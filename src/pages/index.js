@@ -4,9 +4,9 @@ import MaterialCard from '@material-ui/core/Card'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 import Img from 'gatsby-image'
-import ErrorBoundary from 'react-error-boundary'
 
 import Layout from '../components/Layout'
+import ErrorBoundary from '../components/shared/ErrorBoundary'
 
 const ScrollContainer = styled.div`
   height: calc(100vh - 64px);

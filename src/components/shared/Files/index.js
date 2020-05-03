@@ -7,7 +7,8 @@ import get from 'lodash/get'
 import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
-import ErrorBoundary from 'react-error-boundary'
+
+import ErrorBoundary from '../ErrorBoundary'
 
 import {
   apFile as apFileFragment,

@@ -5,9 +5,9 @@ import styled from 'styled-components'
 import Img from 'gatsby-image'
 import Button from '@material-ui/core/Button'
 import { graphql } from 'gatsby'
-import ErrorBoundary from 'react-error-boundary'
 
 import Layout from '../components/Layout'
+import ErrorBoundary from '../components/shared/ErrorBoundary'
 
 const Container = styled.div`
   min-height: calc(100vh - 64px);

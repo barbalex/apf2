@@ -1,7 +1,6 @@
 import React, { useContext, useMemo, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import ErrorBoundary from 'react-error-boundary'
 
 import Layout from '../components/Layout'
 import storeContext from '../storeContext'
@@ -12,6 +11,7 @@ import Ekf from '../components/Ekf'
 import Deletions from '../components/Deletions'
 import EkPlan from '../components/EkPlan'
 import Unterhalt from '../components/Unterhalt'
+import ErrorBoundary from '../components/shared/ErrorBoundary'
 
 const Container = styled.div`
   background-color: #fffde7;
@@ -33,12 +33,12 @@ const DatenPage = ({ location }) => {
    * see: https://bugzilla.mozilla.org/show_bug.cgi?id=774398
    */
   useEffect(() => {
-    window.matchMedia('print').addListener(mql => {
+    window.matchMedia('print').addListener((mql) => {
       setIsPrint(mql.matches)
       if (!mql.matches) setEkfIds([])
     })
     return () => {
-      window.matchMedia('print').removeListener(mql => {
+      window.matchMedia('print').removeListener((mql) => {
         setIsPrint(mql.matches)
       })
     }

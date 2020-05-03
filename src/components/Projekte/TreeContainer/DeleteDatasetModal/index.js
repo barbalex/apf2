@@ -5,11 +5,11 @@ import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 
 import tables from '../../../../modules/tables'
 import deleteDataset from './delete'
 import storeContext from '../../../../storeContext'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const StyledDialog = styled(Dialog)`
   > div > div {
@@ -22,7 +22,7 @@ const DatasetDeleteModal = () => {
   const store = useContext(storeContext)
   const { toDeleteTable, toDeleteLabel, emptyToDelete, toDeleteId } = store
 
-  const table = tables.find(t => t.table === toDeleteTable)
+  const table = tables.find((t) => t.table === toDeleteTable)
   let tableName = null
   if (table && table.labelSingular) {
     tableName = table.labelSingular

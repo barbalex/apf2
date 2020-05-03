@@ -1,10 +1,10 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 
 import Layout from '../components/Layout'
 import Sidebar from './Sidebar'
+import ErrorBoundary from '../components/shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -41,7 +41,7 @@ const DokuDate = styled.p`
 `
 const HtmlDiv = styled.div`
   height: 100%;
-  margin: ${props => (props.pdf ? '0' : '0 25px')};
+  margin: ${(props) => (props.pdf ? '0' : '0 25px')};
 `
 const Title = styled.h1`
   font-size: 1.5rem;
