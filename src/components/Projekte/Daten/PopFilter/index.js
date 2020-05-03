@@ -92,7 +92,7 @@ const Pop = ({ treeName }) => {
     [dataFilterSetValue, row, treeName],
   )
 
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   return (
     <ErrorBoundary>
       <Container>

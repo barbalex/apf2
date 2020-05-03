@@ -115,7 +115,7 @@ const ApArt = ({ treeName }) => {
       </Container>
     )
   }
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   if (errorAeEigById) return `Fehler: ${errorAeEigById.message}`
 
   console.log('Apart rendering')

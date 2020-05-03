@@ -31,13 +31,13 @@ const StyledIconButton = styled(Button)`
   margin-top: -3px !important;
 `
 const StyledPauseCircleOutlineIcon = styled(PauseCircleOutlineIcon)`
-  cursor: ${props =>
+  cursor: ${(props) =>
     props['data-assigningispossible'] ? 'pointer' : 'not-allowed'};
 `
 const StyledPlayCircleOutlineIcon = styled(PlayCircleOutlineIcon)`
-  color: ${props =>
+  color: ${(props) =>
     props['data-assigningispossible'] ? 'black' : 'rgba(0,0,0,0.2) !important'};
-  cursor: ${props =>
+  cursor: ${(props) =>
     props['data-assigningispossible'] ? 'pointer' : 'not-allowed'};
 `
 const ZoomToIcon = styled(FilterCenterFocusIcon)`
@@ -151,15 +151,15 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
   if (apfloraLayer.value === 'tpop') {
     // but tpop is special...
     const pops = get(data, 'tpopByPop.nodes', [])
-    layerData = flatten(pops.map(n => get(n, 'tpopsByPopId.nodes', [])))
+    layerData = flatten(pops.map((n) => get(n, 'tpopsByPopId.nodes', [])))
   }
-  const layerDataHighlighted = layerData.filter(o =>
+  const layerDataHighlighted = layerData.filter((o) =>
     mapIdsFiltered.includes(o.id),
   )
   const onChangeCheckbox = useCallback(() => {
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
       return setActiveApfloraLayers(
-        activeApfloraLayers.filter(l => l !== apfloraLayer.value),
+        activeApfloraLayers.filter((l) => l !== apfloraLayer.value),
       )
     }
     return setActiveApfloraLayers([...activeApfloraLayers, apfloraLayer.value])
@@ -222,7 +222,7 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
     [activeApfloraLayers, apfloraLayer, layerDataHighlighted],
   )
 
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   return (
     <LayerDiv>
       <Checkbox

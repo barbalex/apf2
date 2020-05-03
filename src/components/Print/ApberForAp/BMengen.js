@@ -55,38 +55,38 @@ const BMengen = ({ jahr, mengenResult }) => {
   const { data, error, loading } = mengenResult
 
   const b1LPop_pop = get(data, 'apById.b1LPop.nodes', []).filter(
-    p => get(p, 'popbersByPopId.totalCount') > 0,
+    (p) => get(p, 'popbersByPopId.totalCount') > 0,
   )
   const b1LPop = b1LPop_pop.length
 
   const b1LTpop_pop = get(data, 'apById.b1LTpop.nodes', [])
-  const b1LTpop_tpop = b1LTpop_pop.flatMap(p =>
+  const b1LTpop_tpop = b1LTpop_pop.flatMap((p) =>
     get(p, 'tpopsByPopId.nodes', []),
   )
 
   const b1LTpop = b1LTpop_tpop
-    .flatMap(p => get(p, 'tpopbersByTpopId.totalCount', 0))
-    .filter(tpopbersCount => tpopbersCount > 0).length
+    .flatMap((p) => get(p, 'tpopbersByTpopId.totalCount', 0))
+    .filter((tpopbersCount) => tpopbersCount > 0).length
 
   const b1RPop = get(data, 'apById.b1RPop.nodes', []).filter(
-    p => get(p, 'popbersByPopId.totalCount') > 0,
+    (p) => get(p, 'popbersByPopId.totalCount') > 0,
   ).length
 
   const b1RTpop_pop = get(data, 'apById.b1RTpop.nodes', [])
-  const b1RTpop_tpop = b1RTpop_pop.flatMap(p =>
+  const b1RTpop_tpop = b1RTpop_pop.flatMap((p) =>
     get(p, 'tpopsByPopId.nodes', []),
   )
 
   const b1RTpop = b1RTpop_tpop
-    .flatMap(p => get(p, 'tpopbersByTpopId.totalCount', 0))
-    .filter(tpopbersCount => tpopbersCount > 0).length
-  const b1RTpop_tpopbers = b1RTpop_tpop.flatMap(p =>
+    .flatMap((p) => get(p, 'tpopbersByTpopId.totalCount', 0))
+    .filter((tpopbersCount) => tpopbersCount > 0).length
+  const b1RTpop_tpopbers = b1RTpop_tpop.flatMap((p) =>
     get(p, 'tpopbersByTpopId.nodes', []),
   )
 
-  const b1RTpop_firstYear = min(b1RTpop_tpopbers.map(b => b.jahr))
+  const b1RTpop_firstYear = min(b1RTpop_tpopbers.map((b) => b.jahr))
 
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
   return (
     <Container>

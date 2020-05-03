@@ -253,7 +253,7 @@ const ApberForAp = ({
   const a6LPop = a7LPop + a8LPop
   const a6LTpop = a7LTpop + a8LTpop
 
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
   if (startJahr === 0)
     return (

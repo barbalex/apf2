@@ -35,11 +35,11 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopfreiwkontrType } from '../../../../store/Tree/DataFilter/tpopfreiwkontr'
 
 const Container = styled.div`
-  height: ${props =>
+  height: ${(props) =>
     props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
   @media print {
     font-size: 11px;
     height: auto;
@@ -56,7 +56,7 @@ const InnerContainer = styled.div`
 `
 const GridContainer = styled.div`
   display: grid;
-  grid-template-areas: ${props => {
+  grid-template-areas: ${(props) => {
     const { width } = props
     if (width < 600) {
       return `
@@ -111,7 +111,7 @@ const GridContainer = styled.div`
       'verification verification verification verification verification verification'
     `
   }};
-  grid-template-columns: ${props => {
+  grid-template-columns: ${(props) => {
     const { width } = props
     if (width < 600) return '1fr'
     if (width < 800) return 'repeat(2, 1fr)'
@@ -199,7 +199,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   }
   const tpopkontrFilterValues = Object.entries(
     dataFilter.tpopfreiwkontr,
-  ).filter(e => e[1] || e[1] === 0)
+  ).filter((e) => e[1] || e[1] === 0)
   tpopkontrFilterValues.forEach(([key, value]) => {
     const expression =
       tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
@@ -220,17 +220,17 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
     [],
   )
   const ekzaehleinheits = ekzaehleinheitsOriginal
-    .map(n => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
+    .map((n) => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
     // remove null values stemming from efkzaehleinheit without zaehleinheit_id
-    .filter(n => n !== null)
+    .filter((n) => n !== null)
   const zaehls = get(
     data,
     'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
     [],
   )
-  const zaehlsSorted = sortBy(zaehls, z => {
+  const zaehlsSorted = sortBy(zaehls, (z) => {
     const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
-      e => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.einheit,
+      (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.einheit,
     )
     if (!ekzaehleinheitOriginal) return 999
     return ekzaehleinheitOriginal.sort || 999
@@ -254,7 +254,9 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
     zaehl2WasAttributed && !zaehls3 && ekzaehleinheits.length > 2
   const zaehl3ShowEmpty =
     (!zaehl2WasAttributed && !zaehls3) || ekzaehleinheits.length < 3
-  const einheitsUsed = zaehlsSorted.filter(n => !!n.einheit).map(n => n.einheit)
+  const einheitsUsed = zaehlsSorted
+    .filter((n) => !!n.einheit)
+    .map((n) => n.einheit)
   const isFreiwillig = role === 'apflora_freiwillig'
 
   let tpopkontrTotalCount
@@ -271,16 +273,16 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
       '...',
     )
     const popsOfAp = get(dataTpopkontrs, 'popsOfAp.nodes', [])
-    const tpopsOfAp = flatten(popsOfAp.map(p => get(p, 'tpops.nodes', [])))
+    const tpopsOfAp = flatten(popsOfAp.map((p) => get(p, 'tpops.nodes', [])))
     tpopkontrsOfApTotalCount = !tpopsOfAp.length
       ? '...'
       : tpopsOfAp
-          .map(p => get(p, 'tpopkontrs.totalCount'))
+          .map((p) => get(p, 'tpopkontrs.totalCount'))
           .reduce((acc = 0, val) => acc + val)
     tpopkontrsOfApFilteredCount = !tpopsOfAp.length
       ? '...'
       : tpopsOfAp
-          .map(p => get(p, 'tpopkontrsFiltered.totalCount'))
+          .map((p) => get(p, 'tpopkontrsFiltered.totalCount'))
           .reduce((acc = 0, val) => acc + val)
   } else {
     row = get(data, 'tpopkontrById', {}) || {}
@@ -296,7 +298,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   const { ekfBemerkungen } = row
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (showFilter) {
@@ -446,12 +448,12 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
         )
           // remove ekzaehleinheits without zaehleinheit_id
           .filter(
-            z =>
+            (z) =>
               !!get(z, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.code', null),
           )
 
         Promise.all(
-          ekzaehleinheits.map(z =>
+          ekzaehleinheits.map((z) =>
             client.mutate({
               mutation: createTpopkontrzaehl,
               variables: {
@@ -467,7 +469,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
           ),
         )
           .then(() => refetch())
-          .catch(error =>
+          .catch((error) =>
             enqueNotification({
               message: error.message,
               options: {
@@ -502,7 +504,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
     }
   }, [setIsPrint])
 
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   if (loading) {
     return (
       <Container>

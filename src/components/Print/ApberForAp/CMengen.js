@@ -84,84 +84,87 @@ const CMengen = ({ apId, jahr, startJahr, mengenResult }) => {
   const { data, error, loading } = mengenResult
   const oneLTpop_pop = get(data, 'apById.c1LTpop.nodes', [])
   const oneLTpop_tpop = oneLTpop_pop
-    .flatMap(p => get(p, 'tpopsByPopId.nodes', []))
-    .filter(p => get(p, 'tpopmassnsByTpopId.totalCount', 0) > 0)
+    .flatMap((p) => get(p, 'tpopsByPopId.nodes', []))
+    .filter((p) => get(p, 'tpopmassnsByTpopId.totalCount', 0) > 0)
   const oneLTpop = oneLTpop_tpop.length
   const oneLPop = uniqBy(oneLTpop_tpop, 'popId').length
 
   const oneRTpop_pop = get(data, 'apById.c1RTpop.nodes', [])
-  const oneRTpop_tpop = oneRTpop_pop.flatMap(p =>
+  const oneRTpop_tpop = oneRTpop_pop.flatMap((p) =>
     get(p, 'tpopsByPopId.nodes', []),
   )
 
-  const massns = oneRTpop_tpop.flatMap(p =>
+  const massns = oneRTpop_tpop.flatMap((p) =>
     get(p, 'tpopmassnsByTpopId.nodes', []),
   )
 
-  const massnbers = oneRTpop_tpop.flatMap(p =>
+  const massnbers = oneRTpop_tpop.flatMap((p) =>
     get(p, 'tpopmassnbersByTpopId.nodes', []),
   )
 
-  const oneRTpop_firstYear = min(massns.map(b => b.jahr))
-  const oneRPop_massnbersByPopId = groupBy(massnbers, b =>
+  const oneRTpop_firstYear = min(massns.map((b) => b.jahr))
+  const oneRPop_massnbersByPopId = groupBy(massnbers, (b) =>
     get(b, 'tpopByTpopId.popId'),
   )
   const oneRPop_lastMassnbersByPopId = Object.keys(
     oneRPop_massnbersByPopId,
-  ).map(b => maxBy(oneRPop_massnbersByPopId[b], 'jahr'))
-  const oneRPop_massnbersByTpopId = groupBy(massnbers, b =>
+  ).map((b) => maxBy(oneRPop_massnbersByPopId[b], 'jahr'))
+  const oneRPop_massnbersByTpopId = groupBy(massnbers, (b) =>
     get(b, 'tpopByTpopId.id'),
   )
   const oneRPop_lastMassnbersByTpopId = Object.keys(
     oneRPop_massnbersByTpopId,
-  ).map(b => maxBy(oneRPop_massnbersByTpopId[b], 'jahr'))
+  ).map((b) => maxBy(oneRPop_massnbersByTpopId[b], 'jahr'))
 
   // 1.
-  const oneRPop = uniqBy(massns, b => get(b, 'tpopByTpopId.popId')).length
-  const oneRTpop = uniqBy(massns, b => get(b, 'tpopByTpopId.id')).length
+  const oneRPop = uniqBy(massns, (b) => get(b, 'tpopByTpopId.popId')).length
+  const oneRTpop = uniqBy(massns, (b) => get(b, 'tpopByTpopId.id')).length
 
   // 2.
-  const twoRPop = uniqBy(massnbers, b => get(b, 'tpopByTpopId.popId')).length
-  const twoRTpop = uniqBy(massnbers, b => get(b, 'tpopByTpopId.id')).length
+  const twoRPop = uniqBy(massnbers, (b) => get(b, 'tpopByTpopId.popId')).length
+  const twoRTpop = uniqBy(massnbers, (b) => get(b, 'tpopByTpopId.id')).length
 
   // 3.
   const threeRPop = oneRPop_lastMassnbersByPopId.filter(
-    b => b.beurteilung === 1,
+    (b) => b.beurteilung === 1,
   ).length
   const threeRTpop = oneRPop_lastMassnbersByTpopId.filter(
-    b => b.beurteilung === 1,
+    (b) => b.beurteilung === 1,
   ).length
 
   // 4.
-  const fourRPop = oneRPop_lastMassnbersByPopId.filter(b => b.beurteilung === 2)
-    .length
+  const fourRPop = oneRPop_lastMassnbersByPopId.filter(
+    (b) => b.beurteilung === 2,
+  ).length
   const fourRTpop = oneRPop_lastMassnbersByTpopId.filter(
-    b => b.beurteilung === 2,
+    (b) => b.beurteilung === 2,
   ).length
 
   // 5.
-  const fiveRPop = oneRPop_lastMassnbersByPopId.filter(b => b.beurteilung === 3)
-    .length
+  const fiveRPop = oneRPop_lastMassnbersByPopId.filter(
+    (b) => b.beurteilung === 3,
+  ).length
   const fiveRTpop = oneRPop_lastMassnbersByTpopId.filter(
-    b => b.beurteilung === 3,
+    (b) => b.beurteilung === 3,
   ).length
 
   // 6.
-  const sixRPop = oneRPop_lastMassnbersByPopId.filter(b => b.beurteilung === 4)
-    .length
+  const sixRPop = oneRPop_lastMassnbersByPopId.filter(
+    (b) => b.beurteilung === 4,
+  ).length
   const sixRTpop = oneRPop_lastMassnbersByTpopId.filter(
-    b => b.beurteilung === 4,
+    (b) => b.beurteilung === 4,
   ).length
 
   // 7.
   const sevenRPop = oneRPop_lastMassnbersByPopId.filter(
-    b => b.beurteilung === 5,
+    (b) => b.beurteilung === 5,
   ).length
   const sevenRTpop = oneRPop_lastMassnbersByTpopId.filter(
-    b => b.beurteilung === 5,
+    (b) => b.beurteilung === 5,
   ).length
 
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
   return (
     <Container>

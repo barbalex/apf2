@@ -36,7 +36,7 @@ const Beob = ({ treeName }) => {
   if (!row) return null
   if (!beobFields || beobFields.length === 0) return null
   if (loading) return <Container>Lade...</Container>
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
   return (
     <ErrorBoundary>

@@ -111,7 +111,7 @@ const Ekzaehleinheit = ({ treeName }) => {
       </Container>
     )
   }
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   if (errorLists) {
     return `Fehler: ${errorLists.message}`
   }

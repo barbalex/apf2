@@ -80,7 +80,7 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
   const [errors, setErrors] = useState(null)
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const { value } = event.target
       if (showFilter) {
         return dataFilterSetValue({
@@ -175,7 +175,7 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
     ? 'angesiedelt'
     : 'natürlich'
 
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   return (
     <Container>
       <PopLabel>Population</PopLabel>

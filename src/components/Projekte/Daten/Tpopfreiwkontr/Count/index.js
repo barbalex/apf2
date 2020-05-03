@@ -21,10 +21,10 @@ const Container = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 6px;
   padding: 10px;
-  grid-area: ${props => `count${props.nr}`};
+  grid-area: ${(props) => `count${props.nr}`};
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  grid-template-areas: ${props =>
+  grid-template-areas: ${(props) =>
     props.showempty
       ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
        'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
@@ -38,7 +38,7 @@ const Container = styled.div`
   grid-column-gap: 10px;
   break-inside: avoid;
   @media print {
-    grid-template-areas: ${props =>
+    grid-template-areas: ${(props) =>
       props.showempty
         ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
        'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
@@ -56,10 +56,10 @@ const StyledForm = styled.div`
   border-radius: 6px;
   padding: 10px;
   margin-bottom: 0;
-  grid-area: ${props => `count${props.nr}`};
+  grid-area: ${(props) => `count${props.nr}`};
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  grid-template-areas: ${props =>
+  grid-template-areas: ${(props) =>
     props.showdelete === 'true'
       ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
              'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel .'
@@ -198,23 +198,23 @@ const Count = ({
       [],
     )
     // do list this count's einheit
-    const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
+    const einheitsNotToList = einheitsUsed.filter((e) => e !== row.einheit)
     let zaehleinheitWerte = ekzaehleinheits
       // remove already set values
-      .filter(e => !einheitsNotToList.includes(e.code))
+      .filter((e) => !einheitsNotToList.includes(e.code))
     // add this zaehleineits value if missing
     // so as to show values input in earlier years that shall not be input any more
-    const thisRowsEinheit = allEinheits.find(e => e.code === row.einheit)
+    const thisRowsEinheit = allEinheits.find((e) => e.code === row.einheit)
     if (thisRowsEinheit) {
       zaehleinheitWerte = uniqBy([thisRowsEinheit, ...zaehleinheitWerte], 'id')
     }
-    return sortBy(zaehleinheitWerte, z => {
+    return sortBy(zaehleinheitWerte, (z) => {
       const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
-        e => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.code,
+        (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.code,
       )
       if (!ekzaehleinheitOriginal) return 999
       return ekzaehleinheitOriginal.sort || 999
-    }).map(el => ({
+    }).map((el) => ({
       value: el.code,
       label: el.text,
     }))
@@ -269,7 +269,7 @@ const Count = ({
   if (loading) {
     return <Container>Lade...</Container>
   }
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   if (errorLists) {
     return `Fehler: ${errorLists.message}`
   }
