@@ -288,11 +288,6 @@ const Overlays = () => {
     [overlays, setOverlays],
   )
 
-  console.log('Overlays', {
-    overlays: getSnapshot(overlays),
-    activeOverlays: getSnapshot(activeOverlays),
-  })
-
   return (
     <CardContent>
       <SortableList
