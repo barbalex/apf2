@@ -1,7 +1,7 @@
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-import ErrorBoundary from 'react-error-boundary'
 
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 // create objects outside render
 const closeLowerNodesData = {
