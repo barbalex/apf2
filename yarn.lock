@@ -5604,10 +5604,10 @@ devcert@^1.1.0:
     tmp "^0.0.33"
     tslib "^1.10.0"
 
-dexie@2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/dexie/-/dexie-2.0.4.tgz#6027a5e05879424e8f9979d8c14e7420f27e3a11"
-  integrity sha512-aQ/s1U2wHxwBKRrt2Z/mwFNHMQWhESerFsMYzE+5P5OsIe5o1kgpFMWkzKTtkvkyyEni6mWr/T4HUJuY9xIHLA==
+dexie@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/dexie/-/dexie-3.0.0.tgz#6f468fa30b5c53343bbbfb1659ddede202e1a67c"
+  integrity sha512-wOS7Og4NzXYG2OZPkzmgNTR+WSocu3O6bQSU22s30g3I2g32By/tbaTMoCVFKd55p+oTlxZY8YAMkhJs4vj0sw==
 
 diacritic@0.0.2:
   version "0.0.2"
@@ -7484,14 +7484,14 @@ gatsby-remark-copy-linked-files@2.3.1:
     probe-image-size "^4.1.1"
     unist-util-visit "^1.4.1"
 
-gatsby-remark-embed-video@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/gatsby-remark-embed-video/-/gatsby-remark-embed-video-2.0.1.tgz#d7b5a8ecbde9ec8fc33fb2e569b87b2af35cb278"
-  integrity sha512-V+cW4Ev+iXb0jmqfqKpcdPRn9vsKahIdj9sAUj26Ox4rooknWCjhayBdxT51BM2u7P2u3ck3Ty96PnqW7e/Mog==
+gatsby-remark-embed-video@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/gatsby-remark-embed-video/-/gatsby-remark-embed-video-3.0.0.tgz#2a0c9d55b223a6ede4283f5c8e77b922b03a38f1"
+  integrity sha512-Y28j40IM3xpQ990ftbpPC7gDcL1VCZkVRaw3SmPRfxU5z/OPdtoK17IuczhQfXPQe/am/SE8oRfIAdOZ1/ZXjw==
   dependencies:
     get-video-id "^3.1.4"
     remark-burger "^1.0.1"
-    unist-util-visit "^2.0.0"
+    unist-util-visit "^2.0.2"
 
 gatsby-remark-emojis@0.4.2:
   version "0.4.2"
@@ -11374,7 +11374,7 @@ module-not-found-error@^1.0.1:
   resolved "https://registry.yarnpkg.com/module-not-found-error/-/module-not-found-error-1.0.1.tgz#cf8b4ff4f29640674d6cdd02b0e3bc523c2bbdc0"
   integrity sha1-z4tP9PKWQGdNbN0CsOO8UjwrvcA=
 
-moment@2.24.0:
+moment@2.24.0, moment@2.24.x:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
