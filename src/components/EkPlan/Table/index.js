@@ -7,7 +7,6 @@ import React, {
 } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
@@ -40,6 +39,7 @@ import CellForYear from './CellForYear'
 import Error from '../../shared/Error'
 import exportRowFromTpop from './exportRowFromTpop'
 import exportModule from '../../../modules/export'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const TempContainer = styled.div`
   padding: 10px;
@@ -72,12 +72,12 @@ export const StyledTableCell = styled.div`
   text-overflow: ellipsis !important;
   overflow: hidden !important;
   padding: 2px 4px !important;
-  padding-left: ${props =>
+  padding-left: ${(props) =>
     props['data-firstchild'] ? '10px !important' : '2px'};
   border-left: solid hsla(70, 80%, 75%, 1) 1px;
   border-right: solid hsla(70, 80%, 75%, 1) 1px;
   border-bottom: solid #e6e6e6 1px;
-  background: ${props =>
+  background: ${(props) =>
     props['data-clicked']
       ? 'rgb(255,211,167) !important'
       : props['data-isodd']
@@ -206,7 +206,7 @@ const EkPlanTable = () => {
   })
   const tpops = sortBy(
     get(dataTpop, 'allTpops.nodes', []),
-    t => t.popByPopId.apByApId.label,
+    (t) => t.popByPopId.apByApId.label,
   )
   const years = useMemo(() => yearsFromTpops(tpops), [tpops])
   const yearRows = useMemo(
@@ -224,9 +224,9 @@ const EkPlanTable = () => {
   const yearColumns = yearRows.length
     ? sortBy(
         Object.values(yearRows[0])
-          .filter(o => typeof o === 'object')
-          .filter(o => !!o.value && !!o.value.eks)
-          .filter(o => !!o.name),
+          .filter((o) => typeof o === 'object')
+          .filter((o) => !!o.value && !!o.value.eks)
+          .filter((o) => !!o.name),
         'sort',
       )
     : []
@@ -242,16 +242,16 @@ const EkPlanTable = () => {
   const tpopColumns = tpopRows.length
     ? sortBy(
         Object.values(tpopRows[0])
-          .filter(o => typeof o === 'object')
-          .filter(o => !!o.name)
-          .filter(o => fieldsShown.includes(o.name) || !!o.alwaysShow),
+          .filter((o) => typeof o === 'object')
+          .filter((o) => !!o.name)
+          .filter((o) => fieldsShown.includes(o.name) || !!o.alwaysShow),
         'sort',
       )
     : []
   const headerFieldsFixed = tpops.length
     ? sortBy(
         Object.values(fields).filter(
-          o => fieldsShown.includes(o.name) || !!o.alwaysShow,
+          (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
         ),
         'sort',
       )
@@ -268,7 +268,7 @@ const EkPlanTable = () => {
   let headerYearFieldsWidth = sizeState.width - headerFieldsFixedWidth
   if (headerYearFieldsWidth < 0) headerYearFieldsWidth = 0
 
-  const showsLength = [showEk, showEkf, showMassn].filter(s => !!s).length
+  const showsLength = [showEk, showEkf, showMassn].filter((s) => !!s).length
   const rowHeight = 23 + (!!showsLength ? showsLength - 1 : 0) * 16
   const sbSize = scrollbarSize()
 
@@ -300,7 +300,7 @@ const EkPlanTable = () => {
   )
 
   const onClickExport = useCallback(() => {
-    const data = tpops.map(tpop =>
+    const data = tpops.map((tpop) =>
       exportRowFromTpop({ tpop, dataLists, years, store }),
     )
     exportModule({
@@ -333,7 +333,7 @@ const EkPlanTable = () => {
             key={`${headerFieldsFixed.length}${fieldsShown.join()}`}
             height={60}
             itemCount={headerFieldsFixed.length}
-            itemSize={index => headerFieldsFixed[index].width}
+            itemSize={(index) => headerFieldsFixed[index].width}
             layout="horizontal"
             width={headerFieldsFixedWidth}
           >
@@ -366,7 +366,7 @@ const EkPlanTable = () => {
             rowHeight={() => 60}
             columnCount={yearColumns.length}
             rowCount={1}
-            columnWidth={index => {
+            columnWidth={(index) => {
               if (index === yearColumns.length - 1) {
                 return yearColWidth + sbSize
               }
@@ -388,7 +388,7 @@ const EkPlanTable = () => {
             ref={tpopGrid}
             style={{ overflowY: 'hidden' }}
             columnCount={tpopColumns.length}
-            columnWidth={index => tpopColumns[index].width}
+            columnWidth={(index) => tpopColumns[index].width}
             height={sizeState.height - 60}
             rowCount={tpopRows.length}
             rowHeight={() => rowHeight}

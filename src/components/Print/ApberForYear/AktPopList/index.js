@@ -4,10 +4,10 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import sortBy from 'lodash/sortBy'
 import { useQuery } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../../storeContext'
 import query from './query'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   display: flex;
@@ -76,22 +76,22 @@ const AktPopList = () => {
     },
   })
   const aps = get(data, 'allAps.nodes', [])
-  const pops100 = flatten(aps.map(ap => get(ap, 'pops100.nodes', []))).filter(
-    p => get(p, 'tpopsByPopId.totalCount') > 0,
+  const pops100 = flatten(aps.map((ap) => get(ap, 'pops100.nodes', []))).filter(
+    (p) => get(p, 'tpopsByPopId.totalCount') > 0,
   )
-  const pops200 = flatten(aps.map(ap => get(ap, 'pops200.nodes', []))).filter(
-    p => get(p, 'tpopsByPopId.totalCount') > 0,
+  const pops200 = flatten(aps.map((ap) => get(ap, 'pops200.nodes', []))).filter(
+    (p) => get(p, 'tpopsByPopId.totalCount') > 0,
   )
   const popsUrspr = pops100.length
   const popsAnges = pops200.length
   const popsTotal = popsUrspr + popsAnges
   const apRows = sortBy(
-    aps.map(ap => {
+    aps.map((ap) => {
       const urspr = get(ap, 'pops100.nodes', []).filter(
-        p => get(p, 'tpopsByPopId.totalCount') > 0,
+        (p) => get(p, 'tpopsByPopId.totalCount') > 0,
       ).length
       const anges = get(ap, 'pops200.nodes', []).filter(
-        p => get(p, 'tpopsByPopId.totalCount') > 0,
+        (p) => get(p, 'tpopsByPopId.totalCount') > 0,
       ).length
 
       return {
@@ -129,7 +129,7 @@ const AktPopList = () => {
           <AngesColumn>angesiedelt</AngesColumn>
           <TotalColumn>total</TotalColumn>
         </TitleRow>
-        {apRows.map(o => (
+        {apRows.map((o) => (
           <ApRow key={o.ap}>
             <ApColumn>{o.ap}</ApColumn>
             <UrprColumn>{o.urspr}</UrprColumn>

@@ -9,10 +9,10 @@ import ListItem from '@material-ui/core/ListItem'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
-import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const StyledList = styled(List)`
   overflow-y: auto;
@@ -54,7 +54,7 @@ const TpopFromBeobPopList = ({
   return (
     <ErrorBoundary>
       <StyledList dense>
-        {pops.map(pop => (
+        {pops.map((pop) => (
           <ListItem
             key={pop.id}
             button

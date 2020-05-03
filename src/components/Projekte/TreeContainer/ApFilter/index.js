@@ -4,11 +4,11 @@ import Switch from '@material-ui/core/Switch'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 
 import apById from './apById'
 import Label from '../../../shared/Label'
 import storeContext from '../../../../storeContext'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const NurApDiv = styled.div`
   display: flex;
@@ -63,7 +63,7 @@ const ApFilter = ({ treeName }) => {
         ]
         setActiveNodeArray(newActiveNodeArray)
         // remove from openNodes
-        const newOpenNodes = openNodes.filter(n => {
+        const newOpenNodes = openNodes.filter((n) => {
           if (
             n.length > newActiveNodeArray.length &&
             n[0] === newActiveNodeArray[0] &&

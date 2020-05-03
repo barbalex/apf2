@@ -16,7 +16,6 @@ import debounce from 'lodash/debounce'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useApolloClient } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 
 import LayersControl from './LayersControl'
 import OsmColor from './layers/OsmColor'
@@ -66,6 +65,7 @@ import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import updateTpopById from './updateTpopById'
 import iconFullscreen from './iconFullscreen.png'
 import iconFullscreen2x from './iconFullscreen2x.png'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 import storeContext from '../../../storeContext'
 

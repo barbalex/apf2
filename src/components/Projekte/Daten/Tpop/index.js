@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
@@ -20,6 +19,7 @@ import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNu
 import Ek from './Ek'
 import Tpop from './Tpop'
 import Files from '../../../shared/Files'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: ${(props) =>

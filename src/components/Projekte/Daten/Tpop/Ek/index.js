@@ -11,7 +11,6 @@ import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
-import ErrorBoundary from 'react-error-boundary'
 
 import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
 import RadioButtonGroup from '../../../../shared/RadioButtonGroupFormik'
@@ -22,6 +21,7 @@ import queryEkfrequenzs from './queryEkfrequenzs'
 import queryAdresses from './queryAdresses'
 import storeContext from '../../../../../storeContext'
 import EkYear from './EkYear'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const FormContainerNoColumns = styled.div`
   overflow-y: auto !important;

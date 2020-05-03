@@ -6,7 +6,6 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field, FieldArray } from 'formik'
-import ErrorBoundary from 'react-error-boundary'
 
 import TextField from '../../../shared/TextFieldFormik'
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -18,6 +17,7 @@ import updateEkfrequenzByIdGql from './updateEkfrequenzById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -151,7 +151,7 @@ const Ekfrequenz = ({ treeName }) => {
           >
             {({ handleSubmit, dirty, values }) => (
               <Form
-                onBlur={event => {
+                onBlur={(event) => {
                   // prevent submitting when button blurs
                   if (event.target.type === 'button') return
                   dirty && handleSubmit()
@@ -179,7 +179,7 @@ const Ekfrequenz = ({ treeName }) => {
                 />
                 <FieldArray
                   name="kontrolljahre"
-                  render={arrayHelpers => (
+                  render={(arrayHelpers) => (
                     <KontrolljahrContainer>
                       <LabelRow>
                         <StyledLabel>
@@ -193,7 +193,7 @@ const Ekfrequenz = ({ treeName }) => {
                             // only accept one empty value
                             if (
                               values.kontrolljahre &&
-                              values.kontrolljahre.filter(v => !v).length > 1
+                              values.kontrolljahre.filter((v) => !v).length > 1
                             ) {
                               return
                             }

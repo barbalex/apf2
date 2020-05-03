@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import { observer } from 'mobx-react-lite'
-import ErrorBoundary from 'react-error-boundary'
 
 //import Fallback from '../shared/Fallback'
 import storeContext from '../../storeContext'
 import ApberForApFromAp from './ApberForApFromAp'
 import ApberForYear from './ApberForYear'
+import ErrorBoundary from '../shared/ErrorBoundary'
 
 const Container = styled.div`
   background-color: #eee;

@@ -1,6 +1,5 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import Button from '@material-ui/core/Button'
@@ -12,6 +11,7 @@ import queryAps from './queryAps'
 import storeContext from '../../storeContext'
 import appBaseUrl from '../../modules/appBaseUrl'
 import Error from '../shared/Error'
+import ErrorBoundary from '../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px);

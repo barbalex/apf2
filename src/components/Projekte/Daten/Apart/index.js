@@ -4,7 +4,6 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
-import ErrorBoundary from 'react-error-boundary'
 
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
 import FormTitle from '../../../shared/FormTitle'
@@ -15,6 +14,7 @@ import queryAeEigById from './queryAeEigById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -55,13 +55,13 @@ const ApArt = ({ treeName }) => {
 
   // do not include already choosen assozarten
   const apartenOfAp = get(row, 'apByApId.apartsByApId.nodes', [])
-    .map(o => o.artId)
+    .map((o) => o.artId)
     // but do include the art included in the row
-    .filter(o => o !== row.artId)
+    .filter((o) => o !== row.artId)
     // no null values
-    .filter(o => !!o)
+    .filter((o) => !!o)
   const aeTaxonomiesfilter = useCallback(
-    inputValue =>
+    (inputValue) =>
       !!inputValue
         ? apartenOfAp.length
           ? {

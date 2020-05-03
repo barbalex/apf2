@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 
 import apQuery from './apByIdJahr'
 import apberQuery from './apberById'
 import ApberForAp from '../ApberForAp'
 import storeContext from '../../../storeContext'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -18,13 +18,13 @@ const Container = styled.div`
   /* this part is for when page preview is shown */
   /* Divide single pages with some space and center all pages horizontally */
   /* will be removed in @media print */
-  margin: ${props => (props.issubreport ? '0' : '1cm auto')};
-  margin-left: ${props =>
+  margin: ${(props) => (props.issubreport ? '0' : '1cm auto')};
+  margin-left: ${(props) =>
     props.issubreport ? '-0.75cm !important' : '1cm auto'};
   /* Define a white paper background that sticks out from the darker overall background */
-  background: ${props => (props.issubreport ? 'rgba(0, 0, 0, 0)' : '#fff')};
+  background: ${(props) => (props.issubreport ? 'rgba(0, 0, 0, 0)' : '#fff')};
   /* Show a drop shadow beneath each page */
-  box-shadow: ${props =>
+  box-shadow: ${(props) =>
     props.issubreport ? 'unset' : '0 4px 5px rgba(75, 75, 75, 0.2)'};
 
   /* set dimensions */
@@ -39,7 +39,7 @@ const Container = styled.div`
     width: 21cm;
 
     margin: 0 !important;
-    padding: ${props => (props.issubreport ? '0' : '0.5cm !important')};
+    padding: ${(props) => (props.issubreport ? '0' : '0.5cm !important')};
     /*padding-left: 0 !important;*/
 
     box-shadow: unset;

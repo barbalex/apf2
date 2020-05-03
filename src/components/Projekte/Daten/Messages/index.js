@@ -2,11 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { useQuery } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 import Linkify from 'react-linkify'
 import moment from 'moment'
 
 import query from './query'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -62,7 +62,7 @@ const Messages = () => {
           <Title data-id="form-title">Mitteilungen</Title>
         </TitleRow>
         <FieldsContainer>
-          {rows.map(m => {
+          {rows.map((m) => {
             const date = moment(m.time).format('YYYY.MM.DD')
 
             return (

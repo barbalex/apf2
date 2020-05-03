@@ -15,7 +15,6 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
-import ErrorBoundary from 'react-error-boundary'
 
 import query from './data'
 import TextField from '../../../../../shared/TextFieldFormik'
@@ -23,6 +22,7 @@ import Error from '../../../../../shared/Error'
 import updateUserByIdGql from './updateUserById'
 import objectsFindChangedKey from '../../../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../../../modules/objectsEmptyValuesToNull'
+import ErrorBoundary from '../../../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -86,7 +86,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
     },
     [client, row],
   )
-  const onBlurPassword = useCallback(e => {
+  const onBlurPassword = useCallback((e) => {
     setPasswordErrorText('')
     const password = e.target.value
     setPassword(password)
@@ -97,7 +97,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
     }
   }, [])
   const onBlurPassword2 = useCallback(
-    async event => {
+    async (event) => {
       let value = event.target.value
       if ([undefined, ''].includes(value)) value = null
       setPassword2ErrorText('')
@@ -194,7 +194,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                         type={showPass ? 'text' : 'password'}
                         defaultValue={password}
                         onBlur={onBlurPassword}
-                        onKeyPress={e => {
+                        onKeyPress={(e) => {
                           if (e.key === 'Enter') {
                             onBlurPassword(e)
                           }
@@ -206,7 +206,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                           <InputAdornment position="end">
                             <IconButton
                               onClick={() => setShowPass(!showPass)}
-                              onMouseDown={e => e.preventDefault()}
+                              onMouseDown={(e) => e.preventDefault()}
                               title={showPass ? 'verstecken' : 'anzeigen'}
                             >
                               {showPass ? <VisibilityOff /> : <Visibility />}
@@ -233,7 +233,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                         type={showPass2 ? 'text' : 'password'}
                         defaultValue={password2}
                         onBlur={onBlurPassword2}
-                        onKeyPress={e => {
+                        onKeyPress={(e) => {
                           if (e.key === 'Enter') {
                             onBlurPassword(e)
                           }
@@ -244,7 +244,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                           <InputAdornment position="end">
                             <IconButton
                               onClick={() => setShowPass2(!showPass2)}
-                              onMouseDown={e => e.preventDefault()}
+                              onMouseDown={(e) => e.preventDefault()}
                               title={showPass2 ? 'verstecken' : 'anzeigen'}
                             >
                               {showPass2 ? <VisibilityOff /> : <Visibility />}

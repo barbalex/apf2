@@ -9,7 +9,6 @@ import Paper from '@material-ui/core/Paper'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import { FaExternalLinkAlt } from 'react-icons/fa'
-import ErrorBoundary from 'react-error-boundary'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 
 import appBaseUrl from '../../../../../modules/appBaseUrl'
@@ -17,6 +16,7 @@ import standardQkYear from '../../../../../modules/standardQkYear'
 import query from './query'
 import createMessageFunctions from './createMessageFunctions'
 import storeContext from '../../../../../storeContext'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px - 43px - 48px);

@@ -5,7 +5,6 @@ import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
-import ErrorBoundary from 'react-error-boundary'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -16,6 +15,7 @@ import updateZielByIdGql from './updateZielById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -90,7 +90,7 @@ const Ziel = ({ treeName }) => {
         oldParentNodeUrl.pop()
         const newParentNodeUrl = [...newActiveNodeArray]
         newParentNodeUrl.pop()
-        let newOpenNodes = openNodes.map(n => {
+        let newOpenNodes = openNodes.map((n) => {
           if (isEqual(n, activeNodeArray)) return newActiveNodeArray
           if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
           return n

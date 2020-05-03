@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 
 import ApFilter from './Daten/ApFilter'
 import PopFilter from './Daten/PopFilter'
@@ -10,6 +9,7 @@ import Tpop from './Daten/Tpop'
 import TpopmassnFilter from './Daten/TpopmassnFilter'
 import Tpopfeldkontr from './Daten/Tpopfeldkontr'
 import Tpopfreiwkontr from './Daten/Tpopfreiwkontr'
+import ErrorBoundary from '../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;

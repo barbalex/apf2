@@ -22,11 +22,11 @@ import get from 'lodash/get'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 
 import idbContext from '../idbContext'
 import storeContext from '../storeContext'
 import getUserFromIdb from '../modules/getUserFromIdb'
+import ErrorBoundary from './shared/ErrorBoundary'
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
@@ -98,7 +98,7 @@ const User = () => {
           },
         })
       } catch (error) {
-        const messages = error.graphQLErrors.map(x => x.message)
+        const messages = error.graphQLErrors.map((x) => x.message)
         const isNamePassError =
           messages.includes('invalid user or password') ||
           messages.includes('permission denied for relation user')
@@ -122,7 +122,7 @@ const User = () => {
     [client, idb.currentUser, name, password],
   )
   const onBlurName = useCallback(
-    e => {
+    (e) => {
       setNameErrorText('')
       const name = e.target.value
       setName(name)
@@ -135,7 +135,7 @@ const User = () => {
     [fetchLogin, password],
   )
   const onBlurPassword = useCallback(
-    e => {
+    (e) => {
       setPasswordErrorText('')
       const password = e.target.value
       setPassword(password)
@@ -147,18 +147,19 @@ const User = () => {
     },
     [fetchLogin, name],
   )
-  const onKeyPressName = useCallback(e => e.key === 'Enter' && onBlurName(e), [
-    onBlurName,
-  ])
+  const onKeyPressName = useCallback(
+    (e) => e.key === 'Enter' && onBlurName(e),
+    [onBlurName],
+  )
   const onKeyPressPassword = useCallback(
-    e => e.key === 'Enter' && onBlurPassword(e),
+    (e) => e.key === 'Enter' && onBlurPassword(e),
     [onBlurPassword],
   )
   const onClickShowPass = useCallback(() => setShowPass(!showPass), [showPass])
-  const onMouseDownShowPass = useCallback(e => e.preventDefault(), [])
+  const onMouseDownShowPass = useCallback((e) => e.preventDefault(), [])
 
   useEffect(() => {
-    getUserFromIdb({ idb }).then(user => {
+    getUserFromIdb({ idb }).then((user) => {
       dispatchTokenState({
         type: 'set',
         payload: user.token,

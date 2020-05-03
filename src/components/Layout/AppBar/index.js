@@ -4,11 +4,11 @@ import Toolbar from '@material-ui/core/Toolbar'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { Location } from '@reach/router'
-import ErrorBoundary from 'react-error-boundary'
 
 import Home from './Home'
 import Doku from './Doku'
 import Projekte from './Projekte'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const StyledAppBar = styled(AppBar)`
   min-height: 64px !important;

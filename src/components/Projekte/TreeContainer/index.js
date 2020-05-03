@@ -12,7 +12,6 @@ import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import ErrorBoundary from 'react-error-boundary'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -91,6 +90,7 @@ import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
 import storeContext from '../../../storeContext'
 import TpopFromBeobPopList from './TpopFromBeobPopList'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;

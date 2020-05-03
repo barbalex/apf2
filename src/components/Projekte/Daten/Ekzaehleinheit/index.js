@@ -4,7 +4,6 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
-import ErrorBoundary from 'react-error-boundary'
 
 import TextField from '../../../shared/TextFieldFormik'
 import Select from '../../../shared/SelectFormik'
@@ -16,6 +15,7 @@ import updateEkzaehleinheitByIdGql from './updateEkzaehleinheitById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -48,9 +48,9 @@ const Ekzaehleinheit = ({ treeName }) => {
     row,
     'apByApId.ekzaehleinheitsByApId.nodes',
     [],
-  ).map(o => o.zaehleinheitId)
+  ).map((o) => o.zaehleinheitId)
   // re-add this ones id
-  const notToShow = ekzaehleinheitenOfAp.filter(o => o !== row.zaehleinheitId)
+  const notToShow = ekzaehleinheitenOfAp.filter((o) => o !== row.zaehleinheitId)
   const zaehleinheitWerteFilter = notToShow.length
     ? { id: { notIn: notToShow } }
     : { id: { isNull: false } }

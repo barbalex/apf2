@@ -4,7 +4,6 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import ErrorBoundary from 'react-error-boundary'
 
 import Ap from './Ap'
 import Auswertung from './Auswertung'
@@ -12,6 +11,7 @@ import FormTitle from '../../../shared/FormTitle'
 import Files from '../../../shared/Files'
 import storeContext from '../../../../storeContext'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px);

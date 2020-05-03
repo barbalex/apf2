@@ -5,7 +5,6 @@ import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 import MarkdownIt from 'markdown-it'
 
 import query1 from './query1'
@@ -16,6 +15,7 @@ import AktPopList from './AktPopList'
 import ErfolgList from './ErfolgList'
 import ApberForAp from '../ApberForAp'
 import storeContext from '../../../storeContext'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const mdParser = new MarkdownIt({ breaks: true })
 

@@ -11,10 +11,10 @@ import format from 'date-fns/format'
 import TextField from '@material-ui/core/TextField'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 
 import undelete from './undelete'
 import storeContext from '../../storeContext'
+import ErrorBoundary from '../shared/ErrorBoundary'
 
 const List = styled.div`
   padding-left: 24px;
@@ -26,9 +26,9 @@ const List = styled.div`
 `
 const Row = styled.div`
   display: flex;
-  border-top: ${props =>
+  border-top: ${(props) =>
     props['data-withtopline'] ? '1px solid rgba(0,0,0,0.1)' : 'none'};
-  padding-top: ${props => (props['data-withtopline'] ? '10px' : 'unset')};
+  padding-top: ${(props) => (props['data-withtopline'] ? '10px' : 'unset')};
 `
 const TextContainer = styled.div`
   display: flex;
@@ -66,10 +66,10 @@ const Deletions = () => {
     // loop through all choosenDeletions
     await Promise.all(
       choosenDeletions.map(
-        async id =>
+        async (id) =>
           await undelete({
             deletedDatasets,
-            dataset: deletedDatasets.find(d => d.id === id),
+            dataset: deletedDatasets.find((d) => d.id === id),
             setShowDeletions,
             removeDeletedDatasetById,
             client,
@@ -90,11 +90,11 @@ const Deletions = () => {
     store,
   ])
   const toggleChoosenDeletions = useCallback(
-    event => {
+    (event) => {
       let id = event.target.value
       let newChoosenDeletions
       if (choosenDeletions.includes(id)) {
-        newChoosenDeletions = choosenDeletions.filter(d => d !== id)
+        newChoosenDeletions = choosenDeletions.filter((d) => d !== id)
       } else {
         newChoosenDeletions = [...choosenDeletions, id]
       }
@@ -120,7 +120,7 @@ const Deletions = () => {
               const dataset = { ...ds.data }
               // remove null values
               Object.keys(dataset).forEach(
-                key => dataset[key] == null && delete dataset[key],
+                (key) => dataset[key] == null && delete dataset[key],
               )
               const time = format(new Date(ds.time), 'yyyy.MM.dd HH:mm:ss')
 

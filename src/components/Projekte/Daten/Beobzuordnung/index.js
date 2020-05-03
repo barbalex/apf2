@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/EmailOutlined'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField2'
@@ -24,6 +23,7 @@ import saveArtIdToDb from './saveArtIdToDb'
 import saveTpopIdToDb from './saveTpopIdToDb'
 import sendMail from '../../../../modules/sendMail'
 import storeContext from '../../../../storeContext'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -107,11 +107,11 @@ const getTpopZuordnenSource = (row, apId) => {
   if (!apArt) return []
   const popList = get(apArt, 'apByApId.popsByApId.nodes', [])
   // get all tpop
-  let tpopList = flatten(popList.map(p => get(p, 'tpopsByPopId.nodes', [])))
+  let tpopList = flatten(popList.map((p) => get(p, 'tpopsByPopId.nodes', [])))
     // with coordinates
     // and also: even keep own tpop if it has no coordinates
-    .filter(t => !!t.lv95X || t.id === row.tpopId)
-    .map(t => {
+    .filter((t) => !!t.lv95X || t.id === row.tpopId)
+    .map((t) => {
       // calculate their distance to this beob
       const dX = Math.abs(row.lv95X - t.lv95X)
       const dY = Math.abs(row.lv95Y - t.lv95Y)
@@ -131,7 +131,7 @@ const getTpopZuordnenSource = (row, apId) => {
   // order them by distance
   tpopList = sortBy(tpopList, 'distNr')
   // return array of id, label
-  return tpopList.map(t => ({
+  return tpopList.map((t) => ({
     value: t.id,
     label: t.label,
   }))
@@ -159,7 +159,7 @@ const Beobzuordnung = ({ type, treeName }) => {
 
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
   const aeTaxonomiesfilter = useCallback(
-    inputValue =>
+    (inputValue) =>
       !!inputValue
         ? {
             artname: { includesInsensitive: inputValue },
@@ -170,14 +170,14 @@ const Beobzuordnung = ({ type, treeName }) => {
   )
 
   const onSaveArtIdToDb = useCallback(
-    event => {
+    (event) => {
       const { value } = event.target
       saveArtIdToDb({ value, row, treeName, client, store })
     },
     [client, row, store, treeName],
   )
   const onSaveNichtZuordnenToDb = useCallback(
-    value => {
+    (value) => {
       saveNichtZuordnenToDb({
         value,
         id,
@@ -190,14 +190,14 @@ const Beobzuordnung = ({ type, treeName }) => {
     [client, id, refetch, store, treeName],
   )
   const onSaveTpopIdToDb = useCallback(
-    event => {
+    (event) => {
       const { value } = event.target
       saveTpopIdToDb({ value, id, treeName, type, client, store })
     },
     [client, id, store, treeName, type],
   )
   const onUpdateField = useCallback(
-    event => {
+    (event) => {
       client.mutate({
         mutation: updateBeobByIdGql,
         variables: {
@@ -298,10 +298,10 @@ const Beobzuordnung = ({ type, treeName }) => {
                   const bemerkungen = row.bemerkungen
                   // remove all keys with null
                   const dataArray = Object.entries(JSON.parse(row.data)).filter(
-                    a => !!a[1] || a[1] === 0 || a[1] === false,
+                    (a) => !!a[1] || a[1] === 0 || a[1] === false,
                   )
                   let data = ''
-                  dataArray.forEach(d => {
+                  dataArray.forEach((d) => {
                     data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`
                   })
                   const body = `${origArt}\r\n${neueArt}${

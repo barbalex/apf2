@@ -4,7 +4,6 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
-import ErrorBoundary from 'react-error-boundary'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -17,6 +16,7 @@ import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -59,9 +59,9 @@ const Tpopkontrzaehl = ({ treeName }) => {
   )
 
   const codes = get(dataZaehlOfEk, 'allTpopkontrzaehls.nodes', [])
-    .map(n => n.einheit)
+    .map((n) => n.einheit)
     // prevent null values which cause error in query
-    .filter(e => !!e)
+    .filter((e) => !!e)
   const {
     data: dataLists,
     loading: loadingLists,

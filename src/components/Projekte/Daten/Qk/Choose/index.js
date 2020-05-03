@@ -5,13 +5,13 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 
 import query from './query'
 import RowComponent from './Row'
 import storeContext from '../../../../../storeContext'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px - 43px - 48px);

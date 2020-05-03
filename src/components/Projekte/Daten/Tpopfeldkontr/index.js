@@ -7,7 +7,6 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
-import ErrorBoundary from 'react-error-boundary'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import Checkbox3States from '../../../shared/Checkbox3StatesFormik'
@@ -32,6 +31,7 @@ import { simpleTypes as tpopfeldkontrType } from '../../../../store/Tree/DataFil
 import Files from '../../../shared/Files'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: ${(props) =>

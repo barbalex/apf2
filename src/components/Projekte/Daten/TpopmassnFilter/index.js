@@ -5,7 +5,6 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
-import ErrorBoundary from 'react-error-boundary'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -23,6 +22,7 @@ import queryIsMassnTypAnpflanzung from './queryIsMassnTypAnpflanzung'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopmassnType } from '../../../../store/Tree/DataFilter/tpopmassn'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 145px);

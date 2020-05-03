@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useState, useMemo } from 'react'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import Button from '@material-ui/core/Button'
@@ -13,6 +12,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Fields from './Fields'
 import storeContext from '../../storeContext'
 import { allFields } from '../../store/EkPlan'
+import ErrorBoundary from '../shared/ErrorBoundary'
 
 const ChooseContainer = styled.div`
   position: relative;
@@ -53,9 +53,9 @@ const FelderButton = styled(Button)`
 
 // placing mateiral-ui checkboxes denser
 // see: https://github.com/mui-org/material-ui/issues/6098#issuecomment-380451242
-const DenserPrimaryAction = withStyles(theme => ({
+const DenserPrimaryAction = withStyles((theme) => ({
   root: { margin: '-8px 2px -8px -4px' },
-}))(props => <div className={props.classes.root}>{props.children}</div>)
+}))((props) => <div className={props.classes.root}>{props.children}</div>)
 
 const EkPlanChoose = () => {
   const store = useContext(storeContext)

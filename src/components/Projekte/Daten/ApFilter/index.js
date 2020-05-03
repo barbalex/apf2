@@ -4,7 +4,6 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
-import ErrorBoundary from 'react-error-boundary'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -19,6 +18,7 @@ import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as apType } from '../../../../store/Tree/DataFilter/ap'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 145px);
@@ -73,7 +73,7 @@ const ApFilter = ({ treeName }) => {
   const apFilter = useMemo(() => {
     const apFilter = { projId: { equalTo: projId } }
     const apFilterValues = Object.entries(dataFilterAp).filter(
-      e => e[1] || e[1] === 0,
+      (e) => e[1] || e[1] === 0,
     )
     apFilterValues.forEach(([key, value]) => {
       const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
@@ -130,7 +130,7 @@ const ApFilter = ({ treeName }) => {
   )
 
   const aeTaxonomiesFilter = useCallback(
-    inputValue =>
+    (inputValue) =>
       !!inputValue
         ? {
             apByArtIdExists: true,

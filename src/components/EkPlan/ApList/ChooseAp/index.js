@@ -1,13 +1,13 @@
 import React, { useContext, useCallback, useRef } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import { useApolloClient } from '@apollo/react-hooks'
 import { observer } from 'mobx-react-lite'
 
 import queryApsToChoose from './queryApsToChoose'
 import storeContext from '../../../../storeContext'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const StyledSelect = styled(AsyncSelect)`
   .react-select__control {
@@ -35,15 +35,15 @@ const StyledSelect = styled(AsyncSelect)`
   }
   .react-select__clear-indicator {
     /* ability to hide caret when not enough space */
-    padding-right: ${props => (props.nocaret ? '0' : '8px')};
+    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
   }
   .react-select__dropdown-indicator {
     /* ability to hide caret when not enough space */
-    display: ${props => (props.nocaret ? 'none' : 'flex')};
+    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
   }
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
-    width: ${props => (props.nocaret ? '0' : '1px')};
+    width: ${(props) => (props.nocaret ? '0' : '1px')};
   }
   input {
     @media print {
@@ -54,7 +54,7 @@ const StyledSelect = styled(AsyncSelect)`
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
-    height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
     z-index: 4;
   }
 `
@@ -80,7 +80,7 @@ const EkPlan = ({ setShowChoose }) => {
   const { activeNodeArray } = store.tree
   const projId = activeNodeArray[1] || '99999999-9999-9999-9999-999999999999'
 
-  const apValues = aps.map(a => a.value)
+  const apValues = aps.map((a) => a.value)
 
   const data = useRef({})
   const error = useRef({})
@@ -115,7 +115,7 @@ const EkPlan = ({ setShowChoose }) => {
     [apValues, client, projId],
   )
 
-  const onChange = option => {
+  const onChange = (option) => {
     if (option && option.value) {
       addAp(option)
       setShowChoose(false)

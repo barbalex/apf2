@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
@@ -12,6 +11,7 @@ import Massnahmen from './Massnahmen'
 import Beobachtungen from './Beobachtungen'
 import Anwendung from './Anwendung'
 import Optionen from './Optionen'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;

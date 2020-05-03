@@ -4,11 +4,11 @@ import get from 'lodash/get'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import MarkdownIt from 'markdown-it'
-import ErrorBoundary from 'react-error-boundary'
 
 import FormTitle from '../../../shared/FormTitle'
 import storeContext from '../../../../storeContext'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const mdParser = new MarkdownIt({ breaks: true })
 

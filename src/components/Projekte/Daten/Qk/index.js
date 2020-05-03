@@ -4,7 +4,6 @@ import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import ErrorBoundary from 'react-error-boundary'
 import { useQuery } from '@apollo/react-hooks'
 
 import FormTitle from '../../../shared/FormTitle'
@@ -13,6 +12,7 @@ import storeContext from '../../../../storeContext'
 import Qk from './Qk'
 import Choose from './Choose'
 import queryQk from './queryQk'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px);

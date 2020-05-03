@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
+
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const LabelPopoverRow = styled.div`
   padding: 2px 5px 2px 5px;

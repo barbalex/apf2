@@ -12,7 +12,6 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 import gql from 'graphql-tag'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
@@ -26,6 +25,7 @@ import Select from '../../../shared/Select'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px);

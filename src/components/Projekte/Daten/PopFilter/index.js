@@ -4,7 +4,6 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
-import ErrorBoundary from 'react-error-boundary'
 
 import TextField from '../../../shared/TextFieldFormik'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfoFormik'
@@ -15,6 +14,7 @@ import queryPops from './queryPops'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as popType } from '../../../../store/Tree/DataFilter/pop'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 145px);

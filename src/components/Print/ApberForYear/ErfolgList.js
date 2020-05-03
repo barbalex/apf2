@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import sortBy from 'lodash/sortBy'
-import ErrorBoundary from 'react-error-boundary'
+
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   break-before: page;
@@ -68,27 +69,27 @@ const ErfolgSpanningTitle = styled(Title)`
 const ErfolgNicht = styled(Cell)`
   grid-column: 2 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? 'red' : 'unset')};
+  background-color: ${(props) => (props.val ? 'red' : 'unset')};
 `
 const ErfolgWenig = styled(Cell)`
   grid-column: 3 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? 'orange' : 'unset')};
+  background-color: ${(props) => (props.val ? 'orange' : 'unset')};
 `
 const ErfolgMaessig = styled(Cell)`
   grid-column: 4 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? 'yellow' : 'unset')};
+  background-color: ${(props) => (props.val ? 'yellow' : 'unset')};
 `
 const ErfolgGut = styled(Cell)`
   grid-column: 5 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? '#00f6ff' : 'unset')};
+  background-color: ${(props) => (props.val ? '#00f6ff' : 'unset')};
 `
 const ErfolgSehr = styled(Cell)`
   grid-column: 6 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? '#00ff00' : 'unset')};
+  background-color: ${(props) => (props.val ? '#00ff00' : 'unset')};
 `
 const ErfolgVeraenderung = styled(Cell)`
   grid-column: 7 / span 1;
@@ -97,7 +98,7 @@ const ErfolgVeraenderung = styled(Cell)`
 const ErfolgUnsicher = styled(Cell)`
   grid-column: 8 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? '#afafaf' : 'unset')};
+  background-color: ${(props) => (props.val ? '#afafaf' : 'unset')};
 `
 const ErfolgNichtBeurteilt = styled(Cell)`
   grid-column: 9 / span 1;
@@ -196,12 +197,12 @@ const ErfolgUnsicherTitle = styled(ErfolgTitle)`
 const ErfolgList = ({ jahr, data }) => {
   const aps = get(data, 'allAps.nodes', [])
   const apRows = sortBy(
-    aps.map(ap => {
+    aps.map((ap) => {
       const beurteilung = get(ap, 'apbersByApId.nodes[0].beurteilung')
       const pops = get(ap, 'popsByApId.nodes', [])
-      const tpops = flatten(pops.map(p => get(p, 'tpopsByPopId.nodes', [])))
+      const tpops = flatten(pops.map((p) => get(p, 'tpopsByPopId.nodes', [])))
       const anzMassn = flatten(
-        tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', [])),
+        tpops.map((t) => get(t, 'tpopmassnsByTpopId.nodes', [])),
       ).length
       return {
         ap: get(ap, 'aeTaxonomyByArtId.artname'),
@@ -265,7 +266,7 @@ const ErfolgList = ({ jahr, data }) => {
           <ErfolgNichtBeurteiltTitle>
             <div>nicht beurteilt</div>
           </ErfolgNichtBeurteiltTitle>
-          {apRows.map(row => (
+          {apRows.map((row) => (
             <Fragment key={row.ap}>
               <Ap>{row.ap}</Ap>
               <ErfolgNicht val={!!row.erfolgNicht}>

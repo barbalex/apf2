@@ -6,7 +6,6 @@ import sortBy from 'lodash/sortBy'
 import minBy from 'lodash/minBy'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
-import ErrorBoundary from 'react-error-boundary'
 import { MdPrint } from 'react-icons/md'
 import Fab from '@material-ui/core/Fab'
 import { useQuery } from '@apollo/react-hooks'
@@ -19,6 +18,7 @@ import AMengen from './AMengen'
 import BMengen from './BMengen'
 import CMengen from './CMengen'
 import storeContext from '../../../storeContext'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
