@@ -1,41 +1,74 @@
 // https://stackoverflow.com/a/25296972/712005
 // also: https://gis.stackexchange.com/a/130553/13491
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-//import { useLeaflet } from 'react-leaflet'
+import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
 import axios from 'axios'
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+import get from 'lodash/get'
 
 import storeContext from '../../../../storeContext'
+import popupFromProperties from './popupFromProperties'
+import { nsBetreuung } from '../../../shared/fragments'
+
+const onEachFeature = (feature, layer) => {
+  if (feature.properties) {
+    layer.bindPopup(popupFromProperties(feature.properties))
+  }
+}
+
+// see: https://leafletjs.com/reference-1.6.0.html#path-option
+// need to fill or else popup will only happen when line is clicked
+// when fill is true, need to give stroke an opacity
+const style = () => ({
+  fill: true,
+  fillOpacity: 0,
+  color: 'green',
+  weight: 3,
+  opacity: 1,
+})
 
 const BetreuungsgebieteLayer = () => {
   const { enqueNotification } = useContext(storeContext)
-  //const { map } = useLeaflet()
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const baseUrl = 'https://maps.zh.ch/wfs/OGDZHWFS'
-    const params = {
-      service: 'WFS',
-      version: '2.0.0',
-      request: 'getFeature',
-      typeName: 'ms:ogd-0428_aln_fns_betreuungsgebiete_f',
-      maxFeatures: 3000,
-      outputFormat: 'application/json',
+  const [gbData, setGbData] = useState(null)
+  const [totalData, setTotalData] = useState(null)
+
+  const { data: nsbData, error: nsbError } = useQuery(gql`
+    query nsBetreuungsQuery {
+      allNsBetreuungs {
+        nodes {
+          ...NsBetreuungFields
+        }
+      }
     }
-    const url = `${baseUrl}${window.L.Util.getParamString(params)}`
-    console.log('Betreuungsgebiete, url:', url)
-    axios({
-      method: 'get',
-      url,
-      auth: {
-        username: process.env.GATSBY_MAPS_ZH_CH_USER,
-        password: process.env.GATSBY_MAPS_ZH_CH_SECRET,
+    ${nsBetreuung}
+  `)
+
+  if (nsbError) {
+    enqueNotification({
+      message: `Fehler beim Laden der NS-Gebiets-Betreuer: ${nsbError.message}`,
+      options: {
+        variant: 'error',
       },
     })
+  }
+
+  const nsbNodes = get(nsbData, 'allNsBetreuungs.nodes') || []
+
+  useEffect(() => {
+    /**
+     * BEWARE: https://maps.zh.ch does not include cors headers
+     * so need to query server side
+     */
+    axios({
+      method: 'get',
+      url: 'https://ss.apflora.ch/karte/betreuungsgebiete',
+    })
       .then((response) => {
-        console.log('Betreuungsgebiete, response:', response)
-        //const layer = new window.L.GeoJSON()
+        setGbData(response.data.features)
       })
       .catch((error) => {
         enqueNotification({
@@ -48,7 +81,31 @@ const BetreuungsgebieteLayer = () => {
       })
   }, [enqueNotification])
 
-  return <div style={{ display: 'none' }} />
+  useEffect(() => {
+    if (gbData && nsbData) {
+      const totalData = gbData.map((d) => {
+        const nsb = nsbNodes.find((n) => n.gebietNr === d.properties.nr) || {}
+
+        return {
+          geometry: d.geometry,
+          type: d.type,
+          properties: {
+            ...d.properties,
+            firma: nsb.firma || '',
+            projektleiter: nsb.projektleiter || '',
+            telefon: nsb.telefon || '',
+          },
+        }
+      })
+      setTotalData(totalData)
+    }
+  }, [gbData, nsbData, nsbNodes])
+
+  if (!totalData) return null
+
+  return (
+    <GeoJSON data={totalData} style={style} onEachFeature={onEachFeature} />
+  )
 }
 
 export default observer(BetreuungsgebieteLayer)
