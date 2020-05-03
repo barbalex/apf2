@@ -8,9 +8,12 @@ import logout from '../../modules/logout'
 const Container = styled.div`
   padding: 15px;
 `
+const ButtonContainer = styled.div`
+  margin-right: 10px;
+  margin-bottom: 10px;
+`
 const StyledButton = styled(Button)`
   text-transform: none !important;
-  margin-right: 10px;
 `
 
 const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
@@ -22,15 +25,19 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
 
   return (
     <Container>
-      <p>Etwas ist schief gelaufen. Fehler-Meldung:</p>
+      <p>Sorry, ein Fehler ist aufgetreten:</p>
       <pre>{error.message}</pre>
       {/*<pre>{componentStack}</pre>*/}
-      <StyledButton variant="outlined" onClick={onReload}>
-        neu starten
-      </StyledButton>
-      <StyledButton variant="outlined" onClick={resetErrorBoundary}>
-        Cache löschen und neu starten
-      </StyledButton>
+      <ButtonContainer>
+        <StyledButton variant="outlined" onClick={onReload}>
+          neu starten
+        </StyledButton>
+      </ButtonContainer>
+      <ButtonContainer>
+        <StyledButton variant="outlined" onClick={resetErrorBoundary}>
+          Cache leeren und neu starten (neue Anmeldung nötig)
+        </StyledButton>
+      </ButtonContainer>
     </Container>
   )
 }
