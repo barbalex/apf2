@@ -3,7 +3,6 @@ import 'react-markdown-editor-lite/lib/index.css'
 import MarkdownIt from 'markdown-it'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
 import { FaExpandArrowsAlt } from 'react-icons/fa'
 import MdEditor from 'react-markdown-editor-lite'
 
@@ -89,4 +88,4 @@ const MarkdownField = ({ field, form, label, disabled }) => {
   )
 }
 
-export default observer(MarkdownField)
+export default MarkdownField
