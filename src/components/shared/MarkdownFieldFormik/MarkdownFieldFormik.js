@@ -3,21 +3,19 @@ import 'react-markdown-editor-lite/lib/index.css'
 import MarkdownIt from 'markdown-it'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
-import { FaExpandArrowsAlt } from 'react-icons/fa'
-import MdEditor from 'react-markdown-editor-lite'
+import Editor, { Plugins } from 'react-markdown-editor-lite'
 
 import Label from '../Label'
+
+Editor.use(Plugins.AutoResize, {
+  min: 47,
+  max: 1000,
+})
 
 const mdParser = new MarkdownIt({ breaks: true })
 
 const Container = styled.div`
   margin-bottom: 12px;
-  position: relative;
-  .rc-md-editor {
-    min-height: 200px;
-    resize: vertical;
-    overflow: hidden;
-  }
   .editorpane {
     overflow-y: auto !important;
   }
@@ -25,17 +23,6 @@ const Container = styled.div`
   .html-wrap,
   .rc-md-navigation {
     background-color: #fffde7 !important;
-  }
-`
-// this is to show an expanding symbol in the lower right corner
-// so user realizes he can expand by pulling it
-const ExpandContainer = styled.div`
-  position: absolute;
-  right: 0;
-  bottom: -6px;
-  svg {
-    font-size: 0.8em;
-    color: #6b6b6b;
   }
 `
 const config = {
@@ -72,15 +59,12 @@ const MarkdownField = ({ field, form, label, disabled }) => {
   return (
     <Container>
       <Label label={label} />
-      <MdEditor
+      <Editor
         value={value}
         renderHTML={(text) => mdParser.render(text)}
         onChange={change}
         config={config}
       />
-      <ExpandContainer>
-        <FaExpandArrowsAlt />
-      </ExpandContainer>
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
