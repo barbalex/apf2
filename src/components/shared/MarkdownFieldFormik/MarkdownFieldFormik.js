@@ -1,21 +1,19 @@
-import React, { useCallback, Suspense, lazy } from 'react'
+import React, { useCallback } from 'react'
 import 'react-markdown-editor-lite/lib/index.css'
 import MarkdownIt from 'markdown-it'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaExpandArrowsAlt } from 'react-icons/fa'
+import MdEditor from 'react-markdown-editor-lite'
 
-import Label from './Label'
-
-// need to lazy import because it calls navigator which busts gatsby build
-const MdEditor = lazy(() => import('react-markdown-editor-lite'))
+import Label from '../Label'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
 const Container = styled.div`
-  position: relative;
   margin-bottom: 12px;
+  position: relative;
   .rc-md-editor {
     min-height: 200px;
     resize: vertical;
@@ -30,6 +28,8 @@ const Container = styled.div`
     background-color: #fffde7 !important;
   }
 `
+// this is to show an expanding symbol in the lower right corner
+// so user realizes he can expand by pulling it
 const ExpandContainer = styled.div`
   position: absolute;
   right: 0;
@@ -72,21 +72,19 @@ const MarkdownField = ({ field, form, label, disabled }) => {
 
   return (
     <Container>
-      <Suspense fallback={<div>Lade...</div>}>
-        <Label label={label} />
-        <MdEditor
-          value={value}
-          renderHTML={(text) => mdParser.render(text)}
-          onChange={change}
-          config={config}
-        />
-        <ExpandContainer>
-          <FaExpandArrowsAlt />
-        </ExpandContainer>
-        {!!error && (
-          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-        )}
-      </Suspense>
+      <Label label={label} />
+      <MdEditor
+        value={value}
+        renderHTML={(text) => mdParser.render(text)}
+        onChange={change}
+        config={config}
+      />
+      <ExpandContainer>
+        <FaExpandArrowsAlt />
+      </ExpandContainer>
+      {!!error && (
+        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+      )}
     </Container>
   )
 }
