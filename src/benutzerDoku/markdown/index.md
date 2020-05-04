@@ -1,7 +1,7 @@
 ---
 typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Formatierbare-Felder"
-date: "2020-04-29"
+date: "2020-05-04"
 title: "Formatierbare Felder"
 sort: 15
 ---
@@ -18,6 +18,4 @@ In Markdown-Feldern seht ihr nun ein Menüband am oberen Rand des Feldes. Links 
 
 Markdown ist ein reines Text-Format. Daher kann es roh in ein Textfeld einer Datenbank gespeichert werden. Die Daten können sogar weiterhin abfragt bzw. gesucht werden.<br/><br/>
 
-Der Hauptgrund, warum einige Felder Markdown zulassen, ist um Zeilen-Umbrüche und Leer-Zeilen zu ermöglichen.<br/><br/>
-
-Das Markdown-Werkzeug passt seine Höhe im Editier-Modus leider nicht automatisch an den Inhalt an. Man kann das Feld am unteren rechten Rand mit der Maus packen und grösser ziehen.
+Der Hauptgrund, warum einige Felder Markdown zulassen, ist um Zeilen-Umbrüche und Leer-Zeilen zu ermöglichen.
