@@ -7,7 +7,7 @@ import Editor, { Plugins } from 'react-markdown-editor-lite'
 
 import Label from '../Label'
 
-Editor.use(Plugins, {
+Editor.use(Plugins.AutoResize, {
   min: 100,
   max: 1000,
 })
