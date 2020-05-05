@@ -37,8 +37,11 @@ create or replace function apflora.encrypt_pass()
   returns trigger as
 $$
 begin
-  if NULLIF(NEW.pass,'') IS NOT NULL and (TG_OP = 'INSERT' or NEW.pass <> OLD.pass) then
-    NEW.pass = crypt(NEW.pass, gen_salt('bf'));
+  -- this is REALLY weird:
+  -- if NULLIF(NEW.pass,'') IS NOT NULL and (TG_OP = 'INSERT' or NEW.pass <> OLD.pass) then
+  -- always only worked the SECOND time pass was changed
+  if NULLIF(NEW.pass,'') IS NOT NULL and (TG_OP = 'INSERT' or char_length(NEW.pass) < 40) then
+    NEW.pass := crypt(NEW.pass, gen_salt('bf'));
   end if;
   return NEW;
 end
@@ -50,7 +53,8 @@ comment on function apflora.encrypt_pass() is 'hashed das Passwort bei insert un
 -- to keep passwords safe in the users table
 -- PROBLEM: This trigger does NOT work on insert
 drop trigger if exists encrypt_pass on apflora.user;
-create trigger encrypt_pass
+drop trigger if exists on_change_pass on apflora.user;
+create trigger on_change_pass
 before insert or update on apflora.user
 for each row
 execute procedure apflora.encrypt_pass();
