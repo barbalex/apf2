@@ -417,7 +417,7 @@ const User = ({ treeName }) => {
               <FormHelperText id="passwortHelper">
                 {passwordErrorText || (errors && !!errors.pass)
                   ? errors.pass
-                  : ''}
+                  : 'Passwort muss mindestens 6 Zeichen lang sein und darf keine Zahl sein'}
               </FormHelperText>
             </FormControl>
           )}
