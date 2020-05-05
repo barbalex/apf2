@@ -6,8 +6,8 @@ CREATE TABLE apflora.user (
   -- allow other attributes to be null
   -- so names and roles can be set beforehand by topos
   email text UNIQUE default null,
-  -- is role still used?
-  role name DEFAULT NULL check role_length_maximum_512 (length(role) < 512),
+  -- enforce role to prevent errors when no role is set
+  role name not null DEFAULT 'apflora_ap_reader' check role_length_maximum_512 (length(role) < 512),
   pass text DEFAULT NULL check pass_length_minimum_6 (length(pass) > 5),
   adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT proper_email CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')
@@ -2109,7 +2109,7 @@ CREATE INDEX ON apflora.usermessage USING btree (message_id);
 alter table apflora.usermessage enable row level security;
 drop policy if exists reader on apflora.usermessage;
 create policy reader on apflora.usermessage 
-using (user_name = current_user_name());
+using (user_name = current_user_name() or current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.ziel;
