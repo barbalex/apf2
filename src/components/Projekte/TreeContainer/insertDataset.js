@@ -35,7 +35,7 @@ export default async ({
   const { setActiveNodeArray, openNodes, setOpenNodes } = store[treeName]
   let table = tablePassed
   // insert new dataset in db and fetch id
-  const tableMetadata = tables.find(t => t.table === table)
+  const tableMetadata = tables.find((t) => t.table === table)
   if (!tableMetadata) {
     return enqueNotification({
       message: `no table meta data found for table "${table}"`,
@@ -136,7 +136,7 @@ export default async ({
       ${userFragment}
     `
     delete variables.parentId
-    variables.role = 'apflora_reader'
+    variables.role = 'apflora_ap_reader'
   }
   if (['adresseFolder', 'adresse'].includes(menuType)) {
     mutation = gql`
