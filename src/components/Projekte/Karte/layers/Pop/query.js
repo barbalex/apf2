@@ -1,12 +1,5 @@
 import gql from 'graphql-tag'
 
-import {
-  aeTaxonomies,
-  pop,
-  popStatusWerte,
-  tpop,
-} from '../../../../shared/fragments'
-
 export default gql`
   query PopForMapQuery(
     $projId: UUID!
@@ -20,28 +13,45 @@ export default gql`
   ) {
     projektById(id: $projId) @include(if: $isActiveInMap) {
       id
+      __typename
       perAp: apsByProjId(filter: { id: { equalTo: $apId } })
         @include(if: $perAp) {
         nodes {
           id
+          __typename
           popsByApId(filter: $popFilter) {
             nodes {
-              ...PopFields
+              id
+              __typename
+              nr
+              name
+              status
+              wgs84Lat
+              wgs84Long
+              lv95X
+              lv95Y
               popStatusWerteByStatus {
-                ...PopStatusWerteFields
+                id
+                __typename
+                text
               }
               apByApId {
                 id
+                __typename
                 aeTaxonomyByArtId {
-                  ...AeTaxonomiesFields
+                  id
+                  __typename
+                  artname
                 }
               }
               tpopsByPopId(filter: $tpopFilter)
                 @include(if: $tpopLayerIsActive) {
                 nodes {
-                  ...TpopFields
+                  id
+                  __typename
                   popByPopId {
                     id
+                    __typename
                     nr
                     name
                   }
@@ -54,24 +64,40 @@ export default gql`
       perProj: apsByProjId @include(if: $perProj) {
         nodes {
           id
+          __typename
           popsByApId(filter: $popFilter) {
             nodes {
-              ...PopFields
+              id
+              __typename
+              nr
+              name
+              status
+              wgs84Lat
+              wgs84Long
+              lv95X
+              lv95Y
               popStatusWerteByStatus {
-                ...PopStatusWerteFields
+                id
+                __typename
+                text
               }
               apByApId {
                 id
+                __typename
                 aeTaxonomyByArtId {
-                  ...AeTaxonomiesFields
+                  id
+                  __typename
+                  artname
                 }
               }
               tpopsByPopId(filter: $tpopFilter)
                 @include(if: $tpopLayerIsActive) {
                 nodes {
-                  ...TpopFields
+                  id
+                  __typename
                   popByPopId {
                     id
+                    __typename
                     nr
                     name
                   }
@@ -83,8 +109,4 @@ export default gql`
       }
     }
   }
-  ${aeTaxonomies}
-  ${pop}
-  ${popStatusWerte}
-  ${tpop}
 `
