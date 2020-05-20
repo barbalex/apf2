@@ -1,16 +1,16 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useEffect } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from '@apollo/react-hooks'
 import { useLeaflet } from 'react-leaflet'
+import bboxPolygon from '@turf/bbox-polygon'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
-import objectsInsideBounds from '../../../../../modules/objectsInsideBounds'
 import { simpleTypes as popType } from '../../../../../store/Tree/DataFilter/pop'
 import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
 
@@ -37,7 +37,6 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   const {
     mapFilter,
     activeApfloraLayers,
-    setActiveApfloraLayers,
     setRefetchKey,
     enqueNotification,
   } = store
@@ -51,6 +50,15 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   const isActiveInMap = activeApfloraLayers.includes('tpop')
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
+
+  const bounds = leafletMap.getBounds()
+  const boundsArray = [
+    bounds.getWest(),
+    bounds.getSouth(),
+    bounds.getEast(),
+    bounds.getNorth(),
+  ]
+  const myBbox = bboxPolygon(boundsArray).geometry
 
   const popFilter = {
     // used to filter: wgs84Lat: { isNull: false }
@@ -70,7 +78,10 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     }
   }
 
-  const tpopFilter = { wgs84Lat: { isNull: false } }
+  const tpopFilter = {
+    wgs84Lat: { isNull: false },
+    geomPoint: { within: myBbox },
+  }
   const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
     (e) => e[1] || e[1] === 0,
   )
@@ -97,6 +108,13 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   })
   setRefetchKey({ key: 'tpopForMap', value: refetch })
 
+  useEffect(() => {
+    leafletMap.on('zoomend moveend', refetch)
+    return () => {
+      leafletMap.off('zoomend moveend', refetch)
+    }
+  }, [leafletMap, refetch])
+
   if (error) {
     enqueNotification({
       message: `Fehler beim Laden der Teil-Populationen für die Karte: ${error.message}`,
@@ -115,57 +133,31 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     () => flatten(aps.map((ap) => get(ap, 'popsByApId.nodes', []))),
     [aps],
   )
-  const tpops = useMemo(
+  let tpops = useMemo(
     () => flatten(pops.map((pop) => get(pop, 'tpopsByPopId.nodes', []))),
     [pops],
   )
-
-  console.log('layers Tpop', { tpopsLength: tpops.length })
 
   const mapTpopIdsFiltered = idsInsideFeatureCollection({
     mapFilter,
     data: tpops,
   })
   setTpopIdsFiltered(mapTpopIdsFiltered)
+  console.log('layers Tpop, tpops.length:', tpops.length)
 
-  // use tpops for filtering on map,
-  // tpopsForMap for presenting on map
-  let tpopsForMap = []
   if (tpops.length > 1500) {
-    tpopsForMap = objectsInsideBounds({
-      map: leafletMap,
-      data: tpops,
-    })
-  } else {
-    tpopsForMap = [...tpops]
-  }
-  console.log('layers Tpop', { ttpopsForMapLength: tpopsForMap.length })
-
-  if (tpopsForMap.length > 1500) {
     enqueNotification({
-      message: `Zuviele Teil-Populationen: Es werden maximal 1'500 angezeigt, im aktuellen Ausschnitt sind es: ${tpopsForMap.length.toLocaleString(
+      message: `Zuviele Teil-Populationen: Es werden maximal 1'500 angezeigt, im aktuellen Ausschnitt sind es: ${tpops.length.toLocaleString(
         'de-CH',
       )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
       options: {
         variant: 'warning',
       },
     })
-    tpopsForMap = []
-    setActiveApfloraLayers(activeApfloraLayers.filter((l) => l !== 'tpop'))
-  } else if (tpops.length > 1500) {
-    enqueNotification({
-      message: `Weil das Layer mehr als 1'500 Teil-Populationen enthält (nämlich: ${tpops.length.toLocaleString(
-        'de-CH',
-      )}), wurden nur die ${tpopsForMap.length.toLocaleString(
-        'de-CH',
-      )} im aktuellen Ausschnitt dargestellt. Falls Sie den Ausschnitt verändern sollten, müssen Sie das Layer aus- und wieder einschalten, um die passenden Teil-Populationen neu aufzubauen.`,
-      options: {
-        variant: 'info',
-      },
-    })
+    tpops = []
   }
 
-  const tpopMarkers = tpopsForMap.map((tpop) => (
+  const tpopMarkers = tpops.map((tpop) => (
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
 
