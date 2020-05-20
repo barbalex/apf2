@@ -109,9 +109,12 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   setRefetchKey({ key: 'tpopForMap', value: refetch })
 
   useEffect(() => {
-    leafletMap.on('zoomend moveend', refetch)
+    // DO NOT use:
+    // leafletMap.on('zoomend moveend', refetch
+    // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
+    leafletMap.on('zoomend moveend', () => refetch())
     return () => {
-      leafletMap.off('zoomend moveend', refetch)
+      leafletMap.on('zoomend moveend', () => refetch())
     }
   }, [leafletMap, refetch])
 
@@ -143,11 +146,11 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     data: tpops,
   })
   setTpopIdsFiltered(mapTpopIdsFiltered)
-  console.log('layers Tpop, tpops.length:', tpops.length)
+  //console.log('layers Tpop, tpops.length:', tpops.length)
 
-  if (tpops.length > 1500) {
+  if (tpops.length > 2000) {
     enqueNotification({
-      message: `Zuviele Teil-Populationen: Es werden maximal 1'500 angezeigt, im aktuellen Ausschnitt sind es: ${tpops.length.toLocaleString(
+      message: `Zuviele Teil-Populationen: Es werden maximal 2'000 angezeigt, im aktuellen Ausschnitt sind es: ${tpops.length.toLocaleString(
         'de-CH',
       )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
       options: {

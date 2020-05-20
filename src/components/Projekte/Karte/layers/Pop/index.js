@@ -1,9 +1,11 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useEffect } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from '@apollo/react-hooks'
+import bboxPolygon from '@turf/bbox-polygon'
+import { useLeaflet } from 'react-leaflet'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
@@ -12,10 +14,10 @@ import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureC
 import { simpleTypes as popType } from '../../../../../store/Tree/DataFilter/pop'
 import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
 
-const iconCreateFunction = function(cluster) {
+const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedPop = markers.some(
-    m => m.options.icon.options.className === 'popIconHighlighted',
+    (m) => m.options.icon.options.className === 'popIconHighlighted',
   )
   const className = hasHighlightedPop ? 'popClusterHighlighted' : 'popCluster'
   if (typeof window === 'undefined') return () => {}
@@ -27,6 +29,7 @@ const iconCreateFunction = function(cluster) {
 }
 
 const Pop = ({ treeName }) => {
+  const { map: leafletMap } = useLeaflet()
   const store = useContext(storeContext)
   const {
     activeApfloraLayers,
@@ -46,9 +49,21 @@ const Pop = ({ treeName }) => {
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
-  const popFilter = { wgs84Lat: { isNull: false } }
+  const bounds = leafletMap.getBounds()
+  const boundsArray = [
+    bounds.getWest(),
+    bounds.getSouth(),
+    bounds.getEast(),
+    bounds.getNorth(),
+  ]
+  const myBbox = bboxPolygon(boundsArray).geometry
+
+  const popFilter = {
+    wgs84Lat: { isNull: false },
+    geomPoint: { within: myBbox },
+  }
   const popFilterValues = Object.entries(dataFilter.pop).filter(
-    e => e[1] || e[1] === 0,
+    (e) => e[1] || e[1] === 0,
   )
   popFilterValues.forEach(([key, value]) => {
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
@@ -60,9 +75,12 @@ const Pop = ({ treeName }) => {
     }
   }
 
-  const tpopFilter = { wgs84Lat: { isNull: false } }
+  const tpopFilter = {
+    wgs84Lat: { isNull: false },
+    geomPoint: { within: myBbox },
+  }
   const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    e => e[1] || e[1] === 0,
+    (e) => e[1] || e[1] === 0,
   )
   tpopFilterValues.forEach(([key, value]) => {
     const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
@@ -88,6 +106,16 @@ const Pop = ({ treeName }) => {
   })
   setRefetchKey({ key: 'popForMap', value: refetch })
 
+  useEffect(() => {
+    // DO NOT use:
+    // leafletMap.on('zoomend moveend', refetch
+    // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
+    leafletMap.on('zoomend moveend', () => refetch())
+    return () => {
+      leafletMap.on('zoomend moveend', () => refetch())
+    }
+  }, [leafletMap, refetch])
+
   if (error) {
     enqueNotification({
       message: `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
@@ -103,19 +131,21 @@ const Pop = ({ treeName }) => {
     [],
   )
   let pops = useMemo(
-    () => flatten(aps.map(ap => get(ap, 'popsByApId.nodes', []))),
+    () => flatten(aps.map((ap) => get(ap, 'popsByApId.nodes', []))),
     [aps],
   )
 
   // if tpop are filtered, only show their pop
   if (activeApfloraLayers.includes('tpop')) {
-    const popsForTpops = flatten(aps.map(ap => get(ap, 'popsByApId.nodes', [])))
+    const popsForTpops = flatten(
+      aps.map((ap) => get(ap, 'popsByApId.nodes', [])),
+    )
     // adding useMemo here results in error ???
     const tpops = flatten(
-      popsForTpops.map(pop => get(pop, 'tpopsByPopId.nodes', [])),
+      popsForTpops.map((pop) => get(pop, 'tpopsByPopId.nodes', [])),
     )
-    const popIdsOfTpops = tpops.map(t => t.popId)
-    pops = pops.filter(p => popIdsOfTpops.includes(p.id))
+    const popIdsOfTpops = tpops.map((t) => t.popId)
+    pops = pops.filter((p) => popIdsOfTpops.includes(p.id))
   }
 
   const mapPopIdsFiltered = idsInsideFeatureCollection({
@@ -123,13 +153,26 @@ const Pop = ({ treeName }) => {
     data: pops,
   })
   setPopIdsFiltered(mapPopIdsFiltered)
+  //console.log('layers Pop, pops.length:', pops.length)
+
+  if (pops.length > 2000) {
+    enqueNotification({
+      message: `Zuviele Populationen: Es werden maximal 2'000 angezeigt, im aktuellen Ausschnitt sind es: ${pops.length.toLocaleString(
+        'de-CH',
+      )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
+      options: {
+        variant: 'warning',
+      },
+    })
+    pops = []
+  }
 
   return (
     <MarkerClusterGroup
       maxClusterRadius={66}
       iconCreateFunction={iconCreateFunction}
     >
-      {pops.map(pop => (
+      {pops.map((pop) => (
         <Marker key={pop.id} treeName={treeName} pop={pop} />
       ))}
     </MarkerClusterGroup>
