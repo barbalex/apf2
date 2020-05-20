@@ -9,14 +9,14 @@ export default ({ map, data, idKey = 'id' }) => {
    * so need to filter to data with coordinates first...
    * data arrives only if idKey exists
    */
-  let dataToUse = data
+  const dataToUse = data
     // make sure all rows used have id...
-    .filter(p => !!p[idKey])
+    .filter((p) => !!p[idKey])
     // ...and coordinates
-    .filter(p => p.wgs84Lat)
+    .filter((p) => p.wgs84Lat)
 
   const dataPoints = featureCollection(
-    dataToUse.map(t =>
+    dataToUse.map((t) =>
       point([t.wgs84Lat, t.wgs84Long], {
         id: t[idKey],
       }),
@@ -35,7 +35,19 @@ export default ({ map, data, idKey = 'id' }) => {
 
   // let turf check what points are within filter
   const result = pointsWithinPolygon(dataPoints, searchWithin)
-  const idsWithinPolygon = result.features.map(r => r.properties.id)
+  const idsWithinPolygon = result.features.map((r) => r.properties.id)
 
-  return data.filter(d => idsWithinPolygon.includes(d.id))
+  console.log('objectsInsideBounds', {
+    bounds,
+    dataToUse,
+    dataPoints,
+    boundsArray,
+    myBboxPolygon,
+    polygonArray,
+    searchWithin,
+    result,
+    idsWithinPolygon,
+  })
+
+  return data.filter((d) => idsWithinPolygon.includes(d.id))
 }
