@@ -43,7 +43,7 @@
     "exceljs": "3.9.0",
     "file-saver": "2.0.2",
     "formik": "2.1.4",
-    "gatsby": "2.21.12",
+    "gatsby": "2.20.36",
     "gatsby-image": "2.4.5",
     "gatsby-plugin-create-client-paths": "2.3.2",
     "gatsby-plugin-eslint": "2.0.8",
@@ -128,7 +128,8 @@
     "use-debounce": "3.4.2"
   },
   "dependenciesComments": {
-    "nothing": "now"
+    "nothing": "now",
+    "gatsby": "DO NOT UPGRADE over 2.20.36. 2.21.19 tested to be bad in production. See: https://github.com/gatsbyjs/gatsby/issues/19618#issuecomment-625350450"
   },
   "peerDependencies": {
     "react-is": "16.13.1"
