@@ -1,4 +1,10 @@
-import React, { useContext, useMemo, useEffect, useState } from 'react'
+import React, {
+  useContext,
+  useMemo,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
@@ -106,21 +112,18 @@ const Pop = ({ treeName }) => {
   })
   setRefetchKey({ key: 'popForMap', value: refetch })
 
+  // eslint-disable-next-line no-unused-vars
   const [refetchProvoker, setRefetchProvoker] = useState(1)
   useEffect(() => {
     // DO NOT use:
     // leafletMap.on('zoomend moveend', refetch
     // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
-    // ALSO: leafletMap.on('zoomend moveend', ()=> refetch()) never refetches!!??
-    leafletMap.on('zoomend moveend', () =>
-      setRefetchProvoker(refetchProvoker + 1),
-    )
+    // Also: leafletMap.on('zoomend moveend', ()=> refetch()) never refetches!!??
+    leafletMap.on('zoomend moveend', () => setRefetchProvoker(Math.random()))
     return () => {
-      leafletMap.on('zoomend moveend', () =>
-        setRefetchProvoker(refetchProvoker + 1),
-      )
+      leafletMap.off('zoomend moveend', () => setRefetchProvoker(Math.random()))
     }
-  }, [leafletMap, refetchProvoker])
+  }, [leafletMap])
 
   if (error) {
     enqueNotification({
