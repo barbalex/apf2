@@ -13,16 +13,13 @@ export default gql`
   ) {
     projektById(id: $projId) @include(if: $isActiveInMap) {
       id
-      __typename
       perAp: apsByProjId(filter: { id: { equalTo: $apId } })
         @include(if: $perAp) {
         nodes {
           id
-          __typename
           popsByApId(filter: $popFilter) {
             nodes {
               id
-              __typename
               nr
               name
               status
@@ -32,15 +29,12 @@ export default gql`
               lv95Y
               popStatusWerteByStatus {
                 id
-                __typename
                 text
               }
               apByApId {
                 id
-                __typename
                 aeTaxonomyByArtId {
                   id
-                  __typename
                   artname
                 }
               }
@@ -48,10 +42,8 @@ export default gql`
                 @include(if: $tpopLayerIsActive) {
                 nodes {
                   id
-                  __typename
                   popByPopId {
                     id
-                    __typename
                     nr
                     name
                   }
@@ -64,11 +56,9 @@ export default gql`
       perProj: apsByProjId @include(if: $perProj) {
         nodes {
           id
-          __typename
           popsByApId(filter: $popFilter) {
             nodes {
               id
-              __typename
               nr
               name
               status
@@ -78,15 +68,12 @@ export default gql`
               lv95Y
               popStatusWerteByStatus {
                 id
-                __typename
                 text
               }
               apByApId {
                 id
-                __typename
                 aeTaxonomyByArtId {
                   id
-                  __typename
                   artname
                 }
               }
@@ -94,10 +81,8 @@ export default gql`
                 @include(if: $tpopLayerIsActive) {
                 nodes {
                   id
-                  __typename
                   popByPopId {
                     id
-                    __typename
                     nr
                     name
                   }

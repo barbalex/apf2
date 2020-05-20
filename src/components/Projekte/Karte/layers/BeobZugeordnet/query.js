@@ -21,17 +21,25 @@ export default gql`
           id
           apartsByApId {
             nodes {
-              ...ApartFields
+              id
               aeTaxonomyByArtId {
                 id
                 beobsByArtId(filter: $beobFilter) {
                   nodes {
-                    ...BeobFields
+                    id
+                    wgs84Lat
+                    wgs84Long
+                    lv95X
+                    lv95Y
+                    datum
+                    autor
                     beobQuelleWerteByQuelleId {
-                      ...BeobQuelleWerteFields
+                      id
+                      name
                     }
                     aeTaxonomyByArtId {
-                      ...AeTaxonomiesFields
+                      id
+                      artname
                     }
                     tpopByTpopId {
                       id
@@ -48,8 +56,4 @@ export default gql`
       }
     }
   }
-  ${aeTaxonomies}
-  ${apart}
-  ${beob}
-  ${beobQuelleWerte}
 `
