@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect } from 'react'
+import React, { useContext, useMemo, useEffect, useState } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
@@ -108,15 +108,21 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   })
   setRefetchKey({ key: 'tpopForMap', value: refetch })
 
+  const [refetchProvoker, setRefetchProvoker] = useState(1)
   useEffect(() => {
     // DO NOT use:
     // leafletMap.on('zoomend moveend', refetch
     // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
-    leafletMap.on('zoomend moveend', () => refetch())
+    // ALSO: leafletMap.on('zoomend moveend', ()=> refetch()) never refetches!!??
+    leafletMap.on('zoomend moveend', () =>
+      setRefetchProvoker(refetchProvoker + 1),
+    )
     return () => {
-      leafletMap.on('zoomend moveend', () => refetch())
+      leafletMap.on('zoomend moveend', () =>
+        setRefetchProvoker(refetchProvoker + 1),
+      )
     }
-  }, [leafletMap, refetch])
+  }, [leafletMap, refetchProvoker])
 
   if (error) {
     enqueNotification({
@@ -148,7 +154,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   setTpopIdsFiltered(mapTpopIdsFiltered)
   //console.log('layers Tpop, tpops.length:', tpops.length)
 
-  if (tpops.length > 2000) {
+  if (!clustered && tpops.length > 2000) {
     enqueNotification({
       message: `Zuviele Teil-Populationen: Es werden maximal 2'000 angezeigt, im aktuellen Ausschnitt sind es: ${tpops.length.toLocaleString(
         'de-CH',

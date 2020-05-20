@@ -1,19 +1,21 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useEffect, useState } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
+import bboxPolygon from '@turf/bbox-polygon'
+import { useLeaflet } from 'react-leaflet'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
-const iconCreateFunction = function(cluster) {
+const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedTpop = markers.some(
-    m => m.options.icon.options.className === 'beobIconHighlighted',
+    (m) => m.options.icon.options.className === 'beobIconHighlighted',
   )
   if (typeof window === 'undefined') return {}
   const className = hasHighlightedTpop
@@ -27,6 +29,7 @@ const iconCreateFunction = function(cluster) {
 }
 
 const BeobZugeordnetMarker = ({ treeName, clustered }) => {
+  const { map: leafletMap } = useLeaflet()
   const store = useContext(storeContext)
   const {
     setRefetchKey,
@@ -43,10 +46,20 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobZugeordnet')
 
+  const bounds = leafletMap.getBounds()
+  const boundsArray = [
+    bounds.getWest(),
+    bounds.getSouth(),
+    bounds.getEast(),
+    bounds.getNorth(),
+  ]
+  const myBbox = bboxPolygon(boundsArray).geometry
+
   const beobFilter = {
     tpopId: { isNull: false },
     nichtZuordnen: { equalTo: false },
     wgs84Lat: { isNull: false },
+    geomPoint: { within: myBbox },
   }
   if (!!tree.nodeLabelFilter.beob) {
     beobFilter.label = {
@@ -58,11 +71,25 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
   })
   setRefetchKey({ key: 'beobZugeordnetForMap', value: refetch })
 
+  const [refetchProvoker, setRefetchProvoker] = useState(1)
+  useEffect(() => {
+    // DO NOT use:
+    // leafletMap.on('zoomend moveend', refetch
+    // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
+    // ALSO: leafletMap.on('zoomend moveend', ()=> refetch()) never refetches!!??
+    leafletMap.on('zoomend moveend', () =>
+      setRefetchProvoker(refetchProvoker + 1),
+    )
+    return () => {
+      leafletMap.on('zoomend moveend', () =>
+        setRefetchProvoker(refetchProvoker + 1),
+      )
+    }
+  }, [leafletMap, refetchProvoker])
+
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der Nicht zugeordneten Beobachtungen für die Karte: ${
-        error.message
-      }`,
+      message: `Fehler beim Laden der Nicht zugeordneten Beobachtungen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
       },
@@ -74,12 +101,10 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
     'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
     [],
   )
-  const beobs = useMemo(
+  let beobs = useMemo(
     () =>
       flatten(
-        aparts.map(a =>
-          get(a, 'aeTaxonomyByArtId.beobsByArtId.nodes', []),
-        ),
+        aparts.map((a) => get(a, 'aeTaxonomyByArtId.beobsByArtId.nodes', [])),
       ),
     [aparts],
   )
@@ -92,7 +117,7 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
   const beobZugeordnetForMapNodes = useMemo(
     () =>
       flatten(
-        beobZugeordnetForMapAparts.map(n =>
+        beobZugeordnetForMapAparts.map((n) =>
           get(n, 'aeTaxonomyByArtId.beobsByArtId.nodes', []),
         ),
       ),
@@ -104,7 +129,19 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
   })
   setBeobZugeordnetIdsFiltered(mapBeobZugeordnetIdsFiltered)
 
-  const beobMarkers = beobs.map(beob => (
+  if (!clustered && beobs.length > 2000) {
+    enqueNotification({
+      message: `Zuviele Beobachtungen: Es werden maximal 2'000 angezeigt, im aktuellen Ausschnitt sind es: ${beobs.length.toLocaleString(
+        'de-CH',
+      )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
+      options: {
+        variant: 'warning',
+      },
+    })
+    beobs = []
+  }
+
+  const beobMarkers = beobs.map((beob) => (
     <Marker key={beob.id} treeName={treeName} beob={beob} />
   ))
 

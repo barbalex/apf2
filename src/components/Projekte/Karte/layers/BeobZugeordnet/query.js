@@ -1,12 +1,5 @@
 import gql from 'graphql-tag'
 
-import {
-  aeTaxonomies,
-  apart,
-  beob,
-  beobQuelleWerte,
-} from '../../../../shared/fragments'
-
 export default gql`
   query BeobZugeordnetForMapQuery(
     $projId: UUID!
