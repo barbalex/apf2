@@ -1,7 +1,7 @@
 ---
 typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Karte-Teil-Populationen-aller-Aktionsplaene-anzeigen"
-date: "2019-04-18"
+date: "2020-05-20"
 title: "Karte: (Teil-)Populationen aller Aktionspläne anzeigen"
 sort: 17
 ---
@@ -13,9 +13,9 @@ Bedingungen:
 * Die Karte ist offen
 * In der Karte ist das (Teil-)Populationen-Layer aktiv
 * Bei Teil-Populationen: Die Karte ist auf einen kleinen Ausschnitt gezoomt.<br/>
-  Sonst gibt es mehr Teil-Populationen, als angezeigt werden können (die Grenze wurde bei 1'500 Teilpopulationen gesetzt).<br/>
-  Ist der Ausschnitt zu gross, erscheint eine entsprechende Meldung.<br/>
-  Populationen werden alle angezeigt. Weil das aber sehr viele sind, müsst ihr eine Weile darauf warten
-* Will man den Ausschnitt ändern, muss man den Teil-Populationen-Layer aus- und wieder einschalten, um die Teil-Populationen neu zu laden
+  Sonst gibt es mehr Teil-Populationen, als angezeigt werden können (die Grenze wurde bei 2'000 Teilpopulationen gesetzt).<br/>
+  Ist der Ausschnitt zu gross, erscheint eine entsprechende Meldung
+* Sobald der Ausschnitt ändert (Zoomen oder Verschieben), werden die Daten automatisch neu geladen
 
 Wurde am 11.12.2018 eingeführt.
+Und am 20.5.2020 verbessert.
