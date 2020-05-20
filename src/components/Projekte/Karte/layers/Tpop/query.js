@@ -1,12 +1,5 @@
 import gql from 'graphql-tag'
 
-import {
-  aeTaxonomies,
-  pop,
-  popStatusWerte,
-  tpop,
-} from '../../../../shared/fragments'
-
 export default gql`
   query TpopForMapQuery(
     $apId: UUID!
@@ -23,24 +16,32 @@ export default gql`
         @include(if: $perAp) {
         nodes {
           id
-          aeTaxonomyByArtId {
-            ...AeTaxonomiesFields
-          }
           popsByApId(filter: $popFilter) {
             nodes {
-              ...PopFields
+              id
               tpopsByPopId(filter: $tpopFilter) {
                 nodes {
-                  ...TpopFields
+                  id
+                  nr
+                  status
+                  wgs84Lat
+                  wgs84Long
+                  lv95X
+                  lv95Y
+                  flurname
                   popStatusWerteByStatus {
-                    ...PopStatusWerteFields
+                    id
+                    text
                   }
                   popByPopId {
-                    ...PopFields
+                    id
+                    nr
+                    name
                     apByApId {
                       id
                       aeTaxonomyByArtId {
-                        ...AeTaxonomiesFields
+                        id
+                        artname
                       }
                     }
                   }
@@ -53,24 +54,32 @@ export default gql`
       perProj: apsByProjId @include(if: $perProj) {
         nodes {
           id
-          aeTaxonomyByArtId {
-            ...AeTaxonomiesFields
-          }
           popsByApId(filter: $popFilter) {
             nodes {
-              ...PopFields
-              popStatusWerteByStatus {
-                ...PopStatusWerteFields
-              }
+              id
               tpopsByPopId(filter: $tpopFilter) {
                 nodes {
-                  ...TpopFields
+                  id
+                  nr
+                  status
+                  wgs84Lat
+                  wgs84Long
+                  lv95X
+                  lv95Y
+                  flurname
+                  popStatusWerteByStatus {
+                    id
+                    text
+                  }
                   popByPopId {
-                    ...PopFields
+                    id
+                    nr
+                    name
                     apByApId {
                       id
                       aeTaxonomyByArtId {
-                        ...AeTaxonomiesFields
+                        id
+                        artname
                       }
                     }
                   }
@@ -82,8 +91,4 @@ export default gql`
       }
     }
   }
-  ${aeTaxonomies}
-  ${pop}
-  ${popStatusWerte}
-  ${tpop}
 `
