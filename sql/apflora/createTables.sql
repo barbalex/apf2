@@ -738,6 +738,7 @@ CREATE TABLE apflora.pop (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
+create index on apflora.pop using gist (geom_point);
 CREATE INDEX ON apflora.pop USING btree (id);
 CREATE INDEX ON apflora.pop USING btree (ap_id);
 CREATE INDEX ON apflora.pop USING btree (status);
@@ -1043,6 +1044,7 @@ CREATE TABLE apflora.tpop (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
+create index on apflora.tpop using gist (geom_point);
 CREATE INDEX ON apflora.tpop USING btree (id);
 CREATE INDEX ON apflora.tpop USING btree (pop_id);
 CREATE INDEX ON apflora.tpop USING btree (status);
@@ -2344,6 +2346,7 @@ CREATE TABLE apflora.beob (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
+create index on apflora.beob using gist (geom_point);
 CREATE INDEX ON apflora.beob USING btree (id);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
