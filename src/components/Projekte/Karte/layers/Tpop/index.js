@@ -14,10 +14,10 @@ import objectsInsideBounds from '../../../../../modules/objectsInsideBounds'
 import { simpleTypes as popType } from '../../../../../store/Tree/DataFilter/pop'
 import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
 
-const iconCreateFunction = function(cluster) {
+const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedTpop = markers.some(
-    m => m.options.icon.options.isHighlighted,
+    (m) => m.options.icon.options.isHighlighted,
   )
 
   const className = hasHighlightedTpop
@@ -58,7 +58,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     id: { isNull: false },
   }
   const popFilterValues = Object.entries(dataFilter.pop).filter(
-    e => e[1] || e[1] === 0,
+    (e) => e[1] || e[1] === 0,
   )
   popFilterValues.forEach(([key, value]) => {
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
@@ -72,7 +72,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
 
   const tpopFilter = { wgs84Lat: { isNull: false } }
   const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    e => e[1] || e[1] === 0,
+    (e) => e[1] || e[1] === 0,
   )
   tpopFilterValues.forEach(([key, value]) => {
     const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
@@ -112,13 +112,15 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     [],
   )
   const pops = useMemo(
-    () => flatten(aps.map(ap => get(ap, 'popsByApId.nodes', []))),
+    () => flatten(aps.map((ap) => get(ap, 'popsByApId.nodes', []))),
     [aps],
   )
   const tpops = useMemo(
-    () => flatten(pops.map(pop => get(pop, 'tpopsByPopId.nodes', []))),
+    () => flatten(pops.map((pop) => get(pop, 'tpopsByPopId.nodes', []))),
     [pops],
   )
+
+  console.log('layers Tpop', { tpopsLength: tpops.length })
 
   const mapTpopIdsFiltered = idsInsideFeatureCollection({
     mapFilter,
@@ -137,6 +139,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   } else {
     tpopsForMap = [...tpops]
   }
+  console.log('layers Tpop', { ttpopsForMapLength: tpopsForMap.length })
 
   if (tpopsForMap.length > 1500) {
     enqueNotification({
@@ -148,7 +151,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
       },
     })
     tpopsForMap = []
-    setActiveApfloraLayers(activeApfloraLayers.filter(l => l !== 'tpop'))
+    setActiveApfloraLayers(activeApfloraLayers.filter((l) => l !== 'tpop'))
   } else if (tpops.length > 1500) {
     enqueNotification({
       message: `Weil das Layer mehr als 1'500 Teil-Populationen enthält (nämlich: ${tpops.length.toLocaleString(
@@ -162,7 +165,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     })
   }
 
-  const tpopMarkers = tpopsForMap.map(tpop => (
+  const tpopMarkers = tpopsForMap.map((tpop) => (
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
 
