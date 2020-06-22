@@ -153,13 +153,12 @@ CREATE FUNCTION apflora.ap_update_add_apart() RETURNS trigger AS $ap_update_add_
 -- on insert, art_id is not yet set
 -- so need to do this on update
 BEGIN
-    -- if apart with this ap and new art_id does not exist yet
-    if not exists (select 1 from apflora.apart where ap_id = NEW.id and art_id = NEW.art_id) then
-      -- create it
-      INSERT INTO
-        apflora.apart (ap_id, art_id)
-      VALUES (NEW.id, NEW.art_id);
-    end if;
+  -- if apart with this ap and new art_id does not exist yet
+  if not exists (select 1 from apflora.apart where ap_id = NEW.id and art_id = NEW.art_id) then
+    -- create it
+    INSERT INTO apflora.apart (ap_id, art_id)
+    VALUES (NEW.id, NEW.art_id);
+  end if;
   RETURN NEW;
 END;
 $ap_update_add_apart$ LANGUAGE plpgsql;
