@@ -72,7 +72,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
     setWgs84LongState(wgs84Long || '')
   }, [wgs84Lat, wgs84Long])
 
-  const onChangeX = useCallback(event => {
+  const onChangeX = useCallback((event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95XState(value)
   }, [])
@@ -193,7 +193,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
     [saveToDb],
   )
   const onBlurX = useCallback(
-    event => {
+    (event) => {
       const value = ifIsNumericAsNumber(event.target.value)
       const isValid = xIsValid(value)
       if (!isValid) return setXError(xMessage)
@@ -206,12 +206,12 @@ const Coordinates = ({ row, refetchForm, table }) => {
     },
     [lv95X, lv95YState, saveToDbLv95],
   )
-  const onChangeY = useCallback(event => {
+  const onChangeY = useCallback((event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95YState(value)
   }, [])
   const onBlurY = useCallback(
-    event => {
+    (event) => {
       const value = ifIsNumericAsNumber(event.target.value)
       const isValid = yIsValid(value)
       if (!isValid) return setYError(yMessage)
@@ -224,12 +224,12 @@ const Coordinates = ({ row, refetchForm, table }) => {
     [lv95XState, lv95Y, saveToDbLv95],
   )
 
-  const onChangeWgs84Lat = useCallback(event => {
+  const onChangeWgs84Lat = useCallback((event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setWgs84LatState(value)
   }, [])
   const onBlurWgs84Lat = useCallback(
-    event => {
+    (event) => {
       const value = ifIsNumericAsNumber(event.target.value)
       const isValid = wgs84LatIsValid(value)
       if (!isValid) return setWgs84LatError(wgs84LatMessage)
@@ -242,12 +242,12 @@ const Coordinates = ({ row, refetchForm, table }) => {
     },
     [saveToDbWgs84, wgs84Lat, wgs84LongState],
   )
-  const onChangeWgs84Long = useCallback(event => {
+  const onChangeWgs84Long = useCallback((event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setWgs84LongState(value)
   }, [])
   const onBlurWgs84Long = useCallback(
-    event => {
+    (event) => {
       const value = ifIsNumericAsNumber(event.target.value)
       const isValid = wgs84LongIsValid(value)
       if (!isValid) return setWgs84LongError(wgs84LongMessage)
@@ -272,7 +272,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
           aria-describedby={`${id}wgs84LatErrorText`}
         >
           <InputLabel htmlFor={`${id}wgs84Lat`} shrink>
-            Breitengrad
+            Längengrad
           </InputLabel>
           <Input
             id={`${id}wgs84Lat`}
@@ -301,7 +301,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
           aria-describedby={`${id}wgs84LongErrorText`}
         >
           <InputLabel htmlFor={`${id}wgs84Long`} shrink>
-            Längengrad
+            Breitengrad
           </InputLabel>
           <Input
             id={`${id}wgs84Long`}
