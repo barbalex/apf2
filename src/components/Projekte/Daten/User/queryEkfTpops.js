@@ -10,7 +10,8 @@ export default gql`
         ekfInJahr: tpopkontrsByTpopId(
           filter: {
             typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
-            jahr: { equalTo: $jahr }
+            # accept empty year - in case ekf was manually created
+            or: [{ jahr: { equalTo: $jahr } }, { jahr: { isNull: true } }]
           }
         ) {
           totalCount
