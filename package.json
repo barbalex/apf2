@@ -140,6 +140,7 @@
     "@svgr/cli": "5.4.0",
     "copyfiles": "2.3.0",
     "cypress": "4.10.0",
+    "gatsby-cli": "^2.12.59",
     "postgraphile": "4.7.0",
     "postgraphile-plugin-connection-filter": "2.0.0",
     "postgraphile-plugin-connection-filter-postgis": "1.0.0-alpha.6",
