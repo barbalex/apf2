@@ -1,6 +1,5 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-import { ContextMenuTrigger } from 'react-contextmenu'
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary'
@@ -19,10 +18,11 @@ import isNodeOpen from '../isNodeOpen'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../../storeContext'
+import { ContextMenuTrigger } from '../../../../modules/react-contextmenu'
 
 const singleRowHeight = 23
 const StyledNode = styled.div`
-  padding-left: ${props => `${Number(props['data-level']) * 17 - 10}px`};
+  padding-left: ${(props) => `${Number(props['data-level']) * 17 - 10}px`};
   height: ${singleRowHeight}px;
   max-height: ${singleRowHeight}px;
   box-sizing: border-box;
@@ -31,20 +31,21 @@ const StyledNode = styled.div`
   flex-direction: row;
   white-space: nowrap;
   user-select: none;
-  color: ${props =>
+  color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
 `
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
-  margin-top: ${props =>
+  margin-top: ${(props) =>
     props['data-nodeisopen'] ? '-6px !important' : '1px !important'};
-  margin-left: ${props => (props['data-nodeisopen'] ? '-1px !important' : 0)};
-  margin-right: ${props => (props['data-nodeisopen'] ? '-5px !important' : 0)};
-  padding-left: ${props => (props['data-nodeisopen'] ? '2px' : '2px')};
-  height: ${props =>
+  margin-left: ${(props) => (props['data-nodeisopen'] ? '-1px !important' : 0)};
+  margin-right: ${(props) =>
+    props['data-nodeisopen'] ? '-5px !important' : 0};
+  padding-left: ${(props) => (props['data-nodeisopen'] ? '2px' : '2px')};
+  height: ${(props) =>
     props['data-nodeisopen'] ? '30px !important' : '22px !important'};
-  width: ${props =>
+  width: ${(props) =>
     props['data-nodeisopen'] ? '30px !important' : '26px !important'};
-  color: ${props =>
+  color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   cursor: pointer;
   &:hover {
@@ -61,17 +62,17 @@ const StyledChevronRightIcon = styled(ChevronRightIcon)`
   }
 `
 const StyledMoreHorizIcon = styled(MoreHorizIcon)`
-  margin-top: ${props =>
+  margin-top: ${(props) =>
     props['data-nodeisinactivenodepath']
       ? '-5px !important'
       : '-2px !important'};
-  padding-left: ${props =>
+  padding-left: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '1px' : '2px'};
-  height: ${props =>
+  height: ${(props) =>
     props['data-nodeisinactivenodepath']
       ? '26px !important'
       : '22px !important'};
-  color: ${props =>
+  color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   width: 26px;
   cursor: pointer;
@@ -91,7 +92,7 @@ const SymbolDiv = styled.div`
 const TextSpan = styled.span`
   margin-left: 0;
   font-size: 16px !important;
-  font-weight: ${props =>
+  font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -226,7 +227,7 @@ const Row = ({ index, style, node, treeName }) => {
     node.nodeType === 'table' && node.id === copyingBiotop.id
 
   const onClickNode = useCallback(
-    event => {
+    (event) => {
       toggleNode({
         treeName,
         node,
@@ -236,7 +237,7 @@ const Row = ({ index, style, node, treeName }) => {
     [treeName, node, store],
   )
   const onClickNodeSymbol = useCallback(
-    event => {
+    (event) => {
       toggleNodeSymbol({ treeName, node, store })
     },
     [treeName, node, store],
@@ -252,7 +253,7 @@ const Row = ({ index, style, node, treeName }) => {
     <div style={style}>
       <ContextMenuTrigger
         id={`${treeName}${node.menuType}`}
-        collect={props => myProps}
+        collect={(props) => myProps}
         nodeId={node.id}
         nodeLabel={node.label}
         key={`${node.menuType}${node.id}`}
