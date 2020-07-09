@@ -1,8 +1,8 @@
 import React, { useContext, useState, useCallback } from 'react'
-import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu'
 
 // create objects outside render
 const showBeobOnMapData = {
