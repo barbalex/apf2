@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
-import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu'
 
 // create objects outside render
 const insertData = {
