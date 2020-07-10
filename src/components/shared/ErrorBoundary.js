@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 
 import logout from '../../modules/logout'
+import idbContext from '../../idbContext'
 
 const Container = styled.div`
   padding: 15px;
@@ -60,10 +61,15 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
   )
 }
 
-const MyErrorBoundary = ({ children }) => (
-  <ErrorBoundary FallbackComponent={ErrorFallback} onReset={logout}>
-    {children}
-  </ErrorBoundary>
-)
+const MyErrorBoundary = ({ children }) => {
+  const { idb } = useContext(idbContext)
+  const onLogout = useCallback(() => logout(idb), [idb])
+
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback} onReset={onLogout}>
+      {children}
+    </ErrorBoundary>
+  )
+}
 
 export default MyErrorBoundary
