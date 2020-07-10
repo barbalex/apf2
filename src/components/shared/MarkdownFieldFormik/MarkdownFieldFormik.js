@@ -41,7 +41,6 @@ const MarkdownField = ({ field, form, label, disabled }) => {
   const { onBlur, onChange, value, name } = field
   const { errors } = form
   const error = errors[name]
-  console.log('MarkdownField', { name, value })
 
   const change = useCallback(
     ({ html, text }) => {
@@ -51,7 +50,6 @@ const MarkdownField = ({ field, form, label, disabled }) => {
           value: text,
         },
       }
-      console.log('MarkdownField change, text:', text)
       onChange(fakeEvent)
       onBlur(fakeEvent)
     },
