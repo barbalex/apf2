@@ -6300,10 +6300,10 @@ evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
     md5.js "^1.3.4"
     safe-buffer "^5.1.1"
 
-exceljs@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/exceljs/-/exceljs-4.1.0.tgz#bafd163bad3688ea69308ed23e4938f55556f362"
-  integrity sha512-0lJifIPTS/8ERlZW+IBE0Fk/qUfalA6MOhJDKwip6NVVjpd0LxHz+q2lHhEfZTF2Klv9wGgUwCEP++Db576ZVQ==
+exceljs@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/exceljs/-/exceljs-4.1.1.tgz#a7e7592ed43e55624f9d78a0babda332ab34a745"
+  integrity sha512-DWdCXInpk69qY+Xf7VLiQJulg5B6VpcbSidsgLl92Pu0v9/sh83VLkAsaWbw58Ap8gfhH2sVoGyxHMqRKnyAPA==
   dependencies:
     archiver "^4.0.1"
     dayjs "^1.8.26"
@@ -6929,10 +6929,10 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
-formik@2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/formik/-/formik-2.1.4.tgz#8deef07ec845ea98f75e03da4aad7aab4ac46570"
-  integrity sha512-oKz8S+yQBzuQVSEoxkqqJrKQS5XJASWGVn6mrs+oTWrBoHgByVwwI1qHiVc9GKDpZBU9vAxXYAKz2BvujlwunA==
+formik@2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/formik/-/formik-2.1.5.tgz#de5bbbe35543fa6d049fe96b8ee329d6cd6892b8"
+  integrity sha512-bWpo3PiqVDYslvrRjTq0Isrm0mFXHiO33D8MS6t6dWcqSFGeYF52nlpCM2xwOJ6tRVRznDkL+zz/iHPL4LDuvQ==
   dependencies:
     deepmerge "^2.1.1"
     hoist-non-react-statics "^3.3.0"
@@ -7511,10 +7511,10 @@ gatsby-transformer-sharp@2.5.11:
     semver "^5.7.1"
     sharp "^0.25.1"
 
-gatsby@2.24.1:
-  version "2.24.1"
-  resolved "https://registry.yarnpkg.com/gatsby/-/gatsby-2.24.1.tgz#69673817e354ef5c4db1cb49b6b9a3ae35c65142"
-  integrity sha512-aqFfx+Vj3kBhS17tgL1LrkMzip2Xctd3lCj+pogCGV9GCkg6wOqW2uOEqWeoiCNq09sPuwv3GNB8sbEFoQ/2DA==
+gatsby@2.24.2:
+  version "2.24.2"
+  resolved "https://registry.yarnpkg.com/gatsby/-/gatsby-2.24.2.tgz#cadade2e38dd2bfaea36dd69ebcb735049ead08c"
+  integrity sha512-2zhCJZBPRJiUGbFRnCogMY3liBoFdb3+cCmIpp5b4BzGUEm+t+QZPSW34xkV5IE1WNywuIMtpZF6G8xTbuepbA==
   dependencies:
     "@babel/code-frame" "^7.10.3"
     "@babel/core" "^7.10.3"
@@ -11141,10 +11141,10 @@ mobx-react-lite@2.0.7:
   resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-2.0.7.tgz#1bfb3b4272668e288047cf0c7940b14e91cba284"
   integrity sha512-YKAh2gThC6WooPnVZCoC+rV1bODAKFwkhxikzgH18wpBjkgTkkR9Sb0IesQAH5QrAEH/JQVmy47jcpQkf2Au3Q==
 
-mobx-state-tree@3.16.0:
-  version "3.16.0"
-  resolved "https://registry.yarnpkg.com/mobx-state-tree/-/mobx-state-tree-3.16.0.tgz#814c5c87371ababc07d47bef3892ffa21d739e1d"
-  integrity sha512-3eB3/h611fMNu5tvs7I09Hw9Njd0inJzuJMKaY7l49zbNVV6g1kh/poCu1AHZCA/s91N1rq+2VTv9FPo7wyjdA==
+mobx-state-tree@3.17.2:
+  version "3.17.2"
+  resolved "https://registry.yarnpkg.com/mobx-state-tree/-/mobx-state-tree-3.17.2.tgz#130ab4d450fc4dd6e2571b7385af1350c82def37"
+  integrity sha512-X0+xO7yEvBvPmLU2Z6cp81sD0xQaMXgLD4lGZoKSasOhNJSQPyKlu/LFxJTS6Wgw7J3gkWq9MMfQ4pO6wGMVfw==
 
 mobx@5.15.4:
   version "5.15.4"
