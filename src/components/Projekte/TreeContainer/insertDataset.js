@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'

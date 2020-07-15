@@ -3,11 +3,10 @@
  */
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import get from 'lodash/get'
 
 import storeContext from '../../../storeContext'
