@@ -2656,6 +2656,11 @@ with check (
   )
 );
 
+--insert into apflora.apqk (ap_id, qk_name)
+--select ap.id, qk.name
+--from apflora.qk, apflora.ap
+--on conflict do nothing;
+
 
 -- apflora.ch_gemeinde is imported from:
 -- https://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/gdb/2056/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill.zip
