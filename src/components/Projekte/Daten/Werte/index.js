@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import camelCase from 'lodash/camelCase'
 import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient, useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import { Formik, Form, Field } from 'formik'
 

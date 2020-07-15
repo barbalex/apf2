@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import styled from 'styled-components'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import gql from 'graphql-tag'
 
 import storeContext from '../../../../../../storeContext'

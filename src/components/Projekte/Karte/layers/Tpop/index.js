@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { useLeaflet } from 'react-leaflet'
 import bboxPolygon from '@turf/bbox-polygon'
 

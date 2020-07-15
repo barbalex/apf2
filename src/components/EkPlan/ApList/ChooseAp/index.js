@@ -2,7 +2,7 @@ import React, { useContext, useCallback, useRef } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import queryApsToChoose from './queryApsToChoose'

@@ -8,7 +8,7 @@ import React, { useCallback } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import get from 'lodash/get'
 
 const Container = styled.div`
@@ -17,7 +17,7 @@ const Container = styled.div`
   margin-bottom: 12px;
 `
 const Label = styled.div`
-  font-size: ${props => (props.labelsize ? `${props.labelsize}px` : '12px')};
+  font-size: ${(props) => (props.labelsize ? `${props.labelsize}px` : '12px')};
   color: rgb(0, 0, 0, 0.54);
 `
 const Error = styled.div`
@@ -50,15 +50,15 @@ const StyledSelect = styled(AsyncSelect)`
   }
   .react-select__clear-indicator {
     /* ability to hide caret when not enough space */
-    padding-right: ${props => (props.nocaret ? '0' : '8px')};
+    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
   }
   .react-select__dropdown-indicator {
     /* ability to hide caret when not enough space */
-    display: ${props => (props.nocaret ? 'none' : 'flex')};
+    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
   }
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
-    width: ${props => (props.nocaret ? '0' : '1px')};
+    width: ${(props) => (props.nocaret ? '0' : '1px')};
   }
   input {
     @media print {
@@ -69,7 +69,7 @@ const StyledSelect = styled(AsyncSelect)`
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
-    height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
   }
 `
 
@@ -111,7 +111,7 @@ const SelectTypable = ({
   )
 
   const onChange = useCallback(
-    option => {
+    (option) => {
       const value = option && option.value ? option.value : null
       const fakeEvent = {
         target: {

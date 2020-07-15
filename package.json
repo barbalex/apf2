@@ -19,7 +19,7 @@
     "svgr": "svgr -d src/icons/ svg/"
   },
   "dependencies": {
-    "@apollo/react-hooks": "3.1.5",
+    "@apollo/client": "3.0.0",
     "@material-ui/core": "4.11.0",
     "@material-ui/icons": "4.9.1",
     "@turf/bbox-polygon": "6.0.1",

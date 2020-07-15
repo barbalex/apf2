@@ -11,7 +11,7 @@ import SplitPane from 'react-split-pane'
 import intersection from 'lodash/intersection'
 import { observer } from 'mobx-react-lite'
 import jwtDecode from 'jwt-decode'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { getSnapshot } from 'mobx-state-tree'
 
 // when Karte was loaded async, it did not load,

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import gql from 'graphql-tag'
 
 import { tpop } from '../../shared/fragments'
@@ -31,7 +31,7 @@ const SelectComponent = ({ options, row, val, field }) => {
   const [focused, setFocused] = useState(false)
 
   const onChange = useCallback(
-    async e => {
+    async (e) => {
       const value = e.target.value || null
       try {
         await client.mutate({
@@ -106,7 +106,7 @@ const SelectComponent = ({ options, row, val, field }) => {
             <Option key="option1" value={null}>
               {''}
             </Option>
-            {options.map(o => (
+            {options.map((o) => (
               <Option key={o.value} value={o.value}>
                 {o.label}
               </Option>

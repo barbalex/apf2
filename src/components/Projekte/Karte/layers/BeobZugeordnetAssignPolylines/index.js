@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import Polyline from './Polyline'
@@ -37,9 +37,7 @@ const BeobZugeordnetAssignPolylines = ({ treeName }) => {
 
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der Populationen für die Karte: ${
-        error.message
-      }`,
+      message: `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
       },
@@ -54,14 +52,12 @@ const BeobZugeordnetAssignPolylines = ({ treeName }) => {
   const beobs = useMemo(
     () =>
       flatten(
-        aparts.map(a =>
-          get(a, 'aeTaxonomyByArtId.beobsByArtId.nodes', []),
-        ),
+        aparts.map((a) => get(a, 'aeTaxonomyByArtId.beobsByArtId.nodes', [])),
       ),
     [aparts],
   )
 
-  return beobs.map(beob => (
+  return beobs.map((beob) => (
     <Polyline key={beob.id} beob={beob} treeName={treeName} />
   ))
 }

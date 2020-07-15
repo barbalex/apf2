@@ -8,7 +8,7 @@ import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { MdPrint } from 'react-icons/md'
 import Fab from '@material-ui/core/Fab'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
 
 import queryMengen from './queryMengen'

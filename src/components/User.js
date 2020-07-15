@@ -21,7 +21,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 
 import idbContext from '../idbContext'
 import storeContext from '../storeContext'

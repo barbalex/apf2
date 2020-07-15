@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { Formik, Form, Field } from 'formik'
 

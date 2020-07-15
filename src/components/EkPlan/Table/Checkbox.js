@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
@@ -21,13 +21,13 @@ const Icon = styled.svg`
 const StyledCheckbox = styled.div`
   width: 19px;
   height: 19px;
-  background: ${props => (props.checked ? '#2e7d32' : 'rgba(46,125,50,0.1)')};
+  background: ${(props) => (props.checked ? '#2e7d32' : 'rgba(46,125,50,0.1)')};
   border-radius: 3px;
   transition: all 150ms;
   margin: auto;
 
   ${Icon} {
-    visibility: ${props => (props.checked ? 'visible' : 'hidden')};
+    visibility: ${(props) => (props.checked ? 'visible' : 'hidden')};
   }
 `
 

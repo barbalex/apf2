@@ -4,7 +4,7 @@ import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import get from 'lodash/get'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 

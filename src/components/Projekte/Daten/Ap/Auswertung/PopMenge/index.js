@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useContext } from 'react'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'

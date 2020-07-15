@@ -12,7 +12,7 @@ import theme from './utils/materialTheme'
 import 'moment/locale/de-ch' // this is the important bit,
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale'
-import { ApolloProvider } from '@apollo/react-hooks'
+import { ApolloProvider } from '@apollo/client'
 import localForage from 'localforage'
 import MobxStore from './store'
 import { SnackbarProvider } from 'notistack'

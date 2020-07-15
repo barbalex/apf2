@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery, useApolloClient } from '@apollo/react-hooks'
+import { useQuery, useApolloClient } from '@apollo/client'
 import gql from 'graphql-tag'
 
 import Select from '../../../../../shared/Select'

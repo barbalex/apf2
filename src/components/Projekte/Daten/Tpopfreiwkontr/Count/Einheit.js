@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 
 import Select from '../../../../shared/Select'
 import storeContext from '../../../../../storeContext'
@@ -39,7 +39,7 @@ const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
   const [error, setErrors] = useState(null)
 
   const onChange = useCallback(
-    async event => {
+    async (event) => {
       const val = ifIsNumericAsNumber(event.target.value)
       const variables = {
         id: row.id,

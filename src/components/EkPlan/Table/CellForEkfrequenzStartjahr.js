@@ -1,6 +1,6 @@
 import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import { useSnackbar } from 'notistack'
@@ -15,12 +15,12 @@ const Container = styled.div`
   text-overflow: ellipsis !important;
   overflow: hidden !important;
   padding: 2px 4px !important;
-  padding-left: ${props =>
+  padding-left: ${(props) =>
     props['data-firstchild'] ? '10px !important' : '2px'};
   border-left: solid hsla(70, 80%, 75%, 1) 1px;
   border-right: solid hsla(70, 80%, 75%, 1) 1px;
   border-bottom: solid #e6e6e6 1px;
-  background: ${props =>
+  background: ${(props) =>
     props['data-clicked']
       ? 'rgb(255,211,167) !important'
       : props['data-isodd']
@@ -86,12 +86,12 @@ const CellForEkfrequenzStartjahr = ({ row, style, refetchTpop }) => {
     hovered,
     row.id,
   ])
-  const onChange = useCallback(e => {
+  const onChange = useCallback((e) => {
     const value = e.target.value || e.target.value === 0 ? e.target.value : ''
     setStateValue(value)
   }, [])
   const onBlur = useCallback(
-    async e => {
+    async (e) => {
       const value =
         e.target.value || e.target.value === 0 ? +e.target.value : null
       try {

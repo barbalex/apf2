@@ -7,7 +7,7 @@ import { MdEdit as EditIcon, MdViewList as ListIcon } from 'react-icons/md'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useQuery, useApolloClient } from '@apollo/react-hooks'
+import { useQuery, useApolloClient } from '@apollo/client'
 
 import storeContext from '../../../../storeContext'
 import queryTpop from './queryTpop'
@@ -32,7 +32,7 @@ export const StyledMenuItem = styled(MenuItem)`
   line-height: 1rem !important;
   padding-top: 2px !important;
   padding-bottom: 2px !important;
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.active === 'true' ? 'rgba(0, 0, 0, 0.08) !important' : 'unset'};
 `
 const StyledListItemText = styled(ListItemText)`
@@ -63,12 +63,12 @@ const CellForYearMenu = () => {
   const [ekfsAnchor, setEkfsAnchor] = useState(null)
   const [massnsAnchor, setMassnsAnchor] = useState(null)
 
-  const closeEksMenu = useCallback(event => setEksAnchor(null), [])
-  const closeEkfsMenu = useCallback(event => setEkfsAnchor(null), [])
-  const closeMassnsMenu = useCallback(event => setMassnsAnchor(null), [])
+  const closeEksMenu = useCallback((event) => setEksAnchor(null), [])
+  const closeEkfsMenu = useCallback((event) => setEkfsAnchor(null), [])
+  const closeMassnsMenu = useCallback((event) => setMassnsAnchor(null), [])
 
   const removeEkPlan = useCallback(
-    async typ => {
+    async (typ) => {
       let qResult
       try {
         qResult = await client.query({
@@ -87,7 +87,7 @@ const CellForYearMenu = () => {
           },
         })
       }
-      const id = qResult.data.allEkplans.nodes.find(o => o.typ === typ).id
+      const id = qResult.data.allEkplans.nodes.find((o) => o.typ === typ).id
       try {
         await client.mutate({
           mutation: mutationDeleteEkplan,
@@ -116,7 +116,7 @@ const CellForYearMenu = () => {
   ])
 
   const addEkPlan = useCallback(
-    async typ => {
+    async (typ) => {
       const variables = {
         tpopId,
         jahr: year,
@@ -217,7 +217,7 @@ const CellForYearMenu = () => {
         )}
         {showEk && !!eks.length && (
           <StyledMenuItem
-            onClick={e => setEksAnchor(e.currentTarget)}
+            onClick={(e) => setEksAnchor(e.currentTarget)}
             active={Boolean(eksAnchor).toString()}
           >
             <StyledListItemIcon>
@@ -228,7 +228,7 @@ const CellForYearMenu = () => {
         )}
         {showEkf && !!ekfs.length && (
           <StyledMenuItem
-            onClick={e => setEkfsAnchor(e.currentTarget)}
+            onClick={(e) => setEkfsAnchor(e.currentTarget)}
             active={Boolean(ekfsAnchor).toString()}
           >
             <StyledListItemIcon>
@@ -239,7 +239,7 @@ const CellForYearMenu = () => {
         )}
         {showMassn && !!massns.length && (
           <StyledMenuItem
-            onClick={e => setMassnsAnchor(e.currentTarget)}
+            onClick={(e) => setMassnsAnchor(e.currentTarget)}
             active={Boolean(massnsAnchor).toString()}
           >
             <StyledListItemIcon>

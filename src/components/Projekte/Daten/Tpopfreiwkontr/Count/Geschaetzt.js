@@ -1,6 +1,6 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 
 import TextField from '../../../../shared/TextField'
 import storeContext from '../../../../../storeContext'
@@ -14,7 +14,7 @@ const Geschaetzt = ({ row, refetch }) => {
   const [errors, setErrors] = useState({})
 
   const onChange = useCallback(
-    async event => {
+    async (event) => {
       const val = ifIsNumericAsNumber(event.target.value)
       /*console.log('Geschaetzt, onChange:', {
         row,

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 
 import TextField from '../../../../shared/TextField'
 import storeContext from '../../../../../storeContext'
@@ -15,7 +15,7 @@ const Gezaehlt = ({ row, refetch }) => {
   const [errors, setErrors] = useState({})
 
   const onChange = useCallback(
-    async event => {
+    async (event) => {
       const val = ifIsNumericAsNumber(event.target.value)
       if (val === null && row.methode === 1) return
       if (row.anzahl === val && row.methode === 2) return
