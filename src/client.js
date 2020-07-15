@@ -1,7 +1,10 @@
-import { ApolloClient } from '@apollo/client'
+import {
+  ApolloClient,
+  InMemoryCache,
+  defaultDataIdFromObject,
+} from '@apollo/client'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
-import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory'
 import { ApolloLink } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 import jwtDecode from 'jwt-decode'
