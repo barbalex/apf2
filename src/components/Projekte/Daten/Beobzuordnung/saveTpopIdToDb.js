@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 import updateBeobByIdGql from './updateBeobById'
 
@@ -67,7 +67,7 @@ export default async ({ value, id, treeName, type, client, store }) => {
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [
         ...openNodes.filter(
-          n => !isEqual(n, aNA) && !isEqual(n, oldParentNodeUrl),
+          (n) => !isEqual(n, aNA) && !isEqual(n, oldParentNodeUrl),
         ),
         [aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen'],
         [aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId],
@@ -118,7 +118,7 @@ export default async ({ value, id, treeName, type, client, store }) => {
       // type = zugeordnet?
       newOpenNodes = [
         ...openNodes.filter(
-          n =>
+          (n) =>
             !isEqual(n, aNA) &&
             !isEqual(n, oldParentNodeUrl) &&
             !isEqual(n, oldGParentNodeUrl) &&
@@ -194,7 +194,7 @@ export default async ({ value, id, treeName, type, client, store }) => {
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [
         ...openNodes.filter(
-          n => !isEqual(n, aNA) && !isEqual(n, oldParentNodeUrl),
+          (n) => !isEqual(n, aNA) && !isEqual(n, oldParentNodeUrl),
         ),
         [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen'],
         [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen', id],
@@ -202,7 +202,7 @@ export default async ({ value, id, treeName, type, client, store }) => {
     } else {
       newOpenNodes = [
         ...openNodes.filter(
-          n =>
+          (n) =>
             !isEqual(n, aNA) &&
             !isEqual(n, oldParentNodeUrl) &&
             !isEqual(n, oldGParentNodeUrl) &&

@@ -1,8 +1,7 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import { useQuery } from '@apollo/client'
-import gql from 'graphql-tag'
+import { useQuery, gql } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
 
 import FormTitle from '../../../shared/FormTitle'
