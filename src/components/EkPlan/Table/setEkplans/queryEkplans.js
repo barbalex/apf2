@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export default gql`
   query EkplansQuery($jahr: Int!, $tpopId: UUID!) {
