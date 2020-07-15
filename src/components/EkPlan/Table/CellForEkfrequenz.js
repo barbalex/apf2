@@ -1,7 +1,6 @@
 import React, { useContext, useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { useApolloClient } from '@apollo/client'
-import gql from 'graphql-tag'
+import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useSnackbar } from 'notistack'
 
