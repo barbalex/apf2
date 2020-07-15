@@ -3,11 +3,11 @@ import isEqual from 'lodash/isEqual'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import omit from 'lodash/omit'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 import tables from '../../../../../modules/tables'
 
-const isFreiwilligenKontrolle = activeNodeArray =>
+const isFreiwilligenKontrolle = (activeNodeArray) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
 export default async ({ client, store }) => {
@@ -23,7 +23,7 @@ export default async ({ client, store }) => {
   } = store
 
   // some tables need to be translated, i.e. tpopfreiwkontr
-  const tableMetadata = tables.find(t => t.table === tablePassed)
+  const tableMetadata = tables.find((t) => t.table === tablePassed)
   if (!tableMetadata) {
     return enqueNotification({
       message: `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`,
@@ -151,10 +151,10 @@ export default async ({ client, store }) => {
 
   // remove from openNodes
   const openNodes1 = get(store, 'tree.openNodes')
-  const newOpenNodes1 = openNodes1.filter(n => !isEqual(n, toDeleteUrl))
+  const newOpenNodes1 = openNodes1.filter((n) => !isEqual(n, toDeleteUrl))
   store.tree.setOpenNodes(newOpenNodes1)
   const openNodes2 = get(store, 'tree2.openNodes')
-  const newOpenNodes2 = openNodes2.filter(n => !isEqual(n, toDeleteUrl))
+  const newOpenNodes2 = openNodes2.filter((n) => !isEqual(n, toDeleteUrl))
   store.tree2.setOpenNodes(newOpenNodes2)
 
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()
