@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
-import { useQuery } from '@apollo/client'
-import gql from 'graphql-tag'
+import { useQuery, gql } from '@apollo/client'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
