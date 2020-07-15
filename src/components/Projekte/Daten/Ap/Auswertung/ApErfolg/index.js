@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import get from 'lodash/get'
 import range from 'lodash/range'
 import min from 'lodash/min'
@@ -48,14 +48,14 @@ const erfValueFromCode = {
   4: 5, // sehr erfolgreich
 }
 const findErfolg = ({ jahr, erfolgRawData }) =>
-  erfolgRawData.find(e => e.jahr === jahr)
-const makeErfolg = jahr => ({ jahr, value: null })
+  erfolgRawData.find((e) => e.jahr === jahr)
+const makeErfolg = (jahr) => ({ jahr, value: null })
 const getErfolg = ({ jahr, erfolgRawData }) =>
   findErfolg({ jahr, erfolgRawData }) || makeErfolg(jahr)
-const addMissingErfolgData = erfolgRawData => {
-  const years = erfolgRawData.map(e => e.jahr)
+const addMissingErfolgData = (erfolgRawData) => {
+  const years = erfolgRawData.map((e) => e.jahr)
   const allYears = range(min(years), max(years))
-  return allYears.map(jahr => getErfolg({ jahr, erfolgRawData }))
+  return allYears.map((jahr) => getErfolg({ jahr, erfolgRawData }))
 }
 
 const ApAuswertungApErfolg = ({ id }) => {
@@ -66,7 +66,7 @@ const ApAuswertungApErfolg = ({ id }) => {
   } = useQuery(queryErfolg, {
     variables: { id },
   })
-  const erfolgRawData = get(dataErfolg, 'allApbers.nodes', []).map(e => ({
+  const erfolgRawData = get(dataErfolg, 'allApbers.nodes', []).map((e) => ({
     jahr: e.jahr,
     value: erfValueFromCode[e.beurteilung],
   }))

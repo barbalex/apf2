@@ -1,7 +1,6 @@
 import React, { useContext, useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { useApolloClient } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useSnackbar } from 'notistack'
 
@@ -43,7 +42,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
     row.id,
   ])
   const onChange = useCallback(
-    async e => {
+    async (e) => {
       const value = e.target.value || null
       try {
         await client.mutate({
@@ -126,7 +125,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
     setFocused(false)
   }, [])
   const optionsGrouped = ekfOptionsGroupedPerAp[row.apId]
-  const ekfrequenz = ekfrequenzs.find(f => f.id === field.value)
+  const ekfrequenz = ekfrequenzs.find((f) => f.id === field.value)
   const valueToShow = ekfrequenz ? ekfrequenz.code : ''
 
   return (
@@ -149,7 +148,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
               <Option key="option1" value={null}>
                 {''}
               </Option>
-              {optionsGrouped.map(o => (
+              {optionsGrouped.map((o) => (
                 <Option key={o.value} value={o.value}>
                   {o.label}
                 </Option>

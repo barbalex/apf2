@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import get from 'lodash/get'
 import {
   LineChart,
@@ -52,7 +52,7 @@ const ApAuswertungTpopKontrolliert = ({ id }) => {
     variables: { id },
   })
   const erfolgData = get(data, 'allVApAuswTpopKontrollierts.nodes', []).map(
-    d => ({
+    (d) => ({
       jahr: d.jahr,
       'Teil-Populationen': d.anzahlTpop,
       kontrolliert: d.anzahlKontrolliert,

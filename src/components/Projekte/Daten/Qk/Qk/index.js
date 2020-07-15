@@ -7,7 +7,7 @@ import Badge from '@material-ui/core/Badge'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 

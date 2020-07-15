@@ -1,10 +1,12 @@
-import { ApolloClient } from 'apollo-client'
-//import { createHttpLink } from "apollo-link-http"
-import { BatchHttpLink } from 'apollo-link-batch-http'
-import { setContext } from 'apollo-link-context'
-import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory'
-import { ApolloLink } from 'apollo-link'
-import { onError } from 'apollo-link-error'
+import {
+  ApolloClient,
+  InMemoryCache,
+  defaultDataIdFromObject,
+} from '@apollo/client'
+import { BatchHttpLink } from '@apollo/client/link/batch-http'
+import { setContext } from '@apollo/client/link/context'
+import { ApolloLink } from '@apollo/client'
+import { onError } from '@apollo/client/link/error'
 import jwtDecode from 'jwt-decode'
 import uniqBy from 'lodash/uniqBy'
 
@@ -13,6 +15,8 @@ import existsPermissionsError from './modules/existsPermissionError'
 
 export default ({ idb, store }) => {
   const { enqueNotification } = store
+  // TODO: use new functionality
+  // https://www.apollographql.com/docs/react/migrating/apollo-client-3-migration/?mc_cid=e593721cc7&mc_eid=c8e91f2f0a#apollo-link-and-apollo-link-http
   const authLink = setContext((_, { headers }) => {
     const { token } = store.user
     if (token) {
@@ -90,16 +94,12 @@ export default ({ idb, store }) => {
   })
 
   const cache = new InMemoryCache({
-    dataIdFromObject: object => {
+    dataIdFromObject: (object) => {
       if (object.id && isNaN(object.id)) return object.id
       return defaultDataIdFromObject(object)
     },
   })
-  // use httpLink _instead_ of batchHttpLink to _not_ batch
 
-  /*const httpLink = createHttpLink({
-    uri: graphQlUri(),
-  })*/
   const batchHttpLink = new BatchHttpLink({ uri: graphQlUri() })
   const client = new ApolloClient({
     link: ApolloLink.from([errorLink, authLink, batchHttpLink]),

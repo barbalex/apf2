@@ -4,7 +4,7 @@
  */
 import nearestPoint from '@turf/nearest-point'
 import { featureCollection, point } from '@turf/helpers'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 
@@ -36,10 +36,10 @@ export default async ({ activeNodes, latLng, client }) => {
   })
   const pops = get(data, 'apById.popsByApId.nodes', [])
   const tpops = flatten(
-    pops.map(p => get(p, 'tpopsByPopId.nodes', []).filter(t => t.wgs84Lat)),
+    pops.map((p) => get(p, 'tpopsByPopId.nodes', []).filter((t) => t.wgs84Lat)),
   )
   const tpopPoints = featureCollection(
-    tpops.map(t =>
+    tpops.map((t) =>
       point([t.wgs84Lat, t.wgs84Long], {
         id: t.id,
         popId: t.popId,

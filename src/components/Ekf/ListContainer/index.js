@@ -4,7 +4,7 @@
  */
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import storeContext from '../../../storeContext'
 import dataByUserNameGql from './dataByUserName'

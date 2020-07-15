@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import Linkify from 'react-linkify'
 import moment from 'moment'
 

@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 import updateBeobByIdGql from './updateBeobById'
 
@@ -55,7 +55,7 @@ export default async ({ value, row, treeName, client, store }) => {
     // - new beobNode
     const newOpenNodes = [
       ...openNodes.filter(
-        n =>
+        (n) =>
           !isEqual(n, aNA) &&
           !isEqual(n, oldParentNodeUrl) &&
           !isEqual(n, oldGParentNodeUrl),

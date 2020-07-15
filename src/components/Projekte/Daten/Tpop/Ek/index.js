@@ -9,7 +9,7 @@ import get from 'lodash/get'
 import max from 'lodash/max'
 import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
 
 import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'

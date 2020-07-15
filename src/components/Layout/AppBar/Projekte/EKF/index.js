@@ -4,7 +4,7 @@ import remove from 'lodash/remove'
 import styled, { keyframes } from 'styled-components'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { Link } from 'gatsby'
 import get from 'lodash/get'
 import { MdPrint, MdHourglassEmpty } from 'react-icons/md'
@@ -87,7 +87,7 @@ const ProjekteAppBar = () => {
    * need to clone projekteTabs
    * because otherwise removing elements errors out (because elements are sealed)
    */
-  const projekteTabs = urlQuery.projekteTabs.slice().filter(el => !!el)
+  const projekteTabs = urlQuery.projekteTabs.slice().filter((el) => !!el)
   const isMobile = isMobilePhone()
 
   const { token, name: username } = user
@@ -105,7 +105,7 @@ const ProjekteAppBar = () => {
   const [preparingEkfMultiprint, setPreparingEkfMultiprint] = useState(false)
 
   const onClickButton = useCallback(
-    name => {
+    (name) => {
       if (isMobile) {
         // show one tab only
         setUrlQueryValue({
@@ -116,10 +116,10 @@ const ProjekteAppBar = () => {
         })
       } else {
         if (projekteTabs.includes(name)) {
-          remove(projekteTabs, el => el === name)
+          remove(projekteTabs, (el) => el === name)
           if (name === 'tree2') {
             // close all tree2-tabs
-            remove(projekteTabs, el => el.includes('2'))
+            remove(projekteTabs, (el) => el.includes('2'))
           }
         } else {
           projekteTabs.push(name)

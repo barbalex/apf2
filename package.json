@@ -19,7 +19,7 @@
     "svgr": "svgr -d src/icons/ svg/"
   },
   "dependencies": {
-    "@apollo/react-hooks": "3.1.5",
+    "@apollo/client": "3.0.0",
     "@material-ui/core": "4.11.0",
     "@material-ui/icons": "4.9.1",
     "@turf/bbox-polygon": "6.0.1",
@@ -27,13 +27,6 @@
     "@turf/helpers": "6.1.4",
     "@turf/nearest-point": "6.0.1",
     "@turf/points-within-polygon": "5.1.5",
-    "apollo-cache-inmemory": "1.6.6",
-    "apollo-client": "2.6.10",
-    "apollo-link": "1.2.14",
-    "apollo-link-batch-http": "1.2.14",
-    "apollo-link-context": "1.0.20",
-    "apollo-link-error": "1.1.13",
-    "apollo-link-http": "1.5.17",
     "autosuggest-highlight": "3.1.1",
     "axios": "0.19.2",
     "browser-update": "3.3.19",

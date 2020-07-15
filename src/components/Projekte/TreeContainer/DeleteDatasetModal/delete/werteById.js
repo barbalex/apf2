@@ -1,7 +1,7 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import camelCase from 'lodash/camelCase'
 
-export default table => {
+export default (table) => {
   const tableName = camelCase(table)
   return gql`
     query werteByIdForDelete($id: UUID!) {

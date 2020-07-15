@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import sortBy from 'lodash/sortBy'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import storeContext from '../../../../storeContext'
 import query from './query'

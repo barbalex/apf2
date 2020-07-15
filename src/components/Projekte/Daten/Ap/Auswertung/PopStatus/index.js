@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import get from 'lodash/get'
 import {
   AreaChart,
@@ -58,7 +58,7 @@ const ApAuswertungPopStatus = ({ id }) => {
   })
   const popStatusRawData =
     get(dataPopStatus, 'allVApAuswPopStatuses.nodes') || []
-  const popStatusData = popStatusRawData.map(e => {
+  const popStatusData = popStatusRawData.map((e) => {
     const val = JSON.parse(e.values)
 
     return {

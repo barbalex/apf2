@@ -1,8 +1,8 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import camelCase from 'lodash/camelCase'
 import upperFirst from 'lodash/upperFirst'
 
-export default table => {
+export default (table) => {
   const tableName = camelCase(table)
   const mutation = gql`
       mutation createWerteForUndelete(
