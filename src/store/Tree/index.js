@@ -21,7 +21,7 @@ export default types
       types.array(types.array(types.union(types.string, types.number))),
       [],
     ),
-    apFilter: types.optional(types.boolean, false),
+    apFilter: types.optional(types.boolean, true),
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     map: types.optional(Map, defaultMap),
@@ -30,7 +30,7 @@ export default types
     datenWidth: types.optional(types.number, 500),
     filterWidth: types.optional(types.number, 500),
   })
-  .actions(self => ({
+  .actions((self) => ({
     setTreeWidth(val) {
       self.treeWidth = val
     },
@@ -77,7 +77,7 @@ export const defaultValue = {
   name: 'tree',
   activeNodeArray: [],
   openNodes: [],
-  apFilter: false,
+  apFilter: true,
   nodeLabelFilter: defaultNodeLabelFilter,
   map: defaultMap,
 }
