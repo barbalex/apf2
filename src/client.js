@@ -3,7 +3,7 @@ import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
 import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory'
 import { ApolloLink } from '@apollo/client'
-import { onError } from 'apollo-link-error'
+import { onError } from '@apollo/client/link/error'
 import jwtDecode from 'jwt-decode'
 import uniqBy from 'lodash/uniqBy'
 
