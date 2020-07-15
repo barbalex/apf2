@@ -1,6 +1,6 @@
 import { ApolloClient } from 'apollo-client'
-import { BatchHttpLink } from 'apollo-link-batch-http'
-import { setContext } from 'apollo-link-context'
+import { BatchHttpLink } from '@apollo/client/link/batch-http'
+import { setContext } from '@apollo/client/link/context'
 import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory'
 import { ApolloLink } from '@apollo/client'
 import { onError } from 'apollo-link-error'
