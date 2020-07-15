@@ -1,5 +1,5 @@
 import get from 'lodash/get'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 import { tpopfeldkontr } from '../components/shared/fragments'
 

@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import upperFirst from 'lodash/upperFirst'

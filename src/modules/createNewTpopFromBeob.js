@@ -2,7 +2,7 @@ import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import isEqual from 'date-fns/isEqual'
 import get from 'lodash/get'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 import {
   beob as beobFragment,
@@ -219,7 +219,7 @@ export default async ({ treeName, pop, beobId, client, store }) => {
     ],
   ]
     // and remove old node
-    .filter(n => !isEqual(n, tree.activeNodeArray))
+    .filter((n) => !isEqual(n, tree.activeNodeArray))
 
   addOpenNodes(newOpenNodes)
   setActiveNodeArray(newActiveNodeArray)

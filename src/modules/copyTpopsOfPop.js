@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import get from 'lodash/get'
 
 import copyTo from './copyTo'
@@ -20,7 +20,7 @@ export default async ({ popIdFrom, popIdTo, client, store }) => {
   const tpops = get(data, 'allTpops.nodes', [])
 
   // 2. add tpops to new pop
-  tpops.forEach(tpop =>
+  tpops.forEach((tpop) =>
     copyTo({
       parentId: popIdTo,
       table: 'tpop',
