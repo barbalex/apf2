@@ -4,7 +4,7 @@ import React, { useEffect, useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
-import axios from 'axios'
+import axios from 'redaxios'
 import { useQuery, gql } from '@apollo/client'
 import get from 'lodash/get'
 

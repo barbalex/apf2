@@ -3,7 +3,7 @@
  * Stattdessen wird tabelle ch_gemeinden ausgewertet
  * Diese Methode behalten - könnte künftig nützlich sein
  */
-import axios from 'axios'
+import axios from 'redaxios'
 import get from 'lodash/get'
 
 const getGemeindeForKoord = async ({ lv95X, lv95Y, store }) => {
