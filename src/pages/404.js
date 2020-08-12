@@ -52,11 +52,7 @@ const FourOFour = ({ data }) => {
     <ErrorBoundary>
       <Container>
         <Layout>
-          <Img
-            sizes={data.file.childImageSharp.sizes}
-            fluid={data.file.childImageSharp.fluid}
-            style={bgImageStyle}
-          />
+          <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
           <TextContainer>
             <PageTitle align="center" variant="h6">
               Oh je
@@ -86,9 +82,6 @@ export const query = graphql`
       childImageSharp {
         fluid {
           ...GatsbyImageSharpFluid
-        }
-        sizes {
-          ...GatsbyImageSharpSizes
         }
       }
     }
