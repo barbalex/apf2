@@ -198,7 +198,7 @@ export default ({ data }) => (
               </a>
               .
               <p>
-                Die Applikation wird von&nbsp;
+                Die App wird von&nbsp;
                 <a
                   href="https://gabriel-software.ch"
                   target="_blank"
