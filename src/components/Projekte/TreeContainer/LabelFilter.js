@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
+import { useDebouncedCallback } from 'use-debounce'
 
 import tables from '../../../modules/tables'
 import storeContext from '../../../storeContext'
@@ -44,7 +45,7 @@ const LabelFilter = ({ treeName, nodes }) => {
     empty,
   } = nodeLabelFilter
   const isFiltered = runIsFiltered()
-  const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
+  const activeNode = nodes.find((n) => isEqual(n.url, activeNodeArray))
   const tableName = activeNode ? activeNode.filterTable : null
 
   let labelText = '(filtern nicht möglich)'
@@ -53,7 +54,7 @@ const LabelFilter = ({ treeName, nodes }) => {
     filterValue = get(nodeLabelFilter, tableName, '')
     // make sure 0 is kept
     if (!filterValue && filterValue !== 0) filterValue = ''
-    const table = tables.find(t => t.table === tableName)
+    const table = tables.find((t) => t.table === tableName)
     const tableLabel = table ? table.label : null
     // danger: Projekte can not be filtered because no parent folder
     if (
@@ -71,35 +72,29 @@ const LabelFilter = ({ treeName, nodes }) => {
     setValue(filterValue)
   }, [filterValue, tableName, treeName])
 
-  const onChange = useCallback(
-    e => {
-      const { value } = e.target
-      setValue(value)
-      if (labelText === '(filtern nicht möglich)') return
+  const setValuesAfterChange = useCallback(
+    (val) => {
       const { filterTable, url, label } = activeNode
       // pop if is not folder and label does not comply to filter
       if (
         activeNode.nodeType === 'table' &&
-        !label.includes(
-          value && value.toLowerCase ? value.toLowerCase() : value,
-        )
+        !label.includes(val && val.toLowerCase ? val.toLowerCase() : val)
       ) {
         const newActiveNodeArray = [...url]
         const newActiveUrl = [...url]
         newActiveNodeArray.pop()
-        let newOpenNodes = openNodes.filter(n => n !== newActiveUrl)
+        let newOpenNodes = openNodes.filter((n) => n !== newActiveUrl)
         setActiveNodeArray(newActiveNodeArray)
         setOpenNodes(newOpenNodes)
       }
       setNodeLabelFilterKey({
-        value,
+        value: val,
         tree: treeName,
         key: filterTable,
       })
     },
     [
       activeNode,
-      labelText,
       openNodes,
       setActiveNodeArray,
       setNodeLabelFilterKey,
@@ -107,6 +102,20 @@ const LabelFilter = ({ treeName, nodes }) => {
       treeName,
     ],
   )
+  const [setValuesAfterChangeDebounced] = useDebouncedCallback((val) => {
+    setValuesAfterChange(val)
+  }, 600)
+
+  const onChange = useCallback(
+    (e) => {
+      const val = e.target.value
+      setValue(val)
+      if (labelText === '(filtern nicht möglich)') return
+      setValuesAfterChangeDebounced(val)
+    },
+    [labelText, setValuesAfterChangeDebounced],
+  )
+
   const onClickEmptyFilter = useCallback(() => {
     empty()
     setValue('')
