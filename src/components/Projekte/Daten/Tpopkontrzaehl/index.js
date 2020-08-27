@@ -4,6 +4,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
+import { gql } from '@apollo/client'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -12,11 +13,11 @@ import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryLists from './queryLists'
 import queryZaehlOfEk from './queryZaehlOfEk'
-import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { tpopkontrzaehl } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -81,9 +82,36 @@ const Tpopkontrzaehl = ({ treeName }) => {
         ...objectsEmptyValuesToNull(values),
         changedBy: store.user.name,
       }
+      console.log('Zaehl, onSubmit', { changedField, values })
       try {
         await client.mutate({
-          mutation: updateTpopkontrzaehlByIdGql,
+          mutation: gql`
+            mutation updateAnzahlForEkZaehl(
+              $id: UUID!
+              $anzahl: Int
+              $einheit: Int
+              $methode: Int
+              $changedBy: String
+            ) {
+              updateTpopkontrzaehlById(
+                input: {
+                  id: $id
+                  tpopkontrzaehlPatch: {
+                    id: $id
+                    anzahl: $anzahl
+                    einheit: $einheit
+                    methode: $methode
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                tpopkontrzaehl {
+                  ...TpopkontrzaehlFields
+                }
+              }
+            }
+            ${tpopkontrzaehl}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
