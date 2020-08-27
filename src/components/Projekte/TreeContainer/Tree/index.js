@@ -12,7 +12,7 @@ import storeContext from '../../../../storeContext'
 const singleRowHeight = 23
 const Container = styled.div`
   height: 100%;
-  cursor: ${props => (props['data-loading'] ? 'wait' : 'inherit')};
+  cursor: ${(props) => (props['data-loading'] ? 'wait' : 'inherit')};
   ul {
     margin: 0;
     list-style: none;
@@ -32,12 +32,12 @@ const Tree = ({ treeName, nodes, loading }) => {
 
   useEffect(() => {
     if (listRef && listRef.current) {
-      const index = findIndex(nodes, node => isEqual(node.url, activeNodeArray))
+      const index = findIndex(nodes, (node) =>
+        isEqual(node.url, activeNodeArray),
+      )
       listRef.current.scrollToItem(index)
     }
   }, [activeNodeArray, listRef, nodes, loading])
-
-  //console.log('Tree rendering')
 
   return (
     <Container data-loading={loading}>

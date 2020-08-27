@@ -156,16 +156,18 @@ const Projekte = () => {
 
   useEffect(() => {
     //console.log('Projekte, building treeNodes')
-    setTreeNodes(
-      buildNodes({
-        treeName: 'tree',
-        role,
-        data: treeData,
-        loading: treeLoading,
-        store,
-        dataFilter: treeDataFilter,
-      }),
-    )
+    if (!treeLoading) {
+      setTreeNodes(
+        buildNodes({
+          treeName: 'tree',
+          role,
+          data: treeData,
+          loading: treeLoading,
+          store,
+          dataFilter: treeDataFilter,
+        }),
+      )
+    }
   }, [
     treeLoading,
     //activeNodeArray,
@@ -179,16 +181,18 @@ const Projekte = () => {
   useEffect(() => {
     if (!(tree2Tabs.length === 0 || isPrint)) {
       //console.log('Projekte, building tree2Nodes')
-      setTree2Nodes(
-        buildNodes({
-          treeName: 'tree2',
-          role,
-          dataFilter: tree2DataFilter,
-          data: tree2Data,
-          loading: tree2Loading,
-          store,
-        }),
-      )
+      if (!tree2Loading) {
+        setTree2Nodes(
+          buildNodes({
+            treeName: 'tree2',
+            role,
+            dataFilter: tree2DataFilter,
+            data: tree2Data,
+            loading: tree2Loading,
+            store,
+          }),
+        )
+      }
     }
   }, [
     tree2Loading,
@@ -201,6 +205,7 @@ const Projekte = () => {
     store,
     tree2Tabs.length,
     isPrint,
+    treeLoading,
   ])
 
   if (tree2Tabs.length === 0 || isPrint) {
