@@ -30,6 +30,12 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const fieldTypes = {
+  anzahl: 'Int',
+  einheit: 'Int',
+  methode: 'Int',
+}
+
 const Tpopkontrzaehl = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
@@ -82,25 +88,26 @@ const Tpopkontrzaehl = ({ treeName }) => {
         ...objectsEmptyValuesToNull(values),
         changedBy: store.user.name,
       }
-      console.log('Zaehl, onSubmit', { changedField, values })
+      /**
+       * TODO:
+       * this is an experiment
+       * see if single field mutations work
+       * maybe solve race conditions on mutating:
+       * https://github.com/barbalex/apf2/issues/395
+       */
       try {
         await client.mutate({
           mutation: gql`
             mutation updateAnzahlForEkZaehl(
               $id: UUID!
-              $anzahl: Int
-              $einheit: Int
-              $methode: Int
+              $${changedField}: ${fieldTypes[changedField]}
               $changedBy: String
             ) {
               updateTpopkontrzaehlById(
                 input: {
                   id: $id
                   tpopkontrzaehlPatch: {
-                    id: $id
-                    anzahl: $anzahl
-                    einheit: $einheit
-                    methode: $methode
+                    ${changedField}: $${changedField}
                     changedBy: $changedBy
                   }
                 }
