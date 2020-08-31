@@ -1,4 +1,5 @@
 import uniq from 'lodash/uniq'
+import isUuid from 'is-uuid'
 
 import { simpleTypes as apType } from '../../store/Tree/DataFilter/ap'
 import { simpleTypes as popType } from '../../store/Tree/DataFilter/pop'
@@ -22,7 +23,8 @@ export default ({
   const projekt = uniq(
     openNodes
       .map((a) => (a.length > 1 && a[0] === 'Projekte' ? a[1] : null))
-      .filter((v) => v !== null),
+      .filter((v) => v !== null)
+      .filter((v) => isUuid.anyNonNil(v)),
   )
   let projId = '99999999-9999-9999-9999-999999999999'
   if (projekt && projekt[0]) projId = projekt[0]
@@ -51,7 +53,8 @@ export default ({
           ? a[3]
           : null,
       )
-      .filter((v) => v !== null),
+      .filter((v) => v !== null)
+      .filter((v) => isUuid.anyNonNil(v)),
   )
   const isAp =
     isProjekt &&
@@ -66,7 +69,8 @@ export default ({
           ? a[6]
           : null,
       )
-      .filter((v) => v !== null),
+      .filter((v) => v !== null)
+      .filter((v) => isUuid.anyNonNil(v)),
   )
   const isZiel =
     isAp &&
@@ -83,7 +87,8 @@ export default ({
           ? a[5]
           : null,
       )
-      .filter((v) => v !== null),
+      .filter((v) => v !== null)
+      .filter((v) => isUuid.anyNonNil(v)),
   )
   const isPop =
     isAp &&
@@ -107,7 +112,8 @@ export default ({
           ? a[7]
           : null,
       )
-      .filter((v) => v !== null),
+      .filter((v) => v !== null)
+      .filter((v) => isUuid.anyNonNil(v)),
   )
   const isTpop =
     isPop &&
@@ -133,7 +139,8 @@ export default ({
           ? a[9]
           : null,
       )
-      .filter((v) => v !== null),
+      .filter((v) => v !== null)
+      .filter((v) => isUuid.anyNonNil(v)),
   )
   const isTpopkontr =
     isTpop &&
