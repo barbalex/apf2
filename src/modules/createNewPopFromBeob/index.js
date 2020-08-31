@@ -11,9 +11,17 @@ import updateBeobById from './updateBeobById'
 export default async ({ treeName, id, client, store }) => {
   const { enqueNotification, refetch } = store
   const tree = store[treeName]
-  const { setActiveNodeArray, addOpenNodes } = tree
-  const activeNodes = store[`${treeName}ActiveNodes`]
-  const { ap, projekt } = activeNodes
+  const {
+    setActiveNodeArray,
+    addOpenNodes,
+    apIdInActiveNodeArray,
+    projIdInActiveNodeArray,
+  } = tree
+
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+
   let beobResult
   try {
     beobResult = await client.query({
@@ -42,7 +50,7 @@ export default async ({ treeName, id, client, store }) => {
     popResult = await client.mutate({
       mutation: createPop,
       variables: {
-        apId: ap,
+        apId,
         geomPoint: newGeomPoint,
         bekanntSeit,
       },
@@ -100,9 +108,9 @@ export default async ({ treeName, id, client, store }) => {
   // set new activeNodeArray
   const newActiveNodeArray = [
     `Projekte`,
-    projekt,
+    projId,
     `Aktionspläne`,
-    ap,
+    apId,
     `Populationen`,
     tpop.popId,
     `Teil-Populationen`,
@@ -114,22 +122,22 @@ export default async ({ treeName, id, client, store }) => {
   let newOpenNodes = [
     ...tree.openNodes,
     // add Beob and it's not yet existing parents to open nodes
-    [`Projekte`, projekt, `Aktionspläne`, ap, `Populationen`],
-    [`Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId],
+    [`Projekte`, projId, `Aktionspläne`, apId, `Populationen`],
+    [`Projekte`, projId, `Aktionspläne`, apId, `Populationen`, tpop.popId],
     [
       `Projekte`,
-      projekt,
+      projId,
       `Aktionspläne`,
-      ap,
+      apId,
       `Populationen`,
       tpop.popId,
       `Teil-Populationen`,
     ],
     [
       `Projekte`,
-      projekt,
+      projId,
       `Aktionspläne`,
-      ap,
+      apId,
       `Populationen`,
       tpop.popId,
       `Teil-Populationen`,
@@ -137,9 +145,9 @@ export default async ({ treeName, id, client, store }) => {
     ],
     [
       `Projekte`,
-      projekt,
+      projId,
       `Aktionspläne`,
-      ap,
+      apId,
       `Populationen`,
       tpop.popId,
       `Teil-Populationen`,
@@ -148,9 +156,9 @@ export default async ({ treeName, id, client, store }) => {
     ],
     [
       `Projekte`,
-      projekt,
+      projId,
       `Aktionspläne`,
-      ap,
+      apId,
       `Populationen`,
       tpop.popId,
       `Teil-Populationen`,
@@ -160,7 +168,7 @@ export default async ({ treeName, id, client, store }) => {
     ],
   ]
     // and remove old node
-    .filter(n => !isEqual(n, tree.activeNodeArray))
+    .filter((n) => !isEqual(n, tree.activeNodeArray))
 
   addOpenNodes(newOpenNodes)
   setActiveNodeArray(newActiveNodeArray)

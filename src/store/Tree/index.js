@@ -9,6 +9,11 @@ import NodeLabelFilter, {
 import Map, { defaultValue as defaultMap } from './Map'
 import initialDataFilterValues from './DataFilter/initialValues'
 import DataFilter from './DataFilter/types'
+import apIdInUrl from '../../modules/apIdInUrl'
+import projIdInUrl from '../../modules/projIdInUrl'
+import ekfIdInUrl from '../../modules/ekfIdInUrl'
+import apberuebersichtIdInUrl from '../../modules/apberuebersichtIdInUrl'
+import apberIdInUrl from '../../modules/apberIdInUrl'
 
 export default types
   .model('Tree', {
@@ -70,6 +75,23 @@ export default types
         navigate(`/Daten/${val.join('/')}${query}`)
       }
       self.activeNodeArray = val
+    },
+  }))
+  .views((self) => ({
+    get apIdInActiveNodeArray() {
+      return apIdInUrl(self.activeNodeArray)
+    },
+    get projIdInActiveNodeArray() {
+      return projIdInUrl(self.activeNodeArray)
+    },
+    get ekfIdInActiveNodeArray() {
+      return ekfIdInUrl(self.activeNodeArray)
+    },
+    get apberIdInActiveNodeArray() {
+      return apberIdInUrl(self.activeNodeArray)
+    },
+    get apberuebersichtIdInActiveNodeArray() {
+      return apberuebersichtIdInUrl(self.activeNodeArray)
     },
   }))
 

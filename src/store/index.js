@@ -98,9 +98,6 @@ const myTypes = types
     get treeActiveNodes() {
       return getActiveNodes(self.tree.activeNodeArray)
     },
-    get tree2ActiveNodes() {
-      return getActiveNodes(self.tree2.activeNodeArray)
-    },
     get apGqlFilter() {
       const result = Object.fromEntries(
         Object.entries(getSnapshot(self.tree.dataFilter.ap))
