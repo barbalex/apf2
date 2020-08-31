@@ -26,10 +26,16 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { assigningBeob, refetch, openTree2WithActiveNodeArray } = store
-  const { map, setActiveNodeArray } = store[treeName]
-  const activeNodes = store[`${treeName}ActiveNodes`]
-  const { ap, projekt } = activeNodes
+  const {
+    map,
+    setActiveNodeArray,
+    apIdInActiveNodeArray,
+    projIdInActiveNodeArray,
+  } = store[treeName]
   const { idsFiltered } = map
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
 
   const isHighlighted = idsFiltered.includes(beob.id)
   const latLng =
@@ -63,15 +69,15 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
        * point url to moved beob
        */
       const nearestTpop = await getNearestTpop({
-        activeNodes,
+        apId,
         latLng: event.target._latlng,
         client,
       })
       const newActiveNodeArray = [
         'Projekte',
-        activeNodes.projekt,
+        projId,
         'Aktionspläne',
-        activeNodes.ap,
+        apId,
         'Populationen',
         nearestTpop.popId,
         'Teil-Populationen',
@@ -92,16 +98,16 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
       refetch.beobAssignLines()
       //map.redraw()
     },
-    [activeNodes, beob.id, client, refetch, setActiveNodeArray],
+    [apId, beob.id, client, projId, refetch, setActiveNodeArray],
   )
   const popId = get(beob, 'tpopByTpopId.popId', '')
   const tpopId = get(beob, 'tpopByTpopId.id', '')
   const openBeobInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
       popId,
       'Teil-Populationen',
@@ -109,9 +115,9 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
       'Beobachtungen',
       beob.id,
     ])
-  }, [ap, beob.id, openTree2WithActiveNodeArray, popId, projekt, tpopId])
+  }, [apId, beob.id, openTree2WithActiveNodeArray, popId, projId, tpopId])
   const openBeobInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
       beob.id
     }`
     if (typeof window !== 'undefined') {
@@ -120,7 +126,7 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
       }
       window.open(url)
     }
-  }, [ap, beob.id, popId, projekt, tpopId])
+  }, [apId, beob.id, popId, projId, tpopId])
 
   return (
     <Marker

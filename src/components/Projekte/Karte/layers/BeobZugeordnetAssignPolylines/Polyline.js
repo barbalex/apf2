@@ -20,8 +20,10 @@ const StyledButton = styled(Button)`
 const Line = ({ treeName, beob }) => {
   const store = useContext(storeContext)
   const { openTree2WithActiveNodeArray } = store
-  const activeNodes = store[`${treeName}ActiveNodes`]
-  const { ap, projekt } = activeNodes
+  const { projIdInActiveNodeArray, apIdInActiveNodeArray } = store[treeName]
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const { idsFiltered } = store[treeName].map
 
   const isHighlighted = idsFiltered.includes(beob.id)
@@ -53,9 +55,9 @@ const Line = ({ treeName, beob }) => {
   const openBeobInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
       popId,
       'Teil-Populationen',
@@ -63,9 +65,9 @@ const Line = ({ treeName, beob }) => {
       'Beobachtungen',
       beob.id,
     ])
-  }, [ap, beob.id, openTree2WithActiveNodeArray, popId, projekt, tpopId])
+  }, [apId, beob.id, openTree2WithActiveNodeArray, popId, projId, tpopId])
   const openBeobInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
       beob.id
     }`
     if (typeof window !== 'undefined') {
@@ -74,29 +76,29 @@ const Line = ({ treeName, beob }) => {
       }
       window.open(url)
     }
-  }, [ap, beob.id, popId, projekt, tpopId])
+  }, [apId, beob.id, popId, projId, tpopId])
 
   const openTpopInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
       popId,
       'Teil-Populationen',
       tpopId,
     ])
-  }, [ap, openTree2WithActiveNodeArray, popId, projekt, tpopId])
+  }, [apId, openTree2WithActiveNodeArray, popId, projId, tpopId])
   const openTpopInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}`
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
     }
-  }, [ap, popId, projekt, tpopId])
+  }, [apId, popId, projId, tpopId])
 
   return (
     <Polyline

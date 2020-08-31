@@ -12,10 +12,11 @@ const BeobZugeordnetAssignPolylines = ({ treeName }) => {
   const store = useContext(storeContext)
   const { setRefetchKey, enqueNotification, activeApfloraLayers } = store
   const tree = store[treeName]
+  const { projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
 
-  const activeNodes = store[`${treeName}ActiveNodes`]
-  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
-  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes(
     'beobZugeordnetAssignPolylines',
   )
