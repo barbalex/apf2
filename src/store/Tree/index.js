@@ -14,6 +14,8 @@ import projIdInUrl from '../../modules/projIdInUrl'
 import ekfIdInUrl from '../../modules/ekfIdInUrl'
 import apberuebersichtIdInUrl from '../../modules/apberuebersichtIdInUrl'
 import apberIdInUrl from '../../modules/apberIdInUrl'
+import popIdInUrl from '../../modules/popIdInUrl'
+import tpopIdInUrl from '../../modules/tpopIdInUrl'
 
 export default types
   .model('Tree', {
@@ -92,6 +94,12 @@ export default types
     },
     get apberuebersichtIdInActiveNodeArray() {
       return apberuebersichtIdInUrl(self.activeNodeArray)
+    },
+    get popIdInActiveNodeArray() {
+      return popIdInUrl(self.activeNodeArray)
+    },
+    get tpopIdInActiveNodeArray() {
+      return tpopIdInUrl(self.activeNodeArray)
     },
   }))
 
