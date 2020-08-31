@@ -301,9 +301,14 @@ const TreeContainer = ({
     setUrlQuery,
   } = store
   const tree = store[treeName]
-  const { setActiveNodeArray, openNodes, setOpenNodes } = tree
+  const {
+    setActiveNodeArray,
+    openNodes,
+    setOpenNodes,
+    projIdInActiveNodeArray,
+    activeNodeArray,
+  } = tree
 
-  const activeNodes = store[`${treeName}ActiveNodes`]
   useEffect(() => {
     // if activeNodeArray.length === 1
     // and there is only one projekt
@@ -313,8 +318,8 @@ const TreeContainer = ({
     const existsOnlyOneProjekt = projekteNodes.length === 1
     const projektNode = projekteNodes[0]
     if (
-      activeNodes.projektFolder &&
-      !activeNodes.projekt &&
+      activeNodeArray.includes('Projekte') &&
+      !projIdInActiveNodeArray &&
       existsOnlyOneProjekt &&
       projektNode
     ) {
@@ -324,11 +329,10 @@ const TreeContainer = ({
       setOpenNodes([...openNodes, projektUrl])
     }
   }, [
-    activeNodes.projekt,
-    activeNodes.projektFolder,
-    treeLoading,
+    activeNodeArray,
     nodes,
     openNodes,
+    projIdInActiveNodeArray,
     setActiveNodeArray,
     setOpenNodes,
   ])
@@ -632,7 +636,6 @@ const TreeContainer = ({
   if (treeError) {
     return <ErrorContainer>{`Fehler: ${treeError.message}`}</ErrorContainer>
   }
-  const { projekt } = store[`${treeName}ActiveNodes`]
 
   return (
     <ErrorBoundary>
@@ -640,7 +643,7 @@ const TreeContainer = ({
         {!!toDeleteId && <DeleteDatasetModal treeName={treeName} />}
         <LabelFilterContainer>
           <LabelFilter treeName={treeName} nodes={nodes} />
-          {!!projekt && <ApFilter treeName={treeName} />}
+          {!!projIdInActiveNodeArray && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
         <InnerTreeContainer>
           <Tree treeName={treeName} nodes={nodes} loading={treeLoading} />

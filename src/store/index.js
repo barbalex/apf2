@@ -22,7 +22,6 @@ import initialDataFilterTreeValues from './Tree/DataFilter/initialValues'
 import User, { defaultValue as defaultUser } from './User'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import EkPlan, { defaultValue as defaultEkPlan } from './EkPlan'
-import getActiveNodes from '../modules/getActiveNodes'
 import getOpenNodesFromActiveNodeArray from '../modules/getOpenNodesFromActiveNodeArray'
 import exists from '../modules/exists'
 import simpleTypes from './Tree/DataFilter/simpleTypes'
@@ -95,9 +94,6 @@ const myTypes = types
     notifications: [],
   }))
   .views((self) => ({
-    get treeActiveNodes() {
-      return getActiveNodes(self.tree.activeNodeArray)
-    },
     get apGqlFilter() {
       const result = Object.fromEntries(
         Object.entries(getSnapshot(self.tree.dataFilter.ap))
