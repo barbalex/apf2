@@ -10,10 +10,17 @@ import dataGql from './data'
 
 export default async ({ treeName, id, client, store }) => {
   const tree = store[treeName]
-  const activeNodes = store[`${treeName}ActiveNodes`]
   const { refetch } = store
-  const { projekt, ap, pop } = activeNodes
-  const { addOpenNodes } = tree
+  const {
+    addOpenNodes,
+    popIdInActiveNodeArray,
+    projIdInActiveNodeArray,
+    apIdInActiveNodeArray,
+  } = tree
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const popId = popIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   // 1. load all data
   const { data } = await client.query({
     query: dataGql,
@@ -30,92 +37,92 @@ export default async ({ treeName, id, client, store }) => {
   let newOpenNodes = [
     [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
-      pop,
+      popId,
       'Teil-Populationen',
       id,
     ],
     [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
-      pop,
+      popId,
       'Teil-Populationen',
       id,
       'Massnahmen',
     ],
     [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
-      pop,
+      popId,
       'Teil-Populationen',
       id,
       'Massnahmen-Berichte',
     ],
     [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
-      pop,
+      popId,
       'Teil-Populationen',
       id,
       'Feld-Kontrollen',
     ],
     [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
-      pop,
+      popId,
       'Teil-Populationen',
       id,
       'Freiwilligen-Kontrollen',
     ],
     [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
-      pop,
+      popId,
       'Teil-Populationen',
       id,
       'Kontroll-Berichte',
     ],
     [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
-      pop,
+      popId,
       'Teil-Populationen',
       id,
       'Beobachtungen',
     ],
   ]
   // 2.1: tpopmassns
-  tpopmassns.forEach(k => {
+  tpopmassns.forEach((k) => {
     newOpenNodes = [
       ...newOpenNodes,
       [
         'Projekte',
-        projekt,
+        projId,
         'Aktionspläne',
-        ap,
+        apId,
         'Populationen',
-        pop,
+        popId,
         'Teil-Populationen',
         id,
         'Massnahmen',
@@ -125,16 +132,16 @@ export default async ({ treeName, id, client, store }) => {
   })
 
   // 2.2: tpopmassnbers
-  tpopmassnbers.forEach(k => {
+  tpopmassnbers.forEach((k) => {
     newOpenNodes = [
       ...newOpenNodes,
       [
         'Projekte',
-        projekt,
+        projId,
         'Aktionspläne',
-        ap,
+        apId,
         'Populationen',
-        pop,
+        popId,
         'Teil-Populationen',
         id,
         'Massnahmen-Berichte',
@@ -144,16 +151,16 @@ export default async ({ treeName, id, client, store }) => {
   })
 
   // 2.3: tpopfeldkontrs
-  tpopfeldkontrs.forEach(k => {
+  tpopfeldkontrs.forEach((k) => {
     newOpenNodes = [
       ...newOpenNodes,
       [
         'Projekte',
-        projekt,
+        projId,
         'Aktionspläne',
-        ap,
+        apId,
         'Populationen',
-        pop,
+        popId,
         'Teil-Populationen',
         id,
         'Feld-Kontrollen',
@@ -161,11 +168,11 @@ export default async ({ treeName, id, client, store }) => {
       ],
       [
         'Projekte',
-        projekt,
+        projId,
         'Aktionspläne',
-        ap,
+        apId,
         'Populationen',
-        pop,
+        popId,
         'Teil-Populationen',
         id,
         'Feld-Kontrollen',
@@ -180,11 +187,11 @@ export default async ({ treeName, id, client, store }) => {
         ...newOpenNodes,
         [
           'Projekte',
-          projekt,
+          projId,
           'Aktionspläne',
-          ap,
+          apId,
           'Populationen',
-          pop,
+          popId,
           'Teil-Populationen',
           id,
           'Feld-Kontrollen',
@@ -197,16 +204,16 @@ export default async ({ treeName, id, client, store }) => {
   })
 
   // 2.4: tpopfreiwkontrs
-  tpopfreiwkontrs.forEach(k => {
+  tpopfreiwkontrs.forEach((k) => {
     newOpenNodes = [
       ...newOpenNodes,
       [
         'Projekte',
-        projekt,
+        projId,
         'Aktionspläne',
-        ap,
+        apId,
         'Populationen',
-        pop,
+        popId,
         'Teil-Populationen',
         id,
         'Freiwilligen-Kontrollen',
@@ -214,11 +221,11 @@ export default async ({ treeName, id, client, store }) => {
       ],
       [
         'Projekte',
-        projekt,
+        projId,
         'Aktionspläne',
-        ap,
+        apId,
         'Populationen',
-        pop,
+        popId,
         'Teil-Populationen',
         id,
         'Freiwilligen-Kontrollen',
@@ -233,11 +240,11 @@ export default async ({ treeName, id, client, store }) => {
         ...newOpenNodes,
         [
           'Projekte',
-          projekt,
+          projId,
           'Aktionspläne',
-          ap,
+          apId,
           'Populationen',
-          pop,
+          popId,
           'Teil-Populationen',
           id,
           'Freiwilligen-Kontrollen',
@@ -250,16 +257,16 @@ export default async ({ treeName, id, client, store }) => {
   })
 
   // 2.5: tpopbers
-  tpopbers.forEach(k => {
+  tpopbers.forEach((k) => {
     newOpenNodes = [
       ...newOpenNodes,
       [
         'Projekte',
-        projekt,
+        projId,
         'Aktionspläne',
-        ap,
+        apId,
         'Populationen',
-        pop,
+        popId,
         'Teil-Populationen',
         id,
         'Kontroll-Berichte',
@@ -269,16 +276,16 @@ export default async ({ treeName, id, client, store }) => {
   })
 
   // 2.6: tpopbeobs
-  tpopbeobs.forEach(k => {
+  tpopbeobs.forEach((k) => {
     newOpenNodes = [
       ...newOpenNodes,
       [
         'Projekte',
-        projekt,
+        projId,
         'Aktionspläne',
-        ap,
+        apId,
         'Populationen',
-        pop,
+        popId,
         'Teil-Populationen',
         id,
         'Beobachtungen',

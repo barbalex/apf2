@@ -179,8 +179,12 @@ const Row = ({ index, style, node, treeName }) => {
   const store = useContext(storeContext)
   const { activeApfloraLayers, copying, moving, copyingBiotop } = store
   const tree = store[treeName]
-  const { openNodes, setActiveNodeArray } = tree
-  const activeNodes = store[`${treeName}ActiveNodes`]
+  const {
+    openNodes,
+    setActiveNodeArray,
+    apIdInActiveNodeArray,
+    tpopIdInActiveNodeArray,
+  } = tree
   const { idsFiltered: mapIdsFiltered } = store[treeName].map
 
   const activeNodeArray = get(store, `${treeName}.activeNodeArray`)
@@ -292,35 +296,35 @@ const Row = ({ index, style, node, treeName }) => {
           {karteIsVisible && (
             <>
               {node.menuType === 'ap' &&
-                node.id === activeNodes.ap &&
+                node.id === apIdInActiveNodeArray &&
                 activeApfloraLayers.includes('pop') && (
                   <div title="in Karte sichtbar">
                     <PopMapIcon />
                   </div>
                 )}
               {node.menuType === 'ap' &&
-                node.id === activeNodes.ap &&
+                node.id === apIdInActiveNodeArray &&
                 activeApfloraLayers.includes('tpop') && (
                   <div title="in Karte sichtbar">
                     <TpopMapIcon />
                   </div>
                 )}
               {node.menuType === 'beobNichtBeurteiltFolder' &&
-                node.id === activeNodes.ap &&
+                node.id === apIdInActiveNodeArray &&
                 activeApfloraLayers.includes('beobNichtBeurteilt') && (
                   <div title="in Karte sichtbar">
                     <BeobNichtBeurteiltMapIcon />
                   </div>
                 )}
               {node.menuType === 'beobNichtZuzuordnenFolder' &&
-                node.id === activeNodes.ap &&
+                node.id === apIdInActiveNodeArray &&
                 activeApfloraLayers.includes('beobNichtZuzuordnen') && (
                   <div title="in Karte sichtbar">
                     <BeobNichtZuzuordnenMapIcon />
                   </div>
                 )}
               {node.menuType === 'beobZugeordnetFolder' &&
-                node.id === activeNodes.tpop &&
+                node.id === tpopIdInActiveNodeArray &&
                 activeApfloraLayers.includes('beobZugeordnet') && (
                   <div title="in Karte sichtbar">
                     <BeobZugeordnetMapIcon />
