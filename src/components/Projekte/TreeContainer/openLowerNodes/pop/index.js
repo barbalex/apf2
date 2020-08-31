@@ -10,10 +10,11 @@ import dataGql from './data'
 
 export default async ({ treeName, id, client, store }) => {
   const tree = store[treeName]
-  const activeNodes = store[`${treeName}ActiveNodes`]
   const { refetch } = store
-  const { projekt, ap } = activeNodes
-  const { addOpenNodes } = tree
+  const { addOpenNodes, apIdInActiveNodeArray, projIdInActiveNodeArray } = tree
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   // 1. load all data
   const { data } = await client.query({
     query: dataGql,
@@ -24,59 +25,59 @@ export default async ({ treeName, id, client, store }) => {
   const popmassnbers = get(data, 'popById.popmassnbersByPopId.nodes', [])
   // 2. add activeNodeArrays for all data to openNodes
   const newOpenNodes = [
-    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', id],
+    ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', id],
     [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
       id,
       'Teil-Populationen',
     ],
     [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
       id,
       'Kontroll-Berichte',
     ],
     [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
       id,
       'Massnahmen-Berichte',
     ],
-    popbers.map(o => [
+    popbers.map((o) => [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
       id,
       'Kontroll-Berichte',
       o.id,
     ]),
-    popmassnbers.map(o => [
+    popmassnbers.map((o) => [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
       id,
       'Massnahmen-Berichte',
       o.id,
     ]),
-    tpops.map(o => [
+    tpops.map((o) => [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
       id,
       'Teil-Populationen',

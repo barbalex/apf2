@@ -33,8 +33,9 @@ const ApFilter = ({ treeName }) => {
     setActiveNodeArray,
     openNodes,
     setOpenNodes,
+    apIdInActiveNodeArray,
   } = store[treeName]
-  const activeNodes = store[`${treeName}ActiveNodes`]
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
 
   const onChange = useCallback(async () => {
     const previousApFilter = apFilter
@@ -43,7 +44,6 @@ const ApFilter = ({ treeName }) => {
       // need to fetch previously not had aps
       refetch.tree()
       // apFilter was set to true
-      const { ap: apId } = activeNodes
       let result
       if (apId) {
         // check if this is real ap
@@ -77,14 +77,14 @@ const ApFilter = ({ treeName }) => {
       }
     }
   }, [
-    apFilter,
-    setApFilter,
-    refetch,
-    activeNodes,
     activeNodeArray,
+    apFilter,
+    apId,
     client,
-    setActiveNodeArray,
     openNodes,
+    refetch,
+    setActiveNodeArray,
+    setApFilter,
     setOpenNodes,
   ])
 

@@ -102,10 +102,11 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
     assigningBeob,
     setAssigningBeob,
   } = store
-  const { idsFiltered } = store[treeName].map
+  const tree = store[treeName]
+  const { apIdInActiveNodeArray } = tree
+  const { idsFiltered } = tree.map
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const mapIdsFiltered = idsFiltered
-  const activeNodes = store[`${treeName}ActiveNodes`]
   const layer = apfloraLayer.value
   const pop = layer === 'pop' && activeApfloraLayers.includes('pop')
   const tpop = layer === 'tpop' && activeApfloraLayers.includes('tpop')
@@ -122,7 +123,7 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
     activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
 
   const variables = {
-    ap: activeNodes.ap ? [activeNodes.ap] : [],
+    ap: apIdInActiveNodeArray ? [apIdInActiveNodeArray] : [],
     pop,
     tpop,
     beobNichtBeurteilt,
