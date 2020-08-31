@@ -11,10 +11,10 @@ import dataGql from './data'
 
 export default async ({ treeName, id, client, store }) => {
   const tree = store[treeName]
-  const activeNodes = store[`${treeName}ActiveNodes`]
   const { refetch } = store
-  const { projekt } = activeNodes
-  const { addOpenNodes } = tree
+  const { addOpenNodes, projIdInActiveNodeArray } = tree
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   // 1. load all data
   const { data } = await client.query({
     query: dataGql,
@@ -26,21 +26,21 @@ export default async ({ treeName, id, client, store }) => {
   )
 
   // 2. add activeNodeArrays for all data to openNodes
-  let newOpenNodes = [['Projekte', projekt, 'Aktionspläne', id, 'AP-Ziele']]
+  let newOpenNodes = [['Projekte', projId, 'Aktionspläne', id, 'AP-Ziele']]
 
-  Object.keys(zielsGrouped).forEach(jahr => {
+  Object.keys(zielsGrouped).forEach((jahr) => {
     newOpenNodes = [
       ...newOpenNodes,
-      ['Projekte', projekt, 'Aktionspläne', id, 'AP-Ziele', +jahr],
+      ['Projekte', projId, 'Aktionspläne', id, 'AP-Ziele', +jahr],
     ]
     const ziels = zielsGrouped[+jahr]
-    ziels.forEach(ziel => {
+    ziels.forEach((ziel) => {
       newOpenNodes = [
         ...newOpenNodes,
-        ['Projekte', projekt, 'Aktionspläne', id, 'AP-Ziele', +jahr, ziel.id],
+        ['Projekte', projId, 'Aktionspläne', id, 'AP-Ziele', +jahr, ziel.id],
         [
           'Projekte',
-          projekt,
+          projId,
           'Aktionspläne',
           id,
           'AP-Ziele',
@@ -50,12 +50,12 @@ export default async ({ treeName, id, client, store }) => {
         ],
       ]
       const zielbers = get(ziel, 'zielbersByZielId.nodes', [])
-      zielbers.forEach(zielber => {
+      zielbers.forEach((zielber) => {
         newOpenNodes = [
           ...newOpenNodes,
           [
             'Projekte',
-            projekt,
+            projId,
             'Aktionspläne',
             id,
             'AP-Ziele',

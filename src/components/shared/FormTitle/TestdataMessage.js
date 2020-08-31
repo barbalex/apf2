@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import constants from '../../../modules/constants'
 import storeContext from '../../../storeContext'
@@ -13,9 +12,8 @@ const Div = styled.div`
 
 const TestdataMessage = ({ treeName, apId }) => {
   const store = useContext(storeContext)
-  const tree = store[treeName]
-  const apIdFromTree = get(tree, 'activeNodes.ap')
-  const apIdUsed = apIdFromTree || apId
+  const { apIdInActiveNodeArray } = store[treeName]
+  const apIdUsed = apIdInActiveNodeArray || apId
   const isTestAp = apIdUsed && constants.testAps.includes(apIdUsed)
 
   if (isTestAp) {

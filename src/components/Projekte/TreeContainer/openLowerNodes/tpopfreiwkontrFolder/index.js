@@ -11,10 +11,17 @@ import dataGql from './data'
 
 export default async ({ treeName, id, client, store }) => {
   const tree = store[treeName]
-  const activeNodes = store[`${treeName}ActiveNodes`]
   const { refetch } = store
-  const { projekt, ap, pop } = activeNodes
-  const { addOpenNodes } = tree
+  const {
+    addOpenNodes,
+    projIdInActiveNodeArray,
+    apIdInActiveNodeArray,
+    popIdInActiveNodeArray,
+  } = tree
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const popId = popIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   // 1. load all data
   const { data } = await client.query({
     query: dataGql,
@@ -25,26 +32,26 @@ export default async ({ treeName, id, client, store }) => {
   let newOpenNodes = [
     [
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
-      pop,
+      popId,
       'Teil-Populationen',
       id,
       'Freiwilligen-Kontrollen',
     ],
   ]
-  tpopkontrs.forEach(k => {
+  tpopkontrs.forEach((k) => {
     newOpenNodes = [
       ...newOpenNodes,
       [
         'Projekte',
-        projekt,
+        projId,
         'Aktionspläne',
-        ap,
+        apId,
         'Populationen',
-        pop,
+        popId,
         'Teil-Populationen',
         id,
         'Freiwilligen-Kontrollen',
@@ -52,11 +59,11 @@ export default async ({ treeName, id, client, store }) => {
       ],
       [
         'Projekte',
-        projekt,
+        projId,
         'Aktionspläne',
-        ap,
+        apId,
         'Populationen',
-        pop,
+        popId,
         'Teil-Populationen',
         id,
         'Freiwilligen-Kontrollen',
@@ -65,16 +72,16 @@ export default async ({ treeName, id, client, store }) => {
       ],
     ]
     const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
-    zaehls.forEach(z => {
+    zaehls.forEach((z) => {
       newOpenNodes = [
         ...newOpenNodes,
         [
           'Projekte',
-          projekt,
+          projId,
           'Aktionspläne',
-          ap,
+          apId,
           'Populationen',
-          pop,
+          popId,
           'Teil-Populationen',
           id,
           'Freiwilligen-Kontrollen',
