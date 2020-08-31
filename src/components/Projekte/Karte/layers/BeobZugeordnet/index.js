@@ -38,12 +38,12 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
     mapFilter,
   } = store
   const tree = store[treeName]
-  const { map } = tree
+  const { map, apIdInActiveNodeArray, projIdInActiveNodeArray } = tree
   const { setBeobZugeordnetIdsFiltered } = map
 
-  const activeNodes = store[`${treeName}ActiveNodes`]
-  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
-  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobZugeordnet')
 
   const bounds = leafletMap.getBounds()

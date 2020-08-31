@@ -26,10 +26,16 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { assigningBeob, refetch, openTree2WithActiveNodeArray } = store
-  const { setActiveNodeArray, map } = store[treeName]
-  const activeNodes = store[`${treeName}ActiveNodes`]
-  const { ap, projekt } = activeNodes
+  const {
+    setActiveNodeArray,
+    map,
+    apIdInActiveNodeArray,
+    projIdInActiveNodeArray,
+  } = store[treeName]
   const { idsFiltered } = map
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
 
   const isHighlighted = idsFiltered.includes(beob.id)
   const latLng =
@@ -63,15 +69,15 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
        * point url to moved beob
        */
       const nearestTpop = await getNearestTpop({
-        activeNodes,
+        apId,
         latLng: event.target._latlng,
         client,
       })
       const newActiveNodeArray = [
         'Projekte',
-        activeNodes.projekt,
+        projId,
         'Aktionspläne',
-        activeNodes.ap,
+        apId,
         'Populationen',
         nearestTpop.popId,
         'Teil-Populationen',
@@ -91,20 +97,20 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
       refetch.beobZugeordnetForMap()
       refetch.beobAssignLines()
     },
-    [activeNodes, beob.id, client, refetch, setActiveNodeArray],
+    [apId, beob.id, client, projId, refetch, setActiveNodeArray],
   )
   const openBeobInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'nicht-beurteilte-Beobachtungen',
       beob.id,
     ])
-  }, [ap, beob.id, openTree2WithActiveNodeArray, projekt])
+  }, [apId, beob.id, openTree2WithActiveNodeArray, projId])
   const openBeobInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/nicht-beurteilte-Beobachtungen/${
       beob.id
     }`
     if (typeof window !== 'undefined') {
@@ -113,7 +119,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
       }
       window.open(url)
     }
-  }, [ap, beob.id, projekt])
+  }, [apId, beob.id, projId])
 
   return (
     <Marker

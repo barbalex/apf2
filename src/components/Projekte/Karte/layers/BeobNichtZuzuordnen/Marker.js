@@ -22,9 +22,11 @@ const StyledButton = styled(Button)`
 const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
   const store = useContext(storeContext)
   const { openTree2WithActiveNodeArray } = store
-  const activeNodes = store[`${treeName}ActiveNodes`]
-  const { ap, projekt } = activeNodes
+  const { projIdInActiveNodeArray, apIdInActiveNodeArray } = store[treeName]
   const { idsFiltered } = store[treeName].map
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
 
   const isHighlighted = idsFiltered.includes(beob.id)
   const latLng =
@@ -53,15 +55,15 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
   const openBeobInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'nicht-zuzuordnende-Beobachtungen',
       beob.id,
     ])
-  }, [ap, beob.id, openTree2WithActiveNodeArray, projekt])
+  }, [apId, beob.id, openTree2WithActiveNodeArray, projId])
   const openBeobInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/nicht-zuzuordnende-Beobachtungen/${
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/nicht-zuzuordnende-Beobachtungen/${
       beob.id
     }`
     if (typeof window !== 'undefined') {
@@ -70,7 +72,7 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
       }
       window.open(url)
     }
-  }, [ap, beob.id, projekt])
+  }, [apId, beob.id, projId])
 
   return (
     <Marker position={latLng} icon={icon} title={label}>
