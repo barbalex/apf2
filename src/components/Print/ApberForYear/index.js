@@ -108,9 +108,15 @@ const SecondPageText = styled.div`
 
 const ApberForYear = () => {
   const store = useContext(storeContext)
-  const activeNodes = store.treeActiveNodes
-  const { apberuebersicht: apberuebersichtId } = activeNodes
+  const {
+    apberuebersichtIdInActiveNodeArray,
+    projIdInActiveNodeArray,
+  } = store.tree
 
+  const apberuebersichtId =
+    apberuebersichtIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const projektId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const { data: data1, loading: data1Loading, error: data1Error } = useQuery(
     query1,
     {
@@ -119,7 +125,6 @@ const ApberForYear = () => {
       },
     },
   )
-  const { projekt: projektId } = activeNodes
   const jahr = get(data1, 'apberuebersichtById.jahr', 0)
   const { data: data2, loading: data2Loading, error: data2Error } = useQuery(
     query2,

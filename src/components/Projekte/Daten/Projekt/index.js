@@ -28,14 +28,11 @@ const FieldsContainer = styled.div`
 const Projekt = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { activeNodeArray } = store[treeName]
+  const { activeNodeArray, projIdInActiveNodeArray: projId } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {
-      id:
-        activeNodeArray.length > 1
-          ? activeNodeArray[1]
-          : '99999999-9999-9999-9999-999999999999',
+      id: projId,
     },
   })
 

@@ -68,8 +68,9 @@ const TotalColumn = styled.div`
 
 const AktPopList = () => {
   const store = useContext(storeContext)
-  const activeNodes = store.treeActiveNodes
-  const { projekt: projektId } = activeNodes
+  const { projIdInActiveNodeArray } = store.tree
+  const projektId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const { data, loading, error: dataError } = useQuery(query, {
     variables: {
       projektId,
