@@ -33,13 +33,13 @@ const StyledButton = styled(Button)`
 const TpopMarker = ({ treeName, tpop }) => {
   const store = useContext(storeContext)
   const { openTree2WithActiveNodeArray } = store
-  const activeNodes = store[`${treeName}ActiveNodes`]
-  const { ap, projekt } = activeNodes
-  const {
-    idsFiltered,
-    tpopIcon: tpopIconName,
-    tpopLabel: tpopLabelName,
-  } = store[treeName].map
+  const { map, projIdInActiveNodeArray, apIdInActiveNodeArray } = store[
+    treeName
+  ]
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const { idsFiltered, tpopIcon: tpopIconName, tpopLabel: tpopLabelName } = map
 
   const popNr = get(tpop, 'popByPopId.nr') || '(keine Nr)'
   const tpopNr = get(tpop, 'nr') || '(keine Nr)'
@@ -66,17 +66,17 @@ const TpopMarker = ({ treeName, tpop }) => {
   const openTpopInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
       popId,
       'Teil-Populationen',
       tpop.id,
     ])
-  }, [ap, openTree2WithActiveNodeArray, popId, projekt, tpop.id])
+  }, [apId, openTree2WithActiveNodeArray, popId, projId, tpop.id])
   const openTpopInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${
       tpop.id
     }`
     if (typeof window !== 'undefined') {
@@ -85,7 +85,7 @@ const TpopMarker = ({ treeName, tpop }) => {
       }
       window.open(url)
     }
-  }, [ap, popId, projekt, tpop.id])
+  }, [apId, popId, projId, tpop.id])
 
   if (typeof window === 'undefined') return null
   const latLng = new window.L.LatLng(tpop.wgs84Lat, tpop.wgs84Long)

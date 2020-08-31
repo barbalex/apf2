@@ -52,7 +52,6 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
 const LayersControl = ({ treeName }) => {
   const store = useContext(storeContext)
   const { apfloraLayers, overlays } = store
-  const activeNodes = store[`${treeName}ActiveNodes`]
 
   const [baseLayersExpanded, setBaseLayersExpanded] = useState(true)
   const [overlaysExpanded, setOverlaysExpanded] = useState(false)
@@ -90,12 +89,6 @@ const LayersControl = ({ treeName }) => {
     }
   }, [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded])
 
-  const getApfloraLayersTitle = () => {
-    if (!activeNodes.ap) return 'apflora'
-    const ap = activeNodes.ap
-    if (!ap || !ap.label) return 'apflora'
-    return ap.label
-  }
   const ApfloraCard =
     baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded
       ? CardTitle
@@ -118,7 +111,7 @@ const LayersControl = ({ treeName }) => {
       <CardContainer>
         <Card>
           <CardHeader onClick={onToggleApfloraLayersExpanded}>
-            <ApfloraCard>{getApfloraLayersTitle()}</ApfloraCard>
+            <ApfloraCard>apflora</ApfloraCard>
             <div>
               {apfloraLayersExpanded ? (
                 <StyledExpandLessIcon />

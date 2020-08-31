@@ -41,12 +41,17 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     enqueNotification,
   } = store
   const tree = store[treeName]
-  const { map, dataFilter } = tree
+  const {
+    map,
+    dataFilter,
+    projIdInActiveNodeArray,
+    apIdInActiveNodeArray,
+  } = tree
   const { setTpopIdsFiltered } = map
 
-  const activeNodes = store[`${treeName}ActiveNodes`]
-  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
-  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('tpop')
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'

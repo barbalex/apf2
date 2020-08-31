@@ -8,7 +8,7 @@ import { gql } from '@apollo/client'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 
-export default async ({ activeNodes, latLng, client }) => {
+export default async ({ latLng, client, apId }) => {
   const { lat, lng } = latLng
   const myPoint = point([lat, lng])
   const { data } = await client.query({
@@ -32,7 +32,7 @@ export default async ({ activeNodes, latLng, client }) => {
         }
       }
     `,
-    variables: { apId: activeNodes.ap },
+    variables: { apId: apId || '99999999-9999-9999-9999-999999999999' },
   })
   const pops = get(data, 'apById.popsByApId.nodes', [])
   const tpops = flatten(

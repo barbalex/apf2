@@ -33,11 +33,13 @@ const StyledButton = styled(Button)`
 const PopMarker = ({ treeName, pop }) => {
   const store = useContext(storeContext)
   const { apfloraLayers, openTree2WithActiveNodeArray } = store
-  const activeNodes = store[`${treeName}ActiveNodes`]
-  const { ap, projekt } = activeNodes
-  const { idsFiltered, popIcon: popIconName, popLabel: popLabelName } = store[
+  const { projIdInActiveNodeArray, apIdInActiveNodeArray, map } = store[
     treeName
-  ].map
+  ]
+  const { idsFiltered, popIcon: popIconName, popLabel: popLabelName } = map
+  const projId =
+    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
 
   const nrLabel = pop.nr ? pop.nr.toString() : '(keine Nr)'
   let title = nrLabel
@@ -67,15 +69,15 @@ const PopMarker = ({ treeName, pop }) => {
   const openPopInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
       'Projekte',
-      projekt,
+      projId,
       'Aktionspläne',
-      ap,
+      apId,
       'Populationen',
       pop.id,
     ])
-  }, [ap, openTree2WithActiveNodeArray, pop.id, projekt])
+  }, [apId, openTree2WithActiveNodeArray, pop.id, projId])
   const openPopInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${
       pop.id
     }`
     if (typeof window !== 'undefined') {
@@ -84,7 +86,7 @@ const PopMarker = ({ treeName, pop }) => {
       }
       window.open(url)
     }
-  }, [ap, pop.id, projekt])
+  }, [apId, pop.id, projId])
 
   if (typeof window === 'undefined') return null
   const latLng = new window.L.LatLng(pop.wgs84Lat, pop.wgs84Long)
