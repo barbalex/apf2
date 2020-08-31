@@ -48,20 +48,18 @@ const Container = styled.div`
 
 const ApberForApFromAp = ({ apberId: apberIdPassed, apId: apIdPassed }) => {
   const store = useContext(storeContext)
-  const activeNodes = store.treeActiveNodes
+  const { apberIdInActiveNodeArray, apIdInActiveNodeArray } = store.tree
   let apberId
   if (apberIdPassed) {
     apberId = apberIdPassed
   } else {
-    const { apber: apberIdFromActiveNodes } = activeNodes
-    apberId = apberIdFromActiveNodes
+    apberId = apberIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   }
   let apId
   if (apIdPassed) {
     apId = apIdPassed
   } else {
-    const { ap: apIdFromActiveNodes } = activeNodes
-    apId = apIdFromActiveNodes
+    apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   }
 
   const { data: apberData, error: apberDataError } = useQuery(apberQuery, {

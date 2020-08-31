@@ -27,14 +27,9 @@ const Version = styled.div`
 
 const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
   const store = useContext(storeContext)
-  const {
-    deletedDatasets,
-    user,
-    urlQuery,
-    treeActiveNodes,
-    setShowDeletions,
-  } = store
+  const { deletedDatasets, user, urlQuery, setShowDeletions } = store
   const { idb } = useContext(idbContext)
+  const { projIdInActiveNodeArray } = store.tree
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => setAnchorEl(null), [])
@@ -43,7 +38,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
    * because otherwise removing elements errors out (because elements are sealed)
    */
   const projekteTabs = urlQuery.projekteTabs.slice().filter((el) => !!el)
-  const exporteIsActive = !!treeActiveNodes.projekt
+  const exporteIsActive = !!projIdInActiveNodeArray
   const isMobile = isMobilePhone()
 
   const showDeletedDatasets = useCallback(() => {

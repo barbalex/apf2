@@ -18,7 +18,6 @@ import EkfYear from '../EkfYear'
 import User from './User'
 import storeContext from '../../../../../storeContext'
 import queryAdresse from './queryAdresse'
-import getActiveNodes from '../../../../../modules/getActiveNodes'
 
 const SiteTitle = styled(Button)`
   display: none !important;
@@ -80,8 +79,8 @@ const ProjekteAppBar = () => {
     setIsPrint,
     ekfIds,
   } = store
-  const { activeNodeArray } = store.tree
-  const ekfIsActive = !!getActiveNodes(activeNodeArray).tpopfreiwkontr
+  const { ekfIdInUrl } = store.tree
+  const ekfIsActive = !!ekfIdInUrl
 
   /**
    * need to clone projekteTabs

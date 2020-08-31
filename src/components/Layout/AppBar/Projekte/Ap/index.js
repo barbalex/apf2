@@ -70,16 +70,16 @@ const ProjekteAppBar = () => {
     urlQuery,
     setUrlQuery,
     cloneTree2From1,
-    treeActiveNodes,
     tree,
   } = store
+  const { projIdInActiveNodeArray } = store.tree
 
   /**
    * need to clone projekteTabs
    * because otherwise removing elements errors out (because elements are sealed)
    */
-  const projekteTabs = urlQuery.projekteTabs.slice().filter(el => !!el)
-  const exporteIsActive = !!treeActiveNodes.projekt
+  const projekteTabs = urlQuery.projekteTabs.slice().filter((el) => !!el)
+  const exporteIsActive = !!projIdInActiveNodeArray
   const isMobile = isMobilePhone()
 
   const { token } = user
@@ -90,7 +90,7 @@ const ProjekteAppBar = () => {
   const isProjekt = tree.activeNodeArray[0] === 'Projekte'
 
   const onClickButton = useCallback(
-    name => {
+    (name) => {
       if (isMobile) {
         // show one tab only
         setUrlQueryValue({
@@ -101,10 +101,10 @@ const ProjekteAppBar = () => {
         })
       } else {
         if (projekteTabs.includes(name)) {
-          remove(projekteTabs, el => el === name)
+          remove(projekteTabs, (el) => el === name)
           if (name === 'tree2') {
             // close all tree2-tabs
-            remove(projekteTabs, el => el.includes('2'))
+            remove(projekteTabs, (el) => el.includes('2'))
           }
         } else {
           projekteTabs.push(name)
