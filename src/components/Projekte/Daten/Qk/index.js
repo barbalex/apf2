@@ -81,7 +81,7 @@ const QkForm = ({ treeName }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Qualitätskontrollen" />
+        <FormTitle title="Qualitätskontrollen" treeName={treeName} />
         <FieldsContainer>
           <Tabs
             value={tab}

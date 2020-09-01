@@ -31,6 +31,10 @@ const Buttons = styled.div`
 `
 
 const FormTitle = ({ title, apId, treeName, buttons }) => {
+  if (!treeName) {
+    console.log('FormTitle was not passed a treeName, bailing out!')
+    return
+  }
   return (
     <Container>
       <TitleRow>
