@@ -4,7 +4,6 @@ import React from 'react'
 // otherwise apollo errors during the build
 // see: https://github.com/gatsbyjs/gatsby/issues/11225#issuecomment-457211628
 import 'isomorphic-fetch'
-import 'mobx-react-lite/batchingForReactDom'
 import queryString from 'query-string'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
