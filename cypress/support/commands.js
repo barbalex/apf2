@@ -28,30 +28,17 @@
 // TODO: setting selects is a total mess
 // should become better in next cypress updates
 Cypress.Commands.add('setSelectOption', ({ selector, option, value }) => {
+  cy.get(selector).then((thing) => {
+    if (thing.find('.react-select__clear-indicator').length > 0) {
+      thing.find('.react-select__clear-indicator').click()
+    }
+  })
   cy.get(selector)
-    .find('.css-10nd86i input:text')
-    .focus()
-    .type(option, { force: true })
-    .type('{enter}', { force: true })
-  cy.get(selector)
-    .find('.css-10nd86i')
+    .find('.react-select__input')
     .find('input')
-    .eq(1)
-    .should('have.value', value)
-})
-Cypress.Commands.add('setSelectOptionAsync', ({ selector, option, value }) => {
-  cy.get(selector)
-    .find('.css-10nd86i input:text')
-    .focus()
     .type(option, { force: true })
-    .type('{downarrow}', { force: true })
-    .type('{enter}', { force: true })
-    .trigger('input')
-  cy.get(selector)
-    .find('.css-10nd86i')
-    .find('input')
-    .eq(1)
-    .should('have.value', value)
+    .blur()
+  cy.get(selector).find('.react-select__single-value').should('contain', option)
 })
 Cypress.Commands.add('setSelectTopOption', ({ selector }) => {
   cy.get(selector)
@@ -61,12 +48,7 @@ Cypress.Commands.add('setSelectTopOption', ({ selector }) => {
     .type('{enter}', { force: true })
 })
 Cypress.Commands.add('setSelectOption2', ({ selector, option, value }) => {
-  cy.get(selector)
-    .find('.css-10nd86i')
-    .click()
-    .find('input')
-    .eq(1)
-    .focus()
+  cy.get(selector).find('.css-10nd86i').click().find('input').eq(1).focus()
   /*.find('.react-select__menu')
     .contains(option)
     .click({ force: true })*/
@@ -77,13 +59,13 @@ Cypress.Commands.add('setSelectOption2', ({ selector, option, value }) => {
     .should('have.value', value)*/
 })
 Cypress.Commands.add('clearSelect', ({ selector }) => {
-  cy.get(selector)
-    .find('.css-10nd86i')
-    .find('.react-select__clear-indicator')
-    .click()
-  cy.get(selector)
-    .find('.css-10nd86i')
-    .find('input')
-    .eq(1)
-    .should('have.value', '')
+  cy.get(selector).then((thing) => {
+    if (thing.find('.react-select__clear-indicator').length > 0) {
+      thing.find('.react-select__clear-indicator').click()
+    }
+  })
+  // TODO:
+  // the value of the container is ALWAYS ''
+  // Dont know how to get the real value
+  cy.get(selector).find('.react-select__single-value').should('contain', '')
 })

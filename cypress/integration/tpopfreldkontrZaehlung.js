@@ -9,7 +9,7 @@ describe('Feldkontrolle Zählung form', () => {
   it('has correct Title', () => {
     cy.get('[data-id=form-title]').should('contain', 'Zählung')
   })
-  it.skip('updates einheit', () => {
+  it('updates einheit', () => {
     cy.setSelectOption({
       selector: '[data-id=einheit]',
       option: 'Keimlinge',

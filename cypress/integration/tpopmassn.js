@@ -54,7 +54,7 @@ describe('Teil-Population Massnahme form', () => {
       .blur()
       .should('have.value', typedText)
   })
-  it.skip('updates bearbeiter', () => {
+  it('updates bearbeiter', () => {
     cy.setSelectOption({
       selector: '[data-id=bearbeiter]',
       option: 'Adrienne Frei',
@@ -157,10 +157,7 @@ describe('Teil-Population Massnahme form', () => {
       .blur()
       .should('have.value', typedText)
   })
-  it.skip('updates wirtspflanze', () => {
-    cy.clearSelect({
-      selector: '[data-id=wirtspflanze]',
-    })
+  it('updates wirtspflanze', () => {
     cy.setSelectOption({
       selector: '[data-id=wirtspflanze]',
       option: 'Abies',

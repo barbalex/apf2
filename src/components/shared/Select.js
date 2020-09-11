@@ -121,6 +121,7 @@ const SharedSelect = ({
         maxheight={maxHeight}
         classNamePrefix="react-select"
         nocaret={noCaret}
+        data-id={name}
       />
       {error && <Error>{error}</Error>}
     </Container>
