@@ -57,7 +57,7 @@ const CheckboxWithInfo = ({ value, label, name, popover, saveToDb, error }) => {
         )}
       </StyledFormControl>
       <div>
-        <InfoWithPopover>{popover}</InfoWithPopover>
+        <InfoWithPopover name={name}>{popover}</InfoWithPopover>
       </div>
     </Container>
   )

@@ -62,11 +62,8 @@ describe('Aktionsplan form', () => {
       .type(typedText)
       .should('have.value', typedText)
   })
-  it('opens info when info icon is clicked', () => {
-    cy.get('[data-id=info-icon]')
-      .first()
-      .click()
-      .get('[data-id=info-icon-popover')
-      .should('exist')
+  it('opens info when icon is clicked', () => {
+    cy.get('[data-id=bearbeitung-info-icon]').click({ force: true })
+    cy.get('[data-id=info-icon-popover]').should('exist')
   })
 })

@@ -42,21 +42,11 @@ Cypress.Commands.add('setSelectOption', ({ selector, option, value }) => {
 })
 Cypress.Commands.add('setSelectTopOption', ({ selector }) => {
   cy.get(selector)
-    .find('.css-10nd86i input:text')
+    .find('.react-select__input')
+    .find('input')
     .focus()
     .type('{downarrow}', { force: true })
     .type('{enter}', { force: true })
-})
-Cypress.Commands.add('setSelectOption2', ({ selector, option, value }) => {
-  cy.get(selector).find('.css-10nd86i').click().find('input').eq(1).focus()
-  /*.find('.react-select__menu')
-    .contains(option)
-    .click({ force: true })*/
-  /*cy.get(selector)
-    .find('.css-10nd86i')
-    .find('input')
-    .eq(1)
-    .should('have.value', value)*/
 })
 Cypress.Commands.add('clearSelect', ({ selector }) => {
   cy.get(selector).then((thing) => {
@@ -64,7 +54,6 @@ Cypress.Commands.add('clearSelect', ({ selector }) => {
       thing.find('.react-select__clear-indicator').click()
     }
   })
-  // TODO:
   // the value of the container is ALWAYS ''
   // Dont know how to get the real value
   cy.get(selector).find('.react-select__single-value').should('contain', '')

@@ -170,7 +170,9 @@ const ApAp = ({ treeName, id }) => {
               loading={loadingLists}
               popover={
                 <>
-                  <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                  <LabelPopoverTitleRow data-id="info-icon-popover">
+                    Legende
+                  </LabelPopoverTitleRow>
                   <LabelPopoverContentRow>
                     <LabelPopoverRowColumnLeft>
                       keiner:
@@ -205,7 +207,9 @@ const ApAp = ({ treeName, id }) => {
                 loading={loadingLists}
                 popover={
                   <>
-                    <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                    <LabelPopoverTitleRow data-id="info-icon-popover">
+                      Legende
+                    </LabelPopoverTitleRow>
                     <LabelPopoverContentRow>
                       <LabelPopoverRowColumnLeft>
                         noch keine

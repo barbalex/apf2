@@ -13,12 +13,12 @@ const StyledPopover = styled(Popover)`
   border-radius: 4px;
 `
 
-const InfoWithPopover = ({ children }) => {
+const InfoWithPopover = ({ children, name }) => {
   const [popupOpen, changePopupOpen] = useState(false)
   const [popupAnchorEl, changePopupAnchorEl] = useState(null)
 
   const onClickFontIcon = useCallback(
-    event => {
+    (event) => {
       event.preventDefault()
       changePopupOpen(!popupOpen)
       changePopupAnchorEl(event.currentTarget)
@@ -29,7 +29,10 @@ const InfoWithPopover = ({ children }) => {
 
   return (
     <>
-      <StyledInfoOutlineIcon data-id="info-icon" onClick={onClickFontIcon} />
+      <StyledInfoOutlineIcon
+        data-id={`${name}-info-icon`}
+        onClick={onClickFontIcon}
+      />
       <StyledPopover
         open={popupOpen}
         anchorEl={popupAnchorEl}
