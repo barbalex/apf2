@@ -110,7 +110,6 @@ const SharedSelect = ({
     <Container>
       {label && <Label labelsize={labelSize}>{label}</Label>}
       <StyledSelect
-        data-id={name}
         id={name}
         name={name}
         value={selectValue}

@@ -16,6 +16,7 @@ describe('Adresse form', () => {
     const typedText = `Zusammenfassende Beurteilung
     Im Jahr 2006 wurden...`
     cy.get('#bemerkungen')
+      .find('textarea')
       .clear()
       .type(typedText)
       .should('have.value', typedText)

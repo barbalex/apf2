@@ -60,6 +60,7 @@ const MarkdownField = ({ field, form, label, disabled }) => {
     <Container>
       <Label label={label} />
       <Editor
+        id={name}
         value={value ?? ''}
         renderHTML={(text) => mdParser.render(text)}
         onChange={change}

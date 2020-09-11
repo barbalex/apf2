@@ -20,6 +20,7 @@ describe('AP-Bericht form', () => {
   it('updates vergleichVorjahrGesamtziel', () => {
     const typedText = 'test'
     cy.get('#vergleichVorjahrGesamtziel')
+      .find('textarea')
       .clear()
       .type(typedText)
       .blur()
@@ -33,16 +34,18 @@ describe('AP-Bericht form', () => {
       .should('have.value', '1')
   })
   it('updates veraenderungZumVorjahr', () => {
-    cy.get("[data-id='veraenderungZumVorjahr_+']")
+    cy.get(`[data-id='veraenderungZumVorjahr_+']`)
       .find('input')
-      .check()
-      .get("[data-id='veraenderungZumVorjahr_-'] input")
-      .check()
+      .check({ force: true })
+      .get(`[data-id='veraenderungZumVorjahr_-']`)
+      .find('input')
+      .check({ force: true })
       .should('have.value', '-')
   })
   it('updates konsequenzenUmsetzung', () => {
     const typedText = 'test'
     cy.get('#konsequenzenUmsetzung')
+      .find('textarea')
       .clear()
       .type(typedText)
       .blur()
@@ -51,6 +54,7 @@ describe('AP-Bericht form', () => {
   it('updates konsequenzenErfolgskontrolle', () => {
     const typedText = 'test'
     cy.get('#konsequenzenErfolgskontrolle')
+      .find('textarea')
       .clear()
       .type(typedText)
       .blur()
@@ -59,6 +63,7 @@ describe('AP-Bericht form', () => {
   it('updates biotopeNeue', () => {
     const typedText = 'test'
     cy.get('#biotopeNeue')
+      .find('textarea')
       .clear()
       .type(typedText)
       .blur()
@@ -67,6 +72,7 @@ describe('AP-Bericht form', () => {
   it('updates biotopeOptimieren', () => {
     const typedText = 'test'
     cy.get('#biotopeOptimieren')
+      .find('textarea')
       .clear()
       .type(typedText)
       .blur()
@@ -75,6 +81,7 @@ describe('AP-Bericht form', () => {
   it('updates massnahmenApBearb', () => {
     const typedText = 'test'
     cy.get('#massnahmenApBearb')
+      .find('textarea')
       .clear()
       .type(typedText)
       .blur()
@@ -83,6 +90,7 @@ describe('AP-Bericht form', () => {
   it('updates massnahmenPlanungVsAusfuehrung', () => {
     const typedText = 'test'
     cy.get('#massnahmenPlanungVsAusfuehrung')
+      .find('textarea')
       .clear()
       .type(typedText)
       .blur()
@@ -91,6 +99,7 @@ describe('AP-Bericht form', () => {
   it('updates massnahmenOptimieren', () => {
     const typedText = 'test'
     cy.get('#massnahmenOptimieren')
+      .find('textarea')
       .clear()
       .type(typedText)
       .blur()
@@ -99,6 +108,7 @@ describe('AP-Bericht form', () => {
   it('updates wirkungAufArt', () => {
     const typedText = 'test'
     cy.get('#wirkungAufArt')
+      .find('textarea')
       .clear()
       .type(typedText)
       .blur()
@@ -106,7 +116,7 @@ describe('AP-Bericht form', () => {
   })
   it('updates datum', () => {
     const typedText = '01.01.2000'
-    cy.get('[data-id=datum] input')
+    cy.get('#datum')
       .clear()
       .type(typedText)
       .blur()
@@ -114,7 +124,7 @@ describe('AP-Bericht form', () => {
   })
   it('updates bearbeiter', () => {
     cy.setSelectOption({
-      selector: '[data-id=bearbeiter]',
+      selector: '#bearbeiter',
       option: 'Adrienne Frei',
       value: 'dbc6b98a-4375-11e8-ab21-63812d703dd9',
     })
