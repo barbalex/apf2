@@ -92,7 +92,12 @@ const ApFilter = ({ treeName }) => {
     <ErrorBoundary>
       <NurApDiv>
         <Label label="nur AP" />
-        <StyledSwitch checked={apFilter} onChange={onChange} color="primary" />
+        <StyledSwitch
+          data-id="ap-filter"
+          checked={apFilter}
+          onChange={onChange}
+          color="primary"
+        />
       </NurApDiv>
     </ErrorBoundary>
   )
