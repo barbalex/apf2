@@ -10,7 +10,7 @@ describe('Beobachtung form', () => {
     cy.get('[data-id=form-title]').should('contain', 'Beobachtung')
   })
   // TODO: get this to work
-  it.skip('updates Art', () => {
+  it('updates Art', () => {
     cy.setSelectOption({
       selector: '[data-id=artId]',
       option: 'Abutilon',
@@ -24,9 +24,7 @@ describe('Beobachtung form', () => {
   })
   // TODO: get this to work
   it.skip('updates nicht zuordnen', () => {
-    cy.get('[data-id=nichtZuordnen] input')
-      .check()
-      .should('be.checked')
+    cy.get('[data-id=nichtZuordnen] input').check().should('be.checked')
     /*cy.url().should(
       'include',
       '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/nicht-zuzuordnende-Beobachtungen/b56a65e7-434e-11e8-ab21-4f56ad411a90',
@@ -42,7 +40,7 @@ describe('Beobachtung form', () => {
     )*/
   })
   // TODO: get this to work
-  it.skip('updates Teilpopulation', () => {
+  it('updates Teilpopulation', () => {
     cy.setSelectOption({
       selector: '[data-id=tpopId]',
       option: '3’255m: 503/1 (ohne Status)',

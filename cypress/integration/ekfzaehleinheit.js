@@ -12,7 +12,7 @@ describe('EK-Zähleinheit form', () => {
   it('shows testdata-message', () => {
     cy.get('[data-id=testdata-message]').should('contain', 'Test-Aktionsplan')
   })
-  it.skip('updates Zähleinheit', () => {
+  it('updates Zähleinheit', () => {
     cy.setSelectOption({
       selector: '[data-id=zaehleinheitId]',
       option: 'Blätter',

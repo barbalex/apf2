@@ -112,10 +112,8 @@ describe('AP-Bericht form', () => {
       .blur()
       .should('have.value', typedText)
   })
-  it.skip('updates bearbeiter', () => {
-    cy.clearSelect({
-      selector: '[data-id=bearbeiter]',
-    }).setSelectOption({
+  it('updates bearbeiter', () => {
+    cy.setSelectOption({
       selector: '[data-id=bearbeiter]',
       option: 'Adrienne Frei',
       value: 'dbc6b98a-4375-11e8-ab21-63812d703dd9',

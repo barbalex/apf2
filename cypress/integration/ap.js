@@ -22,12 +22,9 @@ describe('Aktionsplan form', () => {
   it('shows testdata-message', () => {
     cy.get('[data-id=testdata-message]').should('contain', 'Test-Aktionsplan')
   })
-  it.skip('updates Art', () => {
-    cy.clearSelect({
-      selector: '[data-id=artId]',
-    })
-    cy.setSelectOptionAsync({
-      selector: '[data-id=artId]',
+  it('updates Art', () => {
+    cy.setSelectOption({
+      selector: '#artId',
       option: 'Abies a',
       value: '1ab6bbb1-979a-4232-a5d8-62efb5cb984a',
     })
@@ -41,10 +38,7 @@ describe('Aktionsplan form', () => {
   })
   it('updates Start im Jahr', () => {
     const typedText = '2005'
-    cy.get('#startJahr')
-      .clear()
-      .type(typedText)
-      .should('have.value', typedText)
+    cy.get('#startJahr').clear().type(typedText).should('have.value', typedText)
   })
   it('updates Stand Umsetzung', () => {
     cy.get('[data-id=umsetzung_0] input')
@@ -53,11 +47,9 @@ describe('Aktionsplan form', () => {
       .check()
       .should('have.value', '1')
   })
-  it.skip('updates Verantwortlich', () => {
-    cy.clearSelect({
-      selector: '[data-id=bearbeiter]',
-    }).setSelectOption({
-      selector: '[data-id=bearbeiter]',
+  it('updates Verantwortlich', () => {
+    cy.setSelectOption({
+      selector: '#bearbeiter',
       option: 'Adrienne Frei',
       value: 'dbc6b98a-4375-11e8-ab21-63812d703dd9',
     })

@@ -9,11 +9,8 @@ describe('AP-Art form', () => {
   it('has Title Aktionsplan-Art', () => {
     cy.get('[data-id=form-title]').should('contain', 'Aktionsplan-Art')
   })
-  it.skip('updates Art', () => {
-    cy.clearSelect({
-      selector: '[data-id=artId]',
-    })
-    cy.setSelectOptionAsync({
+  it('updates Art', () => {
+    cy.setSelectOption({
       selector: '[data-id=artId]',
       option: 'Abi',
       value: '1ab6bbb1-979a-4232-a5d8-62efb5cb984a',
