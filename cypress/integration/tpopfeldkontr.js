@@ -56,7 +56,7 @@ describe('Teil-Population Feldkontrolle form', () => {
       .check()
       .should('have.value', 'Zwischenbeurteilung')
   })
-  it.skip('updates bearbeiter', () => {
+  it('updates bearbeiter', () => {
     cy.setSelectOption({
       selector: '[data-id=bearbeiter]',
       option: 'Adrienne Frei',

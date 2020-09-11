@@ -9,7 +9,7 @@ describe('Teil-Population Freiwilligen-Kontrolle form', () => {
   it('has correct Title', () => {
     cy.get('[data-id=form-title]').should('contain', 'Freiwilligen-Kontrolle')
   })
-  it.skip('updates bearbeiter', () => {
+  it('updates bearbeiter', () => {
     cy.setSelectOption({
       selector: '[data-id=bearbeiter]',
       option: 'Test Tester',
@@ -32,7 +32,7 @@ describe('Teil-Population Freiwilligen-Kontrolle form', () => {
       .check()
       .should('have.value', 'true')
   })
-  it.skip('updates einheit', () => {
+  it('updates einheit', () => {
     cy.setSelectOption({
       selector: '[data-id=count1] [data-id=einheit]',
       option: 'Pflanzen',

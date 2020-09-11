@@ -11,11 +11,7 @@ describe('Teil-Population form', () => {
   })
   it('updates nr', () => {
     const typedText = '2'
-    cy.get('#nr')
-      .clear()
-      .type(typedText)
-      .blur()
-      .should('have.value', typedText)
+    cy.get('#nr').clear().type(typedText).blur().should('have.value', typedText)
   })
   it('updates flurname', () => {
     const typedText = 'test, bitte nicht löschen'
@@ -71,10 +67,8 @@ describe('Teil-Population form', () => {
       .check()
       .should('have.value', '3')
   })
-  it.skip('updates gemeinde', () => {
-    cy.clearSelect({
-      selector: '[data-id=gemeinde]',
-    }).setSelectOption({
+  it('updates gemeinde', () => {
+    cy.setSelectOption({
       selector: '[data-id=gemeinde]',
       option: 'Einsiedeln',
       value: 'Einsiedeln',
