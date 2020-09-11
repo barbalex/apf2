@@ -169,7 +169,7 @@ const Status = ({ apJahr, treeName, showFilter, field, form }) => {
             onChange={onChangeBekanntSeit}
             onBlur={onBlurBekanntSeit}
             endAdornment={
-              <InfoWithPopover>
+              <InfoWithPopover name="bekanntSeit">
                 <PopoverContentRow>
                   Dieses Feld immer ausfüllen
                 </PopoverContentRow>

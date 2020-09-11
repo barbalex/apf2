@@ -38,7 +38,7 @@ const TextFieldWithInfo = ({
   const error = errors[name]
 
   const onKeyPress = useCallback(
-    event => {
+    (event) => {
       event.key === 'Enter' && handleSubmit()
     },
     [handleSubmit],
@@ -68,7 +68,7 @@ const TextFieldWithInfo = ({
         autoCorrect="off"
         autoCapitalize="off"
         endAdornment={
-          <InfoWithPopover>
+          <InfoWithPopover name={name}>
             <PopoverContentRow>{popover}</PopoverContentRow>
           </InfoWithPopover>
         }

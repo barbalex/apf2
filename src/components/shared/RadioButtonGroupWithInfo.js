@@ -30,7 +30,7 @@ const RadioButtonGroupWithInfo = ({
       label={label}
       error={error}
     />
-    <InfoWithPopover>{popover}</InfoWithPopover>
+    <InfoWithPopover name={name}>{popover}</InfoWithPopover>
   </Container>
 )
 

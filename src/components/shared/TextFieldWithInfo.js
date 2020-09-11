@@ -38,13 +38,13 @@ const TextFieldWithInfo = ({
   const [stateValue, setStateValue] = useState(
     propsValue || propsValue === 0 ? propsValue : '',
   )
-  const onChange = useCallback(event => setStateValue(event.target.value), [])
+  const onChange = useCallback((event) => setStateValue(event.target.value), [])
   useEffect(() => {
     setStateValue(propsValue || propsValue === 0 ? propsValue : '')
   }, [propsValue])
 
   const onKeyPress = useCallback(
-    event => {
+    (event) => {
       if (event.key === 'Enter') {
         saveToDb(event)
       }
@@ -76,7 +76,7 @@ const TextFieldWithInfo = ({
         autoCorrect="off"
         autoCapitalize="off"
         endAdornment={
-          <InfoWithPopover>
+          <InfoWithPopover name={name}>
             <PopoverContentRow>{popover}</PopoverContentRow>
           </InfoWithPopover>
         }
