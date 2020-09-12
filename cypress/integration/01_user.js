@@ -14,6 +14,7 @@ describe('User login', () => {
       })
     */
     indexedDB.deleteDatabase('apflora')
+    cy.wait(1000)
   })
   it('greets with Anmeldung', () => {
     cy.contains('#dialog-title', 'Anmeldung')
