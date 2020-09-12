@@ -3,5 +3,6 @@
   "baseUrl2": "https://apflora.ch",
   "numTestsKeptInMemory": 20,
   "viewportHeight": 1200,
-  "viewportWidth": 1600
+  "viewportWidth": 1600,
+  "retries": 2
 }
