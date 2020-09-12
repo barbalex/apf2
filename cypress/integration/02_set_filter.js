@@ -7,11 +7,7 @@ describe('setting ap-filter', () => {
   it('sets ap-filter back', () => {
     cy.get('[data-id=ap-filter]')
       .find('input')
-      .should('be.checked')
-      .then(($input) => {
-        if ($input) {
-          $input.click()
-        }
-      })
+      .uncheck()
+      .should('not.be.checked')
   })
 })
