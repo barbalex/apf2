@@ -2,7 +2,7 @@
 
 describe('Navigation', () => {
   beforeEach(() => {
-    cy.visit('/Daten/')
+    cy.visit('/Daten/').wait(1500)
   })
   it('home directly opens Projekt', () => {
     cy.url().should('include', '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
