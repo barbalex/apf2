@@ -4,7 +4,7 @@ describe('Aktionsplan form', () => {
   before(() => {
     cy.visit(
       '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640',
-    ).wait(1000)
+    ).wait(1500)
     // TODO: should create new dataset
     /*
     Example of how to use idb, store or client 

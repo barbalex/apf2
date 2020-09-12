@@ -4,7 +4,7 @@ describe('Adresse form', () => {
   before(() => {
     cy.visit(
       '/Daten/Werte-Listen/Adressen/dbc6b9c4-4375-11e8-ab21-27d2a4db8ba6',
-    ).wait(1000)
+    ).wait(1500)
   })
   it('has Title Adresse', () => {
     cy.get('[data-id=form-title]').should('contain', 'Adresse')
