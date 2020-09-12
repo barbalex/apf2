@@ -4,7 +4,7 @@ describe('AP-Bericht form', () => {
   before(() => {
     cy.visit(
       '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/AP-Berichte/e6b2cfbe-3e7b-11e8-acca-fffa590cd65f',
-    ).wait(1000)
+    ).wait(1500)
   })
   it('has Title AP-Bericht', () => {
     cy.get('[data-id=form-title]').should('contain', 'AP-Bericht')
