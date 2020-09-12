@@ -5,6 +5,13 @@ describe('setting ap-filter', () => {
     cy.visit('/Daten//Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13').wait(1000)
   })
   it('sets ap-filter back', () => {
-    cy.get('[data-id=ap-filter]').click()
+    cy.get('[data-id=ap-filter]')
+      .find('input')
+      .should('be.checked')
+      .then(($input) => {
+        if ($input) {
+          $input.click()
+        }
+      })
   })
 })
