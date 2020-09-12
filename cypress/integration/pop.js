@@ -4,18 +4,14 @@ describe('Population form', () => {
   before(() => {
     cy.visit(
       '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/Populationen/70d2b98f-4f62-11e7-aebe-d3b09a4611dd',
-    ).wait(1000)
+    ).wait(1500)
   })
   it('has Title Population', () => {
     cy.get('[data-id=form-title]').should('contain', 'Population')
   })
   it('updates nr', () => {
     const typedText = '2'
-    cy.get('#nr')
-      .clear()
-      .type(typedText)
-      .blur()
-      .should('have.value', typedText)
+    cy.get('#nr').clear().type(typedText).blur().should('have.value', typedText)
   })
   it('updates name', () => {
     const typedText = 'test bitte nicht löschen'
@@ -65,10 +61,7 @@ describe('Population form', () => {
   })
   it('wgs84Lat only accepts valid values', () => {
     const typedText = '100'
-    cy.get('[data-id=wgs84Lat] input')
-      .clear()
-      .type(typedText)
-      .blur()
+    cy.get('[data-id=wgs84Lat] input').clear().type(typedText).blur()
     cy.contains('[data-id=wgs84LatErrorText]', 'Der Breitengrad')
   })
   it('updates wgs84Long', () => {
@@ -81,10 +74,7 @@ describe('Population form', () => {
   })
   it('wgs84Long only accepts valid values', () => {
     const typedText = '200'
-    cy.get('[data-id=wgs84Long] input')
-      .clear()
-      .type(typedText)
-      .blur()
+    cy.get('[data-id=wgs84Long] input').clear().type(typedText).blur()
     cy.contains('[data-id=wgs84LongErrorText]', 'Der Längengrad')
   })
   it('updates lv95X', () => {
@@ -97,10 +87,7 @@ describe('Population form', () => {
   })
   it('lv95X only accepts valid values', () => {
     const typedText = '26948'
-    cy.get('[data-id=lv95X] input')
-      .clear()
-      .type(typedText)
-      .blur()
+    cy.get('[data-id=lv95X] input').clear().type(typedText).blur()
     cy.contains('[data-id=lv95XErrorText]', 'Die X-Koordinate')
   })
   it('updates lv95Y', () => {
@@ -113,10 +100,7 @@ describe('Population form', () => {
   })
   it('lv95Y only accepts valid values', () => {
     const typedText = '12376'
-    cy.get('[data-id=lv95Y] input')
-      .clear()
-      .type(typedText)
-      .blur()
+    cy.get('[data-id=lv95Y] input').clear().type(typedText).blur()
     cy.contains('[data-id=lv95YErrorText]', 'Die Y-Koordinate')
   })
   it('opens info when info icon is clicked', () => {
