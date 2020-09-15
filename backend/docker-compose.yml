@@ -104,12 +104,12 @@ services:
       - ./.env
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-      - caddy_certs:/root/.local/share/caddy
-      - caddy_config:/root/.config/caddy
+      - caddy_data:/data
+      - caddy_config:/config
 volumes:
   db_data:
   sik_data:
-  caddy_certs:
+  caddy_data:
   caddy_config:
   qgisserver_data:
 networks:
