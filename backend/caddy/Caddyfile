@@ -15,11 +15,11 @@ ss.apflora.ch {
   reverse_proxy * ss:7000 {
     header_down Access-Control-Allow-Origin *
     header_down Access-Control-Allow-Methods "GET, POST, OPTIONS"
-    header_up Host {http.request.host}
-    header_up X-Real-IP {http.request.remote}
-    header_up X-Forwarded-For {http.request.remote}
-    header_up X-Forwarded-Port {http.request.port}
-    header_up X-Forwarded-Proto {http.request.scheme}
+    # header_up Host {http.request.host}
+    # header_up X-Real-IP {http.request.remote}
+    # header_up X-Forwarded-For {http.request.remote}
+    # header_up X-Forwarded-Port {http.request.port}
+    # header_up X-Forwarded-Proto {http.request.scheme}
   }
 }
 
