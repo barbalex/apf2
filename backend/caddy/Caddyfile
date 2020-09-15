@@ -22,3 +22,14 @@ ss.apflora.ch {
     header_up X-Forwarded-Proto {http.request.scheme}
   }
 }
+
+# caddy docs: 
+# https://caddyserver.com/docs/modules/http.reverse_proxy.transport.fastcgi
+# https://caddyserver.com/docs/caddyfile/directives/reverse_proxy
+# example: https://github.com/opengisch/qgisserver-caddy/blob/master/Caddyfile
+# nginx example: https://docs.qgis.org/3.10/en/docs/user_manual/working_with_ogc/server/containerized_deployment.html#usable-sample
+gisdata.apflora.ch {
+  reverse_proxy * qgisserver:5555 {
+    transport fastcgi
+  }
+}
