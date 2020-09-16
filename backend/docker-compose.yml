@@ -73,13 +73,11 @@ services:
     build:
       context: ./qgisserver
     volumes:
-      - qgisserver_data:/data
-    #links:
-    #  - db:db
+      - qgisserver_data:/etc/qgisserver
     ports:
-      - '5555:80'
+      - '8380:80'
     expose:
-      - '5555'
+      - '8380'
     restart: always
     networks:
       - network

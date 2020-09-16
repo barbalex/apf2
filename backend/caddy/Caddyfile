@@ -25,10 +25,14 @@ ss.apflora.ch {
 # nginx example: https://docs.qgis.org/3.10/en/docs/user_manual/working_with_ogc/server/containerized_deployment.html#usable-sample
 gisdata.apflora.ch {
   root * /etc/qgisserver
-  reverse_proxy * qgisserver:5555 {
+  file_server
+  # @ows path_regexp map_file ^/ows/(.*)
+  
+  reverse_proxy * qgisserver:8380 {
     transport fastcgi {
-      env PGSERVICEFILE /etc/qgisserver/pg_service.conf
-      env QGIS_PROJECT_FILE /etc/qgisserver/osm.qgs
+      # env PGSERVICEFILE /etc/qgisserver/pg_service.conf
+      # env QUERY_STRING {query}&map=/etc/qgisserver/{re.map_file.1}.qgs
+      env QGIS_PROJECT_FILE /etc/qgisserver/project.qgs
     }
   }
 }
