@@ -73,6 +73,11 @@ services:
       context: ./qgisserver
     volumes:
       - qgisserver_data:/etc/qgisserver
+    environment:
+      - LANG=en_EN.UTF-8
+      - QGIS_PROJECT_FILE=/etc/qgisserver/project.qgs
+      - QGIS_SERVER_LOG_LEVEL=0 # INFO (log all requests)
+      - DEBUG=1 # display env before spawning QGIS Server
     ports:
       - '8380:80'
     expose:
