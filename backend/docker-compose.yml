@@ -69,7 +69,6 @@ services:
         '--retry-on-init-fail',
       ]
   qgisserver:
-    #image: camptocamp/qgis-server
     build:
       context: ./qgisserver
     volumes:
