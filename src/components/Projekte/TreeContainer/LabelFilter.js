@@ -102,7 +102,7 @@ const LabelFilter = ({ treeName, nodes }) => {
       treeName,
     ],
   )
-  const [setValuesAfterChangeDebounced] = useDebouncedCallback((val) => {
+  const changeDebounced = useDebouncedCallback((val) => {
     setValuesAfterChange(val)
   }, 600)
 
@@ -111,9 +111,9 @@ const LabelFilter = ({ treeName, nodes }) => {
       const val = e.target.value
       setValue(val)
       if (labelText === '(filtern nicht möglich)') return
-      setValuesAfterChangeDebounced(val)
+      changeDebounced.callback(val)
     },
-    [labelText, setValuesAfterChangeDebounced],
+    [labelText, changeDebounced],
   )
 
   const onClickEmptyFilter = useCallback(() => {
