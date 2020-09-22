@@ -6,6 +6,7 @@ import mutationUpdateTpop from './mutationUpdateTpop'
 
 export default async ({ row, ekfrequenz, client, store }) => {
   const { enqueNotification } = store
+
   // 1  get ekfrequenz's kontrolljahreAb
   let ekfrequenzResult
   try {
@@ -23,6 +24,17 @@ export default async ({ row, ekfrequenz, client, store }) => {
       },
     })
   }
+  // return if no kontrolljahre exist
+  // it makes no sense to set startjahr if there are no kontrolljahre
+  // see: https://github.com/barbalex/apf2/issues/401
+  const kontrolljahre = get(
+    ekfrequenzResult,
+    'data.ekfrequenzById.kontrolljahre',
+    [],
+  )
+  if (kontrolljahre.length === 0) return
+  // so there exist kontrolljahre
+  // now set startjahr
   const kontrolljahreAb = get(
     ekfrequenzResult,
     'data.ekfrequenzById.kontrolljahreAb',
@@ -40,7 +52,7 @@ export default async ({ row, ekfrequenz, client, store }) => {
   // 2a if ek: get last ek
   if (kontrolljahreAb === 'EK') {
     ekfrequenzStartjahr = max(
-      get(row, 'tpop.tpopkontrsByTpopId.nodes', []).map(n => n.jahr),
+      get(row, 'tpop.tpopkontrsByTpopId.nodes', []).map((n) => n.jahr),
     )
     if (!ekfrequenzStartjahr) {
       return enqueNotification({
@@ -54,7 +66,7 @@ export default async ({ row, ekfrequenz, client, store }) => {
   // 2b if ansiedlung: get last ansiedlung
   if (kontrolljahreAb === 'ANSIEDLUNG') {
     ekfrequenzStartjahr = max(
-      get(row, 'tpop.tpopmassnsByTpopId.nodes', []).map(n => n.jahr),
+      get(row, 'tpop.tpopmassnsByTpopId.nodes', []).map((n) => n.jahr),
     )
     if (!ekfrequenzStartjahr) {
       return enqueNotification({
