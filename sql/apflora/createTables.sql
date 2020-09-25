@@ -1791,6 +1791,7 @@ CREATE TABLE apflora.tpopmassn (
   wirtspflanze text DEFAULT NULL,
   herkunft_pop text DEFAULT NULL,
   sammeldatum varchar(50) DEFAULT NULL,
+  von_anzahl_individuen integer default null,
   form text DEFAULT NULL,
   pflanzanordnung text DEFAULT NULL,
   changed date DEFAULT NOW(),
@@ -1821,6 +1822,7 @@ COMMENT ON COLUMN apflora.tpopmassn.zieleinheit_anzahl IS 'Anzahl Zieleinheiten'
 COMMENT ON COLUMN apflora.tpopmassn.wirtspflanze IS 'Wirtspflanze';
 COMMENT ON COLUMN apflora.tpopmassn.herkunft_pop IS 'Aus welcher Population stammt das Pflanzenmaterial?';
 COMMENT ON COLUMN apflora.tpopmassn.sammeldatum IS 'Datum, an dem die angesiedelten Pflanzen gesammelt wurden';
+COMMENT ON COLUMN apflora.tpopmassn.von_anzahl_individuen IS 'Anzahl besammelte Individuen der Herkunftspopulation';
 COMMENT ON COLUMN apflora.tpopmassn.form IS 'Form, Grösse der Ansiedlung';
 COMMENT ON COLUMN apflora.tpopmassn.pflanzanordnung IS 'Anordnung der Pflanzung';
 COMMENT ON COLUMN apflora.tpopmassn.id IS 'GUID der Tabelle "tpopmassn"';
