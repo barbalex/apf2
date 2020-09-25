@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { useQuery } from '@apollo/client'
 import Linkify from 'react-linkify'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import query from './query'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -63,7 +63,7 @@ const Messages = () => {
         </TitleRow>
         <FieldsContainer>
           {rows.map((m) => {
-            const date = moment(m.time).format('YYYY.MM.DD')
+            const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
 
             return (
               <MessageRow key={m.id}>

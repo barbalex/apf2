@@ -8,9 +8,8 @@ import queryString from 'query-string'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './utils/materialTheme'
-import 'moment/locale/de-ch' // this is the important bit,
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
-import { de } from 'date-fns/locale'
+import de from 'date-fns/locale/de'
 import { ApolloProvider } from '@apollo/client'
 import localForage from 'localforage'
 import MobxStore from './store'

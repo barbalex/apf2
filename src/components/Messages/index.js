@@ -7,7 +7,7 @@ import get from 'lodash/get'
 import Linkify from 'react-linkify'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import query from './data'
 import createUsermessage from './createUsermessage'
@@ -119,7 +119,7 @@ const UserMessages = () => {
         <div>
           {unreadMessages.map((m, index) => {
             const paddBottom = index === unreadMessages.length - 1
-            const date = moment(m.time).format('YYYY.MM.DD')
+            const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
 
             return (
               <MessageRow key={m.id} paddBottom={paddBottom}>
