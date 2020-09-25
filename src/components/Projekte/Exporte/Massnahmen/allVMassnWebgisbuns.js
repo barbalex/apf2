@@ -36,6 +36,7 @@ export default gql`
         MASSNWIRTSPFLANZEN: massnwirtspflanzen
         MASSNHERKUNFTSPOP: massnherkunftspop
         MASSNSAMMELDAT: massnsammeldat
+        MASSNVONANZAHLINDIVIDUEN: massnvonanzahlindividuen
         MASSNCHANGEDAT: massnchangedat
         MASSNCHANGEBY: massnchangeby
       }

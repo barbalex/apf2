@@ -208,6 +208,7 @@ const Massnahmen = () => {
                           wirtspflanze
                           herkunftPop
                           sammeldatum
+                          vonAnzahlIndividuen
                           changed
                           changedBy
                         }
@@ -330,6 +331,7 @@ const Massnahmen = () => {
                   wirtspflanze: n.wirtspflanze,
                   herkunftPop: n.herkunftPop,
                   sammeldatum: n.sammeldatum,
+                  vonAnzahlIndividuen: n.vonAnzahlIndividuen,
                   changed: n.changed,
                   changedBy: n.changedBy,
                 }),

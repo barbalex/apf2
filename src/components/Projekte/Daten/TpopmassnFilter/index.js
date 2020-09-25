@@ -295,6 +295,12 @@ const Tpopmassn = ({ treeName }) => {
                     type="text"
                     component={TextField}
                   />
+                  <Field
+                    name="vonAnzahlIndividuen"
+                    label="Anzahl besammelte Individuen der Herkunftspopulation"
+                    type="number"
+                    component={TextField}
+                  />
                 </Form>
               )}
             </Formik>
