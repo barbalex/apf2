@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import DatePicker from 'react-datepicker'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -80,7 +80,7 @@ const DateField = ({
   popperPlacement = 'auto',
 }) => {
   const onChangeDatePicker = useCallback(
-    date => {
+    (date) => {
       if (date === null) {
         saveToDb({
           target: {
@@ -91,7 +91,7 @@ const DateField = ({
       } else {
         saveToDb({
           target: {
-            value: moment(date).format('YYYY-MM-DD'),
+            value: DateTime.fromJSDate(date).toFormat('yyyy-LL-dd'),
             name,
           },
         })
@@ -100,17 +100,16 @@ const DateField = ({
     [name, saveToDb],
   )
 
+  const isValid = DateTime.fromSQL(value).isValid
+  const selected = isValid ? new Date(DateTime.fromSQL(value)) : null
+
   // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
   return (
     <StyledFormControl>
       {!!label && <Label htmlFor={name}>{label}</Label>}
       <StyledDatePicker
         id={name}
-        selected={
-          moment(value, 'YYYY-MM-DD').isValid()
-            ? new Date(moment(value, 'YYYY-MM-DD').toDate())
-            : null
-        }
+        selected={selected}
         onChange={onChangeDatePicker}
         dateFormat={dateFormat}
         popperPlacement={popperPlacement}
