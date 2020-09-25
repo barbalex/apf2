@@ -26,7 +26,7 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
         'userByName.adresseByAdresseId.tpopkontrsByBearbeiter.nodes',
         [],
       )
-  const ekf = ekfNodes.map(e => ({
+  const ekf = ekfNodes.map((e) => ({
     projekt: get(
       e,
       'tpopByTpopId.popByPopId.apByApId.projektByProjId.name',
@@ -62,7 +62,7 @@ const EkfList = ({ data, loading }) => {
   const store = useContext(storeContext)
   const { ekfYear, ekfAdresseId, tree, setEkfIds } = store
   const ekf = getEkfFromData({ data, ekfAdresseId })
-  setEkfIds(ekf.map(e => e.id))
+  setEkfIds(ekf.map((e) => e.id))
 
   const { activeNodeArray, treeWidth, treeHeight } = tree
   const activeTpopkontrId =
@@ -70,7 +70,7 @@ const EkfList = ({ data, loading }) => {
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
 
-  const projektCount = uniq(ekf.map(e => e.projekt)).length
+  const projektCount = uniq(ekf.map((e) => e.projekt)).length
   const itemSize = projektCount > 1 ? 110 : 91
 
   useEffect(() => {
@@ -96,6 +96,7 @@ const EkfList = ({ data, loading }) => {
       })
     }
   }, [ekfYear, ekf.length, ekf, activeTpopkontrId, store])
+
   if (!loading && ekf.length === 0) {
     return (
       <NoDataContainer>
@@ -103,10 +104,11 @@ const EkfList = ({ data, loading }) => {
       </NoDataContainer>
     )
   }
+
   return (
     <Container>
       <List
-        height={treeHeight}
+        height={treeHeight - 64}
         itemCount={ekf.length}
         itemSize={itemSize}
         width={treeWidth}
