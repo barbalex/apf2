@@ -1,7 +1,7 @@
-import React from "react"
-import styled from "styled-components"
-import get from "lodash/get"
-import format from "date-fns/format"
+import React from 'react'
+import styled from 'styled-components'
+import get from 'lodash/get'
+import { DateTime } from 'luxon'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -91,17 +91,18 @@ const Massnahmen = ({ massns }) => (
         <MassnBeschreibung>Massnahme</MassnBeschreibung>
       </TitleSubRow>
     </TitleRow>
-    {massns.map(m => {
-      const mDatum = m.datum ? format(new Date(m.datum), "dd.MM") : ""
+    {massns.map((m) => {
+      const mDatum = m.datum ? DateTime.fromSQL(m.datum).toFormat('dd.LL') : ''
+
       return (
         <Row key={m.id}>
-          <PopNr>{get(m, "tpopByTpopId.popByPopId.nr", "")}</PopNr>
-          <PopName>{get(m, "tpopByTpopId.popByPopId.name", "")}</PopName>
-          <TpopNr>{get(m, "tpopByTpopId.nr", "")}</TpopNr>
-          <TpopFlurname>{get(m, "tpopByTpopId.flurname", "")}</TpopFlurname>
+          <PopNr>{get(m, 'tpopByTpopId.popByPopId.nr', '')}</PopNr>
+          <PopName>{get(m, 'tpopByTpopId.popByPopId.name', '')}</PopName>
+          <TpopNr>{get(m, 'tpopByTpopId.nr', '')}</TpopNr>
+          <TpopFlurname>{get(m, 'tpopByTpopId.flurname', '')}</TpopFlurname>
           <MassnDatum>{mDatum}</MassnDatum>
-          <MassnTyp>{get(m, "tpopmassnTypWerteByTyp.text", "")}</MassnTyp>
-          <MassnBeschreibung>{get(m, "beschreibung", "")}</MassnBeschreibung>
+          <MassnTyp>{get(m, 'tpopmassnTypWerteByTyp.text', '')}</MassnTyp>
+          <MassnBeschreibung>{get(m, 'beschreibung', '')}</MassnBeschreibung>
         </Row>
       )
     })}

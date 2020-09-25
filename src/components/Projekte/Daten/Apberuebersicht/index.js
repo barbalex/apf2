@@ -7,6 +7,7 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
 import jwtDecode from 'jwt-decode'
 import format from 'date-fns/format'
+import { DateTime } from 'luxon'
 
 import TextField from '../../../shared/TextFieldFormik'
 import MdField from '../../../shared/MarkdownFieldFormik'
@@ -134,7 +135,7 @@ const Apberuebersicht = ({ treeName }) => {
     try {
       const variables = {
         ...row,
-        historyDate: format(new Date(), 'yyyy-MM-dd'),
+        historyDate: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd'),
       }
       await client.mutate({
         mutation: updateApberuebersichtByIdGql,

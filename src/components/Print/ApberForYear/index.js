@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import format from 'date-fns/format'
+import { DateTime } from 'luxon'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
@@ -170,7 +170,9 @@ const ApberForYear = () => {
           </FirstPageTitle>
           <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
           <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
-          <FirstPageDate>{format(new Date(), 'dd.MM.yyyy')}</FirstPageDate>
+          <FirstPageDate>
+            {DateTime.fromJSDate(new Date()).toFormat('dd.LL.yyyy')}
+          </FirstPageDate>
           <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
           {!!apberuebersicht.bemerkungen && (
             <SecondPage>

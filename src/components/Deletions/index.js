@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import styled from 'styled-components'
-import format from 'date-fns/format'
+import { DateTime } from 'luxon'
 import TextField from '@material-ui/core/TextField'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
@@ -122,7 +122,9 @@ const Deletions = () => {
               Object.keys(dataset).forEach(
                 (key) => dataset[key] == null && delete dataset[key],
               )
-              const time = format(new Date(ds.time), 'yyyy.MM.dd HH:mm:ss')
+              const time = DateTime.fromMillis(ds.time).toFormat(
+                'yyyy.LL.dd HH:mm:ss',
+              )
 
               return (
                 <Row key={ds.id} data-withtopline={index > 0}>
