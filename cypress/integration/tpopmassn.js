@@ -180,4 +180,12 @@ describe('Teil-Population Massnahme form', () => {
       .blur()
       .should('have.value', typedText)
   })
+  it('updates vonAnzahlIndividuen', () => {
+    const typedText = '5'
+    cy.get('#vonAnzahlIndividuen')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
 })

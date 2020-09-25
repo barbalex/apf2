@@ -445,6 +445,7 @@ SELECT
   apflora.tpopmassn.wirtspflanze AS "MASSNWIRTSPFLANZEN",
   apflora.tpopmassn.herkunft_pop AS "MASSNHERKUNFTSPOP",
   apflora.tpopmassn.sammeldatum AS "MASSNSAMMELDAT",
+  apflora.tpopmassn.von_anzahl_individuen AS "MASSNVONANZAHLINDIVIDUEN",
   to_char(apflora.tpopmassn.changed, 'DD.MM.YY') AS "MASSNCHANGEDAT",
   apflora.tpopmassn.changed_by AS "MASSNCHANGEBY"
 FROM
@@ -520,6 +521,7 @@ SELECT
   apflora.tpopmassn.wirtspflanze AS massn_wirtspflanze,
   apflora.tpopmassn.herkunft_pop AS massn_herkunft_pop,
   apflora.tpopmassn.sammeldatum AS massn_sammeldatum,
+  apflora.tpopmassn.von_anzahl_individuen AS massn_von_anzahl_individuen,
   apflora.tpopmassn.bemerkungen AS massn_bemerkungen,
   apflora.tpopmassn.changed::timestamp AS massn_changed,
   apflora.tpopmassn.changed_by AS massn_changed_by
@@ -586,6 +588,7 @@ SELECT
   apflora.tpopmassn.wirtspflanze AS massn_wirtspflanze,
   apflora.tpopmassn.herkunft_pop AS massn_herkunft_pop,
   apflora.tpopmassn.sammeldatum AS massn_sammeldatum,
+  apflora.tpopmassn.von_anzahl_individuen AS massn_von_anzahl_individuen,
   apflora.tpopmassn.changed::timestamp AS massn_changed,
   apflora.tpopmassn.changed_by AS massn_changed_by
 FROM

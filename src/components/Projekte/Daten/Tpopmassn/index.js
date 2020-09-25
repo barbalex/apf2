@@ -380,6 +380,12 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                       type="text"
                       component={TextField}
                     />
+                    <Field
+                      name="vonAnzahlIndividuen"
+                      label="Anzahl besammelte Individuen der Herkunftspopulation"
+                      type="number"
+                      component={TextField}
+                    />
                     {!showFilter && <StringToCopy text={row.id} label="id" />}
                   </Form>
                 )}
