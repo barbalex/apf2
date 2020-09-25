@@ -13,7 +13,7 @@ import storeContext from '../../storeContext'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  /*height: 100vh;*/
   @media print {
     display: block;
     height: auto !important;
@@ -109,7 +109,7 @@ const Ekf = () => {
   if (isPrint && ekfIds.length > 0) {
     return (
       <>
-        {ekfIds.map(id => (
+        {ekfIds.map((id) => (
           <Tpopfreiwkontr treeName={treeName} role={role} id={id} key={id} />
         ))}
       </>
