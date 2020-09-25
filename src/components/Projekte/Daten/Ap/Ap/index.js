@@ -4,13 +4,13 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
+import { gql } from '@apollo/client'
 
 import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfoFormik'
 import TextField from '../../../../shared/TextFieldFormik'
 import Select from '../../../../shared/SelectFormik'
 import SelectLoadingOptions from '../../../../shared/SelectLoadingOptionsFormik'
 import TextFieldNonUpdatable from '../../../../shared/TextFieldNonUpdatable'
-import updateApByIdGql from './updateApById'
 import query from './query'
 import queryLists from './queryLists'
 import queryAdresses from './queryAdresses'
@@ -19,6 +19,7 @@ import storeContext from '../../../../../storeContext'
 import objectsFindChangedKey from '../../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../../modules/objectsEmptyValuesToNull'
 import ApUsers from './ApUsers'
+import { ap, aeTaxonomies } from '../../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -67,6 +68,16 @@ const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
 
+const fieldTypes = {
+  bearbeitung: 'Int',
+  startJahr: 'Int',
+  umsetzung: 'Int',
+  artId: 'UUID',
+  bearbeiter: 'UUID',
+  ekfBeobachtungszeitpunkt: 'String',
+  projId: 'UUID',
+}
+
 const ApAp = ({ treeName, id }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
@@ -98,7 +109,32 @@ const ApAp = ({ treeName, id }) => {
       }
       try {
         await client.mutate({
-          mutation: updateApByIdGql,
+          mutation: gql`
+            mutation updateAp(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateApById(
+                input: {
+                  id: $id
+                  apPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                ap {
+                  ...ApFields
+                  aeTaxonomyByArtId {
+                    ...AeTaxonomiesFields
+                  }
+                }
+              }
+            }
+            ${ap}
+            ${aeTaxonomies}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
