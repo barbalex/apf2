@@ -597,6 +597,7 @@ export const tpopmassn = gql`
     wirtspflanze
     herkunftPop
     sammeldatum
+    vonAnzahlIndividuen
     form
     pflanzanordnung
     tpopId

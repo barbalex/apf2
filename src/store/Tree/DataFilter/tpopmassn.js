@@ -46,6 +46,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
+  vonAnzahlIndividuen: types.optional(types.maybeNull(types.number), null),
   form: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -73,6 +74,7 @@ export const initial = {
   wirtspflanze: null,
   herkunftPop: null,
   sammeldatum: null,
+  vonAnzahlIndividuen: null,
   form: null,
   pflanzanordnung: null,
 }
@@ -94,6 +96,7 @@ export const simpleTypes = {
   wirtspflanze: 'string',
   herkunftPop: 'string',
   sammeldatum: 'string',
+  vonAnzahlIndividuen: 'number',
   form: 'string',
   pflanzanordnung: 'string',
 }

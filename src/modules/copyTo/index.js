@@ -178,6 +178,7 @@ export default async ({
           wirtspflanze: row.wirtspflanze,
           herkunftPop: row.herkunftPop,
           sammeldatum: row.sammeldatum,
+          vonAnzahlIndividuen: row.vonAnzahlIndividuen,
           form: row.form,
           pflanzanordnung: row.pflanzanordnung,
           bearbeiter: row.bearbeiter,

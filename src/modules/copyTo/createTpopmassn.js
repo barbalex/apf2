@@ -20,6 +20,7 @@ export default gql`
     $wirtspflanze: String
     $herkunftPop: String
     $sammeldatum: String
+    $vonAnzahlIndividuen: Int
     $form: String
     $pflanzanordnung: String
     $tpopId: UUID
@@ -45,6 +46,7 @@ export default gql`
           wirtspflanze: $wirtspflanze
           herkunftPop: $herkunftPop
           sammeldatum: $sammeldatum
+          vonAnzahlIndividuen: $vonAnzahlIndividuen
           form: $form
           pflanzanordnung: $pflanzanordnung
           tpopId: $tpopId
