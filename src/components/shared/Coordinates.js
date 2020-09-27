@@ -177,7 +177,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       if (lat && long) {
         geomPoint = {
           type: 'Point',
-          coordinates: [long, lat],
+          coordinates: [lat, long],
           // need to add crs otherwise PostGIS v2.5 (on server) errors
           crs: {
             type: 'name',
