@@ -8,7 +8,7 @@ import TextField from '../TextField'
 // render:
 // - TextField if no value exists
 // - markdown presenter if value exists
-// - editor if is focused
+// - markdown editor if is focused
 const MdFieldFormik = (props) => {
   const { label } = props
   const { value, name } = props.field
