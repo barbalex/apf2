@@ -180,21 +180,8 @@ const TpopForm = ({ treeName, showFilter = false }) => {
           value,
         })
       } else {
-        let geomPoint = get(values, 'geomPoint.geojson') || null
-        if (geomPoint) {
-          geomPoint = JSON.parse(geomPoint)
-          // need to add crs otherwise PostGIS v2.5 (on server) errors
-          geomPoint.crs = {
-            type: 'name',
-            properties: {
-              name: 'urn:ogc:def:crs:EPSG::4326',
-            },
-          }
-        }
         const variables = {
           ...objectsEmptyValuesToNull(values),
-          // need to pass geomPoint as GeoJSON
-          geomPoint,
           changedBy: store.user.name,
         }
         try {
@@ -235,30 +222,6 @@ const TpopForm = ({ treeName, showFilter = false }) => {
             `,
             variables,
             // no optimistic responce as geomPoint
-            /*optimisticResponse: {
-              __typename: 'Mutation',
-              updateTpopById: {
-                tpop: {
-                  ...variables,
-                  // need to pass geomPoint with its typename
-                  //geomPoint: values.geomPoint,
-                  geomPoint: JSON.stringify({
-                    ...values.geomPoint,
-                    geojson: {
-                      ...geomPoint,
-                      crs: {
-                        type: 'name',
-                        properties: {
-                          name: 'urn:ogc:def:crs:EPSG::4326',
-                        },
-                      },
-                    },
-                  }),
-                  __typename: 'Tpop',
-                },
-                __typename: 'Tpop',
-              },
-            },*/
           })
         } catch (error) {
           return setErrors({ [changedField]: error.message })
