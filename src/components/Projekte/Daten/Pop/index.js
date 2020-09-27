@@ -6,13 +6,13 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
+import { gql } from '@apollo/client'
 
 import TextField from '../../../shared/TextFieldFormik'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfoFormik'
 import Status from '../../../shared/Status'
 import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import FormTitle from '../../../shared/FormTitle'
-import updatePopByIdGql from './updatePopById'
 import query from './query'
 import storeContext from '../../../../storeContext'
 import Coordinates from '../../../shared/Coordinates'
@@ -21,6 +21,7 @@ import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNu
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { pop } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -44,6 +45,16 @@ const FilesContainer = styled.div`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
+
+const fieldTypes = {
+  apId: 'UUID',
+  nr: 'Int',
+  name: 'String',
+  status: 'Int',
+  statusUnklar: 'Boolean',
+  statusUnklarBegruendung: 'String',
+  bekanntSeit: 'Int',
+}
 
 const Pop = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -81,41 +92,41 @@ const Pop = ({ treeName }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      // when GeomPoint is changed, Coordinates takes over
+      // need to return
+      if (changedField === null) return
+
       const value = values[changedField]
-      let geomPoint = get(values, 'geomPoint.geojson') || null
-      if (geomPoint) {
-        geomPoint = JSON.parse(geomPoint)
-        // need to add crs otherwise PostGIS v2.5 (on server) errors
-        geomPoint.crs = {
-          type: 'name',
-          properties: {
-            name: 'urn:ogc:def:crs:EPSG::4326',
-          },
-        }
-      }
       const variables = {
         ...objectsEmptyValuesToNull(values),
-        // need to pass geomPoint as GeoJSON
-        geomPoint,
         changedBy: store.user.name,
       }
       try {
         await client.mutate({
-          mutation: updatePopByIdGql,
+          mutation: gql`
+            mutation updatePopForPop(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updatePopById(
+                input: {
+                  id: $id
+                  popPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                pop {
+                  ...PopFields
+                }
+              }
+            }
+            ${pop}
+          `,
           variables,
           // no optimistic responce as geomPoint
-          /*optimisticResponse: {
-              __typename: 'Mutation',
-              updatePopById: {
-                pop: {
-                  ...variables,
-                  // need to pass geomPoint with its typename
-                  geomPoint: values.geomPoint,
-                  __typename: 'Pop',
-                },
-                __typename: 'Pop',
-              },
-            },*/
         })
       } catch (error) {
         return setErrors({ [changedField]: error.message })

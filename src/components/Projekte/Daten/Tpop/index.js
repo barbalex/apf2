@@ -57,7 +57,6 @@ const fieldTypes = {
   nr: 'Int',
   gemeinde: 'String',
   flurname: 'String',
-  geomPoint: 'GeoJSON',
   radius: 'Int',
   hoehe: 'Int',
   exposition: 'String',
