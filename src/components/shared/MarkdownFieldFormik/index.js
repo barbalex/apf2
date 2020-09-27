@@ -3,11 +3,15 @@ import { FocusWithin } from 'react-focus-within'
 
 import Editor from './Editor'
 import Presenter from './Presenter'
+import TextField from '../TextField'
 
-// need to lazy import because react-markdown-editor-lite calls navigator which busts gatsby build
+// render:
+// - TextField if no value exists
+// - markdown presenter if value exists
+// - editor if is focused
 const MdFieldFormik = (props) => {
   const { label } = props
-  const { value } = props.field
+  const { value, name } = props.field
 
   return (
     <FocusWithin>
@@ -15,8 +19,15 @@ const MdFieldFormik = (props) => {
         <div {...focusProps}>
           {isFocused ? (
             <Editor {...props} />
-          ) : (
+          ) : !!value ? (
             <Presenter value={value} label={label} />
+          ) : (
+            <TextField
+              value={value}
+              label={label}
+              name={name}
+              saveToDb={() => {}}
+            />
           )}
         </div>
       )}
