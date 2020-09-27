@@ -25,17 +25,18 @@ const MyTextField = ({
   error,
   saveToDb,
   required = false,
+  onFocus = () => {},
 }) => {
   const [stateValue, setStateValue] = useState(
     value || value === 0 ? value : '',
   )
-  const onChange = useCallback(event => setStateValue(event.target.value), [])
+  const onChange = useCallback((event) => setStateValue(event.target.value), [])
   useEffect(() => {
     setStateValue(value || value === 0 ? value : '')
   }, [value])
 
   const onKeyPress = useCallback(
-    event => {
+    (event) => {
       if (event.key === 'Enter') {
         saveToDb(event)
       }
@@ -61,12 +62,13 @@ const MyTextField = ({
         multiline={multiLine}
         onChange={onChange}
         onBlur={saveToDb}
+        onFocus={onFocus}
         onKeyPress={onKeyPress}
         placeholder={hintText}
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
-        onWheel={event => {
+        onWheel={(event) => {
           event.preventDefault()
         }}
       />

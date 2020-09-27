@@ -1,12 +1,32 @@
-import React, { lazy, Suspense } from 'react'
+import React from 'react'
+import { FocusWithin } from 'react-focus-within'
 
-const MarkdownFieldFormik = lazy(() => import('./MarkdownFieldFormik'))
+import TextField from '../TextField'
+import MarkdownField from './Field'
 
 // need to lazy import because react-markdown-editor-lite calls navigator which busts gatsby build
-const MdFieldFormik = (props) => (
-  <Suspense fallback={<div>Lade...</div>}>
-    <MarkdownFieldFormik {...props} />
-  </Suspense>
-)
+const MdFieldFormik = (props) => {
+  const { value, name } = props.field
+
+  return (
+    <FocusWithin>
+      {({ isFocused, focusProps }) => (
+        <div {...focusProps}>
+          {isFocused ? (
+            <MarkdownField {...props} />
+          ) : (
+            <TextField
+              value={value}
+              label={props.label}
+              name={name}
+              multiLine={true}
+              saveToDb={props.saveToDb}
+            />
+          )}
+        </div>
+      )}
+    </FocusWithin>
+  )
+}
 
 export default MdFieldFormik

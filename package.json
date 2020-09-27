@@ -94,6 +94,7 @@
     "react-datepicker": "3.2.2",
     "react-dom": "16.13.1",
     "react-error-boundary": "3.0.2",
+    "react-focus-within": "^2.0.2",
     "react-helmet": "6.1.0",
     "react-icons": "3.11.0",
     "react-image-lightbox": "5.1.1",

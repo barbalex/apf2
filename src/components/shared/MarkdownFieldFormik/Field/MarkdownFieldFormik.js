@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef, useEffect } from 'react'
 import 'react-markdown-editor-lite/lib/index.css'
 import MarkdownIt from 'markdown-it'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import Editor, { Plugins } from 'react-markdown-editor-lite'
 
-import Label from '../Label'
+import Label from '../../Label'
 
 Editor.use(Plugins.AutoResize, {
   min: 47,
@@ -14,7 +14,7 @@ Editor.use(Plugins.AutoResize, {
 
 const mdParser = new MarkdownIt({ breaks: true })
 
-const Container = styled.div`
+const EditorContainer = styled.div`
   margin-bottom: 12px;
   .editorpane {
     overflow-y: auto !important;
@@ -22,6 +22,10 @@ const Container = styled.div`
   .editorpane,
   .html-wrap,
   .rc-md-navigation {
+    background-color: #fffde7 !important;
+  }
+  /* without this full page view is white */
+  .rc-md-editor {
     background-color: #fffde7 !important;
   }
 `
@@ -56,10 +60,24 @@ const MarkdownField = ({ field, form, label, disabled }) => {
     [name, onBlur, onChange],
   )
 
+  const el = useRef(null)
+
+  useEffect(() => {
+    const myEl = el.current.nodeMdText.current
+    myEl.focus()
+    // need to ensure the focus is at the end of the text
+    // not the beginning
+    // see: https://stackoverflow.com/a/35951917/712005
+    var val = myEl.value
+    myEl.value = ''
+    myEl.value = val
+  }, [])
+
   return (
-    <Container>
+    <EditorContainer>
       <Label label={label} />
       <Editor
+        ref={el}
         id={name}
         value={value ?? ''}
         renderHTML={(text) => mdParser.render(text)}
@@ -69,7 +87,7 @@ const MarkdownField = ({ field, form, label, disabled }) => {
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
-    </Container>
+    </EditorContainer>
   )
 }
 
