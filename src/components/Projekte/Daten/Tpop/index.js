@@ -5,12 +5,12 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
+import { gql } from '@apollo/client'
 
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import query from './query'
 import queryTpops from './queryTpops'
-import updateTpopByIdGql from './updateTpopById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopType } from '../../../../store/Tree/DataFilter/tpop'
@@ -20,6 +20,11 @@ import Ek from './Ek'
 import Tpop from './Tpop'
 import Files from '../../../shared/Files'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import {
+  popStatusWerte,
+  tpop,
+  tpopApberrelevantGrundWerte,
+} from '../../../shared/fragments'
 
 const Container = styled.div`
   height: ${(props) =>
@@ -46,6 +51,37 @@ const FilesContainer = styled.div`
   overflow-y: auto !important;
   height: calc(100% - 20px);
 `
+
+const fieldTypes = {
+  popId: 'UUID',
+  nr: 'Int',
+  gemeinde: 'String',
+  flurname: 'String',
+  geomPoint: 'GeoJSON',
+  radius: 'Int',
+  hoehe: 'Int',
+  exposition: 'String',
+  klima: 'String',
+  neigung: 'String',
+  beschreibung: 'String',
+  katasterNr: 'String',
+  status: 'Int',
+  statusUnklarGrund: 'String',
+  apberRelevant: 'Boolean',
+  apberRelevantGrund: 'Int',
+  bekanntSeit: 'Int',
+  eigentuemer: 'String',
+  kontakt: 'String',
+  nutzungszone: 'String',
+  bewirtschafter: 'String',
+  bewirtschaftung: 'String',
+  ekfrequenz: 'UUID',
+  ekfrequenzAbweichend: 'Boolean',
+  ekfKontrolleur: 'UUID',
+  ekfrequenzStartjahr: 'Int',
+  bemerkungen: 'String',
+  statusUnklar: 'Boolean',
+}
 
 const TpopForm = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
@@ -131,6 +167,10 @@ const TpopForm = ({ treeName, showFilter = false }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      // when GeomPoint is changed, Coordinates takes over
+      // need to return
+      if (changedField === null) return
+
       const value = values[changedField]
       if (showFilter) {
         return dataFilterSetValue({
@@ -159,7 +199,40 @@ const TpopForm = ({ treeName, showFilter = false }) => {
         }
         try {
           await client.mutate({
-            mutation: updateTpopByIdGql,
+            mutation: gql`
+              mutation updateTpop(
+                $id: UUID!
+                $${changedField}: ${fieldTypes[changedField]}
+                $changedBy: String
+              ) {
+                updateTpopById(
+                  input: {
+                    id: $id
+                    tpopPatch: {
+                      ${changedField}: $${changedField}
+                      changedBy: $changedBy
+                    }
+                  }
+                ) {
+                  tpop {
+                    ...TpopFields
+                    popStatusWerteByStatus {
+                      ...PopStatusWerteFields
+                    }
+                    tpopApberrelevantGrundWerteByApberRelevantGrund {
+                      ...TpopApberrelevantGrundWerteFields
+                    }
+                    popByPopId {
+                      id
+                      apId
+                    }
+                  }
+                }
+              }
+              ${popStatusWerte}
+              ${tpop}
+              ${tpopApberrelevantGrundWerte}
+            `,
             variables,
             // no optimistic responce as geomPoint
             /*optimisticResponse: {
