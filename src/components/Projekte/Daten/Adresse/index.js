@@ -4,16 +4,17 @@ import get from 'lodash/get'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { Formik, Form, Field } from 'formik'
+import { gql } from '@apollo/client'
 
 import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
-import updateAdresseByIdGql from './updateAdresseById'
 import query from './query'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { adresse } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -25,6 +26,17 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+
+const fieldTypes = {
+  name: 'String',
+  adresse: 'String',
+  telefon: 'String',
+  email: 'String',
+  freiwErfko: 'Boolean',
+  evabVorname: 'String',
+  evabNachname: 'String',
+  evabOrt: 'String',
+}
 
 const Adresse = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -49,7 +61,28 @@ const Adresse = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateAdresseByIdGql,
+          mutation: gql`
+            mutation updateAdresse(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateAdresseById(
+                input: {
+                  id: $id
+                  adressePatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                adresse {
+                  ...AdresseFields
+                }
+              }
+            }
+            ${adresse}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
