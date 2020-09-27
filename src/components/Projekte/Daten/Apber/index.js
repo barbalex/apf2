@@ -4,6 +4,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
+import { gql } from '@apollo/client'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -12,7 +13,6 @@ import Select from '../../../shared/SelectFormik'
 import DateField from '../../../shared/DateFormik'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
-import updateApberByIdGql from './updateApberById'
 import query from './query'
 import queryAdresses from './queryAdresses'
 import queryApErfkritWertes from './queryApErfkritWertes'
@@ -20,6 +20,7 @@ import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { apber } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -40,6 +41,26 @@ const veraenGegenVorjahrWerte = [
   { value: '+', label: '+' },
   { value: '-', label: '-' },
 ]
+
+const fieldTypes = {
+  jahr: 'Int',
+  situation: 'String',
+  vergleichVorjahrGesamtziel: 'String',
+  beurteilung: 'Int',
+  veraenderungZumVorjahr: 'String',
+  apberAnalyse: 'String',
+  konsequenzenUmsetzung: 'String',
+  konsequenzenErfolgskontrolle: 'String',
+  biotopeNeue: 'String',
+  biotopeOptimieren: 'String',
+  massnahmenOptimieren: 'String',
+  wirkungAufArt: 'String',
+  datum: 'Date',
+  massnahmenApBearb: 'String',
+  massnahmenPlanungVsAusfuehrung: 'String',
+  apId: 'UUID',
+  bearbeiter: 'UUID',
+}
 
 const Apber = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -77,7 +98,28 @@ const Apber = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateApberByIdGql,
+          mutation: gql`
+            mutation updateApber(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateApberById(
+                input: {
+                  id: $id
+                  apberPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                apber {
+                  ...ApberFields
+                }
+              }
+            }
+            ${apber}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
