@@ -2,19 +2,19 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
 
 import TextField from '../../../shared/TextFieldFormik'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
 import FormTitle from '../../../shared/FormTitle'
-import updateAssozartByIdGql from './updateAssozartById'
 import query from './query'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { assozart } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -26,6 +26,12 @@ const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
 `
+
+const fieldTypes = {
+  bemerkungen: 'String',
+  aeId: 'UUID',
+  apId: 'UUID',
+}
 
 const Assozart = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -67,7 +73,40 @@ const Assozart = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateAssozartByIdGql,
+          mutation: gql`
+            mutation updateAssozart(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateAssozartById(
+                input: {
+                  id: $id
+                  assozartPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                assozart {
+                  ...AssozartFields
+                  aeTaxonomyByAeId {
+                    id
+                    artname
+                  }
+                  apByApId {
+                    artId
+                    assozartsByApId {
+                      nodes {
+                        ...AssozartFields
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            ${assozart}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
