@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
 
 import TextField from '../../../shared/TextFieldFormik'
@@ -11,11 +11,14 @@ import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryLists from './queryLists'
-import updateEkzaehleinheitByIdGql from './updateEkzaehleinheitById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import {
+  ekzaehleinheit,
+  tpopkontrzaehlEinheitWerte,
+} from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -27,6 +30,14 @@ const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
 `
+
+const fieldTypes = {
+  bemerkungen: 'String',
+  apId: 'UUID',
+  zaehleinheitId: 'UUID',
+  zielrelevant: 'Boolean',
+  sort: 'Int',
+}
 
 const Ekzaehleinheit = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -73,7 +84,32 @@ const Ekzaehleinheit = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateEkzaehleinheitByIdGql,
+          mutation: gql`
+            mutation updateEkzaehleinheit(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateEkzaehleinheitById(
+                input: {
+                  id: $id
+                  ekzaehleinheitPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                ekzaehleinheit {
+                  ...EkzaehleinheitFields
+                  tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                    ...TpopkontrzaehlEinheitWerteFields
+                  }
+                }
+              }
+            }
+            ${ekzaehleinheit}
+            ${tpopkontrzaehlEinheitWerte}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
