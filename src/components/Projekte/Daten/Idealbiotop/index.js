@@ -2,7 +2,7 @@ import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { Formik, Form, Field } from 'formik'
@@ -12,13 +12,13 @@ import DateField from '../../../shared/DateFormik'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
 import query from './query'
-import updateIdealbiotopByIdGql from './updateIdealbiotopById'
 import storeContext from '../../../../storeContext'
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { idealbiotop } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -61,6 +61,27 @@ const Section = styled.div`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
+const fieldTypes = {
+  apId: 'UUID',
+  erstelldatum: 'Date',
+  hoehenlage: 'String',
+  region: 'String',
+  exposition: 'String',
+  besonnung: 'String',
+  hangneigung: 'String',
+  bodenTyp: 'String',
+  bodenKalkgehalt: 'String',
+  bodenDurchlaessigkeit: 'String',
+  bodenHumus: 'String',
+  bodenNaehrstoffgehalt: 'String',
+  wasserhaushalt: 'String',
+  konkurrenz: 'String',
+  moosschicht: 'String',
+  krautschicht: 'String',
+  strauchschicht: 'String',
+  baumschicht: 'String',
+  bemerkungen: 'String',
+}
 
 const Idealbiotop = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -90,7 +111,28 @@ const Idealbiotop = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateIdealbiotopByIdGql,
+          mutation: gql`
+            mutation updateIdealbiotop(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateIdealbiotopById(
+                input: {
+                  id: $id
+                  idealbiotopPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                idealbiotop {
+                  ...IdealbiotopFields
+                }
+              }
+            }
+            ${idealbiotop}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
