@@ -13,12 +13,12 @@ import TextField from '../../../shared/TextFieldFormik'
 import MdField from '../../../shared/MarkdownFieldFormik'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
-import updateApberuebersichtByIdGql from './updateApberuebersichtById'
 import query from './query'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { apberuebersicht } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -39,6 +39,13 @@ const StyledButton = styled(Button)`
     background-color: rgba(46, 125, 50, 0.1) !important;
   }
 `
+
+const fieldTypes = {
+  projId: 'UUID',
+  jahr: 'Int',
+  historyDate: 'Date',
+  bemerkungen: 'String',
+}
 
 const Apberuebersicht = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -71,7 +78,28 @@ const Apberuebersicht = ({ treeName }) => {
       console.log('Apberuebersicht, onSubmit', { changedField })
       try {
         await client.mutate({
-          mutation: updateApberuebersichtByIdGql,
+          mutation: gql`
+            mutation updateApberuebersicht(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateApberuebersichtById(
+                input: {
+                  id: $id
+                  apberuebersichtPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                apberuebersicht {
+                  ...ApberuebersichtFields
+                }
+              }
+            }
+            ${apberuebersicht}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
@@ -134,11 +162,28 @@ const Apberuebersicht = ({ treeName }) => {
     // 2. if it worked: mutate historyDate
     try {
       const variables = {
-        ...row,
+        id: row.id,
         historyDate: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd'),
       }
       await client.mutate({
-        mutation: updateApberuebersichtByIdGql,
+        mutation: gql`
+          mutation updateApberuebersichtForHistoryDate(
+            $id: UUID!
+            $historyDate: Date
+          ) {
+            updateApberuebersichtById(
+              input: {
+                id: $id
+                apberuebersichtPatch: { historyDate: $historyDate }
+              }
+            ) {
+              apberuebersicht {
+                ...ApberuebersichtFields
+              }
+            }
+          }
+          ${apberuebersicht}
+        `,
         variables,
         optimisticResponse: {
           __typename: 'Mutation',
