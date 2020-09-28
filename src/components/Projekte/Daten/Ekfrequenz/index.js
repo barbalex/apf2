@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form, Field, FieldArray } from 'formik'
 
 import TextField from '../../../shared/TextFieldFormik'
@@ -13,11 +13,11 @@ import KontrolljahrField from './KontrolljahrField'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryEkAbrechnungstypWertes from './queryEkAbrechnungstypWertes'
-import updateEkfrequenzByIdGql from './updateEkfrequenzById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { ekfrequenz } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -56,6 +56,18 @@ const DelIcon = styled(IconButton)`
   padding-bottom: 0 !important;
 `
 
+const fieldTypes = {
+  apId: 'UUID',
+  ektyp: 'EkType',
+  anwendungsfall: 'String',
+  code: 'String',
+  kontrolljahre: '[Int]',
+  kontrolljahreAb: 'EkKontrolljahreAb',
+  bemerkungen: 'String',
+  sort: 'Int',
+  ekAbrechnungstyp: 'String',
+}
+
 const ektypeWertes = [
   { value: 'EK', label: 'EK' },
   { value: 'EKF', label: 'EKF' },
@@ -89,14 +101,35 @@ const Ekfrequenz = ({ treeName }) => {
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
+      const changedField = objectsFindChangedKey(values, row) || 'kontrolljahre'
       const variables = {
         ...objectsEmptyValuesToNull(values),
         changedBy: store.user.name,
       }
       try {
         await client.mutate({
-          mutation: updateEkfrequenzByIdGql,
+          mutation: gql`
+            mutation updateEkfrequenz(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateEkfrequenzById(
+                input: {
+                  id: $id
+                  ekfrequenzPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                ekfrequenz {
+                  ...EkfrequenzFields
+                }
+              }
+            }
+            ${ekfrequenz}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
