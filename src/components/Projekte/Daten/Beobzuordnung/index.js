@@ -6,7 +6,7 @@ import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/EmailOutlined'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField2'
@@ -17,13 +17,19 @@ import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import Beob from '../Beob'
 import query from './query'
 import queryAeTaxonomies from './queryAeTaxonomies'
-import updateBeobByIdGql from './updateBeobById'
 import saveNichtZuordnenToDb from './saveNichtZuordnenToDb'
 import saveArtIdToDb from './saveArtIdToDb'
 import saveTpopIdToDb from './saveTpopIdToDb'
 import sendMail from '../../../../modules/sendMail'
 import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import {
+  aeTaxonomies,
+  beob,
+  beobQuelleWerte,
+  pop,
+  popStatusWerte,
+} from '../../../shared/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -88,6 +94,22 @@ const EmailButton = styled(Button)`
 const StyledSendIcon = styled(SendIcon)`
   margin-right: 8px;
 `
+
+const fieldTypes = {
+  idField: 'String',
+  datum: 'Date',
+  autor: 'String',
+  geomPoint: 'GeoJSON',
+  data: 'JSON',
+  artId: 'UUID',
+  artIdOriginal: 'UUID',
+  infofloraInformiertDatum: 'Date',
+  tpopId: 'UUID',
+  nichtZuordnen: 'Boolean',
+  bemerkungen: 'String',
+  quelleId: 'UUID',
+}
+
 const nichtZuordnenPopover = (
   <Container>
     <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
@@ -198,8 +220,66 @@ const Beobzuordnung = ({ type, treeName }) => {
   )
   const onUpdateField = useCallback(
     (event) => {
+      const changedField = event.target.name
       client.mutate({
-        mutation: updateBeobByIdGql,
+        mutation: gql`
+          mutation updateBeobForBeobzuordnung(
+            $id: UUID!
+            $${changedField}: ${fieldTypes[changedField]}
+            $changedBy: String
+          ) {
+            updateBeobById(
+              input: {
+                id: $id
+                beobPatch: {
+                  ${changedField}: $${changedField}
+                  changedBy: $changedBy
+                }
+              }
+            ) {
+              beob {
+                ...BeobFields
+                aeTaxonomyByArtId {
+                  ...AeTaxonomiesFields
+                  apByArtId {
+                    id
+                    popsByApId {
+                      nodes {
+                        id
+                        tpopsByPopId {
+                          nodes {
+                            id
+                            nr
+                            lv95X
+                            lv95Y
+                            popStatusWerteByStatus {
+                              ...PopStatusWerteFields
+                            }
+                            popByPopId {
+                              ...PopFields
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                aeTaxonomyByArtIdOriginal {
+                  id
+                  artname
+                }
+                beobQuelleWerteByQuelleId {
+                  ...BeobQuelleWerteFields
+                }
+              }
+            }
+          }
+          ${aeTaxonomies}
+          ${beob}
+          ${beobQuelleWerte}
+          ${pop}
+          ${popStatusWerte}
+        `,
         variables: {
           id,
           [event.target.name]: event.target.value,
