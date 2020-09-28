@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -10,11 +10,11 @@ import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryLists from './queryLists'
-import updatePopberByIdGql from './updatePopberById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { pop, popber, tpopEntwicklungWerte } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -26,6 +26,13 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+
+const fieldTypes = {
+  popId: 'UUID',
+  jahr: 'Int',
+  entwicklung: 'Int',
+  bemerkungen: 'String',
+}
 
 const Popber = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -58,7 +65,36 @@ const Popber = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updatePopberByIdGql,
+          mutation: gql`
+            mutation updatePopber(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updatePopberById(
+                input: {
+                  id: $id
+                  popberPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                popber {
+                  ...PopberFields
+                  tpopEntwicklungWerteByEntwicklung {
+                    ...TpopEntwicklungWerteFields
+                  }
+                  popByPopId {
+                    ...PopFields
+                  }
+                }
+              }
+            }
+            ${pop}
+            ${popber}
+            ${tpopEntwicklungWerte}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
