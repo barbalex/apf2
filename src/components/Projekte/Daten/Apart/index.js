@@ -4,10 +4,10 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
+import { gql } from '@apollo/client'
 
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
 import FormTitle from '../../../shared/FormTitle'
-import updateApartByIdGql from './updateApartById'
 import query from './query'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import queryAeEigById from './queryAeEigById'
@@ -15,6 +15,7 @@ import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { apart } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -26,6 +27,11 @@ const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
 `
+
+const fieldTypes = {
+  apId: 'UUID',
+  artId: 'UUID',
+}
 
 const ApArt = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -87,7 +93,28 @@ const ApArt = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateApartByIdGql,
+          mutation: gql`
+            mutation updateApart(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateApartById(
+                input: {
+                  id: $id
+                  apartPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                apart {
+                  ...ApartFields
+                }
+              }
+            }
+            ${apart}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
@@ -117,8 +144,6 @@ const ApArt = ({ treeName }) => {
   }
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
   if (errorAeEigById) return `Fehler: ${errorAeEigById.message}`
-
-  console.log('Apart rendering')
 
   return (
     <ErrorBoundary>
