@@ -20,6 +20,10 @@ import { navigate } from 'gatsby'
 import initializeIdb from './modules/initializeIdb'
 import buildClient from './client'
 
+// see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
+import 'fontsource-roboto-mono'
+// see: https://github.com/fontsource/fontsource/tree/master/packages/roboto-mono
+import 'fontsource-roboto'
 import createGlobalStyle from './utils/createGlobalStyle'
 
 import { Provider as MobxProvider } from './storeContext'
