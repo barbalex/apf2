@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -10,11 +10,15 @@ import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryLists from './queryLists'
-import updatePopmassnberByIdGql from './updatePopmassnberById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import {
+  pop,
+  popmassnber,
+  tpopmassnErfbeurtWerte,
+} from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -26,6 +30,13 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+
+const fieldTypes = {
+  popId: 'UUID',
+  jahr: 'Int',
+  beurteilung: 'Int',
+  bemerkungen: 'String',
+}
 
 const Popmassnber = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -58,7 +69,36 @@ const Popmassnber = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updatePopmassnberByIdGql,
+          mutation: gql`
+            mutation updatePopmassnber(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updatePopmassnberById(
+                input: {
+                  id: $id
+                  popmassnberPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                popmassnber {
+                  ...PopmassnberFields
+                  tpopmassnErfbeurtWerteByBeurteilung {
+                    ...TpopmassnErfbeurtWerteFields
+                  }
+                  popByPopId {
+                    ...PopFields
+                  }
+                }
+              }
+            }
+            ${pop}
+            ${popmassnber}
+            ${tpopmassnErfbeurtWerte}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
