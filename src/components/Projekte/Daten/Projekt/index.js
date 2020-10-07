@@ -2,13 +2,12 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
 
 import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
-import updateProjektByIdGql from './updateProjektById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
@@ -24,6 +23,10 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+
+const fieldTypes = {
+  name: 'String',
+}
 
 const Projekt = ({ treeName }) => {
   const client = useApolloClient()
@@ -49,7 +52,29 @@ const Projekt = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateProjektByIdGql,
+          mutation: gql`
+            mutation updateProjekt(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateProjektById(
+                input: {
+                  id: $id
+                  projektPatch: { 
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                projekt {
+                  id
+                  name
+                  changedBy
+                }
+              }
+            }
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
