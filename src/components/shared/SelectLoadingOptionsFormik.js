@@ -75,8 +75,6 @@ const StyledSelect = styled(AsyncSelect)`
 `
 
 const SelectTypable = ({
-  field,
-  form,
   row,
   valueLabelPath,
   valueLabel,
@@ -85,10 +83,13 @@ const SelectTypable = ({
   query,
   filter,
   queryNodesName,
+  handleSubmit,
+  ...props
 }) => {
+  const [field, meta] = useField(props)
   const { onChange, onBlur, value: valuePassed, name } = field
-  const { errors, handleSubmit } = form
-  const saveToDbError = errors[name]
+  const { errors } = meta
+  const saveToDbError = errors?.[name]
 
   const client = useApolloClient()
 

@@ -149,7 +149,7 @@ const Assozart = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
+                <SelectLoadingOptions
                   name="aeId"
                   valueLabelPath="aeTaxonomyByAeId.taxArtName"
                   label="Art"
@@ -157,7 +157,7 @@ const Assozart = ({ treeName }) => {
                   query={queryAeTaxonomies}
                   filter={aeTaxonomiesfilter}
                   queryNodesName="allAeTaxonomies"
-                  component={SelectLoadingOptions}
+                  handleSubmit={handleSubmit}
                 />
                 <TextField
                   name="bemerkungen"
