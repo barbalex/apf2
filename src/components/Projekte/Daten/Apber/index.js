@@ -166,12 +166,7 @@ const Apber = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  name="jahr"
-                  label="Jahr"
-                  type="number"
-                  component={TextField}
-                />
+                <TextField name="jahr" label="Jahr" type="number" />
                 <Field
                   name="vergleichVorjahrGesamtziel"
                   label="Vergleich Vorjahr - Gesamtziel"

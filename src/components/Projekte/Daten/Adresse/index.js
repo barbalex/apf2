@@ -127,55 +127,32 @@ const Adresse = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  name="name"
-                  label="Name"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="adresse"
-                  label="Adresse"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="telefon"
-                  label="Telefon"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="email"
-                  label="Email"
-                  type="email"
-                  component={TextField}
-                />
+                <TextField name="name" label="Name" type="text" />
+                <TextField name="adresse" label="Adresse" type="text" />
+                <TextField name="telefon" label="Telefon" type="text" />
+                <TextField name="email" label="Email" type="email" />
                 <Field
                   name="freiwErfko"
                   label="freiwillige ErfolgskontrolleurIn"
                   component={Checkbox2States}
                 />
-                <Field
+                <TextField
                   name="evabVorname"
                   label="EvAB Vorname"
                   type="text"
                   helperText="Wird für den Export in EvAB benötigt"
-                  component={TextField}
                 />
-                <Field
+                <TextField
                   name="evabNachname"
                   label="EvAB Nachname"
                   type="text"
                   helperText="Wird für den Export in EvAB benötigt"
-                  component={TextField}
                 />
-                <Field
+                <TextField
                   name="evabOrt"
                   label="EvAB Ort"
                   type="text"
                   helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
-                  component={TextField}
                 />
               </Form>
             )}

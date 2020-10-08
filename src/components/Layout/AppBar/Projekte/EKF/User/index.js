@@ -14,7 +14,7 @@ import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import query from './data'
 import TextField from '../../../../../shared/TextFieldFormik'
@@ -159,11 +159,10 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
             <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
               {({ handleSubmit, dirty }) => (
                 <Form onBlur={() => dirty && handleSubmit()}>
-                  <Field
+                  <TextField
                     name="email"
                     label="Email"
                     helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
-                    component={TextField}
                   />
                   {!!passwordMessage && (
                     <PasswordMessage>{passwordMessage}</PasswordMessage>

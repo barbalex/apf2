@@ -230,12 +230,7 @@ const ApAp = ({ treeName, id }) => {
               label="Aktionsplan"
               component={RadioButtonGroupWithInfo}
             />
-            <Field
-              name="startJahr"
-              label="Start im Jahr"
-              type="number"
-              component={TextField}
-            />
+            <TextField name="startJahr" label="Start im Jahr" type="number" />
             <FieldContainer>
               <Field
                 name="umsetzung"
@@ -279,11 +274,10 @@ const ApAp = ({ treeName, id }) => {
               component={Select}
             />
             <ApUsers apId={row.id} />
-            <Field
+            <TextField
               key={`${row.id}ekfBeobachtungszeitpunkt`}
               name="ekfBeobachtungszeitpunkt"
               label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
-              component={TextField}
             />
             <TextFieldNonUpdatable
               key={`${row.id}artwert`}
