@@ -137,12 +137,7 @@ const Popber = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  name="jahr"
-                  label="Jahr"
-                  type="number"
-                  component={TextField}
-                />
+                <TextField name="jahr" label="Jahr" type="number" />
                 <Field
                   name="entwicklung"
                   label="Entwicklung"
@@ -154,11 +149,10 @@ const Popber = ({ treeName }) => {
                   )}
                   loading={loadingLists}
                 />
-                <Field
+                <TextField
                   name="bemerkungen"
                   label="Bemerkungen"
                   type="text"
-                  component={TextField}
                   multiLine
                 />
               </Form>

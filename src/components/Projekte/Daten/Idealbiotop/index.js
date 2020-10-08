@@ -209,125 +209,108 @@ const Idealbiotop = ({ treeName }) => {
                       component={DateField}
                     />
                     <Section>Lage</Section>
-                    <Field
+                    <TextField
                       name="hoehenlage"
                       label="Höhe"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="region"
                       label="Region"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="exposition"
                       label="Exposition"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="besonnung"
                       label="Besonnung"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="hangneigung"
                       label="Hangneigung"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
                     <Section>Boden</Section>
-                    <Field
+                    <TextField
                       name="bodenTyp"
                       label="Typ"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="bodenKalkgehalt"
                       label="Kalkgehalt"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="bodenDurchlaessigkeit"
                       label="Durchlässigkeit"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="bodenHumus"
                       label="Humus"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="bodenNaehrstoffgehalt"
                       label="Nährstoffgehalt"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="wasserhaushalt"
                       label="Wasserhaushalt"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
                     <Section>Vegetation</Section>
-                    <Field
+                    <TextField
                       name="konkurrenz"
                       label="Konkurrenz"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="moosschicht"
                       label="Moosschicht"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="krautschicht"
                       label="Krautschicht"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="strauchschicht"
                       label="Strauchschicht"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="baumschicht"
                       label="Baumschicht"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="bemerkungen"
                       label="Bemerkungen"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
                   </Form>

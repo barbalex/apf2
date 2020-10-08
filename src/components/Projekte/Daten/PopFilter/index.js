@@ -114,12 +114,7 @@ const Pop = ({ treeName }) => {
           >
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  label="Nr."
-                  name="nr"
-                  type="number"
-                  component={TextField}
-                />
+                <TextField label="Nr." name="nr" type="number" />
                 <Field
                   label="Name"
                   name="name"
@@ -138,12 +133,11 @@ const Pop = ({ treeName }) => {
                   name="statusUnklar"
                   component={Checkbox2States}
                 />
-                <Field
+                <TextField
                   label="Begründung"
                   name="statusUnklarBegruendung"
                   type="text"
                   multiLine
-                  component={TextField}
                 />
               </Form>
             )}

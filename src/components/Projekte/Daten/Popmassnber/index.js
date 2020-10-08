@@ -143,12 +143,7 @@ const Popmassnber = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  name="jahr"
-                  label="Jahr"
-                  type="number"
-                  component={TextField}
-                />
+                <TextField name="jahr" label="Jahr" type="number" />
                 <Field
                   name="beurteilung"
                   label="Entwicklung"
@@ -160,11 +155,10 @@ const Popmassnber = ({ treeName }) => {
                   )}
                   loading={loadingLists}
                 />
-                <Field
+                <TextField
                   name="bemerkungen"
                   label="Interpretation"
                   type="text"
-                  component={TextField}
                   multiLine
                 />
               </Form>
