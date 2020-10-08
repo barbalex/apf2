@@ -11,8 +11,9 @@ import TextField from '../TextField'
 // - markdown presenter if value exists
 // - markdown editor if is focused
 const MdFieldFormik = (props) => {
+  const [field] = useField(props)
   const { label } = props
-  const { value, name } = props.field
+  const { value, name } = field
 
   return (
     <FocusWithin>

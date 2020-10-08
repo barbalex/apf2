@@ -85,16 +85,10 @@ const DateField = ({ label, handleSubmit, ...props }) => {
         newValue = DateTime.fromJSDate(date).toFormat('yyyy-LL-dd')
       }
       const fakeEvent = { target: { value: newValue, name } }
-      console.log('DateFormik, onChangedDatePicker', {
-        date,
-        newValue,
-        name,
-        field,
-      })
       onChange(fakeEvent)
       onBlur(fakeEvent)
     },
-    [field, name, onBlur, onChange],
+    [name, onBlur, onChange],
   )
 
   const isValid = DateTime.fromSQL(value).isValid

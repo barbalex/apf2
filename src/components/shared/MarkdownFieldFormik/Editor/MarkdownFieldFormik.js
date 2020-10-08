@@ -4,6 +4,7 @@ import MarkdownIt from 'markdown-it'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import Editor, { Plugins } from 'react-markdown-editor-lite'
+import { useField } from 'formik'
 
 import Label from '../../Label'
 
@@ -41,9 +42,10 @@ const config = {
   markdownClass: 'editorpane',
 }
 
-const MarkdownField = ({ field, form, label, disabled }) => {
+const MarkdownField = ({ label, disabled, ...props }) => {
+  const [field, meta] = useField(props)
   const { onBlur, onChange, value, name } = field
-  const { errors } = form
+  const { errors } = meta
   const error = errors?.[name]
 
   const change = useCallback(

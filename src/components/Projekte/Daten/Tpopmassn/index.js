@@ -280,11 +280,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                       options={get(dataAdresses, 'allAdresses.nodes', [])}
                       loading={loadingAdresses}
                     />
-                    <Field
-                      name="bemerkungen"
-                      label="Bemerkungen"
-                      component={MdField}
-                    />
+                    <MdField name="bemerkungen" label="Bemerkungen" />
                     <Field
                       name="planVorhanden"
                       label="Plan vorhanden"
