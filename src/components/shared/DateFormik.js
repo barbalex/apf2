@@ -6,6 +6,7 @@ import { DateTime } from 'luxon'
 import DatePicker from 'react-datepicker'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import { useField } from 'formik'
 
 const StyledFormControl = styled(FormControl)`
   margin-bottom: 19px !important;
@@ -71,10 +72,11 @@ const dateFormat = [
   'dd',
 ]
 
-const DateField = ({ field, form, label }) => {
+const DateField = ({ label, ...props }) => {
+  const [field, meta] = useField(props)
   const { onChange, onBlur, value, name } = field
-  const { errors } = form
-  const error = errors[name]
+  const { errors } = meta
+  const error = errors?.[name]
 
   const onChangeDatePicker = useCallback(
     (date) => {
@@ -88,12 +90,11 @@ const DateField = ({ field, form, label }) => {
         newValue,
         name,
         field,
-        form,
       })
       onChange(fakeEvent)
       onBlur(fakeEvent)
     },
-    [field, form, name, onBlur, onChange],
+    [field, name, onBlur, onChange],
   )
 
   const isValid = DateTime.fromSQL(value).isValid

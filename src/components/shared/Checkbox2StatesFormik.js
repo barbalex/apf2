@@ -27,7 +27,7 @@ const StyledCheckbox = styled(Checkbox)`
 const Checkbox2StatesFormik = ({ field, form, label }) => {
   const { onChange, onBlur, value, name } = field
   const { errors, handleSubmit } = form
-  const error = errors[name]
+  const error = errors?.[name]
 
   const onClickButton = useCallback(() => {
     const fakeEvent = {

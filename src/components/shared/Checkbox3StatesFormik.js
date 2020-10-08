@@ -37,7 +37,7 @@ const AsideComment = styled.span`
 const RadioButton = ({ field, form, label }) => {
   const { onChange, onBlur, value, name } = field
   const { errors, handleSubmit } = form
-  const error = errors[name]
+  const error = errors?.[name]
 
   const onClickButton = useCallback(() => {
     let newValue = null
