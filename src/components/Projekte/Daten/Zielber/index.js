@@ -2,17 +2,17 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
 
 import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
-import updateZielberByIdGql from './updateZielberById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { zielber as zielberFragment } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -24,6 +24,13 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+
+const fieldTypes = {
+  zielId: 'UUID',
+  jahr: 'Int',
+  erreichung: 'String',
+  bemerkungen: 'String',
+}
 
 const Zielber = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -51,7 +58,28 @@ const Zielber = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateZielberByIdGql,
+          mutation: gql`
+            mutation updateZielber(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateZielberById(
+                input: {
+                  id: $id
+                  zielberPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                zielber {
+                  ...ZielberFields
+                }
+              }
+            }
+            ${zielberFragment}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
