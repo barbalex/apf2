@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -136,7 +136,12 @@ const Ziel = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField name="jahr" label="Jahr" type="number" />
+                <TextField
+                  name="jahr"
+                  label="Jahr"
+                  type="number"
+                  handleSubmit={handleSubmit}
+                />
                 <RadioButtonGroup
                   name="typ"
                   label="Zieltyp"
@@ -149,6 +154,7 @@ const Ziel = ({ treeName }) => {
                   label="Ziel"
                   type="text"
                   multiLine
+                  handleSubmit={handleSubmit}
                 />
               </Form>
             )}

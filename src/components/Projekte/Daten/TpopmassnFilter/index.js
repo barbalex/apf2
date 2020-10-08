@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -163,7 +163,12 @@ const Tpopmassn = ({ treeName }) => {
             >
               {({ handleSubmit, dirty }) => (
                 <Form onBlur={() => dirty && handleSubmit()}>
-                  <TextField name="jahr" label="Jahr" type="number" />
+                  <TextField
+                    name="jahr"
+                    label="Jahr"
+                    type="number"
+                    handleSubmit={handleSubmit}
+                  />
                   <DateField
                     name="datum"
                     label="Datum"
@@ -184,20 +189,22 @@ const Tpopmassn = ({ treeName }) => {
                     name="beschreibung"
                     label="Massnahme"
                     type="text"
+                    handleSubmit={handleSubmit}
                   />
-                  <Field
+                  <Select
                     name="bearbeiter"
                     value={row.bearbeiter}
                     label="BearbeiterIn"
-                    component={Select}
                     options={get(dataAdresses, 'allAdresses.nodes', [])}
                     loading={loadingAdresses}
+                    handleSubmit={handleSubmit}
                   />
                   <TextField
                     name="bemerkungen"
                     label="Bemerkungen"
                     type="text"
                     multiLine
+                    handleSubmit={handleSubmit}
                   />
                   <Checkbox2States
                     name="planVorhanden"
@@ -208,37 +215,53 @@ const Tpopmassn = ({ treeName }) => {
                     name="planBezeichnung"
                     label="Plan Bezeichnung"
                     type="text"
+                    handleSubmit={handleSubmit}
                   />
-                  <TextField name="flaeche" label="Fläche (m2)" type="number" />
+                  <TextField
+                    name="flaeche"
+                    label="Fläche (m2)"
+                    type="number"
+                    handleSubmit={handleSubmit}
+                  />
                   <TextField
                     name="form"
                     label="Form der Ansiedlung"
                     type="text"
+                    handleSubmit={handleSubmit}
                   />
                   <TextField
                     name="pflanzanordnung"
                     label="Pflanzanordnung"
                     type="text"
+                    handleSubmit={handleSubmit}
                   />
-                  <TextField name="markierung" label="Markierung" type="text" />
+                  <TextField
+                    name="markierung"
+                    label="Markierung"
+                    type="text"
+                    handleSubmit={handleSubmit}
+                  />
                   <TextField
                     name="anzTriebe"
                     label="Anzahl Triebe"
                     type="number"
+                    handleSubmit={handleSubmit}
                   />
                   <TextField
                     name="anzPflanzen"
                     label="Anzahl Pflanzen"
                     type="number"
+                    handleSubmit={handleSubmit}
                   />
                   <TextField
                     name="anzPflanzstellen"
                     label="Anzahl Pflanzstellen"
                     type="number"
+                    handleSubmit={handleSubmit}
                   />
                   {isAnpflanzung && (
                     <>
-                      <Field
+                      <Select
                         name="zieleinheitEinheit"
                         label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
                         options={get(
@@ -247,19 +270,20 @@ const Tpopmassn = ({ treeName }) => {
                           [],
                         )}
                         loading={loadingLists}
-                        component={Select}
+                        handleSubmit={handleSubmit}
                       />
                       <TextField
                         name="zieleinheitAnzahl"
                         label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
                         type="number"
+                        handleSubmit={handleSubmit}
                       />
                     </>
                   )}
-                  <Field
+                  <SelectLoadingOptionsTypable
                     field="wirtspflanze"
                     label="Wirtspflanze"
-                    component={SelectLoadingOptionsTypable}
+                    handleSubmit={handleSubmit}
                     query={queryAeTaxonomies}
                     queryNodesName="allAeTaxonomies"
                   />
@@ -267,16 +291,19 @@ const Tpopmassn = ({ treeName }) => {
                     name="herkunftPop"
                     label="Herkunftspopulation"
                     type="text"
+                    handleSubmit={handleSubmit}
                   />
                   <TextField
                     name="sammeldatum"
                     label="Sammeldatum"
                     type="text"
+                    handleSubmit={handleSubmit}
                   />
                   <TextField
                     name="vonAnzahlIndividuen"
                     label="Anzahl besammelte Individuen der Herkunftspopulation"
                     type="number"
+                    handleSubmit={handleSubmit}
                   />
                 </Form>
               )}

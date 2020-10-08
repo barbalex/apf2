@@ -162,9 +162,24 @@ const Werte = ({ treeName, table }) => {
           >
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField name="text" label="Text" type="text" />
-                <TextField name="code" label="Code" type={codeFieldType} />
-                <TextField name="sort" label="Sort" type="number" />
+                <TextField
+                  name="text"
+                  label="Text"
+                  type="text"
+                  handleSubmit={handleSubmit}
+                />
+                <TextField
+                  name="code"
+                  label="Code"
+                  type={codeFieldType}
+                  handleSubmit={handleSubmit}
+                />
+                <TextField
+                  name="sort"
+                  label="Sort"
+                  type="number"
+                  handleSubmit={handleSubmit}
+                />
               </Form>
             )}
           </Formik>
