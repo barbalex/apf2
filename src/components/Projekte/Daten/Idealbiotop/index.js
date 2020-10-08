@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import TextField from '../../../shared/TextFieldFormik'
 import DateField from '../../../shared/DateFormik'
@@ -214,30 +214,35 @@ const Idealbiotop = ({ treeName }) => {
                       label="Höhe"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="region"
                       label="Region"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="exposition"
                       label="Exposition"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="besonnung"
                       label="Besonnung"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="hangneigung"
                       label="Hangneigung"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <Section>Boden</Section>
                     <TextField
@@ -245,36 +250,42 @@ const Idealbiotop = ({ treeName }) => {
                       label="Typ"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="bodenKalkgehalt"
                       label="Kalkgehalt"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="bodenDurchlaessigkeit"
                       label="Durchlässigkeit"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="bodenHumus"
                       label="Humus"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="bodenNaehrstoffgehalt"
                       label="Nährstoffgehalt"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="wasserhaushalt"
                       label="Wasserhaushalt"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <Section>Vegetation</Section>
                     <TextField
@@ -282,36 +293,42 @@ const Idealbiotop = ({ treeName }) => {
                       label="Konkurrenz"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="moosschicht"
                       label="Moosschicht"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="krautschicht"
                       label="Krautschicht"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="strauchschicht"
                       label="Strauchschicht"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="baumschicht"
                       label="Baumschicht"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="bemerkungen"
                       label="Bemerkungen"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                   </Form>
                 )}

@@ -190,12 +190,18 @@ const Ekfrequenz = ({ treeName }) => {
                   dirty && handleSubmit()
                 }}
               >
-                <TextField name="code" label="Kürzel" type="text" />
+                <TextField
+                  name="code"
+                  label="Kürzel"
+                  type="text"
+                  handleSubmit={handleSubmit}
+                />
                 <TextField
                   name="anwendungsfall"
                   label="Anwendungsfall"
                   type="text"
                   multiLine
+                  handleSubmit={handleSubmit}
                 />
                 <RadioButtonGroup
                   name="ektyp"
@@ -286,8 +292,14 @@ const Ekfrequenz = ({ treeName }) => {
                   label="Bemerkungen"
                   type="text"
                   multiLine
+                  handleSubmit={handleSubmit}
                 />
-                <TextField name="sort" label="Sortierung" type="number" />
+                <TextField
+                  name="sort"
+                  label="Sortierung"
+                  type="number"
+                  handleSubmit={handleSubmit}
+                />
               </Form>
             )}
           </Formik>

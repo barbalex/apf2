@@ -142,6 +142,7 @@ const Erfkrit = ({ treeName }) => {
                   label="Kriterien"
                   type="text"
                   multiLine
+                  handleSubmit={handleSubmit}
                 />
               </Form>
             )}

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import TextField from '../../../shared/TextFieldFormik'
 import Select from '../../../shared/SelectFormik'
@@ -164,7 +164,7 @@ const Ekzaehleinheit = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
+                <Select
                   name="zaehleinheitId"
                   label="Zähleinheit"
                   options={get(
@@ -173,19 +173,25 @@ const Ekzaehleinheit = ({ treeName }) => {
                     [],
                   )}
                   loading={loadingLists}
-                  component={Select}
+                  handleSubmit={handleSubmit}
                 />
                 <Checkbox2States
                   name="zielrelevant"
                   label="zielrelevant"
                   handleSubmit={handleSubmit}
                 />
-                <TextField name="sort" label="Sortierung" type="number" />
+                <TextField
+                  name="sort"
+                  label="Sortierung"
+                  type="number"
+                  handleSubmit={handleSubmit}
+                />
                 <TextField
                   name="bemerkungen"
                   label="Bemerkungen"
                   type="text"
                   multiLine
+                  handleSubmit={handleSubmit}
                 />
               </Form>
             )}
