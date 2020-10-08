@@ -83,10 +83,17 @@ const DateField = ({ field, form, label }) => {
         newValue = DateTime.fromJSDate(date).toFormat('yyyy-LL-dd')
       }
       const fakeEvent = { target: { value: newValue, name } }
+      console.log('DateFormik, onChangedDatePicker', {
+        date,
+        newValue,
+        name,
+        field,
+        form,
+      })
       onChange(fakeEvent)
       onBlur(fakeEvent)
     },
-    [name, onBlur, onChange],
+    [field, form, name, onBlur, onChange],
   )
 
   const isValid = DateTime.fromSQL(value).isValid
@@ -99,7 +106,14 @@ const DateField = ({ field, form, label }) => {
       <StyledDatePicker
         id={name}
         selected={selected}
-        onChange={onChangeDatePicker}
+        onChange={(e) => {
+          console.log('DateFormik, onChange, event:', e)
+          onChangeDatePicker(e)
+        }}
+        onSelect={(e) => {
+          console.log('DateFormik, onSelect, event:', e)
+          onChangeDatePicker(e)
+        }}
         dateFormat={dateFormat}
         popperPlacement="auto"
       />

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
@@ -93,24 +93,17 @@ const Zielber = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  name="jahr"
-                  label="Jahr"
-                  type="number"
-                  component={TextField}
-                />
-                <Field
+                <TextField name="jahr" label="Jahr" type="number" />
+                <TextField
                   name="erreichung"
                   label="Ziel-Erreichung"
                   type="text"
-                  component={TextField}
                 />
-                <Field
+                <TextField
                   name="bemerkungen"
                   label="Bemerkungen"
                   type="text"
                   multiLine
-                  component={TextField}
                 />
               </Form>
             )}

@@ -6,7 +6,7 @@ import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 import upperFirst from 'lodash/upperFirst'
 
 import ErrorBoundary from '../ErrorBoundary'
@@ -198,32 +198,29 @@ const File = ({ file, parent, refetch }) => {
                 <ImgReplacement>...</ImgReplacement>
               )}
               <DateiTypField>
-                <Field
+                <TextField
                   name="fileMimeType"
                   label="Datei-Typ"
                   disabled
                   schrinkLabel
-                  component={TextField}
                 />
               </DateiTypField>
               <Spacer />
               <DateiNameField>
-                <Field
+                <TextField
                   name="name"
                   label="Datei-Name"
                   disabled
                   schrinkLabel
-                  component={TextField}
                 />
               </DateiNameField>
               <Spacer />
               <BeschreibungField>
-                <Field
+                <TextField
                   name="beschreibung"
                   label="Beschreibung"
                   multiLine
                   schrinkLabel
-                  component={TextField}
                 />
               </BeschreibungField>
               <DownloadIcon title="herunterladen" onClick={onClickDownload}>

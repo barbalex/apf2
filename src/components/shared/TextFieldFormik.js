@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { useField } from 'formik'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -13,26 +14,26 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const MyTextField = ({
-  field,
-  form,
-  label,
-  type = 'text',
-  multiLine = false,
-  disabled = false,
-  hintText = '',
-  helperText = '',
-  required = false,
-}) => {
+const MyTextField = (props) => {
+  const [field, meta] = useField(props)
+  const {
+    label,
+    type = 'text',
+    multiLine = false,
+    disabled = false,
+    hintText = '',
+    helperText = '',
+    required = false,
+  } = props
   const { onChange, onBlur, value, name } = field
-  const { errors, handleSubmit } = form
-  const error = errors[name]
+  const { errors, handleSubmit } = meta
+  const error = errors?.[name]
 
   // only working solution to prevent whell scrolling from changing number values
   // see: https://github.com/mui-org/material-ui/issues/7960#issuecomment-497945204
   const textFieldRef = useRef(null)
   useEffect(() => {
-    const handleWheel = e => e.preventDefault()
+    const handleWheel = (e) => e.preventDefault()
     const current = textFieldRef.current
     current.addEventListener('wheel', handleWheel)
 
@@ -43,7 +44,7 @@ const MyTextField = ({
 
   // value should immediately update when pressing Enter
   const onKeyDown = useCallback(
-    e => {
+    (e) => {
       if (e.key === 'Enter') {
         handleSubmit()
         // show user something happened
