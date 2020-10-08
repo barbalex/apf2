@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -166,7 +166,12 @@ const Apber = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField name="jahr" label="Jahr" type="number" />
+                <TextField
+                  name="jahr"
+                  label="Jahr"
+                  type="number"
+                  handleSubmit={handleSubmit}
+                />
                 <MdField
                   name="vergleichVorjahrGesamtziel"
                   label="Vergleich Vorjahr - Gesamtziel"
@@ -226,12 +231,12 @@ const Apber = ({ treeName }) => {
                   label="Datum"
                   handleSubmit={handleSubmit}
                 />
-                <Field
+                <Select
                   name="bearbeiter"
                   label="BearbeiterIn"
                   options={get(dataAdresses, 'allAdresses.nodes', [])}
                   loading={loadingAdresses}
-                  component={Select}
+                  handleSubmit={handleSubmit}
                 />
               </Form>
             )}

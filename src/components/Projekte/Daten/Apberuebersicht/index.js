@@ -246,7 +246,12 @@ const Apberuebersicht = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField name="jahr" label="Jahr" type="number" />
+                <TextField
+                  name="jahr"
+                  label="Jahr"
+                  type="number"
+                  handleSubmit={handleSubmit}
+                />
                 {!!row.historyDate && (
                   <TextFieldNonUpdatable
                     value={format(new Date(row.historyDate), 'dd.MM.yyyy')}

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -217,6 +217,7 @@ const ApFilter = ({ treeName }) => {
                   name="startJahr"
                   label="Start im Jahr"
                   type="number"
+                  handleSubmit={handleSubmit}
                 />
                 <FieldContainer>
                   <RadioButtonGroupWithInfo
@@ -255,16 +256,17 @@ const ApFilter = ({ treeName }) => {
                     handleSubmit={handleSubmit}
                   />
                 </FieldContainer>
-                <Field
+                <Select
                   name="bearbeiter"
                   label="Verantwortlich"
                   options={get(dataAdresses, 'allAdresses.nodes', [])}
                   loading={loadingAdresses}
-                  component={Select}
+                  handleSubmit={handleSubmit}
                 />
                 <TextField
                   name="ekfBeobachtungszeitpunkt"
                   label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
+                  handleSubmit={handleSubmit}
                 />
               </Form>
             )}
