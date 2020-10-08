@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import jwtDecode from 'jwt-decode'
 import { MdPrint } from 'react-icons/md'
 import IconButton from '@material-ui/core/IconButton'
@@ -12,7 +12,6 @@ import IconButton from '@material-ui/core/IconButton'
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import query from './query'
 import queryTpopkontrs from './queryTpopkontrs'
-import updateTpopkontrByIdGql from './updateTpopkontrById'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import Title from './Title'
 import Headdata from './Headdata'
@@ -33,6 +32,13 @@ import FilterTitle from '../../../shared/FilterTitle'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopfreiwkontrType } from '../../../../store/Tree/DataFilter/tpopfreiwkontr'
+import {
+  adresse as adresseFragment,
+  pop as popFragment,
+  tpop as tpopFragment,
+  tpopfreiwkontr as tpopfreiwkontrFragment,
+  tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
+} from '../../../shared/fragments'
 
 const Container = styled.div`
   height: ${(props) =>
@@ -149,6 +155,27 @@ const StyledIconButton = styled(IconButton)`
   color: white !important;
   margin-right: 10px !important;
 `
+
+const fieldTypes = {
+  typ: 'String',
+  datum: 'Date',
+  jahr: 'Int',
+  bemerkungen: 'String',
+  flaecheUeberprueft: 'Int',
+  deckungVegetation: 'Int',
+  deckungNackterBoden: 'Int',
+  deckungApArt: 'Int',
+  vegetationshoeheMaximum: 'Int',
+  vegetationshoeheMittel: 'Int',
+  gefaehrdung: 'String',
+  tpopId: 'UUID',
+  bearbeiter: 'UUID',
+  planVorhanden: 'Boolean',
+  jungpflanzenVorhanden: 'Boolean',
+  apberNichtRelevant: 'Boolean',
+  apberNichtRelevantGrund: 'String',
+  ekfBemerkungen: 'String',
+}
 
 const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   const client = useApolloClient()
@@ -330,7 +357,96 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
       if (field2) variables[field2] = value2
       try {
         await client.mutate({
-          mutation: updateTpopkontrByIdGql,
+          mutation: gql`
+            mutation updateTpopkontrForEkf(
+              $id: UUID!
+              $typ: String
+              $datum: Date
+              $jahr: Int
+              $bemerkungen: String
+              $flaecheUeberprueft: Int
+              $deckungVegetation: Int
+              $deckungNackterBoden: Int
+              $deckungApArt: Int
+              $vegetationshoeheMaximum: Int
+              $vegetationshoeheMittel: Int
+              $gefaehrdung: String
+              $tpopId: UUID
+              $bearbeiter: UUID
+              $planVorhanden: Boolean
+              $jungpflanzenVorhanden: Boolean
+              $apberNichtRelevant: Boolean
+              $apberNichtRelevantGrund: String
+              $ekfBemerkungen: String
+              $changedBy: String
+            ) {
+              updateTpopkontrById(
+                input: {
+                  id: $id
+                  tpopkontrPatch: {
+                    typ: $typ
+                    datum: $datum
+                    jahr: $jahr
+                    bemerkungen: $bemerkungen
+                    flaecheUeberprueft: $flaecheUeberprueft
+                    deckungVegetation: $deckungVegetation
+                    deckungNackterBoden: $deckungNackterBoden
+                    deckungApArt: $deckungApArt
+                    vegetationshoeheMaximum: $vegetationshoeheMaximum
+                    vegetationshoeheMittel: $vegetationshoeheMittel
+                    gefaehrdung: $gefaehrdung
+                    tpopId: $tpopId
+                    bearbeiter: $bearbeiter
+                    planVorhanden: $planVorhanden
+                    jungpflanzenVorhanden: $jungpflanzenVorhanden
+                    apberNichtRelevant: $apberNichtRelevant
+                    apberNichtRelevantGrund: $apberNichtRelevantGrund
+                    ekfBemerkungen: $ekfBemerkungen
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                tpopkontr {
+                  ...TpopfreiwkontrFields
+                  adresseByBearbeiter {
+                    ...AdresseFields
+                    usersByAdresseId {
+                      totalCount
+                    }
+                  }
+                  tpopByTpopId {
+                    ...TpopFields
+                    popByPopId {
+                      ...PopFields
+                      apByApId {
+                        id
+                        ekzaehleinheitsByApId {
+                          nodes {
+                            id
+                            tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                              ...TpopkontrzaehlEinheitWerteFields
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                  tpopkontrzaehlsByTpopkontrId {
+                    nodes {
+                      id
+                      anzahl
+                      einheit
+                    }
+                  }
+                }
+              }
+            }
+            ${adresseFragment}
+            ${popFragment}
+            ${tpopFragment}
+            ${tpopfreiwkontrFragment}
+            ${tpopkontrzaehlEinheitWerteFragment}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',

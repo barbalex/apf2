@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client'
 
 import {
-  adresse,
-  pop,
-  tpop,
-  tpopfreiwkontr,
-  tpopkontrzaehlEinheitWerte,
+  adresse as adresseFragment,
+  pop as popFragment,
+  tpop as tpopFragment,
+  tpopfreiwkontr as tpopfreiwkontrFragment,
+  tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -92,9 +92,9 @@ export default gql`
       }
     }
   }
-  ${adresse}
-  ${pop}
-  ${tpop}
-  ${tpopfreiwkontr}
-  ${tpopkontrzaehlEinheitWerte}
+  ${adresseFragment}
+  ${popFragment}
+  ${tpopFragment}
+  ${tpopfreiwkontrFragment}
+  ${tpopkontrzaehlEinheitWerteFragment}
 `
