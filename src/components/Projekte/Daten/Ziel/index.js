@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -11,11 +11,11 @@ import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryLists from './queryLists'
-import updateZielByIdGql from './updateZielById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { ziel as zielFragment } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -27,6 +27,13 @@ const FieldsContainer = styled.div`
   height: 100%;
   overflow: auto !important;
 `
+
+const fieldTypes = {
+  apId: 'UUID',
+  typ: 'Int',
+  jahr: 'Int',
+  bezeichnung: 'String',
+}
 
 const Ziel = ({ treeName }) => {
   const client = useApolloClient()
@@ -65,7 +72,28 @@ const Ziel = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateZielByIdGql,
+          mutation: gql`
+            mutation updateZiel(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateZielById(
+                input: {
+                  id: $id
+                  zielPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                ziel {
+                  ...ZielFields
+                }
+              }
+            }
+            ${zielFragment}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
