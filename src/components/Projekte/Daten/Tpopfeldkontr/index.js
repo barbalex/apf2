@@ -465,11 +465,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       type="text"
                       multiLine
                     />
-                    <Field
-                      name="bemerkungen"
-                      label="Bemerkungen"
-                      component={MdField}
-                    />
+                    <MdField name="bemerkungen" label="Bemerkungen" />
                     <Field
                       name="apberNichtRelevant"
                       label="Im Jahresbericht nicht berücksichtigen"

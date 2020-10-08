@@ -199,7 +199,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
               label="Bewirtschaftung"
               type="text"
             />
-            <Field name="bemerkungen" label="Bemerkungen" component={MdField} />
+            <MdField name="bemerkungen" label="Bemerkungen" />
           </Form>
         )}
       </Formik>

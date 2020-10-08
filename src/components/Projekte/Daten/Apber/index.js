@@ -167,10 +167,9 @@ const Apber = ({ treeName }) => {
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
                 <TextField name="jahr" label="Jahr" type="number" />
-                <Field
+                <MdField
                   name="vergleichVorjahrGesamtziel"
                   label="Vergleich Vorjahr - Gesamtziel"
-                  component={MdField}
                 />
                 <RadioButtonGroup
                   name="beurteilung"
@@ -189,50 +188,38 @@ const Apber = ({ treeName }) => {
                   dataSource={veraenGegenVorjahrWerte}
                   handleSubmit={handleSubmit}
                 />
-                <Field
-                  name="apberAnalyse"
-                  label="Analyse"
-                  component={MdField}
-                />
-                <Field
+                <MdField name="apberAnalyse" label="Analyse" />
+                <MdField
                   name="konsequenzenUmsetzung"
                   label="Konsequenzen für die Umsetzung"
-                  component={MdField}
                 />
-                <Field
+                <MdField
                   name="konsequenzenErfolgskontrolle"
                   label="Konsequenzen für die Erfolgskontrolle"
-                  component={MdField}
                 />
-                <Field
+                <MdField
                   name="biotopeNeue"
                   label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
-                  component={MdField}
                 />
-                <Field
+                <MdField
                   name="biotopeOptimieren"
                   label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
-                  component={MdField}
                 />
-                <Field
+                <MdField
                   name="massnahmenApBearb"
                   label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
-                  component={MdField}
                 />
-                <Field
+                <MdField
                   name="massnahmenPlanungVsAusfuehrung"
                   label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
-                  component={MdField}
                 />
-                <Field
+                <MdField
                   name="massnahmenOptimieren"
                   label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
-                  component={MdField}
                 />
-                <Field
+                <MdField
                   name="wirkungAufArt"
                   label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
-                  component={MdField}
                 />
                 <DateField
                   name="datum"

@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 import jwtDecode from 'jwt-decode'
 import format from 'date-fns/format'
 import { DateTime } from 'luxon'
@@ -262,11 +262,7 @@ const Apberuebersicht = ({ treeName }) => {
                     {`AP, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
                   </StyledButton>
                 )}
-                <Field
-                  name="bemerkungen"
-                  label="Bemerkungen"
-                  component={MdField}
-                />
+                <MdField name="bemerkungen" label="Bemerkungen" />
               </Form>
             )}
           </Formik>
