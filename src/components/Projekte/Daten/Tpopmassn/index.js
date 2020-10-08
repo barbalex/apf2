@@ -181,7 +181,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                 }
               }
             `,
-            variables: { apId, typ: variables.typ },
+            variables: { apId, typ: variables.typ || 1 },
           })
         } catch (error) {
           return setErrors({ [changedField]: error.message })
