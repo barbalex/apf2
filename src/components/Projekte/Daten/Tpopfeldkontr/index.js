@@ -388,7 +388,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                 {({ handleSubmit, dirty }) => (
                   <Form onBlur={() => dirty && handleSubmit()}>
                     <TextField name="jahr" label="Jahr" type="number" />
-                    <Field name="datum" label="Datum" component={DateField} />
+                    <DateField name="datum" label="Datum" />
                     <Field
                       name="typ"
                       label="Kontrolltyp"

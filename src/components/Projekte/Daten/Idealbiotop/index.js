@@ -203,11 +203,7 @@ const Idealbiotop = ({ treeName }) => {
               >
                 {({ handleSubmit, dirty }) => (
                   <Form onBlur={() => dirty && handleSubmit()}>
-                    <Field
-                      name="erstelldatum"
-                      label="Erstelldatum"
-                      component={DateField}
-                    />
+                    <DateField name="erstelldatum" label="Erstelldatum" />
                     <Section>Lage</Section>
                     <TextField
                       name="hoehenlage"

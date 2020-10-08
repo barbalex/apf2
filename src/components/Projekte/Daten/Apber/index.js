@@ -234,7 +234,7 @@ const Apber = ({ treeName }) => {
                   label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
                   component={MdField}
                 />
-                <Field name="datum" label="Datum" component={DateField} />
+                <DateField name="datum" label="Datum" />
                 <Field
                   name="bearbeiter"
                   label="BearbeiterIn"
