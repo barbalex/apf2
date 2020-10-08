@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -10,11 +10,11 @@ import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryLists from './queryLists'
-import updateTpopberByIdGql from './updateTpopberById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { tpopber } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -26,6 +26,13 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+
+const fieldTypes = {
+  tpopId: 'UUID',
+  jahr: 'Int',
+  entwicklung: 'Int',
+  bemerkungen: 'String',
+}
 
 const Tpopber = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -58,7 +65,28 @@ const Tpopber = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateTpopberByIdGql,
+          mutation: gql`
+            mutation updateTpopber(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateTpopberById(
+                input: {
+                  id: $id
+                  tpopberPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                tpopber {
+                  ...TpopberFields
+                }
+              }
+            }
+            ${tpopber}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
@@ -101,12 +129,7 @@ const Tpopber = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  name="jahr"
-                  label="Jahr"
-                  type="number"
-                  component={TextField}
-                />
+                <TextField name="jahr" label="Jahr" type="number" />
                 <Field
                   name="entwicklung"
                   label="Entwicklung"
@@ -118,11 +141,10 @@ const Tpopber = ({ treeName }) => {
                   )}
                   loading={loadingLists}
                 />
-                <Field
+                <TextField
                   name="bemerkungen"
                   label="Bemerkungen"
                   type="text"
-                  component={TextField}
                   multiLine
                 />
               </Form>

@@ -52,7 +52,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
       >
         {({ handleSubmit, handleChange, handleBlur, dirty, setErrors }) => (
           <Form onBlur={() => dirty && handleSubmit()}>
-            <Field name="nr" label="Nr." type="number" component={TextField} />
+            <TextField name="nr" label="Nr." type="number" />
             <Field
               name="flurname"
               label="Flurname"
@@ -71,12 +71,11 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
               label="Status unklar"
               component={Checkbox2States}
             />
-            <Field
+            <TextField
               name="statusUnklarGrund"
               label="Begründung"
               type="text"
               multiLine
-              component={TextField}
             />
             <Field
               name="apberRelevant"
@@ -171,78 +170,34 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
                 component={SelectCreatable}
               />
             )}
-            <Field
-              name="radius"
-              label="Radius (m)"
-              type="number"
-              component={TextField}
-            />
-            <Field
-              name="hoehe"
-              label="Höhe (m.ü.M.)"
-              type="number"
-              component={TextField}
-            />
-            <Field
+            <TextField name="radius" label="Radius (m)" type="number" />
+            <TextField name="hoehe" label="Höhe (m.ü.M.)" type="number" />
+            <TextField
               name="exposition"
               label="Exposition, Besonnung"
               type="text"
-              component={TextField}
             />
-            <Field
-              name="klima"
-              label="Klima"
-              type="text"
-              component={TextField}
-            />
-            <Field
-              name="neigung"
-              label="Hangneigung"
-              type="text"
-              component={TextField}
-            />
-            <Field
+            <TextField name="klima" label="Klima" type="text" />
+            <TextField name="neigung" label="Hangneigung" type="text" />
+            <TextField
               name="beschreibung"
               label="Beschreibung"
               type="text"
               multiline
-              component={TextField}
             />
-            <Field
-              name="katasterNr"
-              label="Kataster-Nr."
-              type="text"
-              component={TextField}
-            />
-            <Field
-              name="eigentuemer"
-              label="EigentümerIn"
-              type="text"
-              component={TextField}
-            />
-            <Field
-              name="kontakt"
-              label="Kontakt vor Ort"
-              type="text"
-              component={TextField}
-            />
-            <Field
-              name="nutzungszone"
-              label="Nutzungszone"
-              type="text"
-              component={TextField}
-            />
-            <Field
+            <TextField name="katasterNr" label="Kataster-Nr." type="text" />
+            <TextField name="eigentuemer" label="EigentümerIn" type="text" />
+            <TextField name="kontakt" label="Kontakt vor Ort" type="text" />
+            <TextField name="nutzungszone" label="Nutzungszone" type="text" />
+            <TextField
               name="bewirtschafter"
               label="BewirtschafterIn"
               type="text"
-              component={TextField}
             />
-            <Field
+            <TextField
               name="bewirtschaftung"
               label="Bewirtschaftung"
               type="text"
-              component={TextField}
             />
             <Field name="bemerkungen" label="Bemerkungen" component={MdField} />
           </Form>

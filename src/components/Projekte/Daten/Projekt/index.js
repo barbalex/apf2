@@ -111,12 +111,7 @@ const Projekt = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  name="name"
-                  label="Name"
-                  type="text"
-                  component={TextField}
-                />
+                <TextField name="name" label="Name" type="text" />
               </Form>
             )}
           </Formik>

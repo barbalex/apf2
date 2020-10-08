@@ -149,11 +149,10 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                     label="EK-Frequenz abweichend"
                     component={Checkbox2States}
                   />
-                  <Field
+                  <TextField
                     name="ekfrequenzStartjahr"
                     label="Startjahr"
                     type="number"
-                    component={TextField}
                   />
                   <Field
                     name="ekfKontrolleur"
