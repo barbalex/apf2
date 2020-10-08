@@ -110,7 +110,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
             {errorLists ? (
               <div>errorLists.message</div>
             ) : (
-              <Field
+              <SelectCreatable
                 name="gemeinde"
                 label="Gemeinde"
                 options={get(dataLists, 'allChGemeindes.nodes', [])}
@@ -173,7 +173,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
                     setTimeout(() => handleSubmit())
                   }
                 }}
-                component={SelectCreatable}
+                handleSubmit={handleSubmit}
               />
             )}
             <TextField

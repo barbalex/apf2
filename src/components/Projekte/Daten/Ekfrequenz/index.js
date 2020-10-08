@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form, Field, FieldArray } from 'formik'
+import { Formik, Form, FieldArray } from 'formik'
 
 import TextField from '../../../shared/TextFieldFormik'
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -247,9 +247,9 @@ const Ekfrequenz = ({ treeName }) => {
                         // so after typing every number - bad for multiple digits
                         values.kontrolljahre.map((kontrolljahr, index) => (
                           <div key={index}>
-                            <Field
+                            <KontrolljahrField
                               name={`kontrolljahre.${index}`}
-                              component={KontrolljahrField}
+                              handleSubmit={handleSubmit}
                             />
                             <DelIcon
                               title={`${values.kontrolljahre[index]} entfernen`}

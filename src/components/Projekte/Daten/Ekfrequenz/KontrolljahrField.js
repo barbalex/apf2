@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useCallback } from 'react'
 import Input from '@material-ui/core/Input'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { useField } from 'formik'
 
 const StyledInput = styled(Input)`
   width: 45px;
@@ -11,15 +12,15 @@ const StyledInput = styled(Input)`
   }
 `
 
-const MyTextField = ({ field, form }) => {
+const MyTextField = ({ handleSubmit, ...props }) => {
+  const [field] = useField(props)
   const { onChange, onBlur, value, name } = field
-  const { handleSubmit } = form
 
   // only working solution
   // see: https://github.com/mui-org/material-ui/issues/7960#issuecomment-497945204
   const textFieldRef = useRef(null)
   useEffect(() => {
-    const handleWheel = e => e.preventDefault()
+    const handleWheel = (e) => e.preventDefault()
     const current = textFieldRef.current
     current.addEventListener('wheel', handleWheel)
 
@@ -28,7 +29,7 @@ const MyTextField = ({ field, form }) => {
     }
   }, [])
 
-  const onKeyDown = useCallback(e => e.key === 'Enter' && handleSubmit(), [
+  const onKeyDown = useCallback((e) => e.key === 'Enter' && handleSubmit(), [
     handleSubmit,
   ])
 
