@@ -10,7 +10,7 @@ import max from 'lodash/max'
 import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
 import RadioButtonGroup from '../../../../shared/RadioButtonGroupFormik'
@@ -153,13 +153,14 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                     name="ekfrequenzStartjahr"
                     label="Startjahr"
                     type="number"
+                    handleSubmit={handleSubmit}
                   />
-                  <Field
+                  <Select
                     name="ekfKontrolleur"
                     label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
-                    component={Select}
                     options={get(dataAdresses, 'allAdresses.nodes', [])}
                     loading={loadingAdresses}
+                    handleSubmit={handleSubmit}
                   />
                 </FormContainerNoColumnsInner>
               </Form>

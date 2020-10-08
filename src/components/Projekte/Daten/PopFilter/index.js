@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import TextField from '../../../shared/TextFieldFormik'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfoFormik'
@@ -114,19 +114,24 @@ const Pop = ({ treeName }) => {
           >
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField label="Nr." name="nr" type="number" />
-                <Field
+                <TextField
+                  label="Nr."
+                  name="nr"
+                  type="number"
+                  handleSubmit={handleSubmit}
+                />
+                <TextFieldWithInfo
                   label="Name"
                   name="name"
                   type="text"
                   popover="Dieses Feld möglichst immer ausfüllen"
-                  component={TextFieldWithInfo}
+                  handleSubmit={handleSubmit}
                 />
-                <Field
+                <Status
                   apJahr={get(row, 'apByApId.startJahr')}
                   treeName={treeName}
                   showFilter={true}
-                  component={Status}
+                  handleSubmit={handleSubmit}
                 />
                 <Checkbox2States
                   label="Status unklar"
@@ -138,6 +143,7 @@ const Pop = ({ treeName }) => {
                   name="statusUnklarBegruendung"
                   type="text"
                   multiLine
+                  handleSubmit={handleSubmit}
                 />
               </Form>
             )}

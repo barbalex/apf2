@@ -137,7 +137,12 @@ const Popber = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField name="jahr" label="Jahr" type="number" />
+                <TextField
+                  name="jahr"
+                  label="Jahr"
+                  type="number"
+                  handleSubmit={handleSubmit}
+                />
                 <RadioButtonGroup
                   name="entwicklung"
                   label="Entwicklung"
@@ -154,6 +159,7 @@ const Popber = ({ treeName }) => {
                   label="Bemerkungen"
                   type="text"
                   multiLine
+                  handleSubmit={handleSubmit}
                 />
               </Form>
             )}
