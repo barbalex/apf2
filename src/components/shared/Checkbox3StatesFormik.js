@@ -38,7 +38,7 @@ const AsideComment = styled.span`
 const Checkbox3StatesFormik = ({ label, handleSubmit, ...props }) => {
   const [field, meta] = useField(props)
   const { onChange, onBlur, value, name } = field
-  const { errors } = meta
+  const { error: errors } = meta
   const error = errors?.[name]
 
   const onClickButton = useCallback(() => {

@@ -75,7 +75,7 @@ const dateFormat = [
 const DateField = ({ label, handleSubmit, ...props }) => {
   const [field, meta] = useField(props)
   const { onChange, onBlur, value, name } = field
-  const { errors } = meta
+  const { error: errors } = meta
   const error = errors?.[name]
 
   const onChangeDatePicker = useCallback(
