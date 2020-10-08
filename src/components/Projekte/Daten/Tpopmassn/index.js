@@ -22,13 +22,13 @@ import queryLists from './queryLists'
 import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import queryIsMassnTypAnpflanzung from './queryIsMassnTypAnpflanzung'
-import updateTpopmassnByIdGql from './updateTpopmassnById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { tpopmassn } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -60,6 +60,31 @@ const FilesContainer = styled.div`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
+
+const fieldTypes = {
+  typ: 'Int',
+  beschreibung: 'String',
+  jahr: 'Int',
+  datum: 'Date',
+  bemerkungen: 'String',
+  planBezeichnung: 'String',
+  flaeche: 'Int',
+  markierung: 'String',
+  anzTriebe: 'Int',
+  anzPflanzen: 'Int',
+  anzPflanzstellen: 'Int',
+  zieleinheitEinheit: 'Int',
+  zieleinheitAnzahl: 'Int',
+  wirtspflanze: 'String',
+  herkunftPop: 'String',
+  sammeldatum: 'String',
+  vonAnzahlIndividuen: 'Int',
+  form: 'String',
+  pflanzanordnung: 'String',
+  tpopId: 'UUID',
+  bearbeiter: 'UUID',
+  planVorhanden: 'Boolean',
+}
 
 const Tpopmassn = ({ treeName, showFilter = false }) => {
   const store = useContext(storeContext)
@@ -107,6 +132,8 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      // happens after choosing wirtspflanze from select
+      if (!changedField) return
       const value = values[changedField]
       /**
        * enable passing two values
@@ -174,7 +201,42 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
       }
       try {
         await client.mutate({
-          mutation: updateTpopmassnByIdGql,
+          mutation: gql`
+            mutation updateTpopmassn(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              ${changedField === 'jahr' ? '$datum: Date' : ''}
+              ${changedField === 'datum' ? '$jahr: Int' : ''}
+              ${
+                changedField === 'typ' && !!variables?.zieleinheitEinheit
+                  ? '$zieleinheitEinheit: Int'
+                  : ''
+              }
+              $changedBy: String
+            ) {
+              updateTpopmassnById(
+                input: {
+                  id: $id
+                  tpopmassnPatch: {
+                    ${changedField}: $${changedField}
+                    ${changedField === 'jahr' ? 'datum: $datum' : ''}
+                    ${changedField === 'datum' ? 'jahr: $jahr' : ''}
+                    ${
+                      changedField === 'typ' && !!variables?.zieleinheitEinheit
+                        ? 'zieleinheitEinheit: $zieleinheitEinheit'
+                        : ''
+                    }
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                tpopmassn {
+                  ...TpopmassnFields
+                }
+              }
+            }
+            ${tpopmassn}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
@@ -362,7 +424,8 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                       </>
                     )}
                     <SelectLoadingOptionsTypable
-                      field="wirtspflanze"
+                      key={`${id}${!!row.wirtspflanze}`}
+                      name="wirtspflanze"
                       label="Wirtspflanze"
                       handleSubmit={handleSubmit}
                       query={queryAeTaxonomies}
