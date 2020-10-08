@@ -19,11 +19,13 @@ import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryAdresses from './queryAdresses'
 import queryEkfTpops from './queryEkfTpops'
-import updateUserByIdGql from './updateUserById'
 import Select from '../../../shared/Select'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments'
+import {
+  tpopkontr as tpopkontrFragment,
+  user as userFragment,
+} from '../../../shared/fragments'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
@@ -77,6 +79,14 @@ const roleWerte = [
     label: 'manager (sieht und ändert fast alle Daten)',
   },
 ]
+
+const fieldTypes = {
+  name: 'String',
+  email: 'String',
+  role: 'String',
+  pass: 'String',
+  adresseId: 'UUID',
+}
 
 const User = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -140,7 +150,26 @@ const User = ({ treeName }) => {
       const value = ifIsNumericAsNumber(event.target.value)
       try {
         await client.mutate({
-          mutation: updateUserByIdGql,
+          mutation: gql`
+            mutation updateUserForUser(
+              $id: UUID!
+              $${field}: ${fieldTypes[field]}
+            ) {
+              updateUserById(
+                input: {
+                  id: $id
+                  userPatch: {
+                    ${field}: $${field}
+                  }
+                }
+              ) {
+                user {
+                  ...UserFields
+                }
+              }
+            }
+            ${userFragment}
+          `,
           variables: {
             id: row.id,
             [field]: value,
