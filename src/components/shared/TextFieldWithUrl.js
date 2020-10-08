@@ -38,7 +38,7 @@ const TextFieldWithUrl = ({
   hintText = '',
 }) => {
   const { onChange, onBlur, value, name } = field
-  const { errors, handleSubmit } = form
+  const { error: errors, handleSubmit } = form
   const error = errors?.[name]
 
   const urls = value ? getUrls(value) : []

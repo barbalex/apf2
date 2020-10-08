@@ -203,6 +203,7 @@ const File = ({ file, parent, refetch }) => {
                   label="Datei-Typ"
                   disabled
                   schrinkLabel
+                  handleSubmit={handleSubmit}
                 />
               </DateiTypField>
               <Spacer />
@@ -212,6 +213,7 @@ const File = ({ file, parent, refetch }) => {
                   label="Datei-Name"
                   disabled
                   schrinkLabel
+                  handleSubmit={handleSubmit}
                 />
               </DateiNameField>
               <Spacer />
@@ -221,6 +223,7 @@ const File = ({ file, parent, refetch }) => {
                   label="Beschreibung"
                   multiLine
                   schrinkLabel
+                  handleSubmit={handleSubmit}
                 />
               </BeschreibungField>
               <DownloadIcon title="herunterladen" onClick={onClickDownload}>

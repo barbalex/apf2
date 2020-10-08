@@ -25,17 +25,17 @@ const PopoverContentRow = styled.div`
 `
 
 const TextFieldWithInfo = ({
-  field,
-  form,
   label,
   type = 'text',
   multiLine = false,
   disabled = false,
   hintText = '',
   popover,
+  ...props
 }) => {
+  const [field, meta] = useField(props)
   const { onChange, onBlur, value, name } = field
-  const { errors, handleSubmit } = form
+  const { error: errors, handleSubmit } = meta
   const error = errors?.[name]
 
   const onKeyPress = useCallback(

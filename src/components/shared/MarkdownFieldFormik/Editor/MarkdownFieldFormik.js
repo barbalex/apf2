@@ -45,7 +45,7 @@ const config = {
 const MarkdownField = ({ label, disabled, ...props }) => {
   const [field, meta] = useField(props)
   const { onBlur, onChange, value, name } = field
-  const { errors } = meta
+  const { error: errors } = meta
   const error = errors?.[name]
 
   const change = useCallback(
