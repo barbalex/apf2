@@ -199,10 +199,10 @@ const Tpopmassn = ({ treeName }) => {
                     type="text"
                     multiLine
                   />
-                  <Field
+                  <Checkbox2States
                     name="planVorhanden"
                     label="Plan vorhanden"
-                    component={Checkbox2States}
+                    handleSubmit={handleSubmit}
                   />
                   <TextField
                     name="planBezeichnung"

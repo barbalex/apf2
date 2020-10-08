@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { useField } from 'formik'
 
 // without slight padding radio is slightly cut off!
 const StyledFormControl = styled(FormControl)`
@@ -34,9 +35,10 @@ const AsideComment = styled.span`
   color: rgba(0, 0, 0, 0.54);
 `
 
-const RadioButton = ({ field, form, label }) => {
+const Checkbox3StatesFormik = ({ label, handleSubmit, ...props }) => {
+  const [field, meta] = useField(props)
   const { onChange, onBlur, value, name } = field
-  const { errors, handleSubmit } = form
+  const { errors } = meta
   const error = errors?.[name]
 
   const onClickButton = useCallback(() => {
@@ -93,8 +95,4 @@ const RadioButton = ({ field, form, label }) => {
   )
 }
 
-RadioButton.defaultProps = {
-  value: 'false',
-}
-
-export default observer(RadioButton)
+export default observer(Checkbox3StatesFormik)

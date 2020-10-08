@@ -281,10 +281,10 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                       loading={loadingAdresses}
                     />
                     <MdField name="bemerkungen" label="Bemerkungen" />
-                    <Field
+                    <Checkbox2States
                       name="planVorhanden"
                       label="Plan vorhanden"
-                      component={Checkbox2States}
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="planBezeichnung"
