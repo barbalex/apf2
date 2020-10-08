@@ -168,7 +168,7 @@ const ApFilter = ({ treeName }) => {
           >
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
+                <SelectLoadingOptions
                   name="artId"
                   valueLabelPath="aeTaxonomyByArtId.artname"
                   label="Art (gibt dem Aktionsplan den Namen)"
@@ -183,7 +183,7 @@ const ApFilter = ({ treeName }) => {
                   query={queryAeTaxonomies}
                   filter={aeTaxonomiesFilter}
                   queryNodesName="allAeTaxonomies"
-                  component={SelectLoadingOptions}
+                  handleSubmit={handleSubmit}
                 />
                 <RadioButtonGroupWithInfo
                   name="bearbeitung"

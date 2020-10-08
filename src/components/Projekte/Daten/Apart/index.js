@@ -192,7 +192,7 @@ const ApArt = ({ treeName }) => {
                 key={row ? row.id : 'artid'}
                 onBlur={() => dirty && handleSubmit()}
               >
-                <Field
+                <SelectLoadingOptions
                   name="artId"
                   valueLabel={
                     dataAeEigById.aeTaxonomyById
@@ -204,7 +204,7 @@ const ApArt = ({ treeName }) => {
                   query={queryAeTaxonomies}
                   filter={aeTaxonomiesfilter}
                   queryNodesName="allAeTaxonomies"
-                  component={SelectLoadingOptions}
+                  handleSubmit={handleSubmit}
                 />
               </Form>
             )}

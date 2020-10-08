@@ -190,7 +190,7 @@ const ApAp = ({ treeName, id }) => {
       <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
         {({ handleSubmit, dirty }) => (
           <Form onBlur={() => dirty && handleSubmit()}>
-            <Field
+            <SelectLoadingOptions
               name="artId"
               valueLabelPath="aeTaxonomyByArtId.taxArtName"
               label="Art (gibt dem Aktionsplan den Namen)"
@@ -198,7 +198,7 @@ const ApAp = ({ treeName, id }) => {
               query={queryAeTaxonomies}
               filter={aeTaxonomiesfilterForData}
               queryNodesName="allAeTaxonomies"
-              component={SelectLoadingOptions}
+              handleSubmit={handleSubmit}
             />
             <RadioButtonGroupWithInfo
               name="bearbeitung"
