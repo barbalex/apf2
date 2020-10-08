@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -162,7 +162,7 @@ const Tpopkontrzaehl = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
+                <Select
                   name="einheit"
                   label="Einheit"
                   options={get(
@@ -171,12 +171,13 @@ const Tpopkontrzaehl = ({ treeName }) => {
                     [],
                   )}
                   loading={loadingLists}
-                  component={Select}
+                  handleSubmit={handleSubmit}
                 />
                 <TextField
                   name="anzahl"
                   label="Anzahl (nur ganze Zahlen)"
                   type="number"
+                  handleSubmit={handleSubmit}
                 />
                 <RadioButtonGroup
                   name="methode"

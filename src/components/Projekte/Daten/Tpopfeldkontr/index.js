@@ -388,7 +388,12 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
               >
                 {({ handleSubmit, dirty }) => (
                   <Form onBlur={() => dirty && handleSubmit()}>
-                    <TextField name="jahr" label="Jahr" type="number" />
+                    <TextField
+                      name="jahr"
+                      label="Jahr"
+                      type="number"
+                      handleSubmit={handleSubmit}
+                    />
                     <DateField
                       name="datum"
                       label="Datum"
@@ -398,14 +403,13 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       name="typ"
                       label="Kontrolltyp"
                       dataSource={tpopkontrTypWerte}
-                      handleSubmit={handleSubmit}
                     />
-                    <Field
+                    <Select
                       name="bearbeiter"
                       label="BearbeiterIn"
-                      component={Select}
                       options={get(dataAdresses, 'allAdresses.nodes', [])}
                       loading={loadingAdresses}
+                      handleSubmit={handleSubmit}
                     />
                     <Checkbox3States
                       name="jungpflanzenVorhanden"
@@ -416,11 +420,13 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       name="vitalitaet"
                       label="Vitalität"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="ueberlebensrate"
                       label="Überlebensrate (in Prozent)"
                       type="number"
+                      handleSubmit={handleSubmit}
                     />
                     <RadioButtonGroupWithInfo
                       name="entwicklung"
@@ -440,30 +446,35 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       hintText="Standort: ..., Klima: ..., anderes: ..."
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="gefaehrdung"
                       label="Gefährdung"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="erfolgsbeurteilung"
                       label="Erfolgsbeurteilung"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="umsetzungAendern"
                       label="Änderungs-Vorschläge Umsetzung"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="kontrolleAendern"
                       label="Änderungs-Vorschläge Kontrolle"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     <MdField name="bemerkungen" label="Bemerkungen" />
                     <Field
@@ -476,6 +487,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       label="Wieso im Jahresbericht nicht berücksichtigen?"
                       type="text"
                       multiLine
+                      handleSubmit={handleSubmit}
                     />
                     {!showFilter && <StringToCopy text={row.id} label="id" />}
                   </Form>
@@ -492,84 +504,106 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
               >
                 {({ handleSubmit, dirty }) => (
                   <Form onBlur={() => dirty && handleSubmit()}>
-                    <TextField name="flaeche" label="Fläche" type="number" />
+                    <TextField
+                      name="flaeche"
+                      label="Fläche"
+                      type="number"
+                      handleSubmit={handleSubmit}
+                    />
                     <Section>Vegetation</Section>
-                    <Field
+                    <Select
                       data-id="lrDelarze"
                       name="lrDelarze"
                       label="Lebensraum nach Delarze"
-                      component={Select}
                       options={aeLrWerte}
                       loading={loadingLists}
+                      handleSubmit={handleSubmit}
                     />
-                    <Field
+                    <Select
                       name="lrUmgebungDelarze"
                       label="Umgebung nach Delarze"
-                      component={Select}
                       options={aeLrWerte}
                       loading={loadingLists}
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="vegetationstyp"
                       label="Vegetationstyp"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="konkurrenz"
                       label="Konkurrenz"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="moosschicht"
                       label="Moosschicht"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="krautschicht"
                       label="Krautschicht"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="strauchschicht"
                       label="Strauchschicht"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="baumschicht"
                       label="Baumschicht"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <Section>Boden</Section>
-                    <TextField name="bodenTyp" label="Typ" type="text" />
+                    <TextField
+                      name="bodenTyp"
+                      label="Typ"
+                      type="text"
+                      handleSubmit={handleSubmit}
+                    />
                     <TextField
                       name="bodenKalkgehalt"
                       label="Kalkgehalt"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="bodenDurchlaessigkeit"
                       label="Durchlässigkeit"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="bodenHumus"
                       label="Humusgehalt"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="bodenNaehrstoffgehalt"
                       label="Nährstoffgehalt"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="bodenAbtrag"
                       label="Bodenabtrag"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="wasserhaushalt"
                       label="Wasserhaushalt"
                       type="text"
+                      handleSubmit={handleSubmit}
                     />
                     <Section>Beurteilung</Section>
                     <TextField
@@ -577,6 +611,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       label="Handlungsbedarf"
                       type="text"
                       multiline
+                      handleSubmit={handleSubmit}
                     />
                     <RadioButtonGroup
                       name="idealbiotopUebereinstimmung"

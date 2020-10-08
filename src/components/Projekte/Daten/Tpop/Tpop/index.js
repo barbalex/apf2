@@ -52,19 +52,24 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
       >
         {({ handleSubmit, handleChange, handleBlur, dirty, setErrors }) => (
           <Form onBlur={() => dirty && handleSubmit()}>
-            <TextField name="nr" label="Nr." type="number" />
-            <Field
+            <TextField
+              name="nr"
+              label="Nr."
+              type="number"
+              handleSubmit={handleSubmit}
+            />
+            <TextFieldWithInfo
               name="flurname"
               label="Flurname"
               type="text"
               popover="Dieses Feld möglichst immer ausfüllen"
-              component={TextFieldWithInfo}
+              handleSubmit={handleSubmit}
             />
-            <Field
+            <Status
               apJahr={apJahr}
               treeName={treeName}
               showFilter={showFilter}
-              component={Status}
+              handleSubmit={handleSubmit}
             />
             <Checkbox2States
               name="statusUnklar"
@@ -76,6 +81,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
               label="Begründung"
               type="text"
               multiLine
+              handleSubmit={handleSubmit}
             />
             <Checkbox2States
               name="apberRelevant"
@@ -170,34 +176,78 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
                 component={SelectCreatable}
               />
             )}
-            <TextField name="radius" label="Radius (m)" type="number" />
-            <TextField name="hoehe" label="Höhe (m.ü.M.)" type="number" />
+            <TextField
+              name="radius"
+              label="Radius (m)"
+              type="number"
+              handleSubmit={handleSubmit}
+            />
+            <TextField
+              name="hoehe"
+              label="Höhe (m.ü.M.)"
+              type="number"
+              handleSubmit={handleSubmit}
+            />
             <TextField
               name="exposition"
               label="Exposition, Besonnung"
               type="text"
+              handleSubmit={handleSubmit}
             />
-            <TextField name="klima" label="Klima" type="text" />
-            <TextField name="neigung" label="Hangneigung" type="text" />
+            <TextField
+              name="klima"
+              label="Klima"
+              type="text"
+              handleSubmit={handleSubmit}
+            />
+            <TextField
+              name="neigung"
+              label="Hangneigung"
+              type="text"
+              handleSubmit={handleSubmit}
+            />
             <TextField
               name="beschreibung"
               label="Beschreibung"
               type="text"
               multiline
+              handleSubmit={handleSubmit}
             />
-            <TextField name="katasterNr" label="Kataster-Nr." type="text" />
-            <TextField name="eigentuemer" label="EigentümerIn" type="text" />
-            <TextField name="kontakt" label="Kontakt vor Ort" type="text" />
-            <TextField name="nutzungszone" label="Nutzungszone" type="text" />
+            <TextField
+              name="katasterNr"
+              label="Kataster-Nr."
+              type="text"
+              handleSubmit={handleSubmit}
+            />
+            <TextField
+              name="eigentuemer"
+              label="EigentümerIn"
+              type="text"
+              handleSubmit={handleSubmit}
+            />
+            <TextField
+              name="kontakt"
+              label="Kontakt vor Ort"
+              type="text"
+              handleSubmit={handleSubmit}
+            />
+            <TextField
+              name="nutzungszone"
+              label="Nutzungszone"
+              type="text"
+              handleSubmit={handleSubmit}
+            />
             <TextField
               name="bewirtschafter"
               label="BewirtschafterIn"
               type="text"
+              handleSubmit={handleSubmit}
             />
             <TextField
               name="bewirtschaftung"
               label="Bewirtschaftung"
               type="text"
+              handleSubmit={handleSubmit}
             />
             <MdField name="bemerkungen" label="Bemerkungen" />
           </Form>
