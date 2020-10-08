@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import AddLocation from '@material-ui/icons/AddLocationOutlined'
 import { observer } from 'mobx-react-lite'
+import { useField } from 'formik'
 
 import exists from '../../modules/exists'
 
@@ -79,8 +80,6 @@ const StyledIconButton = styled(IconButton)`
 `
 
 const SharedSelectCreatable = ({
-  field,
-  form,
   label,
   options: optionsIn,
   loading,
@@ -88,9 +87,12 @@ const SharedSelectCreatable = ({
   onClickLocate,
   maxHeight = null,
   noCaret = false,
+  handleSubmit,
+  ...props
 }) => {
+  const [field, meta] = useField(props)
   const { onChange, onBlur, value, name } = field
-  const { error: errors, handleSubmit } = form
+  const { error: errors } = meta
   const error = errors?.[name]
 
   const [stateValue, setStateValue] = useState(null)

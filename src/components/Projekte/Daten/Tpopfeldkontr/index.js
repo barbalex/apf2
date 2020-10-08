@@ -247,13 +247,6 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
-      if (!changedField) return
-      console.log('Tpopfeldkontr, onSubmit', {
-        values,
-        changedField,
-        value,
-        showFilter,
-      })
       if (showFilter) {
         dataFilterSetValue({
           treeName,
@@ -403,6 +396,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       name="typ"
                       label="Kontrolltyp"
                       dataSource={tpopkontrTypWerte}
+                      handleSubmit={handleSubmit}
                     />
                     <Select
                       name="bearbeiter"
@@ -477,10 +471,10 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       handleSubmit={handleSubmit}
                     />
                     <MdField name="bemerkungen" label="Bemerkungen" />
-                    <Field
+                    <Checkbox3States
                       name="apberNichtRelevant"
                       label="Im Jahresbericht nicht berücksichtigen"
-                      component={Checkbox3States}
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="apberNichtRelevantGrund"

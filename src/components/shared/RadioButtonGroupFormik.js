@@ -144,8 +144,4 @@ const RadioButtonGroup = ({
   )
 }
 
-RadioButtonGroup.defaultProps = {
-  value: null,
-}
-
 export default observer(RadioButtonGroup)
