@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import TextField from '../../../../shared/TextFieldFormik'
 import TextFieldWithInfo from '../../../../shared/TextFieldWithInfoFormik'

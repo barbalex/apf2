@@ -6,7 +6,7 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import Checkbox3States from '../../../shared/Checkbox3StatesFormik'
