@@ -127,10 +127,30 @@ const Adresse = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField name="name" label="Name" type="text" />
-                <TextField name="adresse" label="Adresse" type="text" />
-                <TextField name="telefon" label="Telefon" type="text" />
-                <TextField name="email" label="Email" type="email" />
+                <TextField
+                  name="name"
+                  label="Name"
+                  type="text"
+                  handleSubmit={handleSubmit}
+                />
+                <TextField
+                  name="adresse"
+                  label="Adresse"
+                  type="text"
+                  handleSubmit={handleSubmit}
+                />
+                <TextField
+                  name="telefon"
+                  label="Telefon"
+                  type="text"
+                  handleSubmit={handleSubmit}
+                />
+                <TextField
+                  name="email"
+                  label="Email"
+                  type="email"
+                  handleSubmit={handleSubmit}
+                />
                 <Checkbox2States
                   name="freiwErfko"
                   label="freiwillige ErfolgskontrolleurIn"
@@ -141,18 +161,21 @@ const Adresse = ({ treeName }) => {
                   label="EvAB Vorname"
                   type="text"
                   helperText="Wird für den Export in EvAB benötigt"
+                  handleSubmit={handleSubmit}
                 />
                 <TextField
                   name="evabNachname"
                   label="EvAB Nachname"
                   type="text"
                   helperText="Wird für den Export in EvAB benötigt"
+                  handleSubmit={handleSubmit}
                 />
                 <TextField
                   name="evabOrt"
                   label="EvAB Ort"
                   type="text"
                   helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
+                  handleSubmit={handleSubmit}
                 />
               </Form>
             )}

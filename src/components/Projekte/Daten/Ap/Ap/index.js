@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
 
 import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfoFormik'
@@ -230,7 +230,12 @@ const ApAp = ({ treeName, id }) => {
               label="Aktionsplan"
               handleSubmit={handleSubmit}
             />
-            <TextField name="startJahr" label="Start im Jahr" type="number" />
+            <TextField
+              name="startJahr"
+              label="Start im Jahr"
+              type="number"
+              handleSubmit={handleSubmit}
+            />
             <FieldContainer>
               <RadioButtonGroupWithInfo
                 name="umsetzung"
@@ -266,18 +271,19 @@ const ApAp = ({ treeName, id }) => {
                 handleSubmit={handleSubmit}
               />
             </FieldContainer>
-            <Field
+            <Select
               name="bearbeiter"
               label="Verantwortlich"
               options={get(dataAdresses, 'allAdresses.nodes', [])}
               loading={loadingAdresses}
-              component={Select}
+              handleSubmit={handleSubmit}
             />
             <ApUsers apId={row.id} />
             <TextField
               key={`${row.id}ekfBeobachtungszeitpunkt`}
               name="ekfBeobachtungszeitpunkt"
               label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
+              handleSubmit={handleSubmit}
             />
             <TextFieldNonUpdatable
               key={`${row.id}artwert`}
@@ -287,6 +293,7 @@ const ApAp = ({ treeName, id }) => {
                 'aeTaxonomyByArtId.artwert',
                 'Diese Art hat keinen Artwert',
               )}
+              handleSubmit={handleSubmit}
             />
           </Form>
         )}

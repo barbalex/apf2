@@ -163,6 +163,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                     name="email"
                     label="Email"
                     helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
+                    handleSubmit={handleSubmit}
                   />
                   {!!passwordMessage && (
                     <PasswordMessage>{passwordMessage}</PasswordMessage>
