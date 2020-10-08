@@ -190,18 +190,12 @@ const Ekfrequenz = ({ treeName }) => {
                   dirty && handleSubmit()
                 }}
               >
-                <Field
-                  name="code"
-                  label="Kürzel"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
+                <TextField name="code" label="Kürzel" type="text" />
+                <TextField
                   name="anwendungsfall"
                   label="Anwendungsfall"
                   type="text"
                   multiLine
-                  component={TextField}
                 />
                 <Field
                   name="ektyp"
@@ -287,19 +281,13 @@ const Ekfrequenz = ({ treeName }) => {
                     />
                   )}
                 </div>
-                <Field
+                <TextField
                   name="bemerkungen"
                   label="Bemerkungen"
                   type="text"
                   multiLine
-                  component={TextField}
                 />
-                <Field
-                  name="sort"
-                  label="Sortierung"
-                  type="number"
-                  component={TextField}
-                />
+                <TextField name="sort" label="Sortierung" type="number" />
               </Form>
             )}
           </Formik>

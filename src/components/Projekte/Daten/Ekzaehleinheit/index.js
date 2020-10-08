@@ -180,18 +180,12 @@ const Ekzaehleinheit = ({ treeName }) => {
                   label="zielrelevant"
                   component={Checkbox2States}
                 />
-                <Field
-                  name="sort"
-                  label="Sortierung"
-                  type="number"
-                  component={TextField}
-                />
-                <Field
+                <TextField name="sort" label="Sortierung" type="number" />
+                <TextField
                   name="bemerkungen"
                   label="Bemerkungen"
                   type="text"
                   multiLine
-                  component={TextField}
                 />
               </Form>
             )}

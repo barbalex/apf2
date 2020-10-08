@@ -159,12 +159,11 @@ const Assozart = ({ treeName }) => {
                   queryNodesName="allAeTaxonomies"
                   component={SelectLoadingOptions}
                 />
-                <Field
+                <TextField
                   name="bemerkungen"
                   label="Bemerkungen zur Assoziation"
                   type="text"
                   multiLine
-                  component={TextField}
                 />
               </Form>
             )}

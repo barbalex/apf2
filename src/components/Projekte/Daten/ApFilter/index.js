@@ -213,11 +213,10 @@ const ApFilter = ({ treeName }) => {
                   label="Aktionsplan"
                   component={RadioButtonGroupWithInfo}
                 />
-                <Field
+                <TextField
                   name="startJahr"
                   label="Start im Jahr"
                   type="number"
-                  component={TextField}
                 />
                 <FieldContainer>
                   <Field
@@ -263,10 +262,9 @@ const ApFilter = ({ treeName }) => {
                   loading={loadingAdresses}
                   component={Select}
                 />
-                <Field
+                <TextField
                   name="ekfBeobachtungszeitpunkt"
                   label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
-                  component={TextField}
                 />
               </Form>
             )}

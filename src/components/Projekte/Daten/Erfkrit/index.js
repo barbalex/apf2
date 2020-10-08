@@ -137,12 +137,11 @@ const Erfkrit = ({ treeName }) => {
                   loading={loadingLists}
                   component={RadioButtonGroup}
                 />
-                <Field
+                <TextField
                   name="kriterien"
                   label="Kriterien"
                   type="text"
                   multiLine
-                  component={TextField}
                 />
               </Form>
             )}
