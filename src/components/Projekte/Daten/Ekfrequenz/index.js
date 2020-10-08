@@ -197,12 +197,12 @@ const Ekfrequenz = ({ treeName }) => {
                   type="text"
                   multiLine
                 />
-                <Field
+                <RadioButtonGroup
                   name="ektyp"
                   dataSource={ektypeWertes}
                   loading={false}
                   label="EK-Typ"
-                  component={RadioButtonGroup}
+                  handleSubmit={handleSubmit}
                 />
                 <FieldArray
                   name="kontrolljahre"
@@ -257,18 +257,18 @@ const Ekfrequenz = ({ treeName }) => {
                     </KontrolljahrContainer>
                   )}
                 />
-                <Field
+                <RadioButtonGroup
                   name="kontrolljahreAb"
                   dataSource={kontrolljahreAbWertes}
                   loading={false}
                   label="Kontrolljahre ab letzter"
-                  component={RadioButtonGroup}
+                  handleSubmit={handleSubmit}
                 />
                 <div>
                   {errorEkAbrechnungstypWertes ? (
                     errorEkAbrechnungstypWertes.message
                   ) : (
-                    <Field
+                    <RadioButtonGroup
                       name="ekAbrechnungstyp"
                       dataSource={get(
                         dataEkAbrechnungstypWertes,
@@ -277,7 +277,7 @@ const Ekfrequenz = ({ treeName }) => {
                       )}
                       loading={loadingEkAbrechnungstypWertes}
                       label="EK-Abrechnungstyp"
-                      component={RadioButtonGroup}
+                      handleSubmit={handleSubmit}
                     />
                   )}
                 </div>

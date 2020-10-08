@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -130,12 +130,12 @@ const Erfkrit = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
+                <RadioButtonGroup
                   name="erfolg"
                   label="Beurteilung"
                   dataSource={get(dataLists, 'allApErfkritWertes.nodes', [])}
                   loading={loadingLists}
-                  component={RadioButtonGroup}
+                  handleSubmit={handleSubmit}
                 />
                 <TextField
                   name="kriterien"
