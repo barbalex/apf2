@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form, Field } from 'formik'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -24,7 +24,6 @@ import query from './query'
 import queryLists from './queryLists'
 import queryAdresses from './queryAdresses'
 import queryTpopkontrs from './queryTpopkontrs'
-import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopfeldkontrType } from '../../../../store/Tree/DataFilter/tpopfeldkontr'
@@ -32,6 +31,7 @@ import Files from '../../../shared/Files'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { tpopfeldkontr } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: ${(props) =>
@@ -76,6 +76,51 @@ const Section = styled.div`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
+
+const fieldTypes = {
+  typ: 'String',
+  datum: 'Date',
+  jahr: 'Int',
+  vitalitaet: 'String',
+  ueberlebensrate: 'Int',
+  entwicklung: 'Int',
+  ursachen: 'String',
+  erfolgsbeurteilung: 'String',
+  umsetzungAendern: 'String',
+  kontrolleAendern: 'String',
+  bemerkungen: 'String',
+  lrDelarze: 'String',
+  flaeche: 'Int',
+  lrUmgebungDelarze: 'String',
+  vegetationstyp: 'String',
+  konkurrenz: 'String',
+  moosschicht: 'String',
+  krautschicht: 'String',
+  strauchschicht: 'String',
+  baumschicht: 'String',
+  bodenTyp: 'String',
+  bodenKalkgehalt: 'String',
+  bodenDurchlaessigkeit: 'String',
+  bodenHumus: 'String',
+  bodenNaehrstoffgehalt: 'String',
+  bodenAbtrag: 'String',
+  wasserhaushalt: 'String',
+  idealbiotopUebereinstimmung: 'Int',
+  handlungsbedarf: 'String',
+  flaecheUeberprueft: 'Int',
+  deckungVegetation: 'Int',
+  deckungNackterBoden: 'Int',
+  deckungApArt: 'Int',
+  vegetationshoeheMaximum: 'Int',
+  vegetationshoeheMittel: 'Int',
+  gefaehrdung: 'String',
+  tpopId: 'UUID',
+  bearbeiter: 'UUID',
+  planVorhanden: 'Boolean',
+  jungpflanzenVorhanden: 'Boolean',
+  apberNichtRelevant: 'Boolean',
+  apberNichtRelevantGrund: 'String',
+}
 
 const tpopkontrTypWerte = [
   {
@@ -202,6 +247,12 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
+      console.log('Tpopfeldkontr, onSubmit', {
+        values,
+        changedField,
+        value,
+        showFilter,
+      })
       if (showFilter) {
         dataFilterSetValue({
           treeName,
@@ -225,7 +276,32 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
         }
         try {
           await client.mutate({
-            mutation: updateTpopkontrByIdGql,
+            mutation: gql`
+              mutation updateTpopkontrForEk(
+                $id: UUID!
+                $${changedField}: ${fieldTypes[changedField]}
+                ${changedField === 'jahr' ? '$datum: Date' : ''}
+                ${changedField === 'datum' ? '$jahr: Int' : ''}
+                $changedBy: String
+              ) {
+                updateTpopkontrById(
+                  input: {
+                    id: $id
+                    tpopkontrPatch: {
+                      ${changedField}: $${changedField}
+                      ${changedField === 'jahr' ? 'datum: $datum' : ''}
+                      ${changedField === 'datum' ? 'jahr: $jahr' : ''}
+                      changedBy: $changedBy
+                    }
+                  }
+                ) {
+                  tpopkontr {
+                    ...TpopfeldkontrFields
+                  }
+                }
+              }
+              ${tpopfeldkontr}
+            `,
             variables,
             optimisticResponse: {
               __typename: 'Mutation',
@@ -311,12 +387,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
               >
                 {({ handleSubmit, dirty }) => (
                   <Form onBlur={() => dirty && handleSubmit()}>
-                    <Field
-                      name="jahr"
-                      label="Jahr"
-                      type="number"
-                      component={TextField}
-                    />
+                    <TextField name="jahr" label="Jahr" type="number" />
                     <Field name="datum" label="Datum" component={DateField} />
                     <Field
                       name="typ"
@@ -336,17 +407,15 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       label="Jungpflanzen vorhanden"
                       component={Checkbox3States}
                     />
-                    <Field
+                    <TextField
                       name="vitalitaet"
                       label="Vitalität"
                       type="text"
-                      component={TextField}
                     />
-                    <Field
+                    <TextField
                       name="ueberlebensrate"
                       label="Überlebensrate (in Prozent)"
                       type="number"
-                      component={TextField}
                     />
                     <Field
                       name="entwicklung"
@@ -360,40 +429,35 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       loading={loadingLists}
                       popover={TpopfeldkontrentwicklungPopover}
                     />
-                    <Field
+                    <TextField
                       name="ursachen"
                       label="Ursachen"
                       hintText="Standort: ..., Klima: ..., anderes: ..."
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="gefaehrdung"
                       label="Gefährdung"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="erfolgsbeurteilung"
                       label="Erfolgsbeurteilung"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="umsetzungAendern"
                       label="Änderungs-Vorschläge Umsetzung"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
-                    <Field
+                    <TextField
                       name="kontrolleAendern"
                       label="Änderungs-Vorschläge Kontrolle"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
                     <Field
@@ -406,11 +470,10 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       label="Im Jahresbericht nicht berücksichtigen"
                       component={Checkbox3States}
                     />
-                    <Field
+                    <TextField
                       name="apberNichtRelevantGrund"
                       label="Wieso im Jahresbericht nicht berücksichtigen?"
                       type="text"
-                      component={TextField}
                       multiLine
                     />
                     {!showFilter && <StringToCopy text={row.id} label="id" />}
@@ -428,12 +491,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
               >
                 {({ handleSubmit, dirty }) => (
                   <Form onBlur={() => dirty && handleSubmit()}>
-                    <Field
-                      name="flaeche"
-                      label="Fläche"
-                      type="number"
-                      component={TextField}
-                    />
+                    <TextField name="flaeche" label="Fläche" type="number" />
                     <Section>Vegetation</Section>
                     <Field
                       data-id="lrDelarze"
@@ -450,91 +508,73 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       options={aeLrWerte}
                       loading={loadingLists}
                     />
-                    <Field
+                    <TextField
                       name="vegetationstyp"
                       label="Vegetationstyp"
                       type="text"
-                      component={TextField}
                     />
-                    <Field
+                    <TextField
                       name="konkurrenz"
                       label="Konkurrenz"
                       type="text"
-                      component={TextField}
                     />
-                    <Field
+                    <TextField
                       name="moosschicht"
                       label="Moosschicht"
                       type="text"
-                      component={TextField}
                     />
-                    <Field
+                    <TextField
                       name="krautschicht"
                       label="Krautschicht"
                       type="text"
-                      component={TextField}
                     />
-                    <Field
+                    <TextField
                       name="strauchschicht"
                       label="Strauchschicht"
                       type="text"
-                      component={TextField}
                     />
-                    <Field
+                    <TextField
                       name="baumschicht"
                       label="Baumschicht"
                       type="text"
-                      component={TextField}
                     />
                     <Section>Boden</Section>
-                    <Field
-                      name="bodenTyp"
-                      label="Typ"
-                      type="text"
-                      component={TextField}
-                    />
-                    <Field
+                    <TextField name="bodenTyp" label="Typ" type="text" />
+                    <TextField
                       name="bodenKalkgehalt"
                       label="Kalkgehalt"
                       type="text"
-                      component={TextField}
                     />
-                    <Field
+                    <TextField
                       name="bodenDurchlaessigkeit"
                       label="Durchlässigkeit"
                       type="text"
-                      component={TextField}
                     />
-                    <Field
+                    <TextField
                       name="bodenHumus"
                       label="Humusgehalt"
                       type="text"
-                      component={TextField}
                     />
-                    <Field
+                    <TextField
                       name="bodenNaehrstoffgehalt"
                       label="Nährstoffgehalt"
                       type="text"
-                      component={TextField}
                     />
-                    <Field
+                    <TextField
                       name="bodenAbtrag"
                       label="Bodenabtrag"
                       type="text"
-                      component={TextField}
                     />
-                    <Field
+                    <TextField
                       name="wasserhaushalt"
                       label="Wasserhaushalt"
                       type="text"
-                      component={TextField}
                     />
                     <Section>Beurteilung</Section>
-                    <Field
+                    <TextField
                       name="handlungsbedarf"
                       label="Handlungsbedarf"
                       type="text"
-                      component={TextField}
                       multiline
                     />
                     <Field

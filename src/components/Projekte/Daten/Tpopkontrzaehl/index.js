@@ -173,11 +173,10 @@ const Tpopkontrzaehl = ({ treeName }) => {
                   loading={loadingLists}
                   component={Select}
                 />
-                <Field
+                <TextField
                   name="anzahl"
                   label="Anzahl (nur ganze Zahlen)"
                   type="number"
-                  component={TextField}
                 />
                 <Field
                   name="methode"
