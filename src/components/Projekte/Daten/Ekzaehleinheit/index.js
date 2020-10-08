@@ -175,10 +175,10 @@ const Ekzaehleinheit = ({ treeName }) => {
                   loading={loadingLists}
                   component={Select}
                 />
-                <Field
+                <Checkbox2States
                   name="zielrelevant"
                   label="zielrelevant"
-                  component={Checkbox2States}
+                  handleSubmit={handleSubmit}
                 />
                 <TextField name="sort" label="Sortierung" type="number" />
                 <TextField

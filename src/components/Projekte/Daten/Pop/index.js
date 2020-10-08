@@ -196,10 +196,10 @@ const Pop = ({ treeName }) => {
                     showFilter={false}
                     component={Status}
                   />
-                  <Field
+                  <Checkbox2States
                     label="Status unklar"
                     name="statusUnklar"
-                    component={Checkbox2States}
+                    handleSubmit={handleSubmit}
                   />
                   <TextField
                     label="Begründung"

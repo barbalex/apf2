@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
 
 import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
@@ -131,10 +131,10 @@ const Adresse = ({ treeName }) => {
                 <TextField name="adresse" label="Adresse" type="text" />
                 <TextField name="telefon" label="Telefon" type="text" />
                 <TextField name="email" label="Email" type="email" />
-                <Field
+                <Checkbox2States
                   name="freiwErfko"
                   label="freiwillige ErfolgskontrolleurIn"
-                  component={Checkbox2States}
+                  handleSubmit={handleSubmit}
                 />
                 <TextField
                   name="evabVorname"
