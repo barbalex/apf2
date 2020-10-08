@@ -2,12 +2,18 @@ import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useQuery, useApolloClient } from '@apollo/client'
+import { useQuery, useApolloClient, gql } from '@apollo/client'
 
 import Select from '../../../../shared/Select'
 import storeContext from '../../../../../storeContext'
 import queryAdresses from './queryAdresses'
-import updateTpopkontrByIdGql from '../updateTpopkontrById'
+import {
+  adresse as adresseFragment,
+  pop as popFragment,
+  tpop as tpopFragment,
+  tpopfreiwkontr as tpopfreiwkontrFragment,
+  tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
+} from '../../../../shared/fragments'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -97,7 +103,62 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateTpopkontrByIdGql,
+          mutation: gql`
+            mutation updateTpopkontrForEkf(
+              $id: UUID!
+              $bearbeiter: UUID
+              $changedBy: String
+            ) {
+              updateTpopkontrById(
+                input: {
+                  id: $id
+                  tpopkontrPatch: {
+                    bearbeiter: $bearbeiter
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                tpopkontr {
+                  ...TpopfreiwkontrFields
+                  adresseByBearbeiter {
+                    ...AdresseFields
+                    usersByAdresseId {
+                      totalCount
+                    }
+                  }
+                  tpopByTpopId {
+                    ...TpopFields
+                    popByPopId {
+                      ...PopFields
+                      apByApId {
+                        id
+                        ekzaehleinheitsByApId {
+                          nodes {
+                            id
+                            tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                              ...TpopkontrzaehlEinheitWerteFields
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                  tpopkontrzaehlsByTpopkontrId {
+                    nodes {
+                      id
+                      anzahl
+                      einheit
+                    }
+                  }
+                }
+              }
+            }
+            ${adresseFragment}
+            ${popFragment}
+            ${tpopFragment}
+            ${tpopfreiwkontrFragment}
+            ${tpopkontrzaehlEinheitWerteFragment}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',

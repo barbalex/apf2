@@ -360,48 +360,18 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
           mutation: gql`
             mutation updateTpopkontrForEkf(
               $id: UUID!
-              $typ: String
-              $datum: Date
-              $jahr: Int
-              $bemerkungen: String
-              $flaecheUeberprueft: Int
-              $deckungVegetation: Int
-              $deckungNackterBoden: Int
-              $deckungApArt: Int
-              $vegetationshoeheMaximum: Int
-              $vegetationshoeheMittel: Int
-              $gefaehrdung: String
-              $tpopId: UUID
-              $bearbeiter: UUID
-              $planVorhanden: Boolean
-              $jungpflanzenVorhanden: Boolean
-              $apberNichtRelevant: Boolean
-              $apberNichtRelevantGrund: String
-              $ekfBemerkungen: String
+                $${field}: ${fieldTypes[field]}
+                ${field === 'jahr' ? '$datum: Date' : ''}
+                ${field === 'datum' ? '$jahr: Int' : ''}
               $changedBy: String
             ) {
               updateTpopkontrById(
                 input: {
                   id: $id
                   tpopkontrPatch: {
-                    typ: $typ
-                    datum: $datum
-                    jahr: $jahr
-                    bemerkungen: $bemerkungen
-                    flaecheUeberprueft: $flaecheUeberprueft
-                    deckungVegetation: $deckungVegetation
-                    deckungNackterBoden: $deckungNackterBoden
-                    deckungApArt: $deckungApArt
-                    vegetationshoeheMaximum: $vegetationshoeheMaximum
-                    vegetationshoeheMittel: $vegetationshoeheMittel
-                    gefaehrdung: $gefaehrdung
-                    tpopId: $tpopId
-                    bearbeiter: $bearbeiter
-                    planVorhanden: $planVorhanden
-                    jungpflanzenVorhanden: $jungpflanzenVorhanden
-                    apberNichtRelevant: $apberNichtRelevant
-                    apberNichtRelevantGrund: $apberNichtRelevantGrund
-                    ekfBemerkungen: $ekfBemerkungen
+                      ${field}: $${field}
+                      ${field === 'jahr' ? 'datum: $datum' : ''}
+                      ${field === 'datum' ? 'jahr: $jahr' : ''}
                     changedBy: $changedBy
                   }
                 }
