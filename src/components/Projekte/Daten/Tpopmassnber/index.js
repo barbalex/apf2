@@ -104,16 +104,16 @@ const Tpopmassnber = ({ treeName }) => {
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
                 <TextField name="jahr" label="Jahr" type="number" />
-                <Field
+                <RadioButtonGroup
                   name="beurteilung"
                   label="Entwicklung"
-                  component={RadioButtonGroup}
                   dataSource={get(
                     dataLists,
                     'allTpopmassnErfbeurtWertes.nodes',
                     [],
                   )}
                   loading={loadingLists}
+                  handleSubmit={handleSubmit}
                 />
                 <TextField
                   name="bemerkungen"

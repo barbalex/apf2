@@ -137,12 +137,12 @@ const Ziel = ({ treeName }) => {
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
                 <TextField name="jahr" label="Jahr" type="number" />
-                <Field
+                <RadioButtonGroup
                   name="typ"
                   label="Zieltyp"
                   dataSource={get(dataLists, 'allZielTypWertes.nodes', [])}
                   loading={loadingLists}
-                  component={RadioButtonGroup}
+                  handleSubmit={handleSubmit}
                 />
                 <TextField
                   name="bezeichnung"

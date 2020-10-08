@@ -7,6 +7,7 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { useField } from 'formik'
 
 import exists from '../../modules/exists'
 
@@ -29,14 +30,15 @@ const StyledRadio = styled(Radio)`
 `
 
 const RadioButtonGroup = ({
-  field,
-  form,
   label,
   helperText = '',
   dataSource = [],
+  handleSubmit,
+  ...props
 }) => {
+  const [field, meta] = useField(props)
   const { onChange, onBlur, value, name } = field
-  const { errors, handleSubmit } = form
+  const { errors } = meta
   const error = errors?.[name]
 
   const onClickButton = useCallback(
