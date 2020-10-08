@@ -91,7 +91,7 @@ const SharedSelectCreatable = ({
 }) => {
   const { onChange, onBlur, value, name } = field
   const { errors, handleSubmit } = form
-  const error = errors[name]
+  const error = errors?.[name]
 
   const [stateValue, setStateValue] = useState(null)
 

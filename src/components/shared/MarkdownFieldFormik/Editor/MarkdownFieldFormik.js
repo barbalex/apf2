@@ -44,7 +44,7 @@ const config = {
 const MarkdownField = ({ field, form, label, disabled }) => {
   const { onBlur, onChange, value, name } = field
   const { errors } = form
-  const error = errors[name]
+  const error = errors?.[name]
 
   const change = useCallback(
     ({ html, text }) => {
