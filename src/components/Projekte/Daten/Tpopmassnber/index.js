@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -10,11 +10,11 @@ import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryLists from './queryLists'
-import updateTpopmassnberByIdGql from './updateTpopmassnberById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { tpopmassnber } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -26,6 +26,13 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+
+const fieldTypes = {
+  tpopId: 'UUID',
+  jahr: 'Int',
+  beurteilung: 'Int',
+  bemerkungen: 'String',
+}
 
 const Tpopmassnber = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -58,7 +65,35 @@ const Tpopmassnber = ({ treeName }) => {
       }
       try {
         await client.mutate({
-          mutation: updateTpopmassnberByIdGql,
+          mutation: gql`
+            mutation updateTpopmassnber(
+              $id: UUID!
+              $${changedField}: ${fieldTypes[changedField]}
+              $changedBy: String
+            ) {
+              updateTpopmassnberById(
+                input: {
+                  id: $id
+                  tpopmassnberPatch: {
+                    ${changedField}: $${changedField}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                tpopmassnber {
+                  ...TpopmassnberFields
+                  tpopByTpopId {
+                    id
+                    popByPopId {
+                      id
+                      apId
+                    }
+                  }
+                }
+              }
+            }
+            ${tpopmassnber}
+          `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
