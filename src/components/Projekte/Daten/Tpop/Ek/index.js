@@ -144,10 +144,10 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                       handleSubmit={handleSubmit}
                     />
                   </EkfrequenzOptionsContainer>
-                  <Field
+                  <Checkbox2States
                     name="ekfrequenzAbweichend"
                     label="EK-Frequenz abweichend"
-                    component={Checkbox2States}
+                    handleSubmit={handleSubmit}
                   />
                   <TextField
                     name="ekfrequenzStartjahr"

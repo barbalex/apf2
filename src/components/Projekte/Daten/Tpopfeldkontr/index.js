@@ -407,10 +407,10 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       options={get(dataAdresses, 'allAdresses.nodes', [])}
                       loading={loadingAdresses}
                     />
-                    <Field
+                    <Checkbox3States
                       name="jungpflanzenVorhanden"
                       label="Jungpflanzen vorhanden"
-                      component={Checkbox3States}
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="vitalitaet"

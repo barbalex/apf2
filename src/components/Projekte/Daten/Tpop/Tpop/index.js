@@ -66,10 +66,10 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
               showFilter={showFilter}
               component={Status}
             />
-            <Field
+            <Checkbox2States
               name="statusUnklar"
               label="Status unklar"
-              component={Checkbox2States}
+              handleSubmit={handleSubmit}
             />
             <TextField
               name="statusUnklarGrund"
@@ -77,10 +77,10 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
               type="text"
               multiLine
             />
-            <Field
+            <Checkbox2States
               name="apberRelevant"
               label="Für AP-Bericht relevant"
-              component={Checkbox2States}
+              handleSubmit={handleSubmit}
             />
             {errorLists ? (
               <div>errorLists.message</div>
