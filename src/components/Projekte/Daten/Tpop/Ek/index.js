@@ -136,12 +136,12 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
               <Form onBlur={() => dirty && handleSubmit()}>
                 <FormContainerNoColumnsInner>
                   <EkfrequenzOptionsContainer>
-                    <Field
+                    <RadioButtonGroup
                       name="ekfrequenz"
                       dataSource={ekfrequenzOptions}
                       loading={loadingEkfrequenzs}
                       label="EK-Frequenz"
-                      component={RadioButtonGroup}
+                      handleSubmit={handleSubmit}
                     />
                   </EkfrequenzOptionsContainer>
                   <Field

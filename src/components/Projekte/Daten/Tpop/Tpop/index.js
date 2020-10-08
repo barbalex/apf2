@@ -85,7 +85,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
             {errorLists ? (
               <div>errorLists.message</div>
             ) : (
-              <Field
+              <RadioButtonGroupWithInfo
                 name="apberRelevantGrund"
                 dataSource={get(
                   dataLists,
@@ -95,7 +95,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
                 loading={loadingLists}
                 popover={TpopAbBerRelevantInfoPopover}
                 label="Grund für AP-Bericht (Nicht-)Relevanz"
-                component={RadioButtonGroupWithInfo}
+                handleSubmit={handleSubmit}
               />
             )}
             {!showFilter && (

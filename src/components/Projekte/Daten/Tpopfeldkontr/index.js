@@ -247,6 +247,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
+      if (!changedField) return
       console.log('Tpopfeldkontr, onSubmit', {
         values,
         changedField,
@@ -388,12 +389,16 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                 {({ handleSubmit, dirty }) => (
                   <Form onBlur={() => dirty && handleSubmit()}>
                     <TextField name="jahr" label="Jahr" type="number" />
-                    <DateField name="datum" label="Datum" />
-                    <Field
+                    <DateField
+                      name="datum"
+                      label="Datum"
+                      handleSubmit={handleSubmit}
+                    />
+                    <RadioButtonGroup
                       name="typ"
                       label="Kontrolltyp"
-                      component={RadioButtonGroup}
                       dataSource={tpopkontrTypWerte}
+                      handleSubmit={handleSubmit}
                     />
                     <Field
                       name="bearbeiter"
@@ -417,10 +422,9 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       label="Überlebensrate (in Prozent)"
                       type="number"
                     />
-                    <Field
+                    <RadioButtonGroupWithInfo
                       name="entwicklung"
                       label="Entwicklung"
-                      component={RadioButtonGroupWithInfo}
                       dataSource={get(
                         dataLists,
                         'allTpopEntwicklungWertes.nodes',
@@ -428,6 +432,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       )}
                       loading={loadingLists}
                       popover={TpopfeldkontrentwicklungPopover}
+                      handleSubmit={handleSubmit}
                     />
                     <TextField
                       name="ursachen"
@@ -577,16 +582,16 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       type="text"
                       multiline
                     />
-                    <Field
+                    <RadioButtonGroup
                       name="idealbiotopUebereinstimmung"
                       label="Übereinstimmung mit Idealbiotop"
-                      component={RadioButtonGroup}
                       dataSource={get(
                         dataLists,
                         'allTpopkontrIdbiotuebereinstWertes.nodes',
                         [],
                       )}
                       loading={loadingLists}
+                      handleSubmit={handleSubmit}
                     />
                   </Form>
                 )}

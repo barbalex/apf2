@@ -178,7 +178,7 @@ const Tpopkontrzaehl = ({ treeName }) => {
                   label="Anzahl (nur ganze Zahlen)"
                   type="number"
                 />
-                <Field
+                <RadioButtonGroup
                   name="methode"
                   label="Methode"
                   dataSource={get(
@@ -186,7 +186,7 @@ const Tpopkontrzaehl = ({ treeName }) => {
                     'allTpopkontrzaehlMethodeWertes.nodes',
                     [],
                   )}
-                  component={RadioButtonGroup}
+                  handleSubmit={handleSubmit}
                 />
               </Form>
             )}
