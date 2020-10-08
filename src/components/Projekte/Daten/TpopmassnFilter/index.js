@@ -163,12 +163,7 @@ const Tpopmassn = ({ treeName }) => {
             >
               {({ handleSubmit, dirty }) => (
                 <Form onBlur={() => dirty && handleSubmit()}>
-                  <Field
-                    name="jahr"
-                    label="Jahr"
-                    type="number"
-                    component={TextField}
-                  />
+                  <TextField name="jahr" label="Jahr" type="number" />
                   <Field name="datum" label="Datum" component={DateField} />
                   <Field
                     name="typ"
@@ -181,11 +176,10 @@ const Tpopmassn = ({ treeName }) => {
                     )}
                     loading={loadingLists}
                   />
-                  <Field
+                  <TextField
                     name="beschreibung"
                     label="Massnahme"
                     type="text"
-                    component={TextField}
                   />
                   <Field
                     name="bearbeiter"
@@ -195,11 +189,10 @@ const Tpopmassn = ({ treeName }) => {
                     options={get(dataAdresses, 'allAdresses.nodes', [])}
                     loading={loadingAdresses}
                   />
-                  <Field
+                  <TextField
                     name="bemerkungen"
                     label="Bemerkungen"
                     type="text"
-                    component={TextField}
                     multiLine
                   />
                   <Field
@@ -207,53 +200,37 @@ const Tpopmassn = ({ treeName }) => {
                     label="Plan vorhanden"
                     component={Checkbox2States}
                   />
-                  <Field
+                  <TextField
                     name="planBezeichnung"
                     label="Plan Bezeichnung"
                     type="text"
-                    component={TextField}
                   />
-                  <Field
-                    name="flaeche"
-                    label="Fläche (m2)"
-                    type="number"
-                    component={TextField}
-                  />
-                  <Field
+                  <TextField name="flaeche" label="Fläche (m2)" type="number" />
+                  <TextField
                     name="form"
                     label="Form der Ansiedlung"
                     type="text"
-                    component={TextField}
                   />
-                  <Field
+                  <TextField
                     name="pflanzanordnung"
                     label="Pflanzanordnung"
                     type="text"
-                    component={TextField}
                   />
-                  <Field
-                    name="markierung"
-                    label="Markierung"
-                    type="text"
-                    component={TextField}
-                  />
-                  <Field
+                  <TextField name="markierung" label="Markierung" type="text" />
+                  <TextField
                     name="anzTriebe"
                     label="Anzahl Triebe"
                     type="number"
-                    component={TextField}
                   />
-                  <Field
+                  <TextField
                     name="anzPflanzen"
                     label="Anzahl Pflanzen"
                     type="number"
-                    component={TextField}
                   />
-                  <Field
+                  <TextField
                     name="anzPflanzstellen"
                     label="Anzahl Pflanzstellen"
                     type="number"
-                    component={TextField}
                   />
                   {isAnpflanzung && (
                     <>
@@ -268,11 +245,10 @@ const Tpopmassn = ({ treeName }) => {
                         loading={loadingLists}
                         component={Select}
                       />
-                      <Field
+                      <TextField
                         name="zieleinheitAnzahl"
                         label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
                         type="number"
-                        component={TextField}
                       />
                     </>
                   )}
@@ -283,23 +259,20 @@ const Tpopmassn = ({ treeName }) => {
                     query={queryAeTaxonomies}
                     queryNodesName="allAeTaxonomies"
                   />
-                  <Field
+                  <TextField
                     name="herkunftPop"
                     label="Herkunftspopulation"
                     type="text"
-                    component={TextField}
                   />
-                  <Field
+                  <TextField
                     name="sammeldatum"
                     label="Sammeldatum"
                     type="text"
-                    component={TextField}
                   />
-                  <Field
+                  <TextField
                     name="vonAnzahlIndividuen"
                     label="Anzahl besammelte Individuen der Herkunftspopulation"
                     type="number"
-                    component={TextField}
                   />
                 </Form>
               )}

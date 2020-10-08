@@ -136,12 +136,7 @@ const Ziel = ({ treeName }) => {
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  name="jahr"
-                  label="Jahr"
-                  type="number"
-                  component={TextField}
-                />
+                <TextField name="jahr" label="Jahr" type="number" />
                 <Field
                   name="typ"
                   label="Zieltyp"
@@ -149,12 +144,11 @@ const Ziel = ({ treeName }) => {
                   loading={loadingLists}
                   component={RadioButtonGroup}
                 />
-                <Field
+                <TextField
                   name="bezeichnung"
                   label="Ziel"
                   type="text"
                   multiLine
-                  component={TextField}
                 />
               </Form>
             )}

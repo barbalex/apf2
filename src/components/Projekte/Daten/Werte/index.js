@@ -5,7 +5,7 @@ import camelCase from 'lodash/camelCase'
 import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextFieldFormik'
@@ -162,24 +162,9 @@ const Werte = ({ treeName, table }) => {
           >
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  name="text"
-                  label="Text"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="code"
-                  label="Code"
-                  type={codeFieldType}
-                  component={TextField}
-                />
-                <Field
-                  name="sort"
-                  label="Sort"
-                  type="number"
-                  component={TextField}
-                />
+                <TextField name="text" label="Text" type="text" />
+                <TextField name="code" label="Code" type={codeFieldType} />
+                <TextField name="sort" label="Sort" type="number" />
               </Form>
             )}
           </Formik>
