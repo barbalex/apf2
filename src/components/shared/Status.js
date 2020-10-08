@@ -8,6 +8,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { useField } from 'formik'
 
 import InfoWithPopover from './InfoWithPopover'
 import ifIsNumericAsNumber from '../../modules/ifIsNumericAsNumber'
@@ -63,14 +64,16 @@ const StyledLabel = styled.div`
   pointer-events: none;
   user-select: none;
   padding-bottom: 8px;
-  color: ${props => (props.error ? '#f44336' : 'unset')};
+  color: ${(props) => (props.error ? '#f44336' : 'unset')};
 `
 
-const Status = ({ apJahr, treeName, showFilter, field, form }) => {
-  const { values, errors, handleSubmit, handleChange, handleBlur } = form
-  const herkunftValue = values.status
-  const bekanntSeitValue = values.bekanntSeit
-  const error = errors.status || errors.bekanntSeit
+const Status = ({ apJahr, treeName, showFilter, handleSubmit, ...props }) => {
+  const [field, meta] = useField(props)
+  const { onChange, onBlur } = field
+  const { value, error: errors } = meta
+  const herkunftValue = value.status
+  const bekanntSeitValue = value.bekanntSeit
+  const error = errors?.status || errors?.bekanntSeit
 
   const [bekanntSeitStateValue, setBekanntSeitStateValue] = useState(
     bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '',
@@ -91,7 +94,7 @@ const Status = ({ apJahr, treeName, showFilter, field, form }) => {
   if (showFilter) statusDisabled = false
 
   const onClickButton = useCallback(
-    event => {
+    (event) => {
       /**
        * if clicked element is active value: set null
        * Problem: does not work on change event on RadioGroup
@@ -106,16 +109,16 @@ const Status = ({ apJahr, treeName, showFilter, field, form }) => {
         const fakeEvent = {
           target: { value: null, name: 'status' },
         }
-        handleChange(fakeEvent)
-        handleBlur(fakeEvent)
+        onChange(fakeEvent)
+        onBlur(fakeEvent)
         setTimeout(() => handleSubmit())
         return
       }
     },
-    [handleBlur, handleChange, handleSubmit, herkunftValue],
+    [onBlur, onChange, handleSubmit, herkunftValue],
   )
   const onChangeStatus = useCallback(
-    event => {
+    (event) => {
       const { value: valuePassed } = event.target
       // if clicked element is active herkunftValue: set null
       const fakeEvent = {
@@ -124,28 +127,28 @@ const Status = ({ apJahr, treeName, showFilter, field, form }) => {
           name: 'status',
         },
       }
-      handleChange(fakeEvent)
-      handleBlur(fakeEvent)
+      onChange(fakeEvent)
+      onBlur(fakeEvent)
       setTimeout(() => handleSubmit())
     },
-    [handleBlur, handleChange, handleSubmit],
+    [onBlur, onChange, handleSubmit],
   )
   const onChangeBekanntSeit = useCallback(
-    event =>
+    (event) =>
       setBekanntSeitStateValue(event.target.value ? +event.target.value : ''),
     [],
   )
   const onBlurBekanntSeit = useCallback(
-    event => {
+    (event) => {
       const { value } = event.target
       const fakeEvent = {
         target: { value: ifIsNumericAsNumber(value), name: 'bekanntSeit' },
       }
-      handleChange(fakeEvent)
-      handleBlur(fakeEvent)
+      onChange(fakeEvent)
+      onBlur(fakeEvent)
       setTimeout(() => handleSubmit())
     },
-    [handleBlur, handleChange, handleSubmit],
+    [onBlur, onChange, handleSubmit],
   )
 
   useEffect(() => {

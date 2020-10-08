@@ -26,7 +26,7 @@ const MyTextField = (props) => {
     required = false,
   } = props
   const { onChange, onBlur, value, name } = field
-  const { errors, handleSubmit } = meta
+  const { error: errors, handleSubmit } = meta
   const error = errors?.[name]
 
   // only working solution to prevent whell scrolling from changing number values

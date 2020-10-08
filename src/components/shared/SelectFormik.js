@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
+import { useField } from 'formik'
 
 import exists from '../../modules/exists'
 
@@ -67,17 +68,18 @@ const StyledSelect = styled(Select)`
 `
 
 const SharedSelect = ({
-  field,
-  form,
   label,
   labelSize,
   options,
   loading,
   maxHeight = null,
   noCaret = false,
+  handleSubmit,
+  ...props
 }) => {
+  const [field, meta] = useField(props)
   const { onChange, onBlur, value, name } = field
-  const { errors, handleSubmit } = form
+  const { error: errors } = meta
   const error = errors?.[name]
 
   const onMyChange = useCallback(

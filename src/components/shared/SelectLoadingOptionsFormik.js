@@ -88,7 +88,7 @@ const SelectTypable = ({
 }) => {
   const [field, meta] = useField(props)
   const { onChange, onBlur, value: valuePassed, name } = field
-  const { errors } = meta
+  const { error: errors } = meta
   const saveToDbError = errors?.[name]
 
   const client = useApolloClient()
