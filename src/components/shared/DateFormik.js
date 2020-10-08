@@ -72,7 +72,7 @@ const dateFormat = [
   'dd',
 ]
 
-const DateField = ({ label, ...props }) => {
+const DateField = ({ label, handleSubmit, ...props }) => {
   const [field, meta] = useField(props)
   const { onChange, onBlur, value, name } = field
   const { errors } = meta
@@ -107,13 +107,10 @@ const DateField = ({ label, ...props }) => {
       <StyledDatePicker
         id={name}
         selected={selected}
-        onChange={(e) => {
-          console.log('DateFormik, onChange, event:', e)
-          onChangeDatePicker(e)
-        }}
+        onChange={onChangeDatePicker}
         onSelect={(e) => {
-          console.log('DateFormik, onSelect, event:', e)
-          onChangeDatePicker(e)
+          // for unkonwn reason handleSubmit has to be called
+          setTimeout(handleSubmit)
         }}
         dateFormat={dateFormat}
         popperPlacement="auto"
