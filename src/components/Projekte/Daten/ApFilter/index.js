@@ -185,7 +185,7 @@ const ApFilter = ({ treeName }) => {
                   queryNodesName="allAeTaxonomies"
                   component={SelectLoadingOptions}
                 />
-                <Field
+                <RadioButtonGroupWithInfo
                   name="bearbeitung"
                   dataSource={get(dataLists, 'allApBearbstandWertes.nodes', [])}
                   loading={loadingLists}
@@ -211,7 +211,7 @@ const ApFilter = ({ treeName }) => {
                     </>
                   }
                   label="Aktionsplan"
-                  component={RadioButtonGroupWithInfo}
+                  handleSubmit={handleSubmit}
                 />
                 <TextField
                   name="startJahr"
@@ -219,7 +219,7 @@ const ApFilter = ({ treeName }) => {
                   type="number"
                 />
                 <FieldContainer>
-                  <Field
+                  <RadioButtonGroupWithInfo
                     name="umsetzung"
                     dataSource={get(
                       dataLists,
@@ -252,7 +252,7 @@ const ApFilter = ({ treeName }) => {
                       </>
                     }
                     label="Stand Umsetzung"
-                    component={RadioButtonGroupWithInfo}
+                    handleSubmit={handleSubmit}
                   />
                 </FieldContainer>
                 <Field

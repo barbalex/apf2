@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -138,16 +138,16 @@ const Popber = ({ treeName }) => {
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
                 <TextField name="jahr" label="Jahr" type="number" />
-                <Field
+                <RadioButtonGroup
                   name="entwicklung"
                   label="Entwicklung"
-                  component={RadioButtonGroup}
                   dataSource={get(
                     dataLists,
                     'allTpopEntwicklungWertes.nodes',
                     [],
                   )}
                   loading={loadingLists}
+                  handleSubmit={handleSubmit}
                 />
                 <TextField
                   name="bemerkungen"

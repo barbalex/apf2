@@ -200,7 +200,7 @@ const ApAp = ({ treeName, id }) => {
               queryNodesName="allAeTaxonomies"
               component={SelectLoadingOptions}
             />
-            <Field
+            <RadioButtonGroupWithInfo
               name="bearbeitung"
               dataSource={get(dataLists, 'allApBearbstandWertes.nodes', [])}
               loading={loadingLists}
@@ -228,11 +228,11 @@ const ApAp = ({ treeName, id }) => {
                 </>
               }
               label="Aktionsplan"
-              component={RadioButtonGroupWithInfo}
+              handleSubmit={handleSubmit}
             />
             <TextField name="startJahr" label="Start im Jahr" type="number" />
             <FieldContainer>
-              <Field
+              <RadioButtonGroupWithInfo
                 name="umsetzung"
                 dataSource={get(dataLists, 'allApUmsetzungWertes.nodes', [])}
                 loading={loadingLists}
@@ -263,7 +263,7 @@ const ApAp = ({ treeName, id }) => {
                   </>
                 }
                 label="Stand Umsetzung"
-                component={RadioButtonGroupWithInfo}
+                handleSubmit={handleSubmit}
               />
             </FieldContainer>
             <Field

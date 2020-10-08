@@ -172,7 +172,7 @@ const Apber = ({ treeName }) => {
                   label="Vergleich Vorjahr - Gesamtziel"
                   component={MdField}
                 />
-                <Field
+                <RadioButtonGroup
                   name="beurteilung"
                   label="Beurteilung"
                   dataSource={get(
@@ -181,13 +181,13 @@ const Apber = ({ treeName }) => {
                     [],
                   )}
                   loading={loadingApErfkritWertes}
-                  component={RadioButtonGroup}
+                  handleSubmit={handleSubmit}
                 />
-                <Field
+                <RadioButtonGroup
                   name="veraenderungZumVorjahr"
                   label="Veränderung zum Vorjahr"
                   dataSource={veraenGegenVorjahrWerte}
-                  component={RadioButtonGroup}
+                  handleSubmit={handleSubmit}
                 />
                 <Field
                   name="apberAnalyse"
@@ -234,7 +234,11 @@ const Apber = ({ treeName }) => {
                   label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
                   component={MdField}
                 />
-                <DateField name="datum" label="Datum" />
+                <DateField
+                  name="datum"
+                  label="Datum"
+                  handleSubmit={handleSubmit}
+                />
                 <Field
                   name="bearbeiter"
                   label="BearbeiterIn"
