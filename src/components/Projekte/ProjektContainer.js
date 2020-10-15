@@ -221,7 +221,8 @@ const ProjektContainer = ({
     // return WITH split pane
     // otherwise height is wrong
     // and opening / closing tabs is slow
-    console.log('tabsLength:', tabs.length)
+    // add empty div to prevent split-pane from
+    // missing a second div
     return (
       <Container>
         <StyledSplitPane
