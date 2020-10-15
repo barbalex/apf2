@@ -54,7 +54,7 @@ const StyledSplitPane = styled(SplitPane)`
     border-color: transparent;
   }
   .Pane2 {
-    overflow: ${props => (props.overflow === 'auto' ? 'auto' : 'hidden')};
+    overflow: ${(props) => (props.overflow === 'auto' ? 'auto' : 'hidden')};
   }
 `
 const InnerContainer = styled.div`
@@ -99,7 +99,7 @@ const ProjektContainer = ({
   const filterEl = useRef(null)
 
   // remove 2 to treat all same
-  const tabs = [...tabsPassed].map(t => t.replace('2', ''))
+  const tabs = [...tabsPassed].map((t) => t.replace('2', ''))
 
   const setDimensions = useCallback(() => {
     if (treeEl.current && treeEl.current.clientWidth) {
@@ -179,12 +179,14 @@ const ProjektContainer = ({
     ),
   }
 
+  const paneSize = tabs[0] === 'tree' ? '33%' : '50%'
+
   if (showApberForAp) {
     return (
       <Container>
         <StyledSplitPane
           split="vertical"
-          size={tabs[0] === 'tree' ? '33%' : '50%'}
+          size={paneSize}
           minSize={100}
           onDragFinished={onChange}
           overflow="auto"
@@ -203,7 +205,7 @@ const ProjektContainer = ({
       <Container>
         <StyledSplitPane
           split="vertical"
-          size={tabs[0] === 'tree' ? '33%' : '50%'}
+          size={paneSize}
           minSize={100}
           onDragFinished={onChange}
           overflow="auto"
@@ -219,6 +221,7 @@ const ProjektContainer = ({
     // return WITH split pane
     // otherwise height is wrong
     // and opening / closing tabs is slow
+    console.log('tabsLength:', tabs.length)
     return (
       <Container>
         <StyledSplitPane
@@ -228,6 +231,7 @@ const ProjektContainer = ({
           onDragFinished={onChange}
         >
           {elObj[tabs[0]]}
+          <></>
         </StyledSplitPane>
       </Container>
     )
@@ -238,7 +242,7 @@ const ProjektContainer = ({
       <Container>
         <StyledSplitPane
           split="vertical"
-          size={tabs[0] === 'tree' ? '33%' : '50%'}
+          size={paneSize}
           minSize={100}
           onDragFinished={onChange}
         >
