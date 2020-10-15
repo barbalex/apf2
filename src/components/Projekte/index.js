@@ -68,14 +68,20 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 const treeTabValues = ['tree', 'daten', 'filter', 'karte', 'exporte']
-const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2', 'exporte2']
+const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
 const Projekte = () => {
   const store = useContext(storeContext)
   const { isPrint, urlQuery, setRefetchKey, user } = store
 
   const { projekteTabs } = urlQuery
-  const treeTabs = intersection(treeTabValues, projekteTabs)
+  const treeTabs = useMemo(
+    () =>
+      intersection(treeTabValues, projekteTabs).filter((v) =>
+        store.tree.apIdInActiveNodeArray ? true : v !== 'exporte',
+      ),
+    [projekteTabs, store.tree.apIdInActiveNodeArray],
+  )
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
   const treeDataFilter = getSnapshot(store.tree.dataFilter)
