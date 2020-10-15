@@ -78,9 +78,9 @@ const Projekte = () => {
   const treeTabs = useMemo(
     () =>
       intersection(treeTabValues, projekteTabs).filter((v) =>
-        store.tree.apIdInActiveNodeArray ? true : v !== 'exporte',
+        store.tree.projIdInActiveNodeArray ? true : v !== 'exporte',
       ),
-    [projekteTabs, store.tree.apIdInActiveNodeArray],
+    [projekteTabs, store.tree.projIdInActiveNodeArray],
   )
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
