@@ -189,7 +189,10 @@ const Row = ({ index, style, node, treeName }) => {
 
   const activeNodeArray = get(store, `${treeName}.activeNodeArray`)
   const myProps = { key: index }
-  const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
+  const nodeIsInActiveNodePath = isNodeInActiveNodePath({
+    node,
+    activeNodeArray,
+  })
   const nodeIsOpen = isNodeOpen(openNodes, node.url)
   // build symbols
   let useSymbolIcon = true
