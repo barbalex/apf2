@@ -26,7 +26,7 @@ export default ({
 
   const zieljahre = memoizeOne(() =>
     get(data, 'allZiels.nodes', [])
-      .filter(el => el.apId === apId)
+      .filter((el) => el.apId === apId)
       // reduce to distinct years
       .reduce((a, el, index) => union(a, [el.jahr]), []),
   )()
@@ -40,7 +40,7 @@ export default ({
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele']
 
   // only show if parent node exists
-  if (!nodesPassed.map(n => n.id).includes(apId)) return []
+  if (!nodesPassed.map((n) => n.id).includes(apId)) return []
 
   return [
     {
