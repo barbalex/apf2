@@ -193,7 +193,7 @@ const Row = ({ index, style, node, treeName }) => {
     node,
     activeNodeArray,
   })
-  const nodeIsOpen = isNodeOpen(openNodes, node.url)
+  const nodeIsOpen = isNodeOpen({ openNodes, url: node.url })
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false

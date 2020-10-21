@@ -7,8 +7,8 @@ export default ({ treeName, node, store }) => {
   const { openNodes, setOpenNodes } = store[treeName]
 
   let newOpenNodes = [...openNodes]
-  if (isNodeOpen(openNodes, node.url)) {
-    newOpenNodes = newOpenNodes.filter(n => !isEqual(n, node.url))
+  if (isNodeOpen({ openNodes, url: node.url })) {
+    newOpenNodes = newOpenNodes.filter((n) => !isEqual(n, node.url))
   } else {
     newOpenNodes.push(node.url)
   }

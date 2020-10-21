@@ -13,7 +13,7 @@ export default ({ treeName, node, store }) => {
     }
   }
 
-  if (!isNodeOpen(openNodes, node.url)) {
+  if (!isNodeOpen({ openNodes, url: node.url })) {
     openNode({ treeName, node, openNodes, store })
   }
   setActiveNodeArray([...node.url])
