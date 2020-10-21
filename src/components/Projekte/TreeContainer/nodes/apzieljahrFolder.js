@@ -27,13 +27,13 @@ export default ({
   const ziels = memoizeOne(() =>
     get(data, 'allZiels.nodes', [])
       // of this ap
-      .filter(el => el.apId === apId),
+      .filter((el) => el.apId === apId),
   )()
 
   const zieljahre = memoizeOne(() =>
     ziels
       .reduce((a, el, index) => union(a, [el.jahr]), [])
-      .filter(jahr =>
+      .filter((jahr) =>
         allParentNodesAreOpen(openNodes, [
           'Projekte',
           projId,
@@ -48,7 +48,7 @@ export default ({
 
   return zieljahre.map((jahr, index) => {
     const labelJahr = jahr === null || jahr === undefined ? 'kein Jahr' : jahr
-    const zieleOfJahr = ziels.filter(el => el.jahr === jahr)
+    const zieleOfJahr = ziels.filter((el) => el.jahr === jahr)
     const labelJahreLength = zieleOfJahr.length
 
     return {
