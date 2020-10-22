@@ -3,7 +3,7 @@ import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
+import { MdDeleteSweep } from 'react-icons/md'
 import styled from 'styled-components'
 
 const StyledInput = styled(Input)`
@@ -14,15 +14,16 @@ const StyledInput = styled(Input)`
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
-const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
+const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   cursor: pointer;
   pointer-events: auto;
   padding-top: 5px;
   color: rgba(0, 0, 0, 0.7);
+  font-size: 1.5rem;
 `
 
 const Filter = ({ filter, setFilter }) => {
-  const onChange = useCallback(e => setFilter(e.target.value), [setFilter])
+  const onChange = useCallback((e) => setFilter(e.target.value), [setFilter])
   const onClickEmptyFilter = useCallback(() => setFilter(''), [setFilter])
 
   return (

@@ -1,9 +1,13 @@
+/**
+ * not used any more
+ * used to be used for berichte
+ */
 import React, { useCallback } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import { MdOpenInNew } from 'react-icons/md'
 import green from '@material-ui/core/colors/green'
 import styled from 'styled-components'
 import getUrls from 'get-urls'
@@ -14,9 +18,10 @@ const Container = styled.div`
   margin-bottom: -15px;
   break-inside: avoid;
 `
-const StyledOpenInNewIcon = styled(OpenInNewIcon)`
+const StyledOpenInNewIcon = styled(MdOpenInNew)`
   margin-top: 20px;
   cursor: pointer;
+  font-size: 1.5rem;
   &:hover {
     color: ${green[300]};
   }
