@@ -7,12 +7,19 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import IconButton from '@material-ui/core/IconButton'
-import PanIcon from '@material-ui/icons/MyLocation'
-import ClearIcon from '@material-ui/icons/Clear'
+import { MdMyLocation, MdClear } from 'react-icons/md'
 
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 import panCentreIcon from '../../../../etc/panTo.png'
 
+const PanIcon = styled(MdMyLocation)`
+  font-size: 1.5rem;
+  flex-shrink: 0;
+`
+const ClearIcon = styled(MdClear)`
+  font-size: 1.5rem;
+  flex-shrink: 0;
+`
 const Container = styled.div`
   display: flex;
   background-color: white;
@@ -26,10 +33,10 @@ const Container = styled.div`
 const StyledIconButton = styled(IconButton)`
   margin-top: 8px !important;
   max-width: 30px !important;
-  cursor: ${props => (props.disabled ? 'pointer !important' : 'default')};
+  cursor: ${(props) => (props.disabled ? 'pointer !important' : 'default')};
 `
 const StyledPanIcon = styled(PanIcon)`
-  color: ${props => (props.disabled ? 'grey !important' : 'unset')};
+  color: ${(props) => (props.disabled ? 'grey !important' : 'unset')};
 `
 const StyledClearIcon = styled(ClearIcon)`
   cursor: pointer !important;
@@ -40,8 +47,8 @@ const StyledInput = styled(Input)`
   }
 `
 
-const xIsValid = x => !x || (x >= 2485071 && x < 2828516)
-const yIsValid = y => !y || (y >= 1075346 && y < 1299942)
+const xIsValid = (x) => !x || (x >= 2485071 && x < 2828516)
+const yIsValid = (y) => !y || (y >= 1075346 && y < 1299942)
 
 const PanToCoordinates = ({ setControlType, map }) => {
   const xkoordField = useRef(null)
@@ -63,7 +70,7 @@ const PanToCoordinates = ({ setControlType, map }) => {
   const [gotoFocused, changeGotoFocused] = useState(false)
 
   const onFocusGotoContainer = useCallback(
-    event => {
+    (event) => {
       clearTimeout(timeoutId)
       if (!gotoFocused) {
         changeGotoFocused(true)
@@ -79,7 +86,7 @@ const PanToCoordinates = ({ setControlType, map }) => {
     setControlType('coordinates')
   }, [marker, map, setControlType])
   const onBlurGotoContainer = useCallback(
-    event => {
+    (event) => {
       const newTimeoutId = setTimeout(() => {
         if (gotoFocused) {
           changeGotoFocused(false)
@@ -113,7 +120,7 @@ const PanToCoordinates = ({ setControlType, map }) => {
       setMarker(newMarker)
     }
   }, [x, y, xError, yError, map, marker])
-  const onChangeX = useCallback(event => {
+  const onChangeX = useCallback((event) => {
     let { value } = event.target
     // convert string to number
     value = value ? +value : value
@@ -121,7 +128,7 @@ const PanToCoordinates = ({ setControlType, map }) => {
     // immediately cancel possible existing error
     if (xIsValid(value)) changeXError('')
   }, [])
-  const onChangeY = useCallback(event => {
+  const onChangeY = useCallback((event) => {
     let { value } = event.target
     // convert string to number
     value = value ? +value : value
@@ -130,7 +137,7 @@ const PanToCoordinates = ({ setControlType, map }) => {
     if (yIsValid(value)) changeYError('')
   }, [])
   const onBlurX = useCallback(
-    event => {
+    (event) => {
       // prevent onBlurGotoContainer
       event.stopPropagation()
       if (xIsValid(x)) return changeXError('')
@@ -139,7 +146,7 @@ const PanToCoordinates = ({ setControlType, map }) => {
     [x],
   )
   const onBlurY = useCallback(
-    event => {
+    (event) => {
       // prevent onBlurGotoContainer
       event.stopPropagation()
       if (yIsValid(y)) return changeYError('')
