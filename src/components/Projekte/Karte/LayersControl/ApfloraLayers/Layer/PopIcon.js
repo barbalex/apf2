@@ -1,19 +1,20 @@
 import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
+import { MdLocalFlorist } from 'react-icons/md'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../storeContext'
 
-const MapIcon = styled(LocalFloristIcon)`
+const MapIcon = styled(MdLocalFlorist)`
   margin-right: -0.1em;
   height: 20px !important;
   paint-order: stroke;
   stroke-width: 1px;
   stroke: black;
   color: #947500 !important;
+  font-size: 1.5rem;
 `
 const IconContainer = styled.div`
   cursor: pointer;
@@ -37,33 +38,33 @@ const PopIcon = ({ treeName }) => {
   const { setPopIcon, setPopLabel } = map
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickIconContainer = useCallback(
-    e => setAnchorEl(e.currentTarget),
+    (e) => setAnchorEl(e.currentTarget),
     [],
   )
   const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickAllSame = useCallback(
-    e => {
+    (e) => {
       setPopIcon('normal')
       onClose()
     },
     [onClose, setPopIcon],
   )
   const onClickByStatusGroup = useCallback(
-    e => {
+    (e) => {
       setPopIcon('statusGroup')
       onClose()
     },
     [onClose, setPopIcon],
   )
   const onClickPopTpopNr = useCallback(
-    e => {
+    (e) => {
       setPopLabel('nr')
       onClose()
     },
     [onClose, setPopLabel],
   )
   const onClickFlurname = useCallback(
-    e => {
+    (e) => {
       setPopLabel('name')
       onClose()
     },
