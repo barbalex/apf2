@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -23,7 +23,7 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
 `
 const CardActionIconButton = styled(IconButton)`
-  transform: ${props => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
+  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -60,10 +60,7 @@ const Optionen = () => {
 
   return (
     <StyledCard>
-      <StyledCardActions
-        disableSpacing
-        onClick={() => setExpanded(!expanded)}
-      >
+      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
         <CardActionTitle>Optionen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
