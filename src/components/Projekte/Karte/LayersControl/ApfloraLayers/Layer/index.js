@@ -5,11 +5,13 @@
 import React, { useContext, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
-import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
-import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
-import FilterCenterFocusIcon from '@material-ui/icons/FilterCenterFocus'
-import RemoveIcon from '@material-ui/icons/Remove'
+import {
+  MdPauseCircleOutline,
+  MdPlayCircleOutline,
+  MdLocalFlorist,
+  MdFilterCenterFocus,
+  MdRemove,
+} from 'react-icons/md'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { getSnapshot } from 'mobx-state-tree'
@@ -23,6 +25,21 @@ import query from './data'
 import PopIcon from './PopIcon'
 import TpopIcon from './TpopIcon'
 
+const PauseCircleOutlineIcon = styled(MdPauseCircleOutline)`
+  font-size: 1.5rem;
+`
+const PlayCircleOutlineIcon = styled(MdPlayCircleOutline)`
+  font-size: 1.5rem;
+`
+const LocalFloristIcon = styled(MdLocalFlorist)`
+  font-size: 1.5rem;
+`
+const FilterCenterFocusIcon = styled(MdFilterCenterFocus)`
+  font-size: 1.5rem;
+`
+const RemoveIcon = styled(MdRemove)`
+  font-size: 1.5rem;
+`
 const StyledIconButton = styled(Button)`
   max-width: 18px;
   min-height: 20px !important;
