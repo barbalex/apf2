@@ -67,21 +67,25 @@ const StyledSplitPane = styled(SplitPane)`
     overflow: hidden;
   }
 `
-const treeTabValues = ['tree', 'daten', 'filter', 'karte', 'exporte']
 const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
 const Projekte = () => {
   const store = useContext(storeContext)
-  const { isPrint, urlQuery, setRefetchKey, user } = store
+  const { isPrint, urlQuery, setRefetchKey, user, tree } = store
+  const { projIdInActiveNodeArray } = tree
+  const treeTabValues = [
+    'tree',
+    'daten',
+    'filter',
+    'karte',
+    ...(projIdInActiveNodeArray ? ['exporte'] : []),
+  ]
 
   const { projekteTabs } = urlQuery
-  const treeTabs = useMemo(
-    () =>
-      intersection(treeTabValues, projekteTabs).filter((v) =>
-        store.tree.projIdInActiveNodeArray ? true : v !== 'exporte',
-      ),
-    [projekteTabs, store.tree.projIdInActiveNodeArray],
-  )
+  const treeTabs = useMemo(() => intersection(treeTabValues, projekteTabs), [
+    projekteTabs,
+    treeTabValues,
+  ])
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
   const treeDataFilter = getSnapshot(store.tree.dataFilter)
