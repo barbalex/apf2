@@ -4,11 +4,14 @@ import { useLeaflet } from 'react-leaflet'
 import 'leaflet-easyprint'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
-import FileDownloadIcon from '@material-ui/icons/GetApp'
+import { MdGetApp } from 'react-icons/md'
 
 //import { baseLayers } from './LayersControl/BaseLayers'
 //import storeContext from '../../../storeContext'
 
+const FileDownloadIcon = styled(MdGetApp)`
+  font-size: 1.5rem;
+`
 const StyledButton = styled.button`
   background-color: white;
   width: 34px;
@@ -39,7 +42,7 @@ const PngControl = () => {
   const [printPlugin, changePrintPlugin] = useState({})
 
   const savePng = useCallback(
-    event => {
+    (event) => {
       event.preventDefault()
       printPlugin.printMap('CurrentSize', 'apfloraKarte')
     },
