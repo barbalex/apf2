@@ -1,8 +1,7 @@
 import React, { useContext, useState, useCallback, useEffect } from 'react'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
-import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
 import Overlays from './Overlays'
@@ -10,6 +9,12 @@ import ApfloraLayers from './ApfloraLayers'
 import BaseLayers from './BaseLayers'
 import storeContext from '../../../../storeContext'
 
+const ExpandMoreIcon = styled(MdExpandMore)`
+  font-size: 1.5rem;
+`
+const ExpandLessIcon = styled(MdExpandLess)`
+  font-size: 1.5rem;
+`
 const CardContainer = styled.div`
   background-color: white;
   background-clip: padding-box;
