@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Collapse from '@material-ui/core/Collapse'
 import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from 'styled-components'
 
 const StyledCard = styled(Card)`
@@ -18,7 +18,7 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
 `
 const CardActionIconButton = styled(IconButton)`
-  transform: ${props => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
+  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -41,10 +41,7 @@ const DatenChaotisch = () => {
 
   return (
     <StyledCard>
-      <StyledCardActions
-        disableSpacing
-        onClick={() => setExpanded(!expanded)}
-      >
+      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
         <CardActionTitle>
           Sind die Daten ungeordnet und chaotisch?
         </CardActionTitle>
