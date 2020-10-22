@@ -4,8 +4,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import uniqBy from 'lodash/uniqBy'
 import Button from '@material-ui/core/Button'
-import DeleteIcon from '@material-ui/icons/DeleteForever'
-import AddIcon from '@material-ui/icons/AddCircleOutline'
+import { MdAddCircleOutline, MdDeleteForever } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 
@@ -17,6 +16,12 @@ import queryLists from './queryLists'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import storeContext from '../../../../../storeContext'
 
+const AddIcon = styled(MdAddCircleOutline)`
+  font-size: 1.5rem;
+`
+const DeleteIcon = styled(MdDeleteForever)`
+  font-size: 1.5rem;
+`
 const Container = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 6px;
