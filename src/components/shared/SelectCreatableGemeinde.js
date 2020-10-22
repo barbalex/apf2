@@ -2,12 +2,15 @@ import React, { useState, useCallback, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
-import AddLocation from '@material-ui/icons/AddLocationOutlined'
+import { IoMdLocate } from 'react-icons/io'
 import { observer } from 'mobx-react-lite'
 import { useField } from 'formik'
 
 import exists from '../../modules/exists'
 
+const AddLocationIcon = styled(IoMdLocate)`
+  font-size: 1.5rem;
+`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -179,7 +182,7 @@ const SharedSelectCreatable = ({
             title="Mit Hilfe der Koordinaten automatisch setzen"
             onClick={onClickLocate}
           >
-            <AddLocation />
+            <AddLocationIcon />
           </StyledIconButton>
         )}
       </Field>

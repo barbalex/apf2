@@ -1,7 +1,8 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
-import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
+// this does not exist in any icon library, not even in md!!!!
+import DeleteSweepOutlined from '@material-ui/icons/DeleteSweepOutlined'
+import { MdDeleteSweep } from 'react-icons/md'
 import IconButton from '@material-ui/core/IconButton'
 import { observer } from 'mobx-react-lite'
 
@@ -29,19 +30,18 @@ const FilterNumbers = styled.div`
   user-select: none;
 `
 const StyledIconButton = styled(IconButton)`
-  height: 34px !important;
   width: 34px !important;
   margin-top: -2px !important;
 `
-const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
+const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   cursor: pointer;
   pointer-events: auto;
-  /*font-size: 28px !important;*/
+  font-size: 1.5rem;
+  flex-shrink: 0;
 `
-const StyledDeleteFilterIcon2 = styled(DeleteFilterIcon2)`
+const StyledDeleteFilterIcon2 = styled(DeleteSweepOutlined)`
   cursor: pointer;
   pointer-events: auto;
-  /*font-size: 28px !important;*/
 `
 
 const FormTitle = ({
