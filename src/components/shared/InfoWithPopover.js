@@ -1,13 +1,14 @@
 import React, { useState, useCallback } from 'react'
 import Popover from '@material-ui/core/Popover'
 
-import InfoOutlineIcon from '@material-ui/icons/InfoOutlined'
+import { MdInfoOutline } from 'react-icons/md'
 import styled from 'styled-components'
 
-const StyledInfoOutlineIcon = styled(InfoOutlineIcon)`
+const StyledInfoOutlineIcon = styled(MdInfoOutline)`
   cursor: pointer;
   pointer-events: auto;
   padding-left: 5px;
+  font-size: 1.5rem;
 `
 const StyledPopover = styled(Popover)`
   border-radius: 4px;
