@@ -1,8 +1,10 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
-import DragHandleIcon from '@material-ui/icons/DragHandle'
-import InfoOutlineIcon from '@material-ui/icons/InfoOutlined'
+import {
+  MdDragHandle as DragHandleIcon,
+  MdInfoOutline as InfoOutlineIcon,
+} from 'react-icons/md'
 import {
   SortableContainer,
   SortableElement,

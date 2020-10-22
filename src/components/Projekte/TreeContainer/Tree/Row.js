@@ -1,15 +1,16 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
-import FileCopyIcon from '@material-ui/icons/FileCopy'
-import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary'
-import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
-import { MdExpandMore } from 'react-icons/md'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import RemoveIcon from '@material-ui/icons/Remove'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-//import PrintIcon from '@material-ui/icons/LibraryBooks'
-import PrintIcon from '@material-ui/icons/PictureAsPdf'
+import {
+  MdLocalFlorist,
+  MdSwapVerticalCircle,
+  MdExpandMore,
+  MdContentCopy,
+  MdPhotoLibrary,
+  MdChevronRight,
+  MdRemove,
+  MdMoreHoriz,
+  MdPictureAsPdf,
+} from 'react-icons/md'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
@@ -20,6 +21,9 @@ import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../../storeContext'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu'
 
+const PrintIcon = styled(MdPictureAsPdf)`
+  font-size: 1.5rem;
+`
 const singleRowHeight = 23
 const StyledNode = styled.div`
   padding-left: ${(props) => `${Number(props['data-level']) * 17 - 10}px`};
@@ -52,16 +56,17 @@ const StyledExpandMoreIcon = styled(MdExpandMore)`
     color: #f57c00 !important;
   }
 `
-const StyledChevronRightIcon = styled(ChevronRightIcon)`
+const StyledChevronRightIcon = styled(MdChevronRight)`
   padding-left: 2px;
   height: 22px !important;
   width: 26px;
   cursor: pointer;
+  font-size: 1.5rem;
   &:hover {
     color: #f57c00 !important;
   }
 `
-const StyledMoreHorizIcon = styled(MoreHorizIcon)`
+const StyledMoreHorizIcon = styled(MdMoreHoriz)`
   margin-top: ${(props) =>
     props['data-nodeisinactivenodepath']
       ? '-5px !important'
@@ -74,17 +79,19 @@ const StyledMoreHorizIcon = styled(MoreHorizIcon)`
       : '22px !important'};
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
+  font-size: 1.5rem;
   width: 26px;
   cursor: pointer;
   &:hover {
     color: #f57c00 !important;
   }
 `
-const StyledRemoveIcon = styled(RemoveIcon)`
+const StyledRemoveIcon = styled(MdRemove)`
   padding-left: 6px;
   padding-right: 2px;
   height: 22px !important;
   width: 24px !important;
+  font-size: 1.5rem;
 `
 const SymbolDiv = styled.div`
   cursor: pointer;
@@ -102,10 +109,11 @@ const TextSpan = styled.span`
     color: #f57c00;
   }
 `
-const StyledMapIcon = styled(LocalFloristIcon)`
+const StyledMapIcon = styled(MdLocalFlorist)`
   padding-right: 2px;
   margin-left: -2px;
   height: 20px !important;
+  font-size: 1.4rem;
 `
 const PopMapIcon = styled(StyledMapIcon)`
   color: #947500 !important;
@@ -147,20 +155,23 @@ const BeobZugeordnetFilteredMapIcon = styled(BeobZugeordnetMapIcon)`
   stroke-width: 8px;
   stroke: #fff900;
 `
-const MovingIcon = styled(SwapVerticalCircleIcon)`
+const MovingIcon = styled(MdSwapVerticalCircle)`
   padding-left: 0.2em;
   height: 20px !important;
   color: rgb(255, 90, 0) !important;
+  font-size: 1.5rem;
 `
-const CopyingIcon = styled(FileCopyIcon)`
+const CopyingIcon = styled(MdContentCopy)`
   padding-left: 0.2em;
   height: 20px !important;
   color: rgb(255, 90, 0) !important;
+  font-size: 1.5rem;
 `
-const BiotopCopyingIcon = styled(PhotoLibraryIcon)`
+const BiotopCopyingIcon = styled(MdPhotoLibrary)`
   padding-left: 0.2em;
   height: 20px !important;
   color: rgb(255, 90, 0) !important;
+  font-size: 1.5rem;
 `
 const PrintIconContainer = styled.div`
   cursor: pointer;
