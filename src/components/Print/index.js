@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
-import ArrowBack from '@material-ui/icons/ArrowBack'
+import { MdArrowBack } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
 //import Fallback from '../shared/Fallback'
@@ -35,7 +35,7 @@ const BackButton = styled(Button)`
     display: none !important;
   }
 `
-const StyledArrowBack = styled(ArrowBack)`
+const StyledArrowBack = styled(MdArrowBack)`
   font-size: 18px !important;
   margin-left: -7px;
   padding-right: 4px;
