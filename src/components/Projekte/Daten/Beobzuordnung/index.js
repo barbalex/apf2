@@ -4,7 +4,7 @@ import sortBy from 'lodash/sortBy'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
-import SendIcon from '@material-ui/icons/EmailOutlined'
+import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 
