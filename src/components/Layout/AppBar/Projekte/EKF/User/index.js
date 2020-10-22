@@ -10,8 +10,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import IconButton from '@material-ui/core/IconButton'
-import Visibility from '@material-ui/icons/Visibility'
-import VisibilityOff from '@material-ui/icons/VisibilityOff'
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@material-ui/core/Button'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -209,7 +208,11 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                               onMouseDown={(e) => e.preventDefault()}
                               title={showPass ? 'verstecken' : 'anzeigen'}
                             >
-                              {showPass ? <VisibilityOff /> : <Visibility />}
+                              {showPass ? (
+                                <MdVisibilityOff />
+                              ) : (
+                                <MdVisibility />
+                              )}
                             </IconButton>
                           </InputAdornment>
                         }
@@ -247,7 +250,11 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                               onMouseDown={(e) => e.preventDefault()}
                               title={showPass2 ? 'verstecken' : 'anzeigen'}
                             >
-                              {showPass2 ? <VisibilityOff /> : <Visibility />}
+                              {showPass2 ? (
+                                <MdVisibilityOff />
+                              ) : (
+                                <MdVisibility />
+                              )}
                             </IconButton>
                           </InputAdornment>
                         }
