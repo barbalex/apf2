@@ -4,7 +4,7 @@ import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary'
 import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { MdExpandMore } from 'react-icons/md'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import RemoveIcon from '@material-ui/icons/Remove'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
@@ -34,7 +34,7 @@ const StyledNode = styled.div`
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
 `
-const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
+const StyledExpandMoreIcon = styled(MdExpandMore)`
   margin-top: ${(props) =>
     props['data-nodeisopen'] ? '-6px !important' : '1px !important'};
   margin-left: ${(props) => (props['data-nodeisopen'] ? '-1px !important' : 0)};
