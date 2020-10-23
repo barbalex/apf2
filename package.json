@@ -108,7 +108,7 @@
     "react-resize-detector": "5.2.0",
     "react-select": "3.1.0",
     "react-sortable-hoc": "1.11.0",
-    "react-spinners-kit": "1.9.1",
+    "react-spinners-kit": "git://github.com/barbalex/react-spinners-kit",
     "react-split-pane": "0.1.92",
     "react-typography": "0.16.19",
     "react-window": "1.8.5",
@@ -120,7 +120,8 @@
     "use-debounce": "5.0.1"
   },
   "dependenciesComments": {
-    "nothing": "now"
+    "nothing": "now",
+    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1"
   },
   "peerDependencies": {
     "react-is": "17.0.1"
