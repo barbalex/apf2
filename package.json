@@ -90,16 +90,16 @@
     "proj4leaflet": "1.0.2",
     "prop-types": "15.7.2",
     "query-string": "6.13.6",
-    "react": "17.0.0",
+    "react": "17.0.1",
     "react-copy-to-clipboard": "5.0.2",
     "react-datepicker": "3.3.0",
-    "react-dom": "17.0.0",
+    "react-dom": "17.0.1",
     "react-error-boundary": "3.0.2",
     "react-focus-within": "2.0.2",
     "react-helmet": "6.1.0",
     "react-icons": "3.11.0",
     "react-image-lightbox": "5.1.1",
-    "react-leaflet": "2.7.0",
+    "react-leaflet": "2.8.0",
     "react-leaflet-bing": "4.1.0",
     "react-leaflet-control": "2.1.2",
     "react-leaflet-markercluster": "2.0.0",
@@ -123,7 +123,7 @@
     "nothing": "now"
   },
   "peerDependencies": {
-    "react-is": "17.0.0"
+    "react-is": "17.0.1"
   },
   "devDependencies": {
     "@graphile-contrib/pg-order-by-related": "1.0.0-beta.6",
@@ -132,7 +132,7 @@
     "copyfiles": "2.4.0",
     "cypress": "5.4.0",
     "gatsby-cli": "2.12.111",
-    "postgraphile": "4.9.0",
+    "postgraphile": "4.9.2",
     "postgraphile-plugin-connection-filter": "2.1.0",
     "postgraphile-plugin-connection-filter-postgis": "1.0.0-alpha.6",
     "prettier": "2.1.2",
