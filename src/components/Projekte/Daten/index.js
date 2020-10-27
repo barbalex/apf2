@@ -44,7 +44,7 @@ import Zielber from './Zielber'
 const Container = styled.div`
   height: 100%;
   width: 100%;
-  overflow-x: auto;
+
   @media print {
     height: auto;
     border: none;
