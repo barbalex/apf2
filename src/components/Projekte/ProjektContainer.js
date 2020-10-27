@@ -69,7 +69,6 @@ const InnerContainer = styled.div`
 `
 
 const standardWidth = 500
-const standardHeight = 800
 
 const ProjektContainer = ({
   treeName,
@@ -82,12 +81,7 @@ const ProjektContainer = ({
 }) => {
   const store = useContext(storeContext)
   const { isPrint } = store
-  const {
-    setTreeWidth,
-    setDatenWidth,
-    setFilterWidth,
-    activeNodeArray,
-  } = store[treeName]
+  const { setTreeWidth, activeNodeArray } = store[treeName]
 
   const showApberForAp =
     activeNodeArray.length === 7 &&
@@ -111,17 +105,7 @@ const ProjektContainer = ({
     } else {
       setTreeWidth(standardWidth)
     }
-    if (datenEl.current && datenEl.current.clientWidth) {
-      setDatenWidth(datenEl.current.clientWidth)
-    } else {
-      setDatenWidth(standardWidth)
-    }
-    if (filterEl.current && filterEl.current.clientWidth) {
-      setFilterWidth(filterEl.current.clientWidth)
-    } else {
-      setFilterWidth(standardWidth)
-    }
-  }, [setTreeWidth, setDatenWidth, setFilterWidth])
+  }, [setTreeWidth])
 
   const onChange = useCallback(() => setDimensions(), [setDimensions])
 
