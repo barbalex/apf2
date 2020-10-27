@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
+import { withResizeDetector } from 'react-resize-detector'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -23,18 +24,16 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { apber } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
 `
 const FieldsContainer = styled.div`
-  overflow: auto !important;
+  overflow-x: auto !important;
   padding: 10px;
   height: 100%;
-  column-width: ${(props) =>
-    props.width > 2 * constants.columnWidth
-      ? `${constants.columnWidth}px`
-      : 'auto'};
+  ${(props) =>
+    props['data-column-width'] &&
+    `column-width: ${props['data-column-width']}px;`}
 `
 
 const veraenGegenVorjahrWerte = [
@@ -62,10 +61,10 @@ const fieldTypes = {
   bearbeiter: 'UUID',
 }
 
-const Apber = ({ treeName }) => {
+const Apber = ({ treeName, width = 1000 }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { activeNodeArray, datenWidth } = store[treeName]
+  const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -140,10 +139,15 @@ const Apber = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
+  const columnWidth =
+    width > 2 * constants.columnWidth ? constants.columnWidth : undefined
+
   if (loading) {
     return (
       <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
+        <FieldsContainer data-column-width={columnWidth}>
+          Lade...
+        </FieldsContainer>
       </Container>
     )
   }
@@ -152,6 +156,12 @@ const Apber = ({ treeName }) => {
   if (errorApErfkritWertes) {
     return `Fehler: ${errorApErfkritWertes.message}`
   }
+
+  console.log('Apber', {
+    width,
+    constantsColumnWidth: constants.columnWidth,
+    columnWidth,
+  })
 
   return (
     <ErrorBoundary>
@@ -162,7 +172,7 @@ const Apber = ({ treeName }) => {
           treeName={treeName}
           table="apber"
         />
-        <FieldsContainer width={datenWidth}>
+        <FieldsContainer data-column-width={columnWidth}>
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
@@ -247,4 +257,4 @@ const Apber = ({ treeName }) => {
   )
 }
 
-export default observer(Apber)
+export default withResizeDetector(observer(Apber))
