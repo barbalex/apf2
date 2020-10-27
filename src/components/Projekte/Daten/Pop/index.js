@@ -60,7 +60,7 @@ const Pop = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
   const { refetch, urlQuery, setUrlQuery } = store
-  const { activeNodeArray, datenWidth } = store[treeName]
+  const { activeNodeArray } = store[treeName]
 
   let id =
     activeNodeArray.length > 5
@@ -220,7 +220,7 @@ const Pop = ({ treeName }) => {
           </FormContainer>
         )}
         {tab === 'dateien' && (
-          <FilesContainer data-width={datenWidth}>
+          <FilesContainer>
             <Files parentId={row.id} parent="pop" />
           </FilesContainer>
         )}
