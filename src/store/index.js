@@ -387,8 +387,7 @@ const myTypes = types
     },
     openTree2WithActiveNodeArray(activeNodeArray) {
       const openNodes = getOpenNodesFromActiveNodeArray(activeNodeArray)
-      const treeHeight = self.tree.treeHeight
-      self.tree2 = { ...defaultTree, activeNodeArray, openNodes, treeHeight }
+      self.tree2 = { ...defaultTree, activeNodeArray, openNodes }
       self.urlQuery.addProjekteTab('tree2')
       self.urlQuery.addProjekteTab('daten2')
     },

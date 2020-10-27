@@ -84,7 +84,6 @@ const ProjektContainer = ({
   const { isPrint } = store
   const {
     setTreeWidth,
-    setTreeHeight,
     setDatenWidth,
     setFilterWidth,
     activeNodeArray,
@@ -109,10 +108,8 @@ const ProjektContainer = ({
   const setDimensions = useCallback(() => {
     if (treeEl.current && treeEl.current.clientWidth) {
       setTreeWidth(treeEl.current.clientWidth)
-      setTreeHeight(treeEl.current.clientHeight)
     } else {
       setTreeWidth(standardWidth)
-      setTreeHeight(standardHeight)
     }
     if (datenEl.current && datenEl.current.clientWidth) {
       setDatenWidth(datenEl.current.clientWidth)
@@ -124,7 +121,7 @@ const ProjektContainer = ({
     } else {
       setFilterWidth(standardWidth)
     }
-  }, [setTreeWidth, setTreeHeight, setDatenWidth, setFilterWidth])
+  }, [setTreeWidth, setDatenWidth, setFilterWidth])
 
   const onChange = useCallback(() => setDimensions(), [setDimensions])
 

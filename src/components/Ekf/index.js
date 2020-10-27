@@ -63,7 +63,6 @@ const InnerContainer = styled.div`
 `
 
 const standardWidth = 500
-const standardHeight = 800
 
 const Ekf = ({ height = 1000 }) => {
   const { user, isPrint, tree, ekfIds } = useContext(storeContext)
@@ -71,7 +70,7 @@ const Ekf = ({ height = 1000 }) => {
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
 
-  const { activeNodeArray, setTreeWidth, setTreeHeight, setDatenWidth } = tree
+  const { activeNodeArray, setTreeWidth, setDatenWidth } = tree
   const tpopkontrId =
     activeNodeArray.length > 9
       ? activeNodeArray[9]
@@ -84,17 +83,15 @@ const Ekf = ({ height = 1000 }) => {
   const setDimensions = useCallback(() => {
     if (treeEl.current && treeEl.current.clientWidth) {
       setTreeWidth(treeEl.current.clientWidth)
-      setTreeHeight(treeEl.current.clientHeight)
     } else {
       setTreeWidth(standardWidth)
-      setTreeHeight(standardHeight)
     }
     if (datenEl.current && datenEl.current.clientWidth) {
       setDatenWidth(datenEl.current.clientWidth)
     } else {
       setDatenWidth(standardWidth)
     }
-  }, [setTreeWidth, setTreeHeight, setDatenWidth])
+  }, [setTreeWidth, setDatenWidth])
 
   const onDragFinished = useCallback(() => setDimensions(), [setDimensions])
 
