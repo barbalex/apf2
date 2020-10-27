@@ -4,6 +4,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
+import { withResizeDetector } from 'react-resize-detector'
 
 import TextField from '../../../../shared/TextFieldFormik'
 import TextFieldWithInfo from '../../../../shared/TextFieldWithInfoFormik'
@@ -19,22 +20,31 @@ import constants from '../../../../../modules/constants'
 import storeContext from '../../../../../storeContext'
 import Coordinates from '../../../../shared/Coordinates'
 
+const Container = styled.div`
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: calc(100% - 48px);
+`
 const FormContainer = styled.div`
   padding: 10px;
-  overflow-y: auto !important;
-  height: calc(100% - 20px);
-  column-width: ${(props) =>
-    props['data-width'] > 2 * constants.columnWidth
-      ? `${constants.columnWidth}px`
-      : 'auto'};
+  ${(props) =>
+    props['data-column-width'] &&
+    `column-width: ${props['data-column-width']}px;`}
 `
 
-const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
+const Tpop = ({
+  treeName,
+  showFilter,
+  onSubmit,
+  row,
+  apJahr,
+  refetchTpop,
+  width = 1000,
+}) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
 
   const { enqueNotification } = store
-  const { datenWidth, filterWidth } = store[treeName]
 
   const {
     data: dataLists,
@@ -42,96 +52,100 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
     error: errorLists,
   } = useQuery(queryLists)
 
+  const columnWidth =
+    width > 2 * constants.columnWidth ? constants.columnWidth : undefined
+
   return (
-    <FormContainer data-width={showFilter ? filterWidth : datenWidth}>
-      <Formik
-        key={showFilter ? row : row ? row.id : 'tpop'}
-        initialValues={row}
-        onSubmit={onSubmit}
-        enableReinitialize
-      >
-        {({ handleSubmit, handleChange, handleBlur, dirty, setErrors }) => (
-          <Form onBlur={() => dirty && handleSubmit()}>
-            <TextField
-              name="nr"
-              label="Nr."
-              type="number"
-              handleSubmit={handleSubmit}
-            />
-            <TextFieldWithInfo
-              name="flurname"
-              label="Flurname"
-              type="text"
-              popover="Dieses Feld möglichst immer ausfüllen"
-              handleSubmit={handleSubmit}
-            />
-            <Status
-              apJahr={apJahr}
-              treeName={treeName}
-              showFilter={showFilter}
-              handleSubmit={handleSubmit}
-            />
-            <Checkbox2States
-              name="statusUnklar"
-              label="Status unklar"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="statusUnklarGrund"
-              label="Begründung"
-              type="text"
-              multiLine
-              handleSubmit={handleSubmit}
-            />
-            <Checkbox2States
-              name="apberRelevant"
-              label="Für AP-Bericht relevant"
-              handleSubmit={handleSubmit}
-            />
-            {errorLists ? (
-              <div>errorLists.message</div>
-            ) : (
-              <RadioButtonGroupWithInfo
-                name="apberRelevantGrund"
-                dataSource={get(
-                  dataLists,
-                  'allTpopApberrelevantGrundWertes.nodes',
-                  [],
-                )}
-                loading={loadingLists}
-                popover={TpopAbBerRelevantInfoPopover}
-                label="Grund für AP-Bericht (Nicht-)Relevanz"
+    <Container>
+      <FormContainer data-column-width={columnWidth}>
+        <Formik
+          key={showFilter ? row : row ? row.id : 'tpop'}
+          initialValues={row}
+          onSubmit={onSubmit}
+          enableReinitialize
+        >
+          {({ handleSubmit, handleChange, handleBlur, dirty, setErrors }) => (
+            <Form onBlur={() => dirty && handleSubmit()}>
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
                 handleSubmit={handleSubmit}
               />
-            )}
-            {!showFilter && (
-              <Coordinates row={row} refetchForm={refetchTpop} table="tpop" />
-            )}
-            {errorLists ? (
-              <div>errorLists.message</div>
-            ) : (
-              <SelectCreatable
-                name="gemeinde"
-                label="Gemeinde"
-                options={get(dataLists, 'allChGemeindes.nodes', [])}
-                loading={loadingLists}
-                showLocate={!showFilter}
-                onClickLocate={async (setStateValue) => {
-                  if (!row.lv95X) {
-                    return setErrors({
-                      gemeinde: 'Es fehlen Koordinaten',
-                    })
-                  }
-                  const geojson = get(row, 'geomPoint.geojson')
-                  if (!geojson) return
-                  const geojsonParsed = JSON.parse(geojson)
-                  if (!geojsonParsed) return
-                  let result
-                  try {
-                    result = await client.query({
-                      // this is a hack
-                      // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
-                      query: gql`
+              <TextFieldWithInfo
+                name="flurname"
+                label="Flurname"
+                type="text"
+                popover="Dieses Feld möglichst immer ausfüllen"
+                handleSubmit={handleSubmit}
+              />
+              <Status
+                apJahr={apJahr}
+                treeName={treeName}
+                showFilter={showFilter}
+                handleSubmit={handleSubmit}
+              />
+              <Checkbox2States
+                name="statusUnklar"
+                label="Status unklar"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="statusUnklarGrund"
+                label="Begründung"
+                type="text"
+                multiLine
+                handleSubmit={handleSubmit}
+              />
+              <Checkbox2States
+                name="apberRelevant"
+                label="Für AP-Bericht relevant"
+                handleSubmit={handleSubmit}
+              />
+              {errorLists ? (
+                <div>errorLists.message</div>
+              ) : (
+                <RadioButtonGroupWithInfo
+                  name="apberRelevantGrund"
+                  dataSource={get(
+                    dataLists,
+                    'allTpopApberrelevantGrundWertes.nodes',
+                    [],
+                  )}
+                  loading={loadingLists}
+                  popover={TpopAbBerRelevantInfoPopover}
+                  label="Grund für AP-Bericht (Nicht-)Relevanz"
+                  handleSubmit={handleSubmit}
+                />
+              )}
+              {!showFilter && (
+                <Coordinates row={row} refetchForm={refetchTpop} table="tpop" />
+              )}
+              {errorLists ? (
+                <div>errorLists.message</div>
+              ) : (
+                <SelectCreatable
+                  name="gemeinde"
+                  label="Gemeinde"
+                  options={get(dataLists, 'allChGemeindes.nodes', [])}
+                  loading={loadingLists}
+                  showLocate={!showFilter}
+                  onClickLocate={async (setStateValue) => {
+                    if (!row.lv95X) {
+                      return setErrors({
+                        gemeinde: 'Es fehlen Koordinaten',
+                      })
+                    }
+                    const geojson = get(row, 'geomPoint.geojson')
+                    if (!geojson) return
+                    const geojsonParsed = JSON.parse(geojson)
+                    if (!geojsonParsed) return
+                    let result
+                    try {
+                      result = await client.query({
+                        // this is a hack
+                        // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
+                        query: gql`
                         query tpopGemeindeQuery {
                           allChGemeindes(
                             filter: {
@@ -144,117 +158,118 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
                           }
                         }
                       `,
-                    })
-                  } catch (error) {
-                    return enqueNotification({
-                      message: error.message,
-                      options: {
-                        variant: 'error',
-                      },
-                    })
-                  }
-                  const gemeinde = get(
-                    result,
-                    'data.allChGemeindes.nodes[0].name',
-                    '',
-                  )
-                  // keep following method in case table ch_gemeinden is removed again
-                  /*const gemeinde = await getGemeindeForKoord({
+                      })
+                    } catch (error) {
+                      return enqueNotification({
+                        message: error.message,
+                        options: {
+                          variant: 'error',
+                        },
+                      })
+                    }
+                    const gemeinde = get(
+                      result,
+                      'data.allChGemeindes.nodes[0].name',
+                      '',
+                    )
+                    // keep following method in case table ch_gemeinden is removed again
+                    /*const gemeinde = await getGemeindeForKoord({
                     lv95X: row.lv95X,
                     lv95Y: row.lv95Y,
                     store,
                   })*/
-                  if (gemeinde) {
-                    const fakeEvent = {
-                      target: { value: gemeinde, name: 'gemeinde' },
+                    if (gemeinde) {
+                      const fakeEvent = {
+                        target: { value: gemeinde, name: 'gemeinde' },
+                      }
+                      handleChange(fakeEvent)
+                      handleBlur(fakeEvent)
+                      setTimeout(() => handleSubmit())
                     }
-                    handleChange(fakeEvent)
-                    handleBlur(fakeEvent)
-                    setTimeout(() => handleSubmit())
-                  }
-                }}
+                  }}
+                  handleSubmit={handleSubmit}
+                />
+              )}
+              <TextField
+                name="radius"
+                label="Radius (m)"
+                type="number"
                 handleSubmit={handleSubmit}
               />
-            )}
-            <TextField
-              name="radius"
-              label="Radius (m)"
-              type="number"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="hoehe"
-              label="Höhe (m.ü.M.)"
-              type="number"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="exposition"
-              label="Exposition, Besonnung"
-              type="text"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="klima"
-              label="Klima"
-              type="text"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="neigung"
-              label="Hangneigung"
-              type="text"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="beschreibung"
-              label="Beschreibung"
-              type="text"
-              multiline
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="katasterNr"
-              label="Kataster-Nr."
-              type="text"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="eigentuemer"
-              label="EigentümerIn"
-              type="text"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="kontakt"
-              label="Kontakt vor Ort"
-              type="text"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="nutzungszone"
-              label="Nutzungszone"
-              type="text"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="bewirtschafter"
-              label="BewirtschafterIn"
-              type="text"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="bewirtschaftung"
-              label="Bewirtschaftung"
-              type="text"
-              handleSubmit={handleSubmit}
-            />
-            <MdField name="bemerkungen" label="Bemerkungen" />
-          </Form>
-        )}
-      </Formik>
-    </FormContainer>
+              <TextField
+                name="hoehe"
+                label="Höhe (m.ü.M.)"
+                type="number"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="exposition"
+                label="Exposition, Besonnung"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="klima"
+                label="Klima"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="neigung"
+                label="Hangneigung"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="beschreibung"
+                label="Beschreibung"
+                type="text"
+                multiline
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="katasterNr"
+                label="Kataster-Nr."
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="eigentuemer"
+                label="EigentümerIn"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="kontakt"
+                label="Kontakt vor Ort"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="nutzungszone"
+                label="Nutzungszone"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="bewirtschafter"
+                label="BewirtschafterIn"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="bewirtschaftung"
+                label="Bewirtschaftung"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <MdField name="bemerkungen" label="Bemerkungen" />
+            </Form>
+          )}
+        </Formik>
+      </FormContainer>
+    </Container>
   )
 }
 
-export default observer(Tpop)
+export default withResizeDetector(observer(Tpop))
