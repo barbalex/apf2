@@ -33,7 +33,7 @@ const FilesContainer = styled.div`
 const ApTabs = ({ treeName }) => {
   const store = useContext(storeContext)
   const { urlQuery, setUrlQuery } = store
-  const { activeNodeArray, datenWidth } = store[treeName]
+  const { activeNodeArray } = store[treeName]
 
   let id =
     activeNodeArray.length > 3
@@ -76,7 +76,7 @@ const ApTabs = ({ treeName }) => {
         {tab === 'ap' && <Ap treeName={treeName} id={id} />}
         {tab === 'auswertung' && <Auswertung id={id} />}
         {tab === 'dateien' && (
-          <FilesContainer data-width={datenWidth}>
+          <FilesContainer>
             <Files parentId={id} parent="ap" />
           </FilesContainer>
         )}
