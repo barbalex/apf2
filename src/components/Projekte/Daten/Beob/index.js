@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
+import { withResizeDetector } from 'react-resize-detector'
 
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import constants from '../../../../modules/constants'
@@ -12,15 +13,14 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   padding: 15px 10px 0 10px;
-  column-width: ${(props) =>
-    props['data-width'] > 2 * constants.columnWidth
-      ? `${constants.columnWidth}px`
-      : 'auto'};
+  ${(props) =>
+    props['data-column-width'] &&
+    `column-width: ${props['data-column-width']}px;`}
 `
 
-const Beob = ({ treeName }) => {
+const Beob = ({ treeName, width = 1000 }) => {
   const store = useContext(storeContext)
-  const { activeNodeArray, datenWidth } = store[treeName]
+  const { activeNodeArray } = store[treeName]
   const { data, loading, error } = useQuery(query, {
     variables: {
       id: activeNodeArray[activeNodeArray.length - 1],
@@ -33,15 +33,19 @@ const Beob = ({ treeName }) => {
       )
     : []
 
+  const columnWidth =
+    width > 2 * constants.columnWidth ? constants.columnWidth : undefined
+
   if (!row) return null
   if (!beobFields || beobFields.length === 0) return null
-  if (loading) return <Container>Lade...</Container>
+  if (loading)
+    return <Container data-column-width={columnWidth}>Lade...</Container>
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
   return (
     <ErrorBoundary>
       <div>
-        <Container data-width={datenWidth}>
+        <Container data-column-width={columnWidth}>
           {beobFields.map(([key, value]) => (
             <div key={key}>
               <TextFieldNonUpdatable label={key} value={value} />
@@ -53,4 +57,4 @@ const Beob = ({ treeName }) => {
   )
 }
 
-export default observer(Beob)
+export default withResizeDetector(observer(Beob))
