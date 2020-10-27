@@ -5,6 +5,7 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
+import { withResizeDetector } from 'react-resize-detector'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -26,7 +27,6 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 145px);
-  height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -34,20 +34,20 @@ const Container = styled.div`
 `
 const FormScrollContainer = styled.div`
   height: calc(100% - 43px - 48px);
-  padding: 10px;
   overflow-y: auto !important;
 `
 const ColumnContainer = styled.div`
+  padding: 10px;
   ${(props) =>
-    props['data-width'] > 2 * constants.columnWidth &&
-    `column-width: ${constants.columnWidth}px`}
+    props['data-column-width'] &&
+    `column-width: ${props['data-column-width']}px;`}
 `
 
-const Tpopmassn = ({ treeName }) => {
+const Tpopmassn = ({ treeName, width = 1000 }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
 
-  const { activeNodeArray, filterWidth, dataFilter } = store[treeName]
+  const { activeNodeArray, dataFilter } = store[treeName]
 
   const apId = activeNodeArray[3]
 
@@ -138,9 +138,23 @@ const Tpopmassn = ({ treeName }) => {
     [dataFilterSetValue, row, treeName],
   )
 
+  const columnWidth =
+    width > 2 * constants.columnWidth ? constants.columnWidth : undefined
+
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (errorLists) return `Fehler: ${errorLists.message}`
+
+  console.log('TpopMassnFilter', {
+    columnWidth,
+    width,
+    tpopmassnTotalCount,
+    tpopmassnFilteredCount,
+    tpopmassnsOfApTotalCount,
+    tpopmassnsOfApFilteredCount,
+    row,
+  })
+
   return (
     <ErrorBoundary>
       <Container>
@@ -154,7 +168,7 @@ const Tpopmassn = ({ treeName }) => {
           filteredApNr={tpopmassnsOfApFilteredCount}
         />
         <FormScrollContainer>
-          <ColumnContainer data-width={filterWidth}>
+          <ColumnContainer data-column-width={columnWidth}>
             <Formik
               key={row}
               initialValues={row}
@@ -315,4 +329,4 @@ const Tpopmassn = ({ treeName }) => {
   )
 }
 
-export default observer(Tpopmassn)
+export default withResizeDetector(observer(Tpopmassn))
