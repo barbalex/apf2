@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
+import { withResizeDetector } from 'react-resize-detector'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -13,7 +14,8 @@ import storeContext from '../../storeContext'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  /*height: 100vh;*/
+  height: calc(100vh - 64px);
+
   @media print {
     display: block;
     height: auto !important;
@@ -63,7 +65,7 @@ const InnerContainer = styled.div`
 const standardWidth = 500
 const standardHeight = 800
 
-const Ekf = () => {
+const Ekf = ({ height = 1000 }) => {
   const { user, isPrint, tree, ekfIds } = useContext(storeContext)
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
@@ -129,7 +131,7 @@ const Ekf = () => {
         onDragFinished={onDragFinished}
       >
         <InnerContainer ref={treeEl}>
-          <EkfList />
+          <EkfList height={height} />
         </InnerContainer>
         <InnerContainer ref={datenEl}>
           {tpopkontrId ? (
@@ -143,4 +145,4 @@ const Ekf = () => {
   )
 }
 
-export default observer(Ekf)
+export default withResizeDetector(observer(Ekf))

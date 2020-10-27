@@ -14,7 +14,7 @@ import dataWithDateByAdresseIdGql from './dataWithDateByAdresseId'
 import List from './List'
 import Error from '../../shared/Error'
 
-const EkfListContainer = () => {
+const EkfListContainer = ({ height }) => {
   const store = useContext(storeContext)
   const { ekfYear, ekfAdresseId, user } = store
 
@@ -40,7 +40,7 @@ const EkfListContainer = () => {
     //console.log('ListContainer, error:', error.message)
     return <Error errors={errors} />
   }
-  return <List data={data} loading={loading} />
+  return <List data={data} loading={loading} height={height} />
 }
 
 export default observer(EkfListContainer)

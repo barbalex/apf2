@@ -2,6 +2,7 @@ import React, { useContext, useRef, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
+import { withResizeDetector } from 'react-resize-detector'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -16,13 +17,16 @@ import ApberForApFromAp from '../Print/ApberForApFromAp'
 import ApberForYear from '../Print/ApberForYear'
 
 const Container = styled.div`
-  height: 100%;
+  height: calc(100vh - 64px);
+
   @media print {
     display: block;
     height: auto !important;
   }
 `
 const StyledSplitPane = styled(SplitPane)`
+  height: ${(props) => props['data-height'] ?? 1000}px !important;
+
   .Resizer {
     background: #388e3c;
     opacity: 1;
@@ -74,6 +78,7 @@ const ProjektContainer = ({
   nodes,
   treeLoading,
   treeRefetch,
+  height = 1000,
 }) => {
   const store = useContext(storeContext)
   const { isPrint } = store
@@ -190,6 +195,7 @@ const ProjektContainer = ({
           minSize={100}
           onDragFinished={onChange}
           overflow="auto"
+          data-height={height}
         >
           {elObj.tree}
           <InnerContainer>
@@ -209,6 +215,7 @@ const ProjektContainer = ({
           minSize={100}
           onDragFinished={onChange}
           overflow="auto"
+          data-height={height}
         >
           {elObj.tree}
           <ApberForYear />
@@ -230,6 +237,7 @@ const ProjektContainer = ({
           size="100%"
           minSize={100}
           onDragFinished={onChange}
+          data-height={height}
         >
           {elObj[tabs[0]]}
           <></>
@@ -246,6 +254,7 @@ const ProjektContainer = ({
           size={paneSize}
           minSize={100}
           onDragFinished={onChange}
+          data-height={height}
         >
           {elObj[tabs[0]]}
           {elObj[tabs[1]]}
@@ -262,6 +271,7 @@ const ProjektContainer = ({
           size="33%"
           minSize={100}
           onDragFinished={onChange}
+          data-height={height}
         >
           {elObj[tabs[0]]}
 
@@ -270,6 +280,7 @@ const ProjektContainer = ({
             size="50%"
             minSize={100}
             onDragFinished={onChange}
+            data-height={height}
           >
             {elObj[tabs[1]]}
             {elObj[tabs[2]]}
@@ -287,6 +298,7 @@ const ProjektContainer = ({
           size="25%"
           minSize={100}
           onDragFinished={onChange}
+          data-height={height}
         >
           {elObj[tabs[0]]}
 
@@ -295,6 +307,7 @@ const ProjektContainer = ({
             size="33%"
             minSize={100}
             onDragFinished={onChange}
+            data-height={height}
           >
             {elObj[tabs[1]]}
             <StyledSplitPane
@@ -302,6 +315,7 @@ const ProjektContainer = ({
               size="50%"
               minSize={100}
               onDragFinished={onChange}
+              data-height={height}
             >
               {elObj[tabs[2]]}
               {elObj[tabs[3]]}
@@ -320,6 +334,7 @@ const ProjektContainer = ({
           size="20%"
           onDragFinished={onChange}
           minSize={100}
+          data-height={height}
         >
           {elObj[tabs[0]]}
 
@@ -328,6 +343,7 @@ const ProjektContainer = ({
             size="25%"
             minSize={100}
             onDragFinished={onChange}
+            data-height={height}
           >
             {elObj[tabs[1]]}
             <StyledSplitPane
@@ -335,6 +351,7 @@ const ProjektContainer = ({
               size="33%"
               minSize={100}
               onDragFinished={onChange}
+              data-height={height}
             >
               {elObj[tabs[2]]}
               <StyledSplitPane
@@ -342,6 +359,7 @@ const ProjektContainer = ({
                 size="50%"
                 minSize={100}
                 onDragFinished={onChange}
+                data-height={height}
               >
                 {elObj[tabs[3]]}
                 {elObj[tabs[4]]}
@@ -356,4 +374,4 @@ const ProjektContainer = ({
   return null
 }
 
-export default observer(ProjektContainer)
+export default withResizeDetector(observer(ProjektContainer))

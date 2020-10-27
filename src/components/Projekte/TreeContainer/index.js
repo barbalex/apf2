@@ -191,11 +191,6 @@ const LabelFilterContainer = styled.div`
   padding-top: 5px;
   margin-bottom: 8px;
 `
-const InnerTreeContainer = styled.div`
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-`
 const StyledDialog = styled(Dialog)`
   overflow-y: hidden;
   .MuiDialog-paper {
@@ -645,9 +640,7 @@ const TreeContainer = ({
           <LabelFilter treeName={treeName} nodes={nodes} />
           {!!projIdInActiveNodeArray && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
-        <InnerTreeContainer>
-          <Tree treeName={treeName} nodes={nodes} loading={treeLoading} />
-        </InnerTreeContainer>
+        <Tree treeName={treeName} nodes={nodes} loading={treeLoading} />
         <CmApFolder onClick={handleClick} treeName={treeName} />
         <CmAp onClick={handleClick} treeName={treeName} />
         <CmApberuebersichtFolder onClick={handleClick} treeName={treeName} />

@@ -5,6 +5,7 @@ import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
+import { withResizeDetector } from 'react-resize-detector'
 
 import Row from './Row'
 
@@ -14,6 +15,7 @@ const singleRowHeight = 23
 const Container = styled.div`
   height: 100%;
   width: 100%;
+
   cursor: ${(props) => (props['data-loading'] ? 'wait' : 'inherit')};
   ul {
     margin: 0;
@@ -38,10 +40,10 @@ const StyledList = styled(List)`
   }
 `
 
-const Tree = ({ treeName, nodes, loading }) => {
+const Tree = ({ treeName, nodes, loading, height = 1000 }) => {
   const store = useContext(storeContext)
   const tree = store[treeName]
-  const { activeNodeArray, treeWidth, treeHeight } = tree
+  const { activeNodeArray, treeWidth } = tree
 
   const listRef = React.createRef()
 
@@ -56,10 +58,10 @@ const Tree = ({ treeName, nodes, loading }) => {
 
   return (
     <Container data-loading={loading}>
-      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      <SimpleBar style={{ maxHeight: height, height }}>
         {({ scrollableNodeRef, contentNodeRef }) => (
           <StyledList
-            height={treeHeight - 64 - 64}
+            height={height}
             itemCount={nodes.length}
             itemSize={singleRowHeight}
             width={treeWidth}
@@ -83,4 +85,4 @@ const Tree = ({ treeName, nodes, loading }) => {
   )
 }
 
-export default observer(Tree)
+export default withResizeDetector(observer(Tree))

@@ -58,13 +58,13 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
 }
 
-const EkfList = ({ data, loading }) => {
+const EkfList = ({ data, loading, height }) => {
   const store = useContext(storeContext)
   const { ekfYear, ekfAdresseId, tree, setEkfIds } = store
   const ekf = getEkfFromData({ data, ekfAdresseId })
   setEkfIds(ekf.map((e) => e.id))
 
-  const { activeNodeArray, treeWidth, treeHeight } = tree
+  const { activeNodeArray, treeWidth } = tree
   const activeTpopkontrId =
     activeNodeArray.length > 9
       ? activeNodeArray[9]
@@ -105,26 +105,30 @@ const EkfList = ({ data, loading }) => {
     )
   }
 
+  console.log('List', {
+    height,
+    itemCount: ekf.length,
+    itemSize,
+    itemsHeight: ekf.length * itemSize,
+    windowHeight: window.innerHeight,
+  })
+
   return (
     <Container>
       <List
-        height={treeHeight - 64}
+        height={height}
         itemCount={ekf.length}
         itemSize={itemSize}
         width={treeWidth}
       >
-        {({ index, style }) => {
-          const row = ekf[index]
-
-          return (
-            <Item
-              activeTpopkontrId={activeTpopkontrId}
-              projektCount={projektCount}
-              style={style}
-              row={row}
-            />
-          )
-        }}
+        {({ index, style }) => (
+          <Item
+            activeTpopkontrId={activeTpopkontrId}
+            projektCount={projektCount}
+            style={style}
+            row={ekf[index]}
+          />
+        )}
       </List>
     </Container>
   )

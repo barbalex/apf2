@@ -23,9 +23,8 @@ import queryTree from './queryTree'
 import buildNodes from './TreeContainer/nodes'
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
   height: calc(100vh - 64px);
+
   @media print {
     height: auto !important;
     overflow: visible !important;

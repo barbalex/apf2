@@ -9,13 +9,23 @@ import { useStaticQuery, graphql } from 'gatsby'
 import styled from 'styled-components'
 
 import AppBar from './AppBar'
-//import Fallback from '../shared/Fallback'
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+
   @media print {
     height: auto;
     overflow: visible !important;
   }
+`
+const HeaderContainer = styled.div`
+  flex-grow: 0;
+`
+const ContentContainer = styled.div`
+  flex-grow: 1;
 `
 
 const query = graphql`
@@ -50,10 +60,10 @@ const Layout = ({ children }) => {
       >
         <html lang="de" />
       </Helmet>
-      {/*<Suspense fallback={<Fallback />}>*/}
-      <AppBar />
-      {children}
-      {/*</Suspense>*/}
+      <HeaderContainer>
+        <AppBar />
+      </HeaderContainer>
+      <ContentContainer>{children}</ContentContainer>
     </Container>
   )
 }
