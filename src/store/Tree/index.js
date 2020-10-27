@@ -33,18 +33,10 @@ export default types
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     map: types.optional(Map, defaultMap),
     treeWidth: types.optional(types.number, 500),
-    datenWidth: types.optional(types.number, 500),
-    filterWidth: types.optional(types.number, 500),
   })
   .actions((self) => ({
     setTreeWidth(val) {
       self.treeWidth = val
-    },
-    setDatenWidth(val) {
-      self.datenWidth = val
-    },
-    setFilterWidth(val) {
-      self.filterWidth = val
     },
     setOpenNodes(val) {
       // need set to ensure contained arrays are unique
