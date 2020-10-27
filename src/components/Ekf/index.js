@@ -69,7 +69,7 @@ const Ekf = () => {
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
 
-  const { activeNodeArray, setTreeWidth, setDatenWidth } = tree
+  const { activeNodeArray, setTreeWidth } = tree
   const tpopkontrId =
     activeNodeArray.length > 9
       ? activeNodeArray[9]
@@ -85,12 +85,7 @@ const Ekf = () => {
     } else {
       setTreeWidth(standardWidth)
     }
-    if (datenEl.current && datenEl.current.clientWidth) {
-      setDatenWidth(datenEl.current.clientWidth)
-    } else {
-      setDatenWidth(standardWidth)
-    }
-  }, [setTreeWidth, setDatenWidth])
+  }, [setTreeWidth])
 
   const onDragFinished = useCallback(() => setDimensions(), [setDimensions])
 
