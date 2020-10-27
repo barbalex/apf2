@@ -5,13 +5,14 @@ import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { withResizeDetector } from 'react-resize-detector'
 
 import Item from './Item'
 import storeContext from '../../../../storeContext'
 import initiateDataFromUrl from '../initiateDataFromUrl'
 
 const Container = styled.div`
-  height: 100%;
+  height: calc(100vh - 64px);
   border-right: 1px solid rgb(46, 125, 50);
 `
 const NoDataContainer = styled.div`
@@ -58,7 +59,7 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
 }
 
-const EkfList = ({ data, loading, height }) => {
+const EkfList = ({ data, loading, height = 1000 }) => {
   const store = useContext(storeContext)
   const { ekfYear, ekfAdresseId, tree, setEkfIds } = store
   const ekf = getEkfFromData({ data, ekfAdresseId })
@@ -105,14 +106,6 @@ const EkfList = ({ data, loading, height }) => {
     )
   }
 
-  console.log('List', {
-    height,
-    itemCount: ekf.length,
-    itemSize,
-    itemsHeight: ekf.length * itemSize,
-    windowHeight: window.innerHeight,
-  })
-
   return (
     <Container>
       <List
@@ -134,4 +127,4 @@ const EkfList = ({ data, loading, height }) => {
   )
 }
 
-export default observer(EkfList)
+export default withResizeDetector(observer(EkfList))
