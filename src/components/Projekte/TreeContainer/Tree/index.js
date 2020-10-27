@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
+import SimpleBar from 'simplebar-react'
 
 import Row from './Row'
 
@@ -12,6 +13,7 @@ import storeContext from '../../../../storeContext'
 const singleRowHeight = 23
 const Container = styled.div`
   height: 100%;
+  width: 100%;
   cursor: ${(props) => (props['data-loading'] ? 'wait' : 'inherit')};
   ul {
     margin: 0;
@@ -21,6 +23,19 @@ const Container = styled.div`
 `
 const StyledList = styled(List)`
   overflow-x: hidden !important;
+
+  /* hide native scrollbar */
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    box-shadow: none;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    box-shadow: none;
+  }
 `
 
 const Tree = ({ treeName, nodes, loading }) => {
@@ -41,23 +56,29 @@ const Tree = ({ treeName, nodes, loading }) => {
 
   return (
     <Container data-loading={loading}>
-      <StyledList
-        height={treeHeight - 64 - 64}
-        itemCount={nodes.length}
-        itemSize={singleRowHeight}
-        width={treeWidth}
-        ref={listRef}
-      >
-        {({ index, style }) => (
-          <Row
-            key={index}
-            style={style}
-            index={index}
-            node={nodes[index]}
-            treeName={treeName}
-          />
+      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+        {({ scrollableNodeRef, contentNodeRef }) => (
+          <StyledList
+            height={treeHeight - 64 - 64}
+            itemCount={nodes.length}
+            itemSize={singleRowHeight}
+            width={treeWidth}
+            ref={listRef}
+            innerRef={contentNodeRef}
+            outerRef={scrollableNodeRef}
+          >
+            {({ index, style }) => (
+              <Row
+                key={index}
+                style={style}
+                index={index}
+                node={nodes[index]}
+                treeName={treeName}
+              />
+            )}
+          </StyledList>
         )}
-      </StyledList>
+      </SimpleBar>
     </Container>
   )
 }

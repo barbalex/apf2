@@ -36,6 +36,8 @@ import setUserFromIdb from './modules/setUserFromIdb'
 import initiateDataFromUrl from './modules/initiateDataFromUrl'
 import getActiveNodeArrayFromPathname from './modules/getActiveNodeArrayFromPathname'
 
+import 'simplebar/dist/simplebar.min.css'
+
 import 'react-leaflet-markercluster/dist/styles.min.css'
 import 'react-datepicker/dist/react-datepicker.css'
 

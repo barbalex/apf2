@@ -114,6 +114,7 @@
     "react-window": "1.8.5",
     "recharts": "1.8.5",
     "redaxios": "0.3.0",
+    "simplebar-react": "2.3.0",
     "styled-components": "5.2.0",
     "typography": "0.16.19",
     "uploadcare-widget": "3.10.2",

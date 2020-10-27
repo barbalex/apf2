@@ -42,6 +42,11 @@ export default () => createGlobalStyle`
 
   /* scrollbars */
 
+  .simplebar-scrollbar:before {
+    background: #2e7d32 !important;
+  }
+
+
   ::-webkit-scrollbar {
     width: 12px;
   }
