@@ -15,6 +15,8 @@ import ErrorBoundary from '../components/shared/ErrorBoundary'
 
 const Container = styled.div`
   background-color: #fffde7;
+  height: 100%;
+
   @media print {
     margin-top: 0;
     height: auto;
