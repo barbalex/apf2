@@ -25,7 +25,7 @@ import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const FormContainerNoColumns = styled.div`
   overflow-y: auto !important;
-  height: calc(100% - 20px);
+  height: calc(100% - 48px);
 `
 const FormContainerNoColumnsInner = styled.div`
   padding: 10px;
