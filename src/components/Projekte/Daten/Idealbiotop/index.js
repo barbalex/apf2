@@ -6,6 +6,7 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { Formik, Form } from 'formik'
+import { withResizeDetector } from 'react-resize-detector'
 
 import TextField from '../../../shared/TextFieldFormik'
 import DateField from '../../../shared/DateFormik'
@@ -39,10 +40,9 @@ const FormContainer = styled.div`
   padding: 10px;
   overflow-y: auto !important;
   height: calc(100% - 20px);
-  column-width: ${(props) =>
-    props['data-width'] > 2 * constants.columnWidth
-      ? `${constants.columnWidth}px`
-      : 'auto'};
+  ${(props) =>
+    props['data-column-width'] &&
+    `column-width: ${props['data-column-width']}px;`}
 `
 const FilesContainer = styled.div`
   padding: 10px;
@@ -83,13 +83,13 @@ const fieldTypes = {
   bemerkungen: 'String',
 }
 
-const Idealbiotop = ({ treeName }) => {
+const Idealbiotop = ({ treeName, width = 1000 }) => {
   const store = useContext(storeContext)
   const { urlQuery, setUrlQuery } = store
   const client = useApolloClient()
 
   const [tab, setTab] = useState(get(urlQuery, 'idealbiotopTab', 'idealbiotop'))
-  const { activeNodeArray, datenWidth } = store[treeName]
+  const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -162,6 +162,9 @@ const Idealbiotop = ({ treeName }) => {
     [setUrlQuery, urlQuery],
   )
 
+  const columnWidth =
+    width > 2 * constants.columnWidth ? constants.columnWidth : undefined
+
   if (loading) {
     return (
       <Container>
@@ -195,7 +198,7 @@ const Idealbiotop = ({ treeName }) => {
             <StyledTab label="Dateien" value="dateien" data-id="dateien" />
           </Tabs>
           {tab === 'idealbiotop' && (
-            <FormContainer data-width={datenWidth}>
+            <FormContainer data-column-width={columnWidth}>
               <Formik
                 initialValues={row}
                 onSubmit={onSubmit}
@@ -336,7 +339,7 @@ const Idealbiotop = ({ treeName }) => {
             </FormContainer>
           )}
           {tab === 'dateien' && (
-            <FilesContainer data-width={datenWidth}>
+            <FilesContainer>
               <Files parentId={row.id} parent="idealbiotop" />
             </FilesContainer>
           )}
@@ -346,4 +349,4 @@ const Idealbiotop = ({ treeName }) => {
   )
 }
 
-export default observer(Idealbiotop)
+export default withResizeDetector(observer(Idealbiotop))
