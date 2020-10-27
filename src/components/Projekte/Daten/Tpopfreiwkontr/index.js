@@ -8,6 +8,7 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import jwtDecode from 'jwt-decode'
 import { MdPrint } from 'react-icons/md'
 import IconButton from '@material-ui/core/IconButton'
+import { withResizeDetector } from 'react-resize-detector'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import query from './query'
@@ -59,6 +60,7 @@ const Container = styled.div`
 const InnerContainer = styled.div`
   padding: 10px;
   overflow-y: auto !important;
+  width: 100%;
 `
 const GridContainer = styled.div`
   display: grid;
@@ -177,7 +179,12 @@ const fieldTypes = {
   ekfBemerkungen: 'String',
 }
 
-const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
+const Tpopfreiwkontr = ({
+  treeName,
+  showFilter = false,
+  id: idPassed,
+  width = 1000,
+}) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const {
@@ -189,7 +196,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
     user,
   } = store
   const tree = store[treeName]
-  const { activeNodeArray, datenWidth, filterWidth, dataFilter } = tree
+  const { activeNodeArray, dataFilter } = tree
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
@@ -628,7 +635,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
         />
       )}
       <InnerContainer>
-        <GridContainer width={showFilter ? filterWidth : datenWidth}>
+        <GridContainer width={width}>
           <Title />
           <Headdata
             pop={pop}
@@ -770,4 +777,4 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   )
 }
 
-export default observer(Tpopfreiwkontr)
+export default withResizeDetector(observer(Tpopfreiwkontr))
