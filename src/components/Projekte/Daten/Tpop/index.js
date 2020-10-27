@@ -87,7 +87,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue, refetch, urlQuery, setUrlQuery } = store
 
-  const { activeNodeArray, dataFilter, datenWidth } = store[treeName]
+  const { activeNodeArray, dataFilter } = store[treeName]
   const [tab, setTab] = useState(get(urlQuery, 'tpopTab', 'tpop'))
   const onChangeTab = useCallback(
     (event, value) => {
@@ -306,7 +306,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
               row={row}
             />
           ) : (
-            <FilesContainer data-width={datenWidth}>
+            <FilesContainer>
               <Files parentId={row.id} parent="tpop" />
             </FilesContainer>
           )}
