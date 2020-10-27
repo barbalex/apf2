@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
+import { withResizeDetector } from 'react-resize-detector'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -32,7 +33,6 @@ import { tpopmassn } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
-  height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -44,13 +44,13 @@ const LoadingContainer = styled.div`
 `
 const FormScrollContainer = styled.div`
   height: calc(100vh - 64px - 43px - 48px);
-  padding: 10px;
   overflow-y: auto !important;
 `
 const ColumnContainer = styled.div`
+  padding: 10px;
   ${(props) =>
-    props['data-width'] > 2 * constants.columnWidth &&
-    `column-width: ${constants.columnWidth}px`}
+    props['data-column-width'] &&
+    `column-width: ${props['data-column-width']}px;`}
 `
 const FilesContainer = styled.div`
   padding: 10px;
@@ -86,12 +86,12 @@ const fieldTypes = {
   planVorhanden: 'Boolean',
 }
 
-const Tpopmassn = ({ treeName, showFilter = false }) => {
+const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
   const { urlQuery, setUrlQuery } = store
 
-  const { activeNodeArray, datenWidth } = store[treeName]
+  const { activeNodeArray } = store[treeName]
 
   let id =
     activeNodeArray.length > 9
@@ -273,6 +273,9 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
 
   //console.log('Tpopmassn rendering')
 
+  const columnWidth =
+    width > 2 * constants.columnWidth ? constants.columnWidth : undefined
+
   if (loading) {
     return (
       <Container>
@@ -303,7 +306,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
         </Tabs>
         {tab === 'tpopmassn' && (
           <FormScrollContainer>
-            <ColumnContainer data-width={datenWidth}>
+            <ColumnContainer data-column-width={columnWidth}>
               <Formik
                 key={showFilter ? row : row.id}
                 initialValues={row}
@@ -457,7 +460,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
           </FormScrollContainer>
         )}
         {tab === 'dateien' && !showFilter && (
-          <FilesContainer data-width={datenWidth}>
+          <FilesContainer>
             <Files parentId={row.id} parent="tpopmassn" />
           </FilesContainer>
         )}
@@ -466,4 +469,4 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
   )
 }
 
-export default observer(Tpopmassn)
+export default withResizeDetector(observer(Tpopmassn))
