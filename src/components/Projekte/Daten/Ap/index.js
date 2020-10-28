@@ -18,15 +18,12 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const StyledTabs = styled(Tabs)`
-  margin-bottom: 10px;
-`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 const TabContent = styled.div`
   height: ${(props) =>
-    `calc(100% - ${props['data-form-title-height']}px - 48px - 10px)`};
+    `calc(100% - ${props['data-form-title-height']}px - 48px)`};
 `
 
 const ApTabs = ({ treeName }) => {
@@ -64,7 +61,7 @@ const ApTabs = ({ treeName }) => {
           treeName={treeName}
           setFormTitleHeight={setFormTitleHeight}
         />
-        <StyledTabs
+        <Tabs
           value={tab}
           onChange={onChangeTab}
           indicatorColor="primary"
@@ -78,7 +75,7 @@ const ApTabs = ({ treeName }) => {
             data-id="auswertung"
           />
           <StyledTab label="Dateien" value="dateien" data-id="dateien" />
-        </StyledTabs>
+        </Tabs>
         <TabContent data-form-title-height={formTitleHeight}>
           {tab === 'ap' && <Ap treeName={treeName} id={id} />}
           {tab === 'auswertung' && <Auswertung id={id} />}
