@@ -24,10 +24,9 @@ const StyledTabs = styled(Tabs)`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
-const FilesContainer = styled.div`
-  padding: 10px;
-  overflow-y: auto !important;
-  height: calc(100% - 20px);
+const TabContent = styled.div`
+  height: ${(props) =>
+    `calc(100% - ${props['data-form-title-height']}px - 48px - 10px)`};
 `
 
 const ApTabs = ({ treeName }) => {
@@ -54,10 +53,17 @@ const ApTabs = ({ treeName }) => {
     [setUrlQuery, urlQuery],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(43)
+
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle apId={id} title="Aktionsplan" treeName={treeName} />
+        <FormTitle
+          apId={id}
+          title="Aktionsplan"
+          treeName={treeName}
+          setFormTitleHeight={setFormTitleHeight}
+        />
         <StyledTabs
           value={tab}
           onChange={onChangeTab}
@@ -73,13 +79,11 @@ const ApTabs = ({ treeName }) => {
           />
           <StyledTab label="Dateien" value="dateien" data-id="dateien" />
         </StyledTabs>
-        {tab === 'ap' && <Ap treeName={treeName} id={id} />}
-        {tab === 'auswertung' && <Auswertung id={id} />}
-        {tab === 'dateien' && (
-          <FilesContainer>
-            <Files parentId={id} parent="ap" />
-          </FilesContainer>
-        )}
+        <TabContent data-form-title-height={formTitleHeight}>
+          {tab === 'ap' && <Ap treeName={treeName} id={id} />}
+          {tab === 'auswertung' && <Auswertung id={id} />}
+          {tab === 'dateien' && <Files parentId={id} parent="ap" />}
+        </TabContent>
       </Container>
     </ErrorBoundary>
   )
