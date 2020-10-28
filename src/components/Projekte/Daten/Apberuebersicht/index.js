@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import get from 'lodash/get'
@@ -8,6 +8,7 @@ import { Formik, Form } from 'formik'
 import jwtDecode from 'jwt-decode'
 import format from 'date-fns/format'
 import { DateTime } from 'luxon'
+import SimpleBar from 'simplebar-react'
 
 import TextField from '../../../shared/TextFieldFormik'
 import MdField from '../../../shared/MarkdownFieldFormik'
@@ -25,11 +26,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
-  overflow: auto !important;
-  height: 100%;
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  height: 100%;
+`
+const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled(Form)`
+  padding: 10px;
 `
 const StyledButton = styled(Button)`
   text-transform: none !important;
@@ -225,14 +230,17 @@ const Apberuebersicht = ({ treeName }) => {
     refetch()
   }, [client, enqueNotification, refetch, row])
 
+  const [formTitleHeight, setFormTitleHeight] = useState(43)
+
   if (loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  if (error)
+    return (
+      <LoadingContainer>
+        `Fehler beim Laden der Daten: ${error.message}`
+      </LoadingContainer>
+    )
 
   return (
     <ErrorBoundary>
@@ -241,36 +249,44 @@ const Apberuebersicht = ({ treeName }) => {
           title="AP-Bericht Jahresübersicht"
           treeName={treeName}
           table="apberuebersicht"
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField
-                  name="jahr"
-                  label="Jahr"
-                  type="number"
-                  handleSubmit={handleSubmit}
-                />
-                {!!row.historyDate && (
-                  <TextFieldNonUpdatable
-                    value={format(new Date(row.historyDate), 'dd.MM.yyyy')}
-                    label="Datum, an dem AP, Pop und TPop historisiert wurden"
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+              {({ handleSubmit, dirty }) => (
+                <StyledForm onBlur={() => dirty && handleSubmit()}>
+                  <TextField
+                    name="jahr"
+                    label="Jahr"
+                    type="number"
+                    handleSubmit={handleSubmit}
                   />
-                )}
-                {showHistorize && (
-                  <StyledButton
-                    variant="outlined"
-                    onClick={onClickHistorize}
-                    title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. Noch nicht historisiert wurde und 3. zwischen Januar und März"
-                  >
-                    {`AP, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
-                  </StyledButton>
-                )}
-                <MdField name="bemerkungen" label="Bemerkungen" />
-              </Form>
-            )}
-          </Formik>
+                  {!!row.historyDate && (
+                    <TextFieldNonUpdatable
+                      value={format(new Date(row.historyDate), 'dd.MM.yyyy')}
+                      label="Datum, an dem AP, Pop und TPop historisiert wurden"
+                    />
+                  )}
+                  {showHistorize && (
+                    <StyledButton
+                      variant="outlined"
+                      onClick={onClickHistorize}
+                      title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. Noch nicht historisiert wurde und 3. zwischen Januar und März"
+                    >
+                      {`AP, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
+                    </StyledButton>
+                  )}
+                  <MdField name="bemerkungen" label="Bemerkungen" />
+                </StyledForm>
+              )}
+            </Formik>
+          </SimpleBar>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
