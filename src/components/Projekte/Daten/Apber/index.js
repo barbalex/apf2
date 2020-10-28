@@ -157,12 +157,6 @@ const Apber = ({ treeName, width = 1000 }) => {
     return `Fehler: ${errorApErfkritWertes.message}`
   }
 
-  console.log('Apber', {
-    width,
-    constantsColumnWidth: constants.columnWidth,
-    columnWidth,
-  })
-
   return (
     <ErrorBoundary>
       <Container>
