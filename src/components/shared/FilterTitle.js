@@ -1,10 +1,11 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 // this does not exist in any icon library, not even in md!!!!
 import DeleteSweepOutlined from '@material-ui/icons/DeleteSweepOutlined'
 import { MdDeleteSweep } from 'react-icons/md'
 import IconButton from '@material-ui/core/IconButton'
 import { observer } from 'mobx-react-lite'
+import { withResizeDetector } from 'react-resize-detector'
 
 import storeContext from '../../storeContext'
 import exists from '../../modules/exists'
@@ -52,6 +53,8 @@ const FormTitle = ({
   filteredNr,
   totalApNr,
   filteredApNr,
+  height = 43,
+  setFormTitleHeight = () => {},
 }) => {
   const store = useContext(storeContext)
   const {
@@ -60,6 +63,10 @@ const FormTitle = ({
     dataFilterEmptyTable,
     dataFilterEmptyTree,
   } = store
+
+  useEffect(() => {
+    setFormTitleHeight(height)
+  }, [height, setFormTitleHeight])
 
   const existsTableFilter = dataFilterTableIsFiltered({
     treeName,
@@ -120,4 +127,4 @@ const FormTitle = ({
   )
 }
 
-export default observer(FormTitle)
+export default withResizeDetector(observer(FormTitle))
