@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -6,6 +6,7 @@ import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
 import { withResizeDetector } from 'react-resize-detector'
+import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -24,13 +25,19 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { apber } from '../../../shared/fragments'
 
 const Container = styled.div`
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
-  overflow-x: auto !important;
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  height: 100%;
+`
+const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled(Form)`
+  padding: 10px;
   ${(props) =>
     props['data-column-width'] &&
     `column-width: ${props['data-column-width']}px;`}
@@ -139,22 +146,30 @@ const Apber = ({ treeName, width = 1000 }) => {
     [client, row, store.user.name],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(43)
+
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
   if (loading) {
-    return (
-      <Container>
-        <FieldsContainer data-column-width={columnWidth}>
-          Lade...
-        </FieldsContainer>
-      </Container>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
-  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
+  if (error)
+    return (
+      <LoadingContainer>
+        `Fehler beim Laden der Daten: ${error.message}`
+      </LoadingContainer>
+    )
+  if (errorAdresses)
+    return (
+      <LoadingContainer>`Fehler: ${errorAdresses.message}`</LoadingContainer>
+    )
   if (errorApErfkritWertes) {
-    return `Fehler: ${errorApErfkritWertes.message}`
+    return (
+      <LoadingContainer>
+        `Fehler: ${errorApErfkritWertes.message}`
+      </LoadingContainer>
+    )
   }
 
   return (
@@ -165,86 +180,97 @@ const Apber = ({ treeName, width = 1000 }) => {
           title="AP-Bericht"
           treeName={treeName}
           table="apber"
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer data-column-width={columnWidth}>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField
-                  name="jahr"
-                  label="Jahr"
-                  type="number"
-                  handleSubmit={handleSubmit}
-                />
-                <MdField
-                  name="vergleichVorjahrGesamtziel"
-                  label="Vergleich Vorjahr - Gesamtziel"
-                />
-                <RadioButtonGroup
-                  name="beurteilung"
-                  label="Beurteilung"
-                  dataSource={get(
-                    dataApErfkritWertes,
-                    'allApErfkritWertes.nodes',
-                    [],
-                  )}
-                  loading={loadingApErfkritWertes}
-                  handleSubmit={handleSubmit}
-                />
-                <RadioButtonGroup
-                  name="veraenderungZumVorjahr"
-                  label="Veränderung zum Vorjahr"
-                  dataSource={veraenGegenVorjahrWerte}
-                  handleSubmit={handleSubmit}
-                />
-                <MdField name="apberAnalyse" label="Analyse" />
-                <MdField
-                  name="konsequenzenUmsetzung"
-                  label="Konsequenzen für die Umsetzung"
-                />
-                <MdField
-                  name="konsequenzenErfolgskontrolle"
-                  label="Konsequenzen für die Erfolgskontrolle"
-                />
-                <MdField
-                  name="biotopeNeue"
-                  label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
-                />
-                <MdField
-                  name="biotopeOptimieren"
-                  label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
-                />
-                <MdField
-                  name="massnahmenApBearb"
-                  label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
-                />
-                <MdField
-                  name="massnahmenPlanungVsAusfuehrung"
-                  label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
-                />
-                <MdField
-                  name="massnahmenOptimieren"
-                  label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
-                />
-                <MdField
-                  name="wirkungAufArt"
-                  label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
-                />
-                <DateField
-                  name="datum"
-                  label="Datum"
-                  handleSubmit={handleSubmit}
-                />
-                <Select
-                  name="bearbeiter"
-                  label="BearbeiterIn"
-                  options={get(dataAdresses, 'allAdresses.nodes', [])}
-                  loading={loadingAdresses}
-                  handleSubmit={handleSubmit}
-                />
-              </Form>
-            )}
-          </Formik>
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+              {({ handleSubmit, dirty }) => (
+                <StyledForm
+                  onBlur={() => dirty && handleSubmit()}
+                  data-column-width={columnWidth}
+                >
+                  <TextField
+                    name="jahr"
+                    label="Jahr"
+                    type="number"
+                    handleSubmit={handleSubmit}
+                  />
+                  <MdField
+                    name="vergleichVorjahrGesamtziel"
+                    label="Vergleich Vorjahr - Gesamtziel"
+                  />
+                  <RadioButtonGroup
+                    name="beurteilung"
+                    label="Beurteilung"
+                    dataSource={get(
+                      dataApErfkritWertes,
+                      'allApErfkritWertes.nodes',
+                      [],
+                    )}
+                    loading={loadingApErfkritWertes}
+                    handleSubmit={handleSubmit}
+                  />
+                  <RadioButtonGroup
+                    name="veraenderungZumVorjahr"
+                    label="Veränderung zum Vorjahr"
+                    dataSource={veraenGegenVorjahrWerte}
+                    handleSubmit={handleSubmit}
+                  />
+                  <MdField name="apberAnalyse" label="Analyse" />
+                  <MdField
+                    name="konsequenzenUmsetzung"
+                    label="Konsequenzen für die Umsetzung"
+                  />
+                  <MdField
+                    name="konsequenzenErfolgskontrolle"
+                    label="Konsequenzen für die Erfolgskontrolle"
+                  />
+                  <MdField
+                    name="biotopeNeue"
+                    label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
+                  />
+                  <MdField
+                    name="biotopeOptimieren"
+                    label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
+                  />
+                  <MdField
+                    name="massnahmenApBearb"
+                    label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
+                  />
+                  <MdField
+                    name="massnahmenPlanungVsAusfuehrung"
+                    label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
+                  />
+                  <MdField
+                    name="massnahmenOptimieren"
+                    label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
+                  />
+                  <MdField
+                    name="wirkungAufArt"
+                    label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
+                  />
+                  <DateField
+                    name="datum"
+                    label="Datum"
+                    handleSubmit={handleSubmit}
+                  />
+                  <Select
+                    name="bearbeiter"
+                    label="BearbeiterIn"
+                    options={get(dataAdresses, 'allAdresses.nodes', [])}
+                    loading={loadingAdresses}
+                    handleSubmit={handleSubmit}
+                  />
+                </StyledForm>
+              )}
+            </Formik>
+          </SimpleBar>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
