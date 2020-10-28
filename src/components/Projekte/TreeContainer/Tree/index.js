@@ -13,7 +13,7 @@ import storeContext from '../../../../storeContext'
 
 const singleRowHeight = 23
 const Container = styled.div`
-  height: 100%;
+  height: calc(100% - 53px - 8px);
   width: 100%;
 
   cursor: ${(props) => (props['data-loading'] ? 'wait' : 'inherit')};
@@ -58,7 +58,7 @@ const Tree = ({ treeName, nodes, loading, height = 1000 }) => {
 
   return (
     <Container data-loading={loading}>
-      <SimpleBar style={{ maxHeight: height, height }}>
+      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
         {({ scrollableNodeRef, contentNodeRef }) => (
           <StyledList
             height={height}
