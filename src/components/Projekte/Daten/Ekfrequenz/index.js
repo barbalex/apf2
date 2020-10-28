@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { FaPlus, FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import styled from 'styled-components'
@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form, FieldArray } from 'formik'
+import SimpleBar from 'simplebar-react'
 
 import TextField from '../../../shared/TextFieldFormik'
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -24,10 +25,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
-  overflow: auto !important;
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  height: 100%;
+`
+const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled(Form)`
+  padding: 10px;
 `
 const KontrolljahrContainer = styled.div`
   margin-bottom: 20px;
@@ -158,14 +164,18 @@ const Ekfrequenz = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
   if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
+  }
+  if (error) {
     return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
+      <LoadingContainer>
+        `Fehler beim Laden der Daten: ${error.message}`
+      </LoadingContainer>
     )
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   return (
     <ErrorBoundary>
       <Container>
@@ -174,135 +184,144 @@ const Ekfrequenz = ({ treeName }) => {
           title="EK-Frequenz"
           treeName={treeName}
           table="ekfrequenz"
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer>
-          <Formik
-            key={row.kontrolljahre}
-            initialValues={row}
-            onSubmit={onSubmit}
-            enableReinitialize
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
           >
-            {({ handleSubmit, dirty, values }) => (
-              <Form
-                onBlur={(event) => {
-                  // prevent submitting when button blurs
-                  if (event.target.type === 'button') return
-                  dirty && handleSubmit()
-                }}
-              >
-                <TextField
-                  name="code"
-                  label="Kürzel"
-                  type="text"
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="anwendungsfall"
-                  label="Anwendungsfall"
-                  type="text"
-                  multiLine
-                  handleSubmit={handleSubmit}
-                />
-                <RadioButtonGroup
-                  name="ektyp"
-                  dataSource={ektypeWertes}
-                  loading={false}
-                  label="EK-Typ"
-                  handleSubmit={handleSubmit}
-                />
-                <FieldArray
-                  name="kontrolljahre"
-                  render={(arrayHelpers) => (
-                    <KontrolljahrContainer>
-                      <LabelRow>
-                        <StyledLabel>
-                          Kontrolljahre (= Anzahl Jahre nach Start bzw.
-                          Ansiedlung)
-                        </StyledLabel>
-                        <PlusIcon
-                          title="Kontrolljahr hinzufügen"
-                          aria-label="Kontrolljahr hinzufügen"
-                          onClick={() => {
-                            // only accept one empty value
-                            if (
+            <Formik
+              key={row.kontrolljahre}
+              initialValues={row}
+              onSubmit={onSubmit}
+              enableReinitialize
+            >
+              {({ handleSubmit, dirty, values }) => (
+                <StyledForm
+                  onBlur={(event) => {
+                    // prevent submitting when button blurs
+                    if (event.target.type === 'button') return
+                    dirty && handleSubmit()
+                  }}
+                >
+                  <TextField
+                    name="code"
+                    label="Kürzel"
+                    type="text"
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="anwendungsfall"
+                    label="Anwendungsfall"
+                    type="text"
+                    multiLine
+                    handleSubmit={handleSubmit}
+                  />
+                  <RadioButtonGroup
+                    name="ektyp"
+                    dataSource={ektypeWertes}
+                    loading={false}
+                    label="EK-Typ"
+                    handleSubmit={handleSubmit}
+                  />
+                  <FieldArray
+                    name="kontrolljahre"
+                    render={(arrayHelpers) => (
+                      <KontrolljahrContainer>
+                        <LabelRow>
+                          <StyledLabel>
+                            Kontrolljahre (= Anzahl Jahre nach Start bzw.
+                            Ansiedlung)
+                          </StyledLabel>
+                          <PlusIcon
+                            title="Kontrolljahr hinzufügen"
+                            aria-label="Kontrolljahr hinzufügen"
+                            onClick={() => {
+                              // only accept one empty value
+                              if (
+                                values.kontrolljahre &&
+                                values.kontrolljahre.filter((v) => !v).length >
+                                  1
+                              ) {
+                                return
+                              }
                               values.kontrolljahre &&
-                              values.kontrolljahre.filter((v) => !v).length > 1
-                            ) {
-                              return
-                            }
-                            values.kontrolljahre &&
-                            values.kontrolljahre.length > 0
-                              ? arrayHelpers.insert(
-                                  values.kontrolljahre.length,
-                                  '',
-                                )
-                              : arrayHelpers.push('')
-                          }}
-                        >
-                          <FaPlus />
-                        </PlusIcon>
-                      </LabelRow>
-                      {!!values.kontrolljahre &&
-                        // do not sort here as sorting happens on every change of value
-                        // so after typing every number - bad for multiple digits
-                        values.kontrolljahre.map((kontrolljahr, index) => (
-                          <div key={index}>
-                            <KontrolljahrField
-                              name={`kontrolljahre.${index}`}
-                              handleSubmit={handleSubmit}
-                            />
-                            <DelIcon
-                              title={`${values.kontrolljahre[index]} entfernen`}
-                              aria-label={`${values.kontrolljahre[index]} entfernen`}
-                              onClick={() => arrayHelpers.remove(index)}
-                            >
-                              <FaTimes />
-                            </DelIcon>
-                          </div>
-                        ))}
-                    </KontrolljahrContainer>
-                  )}
-                />
-                <RadioButtonGroup
-                  name="kontrolljahreAb"
-                  dataSource={kontrolljahreAbWertes}
-                  loading={false}
-                  label="Kontrolljahre ab letzter"
-                  handleSubmit={handleSubmit}
-                />
-                <div>
-                  {errorEkAbrechnungstypWertes ? (
-                    errorEkAbrechnungstypWertes.message
-                  ) : (
-                    <RadioButtonGroup
-                      name="ekAbrechnungstyp"
-                      dataSource={get(
-                        dataEkAbrechnungstypWertes,
-                        'allEkAbrechnungstypWertes.nodes',
-                        [],
-                      )}
-                      loading={loadingEkAbrechnungstypWertes}
-                      label="EK-Abrechnungstyp"
-                      handleSubmit={handleSubmit}
-                    />
-                  )}
-                </div>
-                <TextField
-                  name="bemerkungen"
-                  label="Bemerkungen"
-                  type="text"
-                  multiLine
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="sort"
-                  label="Sortierung"
-                  type="number"
-                  handleSubmit={handleSubmit}
-                />
-              </Form>
-            )}
-          </Formik>
+                              values.kontrolljahre.length > 0
+                                ? arrayHelpers.insert(
+                                    values.kontrolljahre.length,
+                                    '',
+                                  )
+                                : arrayHelpers.push('')
+                            }}
+                          >
+                            <FaPlus />
+                          </PlusIcon>
+                        </LabelRow>
+                        {!!values.kontrolljahre &&
+                          // do not sort here as sorting happens on every change of value
+                          // so after typing every number - bad for multiple digits
+                          values.kontrolljahre.map((kontrolljahr, index) => (
+                            <div key={index}>
+                              <KontrolljahrField
+                                name={`kontrolljahre.${index}`}
+                                handleSubmit={handleSubmit}
+                              />
+                              <DelIcon
+                                title={`${values.kontrolljahre[index]} entfernen`}
+                                aria-label={`${values.kontrolljahre[index]} entfernen`}
+                                onClick={() => arrayHelpers.remove(index)}
+                              >
+                                <FaTimes />
+                              </DelIcon>
+                            </div>
+                          ))}
+                      </KontrolljahrContainer>
+                    )}
+                  />
+                  <RadioButtonGroup
+                    name="kontrolljahreAb"
+                    dataSource={kontrolljahreAbWertes}
+                    loading={false}
+                    label="Kontrolljahre ab letzter"
+                    handleSubmit={handleSubmit}
+                  />
+                  <div>
+                    {errorEkAbrechnungstypWertes ? (
+                      errorEkAbrechnungstypWertes.message
+                    ) : (
+                      <RadioButtonGroup
+                        name="ekAbrechnungstyp"
+                        dataSource={get(
+                          dataEkAbrechnungstypWertes,
+                          'allEkAbrechnungstypWertes.nodes',
+                          [],
+                        )}
+                        loading={loadingEkAbrechnungstypWertes}
+                        label="EK-Abrechnungstyp"
+                        handleSubmit={handleSubmit}
+                      />
+                    )}
+                  </div>
+                  <TextField
+                    name="bemerkungen"
+                    label="Bemerkungen"
+                    type="text"
+                    multiLine
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="sort"
+                    label="Sortierung"
+                    type="number"
+                    handleSubmit={handleSubmit}
+                  />
+                </StyledForm>
+              )}
+            </Formik>
+          </SimpleBar>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
