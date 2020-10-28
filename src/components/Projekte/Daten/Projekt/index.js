@@ -1,9 +1,10 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
+import SimpleBar from 'simplebar-react'
 
 import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
@@ -18,10 +19,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  overflow: auto !important;
-  height: 100%;
+`
+const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled(Form)`
+  padding: 10px;
 `
 
 const fieldTypes = {
@@ -95,31 +101,47 @@ const Projekt = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
   if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
+  }
+  if (error) {
     return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
+      <LoadingContainer>
+        `Fehler beim Laden der Daten: ${error.message}`
+      </LoadingContainer>
     )
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Projekt" treeName={treeName} table={filterTable} />
-        <FieldsContainer>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField
-                  name="name"
-                  label="Name"
-                  type="text"
-                  handleSubmit={handleSubmit}
-                />
-              </Form>
-            )}
-          </Formik>
+        <FormTitle
+          title="Projekt"
+          treeName={treeName}
+          table={filterTable}
+          setFormTitleHeight={setFormTitleHeight}
+        />
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+              {({ handleSubmit, dirty }) => (
+                <StyledForm onBlur={() => dirty && handleSubmit()}>
+                  <TextField
+                    name="name"
+                    label="Name"
+                    type="text"
+                    handleSubmit={handleSubmit}
+                  />
+                </StyledForm>
+              )}
+            </Formik>
+          </SimpleBar>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
