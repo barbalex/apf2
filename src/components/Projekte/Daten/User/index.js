@@ -11,6 +11,7 @@ import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@material-ui/core/Button'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
+import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField2'
@@ -32,10 +33,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  overflow: auto !important;
-  height: 100%;
+`
+const ScrollContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled.div`
+  padding: 10px;
 `
 const StyledInput = styled(Input)`
   &:before {
@@ -308,15 +314,23 @@ const User = ({ treeName }) => {
     thisYear,
   ])
 
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
   if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
+  }
+  if (error) {
     return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
+      <LoadingContainer>
+        {`Fehler beim Laden der Daten: ${error.message}`}
+      </LoadingContainer>
     )
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
-  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
+  if (errorAdresses) {
+    return (
+      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
+    )
+  }
   if (!row) return null
   return (
     <ErrorBoundary>
@@ -326,6 +340,7 @@ const User = ({ treeName }) => {
           title="Benutzer"
           treeName={treeName}
           table="user"
+          setFormTitleHeight={setFormTitleHeight}
           buttons={
             <>
               {!editPassword && !passwordMessage && (
@@ -366,128 +381,137 @@ const User = ({ treeName }) => {
             </>
           }
         />
-        <FieldsContainer>
-          <TextField
-            key={`${row.id}name`}
-            name="name"
-            label="Name (nur von Managern veränderbar)"
-            row={row}
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}email`}
-            name="email"
-            label="Email"
-            row={row}
-            saveToDb={saveToDb}
-            errors={errors}
-            helperText="Bitte email aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
-          />
-          <RadioButtonGroup
-            key={`${row.id}role`}
-            name="role"
-            value={row.role}
-            dataSource={roleWerte}
-            saveToDb={saveToDb}
-            error={errors.role}
-            label="Rolle (nur von Managern veränderbar)"
-          />
-          <Select
-            key={`${row.id}adresseId`}
-            name="adresseId"
-            value={row.adresseId}
-            field="adresseId"
-            label="Zugehörige Adresse"
-            options={get(dataAdresses, 'allAdresses.nodes', [])}
-            loading={loadingAdresses}
-            saveToDb={saveToDb}
-            error={errors.adresseId}
-          />
-          {!!passwordMessage && (
-            <PasswordMessage>{passwordMessage}</PasswordMessage>
-          )}
-          {(editPassword || errors.pass) && (
-            <FormControl
-              error={!!passwordErrorText}
-              fullWidth
-              aria-describedby="passwortHelper"
-            >
-              <InputLabel htmlFor="passwort">Neues Passwort</InputLabel>
-              <StyledInput
-                id="passwort"
-                name="pass"
-                type={showPass ? 'text' : 'password'}
-                defaultValue={password}
-                onBlur={onBlurPassword}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
-                    onBlurPassword(e)
-                  }
-                }}
-                autoComplete="current-password"
-                autoCorrect="off"
-                spellCheck="false"
-                error={!!errors.pass}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPass(!showPass)}
-                      onMouseDown={(e) => e.preventDefault()}
-                      title={showPass ? 'verstecken' : 'anzeigen'}
-                    >
-                      {showPass ? <MdVisibilityOff /> : <MdVisibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
+        <ScrollContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <StyledForm>
+              <TextField
+                key={`${row.id}name`}
+                name="name"
+                label="Name (nur von Managern veränderbar)"
+                row={row}
+                saveToDb={saveToDb}
+                errors={errors}
               />
-              <FormHelperText id="passwortHelper">
-                {passwordErrorText || (errors && !!errors.pass)
-                  ? errors.pass
-                  : 'Passwort muss mindestens 6 Zeichen lang sein und darf keine Zahl sein'}
-              </FormHelperText>
-            </FormControl>
-          )}
-          {(editPassword || errors.pass) && !!password && (
-            <FormControl
-              error={!!password2ErrorText}
-              fullWidth
-              aria-describedby="passwortHelper"
-            >
-              <InputLabel htmlFor="passwort">
-                Neues Passwort wiederholen
-              </InputLabel>
-              <StyledInput
-                id="passwort2"
-                name="pass"
-                type={showPass2 ? 'text' : 'password'}
-                defaultValue={password2}
-                onBlur={onBlurPassword2}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
-                    onBlurPassword(e)
-                  }
-                }}
-                autoCorrect="off"
-                spellCheck="false"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPass2(!showPass2)}
-                      onMouseDown={(e) => e.preventDefault()}
-                      title={showPass2 ? 'verstecken' : 'anzeigen'}
-                    >
-                      {showPass2 ? <MdVisibilityOff /> : <MdVisibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
+              <TextField
+                key={`${row.id}email`}
+                name="email"
+                label="Email"
+                row={row}
+                saveToDb={saveToDb}
+                errors={errors}
+                helperText="Bitte email aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
               />
-              <FormHelperText id="passwortHelper">
-                {password2ErrorText}
-              </FormHelperText>
-            </FormControl>
-          )}
-        </FieldsContainer>
+              <RadioButtonGroup
+                key={`${row.id}role`}
+                name="role"
+                value={row.role}
+                dataSource={roleWerte}
+                saveToDb={saveToDb}
+                error={errors.role}
+                label="Rolle (nur von Managern veränderbar)"
+              />
+              <Select
+                key={`${row.id}adresseId`}
+                name="adresseId"
+                value={row.adresseId}
+                field="adresseId"
+                label="Zugehörige Adresse"
+                options={get(dataAdresses, 'allAdresses.nodes', [])}
+                loading={loadingAdresses}
+                saveToDb={saveToDb}
+                error={errors.adresseId}
+              />
+              {!!passwordMessage && (
+                <PasswordMessage>{passwordMessage}</PasswordMessage>
+              )}
+              {(editPassword || errors.pass) && (
+                <FormControl
+                  error={!!passwordErrorText}
+                  fullWidth
+                  aria-describedby="passwortHelper"
+                >
+                  <InputLabel htmlFor="passwort">Neues Passwort</InputLabel>
+                  <StyledInput
+                    id="passwort"
+                    name="pass"
+                    type={showPass ? 'text' : 'password'}
+                    defaultValue={password}
+                    onBlur={onBlurPassword}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        onBlurPassword(e)
+                      }
+                    }}
+                    autoComplete="current-password"
+                    autoCorrect="off"
+                    spellCheck="false"
+                    error={!!errors.pass}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPass(!showPass)}
+                          onMouseDown={(e) => e.preventDefault()}
+                          title={showPass ? 'verstecken' : 'anzeigen'}
+                        >
+                          {showPass ? <MdVisibilityOff /> : <MdVisibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText id="passwortHelper">
+                    {passwordErrorText || (errors && !!errors.pass)
+                      ? errors.pass
+                      : 'Passwort muss mindestens 6 Zeichen lang sein und darf keine Zahl sein'}
+                  </FormHelperText>
+                </FormControl>
+              )}
+              {(editPassword || errors.pass) && !!password && (
+                <FormControl
+                  error={!!password2ErrorText}
+                  fullWidth
+                  aria-describedby="passwortHelper"
+                >
+                  <InputLabel htmlFor="passwort">
+                    Neues Passwort wiederholen
+                  </InputLabel>
+                  <StyledInput
+                    id="passwort2"
+                    name="pass"
+                    type={showPass2 ? 'text' : 'password'}
+                    defaultValue={password2}
+                    onBlur={onBlurPassword2}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        onBlurPassword(e)
+                      }
+                    }}
+                    autoCorrect="off"
+                    spellCheck="false"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPass2(!showPass2)}
+                          onMouseDown={(e) => e.preventDefault()}
+                          title={showPass2 ? 'verstecken' : 'anzeigen'}
+                        >
+                          {showPass2 ? <MdVisibilityOff /> : <MdVisibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText id="passwortHelper">
+                    {password2ErrorText}
+                  </FormHelperText>
+                </FormControl>
+              )}
+            </StyledForm>
+          </SimpleBar>
+        </ScrollContainer>
       </Container>
     </ErrorBoundary>
   )
