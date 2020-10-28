@@ -98,6 +98,7 @@ const SymbolDiv = styled.div`
 `
 const TextSpan = styled.span`
   margin-left: 0;
+  padding-right: 5px;
   font-size: 16px !important;
   font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
