@@ -27,7 +27,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
-  padding: 10px;
+  padding: 0 10px;
 `
 const Spacer = styled.div`
   height: 10px;
