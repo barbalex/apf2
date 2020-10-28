@@ -11,6 +11,7 @@ import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
+import SimpleBar from 'simplebar-react'
 
 import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
 import RadioButtonGroup from '../../../../shared/RadioButtonGroupFormik'
@@ -23,10 +24,6 @@ import storeContext from '../../../../../storeContext'
 import EkYear from './EkYear'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
-const FormContainerNoColumns = styled.div`
-  overflow-y: auto !important;
-  height: calc(100% - 48px);
-`
 const FormContainerNoColumnsInner = styled.div`
   padding: 10px;
 `
@@ -123,9 +120,9 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
   )
 
   return (
-    <ErrorBoundary>
-      <>
-        <FormContainerNoColumns>
+    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      <ErrorBoundary>
+        <>
           <Formik
             key={showFilter ? row : row.id}
             initialValues={row}
@@ -197,9 +194,9 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
               </StyledTable>
             </>
           )}
-        </FormContainerNoColumns>
-      </>
-    </ErrorBoundary>
+        </>
+      </ErrorBoundary>
+    </SimpleBar>
   )
 }
 
