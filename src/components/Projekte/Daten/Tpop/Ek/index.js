@@ -120,7 +120,14 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
   )
 
   return (
-    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+    <SimpleBar
+      style={{
+        maxHeight: '100%',
+        height: '100%',
+        width: '100%',
+        maxWidth: '100%',
+      }}
+    >
       <ErrorBoundary>
         <>
           <Formik

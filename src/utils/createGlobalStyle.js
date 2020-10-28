@@ -45,6 +45,10 @@ export default () => createGlobalStyle`
   .simplebar-scrollbar:before {
     background: #2e7d32 !important;
   }
+  /* hide native scrollbar */
+  .simplebar-content-wrapper::-webkit-scrollbar {
+    display: none;
+  }
 
 
   ::-webkit-scrollbar {
