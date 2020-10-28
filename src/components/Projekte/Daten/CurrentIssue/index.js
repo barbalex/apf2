@@ -1,8 +1,9 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { useQuery, gql } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
+import SimpleBar from 'simplebar-react'
 
 import FormTitle from '../../../shared/FormTitle'
 import storeContext from '../../../../storeContext'
@@ -16,10 +17,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  overflow: auto !important;
-  height: 100%;
+`
+const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const Content = styled.div`
+  padding: 10px;
 `
 
 const query = gql`
@@ -47,14 +53,18 @@ const CurrentIssue = ({ treeName }) => {
 
   const row = get(data, 'currentissueById', {})
 
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
   if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
+  }
+  if (error) {
     return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
+      <LoadingContainer>
+        `Fehler beim Laden der Daten: ${error.message}`
+      </LoadingContainer>
     )
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   if (!row) return null
   return (
     <ErrorBoundary>
@@ -64,13 +74,21 @@ const CurrentIssue = ({ treeName }) => {
           title="Aktueller Fehler"
           treeName={treeName}
           table="currentissue"
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: mdParser.render(row.issue),
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
             }}
-          />
+          >
+            <Content
+              dangerouslySetInnerHTML={{
+                __html: mdParser.render(row.issue),
+              }}
+            />
+          </SimpleBar>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
