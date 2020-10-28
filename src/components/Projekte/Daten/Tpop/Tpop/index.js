@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import { withResizeDetector } from 'react-resize-detector'
+import SimpleBar from 'simplebar-react'
 
 import TextField from '../../../../shared/TextFieldFormik'
 import TextFieldWithInfo from '../../../../shared/TextFieldWithInfoFormik'
@@ -21,12 +22,8 @@ import storeContext from '../../../../../storeContext'
 import Coordinates from '../../../../shared/Coordinates'
 
 const Container = styled.div`
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  height: calc(100% - 48px);
-`
-const FormContainer = styled.div`
-  padding: 10px;
+  height: 100%;
+  padding: 0 10px;
   ${(props) =>
     props['data-column-width'] &&
     `column-width: ${props['data-column-width']}px;`}
@@ -56,8 +53,8 @@ const Tpop = ({
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
   return (
-    <Container>
-      <FormContainer data-column-width={columnWidth}>
+    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      <Container data-column-width={columnWidth}>
         <Formik
           key={showFilter ? row : row ? row.id : 'tpop'}
           initialValues={row}
@@ -267,8 +264,8 @@ const Tpop = ({
             </Form>
           )}
         </Formik>
-      </FormContainer>
-    </Container>
+      </Container>
+    </SimpleBar>
   )
 }
 
