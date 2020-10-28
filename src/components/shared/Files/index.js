@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
+import SimpleBar from 'simplebar-react'
 
 import ErrorBoundary from '../ErrorBoundary'
 
@@ -26,6 +27,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
+  padding: 10px;
 `
 const Spacer = styled.div`
   height: 10px;
@@ -149,53 +151,60 @@ const Files = ({ parentId, parent }) => {
   }
 
   return (
-    <ErrorBoundary>
-      <Container>
-        <ButtonsContainer>
-          <Uploader
-            id="file"
-            name="file"
-            onChange={onChangeUploader}
-            content="test"
-          />
-          {!!images.length && (
-            <LightboxButton
-              color="primary"
-              variant="outlined"
-              onClick={onClickLightboxButton}
-            >
-              Bilder in Gallerie öffnen
-            </LightboxButton>
+    <SimpleBar
+      style={{
+        maxHeight: '100%',
+        height: '100%',
+      }}
+    >
+      <ErrorBoundary>
+        <Container>
+          <ButtonsContainer>
+            <Uploader
+              id="file"
+              name="file"
+              onChange={onChangeUploader}
+              content="test"
+            />
+            {!!images.length && (
+              <LightboxButton
+                color="primary"
+                variant="outlined"
+                onClick={onClickLightboxButton}
+              >
+                Bilder in Gallerie öffnen
+              </LightboxButton>
+            )}
+          </ButtonsContainer>
+          {lightboxIsOpen && (
+            <Lightbox
+              mainSrc={imageUrls[imageIndex]}
+              nextSrc={imageUrls[(imageIndex + 1) % images.length]}
+              prevSrc={
+                imageUrls[(imageIndex + images.length - 1) % images.length]
+              }
+              onCloseRequest={onCloseLightboxRequest}
+              onMovePrevRequest={onMovePrevImageRequest}
+              onMoveNextRequest={onMoveNextImageRequest}
+              imageTitle={images[imageIndex].name || ''}
+              imageCaption={images[imageIndex].beschreibung || ''}
+              wrapperClassName="lightbox"
+              nextLabel="Nächstes Bild"
+              prevLabel="Voriges Bild"
+            />
           )}
-        </ButtonsContainer>
-        {lightboxIsOpen && (
-          <Lightbox
-            mainSrc={imageUrls[imageIndex]}
-            nextSrc={imageUrls[(imageIndex + 1) % images.length]}
-            prevSrc={
-              imageUrls[(imageIndex + images.length - 1) % images.length]
-            }
-            onCloseRequest={onCloseLightboxRequest}
-            onMovePrevRequest={onMovePrevImageRequest}
-            onMoveNextRequest={onMoveNextImageRequest}
-            imageTitle={images[imageIndex].name || ''}
-            imageCaption={images[imageIndex].beschreibung || ''}
-            wrapperClassName="lightbox"
-            nextLabel="Nächstes Bild"
-            prevLabel="Voriges Bild"
-          />
-        )}
-        <Spacer />
-        {files.map((file) => (
-          <File
-            key={file.fileId}
-            file={file}
-            parent={parent}
-            refetch={refetch}
-          />
-        ))}
-      </Container>
-    </ErrorBoundary>
+          <Spacer />
+          {files.map((file) => (
+            <File
+              key={file.fileId}
+              file={file}
+              parent={parent}
+              refetch={refetch}
+            />
+          ))}
+        </Container>
+      </ErrorBoundary>
+    </SimpleBar>
   )
 }
 
