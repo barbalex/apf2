@@ -1,9 +1,10 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
+import SimpleBar from 'simplebar-react'
 
 import TextField from '../../../shared/TextFieldFormik'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
@@ -21,10 +22,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
-  overflow: auto !important;
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  height: 100%;
+`
+const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled(Form)`
+  padding: 10px;
 `
 
 const fieldTypes = {
@@ -127,14 +133,17 @@ const Assozart = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(43)
+
   if (loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  if (error)
+    return (
+      <LoadingContainer>
+        `Fehler beim Laden der Daten: ${error.message}`
+      </LoadingContainer>
+    )
 
   return (
     <ErrorBoundary>
@@ -144,31 +153,39 @@ const Assozart = ({ treeName }) => {
           title="assoziierte Art"
           treeName={treeName}
           table="assozart"
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <SelectLoadingOptions
-                  name="aeId"
-                  valueLabelPath="aeTaxonomyByAeId.taxArtName"
-                  label="Art"
-                  row={row}
-                  query={queryAeTaxonomies}
-                  filter={aeTaxonomiesfilter}
-                  queryNodesName="allAeTaxonomies"
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="bemerkungen"
-                  label="Bemerkungen zur Assoziation"
-                  type="text"
-                  multiLine
-                  handleSubmit={handleSubmit}
-                />
-              </Form>
-            )}
-          </Formik>
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+              {({ handleSubmit, dirty }) => (
+                <StyledForm onBlur={() => dirty && handleSubmit()}>
+                  <SelectLoadingOptions
+                    name="aeId"
+                    valueLabelPath="aeTaxonomyByAeId.taxArtName"
+                    label="Art"
+                    row={row}
+                    query={queryAeTaxonomies}
+                    filter={aeTaxonomiesfilter}
+                    queryNodesName="allAeTaxonomies"
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="bemerkungen"
+                    label="Bemerkungen zur Assoziation"
+                    type="text"
+                    multiLine
+                    handleSubmit={handleSubmit}
+                  />
+                </StyledForm>
+              )}
+            </Formik>
+          </SimpleBar>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
