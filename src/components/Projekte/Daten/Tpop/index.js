@@ -46,10 +46,11 @@ const LoadingDiv = styled.div`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
+const TabContent = styled.div`
+  height: ${(props) => `calc(100% - 48px)`};
+`
 const FilesContainer = styled.div`
-  padding: 10px;
-  overflow-y: auto !important;
-  height: calc(100% - 20px);
+  height: 100%;
 `
 
 const fieldTypes = {
@@ -287,29 +288,31 @@ const TpopForm = ({ treeName, showFilter = false }) => {
               <StyledTab label="Dateien" value="dateien" data-id="dateien" />
             )}
           </Tabs>
-          {!showFilter && loading ? (
-            <LoadingDiv>Lade...</LoadingDiv>
-          ) : tab === 'tpop' ? (
-            <Tpop
-              treeName={treeName}
-              showFilter={showFilter}
-              onSubmit={onSubmit}
-              row={row}
-              apJahr={apJahr}
-              refetchTpop={refetchTpop}
-            />
-          ) : tab === 'ek' ? (
-            <Ek
-              treeName={treeName}
-              showFilter={showFilter}
-              onSubmit={onSubmit}
-              row={row}
-            />
-          ) : (
-            <FilesContainer>
-              <Files parentId={row.id} parent="tpop" />
-            </FilesContainer>
-          )}
+          <TabContent>
+            {!showFilter && loading ? (
+              <LoadingDiv>Lade...</LoadingDiv>
+            ) : tab === 'tpop' ? (
+              <Tpop
+                treeName={treeName}
+                showFilter={showFilter}
+                onSubmit={onSubmit}
+                row={row}
+                apJahr={apJahr}
+                refetchTpop={refetchTpop}
+              />
+            ) : tab === 'ek' ? (
+              <Ek
+                treeName={treeName}
+                showFilter={showFilter}
+                onSubmit={onSubmit}
+                row={row}
+              />
+            ) : (
+              <FilesContainer>
+                <Files parentId={row.id} parent="tpop" />
+              </FilesContainer>
+            )}
+          </TabContent>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
