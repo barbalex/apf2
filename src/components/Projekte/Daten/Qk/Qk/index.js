@@ -19,14 +19,10 @@ import storeContext from '../../../../../storeContext'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const Container = styled.div`
-  height: calc(100vh - 64px - 43px - 48px);
+  height: 100%;
   display: flex;
   flex-direction: column;
-`
-const FieldsContainer = styled.div`
   padding: 10px;
-  overflow: auto !important;
-  height: 100%;
 `
 const StyledPaper = styled(Paper)`
   padding: 10px;
@@ -130,75 +126,74 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <FieldsContainer>
-          <StyledFormControl fullWidth>
-            <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
-            <Input
-              id="berichtjahr"
-              value={berichtjahr}
-              type="number"
-              onChange={onChangeBerichtjahr}
+        <StyledFormControl fullWidth>
+          <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
+          <Input
+            id="berichtjahr"
+            value={berichtjahr}
+            type="number"
+            onChange={onChangeBerichtjahr}
+          />
+        </StyledFormControl>
+        <StyledFormControl fullWidth>
+          <InputLabel htmlFor="filter">
+            nach Abschnitts-Titel filtern
+          </InputLabel>
+          <Input id="filter" value={filter} onChange={onChangeFilter} />
+        </StyledFormControl>
+        {loading ? (
+          <AnalyzingButton onClick={() => refetch()} variant="outlined">
+            <AnalyzingSpan>Die Daten werden analysiert</AnalyzingSpan>
+            <Spinner
+              size={50}
+              frontColor="#2e7d32"
+              backColor="#4a148c1a"
+              loading={true}
             />
-          </StyledFormControl>
-          <StyledFormControl fullWidth>
-            <InputLabel htmlFor="filter">
-              nach Abschnitts-Titel filtern
-            </InputLabel>
-            <Input id="filter" value={filter} onChange={onChangeFilter} />
-          </StyledFormControl>
-          {loading ? (
-            <AnalyzingButton onClick={() => refetch()} variant="outlined">
-              <AnalyzingSpan>Die Daten werden analysiert</AnalyzingSpan>
-              <Spinner
-                size={50}
-                frontColor="#2e7d32"
-                backColor="#4a148c1a"
-                loading={true}
-              />
-            </AnalyzingButton>
-          ) : (
+          </AnalyzingButton>
+        ) : (
+          <div>
             <Badge badgeContent={messageGroupsFiltered.length} color="primary">
               <AnalyzingButton onClick={() => refetch()} variant="outlined">
                 neu analysieren
               </AnalyzingButton>
             </Badge>
-          )}
-          {messageGroupsFiltered.map((messageGroup, index) => (
-            <StyledPaper key={messageGroup.title} elevation={2}>
-              <Title>{messageGroup.title}</Title>
-              {messageGroup.messages.map((m, i) => (
-                <Row key={`${m.text}Index${i}`}>
-                  <StyledA
-                    onClick={() => openTree2WithActiveNodeArray(m.url)}
-                    title="in Strukturbaum 2 öffnen"
-                  >
-                    {m.text}
-                  </StyledA>
-                  <OutsideLink
-                    onClick={() => {
-                      const url = `${appBaseUrl()}Daten/${m.url.join('/')}`
-                      if (typeof window !== 'undefined') {
-                        if (
-                          window.matchMedia('(display-mode: standalone)')
-                            .matches
-                        ) {
-                          return window.open(url, '_blank', 'toolbar=no')
-                        }
-                        window.open(url)
+          </div>
+        )}
+        {messageGroupsFiltered.map((messageGroup, index) => (
+          <StyledPaper key={messageGroup.title} elevation={2}>
+            <Title>{messageGroup.title}</Title>
+            {messageGroup.messages.map((m, i) => (
+              <Row key={`${m.text}Index${i}`}>
+                <StyledA
+                  onClick={() => openTree2WithActiveNodeArray(m.url)}
+                  title="in Strukturbaum 2 öffnen"
+                >
+                  {m.text}
+                </StyledA>
+                <OutsideLink
+                  onClick={() => {
+                    const url = `${appBaseUrl()}Daten/${m.url.join('/')}`
+                    if (typeof window !== 'undefined') {
+                      if (
+                        window.matchMedia('(display-mode: standalone)').matches
+                      ) {
+                        return window.open(url, '_blank', 'toolbar=no')
                       }
-                    }}
-                    title="in neuem Fenster öffnen"
-                  >
-                    <FaExternalLinkAlt />
-                  </OutsideLink>
-                </Row>
-              ))}
-            </StyledPaper>
-          ))}
-          {!loading && messageGroups.length === 0 && (
-            <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
-          )}
-        </FieldsContainer>
+                      window.open(url)
+                    }
+                  }}
+                  title="in neuem Fenster öffnen"
+                >
+                  <FaExternalLinkAlt />
+                </OutsideLink>
+              </Row>
+            ))}
+          </StyledPaper>
+        ))}
+        {!loading && messageGroups.length === 0 && (
+          <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
+        )}
       </Container>
     </ErrorBoundary>
   )
