@@ -1,10 +1,11 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
+import SimpleBar from 'simplebar-react'
 
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
 import FormTitle from '../../../shared/FormTitle'
@@ -22,10 +23,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
-  overflow: auto !important;
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  height: 100%;
+`
+const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const FieldsSubContainer = styled.div`
+  padding: 10px 10px 0 10px;
 `
 
 const fieldTypes = {
@@ -135,15 +141,21 @@ const ApArt = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(43)
+
   if (loading || loadingAeEigById) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
-  if (errorAeEigById) return `Fehler: ${errorAeEigById.message}`
+  if (error)
+    return (
+      <LoadingContainer>
+        `Fehler beim Laden der Daten: ${error.message}`
+      </LoadingContainer>
+    )
+  if (errorAeEigById)
+    return (
+      <LoadingContainer>`Fehler: ${errorAeEigById.message}`</LoadingContainer>
+    )
 
   return (
     <ErrorBoundary>
@@ -153,62 +165,77 @@ const ApArt = ({ treeName }) => {
           title="Aktionsplan-Art"
           treeName={treeName}
           table="apart"
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer>
-          <div>
-            "Aktionsplan-Arten" sind alle Arten, welche der Aktionsplan
-            behandelt. Häufig dürfte das bloss eine einzige Art sein. Folgende
-            Gründe können dazu führen, dass hier mehrere aufgelistet werden:
-            <ul>
-              <li>Die AP-Art hat Synonyme</li>
-              <li>
-                Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B.
-                SISF 2 und SISF 3 bzw. Checklist 2017
-              </li>
-              <li>
-                Wenn eine Art im Rahmen des Aktionsplans inklusive nicht
-                synonymer aber eng verwandter Arten gefasst wid (z.B.
-                Unterarten)
-              </li>
-            </ul>
-          </div>
-          <div>
-            Beobachtungen aller AP-Arten stehen im Ordner "Beobachtungen nicht
-            beurteilt" zur Verfügung und können Teilpopulationen zugeordnet
-            werden.
-            <br />
-            <br />
-          </div>
-          <div>
-            Die im Aktionsplan gewählte namensgebende Art gibt dem Aktionsplan
-            nicht nur den Namen. Unter ihrer id werden auch die Kontrollen an
-            InfoFlora geliefert.
-            <br />
-            <br />
-          </div>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ handleSubmit, dirty }) => (
-              <Form
-                key={row ? row.id : 'artid'}
-                onBlur={() => dirty && handleSubmit()}
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <FieldsSubContainer>
+              <div>
+                "Aktionsplan-Arten" sind alle Arten, welche der Aktionsplan
+                behandelt. Häufig dürfte das bloss eine einzige Art sein.
+                Folgende Gründe können dazu führen, dass hier mehrere
+                aufgelistet werden:
+                <ul>
+                  <li>Die AP-Art hat Synonyme</li>
+                  <li>
+                    Beobachtungen liegen in unterschiedlichen Taxonomien vor,
+                    z.B. SISF 2 und SISF 3 bzw. Checklist 2017
+                  </li>
+                  <li>
+                    Wenn eine Art im Rahmen des Aktionsplans inklusive nicht
+                    synonymer aber eng verwandter Arten gefasst wid (z.B.
+                    Unterarten)
+                  </li>
+                </ul>
+              </div>
+              <div>
+                Beobachtungen aller AP-Arten stehen im Ordner "Beobachtungen
+                nicht beurteilt" zur Verfügung und können Teilpopulationen
+                zugeordnet werden.
+                <br />
+                <br />
+              </div>
+              <div>
+                Die im Aktionsplan gewählte namensgebende Art gibt dem
+                Aktionsplan nicht nur den Namen. Unter ihrer id werden auch die
+                Kontrollen an InfoFlora geliefert.
+                <br />
+                <br />
+              </div>
+              <Formik
+                initialValues={row}
+                onSubmit={onSubmit}
+                enableReinitialize
               >
-                <SelectLoadingOptions
-                  name="artId"
-                  valueLabel={
-                    dataAeEigById.aeTaxonomyById
-                      ? dataAeEigById.aeTaxonomyById.taxArtName
-                      : ''
-                  }
-                  label="Art"
-                  row={row}
-                  query={queryAeTaxonomies}
-                  filter={aeTaxonomiesfilter}
-                  queryNodesName="allAeTaxonomies"
-                  handleSubmit={handleSubmit}
-                />
-              </Form>
-            )}
-          </Formik>
+                {({ handleSubmit, dirty }) => (
+                  <Form
+                    key={row ? row.id : 'artid'}
+                    onBlur={() => dirty && handleSubmit()}
+                  >
+                    <SelectLoadingOptions
+                      name="artId"
+                      valueLabel={
+                        dataAeEigById.aeTaxonomyById
+                          ? dataAeEigById.aeTaxonomyById.taxArtName
+                          : ''
+                      }
+                      label="Art"
+                      row={row}
+                      query={queryAeTaxonomies}
+                      filter={aeTaxonomiesfilter}
+                      queryNodesName="allAeTaxonomies"
+                      handleSubmit={handleSubmit}
+                    />
+                  </Form>
+                )}
+              </Formik>
+            </FieldsSubContainer>
+          </SimpleBar>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
