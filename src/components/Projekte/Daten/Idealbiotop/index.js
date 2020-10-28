@@ -7,6 +7,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { Formik, Form } from 'formik'
 import { withResizeDetector } from 'react-resize-detector'
+import SimpleBar from 'simplebar-react'
 
 import TextField from '../../../shared/TextFieldFormik'
 import DateField from '../../../shared/DateFormik'
@@ -37,17 +38,14 @@ const FieldsContainer = styled.div`
   }
 `
 const FormContainer = styled.div`
-  padding: 10px;
-  overflow-y: auto !important;
-  height: calc(100% - 20px);
+  padding: 0 10px;
+  height: 100%;
   ${(props) =>
     props['data-column-width'] &&
     `column-width: ${props['data-column-width']}px;`}
 `
 const FilesContainer = styled.div`
-  padding: 10px;
-  overflow-y: auto !important;
-  height: calc(100% - 20px);
+  height: 100%;
 `
 const Section = styled.div`
   padding-top: 20px;
@@ -60,6 +58,10 @@ const Section = styled.div`
 `
 const StyledTab = styled(Tab)`
   text-transform: none !important;
+`
+const TabContent = styled.div`
+  height: ${(props) =>
+    `calc(100% - ${props['data-form-title-height']}px - 48px)`};
 `
 const fieldTypes = {
   apId: 'UUID',
@@ -162,6 +164,8 @@ const Idealbiotop = ({ treeName, width = 1000 }) => {
     [setUrlQuery, urlQuery],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(43)
+
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
@@ -181,6 +185,7 @@ const Idealbiotop = ({ treeName, width = 1000 }) => {
           title="Idealbiotop"
           treeName={treeName}
           table="idealbiotop"
+          setFormTitleHeight={setFormTitleHeight}
         />
         <FieldsContainer>
           <Tabs
@@ -197,152 +202,156 @@ const Idealbiotop = ({ treeName, width = 1000 }) => {
             />
             <StyledTab label="Dateien" value="dateien" data-id="dateien" />
           </Tabs>
-          {tab === 'idealbiotop' && (
-            <FormContainer data-column-width={columnWidth}>
-              <Formik
-                initialValues={row}
-                onSubmit={onSubmit}
-                enableReinitialize
-              >
-                {({ handleSubmit, dirty }) => (
-                  <Form onBlur={() => dirty && handleSubmit()}>
-                    <DateField
-                      name="erstelldatum"
-                      label="Erstelldatum"
-                      handleSubmit={handleSubmit}
-                    />
-                    <Section>Lage</Section>
-                    <TextField
-                      name="hoehenlage"
-                      label="Höhe"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="region"
-                      label="Region"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="exposition"
-                      label="Exposition"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="besonnung"
-                      label="Besonnung"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="hangneigung"
-                      label="Hangneigung"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <Section>Boden</Section>
-                    <TextField
-                      name="bodenTyp"
-                      label="Typ"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="bodenKalkgehalt"
-                      label="Kalkgehalt"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="bodenDurchlaessigkeit"
-                      label="Durchlässigkeit"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="bodenHumus"
-                      label="Humus"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="bodenNaehrstoffgehalt"
-                      label="Nährstoffgehalt"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="wasserhaushalt"
-                      label="Wasserhaushalt"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <Section>Vegetation</Section>
-                    <TextField
-                      name="konkurrenz"
-                      label="Konkurrenz"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="moosschicht"
-                      label="Moosschicht"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="krautschicht"
-                      label="Krautschicht"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="strauchschicht"
-                      label="Strauchschicht"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="baumschicht"
-                      label="Baumschicht"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                    <TextField
-                      name="bemerkungen"
-                      label="Bemerkungen"
-                      type="text"
-                      multiLine
-                      handleSubmit={handleSubmit}
-                    />
-                  </Form>
-                )}
-              </Formik>
-            </FormContainer>
-          )}
-          {tab === 'dateien' && (
-            <FilesContainer>
-              <Files parentId={row.id} parent="idealbiotop" />
-            </FilesContainer>
-          )}
+          <TabContent data-form-title-height={formTitleHeight}>
+            <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+              {tab === 'idealbiotop' && (
+                <FormContainer data-column-width={columnWidth}>
+                  <Formik
+                    initialValues={row}
+                    onSubmit={onSubmit}
+                    enableReinitialize
+                  >
+                    {({ handleSubmit, dirty }) => (
+                      <Form onBlur={() => dirty && handleSubmit()}>
+                        <DateField
+                          name="erstelldatum"
+                          label="Erstelldatum"
+                          handleSubmit={handleSubmit}
+                        />
+                        <Section>Lage</Section>
+                        <TextField
+                          name="hoehenlage"
+                          label="Höhe"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="region"
+                          label="Region"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="exposition"
+                          label="Exposition"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="besonnung"
+                          label="Besonnung"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="hangneigung"
+                          label="Hangneigung"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <Section>Boden</Section>
+                        <TextField
+                          name="bodenTyp"
+                          label="Typ"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="bodenKalkgehalt"
+                          label="Kalkgehalt"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="bodenDurchlaessigkeit"
+                          label="Durchlässigkeit"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="bodenHumus"
+                          label="Humus"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="bodenNaehrstoffgehalt"
+                          label="Nährstoffgehalt"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="wasserhaushalt"
+                          label="Wasserhaushalt"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <Section>Vegetation</Section>
+                        <TextField
+                          name="konkurrenz"
+                          label="Konkurrenz"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="moosschicht"
+                          label="Moosschicht"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="krautschicht"
+                          label="Krautschicht"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="strauchschicht"
+                          label="Strauchschicht"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="baumschicht"
+                          label="Baumschicht"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="bemerkungen"
+                          label="Bemerkungen"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                      </Form>
+                    )}
+                  </Formik>
+                </FormContainer>
+              )}
+              {tab === 'dateien' && (
+                <FilesContainer>
+                  <Files parentId={row.id} parent="idealbiotop" />
+                </FilesContainer>
+              )}
+            </SimpleBar>
+          </TabContent>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
