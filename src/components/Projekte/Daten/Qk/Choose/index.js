@@ -14,9 +14,10 @@ import storeContext from '../../../../../storeContext'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const Container = styled.div`
-  height: calc(100vh - 64px - 43px - 48px);
+  height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 10px 0;
 `
 const LoadingContainer = styled.div`
   padding: 10px;
@@ -30,11 +31,6 @@ const SpinnerContainer = styled.div`
 `
 const SpinnerText = styled.div`
   padding: 10px;
-`
-const FieldsContainer = styled.div`
-  padding: 10px 0;
-  overflow: auto !important;
-  height: 100%;
 `
 const FilterContainer = styled.div`
   padding: 0 60px;
@@ -90,22 +86,20 @@ const ChooseQk = ({ treeName, refetchTab }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <FieldsContainer>
-          <FilterContainer>
-            <StyledFormControl fullWidth>
-              <InputLabel htmlFor="filter">{label}</InputLabel>
-              <Input id="filter" value={filter} onChange={onChangeFilter} />
-            </StyledFormControl>
-          </FilterContainer>
-          {rowsFiltered.map((row) => (
-            <RowComponent
-              key={row.name}
-              apId={apId}
-              qk={row}
-              refetchTab={refetchTab}
-            />
-          ))}
-        </FieldsContainer>
+        <FilterContainer>
+          <StyledFormControl fullWidth>
+            <InputLabel htmlFor="filter">{label}</InputLabel>
+            <Input id="filter" value={filter} onChange={onChangeFilter} />
+          </StyledFormControl>
+        </FilterContainer>
+        {rowsFiltered.map((row) => (
+          <RowComponent
+            key={row.name}
+            apId={apId}
+            qk={row}
+            refetchTab={refetchTab}
+          />
+        ))}
       </Container>
     </ErrorBoundary>
   )
