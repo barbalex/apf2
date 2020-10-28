@@ -9,6 +9,7 @@ import jwtDecode from 'jwt-decode'
 import { MdPrint } from 'react-icons/md'
 import IconButton from '@material-ui/core/IconButton'
 import { withResizeDetector } from 'react-resize-detector'
+import SimpleBar from 'simplebar-react'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import query from './query'
@@ -57,9 +58,15 @@ const Container = styled.div`
     page-break-after: always;
   }
 `
-const InnerContainer = styled.div`
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  overflow-y: auto !important;
+`
+const ScrollContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const FormContainer = styled.div`
+  padding: 10px;
   width: 100%;
 `
 const GridContainer = styled.div`
@@ -597,13 +604,15 @@ const Tpopfreiwkontr = ({
     }
   }, [setIsPrint])
 
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
-  if (loading) {
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
+  if (error) {
     return (
-      <Container>
-        <InnerContainer>Lade...</InnerContainer>
-      </Container>
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
     )
+  }
+  if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
   if (Object.keys(row).length === 0) return null
 
@@ -618,6 +627,7 @@ const Tpopfreiwkontr = ({
           filteredNr={tpopkontrFilteredCount}
           totalApNr={tpopkontrsOfApTotalCount}
           filteredApNr={tpopkontrsOfApFilteredCount}
+          setFormTitleHeight={setFormTitleHeight}
         />
       )}
       {!(view === 'ekf') && !showFilter && (
@@ -625,6 +635,7 @@ const Tpopfreiwkontr = ({
           apId={apId}
           title="Freiwilligen-Kontrolle"
           treeName={treeName}
+          setFormTitleHeight={setFormTitleHeight}
           buttons={
             <>
               <StyledIconButton onClick={onClickPrint} title="drucken">
@@ -634,145 +645,154 @@ const Tpopfreiwkontr = ({
           }
         />
       )}
-      <InnerContainer>
-        <GridContainer width={width}>
-          <Title />
-          <Headdata
-            pop={pop}
-            tpop={tpop}
-            row={row}
-            showFilter={showFilter}
-            treeName={treeName}
-          />
-          <Besttime row={row} />
-          <Date saveToDb={saveToDb} row={row} errors={errors} />
-          <Map
-            saveToDb={saveToDb}
-            row={row}
-            errors={errors}
-            showFilter={showFilter}
-          />
-          {!showFilter && (
-            <>
-              <Image key={apId} apId={apId} artname={artname} />
-              {zaehls1 && (
-                <Count
-                  key={zaehls1.id}
-                  id={zaehls1.id}
-                  tpopkontrId={row.id}
-                  nr="1"
-                  refetch={refetch}
-                  einheitsUsed={einheitsUsed}
-                  ekzaehleinheits={ekzaehleinheits}
-                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                  treeName={treeName}
-                />
+      <ScrollContainer data-form-title-height={formTitleHeight}>
+        <SimpleBar
+          style={{
+            maxHeight: '100%',
+            height: '100%',
+          }}
+        >
+          <FormContainer>
+            <GridContainer width={width}>
+              <Title />
+              <Headdata
+                pop={pop}
+                tpop={tpop}
+                row={row}
+                showFilter={showFilter}
+                treeName={treeName}
+              />
+              <Besttime row={row} />
+              <Date saveToDb={saveToDb} row={row} errors={errors} />
+              <Map
+                saveToDb={saveToDb}
+                row={row}
+                errors={errors}
+                showFilter={showFilter}
+              />
+              {!showFilter && (
+                <>
+                  <Image key={apId} apId={apId} artname={artname} />
+                  {zaehls1 && (
+                    <Count
+                      key={zaehls1.id}
+                      id={zaehls1.id}
+                      tpopkontrId={row.id}
+                      nr="1"
+                      refetch={refetch}
+                      einheitsUsed={einheitsUsed}
+                      ekzaehleinheits={ekzaehleinheits}
+                      ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                      treeName={treeName}
+                    />
+                  )}
+                  {zaehl1ShowEmpty && (
+                    <CountHint>
+                      Sie müssen auf Ebene Aktionsplan EK-Zähleinheiten
+                      definieren, um hier Zählungen erfassen zu können.
+                    </CountHint>
+                  )}
+                  {zaehls2 && (
+                    <Count
+                      key={zaehls2.id}
+                      id={zaehls2.id}
+                      tpopkontrId={row.id}
+                      nr="2"
+                      refetch={refetch}
+                      einheitsUsed={einheitsUsed}
+                      ekzaehleinheits={ekzaehleinheits}
+                      ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                      treeName={treeName}
+                    />
+                  )}
+                  {zaehl2ShowNew && (
+                    <Count
+                      id={null}
+                      tpopkontrId={row.id}
+                      nr="2"
+                      showNew
+                      refetch={refetch}
+                      einheitsUsed={einheitsUsed}
+                      ekzaehleinheits={ekzaehleinheits}
+                      ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                      treeName={treeName}
+                    />
+                  )}
+                  {zaehl2ShowEmpty && !zaehl1ShowEmpty && (
+                    <Count
+                      id={null}
+                      tpopkontrId={row.id}
+                      nr="2"
+                      showEmpty
+                      showNew
+                      refetch={refetch}
+                      einheitsUsed={einheitsUsed}
+                      ekzaehleinheits={ekzaehleinheits}
+                      ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                      treeName={treeName}
+                    />
+                  )}
+                  {zaehls3 && (
+                    <Count
+                      key={zaehls3.id}
+                      id={zaehls3.id}
+                      tpopkontrId={row.id}
+                      nr="3"
+                      refetch={refetch}
+                      einheitsUsed={einheitsUsed}
+                      ekzaehleinheits={ekzaehleinheits}
+                      ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                      treeName={treeName}
+                    />
+                  )}
+                  {zaehl3ShowNew && (
+                    <Count
+                      id={null}
+                      tpopkontrId={row.id}
+                      nr="3"
+                      showNew
+                      refetch={refetch}
+                      einheitsUsed={einheitsUsed}
+                      ekzaehleinheits={ekzaehleinheits}
+                      ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                      treeName={treeName}
+                    />
+                  )}
+                  {zaehl3ShowEmpty && !zaehl2ShowEmpty && (
+                    <Count
+                      id={null}
+                      tpopkontrId={row.id}
+                      nr="3"
+                      showEmpty
+                      showNew
+                      refetch={refetch}
+                      einheitsUsed={einheitsUsed}
+                      ekzaehleinheits={ekzaehleinheits}
+                      ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                      treeName={treeName}
+                    />
+                  )}
+                </>
               )}
-              {zaehl1ShowEmpty && (
-                <CountHint>
-                  Sie müssen auf Ebene Aktionsplan EK-Zähleinheiten definieren,
-                  um hier Zählungen erfassen zu können.
-                </CountHint>
+              <Cover saveToDb={saveToDb} row={row} errors={errors} />
+              <More saveToDb={saveToDb} row={row} errors={errors} />
+              <Danger saveToDb={saveToDb} row={row} errors={errors} />
+              <Remarks saveToDb={saveToDb} row={row} errors={errors} />
+              {((isPrint && ekfBemerkungen) || !isPrint) && (
+                <EkfRemarks saveToDb={saveToDb} row={row} errors={errors} />
               )}
-              {zaehls2 && (
-                <Count
-                  key={zaehls2.id}
-                  id={zaehls2.id}
-                  tpopkontrId={row.id}
-                  nr="2"
-                  refetch={refetch}
-                  einheitsUsed={einheitsUsed}
-                  ekzaehleinheits={ekzaehleinheits}
-                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                  treeName={treeName}
-                />
+              {!isPrint && !showFilter && <Files row={row} />}
+              {!isPrint && !isFreiwillig && !(view === 'ekf') && (
+                <Verification saveToDb={saveToDb} row={row} errors={errors} />
               )}
-              {zaehl2ShowNew && (
-                <Count
-                  id={null}
-                  tpopkontrId={row.id}
-                  nr="2"
-                  showNew
-                  refetch={refetch}
-                  einheitsUsed={einheitsUsed}
-                  ekzaehleinheits={ekzaehleinheits}
-                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                  treeName={treeName}
-                />
-              )}
-              {zaehl2ShowEmpty && !zaehl1ShowEmpty && (
-                <Count
-                  id={null}
-                  tpopkontrId={row.id}
-                  nr="2"
-                  showEmpty
-                  showNew
-                  refetch={refetch}
-                  einheitsUsed={einheitsUsed}
-                  ekzaehleinheits={ekzaehleinheits}
-                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                  treeName={treeName}
-                />
-              )}
-              {zaehls3 && (
-                <Count
-                  key={zaehls3.id}
-                  id={zaehls3.id}
-                  tpopkontrId={row.id}
-                  nr="3"
-                  refetch={refetch}
-                  einheitsUsed={einheitsUsed}
-                  ekzaehleinheits={ekzaehleinheits}
-                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                  treeName={treeName}
-                />
-              )}
-              {zaehl3ShowNew && (
-                <Count
-                  id={null}
-                  tpopkontrId={row.id}
-                  nr="3"
-                  showNew
-                  refetch={refetch}
-                  einheitsUsed={einheitsUsed}
-                  ekzaehleinheits={ekzaehleinheits}
-                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                  treeName={treeName}
-                />
-              )}
-              {zaehl3ShowEmpty && !zaehl2ShowEmpty && (
-                <Count
-                  id={null}
-                  tpopkontrId={row.id}
-                  nr="3"
-                  showEmpty
-                  showNew
-                  refetch={refetch}
-                  einheitsUsed={einheitsUsed}
-                  ekzaehleinheits={ekzaehleinheits}
-                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                  treeName={treeName}
-                />
-              )}
-            </>
-          )}
-          <Cover saveToDb={saveToDb} row={row} errors={errors} />
-          <More saveToDb={saveToDb} row={row} errors={errors} />
-          <Danger saveToDb={saveToDb} row={row} errors={errors} />
-          <Remarks saveToDb={saveToDb} row={row} errors={errors} />
-          {((isPrint && ekfBemerkungen) || !isPrint) && (
-            <EkfRemarks saveToDb={saveToDb} row={row} errors={errors} />
-          )}
-          {!isPrint && !showFilter && <Files row={row} />}
-          {!isPrint && !isFreiwillig && !(view === 'ekf') && (
-            <Verification saveToDb={saveToDb} row={row} errors={errors} />
-          )}
-        </GridContainer>
-        {!showFilter && !isPrint && !isFreiwillig && !(view === 'ekf') && (
-          <StringToCopy text={row.id} label="GUID" />
-        )}
-        {!isPrint && <div style={{ height: '64px' }} />}
-      </InnerContainer>
+            </GridContainer>
+            {!showFilter && !isPrint && !isFreiwillig && !(view === 'ekf') && (
+              <StringToCopy text={row.id} label="GUID" />
+            )}
+            {!isPrint && <div style={{ height: '64px' }} />}
+          </FormContainer>
+        </SimpleBar>
+      </ScrollContainer>
     </Container>
   )
 }
