@@ -5,6 +5,7 @@ import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
+import SimpleBar from 'simplebar-react'
 
 import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -23,7 +24,6 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   padding: 10px;
-  overflow: auto !important;
   height: 100%;
 `
 
@@ -123,64 +123,71 @@ const Adresse = ({ treeName }) => {
           treeName={treeName}
           table="adresse"
         />
-        <FieldsContainer>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField
-                  name="name"
-                  label="Name"
-                  type="text"
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="adresse"
-                  label="Adresse"
-                  type="text"
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="telefon"
-                  label="Telefon"
-                  type="text"
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="email"
-                  label="Email"
-                  type="email"
-                  handleSubmit={handleSubmit}
-                />
-                <Checkbox2States
-                  name="freiwErfko"
-                  label="freiwillige ErfolgskontrolleurIn"
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="evabVorname"
-                  label="EvAB Vorname"
-                  type="text"
-                  helperText="Wird für den Export in EvAB benötigt"
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="evabNachname"
-                  label="EvAB Nachname"
-                  type="text"
-                  helperText="Wird für den Export in EvAB benötigt"
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="evabOrt"
-                  label="EvAB Ort"
-                  type="text"
-                  helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
-                  handleSubmit={handleSubmit}
-                />
-              </Form>
-            )}
-          </Formik>
-        </FieldsContainer>
+        <SimpleBar
+          style={{
+            maxHeight: 'calc(100% - 43px)',
+            height: 'calc(100% - 43px)',
+          }}
+        >
+          <FieldsContainer>
+            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+              {({ handleSubmit, dirty }) => (
+                <Form onBlur={() => dirty && handleSubmit()}>
+                  <TextField
+                    name="name"
+                    label="Name"
+                    type="text"
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="adresse"
+                    label="Adresse"
+                    type="text"
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="telefon"
+                    label="Telefon"
+                    type="text"
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="email"
+                    label="Email"
+                    type="email"
+                    handleSubmit={handleSubmit}
+                  />
+                  <Checkbox2States
+                    name="freiwErfko"
+                    label="freiwillige ErfolgskontrolleurIn"
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="evabVorname"
+                    label="EvAB Vorname"
+                    type="text"
+                    helperText="Wird für den Export in EvAB benötigt"
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="evabNachname"
+                    label="EvAB Nachname"
+                    type="text"
+                    helperText="Wird für den Export in EvAB benötigt"
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="evabOrt"
+                    label="EvAB Ort"
+                    type="text"
+                    helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
+                    handleSubmit={handleSubmit}
+                  />
+                </Form>
+              )}
+            </Formik>
+          </FieldsContainer>
+        </SimpleBar>
       </Container>
     </ErrorBoundary>
   )
