@@ -33,15 +33,13 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { tpopmassn } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
 `
 const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  padding-top: 0;
-  height: 100%;
 `
 const ColumnContainer = styled.div`
   padding: 10px;
@@ -275,15 +273,25 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
   if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
+  }
+  if (error) {
     return (
-      <Container>
-        <LoadingContainer>Lade...</LoadingContainer>
-      </Container>
+      <LoadingContainer>
+        {`Fehler beim Laden der Daten: ${error.message}`}
+      </LoadingContainer>
     )
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
-  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
-  if (errorLists) return `Fehler: ${errorLists.message}`
+  if (errorAdresses) {
+    return (
+      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
+    )
+  }
+  if (errorLists) {
+    return (
+      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
+    )
+  }
   return (
     <ErrorBoundary>
       <Container>
