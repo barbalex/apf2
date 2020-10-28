@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
+import SimpleBar from 'simplebar-react'
 
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
@@ -33,9 +34,13 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
+  padding: 10px;
+`
 const FieldsContainer = styled.div`
   overflow: hidden !important;
-  height: 100%;
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
   fieldset {
     padding-right: 30px;
   }
@@ -48,9 +53,6 @@ const StyledTab = styled(Tab)`
 `
 const TabContent = styled.div`
   height: ${(props) => `calc(100% - 48px)`};
-`
-const FilesContainer = styled.div`
-  height: 100%;
 `
 
 const fieldTypes = {
@@ -253,7 +255,13 @@ const TpopForm = ({ treeName, showFilter = false }) => {
     ],
   )
 
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
+  if (error) {
+    return (
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
+    )
+  }
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -266,15 +274,17 @@ const TpopForm = ({ treeName, showFilter = false }) => {
             filteredNr={tpopFilteredCount}
             totalApNr={tpopOfApTotalCount}
             filteredApNr={tpopOfApFilteredCount}
+            setFormTitleHeight={setFormTitleHeight}
           />
         ) : (
           <FormTitle
             apId={get(data, 'tpopById.popByPopId.apId')}
             title="Teil-Population"
             treeName={treeName}
+            setFormTitleHeight={setFormTitleHeight}
           />
         )}
-        <FieldsContainer>
+        <FieldsContainer data-form-title-height={formTitleHeight}>
           <Tabs
             value={tab}
             onChange={onChangeTab}
@@ -308,9 +318,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
                 row={row}
               />
             ) : (
-              <FilesContainer>
-                <Files parentId={row.id} parent="tpop" />
-              </FilesContainer>
+              <Files parentId={row.id} parent="tpop" />
             )}
           </TabContent>
         </FieldsContainer>
