@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import camelCase from 'lodash/camelCase'
@@ -6,6 +6,7 @@ import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
+import SimpleBar from 'simplebar-react'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextFieldFormik'
@@ -19,10 +20,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  overflow: auto !important;
-  height: 100%;
+`
+const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled(Form)`
+  padding: 10px;
 `
 
 const Werte = ({ treeName, table }) => {
@@ -135,14 +141,16 @@ const Werte = ({ treeName, table }) => {
     ],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
   if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
+  }
+  if (error) {
     return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
     )
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
   return (
     <ErrorBoundary>
@@ -152,37 +160,45 @@ const Werte = ({ treeName, table }) => {
           title={table}
           treeName={treeName}
           table={table}
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer>
-          <Formik
-            row={row}
-            initialValues={row}
-            onSubmit={onSubmit}
-            enableReinitialize
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
           >
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField
-                  name="text"
-                  label="Text"
-                  type="text"
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="code"
-                  label="Code"
-                  type={codeFieldType}
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="sort"
-                  label="Sort"
-                  type="number"
-                  handleSubmit={handleSubmit}
-                />
-              </Form>
-            )}
-          </Formik>
+            <Formik
+              row={row}
+              initialValues={row}
+              onSubmit={onSubmit}
+              enableReinitialize
+            >
+              {({ handleSubmit, dirty }) => (
+                <StyledForm onBlur={() => dirty && handleSubmit()}>
+                  <TextField
+                    name="text"
+                    label="Text"
+                    type="text"
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="code"
+                    label="Code"
+                    type={codeFieldType}
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="sort"
+                    label="Sort"
+                    type="number"
+                    handleSubmit={handleSubmit}
+                  />
+                </StyledForm>
+              )}
+            </Formik>
+          </SimpleBar>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
