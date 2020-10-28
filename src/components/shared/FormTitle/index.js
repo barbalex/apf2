@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { withResizeDetector } from 'react-resize-detector'
 
 import TestdataMessage from './TestdataMessage'
 
@@ -9,6 +10,7 @@ const Container = styled.div`
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+
   @media print {
     display: none !important;
   }
@@ -30,11 +32,23 @@ const Buttons = styled.div`
   padding: 3px 0 3px 10px;
 `
 
-const FormTitle = ({ title, apId, treeName, buttons }) => {
+const FormTitle = ({
+  title,
+  apId,
+  treeName,
+  buttons,
+  height = 43,
+  setFormTitleHeight = () => {},
+}) => {
+  useEffect(() => {
+    setFormTitleHeight(height)
+  }, [height, setFormTitleHeight])
+
   if (!treeName) {
     console.log('FormTitle was not passed a treeName, bailing out!')
     return
   }
+
   return (
     <Container>
       <TitleRow>
@@ -46,4 +60,4 @@ const FormTitle = ({ title, apId, treeName, buttons }) => {
   )
 }
 
-export default observer(FormTitle)
+export default withResizeDetector(observer(FormTitle))
