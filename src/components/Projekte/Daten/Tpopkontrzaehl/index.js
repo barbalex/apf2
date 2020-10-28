@@ -1,10 +1,11 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
+import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -24,10 +25,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  overflow: auto !important;
-  height: 100%;
+`
+const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled(Form)`
+  padding: 10px;
 `
 
 const fieldTypes = {
@@ -139,16 +145,20 @@ const Tpopkontrzaehl = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
   if (loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) return error.message
-  if (errorLists) return errorLists.message
-  if (errorZaehlOfEk) return errorZaehlOfEk.message
+  if (error) {
+    return <LoadingContainer>{error.message}</LoadingContainer>
+  }
+  if (errorLists) {
+    return <LoadingContainer>{errorLists.message}</LoadingContainer>
+  }
+  if (errorZaehlOfEk) {
+    return <LoadingContainer>{errorZaehlOfEk.message}</LoadingContainer>
+  }
   return (
     <ErrorBoundary>
       <Container>
@@ -157,41 +167,49 @@ const Tpopkontrzaehl = ({ treeName }) => {
           title="Zählung"
           treeName={treeName}
           table="tpopkontrzaehl"
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <Select
-                  name="einheit"
-                  label="Einheit"
-                  options={get(
-                    dataLists,
-                    'allTpopkontrzaehlEinheitWertes.nodes',
-                    [],
-                  )}
-                  loading={loadingLists}
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="anzahl"
-                  label="Anzahl (nur ganze Zahlen)"
-                  type="number"
-                  handleSubmit={handleSubmit}
-                />
-                <RadioButtonGroup
-                  name="methode"
-                  label="Methode"
-                  dataSource={get(
-                    dataLists,
-                    'allTpopkontrzaehlMethodeWertes.nodes',
-                    [],
-                  )}
-                  handleSubmit={handleSubmit}
-                />
-              </Form>
-            )}
-          </Formik>
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+              {({ handleSubmit, dirty }) => (
+                <StyledForm onBlur={() => dirty && handleSubmit()}>
+                  <Select
+                    name="einheit"
+                    label="Einheit"
+                    options={get(
+                      dataLists,
+                      'allTpopkontrzaehlEinheitWertes.nodes',
+                      [],
+                    )}
+                    loading={loadingLists}
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="anzahl"
+                    label="Anzahl (nur ganze Zahlen)"
+                    type="number"
+                    handleSubmit={handleSubmit}
+                  />
+                  <RadioButtonGroup
+                    name="methode"
+                    label="Methode"
+                    dataSource={get(
+                      dataLists,
+                      'allTpopkontrzaehlMethodeWertes.nodes',
+                      [],
+                    )}
+                    handleSubmit={handleSubmit}
+                  />
+                </StyledForm>
+              )}
+            </Formik>
+          </SimpleBar>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
