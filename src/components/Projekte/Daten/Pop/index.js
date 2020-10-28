@@ -37,9 +37,6 @@ const FormContainer = styled.div`
   padding-top: 0;
   height: 100%;
 `
-const FilesContainer = styled.div`
-  height: 100%;
-`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
@@ -236,11 +233,7 @@ const Pop = ({ treeName }) => {
               </FormContainer>
             </SimpleBar>
           )}
-          {tab === 'dateien' && (
-            <FilesContainer>
-              <Files parentId={row.id} parent="pop" />
-            </FilesContainer>
-          )}
+          {tab === 'dateien' && <Files parentId={row.id} parent="pop" />}
         </TabContent>
       </Container>
     </ErrorBoundary>
