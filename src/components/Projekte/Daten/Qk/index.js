@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
+import SimpleBar from 'simplebar-react'
 
 import FormTitle from '../../../shared/FormTitle'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
@@ -20,18 +21,19 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
-const FieldsContainer = styled.div`
-  overflow: hidden !important;
-  height: calc(100vh - 64px - 43px);
-  fieldset {
-    padding-right: 30px;
-  }
-`
 const LoadingContainer = styled.div`
-  padding: 8px;
+  height: calc(100vh - 64px);
+  padding: 10px;
 `
 const StyledTab = styled(Tab)`
   text-transform: none !important;
+`
+const TabContent = styled.div`
+  height: ${(props) =>
+    `calc(100% - ${props['data-form-title-height']}px - 48px)`};
+  fieldset {
+    padding-right: 30px;
+  }
 `
 
 const QkForm = ({ treeName }) => {
@@ -77,45 +79,62 @@ const QkForm = ({ treeName }) => {
     [setUrlQuery, urlQuery],
   )
 
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  const [formTitleHeight, setFormTitleHeight] = useState(43)
+
+  if (error) {
+    return (
+      <LoadingContainer>
+        {`Fehler beim Laden der Daten: ${error.message}`}
+      </LoadingContainer>
+    )
+  }
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Qualitätskontrollen" treeName={treeName} />
-        <FieldsContainer>
-          <Tabs
-            value={tab}
-            onChange={onChangeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
+        <FormTitle
+          title="Qualitätskontrollen"
+          treeName={treeName}
+          setFormTitleHeight={setFormTitleHeight}
+        />
+        <Tabs
+          value={tab}
+          onChange={onChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <StyledTab label="ausführen" value="qk" data-id="qk" />
+          <StyledTab
+            label={`auswählen${!!qkCount ? ` (${apqkCount}/${qkCount})` : ''}`}
+            value="waehlen"
+            data-id="waehlen"
+          />
+        </Tabs>
+        <TabContent data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
           >
-            <StyledTab label="ausführen" value="qk" data-id="qk" />
-            <StyledTab
-              label={`auswählen${
-                !!qkCount ? ` (${apqkCount}/${qkCount})` : ''
-              }`}
-              value="waehlen"
-              data-id="waehlen"
-            />
-          </Tabs>
-          {tab === 'qk' ? (
-            <>
-              {loading ? (
-                <LoadingContainer>Lade Daten...</LoadingContainer>
-              ) : (
-                <Qk
-                  key={qkCount}
-                  treeName={treeName}
-                  qkNameQueries={qkNameQueries}
-                  qks={qks}
-                />
-              )}
-            </>
-          ) : (
-            <Choose treeName={treeName} refetchTab={refetch} />
-          )}
-        </FieldsContainer>
+            {tab === 'qk' ? (
+              <>
+                {loading ? (
+                  <LoadingContainer>Lade Daten...</LoadingContainer>
+                ) : (
+                  <Qk
+                    key={qkCount}
+                    treeName={treeName}
+                    qkNameQueries={qkNameQueries}
+                    qks={qks}
+                  />
+                )}
+              </>
+            ) : (
+              <Choose treeName={treeName} refetchTab={refetch} />
+            )}
+          </SimpleBar>
+        </TabContent>
       </Container>
     </ErrorBoundary>
   )
