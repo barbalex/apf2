@@ -1,10 +1,11 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
+import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -22,10 +23,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  height: 100%;
-  overflow: auto !important;
+`
+const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled(Form)`
+  padding: 10px;
 `
 
 const fieldTypes = {
@@ -138,18 +144,18 @@ const Ziel = ({ treeName }) => {
     ],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
   if (loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
   if (error) {
-    return `Fehler: ${error.message}`
+    return <LoadingContainer>{`Fehler: ${error.message}`}</LoadingContainer>
   }
   if (errorLists) {
-    return `Fehler: ${errorLists.message}`
+    return (
+      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
+    )
   }
   return (
     <ErrorBoundary>
@@ -159,34 +165,42 @@ const Ziel = ({ treeName }) => {
           title="Ziel"
           treeName={treeName}
           table="ziel"
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField
-                  name="jahr"
-                  label="Jahr"
-                  type="number"
-                  handleSubmit={handleSubmit}
-                />
-                <RadioButtonGroup
-                  name="typ"
-                  label="Zieltyp"
-                  dataSource={get(dataLists, 'allZielTypWertes.nodes', [])}
-                  loading={loadingLists}
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="bezeichnung"
-                  label="Ziel"
-                  type="text"
-                  multiLine
-                  handleSubmit={handleSubmit}
-                />
-              </Form>
-            )}
-          </Formik>
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+              {({ handleSubmit, dirty }) => (
+                <StyledForm onBlur={() => dirty && handleSubmit()}>
+                  <TextField
+                    name="jahr"
+                    label="Jahr"
+                    type="number"
+                    handleSubmit={handleSubmit}
+                  />
+                  <RadioButtonGroup
+                    name="typ"
+                    label="Zieltyp"
+                    dataSource={get(dataLists, 'allZielTypWertes.nodes', [])}
+                    loading={loadingLists}
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="bezeichnung"
+                    label="Ziel"
+                    type="text"
+                    multiLine
+                    handleSubmit={handleSubmit}
+                  />
+                </StyledForm>
+              )}
+            </Formik>
+          </SimpleBar>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
