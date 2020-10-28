@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { useApolloClient, useQuery } from '@apollo/client'
@@ -22,9 +22,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  height: 100%;
+`
+const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled(Form)`
+  padding: 10px;
 `
 
 const fieldTypes = {
@@ -103,16 +109,19 @@ const Adresse = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
   //console.log('Adresse')
 
   if (loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  if (error)
+    return (
+      <LoadingContainer>
+        `Fehler beim Laden der Daten: ${error.message}`
+      </LoadingContainer>
+    )
 
   return (
     <ErrorBoundary>
@@ -122,17 +131,18 @@ const Adresse = ({ treeName }) => {
           title="Adresse"
           treeName={treeName}
           table="adresse"
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <SimpleBar
-          style={{
-            maxHeight: 'calc(100% - 43px)',
-            height: 'calc(100% - 43px)',
-          }}
-        >
-          <FieldsContainer>
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
             <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
               {({ handleSubmit, dirty }) => (
-                <Form onBlur={() => dirty && handleSubmit()}>
+                <StyledForm onBlur={() => dirty && handleSubmit()}>
                   <TextField
                     name="name"
                     label="Name"
@@ -183,11 +193,11 @@ const Adresse = ({ treeName }) => {
                     helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
                     handleSubmit={handleSubmit}
                   />
-                </Form>
+                </StyledForm>
               )}
             </Formik>
-          </FieldsContainer>
-        </SimpleBar>
+          </SimpleBar>
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )
