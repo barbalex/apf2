@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import get from 'lodash/get'
@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
+import SimpleBar from 'simplebar-react'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField2'
@@ -32,10 +33,14 @@ import {
 } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: 100%;
+  height: calc(100vh - 64px);
   overflow-x: auto;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+`
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
+  padding: 10px;
 `
 const FormContainer = styled.div`
   height: calc(100vh - 64px);
@@ -43,8 +48,7 @@ const FormContainer = styled.div`
   flex-direction: column;
 `
 const DataContainer = styled.div`
-  height: 100%;
-  overflow: auto !important;
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -290,14 +294,17 @@ const Beobzuordnung = ({ type, treeName }) => {
     [client, id, store.user.name],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(43)
+
   if (loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  if (error)
+    return (
+      <LoadingContainer>
+        `Fehler beim Laden der Daten: ${error.message}`
+      </LoadingContainer>
+    )
   return (
     <ErrorBoundary>
       <FormContainer>
@@ -306,109 +313,120 @@ const Beobzuordnung = ({ type, treeName }) => {
           title="Beobachtung"
           treeName={treeName}
           table="beob"
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <DataContainer>
-          <FieldsContainer>
-            {row && row.artId !== row.artIdOriginal && (
-              <OriginalArtDiv>{`Art gemäss Original-Meldung: ${get(
-                row,
-                'aeTaxonomyByArtIdOriginal.artname',
-              )}`}</OriginalArtDiv>
-            )}
-            <SelectLoadingOptions
-              key={`${row.id}artId`}
-              field="artId"
-              valueLabelPath="aeTaxonomyByArtId.artname"
-              label="Art"
-              row={row}
-              saveToDb={onSaveArtIdToDb}
-              query={queryAeTaxonomies}
-              filter={aeTaxonomiesfilter}
-              queryNodesName="allAeTaxonomies"
-            />
-            <CheckboxWithInfo
-              key={`${row.id}nichtZuordnen`}
-              name="nichtZuordnen"
-              label="Nicht zuordnen"
-              value={row.nichtZuordnen}
-              saveToDb={onSaveNichtZuordnenToDb}
-              popover={nichtZuordnenPopover}
-            />
-            <Select
-              key={`${row.id}tpopId`}
-              name="tpopId"
-              value={row.tpopId ? row.tpopId : ''}
-              field="tpopId"
-              label={
-                !!row.tpopId
-                  ? 'Einer anderen Teilpopulation zuordnen'
-                  : 'Einer Teilpopulation zuordnen'
-              }
-              options={getTpopZuordnenSource(row, apId)}
-              saveToDb={onSaveTpopIdToDb}
-            />
-            <TextField
-              key={`${row.id}bemerkungen`}
-              name="bemerkungen"
-              label="Bemerkungen zur Zuordnung"
-              row={row}
-              type="text"
-              multiLine
-              saveToDb={onUpdateField}
-            />
-            <InfofloraRow>
-              <DateField
-                key={`${row.id}infofloraInformiertDatum`}
-                name="infofloraInformiertDatum"
-                label="Info Flora informiert am:"
-                value={row.infofloraInformiertDatum}
+        <DataContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <FieldsContainer>
+              {row && row.artId !== row.artIdOriginal && (
+                <OriginalArtDiv>{`Art gemäss Original-Meldung: ${get(
+                  row,
+                  'aeTaxonomyByArtIdOriginal.artname',
+                )}`}</OriginalArtDiv>
+              )}
+              <SelectLoadingOptions
+                key={`${row.id}artId`}
+                field="artId"
+                valueLabelPath="aeTaxonomyByArtId.artname"
+                label="Art"
+                row={row}
+                saveToDb={onSaveArtIdToDb}
+                query={queryAeTaxonomies}
+                filter={aeTaxonomiesfilter}
+                queryNodesName="allAeTaxonomies"
+              />
+              <CheckboxWithInfo
+                key={`${row.id}nichtZuordnen`}
+                name="nichtZuordnen"
+                label="Nicht zuordnen"
+                value={row.nichtZuordnen}
+                saveToDb={onSaveNichtZuordnenToDb}
+                popover={nichtZuordnenPopover}
+              />
+              <Select
+                key={`${row.id}tpopId`}
+                name="tpopId"
+                value={row.tpopId ? row.tpopId : ''}
+                field="tpopId"
+                label={
+                  !!row.tpopId
+                    ? 'Einer anderen Teilpopulation zuordnen'
+                    : 'Einer Teilpopulation zuordnen'
+                }
+                options={getTpopZuordnenSource(row, apId)}
+                saveToDb={onSaveTpopIdToDb}
+              />
+              <TextField
+                key={`${row.id}bemerkungen`}
+                name="bemerkungen"
+                label="Bemerkungen zur Zuordnung"
+                row={row}
+                type="text"
+                multiLine
                 saveToDb={onUpdateField}
               />
-              <EmailButton
-                variant="outlined"
-                onClick={() => {
-                  const origArt = `Art gemäss Beobachtung: SISF-Nr: ${get(
-                    row,
-                    'aeTaxonomyByArtId.taxid',
-                  )}, Artname: ${get(row, 'aeTaxonomyByArtId.artname')}`
-                  const neueArt = `Korrigierte Art: SISF-Nr: ${get(
-                    row,
-                    'aeTaxonomyByArtIdOriginal.taxid',
-                  )}, Artname: ${get(row, 'aeTaxonomyByArtIdOriginal.artname')}`
-                  const bemerkungen = row.bemerkungen
-                  // remove all keys with null
-                  const dataArray = Object.entries(JSON.parse(row.data)).filter(
-                    (a) => !!a[1] || a[1] === 0 || a[1] === false,
-                  )
-                  let data = ''
-                  dataArray.forEach((d) => {
-                    data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`
-                  })
-                  const body = `${origArt}\r\n${neueArt}${
-                    bemerkungen
-                      ? `${
-                          bemerkungen ? `\r\nBemerkungen: ${bemerkungen}` : ''
-                        }`
-                      : ''
-                  }\r\n\r\nOriginal-Beobachtungs-Daten:\r\n${data}`
-                  sendMail({
-                    to: 'info@infoflora.ch',
-                    subject: 'Flora-Beobachtung: Verifikation',
-                    body,
-                  })
-                }}
-              >
-                <StyledSendIcon />
-                Email an Info Flora
-              </EmailButton>
-            </InfofloraRow>
-          </FieldsContainer>
-          <Title>{`Informationen aus ${get(
-            row,
-            'beobQuelleWerteByQuelleId.name',
-            '?',
-          )} (nicht veränderbar)`}</Title>
-          <Beob treeName={treeName} />
+              <InfofloraRow>
+                <DateField
+                  key={`${row.id}infofloraInformiertDatum`}
+                  name="infofloraInformiertDatum"
+                  label="Info Flora informiert am:"
+                  value={row.infofloraInformiertDatum}
+                  saveToDb={onUpdateField}
+                />
+                <EmailButton
+                  variant="outlined"
+                  onClick={() => {
+                    const origArt = `Art gemäss Beobachtung: SISF-Nr: ${get(
+                      row,
+                      'aeTaxonomyByArtId.taxid',
+                    )}, Artname: ${get(row, 'aeTaxonomyByArtId.artname')}`
+                    const neueArt = `Korrigierte Art: SISF-Nr: ${get(
+                      row,
+                      'aeTaxonomyByArtIdOriginal.taxid',
+                    )}, Artname: ${get(
+                      row,
+                      'aeTaxonomyByArtIdOriginal.artname',
+                    )}`
+                    const bemerkungen = row.bemerkungen
+                    // remove all keys with null
+                    const dataArray = Object.entries(
+                      JSON.parse(row.data),
+                    ).filter((a) => !!a[1] || a[1] === 0 || a[1] === false)
+                    let data = ''
+                    dataArray.forEach((d) => {
+                      data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`
+                    })
+                    const body = `${origArt}\r\n${neueArt}${
+                      bemerkungen
+                        ? `${
+                            bemerkungen ? `\r\nBemerkungen: ${bemerkungen}` : ''
+                          }`
+                        : ''
+                    }\r\n\r\nOriginal-Beobachtungs-Daten:\r\n${data}`
+                    sendMail({
+                      to: 'info@infoflora.ch',
+                      subject: 'Flora-Beobachtung: Verifikation',
+                      body,
+                    })
+                  }}
+                >
+                  <StyledSendIcon />
+                  Email an Info Flora
+                </EmailButton>
+              </InfofloraRow>
+            </FieldsContainer>
+            <Title>{`Informationen aus ${get(
+              row,
+              'beobQuelleWerteByQuelleId.name',
+              '?',
+            )} (nicht veränderbar)`}</Title>
+            <Beob treeName={treeName} />
+          </SimpleBar>
         </DataContainer>
       </FormContainer>
     </ErrorBoundary>
