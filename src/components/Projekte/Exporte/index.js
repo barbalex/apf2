@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import SimpleBar from 'simplebar-react'
 
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
@@ -21,36 +22,52 @@ const Container = styled.div`
     display: none !important;
   }
 `
-const FieldsContainer = styled.div`
+const ScrollContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const InnerContainer = styled.div`
   padding: 10px;
-  /* somehow height was not correct with 100% so scrollbar missbehaved*/
-  height: calc(100vh - 64px - 42px);
-  padding-bottom: 10px;
-  overflow-x: auto !important;
 `
 const ExporteContainer = styled.div`
   height: 100%;
 `
 
-const Exporte = () => (
-  <ExporteContainer data-id={`exporte-container`}>
-    <ErrorBoundary>
-      <Container>
-        <FormTitle title="Exporte" treeName="tree" />
-        <FieldsContainer>
-          <Optionen />
-          <Tipps />
-          <Ap />
-          <Populationen />
-          <Teilpopulationen />
-          <Kontrollen />
-          <Massnahmen />
-          <Beobachtungen />
-          <Anwendung />
-        </FieldsContainer>
-      </Container>
-    </ErrorBoundary>
-  </ExporteContainer>
-)
+const Exporte = () => {
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
+  return (
+    <ExporteContainer data-id={`exporte-container`}>
+      <ErrorBoundary>
+        <Container>
+          <FormTitle
+            title="Exporte"
+            treeName="tree"
+            setFormTitleHeight={setFormTitleHeight}
+          />
+          <ScrollContainer data-form-title-height={formTitleHeight}>
+            <SimpleBar
+              style={{
+                maxHeight: '100%',
+                height: '100%',
+              }}
+            >
+              <InnerContainer>
+                <Optionen />
+                <Tipps />
+                <Ap />
+                <Populationen />
+                <Teilpopulationen />
+                <Kontrollen />
+                <Massnahmen />
+                <Beobachtungen />
+                <Anwendung />
+              </InnerContainer>
+            </SimpleBar>
+          </ScrollContainer>
+        </Container>
+      </ErrorBoundary>
+    </ExporteContainer>
+  )
+}
 
 export default Exporte
