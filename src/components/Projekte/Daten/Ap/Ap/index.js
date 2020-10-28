@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
+import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfoFormik'
 import TextField from '../../../../shared/TextFieldFormik'
@@ -22,15 +23,11 @@ import ApUsers from './ApUsers'
 import { ap, aeTaxonomies } from '../../../../shared/fragments'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
-  display: flex;
-  flex-direction: column;
+  height: 100%;
 `
 const FormContainer = styled.div`
   padding: 10px;
   padding-top: 0;
-  overflow-y: auto !important;
-  height: calc(100% - 43px - 48px + 4px);
 `
 const LoadingContainer = styled.div`
   padding: 10px;
@@ -186,60 +183,29 @@ const ApAp = ({ treeName, id }) => {
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
   return (
-    <FormContainer>
-      <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-        {({ handleSubmit, dirty }) => (
-          <Form onBlur={() => dirty && handleSubmit()}>
-            <SelectLoadingOptions
-              name="artId"
-              valueLabelPath="aeTaxonomyByArtId.taxArtName"
-              label="Art (gibt dem Aktionsplan den Namen)"
-              row={row}
-              query={queryAeTaxonomies}
-              filter={aeTaxonomiesfilterForData}
-              queryNodesName="allAeTaxonomies"
-              handleSubmit={handleSubmit}
-            />
-            <RadioButtonGroupWithInfo
-              name="bearbeitung"
-              dataSource={get(dataLists, 'allApBearbstandWertes.nodes', [])}
-              loading={loadingLists}
-              popover={
-                <>
-                  <LabelPopoverTitleRow data-id="info-icon-popover">
-                    Legende
-                  </LabelPopoverTitleRow>
-                  <LabelPopoverContentRow>
-                    <LabelPopoverRowColumnLeft>
-                      keiner:
-                    </LabelPopoverRowColumnLeft>
-                    <LabelPopoverRowColumnRight>
-                      kein Aktionsplan vorgesehen
-                    </LabelPopoverRowColumnRight>
-                  </LabelPopoverContentRow>
-                  <LabelPopoverContentRow>
-                    <LabelPopoverRowColumnLeft>
-                      erstellt:
-                    </LabelPopoverRowColumnLeft>
-                    <LabelPopoverRowColumnRight>
-                      Aktionsplan fertig, auf der Webseite der FNS
-                    </LabelPopoverRowColumnRight>
-                  </LabelPopoverContentRow>
-                </>
-              }
-              label="Aktionsplan"
-              handleSubmit={handleSubmit}
-            />
-            <TextField
-              name="startJahr"
-              label="Start im Jahr"
-              type="number"
-              handleSubmit={handleSubmit}
-            />
-            <FieldContainer>
+    <SimpleBar
+      style={{
+        maxHeight: '100%',
+        height: '100%',
+      }}
+    >
+      <FormContainer>
+        <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+          {({ handleSubmit, dirty }) => (
+            <Form onBlur={() => dirty && handleSubmit()}>
+              <SelectLoadingOptions
+                name="artId"
+                valueLabelPath="aeTaxonomyByArtId.taxArtName"
+                label="Art (gibt dem Aktionsplan den Namen)"
+                row={row}
+                query={queryAeTaxonomies}
+                filter={aeTaxonomiesfilterForData}
+                queryNodesName="allAeTaxonomies"
+                handleSubmit={handleSubmit}
+              />
               <RadioButtonGroupWithInfo
-                name="umsetzung"
-                dataSource={get(dataLists, 'allApUmsetzungWertes.nodes', [])}
+                name="bearbeitung"
+                dataSource={get(dataLists, 'allApBearbstandWertes.nodes', [])}
                 loading={loadingLists}
                 popover={
                   <>
@@ -248,57 +214,95 @@ const ApAp = ({ treeName, id }) => {
                     </LabelPopoverTitleRow>
                     <LabelPopoverContentRow>
                       <LabelPopoverRowColumnLeft>
-                        noch keine
-                        <br />
-                        Umsetzung:
+                        keiner:
                       </LabelPopoverRowColumnLeft>
                       <LabelPopoverRowColumnRight>
-                        noch keine Massnahmen ausgeführt
+                        kein Aktionsplan vorgesehen
                       </LabelPopoverRowColumnRight>
                     </LabelPopoverContentRow>
                     <LabelPopoverContentRow>
                       <LabelPopoverRowColumnLeft>
-                        in Umsetzung:
+                        erstellt:
                       </LabelPopoverRowColumnLeft>
                       <LabelPopoverRowColumnRight>
-                        bereits Massnahmen ausgeführt (auch wenn AP noch nicht
-                        erstellt)
+                        Aktionsplan fertig, auf der Webseite der FNS
                       </LabelPopoverRowColumnRight>
                     </LabelPopoverContentRow>
                   </>
                 }
-                label="Stand Umsetzung"
+                label="Aktionsplan"
                 handleSubmit={handleSubmit}
               />
-            </FieldContainer>
-            <Select
-              name="bearbeiter"
-              label="Verantwortlich"
-              options={get(dataAdresses, 'allAdresses.nodes', [])}
-              loading={loadingAdresses}
-              handleSubmit={handleSubmit}
-            />
-            <ApUsers apId={row.id} />
-            <TextField
-              key={`${row.id}ekfBeobachtungszeitpunkt`}
-              name="ekfBeobachtungszeitpunkt"
-              label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
-              handleSubmit={handleSubmit}
-            />
-            <TextFieldNonUpdatable
-              key={`${row.id}artwert`}
-              label="Artwert"
-              value={get(
-                row,
-                'aeTaxonomyByArtId.artwert',
-                'Diese Art hat keinen Artwert',
-              )}
-              handleSubmit={handleSubmit}
-            />
-          </Form>
-        )}
-      </Formik>
-    </FormContainer>
+              <TextField
+                name="startJahr"
+                label="Start im Jahr"
+                type="number"
+                handleSubmit={handleSubmit}
+              />
+              <FieldContainer>
+                <RadioButtonGroupWithInfo
+                  name="umsetzung"
+                  dataSource={get(dataLists, 'allApUmsetzungWertes.nodes', [])}
+                  loading={loadingLists}
+                  popover={
+                    <>
+                      <LabelPopoverTitleRow data-id="info-icon-popover">
+                        Legende
+                      </LabelPopoverTitleRow>
+                      <LabelPopoverContentRow>
+                        <LabelPopoverRowColumnLeft>
+                          noch keine
+                          <br />
+                          Umsetzung:
+                        </LabelPopoverRowColumnLeft>
+                        <LabelPopoverRowColumnRight>
+                          noch keine Massnahmen ausgeführt
+                        </LabelPopoverRowColumnRight>
+                      </LabelPopoverContentRow>
+                      <LabelPopoverContentRow>
+                        <LabelPopoverRowColumnLeft>
+                          in Umsetzung:
+                        </LabelPopoverRowColumnLeft>
+                        <LabelPopoverRowColumnRight>
+                          bereits Massnahmen ausgeführt (auch wenn AP noch nicht
+                          erstellt)
+                        </LabelPopoverRowColumnRight>
+                      </LabelPopoverContentRow>
+                    </>
+                  }
+                  label="Stand Umsetzung"
+                  handleSubmit={handleSubmit}
+                />
+              </FieldContainer>
+              <Select
+                name="bearbeiter"
+                label="Verantwortlich"
+                options={get(dataAdresses, 'allAdresses.nodes', [])}
+                loading={loadingAdresses}
+                handleSubmit={handleSubmit}
+              />
+              <ApUsers apId={row.id} />
+              <TextField
+                key={`${row.id}ekfBeobachtungszeitpunkt`}
+                name="ekfBeobachtungszeitpunkt"
+                label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
+                handleSubmit={handleSubmit}
+              />
+              <TextFieldNonUpdatable
+                key={`${row.id}artwert`}
+                label="Artwert"
+                value={get(
+                  row,
+                  'aeTaxonomyByArtId.artwert',
+                  'Diese Art hat keinen Artwert',
+                )}
+                handleSubmit={handleSubmit}
+              />
+            </Form>
+          )}
+        </Formik>
+      </FormContainer>
+    </SimpleBar>
   )
 }
 
