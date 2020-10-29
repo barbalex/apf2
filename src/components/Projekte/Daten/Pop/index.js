@@ -22,6 +22,7 @@ import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNu
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 import { pop } from '../../../shared/fragments'
 
 const Container = styled.div`
@@ -151,11 +152,7 @@ const Pop = ({ treeName }) => {
   if (loading) {
     return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) {
-    return (
-      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
-    )
-  }
+  if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <Container>

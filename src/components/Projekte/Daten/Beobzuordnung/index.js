@@ -24,6 +24,7 @@ import saveTpopIdToDb from './saveTpopIdToDb'
 import sendMail from '../../../../modules/sendMail'
 import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 import {
   aeTaxonomies,
   beob,
@@ -299,13 +300,7 @@ const Beobzuordnung = ({ type, treeName }) => {
   if (loading) {
     return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) {
-    return (
-      <LoadingContainer>
-        {`Fehler beim Laden der Daten: ${error.message}`}
-      </LoadingContainer>
-    )
-  }
+  if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <FormContainer>

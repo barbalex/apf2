@@ -9,6 +9,7 @@ import FormTitle from '../../../shared/FormTitle'
 import storeContext from '../../../../storeContext'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
@@ -58,13 +59,7 @@ const CurrentIssue = ({ treeName }) => {
   if (loading) {
     return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) {
-    return (
-      <LoadingContainer>
-        {`Fehler beim Laden der Daten: ${error.message}`}
-      </LoadingContainer>
-    )
-  }
+  if (error) return <Error error={error} />
   if (!row) return null
   return (
     <ErrorBoundary>
