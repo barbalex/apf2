@@ -12,7 +12,6 @@ import exists from '../../modules/exists'
 
 const Container = styled.div`
   background-color: #ffd3a7;
-  padding-bottom: 10px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -45,7 +44,7 @@ const StyledDeleteFilterIcon2 = styled(DeleteSweepOutlined)`
   pointer-events: auto;
 `
 
-const FormTitle = ({
+const FilterTitle = ({
   title,
   table,
   treeName,
@@ -127,4 +126,4 @@ const FormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(FormTitle))
+export default withResizeDetector(observer(FilterTitle))
