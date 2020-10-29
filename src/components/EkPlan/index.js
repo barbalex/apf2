@@ -59,9 +59,7 @@ const EkPlan = () => {
   }, [])
 
   if (error) {
-    const errors = [error]
-    //console.log('EkPlan, error:', error.message)
-    return <Error errors={errors} />
+    return <Error error={error} />
   }
 
   return (

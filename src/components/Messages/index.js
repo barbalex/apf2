@@ -100,11 +100,7 @@ const UserMessages = () => {
     return refetch()
   }, [client, refetch, unreadMessages, userName])
 
-  if (error) {
-    const errors = [error]
-    console.log('Messages, error:', error.message)
-    return <Error errors={errors} />
-  }
+  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
