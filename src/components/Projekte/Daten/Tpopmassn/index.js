@@ -30,6 +30,7 @@ import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNu
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 import { tpopmassn } from '../../../shared/fragments'
 
 const Container = styled.div`
@@ -272,26 +273,15 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
-  if (error) {
-    return (
-      <LoadingContainer>
-        {`Fehler beim Laden der Daten: ${error.message}`}
-      </LoadingContainer>
-    )
-  }
-  if (errorAdresses) {
-    return (
-      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
-    )
-  }
-  if (errorLists) {
-    return (
-      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
-    )
-  }
+  if (loading) return <LoadingContainer>Lade...</LoadingContainer>
+
+  const errors = [
+    ...(error ? [error] : []),
+    ...(errorLists ? [errorLists] : []),
+    ...(errorAdresses ? [errorAdresses] : []),
+  ]
+  if (errors.length) return <Error errors={errors} />
+
   return (
     <ErrorBoundary>
       <Container>

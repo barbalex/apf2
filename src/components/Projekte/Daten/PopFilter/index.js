@@ -16,15 +16,12 @@ import storeContext from '../../../../storeContext'
 import { simpleTypes as popType } from '../../../../store/Tree/DataFilter/pop'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 
 const Container = styled.div`
   height: calc(100vh - 64px - 81px);
   display: flex;
   flex-direction: column;
-  background-color: #ffd3a7;
-`
-const LoadingContainer = styled.div`
-  height: calc(100vh - 64px - 81px);
   background-color: #ffd3a7;
 `
 const FormContainer = styled.div`
@@ -100,11 +97,7 @@ const PopFilter = ({ treeName }) => {
 
   const [formTitleHeight, setFormTitleHeight] = useState(0)
 
-  if (error) {
-    return (
-      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
-    )
-  }
+  if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <Container>
