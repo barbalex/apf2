@@ -4,6 +4,7 @@ import get from 'lodash/get'
 import { useQuery } from '@apollo/client'
 import Linkify from 'react-linkify'
 import { DateTime } from 'luxon'
+import SimpleBar from 'simplebar-react'
 
 import query from './query'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -16,10 +17,12 @@ const LoadingContainer = styled.div`
   height: calc(100vh - 64px);
   padding: 10px;
 `
+const ScrollContainer = styled.div`
+  height: calc(100% - 43px);
+`
 const FieldsContainer = styled.div`
   padding: 10px;
-  overflow: auto !important;
-  height: calc(100vh - 64px - 42px);
+  height: 100%;
 `
 const MessageRow = styled.div`
   display: flex;
@@ -51,9 +54,8 @@ const Messages = () => {
 
   const rows = get(data, 'allMessages.nodes') || []
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <LoadingContainer>Lade...</LoadingContainer>
+
   if (error) return <Error error={error} />
 
   return (
@@ -62,22 +64,31 @@ const Messages = () => {
         <TitleRow>
           <Title data-id="form-title">Mitteilungen</Title>
         </TitleRow>
-        <FieldsContainer>
-          {rows.map((m) => {
-            const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
+        <ScrollContainer>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <FieldsContainer>
+              {rows.map((m) => {
+                const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
 
-            return (
-              <MessageRow key={m.id}>
-                <Date>{date}</Date>
-                <Message>
-                  <Linkify properties={{ target: '_blank' }}>
-                    {m.message}
-                  </Linkify>
-                </Message>
-              </MessageRow>
-            )
-          })}
-        </FieldsContainer>
+                return (
+                  <MessageRow key={m.id}>
+                    <Date>{date}</Date>
+                    <Message>
+                      <Linkify properties={{ target: '_blank' }}>
+                        {m.message}
+                      </Linkify>
+                    </Message>
+                  </MessageRow>
+                )
+              })}
+            </FieldsContainer>
+          </SimpleBar>
+        </ScrollContainer>
       </Container>
     </ErrorBoundary>
   )
