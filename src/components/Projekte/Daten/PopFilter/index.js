@@ -1,9 +1,10 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
+import SimpleBar from 'simplebar-react'
 
 import TextField from '../../../shared/TextFieldFormik'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfoFormik'
@@ -17,19 +18,24 @@ import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
-  height: calc(100vh - 145px);
+  height: calc(100vh - 64px - 81px);
   display: flex;
   flex-direction: column;
   background-color: #ffd3a7;
 `
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px - 81px);
+  background-color: #ffd3a7;
+`
 const FormContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled(Form)`
   padding: 10px;
   padding-top: 0;
-  overflow-y: auto !important;
-  height: calc(100% - 43px - 48px + 4px);
 `
 
-const Pop = ({ treeName }) => {
+const PopFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
   const { activeNodeArray, dataFilter } = store[treeName]
@@ -92,7 +98,13 @@ const Pop = ({ treeName }) => {
     [dataFilterSetValue, row, treeName],
   )
 
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
+  if (error) {
+    return (
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
+    )
+  }
   return (
     <ErrorBoundary>
       <Container>
@@ -104,54 +116,62 @@ const Pop = ({ treeName }) => {
           filteredNr={popFilteredCount}
           totalApNr={popOfApTotalCount}
           filteredApNr={popOfApFilteredCount}
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FormContainer>
-          <Formik
-            key={row}
-            initialValues={row}
-            onSubmit={onSubmit}
-            enableReinitialize
+        <FormContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
           >
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <TextField
-                  label="Nr."
-                  name="nr"
-                  type="number"
-                  handleSubmit={handleSubmit}
-                />
-                <TextFieldWithInfo
-                  label="Name"
-                  name="name"
-                  type="text"
-                  popover="Dieses Feld möglichst immer ausfüllen"
-                  handleSubmit={handleSubmit}
-                />
-                <Status
-                  apJahr={get(row, 'apByApId.startJahr')}
-                  treeName={treeName}
-                  showFilter={true}
-                  handleSubmit={handleSubmit}
-                />
-                <Checkbox2States
-                  label="Status unklar"
-                  name="statusUnklar"
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  label="Begründung"
-                  name="statusUnklarBegruendung"
-                  type="text"
-                  multiLine
-                  handleSubmit={handleSubmit}
-                />
-              </Form>
-            )}
-          </Formik>
+            <Formik
+              key={row}
+              initialValues={row}
+              onSubmit={onSubmit}
+              enableReinitialize
+            >
+              {({ handleSubmit, dirty }) => (
+                <StyledForm onBlur={() => dirty && handleSubmit()}>
+                  <TextField
+                    label="Nr."
+                    name="nr"
+                    type="number"
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextFieldWithInfo
+                    label="Name"
+                    name="name"
+                    type="text"
+                    popover="Dieses Feld möglichst immer ausfüllen"
+                    handleSubmit={handleSubmit}
+                  />
+                  <Status
+                    apJahr={get(row, 'apByApId.startJahr')}
+                    treeName={treeName}
+                    showFilter={true}
+                    handleSubmit={handleSubmit}
+                  />
+                  <Checkbox2States
+                    label="Status unklar"
+                    name="statusUnklar"
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    label="Begründung"
+                    name="statusUnklarBegruendung"
+                    type="text"
+                    multiLine
+                    handleSubmit={handleSubmit}
+                  />
+                </StyledForm>
+              )}
+            </Formik>
+          </SimpleBar>
         </FormContainer>
       </Container>
     </ErrorBoundary>
   )
 }
 
-export default observer(Pop)
+export default observer(PopFilter)
