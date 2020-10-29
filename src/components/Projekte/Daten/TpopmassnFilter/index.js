@@ -28,7 +28,6 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: calc(100vh - 64px - 81px);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   background-color: #ffd3a7;
@@ -321,6 +320,8 @@ const TpopmassnFilter = ({ treeName, width = 1000 }) => {
                       </>
                     )}
                     <SelectLoadingOptionsTypable
+                      key={`any-filter${!!row.wirtspflanze}`}
+                      name="wirtspflanze"
                       field="wirtspflanze"
                       label="Wirtspflanze"
                       handleSubmit={handleSubmit}
