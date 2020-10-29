@@ -1,9 +1,10 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import React, { useContext, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
+import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -21,15 +22,20 @@ import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
-  height: calc(100vh - 145px);
+  height: calc(100vh - 64px - 81px);
   display: flex;
   flex-direction: column;
   background-color: #ffd3a7;
 `
+const LoadingContainer = styled.div`
+  height: calc(100vh - 145px);
+  background-color: #ffd3a7;
+`
 const FieldsContainer = styled.div`
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+`
+const StyledForm = styled(Form)`
   padding: 10px;
-  overflow: auto !important;
-  height: 100%;
 `
 const FieldContainer = styled.div`
   display: flex;
@@ -142,11 +148,25 @@ const ApFilter = ({ treeName }) => {
     [],
   )
 
-  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
-  if (apsError) return `Fehler: ${apsError.message}`
-  if (errorLists) return `Fehler: ${errorLists.message}`
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
+  if (errorAdresses) {
+    return (
+      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
+    )
+  }
+  if (apsError) {
+    return <LoadingContainer>{`Fehler: ${apsError.message}`}</LoadingContainer>
+  }
+  if (errorLists) {
+    return (
+      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
+    )
+  }
   if (errorAeTaxonomiesById) {
-    return `Fehler: ${errorAeTaxonomiesById.message}`
+    return (
+      <LoadingContainer>{`Fehler: ${errorAeTaxonomiesById.message}`}</LoadingContainer>
+    )
   }
 
   return (
@@ -158,73 +178,45 @@ const ApFilter = ({ treeName }) => {
           table="ap"
           totalNr={get(apsData, 'allAps.totalCount', '...')}
           filteredNr={get(apsData, 'filteredAps.totalCount', '...')}
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer>
-          <Formik
-            key={row}
-            initialValues={row}
-            onSubmit={onSubmit}
-            enableReinitialize
+        <FieldsContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
           >
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <SelectLoadingOptions
-                  name="artId"
-                  valueLabelPath="aeTaxonomyByArtId.artname"
-                  label="Art (gibt dem Aktionsplan den Namen)"
-                  row={{
-                    ...row,
-                    ...{
-                      aeTaxonomyByArtId: {
-                        artname,
+            <Formik
+              key={row}
+              initialValues={row}
+              onSubmit={onSubmit}
+              enableReinitialize
+            >
+              {({ handleSubmit, dirty }) => (
+                <StyledForm onBlur={() => dirty && handleSubmit()}>
+                  <SelectLoadingOptions
+                    name="artId"
+                    valueLabelPath="aeTaxonomyByArtId.artname"
+                    label="Art (gibt dem Aktionsplan den Namen)"
+                    row={{
+                      ...row,
+                      ...{
+                        aeTaxonomyByArtId: {
+                          artname,
+                        },
                       },
-                    },
-                  }}
-                  query={queryAeTaxonomies}
-                  filter={aeTaxonomiesFilter}
-                  queryNodesName="allAeTaxonomies"
-                  handleSubmit={handleSubmit}
-                />
-                <RadioButtonGroupWithInfo
-                  name="bearbeitung"
-                  dataSource={get(dataLists, 'allApBearbstandWertes.nodes', [])}
-                  loading={loadingLists}
-                  popover={
-                    <>
-                      <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                      <LabelPopoverContentRow>
-                        <LabelPopoverRowColumnLeft>
-                          keiner:
-                        </LabelPopoverRowColumnLeft>
-                        <LabelPopoverRowColumnRight>
-                          kein Aktionsplan vorgesehen
-                        </LabelPopoverRowColumnRight>
-                      </LabelPopoverContentRow>
-                      <LabelPopoverContentRow>
-                        <LabelPopoverRowColumnLeft>
-                          erstellt:
-                        </LabelPopoverRowColumnLeft>
-                        <LabelPopoverRowColumnRight>
-                          Aktionsplan fertig, auf der Webseite der FNS
-                        </LabelPopoverRowColumnRight>
-                      </LabelPopoverContentRow>
-                    </>
-                  }
-                  label="Aktionsplan"
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="startJahr"
-                  label="Start im Jahr"
-                  type="number"
-                  handleSubmit={handleSubmit}
-                />
-                <FieldContainer>
+                    }}
+                    query={queryAeTaxonomies}
+                    filter={aeTaxonomiesFilter}
+                    queryNodesName="allAeTaxonomies"
+                    handleSubmit={handleSubmit}
+                  />
                   <RadioButtonGroupWithInfo
-                    name="umsetzung"
+                    name="bearbeitung"
                     dataSource={get(
                       dataLists,
-                      'allApUmsetzungWertes.nodes',
+                      'allApBearbstandWertes.nodes',
                       [],
                     )}
                     loading={loadingLists}
@@ -233,44 +225,84 @@ const ApFilter = ({ treeName }) => {
                         <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
                         <LabelPopoverContentRow>
                           <LabelPopoverRowColumnLeft>
-                            noch keine
-                            <br />
-                            Umsetzung:
+                            keiner:
                           </LabelPopoverRowColumnLeft>
                           <LabelPopoverRowColumnRight>
-                            noch keine Massnahmen ausgeführt
+                            kein Aktionsplan vorgesehen
                           </LabelPopoverRowColumnRight>
                         </LabelPopoverContentRow>
                         <LabelPopoverContentRow>
                           <LabelPopoverRowColumnLeft>
-                            in Umsetzung:
+                            erstellt:
                           </LabelPopoverRowColumnLeft>
                           <LabelPopoverRowColumnRight>
-                            bereits Massnahmen ausgeführt (auch wenn AP noch
-                            nicht erstellt)
+                            Aktionsplan fertig, auf der Webseite der FNS
                           </LabelPopoverRowColumnRight>
                         </LabelPopoverContentRow>
                       </>
                     }
-                    label="Stand Umsetzung"
+                    label="Aktionsplan"
                     handleSubmit={handleSubmit}
                   />
-                </FieldContainer>
-                <Select
-                  name="bearbeiter"
-                  label="Verantwortlich"
-                  options={get(dataAdresses, 'allAdresses.nodes', [])}
-                  loading={loadingAdresses}
-                  handleSubmit={handleSubmit}
-                />
-                <TextField
-                  name="ekfBeobachtungszeitpunkt"
-                  label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
-                  handleSubmit={handleSubmit}
-                />
-              </Form>
-            )}
-          </Formik>
+                  <TextField
+                    name="startJahr"
+                    label="Start im Jahr"
+                    type="number"
+                    handleSubmit={handleSubmit}
+                  />
+                  <FieldContainer>
+                    <RadioButtonGroupWithInfo
+                      name="umsetzung"
+                      dataSource={get(
+                        dataLists,
+                        'allApUmsetzungWertes.nodes',
+                        [],
+                      )}
+                      loading={loadingLists}
+                      popover={
+                        <>
+                          <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                          <LabelPopoverContentRow>
+                            <LabelPopoverRowColumnLeft>
+                              noch keine
+                              <br />
+                              Umsetzung:
+                            </LabelPopoverRowColumnLeft>
+                            <LabelPopoverRowColumnRight>
+                              noch keine Massnahmen ausgeführt
+                            </LabelPopoverRowColumnRight>
+                          </LabelPopoverContentRow>
+                          <LabelPopoverContentRow>
+                            <LabelPopoverRowColumnLeft>
+                              in Umsetzung:
+                            </LabelPopoverRowColumnLeft>
+                            <LabelPopoverRowColumnRight>
+                              bereits Massnahmen ausgeführt (auch wenn AP noch
+                              nicht erstellt)
+                            </LabelPopoverRowColumnRight>
+                          </LabelPopoverContentRow>
+                        </>
+                      }
+                      label="Stand Umsetzung"
+                      handleSubmit={handleSubmit}
+                    />
+                  </FieldContainer>
+                  <Select
+                    name="bearbeiter"
+                    label="Verantwortlich"
+                    options={get(dataAdresses, 'allAdresses.nodes', [])}
+                    loading={loadingAdresses}
+                    handleSubmit={handleSubmit}
+                  />
+                  <TextField
+                    name="ekfBeobachtungszeitpunkt"
+                    label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
+                    handleSubmit={handleSubmit}
+                  />
+                </StyledForm>
+              )}
+            </Formik>
+          </SimpleBar>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
