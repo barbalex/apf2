@@ -91,6 +91,7 @@ import insertDataset from './insertDataset'
 import storeContext from '../../../storeContext'
 import TpopFromBeobPopList from './TpopFromBeobPopList'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import Error from '../../shared/Error'
 
 const Container = styled.div`
   height: 100%;
@@ -628,9 +629,7 @@ const TreeContainer = ({
       </ErrorContainer>
     )
   }
-  if (treeError) {
-    return <ErrorContainer>{`Fehler: ${treeError.message}`}</ErrorContainer>
-  }
+  if (treeError) return <Error error={treeError} />
 
   return (
     <ErrorBoundary>

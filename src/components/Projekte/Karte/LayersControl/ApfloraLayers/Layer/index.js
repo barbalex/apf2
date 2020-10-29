@@ -19,7 +19,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 
 import Checkbox from '../../shared/Checkbox'
-import Error from '../../shared/Error'
+import Error from '../../../../../shared/Error'
 import getBounds from '../../../../../../modules/getBounds'
 import storeContext from '../../../../../../storeContext'
 import query from './data'

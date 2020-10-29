@@ -33,11 +33,6 @@ const Container = styled.div`
   flex-direction: column;
   background-color: #ffd3a7;
 `
-const LoadingContainer = styled.div`
-  height: calc(100vh - 64px - 81px);
-  padding: 10px;
-  background-color: #ffd3a7;
-`
 const FormScrollContainer = styled.div`
   height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
 `

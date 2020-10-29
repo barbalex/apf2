@@ -37,9 +37,6 @@ const Container = styled(Area)`
     padding-top: 10px;
   }
 `
-const LoadingContainer = styled.div`
-  padding: 10px;
-`
 const Label = styled.div`
   font-weight: 700;
 `
