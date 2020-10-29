@@ -44,7 +44,6 @@ const StyledCardContent = styled(CardContent)`
   align-items: stretch;
   justify-content: stretch;
   align-content: stretch;
-  overflow: auto;
 `
 const DownloadCardButton = styled(Button)`
   flex-basis: 450px;
