@@ -17,6 +17,7 @@ import styled from 'styled-components'
 
 import queryErfolg from './queryErfolg'
 import CustomTick from './CustomTick'
+import Error from '../../../../../shared/Error'
 
 const SpinnerContainer = styled.div`
   height: 400px;
@@ -72,9 +73,7 @@ const ApAuswertungApErfolg = ({ id }) => {
   }))
   const erfolgData = addMissingErfolgData(erfolgRawData)
 
-  if (errorErfolg) {
-    return `Fehler beim Laden der Daten: ${errorErfolg.message}`
-  }
+  if (errorErfolg) return <Error error={errorErfolg} />
 
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821

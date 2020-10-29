@@ -20,15 +20,12 @@ import storeContext from '../../../../storeContext'
 import { simpleTypes as apType } from '../../../../store/Tree/DataFilter/ap'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 
 const Container = styled.div`
   height: calc(100vh - 64px - 81px);
   display: flex;
   flex-direction: column;
-  background-color: #ffd3a7;
-`
-const LoadingContainer = styled.div`
-  height: calc(100vh - 145px);
   background-color: #ffd3a7;
 `
 const FieldsContainer = styled.div`
@@ -150,24 +147,13 @@ const ApFilter = ({ treeName }) => {
 
   const [formTitleHeight, setFormTitleHeight] = useState(0)
 
-  if (errorAdresses) {
-    return (
-      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
-    )
-  }
-  if (apsError) {
-    return <LoadingContainer>{`Fehler: ${apsError.message}`}</LoadingContainer>
-  }
-  if (errorLists) {
-    return (
-      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
-    )
-  }
-  if (errorAeTaxonomiesById) {
-    return (
-      <LoadingContainer>{`Fehler: ${errorAeTaxonomiesById.message}`}</LoadingContainer>
-    )
-  }
+  const errors = [
+    ...(errorAdresses ? [errorAdresses] : []),
+    ...(apsError ? [apsError] : []),
+    ...(errorLists ? [errorLists] : []),
+    ...(errorAeTaxonomiesById ? [errorAeTaxonomiesById] : []),
+  ]
+  if (errors.length) return <Error errors={errors} />
 
   return (
     <ErrorBoundary>

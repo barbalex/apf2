@@ -25,10 +25,6 @@ const Container = styled.div`
   flex-direction: column;
   padding: 10px;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const StyledPaper = styled(Paper)`
   padding: 10px;
   margin-bottom: 12px !important;

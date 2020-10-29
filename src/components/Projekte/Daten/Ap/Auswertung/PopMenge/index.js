@@ -21,6 +21,7 @@ import queryPopMenge from './queryPopMenge'
 import CustomTooltip from './CustomTooltip'
 import exists from '../../../../../../modules/exists'
 import storeContext from '../../../../../../storeContext'
+import Error from '../../../../../shared/Error'
 
 const SpinnerContainer = styled.div`
   height: 400px;
@@ -154,9 +155,7 @@ const ApAuswertungPopMenge = ({ id }) => {
     }
   }, [])
 
-  if (errorPopMenge) {
-    return `Fehler beim Laden der Daten: ${errorPopMenge.message}`
-  }
+  if (errorPopMenge) return <Error error={errorPopMenge} />
 
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
