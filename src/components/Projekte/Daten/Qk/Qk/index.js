@@ -24,6 +24,10 @@ const Container = styled.div`
   flex-direction: column;
   padding: 10px;
 `
+const LoadingContainer = styled.div`
+  height: 100%;
+  padding: 10px;
+`
 const StyledPaper = styled(Paper)`
   padding: 10px;
   margin-bottom: 12px !important;
@@ -122,7 +126,11 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
     return true
   })
 
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  if (error) {
+    return (
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
+    )
+  }
   return (
     <ErrorBoundary>
       <Container>
