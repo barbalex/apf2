@@ -20,6 +20,7 @@ import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 import { idealbiotop } from '../../../shared/fragments'
 
 const Container = styled.div`
@@ -176,11 +177,7 @@ const Idealbiotop = ({ treeName, width = 1000 }) => {
   if (loading) {
     return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) {
-    return (
-      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
-    )
-  }
+  if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <Container>

@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/client'
 import get from 'lodash/get'
 
 import query from './query'
+import Error from '../../../../../shared/Error'
 
 const Row = styled.div`
   display: flex;
@@ -73,14 +74,7 @@ const ChooseQkRow = ({ apId, qk, refetchTab }) => {
     setTimeout(() => refetchTab())
   }, [apId, checked, client, qk.name, refetch, refetchTab])
 
-  if (error)
-    return (
-      <Row>
-        <Check>Fehler</Check>
-        <Titel>{qk.titel}</Titel>
-        <Beschreibung>{qk.beschreibung}</Beschreibung>
-      </Row>
-    )
+  if (error) return <Error error={error} />
   return (
     <Row>
       <Check>
