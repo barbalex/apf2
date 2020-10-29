@@ -136,14 +136,8 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
     [client, password, row.id],
   )
 
-  console.log('User rendering')
-
   if (loading) return null
-  if (error) {
-    const errors = [error]
-    //console.log('AppBar Projekte Ekf User, error:', error.message)
-    return <Error errors={errors} />
-  }
+  if (error) return <Error error={error} />
 
   return (
     <Dialog

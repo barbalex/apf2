@@ -311,15 +311,14 @@ const EkPlanTable = () => {
     })
   }, [tpops, store, dataLists, years])
 
-  if (aps.length > 0 && loadingTpop)
+  if (aps.length > 0 && loadingTpop) {
     return <TempContainer>Lade...</TempContainer>
-  if (errorTpop || errorLists) {
-    let errors = []
-    if (errorTpop) errors = [errorTpop]
-    if (errorLists) errors = [...errors, errorLists]
-
-    return <Error errors={errors} />
   }
+  const errors = [
+    ...(errorTpop ? [errorTpop] : []),
+    ...(errorLists ? [errorLists] : []),
+  ]
+  if (errors.length) return <Error errors={errors} />
   return (
     <ErrorBoundary>
       <ExportButton variant="outlined" onClick={onClickExport}>

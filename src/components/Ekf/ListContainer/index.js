@@ -36,9 +36,7 @@ const EkfListContainer = () => {
   })
 
   if (error) {
-    const errors = [error]
-    //console.log('ListContainer, error:', error.message)
-    return <Error errors={errors} />
+    return <Error error={error} />
   }
   return <List data={data} loading={loading} />
 }
