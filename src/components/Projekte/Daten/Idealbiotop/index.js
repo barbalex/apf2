@@ -27,6 +27,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
+  padding: 10px;
+`
 const FieldsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -170,13 +174,13 @@ const Idealbiotop = ({ treeName, width = 1000 }) => {
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
   if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
+  }
+  if (error) {
     return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
     )
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   return (
     <ErrorBoundary>
       <Container>

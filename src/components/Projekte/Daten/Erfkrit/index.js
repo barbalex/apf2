@@ -120,12 +120,14 @@ const Erfkrit = ({ treeName }) => {
   if (error) {
     return (
       <LoadingContainer>
-        `Fehler beim Laden der Daten: ${error.message}`
+        {`Fehler beim Laden der Daten: ${error.message}`}
       </LoadingContainer>
     )
   }
   if (errorLists) {
-    return <LoadingContainer>`Fehler: ${errorLists.message}`</LoadingContainer>
+    return (
+      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
+    )
   }
   return (
     <ErrorBoundary>
