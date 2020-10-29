@@ -12,15 +12,13 @@ import query from './query'
 import RowComponent from './Row'
 import storeContext from '../../../../../storeContext'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import Error from '../../../../shared/Error'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 10px 0;
-`
-const LoadingContainer = styled.div`
-  padding: 10px;
 `
 const SpinnerContainer = styled.div`
   height: 400px;
@@ -67,9 +65,6 @@ const ChooseQk = ({ treeName, refetchTab }) => {
     ? `filtern: ${rowsFiltered.length}/${rows.length}`
     : 'filtern'
 
-  if (error) {
-    return <LoadingContainer>{`Fehler: ${error.message}`}</LoadingContainer>
-  }
   if (loading) {
     return (
       <SpinnerContainer>
@@ -83,6 +78,7 @@ const ChooseQk = ({ treeName, refetchTab }) => {
       </SpinnerContainer>
     )
   }
+  if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <Container>

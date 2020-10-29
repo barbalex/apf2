@@ -14,6 +14,7 @@ import Qk from './Qk'
 import Choose from './Choose'
 import queryQk from './queryQk'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -81,13 +82,7 @@ const QkForm = ({ treeName }) => {
 
   const [formTitleHeight, setFormTitleHeight] = useState(43)
 
-  if (error) {
-    return (
-      <LoadingContainer>
-        {`Fehler beim Laden der Daten: ${error.message}`}
-      </LoadingContainer>
-    )
-  }
+  if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <Container>
