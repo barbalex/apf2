@@ -19,6 +19,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 
 import Checkbox from '../../shared/Checkbox'
+import Error from '../../shared/Error'
 import getBounds from '../../../../../../modules/getBounds'
 import storeContext from '../../../../../../storeContext'
 import query from './data'
@@ -240,7 +241,7 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
     [activeApfloraLayers, apfloraLayer, layerDataHighlighted],
   )
 
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  if (error) return <Error error={error} />
   return (
     <LayerDiv>
       <Checkbox

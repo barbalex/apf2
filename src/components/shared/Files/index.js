@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button'
 import SimpleBar from 'simplebar-react'
 
 import ErrorBoundary from '../ErrorBoundary'
+import Error from '../Error'
 
 import {
   apFile as apFileFragment,
@@ -140,15 +141,9 @@ const Files = ({ parentId, parent }) => {
     [imageIndex, images.length],
   )
 
-  if (loading) {
-    return 'Lade...'
-  }
+  if (loading) return 'Lade...'
 
-  if (error) {
-    return (
-      <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
-    )
-  }
+  if (error) return <Error error={error} />
 
   return (
     <SimpleBar

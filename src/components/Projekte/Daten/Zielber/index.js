@@ -13,6 +13,7 @@ import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 import { zielber as zielberFragment } from '../../../shared/fragments'
 
 const Container = styled.div`
@@ -108,16 +109,10 @@ const Zielber = ({ treeName }) => {
 
   const [formTitleHeight, setFormTitleHeight] = useState(0)
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
-  if (error) {
-    return (
-      <LoadingContainer>
-        {`Fehler beim Laden der Daten: ${error.message}`}
-      </LoadingContainer>
-    )
-  }
+  if (loading) return <LoadingContainer>Lade...</LoadingContainer>
+
+  if (error) return <Error error={error} />
+
   return (
     <ErrorBoundary>
       <Container>
