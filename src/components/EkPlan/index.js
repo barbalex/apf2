@@ -58,9 +58,7 @@ const EkPlan = () => {
     }
   }, [])
 
-  if (error) {
-    return <Error error={error} />
-  }
+  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
