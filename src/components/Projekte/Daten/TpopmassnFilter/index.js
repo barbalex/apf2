@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import { withResizeDetector } from 'react-resize-detector'
+import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -26,15 +27,19 @@ import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
-  height: calc(100vh - 145px);
+  height: calc(100vh - 64px - 81px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   background-color: #ffd3a7;
 `
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px - 81px);
+  padding: 10px;
+  background-color: #ffd3a7;
+`
 const FormScrollContainer = styled.div`
-  height: calc(100% - 43px - 48px);
-  overflow-y: auto !important;
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
 `
 const ColumnContainer = styled.div`
   padding: 10px;
@@ -43,7 +48,7 @@ const ColumnContainer = styled.div`
     `column-width: ${props['data-column-width']}px;`}
 `
 
-const Tpopmassn = ({ treeName, width = 1000 }) => {
+const TpopmassnFilter = ({ treeName, width = 1000 }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
 
@@ -138,12 +143,26 @@ const Tpopmassn = ({ treeName, width = 1000 }) => {
     [dataFilterSetValue, row, treeName],
   )
 
+  const [formTitleHeight, setFormTitleHeight] = useState(0)
+
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
-  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
-  if (errorLists) return `Fehler: ${errorLists.message}`
+  if (error) {
+    return (
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
+    )
+  }
+  if (errorAdresses) {
+    return (
+      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
+    )
+  }
+  if (errorLists) {
+    return (
+      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
+    )
+  }
 
   console.log('TpopMassnFilter', {
     columnWidth,
@@ -156,8 +175,8 @@ const Tpopmassn = ({ treeName, width = 1000 }) => {
   })
 
   return (
-    <ErrorBoundary>
-      <Container>
+    <Container>
+      <ErrorBoundary>
         <FilterTitle
           title="Massnahmen"
           treeName={treeName}
@@ -166,167 +185,175 @@ const Tpopmassn = ({ treeName, width = 1000 }) => {
           filteredNr={tpopmassnFilteredCount}
           totalApNr={tpopmassnsOfApTotalCount}
           filteredApNr={tpopmassnsOfApFilteredCount}
+          setFormTitleHeight={setFormTitleHeight}
         />
-        <FormScrollContainer>
-          <ColumnContainer data-column-width={columnWidth}>
-            <Formik
-              key={row}
-              initialValues={row}
-              onSubmit={onSubmit}
-              enableReinitialize
-            >
-              {({ handleSubmit, dirty }) => (
-                <Form onBlur={() => dirty && handleSubmit()}>
-                  <TextField
-                    name="jahr"
-                    label="Jahr"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <DateField
-                    name="datum"
-                    label="Datum"
-                    handleSubmit={handleSubmit}
-                  />
-                  <RadioButtonGroup
-                    name="typ"
-                    label="Typ"
-                    dataSource={get(
-                      dataLists,
-                      'allTpopmassnTypWertes.nodes',
-                      [],
+        <FormScrollContainer data-form-title-height={formTitleHeight}>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <ColumnContainer data-column-width={columnWidth}>
+              <Formik
+                key={row}
+                initialValues={row}
+                onSubmit={onSubmit}
+                enableReinitialize
+              >
+                {({ handleSubmit, dirty }) => (
+                  <Form onBlur={() => dirty && handleSubmit()}>
+                    <TextField
+                      name="jahr"
+                      label="Jahr"
+                      type="number"
+                      handleSubmit={handleSubmit}
+                    />
+                    <DateField
+                      name="datum"
+                      label="Datum"
+                      handleSubmit={handleSubmit}
+                    />
+                    <RadioButtonGroup
+                      name="typ"
+                      label="Typ"
+                      dataSource={get(
+                        dataLists,
+                        'allTpopmassnTypWertes.nodes',
+                        [],
+                      )}
+                      loading={loadingLists}
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="beschreibung"
+                      label="Massnahme"
+                      type="text"
+                      handleSubmit={handleSubmit}
+                    />
+                    <Select
+                      name="bearbeiter"
+                      value={row.bearbeiter}
+                      label="BearbeiterIn"
+                      options={get(dataAdresses, 'allAdresses.nodes', [])}
+                      loading={loadingAdresses}
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="bemerkungen"
+                      label="Bemerkungen"
+                      type="text"
+                      multiLine
+                      handleSubmit={handleSubmit}
+                    />
+                    <Checkbox2States
+                      name="planVorhanden"
+                      label="Plan vorhanden"
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="planBezeichnung"
+                      label="Plan Bezeichnung"
+                      type="text"
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="flaeche"
+                      label="Fläche (m2)"
+                      type="number"
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="form"
+                      label="Form der Ansiedlung"
+                      type="text"
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="pflanzanordnung"
+                      label="Pflanzanordnung"
+                      type="text"
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="markierung"
+                      label="Markierung"
+                      type="text"
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="anzTriebe"
+                      label="Anzahl Triebe"
+                      type="number"
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="anzPflanzen"
+                      label="Anzahl Pflanzen"
+                      type="number"
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="anzPflanzstellen"
+                      label="Anzahl Pflanzstellen"
+                      type="number"
+                      handleSubmit={handleSubmit}
+                    />
+                    {isAnpflanzung && (
+                      <>
+                        <Select
+                          name="zieleinheitEinheit"
+                          label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
+                          options={get(
+                            dataLists,
+                            'allTpopkontrzaehlEinheitWertes.nodes',
+                            [],
+                          )}
+                          loading={loadingLists}
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="zieleinheitAnzahl"
+                          label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
+                          type="number"
+                          handleSubmit={handleSubmit}
+                        />
+                      </>
                     )}
-                    loading={loadingLists}
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="beschreibung"
-                    label="Massnahme"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <Select
-                    name="bearbeiter"
-                    value={row.bearbeiter}
-                    label="BearbeiterIn"
-                    options={get(dataAdresses, 'allAdresses.nodes', [])}
-                    loading={loadingAdresses}
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="bemerkungen"
-                    label="Bemerkungen"
-                    type="text"
-                    multiLine
-                    handleSubmit={handleSubmit}
-                  />
-                  <Checkbox2States
-                    name="planVorhanden"
-                    label="Plan vorhanden"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="planBezeichnung"
-                    label="Plan Bezeichnung"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="flaeche"
-                    label="Fläche (m2)"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="form"
-                    label="Form der Ansiedlung"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="pflanzanordnung"
-                    label="Pflanzanordnung"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="markierung"
-                    label="Markierung"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="anzTriebe"
-                    label="Anzahl Triebe"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="anzPflanzen"
-                    label="Anzahl Pflanzen"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="anzPflanzstellen"
-                    label="Anzahl Pflanzstellen"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  {isAnpflanzung && (
-                    <>
-                      <Select
-                        name="zieleinheitEinheit"
-                        label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
-                        options={get(
-                          dataLists,
-                          'allTpopkontrzaehlEinheitWertes.nodes',
-                          [],
-                        )}
-                        loading={loadingLists}
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="zieleinheitAnzahl"
-                        label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
-                        type="number"
-                        handleSubmit={handleSubmit}
-                      />
-                    </>
-                  )}
-                  <SelectLoadingOptionsTypable
-                    field="wirtspflanze"
-                    label="Wirtspflanze"
-                    handleSubmit={handleSubmit}
-                    query={queryAeTaxonomies}
-                    queryNodesName="allAeTaxonomies"
-                  />
-                  <TextField
-                    name="herkunftPop"
-                    label="Herkunftspopulation"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="sammeldatum"
-                    label="Sammeldatum"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="vonAnzahlIndividuen"
-                    label="Anzahl besammelte Individuen der Herkunftspopulation"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                </Form>
-              )}
-            </Formik>
-          </ColumnContainer>
+                    <SelectLoadingOptionsTypable
+                      field="wirtspflanze"
+                      label="Wirtspflanze"
+                      handleSubmit={handleSubmit}
+                      query={queryAeTaxonomies}
+                      queryNodesName="allAeTaxonomies"
+                    />
+                    <TextField
+                      name="herkunftPop"
+                      label="Herkunftspopulation"
+                      type="text"
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="sammeldatum"
+                      label="Sammeldatum"
+                      type="text"
+                      handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="vonAnzahlIndividuen"
+                      label="Anzahl besammelte Individuen der Herkunftspopulation"
+                      type="number"
+                      handleSubmit={handleSubmit}
+                    />
+                  </Form>
+                )}
+              </Formik>
+            </ColumnContainer>
+          </SimpleBar>
         </FormScrollContainer>
-      </Container>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </Container>
   )
 }
 
-export default withResizeDetector(observer(Tpopmassn))
+export default withResizeDetector(observer(TpopmassnFilter))
