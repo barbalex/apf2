@@ -25,6 +25,7 @@ import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopmassnType } from '../../../../store/Tree/DataFilter/tpopmassn'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 
 const Container = styled.div`
   height: calc(100vh - 64px - 81px);
@@ -147,31 +148,12 @@ const TpopmassnFilter = ({ treeName, width = 1000 }) => {
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
-  if (error) {
-    return (
-      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
-    )
-  }
-  if (errorAdresses) {
-    return (
-      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
-    )
-  }
-  if (errorLists) {
-    return (
-      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
-    )
-  }
-
-  console.log('TpopMassnFilter', {
-    columnWidth,
-    width,
-    tpopmassnTotalCount,
-    tpopmassnFilteredCount,
-    tpopmassnsOfApTotalCount,
-    tpopmassnsOfApFilteredCount,
-    row,
-  })
+  const errors = [
+    ...(error ? [error] : []),
+    ...(errorLists ? [errorLists] : []),
+    ...(errorAdresses ? [errorAdresses] : []),
+  ]
+  if (errors.length) return <Error errors={errors} />
 
   return (
     <Container>

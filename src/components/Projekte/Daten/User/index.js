@@ -27,6 +27,7 @@ import {
   user as userFragment,
 } from '../../../shared/fragments'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -316,22 +317,16 @@ const User = ({ treeName }) => {
 
   const [formTitleHeight, setFormTitleHeight] = useState(0)
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
-  if (error) {
-    return (
-      <LoadingContainer>
-        {`Fehler beim Laden der Daten: ${error.message}`}
-      </LoadingContainer>
-    )
-  }
-  if (errorAdresses) {
-    return (
-      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
-    )
-  }
+  if (loading) return <LoadingContainer>Lade...</LoadingContainer>
+
+  const queryErrors = [
+    ...(error ? [error] : []),
+    ...(errorAdresses ? [errorAdresses] : []),
+  ]
+  if (queryErrors.length) return <Error errors={queryErrors} />
+
   if (!row) return null
+
   return (
     <ErrorBoundary>
       <Container>

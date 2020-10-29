@@ -12,6 +12,7 @@ import get from 'lodash/get'
 import storeContext from '../../../storeContext'
 import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import Error from '../../shared/Error'
 
 const StyledList = styled(List)`
   overflow-y: auto;
@@ -45,8 +46,8 @@ const TpopFromBeobPopList = ({
     variables: { apId },
   })
 
-  if (error) return error.message
   if (loading) return 'Lade Daten...'
+  if (error) return <Error error={error} />
 
   const pops = get(data, 'allPops.nodes', [])
 
