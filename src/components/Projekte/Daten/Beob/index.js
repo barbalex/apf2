@@ -10,6 +10,7 @@ import constants from '../../../../modules/constants'
 import query from './query'
 import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 
 const Container = styled.div`
   padding: 15px 10px 0 10px;
@@ -44,11 +45,7 @@ const Beob = ({ treeName, width = 1000 }) => {
   if (loading) {
     return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) {
-    return (
-      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
-    )
-  }
+  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>

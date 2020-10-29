@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import ApUser from './ApUser'
 import NewUser from './NewUser'
 import Label from '../../../../../shared/Label'
+import Error from '../../../../../shared/Error'
 
 const Container = styled.div`
   margin-top: 10px;
@@ -61,14 +62,6 @@ const ApUsers = ({ apId }) => {
   )
   const apUsers = data ? get(data, 'allApUsers.nodes', []) : []
 
-  if (error) {
-    return (
-      <Container>
-        <Label label={'Benutzer mit Zugriff'} />>{error.message}
-      </Container>
-    )
-  }
-
   if (loading) {
     return (
       <Container>
@@ -77,6 +70,8 @@ const ApUsers = ({ apId }) => {
       </Container>
     )
   }
+
+  if (error) return <Error error={error} />
 
   return (
     <Container>

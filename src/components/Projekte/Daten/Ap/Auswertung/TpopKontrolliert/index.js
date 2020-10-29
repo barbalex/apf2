@@ -16,6 +16,7 @@ import styled from 'styled-components'
 
 import query from './query'
 import CustomTooltip from '../CustomTooltip'
+import Error from '../../../../../shared/Error'
 
 const SpinnerContainer = styled.div`
   height: 400px;
@@ -59,9 +60,7 @@ const ApAuswertungTpopKontrolliert = ({ id }) => {
     }),
   )
 
-  if (error) {
-    return `Fehler beim Laden der Daten: ${error.message}`
-  }
+  if (error) return <Error error={error} />
 
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821

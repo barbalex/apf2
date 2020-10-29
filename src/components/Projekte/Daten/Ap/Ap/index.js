@@ -21,6 +21,7 @@ import objectsFindChangedKey from '../../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../../modules/objectsEmptyValuesToNull'
 import ApUsers from './ApUsers'
 import { ap, aeTaxonomies } from '../../../../shared/fragments'
+import Error from '../../../../shared/Error'
 
 const FormContainer = styled.div`
   padding: 10px;
@@ -170,23 +171,12 @@ const ApAp = ({ treeName, id }) => {
   if (loading) {
     return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (errorAdresses) {
-    return (
-      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
-    )
-  }
-  if (errorLists) {
-    return (
-      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
-    )
-  }
-  if (error) {
-    return (
-      <LoadingContainer>
-        `Fehler beim Laden der Daten: ${error.message}`
-      </LoadingContainer>
-    )
-  }
+  const errors = [
+    ...(errorAdresses ? [errorAdresses] : []),
+    ...(errorLists ? [errorLists] : []),
+    ...(error ? [error] : []),
+  ]
+  if (errors.length) return <Error errors={errors} />
 
   return (
     <SimpleBar
