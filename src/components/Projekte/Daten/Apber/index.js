@@ -23,6 +23,7 @@ import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { apber } from '../../../shared/fragments'
+import Error from '../../../shared/Error'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -154,23 +155,13 @@ const Apber = ({ treeName, width = 1000 }) => {
   if (loading) {
     return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error)
-    return (
-      <LoadingContainer>
-        {`Fehler beim Laden der Daten: ${error.message}`}
-      </LoadingContainer>
-    )
-  if (errorAdresses)
-    return (
-      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
-    )
-  if (errorApErfkritWertes) {
-    return (
-      <LoadingContainer>
-        {`Fehler: ${errorApErfkritWertes.message}`}
-      </LoadingContainer>
-    )
-  }
+
+  const errors = [
+    ...(error ? [error] : []),
+    ...(errorAdresses ? [errorAdresses] : []),
+    ...(errorApErfkritWertes ? [errorApErfkritWertes] : []),
+  ]
+  if (errors.length) return <Error errors={errors} />
 
   return (
     <ErrorBoundary>
