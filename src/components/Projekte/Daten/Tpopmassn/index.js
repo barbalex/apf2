@@ -33,7 +33,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { tpopmassn } from '../../../shared/fragments'
 
 const Container = styled.div`
-  overflow: hidden;
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
 `
