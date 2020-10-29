@@ -11,6 +11,10 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 const Container = styled.div`
   height: calc(100vh - 64px);
 `
+const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
+  padding: 10px;
+`
 const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
@@ -47,13 +51,13 @@ const Messages = () => {
   const rows = get(data, 'allMessages.nodes') || []
 
   if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
+  }
+  if (error) {
     return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
     )
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
   return (
     <ErrorBoundary>

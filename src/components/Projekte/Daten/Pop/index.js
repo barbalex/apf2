@@ -30,6 +30,7 @@ const Container = styled.div`
   flex-direction: column;
 `
 const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
 `
 const FormContainer = styled.div`
@@ -148,13 +149,13 @@ const Pop = ({ treeName }) => {
   const [formTitleHeight, setFormTitleHeight] = useState(43)
 
   if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
+  }
+  if (error) {
     return (
-      <Container>
-        <LoadingContainer>Lade...</LoadingContainer>
-      </Container>
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
     )
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
   return (
     <ErrorBoundary>
       <Container>
