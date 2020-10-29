@@ -149,12 +149,12 @@ const ApArt = ({ treeName }) => {
   if (error)
     return (
       <LoadingContainer>
-        `Fehler beim Laden der Daten: ${error.message}`
+        {`Fehler beim Laden der Daten: ${error.message}`}
       </LoadingContainer>
     )
   if (errorAeEigById)
     return (
-      <LoadingContainer>`Fehler: ${errorAeEigById.message}`</LoadingContainer>
+      <LoadingContainer>{`Fehler: ${errorAeEigById.message}`}</LoadingContainer>
     )
 
   return (
