@@ -41,6 +41,7 @@ import {
   tpopfreiwkontr as tpopfreiwkontrFragment,
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../../shared/fragments'
+import Error from '../../../shared/Error'
 
 const Container = styled.div`
   height: ${(props) =>
@@ -606,14 +607,8 @@ const Tpopfreiwkontr = ({
 
   const [formTitleHeight, setFormTitleHeight] = useState(0)
 
-  if (error) {
-    return (
-      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
-    )
-  }
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <LoadingContainer>Lade...</LoadingContainer>
+  if (error) return <Error error={error} />
   if (Object.keys(row).length === 0) return null
 
   return (

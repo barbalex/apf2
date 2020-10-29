@@ -17,6 +17,7 @@ import query from './query'
 import createMessageFunctions from './createMessageFunctions'
 import storeContext from '../../../../../storeContext'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import Error from '../../../../shared/Error'
 
 const Container = styled.div`
   height: 100%;
@@ -126,11 +127,7 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
     return true
   })
 
-  if (error) {
-    return (
-      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
-    )
-  }
+  if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <Container>

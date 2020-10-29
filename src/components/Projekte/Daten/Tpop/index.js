@@ -6,7 +6,6 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
@@ -21,6 +20,7 @@ import Ek from './Ek'
 import Tpop from './Tpop'
 import Files from '../../../shared/Files'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 import {
   popStatusWerte,
   tpop,
@@ -33,10 +33,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
-`
-const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
-  padding: 10px;
 `
 const FieldsContainer = styled.div`
   overflow: hidden !important;
@@ -257,11 +253,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
 
   const [formTitleHeight, setFormTitleHeight] = useState(0)
 
-  if (error) {
-    return (
-      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
-    )
-  }
+  if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>

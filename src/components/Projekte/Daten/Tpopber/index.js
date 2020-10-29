@@ -15,6 +15,7 @@ import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 import { tpopber } from '../../../shared/fragments'
 
 const Container = styled.div`
@@ -118,16 +119,13 @@ const Tpopber = ({ treeName }) => {
   if (loading) {
     return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) {
-    return (
-      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
-    )
-  }
-  if (errorLists) {
-    return (
-      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
-    )
-  }
+
+  const errors = [
+    ...(error ? [error] : []),
+    ...(errorLists ? [errorLists] : []),
+  ]
+  if (errors.length) return <Error errors={errors} />
+
   return (
     <ErrorBoundary>
       <Container>
