@@ -49,7 +49,7 @@ const LoadingContainer = styled.div`
 const FieldsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
   > div:first-child {
     > div:first-child {
       display: block !important;
@@ -369,7 +369,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false, width = 1000 }) => {
             setFormTitleHeight={setFormTitleHeight}
           />
         )}
-        <FieldsContainer>
+        <FieldsContainer data-form-title-height={formTitleHeight}>
           <Tabs
             value={tab}
             onChange={onChangeTab}
