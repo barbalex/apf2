@@ -138,12 +138,13 @@ const Assozart = ({ treeName }) => {
   if (loading) {
     return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error)
+  if (error) {
     return (
       <LoadingContainer>
-        `Fehler beim Laden der Daten: ${error.message}`
+        {`Fehler beim Laden der Daten: ${error.message}`}
       </LoadingContainer>
     )
+  }
 
   return (
     <ErrorBoundary>

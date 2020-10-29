@@ -17,6 +17,9 @@ const Container = styled.div`
     props['data-column-width'] &&
     `column-width: ${props['data-column-width']}px;`}
 `
+const LoadingContainer = styled.div`
+  padding: 10px;
+`
 
 const Beob = ({ treeName, width = 1000 }) => {
   const store = useContext(storeContext)
@@ -38,9 +41,14 @@ const Beob = ({ treeName, width = 1000 }) => {
 
   if (!row) return null
   if (!beobFields || beobFields.length === 0) return null
-  if (loading)
-    return <Container data-column-width={columnWidth}>Lade...</Container>
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
+  }
+  if (error) {
+    return (
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
+    )
+  }
 
   return (
     <ErrorBoundary>
