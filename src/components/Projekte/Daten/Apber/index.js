@@ -157,17 +157,17 @@ const Apber = ({ treeName, width = 1000 }) => {
   if (error)
     return (
       <LoadingContainer>
-        `Fehler beim Laden der Daten: ${error.message}`
+        {`Fehler beim Laden der Daten: ${error.message}`}
       </LoadingContainer>
     )
   if (errorAdresses)
     return (
-      <LoadingContainer>`Fehler: ${errorAdresses.message}`</LoadingContainer>
+      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
     )
   if (errorApErfkritWertes) {
     return (
       <LoadingContainer>
-        `Fehler: ${errorApErfkritWertes.message}`
+        {`Fehler: ${errorApErfkritWertes.message}`}
       </LoadingContainer>
     )
   }
