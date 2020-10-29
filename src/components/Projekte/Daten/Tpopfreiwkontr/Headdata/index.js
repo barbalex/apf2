@@ -36,6 +36,9 @@ const Container = styled(Area)`
     padding-top: 10px;
   }
 `
+const LoadingContainer = styled.div`
+  padding: 10px;
+`
 const Label = styled.div`
   font-weight: 700;
 `
@@ -236,7 +239,11 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
     ? 'angesiedelt'
     : 'natürlich'
 
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  if (error) {
+    return (
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
+    )
+  }
   return (
     <Container>
       <PopLabel>Population</PopLabel>

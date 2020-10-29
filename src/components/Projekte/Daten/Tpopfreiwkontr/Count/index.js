@@ -56,6 +56,9 @@ const Container = styled.div`
            'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   }
 `
+const LoadingContainer = styled.div`
+  padding: 10px;
+`
 const StyledForm = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 6px;
@@ -272,11 +275,17 @@ const Count = ({
     )
   }
   if (loading) {
-    return <Container>Lade...</Container>
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  if (error) {
+    return (
+      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
+    )
+  }
   if (errorLists) {
-    return `Fehler: ${errorLists.message}`
+    return (
+      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
+    )
   }
   return (
     <StyledForm
