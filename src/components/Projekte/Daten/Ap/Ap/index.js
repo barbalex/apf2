@@ -22,17 +22,13 @@ import objectsEmptyValuesToNull from '../../../../../modules/objectsEmptyValuesT
 import ApUsers from './ApUsers'
 import { ap, aeTaxonomies } from '../../../../shared/fragments'
 
-const Container = styled.div`
-  height: 100%;
-`
 const FormContainer = styled.div`
   padding: 10px;
   padding-top: 0;
 `
 const LoadingContainer = styled.div`
+  height: calc(100vh - 64px);
   padding: 10px;
-  overflow: auto !important;
-  height: 100%;
 `
 const FieldContainer = styled.div`
   display: flex;
@@ -172,15 +168,25 @@ const ApAp = ({ treeName, id }) => {
   )
 
   if (loading) {
+    return <LoadingContainer>Lade...</LoadingContainer>
+  }
+  if (errorAdresses) {
     return (
-      <Container>
-        <LoadingContainer>Lade...</LoadingContainer>
-      </Container>
+      <LoadingContainer>{`Fehler: ${errorAdresses.message}`}</LoadingContainer>
     )
   }
-  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
-  if (errorLists) return `Fehler: ${errorLists.message}`
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  if (errorLists) {
+    return (
+      <LoadingContainer>{`Fehler: ${errorLists.message}`}</LoadingContainer>
+    )
+  }
+  if (error) {
+    return (
+      <LoadingContainer>
+        `Fehler beim Laden der Daten: ${error.message}`
+      </LoadingContainer>
+    )
+  }
 
   return (
     <SimpleBar
