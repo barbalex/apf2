@@ -18,6 +18,7 @@ import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Error from '../../../shared/Error'
 import { tpopkontrzaehl } from '../../../shared/fragments'
 
 const Container = styled.div`
@@ -150,15 +151,14 @@ const Tpopkontrzaehl = ({ treeName }) => {
   if (loading) {
     return <LoadingContainer>Lade...</LoadingContainer>
   }
-  if (error) {
-    return <LoadingContainer>{error.message}</LoadingContainer>
-  }
-  if (errorLists) {
-    return <LoadingContainer>{errorLists.message}</LoadingContainer>
-  }
-  if (errorZaehlOfEk) {
-    return <LoadingContainer>{errorZaehlOfEk.message}</LoadingContainer>
-  }
+
+  const errors = [
+    ...(error ? [error] : []),
+    ...(errorLists ? [errorLists] : []),
+    ...(errorZaehlOfEk ? [errorZaehlOfEk] : []),
+  ]
+  if (errors.length) return <Error errors={errors} />
+
   return (
     <ErrorBoundary>
       <Container>

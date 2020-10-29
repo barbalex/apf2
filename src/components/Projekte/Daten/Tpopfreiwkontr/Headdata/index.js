@@ -14,6 +14,7 @@ import {
   tpopfreiwkontr as tpopfreiwkontrFragment,
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../../../shared/fragments'
+import Error from '../../../../shared/Error'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -239,11 +240,7 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
     ? 'angesiedelt'
     : 'natürlich'
 
-  if (error) {
-    return (
-      <LoadingContainer>{`Fehler beim Laden der Daten: ${error.message}`}</LoadingContainer>
-    )
-  }
+  if (error) return <Error error={error} />
   return (
     <Container>
       <PopLabel>Population</PopLabel>
