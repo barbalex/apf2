@@ -18,6 +18,7 @@ import EkfYear from '../EkfYear'
 import User from './User'
 import storeContext from '../../../../../storeContext'
 import queryAdresse from './queryAdresse'
+import queryUser from './queryUser'
 
 const SiteTitle = styled(Button)`
   display: none !important;
@@ -94,8 +95,18 @@ const ProjekteAppBar = () => {
   const role = tokenDecoded ? tokenDecoded.role : null
   const isFreiwillig = role === 'apflora_freiwillig'
 
+  // if no ekfAdresseId
+  // need to fetch adresse.id for this user
+  // and use that instead
+  const { data: dataUser } = useQuery(queryUser, {
+    variables: { name: username },
+  })
+  const userAdresseId = dataUser?.userByName?.adresseId
   const { data } = useQuery(queryAdresse, {
-    variables: { id: ekfAdresseId },
+    variables: {
+      id:
+        ekfAdresseId || userAdresseId || '99999999-9999-9999-9999-999999999999',
+    },
   })
   const adresseName = get(data, 'adresseById.name') || null
   const ekfCount = ekfIds.length
