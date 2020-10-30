@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogContent from '@material-ui/core/DialogContent'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -193,7 +194,7 @@ const LabelFilterContainer = styled.div`
   margin-bottom: 8px;
 `
 const StyledDialog = styled(Dialog)`
-  overflow-y: hidden;
+  /*overflow-y: hidden;*/
   .MuiDialog-paper {
     overflow-y: hidden;
   }
@@ -717,15 +718,18 @@ const TreeContainer = ({
           onClose={closeNewTpopFromBeobDialog}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
+          maxWidth="xl"
         >
           <DialogTitle id="alert-dialog-title">
             {'Population wählen:'}
           </DialogTitle>
-          <TpopFromBeobPopList
-            treeName={treeName}
-            beobId={newTpopFromBeobBeobId}
-            closeNewTpopFromBeobDialog={closeNewTpopFromBeobDialog}
-          />
+          <DialogContent dividers={false}>
+            <TpopFromBeobPopList
+              treeName={treeName}
+              beobId={newTpopFromBeobBeobId}
+              closeNewTpopFromBeobDialog={closeNewTpopFromBeobDialog}
+            />
+          </DialogContent>
           <DialogActions>
             <Button onClick={closeNewTpopFromBeobDialog}>abbrechen</Button>
           </DialogActions>

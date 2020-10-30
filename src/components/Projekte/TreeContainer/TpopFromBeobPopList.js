@@ -14,8 +14,13 @@ import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Error from '../../shared/Error'
 
-const StyledList = styled(List)`
-  overflow-y: auto;
+const LoadingContainer = styled.div`
+  padding: 10px;
+`
+const StyledListItem = styled(ListItem)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 const TpopFromBeobPopList = ({
@@ -46,27 +51,33 @@ const TpopFromBeobPopList = ({
     variables: { apId },
   })
 
-  if (loading) return 'Lade Daten...'
+  if (loading) return <LoadingContainer>'Lade Daten...'</LoadingContainer>
   if (error) return <Error error={error} />
 
   const pops = get(data, 'allPops.nodes', [])
 
   return (
     <ErrorBoundary>
-      <StyledList dense>
+      <List dense>
         {pops.map((pop) => (
-          <ListItem
+          <StyledListItem
             key={pop.id}
             button
             onClick={() => {
-              createNewTpopFromBeob({ treeName, pop, beobId, client, store })
+              createNewTpopFromBeob({
+                treeName,
+                pop,
+                beobId,
+                client,
+                store,
+              })
               closeNewTpopFromBeobDialog()
             }}
           >
             {pop.label}
-          </ListItem>
+          </StyledListItem>
         ))}
-      </StyledList>
+      </List>
     </ErrorBoundary>
   )
 }
