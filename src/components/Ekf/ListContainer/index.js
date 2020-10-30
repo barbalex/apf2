@@ -27,7 +27,7 @@ const EkfListContainer = () => {
       : dataWithDateByUserNameGql
   }
   const { name: userName } = user
-  const variables = ekfAdresseId
+  const variables = !!ekfAdresseId
     ? { id: ekfAdresseId, jahr: ekfYear }
     : { userName, jahr: ekfYear }
 
@@ -35,7 +35,9 @@ const EkfListContainer = () => {
     variables,
   })
 
-  if (error) return <Error error={error} />
+  if (error) {
+    return <Error error={error} />
+  }
 
   return <List data={data} loading={loading} />
 }
