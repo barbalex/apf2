@@ -4,13 +4,20 @@ import MaterialCard from '@material-ui/core/Card'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 import Img from 'gatsby-image'
+import SimpleBar from 'simplebar-react'
 
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 
+const StyledSimpleBar = styled(SimpleBar)`
+  max-height: calc(100vh - 64px);
+  height: calc(100vh - 64px);
+  .simplebar-scrollbar:before {
+    background: rgba(0, 0, 0, 0.7) !important;
+  }
+`
 const ScrollContainer = styled.div`
   height: calc(100vh - 64px);
-  overflow-y: auto;
 `
 const Container = styled.div`
   padding: 15px;
@@ -104,114 +111,122 @@ const bgImageStyle = {
 export default ({ data }) => (
   <ErrorBoundary>
     <Layout>
-      <ScrollContainer>
-        <Container>
-          <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
-          <PageTitle align="center" variant="h6" color="inherit">
-            Bedrohte Pflanzenarten fördern
-          </PageTitle>
-          <CardContainer>
-            <Card>
-              <CardTitle>Aktionsplanarten</CardTitle>
-              Sehr seltene und gefährdete Pflanzenarten, für welche der Kanton
-              Zürich eine besondere Verantwortung hat. Für jede wurde ein
-              Aktionsplan erstellt.
-            </Card>
-            <Card>
-              <CardTitle>Artverantwortliche</CardTitle>
-              Für jede Aktionsplanart ist ein Experte oder eine Expertin
-              verantwortlich.
-            </Card>
-            <Card>
-              <CardTitle>Populationen</CardTitle>
-              Die Pflanzen einer Art bilden kleine oder grosse Populationen, je
-              nachdem wie günstig die Bedingungen für die Art sind.
-            </Card>
-            <Card>
-              <CardTitle>Ziele</CardTitle>
-              beschreiben, wie sich die Populationen künftig entwickeln sollen,
-              damit die Art langfristig erhalten bleibt.
-            </Card>
-            <Card>
-              <CardTitle>Idealbiotope</CardTitle>
-              Wo Aktionsplanarten gut gedeihen, werden die Standortsbedingungen
-              analysiert. Daraus lassen sich Idealbiotope ableiten. Diese geben
-              den Massstab vor für die Aufwertung und die Schaffung von neuen
-              Wuchsorten.
-            </Card>
-            <Card>
-              <CardTitle>Massnahmen</CardTitle>
-              Primär werden die Lebensräume der ursprünglichen Vorkommen der
-              Aktionsplanarten gemäss ihrer Ansprüche aufgewertet. Sekundär
-              werden Aktionsplanarten vermehrt, um bestehende Populationen durch
-              Ansiedlungen zu verstärken oder um neue Populationen zu gründen.
-            </Card>
-            <Card>
-              <CardTitle>Kontrollen</CardTitle>
-              Die Artverantwortlichen, aber auch Freiwillige besuchen
-              Populationen, erfassen die Grösse des Bestandes und überprüfen die
-              Wirkung der Massnahmen.
-            </Card>
-            <Card>
-              <CardTitle>Berichte</CardTitle>
-              Jährlich verfassen die Artverantwortlichen einen Bericht über die
-              Entwicklung der Populationen, den Erfolg der Massnahmen und die
-              Erreichung der Ziele.
-            </Card>
-            <Card>
-              <CardTitle>Planung</CardTitle>
-              Aufgrund der in den Jahresberichten dargestellten Erfahrungen
-              planen die Artverantwortlichen die Massnahmen und Kontrollen für
-              das folgende Jahr.
-            </Card>
-            <Card>
-              <CardTitle>Beobachtungen</CardTitle>
-              Die Artverantwortlichen prüfen von Dritten gemeldete Beobachtungen
-              und ordnen diese den Populationen der Aktionsplanarten zu.
-            </Card>
-            <Card>
-              <CardTitle>Freiwillige</CardTitle>
-              unterstützen die Artverantwortlichen bei der Kontrolle von
-              Populationen und der{' '}
-              <a
-                href="//vermehrung.ch"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Vermehrung von Aktionsplanarten
-              </a>
-              .
-            </Card>
-            <Card>
-              <CardTitle>Organisation des Projektes</CardTitle>
-              durch&nbsp;
-              <a href="//toposmm.ch" target="_blank" rel="noopener noreferrer">
-                {'topos Marti & Müller AG'}
-              </a>
-              &nbsp;im Auftrag der&nbsp;
-              <a
-                href="//aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Fachstelle Naturschutz des Kantons Zürich
-              </a>
-              .
-              <p>
-                Die App wird von&nbsp;
+      <StyledSimpleBar>
+        <ScrollContainer>
+          <Container>
+            <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
+            <PageTitle align="center" variant="h6" color="inherit">
+              Bedrohte Pflanzenarten fördern
+            </PageTitle>
+            <CardContainer>
+              <Card>
+                <CardTitle>Aktionsplanarten</CardTitle>
+                Sehr seltene und gefährdete Pflanzenarten, für welche der Kanton
+                Zürich eine besondere Verantwortung hat. Für jede wurde ein
+                Aktionsplan erstellt.
+              </Card>
+              <Card>
+                <CardTitle>Artverantwortliche</CardTitle>
+                Für jede Aktionsplanart ist ein Experte oder eine Expertin
+                verantwortlich.
+              </Card>
+              <Card>
+                <CardTitle>Populationen</CardTitle>
+                Die Pflanzen einer Art bilden kleine oder grosse Populationen,
+                je nachdem wie günstig die Bedingungen für die Art sind.
+              </Card>
+              <Card>
+                <CardTitle>Ziele</CardTitle>
+                beschreiben, wie sich die Populationen künftig entwickeln
+                sollen, damit die Art langfristig erhalten bleibt.
+              </Card>
+              <Card>
+                <CardTitle>Idealbiotope</CardTitle>
+                Wo Aktionsplanarten gut gedeihen, werden die
+                Standortsbedingungen analysiert. Daraus lassen sich Idealbiotope
+                ableiten. Diese geben den Massstab vor für die Aufwertung und
+                die Schaffung von neuen Wuchsorten.
+              </Card>
+              <Card>
+                <CardTitle>Massnahmen</CardTitle>
+                Primär werden die Lebensräume der ursprünglichen Vorkommen der
+                Aktionsplanarten gemäss ihrer Ansprüche aufgewertet. Sekundär
+                werden Aktionsplanarten vermehrt, um bestehende Populationen
+                durch Ansiedlungen zu verstärken oder um neue Populationen zu
+                gründen.
+              </Card>
+              <Card>
+                <CardTitle>Kontrollen</CardTitle>
+                Die Artverantwortlichen, aber auch Freiwillige besuchen
+                Populationen, erfassen die Grösse des Bestandes und überprüfen
+                die Wirkung der Massnahmen.
+              </Card>
+              <Card>
+                <CardTitle>Berichte</CardTitle>
+                Jährlich verfassen die Artverantwortlichen einen Bericht über
+                die Entwicklung der Populationen, den Erfolg der Massnahmen und
+                die Erreichung der Ziele.
+              </Card>
+              <Card>
+                <CardTitle>Planung</CardTitle>
+                Aufgrund der in den Jahresberichten dargestellten Erfahrungen
+                planen die Artverantwortlichen die Massnahmen und Kontrollen für
+                das folgende Jahr.
+              </Card>
+              <Card>
+                <CardTitle>Beobachtungen</CardTitle>
+                Die Artverantwortlichen prüfen von Dritten gemeldete
+                Beobachtungen und ordnen diese den Populationen der
+                Aktionsplanarten zu.
+              </Card>
+              <Card>
+                <CardTitle>Freiwillige</CardTitle>
+                unterstützen die Artverantwortlichen bei der Kontrolle von
+                Populationen und der{' '}
                 <a
-                  href="https://gabriel-software.ch"
+                  href="//vermehrung.ch"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Gabriel-Software
+                  Vermehrung von Aktionsplanarten
                 </a>
-                &nbsp;entwickelt.
-              </p>
-            </Card>
-          </CardContainer>
-        </Container>
-      </ScrollContainer>
+                .
+              </Card>
+              <Card>
+                <CardTitle>Organisation des Projektes</CardTitle>
+                durch&nbsp;
+                <a
+                  href="//toposmm.ch"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {'topos Marti & Müller AG'}
+                </a>
+                &nbsp;im Auftrag der&nbsp;
+                <a
+                  href="//aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Fachstelle Naturschutz des Kantons Zürich
+                </a>
+                .
+                <p>
+                  Die App wird von&nbsp;
+                  <a
+                    href="https://gabriel-software.ch"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Gabriel-Software
+                  </a>
+                  &nbsp;entwickelt.
+                </p>
+              </Card>
+            </CardContainer>
+          </Container>
+        </ScrollContainer>
+      </StyledSimpleBar>
     </Layout>
   </ErrorBoundary>
 )

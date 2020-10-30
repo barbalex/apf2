@@ -18,7 +18,7 @@ const mdParser = new MarkdownIt({ breaks: true })
 const EditorContainer = styled.div`
   margin-bottom: 12px;
   .editorpane {
-    overflow-y: auto !important;
+    overflow-y: hidden !important;
   }
   .editorpane,
   .html-wrap,
