@@ -52,20 +52,16 @@ export default () => createGlobalStyle`
 
 
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
   }
 
   ::-webkit-scrollbar:horizontal {
-    height: 12px;
-  }
-
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.4);
+    height: 8px;
   }
 
   ::-webkit-scrollbar-thumb {
-    border-radius: 2px;
-    box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    box-shadow: inset 0 0 7px #2e7d32;
     background: rgba(85, 85, 85, 0.05);
   }
 
