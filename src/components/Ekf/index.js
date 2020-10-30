@@ -74,6 +74,8 @@ const Ekf = () => {
     activeNodeArray.length > 9
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
+  const tpopkontrIdExists =
+    tpopkontrId !== '99999999-9999-9999-9999-999999999999'
   const treeName = 'tree'
 
   const treeEl = useRef(null)
@@ -109,7 +111,7 @@ const Ekf = () => {
     )
   }
 
-  if (isPrint && tpopkontrId) {
+  if (isPrint && tpopkontrIdExists) {
     return <Tpopfreiwkontr treeName={treeName} role={role} />
   }
 
@@ -125,7 +127,7 @@ const Ekf = () => {
           <EkfList />
         </InnerContainer>
         <InnerContainer ref={datenEl}>
-          {tpopkontrId ? (
+          {tpopkontrIdExists ? (
             <Tpopfreiwkontr treeName={treeName} role={role} />
           ) : (
             <InnerContainer />
