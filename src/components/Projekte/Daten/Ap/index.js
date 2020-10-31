@@ -28,7 +28,7 @@ const TabContent = styled.div`
 
 const ApTabs = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { urlQuery, setUrlQuery } = store
+  const { urlQuery, setUrlQuery, appBarHeight } = store
   const { activeNodeArray } = store[treeName]
 
   let id =
@@ -51,6 +51,8 @@ const ApTabs = ({ treeName }) => {
   )
 
   const [formTitleHeight, setFormTitleHeight] = useState(43)
+
+  console.log('Ap, appBarHeight:', appBarHeight)
 
   return (
     <ErrorBoundary>
