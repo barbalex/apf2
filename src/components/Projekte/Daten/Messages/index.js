@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { useQuery } from '@apollo/client'
@@ -9,12 +9,13 @@ import SimpleBar from 'simplebar-react'
 import query from './query'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import storeContext from '../../../../storeContext'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
 `
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   padding: 10px;
 `
 const ScrollContainer = styled.div`
@@ -50,17 +51,25 @@ const Title = styled.div`
 `
 
 const Messages = () => {
+  const store = useContext(storeContext)
+  const { appBarHeight } = store
+
   const { data, loading, error } = useQuery(query)
 
   const rows = get(data, 'allMessages.nodes') || []
 
-  if (loading) return <LoadingContainer>Lade...</LoadingContainer>
+  if (loading)
+    return (
+      <LoadingContainer data-appbar-height={appBarHeight}>
+        Lade...
+      </LoadingContainer>
+    )
 
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <TitleRow>
           <Title data-id="form-title">Mitteilungen</Title>
         </TitleRow>

@@ -24,12 +24,12 @@ import Error from '../../../shared/Error'
 import { idealbiotop } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
 `
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -92,7 +92,7 @@ const fieldTypes = {
 
 const Idealbiotop = ({ treeName, width = 1000 }) => {
   const store = useContext(storeContext)
-  const { urlQuery, setUrlQuery } = store
+  const { urlQuery, setUrlQuery, appBarHeight } = store
   const client = useApolloClient()
 
   const [tab, setTab] = useState(get(urlQuery, 'idealbiotopTab', 'idealbiotop'))
@@ -175,12 +175,16 @@ const Idealbiotop = ({ treeName, width = 1000 }) => {
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
   if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
+    return (
+      <LoadingContainer data-appbar-height={appBarHeight}>
+        Lade...
+      </LoadingContainer>
+    )
   }
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <FormTitle
           apId={row.apId}
           title="Idealbiotop"
