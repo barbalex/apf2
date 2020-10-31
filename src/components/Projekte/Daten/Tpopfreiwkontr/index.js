@@ -45,7 +45,9 @@ import Error from '../../../shared/Error'
 
 const Container = styled.div`
   height: ${(props) =>
-    props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
+    props.showfilter
+      ? 'calc(100vh - 145px)'
+      : `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
@@ -202,6 +204,7 @@ const Tpopfreiwkontr = ({
     setIsPrint,
     view,
     user,
+    appBarHeight,
   } = store
   const tree = store[treeName]
   const { activeNodeArray, dataFilter } = tree
@@ -607,12 +610,17 @@ const Tpopfreiwkontr = ({
 
   const [formTitleHeight, setFormTitleHeight] = useState(0)
 
-  if (loading) return <LoadingContainer>Lade...</LoadingContainer>
+  if (loading)
+    return (
+      <LoadingContainer data-appbar-height={appBarHeight}>
+        Lade...
+      </LoadingContainer>
+    )
   if (error) return <Error error={error} />
   if (Object.keys(row).length === 0) return null
 
   return (
-    <Container showfilter={showFilter}>
+    <Container showfilter={showFilter} data-appbar-height={appBarHeight}>
       {!(view === 'ekf') && showFilter && (
         <FilterTitle
           title="Freiwilligen-Kontrollen"

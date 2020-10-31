@@ -29,7 +29,9 @@ import {
 
 const Container = styled.div`
   height: ${(props) =>
-    props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
+    props.showfilter
+      ? 'calc(100vh - 145px)'
+      : `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
@@ -84,7 +86,13 @@ const fieldTypes = {
 const TpopForm = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { dataFilterSetValue, refetch, urlQuery, setUrlQuery } = store
+  const {
+    dataFilterSetValue,
+    refetch,
+    urlQuery,
+    setUrlQuery,
+    appBarHeight,
+  } = store
 
   const { activeNodeArray, dataFilter } = store[treeName]
   const [tab, setTab] = useState(get(urlQuery, 'tpopTab', 'tpop'))
@@ -256,7 +264,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
+      <Container showfilter={showFilter} data-appbar-height={appBarHeight}>
         {showFilter ? (
           <FilterTitle
             title="Teil-Population"

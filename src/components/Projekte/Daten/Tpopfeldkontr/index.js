@@ -38,7 +38,9 @@ import { tpopfeldkontr } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: ${(props) =>
-    props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
+    props.showfilter
+      ? 'calc(100vh - 145px)'
+      : `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
@@ -140,7 +142,7 @@ const tpopkontrTypWerte = [
 const Tpopfeldkontr = ({ treeName, showFilter = false, width = 1000 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { dataFilterSetValue, urlQuery, setUrlQuery } = store
+  const { dataFilterSetValue, urlQuery, setUrlQuery, appBarHeight } = store
   const { activeNodeArray, dataFilter } = store[treeName]
 
   let id =
@@ -331,7 +333,11 @@ const Tpopfeldkontr = ({ treeName, showFilter = false, width = 1000 }) => {
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
   if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
+    return (
+      <LoadingContainer data-appbar-height={appBarHeight}>
+        Lade...
+      </LoadingContainer>
+    )
   }
 
   const errors = [
@@ -343,7 +349,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false, width = 1000 }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
+      <Container showfilter={showFilter} data-appbar-height={appBarHeight}>
         {showFilter ? (
           <FilterTitle
             title="Feld-Kontrollen"
