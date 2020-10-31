@@ -16,12 +16,12 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
 `
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -38,6 +38,7 @@ const fieldTypes = {
 const Projekt = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { appBarHeight } = store
   const { activeNodeArray, projIdInActiveNodeArray: projId } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -105,12 +106,16 @@ const Projekt = ({ treeName }) => {
   const [formTitleHeight, setFormTitleHeight] = useState(0)
 
   if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
+    return (
+      <LoadingContainer data-appbar-height={appBarHeight}>
+        Lade...
+      </LoadingContainer>
+    )
   }
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <FormTitle
           title="Projekt"
           treeName={treeName}

@@ -19,7 +19,8 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: calc(100vh - 64px - 81px);
+  height: ${(props) =>
+    `calc(100% - ${props['data-popfilter-title-height']}px)`};
   display: flex;
   flex-direction: column;
   background-color: #ffd3a7;
@@ -32,9 +33,9 @@ const StyledForm = styled(Form)`
   padding-top: 0;
 `
 
-const PopFilter = ({ treeName }) => {
+const PopFilter = ({ treeName, popFilterTitleHeight = 81 }) => {
   const store = useContext(storeContext)
-  const { dataFilterSetValue } = store
+  const { dataFilterSetValue, appBarHeight } = store
   const { activeNodeArray, dataFilter } = store[treeName]
 
   const apId = activeNodeArray[3]
@@ -100,7 +101,7 @@ const PopFilter = ({ treeName }) => {
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-popfilter-title-height={popFilterTitleHeight}>
         <FilterTitle
           title="Population"
           treeName={treeName}

@@ -17,13 +17,13 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: 100%;
   padding: 10px;
 `
 const StyledTab = styled(Tab)`
@@ -39,7 +39,7 @@ const TabContent = styled.div`
 
 const QkForm = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { urlQuery, setUrlQuery } = store
+  const { urlQuery, setUrlQuery, appBarHeight } = store
   const { activeNodeArray } = store[treeName]
   const apId = activeNodeArray[3]
 
@@ -85,7 +85,7 @@ const QkForm = ({ treeName }) => {
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <FormTitle
           title="Qualitätskontrollen"
           treeName={treeName}
