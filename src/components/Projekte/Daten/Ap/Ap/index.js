@@ -75,7 +75,7 @@ const fieldTypes = {
 const ApAp = ({ treeName, id }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { user, appBarHeight } = store
+  const { user } = store
 
   const { data, error, loading } = useQuery(query, {
     variables: { id },
