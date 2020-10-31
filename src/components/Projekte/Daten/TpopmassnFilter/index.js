@@ -28,7 +28,8 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: calc(100vh - 64px - 81px);
+  /*height: calc(100vh - 64px - 81px);*/
+  height: ${(props) => `calc(100% - ${props['data-filter-title-height']}px)`};
   display: flex;
   flex-direction: column;
   background-color: #ffd3a7;
@@ -43,7 +44,11 @@ const ColumnContainer = styled.div`
     `column-width: ${props['data-column-width']}px;`}
 `
 
-const TpopmassnFilter = ({ treeName, width = 1000 }) => {
+const TpopmassnFilter = ({
+  treeName,
+  width = 1000,
+  filterTitleHeight = 81,
+}) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
 
@@ -151,7 +156,7 @@ const TpopmassnFilter = ({ treeName, width = 1000 }) => {
   if (errors.length) return <Error errors={errors} />
 
   return (
-    <Container>
+    <Container data-filter-title-height={filterTitleHeight}>
       <ErrorBoundary>
         <FilterTitle
           title="Massnahmen"

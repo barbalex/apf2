@@ -46,7 +46,7 @@ import Error from '../../../shared/Error'
 const Container = styled.div`
   height: ${(props) =>
     props.showfilter
-      ? 'calc(100vh - 145px)'
+      ? `calc(100% - ${props['data-filter-title-height']}px)`
       : `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
@@ -62,7 +62,7 @@ const Container = styled.div`
   }
 `
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   padding: 10px;
 `
 const ScrollContainer = styled.div`
@@ -194,6 +194,7 @@ const Tpopfreiwkontr = ({
   showFilter = false,
   id: idPassed,
   width = 1000,
+  filterTitleHeight = 81,
 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
@@ -620,7 +621,11 @@ const Tpopfreiwkontr = ({
   if (Object.keys(row).length === 0) return null
 
   return (
-    <Container showfilter={showFilter} data-appbar-height={appBarHeight}>
+    <Container
+      showfilter={showFilter}
+      data-appbar-height={appBarHeight}
+      data-filter-title-height={filterTitleHeight}
+    >
       {!(view === 'ekf') && showFilter && (
         <FilterTitle
           title="Freiwilligen-Kontrollen"
