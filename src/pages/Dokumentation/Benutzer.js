@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 
 import Layout from '../../components/Layout'
 import Sidebar from '../../templates/Sidebar'
 import ErrorBoundary from '../../components/shared/ErrorBoundary'
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   background-color: #fffde7;
 `
@@ -36,10 +37,13 @@ const Doku = styled.div`
 const Template = ({ data }) => {
   const edges = data.allMarkdownRemark.edges
 
+  const store = useContext(storeContext)
+  const { appBarHeight } = store
+
   return (
     <ErrorBoundary>
       <Layout>
-        <Container>
+        <Container data-appbar-height={appBarHeight}>
           <Sidebar
             title="Benutzer-Dokumentation"
             titleLink="/Dokumentation/Benutzer/"

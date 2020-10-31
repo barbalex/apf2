@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Typography from '@material-ui/core/Typography'
 import MaterialCard from '@material-ui/core/Card'
 import { graphql } from 'gatsby'
@@ -8,16 +8,14 @@ import SimpleBar from 'simplebar-react'
 
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
+import storeContext from '../storeContext'
 
 const StyledSimpleBar = styled(SimpleBar)`
-  max-height: calc(100vh - 64px);
-  height: calc(100vh - 64px);
+  max-height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   .simplebar-scrollbar:before {
     background: rgba(0, 0, 0, 0.7) !important;
   }
-`
-const ScrollContainer = styled.div`
-  height: calc(100vh - 64px);
 `
 const Container = styled.div`
   padding: 15px;
@@ -108,11 +106,14 @@ const bgImageStyle = {
   zIndex: -1,
 }
 
-export default ({ data }) => (
-  <ErrorBoundary>
-    <Layout>
-      <StyledSimpleBar>
-        <ScrollContainer>
+export default ({ data }) => {
+  const store = useContext(storeContext)
+  const { appBarHeight } = store
+
+  return (
+    <ErrorBoundary>
+      <Layout>
+        <StyledSimpleBar data-appbar-height={appBarHeight}>
           <Container>
             <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
             <PageTitle align="center" variant="h6" color="inherit">
@@ -225,11 +226,11 @@ export default ({ data }) => (
               </Card>
             </CardContainer>
           </Container>
-        </ScrollContainer>
-      </StyledSimpleBar>
-    </Layout>
-  </ErrorBoundary>
-)
+        </StyledSimpleBar>
+      </Layout>
+    </ErrorBoundary>
+  )
+}
 
 export const query = graphql`
   query indexPageQuery {

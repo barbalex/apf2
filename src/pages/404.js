@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import Typography from '@material-ui/core/Typography'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
@@ -8,9 +8,10 @@ import { graphql } from 'gatsby'
 
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
+import storeContext from '../storeContext'
 
 const Container = styled.div`
-  min-height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
 `
 const TextContainer = styled.div`
   display: flex;
@@ -46,11 +47,14 @@ const bgImageStyle = {
 }
 
 const FourOFour = ({ data }) => {
+  const store = useContext(storeContext)
+  const { appBarHeight } = store
+
   const onClickBack = useCallback(() => navigate('/'), [])
 
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <Layout>
           <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
           <TextContainer>
