@@ -14,7 +14,7 @@ import Error from '../shared/Error'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -38,6 +38,7 @@ const AnleitungButton = styled(Button)`
 
 const EkPlan = () => {
   const store = useContext(storeContext)
+  const { appBarHeight } = store
   const { aps, setApsData, setApsDataLoading } = store.ekPlan
 
   const { data, loading, error } = useQuery(queryAps, {
@@ -62,7 +63,7 @@ const EkPlan = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <Header>
           <ApList />
           <AnleitungButton variant="outlined" onClick={onClickAnleitung}>

@@ -1,13 +1,15 @@
 // This is the entry file for the application
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
+
+import storeContext from '../storeContext'
 
 const Container = styled.div`
   font: 20px Helvetica, sans-serif;
   color: #333;
   text-align: center;
   padding: 150px;
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   background-color: #fffde7;
 `
 const Article = styled.article`
@@ -28,21 +30,26 @@ const A = styled.a`
   }
 `
 
-const App = ({ element }) => (
-  <Container>
-    <Article>
-      <Titel>Wir sind bald zurück!</Titel>
-      <div>
-        <p>
-          Bitte entschuldigen Sie den Unterbruch. apflora.ch wird gerade
-          unterhalten. Wenn nötig sind wir{' '}
-          <A href="mailto:alex@gabriel-software.ch">erreichbar</A>, ansonsten
-          sind wir bald wieder online!
-        </p>
-        <p>&mdash; Das apflora-Team</p>
-      </div>
-    </Article>
-  </Container>
-)
+const App = ({ element }) => {
+  const store = useContext(storeContext)
+  const { appBarHeight } = store
+
+  return (
+    <Container data-appbar-height={appBarHeight}>
+      <Article>
+        <Titel>Wir sind bald zurück!</Titel>
+        <div>
+          <p>
+            Bitte entschuldigen Sie den Unterbruch. apflora.ch wird gerade
+            unterhalten. Wenn nötig sind wir{' '}
+            <A href="mailto:alex@gabriel-software.ch">erreichbar</A>, ansonsten
+            sind wir bald wieder online!
+          </p>
+          <p>&mdash; Das apflora-Team</p>
+        </div>
+      </Article>
+    </Container>
+  )
+}
 
 export default App

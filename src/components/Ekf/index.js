@@ -13,7 +13,7 @@ import storeContext from '../../storeContext'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
 
   @media print {
     display: block;
@@ -64,7 +64,7 @@ const InnerContainer = styled.div`
 const standardWidth = 500
 
 const Ekf = () => {
-  const { user, isPrint, tree, ekfIds } = useContext(storeContext)
+  const { user, isPrint, tree, ekfIds, appBarHeight } = useContext(storeContext)
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
@@ -116,7 +116,7 @@ const Ekf = () => {
   }
 
   return (
-    <Container>
+    <Container data-appbar-height={appBarHeight}>
       <StyledSplitPane
         split="vertical"
         size="33%"

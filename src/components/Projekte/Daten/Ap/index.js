@@ -14,7 +14,7 @@ import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
 `
@@ -52,11 +52,9 @@ const ApTabs = ({ treeName }) => {
 
   const [formTitleHeight, setFormTitleHeight] = useState(43)
 
-  console.log('Ap, appBarHeight:', appBarHeight)
-
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <FormTitle
           apId={id}
           title="Aktionsplan"

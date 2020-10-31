@@ -12,7 +12,7 @@ import storeContext from '../../../../storeContext'
 import initiateDataFromUrl from '../initiateDataFromUrl'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   border-right: 1px solid rgb(46, 125, 50);
 `
 const NoDataContainer = styled.div`
@@ -61,7 +61,7 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
 
 const EkfList = ({ data, loading, height = 1000 }) => {
   const store = useContext(storeContext)
-  const { ekfYear, ekfAdresseId, tree, setEkfIds } = store
+  const { ekfYear, ekfAdresseId, tree, setEkfIds, appBarHeight } = store
   const ekf = getEkfFromData({ data, ekfAdresseId })
   setEkfIds(ekf.map((e) => e.id))
 
@@ -107,7 +107,7 @@ const EkfList = ({ data, loading, height = 1000 }) => {
   }
 
   return (
-    <Container>
+    <Container data-appbar-height={appBarHeight}>
       <List
         height={height}
         itemCount={ekf.length}
