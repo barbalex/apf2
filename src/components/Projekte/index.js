@@ -23,7 +23,7 @@ import queryTree from './queryTree'
 import buildNodes from './TreeContainer/nodes'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
 
   @media print {
     height: auto !important;
@@ -70,7 +70,7 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
 const Projekte = () => {
   const store = useContext(storeContext)
-  const { isPrint, urlQuery, setRefetchKey, user, tree } = store
+  const { isPrint, urlQuery, setRefetchKey, user, tree, appBarHeight } = store
   const { projIdInActiveNodeArray } = tree
   const treeTabValues = [
     'tree',
@@ -219,7 +219,7 @@ const Projekte = () => {
 
   if (tree2Tabs.length === 0 || isPrint) {
     return (
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <ProjektContainer
           treeName="tree"
           tabs={treeTabs}
@@ -234,7 +234,7 @@ const Projekte = () => {
   }
 
   return (
-    <Container>
+    <Container data-appbar-height={appBarHeight}>
       <StyledSplitPane split="vertical" defaultSize="50%">
         <ProjektContainer
           treeName="tree"

@@ -23,12 +23,12 @@ import { apberuebersicht } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
 `
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -56,7 +56,7 @@ const fieldTypes = {
 const Apberuebersicht = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { user, enqueNotification } = store
+  const { user, enqueNotification, appBarHeight } = store
   const { token } = user
   const role = token ? jwtDecode(token).role : null
   const userIsManager = role === 'apflora_manager'
@@ -234,13 +234,17 @@ const Apberuebersicht = ({ treeName }) => {
   const [formTitleHeight, setFormTitleHeight] = useState(43)
 
   if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
+    return (
+      <LoadingContainer data-appbar-height={appBarHeight}>
+        Lade...
+      </LoadingContainer>
+    )
   }
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <FormTitle
           title="AP-Bericht Jahresübersicht"
           treeName={treeName}
