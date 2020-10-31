@@ -28,7 +28,7 @@ const FormContainer = styled.div`
   padding-top: 0;
 `
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: 100%;
   padding: 10px;
 `
 const FieldContainer = styled.div`
@@ -75,7 +75,7 @@ const fieldTypes = {
 const ApAp = ({ treeName, id }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { user } = store
+  const { user, appBarHeight } = store
 
   const { data, error, loading } = useQuery(query, {
     variables: { id },
