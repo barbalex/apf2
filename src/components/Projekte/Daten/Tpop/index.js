@@ -30,7 +30,7 @@ import {
 const Container = styled.div`
   height: ${(props) =>
     props.showfilter
-      ? 'calc(100vh - 145px)'
+      ? `calc(100% - ${props['data-filter-title-height']}px)`
       : `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
@@ -83,7 +83,7 @@ const fieldTypes = {
   statusUnklar: 'Boolean',
 }
 
-const TpopForm = ({ treeName, showFilter = false }) => {
+const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const {
@@ -264,7 +264,11 @@ const TpopForm = ({ treeName, showFilter = false }) => {
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter} data-appbar-height={appBarHeight}>
+      <Container
+        showfilter={showFilter}
+        data-appbar-height={appBarHeight}
+        data-filter-title-height={filterTitleHeight}
+      >
         {showFilter ? (
           <FilterTitle
             title="Teil-Population"

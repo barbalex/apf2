@@ -39,14 +39,14 @@ import { tpopfeldkontr } from '../../../shared/fragments'
 const Container = styled.div`
   height: ${(props) =>
     props.showfilter
-      ? 'calc(100vh - 145px)'
+      ? `calc(100% - ${props['data-filter-title-height']}px)`
       : `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -79,8 +79,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 const TabContent = styled.div`
-  height: ${(props) =>
-    `calc(100% - ${props['data-form-title-height']}px - 48px)`};
+  height: ${(props) => `calc(100% - 48px)`};
 `
 
 const fieldTypes = {
@@ -139,7 +138,12 @@ const tpopkontrTypWerte = [
   },
 ]
 
-const Tpopfeldkontr = ({ treeName, showFilter = false, width = 1000 }) => {
+const Tpopfeldkontr = ({
+  treeName,
+  showFilter = false,
+  width = 1000,
+  filterTitleHeight = 81,
+}) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { dataFilterSetValue, urlQuery, setUrlQuery, appBarHeight } = store
@@ -349,7 +353,11 @@ const Tpopfeldkontr = ({ treeName, showFilter = false, width = 1000 }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter} data-appbar-height={appBarHeight}>
+      <Container
+        showfilter={showFilter}
+        data-appbar-height={appBarHeight}
+        data-filter-title-height={filterTitleHeight}
+      >
         {showFilter ? (
           <FilterTitle
             title="Feld-Kontrollen"
@@ -387,7 +395,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false, width = 1000 }) => {
               <StyledTab label="Dateien" value="dateien" data-id="dateien" />
             )}
           </Tabs>
-          <TabContent data-form-title-height={formTitleHeight}>
+          <TabContent>
             {tab === 'entwicklung' && (
               <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
                 <FormContainer data-column-width={columnWidth}>

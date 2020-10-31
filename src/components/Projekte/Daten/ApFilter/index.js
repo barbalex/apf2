@@ -23,7 +23,8 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px - 81px)`};
+  height: ${(props) =>
+    `calc(100vh - ${props['data-appbar-height']}px - ${props['data-filter-title-height']}px)`};
   display: flex;
   flex-direction: column;
   background-color: #ffd3a7;
@@ -65,7 +66,7 @@ const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
 
-const ApFilter = ({ treeName }) => {
+const ApFilter = ({ treeName, filterTitleHeight = 81 }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue, appBarHeight } = store
   const { activeNodeArray, dataFilter } = store[treeName]
@@ -157,7 +158,10 @@ const ApFilter = ({ treeName }) => {
 
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container
+        data-appbar-height={appBarHeight}
+        data-filter-title-height={filterTitleHeight}
+      >
         <FilterTitle
           title="Aktionsplan"
           treeName={treeName}
