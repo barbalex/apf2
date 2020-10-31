@@ -33,18 +33,17 @@ import {
   popStatusWerte,
 } from '../../../shared/fragments'
 
-const Container = styled.div`
-  height: calc(100vh - 64px);
+const PopoverContainer = styled.div`
   overflow-x: auto;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 `
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   padding: 10px;
 `
 const FormContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
 `
@@ -116,7 +115,7 @@ const fieldTypes = {
 }
 
 const nichtZuordnenPopover = (
-  <Container>
+  <PopoverContainer>
     <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
     <LabelPopoverContentRow>
       {'Will heissen: Die Beobachtung kann nicht zugeordnet werden.'}
@@ -125,7 +124,7 @@ const nichtZuordnenPopover = (
       <br />
       {'Bitte im Bemerkungsfeld begründen.'}
     </LabelPopoverContentRow>
-  </Container>
+  </PopoverContainer>
 )
 
 const getTpopZuordnenSource = (row, apId) => {
@@ -167,6 +166,7 @@ const getTpopZuordnenSource = (row, apId) => {
 const Beobzuordnung = ({ type, treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { appBarHeight } = store
   const tree = store[treeName]
   const { activeNodeArray } = tree
   const id = activeNodeArray[activeNodeArray.length - 1]
@@ -298,12 +298,16 @@ const Beobzuordnung = ({ type, treeName }) => {
   const [formTitleHeight, setFormTitleHeight] = useState(43)
 
   if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
+    return (
+      <LoadingContainer data-appbar-height={appBarHeight}>
+        Lade...
+      </LoadingContainer>
+    )
   }
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <FormContainer>
+      <FormContainer data-appbar-height={appBarHeight}>
         <FormTitle
           apId={get(row, 'aeTaxonomyByArtId.apByArtId.id', null)}
           title="Beobachtung"

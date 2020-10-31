@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
@@ -10,9 +10,10 @@ import TpopmassnFilter from './Daten/TpopmassnFilter'
 import Tpopfeldkontr from './Daten/Tpopfeldkontr'
 import Tpopfreiwkontr from './Daten/Tpopfreiwkontr'
 import ErrorBoundary from '../shared/ErrorBoundary'
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
-  height: 100%;
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
   background-color: #ffd3a7;
@@ -37,6 +38,9 @@ const Title = styled.div`
 `
 
 export default ({ treeName }) => {
+  const store = useContext(storeContext)
+  const { appBarHeight } = store
+
   const [activeTab, setActiveTab] = useState('ap')
 
   const onChangeTab = useCallback((event, value) => setActiveTab(value), [])
@@ -59,9 +63,11 @@ export default ({ treeName }) => {
     tpopfreiwkontr: 'Freiwilligen-Kontrollen Filter',
   }
 
+  const popFilterTitleHeight = 81
+
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <TitleRow>
           <Title data-id="form-title">{titleObject[activeTab]}</Title>
           <StyledTabs
