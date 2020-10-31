@@ -11,7 +11,7 @@ import Filter from './Filter'
 const Menu = styled.div`
   width: 25%;
   min-width: 320px;
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   overflow-y: auto;
   padding: 25px 0;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
@@ -36,6 +36,7 @@ const Sidebar = ({ title, titleLink, edges }) => {
     benutzerDokuFilter,
     setTechnDokuFilter,
     setBenutzerDokuFilter,
+    appBarHeight,
   } = store
   const filter =
     title === 'Benutzer-Dokumentation' ? benutzerDokuFilter : technDokuFilter
@@ -45,8 +46,8 @@ const Sidebar = ({ title, titleLink, edges }) => {
       : setTechnDokuFilter
 
   const items = edges
-    .filter(n => !!n && !!n.node)
-    .filter(n =>
+    .filter((n) => !!n && !!n.node)
+    .filter((n) =>
       !!filter
         ? get(n, 'node.frontmatter.title', '(Titel fehlt)')
             .toLowerCase()
@@ -55,7 +56,7 @@ const Sidebar = ({ title, titleLink, edges }) => {
     )
 
   return (
-    <Menu>
+    <Menu data-appbar-height={appBarHeight}>
       <MenuTitle>
         <MenuTitleLink to={titleLink}>{title}</MenuTitleLink>
         <Filter filter={filter} setFilter={setFilter} />
