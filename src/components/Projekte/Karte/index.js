@@ -82,7 +82,7 @@ const crs = new window.L.Proj.CRS(
 )*/
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   overflow: hidden;
   .map-control-scalebar-text {
     width: 83px;
@@ -428,6 +428,7 @@ const Karte = ({ treeName }) => {
     assigningBeob,
     setMapMouseCoordinates,
     refetch,
+    appBarHeight,
   } = store
   const bounds = getSnapshot(boundsRaw)
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
@@ -493,7 +494,10 @@ const Karte = ({ treeName }) => {
   if (typeof window === 'undefined') return null
 
   return (
-    <Container data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}>
+    <Container
+      data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}
+      data-appbar-height={appBarHeight}
+    >
       <ErrorBoundary>
         <StyledMap
           localizing={!!idOfTpopBeingLocalized}
