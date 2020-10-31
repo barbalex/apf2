@@ -22,12 +22,12 @@ import Error from '../../../shared/Error'
 import { tpopkontrzaehl } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
 `
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -44,8 +44,9 @@ const fieldTypes = {
 }
 
 const Tpopkontrzaehl = ({ treeName }) => {
-  const store = useContext(storeContext)
   const client = useApolloClient()
+  const store = useContext(storeContext)
+  const { appBarHeight } = store
   const { activeNodeArray } = store[treeName]
 
   const tpopkontrzaehlId =
@@ -95,13 +96,6 @@ const Tpopkontrzaehl = ({ treeName }) => {
         ...objectsEmptyValuesToNull(values),
         changedBy: store.user.name,
       }
-      /**
-       * TODO:
-       * this is an experiment
-       * see if single field mutations work
-       * maybe solve race conditions on mutating:
-       * https://github.com/barbalex/apf2/issues/395
-       */
       try {
         await client.mutate({
           mutation: gql`
@@ -149,7 +143,11 @@ const Tpopkontrzaehl = ({ treeName }) => {
   const [formTitleHeight, setFormTitleHeight] = useState(0)
 
   if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
+    return (
+      <LoadingContainer data-appbar-height={appBarHeight}>
+        Lade...
+      </LoadingContainer>
+    )
   }
 
   const errors = [
@@ -161,7 +159,7 @@ const Tpopkontrzaehl = ({ treeName }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <FormTitle
           apId={activeNodeArray[3]}
           title="Zählung"

@@ -28,7 +28,6 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  /*height: calc(100vh - 64px - 81px);*/
   height: ${(props) => `calc(100% - ${props['data-filter-title-height']}px)`};
   display: flex;
   flex-direction: column;

@@ -30,12 +30,12 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
 `
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   padding: 10px;
 `
 const ScrollContainer = styled.div`
@@ -96,7 +96,7 @@ const fieldTypes = {
 
 const User = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { setEkfAdresseId, setView } = store
+  const { setEkfAdresseId, setView, appBarHeight } = store
   const { activeNodeArray } = store[treeName]
   const client = useApolloClient()
 
@@ -317,7 +317,13 @@ const User = ({ treeName }) => {
 
   const [formTitleHeight, setFormTitleHeight] = useState(0)
 
-  if (loading) return <LoadingContainer>Lade...</LoadingContainer>
+  if (loading) {
+    return (
+      <LoadingContainer data-appbar-height={appBarHeight}>
+        Lade...
+      </LoadingContainer>
+    )
+  }
 
   const queryErrors = [
     ...(error ? [error] : []),
@@ -329,7 +335,7 @@ const User = ({ treeName }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-appbar-height={appBarHeight}>
         <FormTitle
           apId={row.id}
           title="Benutzer"
