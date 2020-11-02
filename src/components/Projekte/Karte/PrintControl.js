@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import 'leaflet'
 import 'leaflet-easyprint'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 
 const options = {
   title: 'drucken',
@@ -19,10 +19,10 @@ const options = {
 const style = { display: 'none' }
 
 const PrintControl = () => {
-  const { map } = useLeaflet()
+  const map = useMap()
 
   useEffect(() => {
-    typeof window !== 'undefined' && window.L.easyPrint(options).addTo(map)
+    window.L.easyPrint(options).addTo(map)
   }, [map])
 
   return <div style={style} />

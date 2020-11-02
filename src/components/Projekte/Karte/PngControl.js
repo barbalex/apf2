@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import 'leaflet'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 import 'leaflet-easyprint'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
@@ -37,8 +37,7 @@ const options = {
 
 const PngControl = () => {
   //const { activeBaseLayer } = useContext(storeContext)
-  const { map } = useLeaflet()
-
+  const map = useMap()
   const [printPlugin, changePrintPlugin] = useState({})
 
   const savePng = useCallback(

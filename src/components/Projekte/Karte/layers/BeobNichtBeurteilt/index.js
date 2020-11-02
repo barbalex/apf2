@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import bboxPolygon from '@turf/bbox-polygon'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
@@ -29,7 +29,7 @@ const iconCreateFunction = function (cluster) {
 }
 
 const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
-  const { map: leafletMap } = useLeaflet()
+  const leafletMap = useMap()
   const store = useContext(storeContext)
   const {
     setRefetchKey,
@@ -142,7 +142,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
     <Marker key={beob.id} treeName={treeName} beob={beob} />
   ))
 
-  if (clustered) {
+  /*if (clustered) {
     return (
       <MarkerClusterGroup
         maxClusterRadius={66}
@@ -151,7 +151,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
         {beobMarkers}
       </MarkerClusterGroup>
     )
-  }
+  }*/
   return beobMarkers
 }
 

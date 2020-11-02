@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import 'leaflet'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 // regular import results in error,
 // see: https://github.com/ljagis/leaflet-measure/issues/68
 // import 'leaflet-measure'
@@ -20,9 +20,9 @@ const options = {
 const style = { display: 'none' }
 
 const MeasureControl = () => {
-  const { map } = useLeaflet()
+  const map = useMap()
+
   useEffect(() => {
-    if (typeof window === 'undefined') return
     const measureControl = new window.L.Control.Measure(options)
     measureControl.addTo(map)
   }, [map])

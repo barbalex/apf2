@@ -6,7 +6,7 @@
  */
 
 import React, { useContext, useRef, useCallback, useMemo } from 'react'
-import { MapContainer, ScaleControl } from 'react-leaflet'
+import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import 'leaflet'
 import 'proj4'
@@ -55,12 +55,12 @@ import BeobNichtZuzuordnen from './layers/BeobNichtZuzuordnen'
 import BeobZugeordnet from './layers/BeobZugeordnet'
 import BeobZugeordnetAssignPolylines from './layers/BeobZugeordnetAssignPolylines'
 import MeasureControl from './MeasureControl'
-//import FullScreenControl from './FullScreenControl'
-//import SwitchScaleControl from './ScaleControl'
-//import DrawControl from './DrawControl'
+import FullScreenControl from './FullScreenControl'
+import SwitchScaleControl from './ScaleControl'
+import DrawControl from './DrawControl'
 import PrintControl from './PrintControl'
-//import PngControl from './PngControl'
-//import CoordinatesControl from './CoordinatesControl'
+import PngControl from './PngControl'
+import CoordinatesControl from './CoordinatesControl'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import updateTpopById from './updateTpopById'
 import iconFullscreen from './iconFullscreen.png'
@@ -88,10 +88,9 @@ const Container = styled.div`
     width: 83px;
   }
 `
-const StyledMapContainer = styled(MapContainer)`
+const StyledMap = styled(Map)`
   height: calc(100%);
-  cursor: ${(props) =>
-    props['data-localizing'] ? 'crosshair' : 'grab'} !important;
+  cursor: ${(props) => (props.localizing ? 'crosshair' : 'grab')} !important;
   @media print {
     height: 100%;
     width: 100%;
@@ -500,91 +499,90 @@ const Karte = ({ treeName }) => {
       data-appbar-height={appBarHeight}
     >
       <ErrorBoundary>
-        <StyledMapContainer
-          data-localizing={!!idOfTpopBeingLocalized}
+        <StyledMap
+          localizing={!!idOfTpopBeingLocalized}
           ref={mapRef}
           bounds={bounds}
+          //preferCanvas
+          onMouseMove={onMouseMove}
           // need max and min zoom because otherwise
           // something errors
           // probably clustering function
           maxZoom={22}
           minZoom={0}
           doubleClickZoom={false}
-          eventHandlers={{
-            mouseMove: onMouseMove,
-            dblClick: async (event) => {
-              // since 2018 10 31 using idOfTpopBeingLocalized directly
-              // returns null, so need to use store.idOfTpopBeingLocalized
-              const { idOfTpopBeingLocalized } = store
-              /**
-               * TODO
-               * When clicking on Layertool
-               * somehow Mapelement grabs the click event
-               * although Layertool lies _over_ map element ??!!
-               * So when localizing, if user wants to change base map,
-               * click on Layertool sets new coordinates!
-               */
-              if (!!idOfTpopBeingLocalized) {
-                const { lat, lng } = event.latlng
-                const geomPoint = {
-                  type: 'Point',
-                  coordinates: [lng, lat],
-                  // need to add crs otherwise PostGIS v2.5 (on server) errors
-                  crs: {
-                    type: 'name',
-                    properties: {
-                      name: 'urn:ogc:def:crs:EPSG::4326',
-                    },
+          onDblclick={async (event) => {
+            // since 2018 10 31 using idOfTpopBeingLocalized directly
+            // returns null, so need to use store.idOfTpopBeingLocalized
+            const { idOfTpopBeingLocalized } = store
+            /**
+             * TODO
+             * When clicking on Layertool
+             * somehow Mapelement grabs the click event
+             * although Layertool lies _over_ map element ??!!
+             * So when localizing, if user wants to change base map,
+             * click on Layertool sets new coordinates!
+             */
+            if (!!idOfTpopBeingLocalized) {
+              const { lat, lng } = event.latlng
+              const geomPoint = {
+                type: 'Point',
+                coordinates: [lng, lat],
+                // need to add crs otherwise PostGIS v2.5 (on server) errors
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::4326',
                   },
-                }
-                // DANGER:
-                // need to stop propagation of the event
-                // if not it is called a second time
-                // the crazy thing is:
-                // in some areas (not all) the second event
-                // has wrong coordinates!!!!
-                typeof window !== 'undefined' &&
-                  window.L.DomEvent.stopPropagation(event)
-                /**
-                 * how to update a geometry value?
-                 * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
-                 */
-                try {
-                  await client.mutate({
-                    mutation: updateTpopById,
-                    variables: {
-                      id: idOfTpopBeingLocalized,
-                      geomPoint,
-                    },
-                    // no optimistic responce as geomPoint
-                    /*optimisticResponse: {
-                      __typename: 'Mutation',
-                      updateTpopById: {
-                        tpop: {
-                          id: idOfTpopBeingLocalized,
-                          __typename: 'Tpop',
-                        },
+                },
+              }
+              // DANGER:
+              // need to stop propagation of the event
+              // if not it is called a second time
+              // the crazy thing is:
+              // in some areas (not all) the second event
+              // has wrong coordinates!!!!
+              typeof window !== 'undefined' &&
+                window.L.DomEvent.stopPropagation(event)
+              /**
+               * how to update a geometry value?
+               * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
+               */
+              try {
+                await client.mutate({
+                  mutation: updateTpopById,
+                  variables: {
+                    id: idOfTpopBeingLocalized,
+                    geomPoint,
+                  },
+                  // no optimistic responce as geomPoint
+                  /*optimisticResponse: {
+                    __typename: 'Mutation',
+                    updateTpopById: {
+                      tpop: {
+                        id: idOfTpopBeingLocalized,
                         __typename: 'Tpop',
                       },
-                    },*/
-                  })
-                  // refetch so it appears on map
-                  if (refetch.tpopForMap) {
-                    // need to also refetch pop in case it was new
-                    refetch.popForMap && refetch.popForMap()
-                    refetch.tpopForMap()
-                  }
-                } catch (error) {
-                  enqueNotification({
-                    message: error.message,
-                    options: {
-                      variant: 'error',
+                      __typename: 'Tpop',
                     },
-                  })
+                  },*/
+                })
+                // refetch so it appears on map
+                if (refetch.tpopForMap) {
+                  // need to also refetch pop in case it was new
+                  refetch.popForMap && refetch.popForMap()
+                  refetch.tpopForMap()
                 }
-                setIdOfTpopBeingLocalized(null)
+              } catch (error) {
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
-            },
+              setIdOfTpopBeingLocalized(null)
+            }
           }}
         >
           {activeBaseLayer && <BaseLayerComponent />}
@@ -612,7 +610,12 @@ const Karte = ({ treeName }) => {
           />
           <PrintControl />
           <MeasureControl />
-        </StyledMapContainer>
+          <SwitchScaleControl />
+          <FullScreenControl />
+          {activeApfloraLayers.includes('mapFilter') && <DrawControl />}
+          <PngControl />
+          <CoordinatesControl />
+        </StyledMap>
       </ErrorBoundary>
     </Container>
   )

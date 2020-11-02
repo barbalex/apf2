@@ -1,9 +1,9 @@
 import React, { useContext, useState, useCallback, useEffect } from 'react'
-import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
+import Control from '../Control'
 import Overlays from './Overlays'
 import ApfloraLayers from './ApfloraLayers'
 import BaseLayers from './BaseLayers'
@@ -24,9 +24,6 @@ const CardContainer = styled.div`
 const Card = styled.div`
   padding-top: 3px;
   color: rgb(48, 48, 48);
-  &:not(:first-of-type) {
-    border-top: 1px solid rgba(0, 0, 0, 0.2);
-  }
 `
 const CardHeader = styled.div`
   display: flex;

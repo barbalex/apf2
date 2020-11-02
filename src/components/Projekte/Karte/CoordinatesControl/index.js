@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import 'leaflet'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 
@@ -24,7 +24,7 @@ const StyledControl = styled(Control)`
 
 const CoordinatesControl = () => {
   const [controlType, setControlType] = useState('coordinates')
-  const { map } = useLeaflet()
+  const map = useMap()
   // hack to get control to show on first load
   // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
   useEffect(() => {

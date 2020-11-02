@@ -1,13 +1,13 @@
 import React, { useEffect, useContext } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../storeContext'
 
 const DrawControl = () => {
-  const { map } = useLeaflet()
+  const map = useMap()
   const store = useContext(storeContext)
   const { setMapFilter } = store
 
@@ -64,12 +64,12 @@ const DrawControl = () => {
     })
 
     map.addControl(drawControl)
-    map.on('draw:created', e => {
+    map.on('draw:created', (e) => {
       mapFilter.addLayer(e.layer)
       setMapFilter(mapFilter.toGeoJSON())
     })
-    map.on('draw:edited', e => setMapFilter(mapFilter.toGeoJSON()))
-    map.on('draw:deleted', e => setMapFilter(mapFilter.toGeoJSON()))
+    map.on('draw:edited', (e) => setMapFilter(mapFilter.toGeoJSON()))
+    map.on('draw:deleted', (e) => setMapFilter(mapFilter.toGeoJSON()))
 
     return () => {
       map.removeLayer(mapFilter)

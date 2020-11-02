@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from '@apollo/client'
 import bboxPolygon from '@turf/bbox-polygon'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
@@ -29,7 +29,7 @@ const iconCreateFunction = function (cluster) {
 }
 
 const Pop = ({ treeName }) => {
-  const { map: leafletMap } = useLeaflet()
+  const leafletMap = useMap()
   const store = useContext(storeContext)
   const {
     activeApfloraLayers,
@@ -163,7 +163,11 @@ const Pop = ({ treeName }) => {
   setPopIdsFiltered(mapPopIdsFiltered)
   //console.log('layers Pop, pops.length:', pops.length)
 
-  return (
+  return pops.map((pop) => (
+    <Marker key={pop.id} treeName={treeName} pop={pop} />
+  ))
+
+  /*return (
     <MarkerClusterGroup
       maxClusterRadius={66}
       iconCreateFunction={iconCreateFunction}
@@ -172,7 +176,7 @@ const Pop = ({ treeName }) => {
         <Marker key={pop.id} treeName={treeName} pop={pop} />
       ))}
     </MarkerClusterGroup>
-  )
+  )*/
 }
 
 export default observer(Pop)

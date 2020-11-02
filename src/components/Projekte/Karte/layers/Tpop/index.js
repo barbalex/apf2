@@ -4,7 +4,7 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from '@apollo/client'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 import bboxPolygon from '@turf/bbox-polygon'
 
 import Marker from './Marker'
@@ -32,7 +32,7 @@ const iconCreateFunction = function (cluster) {
 }
 
 const Tpop = ({ treeName, clustered, leaflet }) => {
-  const { map: leafletMap } = useLeaflet()
+  const leafletMap = useMap()
   const store = useContext(storeContext)
   const {
     mapFilter,
@@ -172,7 +172,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
 
-  if (clustered) {
+  /*if (clustered) {
     return (
       <MarkerClusterGroup
         maxClusterRadius={66}
@@ -181,7 +181,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
         {tpopMarkers}
       </MarkerClusterGroup>
     )
-  }
+  }*/
   return tpopMarkers
 }
 

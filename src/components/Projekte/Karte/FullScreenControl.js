@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import 'leaflet'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 // eslint-disable-next-line no-unused-vars
 import leafletFullscreen from 'leaflet.fullscreen'
 
@@ -15,7 +15,8 @@ const options = {
 }
 
 const FullScreenControl = () => {
-  const { map } = useLeaflet()
+  const map = useMap()
+
   useEffect(() => {
     if (typeof window === 'undefined') return
     const fullscreenControl = window.L.control.fullscreen(options)
