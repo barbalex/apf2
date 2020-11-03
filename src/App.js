@@ -54,7 +54,13 @@ const App = ({ element }) => {
 
   if (typeof window !== 'undefined') {
     const visitedTopDomain = window.location.pathname === '/'
-    const blacklist = ['user', 'refetch', 'notifications', 'ekfIds']
+    const blacklist = [
+      'user',
+      'refetch',
+      'notifications',
+      'ekfIds',
+      'hideMapControls',
+    ]
     import('mst-persist').then((module) =>
       module
         .default('store', store, {
