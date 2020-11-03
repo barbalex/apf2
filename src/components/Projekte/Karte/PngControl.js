@@ -50,8 +50,13 @@ const PngControl = () => {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const pp = window.L.easyPrint(options).addTo(map)
+    const pp = window.L.easyPrint(options)
+    pp.addTo(map)
     changePrintPlugin(pp)
+
+    return () => {
+      pp.remove()
+    }
   }, [map])
 
   //const layer = baseLayers.find(l => l.value === activeBaseLayer)
