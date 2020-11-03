@@ -17,6 +17,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useApolloClient } from '@apollo/client'
 
+import Control from './Control'
 import LayersControl from './LayersControl'
 import OsmColor from './layers/OsmColor'
 import OsmBw from './layers/OsmBw'
@@ -55,9 +56,9 @@ import BeobNichtZuzuordnen from './layers/BeobNichtZuzuordnen'
 import BeobZugeordnet from './layers/BeobZugeordnet'
 import BeobZugeordnetAssignPolylines from './layers/BeobZugeordnetAssignPolylines'
 import MeasureControl from './MeasureControl'
-//import FullScreenControl from './FullScreenControl'
+import FullScreenControl from './FullScreenControl'
 //import SwitchScaleControl from './ScaleControl'
-//import DrawControl from './DrawControl'
+import DrawControl from './DrawControl'
 import PrintControl from './PrintControl'
 //import PngControl from './PngControl'
 //import CoordinatesControl from './CoordinatesControl'
@@ -92,6 +93,10 @@ const StyledMapContainer = styled(MapContainer)`
   height: calc(100%);
   cursor: ${(props) =>
     props['data-localizing'] ? 'crosshair' : 'grab'} !important;
+
+  .leaflet-control-container > .leaflet-top.leaflet-right {
+    top: 94px;
+  }
   @media print {
     height: 100%;
     width: 100%;
@@ -604,16 +609,22 @@ const Karte = ({ treeName }) => {
           <BeobNichtZuzuordnen treeName={treeName} clustered={clustered} />
           <BeobZugeordnet treeName={treeName} clustered={clustered} />
           <BeobZugeordnetAssignPolylines treeName={treeName} />
-          <ZoomControl position="topright" />
           <ScaleControl imperial={false} />
-          {/*<LayersControl
-            treeName={treeName}
-            // this enforces rerendering when sorting changes
-            activeOverlaysString={activeOverlays.join()}
-            activeApfloraLayersString={activeApfloraLayers.join()}
-          />*/}
+          <Control position="topright">
+            <>
+              <LayersControl
+                treeName={treeName}
+                // this enforces rerendering when sorting changes
+                activeOverlaysString={activeOverlays.join()}
+                activeApfloraLayersString={activeApfloraLayers.join()}
+              />
+            </>
+          </Control>
+          <ZoomControl position="topright" />
+          <FullScreenControl />
           <PrintControl />
           <MeasureControl />
+          {activeApfloraLayers.includes('mapFilter') && <DrawControl />}
         </StyledMapContainer>
       </ErrorBoundary>
     </Container>
