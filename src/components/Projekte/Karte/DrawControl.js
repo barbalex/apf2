@@ -11,8 +11,9 @@ const DrawControl = () => {
   const store = useContext(storeContext)
   const { setMapFilter } = store
 
+  //console.log('DrawControl, map:', map)
+
   useEffect(() => {
-    if (typeof window === 'undefined') return
     window.L.drawLocal.draw.toolbar.buttons.polygon =
       'Polygon(e) zeichnen, um zu filtern'
     window.L.drawLocal.draw.toolbar.buttons.rectangle =
@@ -49,6 +50,7 @@ const DrawControl = () => {
     window.L.drawLocal.edit.handlers.edit.tooltip.subtext =
       'Punkte ziehen, um Filter-Umriss(e) zu verändern'
     window.L.drawLocal.edit.handlers.remove.tooltip.text = `zum Löschen auf Filter-Umriss klicken, dann auf 'speichern'`
+
     const mapFilter = new window.L.FeatureGroup()
     map.addLayer(mapFilter)
     const drawControl = new window.L.Control.Draw({
