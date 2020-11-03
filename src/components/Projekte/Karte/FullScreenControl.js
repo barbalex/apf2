@@ -5,7 +5,7 @@ import { useMap } from 'react-leaflet'
 import leafletFullscreen from 'leaflet.fullscreen'
 
 const options = {
-  position: 'topleft', // change the position of the button can be topleft, topright, bottomright or bottomleft, defaut topleft
+  position: 'topright', // change the position of the button can be topleft, topright, bottomright or bottomleft, defaut topleft
   title: 'Karte maximieren', // change the title of the button, default Full Screen
   titleCancel: 'Karte verkleinern', // change the title of the button when fullscreen is on, default Exit Full Screen
   content: null, // change the content of the button, can be HTML, default null
@@ -18,7 +18,6 @@ const FullScreenControl = () => {
   const map = useMap()
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
     const fullscreenControl = window.L.control.fullscreen(options)
     fullscreenControl.addTo(map)
 
