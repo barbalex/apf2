@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react'
 import 'leaflet'
 import { useLeaflet } from 'react-leaflet'
-// regular import results in error,
-// see: https://github.com/ljagis/leaflet-measure/issues/68
-// import 'leaflet-measure'
-import '../../../../node_modules/leaflet-measure/dist/leaflet-measure'
+import 'leaflet-measure'
 
 const options = {
   primaryLengthUnit: 'meters',
