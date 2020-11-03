@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import 'leaflet'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 import 'leaflet-measure'
 
 const options = {
@@ -17,11 +17,15 @@ const options = {
 const style = { display: 'none' }
 
 const MeasureControl = () => {
-  const { map } = useLeaflet()
+  const map = useMap()
+
   useEffect(() => {
-    if (typeof window === 'undefined') return
     const measureControl = new window.L.Control.Measure(options)
     measureControl.addTo(map)
+
+    return () => {
+      measureControl.remove()
+    }
   }, [map])
 
   return <div style={style} />
