@@ -103,72 +103,65 @@ const LayersControl = ({ treeName }) => {
     setBaseLayersExpanded(false)
   }, [])
 
-  /*console.log('LayersControl', {
-    overlays: getSnapshot(overlays),
-    overlaysExpanded,
-  })*/
-
   return (
-    <Control position="topright">
-      <CardContainer>
-        <Card>
-          <CardHeader onClick={onToggleApfloraLayersExpanded}>
-            <ApfloraCard>apflora</ApfloraCard>
-            <div>
-              {apfloraLayersExpanded ? (
-                <StyledExpandLessIcon />
-              ) : (
-                <StyledExpandMoreIcon />
-              )}
-            </div>
-          </CardHeader>
-          {apfloraLayersExpanded && (
-            <ApfloraLayers
-              treeName={treeName}
-              /**
-               * overlaysString enforces rererender
-               * even when only the sorting changes
-               */
-              apfloraLayersString={apfloraLayers.map((o) => o.value).join()}
-            />
-          )}
-        </Card>
-        <Card>
-          <CardHeader onClick={onToggleOverlaysExpanded}>
-            <CardTitle>überlagernd</CardTitle>
-            <div>
-              {overlaysExpanded ? (
-                <StyledExpandLessIcon />
-              ) : (
-                <StyledExpandMoreIcon />
-              )}
-            </div>
-          </CardHeader>
-          {overlaysExpanded && (
-            <Overlays
-              /**
-               * overlaysString enforces rererender
-               * even when only the sorting changes
-               */
-              overlaysString={overlays.map((o) => o.value).join()}
-            />
-          )}
-        </Card>
-        <Card>
-          <CardHeader onClick={onToggleBaseLayersExpanded}>
-            <CardTitle>Hintergrund</CardTitle>
-            <div>
-              {baseLayersExpanded ? (
-                <StyledExpandLessIcon />
-              ) : (
-                <StyledExpandMoreIcon />
-              )}
-            </div>
-          </CardHeader>
-          {baseLayersExpanded && <BaseLayers />}
-        </Card>
-      </CardContainer>
-    </Control>
+    <CardContainer>
+      <Card>
+        <CardHeader onClick={onToggleApfloraLayersExpanded}>
+          <ApfloraCard>apflora</ApfloraCard>
+          <div>
+            {apfloraLayersExpanded ? (
+              <StyledExpandLessIcon />
+            ) : (
+              <StyledExpandMoreIcon />
+            )}
+          </div>
+        </CardHeader>
+        {apfloraLayersExpanded && (
+          <ApfloraLayers
+            treeName={treeName}
+            /**
+             * overlaysString enforces rererender
+             * even when only the sorting changes
+             */
+            apfloraLayersString={apfloraLayers.map((o) => o.value).join()}
+          />
+        )}
+      </Card>
+      <Card>
+        <CardHeader onClick={onToggleOverlaysExpanded}>
+          <CardTitle>überlagernd</CardTitle>
+          <div>
+            {overlaysExpanded ? (
+              <StyledExpandLessIcon />
+            ) : (
+              <StyledExpandMoreIcon />
+            )}
+          </div>
+        </CardHeader>
+        {overlaysExpanded && (
+          <Overlays
+            /**
+             * overlaysString enforces rererender
+             * even when only the sorting changes
+             */
+            overlaysString={overlays.map((o) => o.value).join()}
+          />
+        )}
+      </Card>
+      <Card>
+        <CardHeader onClick={onToggleBaseLayersExpanded}>
+          <CardTitle>Hintergrund</CardTitle>
+          <div>
+            {baseLayersExpanded ? (
+              <StyledExpandLessIcon />
+            ) : (
+              <StyledExpandMoreIcon />
+            )}
+          </div>
+        </CardHeader>
+        {baseLayersExpanded && <BaseLayers />}
+      </Card>
+    </CardContainer>
   )
 }
 
