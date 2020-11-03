@@ -43,7 +43,6 @@ const ScaleControl = () => {
   const map = useMap()
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
     const switchScaleControl = new window.L.Control.SwitchScaleControl(options)
     switchScaleControl.addTo(map)
 
