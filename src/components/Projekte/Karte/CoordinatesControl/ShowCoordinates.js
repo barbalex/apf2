@@ -14,7 +14,6 @@ const StyledDiv = styled.div`
     0 3px 2px white, -0 -3px 2px white, 3px 0 2px white, -3px 0 2px white;
   cursor: pointer;
   margin-bottom: 2px !important;
-  margin-right: 5px !important;
 `
 
 const ShowCoordinates = ({ setControlType }) => {
