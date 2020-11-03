@@ -60,8 +60,8 @@ import FullScreenControl from './FullScreenControl'
 //import SwitchScaleControl from './ScaleControl'
 import DrawControl from './DrawControl'
 import PrintControl from './PrintControl'
-//import PngControl from './PngControl'
-//import CoordinatesControl from './CoordinatesControl'
+import PngControl from './PngControl'
+import CoordinatesControl from './CoordinatesControl'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import updateTpopById from './updateTpopById'
 import iconFullscreen from './iconFullscreen.png'
@@ -94,8 +94,10 @@ const StyledMapContainer = styled(MapContainer)`
   cursor: ${(props) =>
     props['data-localizing'] ? 'crosshair' : 'grab'} !important;
 
-  .leaflet-control-container > .leaflet-top.leaflet-right {
-    top: 94px;
+  .leaflet-control-container:not(.first) {
+    .leaflet-top.leaflet-right {
+      top: 128px;
+    }
   }
   @media print {
     height: 100%;
@@ -435,6 +437,7 @@ const Karte = ({ treeName }) => {
     setMapMouseCoordinates,
     refetch,
     appBarHeight,
+    hideMapControls,
   } = store
   const bounds = getSnapshot(boundsRaw)
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
@@ -500,6 +503,8 @@ const Karte = ({ treeName }) => {
   const showMapFilter = activeApfloraLayers.includes('mapFilter')
 
   if (typeof window === 'undefined') return null
+
+  //console.log('Karte', { hideMapControls })
 
   return (
     <Container
@@ -612,7 +617,7 @@ const Karte = ({ treeName }) => {
           <BeobZugeordnet treeName={treeName} clustered={clustered} />
           <BeobZugeordnetAssignPolylines treeName={treeName} />
           <ScaleControl imperial={false} />
-          <Control position="topright">
+          <Control position="topright" visible={!hideMapControls}>
             <>
               <LayersControl
                 treeName={treeName}
@@ -620,13 +625,17 @@ const Karte = ({ treeName }) => {
                 activeOverlaysString={activeOverlays.join()}
                 activeApfloraLayersString={activeApfloraLayers.join()}
               />
+              <PngControl />
             </>
           </Control>
+          <PrintControl />
           <ZoomControl position="topright" />
           <FullScreenControl />
-          <PrintControl />
           <MeasureControl />
           {showMapFilter && <DrawControl />}
+          <Control position="bottomright">
+            <CoordinatesControl />
+          </Control>
         </StyledMapContainer>
       </ErrorBoundary>
     </Container>
