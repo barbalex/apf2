@@ -6,7 +6,7 @@
  */
 
 import React, { useContext, useRef, useCallback, useMemo } from 'react'
-import { MapContainer, ScaleControl } from 'react-leaflet'
+import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
 import styled from 'styled-components'
 import 'leaflet'
 import 'proj4'
@@ -510,6 +510,7 @@ const Karte = ({ treeName }) => {
           maxZoom={22}
           minZoom={0}
           doubleClickZoom={false}
+          zoomControl={false}
           eventHandlers={{
             mouseMove: onMouseMove,
             dblClick: async (event) => {
@@ -603,13 +604,14 @@ const Karte = ({ treeName }) => {
           <BeobNichtZuzuordnen treeName={treeName} clustered={clustered} />
           <BeobZugeordnet treeName={treeName} clustered={clustered} />
           <BeobZugeordnetAssignPolylines treeName={treeName} />
+          <ZoomControl position="topright" />
           <ScaleControl imperial={false} />
-          <LayersControl
+          {/*<LayersControl
             treeName={treeName}
             // this enforces rerendering when sorting changes
             activeOverlaysString={activeOverlays.join()}
             activeApfloraLayersString={activeApfloraLayers.join()}
-          />
+          />*/}
           <PrintControl />
           <MeasureControl />
         </StyledMapContainer>
