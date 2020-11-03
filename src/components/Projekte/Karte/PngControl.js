@@ -1,13 +1,12 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useContext } from 'react'
 import 'leaflet'
 import { useMap } from 'react-leaflet'
 import 'leaflet-easyprint'
-import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 import { MdGetApp } from 'react-icons/md'
+import { observer } from 'mobx-react-lite'
 
-//import { baseLayers } from './LayersControl/BaseLayers'
-//import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext'
 
 const FileDownloadIcon = styled(MdGetApp)`
   font-size: 1.5rem;
@@ -36,41 +35,46 @@ const options = {
 }
 
 const PngControl = () => {
-  //const { activeBaseLayer } = useContext(storeContext)
+  const { setHideMapControls } = useContext(storeContext)
   const map = useMap()
-  const [printPlugin, changePrintPlugin] = useState({})
-
-  const savePng = useCallback(
-    (event) => {
-      event.preventDefault()
-      printPlugin.printMap('CurrentSize', 'apfloraKarte')
-    },
-    [printPlugin],
-  )
+  const [printPlugin, setPrintPlugin] = useState({})
 
   useEffect(() => {
     const pp = window.L.easyPrint(options)
     pp.addTo(map)
-    changePrintPlugin(pp)
+    setPrintPlugin(pp)
 
     return () => {
       pp.remove()
     }
   }, [map])
 
-  //const layer = baseLayers.find(l => l.value === activeBaseLayer)
-  //const sendsCors = layer && layer.cors
-  //if (!sendsCors) return null
+  useEffect(() => {
+    map.on('easyPrint-finished', () => {
+      setHideMapControls(false)
+    })
+
+    return () => {
+      map.off('easyPrint-finished', () => {
+        setHideMapControls(false)
+      })
+    }
+  }, [map, setHideMapControls])
+
+  const savePng = useCallback(
+    (event) => {
+      event.preventDefault()
+      setHideMapControls(true)
+      printPlugin.printMap('CurrentSize', 'apfloraKarte')
+    },
+    [printPlugin, setHideMapControls],
+  )
 
   return (
-    <div>
-      <Control position="topright">
-        <StyledButton onClick={savePng} title="Karte als png speichern">
-          <FileDownloadIcon />
-        </StyledButton>
-      </Control>
-    </div>
+    <StyledButton onClick={savePng} title="Karte als png speichern">
+      <FileDownloadIcon />
+    </StyledButton>
   )
 }
 
-export default PngControl
+export default observer(PngControl)
