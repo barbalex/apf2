@@ -49,7 +49,6 @@ const PngControl = () => {
   )
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
     const pp = window.L.easyPrint(options)
     pp.addTo(map)
     changePrintPlugin(pp)
