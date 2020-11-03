@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import 'leaflet'
 import { useMap } from 'react-leaflet'
-import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 
 import ShowCoordinates from './ShowCoordinates'
@@ -17,9 +16,8 @@ import PanToCoordinates from './PanToCoordinates'
  * - render coordinates
  */
 
-const StyledControl = styled(Control)`
-  margin-bottom: 2px !important;
-  margin-right: 5px !important;
+const Container = styled.div`
+  margin-bottom: 10px !important;
 `
 
 const CoordinatesControl = () => {
@@ -32,13 +30,13 @@ const CoordinatesControl = () => {
   }, [])
 
   return (
-    <StyledControl position="bottomright">
+    <Container>
       {controlType === 'coordinates' ? (
         <ShowCoordinates setControlType={setControlType} />
       ) : (
         <PanToCoordinates setControlType={setControlType} map={map} />
       )}
-    </StyledControl>
+    </Container>
   )
 }
 
