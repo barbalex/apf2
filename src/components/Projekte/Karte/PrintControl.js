@@ -22,7 +22,12 @@ const PrintControl = () => {
   const map = useMap()
 
   useEffect(() => {
-    window.L.easyPrint(options).addTo(map)
+    const printControl = window.L.easyPrint(options)
+    printControl.addTo(map)
+
+    return () => {
+      printControl.remove()
+    }
   }, [map])
 
   return <div style={style} />
