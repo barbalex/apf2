@@ -497,6 +497,8 @@ const Karte = ({ treeName }) => {
     overlays.findIndex((o) => o.value === activeOverlay),
   )
 
+  const showMapFilter = activeApfloraLayers.includes('mapFilter')
+
   if (typeof window === 'undefined') return null
 
   return (
@@ -624,7 +626,7 @@ const Karte = ({ treeName }) => {
           <FullScreenControl />
           <PrintControl />
           <MeasureControl />
-          {activeApfloraLayers.includes('mapFilter') && <DrawControl />}
+          {showMapFilter && <DrawControl />}
         </StyledMapContainer>
       </ErrorBoundary>
     </Container>
