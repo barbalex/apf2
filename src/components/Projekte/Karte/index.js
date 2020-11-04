@@ -14,7 +14,6 @@ import 'proj4leaflet'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { useApolloClient } from '@apollo/client'
 
 import Control from './Control'
 import LayersControl from './LayersControl'
@@ -61,7 +60,6 @@ import DrawControl from './DrawControl'
 import PrintControl from './PrintControl'
 import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl'
-import updateTpopById from './updateTpopById'
 import iconFullscreen from './iconFullscreen.png'
 import iconFullscreen2x from './iconFullscreen2x.png'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -86,17 +84,19 @@ const Container = styled.div`
   .map-control-scalebar-text {
     width: 83px;
   }
+  .leaflet-container.crosshair-cursor-enabled {
+    cursor: crosshair;
+  }
 `
 const StyledMapContainer = styled(MapContainer)`
   height: calc(100%);
-  cursor: ${(props) =>
-    props['data-localizing'] ? 'crosshair' : 'grab'} !important;
 
   .leaflet-control-container:not(.first) {
     .leaflet-top.leaflet-right {
       top: 128px;
     }
   }
+
   @media print {
     height: 100%;
     width: 100%;
@@ -420,7 +420,6 @@ const StyledMapContainer = styled(MapContainer)`
  */
 
 const Karte = ({ treeName }) => {
-  const client = useApolloClient()
   const store = useContext(storeContext)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
@@ -428,11 +427,8 @@ const Karte = ({ treeName }) => {
     activeOverlays: activeOverlaysRaw,
     activeBaseLayer,
     idOfTpopBeingLocalized,
-    setIdOfTpopBeingLocalized,
     bounds: boundsRaw,
-    enqueNotification,
     assigningBeob,
-    refetch,
     appBarHeight,
     hideMapControls,
   } = store
@@ -491,7 +487,7 @@ const Karte = ({ treeName }) => {
 
   if (typeof window === 'undefined') return null
 
-  //console.log('Karte', { hideMapControls })
+  console.log('Karte', { idOfTpopBeingLocalized })
 
   return (
     <Container
@@ -500,7 +496,8 @@ const Karte = ({ treeName }) => {
     >
       <ErrorBoundary>
         <StyledMapContainer
-          data-localizing={!!idOfTpopBeingLocalized}
+          /* changing data-localizing destroys map!!!!! */
+          //data-localizing={!!idOfTpopBeingLocalized}
           ref={mapRef}
           bounds={bounds}
           // need max and min zoom because otherwise
@@ -510,81 +507,6 @@ const Karte = ({ treeName }) => {
           minZoom={0}
           doubleClickZoom={false}
           zoomControl={false}
-          eventHandlers={{
-            dblClick: async (event) => {
-              // since 2018 10 31 using idOfTpopBeingLocalized directly
-              // returns null, so need to use store.idOfTpopBeingLocalized
-              const { idOfTpopBeingLocalized } = store
-              /**
-               * TODO
-               * When clicking on Layertool
-               * somehow Mapelement grabs the click event
-               * although Layertool lies _over_ map element ??!!
-               * So when localizing, if user wants to change base map,
-               * click on Layertool sets new coordinates!
-               */
-              if (!!idOfTpopBeingLocalized) {
-                const { lat, lng } = event.latlng
-                const geomPoint = {
-                  type: 'Point',
-                  coordinates: [lng, lat],
-                  // need to add crs otherwise PostGIS v2.5 (on server) errors
-                  crs: {
-                    type: 'name',
-                    properties: {
-                      name: 'urn:ogc:def:crs:EPSG::4326',
-                    },
-                  },
-                }
-                // DANGER:
-                // need to stop propagation of the event
-                // if not it is called a second time
-                // the crazy thing is:
-                // in some areas (not all) the second event
-                // has wrong coordinates!!!!
-                typeof window !== 'undefined' &&
-                  window.L.DomEvent.stopPropagation(event)
-                /**
-                 * how to update a geometry value?
-                 * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
-                 */
-                try {
-                  await client.mutate({
-                    mutation: updateTpopById,
-                    variables: {
-                      id: idOfTpopBeingLocalized,
-                      geomPoint,
-                    },
-                    // no optimistic responce as geomPoint
-                    /*optimisticResponse: {
-                      __typename: 'Mutation',
-                      updateTpopById: {
-                        tpop: {
-                          id: idOfTpopBeingLocalized,
-                          __typename: 'Tpop',
-                        },
-                        __typename: 'Tpop',
-                      },
-                    },*/
-                  })
-                  // refetch so it appears on map
-                  if (refetch.tpopForMap) {
-                    // need to also refetch pop in case it was new
-                    refetch.popForMap && refetch.popForMap()
-                    refetch.tpopForMap()
-                  }
-                } catch (error) {
-                  enqueNotification({
-                    message: error.message,
-                    options: {
-                      variant: 'error',
-                    },
-                  })
-                }
-                setIdOfTpopBeingLocalized(null)
-              }
-            },
-          }}
         >
           {activeBaseLayer && <BaseLayerComponent />}
           {activeOverlaysSorted
