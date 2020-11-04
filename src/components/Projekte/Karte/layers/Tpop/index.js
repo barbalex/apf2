@@ -3,8 +3,8 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { useQuery } from '@apollo/client'
-import { useMap } from 'react-leaflet'
+import { useQuery, useApolloClient } from '@apollo/client'
+import { useMapEvents } from 'react-leaflet'
 import bboxPolygon from '@turf/bbox-polygon'
 
 import Marker from './Marker'
@@ -13,6 +13,7 @@ import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 import { simpleTypes as popType } from '../../../../../store/Tree/DataFilter/pop'
 import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
+import updateTpopById from './updateTpopById'
 
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -32,14 +33,97 @@ const iconCreateFunction = function (cluster) {
 }
 
 const Tpop = ({ treeName, clustered, leaflet }) => {
-  const leafletMap = useMap()
+  const client = useApolloClient()
+
   const store = useContext(storeContext)
   const {
     mapFilter,
     activeApfloraLayers,
     setRefetchKey,
     enqueNotification,
+    setIdOfTpopBeingLocalized,
+    idOfTpopBeingLocalized,
+    refetch,
   } = store
+
+  const leafletMap = useMapEvents({
+    async dblclick(event) {
+      console.log('doubleclick')
+
+      // since 2018 10 31 using idOfTpopBeingLocalized directly
+      // returns null, so need to use store.idOfTpopBeingLocalized
+      const { idOfTpopBeingLocalized } = store
+      console.log('Tpop, on dblclick', { idOfTpopBeingLocalized })
+      if (!idOfTpopBeingLocalized) return
+      /**
+       * TODO
+       * When clicking on Layertool
+       * somehow Mapelement grabs the click event
+       * although Layertool lies _over_ map element ??!!
+       * So when localizing, if user wants to change base map,
+       * click on Layertool sets new coordinates!
+       */
+      const { lat, lng } = event.latlng
+      const geomPoint = {
+        type: 'Point',
+        coordinates: [lng, lat],
+        // need to add crs otherwise PostGIS v2.5 (on server) errors
+        crs: {
+          type: 'name',
+          properties: {
+            name: 'urn:ogc:def:crs:EPSG::4326',
+          },
+        },
+      }
+      console.log('Tpop, on dblclick', { lat, lng, geomPoint })
+      // DANGER:
+      // need to stop propagation of the event
+      // if not it is called a second time
+      // the crazy thing is:
+      // in some areas (not all) the second event
+      // has wrong coordinates!!!!
+      typeof window !== 'undefined' && window.L.DomEvent.stopPropagation(event)
+      /**
+       * how to update a geometry value?
+       * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
+       */
+      try {
+        await client.mutate({
+          mutation: updateTpopById,
+          variables: {
+            id: idOfTpopBeingLocalized,
+            geomPoint,
+          },
+          // no optimistic responce as geomPoint
+          /*optimisticResponse: {
+                      __typename: 'Mutation',
+                      updateTpopById: {
+                        tpop: {
+                          id: idOfTpopBeingLocalized,
+                          __typename: 'Tpop',
+                        },
+                        __typename: 'Tpop',
+                      },
+                    },*/
+        })
+        console.log('Tpop, on dblclick', { refetch })
+        // refetch so it appears on map
+        if (refetch.tpopForMap) {
+          // need to also refetch pop in case it was new
+          refetch.popForMap && refetch.popForMap()
+          refetch.tpopForMap()
+        }
+      } catch (error) {
+        enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      setIdOfTpopBeingLocalized(null)
+    },
+  })
   const tree = store[treeName]
   const {
     map,
@@ -48,6 +132,20 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     apIdInActiveNodeArray,
   } = tree
   const { setTpopIdsFiltered } = map
+
+  useEffect(() => {
+    if (!!idOfTpopBeingLocalized) {
+      window.L.DomUtil.addClass(
+        leafletMap._container,
+        'crosshair-cursor-enabled',
+      )
+    } else {
+      window.L.DomUtil.removeClass(
+        leafletMap._container,
+        'crosshair-cursor-enabled',
+      )
+    }
+  }, [idOfTpopBeingLocalized, leafletMap._container])
 
   const projId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
@@ -100,7 +198,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     }
   }
 
-  var { data, error, refetch } = useQuery(query, {
+  var { data, error, refetch: refetchQuery } = useQuery(query, {
     variables: {
       projId,
       apId,
@@ -111,15 +209,15 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
       tpopFilter,
     },
   })
-  setRefetchKey({ key: 'tpopForMap', value: refetch })
+  setRefetchKey({ key: 'tpopForMap', value: refetchQuery })
 
   // eslint-disable-next-line no-unused-vars
   const [refetchProvoker, setRefetchProvoker] = useState(1)
   useEffect(() => {
     // DO NOT use:
-    // leafletMap.on('zoomend moveend', refetch
+    // leafletMap.on('zoomend moveend', refetchQuery
     // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
-    // Also: leafletMap.on('zoomend moveend', ()=> refetch()) never refetches!!??
+    // Also: leafletMap.on('zoomend moveend', ()=> refetchQuery()) never refetches!!??
     leafletMap.on('zoomend moveend', () => setRefetchProvoker(Math.random()))
     return () => {
       leafletMap.off('zoomend moveend', () => setRefetchProvoker(Math.random()))
