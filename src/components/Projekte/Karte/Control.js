@@ -6,6 +6,7 @@ const OuterDiv = styled.div`
 `
 const InnerDiv = styled.div`
   border: none !important;
+  box-shadow: none !important;
   /* float children right */
   > button {
     float: right;
