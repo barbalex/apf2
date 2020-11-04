@@ -5,14 +5,13 @@
  *
  */
 
-import React, { useContext, useRef, useCallback, useMemo } from 'react'
+import React, { useContext, useRef, useMemo } from 'react'
 import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
 import styled from 'styled-components'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
 import sortBy from 'lodash/sortBy'
-import debounce from 'lodash/debounce'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useApolloClient } from '@apollo/client'
@@ -62,7 +61,6 @@ import DrawControl from './DrawControl'
 import PrintControl from './PrintControl'
 import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl'
-import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import updateTpopById from './updateTpopById'
 import iconFullscreen from './iconFullscreen.png'
 import iconFullscreen2x from './iconFullscreen2x.png'
@@ -434,7 +432,6 @@ const Karte = ({ treeName }) => {
     bounds: boundsRaw,
     enqueNotification,
     assigningBeob,
-    setMapMouseCoordinates,
     refetch,
     appBarHeight,
     hideMapControls,
@@ -444,16 +441,6 @@ const Karte = ({ treeName }) => {
   const activeOverlays = getSnapshot(activeOverlaysRaw)
 
   const mapRef = useRef(null)
-
-  const setMouseCoords = useCallback(
-    (e) => {
-      const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
-      setMapMouseCoordinates({ x, y })
-    },
-    [setMapMouseCoordinates],
-  )
-
-  const onMouseMove = debounce(setMouseCoords, 50)
 
   const clustered = !(
     assigningBeob ||
@@ -524,7 +511,6 @@ const Karte = ({ treeName }) => {
           doubleClickZoom={false}
           zoomControl={false}
           eventHandlers={{
-            mouseMove: onMouseMove,
             dblClick: async (event) => {
               // since 2018 10 31 using idOfTpopBeingLocalized directly
               // returns null, so need to use store.idOfTpopBeingLocalized
