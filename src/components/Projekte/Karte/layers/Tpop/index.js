@@ -135,6 +135,8 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
 
   useEffect(() => {
     if (!!idOfTpopBeingLocalized) {
+      // see: https://stackoverflow.com/a/28724847/712005
+      // altering the maps css corrupted the map ui
       window.L.DomUtil.addClass(
         leafletMap._container,
         'crosshair-cursor-enabled',
