@@ -138,7 +138,7 @@ const App = ({ element }) => {
             <SnackbarProvider
               maxSnack={3}
               preventDuplicate
-              autoHideDuration={10000}
+              autoHideDuration={20000}
               action={(key) => <NotificationDismisser nKey={key} />}
             >
               <>
