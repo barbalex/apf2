@@ -29,7 +29,6 @@ const CoordinatesControl = () => {
 
   const setMouseCoords = useCallback(
     (e) => {
-      console.log('mouseMove debounced')
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
       setMapMouseCoordinates({ x, y })
     },
