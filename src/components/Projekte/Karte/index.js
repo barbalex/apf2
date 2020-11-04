@@ -487,8 +487,6 @@ const Karte = ({ treeName }) => {
 
   if (typeof window === 'undefined') return null
 
-  console.log('Karte', { idOfTpopBeingLocalized })
-
   return (
     <Container
       data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}
