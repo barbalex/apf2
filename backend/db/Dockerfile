@@ -12,51 +12,6 @@ RUN apt-get -y install curl
 RUN apt-get -y install bash
 RUN apt-get -y install nano
 
-# install rclone
-# WARNING: THIS PREVENTED THE GRAPHQL SERVER FROM RUNNING CORRECTLY!
-# https://rclone.org/install/#install-with-docker
-# https://hub.docker.com/r/rclone/rclone/dockerfile
-# https://github.com/bcardiff/docker-rclone/blob/master/Dockerfile
-#FROM alpine:3.9
-
-#LABEL maintainer="Brian J. Cardiff <bcardiff@gmail.com>"
-
-#ARG RCLONE_VERSION=current
-#ARG ARCH=amd64
-#ENV SYNC_SRC=
-#ENV SYNC_DEST=
-#ENV SYNC_OPTS=-v
-#ENV RCLONE_OPTS="--config /config/rclone.conf"
-#ENV CRON=
-#ENV CRON_ABORT=
-#ENV FORCE_SYNC=
-#ENV CHECK_URL=
-#ENV TZ=
-
-#RUN apk -U add ca-certificates fuse wget dcron tzdata \
-#&& rm -rf /var/cache/apk/*
-
-#RUN URL=http://downloads.rclone.org/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-linux-${ARCH}.zip ; \
-#  URL=${URL/\/current/} ; \
-#  cd /tmp \
-#  && wget -q $URL \
-#  && unzip /tmp/rclone-${RCLONE_VERSION}-linux-${ARCH}.zip \
-#  && mv /tmp/rclone-*-linux-${ARCH}/rclone /usr/bin \
-#  && rm -r /tmp/rclone*
-
-#COPY entrypoint.sh /
-#COPY sync.sh /
-#COPY sync-abort.sh /
-#RUN chmod +x entrypoint.sh
-#RUN chmod +x sync.sh
-#RUN chmod +x sync-abort.sh
-
-#VOLUME ["/config"]
-
-#ENTRYPOINT ["/entrypoint.sh"]
-
-#CMD [""]
-
 # install dropbox uploader
 ADD dropbox_uploader.conf /dropbox_uploader.conf
 RUN curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o dropbox_uploader.sh
