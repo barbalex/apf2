@@ -1,7 +1,7 @@
 {
   "name": "apf2",
   "description": "Aktionspläne für Flora-Projekte",
-  "version": "1.43.9",
+  "version": "1.43.10",
   "repository": {
     "type": "git",
     "url": "git://github.com/barbalex/apf2.git"
