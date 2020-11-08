@@ -25,7 +25,7 @@ export const baseLayers = [
   },
   // https://wms.zh.ch/upwms?SERVICE=WMS&Request=GetCapabilities
   { label: 'ZH Übersichtsplan', value: 'ZhUep', cors: true },
-  // { label: 'Bing Luftbild', value: 'BingAerial' },
+  { label: 'Bing Luftbild', value: 'BingAerial' },
   // https://wms.zh.ch/OrthoZHWMS?SERVICE=WMS&Request=GetCapabilities
   {
     label: 'ZH Orthofoto Sommer 2018 RGB',

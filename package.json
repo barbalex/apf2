@@ -100,7 +100,7 @@
     "react-icons": "3.11.0",
     "react-image-lightbox": "5.1.1",
     "react-leaflet": "2.8.0",
-    "react-leaflet-bing": "4.1.0",
+    "react-leaflet-bing-v2": "5.0.1",
     "react-leaflet-control": "2.1.2",
     "react-leaflet-markercluster": "2.0.0",
     "react-linkify": "1.0.0-alpha",
