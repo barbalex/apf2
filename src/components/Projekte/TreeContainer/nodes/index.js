@@ -80,12 +80,16 @@ const compare = (a, b) => {
 }
 
 export default ({ data, loading, store, role, treeName, dataFilter }) => {
+  console.log('TreeContainer, openNodes:', store[treeName].openNodes)
+  console.log(
+    'TreeContainer, openNodesJSoned:',
+    store[treeName].openNodes.toJSON(),
+  )
   const openNodes = store[treeName].openNodes
     .toJSON()
     // need to sort so folders are added in correct order
     // because every lower folder gets previous nodes passed
     .sort(sort)
-  //console.log('nodes', { data, openNodes })
   const projektNodes = [...buildProjektNodes({ data, treeName, store })]
 
   let nodes = [
