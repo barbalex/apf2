@@ -426,7 +426,6 @@ const Karte = ({ treeName }) => {
     overlays,
     activeOverlays: activeOverlaysRaw,
     activeBaseLayer,
-    idOfTpopBeingLocalized,
     bounds: boundsRaw,
     assigningBeob,
     appBarHeight,
@@ -494,8 +493,6 @@ const Karte = ({ treeName }) => {
     >
       <ErrorBoundary>
         <StyledMapContainer
-          /* changing data-localizing destroys map!!!!! */
-          //data-localizing={!!idOfTpopBeingLocalized}
           ref={mapRef}
           bounds={bounds}
           // need max and min zoom because otherwise
