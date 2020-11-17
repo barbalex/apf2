@@ -142,6 +142,7 @@ const CellForEkfrequenzStartjahr = ({ row, style, refetchTpop }) => {
           },
         })
       }
+      // TODO: or ekfrequenz has no kontrolljahre
       if (row.ekfrequenz.value && value) {
         setEkplans({
           tpopId: row.id,

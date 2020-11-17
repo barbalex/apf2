@@ -6,7 +6,7 @@ import React from 'react'
     at _inherits (react-leaflet-bing.js:106)
     at react-leaflet-bing.js:109
  */
-import { BingLayer } from 'react-leaflet-bing'
+import { BingLayer } from 'react-leaflet-bing-v2'
 
 const bingKey =
   'AjGOtB_ygBplpxXtKiiHtm-GERjSg9TFEoCmuBI_Yz4VWy0unRGUDo9GOZHA46Pf'

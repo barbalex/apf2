@@ -14,6 +14,10 @@ export default async ({
   store,
   closeSnackbar,
 }) => {
+  // TODO:
+  // only return if set ekfrequenz has kontrolljahre?
+  // but then: query ekplans beginning when? This year
+  console.log('setEkplans', { ekfrequenzValue })
   if (!ekfrequenzStartjahr) return
   const { enqueNotification } = store
   // 1. query all ekplans beginning with ekfrequenzStartJahr

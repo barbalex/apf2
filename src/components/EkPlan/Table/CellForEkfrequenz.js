@@ -104,6 +104,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
         })
       }
       // set ekplans if startjahr exists
+      // TODO: or ekfrequenz has no kontrolljahre
       if (!!ekfrequenzStartjahr && !!value) {
         setEkplans({
           tpopId: row.id,
@@ -127,6 +128,14 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
   const optionsGrouped = ekfOptionsGroupedPerAp[row.apId]
   const ekfrequenz = ekfrequenzs.find((f) => f.id === field.value)
   const valueToShow = ekfrequenz ? ekfrequenz.code : ''
+
+  focused &&
+    console.log('CellForEkfrequenz', {
+      focused,
+      optionsGrouped,
+      valueToShow,
+      ekfOptionsGroupedPerAp,
+    })
 
   return (
     <StyledCellForSelect

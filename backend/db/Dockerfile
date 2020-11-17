@@ -14,9 +14,6 @@ RUN apt-get -y install nano
 
 # install dropbox uploader
 ADD dropbox_uploader.conf /dropbox_uploader.conf
-#ADD .dropbox_uploader ~/.dropbox_uploader
-# this did not work as token was never written to the file
-#RUN echo "OAUTH_ACCESS_TOKEN=$DROPBOX_OAUTH_ACCESS_TOKEN" >> /dropbox_uploader.conf
 RUN curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o dropbox_uploader.sh
 RUN chmod +x dropbox_uploader.sh
 

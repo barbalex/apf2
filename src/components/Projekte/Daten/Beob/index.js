@@ -7,6 +7,7 @@ import { withResizeDetector } from 'react-resize-detector'
 
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import constants from '../../../../modules/constants'
+import exists from '../../../../modules/exists'
 import query from './query'
 import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -32,10 +33,12 @@ const Beob = ({ treeName, width = 1000 }) => {
   })
   const row = get(data, 'beobById', {})
   const beobFields = row.data
-    ? Object.entries(JSON.parse(row.data)).filter(
-        ([key, value]) => value || value === 0 || value === false,
+    ? Object.entries(JSON.parse(row.data)).filter(([key, value]) =>
+        exists(value),
       )
     : []
+
+  //console.log('Beob', { row, beobFields, data, loading, error })
 
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined

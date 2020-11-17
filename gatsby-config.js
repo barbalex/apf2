@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'apflora v1.43.9',
+    title: 'apflora v1.43.10',
   },
   plugins: [
     {
@@ -55,7 +55,9 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        scope: '/',
+        // uncommented scope because of gatsby issue
+        // https://github.com/gatsbyjs/gatsby/issues/27839
+        //scope: '/',
         name: 'apflora.ch',
         short_name: 'apflora',
         start_url: '/',

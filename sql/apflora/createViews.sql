@@ -4704,8 +4704,8 @@ from
   apflora.beob
   inner join apflora.apart
   on apflora.apart.art_id = apflora.beob.art_id
-    inner join apflora.beob_quelle_werte
-    on apflora.beob_quelle_werte.id = apflora.beob.quelle_id
+  inner join apflora.beob_quelle_werte
+  on apflora.beob_quelle_werte.id = apflora.beob.quelle_id
 order by
   apflora.beob.datum desc,
   apflora.beob.autor asc,

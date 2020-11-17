@@ -13,6 +13,10 @@ import storeContext from '../storeContext'
 const StyledSimpleBar = styled(SimpleBar)`
   max-height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  .simplebar-content {
+    /* without this image did not cover 100% on large screens */
+    height: 100%;
+  }
   .simplebar-scrollbar:before {
     background: rgba(0, 0, 0, 0.7) !important;
   }
