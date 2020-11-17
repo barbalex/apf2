@@ -3,7 +3,7 @@
 // https://github.com/victorzinho/leaflet-switch-scale-control
 import React, { useEffect } from 'react'
 import 'leaflet'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 // eslint-disable-next-line no-unused-vars
 import SwitchScaleControl from 'leaflet-switch-scale-control'
 
@@ -21,7 +21,7 @@ const options = {
   scales: [500, 1000, 2000, 5000, 10000, 25000, 50000, 100000, 200000, 500000], // Array of selectable scales
   roundScales: undefined, // Array of available to display rounded scales
   adjustScales: false, // Flag: whether to adjust custom scale to max of scales
-  pixelsInMeterWidth: function() {
+  pixelsInMeterWidth: function () {
     var div = document.createElement('div')
     div.style.cssText =
       'position: absolute;  left: -100%;  top: -100%;  width: 100cm;'
@@ -30,21 +30,25 @@ const options = {
     document.body.removeChild(div)
     return px
   },
-  getMapWidthForLanInMeters: function(currentLan) {
+  getMapWidthForLanInMeters: function (currentLan) {
     return 6378137 * 2 * Math.PI * Math.cos((currentLan * Math.PI) / 180)
   },
-  render: function(ratio) {
+  render: function (ratio) {
     return '1 : ' + ratio.toLocaleString('de-ch')
   },
 }
 const style = { display: 'none' }
 
 const ScaleControl = () => {
-  const { map } = useLeaflet()
+  const map = useMap()
+
   useEffect(() => {
-    if (typeof window === 'undefined') return
     const switchScaleControl = new window.L.Control.SwitchScaleControl(options)
     switchScaleControl.addTo(map)
+
+    return () => {
+      switchScaleControl.remove()
+    }
   }, [map])
 
   return <div style={style} />

@@ -14,7 +14,7 @@ export default types
     popLabel: types.string,
     tpopLabel: types.string,
   })
-  .views(self => ({
+  .views((self) => ({
     get idsFiltered() {
       const tree = getParent(self)
       const { activeNodeArray } = tree
@@ -31,7 +31,7 @@ export default types
       ]
     },
   }))
-  .actions(self => ({
+  .actions((self) => ({
     setPopIdsFiltered(val) {
       self.popIdsFiltered = val
     },

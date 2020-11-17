@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import 'leaflet'
-import { useLeaflet } from 'react-leaflet'
+import { useMap } from 'react-leaflet'
 // eslint-disable-next-line no-unused-vars
 import leafletFullscreen from 'leaflet.fullscreen'
 
 const options = {
-  position: 'topleft', // change the position of the button can be topleft, topright, bottomright or bottomleft, defaut topleft
+  position: 'topright', // change the position of the button can be topleft, topright, bottomright or bottomleft, defaut topleft
   title: 'Karte maximieren', // change the title of the button, default Full Screen
   titleCancel: 'Karte verkleinern', // change the title of the button when fullscreen is on, default Exit Full Screen
   content: null, // change the content of the button, can be HTML, default null
@@ -15,11 +15,15 @@ const options = {
 }
 
 const FullScreenControl = () => {
-  const { map } = useLeaflet()
+  const map = useMap()
+
   useEffect(() => {
-    if (typeof window === 'undefined') return
     const fullscreenControl = window.L.control.fullscreen(options)
     fullscreenControl.addTo(map)
+
+    return () => {
+      fullscreenControl.remove()
+    }
   }, [map])
 
   return <div style={{ display: 'none' }} />

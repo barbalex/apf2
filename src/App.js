@@ -54,7 +54,13 @@ const App = ({ element }) => {
 
   if (typeof window !== 'undefined') {
     const visitedTopDomain = window.location.pathname === '/'
-    const blacklist = ['user', 'refetch', 'notifications', 'ekfIds']
+    const blacklist = [
+      'user',
+      'refetch',
+      'notifications',
+      'ekfIds',
+      'hideMapControls',
+    ]
     import('mst-persist').then((module) =>
       module
         .default('store', store, {
@@ -132,7 +138,7 @@ const App = ({ element }) => {
             <SnackbarProvider
               maxSnack={3}
               preventDuplicate
-              autoHideDuration={10000}
+              autoHideDuration={20000}
               action={(key) => <NotificationDismisser nKey={key} />}
             >
               <>

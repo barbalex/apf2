@@ -69,6 +69,7 @@ const myTypes = types
       MapMouseCoordinates,
       defaultMapMouseCoordinates,
     ),
+    hideMapControls: types.optional(types.boolean, false),
     exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
     exportApplyMapFilter: types.optional(types.boolean, false),
     assigningBeob: types.optional(types.boolean, false),
@@ -200,6 +201,9 @@ const myTypes = types
     },
   }))
   .actions((self) => ({
+    setHideMapControls(val) {
+      self.hideMapControls = val
+    },
     setAppBarHeight(val) {
       self.appBarHeight = val
     },

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { tpop } from '../../shared/fragments'
+import { tpop } from '../../../../shared/fragments'
 
 export default gql`
   mutation updateTpopByIdForKarte($id: UUID!, $geomPoint: GeoJSON) {

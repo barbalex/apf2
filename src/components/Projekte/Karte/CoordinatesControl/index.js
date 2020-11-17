@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import 'leaflet'
-import { useLeaflet } from 'react-leaflet'
-import Control from 'react-leaflet-control'
+import { useMapEvents } from 'react-leaflet'
 import styled from 'styled-components'
+import debounce from 'lodash/debounce'
 
 import ShowCoordinates from './ShowCoordinates'
 import PanToCoordinates from './PanToCoordinates'
+import epsg4326to2056 from '../../../../modules/epsg4326to2056'
+import storeContext from '../../../../storeContext'
 
 /**
  * onClick coordinates container: render coordinate-field-pair and go-to button
@@ -17,14 +19,29 @@ import PanToCoordinates from './PanToCoordinates'
  * - render coordinates
  */
 
-const StyledControl = styled(Control)`
-  margin-bottom: 2px !important;
-  margin-right: 5px !important;
+const Container = styled.div`
+  margin-bottom: 10px !important;
 `
 
 const CoordinatesControl = () => {
+  const { setMapMouseCoordinates } = useContext(storeContext)
   const [controlType, setControlType] = useState('coordinates')
-  const { map } = useLeaflet()
+
+  const setMouseCoords = useCallback(
+    (e) => {
+      const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
+      setMapMouseCoordinates({ x, y })
+    },
+    [setMapMouseCoordinates],
+  )
+
+  const onMouseMove = debounce(setMouseCoords, 50)
+
+  const map = useMapEvents({
+    mousemove(e) {
+      onMouseMove(e)
+    },
+  })
   // hack to get control to show on first load
   // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
   useEffect(() => {
@@ -32,13 +49,13 @@ const CoordinatesControl = () => {
   }, [])
 
   return (
-    <StyledControl position="bottomright">
+    <Container>
       {controlType === 'coordinates' ? (
         <ShowCoordinates setControlType={setControlType} />
       ) : (
         <PanToCoordinates setControlType={setControlType} map={map} />
       )}
-    </StyledControl>
+    </Container>
   )
 }
 

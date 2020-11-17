@@ -27,7 +27,6 @@ const Container = styled.div`
   padding-left: 5px;
   padding-right: 5px;
   margin-bottom: 2px !important;
-  margin-right: 5px !important;
   max-width: 380px;
 `
 const StyledIconButton = styled(IconButton)`
