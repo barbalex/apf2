@@ -142,7 +142,7 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
     <Marker key={beob.id} treeName={treeName} beob={beob} />
   ))
 
-  /*if (clustered) {
+  if (clustered) {
     return (
       <MarkerClusterGroup
         maxClusterRadius={66}
@@ -151,7 +151,7 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
         {beobMarkers}
       </MarkerClusterGroup>
     )
-  }*/
+  }
   return beobMarkers
 }
 

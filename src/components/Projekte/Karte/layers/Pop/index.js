@@ -163,11 +163,7 @@ const Pop = ({ treeName }) => {
   setPopIdsFiltered(mapPopIdsFiltered)
   //console.log('layers Pop, pops.length:', pops.length)
 
-  return pops.map((pop) => (
-    <Marker key={pop.id} treeName={treeName} pop={pop} />
-  ))
-
-  /*return (
+  return (
     <MarkerClusterGroup
       maxClusterRadius={66}
       iconCreateFunction={iconCreateFunction}
@@ -176,7 +172,7 @@ const Pop = ({ treeName }) => {
         <Marker key={pop.id} treeName={treeName} pop={pop} />
       ))}
     </MarkerClusterGroup>
-  )*/
+  )
 }
 
 export default observer(Pop)

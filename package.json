@@ -102,7 +102,7 @@
     "react-leaflet": "3.0.0",
     "react-leaflet-bing": "4.1.0",
     "react-leaflet-control": "2.1.2",
-    "react-leaflet-markercluster": "2.0.0",
+    "react-leaflet-markercluster": "3.0.0-rc1",
     "react-linkify": "1.0.0-alpha",
     "react-markdown-editor-lite": "1.2.2",
     "react-resize-detector": "5.2.0",

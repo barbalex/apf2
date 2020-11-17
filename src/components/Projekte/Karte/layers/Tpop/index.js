@@ -272,7 +272,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
 
-  /*if (clustered) {
+  if (clustered) {
     return (
       <MarkerClusterGroup
         maxClusterRadius={66}
@@ -281,7 +281,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
         {tpopMarkers}
       </MarkerClusterGroup>
     )
-  }*/
+  }
   return tpopMarkers
 }
 
