@@ -1,8 +1,8 @@
 ---
 typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Erfolgs-Kontrollen-planen"
-date: "2019-09-10"
-title: "Erfolgs-Kontrollen planen"
+path: '/Dokumentation/Benutzer/Erfolgs-Kontrollen-planen'
+date: '2019-09-10'
+title: 'Erfolgs-Kontrollen planen'
 sort: 12
 ---
 
@@ -19,11 +19,12 @@ sort: 12
    - [Kontrollen planen](#kontrollen-planen)
    - [Mehr Informationen](#mehr-informationen)
    - [Filter setzen](#filter-setzen)
-<br/><br/>
+     <br/><br/>
 
 ## 1. Ziele
 
 Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Im Jahr 2019 wird die Verwaltung und Planung der eigentlichen Kontrollen in apflora weiter entwickelt. Ziele:
+
 - Die Durchführung von Erfolgskontrollen kann sorgfältig geplant werden
 - Topos und Artverantwortliche erhalten eine gute Übersicht über:
   - geplante EK und EKF
@@ -34,19 +35,25 @@ Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Im Jahr 2019 wird di
 ## 2. Diese Daten werden erfasst
 
 ### Global
+
 Durch die Koordinationsstelle. Im Strukturbaum in den Werte-Listen.
+
 - EK-Abrechnungstypen
 - Zähleinheiten
-![im Strukturbaum](ekplanen_global.png)
+  ![im Strukturbaum](ekplanen_global.png)
 
 ### Pro Aktionsplan
+
 Durch Koordinationsstelle und Artverantwortliche.
+
 - Welche Zähleinheiten sind zielrelevant und sollen daher immer erfasst werden
 - Frequenzen, nach denen in diesem AP kontrolliert werden soll. Inklusive Abrechnungstyp (EK-Frequenzen)
-![im Strukturbaum](ekplanen_ap.png)
+  ![im Strukturbaum](ekplanen_ap.png)
 
 ### Pro Teilpopulation
+
 Durch Artverantwortliche.
+
 - Aus den für den AP bestimmten Frequenzen wird die für diese Teil-Population passende gewählt
 - Weicht die EK-Frequenz von der auf AP-Ebene für diesen Fall bestimmten Wert ab, wird das besonders markiert ("EK-Frequenz abweichend")
 - In welchen Jahren Kontrollen erfolgen sollen, differenziert nach EK und EKF
@@ -54,6 +61,7 @@ Durch Artverantwortliche.
 Letzteres ist die eigentliche EK-Planung und sie geschieht primär im entsprechenden Formular:<br/><br/>
 
 ## 3. Formular EK-Planung
+
 Das Formular ist für die Darstellung und Bearbeitung grosser Datenmengen konzipiert.<br/>
 Je grösser und höher aufgelöst der Bildschirm, desto übersichtlicher kann man arbeiten. Auf kleinen Bildschirmen (z.B. Handy) ist es kaum brauchbar.<br/><br/>
 
@@ -73,6 +81,7 @@ Oben rechts wählt man, welche Informationen in den Teil-Populationen angezeigt 
 ![Formular](ekplanen_form_3.png)<br/>
 
 In den Zeilen für die Teilpopulationen werden in den Jahres-Spalten dargestellt:
+
 - Grüne Haken symbolisieren ausgeführte Kontrollen ![Kontrolle](ekplanen_haken.png)
 - Direkt rechts des Hakens stellt eine rote Zahl die Anzahl Kontrollen dar, wenn im selben Jahr mehrere Kontrollen stattfanden ![mehrere Kontrollen im selben Jahr](ekplanen_haken_multiple.png)
 - Etwas weiter rechts neben dem Haken stellt eine schwarze Zahl die gemäss zielrelevanter Zähleinheit erfasste Anzahl dar, wenn diese Einheit gezählt wurde ![Zählung](ekplanen_haken_zaehlung.png)
@@ -85,20 +94,26 @@ In den Zeilen für die Teilpopulationen werden in den Jahres-Spalten dargestellt
 ### Kontrollen planen
 
 #### Automatisch
+
 ![Automatisch planen](ekplanen_auto.gif)
 
 Ändert man die EK-Frequenz:<br/>
-1. Setzt apflora zunächst das Startjahr, beruhend auf der gewählten EK-Frequenz mit:
-  - EK-Typ (EK oder EKF)
-  - "Kontrolljahre ab letzter" (Kontrolle oder Ansiedlung)
-  - letzte Kontrolle oder Ansiedlung
-2. Dann setzt apflora die EK-Pläne, beruhend auf
-  - Startjahr und
-  - Kontrolljahre gemäss EK-Frequenz<br/>
 
-Ändert man das Kontrolljahr, setzt apflora die EK-Pläne.<br/><br/>
+1. Setzt apflora zunächst das Startjahr, beruhend auf der gewählten EK-Frequenz mit:
+
+- EK-Typ (EK oder EKF)
+- "Kontrolljahre ab letzter" (Kontrolle oder Ansiedlung)
+- letzte Kontrolle oder Ansiedlung
+
+2. Dann setzt apflora die EK-Pläne, beruhend auf
+
+- Startjahr und
+- Kontrolljahre gemäss EK-Frequenz<br/>
+
+Ändert man das Startjahr (und es gibt eine EK-Frequenz), setzt apflora die EK-Pläne.<br/><br/>
 
 #### Manuell
+
 Wenn man eine Jahres-Zelle (Teilpopulation in Jahr) mit der Linken Maustaste anklickt, erscheint ein Menü. Hier wählt man den entsprechenden Eintrag:
 ![Manuell planen](ekplanen_manuell.png)<br/>
 
