@@ -1,9 +1,10 @@
 import React, {
-  useState,
   useCallback,
   useContext,
-  useReducer,
   useEffect,
+  useReducer,
+  useRef,
+  useState,
 } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -66,12 +67,16 @@ const User = () => {
     fetchingToken: true,
   })
 
+  const nameInput = useRef(null)
+  const passwordInput = useRef(null)
+
   const fetchLogin = useCallback(
     // callbacks pass name or password
     // because state is not up to date yet
     async ({ name: namePassed, password: passwordPassed }) => {
-      const nameToUse = namePassed || name
-      const passwordToUse = passwordPassed || password
+      const nameToUse = namePassed || name || nameInput.current.value
+      const passwordToUse =
+        passwordPassed || password || passwordInput.current.value
       let result
       try {
         result = await client.mutate({
@@ -187,6 +192,7 @@ const User = () => {
             <InputLabel htmlFor="name">Name</InputLabel>
             <StyledInput
               id="name"
+              inputRef={nameInput}
               className="user-name"
               defaultValue={name}
               onBlur={onBlurName}
@@ -203,6 +209,7 @@ const User = () => {
             <InputLabel htmlFor="passwort">Passwort</InputLabel>
             <StyledInput
               id="passwort"
+              inputRef={passwordInput}
               className="user-passwort"
               type={showPass ? 'text' : 'password'}
               defaultValue={password}
