@@ -129,13 +129,13 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
   const ekfrequenz = ekfrequenzs.find((f) => f.id === field.value)
   const valueToShow = ekfrequenz ? ekfrequenz.code : ''
 
-  focused &&
+  /*focused &&
     console.log('CellForEkfrequenz', {
       focused,
       optionsGrouped,
       valueToShow,
       ekfOptionsGroupedPerAp,
-    })
+    })*/
 
   return (
     <StyledCellForSelect
