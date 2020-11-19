@@ -5,6 +5,7 @@ export default gql`
     ekfrequenzById(id: $id) {
       id
       kontrolljahreAb
+      kontrolljahre
     }
   }
 `
