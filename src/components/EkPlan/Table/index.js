@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useMemo,
-  useCallback,
-  useReducer,
-  useRef,
-} from 'react'
+import React, { useContext, useMemo, useCallback, useRef } from 'react'
 import { useQuery } from '@apollo/client'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -13,7 +7,7 @@ import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
 import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
 import scrollbarSize from 'dom-helpers/scrollbarSize'
-import ReactResizeDetector from 'react-resize-detector'
+import { withResizeDetector } from 'react-resize-detector'
 import Button from '@material-ui/core/Button'
 
 import queryTpop from './queryTpop'
@@ -45,9 +39,12 @@ const TempContainer = styled.div`
   padding: 10px;
   user-select: none !important;
 `
+const OuterContainer = styled.div`
+  height: calc(100% - 86px);
+`
 const Container = styled.div`
   position: relative;
-  width: 100vw;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -129,11 +126,8 @@ const ExportButton = styled(Button)`
   line-height: unset !important;
   z-index: 5;
 `
-function sizeReducer(state, action) {
-  return action.payload
-}
 
-const EkPlanTable = () => {
+const EkPlanTable = ({ width = 0, height = 0 }) => {
   const store = useContext(storeContext)
   const {
     aps,
@@ -151,15 +145,6 @@ const EkPlanTable = () => {
     filterKontrolleYear,
     filterEkplanYear,
   } = store.ekPlan
-
-  const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
-    width: 0,
-    height: 0,
-  })
-  const onResize = useCallback(
-    (width, height) => sizeDispatch({ payload: { width, height } }),
-    [],
-  )
 
   const tpopFilter = { popByPopId: { apId: { in: apValues } } }
   if (filterEmptyEkfrequenz) {
@@ -258,15 +243,15 @@ const EkPlanTable = () => {
       )
     : []
   let headerFieldsFixedWidth = sumBy(headerFieldsFixed, 'width')
-  if (headerFieldsFixedWidth > sizeState.width) {
-    headerFieldsFixedWidth = sizeState.width
+  if (headerFieldsFixedWidth > width) {
+    headerFieldsFixedWidth = width
   }
 
   const tpopGrid = useRef(null)
   const yearHeaderGrid = useRef(null)
 
   const yearColWidth = yearColumnWidth
-  let headerYearFieldsWidth = sizeState.width - headerFieldsFixedWidth
+  let headerYearFieldsWidth = width - headerFieldsFixedWidth
   if (headerYearFieldsWidth < 0) headerYearFieldsWidth = 0
 
   const showsLength = [showEk, showEkf, showMassn].filter((s) => !!s).length
@@ -311,6 +296,8 @@ const EkPlanTable = () => {
     })
   }, [tpops, store, dataLists, years])
 
+  console.log('EkPlan Table rendering')
+
   if (aps.length > 0 && loadingTpop) {
     return <TempContainer>Lade...</TempContainer>
   }
@@ -320,175 +307,180 @@ const EkPlanTable = () => {
   ]
   if (errors.length) return <Error errors={errors} />
   return (
-    <ErrorBoundary>
-      <ExportButton variant="outlined" onClick={onClickExport}>
-        exportieren
-      </ExportButton>
-      <Container>
-        <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-        <HeaderContainer>
-          <TpopTitle>{`${tpops.length} Teilpopulationen`}</TpopTitle>
-          <VariableSizeList
-            style={{ overflow: 'hidden' }}
-            key={`${headerFieldsFixed.length}${fieldsShown.join()}`}
-            height={60}
-            itemCount={headerFieldsFixed.length}
-            itemSize={(index) => headerFieldsFixed[index].width}
-            layout="horizontal"
-            width={headerFieldsFixedWidth}
-          >
-            {({ index, style }) => {
-              const column = headerFieldsFixed[index]
-              const field = column.name
-              // Return specifically built components for columns with menu
-              if (field === 'ekfrequenz') {
-                return (
-                  <CellHeaderFixedEkfrequenz style={style} column={column} />
-                )
-              }
-              if (field === 'ekfrequenzStartjahr') {
-                return (
-                  <CellHeaderFixedEkfrequenzStartjahr
-                    style={style}
-                    column={column}
-                  />
-                )
-              }
-              return <CellHeaderFixed style={style} column={column} />
-            }}
-          </VariableSizeList>
-          <VariableSizeGrid
-            key={yearHeaderRerenderValue}
-            style={{ overflow: 'hidden' }}
-            ref={yearHeaderGrid}
-            height={60}
-            width={headerYearFieldsWidth}
-            rowHeight={() => 60}
-            columnCount={yearColumns.length}
-            rowCount={1}
-            columnWidth={(index) => {
-              if (index === yearColumns.length - 1) {
-                return yearColWidth + sbSize
-              }
-              return yearColWidth
-            }}
-          >
-            {({ columnIndex, rowIndex, style }) => (
-              <CellHeaderYear
-                style={style}
-                column={years[columnIndex]}
-                rows={tpopRows}
-              />
-            )}
-          </VariableSizeGrid>
-        </HeaderContainer>
-        <BodyContainer>
-          <VariableSizeGrid
-            key={`${rowHeight}${fieldsShown.join()}`}
-            ref={tpopGrid}
-            style={{ overflowY: 'hidden' }}
-            columnCount={tpopColumns.length}
-            columnWidth={(index) => tpopColumns[index].width}
-            height={sizeState.height - 60}
-            rowCount={tpopRows.length}
-            rowHeight={() => rowHeight}
-            width={headerFieldsFixedWidth}
-          >
-            {({ columnIndex, rowIndex, style }) => {
-              const row = tpopRows[rowIndex]
-              const column = tpopColumns[columnIndex].name
-              const value = row[column]
-              if (value.name === 'yearTitle') {
-                return (
-                  <CellForYearTitle key={value.name} style={style} row={row} />
-                )
-              }
-              if (value.name === 'ekAbrechnungstyp') {
+    <OuterContainer>
+      <ErrorBoundary>
+        <ExportButton variant="outlined" onClick={onClickExport}>
+          exportieren
+        </ExportButton>
+        <Container>
+          <HeaderContainer>
+            <TpopTitle>{`${tpops.length} Teilpopulationen`}</TpopTitle>
+            <VariableSizeList
+              style={{ overflow: 'hidden' }}
+              key={`${headerFieldsFixed.length}${fieldsShown.join()}`}
+              height={60}
+              itemCount={headerFieldsFixed.length}
+              itemSize={(index) => headerFieldsFixed[index].width}
+              layout="horizontal"
+              width={headerFieldsFixedWidth}
+            >
+              {({ index, style }) => {
+                const column = headerFieldsFixed[index]
+                const field = column.name
+                // Return specifically built components for columns with menu
+                if (field === 'ekfrequenz') {
+                  return (
+                    <CellHeaderFixedEkfrequenz style={style} column={column} />
+                  )
+                }
+                if (field === 'ekfrequenzStartjahr') {
+                  return (
+                    <CellHeaderFixedEkfrequenzStartjahr
+                      style={style}
+                      column={column}
+                    />
+                  )
+                }
+                return <CellHeaderFixed style={style} column={column} />
+              }}
+            </VariableSizeList>
+            <VariableSizeGrid
+              key={yearHeaderRerenderValue}
+              style={{ overflow: 'hidden' }}
+              ref={yearHeaderGrid}
+              height={60}
+              width={headerYearFieldsWidth}
+              rowHeight={() => 60}
+              columnCount={yearColumns.length}
+              rowCount={1}
+              columnWidth={(index) => {
+                if (index === yearColumns.length - 1) {
+                  return yearColWidth + sbSize
+                }
+                return yearColWidth
+              }}
+            >
+              {({ columnIndex, rowIndex, style }) => (
+                <CellHeaderYear
+                  style={style}
+                  column={years[columnIndex]}
+                  rows={tpopRows}
+                />
+              )}
+            </VariableSizeGrid>
+          </HeaderContainer>
+          <BodyContainer>
+            <VariableSizeGrid
+              key={`${rowHeight}${fieldsShown.join()}`}
+              ref={tpopGrid}
+              style={{ overflowY: 'hidden' }}
+              columnCount={tpopColumns.length}
+              columnWidth={(index) => tpopColumns[index].width}
+              height={height - 60}
+              rowCount={tpopRows.length}
+              rowHeight={() => rowHeight}
+              width={headerFieldsFixedWidth}
+            >
+              {({ columnIndex, rowIndex, style }) => {
+                const row = tpopRows[rowIndex]
+                const column = tpopColumns[columnIndex].name
+                const value = row[column]
+                if (value.name === 'yearTitle') {
+                  return (
+                    <CellForYearTitle
+                      key={value.name}
+                      style={style}
+                      row={row}
+                    />
+                  )
+                }
+                if (value.name === 'ekAbrechnungstyp') {
+                  return (
+                    <CellForValue
+                      key={value.name}
+                      field={value}
+                      style={style}
+                      row={row}
+                      firstChild={columnIndex === 0}
+                    />
+                  )
+                }
+                if (value.name === 'ekfrequenz') {
+                  return (
+                    <CellForEkfrequenz
+                      key={value.name}
+                      row={row}
+                      ekfrequenzs={ekfrequenzs}
+                      field={value}
+                      style={style}
+                      refetchTpop={refetch}
+                    />
+                  )
+                }
+                if (value.name === 'ekfrequenzStartjahr') {
+                  return (
+                    <CellForEkfrequenzStartjahr
+                      key={value.name}
+                      row={row}
+                      style={style}
+                      refetchTpop={refetch}
+                    />
+                  )
+                }
+                if (value.name === 'ekfrequenzAbweichend') {
+                  return (
+                    <CellForEkfrequenzAbweichend
+                      key={value.name}
+                      row={row}
+                      field={value}
+                      style={style}
+                    />
+                  )
+                }
+                if (value.name === 'link') {
+                  return (
+                    <CellForTpopLink
+                      key={value.name}
+                      field={value}
+                      style={style}
+                      row={row}
+                    />
+                  )
+                }
                 return (
                   <CellForValue
-                    key={value.name}
+                    key={value.label}
                     field={value}
                     style={style}
                     row={row}
                     firstChild={columnIndex === 0}
                   />
                 )
-              }
-              if (value.name === 'ekfrequenz') {
-                return (
-                  <CellForEkfrequenz
-                    key={value.name}
-                    row={row}
-                    ekfrequenzs={ekfrequenzs}
-                    field={value}
-                    style={style}
-                    refetchTpop={refetch}
-                  />
-                )
-              }
-              if (value.name === 'ekfrequenzStartjahr') {
-                return (
-                  <CellForEkfrequenzStartjahr
-                    key={value.name}
-                    row={row}
-                    style={style}
-                    refetchTpop={refetch}
-                  />
-                )
-              }
-              if (value.name === 'ekfrequenzAbweichend') {
-                return (
-                  <CellForEkfrequenzAbweichend
-                    key={value.name}
-                    row={row}
-                    field={value}
-                    style={style}
-                  />
-                )
-              }
-              if (value.name === 'link') {
-                return (
-                  <CellForTpopLink
-                    key={value.name}
-                    field={value}
-                    style={style}
-                    row={row}
-                  />
-                )
-              }
-              return (
-                <CellForValue
-                  key={value.label}
-                  field={value}
-                  style={style}
-                  row={row}
-                  firstChild={columnIndex === 0}
-                />
-              )
-            }}
-          </VariableSizeGrid>
-          <FixedSizeGrid
-            columnCount={yearColumns.length}
-            columnWidth={yearColWidth}
-            height={sizeState.height - 60}
-            rowCount={yearRows.length}
-            rowHeight={rowHeight}
-            width={sizeState.width - headerFieldsFixedWidth}
-            onScroll={onScroll}
-          >
-            {({ columnIndex, rowIndex, style }) => {
-              const row = yearRows[rowIndex]
-              const column = yearColumns[columnIndex].name
-              const value = row[column]
+              }}
+            </VariableSizeGrid>
+            <FixedSizeGrid
+              columnCount={yearColumns.length}
+              columnWidth={yearColWidth}
+              height={height - 60}
+              rowCount={yearRows.length}
+              rowHeight={rowHeight}
+              width={width - headerFieldsFixedWidth}
+              onScroll={onScroll}
+            >
+              {({ columnIndex, rowIndex, style }) => {
+                const row = yearRows[rowIndex]
+                const column = yearColumns[columnIndex].name
+                const value = row[column]
 
-              return <CellForYear row={row} field={value} style={style} />
-            }}
-          </FixedSizeGrid>
-        </BodyContainer>
-      </Container>
-      {!!yearMenuAnchor && <CellForYearMenu />}
-    </ErrorBoundary>
+                return <CellForYear row={row} field={value} style={style} />
+              }}
+            </FixedSizeGrid>
+          </BodyContainer>
+        </Container>
+        {!!yearMenuAnchor && <CellForYearMenu />}
+      </ErrorBoundary>
+    </OuterContainer>
   )
 }
 
-export default observer(EkPlanTable)
+export default withResizeDetector(observer(EkPlanTable))
