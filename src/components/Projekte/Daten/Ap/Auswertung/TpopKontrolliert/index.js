@@ -39,8 +39,11 @@ const Title = styled.h4`
   margin-bottom: 0;
   margin-top: 15px;
 `
-const TitleKontr = styled.span`
+const TitleTitle = styled.span`
   color: red;
+`
+const TitleKontr = styled.span`
+  color: #2e7d32;
 `
 
 const color = {
@@ -80,7 +83,8 @@ const ApAuswertungTpopKontrolliert = ({ id }) => {
       ) : erfolgData.length ? (
         <>
           <Title>
-            (<TitleKontr>kontrollierte</TitleKontr>) Teil-Populationen
+            (<TitleKontr>kontrollierte</TitleKontr>){' '}
+            <TitleTitle>Teil-Populationen</TitleTitle>
           </Title>
           <ResponsiveContainer width="99%" height={400}>
             <LineChart
@@ -128,7 +132,8 @@ const ApAuswertungTpopKontrolliert = ({ id }) => {
       ) : (
         <>
           <Title>
-            (<TitleKontr>kontrollierte</TitleKontr>) Teil-Populationen
+            (<TitleKontr>kontrollierte</TitleKontr>){' '}
+            <TitleTitle>Teil-Populationen</TitleTitle>
           </Title>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>
         </>
