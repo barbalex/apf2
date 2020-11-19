@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
-import Control from '../Control'
 import Overlays from './Overlays'
 import ApfloraLayers from './ApfloraLayers'
 import BaseLayers from './BaseLayers'
