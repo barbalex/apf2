@@ -61,6 +61,7 @@ export default types
     filterAnsiedlungYear: types.maybeNull(types.number, null),
     filterKontrolleYear: types.maybeNull(types.number, null),
     filterEkplanYear: types.maybeNull(types.number, null),
+    pastYears: types.optional(types.number, 5),
   })
   .volatile(() => ({
     yearMenuAnchor: null,
@@ -69,7 +70,10 @@ export default types
     apsData: [],
     ekfrequenzs: [],
   }))
-  .actions(self => ({
+  .actions((self) => ({
+    setPastYears(val) {
+      self.pastYears = val
+    },
     setEkfrequenzs(val) {
       self.ekfrequenzs = val
     },
@@ -113,7 +117,7 @@ export default types
       self.aps = [...self.aps, ap]
     },
     removeAp(ap) {
-      self.aps = self.aps.filter(a => a.value !== ap.value)
+      self.aps = self.aps.filter((a) => a.value !== ap.value)
     },
     setFields(fields) {
       self.fields = fields
@@ -128,7 +132,7 @@ export default types
       self.fields = uniq([...self.fields, field])
     },
     removeField(field) {
-      self.fields = self.fields.filter(f => f !== field)
+      self.fields = self.fields.filter((f) => f !== field)
     },
     setYearMenuAnchor(anchor) {
       self.yearMenuAnchor = anchor
@@ -144,15 +148,15 @@ export default types
       self.scrollPositions = val
     },
   }))
-  .views(self => ({
+  .views((self) => ({
     get apValues() {
-      return self.aps.map(a => a.value)
+      return self.aps.map((a) => a.value)
     },
     get ekfOptionsGroupedPerAp() {
       const longestAnwendungsfall = max(
-        self.ekfrequenzs.map(a => (a.anwendungsfall || '').length),
+        self.ekfrequenzs.map((a) => (a.anwendungsfall || '').length),
       )
-      const options = self.ekfrequenzs.map(o => {
+      const options = self.ekfrequenzs.map((o) => {
         const code = (o.code || '').padEnd(9, '\xA0')
         const anwendungsfall =
           `${(o.anwendungsfall || '').padEnd(longestAnwendungsfall, '\xA0')}` ||
@@ -170,9 +174,9 @@ export default types
     get einheitsByAp() {
       const e = groupBy(get(self.apsData, 'allAps.nodes', []), 'id')
       Object.keys(e).forEach(
-        apId =>
+        (apId) =>
           (e[apId] = get(e[apId][0], 'ekzaehleinheitsByApId.nodes', []).map(
-            o => o.tpopkontrzaehlEinheitWerteByZaehleinheitId.code,
+            (o) => o.tpopkontrzaehlEinheitWerteByZaehleinheitId.code,
           )),
       )
       return e
@@ -302,5 +306,11 @@ export const defaultValue = {
   apsDataLoading: true,
   filterEmptyEkfrequenz: false,
   filterEmptyEkfrequenzStartjahr: false,
+  filterAnsiedlungYear: null,
+  filterKontrolleYear: null,
+  filterEkplanYear: null,
   apsData: [],
+  pastYears: 5,
+  scrollPositions: null,
+  ekfrequenzs: [],
 }

@@ -115,7 +115,7 @@ const TpopTitle = styled.h4`
 const ExportButton = styled(Button)`
   position: absolute !important;
   top: 70px !important;
-  right: 420px !important;
+  right: 555px !important;
   min-width: 100px !important;
   text-transform: none !important;
   height: 2.2em;
@@ -144,6 +144,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     filterAnsiedlungYear,
     filterKontrolleYear,
     filterEkplanYear,
+    pastYears,
   } = store.ekPlan
 
   const tpopFilter = { popByPopId: { apId: { in: apValues } } }
@@ -188,13 +189,17 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   } = useQuery(queryTpop, {
     variables: {
       tpopFilter,
+      jahr: new Date().getFullYear() - pastYears,
     },
   })
   const tpops = sortBy(
     get(dataTpop, 'allTpops.nodes', []),
     (t) => t.popByPopId.apByApId.label,
   )
-  const years = useMemo(() => yearsFromTpops(tpops), [tpops])
+  const years = useMemo(() => yearsFromTpops({ tpops, pastYears }), [
+    pastYears,
+    tpops,
+  ])
   const yearRows = useMemo(
     () =>
       tpops.map((tpop, index) =>
@@ -295,8 +300,6 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
       store,
     })
   }, [tpops, store, dataLists, years])
-
-  //console.log('EkPlan Table rendering')
 
   if (aps.length > 0 && loadingTpop) {
     return <TempContainer>Lade...</TempContainer>

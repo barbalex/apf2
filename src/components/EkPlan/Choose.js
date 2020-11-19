@@ -1,7 +1,14 @@
-import React, { useContext, useCallback, useState, useMemo } from 'react'
+import React, {
+  useContext,
+  useCallback,
+  useState,
+  useMemo,
+  useEffect,
+} from 'react'
 import styled from 'styled-components'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
+import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -16,7 +23,7 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 
 const ChooseContainer = styled.div`
   position: relative;
-  flex-basis: 295px;
+  flex-basis: 430px;
   flex-shrink: 0;
   flex-grow: 0;
   align-self: flex-start;
@@ -47,8 +54,18 @@ const StyledDialog = styled(Dialog)`
 `
 const FelderButton = styled(Button)`
   text-transform: none !important;
-  padding: 0 4px !important;
   font-size: 0.75rem !important;
+  width: 150px;
+`
+const PastYearsContainer = styled.div`
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: 150px;
+`
+const StyledTextField = styled(TextField)`
+  input {
+    font-size: 13px;
+  }
 `
 
 // placing mateiral-ui checkboxes denser
@@ -71,6 +88,8 @@ const EkPlanChoose = () => {
     setShowEkCount,
     showMassn,
     setShowMassn,
+    pastYears,
+    setPastYears,
   } = store.ekPlan
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,10 +118,40 @@ const EkPlanChoose = () => {
     [fields.length],
   )
 
+  const [pastYearsLocal, setPastYearsLocal] = useState(pastYears)
+  useEffect(() => {
+    setPastYearsLocal(pastYears)
+  }, [pastYears])
+  const onChangePastYears = useCallback(
+    (event) => {
+      setPastYearsLocal(event.target.value ? +event.target.value : '')
+    },
+    [setPastYearsLocal],
+  )
+  const onBlurPastYears = useCallback(() => {
+    let value = pastYearsLocal
+    if (pastYearsLocal === '') value = 5
+    setPastYears(value)
+  }, [pastYearsLocal, setPastYears])
+
   return (
     <ErrorBoundary>
       <ChooseContainer>
         <ChooseTitle>anzeigen:</ChooseTitle>
+        <PastYearsContainer>
+          <StyledTextField
+            label="vergangene Jahre"
+            variant="outlined"
+            value={pastYearsLocal}
+            onChange={onChangePastYears}
+            onBlur={onBlurPastYears}
+            size="small"
+            type="number"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </PastYearsContainer>
         <FelderButton
           variant="outlined"
           size="small"

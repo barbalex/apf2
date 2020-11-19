@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  query EkplanTpopQuery($tpopFilter: TpopFilter!) {
+  query EkplanTpopQuery($tpopFilter: TpopFilter!, $jahr: Int!) {
     allTpops(filter: $tpopFilter, orderBy: [POP_BY_POP_ID__NR_ASC, NR_ASC]) {
       totalCount
       nodes {
@@ -19,7 +19,7 @@ export default gql`
         }
         bekanntSeit
         # ensure never before 1993
-        tpopkontrsByTpopId(filter: { jahr: { greaterThanOrEqualTo: 1993 } }) {
+        tpopkontrsByTpopId(filter: { jahr: { greaterThanOrEqualTo: $jahr } }) {
           nodes {
             id
             jahr
@@ -46,7 +46,10 @@ export default gql`
           }
         }
         tpopmassnsByTpopId(
-          filter: { tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } } }
+          filter: {
+            tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } }
+            jahr: { greaterThanOrEqualTo: $jahr }
+          }
         ) {
           nodes {
             id
@@ -66,7 +69,7 @@ export default gql`
             }
           }
         }
-        ekplansByTpopId {
+        ekplansByTpopId(filter: { jahr: { greaterThanOrEqualTo: $jahr } }) {
           nodes {
             id
             jahr
