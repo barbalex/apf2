@@ -31,7 +31,6 @@
     "browser-update": "3.3.25",
     "date-fns": "2.16.1",
     "dexie": "3.0.3",
-    "dom-helpers": "5.2.0",
     "exceljs": "4.2.0",
     "file-saver": "2.0.5",
     "fontsource-roboto": "3.0.3",

@@ -73,8 +73,6 @@ const UserMessages = () => {
     return refetch()
   }, [client, refetch, unreadMessages, userName])
 
-  console.log('Messages rendering')
-
   if (error) return <Error error={error} />
 
   return (

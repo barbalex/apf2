@@ -6,7 +6,6 @@ import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
 import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
-import scrollbarSize from 'dom-helpers/scrollbarSize'
 import { withResizeDetector } from 'react-resize-detector'
 import Button from '@material-ui/core/Button'
 
@@ -255,13 +254,11 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   const tpopGrid = useRef(null)
   const yearHeaderGrid = useRef(null)
 
-  const yearColWidth = yearColumnWidth
   let headerYearFieldsWidth = width - headerFieldsFixedWidth
   if (headerYearFieldsWidth < 0) headerYearFieldsWidth = 0
 
   const showsLength = [showEk, showEkf, showMassn].filter((s) => !!s).length
   const rowHeight = 23 + (!!showsLength ? showsLength - 1 : 0) * 16
-  const sbSize = scrollbarSize()
 
   /**
    * See https://github.com/bvaughn/react-window/issues/69
@@ -356,12 +353,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
               rowHeight={() => 60}
               columnCount={yearColumns.length}
               rowCount={1}
-              columnWidth={(index) => {
-                if (index === yearColumns.length - 1) {
-                  return yearColWidth + sbSize
-                }
-                return yearColWidth
-              }}
+              columnWidth={() => yearColumnWidth}
             >
               {({ columnIndex, rowIndex, style }) => (
                 <CellHeaderYear
@@ -463,7 +455,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
             </VariableSizeGrid>
             <FixedSizeGrid
               columnCount={yearColumns.length}
-              columnWidth={yearColWidth}
+              columnWidth={yearColumnWidth}
               height={height - 60}
               rowCount={yearRows.length}
               rowHeight={rowHeight}
