@@ -33,7 +33,7 @@
     "dexie": "3.0.3",
     "dom-helpers": "5.2.0",
     "exceljs": "4.2.0",
-    "file-saver": "2.0.4",
+    "file-saver": "2.0.5",
     "fontsource-roboto": "3.0.3",
     "fontsource-roboto-mono": "3.0.3",
     "formik": "2.2.5",
