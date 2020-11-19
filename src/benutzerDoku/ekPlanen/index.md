@@ -71,7 +71,7 @@ Oben links wählt man, von welchen Aktionsplänen Teil-Populationen angezeigt we
 ![Formular](ekplanen_form_2.png)<br/>
 
 Sobald ein AP gewählt wurde, erscheinen die zugehörigen Teil-Populationen in der Liste.<br/>
-Rechts davon werden für Jahre Splaten aufgebaut. Beginnend mit dem ersten Jahr nach 1993, in dem in einer der aufgelisteten Teil-Populationen eine Kontrolle stattfand, bis 15 Jahre in die Zukunft.<br/>
+Rechts davon werden für Jahre Spalten aufgebaut. Beginnend mit dem ersten Jahr nach 1993, in dem in einer der aufgelisteten Teil-Populationen eine Kontrolle stattfand, bis 15 Jahre in die Zukunft.<br/>
 Wurde nach TPop mit Ansiedlungen gefiltert, wird das Jahr, für das gefiltert wird, in jedem Fall dargestellt (auch wenn die aufgelisteten TPop erst später kontrolliert wurden).<br/>
 ![Formular](ekplanen_form_1.png)<br/>
 
