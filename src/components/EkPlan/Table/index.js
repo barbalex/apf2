@@ -296,7 +296,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     })
   }, [tpops, store, dataLists, years])
 
-  console.log('EkPlan Table rendering')
+  //console.log('EkPlan Table rendering')
 
   if (aps.length > 0 && loadingTpop) {
     return <TempContainer>Lade...</TempContainer>
