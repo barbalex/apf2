@@ -15,14 +15,14 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import Messages from './Messages'
 
 const StyledDialog = styled(Dialog)`
+  display: flex;
+  flex-direction: column;
   > div > div {
     max-width: ${typeof window !== 'undefined'
       ? window.innerWidth * 0.8
       : 0}px !important;
     min-width: 368px !important;
-  }
-  > div > div > div {
-    overflow: hidden;
+    min-width: 80% !important;
   }
 `
 const TitleRow = styled.div`
@@ -72,6 +72,8 @@ const UserMessages = () => {
     )
     return refetch()
   }, [client, refetch, unreadMessages, userName])
+
+  console.log('Messages rendering')
 
   if (error) return <Error error={error} />
 

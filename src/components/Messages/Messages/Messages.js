@@ -5,19 +5,19 @@ import Linkify from 'react-linkify'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { DateTime } from 'luxon'
-import SimpleBar from 'simplebar-react'
 import { withResizeDetector } from 'react-resize-detector'
 
-import createUsermessage from './createUsermessage'
-import storeContext from '../../storeContext'
+import createUsermessage from '../createUsermessage'
+import storeContext from '../../../storeContext'
 
-const ScrollContainer = styled.div`
-  height: ${(props) => `${props['data-height']}px`};
+const Container = styled.div`
+  height: 100%;
 `
 const MessageRow = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-bottom: ${(props) => (props.paddBottom ? '24px' : 0)};
+  padding-bottom: ${(props) => (props.paddBottom ? '24px' : '7px')};
+  border-top: 1px solid #cacaca;
   padding-left: 24px;
   padding-right: 15px;
   min-height: 36px;
@@ -31,7 +31,7 @@ const OkButton = styled(Button)`
   right: 12px;
 `
 
-const UserMessages = ({ unreadMessages, height = 800 }) => {
+const UserMessages = ({ unreadMessages, height = 200 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { user } = store
@@ -49,28 +49,21 @@ const UserMessages = ({ unreadMessages, height = 800 }) => {
   )
 
   return (
-    <ScrollContainer data-height={height}>
-      <SimpleBar
-        style={{
-          maxHeight: '100%',
-          height: '100%',
-        }}
-      >
-        {unreadMessages.map((m, index) => {
-          const paddBottom = index === unreadMessages.length - 1
-          const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
+    <Container>
+      {unreadMessages.map((m, index) => {
+        const paddBottom = index === unreadMessages.length - 1
+        const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
 
-          return (
-            <MessageRow key={m.id} paddBottom={paddBottom}>
-              <Linkify properties={{ target: '_blank' }}>
-                <MessageDiv>{`${date}: ${m.message}`}</MessageDiv>
-              </Linkify>
-              <OkButton onClick={() => onClickRead(m)}>o.k.</OkButton>
-            </MessageRow>
-          )
-        })}
-      </SimpleBar>
-    </ScrollContainer>
+        return (
+          <MessageRow key={m.id} paddBottom={paddBottom}>
+            <Linkify properties={{ target: '_blank' }}>
+              <MessageDiv>{`${date}: ${m.message}`}</MessageDiv>
+            </Linkify>
+            <OkButton onClick={() => onClickRead(m)}>o.k.</OkButton>
+          </MessageRow>
+        )
+      })}
+    </Container>
   )
 }
 
