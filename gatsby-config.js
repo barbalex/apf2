@@ -57,7 +57,7 @@ module.exports = {
       options: {
         // uncommented scope because of gatsby issue
         // https://github.com/gatsbyjs/gatsby/issues/27839
-        //scope: '/',
+        scope: '/',
         name: 'apflora.ch',
         short_name: 'apflora',
         start_url: '/',

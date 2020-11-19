@@ -41,7 +41,7 @@
     "gatsby-image": "2.5.0",
     "gatsby-plugin-create-client-paths": "2.4.0",
     "gatsby-plugin-eslint": "2.0.8",
-    "gatsby-plugin-manifest": "2.4.37",
+    "gatsby-plugin-manifest": "2.6.1",
     "gatsby-plugin-offline": "3.4.0",
     "gatsby-plugin-react-helmet": "3.4.0",
     "gatsby-plugin-sharp": "2.8.0",
@@ -52,7 +52,7 @@
     "gatsby-remark-embed-video": "3.0.10",
     "gatsby-remark-emojis": "0.4.3",
     "gatsby-remark-external-links": "0.0.4",
-    "gatsby-remark-images": "3.3.40",
+    "gatsby-remark-images": "3.5.1",
     "gatsby-remark-images-medium-zoom": "1.7.0",
     "gatsby-remark-numbered-footnotes": "1.0.1",
     "gatsby-remark-prismjs": "3.7.0",
@@ -123,9 +123,7 @@
   },
   "dependenciesComments": {
     "nothing": "now",
-    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1",
-    "gatsby-remark-images": "do not update from 3.3.40 to 3.4.1, see: https://github.com/gatsbyjs/gatsby/issues/27839#issuecomment-722949376",
-    "gatsby-plugin-manifest": "do not update from 2.4.37 to 2.5.2, see: https://github.com/gatsbyjs/gatsby/issues/27839#issuecomment-722949376"
+    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1"
   },
   "peerDependencies": {
     "react-is": "17.0.1"
