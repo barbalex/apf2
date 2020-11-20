@@ -49,16 +49,29 @@ const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 const CellHeaderFixedEkfrequenz = ({ style, column }) => {
   const store = useContext(storeContext)
-  const { filterEkfrequenzEmpty, setFilterEmptyEkfrequenz } = store.ekPlan
+  const {
+    filterEkfrequenzEmpty,
+    setFilterEmptyEkfrequenz,
+    filterEkfrequenz,
+    setFilterEkfrequenz,
+  } = store.ekPlan
 
   const [anchorEl, setAnchorEl] = useState(null)
 
   const closeMenu = useCallback(() => setAnchorEl(null), [])
   const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
   const onClickFilterEmptyValues = useCallback(() => {
+    if (!filterEkfrequenzEmpty && filterEkfrequenz) {
+      setFilterEkfrequenz(null)
+    }
     setFilterEmptyEkfrequenz(!filterEkfrequenzEmpty)
     setAnchorEl(null)
-  }, [filterEkfrequenzEmpty, setFilterEmptyEkfrequenz])
+  }, [
+    filterEkfrequenzEmpty,
+    setFilterEkfrequenz,
+    setFilterEmptyEkfrequenz,
+    filterEkfrequenz,
+  ])
 
   const { label } = column
 
@@ -72,7 +85,11 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
       >
         <Title>{label}</Title>
         <Dropdown>
-          {filterEkfrequenzEmpty ? <StyledFaFilter /> : <Caret />}
+          {filterEkfrequenzEmpty || filterEkfrequenz ? (
+            <StyledFaFilter />
+          ) : (
+            <Caret />
+          )}
         </Dropdown>
       </StyledCell>
       <Menu

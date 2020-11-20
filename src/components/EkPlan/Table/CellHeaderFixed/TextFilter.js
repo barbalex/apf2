@@ -29,7 +29,22 @@ const valForState = (valPassed) => {
 
 const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
   const store = useContext(storeContext)
+  const {
+    setFilterEmptyEkfrequenz,
+    setFilterEmptyEkfrequenzStartjahr,
+  } = store.ekPlan
   const { name } = column
+
+  const type = [
+    'popNr',
+    'nr',
+    'bekanntSeit',
+    'lv95X',
+    'lv95Y',
+    'ekfrequenzStartjahr',
+  ].includes(name)
+    ? 'number'
+    : 'text'
 
   const storeValue = store.ekPlan?.[`filter${upperFirst(name)}`]
   const storeSetFunction = store.ekPlan?.[`setFilter${upperFirst(name)}`]
@@ -56,6 +71,9 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
         !(event.target.value === '' && storeValue === null)
       ) {
         storeSetFunction(valForStore(event.target.value))
+        if (name === 'ekfrequenz') setFilterEmptyEkfrequenz(false)
+        if (name === 'ekfrequenzStartjahr')
+          setFilterEmptyEkfrequenzStartjahr(false)
         closeMenu()
       }
     },
@@ -88,6 +106,7 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
       <Input
         id="EkPlanHeaderFilter"
         inputRef={inputRef}
+        type={type}
         value={localValue}
         onChange={onChange}
         onBlur={onBlur}

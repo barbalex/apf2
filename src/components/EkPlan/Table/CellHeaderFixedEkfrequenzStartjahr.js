@@ -53,6 +53,8 @@ const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
   const {
     filterEkfrequenzStartjahrEmpty,
     setFilterEmptyEkfrequenzStartjahr,
+    filterEkfrequenzStartjahr,
+    setFilterEkfrequenzStartjahr,
   } = store.ekPlan
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -60,9 +62,17 @@ const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
   const closeMenu = useCallback(() => setAnchorEl(null), [])
   const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
   const onClickFilterEmptyValues = useCallback(() => {
+    if (!filterEkfrequenzStartjahrEmpty && filterEkfrequenzStartjahr) {
+      setFilterEkfrequenzStartjahr(null)
+    }
     setFilterEmptyEkfrequenzStartjahr(!filterEkfrequenzStartjahrEmpty)
     setAnchorEl(null)
-  }, [filterEkfrequenzStartjahrEmpty, setFilterEmptyEkfrequenzStartjahr])
+  }, [
+    filterEkfrequenzStartjahrEmpty,
+    setFilterEkfrequenzStartjahr,
+    setFilterEmptyEkfrequenzStartjahr,
+    filterEkfrequenzStartjahr,
+  ])
 
   const { label } = column
 
@@ -76,7 +86,11 @@ const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
       >
         <Title>{label}</Title>
         <Dropdown>
-          {filterEkfrequenzStartjahrEmpty ? <StyledFaFilter /> : <Caret />}
+          {filterEkfrequenzStartjahrEmpty || filterEkfrequenzStartjahr ? (
+            <StyledFaFilter />
+          ) : (
+            <Caret />
+          )}
         </Dropdown>
       </StyledCell>
       <Menu
