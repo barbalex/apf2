@@ -9,7 +9,7 @@ export default {
     name: 'popNr',
     label: 'Pop Nr',
     sort: 2,
-    width: 40,
+    width: 49,
   },
   popName: {
     name: 'popName',
@@ -27,7 +27,7 @@ export default {
     name: 'nr',
     label: 'TPop Nr',
     sort: 5,
-    width: 50,
+    width: 58,
   },
   gemeinde: {
     name: 'gemeinde',
@@ -51,25 +51,26 @@ export default {
     name: 'bekanntSeit',
     label: 'TPop bekannt seit',
     sort: 9,
-    width: 60,
+    width: 70,
   },
   lv95X: {
     name: 'lv95X',
     label: 'X Koordinate',
     sort: 10,
-    width: 70,
+    width: 83,
   },
   lv95Y: {
     name: 'lv95Y',
     label: 'Y Koordinate',
     sort: 11,
-    width: 70,
+    width: 83,
   },
   link: {
     name: 'link',
     label: 'TPop Link',
     sort: 12,
     width: 40,
+    nofilter: true,
   },
   ekAbrechnungstyp: {
     name: 'ekAbrechnungstyp',
@@ -87,13 +88,13 @@ export default {
     name: 'ekfrequenzStartjahr',
     label: 'EK Frequenz Startjahr',
     sort: 15,
-    width: 76,
+    width: 78,
   },
   ekfrequenzAbweichend: {
     name: 'ekfrequenzAbweichend',
     label: 'EK Frequenz abweichend',
     sort: 16,
-    width: 76,
+    width: 85,
   },
   yearTitle: {
     name: 'yearTitle',
@@ -101,5 +102,6 @@ export default {
     sort: 17,
     width: 50,
     alwaysShow: true,
+    nofilter: true,
   },
 }

@@ -56,6 +56,7 @@ export default types
     ),
     hovered: types.optional(Hovered, defaultHovered),
     apsDataLoading: types.optional(types.boolean, true),
+    filterAp: types.optional(types.union(types.string, types.number), null),
     filterEmptyEkfrequenz: types.optional(types.boolean, false),
     filterEmptyEkfrequenzStartjahr: types.optional(types.boolean, false),
     filterAnsiedlungYear: types.maybeNull(types.number, null),
