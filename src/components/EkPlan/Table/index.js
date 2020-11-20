@@ -139,6 +139,9 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     showEkf,
     showMassn,
     filterAp,
+    filterPopNr,
+    filterPopName,
+    filterPopStatus,
     filterEkfrequenzEmpty,
     filterEkfrequenzStartjahrEmpty,
     filterAnsiedlungYear,
@@ -150,6 +153,19 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   const tpopFilter = { popByPopId: { apId: { in: apValues } } }
   if (filterAp) {
     tpopFilter.apName = { includesInsensitive: filterAp }
+  }
+  if (filterPopNr) {
+    tpopFilter.popByPopId.nr = { equalTo: filterPopNr }
+  }
+  if (filterPopName) {
+    tpopFilter.popByPopId.name = { includesInsensitive: filterPopName }
+  }
+  if (filterPopStatus) {
+    tpopFilter.popByPopId.popStatusWerteByStatus = {
+      text: {
+        includesInsensitive: filterPopStatus,
+      },
+    }
   }
   if (filterEkfrequenzEmpty) {
     tpopFilter.ekfrequenz = { isNull: true }
@@ -303,12 +319,13 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   if (aps.length > 0 && loadingTpop) {
     return <TempContainer>Lade...</TempContainer>
   }
+
   const errors = [
     ...(errorTpop ? [errorTpop] : []),
     ...(errorLists ? [errorLists] : []),
   ]
   if (errors.length) return <Error errors={errors} />
-  console.log('Table', { headerFieldsFixed })
+
   return (
     <OuterContainer>
       <ErrorBoundary>

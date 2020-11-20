@@ -57,7 +57,7 @@ export default types
     hovered: types.optional(Hovered, defaultHovered),
     apsDataLoading: types.optional(types.boolean, true),
     filterAp: types.maybeNull(types.union(types.string, types.number)),
-    filterPopNr: types.maybeNull(types.union(types.string, types.number)),
+    filterPopNr: types.maybeNull(types.number),
     filterPopName: types.maybeNull(types.union(types.string, types.number)),
     filterPopStatus: types.maybeNull(types.union(types.string, types.number)),
     filterNr: types.maybeNull(types.union(types.string, types.number)),
@@ -105,7 +105,7 @@ export default types
       self.filterAp = val
     },
     setFilterPopNr(val) {
-      self.filterPopNr = val
+      self.filterPopNr = val ? +val : null
     },
     setFilterPopName(val) {
       self.filterPopName = val
