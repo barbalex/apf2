@@ -1,6 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useContext, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import IconButton from '@material-ui/core/IconButton'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import Input from '@material-ui/core/Input'
+import { MdClear } from 'react-icons'
 //import styled from 'styled-components'
 import upperFirst from 'lodash/upperFirst'
 
@@ -37,15 +43,33 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
     storeSetFunction(valForStore(event.target.value))
     closeMenu()
   }, [])
+  const onClickEmpty = useCallback((event) => {
+    storeSetFunction(null)
+  }, [])
 
   return (
-    <TextField
-      label="Filter"
-      size="small"
-      value={localValue}
-      onChange={onChange}
-      onBlur={onBlur}
-    />
+    <FormControl>
+      <InputLabel htmlFor="EkPlanHeaderFilter">Filter</InputLabel>
+      <Input
+        id="EkPlanHeaderFilter"
+        value={localValue}
+        onChange={onChange}
+        onBlur={onBlur}
+        endAdornment={
+          !!localValue ? (
+            <InputAdornment position="end">
+              <IconButton aria-label="Filter leeren" onClick={onClickEmpty}>
+                <MdClear />
+              </IconButton>
+            </InputAdornment>
+          ) : (
+            <InputAdornment position="end">
+              <div />
+            </InputAdornment>
+          )
+        }
+      />
+    </FormControl>
   )
 }
 
