@@ -5,6 +5,7 @@ import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
+import TextFilter from './CellHeaderFixed/TextFilter'
 
 export const StyledCell = styled.div`
   display: flex;
@@ -41,6 +42,9 @@ const Dropdown = styled.div`
 const StyledFaFilter = styled(FaFilter)`
   font-size: 0.9em;
   padding-right: 3px;
+`
+const TextFilterContainer = styled.div`
+  padding: 0 16px;
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
@@ -89,6 +93,9 @@ const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
             ? 'nicht Leerwerte filtern'
             : 'Leerwerte filtern'}
         </MenuItem>
+        <TextFilterContainer>
+          <TextFilter column={column} closeMenu={closeMenu} />
+        </TextFilterContainer>
       </Menu>
     </>
   )

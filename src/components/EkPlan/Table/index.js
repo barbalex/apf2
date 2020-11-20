@@ -151,6 +151,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     filterLv95Y,
     filterEkAbrechnungstyp,
     filterEkfrequenz,
+    filterEkfrequenzStartjahr,
     filterEkfrequenzEmpty,
     filterEkfrequenzStartjahrEmpty,
     filterAnsiedlungYear,
@@ -214,6 +215,9 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
         includesInsensitive: filterEkfrequenz,
       },
     }
+  }
+  if (filterEkfrequenzStartjahr) {
+    tpopFilter.ekfrequenzStartjahr = { equalTo: filterEkfrequenzStartjahr }
   }
   if (filterEkfrequenzEmpty) {
     tpopFilter.ekfrequenz = { isNull: true }

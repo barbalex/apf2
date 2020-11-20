@@ -141,7 +141,7 @@ export default types
       self.filterEkfrequenz = val
     },
     setFilterEkfrequenzStartjahr(val) {
-      self.filterEkfrequenzStartjahr = val
+      self.filterEkfrequenzStartjahr = val ? +val : null
     },
     setFilterEkfrequenzAbweichend(val) {
       self.filterEkfrequenzAbweichend = val
