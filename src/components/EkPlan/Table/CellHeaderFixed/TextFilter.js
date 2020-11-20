@@ -12,7 +12,6 @@ import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
 import { MdClear } from 'react-icons/md'
-//import styled from 'styled-components'
 import upperFirst from 'lodash/upperFirst'
 
 import storeContext from '../../../../storeContext'
