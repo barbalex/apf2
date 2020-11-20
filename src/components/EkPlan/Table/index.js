@@ -149,6 +149,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     filterBekanntSeit,
     filterLv95X,
     filterLv95Y,
+    filterEkfrequenzAbweichend,
     filterEkAbrechnungstyp,
     filterEkfrequenz,
     filterEkfrequenzStartjahr,
@@ -201,6 +202,9 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   }
   if (filterLv95Y) {
     tpopFilter.lv95Y = { equalTo: filterLv95Y }
+  }
+  if (filterEkfrequenzAbweichend) {
+    tpopFilter.ekfrequenzAbweichend = { equalTo: filterEkfrequenzAbweichend }
   }
   if (filterEkAbrechnungstyp) {
     tpopFilter.ekfrequenzByEkfrequenz = {

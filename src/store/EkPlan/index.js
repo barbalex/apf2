@@ -74,9 +74,7 @@ export default types
     filterEkfrequenzStartjahr: types.maybeNull(
       types.union(types.string, types.number),
     ),
-    filterEkfrequenzAbweichend: types.maybeNull(
-      types.union(types.string, types.number),
-    ),
+    filterEkfrequenzAbweichend: types.optional(types.boolean, false),
     filterEkfrequenzEmpty: types.optional(types.boolean, false),
     filterEkfrequenzStartjahrEmpty: types.optional(types.boolean, false),
     filterAnsiedlungYear: types.maybeNull(types.number, null),
@@ -384,7 +382,7 @@ export const defaultValue = {
   filterEkAbrechnungstyp: null,
   filterEkfrequenz: null,
   filterEkfrequenzStartjahr: null,
-  filterEkfrequenzAbweichend: null,
+  filterEkfrequenzAbweichend: false,
   filterEkfrequenzEmpty: false,
   filterEkfrequenzStartjahrEmpty: false,
   filterAnsiedlungYear: null,

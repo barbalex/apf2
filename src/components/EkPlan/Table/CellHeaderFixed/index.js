@@ -9,6 +9,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../storeContext'
 import TextFilter from './TextFilter'
+import BooleanFilter from './BooleanFilter'
 
 export const StyledCell = styled.div`
   display: flex;
@@ -61,6 +62,8 @@ const CellHeaderFixed = ({ style, column }) => {
     [],
   )
 
+  const typeIsBoolean = ['ekfrequenzAbweichend'].includes(name)
+
   return (
     <>
       <StyledCell
@@ -82,9 +85,13 @@ const CellHeaderFixed = ({ style, column }) => {
         anchorOrigin={anchorOrigin}
         getContentAnchorEl={null}
       >
-        <MenuItem dense>
-          <TextFilter column={column} closeMenu={closeMenu} />
-        </MenuItem>
+        {typeIsBoolean ? (
+          <BooleanFilter column={column} closeMenu={closeMenu} />
+        ) : (
+          <MenuItem dense>
+            <TextFilter column={column} closeMenu={closeMenu} />
+          </MenuItem>
+        )}
       </Menu>
     </>
   )
