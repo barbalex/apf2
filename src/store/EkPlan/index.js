@@ -57,6 +57,26 @@ export default types
     hovered: types.optional(Hovered, defaultHovered),
     apsDataLoading: types.optional(types.boolean, true),
     filterAp: types.maybeNull(types.union(types.string, types.number)),
+    filterPopNr: types.maybeNull(types.union(types.string, types.number)),
+    filterPopName: types.maybeNull(types.union(types.string, types.number)),
+    filterPopStatus: types.maybeNull(types.union(types.string, types.number)),
+    filterNr: types.maybeNull(types.union(types.string, types.number)),
+    filterGemeinde: types.maybeNull(types.union(types.string, types.number)),
+    filterFlurname: types.maybeNull(types.union(types.string, types.number)),
+    filterStatus: types.maybeNull(types.union(types.string, types.number)),
+    filterBekanntSeit: types.maybeNull(types.union(types.string, types.number)),
+    filterLv95X: types.maybeNull(types.union(types.string, types.number)),
+    filterLv95Y: types.maybeNull(types.union(types.string, types.number)),
+    filterEkAbrechnungstyp: types.maybeNull(
+      types.union(types.string, types.number),
+    ),
+    filterEkfrequenz: types.maybeNull(types.union(types.string, types.number)),
+    filterEkfrequenzStartjahr: types.maybeNull(
+      types.union(types.string, types.number),
+    ),
+    filterEkfrequenzAbweichend: types.maybeNull(
+      types.union(types.string, types.number),
+    ),
     filterEkfrequenzEmpty: types.optional(types.boolean, false),
     filterEkfrequenzStartjahrEmpty: types.optional(types.boolean, false),
     filterAnsiedlungYear: types.maybeNull(types.number, null),
@@ -80,6 +100,51 @@ export default types
     },
     setApsDataLoading(val) {
       self.apsDataLoading = val
+    },
+    setFilterAp(val) {
+      self.filterAp = val
+    },
+    setFilterPopNr(val) {
+      self.filterPopNr = val
+    },
+    setFilterPopName(val) {
+      self.filterPopName = val
+    },
+    setFilterPopStatus(val) {
+      self.filterPopStatus = val
+    },
+    setFilterNr(val) {
+      self.filterNr = val
+    },
+    setFilterGemeinde(val) {
+      self.filterGemeinde = val
+    },
+    setFilterFlurname(val) {
+      self.filterFlurname = val
+    },
+    setFilterStatus(val) {
+      self.filterStatus = val
+    },
+    setFilterBekanntSeit(val) {
+      self.filterBekanntSeit = val
+    },
+    setFilterLv95X(val) {
+      self.filterLv95X = val
+    },
+    setFilterLv95Y(val) {
+      self.filterLv95Y = val
+    },
+    setFilterEkAbrechnungstyp(val) {
+      self.filterEkAbrechnungstyp = val
+    },
+    setFilterEkfrequenz(val) {
+      self.filterEkfrequenz = val
+    },
+    setFilterEkfrequenzStartjahr(val) {
+      self.filterEkfrequenzStartjahr = val
+    },
+    setFilterEkfrequenzAbweichend(val) {
+      self.filterEkfrequenzAbweichend = val
     },
     setFilterEmptyEkfrequenz(val) {
       self.filterEkfrequenzEmpty = val
@@ -305,6 +370,21 @@ export const defaultValue = {
   yearMenuAnchor: null,
   yearClicked: initialYearClicked,
   apsDataLoading: true,
+  filterAp: null,
+  filterPopNr: null,
+  filterPopName: null,
+  filterPopStatus: null,
+  filterNr: null,
+  filterGemeinde: null,
+  filterFlurname: null,
+  filterStatus: null,
+  filterBekanntSeit: null,
+  filterLv95X: null,
+  filterLv95Y: null,
+  filterEkAbrechnungstyp: null,
+  filterEkfrequenz: null,
+  filterEkfrequenzStartjahr: null,
+  filterEkfrequenzAbweichend: null,
   filterEkfrequenzEmpty: false,
   filterEkfrequenzStartjahrEmpty: false,
   filterAnsiedlungYear: null,
