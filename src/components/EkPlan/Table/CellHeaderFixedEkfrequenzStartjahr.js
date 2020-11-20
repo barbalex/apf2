@@ -1,13 +1,14 @@
 import React, { useState, useCallback, useContext } from 'react'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import { FaSortDown as Caret } from 'react-icons/fa'
+import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
 
 export const StyledCell = styled.div`
   display: flex;
+  justify-content: space-between;
   font-weight: 500;
   font-size: 0.75rem;
   color: black;
@@ -16,6 +17,7 @@ export const StyledCell = styled.div`
   border-right: solid hsla(120, 25%, 70%, 1) 1px;
   border-bottom: solid #e6e6e6 1px;
   background: hsla(120, 25%, 88%, 1);
+  padding: 0 4px;
   cursor: pointer;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
@@ -27,12 +29,18 @@ const Title = styled.div`
   display: inline-block;
   vertical-align: middle;
   line-height: normal;
-  padding: 2px 4px;
+  padding: 2px 0;
   margin-top: auto;
   margin-bottom: auto;
+  user-select: none;
 `
 const Dropdown = styled.div`
   font-size: 1.3em;
+  padding-left: 2px;
+`
+const StyledFaFilter = styled(FaFilter)`
+  font-size: 0.9em;
+  padding-right: 3px;
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
@@ -46,7 +54,7 @@ const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const closeMenu = useCallback(() => setAnchorEl(null), [])
-  const onClickCell = useCallback(e => setAnchorEl(e.currentTarget), [])
+  const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
   const onClickFilterEmptyValues = useCallback(() => {
     setFilterEmptyEkfrequenzStartjahr(!filterEmptyEkfrequenzStartjahr)
     setAnchorEl(null)
@@ -64,7 +72,7 @@ const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
       >
         <Title>{label}</Title>
         <Dropdown>
-          <Caret />
+          {filterEmptyEkfrequenzStartjahr ? <StyledFaFilter /> : <Caret />}
         </Dropdown>
       </StyledCell>
       <Menu
