@@ -10,7 +10,6 @@ const yearsFromTpops = ({ tpops, pastYears }) => {
   const currentYear = new Date().getFullYear()
   const firstEkYear = firstEk?.jahr ?? 999999
   const firstMassnYear = firstMassn?.jahr ?? 999999
-  // ensure never before 1993
   let firstYear = min([firstEkYear, firstMassnYear])
   let lastYear = currentYear + 15
   if (pastYears < 0) lastYear = lastYear - pastYears
