@@ -11,6 +11,7 @@ const StyledYearHeaderCell = styled.div`
   border-right: solid hsla(120, 25%, 70%, 1) 1px;
   border-bottom: solid #e6e6e6 1px;
   background: hsla(120, 25%, 88%, 1);
+  user-select: none;
   span {
     display: inline-block;
     vertical-align: middle;
