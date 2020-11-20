@@ -48,7 +48,7 @@ const CellHeaderFixed = ({ style, column }) => {
   const { label, nofilter } = column
   const store = useContext(storeContext)
   const {
-    filterEmptyEkfrequenzStartjahr,
+    filterEkfrequenzStartjahrEmpty,
     setFilterEmptyEkfrequenzStartjahr,
   } = store.ekPlan
 
@@ -57,9 +57,9 @@ const CellHeaderFixed = ({ style, column }) => {
   const closeMenu = useCallback(() => setAnchorEl(null), [])
   const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
   const onClickFilterEmptyValues = useCallback(() => {
-    setFilterEmptyEkfrequenzStartjahr(!filterEmptyEkfrequenzStartjahr)
+    setFilterEmptyEkfrequenzStartjahr(!filterEkfrequenzStartjahrEmpty)
     setAnchorEl(null)
-  }, [filterEmptyEkfrequenzStartjahr, setFilterEmptyEkfrequenzStartjahr])
+  }, [filterEkfrequenzStartjahrEmpty, setFilterEmptyEkfrequenzStartjahr])
 
   return (
     <>
@@ -72,7 +72,7 @@ const CellHeaderFixed = ({ style, column }) => {
         <Title>{label}</Title>
         {!nofilter && (
           <Dropdown>
-            {filterEmptyEkfrequenzStartjahr ? <StyledFaFilter /> : <Caret />}
+            {filterEkfrequenzStartjahrEmpty ? <StyledFaFilter /> : <Caret />}
           </Dropdown>
         )}
       </StyledCell>
@@ -86,7 +86,7 @@ const CellHeaderFixed = ({ style, column }) => {
         getContentAnchorEl={null}
       >
         <MenuItem onClick={onClickFilterEmptyValues} dense>
-          {filterEmptyEkfrequenzStartjahr
+          {filterEkfrequenzStartjahrEmpty
             ? 'nicht Leerwerte filtern'
             : 'Leerwerte filtern'}
         </MenuItem>

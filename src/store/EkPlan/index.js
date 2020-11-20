@@ -49,16 +49,16 @@ export default types
     showCount: types.optional(types.boolean, true),
     showEkCount: types.optional(types.boolean, true),
     showMassn: types.optional(types.boolean, true),
-    aps: types.optional(types.array(Ap), []),
+    aps: types.array(Ap),
     fields: types.optional(
       types.array(types.union(types.string, types.number)),
       defaultFields,
     ),
     hovered: types.optional(Hovered, defaultHovered),
     apsDataLoading: types.optional(types.boolean, true),
-    filterAp: types.optional(types.union(types.string, types.number), null),
-    filterEmptyEkfrequenz: types.optional(types.boolean, false),
-    filterEmptyEkfrequenzStartjahr: types.optional(types.boolean, false),
+    filterAp: types.maybeNull(types.union(types.string, types.number)),
+    filterEkfrequenzEmpty: types.optional(types.boolean, false),
+    filterEkfrequenzStartjahrEmpty: types.optional(types.boolean, false),
     filterAnsiedlungYear: types.maybeNull(types.number, null),
     filterKontrolleYear: types.maybeNull(types.number, null),
     filterEkplanYear: types.maybeNull(types.number, null),
@@ -82,7 +82,7 @@ export default types
       self.apsDataLoading = val
     },
     setFilterEmptyEkfrequenz(val) {
-      self.filterEmptyEkfrequenz = val
+      self.filterEkfrequenzEmpty = val
     },
     setFilterAnsiedlungYear(val) {
       self.filterAnsiedlungYear = val
@@ -94,7 +94,7 @@ export default types
       self.filterEkplanYear = val
     },
     setFilterEmptyEkfrequenzStartjahr(val) {
-      self.filterEmptyEkfrequenzStartjahr = val
+      self.filterEkfrequenzStartjahrEmpty = val
     },
     setApsData(val) {
       self.apsData = val
@@ -305,8 +305,8 @@ export const defaultValue = {
   yearMenuAnchor: null,
   yearClicked: initialYearClicked,
   apsDataLoading: true,
-  filterEmptyEkfrequenz: false,
-  filterEmptyEkfrequenzStartjahr: false,
+  filterEkfrequenzEmpty: false,
+  filterEkfrequenzStartjahrEmpty: false,
   filterAnsiedlungYear: null,
   filterKontrolleYear: null,
   filterEkplanYear: null,

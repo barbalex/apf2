@@ -138,8 +138,8 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     showEk,
     showEkf,
     showMassn,
-    filterEmptyEkfrequenz,
-    filterEmptyEkfrequenzStartjahr,
+    filterEkfrequenzEmpty,
+    filterEkfrequenzStartjahrEmpty,
     filterAnsiedlungYear,
     filterKontrolleYear,
     filterEkplanYear,
@@ -147,10 +147,10 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   } = store.ekPlan
 
   const tpopFilter = { popByPopId: { apId: { in: apValues } } }
-  if (filterEmptyEkfrequenz) {
+  if (filterEkfrequenzEmpty) {
     tpopFilter.ekfrequenz = { isNull: true }
   }
-  if (filterEmptyEkfrequenzStartjahr) {
+  if (filterEkfrequenzStartjahrEmpty) {
     tpopFilter.ekfrequenzStartjahr = { isNull: true }
   }
   if (filterKontrolleYear) {

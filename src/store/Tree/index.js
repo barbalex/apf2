@@ -20,13 +20,9 @@ import tpopIdInUrl from '../../modules/tpopIdInUrl'
 export default types
   .model('Tree', {
     name: types.optional(types.string, 'tree'),
-    activeNodeArray: types.optional(
+    activeNodeArray: types.array(types.union(types.string, types.number)),
+    openNodes: types.array(
       types.array(types.union(types.string, types.number)),
-      [],
-    ),
-    openNodes: types.optional(
-      types.array(types.array(types.union(types.string, types.number))),
-      [],
     ),
     apFilter: types.optional(types.boolean, true),
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
