@@ -145,6 +145,11 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     filterNr,
     filterGemeinde,
     filterFlurname,
+    filterStatus,
+    filterBekanntSeit,
+    filterLv95X,
+    filterLv95Y,
+    filterEkAbrechnungstyp,
     filterEkfrequenzEmpty,
     filterEkfrequenzStartjahrEmpty,
     filterAnsiedlungYear,
@@ -178,6 +183,29 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   }
   if (filterFlurname) {
     tpopFilter.flurname = { includesInsensitive: filterFlurname }
+  }
+  if (filterStatus) {
+    tpopFilter.popStatusWerteByStatus = {
+      text: {
+        includesInsensitive: filterStatus,
+      },
+    }
+  }
+  if (filterBekanntSeit) {
+    tpopFilter.bekanntSeit = { equalTo: filterBekanntSeit }
+  }
+  if (filterLv95X) {
+    tpopFilter.lv95X = { equalTo: filterLv95X }
+  }
+  if (filterLv95Y) {
+    tpopFilter.lv95Y = { equalTo: filterLv95Y }
+  }
+  if (filterEkAbrechnungstyp) {
+    tpopFilter.ekfrequenzByEkfrequenz = {
+      ekAbrechnungstyp: {
+        includesInsensitive: filterEkAbrechnungstyp,
+      },
+    }
   }
   if (filterEkfrequenzEmpty) {
     tpopFilter.ekfrequenz = { isNull: true }

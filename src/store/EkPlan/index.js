@@ -64,7 +64,7 @@ export default types
     filterGemeinde: types.maybeNull(types.union(types.string, types.number)),
     filterFlurname: types.maybeNull(types.union(types.string, types.number)),
     filterStatus: types.maybeNull(types.union(types.string, types.number)),
-    filterBekanntSeit: types.maybeNull(types.union(types.string, types.number)),
+    filterBekanntSeit: types.maybeNull(types.number),
     filterLv95X: types.maybeNull(types.union(types.string, types.number)),
     filterLv95Y: types.maybeNull(types.union(types.string, types.number)),
     filterEkAbrechnungstyp: types.maybeNull(
@@ -126,13 +126,13 @@ export default types
       self.filterStatus = val
     },
     setFilterBekanntSeit(val) {
-      self.filterBekanntSeit = val
+      self.filterBekanntSeit = val ? +val : null
     },
     setFilterLv95X(val) {
-      self.filterLv95X = val
+      self.filterLv95X = val ? +val : null
     },
     setFilterLv95Y(val) {
-      self.filterLv95Y = val
+      self.filterLv95Y = val ? +val : null
     },
     setFilterEkAbrechnungstyp(val) {
       self.filterEkAbrechnungstyp = val

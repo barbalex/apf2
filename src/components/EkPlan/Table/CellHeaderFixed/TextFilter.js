@@ -46,8 +46,13 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
   }, [])
   const onBlur = useCallback(
     (event) => {
+      /*console.log('onBlur', {
+        eventTargetValue: event.target.value,
+        storeValue,
+        localValue,
+      })*/
       if (
-        event.target.value !== storeValue &&
+        event.target.value != storeValue && // eslint-disable-line eqeqeq
         !(event.target.value === '' && storeValue === null)
       ) {
         storeSetFunction(valForStore(event.target.value))
@@ -60,6 +65,7 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
     (event) => {
       // prevent blur event which would close menu
       event.stopPropagation()
+      //console.log('onClickEmpty', { localValue })
       if (!!localValue) {
         setLocalValue('')
       }
