@@ -138,6 +138,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     showEk,
     showEkf,
     showMassn,
+    filterAp,
     filterEkfrequenzEmpty,
     filterEkfrequenzStartjahrEmpty,
     filterAnsiedlungYear,
@@ -147,6 +148,9 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   } = store.ekPlan
 
   const tpopFilter = { popByPopId: { apId: { in: apValues } } }
+  if (filterAp) {
+    tpopFilter.apName = { includesInsensitive: filterAp }
+  }
   if (filterEkfrequenzEmpty) {
     tpopFilter.ekfrequenz = { isNull: true }
   }
@@ -238,14 +242,12 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
         'sort',
       )
     : []
-  const headerFieldsFixed = tpops.length
-    ? sortBy(
-        Object.values(fields).filter(
-          (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
-        ),
-        'sort',
-      )
-    : []
+  const headerFieldsFixed = sortBy(
+    Object.values(fields).filter(
+      (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
+    ),
+    'sort',
+  )
   let headerFieldsFixedWidth = sumBy(headerFieldsFixed, 'width')
   if (headerFieldsFixedWidth > width) {
     headerFieldsFixedWidth = width
@@ -306,6 +308,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     ...(errorLists ? [errorLists] : []),
   ]
   if (errors.length) return <Error errors={errors} />
+  console.log('Table', { headerFieldsFixed })
   return (
     <OuterContainer>
       <ErrorBoundary>
