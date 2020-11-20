@@ -1,10 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useContext } from 'react'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
+import upperFirst from 'lodash/upperFirst'
+import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../storeContext'
+import storeContext from '../../../../storeContext'
+import TextFilter from './TextFilter'
 
 export const StyledCell = styled.div`
   display: flex;
@@ -45,39 +49,37 @@ const StyledFaFilter = styled(FaFilter)`
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 const CellHeaderFixed = ({ style, column }) => {
-  const { label, nofilter } = column
+  const { name, label, nofilter } = column
   const store = useContext(storeContext)
-  const {
-    filterEkfrequenzStartjahrEmpty,
-    setFilterEmptyEkfrequenzStartjahr,
-  } = store.ekPlan
+
+  const filterValue = store.ekPlan?.[`filter${upperFirst(name)}`]
 
   const [anchorEl, setAnchorEl] = useState(null)
-
   const closeMenu = useCallback(() => setAnchorEl(null), [])
   const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
-  const onClickFilterEmptyValues = useCallback(() => {
-    setFilterEmptyEkfrequenzStartjahr(!filterEkfrequenzStartjahrEmpty)
-    setAnchorEl(null)
-  }, [filterEkfrequenzStartjahrEmpty, setFilterEmptyEkfrequenzStartjahr])
+
+  name === 'ap' &&
+    console.log('CellHeaderFixed', {
+      name,
+      filterValue,
+      nofilterSet: !nofilter,
+    })
 
   return (
     <>
       <StyledCell
         style={style}
-        aria-controls="ekfrequenzStartjahrHeaderMenu"
+        aria-controls={`${name}ColumnHeaderMenu`}
         aria-haspopup="true"
         onClick={onClickCell}
       >
         <Title>{label}</Title>
         {!nofilter && (
-          <Dropdown>
-            {filterEkfrequenzStartjahrEmpty ? <StyledFaFilter /> : <Caret />}
-          </Dropdown>
+          <Dropdown>{!!filterValue ? <StyledFaFilter /> : <Caret />}</Dropdown>
         )}
       </StyledCell>
       <Menu
-        id="ekfrequenzStartjahrHeaderMenu"
+        id={`${name}ColumnHeaderMenu`}
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
@@ -85,14 +87,12 @@ const CellHeaderFixed = ({ style, column }) => {
         anchorOrigin={anchorOrigin}
         getContentAnchorEl={null}
       >
-        <MenuItem onClick={onClickFilterEmptyValues} dense>
-          {filterEkfrequenzStartjahrEmpty
-            ? 'nicht Leerwerte filtern'
-            : 'Leerwerte filtern'}
+        <MenuItem dense>
+          <TextFilter column={column} closeMenu={closeMenu} />
         </MenuItem>
       </Menu>
     </>
   )
 }
 
-export default CellHeaderFixed
+export default observer(CellHeaderFixed)
