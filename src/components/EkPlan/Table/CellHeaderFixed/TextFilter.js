@@ -1,12 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useCallback, useContext, useEffect } from 'react'
-import TextField from '@material-ui/core/TextField'
+import React, {
+  useState,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
-import { MdClear } from 'react-icons'
+import { MdClear } from 'react-icons/md'
 //import styled from 'styled-components'
 import upperFirst from 'lodash/upperFirst'
 
@@ -33,18 +38,43 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
   const [localValue, setLocalValue] = useState('')
   useEffect(() => {
     setLocalValue(valForState(storeValue))
-  }, [name])
-  //console.log('CellHeaderFixedTextFilter', { name, store, ekPlan: store.ekPlan })
+  }, [storeValue])
+
+  const inputRef = useRef(null)
 
   const onChange = useCallback((event) => {
     setLocalValue(valForState(event.target.value))
   }, [])
-  const onBlur = useCallback((event) => {
-    storeSetFunction(valForStore(event.target.value))
-    closeMenu()
-  }, [])
-  const onClickEmpty = useCallback((event) => {
-    storeSetFunction(null)
+  const onBlur = useCallback(
+    (event) => {
+      if (
+        event.target.value !== storeValue &&
+        !(event.target.value === '' && storeValue === null)
+      ) {
+        storeSetFunction(valForStore(event.target.value))
+        closeMenu()
+      }
+    },
+    [storeValue, storeValue],
+  )
+  const onClickEmpty = useCallback(
+    (event) => {
+      // prevent blur event which would close menu
+      event.stopPropagation()
+      if (!!localValue) {
+        setLocalValue('')
+      }
+      inputRef.current.focus()
+    },
+    [localValue],
+  )
+  useEffect(() => {
+    inputRef.current && inputRef.current.focus()
+  }, [inputRef.current])
+  const onKeyDown = useCallback((event) => {
+    if (event.key === 'Enter') {
+      onBlur(event)
+    }
   }, [])
 
   return (
@@ -52,21 +82,21 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
       <InputLabel htmlFor="EkPlanHeaderFilter">Filter</InputLabel>
       <Input
         id="EkPlanHeaderFilter"
+        inputRef={inputRef}
         value={localValue}
         onChange={onChange}
         onBlur={onBlur}
+        onKeyDown={onKeyDown}
         endAdornment={
-          !!localValue ? (
-            <InputAdornment position="end">
-              <IconButton aria-label="Filter leeren" onClick={onClickEmpty}>
-                <MdClear />
-              </IconButton>
-            </InputAdornment>
-          ) : (
-            <InputAdornment position="end">
-              <div />
-            </InputAdornment>
-          )
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="Filter leeren"
+              title="Filter leeren"
+              onClick={onClickEmpty}
+            >
+              <MdClear />
+            </IconButton>
+          </InputAdornment>
         }
       />
     </FormControl>

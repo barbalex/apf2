@@ -56,14 +56,10 @@ const CellHeaderFixed = ({ style, column }) => {
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => setAnchorEl(null), [])
-  const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
-
-  name === 'ap' &&
-    console.log('CellHeaderFixed', {
-      name,
-      filterValue,
-      nofilterSet: !nofilter,
-    })
+  const onClickCell = useCallback(
+    (e) => !anchorEl && setAnchorEl(e.currentTarget),
+    [],
+  )
 
   return (
     <>
@@ -81,7 +77,6 @@ const CellHeaderFixed = ({ style, column }) => {
       <Menu
         id={`${name}ColumnHeaderMenu`}
         anchorEl={anchorEl}
-        keepMounted
         open={Boolean(anchorEl)}
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}
