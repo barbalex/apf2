@@ -142,6 +142,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     filterPopNr,
     filterPopName,
     filterPopStatus,
+    filterNr,
     filterEkfrequenzEmpty,
     filterEkfrequenzStartjahrEmpty,
     filterAnsiedlungYear,
@@ -166,6 +167,9 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
         includesInsensitive: filterPopStatus,
       },
     }
+  }
+  if (filterNr) {
+    tpopFilter.nr = { equalTo: filterNr }
   }
   if (filterEkfrequenzEmpty) {
     tpopFilter.ekfrequenz = { isNull: true }

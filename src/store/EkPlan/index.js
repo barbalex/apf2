@@ -114,7 +114,7 @@ export default types
       self.filterPopStatus = val
     },
     setFilterNr(val) {
-      self.filterNr = val
+      self.filterNr = val ? +val : null
     },
     setFilterGemeinde(val) {
       self.filterGemeinde = val
