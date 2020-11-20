@@ -1,10 +1,9 @@
-import get from 'lodash/get'
 import max from 'lodash/max'
 
 import queryEkfrequenz from './queryEkfrequenz'
 import mutationUpdateTpop from './mutationUpdateTpop'
 
-export default async ({ row, ekfrequenz, client, store }) => {
+const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   const { enqueNotification } = store
 
   // 1  get ekfrequenz's kontrolljahreAb
@@ -27,19 +26,14 @@ export default async ({ row, ekfrequenz, client, store }) => {
   // return if no kontrolljahre exist
   // it makes no sense to set startjahr if there are no kontrolljahre
   // see: https://github.com/barbalex/apf2/issues/401
-  const kontrolljahre = get(
-    ekfrequenzResult,
-    'data.ekfrequenzById.kontrolljahre',
-    [],
-  )
+  const kontrolljahre =
+    ekfrequenzResult?.data?.ekfrequenzById?.kontrolljahre ?? []
+
   if (kontrolljahre.length === 0) return
   // so there exist kontrolljahre
   // now set startjahr
-  const kontrolljahreAb = get(
-    ekfrequenzResult,
-    'data.ekfrequenzById.kontrolljahreAb',
-    null,
-  )
+  const kontrolljahreAb =
+    ekfrequenzResult?.data?.ekfrequenzById?.kontrolljahreAb ?? null
   if (!kontrolljahreAb) {
     return enqueNotification({
       message: `Bei der gewählten EK-Frequenz wurde das Feld 'Kontrolljahre ab' nicht erfasst. Daher konnte das Startjahr nicht berechnet werden`,
@@ -52,7 +46,7 @@ export default async ({ row, ekfrequenz, client, store }) => {
   // 2a if ek: get last ek
   if (kontrolljahreAb === 'EK') {
     ekfrequenzStartjahr = max(
-      get(row, 'tpop.tpopkontrsByTpopId.nodes', []).map((n) => n.jahr),
+      (row?.tpop?.tpopkontrsByTpopId?.nodes ?? []).map((n) => n.jahr),
     )
     if (!ekfrequenzStartjahr) {
       return enqueNotification({
@@ -66,7 +60,7 @@ export default async ({ row, ekfrequenz, client, store }) => {
   // 2b if ansiedlung: get last ansiedlung
   if (kontrolljahreAb === 'ANSIEDLUNG') {
     ekfrequenzStartjahr = max(
-      get(row, 'tpop.tpopmassnsByTpopId.nodes', []).map((n) => n.jahr),
+      (row?.tpop?.tpopmassnsByTpopId?.nodes ?? []).map((n) => n.jahr),
     )
     if (!ekfrequenzStartjahr) {
       return enqueNotification({
@@ -109,3 +103,5 @@ export default async ({ row, ekfrequenz, client, store }) => {
   // 5 return startjahr
   return ekfrequenzStartjahr
 }
+
+export default setStartjahr
