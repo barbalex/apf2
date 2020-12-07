@@ -486,6 +486,12 @@ const Karte = ({ treeName }) => {
 
   if (typeof window === 'undefined') return null
 
+  // TODO:
+  // resetting bounds has no influence on map
+  // probably due to update to v3 of react-leaflet
+  // see: https://github.com/PaulLeCam/react-leaflet/issues/799
+  console.log('Karte, bounds:', bounds)
+
   return (
     <Container
       data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}
