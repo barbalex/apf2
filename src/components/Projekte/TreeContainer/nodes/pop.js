@@ -22,10 +22,12 @@ export default ({
   const nodes = memoizeOne(() =>
     get(data, 'allPops.nodes', [])
       // only show if parent node exists
-      .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}PopFolder`))
+      .filter((el) =>
+        nodesPassed.map((n) => n.id).includes(`${el.apId}PopFolder`),
+      )
       // only show nodes of this parent
-      .filter(el => el.apId === apId)
-      .map(el => ({
+      .filter((el) => el.apId === apId)
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'pop',
         filterTable: 'pop',
