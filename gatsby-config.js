@@ -41,7 +41,7 @@ module.exports = {
         name: 'benutzerDoku-pages',
       },
     },
-    'gatsby-plugin-sharp',
+    { resolve: 'gatsby-plugin-sharp', options: { failOnError: false } },
     'gatsby-transformer-sharp',
     {
       resolve: 'gatsby-plugin-typography',
