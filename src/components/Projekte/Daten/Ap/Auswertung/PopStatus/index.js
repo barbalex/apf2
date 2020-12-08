@@ -49,7 +49,7 @@ const color = {
   'potentieller Wuchs-/Ansiedlungsort': 'grey',
 }
 
-const ApAuswertungPopStatus = ({ id }) => {
+const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
   const {
     data: dataPopStatus,
     error: errorPopStatus,
@@ -93,7 +93,7 @@ const ApAuswertungPopStatus = ({ id }) => {
       ) : popStatusRawData.length ? (
         <>
           <Title>Stati der Populationen</Title>
-          <ResponsiveContainer width="99%" height={400}>
+          <ResponsiveContainer width="99%" height={height}>
             <AreaChart
               width={600}
               height={300}
@@ -104,10 +104,10 @@ const ApAuswertungPopStatus = ({ id }) => {
               <YAxis
                 interval={0}
                 label={{
-                  value: 'Anzahl Populationen',
+                  value: print ? 'Anzahl' : 'Anzahl Populationen',
                   angle: -90,
                   position: 'insideLeft',
-                  offset: -15,
+                  offset: print ? 0 : -15,
                 }}
               />
               <Area

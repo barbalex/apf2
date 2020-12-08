@@ -838,7 +838,6 @@ CREATE TABLE apflora.pop_history (
   changed_by varchar(20) DEFAULT null,
   primary key (id, year)
 );
-alter table apflora.pop_history add constraint fk_ap FOREIGN key (ap_id) references apflora.ap (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 CREATE INDEX ON apflora.pop_history USING btree (id);
 CREATE INDEX ON apflora.pop_history USING btree (year);
 CREATE INDEX ON apflora.pop_history USING btree (ap_id);
@@ -1205,7 +1204,6 @@ CREATE TABLE apflora.tpop_history (
   changed_by varchar(20) DEFAULT null,
   primary key (id, year)
 );
-
 alter table apflora.tpop_history add constraint fk_pop_history FOREIGN key (year, pop_id) references apflora.pop_history (year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 CREATE INDEX ON apflora.tpop_history USING btree (id);
 CREATE INDEX ON apflora.tpop_history USING btree (year);

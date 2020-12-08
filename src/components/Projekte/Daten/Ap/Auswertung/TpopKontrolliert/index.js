@@ -51,7 +51,7 @@ const color = {
   kontrolliert: 'red',
 }
 
-const ApAuswertungTpopKontrolliert = ({ id }) => {
+const ApAuswertungTpopKontrolliert = ({ id, height = 400, print }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { id },
   })
@@ -86,7 +86,7 @@ const ApAuswertungTpopKontrolliert = ({ id }) => {
             (<TitleKontr>kontrollierte</TitleKontr>){' '}
             <TitleTitle>Teil-Populationen</TitleTitle>
           </Title>
-          <ResponsiveContainer width="99%" height={400}>
+          <ResponsiveContainer width="99%" height={height}>
             <LineChart
               width={600}
               height={300}
@@ -96,10 +96,10 @@ const ApAuswertungTpopKontrolliert = ({ id }) => {
               <XAxis dataKey="jahr" />
               <YAxis
                 label={{
-                  value: 'Teil-Populationen',
+                  value: print ? 'Anzahl' : 'Teil-Populationen',
                   angle: -90,
                   position: 'insideLeft',
-                  offset: -15,
+                  offset: print ? 0 : -15,
                 }}
                 dataKey="Teil-Populationen"
               />

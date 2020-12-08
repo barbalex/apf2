@@ -19,6 +19,9 @@ import BMengen from './BMengen'
 import CMengen from './CMengen'
 import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import PopMenge from '../../Projekte/Daten/Ap/Auswertung/PopMenge'
+import PopStatus from '../../Projekte/Daten/Ap/Auswertung/PopStatus'
+import TpopKontrolliert from '../../Projekte/Daten/Ap/Auswertung/TpopKontrolliert'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
@@ -134,6 +137,9 @@ const StyledFab = styled(Fab)`
   @media print {
     display: none !important;
   }
+`
+const ChartContainer = styled.div`
+  padding: 10px 0;
 `
 
 const ApberForAp = ({
@@ -336,8 +342,16 @@ const ApberForAp = ({
               </FullWidthField>
             </FieldRowFullWidth>
           )}
-
           <BMengen apId={apId} jahr={jahr} mengenResult={mengenResult} />
+          <ChartContainer>
+            <TpopKontrolliert id={apId} height={250} print />
+          </ChartContainer>
+          <ChartContainer>
+            <PopStatus id={apId} height={250} print />
+          </ChartContainer>
+          <ChartContainer>
+            <PopMenge id={apId} height={250} print />
+          </ChartContainer>
           {!!apber.biotopeOptimieren && (
             <FieldRowFullWidth>
               <TitledLabel>

@@ -71,7 +71,7 @@ const formatNumber = (tickItem) => {
   return value
 }
 
-const ApAuswertungPopMenge = ({ id }) => {
+const ApAuswertungPopMenge = ({ id, height = 400, print }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
@@ -178,34 +178,38 @@ const ApAuswertungPopMenge = ({ id }) => {
             <div>
               <Title>{`"${zielEinheit}" nach Populationen`}</Title>
             </div>
-            {refreshing ? (
-              <RefreshButtonSpinning
-                title="Daten werden neu berechnet"
-                aria-label="Daten werden neu berechnet"
-                onClick={onClickRefresh}
-                size="small"
-              >
-                <FaRedo />
-              </RefreshButtonSpinning>
-            ) : (
-              <RefreshButton
-                title="Daten neu rechnen"
-                aria-label="Daten neu rechnen"
-                onClick={onClickRefresh}
-                size="small"
-              >
-                <FaRedo />
-              </RefreshButton>
+            {!print && (
+              <>
+                {refreshing ? (
+                  <RefreshButtonSpinning
+                    title="Daten werden neu berechnet"
+                    aria-label="Daten werden neu berechnet"
+                    onClick={onClickRefresh}
+                    size="small"
+                  >
+                    <FaRedo />
+                  </RefreshButtonSpinning>
+                ) : (
+                  <RefreshButton
+                    title="Daten neu rechnen"
+                    aria-label="Daten neu rechnen"
+                    onClick={onClickRefresh}
+                    size="small"
+                  >
+                    <FaRedo />
+                  </RefreshButton>
+                )}
+                <IconButton
+                  aria-label="Mehr Informationen"
+                  title="Mehr Informationen"
+                  onClick={onClickMoreInfo}
+                >
+                  <IoMdInformationCircleOutline />
+                </IconButton>
+              </>
             )}
-            <IconButton
-              aria-label="Mehr Informationen"
-              title="Mehr Informationen"
-              onClick={onClickMoreInfo}
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
           </TitleRow>
-          <ResponsiveContainer width="99%" height={400}>
+          <ResponsiveContainer width="99%" height={height}>
             <AreaChart
               width={600}
               height={300}
@@ -219,7 +223,7 @@ const ApAuswertungPopMenge = ({ id }) => {
                   value: zielEinheit,
                   angle: -90,
                   position: 'insideLeft',
-                  offset: -15,
+                  offset: print ? 0 : -15,
                 }}
                 tickFormatter={formatNumber}
               />
