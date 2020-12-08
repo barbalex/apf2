@@ -179,7 +179,7 @@ const AMengen = ({
       <PopSeit />
       <TpopSeit />
     </Row>
-    <FernerRow>Ferner:</FernerRow>
+    <FernerRow>ferner:</FernerRow>
     <Row>
       <Label1>potentieller Wuchs-/Ansiedlungsort:</Label1>
       <PopBerJahr>{loading ? '...' : a10LPop}</PopBerJahr>
