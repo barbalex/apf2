@@ -44,6 +44,11 @@ const PopName = styled.div`
   max-width: 3.5cm;
   padding-right: 0.2cm;
 `
+const PopNrName = styled.div`
+  min-width: 4.1cm;
+  max-width: 4.1cm;
+  padding-right: 0.2cm;
+`
 const TpopNr = styled.div`
   min-width: 0.8cm;
   max-width: 0.8cm;
@@ -54,14 +59,31 @@ const TpopFlurname = styled.div`
   max-width: 3.5cm;
   padding-right: 0.2cm;
 `
+const TpopNrFlurname = styled.div`
+  min-width: 4.3cm;
+  max-width: 4.3cm;
+  padding-right: 0.2cm;
+`
 const MassnDatum = styled.div`
   min-width: 1cm;
   max-width: 1cm;
   padding-right: 0.2cm;
 `
+const MassnDatumTitle = styled.div`
+  min-width: 1cm;
+  max-width: 1cm;
+  padding-right: 0.2cm;
+  padding-top: 3px;
+  font-size: 10px;
+`
 const MassnTyp = styled.div`
   min-width: 3.3cm;
   max-width: 3.3cm;
+  padding-right: 0.2cm;
+`
+const MassnDatumTyp = styled.div`
+  min-width: 4.3cm;
+  max-width: 4.3cm;
   padding-right: 0.2cm;
 `
 const MassnBeschreibung = styled.div`
@@ -73,12 +95,9 @@ const Massnahmen = ({ massns }) => (
     <Title>Massnahmen im Berichtsjahr:</Title>
     <TitleRow>
       <TitleSubRow>
-        <PopNr>Pop</PopNr>
-        <PopName>Pop</PopName>
-        <TpopNr>TPop</TpopNr>
-        <TpopFlurname>TPop</TpopFlurname>
-        <MassnDatum>Massn</MassnDatum>
-        <MassnTyp>Massn</MassnTyp>
+        <PopNrName>Population</PopNrName>
+        <TpopNrFlurname>Teil-Population</TpopNrFlurname>
+        <MassnDatumTyp>Massnahme</MassnDatumTyp>
         <MassnBeschreibung />
       </TitleSubRow>
       <TitleSubRow>
@@ -86,7 +105,7 @@ const Massnahmen = ({ massns }) => (
         <PopName>Name</PopName>
         <TpopNr>Nr.</TpopNr>
         <TpopFlurname>Flurname</TpopFlurname>
-        <MassnDatum>Datum</MassnDatum>
+        <MassnDatumTitle>Datum</MassnDatumTitle>
         <MassnTyp>Typ</MassnTyp>
         <MassnBeschreibung>Massnahme</MassnBeschreibung>
       </TitleSubRow>
