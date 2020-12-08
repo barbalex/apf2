@@ -16,16 +16,16 @@ export default gql`
         tpopFlurname
         tpopStatus
         jahr
-        pflanzen
+        pflanzenTotal
         pflanzenOhneJungpflanzen
-        triebe
+        triebeTotal
         triebeBeweidung
         keimlinge
-        rosetten
+        davonRosetten
         jungpflanzen
         blatter
-        bluhendePflanzen
-        bluhendeTriebe
+        davonBluhendePflanzen
+        davonBluhendeTriebe
         bluten
         fertilePflanzen
         fruchtendeTriebe

@@ -2428,9 +2428,9 @@ const Teilpopulationen = ({ treeName }) => {
                   '',
                 ),
                 jahr: get(z, 'vTpopLastCountsByTpopId.nodes[0].jahr', ''),
-                pflanzen: get(
+                pflanzenTotal: get(
                   z,
-                  'vTpopLastCountsByTpopId.nodes[0].pflanzen',
+                  'vTpopLastCountsByTpopId.nodes[0].pflanzenTotal',
                   '',
                 ),
                 pflanzen_ohne_jungpflanzen: get(
@@ -2438,7 +2438,11 @@ const Teilpopulationen = ({ treeName }) => {
                   'vTpopLastCountsByTpopId.nodes[0].pflanzenOhneJungpflanzen',
                   '',
                 ),
-                triebe: get(z, 'vTpopLastCountsByTpopId.nodes[0].triebe', ''),
+                triebeTotal: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].triebeTotal',
+                  '',
+                ),
                 triebe_beweidung: get(
                   z,
                   'vTpopLastCountsByTpopId.nodes[0].triebeBeweidung',
@@ -2449,9 +2453,9 @@ const Teilpopulationen = ({ treeName }) => {
                   'vTpopLastCountsByTpopId.nodes[0].keimlinge',
                   '',
                 ),
-                rosetten: get(
+                davonRosetten: get(
                   z,
-                  'vTpopLastCountsByTpopId.nodes[0].rosetten',
+                  'vTpopLastCountsByTpopId.nodes[0].davonRosetten',
                   '',
                 ),
                 jungpflanzen: get(
@@ -2464,14 +2468,14 @@ const Teilpopulationen = ({ treeName }) => {
                   'vTpopLastCountsByTpopId.nodes[0].blatter',
                   '',
                 ),
-                bluehende_pflanzen: get(
+                davonBluehende_pflanzen: get(
                   z,
-                  'vTpopLastCountsByTpopId.nodes[0].bluhendePflanzen',
+                  'vTpopLastCountsByTpopId.nodes[0].davonBluhendePflanzen',
                   '',
                 ),
-                bluehende_triebe: get(
+                davonBluehende_triebe: get(
                   z,
-                  'vTpopLastCountsByTpopId.nodes[0].bluhendeTriebe',
+                  'vTpopLastCountsByTpopId.nodes[0].davonBluhendeTriebe',
                   '',
                 ),
                 blueten: get(z, 'vTpopLastCountsByTpopId.nodes[0].bluten', ''),

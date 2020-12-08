@@ -1186,13 +1186,21 @@ const Populationen = () => {
                   '',
                 ),
                 jahre: get(z, 'vPopLastCountsByPopId.nodes[0].jahre', ''),
-                pflanzen: get(z, 'vPopLastCountsByPopId.nodes[0].pflanzen', ''),
+                pflanzenTotal: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].pflanzenTotal',
+                  '',
+                ),
                 pflanzen_ohne_jungpflanzen: get(
                   z,
                   'vPopLastCountsByPopId.nodes[0].pflanzenOhneJungpflanzen',
                   '',
                 ),
-                triebe: get(z, 'vPopLastCountsByPopId.nodes[0].triebe', ''),
+                triebeTotal: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].triebeTotal',
+                  '',
+                ),
                 triebe_beweidung: get(
                   z,
                   'vPopLastCountsByPopId.nodes[0].triebeBeweidung',
@@ -1203,21 +1211,25 @@ const Populationen = () => {
                   'vPopLastCountsByPopId.nodes[0].keimlinge',
                   '',
                 ),
-                rosetten: get(z, 'vPopLastCountsByPopId.nodes[0].rosetten', ''),
+                davonRosetten: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].davonRosetten',
+                  '',
+                ),
                 jungpflanzen: get(
                   z,
                   'vPopLastCountsByPopId.nodes[0].jungpflanzen',
                   '',
                 ),
                 blaetter: get(z, 'vPopLastCountsByPopId.nodes[0].blatter', ''),
-                bluehende_pflanzen: get(
+                davonBluehende_pflanzen: get(
                   z,
-                  'vPopLastCountsByPopId.nodes[0].bluhendePflanzen',
+                  'vPopLastCountsByPopId.nodes[0].davonBluhendePflanzen',
                   '',
                 ),
-                bluehende_triebe: get(
+                davonBluehende_triebe: get(
                   z,
-                  'vPopLastCountsByPopId.nodes[0].bluhendeTriebe',
+                  'vPopLastCountsByPopId.nodes[0].davonBluhendeTriebe',
                   '',
                 ),
                 blueten: get(z, 'vPopLastCountsByPopId.nodes[0].bluten', ''),
@@ -1365,9 +1377,9 @@ const Populationen = () => {
                   'vPopLastCountWithMassnsByPopId.nodes[0].jahre',
                   '',
                 ),
-                pflanzen: get(
+                pflanzenTotal: get(
                   z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].pflanzen',
+                  'vPopLastCountWithMassnsByPopId.nodes[0].pflanzenTotal',
                   '',
                 ),
                 pflanzen_ohne_jungpflanzen: get(
@@ -1375,9 +1387,9 @@ const Populationen = () => {
                   'vPopLastCountWithMassnsByPopId.nodes[0].pflanzenOhneJungpflanzen',
                   '',
                 ),
-                triebe: get(
+                triebeTotal: get(
                   z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].triebe',
+                  'vPopLastCountWithMassnsByPopId.nodes[0].triebeTotal',
                   '',
                 ),
                 triebe_beweidung: get(
@@ -1390,9 +1402,9 @@ const Populationen = () => {
                   'vPopLastCountWithMassnsByPopId.nodes[0].keimlinge',
                   '',
                 ),
-                rosetten: get(
+                davonRosetten: get(
                   z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].rosetten',
+                  'vPopLastCountWithMassnsByPopId.nodes[0].davonRosetten',
                   '',
                 ),
                 jungpflanzen: get(
@@ -1405,14 +1417,14 @@ const Populationen = () => {
                   'vPopLastCountWithMassnsByPopId.nodes[0].blatter',
                   '',
                 ),
-                bluehende_pflanzen: get(
+                davonBluehende_pflanzen: get(
                   z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].bluhendePflanzen',
+                  'vPopLastCountWithMassnsByPopId.nodes[0].davonBluhendePflanzen',
                   '',
                 ),
-                bluehende_triebe: get(
+                davonBluehende_triebe: get(
                   z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].bluhendeTriebe',
+                  'vPopLastCountWithMassnsByPopId.nodes[0].davonBluhendeTriebe',
                   '',
                 ),
                 blueten: get(
