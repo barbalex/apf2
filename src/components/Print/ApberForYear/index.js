@@ -159,6 +159,17 @@ const ApberForYear = () => {
     return `Fehler: ${data2Error.message}`
   }
 
+  // TODO: remove this return after having changed aktpoplist
+  /*return (
+    <ErrorBoundary>
+      <Container>
+        <ContentContainer>
+          <AktPopList year={jahr} />
+        </ContentContainer>
+      </Container>
+    </ErrorBoundary>
+  )*/
+
   return (
     <ErrorBoundary>
       <Container>
@@ -189,7 +200,7 @@ const ApberForYear = () => {
           )}
           <AvList data={data} />
           <ErfolgList jahr={jahr} data={data} />
-          <AktPopList />
+          <AktPopList year={jahr} />
           {aps.map((ap, index) => (
             <ApberForAp
               key={ap.id}
