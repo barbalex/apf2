@@ -16,7 +16,7 @@ const Container = styled.div`
   font-size: 10px;
   line-height: 1.1em;
   @media screen {
-    /*margin-top: 1cm;*/
+    margin-top: 1.5cm;
   }
   @media print {
     padding-top: 0.3cm !important;
