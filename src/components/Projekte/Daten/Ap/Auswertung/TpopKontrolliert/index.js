@@ -40,10 +40,10 @@ const Title = styled.h4`
   margin-top: 15px;
 `
 const TitleTitle = styled.span`
-  color: red;
+  color: #2e7d32;
 `
 const TitleKontr = styled.span`
-  color: #2e7d32;
+  color: red;
 `
 
 const color = {
