@@ -117,6 +117,7 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
                 stroke={color['ursprünglich, aktuell']}
                 fill={color['ursprünglich, aktuell']}
                 legendType="square"
+                isAnimationActive={!print}
               />
               <Area
                 type="monotone"
@@ -125,6 +126,7 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
                 stroke={color['ursprünglich, erloschen']}
                 fill={color['ursprünglich, erloschen']}
                 legendType="square"
+                isAnimationActive={!print}
               />
               <Area
                 type="monotone"
@@ -133,6 +135,7 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
                 stroke={color['angesiedelt, aktuell']}
                 fill={color['angesiedelt, aktuell']}
                 legendType="square"
+                isAnimationActive={!print}
               />
               <Area
                 type="monotone"
@@ -141,6 +144,7 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
                 stroke={color['Ansaatversuch']}
                 fill={color['Ansaatversuch']}
                 legendType="square"
+                isAnimationActive={!print}
               />
               <Area
                 type="monotone"
@@ -149,6 +153,7 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
                 stroke={color['angesiedelt, erloschen/nicht etabliert']}
                 fill={color['angesiedelt, erloschen/nicht etabliert']}
                 legendType="square"
+                isAnimationActive={!print}
               />
               <Area
                 type="monotone"
@@ -157,6 +162,7 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
                 stroke={color['potentieller Wuchs-/Ansiedlungsort']}
                 fill={color['potentieller Wuchs-/Ansiedlungsort']}
                 legendType="square"
+                isAnimationActive={!print}
               />
               <Tooltip content={<CustomTooltip color={color} />} />
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />

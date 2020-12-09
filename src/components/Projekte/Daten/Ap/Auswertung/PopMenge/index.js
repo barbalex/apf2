@@ -236,6 +236,7 @@ const ApAuswertungPopMenge = ({ id, height = 400, print }) => {
                   stroke={color}
                   strokeWidth={2}
                   fill={color}
+                  isAnimationActive={!print}
                 />
               ))}
               <Tooltip content={<CustomTooltip popsData={popsData} />} />
