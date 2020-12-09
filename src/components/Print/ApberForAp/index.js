@@ -140,6 +140,9 @@ const StyledFab = styled(Fab)`
 `
 const ChartContainer = styled.div`
   padding: 10px 0;
+  @media print {
+    break-inside: avoid;
+  }
 `
 
 const ApberForAp = ({
