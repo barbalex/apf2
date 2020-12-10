@@ -1,8 +1,8 @@
 ---
 typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/historisierung"
-date: "2020-03-27"
-title: "Historisierung von AP, Pop und TPop"
+path: '/Dokumentation/Benutzer/historisierung'
+date: '2020-12-10'
+title: 'Historisierung von AP, Pop und TPop'
 sort: 16
 ---
 
@@ -31,9 +31,9 @@ Hingegen ist es nicht möglich, zu **wissen, wann Stati geändert wurden**. Bzw.
 ## Lösung
 
 - Ein mal im Jahr (wenn der Jahresbericht erzeugt wird) werden alle AP, Pop und TPop in eigene Tabellen kopiert
+  Nachtrag am 10.12.2020: Im verlauf eines Jahrs können die Daten jederzeit historisiert werden, bis spätestens Ende März des Folgejahrs. Wurde das betreffende Jahr schon historisiert, werden die alten Daten einfach überschrieben
 - Abfragen könnten Historien verwenden, um die Änderung wesentlicher Felder wie z.B. Status oder AP-Bearbeitungsstand auszulesen
 - Daten für Vorjahre wurden aus Sicherungen importiert
-
 
 ## Umsetzung
 
@@ -60,28 +60,31 @@ Hingegen ist es nicht möglich, zu **wissen, wann Stati geändert wurden**. Bzw.
 Aus Sicherungen wurden importiert: <br/><br/>
 
 ### ap
+
 | Jahr | Anzahl Datensätze |
-| ---- | ----- |
-| 2014 | 471   |
-| 2015 | 524   |
-| 2016 | 561   |
-| 2017 | 572   |
-| 2018 | 573   |
+| ---- | ----------------- |
+| 2014 | 471               |
+| 2015 | 524               |
+| 2016 | 561               |
+| 2017 | 572               |
+| 2018 | 573               |
 
 ### pop
+
 | Jahr | Anzahl Datensätze |
-| ---- | ----- |
-| 2014 | 4557  |
-| 2015 | 5208  |
-| 2016 | 5610  |
-| 2017 | 5932  |
-| 2018 | 6414  |
+| ---- | ----------------- |
+| 2014 | 4557              |
+| 2015 | 5208              |
+| 2016 | 5610              |
+| 2017 | 5932              |
+| 2018 | 6414              |
 
 ### tpop
-| Jahr | Anzahl Datensätze  |
-| ---- | ------ |
-| 2014 |  7791  |
-| 2015 |  9155  |
-| 2016 | 10116  |
-| 2017 | 10930  |
-| 2018 | 11975  |
+
+| Jahr | Anzahl Datensätze |
+| ---- | ----------------- |
+| 2014 | 7791              |
+| 2015 | 9155              |
+| 2016 | 10116             |
+| 2017 | 10930             |
+| 2018 | 11975             |
