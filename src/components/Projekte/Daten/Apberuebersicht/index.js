@@ -226,9 +226,8 @@ const Apberuebersicht = ({ treeName }) => {
       `,
     })
     // notify user
-    const year = new Date().getFullYear() - 1
     enqueNotification({
-      message: `AP, Pop und TPop wurden für das Jahr ${year} historisiert`,
+      message: `AP, Pop und TPop wurden für das Jahr ${row.jahr} historisiert`,
       options: {
         variant: 'info',
       },
