@@ -1,4 +1,3 @@
-DROP FUNCTION apflora.historize();
 CREATE OR REPLACE FUNCTION apflora.historize(year integer)
   RETURNS boolean AS $$
   BEGIN
