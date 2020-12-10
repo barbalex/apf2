@@ -55,7 +55,7 @@ const getErfolg = ({ jahr, erfolgRawData }) =>
   findErfolg({ jahr, erfolgRawData }) || makeErfolg(jahr)
 const addMissingErfolgData = (erfolgRawData) => {
   const years = erfolgRawData.map((e) => e.jahr)
-  const allYears = range(min(years), max(years))
+  const allYears = range(min(years), max(years) + 1)
   return allYears.map((jahr) => getErfolg({ jahr, erfolgRawData }))
 }
 

@@ -126,27 +126,32 @@ const Apberuebersicht = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  const isJanuaryThroughMarchOfFollowingYear = useMemo(() => {
+  const isBeforeMarchOfFollowingYear = useMemo(() => {
     const now = new Date()
     const currentMonth = now.getMonth()
-    const previousYear = now.getFullYear() - 1
-    return currentMonth < 3 && previousYear === row.jahr
+    const currentYear = now.getFullYear()
+    const previousYear = currentYear - 1
+    return (
+      (currentMonth < 3 && previousYear === row.jahr) ||
+      currentYear === row.jahr
+    )
   }, [row.jahr])
-  const notHistorizedYet = !row.historyDate
-  const showHistorize =
-    userIsManager && isJanuaryThroughMarchOfFollowingYear && notHistorizedYet
+  const showHistorize = userIsManager && isBeforeMarchOfFollowingYear
 
   const onClickHistorize = useCallback(async () => {
     // 1. historize
     try {
       await client.mutate({
         mutation: gql`
-          mutation historize {
-            historize(input: { clientMutationId: "bla" }) {
+          mutation historize($year: Int!) {
+            historize(input: { clientMutationId: "bla", year: $year }) {
               boolean
             }
           }
         `,
+        variables: {
+          year: row.jahr,
+        },
       })
     } catch (error) {
       console.log('Error from mutating historize:', error)
@@ -277,7 +282,7 @@ const Apberuebersicht = ({ treeName }) => {
                     <StyledButton
                       variant="outlined"
                       onClick={onClickHistorize}
-                      title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. Noch nicht historisiert wurde und 3. zwischen Januar und März"
+                      title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. bis zum März des Folgejahrs"
                     >
                       {`AP, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
                     </StyledButton>
