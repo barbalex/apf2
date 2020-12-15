@@ -7,4 +7,4 @@ sort: 7
 pdf: true
 ---
 
-Bitte laden Sie&nbsp;<a rel="noopener noreferrer" href="./AnleitungEingabe.pdf">die PDF-Datei</a>&nbsp;herunter.
+Bitte laden Sie&nbsp;<a rel="noopener noreferrer" href="https://ucarecdn.com/610999e7-52f8-43fb-a4b0-f09da7767aa0/AnleitungEingabe.pdf">die PDF-Datei</a>&nbsp;herunter.
