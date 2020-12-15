@@ -1,3 +1,7 @@
+/**
+ * used to automatically set first year depending on first kontrs or first massns
+ * but now users set first shown year via pastYears
+ */
 //import minBy from 'lodash/minBy'
 //import min from 'lodash/min'
 

@@ -264,7 +264,6 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   } = useQuery(queryTpop, {
     variables: {
       tpopFilter,
-      jahr: 1993, // new Date().getFullYear() - pastYears,
     },
   })
   const tpops = sortBy(
