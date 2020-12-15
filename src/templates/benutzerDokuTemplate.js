@@ -6,6 +6,7 @@ import Layout from '../components/Layout'
 import Sidebar from './Sidebar'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import storeContext from '../storeContext'
+import './benutzerDoku.css'
 
 const Container = styled.div`
   height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
