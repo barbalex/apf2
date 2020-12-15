@@ -11,7 +11,7 @@
   "scripts": {
     "analyze": "npx source-map-explorer build/static/js/main.*",
     "build": "gatsby clean && gatsby build",
-    "postbuild": "copyfiles .now/* public && copyfiles now.json public",
+    "postbuild": "copyfiles .vercel/* public && copyfiles vercel.json public",
     "dev": "gatsby develop",
     "lazydev": "GATSBY_EXPERIMENTAL_LAZY_DEVJS=true gatsby develop",
     "start": "npm run develop",
@@ -140,7 +140,8 @@
     "postgraphile-plugin-connection-filter": "2.1.1",
     "postgraphile-plugin-connection-filter-postgis": "1.0.0-alpha.6",
     "prettier": "2.2.1",
-    "source-map-explorer": "2.5.1"
+    "source-map-explorer": "2.5.1",
+    "vercel": "21.0.1"
   },
   "eslintConfig": {
     "extends": "react-app"
