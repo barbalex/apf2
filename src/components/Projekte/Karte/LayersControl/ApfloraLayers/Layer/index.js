@@ -17,6 +17,7 @@ import flatten from 'lodash/flatten'
 import { getSnapshot } from 'mobx-state-tree'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
+import { useMap } from 'react-leaflet'
 
 import Checkbox from '../../shared/Checkbox'
 import Error from '../../../../../shared/Error'
@@ -112,13 +113,14 @@ const BeobZugeordnetAssignPolylinesIcon = styled(RemoveIcon)`
 const MapIconDiv = styled.div``
 
 const MySortableItem = ({ treeName, apfloraLayer, index }) => {
+  const map = useMap()
   const store = useContext(storeContext)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     setActiveApfloraLayers,
-    setBounds,
     assigningBeob,
     setAssigningBeob,
+    setBounds,
   } = store
   const tree = store[treeName]
   const { apIdInActiveNodeArray } = tree
@@ -192,17 +194,26 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
     // only zoom if there is data to zoom on
     if (layerData.length === 0) return
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
-      setBounds(getBounds(layerData))
+      const newBounds = getBounds(layerData)
+      map.fitBounds(newBounds)
+      setBounds(newBounds)
     }
-  }, [layerData, activeApfloraLayers, apfloraLayer.value, setBounds])
+  }, [layerData, activeApfloraLayers, apfloraLayer.value, map, setBounds])
   const onClickZoomToActive = useCallback(() => {
     // only zoom if a tpop is highlighted
     if (layerDataHighlighted.length === 0) return
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
       const newBounds = getBounds(layerDataHighlighted)
+      map.fitBounds(newBounds)
       setBounds(newBounds)
     }
-  }, [layerDataHighlighted, activeApfloraLayers, apfloraLayer.value, setBounds])
+  }, [
+    layerDataHighlighted,
+    activeApfloraLayers,
+    apfloraLayer.value,
+    map,
+    setBounds,
+  ])
   const zoomToAllIconStyle = useMemo(
     () => ({
       color:

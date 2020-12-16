@@ -5,7 +5,7 @@
  *
  */
 
-import React, { useContext, useRef, useMemo } from 'react'
+import React, { useContext, useRef, useMemo, useEffect } from 'react'
 import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
 import styled from 'styled-components'
 import 'leaflet'
@@ -486,12 +486,6 @@ const Karte = ({ treeName }) => {
 
   if (typeof window === 'undefined') return null
 
-  // TODO:
-  // resetting bounds has no influence on map
-  // probably due to update to v3 of react-leaflet
-  // see: https://github.com/PaulLeCam/react-leaflet/issues/799
-  console.log('Karte, bounds:', bounds)
-
   return (
     <Container
       data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}
@@ -500,6 +494,9 @@ const Karte = ({ treeName }) => {
       <ErrorBoundary>
         <StyledMapContainer
           ref={mapRef}
+          // bounds need to be set using ma.fitBounds sice v3
+          // but keep bounds in store as last bound will be reapplied
+          // when map is re-opened
           bounds={bounds}
           // need max and min zoom because otherwise
           // something errors
