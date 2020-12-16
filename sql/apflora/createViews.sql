@@ -5058,8 +5058,19 @@ with data as (
     status,
     count(*) as anzahl
     from
-      apflora.pop_history
-    where status is not null
+      apflora.pop_history pop
+    where 
+      status is not null
+      and exists (
+        select
+          1 
+        from 
+          apflora.tpop_history tpop 
+        where
+          tpop.apber_relevant = true
+          and tpop.pop_id = pop.id
+          and tpop.year = pop.year
+      )
     group by
       ap_id,
       year,
@@ -5249,11 +5260,15 @@ kontr as (
       on tpop2.id = kontr2.tpop_id and tpop2.year = kontr2.jahr
     on zaehl2.tpopkontr_id = kontr2.id and zaehl2.einheit = ze2.code
   where
+    -- Jahr muss existieren
     kontr2.jahr is not null
+    -- nur aktuelle Stati
     and tpop2.status in (100, 200, 201)
+    -- nur von berichts-relevanten tpop
     and tpop2.apber_relevant = true
+    -- nur wenn eine Anzahl erfasst wurde
     and zaehl2.anzahl is not null
-    -- nur Zählungen mit der Ziel-Einheit
+    -- nur wenn die Ziel-Einheit erfasst wurde
     and ze2.code = zaehl2.einheit
   order by
     tpop2.id,
