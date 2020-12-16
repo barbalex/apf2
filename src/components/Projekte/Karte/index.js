@@ -5,7 +5,7 @@
  *
  */
 
-import React, { useContext, useRef, useMemo, useEffect } from 'react'
+import React, { useContext, useRef, useMemo } from 'react'
 import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
 import styled from 'styled-components'
 import 'leaflet'
