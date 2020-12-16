@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import fields from './fields'
 import appBaseUrl from '../../../modules/appBaseUrl'
 
-const isOdd = num => num % 2 === 0
+const isOdd = (num) => num % 2 === 0
 
 export default ({ tpop, index, dataLists }) => {
   let lv95X = get(tpop, 'lv95X')
@@ -78,12 +78,9 @@ export default ({ tpop, index, dataLists }) => {
     },
     ekAbrechnungstyp: {
       ...fields.ekAbrechnungstyp,
-      value: get(
-        get(dataLists, 'allEkfrequenzs.nodes', []).find(
-          e => e.id === get(tpop, 'ekfrequenz'),
-        ),
-        'ekAbrechnungstypWerteByEkAbrechnungstyp.text',
-      ),
+      value:
+        tpop?.ekfrequenzByEkfrequenz?.ekAbrechnungstypWerteByEkAbrechnungstyp
+          ?.text ?? '',
     },
     ekfrequenz: {
       ...fields.ekfrequenz,

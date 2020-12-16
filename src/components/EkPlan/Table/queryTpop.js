@@ -14,6 +14,14 @@ export default gql`
         ekfrequenz
         ekfrequenzStartjahr
         ekfrequenzAbweichend
+        ekfrequenzByEkfrequenz {
+          ekAbrechnungstyp
+          id
+          ekAbrechnungstypWerteByEkAbrechnungstyp {
+            id
+            text
+          }
+        }
         popStatusWerteByStatus {
           text
         }
