@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client'
 
+// query: v_pop_last_count_with_massn
 export default gql`
   query popLastCountsWithMassnQuery {
     allPops(filter: { vPopLastCountWithMassnsByPopIdExist: true }) {
