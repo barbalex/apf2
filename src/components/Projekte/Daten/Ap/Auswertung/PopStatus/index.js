@@ -42,7 +42,7 @@ const Title = styled.h4`
 
 const color = {
   'ursprünglich, aktuell': '#2e7d32',
-  'ursprünglich, erloschen': 'rgba(46,125,50,0.5)',
+  'ursprünglich, erloschen (nach 1950)': 'rgba(46,125,50,0.5)',
   'angesiedelt, aktuell': 'rgba(245,141,66,1)',
   Ansaatversuch: 'brown',
   'angesiedelt, erloschen/nicht etabliert': 'rgba(245,141,66,0.5)',
@@ -65,7 +65,7 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
     return {
       jahr: e.jahr,
       'ursprünglich, aktuell': val[100] || 0,
-      'ursprünglich, erloschen': val[101] || 0,
+      'ursprünglich, erloschen (nach 1950)': val[101] || 0,
       'angesiedelt, aktuell': val[200] || 0,
       Ansaatversuch: val[201] || 0,
       'angesiedelt, erloschen/nicht etabliert': val[202] || 0,
@@ -92,7 +92,7 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
         </SpinnerContainer>
       ) : popStatusRawData.length ? (
         <>
-          <Title>Stati der Populationen</Title>
+          <Title>Populationen nach Status</Title>
           <ResponsiveContainer width="99%" height={height}>
             <AreaChart
               width={600}
@@ -121,10 +121,10 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
               />
               <Area
                 type="monotone"
-                dataKey="ursprünglich, erloschen"
+                dataKey="ursprünglich, erloschen (nach 1950)"
                 stackId="1"
-                stroke={color['ursprünglich, erloschen']}
-                fill={color['ursprünglich, erloschen']}
+                stroke={color['ursprünglich, erloschen (nach 1950)']}
+                fill={color['ursprünglich, erloschen (nach 1950)']}
                 legendType="square"
                 isAnimationActive={!print}
               />
@@ -177,7 +177,7 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
         </>
       ) : (
         <>
-          <Title>Stati der Populationen</Title>
+          <Title>Populationen nach Status</Title>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>
         </>
       )}
