@@ -61,6 +61,11 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
     logout(idb)
   }, [idb])
 
+  const onClickUptime = useCallback(() => {
+    typeof window !== 'undefined' && window.open('https://uptime.apflora.ch')
+    setAnchorEl(null)
+  }, [])
+
   return (
     <Container>
       <MehrButton
@@ -99,6 +104,9 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
           onClick={onClickLogout}
           data-id="appbar-more-logout"
         >{`${user.name} abmelden (und Cache leeren)`}</MenuItem>
+        <MenuItem onClick={onClickUptime}>
+          Verfügbarkeit von apflora.ch
+        </MenuItem>
         <Version>Version: 1.48.8 vom 22.12.2020</Version>
       </Menu>
     </Container>
