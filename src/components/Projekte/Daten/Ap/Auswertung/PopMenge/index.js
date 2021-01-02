@@ -62,7 +62,8 @@ const RefreshButtonSpinning = styled(IconButton)`
 `
 const RefreshButton = styled(IconButton)``
 
-const color = 'rgba(46,125,50,0.3)'
+const colorUrspruenglich = 'rgba(46,125,50,0.3)'
+const colorAngesiedelt = 'rgba(245,141,66,1)'
 const formatNumber = (tickItem) => {
   const value =
     exists(tickItem) && tickItem.toLocaleString
@@ -227,18 +228,31 @@ const ApAuswertungPopMenge = ({ id, height = 400, print }) => {
                 }}
                 tickFormatter={formatNumber}
               />
-              {popIdsWithDataSorted.reverse().map((id) => (
-                <Area
-                  key={id}
-                  type="linear"
-                  dataKey={id}
-                  stackId="1"
-                  stroke={color}
-                  strokeWidth={2}
-                  fill={color}
-                  isAnimationActive={!print}
-                />
-              ))}
+              {popIdsWithDataSorted.reverse().map((id) => {
+                const pop = popsData.find((p) => p.id === id)
+                let color
+                if (!pop) {
+                  color = 'grey'
+                } else {
+                  const isUrspruenglich = pop?.status < 200
+                  color = isUrspruenglich
+                    ? colorUrspruenglich
+                    : colorAngesiedelt
+                }
+
+                return (
+                  <Area
+                    key={id}
+                    type="linear"
+                    dataKey={id}
+                    stackId="1"
+                    stroke={color}
+                    strokeWidth={2}
+                    fill={color}
+                    isAnimationActive={!print}
+                  />
+                )
+              })}
               <Tooltip content={<CustomTooltip popsData={popsData} />} />
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
             </AreaChart>
