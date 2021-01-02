@@ -101,7 +101,7 @@ const TextSpan = styled.span`
   padding-right: 5px;
   font-size: 16px !important;
   font-weight: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
+    props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow-x: hidden !important;

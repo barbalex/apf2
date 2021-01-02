@@ -8,7 +8,7 @@ const Container = styled.div`
 `
 const Title = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  font-weight: 600;
+  font-weight: 700;
 `
 const Row = styled.div`
   display: flex;
@@ -40,7 +40,7 @@ const Ziele = ({ ziele }) => (
       <Typ>Typ</Typ>
       <Goal>Ziel</Goal>
     </TitleRow>
-    {ziele.map(z => {
+    {ziele.map((z) => {
       const zielBer = get(z, 'zielbersByZielId.nodes', [])[0]
 
       return (

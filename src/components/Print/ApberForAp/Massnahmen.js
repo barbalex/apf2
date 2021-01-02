@@ -11,7 +11,7 @@ const Container = styled.div`
 `
 const Title = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  font-weight: 600;
+  font-weight: 700;
   break-after: avoid;
   page-break-after: avoid;
   page-break-inside: avoid;

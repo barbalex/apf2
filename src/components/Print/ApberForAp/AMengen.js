@@ -7,7 +7,7 @@ const Container = styled.div`
 `
 const Title = styled.h3`
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   margin-bottom: -18px;
 `
 const Row = styled.div`
@@ -21,7 +21,7 @@ const YearRow = styled.div`
   padding: 0.05cm 0;
 `
 const TotalRow = styled(Row)`
-  font-weight: 600;
+  font-weight: 700;
 `
 const FernerRow = styled.div`
   padding: 0.05cm 0 0 0;

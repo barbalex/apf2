@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "@apollo/client": "3.3.6",
+    "@fontsource/roboto": "^4.1.0",
+    "@fontsource/roboto-mono": "^4.1.0",
     "@material-ui/core": "4.11.2",
     "@material-ui/icons": "4.11.2",
     "@turf/bbox-polygon": "6.0.1",
@@ -33,8 +35,6 @@
     "dexie": "3.0.3",
     "exceljs": "4.2.0",
     "file-saver": "2.0.5",
-    "fontsource-roboto": "3.1.5",
-    "fontsource-roboto-mono": "3.1.6",
     "formik": "2.2.6",
     "gatsby": "2.29.1",
     "gatsby-image": "2.8.0",

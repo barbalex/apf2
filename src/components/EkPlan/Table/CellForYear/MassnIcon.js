@@ -11,7 +11,7 @@ const CheckboxContainer = styled.div`
   height: 100%;
   display: flex;
   flex-wrap: nowrap;
-  justify-content: ${props => (props.showcount ? 'space-between' : 'center')};
+  justify-content: ${(props) => (props.showcount ? 'space-between' : 'center')};
 `
 const MassnContainer = styled.div`
   position: relative;
@@ -26,7 +26,7 @@ const MassnSymbol = styled(GoZap)`
   color: #2e7d32;
 `
 const NrOfMassn = styled.div`
-  font-weight: 900;
+  font-weight: 700;
   font-size: smaller;
   position: absolute;
   bottom: -2px;
@@ -51,10 +51,10 @@ const MassnIcon = ({ ansiedlungs }) => {
   }
   let sumCounted = null
   const ansiedlungsWithCount = ansiedlungs.filter(
-    ans => ans.zieleinheitAnzahl !== null,
+    (ans) => ans.zieleinheitAnzahl !== null,
   )
   if (ansiedlungsWithCount.length) {
-    sumCounted = sum(ansiedlungsWithCount.map(ans => ans.zieleinheitAnzahl))
+    sumCounted = sum(ansiedlungsWithCount.map((ans) => ans.zieleinheitAnzahl))
   }
 
   return (

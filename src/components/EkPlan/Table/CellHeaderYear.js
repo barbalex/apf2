@@ -21,7 +21,7 @@ const StyledCell = styled.div`
   cursor: pointer;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
-    font-weight: 800 !important;
+    font-weight: 700 !important;
   }
 `
 const Title = styled.div`
@@ -37,7 +37,7 @@ const Dropdown = styled.div`
   font-size: 1.3em;
 `
 const StyledMenuItem = styled(MenuItem)`
-  color: ${props => (props.active ? 'black' : 'rgba(0,0,0,0.3) !important')};
+  color: ${(props) => (props.active ? 'black' : 'rgba(0,0,0,0.3) !important')};
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
@@ -64,9 +64,9 @@ const CellHeaderYear = ({ style, column, rows }) => {
     if (filterKontrolleYear && filterKontrolleYear !== column) return false
     return (
       rows.filter(
-        row =>
+        (row) =>
           get(row, 'tpop.tpopkontrsByTpopId.nodes', []).filter(
-            node => node.jahr === column,
+            (node) => node.jahr === column,
           ).length > 0,
       ).length > 0
     )
@@ -75,9 +75,9 @@ const CellHeaderYear = ({ style, column, rows }) => {
     if (filterAnsiedlungYear && filterAnsiedlungYear !== column) return false
     return (
       rows.filter(
-        row =>
+        (row) =>
           get(row, 'tpop.tpopmassnsByTpopId.nodes', []).filter(
-            node => node.jahr === column,
+            (node) => node.jahr === column,
           ).length > 0,
       ).length > 0
     )
@@ -86,16 +86,16 @@ const CellHeaderYear = ({ style, column, rows }) => {
     if (filterEkplanYear && filterEkplanYear !== column) return false
     return (
       rows.filter(
-        row =>
+        (row) =>
           get(row, 'tpop.ekplansByTpopId.nodes', []).filter(
-            node => node.jahr === column,
+            (node) => node.jahr === column,
           ).length > 0,
       ).length > 0
     )
   }, [column, filterEkplanYear, rows])
 
   const closeMenu = useCallback(() => setAnchorEl(null), [])
-  const onClickCell = useCallback(e => setAnchorEl(e.currentTarget), [])
+  const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
   const onClickFilterAnsiedlungYear = useCallback(() => {
     if (!yearHasAnsiedlungen) return
     setFilterAnsiedlungYear(filterAnsiedlungYear ? null : column)

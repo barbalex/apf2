@@ -12,11 +12,11 @@ const Popup = styled.div`
 `
 const Title = styled.div`
   font-size: 1em;
-  font-weight: 900;
+  font-weight: 700;
 `
 const Row = styled.div`
   font-size: 0.8em;
-  font-weight: 600;
+  font-weight: 700;
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
@@ -28,8 +28,8 @@ const Label = styled.div`
 const Value = styled.div``
 
 const CustomTooltip = ({ payload, label, active, popsData }) => {
-  const payloadSorted = sortBy(payload, p => {
-    const pop = popsData.find(d => d.id === p.dataKey)
+  const payloadSorted = sortBy(payload, (p) => {
+    const pop = popsData.find((d) => d.id === p.dataKey)
     if (pop) return pop.nr
     return p.dataKey
   })
@@ -37,7 +37,7 @@ const CustomTooltip = ({ payload, label, active, popsData }) => {
     <Popup>
       <Title>{label}</Title>
       {payloadSorted.map((p, i) => {
-        const pop = popsData.find(d => d.id === p.dataKey)
+        const pop = popsData.find((d) => d.id === p.dataKey)
         let label = p.dataKey
         if (pop) {
           label = `${pop.nr || '(keine Nr)'}: ${pop.name || '(kein Name)'}`

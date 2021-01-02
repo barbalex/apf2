@@ -22,7 +22,7 @@ const IconContainer = styled.div`
 const MenuTitle = styled.div`
   font-size: 14px !important;
   padding: 2px 14px;
-  font-weight: 600;
+  font-weight: 700;
   &:focus {
     outline: none;
   }

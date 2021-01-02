@@ -72,7 +72,7 @@ const Header = styled.p`
 `
 const Title1 = styled.h3`
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   break-after: avoid;
   page-break-after: avoid;
 `
@@ -94,7 +94,7 @@ const FieldRow = styled.div`
   padding: 0.2cm 0;
 `
 const FieldRowBold = styled(FieldRow)`
-  font-weight: 800;
+  font-weight: 700;
 `
 const FieldRowFullWidth = styled.div`
   display: flex;

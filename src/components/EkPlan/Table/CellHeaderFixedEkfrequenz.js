@@ -22,7 +22,7 @@ export const StyledCell = styled.div`
   cursor: pointer;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
-    font-weight: 800 !important;
+    font-weight: 700 !important;
   }
 `
 const Title = styled.div`

@@ -98,7 +98,7 @@ const PageTitle = styled(Typography)`
   }
 `
 const CardTitle = styled.h3`
-  font-weight: 900;
+  font-weight: 700;
 `
 
 const bgImageStyle = {

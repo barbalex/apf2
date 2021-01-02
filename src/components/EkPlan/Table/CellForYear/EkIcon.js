@@ -11,7 +11,7 @@ const CheckboxContainer = styled.div`
   height: 100%;
   display: flex;
   flex-wrap: nowrap;
-  justify-content: ${props => (props.showcount ? 'space-between' : 'center')};
+  justify-content: ${(props) => (props.showcount ? 'space-between' : 'center')};
 `
 
 const Icon = styled.svg`
@@ -23,16 +23,17 @@ const StyledCheckbox = styled.div`
   position: relative;
   width: 17px;
   height: 17px;
-  background: ${props => (props.planned ? 'rgba(46, 125, 50, 0.05)' : 'none')};
+  background: ${(props) =>
+    props.planned ? 'rgba(46, 125, 50, 0.05)' : 'none'};
   border-radius: 3px;
-  border: ${props => (props.planned ? '1px solid #2e7d32' : 'none')};
+  border: ${(props) => (props.planned ? '1px solid #2e7d32' : 'none')};
   transition: all 150ms;
   flex-grow: 0;
   flex-basis: 19px;
   flex-shrink: 0;
 `
 const NrOfEk = styled.div`
-  font-weight: 900;
+  font-weight: 700;
   font-size: smaller;
   position: absolute;
   bottom: -2px;
@@ -62,9 +63,9 @@ const EkIcon = ({ planned, eks, einheits }) => {
   if (einheits && einheits.length) {
     eksHaveCountedZielrelevanteEinheits =
       eks
-        .flatMap(ek =>
+        .flatMap((ek) =>
           get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', []).filter(
-            z =>
+            (z) =>
               einheits.includes(z.einheit) &&
               z.anzahl !== null &&
               get(
@@ -74,14 +75,14 @@ const EkIcon = ({ planned, eks, einheits }) => {
               ).length > 0,
           ),
         )
-        .filter(o => !!o).length > 0
+        .filter((o) => !!o).length > 0
   }
   if (eksHaveCountedZielrelevanteEinheits) {
     sumCounted = sum(
-      eks.flatMap(ek =>
+      eks.flatMap((ek) =>
         get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
           .filter(
-            z =>
+            (z) =>
               einheits.includes(z.einheit) &&
               z.anzahl !== null &&
               get(
@@ -90,7 +91,7 @@ const EkIcon = ({ planned, eks, einheits }) => {
                 [],
               ).length > 0,
           )
-          .flatMap(z => z.anzahl),
+          .flatMap((z) => z.anzahl),
       ),
     )
   }

@@ -11,15 +11,15 @@ const Popup = styled.div`
 `
 const Title = styled.div`
   font-size: 1em;
-  font-weight: 900;
+  font-weight: 700;
 `
 const Row = styled.div`
   font-size: 0.8em;
-  font-weight: 600;
+  font-weight: 700;
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
-  color: ${props => props.color};
+  color: ${(props) => props.color};
 `
 const Label = styled.div`
   padding-right: 5px;
