@@ -2,6 +2,10 @@ CREATE OR REPLACE FUNCTION apflora.historize(year integer)
   RETURNS boolean AS $$
   BEGIN
 
+  delete from apflora.tpop_history where apflora.tpop_history.year = $1;
+  delete from apflora.pop_history where apflora.pop_history.year = $1;
+  delete from apflora.ap_history where apflora.ap_history.year = $1;
+
   insert into apflora.ap_history
   select
     $1 as year,
@@ -15,18 +19,7 @@ CREATE OR REPLACE FUNCTION apflora.historize(year integer)
     ekf_beobachtungszeitpunkt,
     changed,
     changed_by
-  from apflora.ap
-  on conflict on constraint ap_history_pkey do update set
-    -- do not update prmary keys: year and id
-    art_id = excluded.art_id,
-    proj_id = excluded.proj_id,
-    bearbeitung = excluded.bearbeitung,
-    start_jahr = excluded.start_jahr,
-    umsetzung = excluded.umsetzung,
-    bearbeiter = excluded.bearbeiter,
-    ekf_beobachtungszeitpunkt = excluded.ekf_beobachtungszeitpunkt,
-    changed = excluded.changed,
-    changed_by = excluded.changed_by;
+  from apflora.ap;
 
   insert into apflora.pop_history
   select
@@ -42,19 +35,7 @@ CREATE OR REPLACE FUNCTION apflora.historize(year integer)
     geom_point,
     changed,
     changed_by
-  from apflora.pop
-  on conflict on constraint pop_history_pkey do update set
-    -- do not update prmary keys: year and id
-    ap_id = excluded.ap_id,
-    nr = excluded.nr,
-    name = excluded.name,
-    status = excluded.status,
-    status_unklar = excluded.status_unklar,
-    status_unklar_begruendung = excluded.status_unklar_begruendung,
-    bekannt_seit = excluded.bekannt_seit,
-    geom_point = excluded.geom_point,
-    changed = excluded.changed,
-    changed_by = excluded.changed_by;
+  from apflora.pop;
 
   insert into apflora.tpop_history
   select
@@ -90,39 +71,7 @@ CREATE OR REPLACE FUNCTION apflora.historize(year integer)
     bemerkungen,
     changed,
     changed_by
-  from apflora.tpop
-  on conflict on constraint tpop_history_pkey do update set
-    -- do not update prmary keys: year and id
-    pop_id = excluded.pop_id,
-    nr = excluded.nr,
-    gemeinde = excluded.gemeinde,
-    flurname = excluded.flurname,
-    geom_point = excluded.geom_point,
-    radius = excluded.radius,
-    hoehe = excluded.hoehe,
-    exposition = excluded.exposition,
-    klima = excluded.klima,
-    neigung = excluded.neigung,
-    beschreibung = excluded.beschreibung,
-    kataster_nr = excluded.kataster_nr,
-    status = excluded.status,
-    status_unklar = excluded.status_unklar,
-    status_unklar_grund = excluded.status_unklar_grund,
-    apber_relevant = excluded.apber_relevant,
-    apber_relevant_grund = excluded.apber_relevant_grund,
-    bekannt_seit = excluded.bekannt_seit,
-    eigentuemer = excluded.eigentuemer,
-    kontakt = excluded.kontakt,
-    nutzungszone = excluded.nutzungszone,
-    bewirtschafter = excluded.bewirtschafter,
-    bewirtschaftung = excluded.bewirtschaftung,
-    ekfrequenz = excluded.ekfrequenz,
-    ekfrequenz_startjahr = excluded.ekfrequenz_startjahr,
-    ekfrequenz_abweichend = excluded.ekfrequenz_abweichend,
-    ekf_kontrolleur = excluded.ekf_kontrolleur,
-    bemerkungen = excluded.bemerkungen,
-    changed = excluded.changed,
-    changed_by = excluded.changed_by;
+  from apflora.tpop;
 
   RETURN FOUND;
 
