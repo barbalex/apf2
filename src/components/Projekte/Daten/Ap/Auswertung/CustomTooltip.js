@@ -27,7 +27,7 @@ const Label = styled.div`
 const Value = styled.div``
 
 const CustomTooltip = ({ payload, label, active, color, reverse }) => {
-  const data = reverse ? payload : payload.reverse()
+  const data = reverse ? payload : payload?.reverse() ?? []
 
   return (
     <Popup>
@@ -39,7 +39,7 @@ const CustomTooltip = ({ payload, label, active, color, reverse }) => {
             : null
 
         return (
-          <Row key={o.dataKey} color={color[o.dataKey]}>
+          <Row key={`${i}/${o.dataKey}`} color={color[o.dataKey]}>
             <Label>{`${o.dataKey}:`}</Label>
             <Value>{value}</Value>
           </Row>
