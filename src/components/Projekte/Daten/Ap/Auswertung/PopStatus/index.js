@@ -108,11 +108,6 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
 
-  console.log('PopStatus', {
-    popStatusData,
-    erloschenZuvorAutochthon: dataPopStati?.a7LPop?.nodes,
-  })
-
   return (
     <>
       {loadingPopStati ? (
