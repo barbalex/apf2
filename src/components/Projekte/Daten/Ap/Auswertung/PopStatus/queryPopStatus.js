@@ -1,3 +1,6 @@
+/**
+ * 2021.01.03: not in use any more
+ */
 import { gql } from '@apollo/client'
 
 // query: v_ap_ausw_pop_status

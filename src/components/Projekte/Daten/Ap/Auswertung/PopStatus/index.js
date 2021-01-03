@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
-import get from 'lodash/get'
 import {
   AreaChart,
   Area,
@@ -13,8 +12,10 @@ import {
 } from 'recharts'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 import styled from 'styled-components'
+import uniq from 'lodash/uniq'
 
-import queryPopStatus from './queryPopStatus'
+import query from './query'
+import queryStartjahr from './queryStartjahr'
 import CustomTooltip from '../CustomTooltip'
 import Error from '../../../../../shared/Error'
 
@@ -42,45 +43,79 @@ const Title = styled.h4`
 
 const color = {
   'ursprünglich, aktuell': '#2e7d32',
-  'ursprünglich, erloschen (nach 1950)': 'rgba(46,125,50,0.5)',
-  'angesiedelt, aktuell': 'rgba(245,141,66,1)',
+  'angesiedelt (vor Beginn AP)': 'rgba(245,141,66,1)',
+  'angesiedelt (nach Beginn AP)': 'rgba(245,141,66,1)',
   Ansaatversuch: 'brown',
-  'angesiedelt, erloschen/nicht etabliert': 'rgba(245,141,66,0.5)',
+  'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt':
+    'rgba(46,125,50,0.5)',
+  'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt':
+    'rgba(245,141,66,0.5)',
   'potentieller Wuchs-/Ansiedlungsort': 'grey',
 }
 
 const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
+  const [startJahr, setStartJahr] = useState()
   const {
-    data: dataPopStatus,
-    error: errorPopStatus,
-    loading: loadingPopStatus,
-  } = useQuery(queryPopStatus, {
-    variables: { id },
+    data: dataStartjahr,
+    //error: errorStartjahr,
+    //loading: loadingStartjahr,
+  } = useQuery(queryStartjahr, {
+    variables: { apId: id },
   })
-  const popStatusRawData =
-    get(dataPopStatus, 'allVApAuswPopStatuses.nodes') || []
-  const popStatusData = popStatusRawData.map((e) => {
-    const val = JSON.parse(e.values)
+  const queriedStartjahr = dataStartjahr?.apById?.startJahr
+  useEffect(() => {
+    queriedStartjahr && setStartJahr(queriedStartjahr)
+  }, [queriedStartjahr])
 
-    return {
-      jahr: e.jahr,
-      'ursprünglich, aktuell': val[100] || 0,
-      'ursprünglich, erloschen (nach 1950)': val[101] || 0,
-      'angesiedelt, aktuell': val[200] || 0,
-      Ansaatversuch: val[201] || 0,
-      'angesiedelt, erloschen/nicht etabliert': val[202] || 0,
-      'potentieller Wuchs-/Ansiedlungsort': val[300] || 0,
-    }
+  const {
+    data: dataPopStati,
+    error: errorPopStati,
+    loading: loadingPopStati,
+  } = useQuery(query, {
+    variables: { apId: id, startJahr: startJahr, query: !!startJahr },
   })
+  const years = uniq(
+    (dataPopStati?.years?.nodes ?? []).map((n) => n.year),
+  ).sort()
 
-  if (errorPopStatus) return <Error error={errorPopStatus} />
+  const popStatusData = years.map((jahr) => ({
+    jahr,
+    'ursprünglich, aktuell': (dataPopStati?.a3LPop?.nodes ?? []).filter(
+      (n) => n.year === jahr,
+    ).length,
+    'angesiedelt (vor Beginn AP)': (dataPopStati?.a4LPop?.nodes ?? []).filter(
+      (n) => n.year === jahr,
+    ).length,
+    'angesiedelt (nach Beginn AP)': (dataPopStati?.a5LPop?.nodes ?? []).filter(
+      (n) => n.year === jahr,
+    ).length,
+    Ansaatversuch: (dataPopStati?.a9LPop?.nodes ?? []).filter(
+      (n) => n.year === jahr,
+    ).length,
+    'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt': (
+      dataPopStati?.a7LPop?.nodes ?? []
+    ).filter((n) => n.year === jahr).length,
+    'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt': (
+      dataPopStati?.a8LPop?.nodes ?? []
+    ).filter((n) => n.year === jahr).length,
+    'potentieller Wuchs-/Ansiedlungsort': (
+      dataPopStati?.a10LPop?.nodes ?? []
+    ).filter((n) => n.year === jahr).length,
+  }))
+
+  if (errorPopStati) return <Error error={errorPopStati} />
 
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
 
+  console.log('PopStatus', {
+    popStatusData,
+    erloschenZuvorAutochthon: dataPopStati?.a7LPop?.nodes,
+  })
+
   return (
     <>
-      {loadingPopStatus ? (
+      {loadingPopStati ? (
         <SpinnerContainer>
           <Spinner
             size={50}
@@ -90,7 +125,7 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
           />
           <SpinnerText>lade Populations-Stati...</SpinnerText>
         </SpinnerContainer>
-      ) : popStatusRawData.length ? (
+      ) : years.length ? (
         <>
           <Title>Populationen nach Status</Title>
           <ResponsiveContainer width="99%" height={height}>
@@ -121,19 +156,19 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
               />
               <Area
                 type="monotone"
-                dataKey="ursprünglich, erloschen (nach 1950)"
+                dataKey="angesiedelt (vor Beginn AP)"
                 stackId="1"
-                stroke={color['ursprünglich, erloschen (nach 1950)']}
-                fill={color['ursprünglich, erloschen (nach 1950)']}
+                stroke={color['angesiedelt (vor Beginn AP)']}
+                fill={color['angesiedelt (vor Beginn AP)']}
                 legendType="square"
                 isAnimationActive={!print}
               />
               <Area
                 type="monotone"
-                dataKey="angesiedelt, aktuell"
+                dataKey="angesiedelt (nach Beginn AP)"
                 stackId="1"
-                stroke={color['angesiedelt, aktuell']}
-                fill={color['angesiedelt, aktuell']}
+                stroke={color['angesiedelt (nach Beginn AP)']}
+                fill={color['angesiedelt (nach Beginn AP)']}
                 legendType="square"
                 isAnimationActive={!print}
               />
@@ -148,10 +183,35 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
               />
               <Area
                 type="monotone"
-                dataKey="angesiedelt, erloschen/nicht etabliert"
+                dataKey="erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt"
                 stackId="1"
-                stroke={color['angesiedelt, erloschen/nicht etabliert']}
-                fill={color['angesiedelt, erloschen/nicht etabliert']}
+                stroke={
+                  color[
+                    'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt'
+                  ]
+                }
+                fill={
+                  color[
+                    'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt'
+                  ]
+                }
+                legendType="square"
+                isAnimationActive={!print}
+              />
+              <Area
+                type="monotone"
+                dataKey="erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt"
+                stackId="1"
+                stroke={
+                  color[
+                    'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt'
+                  ]
+                }
+                fill={
+                  color[
+                    'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt'
+                  ]
+                }
                 legendType="square"
                 isAnimationActive={!print}
               />
