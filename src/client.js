@@ -95,7 +95,13 @@ export default ({ idb, store }) => {
 
   const cache = new InMemoryCache({
     dataIdFromObject: (object) => {
-      if (object.id && isNaN(object.id)) return object.id
+      //console.log({ object })
+      if (object.__typename?.toLowerCase()?.includes('history')) {
+        return `${object.id}/${object.year}`
+      }
+      if (object.id && isNaN(object.id)) {
+        return object.id
+      }
       return defaultDataIdFromObject(object)
     },
   })
