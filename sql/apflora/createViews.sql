@@ -5049,6 +5049,7 @@ order BY
 comment on view apflora.v_tpop_last_count_with_massn is '@foreignKey (tpop_id) references tpop (id)';
 
 -- used in form ap
+-- 2021.01.03: not in use any more
 DROP VIEW IF EXISTS apflora.v_ap_ausw_pop_status CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_ausw_pop_status AS
 with data as (
