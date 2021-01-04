@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useQuery } from '@apollo/client'
 import {
   AreaChart,
@@ -15,7 +15,6 @@ import styled from 'styled-components'
 import uniq from 'lodash/uniq'
 
 import query from './query'
-import queryStartjahr from './queryStartjahr'
 import CustomTooltip from '../CustomTooltip'
 import Error from '../../../../../shared/Error'
 
@@ -54,53 +53,29 @@ const color = {
 }
 
 const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
-  const [startJahr, setStartJahr] = useState()
-  const {
-    data: dataStartjahr,
-    //error: errorStartjahr,
-    //loading: loadingStartjahr,
-  } = useQuery(queryStartjahr, {
-    variables: { apId: id },
-  })
-  const queriedStartjahr = dataStartjahr?.apById?.startJahr
-  useEffect(() => {
-    queriedStartjahr && setStartJahr(queriedStartjahr)
-  }, [queriedStartjahr])
-
   const {
     data: dataPopStati,
     error: errorPopStati,
     loading: loadingPopStati,
   } = useQuery(query, {
-    variables: { apId: id, startJahr: startJahr, query: !!startJahr },
+    variables: { apId: id },
   })
+  const rows = dataPopStati?.popNachStatusForJber?.nodes ?? []
   const years = uniq(
     (dataPopStati?.years?.nodes ?? []).map((n) => n.year),
   ).sort()
 
-  const popStatusData = years.map((jahr) => ({
-    jahr,
-    'ursprünglich, aktuell': (dataPopStati?.a3LPop?.nodes ?? []).filter(
-      (n) => n.year === jahr,
-    ).length,
-    'angesiedelt (vor Beginn AP)': (dataPopStati?.a4LPop?.nodes ?? []).filter(
-      (n) => n.year === jahr,
-    ).length,
-    'angesiedelt (nach Beginn AP)': (dataPopStati?.a5LPop?.nodes ?? []).filter(
-      (n) => n.year === jahr,
-    ).length,
-    Ansaatversuch: (dataPopStati?.a9LPop?.nodes ?? []).filter(
-      (n) => n.year === jahr,
-    ).length,
-    'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt': (
-      dataPopStati?.a7LPop?.nodes ?? []
-    ).filter((n) => n.year === jahr).length,
-    'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt': (
-      dataPopStati?.a8LPop?.nodes ?? []
-    ).filter((n) => n.year === jahr).length,
-    'potentieller Wuchs-/Ansiedlungsort': (
-      dataPopStati?.a10LPop?.nodes ?? []
-    ).filter((n) => n.year === jahr).length,
+  const popStatusData = rows.map((row) => ({
+    jahr: row.year,
+    'ursprünglich, aktuell': row?.a3LPop ?? 0,
+    'angesiedelt (vor Beginn AP)': row?.a4LPop ?? 0,
+    'angesiedelt (nach Beginn AP)': row?.a5LPop ?? 0,
+    Ansaatversuch: row?.a9LPop ?? 0,
+    'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt':
+      row?.a7LPop ?? 0,
+    'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt':
+      row?.a8LPop ?? 0,
+    'potentieller Wuchs-/Ansiedlungsort': row?.a10LPop ?? 0,
   }))
 
   if (errorPopStati) return <Error error={errorPopStati} />
