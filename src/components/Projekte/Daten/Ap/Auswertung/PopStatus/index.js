@@ -12,7 +12,6 @@ import {
 } from 'recharts'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 import styled from 'styled-components'
-import uniq from 'lodash/uniq'
 
 import query from './query'
 import CustomTooltip from '../CustomTooltip'
@@ -61,21 +60,18 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
     variables: { apId: id },
   })
   const rows = dataPopStati?.popNachStatusForJber?.nodes ?? []
-  const years = uniq(
-    (dataPopStati?.years?.nodes ?? []).map((n) => n.year),
-  ).sort()
 
   const popStatusData = rows.map((row) => ({
     jahr: row.year,
-    'ursprünglich, aktuell': row?.a3LPop ?? 0,
-    'angesiedelt (vor Beginn AP)': row?.a4LPop ?? 0,
-    'angesiedelt (nach Beginn AP)': row?.a5LPop ?? 0,
-    Ansaatversuch: row?.a9LPop ?? 0,
+    'ursprünglich, aktuell': row?.a3Lpop ?? 0,
+    'angesiedelt (vor Beginn AP)': row?.a4Lpop ?? 0,
+    'angesiedelt (nach Beginn AP)': row?.a5Lpop ?? 0,
+    Ansaatversuch: row?.a9Lpop ?? 0,
     'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt':
-      row?.a7LPop ?? 0,
+      row?.a7Lpop ?? 0,
     'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt':
-      row?.a8LPop ?? 0,
-    'potentieller Wuchs-/Ansiedlungsort': row?.a10LPop ?? 0,
+      row?.a8Lpop ?? 0,
+    'potentieller Wuchs-/Ansiedlungsort': row?.a10Lpop ?? 0,
   }))
 
   if (errorPopStati) return <Error error={errorPopStati} />
@@ -95,7 +91,7 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
           />
           <SpinnerText>lade Populations-Stati...</SpinnerText>
         </SpinnerContainer>
-      ) : years.length ? (
+      ) : rows.length ? (
         <>
           <Title>Populationen nach Status</Title>
           <ResponsiveContainer width="99%" height={height}>
