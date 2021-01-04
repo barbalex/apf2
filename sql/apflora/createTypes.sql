@@ -40,3 +40,9 @@ CREATE TYPE apflora.q_tpop_counted_einheit_multiple_times_in_year AS (
   einheit text,
   anzahl bigint
 );
+
+create type apflora.tpop_kontrolliert_for_jber as (
+  year integer,
+  anz_tpop bigint,
+  anz_tpopber bigint
+);

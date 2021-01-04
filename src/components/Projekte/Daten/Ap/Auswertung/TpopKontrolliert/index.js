@@ -55,11 +55,11 @@ const ApAuswertungTpopKontrolliert = ({ id, height = 400, print }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { id },
   })
-  const erfolgData = get(data, 'allVApAuswTpopKontrollierts.nodes', []).map(
+  const erfolgData = get(data, 'tpopKontrolliertForJber.nodes', []).map(
     (d) => ({
-      jahr: d.jahr,
-      'Teil-Populationen': d.anzahlTpop,
-      kontrolliert: d.anzahlKontrolliert,
+      jahr: d.year,
+      'Teil-Populationen': d.anzTpop,
+      kontrolliert: d.anzTpopber,
     }),
   )
 
