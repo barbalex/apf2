@@ -2,96 +2,20 @@ DROP FUNCTION IF EXISTS apflora.tpop_kontrolliert(apid uuid);
 CREATE OR REPLACE FUNCTION apflora.tpop_kontrolliert(apid uuid)
   RETURNS setof apflora.tpop_kontrolliert AS
   $$
-  SELECT DISTINCT
-    apflora.ap.proj_id,
-    apflora.pop.ap_id,
-    apflora.pop.id,
-    apflora.pop.nr
+  SELECT 
+    tpopber.*
   FROM
-    apflora.ap
-    INNER JOIN
-      apflora.pop
-      ON apflora.pop.ap_id = apflora.ap.id
+    apflora.tpopber tpopber
+    INNER JOIN apflora.tpop_history tpop
+      inner join apflora.pop_history pop
+      on tpop.pop_id = pop.id and tpop.year = pop.year
+    ON tpopber.tpop_id = tpop.id and tpopber.jahr = tpop.year
   WHERE
-    apflora.pop.id IN (
-      SELECT
-        apflora.tpop.pop_id
-      FROM
-        apflora.tpop
-        inner join apflora.pop
-          inner join apflora.ap
-          on apflora.ap.id = apflora.pop.ap_id
-        on apflora.pop.id = apflora.tpop.pop_id
-      WHERE
-        apflora.tpop.apber_relevant = true
-        and apflora.ap.id = $2
-        and apflora.ap.proj_id = $1
-      GROUP BY
-        apflora.tpop.pop_id
-    )
-    and apflora.pop.id IN (
-      -- 3. "Pop mit TPop mit verlangten TPopBer im Berichtjahr" ermitteln:
-      SELECT DISTINCT
-        apflora.tpop.pop_id
-      FROM
-        apflora.tpop
-      WHERE
-        apflora.tpop.id IN (
-          -- 1. "TPop mit Ansiedlungen/Ansaaten vor dem Berichtjahr" ermitteln:
-          SELECT DISTINCT
-            apflora.tpopmassn.tpop_id
-          FROM
-            apflora.tpopmassn
-            inner join apflora.tpop
-              inner join apflora.pop
-                inner join apflora.ap
-                on apflora.ap.id = apflora.pop.ap_id
-              on apflora.pop.id = apflora.tpop.pop_id
-            on apflora.tpop.id = apflora.tpopmassn.tpop_id
-          WHERE
-            apflora.tpopmassn.typ in (1, 2, 3)
-            and apflora.tpopmassn.jahr < $3
-            and apflora.ap.id = $2
-            and apflora.ap.proj_id = $1
-        )
-        and apflora.tpop.id IN (
-          -- 2. "TPop mit Kontrolle im Berichtjahr" ermitteln:
-          SELECT DISTINCT
-            apflora.tpopkontr.tpop_id
-          FROM
-            apflora.tpopkontr
-            inner join apflora.tpop
-              inner join apflora.pop
-                inner join apflora.ap
-                on apflora.ap.id = apflora.pop.ap_id
-              on apflora.pop.id = apflora.tpop.pop_id
-            on apflora.tpop.id = apflora.tpopkontr.tpop_id
-          WHERE
-            apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
-            and apflora.tpopkontr.jahr = $3
-            and apflora.ap.id = $2
-            and apflora.ap.proj_id = $1
-        )
-    )
-    and apflora.pop.id NOT IN (
-      -- 4. "Pop mit PopBer im Berichtjahr" ermitteln:
-      SELECT DISTINCT
-        apflora.popber.pop_id
-      FROM
-        apflora.popber
-          inner join apflora.pop
-            inner join apflora.ap
-            on apflora.ap.id = apflora.pop.ap_id
-          on apflora.pop.id = apflora.popber.pop_id
-      WHERE
-        apflora.popber.jahr = $3
-        and apflora.ap.id = $2
-        and apflora.ap.proj_id = $1
-    )
-    and apflora.pop.ap_id = $2
-    and apflora.ap.proj_id = $1
-    ORDER BY apflora.pop.nr
+    pop.ap_id = $1
+    and pop.status < 300
+    and tpop.apber_relevant = true
+  ORDER BY tpopber.jahr
   $$
   LANGUAGE sql STABLE;
-ALTER FUNCTION apflora.tpop_kontrolliert(projid uuid, apid uuid, berichtjahr integer)
+ALTER FUNCTION apflora.tpop_kontrolliert(apid uuid)
   OWNER TO postgres;

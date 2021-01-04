@@ -1,6 +1,6 @@
-DROP FUNCTION IF EXISTS apflora.tpop_jahre(apid uuid);
-CREATE OR REPLACE FUNCTION apflora.tpop_jahre(apid uuid)
-  RETURNS setof apflora.tpop_jahre AS
+DROP FUNCTION IF EXISTS apflora.tpop_histories(apid uuid);
+CREATE OR REPLACE FUNCTION apflora.tpop_histories(apid uuid)
+  RETURNS setof apflora.tpop_histories AS
   $$
   SELECT
     *
@@ -14,5 +14,5 @@ CREATE OR REPLACE FUNCTION apflora.tpop_jahre(apid uuid)
     ORDER BY apflora.pop.nr
   $$
   LANGUAGE sql STABLE;
-ALTER FUNCTION apflora.tpop_jahre(apid uuid)
+ALTER FUNCTION apflora.tpop_histories(apid uuid)
   OWNER TO postgres;
