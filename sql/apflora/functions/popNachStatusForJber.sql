@@ -1,13 +1,13 @@
-DROP FUNCTION IF EXISTS apflora.pop_nach_status_for_jber(apid uuid);
-CREATE OR REPLACE FUNCTION apflora.pop_nach_status_for_jber(apid uuid)
-  RETURNS setof apflora.pop_nach_status_for_jber AS
+drop function if exists apflora.pop_nach_status_for_jber(apid uuid);
+create or replace function apflora.pop_nach_status_for_jber(apid uuid)
+  returns setof apflora.pop_nach_status_for_jber as
   $$
   with years as (
     select distinct pop.year
     from apflora.pop_history pop
       inner join apflora.tpop_history tpop
       on tpop.pop_id = pop.id and tpop.year = pop.year
-    WHERE
+    where
       pop.ap_id = $1
       and tpop.apber_relevant = true
     order by pop.year
@@ -18,59 +18,132 @@ CREATE OR REPLACE FUNCTION apflora.pop_nach_status_for_jber(apid uuid)
     from apflora.pop_history pop
       inner join apflora.tpop_history tpop
       on tpop.pop_id = pop.id and tpop.year = pop.year
-    WHERE
+    where
       pop.ap_id = $1
       and pop.status = 100
       and tpop.apber_relevant = true
     group by pop.year
-  ), a4LPop as (
+  ), a4lpop as (
     select
       pop.year,
-      count(distinct pop.id) as a4LPop
+      count(distinct pop.id) as a4lpop
     from apflora.pop_history pop
       inner join apflora.tpop_history tpop
       on tpop.pop_id = pop.id and tpop.year = pop.year
       inner join apflora.ap_history ap
       on ap.id = pop.ap_id and ap.year = pop.year
-    WHERE
+    where
       pop.ap_id = $1
       and pop.status = 200
       and ap.start_jahr is not null
       and pop.bekannt_seit < ap.start_jahr
       and tpop.apber_relevant = true
     group by pop.year
-  ), a5LPop as (
+  ), a5lpop as (
     select
       pop.year,
-      count(distinct pop.id) as a5LPop
+      count(distinct pop.id) as a5lpop
     from apflora.pop_history pop
       inner join apflora.tpop_history tpop
       on tpop.pop_id = pop.id and tpop.year = pop.year
       inner join apflora.ap_history ap
       on ap.id = pop.ap_id and ap.year = pop.year
-    WHERE
+    where
       pop.ap_id = $1
       and pop.status = 200
       and ap.start_jahr is not null
       and pop.bekannt_seit >= ap.start_jahr
       and tpop.apber_relevant = true
     group by pop.year
+  ), a7lpop as (
+    select
+      pop.year,
+      count(distinct pop.id) as a7lpop
+    from apflora.pop_history pop
+      inner join apflora.tpop_history tpop
+      on tpop.pop_id = pop.id and tpop.year = pop.year
+      inner join apflora.ap_history ap
+      on ap.id = pop.ap_id and ap.year = pop.year
+    where
+      pop.ap_id = $1
+      and tpop.apber_relevant = true
+      and (
+        pop.status = 101
+        or (
+          pop.status = 202
+          and ap.start_jahr is not null
+          and (
+            pop.bekannt_seit is null
+            or pop.bekannt_seit < ap.start_jahr
+          )
+        )
+      )
+    group by pop.year
+  ), a8lpop as (
+    select
+      pop.year,
+      count(distinct pop.id) as a8lpop
+    from apflora.pop_history pop
+      inner join apflora.tpop_history tpop
+      on tpop.pop_id = pop.id and tpop.year = pop.year
+      inner join apflora.ap_history ap
+      on ap.id = pop.ap_id and ap.year = pop.year
+    where
+      pop.ap_id = $1
+      and pop.status = 202
+      and ap.start_jahr is not null
+      and pop.bekannt_seit >= ap.start_jahr
+      and tpop.apber_relevant = true
+    group by pop.year
+  ), a9lpop as (
+    select
+      pop.year,
+      count(distinct pop.id) as a9lpop
+    from apflora.pop_history pop
+      inner join apflora.tpop_history tpop
+      on tpop.pop_id = pop.id and tpop.year = pop.year
+    where
+      pop.ap_id = $1
+      and pop.status = 201
+      and tpop.apber_relevant = true
+    group by pop.year
+  ), a10lpop as (
+    select
+      pop.year,
+      count(distinct pop.id) as a10lpop
+    from apflora.pop_history pop
+    where
+      pop.ap_id = $1
+      and pop.status = 300
+    group by pop.year
   )
-  SELECT
+  select
     years.year,
     a3lpop.a3lpop,
-    a4LPop.a4LPop,
-    a5LPop.a5LPop
-  FROM
+    a4lpop.a4lpop,
+    a5lpop.a5lpop,
+    a7lpop.a7lpop,
+    a8lpop.a8lpop,
+    a9lpop.a9lpop,
+    a10lpop.a10lpop
+  from
     years
     left join a3lpop
     on a3lpop.year = years.year
-    left join a4LPop
-    on a4LPop.year = years.year
-    left join a5LPop
-    on a5LPop.year = years.year
+    left join a4lpop
+    on a4lpop.year = years.year
+    left join a5lpop
+    on a5lpop.year = years.year
+    left join a7lpop
+    on a7lpop.year = years.year
+    left join a8lpop
+    on a8lpop.year = years.year
+    left join a9lpop
+    on a9lpop.year = years.year
+    left join a10lpop
+    on a10lpop.year = years.year
   order by years.year
   $$
-  LANGUAGE sql STABLE;
-ALTER FUNCTION apflora.pop_nach_status_for_jber(apid uuid)
-  OWNER TO postgres;
+  language sql stable;
+alter function apflora.pop_nach_status_for_jber(apid uuid)
+  owner to postgres;
