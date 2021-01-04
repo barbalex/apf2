@@ -46,3 +46,14 @@ create type apflora.tpop_kontrolliert_for_jber as (
   anz_tpop bigint,
   anz_tpopber bigint
 );
+
+create type apflora.pop_nach_status_for_jber as (
+  year integer,
+  a3lpop bigint,
+  a4lpop bigint,
+  a5lpop bigint,
+  a7lpop bigint,
+  a8lpop bigint,
+  a9lpop bigint,
+  a10lpop bigint
+);
