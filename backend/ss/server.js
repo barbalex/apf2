@@ -41,6 +41,13 @@ const karteBetreuungsgebieteUrl = `${karteBetreuungsgebieteBaseUrl}?${querystrin
 
 async function start() {
   server.route({
+    method: '*',
+    path: '/',
+    handler: (request, h) => {
+      return `Hello there`
+    },
+  })
+  server.route({
     method: 'GET',
     path: '/karte/massnahmen',
     handler: async (req, h) => {

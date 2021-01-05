@@ -14,7 +14,7 @@ api.apflora.ch {
 ss.apflora.ch {
   reverse_proxy * ss:7000 {
     header_down Access-Control-Allow-Origin *
-    header_down Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    header_down Access-Control-Allow-Methods "HEAD, GET, POST, OPTIONS"
   }
 }
 
