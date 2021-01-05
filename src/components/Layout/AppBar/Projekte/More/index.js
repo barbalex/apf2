@@ -105,7 +105,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
           data-id="appbar-more-logout"
         >{`${user.name} abmelden (und Cache leeren)`}</MenuItem>
         <MenuItem onClick={onClickUptime}>
-          Verfügbarkeit von apflora.ch
+          Verfügbarkeit der Server von apflora.ch
         </MenuItem>
         <Version>Version: 1.48.13 vom 4.01.2021</Version>
       </Menu>
