@@ -1087,6 +1087,26 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         n.nr || n.id
       }`,
     })),
+  tpopMitAktuellenAnpflanzungenOhneZielrelevanteEinheit: () =>
+    get(
+      data,
+      'tpopMitAktuellenAnpflanzungenOhneZielrelevanteEinheit.nodes',
+      [],
+    ).map((n) => ({
+      url: [
+        'Projekte',
+        n.projId,
+        'Aktionspläne',
+        n.apId,
+        'Populationen',
+        n.popId,
+        'Teil-Populationen',
+        n.id,
+      ],
+      text: `Population: ${n.popNr || n.popId}, Teil-Population: ${
+        n.nr || n.id
+      }`,
+    })),
   tpopberOhneJahr: () => {
     const popNodes = get(
       data,

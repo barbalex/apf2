@@ -69,6 +69,7 @@ export default gql`
     $tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl: Boolean!
     $tpopMitStatusPotentiellUndAnsiedlung: Boolean!
     $tpopMitAktuellenKontrollenOhneZielrelevanteEinheit: Boolean!
+    $tpopMitAktuellenAnpflanzungenOhneZielrelevanteEinheit: Boolean!
     $tpopMitStatusPotentiellUndZaehlungMitAnzahl: Boolean!
     $tpopOhneApberRelevant: Boolean!
     $tpopOhneBekanntSeit: Boolean!
