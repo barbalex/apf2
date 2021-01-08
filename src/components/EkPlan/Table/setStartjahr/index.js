@@ -59,6 +59,9 @@ const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   }
   // 2b if ansiedlung: get last ansiedlung
   if (kontrolljahreAb === 'ANSIEDLUNG') {
+    // TODO:
+    // if tpop.status === 201 (Ansaatversuch): choose first ansaat
+    // else: choose last anpflanzung
     ekfrequenzStartjahr = max(
       (row?.tpop?.tpopmassnsByTpopId?.nodes ?? []).map((n) => n.jahr),
     )
