@@ -14,7 +14,7 @@ CREATE OR REPLACE FUNCTION apflora.q_pop_ohne_popber(projid uuid, apid uuid, ber
       ON apflora.pop.ap_id = apflora.ap.id
   WHERE
     apflora.pop.id IN (
-      SELECT
+      SELECT distinct
         apflora.tpop.pop_id
       FROM
         apflora.tpop
@@ -26,55 +26,19 @@ CREATE OR REPLACE FUNCTION apflora.q_pop_ohne_popber(projid uuid, apid uuid, ber
         apflora.tpop.apber_relevant = true
         and apflora.ap.id = $2
         and apflora.ap.proj_id = $1
-      GROUP BY
-        apflora.tpop.pop_id
-    )
-    and apflora.pop.id IN (
-      -- 3. "Pop mit TPop mit verlangten TPopBer im Berichtjahr" ermitteln:
-      SELECT DISTINCT
-        apflora.tpop.pop_id
-      FROM
-        apflora.tpop
-      WHERE
-        apflora.tpop.id IN (
-          -- 1. "TPop mit Ansiedlungen/Ansaaten vor dem Berichtjahr" ermitteln:
-          SELECT DISTINCT
-            apflora.tpopmassn.tpop_id
-          FROM
-            apflora.tpopmassn
-            inner join apflora.tpop
-              inner join apflora.pop
-                inner join apflora.ap
-                on apflora.ap.id = apflora.pop.ap_id
-              on apflora.pop.id = apflora.tpop.pop_id
-            on apflora.tpop.id = apflora.tpopmassn.tpop_id
-          WHERE
-            apflora.tpopmassn.typ in (1, 2, 3)
-            and apflora.tpopmassn.jahr < $3
-            and apflora.ap.id = $2
-            and apflora.ap.proj_id = $1
-        )
         and apflora.tpop.id IN (
-          -- 2. "TPop mit Kontrolle im Berichtjahr" ermitteln:
+          -- mit Kontrolle im Berichtjahr
           SELECT DISTINCT
             apflora.tpopkontr.tpop_id
           FROM
             apflora.tpopkontr
-            inner join apflora.tpop
-              inner join apflora.pop
-                inner join apflora.ap
-                on apflora.ap.id = apflora.pop.ap_id
-              on apflora.pop.id = apflora.tpop.pop_id
-            on apflora.tpop.id = apflora.tpopkontr.tpop_id
           WHERE
             apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
             and apflora.tpopkontr.jahr = $3
-            and apflora.ap.id = $2
-            and apflora.ap.proj_id = $1
         )
     )
     and apflora.pop.id NOT IN (
-      -- 4. "Pop mit PopBer im Berichtjahr" ermitteln:
+      -- mit PopBer im Berichtjahr
       SELECT DISTINCT
         apflora.popber.pop_id
       FROM
