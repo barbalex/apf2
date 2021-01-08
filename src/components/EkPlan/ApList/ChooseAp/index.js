@@ -157,7 +157,7 @@ const EkPlan = ({ setShowChoose }) => {
         />
         {error.current && <Error>{error.current.message}</Error>}
       </SelectContainer>
-    </ErrorBoundary>
+    </ErrorBoundary> 
   )
 }
 
