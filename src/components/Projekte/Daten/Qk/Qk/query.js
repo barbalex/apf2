@@ -1369,6 +1369,18 @@ export default gql`
         nr
       }
     }
+    tpopMitAktuellenAnpflanzungenOhneZielrelevanteEinheit: allVQTpopMitAktuellenAnpflanzungenOhneZielrelevanteEinheits(
+      filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+    ) @include(if: $tpopMitAktuellenAnpflanzungenOhneZielrelevanteEinheit) {
+      nodes {
+        projId
+        apId
+        popId
+        popNr
+        id
+        nr
+      }
+    }
     tpopberOhneJahr: projektById(id: $projId) @include(if: $tpopberOhneJahr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
