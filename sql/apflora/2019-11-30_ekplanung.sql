@@ -32,6 +32,9 @@ with letzte_kontrolle as (
     apflora.tpopkontr.datum desc
 ),
 letzte_ansiedlung as (
+  -- TODO: 
+  -- if tpop.status === 201 (Ansaatversuch): choose first ansaat
+  -- else: choose last anpflanzung
   select distinct on (apflora.tpop.id)
     apflora.tpop.id as tpop_id,
     apflora.tpopmassn.jahr
