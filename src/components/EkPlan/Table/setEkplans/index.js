@@ -5,7 +5,7 @@ import queryEkfrequenz from './queryEkfrequenz'
 import mutationDeleteEkplan from './mutationDeleteEkplan'
 import mutationCreateEkplan from './mutationCreateEkplan'
 
-export default async ({
+const setEkplans = async ({
   tpopId,
   ekfrequenz: ekfrequenzValue,
   ekfrequenzStartjahr,
@@ -17,7 +17,7 @@ export default async ({
   // TODO:
   // only return if set ekfrequenz has kontrolljahre?
   // but then: query ekplans beginning when? This year
-  console.log('setEkplans', { ekfrequenzValue })
+  //console.log('setEkplans', { ekfrequenzValue })
   if (!ekfrequenzStartjahr) return
   const { enqueNotification } = store
   // 1. query all ekplans beginning with ekfrequenzStartJahr
@@ -129,3 +129,5 @@ export default async ({
   })
   refetchTpop()
 }
+
+export default setEkplans
