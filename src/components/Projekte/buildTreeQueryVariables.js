@@ -293,7 +293,7 @@ export default ({
   }
   const tpopkontrzaehlsFilter = {
     tpopkontrId: { in: tpopkontr },
-    einheit: { isNull: false },
+    anzahl: { isNull: false },
   }
   if (!!nodeLabelFilter.tpopkontrzaehl) {
     tpopkontrzaehlsFilter.label = {
