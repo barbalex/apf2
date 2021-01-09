@@ -291,7 +291,10 @@ export default ({
       includesInsensitive: nodeLabelFilter.tpopkontr,
     }
   }
-  const tpopkontrzaehlsFilter = { tpopkontrId: { in: tpopkontr } }
+  const tpopkontrzaehlsFilter = {
+    tpopkontrId: { in: tpopkontr },
+    einheit: { isNull: false },
+  }
   if (!!nodeLabelFilter.tpopkontrzaehl) {
     tpopkontrzaehlsFilter.label = {
       includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
