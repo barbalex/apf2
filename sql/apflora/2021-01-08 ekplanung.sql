@@ -251,7 +251,9 @@ select
     tpop.nr;
 
 update apflora.tpop
-set ekfrequenz_startjahr = apflora.v_tpop_ekfrequenz_to_set.ekfrequenz_startjahr
+set 
+  ekfrequenz_startjahr = apflora.v_tpop_ekfrequenz_to_set.ekfrequenz_startjahr,
+  ekfrequenz = apflora.v_tpop_ekfrequenz_to_set.ekfrequenz
 from apflora.v_tpop_ekfrequenz_to_set
 where apflora.tpop.id = apflora.v_tpop_ekfrequenz_to_set.tpop_id;
 
@@ -268,7 +270,9 @@ select
   tpophist.status as status_code_2019,
   status_werte_hist.text as status_text_2019,
   tpop.ekfrequenz as ekfrequenz_id,
-  ekfrequenz.code as ekfrequenz_code
+  ekfrequenz.code as ekfrequenz_code,
+  ekfrequenz_to_set.id as ekfrequenz_to_set_id,
+  ekfrequenz_to_set.code as ekfrequenz_to_set_code
 from apflora.tpop tpop
   inner join apflora.tpop_history tpophist
     inner join apflora.pop_status_werte status_werte_hist
@@ -282,6 +286,8 @@ from apflora.tpop tpop
     inner join apflora.ap ap
       inner join apflora.ae_taxonomies tax
       on tax.id = ap.art_id
+      inner join apflora.ekfrequenz ekfrequenz_to_set
+      on ekfrequenz_to_set.ap_id = ap.id and ekfrequenz_to_set.code = 'nie (EK)'
     on ap.id = pop.ap_id
   on pop.id = tpop.pop_id
 WHERE
@@ -306,28 +312,110 @@ order by
   tpop.nr;
 
 
-with tpop_nie_ek_ekfrequenzs as (
-  select tpop.id tpop_id, ekfrequenz.id as ekfrequenz_id
-  from apflora.ap ap
-    inner join apflora.ekfrequenz ekfrequenz
-    on ekfrequenz.ap_id = ap.id and ekfrequenz.code = 'nie (EK)'
-    inner join apflora.pop pop
-      inner join apflora.tpop tpop
-      on tpop.pop_id = pop.id
-    on pop.ap_id = ap.id
-)
-
 update apflora.tpop tpop
-set tpop.ekfrequenz = (
-  select ekfrequenz.id
-  from apflora.ap ap
-    inner join apflora.ekfrequenz ekfrequenz
-    on ekfrequenz.ap_id = ap.id and ekfrequenz.code = 'nie (EK)'
-    inner join apflora.pop pop
-      inner join apflora.tpop
-      on apflora.tpop.pop_id = pop.id
-    on pop.ap_id = ap.id
-  where apflora.tpop.id = tpop.id
+set ekfrequenz = (
+  select ekfrequenz_to_set_id from apflora.v_tpop_ekfrequenz_to_set_nie nie
+  where nie.id = tpop.id
 )
-where 
-  tpop.id in (select distinct id from apflora.v_tpop_ekfrequenz_to_set_nie);
+where tpop.id in (select distinct id from apflora.v_tpop_ekfrequenz_to_set_nie);
+
+
+
+with kontrolljahre as (
+  select
+    tpop1.id,
+    apflora.ekfrequenz.ektyp,
+    tpop1.ekfrequenz_startjahr, 
+    unnest(apflora.ekfrequenz.kontrolljahre) as kontrolljahr
+  from
+    apflora.tpop tpop1
+    inner join apflora.ekfrequenz
+    on apflora.ekfrequenz.id = tpop1.ekfrequenz
+  where
+    tpop1.ekfrequenz is not null
+    and tpop1.ekfrequenz_startjahr is not null
+    and apflora.ekfrequenz.kontrolljahre is not null
+    and (
+      select count(*)
+      from apflora.ekplan
+      where tpop_id = tpop1.id
+    ) = 0
+  order by
+    tpop1.id,
+    tpop1.ekfrequenz_startjahr
+),
+ekplans as (
+  select
+    id as tpop_id,
+    kontrolljahr + ekfrequenz_startjahr as jahr,
+    ektyp as typ,
+    '2021-01-10' as changed,
+    'ag' as changed_by
+  from
+    kontrolljahre
+)
+insert into apflora.ekplan(tpop_id,jahr,typ,changed,changed_by)
+select
+  tpop_id,
+  jahr,
+  typ::ek_type,
+  changed::date,
+  changed_by
+from ekplans;
+
+-- to show before updating:
+with kontrolljahre as (
+  select
+    tpop1.id,
+    apflora.ekfrequenz.ektyp,
+    tpop1.ekfrequenz_startjahr, 
+    unnest(apflora.ekfrequenz.kontrolljahre) as kontrolljahr
+  from
+    apflora.tpop tpop1
+    inner join apflora.ekfrequenz
+    on apflora.ekfrequenz.id = tpop1.ekfrequenz
+  where
+    (
+      tpop1.ekfrequenz is not null
+      and tpop1.ekfrequenz_startjahr is not null
+      and apflora.ekfrequenz.kontrolljahre is not null
+      and (
+        select count(*)
+        from apflora.ekplan
+        where tpop_id = tpop1.id
+      ) = 0
+    )
+  order by
+    tpop1.id,
+    tpop1.ekfrequenz_startjahr
+),
+ekplans as (
+  select
+    id as tpop_id,
+    kontrolljahr + ekfrequenz_startjahr as jahr,
+    ektyp as typ,
+    '2021-01-10' as changed,
+    'ag' as changed_by
+  from
+    kontrolljahre
+)
+select
+  tax.artname,
+  pop.nr as pop_nr,
+  tpop.nr as tpop_nr,
+  ekplans.jahr,
+  ekplans.typ
+from ekplans
+inner join apflora.tpop tpop
+  inner join apflora.pop pop
+    inner join apflora.ap ap
+      inner join apflora.ae_taxonomies tax
+      on ap.art_id = tax.id
+    on ap.id = pop.ap_id
+  on pop.id = tpop.pop_id
+on tpop.id = ekplans.tpop_id
+order by
+  tax.artname,
+  pop.nr,
+  tpop.nr,
+  jahr;
