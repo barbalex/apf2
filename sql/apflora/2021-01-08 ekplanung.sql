@@ -250,6 +250,7 @@ select
     pop.nr,
     tpop.nr;
 
+-- TODO: if o.k. by Topos:
 update apflora.tpop
 set 
   ekfrequenz_startjahr = apflora.v_tpop_ekfrequenz_to_set.ekfrequenz_startjahr,
@@ -319,8 +320,7 @@ set ekfrequenz = (
 )
 where tpop.id in (select distinct id from apflora.v_tpop_ekfrequenz_to_set_nie);
 
-
-
+-- TODO: if o.k. by Topos:
 with kontrolljahre as (
   select
     tpop1.id,
