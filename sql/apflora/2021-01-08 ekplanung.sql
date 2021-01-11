@@ -206,6 +206,7 @@ tpop_plus as (
     on tpop.pop_id = pop.id
   where
     tpop.ekfrequenz is not null
+    -- Die AP-Liste ist ein bisschen kompliziert: weil einige künftig zu AP's werden sollen, sind es nicht _nur_ ap's
     and pop.ap_id not in ('6c52d11b-4f62-11e7-aebe-e30ba55051d8', '6c52d132-4f62-11e7-aebe-571f196500d9', '6c52d24e-4f62-11e7-aebe-4f55ce8d8aeb', '6c52d24f-4f62-11e7-aebe-9759f2114695', '6c52d251-4f62-11e7-aebe-239f844a5125', '6c52d256-4f62-11e7-aebe-8723d142869e')
 )
 select
