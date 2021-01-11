@@ -2575,6 +2575,7 @@ const Teilpopulationen = ({ treeName }) => {
               let result
               try {
                 result = await client.query({
+                  // view: v_tpop_last_count_with_massn
                   query: await import('./allVTpopLastCountWithMassns').then(
                     (m) => m.default,
                   ),
