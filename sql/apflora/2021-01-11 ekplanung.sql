@@ -252,7 +252,7 @@ select
     pop.nr,
     tpop.nr;
 
--- TODO: if o.k. by Topos:
+-- DO: if o.k. by Topos:
 update apflora.tpop
 set 
   ekfrequenz_startjahr = apflora.v_tpop_ekfrequenz_to_set.ekfrequenz_startjahr,
@@ -289,6 +289,7 @@ from apflora.tpop tpop
     inner join apflora.ap ap
       inner join apflora.ae_taxonomies tax
       on tax.id = ap.art_id
+      -- get this ap's ekfrequenz with code 'nie (EK)'
       inner join apflora.ekfrequenz ekfrequenz_to_set
       on ekfrequenz_to_set.ap_id = ap.id and ekfrequenz_to_set.code = 'nie (EK)'
     on ap.id = pop.ap_id
@@ -322,7 +323,7 @@ set ekfrequenz = (
 )
 where tpop.id in (select distinct id from apflora.v_tpop_ekfrequenz_to_set_nie);
 
--- TODO: if o.k. by Topos:
+-- DO: if o.k. by Topos:
 with kontrolljahre as (
   select
     tpop1.id,
