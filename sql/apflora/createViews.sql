@@ -4872,6 +4872,7 @@ from crosstab($$
           massn1.datum desc
 
       )
+      -- 1. get zieleinheit from massnahmen counts
       select * from (
         select distinct on (tpop2.id)
           tpop2.id as tpop_id,
@@ -4899,12 +4900,13 @@ from crosstab($$
           massn0.jahr desc,
           massn0.datum desc
       ) as triebe
+      -- 2. get anz_triebe from massnahmen counts
       union
       select * from (
         select distinct on (tpop2.id)
           tpop2.id as tpop_id,
           massn2.jahr,
-          'Triebe' as zaehleinheit,
+          'Triebe total' as zaehleinheit,
           massn2.anz_triebe as anzahl
         from
           apflora.tpopmassn massn2
@@ -4926,11 +4928,12 @@ from crosstab($$
           massn2.datum desc
       ) as triebe
       union
+      -- 3. get anz_pflanzen from massnahmen counts
       select * from (
         select distinct on (tpop3.id)
           tpop3.id as tpop_id,
           massn3.jahr,
-          'Pflanzen' as zaehleinheit,
+          'Pflanzen total' as zaehleinheit,
           massn3.anz_pflanzen as anzahl
         from
           apflora.tpopmassn massn3
@@ -4952,6 +4955,7 @@ from crosstab($$
           massn3.datum desc
       ) as pflanzen
       union
+      -- 3. get anz_pflanzstellen from massnahmen counts
       select * from (
         select distinct on (tpop4.id)
           tpop4.id as tpop_id,
@@ -4977,6 +4981,7 @@ from crosstab($$
           massn4.jahr desc,
           massn4.datum desc
       ) as pflanzstellen
+      -- 3. get all einheits from tpopkontr counts
       union
       select * from (
         select distinct on (tpop5.id, apflora.tpopkontrzaehl_einheit_werte.text)
