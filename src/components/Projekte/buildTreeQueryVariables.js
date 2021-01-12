@@ -293,8 +293,10 @@ export default ({
   }
   const tpopkontrzaehlsFilter = {
     tpopkontrId: { in: tpopkontr },
-    anzahl: { isNull: false },
   }
+  // TODO: if is freiwkontr: add "anzahl: { isNull: false }"
+  // now done by filtering in tree nodes
+
   if (!!nodeLabelFilter.tpopkontrzaehl) {
     tpopkontrzaehlsFilter.label = {
       includesInsensitive: nodeLabelFilter.tpopkontrzaehl,

@@ -2,6 +2,8 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
+import exists from '../../../../modules/exists'
+
 export default ({
   nodes: nodesPassed,
   data,
@@ -31,14 +33,14 @@ export default ({
   const nodes = memoizeOne(() =>
     get(data, 'allTpopkontrzaehls.nodes', [])
       // only show if parent node exists
-      .filter(el =>
+      .filter((el) =>
         nodesPassed
-          .map(n => n.id)
+          .map((n) => n.id)
           .includes(`${el.tpopkontrId}TpopfreiwkontrzaehlFolder`),
       )
       // only show nodes of this parent
-      .filter(el => el.tpopkontrId === tpopkontrId)
-      .map(el => ({
+      .filter((el) => el.tpopkontrId === tpopkontrId && exists(el.anzahl))
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'tpopfreiwkontrzaehl',
         filterTable: 'tpopkontrzaehl',
