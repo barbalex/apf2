@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
-// view: v_ap_ausw_pop_menge
 export default gql`
   query apAuswertungPopMenge($id: UUID!) {
+    # view: v_ap_ausw_pop_menge
     allVApAuswPopMenges(filter: { apId: { equalTo: $id } }, orderBy: JAHR_ASC) {
       nodes {
         jahr
