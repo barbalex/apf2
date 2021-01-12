@@ -63,21 +63,27 @@ const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
 
   const popStatusData = rows.map((row) => ({
     jahr: row.year,
-    'ursprünglich, aktuell': row?.a3Lpop ?? 0,
-    'angesiedelt (vor Beginn AP)': row?.a4Lpop ?? 0,
-    'angesiedelt (nach Beginn AP)': row?.a5Lpop ?? 0,
-    Ansaatversuch: row?.a9Lpop ?? 0,
-    'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt':
-      row?.a7Lpop ?? 0,
-    'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt':
-      row?.a8Lpop ?? 0,
-    'potentieller Wuchs-/Ansiedlungsort': row?.a10Lpop ?? 0,
+    'ursprünglich, aktuell': row?.a3Lpop ? Number(row?.a3Lpop) : 0,
+    'angesiedelt (vor Beginn AP)': row?.a4Lpop ? Number(row?.a4Lpop) : 0,
+    'angesiedelt (nach Beginn AP)': row?.a5Lpop ? Number(row?.a5Lpop) : 0,
+    Ansaatversuch: row?.a9Lpop ? Number(row?.a9Lpop) : 0,
+    'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt': row?.a7Lpop
+      ? Number(row?.a7Lpop)
+      : 0,
+    'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt': row?.a8Lpop
+      ? Number(row?.a8Lpop)
+      : 0,
+    'potentieller Wuchs-/Ansiedlungsort': row?.a10Lpop
+      ? Number(row?.a10Lpop)
+      : 0,
   }))
 
   if (errorPopStati) return <Error error={errorPopStati} />
 
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
+
+  //console.log('AP PopStatus, popStatusData:', popStatusData)
 
   return (
     <>

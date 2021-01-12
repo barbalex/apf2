@@ -58,8 +58,8 @@ const ApAuswertungTpopKontrolliert = ({ id, height = 400, print }) => {
   const erfolgData = get(data, 'tpopKontrolliertForJber.nodes', []).map(
     (d) => ({
       jahr: d.year,
-      'Teil-Populationen': d.anzTpop,
-      kontrolliert: d.anzTpopber,
+      'Teil-Populationen': d.anzTpop ? Number(d.anzTpop) : 0,
+      kontrolliert: d.anzTpopber ? Number(d.anzTpopber) : 0,
     }),
   )
 
@@ -67,6 +67,8 @@ const ApAuswertungTpopKontrolliert = ({ id, height = 400, print }) => {
 
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
+
+  //console.log('Ap TPopKontrolliert, erfolgData:', erfolgData)
 
   return (
     <>
