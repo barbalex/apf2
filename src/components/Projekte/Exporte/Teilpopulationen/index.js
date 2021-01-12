@@ -849,6 +849,11 @@ const Teilpopulationen = ({ treeName }) => {
                   'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].status',
                   '',
                 ),
+                status_decodiert: get(
+                  n,
+                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].statusDecodiert',
+                  '',
+                ),
                 bekannt_seit: get(
                   n,
                   'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].bekanntSeit',
@@ -1663,6 +1668,11 @@ const Teilpopulationen = ({ treeName }) => {
                   status: get(
                     n,
                     'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].status',
+                    '',
+                  ),
+                  status_decodiert: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].statusDecodiert',
                     '',
                   ),
                   bekannt_seit: get(

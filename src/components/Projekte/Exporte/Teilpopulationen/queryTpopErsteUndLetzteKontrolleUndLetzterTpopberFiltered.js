@@ -35,6 +35,7 @@ export default gql`
             gemeinde
             flurname
             status
+            statusDecodiert
             bekanntSeit
             statusUnklar
             statusUnklarGrund

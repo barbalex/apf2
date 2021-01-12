@@ -8,6 +8,7 @@ export default gql`
       totalCount
       nodes {
         id
+        # view: v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber
         vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById {
           nodes {
             apId
@@ -30,6 +31,7 @@ export default gql`
             gemeinde
             flurname
             status
+            statusDecodiert
             bekanntSeit
             statusUnklar
             statusUnklarGrund
