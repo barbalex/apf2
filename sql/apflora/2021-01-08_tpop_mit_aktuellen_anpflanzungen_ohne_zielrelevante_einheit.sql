@@ -37,3 +37,15 @@ FROM
 ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
+
+
+
+-- ensure this qk is choosen:
+insert into apflora.apqk (ap_id, qk_name)
+select distinct
+  id as ap_id,
+  'tpopMitAktuellenAnpflanzungenOhneZielrelevanteEinheit' as qk_name
+from apflora.ap ap
+inner join apflora.apqk qk
+on ap.id = qk.ap_id
+on conflict do nothing;
