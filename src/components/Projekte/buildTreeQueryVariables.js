@@ -294,8 +294,8 @@ export default ({
   const tpopkontrzaehlsFilter = {
     tpopkontrId: { in: tpopkontr },
   }
-  // TODO: if is freiwkontr: add "anzahl: { isNull: false }"
-  // now done by filtering in tree nodes
+  // idea: for tpopfreiwkontrs: filter anzahl not null?
+  // now done in the nodes
 
   if (!!nodeLabelFilter.tpopkontrzaehl) {
     tpopkontrzaehlsFilter.label = {
