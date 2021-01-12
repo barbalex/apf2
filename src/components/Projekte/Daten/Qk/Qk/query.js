@@ -697,6 +697,7 @@ export default gql`
         nr
       }
     }
+    # view: v_q_pop_statuserloschenletzterpopberunsicher
     popStatusErloschenLetzterPopberUnsicher: allVQPopStatuserloschenletzterpopberunsichers(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
     ) @include(if: $popStatusErloschenLetzterPopberUnsicher) {
@@ -789,6 +790,7 @@ export default gql`
         nr
       }
     }
+    # view: v_q_pop_statusaktuellletzterpopbererloschen
     popStatusAktuellLetzterPopberErloschen: allVQPopStatusaktuellletzterpopbererloschens(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
     ) @include(if: $popStatusAktuellLetzterPopberErloschen) {
@@ -988,6 +990,7 @@ export default gql`
         nr
       }
     }
+    # view: v_q_tpop_statusaktuellletztertpopbererloschen
     tpopStatusAktuellLetzterTpopberErloschen: allVQTpopStatusaktuellletztertpopbererloschens(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
     ) @include(if: $tpopStatusAktuellLetzterTpopberErloschen) {
@@ -1024,6 +1027,7 @@ export default gql`
         nr
       }
     }
+    # view: v_q_tpop_statuserloschenletztertpopberunsicher
     tpopStatusErloschenLetzterTpopberUnsicher: allVQTpopStatuserloschenletztertpopberunsichers(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
     ) @include(if: $tpopStatusErloschenLetzterTpopberUnsicher) {
