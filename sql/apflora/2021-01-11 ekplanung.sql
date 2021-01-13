@@ -422,3 +422,53 @@ order by
   pop.nr,
   tpop.nr,
   jahr;
+
+
+-- 2021.01.13
+-- Diese Beschreibung wurde abgebrochen, weil entschieden wurde, dass die AV's das machen sollten
+-- Ich behalte es noch, falls Listen erstellt werden sollen, um die AV's/Topos zu unterstützen
+-- 1.  Titel:
+--     Routine zur Anpassung der EK-Planung in bestehenden Teil-Populationen, in denen 2020 Anpflanzungen erfolgten
+-- 2.  Anliegen und Begründung:
+-- 2.1 Beispiel 1: im Jahr 2017 wurde eine TP mit einer Anpflanzung neu gegründet.
+--     Somit ist die EK-Frequenz SA, Startjahr 2017 und es existieren EK-Pläne.
+--     Nun werden im Jahr 2020 nochmals 100 Pflanzen ausgebracht. Diese sollten genauso eng kontrolliert werden, wie eine neue Anpflanzung. 
+--     Deshalb sollte die Routine als Startjahr 2020 setzen. Und neue EK-Pläne ab 2021 generieren.
+-- 2.2 Beispiel 2: 2017 wurde eine Teil-Population mit einer Ansaat gegründet (Status Ansaatversuch).
+--     Es bestehen für die EK-Frequenz A mit Startjahr 2017 EK-Pläne. 
+--     Erfolgt hier 2020 eine Anpflanzung, wechselt der Status der TP zu angesiedelt aktuell (FRAGE: WER MACHT DAS? ROUTINE ODER AV? ich nehme an Routine)
+--     Wie im obigen Fall setzt die Routine als Startjahr 2020. Und generiert ab 2021 neue EK-Pläne.
+-- 2.3 Möglich ist, dass im obigen ersten Fall die Artverantwortliche eine Ansiedlungsbegleitung D gewählt hat. 
+--     Diese würde in den Jahre 2018, 2019, 2020 und 2021 laufen. In diesem Fall sollten die Ansiedlungsbegleitungen, 
+--     die ja von den AV manuell ausgewählt wurden, so bleiben, wie sie sind. 
+--     Die AV kann immer noch in diesen einzelnen Fällen, wenn sie will, auf SA mit neuem Startjahr umstellen. 
+--     Ebenso, wenn die AV eine Ansaat-Begleitung AB gewählt hat.
+-- 3.  Routine:
+-- 3.1 Zur Erinnerung: Die EK-Planung besteht unter anderem aus:
+--     - EK-Frequenz und Startjahr bei der Teil-Population
+--     - EK-Plänen: Pro TPop eine Listen von Jahren, an denen kontrolliert werden soll
+--     - EK-Frequenzen, die pro AP definiert sind. Hier ist auch definiert, in welchen Jahren ab dem Startjahr kontrolliert werden soll
+-- 3.2 UPDATE-Abfrage um angesiedelte, aktuelle Teil-Populationen anzupassen:
+--     Auswahlkriterien: 
+--     - Status ist: "angesiedelt, aktuell"
+--     - apber_relevant ist "true"
+--     - EK-Frequenz ist "SA" (Voraussetzung: Das es diesen Typ bei diesem AP auch wirklich gibt...)
+--     - im Jahr 2020 erfolgte eine Anpflanzung
+--     Updates:
+--     - Startjahr wird auf 2020 gesetzt
+-- 3.3 UPDATE-Abfrage um angesäte Teil-Populationen anzupassen:
+--     Auswahlkriterien: 
+--     - Status ist: "Ansaatversuch"
+--     - apber_relevant ist "true"
+--     - EK-Frequenz ist "A" (Voraussetzung: Das es diesen Typ bei diesem AP auch wirklich gibt...)
+--     - im Jahr 2020 erfolgte eine Anpflanzung
+--     Updates:
+--     - Startjahr wird auf 2020 gesetzt
+--     - EK-Frequenz wird auf "SA" gesetzt
+--     - status wird auf "angesiedelt aktuell" gesetzt
+-- 3.4 DELETE-Abfrage, um nicht mehr benötigte EK-Pläne zu löschen:
+--     Auswahlkriterien: 
+--     - die TPop ist eine der oben erwähnten
+--     - VORSICHT: Diese Abfrage muss vor den obigen ausgeführt werden, weil deren Status und EK-Frequenz geändert wird
+-- usw
+
