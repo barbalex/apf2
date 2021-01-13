@@ -3930,7 +3930,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.tpop.status IN (100, 200, 300)
+  apflora.tpop.status IN (100, 200, 201, 300)
   AND lasttpopber.entwicklung = 8
   AND apflora.tpop.id NOT IN (
     -- Ansiedlungen since apflora.tpopber.jahr
@@ -3979,7 +3979,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.pop.status  IN (100, 200, 300)
+  apflora.pop.status IN (100, 200, 201, 300)
   AND lastpopber.entwicklung = 8
   AND apflora.pop.id NOT IN (
     -- Ansiedlungen since lastpopber.jahr
