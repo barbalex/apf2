@@ -11,10 +11,10 @@ import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
-import Checkbox3States from '../../../shared/Checkbox3StatesFormik'
 import TextField from '../../../shared/TextFieldFormik'
 import MdField from '../../../shared/MarkdownFieldFormik'
 import Select from '../../../shared/SelectFormik'
+import JesNoFormik from '../../../shared/JesNoFormik'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'
 import DateField from '../../../shared/DateFormik'
 import StringToCopy from '../../../shared/StringToCopy'
@@ -431,7 +431,7 @@ const Tpopfeldkontr = ({
                           loading={loadingAdresses}
                           handleSubmit={handleSubmit}
                         />
-                        <Checkbox3States
+                        <JesNoFormik
                           name="jungpflanzenVorhanden"
                           label="Jungpflanzen vorhanden"
                           handleSubmit={handleSubmit}
@@ -497,7 +497,7 @@ const Tpopfeldkontr = ({
                           handleSubmit={handleSubmit}
                         />
                         <MdField name="bemerkungen" label="Bemerkungen" />
-                        <Checkbox3States
+                        <JesNoFormik
                           name="apberNichtRelevant"
                           label="Im Jahresbericht nicht berücksichtigen"
                           handleSubmit={handleSubmit}
