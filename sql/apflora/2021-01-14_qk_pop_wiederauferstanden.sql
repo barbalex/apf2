@@ -1,3 +1,11 @@
+-- Beschreibung von K. Marti:
+-- Wird bei einer ursprünglich erloschenen Population eine Anpflanzung/Ansaat vorgenommen, 
+-- dann ist eine neue Population in der APFloraDB anzulegen. 
+-- In der Regel wird zuerst die Massnahme ausgeführt und danach erfolgt die Eingabe in die DB und eine allfällige Statusänderung. 
+-- D.h. mit einer Qualitätskontrolle müsste überprüft werden, ob bei einer im Vorjahr ursprünglich erloschenen Population 
+-- im aktuellen Jahr eine Statusänderung erfolgt ist (ursprünglich aktuell, angesiedelt aktuell, Ansaatversuch) 
+-- und eine Ansiedlungsmassnahme (Anpflanzung oder Ansaat). Das wäre dann eine Fehler.
+
 -- name: popStatusUrspruenglichWiederauferstanden
 -- titel: Population: Status war 'ursprünglich, erloschen'. Nach einer Ansiedlung wieder 'ursprünglich aktuell', 'angesiedelt aktuell', 'Ansaatversuch'
 
