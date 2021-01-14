@@ -122,7 +122,8 @@
   },
   "dependenciesComments": {
     "nothing": "now",
-    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1"
+    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1",
+    "gatsby-plugin-sharp": "2.8.0: wait for version > 2.12.1"
   },
   "peerDependencies": {
     "react-is": "17.0.1"
