@@ -59,6 +59,7 @@ export default gql`
     $popStatusErloschenLetzterPopberZunehmend: Boolean!
     $popStatusErloschenMitTpopAktuell: Boolean!
     $popStatusErloschenMitTpopAnsaatversuch: Boolean!
+    $popStatusUrspruenglichWiederauferstanden: Boolean!
     $popberOhneEntwicklung: Boolean!
     $popberOhneJahr: Boolean!
     $popmassnberOhneEntwicklung: Boolean!
@@ -773,6 +774,20 @@ export default gql`
     popStatusErloschenMitTpopAnsaatversuch: allVQPopStatuserloschenmittpopansaatversuches(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
     ) @include(if: $popStatusErloschenMitTpopAnsaatversuch) {
+      nodes {
+        projId
+        apId
+        id
+        nr
+      }
+    }
+    popStatusUrspruenglichWiederauferstanden: allVQPopUrspruenglichWiederauferstandens(
+      filter: {
+        projId: { equalTo: $projId }
+        apId: { equalTo: $apId }
+        jahr: { equalTo: $berichtjahr }
+      }
+    ) @include(if: $popStatusUrspruenglichWiederauferstanden) {
       nodes {
         projId
         apId

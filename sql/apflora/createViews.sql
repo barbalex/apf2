@@ -3948,6 +3948,48 @@ ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
 
+DROP VIEW IF EXISTS apflora.v_q_pop_urspruenglich_wiederauferstanden CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_pop_urspruenglich_wiederauferstanden AS
+with pop_id_ansiedlung_jahre as (
+  select distinct
+    tpop.pop_id as id,
+    massn.jahr
+  from
+    apflora.tpop tpop
+    inner join apflora.tpopmassn massn
+      inner join apflora.tpopmassn_typ_werte massntyp
+      on massn.typ = massntyp.code
+    on tpop.id = massn.tpop_id
+  where
+    massntyp.ansiedlung = true
+  order by
+    tpop.pop_id,
+    massn.jahr
+)
+select
+  projekt.id as proj_id,
+  tax.artname,
+  ap.id as ap_id,
+  pop.id,
+  pop.nr,
+  pop_id_ansiedlung_jahre.jahr
+from
+  apflora.pop pop
+  inner join pop_id_ansiedlung_jahre
+    inner join apflora.pop_history pop_history
+    on pop_id_ansiedlung_jahre.id = pop_history.id and pop_history.year = pop_id_ansiedlung_jahre.jahr - 1
+  on pop.id = pop_id_ansiedlung_jahre.id
+  inner join apflora.ap ap
+    inner join apflora.projekt projekt
+    on projekt.id = ap.proj_id
+    inner join apflora.ae_taxonomies tax
+    on ap.art_id = tax.id
+  on ap.id = pop.ap_id
+where
+  pop.status = 101
+  and pop_history.status in (100, 200, 201);
+
+
 DROP VIEW IF EXISTS apflora.v_q_pop_statusaktuellletzterpopbererloschen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statusaktuellletzterpopbererloschen AS
 WITH lastpopber AS (

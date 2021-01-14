@@ -444,6 +444,20 @@ export default ({ data, berichtjahr, projId, apId }) => ({
       url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
       text: `Population: ${n.nr || n.id}`,
     })),
+  popStatusUrspruenglichWiederauferstanden: () =>
+    get(data, 'popStatusUrspruenglichWiederauferstanden.nodes', []).map(
+      (n) => ({
+        url: [
+          'Projekte',
+          n.projId,
+          'Aktionspläne',
+          n.apId,
+          'Populationen',
+          n.id,
+        ],
+        text: `Population: ${n.nr || n.id}`,
+      }),
+    ),
   popStatusAngesiedeltMitTpopUrspruenglich: () =>
     get(data, 'popStatusAngesiedeltMitTpopUrspruenglich.nodes', []).map(
       (n) => ({

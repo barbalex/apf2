@@ -48,8 +48,8 @@ from
     on ap.art_id = tax.id
   on ap.id = pop.ap_id
 where
-  pop.status = 101
-  and pop_history.status in (100, 200, 201);
+  pop.status in (100, 200, 201)
+  and pop_history.status = 101;
 
 -- ensure this qk is choosen:
 insert into apflora.apqk (ap_id, qk_name)
