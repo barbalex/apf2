@@ -323,6 +323,22 @@ set ekfrequenz = (
 )
 where tpop.id in (select distinct id from apflora.v_tpop_ekfrequenz_to_set_nie);
 
+-- need to remove ekplan:
+with tpop_id_to_unplan as (
+  select 
+    tpop.id
+  from apflora.tpop tpop
+    left join apflora.ekfrequenz ekfrequenz
+    on ekfrequenz.id = tpop.ekfrequenz
+  WHERE
+    ekfrequenz.code = 'nie (EK)'
+)
+delete from apflora.ekplan
+where 
+  tpop_id in (select id from tpop_id_to_unplan)
+  and jahr > 2020;
+
+
 -- DO: if o.k. by Topos:
 with kontrolljahre as (
   select
