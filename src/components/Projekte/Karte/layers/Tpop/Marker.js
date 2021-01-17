@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useMemo } from 'react'
 import { Marker, Tooltip, Popup } from 'react-leaflet'
 import get from 'lodash/get'
 import styled from 'styled-components'
@@ -58,38 +58,36 @@ const TpopMarker = ({ treeName, tpop }) => {
   const nrLabel = `${popNr}.${tpopNr}`.toString()
   const isHighlighted = idsFiltered.includes(tpop.id)
 
-  console.log('TpopMarker', {
-    isHighlighted,
-    tpopIconName,
-    status: tpop.status,
-  })
-
-  let iconUrl = isHighlighted ? tpopIconHighlighted : tpopIcon
-  if (tpopIconName === 'statusGroup') {
-    iconUrl = isHighlighted ? qIconHighlighted : qIcon
-    if (tpop.status === 300) {
-      iconUrl = isHighlighted ? pIconHighlighted : pIcon
-    } else if (tpop.status >= 200) {
-      iconUrl = isHighlighted ? aIconHighlighted : aIcon
-    } else if (tpop.status >= 100) {
-      iconUrl = isHighlighted ? uIconHighlighted : uIcon
-    }
-  } else if (tpopIconName === 'statusGroupSymbols') {
-    iconUrl = isHighlighted ? svg100Highlighted : svg100
-    if (tpop.status === 100) {
+  const iconUrl = useMemo(() => {
+    let iconUrl = isHighlighted ? tpopIconHighlighted : tpopIcon
+    if (tpopIconName === 'statusGroup') {
+      iconUrl = isHighlighted ? qIconHighlighted : qIcon
+      if (tpop.status === 300) {
+        iconUrl = isHighlighted ? pIconHighlighted : pIcon
+      } else if (tpop.status >= 200) {
+        iconUrl = isHighlighted ? aIconHighlighted : aIcon
+      } else if (tpop.status >= 100) {
+        iconUrl = isHighlighted ? uIconHighlighted : uIcon
+      }
+    } else if (tpopIconName === 'statusGroupSymbols') {
       iconUrl = isHighlighted ? svg100Highlighted : svg100
-    } else if (tpop.status === 101) {
-      iconUrl = isHighlighted ? svg101Highlighted : svg101
-    } else if (tpop.status === 200) {
-      iconUrl = isHighlighted ? svg200Highlighted : svg200
-    } else if (tpop.status === 201) {
-      iconUrl = isHighlighted ? svg201Highlighted : svg201
-    } else if (tpop.status === 202) {
-      iconUrl = isHighlighted ? svg202Highlighted : svg202
-    } else if (tpop.status === 300) {
-      iconUrl = isHighlighted ? svg300Highlighted : svg300
+      if (tpop.status === 100) {
+        iconUrl = isHighlighted ? svg100Highlighted : svg100
+      } else if (tpop.status === 101) {
+        iconUrl = isHighlighted ? svg101Highlighted : svg101
+      } else if (tpop.status === 200) {
+        iconUrl = isHighlighted ? svg200Highlighted : svg200
+      } else if (tpop.status === 201) {
+        iconUrl = isHighlighted ? svg201Highlighted : svg201
+      } else if (tpop.status === 202) {
+        iconUrl = isHighlighted ? svg202Highlighted : svg202
+      } else if (tpop.status === 300) {
+        iconUrl = isHighlighted ? svg300Highlighted : svg300
+      }
     }
-  }
+    return iconUrl
+  }, [isHighlighted, tpop.status, tpopIconName])
+
   const popId = get(tpop, 'popByPopId.id', '')
   const openTpopInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
@@ -124,6 +122,7 @@ const TpopMarker = ({ treeName, tpop }) => {
   })
   let title = nrLabel
   if (tpopLabelName === 'name') title = tpop.flurname
+  if (tpopLabelName === 'none') title = ''
   const artname = get(tpop, 'popByPopId.apByApId.aeTaxonomyByArtId.artname', '')
 
   return (

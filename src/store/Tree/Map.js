@@ -10,7 +10,7 @@ export default types
     // icons: oneOf: normal, statusGroup, statusGroupSymbols
     popIcon: types.string,
     tpopIcon: types.string,
-    // labels: oneOf: nr, name
+    // labels: oneOf: nr, name, none
     popLabel: types.string,
     tpopLabel: types.string,
   })

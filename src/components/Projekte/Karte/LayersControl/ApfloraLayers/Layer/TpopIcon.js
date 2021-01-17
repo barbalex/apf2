@@ -81,6 +81,13 @@ const TpopIcon = ({ treeName }) => {
     },
     [onClose, setTpopLabel],
   )
+  const onClickNoLabel = useCallback(
+    (e) => {
+      setTpopLabel('none')
+      onClose()
+    },
+    [onClose, setTpopLabel],
+  )
 
   return (
     <>
@@ -120,6 +127,10 @@ const TpopIcon = ({ treeName }) => {
         <StyledMenuItem onClick={onClickFlurname}>
           {tpopLabel === 'name' && <CheckIcon />}
           {`Flurname`}
+        </StyledMenuItem>
+        <StyledMenuItem onClick={onClickNoLabel}>
+          {tpopLabel === 'none' && <CheckIcon />}
+          {`keine`}
         </StyledMenuItem>
       </Menu>
     </>
