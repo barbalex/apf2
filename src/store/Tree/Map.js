@@ -7,10 +7,10 @@ export default types
     beobNichtBeurteiltIdsFiltered: types.array(types.string),
     beobNichtZuzuordnenIdsFiltered: types.array(types.string),
     beobZugeordnetIdsFiltered: types.array(types.string),
-    // icons: oneOf: normal, statusGroup
+    // icons: oneOf: normal, statusGroup, statusGroupSymbols
     popIcon: types.string,
     tpopIcon: types.string,
-    // labels: oneOf: nr, name
+    // labels: oneOf: nr, name, none
     popLabel: types.string,
     tpopLabel: types.string,
   })

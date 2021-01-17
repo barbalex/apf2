@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useMemo } from 'react'
 import { Marker, Tooltip, Popup } from 'react-leaflet'
 import get from 'lodash/get'
 import styled from 'styled-components'
@@ -8,15 +8,27 @@ import Button from '@material-ui/core/Button'
 import storeContext from '../../../../../storeContext'
 import tpopIcon from './tpop.svg'
 import tpopIconHighlighted from './tpopHighlighted.svg'
-import uIcon from './u.svg'
-import uIconHighlighted from './uHighlighted.svg'
-import aIcon from './a.svg'
-import aIconHighlighted from './aHighlighted.svg'
-import pIcon from './p.svg'
-import pIconHighlighted from './pHighlighted.svg'
-import qIcon from './q.svg'
-import qIconHighlighted from './qHighlighted.svg'
+import uIcon from './statusGroup/u.svg'
+import uIconHighlighted from './statusGroup/uHighlighted.svg'
+import aIcon from './statusGroup/a.svg'
+import aIconHighlighted from './statusGroup/aHighlighted.svg'
+import pIcon from './statusGroup/p.svg'
+import pIconHighlighted from './statusGroup/pHighlighted.svg'
+import qIcon from './statusGroup/q.svg'
+import qIconHighlighted from './statusGroup/qHighlighted.svg'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
+import svg100 from './statusGroupSymbols/100.svg'
+import svg100Highlighted from './statusGroupSymbols/100_highlighted.svg'
+import svg101 from './statusGroupSymbols/101.svg'
+import svg101Highlighted from './statusGroupSymbols/101_highlighted.svg'
+import svg200 from './statusGroupSymbols/200.svg'
+import svg200Highlighted from './statusGroupSymbols/200_highlighted.svg'
+import svg201 from './statusGroupSymbols/201.svg'
+import svg201Highlighted from './statusGroupSymbols/201_highlighted.svg'
+import svg202 from './statusGroupSymbols/202.svg'
+import svg202Highlighted from './statusGroupSymbols/202_highlighted.svg'
+import svg300 from './statusGroupSymbols/300.svg'
+import svg300Highlighted from './statusGroupSymbols/300_highlighted.svg'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -46,22 +58,36 @@ const TpopMarker = ({ treeName, tpop }) => {
   const nrLabel = `${popNr}.${tpopNr}`.toString()
   const isHighlighted = idsFiltered.includes(tpop.id)
 
-  let iconUrl = tpopIcon
-  if (isHighlighted) iconUrl = tpopIconHighlighted
-  if (tpopIconName === 'statusGroup') {
-    iconUrl = qIcon
-    if (isHighlighted) iconUrl = qIconHighlighted
-    if (tpop.status === 300) {
-      iconUrl = pIcon
-      if (isHighlighted) iconUrl = pIconHighlighted
-    } else if (tpop.status >= 200) {
-      iconUrl = aIcon
-      if (isHighlighted) iconUrl = aIconHighlighted
-    } else if (tpop.status >= 100) {
-      iconUrl = uIcon
-      if (isHighlighted) iconUrl = uIconHighlighted
+  const iconUrl = useMemo(() => {
+    let iconUrl = isHighlighted ? tpopIconHighlighted : tpopIcon
+    if (tpopIconName === 'statusGroup') {
+      iconUrl = isHighlighted ? qIconHighlighted : qIcon
+      if (tpop.status === 300) {
+        iconUrl = isHighlighted ? pIconHighlighted : pIcon
+      } else if (tpop.status >= 200) {
+        iconUrl = isHighlighted ? aIconHighlighted : aIcon
+      } else if (tpop.status >= 100) {
+        iconUrl = isHighlighted ? uIconHighlighted : uIcon
+      }
+    } else if (tpopIconName === 'statusGroupSymbols') {
+      iconUrl = isHighlighted ? svg100Highlighted : svg100
+      if (tpop.status === 100) {
+        iconUrl = isHighlighted ? svg100Highlighted : svg100
+      } else if (tpop.status === 101) {
+        iconUrl = isHighlighted ? svg101Highlighted : svg101
+      } else if (tpop.status === 200) {
+        iconUrl = isHighlighted ? svg200Highlighted : svg200
+      } else if (tpop.status === 201) {
+        iconUrl = isHighlighted ? svg201Highlighted : svg201
+      } else if (tpop.status === 202) {
+        iconUrl = isHighlighted ? svg202Highlighted : svg202
+      } else if (tpop.status === 300) {
+        iconUrl = isHighlighted ? svg300Highlighted : svg300
+      }
     }
-  }
+    return iconUrl
+  }, [isHighlighted, tpop.status, tpopIconName])
+
   const popId = get(tpop, 'popByPopId.id', '')
   const openTpopInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
@@ -96,6 +122,7 @@ const TpopMarker = ({ treeName, tpop }) => {
   })
   let title = nrLabel
   if (tpopLabelName === 'name') title = tpop.flurname
+  if (tpopLabelName === 'none') title = ''
   const artname = get(tpop, 'popByPopId.apByApId.aeTaxonomyByArtId.artname', '')
 
   return (
