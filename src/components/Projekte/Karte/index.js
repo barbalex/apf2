@@ -5,7 +5,7 @@
  *
  */
 
-import React, { useContext, useRef, useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
 import styled from 'styled-components'
 import 'leaflet'
@@ -435,8 +435,6 @@ const Karte = ({ treeName }) => {
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const activeOverlays = getSnapshot(activeOverlaysRaw)
 
-  const mapRef = useRef(null)
-
   const clustered = !(
     assigningBeob ||
     activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
@@ -493,9 +491,6 @@ const Karte = ({ treeName }) => {
     >
       <ErrorBoundary>
         <StyledMapContainer
-          // why do I need this ref?
-          // creates Function components cannot be given refs warning
-          ref={mapRef}
           // bounds need to be set using ma.fitBounds sice v3
           // but keep bounds in store as last bound will be reapplied
           // when map is re-opened
