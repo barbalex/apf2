@@ -493,6 +493,8 @@ const Karte = ({ treeName }) => {
     >
       <ErrorBoundary>
         <StyledMapContainer
+          // why do I need this ref?
+          // creates Function components cannot be given refs warning
           ref={mapRef}
           // bounds need to be set using ma.fitBounds sice v3
           // but keep bounds in store as last bound will be reapplied
