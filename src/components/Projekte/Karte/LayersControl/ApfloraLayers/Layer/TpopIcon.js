@@ -4,6 +4,7 @@ import { MdLocalFlorist } from 'react-icons/md'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { observer } from 'mobx-react-lite'
+import { FaCheck } from 'react-icons/fa'
 
 import storeContext from '../../../../../../storeContext'
 
@@ -31,11 +32,14 @@ const StyledMenuItem = styled(MenuItem)`
   font-size: 14px !important;
   padding: 5px 14px !important;
 `
+const CheckIcon = styled(FaCheck)`
+  padding-right: 5px;
+`
 
 const TpopIcon = ({ treeName }) => {
   const store = useContext(storeContext)
   const { map } = store[treeName]
-  const { setTpopIcon, setTpopLabel } = map
+  const { tpopIcon, setTpopIcon, tpopLabel, setTpopLabel } = map
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickIconContainer = useCallback(
     (e) => setAnchorEl(e.currentTarget),
@@ -52,6 +56,13 @@ const TpopIcon = ({ treeName }) => {
   const onClickByStatusGroup = useCallback(
     (e) => {
       setTpopIcon('statusGroup')
+      onClose()
+    },
+    [onClose, setTpopIcon],
+  )
+  const onClickByStatusGroupSymbols = useCallback(
+    (e) => {
+      setTpopIcon('statusGroupSymbols')
       onClose()
     },
     [onClose, setTpopIcon],
@@ -89,15 +100,27 @@ const TpopIcon = ({ treeName }) => {
         onClose={onClose}
       >
         <MenuTitle>Symbole wählen:</MenuTitle>
-        <StyledMenuItem onClick={onClickAllSame}>alle gleich</StyledMenuItem>
+        <StyledMenuItem onClick={onClickAllSame}>
+          {tpopIcon === 'normal' && <CheckIcon />}
+          {`alle gleich (Blume)`}
+        </StyledMenuItem>
         <StyledMenuItem onClick={onClickByStatusGroup}>
-          angesiedelt / ursprünglich / potentiell
+          {tpopIcon === 'statusGroup' && <CheckIcon />}
+          {`nach Status, mit Buchstaben`}
+        </StyledMenuItem>
+        <StyledMenuItem onClick={onClickByStatusGroupSymbols}>
+          {tpopIcon === 'statusGroupSymbols' && <CheckIcon />}
+          {`nach Status, mit Symbolen`}
         </StyledMenuItem>
         <MenuTitle>Beschriftung wählen:</MenuTitle>
         <StyledMenuItem onClick={onClickPopTpopNr}>
-          Pop-Nr / TPop-Nr
+          {tpopLabel === 'nr' && <CheckIcon />}
+          {`Pop-Nr / TPop-Nr`}
         </StyledMenuItem>
-        <StyledMenuItem onClick={onClickFlurname}>Flurname</StyledMenuItem>
+        <StyledMenuItem onClick={onClickFlurname}>
+          {tpopLabel === 'name' && <CheckIcon />}
+          {`Flurname`}
+        </StyledMenuItem>
       </Menu>
     </>
   )
