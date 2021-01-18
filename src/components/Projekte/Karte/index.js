@@ -23,7 +23,7 @@ import SwissTopoPixelFarbe from './layers/SwisstopoPixelFarbe'
 import SwissTopoPixelGrau from './layers/SwisstopoPixelGrau'
 import SwisstopoSiegfried from './layers/SwisstopoSiegfried'
 import SwisstopoDufour from './layers/SwisstopoDufour'
-import BingAerial from './layers/BingAerial'
+//import BingAerial from './layers/BingAerial'
 import ZhOrtho2014Rgb from './layers/ZhOrtho2014Rgb'
 import ZhOrtho2014Ir from './layers/ZhOrtho2014Ir'
 import ZhOrtho2015Rgb from './layers/ZhOrtho2015Rgb'
@@ -467,7 +467,7 @@ const Karte = ({ treeName }) => {
       SwisstopoSiegfried: () => <SwisstopoSiegfried />,
       SwisstopoDufour: () => <SwisstopoDufour />,
       ZhUep: () => <ZhUep />,
-      BingAerial: () => <BingAerial />,
+      //BingAerial: () => <BingAerial />,
       ZhOrtho2018Rgb: () => <ZhOrtho2018Rgb />,
       ZhOrtho2018Ir: () => <ZhOrtho2018Ir />,
       ZhOrtho2015Rgb: () => <ZhOrtho2015Rgb />,
