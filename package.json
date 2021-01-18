@@ -1,7 +1,7 @@
 {
   "name": "apf2",
   "description": "Aktionspläne für Flora-Projekte",
-  "version": "1.51.1",
+  "version": "1.51.2",
   "repository": {
     "type": "git",
     "url": "git://github.com/barbalex/apf2.git"
@@ -99,7 +99,6 @@
     "react-icons": "4.1.0",
     "react-image-lightbox": "5.1.1",
     "react-leaflet": "3.0.5",
-    "react-leaflet-bing": "4.1.0",
     "react-leaflet-bing-v2": "5.0.1",
     "react-leaflet-control": "2.1.2",
     "react-leaflet-markercluster": "3.0.0-rc1",
