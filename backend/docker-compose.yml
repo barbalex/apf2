@@ -68,24 +68,6 @@ services:
         '--enable-query-batching',
         '--retry-on-init-fail',
       ]
-  qgisserver:
-    build:
-      context: ./qgisserver
-    volumes:
-      - qgisserver_data:/etc/qgisserver
-    environment:
-      - LANG=en_EN.UTF-8
-      - QGIS_PROJECT_FILE=/etc/qgisserver/project.qgs
-      - QGIS_SERVER_LOG_LEVEL=0 # INFO (log all requests)
-      - DEBUG=1 # display env before spawning QGIS Server
-    ports:
-      - '8380:80'
-    expose:
-      - '8380'
-    restart: always
-    networks:
-      - network
-    container_name: qgisserver
   caddy:
     build:
       context: ./caddy
@@ -94,7 +76,6 @@ services:
       - network
     depends_on:
       - graphql
-      - qgisserver
     restart: always
     # original image downgrades user but that seems not to work
     # see: https://caddy.community/t/basic-docker-compose-setup-failing/6892/7?u=alexander_gabriel
@@ -113,6 +94,5 @@ volumes:
   sik_data:
   caddy_data:
   caddy_config:
-  qgisserver_data:
 networks:
   network:

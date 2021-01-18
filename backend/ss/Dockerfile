@@ -1,13 +1,15 @@
-FROM node:12
+FROM node:lts-alpine
+RUN apk add dumb-init
+ENV NODE_ENV production
 
 # Create app directory
 WORKDIR /usr/src/ss
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
 
-RUN npm install
+RUN npm ci --only=production
 # If you are building your code for production
 # RUN npm ci --only=production
 
@@ -16,4 +18,6 @@ COPY . .
 
 EXPOSE 7000
 
-CMD [ "node", "server.js" ]
+USER node
+
+CMD [ "dumb-init", "node", "server.js" ]
