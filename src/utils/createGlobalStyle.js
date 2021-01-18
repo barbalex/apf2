@@ -112,6 +112,8 @@ export default () => createGlobalStyle`
   background-color: rgba(46, 125, 50, 0.08);
 }
 
+
+/* recharts */
 .recharts-legend-item {
   margin-bottom: 3px !important;
 }
