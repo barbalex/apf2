@@ -3,17 +3,16 @@
  * because neither StaticQuery nor AppQuery
  * work there :-(
  */
-import React from 'react'
+import React, { useContext } from 'react'
 import { Helmet } from 'react-helmet'
 import { useStaticQuery, graphql } from 'gatsby'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 import AppBar from './AppBar'
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
   height: 100%;
 
   @media print {
@@ -21,11 +20,8 @@ const Container = styled.div`
     overflow: visible !important;
   }
 `
-const HeaderContainer = styled.div`
-  flex-grow: 0;
-`
 const ContentContainer = styled.div`
-  flex-grow: 1;
+  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
 `
 
 const query = graphql`
@@ -41,6 +37,8 @@ const query = graphql`
  * ReactDOMServer does not yet support Suspense
  */
 const Layout = ({ children }) => {
+  const store = useContext(storeContext)
+  const { appBarHeight } = store
   const data = useStaticQuery(query)
 
   return (
@@ -60,12 +58,12 @@ const Layout = ({ children }) => {
       >
         <html lang="de" />
       </Helmet>
-      <HeaderContainer>
-        <AppBar />
-      </HeaderContainer>
-      <ContentContainer>{children}</ContentContainer>
+      <AppBar />
+      <ContentContainer data-appbar-height={appBarHeight}>
+        {children}
+      </ContentContainer>
     </Container>
   )
 }
 
-export default Layout
+export default observer(Layout)
