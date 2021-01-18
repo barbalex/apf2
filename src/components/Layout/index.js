@@ -20,6 +20,7 @@ const Container = styled.div`
     overflow: visible !important;
   }
 `
+// TODO: is this element necessary?
 const ContentContainer = styled.div`
   height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
 `
