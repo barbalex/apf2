@@ -1,10 +1,10 @@
 import React from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-const ZhOrtho2015Layer = () => (
+const ZhOrthoFcirAktuellLayer = () => (
   <WMSTileLayer
     url="//wms.zh.ch/OrthoZHWMS"
-    layers="ortho_w_2015"
+    layers="ortho_s_fcir_2018"
     version="1.3.0"
     format="image/png"
     maxNativeZoom={18}
@@ -13,4 +13,4 @@ const ZhOrtho2015Layer = () => (
   />
 )
 
-export default ZhOrtho2015Layer
+export default ZhOrthoFcirAktuellLayer

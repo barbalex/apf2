@@ -4,7 +4,7 @@ import { WMSTileLayer } from 'react-leaflet'
 const ZhOrtho2015InfraLayer = () => (
   <WMSTileLayer
     url="//wms.zh.ch/OrthoZHWMS"
-    layers="ortho_sp_fcir"
+    layers="ortho_w_fcir_2015"
     version="1.3.0"
     format="image/png"
     maxNativeZoom={18}
