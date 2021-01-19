@@ -21,7 +21,7 @@ const fragments = {
   ekAbrechnungstypWerte: ekAbrechnungstypWerteFragment,
 }
 
-export default async ({
+const insertDataset = async ({
   treeName,
   tablePassed,
   parentId,
@@ -198,6 +198,30 @@ export default async ({
     urlWithoutJahr.pop()
     newOpenNodes = [...openNodes, urlWithoutJahr, newActiveNodeArray]
   }
+  if (menuType.includes('tpopfeldkontr')) {
+    // 1. add new zaehlung
+    const result = await client.mutate({
+      mutation: gql`
+        mutation createWerte($parentId: UUID!) {
+          createTpopkontrzaehl(
+            input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
+          ) {
+            tpopkontrzaehl {
+              id
+            }
+          }
+        }
+      `,
+      variables: { parentId: row[idField] },
+    })
+    // 2. open the zaehlungFolder
+    const zaehlId = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
+    const newOpenFolder = [...newActiveNodeArray, 'Zaehlungen']
+    const newOpenNode = [...newActiveNodeArray, 'Zaehlungen', zaehlId]
+    newOpenNodes = [...newOpenNodes, newOpenFolder, newOpenNode]
+  }
   setOpenNodes(newOpenNodes)
   refetch.tree()
 }
+
+export default insertDataset
