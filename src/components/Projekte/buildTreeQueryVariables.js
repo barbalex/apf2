@@ -8,13 +8,14 @@ import { simpleTypes as tpopmassnType } from '../../store/Tree/DataFilter/tpopma
 import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tpopfeldkontr'
 import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
 
-export default ({
+const buildTreeQueryVariables = ({
   treeName,
   dataFilter,
   openNodes,
   activeNodeArray,
   apFilter: apFilterSet,
   nodeLabelFilter,
+  apIdInActiveNodeArray,
 }) => {
   // apFilter is used for form nodeLabelFilter AND apFilter of tree :-(
   const isWerteListen = openNodes.some(
@@ -32,7 +33,7 @@ export default ({
   const isProjekt = openNodes.some(
     (nArray) => nArray[0] === 'Projekte' && nArray[1],
   )
-  const apFilter = { projId: { in: projId } }
+  let apFilter = { projId: { in: projId } }
   const apFilterValues = Object.entries(dataFilter.ap).filter(
     (e) => e[1] || e[1] === 0,
   )
@@ -43,6 +44,11 @@ export default ({
   // for unknown reason the following only works belated, so not
   if (apFilterSet) {
     apFilter.bearbeitung = { in: [1, 2, 3] }
+  }
+  if (apIdInActiveNodeArray) {
+    // if apId in activeNodeArray
+    // allow showing this ap
+    apFilter = { or: [apFilter, { id: { equalTo: apIdInActiveNodeArray } }] }
   }
   const ap = uniq(
     openNodes
@@ -398,3 +404,5 @@ export default ({
     zielsFilter,
   }
 }
+
+export default buildTreeQueryVariables

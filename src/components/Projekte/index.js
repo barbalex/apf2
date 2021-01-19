@@ -71,7 +71,7 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 const Projekte = () => {
   const store = useContext(storeContext)
   const { isPrint, urlQuery, setRefetchKey, user, tree, appBarHeight } = store
-  const { projIdInActiveNodeArray } = tree
+  const { projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
   const treeTabValues = [
     'tree',
     'daten',
@@ -107,6 +107,7 @@ const Projekte = () => {
         activeNodeArray: treeActiveNodeArray,
         apFilter: treeApFilter,
         nodeLabelFilter: treeNodeLabelFilter,
+        apIdInActiveNodeArray,
       }),
     [
       treeDataFilter,
@@ -114,6 +115,7 @@ const Projekte = () => {
       treeApFilter,
       treeNodeLabelFilter,
       treeOpenNodes,
+      apIdInActiveNodeArray,
     ],
   )
   const queryTree2Variables = useMemo(
@@ -125,6 +127,7 @@ const Projekte = () => {
         activeNodeArray: tree2ActiveNodeArray,
         apFilter: tree2ApFilter,
         nodeLabelFilter: tree2NodeLabelFilter,
+        apIdInActiveNodeArray,
       }),
     [
       tree2DataFilter,
@@ -132,6 +135,7 @@ const Projekte = () => {
       tree2ApFilter,
       tree2NodeLabelFilter,
       tree2OpenNodes,
+      apIdInActiveNodeArray,
     ],
   )
 
