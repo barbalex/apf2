@@ -2,8 +2,6 @@
  * moves a dataset to a different parent
  * used when copying for instance tpop to other pop in tree
  */
-import get from 'lodash/get'
-
 import tables from '../tables'
 import copyTpopsOfPop from '../copyTpopsOfPop'
 import copyZaehlOfTpopKontr from '../copyZaehlOfTpopKontr'
@@ -21,7 +19,7 @@ import createPop from './createPop'
 //import queryTpopfreiwkontr from './queryTpopfreiwkontr'
 
 // copyTpopsOfPop can pass table and id separately
-export default async ({
+const copyTo = async ({
   parentId,
   table: tablePassed,
   id: idPassed,
@@ -48,35 +46,35 @@ export default async ({
         query: queryTpopKontrzaehlById,
         variables: { id },
       })
-      row = get(data0, 'tpopkontrzaehlById')
+      row = data0?.tpopkontrzaehlById
       break
     case 'tpopkontr':
       const { data: data1 } = await client.query({
         query: queryTpopKontrById,
         variables: { id },
       })
-      row = get(data1, 'tpopkontrById')
+      row = data1?.tpopkontrById
       break
     case 'tpopmassn':
       const { data: data2 } = await client.query({
         query: queryTpopmassnById,
         variables: { id },
       })
-      row = get(data2, 'tpopmassnById')
+      row = data2?.tpopmassnById
       break
     case 'tpop':
       const { data: data3 } = await client.query({
         query: queryTpopById,
         variables: { id },
       })
-      row = get(data3, 'tpopById')
+      row = data3?.tpopById
       break
     case 'pop':
       const { data: data4 } = await client.query({
         query: queryPopById,
         variables: { id },
       })
-      row = get(data4, 'popById')
+      row = data4?.popById
       break
     default:
       // do nothing
@@ -106,7 +104,7 @@ export default async ({
           methode: row.methode,
         },
       })
-      newId = get(response, 'data.createTpopkontrzaehl.tpopkontrzaehl.id')
+      newId = response?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
       break
     case 'tpopkontr':
       response = await client.mutate({
@@ -155,7 +153,7 @@ export default async ({
         },
         // update does not work because query contains filter
       })
-      newId = get(response, 'data.createTpopkontr.tpopkontr.id')
+      newId = response?.data?.createTpopkontr?.tpopkontr?.id
       break
     case 'tpopmassn':
       response = await client.mutate({
@@ -185,10 +183,10 @@ export default async ({
           planVorhanden: row.planVorhanden,
         },
       })
-      newId = get(response, 'data.createTpopmassn.tpopmassn.id')
+      newId = response?.data?.createTpopmassn?.tpopmassn?.id
       break
     case 'tpop':
-      let geomPointTpop = get(row, 'geomPoint.geojson') || null
+      let geomPointTpop = row?.geomPoint?.geojson || null
       if (geomPointTpop) geomPointTpop = JSON.parse(geomPointTpop)
       response = await client.mutate({
         mutation: createTpop,
@@ -222,10 +220,10 @@ export default async ({
           statusUnklar: row.statusUnklar,
         },
       })
-      newId = get(response, 'data.createTpop.tpop.id')
+      newId = response?.data?.createTpop?.tpop?.id
       break
     case 'pop':
-      let geomPointPop = get(row, 'geomPoint.geojson') || null
+      let geomPointPop = row?.geomPoint?.geojson
       if (geomPointPop) geomPointPop = JSON.parse(geomPointPop)
       response = await client.mutate({
         mutation: createPop,
@@ -240,13 +238,12 @@ export default async ({
           geomPoint: geomPointPop,
         },
       })
-      newId = get(response, 'data.createPop.pop.id')
+      newId = response?.data?.createPop?.pop?.id
       break
     default:
       // do nothing
       break
   }
-  if (table) refetch[`${table}s`]()
   refetch.tree()
 
   // copy tpop if needed
@@ -268,3 +265,5 @@ export default async ({
     })
   }
 }
+
+export default copyTo
