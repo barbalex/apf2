@@ -106,7 +106,6 @@ const ApAp = ({ treeName, id }) => {
         ...objectsEmptyValuesToNull(values),
         changedBy: user.name,
       }
-      console.log('Ap, onSubmit', { changedField, variables, values, row })
       try {
         await client.mutate({
           mutation: gql`

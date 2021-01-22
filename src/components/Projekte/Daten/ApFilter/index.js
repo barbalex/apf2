@@ -68,8 +68,13 @@ const LabelPopoverRowColumnRight = styled.div`
 
 const ApFilter = ({ treeName, filterTitleHeight = 81 }) => {
   const store = useContext(storeContext)
-  const { dataFilterSetValue, appBarHeight } = store
-  const { activeNodeArray, dataFilter } = store[treeName]
+  const { dataFilterSetValue, appBarHeight, enqueNotification } = store
+  const {
+    activeNodeArray,
+    dataFilter,
+    setApFilter,
+    apFilter: nurApFilter,
+  } = store[treeName]
 
   const projId = activeNodeArray[1]
   const dataFilterAp = { ...dataFilter.ap }
@@ -128,6 +133,18 @@ const ApFilter = ({ treeName, filterTitleHeight = 81 }) => {
       // https://github.com/JedWatson/react-select/issues/4101
       if (!changedField) return
 
+      // if showFilter, turn off 'nurAp' and tell user
+      if (nurApFilter) {
+        setApFilter(false)
+        enqueNotification({
+          message:
+            'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
+          options: {
+            variant: 'info',
+          },
+        })
+      }
+
       const value = values[changedField]
       dataFilterSetValue({
         treeName,
@@ -136,7 +153,14 @@ const ApFilter = ({ treeName, filterTitleHeight = 81 }) => {
         value,
       })
     },
-    [dataFilterSetValue, row, treeName],
+    [
+      dataFilterSetValue,
+      enqueNotification,
+      nurApFilter,
+      row,
+      setApFilter,
+      treeName,
+    ],
   )
 
   const aeTaxonomiesFilter = useCallback(
