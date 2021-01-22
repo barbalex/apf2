@@ -1,6 +1,5 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -92,15 +91,22 @@ const ApAp = ({ treeName, id }) => {
     loading: loadingLists,
   } = useQuery(queryLists)
 
-  const row = get(data, 'apById', {})
+  const row = data?.apById ?? {}
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      // BEWARE: react-select fires twice when a value is cleared
+      // second event leads to an error as the values passed are same as before
+      // so prevent this by returning if no changed field exists
+      // https://github.com/JedWatson/react-select/issues/4101
+      if (!changedField) return
+
       const variables = {
         ...objectsEmptyValuesToNull(values),
         changedBy: user.name,
       }
+      console.log('Ap, onSubmit', { changedField, variables, values, row })
       try {
         await client.mutate({
           mutation: gql`
@@ -201,7 +207,7 @@ const ApAp = ({ treeName, id }) => {
               />
               <RadioButtonGroupWithInfo
                 name="bearbeitung"
-                dataSource={get(dataLists, 'allApBearbstandWertes.nodes', [])}
+                dataSource={dataLists?.allApBearbstandWertes?.nodes ?? []}
                 loading={loadingLists}
                 popover={
                   <>
@@ -238,7 +244,7 @@ const ApAp = ({ treeName, id }) => {
               <FieldContainer>
                 <RadioButtonGroupWithInfo
                   name="umsetzung"
-                  dataSource={get(dataLists, 'allApUmsetzungWertes.nodes', [])}
+                  dataSource={dataLists?.allApUmsetzungWertes?.nodes ?? []}
                   loading={loadingLists}
                   popover={
                     <>
@@ -273,7 +279,7 @@ const ApAp = ({ treeName, id }) => {
               <Select
                 name="bearbeiter"
                 label="Verantwortlich"
-                options={get(dataAdresses, 'allAdresses.nodes', [])}
+                options={dataAdresses?.allAdresses?.nodes ?? []}
                 loading={loadingAdresses}
                 handleSubmit={handleSubmit}
               />
@@ -287,11 +293,10 @@ const ApAp = ({ treeName, id }) => {
               <TextFieldNonUpdatable
                 key={`${row.id}artwert`}
                 label="Artwert"
-                value={get(
-                  row,
-                  'aeTaxonomyByArtId.artwert',
-                  'Diese Art hat keinen Artwert',
-                )}
+                value={
+                  row?.aeTaxonomyByArtId?.artwert ??
+                  'Diese Art hat keinen Artwert'
+                }
                 handleSubmit={handleSubmit}
               />
             </Form>

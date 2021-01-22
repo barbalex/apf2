@@ -173,6 +173,12 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      // BEWARE: react-select fires twice when a value is cleared
+      // second event leads to an error as the values passed are same as before
+      // so prevent this by returning if no changed field exists
+      // https://github.com/JedWatson/react-select/issues/4101
+      if (!changedField) return
+
       // when GeomPoint is changed, Coordinates takes over
       // need to return
       if (changedField === null) return

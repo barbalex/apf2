@@ -122,6 +122,12 @@ const ApFilter = ({ treeName, filterTitleHeight = 81 }) => {
   const onSubmit = useCallback(
     (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      // BEWARE: react-select fires twice when a value is cleared
+      // second event leads to an error as the values passed are same as before
+      // so prevent this by returning if no changed field exists
+      // https://github.com/JedWatson/react-select/issues/4101
+      if (!changedField) return
+
       const value = values[changedField]
       dataFilterSetValue({
         treeName,
