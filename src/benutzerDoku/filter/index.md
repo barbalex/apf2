@@ -1,8 +1,8 @@
 ---
 typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Formular-Filter"
-date: "2019-04-18"
-title: "Formular-Filter"
+path: '/Dokumentation/Benutzer/Formular-Filter'
+date: '2021-01-22'
+title: 'Formular-Filter'
 sort: 14
 ---
 
@@ -11,6 +11,7 @@ Am 15.03.2019 wurden sie verändert, um die Benutzerfreundlichkeit zu erhöhen.<
 <img src="filterForm.png" title="Filter-Formular" width="600" /><br/>
 
 ## In diesen Formularen kann man filtern
+
 - Aktionsplan
 - Population
 - Teil-Population
@@ -25,21 +26,25 @@ Erfasst man in einem Filter-Feld Daten, wird der entsprechende Filter nach Verla
 Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `Strukturbaum 2`, entspricht er genau dem `Strukturbaum`, d.h. es wird auch ein allfälliger Filter kopiert. Danach sind die Filter unabhängig.<br/><br/>
 
 ## Wie öffnet man ein Filter-Formular?
+
 - Mit der Schaltfläche oben in der Navigationszeile, rechts neben der Daten-Schaltfläche<br/>
   ![Filter öffnen](filterButton.png)
 
 ## Wo wird der Filter angewendet?
+
 - Im Strukturbaum auf der gefilterten Ebene.<br/>
   Ein Filter auf Ebene Teil-Population wirkt sich also nicht auf die Populationen aus
 - In der Karte (Populationen, Teil-Populationen).<br/>
   Ein Filter auf Ebene Teil-Population wirkt sich hier auch auf der Ebene Population aus. Und umgekehrt.
-- Nicht realisiert aber als Erweiterung denkbar (und für 2019 vorgesehen): In Exporten der entsprechenden Ebene
+- In Exporten der entsprechenden Ebene
 
 ## Wie werden Filter entfernt?
+
 Im Formular erscheinen oben zwei Symbole, sobald ein Filter angewendet wird:
+
 - Mit dem linken Symbol kann man den Filter in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Aktionsplan)
 - Mit dem rechten Symbol kann man alle angewendeten Filter entfernen<br/>
-![Filter entfernen](filterRemove2.png)
+  ![Filter entfernen](filterRemove2.png)
 
 ## Welche Möglichkeiten eröffnet mir das?
 
