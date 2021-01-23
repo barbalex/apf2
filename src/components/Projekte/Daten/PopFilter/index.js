@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useState } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -63,11 +62,11 @@ const PopFilter = ({ treeName, filterTitleHeight = 81 }) => {
   })
   const { data: dataPops, error } = useQuery(queryPops, {
     variables: {
-      showFilter: true,
       allPopsFilter,
       popFilter,
       popApFilter,
       apId,
+      apIdExists: !!apId,
     },
   })
 
@@ -76,10 +75,10 @@ const PopFilter = ({ treeName, filterTitleHeight = 81 }) => {
   let popOfApTotalCount
   let popOfApFilteredCount
   const row = dataFilter.pop
-  popTotalCount = get(dataPops, 'allPops.totalCount', '...')
-  popFilteredCount = get(dataPops, 'popsFiltered.totalCount', '...')
-  popOfApTotalCount = get(dataPops, 'popsOfAp.totalCount', '...')
-  popOfApFilteredCount = get(dataPops, 'popsOfApFiltered.totalCount', '...')
+  popTotalCount = dataPops?.allPops?.totalCount ?? '...'
+  popFilteredCount = dataPops?.popsFiltered?.totalCount ?? '...'
+  popOfApTotalCount = dataPops?.popsOfAp?.totalCount ?? '...'
+  popOfApFilteredCount = dataPops?.popsOfApFiltered?.totalCount ?? '...'
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -146,7 +145,7 @@ const PopFilter = ({ treeName, filterTitleHeight = 81 }) => {
                     handleSubmit={handleSubmit}
                   />
                   <Status
-                    apJahr={get(row, 'apByApId.startJahr')}
+                    apJahr={row?.apByApId?.startJahr}
                     treeName={treeName}
                     showFilter={true}
                     handleSubmit={handleSubmit}
