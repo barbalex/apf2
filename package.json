@@ -96,6 +96,7 @@
     "react-error-boundary": "3.1.0",
     "react-focus-within": "2.0.2",
     "react-helmet": "6.1.0",
+    "react-highlight-words": "0.17.0",
     "react-icons": "4.1.0",
     "react-image-lightbox": "5.1.1",
     "react-leaflet": "3.0.5",

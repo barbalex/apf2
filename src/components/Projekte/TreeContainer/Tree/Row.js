@@ -13,6 +13,7 @@ import {
 } from 'react-icons/md'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
+import Highlighter from 'react-highlight-words'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
@@ -196,6 +197,7 @@ const Row = ({ index, style, node, treeName }) => {
     setActiveNodeArray,
     apIdInActiveNodeArray,
     tpopIdInActiveNodeArray,
+    nodeLabelFilter,
   } = tree
   const { idsFiltered: mapIdsFiltered } = store[treeName].map
 
@@ -422,7 +424,14 @@ const Row = ({ index, style, node, treeName }) => {
             node={node}
             onClick={onClickNode}
           >
-            {node.label}
+            {node.menuType === 'ap' && nodeLabelFilter?.ap ? (
+              <Highlighter
+                searchWords={[nodeLabelFilter.ap]}
+                textToHighlight={node.label}
+              />
+            ) : (
+              node.label
+            )}
           </TextSpan>
           {isMoving && (
             <div title="zum Verschieben gemerkt, bereit zum Einfügen">
