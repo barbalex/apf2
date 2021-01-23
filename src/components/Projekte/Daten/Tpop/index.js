@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useState } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
@@ -95,7 +94,7 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
   } = store
 
   const { activeNodeArray, dataFilter } = store[treeName]
-  const [tab, setTab] = useState(get(urlQuery, 'tpopTab', 'tpop'))
+  const [tab, setTab] = useState(urlQuery?.tpopTab ?? 'tpop')
   const onChangeTab = useCallback(
     (event, value) => {
       setUrlQueryValue({
@@ -120,7 +119,7 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
       id,
     },
   })
-  const apJahr = get(data, 'tpopById.popByPopId.apByApId.startJahr', null)
+  const apJahr = data?.tpopById?.popByPopId?.apByApId?.startJahr ?? null
 
   const allTpopsFilter = {
     popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
@@ -139,10 +138,10 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
 
   const { data: dataTpops } = useQuery(queryTpops, {
     variables: {
-      showFilter,
       allTpopsFilter,
       tpopFilter,
       apId,
+      apIdExists: !!apId && showFilter,
     },
   })
 
@@ -153,21 +152,21 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
   let row
   if (showFilter) {
     row = dataFilter.tpop
-    tpopTotalCount = get(dataTpops, 'allTpops.totalCount', '...')
-    tpopFilteredCount = get(dataTpops, 'tpopsFiltered.totalCount', '...')
-    const popsOfAp = get(dataTpops, 'popsOfAp.nodes', [])
+    tpopTotalCount = dataTpops?.allTpops?.totalCount ?? '...'
+    tpopFilteredCount = dataTpops?.tpopsFiltered?.totalCount ?? '...'
+    const popsOfAp = dataTpops?.popsOfAp?.nodes ?? []
     tpopOfApTotalCount = !popsOfAp.length
       ? '...'
       : popsOfAp
-          .map((p) => get(p, 'tpops.totalCount'))
+          .map((p) => p?.tpops?.totalCount)
           .reduce((acc = 0, val) => acc + val)
     tpopOfApFilteredCount = !popsOfAp.length
       ? '...'
       : popsOfAp
-          .map((p) => get(p, 'tpopsFiltered.totalCount'))
+          .map((p) => p?.tpopsFiltered?.totalCount)
           .reduce((acc = 0, val) => acc + val)
   } else {
-    row = get(data, 'tpopById', {})
+    row = data?.tpopById ?? {}
   }
 
   const onSubmit = useCallback(
@@ -288,7 +287,7 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
           />
         ) : (
           <FormTitle
-            apId={get(data, 'tpopById.popByPopId.apId')}
+            apId={data?.tpopById?.popByPopId?.apId}
             title="Teil-Population"
             treeName={treeName}
             setFormTitleHeight={setFormTitleHeight}

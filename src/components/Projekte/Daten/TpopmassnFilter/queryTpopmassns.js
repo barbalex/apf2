@@ -2,20 +2,20 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query tpopmassnsFilterQuery(
-    $showFilter: Boolean!
+    $apIdExists: Boolean!
     $tpopmassnFilter: TpopmassnFilter!
     $allTpopmassnFilter: TpopmassnFilter!
     $apId: UUID!
   ) {
-    allTpopmassns(filter: $allTpopmassnFilter) @include(if: $showFilter) {
+    allTpopmassns(filter: $allTpopmassnFilter) @include(if: $apIdExists) {
       totalCount
     }
     tpopmassnsFiltered: allTpopmassns(filter: $tpopmassnFilter)
-      @include(if: $showFilter) {
+      @include(if: $apIdExists) {
       totalCount
     }
     popsOfAp: allPops(filter: { apId: { equalTo: $apId } })
-      @include(if: $showFilter) {
+      @include(if: $apIdExists) {
       nodes {
         id
         tpops: tpopsByPopId {

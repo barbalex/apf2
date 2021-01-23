@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
@@ -228,7 +227,7 @@ const Tpopfreiwkontr = ({
   // DO NOT fetch apId from activeNodeArray because this form is also used for mass prints
   //const apId = activeNodeArray[3]
   const apId =
-    get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId') ||
+    data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??
     '99999999-9999-9999-9999-999999999999'
 
   const allTpopkontrFilter = {
@@ -253,27 +252,21 @@ const Tpopfreiwkontr = ({
   })
   const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
     variables: {
-      showFilter,
       tpopkontrFilter,
       allTpopkontrFilter,
       apId,
+      apIdExists: !!apId && showFilter,
     },
   })
 
-  const ekzaehleinheitsOriginal = get(
-    data,
-    'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekzaehleinheitsByApId.nodes',
-    [],
-  )
+  const ekzaehleinheitsOriginal =
+    data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
+      ?.ekzaehleinheitsByApId?.nodes ?? []
   const ekzaehleinheits = ekzaehleinheitsOriginal
-    .map((n) => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
+    .map((n) => n?.tpopkontrzaehlEinheitWerteByZaehleinheitId ?? {})
     // remove null values stemming from efkzaehleinheit without zaehleinheit_id
     .filter((n) => n !== null)
-  const zaehls = get(
-    data,
-    'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
-    [],
-  )
+  const zaehls = data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
   const zaehlsSorted = sortBy(zaehls, (z) => {
     const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
       (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.einheit,
@@ -312,35 +305,29 @@ const Tpopfreiwkontr = ({
   let row
   if (showFilter) {
     row = dataFilter.tpopfreiwkontr
-    tpopkontrTotalCount = get(dataTpopkontrs, 'allTpopkontrs.totalCount', '...')
-    tpopkontrFilteredCount = get(
-      dataTpopkontrs,
-      'tpopkontrsFiltered.totalCount',
-      '...',
-    )
-    const popsOfAp = get(dataTpopkontrs, 'popsOfAp.nodes', [])
-    const tpopsOfAp = flatten(popsOfAp.map((p) => get(p, 'tpops.nodes', [])))
+    tpopkontrTotalCount = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
+    tpopkontrFilteredCount =
+      dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
+    const popsOfAp = dataTpopkontrs?.popsOfAp?.nodes ?? []
+    const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
     tpopkontrsOfApTotalCount = !tpopsOfAp.length
       ? '...'
       : tpopsOfAp
-          .map((p) => get(p, 'tpopkontrs.totalCount'))
+          .map((p) => p?.tpopkontrs?.totalCount)
           .reduce((acc = 0, val) => acc + val)
     tpopkontrsOfApFilteredCount = !tpopsOfAp.length
       ? '...'
       : tpopsOfAp
-          .map((p) => get(p, 'tpopkontrsFiltered.totalCount'))
+          .map((p) => p?.tpopkontrsFiltered?.totalCount)
           .reduce((acc = 0, val) => acc + val)
   } else {
-    row = get(data, 'tpopkontrById', {}) || {}
+    row = data?.tpopkontrById ?? {}
   }
 
-  const artname = get(
-    row,
-    'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.artname',
-    '',
-  )
-  const pop = get(row, 'tpopByTpopId.popByPopId', {})
-  const tpop = get(row, 'tpopByTpopId', {})
+  const artname =
+    row?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? ''
+  const pop = row?.tpopByTpopId?.popByPopId ?? {}
+  const tpop = row?.tpopByTpopId ?? {}
   const { ekfBemerkungen } = row
 
   const saveToDb = useCallback(
@@ -546,16 +533,12 @@ const Tpopfreiwkontr = ({
       if (tpopkontrCount === 0) {
         // add counts for all ekzaehleinheit
         // BUT DANGER: only for ekzaehleinheit with zaehleinheit_id
-        const ekzaehleinheits = get(
-          data,
-          'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekzaehleinheitsByApId.nodes',
-          [],
+        const ekzaehleinheits = (
+          data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
+            ?.ekzaehleinheitsByApId?.nodes ?? []
         )
           // remove ekzaehleinheits without zaehleinheit_id
-          .filter(
-            (z) =>
-              !!get(z, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.code', null),
-          )
+          .filter((z) => !!z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code)
 
         Promise.all(
           ekzaehleinheits.map((z) =>
@@ -563,11 +546,8 @@ const Tpopfreiwkontr = ({
               mutation: createTpopkontrzaehl,
               variables: {
                 tpopkontrId: row.id,
-                einheit: get(
-                  z,
-                  'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
-                  null,
-                ),
+                einheit:
+                  z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code ?? null,
                 changedBy: user.name,
               },
             }),

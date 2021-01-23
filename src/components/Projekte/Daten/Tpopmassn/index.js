@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useState } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -111,7 +110,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
     error: errorLists,
   } = useQuery(queryLists)
 
-  const row = get(data, 'tpopmassnById', {})
+  const row = data?.tpopmassnById ?? {}
 
   const { data: dataIsMassnTypAnpflanzung } = useQuery(
     queryIsMassnTypAnpflanzung,
@@ -119,10 +118,8 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
       variables: { typ: row.typ || 999999999 },
     },
   )
-  const isAnpflanzung = get(
-    dataIsMassnTypAnpflanzung,
-    'allTpopmassnTypWertes.nodes[0].anpflanzung',
-  )
+  const isAnpflanzung =
+    dataIsMassnTypAnpflanzung?.allTpopmassnTypWertes?.nodes?.[0]?.anpflanzung
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -187,15 +184,12 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
         } catch (error) {
           return setErrors({ [changedField]: error.message })
         }
-        const isAnpflanzung = get(
-          zieleinheitIdResult,
-          'data.allTpopmassnTypWertes.nodes[0].anpflanzung',
-        )
+        const isAnpflanzung =
+          zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
+            ?.anpflanzung
         const zieleinheitCode =
-          get(
-            zieleinheitIdResult,
-            'data.allEkzaehleinheits.nodes[0].tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
-          ) || null
+          zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
+            ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code
         if (isAnpflanzung && zieleinheitCode) {
           variables.zieleinheitEinheit = zieleinheitCode
         }
@@ -258,7 +252,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
     [apId, client, row, store.user.name],
   )
 
-  const [tab, setTab] = useState(get(urlQuery, 'tpopmassnTab', 'tpopmassn'))
+  const [tab, setTab] = useState(urlQuery?.tpopmassnTab ?? 'tpopmassn')
   const onChangeTab = useCallback(
     (event, value) => {
       setUrlQueryValue({
@@ -339,11 +333,9 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                       <RadioButtonGroup
                         name="typ"
                         label="Typ"
-                        dataSource={get(
-                          dataLists,
-                          'allTpopmassnTypWertes.nodes',
-                          [],
-                        )}
+                        dataSource={
+                          dataLists?.allTpopmassnTypWertes?.nodes ?? []
+                        }
                         loading={loadingLists}
                         handleSubmit={handleSubmit}
                       />
@@ -357,7 +349,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                         name="bearbeiter"
                         value={row.bearbeiter}
                         label="BearbeiterIn"
-                        options={get(dataAdresses, 'allAdresses.nodes', [])}
+                        options={dataAdresses?.allAdresses?.nodes ?? []}
                         loading={loadingAdresses}
                         handleSubmit={handleSubmit}
                       />
@@ -420,11 +412,10 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           <Select
                             name="zieleinheitEinheit"
                             label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
-                            options={get(
-                              dataLists,
-                              'allTpopkontrzaehlEinheitWertes.nodes',
-                              [],
-                            )}
+                            options={
+                              dataLists?.allTpopkontrzaehlEinheitWertes
+                                ?.nodes ?? []
+                            }
                             loading={loadingLists}
                             handleSubmit={handleSubmit}
                           />

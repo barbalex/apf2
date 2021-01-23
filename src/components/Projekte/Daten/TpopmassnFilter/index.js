@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
@@ -75,10 +74,10 @@ const TpopmassnFilter = ({
   })
   const { data: dataTpopmassns, error } = useQuery(queryTpopmassns, {
     variables: {
-      showFilter: true,
       tpopmassnFilter,
       allTpopmassnFilter,
       apId,
+      apIdExists: !!apId,
     },
   })
 
@@ -94,27 +93,20 @@ const TpopmassnFilter = ({
   } = useQuery(queryLists)
 
   const row = dataFilter.tpopmassn
-  const tpopmassnTotalCount = get(
-    dataTpopmassns,
-    'allTpopmassns.totalCount',
-    '...',
-  )
-  const tpopmassnFilteredCount = get(
-    dataTpopmassns,
-    'tpopmassnsFiltered.totalCount',
-    '...',
-  )
-  const popsOfAp = get(dataTpopmassns, 'popsOfAp.nodes', [])
-  const tpopsOfAp = flatten(popsOfAp.map((p) => get(p, 'tpops.nodes', [])))
+  const tpopmassnTotalCount = dataTpopmassns?.allTpopmassns?.totalCount ?? '...'
+  const tpopmassnFilteredCount =
+    dataTpopmassns?.tpopmassnsFiltered?.totalCount ?? '...'
+  const popsOfAp = dataTpopmassns?.popsOfAp?.nodes ?? []
+  const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
   const tpopmassnsOfApTotalCount = !tpopsOfAp.length
     ? '...'
     : tpopsOfAp
-        .map((p) => get(p, 'tpopmassns.totalCount'))
+        .map((p) => p?.tpopmassns?.totalCount)
         .reduce((acc = 0, val) => acc + val)
   const tpopmassnsOfApFilteredCount = !tpopsOfAp.length
     ? '...'
     : tpopsOfAp
-        .map((p) => get(p, 'tpopmassnsFiltered.totalCount'))
+        .map((p) => p?.tpopmassnsFiltered?.totalCount)
         .reduce((acc = 0, val) => acc + val)
 
   const { data: dataIsMassnTypAnpflanzung } = useQuery(
@@ -123,10 +115,8 @@ const TpopmassnFilter = ({
       variables: { typ: row.typ || 999999999 },
     },
   )
-  const isAnpflanzung = get(
-    dataIsMassnTypAnpflanzung,
-    'allTpopmassnTypWertes.nodes[0].anpflanzung',
-  )
+  const isAnpflanzung =
+    dataIsMassnTypAnpflanzung?.allTpopmassnTypWertes?.nodes?.[0]?.anpflanzung
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -203,11 +193,7 @@ const TpopmassnFilter = ({
                     <RadioButtonGroup
                       name="typ"
                       label="Typ"
-                      dataSource={get(
-                        dataLists,
-                        'allTpopmassnTypWertes.nodes',
-                        [],
-                      )}
+                      dataSource={dataLists?.allTpopmassnTypWertes?.nodes ?? []}
                       loading={loadingLists}
                       handleSubmit={handleSubmit}
                     />
@@ -221,7 +207,7 @@ const TpopmassnFilter = ({
                       name="bearbeiter"
                       value={row.bearbeiter}
                       label="BearbeiterIn"
-                      options={get(dataAdresses, 'allAdresses.nodes', [])}
+                      options={dataAdresses?.allAdresses?.nodes ?? []}
                       loading={loadingAdresses}
                       handleSubmit={handleSubmit}
                     />
@@ -290,11 +276,10 @@ const TpopmassnFilter = ({
                         <Select
                           name="zieleinheitEinheit"
                           label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
-                          options={get(
-                            dataLists,
-                            'allTpopkontrzaehlEinheitWertes.nodes',
-                            [],
-                          )}
+                          options={
+                            dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ??
+                            []
+                          }
                           loading={loadingLists}
                           handleSubmit={handleSubmit}
                         />

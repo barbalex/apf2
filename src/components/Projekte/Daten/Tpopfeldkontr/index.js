@@ -2,7 +2,6 @@ import React, { useState, useCallback, useContext } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
@@ -189,10 +188,10 @@ const Tpopfeldkontr = ({
   })
   const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
     variables: {
-      showFilter,
       tpopkontrFilter,
       allTpopkontrFilter,
       apId,
+      apIdExists: !!apId && showFilter,
     },
   })
 
@@ -208,7 +207,7 @@ const Tpopfeldkontr = ({
     error: errorLists,
   } = useQuery(queryLists)
 
-  const [tab, setTab] = useState(get(urlQuery, 'feldkontrTab', 'entwicklung'))
+  const [tab, setTab] = useState(urlQuery?.feldkontrTab ?? 'entwicklung')
   const onChangeTab = useCallback(
     (event, value) => {
       setUrlQueryValue({
@@ -229,26 +228,23 @@ const Tpopfeldkontr = ({
   let row
   if (showFilter) {
     row = dataFilter.tpopfeldkontr
-    tpopkontrTotalCount = get(dataTpopkontrs, 'allTpopkontrs.totalCount', '...')
-    tpopkontrFilteredCount = get(
-      dataTpopkontrs,
-      'tpopkontrsFiltered.totalCount',
-      '...',
-    )
-    const popsOfAp = get(dataTpopkontrs, 'popsOfAp.nodes', [])
-    const tpopsOfAp = flatten(popsOfAp.map((p) => get(p, 'tpops.nodes', [])))
+    tpopkontrTotalCount = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
+    tpopkontrFilteredCount =
+      dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
+    const popsOfAp = dataTpopkontrs?.popsOfAp?.nodes ?? []
+    const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
     tpopkontrsOfApTotalCount = !tpopsOfAp.length
       ? '...'
       : tpopsOfAp
-          .map((p) => get(p, 'tpopkontrs.totalCount'))
+          .map((p) => p?.tpopkontrs?.totalCount)
           .reduce((acc = 0, val) => acc + val)
     tpopkontrsOfApFilteredCount = !tpopsOfAp.length
       ? '...'
       : tpopsOfAp
-          .map((p) => get(p, 'tpopkontrsFiltered.totalCount'))
+          .map((p) => p?.tpopkontrsFiltered?.totalCount)
           .reduce((acc = 0, val) => acc + val)
   } else {
-    row = get(data, 'tpopkontrById', {})
+    row = data?.tpopkontrById ?? {}
   }
 
   const onSubmit = useCallback(
@@ -331,7 +327,7 @@ const Tpopfeldkontr = ({
     [client, dataFilterSetValue, row, showFilter, store.user.name, treeName],
   )
 
-  const aeLrWerte = get(dataLists, 'allAeLrDelarzes.nodes', [])
+  const aeLrWerte = (dataLists?.allAeLrDelarzes?.nodes ?? [])
     .map(
       (e) => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`,
     )
@@ -433,7 +429,7 @@ const Tpopfeldkontr = ({
                         <Select
                           name="bearbeiter"
                           label="BearbeiterIn"
-                          options={get(dataAdresses, 'allAdresses.nodes', [])}
+                          options={dataAdresses?.allAdresses?.nodes ?? []}
                           loading={loadingAdresses}
                           handleSubmit={handleSubmit}
                         />
@@ -457,11 +453,9 @@ const Tpopfeldkontr = ({
                         <RadioButtonGroupWithInfo
                           name="entwicklung"
                           label="Entwicklung"
-                          dataSource={get(
-                            dataLists,
-                            'allTpopEntwicklungWertes.nodes',
-                            [],
-                          )}
+                          dataSource={
+                            dataLists?.allTpopEntwicklungWertes?.nodes ?? []
+                          }
                           loading={loadingLists}
                           popover={TpopfeldkontrentwicklungPopover}
                           handleSubmit={handleSubmit}
@@ -646,11 +640,10 @@ const Tpopfeldkontr = ({
                         <RadioButtonGroup
                           name="idealbiotopUebereinstimmung"
                           label="Übereinstimmung mit Idealbiotop"
-                          dataSource={get(
-                            dataLists,
-                            'allTpopkontrIdbiotuebereinstWertes.nodes',
-                            [],
-                          )}
+                          dataSource={
+                            dataLists?.allTpopkontrIdbiotuebereinstWertes
+                              ?.nodes ?? []
+                          }
                           loading={loadingLists}
                           handleSubmit={handleSubmit}
                         />

@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -104,11 +103,9 @@ const Tpop = ({
               ) : (
                 <RadioButtonGroupWithInfo
                   name="apberRelevantGrund"
-                  dataSource={get(
-                    dataLists,
-                    'allTpopApberrelevantGrundWertes.nodes',
-                    [],
-                  )}
+                  dataSource={
+                    dataLists?.allTpopApberrelevantGrundWertes?.nodes ?? []
+                  }
                   loading={loadingLists}
                   popover={TpopAbBerRelevantInfoPopover}
                   label="Grund für AP-Bericht (Nicht-)Relevanz"
@@ -124,7 +121,7 @@ const Tpop = ({
                 <SelectCreatable
                   name="gemeinde"
                   label="Gemeinde"
-                  options={get(dataLists, 'allChGemeindes.nodes', [])}
+                  options={dataLists?.allChGemeindes?.nodes ?? []}
                   loading={loadingLists}
                   showLocate={!showFilter}
                   onClickLocate={async (setStateValue) => {
@@ -133,7 +130,7 @@ const Tpop = ({
                         gemeinde: 'Es fehlen Koordinaten',
                       })
                     }
-                    const geojson = get(row, 'geomPoint.geojson')
+                    const geojson = row?.geomPoint?.geojson
                     if (!geojson) return
                     const geojsonParsed = JSON.parse(geojson)
                     if (!geojsonParsed) return
@@ -164,11 +161,8 @@ const Tpop = ({
                         },
                       })
                     }
-                    const gemeinde = get(
-                      result,
-                      'data.allChGemeindes.nodes[0].name',
-                      '',
-                    )
+                    const gemeinde =
+                      result?.data?.allChGemeindes?.nodes?.[0]?.name ?? ''
                     // keep following method in case table ch_gemeinden is removed again
                     /*const gemeinde = await getGemeindeForKoord({
                     lv95X: row.lv95X,

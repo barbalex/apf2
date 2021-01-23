@@ -2,20 +2,20 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query tpopkontrQueryForEk(
-    $showFilter: Boolean!
+    $apIdExists: Boolean!
     $tpopkontrFilter: TpopkontrFilter!
     $allTpopkontrFilter: TpopkontrFilter!
     $apId: UUID!
   ) {
-    allTpopkontrs(filter: $allTpopkontrFilter) @include(if: $showFilter) {
+    allTpopkontrs(filter: $allTpopkontrFilter) @include(if: $apIdExists) {
       totalCount
     }
     tpopkontrsFiltered: allTpopkontrs(filter: $tpopkontrFilter)
-      @include(if: $showFilter) {
+      @include(if: $apIdExists) {
       totalCount
     }
     popsOfAp: allPops(filter: { apId: { equalTo: $apId } })
-      @include(if: $showFilter) {
+      @include(if: $apIdExists) {
       nodes {
         id
         tpops: tpopsByPopId {
