@@ -424,9 +424,9 @@ const Row = ({ index, style, node, treeName }) => {
             node={node}
             onClick={onClickNode}
           >
-            {node.menuType === 'ap' && nodeLabelFilter?.ap ? (
+            {nodeLabelFilter?.[node.menuType] ? (
               <Highlighter
-                searchWords={[nodeLabelFilter.ap]}
+                searchWords={[nodeLabelFilter[node.menuType]]}
                 textToHighlight={node.label}
               />
             ) : (
