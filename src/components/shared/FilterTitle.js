@@ -15,6 +15,7 @@ const Container = styled.div`
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  min-height: 46px;
   @media print {
     display: none !important;
   }
