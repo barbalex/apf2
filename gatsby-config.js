@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'apflora v1.53.1',
+    title: 'apflora v1.54.0',
   },
   plugins: [
     {
