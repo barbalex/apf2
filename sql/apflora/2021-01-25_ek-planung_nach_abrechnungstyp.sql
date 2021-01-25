@@ -1,3 +1,5 @@
+DROP VIEW IF EXISTS apflora.v_ek_planung_nach_abrechnungstyp CASCADE;
+CREATE OR REPLACE VIEW apflora.v_ek_planung_nach_abrechnungstyp AS
 select
   tax.artname,
   adresse.name as artverantwortlich,
@@ -31,4 +33,8 @@ order by
   tax.artname,
   ekplan.jahr,
   ek_abrechnungstyp_werte.text;
+
+select colpivot('_ek_planung_nach_abrechnungstyp', 'select * from apflora.v_ek_planung_nach_abrechnungstyp',
+    array['artname', 'artverantwortlich', 'jahr'], array['ek_abrechnungstyp'], '#.anzahl', null);
+select * from _ek_planung_nach_abrechnungstyp order by artname, jahr;
   
