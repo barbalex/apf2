@@ -479,6 +479,60 @@ const AP = () => {
     })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
+  const onClickEkPlanung = useCallback(async () => {
+    const notif = enqueNotification({
+      message: `Export "EkPlanungProJahrNachAbrechnungstyp" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
+    let result
+    try {
+      result = await client.query({
+        query: await import('./queryEkPlanungNachAbrechnungstyp').then(
+          (m) => m.default,
+        ),
+      })
+    } catch (error) {
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    const rows = get(
+      result.data,
+      'allVEkPlanungNachAbrechnungstyps.nodes',
+      [],
+    ).map((z) => ({
+      ap_id: z?.id,
+      artname: z?.artname ?? '',
+      artverantwortlich: z?.artverantwortlich ?? '',
+      jahr: z?.jahr ? z.jahr : '',
+      a: z?.a ? +z.a : 0,
+      b: z?.b ? +z.b : 0,
+      d: z?.d ? +z.d : 0,
+      ekf: z?.ekf ? +z.ekf : 0,
+    }))
+    removeNotification(notif)
+    closeSnackbar(notif)
+    if (rows.length === 0) {
+      return enqueNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    exportModule({
+      data: rows,
+      fileName: 'EkPlanungProJahrNachAbrechnungstyp',
+      store,
+    })
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
+
   const onClickZiele = useCallback(async () => {
     const notif = enqueNotification({
       message: `Export "ApZiele" wird vorbereitet...`,
@@ -803,6 +857,9 @@ const AP = () => {
           </DownloadCardButton>
           <DownloadCardButton onClick={onClickApPopEkPrio}>
             Priorisierung für EK basierend auf Pop-Entwicklung
+          </DownloadCardButton>
+          <DownloadCardButton onClick={onClickEkPlanung}>
+            EK-Planung pro Jahr nach Abrechnungstyp
           </DownloadCardButton>
           <DownloadCardButton onClick={onClickZiele}>Ziele</DownloadCardButton>
           <DownloadCardButton onClick={onClickZielber}>
