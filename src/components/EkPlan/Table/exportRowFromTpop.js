@@ -52,6 +52,9 @@ export default ({ tpop, dataLists, years, store }) => {
   if (fields.includes('lv95Y')) {
     row.lv95Y = get(tpop, 'lv95Y') || '-'
   }
+  if (fields.includes('ekfKontrolleur')) {
+    row.ekfKontrolleur = tpop?.adresseByEkfKontrolleur?.name ?? '-'
+  }
   if (fields.includes('link')) {
     row.tpopLink = `${appBaseUrl()}Daten/Projekte/${
       tpop.popByPopId.apByApId.projId

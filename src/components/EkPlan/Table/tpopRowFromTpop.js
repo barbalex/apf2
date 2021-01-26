@@ -76,6 +76,10 @@ export default ({ tpop, index, dataLists }) => {
         tpop.popByPopId.id
       }/Teil-Populationen/${tpop.id}`,
     },
+    ekfKontrolleur: {
+      ...fields.ekfKontrolleur,
+      value: tpop?.adresseByEkfKontrolleur?.name,
+    },
     ekAbrechnungstyp: {
       ...fields.ekAbrechnungstyp,
       value:

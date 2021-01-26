@@ -29,6 +29,7 @@ export const allFields = [
   'lv95X',
   'lv95Y',
   'link',
+  'ekfKontrolleur',
   'ekAbrechnungstyp',
   'ekfrequenz',
   'ekfrequenzStartjahr',
@@ -67,6 +68,9 @@ export default types
     filterBekanntSeit: types.maybeNull(types.number),
     filterLv95X: types.maybeNull(types.union(types.string, types.number)),
     filterLv95Y: types.maybeNull(types.union(types.string, types.number)),
+    filterEkfKontrolleur: types.maybeNull(
+      types.union(types.string, types.number),
+    ),
     filterEkAbrechnungstyp: types.maybeNull(
       types.union(types.string, types.number),
     ),
@@ -131,6 +135,9 @@ export default types
     },
     setFilterLv95Y(val) {
       self.filterLv95Y = val ? +val : null
+    },
+    setFilterEkfKontrolleur(val) {
+      self.filterEkfKontrolleur = val
     },
     setFilterEkAbrechnungstyp(val) {
       self.filterEkAbrechnungstyp = val

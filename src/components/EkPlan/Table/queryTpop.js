@@ -26,6 +26,9 @@ export default gql`
           text
         }
         bekanntSeit
+        adresseByEkfKontrolleur {
+          name
+        }
         tpopkontrsByTpopId {
           nodes {
             id

@@ -165,6 +165,18 @@ const Fields = () => {
           labelPlacement="end"
         />
         <FormControlLabel
+          value={fields.includes('ekfKontrolleur').toString()}
+          control={
+            <Radio
+              color="primary"
+              checked={fields.includes('ekfKontrolleur')}
+              onClick={() => toggleField('ekfKontrolleur')}
+            />
+          }
+          label="EKF-KontrolleurIn"
+          labelPlacement="end"
+        />
+        <FormControlLabel
           value={fields.includes('ekAbrechnungstyp').toString()}
           control={
             <Radio
