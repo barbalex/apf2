@@ -5,7 +5,7 @@ with data as (
     ap.id,
     ekplan.jahr,
     ek_abrechnungstyp_werte.code as ek_abrechnungstyp,
-    count(ekplan.id) as anzahl
+    count(ekplan.id)::int as anzahl
   from
     apflora.ekplan ekplan
     inner join apflora.tpop tpop
@@ -29,7 +29,7 @@ with data as (
 )
 select
   tax.artname,
-  ap.id,
+  ap.id as ap_id,
   adresse.name as artverantwortlich,
   ekplan.jahr,
   (select anzahl from data where id = ap.id and jahr = ekplan.jahr and ek_abrechnungstyp = 'A') as A,

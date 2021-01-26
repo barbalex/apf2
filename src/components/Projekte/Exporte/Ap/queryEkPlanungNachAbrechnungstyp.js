@@ -4,7 +4,7 @@ export default gql`
   query ekPlanungNachAbrechnungstyps {
     allVEkPlanungNachAbrechnungstyps {
       nodes {
-        id
+        apId
         artname
         artverantwortlich
         jahr

@@ -502,20 +502,23 @@ const AP = () => {
         },
       })
     }
-    const rows = get(
-      result.data,
-      'allVEkPlanungNachAbrechnungstyps.nodes',
-      [],
+    const rows = (
+      result.data?.allVEkPlanungNachAbrechnungstyps?.nodes ?? []
     ).map((z) => ({
-      ap_id: z?.id,
+      ap_id: z?.apId,
       artname: z?.artname ?? '',
       artverantwortlich: z?.artverantwortlich ?? '',
-      jahr: z?.jahr ? z.jahr : '',
-      a: z?.a ? +z.a : 0,
-      b: z?.b ? +z.b : 0,
-      d: z?.d ? +z.d : 0,
-      ekf: z?.ekf ? +z.ekf : 0,
+      jahr: z.jahr ?? '',
+      a: z?.a ?? 0,
+      b: z?.b ?? 0,
+      d: z?.d ?? 0,
+      ekf: z?.ekf ?? 0,
     }))
+    console.log('Exporte AP, rows:', {
+      rows,
+      data: result.data?.allVEkPlanungNachAbrechnungstyps?.nodes ?? [],
+      result,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
     if (rows.length === 0) {
