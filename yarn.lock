@@ -4693,9 +4693,9 @@ content-type@^1.0.4, content-type@~1.0.4:
   integrity sha512-hIP3EEPs8tB9AT1L+NUqtwOAps4mk2Zob89MWXMHjHWg9milF/j4osnnQLXBCBFBk/tvIG/tUc9mOUJiPBhPXA==
 
 contentful-management@^7.5.1:
-  version "7.5.2"
-  resolved "https://registry.yarnpkg.com/contentful-management/-/contentful-management-7.5.2.tgz#29b03a84cb46c3a88ea56651d6c8d4fbb0236084"
-  integrity sha512-z6Am3IBTqjTqlLx7kE/5ykHX2HOZL/KmPGjmn3UrxRTaiiU62YNSIQGys8jdprkErWNNwxjMNstwGZzj/iC0CQ==
+  version "7.5.3"
+  resolved "https://registry.yarnpkg.com/contentful-management/-/contentful-management-7.5.3.tgz#3adcea59944a8cdd6e5f53d3f91db0ff1114736a"
+  integrity sha512-CBOXgfRsm5GmVED38ny0rz4pLdPk0P5G1FZpaBNTxyjCLH7Vsarqak0ysGSezbG9LtuUa5W0jFKyqv74tSYSRA==
   dependencies:
     axios "^0.21.0"
     contentful-sdk-core "^6.7.0"
@@ -10306,10 +10306,10 @@ leaflet-measure@3.1.0:
   dependencies:
     leaflet "^1.0.0"
 
-leaflet.fullscreen@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/leaflet.fullscreen/-/leaflet.fullscreen-2.0.0.tgz#ef60c291dccde6508ce690561b2c3a5d933e0384"
-  integrity sha512-MCgTKmdEF9Twh8nWI7SVBiEFvDmxS78Y+k63SwjNiFRzp3T4b9G7HmR69sdSKr0yOhCiDEssLw1RUoswMxD21Q==
+leaflet.fullscreen@1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/leaflet.fullscreen/-/leaflet.fullscreen-1.6.0.tgz#daad9a6e07c8bdbca8e5af7e3d50272d31b0226a"
+  integrity sha512-Mr6STMeyKSfJ1CsKFcPZOm425LOe0c/6EHh0AK93GiTvteTAMFmO/oFDNe+0p1mk4+8yeGLcYgaXTSzPveEGhA==
 
 leaflet.markercluster@1.4.1, leaflet.markercluster@^1.4.1:
   version "1.4.1"

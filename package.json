@@ -71,7 +71,7 @@
     "leaflet-image": "0.4.0",
     "leaflet-measure": "3.1.0",
     "leaflet-switch-scale-control": "https://github.com/victorzinho/leaflet-switch-scale-control",
-    "leaflet.fullscreen": "2.0.0",
+    "leaflet.fullscreen": "1.6.0",
     "leaflet.markercluster": "1.4.1",
     "localforage": "1.9.0",
     "lodash": "4.17.20",
@@ -123,7 +123,8 @@
   "dependenciesComments": {
     "nothing": "now",
     "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1",
-    "gatsby-plugin-sharp": "2.8.0: wait for version > 2.13.0"
+    "gatsby-plugin-sharp": "2.8.0: wait for version > 2.13.0",
+    "leaflet.fullscreen": "1.6.0: do not update to v2: https://github.com/brunob/leaflet.fullscreen/issues/77"
   },
   "peerDependencies": {
     "react-is": "17.0.1"
