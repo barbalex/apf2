@@ -124,7 +124,8 @@
     "nothing": "now",
     "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1",
     "gatsby-plugin-sharp": "2.8.0: wait for version > 2.13.0",
-    "leaflet.fullscreen": "1.6.0: do not update to v2: https://github.com/brunob/leaflet.fullscreen/issues/77"
+    "leaflet.fullscreen": "1.6.0: do not update to v2: https://github.com/brunob/leaflet.fullscreen/issues/77",
+    "mobx": "6.0.5: do not upgrade to 6.1.0 or higher until this issue is solved: https://github.com/mobxjs/mobx-state-tree/issues/1653"
   },
   "peerDependencies": {
     "react-is": "17.0.1"
