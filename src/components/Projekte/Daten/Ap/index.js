@@ -77,6 +77,7 @@ const ApTabs = ({ treeName }) => {
           />
           <StyledTab label="Dateien" value="dateien" data-id="dateien" />
           <StyledTab label="Historien" value="history" data-id="history" />
+          )}
         </Tabs>
         <TabContent data-form-title-height={formTitleHeight}>
           {tab === 'ap' && <Ap treeName={treeName} id={id} />}

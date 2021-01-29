@@ -17,6 +17,7 @@ import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import Ek from './Ek'
 import Tpop from './Tpop'
+import TpopHistory from './History'
 import Files from '../../../shared/Files'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
@@ -306,6 +307,9 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
             {!showFilter && (
               <StyledTab label="Dateien" value="dateien" data-id="dateien" />
             )}
+            {!showFilter && (
+              <StyledTab label="Historien" value="history" data-id="history" />
+            )}
           </Tabs>
           <TabContent>
             {!showFilter && loading ? (
@@ -326,8 +330,10 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
                 onSubmit={onSubmit}
                 row={row}
               />
-            ) : (
+            ) : tab === 'dateien' ? (
               <Files parentId={row.id} parent="tpop" />
+            ) : (
+              <TpopHistory tpopId={id} />
             )}
           </TabContent>
         </FieldsContainer>
