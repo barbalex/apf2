@@ -5722,6 +5722,11 @@ diff-sequences@^25.2.6:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-25.2.6.tgz#5f467c00edd35352b7bca46d7927d60e687a76dd"
   integrity sha512-Hq8o7+6GaZeoFjtpgvRBUknSXNeJiCx7V9Fr94ZMljNiCr9n9L8H8aJqgWOQiDDGdyn29fRNcDdRVJ5fdyihfg==
 
+diff@^1.2.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/diff/-/diff-1.4.0.tgz#7f28d2eb9ee7b15a97efd89ce63dcfdaa3ccbabf"
+  integrity sha1-fyjS657nsVqX79ic5j3P2qPMur8=
+
 diff@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
@@ -8292,9 +8297,9 @@ graphile-build@4.10.0:
     semver "^6.0.0"
 
 graphile-utils@^4.10.0:
-  version "4.10.0"
-  resolved "https://registry.yarnpkg.com/graphile-utils/-/graphile-utils-4.10.0.tgz#70780b0456d80d51e91f4b39a5187356e2256e1d"
-  integrity sha512-SYgguryvu6bhsNn5hUO2VQe3dYl6Ov1vlEWqajiX3XfG0zZTz3KhUZHJ7Usjb1VoiPD0vLZ3EcGybsuVq0acTA==
+  version "4.11.2"
+  resolved "https://registry.yarnpkg.com/graphile-utils/-/graphile-utils-4.11.2.tgz#264ede219a9c735cab3861fcd6b31da66495de1b"
+  integrity sha512-XEDtU+R3dWPMeQ+R8BpbkFbf/U8xyVXJEF91jcdGXY0REPMr4sPypbtKJVGF73VqA1pPCEkfthbVd/6DiueUwQ==
   dependencies:
     debug "^4.1.1"
     graphql ">=0.9 <0.14 || ^14.0.2 || ^15.4.0"
@@ -11557,9 +11562,9 @@ node-libs-browser@^2.2.1:
     vm-browserify "^1.0.1"
 
 node-object-hash@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/node-object-hash/-/node-object-hash-2.1.0.tgz#e99609f6a2b92ebfff295fe10c1d0169edfb8121"
-  integrity sha512-RnBOdxTeonuHncuQid0oh0l7r37pfgLnNOIo+fTywzkoRZQwXkJH/lI2FtroxYMXXVG1kYJtRJM3AreHVRr/eg==
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/node-object-hash/-/node-object-hash-2.1.2.tgz#10c79a43640b4659d06be201b27bc4e3d77ae9fc"
+  integrity sha512-ltdyKf+VUyPHI/FUWC053xCm0Fs3LfUvsI5eqAmQJ6KZSoXAdTWkm6EWFfeTy5SyJTVptTdPn1X8C4EUwo0T1Q==
 
 node-releases@^1.1.69:
   version "1.1.70"
@@ -13841,6 +13846,15 @@ react-split-pane@0.1.92:
     react-lifecycles-compat "^3.0.4"
     react-style-proptype "^3.2.2"
 
+react-stylable-diff@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-stylable-diff/-/react-stylable-diff-2.0.0.tgz#65ac25f2c09d43a81cf61a0b0f60e689019b7c81"
+  integrity sha512-7PdaBpfqlxBveX4+NfSvNPMFvH+uXI3F0iHGjcs4y7RWdiQ9XAkgP7Y+qHqADPGqTVdCDqzS7ZHY18/pzTnHlg==
+  dependencies:
+    diff "^1.2.0"
+    prop-types "^15.6.0"
+    react "^16.0.0"
+
 react-style-proptype@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/react-style-proptype/-/react-style-proptype-3.2.2.tgz#d8e998e62ce79ec35b087252b90f19f1c33968a0"
@@ -13888,6 +13902,15 @@ react@17.0.1:
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
+
+react@^16.0.0:
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
+  integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"

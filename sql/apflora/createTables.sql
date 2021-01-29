@@ -193,12 +193,12 @@ DROP TABLE IF EXISTS apflora.ap_history;
 CREATE TABLE apflora.ap_history (
   year integer not null,
   id UUID not null,
-  art_id UUID DEFAULT NULL,
-  proj_id uuid DEFAULT NULL,
-  bearbeitung integer DEFAULT NULL,
+  art_id UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) on delete no action on update cascade,
+  proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   start_jahr smallint DEFAULT NULL,
-  umsetzung integer DEFAULT NULL,
-  bearbeiter uuid DEFAULT NULL,
+  umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   ekf_beobachtungszeitpunkt text default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null,
@@ -826,10 +826,10 @@ DROP TABLE IF EXISTS apflora.pop_history;
 CREATE TABLE apflora.pop_history (
   year integer not null,
   id UUID not null,
-  ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE NO ACTION on update cascade,
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
-  status integer DEFAULT NULL,
+  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   status_unklar boolean default false,
   status_unklar_begruendung text DEFAULT NULL,
   bekannt_seit smallint DEFAULT NULL,
@@ -1205,6 +1205,7 @@ CREATE TABLE apflora.tpop_history (
   primary key (id, year)
 );
 alter table apflora.tpop_history add constraint fk_pop_history FOREIGN key (year, pop_id) references apflora.pop_history (year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+comment on table apflora.tpop_history is E'@foreignKey (pop_id) references pop (id)\n@foreignKey (status) references pop_status_werte (code)\n@foreignKey (apber_relevant_grund) references tpop_apberrelevant_grund_werte (code)\n@foreignKey (ekfrequenz) references ekfrequenz (id)\n@foreignKey (ekf_kontrolleur) references adresse (id)';
 CREATE INDEX ON apflora.tpop_history USING btree (id);
 CREATE INDEX ON apflora.tpop_history USING btree (year);
 CREATE INDEX ON apflora.tpop_history USING btree (pop_id);
@@ -1212,6 +1213,9 @@ CREATE INDEX ON apflora.tpop_history USING btree (status);
 CREATE INDEX ON apflora.tpop_history USING btree (apber_relevant);
 CREATE INDEX ON apflora.tpop_history USING btree (nr);
 CREATE INDEX ON apflora.tpop_history USING btree (flurname);
+CREATE INDEX ON apflora.tpop_history USING btree (ekf_kontrolleur);
+CREATE INDEX ON apflora.tpop_history USING btree (ekfrequenz);
+CREATE INDEX ON apflora.tpop_history USING btree (apber_relevant_grund);
 COMMENT ON COLUMN apflora.tpop_history.year IS 'Jahr: tpop_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von tpop kopiert';
 COMMENT ON COLUMN apflora.tpop_history.id IS 'Primärschlüssel der Tabelle tpop';
 

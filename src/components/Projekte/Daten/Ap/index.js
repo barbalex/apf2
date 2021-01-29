@@ -9,6 +9,7 @@ import Ap from './Ap'
 import Auswertung from './Auswertung'
 import FormTitle from '../../../shared/FormTitle'
 import Files from '../../../shared/Files'
+import ApHistory from './History'
 import storeContext from '../../../../storeContext'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -75,11 +76,13 @@ const ApTabs = ({ treeName }) => {
             data-id="auswertung"
           />
           <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+          <StyledTab label="Historien" value="history" data-id="history" />
         </Tabs>
         <TabContent data-form-title-height={formTitleHeight}>
           {tab === 'ap' && <Ap treeName={treeName} id={id} />}
           {tab === 'auswertung' && <Auswertung id={id} />}
           {tab === 'dateien' && <Files parentId={id} parent="ap" />}
+          {tab === 'history' && <ApHistory apId={id} />}
         </TabContent>
       </Container>
     </ErrorBoundary>

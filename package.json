@@ -110,6 +110,7 @@
     "react-sortable-hoc": "1.11.0",
     "react-spinners-kit": "git://github.com/barbalex/react-spinners-kit",
     "react-split-pane": "0.1.92",
+    "react-stylable-diff": "2.0.0",
     "react-typography": "0.16.19",
     "react-window": "1.8.6",
     "recharts": "2.0.4",

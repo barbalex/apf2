@@ -112,6 +112,23 @@ export const apFile = gql`
   }
 `
 
+export const apHistory = gql`
+  fragment ApHistoryFields on ApHistory {
+    id
+    year
+    artId
+    bearbeitung
+    startJahr
+    umsetzung
+    artId
+    bearbeiter
+    ekfBeobachtungszeitpunkt
+    projId
+    changed
+    changedBy
+  }
+`
+
 export const apqk = gql`
   fragment ApqkFields on Apqk {
     apId
@@ -325,6 +342,27 @@ export const popFile = gql`
   }
 `
 
+export const popHistory = gql`
+  fragment PopHistoryFields on PopHistory {
+    id
+    year
+    apId
+    nr
+    name
+    status
+    statusUnklar
+    statusUnklarBegruendung
+    bekanntSeit
+    geomPoint {
+      geojson
+      x
+      y
+    }
+    changed
+    changedBy
+  }
+`
+
 export const popmassnber = gql`
   fragment PopmassnberFields on Popmassnber {
     id
@@ -501,6 +539,47 @@ export const tpopfreiwkontr = gql`
     jungpflanzenVorhanden
     apberNichtRelevant
     apberNichtRelevantGrund
+    changedBy
+  }
+`
+
+export const tpopHistory = gql`
+  fragment TpopHistoryFields on TpopHistory {
+    id
+    year
+    popId
+    nr
+    gemeinde
+    flurname
+    geomPoint {
+      geojson
+      x
+      y
+    }
+    radius
+    hoehe
+    exposition
+    klima
+    neigung
+    beschreibung
+    katasterNr
+    status
+    statusUnklarGrund
+    apberRelevant
+    apberRelevantGrund
+    bekanntSeit
+    eigentuemer
+    kontakt
+    nutzungszone
+    bewirtschafter
+    bewirtschaftung
+    ekfrequenz
+    ekfrequenzAbweichend
+    ekfrequenzStartjahr
+    ekfKontrolleur
+    bemerkungen
+    statusUnklar
+    changed
     changedBy
   }
 `

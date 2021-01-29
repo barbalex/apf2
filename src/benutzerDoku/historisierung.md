@@ -30,7 +30,7 @@ Hingegen ist es nicht möglich, zu **wissen, wann Stati geändert wurden**. Bzw.
 
 ## Lösung
 
-- Ein mal im Jahr (wenn der Jahresbericht erzeugt wird) werden alle AP, Pop und TPop in eigene Tabellen kopiert
+- Ein mal im Jahr (wenn der Jahresbericht erzeugt wird) werden alle AP, Pop und TPop in eigene Tabellen kopiert<br/>
   Nachtrag am 10.12.2020: Im verlauf eines Jahrs können die Daten jederzeit historisiert werden, bis spätestens Ende März des Folgejahrs. Wurde das betreffende Jahr schon historisiert, werden die alten Daten einfach überschrieben
 - Abfragen könnten Historien verwenden, um die Änderung wesentlicher Felder wie z.B. Status oder AP-Bearbeitungsstand auszulesen
 - Daten für Vorjahre wurden aus Sicherungen importiert
