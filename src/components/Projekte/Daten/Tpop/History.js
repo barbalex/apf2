@@ -165,7 +165,7 @@ const Aktuell = styled.span`
   background-color: rgb(201, 238, 211);
 `
 
-const ApHistory = ({ tpopId }) => {
+const TpopHistory = ({ tpopId }) => {
   const { error, data, loading } = useQuery(tpopHistoriesQuery, {
     variables: {
       tpopId,
@@ -373,4 +373,4 @@ const ApHistory = ({ tpopId }) => {
   )
 }
 
-export default ApHistory
+export default TpopHistory

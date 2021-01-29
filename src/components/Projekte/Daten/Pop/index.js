@@ -24,6 +24,7 @@ import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import { pop } from '../../../shared/fragments'
+import PopHistory from './History'
 
 const Container = styled.div`
   height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
@@ -181,6 +182,7 @@ const Pop = ({ treeName }) => {
         >
           <StyledTab label="Population" value="pop" data-id="pop" />
           <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+          <StyledTab label="Historien" value="history" data-id="history" />
         </Tabs>
         <TabContent data-form-title-height={formTitleHeight}>
           {tab === 'pop' && (
@@ -242,6 +244,7 @@ const Pop = ({ treeName }) => {
             </SimpleBar>
           )}
           {tab === 'dateien' && <Files parentId={row.id} parent="pop" />}
+          {tab === 'history' && <PopHistory popId={id} />}
         </TabContent>
       </Container>
     </ErrorBoundary>
