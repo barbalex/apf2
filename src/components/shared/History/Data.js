@@ -24,7 +24,8 @@ const Row = styled.div`
   }
 `
 const Key = styled.div`
-  width: 130px;
+  width: 225px;
+  padding-right: 5px;
   color: rgba(0, 0, 0, 0.54);
 `
 

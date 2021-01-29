@@ -143,13 +143,13 @@ const ApHistory = ({ apId }) => {
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
       <InnerContainer>
         <DocLine>
-          Historisierte Daten des Aktionsplans (
+          Jährlich historisierte Daten des Aktionsplans (
           <DocLink onClick={openDocs}>Dokumentation</DocLink>
           ).
         </DocLine>
         <DocLine>
           <Aenderung>Änderungen</Aenderung> zum{' '}
-          <Aktuell>aktuellen Zustand</Aktuell> wurden hervorgehoben.
+          <Aktuell>aktuellen Zustand</Aktuell> sind hervorgehoben.
         </DocLine>
         {rows.map((r) => {
           const dataArray = [
@@ -188,7 +188,13 @@ const ApHistory = ({ apId }) => {
             },
           ]
 
-          return <History key={r.id} year={r?.year} dataArray={dataArray} />
+          return (
+            <History
+              key={`${r.id}${r.year}`}
+              year={r?.year}
+              dataArray={dataArray}
+            />
+          )
         })}
       </InnerContainer>
     </SimpleBar>

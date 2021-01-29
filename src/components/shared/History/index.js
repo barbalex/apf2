@@ -6,7 +6,7 @@ import Data from './Data'
 import ErrorBoundary from '../ErrorBoundary'
 
 const Container = styled.div`
-  padding: 10px;
+  padding: 10px 0;
 `
 const Title = styled.h4`
   margin-bottom: 0;
