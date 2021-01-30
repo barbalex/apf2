@@ -25,6 +25,7 @@ import queryAeTaxonomies from './queryAeTaxonomies'
 import queryIsMassnTypAnpflanzung from './queryIsMassnTypAnpflanzung'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import exists from '../../../../modules/exists'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
@@ -98,6 +99,10 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
       id,
     },
   })
+
+  const notMassnCountUnit =
+    data?.tpopmassnById?.tpopByTpopId?.popByPopId?.apByApId
+      ?.ekzaehleinheitsByApId?.nodes?.[0]?.notMassnCountUnit
 
   const {
     data: dataAdresses,
@@ -174,6 +179,8 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                     tpopkontrzaehlEinheitWerteByZaehleinheitId {
                       id
                       code
+                      correspondsToMassnAnzTriebe
+                      correspondsToMassnAnzPflanzen
                     }
                   }
                 }
@@ -187,11 +194,111 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
         const isAnpflanzung =
           zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
             ?.anpflanzung
-        const zieleinheitCode =
+        const zieleinheit =
           zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
-            ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code
+            ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
+        const zieleinheitCode = zieleinheit?.code
         if (isAnpflanzung && zieleinheitCode) {
           variables.zieleinheitEinheit = zieleinheitCode
+          if (!notMassnCountUnit && zieleinheit?.correspondsToMassnAnzTriebe) {
+            variables.zieleinheitAnzahl = row.anzTriebe
+          }
+          if (
+            !notMassnCountUnit &&
+            zieleinheit?.correspondsToMassnAnzPflanzen
+          ) {
+            variables.zieleinheitAnzahl = row.anzPflanzen
+          }
+        }
+      }
+      if (!notMassnCountUnit && changedField === 'anzTriebe') {
+        // IF zieleinheit corresponds to Anzahl Triebe
+        // have to set zieleinheitAnzahl to anzTriebe
+        let zieleinheitIdResult
+        try {
+          zieleinheitIdResult = await client.query({
+            query: gql`
+              query tpopmassnZieleinheitQuery($apId: UUID!, $typ: Int!) {
+                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
+                  nodes {
+                    id
+                    anpflanzung
+                  }
+                }
+                allEkzaehleinheits(
+                  filter: {
+                    zielrelevant: { equalTo: true }
+                    apId: { equalTo: $apId }
+                  }
+                ) {
+                  nodes {
+                    id
+                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                      id
+                      correspondsToMassnAnzTriebe
+                    }
+                  }
+                }
+              }
+            `,
+            variables: { apId, typ: variables.typ || 1 },
+          })
+        } catch (error) {
+          return setErrors({ [changedField]: error.message })
+        }
+        const isAnpflanzung =
+          zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
+            ?.anpflanzung
+        const zieleinheit =
+          zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
+            ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
+        if (isAnpflanzung && zieleinheit?.correspondsToMassnAnzTriebe) {
+          variables.zieleinheitAnzahl = exists(value) ? value : null
+        }
+      }
+      if (!notMassnCountUnit && changedField === 'anzPflanzen') {
+        // IF zieleinheit corresponds to Anzahl Triebe
+        // have to set zieleinheitAnzahl to anzPflanzen
+        let zieleinheitIdResult
+        try {
+          zieleinheitIdResult = await client.query({
+            query: gql`
+              query tpopmassnZieleinheitQuery($apId: UUID!, $typ: Int!) {
+                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
+                  nodes {
+                    id
+                    anpflanzung
+                  }
+                }
+                allEkzaehleinheits(
+                  filter: {
+                    zielrelevant: { equalTo: true }
+                    apId: { equalTo: $apId }
+                  }
+                ) {
+                  nodes {
+                    id
+                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                      id
+                      correspondsToMassnAnzPflanzen
+                    }
+                  }
+                }
+              }
+            `,
+            variables: { apId, typ: variables.typ || 1 },
+          })
+        } catch (error) {
+          return setErrors({ [changedField]: error.message })
+        }
+        const isAnpflanzung =
+          zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
+            ?.anpflanzung
+        const zieleinheit =
+          zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
+            ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
+        if (isAnpflanzung && zieleinheit?.correspondsToMassnAnzPflanzen) {
+          variables.zieleinheitAnzahl = exists(value) ? value : null
         }
       }
       try {
@@ -202,9 +309,10 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
               $${changedField}: ${fieldTypes[changedField]}
               ${changedField === 'jahr' ? '$datum: Date' : ''}
               ${changedField === 'datum' ? '$jahr: Int' : ''}
+              ${changedField === 'typ' ? '$zieleinheitEinheit: Int' : ''}
               ${
-                changedField === 'typ' && !!variables?.zieleinheitEinheit
-                  ? '$zieleinheitEinheit: Int'
+                ['typ', 'anzTriebe', 'anzPflanzen'].includes(changedField)
+                  ? '$zieleinheitAnzahl: Int'
                   : ''
               }
               $changedBy: String
@@ -217,8 +325,13 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                     ${changedField === 'jahr' ? 'datum: $datum' : ''}
                     ${changedField === 'datum' ? 'jahr: $jahr' : ''}
                     ${
-                      changedField === 'typ' && !!variables?.zieleinheitEinheit
+                      changedField === 'typ'
                         ? 'zieleinheitEinheit: $zieleinheitEinheit'
+                        : ''
+                    }
+                    ${
+                      ['typ', 'anzTriebe', 'anzPflanzen'].includes(changedField)
+                        ? 'zieleinheitAnzahl: $zieleinheitAnzahl'
                         : ''
                     }
                     changedBy: $changedBy
@@ -421,7 +534,11 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           />
                           <TextField
                             name="zieleinheitAnzahl"
-                            label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
+                            label={
+                              notMassnCountUnit === true
+                                ? 'Ziel-Einheit: Anzahl'
+                                : 'Ziel-Einheit: Anzahl (wird automatisch gesetzt)'
+                            }
                             type="number"
                             handleSubmit={handleSubmit}
                           />
