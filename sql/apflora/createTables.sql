@@ -2478,11 +2478,18 @@ create table apflora.ekzaehleinheit(
   ap_id uuid not null references apflora.ap (id) on delete cascade on update cascade,
   zaehleinheit_id uuid default null references apflora.tpopkontrzaehl_einheit_werte (id) on delete cascade on update cascade,
   zielrelevant boolean default false,
+  not_massn_count_unit boolean default false,
   sort smallint default null,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null
 );
+alter table apflora.ekzaehleinheit add column not_massn_count_unit boolean default false;
+CREATE INDEX ON apflora.ekzaehleinheit USING btree (not_massn_count_unit);
+COMMENT ON COLUMN apflora.ekzaehleinheit.not_massn_count_unit IS 'Deklariert, dass bewusst keine der zwei Zähleinheiten von Massnahmen gewählt wurde. Ermöglicht, dass eine Qualitätskontrolle auflistet, wo unbewusst Zieleinheiten gewählt wurden, welche keiner der zwei Zähleinheiten von Massnahmen entsprechen';
+
+
+
 CREATE UNIQUE INDEX ekzaehleinheit_single_zielrelevant_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zielrelevant) WHERE zielrelevant = 'true';
 CREATE UNIQUE INDEX ekzaehleinheit_zaehleinheit_unique_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zaehleinheit_id);
 CREATE INDEX ON apflora.ekzaehleinheit USING btree (id);

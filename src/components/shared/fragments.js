@@ -233,6 +233,7 @@ export const ekzaehleinheit = gql`
     label
     zaehleinheitId
     zielrelevant
+    notMassnCountUnit
     sort
     bemerkungen
     changedBy
@@ -858,6 +859,8 @@ export const tpopkontrzaehlEinheitWerte = gql`
     id
     code
     text
+    correspondsToMassnAnzTriebe
+    correspondsToMassnAnzPflanzen
     sort
     historic
     label

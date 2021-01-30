@@ -34,6 +34,7 @@ import Tpopber from './Tpopber'
 import Tpopfeldkontr from './Tpopfeldkontr'
 import Tpopfreiwkontr from './Tpopfreiwkontr'
 import Tpopkontrzaehl from './Tpopkontrzaehl'
+import TpopkontrzaehlEinheitWerte from './TpopkontrzaehlEinheitWerte'
 import Tpopmassn from './Tpopmassn'
 import Tpopmassnber from './Tpopmassnber'
 import User from './User'
@@ -156,6 +157,10 @@ const Daten = ({ treeName, nodes }) => {
     }
     case 'tpopkontrzaehl': {
       form = <Tpopkontrzaehl treeName={treeName} />
+      break
+    }
+    case 'tpopkontrzaehlEinheitWerte': {
+      form = <TpopkontrzaehlEinheitWerte treeName={treeName} />
       break
     }
     case 'tpopmassn': {

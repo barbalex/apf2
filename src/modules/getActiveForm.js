@@ -79,7 +79,7 @@ export default ({ store, treeName, nodes }) => {
       return { form: 'werte', type: 'tpop_apberrelevant_grund_werte' }
     }
     case 'tpopkontrzaehlEinheitWerte': {
-      return { form: 'werte', type: 'tpopkontrzaehl_einheit_werte' }
+      return { form: 'tpopkontrzaehlEinheitWerte' }
     }
     case 'ekAbrechnungstypWerte': {
       return { form: 'werte', type: 'ek_abrechnungstyp_werte' }
