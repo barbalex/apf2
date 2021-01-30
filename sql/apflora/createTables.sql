@@ -2484,23 +2484,19 @@ create table apflora.ekzaehleinheit(
   changed date default now(),
   changed_by varchar(20) default null
 );
-alter table apflora.ekzaehleinheit add column not_massn_count_unit boolean default false;
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (not_massn_count_unit);
-COMMENT ON COLUMN apflora.ekzaehleinheit.not_massn_count_unit IS 'Deklariert, dass bewusst keine der zwei Zähleinheiten von Massnahmen gewählt wurde. Ermöglicht, dass eine Qualitätskontrolle auflistet, wo unbewusst Zieleinheiten gewählt wurden, welche keiner der zwei Zähleinheiten von Massnahmen entsprechen';
-
-
-
 CREATE UNIQUE INDEX ekzaehleinheit_single_zielrelevant_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zielrelevant) WHERE zielrelevant = 'true';
 CREATE UNIQUE INDEX ekzaehleinheit_zaehleinheit_unique_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zaehleinheit_id);
 CREATE INDEX ON apflora.ekzaehleinheit USING btree (id);
 CREATE INDEX ON apflora.ekzaehleinheit USING btree (ap_id);
 CREATE INDEX ON apflora.ekzaehleinheit USING btree (zaehleinheit_id);
+CREATE INDEX ON apflora.ekzaehleinheit USING btree (not_massn_count_unit);
 CREATE INDEX ON apflora.ekzaehleinheit USING btree (sort);
 COMMENT ON COLUMN apflora.ekzaehleinheit.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ekzaehleinheit.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.ekzaehleinheit.zaehleinheit_id IS 'Zugehörige Zähleinheit. Fremdschlüssel aus der Tabelle "tpopkontrzaehl_einheit_werte"';
 COMMENT ON COLUMN apflora.ekzaehleinheit.bemerkungen IS 'Bemerkungen zur EK-Zähleinheit';
 COMMENT ON COLUMN apflora.ekzaehleinheit.zielrelevant IS 'Ob die Zähleinheit zielrelevant ist';
+COMMENT ON COLUMN apflora.ekzaehleinheit.not_massn_count_unit IS 'Deklariert, dass bewusst keine der zwei Zähleinheiten von Massnahmen gewählt wurde. Ermöglicht, dass eine Qualitätskontrolle auflistet, wo unbewusst Zieleinheiten gewählt wurden, welche keiner der zwei Zähleinheiten von Massnahmen entsprechen';
 COMMENT ON COLUMN apflora.ekzaehleinheit.sort IS 'Um die Zähleinheiten untereinander zu sortieren';
 COMMENT ON COLUMN apflora.ekzaehleinheit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekzaehleinheit.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';

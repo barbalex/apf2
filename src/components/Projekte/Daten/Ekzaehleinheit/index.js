@@ -43,6 +43,7 @@ const fieldTypes = {
   apId: 'UUID',
   zaehleinheitId: 'UUID',
   zielrelevant: 'Boolean',
+  notMassnCountUnit: 'Boolean',
   sort: 'Int',
 }
 
@@ -204,6 +205,11 @@ const Ekzaehleinheit = ({ treeName }) => {
                   <Checkbox2States
                     name="zielrelevant"
                     label="zielrelevant"
+                    handleSubmit={handleSubmit}
+                  />
+                  <Checkbox2States
+                    name="notMassnCountUnit"
+                    label="Enspricht bewusst keiner Massnahmen-Zähleinheit"
                     handleSubmit={handleSubmit}
                   />
                   <TextField
