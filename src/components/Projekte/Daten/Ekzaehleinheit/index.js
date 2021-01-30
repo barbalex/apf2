@@ -210,7 +210,7 @@ const Ekzaehleinheit = ({ treeName }) => {
                   {row.zielrelevant && (
                     <Checkbox2States
                       name="notMassnCountUnit"
-                      label="Entspricht bewusst keiner Massnahmen-Zähleinheit"
+                      label="Entspricht bewusst keiner Massnahmen-Zähleinheit ('Anzahl Pflanzen' oder 'Anzahl Triebe')"
                       handleSubmit={handleSubmit}
                     />
                   )}
