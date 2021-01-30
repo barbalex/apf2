@@ -207,11 +207,13 @@ const Ekzaehleinheit = ({ treeName }) => {
                     label="zielrelevant"
                     handleSubmit={handleSubmit}
                   />
-                  <Checkbox2States
-                    name="notMassnCountUnit"
-                    label="Enspricht bewusst keiner Massnahmen-Zähleinheit"
-                    handleSubmit={handleSubmit}
-                  />
+                  {row.zielrelevant && (
+                    <Checkbox2States
+                      name="notMassnCountUnit"
+                      label="Enspricht bewusst keiner Massnahmen-Zähleinheit"
+                      handleSubmit={handleSubmit}
+                    />
+                  )}
                   <TextField
                     name="sort"
                     label="Sortierung"
