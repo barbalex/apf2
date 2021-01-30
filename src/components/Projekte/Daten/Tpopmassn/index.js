@@ -362,7 +362,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
       }
       setErrors({})
     },
-    [apId, client, row, store.user.name],
+    [apId, client, notMassnCountUnit, row, store.user.name],
   )
 
   const [tab, setTab] = useState(urlQuery?.tpopmassnTab ?? 'tpopmassn')
