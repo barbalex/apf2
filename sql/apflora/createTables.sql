@@ -1716,6 +1716,8 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   code serial,
   text varchar(50) DEFAULT NULL,
+  corresponds_to_massn_anz_triebe boolean default false,
+  corresponds_to_massn_anz_pflanzen boolean default false,
   sort smallint DEFAULT NULL,
   historic boolean default false,
   changed date DEFAULT NOW(),
@@ -1724,16 +1726,19 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
 create sequence apflora.tpopkontrzaehl_einheit_werte_code_seq owned by apflora.tpopkontrzaehl_einheit_werte.code;
 alter table apflora.tpopkontrzaehl_einheit_werte alter column code set default nextval('apflora.tpopkontrzaehl_einheit_werte_code_seq');
 select setval('apflora.tpopkontrzaehl_einheit_werte_code_seq', (select max(code)+1 from apflora.tpopkontrzaehl_einheit_werte), false);
-alter table apflora.tpopkontrzaehl_einheit_werte alter column changed_by drop not null, alter column changed_by set default null;
 
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (sort);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (historic);
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (corresponds_to_massn_anz_triebe);
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (corresponds_to_massn_anz_pflanzen);
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.corresponds_to_massn_anz_triebe IS 'Entspricht den "Anzahl Triebe" bei Massnahmen. Ermöglicht es, tpopmassn.zieleinheit_anzahl automatisch zu setzen';
+COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.corresponds_to_massn_anz_pflanzen IS 'Entspricht den "Anzahl Pflanzen" bei Massnahmen. Ermöglicht es, tpopmassn.zieleinheit_anzahl automatisch zu setzen';
 
 alter table apflora.tpopkontrzaehl_einheit_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontrzaehl_einheit_werte;
