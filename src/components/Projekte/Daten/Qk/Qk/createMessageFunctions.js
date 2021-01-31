@@ -66,6 +66,18 @@ export default ({ data, berichtjahr, projId, apId }) => ({
       url: ['Projekte', projId, 'Aktionspläne', apId],
       text: `Feld "Verantwortlich" ist leer`,
     })),
+  ekzieleinheitOhneMassnZaehleinheit: () =>
+    get(data, 'ekzieleinheitOhneMassnZaehleinheit.nodes', []).map((n) => ({
+      url: [
+        'Projekte',
+        n.projId,
+        'Aktionspläne',
+        n.apId,
+        'EK-Zähleinheiten',
+        n.id,
+      ],
+      text: `AP: ${n.artname}, Zähleinheit: ${n.zaehleinheit}`,
+    })),
   zielOhneJahr: () =>
     get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', []).map(
       (n) => ({

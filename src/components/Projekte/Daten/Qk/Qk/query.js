@@ -15,6 +15,7 @@ export default gql`
     $apberOhneBeurteilung: Boolean!
     $apberOhneJahr: Boolean!
     $apberOhneVergleichVorjahrGesamtziel: Boolean!
+    $ekzieleinheitOhneMassnZaehleinheit: Boolean!
     $assozartOhneArt: Boolean!
     $erfkritOhneBeurteilung: Boolean!
     $erfkritOhneKriterien: Boolean!
@@ -180,6 +181,17 @@ export default gql`
         nodes {
           ...ApFields
         }
+      }
+    }
+    ekzieleinheitOhneMassnZaehleinheit: allVQEkzieleinheitOhneMassnZaehleinheits(
+      filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+    ) @include(if: $ekzieleinheitOhneMassnZaehleinheit) {
+      nodes {
+        projId
+        apId
+        id
+        artname
+        zaehleinheit
       }
     }
     zielOhneJahr: projektById(id: $projId) @include(if: $zielOhneJahr) {

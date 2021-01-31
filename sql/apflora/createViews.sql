@@ -5753,3 +5753,29 @@ group by
 order by
   tax.artname,
   ekplan.jahr;
+
+-- the original query is here: 2021-01-31_v_q_ekzieleinheit_ohne_massn_zaehleinheit.sql
+DROP VIEW IF EXISTS apflora.v_q_ekzieleinheit_ohne_massn_zaehleinheit CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_ekzieleinheit_ohne_massn_zaehleinheit AS
+select
+  ap.proj_id,
+  ekzaehleinheit.ap_id,
+  ekzaehleinheit.id,
+  --ekzaehleinheit.zaehleinheit_id,
+  tax.artname,
+  zaehl_einheit_werte.text as zaehleinheit
+from apflora.ekzaehleinheit ekzaehleinheit
+  inner join apflora.ap ap
+    inner join apflora.ae_taxonomies tax
+    on tax.id = ap.art_id
+  on ap.id = ekzaehleinheit.ap_id
+  inner join apflora.tpopkontrzaehl_einheit_werte zaehl_einheit_werte
+  on zaehl_einheit_werte.id = ekzaehleinheit.zaehleinheit_id
+where
+  ekzaehleinheit.zielrelevant = true
+  and ekzaehleinheit.not_massn_count_unit = false
+  and zaehl_einheit_werte.corresponds_to_massn_anz_triebe = false
+  and zaehl_einheit_werte.corresponds_to_massn_anz_pflanzen = false
+order by
+  tax.artname,
+  zaehl_einheit_werte.text;
