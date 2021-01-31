@@ -103,6 +103,7 @@ export default gql`
     $tpopmassnOhneBearb: Boolean!
     $tpopmassnOhneJahr: Boolean!
     $tpopmassnOhneTyp: Boolean!
+    $anpflanzungOhneZielrelevanteEinheit: Boolean!
     $tpopmassnberOhneBeurteilung: Boolean!
     $tpopmassnberOhneJahr: Boolean!
     $zielOhneJahr: Boolean!
@@ -1593,6 +1594,20 @@ export default gql`
             }
           }
         }
+      }
+    }
+    anpflanzungOhneZielrelevanteEinheit: allVQAnpflanzungOhneZielrelevanteEinheits(
+      filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+    ) @include(if: $anpflanzungOhneZielrelevanteEinheit) {
+      nodes {
+        projId
+        apId
+        popId
+        popNr
+        tpopId
+        tpopNr
+        id
+        jahr
       }
     }
     tpopmassnberOhneJahr: projektById(id: $projId)
