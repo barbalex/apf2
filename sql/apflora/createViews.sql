@@ -1946,7 +1946,7 @@ DROP VIEW IF EXISTS apflora.v_beob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beob AS
 SELECT
   apflora.beob.id,
-  apflora.beob_quelle_werte.name AS quelle,
+  apflora.beob.quelle,
   beob.id_field,
   beob.data->>(SELECT id_field FROM apflora.beob WHERE id = beob2.id) AS "OriginalId",
   apflora.beob.art_id,
@@ -1977,7 +1977,7 @@ SELECT
   apflora.beob.changed,
   apflora.beob.changed_by
 FROM
-  (((apflora.beob
+  ((apflora.beob
   INNER JOIN
     apflora.beob AS beob2
     ON beob2.id = beob.id)
@@ -1987,9 +1987,6 @@ FROM
       apflora.ap
       ON apflora.ap.art_id = apflora.ae_taxonomies.id
     ON apflora.beob.art_id = apflora.ae_taxonomies.id)
-  INNER JOIN
-    apflora.beob_quelle_werte
-    ON beob.quelle_id = beob_quelle_werte.id)
   LEFT JOIN
     apflora.tpop
     ON apflora.tpop.id = apflora.beob.tpop_id
@@ -2012,7 +2009,7 @@ DROP VIEW IF EXISTS apflora.v_beob_art_changed CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beob_art_changed AS
 SELECT
   apflora.beob.id,
-  apflora.beob_quelle_werte.name AS quelle,
+  apflora.beob.quelle,
   beob.id_field,
   beob.data->>(SELECT id_field FROM apflora.beob WHERE id = beob2.id) AS "original_id",
   apflora.beob.art_id_original,
@@ -2062,9 +2059,6 @@ FROM
       apflora.ap as artidoriginalsap
       ON artidoriginalsap.art_id = ae_artidoriginal.id
     ON apflora.beob.art_id_original = ae_artidoriginal.id
-  INNER JOIN
-    apflora.beob_quelle_werte
-    ON beob.quelle_id = beob_quelle_werte.id
   LEFT JOIN
     apflora.tpop
     ON apflora.tpop.id = apflora.beob.tpop_id
@@ -4740,18 +4734,16 @@ select
   apflora.beob.wgs84_lat,
   apflora.beob.wgs84_long,
   apflora.apart.ap_id,
-  apflora.beob_quelle_werte.name as quelle,
-  to_char(apflora.beob.datum, 'YYYY.MM.DD') || ': ' || coalesce(apflora.beob.autor, '(kein Autor)') || ' (' || apflora.beob_quelle_werte.name || ')' as label
+  apflora.beob.quelle,
+  to_char(apflora.beob.datum, 'YYYY.MM.DD') || ': ' || coalesce(apflora.beob.autor, '(kein Autor)') || ' (' || apflora.beob.quelle || ')' as label
 from
   apflora.beob
   inner join apflora.apart
   on apflora.apart.art_id = apflora.beob.art_id
-  inner join apflora.beob_quelle_werte
-  on apflora.beob_quelle_werte.id = apflora.beob.quelle_id
 order by
   apflora.beob.datum desc,
   apflora.beob.autor asc,
-  apflora.beob_quelle_werte.name asc;
+  apflora.beob.quelle asc;
 
 -- used in exports
 -- use https://github.com/hnsl/colpivot instead?

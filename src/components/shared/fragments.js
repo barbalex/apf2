@@ -169,14 +169,12 @@ export const beob = gql`
     tpopId
     nichtZuordnen
     bemerkungen
-    quelleId
+    quelle
     artIdOriginal
     infofloraInformiertDatum
     changedBy
   }
 `
-
-// TODO: beobQuelleWerte and other werte
 
 export const currentIssue = gql`
   fragment CurrentIssueFields on Currentissue {
@@ -776,13 +774,6 @@ export const apUmsetzungWerte = gql`
     sort
     historic
     changedBy
-  }
-`
-
-export const beobQuelleWerte = gql`
-  fragment BeobQuelleWerteFields on BeobQuelleWerte {
-    id
-    name
   }
 `
 

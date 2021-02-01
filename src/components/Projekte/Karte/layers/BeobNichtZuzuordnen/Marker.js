@@ -50,7 +50,7 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
     datum = format(new Date(beob.datum), 'yyyy.MM.dd')
   }
   const autor = beob.autor || '(kein Autor)'
-  const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
+  const quelle = get(beob, 'quelle', '')
   const label = `${datum}: ${autor} (${quelle})`
   const openBeobInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([

@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: '/Dokumentation/Technisch/Beobachtungen-verwalten'
-date: '2020-09-07'
+date: '2021-02-01'
 title: 'Beobachtungen verwalten'
 sort: 3
 ---
@@ -33,7 +33,7 @@ Struktur der Tabelle "beob":
 - id: id dieser Tabelle. Ohne Bezug zu id's in den Beobachtungsdaten
 - data: Unveränderte Originaldaten im JSONB Format
 - id_field: Feld in den Originaldaten, welches die Original-ID enthält. Dient dazu, gemeinsam mit dem Feld `quelle_id` jederzeit mit neuen Versionen von Originaldaten verbinden zu können
-- quelle_id: Woher die Beobachtung stammt (z.B. Info Spezies). Fremdschlüssel aus der Tabelle `beob_quelle_werte`
+- quelle: Woher die Beobachtung stammt. Möglichst kurz und klar, ähnlich Literaturzitaten. Beispiel: Info Spezies 2017
 - art_id: beschreibt die Art. Fremdschlüssel aus Tabelle `ae_taxonomies`
 - art_id_original: Am Unterschied zwischen art_id_original und art_id wird erkenntlich, wenn die Art-Bestimmung verändert wurde
 - autor: Autor der Beobachtung

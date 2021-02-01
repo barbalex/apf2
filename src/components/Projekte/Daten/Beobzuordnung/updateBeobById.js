@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 import {
   aeTaxonomies,
   beob,
-  beobQuelleWerte,
   pop,
   popStatusWerte,
 } from '../../../shared/fragments'
@@ -22,7 +21,7 @@ export default gql`
     $tpopId: UUID
     $nichtZuordnen: Boolean
     $bemerkungen: String
-    $quelleId: UUID
+    $quelle: String
     $changedBy: String
   ) {
     updateBeobById(
@@ -41,7 +40,7 @@ export default gql`
           tpopId: $tpopId
           nichtZuordnen: $nichtZuordnen
           bemerkungen: $bemerkungen
-          quelleId: $quelleId
+          quelle: $quelle
           changedBy: $changedBy
         }
       }
@@ -77,15 +76,11 @@ export default gql`
           id
           artname
         }
-        beobQuelleWerteByQuelleId {
-          ...BeobQuelleWerteFields
-        }
       }
     }
   }
   ${aeTaxonomies}
   ${beob}
-  ${beobQuelleWerte}
   ${pop}
   ${popStatusWerte}
 `

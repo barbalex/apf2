@@ -26,10 +26,7 @@ export default gql`
                     lv95Y
                     datum
                     autor
-                    beobQuelleWerteByQuelleId {
-                      id
-                      name
-                    }
+                    quelle
                     aeTaxonomyByArtId {
                       id
                       artname

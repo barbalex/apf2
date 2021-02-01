@@ -2334,7 +2334,8 @@ with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.beob;
 CREATE TABLE apflora.beob (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  quelle_id uuid Default Null,
+  quelle_id uuid Default Null REFERENCES apflora.beob_quelle_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  quelle text default null,
   -- this field in data contains this datasets id
   id_field varchar(38) DEFAULT NULL,
   art_id UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) on delete no action on update cascade,
@@ -2350,7 +2351,6 @@ CREATE TABLE apflora.beob (
   geom_point geometry(Point, 4326) default null,
   -- maybe later add a geojson field for polygons?
   data jsonb,
-  quelle_id uuid Default Null REFERENCES apflora.beob_quelle_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE SET NULL ON UPDATE CASCADE,
   nicht_zuordnen boolean default false,
   infoflora_informiert_datum date default null,
@@ -2363,6 +2363,7 @@ CREATE INDEX ON apflora.beob USING btree (id);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
 CREATE INDEX ON apflora.beob USING btree (art_id_original);
+CREATE INDEX ON apflora.beob USING btree (quelle);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (tpop_id);
 CREATE INDEX ON apflora.beob USING btree (nicht_zuordnen);
@@ -2417,18 +2418,17 @@ CREATE TABLE apflora.beobprojekt (
   UNIQUE (proj_id, beob_id)
 );
 
-DROP TABLE IF EXISTS apflora.beob_quelle_werte;
-CREATE TABLE apflora.beob_quelle_werte (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  name varchar(255) DEFAULT NULL
-);
-CREATE INDEX ON apflora.beob_quelle_werte USING btree (id);
-
-alter table apflora.beob_quelle_werte enable row level security;
-drop policy if exists reader on apflora.beob_quelle_werte;
-create policy reader on apflora.beob_quelle_werte
-using (true)
-with check (current_user = 'apflora_manager');
+--DROP TABLE IF EXISTS apflora.beob_quelle_werte;
+--CREATE TABLE apflora.beob_quelle_werte (
+--  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+--  name varchar(255) DEFAULT NULL
+--);
+--CREATE INDEX ON apflora.beob_quelle_werte USING btree (id);
+--alter table apflora.beob_quelle_werte enable row level security;
+--drop policy if exists reader on apflora.beob_quelle_werte;
+--create policy reader on apflora.beob_quelle_werte
+--using (true)
+--with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.apart;

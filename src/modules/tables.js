@@ -357,13 +357,6 @@ export default [
     stammdaten: true,
   },
   {
-    table: 'beob_quelle_werte',
-    label: 'Beob-Quelle-Werte',
-    idField: 'id',
-    parentIdField: 'none',
-    stammdaten: true,
-  },
-  {
     table: 'ae_lr_delarze',
     label: 'LR-Delarze-Werte',
     idField: 'id',
