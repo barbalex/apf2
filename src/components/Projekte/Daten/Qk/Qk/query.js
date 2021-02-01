@@ -1597,7 +1597,11 @@ export default gql`
       }
     }
     anpflanzungOhneZielrelevanteEinheit: allVQAnpflanzungOhneZielrelevanteEinheits(
-      filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+      filter: {
+        projId: { equalTo: $projId }
+        apId: { equalTo: $apId }
+        jahr: { equalTo: $berichtjahr }
+      }
     ) @include(if: $anpflanzungOhneZielrelevanteEinheit) {
       nodes {
         projId
