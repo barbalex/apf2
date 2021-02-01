@@ -4,7 +4,7 @@ DROP VIEW IF EXISTS apflora.v_beob_art_changed CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beob_art_changed AS
 SELECT
   apflora.beob.id,
-  apflora.beob_quelle_werte.name AS quelle,
+  apflora.beob.quelle,
   beob.id_field,
   beob.data->>(SELECT id_field FROM apflora.beob WHERE id = beob2.id) AS "original_id",
   apflora.beob.art_id_original,
@@ -58,9 +58,6 @@ FROM
       apflora.ap as artidoriginalsap
       ON artidoriginalsap.art_id = ae_artidoriginal.id
     ON apflora.beob.art_id_original = ae_artidoriginal.id
-  INNER JOIN
-    apflora.beob_quelle_werte
-    ON beob.quelle_id = beob_quelle_werte.id
   LEFT JOIN
     apflora.tpop
     ON apflora.tpop.id = apflora.beob.tpop_id

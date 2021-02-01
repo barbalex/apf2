@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 import {
   aeTaxonomies,
   beob,
-  beobQuelleWerte,
   popStatusWerte,
   tpop,
 } from '../../components/shared/fragments'
@@ -41,15 +40,11 @@ export default gql`
             }
           }
         }
-        beobQuelleWerteByQuelleId {
-          ...BeobQuelleWerteFields
-        }
       }
     }
   }
   ${aeTaxonomies}
   ${beob}
-  ${beobQuelleWerte}
   ${popStatusWerte}
   ${tpop}
 `

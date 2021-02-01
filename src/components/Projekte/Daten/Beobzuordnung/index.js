@@ -28,7 +28,6 @@ import Error from '../../../shared/Error'
 import {
   aeTaxonomies,
   beob,
-  beobQuelleWerte,
   pop,
   popStatusWerte,
 } from '../../../shared/fragments'
@@ -111,7 +110,7 @@ const fieldTypes = {
   tpopId: 'UUID',
   nichtZuordnen: 'Boolean',
   bemerkungen: 'String',
-  quelleId: 'UUID',
+  quelle: 'String',
 }
 
 const nichtZuordnenPopover = (
@@ -243,7 +242,6 @@ const Beobzuordnung = ({ type, treeName }) => {
               }
             ) {
               beob {
-                ...BeobFields
                 aeTaxonomyByArtId {
                   ...AeTaxonomiesFields
                   apByArtId {
@@ -273,15 +271,11 @@ const Beobzuordnung = ({ type, treeName }) => {
                   id
                   artname
                 }
-                beobQuelleWerteByQuelleId {
-                  ...BeobQuelleWerteFields
-                }
               }
             }
           }
           ${aeTaxonomies}
           ${beob}
-          ${beobQuelleWerte}
           ${pop}
           ${popStatusWerte}
         `,
@@ -422,7 +416,7 @@ const Beobzuordnung = ({ type, treeName }) => {
             </FieldsContainer>
             <Title>{`Informationen aus ${get(
               row,
-              'beobQuelleWerteByQuelleId.name',
+              'quelle',
               '?',
             )} (nicht veränderbar)`}</Title>
             <Beob treeName={treeName} />

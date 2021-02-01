@@ -8,7 +8,6 @@ import {
   beob as beobFragment,
   tpop,
   aeTaxonomies,
-  beobQuelleWerte,
   popStatusWerte,
 } from '../components/shared/fragments'
 
@@ -71,15 +70,11 @@ const updateBeobById = gql`
             }
           }
         }
-        beobQuelleWerteByQuelleId {
-          ...BeobQuelleWerteFields
-        }
       }
     }
   }
   ${aeTaxonomies}
   ${beobFragment}
-  ${beobQuelleWerte}
   ${popStatusWerte}
   ${tpop}
 `

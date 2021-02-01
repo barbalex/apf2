@@ -4,7 +4,6 @@ import {
   aeTaxonomies,
   apart,
   beob,
-  beobQuelleWerte,
   pop,
   popStatusWerte,
 } from '../../../shared/fragments'
@@ -48,15 +47,11 @@ export default gql`
         taxid
         artname
       }
-      beobQuelleWerteByQuelleId {
-        ...BeobQuelleWerteFields
-      }
     }
   }
   ${aeTaxonomies}
   ${apart}
   ${beob}
-  ${beobQuelleWerte}
   ${pop}
   ${popStatusWerte}
 `
