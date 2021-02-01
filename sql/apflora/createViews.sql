@@ -4727,23 +4727,34 @@ ORDER BY
 
 -- need this because filtering on apart
 -- in graphql overwhelms the server
-DROP VIEW IF EXISTS apflora.v_apbeob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apbeob AS
 select
-  apflora.beob.*,
-  apflora.beob.wgs84_lat,
-  apflora.beob.wgs84_long,
+  beob.id,
+  beob.quelle,
+  beob.id_field,
+  beob.art_id,
+  beob.datum,
+  beob.autor,
+  beob.geom_point,
+  beob.data,
+  beob.tpop_id,
+  beob.nicht_zuordnen,
+  beob.infoflora_informiert_datum,
+  beob.bemerkungen,
+  beob.changed,
+  beob.changed_by,
+  beob.wgs84_lat,
+  beob.wgs84_long,
   apflora.apart.ap_id,
-  apflora.beob.quelle,
-  to_char(apflora.beob.datum, 'YYYY.MM.DD') || ': ' || coalesce(apflora.beob.autor, '(kein Autor)') || ' (' || apflora.beob.quelle || ')' as label
+  to_char(beob.datum, 'YYYY.MM.DD') || ': ' || coalesce(beob.autor, '(kein Autor)') || ' (' || beob.quelle || ')' as label
 from
-  apflora.beob
+  apflora.beob beob
   inner join apflora.apart
-  on apflora.apart.art_id = apflora.beob.art_id
+  on apflora.apart.art_id = beob.art_id
 order by
-  apflora.beob.datum desc,
-  apflora.beob.autor asc,
-  apflora.beob.quelle asc;
+  beob.datum desc,
+  beob.autor asc,
+  beob.quelle asc;
 
 -- used in exports
 -- use https://github.com/hnsl/colpivot instead?

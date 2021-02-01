@@ -2321,7 +2321,7 @@ with check (current_user = 'apflora_manager');
 --
 -- beob can collect beob of any provenience by following this convention:
 -- - fields that are used in apflora.ch are appended as regular fields, that is:
---   quelle_id, art_id, datum, autor, geom_point
+--   quelle, art_id, datum, autor, geom_point
 --   These fields are extracted from the original beob at import
 -- - all fields of the original beob are put in jsonb field "data"
 --   and shown in the form that lists beob
@@ -2334,7 +2334,6 @@ with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.beob;
 CREATE TABLE apflora.beob (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  quelle_id uuid Default Null REFERENCES apflora.beob_quelle_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
   quelle text default null,
   -- this field in data contains this datasets id
   id_field varchar(38) DEFAULT NULL,
@@ -2360,11 +2359,9 @@ CREATE TABLE apflora.beob (
 );
 create index on apflora.beob using gist (geom_point);
 CREATE INDEX ON apflora.beob USING btree (id);
-CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
 CREATE INDEX ON apflora.beob USING btree (art_id_original);
 CREATE INDEX ON apflora.beob USING btree (quelle);
-CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (tpop_id);
 CREATE INDEX ON apflora.beob USING btree (nicht_zuordnen);
 CREATE INDEX ON apflora.beob USING btree (infoflora_informiert_datum);

@@ -22,7 +22,7 @@ Zweck dieser Datenstruktur:
 
 - Die Struktur von Beobachtungsdaten ist im Prinzip unerheblich. Änderungen daran auch nicht. Wichtig ist einzig, dass zum Zeitpunkt des Imports klar ist, wie aus den Beobachtungsdaten die abgeleiteten Felder in Tabelle `beob` generiert werden können
 - Somit können jederzeit Beobachtungen unabhängig von ihrer Datenstruktur importiert werden
-- Schon vorhandene Beobachtungen können bei erneutem Import mit aktuelleren ersetzt werden (`quelle_id` und `id_field` vergleichen)
+- Schon vorhandene Beobachtungen können bei erneutem Import mit aktuelleren ersetzt werden (`quelle` und `id_field` vergleichen)
 - Mit Hilfe der abgeleiteten Felder können gebaut werden:
   - der Strukturbaum
   - das Beobachtungs-Formular
@@ -32,7 +32,7 @@ Struktur der Tabelle "beob":
 
 - id: id dieser Tabelle. Ohne Bezug zu id's in den Beobachtungsdaten
 - data: Unveränderte Originaldaten im JSONB Format
-- id_field: Feld in den Originaldaten, welches die Original-ID enthält. Dient dazu, gemeinsam mit dem Feld `quelle_id` jederzeit mit neuen Versionen von Originaldaten verbinden zu können
+- id_field: Feld in den Originaldaten, welches die Original-ID enthält. Dient dazu, gemeinsam mit dem Feld `quelle` jederzeit mit neuen Versionen von Originaldaten verbinden zu können
 - quelle: Woher die Beobachtung stammt. Möglichst kurz und klar, ähnlich Literaturzitaten. Beispiel: Info Spezies 2017
 - art_id: beschreibt die Art. Fremdschlüssel aus Tabelle `ae_taxonomies`
 - art_id_original: Am Unterschied zwischen art_id_original und art_id wird erkenntlich, wenn die Art-Bestimmung verändert wurde

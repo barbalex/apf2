@@ -110,7 +110,7 @@ const fieldTypes = {
   tpopId: 'UUID',
   nichtZuordnen: 'Boolean',
   bemerkungen: 'String',
-  quelleId: 'UUID',
+  quelle: 'String',
 }
 
 const nichtZuordnenPopover = (
