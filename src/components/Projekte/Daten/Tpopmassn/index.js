@@ -218,7 +218,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
         try {
           zieleinheitIdResult = await client.query({
             query: gql`
-              query tpopmassnZieleinheitQuery($apId: UUID!, $typ: Int!) {
+              query tpopmassnZieleinheitQuery2($apId: UUID!, $typ: Int!) {
                 allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
                   nodes {
                     id
@@ -263,7 +263,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
         try {
           zieleinheitIdResult = await client.query({
             query: gql`
-              query tpopmassnZieleinheitQuery($apId: UUID!, $typ: Int!) {
+              query tpopmassnZieleinheitQuery3($apId: UUID!, $typ: Int!) {
                 allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
                   nodes {
                     id
