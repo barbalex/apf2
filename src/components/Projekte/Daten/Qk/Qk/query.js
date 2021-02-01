@@ -104,6 +104,7 @@ export default gql`
     $tpopmassnOhneJahr: Boolean!
     $tpopmassnOhneTyp: Boolean!
     $anpflanzungOhneZielrelevanteEinheit: Boolean!
+    $anpflanzungZielrelevanteEinheitFalsch: Boolean!
     $tpopmassnberOhneBeurteilung: Boolean!
     $tpopmassnberOhneJahr: Boolean!
     $zielOhneJahr: Boolean!
@@ -1612,6 +1613,26 @@ export default gql`
         tpopNr
         id
         jahr
+      }
+    }
+    anpflanzungZielrelevanteEinheitFalsch: allVQAnpflanzungZielrelevanteEinheitFalsches(
+      filter: {
+        projId: { equalTo: $projId }
+        apId: { equalTo: $apId }
+        jahr: { equalTo: $berichtjahr }
+      }
+    ) @include(if: $anpflanzungZielrelevanteEinheitFalsch) {
+      nodes {
+        projId
+        apId
+        popId
+        popNr
+        tpopId
+        tpopNr
+        id
+        jahr
+        ekZieleinheit
+        massnZieleinheit
       }
     }
     tpopmassnberOhneJahr: projektById(id: $projId)
