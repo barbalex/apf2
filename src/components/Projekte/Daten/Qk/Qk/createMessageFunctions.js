@@ -1352,6 +1352,26 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         n.ekZieleinheit
       })`,
     })),
+  anpflanzungZielrelevanteAnzahlFalsch: () =>
+    get(data, 'anpflanzungZielrelevanteAnzahlFalsch.nodes', []).map((n) => ({
+      url: [
+        'Projekte',
+        n.projId,
+        'Aktionspläne',
+        n.apId,
+        'Populationen',
+        n.popId,
+        'Teil-Populationen',
+        n.tpopId,
+        'Massnahmen',
+        n.id,
+      ],
+      text: `Population: ${n.popNr || n.popId}, Teil-Population: ${
+        n.tpopNr || n.tpopId
+      }, Massnahme: ${n.jahr || n.id} (${n.zieleinheitAnzahl ?? 'keine'} '${
+        n.ekZieleinheit
+      }' statt ${n.anzahl})`,
+    })),
   tpopmassnberOhneJahr: () => {
     const popNodes = get(
       data,
