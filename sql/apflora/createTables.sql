@@ -2415,18 +2415,6 @@ CREATE TABLE apflora.beobprojekt (
   UNIQUE (proj_id, beob_id)
 );
 
---DROP TABLE IF EXISTS apflora.beob_quelle_werte;
---CREATE TABLE apflora.beob_quelle_werte (
---  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
---  name varchar(255) DEFAULT NULL
---);
---CREATE INDEX ON apflora.beob_quelle_werte USING btree (id);
---alter table apflora.beob_quelle_werte enable row level security;
---drop policy if exists reader on apflora.beob_quelle_werte;
---create policy reader on apflora.beob_quelle_werte
---using (true)
---with check (current_user = 'apflora_manager');
-
 
 DROP TABLE IF EXISTS apflora.apart;
 CREATE TABLE apflora.apart (

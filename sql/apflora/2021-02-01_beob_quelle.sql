@@ -269,6 +269,7 @@ where
   werte.id = beob.quelle_id
   and werte.name = 'FloZ';
 
+-- replace app
 -- zuletzt:
 alter table apflora.beob drop column quelle_id;
 drop table apflora.beob_quelle_werte;
