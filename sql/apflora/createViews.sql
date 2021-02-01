@@ -5755,27 +5755,32 @@ order by
   ekplan.jahr;
 
 -- the original query is here: 2021-01-31_v_q_ekzieleinheit_ohne_massn_zaehleinheit.sql
-DROP VIEW IF EXISTS apflora.v_q_ekzieleinheit_ohne_massn_zaehleinheit CASCADE;
-CREATE OR REPLACE VIEW apflora.v_q_ekzieleinheit_ohne_massn_zaehleinheit AS
+DROP VIEW IF EXISTS apflora.v_q_anpflanzung_ohne_zielrelevante_einheit CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_anpflanzung_ohne_zielrelevante_einheit AS
 select
   ap.proj_id,
-  ekzaehleinheit.ap_id,
-  ekzaehleinheit.id,
-  --ekzaehleinheit.zaehleinheit_id,
-  tax.artname,
-  zaehl_einheit_werte.text as zaehleinheit
-from apflora.ekzaehleinheit ekzaehleinheit
-  inner join apflora.ap ap
-    inner join apflora.ae_taxonomies tax
-    on tax.id = ap.art_id
-  on ap.id = ekzaehleinheit.ap_id
-  inner join apflora.tpopkontrzaehl_einheit_werte zaehl_einheit_werte
-  on zaehl_einheit_werte.id = ekzaehleinheit.zaehleinheit_id
+  ap.id as ap_id,
+  pop.id as pop_id,
+  pop.nr as pop_nr,
+  tpop.id as tpop_id,
+  tpop.nr as tpop_nr,
+  massn.id,
+  massn.jahr
+from apflora.tpopmassn massn
+  inner join apflora.tpopmassn_typ_werte massn_typ
+  on massn_typ.code = massn.typ
+  inner join apflora.tpop tpop
+    inner join apflora.pop pop
+      inner join apflora.ap ap
+        inner join apflora.ae_taxonomies tax
+        on tax.id = ap.art_id
+      on ap.id = pop.ap_id
+    on pop.id = tpop.pop_id
+  on massn.tpop_id = tpop.id
 where
-  ekzaehleinheit.zielrelevant = true
-  and ekzaehleinheit.not_massn_count_unit = false
-  and zaehl_einheit_werte.corresponds_to_massn_anz_triebe = false
-  and zaehl_einheit_werte.corresponds_to_massn_anz_pflanzen = false
+  massn.typ = 2
+  and massn.zieleinheit_einheit is null
 order by
-  tax.artname,
-  zaehl_einheit_werte.text;
+  pop.nr,
+  tpop.nr,
+  massn.jahr;
