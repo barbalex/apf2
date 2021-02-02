@@ -108,7 +108,6 @@ const fieldTypes = {
   bodenHumus: 'String',
   bodenNaehrstoffgehalt: 'String',
   bodenAbtrag: 'String',
-  wasserhaushalt: 'String',
   idealbiotopUebereinstimmung: 'Int',
   handlungsbedarf: 'String',
   flaecheUeberprueft: 'Int',

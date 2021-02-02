@@ -1,9 +1,9 @@
 -- 1. add new fields
 alter table apflora.tpop add column boden_typ text DEFAULT NULL;
-alter table apflora.tpop add column boden_kalkgehalt varchar(100) DEFAULT NULL;
-alter table apflora.tpop add column boden_durchlaessigkeit varchar(100) DEFAULT NULL;
-alter table apflora.tpop add column boden_humus varchar(100) DEFAULT NULL;
-alter table apflora.tpop add column boden_naehrstoffgehalt varchar(100) DEFAULT NULL;
+alter table apflora.tpop add column boden_kalkgehalt text DEFAULT NULL;
+alter table apflora.tpop add column boden_durchlaessigkeit text DEFAULT NULL;
+alter table apflora.tpop add column boden_humus text DEFAULT NULL;
+alter table apflora.tpop add column boden_naehrstoffgehalt text DEFAULT NULL;
 alter table apflora.tpop add column boden_abtrag text DEFAULT NULL;
 alter table apflora.tpop add column wasserhaushalt text DEFAULT NULL;
 COMMENT ON COLUMN apflora.tpop.boden_typ IS 'Bodentyp';
@@ -778,17 +778,220 @@ ORDER BY
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum;
 
+-- Daten migrieren
+with kontr as (
+  select
+    tpop_id,
+    wasserhaushalt,
+    array_to_string(sort(array_agg(jahr)), ', ') || ': ' || wasserhaushalt::text as with_years
+  from apflora.tpopkontr
+  where wasserhaushalt is not null
+  group by
+    tpop_id,
+    wasserhaushalt
+  --order by
+    --tpop_id
+), data as
+(
+  select
+    tpop_id,
+    case
+      when count(tpop_id) = 1 then string_agg(wasserhaushalt::text, '; ')
+      else string_agg(with_years, '; ')
+    end as wasserhaushalt,
+    count(tpop_id) as anz_tpop
+  from kontr
+  group by tpop_id
+  order by tpop_id
+)
+update apflora.tpop tpop
+set wasserhaushalt = data.wasserhaushalt
+from data
+where data.tpop_id = tpop.id;
+
+with kontr as (
+  select
+    tpop_id,
+    boden_typ,
+    array_to_string(sort(array_agg(jahr)), ', ') || ': ' || boden_typ::text as with_years
+  from apflora.tpopkontr
+  where boden_typ is not null
+  group by
+    tpop_id,
+    boden_typ
+  --order by
+    --tpop_id
+), data as
+(
+  select
+    tpop_id,
+    case
+      when count(tpop_id) = 1 then string_agg(boden_typ::text, '; ')
+      else string_agg(with_years, '; ')
+    end as boden_typ,
+    count(tpop_id) as anz_tpop
+  from kontr
+  group by tpop_id
+  order by tpop_id
+)
+update apflora.tpop tpop
+set boden_typ = data.boden_typ
+from data
+where data.tpop_id = tpop.id;
+
+with kontr as (
+  select
+    tpop_id,
+    boden_kalkgehalt,
+    array_to_string(sort(array_agg(jahr)), ', ') || ': ' || boden_kalkgehalt::text as with_years
+  from apflora.tpopkontr
+  where boden_kalkgehalt is not null
+  group by
+    tpop_id,
+    boden_kalkgehalt
+  --order by
+    --tpop_id
+), data as
+(
+  select
+    tpop_id,
+    case
+      when count(tpop_id) = 1 then string_agg(boden_kalkgehalt::text, '; ')
+      else string_agg(with_years, '; ')
+    end as boden_kalkgehalt,
+    count(tpop_id) as anz_tpop
+  from kontr
+  group by tpop_id
+  order by tpop_id
+)
+update apflora.tpop tpop
+set boden_kalkgehalt = data.boden_kalkgehalt
+from data
+where data.tpop_id = tpop.id;
+
+with kontr as (
+  select
+    tpop_id,
+    boden_durchlaessigkeit,
+    array_to_string(sort(array_agg(jahr)), ', ') || ': ' || boden_durchlaessigkeit::text as with_years
+  from apflora.tpopkontr
+  where boden_durchlaessigkeit is not null
+  group by
+    tpop_id,
+    boden_durchlaessigkeit
+  --order by
+    --tpop_id
+), data as
+(
+  select
+    tpop_id,
+    case
+      when count(tpop_id) = 1 then string_agg(boden_durchlaessigkeit::text, '; ')
+      else string_agg(with_years, '; ')
+    end as boden_durchlaessigkeit,
+    count(tpop_id) as anz_tpop
+  from kontr
+  group by tpop_id
+  order by tpop_id
+)
+update apflora.tpop tpop
+set boden_durchlaessigkeit = data.boden_durchlaessigkeit
+from data
+where data.tpop_id = tpop.id;
+
+with kontr as (
+  select
+    tpop_id,
+    boden_humus,
+    array_to_string(sort(array_agg(jahr)), ', ') || ': ' || boden_humus::text as with_years
+  from apflora.tpopkontr
+  where boden_humus is not null
+  group by
+    tpop_id,
+    boden_humus
+  --order by
+    --tpop_id
+), data as
+(
+  select
+    tpop_id,
+    case
+      when count(tpop_id) = 1 then string_agg(boden_humus::text, '; ')
+      else string_agg(with_years, '; ')
+    end as boden_humus,
+    count(tpop_id) as anz_tpop
+  from kontr
+  group by tpop_id
+  order by tpop_id
+)
+update apflora.tpop tpop
+set boden_humus = data.boden_humus
+from data
+where data.tpop_id = tpop.id;
+
+with kontr as (
+  select
+    tpop_id,
+    boden_naehrstoffgehalt,
+    array_to_string(sort(array_agg(jahr)), ', ') || ': ' || boden_naehrstoffgehalt::text as with_years
+  from apflora.tpopkontr
+  where boden_naehrstoffgehalt is not null
+  group by
+    tpop_id,
+    boden_naehrstoffgehalt
+  --order by
+    --tpop_id
+), data as
+(
+  select
+    tpop_id,
+    case
+      when count(tpop_id) = 1 then string_agg(boden_naehrstoffgehalt::text, '; ')
+      else string_agg(with_years, '; ')
+    end as boden_naehrstoffgehalt,
+    count(tpop_id) as anz_tpop
+  from kontr
+  group by tpop_id
+  order by tpop_id
+)
+update apflora.tpop tpop
+set boden_naehrstoffgehalt = data.boden_naehrstoffgehalt
+from data
+where data.tpop_id = tpop.id;
+
+with kontr as (
+  select
+    tpop_id,
+    boden_abtrag,
+    array_to_string(sort(array_agg(jahr)), ', ') || ': ' || boden_abtrag::text as with_years
+  from apflora.tpopkontr
+  where boden_abtrag is not null
+  group by
+    tpop_id,
+    boden_abtrag
+  --order by
+    --tpop_id
+), data as
+(
+  select
+    tpop_id,
+    case
+      when count(tpop_id) = 1 then string_agg(boden_abtrag::text, '; ')
+      else string_agg(with_years, '; ')
+    end as boden_abtrag,
+    count(tpop_id) as anz_tpop
+  from kontr
+  group by tpop_id
+  order by tpop_id
+)
+update apflora.tpop tpop
+set boden_abtrag = data.boden_abtrag
+from data
+where data.tpop_id = tpop.id;
 
 
 
-
-
-
-
-
-
-
-
+-- remove last remains of wasserhaushalt etc.
 
 -- drop old fields
 alter table apflora.tpopkontr drop boden_typ;

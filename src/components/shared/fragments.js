@@ -487,13 +487,6 @@ export const tpopfeldkontr = gql`
     krautschicht
     strauchschicht
     baumschicht
-    bodenTyp
-    bodenKalkgehalt
-    bodenDurchlaessigkeit
-    bodenHumus
-    bodenNaehrstoffgehalt
-    bodenAbtrag
-    wasserhaushalt
     idealbiotopUebereinstimmung
     handlungsbedarf
     flaecheUeberprueft
@@ -614,13 +607,6 @@ export const tpopkontr = gql`
     krautschicht
     strauchschicht
     baumschicht
-    bodenTyp
-    bodenKalkgehalt
-    bodenDurchlaessigkeit
-    bodenHumus
-    bodenNaehrstoffgehalt
-    bodenAbtrag
-    wasserhaushalt
     idealbiotopUebereinstimmung
     handlungsbedarf
     flaecheUeberprueft
