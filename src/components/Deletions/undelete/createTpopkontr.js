@@ -25,13 +25,6 @@ export default gql`
     $krautschicht: String
     $strauchschicht: String
     $baumschicht: String
-    $bodenTyp: String
-    $bodenKalkgehalt: String
-    $bodenDurchlaessigkeit: String
-    $bodenHumus: String
-    $bodenNaehrstoffgehalt: String
-    $bodenAbtrag: String
-    $wasserhaushalt: String
     $idealbiotopUebereinstimmung: Int
     $handlungsbedarf: String
     $flaecheUeberprueft: Int
@@ -73,13 +66,6 @@ export default gql`
           krautschicht: $krautschicht
           strauchschicht: $strauchschicht
           baumschicht: $baumschicht
-          bodenTyp: $bodenTyp
-          bodenKalkgehalt: $bodenKalkgehalt
-          bodenDurchlaessigkeit: $bodenDurchlaessigkeit
-          bodenHumus: $bodenHumus
-          bodenNaehrstoffgehalt: $bodenNaehrstoffgehalt
-          bodenAbtrag: $bodenAbtrag
-          wasserhaushalt: $wasserhaushalt
           idealbiotopUebereinstimmung: $idealbiotopUebereinstimmung
           handlungsbedarf: $handlungsbedarf
           flaecheUeberprueft: $flaecheUeberprueft
