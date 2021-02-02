@@ -15,6 +15,13 @@ export default gql`
     $exposition: String
     $klima: String
     $neigung: String
+    $bodenTyp: String
+    $bodenKalkgehalt: String
+    $bodenDurchlaessigkeit: String
+    $bodenHumus: String
+    $bodenNaehrstoffgehalt: String
+    $bodenAbtrag: String
+    $wasserhaushalt: String
     $beschreibung: String
     $katasterNr: String
     $status: Int
@@ -47,6 +54,13 @@ export default gql`
           exposition: $exposition
           klima: $klima
           neigung: $neigung
+          bodenTyp: $bodenTyp
+          bodenKalkgehalt: $bodenKalkgehalt
+          bodenDurchlaessigkeit: $bodenDurchlaessigkeit
+          bodenHumus: $bodenHumus
+          bodenNaehrstoffgehalt: $bodenNaehrstoffgehalt
+          bodenAbtrag: $bodenAbtrag
+          wasserhaushalt: $wasserhaushalt
           beschreibung: $beschreibung
           katasterNr: $katasterNr
           status: $status

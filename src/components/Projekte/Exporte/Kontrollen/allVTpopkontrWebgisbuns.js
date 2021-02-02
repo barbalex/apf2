@@ -36,13 +36,6 @@ export default gql`
         KONTRKRAUTSCHICHT: kontrkrautschicht
         KONTRSTRAUCHSCHICHT: kontrstrauchschicht
         KONTRBAUMSCHICHT: kontrbaumschicht
-        KONTRBODENTYP: kontrbodentyp
-        KONTRBODENKALK: kontrbodenkalk
-        KONTRBODENDURCHLAESSIGK: kontrbodendurchlaessigk
-        KONTRBODENHUMUS: kontrbodenhumus
-        KONTRBODENNAEHRSTOFF: kontrbodennaehrstoff
-        KONTROBERBODENABTRAG: kontroberbodenabtrag
-        KONTROBODENWASSERHAUSHALT: kontrobodenwasserhaushalt
         KONTRUEBEREINSTIMMUNIDEAL: kontruebereinstimmunideal
         KONTRHANDLUNGSBEDARF: kontrhandlungsbedarf
         KONTRUEBERPRUFTFLAECHE: kontrueberpruftflaeche

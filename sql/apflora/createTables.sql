@@ -1023,6 +1023,13 @@ CREATE TABLE apflora.tpop (
   exposition varchar(50) DEFAULT NULL,
   klima varchar(50) DEFAULT NULL,
   neigung varchar(50) DEFAULT NULL,
+  boden_typ text DEFAULT NULL,
+  boden_kalkgehalt text DEFAULT NULL,
+  boden_durchlaessigkeit text DEFAULT NULL,
+  boden_humus text DEFAULT NULL,
+  boden_naehrstoffgehalt text DEFAULT NULL,
+  boden_abtrag text DEFAULT NULL,
+  wasserhaushalt text DEFAULT NULL,
   beschreibung text DEFAULT NULL,
   kataster_nr text DEFAULT NULL,
   status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -1064,6 +1071,13 @@ COMMENT ON COLUMN apflora.tpop.hoehe IS 'Höhe über Meer (m)';
 COMMENT ON COLUMN apflora.tpop.exposition IS 'Exposition / Besonnung des Standorts';
 COMMENT ON COLUMN apflora.tpop.klima IS 'Klima des Standorts';
 COMMENT ON COLUMN apflora.tpop.neigung IS 'Hangneigung des Standorts';
+COMMENT ON COLUMN apflora.tpop.boden_typ IS 'Bodentyp';
+COMMENT ON COLUMN apflora.tpop.boden_kalkgehalt IS 'Kalkgehalt des Bodens';
+COMMENT ON COLUMN apflora.tpop.boden_durchlaessigkeit IS 'Durchlässigkeit des Bodens';
+COMMENT ON COLUMN apflora.tpop.boden_humus IS 'Humusgehalt des Bodens';
+COMMENT ON COLUMN apflora.tpop.boden_naehrstoffgehalt IS 'Nährstoffgehalt des Bodens';
+COMMENT ON COLUMN apflora.tpop.boden_abtrag IS 'Oberbodenabtrag';
+COMMENT ON COLUMN apflora.tpop.wasserhaushalt IS 'Wasserhaushalt';
 COMMENT ON COLUMN apflora.tpop.beschreibung IS 'Beschreibung der Fläche';
 COMMENT ON COLUMN apflora.tpop.kataster_nr IS 'Kataster-Nummer';
 COMMENT ON COLUMN apflora.tpop.status IS 'Herkunft der Teilpopulation. Auswahl aus Tabelle "pop_status_werte"';
@@ -1397,13 +1411,6 @@ CREATE TABLE apflora.tpopkontr (
   krautschicht varchar(100) DEFAULT NULL,
   strauchschicht text DEFAULT NULL,
   baumschicht varchar(100) DEFAULT NULL,
-  boden_typ text DEFAULT NULL,
-  boden_kalkgehalt varchar(100) DEFAULT NULL,
-  boden_durchlaessigkeit varchar(100) DEFAULT NULL,
-  boden_humus varchar(100) DEFAULT NULL,
-  boden_naehrstoffgehalt varchar(100) DEFAULT NULL,
-  boden_abtrag text DEFAULT NULL,
-  wasserhaushalt text DEFAULT NULL,
   idealbiotop_uebereinstimmung integer DEFAULT NULL REFERENCES apflora.tpopkontr_idbiotuebereinst_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   handlungsbedarf text,
   flaeche_ueberprueft integer DEFAULT NULL,
@@ -1455,13 +1462,6 @@ COMMENT ON COLUMN apflora.tpopkontr.moosschicht IS 'Moosschicht';
 COMMENT ON COLUMN apflora.tpopkontr.krautschicht IS 'Krautschicht';
 COMMENT ON COLUMN apflora.tpopkontr.strauchschicht IS 'Strauchschicht, ehemals Verbuschung (%)';
 COMMENT ON COLUMN apflora.tpopkontr.baumschicht IS 'Baumschicht';
-COMMENT ON COLUMN apflora.tpopkontr.boden_typ IS 'Bodentyp';
-COMMENT ON COLUMN apflora.tpopkontr.boden_kalkgehalt IS 'Kalkgehalt des Bodens';
-COMMENT ON COLUMN apflora.tpopkontr.boden_durchlaessigkeit IS 'Durchlässigkeit des Bodens';
-COMMENT ON COLUMN apflora.tpopkontr.boden_humus IS 'Humusgehalt des Bodens';
-COMMENT ON COLUMN apflora.tpopkontr.boden_naehrstoffgehalt IS 'Nährstoffgehalt des Bodens';
-COMMENT ON COLUMN apflora.tpopkontr.boden_abtrag IS 'Oberbodenabtrag';
-COMMENT ON COLUMN apflora.tpopkontr.wasserhaushalt IS 'Wasserhaushalt';
 COMMENT ON COLUMN apflora.tpopkontr.idealbiotop_uebereinstimmung IS 'Übereinstimmung mit dem Idealbiotop';
 COMMENT ON COLUMN apflora.tpopkontr.handlungsbedarf IS 'Handlungsbedarf bezüglich Biotop';
 COMMENT ON COLUMN apflora.tpopkontr.flaeche_ueberprueft IS 'Überprüfte Fläche in m2. Nur für Freiwilligen-Erfolgskontrolle';

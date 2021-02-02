@@ -213,13 +213,6 @@ const Kontrollen = () => {
                           krautschicht
                           strauchschicht
                           baumschicht
-                          bodenTyp
-                          bodenKalkgehalt
-                          bodenDurchlaessigkeit
-                          bodenHumus
-                          bodenNaehrstoffgehalt
-                          bodenAbtrag
-                          wasserhaushalt
                           tpopkontrIdbiotuebereinstWerteByIdealbiotopUebereinstimmung {
                             id
                             text
@@ -371,13 +364,6 @@ const Kontrollen = () => {
                   krautschicht: n.krautschicht,
                   strauchschicht: n.strauchschicht,
                   baumschicht: n.baumschicht,
-                  bodenTyp: n.bodenTyp,
-                  bodenKalkgehalt: n.bodenKalkgehalt,
-                  bodenDurchlaessigkeit: n.bodenDurchlaessigkeit,
-                  bodenHumus: n.bodenHumus,
-                  bodenNaehrstoffgehalt: n.bodenNaehrstoffgehalt,
-                  bodenAbtrag: n.bodenAbtrag,
-                  wasserhaushalt: n.wasserhaushalt,
                   idealbiotopUebereinstimmung:
                     get(
                       n,

@@ -108,7 +108,6 @@ const fieldTypes = {
   bodenHumus: 'String',
   bodenNaehrstoffgehalt: 'String',
   bodenAbtrag: 'String',
-  wasserhaushalt: 'String',
   idealbiotopUebereinstimmung: 'Int',
   handlungsbedarf: 'String',
   flaecheUeberprueft: 'Int',
@@ -583,49 +582,6 @@ const Tpopfeldkontr = ({
                         <TextField
                           name="baumschicht"
                           label="Baumschicht"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <Section>Boden</Section>
-                        <TextField
-                          name="bodenTyp"
-                          label="Typ"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="bodenKalkgehalt"
-                          label="Kalkgehalt"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="bodenDurchlaessigkeit"
-                          label="Durchlässigkeit"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="bodenHumus"
-                          label="Humusgehalt"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="bodenNaehrstoffgehalt"
-                          label="Nährstoffgehalt"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="bodenAbtrag"
-                          label="Bodenabtrag"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="wasserhaushalt"
-                          label="Wasserhaushalt"
                           type="text"
                           handleSubmit={handleSubmit}
                         />

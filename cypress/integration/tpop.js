@@ -115,6 +115,62 @@ describe('Teil-Population form', () => {
       .blur()
       .should('have.value', typedText)
   })
+  it('updates bodenTyp', () => {
+    const typedText = 'test, bitte nicht löschen'
+    cy.get('#bodenTyp')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
+  it('updates bodenKalkgehalt', () => {
+    const typedText = 'test, bitte nicht löschen'
+    cy.get('#bodenKalkgehalt')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
+  it('updates bodenDurchlaessigkeit', () => {
+    const typedText = 'test, bitte nicht löschen'
+    cy.get('#bodenDurchlaessigkeit')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
+  it('updates bodenHumus', () => {
+    const typedText = 'test, bitte nicht löschen'
+    cy.get('#bodenHumus')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
+  it('updates bodenNaehrstoffgehalt', () => {
+    const typedText = 'test, bitte nicht löschen'
+    cy.get('#bodenNaehrstoffgehalt')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
+  it('updates bodenAbtrag', () => {
+    const typedText = 'test, bitte nicht löschen'
+    cy.get('#bodenAbtrag')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
+  it('updates wasserhaushalt', () => {
+    const typedText = 'test, bitte nicht löschen'
+    cy.get('#wasserhaushalt')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
   it('updates beschreibung', () => {
     const typedText = 'test'
     cy.get('#beschreibung')
