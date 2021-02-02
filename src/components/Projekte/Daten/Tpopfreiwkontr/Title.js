@@ -16,8 +16,10 @@ const Container = styled(Area)`
   }
 `
 
-const Title = () => (
-  <Container>{`Erfolgskontrolle Artenschutz Flora ${new Date().getFullYear()}`}</Container>
-)
+const Title = ({ row }) => {
+  const year = row?.jahr ?? new Date().getFullYear()
+
+  return <Container>{`Erfolgskontrolle Artenschutz Flora ${year}`}</Container>
+}
 
 export default Title

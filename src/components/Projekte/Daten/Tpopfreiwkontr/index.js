@@ -642,7 +642,7 @@ const Tpopfreiwkontr = ({
         >
           <FormContainer>
             <GridContainer width={width}>
-              <Title />
+              <Title row={row} />
               <Headdata
                 pop={pop}
                 tpop={tpop}
