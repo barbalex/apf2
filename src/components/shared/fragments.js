@@ -415,6 +415,13 @@ export const tpop = gql`
     exposition
     klima
     neigung
+    bodenTyp
+    bodenKalkgehalt
+    bodenDurchlaessigkeit
+    bodenHumus
+    bodenNaehrstoffgehalt
+    bodenAbtrag
+    wasserhaushalt
     beschreibung
     katasterNr
     status

@@ -31,13 +31,6 @@ export default async ({ id, client, copyingBiotop }) => {
         $krautschicht: String
         $strauchschicht: String
         $baumschicht: String
-        $bodenTyp: String
-        $bodenKalkgehalt: String
-        $bodenDurchlaessigkeit: String
-        $bodenHumus: String
-        $bodenNaehrstoffgehalt: String
-        $bodenAbtrag: String
-        $wasserhaushalt: String
         $handlungsbedarf: String
         $idealbiotopUebereinstimmung: Int
       ) {
@@ -55,13 +48,6 @@ export default async ({ id, client, copyingBiotop }) => {
               krautschicht: $krautschicht
               strauchschicht: $strauchschicht
               baumschicht: $baumschicht
-              bodenTyp: $bodenTyp
-              bodenKalkgehalt: $bodenKalkgehalt
-              bodenDurchlaessigkeit: $bodenDurchlaessigkeit
-              bodenHumus: $bodenHumus
-              bodenNaehrstoffgehalt: $bodenNaehrstoffgehalt
-              bodenAbtrag: $bodenAbtrag
-              wasserhaushalt: $wasserhaushalt
               handlungsbedarf: $handlungsbedarf
               idealbiotopUebereinstimmung: $idealbiotopUebereinstimmung
             }
@@ -85,13 +71,6 @@ export default async ({ id, client, copyingBiotop }) => {
       krautschicht: get(from, 'krautschicht', null),
       strauchschicht: get(from, 'strauchschicht', null),
       baumschicht: get(from, 'baumschicht', null),
-      bodenTyp: get(from, 'bodenTyp', null),
-      bodenKalkgehalt: get(from, 'bodenKalkgehalt', null),
-      bodenDurchlaessigkeit: get(from, 'bodenDurchlaessigkeit', null),
-      bodenHumus: get(from, 'bodenHumus', null),
-      bodenNaehrstoffgehalt: get(from, 'bodenNaehrstoffgehalt', null),
-      bodenAbtrag: get(from, 'bodenAbtrag', null),
-      wasserhaushalt: get(from, 'wasserhaushalt', null),
       handlungsbedarf: get(from, 'handlungsbedarf', null),
       idealbiotopUebereinstimmung: get(
         from,

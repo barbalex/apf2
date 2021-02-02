@@ -1079,41 +1079,6 @@ const Teilpopulationen = ({ treeName }) => {
                   'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBaumschicht',
                   '',
                 ),
-                erste_kontrolle_boden_typ: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenTyp',
-                  '',
-                ),
-                erste_kontrolle_boden_kalkgehalt: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenKalkgehalt',
-                  '',
-                ),
-                erste_kontrolle_boden_durchlaessigkeit: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenDurchlaessigkeit',
-                  '',
-                ),
-                erste_kontrolle_boden_humus: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenHumus',
-                  '',
-                ),
-                erste_kontrolle_boden_naehrstoffgehalt: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenNaehrstoffgehalt',
-                  '',
-                ),
-                erste_kontrolle_boden_abtrag: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenAbtrag',
-                  '',
-                ),
-                erste_kontrolle_wasserhaushalt: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleWasserhaushalt',
-                  '',
-                ),
                 erste_kontrolle_idealbiotop_uebereinstimmung: get(
                   n,
                   'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleIdealbiotopUebereinstimmung',
@@ -1317,41 +1282,6 @@ const Teilpopulationen = ({ treeName }) => {
                 letzte_kontrolle_baumschicht: get(
                   n,
                   'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBaumschicht',
-                  '',
-                ),
-                letzte_kontrolle_boden_typ: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenTyp',
-                  '',
-                ),
-                letzte_kontrolle_boden_kalkgehalt: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenKalkgehalt',
-                  '',
-                ),
-                letzte_kontrolle_boden_durchlaessigkeit: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenDurchlaessigkeit',
-                  '',
-                ),
-                letzte_kontrolle_boden_humus: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenHumus',
-                  '',
-                ),
-                letzte_kontrolle_boden_naehrstoffgehalt: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenNaehrstoffgehalt',
-                  '',
-                ),
-                letzte_kontrolle_boden_abtrag: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenAbtrag',
-                  '',
-                ),
-                letzte_kontrolle_wasserhaushalt: get(
-                  n,
-                  'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleWasserhaushalt',
                   '',
                 ),
                 letzte_kontrolle_idealbiotop_uebereinstimmung: get(
@@ -1900,41 +1830,6 @@ const Teilpopulationen = ({ treeName }) => {
                     'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBaumschicht',
                     '',
                   ),
-                  erste_kontrolle_boden_typ: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenTyp',
-                    '',
-                  ),
-                  erste_kontrolle_boden_kalkgehalt: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenKalkgehalt',
-                    '',
-                  ),
-                  erste_kontrolle_boden_durchlaessigkeit: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenDurchlaessigkeit',
-                    '',
-                  ),
-                  erste_kontrolle_boden_humus: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenHumus',
-                    '',
-                  ),
-                  erste_kontrolle_boden_naehrstoffgehalt: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenNaehrstoffgehalt',
-                    '',
-                  ),
-                  erste_kontrolle_boden_abtrag: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenAbtrag',
-                    '',
-                  ),
-                  erste_kontrolle_wasserhaushalt: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleWasserhaushalt',
-                    '',
-                  ),
                   erste_kontrolle_idealbiotop_uebereinstimmung: get(
                     n,
                     'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleIdealbiotopUebereinstimmung',
@@ -2138,41 +2033,6 @@ const Teilpopulationen = ({ treeName }) => {
                   letzte_kontrolle_baumschicht: get(
                     n,
                     'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBaumschicht',
-                    '',
-                  ),
-                  letzte_kontrolle_boden_typ: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenTyp',
-                    '',
-                  ),
-                  letzte_kontrolle_boden_kalkgehalt: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenKalkgehalt',
-                    '',
-                  ),
-                  letzte_kontrolle_boden_durchlaessigkeit: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenDurchlaessigkeit',
-                    '',
-                  ),
-                  letzte_kontrolle_boden_humus: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenHumus',
-                    '',
-                  ),
-                  letzte_kontrolle_boden_naehrstoffgehalt: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenNaehrstoffgehalt',
-                    '',
-                  ),
-                  letzte_kontrolle_boden_abtrag: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenAbtrag',
-                    '',
-                  ),
-                  letzte_kontrolle_wasserhaushalt: get(
-                    n,
-                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleWasserhaushalt',
                     '',
                   ),
                   letzte_kontrolle_idealbiotop_uebereinstimmung: get(
