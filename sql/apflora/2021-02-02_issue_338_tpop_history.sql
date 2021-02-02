@@ -1,3 +1,12 @@
+alter table apflora.tpop_history add column boden_typ text DEFAULT NULL;
+alter table apflora.tpop_history add column boden_kalkgehalt text DEFAULT NULL;
+alter table apflora.tpop_history add column boden_durchlaessigkeit text DEFAULT NULL;
+alter table apflora.tpop_history add column boden_humus text DEFAULT NULL;
+alter table apflora.tpop_history add column boden_naehrstoffgehalt text DEFAULT NULL;
+alter table apflora.tpop_history add column boden_abtrag text DEFAULT NULL;
+alter table apflora.tpop_history add column wasserhaushalt text DEFAULT NULL;
+
+
 CREATE OR REPLACE FUNCTION apflora.historize(year integer)
   RETURNS boolean AS $$
   BEGIN
@@ -124,6 +133,3 @@ CREATE OR REPLACE FUNCTION apflora.historize(year integer)
 
  END;
  $$ LANGUAGE plpgsql SECURITY DEFINER;
-
-ALTER FUNCTION apflora.historize(year integer)
-  OWNER TO postgres;

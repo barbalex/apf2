@@ -161,14 +161,6 @@ const Apberuebersicht = ({ treeName }) => {
       })
     } catch (error) {
       console.log('Error from mutating historize:', error)
-      if (error.message.includes('Unique-Constraint')) {
-        return enqueNotification({
-          message: `Die Historisierung ist gescheitert, weil sie schon einmal durchgeführt wurde. Kontaktieren Sie alex@gabriel-software, wenn sie wiederholt werden soll`,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
       return enqueNotification({
         message: `Die Historisierung ist gescheitert. Fehlermeldung: ${error.message}`,
         options: {
