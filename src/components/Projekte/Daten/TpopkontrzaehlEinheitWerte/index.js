@@ -41,7 +41,7 @@ const TpopkontrzaehlEinheitWerte = ({ treeName, table }) => {
       ? activeNodeArray[2]
       : '99999999-9999-9999-9999-999999999999'
   const query = gql`
-    query werteByIdQuery($id: UUID!) {
+    query werteByIdQueryForTpopkontrzaehlEinheitWerte($id: UUID!) {
       tpopkontrzaehlEinheitWerteById(id: $id) {
         id
         code
