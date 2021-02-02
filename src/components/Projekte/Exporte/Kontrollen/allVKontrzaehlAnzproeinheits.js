@@ -30,6 +30,13 @@ export default gql`
         tpop_exposition: tpopExposition
         tpop_klima: tpopKlima
         tpop_neigung: tpopNeigung
+        tpop_boden_typ: kontrBodenTyp
+        tpop_boden_kalkgehalt: kontrBodenKalkgehalt
+        tpop_boden_durchlaessigkeit: kontrBodenDurchlaessigkeit
+        tpop_boden_humus: kontrBodenHumus
+        tpop_boden_naehrstoffgehalt: kontrBodenNaehrstoffgehalt
+        tpop_boden_abtrag: kontrBodenAbtrag
+        tpop_wasserhaushalt: kontrWasserhaushalt
         tpop_beschreibung: tpopBeschreibung
         tpop_kataster_nr: tpopKatasterNr
         tpop_apber_relevant: tpopApberRelevant
@@ -58,26 +65,20 @@ export default gql`
         kontr_vegetationstyp: kontrVegetationstyp
         kontr_konkurrenz: kontrKonkurrenz
         kontr_moosschicht: kontrMoosschicht
-        kontr_krautschicht: kontrStrauchschicht
-        kontr_strauchschicht: kontrBaumschicht
-        kontr_baumschicht: kontrBodenTyp
-        kontr_boden_typ: kontrBodenKalkgehalt
-        kontr_boden_kalkgehalt: kontrBodenDurchlaessigkeit
-        kontr_boden_durchlaessigkeit: kontrBodenHumus
-        kontr_boden_humus: kontrBodenNaehrstoffgehalt
-        kontr_boden_naehrstoffgehalt: kontrBodenAbtrag
-        kontr_boden_abtrag: kontrWasserhaushalt
-        kontr_wasserhaushalt: kontrIdealbiotopUebereinstimmung
-        kontr_idealbiotop_uebereinstimmung: kontrHandlungsbedarf
-        kontr_handlungsbedarf: kontrFlaecheUeberprueft
-        kontr_flaeche_ueberprueft: kontrFlaeche
-        kontr_flaeche: kontrPlanVorhanden
-        kontr_plan_vorhanden: kontrDeckungVegetation
-        kontr_deckung_vegetation: kontrDeckungNackterBoden
-        kontr_deckung_nackter_boden: kontrDeckungApArt
-        kontr_deckung_ap_art: kontrJungpflanzenVorhanden
-        kontr_jungpflanzen_vorhanden: kontrVegetationshoeheMaximum
-        kontr_vegetationshoehe_maximum: kontrVegetationshoeheMittel
+        kontr_krautschicht: kontrKrautschicht
+        kontr_strauchschicht: kontrStrauchschicht
+        kontr_baumschicht: kontrBaumschicht
+        kontr_idealbiotop_uebereinstimmung: kontrIdealbiotopUebereinstimmung
+        kontr_handlungsbedarf: kontrHandlungsbedarf
+        kontr_flaeche_ueberprueft: kontrFlaecheUeberprueft
+        kontr_flaeche: kontrFlaeche
+        kontr_plan_vorhanden: kontrPlanVorhanden
+        kontr_deckung_vegetation: kontrDeckungVegetation
+        kontr_deckung_nackter_boden: kontrDeckungNackterBoden
+        kontr_deckung_ap_art: kontrDeckungApArt
+        kontr_jungpflanzen_vorhanden: kontrJungpflanzenVorhanden
+        kontr_vegetationshoehe_maximum: kontrVegetationshoeheMaximum
+        kontr_vegetationshoehe_mittel: kontrVegetationshoeheMittel
         kontr_gefaehrdung: kontrGefaehrdung
         kontr_changed: kontrChanged
         kontr_changed_by: kontrChangedBy

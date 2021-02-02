@@ -212,6 +212,48 @@ const Tpop = ({
                 handleSubmit={handleSubmit}
               />
               <TextField
+                name="bodenTyp"
+                label="Boden: Typ"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="bodenKalkgehalt"
+                label="Boden: Kalkgehalt"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="bodenDurchlaessigkeit"
+                label="Boden: Durchlässigkeit"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="bodenHumus"
+                label="Boden: Humusgehalt"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="bodenNaehrstoffgehalt"
+                label="Boden: Nährstoffgehalt"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="bodenAbtrag"
+                label="Boden: Abtrag"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="wasserhaushalt"
+                label="Boden: Wasserhaushalt"
+                type="text"
+                handleSubmit={handleSubmit}
+              />
+              <TextField
                 name="beschreibung"
                 label="Beschreibung"
                 type="text"
