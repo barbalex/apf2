@@ -301,6 +301,49 @@ with a3LPop as (
     and tpop.bekannt_seit <= 2020
   group by
     pop.ap_id
+), b1RPop as (
+  select
+    pop.ap_id,
+    count(distinct pop.id) as count
+  from apflora.ap ap
+    inner join apflora.pop pop
+      inner join apflora.popber popber
+      on pop.id = popber.pop_id
+      inner join apflora.tpop tpop
+      on pop.id = tpop.pop_id
+    on pop.ap_id = ap.id
+  where
+    pop.status < 300
+    and pop.bekannt_seit <= 2020
+    and tpop.apber_relevant = true
+    and tpop.bekannt_seit <= 2020
+    and popber.jahr is not null
+    and popber.jahr <= 2020
+    and popber.entwicklung is not null
+  group by
+    pop.ap_id
+), b1RTpop as (
+  select
+    pop.ap_id,
+    count(distinct tpop.id) as count
+  from apflora.ap ap
+    inner join apflora.pop pop
+      inner join apflora.tpop tpop
+        inner join apflora.tpopber tpopber
+        on tpop.id = tpopber.tpop_id
+      on pop.id = tpop.pop_id
+    on pop.ap_id = ap.id
+  where
+    pop.status < 300
+    and pop.bekannt_seit <= 2020
+    and tpop.status < 300
+    and tpop.apber_relevant = true
+    and tpop.bekannt_seit <= 2020
+    and tpopber.jahr is not null
+    and tpopber.jahr <= 2020
+    and tpopber.entwicklung is not null
+  group by
+    pop.ap_id
 )
 select
   tax.artname,
@@ -321,7 +364,9 @@ select
   coalesce(a10LTpop.count, 0) as a_10_l_tpop,
   coalesce(b1LPop.count, 0) as b_1_l_pop,
   coalesce(b1LTpop.count, 0) as b_1_l_tpop,
-  coalesce(b1LFirstYear.jahr, 0) as b_1_first_year
+  coalesce(b1LFirstYear.jahr, 0) as b_1_first_year,
+  coalesce(b1RPop.count, 0) as b_1_r_pop,
+  coalesce(b1RTpop.count, 0) as b_1_r_tpop
 from apflora.ap
   left join a3LPop on
   a3LPop.ap_id = ap.id
@@ -357,6 +402,10 @@ from apflora.ap
   b1LTpop.ap_id = ap.id
   left join b1LFirstYear on
   b1LFirstYear.ap_id = ap.id
+  left join b1RPop on
+  b1RPop.ap_id = ap.id
+  left join b1RTpop on
+  b1RTpop.ap_id = ap.id
   inner join apflora.ae_taxonomies tax
   on tax.id = ap.art_id
 where
