@@ -14,6 +14,7 @@ import AvList from './AvList'
 import AktPopList from './AktPopList'
 import ErfolgList from './ErfolgList'
 import ApberForAp from '../ApberForAp'
+import queryMengen from './queryMengen'
 import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -145,6 +146,14 @@ const ApberForYear = () => {
     (ap) => get(ap, 'aeTaxonomyByArtId.artname'),
   )
 
+  const {
+    data: mengenData,
+    loading: mengenLoading,
+    error: mengenError,
+  } = useQuery(queryMengen, {
+    variables: { jahr },
+  })
+
   if (data1Loading || data2Loading) {
     return (
       <Container>
@@ -201,16 +210,20 @@ const ApberForYear = () => {
           <AvList data={data} />
           <ErfolgList jahr={jahr} data={data} />
           <AktPopList year={jahr} />
-          {aps.map((ap, index) => (
-            <ApberForAp
-              key={ap.id}
-              apId={ap.id}
-              jahr={jahr}
-              apData={ap}
-              isSubReport={true}
-              subReportIndex={index}
-            />
-          ))}
+          {mengenError
+            ? mengenError.message
+            : mengenData?.jberAbc?.nodes?.map((node, index) => (
+                <ApberForAp
+                  key={node.apId}
+                  apId={node.apId}
+                  jahr={jahr}
+                  apData={aps.find((ap) => ap.id === node.apId)}
+                  mengenLoading={mengenLoading}
+                  node={node}
+                  isSubReport={true}
+                  subReportIndex={index}
+                />
+              ))}
         </ContentContainer>
       </Container>
     </ErrorBoundary>

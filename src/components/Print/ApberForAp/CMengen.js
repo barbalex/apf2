@@ -75,28 +75,24 @@ const PopSeit = styled(Number)`
 `
 const TpopSeit = styled(Number)``
 
-const CMengen = ({ apId, jahr, startJahr, mengenResult }) => {
-  const { data, error, loading } = mengenResult
-
-  const c1LPop = data?.jberAbc?.nodes?.[0]?.c1LPop
-  const c1LTpop = data?.jberAbc?.nodes?.[0]?.c1LTpop
-  const c1RPop = data?.jberAbc?.nodes?.[0]?.c1RPop
-  const c1RTpop = data?.jberAbc?.nodes?.[0]?.c1RTpop
-  const c2RPop = data?.jberAbc?.nodes?.[0]?.c2RPop
-  const c2RTpop = data?.jberAbc?.nodes?.[0]?.c2RTpop
-  const c3RPop = data?.jberAbc?.nodes?.[0]?.c3RPop
-  const c3RTpop = data?.jberAbc?.nodes?.[0]?.c3RTpop
-  const c4RPop = data?.jberAbc?.nodes?.[0]?.c4RPop
-  const c4RTpop = data?.jberAbc?.nodes?.[0]?.c4RTpop
-  const c5RPop = data?.jberAbc?.nodes?.[0]?.c5RPop
-  const c5RTpop = data?.jberAbc?.nodes?.[0]?.c5RTpop
-  const c6RPop = data?.jberAbc?.nodes?.[0]?.c6RPop
-  const c6RTpop = data?.jberAbc?.nodes?.[0]?.c6RTpop
-  const c7RPop = data?.jberAbc?.nodes?.[0]?.c7RPop
-  const c7RTpop = data?.jberAbc?.nodes?.[0]?.c7RTpop
-  const c1FirstYear = data?.jberAbc?.nodes?.[0]?.c1FirstYear
-
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+const CMengen = ({ apId, jahr, startJahr, loading, node }) => {
+  const c1LPop = node?.c1LPop
+  const c1LTpop = node?.c1LTpop
+  const c1RPop = node?.c1RPop
+  const c1RTpop = node?.c1RTpop
+  const c2RPop = node?.c2RPop
+  const c2RTpop = node?.c2RTpop
+  const c3RPop = node?.c3RPop
+  const c3RTpop = node?.c3RTpop
+  const c4RPop = node?.c4RPop
+  const c4RTpop = node?.c4RTpop
+  const c5RPop = node?.c5RPop
+  const c5RTpop = node?.c5RTpop
+  const c6RPop = node?.c6RPop
+  const c6RTpop = node?.c6RTpop
+  const c7RPop = node?.c7RPop
+  const c7RTpop = node?.c7RTpop
+  const c1FirstYear = node?.c1FirstYear
 
   return (
     <Container>

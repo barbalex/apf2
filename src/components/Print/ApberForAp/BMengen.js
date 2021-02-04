@@ -49,16 +49,12 @@ const PopSeit = styled(Number)`
 `
 const TpopSeit = styled(Number)``
 
-const BMengen = ({ jahr, mengenResult }) => {
-  const { data, error, loading } = mengenResult
-
-  const b1LPop = data?.jberAbc?.nodes?.[0]?.b1LPop
-  const b1LTpop = data?.jberAbc?.nodes?.[0]?.b1LTpop
-  const b1RPop = data?.jberAbc?.nodes?.[0]?.b1RPop
-  const b1RTpop = data?.jberAbc?.nodes?.[0]?.b1RTpop
-  const b1FirstYear = data?.jberAbc?.nodes?.[0]?.b1FirstYear
-
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
+const BMengen = ({ jahr, loading, node }) => {
+  const b1LPop = node?.b1LPop
+  const b1LTpop = node?.b1LTpop
+  const b1RPop = node?.b1RPop
+  const b1RTpop = node?.b1RTpop
+  const b1FirstYear = node?.b1FirstYear
 
   return (
     <Container>

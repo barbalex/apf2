@@ -148,6 +148,8 @@ const ApberForAp = ({
   apId,
   jahr,
   apData: apDataPassed,
+  node,
+  mengenLoading,
   /**
    * when ApberForAp is called from ApberForYear
    * isSubReport is passed
@@ -197,9 +199,11 @@ const ApberForAp = ({
   const yearOfFirstTpopber = !!firstTpopber ? firstTpopber.jahr : 0
   const startJahr = get(apData, 'startJahr', 0)
 
-  const mengenResult = useQuery(queryMengen, {
-    variables: { apId, jahr },
-  })
+  const mengenResult =
+    node ??
+    useQuery(queryMengen, {
+      variables: { apId, jahr },
+    })
 
   const onClickPrint = useCallback(() => {
     if (typeof window !== 'undefined') {
@@ -211,28 +215,9 @@ const ApberForAp = ({
     }
   }, [setIsPrint])
 
-  const { data, error, loading } = mengenResult
-
-  const a3LPop = data?.jberAbc?.nodes?.[0]?.a3LPop
-  const a3LTpop = data?.jberAbc?.nodes?.[0]?.a3LTpop
-  const a4LPop = data?.jberAbc?.nodes?.[0]?.a4LPop
-  const a4LTpop = data?.jberAbc?.nodes?.[0]?.a4LTpop
-  const a5LPop = data?.jberAbc?.nodes?.[0]?.a5LPop
-  const a5LTpop = data?.jberAbc?.nodes?.[0]?.a5LTpop
-  const a7LPop = data?.jberAbc?.nodes?.[0]?.a7LPop
-  const a7LTpop = data?.jberAbc?.nodes?.[0]?.a7LTpop
-  const a8LPop = data?.jberAbc?.nodes?.[0]?.a8LPop
-  const a8LTpop = data?.jberAbc?.nodes?.[0]?.a8LTpop
-  const a9LPop = data?.jberAbc?.nodes?.[0]?.a9LPop
-  const a9LTpop = data?.jberAbc?.nodes?.[0]?.a9LTpop
-  const a10LPop = data?.jberAbc?.nodes?.[0]?.a10LPop
-  const a10LTpop = data?.jberAbc?.nodes?.[0]?.a10LTpop
-  const a1LPop = a3LPop + a4LPop + a5LPop + a7LPop + a8LPop + a9LPop
-  const a1LTpop = a3LTpop + a4LTpop + a5LTpop + a7LTpop + a8LTpop + a9LTpop
-  const a2LPop = a3LPop + a4LPop + a5LPop
-  const a2LTpop = a3LTpop + a4LTpop + a5LTpop
-  const a6LPop = a7LPop + a8LPop
-  const a6LTpop = a7LTpop + a8LTpop
+  const data = node ?? mengenResult.data?.jberAbc?.nodes?.[0]
+  const loading = node ? mengenLoading : mengenResult.loading
+  const error = node ? false : mengenResult.error
 
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
@@ -279,30 +264,7 @@ const ApberForAp = ({
             <p>{`Erste Kontrolle: ${yearOfFirstTpopber}`}</p>
           </Row>
 
-          <AMengen
-            loading={loading}
-            jahr={jahr}
-            a1LPop={a1LPop}
-            a1LTpop={a1LTpop}
-            a2LPop={a2LPop}
-            a2LTpop={a2LTpop}
-            a3LPop={a3LPop}
-            a3LTpop={a3LTpop}
-            a4LPop={a4LPop}
-            a4LTpop={a4LTpop}
-            a5LPop={a5LPop}
-            a5LTpop={a5LTpop}
-            a6LPop={a6LPop}
-            a6LTpop={a6LTpop}
-            a7LPop={a7LPop}
-            a7LTpop={a7LTpop}
-            a8LPop={a8LPop}
-            a8LTpop={a8LTpop}
-            a9LPop={a9LPop}
-            a9LTpop={a9LTpop}
-            a10LPop={a10LPop}
-            a10LTpop={a10LTpop}
-          />
+          <AMengen loading={loading} node={data} jahr={jahr} />
           {!!apber.biotopeNeue && (
             <FieldRowFullWidth>
               <TitledLabel>
@@ -317,7 +279,7 @@ const ApberForAp = ({
               </FullWidthField>
             </FieldRowFullWidth>
           )}
-          <BMengen apId={apId} jahr={jahr} mengenResult={mengenResult} />
+          <BMengen apId={apId} jahr={jahr} loading={loading} node={data} />
           <ChartContainer>
             <TpopKontrolliert id={apId} height={250} print />
           </ChartContainer>
@@ -347,7 +309,8 @@ const ApberForAp = ({
           <CMengen
             jahr={jahr}
             startJahr={startJahr}
-            mengenResult={mengenResult}
+            loading={loading}
+            node={data}
           />
           {!!apber.massnahmenPlanungVsAusfuehrung && (
             <FieldRowFullWidth>
