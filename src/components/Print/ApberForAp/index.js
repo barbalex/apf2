@@ -1,7 +1,6 @@
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sum from 'lodash/sum'
 import sortBy from 'lodash/sortBy'
 import minBy from 'lodash/minBy'
 import flatten from 'lodash/flatten'
@@ -199,7 +198,7 @@ const ApberForAp = ({
   const startJahr = get(apData, 'startJahr', 0)
 
   const mengenResult = useQuery(queryMengen, {
-    variables: { apId, startJahr, jahr },
+    variables: { apId, jahr },
   })
 
   const onClickPrint = useCallback(() => {
@@ -213,48 +212,21 @@ const ApberForAp = ({
   }, [setIsPrint])
 
   const { data, error, loading } = mengenResult
-  const a3LPop = get(data, 'apById.a3LPop.totalCount', 0)
-  const a3LTpop = sum(
-    get(data, 'apById.a3LTpop.nodes', []).map((p) =>
-      get(p, 'tpopsByPopId.totalCount'),
-    ),
-  )
-  const a4LPop = get(data, 'apById.a4LPop.totalCount', 0)
-  const a4LTpop = sum(
-    get(data, 'apById.a4LTpop.nodes', []).map((p) =>
-      get(p, 'tpopsByPopId.totalCount'),
-    ),
-  )
-  const a5LPop = get(data, 'apById.a5LPop.totalCount', 0)
-  const a5LTpop = sum(
-    get(data, 'apById.a5LTpop.nodes', []).map((p) =>
-      get(p, 'tpopsByPopId.totalCount'),
-    ),
-  )
-  const a7LPop = get(data, 'apById.a7LPop.totalCount', 0)
-  const a7LTpop = sum(
-    get(data, 'apById.a7LTpop.nodes', []).map((p) =>
-      get(p, 'tpopsByPopId.totalCount'),
-    ),
-  )
-  const a8LPop = get(data, 'apById.a8LPop.totalCount', 0)
-  const a8LTpop = sum(
-    get(data, 'apById.a8LTpop.nodes', []).map((p) =>
-      get(p, 'tpopsByPopId.totalCount'),
-    ),
-  )
-  const a9LPop = get(data, 'apById.a9LPop.totalCount', 0)
-  const a9LTpop = sum(
-    get(data, 'apById.a9LTpop.nodes', []).map((p) =>
-      get(p, 'tpopsByPopId.totalCount'),
-    ),
-  )
-  const a10LPop = get(data, 'apById.a10LPop.totalCount', 0)
-  const a10LTpop = sum(
-    get(data, 'apById.a10LTpop.nodes', []).map((p) =>
-      get(p, 'tpopsByPopId.totalCount'),
-    ),
-  )
+
+  const a3LPop = data?.jberAbc?.nodes?.[0]?.a3LPop
+  const a3LTpop = data?.jberAbc?.nodes?.[0]?.a3LTpop
+  const a4LPop = data?.jberAbc?.nodes?.[0]?.a4LPop
+  const a4LTpop = data?.jberAbc?.nodes?.[0]?.a4LTpop
+  const a5LPop = data?.jberAbc?.nodes?.[0]?.a5LPop
+  const a5LTpop = data?.jberAbc?.nodes?.[0]?.a5LTpop
+  const a7LPop = data?.jberAbc?.nodes?.[0]?.a7LPop
+  const a7LTpop = data?.jberAbc?.nodes?.[0]?.a7LTpop
+  const a8LPop = data?.jberAbc?.nodes?.[0]?.a8LPop
+  const a8LTpop = data?.jberAbc?.nodes?.[0]?.a8LTpop
+  const a9LPop = data?.jberAbc?.nodes?.[0]?.a9LPop
+  const a9LTpop = data?.jberAbc?.nodes?.[0]?.a9LTpop
+  const a10LPop = data?.jberAbc?.nodes?.[0]?.a10LPop
+  const a10LTpop = data?.jberAbc?.nodes?.[0]?.a10LTpop
   const a1LPop = a3LPop + a4LPop + a5LPop + a7LPop + a8LPop + a9LPop
   const a1LTpop = a3LTpop + a4LTpop + a5LTpop + a7LTpop + a8LTpop + a9LTpop
   const a2LPop = a3LPop + a4LPop + a5LPop

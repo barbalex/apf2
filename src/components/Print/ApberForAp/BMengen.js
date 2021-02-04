@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
-import min from 'lodash/min'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -54,37 +52,11 @@ const TpopSeit = styled(Number)``
 const BMengen = ({ jahr, mengenResult }) => {
   const { data, error, loading } = mengenResult
 
-  const b1LPop_pop = get(data, 'apById.b1LPop.nodes', []).filter(
-    (p) => get(p, 'popbersByPopId.totalCount') > 0,
-  )
-  const b1LPop = b1LPop_pop.length
-
-  const b1LTpop_pop = get(data, 'apById.b1LTpop.nodes', [])
-  const b1LTpop_tpop = b1LTpop_pop.flatMap((p) =>
-    get(p, 'tpopsByPopId.nodes', []),
-  )
-
-  const b1LTpop = b1LTpop_tpop
-    .flatMap((p) => get(p, 'tpopbersByTpopId.totalCount', 0))
-    .filter((tpopbersCount) => tpopbersCount > 0).length
-
-  const b1RPop = get(data, 'apById.b1RPop.nodes', []).filter(
-    (p) => get(p, 'popbersByPopId.totalCount') > 0,
-  ).length
-
-  const b1RTpop_pop = get(data, 'apById.b1RTpop.nodes', [])
-  const b1RTpop_tpop = b1RTpop_pop.flatMap((p) =>
-    get(p, 'tpopsByPopId.nodes', []),
-  )
-
-  const b1RTpop = b1RTpop_tpop
-    .flatMap((p) => get(p, 'tpopbersByTpopId.totalCount', 0))
-    .filter((tpopbersCount) => tpopbersCount > 0).length
-  const b1RTpop_tpopbers = b1RTpop_tpop.flatMap((p) =>
-    get(p, 'tpopbersByTpopId.nodes', []),
-  )
-
-  const b1RTpop_firstYear = min(b1RTpop_tpopbers.map((b) => b.jahr))
+  const b1LPop = data?.jberAbc?.nodes?.[0]?.b1LPop
+  const b1LTpop = data?.jberAbc?.nodes?.[0]?.b1LTpop
+  const b1RPop = data?.jberAbc?.nodes?.[0]?.b1RPop
+  const b1RTpop = data?.jberAbc?.nodes?.[0]?.b1RTpop
+  const b1FirstYear = data?.jberAbc?.nodes?.[0]?.b1FirstYear
 
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
@@ -93,7 +65,7 @@ const BMengen = ({ jahr, mengenResult }) => {
       <Title>B. Bestandesentwicklung</Title>
       <YearRow>
         <Year>{jahr}</Year>
-        <YearSince>{`Seit ${loading ? '...' : b1RTpop_firstYear}`}</YearSince>
+        <YearSince>{`Seit ${loading ? '...' : b1FirstYear}`}</YearSince>
       </YearRow>
       <LabelRow>
         <Label1 />

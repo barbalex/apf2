@@ -38,22 +38,64 @@ CREATE TYPE apflora.q_tpop_counted_einheit_multiple_times_in_year AS (
   id uuid,
   nr integer,
   einheit text,
-  anzahl bigint
+  anzahl integer
 );
 
 create type apflora.tpop_kontrolliert_for_jber as (
   year integer,
-  anz_tpop bigint,
-  anz_tpopber bigint
+  anz_tpop integer,
+  anz_tpopber integer
 );
 
 create type apflora.pop_nach_status_for_jber as (
   year integer,
-  a3lpop bigint,
-  a4lpop bigint,
-  a5lpop bigint,
-  a7lpop bigint,
-  a8lpop bigint,
-  a9lpop bigint,
-  a10lpop bigint
+  a3lpop integer,
+  a4lpop integer,
+  a5lpop integer,
+  a7lpop integer,
+  a8lpop integer,
+  a9lpop integer,
+  a10lpop integer
+);
+
+drop type apflora.jber_abc cascade;
+create type apflora.jber_abc as (
+  artname text,
+  ap_id uuid,
+  a_3_l_pop integer,
+  a_3_l_tpop integer,
+  a_4_l_pop integer,
+  a_4_l_tpop integer,
+  a_5_l_pop integer,
+  a_5_l_tpop integer,
+  a_7_l_pop integer,
+  a_7_l_tpop integer,
+  a_8_l_pop integer,
+  a_8_l_tpop integer,
+  a_9_l_pop integer,
+  a_9_l_tpop integer,
+  a_10_l_pop integer,
+  a_10_l_tpop integer,
+  b_1_l_pop integer,
+  b_1_l_tpop integer,
+  b_1_first_year integer,
+  b_1_r_pop integer,
+  b_1_r_tpop integer,
+  c_1_l_pop integer,
+  c_1_l_tpop integer,
+  c_1_r_pop integer,
+  c_1_r_tpop integer,
+  c_1_first_year integer,
+  c_2_r_pop integer,
+  c_2_r_tpop integer,
+  c_3_r_pop integer,
+  c_3_r_tpop integer,
+  c_4_r_pop integer,
+  c_4_r_tpop integer,
+  c_5_r_pop integer,
+  c_5_r_tpop integer,
+  c_6_r_pop integer,
+  c_6_r_tpop integer,
+  c_7_r_pop integer,
+  c_7_r_tpop integer
 );

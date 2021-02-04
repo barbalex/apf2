@@ -1,10 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
-import uniqBy from 'lodash/uniqBy'
-import min from 'lodash/min'
-import groupBy from 'lodash/groupBy'
-import maxBy from 'lodash/maxBy'
 import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`
@@ -82,87 +77,24 @@ const TpopSeit = styled(Number)``
 
 const CMengen = ({ apId, jahr, startJahr, mengenResult }) => {
   const { data, error, loading } = mengenResult
-  const oneLTpop_pop = get(data, 'apById.c1LTpop.nodes', [])
-  const oneLTpop_tpop = oneLTpop_pop
-    .flatMap((p) => get(p, 'tpopsByPopId.nodes', []))
-    .filter((p) => get(p, 'tpopmassnsByTpopId.totalCount', 0) > 0)
-  const oneLTpop = oneLTpop_tpop.length
-  const oneLPop = uniqBy(oneLTpop_tpop, 'popId').length
 
-  const oneRTpop_pop = get(data, 'apById.c1RTpop.nodes', [])
-  const oneRTpop_tpop = oneRTpop_pop.flatMap((p) =>
-    get(p, 'tpopsByPopId.nodes', []),
-  )
-
-  const massns = oneRTpop_tpop.flatMap((p) =>
-    get(p, 'tpopmassnsByTpopId.nodes', []),
-  )
-
-  const massnbers = oneRTpop_tpop.flatMap((p) =>
-    get(p, 'tpopmassnbersByTpopId.nodes', []),
-  )
-
-  const oneRTpop_firstYear = min(massns.map((b) => b.jahr))
-  const oneRPop_massnbersByPopId = groupBy(massnbers, (b) =>
-    get(b, 'tpopByTpopId.popId'),
-  )
-  const oneRPop_lastMassnbersByPopId = Object.keys(
-    oneRPop_massnbersByPopId,
-  ).map((b) => maxBy(oneRPop_massnbersByPopId[b], 'jahr'))
-  const oneRPop_massnbersByTpopId = groupBy(massnbers, (b) =>
-    get(b, 'tpopByTpopId.id'),
-  )
-  const oneRPop_lastMassnbersByTpopId = Object.keys(
-    oneRPop_massnbersByTpopId,
-  ).map((b) => maxBy(oneRPop_massnbersByTpopId[b], 'jahr'))
-
-  // 1.
-  const oneRPop = uniqBy(massns, (b) => get(b, 'tpopByTpopId.popId')).length
-  const oneRTpop = uniqBy(massns, (b) => get(b, 'tpopByTpopId.id')).length
-
-  // 2.
-  const twoRPop = uniqBy(massnbers, (b) => get(b, 'tpopByTpopId.popId')).length
-  const twoRTpop = uniqBy(massnbers, (b) => get(b, 'tpopByTpopId.id')).length
-
-  // 3.
-  const threeRPop = oneRPop_lastMassnbersByPopId.filter(
-    (b) => b.beurteilung === 1,
-  ).length
-  const threeRTpop = oneRPop_lastMassnbersByTpopId.filter(
-    (b) => b.beurteilung === 1,
-  ).length
-
-  // 4.
-  const fourRPop = oneRPop_lastMassnbersByPopId.filter(
-    (b) => b.beurteilung === 2,
-  ).length
-  const fourRTpop = oneRPop_lastMassnbersByTpopId.filter(
-    (b) => b.beurteilung === 2,
-  ).length
-
-  // 5.
-  const fiveRPop = oneRPop_lastMassnbersByPopId.filter(
-    (b) => b.beurteilung === 3,
-  ).length
-  const fiveRTpop = oneRPop_lastMassnbersByTpopId.filter(
-    (b) => b.beurteilung === 3,
-  ).length
-
-  // 6.
-  const sixRPop = oneRPop_lastMassnbersByPopId.filter(
-    (b) => b.beurteilung === 4,
-  ).length
-  const sixRTpop = oneRPop_lastMassnbersByTpopId.filter(
-    (b) => b.beurteilung === 4,
-  ).length
-
-  // 7.
-  const sevenRPop = oneRPop_lastMassnbersByPopId.filter(
-    (b) => b.beurteilung === 5,
-  ).length
-  const sevenRTpop = oneRPop_lastMassnbersByTpopId.filter(
-    (b) => b.beurteilung === 5,
-  ).length
+  const c1LPop = data?.jberAbc?.nodes?.[0]?.c1LPop
+  const c1LTpop = data?.jberAbc?.nodes?.[0]?.c1LTpop
+  const c1RPop = data?.jberAbc?.nodes?.[0]?.c1RPop
+  const c1RTpop = data?.jberAbc?.nodes?.[0]?.c1RTpop
+  const c2RPop = data?.jberAbc?.nodes?.[0]?.c2RPop
+  const c2RTpop = data?.jberAbc?.nodes?.[0]?.c2RTpop
+  const c3RPop = data?.jberAbc?.nodes?.[0]?.c3RPop
+  const c3RTpop = data?.jberAbc?.nodes?.[0]?.c3RTpop
+  const c4RPop = data?.jberAbc?.nodes?.[0]?.c4RPop
+  const c4RTpop = data?.jberAbc?.nodes?.[0]?.c4RTpop
+  const c5RPop = data?.jberAbc?.nodes?.[0]?.c5RPop
+  const c5RTpop = data?.jberAbc?.nodes?.[0]?.c5RTpop
+  const c6RPop = data?.jberAbc?.nodes?.[0]?.c6RPop
+  const c6RTpop = data?.jberAbc?.nodes?.[0]?.c6RTpop
+  const c7RPop = data?.jberAbc?.nodes?.[0]?.c7RPop
+  const c7RTpop = data?.jberAbc?.nodes?.[0]?.c7RTpop
+  const c1FirstYear = data?.jberAbc?.nodes?.[0]?.c1FirstYear
 
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
@@ -171,7 +103,7 @@ const CMengen = ({ apId, jahr, startJahr, mengenResult }) => {
       <Title>C. Zwischenbilanz zur Wirkung von Massnahmen</Title>
       <YearRow>
         <Year>{jahr}</Year>
-        <YearSince>{`Seit ${loading ? '...' : oneRTpop_firstYear}`}</YearSince>
+        <YearSince>{`Seit ${loading ? '...' : c1FirstYear}`}</YearSince>
       </YearRow>
       <LabelRow>
         <Label1 />
@@ -182,53 +114,53 @@ const CMengen = ({ apId, jahr, startJahr, mengenResult }) => {
       </LabelRow>
       <Row>
         <Label1>Anzahl Populationen/Teilpopulationen mit Massnahmen</Label1>
-        <PopBerJahr>{loading ? '...' : oneLPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : oneLTpop}</TpopBerJahr>
-        <PopSeit>{loading ? '...' : oneRPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : oneRTpop}</TpopSeit>
+        <PopBerJahr>{loading ? '...' : c1LPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : c1LTpop}</TpopBerJahr>
+        <PopSeit>{loading ? '...' : c1RPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : c1RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label2>kontrolliert</Label2>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : twoRPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : twoRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : c2RPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : c2RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label2Davon>davon:</Label2Davon>
         <Label2AfterDavon>sehr erfolgreich</Label2AfterDavon>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : threeRPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : threeRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : c3RPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : c3RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>erfolgreich</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : fourRPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : fourRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : c4RPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : c4RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>weniger erfolgreich</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : fiveRPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : fiveRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : c5RPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : c5RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>nicht erfolgreich</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : sixRPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : sixRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : c6RPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : c6RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>mit unsicherer Wirkung</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : sevenRPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : sevenRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : c7RPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : c7RTpop}</TpopSeit>
       </Row>
     </Container>
   )

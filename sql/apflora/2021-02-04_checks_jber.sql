@@ -85,6 +85,7 @@ order by
 select
 	tax.artname,
 	pop.nr as pop_nr,
+	tpop.nr as tpop_nr,
 	massn.jahr
 from
 	apflora.ae_taxonomies tax
