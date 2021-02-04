@@ -326,7 +326,7 @@ with a_3_l_pop as (
     and tpopber.entwicklung is not null
   group by
     pop.ap_id
-), c1LPop as (
+), c_1_l_pop as (
   select
     pop.ap_id,
     count(distinct pop.id) as count
@@ -346,7 +346,7 @@ with a_3_l_pop as (
     and massn.typ is not null
   group by
     pop.ap_id
-), c1LTpop as (
+), c_1_l_tpop as (
   select
     pop.ap_id,
     count(distinct tpop.id) as count
@@ -366,7 +366,7 @@ with a_3_l_pop as (
     and massn.typ is not null
   group by
     pop.ap_id
-), c1RPop as (
+), c_1_r_pop as (
   select
     pop.ap_id,
     count(distinct pop.id) as count
@@ -386,7 +386,7 @@ with a_3_l_pop as (
     and massn.typ is not null
   group by
     pop.ap_id
-), c1RTpop as (
+), c_1_r_tpop as (
   select
     pop.ap_id,
     min(massn.jahr) as first_year,
@@ -409,15 +409,15 @@ with a_3_l_pop as (
     and massn.typ is not null
   group by
     pop.ap_id
-), c2RPop as (
+), c_2_r_pop as (
   select
     pop.ap_id,
     count(distinct pop.id) as count
   from apflora.ap ap
     inner join apflora.pop pop
+      inner join apflora.popmassnber massnber
+      on pop.id = massnber.pop_id
       inner join apflora.tpop tpop
-        inner join apflora.tpopmassnber massnber
-        on tpop.id = massnber.tpop_id
       on pop.id = tpop.pop_id
     on pop.ap_id = ap.id
   where
@@ -426,10 +426,10 @@ with a_3_l_pop as (
     and tpop.status < 300
     and tpop.apber_relevant = true
     and tpop.bekannt_seit <= 2020
-    and massnber.beurteilung is not null
+    and massnber.beurteilung between 1 and 5
   group by
     pop.ap_id
-), c2RTpop as (
+), c_2_r_tpop as (
   select
     pop.ap_id,
     count(distinct tpop.id) as count
@@ -448,7 +448,7 @@ with a_3_l_pop as (
     and tpop.bekannt_seit <= 2020
     and massnber.jahr is not null
     and massnber.jahr <= 2020
-    and massnber.beurteilung is not null
+    and massnber.beurteilung between 1 and 5
   group by
     pop.ap_id
 ), c3RPopLastBer as (
@@ -471,7 +471,7 @@ with a_3_l_pop as (
     and tpop.bekannt_seit <= 2020
     and massnber.jahr is not null
     and massnber.jahr <= 2020
-    and massnber.beurteilung is not null
+    and massnber.beurteilung between 1 and 5
   order by
     pop.ap_id,
     pop.id,
@@ -496,24 +496,80 @@ with a_3_l_pop as (
     and tpop.bekannt_seit <= 2020
     and massnber.jahr is not null
     and massnber.jahr <= 2020
-    and massnber.beurteilung is not null
+    and massnber.beurteilung between 1 and 5
   order by
     pop.ap_id,
     tpop.id,
     massnber.jahr desc
-), c3RPop as (
+), c_3_r_pop as (
   select
     ap_id,
     count(pop_id)
   from c3RPopLastBer
   where beurteilung = 1
   group by ap_id
-), c3RTpop as (
+), c_3_r_tpop as (
   select
     ap_id,
     count(tpop_id)
   from c3RTpopLastBer
   where beurteilung = 1
+  group by ap_id
+), c_4_r_pop as (
+  select
+    ap_id,
+    count(pop_id)
+  from c3RPopLastBer
+  where beurteilung = 2
+  group by ap_id
+), c_4_r_tpop as (
+  select
+    ap_id,
+    count(tpop_id)
+  from c3RTpopLastBer
+  where beurteilung = 2
+  group by ap_id
+), c_5_r_pop as (
+  select
+    ap_id,
+    count(pop_id)
+  from c3RPopLastBer
+  where beurteilung = 3
+  group by ap_id
+), c_5_r_tpop as (
+  select
+    ap_id,
+    count(tpop_id)
+  from c3RTpopLastBer
+  where beurteilung = 3
+  group by ap_id
+), c_6_r_pop as (
+  select
+    ap_id,
+    count(pop_id)
+  from c3RPopLastBer
+  where beurteilung = 4
+  group by ap_id
+), c_6_r_tpop as (
+  select
+    ap_id,
+    count(tpop_id)
+  from c3RTpopLastBer
+  where beurteilung = 4
+  group by ap_id
+), c_7_r_pop as (
+  select
+    ap_id,
+    count(pop_id)
+  from c3RPopLastBer
+  where beurteilung = 5
+  group by ap_id
+), c_7_r_tpop as (
+  select
+    ap_id,
+    count(tpop_id)
+  from c3RTpopLastBer
+  where beurteilung = 5
   group by ap_id
 )
 select
@@ -538,15 +594,23 @@ select
   b_1_r_tpop.first_year as b_1_first_year,
   coalesce(b_1_r_pop.count, 0) as b_1_r_pop,
   coalesce(b_1_r_tpop.count, 0) as b_1_r_tpop,
-  coalesce(c1LPop.count, 0) as c_1_l_pop,
-  coalesce(c1LTpop.count, 0) as c_1_l_tpop,
-  coalesce(c1RPop.count, 0) as c_1_r_pop,
-  coalesce(c1RTpop.count, 0) as c_1_r_tpop,
-  c1RTpop.first_year as C_1_first_year,
-  coalesce(c2RPop.count, 0) as c_2_r_pop,
-  coalesce(c2RTpop.count, 0) as c_2_r_tpop,
-  coalesce(c3RPop.count, 0) as c_3_r_pop,
-  coalesce(c3RTpop.count, 0) as c_3_r_tpop
+  coalesce(c_1_l_pop.count, 0) as c_1_l_pop,
+  coalesce(c_1_l_tpop.count, 0) as c_1_l_tpop,
+  coalesce(c_1_r_pop.count, 0) as c_1_r_pop,
+  coalesce(c_1_r_tpop.count, 0) as c_1_r_tpop,
+  c_1_r_tpop.first_year as C_1_first_year,
+  coalesce(c_2_r_pop.count, 0) as c_2_r_pop,
+  coalesce(c_2_r_tpop.count, 0) as c_2_r_tpop,
+  coalesce(c_3_r_pop.count, 0) as c_3_r_pop,
+  coalesce(c_3_r_tpop.count, 0) as c_3_r_tpop,
+  coalesce(c_4_r_pop.count, 0) as c_4_r_pop,
+  coalesce(c_4_r_tpop.count, 0) as c_4_r_tpop,
+  coalesce(c_5_r_pop.count, 0) as c_5_r_pop,
+  coalesce(c_5_r_tpop.count, 0) as c_5_r_tpop,
+  coalesce(c_6_r_pop.count, 0) as c_6_r_pop,
+  coalesce(c_6_r_tpop.count, 0) as c_6_r_tpop,
+  coalesce(c_7_r_pop.count, 0) as c_7_r_pop,
+  coalesce(c_7_r_tpop.count, 0) as c_7_r_tpop
 from apflora.ap
   left join a_3_l_pop on
   a_3_l_pop.ap_id = ap.id
@@ -584,22 +648,38 @@ from apflora.ap
   b_1_r_pop.ap_id = ap.id
   left join b_1_r_tpop on
   b_1_r_tpop.ap_id = ap.id
-  left join c1LPop on
-  c1LPop.ap_id = ap.id
-  left join c1LTpop on
-  c1LTpop.ap_id = ap.id
-  left join c1RPop on
-  c1RPop.ap_id = ap.id
-  left join c1RTpop on
-  c1RTpop.ap_id = ap.id
-  left join c2RPop on
-  c2RPop.ap_id = ap.id
-  left join c2RTpop on
-  c2RTpop.ap_id = ap.id
-  left join c3RPop on
-  c3RPop.ap_id = ap.id
-  left join c3RTpop on
-  c3RTpop.ap_id = ap.id
+  left join c_1_l_pop on
+  c_1_l_pop.ap_id = ap.id
+  left join c_1_l_tpop on
+  c_1_l_tpop.ap_id = ap.id
+  left join c_1_r_pop on
+  c_1_r_pop.ap_id = ap.id
+  left join c_1_r_tpop on
+  c_1_r_tpop.ap_id = ap.id
+  left join c_2_r_pop on
+  c_2_r_pop.ap_id = ap.id
+  left join c_2_r_tpop on
+  c_2_r_tpop.ap_id = ap.id
+  left join c_3_r_pop on
+  c_3_r_pop.ap_id = ap.id
+  left join c_3_r_tpop on
+  c_3_r_tpop.ap_id = ap.id
+  left join c_4_r_pop on
+  c_4_r_pop.ap_id = ap.id
+  left join c_4_r_tpop on
+  c_4_r_tpop.ap_id = ap.id
+  left join c_5_r_pop on
+  c_5_r_pop.ap_id = ap.id
+  left join c_5_r_tpop on
+  c_5_r_tpop.ap_id = ap.id
+  left join c_6_r_pop on
+  c_6_r_pop.ap_id = ap.id
+  left join c_6_r_tpop on
+  c_6_r_tpop.ap_id = ap.id
+  left join c_7_r_pop on
+  c_7_r_pop.ap_id = ap.id
+  left join c_7_r_tpop on
+  c_7_r_tpop.ap_id = ap.id
   inner join apflora.ae_taxonomies tax
   on tax.id = ap.art_id
 where
