@@ -29,7 +29,7 @@ const Value = styled.div``
 const colorUrspruenglich = '#2e7d32'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 
-const CustomTooltip = ({ payload, label, active, popsData }) => {
+const CustomTooltip = ({ payload = [], label, active, popsData }) => {
   const payloadSorted = sortBy(payload, (p) => {
     const pop = popsData.find((d) => d.id === p.dataKey)
     if (pop) return pop.nr

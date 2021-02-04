@@ -21,7 +21,7 @@ const CustomTick = ({ payload, x, y, textAnchor, stroke, radius }) => {
         textAnchor={textAnchor}
       >
         <tspan x={x} dy="0.3em">
-          {labelFromValue[payload.value]}
+          {labelFromValue[payload?.value]}
         </tspan>
       </text>
     </g>
