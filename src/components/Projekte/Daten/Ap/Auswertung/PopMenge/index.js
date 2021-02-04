@@ -72,17 +72,23 @@ const formatNumber = (tickItem) => {
   return value
 }
 
-const ApAuswertungPopMenge = ({ id, height = 400, print }) => {
+const ApAuswertungPopMenge = ({
+  id,
+  height = 400,
+  print,
+  jahr: jahrPassed,
+}) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
+  const jahr = jahrPassed ?? new Date().getFullYear()
   const {
     data: dataPopMenge,
     error: errorPopMenge,
     loading: loadingPopMenge,
     refetch: refetchPopMenge,
   } = useQuery(queryPopMenge, {
-    variables: { id },
+    variables: { id, jahr },
   })
 
   const popsData = get(dataPopMenge, 'allPops.nodes') || []

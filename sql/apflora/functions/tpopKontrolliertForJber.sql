@@ -15,7 +15,15 @@ CREATE OR REPLACE FUNCTION apflora.tpop_kontrolliert_for_jber(apid uuid)
   WHERE
     pop.ap_id = $1
     and pop.status < 300
+    and (
+      pop.bekannt_seit <= pop.year
+      or pop.bekannt_seit is null
+    )
     and tpop.status < 300
+    and (
+      tpop.bekannt_seit <= tpop.year
+      or tpop.bekannt_seit is null
+    )
     and tpop.apber_relevant = true
   group BY pop.year
   order by pop.year

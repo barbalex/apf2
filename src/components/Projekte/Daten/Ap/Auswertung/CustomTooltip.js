@@ -26,7 +26,7 @@ const Label = styled.div`
 `
 const Value = styled.div``
 
-const CustomTooltip = ({ payload, label, active, color, reverse }) => {
+const CustomTooltip = ({ payload = [], label, active, color, reverse }) => {
   const data = reverse ? payload : payload?.reverse() ?? []
 
   return (

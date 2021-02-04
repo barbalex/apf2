@@ -9,7 +9,15 @@ create or replace function apflora.pop_nach_status_for_jber(apid uuid)
       on tpop.pop_id = pop.id and tpop.year = pop.year
     where
       pop.ap_id = $1
+      and (
+        pop.bekannt_seit <= pop.year
+        or pop.bekannt_seit is null
+      )
       and tpop.apber_relevant = true
+      and (
+        tpop.bekannt_seit <= tpop.year
+        or tpop.bekannt_seit is null
+      )
     order by pop.year
   ), a3lpop as (
     select
@@ -20,8 +28,16 @@ create or replace function apflora.pop_nach_status_for_jber(apid uuid)
       on tpop.pop_id = pop.id and tpop.year = pop.year
     where
       pop.ap_id = $1
+      and (
+        pop.bekannt_seit <= pop.year
+        or pop.bekannt_seit is null
+      )
       and pop.status = 100
       and tpop.apber_relevant = true
+      and (
+        tpop.bekannt_seit <= tpop.year
+        or tpop.bekannt_seit is null
+      )
     group by pop.year
   ), a4lpop as (
     select
@@ -34,10 +50,18 @@ create or replace function apflora.pop_nach_status_for_jber(apid uuid)
       on ap.id = pop.ap_id and ap.year = pop.year
     where
       pop.ap_id = $1
+      and (
+        pop.bekannt_seit <= pop.year
+        or pop.bekannt_seit is null
+      )
       and pop.status = 200
       and ap.start_jahr is not null
       and pop.bekannt_seit < ap.start_jahr
       and tpop.apber_relevant = true
+      and (
+        tpop.bekannt_seit <= tpop.year
+        or tpop.bekannt_seit is null
+      )
     group by pop.year
   ), a5lpop as (
     select
@@ -50,10 +74,18 @@ create or replace function apflora.pop_nach_status_for_jber(apid uuid)
       on ap.id = pop.ap_id and ap.year = pop.year
     where
       pop.ap_id = $1
+      and (
+        pop.bekannt_seit <= pop.year
+        or pop.bekannt_seit is null
+      )
       and pop.status = 200
       and ap.start_jahr is not null
       and pop.bekannt_seit >= ap.start_jahr
       and tpop.apber_relevant = true
+      and (
+        tpop.bekannt_seit <= tpop.year
+        or tpop.bekannt_seit is null
+      )
     group by pop.year
   ), a7lpop as (
     select
@@ -66,7 +98,15 @@ create or replace function apflora.pop_nach_status_for_jber(apid uuid)
       on ap.id = pop.ap_id and ap.year = pop.year
     where
       pop.ap_id = $1
+      and (
+        pop.bekannt_seit <= pop.year
+        or pop.bekannt_seit is null
+      )
       and tpop.apber_relevant = true
+      and (
+        tpop.bekannt_seit <= tpop.year
+        or tpop.bekannt_seit is null
+      )
       and (
         pop.status = 101
         or (
@@ -90,10 +130,18 @@ create or replace function apflora.pop_nach_status_for_jber(apid uuid)
       on ap.id = pop.ap_id and ap.year = pop.year
     where
       pop.ap_id = $1
+      and (
+        pop.bekannt_seit <= pop.year
+        or pop.bekannt_seit is null
+      )
       and pop.status = 202
       and ap.start_jahr is not null
       and pop.bekannt_seit >= ap.start_jahr
       and tpop.apber_relevant = true
+      and (
+        tpop.bekannt_seit <= tpop.year
+        or tpop.bekannt_seit is null
+      )
     group by pop.year
   ), a9lpop as (
     select
@@ -104,17 +152,36 @@ create or replace function apflora.pop_nach_status_for_jber(apid uuid)
       on tpop.pop_id = pop.id and tpop.year = pop.year
     where
       pop.ap_id = $1
+      and (
+        pop.bekannt_seit <= pop.year
+        or pop.bekannt_seit is null
+      )
       and pop.status = 201
       and tpop.apber_relevant = true
+      and (
+        tpop.bekannt_seit <= tpop.year
+        or tpop.bekannt_seit is null
+      )
     group by pop.year
   ), a10lpop as (
     select
       pop.year,
       count(distinct pop.id) as a10lpop
     from apflora.pop_history pop
+      inner join apflora.tpop_history tpop
+      on tpop.pop_id = pop.id and tpop.year = pop.year
     where
       pop.ap_id = $1
+      and (
+        pop.bekannt_seit <= pop.year
+        or pop.bekannt_seit is null
+      )
       and pop.status = 300
+      and tpop.apber_relevant = true
+      and (
+        tpop.bekannt_seit <= tpop.year
+        or tpop.bekannt_seit is null
+      )
     group by pop.year
   )
   select

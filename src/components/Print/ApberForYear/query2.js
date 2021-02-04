@@ -30,10 +30,25 @@ export default gql`
         adresseByBearbeiter {
           ...AdresseFields
         }
-        popsByApId {
+        popsByApId(
+          filter: {
+            or: [
+              { bekanntSeit: { lessThanOrEqualTo: $jahr } }
+              { bekanntSeit: { isNull: true } }
+            ]
+          }
+        ) {
           nodes {
             id
-            tpopsByPopId(condition: { apberRelevant: true }) {
+            tpopsByPopId(
+              filter: {
+                apberRelevant: { equalTo: true }
+                or: [
+                  { bekanntSeit: { lessThanOrEqualTo: $jahr } }
+                  { bekanntSeit: { isNull: true } }
+                ]
+              }
+            ) {
               nodes {
                 id
                 apberRelevant

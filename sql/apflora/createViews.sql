@@ -5156,9 +5156,7 @@ group by ap_id, year
 order by ap_id, year;
 
 -- refresh materialized view apflora.v_ap_ausw_pop_menge;
--- ACHTUNG: Original dieses Views in 2020-03-26_zielrelev_einheit_pro_pop_und_jahr.sql
-DROP materialized VIEW IF EXISTS apflora.v_ap_ausw_pop_menge CASCADE;
-CREATE materialized VIEW apflora.v_ap_ausw_pop_menge AS
+-- ACHTUNG: Original dieses Views in 2020-03-26_zielrelev_einheit_pro_pop_und_jahr.sql > 2021-02-04_zielrelev_einheit_pro_pop_und_jahr
 with
 massnjahre as (
   select distinct on (tpop0.id, massn0.jahr)
@@ -5259,6 +5257,15 @@ pop_data as (
   where
     pop4.status in (100, 200, 201)
 	  and tplm.anzahl is not null
+    and (
+      pop4.bekannt_seit <= pop4.year
+      or pop4.bekannt_seit is null
+    )
+    and (
+      tpop4.bekannt_seit <= tpop4.year
+      or tpop4.bekannt_seit is null
+    )
+    and tpop4.apber_relevant = true
   group by
     ap4.id,
     pop4.year,

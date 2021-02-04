@@ -353,7 +353,7 @@ const ApberForAp = ({
             <PopStatus id={apId} height={250} print />
           </ChartContainer>
           <ChartContainer>
-            <PopMenge id={apId} height={250} print />
+            <PopMenge id={apId} jahr={jahr} height={250} print />
           </ChartContainer>
           {!!apber.biotopeOptimieren && (
             <FieldRowFullWidth>

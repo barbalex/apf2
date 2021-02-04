@@ -103,6 +103,7 @@ const AktPopList = ({ year }) => {
     variables: {
       projektId,
       previousYear,
+      jahr: year,
     },
   })
   const aps = get(data, 'allAps.nodes', [])
