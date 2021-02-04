@@ -282,25 +282,6 @@ with a3LPop as (
     and tpop.bekannt_seit <= 2020
   group by
     pop.ap_id
-), b1LFirstYear as (
-  select
-    pop.ap_id,
-    min(tpopber.jahr) as jahr
-  from apflora.ap ap
-    inner join apflora.pop pop
-      inner join apflora.tpop tpop
-        inner join apflora.tpopber tpopber
-        on tpop.id = tpopber.tpop_id
-      on pop.id = tpop.pop_id
-    on pop.ap_id = ap.id
-  where
-    pop.status < 300
-    and pop.bekannt_seit <= 2020
-    and tpop.status < 300
-    and tpop.apber_relevant = true
-    and tpop.bekannt_seit <= 2020
-  group by
-    pop.ap_id
 ), b1RPop as (
   select
     pop.ap_id,
@@ -325,6 +306,7 @@ with a3LPop as (
 ), b1RTpop as (
   select
     pop.ap_id,
+    min(tpopber.jahr) as first_year,
     count(distinct tpop.id) as count
   from apflora.ap ap
     inner join apflora.pop pop
@@ -342,6 +324,131 @@ with a3LPop as (
     and tpopber.jahr is not null
     and tpopber.jahr <= 2020
     and tpopber.entwicklung is not null
+  group by
+    pop.ap_id
+), c1LPop as (
+  select
+    pop.ap_id,
+    count(distinct pop.id) as count
+  from apflora.ap ap
+    inner join apflora.pop pop
+      inner join apflora.tpop tpop
+        inner join apflora.tpopmassn massn
+        on tpop.id = massn.tpop_id and massn.jahr = 2020
+      on pop.id = tpop.pop_id
+    on pop.ap_id = ap.id
+  where
+    pop.status < 300
+    and pop.bekannt_seit <= 2020
+    and tpop.status < 300
+    and tpop.apber_relevant = true
+    and tpop.bekannt_seit <= 2020
+    and massn.typ is not null
+  group by
+    pop.ap_id
+), c1LTpop as (
+  select
+    pop.ap_id,
+    count(distinct tpop.id) as count
+  from apflora.ap ap
+    inner join apflora.pop pop
+      inner join apflora.tpop tpop
+        inner join apflora.tpopmassn massn
+        on tpop.id = massn.tpop_id and massn.jahr = 2020
+      on pop.id = tpop.pop_id
+    on pop.ap_id = ap.id
+  where
+    pop.status < 300
+    and pop.bekannt_seit <= 2020
+    and tpop.status < 300
+    and tpop.apber_relevant = true
+    and tpop.bekannt_seit <= 2020
+    and massn.typ is not null
+  group by
+    pop.ap_id
+), c1RPop as (
+  select
+    pop.ap_id,
+    count(distinct pop.id) as count
+  from apflora.ap ap
+    inner join apflora.pop pop
+      inner join apflora.tpop tpop
+        inner join apflora.tpopmassn massn
+        on tpop.id = massn.tpop_id
+      on pop.id = tpop.pop_id
+    on pop.ap_id = ap.id
+  where
+    pop.status < 300
+    and pop.bekannt_seit <= 2020
+    and tpop.status < 300
+    and tpop.apber_relevant = true
+    and tpop.bekannt_seit <= 2020
+    and massn.typ is not null
+  group by
+    pop.ap_id
+), c1RTpop as (
+  select
+    pop.ap_id,
+    min(massn.jahr) as first_year,
+    count(distinct tpop.id) as count
+  from apflora.ap ap
+    inner join apflora.pop pop
+      inner join apflora.tpop tpop
+        inner join apflora.tpopmassn massn
+        on tpop.id = massn.tpop_id
+      on pop.id = tpop.pop_id
+    on pop.ap_id = ap.id
+  where
+    pop.status < 300
+    and pop.bekannt_seit <= 2020
+    and tpop.status < 300
+    and tpop.apber_relevant = true
+    and tpop.bekannt_seit <= 2020
+    and massn.jahr is not null
+    and massn.jahr <= 2020
+    and massn.typ is not null
+  group by
+    pop.ap_id
+), c2RPop as (
+  select
+    pop.ap_id,
+    count(distinct pop.id) as count
+  from apflora.ap ap
+    inner join apflora.pop pop
+      inner join apflora.tpop tpop
+        inner join apflora.tpopmassnber massnber
+        on tpop.id = massnber.tpop_id
+      on pop.id = tpop.pop_id
+    on pop.ap_id = ap.id
+  where
+    pop.status < 300
+    and pop.bekannt_seit <= 2020
+    and tpop.status < 300
+    and tpop.apber_relevant = true
+    and tpop.bekannt_seit <= 2020
+    and massnber.beurteilung is not null
+  group by
+    pop.ap_id
+), c2RTpop as (
+  select
+    pop.ap_id,
+    count(distinct tpop.id) as count
+  from apflora.ap ap
+    inner join apflora.pop pop
+      inner join apflora.tpop tpop
+        inner join apflora.tpopmassnber massnber
+        on tpop.id = massnber.tpop_id
+      on pop.id = tpop.pop_id
+    on pop.ap_id = ap.id
+  where
+    pop.status < 300
+    and pop.bekannt_seit <= 2020
+    and tpop.status < 300
+    and tpop.apber_relevant = true
+    and tpop.bekannt_seit <= 2020
+    and massnber.jahr is not null
+    and massnber.jahr <= 2020
+    and massnber.beurteilung is not null
   group by
     pop.ap_id
 )
@@ -364,9 +471,16 @@ select
   coalesce(a10LTpop.count, 0) as a_10_l_tpop,
   coalesce(b1LPop.count, 0) as b_1_l_pop,
   coalesce(b1LTpop.count, 0) as b_1_l_tpop,
-  coalesce(b1LFirstYear.jahr, 0) as b_1_first_year,
+  b1RTpop.first_year as b_1_first_year,
   coalesce(b1RPop.count, 0) as b_1_r_pop,
-  coalesce(b1RTpop.count, 0) as b_1_r_tpop
+  coalesce(b1RTpop.count, 0) as b_1_r_tpop,
+  coalesce(c1LPop.count, 0) as c_1_l_pop,
+  coalesce(c1LTpop.count, 0) as c_1_l_tpop,
+  coalesce(c1RPop.count, 0) as c_1_r_pop,
+  coalesce(c1RTpop.count, 0) as c_1_r_tpop,
+  c1RTpop.first_year as C_1_first_year,
+  coalesce(c2RPop.count, 0) as c_2_r_pop,
+  coalesce(c2RTpop.count, 0) as c_2_r_tpop
 from apflora.ap
   left join a3LPop on
   a3LPop.ap_id = ap.id
@@ -400,12 +514,22 @@ from apflora.ap
   b1LPop.ap_id = ap.id
   left join b1LTpop on
   b1LTpop.ap_id = ap.id
-  left join b1LFirstYear on
-  b1LFirstYear.ap_id = ap.id
   left join b1RPop on
   b1RPop.ap_id = ap.id
   left join b1RTpop on
   b1RTpop.ap_id = ap.id
+  left join c1LPop on
+  c1LPop.ap_id = ap.id
+  left join c1LTpop on
+  c1LTpop.ap_id = ap.id
+  left join c1RPop on
+  c1RPop.ap_id = ap.id
+  left join c1RTpop on
+  c1RTpop.ap_id = ap.id
+  left join c2RPop on
+  c2RPop.ap_id = ap.id
+  left join c2RTpop on
+  c2RTpop.ap_id = ap.id
   inner join apflora.ae_taxonomies tax
   on tax.id = ap.art_id
 where
