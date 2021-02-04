@@ -100,14 +100,8 @@ pop_data as (
   where
     pop4.status in (100, 200, 201)
 	  and tplm.anzahl is not null
-    and (
-      pop4.bekannt_seit <= pop4.year
-      or pop4.bekannt_seit is null
-    )
-    and (
-      tpop4.bekannt_seit <= tpop4.year
-      or tpop4.bekannt_seit is null
-    )
+    and pop4.bekannt_seit <= pop4.year
+    and tpop4.bekannt_seit <= tpop4.year
     and tpop4.apber_relevant = true
   group by
     ap4.id,

@@ -18,10 +18,7 @@ export default gql`
         pops100: popsByApId(
           filter: {
             status: { equalTo: 100 }
-            or: [
-              { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-              { bekanntSeit: { isNull: true } }
-            ]
+            bekanntSeit: { lessThanOrEqualTo: $jahr }
           }
         ) {
           nodes {
@@ -29,10 +26,7 @@ export default gql`
             tpopsByPopId(
               filter: {
                 apberRelevant: { equalTo: true }
-                or: [
-                  { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                  { bekanntSeit: { isNull: true } }
-                ]
+                bekanntSeit: { lessThanOrEqualTo: $jahr }
               }
             ) {
               totalCount
@@ -43,10 +37,7 @@ export default gql`
           filter: {
             year: { equalTo: $previousYear }
             status: { equalTo: 100 }
-            or: [
-              { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-              { bekanntSeit: { isNull: true } }
-            ]
+            bekanntSeit: { lessThanOrEqualTo: $jahr }
           }
         ) {
           nodes {
@@ -55,10 +46,7 @@ export default gql`
               filter: {
                 year: { equalTo: $previousYear }
                 apberRelevant: { equalTo: true }
-                or: [
-                  { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                  { bekanntSeit: { isNull: true } }
-                ]
+                bekanntSeit: { lessThanOrEqualTo: $jahr }
               }
             ) {
               totalCount
@@ -68,10 +56,7 @@ export default gql`
         pops200: popsByApId(
           filter: {
             status: { equalTo: 200 }
-            or: [
-              { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-              { bekanntSeit: { isNull: true } }
-            ]
+            bekanntSeit: { lessThanOrEqualTo: $jahr }
           }
         ) {
           nodes {
@@ -79,10 +64,7 @@ export default gql`
             tpopsByPopId(
               filter: {
                 apberRelevant: { equalTo: true }
-                or: [
-                  { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                  { bekanntSeit: { isNull: true } }
-                ]
+                bekanntSeit: { lessThanOrEqualTo: $jahr }
               }
             ) {
               totalCount
@@ -93,10 +75,7 @@ export default gql`
           filter: {
             year: { equalTo: $previousYear }
             status: { equalTo: 200 }
-            or: [
-              { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-              { bekanntSeit: { isNull: true } }
-            ]
+            bekanntSeit: { lessThanOrEqualTo: $jahr }
           }
         ) {
           nodes {
@@ -105,10 +84,7 @@ export default gql`
               filter: {
                 year: { equalTo: $previousYear }
                 apberRelevant: { equalTo: true }
-                or: [
-                  { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                  { bekanntSeit: { isNull: true } }
-                ]
+                bekanntSeit: { lessThanOrEqualTo: $jahr }
               }
             ) {
               totalCount

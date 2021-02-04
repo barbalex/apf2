@@ -1061,6 +1061,7 @@ CREATE INDEX ON apflora.tpop USING btree (flurname);
 CREATE INDEX ON apflora.tpop USING btree (ekfrequenz);
 CREATE INDEX ON apflora.tpop USING btree (ekfrequenz_abweichend);
 CREATE INDEX ON apflora.tpop USING btree (ekf_kontrolleur);
+CREATE INDEX ON apflora.tpop USING btree (bekannt_seit);
 COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.tpop.nr IS 'Nummer der Teilpopulation';

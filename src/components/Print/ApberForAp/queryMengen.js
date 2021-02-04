@@ -9,17 +9,11 @@ export default gql`
       a3LPop: popsByApId(
         filter: {
           status: { equalTo: 100 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
           tpopsByPopId: {
             some: {
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           }
         }
@@ -29,10 +23,7 @@ export default gql`
       a3LTpop: popsByApId(
         filter: {
           status: { lessThan: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
         }
       ) {
         nodes {
@@ -41,10 +32,7 @@ export default gql`
             filter: {
               status: { equalTo: 100 }
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           ) {
             totalCount
@@ -54,18 +42,14 @@ export default gql`
       a4LPop: popsByApId(
         filter: {
           status: { equalTo: 200 }
-          bekanntSeit: { lessThan: $startJahr }
-          or: [
+          and: [
+            { bekanntSeit: { lessThan: $startJahr } }
             { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
           ]
           tpopsByPopId: {
             some: {
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           }
         }
@@ -75,10 +59,7 @@ export default gql`
       a4LTpop: popsByApId(
         filter: {
           status: { lessThan: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
         }
       ) {
         nodes {
@@ -87,10 +68,9 @@ export default gql`
             filter: {
               status: { equalTo: 200 }
               apberRelevant: { equalTo: true }
-              bekanntSeit: { lessThan: $startJahr }
-              or: [
+              and: [
+                { bekanntSeit: { lessThan: $startJahr } }
                 { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
               ]
             }
           ) {
@@ -101,17 +81,16 @@ export default gql`
       a5LPop: popsByApId(
         filter: {
           status: { equalTo: 200 }
-          bekanntSeit: { greaterThanOrEqualTo: $startJahr }
-          or: [
+          and: [
+            { bekanntSeit: { greaterThanOrEqualTo: $startJahr } }
             { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
           ]
           tpopsByPopId: {
             some: {
               apberRelevant: { equalTo: true }
-              or: [
+              and: [
+                { bekanntSeit: { greaterThanOrEqualTo: $startJahr } }
                 { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
               ]
             }
           }
@@ -122,10 +101,7 @@ export default gql`
       a5LTpop: popsByApId(
         filter: {
           status: { lessThan: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
         }
       ) {
         nodes {
@@ -134,10 +110,9 @@ export default gql`
             filter: {
               status: { equalTo: 200 }
               apberRelevant: { equalTo: true }
-              bekanntSeit: { greaterThanOrEqualTo: $startJahr }
-              or: [
+              and: [
+                { bekanntSeit: { greaterThanOrEqualTo: $startJahr } }
                 { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
               ]
             }
           ) {
@@ -147,41 +122,17 @@ export default gql`
       }
       a7LPop: popsByApId(
         filter: {
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
+          or: [
+            { status: { equalTo: 101 } }
+            { status: { equalTo: 202 }, bekanntSeit: { lessThan: $startJahr } }
+          ]
           tpopsByPopId: {
             some: {
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           }
-          or: [
-            {
-              status: { equalTo: 101 }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
-            }
-            {
-              and: [
-                { status: { equalTo: 202 } }
-                {
-                  or: [
-                    { bekanntSeit: { isNull: true } }
-                    { bekanntSeit: { lessThan: $startJahr } }
-                  ]
-                }
-                {
-                  or: [
-                    { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                    { bekanntSeit: { isNull: true } }
-                  ]
-                }
-              ]
-            }
-          ]
         }
       ) {
         totalCount
@@ -189,35 +140,20 @@ export default gql`
       a7LTpop: popsByApId(
         filter: {
           status: { lessThan: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
         }
       ) {
         nodes {
           id
           tpopsByPopId(
             filter: {
-              and: [
-                { apberRelevant: { equalTo: true } }
+              apberRelevant: { equalTo: true }
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
+              or: [
+                { status: { equalTo: 101 } }
                 {
-                  or: [
-                    { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                    { bekanntSeit: { isNull: true } }
-                  ]
-                }
-                {
-                  or: [
-                    { status: { equalTo: 101 } }
-                    {
-                      status: { equalTo: 202 }
-                      or: [
-                        { bekanntSeit: { isNull: true } }
-                        { bekanntSeit: { lessThan: $startJahr } }
-                      ]
-                    }
-                  ]
+                  status: { equalTo: 202 }
+                  bekanntSeit: { lessThan: $startJahr }
                 }
               ]
             }
@@ -229,18 +165,14 @@ export default gql`
       a8LPop: popsByApId(
         filter: {
           status: { equalTo: 202 }
-          bekanntSeit: { greaterThanOrEqualTo: $startJahr }
-          or: [
+          and: [
+            { bekanntSeit: { greaterThanOrEqualTo: $startJahr } }
             { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
           ]
           tpopsByPopId: {
             some: {
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           }
         }
@@ -250,10 +182,7 @@ export default gql`
       a8LTpop: popsByApId(
         filter: {
           status: { lessThan: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
         }
       ) {
         nodes {
@@ -261,11 +190,10 @@ export default gql`
           tpopsByPopId(
             filter: {
               status: { equalTo: 202 }
-              bekanntSeit: { greaterThanOrEqualTo: $startJahr }
               apberRelevant: { equalTo: true }
-              or: [
+              and: [
+                { bekanntSeit: { greaterThanOrEqualTo: $startJahr } }
                 { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
               ]
             }
           ) {
@@ -276,17 +204,11 @@ export default gql`
       a9LPop: popsByApId(
         filter: {
           status: { equalTo: 201 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
           tpopsByPopId: {
             some: {
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           }
         }
@@ -294,12 +216,7 @@ export default gql`
         totalCount
       }
       a9LTpop: popsByApId(
-        filter: {
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
-        }
+        filter: { bekanntSeit: { lessThanOrEqualTo: $jahr } }
       ) {
         nodes {
           id
@@ -307,10 +224,7 @@ export default gql`
             filter: {
               status: { equalTo: 201 }
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           ) {
             totalCount
@@ -320,10 +234,7 @@ export default gql`
       a10LPop: popsByApId(
         filter: {
           status: { equalTo: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
         }
       ) {
         totalCount
@@ -335,10 +246,7 @@ export default gql`
             filter: {
               status: { equalTo: 300 }
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           ) {
             totalCount
@@ -348,17 +256,11 @@ export default gql`
       b1LPop: popsByApId(
         filter: {
           status: { lessThan: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
           tpopsByPopId: {
             some: {
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           }
         }
@@ -376,10 +278,7 @@ export default gql`
       b1LTpop: popsByApId(
         filter: {
           status: { lessThan: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
         }
       ) {
         nodes {
@@ -388,10 +287,7 @@ export default gql`
             filter: {
               status: { lessThan: 300 }
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           ) {
             totalCount
@@ -410,17 +306,11 @@ export default gql`
       b1RPop: popsByApId(
         filter: {
           status: { lessThan: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
           tpopsByPopId: {
             some: {
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           }
         }
@@ -443,10 +333,7 @@ export default gql`
       b1RTpop: popsByApId(
         filter: {
           status: { lessThan: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
         }
       ) {
         nodes {
@@ -455,10 +342,7 @@ export default gql`
             filter: {
               status: { lessThan: 300 }
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           ) {
             totalCount
@@ -485,10 +369,7 @@ export default gql`
       c1LTpop: popsByApId(
         filter: {
           status: { lessThan: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
         }
       ) {
         nodes {
@@ -497,10 +378,7 @@ export default gql`
             filter: {
               status: { lessThan: 300 }
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           ) {
             totalCount
@@ -517,10 +395,7 @@ export default gql`
       c1RTpop: popsByApId(
         filter: {
           status: { lessThan: 300 }
-          or: [
-            { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-            { bekanntSeit: { isNull: true } }
-          ]
+          bekanntSeit: { lessThanOrEqualTo: $jahr }
         }
       ) {
         nodes {
@@ -529,10 +404,7 @@ export default gql`
             filter: {
               status: { lessThan: 300 }
               apberRelevant: { equalTo: true }
-              or: [
-                { bekanntSeit: { lessThanOrEqualTo: $jahr } }
-                { bekanntSeit: { isNull: true } }
-              ]
+              bekanntSeit: { lessThanOrEqualTo: $jahr }
             }
           ) {
             totalCount
