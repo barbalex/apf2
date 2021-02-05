@@ -120,18 +120,6 @@ const ProjektContainer = ({
     setDimensions()
   }, [tabs.length, isPrint, setDimensions])
 
-  if (isPrint && showApberForAp) {
-    return <ApberForApFromAp />
-  }
-
-  if (isPrint && showApberForYear) {
-    return <ApberForYear />
-  }
-
-  if (isPrint) {
-    return <Daten treeName={treeName} nodes={nodes} />
-  }
-
   const elObj = {
     tree: (
       <InnerContainer ref={treeEl}>
@@ -167,7 +155,9 @@ const ProjektContainer = ({
 
   const paneSize = tabs[0] === 'tree' ? '33%' : '50%'
 
-  if (showApberForAp) {
+  if (showApberForYear) {
+    const component = <ApberForYear />
+    if (isPrint) return component
     return (
       <Container data-appbar-height={appBarHeight}>
         <StyledSplitPane
@@ -179,15 +169,15 @@ const ProjektContainer = ({
           data-height={height}
         >
           {elObj.tree}
-          <InnerContainer>
-            <ApberForApFromAp />
-          </InnerContainer>
+          {component}
         </StyledSplitPane>
       </Container>
     )
   }
 
-  if (showApberForYear) {
+  if (showApberForAp) {
+    const component = <ApberForApFromAp />
+    if (isPrint) return component
     return (
       <Container data-appbar-height={appBarHeight}>
         <StyledSplitPane
@@ -199,10 +189,14 @@ const ProjektContainer = ({
           data-height={height}
         >
           {elObj.tree}
-          <ApberForYear />
+          <InnerContainer>{component}</InnerContainer>
         </StyledSplitPane>
       </Container>
     )
+  }
+
+  if (isPrint) {
+    return <Daten treeName={treeName} nodes={nodes} />
   }
 
   if (tabs.length < 2) {

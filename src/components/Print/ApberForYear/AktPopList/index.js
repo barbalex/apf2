@@ -160,7 +160,7 @@ const AktPopList = ({ year }) => {
     return `Fehler: ${dataError.message}`
   }
 
-  if (loading) {
+  /*if (loading) {
     return (
       <ErrorBoundary>
         <Container>
@@ -169,7 +169,7 @@ const AktPopList = ({ year }) => {
         </Container>
       </ErrorBoundary>
     )
-  }
+  }*/
 
   return (
     <ErrorBoundary>

@@ -20,10 +20,6 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
-const LoadingContainer = styled.div`
-  padding: 15px;
-  height: 100%;
-`
 const Container = styled.div`
   /* this part is for when page preview is shown */
   /* Divide single pages with some space and center all pages horizontally */
@@ -118,27 +114,22 @@ const ApberForYear = () => {
     apberuebersichtIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const projektId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const { data: data1, loading: data1Loading, error: data1Error } = useQuery(
-    query1,
-    {
-      variables: {
-        apberuebersichtId,
-      },
+  const { data: data1, error: data1Error } = useQuery(query1, {
+    variables: {
+      apberuebersichtId,
     },
-  )
+  })
   const jahr = get(data1, 'apberuebersichtById.jahr', 0)
-  const { data: data2, loading: data2Loading, error: data2Error } = useQuery(
-    query2,
-    {
-      variables: {
-        projektId,
-        jahr,
-      },
+  const { data: data2, error: data2Error } = useQuery(query2, {
+    variables: {
+      projektId,
+      jahr,
+      apberuebersichtId,
     },
-  )
+  })
 
   const data = { ...data1, ...data2 }
-  const apberuebersicht = get(data1, 'apberuebersichtById')
+  const apberuebersicht = data1?.apberuebersichtById ?? {}
   const aps = sortBy(
     get(data2, 'allAps.nodes', []).filter(
       (ap) => get(ap, 'apbersByApId.totalCount', 0) > 0,
@@ -154,30 +145,12 @@ const ApberForYear = () => {
     variables: { jahr },
   })
 
-  if (data1Loading || data2Loading) {
-    return (
-      <Container>
-        <LoadingContainer>Lade...</LoadingContainer>
-      </Container>
-    )
-  }
   if (data1Error) {
     return `Fehler: ${data1Error.message}`
   }
   if (data2Error) {
     return `Fehler: ${data2Error.message}`
   }
-
-  // TODO: remove this return after having changed aktpoplist
-  /*return (
-    <ErrorBoundary>
-      <Container>
-        <ContentContainer>
-          <AktPopList year={jahr} />
-        </ContentContainer>
-      </Container>
-    </ErrorBoundary>
-  )*/
 
   return (
     <ErrorBoundary>
@@ -194,7 +167,7 @@ const ApberForYear = () => {
             {DateTime.fromJSDate(new Date()).toFormat('dd.LL.yyyy')}
           </FirstPageDate>
           <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
-          {!!apberuebersicht.bemerkungen && (
+          {!!apberuebersicht?.bemerkungen && (
             <SecondPage>
               <SecondPageTop />
               <SecondPageTitle>Zusammenfassung</SecondPageTitle>

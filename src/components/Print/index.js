@@ -61,10 +61,6 @@ const Print = () => {
 
   if (!showApberForAp && !showApberForYear) return null
 
-  /**
-   * ReactDOMServer does not yet support Suspense
-   */
-
   return (
     <ErrorBoundary>
       <Container>
