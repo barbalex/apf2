@@ -14,6 +14,7 @@ import AvList from './AvList'
 import AktPopList from './AktPopList'
 import ErfolgList from './ErfolgList'
 import ApberForAp from '../ApberForAp'
+import ApberForAps from './ApberForAps'
 import queryMengen from './queryMengen'
 import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -129,7 +130,7 @@ const ApberForYear = () => {
   })
 
   const data = { ...data1, ...data2 }
-  const apberuebersicht = data1?.apberuebersichtById ?? {}
+  const apberuebersicht = data1?.apberuebersichtById
   const aps = sortBy(
     get(data2, 'allAps.nodes', []).filter(
       (ap) => get(ap, 'apbersByApId.totalCount', 0) > 0,
@@ -183,20 +184,7 @@ const ApberForYear = () => {
           <AvList data={data} />
           <ErfolgList jahr={jahr} data={data} />
           <AktPopList year={jahr} />
-          {mengenError
-            ? mengenError.message
-            : mengenData?.jberAbc?.nodes?.map((node, index) => (
-                <ApberForAp
-                  key={node.apId}
-                  apId={node.apId}
-                  jahr={jahr}
-                  apData={aps.find((ap) => ap.id === node.apId)}
-                  mengenLoading={mengenLoading}
-                  node={node}
-                  isSubReport={true}
-                  subReportIndex={index}
-                />
-              ))}
+          <ApberForAps jahr={jahr} />
         </ContentContainer>
       </Container>
     </ErrorBoundary>
