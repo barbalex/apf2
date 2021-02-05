@@ -1,7 +1,5 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
-import flatten from 'lodash/flatten'
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { useQuery } from '@apollo/client'
