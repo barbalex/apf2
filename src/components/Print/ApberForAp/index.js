@@ -58,9 +58,11 @@ const Container = styled.div`
 const ContentContainer = styled.div`
   padding: ${(props) => (props.issubreport ? '1.5cm 0 1.5cm 0' : '1.5cm')};
   width: 18cm;
+  width: ${(props) => (props.issubreport ? '18cm' : 'unset')};
   font-size: 14px;
   @media print {
     padding: 0;
+    padding: ${(props) => (props.issubreport ? '0' : '0 1.5cm')};
     height: auto !important;
     overflow: visible !important;
   }
@@ -153,7 +155,7 @@ const ApberForAp = ({
    * when ApberForAp is called from ApberForYear
    * isSubReport is passed
    */
-  isSubReport = true,
+  isSubReport = false,
   // and need to build print button only once
   // so only when index is 0
   subReportIndex,
@@ -210,7 +212,7 @@ const ApberForAp = ({
   // data remains undefined
   if (loading && !isPrint) return <Spinner />
 
-  //console.log('ApberForAp', { isSubReport, node, mengenResult, data, loading })
+  console.log('ApberForAp', { isSubReport })
 
   return (
     <ErrorBoundary>

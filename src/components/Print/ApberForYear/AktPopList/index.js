@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import sortBy from 'lodash/sortBy'
+import sumBy from 'lodash/sumBy'
 import { useQuery } from '@apollo/client'
 
 import storeContext from '../../../../storeContext'
@@ -99,68 +100,38 @@ const AktPopList = ({ year }) => {
   const projektId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const previousYear = year - 1
-  const { data, error: dataError } = useQuery(query, {
+  const { data, loading, error } = useQuery(query, {
     variables: {
       projektId,
       previousYear,
       jahr: year,
     },
   })
-  const aps = get(data, 'allAps.nodes', [])
-  const pops100 = flatten(aps.map((ap) => get(ap, 'pops100.nodes', []))).filter(
-    (p) => get(p, 'tpopsByPopId.totalCount') > 0,
-  )
-  const pops100previous = flatten(
-    aps.map((ap) => get(ap, 'pops100previous.nodes', [])),
-  ).filter((p) => get(p, 'tpopHistoriesByYearAndPopId.totalCount') > 0)
-  const pops200 = flatten(aps.map((ap) => get(ap, 'pops200.nodes', []))).filter(
-    (p) => get(p, 'tpopsByPopId.totalCount') > 0,
-  )
-  const pops200previous = flatten(
-    aps.map((ap) => get(ap, 'pops200previous.nodes', [])),
-  ).filter((p) => get(p, 'tpopHistoriesByYearAndPopId.totalCount') > 0)
-  const popsUrspr = pops100.length
-  const popsAnges = pops200.length
-  const popsTotal = popsUrspr + popsAnges
-  const popsUrsprDiff = pops100.length - pops100previous.length
-  const popsAngesDiff = pops200.length - pops200previous.length
-  const popsTotalDiff =
-    pops100.length +
-    pops200.length -
-    (pops100previous.length + pops200previous.length)
+  const aps = data?.jberAktPop?.nodes ?? []
+  const popsUrspr = sumBy(aps, 'pop100')
+  const popsAnges = sumBy(aps, 'pop200')
+  const popsTotal = sumBy(aps, 'popTotal')
+  const popsUrsprDiff = sumBy(aps, 'pop100Diff')
+  const popsAngesDiff = sumBy(aps, 'pop200Diff')
+  const popsTotalDiff = sumBy(aps, 'popTotalDiff')
   const apRows = sortBy(
-    aps.map((ap) => {
-      const urspr = get(ap, 'pops100.nodes', []).filter(
-        (p) => get(p, 'tpopsByPopId.totalCount') > 0,
-      ).length
-      const ursprPrevious = get(ap, 'pops100previous.nodes', []).filter(
-        (p) => get(p, 'tpopHistoriesByYearAndPopId.totalCount') > 0,
-      ).length
-      const anges = get(ap, 'pops200.nodes', []).filter(
-        (p) => get(p, 'tpopsByPopId.totalCount') > 0,
-      ).length
-      const angesPrevious = get(ap, 'pops200previous.nodes', []).filter(
-        (p) => get(p, 'tpopHistoriesByYearAndPopId.totalCount') > 0,
-      ).length
-
-      return {
-        ap: get(ap, 'aeTaxonomyByArtId.artname'),
-        urspr,
-        anges,
-        total: urspr + anges,
-        ursprDiff: urspr - ursprPrevious,
-        angesDiff: anges - angesPrevious,
-        totalDiff: urspr + anges - (ursprPrevious + angesPrevious),
-      }
-    }),
+    aps.map((ap) => ({
+      ap: ap?.artname,
+      urspr: ap?.pop100,
+      anges: ap?.pop200,
+      total: ap?.popTotal,
+      ursprDiff: ap?.pop100Diff,
+      angesDiff: ap?.pop200Diff,
+      totalDiff: ap?.popTotalDiff,
+    })),
     'ap',
   )
 
-  if (dataError) {
-    return `Fehler: ${dataError.message}`
+  if (error) {
+    return `Fehler: ${error.message}`
   }
 
-  /*if (loading) {
+  if (loading) {
     return (
       <ErrorBoundary>
         <Container>
@@ -169,7 +140,7 @@ const AktPopList = ({ year }) => {
         </Container>
       </ErrorBoundary>
     )
-  }*/
+  }
 
   return (
     <ErrorBoundary>

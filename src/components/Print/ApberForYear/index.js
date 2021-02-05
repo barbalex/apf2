@@ -20,8 +20,8 @@ const ApberForYearContainer = () => {
     apberuebersichtIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
 
   const [year, setYear] = useState(printingJberYear)
-  const [error, setError] = useState()
-  const [loading, setLoading] = useState()
+  const [error, setError] = useState(undefined)
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     if (printingJberYear) return
 
@@ -75,6 +75,7 @@ const ApberForYearContainer = () => {
     year,
     apberuebersichtId,
     printingJberYear,
+    loading,
   })
 
   return (

@@ -101,3 +101,18 @@ create type apflora.jber_abc as (
   c_7_r_pop integer,
   c_7_r_tpop integer
 );
+
+
+
+
+drop type apflora.jber_akt_pop cascade;
+create type apflora.jber_akt_pop as (
+  artname text,
+  id uuid,
+  pop_100 integer,
+  pop_200 integer,
+  pop_total integer,
+  pop_100_diff integer,
+  pop_200_diff integer,
+  pop_total_diff integer
+);

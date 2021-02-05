@@ -1,98 +1,18 @@
 import { gql } from '@apollo/client'
 
-import { aeTaxonomies } from '../../../shared/fragments'
-
 export default gql`
-  query AktPopListAps($projektId: UUID!, $previousYear: Int!, $jahr: Int!) {
-    allAps(
-      filter: {
-        bearbeitung: { in: [1, 2, 3] }
-        projId: { equalTo: $projektId }
-      }
-    ) {
+  query AktPopListAps($jahr: Int!) {
+    jberAktPop(jahr: $jahr) {
       nodes {
+        artname
         id
-        aeTaxonomyByArtId {
-          ...AeTaxonomiesFields
-        }
-        pops100: popsByApId(
-          filter: {
-            status: { equalTo: 100 }
-            bekanntSeit: { lessThanOrEqualTo: $jahr }
-          }
-        ) {
-          nodes {
-            id
-            tpopsByPopId(
-              filter: {
-                apberRelevant: { equalTo: true }
-                bekanntSeit: { lessThanOrEqualTo: $jahr }
-              }
-            ) {
-              totalCount
-            }
-          }
-        }
-        pops100previous: popHistoriesByApId(
-          filter: {
-            year: { equalTo: $previousYear }
-            status: { equalTo: 100 }
-            bekanntSeit: { lessThanOrEqualTo: $jahr }
-          }
-        ) {
-          nodes {
-            id
-            tpopHistoriesByYearAndPopId(
-              filter: {
-                year: { equalTo: $previousYear }
-                apberRelevant: { equalTo: true }
-                bekanntSeit: { lessThanOrEqualTo: $jahr }
-              }
-            ) {
-              totalCount
-            }
-          }
-        }
-        pops200: popsByApId(
-          filter: {
-            status: { equalTo: 200 }
-            bekanntSeit: { lessThanOrEqualTo: $jahr }
-          }
-        ) {
-          nodes {
-            id
-            tpopsByPopId(
-              filter: {
-                apberRelevant: { equalTo: true }
-                bekanntSeit: { lessThanOrEqualTo: $jahr }
-              }
-            ) {
-              totalCount
-            }
-          }
-        }
-        pops200previous: popHistoriesByApId(
-          filter: {
-            year: { equalTo: $previousYear }
-            status: { equalTo: 200 }
-            bekanntSeit: { lessThanOrEqualTo: $jahr }
-          }
-        ) {
-          nodes {
-            id
-            tpopHistoriesByYearAndPopId(
-              filter: {
-                year: { equalTo: $previousYear }
-                apberRelevant: { equalTo: true }
-                bekanntSeit: { lessThanOrEqualTo: $jahr }
-              }
-            ) {
-              totalCount
-            }
-          }
-        }
+        pop100
+        pop200
+        popTotal
+        pop100Diff
+        pop200Diff
+        popTotalDiff
       }
     }
   }
-  ${aeTaxonomies}
 `

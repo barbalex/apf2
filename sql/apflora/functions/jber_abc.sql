@@ -11,9 +11,9 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.id = tpop.pop_id
     where
       pop.status = 100
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), a_3_l_tpop as (
@@ -25,10 +25,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.id = tpop.pop_id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status = 100
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), a_4_l_pop as (
@@ -42,10 +42,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status = 200
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and pop.bekannt_seit < ap.start_jahr
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and tpop.bekannt_seit < ap.start_jahr
     group by
       pop.ap_id
@@ -60,10 +60,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status = 200
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and tpop.bekannt_seit < ap.start_jahr
     group by
       pop.ap_id
@@ -78,10 +78,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status = 200
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and pop.bekannt_seit >= ap.start_jahr
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and tpop.bekannt_seit >= ap.start_jahr
     group by
       pop.ap_id
@@ -96,10 +96,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status = 200
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and tpop.bekannt_seit >= ap.start_jahr
     group by
       pop.ap_id
@@ -120,9 +120,9 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
           and pop.bekannt_seit < ap.start_jahr
         )
       )
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), a_7_l_tpop as (
@@ -136,7 +136,7 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and (
         tpop.status = 101
         or (
@@ -145,7 +145,7 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
         )
       )
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), a_8_l_pop as (
@@ -160,9 +160,9 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     where
       pop.status = 202
       and pop.bekannt_seit >= ap.start_jahr
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), a_8_l_tpop as (
@@ -176,11 +176,11 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status = 202
       and tpop.bekannt_seit >= ap.start_jahr
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), a_9_l_pop as (
@@ -194,9 +194,9 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status = 201
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), a_9_l_tpop as (
@@ -209,10 +209,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
         on pop.id = tpop.pop_id
       on pop.ap_id = ap.id
     where
-      pop.bekannt_seit <= 2020
+      pop.bekannt_seit <= $1
       and tpop.status = 201
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), a_10_l_pop as (
@@ -226,10 +226,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status = 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       --and tpop.status = 300
       --and tpop.apber_relevant = true
-      --and tpop.bekannt_seit <= 2020
+      --and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), a_10_l_tpop as (
@@ -242,10 +242,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
         on pop.id = tpop.pop_id
       on pop.ap_id = ap.id
     where
-      --pop.bekannt_seit <= 2020
+      --pop.bekannt_seit <= $1
       tpop.status = 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), b_1_l_pop as (
@@ -255,15 +255,15 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     from apflora.ap ap
       inner join apflora.pop pop
         inner join apflora.popber popber
-        on pop.id = popber.pop_id and popber.jahr = 2020
+        on pop.id = popber.pop_id and popber.jahr = $1
         inner join apflora.tpop tpop
         on pop.id = tpop.pop_id
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), b_1_l_tpop as (
@@ -274,15 +274,15 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       inner join apflora.pop pop
         inner join apflora.tpop tpop
           inner join apflora.tpopber tpopber
-          on tpop.id = tpopber.tpop_id and tpopber.jahr = 2020
+          on tpop.id = tpopber.tpop_id and tpopber.jahr = $1
         on pop.id = tpop.pop_id
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status < 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), b_1_r_pop as (
@@ -298,11 +298,11 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and popber.jahr is not null
-      and popber.jahr <= 2020
+      and popber.jahr <= $1
       and popber.entwicklung is not null
     group by
       pop.ap_id
@@ -320,12 +320,12 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status < 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and tpopber.jahr is not null
-      and tpopber.jahr <= 2020
+      and tpopber.jahr <= $1
       and tpopber.entwicklung is not null
     group by
       pop.ap_id
@@ -337,15 +337,15 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       inner join apflora.pop pop
         inner join apflora.tpop tpop
           inner join apflora.tpopmassn massn
-          on tpop.id = massn.tpop_id and massn.jahr = 2020
+          on tpop.id = massn.tpop_id and massn.jahr = $1
         on pop.id = tpop.pop_id
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status < 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and massn.typ is not null
     group by
       pop.ap_id
@@ -357,15 +357,15 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       inner join apflora.pop pop
         inner join apflora.tpop tpop
           inner join apflora.tpopmassn massn
-          on tpop.id = massn.tpop_id and massn.jahr = 2020
+          on tpop.id = massn.tpop_id and massn.jahr = $1
         on pop.id = tpop.pop_id
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status < 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and massn.typ is not null
     group by
       pop.ap_id
@@ -382,10 +382,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status < 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and massn.typ is not null
     group by
       pop.ap_id
@@ -403,12 +403,12 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status < 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and massn.jahr is not null
-      and massn.jahr <= 2020
+      and massn.jahr <= $1
       and massn.typ is not null
     group by
       pop.ap_id
@@ -425,10 +425,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status < 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and massnber.beurteilung between 1 and 5
     group by
       pop.ap_id
@@ -445,12 +445,12 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status < 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and massnber.jahr is not null
-      and massnber.jahr <= 2020
+      and massnber.jahr <= $1
       and massnber.beurteilung between 1 and 5
     group by
       pop.ap_id
@@ -468,12 +468,12 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status < 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and massnber.jahr is not null
-      and massnber.jahr <= 2020
+      and massnber.jahr <= $1
       and massnber.beurteilung between 1 and 5
     order by
       pop.ap_id,
@@ -493,12 +493,12 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status < 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and massnber.jahr is not null
-      and massnber.jahr <= 2020
+      and massnber.jahr <= $1
       and massnber.beurteilung between 1 and 5
     order by
       pop.ap_id,
@@ -587,12 +587,12 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       on pop.ap_id = ap.id
     where
       pop.status < 300
-      and pop.bekannt_seit <= 2020
+      and pop.bekannt_seit <= $1
       and tpop.status < 300
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= 2020
+      and tpop.bekannt_seit <= $1
       and massn.jahr is not null
-      and massn.jahr <= 2020
+      and massn.jahr <= $1
     order by
       pop.ap_id,
       massn.jahr asc
