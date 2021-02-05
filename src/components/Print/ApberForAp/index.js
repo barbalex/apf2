@@ -1,8 +1,6 @@
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import minBy from 'lodash/minBy'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { MdPrint } from 'react-icons/md'
@@ -163,46 +161,34 @@ const ApberForAp = ({
   const { setIsPrint } = store
 
   const apData = isSubReport ? apDataPassed : apDataPassed.apById
-  const artname = get(apData, 'aeTaxonomyByArtId.artname', '(Art fehlt)')
-  const apber = get(apData, 'apbersByApId.nodes[0]', {})
-  const apberDatum = get(apber, 'datum')
-  const erfkrit = sortBy(get(apData, 'erfkritsByApId.nodes', []), (e) =>
-    get(e, 'apErfkritWerteByErfolg.sort'),
+  const apber = apData?.apbersByApId?.nodes?.[0] ?? {}
+  console.log('ApberForAp', { apber, isSubReport, apDataPassed })
+  const apberDatum = apber?.datum
+  const erfkrit = sortBy(
+    apData?.erfkritsByApId?.nodes ?? [],
+    (e) => e?.apErfkritWerteByErfolg?.sort,
   )
-  const ziele = sortBy(get(apData, 'zielsByApId.nodes', []), (e) => [
-    get(e, 'zielTypWerteByTyp.sort'),
+  const ziele = sortBy(apData?.zielsByApId?.nodes ?? [], (e) => [
+    e?.zielTypWerteByTyp?.sort,
     e.bezeichnung,
   ])
-  const pops = get(apData, 'popsByApId.nodes', [])
-  const tpops = flatten(pops.map((p) => get(p, 'tpopsByPopId.nodes', [])))
+  const pops = apData?.popsByApId?.nodes ?? []
+  const tpops = flatten(pops.map((p) => p?.tpopsByPopId?.nodes ?? []))
   const massns = sortBy(
-    flatten(tpops.map((t) => get(t, 'tpopmassnsByTpopId.nodes', []))),
+    flatten(tpops.map((t) => t?.tpopmassnsByTpopId?.nodes ?? [])),
     (m) => [
-      get(m, 'tpopByTpopId.popByPopId.nr'),
-      get(m, 'tpopByTpopId.nr'),
-      get(m, 'datum'),
-      get(m, 'tpopmassnTypWerteByTyp.text'),
-      get(m, 'beschreibung'),
+      m?.tpopByTpopId?.popByPopId.nr,
+      m?.tpopByTpopId?.nr,
+      m?.datum,
+      m?.tpopmassnTypWerteByTyp?.text,
+      m?.beschreibung,
     ],
   )
-  const firstMassn = minBy(
-    flatten(tpops.map((t) => get(t, 'firstTpopmassn.nodes[0]', []))),
-    'datum',
-  )
-  const yearOfFirstMassn = !!firstMassn
-    ? format(new Date(firstMassn.datum), 'yyyy')
-    : 0
-  const firstTpopber = minBy(
-    flatten(tpops.map((t) => get(t, 'firstTpopber.nodes[0]', []))),
-    'jahr',
-  )
-  const yearOfFirstTpopber = !!firstTpopber ? firstTpopber.jahr : 0
-  const startJahr = get(apData, 'startJahr', 0)
 
   const mengenResult =
     node ??
     useQuery(queryMengen, {
-      variables: { apId, jahr },
+      variables: { apId: node.id, jahr },
     })
 
   const onClickPrint = useCallback(() => {
@@ -221,17 +207,6 @@ const ApberForAp = ({
 
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
 
-  if (startJahr === 0)
-    return (
-      <ErrorBoundary>
-        <Container issubreport={isSubReport}>
-          <ContentContainer>
-            Bitte beim AP ein Startjahr ergänzen!
-          </ContentContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-
   return (
     <ErrorBoundary>
       <Container issubreport={isSubReport}>
@@ -247,21 +222,19 @@ const ApberForAp = ({
         )}
         <ContentContainer>
           <Header>
-            {`Jahresbericht ${get(apber, 'jahr', '(Jahr fehlt)')},
-              ${artname},
+            {`Jahresbericht ${node?.startJahr ?? '(Jahr fehlt)'},
+              ${node.artname},
               ${format(new Date(), 'dd.MM.yyyy')}`}
           </Header>
 
-          <Title1>{artname}</Title1>
+          <Title1>{node.artname}</Title1>
 
           <Row>
-            <p>{`Start Programm: ${get(
-              apData,
-              'startJahr',
-              '(Start-Jahr fehlt)',
-            )}`}</p>
-            <p>{`Erste Massnahme: ${yearOfFirstMassn}`}</p>
-            <p>{`Erste Kontrolle: ${yearOfFirstTpopber}`}</p>
+            <p>{`Start Programm: ${
+              node?.startJahr ?? '(Start-Jahr fehlt)'
+            }`}</p>
+            <p>{`Erste Massnahme: ${node.firstMassn}`}</p>
+            <p>{`Erste Kontrolle: ${node.b1FirstYear}`}</p>
           </Row>
 
           <AMengen loading={loading} node={data} jahr={jahr} />
@@ -273,7 +246,7 @@ const ApberForAp = ({
               <FullWidthField>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: mdParser.render(get(apber, 'biotopeNeue', '')),
+                    __html: mdParser.render(apber?.biotopeNeue ?? ''),
                   }}
                 />
               </FullWidthField>
@@ -297,9 +270,7 @@ const ApberForAp = ({
               <FullWidthField>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: mdParser.render(
-                      get(apber, 'biotopeOptimieren', ''),
-                    ),
+                    __html: mdParser.render(apber?.biotopeOptimieren ?? ''),
                   }}
                 />
               </FullWidthField>
@@ -308,7 +279,7 @@ const ApberForAp = ({
 
           <CMengen
             jahr={jahr}
-            startJahr={startJahr}
+            startJahr={node.startJahr}
             loading={loading}
             node={data}
           />
@@ -319,7 +290,7 @@ const ApberForAp = ({
                 <div
                   dangerouslySetInnerHTML={{
                     __html: mdParser.render(
-                      get(apber, 'massnahmenPlanungVsAusfuehrung', ''),
+                      apber?.massnahmenPlanungVsAusfuehrung ?? '',
                     ),
                   }}
                 />
@@ -335,9 +306,7 @@ const ApberForAp = ({
               <FullWidthField>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: mdParser.render(
-                      get(apber, 'massnahmenOptimieren', ''),
-                    ),
+                    __html: mdParser.render(apber?.massnahmenOptimieren ?? ''),
                   }}
                 />
               </FullWidthField>
@@ -351,9 +320,7 @@ const ApberForAp = ({
               <FullWidthField>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: mdParser.render(
-                      get(apber, 'massnahmenApBearb', ''),
-                    ),
+                    __html: mdParser.render(apber?.massnahmenApBearb ?? ''),
                   }}
                 />
               </FullWidthField>
@@ -373,7 +340,7 @@ const ApberForAp = ({
                 <div
                   dangerouslySetInnerHTML={{
                     __html: mdParser.render(
-                      get(apber, 'vergleichVorjahrGesamtziel', ''),
+                      apber?.vergleichVorjahrGesamtziel ?? '',
                     ),
                   }}
                 />
@@ -387,11 +354,9 @@ const ApberForAp = ({
               <Field>
                 {erfkrit.map((e) => (
                   <ErfkritRow key={e.id}>
-                    <ErfkritErfolg>{`${get(
-                      e,
-                      'apErfkritWerteByErfolg.text',
-                      '(fehlt)',
-                    )}:`}</ErfkritErfolg>
+                    <ErfkritErfolg>{`${
+                      e?.apErfkritWerteByErfolg?.text ?? '(fehlt)'
+                    }:`}</ErfkritErfolg>
                     <ErfkritKriterium>
                       {e.kriterien || '(fehlt)'}
                     </ErfkritKriterium>
@@ -403,15 +368,13 @@ const ApberForAp = ({
           {!!apber.apErfkritWerteByBeurteilung && (
             <FieldRowBold>
               <FieldLabel>Beurteilung</FieldLabel>
-              <Field>
-                {get(apber, 'apErfkritWerteByBeurteilung.text', '')}
-              </Field>
+              <Field>{apber?.apErfkritWerteByBeurteilung?.text ?? ''}</Field>
             </FieldRowBold>
           )}
           {!!apber.wirkungAufArt && (
             <FieldRow>
               <FieldLabel>Bemerkungen</FieldLabel>
-              <Field>{get(apber, 'wirkungAufArt', '')}</Field>
+              <Field>{apber?.wirkungAufArt ?? ''}</Field>
             </FieldRow>
           )}
           {!!apber.apberAnalyse && (
@@ -420,7 +383,7 @@ const ApberForAp = ({
               <Field>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: mdParser.render(get(apber, 'apberAnalyse', '')),
+                    __html: mdParser.render(apber?.apberAnalyse ?? ''),
                   }}
                 />
               </Field>
@@ -432,9 +395,7 @@ const ApberForAp = ({
               <Field>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: mdParser.render(
-                      get(apber, 'konsequenzenUmsetzung', ''),
-                    ),
+                    __html: mdParser.render(apber?.konsequenzenUmsetzung ?? ''),
                   }}
                 />
               </Field>
@@ -447,7 +408,7 @@ const ApberForAp = ({
                 <div
                   dangerouslySetInnerHTML={{
                     __html: mdParser.render(
-                      get(apber, 'konsequenzenErfolgskontrolle', ''),
+                      apber?.konsequenzenErfolgskontrolle ?? '',
                     ),
                   }}
                 />
@@ -459,7 +420,7 @@ const ApberForAp = ({
               apberDatum
                 ? format(new Date(apberDatum), 'dd.MM.yyyy')
                 : '(Datum fehlt)'
-            } / ${get(apber, 'adresseByBearbeiter.name', '(kein Bearbeiter)')}`}
+            } / ${apber?.adresseByBearbeiter?.name ?? '(kein Bearbeiter)'}`}
           </Row>
         </ContentContainer>
       </Container>

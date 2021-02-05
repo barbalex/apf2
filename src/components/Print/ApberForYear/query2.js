@@ -4,7 +4,6 @@ import {
   adresse,
   aeTaxonomies,
   apber,
-  tpopber,
   ziel,
   apErfkritWerte,
   tpopmassnTypWerte,
@@ -13,7 +12,7 @@ import {
 } from '../../shared/fragments'
 
 export default gql`
-  query projektById($projektId: UUID!, $jahr: Int!) {
+  query projektByIdForApberForYear($projektId: UUID!, $jahr: Int!) {
     allAps(
       filter: {
         bearbeitung: { in: [1, 2, 3] }
@@ -22,7 +21,6 @@ export default gql`
     ) {
       nodes {
         id
-        startJahr
         bearbeitung
         aeTaxonomyByArtId {
           ...AeTaxonomiesFields
@@ -42,15 +40,6 @@ export default gql`
               nodes {
                 id
                 apberRelevant
-                firstTpopmassn: tpopmassnsByTpopId(
-                  orderBy: DATUM_ASC
-                  first: 1
-                ) {
-                  nodes {
-                    id
-                    datum
-                  }
-                }
                 tpopmassnsByTpopId(condition: { jahr: $jahr }) {
                   nodes {
                     id
@@ -69,11 +58,6 @@ export default gql`
                         name
                       }
                     }
-                  }
-                }
-                firstTpopber: tpopbersByTpopId(orderBy: JAHR_ASC, first: 1) {
-                  nodes {
-                    ...TpopberFields
                   }
                 }
               }
@@ -121,7 +105,6 @@ export default gql`
   ${aeTaxonomies}
   ${apber}
   ${apErfkritWerte}
-  ${tpopber}
   ${tpopmassnTypWerte}
   ${ziel}
   ${zielber}

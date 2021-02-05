@@ -1,21 +1,17 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import { DateTime } from 'luxon'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
+import { gql } from '@apollo/client'
 
-import query1 from './query1'
 import query2 from './query2'
 import fnslogo from './fnslogo.png'
 import AvList from './AvList'
 import AktPopList from './AktPopList'
 import ErfolgList from './ErfolgList'
-import ApberForAp from '../ApberForAp'
 import ApberForAps from './ApberForAps'
-import queryMengen from './queryMengen'
 import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -115,43 +111,41 @@ const ApberForYear = () => {
     apberuebersichtIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const projektId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const { data: data1, error: data1Error } = useQuery(query1, {
-    variables: {
-      apberuebersichtId,
+  const { data: data1, loading: loading1, error: error1 } = useQuery(
+    gql`
+      query apberuebersichtByIdForApberForYear($apberuebersichtId: UUID!) {
+        apberuebersichtById(id: $apberuebersichtId) {
+          id
+          jahr
+          bemerkungen
+        }
+      }
+    `,
+    {
+      variables: {
+        apberuebersichtId,
+      },
     },
-  })
-  const jahr = get(data1, 'apberuebersichtById.jahr', 0)
-  const { data: data2, error: data2Error } = useQuery(query2, {
+  )
+  const jahr = data1?.apberuebersichtById?.jahr ?? 0
+  const { data: data2, loading: loading2, error: error2 } = useQuery(query2, {
     variables: {
       projektId,
       jahr,
-      apberuebersichtId,
     },
   })
 
-  const data = { ...data1, ...data2 }
+  //console.log('ApberForYear', { loading1, loading2, data1, data2, error2 })
+  console.log('ApberForYear', { loading2, data2, jahr, projektId })
+
+  if (error1) {
+    return `Fehler: ${error1.message}`
+  }
+  if (error2) {
+    return `Fehler: ${error2.message}`
+  }
+
   const apberuebersicht = data1?.apberuebersichtById
-  const aps = sortBy(
-    get(data2, 'allAps.nodes', []).filter(
-      (ap) => get(ap, 'apbersByApId.totalCount', 0) > 0,
-    ),
-    (ap) => get(ap, 'aeTaxonomyByArtId.artname'),
-  )
-
-  const {
-    data: mengenData,
-    loading: mengenLoading,
-    error: mengenError,
-  } = useQuery(queryMengen, {
-    variables: { jahr },
-  })
-
-  if (data1Error) {
-    return `Fehler: ${data1Error.message}`
-  }
-  if (data2Error) {
-    return `Fehler: ${data2Error.message}`
-  }
 
   return (
     <ErrorBoundary>
@@ -181,10 +175,10 @@ const ApberForYear = () => {
               </SecondPageText>
             </SecondPage>
           )}
-          <AvList data={data} />
-          <ErfolgList jahr={jahr} data={data} />
+          <AvList data={data2} />
+          <ErfolgList jahr={jahr} data={data2} />
           <AktPopList year={jahr} />
-          <ApberForAps jahr={jahr} />
+          <ApberForAps jahr={jahr} data={data2} />
         </ContentContainer>
       </Container>
     </ErrorBoundary>

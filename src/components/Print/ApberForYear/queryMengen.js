@@ -5,7 +5,8 @@ export default gql`
     jberAbc(jahr: $jahr) {
       nodes {
         artname
-        apId
+        id
+        startJahr
         a3LPop
         a3LTpop
         a4LPop
@@ -30,6 +31,7 @@ export default gql`
         c1RPop
         c1RTpop
         c1FirstYear
+        firstMassn
         c2RPop
         c2RTpop
         c3RPop

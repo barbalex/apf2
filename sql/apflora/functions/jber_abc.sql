@@ -574,10 +574,34 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     from c3RTpopLastBer
     where beurteilung = 5
     group by ap_id
+  ), first_massn as (
+    select distinct on (pop.ap_id)
+      pop.ap_id,
+      massn.jahr
+    from apflora.ap ap
+      inner join apflora.pop pop
+        inner join apflora.tpop tpop
+          inner join apflora.tpopmassn massn
+          on tpop.id = massn.tpop_id
+        on pop.id = tpop.pop_id
+      on pop.ap_id = ap.id
+    where
+      pop.status < 300
+      and pop.bekannt_seit <= 2020
+      and tpop.status < 300
+      and tpop.apber_relevant = true
+      and tpop.bekannt_seit <= 2020
+      and massn.jahr is not null
+      and massn.jahr <= 2020
+    order by
+      pop.ap_id,
+      massn.jahr asc
   )
   select
     tax.artname,
-    ap.id as ap_id,
+    -- need this to be id, not ap_id, for apollo:
+    ap.id,
+    ap.start_jahr::int,
     coalesce(a_3_l_pop.count, 0)::int as a_3_l_pop,
     coalesce(a_3_l_tpop.count, 0)::int as a_3_l_tpop,
     coalesce(a_4_l_pop.count, 0)::int as a_4_l_pop,
@@ -602,6 +626,7 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     coalesce(c_1_r_pop.count, 0)::int as c_1_r_pop,
     coalesce(c_1_r_tpop.count, 0)::int as c_1_r_tpop,
     c_1_r_tpop.first_year::int as c_1_first_year,
+    first_massn.jahr::int as first_massn,
     coalesce(c_2_r_pop.count, 0)::int as c_2_r_pop,
     coalesce(c_2_r_tpop.count, 0)::int as c_2_r_tpop,
     coalesce(c_3_r_pop.count, 0)::int as c_3_r_pop,
@@ -683,6 +708,8 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     c_7_r_pop.ap_id = ap.id
     left join c_7_r_tpop on
     c_7_r_tpop.ap_id = ap.id
+    left join first_massn on
+    first_massn.ap_id = ap.id
     inner join apflora.ae_taxonomies tax
     on tax.id = ap.art_id
   where

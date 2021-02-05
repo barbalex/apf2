@@ -61,7 +61,8 @@ create type apflora.pop_nach_status_for_jber as (
 drop type apflora.jber_abc cascade;
 create type apflora.jber_abc as (
   artname text,
-  ap_id uuid,
+  id uuid,
+  start_jahr integer,
   a_3_l_pop integer,
   a_3_l_tpop integer,
   a_4_l_pop integer,
@@ -86,6 +87,7 @@ create type apflora.jber_abc as (
   c_1_r_pop integer,
   c_1_r_tpop integer,
   c_1_first_year integer,
+  first_massn integer,
   c_2_r_pop integer,
   c_2_r_tpop integer,
   c_3_r_pop integer,

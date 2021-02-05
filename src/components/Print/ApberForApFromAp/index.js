@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 
@@ -68,7 +67,7 @@ const ApberForApFromAp = ({ apberId: apberIdPassed, apId: apIdPassed }) => {
     },
   })
 
-  const jahr = get(apberData, 'apberById.jahr', 0)
+  const jahr = apberData?.apberById?.jahr ?? 0
 
   const { data: apData, loading: apDataLoading, error: apDataError } = useQuery(
     apQuery,
