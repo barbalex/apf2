@@ -54,16 +54,28 @@ const TotalRow = styled(ApRow)`
 const DiffLeftColumn = styled.div`
   min-width: 8.8cm;
   max-width: 8.8cm;
+  @media print {
+    min-width: 9.7cm;
+    max-width: 9.7cm;
+  }
 `
 const DataColumn = styled.div`
-  min-width: 4.8cm;
-  max-width: 4.8cm;
+  min-width: 5.1cm;
+  max-width: 5.1cm;
   text-align: center;
+  @media print {
+    min-width: 5.4cm;
+    max-width: 5.4cm;
+  }
 `
 const DiffColumn = styled.div`
-  min-width: 4.8cm;
-  max-width: 4.8cm;
+  min-width: 4.4cm;
+  max-width: 4.4cm;
   text-align: center;
+  @media print {
+    min-width: 5cm;
+    max-width: 5cm;
+  }
 `
 const ApColumn = styled.div`
   min-width: 8.8cm;
@@ -71,30 +83,50 @@ const ApColumn = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  @media print {
+    min-width: 9.5cm;
+    max-width: 9.5cm;
+  }
 `
 const UrsprColumn = styled.div`
   min-width: 1.6cm;
   max-width: 1.6cm;
   text-align: center;
   background-color: ${(props) => props['data-color'] ?? 'white'};
+  @media print {
+    min-width: 1.9cm;
+    max-width: 1.9cm;
+  }
 `
 const AngesColumn = styled.div`
   min-width: 1.6cm;
   max-width: 1.6cm;
   text-align: center;
   background-color: ${(props) => props['data-color'] ?? 'white'};
+  @media print {
+    min-width: 1.9cm;
+    max-width: 1.9cm;
+  }
 `
 const TotalColumn = styled.div`
   min-width: 1.6cm;
   max-width: 1.6cm;
   text-align: center;
   background-color: ${(props) => props['data-color'] ?? 'white'};
+  @media print {
+    min-width: 1.9cm;
+    max-width: 1.9cm;
+  }
 `
 const TotalDiffColumn = styled.div`
   min-width: 1.2cm;
   max-width: 1.2cm;
   text-align: center;
   background-color: ${(props) => props['data-color'] ?? 'white'};
+  @media print {
+    min-width: 1.5cm;
+    max-width: 1.5cm;
+  }
 `
 
 const AktPopList = ({ year }) => {
