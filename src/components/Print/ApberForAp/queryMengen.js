@@ -1,11 +1,12 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  query apByIdForMengen($apId: UUID!, $jahr: Int!) {
-    jberAbc(jahr: $jahr, filter: { apId: { equalTo: $apId } }) {
+  query apByIdForApberForAp($apId: UUID!, $jahr: Int!) {
+    jberAbc(jahr: $jahr, filter: { id: { equalTo: $apId } }) {
       nodes {
         artname
-        apId
+        id
+        startJahr
         a3LPop
         a3LTpop
         a4LPop
@@ -30,6 +31,7 @@ export default gql`
         c1RPop
         c1RTpop
         c1FirstYear
+        firstMassn
         c2RPop
         c2RTpop
         c3RPop

@@ -59,6 +59,7 @@ const myTypes = types
     ),
     user: types.optional(User, defaultUser),
     isPrint: types.optional(types.boolean, false),
+    printingJberYear: types.optional(types.number, new Date().getFullYear()),
     view: types.optional(types.string, 'normal'),
     ekfYear: types.optional(types.number, ekfYear),
     ekfAdresseId: types.optional(types.maybeNull(types.string), null),
@@ -203,6 +204,9 @@ const myTypes = types
     },
   }))
   .actions((self) => ({
+    setPrintingJberYear(val) {
+      self.printingJberYear = val
+    },
     setHideMapControls(val) {
       self.hideMapControls = val
     },

@@ -16,6 +16,7 @@ import BMengen from './BMengen'
 import CMengen from './CMengen'
 import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import Spinner from '../../shared/Spinner'
 import PopMenge from '../../Projekte/Daten/Ap/Auswertung/PopMenge'
 import PopStatus from '../../Projekte/Daten/Ap/Auswertung/PopStatus'
 import TpopKontrolliert from '../../Projekte/Daten/Ap/Auswertung/TpopKontrolliert'
@@ -27,8 +28,7 @@ const Container = styled.div`
   /* Divide single pages with some space and center all pages horizontally */
   /* will be removed in @media print */
   margin: ${(props) => (props.issubreport ? '0' : '1cm auto')};
-  margin-left: ${(props) =>
-    props.issubreport ? '-0.75cm !important' : '1cm auto'};
+  margin-left: ${(props) => (props.issubreport ? '0 !important' : '1cm auto')};
   /* Define a white paper background that sticks out from the darker overall background */
   background: ${(props) => (props.issubreport ? 'rgba(0, 0, 0, 0)' : '#fff')};
   /* Show a drop shadow beneath each page */
@@ -56,7 +56,8 @@ const Container = styled.div`
   }
 `
 const ContentContainer = styled.div`
-  padding: 1.5cm;
+  padding: ${(props) => (props.issubreport ? '1.5cm 0 1.5cm 0' : '1.5cm')};
+  width: 18cm;
   font-size: 14px;
   @media print {
     padding: 0;
@@ -152,17 +153,16 @@ const ApberForAp = ({
    * when ApberForAp is called from ApberForYear
    * isSubReport is passed
    */
-  isSubReport,
+  isSubReport = true,
   // and need to build print button only once
   // so only when index is 0
   subReportIndex,
 }) => {
   const store = useContext(storeContext)
-  const { setIsPrint } = store
+  const { setIsPrint, isPrint } = store
 
   const apData = isSubReport ? apDataPassed : apDataPassed.apById
   const apber = apData?.apbersByApId?.nodes?.[0] ?? {}
-  console.log('ApberForAp', { apber, isSubReport, apDataPassed })
   const apberDatum = apber?.datum
   const erfkrit = sortBy(
     apData?.erfkritsByApId?.nodes ?? [],
@@ -188,7 +188,7 @@ const ApberForAp = ({
   const mengenResult =
     node ??
     useQuery(queryMengen, {
-      variables: { apId: node.id, jahr },
+      variables: { apId, jahr },
     })
 
   const onClickPrint = useCallback(() => {
@@ -206,6 +206,11 @@ const ApberForAp = ({
   const error = node ? false : mengenResult.error
 
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
+  // DANGER: without rerendering when loading mutates from true to false
+  // data remains undefined
+  if (loading && !isPrint) return <Spinner />
+
+  //console.log('ApberForAp', { isSubReport, node, mengenResult, data, loading })
 
   return (
     <ErrorBoundary>
@@ -220,21 +225,21 @@ const ApberForAp = ({
             <MdPrint />
           </StyledFab>
         )}
-        <ContentContainer>
+        <ContentContainer issubreport={isSubReport}>
           <Header>
-            {`Jahresbericht ${node?.startJahr ?? '(Jahr fehlt)'},
-              ${node.artname},
+            {`Jahresbericht ${data?.startJahr ?? '(Jahr fehlt)'},
+              ${data.artname},
               ${format(new Date(), 'dd.MM.yyyy')}`}
           </Header>
 
-          <Title1>{node.artname}</Title1>
+          <Title1>{data.artname}</Title1>
 
           <Row>
             <p>{`Start Programm: ${
-              node?.startJahr ?? '(Start-Jahr fehlt)'
+              data?.startJahr ?? '(Start-Jahr fehlt)'
             }`}</p>
-            <p>{`Erste Massnahme: ${node.firstMassn}`}</p>
-            <p>{`Erste Kontrolle: ${node.b1FirstYear}`}</p>
+            <p>{`Erste Massnahme: ${data.firstMassn}`}</p>
+            <p>{`Erste Kontrolle: ${data.b1FirstYear}`}</p>
           </Row>
 
           <AMengen loading={loading} node={data} jahr={jahr} />
@@ -279,7 +284,7 @@ const ApberForAp = ({
 
           <CMengen
             jahr={jahr}
-            startJahr={node.startJahr}
+            startJahr={data.startJahr}
             loading={loading}
             node={data}
           />

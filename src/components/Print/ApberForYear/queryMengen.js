@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  query apByIdForMengen($jahr: Int!) {
+  query apByIdForApberForYear($jahr: Int!) {
     jberAbc(jahr: $jahr) {
       nodes {
         artname

@@ -12,7 +12,16 @@ import {
 } from '../../shared/fragments'
 
 export default gql`
-  query projektByIdForApberForYear($projektId: UUID!, $jahr: Int!) {
+  query projektByIdForApberForYear(
+    $projektId: UUID!
+    $jahr: Int!
+    $apberuebersichtId: UUID!
+  ) {
+    apberuebersichtById(id: $apberuebersichtId) {
+      id
+      jahr
+      bemerkungen
+    }
     allAps(
       filter: {
         bearbeitung: { in: [1, 2, 3] }

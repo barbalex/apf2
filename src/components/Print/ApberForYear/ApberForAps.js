@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client'
 import ApberForAp from '../ApberForAp'
 import queryMengen from './queryMengen'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import Spinner from '../../shared/Spinner'
 
 const ApberForYear = ({ jahr, data: dataPassed }) => {
   const aps = (dataPassed?.allAps?.nodes ?? []).filter(
@@ -22,6 +23,9 @@ const ApberForYear = ({ jahr, data: dataPassed }) => {
   if (error) {
     return `Fehler: ${error.message}`
   }
+  // DANGER: without rerendering when loading mutates from true to false
+  // data remains undefined
+  if (loading) return <Spinner />
 
   return (
     <ErrorBoundary>

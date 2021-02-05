@@ -190,7 +190,13 @@ const PrintIconContainer = styled.div`
 
 const Row = ({ index, style, node, treeName }) => {
   const store = useContext(storeContext)
-  const { activeApfloraLayers, copying, moving, copyingBiotop } = store
+  const {
+    activeApfloraLayers,
+    copying,
+    moving,
+    copyingBiotop,
+    setPrintingJberYear,
+  } = store
   const tree = store[treeName]
   const {
     openNodes,
@@ -263,10 +269,10 @@ const Row = ({ index, style, node, treeName }) => {
     },
     [treeName, node, store],
   )
-  const onClickPrint = useCallback(
-    () => setActiveNodeArray([...node.url, 'print']),
-    [node.url, setActiveNodeArray],
-  )
+  const onClickPrint = useCallback(() => {
+    setPrintingJberYear(+node.label)
+    setActiveNodeArray([...node.url, 'print'])
+  }, [node.label, node.url, setActiveNodeArray, setPrintingJberYear])
 
   const karteIsVisible = store.urlQuery.projekteTabs.includes('karte')
 
