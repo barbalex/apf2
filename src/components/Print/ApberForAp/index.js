@@ -57,12 +57,12 @@ const Container = styled.div`
 `
 const ContentContainer = styled.div`
   padding: ${(props) => (props.issubreport ? '1.5cm 0 1.5cm 0' : '1.5cm')};
-  width: 18cm;
   width: ${(props) => (props.issubreport ? '18cm' : 'unset')};
   font-size: 14px;
   @media print {
     padding: 0;
     padding: ${(props) => (props.issubreport ? '0' : '0 1.5cm')};
+    width: 21cm;
     height: auto !important;
     overflow: visible !important;
   }
@@ -161,7 +161,7 @@ const ApberForAp = ({
   subReportIndex,
 }) => {
   const store = useContext(storeContext)
-  const { setIsPrint, isPrint } = store
+  const { setIsPrint } = store
 
   const apData = isSubReport ? apDataPassed : apDataPassed.apById
   const apber = apData?.apbersByApId?.nodes?.[0] ?? {}
@@ -210,9 +210,7 @@ const ApberForAp = ({
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
   // DANGER: without rerendering when loading mutates from true to false
   // data remains undefined
-  if (loading && !isPrint) return <Spinner />
-
-  console.log('ApberForAp', { isSubReport })
+  if (loading) return <Spinner />
 
   return (
     <ErrorBoundary>

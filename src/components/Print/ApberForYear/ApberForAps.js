@@ -17,12 +17,10 @@ const ApberForYear = ({ jahr, data: dataPassed }) => {
   })
   const nodes = data?.jberAbc?.nodes ?? []
 
-  //console.log('ApberForAps', { loading, data, nodes })
-  console.log('ApberForAps', { aps })
-
   if (error) {
     return `Fehler: ${error.message}`
   }
+
   // DANGER: without rerendering when loading mutates from true to false
   // data remains undefined
   if (loading) return <Spinner />

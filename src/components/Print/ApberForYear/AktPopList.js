@@ -1,12 +1,11 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { useQuery } from '@apollo/client'
+import { gql } from '@apollo/client'
 
-import storeContext from '../../../../storeContext'
-import query from './query'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import storeContext from '../../../storeContext'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   display: flex;
@@ -91,6 +90,12 @@ const TotalColumn = styled.div`
   text-align: center;
   background-color: ${(props) => props['data-color'] ?? 'white'};
 `
+const TotalDiffColumn = styled.div`
+  min-width: 1.2cm;
+  max-width: 1.2cm;
+  text-align: center;
+  background-color: ${(props) => props['data-color'] ?? 'white'};
+`
 
 const AktPopList = ({ year }) => {
   const store = useContext(storeContext)
@@ -98,32 +103,40 @@ const AktPopList = ({ year }) => {
   const projektId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const previousYear = year - 1
-  const { data, loading, error } = useQuery(query, {
-    variables: {
-      projektId,
-      previousYear,
-      jahr: year,
+  const { data, loading, error } = useQuery(
+    gql`
+      query AktPopListAps($jahr: Int!) {
+        jberAktPop(jahr: $jahr) {
+          nodes {
+            artname
+            id
+            pop100
+            pop200
+            popTotal
+            pop100Diff
+            pop200Diff
+            popTotalDiff
+          }
+        }
+      }
+    `,
+    {
+      variables: {
+        projektId,
+        previousYear,
+        jahr: year,
+      },
     },
-  })
-  const aps = data?.jberAktPop?.nodes ?? []
-  const popsUrspr = sumBy(aps, 'pop100')
-  const popsAnges = sumBy(aps, 'pop200')
-  const popsTotal = sumBy(aps, 'popTotal')
-  const popsUrsprDiff = sumBy(aps, 'pop100Diff')
-  const popsAngesDiff = sumBy(aps, 'pop200Diff')
-  const popsTotalDiff = sumBy(aps, 'popTotalDiff')
-  const apRows = sortBy(
-    aps.map((ap) => ({
-      ap: ap?.artname,
-      urspr: ap?.pop100,
-      anges: ap?.pop200,
-      total: ap?.popTotal,
-      ursprDiff: ap?.pop100Diff,
-      angesDiff: ap?.pop200Diff,
-      totalDiff: ap?.popTotalDiff,
-    })),
-    'ap',
   )
+  const aps = data?.jberAktPop?.nodes ?? []
+  const pop100 = sumBy(aps, 'pop100')
+  const pop200 = sumBy(aps, 'pop200')
+  const popsTotal = sumBy(aps, 'popTotal')
+  const pop100Diff = sumBy(aps, 'pop100Diff')
+  const pop200Diff = sumBy(aps, 'pop200Diff')
+  const popTotalDiff = sumBy(aps, 'popTotalDiff')
+
+  //console.log('AktPopList', { apRows, aps, data })
 
   if (error) {
     return `Fehler: ${error.message}`
@@ -156,75 +169,75 @@ const AktPopList = ({ year }) => {
           <TotalColumn>total</TotalColumn>
           <UrsprColumn>ursprünglich</UrsprColumn>
           <AngesColumn>angesiedelt</AngesColumn>
-          <TotalColumn>total</TotalColumn>
+          <TotalDiffColumn>total</TotalDiffColumn>
         </TitleRow2>
-        {apRows.map((o) => (
-          <ApRow key={o.ap}>
-            <ApColumn>{o.ap}</ApColumn>
-            <UrsprColumn>{o.urspr}</UrsprColumn>
-            <AngesColumn>{o.anges}</AngesColumn>
-            <TotalColumn>{o.total}</TotalColumn>
+        {aps.map((ap) => (
+          <ApRow key={ap?.artname}>
+            <ApColumn>{ap?.artname}</ApColumn>
+            <UrsprColumn>{ap?.pop100}</UrsprColumn>
+            <AngesColumn>{ap?.pop200}</AngesColumn>
+            <TotalColumn>{ap?.popTotal}</TotalColumn>
             <UrsprColumn
               data-color={
-                o.ursprDiff > 0 ? '#00ff00' : o.ursprDiff < 0 ? 'red' : 'white'
+                ap?.pop100Diff > 0
+                  ? '#00ff00'
+                  : ap?.pop100Diff < 0
+                  ? 'red'
+                  : 'white'
               }
             >
-              {o.ursprDiff}
+              {ap?.pop100Diff}
             </UrsprColumn>
             <AngesColumn
               data-color={
-                o.angesDiff > 0 ? '#00ff00' : o.angesDiff < 0 ? 'red' : 'white'
+                ap?.pop200Diff > 0
+                  ? '#00ff00'
+                  : ap?.pop200Diff < 0
+                  ? 'red'
+                  : 'white'
               }
             >
-              {o.angesDiff}
+              {ap?.pop200Diff}
             </AngesColumn>
-            <TotalColumn
+            <TotalDiffColumn
               data-color={
-                o.totalDiff > 0 ? '#00ff00' : o.totalDiff < 0 ? 'red' : 'white'
+                ap?.popTotalDiff > 0
+                  ? '#00ff00'
+                  : ap?.popTotalDiff < 0
+                  ? 'red'
+                  : 'white'
               }
             >
-              {o.totalDiff}
-            </TotalColumn>
+              {ap?.popTotalDiff}
+            </TotalDiffColumn>
           </ApRow>
         ))}
         <TotalRow>
-          <ApColumn>{apRows.length}</ApColumn>
-          <UrsprColumn>{popsUrspr}</UrsprColumn>
-          <AngesColumn>{popsAnges}</AngesColumn>
+          <ApColumn>{aps.length}</ApColumn>
+          <UrsprColumn>{pop100}</UrsprColumn>
+          <AngesColumn>{pop200}</AngesColumn>
           <TotalColumn>{popsTotal}</TotalColumn>
           <UrsprColumn
             data-color={
-              popsUrsprDiff > 0
-                ? '#00ff00'
-                : popsUrsprDiff < 0
-                ? 'red'
-                : 'white'
+              pop100Diff > 0 ? '#00ff00' : pop100Diff < 0 ? 'red' : 'white'
             }
           >
-            {popsUrsprDiff}
+            {pop100Diff}
           </UrsprColumn>
           <AngesColumn
             data-color={
-              popsAngesDiff > 0
-                ? '#00ff00'
-                : popsAngesDiff < 0
-                ? 'red'
-                : 'white'
+              pop200Diff > 0 ? '#00ff00' : pop200Diff < 0 ? 'red' : 'white'
             }
           >
-            {popsAngesDiff}
+            {pop200Diff}
           </AngesColumn>
-          <TotalColumn
+          <TotalDiffColumn
             data-color={
-              popsTotalDiff > 0
-                ? '#00ff00'
-                : popsTotalDiff < 0
-                ? 'red'
-                : 'white'
+              popTotalDiff > 0 ? '#00ff00' : popTotalDiff < 0 ? 'red' : 'white'
             }
           >
-            {popsTotalDiff}
-          </TotalColumn>
+            {popTotalDiff}
+          </TotalDiffColumn>
         </TotalRow>
       </Container>
     </ErrorBoundary>

@@ -11,10 +11,8 @@ import Spinner from '../../shared/Spinner'
 const ApberForYearContainer = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { isPrint, printingJberYear } = store
+  const { printingJberYear } = store
   const { apberuebersichtIdInActiveNodeArray } = store.tree
-
-  console.log('ApberForYearContainer, printingJberYear:', printingJberYear)
 
   const apberuebersichtId =
     apberuebersichtIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
@@ -22,6 +20,9 @@ const ApberForYearContainer = () => {
   const [year, setYear] = useState(printingJberYear)
   const [error, setError] = useState(undefined)
   const [loading, setLoading] = useState(false)
+  useEffect(() => {
+    setYear(printingJberYear)
+  }, [printingJberYear])
   useEffect(() => {
     if (printingJberYear) return
 
@@ -49,6 +50,11 @@ const ApberForYearContainer = () => {
       } catch (error) {
         setError(error)
       }
+      /*console.log('ApberForYear, useEffect setting year:', {
+        year: result?.data?.apberuebersichtById?.jahr,
+        result,
+        apberuebersichtId,
+      })*/
       setYear(result?.apberuebersichtById?.jahr)
       setLoading(false)
     }
@@ -61,8 +67,6 @@ const ApberForYearContainer = () => {
     printingJberYear,
   ])
 
-  //console.log('ApberForYearContainer', { data, loading, error })
-
   if (error) {
     return `Fehler: ${error.message}`
   }
@@ -71,12 +75,7 @@ const ApberForYearContainer = () => {
   // data remains undefined
   if (loading) return <Spinner />
 
-  console.log('ApberForYearContainer', {
-    year,
-    apberuebersichtId,
-    printingJberYear,
-    loading,
-  })
+  //console.log('ApberForYear, year:', year)
 
   return (
     <ErrorBoundary>

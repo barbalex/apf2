@@ -102,7 +102,6 @@ const SecondPageText = styled.div`
 
 const ApberForYear = ({ apberuebersichtId, jahr }) => {
   const store = useContext(storeContext)
-  const { isPrint } = store
   const { projIdInActiveNodeArray } = store.tree
 
   const projektId =
@@ -121,7 +120,7 @@ const ApberForYear = ({ apberuebersichtId, jahr }) => {
 
   // DANGER: without rerendering when loading mutates from true to false
   // data remains undefined
-  // BUT WITH IT PRINT ONLY SHOWS THE SPINNER!!!!!!!!!!!!!!!
+  // BUT WITH IT PRINT SOMETIMES ONLY SHOWS THE SPINNER!!!!!!!!!!!!!!!
   if (loading) return <Spinner />
 
   const apberuebersicht = data?.apberuebersichtById

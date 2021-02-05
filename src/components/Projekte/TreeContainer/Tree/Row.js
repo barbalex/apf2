@@ -271,6 +271,7 @@ const Row = ({ index, style, node, treeName }) => {
   )
   const onClickPrint = useCallback(() => {
     setPrintingJberYear(+node.label)
+    console.log('row, onClickPrint, setting year:' + node.label)
     setActiveNodeArray([...node.url, 'print'])
   }, [node.label, node.url, setActiveNodeArray, setPrintingJberYear])
 

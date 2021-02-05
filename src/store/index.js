@@ -59,7 +59,7 @@ const myTypes = types
     ),
     user: types.optional(User, defaultUser),
     isPrint: types.optional(types.boolean, false),
-    printingJberYear: types.optional(types.number, new Date().getFullYear()),
+    printingJberYear: types.optional(types.number, 0),
     view: types.optional(types.string, 'normal'),
     ekfYear: types.optional(types.number, ekfYear),
     ekfAdresseId: types.optional(types.maybeNull(types.string), null),
