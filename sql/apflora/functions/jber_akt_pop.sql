@@ -58,10 +58,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_akt_pop(jahr int)
     where
       pop.year = $1 - 1
       and pop.status = 100
-      and pop.bekannt_seit <= $1
+      and pop.bekannt_seit <= pop.year
       and tpop.year = $1 - 1
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
+      and tpop.bekannt_seit <= tpop.year
     group by
       pop.ap_id
   ), pop_200_previous as (
@@ -74,10 +74,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_akt_pop(jahr int)
     where
       pop.year = $1 - 1
       and pop.status = 200
-      and pop.bekannt_seit <= $1
+      and pop.bekannt_seit <= pop.year
       and tpop.year = $1 - 1
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
+      and tpop.bekannt_seit <= tpop.year
     group by
       pop.ap_id
   ), pop_previous_total as (
@@ -90,10 +90,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_akt_pop(jahr int)
     where
       pop.year = $1 - 1
       and pop.status in (100, 200)
-      and pop.bekannt_seit <= $1
+      and pop.bekannt_seit <= pop.year
       and tpop.year = $1 - 1
       and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
+      and tpop.bekannt_seit <= tpop.year
     group by
       pop.ap_id
   )

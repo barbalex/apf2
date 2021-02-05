@@ -225,11 +225,13 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
         on pop.id = tpop.pop_id
       on pop.ap_id = ap.id
     where
+      -- apber_relevant has not been set in these cases
+      -- see: https://github.com/barbalex/apf2/issues/442#issuecomment-774253361
       pop.status = 300
       and pop.bekannt_seit <= $1
-      --and tpop.status = 300
-      --and tpop.apber_relevant = true
-      --and tpop.bekannt_seit <= $1
+      and tpop.status = 300
+      and tpop.apber_relevant = true
+      and tpop.bekannt_seit <= $1
     group by
       pop.ap_id
   ), a_10_l_tpop as (
@@ -242,8 +244,10 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
         on pop.id = tpop.pop_id
       on pop.ap_id = ap.id
     where
-      --pop.bekannt_seit <= $1
-      tpop.status = 300
+      -- apber_relevant has not been set in these cases
+      -- see: https://github.com/barbalex/apf2/issues/442#issuecomment-774253361
+      pop.bekannt_seit <= $1
+      and tpop.status = 300
       and tpop.apber_relevant = true
       and tpop.bekannt_seit <= $1
     group by
