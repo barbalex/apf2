@@ -99,7 +99,7 @@ const AktPopList = ({ year }) => {
   const projektId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const previousYear = year - 1
-  const { data, loading, error: dataError } = useQuery(query, {
+  const { data, error: dataError } = useQuery(query, {
     variables: {
       projektId,
       previousYear,
