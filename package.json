@@ -19,7 +19,7 @@
     "svgr": "svgr -d src/icons/ svg/"
   },
   "dependencies": {
-    "@apollo/client": "3.3.7",
+    "@apollo/client": "3.3.8",
     "@fontsource/roboto": "4.1.0",
     "@fontsource/roboto-mono": "4.1.1",
     "@material-ui/core": "4.11.3",
@@ -31,12 +31,12 @@
     "@turf/points-within-polygon": "6.3.0",
     "autosuggest-highlight": "3.1.1",
     "browser-update": "3.3.25",
-    "date-fns": "2.16.1",
+    "date-fns": "2.17.0",
     "dexie": "3.0.3",
     "exceljs": "4.2.0",
     "file-saver": "2.0.5",
     "formik": "2.2.6",
-    "gatsby": "2.31.1",
+    "gatsby": "2.32.3",
     "gatsby-image": "2.11.0",
     "gatsby-plugin-create-client-paths": "2.10.0",
     "gatsby-plugin-eslint": "2.0.8",
@@ -144,10 +144,6 @@
     "prettier": "2.2.1",
     "source-map-explorer": "2.5.2",
     "vercel": "21.2.3"
-  },
-  "resolutions": {
-    "@babel/preset-env": "7.12.11",
-    "@babel/plugin-transform-spread": "7.12.1"
   },
   "eslintConfig": {
     "extends": "react-app"
