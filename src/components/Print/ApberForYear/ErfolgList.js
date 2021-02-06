@@ -195,6 +195,7 @@ const ErfolgUnsicherTitle = styled(ErfolgTitle)`
 `
 
 const ErfolgList = ({ jahr, data }) => {
+  //const nodes = data?.jberAktPop?.nodes ?? []
   const aps = get(data, 'allAps.nodes', [])
   const apRows = sortBy(
     aps.map((ap) => {

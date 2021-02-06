@@ -600,6 +600,27 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     order by
       pop.ap_id,
       massn.jahr asc
+  ), erfolg as (
+    select distinct on (ap.id)
+      ap.id,
+      apber.beurteilung
+    from apflora.ap ap
+      inner join apflora.apber apber
+      on ap.id = apber.ap_id
+      inner join apflora.pop pop
+        inner join apflora.tpop tpop
+        on pop.id = tpop.pop_id
+      on pop.ap_id = ap.id
+    where
+      pop.status < 300
+      and pop.bekannt_seit <= $1
+      and tpop.status < 300
+      and tpop.apber_relevant = true
+      and tpop.bekannt_seit <= $1
+      and apber.jahr = $1
+      and apber.beurteilung is not null
+    order by
+      ap.id
   )
   select
     tax.artname,
@@ -643,7 +664,8 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     coalesce(c_6_r_pop.count, 0)::int as c_6_r_pop,
     coalesce(c_6_r_tpop.count, 0)::int as c_6_r_tpop,
     coalesce(c_7_r_pop.count, 0)::int as c_7_r_pop,
-    coalesce(c_7_r_tpop.count, 0)::int as c_7_r_tpop
+    coalesce(c_7_r_tpop.count, 0)::int as c_7_r_tpop,
+    erfolg.beurteilung::int as erfolg
   from apflora.ap
     left join a_3_l_pop on
     a_3_l_pop.ap_id = ap.id
@@ -717,6 +739,8 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     first_massn.ap_id = ap.id
     inner join apflora.ae_taxonomies tax
     on tax.id = ap.art_id
+    left join erfolg
+    on erfolg.id = ap.id
     left join apflora.adresse adresse
     on ap.bearbeiter = adresse.id
   where

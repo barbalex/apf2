@@ -100,7 +100,8 @@ create type apflora.jber_abc as (
   c_6_r_pop integer,
   c_6_r_tpop integer,
   c_7_r_pop integer,
-  c_7_r_tpop integer
+  c_7_r_tpop integer,
+  erfolg integer
 );
 
 
