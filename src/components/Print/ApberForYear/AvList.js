@@ -40,10 +40,11 @@ const Title = styled.p`
 `
 
 const AvList = ({ data }) => {
+  const nodes = data?.jberAbc?.nodes ?? []
   const avGrouped = groupBy(
-    get(data, 'allAps.nodes', []).map((ap) => ({
-      av: get(ap, 'adresseByBearbeiter.name', '(kein Wert)'),
-      art: get(ap, 'aeTaxonomyByArtId.artname', '(keine Art gewählt)'),
+    get(nodes).map((ap) => ({
+      av: ap?.bearbeiter ?? '(kein Wert)',
+      art: ap?.artname ?? '(keine Art gewählt)',
     })),
     'av',
   )

@@ -606,6 +606,7 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     -- need this to be id, not ap_id, for apollo:
     ap.id,
     ap.start_jahr::int,
+    adresse.name as bearbeiter,
     coalesce(a_3_l_pop.count, 0)::int as a_3_l_pop,
     coalesce(a_3_l_tpop.count, 0)::int as a_3_l_tpop,
     coalesce(a_4_l_pop.count, 0)::int as a_4_l_pop,
@@ -716,6 +717,8 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     first_massn.ap_id = ap.id
     inner join apflora.ae_taxonomies tax
     on tax.id = ap.art_id
+    left join apflora.adresse adresse
+    on ap.bearbeiter = adresse.id
   where
     ap.bearbeitung between 1 and 3
   order by

@@ -63,6 +63,7 @@ create type apflora.jber_abc as (
   artname text,
   id uuid,
   start_jahr integer,
+  bearbeiter text,
   a_3_l_pop integer,
   a_3_l_tpop integer,
   a_4_l_pop integer,

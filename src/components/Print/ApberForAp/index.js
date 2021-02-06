@@ -150,7 +150,6 @@ const ApberForAp = ({
   jahr,
   apData: apDataPassed,
   node,
-  mengenLoading,
   /**
    * when ApberForAp is called from ApberForYear
    * isSubReport is passed
@@ -204,7 +203,7 @@ const ApberForAp = ({
   }, [setIsPrint])
 
   const data = node ?? mengenResult.data?.jberAbc?.nodes?.[0]
-  const loading = node ? mengenLoading : mengenResult.loading
+  const loading = node ? false : mengenResult.loading
   const error = node ? false : mengenResult.error
 
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
@@ -425,7 +424,7 @@ const ApberForAp = ({
               apberDatum
                 ? format(new Date(apberDatum), 'dd.MM.yyyy')
                 : '(Datum fehlt)'
-            } / ${apber?.adresseByBearbeiter?.name ?? '(kein Bearbeiter)'}`}
+            } / ${node.bearbeiter ?? '(kein Bearbeiter)'}`}
           </Row>
         </ContentContainer>
       </Container>
