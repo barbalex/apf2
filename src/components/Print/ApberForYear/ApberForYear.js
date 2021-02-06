@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
 
-import query2 from './query2'
+import query from './query'
 import fnslogo from './fnslogo.png'
 import AvList from './AvList'
 import AktPopList from './AktPopList'
@@ -106,7 +106,7 @@ const ApberForYear = ({ apberuebersichtId, jahr }) => {
 
   const projektId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const { data, loading, error } = useQuery(query2, {
+  const { data, loading, error } = useQuery(query, {
     variables: {
       projektId,
       jahr,
