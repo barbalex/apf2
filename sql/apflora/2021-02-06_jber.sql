@@ -18,6 +18,7 @@ create type apflora.jber_abc as (
   id uuid,
   start_jahr integer,
   bearbeiter text,
+  bearbeitung integer,
   a_3_l_pop integer,
   a_3_l_tpop integer,
   a_4_l_pop integer,
@@ -55,8 +56,10 @@ create type apflora.jber_abc as (
   c_6_r_tpop integer,
   c_7_r_pop integer,
   c_7_r_tpop integer,
-  erfolg integer
+  erfolg integer,
+  erfolg_vorjahr integer
 );
+
 
 drop function if exists apflora.pop_nach_status_for_jber(apid uuid);
 drop function if exists apflora.pop_nach_status_for_jber(apid uuid, year int);
@@ -244,6 +247,7 @@ create or replace function apflora.pop_nach_status_for_jber(apid uuid, year int)
   language sql stable;
 alter function apflora.pop_nach_status_for_jber(apid uuid, year int)
   owner to postgres;
+
 
 DROP FUNCTION IF EXISTS apflora.jber_abc(jahr int);
 CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
@@ -868,6 +872,27 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
       and apber.beurteilung is not null
     order by
       ap.id
+  ), erfolg_vorjahr as (
+    select distinct on (ap.id)
+      ap.id,
+      apber.beurteilung
+    from apflora.ap ap
+      inner join apflora.apber apber
+      on ap.id = apber.ap_id
+      inner join apflora.pop pop
+        inner join apflora.tpop tpop
+        on pop.id = tpop.pop_id
+      on pop.ap_id = ap.id
+    where
+      pop.status < 300
+      and pop.bekannt_seit <= $1
+      and tpop.status < 300
+      and tpop.apber_relevant = true
+      and tpop.bekannt_seit <= $1
+      and apber.jahr = $1 - 1
+      and apber.beurteilung is not null
+    order by
+      ap.id
   )
   select
     tax.artname,
@@ -875,6 +900,7 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     ap.id,
     ap.start_jahr::int,
     adresse.name as bearbeiter,
+    coalesce(ap.bearbeitung, 0)::int as bearbeitung,
     coalesce(a_3_l_pop.count, 0)::int as a_3_l_pop,
     coalesce(a_3_l_tpop.count, 0)::int as a_3_l_tpop,
     coalesce(a_4_l_pop.count, 0)::int as a_4_l_pop,
@@ -912,7 +938,8 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     coalesce(c_6_r_tpop.count, 0)::int as c_6_r_tpop,
     coalesce(c_7_r_pop.count, 0)::int as c_7_r_pop,
     coalesce(c_7_r_tpop.count, 0)::int as c_7_r_tpop,
-    erfolg.beurteilung::int as erfolg
+    erfolg.beurteilung::int as erfolg,
+    erfolg_vorjahr.beurteilung::int as erfolg_vorjahr
   from apflora.ap
     left join a_3_l_pop on
     a_3_l_pop.ap_id = ap.id
@@ -988,6 +1015,8 @@ CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
     on tax.id = ap.art_id
     left join erfolg
     on erfolg.id = ap.id
+    left join erfolg_vorjahr
+    on erfolg_vorjahr.id = ap.id
     left join apflora.adresse adresse
     on ap.bearbeiter = adresse.id
   where
