@@ -112,3 +112,78 @@ order by
 "Thalictrum simplex L. subsp. galioides (Pers.) Korsh."	41	2011
 "Thalictrum simplex L. subsp. galioides (Pers.) Korsh."	41	2013
 
+-- pot. Wuchsorte mit apber_relevant
+select
+	tax.artname,
+	pop.nr as pop_nr,
+	pop.status as pop_status,
+	tpop.nr as tpop_nr,
+	tpop.status as tpop_status,
+	tpop.apber_relevant
+from
+	apflora.ae_taxonomies tax
+	inner join apflora.ap ap
+		inner join apflora.pop pop
+			inner join apflora.tpop tpop
+			on pop.id = tpop.pop_id
+		on ap.id = pop.ap_id
+	on tax.id = ap.art_id
+where
+	tpop.status = 300
+	and ap.bearbeitung between 1 and 3
+order by
+	tax.artname,
+	pop.nr,
+	tpop.nr;
+
+-- pot. Wuchsorte, die apber-relevant gesetzt wurden
+select
+	tax.artname,
+	pop.year,
+	pop.nr as pop_nr,
+	pop.status as pop_status,
+	tpop.nr as tpop_nr,
+	tpop.status as tpop_status,
+	tpop.apber_relevant
+from
+	apflora.ae_taxonomies tax
+	inner join apflora.ap_history ap
+		inner join apflora.pop_history pop
+			inner join apflora.tpop_history tpop
+			on pop.id = tpop.pop_id and pop.year = tpop.year
+		on ap.id = pop.ap_id and ap.year = pop.year
+	on tax.id = ap.art_id
+where
+	tpop.status = 300
+	and ap.bearbeitung between 1 and 3
+	and tpop.apber_relevant = true
+order by
+	tax.artname,
+	pop.year,
+	pop.nr,
+	tpop.nr;
+
+
+-- pot. Wuchsorte mit apber_relevant
+select
+	tax.artname,
+	pop.nr as pop_nr,
+	pop.status as pop_status,
+	tpop.nr as tpop_nr,
+	tpop.status as tpop_status,
+	tpop.apber_relevant
+from
+	apflora.ae_taxonomies tax
+	inner join apflora.ap ap
+		inner join apflora.pop pop
+			inner join apflora.tpop tpop
+			on pop.id = tpop.pop_id
+		on ap.id = pop.ap_id
+	on tax.id = ap.art_id
+where
+	tpop.status = 300
+	and ap.bearbeitung between 1 and 3
+order by
+	tax.artname,
+	pop.nr,
+	tpop.nr;

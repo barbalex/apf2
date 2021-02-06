@@ -1,9 +1,9 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  query popDataForPopStatus($apId: UUID!) {
+  query popDataForPopStatus($apId: UUID!, $year: Int!) {
     # function: pop_nach_status_for_jber
-    popNachStatusForJber(apid: $apId) {
+    popNachStatusForJber(apid: $apId, year: $year) {
       nodes {
         year
         a3Lpop

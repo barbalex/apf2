@@ -51,9 +51,9 @@ const color = {
   kontrolliert: 'red',
 }
 
-const ApAuswertungTpopKontrolliert = ({ id, height = 400, print }) => {
+const ApAuswertungTpopKontrolliert = ({ id, height = 400, print, jahr }) => {
   const { data, error, loading } = useQuery(query, {
-    variables: { id },
+    variables: { id, year: jahr ?? new Date().getFullYear() },
   })
   const erfolgData = get(data, 'tpopKontrolliertForJber.nodes', []).map(
     (d) => ({

@@ -272,32 +272,36 @@ const ApAuswertungPopMenge = ({
             <div>
               <Title>{`"${zielEinheit}" nach Populationen`}</Title>
             </div>
-            {refreshing ? (
-              <RefreshButtonSpinning
-                title="Daten werden neu berechnet"
-                aria-label="Daten werden neu berechnet"
-                onClick={onClickRefresh}
-                size="small"
-              >
-                <FaRedo />
-              </RefreshButtonSpinning>
-            ) : (
-              <RefreshButton
-                title="Daten neu rechnen"
-                aria-label="Daten neu rechnen"
-                onClick={onClickRefresh}
-                size="small"
-              >
-                <FaRedo />
-              </RefreshButton>
+            {!print && (
+              <>
+                {refreshing ? (
+                  <RefreshButtonSpinning
+                    title="Daten werden neu berechnet"
+                    aria-label="Daten werden neu berechnet"
+                    onClick={onClickRefresh}
+                    size="small"
+                  >
+                    <FaRedo />
+                  </RefreshButtonSpinning>
+                ) : (
+                  <RefreshButton
+                    title="Daten neu rechnen"
+                    aria-label="Daten neu rechnen"
+                    onClick={onClickRefresh}
+                    size="small"
+                  >
+                    <FaRedo />
+                  </RefreshButton>
+                )}
+                <IconButton
+                  aria-label="Mehr Informationen"
+                  title="Mehr Informationen"
+                  onClick={onClickMoreInfo}
+                >
+                  <IoMdInformationCircleOutline />
+                </IconButton>
+              </>
             )}
-            <IconButton
-              aria-label="Mehr Informationen"
-              title="Mehr Informationen"
-              onClick={onClickMoreInfo}
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
           </TitleRow>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>
         </>

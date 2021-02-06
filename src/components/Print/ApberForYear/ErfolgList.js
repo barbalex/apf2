@@ -70,47 +70,57 @@ const ErfolgNicht = styled(Cell)`
   grid-column: 2 / span 1;
   text-align: center;
   background-color: ${(props) => (props.val ? 'red' : 'unset')};
+  font-weight: 600;
 `
 const ErfolgWenig = styled(Cell)`
   grid-column: 3 / span 1;
   text-align: center;
   background-color: ${(props) => (props.val ? 'orange' : 'unset')};
+  font-weight: 600;
 `
 const ErfolgMaessig = styled(Cell)`
   grid-column: 4 / span 1;
   text-align: center;
   background-color: ${(props) => (props.val ? 'yellow' : 'unset')};
+  font-weight: 600;
 `
 const ErfolgGut = styled(Cell)`
   grid-column: 5 / span 1;
   text-align: center;
   background-color: ${(props) => (props.val ? '#00f6ff' : 'unset')};
+  font-weight: 600;
 `
 const ErfolgSehr = styled(Cell)`
   grid-column: 6 / span 1;
   text-align: center;
   background-color: ${(props) => (props.val ? '#00ff00' : 'unset')};
+  font-weight: 600;
 `
 const ErfolgVeraenderung = styled(Cell)`
   grid-column: 7 / span 1;
   text-align: center;
+  font-weight: 600;
 `
 const ErfolgUnsicher = styled(Cell)`
   grid-column: 8 / span 1;
   text-align: center;
   background-color: ${(props) => (props.val ? '#afafaf' : 'unset')};
+  font-weight: 600;
 `
 const ErfolgNichtBeurteilt = styled(Cell)`
   grid-column: 9 / span 1;
   text-align: center;
+  font-weight: 600;
 `
 const KeineMassnahme = styled(Cell)`
   grid-column: 10 / span 1;
   text-align: center;
+  font-weight: 600;
 `
 const ApExists = styled(Cell)`
   grid-column: 11 / span 1;
   text-align: center;
+  font-weight: 600;
 `
 const KeineMassnTitle = styled(Title)`
   grid-column: 10 / span 1;
@@ -195,38 +205,31 @@ const ErfolgUnsicherTitle = styled(ErfolgTitle)`
 `
 
 const ErfolgList = ({ jahr, data }) => {
-  //const nodes = data?.jberAktPop?.nodes ?? []
-  const aps = get(data, 'allAps.nodes', [])
-  const apRows = sortBy(
-    aps.map((ap) => {
-      const beurteilung = get(ap, 'apbersByApId.nodes[0].beurteilung')
-      const pops = get(ap, 'popsByApId.nodes', [])
-      const tpops = flatten(pops.map((p) => get(p, 'tpopsByPopId.nodes', [])))
-      const anzMassn = flatten(
-        tpops.map((t) => get(t, 'tpopmassnsByTpopId.nodes', [])),
-      ).length
-      return {
-        ap: get(ap, 'aeTaxonomyByArtId.artname'),
-        erfolgNicht: beurteilung === 3 ? 'X' : '',
-        erfolgWenig: beurteilung === 6 ? 'X' : '',
-        erfolgMaessig: beurteilung === 5 ? 'X' : '',
-        erfolgGut: beurteilung === 1 ? 'X' : '',
-        erfolgSehr: beurteilung === 4 ? 'X' : '',
-        erfolgUnsicher: beurteilung === 1168274204 ? 'X' : '',
-        nichtBeurteilt: ![1, 3, 4, 5, 6, 1168274204].includes(beurteilung)
-          ? 'X'
-          : '',
-        veraenderung: get(
-          ap,
-          'apbersByApId.nodes[0].veraenderungZumVorjahr',
-          '',
-        ),
-        keineMassnahme: anzMassn === 0 ? 'X' : '',
-        apExists: ap.bearbeitung === 3 ? 'X' : '',
-      }
-    }),
-    'ap',
-  )
+  const nodes = data?.jberAbc?.nodes ?? []
+  const apRows = nodes.map((ap) => {
+    const veraenderung =
+      ap.erfolg === 1168274204 || ap.erfolgVorjahr === 1168274204
+        ? ''
+        : ap.erfolg - ap.erfolgVorjahr === 0
+        ? ''
+        : ap.erfolg - ap.erfolgVorjahr > 0
+        ? '╋'
+        : '―'
+
+    return {
+      ap: ap.artname,
+      erfolgNicht: ap?.erfolg === 3 ? 'X' : '',
+      erfolgWenig: ap?.erfolg === 6 ? 'X' : '',
+      erfolgMaessig: ap?.erfolg === 5 ? 'X' : '',
+      erfolgGut: ap?.erfolg === 1 ? 'X' : '',
+      erfolgSehr: ap?.erfolg === 4 ? 'X' : '',
+      erfolgUnsicher: ap?.erfolg === 1168274204 ? 'X' : '',
+      nichtBeurteilt: ap?.erfolg === 0 ? 'X' : '',
+      veraenderung,
+      keineMassnahme: ap.c1LPop === 0 ? 'X' : '',
+      apExists: ap.bearbeitung === 3 ? 'X' : '',
+    }
+  })
 
   return (
     <ErrorBoundary>

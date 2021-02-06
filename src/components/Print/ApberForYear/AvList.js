@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import groupBy from 'lodash/groupBy'
 import sortBy from 'lodash/sortBy'
 
@@ -31,6 +30,9 @@ const NonAvRow = styled.div`
 const Av = styled.div`
   min-width: 5cm;
   max-width: 5cm;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 const Art = styled.div``
 const Title = styled.p`
@@ -42,7 +44,7 @@ const Title = styled.p`
 const AvList = ({ data }) => {
   const nodes = data?.jberAbc?.nodes ?? []
   const avGrouped = groupBy(
-    get(nodes).map((ap) => ({
+    nodes.map((ap) => ({
       av: ap?.bearbeiter ?? '(kein Wert)',
       art: ap?.artname ?? '(keine Art gewählt)',
     })),

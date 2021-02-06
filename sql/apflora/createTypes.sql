@@ -47,6 +47,7 @@ create type apflora.tpop_kontrolliert_for_jber as (
   anz_tpopber integer
 );
 
+drop type apflora.pop_nach_status_for_jber cascade;
 create type apflora.pop_nach_status_for_jber as (
   year integer,
   a3lpop integer,
@@ -64,6 +65,7 @@ create type apflora.jber_abc as (
   id uuid,
   start_jahr integer,
   bearbeiter text,
+  bearbeitung integer,
   a_3_l_pop integer,
   a_3_l_tpop integer,
   a_4_l_pop integer,
@@ -101,7 +103,8 @@ create type apflora.jber_abc as (
   c_6_r_tpop integer,
   c_7_r_pop integer,
   c_7_r_tpop integer,
-  erfolg integer
+  erfolg integer,
+  erfolg_vorjahr integer
 );
 
 

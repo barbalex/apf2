@@ -258,10 +258,10 @@ const ApberForAp = ({
           )}
           <BMengen apId={apId} jahr={jahr} loading={loading} node={data} />
           <ChartContainer>
-            <TpopKontrolliert id={apId} height={250} print />
+            <TpopKontrolliert id={apId} jahr={jahr} height={250} print />
           </ChartContainer>
           <ChartContainer>
-            <PopStatus id={apId} height={250} print />
+            <PopStatus id={apId} year={jahr} height={250} print />
           </ChartContainer>
           <ChartContainer>
             <PopMenge id={apId} jahr={jahr} height={250} print />
@@ -424,7 +424,7 @@ const ApberForAp = ({
               apberDatum
                 ? format(new Date(apberDatum), 'dd.MM.yyyy')
                 : '(Datum fehlt)'
-            } / ${node.bearbeiter ?? '(kein Bearbeiter)'}`}
+            } / ${data?.bearbeiter ?? '(kein Bearbeiter)'}`}
           </Row>
         </ContentContainer>
       </Container>

@@ -111,6 +111,7 @@ export default gql`
         artname
         id
         startJahr
+        bearbeiter
         a3LPop
         a3LTpop
         a4LPop
@@ -148,6 +149,8 @@ export default gql`
         c6RTpop
         c7RPop
         c7RTpop
+        erfolg
+        erfolgVorjahr
       }
     }
   }

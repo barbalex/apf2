@@ -51,13 +51,19 @@ const color = {
   'potentieller Wuchs-/Ansiedlungsort': 'grey',
 }
 
-const ApAuswertungPopStatus = ({ id, height = 400, print }) => {
+const ApAuswertungPopStatus = ({
+  id,
+  height = 400,
+  print,
+  year: yearPassed,
+}) => {
+  const year = yearPassed ?? new Date().getFullYear()
   const {
     data: dataPopStati,
     error: errorPopStati,
     loading: loadingPopStati,
   } = useQuery(query, {
-    variables: { apId: id },
+    variables: { apId: id, year },
   })
   const rows = dataPopStati?.popNachStatusForJber?.nodes ?? []
 
