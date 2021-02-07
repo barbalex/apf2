@@ -1,3 +1,12 @@
+-- DANGER:
+-- 1. EVERY type needs an id (or apollo will not work correctly)
+-- 2. When re-using existing id's 
+--    apollo will replace those models with these in cache
+--    This will cause hard to solve issues
+-- 3. So either use existing id's but tell apollo to 
+--    combine them with the __typename when caching (in client.js, dataIdFromObject)
+-- 4. Or give them new uuid's
+
 CREATE TYPE apflora.q_pop_ohne_popmassnber AS (
   proj_id uuid,
   ap_id uuid,
@@ -106,8 +115,6 @@ create type apflora.jber_abc as (
   erfolg integer,
   erfolg_vorjahr integer
 );
-
-
 
 
 drop type apflora.jber_akt_pop cascade;

@@ -95,15 +95,24 @@ export default ({ idb, store }) => {
 
   const cache = new InMemoryCache({
     dataIdFromObject: (object) => {
-      //console.log({ object })
       if (object.__typename?.toLowerCase()?.includes('history')) {
         return `${object.id}/${object.year}`
       }
-      // BEWARE: the following functions use ap_id as their id
-      // thus once loaded apollo will replace the ap's in the cache with their data
-      // thus in the tree 'Aktionspläne' will count 0
+      // BEWARE: the following functions/types use existing id's as their id
+      // thus once loaded apollo will replace the existing models in the cache with their data
+      // this will cause hard to solve issues
       // so need to force default data id that combines __typename with id
-      if (['JberAbc', 'JberAktPop'].includes(object.__typename)) {
+      if (
+        [
+          'JberAbc',
+          'JberAktPop',
+          'QPopOhnePopmassnber',
+          'QPopOhnePopber',
+          'QTpopOhneMassnber',
+          'QTpopOhneTpopber',
+          'QTpopCountedEinheitMultipleTimesInYear',
+        ].includes(object.__typename)
+      ) {
         return defaultDataIdFromObject(object)
       }
       if (object.id && isNaN(object.id)) {
