@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'apflora v1.62.11',
+    title: 'apflora v1.62.10',
   },
   plugins: [
     {
@@ -68,6 +68,11 @@ module.exports = {
         theme_color: '#2e7d32',
         display: 'minimal-ui',
         icon: 'src/images/ophr.png',
+        // not using maskable icon as that con not be transparent
+        // which looks hideous in browser
+        //icon_options: {
+        //  purpose: `any maskable`,
+        //},
         include_favicon: true,
         description: 'Aktionspläne für Flora-Projekte',
       },
