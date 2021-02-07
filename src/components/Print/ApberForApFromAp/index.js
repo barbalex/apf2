@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 
@@ -8,42 +7,7 @@ import apberQuery from './apberById'
 import ApberForAp from '../ApberForAp'
 import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-
-const LoadingContainer = styled.div`
-  padding: 15px;
-  height: 100%;
-`
-const Container = styled.div`
-  /* this part is for when page preview is shown */
-  /* Divide single pages with some space and center all pages horizontally */
-  /* will be removed in @media print */
-  margin: ${(props) => (props.issubreport ? '0' : '1cm auto')};
-  margin-left: ${(props) =>
-    props.issubreport ? '-0.75cm !important' : '1cm auto'};
-  /* Define a white paper background that sticks out from the darker overall background */
-  background: ${(props) => (props.issubreport ? 'rgba(0, 0, 0, 0)' : '#fff')};
-  /* Show a drop shadow beneath each page */
-  box-shadow: ${(props) =>
-    props.issubreport ? 'unset' : '0 4px 5px rgba(75, 75, 75, 0.2)'};
-
-  /* set dimensions */
-  width: 21cm;
-
-  overflow-y: visible;
-
-  @media print {
-    /* this is when it is actually printed */
-    height: auto !important;
-    overflow: visible !important;
-    width: 21cm;
-
-    margin: 0 !important;
-    padding: ${(props) => (props.issubreport ? '0' : '0.5cm !important')};
-    /*padding-left: 0 !important;*/
-
-    box-shadow: unset;
-  }
-`
+import Spinner from '../../shared/Spinner'
 
 const ApberForApFromAp = ({ apberId: apberIdPassed, apId: apIdPassed }) => {
   const store = useContext(storeContext)
@@ -79,13 +43,7 @@ const ApberForApFromAp = ({ apberId: apberIdPassed, apId: apIdPassed }) => {
     },
   )
 
-  if (apDataLoading) {
-    return (
-      <Container>
-        <LoadingContainer>Lade...</LoadingContainer>
-      </Container>
-    )
-  }
+  if (apDataLoading) return <Spinner />
   if (apberDataError) return `Fehler: ${apberDataError.message}`
   if (apDataError) return `Fehler: ${apDataError.message}`
 
