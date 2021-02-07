@@ -64,7 +64,6 @@ module.exports = {
         // Think about what the user will want to do once they open your app,
         // and place them there
         start_url: './Daten',
-        //start_url: './',
         background_color: '#2e7d32',
         theme_color: '#2e7d32',
         display: 'minimal-ui',
