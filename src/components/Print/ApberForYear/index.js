@@ -73,7 +73,9 @@ const ApberForYearContainer = () => {
 
   // DANGER: without rerendering when loading mutates from true to false
   // data remains undefined
-  if (loading) return <Spinner />
+  // Plus: ensure jber is only rendered when year has been fetched
+  // this is important when opening app on jber route
+  if (loading || !year) return <Spinner />
 
   //console.log('ApberForYear, year:', year)
 
