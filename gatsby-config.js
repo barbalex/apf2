@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'apflora v1.62.3',
+    title: 'apflora v1.62.4',
   },
   plugins: [
     {
@@ -55,15 +55,18 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        // uncommented scope because of gatsby issue
-        // https://github.com/gatsbyjs/gatsby/issues/27839
-        scope: '/',
+        scope: '.',
         name: 'apflora.ch',
         short_name: 'apflora',
-        start_url: '/',
+        // https://web.dev/add-manifest/:
+        // Your start_url should direct the user straight into your app,
+        // rather than a product landing page.
+        // Think about what the user will want to do once they open your app,
+        // and place them there
+        start_url: './',
         background_color: '#2e7d32',
         theme_color: '#2e7d32',
-        display: 'standalone',
+        display: 'minimal-ui',
         icon: 'src/images/ophr.png',
         include_favicon: true,
       },
