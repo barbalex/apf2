@@ -99,6 +99,13 @@ export default ({ idb, store }) => {
       if (object.__typename?.toLowerCase()?.includes('history')) {
         return `${object.id}/${object.year}`
       }
+      // BEWARE: the following functions use ap_id as their id
+      // thus once loaded apollo will replace the ap's in the cache with their data
+      // thus in the tree 'Aktionspläne' will count 0
+      // so need to force default data id that combines __typename with id
+      if (['JberAbc', 'JberAktPop'].includes(object.__typename)) {
+        return defaultDataIdFromObject(object)
+      }
       if (object.id && isNaN(object.id)) {
         return object.id
       }
