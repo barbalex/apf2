@@ -76,30 +76,30 @@ const PopSeit = styled(Number)`
 const TpopSeit = styled(Number)``
 
 const CMengen = ({ apId, jahr, loading, node }) => {
-  const c1LPop = node?.c1LPop
-  const c1LTpop = node?.c1LTpop
-  const c1RPop = node?.c1RPop
-  const c1RTpop = node?.c1RTpop
-  const c2RPop = node?.c2RPop
-  const c2RTpop = node?.c2RTpop
-  const c3RPop = node?.c3RPop
-  const c3RTpop = node?.c3RTpop
-  const c4RPop = node?.c4RPop
-  const c4RTpop = node?.c4RTpop
-  const c5RPop = node?.c5RPop
-  const c5RTpop = node?.c5RTpop
-  const c6RPop = node?.c6RPop
-  const c6RTpop = node?.c6RTpop
-  const c7RPop = node?.c7RPop
-  const c7RTpop = node?.c7RTpop
-  const c1FirstYear = node?.c1FirstYear
+  const c1LPop = loading ? '...' : node?.c1LPop
+  const c1LTpop = loading ? '...' : node?.c1LTpop
+  const c1RPop = loading ? '...' : node?.c1RPop
+  const c1RTpop = loading ? '...' : node?.c1RTpop
+  const c2RPop = loading ? '...' : node?.c2RPop
+  const c2RTpop = loading ? '...' : node?.c2RTpop
+  const c3RPop = loading ? '...' : node?.c3RPop
+  const c3RTpop = loading ? '...' : node?.c3RTpop
+  const c4RPop = loading ? '...' : node?.c4RPop
+  const c4RTpop = loading ? '...' : node?.c4RTpop
+  const c5RPop = loading ? '...' : node?.c5RPop
+  const c5RTpop = loading ? '...' : node?.c5RTpop
+  const c6RPop = loading ? '...' : node?.c6RPop
+  const c6RTpop = loading ? '...' : node?.c6RTpop
+  const c7RPop = loading ? '...' : node?.c7RPop
+  const c7RTpop = loading ? '...' : node?.c7RTpop
+  const c1FirstYear = loading ? '...' : node?.c1FirstYear
 
   return (
     <Container>
       <Title>C. Zwischenbilanz zur Wirkung von Massnahmen</Title>
       <YearRow>
         <Year>{jahr}</Year>
-        <YearSince>{`Seit ${loading ? '...' : c1FirstYear}`}</YearSince>
+        <YearSince>{`Seit ${c1FirstYear}`}</YearSince>
       </YearRow>
       <LabelRow>
         <Label1 />
@@ -110,53 +110,53 @@ const CMengen = ({ apId, jahr, loading, node }) => {
       </LabelRow>
       <Row>
         <Label1>Anzahl Populationen/Teilpopulationen mit Massnahmen</Label1>
-        <PopBerJahr>{loading ? '...' : c1LPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : c1LTpop}</TpopBerJahr>
-        <PopSeit>{loading ? '...' : c1RPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : c1RTpop}</TpopSeit>
+        <PopBerJahr>{c1LPop}</PopBerJahr>
+        <TpopBerJahr>{c1LTpop}</TpopBerJahr>
+        <PopSeit>{c1RPop}</PopSeit>
+        <TpopSeit>{c1RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label2>kontrolliert</Label2>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : c2RPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : c2RTpop}</TpopSeit>
+        <PopSeit>{c2RPop}</PopSeit>
+        <TpopSeit>{c2RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label2Davon>davon:</Label2Davon>
         <Label2AfterDavon>sehr erfolgreich</Label2AfterDavon>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : c3RPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : c3RTpop}</TpopSeit>
+        <PopSeit>{c3RPop}</PopSeit>
+        <TpopSeit>{c3RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>erfolgreich</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : c4RPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : c4RTpop}</TpopSeit>
+        <PopSeit>{c4RPop}</PopSeit>
+        <TpopSeit>{c4RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>weniger erfolgreich</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : c5RPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : c5RTpop}</TpopSeit>
+        <PopSeit>{c5RPop}</PopSeit>
+        <TpopSeit>{c5RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>nicht erfolgreich</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : c6RPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : c6RTpop}</TpopSeit>
+        <PopSeit>{c6RPop}</PopSeit>
+        <TpopSeit>{c6RTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>mit unsicherer Wirkung</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{loading ? '...' : c7RPop}</PopSeit>
-        <TpopSeit>{loading ? '...' : c7RTpop}</TpopSeit>
+        <PopSeit>{c7RPop}</PopSeit>
+        <TpopSeit>{c7RTpop}</TpopSeit>
       </Row>
     </Container>
   )
