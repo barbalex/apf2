@@ -69,6 +69,7 @@ module.exports = {
         display: 'minimal-ui',
         icon: 'src/images/ophr.png',
         include_favicon: true,
+        description: 'Aktionspläne für Flora-Projekte',
       },
     },
     {
