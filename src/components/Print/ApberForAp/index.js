@@ -23,6 +23,9 @@ import TpopKontrolliert from '../../Projekte/Daten/Ap/Auswertung/TpopKontrollier
 
 const mdParser = new MarkdownIt({ breaks: true })
 
+const NoDataContainer = styled.div`
+  margin: 1cm;
+`
 const Container = styled.div`
   /* this part is for when page preview is shown */
   /* Divide single pages with some space and center all pages horizontally */
@@ -206,10 +209,20 @@ const ApberForAp = ({
   const loading = node ? false : mengenResult.loading
   const error = node ? false : mengenResult.error
 
+  //console.log('ApberForAp', { data, mengenResult, apId, jahr })
+
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
   // DANGER: without rerendering when loading mutates from true to false
   // data remains undefined
   if (loading) return <Spinner />
+
+  if (!data) {
+    return (
+      <NoDataContainer issubreport={isSubReport}>
+        Sorry, es gibt nicht ausreichend Daten
+      </NoDataContainer>
+    )
+  }
 
   return (
     <ErrorBoundary>
@@ -227,18 +240,18 @@ const ApberForAp = ({
         <ContentContainer issubreport={isSubReport}>
           <Header>
             {`Jahresbericht ${data?.startJahr ?? '(Jahr fehlt)'},
-              ${data.artname},
+              ${data?.artname ?? ''},
               ${format(new Date(), 'dd.MM.yyyy')}`}
           </Header>
 
-          <Title1>{data.artname}</Title1>
+          <Title1>{data?.artname ?? ''}</Title1>
 
           <Row>
             <p>{`Start Programm: ${
               data?.startJahr ?? '(Start-Jahr fehlt)'
             }`}</p>
-            <p>{`Erste Massnahme: ${data.firstMassn}`}</p>
-            <p>{`Erste Kontrolle: ${data.b1FirstYear}`}</p>
+            <p>{`Erste Massnahme: ${data?.firstMassn ?? ''}`}</p>
+            <p>{`Erste Kontrolle: ${data?.b1FirstYear ?? ''}`}</p>
           </Row>
 
           <AMengen loading={loading} node={data} jahr={jahr} />
@@ -281,12 +294,7 @@ const ApberForAp = ({
             </FieldRowFullWidth>
           )}
 
-          <CMengen
-            jahr={jahr}
-            startJahr={data.startJahr}
-            loading={loading}
-            node={data}
-          />
+          <CMengen jahr={jahr} loading={loading} node={data} />
           {!!apber.massnahmenPlanungVsAusfuehrung && (
             <FieldRowFullWidth>
               <TitledLabel>Vergleich Ausführung/Planung</TitledLabel>
