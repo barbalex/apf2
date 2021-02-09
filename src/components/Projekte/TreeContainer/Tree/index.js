@@ -43,18 +43,23 @@ const StyledList = styled(List)`
 const Tree = ({ treeName, nodes, loading, height = 1000 }) => {
   const store = useContext(storeContext)
   const tree = store[treeName]
-  const { activeNodeArray, treeWidth } = tree
+  const {
+    activeNodeArray,
+    treeWidth,
+    lastTouchedNode: lastTouchedNodeProxy,
+  } = tree
 
   const listRef = React.createRef()
+  const lastTouchedNode = lastTouchedNodeProxy?.slice()
+  // when loading on url, lastTouchedNode may not be set
+  const urlToFocus = lastTouchedNode.length ? lastTouchedNode : activeNodeArray
 
   useEffect(() => {
     if (listRef && listRef.current) {
-      const index = findIndex(nodes, (node) =>
-        isEqual(node.url, activeNodeArray),
-      )
+      const index = findIndex(nodes, (node) => isEqual(node.url, urlToFocus))
       listRef.current.scrollToItem(index)
     }
-  }, [activeNodeArray, listRef, nodes, loading])
+  }, [listRef, nodes, loading, urlToFocus])
 
   return (
     <Container data-loading={loading}>

@@ -10,6 +10,7 @@ export default ({ treeName, node, store }) => {
     setOpenNodes,
     activeNodeArray,
     setActiveNodeArray,
+    setLastTouchedNode,
   } = store[treeName]
 
   let newOpenNodes = [...openNodes]
@@ -26,4 +27,5 @@ export default ({ treeName, node, store }) => {
     newOpenNodes.push(node.url)
   }
   setOpenNodes(newOpenNodes)
+  setLastTouchedNode(node.url)
 }

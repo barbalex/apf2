@@ -21,6 +21,15 @@ export default types
   .model('Tree', {
     name: types.optional(types.string, 'tree'),
     activeNodeArray: types.array(types.union(types.string, types.number)),
+    // lastTouchedNode is needed to keep the last clicked arrow known
+    // so it does not jump
+    // before using this, activeNodeArray was used instead
+    // but then when an arrow out of sight of the active node
+    // is clicked, the list jumps back to the active node :-(
+    lastTouchedNode: types.optional(
+      types.array(types.union(types.string, types.number)),
+      [],
+    ),
     openNodes: types.array(
       types.array(types.union(types.string, types.number)),
     ),
@@ -31,6 +40,9 @@ export default types
     treeWidth: types.optional(types.number, 500),
   })
   .actions((self) => ({
+    setLastTouchedNode(val) {
+      self.lastTouchedNode = val
+    },
     setTreeWidth(val) {
       self.treeWidth = val
     },
@@ -90,6 +102,7 @@ export default types
 export const defaultValue = {
   name: 'tree',
   activeNodeArray: [],
+  lastTouchedNode: [],
   openNodes: [],
   apFilter: true,
   nodeLabelFilter: defaultNodeLabelFilter,

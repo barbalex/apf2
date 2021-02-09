@@ -1,6 +1,7 @@
 import React, { useContext, useMemo, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { getSnapshot } from 'mobx-state-tree'
 
 import Layout from '../components/Layout'
 import storeContext from '../storeContext'
@@ -28,7 +29,12 @@ const Container = styled.div`
 const DatenPage = ({ location }) => {
   const store = useContext(storeContext)
   const { view, showDeletions, user, setIsPrint, setEkfIds } = store
-  const { activeNodeArray } = store.tree
+  const { activeNodeArray, setLastTouchedNode } = store.tree
+
+  useEffect(() => {
+    // set last touched node in case project is directly opened on it
+    setLastTouchedNode(getSnapshot(activeNodeArray))
+  }, [activeNodeArray, setLastTouchedNode])
 
   /**
    * In Firefox this does not work! Bug is open since 7 years:
