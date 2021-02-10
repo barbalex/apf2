@@ -19,7 +19,7 @@
     "svgr": "svgr -d src/icons/ svg/"
   },
   "dependencies": {
-    "@apollo/client": "3.3.8",
+    "@apollo/client": "3.3.9",
     "@fontsource/roboto": "4.2.0",
     "@fontsource/roboto-mono": "4.2.0",
     "@material-ui/core": "4.11.3",
@@ -88,7 +88,7 @@
     "proj4": "2.7.0",
     "proj4leaflet": "1.0.2",
     "prop-types": "15.7.2",
-    "query-string": "6.13.8",
+    "query-string": "6.14.0",
     "react": "17.0.1",
     "react-copy-to-clipboard": "5.0.3",
     "react-datepicker": "3.4.1",
@@ -113,7 +113,7 @@
     "react-stylable-diff": "2.0.0",
     "react-typography": "0.16.19",
     "react-window": "1.8.6",
-    "recharts": "2.0.4",
+    "recharts": "2.0.6",
     "redaxios": "0.4.1",
     "simplebar-react": "2.3.0",
     "styled-components": "5.2.1",
