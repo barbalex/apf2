@@ -59,13 +59,13 @@ export default types
     setApFilter(val) {
       self.apFilter = val
     },
-    setActiveNodeArray(val) {
+    setActiveNodeArray(val, nonavigate) {
       if (isEqual(val, self.activeNodeArray)) {
         // do not do this if already set
         // trying to stop vicious cycle of reloading in first start after update
         return
       }
-      if (self.name === 'tree') {
+      if (self.name === 'tree' && !nonavigate) {
         const store = getParent(self)
         const { urlQuery } = store
         const search = queryString.stringify(urlQuery)

@@ -2,6 +2,7 @@ import React, { useContext, useMemo, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
+import isEqual from 'lodash/isEqual'
 
 import Layout from '../components/Layout'
 import storeContext from '../storeContext'
@@ -13,6 +14,7 @@ import Deletions from '../components/Deletions'
 import EkPlan from '../components/EkPlan'
 import Unterhalt from '../components/Unterhalt'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
+import getActiveNodeArrayFromPathname from '../modules/getActiveNodeArrayFromPathname'
 
 const Container = styled.div`
   background-color: #fffde7;
@@ -29,12 +31,23 @@ const Container = styled.div`
 const DatenPage = ({ location }) => {
   const store = useContext(storeContext)
   const { view, showDeletions, user, setIsPrint, setEkfIds } = store
-  const { activeNodeArray, setLastTouchedNode } = store.tree
+  const { activeNodeArray, setActiveNodeArray, setLastTouchedNode } = store.tree
 
   useEffect(() => {
     // set last touched node in case project is directly opened on it
     setLastTouchedNode(getSnapshot(activeNodeArray))
   }, [activeNodeArray, setLastTouchedNode])
+
+  // when pathname changes, update activeNodeArray
+  // seems no more needed?
+  const { pathname } = location
+  useEffect(() => {
+    const newAna = getActiveNodeArrayFromPathname(pathname)
+    if (!isEqual(newAna, activeNodeArray.slice())) {
+      // user pushed back button > update activeNodeArray
+      setActiveNodeArray(newAna, 'nonavigate')
+    }
+  }, [activeNodeArray, pathname, setActiveNodeArray])
 
   /**
    * In Firefox this does not work! Bug is open since 7 years:
