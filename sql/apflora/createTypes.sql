@@ -64,8 +64,7 @@ create type apflora.pop_nach_status_for_jber as (
   a5lpop integer,
   a7lpop integer,
   a8lpop integer,
-  a9lpop integer,
-  a10lpop integer
+  a9lpop integer
 );
 
 drop type apflora.jber_abc cascade;
@@ -87,8 +86,6 @@ create type apflora.jber_abc as (
   a_8_l_tpop integer,
   a_9_l_pop integer,
   a_9_l_tpop integer,
-  a_10_l_pop integer,
-  a_10_l_tpop integer,
   b_1_l_pop integer,
   b_1_l_tpop integer,
   b_1_first_year integer,

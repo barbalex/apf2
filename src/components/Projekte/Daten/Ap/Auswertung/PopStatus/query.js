@@ -12,7 +12,6 @@ export default gql`
         a7Lpop
         a8Lpop
         a9Lpop
-        a10Lpop
       }
     }
   }

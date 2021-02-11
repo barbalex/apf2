@@ -48,7 +48,6 @@ const color = {
     'rgba(46,125,50,0.5)',
   'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt':
     'rgba(245,141,66,0.5)',
-  'potentieller Wuchs-/Ansiedlungsort': 'grey',
 }
 
 const ApAuswertungPopStatus = ({
@@ -78,9 +77,6 @@ const ApAuswertungPopStatus = ({
       : 0,
     'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt': row?.a8Lpop
       ? Number(row?.a8Lpop)
-      : 0,
-    'potentieller Wuchs-/Ansiedlungsort': row?.a10Lpop
-      ? Number(row?.a10Lpop)
       : 0,
   }))
 
@@ -190,15 +186,6 @@ const ApAuswertungPopStatus = ({
                     'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt'
                   ]
                 }
-                legendType="square"
-                isAnimationActive={!print}
-              />
-              <Area
-                type="monotone"
-                dataKey="potentieller Wuchs-/Ansiedlungsort"
-                stackId="1"
-                stroke={color['potentieller Wuchs-/Ansiedlungsort']}
-                fill={color['potentieller Wuchs-/Ansiedlungsort']}
                 legendType="square"
                 isAnimationActive={!print}
               />

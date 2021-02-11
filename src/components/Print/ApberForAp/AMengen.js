@@ -23,10 +23,6 @@ const YearRow = styled.div`
 const TotalRow = styled(Row)`
   font-weight: 700;
 `
-const FernerRow = styled.div`
-  padding: 0.05cm 0 0 0;
-  font-size: 12px;
-`
 const LabelRow = styled(Row)`
   font-size: 12px;
 `
@@ -89,8 +85,6 @@ const AMengen = ({ loading, jahr, node }) => {
   const a8LTpop = node?.a8LTpop
   const a9LPop = node?.a9LPop
   const a9LTpop = node?.a9LTpop
-  const a10LPop = node?.a10LPop
-  const a10LTpop = node?.a10LTpop
   const a1LPop = loading
     ? '...'
     : a3LPop + a4LPop + a5LPop + a7LPop + a8LPop + a9LPop
@@ -179,14 +173,6 @@ const AMengen = ({ loading, jahr, node }) => {
         <Label2>Ansaatversuche:</Label2>
         <PopBerJahr>{loading ? '...' : a9LPop}</PopBerJahr>
         <TpopBerJahr>{loading ? '...' : a9LTpop}</TpopBerJahr>
-        <PopSeit />
-        <TpopSeit />
-      </Row>
-      <FernerRow>ferner:</FernerRow>
-      <Row>
-        <Label1>potentieller Wuchs-/Ansiedlungsort:</Label1>
-        <PopBerJahr>{loading ? '...' : a10LPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : a10LTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>

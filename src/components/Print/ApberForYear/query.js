@@ -124,8 +124,6 @@ export default gql`
         a8LTpop
         a9LPop
         a9LTpop
-        a10LPop
-        a10LTpop
         b1LPop
         b1LTpop
         b1FirstYear
