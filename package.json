@@ -123,7 +123,7 @@
   },
   "dependenciesComments": {
     "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1",
-    "gatsby-plugin-sharp": "2.8.0: wait for version > 2.13.0",
+    "gatsby-plugin-sharp": "2.8.0: wait for version > 2.13.0. Also: need the sharp resolution for the build not to break on macOS",
     "leaflet.fullscreen": "1.6.0: do not update to v2: https://github.com/brunob/leaflet.fullscreen/issues/77",
     "gatsby-plugin-eslint": "2.0.8: do not update to v3, see: https://github.com/mongkuen/gatsby-plugin-eslint/issues/25 and https://github.com/gatsbyjs/gatsby/issues/29326#issuecomment-773895559"
   },
@@ -143,6 +143,9 @@
     "prettier": "2.2.1",
     "source-map-explorer": "2.5.2",
     "vercel": "21.2.3"
+  },
+  "resolutions": {
+    "sharp": "0.25.4"
   },
   "eslintConfig": {
     "extends": "react-app"
