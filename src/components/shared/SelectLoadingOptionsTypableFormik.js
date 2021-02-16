@@ -3,7 +3,6 @@ import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
-import get from 'lodash/get'
 import { useField } from 'formik'
 
 const Container = styled.div`
@@ -100,7 +99,7 @@ const SelectTypable = ({
           filter,
         },
       })
-      const options = get(data, `${queryNodesName}.nodes`, [])
+      const options = data?.[queryNodesName]?.nodes ?? []
       cb(options)
     },
     [client, query, queryNodesName],
