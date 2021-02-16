@@ -1,5 +1,5 @@
 /**
- * Diese Mehode um Gemeinden zu ermitteln wird momentan nicht benutz
+ * Diese Methode um Gemeinden zu ermitteln wird momentan nicht benutzt
  * Stattdessen wird tabelle ch_gemeinden ausgewertet
  * Diese Methode behalten - könnte künftig nützlich sein
  */
