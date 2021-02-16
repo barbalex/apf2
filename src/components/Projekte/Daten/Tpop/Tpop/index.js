@@ -147,6 +147,8 @@ const Tpop = ({
                             }
                           ) {
                             nodes {
+                              # apollo wants an id for its cache
+                              id: objectid
                               name
                             }
                           }
