@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const aperfkritFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -25,7 +25,8 @@ export default ({
 
   const erfkritNodesLength = memoizeOne(
     () =>
-      get(data, 'allErfkrits.nodes', []).filter(el => el.apId === apId).length,
+      get(data, 'allErfkrits.nodes', []).filter((el) => el.apId === apId)
+        .length,
   )()
   const message = loading
     ? '...'
@@ -36,7 +37,7 @@ export default ({
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien']
 
   // only show if parent node exists
-  if (!nodesPassed.map(n => n.id).includes(apId)) return []
+  if (!nodesPassed.map((n) => n.id).includes(apId)) return []
 
   return [
     {
@@ -53,3 +54,5 @@ export default ({
     },
   ]
 }
+
+export default aperfkritFolderNode

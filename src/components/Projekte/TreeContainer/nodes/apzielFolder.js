@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import union from 'lodash/union'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const apzielFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -57,3 +57,5 @@ export default ({
     },
   ]
 }
+
+export default apzielFolderNode

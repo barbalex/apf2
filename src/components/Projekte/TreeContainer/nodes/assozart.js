@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const assozartNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -22,12 +22,12 @@ export default ({
   const nodes = memoizeOne(() =>
     get(data, 'allAssozarts.nodes', [])
       // only show if parent node exists
-      .filter(el =>
-        nodesPassed.map(n => n.id).includes(`${el.apId}AssozartFolder`),
+      .filter((el) =>
+        nodesPassed.map((n) => n.id).includes(`${el.apId}AssozartFolder`),
       )
       // only show nodes of this parent
-      .filter(el => el.apId === apId)
-      .map(el => ({
+      .filter((el) => el.apId === apId)
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'assozart',
         filterTable: 'assozart',
@@ -54,3 +54,5 @@ export default ({
 
   return nodes
 }
+
+export default assozartNodes
