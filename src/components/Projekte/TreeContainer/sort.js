@@ -1,4 +1,4 @@
-const exists = value => !!value || value === 0
+const exists = (value) => !!value || value === 0
 
 const sort = (a, b, i) => {
   // return if no element at this index
@@ -19,4 +19,6 @@ const sort = (a, b, i) => {
   if (aI.toLowerCase() > bI.toLowerCase()) return 1
 }
 
-export default (a, b) => sort(a, b, 0)
+const Sort = (a, b) => sort(a, b, 0)
+
+export default Sort

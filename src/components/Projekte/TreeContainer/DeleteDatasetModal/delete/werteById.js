@@ -1,8 +1,9 @@
 import { gql } from '@apollo/client'
 import camelCase from 'lodash/camelCase'
 
-export default (table) => {
+const werteById = (table) => {
   const tableName = camelCase(table)
+
   return gql`
     query werteByIdForDelete($id: UUID!) {
       ${tableName}ById(id: $id) {
@@ -16,3 +17,5 @@ export default (table) => {
     }
   `
 }
+
+export default werteById

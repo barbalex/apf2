@@ -1,7 +1,7 @@
 import isNodeOpen from './isNodeOpen'
 import openNode from './openNode'
 
-export default ({ treeName, node, store }) => {
+const toggleNode = ({ treeName, node, store }) => {
   if (!node.url) throw new Error('passed node has no url')
   const { dataFilterSetActiveTable } = store
   const {
@@ -45,3 +45,5 @@ export default ({ treeName, node, store }) => {
     setLastTouchedNode(node.url)
   }
 }
+
+export default toggleNode
