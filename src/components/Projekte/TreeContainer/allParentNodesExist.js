@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual'
 
-export default (nodes, nodePassed) => {
+const allParentNodesExist = (nodes, nodePassed) => {
   let parentNodes = []
   const nodeUrl = [...nodePassed.url]
   // pop own url - check only for parents
@@ -10,9 +10,11 @@ export default (nodes, nodePassed) => {
   }
   // remove 'Projekte' as that is not contained in openNodes
   parentNodes = parentNodes.filter(
-    n => !(n.length === 1 && n[0] === 'Projekte'),
+    (n) => !(n.length === 1 && n[0] === 'Projekte'),
   )
   if (parentNodes.length === 0) return true
-  const nodeUrls = nodes.map(n => n.url)
-  return parentNodes.every(n => nodeUrls.some(url => isEqual(url, n)))
+  const nodeUrls = nodes.map((n) => n.url)
+  return parentNodes.every((n) => nodeUrls.some((url) => isEqual(url, n)))
 }
+
+export default allParentNodesExist

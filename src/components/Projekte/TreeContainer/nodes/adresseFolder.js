@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 
-export default ({
+const adresseFolder = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -23,7 +23,7 @@ export default ({
   }
 
   // only show if parent node exists
-  if (!nodesPassed.map(n => n.id).includes('wlFolder')) return []
+  if (!nodesPassed.map((n) => n.id).includes('wlFolder')) return []
 
   return [
     {
@@ -39,3 +39,5 @@ export default ({
     },
   ]
 }
+
+export default adresseFolder

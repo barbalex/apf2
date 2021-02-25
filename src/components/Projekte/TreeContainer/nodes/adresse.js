@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const adresse = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -13,8 +13,8 @@ export default ({
   const nodes = memoizeOne(() =>
     adresses
       // only show if parent node exists
-      .filter(el => nodesPassed.map(n => n.id).includes('adresseFolder'))
-      .map(el => ({
+      .filter((el) => nodesPassed.map((n) => n.id).includes('adresseFolder'))
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'adresse',
         filterTable: 'adresse',
@@ -33,3 +33,5 @@ export default ({
 
   return nodes
 }
+
+export default adresse

@@ -3,7 +3,7 @@
 
 import types from '../../../store/Tree/DataFilter/simpleTypes'
 
-export default ({ node, dataFilterArray, table }) => {
+const filterNodesByApFilter = ({ node, dataFilterArray, table }) => {
   if (dataFilterArray.length === 0) return true
   let type = 'string'
   return dataFilterArray.every(([key, value]) => {
@@ -28,3 +28,5 @@ export default ({ node, dataFilterArray, table }) => {
       .includes(value.toString().toLowerCase())
   })
 }
+
+export default filterNodesByApFilter
