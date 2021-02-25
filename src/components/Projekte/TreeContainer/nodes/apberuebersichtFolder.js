@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const apberuebersichtFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -12,7 +12,7 @@ export default ({
   store,
 }) => {
   // fetch sorting indexes of parents
-  const projNodeIds = projektNodes.map(n => n.id)
+  const projNodeIds = projektNodes.map((n) => n.id)
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
@@ -21,7 +21,7 @@ export default ({
 
   const apberuebersichtNodesLength = memoizeOne(
     () =>
-      get(data, 'allApberuebersichts.nodes', []).filter(el =>
+      get(data, 'allApberuebersichts.nodes', []).filter((el) =>
         projNodeIds.includes(el.projId),
       ).length,
   )()
@@ -54,3 +54,5 @@ export default ({
     },
   ]
 }
+
+export default apberuebersichtFolderNode

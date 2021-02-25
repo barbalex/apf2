@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const apberrelevantGrundWerteNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -17,12 +17,12 @@ export default ({
   const nodes = memoizeOne(() =>
     apberrelevantGrundWertes
       // only show if parent node exists
-      .filter(el =>
+      .filter((el) =>
         nodesPassed
-          .map(n => n.id)
+          .map((n) => n.id)
           .includes('tpopApberrelevantGrundWerteFolder'),
       )
-      .map(el => ({
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'tpopApberrelevantGrundWerte',
         filterTable: 'tpopApberrelevantGrundWerte',
@@ -41,3 +41,5 @@ export default ({
 
   return nodes
 }
+
+export default apberrelevantGrundWerteNodes

@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 
-export default ({
+const apberrelevantGrundWerteFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -20,7 +20,10 @@ export default ({
   let apberrelevantGrundWerteNodesLength = apberrelevantGrundWertes.length
   // before ApberrelevantGrundWerte folder is active, only total count was fetched, not yet any apberrelevantGrundWerten nodes
   if (apberrelevantGrundWertes.length === 0)
-    apberrelevantGrundWerteNodesLength = get(data, 'tpopApberrelevantGrundWertesUnfiltered.totalCount')
+    apberrelevantGrundWerteNodesLength = get(
+      data,
+      'tpopApberrelevantGrundWertesUnfiltered.totalCount',
+    )
   let message =
     loading && !apberrelevantGrundWerteNodesLength
       ? '...'
@@ -30,7 +33,7 @@ export default ({
   }
 
   // only show if parent node exists
-  if (!nodesPassed.map(n => n.id).includes('wlFolder')) return []
+  if (!nodesPassed.map((n) => n.id).includes('wlFolder')) return []
 
   return [
     {
@@ -46,3 +49,5 @@ export default ({
     },
   ]
 }
+
+export default apberrelevantGrundWerteFolderNode

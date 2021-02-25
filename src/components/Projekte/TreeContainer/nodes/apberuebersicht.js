@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const apberuebersichtNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -11,7 +11,7 @@ export default ({
   store,
 }) => {
   // fetch sorting indexes of parents
-  const projNodeIds = projektNodes.map(n => n.id)
+  const projNodeIds = projektNodes.map((n) => n.id)
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
@@ -20,10 +20,10 @@ export default ({
   const nodes = memoizeOne(() =>
     get(data, 'allApberuebersichts.nodes', [])
       // only show if parent node exists
-      .filter(el => projNodeIds.includes(el.projId))
+      .filter((el) => projNodeIds.includes(el.projId))
       // only show nodes of this parent
-      .filter(el => el.projId === projId)
-      .map(el => ({
+      .filter((el) => el.projId === projId)
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'apberuebersicht',
         filterTable: 'apberuebersicht',
@@ -43,3 +43,5 @@ export default ({
 
   return nodes
 }
+
+export default apberuebersichtNodes

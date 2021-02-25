@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const apberFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -25,7 +25,7 @@ export default ({
 
   const apberNodesLength = memoizeOne(
     () =>
-      get(data, 'allApbers.nodes', []).filter(el => el.apId === apId).length,
+      get(data, 'allApbers.nodes', []).filter((el) => el.apId === apId).length,
   )()
   /*
   let message = loading && !apberNodesLength ? '...' : apberNodesLength
@@ -41,7 +41,7 @@ export default ({
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte']
 
   // only show if parent node exists
-  if (!nodesPassed.map(n => n.id).includes(apId)) return []
+  if (!nodesPassed.map((n) => n.id).includes(apId)) return []
 
   return [
     {
@@ -58,3 +58,5 @@ export default ({
     },
   ]
 }
+
+export default apberFolderNode
