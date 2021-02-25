@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const aperfkritNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -24,10 +24,12 @@ export default ({
   const nodes = memoizeOne(() =>
     get(data, 'allErfkrits.nodes', [])
       // only show if parent node exists
-      .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}Erfkrit`))
+      .filter((el) =>
+        nodesPassed.map((n) => n.id).includes(`${el.apId}Erfkrit`),
+      )
       // only show nodes of this parent
-      .filter(el => el.apId === apId)
-      .map(el => ({
+      .filter((el) => el.apId === apId)
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'erfkrit',
         filterTable: 'erfkrit',
@@ -54,3 +56,5 @@ export default ({
 
   return nodes
 }
+
+export default aperfkritNodes
