@@ -189,6 +189,7 @@ const ApberForAp = ({
     ],
   )
 
+  // TODO: do not useQuery conditionally
   const mengenResult =
     node ??
     useQuery(queryMengen, {

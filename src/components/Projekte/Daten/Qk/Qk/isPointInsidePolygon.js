@@ -1,6 +1,6 @@
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon'
 
-export default (polygon, lat, long) => {
+const isPointInsidePolygon = (polygon, lat, long) => {
   // build a geoJson point
   const koordPt = {
     type: 'Feature',
@@ -19,3 +19,5 @@ export default (polygon, lat, long) => {
   // let turf check if the point is in zh
   return booleanPointInPolygon(koordPt, polygon)
 }
+
+export default isPointInsidePolygon

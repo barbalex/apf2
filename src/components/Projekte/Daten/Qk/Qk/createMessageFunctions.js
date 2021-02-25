@@ -5,7 +5,7 @@ import sortBy from 'lodash/sortBy'
 import isPointInsidePolygon from './isPointInsidePolygon'
 import ktZh from './ktZh.json'
 
-export default ({ data, berichtjahr, projId, apId }) => ({
+const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
   tpopsOutsideZh: () => {
     const projId = get(data, 'tpopsOutsideZh.projId')
     const apId = get(data, 'tpopsOutsideZh.apsByProjId.nodes[0].id')
@@ -1935,3 +1935,5 @@ export default ({ data, berichtjahr, projId, apId }) => ({
     })
   },
 })
+
+export default createMessageFunctions
