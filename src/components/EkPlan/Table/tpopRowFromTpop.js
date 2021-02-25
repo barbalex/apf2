@@ -5,7 +5,7 @@ import appBaseUrl from '../../../modules/appBaseUrl'
 
 const isOdd = (num) => num % 2 === 0
 
-export default ({ tpop, index, dataLists }) => {
+const tpopRowFromTpop = ({ tpop, index, dataLists }) => {
   let lv95X = get(tpop, 'lv95X')
   if (lv95X && lv95X.toLocaleString) {
     lv95X = lv95X.toLocaleString('de-ch')
@@ -101,3 +101,5 @@ export default ({ tpop, index, dataLists }) => {
     yearTitle: fields.yearTitle,
   }
 }
+
+export default tpopRowFromTpop

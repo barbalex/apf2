@@ -13,7 +13,7 @@ import uniqBy from 'lodash/uniqBy'
 import graphQlUri from './modules/graphQlUri'
 import existsPermissionsError from './modules/existsPermissionError'
 
-export default ({ idb, store }) => {
+const Client = ({ idb, store }) => {
   const { enqueNotification } = store
   // TODO: use new functionality
   // https://www.apollographql.com/docs/react/migrating/apollo-client-3-migration/?mc_cid=e593721cc7&mc_eid=c8e91f2f0a#apollo-link-and-apollo-link-http
@@ -130,3 +130,5 @@ export default ({ idb, store }) => {
   })
   return client
 }
+
+export default Client

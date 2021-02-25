@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 import camelCase from 'lodash/camelCase'
 import upperFirst from 'lodash/upperFirst'
 
-export default (table) => {
+const createWerte = (table) => {
   const tableName = camelCase(table)
   const mutation = gql`
       mutation createWerteForUndelete(
@@ -34,3 +34,5 @@ export default (table) => {
     `
   return mutation
 }
+
+export default createWerte

@@ -3,7 +3,7 @@ import sum from 'lodash/sum'
 
 import appBaseUrl from '../../../modules/appBaseUrl'
 
-export default ({ tpop, dataLists, years, store }) => {
+const exportRowFromTpop = ({ tpop, dataLists, years, store }) => {
   const {
     einheitsByAp,
     showCount,
@@ -179,3 +179,5 @@ export default ({ tpop, dataLists, years, store }) => {
   })
   return row
 }
+
+export default exportRowFromTpop
