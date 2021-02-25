@@ -4,7 +4,7 @@ import memoizeOne from 'memoize-one'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
-export default ({
+const ap = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -21,10 +21,10 @@ export default ({
   const nodes = memoizeOne(() =>
     get(data, 'allAps.nodes', [])
       // only show if parent node exists
-      .filter(el => nodesPassed.map(n => n.id).includes(el.projId))
+      .filter((el) => nodesPassed.map((n) => n.id).includes(el.projId))
       // only show nodes of this parent
-      .filter(el => el.projId === projId)
-      .map(el => ({
+      .filter((el) => el.projId === projId)
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'ap',
         filterTable: 'ap',
@@ -36,7 +36,7 @@ export default ({
         url: ['Projekte', el.projId, 'Aktionspläne', el.id],
         hasChildren: true,
       }))
-      .filter(el => allParentNodesAreOpen(store[treeName].openNodes, el.url))
+      .filter((el) => allParentNodesAreOpen(store[treeName].openNodes, el.url))
       .map((el, index) => {
         el.sort = [projIndex, 1, index]
         return el
@@ -45,3 +45,5 @@ export default ({
 
   return nodes
 }
+
+export default ap

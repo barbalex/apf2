@@ -3,7 +3,7 @@ import isEqual from 'lodash/isEqual'
 import isNodeOpen from './isNodeOpen'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 
-export default ({ treeName, node, store }) => {
+const toggleNodeSymbol = ({ treeName, node, store }) => {
   if (!node.url) throw new Error('passed node has no url')
   const {
     openNodes,
@@ -29,3 +29,5 @@ export default ({ treeName, node, store }) => {
   setOpenNodes(newOpenNodes)
   setLastTouchedNode(node.url)
 }
+
+export default toggleNodeSymbol

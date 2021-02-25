@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const apartFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -14,7 +14,7 @@ export default ({
   store,
 }) => {
   // return empty if ap is not a real ap and apFilter is set
-  const ap = get(data, 'allAps.nodes', []).find(n => n.id === apId)
+  const ap = get(data, 'allAps.nodes', []).find((n) => n.id === apId)
   const isAp = ap && [1, 2, 3].includes(ap.bearbeitung)
   const apFilter = get(store, `${treeName}.apFilter`)
   if (!!apFilter && !isAp) return []
@@ -32,7 +32,7 @@ export default ({
     get(store, `${treeName}.nodeLabelFilter.apart`) || ''
 
   const apartNodesLength = memoizeOne(
-    () => aparts.filter(el => el.apId === apId).length,
+    () => aparts.filter((el) => el.apId === apId).length,
   )()
   /*let message = loading && !apartNodesLength ? '...' : apartNodesLength
   if (nodeLabelFilterString) {
@@ -45,7 +45,7 @@ export default ({
     : apartNodesLength
 
   // only show if parent node exists
-  const apNodesIds = nodesPassed.map(n => n.id)
+  const apNodesIds = nodesPassed.map((n) => n.id)
   if (!apNodesIds.includes(apId)) return []
 
   return [
@@ -63,3 +63,5 @@ export default ({
     },
   ]
 }
+
+export default apartFolderNode

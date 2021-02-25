@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const apartNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -22,10 +22,10 @@ export default ({
   const nodes = memoizeOne(() =>
     get(data, 'allAparts.nodes', [])
       // only show if parent node exists
-      .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}Apart`))
+      .filter((el) => nodesPassed.map((n) => n.id).includes(`${el.apId}Apart`))
       // only show nodes of this parent
-      .filter(el => el.apId === apId)
-      .map(el => ({
+      .filter((el) => el.apId === apId)
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'apart',
         filterTable: 'apart',
@@ -45,3 +45,5 @@ export default ({
 
   return nodes
 }
+
+export default apartNodes
