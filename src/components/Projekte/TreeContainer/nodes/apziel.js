@@ -5,7 +5,7 @@ import memoizeOne from 'memoize-one'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
 
-export default ({
+const apzielNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -25,14 +25,17 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const zieljahrIndex = findIndex(apzieljahrFolderNodes, el => el.jahr === jahr)
+  const zieljahrIndex = findIndex(
+    apzieljahrFolderNodes,
+    (el) => el.jahr === jahr,
+  )
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
     get(data, 'allZiels.nodes', [])
-      .filter(el => el.apId === apId)
-      .filter(el => el.jahr === jahr)
-      .map(el => ({
+      .filter((el) => el.apId === apId)
+      .filter((el) => el.jahr === jahr)
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'ziel',
         filterTable: 'ziel',
@@ -52,8 +55,8 @@ export default ({
         ],
         hasChildren: true,
       }))
-      .filter(el => allParentNodesAreOpen(openNodes, el.url))
-      .filter(n => allParentNodesExist(nodesPassed, n))
+      .filter((el) => allParentNodesAreOpen(openNodes, el.url))
+      .filter((n) => allParentNodesExist(nodesPassed, n))
       .map((el, index) => {
         el.sort = [projIndex, 1, apIndex, 2, zieljahrIndex, index]
         return el
@@ -62,3 +65,5 @@ export default ({
 
   return nodes
 }
+
+export default apzielNodes

@@ -5,7 +5,7 @@ import memoizeOne from 'memoize-one'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
 
-export default ({
+const apzielberFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -30,14 +30,14 @@ export default ({
   })
   const zieljahrIndex = findIndex(
     apzieljahrFolderNodes,
-    el => el.jahr === zielJahr,
+    (el) => el.jahr === zielJahr,
   )
-  const zielIndex = findIndex(apzielNodes, el => el.id === zielId)
+  const zielIndex = findIndex(apzielNodes, (el) => el.id === zielId)
   const nodeLabelFilterString =
     get(store, `${treeName}.nodeLabelFilter.zielber`) || ''
   const zielberNodesLength = memoizeOne(
     () =>
-      get(data, 'allZielbers.nodes', []).filter(el => el.zielId === zielId)
+      get(data, 'allZielbers.nodes', []).filter((el) => el.zielId === zielId)
         .length,
   )()
   const message = loading
@@ -72,5 +72,7 @@ export default ({
       sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1],
       hasChildren: zielberNodesLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ].filter((n) => allParentNodesExist(nodesPassed, n))
 }
+
+export default apzielberFolderNode

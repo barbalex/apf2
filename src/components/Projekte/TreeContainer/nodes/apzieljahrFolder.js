@@ -5,7 +5,7 @@ import memoizeOne from 'memoize-one'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
-export default ({
+const apzieljahrFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -66,3 +66,5 @@ export default ({
     }
   })
 }
+
+export default apzieljahrFolderNode

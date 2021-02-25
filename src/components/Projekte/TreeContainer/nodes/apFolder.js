@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const apFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -12,7 +12,7 @@ export default ({
   store,
 }) => {
   // fetch sorting indexes of parents
-  const projNodeIds = projektNodes.map(n => n.id)
+  const projNodeIds = projektNodes.map((n) => n.id)
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
@@ -22,7 +22,7 @@ export default ({
   const apNodes = memoizeOne(() =>
     get(data, 'allAps.nodes', [])
       // only show if parent node exists
-      .filter(el => projNodeIds.includes(el.projId)),
+      .filter((el) => projNodeIds.includes(el.projId)),
   )()
   const message = loading
     ? '...'
@@ -48,3 +48,5 @@ export default ({
     },
   ]
 }
+
+export default apFolderNode
