@@ -1,6 +1,6 @@
 import isNodeOpen from './isNodeOpen'
 
-export default (openNodes, urlPassed) => {
+const allParentNodesAreOpen = (openNodes, urlPassed) => {
   let parentNodes = []
   const url = [...urlPassed]
   for (let i = 1; i < url.length; i++) {
@@ -13,3 +13,5 @@ export default (openNodes, urlPassed) => {
   if (parentNodes.length === 0) return true
   return parentNodes.every((n) => isNodeOpen({ openNodes, url: n }))
 }
+
+export default allParentNodesAreOpen

@@ -1,6 +1,6 @@
 // alternative: renderToString
 // see: https://gis.stackexchange.com/a/356513/13491
-export default (p) =>
+const PopupFromProperties = (p) =>
   `<div>
   ${Object.entries(p)
     .filter((e) => !!e[1])
@@ -13,3 +13,5 @@ export default (p) =>
     )
     .join('')}
 </div>`
+
+export default PopupFromProperties

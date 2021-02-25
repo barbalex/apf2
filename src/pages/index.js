@@ -110,7 +110,7 @@ const bgImageStyle = {
   zIndex: -1,
 }
 
-export default ({ data }) => {
+const Home = ({ data }) => {
   const store = useContext(storeContext)
   const { appBarHeight } = store
 
@@ -247,3 +247,5 @@ export const query = graphql`
     }
   }
 `
+
+export default Home
