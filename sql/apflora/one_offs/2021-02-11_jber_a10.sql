@@ -1,9 +1,9 @@
 -- 1. update app side code
 -- 2. update version
 -- 3. run these queries:
+DROP TYPE apflora.jber_abc CASCADE;
 
-drop type apflora.jber_abc cascade;
-create type apflora.jber_abc as (
+CREATE TYPE apflora.jber_abc AS (
   artname text,
   id uuid,
   start_jahr integer,
@@ -48,744 +48,734 @@ create type apflora.jber_abc as (
   erfolg_vorjahr integer
 );
 
-DROP FUNCTION IF EXISTS apflora.jber_abc(jahr int);
-CREATE OR REPLACE FUNCTION apflora.jber_abc(jahr int)
-  RETURNS setof apflora.jber_abc AS
-  $$
-  with a_3_l_pop as (
-    select
-      pop.ap_id,
-      count(distinct pop.id) as count
-    from apflora.pop pop
-      inner join apflora.tpop tpop
-      on pop.id = tpop.pop_id
-    where
-      pop.status = 100
-      and pop.bekannt_seit <= $1
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-    group by
-      pop.ap_id
-  ), a_3_l_tpop as (
-    select
-      pop.ap_id,
-      count(distinct tpop.id) as count
-    from apflora.pop pop
-      inner join apflora.tpop tpop
-      on pop.id = tpop.pop_id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status = 100
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-    group by
-      pop.ap_id
-  ), a_4_l_pop as (
-    select
-      pop.ap_id,
-      count(distinct pop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status = 200
-      and pop.bekannt_seit <= $1
-      and pop.bekannt_seit < ap.start_jahr
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and tpop.bekannt_seit < ap.start_jahr
-    group by
-      pop.ap_id
-  ), a_4_l_tpop as (
-    select
-      pop.ap_id,
-      count(distinct tpop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status = 200
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and tpop.bekannt_seit < ap.start_jahr
-    group by
-      pop.ap_id
-  ), a_5_l_pop as (
-    select
-      pop.ap_id,
-      count(distinct pop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status = 200
-      and pop.bekannt_seit <= $1
-      and pop.bekannt_seit >= ap.start_jahr
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and tpop.bekannt_seit >= ap.start_jahr
-    group by
-      pop.ap_id
-  ), a_5_l_tpop as (
-    select
-      pop.ap_id,
-      count(distinct tpop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status = 200
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and tpop.bekannt_seit >= ap.start_jahr
-    group by
-      pop.ap_id
-  ), a_7_l_pop as (
-    select
-      pop.ap_id,
-      count(distinct pop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      (
-        pop.status = 101
-        or (
-          pop.status = 202
-          and pop.bekannt_seit < ap.start_jahr
-        )
-      )
-      and pop.bekannt_seit <= $1
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-    group by
-      pop.ap_id
-  ), a_7_l_tpop as (
-    select
-      pop.ap_id,
-      count(distinct tpop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and (
-        tpop.status = 101
-        or (
-          tpop.status = 202
-          and tpop.bekannt_seit < ap.start_jahr
-        )
-      )
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-    group by
-      pop.ap_id
-  ), a_8_l_pop as (
-    select
-      pop.ap_id,
-      count(distinct pop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status = 202
-      and pop.bekannt_seit >= ap.start_jahr
-      and pop.bekannt_seit <= $1
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-    group by
-      pop.ap_id
-  ), a_8_l_tpop as (
-    select
-      pop.ap_id,
-      count(distinct tpop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status = 202
-      and tpop.bekannt_seit >= ap.start_jahr
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-    group by
-      pop.ap_id
-  ), a_9_l_pop as (
-    select
-      pop.ap_id,
-      count(distinct pop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status = 201
-      and pop.bekannt_seit <= $1
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-    group by
-      pop.ap_id
-  ), a_9_l_tpop as (
-    select
-      pop.ap_id,
-      count(distinct tpop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.bekannt_seit <= $1
-      and tpop.status = 201
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-    group by
-      pop.ap_id
-  ), b_1_l_pop as (
-    select
-      pop.ap_id,
-      count(distinct popber.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.popber popber
-        on pop.id = popber.pop_id and popber.jahr = $1
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-    group by
-      pop.ap_id
-  ), b_1_l_tpop as (
-    select
-      pop.ap_id,
-      count(distinct tpopber.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-          inner join apflora.tpopber tpopber
-          on tpop.id = tpopber.tpop_id and tpopber.jahr = $1
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-    group by
-      pop.ap_id
-  ), b_1_r_pop as (
-    select
-      pop.ap_id,
-      count(distinct pop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.popber popber
-        on pop.id = popber.pop_id
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and popber.jahr is not null
-      and popber.jahr <= $1
-      and popber.entwicklung is not null
-    group by
-      pop.ap_id
-  ), b_1_r_tpop as (
-    select
-      pop.ap_id,
-      min(tpopber.jahr) as first_year,
-      count(distinct tpop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-          inner join apflora.tpopber tpopber
-          on tpop.id = tpopber.tpop_id
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and tpopber.jahr is not null
-      and tpopber.jahr <= $1
-      and tpopber.entwicklung is not null
-    group by
-      pop.ap_id
-  ), c_1_l_pop as (
-    select
-      pop.ap_id,
-      count(distinct pop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-          inner join apflora.tpopmassn massn
-          on tpop.id = massn.tpop_id and massn.jahr = $1
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and massn.typ is not null
-    group by
-      pop.ap_id
-  ), c_1_l_tpop as (
-    select
-      pop.ap_id,
-      count(distinct tpop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-          inner join apflora.tpopmassn massn
-          on tpop.id = massn.tpop_id and massn.jahr = $1
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and massn.typ is not null
-    group by
-      pop.ap_id
-  ), c_1_r_pop as (
-    select
-      pop.ap_id,
-      count(distinct pop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-          inner join apflora.tpopmassn massn
-          on tpop.id = massn.tpop_id
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and massn.typ is not null
-    group by
-      pop.ap_id
-  ), c_1_r_tpop as (
-    select
-      pop.ap_id,
-      min(massn.jahr) as first_year,
-      count(distinct tpop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-          inner join apflora.tpopmassn massn
-          on tpop.id = massn.tpop_id
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and massn.jahr is not null
-      and massn.jahr <= $1
-      and massn.typ is not null
-    group by
-      pop.ap_id
-  ), c_2_r_pop as (
-    select
-      pop.ap_id,
-      count(distinct pop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.popmassnber massnber
-        on pop.id = massnber.pop_id
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and massnber.beurteilung between 1 and 5
-    group by
-      pop.ap_id
-  ), c_2_r_tpop as (
-    select
-      pop.ap_id,
-      count(distinct tpop.id) as count
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-          inner join apflora.tpopmassnber massnber
-          on tpop.id = massnber.tpop_id
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and massnber.jahr is not null
-      and massnber.jahr <= $1
-      and massnber.beurteilung between 1 and 5
-    group by
-      pop.ap_id
-  ), c3RPopLastBer as (
-    select distinct on (pop.ap_id, pop.id)
-      pop.ap_id,
-      pop.id as pop_id,
-      massnber.beurteilung
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.popmassnber massnber
-        on pop.id = massnber.pop_id
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and massnber.jahr is not null
-      and massnber.jahr <= $1
-      and massnber.beurteilung between 1 and 5
-    order by
-      pop.ap_id,
-      pop.id,
-      massnber.jahr desc
-  ), c3RTpopLastBer as (
-    select distinct on (pop.ap_id, tpop.id)
-      pop.ap_id,
-      tpop.id as tpop_id,
-      massnber.beurteilung
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-          inner join apflora.tpopmassnber massnber
-          on tpop.id = massnber.tpop_id
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and massnber.jahr is not null
-      and massnber.jahr <= $1
-      and massnber.beurteilung between 1 and 5
-    order by
-      pop.ap_id,
-      tpop.id,
-      massnber.jahr desc
-  ), c_3_r_pop as (
-    select
-      ap_id,
-      count(pop_id)
-    from c3RPopLastBer
-    where beurteilung = 1
-    group by ap_id
-  ), c_3_r_tpop as (
-    select
-      ap_id,
-      count(tpop_id)
-    from c3RTpopLastBer
-    where beurteilung = 1
-    group by ap_id
-  ), c_4_r_pop as (
-    select
-      ap_id,
-      count(pop_id)
-    from c3RPopLastBer
-    where beurteilung = 2
-    group by ap_id
-  ), c_4_r_tpop as (
-    select
-      ap_id,
-      count(tpop_id)
-    from c3RTpopLastBer
-    where beurteilung = 2
-    group by ap_id
-  ), c_5_r_pop as (
-    select
-      ap_id,
-      count(pop_id)
-    from c3RPopLastBer
-    where beurteilung = 3
-    group by ap_id
-  ), c_5_r_tpop as (
-    select
-      ap_id,
-      count(tpop_id)
-    from c3RTpopLastBer
-    where beurteilung = 3
-    group by ap_id
-  ), c_6_r_pop as (
-    select
-      ap_id,
-      count(pop_id)
-    from c3RPopLastBer
-    where beurteilung = 4
-    group by ap_id
-  ), c_6_r_tpop as (
-    select
-      ap_id,
-      count(tpop_id)
-    from c3RTpopLastBer
-    where beurteilung = 4
-    group by ap_id
-  ), c_7_r_pop as (
-    select
-      ap_id,
-      count(pop_id)
-    from c3RPopLastBer
-    where beurteilung = 5
-    group by ap_id
-  ), c_7_r_tpop as (
-    select
-      ap_id,
-      count(tpop_id)
-    from c3RTpopLastBer
-    where beurteilung = 5
-    group by ap_id
-  ), first_massn as (
-    select distinct on (pop.ap_id)
-      pop.ap_id,
-      massn.jahr
-    from apflora.ap ap
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-          inner join apflora.tpopmassn massn
-          on tpop.id = massn.tpop_id
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and massn.jahr is not null
-      and massn.jahr <= $1
-    order by
-      pop.ap_id,
-      massn.jahr asc
-  ), erfolg as (
-    select distinct on (ap.id)
-      ap.id,
-      apber.beurteilung
-    from apflora.ap ap
-      inner join apflora.apber apber
-      on ap.id = apber.ap_id
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and apber.jahr = $1
-      and apber.beurteilung is not null
-    order by
-      ap.id
-  ), erfolg_vorjahr as (
-    select distinct on (ap.id)
-      ap.id,
-      apber.beurteilung
-    from apflora.ap ap
-      inner join apflora.apber apber
-      on ap.id = apber.ap_id
-      inner join apflora.pop pop
-        inner join apflora.tpop tpop
-        on pop.id = tpop.pop_id
-      on pop.ap_id = ap.id
-    where
-      pop.status < 300
-      and pop.bekannt_seit <= $1
-      and tpop.status < 300
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= $1
-      and apber.jahr = $1 - 1
-      and apber.beurteilung is not null
-    order by
-      ap.id
-  )
-  select
-    tax.artname,
-    -- need this to be id, not ap_id, for apollo:
-    ap.id,
-    ap.start_jahr::int,
-    adresse.name as bearbeiter,
-    coalesce(ap.bearbeitung, 0)::int as bearbeitung,
-    coalesce(a_3_l_pop.count, 0)::int as a_3_l_pop,
-    coalesce(a_3_l_tpop.count, 0)::int as a_3_l_tpop,
-    coalesce(a_4_l_pop.count, 0)::int as a_4_l_pop,
-    coalesce(a_4_l_tpop.count, 0)::int as a_4_l_tpop,
-    coalesce(a_5_l_pop.count, 0)::int as a_5_l_pop,
-    coalesce(a_5_l_tpop.count, 0)::int as a_5_l_tpop,
-    coalesce(a_7_l_pop.count, 0)::int as a_7_l_pop,
-    coalesce(a_7_l_tpop.count, 0)::int as a_7_l_tpop,
-    coalesce(a_8_l_pop.count, 0)::int as a_8_l_pop,
-    coalesce(a_8_l_tpop.count, 0)::int as a_8_l_tpop,
-    coalesce(a_9_l_pop.count, 0)::int as a_9_l_pop,
-    coalesce(a_9_l_tpop.count, 0)::int as a_9_l_tpop,
-    coalesce(b_1_l_pop.count, 0)::int as b_1_l_pop,
-    coalesce(b_1_l_tpop.count, 0)::int as b_1_l_tpop,
-    b_1_r_tpop.first_year::int as b_1_first_year,
-    coalesce(b_1_r_pop.count, 0)::int as b_1_r_pop,
-    coalesce(b_1_r_tpop.count, 0)::int as b_1_r_tpop,
-    coalesce(c_1_l_pop.count, 0)::int as c_1_l_pop,
-    coalesce(c_1_l_tpop.count, 0)::int as c_1_l_tpop,
-    coalesce(c_1_r_pop.count, 0)::int as c_1_r_pop,
-    coalesce(c_1_r_tpop.count, 0)::int as c_1_r_tpop,
-    c_1_r_tpop.first_year::int as c_1_first_year,
-    first_massn.jahr::int as first_massn,
-    coalesce(c_2_r_pop.count, 0)::int as c_2_r_pop,
-    coalesce(c_2_r_tpop.count, 0)::int as c_2_r_tpop,
-    coalesce(c_3_r_pop.count, 0)::int as c_3_r_pop,
-    coalesce(c_3_r_tpop.count, 0)::int as c_3_r_tpop,
-    coalesce(c_4_r_pop.count, 0)::int as c_4_r_pop,
-    coalesce(c_4_r_tpop.count, 0)::int as c_4_r_tpop,
-    coalesce(c_5_r_pop.count, 0)::int as c_5_r_pop,
-    coalesce(c_5_r_tpop.count, 0)::int as c_5_r_tpop,
-    coalesce(c_6_r_pop.count, 0)::int as c_6_r_pop,
-    coalesce(c_6_r_tpop.count, 0)::int as c_6_r_tpop,
-    coalesce(c_7_r_pop.count, 0)::int as c_7_r_pop,
-    coalesce(c_7_r_tpop.count, 0)::int as c_7_r_tpop,
-    erfolg.beurteilung::int as erfolg,
-    erfolg_vorjahr.beurteilung::int as erfolg_vorjahr
-  from apflora.ap
-    left join a_3_l_pop on
-    a_3_l_pop.ap_id = ap.id
-    left join a_3_l_tpop on
-    a_3_l_tpop.ap_id = ap.id
-    left join a_4_l_pop on
-    a_4_l_pop.ap_id = ap.id
-    left join a_4_l_tpop on
-    a_4_l_tpop.ap_id = ap.id
-    left join a_5_l_pop on
-    a_5_l_pop.ap_id = ap.id
-    left join a_5_l_tpop on
-    a_5_l_tpop.ap_id = ap.id
-    left join a_7_l_pop on
-    a_7_l_pop.ap_id = ap.id
-    left join a_7_l_tpop on
-    a_7_l_tpop.ap_id = ap.id
-    left join a_8_l_pop on
-    a_8_l_pop.ap_id = ap.id
-    left join a_8_l_tpop on
-    a_8_l_tpop.ap_id = ap.id
-    left join a_9_l_pop on
-    a_9_l_pop.ap_id = ap.id
-    left join a_9_l_tpop on
-    a_9_l_tpop.ap_id = ap.id
-    left join b_1_l_pop on
-    b_1_l_pop.ap_id = ap.id
-    left join b_1_l_tpop on
-    b_1_l_tpop.ap_id = ap.id
-    left join b_1_r_pop on
-    b_1_r_pop.ap_id = ap.id
-    left join b_1_r_tpop on
-    b_1_r_tpop.ap_id = ap.id
-    left join c_1_l_pop on
-    c_1_l_pop.ap_id = ap.id
-    left join c_1_l_tpop on
-    c_1_l_tpop.ap_id = ap.id
-    left join c_1_r_pop on
-    c_1_r_pop.ap_id = ap.id
-    left join c_1_r_tpop on
-    c_1_r_tpop.ap_id = ap.id
-    left join c_2_r_pop on
-    c_2_r_pop.ap_id = ap.id
-    left join c_2_r_tpop on
-    c_2_r_tpop.ap_id = ap.id
-    left join c_3_r_pop on
-    c_3_r_pop.ap_id = ap.id
-    left join c_3_r_tpop on
-    c_3_r_tpop.ap_id = ap.id
-    left join c_4_r_pop on
-    c_4_r_pop.ap_id = ap.id
-    left join c_4_r_tpop on
-    c_4_r_tpop.ap_id = ap.id
-    left join c_5_r_pop on
-    c_5_r_pop.ap_id = ap.id
-    left join c_5_r_tpop on
-    c_5_r_tpop.ap_id = ap.id
-    left join c_6_r_pop on
-    c_6_r_pop.ap_id = ap.id
-    left join c_6_r_tpop on
-    c_6_r_tpop.ap_id = ap.id
-    left join c_7_r_pop on
-    c_7_r_pop.ap_id = ap.id
-    left join c_7_r_tpop on
-    c_7_r_tpop.ap_id = ap.id
-    left join first_massn on
-    first_massn.ap_id = ap.id
-    inner join apflora.ae_taxonomies tax
-    on tax.id = ap.art_id
-    left join erfolg
-    on erfolg.id = ap.id
-    left join erfolg_vorjahr
-    on erfolg_vorjahr.id = ap.id
-    left join apflora.adresse adresse
-    on ap.bearbeiter = adresse.id
-  where
-    ap.bearbeitung between 1 and 3
-  order by
-    tax.artname
-  $$
-  LANGUAGE sql STABLE;
-ALTER FUNCTION apflora.jber_abc(jahr int)
-  OWNER TO postgres;
+DROP FUNCTION IF EXISTS apflora.jber_abc (jahr int);
 
-drop type apflora.pop_nach_status_for_jber cascade;
-create type apflora.pop_nach_status_for_jber as (
+CREATE OR REPLACE FUNCTION apflora.jber_abc (jahr int)
+  RETURNS SETOF apflora.jber_abc
+  AS $$
+  WITH a_3_l_pop AS (
+    SELECT
+      pop.ap_id,
+      count(DISTINCT pop.id) AS count
+    FROM
+      apflora.pop pop
+      INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id
+    WHERE
+      pop.status = 100
+      AND pop.bekannt_seit <= $1
+      AND tpop.apber_relevant = TRUE
+      AND tpop.bekannt_seit <= $1
+    GROUP BY
+      pop.ap_id
+),
+a_3_l_tpop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT tpop.id) AS count
+  FROM
+    apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status = 100
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+  GROUP BY
+    pop.ap_id
+),
+a_4_l_pop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT pop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status = 200
+    AND pop.bekannt_seit <= $1
+    AND pop.bekannt_seit < ap.start_jahr
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND tpop.bekannt_seit < ap.start_jahr
+  GROUP BY
+    pop.ap_id
+),
+a_4_l_tpop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT tpop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status = 200
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND tpop.bekannt_seit < ap.start_jahr
+  GROUP BY
+    pop.ap_id
+),
+a_5_l_pop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT pop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status = 200
+    AND pop.bekannt_seit <= $1
+    AND pop.bekannt_seit >= ap.start_jahr
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND tpop.bekannt_seit >= ap.start_jahr
+  GROUP BY
+    pop.ap_id
+),
+a_5_l_tpop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT tpop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status = 200
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND tpop.bekannt_seit >= ap.start_jahr
+  GROUP BY
+    pop.ap_id
+),
+a_7_l_pop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT pop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE (pop.status = 101
+    OR (pop.status = 202
+      AND pop.bekannt_seit < ap.start_jahr))
+  AND pop.bekannt_seit <= $1
+  AND tpop.apber_relevant = TRUE
+  AND tpop.bekannt_seit <= $1
+GROUP BY
+  pop.ap_id
+),
+a_7_l_tpop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT tpop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND (tpop.status = 101
+      OR (tpop.status = 202
+        AND tpop.bekannt_seit < ap.start_jahr))
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+  GROUP BY
+    pop.ap_id
+),
+a_8_l_pop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT pop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status = 202
+    AND pop.bekannt_seit >= ap.start_jahr
+    AND pop.bekannt_seit <= $1
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+  GROUP BY
+    pop.ap_id
+),
+a_8_l_tpop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT tpop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status = 202
+    AND tpop.bekannt_seit >= ap.start_jahr
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+  GROUP BY
+    pop.ap_id
+),
+a_9_l_pop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT pop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status = 201
+    AND pop.bekannt_seit <= $1
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+  GROUP BY
+    pop.ap_id
+),
+a_9_l_tpop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT tpop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.bekannt_seit <= $1
+    AND tpop.status = 201
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+  GROUP BY
+    pop.ap_id
+),
+b_1_l_pop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT popber.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.popber popber ON pop.id = popber.pop_id
+      AND popber.jahr = $1
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+  GROUP BY
+    pop.ap_id
+),
+b_1_l_tpop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT tpopber.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop
+    INNER JOIN apflora.tpopber tpopber ON tpop.id = tpopber.tpop_id
+      AND tpopber.jahr = $1 ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+  GROUP BY
+    pop.ap_id
+),
+b_1_r_pop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT pop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.popber popber ON pop.id = popber.pop_id
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND popber.jahr IS NOT NULL
+    AND popber.jahr <= $1
+    AND popber.entwicklung IS NOT NULL
+  GROUP BY
+    pop.ap_id
+),
+b_1_r_tpop AS (
+  SELECT
+    pop.ap_id,
+    min(tpopber.jahr) AS first_year,
+    count(DISTINCT tpop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop
+    INNER JOIN apflora.tpopber tpopber ON tpop.id = tpopber.tpop_id ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND tpopber.jahr IS NOT NULL
+    AND tpopber.jahr <= $1
+    AND tpopber.entwicklung IS NOT NULL
+  GROUP BY
+    pop.ap_id
+),
+c_1_l_pop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT pop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop
+    INNER JOIN apflora.tpopmassn massn ON tpop.id = massn.tpop_id
+      AND massn.jahr = $1 ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND massn.typ IS NOT NULL
+  GROUP BY
+    pop.ap_id
+),
+c_1_l_tpop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT tpop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop
+    INNER JOIN apflora.tpopmassn massn ON tpop.id = massn.tpop_id
+      AND massn.jahr = $1 ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND massn.typ IS NOT NULL
+  GROUP BY
+    pop.ap_id
+),
+c_1_r_pop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT pop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop
+    INNER JOIN apflora.tpopmassn massn ON tpop.id = massn.tpop_id ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND massn.typ IS NOT NULL
+  GROUP BY
+    pop.ap_id
+),
+c_1_r_tpop AS (
+  SELECT
+    pop.ap_id,
+    min(massn.jahr) AS first_year,
+    count(DISTINCT tpop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop
+    INNER JOIN apflora.tpopmassn massn ON tpop.id = massn.tpop_id ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND massn.jahr IS NOT NULL
+    AND massn.jahr <= $1
+    AND massn.typ IS NOT NULL
+  GROUP BY
+    pop.ap_id
+),
+c_2_r_pop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT pop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.popmassnber massnber ON pop.id = massnber.pop_id
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND massnber.beurteilung BETWEEN 1 AND 5
+  GROUP BY
+    pop.ap_id
+),
+c_2_r_tpop AS (
+  SELECT
+    pop.ap_id,
+    count(DISTINCT tpop.id) AS count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop
+    INNER JOIN apflora.tpopmassnber massnber ON tpop.id = massnber.tpop_id ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND massnber.jahr IS NOT NULL
+    AND massnber.jahr <= $1
+    AND massnber.beurteilung BETWEEN 1 AND 5
+  GROUP BY
+    pop.ap_id
+),
+c3RPopLastBer AS (
+  SELECT DISTINCT ON (pop.ap_id,
+    pop.id)
+    pop.ap_id,
+    pop.id AS pop_id,
+    massnber.beurteilung
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.popmassnber massnber ON pop.id = massnber.pop_id
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND massnber.jahr IS NOT NULL
+    AND massnber.jahr <= $1
+    AND massnber.beurteilung BETWEEN 1 AND 5
+  ORDER BY
+    pop.ap_id,
+    pop.id,
+    massnber.jahr DESC
+),
+c3RTpopLastBer AS (
+  SELECT DISTINCT ON (pop.ap_id,
+    tpop.id)
+    pop.ap_id,
+    tpop.id AS tpop_id,
+    massnber.beurteilung
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop
+    INNER JOIN apflora.tpopmassnber massnber ON tpop.id = massnber.tpop_id ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND massnber.jahr IS NOT NULL
+    AND massnber.jahr <= $1
+    AND massnber.beurteilung BETWEEN 1 AND 5
+  ORDER BY
+    pop.ap_id,
+    tpop.id,
+    massnber.jahr DESC
+),
+c_3_r_pop AS (
+  SELECT
+    ap_id,
+    count(pop_id)
+  FROM
+    c3RPopLastBer
+  WHERE
+    beurteilung = 1
+  GROUP BY
+    ap_id
+),
+c_3_r_tpop AS (
+  SELECT
+    ap_id,
+    count(tpop_id)
+  FROM
+    c3RTpopLastBer
+  WHERE
+    beurteilung = 1
+  GROUP BY
+    ap_id
+),
+c_4_r_pop AS (
+  SELECT
+    ap_id,
+    count(pop_id)
+  FROM
+    c3RPopLastBer
+  WHERE
+    beurteilung = 2
+  GROUP BY
+    ap_id
+),
+c_4_r_tpop AS (
+  SELECT
+    ap_id,
+    count(tpop_id)
+  FROM
+    c3RTpopLastBer
+  WHERE
+    beurteilung = 2
+  GROUP BY
+    ap_id
+),
+c_5_r_pop AS (
+  SELECT
+    ap_id,
+    count(pop_id)
+  FROM
+    c3RPopLastBer
+  WHERE
+    beurteilung = 3
+  GROUP BY
+    ap_id
+),
+c_5_r_tpop AS (
+  SELECT
+    ap_id,
+    count(tpop_id)
+  FROM
+    c3RTpopLastBer
+  WHERE
+    beurteilung = 3
+  GROUP BY
+    ap_id
+),
+c_6_r_pop AS (
+  SELECT
+    ap_id,
+    count(pop_id)
+  FROM
+    c3RPopLastBer
+  WHERE
+    beurteilung = 4
+  GROUP BY
+    ap_id
+),
+c_6_r_tpop AS (
+  SELECT
+    ap_id,
+    count(tpop_id)
+  FROM
+    c3RTpopLastBer
+  WHERE
+    beurteilung = 4
+  GROUP BY
+    ap_id
+),
+c_7_r_pop AS (
+  SELECT
+    ap_id,
+    count(pop_id)
+  FROM
+    c3RPopLastBer
+  WHERE
+    beurteilung = 5
+  GROUP BY
+    ap_id
+),
+c_7_r_tpop AS (
+  SELECT
+    ap_id,
+    count(tpop_id)
+  FROM
+    c3RTpopLastBer
+  WHERE
+    beurteilung = 5
+  GROUP BY
+    ap_id
+),
+first_massn AS (
+  SELECT DISTINCT ON (pop.ap_id)
+    pop.ap_id,
+    massn.jahr
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop
+    INNER JOIN apflora.tpopmassn massn ON tpop.id = massn.tpop_id ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND massn.jahr IS NOT NULL
+    AND massn.jahr <= $1
+  ORDER BY
+    pop.ap_id,
+    massn.jahr ASC
+),
+erfolg AS (
+  SELECT DISTINCT ON (ap.id)
+    ap.id,
+    apber.beurteilung
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.apber apber ON ap.id = apber.ap_id
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND apber.jahr = $1
+    AND apber.beurteilung IS NOT NULL
+  ORDER BY
+    ap.id
+),
+erfolg_vorjahr AS (
+  SELECT DISTINCT ON (ap.id)
+    ap.id,
+    apber.beurteilung
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.apber apber ON ap.id = apber.ap_id
+    INNER JOIN apflora.pop pop
+    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+  WHERE
+    pop.status < 300
+    AND pop.bekannt_seit <= $1
+    AND tpop.status < 300
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= $1
+    AND apber.jahr = $1 - 1
+    AND apber.beurteilung IS NOT NULL
+  ORDER BY
+    ap.id
+)
+SELECT
+  tax.artname,
+  -- need this to be id, not ap_id, for apollo:
+  ap.id,
+  ap.start_jahr::int,
+  adresse.name AS bearbeiter,
+  coalesce(ap.bearbeitung, 0)::int AS bearbeitung,
+  coalesce(a_3_l_pop.count, 0)::int AS a_3_l_pop,
+  coalesce(a_3_l_tpop.count, 0)::int AS a_3_l_tpop,
+  coalesce(a_4_l_pop.count, 0)::int AS a_4_l_pop,
+  coalesce(a_4_l_tpop.count, 0)::int AS a_4_l_tpop,
+  coalesce(a_5_l_pop.count, 0)::int AS a_5_l_pop,
+  coalesce(a_5_l_tpop.count, 0)::int AS a_5_l_tpop,
+  coalesce(a_7_l_pop.count, 0)::int AS a_7_l_pop,
+  coalesce(a_7_l_tpop.count, 0)::int AS a_7_l_tpop,
+  coalesce(a_8_l_pop.count, 0)::int AS a_8_l_pop,
+  coalesce(a_8_l_tpop.count, 0)::int AS a_8_l_tpop,
+  coalesce(a_9_l_pop.count, 0)::int AS a_9_l_pop,
+  coalesce(a_9_l_tpop.count, 0)::int AS a_9_l_tpop,
+  coalesce(b_1_l_pop.count, 0)::int AS b_1_l_pop,
+  coalesce(b_1_l_tpop.count, 0)::int AS b_1_l_tpop,
+  b_1_r_tpop.first_year::int AS b_1_first_year,
+  coalesce(b_1_r_pop.count, 0)::int AS b_1_r_pop,
+  coalesce(b_1_r_tpop.count, 0)::int AS b_1_r_tpop,
+  coalesce(c_1_l_pop.count, 0)::int AS c_1_l_pop,
+  coalesce(c_1_l_tpop.count, 0)::int AS c_1_l_tpop,
+  coalesce(c_1_r_pop.count, 0)::int AS c_1_r_pop,
+  coalesce(c_1_r_tpop.count, 0)::int AS c_1_r_tpop,
+  c_1_r_tpop.first_year::int AS c_1_first_year,
+  first_massn.jahr::int AS first_massn,
+  coalesce(c_2_r_pop.count, 0)::int AS c_2_r_pop,
+  coalesce(c_2_r_tpop.count, 0)::int AS c_2_r_tpop,
+  coalesce(c_3_r_pop.count, 0)::int AS c_3_r_pop,
+  coalesce(c_3_r_tpop.count, 0)::int AS c_3_r_tpop,
+  coalesce(c_4_r_pop.count, 0)::int AS c_4_r_pop,
+  coalesce(c_4_r_tpop.count, 0)::int AS c_4_r_tpop,
+  coalesce(c_5_r_pop.count, 0)::int AS c_5_r_pop,
+  coalesce(c_5_r_tpop.count, 0)::int AS c_5_r_tpop,
+  coalesce(c_6_r_pop.count, 0)::int AS c_6_r_pop,
+  coalesce(c_6_r_tpop.count, 0)::int AS c_6_r_tpop,
+  coalesce(c_7_r_pop.count, 0)::int AS c_7_r_pop,
+  coalesce(c_7_r_tpop.count, 0)::int AS c_7_r_tpop,
+  erfolg.beurteilung::int AS erfolg,
+  erfolg_vorjahr.beurteilung::int AS erfolg_vorjahr
+FROM
+  apflora.ap
+  LEFT JOIN a_3_l_pop ON a_3_l_pop.ap_id = ap.id
+  LEFT JOIN a_3_l_tpop ON a_3_l_tpop.ap_id = ap.id
+  LEFT JOIN a_4_l_pop ON a_4_l_pop.ap_id = ap.id
+  LEFT JOIN a_4_l_tpop ON a_4_l_tpop.ap_id = ap.id
+  LEFT JOIN a_5_l_pop ON a_5_l_pop.ap_id = ap.id
+  LEFT JOIN a_5_l_tpop ON a_5_l_tpop.ap_id = ap.id
+  LEFT JOIN a_7_l_pop ON a_7_l_pop.ap_id = ap.id
+  LEFT JOIN a_7_l_tpop ON a_7_l_tpop.ap_id = ap.id
+  LEFT JOIN a_8_l_pop ON a_8_l_pop.ap_id = ap.id
+  LEFT JOIN a_8_l_tpop ON a_8_l_tpop.ap_id = ap.id
+  LEFT JOIN a_9_l_pop ON a_9_l_pop.ap_id = ap.id
+  LEFT JOIN a_9_l_tpop ON a_9_l_tpop.ap_id = ap.id
+  LEFT JOIN b_1_l_pop ON b_1_l_pop.ap_id = ap.id
+  LEFT JOIN b_1_l_tpop ON b_1_l_tpop.ap_id = ap.id
+  LEFT JOIN b_1_r_pop ON b_1_r_pop.ap_id = ap.id
+  LEFT JOIN b_1_r_tpop ON b_1_r_tpop.ap_id = ap.id
+  LEFT JOIN c_1_l_pop ON c_1_l_pop.ap_id = ap.id
+  LEFT JOIN c_1_l_tpop ON c_1_l_tpop.ap_id = ap.id
+  LEFT JOIN c_1_r_pop ON c_1_r_pop.ap_id = ap.id
+  LEFT JOIN c_1_r_tpop ON c_1_r_tpop.ap_id = ap.id
+  LEFT JOIN c_2_r_pop ON c_2_r_pop.ap_id = ap.id
+  LEFT JOIN c_2_r_tpop ON c_2_r_tpop.ap_id = ap.id
+  LEFT JOIN c_3_r_pop ON c_3_r_pop.ap_id = ap.id
+  LEFT JOIN c_3_r_tpop ON c_3_r_tpop.ap_id = ap.id
+  LEFT JOIN c_4_r_pop ON c_4_r_pop.ap_id = ap.id
+  LEFT JOIN c_4_r_tpop ON c_4_r_tpop.ap_id = ap.id
+  LEFT JOIN c_5_r_pop ON c_5_r_pop.ap_id = ap.id
+  LEFT JOIN c_5_r_tpop ON c_5_r_tpop.ap_id = ap.id
+  LEFT JOIN c_6_r_pop ON c_6_r_pop.ap_id = ap.id
+  LEFT JOIN c_6_r_tpop ON c_6_r_tpop.ap_id = ap.id
+  LEFT JOIN c_7_r_pop ON c_7_r_pop.ap_id = ap.id
+  LEFT JOIN c_7_r_tpop ON c_7_r_tpop.ap_id = ap.id
+  LEFT JOIN first_massn ON first_massn.ap_id = ap.id
+  INNER JOIN apflora.ae_taxonomies tax ON tax.id = ap.art_id
+  LEFT JOIN erfolg ON erfolg.id = ap.id
+  LEFT JOIN erfolg_vorjahr ON erfolg_vorjahr.id = ap.id
+  LEFT JOIN apflora.adresse adresse ON ap.bearbeiter = adresse.id
+WHERE
+  ap.bearbeitung BETWEEN 1 AND 3
+ORDER BY
+  tax.artname
+$$
+LANGUAGE sql
+STABLE;
+
+ALTER FUNCTION apflora.jber_abc (jahr int) OWNER TO postgres;
+
+DROP TYPE apflora.pop_nach_status_for_jber CASCADE;
+
+CREATE TYPE apflora.pop_nach_status_for_jber AS (
   year integer,
   a3lpop integer,
   a4lpop integer,
@@ -795,169 +785,183 @@ create type apflora.pop_nach_status_for_jber as (
   a9lpop integer
 );
 
-drop function if exists apflora.pop_nach_status_for_jber(apid uuid, year int);
-create or replace function apflora.pop_nach_status_for_jber(apid uuid, year int)
-  returns setof apflora.pop_nach_status_for_jber as
-  $$
-  with years as (
-    select distinct pop.year
-    from apflora.pop_history pop
-      inner join apflora.tpop_history tpop
-      on tpop.pop_id = pop.id and tpop.year = pop.year
-    where
+DROP FUNCTION IF EXISTS apflora.pop_nach_status_for_jber (apid uuid, year int);
+
+CREATE OR REPLACE FUNCTION apflora.pop_nach_status_for_jber (apid uuid, year int)
+  RETURNS SETOF apflora.pop_nach_status_for_jber
+  AS $$
+  WITH years AS (
+    SELECT DISTINCT
+      pop.year
+    FROM
+      apflora.pop_history pop
+      INNER JOIN apflora.tpop_history tpop ON tpop.pop_id = pop.id
+        AND tpop.year = pop.year
+    WHERE
       pop.ap_id = $1
-      and pop.year <= $2
-      and pop.bekannt_seit <= pop.year
-      and tpop.year <= $2
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= tpop.year
-    order by pop.year
-  ), a3lpop as (
-    select
-      pop.year,
-      count(distinct pop.id) as a3lpop
-    from apflora.pop_history pop
-      inner join apflora.tpop_history tpop
-      on tpop.pop_id = pop.id and tpop.year = pop.year
-    where
-      pop.ap_id = $1
-      and pop.year <= $2
-      and pop.bekannt_seit <= pop.year
-      and pop.status = 100
-      and tpop.year <= $2
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= tpop.year
-    group by pop.year
-  ), a4lpop as (
-    select
-      pop.year,
-      count(distinct pop.id) as a4lpop
-    from apflora.pop_history pop
-      inner join apflora.tpop_history tpop
-      on tpop.pop_id = pop.id and tpop.year = pop.year
-      inner join apflora.ap_history ap
-      on ap.id = pop.ap_id and ap.year = pop.year
-    where
-      pop.ap_id = $1
-      and pop.year <= $2
-      and pop.bekannt_seit <= pop.year
-      and pop.status = 200
-      and ap.start_jahr is not null
-      and pop.bekannt_seit < ap.start_jahr
-      and tpop.year <= $2
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= tpop.year
-    group by pop.year
-  ), a5lpop as (
-    select
-      pop.year,
-      count(distinct pop.id) as a5lpop
-    from apflora.pop_history pop
-      inner join apflora.tpop_history tpop
-      on tpop.pop_id = pop.id and tpop.year = pop.year
-      inner join apflora.ap_history ap
-      on ap.id = pop.ap_id and ap.year = pop.year
-    where
-      pop.ap_id = $1
-      and pop.year <= $2
-      and pop.bekannt_seit <= pop.year
-      and pop.status = 200
-      and ap.start_jahr is not null
-      and pop.bekannt_seit >= ap.start_jahr
-      and tpop.year <= $2
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= tpop.year
-    group by pop.year
-  ), a7lpop as (
-    select
-      pop.year,
-      count(distinct pop.id) as a7lpop
-    from apflora.pop_history pop
-      inner join apflora.tpop_history tpop
-      on tpop.pop_id = pop.id and tpop.year = pop.year
-      inner join apflora.ap_history ap
-      on ap.id = pop.ap_id and ap.year = pop.year
-    where
-      pop.ap_id = $1
-      and pop.year <= $2
-      and pop.bekannt_seit <= pop.year
-      and tpop.year <= $2
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= tpop.year
-      and (
-        pop.status = 101
-        or (
-          pop.status = 202
-          and ap.start_jahr is not null
-          and (
-            pop.bekannt_seit is null
-            or pop.bekannt_seit < ap.start_jahr
-          )
-        )
-      )
-    group by pop.year
-  ), a8lpop as (
-    select
-      pop.year,
-      count(distinct pop.id) as a8lpop
-    from apflora.pop_history pop
-      inner join apflora.tpop_history tpop
-      on tpop.pop_id = pop.id and tpop.year = pop.year
-      inner join apflora.ap_history ap
-      on ap.id = pop.ap_id and ap.year = pop.year
-    where
-      pop.ap_id = $1
-      and pop.year <= $2
-      and pop.bekannt_seit <= pop.year
-      and pop.status = 202
-      and ap.start_jahr is not null
-      and pop.bekannt_seit >= ap.start_jahr
-      and tpop.year <= $2
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= tpop.year
-    group by pop.year
-  ), a9lpop as (
-    select
-      pop.year,
-      count(distinct pop.id) as a9lpop
-    from apflora.pop_history pop
-      inner join apflora.tpop_history tpop
-      on tpop.pop_id = pop.id and tpop.year = pop.year
-    where
-      pop.ap_id = $1
-      and pop.year <= $2
-      and pop.bekannt_seit <= pop.year
-      and pop.status = 201
-      and tpop.year <= $2
-      and tpop.apber_relevant = true
-      and tpop.bekannt_seit <= tpop.year
-    group by pop.year
-  )
-  select
-    years.year::int,
-    a3lpop.a3lpop::int,
-    a4lpop.a4lpop::int,
-    a5lpop.a5lpop::int,
-    a7lpop.a7lpop::int,
-    a8lpop.a8lpop::int,
-    a9lpop.a9lpop::int
-  from
-    years
-    left join a3lpop
-    on a3lpop.year = years.year
-    left join a4lpop
-    on a4lpop.year = years.year
-    left join a5lpop
-    on a5lpop.year = years.year
-    left join a7lpop
-    on a7lpop.year = years.year
-    left join a8lpop
-    on a8lpop.year = years.year
-    left join a9lpop
-    on a9lpop.year = years.year
-  where years.year <= $2
-  order by years.year
-  $$
-  language sql stable;
-alter function apflora.pop_nach_status_for_jber(apid uuid, year int)
-  owner to postgres;
+      AND pop.year <= $2
+      AND pop.bekannt_seit <= pop.year
+      AND tpop.year <= $2
+      AND tpop.apber_relevant = TRUE
+      AND tpop.bekannt_seit <= tpop.year
+    ORDER BY
+      pop.year
+),
+a3lpop AS (
+  SELECT
+    pop.year,
+    count(DISTINCT pop.id) AS a3lpop
+FROM
+  apflora.pop_history pop
+  INNER JOIN apflora.tpop_history tpop ON tpop.pop_id = pop.id
+    AND tpop.year = pop.year
+  WHERE
+    pop.ap_id = $1
+    AND pop.year <= $2
+    AND pop.bekannt_seit <= pop.year
+    AND pop.status = 100
+    AND tpop.year <= $2
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= tpop.year
+  GROUP BY
+    pop.year
+),
+a4lpop AS (
+  SELECT
+    pop.year,
+    count(DISTINCT pop.id) AS a4lpop
+FROM
+  apflora.pop_history pop
+  INNER JOIN apflora.tpop_history tpop ON tpop.pop_id = pop.id
+    AND tpop.year = pop.year
+  INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id
+    AND ap.year = pop.year
+  WHERE
+    pop.ap_id = $1
+    AND pop.year <= $2
+    AND pop.bekannt_seit <= pop.year
+    AND pop.status = 200
+    AND ap.start_jahr IS NOT NULL
+    AND pop.bekannt_seit < ap.start_jahr
+    AND tpop.year <= $2
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= tpop.year
+  GROUP BY
+    pop.year
+),
+a5lpop AS (
+  SELECT
+    pop.year,
+    count(DISTINCT pop.id) AS a5lpop
+FROM
+  apflora.pop_history pop
+  INNER JOIN apflora.tpop_history tpop ON tpop.pop_id = pop.id
+    AND tpop.year = pop.year
+  INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id
+    AND ap.year = pop.year
+  WHERE
+    pop.ap_id = $1
+    AND pop.year <= $2
+    AND pop.bekannt_seit <= pop.year
+    AND pop.status = 200
+    AND ap.start_jahr IS NOT NULL
+    AND pop.bekannt_seit >= ap.start_jahr
+    AND tpop.year <= $2
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= tpop.year
+  GROUP BY
+    pop.year
+),
+a7lpop AS (
+  SELECT
+    pop.year,
+    count(DISTINCT pop.id) AS a7lpop
+FROM
+  apflora.pop_history pop
+  INNER JOIN apflora.tpop_history tpop ON tpop.pop_id = pop.id
+    AND tpop.year = pop.year
+  INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id
+    AND ap.year = pop.year
+  WHERE
+    pop.ap_id = $1
+    AND pop.year <= $2
+    AND pop.bekannt_seit <= pop.year
+    AND tpop.year <= $2
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= tpop.year
+    AND (pop.status = 101
+      OR (pop.status = 202
+        AND ap.start_jahr IS NOT NULL
+        AND (pop.bekannt_seit IS NULL
+          OR pop.bekannt_seit < ap.start_jahr)))
+  GROUP BY
+    pop.year
+),
+a8lpop AS (
+  SELECT
+    pop.year,
+    count(DISTINCT pop.id) AS a8lpop
+FROM
+  apflora.pop_history pop
+  INNER JOIN apflora.tpop_history tpop ON tpop.pop_id = pop.id
+    AND tpop.year = pop.year
+  INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id
+    AND ap.year = pop.year
+  WHERE
+    pop.ap_id = $1
+    AND pop.year <= $2
+    AND pop.bekannt_seit <= pop.year
+    AND pop.status = 202
+    AND ap.start_jahr IS NOT NULL
+    AND pop.bekannt_seit >= ap.start_jahr
+    AND tpop.year <= $2
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= tpop.year
+  GROUP BY
+    pop.year
+),
+a9lpop AS (
+  SELECT
+    pop.year,
+    count(DISTINCT pop.id) AS a9lpop
+FROM
+  apflora.pop_history pop
+  INNER JOIN apflora.tpop_history tpop ON tpop.pop_id = pop.id
+    AND tpop.year = pop.year
+  WHERE
+    pop.ap_id = $1
+    AND pop.year <= $2
+    AND pop.bekannt_seit <= pop.year
+    AND pop.status = 201
+    AND tpop.year <= $2
+    AND tpop.apber_relevant = TRUE
+    AND tpop.bekannt_seit <= tpop.year
+  GROUP BY
+    pop.year
+)
+SELECT
+  years.year::int,
+  a3lpop.a3lpop::int,
+  a4lpop.a4lpop::int,
+  a5lpop.a5lpop::int,
+  a7lpop.a7lpop::int,
+  a8lpop.a8lpop::int,
+  a9lpop.a9lpop::int
+FROM
+  years
+  LEFT JOIN a3lpop ON a3lpop.year = years.year
+  LEFT JOIN a4lpop ON a4lpop.year = years.year
+  LEFT JOIN a5lpop ON a5lpop.year = years.year
+  LEFT JOIN a7lpop ON a7lpop.year = years.year
+  LEFT JOIN a8lpop ON a8lpop.year = years.year
+  LEFT JOIN a9lpop ON a9lpop.year = years.year
+WHERE
+  years.year <= $2
+ORDER BY
+  years.year
+$$
+LANGUAGE sql
+STABLE;
+
+ALTER FUNCTION apflora.pop_nach_status_for_jber (apid uuid, year int) OWNER TO postgres;
+
