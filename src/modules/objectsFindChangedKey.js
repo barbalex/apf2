@@ -3,7 +3,7 @@
  * need to compare row and values
  * to find changed field
  */
-export default (a, b) => {
+const objectsFindChangedKey = (a, b) => {
   for (const [key, value] of Object.entries(a)) {
     // DANGER
     // if query fetched dependent data, there will be objects with that data contained
@@ -18,3 +18,5 @@ export default (a, b) => {
   }
   return null
 }
+
+export default objectsFindChangedKey
