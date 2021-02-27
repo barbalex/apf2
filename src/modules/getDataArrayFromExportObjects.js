@@ -1,9 +1,9 @@
-export default exportObjects => {
+const getDataArrayFromExportObjects = (exportObjects) => {
   const dataArray = []
   // first the field names:
   dataArray.push(Object.keys(exportObjects[0]))
   // then the field values
-  exportObjects.forEach(object =>
+  exportObjects.forEach((object) =>
     dataArray.push(
       Object.keys(object).map((key, index) => {
         /**
@@ -19,3 +19,5 @@ export default exportObjects => {
   )
   return dataArray
 }
+
+export default getDataArrayFromExportObjects

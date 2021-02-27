@@ -2,7 +2,7 @@
  * nimmt Zeichenfolgen entgegen
  * ersetzt Zeichen(-folgen), die kml nicht erträgt mit konformen
  */
-export default string => {
+const removeKmlNogoChar = (string) => {
   if (string && typeof string === 'string') {
     return string
       .replace(/&/g, 'und')
@@ -13,3 +13,5 @@ export default string => {
   }
   return string
 }
+
+export default removeKmlNogoChar
