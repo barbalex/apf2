@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 
-export default ({
+const messagesFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -29,3 +29,5 @@ export default ({
     },
   ]
 }
+
+export default messagesFolderNode

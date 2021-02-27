@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const ekzaehleinheitNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -22,12 +22,12 @@ export default ({
   const nodes = memoizeOne(() =>
     get(data, 'allEkzaehleinheits.nodes', [])
       // only show if parent node exists
-      .filter(el =>
-        nodesPassed.map(n => n.id).includes(`${el.apId}Ekzaehleinheit`),
+      .filter((el) =>
+        nodesPassed.map((n) => n.id).includes(`${el.apId}Ekzaehleinheit`),
       )
       // only show nodes of this parent
-      .filter(el => el.apId === apId)
-      .map(el => ({
+      .filter((el) => el.apId === apId)
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'ekzaehleinheit',
         filterTable: 'ekzaehleinheit',
@@ -54,3 +54,5 @@ export default ({
 
   return nodes
 }
+
+export default ekzaehleinheitNodes

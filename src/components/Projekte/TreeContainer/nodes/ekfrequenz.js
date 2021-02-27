@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const ekfrequenzNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -22,10 +22,12 @@ export default ({
   const nodes = memoizeOne(() =>
     get(data, 'allEkfrequenzs.nodes', [])
       // only show if parent node exists
-      .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}Ekfrequenz`))
+      .filter((el) =>
+        nodesPassed.map((n) => n.id).includes(`${el.apId}Ekfrequenz`),
+      )
       // only show nodes of this parent
-      .filter(el => el.apId === apId)
-      .map(el => ({
+      .filter((el) => el.apId === apId)
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'ekfrequenz',
         filterTable: 'ekfrequenz',
@@ -45,3 +47,5 @@ export default ({
 
   return nodes
 }
+
+export default ekfrequenzNodes
