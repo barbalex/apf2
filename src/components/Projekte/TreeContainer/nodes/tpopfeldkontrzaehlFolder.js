@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const tpopfeldkontrzaehlFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -33,7 +33,7 @@ export default ({
   const childrenLength = memoizeOne(
     () =>
       get(data, 'allTpopkontrzaehls.nodes', []).filter(
-        el => el.tpopkontrId === tpopkontrId,
+        (el) => el.tpopkontrId === tpopkontrId,
       ).length,
   )()
 
@@ -58,7 +58,7 @@ export default ({
   ]
 
   // only show if parent node exists
-  if (!nodesPassed.map(n => n.id).includes(tpopkontrId)) return []
+  if (!nodesPassed.map((n) => n.id).includes(tpopkontrId)) return []
 
   return [
     {
@@ -86,3 +86,5 @@ export default ({
     },
   ]
 }
+
+export default tpopfeldkontrzaehlFolderNode

@@ -1,7 +1,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-export default ({
+const tpopfeldkontrNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -26,12 +26,12 @@ export default ({
   // map through all elements and create array of nodes
   let nodes = get(data, 'allTpopfeldkontrs.nodes', [])
     // only show if parent node exists
-    .filter(el =>
-      nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopfeldkontrFolder`),
+    .filter((el) =>
+      nodesPassed.map((n) => n.id).includes(`${el.tpopId}TpopfeldkontrFolder`),
     )
     // only show nodes of this parent
-    .filter(el => el.tpopId === tpopId)
-    .map(el => ({
+    .filter((el) => el.tpopId === tpopId)
+    .map((el) => ({
       nodeType: 'table',
       menuType: 'tpopfeldkontr',
       filterTable: 'tpopkontr',
@@ -61,3 +61,5 @@ export default ({
 
   return nodes
 }
+
+export default tpopfeldkontrNodes

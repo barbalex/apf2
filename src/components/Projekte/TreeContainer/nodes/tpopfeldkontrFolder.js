@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
 
-export default ({
+const tpopfeldkontrFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -28,7 +28,7 @@ export default ({
     get(store, `${treeName}.nodeLabelFilter.tpopkontr`) || ''
 
   let children = get(data, 'allTpopfeldkontrs.nodes', []).filter(
-    el => el.tpopId === tpopId,
+    (el) => el.tpopId === tpopId,
   )
 
   /**
@@ -59,7 +59,7 @@ export default ({
   ]
 
   // only show if parent node exists
-  if (!nodesPassed.map(n => n.id).includes(tpopId)) return []
+  if (!nodesPassed.map((n) => n.id).includes(tpopId)) return []
 
   const nodes = [
     {
@@ -77,3 +77,5 @@ export default ({
   ]
   return nodes
 }
+
+export default tpopfeldkontrFolderNode
