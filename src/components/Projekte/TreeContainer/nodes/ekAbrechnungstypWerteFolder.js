@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 
-export default ({
+const ekAbrechnungstypWerteFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -20,7 +20,10 @@ export default ({
   let ekAbrechnungstypWerteNodesLength = ekAbrechnungstypWertes.length
   // before EkAbrechnungstypWerte folder is active, only total count was fetched, not yet any ekAbrechnungstypWerten nodes
   if (ekAbrechnungstypWertes.length === 0)
-    ekAbrechnungstypWerteNodesLength = get(data, 'ekAbrechnungstypWertesUnfiltered.totalCount')
+    ekAbrechnungstypWerteNodesLength = get(
+      data,
+      'ekAbrechnungstypWertesUnfiltered.totalCount',
+    )
   let message =
     loading && !ekAbrechnungstypWerteNodesLength
       ? '...'
@@ -30,7 +33,7 @@ export default ({
   }
 
   // only show if parent node exists
-  if (!nodesPassed.map(n => n.id).includes('wlFolder')) return []
+  if (!nodesPassed.map((n) => n.id).includes('wlFolder')) return []
 
   return [
     {
@@ -46,3 +49,5 @@ export default ({
     },
   ]
 }
+
+export default ekAbrechnungstypWerteFolderNode

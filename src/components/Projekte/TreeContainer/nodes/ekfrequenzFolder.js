@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const ekfrequenzFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -26,7 +26,7 @@ export default ({
     get(store, `${treeName}.nodeLabelFilter.ekfrequenz`) || ''
 
   const ekfrequenzNodesLength = memoizeOne(
-    () => ekfrequenzs.filter(el => el.apId === apId).length,
+    () => ekfrequenzs.filter((el) => el.apId === apId).length,
   )()
   const message = loading
     ? '...'
@@ -37,7 +37,7 @@ export default ({
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'EK-Frequenzen']
 
   // only show if parent node exists
-  const apNodesIds = nodesPassed.map(n => n.id)
+  const apNodesIds = nodesPassed.map((n) => n.id)
   if (!apNodesIds.includes(apId)) return []
 
   return [
@@ -55,3 +55,5 @@ export default ({
     },
   ]
 }
+
+export default ekfrequenzFolderNode

@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const ekAbrechnungstypWerteNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -17,10 +17,10 @@ export default ({
   const nodes = memoizeOne(() =>
     ekAbrechnungstypWertes
       // only show if parent node exists
-      .filter(el =>
-        nodesPassed.map(n => n.id).includes('ekAbrechnungstypWerteFolder'),
+      .filter((el) =>
+        nodesPassed.map((n) => n.id).includes('ekAbrechnungstypWerteFolder'),
       )
-      .map(el => ({
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'ekAbrechnungstypWerte',
         filterTable: 'ekAbrechnungstypWerte',
@@ -39,3 +39,5 @@ export default ({
 
   return nodes
 }
+
+export default ekAbrechnungstypWerteNodes

@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const currentIssuesNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -17,7 +17,7 @@ export default ({
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
     sortBy(currentIssues, ['sort', 'title'])
-      .map(el => ({
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'currentIssue',
         id: el.id,
@@ -34,3 +34,5 @@ export default ({
 
   return nodes
 }
+
+export default currentIssuesNodes
