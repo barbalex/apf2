@@ -1,4 +1,4 @@
-export default o => {
+const objectsEmptyValuesToNull = (o) => {
   const object = { ...o }
   for (const [key, value] of Object.entries(object)) {
     if (value === '' || value === undefined) {
@@ -7,3 +7,5 @@ export default o => {
   }
   return object
 }
+
+export default objectsEmptyValuesToNull

@@ -1,4 +1,4 @@
-export default [
+const tables = [
   {
     table: 'ap',
     parentTable: 'projekt',
@@ -386,3 +386,5 @@ export default [
     parentIdField: 'none',
   },
 ]
+
+export default tables
