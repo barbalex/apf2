@@ -3,7 +3,13 @@ import isFinite from 'lodash/isFinite'
 
 import epsg2056to4326 from './epsg2056to4326notReverse'
 
-export default ({ mapFilter, data, idKey = 'id', xKey = 'x', yKey = 'y' }) => {
+const idsInsideFeatureCollectionLv95 = ({
+  mapFilter,
+  data,
+  idKey = 'id',
+  xKey = 'x',
+  yKey = 'y',
+}) => {
   /**
    * data is passed from map.pop.pops OR a view fetched from the server
    * so need to filter to data with coordinates first...
@@ -11,13 +17,13 @@ export default ({ mapFilter, data, idKey = 'id', xKey = 'x', yKey = 'y' }) => {
    */
   let dataToUse = data
     // make sure all rows used have id...
-    .filter(p => !!p[idKey])
+    .filter((p) => !!p[idKey])
     // ...and coordinates
-    .filter(p => p[xKey] && isFinite(p[xKey]) && p[yKey] && isFinite(p[yKey]))
+    .filter((p) => p[xKey] && isFinite(p[xKey]) && p[yKey] && isFinite(p[yKey]))
   const points = {
     type: 'FeatureCollection',
     // build an array of geoJson points
-    features: dataToUse.map(p => ({
+    features: dataToUse.map((p) => ({
       type: 'Feature',
       properties: {
         id: p[idKey],
@@ -40,5 +46,7 @@ export default ({ mapFilter, data, idKey = 'id', xKey = 'x', yKey = 'y' }) => {
   // let turf check what points are within filter
   const result = pointsWithinPolygon(points, mapFilter)
 
-  return result.features.map(r => r.properties.id)
+  return result.features.map((r) => r.properties.id)
 }
+
+export default idsInsideFeatureCollectionLv95

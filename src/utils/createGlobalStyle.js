@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 
-export default () => createGlobalStyle`
+const createGlobalStyleModule = () => createGlobalStyle`
   html,
   body,
   #___gatsby {
@@ -118,3 +118,5 @@ export default () => createGlobalStyle`
   margin-bottom: 3px !important;
 }
 `
+
+export default createGlobalStyleModule

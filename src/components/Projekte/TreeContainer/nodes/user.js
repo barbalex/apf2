@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const userNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -14,7 +14,7 @@ export default ({
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
     get(data, 'allUsers.nodes', [])
-      .map(el => ({
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'user',
         filterTable: 'user',
@@ -32,3 +32,5 @@ export default ({
 
   return nodes
 }
+
+export default userNodes
