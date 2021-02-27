@@ -1,11 +1,11 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { MdPrint } from 'react-icons/md'
 import Fab from '@material-ui/core/Fab'
-import { useQuery } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
 
 import queryMengen from './queryMengen'
@@ -164,6 +164,7 @@ const ApberForAp = ({
 }) => {
   const store = useContext(storeContext)
   const { setIsPrint } = store
+  const client = useApolloClient()
 
   const apData = isSubReport ? apDataPassed : apDataPassed.apById
   const apber = apData?.apbersByApId?.nodes?.[0] ?? {}
@@ -190,11 +191,30 @@ const ApberForAp = ({
   )
 
   // TODO: do not useQuery conditionally
-  const mengenResult =
-    node ??
-    useQuery(queryMengen, {
-      variables: { apId, jahr },
-    })
+  const [mengenResult, setMengenResult] = useState(node)
+  useEffect(() => {
+    if (!node) {
+      client
+        .query({
+          query: queryMengen,
+          variables: {
+            apId,
+            jahr,
+          },
+        })
+        .then((result) => {
+          setMengenResult(result)
+        })
+        .catch((error) => {
+          store.enqueNotification({
+            message: error.message,
+            options: {
+              variant: 'error',
+            },
+          })
+        })
+    }
+  }, [apId, client, jahr, node, store])
 
   const onClickPrint = useCallback(() => {
     if (typeof window !== 'undefined') {
