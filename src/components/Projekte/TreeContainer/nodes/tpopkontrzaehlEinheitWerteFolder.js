@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 
-export default ({
+const tpopkontrzaehlEinheitWerteFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -20,7 +20,10 @@ export default ({
   let tpopkontrzaehlEinheitWerteNodesLength = tpopkontrzaehlEinheitWertes.length
   // before TpopkontrzaehlEinheitWerte folder is active, only total count was fetched, not yet any tpopkontrzaehlEinheitWerten nodes
   if (tpopkontrzaehlEinheitWertes.length === 0)
-    tpopkontrzaehlEinheitWerteNodesLength = get(data, 'tpopkontrzaehlEinheitWertesUnfiltered.totalCount')
+    tpopkontrzaehlEinheitWerteNodesLength = get(
+      data,
+      'tpopkontrzaehlEinheitWertesUnfiltered.totalCount',
+    )
   let message =
     loading && !tpopkontrzaehlEinheitWerteNodesLength
       ? '...'
@@ -30,7 +33,7 @@ export default ({
   }
 
   // only show if parent node exists
-  if (!nodesPassed.map(n => n.id).includes('wlFolder')) return []
+  if (!nodesPassed.map((n) => n.id).includes('wlFolder')) return []
 
   return [
     {
@@ -46,3 +49,5 @@ export default ({
     },
   ]
 }
+
+export default tpopkontrzaehlEinheitWerteFolderNode
