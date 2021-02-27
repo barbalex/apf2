@@ -9,7 +9,12 @@ import get from 'lodash/get'
 
 import dataGql from './data'
 
-export default async ({ treeName, id, client, store }) => {
+const openLowerNodesTpopfreiwkontrFolder = async ({
+  treeName,
+  id,
+  client,
+  store,
+}) => {
   const tree = store[treeName]
   const { refetch } = store
   const {
@@ -99,3 +104,5 @@ export default async ({ treeName, id, client, store }) => {
   // 4. refresh tree
   refetch.tree()
 }
+
+export default openLowerNodesTpopfreiwkontrFolder
