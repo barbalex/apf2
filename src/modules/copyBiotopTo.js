@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 
 import { tpopfeldkontr } from '../components/shared/fragments'
 
-export default async ({ id, client, copyingBiotop }) => {
+const copyBiotopTo = async ({ id, client, copyingBiotop }) => {
   // fetch previous id from copyingBiotop
   const previousId = copyingBiotop.id
   const { data: dataFrom } = await client.query({
@@ -80,3 +80,5 @@ export default async ({ id, client, copyingBiotop }) => {
     },
   })
 }
+
+export default copyBiotopTo

@@ -8,7 +8,7 @@ import get from 'lodash/get'
 
 import dataGql from './data'
 
-export default async ({
+const openLowerNodesZieljahrFolder = async ({
   treeName,
   id: jahrString,
   parentId: apId,
@@ -73,3 +73,5 @@ export default async ({
   // 4. refresh tree
   refetch.tree()
 }
+
+export default openLowerNodesZieljahrFolder
