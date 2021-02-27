@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
@@ -91,7 +91,7 @@ const ApAp = ({ treeName, id }) => {
     loading: loadingLists,
   } = useQuery(queryLists)
 
-  const row = data?.apById ?? {}
+  const row = useMemo(() => data?.apById ?? {}, [data?.apById])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {

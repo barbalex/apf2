@@ -6,7 +6,6 @@ import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
 import axios from 'redaxios'
 import { useQuery, gql } from '@apollo/client'
-import get from 'lodash/get'
 
 import storeContext from '../../../../storeContext'
 import popupFromProperties from './popupFromProperties'
@@ -55,8 +54,6 @@ const BetreuungsgebieteLayer = () => {
     })
   }
 
-  const nsbNodes = get(nsbData, 'allNsBetreuungs.nodes') || []
-
   useEffect(() => {
     /**
      * BEWARE: https://maps.zh.ch does not include cors headers
@@ -82,6 +79,7 @@ const BetreuungsgebieteLayer = () => {
 
   useEffect(() => {
     if (gbData && nsbData) {
+      const nsbNodes = nsbData?.allNsBetreuungs?.nodes ?? []
       const totalData = gbData.map((d) => {
         const nsb = nsbNodes.find((n) => n.gebietNr === d.properties.nr) || {}
         const properties = {
@@ -100,7 +98,7 @@ const BetreuungsgebieteLayer = () => {
       })
       setTotalData(totalData)
     }
-  }, [gbData, nsbData, nsbNodes])
+  }, [gbData, nsbData])
 
   if (!totalData) return null
 

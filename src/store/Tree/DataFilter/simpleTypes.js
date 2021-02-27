@@ -5,7 +5,7 @@ import { simpleTypes as tpopfeldkontr } from './tpopfeldkontr'
 import { simpleTypes as tpopfreiwkontr } from './tpopfreiwkontr'
 import { simpleTypes as tpopmassn } from './tpopmassn'
 
-export default {
+const simpleTypes = {
   ap,
   pop,
   tpop,
@@ -13,3 +13,5 @@ export default {
   tpopfreiwkontr,
   tpopmassn,
 }
+
+export default simpleTypes

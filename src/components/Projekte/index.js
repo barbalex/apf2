@@ -72,19 +72,18 @@ const Projekte = () => {
   const store = useContext(storeContext)
   const { isPrint, urlQuery, setRefetchKey, user, tree, appBarHeight } = store
   const { projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
-  const treeTabValues = [
-    'tree',
-    'daten',
-    'filter',
-    'karte',
-    ...(projIdInActiveNodeArray ? ['exporte'] : []),
-  ]
 
   const { projekteTabs } = urlQuery
-  const treeTabs = useMemo(() => intersection(treeTabValues, projekteTabs), [
-    projekteTabs,
-    treeTabValues,
-  ])
+  const treeTabs = useMemo(() => {
+    const treeTabValues = [
+      'tree',
+      'daten',
+      'filter',
+      'karte',
+      ...(projIdInActiveNodeArray ? ['exporte'] : []),
+    ]
+    return intersection(treeTabValues, projekteTabs)
+  }, [projIdInActiveNodeArray, projekteTabs])
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
   const treeDataFilter = getSnapshot(store.tree.dataFilter)
