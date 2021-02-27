@@ -1,6 +1,6 @@
 import pointsWithinPolygon from '@turf/points-within-polygon'
 
-export default ({
+const idsInsideFeatureCollection = ({
   mapFilter,
   data,
   idKey = 'id',
@@ -14,13 +14,13 @@ export default ({
    */
   let dataToUse = data
     // make sure all rows used have id...
-    .filter(p => !!p[idKey])
+    .filter((p) => !!p[idKey])
     // ...and coordinates
-    .filter(p => p[xKey])
+    .filter((p) => p[xKey])
   const points = {
     type: 'FeatureCollection',
     // build an array of geoJson points
-    features: dataToUse.map(p => ({
+    features: dataToUse.map((p) => ({
       type: 'Feature',
       properties: {
         id: p[idKey],
@@ -43,5 +43,7 @@ export default ({
   // let turf check what points are within filter
   const result = pointsWithinPolygon(points, mapFilter)
 
-  return result.features.map(r => r.properties.id)
+  return result.features.map((r) => r.properties.id)
 }
+
+export default idsInsideFeatureCollection

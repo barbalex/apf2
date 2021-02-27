@@ -1,6 +1,6 @@
 import Dexie from 'dexie'
 
-export default () => {
+const initializeIdb = () => {
   const tablesObject = {}
   // create table to save user login in
   // this helps in that user can open new tab and remain logged in!
@@ -9,3 +9,5 @@ export default () => {
   idb.version(1).stores(tablesObject)
   return idb
 }
+
+export default initializeIdb

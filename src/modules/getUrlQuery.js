@@ -1,7 +1,7 @@
 import isString from 'lodash/isString'
 import queryString from 'query-string'
 
-export default () => {
+const getUrlQuery = () => {
   const query =
     typeof window !== 'undefined'
       ? queryString.parse(window.location.search)
@@ -25,3 +25,5 @@ export default () => {
   }
   return query
 }
+
+export default getUrlQuery

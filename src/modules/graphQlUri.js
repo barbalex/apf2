@@ -1,4 +1,4 @@
-export default () => {
+const graphQlUri = () => {
   if (typeof window === 'undefined') {
     return 'https://api.apflora.ch/graphql'
   }
@@ -9,3 +9,5 @@ export default () => {
     ? 'http://localhost:5000/graphql'
     : 'https://api.apflora.ch/graphql'
 }
+
+export default graphQlUri

@@ -3,7 +3,7 @@ import isEqual from 'lodash/isEqual'
 
 import getTableNameFromActiveNode from './getTableNameFromActiveNode'
 
-export default ({ store, treeName, nodes }) => {
+const getActiveForm = ({ store, treeName, nodes }) => {
   const { activeNodeArray } = store[treeName]
   const activeFilterTable = get(store, `${treeName}.dataFilter.activeTable`, '')
 
@@ -97,3 +97,5 @@ export default ({ store, treeName, nodes }) => {
       return { form: null, type: null }
   }
 }
+
+export default getActiveForm
