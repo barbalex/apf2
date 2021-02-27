@@ -4,7 +4,7 @@ import { gql } from '@apollo/client'
 
 import updateBeobByIdGql from './updateBeobById'
 
-export default async ({ value, row, treeName, client, store }) => {
+const saveArtIdToDb = async ({ value, row, treeName, client, store }) => {
   const { refetch } = store
   const {
     activeNodeArray: aNA,
@@ -71,3 +71,5 @@ export default async ({ value, row, treeName, client, store }) => {
     if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
   }
 }
+
+export default saveArtIdToDb
