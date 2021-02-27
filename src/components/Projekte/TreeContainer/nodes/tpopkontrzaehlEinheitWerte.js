@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const tpopkontrzaehlEinheitWerteNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -17,10 +17,12 @@ export default ({
   const nodes = memoizeOne(() =>
     tpopkontrzaehlEinheitWertes
       // only show if parent node exists
-      .filter(el =>
-        nodesPassed.map(n => n.id).includes('tpopkontrzaehlEinheitWerteFolder'),
+      .filter((el) =>
+        nodesPassed
+          .map((n) => n.id)
+          .includes('tpopkontrzaehlEinheitWerteFolder'),
       )
-      .map(el => ({
+      .map((el) => ({
         nodeType: 'table',
         menuType: 'tpopkontrzaehlEinheitWerte',
         filterTable: 'tpopkontrzaehlEinheitWerte',
@@ -39,3 +41,5 @@ export default ({
 
   return nodes
 }
+
+export default tpopkontrzaehlEinheitWerteNodes

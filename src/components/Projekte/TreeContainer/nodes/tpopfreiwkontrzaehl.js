@@ -4,7 +4,7 @@ import memoizeOne from 'memoize-one'
 
 import exists from '../../../../modules/exists'
 
-export default ({
+const tpopfreiwkontrzaehlNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -85,3 +85,5 @@ export default ({
 
   return nodes
 }
+
+export default tpopfreiwkontrzaehlNodes
