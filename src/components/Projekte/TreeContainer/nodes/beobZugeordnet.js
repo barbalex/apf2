@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const beobZugeordnetNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -28,11 +28,13 @@ export default ({
   const nodes = memoizeOne(() =>
     get(data, 'allVApbeobsZugeordnet.nodes', [])
       // only show if parent node exists
-      .filter(el =>
-        nodesPassed.map(n => n.id).includes(`${el.tpopId}BeobZugeordnetFolder`),
+      .filter((el) =>
+        nodesPassed
+          .map((n) => n.id)
+          .includes(`${el.tpopId}BeobZugeordnetFolder`),
       )
       // only show nodes of this parent
-      .filter(el => el.tpopId === tpopId)
+      .filter((el) => el.tpopId === tpopId)
       .map((el, index) => {
         return {
           nodeType: 'table',
@@ -66,3 +68,5 @@ export default ({
 
   return nodes
 }
+
+export default beobZugeordnetNodes

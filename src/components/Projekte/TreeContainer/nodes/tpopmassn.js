@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const tpopmassnNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -28,11 +28,11 @@ export default ({
   const nodes = memoizeOne(() =>
     get(data, 'allTpopmassns.nodes', [])
       // only show if parent node exists
-      .filter(el =>
-        nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopmassnFolder`),
+      .filter((el) =>
+        nodesPassed.map((n) => n.id).includes(`${el.tpopId}TpopmassnFolder`),
       )
       // only show nodes of this parent
-      .filter(el => el.tpopId === tpopId)
+      .filter((el) => el.tpopId === tpopId)
       .map((el, index) => ({
         nodeType: 'table',
         menuType: 'tpopmassn',
@@ -64,3 +64,5 @@ export default ({
 
   return nodes
 }
+
+export default tpopmassnNodes
