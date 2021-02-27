@@ -1,6 +1,6 @@
 import isUuid from 'is-uuid'
 
-export default (url) => {
+const apberIdInUrl = (url) => {
   if (url[4] === 'AP-Berichte') {
     const indexOfId = url.indexOf('AP-Berichte') + 1
     if (url.length > indexOfId) {
@@ -10,3 +10,5 @@ export default (url) => {
   }
   return undefined
 }
+
+export default apberIdInUrl

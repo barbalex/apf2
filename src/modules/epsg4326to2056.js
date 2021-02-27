@@ -5,8 +5,10 @@ proj4.defs(
 )
 proj4.defs('EPSG:4326', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
-export default (xPassed, yPassed) => {
+const epsg4326to2056 = (xPassed, yPassed) => {
   const [x, y] = proj4('EPSG:4326', 'EPSG:2056', [+xPassed, +yPassed])
   // round to the integer
   return [parseInt(x, 10), parseInt(y, 10)]
 }
+
+export default epsg4326to2056

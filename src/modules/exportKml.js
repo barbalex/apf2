@@ -4,7 +4,7 @@ import groupBy from 'lodash/groupBy'
 
 import clean from './removeKmlNogoChar'
 
-export default ({ fileName, data }) => {
+const exportKml = ({ fileName, data }) => {
   const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
   const dataByArt = groupBy(data, 'art')
   const kml = `<?xml version='1.0' encoding='UTF-8'?>
@@ -56,3 +56,5 @@ export default ({ fileName, data }) => {
   `
   fileDownload(kml, `${file}.kml`, 'application/vnd.google-earth.kml+xml')
 }
+
+export default exportKml
