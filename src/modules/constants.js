@@ -1,4 +1,4 @@
-export default {
+const constants = {
   columnWidth: 600,
   testAps: [
     '6c52d174-4f62-11e7-aebe-67a303eb0640',
@@ -6,3 +6,5 @@ export default {
     '0aba83f3-d515-4806-bc14-838f8f6d0fe6',
   ],
 }
+
+export default constants

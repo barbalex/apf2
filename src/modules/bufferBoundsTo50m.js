@@ -1,4 +1,4 @@
-export default bounds => {
+const bufferBoundsTo50m = (bounds) => {
   // only buffer if two points are identical
   if (bounds.length === 2) {
     const b1 = bounds[0]
@@ -21,3 +21,5 @@ export default bounds => {
 
   return bounds
 }
+
+export default bufferBoundsTo50m

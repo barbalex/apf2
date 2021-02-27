@@ -1,4 +1,4 @@
-export default {
+const fields = {
   ap: {
     name: 'ap',
     label: 'AP',
@@ -111,3 +111,5 @@ export default {
     nofilter: true,
   },
 }
+
+export default fields
