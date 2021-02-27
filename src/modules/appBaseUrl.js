@@ -1,6 +1,6 @@
 // in development should return local path
 
-export default () => {
+const appBaseUrl = () => {
   if (typeof window === 'undefined') return
   const hostnameWithoutWww = window.location.hostname.replace('www.', '')
   const isLocalhost = hostnameWithoutWww === 'localhost'
@@ -13,3 +13,5 @@ export default () => {
 
   return appHost
 }
+
+export default appBaseUrl

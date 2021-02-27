@@ -1,6 +1,6 @@
 import isUuid from 'is-uuid'
 
-export default (url) => {
+const ekfIdInUrl = (url) => {
   if (url.includes('Freiwilligen-Kontrollen')) {
     const indexOfId = url.indexOf('Freiwilligen-Kontrollen') + 1
     if (url.length > indexOfId) {
@@ -10,3 +10,5 @@ export default (url) => {
   }
   return undefined
 }
+
+export default ekfIdInUrl
