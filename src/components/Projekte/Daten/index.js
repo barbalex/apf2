@@ -7,8 +7,6 @@ import getActiveForm from '../../../modules/getActiveForm'
 /**
  * ReactDOMServer does not yet support Suspense
  */
-
-//import Fallback from '../../shared/Fallback'
 import storeContext from '../../../storeContext'
 import Adresse from './Adresse'
 import Ap from './Ap'
