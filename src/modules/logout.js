@@ -1,6 +1,6 @@
 import localForage from 'localforage'
 
-export default async (idb) => {
+const logout = async (idb) => {
   console.log('LOGGING OUT')
   if (typeof window !== 'undefined') {
     localForage.clear()
@@ -9,3 +9,5 @@ export default async (idb) => {
     window.location.reload(true)
   }
 }
+
+export default logout

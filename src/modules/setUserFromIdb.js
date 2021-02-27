@@ -2,7 +2,7 @@ import jwtDecode from 'jwt-decode'
 
 import getUserFromIdb from './getUserFromIdb'
 
-export default async ({ idb, store }) => {
+const setUserFromIdb = async ({ idb, store }) => {
   const user = await getUserFromIdb({ idb })
   const { name, token } = user
 
@@ -19,3 +19,5 @@ export default async ({ idb, store }) => {
   setView(view)
   return name
 }
+
+export default setUserFromIdb

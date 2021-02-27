@@ -12,7 +12,7 @@ import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
 import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
 
-export default async ({ data, store }) => {
+const getXlsxBuffer = async ({ data, store }) => {
   const dataArray = getDataArrayFromExportObjects(data)
   const numberOfColumns =
     dataArray && dataArray[0] && dataArray[0].length ? dataArray[0].length : 0
@@ -67,3 +67,5 @@ export default async ({ data, store }) => {
   }
   return buffer
 }
+
+export default getXlsxBuffer
