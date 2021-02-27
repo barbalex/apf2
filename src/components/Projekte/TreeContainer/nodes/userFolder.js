@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const userFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -37,3 +37,5 @@ export default ({
     },
   ]
 }
+
+export default userFolderNode

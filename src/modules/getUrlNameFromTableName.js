@@ -1,4 +1,4 @@
-export default (table) => {
+const getUrlNameFromTableName = (table) => {
   const names = {
     ap: 'Aktionspläne',
     apber: 'AP-Berichte',
@@ -26,3 +26,5 @@ export default (table) => {
     throw new Error(`Der Tabelle ${table} konnte kein Namen zugewiesen werden`)
   return name
 }
+
+export default getUrlNameFromTableName

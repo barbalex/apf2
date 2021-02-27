@@ -1,4 +1,4 @@
-export default ({ projektNodes }) => {
+const wlFolderNode = ({ projektNodes }) => {
   // fetch sorting indexes of parents
   const wlIndex = projektNodes.length + 2
 
@@ -15,3 +15,5 @@ export default ({ projektNodes }) => {
     },
   ]
 }
+
+export default wlFolderNode

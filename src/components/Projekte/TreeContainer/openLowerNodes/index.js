@@ -7,7 +7,14 @@ import popFolder from './popFolder'
 import zielFolder from './zielFolder'
 import zieljahrFolder from './zieljahrFolder'
 
-export default ({ treeName, id, parentId, menuType, client, store }) => {
+const openLowerNodes = ({
+  treeName,
+  id,
+  parentId,
+  menuType,
+  client,
+  store,
+}) => {
   /**
    * 1. load all data
    * 2. build openNodes for all data using setOpenNodesFromActiveNodeArray
@@ -62,3 +69,5 @@ export default ({ treeName, id, parentId, menuType, client, store }) => {
       break
   }
 }
+
+export default openLowerNodes
