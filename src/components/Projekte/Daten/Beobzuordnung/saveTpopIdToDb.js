@@ -4,7 +4,7 @@ import { gql } from '@apollo/client'
 
 import updateBeobByIdGql from './updateBeobById'
 
-export default async ({ value, id, treeName, type, client, store }) => {
+const saveTpopIdToDb = async ({ value, id, treeName, type, client, store }) => {
   const { refetch } = store
   const variables = {
     id,
@@ -224,3 +224,5 @@ export default async ({ value, id, treeName, type, client, store }) => {
   if (refetch.beobNichtBeurteiltForMap) refetch.beobNichtBeurteiltForMap()
   if (refetch.beobAssignLines) refetch.beobAssignLines()
 }
+
+export default saveTpopIdToDb

@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import queryBeob from './queryBeob'
 import updateTpopById from './updateTpopById'
 
-export default async ({ id, store, client }) => {
+const copyBeobZugeordnetKoordToTpop = async ({ id, store, client }) => {
   // fetch beob coodinates
   let beobResult
   try {
@@ -62,3 +62,5 @@ export default async ({ id, store, client }) => {
     })
   }
 }
+
+export default copyBeobZugeordnetKoordToTpop
