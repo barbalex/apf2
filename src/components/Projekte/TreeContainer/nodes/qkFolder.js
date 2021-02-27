@@ -1,6 +1,6 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({
+const qkFolderNode = ({
   nodes: nodesPassed,
   projektNodes,
   projId,
@@ -18,7 +18,7 @@ export default ({
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'Qualitaetskontrollen']
 
   // only show if parent node exists
-  const apNodesIds = nodesPassed.map(n => n.id)
+  const apNodesIds = nodesPassed.map((n) => n.id)
   if (!apNodesIds.includes(apId)) return []
 
   return [
@@ -36,3 +36,5 @@ export default ({
     },
   ]
 }
+
+export default qkFolderNode
