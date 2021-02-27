@@ -77,10 +77,10 @@ const ApFilter = ({ treeName, filterTitleHeight = 81 }) => {
   } = store[treeName]
 
   const projId = activeNodeArray[1]
-  const dataFilterAp = { ...dataFilter.ap }
 
   const apFilter = useMemo(() => {
     const apFilter = { projId: { equalTo: projId } }
+    const dataFilterAp = { ...dataFilter.ap }
     const apFilterValues = Object.entries(dataFilterAp).filter(
       (e) => e[1] || e[1] === 0,
     )
@@ -89,7 +89,7 @@ const ApFilter = ({ treeName, filterTitleHeight = 81 }) => {
       apFilter[key] = { [expression]: value }
     })
     return apFilter
-  }, [projId, dataFilterAp])
+  }, [dataFilter.ap, projId])
   const { data: apsData, error: apsError } = useQuery(queryAps, {
     variables: { apFilter },
   })

@@ -1,6 +1,5 @@
-﻿import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -48,7 +47,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
     variables: { name: username },
   })
   const client = useApolloClient()
-  const row = get(data, 'userByName') || {}
+  const row = useMemo(() => data?.userByName ?? {}, [data?.userByName])
 
   const [editPassword, setEditPassword] = useState(false)
   const [password, setPassword] = useState('')

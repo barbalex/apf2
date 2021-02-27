@@ -3,7 +3,7 @@
  * according to https://www.voorhoede.nl/en/blog/say-no-to-image-reflow
  */
 
-export default {
+const padding = {
   '6c52d126-4f62-11e7-aebe-cbb8319e1712': 27.1739130434783,
   '6c52d134-4f62-11e7-aebe-f78ab946ed4e': 100.695410292072,
   '6c52d142-4f62-11e7-aebe-13d6fdd1c0e7': 65.7354149548069,
@@ -54,3 +54,5 @@ export default {
   '6c52d347-4f62-11e7-aebe-8b160a649947': 66.9642857142857,
   '6c52d348-4f62-11e7-aebe-9be0ec6227b2': 36.4764268,
 }
+
+export default padding
