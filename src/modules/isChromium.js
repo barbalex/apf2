@@ -1,7 +1,7 @@
 // source: https://stackoverflow.com/a/9851769/712005
 // and https://social.msdn.microsoft.com/Forums/en-US/edde0150-9478-4ca6-ba0f-9e084b5a4719/how-to-detect-microsoft-edge-chromium-chrome-ie-browser-using-javascript?forum=iewebdevelopment
 
-export default () => {
+const isChromium = () => {
   if (typeof window === 'undefined') return
 
   // Opera 8.0+
@@ -22,3 +22,5 @@ export default () => {
 
   return isBlink || isEdgeChromium
 }
+
+export default isChromium

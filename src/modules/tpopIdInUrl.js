@@ -1,6 +1,6 @@
 import isUuid from 'is-uuid'
 
-export default (url) => {
+const tpopIdInUrl = (url) => {
   if (url.includes('Teil-Populationen')) {
     const indexOfId = url.indexOf('Teil-Populationen') + 1
     if (url.length > indexOfId) {
@@ -10,3 +10,5 @@ export default (url) => {
   }
   return undefined
 }
+
+export default tpopIdInUrl

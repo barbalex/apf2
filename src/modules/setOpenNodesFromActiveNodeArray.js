@@ -1,4 +1,6 @@
-import getOpenNodesFromActiveNodeArray from "../modules/getOpenNodesFromActiveNodeArray"
+import getOpenNodesFromActiveNodeArray from '../modules/getOpenNodesFromActiveNodeArray'
 
-export default ({ activeNodeArray, store }) =>
+const setOpenNodesFromActiveNodeArray = ({ activeNodeArray, store }) =>
   store.tree.setOpenNodes(getOpenNodesFromActiveNodeArray(activeNodeArray))
+
+export default setOpenNodesFromActiveNodeArray
