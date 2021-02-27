@@ -5,7 +5,7 @@ import { initial as tpopmassn } from './tpopmassn'
 import { initial as tpopfeldkontr } from './tpopfeldkontr'
 import { initial as tpopfreiwkontr } from './tpopfreiwkontr'
 
-export default {
+const initialValues = {
   activeTable: null,
   ap,
   pop,
@@ -14,3 +14,5 @@ export default {
   tpopfreiwkontr,
   tpopmassn,
 }
+
+export default initialValues

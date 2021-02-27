@@ -8,8 +8,9 @@ import storeContext from '../../../../storeContext'
 const OuterContainer = styled.div`
   border-bottom: 1px solid rgba(46, 125, 50, 0.5);
   cursor: pointer;
-  background-color: ${props => (props.active ? 'rgb(255, 250, 198)' : 'unset')};
-  border-top: ${props =>
+  background-color: ${(props) =>
+    props.active ? 'rgb(255, 250, 198)' : 'unset'};
+  border-top: ${(props) =>
     props.active ? '1px solid rgba(46, 125, 50, 0.5)' : 'unset'};
   &:hover {
     background-color: rgb(255, 250, 198);
@@ -18,7 +19,7 @@ const OuterContainer = styled.div`
   }
 `
 const InnerContainer = styled.div`
-  height: ${props => props.height}px;
+  height: ${(props) => props.height}px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,27 +34,25 @@ const InnerContainer = styled.div`
 const EkfList = ({ activeTpopkontrId, projektCount, style, row }) => {
   const store = useContext(storeContext)
   const innerContainerHeight = projektCount > 1 ? 110 : 91
-  const url = [
-    'Projekte',
-    row.projId,
-    'Aktionspläne',
-    row.apId,
-    'Populationen',
-    row.popId,
-    'Teil-Populationen',
-    row.tpopId,
-    'Freiwilligen-Kontrollen',
-    row.id,
-  ]
 
-  const onClick = useCallback(
-    () =>
-      initiateDataFromUrl({
-        activeNodeArray: url,
-        store,
-      }),
-    [store, url],
-  )
+  const onClick = useCallback(() => {
+    const url = [
+      'Projekte',
+      row.projId,
+      'Aktionspläne',
+      row.apId,
+      'Populationen',
+      row.popId,
+      'Teil-Populationen',
+      row.tpopId,
+      'Freiwilligen-Kontrollen',
+      row.id,
+    ]
+    initiateDataFromUrl({
+      activeNodeArray: url,
+      store,
+    })
+  }, [row.apId, row.id, row.popId, row.projId, row.tpopId, store])
 
   return (
     <OuterContainer

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useState, useMemo } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
@@ -115,7 +115,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
     error: errorLists,
   } = useQuery(queryLists)
 
-  const row = data?.tpopmassnById ?? {}
+  const row = useMemo(() => data?.tpopmassnById ?? {}, [data?.tpopmassnById])
 
   const { data: dataIsMassnTypAnpflanzung } = useQuery(
     queryIsMassnTypAnpflanzung,

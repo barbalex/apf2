@@ -1,4 +1,4 @@
-export default [
+const apfloraLayers = [
   {
     label: 'Populationen',
     value: 'pop',
@@ -28,3 +28,5 @@ export default [
     value: 'mapFilter',
   },
 ]
+
+export default apfloraLayers

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
@@ -58,7 +58,9 @@ const TpopkontrzaehlEinheitWerte = ({ treeName, table }) => {
     },
   })
 
-  const row = data?.tpopkontrzaehlEinheitWerteById ?? {}
+  const row = useMemo(() => data?.tpopkontrzaehlEinheitWerteById ?? {}, [
+    data?.tpopkontrzaehlEinheitWerteById,
+  ])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
