@@ -7,7 +7,7 @@ import exportKml from './exportKml'
 // this version is ogc-compatible and can be used for https://map.geo.admin.ch
 //import exportKml from './exportKml_ogc'
 
-export default async ({
+const exportModule = async ({
   data: dataPassed,
   fileName,
   kml,
@@ -68,3 +68,5 @@ export default async ({
     })
   }
 }
+
+export default exportModule

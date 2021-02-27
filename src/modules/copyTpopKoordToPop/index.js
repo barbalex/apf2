@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import queryTpop from './queryTpop'
 import updatePopById from './updatePopById'
 
-export default async ({ id, store, client }) => {
+const copyTpopKoordToPop = async ({ id, store, client }) => {
   const { refetch } = store
   // fetch tpop
   let tpopResult
@@ -58,3 +58,5 @@ export default async ({ id, store, client }) => {
   if (refetch.popForMap) refetch.popForMap()
   if (refetch.tpopForMap) refetch.tpopForMap()
 }
+
+export default copyTpopKoordToPop

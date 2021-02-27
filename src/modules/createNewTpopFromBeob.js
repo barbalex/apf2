@@ -79,7 +79,13 @@ const updateBeobById = gql`
   ${tpop}
 `
 
-export default async ({ treeName, pop, beobId, client, store }) => {
+const createNewTpopFromBeob = async ({
+  treeName,
+  pop,
+  beobId,
+  client,
+  store,
+}) => {
   const { enqueNotification, refetch } = store
   const tree = store[treeName]
   const {
@@ -228,3 +234,5 @@ export default async ({ treeName, pop, beobId, client, store }) => {
   refetch.tree()
   if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
 }
+
+export default createNewTpopFromBeob

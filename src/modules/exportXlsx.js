@@ -3,7 +3,7 @@ import format from 'date-fns/format'
 
 import getXlsxBuffer from './getXlsxBuffer'
 
-export default async ({ fileName, data, store }) => {
+const exportXlsx = async ({ fileName, data, store }) => {
   let buffer
   try {
     buffer = await getXlsxBuffer({ data, store })
@@ -21,3 +21,5 @@ export default async ({ fileName, data, store }) => {
     `${file}.xlsx`,
   )
 }
+
+export default exportXlsx

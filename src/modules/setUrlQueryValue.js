@@ -1,4 +1,4 @@
-export default async ({ key, value, urlQuery, setUrlQuery }) => {
+const setUrlQueryValue = async ({ key, value, urlQuery, setUrlQuery }) => {
   let {
     projekteTabs,
     popTab,
@@ -37,3 +37,5 @@ export default async ({ key, value, urlQuery, setUrlQuery }) => {
     qkTab,
   })
 }
+
+export default setUrlQueryValue
