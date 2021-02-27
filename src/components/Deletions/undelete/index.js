@@ -1,7 +1,7 @@
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 
-export default async ({
+const undelete = async ({
   deletedDatasets,
   dataset,
   setShowDeletions,
@@ -18,7 +18,7 @@ export default async ({
     : `create${upperFirst(camelCase(table))}`
   let mutation
   try {
-    mutation = await import(`./${queryName}`).then(m => m.default)
+    mutation = await import(`./${queryName}`).then((m) => m.default)
   } catch (error) {
     return store.enqueNotification({
       message: `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`,
@@ -47,3 +47,5 @@ export default async ({
 
   if (afterDeletionHook) afterDeletionHook()
 }
+
+export default undelete

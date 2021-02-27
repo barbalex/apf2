@@ -8,7 +8,7 @@ import createPop from './createPop'
 import createTpop from './createTpop'
 import updateBeobById from './updateBeobById'
 
-export default async ({ treeName, id, client, store }) => {
+const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
   const { enqueNotification, refetch } = store
   const tree = store[treeName]
   const {
@@ -178,3 +178,5 @@ export default async ({ treeName, id, client, store }) => {
   refetch.tree()
   if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
 }
+
+export default createNewPopFromBeob

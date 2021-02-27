@@ -8,13 +8,13 @@ import updateTpopmassnById from './updateTpopmassnById'
 import updateTpopById from './updateTpopById'
 import updatePopById from './updatePopById'
 
-export default async ({ id: newParentId, store, client }) => {
+const moveTo = async ({ id: newParentId, store, client }) => {
   const { enqueNotification, moving, setMoving } = store
   let { table } = moving
   const { id } = moving
 
   // ensure derived data exists
-  const tabelle = tables.find(t => t.table === table)
+  const tabelle = tables.find((t) => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
   if (tabelle.dbTable) {
     table = tabelle.dbTable
@@ -115,3 +115,5 @@ export default async ({ id: newParentId, store, client }) => {
     label: null,
   })
 }
+
+export default moveTo

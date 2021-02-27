@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 
 import updateBeobByIdGql from './updateBeobById'
 
-export default async ({
+const saveNichtZuordnenToDb = async ({
   value,
   id,
   treeName,
@@ -46,7 +46,7 @@ export default async ({
   oldParentNodeUrl.pop()
   const newParentNodeUrl = [...newActiveNodeArray]
   newParentNodeUrl.pop()
-  const newOpenNodes = openNodes.map(n => {
+  const newOpenNodes = openNodes.map((n) => {
     if (isEqual(n, activeNodeArray)) return newActiveNodeArray
     if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
     return n
@@ -56,3 +56,5 @@ export default async ({
   if (refetchPassed) refetchPassed()
   //refetchTree('local')
 }
+
+export default saveNichtZuordnenToDb
