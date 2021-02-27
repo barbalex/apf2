@@ -190,7 +190,6 @@ const ApberForAp = ({
     ],
   )
 
-  // TODO: do not useQuery conditionally
   const [mengenResult, setMengenResult] = useState(node)
   useEffect(() => {
     if (!node) {
