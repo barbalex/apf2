@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const popNodes = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -55,3 +55,5 @@ export default ({
 
   return nodes
 }
+
+export default popNodes

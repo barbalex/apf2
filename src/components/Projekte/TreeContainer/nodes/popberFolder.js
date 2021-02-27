@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const popberFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -16,7 +16,7 @@ export default ({
   store,
 }) => {
   // return empty if ap is not a real ap and apFilter is set
-  const ap = get(data, 'allAps.nodes', []).find(n => n.id === apId)
+  const ap = get(data, 'allAps.nodes', []).find((n) => n.id === apId)
   const isAp = ap && [1, 2, 3].includes(ap.bearbeitung)
   const apFilter = get(store, `${treeName}.apFilter`)
   if (!!apFilter && !isAp) return []
@@ -32,7 +32,8 @@ export default ({
 
   const childrenLength = memoizeOne(
     () =>
-      get(data, 'allPopbers.nodes', []).filter(el => el.popId === popId).length,
+      get(data, 'allPopbers.nodes', []).filter((el) => el.popId === popId)
+        .length,
   )()
 
   const message = loading
@@ -42,7 +43,7 @@ export default ({
     : childrenLength
 
   // only show if parent node exists
-  if (!nodesPassed.map(n => n.id).includes(popId)) return []
+  if (!nodesPassed.map((n) => n.id).includes(popId)) return []
 
   return [
     {
@@ -67,3 +68,5 @@ export default ({
     },
   ]
 }
+
+export default popberFolderNode

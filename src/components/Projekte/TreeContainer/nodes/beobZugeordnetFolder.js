@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
+const beobZugeordnetFolderNode = ({
   nodes: nodesPassed,
   data,
   treeName,
@@ -30,7 +30,7 @@ export default ({
   const childrenLength = memoizeOne(
     () =>
       get(data, 'allVApbeobsZugeordnet.nodes', []).filter(
-        el => el.tpopId === tpopId,
+        (el) => el.tpopId === tpopId,
       ).length,
   )()
   const message = loading
@@ -52,7 +52,7 @@ export default ({
   ]
 
   // only show if parent node exists
-  if (!nodesPassed.map(n => n.id).includes(tpopId)) return []
+  if (!nodesPassed.map((n) => n.id).includes(tpopId)) return []
 
   return [
     {
@@ -69,3 +69,5 @@ export default ({
     },
   ]
 }
+
+export default beobZugeordnetFolderNode

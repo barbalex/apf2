@@ -1,4 +1,4 @@
-export default (a, b) => {
+const compareLabel = (a, b) => {
   if (a.label.toLowerCase() < b.label.toLowerCase()) {
     return -1
   } else if (a.label.toLowerCase() > b.label.toLowerCase()) {
@@ -6,3 +6,5 @@ export default (a, b) => {
   }
   return 0
 }
+
+export default compareLabel
