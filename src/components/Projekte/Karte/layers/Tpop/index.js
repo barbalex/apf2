@@ -48,12 +48,12 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
 
   const leafletMap = useMapEvents({
     async dblclick(event) {
-      console.log('doubleclick')
+      //console.log('doubleclick')
 
       // since 2018 10 31 using idOfTpopBeingLocalized directly
       // returns null, so need to use store.idOfTpopBeingLocalized
       const { idOfTpopBeingLocalized } = store
-      console.log('Tpop, on dblclick', { idOfTpopBeingLocalized })
+      //console.log('Tpop, on dblclick', { idOfTpopBeingLocalized })
       if (!idOfTpopBeingLocalized) return
       /**
        * TODO
@@ -75,7 +75,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
           },
         },
       }
-      console.log('Tpop, on dblclick', { lat, lng, geomPoint })
+      //console.log('Tpop, on dblclick', { lat, lng, geomPoint })
       // DANGER:
       // need to stop propagation of the event
       // if not it is called a second time
