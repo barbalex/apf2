@@ -7,7 +7,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import upperFirst from 'lodash/upperFirst'
-import get from 'lodash/get'
 
 import storeContext from '../../storeContext'
 import ifIsNumericAsNumber from '../../modules/ifIsNumericAsNumber'
@@ -44,8 +43,8 @@ const Row = styled.div`
 
 const Coordinates = ({ row, refetchForm, table }) => {
   const { lv95X, lv95Y, id } = row || {}
-  const wgs84Lat = get(row, 'geomPoint.x')
-  const wgs84Long = get(row, 'geomPoint.y')
+  const wgs84Lat = row?.geomPoint?.x
+  const wgs84Long = row?.geomPoint?.y
 
   const client = useApolloClient()
   const store = useContext(storeContext)
