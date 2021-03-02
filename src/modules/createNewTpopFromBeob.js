@@ -1,7 +1,6 @@
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import isEqual from 'date-fns/isEqual'
-import get from 'lodash/get'
 import { gql } from '@apollo/client'
 
 import {
@@ -118,10 +117,12 @@ const createNewTpopFromBeob = async ({
       },
     })
   }
-  const beob = get(beobResult, 'data.beobById')
-  const { geomPoint, datum, data } = beob
+  const beob = beobResult?.data?.beobById ?? {}
+  const { datum, data } = beob
   const datumIsValid = isValid(new Date(datum))
   const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
+  let geomPoint = beob?.geomPoint?.geojson
+  geomPoint = geomPoint ? JSON.parse(geomPoint) : null
 
   // create new tpop for pop
   let tpopResult
@@ -132,8 +133,8 @@ const createNewTpopFromBeob = async ({
         popId: pop.id,
         geomPoint,
         bekannt_seit: bekanntSeit,
-        gemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
-        flurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
+        gemeinde: data?.NOM_COMMUNE ? data.NOM_COMMUNE : null,
+        flurname: data?.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
       },
     })
   } catch (error) {
@@ -144,7 +145,16 @@ const createNewTpopFromBeob = async ({
       },
     })
   }
-  const tpop = get(tpopResult, 'data.createTpop.tpop')
+  const tpop = tpopResult?.data?.createTpop?.tpop
+  if (!tpop) {
+    return enqueNotification({
+      message:
+        'Sorry, ein Fehler ist aufgetreten: Die Datenbank hat die ID der neu geschaffenen TPop nicht retourniert',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
 
   try {
     await client.mutate({
