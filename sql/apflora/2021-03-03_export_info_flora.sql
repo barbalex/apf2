@@ -45,7 +45,7 @@ SELECT
     ) THEN 'Offizielle Wiederansiedlung/Populationsverstärkung (Herkunft bekannt)'
     WHEN tpop.status_unklar = true THEN 'Herkunft unklar, Verdacht auf Ansiedlung/Ansalbung,Einsaat/Anpflanzung oder sonstwie anthropogen unterstütztes Auftreten'
     ELSE 'Inoffizielle Ansiedlung (offensichtlich gepflanzt/angesalbt oder eingesät, Herkunft unbekannt)'
-  END AS introduit,
+  END AS herkunft, -- war: introduit
    CASE
     WHEN tpop.status < 200 THEN 'N'
     WHEN EXISTS(
@@ -60,7 +60,7 @@ SELECT
     ) THEN 'R'
     WHEN tpop.status_unklar = true THEN 'I'
     ELSE 'O'
-  END AS introduit_codiert,
+  END AS herkunft_codiert,
   apflora.pop_status_werte.text as status,
   tpop.bekannt_seit as bekannt_seit,
   CASE
