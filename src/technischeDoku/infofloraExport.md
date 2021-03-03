@@ -6,7 +6,7 @@ title: 'Info-Flora-Export'
 sort: 10
 ---
 
-Feld- und Freiwilligen-Kontrollen entsprechen Beobachtungen. Ein mal jährlich (ca. im April) werden sie daher an Info Flora exportiert.<br/><br/>
+Feld- und Freiwilligen-Kontrollen entsprechen Beobachtungen. Ein mal jährlich (ca. im April) werden sie an Info Flora exportiert.<br/><br/>
 
 ### Folgende Kontrollen werden exportiert
 
