@@ -61,6 +61,8 @@ SELECT
     WHEN tpop.status_unklar = true THEN 'I'
     ELSE 'O'
   END AS introduit_codiert,
+  apflora.pop_status_werte.text as status,
+  tpop.bekannt_seit as bekannt_seit,
   /*
   Präsenz:
   - wenn 0 gezählt wurden und der Bericht aus demselben Jahr erloschen meldet:
@@ -86,7 +88,7 @@ SELECT
     ) THEN 'erloschen/zerstört'
     WHEN kontrolle_mit_groesster_anzahl.anzahl = 0 THEN 'nicht festgestellt/gesehen (ohne Angabe der Wahrscheinlichkeit)'
     ELSE 'vorhanden'
-  END AS presence,
+  END AS praesenz,
   CASE
     WHEN (
       kontrolle_mit_groesster_anzahl.anzahl = 0
@@ -103,11 +105,25 @@ SELECT
     ) THEN '-'
     WHEN kontrolle_mit_groesster_anzahl.anzahl = 0 THEN 'N'
     ELSE '+'
-  END AS presence_codiert,
-  kontr.gefaehrdung AS menaces,
-  kontr.vitalitaet AS vitalite_plante,
+  END AS praesenz_codiert,
+  kontr.gefaehrdung AS gefaehrdung,
+  kontr.vitalitaet AS vitalitaet,
   tpop.beschreibung AS station,
   kontr.lr_delarze as lebensraum_nach_delarze,
+  kontr.lr_umgebung_delarze as umgebung_nach_delarze,
+  '± 25m' as genauigkeit_lage,
+  'A' as genauigkeit_lage_codiert,
+  'Point' as geometry_type,
+  'X (Nicht definiert)' as genauigkeit_hoehe,
+  tpop.lv95_x AS x,
+  tpop.lv95_y AS y,
+  tpop.gemeinde as gemeinde,
+  tpop.flurname as flurname,
+  CASE
+    WHEN tpop.hoehe IS NOT NULL
+    THEN tpop.hoehe
+    ELSE 0
+  END AS obergrenze_hoehe,
   /*
    * Zählungen auswerten für ABONDANCE
    */
@@ -118,7 +134,7 @@ SELECT
     string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', '),
     ', Methoden: ',
     string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ')
-    ) AS abondance,
+    ) AS zaehlungen,
   'C'::TEXT AS "EXPERTISE_INTRODUIT",
   /*
    * AP-Verantwortliche oder topos als EXPERTISE_INTRODUITE_NOM setzen
@@ -248,6 +264,11 @@ GROUP BY
   tpop.status_unklar,
   pop_status_werte.text,
   tpop.bekannt_seit,
+  tpop.hoehe,
+  tpop.lv95_x,
+  tpop.lv95_y,
+  tpop.gemeinde,
+  tpop.flurname,
   kontrolle_mit_groesster_anzahl.anzahl,
   kontr.gefaehrdung,
   kontr.vitalitaet,
