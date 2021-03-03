@@ -113,7 +113,7 @@ SELECT
    */
   concat(
     'Anzahlen: ',
-    array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', '),
+    array_to_string(array_agg(zaehl.anzahl), ', '),
     ', Zaehleinheiten: ',
     string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', '),
     ', Methoden: ',
@@ -124,8 +124,8 @@ SELECT
    * AP-Verantwortliche oder topos als EXPERTISE_INTRODUITE_NOM setzen
    */
   CASE
-    WHEN apflora_adresse_2.name IS NOT NULL
-    THEN apflora_adresse_2.name
+    WHEN ap_bearbeiter_adresse.name IS NOT NULL
+    THEN ap_bearbeiter_adresse.name
     ELSE 'topos Marti & Müller AG Zürich'
   END AS expertise_introduite_nom,
   'AP Flora ZH' AS projet,
@@ -136,12 +136,12 @@ SELECT
       ELSE 'Aktionsplan: (keine Angabe)'
     END,
     CASE
-      WHEN apflora.ap.start_jahr IS NOT NULL
-      THEN concat('; Start im Jahr: ', apflora.ap.start_jahr)
+      WHEN ap.start_jahr IS NOT NULL
+      THEN concat('; Start im Jahr: ', ap.start_jahr)
       ELSE ''
     END,
     CASE
-      WHEN apflora.ap.umsetzung IS NOT NULL
+      WHEN ap.umsetzung IS NOT NULL
       THEN concat('; Stand Umsetzung: ', apflora.ap_umsetzung_werte.text)
       ELSE ''
     END,
@@ -166,19 +166,19 @@ SELECT
     ELSE ''
   END AS status
 FROM
-  apflora.ap
+  apflora.ap ap
   LEFT JOIN
-    apflora.adresse AS apflora_adresse_2
-    ON apflora.ap.bearbeiter = apflora_adresse_2.id
+    apflora.adresse AS ap_bearbeiter_adresse
+    ON ap.bearbeiter = ap_bearbeiter_adresse.id
   LEFT JOIN
     apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
+    ON ap.bearbeitung = apflora.ap_bearbstand_werte.code
   LEFT JOIN
     apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
+    ON ap.umsetzung = apflora.ap_umsetzung_werte.code
   INNER JOIN
     apflora.ae_taxonomies tax
-    ON apflora.ap.art_id = tax.id
+    ON ap.art_id = tax.id
   INNER JOIN
     apflora.pop pop
     INNER JOIN
@@ -189,23 +189,23 @@ FROM
       INNER JOIN
         apflora.tpopkontr kontr
         LEFT JOIN
-          apflora.adresse
-          ON kontr.bearbeiter = apflora.adresse.id
+          apflora.adresse kontr_bearbeiter_adresse
+          ON kontr.bearbeiter = kontr_bearbeiter_adresse.id
         INNER JOIN
           kontrolle_mit_groesster_anzahl
           ON kontrolle_mit_groesster_anzahl.id = kontr.id
         LEFT JOIN
-          apflora.tpopkontrzaehl
+          apflora.tpopkontrzaehl zaehl
           LEFT JOIN
             apflora.tpopkontrzaehl_einheit_werte
-            ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code
+            ON zaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code
           LEFT JOIN
             apflora.tpopkontrzaehl_methode_werte
-            ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code
-          ON kontr.id = apflora.tpopkontrzaehl.tpopkontr_id
+            ON zaehl.methode = apflora.tpopkontrzaehl_methode_werte.code
+          ON kontr.id = zaehl.tpopkontr_id
         ON tpop.id = kontr.tpop_id
       ON pop.id = tpop.pop_id
-    ON apflora.ap.id = pop.ap_id
+    ON ap.id = pop.ap_id
 WHERE
   -- keine Testarten
   tax.taxid > 150
@@ -238,8 +238,8 @@ GROUP BY
   kontr.tpop_id,
   kontr.id,
   kontr.jahr,
-  apflora.adresse.id,
-  apflora.ap.id,
+  kontr_bearbeiter_adresse.id,
+  ap.id,
   tax.taxid,
   tax.artname,
   ap_bearbstand_werte.text,
@@ -252,4 +252,4 @@ GROUP BY
   kontr.gefaehrdung,
   kontr.vitalitaet,
   tpop.beschreibung,
-  apflora_adresse_2.name;
+  ap_bearbeiter_adresse.name;
