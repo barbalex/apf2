@@ -1,4 +1,3 @@
-
 DROP VIEW IF EXISTS apflora.v_export_info_flora_beob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_export_info_flora_beob AS
 with kontrolle_mit_groesster_anzahl as (
@@ -15,6 +14,7 @@ with kontrolle_mit_groesster_anzahl as (
 )
 SELECT
   kontr.id as id_projektintern,
+  concat('{', upper(kontr.id::text), '}') as id_in_evab,
   tax.taxid as sisf_nr_2005,
   tax.artname as artname,
   'Feldbeobachtung' AS beobachtungstyp,
@@ -127,7 +127,7 @@ SELECT
   END AS praesenz_codiert,
   kontr.gefaehrdung AS gefaehrdung,
   kontr.vitalitaet AS vitalitaet,
-  tpop.beschreibung AS station,
+  tpop.beschreibung AS beschreibung,
   kontr.lr_delarze as lebensraum_nach_delarze,
   kontr.lr_umgebung_delarze as umgebung_nach_delarze,
   kontr.moosschicht as deckung_moosschicht,
@@ -158,7 +158,7 @@ SELECT
     ', Methoden: ',
     string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ')
     ) AS zaehlungen,
-  'C'::TEXT AS "EXPERTISE_INTRODUIT",
+  'C'::TEXT AS expertise_introduit,
   /*
    * AP-Verantwortliche oder topos als EXPERTISE_INTRODUITE_NOM setzen
    */
@@ -167,7 +167,7 @@ SELECT
     THEN ap_bearbeiter_adresse.name
     ELSE 'topos Marti & Müller AG Zürich'
   END AS expertise_introduite_nom,
-  'AP Flora ZH' AS projet,
+  'AP Flora ZH' AS projekt,
   concat(
     CASE
       WHEN apflora.ap_bearbstand_werte.text IS NOT NULL
@@ -185,25 +185,7 @@ SELECT
       ELSE ''
     END,
     ''
-  ) AS bemerkungen_zum_aktionsplan,
-  CASE
-    WHEN tpop.status IS NOT NULL
-    THEN
-      concat(
-        'Status: ',
-        apflora.pop_status_werte.text,
-        CASE
-          WHEN tpop.bekannt_seit IS NOT NULL
-          THEN
-            concat(
-              '; Bekannt seit: ',
-              tpop.bekannt_seit
-            )
-          ELSE ''
-        END
-      )
-    ELSE ''
-  END AS status
+  ) AS aktionsplan
 FROM
   apflora.ap ap
   LEFT JOIN
@@ -227,9 +209,6 @@ FROM
         ON tpop.status = apflora.pop_status_werte.code
       INNER JOIN
         apflora.tpopkontr kontr
-        LEFT JOIN
-          apflora.adresse kontr_bearbeiter_adresse
-          ON kontr.bearbeiter = kontr_bearbeiter_adresse.id
         INNER JOIN
           kontrolle_mit_groesster_anzahl
           ON kontrolle_mit_groesster_anzahl.id = kontr.id
@@ -273,11 +252,6 @@ WHERE
   AND tpop.flurname IS NOT NULL
 -- grouping is necessary because zaehlungen are concatted
 GROUP BY
-  kontr.zeit_id,
-  kontr.tpop_id,
-  kontr.id,
-  kontr.jahr,
-  kontr_bearbeiter_adresse.id,
   ap.id,
   ap_bearbeiter_adresse.name,
   tax.taxid,
@@ -295,10 +269,17 @@ GROUP BY
   tpop.flurname,
   tpop.beschreibung,
   kontrolle_mit_groesster_anzahl.anzahl,
+  kontr.id,
+  kontr.zeit_id,
+  kontr.tpop_id,
+  kontr.jahr,
   kontr.gefaehrdung,
   kontr.vitalitaet,
   kontr.datum,
   kontr.moosschicht,
   kontr.krautschicht,
   kontr.strauchschicht,
-  kontr.baumschicht;
+  kontr.baumschicht
+order BY
+  tax.artname,
+  kontr.datum;
