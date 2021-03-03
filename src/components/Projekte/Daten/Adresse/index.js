@@ -40,9 +40,6 @@ const fieldTypes = {
   telefon: 'String',
   email: 'String',
   freiwErfko: 'Boolean',
-  evabVorname: 'String',
-  evabNachname: 'String',
-  evabOrt: 'String',
 }
 
 const Adresse = ({ treeName }) => {
@@ -175,27 +172,6 @@ const Adresse = ({ treeName }) => {
                   <Checkbox2States
                     name="freiwErfko"
                     label="freiwillige ErfolgskontrolleurIn"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="evabVorname"
-                    label="EvAB Vorname"
-                    type="text"
-                    helperText="Wird für den Export in EvAB benötigt"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="evabNachname"
-                    label="EvAB Nachname"
-                    type="text"
-                    helperText="Wird für den Export in EvAB benötigt"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="evabOrt"
-                    label="EvAB Ort"
-                    type="text"
-                    helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
                     handleSubmit={handleSubmit}
                   />
                 </StyledForm>

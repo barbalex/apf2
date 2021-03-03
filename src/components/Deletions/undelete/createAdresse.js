@@ -10,9 +10,6 @@ export default gql`
     $telefon: String
     $email: String
     $freiwErfko: Boolean
-    $evabVorname: String
-    $evabNachname: String
-    $evabOrt: String
   ) {
     createAdresse(
       input: {
@@ -23,9 +20,6 @@ export default gql`
           telefon: $telefon
           email: $email
           freiwErfko: $freiwErfko
-          evabVorname: $evabVorname
-          evabNachname: $evabNachname
-          evabOrt: $evabOrt
         }
       }
     ) {

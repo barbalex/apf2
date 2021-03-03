@@ -28,22 +28,4 @@ describe('Adresse form', () => {
   it('updates Freiw. Erfko', () => {
     cy.get('[data-id=freiwErfko] input').check().should('have.value', 'true')
   })
-  it('updates EvAB Vorname', () => {
-    const typedText = 'Alexander'
-    cy.get('#evabVorname')
-      .clear()
-      .type(typedText)
-      .should('have.value', typedText)
-  })
-  it('updates EvAB Nachname', () => {
-    const typedText = 'Gabriel'
-    cy.get('#evabNachname')
-      .clear()
-      .type(typedText)
-      .should('have.value', typedText)
-  })
-  it('updates EvAB Ort', () => {
-    const typedText = 'Thalwil'
-    cy.get('#evabOrt').clear().type(typedText).should('have.value', typedText)
-  })
 })

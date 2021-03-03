@@ -9,9 +9,6 @@ export const adresse = gql`
     telefon
     email
     freiwErfko
-    evabVorname
-    evabNachname
-    evabOrt
     changedBy
   }
 `
