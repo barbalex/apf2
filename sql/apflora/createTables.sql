@@ -2263,20 +2263,6 @@ with check (
 );
 
 
-DROP TABLE IF EXISTS apflora.evab_typologie;
-CREATE TABLE apflora.evab_typologie (
-  "TYPO" varchar(9) PRIMARY KEY,
-  "LEBENSRAUM" varchar(100),
-  "Alliance" varchar(100)
-);
-
-alter table apflora.evab_typologie enable row level security;
-drop policy if exists reader on apflora.evab_typologie;
-create policy reader on apflora.evab_typologie 
-using (true)
-with check (current_user = 'apflora_manager');
-
-
 -- this table can not be used as foreign table
 -- because it needs to be referenced
 drop table if exists apflora.ae_taxonomies;
