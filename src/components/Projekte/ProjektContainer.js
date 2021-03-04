@@ -1,10 +1,16 @@
-import React, { useContext, useRef, useCallback, useEffect } from 'react'
+import React, {
+  useContext,
+  useRef,
+  useCallback,
+  useEffect,
+  Suspense,
+} from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import { withResizeDetector } from 'react-resize-detector'
 
-import Karte from './Karte'
+import KarteOderNull from './KarteOderNull'
 import TreeContainer from './TreeContainer'
 import Daten from './Daten'
 import Exporte from './Exporte'
@@ -140,7 +146,9 @@ const ProjektContainer = ({
     ),
     karte: (
       <InnerContainer>
-        <Karte treeName={treeName} />
+        <Suspense fallback={<div>Lade...</div>}>
+          <KarteOderNull treeName={treeName} />
+        </Suspense>
       </InnerContainer>
     ),
     exporte: (
