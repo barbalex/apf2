@@ -72,18 +72,23 @@ const Projekte = () => {
   const store = useContext(storeContext)
   const { isPrint, urlQuery, setRefetchKey, user, tree, appBarHeight } = store
   const { projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
+  // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
+  // to prevent it from causing unnessecary renders
+  // BUT: this prevents necessary renders: clicking tabs does not cause re-render!
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const treeTabValues = [
+    'tree',
+    'daten',
+    'filter',
+    'karte',
+    ...(projIdInActiveNodeArray ? ['exporte'] : []),
+  ]
 
   const { projekteTabs } = urlQuery
-  const treeTabs = useMemo(() => {
-    const treeTabValues = [
-      'tree',
-      'daten',
-      'filter',
-      'karte',
-      ...(projIdInActiveNodeArray ? ['exporte'] : []),
-    ]
-    return intersection(treeTabValues, projekteTabs)
-  }, [projIdInActiveNodeArray, projekteTabs])
+  const treeTabs = useMemo(() => intersection(treeTabValues, projekteTabs), [
+    projekteTabs,
+    treeTabValues,
+  ])
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
   const treeDataFilter = getSnapshot(store.tree.dataFilter)
