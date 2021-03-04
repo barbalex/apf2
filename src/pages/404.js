@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import Typography from '@material-ui/core/Typography'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
-import Img from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 import Button from '@material-ui/core/Button'
 import { graphql } from 'gatsby'
 
@@ -56,7 +56,10 @@ const FourOFour = ({ data }) => {
     <ErrorBoundary>
       <Container data-appbar-height={appBarHeight}>
         <Layout>
-          <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
+          <GatsbyImage
+            image={data.file.childImageSharp.gatsbyImageData}
+            style={bgImageStyle}
+          />
           <TextContainer>
             <PageTitle align="center" variant="h6">
               Oh je
@@ -84,9 +87,7 @@ export const query = graphql`
   query FourOFourQuery {
     file(relativePath: { eq: "ophr-ara.jpg" }) {
       childImageSharp {
-        fluid {
-          ...GatsbyImageSharpFluid
-        }
+        gatsbyImageData(layout: FIXED)
       }
     }
   }

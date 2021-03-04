@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography'
 import MaterialCard from '@material-ui/core/Card'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
-import Img from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 import SimpleBar from 'simplebar-react'
 
 import Layout from '../components/Layout'
@@ -119,7 +119,11 @@ const Home = ({ data }) => {
       <Layout>
         <StyledSimpleBar data-appbar-height={appBarHeight}>
           <Container>
-            <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
+            <GatsbyImage
+              image={data.file.childImageSharp.gatsbyImageData}
+              style={bgImageStyle}
+              alt="Ophrys"
+            />
             <PageTitle align="center" variant="h6" color="inherit">
               Bedrohte Pflanzenarten fördern
             </PageTitle>
@@ -240,9 +244,11 @@ export const query = graphql`
   query indexPageQuery {
     file(relativePath: { eq: "ophr-ara.jpg" }) {
       childImageSharp {
-        fluid {
-          ...GatsbyImageSharpFluid
-        }
+        gatsbyImageData(
+          layout: FIXED
+          placeholder: BLURRED
+          formats: [AUTO, WEBP, AVIF]
+        )
       }
     }
   }
