@@ -493,11 +493,6 @@ const Karte = ({ treeName }) => {
     >
       <ErrorBoundary>
         <StyledMapContainer
-          // why do I need this ref?
-          // creates Function components cannot be given refs warning
-          // seems to prevent the map to be drawn in only parts of the map window?????
-          // oops. happens also when ref is not set
-          //ref={mapRef}
           // bounds need to be set using ma.fitBounds sice v3
           // but keep bounds in store as last bound will be reapplied
           // when map is re-opened
