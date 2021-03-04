@@ -152,9 +152,6 @@
     "source-map-explorer": "2.5.2",
     "vercel": "21.3.2"
   },
-  "resolutions": {
-    "sharp": "0.25.4"
-  },
   "eslintConfig": {
     "extends": "react-app"
   },
