@@ -64,6 +64,7 @@ const myTypes = types
     ekfYear: types.optional(types.number, ekfYear),
     ekfAdresseId: types.optional(types.maybeNull(types.string), null),
     ekfIds: types.array(types.string),
+    ekfMultiPrint: types.optional(types.boolean, false),
     copying: types.optional(Copying, defaultCopying),
     copyingBiotop: types.optional(CopyingBiotop, defaultCopyingBiotop),
     urlQuery: types.optional(UrlQuery, defaultUrlQuery),
@@ -215,6 +216,9 @@ const myTypes = types
     },
     setEkfIds(ids) {
       self.ekfIds = [...ids]
+    },
+    setEkfMultiPrint(val) {
+      self.ekfMultiPrint = val
     },
     enqueNotification(note) {
       const key = note.options && note.options.key

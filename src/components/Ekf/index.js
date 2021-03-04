@@ -64,7 +64,14 @@ const InnerContainer = styled.div`
 const standardWidth = 500
 
 const Ekf = () => {
-  const { user, isPrint, tree, ekfIds, appBarHeight } = useContext(storeContext)
+  const {
+    user,
+    isPrint,
+    tree,
+    ekfIds: ekfIdsRaw,
+    ekfMultiPrint,
+    appBarHeight,
+  } = useContext(storeContext)
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
@@ -101,7 +108,8 @@ const Ekf = () => {
       window.removeEventListener('resize', setDimensions)
   }, [setDimensions])
 
-  if (isPrint && ekfIds.length > 0) {
+  const ekfIds = ekfIdsRaw?.toJSON()
+  if (isPrint && ekfIds.length > 0 && ekfMultiPrint) {
     return (
       <>
         {ekfIds.map((id) => (

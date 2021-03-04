@@ -79,9 +79,10 @@ const ProjekteAppBar = () => {
     ekfAdresseId,
     setIsPrint,
     ekfIds,
+    setEkfMultiPrint,
   } = store
-  const { ekfIdInUrl } = store.tree
-  const ekfIsActive = !!ekfIdInUrl
+  const { ekfIdInActiveNodeArray } = store.tree
+  const ekfIsActive = !!ekfIdInActiveNodeArray
 
   /**
    * need to clone projekteTabs
@@ -160,18 +161,21 @@ const ProjekteAppBar = () => {
   ])
   const setViewNormal = useCallback(() => setView('normal'), [setView])
   const toggleUserOpen = useCallback(() => setUserOpen(!userOpen), [userOpen])
+
   const onClickPrintSingle = useCallback(() => {
     if (typeof window !== 'undefined') {
+      setEkfMultiPrint(false)
       setIsPrint(true)
       setTimeout(() => {
         window.print()
         setIsPrint(false)
       })
     }
-  }, [setIsPrint])
+  }, [setEkfMultiPrint, setIsPrint])
   const onClickPrintAll = useCallback(() => {
     if (typeof window !== 'undefined') {
       setPreparingEkfMultiprint(true)
+      setEkfMultiPrint(true)
       setIsPrint(true)
       // TODO: need to know when all tpopfreiwkontr forms have finisched rendering
       // idea for hack: use ekfCount to set timeout value?
@@ -179,9 +183,10 @@ const ProjekteAppBar = () => {
         window.print()
         setIsPrint(false)
         setPreparingEkfMultiprint(false)
+        setPreparingEkfMultiprint(false)
       }, 3000 + ekfCount * 300)
     }
-  }, [ekfCount, setIsPrint])
+  }, [ekfCount, setEkfMultiPrint, setIsPrint])
 
   return (
     <>
