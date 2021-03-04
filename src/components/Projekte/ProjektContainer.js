@@ -4,10 +4,7 @@ import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import { withResizeDetector } from 'react-resize-detector'
 
-// when Karte was loaded async, it did not load,
-// but only in production!
-//import Karte from "./Karte"
-import KarteOrNull from './KarteOrNull'
+import Karte from './Karte'
 import TreeContainer from './TreeContainer'
 import Daten from './Daten'
 import Exporte from './Exporte'
@@ -143,7 +140,7 @@ const ProjektContainer = ({
     ),
     karte: (
       <InnerContainer>
-        <KarteOrNull treeName={treeName} />
+        <Karte treeName={treeName} />
       </InnerContainer>
     ),
     exporte: (
