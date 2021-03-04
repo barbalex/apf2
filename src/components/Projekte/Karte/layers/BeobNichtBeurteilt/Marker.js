@@ -127,7 +127,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
       icon={icon}
       title={label}
       draggable={assigningBeob}
-      onMoveend={onMoveend}
+      eventHandlers={{ moveend: onMoveend }}
     >
       <Popup>
         <>
