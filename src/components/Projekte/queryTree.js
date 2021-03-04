@@ -121,6 +121,9 @@ export default gql`
       nodes {
         id
         label
+        datum
+        autor
+        quelle
         apId
         artId
       }
@@ -130,6 +133,9 @@ export default gql`
       nodes {
         id
         label
+        datum
+        autor
+        quelle
         tpopId
         artId
       }

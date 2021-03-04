@@ -1,6 +1,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
+import { DateTime } from 'luxon'
 
 const beobZugeordnetNodes = ({
   nodes: nodesPassed,
@@ -36,6 +37,17 @@ const beobZugeordnetNodes = ({
       // only show nodes of this parent
       .filter((el) => el.tpopId === tpopId)
       .map((el, index) => {
+        // somehow the label passed by the view gets corrupted when the node is active ????!!!
+        // instead of '2010.07.02: Dickenmann Regula (EvAB 2016)' it gives: '2010.07.02: Dickenmann RegulaEvAB 2016)'
+        // so need to build it here
+        const datumIsValid = DateTime.fromSQL(el.datum).isValid
+        const datum = datumIsValid
+          ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
+          : '(kein Datum)'
+        const label = `${datum}: ${el?.autor ?? '(kein Autor)'} (${
+          el?.quelle ?? 'keine Quelle'
+        })`
+
         return {
           nodeType: 'table',
           menuType: 'beobZugeordnet',
@@ -44,7 +56,7 @@ const beobZugeordnetNodes = ({
           parentId: `${el.tpopId}BeobZugeordnetFolder`,
           parentTableId: el.tpopId,
           urlLabel: el.id,
-          label: el.label,
+          label,
           url: [
             'Projekte',
             projId,
