@@ -4153,7 +4153,7 @@ select
   beob.wgs84_lat,
   beob.wgs84_long,
   apflora.apart.ap_id,
-  to_char(beob.datum, 'YYYY.MM.DD') || ': ' || coalesce(beob.autor, '(kein Autor)') || ' (' || beob.quelle || ')' as label
+  concat(to_char(beob.datum, 'YYYY.MM.DD'), ': ', coalesce(beob.autor, '(kein Autor)'), ' (', beob.quelle, ')') as label
 from
   apflora.beob beob
   inner join apflora.apart
