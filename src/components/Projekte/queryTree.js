@@ -109,6 +109,9 @@ export default gql`
       nodes {
         id
         label
+        datum
+        autor
+        quelle
         apId
       }
     }
