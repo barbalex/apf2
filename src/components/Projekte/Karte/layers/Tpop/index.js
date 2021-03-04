@@ -217,12 +217,13 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   const [refetchProvoker, setRefetchProvoker] = useState(1)
   useEffect(() => {
     // DO NOT use:
-    // leafletMap.on('zoomend moveend', refetchQuery
+    // leafletMap.on('zoomend dragend', refetchQuery
     // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
-    // Also: leafletMap.on('zoomend moveend', ()=> refetchQuery()) never refetches!!??
-    leafletMap.on('zoomend moveend', () => setRefetchProvoker(Math.random()))
+    // Also: leafletMap.on('zoomend dragend', ()=> refetchQuery()) never refetches!!??
+    // Also: use dragend, not moveend because moveend fires on zoomend as well
+    leafletMap.on('zoomend dragend', () => setRefetchProvoker(Math.random()))
     return () => {
-      leafletMap.off('zoomend moveend', () => setRefetchProvoker(Math.random()))
+      leafletMap.off('zoomend dragend', () => setRefetchProvoker(Math.random()))
     }
   }, [leafletMap])
 

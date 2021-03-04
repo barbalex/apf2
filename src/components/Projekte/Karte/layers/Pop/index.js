@@ -1,5 +1,4 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
-import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
@@ -115,12 +114,17 @@ const Pop = ({ treeName }) => {
   const [refetchProvoker, setRefetchProvoker] = useState(1)
   useEffect(() => {
     // DO NOT use:
-    // leafletMap.on('zoomend moveend', refetch
+    // leafletMap.on('zoomend dragend', refetch
     // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
-    // Also: leafletMap.on('zoomend moveend', ()=> refetch()) never refetches!!??
-    leafletMap.on('zoomend moveend', () => setRefetchProvoker(Math.random()))
+    // Also: leafletMap.on('zoomend dragend', ()=> refetch()) never refetches!!??
+    // Also: use dragend, not moveend because moveend fires on zoomend as well
+    leafletMap.on('zoomend dragend', () => {
+      setRefetchProvoker(Math.random())
+    })
     return () => {
-      leafletMap.off('zoomend moveend', () => setRefetchProvoker(Math.random()))
+      leafletMap.off('zoomend dragend', () => {
+        setRefetchProvoker(Math.random())
+      })
     }
   }, [leafletMap])
 
@@ -133,24 +137,21 @@ const Pop = ({ treeName }) => {
     })
   }
 
-  const aps = get(
-    data,
-    `projektById.${!!perAp ? 'perAp' : 'perProj'}.nodes`,
-    [],
+  const aps = useMemo(
+    () => data?.projektById?.[!!perAp ? 'perAp' : 'perProj']?.nodes ?? [],
+    [data?.projektById, perAp],
   )
   let pops = useMemo(
-    () => flatten(aps.map((ap) => get(ap, 'popsByApId.nodes', []))),
+    () => flatten(aps.map((ap) => ap?.popsByApId?.nodes ?? [])),
     [aps],
   )
 
   // if tpop are filtered, only show their pop
   if (activeApfloraLayers.includes('tpop')) {
-    const popsForTpops = flatten(
-      aps.map((ap) => get(ap, 'popsByApId.nodes', [])),
-    )
+    const popsForTpops = flatten(aps.map((ap) => ap?.popsByApId?.nodes ?? []))
     // adding useMemo here results in error ???
     const tpops = flatten(
-      popsForTpops.map((pop) => get(pop, 'tpopsByPopId.nodes', [])),
+      popsForTpops.map((pop) => pop?.tpopsByPopId?.nodes ?? []),
     )
     const popIdsOfTpops = tpops.map((t) => t.popId)
     pops = pops.filter((p) => popIdsOfTpops.includes(p.id))
