@@ -2,7 +2,6 @@ import { gql } from '@apollo/client'
 
 import {
   aeTaxonomies,
-  apart,
   beob,
   pop,
   popStatusWerte,
@@ -10,37 +9,32 @@ import {
 
 export default gql`
   query beobByIdQueryForZuordnung($id: UUID!, $apId: UUID!) {
-    beobById(id: $id) {
-      ...BeobFields
-      aeTaxonomyByArtId {
-        ...AeTaxonomiesFields
-        apartsByArtId(filter: { apId: { equalTo: $apId } }) {
-          nodes {
-            ...ApartFields
-            apByApId {
+    apById(id: $apId) {
+      id
+      popsByApId {
+        nodes {
+          id
+          tpopsByPopId {
+            nodes {
               id
-              popsByApId {
-                nodes {
-                  id
-                  tpopsByPopId {
-                    nodes {
-                      id
-                      nr
-                      lv95X
-                      lv95Y
-                      popStatusWerteByStatus {
-                        ...PopStatusWerteFields
-                      }
-                      popByPopId {
-                        ...PopFields
-                      }
-                    }
-                  }
-                }
+              nr
+              lv95X
+              lv95Y
+              popStatusWerteByStatus {
+                ...PopStatusWerteFields
+              }
+              popByPopId {
+                ...PopFields
               }
             }
           }
         }
+      }
+    }
+    beobById(id: $id) {
+      ...BeobFields
+      aeTaxonomyByArtId {
+        ...AeTaxonomiesFields
       }
       aeTaxonomyByArtIdOriginal {
         id
@@ -50,7 +44,6 @@ export default gql`
     }
   }
   ${aeTaxonomies}
-  ${apart}
   ${beob}
   ${pop}
   ${popStatusWerte}

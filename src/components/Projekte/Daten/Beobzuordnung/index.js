@@ -1,7 +1,6 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
-import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
@@ -126,13 +125,11 @@ const nichtZuordnenPopover = (
   </PopoverContainer>
 )
 
-const getTpopZuordnenSource = (row, apId) => {
+const getTpopZuordnenSource = ({ row, apId, ap }) => {
   // get all popIds of active ap
-  const apArt = get(row, 'aeTaxonomyByArtId.apartsByArtId.nodes[0]', [])
-  if (!apArt) return []
-  const popList = get(apArt, 'apByApId.popsByApId.nodes', [])
+  const popList = ap?.popsByApId?.nodes ?? []
   // get all tpop
-  let tpopList = flatten(popList.map((p) => get(p, 'tpopsByPopId.nodes', [])))
+  let tpopList = flatten(popList.map((p) => p?.tpopsByPopId?.nodes ?? []))
     // with coordinates
     // and also: even keep own tpop if it has no coordinates
     .filter((t) => !!t.lv95X || t.id === row.tpopId)
@@ -143,9 +140,9 @@ const getTpopZuordnenSource = (row, apId) => {
       const distNr = Math.round((dX ** 2 + dY ** 2) ** 0.5)
       const distance = distNr.toLocaleString('de-ch')
       // build label
-      const tpopStatus = get(t, 'popStatusWerteByStatus.text', 'ohne Status')
-      const popNr = get(t, 'popByPopId.nr', '(keine Nr)')
-      const tpopNr = t.nr || '(keine Nr)'
+      const tpopStatus = t?.popStatusWerteByStatus?.text ?? 'ohne Status'
+      const popNr = t?.popByPopId?.nr ?? '(keine Nr)'
+      const tpopNr = t.nr ?? '(keine Nr)'
 
       return {
         id: t.id,
@@ -181,7 +178,8 @@ const Beobzuordnung = ({ type, treeName }) => {
     },
   })
 
-  const row = get(data, 'beobById', {})
+  const row = useMemo(() => data?.beobById ?? {}, [data?.beobById])
+  const ap = useMemo(() => data?.apById ?? {}, [data?.apById])
 
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
   const aeTaxonomiesfilter = useCallback(
@@ -303,7 +301,7 @@ const Beobzuordnung = ({ type, treeName }) => {
     <ErrorBoundary>
       <FormContainer data-appbar-height={appBarHeight}>
         <FormTitle
-          apId={get(row, 'aeTaxonomyByArtId.apByArtId.id', null)}
+          apId={apId ?? null}
           title="Beobachtung"
           treeName={treeName}
           table="beob"
@@ -318,10 +316,9 @@ const Beobzuordnung = ({ type, treeName }) => {
           >
             <FieldsContainer>
               {row && row.artId !== row.artIdOriginal && (
-                <OriginalArtDiv>{`Art gemäss Original-Meldung: ${get(
-                  row,
-                  'aeTaxonomyByArtIdOriginal.artname',
-                )}`}</OriginalArtDiv>
+                <OriginalArtDiv>{`Art gemäss Original-Meldung: ${
+                  row?.aeTaxonomyByArtIdOriginal?.artname ?? '(kein Name)'
+                }`}</OriginalArtDiv>
               )}
               <SelectLoadingOptions
                 key={`${row.id}artId`}
@@ -345,14 +342,14 @@ const Beobzuordnung = ({ type, treeName }) => {
               <Select
                 key={`${row.id}tpopId`}
                 name="tpopId"
-                value={row.tpopId ? row.tpopId : ''}
+                value={row.tpopId ?? ''}
                 field="tpopId"
                 label={
                   !!row.tpopId
                     ? 'Einer anderen Teilpopulation zuordnen'
                     : 'Einer Teilpopulation zuordnen'
                 }
-                options={getTpopZuordnenSource(row, apId)}
+                options={getTpopZuordnenSource({ row, apId, ap })}
                 saveToDb={onSaveTpopIdToDb}
               />
               <TextField
@@ -375,17 +372,16 @@ const Beobzuordnung = ({ type, treeName }) => {
                 <EmailButton
                   variant="outlined"
                   onClick={() => {
-                    const origArt = `Art gemäss Beobachtung: SISF-Nr: ${get(
-                      row,
-                      'aeTaxonomyByArtId.taxid',
-                    )}, Artname: ${get(row, 'aeTaxonomyByArtId.artname')}`
-                    const neueArt = `Korrigierte Art: SISF-Nr: ${get(
-                      row,
-                      'aeTaxonomyByArtIdOriginal.taxid',
-                    )}, Artname: ${get(
-                      row,
-                      'aeTaxonomyByArtIdOriginal.artname',
-                    )}`
+                    const origArt = `Art gemäss Beobachtung: SISF-Nr: ${
+                      row?.aeTaxonomyByArtId?.taxid ?? '(keine)'
+                    }, Artname: ${
+                      row?.aeTaxonomyByArtId?.artname ?? '(keiner)'
+                    }`
+                    const neueArt = `Korrigierte Art: SISF-Nr: ${
+                      row?.aeTaxonomyByArtIdOriginal?.taxid ?? '(keine)'
+                    }, Artname: ${
+                      row?.aeTaxonomyByArtIdOriginal?.artname ?? '(keiner)'
+                    }`
                     const bemerkungen = row.bemerkungen
                     // remove all keys with null
                     const dataArray = Object.entries(
@@ -414,11 +410,9 @@ const Beobzuordnung = ({ type, treeName }) => {
                 </EmailButton>
               </InfofloraRow>
             </FieldsContainer>
-            <Title>{`Informationen aus ${get(
-              row,
-              'quelle',
-              '?',
-            )} (nicht veränderbar)`}</Title>
+            <Title>{`Informationen aus ${
+              row?.quelle ?? '?'
+            } (nicht veränderbar)`}</Title>
             <Beob treeName={treeName} />
           </SimpleBar>
         </DataContainer>

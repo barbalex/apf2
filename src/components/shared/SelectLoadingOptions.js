@@ -125,8 +125,8 @@ const SelectTypable = ({
   )
 
   const value = {
-    value: row[field] || '',
-    label: get(row, valueLabelPath) || '',
+    value: row[field] ?? '',
+    label: row?.[valueLabelPath] ?? '',
   }
 
   return (
