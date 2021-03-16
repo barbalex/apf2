@@ -198,7 +198,7 @@ const insertDataset = async ({
     urlWithoutJahr.pop()
     newOpenNodes = [...openNodes, urlWithoutJahr, newActiveNodeArray]
   }
-  if (menuType.includes('tpopfeldkontr')) {
+  if (['tpopfeldkontr', 'tpopfeldkontrFolder'].includes(menuType)) {
     // 1. add new zaehlung
     const result = await client.mutate({
       mutation: gql`
