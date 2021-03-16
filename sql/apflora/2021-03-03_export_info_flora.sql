@@ -72,6 +72,9 @@ SELECT
   ELSE
     concat('01.01.', kontr.jahr)
   END AS datum,
+  kontr.jahr AS jahr,
+  date_part('month', kontr.datum) AS monat,
+  date_part('day', kontr.datum) AS tag,
   CASE WHEN kontr.datum IS NOT NULL THEN
     'genau'
   ELSE
