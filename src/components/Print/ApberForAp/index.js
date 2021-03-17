@@ -190,7 +190,7 @@ const ApberForAp = ({
     ],
   )
 
-  const [mengenResult, setMengenResult] = useState(node)
+  const [mengenResult, setMengenResult] = useState(node ?? { loading: true })
   useEffect(() => {
     if (!node) {
       client
@@ -225,18 +225,16 @@ const ApberForAp = ({
     }
   }, [setIsPrint])
 
-  const data = node ?? mengenResult.data?.jberAbc?.nodes?.[0]
-  const loading = node ? false : mengenResult.loading
-  const error = node ? false : mengenResult.error
-
-  //console.log('ApberForAp', { data, mengenResult, apId, jahr })
+  const data = node ?? mengenResult?.data?.jberAbc?.nodes?.[0]
+  const loading = node ? false : mengenResult?.loading
+  const error = node ? false : mengenResult?.error
 
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
   // DANGER: without rerendering when loading mutates from true to false
   // data remains undefined
   if (loading) return <Spinner />
 
-  if (!data) {
+  if (!data ?? !!node ?? mengenResult?.data?.jberAbc?.nodes) {
     return (
       <NoDataContainer issubreport={isSubReport}>
         Sorry, es gibt nicht ausreichend Daten
