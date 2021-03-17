@@ -5,7 +5,7 @@ import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { MdPrint } from 'react-icons/md'
 import Fab from '@material-ui/core/Fab'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useLazyQuery } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
 
 import queryMengen from './queryMengen'
@@ -166,6 +166,17 @@ const ApberForAp = ({
   const { setIsPrint } = store
   const client = useApolloClient()
 
+  const [
+    getMengen,
+    { data: mengenData, loading: mengenLoading, error: mengenError },
+  ] = useLazyQuery(queryMengen, {
+    fetchPolicy: 'no-cache',
+    variables: {
+      apId,
+      jahr,
+    },
+  })
+
   const apData = isSubReport ? apDataPassed : apDataPassed.apById
   const apber = apData?.apbersByApId?.nodes?.[0] ?? {}
   const apberDatum = apber?.datum
@@ -190,39 +201,17 @@ const ApberForAp = ({
     ],
   )
 
-  const [result, setResult] = useState(node ?? { loading: true })
   useEffect(() => {
     // somehow when live jahr can come over as 0
     // which then seems to block querying????
     if (!node && jahr && apId) {
-      client
-        .query({
-          query: queryMengen,
-          // this is necessary for when user changed ap.bearbeitung: query needs to re-run afterwards
-          fetchPolicy: 'no-cache',
-          variables: {
-            apId,
-            jahr,
-          },
-        })
-        .then((result) => {
-          //console.log('useEffect returning result:', result)
-          setResult(result)
-        })
-        .catch((error) => {
-          store.enqueNotification({
-            message: error.message,
-            options: {
-              variant: 'error',
-            },
-          })
-        })
+      getMengen()
     }
-  }, [apId, client, jahr, node, store])
+  }, [apId, client, getMengen, jahr, node, store])
 
-  const data = node ?? result?.data?.jberAbc?.nodes?.[0]
-  const loading = node ? false : result?.loading
-  const error = node ? false : result?.error
+  const data = node ?? mengenData?.jberAbc?.nodes?.[0]
+  const loading = node ? false : mengenLoading
+  const error = node ? false : mengenError
 
   const onClickPrint = useCallback(() => {
     if (typeof window !== 'undefined') {
