@@ -206,7 +206,7 @@ const ApberForAp = ({
           },
         })
         .then((result) => {
-          console.log('useEffect returning result:', result)
+          //console.log('useEffect returning result:', result)
           setResult(result)
         })
         .catch((error) => {
