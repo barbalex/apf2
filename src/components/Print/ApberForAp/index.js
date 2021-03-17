@@ -190,9 +190,7 @@ const ApberForAp = ({
     ],
   )
 
-  const [loading, setLoading] = useState(node ? false : true)
-  const [error, setError] = useState(false)
-  const [data, setData] = useState(node)
+  const [result, setResult] = useState(node ?? { loading: true })
   useEffect(() => {
     if (!node) {
       client
@@ -207,9 +205,7 @@ const ApberForAp = ({
         })
         .then((result) => {
           console.log('useEffect returning result:', result)
-          setData(result?.data?.jberAbc?.nodes?.[0])
-          setLoading(result?.loading)
-          setError(result?.error)
+          setResult(result)
         })
         .catch((error) => {
           store.enqueNotification({
@@ -221,6 +217,10 @@ const ApberForAp = ({
         })
     }
   }, [apId, client, jahr, node, store])
+
+  const data = node ?? result?.data?.jberAbc?.nodes?.[0]
+  const loading = node ? false : result?.loading
+  const error = node ? false : result?.error
 
   const onClickPrint = useCallback(() => {
     if (typeof window !== 'undefined') {
@@ -242,8 +242,11 @@ const ApberForAp = ({
   if (!data) {
     return (
       <NoDataContainer issubreport={isSubReport}>
-        Sorry, es gibt nicht ausreichend Daten. Kann es sein, dass es sich nicht
-        um einen gültigen Aktionsplan handelt?
+        <div>Sorry, es gibt nicht ausreichend Daten.</div>
+        <div>
+          Kann es sein, dass es sich nicht um einen gültigen Aktionsplan
+          handelt?
+        </div>
       </NoDataContainer>
     )
   }
