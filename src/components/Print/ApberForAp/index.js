@@ -190,19 +190,26 @@ const ApberForAp = ({
     ],
   )
 
-  const [mengenResult, setMengenResult] = useState(node ?? { loading: true })
+  const [loading, setLoading] = useState(node ? false : true)
+  const [error, setError] = useState(false)
+  const [data, setData] = useState(node)
   useEffect(() => {
     if (!node) {
       client
         .query({
           query: queryMengen,
+          // this is necessary for when user changed ap.bearbeitung: query needs to re-run afterwards
+          fetchPolicy: 'no-cache',
           variables: {
             apId,
             jahr,
           },
         })
         .then((result) => {
-          setMengenResult(result)
+          console.log('useEffect returning result:', result)
+          setData(result?.data?.jberAbc?.nodes?.[0])
+          setLoading(result?.loading)
+          setError(result?.error)
         })
         .catch((error) => {
           store.enqueNotification({
@@ -225,19 +232,18 @@ const ApberForAp = ({
     }
   }, [setIsPrint])
 
-  const data = node ?? mengenResult?.data?.jberAbc?.nodes?.[0]
-  const loading = node ? false : mengenResult?.loading
-  const error = node ? false : mengenResult?.error
+  //console.log('ApberForAp:', { data, loading, error, node })
 
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
   // DANGER: without rerendering when loading mutates from true to false
   // data remains undefined
   if (loading) return <Spinner />
 
-  if (!data ?? !!node ?? mengenResult?.data?.jberAbc?.nodes) {
+  if (!data) {
     return (
       <NoDataContainer issubreport={isSubReport}>
-        Sorry, es gibt nicht ausreichend Daten
+        Sorry, es gibt nicht ausreichend Daten. Kann es sein, dass es sich nicht
+        um einen gültigen Aktionsplan handelt?
       </NoDataContainer>
     )
   }
