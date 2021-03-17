@@ -192,7 +192,9 @@ const ApberForAp = ({
 
   const [result, setResult] = useState(node ?? { loading: true })
   useEffect(() => {
-    if (!node) {
+    // somehow when live jahr can come over as 0
+    // which then seems to block querying????
+    if (!node && jahr && apId) {
       client
         .query({
           query: queryMengen,
@@ -232,7 +234,7 @@ const ApberForAp = ({
     }
   }, [setIsPrint])
 
-  //console.log('ApberForAp:', { data, loading, error, node })
+  //console.log('ApberForAp:', { data, loading, error, node, jahr })
 
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
   // DANGER: without rerendering when loading mutates from true to false
