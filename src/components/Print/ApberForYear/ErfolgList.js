@@ -255,7 +255,7 @@ const ErfolgList = ({ jahr, data }) => {
     }
   })
 
-  console.log('ErfolgList, apRows:', apRows)
+  //console.log('ErfolgList, apRows:', apRows)
 
   return (
     <ErrorBoundary>
