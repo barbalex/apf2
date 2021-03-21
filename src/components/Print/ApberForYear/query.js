@@ -112,6 +112,7 @@ export default gql`
         id
         startJahr
         bearbeiter
+        bearbeitung
         a3LPop
         a3LTpop
         a4LPop

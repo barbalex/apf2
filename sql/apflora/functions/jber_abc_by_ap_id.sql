@@ -619,10 +619,11 @@ first_massn AS (
 erfolg AS (
   SELECT DISTINCT ON (ap.id)
     ap.id,
-    apber.beurteilung
+    ew.sort AS beurteilung
   FROM
     apflora.ap ap
-    INNER JOIN apflora.apber apber ON ap.id = apber.ap_id
+    INNER JOIN apflora.apber apber
+    INNER JOIN apflora.ap_erfkrit_werte ew ON ew.code = apber.beurteilung ON ap.id = apber.ap_id
     INNER JOIN apflora.pop pop
     INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
   WHERE
@@ -640,10 +641,11 @@ erfolg AS (
 erfolg_vorjahr AS (
   SELECT DISTINCT ON (ap.id)
     ap.id,
-    apber.beurteilung
+    ew.sort AS beurteilung
   FROM
     apflora.ap ap
-    INNER JOIN apflora.apber apber ON ap.id = apber.ap_id
+    INNER JOIN apflora.apber apber
+    INNER JOIN apflora.ap_erfkrit_werte ew ON ew.code = apber.beurteilung ON ap.id = apber.ap_id
     INNER JOIN apflora.pop pop
     INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
   WHERE

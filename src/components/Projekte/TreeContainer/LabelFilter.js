@@ -112,7 +112,7 @@ const LabelFilter = ({ treeName, nodes }) => {
       const val = e.target.value
       setValue(val)
       if (labelText === '(filtern nicht möglich)') return
-      changeDebounced.callback(val)
+      changeDebounced(val)
     },
     [labelText, changeDebounced],
   )

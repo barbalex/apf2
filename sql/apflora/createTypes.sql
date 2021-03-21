@@ -1,12 +1,11 @@
 -- DANGER:
 -- 1. EVERY type needs an id (or apollo will not work correctly)
--- 2. When re-using existing id's 
+-- 2. When re-using existing id's
 --    apollo will replace those models with these in cache
 --    This will cause hard to solve issues
--- 3. So either use existing id's but tell apollo to 
+-- 3. So either use existing id's but tell apollo to
 --    combine them with the __typename when caching (in client.js, dataIdFromObject)
 -- 4. Or give them new uuid's
-
 CREATE TYPE apflora.q_pop_ohne_popmassnber AS (
   proj_id uuid,
   ap_id uuid,
@@ -50,14 +49,15 @@ CREATE TYPE apflora.q_tpop_counted_einheit_multiple_times_in_year AS (
   anzahl integer
 );
 
-create type apflora.tpop_kontrolliert_for_jber as (
+CREATE TYPE apflora.tpop_kontrolliert_for_jber AS (
   year integer,
   anz_tpop integer,
   anz_tpopber integer
 );
 
-drop type apflora.pop_nach_status_for_jber cascade;
-create type apflora.pop_nach_status_for_jber as (
+DROP TYPE apflora.pop_nach_status_for_jber CASCADE;
+
+CREATE TYPE apflora.pop_nach_status_for_jber AS (
   year integer,
   a3lpop integer,
   a4lpop integer,
@@ -67,8 +67,9 @@ create type apflora.pop_nach_status_for_jber as (
   a9lpop integer
 );
 
-drop type apflora.jber_abc cascade;
-create type apflora.jber_abc as (
+DROP TYPE apflora.jber_abc CASCADE;
+
+CREATE TYPE apflora.jber_abc AS (
   artname text,
   id uuid,
   start_jahr integer,
@@ -113,9 +114,9 @@ create type apflora.jber_abc as (
   erfolg_vorjahr integer
 );
 
+DROP TYPE apflora.jber_akt_pop CASCADE;
 
-drop type apflora.jber_akt_pop cascade;
-create type apflora.jber_akt_pop as (
+CREATE TYPE apflora.jber_akt_pop AS (
   artname text,
   id uuid,
   pop_100 integer,
@@ -125,3 +126,4 @@ create type apflora.jber_akt_pop as (
   pop_200_diff integer,
   pop_total_diff integer
 );
+
