@@ -230,18 +230,15 @@ const ErfolgList = ({ jahr, data }) => {
         : ap.erfolg - ap.erfolgVorjahr > 0
         ? '―'
         : '╋'
+    // Problem: in print some artnames are very long
+    // this pushes columns to the right, off of the print
+    // Seems that overflow/ellipis is not respected
+    // so need to shorten names
     const artname =
       ap.artname?.length > 82
         ? `${ap.artname?.substring?.(0, 82)}...`
         : ap.artname ?? ''
-    /*console.log('ErfolgList, ap.artname:', {
-      rowAp: ap.artname,
-      rowApLength: ap.artname?.length,
-      typeofRowApLength: typeof ap.artname?.length,
-      rowSubstring: `${ap.artname?.substring?.(0, 70)}...`,
-      rowApLengthGreaterThan70: ap.artname?.length > 70,
-      artname,
-    })*/
+
     return {
       //ap: ap.artname,
       ap: artname,
