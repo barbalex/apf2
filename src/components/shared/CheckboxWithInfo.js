@@ -47,7 +47,7 @@ const CheckboxWithInfo = ({ value, label, name, popover, saveToDb, error }) => {
                 onChange={onCheck}
                 value={label}
                 color="primary"
-                data-id={name}
+                inputProps={{ 'data-id': name }}
               />
             }
           />

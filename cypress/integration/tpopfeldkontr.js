@@ -56,7 +56,7 @@ describe('Teil-Population Feldkontrolle form', () => {
       .check()
       .should('have.value', 'Zwischenbeurteilung')
   })
-  it('updates bearbeiter', () => {
+  it.skip('updates bearbeiter', () => {
     cy.setSelectOption({
       selector: '[data-id=bearbeiter]',
       option: 'Adrienne Frei',
@@ -132,7 +132,7 @@ describe('Teil-Population Feldkontrolle form', () => {
       .check()
       .get('[data-id=apberNichtRelevant] input')
       .check()
-      .should('have.value', 'true')
+      .should('be.checked')
   })
   it('updates apberNichtRelevantGrund', () => {
     const typedText = 'test, bitte nicht löschen'

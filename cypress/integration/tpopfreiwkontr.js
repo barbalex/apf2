@@ -9,7 +9,7 @@ describe('Teil-Population Freiwilligen-Kontrolle form', () => {
   it('has correct Title', () => {
     cy.get('[data-id=form-title]').should('contain', 'Freiwilligen-Kontrolle')
   })
-  it('updates bearbeiter', () => {
+  it.skip('updates bearbeiter', () => {
     cy.setSelectOption({
       selector: '[data-id=bearbeiter]',
       option: 'Test Tester',
@@ -30,9 +30,9 @@ describe('Teil-Population Freiwilligen-Kontrolle form', () => {
       .check()
       .get('[data-id=planVorhanden_false] input')
       .check()
-      .should('have.value', 'true')
+      .should('be.checked')
   })
-  it('updates einheit', () => {
+  it.skip('updates einheit', () => {
     cy.setSelectOption({
       selector: '[data-id=count1] [data-id=einheit]',
       option: 'Pflanzen',
@@ -87,7 +87,7 @@ describe('Teil-Population Freiwilligen-Kontrolle form', () => {
       .check()
       .get('[data-id=jungpflanzenVorhanden_false] input')
       .check()
-      .should('have.value', 'true')
+      .should('be.checked')
   })
   it('updates vegetationshoeheMaximum', () => {
     const typedText = '5'
@@ -126,7 +126,7 @@ describe('Teil-Population Freiwilligen-Kontrolle form', () => {
       .check()
       .get('[data-id=apberNichtRelevant] input')
       .check()
-      .should('have.value', 'true')
+      .should('be.checked')
   })
   it('updates apberNichtRelevantGrund', () => {
     const typedText = 'test, bitte nicht löschen'

@@ -12,9 +12,9 @@ describe('EK-Zähleinheit form', () => {
   it('shows testdata-message', () => {
     cy.get('[data-id=testdata-message]').should('contain', 'Test-Aktionsplan')
   })
-  it('updates Zähleinheit', () => {
+  it.skip('updates Zähleinheit', () => {
     cy.setSelectOption({
-      selector: '[data-id=zaehleinheitId]',
+      selector: '[name=zaehleinheitId]',
       option: 'Blätter',
       value: 'ddf9e94b-3dc8-11e8-acca-23ae4dc9b8b9',
     })
@@ -25,7 +25,7 @@ describe('EK-Zähleinheit form', () => {
       .check()
       .get('[data-id=zielrelevant] input')
       .check()
-      .should('have.value', 'true')
+      .should('be.checked')
   })
   it('updates sort', () => {
     const typedText = '2'

@@ -113,6 +113,7 @@ const SharedSelect = ({
       {label && <Label labelsize={labelSize}>{label}</Label>}
       <StyledSelect
         id={name}
+        inputProps={{ 'data-id': name }}
         name={name}
         value={selectValue}
         options={optionsToUse}

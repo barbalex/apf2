@@ -77,7 +77,7 @@ const Checkbox3StatesFormik = ({ label, handleSubmit, ...props }) => {
       >
         <StyledFormLabel component="legend">{label}</StyledFormLabel>
         <StyledCheckbox
-          data-id={name}
+          inputProps={{ 'data-id': name }}
           onClick={onClickButton}
           color="primary"
           checked={checked}

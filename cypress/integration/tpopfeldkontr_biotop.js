@@ -9,7 +9,7 @@ describe('Teil-Population Feldkontrolle Biotop form', () => {
   it('opens Biotop', () => {
     cy.get('[data-id=biotop]').click()
   })
-  it('updates lrDelarze', () => {
+  it.skip('updates lrDelarze', () => {
     cy.get('[data-id=lrDelarze]').find('.css-10nd86i input:text').focus()
     cy.setSelectOption({
       selector: '[data-id=lrDelarze]',
@@ -17,7 +17,7 @@ describe('Teil-Population Feldkontrolle Biotop form', () => {
       value: '1: Gewässer',
     })
   })
-  it('updates lrUmgebungDelarze', () => {
+  it.skip('updates lrUmgebungDelarze', () => {
     cy.setSelectOption({
       selector: '[data-id=lrUmgebungDelarze]',
       option: '1: Gewässer',

@@ -4,14 +4,17 @@ describe('Adresse form', () => {
   before(() => {
     cy.visit(
       '/Daten/Werte-Listen/Adressen/dbc6b9c4-4375-11e8-ab21-27d2a4db8ba6',
-    ).wait(1500)
+    )
   })
   it('has Title Adresse', () => {
     cy.get('[data-id=form-title]').should('contain', 'Adresse')
   })
   it('updates Name', () => {
     const typedText = 'Alexander Gabriel'
-    cy.get('#name').clear().type(typedText).should('have.value', typedText)
+    cy.get('[name=name]')
+      .clear()
+      .type(typedText)
+      .should('have.value', typedText)
   })
   it('updates Adresse', () => {
     const typedText = 'Wiesenstrasse 22, 8800 Thalwil'
@@ -26,6 +29,6 @@ describe('Adresse form', () => {
     cy.get('#email').clear().type(typedText).should('have.value', typedText)
   })
   it('updates Freiw. Erfko', () => {
-    cy.get('[data-id=freiwErfko] input').check().should('have.value', 'true')
+    cy.get('[data-id=freiwErfko] input').check().should('be.checked')
   })
 })

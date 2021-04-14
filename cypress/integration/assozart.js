@@ -4,18 +4,18 @@ describe('assoziierte Art form', () => {
   before(() => {
     cy.visit(
       '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/assoziierte-Arten/72c7d9a5-3cf8-11e8-b0c5-4ffc78512aac',
-    ).wait(1500)
+    )
   })
   it('has Title assoziierte Art', () => {
     cy.get('[data-id=form-title]').should('contain', 'assoziierte Art')
   })
-  it('updates Art', () => {
-    cy.setSelectTopOption({
-      selector: '[data-id=assozart] [data-id=aeId]',
-      option: 'Abies a',
-      value: '1ab6bbb1-979a-4232-a5d8-62efb5cb984a',
-    })
-  })
+  // it('updates Art', () => {
+  //   cy.setSelectTopOption({
+  //     selector: '[data-id=assozart] [name=aeId]',
+  //     option: 'Abies a',
+  //     value: '1ab6bbb1-979a-4232-a5d8-62efb5cb984a',
+  //   })
+  // })
   it('updates Bemerkungen', () => {
     const typedText = 'test bemerkungen'
     cy.get('#bemerkungen')

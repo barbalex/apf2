@@ -41,7 +41,7 @@ describe('Population form', () => {
       .check()
       .get('[data-id=statusUnklar] input')
       .check()
-      .should('have.value', 'true')
+      .should('be.checked')
   })
   it('updates statusUnklarBegruendung', () => {
     const typedText = 'test'

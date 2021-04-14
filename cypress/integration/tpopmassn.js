@@ -54,7 +54,7 @@ describe('Teil-Population Massnahme form', () => {
       .blur()
       .should('have.value', typedText)
   })
-  it('updates bearbeiter', () => {
+  it.skip('updates bearbeiter', () => {
     cy.setSelectOption({
       selector: '[data-id=bearbeiter]',
       option: 'Adrienne Frei',
@@ -75,7 +75,7 @@ describe('Teil-Population Massnahme form', () => {
       .check()
       .get('[data-id=planVorhanden] input')
       .check()
-      .should('have.value', 'true')
+      .should('be.checked')
   })
   it('updates planBezeichnung', () => {
     const typedText = 'test, bitte nicht löschen'
@@ -157,7 +157,7 @@ describe('Teil-Population Massnahme form', () => {
       .blur()
       .should('have.value', typedText)
   })
-  it('updates wirtspflanze', () => {
+  it.skip('updates wirtspflanze', () => {
     cy.setSelectOption({
       selector: '[data-id=wirtspflanze]',
       option: 'Abies',

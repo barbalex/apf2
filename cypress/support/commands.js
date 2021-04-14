@@ -25,8 +25,23 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 /* eslint-disable no-undef */
 
+const { cy } = require('date-fns/locale')
+
 // TODO: setting selects is a total mess
 // should become better in next cypress updates
+// Cypress.Commands.add('setSelectOption', ({ selector, option, value }) => {
+//   cy.get(selector).then((thing) => {
+//     if (thing.find('.react-select__clear-indicator').length > 0) {
+//       thing.find('.react-select__clear-indicator').click()
+//     }
+//   })
+//   cy.get(selector)
+//     .find('.react-select__input')
+//     .find('input')
+//     .type(option, { force: true })
+//     .blur()
+//   cy.get(selector).find('.react-select__single-value').should('contain', option)
+// })
 Cypress.Commands.add('setSelectOption', ({ selector, option, value }) => {
   cy.get(selector).then((thing) => {
     if (thing.find('.react-select__clear-indicator').length > 0) {
@@ -40,13 +55,22 @@ Cypress.Commands.add('setSelectOption', ({ selector, option, value }) => {
     .blur()
   cy.get(selector).find('.react-select__single-value').should('contain', option)
 })
+// Cypress.Commands.add('setSelectTopOption', ({ selector }) => {
+//   cy.get(selector)
+//     .find('.react-select__input')
+//     .find('input')
+//     .focus()
+//     .type('{downarrow}', { force: true })
+//     .type('{enter}', { force: true })
+// })
 Cypress.Commands.add('setSelectTopOption', ({ selector }) => {
   cy.get(selector)
-    .find('.react-select__input')
-    .find('input')
-    .focus()
-    .type('{downarrow}', { force: true })
-    .type('{enter}', { force: true })
+    .find('.react-select__control') // find react-select component
+    .click() // click to open dropdown
+    .get('.react-select__menu') // find opened dropdown
+    .find('.react-select__option') // find all options
+    .first()
+    .click() // click on first option
 })
 Cypress.Commands.add('clearSelect', ({ selector }) => {
   cy.get(selector).then((thing) => {

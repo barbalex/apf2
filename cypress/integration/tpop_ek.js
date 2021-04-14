@@ -21,7 +21,7 @@ describe('Teil-Population form', () => {
       .check()
       .get('[data-id=ekfrequenzAbweichend] input')
       .check()
-      .should('have.value', 'true')
+      .should('be.checked')
   })
   it('updates ekAbrechnungstyp', () => {
     cy.get('[data-id=ekAbrechnungstyp_a] input')
