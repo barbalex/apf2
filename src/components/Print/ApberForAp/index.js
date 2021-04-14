@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import flatten from 'lodash/flatten'
