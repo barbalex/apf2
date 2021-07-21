@@ -1,4 +1,5 @@
 import get from 'lodash/get'
+import max from 'lodash/max'
 
 const currentIssuesFolderNode = ({
   nodes: nodesPassed,
@@ -14,7 +15,9 @@ const currentIssuesFolderNode = ({
   const currentIssuesIndex = projektNodes.length + 3
 
   let message =
-    loading && !currentIssues.length ? '...' : currentIssues.length - 1
+    loading && !currentIssues.length
+      ? '...'
+      : max([currentIssues.length - 1, 0])
 
   return [
     {
