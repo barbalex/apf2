@@ -134,7 +134,7 @@
     "@svgr/cli": "5.5.0",
     "babel-eslint": "10.1.0",
     "copyfiles": "2.4.1",
-    "cypress": "7.3.0",
+    "cypress": "8.0.0",
     "eslint": "7.31.0",
     "eslint-config-react-app": "6.0.0",
     "eslint-plugin-flowtype": "5.8.0",
@@ -142,14 +142,14 @@
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "7.24.0",
     "eslint-plugin-react-hooks": "4.2.0",
-    "eslint-webpack-plugin": "2.5.4",
+    "eslint-webpack-plugin": "3.0.1",
     "gatsby-cli": "3.10.0",
     "postgraphile": "4.12.3",
     "postgraphile-plugin-connection-filter": "2.2.1",
     "postgraphile-plugin-connection-filter-postgis": "1.0.0-alpha.6",
     "prettier": "2.3.2",
     "source-map-explorer": "2.5.2",
-    "vercel": "22.0.1"
+    "vercel": "23.0.1"
   },
   "eslintConfig": {
     "extends": "react-app"
