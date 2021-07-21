@@ -40,7 +40,7 @@ class Uploader extends Component {
       widget.value(value)
     }
     if (typeof onChange === 'function') {
-      widget.onChange(files => {
+      widget.onChange((files) => {
         if (files) {
           this.files =
             this.files && this.files.files ? this.files.files() : [this.files]
@@ -54,9 +54,9 @@ class Uploader extends Component {
     if (typeof onUploadComplete === 'function') {
       widget.onUploadComplete(onUploadComplete)
     }
-    widget.onDialogOpen(dialog => (this.dialog = dialog))
+    widget.onDialogOpen((dialog) => (this.dialog = dialog))
     // reset widget after upload
-    widget.onUploadComplete(function() {
+    widget.onUploadComplete(function () {
       widget.value(null)
     })
   }
@@ -95,7 +95,7 @@ class Uploader extends Component {
     return (
       <input
         type="hidden"
-        ref={input => (this.uploader = input)}
+        ref={(input) => (this.uploader = input)}
         data-image-shrink="2400x1600"
         //data-multiple="true"
         //data-multiple-min="1"
