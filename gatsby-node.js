@@ -56,18 +56,3 @@ exports.createPages = async ({ actions, graphql }) => {
     }
   })
 }
-
-exports.onCreateWebpackConfig = ({ actions }) => {
-  actions.setWebpackConfig({
-    resolve: {
-      fallback: {
-        // md5-hex uses node:crypto
-        // webpack v5 does not polyfill for it any more
-        // so need to do that here
-        // see: https://github.com/gatsbyjs/gatsby/issues/32465#issuecomment-884255203
-        // and: https://stackoverflow.com/a/67335037/712005
-        crypto: require.resolve('crypto-browserify'),
-      },
-    },
-  })
-}
