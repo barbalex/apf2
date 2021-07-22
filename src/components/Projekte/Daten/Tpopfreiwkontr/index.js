@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { MdPrint } from 'react-icons/md'
 import IconButton from '@material-ui/core/IconButton'
-import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
 import query from './query'
@@ -52,7 +51,6 @@ const Tpopfreiwkontr = ({
   treeName,
   showFilter = false,
   id: idPassed,
-  width = 1000,
   filterTitleHeight = 81,
 }) => {
   const client = useApolloClient()
@@ -207,8 +205,6 @@ const Tpopfreiwkontr = ({
   if (error) return <Error error={error} />
   if (Object.keys(row).length === 0) return null
 
-  console.log('isPrint:', isPrint)
-
   return (
     <Container
       showfilter={showFilter}
@@ -278,4 +274,4 @@ const Tpopfreiwkontr = ({
   )
 }
 
-export default withResizeDetector(observer(Tpopfreiwkontr))
+export default observer(Tpopfreiwkontr)
