@@ -4,7 +4,7 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import bboxPolygon from '@turf/bbox-polygon'
+// import bboxPolygon from '@turf/bbox-polygon'
 import { useMap } from 'react-leaflet'
 
 import Marker from './Marker'
@@ -31,12 +31,8 @@ const iconCreateFunction = function (cluster) {
 const BeobZugeordnetMarker = ({ treeName, clustered }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const {
-    setRefetchKey,
-    enqueNotification,
-    activeApfloraLayers,
-    mapFilter,
-  } = store
+  const { setRefetchKey, enqueNotification, activeApfloraLayers, mapFilter } =
+    store
   const tree = store[treeName]
   const { map, apIdInActiveNodeArray, projIdInActiveNodeArray } = tree
   const { setBeobZugeordnetIdsFiltered } = map
@@ -46,20 +42,22 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
   const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobZugeordnet')
 
-  const bounds = leafletMap.getBounds()
-  const boundsArray = [
-    bounds.getWest(),
-    bounds.getSouth(),
-    bounds.getEast(),
-    bounds.getNorth(),
-  ]
-  const myBbox = bboxPolygon(boundsArray).geometry
+  // const bounds = leafletMap.getBounds()
+  // const boundsArray = [
+  //   bounds.getWest(),
+  //   bounds.getSouth(),
+  //   bounds.getEast(),
+  //   bounds.getNorth(),
+  // ]
+  // const myBbox = bboxPolygon(boundsArray).geometry
 
   const beobFilter = {
     tpopId: { isNull: false },
     nichtZuordnen: { equalTo: false },
     wgs84Lat: { isNull: false },
-    geomPoint: { within: myBbox },
+    // 2021.08.16: needed to remove this filter
+    // because icons where added every time a tpop left, then reentered the bbox
+    // geomPoint: { within: myBbox },
   }
   if (!!tree.nodeLabelFilter.beob) {
     beobFilter.label = {

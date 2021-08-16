@@ -3,7 +3,7 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from '@apollo/client'
-import bboxPolygon from '@turf/bbox-polygon'
+// import bboxPolygon from '@turf/bbox-polygon'
 import { useMap } from 'react-leaflet'
 
 import Marker from './Marker'
@@ -30,19 +30,11 @@ const iconCreateFunction = function (cluster) {
 const Pop = ({ treeName }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const {
-    activeApfloraLayers,
-    enqueNotification,
-    mapFilter,
-    setRefetchKey,
-  } = store
+  const { activeApfloraLayers, enqueNotification, mapFilter, setRefetchKey } =
+    store
   const tree = store[treeName]
-  const {
-    map,
-    dataFilter,
-    projIdInActiveNodeArray,
-    apIdInActiveNodeArray,
-  } = tree
+  const { map, dataFilter, projIdInActiveNodeArray, apIdInActiveNodeArray } =
+    tree
   const { setPopIdsFiltered } = map
 
   const projId =
@@ -53,18 +45,20 @@ const Pop = ({ treeName }) => {
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
-  const bounds = leafletMap.getBounds()
-  const boundsArray = [
-    bounds.getWest(),
-    bounds.getSouth(),
-    bounds.getEast(),
-    bounds.getNorth(),
-  ]
-  const myBbox = bboxPolygon(boundsArray).geometry
+  // const bounds = leafletMap.getBounds()
+  // const boundsArray = [
+  //   bounds.getWest(),
+  //   bounds.getSouth(),
+  //   bounds.getEast(),
+  //   bounds.getNorth(),
+  // ]
+  // const myBbox = bboxPolygon(boundsArray).geometry
 
   const popFilter = {
     wgs84Lat: { isNull: false },
-    geomPoint: { within: myBbox },
+    // 2021.08.16: needed to remove this filter
+    // because icons where added every time a tpop left, then reentered the bbox
+    //geomPoint: { within: myBbox },
   }
   const popFilterValues = Object.entries(dataFilter.pop).filter(
     (e) => e[1] || e[1] === 0,
@@ -81,7 +75,7 @@ const Pop = ({ treeName }) => {
 
   const tpopFilter = {
     wgs84Lat: { isNull: false },
-    geomPoint: { within: myBbox },
+    //geomPoint: { within: myBbox },
   }
   const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
     (e) => e[1] || e[1] === 0,

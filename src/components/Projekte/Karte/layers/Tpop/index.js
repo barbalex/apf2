@@ -3,9 +3,9 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { useQuery, useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { useMapEvents } from 'react-leaflet'
-import bboxPolygon from '@turf/bbox-polygon'
+// import bboxPolygon from '@turf/bbox-polygon'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
@@ -17,14 +17,14 @@ import updateTpopById from './updateTpopById'
 
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
+  if (typeof window === 'undefined') return () => {}
+
   const hasHighlightedTpop = markers.some(
     (m) => m.options.icon.options.isHighlighted,
   )
-
   const className = hasHighlightedTpop
     ? 'tpopClusterHighlighted'
     : 'tpopCluster'
-  if (typeof window === 'undefined') return () => {}
   return window.L.divIcon({
     html: markers.length,
     className,
@@ -94,19 +94,8 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
             id: idOfTpopBeingLocalized,
             geomPoint,
           },
-          // no optimistic responce as geomPoint
-          /*optimisticResponse: {
-                      __typename: 'Mutation',
-                      updateTpopById: {
-                        tpop: {
-                          id: idOfTpopBeingLocalized,
-                          __typename: 'Tpop',
-                        },
-                        __typename: 'Tpop',
-                      },
-                    },*/
         })
-        console.log('Tpop, on dblclick', { refetch })
+        // console.log('Tpop, on dblclick', { refetch })
         // refetch so it appears on map
         if (refetch.tpopForMap) {
           // need to also refetch pop in case it was new
@@ -125,12 +114,8 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     },
   })
   const tree = store[treeName]
-  const {
-    map,
-    dataFilter,
-    projIdInActiveNodeArray,
-    apIdInActiveNodeArray,
-  } = tree
+  const { map, dataFilter, projIdInActiveNodeArray, apIdInActiveNodeArray } =
+    tree
   const { setTpopIdsFiltered } = map
 
   useEffect(() => {
@@ -156,20 +141,23 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
-  const bounds = leafletMap.getBounds()
-  const boundsArray = [
-    bounds.getWest(),
-    bounds.getSouth(),
-    bounds.getEast(),
-    bounds.getNorth(),
-  ]
-  const myBbox = bboxPolygon(boundsArray).geometry
+  // const bounds = leafletMap.getBounds()
+  // const boundsArray = [
+  //   bounds.getWest(),
+  //   bounds.getSouth(),
+  //   bounds.getEast(),
+  //   bounds.getNorth(),
+  // ]
+  // const myBbox = bboxPolygon(boundsArray).geometry
 
-  const popFilter = {
-    // used to filter: wgs84Lat: { isNull: false }
-    // but then tpop with wgs84Lat with pop without would not show
-    id: { isNull: false },
-  }
+  const popFilter = useMemo(
+    () => ({
+      // used to filter: wgs84Lat: { isNull: false }
+      // but then tpop with wgs84Lat with pop without would not show
+      id: { isNull: false },
+    }),
+    [],
+  )
   const popFilterValues = Object.entries(dataFilter.pop).filter(
     (e) => e[1] || e[1] === 0,
   )
@@ -182,11 +170,15 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
       includesInsensitive: tree.nodeLabelFilter.pop,
     }
   }
-
-  const tpopFilter = {
-    wgs84Lat: { isNull: false },
-    geomPoint: { within: myBbox },
-  }
+  const tpopFilter = useMemo(
+    () => ({
+      wgs84Lat: { isNull: false },
+      // 2021.08.16: needed to remove this filter
+      // because icons where added every time a tpop left, then reentered the bbox
+      //geomPoint: { within: myBbox },
+    }),
+    [],
+  )
   const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
     (e) => e[1] || e[1] === 0,
   )
@@ -200,18 +192,45 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     }
   }
 
-  var { data, error, refetch: refetchQuery } = useQuery(query, {
-    variables: {
-      projId,
-      apId,
-      perAp,
-      perProj,
-      isActiveInMap,
-      popFilter,
-      tpopFilter,
-    },
-  })
-  setRefetchKey({ key: 'tpopForMap', value: refetchQuery })
+  const [data, setData] = useState({})
+  useEffect(() => {
+    client
+      .query({
+        query: query,
+        variables: {
+          projId,
+          apId,
+          perAp,
+          perProj,
+          isActiveInMap,
+          popFilter,
+          tpopFilter,
+        },
+      })
+      .then(({ data, error, refetch: refetchQuery, loading }) => {
+        setRefetchKey({ key: 'tpopForMap', value: refetchQuery })
+        if (loading === false) setData(data)
+      })
+      .catch((error) => {
+        enqueNotification({
+          message: `Fehler beim Laden der Teil-Populationen für die Karte: ${error.message}`,
+          options: {
+            variant: 'error',
+          },
+        })
+      })
+  }, [
+    projId,
+    apId,
+    perAp,
+    perProj,
+    isActiveInMap,
+    popFilter,
+    setRefetchKey,
+    client,
+    tpopFilter,
+    enqueNotification,
+  ])
 
   // eslint-disable-next-line no-unused-vars
   const [refetchProvoker, setRefetchProvoker] = useState(1)
@@ -222,19 +241,12 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     // Also: leafletMap.on('zoomend dragend', ()=> refetchQuery()) never refetches!!??
     // Also: use dragend, not moveend because moveend fires on zoomend as well
     leafletMap.on('zoomend dragend', () => setRefetchProvoker(Math.random()))
+    // leafletMap.on('zoomend', () => console.log('zoomend'))
+    // leafletMap.on('dragend', () => console.log('dragend'))
     return () => {
       leafletMap.off('zoomend dragend', () => setRefetchProvoker(Math.random()))
     }
   }, [leafletMap])
-
-  if (error) {
-    enqueNotification({
-      message: `Fehler beim Laden der Teil-Populationen für die Karte: ${error.message}`,
-      options: {
-        variant: 'error',
-      },
-    })
-  }
 
   const aps = get(
     data,
@@ -272,6 +284,10 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   const tpopMarkers = tpops.map((tpop) => (
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
+
+  // console.log('Tpop rendering, tpops.length: ', tpops.length)
+  // console.log('Tpop rendering, tpopMarkers.length: ', tpopMarkers.length)
+  // console.log('Tpop rendering, clustered: ', clustered)
 
   if (clustered) {
     return (
