@@ -28,6 +28,11 @@ export const baseLayers = [
   { label: 'Bing Luftbild', value: 'BingAerial' },
   // https://wms.zh.ch/OrthoZHWMS?SERVICE=WMS&Request=GetCapabilities
   {
+    label: 'ZH Orthofoto aktuell (2020)',
+    value: 'ZhOrthoAktuellRgb',
+    cors: true,
+  },
+  {
     label: 'ZH Orthofoto Sommer 2018 RGB',
     value: 'ZhOrtho2018Rgb',
     cors: true,
