@@ -198,7 +198,7 @@ create index on apflora.infoflora20210817filtered using btree (evab_id);
 create index on apflora.infoflora20210817filtered using btree (no_isfs);
 create index on apflora.infoflora20210817filtered using btree (copyright);
 create index on apflora.infoflora20210817filtered using btree (obs_id);
--- 5. import rest
+-- 5. insert rest into temp table
 with kontrollen as (
   select info.obs_id
   from apflora.infoflora20210817 info
@@ -365,7 +365,7 @@ where info.obs_id not in (
 -- Example select into jsonb:
 -- SELECT id, json_build_object('name', name, 'addr', addr) AS data
 -- FROM   myt;
--- build temp beob table
+-- 6. build temp beob table
 CREATE TABLE apflora.beob20210817 (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   quelle text default null,
@@ -392,7 +392,7 @@ CREATE TABLE apflora.beob20210817 (
     changed date DEFAULT NOW(),
     changed_by varchar(20) DEFAULT null
 );
--- insert importdata into temp beob table
+-- 7. insert importdata into temp beob table
 insert into apflora.beob20210817 (
     id_field,
     datum,
@@ -412,7 +412,6 @@ select 'obs_id',
     coalesce(obs_day, '01')
   )::date,
   observers,
-  --json_build_object('name', name, 'addr', addr) AS data,
   row_to_json(row),
   (
     select id
@@ -431,7 +430,8 @@ select 'obs_id',
   ),
   'Info Flora 2021.05'
 from apflora.infoflora20210817filtered row;
--- insert temp beob into beob
+-- 8. check this table
+-- 9. insert temp beob into beob
 insert into apflora.beob (
     id_field,
     datum,
