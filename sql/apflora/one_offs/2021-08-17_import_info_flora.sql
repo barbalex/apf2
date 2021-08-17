@@ -362,9 +362,6 @@ where info.obs_id not in (
     from imported
   );
 -- 21154 rows
--- Example select into jsonb:
--- SELECT id, json_build_object('name', name, 'addr', addr) AS data
--- FROM   myt;
 -- 6. build temp beob table
 CREATE TABLE apflora.beob20210817 (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
