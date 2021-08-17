@@ -399,6 +399,7 @@ insert into apflora.beob20210817 (
     autor,
     data,
     art_id,
+    art_id_original,
     changed_by,
     geom_point,
     quelle
@@ -413,6 +414,11 @@ select 'obs_id',
   observers,
   --json_build_object('name', name, 'addr', addr) AS data,
   row_to_json(row),
+  (
+    select id
+    from apflora.ae_taxonomies
+    where taxid = no_isfs
+  ),
   (
     select id
     from apflora.ae_taxonomies
