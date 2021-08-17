@@ -111,7 +111,6 @@ where tax.taxid in (
 order by tax.artname,
   beob.datum;
 -- 2258 rows! WHAT?
--- TODO: update data?
 -- test if id from floz2017 equals obs_id from infoflora20210817:
 select *
 from apflora.infoflora20210817 info
@@ -124,7 +123,6 @@ from apflora.infoflora20210817 info
   inner join apflora.beob beob on (beob.data->>beob.id_field)::text = info.obs_id::text;
 -- 3734 rows
 -- excluding kontr and floz had no influence
--- TODO: update data?
 -- 5. filter
 create table apflora.infoflora20210817filtered (
   evab_id uuid,
