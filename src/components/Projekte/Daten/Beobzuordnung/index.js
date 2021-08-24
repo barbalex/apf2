@@ -240,6 +240,7 @@ const Beobzuordnung = ({ type, treeName }) => {
               }
             ) {
               beob {
+                ...BeobFields
                 aeTaxonomyByArtId {
                   ...AeTaxonomiesFields
                   apByArtId {
