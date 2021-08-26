@@ -432,9 +432,12 @@ const Karte = ({ treeName }) => {
     appBarHeight,
     hideMapControls,
   } = store
+  const tree = store[treeName]
+  const { apIdInActiveNodeArray } = tree
   const bounds = getSnapshot(boundsRaw)
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const activeOverlays = getSnapshot(activeOverlaysRaw)
+  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
 
   //const mapRef = useRef(null)
 
@@ -497,6 +500,8 @@ const Karte = ({ treeName }) => {
 
   if (typeof window === 'undefined') return null
 
+  console.log('activeApfloraLayers', activeApfloraLayers)
+
   return (
     <Container
       data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}
@@ -526,11 +531,30 @@ const Karte = ({ treeName }) => {
               return <OverlayComponent key={overlayName} />
             })
             .reverse()}
-          <Pop treeName={treeName} />
-          <Tpop treeName={treeName} clustered={clustered} />
-          <BeobNichtBeurteilt treeName={treeName} clustered={clustered} />
-          <BeobNichtZuzuordnen treeName={treeName} clustered={clustered} />
-          <BeobZugeordnet treeName={treeName} clustered={clustered} />
+          <Pop
+            key={`${apId}/pop/${activeApfloraLayers.join()}`}
+            treeName={treeName}
+          />
+          <Tpop
+            key={`${apId}/tpop/${activeApfloraLayers.join()}`}
+            treeName={treeName}
+            clustered={clustered}
+          />
+          <BeobNichtBeurteilt
+            key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}`}
+            treeName={treeName}
+            clustered={clustered}
+          />
+          <BeobNichtZuzuordnen
+            key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}`}
+            treeName={treeName}
+            clustered={clustered}
+          />
+          <BeobZugeordnet
+            key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}`}
+            treeName={treeName}
+            clustered={clustered}
+          />
           <BeobZugeordnetAssignPolylines treeName={treeName} />
           <ScaleControl imperial={false} />
           <Control position="topright" visible={!hideMapControls}>

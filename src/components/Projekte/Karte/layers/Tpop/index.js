@@ -15,20 +15,17 @@ import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tp
 import updateTpopById from './updateTpopById'
 
 const iconCreateFunction = (cluster) => {
-  const markers = cluster.getAllChildMarkers()
-  const count = cluster.getChildCount()
-
   if (typeof window === 'undefined') return () => {}
 
-  const hasHighlightedTpop = markers.some(
-    (m) => m.options.icon.options.isHighlighted,
-  )
+  const hasHighlightedTpop = cluster
+    .getAllChildMarkers()
+    .some((m) => m.options.icon.options.isHighlighted)
   const className = hasHighlightedTpop
     ? 'tpopClusterHighlighted'
     : 'tpopCluster'
 
   return window.L.divIcon({
-    html: count,
+    html: cluster.getChildCount(),
     className,
     iconSize: window.L.point(40, 40),
   })
@@ -196,7 +193,6 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
 
   const [data, setData] = useState({})
   useEffect(() => {
-    console.log('querying tpop for map')
     client
       .query({
         query: query,
@@ -238,22 +234,6 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     enqueNotification,
   ])
 
-  // eslint-disable-next-line no-unused-vars
-  const [refetchProvoker, setRefetchProvoker] = useState(1)
-  useEffect(() => {
-    // DO NOT use:
-    // leafletMap.on('zoomend dragend', refetchQuery
-    // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
-    // Also: leafletMap.on('zoomend dragend', ()=> refetchQuery()) never refetches!!??
-    // Also: use dragend, not moveend because moveend fires on zoomend as well
-    leafletMap.on('zoomend dragend', () => setRefetchProvoker(Math.random()))
-    // leafletMap.on('zoomend', () => console.log('zoomend'))
-    // leafletMap.on('dragend', () => console.log('dragend'))
-    return () => {
-      leafletMap.off('zoomend dragend', () => setRefetchProvoker(Math.random()))
-    }
-  }, [leafletMap])
-
   const aps = useMemo(
     () =>
       perAp
@@ -293,15 +273,14 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
 
-  console.log('Tpop rendering, tpops.length: ', tpops.length)
+  //console.log('Tpop rendering, tpops.length: ', tpops.length)
   //console.log('Tpop rendering, tpopMarkers.length: ', tpopMarkers.length)
   // console.log('Tpop rendering, clustered: ', clustered)
-  console.log('Tpop rendering, apId:', apId)
+  //console.log('Tpop rendering, apId:', apId)
 
   if (clustered) {
     return (
       <MarkerClusterGroup
-        //key={apId}
         maxClusterRadius={66}
         iconCreateFunction={iconCreateFunction}
       >
