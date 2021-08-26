@@ -1,5 +1,4 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
-import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
@@ -17,6 +16,8 @@ import updateTpopById from './updateTpopById'
 
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
+  const count = cluster.getChildCount()
+
   if (typeof window === 'undefined') return () => {}
 
   const hasHighlightedTpop = markers.some(
@@ -25,8 +26,9 @@ const iconCreateFunction = function (cluster) {
   const className = hasHighlightedTpop
     ? 'tpopClusterHighlighted'
     : 'tpopCluster'
+
   return window.L.divIcon({
-    html: markers.length,
+    html: count,
     className,
     iconSize: window.L.point(40, 40),
   })
@@ -194,6 +196,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
 
   const [data, setData] = useState({})
   useEffect(() => {
+    console.log('querying tpop for map')
     client
       .query({
         query: query,
@@ -206,10 +209,13 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
           popFilter,
           tpopFilter,
         },
+        //fetchPolicy: 'no-cache',
       })
       .then(({ data, error, refetch: refetchQuery, loading }) => {
-        setRefetchKey({ key: 'tpopForMap', value: refetchQuery })
-        if (loading === false) setData(data)
+        if (loading === false) {
+          setData(data)
+          setRefetchKey({ key: 'tpopForMap', value: refetchQuery })
+        }
       })
       .catch((error) => {
         enqueNotification({
@@ -248,17 +254,19 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     }
   }, [leafletMap])
 
-  const aps = get(
-    data,
-    `projektById.${!!perAp ? 'perAp' : 'perProj'}.nodes`,
-    [],
+  const aps = useMemo(
+    () =>
+      perAp
+        ? data?.projektById?.perAp?.nodes ?? []
+        : data?.projektById?.perProj?.nodes ?? [],
+    [data?.projektById?.perAp?.nodes, data?.projektById?.perProj?.nodes, perAp],
   )
   const pops = useMemo(
-    () => flatten(aps.map((ap) => get(ap, 'popsByApId.nodes', []))),
+    () => flatten(aps.map((ap) => ap?.popsByApId?.nodes ?? [])),
     [aps],
   )
   let tpops = useMemo(
-    () => flatten(pops.map((pop) => get(pop, 'tpopsByPopId.nodes', []))),
+    () => flatten(pops.map((pop) => pop?.tpopsByPopId?.nodes ?? [])),
     [pops],
   )
 
@@ -285,13 +293,15 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
 
-  // console.log('Tpop rendering, tpops.length: ', tpops.length)
-  // console.log('Tpop rendering, tpopMarkers.length: ', tpopMarkers.length)
+  console.log('Tpop rendering, tpops.length: ', tpops.length)
+  //console.log('Tpop rendering, tpopMarkers.length: ', tpopMarkers.length)
   // console.log('Tpop rendering, clustered: ', clustered)
+  console.log('Tpop rendering, apId:', apId)
 
   if (clustered) {
     return (
       <MarkerClusterGroup
+        //key={apId}
         maxClusterRadius={66}
         iconCreateFunction={iconCreateFunction}
       >
