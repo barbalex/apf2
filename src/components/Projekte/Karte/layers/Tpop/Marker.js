@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useMemo } from 'react'
 import { Marker, Tooltip, Popup } from 'react-leaflet'
-import get from 'lodash/get'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Button from '@material-ui/core/Button'
@@ -45,16 +44,15 @@ const StyledButton = styled(Button)`
 const TpopMarker = ({ treeName, tpop }) => {
   const store = useContext(storeContext)
   const { openTree2WithActiveNodeArray } = store
-  const { map, projIdInActiveNodeArray, apIdInActiveNodeArray } = store[
-    treeName
-  ]
+  const { map, projIdInActiveNodeArray, apIdInActiveNodeArray } =
+    store[treeName]
   const projId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const { idsFiltered, tpopIcon: tpopIconName, tpopLabel: tpopLabelName } = map
 
-  const popNr = get(tpop, 'popByPopId.nr') || '(keine Nr)'
-  const tpopNr = get(tpop, 'nr') || '(keine Nr)'
+  const popNr = tpop?.popByPopId?.nr ?? '(keine Nr)'
+  const tpopNr = tpop?.nr ?? '(keine Nr)'
   const nrLabel = `${popNr}.${tpopNr}`.toString()
   const isHighlighted = idsFiltered.includes(tpop.id)
 
@@ -88,7 +86,7 @@ const TpopMarker = ({ treeName, tpop }) => {
     return iconUrl
   }, [isHighlighted, tpop.status, tpopIconName])
 
-  const popId = get(tpop, 'popByPopId.id', '')
+  const popId = tpop?.popByPopId?.id ?? ''
   const openTpopInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
       'Projekte',
@@ -123,7 +121,7 @@ const TpopMarker = ({ treeName, tpop }) => {
   let title = nrLabel
   if (tpopLabelName === 'name') title = tpop.flurname
   if (tpopLabelName === 'none') title = ''
-  const artname = get(tpop, 'popByPopId.apByApId.aeTaxonomyByArtId.artname', '')
+  const artname = tpop?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? ''
 
   return (
     <Marker position={latLng} icon={icon} title={title}>
@@ -137,22 +135,18 @@ const TpopMarker = ({ treeName, tpop }) => {
           </StyledH3>
           <div>{`Aktionsplan: ${artname}`}</div>
           <div>
-            {`Population: ${get(tpop, 'popByPopId.nr', '(keine Nr)')}: ${get(
-              tpop,
-              'popByPopId.name',
-              '(kein Name)',
-            )}`}
+            {`Population: ${tpop?.popByPopId?.nr ?? '(keine Nr)'}: ${
+              tpop?.popByPopId?.name ?? '(kein Name)'
+            }`}
           </div>
           <div>
             {`Koordinaten: ${tpop.lv95X.toLocaleString(
               'de-ch',
             )} / ${tpop.lv95Y.toLocaleString('de-ch')}`}
           </div>
-          <div>{`Status: ${get(
-            tpop,
-            'popStatusWerteByStatus.text',
-            '(kein Status)',
-          )}`}</div>
+          <div>{`Status: ${
+            tpop?.popStatusWerteByStatus?.text ?? '(kein Status)'
+          }`}</div>
           <StyledButton size="small" variant="outlined" onClick={openTpopInTab}>
             Formular in neuem Fenster öffnen
           </StyledButton>
