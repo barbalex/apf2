@@ -9,34 +9,37 @@ CREATE TABLE apflora.user (
   -- enforce role to prevent errors when no role is set
   role name not null DEFAULT 'apflora_ap_reader' check role_length_maximum_512 (length(role) < 512),
   pass text DEFAULT NULL check pass_length_minimum_6 (length(pass) > 5),
-  adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT proper_email CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')
+  adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    CONSTRAINT proper_email CHECK (
+      email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'
+    )
 );
 alter table apflora.user drop constraint if exists user_pass_check;
 alter table apflora.user drop constraint if exists pass_length_minimum_6;
-alter table apflora.user add constraint password_length_minimum_6 check (length(pass) > 5);
+alter table apflora.user
+add constraint password_length_minimum_6 check (length(pass) > 5);
 alter table apflora.user drop constraint if exists user_role_check;
-alter table apflora.user add constraint role_length_maximum_512 check (length(role) < 512);
+alter table apflora.user
+add constraint role_length_maximum_512 check (length(role) < 512);
 CREATE INDEX ON apflora.user USING btree (id);
 CREATE INDEX ON apflora.user USING btree (name);
 CREATE INDEX ON apflora.user USING btree (adresse_id);
 comment on table apflora.user is 'Konten, um den Zugriff auf apflora.ch zu regeln';
 COMMENT ON COLUMN apflora.user.adresse_id IS 'Datensatz bzw. Fremdschlüssel des Users in der Tabelle "adresse". Wird benutzt, damit die EKF-Kontrollen von Freiwilligen-Kontrolleurinnen gefiltert werden können';
-alter table apflora.user add column adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE;
-
+alter table apflora.user
+add column adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE
+SET NULL ON UPDATE CASCADE;
 create or replace function current_user_name() returns text as $$
-  select nullif(current_setting('jwt.claims.username', true), '')::text;
+select nullif(current_setting('jwt.claims.username', true), '')::text;
 $$ language sql stable security definer;
-
 ALTER TABLE apflora.user ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader_writer ON apflora.user;
-CREATE POLICY reader_writer ON apflora.user
-USING (
+CREATE POLICY reader_writer ON apflora.user USING (
   name = current_user_name()
   OR current_user = 'anon'
   or current_user = 'apflora_manager'
 );
-
 DROP TABLE IF EXISTS adresse;
 CREATE TABLE apflora.adresse (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -62,27 +65,26 @@ COMMENT ON COLUMN apflora.adresse.email IS 'Email';
 COMMENT ON COLUMN apflora.adresse.freiw_erfko IS 'Ist die Person freiwillige(r) Kontrolleur(in)';
 COMMENT ON COLUMN apflora.adresse.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 ALTER TABLE apflora.adresse ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS writer ON apflora.adresse;
-CREATE POLICY writer ON apflora.adresse
-USING (true)
-WITH CHECK (
+CREATE POLICY writer ON apflora.adresse USING (true) WITH CHECK (
   current_user in ('apflora_manager', 'apflora_ap_writer')
 );
-
 DROP TABLE IF EXISTS apflora.ap;
 CREATE TABLE apflora.ap (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   art_id UUID UNIQUE DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) on delete no action on update cascade,
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  start_jahr smallint DEFAULT NULL,
-  umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  ekf_beobachtungszeitpunkt text default null,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    start_jahr smallint DEFAULT NULL,
+    umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    ekf_beobachtungszeitpunkt text default null,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.ap USING btree (id);
 CREATE INDEX ON apflora.ap USING btree (art_id);
@@ -101,30 +103,34 @@ COMMENT ON COLUMN apflora.ap.bearbeiter IS 'Verantwortliche(r) für die Art';
 COMMENT ON COLUMN apflora.ap.ekf_beobachtungszeitpunkt IS 'bester Beobachtungszeitpunkt';
 COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.ap enable row level security;
 drop policy if exists reader on apflora.ap;
-create policy reader on apflora.ap 
-using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_ap_writer', 'apflora_freiwillig')
+create policy reader on apflora.ap using (
+  current_user in (
+    'apflora_manager',
+    'apflora_reader',
+    'apflora_ap_writer',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
-
 drop table if exists apflora.ap_user;
 create table apflora.ap_user (
   id uuid primary key default uuid_generate_v1mc(),
@@ -136,16 +142,9 @@ CREATE INDEX ON apflora.ap_user USING btree (id);
 CREATE INDEX ON apflora.ap_user USING btree (ap_id);
 CREATE INDEX ON apflora.ap_user USING btree (user_name);
 COMMENT ON table apflora.ap IS 'Hier wird bestimmt, welche Benutzer mit den rollen "apflora_ap_writer" oder "apflora_reader" Zugriff auf einen AP erhalten';
-
 alter table apflora.ap_user enable row level security;
 drop policy if exists reader on apflora.ap_user;
-create policy reader on apflora.ap_user 
-using (true)
-with check (
-  current_user = 'apflora_manager'
-);
-
-
+create policy reader on apflora.ap_user using (true) with check (current_user = 'apflora_manager');
 drop table if exists apflora.ap_file;
 create table apflora.ap_file (
   id uuid primary key DEFAULT uuid_generate_v1mc(),
@@ -159,44 +158,51 @@ create index on apflora.ap using btree (id);
 create index on apflora.ap_file using btree (ap_id);
 create index on apflora.ap_file using btree (file_id);
 create index on apflora.ap_file using btree (file_mime_type);
-
 alter table apflora.ap_file enable row level security;
 drop policy if exists reader on apflora.ap_file;
-create policy reader on apflora.ap_file 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.ap_file using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.ap_history;
 CREATE TABLE apflora.ap_history (
   year integer not null,
   id UUID not null,
   art_id UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) on delete no action on update cascade,
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  start_jahr smallint DEFAULT NULL,
-  umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  ekf_beobachtungszeitpunkt text default null,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null,
-  primary key (id, year)
+  bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    start_jahr smallint DEFAULT NULL,
+    umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    ekf_beobachtungszeitpunkt text default null,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null,
+    primary key (id, year)
 );
 CREATE INDEX ON apflora.ap_history USING btree (id);
 CREATE INDEX ON apflora.ap_history USING btree (year);
@@ -217,29 +223,34 @@ COMMENT ON COLUMN apflora.ap_history.bearbeiter IS 'Verantwortliche(r) für die 
 COMMENT ON COLUMN apflora.ap_history.ekf_beobachtungszeitpunkt IS 'bester Beobachtungszeitpunkt';
 COMMENT ON COLUMN apflora.ap_history.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_history.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.ap_history enable row level security;
 drop policy if exists reader on apflora.ap_history;
-create policy reader on apflora.ap_history 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.ap_history using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
 CREATE TABLE apflora.userprojekt (
@@ -247,7 +258,6 @@ CREATE TABLE apflora.userprojekt (
   proj_id uuid REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE INDEX ON apflora.userprojekt USING btree (username, proj_id);
-
 DROP TABLE IF EXISTS apflora.ap_bearbstand_werte;
 CREATE TABLE apflora.ap_bearbstand_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -259,10 +269,21 @@ CREATE TABLE apflora.ap_bearbstand_werte (
   changed_by varchar(20) default NULL
 );
 create sequence apflora.ap_bearbstand_werte_code_seq owned by apflora.ap_bearbstand_werte.code;
-alter table apflora.ap_bearbstand_werte alter column code set default nextval('apflora.ap_bearbstand_werte_code_seq');
-select setval('apflora.ap_bearbstand_werte_code_seq', (select max(code)+1 from apflora.ap_bearbstand_werte), false);
-alter table apflora.ap_bearbstand_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.ap_bearbstand_werte
+alter column code
+set default nextval('apflora.ap_bearbstand_werte_code_seq');
+select setval(
+    'apflora.ap_bearbstand_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.ap_bearbstand_werte
+    ),
+    false
+  );
+alter table apflora.ap_bearbstand_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (id);
 CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (code);
 CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (sort);
@@ -271,15 +292,9 @@ COMMENT ON COLUMN apflora.ap_bearbstand_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.ap_bearbstand_werte enable row level security;
 drop policy if exists reader on apflora.ap_bearbstand_werte;
-create policy reader on apflora.ap_bearbstand_werte
-using (true)
-with check (
-  current_user = 'apflora_manager'
-);
-
+create policy reader on apflora.ap_bearbstand_werte using (true) with check (current_user = 'apflora_manager');
 -- this table is not used!!!
 DROP TABLE IF EXISTS apflora.ap_erfbeurtkrit_werte;
 CREATE TABLE apflora.ap_erfbeurtkrit_werte (
@@ -291,12 +306,22 @@ CREATE TABLE apflora.ap_erfbeurtkrit_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
-
 create sequence apflora.ap_erfbeurtkrit_werte_code_seq owned by apflora.ap_erfbeurtkrit_werte.code;
-alter table apflora.ap_erfbeurtkrit_werte alter column code set default nextval('apflora.ap_erfbeurtkrit_werte_code_seq');
-select setval('apflora.ap_erfbeurtkrit_werte_code_seq', (select max(code)+1 from apflora.ap_erfbeurtkrit_werte), false);
-alter table apflora.ap_erfbeurtkrit_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.ap_erfbeurtkrit_werte
+alter column code
+set default nextval('apflora.ap_erfbeurtkrit_werte_code_seq');
+select setval(
+    'apflora.ap_erfbeurtkrit_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.ap_erfbeurtkrit_werte
+    ),
+    false
+  );
+alter table apflora.ap_erfbeurtkrit_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (id);
 CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (code);
 CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (sort);
@@ -305,16 +330,9 @@ COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.ap_erfbeurtkrit_werte enable row level security;
 drop policy if exists reader on apflora.ap_erfbeurtkrit_werte;
-create policy reader on apflora.ap_erfbeurtkrit_werte
-using (true)
-with check (
-  current_user = 'apflora_manager'
-);
-
-
+create policy reader on apflora.ap_erfbeurtkrit_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.ap_erfkrit_werte;
 CREATE TABLE apflora.ap_erfkrit_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -326,10 +344,21 @@ CREATE TABLE apflora.ap_erfkrit_werte (
   changed_by varchar(20) default NULL
 );
 create sequence apflora.ap_erfkrit_werte_code_seq owned by apflora.ap_erfkrit_werte.code;
-alter table apflora.ap_erfkrit_werte alter column code set default nextval('apflora.ap_erfkrit_werte_code_seq');
-select setval('apflora.ap_erfkrit_werte_code_seq', (select max(code)+1 from apflora.ap_erfkrit_werte), false);
-alter table apflora.ap_erfkrit_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.ap_erfkrit_werte
+alter column code
+set default nextval('apflora.ap_erfkrit_werte_code_seq');
+select setval(
+    'apflora.ap_erfkrit_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.ap_erfkrit_werte
+    ),
+    false
+  );
+alter table apflora.ap_erfkrit_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (id);
 CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (code);
 CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (sort);
@@ -339,16 +368,9 @@ COMMENT ON COLUMN apflora.ap_erfkrit_werte.text IS 'Wie werden die durchgefuehrt
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.ap_erfkrit_werte enable row level security;
 drop policy if exists reader on apflora.ap_erfkrit_werte;
-create policy reader on apflora.ap_erfkrit_werte
-using (true)
-with check (
-  current_user = 'apflora_manager'
-);
-
-
+create policy reader on apflora.ap_erfkrit_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.ap_umsetzung_werte;
 CREATE TABLE apflora.ap_umsetzung_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -360,10 +382,21 @@ CREATE TABLE apflora.ap_umsetzung_werte (
   changed_by varchar(20) default NULL
 );
 create sequence apflora.ap_umsetzung_werte_code_seq owned by apflora.ap_umsetzung_werte.code;
-alter table apflora.ap_umsetzung_werte alter column code set default nextval('apflora.ap_umsetzung_werte_code_seq');
-select setval('apflora.ap_umsetzung_werte_code_seq', (select max(code)+1 from apflora.ap_umsetzung_werte), false);
-alter table apflora.ap_umsetzung_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.ap_umsetzung_werte
+alter column code
+set default nextval('apflora.ap_umsetzung_werte_code_seq');
+select setval(
+    'apflora.ap_umsetzung_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.ap_umsetzung_werte
+    ),
+    false
+  );
+alter table apflora.ap_umsetzung_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (id);
 CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (code);
 CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (sort);
@@ -372,16 +405,9 @@ COMMENT ON COLUMN apflora.ap_umsetzung_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.ap_umsetzung_werte enable row level security;
 drop policy if exists reader on apflora.ap_umsetzung_werte;
-create policy reader on apflora.ap_umsetzung_werte
-using (true)
-with check (
-  current_user = 'apflora_manager'
-);
-
-
+create policy reader on apflora.ap_umsetzung_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.apber;
 CREATE TABLE apflora.apber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -389,22 +415,24 @@ CREATE TABLE apflora.apber (
   jahr smallint DEFAULT NULL,
   situation text,
   vergleich_vorjahr_gesamtziel text,
-  beurteilung integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  veraenderung_zum_vorjahr varchar(2) DEFAULT NULL,
-  -- analyse is a reserved word!!!
-  apber_analyse text DEFAULT NULL,
-  konsequenzen_umsetzung text,
-  konsequenzen_erfolgskontrolle text,
-  biotope_neue text,
-  biotope_optimieren text,
-  massnahmen_optimieren text,
-  massnahmen_ap_bearb text,
-  massnahmen_planung_vs_ausfuehrung text,
-  wirkung_auf_art text,
-  datum date DEFAULT NULL,
-  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  beurteilung integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    veraenderung_zum_vorjahr varchar(2) DEFAULT NULL,
+    -- analyse is a reserved word!!!
+    apber_analyse text DEFAULT NULL,
+    konsequenzen_umsetzung text,
+    konsequenzen_erfolgskontrolle text,
+    biotope_neue text,
+    biotope_optimieren text,
+    massnahmen_optimieren text,
+    massnahmen_ap_bearb text,
+    massnahmen_planung_vs_ausfuehrung text,
+    wirkung_auf_art text,
+    datum date DEFAULT NULL,
+    bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.apber USING btree (id);
 CREATE INDEX ON apflora.apber USING btree (ap_id);
@@ -430,31 +458,37 @@ COMMENT ON COLUMN apflora.apber.datum IS 'Datum der Nachführung';
 COMMENT ON COLUMN apflora.apber.bearbeiter IS 'BerichtsverfasserIn: Auswahl aus der Tabelle "adresse"';
 COMMENT ON COLUMN apflora.apber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.apber alter column changed_by set default null;
-
+alter table apflora.apber
+alter column changed_by
+set default null;
 alter table apflora.apber enable row level security;
 drop policy if exists reader on apflora.apber;
-create policy reader on apflora.apber 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.apber using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.apberuebersicht;
 CREATE TABLE apflora.apberuebersicht (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -476,19 +510,19 @@ COMMENT ON COLUMN apflora.apberuebersicht.history_date IS 'Datum, an dem die Dat
 COMMENT ON COLUMN apflora.apberuebersicht.bemerkungen IS 'Bemerkungen zur Artübersicht';
 COMMENT ON COLUMN apflora.apberuebersicht.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apberuebersicht.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.apberuebersicht alter column changed_by set default null;
-
+alter table apflora.apberuebersicht
+alter column changed_by
+set default null;
 alter table apflora.apberuebersicht enable row level security;
 drop policy if exists reader on apflora.apberuebersicht;
-create policy reader on apflora.apberuebersicht 
-using  (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_ap_writer', 'apflora_ap_reader')
-)
-with check (
-  current_user = 'apflora_manager'
-);
-
-
+create policy reader on apflora.apberuebersicht using (
+  current_user in (
+    'apflora_manager',
+    'apflora_reader',
+    'apflora_ap_writer',
+    'apflora_ap_reader'
+  )
+) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.assozart;
 CREATE TABLE apflora.assozart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -506,31 +540,37 @@ COMMENT ON COLUMN apflora.assozart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschl
 COMMENT ON COLUMN apflora.assozart.bemerkungen IS 'Bemerkungen zur Assoziation';
 COMMENT ON COLUMN apflora.assozart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.assozart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
-alter table apflora.assozart alter column changed_by set default null;
-
+alter table apflora.assozart
+alter column changed_by
+set default null;
 alter table apflora.assozart enable row level security;
 drop policy if exists reader on apflora.assozart;
-create policy reader on apflora.assozart 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.assozart using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager')
   or (
     current_user in ('apflora_ap_writer')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.projekt;
 CREATE TABLE apflora.projekt (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -542,24 +582,18 @@ CREATE INDEX ON apflora.projekt USING btree (id);
 CREATE INDEX ON apflora.projekt USING btree (name);
 COMMENT ON COLUMN apflora.projekt.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.projekt enable row level security;
 drop policy if exists reader on apflora.projekt;
-create policy reader on apflora.projekt 
-using (true)
-with check (
-  current_user = 'apflora_manager'
-);
-
-
+create policy reader on apflora.projekt using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   ap_id UUID NOT NULL DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  kriterien text DEFAULT NULL,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    kriterien text DEFAULT NULL,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.erfkrit USING btree (id);
 CREATE INDEX ON apflora.erfkrit USING btree (ap_id);
@@ -570,30 +604,34 @@ COMMENT ON COLUMN apflora.erfkrit.erfolg IS 'Wie gut werden die Ziele erreicht? 
 COMMENT ON COLUMN apflora.erfkrit.kriterien IS 'Beschreibung der Kriterien für den Erfolg';
 COMMENT ON COLUMN apflora.erfkrit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.erfkrit.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.erfkrit enable row level security;
 drop policy if exists reader on apflora.erfkrit;
-create policy reader on apflora.erfkrit 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.erfkrit using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.idealbiotop;
 CREATE TABLE apflora.idealbiotop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -643,30 +681,34 @@ COMMENT ON COLUMN apflora.idealbiotop.baumschicht IS 'Baumschicht';
 COMMENT ON COLUMN apflora.idealbiotop.bemerkungen IS 'Bemerkungen';
 COMMENT ON COLUMN apflora.idealbiotop.changed IS 'Wann wurde der Datensatz zuletzt verändert?';
 COMMENT ON COLUMN apflora.idealbiotop.changed_by IS 'Wer hat den Datensatz zuletzt verändert?';
-
 alter table apflora.idealbiotop enable row level security;
 drop policy if exists reader on apflora.idealbiotop;
-create policy reader on apflora.idealbiotop 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.idealbiotop using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
-
 drop table if exists apflora.idealbiotop_file;
 create table apflora.idealbiotop_file (
   id uuid primary key DEFAULT uuid_generate_v1mc(),
@@ -680,57 +722,58 @@ create index on apflora.idealbiotop using btree (id);
 create index on apflora.idealbiotop_file using btree (idealbiotop_id);
 create index on apflora.idealbiotop_file using btree (file_id);
 create index on apflora.idealbiotop_file using btree (file_mime_type);
-
 alter table apflora.idealbiotop_file enable row level security;
 drop policy if exists reader on apflora.idealbiotop_file;
-create policy reader on apflora.idealbiotop_file 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.idealbiotop_file using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and id in (
       select apflora.idealbiotop_file.id
-      from 
-        apflora.idealbiotop_file
-        inner join apflora.idealbiotop
-        on apflora.idealbiotop.id = apflora.idealbiotop_file.idealbiotop_id
-        where apflora.idealbiotop.ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+      from apflora.idealbiotop_file
+        inner join apflora.idealbiotop on apflora.idealbiotop.id = apflora.idealbiotop_file.idealbiotop_id
+      where apflora.idealbiotop.ap_id in (
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
         )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and id in (
       select apflora.idealbiotop_file.id
-      from 
-        apflora.idealbiotop_file
-        inner join apflora.idealbiotop
-        on apflora.idealbiotop.id = apflora.idealbiotop_file.idealbiotop_id
-        where apflora.idealbiotop.ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+      from apflora.idealbiotop_file
+        inner join apflora.idealbiotop on apflora.idealbiotop.id = apflora.idealbiotop_file.idealbiotop_id
+      where apflora.idealbiotop.ap_id in (
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
         )
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.pop;
 CREATE TABLE apflora.pop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
-  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  status_unklar boolean default false,
-  status_unklar_begruendung text DEFAULT NULL,
-  bekannt_seit smallint DEFAULT NULL,
-  geom_point geometry(Point, 4326) default null,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    status_unklar boolean default false,
+    status_unklar_begruendung text DEFAULT NULL,
+    bekannt_seit smallint DEFAULT NULL,
+    geom_point geometry(Point, 4326) default null,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 create index on apflora.pop using gist (geom_point);
 CREATE INDEX ON apflora.pop USING btree (id);
@@ -749,30 +792,34 @@ COMMENT ON COLUMN apflora.pop.status_unklar_begruendung IS 'Begründung, wieso d
 COMMENT ON COLUMN apflora.pop.bekannt_seit IS 'Seit wann ist die Population bekannt?';
 COMMENT ON COLUMN apflora.pop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.pop enable row level security;
 drop policy if exists reader on apflora.pop;
-create policy reader on apflora.pop 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.pop using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
-
 drop table if exists apflora.pop_file;
 create table apflora.pop_file (
   id uuid primary key DEFAULT uuid_generate_v1mc(),
@@ -786,36 +833,42 @@ create index on apflora.pop using btree (id);
 create index on apflora.pop_file using btree (pop_id);
 create index on apflora.pop_file using btree (file_id);
 create index on apflora.pop_file using btree (file_mime_type);
-
 alter table apflora.pop_file enable row level security;
 drop policy if exists reader on apflora.pop_file;
-create policy reader on apflora.pop_file 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.pop_file using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and pop_id in (
-      select id from apflora.pop
+      select id
+      from apflora.pop
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and pop_id in (
-      select id from apflora.pop
+      select id
+      from apflora.pop
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.pop_history;
 CREATE TABLE apflora.pop_history (
   year integer not null,
@@ -823,14 +876,15 @@ CREATE TABLE apflora.pop_history (
   ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE NO ACTION on update cascade,
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
-  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  status_unklar boolean default false,
-  status_unklar_begruendung text DEFAULT NULL,
-  bekannt_seit smallint DEFAULT NULL,
-  geom_point geometry(Point, 4326) default null,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null,
-  primary key (id, year)
+  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    status_unklar boolean default false,
+    status_unklar_begruendung text DEFAULT NULL,
+    bekannt_seit smallint DEFAULT NULL,
+    geom_point geometry(Point, 4326) default null,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null,
+    primary key (id, year)
 );
 CREATE INDEX ON apflora.pop_history USING btree (id);
 CREATE INDEX ON apflora.pop_history USING btree (year);
@@ -841,30 +895,34 @@ CREATE INDEX ON apflora.pop_history USING btree (name);
 CREATE INDEX ON apflora.pop_history USING btree (bekannt_seit);
 COMMENT ON COLUMN apflora.pop_history.year IS 'Jahr: pop_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von pop kopiert';
 COMMENT ON COLUMN apflora.pop_history.id IS 'Primärschlüssel der Tabelle "pop"';
-
 alter table apflora.pop_history enable row level security;
 drop policy if exists reader on apflora.pop_history;
-create policy reader on apflora.pop_history 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.pop_history using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 CREATE TABLE apflora.pop_status_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -876,10 +934,21 @@ CREATE TABLE apflora.pop_status_werte (
   changed_by varchar(20) DEFAULT null
 );
 create sequence apflora.pop_status_werte_code_seq owned by apflora.pop_status_werte.code;
-alter table apflora.pop_status_werte alter column code set default nextval('apflora.pop_status_werte_code_seq');
-select setval('apflora.pop_status_werte_code_seq', (select max(code)+1 from apflora.pop_status_werte), false);
-alter table apflora.pop_status_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.pop_status_werte
+alter column code
+set default nextval('apflora.pop_status_werte_code_seq');
+select setval(
+    'apflora.pop_status_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.pop_status_werte
+    ),
+    false
+  );
+alter table apflora.pop_status_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.pop_status_werte USING btree (id);
 CREATE INDEX ON apflora.pop_status_werte USING btree (code);
 CREATE INDEX ON apflora.pop_status_werte USING btree (text);
@@ -890,23 +959,19 @@ COMMENT ON COLUMN apflora.pop_status_werte.text IS 'Beschreibung der Herkunft';
 COMMENT ON COLUMN apflora.pop_status_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.pop_status_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop_status_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.pop_status_werte enable row level security;
 drop policy if exists reader on apflora.pop_status_werte;
-create policy reader on apflora.pop_status_werte
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.pop_status_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.popber;
 CREATE TABLE apflora.popber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
-  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  bemerkungen text,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    bemerkungen text,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 COMMENT ON COLUMN apflora.popber.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.popber.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
@@ -919,47 +984,52 @@ CREATE INDEX ON apflora.popber USING btree (id);
 CREATE INDEX ON apflora.popber USING btree (pop_id);
 CREATE INDEX ON apflora.popber USING btree (entwicklung);
 CREATE INDEX ON apflora.popber USING btree (jahr);
-
 alter table apflora.popber enable row level security;
 drop policy if exists reader on apflora.popber;
-create policy reader on apflora.popber 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.popber using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and pop_id in (
-      select distinct apflora.pop.id 
+      select distinct apflora.pop.id
       from apflora.pop
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and pop_id in (
-      select distinct apflora.pop.id 
+      select distinct apflora.pop.id
       from apflora.pop
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.popmassnber;
 CREATE TABLE apflora.popmassnber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
-  beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  bemerkungen text,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    bemerkungen text,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.popmassnber USING btree (id);
 CREATE INDEX ON apflora.popmassnber USING btree (pop_id);
@@ -972,38 +1042,42 @@ COMMENT ON COLUMN apflora.popmassnber.beurteilung IS 'Wie wird die Wirkung aller
 COMMENT ON COLUMN apflora.popmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.popmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.popmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.popmassnber enable row level security;
 drop policy if exists reader on apflora.popmassnber;
-create policy reader on apflora.popmassnber 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.popmassnber using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and pop_id in (
-      select id 
+      select id
       from apflora.pop
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and pop_id in (
-      select id 
+      select id
       from apflora.pop
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.tpop;
 CREATE TABLE apflora.tpop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1026,24 +1100,28 @@ CREATE TABLE apflora.tpop (
   wasserhaushalt text DEFAULT NULL,
   beschreibung text DEFAULT NULL,
   kataster_nr text DEFAULT NULL,
-  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  status_unklar boolean default false,
-  status_unklar_grund text DEFAULT NULL,
-  apber_relevant boolean default true,
-  apber_relevant_grund integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_grund_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  bekannt_seit smallint DEFAULT NULL,
-  eigentuemer text DEFAULT NULL,
-  kontakt text DEFAULT NULL,
-  nutzungszone text DEFAULT NULL,
-  bewirtschafter text DEFAULT NULL,
-  bewirtschaftung text DEFAULT NULL,
-  ekfrequenz UUID DEFAULT null REFERENCES apflora.ekfrequenz (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  ekfrequenz_startjahr smallint default null,
-  ekfrequenz_abweichend boolean DEFAULT false,
-  ekf_kontrolleur uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  bemerkungen text,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    status_unklar boolean default false,
+    status_unklar_grund text DEFAULT NULL,
+    apber_relevant boolean default true,
+    apber_relevant_grund integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_grund_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    bekannt_seit smallint DEFAULT NULL,
+    eigentuemer text DEFAULT NULL,
+    kontakt text DEFAULT NULL,
+    nutzungszone text DEFAULT NULL,
+    bewirtschafter text DEFAULT NULL,
+    bewirtschaftung text DEFAULT NULL,
+    ekfrequenz UUID DEFAULT null REFERENCES apflora.ekfrequenz (id) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    ekfrequenz_startjahr smallint default null,
+    ekfrequenz_abweichend boolean DEFAULT false,
+    ekf_kontrolleur uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    bemerkungen text,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 create index on apflora.tpop using gist (geom_point);
 CREATE INDEX ON apflora.tpop USING btree (id);
@@ -1092,38 +1170,42 @@ COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspric
 COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Wer diese TPop freiwillig kontrolliert. Dient dazu, Formulare für die EKF zu generieren';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.tpop enable row level security;
 drop policy if exists reader on apflora.tpop;
-create policy reader on apflora.tpop 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.tpop using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and pop_id in (
-      select id 
+      select id
       from apflora.pop
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and pop_id in (
-      select id 
+      select id
       from apflora.pop
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
 );
-
-
 drop table if exists apflora.tpop_file;
 create table apflora.tpop_file (
   id uuid primary key DEFAULT uuid_generate_v1mc(),
@@ -1137,28 +1219,32 @@ create index on apflora.tpop using btree (id);
 create index on apflora.tpop_file using btree (tpop_id);
 create index on apflora.tpop_file using btree (file_id);
 create index on apflora.tpop_file using btree (file_mime_type);
-
 alter table apflora.tpop_file enable row level security;
 drop policy if exists reader on apflora.tpop_file;
-create policy reader on apflora.tpop_file 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.tpop_file using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and tpop_id in (
       select id
       from apflora.tpop
       where pop_id in (
-        select id 
-        from apflora.pop
-        where ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+          select id
+          from apflora.pop
+          where ap_id in (
+              select ap_id
+              from apflora.ap_user
+              where user_name = current_user_name()
+            )
         )
-      )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
@@ -1166,17 +1252,17 @@ with check (
       select id
       from apflora.tpop
       where pop_id in (
-        select id 
-        from apflora.pop
-        where ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+          select id
+          from apflora.pop
+          where ap_id in (
+              select ap_id
+              from apflora.ap_user
+              where user_name = current_user_name()
+            )
         )
-      )
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.tpop_history;
 CREATE TABLE apflora.tpop_history (
   year integer not null,
@@ -1220,8 +1306,9 @@ CREATE TABLE apflora.tpop_history (
   changed_by varchar(20) DEFAULT null,
   primary key (id, year)
 );
-alter table apflora.tpop_history add constraint fk_pop_history FOREIGN key (year, pop_id) references apflora.pop_history (year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
-comment on table apflora.tpop_history is E'@foreignKey (pop_id) references pop (id)\n@foreignKey (status) references pop_status_werte (code)\n@foreignKey (apber_relevant_grund) references tpop_apberrelevant_grund_werte (code)\n@foreignKey (ekfrequenz) references ekfrequenz (id)\n@foreignKey (ekf_kontrolleur) references adresse (id)';
+alter table apflora.tpop_history
+add constraint fk_pop_history FOREIGN key (year, pop_id) references apflora.pop_history (year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+comment on table apflora.tpop_history is E '@foreignKey (pop_id) references pop (id)\n@foreignKey (status) references pop_status_werte (code)\n@foreignKey (apber_relevant_grund) references tpop_apberrelevant_grund_werte (code)\n@foreignKey (ekfrequenz) references ekfrequenz (id)\n@foreignKey (ekf_kontrolleur) references adresse (id)';
 CREATE INDEX ON apflora.tpop_history USING btree (id);
 CREATE INDEX ON apflora.tpop_history USING btree (year);
 CREATE INDEX ON apflora.tpop_history USING btree (pop_id);
@@ -1234,38 +1321,42 @@ CREATE INDEX ON apflora.tpop_history USING btree (ekfrequenz);
 CREATE INDEX ON apflora.tpop_history USING btree (apber_relevant_grund);
 COMMENT ON COLUMN apflora.tpop_history.year IS 'Jahr: tpop_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von tpop kopiert';
 COMMENT ON COLUMN apflora.tpop_history.id IS 'Primärschlüssel der Tabelle tpop';
-
 alter table apflora.tpop_history enable row level security;
 drop policy if exists reader on apflora.tpop_history;
-create policy reader on apflora.tpop_history 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.tpop_history using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and pop_id in (
-      select id 
+      select id
       from apflora.pop_history
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and pop_id in (
-      select id 
+      select id
       from apflora.pop_history
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
 CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1277,10 +1368,23 @@ CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
   changed_by varchar(20) default NULL
 );
 create sequence apflora.tpop_apberrelevant_grund_werte_code_seq owned by apflora.tpop_apberrelevant_grund_werte.code;
-alter table apflora.tpop_apberrelevant_grund_werte alter column code set default nextval('apflora.tpop_apberrelevant_grund_werte_code_seq');
-select setval('apflora.tpop_apberrelevant_grund_werte_code_seq', (select max(code)+1 from apflora.tpop_apberrelevant_grund_werte), false);
-alter table apflora.tpop_apberrelevant_grund_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.tpop_apberrelevant_grund_werte
+alter column code
+set default nextval(
+    'apflora.tpop_apberrelevant_grund_werte_code_seq'
+  );
+select setval(
+    'apflora.tpop_apberrelevant_grund_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.tpop_apberrelevant_grund_werte
+    ),
+    false
+  );
+alter table apflora.tpop_apberrelevant_grund_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (id);
 CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (code);
 CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (text);
@@ -1289,14 +1393,9 @@ COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.id IS 'Primärschlüsse
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.tpop_apberrelevant_grund_werte enable row level security;
 drop policy if exists reader on apflora.tpop_apberrelevant_grund_werte;
-create policy reader on apflora.tpop_apberrelevant_grund_werte
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.tpop_apberrelevant_grund_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
 CREATE TABLE apflora.tpop_entwicklung_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1308,10 +1407,21 @@ CREATE TABLE apflora.tpop_entwicklung_werte (
   changed_by varchar(20) default NULL
 );
 create sequence apflora.tpop_entwicklung_werte_code_seq owned by apflora.tpop_entwicklung_werte.code;
-alter table apflora.tpop_entwicklung_werte alter column code set default nextval('apflora.tpop_entwicklung_werte_code_seq');
-select setval('apflora.tpop_entwicklung_werte_code_seq', (select max(code)+1 from apflora.tpop_entwicklung_werte), false);
-alter table apflora.tpop_entwicklung_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.tpop_entwicklung_werte
+alter column code
+set default nextval('apflora.tpop_entwicklung_werte_code_seq');
+select setval(
+    'apflora.tpop_entwicklung_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.tpop_entwicklung_werte
+    ),
+    false
+  );
+alter table apflora.tpop_entwicklung_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (id);
 CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (code);
 CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (sort);
@@ -1320,22 +1430,18 @@ COMMENT ON COLUMN apflora.tpop_entwicklung_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.tpop_entwicklung_werte enable row level security;
 drop policy if exists reader on apflora.tpop_entwicklung_werte;
-create policy reader on apflora.tpop_entwicklung_werte
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.tpop_entwicklung_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.tpopber;
 CREATE TABLE apflora.tpopber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
-  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 COMMENT ON COLUMN apflora.tpopber.id IS 'Primärschlüssel der Tabelle "tpopber"';
 COMMENT ON COLUMN apflora.tpopber.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel der Tabelle "tpop"';
@@ -1348,28 +1454,32 @@ CREATE INDEX ON apflora.tpopber USING btree (id);
 CREATE INDEX ON apflora.tpopber USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopber USING btree (entwicklung);
 CREATE INDEX ON apflora.tpopber USING btree (jahr);
-
 alter table apflora.tpopber enable row level security;
 drop policy if exists reader on apflora.tpopber;
-create policy reader on apflora.tpopber 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.tpopber using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and tpop_id in (
       select id
       from apflora.tpop
       where pop_id in (
-        select id 
-        from apflora.pop
-        where ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+          select id
+          from apflora.pop
+          where ap_id in (
+              select ap_id
+              from apflora.ap_user
+              where user_name = current_user_name()
+            )
         )
-      )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
@@ -1377,59 +1487,63 @@ with check (
       select id
       from apflora.tpop
       where pop_id in (
-        select id 
-        from apflora.pop
-        where ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+          select id
+          from apflora.pop
+          where ap_id in (
+              select ap_id
+              from apflora.ap_user
+              where user_name = current_user_name()
+            )
         )
-      )
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.tpopkontr;
 CREATE TABLE apflora.tpopkontr (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  typ varchar(50) DEFAULT NULL REFERENCES apflora.tpopkontr_typ_werte (text) ON DELETE SET NULL ON UPDATE CASCADE,
-  datum date DEFAULT NULL,
-  jahr smallint DEFAULT NULL,
-  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  vitalitaet text DEFAULT NULL,
-  ueberlebensrate smallint DEFAULT NULL,
-  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  ursachen text DEFAULT NULL,
-  erfolgsbeurteilung text DEFAULT NULL,
-  umsetzung_aendern text DEFAULT NULL,
-  kontrolle_aendern text DEFAULT NULL,
-  bemerkungen text,
-  lr_delarze text DEFAULT NULL,
-  flaeche integer DEFAULT NULL,
-  lr_umgebung_delarze text DEFAULT NULL,
-  vegetationstyp varchar(100) DEFAULT NULL,
-  konkurrenz varchar(100) DEFAULT NULL,
-  moosschicht varchar(100) DEFAULT NULL,
-  krautschicht varchar(100) DEFAULT NULL,
-  strauchschicht text DEFAULT NULL,
-  baumschicht varchar(100) DEFAULT NULL,
-  idealbiotop_uebereinstimmung integer DEFAULT NULL REFERENCES apflora.tpopkontr_idbiotuebereinst_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  handlungsbedarf text,
-  flaeche_ueberprueft integer DEFAULT NULL,
-  plan_vorhanden boolean DEFAULT false,
-  deckung_vegetation smallint DEFAULT NULL,
-  deckung_nackter_boden smallint DEFAULT NULL,
-  deckung_ap_art smallint DEFAULT NULL,
-  jungpflanzen_vorhanden boolean DEFAULT null,
-  vegetationshoehe_maximum smallint DEFAULT NULL,
-  vegetationshoehe_mittel smallint DEFAULT NULL,
-  gefaehrdung text DEFAULT NULL,
-  apber_nicht_relevant boolean default null,
-  apber_nicht_relevant_grund text DEFAULT NULL,
-  ekf_bemerkungen text DEFAULT NULL,
-  zeit_id UUID DEFAULT uuid_generate_v1mc(),
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  typ varchar(50) DEFAULT NULL REFERENCES apflora.tpopkontr_typ_werte (text) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    datum date DEFAULT NULL,
+    jahr smallint DEFAULT NULL,
+    bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    vitalitaet text DEFAULT NULL,
+    ueberlebensrate smallint DEFAULT NULL,
+    entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    ursachen text DEFAULT NULL,
+    erfolgsbeurteilung text DEFAULT NULL,
+    umsetzung_aendern text DEFAULT NULL,
+    kontrolle_aendern text DEFAULT NULL,
+    bemerkungen text,
+    lr_delarze text DEFAULT NULL,
+    flaeche integer DEFAULT NULL,
+    lr_umgebung_delarze text DEFAULT NULL,
+    vegetationstyp varchar(100) DEFAULT NULL,
+    konkurrenz varchar(100) DEFAULT NULL,
+    moosschicht varchar(100) DEFAULT NULL,
+    krautschicht varchar(100) DEFAULT NULL,
+    strauchschicht text DEFAULT NULL,
+    baumschicht varchar(100) DEFAULT NULL,
+    idealbiotop_uebereinstimmung integer DEFAULT NULL REFERENCES apflora.tpopkontr_idbiotuebereinst_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    handlungsbedarf text,
+    flaeche_ueberprueft integer DEFAULT NULL,
+    plan_vorhanden boolean DEFAULT false,
+    deckung_vegetation smallint DEFAULT NULL,
+    deckung_nackter_boden smallint DEFAULT NULL,
+    deckung_ap_art smallint DEFAULT NULL,
+    jungpflanzen_vorhanden boolean DEFAULT null,
+    vegetationshoehe_maximum smallint DEFAULT NULL,
+    vegetationshoehe_mittel smallint DEFAULT NULL,
+    gefaehrdung text DEFAULT NULL,
+    apber_nicht_relevant boolean default null,
+    apber_nicht_relevant_grund text DEFAULT NULL,
+    ekf_bemerkungen text DEFAULT NULL,
+    zeit_id UUID DEFAULT uuid_generate_v1mc(),
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
 CREATE INDEX ON apflora.tpopkontr USING btree (tpop_id);
@@ -1480,28 +1594,32 @@ COMMENT ON COLUMN apflora.tpopkontr.changed IS 'Wann wurde der Datensatz zuletzt
 COMMENT ON COLUMN apflora.tpopkontr.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant IS 'Pro Jahr sollte maximal eine Kontrolle AP-Bericht-relevant sein. Dient dazu Kontrollen auszuschliessen';
 COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant_grund IS 'Grund, wieso die Kontrolle vom AP-Bericht ausgeschlossen wurde';
-
 alter table apflora.tpopkontr enable row level security;
 drop policy if exists reader on apflora.tpopkontr;
-create policy reader on apflora.tpopkontr 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.tpopkontr using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and tpop_id in (
       select id
       from apflora.tpop
       where pop_id in (
-        select id 
-        from apflora.pop
-        where ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+          select id
+          from apflora.pop
+          where ap_id in (
+              select ap_id
+              from apflora.ap_user
+              where user_name = current_user_name()
+            )
         )
-      )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
@@ -1509,17 +1627,17 @@ with check (
       select id
       from apflora.tpop
       where pop_id in (
-        select id 
-        from apflora.pop
-        where ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+          select id
+          from apflora.pop
+          where ap_id in (
+              select ap_id
+              from apflora.ap_user
+              where user_name = current_user_name()
+            )
         )
-      )
     )
   )
 );
-
-
 drop table if exists apflora.tpopkontr_file;
 create table apflora.tpopkontr_file (
   id uuid primary key DEFAULT uuid_generate_v1mc(),
@@ -1533,32 +1651,36 @@ create index on apflora.tpopkontr using btree (id);
 create index on apflora.tpopkontr_file using btree (tpopkontr_id);
 create index on apflora.tpopkontr_file using btree (file_id);
 create index on apflora.tpopkontr_file using btree (file_mime_type);
-
 alter table apflora.tpopkontr_file enable row level security;
 drop policy if exists reader on apflora.tpopkontr_file;
-create policy reader on apflora.tpopkontr_file 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.tpopkontr_file using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and tpopkontr_id in (
       select id
       from apflora.tpopkontr
       where tpop_id in (
-        select id
-        from apflora.tpop
-        where pop_id in (
-          select id 
-          from apflora.pop
-          where ap_id in (
-            select ap_id from apflora.ap_user where user_name = current_user_name()
-          )
+          select id
+          from apflora.tpop
+          where pop_id in (
+              select id
+              from apflora.pop
+              where ap_id in (
+                  select ap_id
+                  from apflora.ap_user
+                  where user_name = current_user_name()
+                )
+            )
         )
-      )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
@@ -1566,21 +1688,21 @@ with check (
       select id
       from apflora.tpopkontr
       where tpop_id in (
-        select id
-        from apflora.tpop
-        where pop_id in (
-          select id 
-          from apflora.pop
-          where ap_id in (
-            select ap_id from apflora.ap_user where user_name = current_user_name()
-          )
+          select id
+          from apflora.tpop
+          where pop_id in (
+              select id
+              from apflora.pop
+              where ap_id in (
+                  select ap_id
+                  from apflora.ap_user
+                  where user_name = current_user_name()
+                )
+            )
         )
-      )
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1592,10 +1714,23 @@ CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   changed_by varchar(20) default NULL
 );
 create sequence apflora.tpopkontr_idbiotuebereinst_werte_code_seq owned by apflora.tpopkontr_idbiotuebereinst_werte.code;
-alter table apflora.tpopkontr_idbiotuebereinst_werte alter column code set default nextval('apflora.tpopkontr_idbiotuebereinst_werte_code_seq');
-select setval('apflora.tpopkontr_idbiotuebereinst_werte_code_seq', (select max(code)+1 from apflora.tpopkontr_idbiotuebereinst_werte), false);
-alter table apflora.tpopkontr_idbiotuebereinst_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.tpopkontr_idbiotuebereinst_werte
+alter column code
+set default nextval(
+    'apflora.tpopkontr_idbiotuebereinst_werte_code_seq'
+  );
+select setval(
+    'apflora.tpopkontr_idbiotuebereinst_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.tpopkontr_idbiotuebereinst_werte
+    ),
+    false
+  );
+alter table apflora.tpopkontr_idbiotuebereinst_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (sort);
@@ -1604,14 +1739,9 @@ COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.id IS 'Primärschlüs
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.tpopkontr_idbiotuebereinst_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontr_idbiotuebereinst_werte;
-create policy reader on apflora.tpopkontr_idbiotuebereinst_werte
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.tpopkontr_idbiotuebereinst_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
 CREATE TABLE apflora.tpopkontr_typ_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1623,10 +1753,21 @@ CREATE TABLE apflora.tpopkontr_typ_werte (
   changed_by varchar(20) default NULL
 );
 create sequence apflora.tpopkontr_typ_werte_code_seq owned by apflora.tpopkontr_typ_werte.code;
-alter table apflora.tpopkontr_typ_werte alter column code set default nextval('apflora.tpopkontr_typ_werte_code_seq');
-select setval('apflora.tpopkontr_typ_werte_code_seq', (select max(code)+1 from apflora.tpopkontr_typ_werte), false);
-alter table apflora.tpopkontr_typ_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.tpopkontr_typ_werte
+alter column code
+set default nextval('apflora.tpopkontr_typ_werte_code_seq');
+select setval(
+    'apflora.tpopkontr_typ_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.tpopkontr_typ_werte
+    ),
+    false
+  );
+alter table apflora.tpopkontr_typ_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (sort);
@@ -1635,24 +1776,21 @@ COMMENT ON COLUMN apflora.tpopkontr_typ_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.tpopkontr_typ_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontr_typ_werte;
-create policy reader on apflora.tpopkontr_typ_werte
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.tpopkontr_typ_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 CREATE TABLE apflora.tpopkontrzaehl (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   tpopkontr_id uuid DEFAULT NULL REFERENCES apflora.tpopkontr (id) ON DELETE CASCADE ON UPDATE CASCADE,
   anzahl integer DEFAULT NULL,
-  einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null,
-  unique (id, einheit)
+  einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null,
+    unique (id, einheit)
 );
 -- 2019 10 29: alter table apflora.tpopkontrzaehl add constraint id_einheit_unique unique (id, einheit);
 COMMENT ON COLUMN apflora.tpopkontrzaehl.anzahl IS 'Anzahl Zaehleinheiten';
@@ -1665,32 +1803,36 @@ CREATE INDEX ON apflora.tpopkontrzaehl USING btree (tpopkontr_id);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (anzahl);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (einheit);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (methode);
-
 alter table apflora.tpopkontrzaehl enable row level security;
 drop policy if exists reader on apflora.tpopkontrzaehl;
-create policy reader on apflora.tpopkontrzaehl 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.tpopkontrzaehl using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and tpopkontr_id in (
       select id
       from apflora.tpopkontr
       where tpop_id in (
-        select id
-        from apflora.tpop
-        where pop_id in (
-          select id 
-          from apflora.pop
-          where ap_id in (
-            select ap_id from apflora.ap_user where user_name = current_user_name()
-          )
+          select id
+          from apflora.tpop
+          where pop_id in (
+              select id
+              from apflora.pop
+              where ap_id in (
+                  select ap_id
+                  from apflora.ap_user
+                  where user_name = current_user_name()
+                )
+            )
         )
-      )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
@@ -1698,21 +1840,21 @@ with check (
       select id
       from apflora.tpopkontr
       where tpop_id in (
-        select id
-        from apflora.tpop
-        where pop_id in (
-          select id 
-          from apflora.pop
-          where ap_id in (
-            select ap_id from apflora.ap_user where user_name = current_user_name()
-          )
+          select id
+          from apflora.tpop
+          where pop_id in (
+              select id
+              from apflora.pop
+              where ap_id in (
+                  select ap_id
+                  from apflora.ap_user
+                  where user_name = current_user_name()
+                )
+            )
         )
-      )
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1726,9 +1868,17 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   changed_by varchar(20) default NULL
 );
 create sequence apflora.tpopkontrzaehl_einheit_werte_code_seq owned by apflora.tpopkontrzaehl_einheit_werte.code;
-alter table apflora.tpopkontrzaehl_einheit_werte alter column code set default nextval('apflora.tpopkontrzaehl_einheit_werte_code_seq');
-select setval('apflora.tpopkontrzaehl_einheit_werte_code_seq', (select max(code)+1 from apflora.tpopkontrzaehl_einheit_werte), false);
-
+alter table apflora.tpopkontrzaehl_einheit_werte
+alter column code
+set default nextval('apflora.tpopkontrzaehl_einheit_werte_code_seq');
+select setval(
+    'apflora.tpopkontrzaehl_einheit_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.tpopkontrzaehl_einheit_werte
+    ),
+    false
+  );
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (sort);
@@ -1741,14 +1891,9 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed IS 'Wann wurde de
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.corresponds_to_massn_anz_triebe IS 'Entspricht den "Anzahl Triebe" bei Massnahmen. Ermöglicht es, tpopmassn.zieleinheit_anzahl automatisch zu setzen';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.corresponds_to_massn_anz_pflanzen IS 'Entspricht den "Anzahl Pflanzen" bei Massnahmen. Ermöglicht es, tpopmassn.zieleinheit_anzahl automatisch zu setzen';
-
 alter table apflora.tpopkontrzaehl_einheit_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontrzaehl_einheit_werte;
-create policy reader on apflora.tpopkontrzaehl_einheit_werte
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.tpopkontrzaehl_einheit_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
 CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1760,11 +1905,24 @@ CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   changed_by varchar(20) default NULL
 );
 create sequence apflora.tpopkontrzaehl_methode_werte_code_seq owned by apflora.tpopkontrzaehl_methode_werte.code;
-alter table apflora.tpopkontrzaehl_methode_werte alter column code set default nextval('apflora.tpopkontrzaehl_methode_werte_code_seq');
-select setval('apflora.tpopkontrzaehl_methode_werte_code_seq', (select max(code)+1 from apflora.tpopkontrzaehl_methode_werte), false);
-alter table apflora.tpopkontrzaehl_methode_werte alter column changed_by drop not null, alter column changed_by set default null;
-
-alter table apflora.tpopkontrzaehl_methode_werte alter column changed_by set default null;
+alter table apflora.tpopkontrzaehl_methode_werte
+alter column code
+set default nextval('apflora.tpopkontrzaehl_methode_werte_code_seq');
+select setval(
+    'apflora.tpopkontrzaehl_methode_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.tpopkontrzaehl_methode_werte
+    ),
+    false
+  );
+alter table apflora.tpopkontrzaehl_methode_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
+alter table apflora.tpopkontrzaehl_methode_werte
+alter column changed_by
+set default null;
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (sort);
@@ -1773,41 +1931,39 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.id IS 'Primärschlüssel'
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.tpopkontrzaehl_methode_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontrzaehl_methode_werte;
-create policy reader on apflora.tpopkontrzaehl_methode_werte
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.tpopkontrzaehl_methode_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.tpopmassn;
 CREATE TABLE apflora.tpopmassn (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  typ integer DEFAULT NULL REFERENCES apflora.tpopmassn_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  beschreibung text DEFAULT NULL,
-  jahr smallint DEFAULT NULL,
-  datum date DEFAULT NULL,
-  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  bemerkungen text,
-  plan_vorhanden boolean DEFAULT false,
-  plan_bezeichnung text DEFAULT NULL,
-  flaeche integer DEFAULT NULL,
-  markierung text DEFAULT NULL,
-  anz_triebe integer DEFAULT NULL,
-  anz_pflanzen integer DEFAULT NULL,
-  anz_pflanzstellen integer DEFAULT NULL,
-  zieleinheit_einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  zieleinheit_anzahl integer DEFAULT NULL,
-  wirtspflanze text DEFAULT NULL,
-  herkunft_pop text DEFAULT NULL,
-  sammeldatum varchar(50) DEFAULT NULL,
-  von_anzahl_individuen integer default null,
-  form text DEFAULT NULL,
-  pflanzanordnung text DEFAULT NULL,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  typ integer DEFAULT NULL REFERENCES apflora.tpopmassn_typ_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    beschreibung text DEFAULT NULL,
+    jahr smallint DEFAULT NULL,
+    datum date DEFAULT NULL,
+    bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    bemerkungen text,
+    plan_vorhanden boolean DEFAULT false,
+    plan_bezeichnung text DEFAULT NULL,
+    flaeche integer DEFAULT NULL,
+    markierung text DEFAULT NULL,
+    anz_triebe integer DEFAULT NULL,
+    anz_pflanzen integer DEFAULT NULL,
+    anz_pflanzstellen integer DEFAULT NULL,
+    zieleinheit_einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    zieleinheit_anzahl integer DEFAULT NULL,
+    wirtspflanze text DEFAULT NULL,
+    herkunft_pop text DEFAULT NULL,
+    sammeldatum varchar(50) DEFAULT NULL,
+    von_anzahl_individuen integer default null,
+    form text DEFAULT NULL,
+    pflanzanordnung text DEFAULT NULL,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree (id);
 CREATE INDEX ON apflora.tpopmassn USING btree (tpop_id);
@@ -1840,28 +1996,32 @@ COMMENT ON COLUMN apflora.tpopmassn.pflanzanordnung IS 'Anordnung der Pflanzung'
 COMMENT ON COLUMN apflora.tpopmassn.id IS 'GUID der Tabelle "tpopmassn"';
 COMMENT ON COLUMN apflora.tpopmassn.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.tpopmassn enable row level security;
 drop policy if exists reader on apflora.tpopmassn;
-create policy reader on apflora.tpopmassn 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.tpopmassn using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and tpop_id in (
       select id
       from apflora.tpop
       where pop_id in (
-        select id 
-        from apflora.pop
-        where ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+          select id
+          from apflora.pop
+          where ap_id in (
+              select ap_id
+              from apflora.ap_user
+              where user_name = current_user_name()
+            )
         )
-      )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
@@ -1869,17 +2029,17 @@ with check (
       select id
       from apflora.tpop
       where pop_id in (
-        select id 
-        from apflora.pop
-        where ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+          select id
+          from apflora.pop
+          where ap_id in (
+              select ap_id
+              from apflora.ap_user
+              where user_name = current_user_name()
+            )
         )
-      )
     )
   )
 );
-
-
 drop table if exists apflora.tpopmassn_file;
 create table apflora.tpopmassn_file (
   id uuid primary key DEFAULT uuid_generate_v1mc(),
@@ -1893,32 +2053,36 @@ create index on apflora.tpopmassn using btree (id);
 create index on apflora.tpopmassn_file using btree (tpopmassn_id);
 create index on apflora.tpopmassn_file using btree (file_id);
 create index on apflora.tpopmassn_file using btree (file_mime_type);
-
 alter table apflora.tpopmassn_file enable row level security;
 drop policy if exists reader on apflora.tpopmassn_file;
-create policy reader on apflora.tpopmassn_file 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.tpopmassn_file using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and tpopmassn_id in (
       select id
       from apflora.tpopmassn
       where tpop_id in (
-        select id
-        from apflora.tpop
-        where pop_id in (
-          select id 
-          from apflora.pop
-          where ap_id in (
-            select ap_id from apflora.ap_user where user_name = current_user_name()
-          )
+          select id
+          from apflora.tpop
+          where pop_id in (
+              select id
+              from apflora.pop
+              where ap_id in (
+                  select ap_id
+                  from apflora.ap_user
+                  where user_name = current_user_name()
+                )
+            )
         )
-      )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
@@ -1926,21 +2090,21 @@ with check (
       select id
       from apflora.tpopmassn
       where tpop_id in (
-        select id
-        from apflora.tpop
-        where pop_id in (
-          select id 
-          from apflora.pop
-          where ap_id in (
-            select ap_id from apflora.ap_user where user_name = current_user_name()
-          )
+          select id
+          from apflora.tpop
+          where pop_id in (
+              select id
+              from apflora.pop
+              where ap_id in (
+                  select ap_id
+                  from apflora.ap_user
+                  where user_name = current_user_name()
+                )
+            )
         )
-      )
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
 CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1952,10 +2116,21 @@ CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   changed_by varchar(20) default NULL
 );
 create sequence apflora.tpopmassn_erfbeurt_werte_code_seq owned by apflora.tpopmassn_erfbeurt_werte.code;
-alter table apflora.tpopmassn_erfbeurt_werte alter column code set default nextval('apflora.tpopmassn_erfbeurt_werte_code_seq');
-select setval('apflora.tpopmassn_erfbeurt_werte_code_seq', (select max(code)+1 from apflora.tpopmassn_erfbeurt_werte), false);
-alter table apflora.tpopmassn_erfbeurt_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.tpopmassn_erfbeurt_werte
+alter column code
+set default nextval('apflora.tpopmassn_erfbeurt_werte_code_seq');
+select setval(
+    'apflora.tpopmassn_erfbeurt_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.tpopmassn_erfbeurt_werte
+    ),
+    false
+  );
+alter table apflora.tpopmassn_erfbeurt_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (id);
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (code);
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (sort);
@@ -1965,14 +2140,9 @@ COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.text IS 'Wie werden die durch
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.tpopmassn_erfbeurt_werte enable row level security;
 drop policy if exists reader on apflora.tpopmassn_erfbeurt_werte;
-create policy reader on apflora.tpopmassn_erfbeurt_werte
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.tpopmassn_erfbeurt_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.tpopmassn_typ_werte;
 CREATE TABLE apflora.tpopmassn_typ_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1986,10 +2156,21 @@ CREATE TABLE apflora.tpopmassn_typ_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 create sequence apflora.tpopmassn_typ_werte_code_seq owned by apflora.tpopmassn_typ_werte.code;
-alter table apflora.tpopmassn_typ_werte alter column code set default nextval('apflora.tpopmassn_typ_werte_code_seq');
-select setval('apflora.tpopmassn_typ_werte_code_seq', (select max(code)+1 from apflora.tpopmassn_typ_werte), false);
-alter table apflora.tpopmassn_typ_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.tpopmassn_typ_werte
+alter column code
+set default nextval('apflora.tpopmassn_typ_werte_code_seq');
+select setval(
+    'apflora.tpopmassn_typ_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.tpopmassn_typ_werte
+    ),
+    false
+  );
+alter table apflora.tpopmassn_typ_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (id);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (code);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (sort);
@@ -2001,23 +2182,19 @@ COMMENT ON COLUMN apflora.tpopmassn_typ_werte.ansiedlung IS 'Handelt es sich um 
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.tpopmassn_typ_werte enable row level security;
 drop policy if exists reader on apflora.tpopmassn_typ_werte;
-create policy reader on apflora.tpopmassn_typ_werte
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.tpopmassn_typ_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.tpopmassnber;
 CREATE TABLE apflora.tpopmassnber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
-  beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  bemerkungen text,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    bemerkungen text,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.tpopmassnber USING btree (id);
 CREATE INDEX ON apflora.tpopmassnber USING btree (tpop_id);
@@ -2030,28 +2207,32 @@ COMMENT ON COLUMN apflora.tpopmassnber.beurteilung IS 'Beurteilung des Erfolgs. 
 COMMENT ON COLUMN apflora.tpopmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.tpopmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.tpopmassnber enable row level security;
 drop policy if exists reader on apflora.tpopmassnber;
-create policy reader on apflora.tpopmassnber 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.tpopmassnber using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and tpop_id in (
       select id
       from apflora.tpop
       where pop_id in (
-        select id 
-        from apflora.pop
-        where ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+          select id
+          from apflora.pop
+          where ap_id in (
+              select ap_id
+              from apflora.ap_user
+              where user_name = current_user_name()
+            )
         )
-      )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
@@ -2059,17 +2240,17 @@ with check (
       select id
       from apflora.tpop
       where pop_id in (
-        select id 
-        from apflora.pop
-        where ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+          select id
+          from apflora.pop
+          where ap_id in (
+              select ap_id
+              from apflora.ap_user
+              where user_name = current_user_name()
+            )
         )
-      )
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.message CASCADE;
 CREATE TABLE apflora.message (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2083,14 +2264,9 @@ CREATE INDEX ON apflora.message USING btree (id);
 CREATE INDEX ON apflora.message USING btree (time);
 COMMENT ON COLUMN apflora.message.message IS 'Nachricht an die Benutzer';
 COMMENT ON COLUMN apflora.message.active IS 'false: diese Nachricht wird nicht mehr übermittelt';
-
 alter table apflora.message enable row level security;
 drop policy if exists reader on apflora.message;
-create policy reader on apflora.message 
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.message using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.currentIssue CASCADE;
 CREATE TABLE apflora.currentIssue (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2102,14 +2278,9 @@ CREATE INDEX ON apflora.currentIssue USING btree (id);
 CREATE INDEX ON apflora.currentIssue USING btree (sort);
 CREATE INDEX ON apflora.currentIssue USING btree (title);
 COMMENT ON COLUMN apflora.currentIssue.issue IS 'Bekannter Fehler';
-
 alter table apflora.currentIssue enable row level security;
 drop policy if exists reader on apflora.currentIssue;
-create policy reader on apflora.currentIssue 
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.currentIssue using (true) with check (current_user = 'apflora_manager');
 -- list of read messages per user
 DROP TABLE IF EXISTS apflora.usermessage;
 CREATE TABLE apflora.usermessage (
@@ -2120,23 +2291,23 @@ CREATE TABLE apflora.usermessage (
 CREATE INDEX ON apflora.usermessage USING btree (id);
 CREATE INDEX ON apflora.usermessage USING btree (user_name);
 CREATE INDEX ON apflora.usermessage USING btree (message_id);
-
 -- this needs to be written by user when he ok's message
 alter table apflora.usermessage enable row level security;
 drop policy if exists reader on apflora.usermessage;
-create policy reader on apflora.usermessage 
-using (user_name = current_user_name() or current_user = 'apflora_manager');
-
-
+create policy reader on apflora.usermessage using (
+  user_name = current_user_name()
+  or current_user = 'apflora_manager'
+);
 DROP TABLE IF EXISTS apflora.ziel;
 CREATE TABLE apflora.ziel (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   ap_id UUID NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  jahr smallint DEFAULT NULL,
-  bezeichnung text,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    jahr smallint DEFAULT NULL,
+    bezeichnung text,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.ziel USING btree (id);
 CREATE INDEX ON apflora.ziel USING btree (ap_id);
@@ -2149,30 +2320,34 @@ COMMENT ON COLUMN apflora.ziel.jahr IS 'In welchem Jahr soll das Ziel erreicht w
 COMMENT ON COLUMN apflora.ziel.bezeichnung IS 'Textliche Beschreibung des Ziels';
 COMMENT ON COLUMN apflora.ziel.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ziel.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.ziel enable row level security;
 drop policy if exists reader on apflora.ziel;
-create policy reader on apflora.ziel 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.ziel using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
-
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
 CREATE TABLE apflora.ziel_typ_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2184,10 +2359,21 @@ CREATE TABLE apflora.ziel_typ_werte (
   changed_by varchar(20) NOT NULL
 );
 create sequence apflora.ziel_typ_werte_code_seq owned by apflora.ziel_typ_werte.code;
-alter table apflora.ziel_typ_werte alter column code set default nextval('apflora.ziel_typ_werte_code_seq');
-select setval('apflora.ziel_typ_werte_code_seq', (select max(code)+1 from apflora.ziel_typ_werte), false);
-alter table apflora.ziel_typ_werte alter column changed_by drop not null, alter column changed_by set default null;
-
+alter table apflora.ziel_typ_werte
+alter column code
+set default nextval('apflora.ziel_typ_werte_code_seq');
+select setval(
+    'apflora.ziel_typ_werte_code_seq',
+    (
+      select max(code) + 1
+      from apflora.ziel_typ_werte
+    ),
+    false
+  );
+alter table apflora.ziel_typ_werte
+alter column changed_by drop not null,
+  alter column changed_by
+set default null;
 CREATE INDEX ON apflora.ziel_typ_werte USING btree (id);
 CREATE INDEX ON apflora.ziel_typ_werte USING btree (code);
 CREATE INDEX ON apflora.ziel_typ_werte USING btree (sort);
@@ -2197,14 +2383,9 @@ COMMENT ON COLUMN apflora.ziel_typ_werte.text IS 'Beschreibung des Ziels';
 COMMENT ON COLUMN apflora.ziel_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.ziel_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ziel_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.ziel_typ_werte enable row level security;
 drop policy if exists reader on apflora.ziel_typ_werte;
-create policy reader on apflora.ziel_typ_werte
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.ziel_typ_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.zielber;
 CREATE TABLE apflora.zielber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2225,38 +2406,42 @@ COMMENT ON COLUMN apflora.zielber.erreichung IS 'Beurteilung der Zielerreichung'
 COMMENT ON COLUMN apflora.zielber.bemerkungen IS 'Bemerkungen zur Zielerreichung';
 COMMENT ON COLUMN apflora.zielber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.zielber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.zielber enable row level security;
 drop policy if exists reader on apflora.zielber;
-create policy reader on apflora.zielber 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.zielber using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and ziel_id in (
-      select id 
+      select id
       from apflora.ziel
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and ziel_id in (
-      select id 
+      select id
       from apflora.ziel
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
 );
-
-
 -- this table can not be used as foreign table
 -- because it needs to be referenced
 drop table if exists apflora.ae_taxonomies;
@@ -2277,14 +2462,9 @@ create index on apflora.ae_taxonomies (id);
 create index on apflora.ae_taxonomies (taxid);
 create index on apflora.ae_taxonomies (artname);
 create index on apflora.ae_taxonomies (tax_art_name);
-
 alter table apflora.ae_taxonomies enable row level security;
 drop policy if exists reader on apflora.ae_taxonomies;
-create policy reader on apflora.ae_taxonomies 
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.ae_taxonomies using (true) with check (current_user = 'apflora_manager');
 -- to update data run:
 --truncate apflora.ae_taxonomies;
 --insert into apflora.ae_taxonomies(taxonomie_id, taxonomie_name, id, taxid, familie, artname, tax_art_name, status, artwert)
@@ -2305,7 +2485,6 @@ with check (current_user = 'apflora_manager');
 --from apflora.ae_taxonomies_download;
 --update apflora.ae_taxonomies
 --set tax_art_name = concat('SISF2: ', artname);
-
 --
 -- beob can collect beob of any provenience by following this convention:
 -- - fields that are used in apflora.ch are appended as regular fields, that is:
@@ -2325,6 +2504,10 @@ CREATE TABLE apflora.beob (
   quelle text default null,
   -- this field in data contains this datasets id
   id_field varchar(38) DEFAULT NULL,
+  id_original text default null,
+  id_evab text default null,
+  id_evab_lc text default null,
+  obs_id bigint default null,
   art_id UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) on delete no action on update cascade,
   -- art_id can be changed. art_id_original documents this change
   art_id_original UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) on delete no action on update cascade,
@@ -2338,15 +2521,20 @@ CREATE TABLE apflora.beob (
   geom_point geometry(Point, 4326) default null,
   -- maybe later add a geojson field for polygons?
   data jsonb,
-  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  nicht_zuordnen boolean default false,
-  infoflora_informiert_datum date default null,
-  bemerkungen text,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    nicht_zuordnen boolean default false,
+    infoflora_informiert_datum date default null,
+    bemerkungen text,
+    changed date DEFAULT NOW(),
+    changed_by varchar(20) DEFAULT null
 );
 create index on apflora.beob using gist (geom_point);
 CREATE INDEX ON apflora.beob USING btree (id);
+CREATE INDEX ON apflora.beob USING btree (id_original);
+CREATE INDEX ON apflora.beob USING btree (id_evab);
+CREATE INDEX ON apflora.beob USING btree (id_evab_lc);
+CREATE INDEX ON apflora.beob USING btree (obs_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
 CREATE INDEX ON apflora.beob USING btree (art_id_original);
 CREATE INDEX ON apflora.beob USING btree (quelle);
@@ -2360,58 +2548,60 @@ COMMENT ON COLUMN apflora.beob.infoflora_informiert_datum IS 'Datum, an dem Info
 COMMENT ON COLUMN apflora.beob.bemerkungen IS 'Bemerkungen zur Zuordnung';
 COMMENT ON COLUMN apflora.beob.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.beob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.beob enable row level security;
 drop policy if exists reader on apflora.beob;
-create policy reader on apflora.beob 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader')
+create policy reader on apflora.beob using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and art_id in (
-      select distinct art_id 
+      select distinct art_id
       from apflora.apart
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager')
   or (
     current_user in ('apflora_ap_writer')
     and art_id in (
-      select distinct art_id 
+      select distinct art_id
       from apflora.apart
       where ap_id in (
-        select ap_id from apflora.ap_user where user_name = current_user_name()
-      )
+          select ap_id
+          from apflora.ap_user
+          where user_name = current_user_name()
+        )
     )
   )
 );
-
-
 -- beobprojekt is used to control
 -- what beob are seen in what projekt
 -- IT IS NOT YET USED!
 DROP TABLE IF EXISTS apflora.beobprojekt;
 CREATE TABLE apflora.beobprojekt (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  proj_id UUID NOT NULL REFERENCES apflora.projekt (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  beob_id UUID NOT NULL REFERENCES apflora.beob (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  UNIQUE (proj_id, beob_id)
+  proj_id UUID NOT NULL REFERENCES apflora.projekt (id) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    beob_id UUID NOT NULL REFERENCES apflora.beob (id) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    UNIQUE (proj_id, beob_id)
 );
-
-
 DROP TABLE IF EXISTS apflora.apart;
 CREATE TABLE apflora.apart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   art_id UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO ACTION ON UPDATE CASCADE,
   ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   changed date DEFAULT NULL,
-  changed_by varchar(20) DEFAULT NULL
-  --UNIQUE (art_id) --no, maybe after beob were rearranged
+  changed_by varchar(20) DEFAULT NULL --UNIQUE (art_id) --no, maybe after beob were rearranged
 );
 CREATE INDEX ON apflora.apart USING btree (id);
 CREATE INDEX ON apflora.apart USING btree (ap_id);
@@ -2421,30 +2611,34 @@ COMMENT ON COLUMN apflora.apart.art_id IS 'Zugehörige Art. Aus der Tabelle "ae_
 COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.apart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
-
 alter table apflora.apart enable row level security;
 drop policy if exists reader on apflora.apart;
-create policy reader on apflora.apart 
-using (
-  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.apart using (
+  current_user in (
+    'apflora_manager',
+    'apflora_ap_writer',
+    'apflora_reader',
+    'apflora_freiwillig'
+  )
   or (
     current_user in ('apflora_ap_reader')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
-)
-with check (
+) with check (
   current_user in ('apflora_manager', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
-
 drop table if exists apflora.ekzaehleinheit;
 create table apflora.ekzaehleinheit(
   id uuid primary key default uuid_generate_v1mc(),
@@ -2457,7 +2651,8 @@ create table apflora.ekzaehleinheit(
   changed date default now(),
   changed_by varchar(20) default null
 );
-CREATE UNIQUE INDEX ekzaehleinheit_single_zielrelevant_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zielrelevant) WHERE zielrelevant = 'true';
+CREATE UNIQUE INDEX ekzaehleinheit_single_zielrelevant_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zielrelevant)
+WHERE zielrelevant = 'true';
 CREATE UNIQUE INDEX ekzaehleinheit_zaehleinheit_unique_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zaehleinheit_id);
 CREATE INDEX ON apflora.ekzaehleinheit USING btree (id);
 CREATE INDEX ON apflora.ekzaehleinheit USING btree (ap_id);
@@ -2473,19 +2668,13 @@ COMMENT ON COLUMN apflora.ekzaehleinheit.not_massn_count_unit IS 'Deklariert, da
 COMMENT ON COLUMN apflora.ekzaehleinheit.sort IS 'Um die Zähleinheiten untereinander zu sortieren';
 COMMENT ON COLUMN apflora.ekzaehleinheit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekzaehleinheit.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
-
 alter table apflora.ekzaehleinheit enable row level security;
 DROP POLICY IF EXISTS writer ON apflora.ekzaehleinheit;
-CREATE POLICY writer ON apflora.ekzaehleinheit
-USING (true)
-WITH CHECK (current_user = 'apflora_manager');
-
-  
+CREATE POLICY writer ON apflora.ekzaehleinheit USING (true) WITH CHECK (current_user = 'apflora_manager');
 drop type if exists ek_type;
 create type ek_type as enum ('ek', 'ekf');
 drop type if exists ek_kontrolljahre_ab;
 create type ek_kontrolljahre_ab as enum ('ek', 'ansiedlung');
-
 drop table if exists apflora.ekfrequenz;
 create table apflora.ekfrequenz(
   id uuid primary key default uuid_generate_v1mc(),
@@ -2493,16 +2682,17 @@ create table apflora.ekfrequenz(
   ektyp ek_type default null,
   anwendungsfall text default null,
   code text default null,
-  kontrolljahre integer[],
+  kontrolljahre integer [],
   kontrolljahre_ab ek_kontrolljahre_ab default null,
   anzahl_min integer default null,
   anzahl_max integer default null,
   bemerkungen text default null,
   sort smallint default null,
-  ek_abrechnungstyp text DEFAULT null REFERENCES apflora.ek_abrechnungstyp_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  changed date default now(),
-  changed_by varchar(20) default null,
-  unique(ap_id, code)
+  ek_abrechnungstyp text DEFAULT null REFERENCES apflora.ek_abrechnungstyp_werte (code) ON DELETE
+  SET NULL ON UPDATE CASCADE,
+    changed date default now(),
+    changed_by varchar(20) default null,
+    unique(ap_id, code)
 );
 CREATE INDEX ON apflora.ekfrequenz USING btree (id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
@@ -2525,14 +2715,9 @@ COMMENT ON COLUMN apflora.ekfrequenz.sort IS 'Damit EK-Zähleinheiten untereinan
 COMMENT ON COLUMN apflora.ekfrequenz.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
 COMMENT ON COLUMN apflora.ekfrequenz.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekfrequenz.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
-
 alter table apflora.ekfrequenz enable row level security;
 DROP POLICY IF EXISTS writer ON apflora.ekfrequenz;
-CREATE POLICY writer ON apflora.ekfrequenz
-USING (true)
-WITH CHECK (current_user = 'apflora_manager');
-
-
+CREATE POLICY writer ON apflora.ekfrequenz USING (true) WITH CHECK (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
 CREATE TABLE apflora.ek_abrechnungstyp_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2551,14 +2736,9 @@ COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.ek_abrechnungstyp_werte enable row level security;
 drop policy if exists reader on apflora.ek_abrechnungstyp_werte;
-create policy reader on apflora.ek_abrechnungstyp_werte
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.ek_abrechnungstyp_werte using (true) with check (current_user = 'apflora_manager');
 DROP TABLE IF EXISTS apflora.ekplan;
 CREATE TABLE apflora.ekplan (
   id uuid primary key default uuid_generate_v1mc(),
@@ -2578,12 +2758,9 @@ COMMENT ON COLUMN apflora.ekplan.jahr IS 'Jahr, in dem eine EK geplant ist';
 COMMENT ON COLUMN apflora.ekplan.type IS 'ek oder ekf';
 COMMENT ON COLUMN apflora.ekplan.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekplan.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
 alter table apflora.ekplan enable row level security;
 drop policy if exists writer on apflora.ekplan;
-create policy writer on apflora.ekplan
-using (true)
-with check (
+create policy writer on apflora.ekplan using (true) with check (
   current_user = 'apflora_manager'
   or (
     current_user in ('apflora_ap_writer')
@@ -2591,17 +2768,17 @@ with check (
       select id
       from apflora.tpop
       where pop_id in (
-        select id 
-        from apflora.pop
-        where ap_id in (
-          select ap_id from apflora.ap_user where user_name = current_user_name()
+          select id
+          from apflora.pop
+          where ap_id in (
+              select ap_id
+              from apflora.ap_user
+              where user_name = current_user_name()
+            )
         )
-      )
     )
   )
 );
-
-
 drop table if exists apflora.qk;
 create table apflora.qk (
   name text primary key,
@@ -2613,14 +2790,9 @@ create index on apflora.qk using btree (name);
 create index on apflora.qk using btree (titel);
 create index on apflora.qk using btree (sort);
 comment on column apflora.qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
-
 alter table apflora.qk enable row level security;
 drop policy if exists reader on apflora.qk;
-create policy reader on apflora.qk
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.qk using (true) with check (current_user = 'apflora_manager');
 drop table if exists apflora.apqk;
 create table apflora.apqk (
   ap_id UUID NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -2629,64 +2801,43 @@ create table apflora.apqk (
 );
 create index on apflora.apqk using btree (ap_id);
 create index on apflora.apqk using btree (qk_name);
-
 alter table apflora.apqk enable row level security;
 drop policy if exists reader on apflora.apqk;
-create policy reader on apflora.apqk 
-using (true)
-with check (
+create policy reader on apflora.apqk using (true) with check (
   current_user in ('apflora_manager')
   or (
     current_user in ('apflora_ap_writer')
     and ap_id in (
-      select ap_id from apflora.ap_user where user_name = current_user_name()
+      select ap_id
+      from apflora.ap_user
+      where user_name = current_user_name()
     )
   )
 );
-
 --insert into apflora.apqk (ap_id, qk_name)
 --select ap.id, qk.name
 --from apflora.qk, apflora.ap
 --on conflict do nothing;
-
-
 -- apflora.ch_gemeinde is imported from:
 -- https://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/gdb/2056/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill.zip
 create index on apflora.ch_gemeinde using btree (name);
 comment on table apflora.ch_gemeinde is 'Quelle: https://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/gdb/2056/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill.zip'
-
 alter table apflora.ch_gemeinde enable row level security;
 drop policy if exists reader on apflora.ch_gemeinde;
-create policy reader on apflora.ch_gemeinde
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.ch_gemeinde using (true) with check (current_user = 'apflora_manager');
 -- apflora.markierungen was received from topos
 comment on table apflora.markierungen is 'Markierungen, die im Rahmen von apflora gesetzt wurden. Quelle: Topos'
-
 alter table apflora.markierungen enable row level security;
 drop policy if exists reader on apflora.markierungen;
-create policy reader on apflora.markierungen
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.markierungen using (true) with check (current_user = 'apflora_manager');
 -- apflora.detailplaene was received from topos
 comment on table apflora.detailplaene is 'Detailpläne, die im Rahmen von apflora gesetzt wurden. Quelle: Topos'
-
 alter table apflora.detailplaene enable row level security;
 drop policy if exists reader on apflora.detailplaene;
-create policy reader on apflora.detailplaene
-using (true)
-with check (current_user = 'apflora_manager');
-
-
+create policy reader on apflora.detailplaene using (true) with check (current_user = 'apflora_manager');
 --truncate apflora.apqk
 --insert into apflora.apqk(ap_id, qk_name)
 --select distinct apflora.ap.id, apflora.qk.name from apflora.ap, apflora.qk where apflora.ap.bearbeitung is null
-
-
 drop table if exists apflora.ns_betreuung;
 create table apflora.ns_betreuung (
   gebiet_nr integer primary key,
@@ -2697,9 +2848,6 @@ create table apflora.ns_betreuung (
 );
 create index on apflora.ns_betreuung using btree (gebiet_nr);
 comment on table apflora.ns_betreuung is 'Von der FNS. Um zu das wfs betreuungsgebiete mit den Betreuern zu verknüpfen';
-
 alter table apflora.ns_betreuung enable row level security;
 drop policy if exists reader on apflora.ns_betreuung;
-create policy reader on apflora.ns_betreuung
-using (true)
-with check (current_user = 'apflora_manager');
+create policy reader on apflora.ns_betreuung using (true) with check (current_user = 'apflora_manager');
