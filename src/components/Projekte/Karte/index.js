@@ -500,7 +500,9 @@ const Karte = ({ treeName }) => {
 
   if (typeof window === 'undefined') return null
 
-  console.log('activeApfloraLayers', activeApfloraLayers)
+  // clustered layers receive a key that rebuilds them every time the cluster
+  // tool would erroneously add new markers from last time it build
+  // see: https://github.com/barbalex/apf2/issues/467
 
   return (
     <Container
