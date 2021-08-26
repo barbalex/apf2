@@ -14,7 +14,7 @@ import { simpleTypes as popType } from '../../../../../store/Tree/DataFilter/pop
 import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
 import updateTpopById from './updateTpopById'
 
-const iconCreateFunction = function (cluster) {
+const iconCreateFunction = (cluster) => {
   const markers = cluster.getAllChildMarkers()
   const count = cluster.getChildCount()
 
