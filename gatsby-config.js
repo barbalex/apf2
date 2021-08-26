@@ -4,17 +4,6 @@ module.exports = {
   },
   plugins: [
     {
-      resolve: 'gatsby-plugin-eslint',
-      options: {
-        test: /\.js$|\.jsx$/,
-        exclude: /(node_modules|cache|public|docs)/,
-        options: {
-          emitWarning: true,
-          failOnError: false,
-        },
-      },
-    },
-    {
       resolve: 'gatsby-plugin-create-client-paths',
       options: {
         prefixes: [`/Daten/*`],
