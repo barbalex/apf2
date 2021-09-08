@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useEffect, useState } from 'react'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useLazyQuery } from '@apollo/client'
 import { useMapEvents } from 'react-leaflet'
 // import bboxPolygon from '@turf/bbox-polygon'
 
@@ -94,13 +94,17 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
             geomPoint,
           },
         })
-        // console.log('Tpop, on dblclick', { refetch })
+        console.log('Tpop, on dblclick', { refetch })
         // refetch so it appears on map
         if (refetch.tpopForMap) {
           // need to also refetch pop in case it was new
           refetch.popForMap && refetch.popForMap()
           refetch.tpopForMap()
         }
+        // TODO: if layers are visible
+        // client.refetchQueries({
+        //   include: ['TpopForMapQuery', 'PopForMapQuery'],
+        // })
       } catch (error) {
         enqueNotification({
           message: error.message,
@@ -191,48 +195,34 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     }
   }
 
-  const [data, setData] = useState({})
+  const [fetchTpopDataForMap, { error: errorLoadingTpopForMap, data }] =
+    useLazyQuery(query, {
+      variables: {
+        projId,
+        apId,
+        perAp,
+        perProj,
+        isActiveInMap,
+        popFilter,
+        tpopFilter,
+      },
+    })
+
+  if (errorLoadingTpopForMap) {
+    enqueNotification({
+      message: `Fehler beim Laden der Teil-Populationen für die Karte: ${errorLoadingTpopForMap.message}`,
+      options: {
+        variant: 'error',
+      },
+    })
+  }
+
   useEffect(() => {
-    client
-      .query({
-        query: query,
-        variables: {
-          projId,
-          apId,
-          perAp,
-          perProj,
-          isActiveInMap,
-          popFilter,
-          tpopFilter,
-        },
-        //fetchPolicy: 'no-cache',
-      })
-      .then(({ data, error, refetch: refetchQuery, loading }) => {
-        if (loading === false) {
-          setData(data)
-          setRefetchKey({ key: 'tpopForMap', value: refetchQuery })
-        }
-      })
-      .catch((error) => {
-        enqueNotification({
-          message: `Fehler beim Laden der Teil-Populationen für die Karte: ${error.message}`,
-          options: {
-            variant: 'error',
-          },
-        })
-      })
-  }, [
-    projId,
-    apId,
-    perAp,
-    perProj,
-    isActiveInMap,
-    popFilter,
-    setRefetchKey,
-    client,
-    tpopFilter,
-    enqueNotification,
-  ])
+    if (fetchTpopDataForMap !== undefined) {
+      fetchTpopDataForMap()
+      setRefetchKey({ key: 'tpopForMap', value: fetchTpopDataForMap })
+    }
+  }, [enqueNotification, fetchTpopDataForMap, setRefetchKey])
 
   const aps = useMemo(
     () =>

@@ -93,13 +93,8 @@ const fieldTypes = {
 const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const {
-    dataFilterSetValue,
-    refetch,
-    urlQuery,
-    setUrlQuery,
-    appBarHeight,
-  } = store
+  const { dataFilterSetValue, refetch, urlQuery, setUrlQuery, appBarHeight } =
+    store
 
   const { activeNodeArray, dataFilter } = store[treeName]
   const [tab, setTab] = useState(urlQuery?.tpopTab ?? 'tpop')
@@ -122,7 +117,12 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
       : '99999999-9999-9999-9999-999999999999'
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const apId = activeNodeArray[3]
-  const { data, loading, error, refetch: refetchTpop } = useQuery(query, {
+  const {
+    data,
+    loading,
+    error,
+    refetch: refetchTpop,
+  } = useQuery(query, {
     variables: {
       id,
     },
@@ -266,8 +266,8 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
       showFilter,
       dataFilterSetValue,
       treeName,
-      client,
       store.user.name,
+      client,
       refetch,
     ],
   )
