@@ -19,7 +19,7 @@
     "svgr": "svgr -d src/icons/ svg/"
   },
   "dependencies": {
-    "@apollo/client": "3.4.10",
+    "@apollo/client": "3.4.11",
     "@fontsource/roboto": "4.5.0",
     "@fontsource/roboto-mono": "4.5.0",
     "@material-ui/core": "4.12.3",
@@ -70,7 +70,7 @@
     "leaflet-image": "0.4.0",
     "leaflet-measure": "3.1.0",
     "leaflet-switch-scale-control": "https://github.com/victorzinho/leaflet-switch-scale-control",
-    "leaflet.markercluster": "1.5.0",
+    "leaflet.markercluster": "1.5.1",
     "localforage": "1.10.0",
     "lodash": "4.17.21",
     "luxon": "2.0.2",
@@ -117,12 +117,13 @@
     "simplebar-react": "2.3.5",
     "styled-components": "5.3.1",
     "typography": "0.16.21",
-    "uploadcare-widget": "3.11.3",
+    "uploadcare-widget": "3.11.5",
     "use-debounce": "7.0.0"
   },
   "dependenciesComments": {
     "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1",
-    "md5-hex": "Do not update 3.0.1 to 4.0.0, see: https://github.com/sindresorhus/md5-hex/issues/17"
+    "md5-hex": "Do not update 3.0.1 to 4.0.0, see: https://github.com/sindresorhus/md5-hex/issues/17",
+    "webpack resolution": "webpack v5.53.0 broke gatsby: https://github.com/gatsbyjs/gatsby/issues/33216"
   },
   "peerDependencies": {
     "react-is": "17.0.2"
@@ -133,10 +134,10 @@
     "@svgr/cli": "5.5.0",
     "babel-eslint": "10.1.0",
     "copyfiles": "2.4.1",
-    "cypress": "8.3.1",
+    "cypress": "8.4.0",
     "eslint": "7.32.0",
     "eslint-config-react-app": "6.0.0",
-    "eslint-plugin-flowtype": "5.9.2",
+    "eslint-plugin-flowtype": "6.0.1",
     "eslint-plugin-import": "2.24.2",
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "7.25.1",
@@ -146,7 +147,7 @@
     "postgraphile": "4.12.3",
     "postgraphile-plugin-connection-filter": "2.2.2",
     "postgraphile-plugin-connection-filter-postgis": "1.0.0-alpha.6",
-    "prettier": "2.3.2",
+    "prettier": "2.4.1",
     "source-map-explorer": "2.5.2",
     "vercel": "23.1.2"
   },
