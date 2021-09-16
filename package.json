@@ -153,6 +153,9 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "resolutions": {
+    "webpack": "5.52.1"
+  },
   "browserslist": [
     ">0.2%",
     "not dead",
