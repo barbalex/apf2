@@ -30,6 +30,7 @@
     "@turf/nearest-point": "6.5.0",
     "@turf/points-within-polygon": "6.5.0",
     "autosuggest-highlight": "3.1.1",
+    "blueimp-md5": "2.18.0",
     "browser-update": "3.3.30",
     "date-fns": "2.24.0",
     "dexie": "3.0.3",
@@ -75,7 +76,6 @@
     "lodash": "4.17.21",
     "luxon": "2.0.2",
     "markdown-it": "12.2.0",
-    "md5-hex": "3.0.1",
     "memoize-one": "5.2.1",
     "mobx": "6.3.3",
     "mobx-react-lite": "3.2.1",
@@ -121,9 +121,7 @@
     "use-debounce": "7.0.0"
   },
   "dependenciesComments": {
-    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1",
-    "md5-hex": "Do not update 3.0.1 to 4.0.0, see: https://github.com/sindresorhus/md5-hex/issues/17",
-    "webpack resolution": "webpack v5.53.0 broke gatsby: https://github.com/gatsbyjs/gatsby/issues/33216"
+    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1"
   },
   "peerDependencies": {
     "react-is": "17.0.2"
