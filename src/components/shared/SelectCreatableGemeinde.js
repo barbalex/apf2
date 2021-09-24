@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { IoMdLocate } from 'react-icons/io'
 import { observer } from 'mobx-react-lite'
 import { useField } from 'formik'

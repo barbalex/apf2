@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import IconButton from '@material-ui/core/IconButton'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import InputAdornment from '@mui/material/InputAdornment'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
@@ -435,6 +435,7 @@ const User = ({ treeName }) => {
                   error={!!passwordErrorText}
                   fullWidth
                   aria-describedby="passwortHelper"
+                  variant="standard"
                 >
                   <InputLabel htmlFor="passwort">Neues Passwort</InputLabel>
                   <StyledInput
@@ -458,6 +459,7 @@ const User = ({ treeName }) => {
                           onClick={() => setShowPass(!showPass)}
                           onMouseDown={(e) => e.preventDefault()}
                           title={showPass ? 'verstecken' : 'anzeigen'}
+                          size="large"
                         >
                           {showPass ? <MdVisibilityOff /> : <MdVisibility />}
                         </IconButton>
@@ -476,6 +478,7 @@ const User = ({ treeName }) => {
                   error={!!password2ErrorText}
                   fullWidth
                   aria-describedby="passwortHelper"
+                  variant="standard"
                 >
                   <InputLabel htmlFor="passwort">
                     Neues Passwort wiederholen
@@ -499,6 +502,7 @@ const User = ({ treeName }) => {
                           onClick={() => setShowPass2(!showPass2)}
                           onMouseDown={(e) => e.preventDefault()}
                           title={showPass2 ? 'verstecken' : 'anzeigen'}
+                          size="large"
                         >
                           {showPass2 ? <MdVisibilityOff /> : <MdVisibility />}
                         </IconButton>

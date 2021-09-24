@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
-import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormHelperText from '@material-ui/core/FormHelperText'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import FormHelperText from '@mui/material/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useField } from 'formik'
@@ -162,7 +162,11 @@ const Status = ({ apJahr, treeName, showFilter, handleSubmit, ...props }) => {
   return (
     <div>
       <FieldWithInfoContainer>
-        <FormControl fullWidth aria-describedby="bekanntSeitHelper">
+        <FormControl
+          fullWidth
+          aria-describedby="bekanntSeitHelper"
+          variant="standard"
+        >
           <InputLabel htmlFor="bekanntSeit">bekannt seit</InputLabel>
           <StyledInput
             id="bekanntSeit"
@@ -186,6 +190,7 @@ const Status = ({ apJahr, treeName, showFilter, handleSubmit, ...props }) => {
           component="fieldset"
           error={!!error}
           aria-describedby="StatusErrorText"
+          variant="standard"
         >
           <StyledLabel error={!!error}>Status</StyledLabel>
           <RadioGroup

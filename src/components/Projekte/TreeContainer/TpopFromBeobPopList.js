@@ -4,8 +4,8 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
 import { observer } from 'mobx-react-lite'
 import get from 'lodash/get'
 

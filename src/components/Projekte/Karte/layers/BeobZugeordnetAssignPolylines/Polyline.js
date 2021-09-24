@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import { observer } from 'mobx-react-lite'
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
 
 import storeContext from '../../../../../storeContext'
 import appBaseUrl from '../../../../../modules/appBaseUrl'

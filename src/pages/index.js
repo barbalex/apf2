@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
-import Typography from '@material-ui/core/Typography'
-import MaterialCard from '@material-ui/core/Card'
+import Typography from '@mui/material/Typography'
+import MaterialCard from '@mui/material/Card'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 import { GatsbyImage } from 'gatsby-plugin-image'

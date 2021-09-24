@@ -1,9 +1,9 @@
 import React, { useContext, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 // this does not exist in any icon library, not even in md!!!!
-import DeleteSweepOutlined from '@material-ui/icons/DeleteSweepOutlined'
+import DeleteSweepOutlined from '@mui/icons-material/DeleteSweepOutlined'
 import { MdDeleteSweep } from 'react-icons/md'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 import { withResizeDetector } from 'react-resize-detector'
 

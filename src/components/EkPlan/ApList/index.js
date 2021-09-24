@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useContext } from 'react'
 import { FaPlus } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import styled from 'styled-components'
 
 import Ap from './Ap'

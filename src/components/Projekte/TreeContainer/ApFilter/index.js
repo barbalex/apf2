@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import Switch from '@material-ui/core/Switch'
+import Switch from '@mui/material/Switch'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'

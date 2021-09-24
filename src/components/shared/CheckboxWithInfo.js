@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
-import FormGroup from '@material-ui/core/FormGroup'
-import FormControl from '@material-ui/core/FormControl'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import Checkbox from '@material-ui/core/Checkbox'
+import FormGroup from '@mui/material/FormGroup'
+import FormControl from '@mui/material/FormControl'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import FormHelperText from '@mui/material/FormHelperText'
+import Checkbox from '@mui/material/Checkbox'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -37,6 +37,7 @@ const CheckboxWithInfo = ({ value, label, name, popover, saveToDb, error }) => {
         component="fieldset"
         error={!!error}
         aria-describedby={`${label}ErrorText`}
+        variant="standard"
       >
         <FormGroup>
           <Label label={label} />

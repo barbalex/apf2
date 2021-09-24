@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import Checkbox from '@material-ui/core/Checkbox'
+import Checkbox from '@mui/material/Checkbox'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 import get from 'lodash/get'

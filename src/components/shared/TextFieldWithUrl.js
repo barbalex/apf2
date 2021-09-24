@@ -3,12 +3,12 @@
  * used to be used for berichte
  */
 import React, { useCallback } from 'react'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
 import { MdOpenInNew } from 'react-icons/md'
-import green from '@material-ui/core/colors/green'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import { green } from '@mui/material/colors'
 import styled from 'styled-components'
 import getUrls from 'get-urls'
 import { observer } from 'mobx-react-lite'
@@ -62,6 +62,7 @@ const TextFieldWithUrl = ({
         fullWidth
         error={!!error}
         aria-describedby={`${label}ErrorText`}
+        variant="standard"
       >
         <InputLabel htmlFor={label} shrink>
           {`${label} (gültige URL's beginnen mit "https://", "//" oder "www.")`}

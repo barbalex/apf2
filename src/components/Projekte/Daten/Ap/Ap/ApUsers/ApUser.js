@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import get from 'lodash/get'
 import { FaTimes } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import styled from 'styled-components'
 import { useApolloClient, gql } from '@apollo/client'
 

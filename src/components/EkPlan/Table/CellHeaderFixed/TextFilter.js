@@ -6,11 +6,11 @@ import React, {
   useEffect,
   useRef,
 } from 'react'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import IconButton from '@material-ui/core/IconButton'
-import FormControl from '@material-ui/core/FormControl'
-import InputLabel from '@material-ui/core/InputLabel'
-import Input from '@material-ui/core/Input'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import Input from '@mui/material/Input'
 import { MdClear } from 'react-icons/md'
 import upperFirst from 'lodash/upperFirst'
 
@@ -29,10 +29,8 @@ const valForState = (valPassed) => {
 
 const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
   const store = useContext(storeContext)
-  const {
-    setFilterEmptyEkfrequenz,
-    setFilterEmptyEkfrequenzStartjahr,
-  } = store.ekPlan
+  const { setFilterEmptyEkfrequenz, setFilterEmptyEkfrequenzStartjahr } =
+    store.ekPlan
   const { name } = column
 
   const type = [
@@ -102,7 +100,9 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
 
   return (
     <FormControl>
-      <InputLabel htmlFor="EkPlanHeaderFilter">Filter</InputLabel>
+      <InputLabel htmlFor="EkPlanHeaderFilter" variant="standard">
+        Filter
+      </InputLabel>
       <Input
         id="EkPlanHeaderFilter"
         inputRef={inputRef}
@@ -117,6 +117,7 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
               aria-label="Filter leeren"
               title="Filter leeren"
               onClick={onClickEmpty}
+              size="large"
             >
               <MdClear />
             </IconButton>

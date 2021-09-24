@@ -1,9 +1,9 @@
 import React, { useCallback, useContext } from 'react'
-import Typography from '@material-ui/core/Typography'
+import Typography from '@mui/material/Typography'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
 import { GatsbyImage } from 'gatsby-plugin-image'
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/Layout'

@@ -4,7 +4,7 @@ import sortBy from 'lodash/sortBy'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { MdPrint } from 'react-icons/md'
-import Fab from '@material-ui/core/Fab'
+import Fab from '@mui/material/Fab'
 import { useApolloClient, useLazyQuery } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
 

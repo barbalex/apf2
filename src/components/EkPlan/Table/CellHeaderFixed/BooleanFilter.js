@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useContext } from 'react'
-import MenuItem from '@material-ui/core/MenuItem'
+import MenuItem from '@mui/material/MenuItem'
 import upperFirst from 'lodash/upperFirst'
 
 import storeContext from '../../../../storeContext'

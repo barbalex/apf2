@@ -7,7 +7,7 @@ import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
 import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
 
 import queryTpop from './queryTpop'
 import queryLists from './queryLists'

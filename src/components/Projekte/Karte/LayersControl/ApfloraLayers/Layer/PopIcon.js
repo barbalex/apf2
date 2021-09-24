@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { MdLocalFlorist } from 'react-icons/md'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../storeContext'

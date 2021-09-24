@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
-import Radio from '@material-ui/core/Radio'
-import FormLabel from '@material-ui/core/FormLabel'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
+import Radio from '@mui/material/Radio'
+import FormLabel from '@mui/material/FormLabel'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -40,6 +40,7 @@ const RadioButton = ({ label, name, value, error, saveToDb }) => {
       component="fieldset"
       error={!!error}
       aria-describedby={`${label}ErrorText`}
+      variant="standard"
     >
       <StyledFormLabel component="legend">{label}</StyledFormLabel>
       <StyledRadio

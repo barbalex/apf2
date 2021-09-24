@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
-import InputAdornment from '@material-ui/core/InputAdornment'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
 import styled from 'styled-components'
 
@@ -27,7 +27,7 @@ const Filter = ({ filter, setFilter }) => {
   const onClickEmptyFilter = useCallback(() => setFilter(''), [setFilter])
 
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth variant="standard">
       <InputLabel htmlFor="filterInput">filtern</InputLabel>
       <StyledInput
         id="filterInput"

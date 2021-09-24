@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useContext } from 'react'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
-import Button from '@material-ui/core/Button'
-import Badge from '@material-ui/core/Badge'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import Button from '@mui/material/Button'
+import Badge from '@mui/material/Badge'
 import styled from 'styled-components'
-import Paper from '@material-ui/core/Paper'
+import Paper from '@mui/material/Paper'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { FaExternalLinkAlt } from 'react-icons/fa'
@@ -127,7 +127,7 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <StyledFormControl fullWidth>
+        <StyledFormControl fullWidth variant="standard">
           <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
           <Input
             id="berichtjahr"
@@ -136,7 +136,7 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
             onChange={onChangeBerichtjahr}
           />
         </StyledFormControl>
-        <StyledFormControl fullWidth>
+        <StyledFormControl fullWidth variant="standard">
           <InputLabel htmlFor="filter">
             nach Abschnitts-Titel filtern
           </InputLabel>

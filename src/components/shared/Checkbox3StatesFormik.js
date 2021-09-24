@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
-import Checkbox from '@material-ui/core/Checkbox'
-import FormLabel from '@material-ui/core/FormLabel'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
+import Checkbox from '@mui/material/Checkbox'
+import FormLabel from '@mui/material/FormLabel'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useField } from 'formik'
@@ -74,6 +74,7 @@ const Checkbox3StatesFormik = ({ label, handleSubmit, ...props }) => {
         component="fieldset"
         error={!!error}
         aria-describedby={`${label}ErrorText`}
+        variant="standard"
       >
         <StyledFormLabel component="legend">{label}</StyledFormLabel>
         <StyledCheckbox

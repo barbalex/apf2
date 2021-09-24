@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
 

@@ -5,7 +5,7 @@ import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
 
 import storeContext from '../../../../../storeContext'
 import beobIcon from './beob.svg'

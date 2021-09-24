@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
-import DialogContent from '@material-ui/core/DialogContent'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Radio from '@mui/material/Radio'
+import DialogContent from '@mui/material/DialogContent'
 
 import storeContext from '../../storeContext'
 import ErrorBoundary from '../shared/ErrorBoundary'

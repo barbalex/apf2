@@ -6,17 +6,17 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogActions from '@material-ui/core/DialogActions'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import IconButton from '@material-ui/core/IconButton'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogActions from '@mui/material/DialogActions'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import InputAdornment from '@mui/material/InputAdornment'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -188,6 +188,7 @@ const User = () => {
             error={!!nameErrorText}
             fullWidth
             aria-describedby="nameHelper"
+            variant="standard"
           >
             <InputLabel htmlFor="name">Name</InputLabel>
             <StyledInput
@@ -205,6 +206,7 @@ const User = () => {
             error={!!passwordErrorText}
             fullWidth
             aria-describedby="passwortHelper"
+            variant="standard"
           >
             <InputLabel htmlFor="passwort">Passwort</InputLabel>
             <StyledInput
@@ -224,6 +226,7 @@ const User = () => {
                     onClick={onClickShowPass}
                     onMouseDown={onMouseDownShowPass}
                     title={showPass ? 'verstecken' : 'anzeigen'}
+                    size="large"
                   >
                     {showPass ? <MdVisibilityOff /> : <MdVisibility />}
                   </IconButton>
