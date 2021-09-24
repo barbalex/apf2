@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useState, useEffect } from 'react'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
-import InputAdornment from '@material-ui/core/InputAdornment'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -34,12 +34,8 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
 
 const LabelFilter = ({ treeName, nodes }) => {
   const store = useContext(storeContext)
-  const {
-    nodeLabelFilter,
-    activeNodeArray,
-    setActiveNodeArray,
-    setOpenNodes,
-  } = store[treeName]
+  const { nodeLabelFilter, activeNodeArray, setActiveNodeArray, setOpenNodes } =
+    store[treeName]
   const {
     setKey: setNodeLabelFilterKey,
     isFiltered: runIsFiltered,
@@ -123,7 +119,7 @@ const LabelFilter = ({ treeName, nodes }) => {
   }, [empty])
 
   return (
-    <StyledFormControl fullWidth>
+    <StyledFormControl fullWidth variant="standard">
       <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
       <StyledInput
         id={labelText}

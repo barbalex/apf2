@@ -15,7 +15,7 @@ import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 import styled, { keyframes } from 'styled-components'
 import { FaRedo } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 
 import queryPopMenge from './queryPopMenge'
 import CustomTooltip from './CustomTooltip'
@@ -169,145 +169,143 @@ const ApAuswertungPopMenge = ({
 
   //console.log('AP, PopMenge, popMengeData:', popMengeData)
 
-  return (
-    <>
-      {loadingPopMenge ? (
-        <SpinnerContainer>
-          <Spinner
-            size={50}
-            frontColor="#2e7d32"
-            backColor="#4a148c1a"
-            loading={true}
-          />
-          <SpinnerText>lade Mengen nach Populationen...</SpinnerText>
-        </SpinnerContainer>
-      ) : popMengeData.length ? (
-        <>
-          <TitleRow>
-            <div>
-              <Title>{`"${zielEinheit}" nach Populationen`}</Title>
-            </div>
-            {!print && (
-              <>
-                {refreshing ? (
-                  <RefreshButtonSpinning
-                    title="Daten werden neu berechnet"
-                    aria-label="Daten werden neu berechnet"
-                    onClick={onClickRefresh}
-                    size="small"
-                  >
-                    <FaRedo />
-                  </RefreshButtonSpinning>
-                ) : (
-                  <RefreshButton
-                    title="Daten neu rechnen"
-                    aria-label="Daten neu rechnen"
-                    onClick={onClickRefresh}
-                    size="small"
-                  >
-                    <FaRedo />
-                  </RefreshButton>
-                )}
-                <IconButton
-                  aria-label="Mehr Informationen"
-                  title="Mehr Informationen"
-                  onClick={onClickMoreInfo}
+  return <>
+    {loadingPopMenge ? (
+      <SpinnerContainer>
+        <Spinner
+          size={50}
+          frontColor="#2e7d32"
+          backColor="#4a148c1a"
+          loading={true}
+        />
+        <SpinnerText>lade Mengen nach Populationen...</SpinnerText>
+      </SpinnerContainer>
+    ) : popMengeData.length ? (
+      <>
+        <TitleRow>
+          <div>
+            <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+          </div>
+          {!print && (
+            <>
+              {refreshing ? (
+                <RefreshButtonSpinning
+                  title="Daten werden neu berechnet"
+                  aria-label="Daten werden neu berechnet"
+                  onClick={onClickRefresh}
+                  size="small"
                 >
-                  <IoMdInformationCircleOutline />
-                </IconButton>
-              </>
-            )}
-          </TitleRow>
-          <ResponsiveContainer width="99%" height={height}>
-            <AreaChart
-              width={600}
-              height={300}
-              data={popMengeData}
-              margin={{ top: 10, right: 10, left: 27 }}
-            >
-              <XAxis dataKey="jahr" />
-              <YAxis
-                interval={0}
-                label={{
-                  value: zielEinheit,
-                  angle: -90,
-                  position: 'insideLeft',
-                  offset: print ? 0 : -15,
-                }}
-                tickFormatter={formatNumber}
-              />
-              {popIdsWithDataSorted.reverse().map((id) => {
-                const pop = popsData.find((p) => p.id === id)
-                let color
-                if (!pop) {
-                  color = 'grey'
-                } else {
-                  const isUrspruenglich = pop?.status < 200
-                  color = isUrspruenglich
-                    ? colorUrspruenglich
-                    : colorAngesiedelt
-                }
+                  <FaRedo />
+                </RefreshButtonSpinning>
+              ) : (
+                <RefreshButton
+                  title="Daten neu rechnen"
+                  aria-label="Daten neu rechnen"
+                  onClick={onClickRefresh}
+                  size="small"
+                >
+                  <FaRedo />
+                </RefreshButton>
+              )}
+              <IconButton
+                aria-label="Mehr Informationen"
+                title="Mehr Informationen"
+                onClick={onClickMoreInfo}
+                size="large">
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </>
+          )}
+        </TitleRow>
+        <ResponsiveContainer width="99%" height={height}>
+          <AreaChart
+            width={600}
+            height={300}
+            data={popMengeData}
+            margin={{ top: 10, right: 10, left: 27 }}
+          >
+            <XAxis dataKey="jahr" />
+            <YAxis
+              interval={0}
+              label={{
+                value: zielEinheit,
+                angle: -90,
+                position: 'insideLeft',
+                offset: print ? 0 : -15,
+              }}
+              tickFormatter={formatNumber}
+            />
+            {popIdsWithDataSorted.reverse().map((id) => {
+              const pop = popsData.find((p) => p.id === id)
+              let color
+              if (!pop) {
+                color = 'grey'
+              } else {
+                const isUrspruenglich = pop?.status < 200
+                color = isUrspruenglich
+                  ? colorUrspruenglich
+                  : colorAngesiedelt
+              }
 
-                return (
-                  <Area
-                    key={id}
-                    type="linear"
-                    dataKey={id}
-                    stackId="1"
-                    stroke={color}
-                    strokeWidth={2}
-                    fill={color}
-                    isAnimationActive={!print}
-                  />
-                )
-              })}
-              <Tooltip content={<CustomTooltip popsData={popsData} />} />
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </>
-      ) : (
-        <>
-          <TitleRow>
-            <div>
-              <Title>{`"${zielEinheit}" nach Populationen`}</Title>
-            </div>
-            {!print && (
-              <>
-                {refreshing ? (
-                  <RefreshButtonSpinning
-                    title="Daten werden neu berechnet"
-                    aria-label="Daten werden neu berechnet"
-                    onClick={onClickRefresh}
-                    size="small"
-                  >
-                    <FaRedo />
-                  </RefreshButtonSpinning>
-                ) : (
-                  <RefreshButton
-                    title="Daten neu rechnen"
-                    aria-label="Daten neu rechnen"
-                    onClick={onClickRefresh}
-                    size="small"
-                  >
-                    <FaRedo />
-                  </RefreshButton>
-                )}
-                <IconButton
-                  aria-label="Mehr Informationen"
-                  title="Mehr Informationen"
-                  onClick={onClickMoreInfo}
+              return (
+                <Area
+                  key={id}
+                  type="linear"
+                  dataKey={id}
+                  stackId="1"
+                  stroke={color}
+                  strokeWidth={2}
+                  fill={color}
+                  isAnimationActive={!print}
+                />
+              )
+            })}
+            <Tooltip content={<CustomTooltip popsData={popsData} />} />
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+          </AreaChart>
+        </ResponsiveContainer>
+      </>
+    ) : (
+      <>
+        <TitleRow>
+          <div>
+            <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+          </div>
+          {!print && (
+            <>
+              {refreshing ? (
+                <RefreshButtonSpinning
+                  title="Daten werden neu berechnet"
+                  aria-label="Daten werden neu berechnet"
+                  onClick={onClickRefresh}
+                  size="small"
                 >
-                  <IoMdInformationCircleOutline />
-                </IconButton>
-              </>
-            )}
-          </TitleRow>
-          <NoDataContainer>Keine Daten gefunden</NoDataContainer>
-        </>
-      )}
-    </>
-  )
+                  <FaRedo />
+                </RefreshButtonSpinning>
+              ) : (
+                <RefreshButton
+                  title="Daten neu rechnen"
+                  aria-label="Daten neu rechnen"
+                  onClick={onClickRefresh}
+                  size="small"
+                >
+                  <FaRedo />
+                </RefreshButton>
+              )}
+              <IconButton
+                aria-label="Mehr Informationen"
+                title="Mehr Informationen"
+                onClick={onClickMoreInfo}
+                size="large">
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </>
+          )}
+        </TitleRow>
+        <NoDataContainer>Keine Daten gefunden</NoDataContainer>
+      </>
+    )}
+  </>;
 }
 
 export default ApAuswertungPopMenge

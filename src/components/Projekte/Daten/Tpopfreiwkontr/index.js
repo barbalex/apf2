@@ -4,7 +4,7 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { MdPrint } from 'react-icons/md'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import SimpleBar from 'simplebar-react'
 
 import query from './query'

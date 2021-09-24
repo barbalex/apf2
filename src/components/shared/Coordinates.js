@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
@@ -268,6 +268,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
           fullWidth
           error={!!wgs84LatError}
           aria-describedby={`${id}wgs84LatErrorText`}
+          variant="standard"
         >
           <InputLabel htmlFor={`${id}wgs84Lat`} shrink>
             Längengrad
@@ -297,6 +298,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
           fullWidth
           error={!!wgs84LongError}
           aria-describedby={`${id}wgs84LongErrorText`}
+          variant="standard"
         >
           <InputLabel htmlFor={`${id}wgs84Long`} shrink>
             Breitengrad
@@ -328,6 +330,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
           fullWidth
           error={!!xError}
           aria-describedby={`${id}lv95XErrorText`}
+          variant="standard"
         >
           <InputLabel htmlFor={`${id}lv95X`} shrink>
             X-Koordinate
@@ -354,6 +357,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
           fullWidth
           error={!!yError}
           aria-describedby={`${id}lv95YErrorText`}
+          variant="standard"
         >
           <InputLabel htmlFor={`${id}lv95Y`} shrink>
             Y-Koordinate

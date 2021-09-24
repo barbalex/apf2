@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback, useEffect } from 'react'
-import Input from '@material-ui/core/Input'
+import Input from '@mui/material/Input'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 

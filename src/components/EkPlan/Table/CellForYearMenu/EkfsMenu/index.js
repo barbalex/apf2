@@ -1,5 +1,5 @@
 import React from 'react'
-import Menu from '@material-ui/core/Menu'
+import Menu from '@mui/material/Menu'
 
 import Ekf from './Ekf'
 

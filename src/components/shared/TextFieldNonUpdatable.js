@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -26,6 +26,7 @@ const MyTextField = ({ label, value = '' }) => {
       error={!!error}
       fullWidth
       aria-describedby={`${label}-helper`}
+      variant="standard"
     >
       <InputLabel htmlFor={label} shrink>
         {label}

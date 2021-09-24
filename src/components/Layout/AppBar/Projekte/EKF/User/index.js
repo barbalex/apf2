@@ -1,16 +1,16 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogActions from '@material-ui/core/DialogActions'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import IconButton from '@material-ui/core/IconButton'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogActions from '@mui/material/DialogActions'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import InputAdornment from '@mui/material/InputAdornment'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
 
@@ -185,6 +185,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                       error={!!passwordErrorText}
                       fullWidth
                       aria-describedby="passwortHelper"
+                      variant="standard"
                     >
                       <InputLabel htmlFor="passwort">Passwort</InputLabel>
                       <StyledInput
@@ -206,6 +207,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                               onClick={() => setShowPass(!showPass)}
                               onMouseDown={(e) => e.preventDefault()}
                               title={showPass ? 'verstecken' : 'anzeigen'}
+                              size="large"
                             >
                               {showPass ? (
                                 <MdVisibilityOff />
@@ -226,6 +228,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                       error={!!password2ErrorText}
                       fullWidth
                       aria-describedby="passwortHelper"
+                      variant="standard"
                     >
                       <InputLabel htmlFor="passwort">
                         Passwort wiederholen
@@ -248,6 +251,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                               onClick={() => setShowPass2(!showPass2)}
                               onMouseDown={(e) => e.preventDefault()}
                               title={showPass2 ? 'verstecken' : 'anzeigen'}
+                              size="large"
                             >
                               {showPass2 ? (
                                 <MdVisibilityOff />

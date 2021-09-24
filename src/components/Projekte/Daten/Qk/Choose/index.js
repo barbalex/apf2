@@ -1,8 +1,8 @@
 import React, { useContext, useState, useCallback } from 'react'
 import styled from 'styled-components'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import get from 'lodash/get'
@@ -83,7 +83,7 @@ const ChooseQk = ({ treeName, refetchTab }) => {
     <ErrorBoundary>
       <Container>
         <FilterContainer>
-          <StyledFormControl fullWidth>
+          <StyledFormControl fullWidth variant="standard">
             <InputLabel htmlFor="filter">{label}</InputLabel>
             <Input id="filter" value={filter} onChange={onChangeFilter} />
           </StyledFormControl>

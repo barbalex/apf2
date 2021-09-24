@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@mui/material/IconButton'
 import { MdClose as CloseIcon } from 'react-icons/md'
 import { useSnackbar } from 'notistack'
 
@@ -13,10 +13,10 @@ const NotificationDismisser = ({ nKey }) => {
       aria-label="Close"
       color="inherit"
       onClick={onClick}
-    >
+      size="large">
       <CloseIcon />
     </IconButton>
-  )
+  );
 }
 
 export default NotificationDismisser

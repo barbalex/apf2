@@ -6,7 +6,7 @@ import React from 'react'
 import 'isomorphic-fetch'
 import queryString from 'query-string'
 
-import { MuiThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import theme from './utils/materialTheme'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import de from 'date-fns/locale/de'
@@ -137,24 +137,26 @@ const App = ({ element }) => {
     <IdbProvider value={idbContext}>
       <MobxProvider value={store}>
         <ApolloProvider client={client}>
-          <MuiThemeProvider theme={theme}>
-            <SnackbarProvider
-              maxSnack={3}
-              preventDuplicate
-              autoHideDuration={20000}
-              action={(key) => <NotificationDismisser nKey={key} />}
-            >
-              <>
-                <GlobalStyle />
-                {element}
-                <Notifier />
-              </>
-            </SnackbarProvider>
-          </MuiThemeProvider>
+          <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
+              <SnackbarProvider
+                maxSnack={3}
+                preventDuplicate
+                autoHideDuration={20000}
+                action={(key) => <NotificationDismisser nKey={key} />}
+              >
+                <>
+                  <GlobalStyle />
+                  {element}
+                  <Notifier />
+                </>
+              </SnackbarProvider>
+            </ThemeProvider>
+          </StyledEngineProvider>
         </ApolloProvider>
       </MobxProvider>
     </IdbProvider>
-  )
+  );
 }
 
 export default App

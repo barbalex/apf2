@@ -9,7 +9,7 @@ const removeKmlNogoChar = (string) => {
       .replace(/>>>/g, ' ')
       .replace(/<<</g, ' ')
       .replace(/"/g, '')
-      .replace(/'/g, '')
+      .replace(/'/g, '');
   }
   return string
 }

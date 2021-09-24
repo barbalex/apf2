@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback } from 'react'
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
 import remove from 'lodash/remove'
 import styled, { keyframes } from 'styled-components'
 import jwtDecode from 'jwt-decode'
@@ -8,8 +8,8 @@ import { useQuery } from '@apollo/client'
 import { Link } from 'gatsby'
 import get from 'lodash/get'
 import { MdPrint, MdHourglassEmpty } from 'react-icons/md'
-import IconButton from '@material-ui/core/IconButton'
-import Badge from '@material-ui/core/Badge'
+import IconButton from '@mui/material/IconButton'
+import Badge from '@mui/material/Badge'
 
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../../../modules/setUrlQueryValue'
@@ -50,7 +50,7 @@ const StyledIconButton = styled(IconButton)`
   }
 `
 const StyledBadge = styled(Badge)`
-  .MuiBadge-anchorOriginTopRightRectangle {
+  .MuiBadge-anchorOriginTopRightRectangular {
     top: 9px !important;
     right: 9px !important;
   }

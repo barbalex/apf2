@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useEffect } from 'react'
 import 'react-markdown-editor-lite/lib/index.css'
 import MarkdownIt from 'markdown-it'
-import FormHelperText from '@material-ui/core/FormHelperText'
+import FormHelperText from '@mui/material/FormHelperText'
 import styled from 'styled-components'
 import Editor, { Plugins } from 'react-markdown-editor-lite'
 import { useField } from 'formik'

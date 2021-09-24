@@ -2,11 +2,11 @@ import React, { useState, useCallback, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import 'leaflet'
 import styled from 'styled-components'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import IconButton from '@material-ui/core/IconButton'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import IconButton from '@mui/material/IconButton'
 import { MdMyLocation, MdClear } from 'react-icons/md'
 
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
@@ -156,7 +156,12 @@ const PanToCoordinates = ({ setControlType, map }) => {
 
   return (
     <Container onBlur={onBlurGotoContainer} onFocus={onFocusGotoContainer}>
-      <FormControl error={!!xError} fullWidth aria-describedby="xhelper">
+      <FormControl
+        error={!!xError}
+        fullWidth
+        aria-describedby="xhelper"
+        variant="standard"
+      >
         <InputLabel htmlFor="XKoordinate">X-Koordinate</InputLabel>
         <StyledInput
           id="XKoordinate"
@@ -170,7 +175,12 @@ const PanToCoordinates = ({ setControlType, map }) => {
         />
         <FormHelperText id="xhelper">{xError}</FormHelperText>
       </FormControl>
-      <FormControl error={!!yError} fullWidth aria-describedby="yhelper">
+      <FormControl
+        error={!!yError}
+        fullWidth
+        aria-describedby="yhelper"
+        variant="standard"
+      >
         <InputLabel htmlFor="YKoordinate">Y-Koordinate</InputLabel>
         <StyledInput
           id="YKoordinate"
