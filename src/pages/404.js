@@ -2,9 +2,8 @@ import React, { useCallback, useContext } from 'react'
 import Typography from '@mui/material/Typography'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
-import { GatsbyImage } from 'gatsby-plugin-image'
+import { StaticImage } from 'gatsby-plugin-image'
 import Button from '@mui/material/Button'
-import { graphql } from 'gatsby'
 
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
@@ -46,7 +45,7 @@ const bgImageStyle = {
   zIndex: -1,
 }
 
-const FourOFour = ({ data }) => {
+const FourOFour = () => {
   const store = useContext(storeContext)
   const { appBarHeight } = store
 
@@ -56,9 +55,11 @@ const FourOFour = ({ data }) => {
     <ErrorBoundary>
       <Container data-appbar-height={appBarHeight}>
         <Layout>
-          <GatsbyImage
-            image={data.file.childImageSharp.gatsbyImageData}
+          <StaticImage
             style={bgImageStyle}
+            src="../images/ophr-ara.jpg"
+            alt="Ophrys"
+            layout="fullWidth"
           />
           <TextContainer>
             <PageTitle align="center" variant="h6">
@@ -82,13 +83,3 @@ const FourOFour = ({ data }) => {
 }
 
 export default FourOFour
-
-export const query = graphql`
-  query FourOFourQuery {
-    file(relativePath: { eq: "ophr-ara.jpg" }) {
-      childImageSharp {
-        gatsbyImageData(layout: FIXED)
-      }
-    }
-  }
-`

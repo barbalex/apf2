@@ -1,9 +1,8 @@
 import React, { useContext } from 'react'
 import Typography from '@mui/material/Typography'
 import MaterialCard from '@mui/material/Card'
-import { graphql } from 'gatsby'
 import styled from 'styled-components'
-import { GatsbyImage } from 'gatsby-plugin-image'
+import { StaticImage } from 'gatsby-plugin-image'
 import SimpleBar from 'simplebar-react'
 
 import Layout from '../components/Layout'
@@ -110,7 +109,7 @@ const bgImageStyle = {
   zIndex: -1,
 }
 
-const Home = ({ data }) => {
+const Home = () => {
   const store = useContext(storeContext)
   const { appBarHeight } = store
 
@@ -119,10 +118,11 @@ const Home = ({ data }) => {
       <Layout>
         <StyledSimpleBar data-appbar-height={appBarHeight}>
           <Container>
-            <GatsbyImage
-              image={data.file.childImageSharp.gatsbyImageData}
+            <StaticImage
               style={bgImageStyle}
               alt="Ophrys"
+              src="../images/ophr-ara.jpg"
+              layout="fullWidth"
             />
             <PageTitle align="center" variant="h6" color="inherit">
               Bedrohte Pflanzenarten fördern
@@ -239,19 +239,5 @@ const Home = ({ data }) => {
     </ErrorBoundary>
   )
 }
-
-export const query = graphql`
-  query indexPageQuery {
-    file(relativePath: { eq: "ophr-ara.jpg" }) {
-      childImageSharp {
-        gatsbyImageData(
-          layout: FIXED
-          placeholder: BLURRED
-          formats: [AUTO, WEBP, AVIF]
-        )
-      }
-    }
-  }
-`
 
 export default Home
