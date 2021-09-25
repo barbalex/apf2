@@ -113,6 +113,7 @@ const Beobachtungen = () => {
           data-expanded={expanded}
           aria-expanded={expanded}
           aria-label="öffnen"
+          color="inherit"
         >
           <Icon title={expanded ? 'schliessen' : 'öffnen'}>
             <ExpandMoreIcon />
@@ -121,10 +122,11 @@ const Beobachtungen = () => {
       </StyledCardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
-          <DownloadCardButton onClick={onClickButton}>
+          <DownloadCardButton onClick={onClickButton} color="inherit">
             <div>Alle Beobachtungen, bei denen die Art verändert wurde</div>
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "Beobachtungen" wird vorbereitet...`,
@@ -157,6 +159,7 @@ const Beobachtungen = () => {
             <div>Alle zugeordneten Beobachtungen</div>
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "Beobachtungen" wird vorbereitet...`,

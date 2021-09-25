@@ -832,6 +832,7 @@ const AP = () => {
           data-expanded={expanded}
           aria-expanded={expanded}
           aria-label="öffnen"
+          color="inherit"
         >
           <Icon title={expanded ? 'schliessen' : 'öffnen'}>
             <ExpandMoreIcon />
@@ -840,41 +841,43 @@ const AP = () => {
       </StyledCardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
-          <DownloadCardButton onClick={onClickAp}>
+          <DownloadCardButton onClick={onClickAp} color="inherit">
             {apIsFiltered ? 'Aktionspläne (gefiltert)' : 'Aktionspläne'}
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickApOhnePop}>
+          <DownloadCardButton onClick={onClickApOhnePop} color="inherit">
             Aktionspläne ohne Populationen
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickAnzMassnProAp}>
+          <DownloadCardButton onClick={onClickAnzMassnProAp} color="inherit">
             Anzahl Massnahmen pro Aktionsplan
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickAnzKontrProAp}>
+          <DownloadCardButton onClick={onClickAnzKontrProAp} color="inherit">
             Anzahl Kontrollen pro Aktionsplan
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickApBer}>
+          <DownloadCardButton onClick={onClickApBer} color="inherit">
             AP-Berichte (Jahresberichte)
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickApBerUndMassn}>
+          <DownloadCardButton onClick={onClickApBerUndMassn} color="inherit">
             AP-Berichte und Massnahmen
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickApPopEkPrio}>
+          <DownloadCardButton onClick={onClickApPopEkPrio} color="inherit">
             Priorisierung für EK basierend auf Pop-Entwicklung
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickEkPlanung}>
+          <DownloadCardButton onClick={onClickEkPlanung} color="inherit">
             EK-Planung pro Jahr nach Abrechnungstyp
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickZiele}>Ziele</DownloadCardButton>
-          <DownloadCardButton onClick={onClickZielber}>
+          <DownloadCardButton onClick={onClickZiele} color="inherit">
+            Ziele
+          </DownloadCardButton>
+          <DownloadCardButton onClick={onClickZielber} color="inherit">
             Ziel-Berichte
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickErfkrit}>
+          <DownloadCardButton onClick={onClickErfkrit} color="inherit">
             Erfolgskriterien
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickIdealbiotop}>
+          <DownloadCardButton onClick={onClickIdealbiotop} color="inherit">
             Idealbiotope
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickAssozarten}>
+          <DownloadCardButton onClick={onClickAssozarten} color="inherit">
             Assoziierte Arten
           </DownloadCardButton>
         </StyledCardContent>

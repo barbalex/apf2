@@ -14,7 +14,7 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
 import { observer } from 'mobx-react-lite'
-import withStyles from '@mui/styles/withStyles';
+import withStyles from '@mui/styles/withStyles'
 
 import Fields from './Fields'
 import storeContext from '../../storeContext'
@@ -94,22 +94,22 @@ const EkPlanChoose = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChangeShowEk = useCallback(() => setShowEk(!showEk), [showEk])
-  const onChangeShowEkf = useCallback(() => setShowEkf(!showEkf), [
-    setShowEkf,
-    showEkf,
-  ])
-  const onChangeShowCount = useCallback(() => setShowCount(!showCount), [
-    setShowCount,
-    showCount,
-  ])
-  const onChangeShowEkCount = useCallback(() => setShowEkCount(!showEkCount), [
-    setShowEkCount,
-    showEkCount,
-  ])
-  const onChangeShowMassn = useCallback(() => setShowMassn(!showMassn), [
-    setShowMassn,
-    showMassn,
-  ])
+  const onChangeShowEkf = useCallback(
+    () => setShowEkf(!showEkf),
+    [setShowEkf, showEkf],
+  )
+  const onChangeShowCount = useCallback(
+    () => setShowCount(!showCount),
+    [setShowCount, showCount],
+  )
+  const onChangeShowEkCount = useCallback(
+    () => setShowEkCount(!showEkCount),
+    [setShowEkCount, showEkCount],
+  )
+  const onChangeShowMassn = useCallback(
+    () => setShowMassn(!showMassn),
+    [setShowMassn, showMassn],
+  )
   const [fieldsDialogOpen, setFieldsDialogOpen] = useState(false)
   const onClickChooseFields = useCallback(() => setFieldsDialogOpen(true), [])
   const closeFieldsDialog = useCallback(() => setFieldsDialogOpen(false), [])
@@ -156,6 +156,7 @@ const EkPlanChoose = () => {
           variant="outlined"
           size="small"
           onClick={onClickChooseFields}
+          color="inherit"
         >
           {felderButtonTitle}
         </FelderButton>
@@ -234,7 +235,9 @@ const EkPlanChoose = () => {
         <DialogTitle id="alert-dialog-title">{'Felder wählen:'}</DialogTitle>
         <Fields />
         <DialogActions>
-          <Button onClick={closeFieldsDialog}>schliessen</Button>
+          <Button onClick={closeFieldsDialog} color="inherit">
+            schliessen
+          </Button>
         </DialogActions>
       </StyledDialog>
     </ErrorBoundary>

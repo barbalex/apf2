@@ -72,7 +72,11 @@ const FourOFour = () => {
             </Text>
           </TextContainer>
           <TextContainer>
-            <StyledButton variant="outlined" onClick={onClickBack}>
+            <StyledButton
+              variant="outlined"
+              onClick={onClickBack}
+              color="inherit"
+            >
               Zurück zur Startseite
             </StyledButton>
           </TextContainer>

@@ -80,6 +80,7 @@ const Populationen = () => {
           data-expanded={expanded}
           aria-expanded={expanded}
           aria-label="öffnen"
+          color="inherit"
         >
           <Icon title={expanded ? 'schliessen' : 'öffnen'}>
             <ExpandMoreIcon />
@@ -89,6 +90,7 @@ const Populationen = () => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "Populationen" wird vorbereitet...`,
@@ -195,6 +197,7 @@ const Populationen = () => {
             {popIsFiltered ? 'Populationen (gefiltert)' : 'Populationen'}
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "Populationen" wird vorbereitet...`,
@@ -246,6 +249,7 @@ const Populationen = () => {
             <div>Populationen für Google Earth (beschriftet mit PopNr)</div>
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "PopulationenNachNamen" wird vorbereitet...`,
@@ -301,6 +305,7 @@ const Populationen = () => {
             </div>
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "PopulationenVonApArtenOhneStatus" wird vorbereitet...`,
@@ -363,6 +368,7 @@ const Populationen = () => {
             Populationen von AP-Arten ohne Status
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "PopulationenOhneKoordinaten" wird vorbereitet...`,
@@ -448,6 +454,7 @@ const Populationen = () => {
             Populationen ohne Koordinaten
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "PopulationenAnzMassnProMassnber" wird vorbereitet...`,
@@ -587,6 +594,7 @@ const Populationen = () => {
             Berichtsjahr
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "PopulationenAnzahlMassnahmen" wird vorbereitet...`,
@@ -675,6 +683,7 @@ const Populationen = () => {
             Anzahl Massnahmen pro Population
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "PopulationenAnzahlKontrollen" wird vorbereitet...`,
@@ -763,6 +772,7 @@ const Populationen = () => {
             Anzahl Kontrollen pro Population
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "PopulationenPopUndMassnBerichte" wird vorbereitet...`,
@@ -847,6 +857,7 @@ const Populationen = () => {
             Populationen inkl. Populations- und Massnahmen-Berichte
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "PopulationenMitLetzemPopBericht" wird vorbereitet...`,
@@ -993,6 +1004,7 @@ const Populationen = () => {
             Populationen mit dem letzten Populations-Bericht
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "PopulationenMitLetztemMassnBericht" wird vorbereitet...`,
@@ -1151,6 +1163,7 @@ const Populationen = () => {
             Populationen mit dem letzten Massnahmen-Bericht
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "PopulationenLetzteZaehlungen" wird vorbereitet...`,
@@ -1318,6 +1331,7 @@ const Populationen = () => {
             Letzte Zählungen
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "PopLetzteZaehlungenInklMassn" wird vorbereitet...`,

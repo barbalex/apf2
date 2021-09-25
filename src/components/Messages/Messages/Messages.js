@@ -59,7 +59,9 @@ const UserMessages = ({ unreadMessages, height = 200 }) => {
             <Linkify properties={{ target: '_blank' }}>
               <MessageDiv>{`${date}: ${m.message}`}</MessageDiv>
             </Linkify>
-            <OkButton onClick={() => onClickRead(m)}>o.k.</OkButton>
+            <OkButton onClick={() => onClickRead(m)} color="inherit">
+              o.k.
+            </OkButton>
           </MessageRow>
         )
       })}

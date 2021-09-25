@@ -66,7 +66,11 @@ const EkPlan = () => {
       <Container data-appbar-height={appBarHeight}>
         <Header>
           <ApList />
-          <AnleitungButton variant="outlined" onClick={onClickAnleitung}>
+          <AnleitungButton
+            variant="outlined"
+            onClick={onClickAnleitung}
+            color="inherit"
+          >
             Anleitung
           </AnleitungButton>
           <Choose />

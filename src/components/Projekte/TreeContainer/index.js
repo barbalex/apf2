@@ -334,9 +334,8 @@ const TreeContainer = ({
     setOpenNodes,
   ])
 
-  const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useState(
-    false,
-  )
+  const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] =
+    useState(false)
   const [newTpopFromBeobBeobId, setNewTpopFromBeobBeobId] = useState(null)
   const closeNewTpopFromBeobDialog = useCallback(
     () => setNewTpopFromBeobDialogOpen(false),
@@ -621,6 +620,7 @@ const TreeContainer = ({
         <div>Bitte melden Sie sich neu an.</div>
         <LogoutButton
           variant="outlined"
+          color="inherit"
           onClick={() => {
             logout(idb)
           }}
@@ -731,7 +731,9 @@ const TreeContainer = ({
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={closeNewTpopFromBeobDialog}>abbrechen</Button>
+            <Button onClick={closeNewTpopFromBeobDialog} color="inherit">
+              abbrechen
+            </Button>
           </DialogActions>
         </StyledDialog>
       </Container>

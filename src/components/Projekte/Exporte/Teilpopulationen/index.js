@@ -307,6 +307,7 @@ const Teilpopulationen = ({ treeName }) => {
           data-expanded={expanded}
           aria-expanded={expanded}
           aria-label="öffnen"
+          color="inherit"
         >
           <Icon title={expanded ? 'schliessen' : 'öffnen'}>
             <ExpandMoreIcon />
@@ -315,12 +316,13 @@ const Teilpopulationen = ({ treeName }) => {
       </StyledCardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
-          <DownloadCardButton onClick={onClickButton}>
+          <DownloadCardButton onClick={onClickButton} color="inherit">
             {tpopIsFiltered
               ? 'Teilpopulationen (gefiltert)'
               : 'Teilpopulationen'}
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "TeilpopulationenWebGisBun" wird vorbereitet...`,
@@ -366,6 +368,7 @@ const Teilpopulationen = ({ treeName }) => {
             Teilpopulationen für WebGIS BUN
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "Teilpopulationen" wird vorbereitet...`,
@@ -416,6 +419,7 @@ const Teilpopulationen = ({ treeName }) => {
             <div>(beschriftet mit PopNr/TPopNr)</div>
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "TeilpopulationenNachNamen" wird vorbereitet...`,
@@ -468,6 +472,7 @@ const Teilpopulationen = ({ treeName }) => {
             <div>(beschriftet mit Artname, PopNr/TPopNr)</div>
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...`,
@@ -515,6 +520,7 @@ const Teilpopulationen = ({ treeName }) => {
             <div>{'ohne "Bekannt seit"'}</div>
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...`,
@@ -562,6 +568,7 @@ const Teilpopulationen = ({ treeName }) => {
             <div>{'im Feld "Für AP-Bericht relevant"'}</div>
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...`,
@@ -726,6 +733,7 @@ const Teilpopulationen = ({ treeName }) => {
             Anzahl Massnahmen pro Teilpopulation
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...`,
@@ -2193,6 +2201,7 @@ const Teilpopulationen = ({ treeName }) => {
             />
           </AutocompleteContainer>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...`,
@@ -2242,6 +2251,7 @@ const Teilpopulationen = ({ treeName }) => {
             Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "TeilpopulationenLetzteZaehlungen" wird vorbereitet...`,
@@ -2434,6 +2444,7 @@ const Teilpopulationen = ({ treeName }) => {
             Letzte Zählungen
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "TPopLetzteZaehlungenInklMassn" wird vorbereitet...`,

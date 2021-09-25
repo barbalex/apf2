@@ -274,7 +274,9 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
         </Container>
       </ErrorBoundary>
       <DialogActions>
-        <Button onClick={toggleUserOpen}>schliessen</Button>
+        <Button onClick={toggleUserOpen} color="inherit">
+          schliessen
+        </Button>
       </DialogActions>
     </Dialog>
   )

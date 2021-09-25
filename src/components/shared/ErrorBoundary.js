@@ -48,7 +48,7 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
         <Pre>{componentStack}</Pre>
       </Details>
       <ButtonContainer>
-        <StyledButton variant="outlined" onClick={onReload}>
+        <StyledButton variant="outlined" onClick={onReload} color="inherit">
           neu starten
         </StyledButton>
       </ButtonContainer>

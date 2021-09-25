@@ -372,6 +372,7 @@ const Beobzuordnung = ({ type, treeName }) => {
                 />
                 <EmailButton
                   variant="outlined"
+                  color="inherit"
                   onClick={() => {
                     const origArt = `Art gemäss Beobachtung: SISF-Nr: ${
                       row?.aeTaxonomyByArtId?.taxid ?? '(keine)'

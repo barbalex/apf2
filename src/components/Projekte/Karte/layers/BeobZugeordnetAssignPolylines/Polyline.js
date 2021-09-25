@@ -123,22 +123,34 @@ const Line = ({ treeName, beob }) => {
             '(keine Nr)',
           )}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
           <div>{`Quelle: ${quelle}`}</div>
-          <StyledButton size="small" variant="outlined" onClick={openBeobInTab}>
+          <StyledButton
+            size="small"
+            variant="outlined"
+            color="inherit"
+            onClick={openBeobInTab}
+          >
             Beob. in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"
             variant="outlined"
+            color="inherit"
             onClick={openBeobInTree2}
           >
             Beob. in Strukturbaum 2 öffnen
           </StyledButton>
-          <StyledButton size="small" variant="outlined" onClick={openTpopInTab}>
+          <StyledButton
+            size="small"
+            variant="outlined"
+            color="inherit"
+            onClick={openTpopInTab}
+          >
             TPop. in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"
             variant="outlined"
+            color="inherit"
             onClick={openTpopInTree2}
           >
             TPop. in Strukturbaum 2 öffnen

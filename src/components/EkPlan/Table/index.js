@@ -276,10 +276,10 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     get(dataTpop, 'allTpops.nodes', []),
     (t) => t.popByPopId.apByApId.label,
   )
-  const years = useMemo(() => yearsFromTpops({ tpops, pastYears }), [
-    pastYears,
-    tpops,
-  ])
+  const years = useMemo(
+    () => yearsFromTpops({ tpops, pastYears }),
+    [pastYears, tpops],
+  )
   const yearRows = useMemo(
     () =>
       tpops.map((tpop, index) =>
@@ -390,7 +390,11 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   return (
     <OuterContainer>
       <ErrorBoundary>
-        <ExportButton variant="outlined" onClick={onClickExport}>
+        <ExportButton
+          variant="outlined"
+          onClick={onClickExport}
+          color="inherit"
+        >
           exportieren
         </ExportButton>
         <Container>

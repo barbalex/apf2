@@ -142,13 +142,19 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
               'de-ch',
             )} / ${beob.lv95Y.toLocaleString('de-ch')}`}
           </div>
-          <StyledButton size="small" variant="outlined" onClick={openBeobInTab}>
+          <StyledButton
+            size="small"
+            variant="outlined"
+            onClick={openBeobInTab}
+            color="inherit"
+          >
             Formular in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"
             variant="outlined"
             onClick={openBeobInTree2}
+            color="inherit"
           >
             Formular in Strukturbaum 2 öffnen
           </StyledButton>

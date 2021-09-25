@@ -266,7 +266,11 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
           apfloraLayer.value,
         ) && (
           <ZuordnenDiv>
-            <StyledIconButton title={zuordnenTitle} onClick={onClickZuordnen}>
+            <StyledIconButton
+              title={zuordnenTitle}
+              onClick={onClickZuordnen}
+              color="inherit"
+            >
               {assigningBeob ? (
                 <StyledPauseCircleOutlineIcon
                   data-assigningispossible={assigningispossible}
@@ -321,6 +325,7 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
             <StyledIconButton
               title={`auf alle ${apfloraLayer.label} zoomen`}
               onClick={onClickZoomToAll}
+              color="inherit"
             >
               <ZoomToIcon style={zoomToAllIconStyle} />
             </StyledIconButton>
@@ -331,6 +336,7 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
             <StyledIconButton
               title={`auf aktive ${apfloraLayer.label} zoomen`}
               onClick={onClickZoomToActive}
+              color="inherit"
             >
               <ZoomToIcon style={zoomToActiveIconStyle} />
             </StyledIconButton>

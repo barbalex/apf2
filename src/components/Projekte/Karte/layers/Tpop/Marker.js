@@ -147,12 +147,18 @@ const TpopMarker = ({ treeName, tpop }) => {
           <div>{`Status: ${
             tpop?.popStatusWerteByStatus?.text ?? '(kein Status)'
           }`}</div>
-          <StyledButton size="small" variant="outlined" onClick={openTpopInTab}>
+          <StyledButton
+            size="small"
+            variant="outlined"
+            color="inherit"
+            onClick={openTpopInTab}
+          >
             Formular in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"
             variant="outlined"
+            color="inherit"
             onClick={openTpopInTree2}
           >
             Formular in Strukturbaum 2 öffnen

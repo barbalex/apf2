@@ -48,7 +48,9 @@ const DatasetDeleteModal = () => {
       <StyledDialog open={!!toDeleteId}>
         {question}
         <DialogActions>
-          <Button onClick={emptyToDelete}>Abbrechen</Button>
+          <Button onClick={emptyToDelete} color="inherit">
+            Abbrechen
+          </Button>
           <Button color="primary" onClick={onClickLoeschen}>
             Löschen
           </Button>

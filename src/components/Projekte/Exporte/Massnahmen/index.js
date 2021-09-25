@@ -79,6 +79,7 @@ const Massnahmen = () => {
           data-expanded={expanded}
           aria-expanded={expanded}
           aria-label="öffnen"
+          color="inherit"
         >
           <Icon title={expanded ? 'schliessen' : 'öffnen'}>
             <ExpandMoreIcon />
@@ -88,6 +89,7 @@ const Massnahmen = () => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "Massnahmen" wird vorbereitet...`,
@@ -359,6 +361,7 @@ const Massnahmen = () => {
             {tpopmassnIsFiltered ? 'Massnahmen (gefiltert)' : 'Massnahmen'}
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "MassnahmenWebGisBun" wird vorbereitet...`,

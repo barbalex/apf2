@@ -280,6 +280,7 @@ const Apberuebersicht = ({ treeName }) => {
                       variant="outlined"
                       onClick={onClickHistorize}
                       title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. bis zum März des Folgejahrs"
+                      color="inherit"
                     >
                       {`AP, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
                     </StyledButton>

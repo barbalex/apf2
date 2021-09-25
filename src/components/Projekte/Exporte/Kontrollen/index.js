@@ -84,6 +84,7 @@ const Kontrollen = () => {
           data-expanded={expanded}
           aria-expanded={expanded}
           aria-label="öffnen"
+          color="inherit"
         >
           <Icon title={expanded ? 'schliessen' : 'öffnen'}>
             <ExpandMoreIcon />
@@ -93,6 +94,7 @@ const Kontrollen = () => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "Kontrollen" wird vorbereitet...`,
@@ -424,6 +426,7 @@ const Kontrollen = () => {
             {tpopkontrIsFiltered ? 'Kontrollen (gefiltert)' : 'Kontrollen'}
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "KontrollenWebGisBun" wird vorbereitet...`,
@@ -471,6 +474,7 @@ const Kontrollen = () => {
             Kontrollen für WebGIS BUN
           </DownloadCardButton>
           <DownloadCardButton
+            color="inherit"
             onClick={async () => {
               const notif = enqueNotification({
                 message: `Export "KontrollenAnzahlProZaehleinheit" wird vorbereitet...`,

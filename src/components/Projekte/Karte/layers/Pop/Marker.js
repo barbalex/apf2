@@ -33,9 +33,8 @@ const StyledButton = styled(Button)`
 const PopMarker = ({ treeName, pop }) => {
   const store = useContext(storeContext)
   const { apfloraLayers, openTree2WithActiveNodeArray } = store
-  const { projIdInActiveNodeArray, apIdInActiveNodeArray, map } = store[
-    treeName
-  ]
+  const { projIdInActiveNodeArray, apIdInActiveNodeArray, map } =
+    store[treeName]
   const { idsFiltered, popIcon: popIconName, popLabel: popLabelName } = map
   const projId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
@@ -126,12 +125,18 @@ const PopMarker = ({ treeName, pop }) => {
             'popStatusWerteByStatus.text',
             '(kein Status)',
           )}`}</div>
-          <StyledButton size="small" variant="outlined" onClick={openPopInTab}>
+          <StyledButton
+            size="small"
+            variant="outlined"
+            color="inherit"
+            onClick={openPopInTab}
+          >
             Formular in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"
             variant="outlined"
+            color="inherit"
             onClick={openPopInTree2}
           >
             Formular in Strukturbaum 2 öffnen

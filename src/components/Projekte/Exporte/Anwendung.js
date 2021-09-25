@@ -66,6 +66,7 @@ const Anwendung = () => {
           data-expanded={expanded}
           aria-expanded={expanded}
           aria-label="öffnen"
+          color="inherit"
         >
           <Icon title={expanded ? 'schliessen' : 'öffnen'}>
             <ExpandMoreIcon />
@@ -74,7 +75,7 @@ const Anwendung = () => {
       </StyledCardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
-          <DownloadCardButton onClick={onClickGrafisch}>
+          <DownloadCardButton onClick={onClickGrafisch} color="inherit">
             Datenstruktur grafisch dargestellt
           </DownloadCardButton>
         </StyledCardContent>

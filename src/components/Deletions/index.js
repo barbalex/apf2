@@ -102,9 +102,10 @@ const Deletions = () => {
     },
     [choosenDeletions],
   )
-  const onClickClose = useCallback(() => setShowDeletions(false), [
-    setShowDeletions,
-  ])
+  const onClickClose = useCallback(
+    () => setShowDeletions(false),
+    [setShowDeletions],
+  )
 
   return (
     <ErrorBoundary>
@@ -165,6 +166,7 @@ const Deletions = () => {
           <Button
             onClick={onClickUndo}
             disabled={choosenDeletions.length === 0}
+            color="inherit"
           >
             wiederherstellen
           </Button>

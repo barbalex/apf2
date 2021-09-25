@@ -83,7 +83,9 @@ const UserMessages = () => {
       >
         <TitleRow>
           <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
-          <AllOkButton onClick={onClickReadAll}>alle o.k.</AllOkButton>
+          <AllOkButton onClick={onClickReadAll} color="inherit">
+            alle o.k.
+          </AllOkButton>
         </TitleRow>
         <Messages unreadMessages={unreadMessages} />
       </StyledDialog>
