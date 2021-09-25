@@ -1,18 +1,8 @@
 import React, { useCallback } from 'react'
 import { navigate } from 'gatsby'
-import MListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-import Divider from '@mui/material/Divider'
 import { Location } from '@reach/router'
-import styled from 'styled-components'
-import get from 'lodash/get'
-
-const ListItem = styled(MListItem)`
-  background-color: ${props =>
-    props.active === 'true' ? 'rgb(255, 250, 198)' : 'unset'} !important;
-  padding-top: 7px !important;
-  padding-bottom: 7px !important;
-`
 
 const MenuItem = ({ node }) => {
   const onClickMenuItem = useCallback(
@@ -23,19 +13,17 @@ const MenuItem = ({ node }) => {
   return (
     <Location>
       {({ location }) => {
-        const active = (
+        const active =
           `${node.frontmatter.path}` === location.pathname ||
           `${node.frontmatter.path}/` === location.pathname
-        ).toString()
 
         return (
           <>
-            <ListItem button onClick={onClickMenuItem} active={active}>
+            <ListItemButton onClick={onClickMenuItem} selected={active} divider>
               <ListItemText onClick={onClickMenuItem}>
-                {get(node, 'frontmatter.title', '(Titel fehlt)')}
+                {node?.frontmatter?.title ?? '(Titel fehlt)'}
               </ListItemText>
-            </ListItem>
-            <Divider />
+            </ListItemButton>
           </>
         )
       }}
