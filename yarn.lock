@@ -1887,7 +1887,6 @@
     prop-types "^15.7.2"
 
 "@mui/styled-engine-sc@5.0.0", "@mui/styled-engine@^5.0.1", "@mui/styled-engine@npm:@mui/styled-engine-sc@latest":
-  name "@mui/styled-engine"
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@mui/styled-engine-sc/-/styled-engine-sc-5.0.0.tgz#e8a8c154b27a5c98db2ae0e0c151ee6dbd2a651e"
   integrity sha512-N2+VHdqBE8hOyoHwFyNHIV8r+/wySsavvRysTbLtLIzDPOlsq7FkPdjH2+tQbzZpWcKvdby7vxcat9C8cREelA==
@@ -2593,7 +2592,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-transition-group@^4.4.3":
+"@types/react-transition-group@^4.4.0", "@types/react-transition-group@^4.4.3":
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.3.tgz#b0994da0a7023d67dbb4a8910a62112bc00d5688"
   integrity sha512-fUx5muOWSYP8Bw2BUQ9M9RK9+W1XBK/7FLJ8PTQpnpTEkn0ccyMffyEQvan4C3h53gHdx7KE5Qrxi/LnUGQtdg==
@@ -10583,7 +10582,7 @@ not@^0.1.0:
   resolved "https://registry.yarnpkg.com/not/-/not-0.1.0.tgz#c9691c1746c55dcfbe54cbd8bd4ff041bc2b519d"
   integrity sha1-yWkcF0bFXc++VMvYvU/wQbwrUZ0=
 
-notistack@^1.0.6-next.3:
+notistack@1.0.6-next.3:
   version "1.0.6-next.3"
   resolved "https://registry.yarnpkg.com/notistack/-/notistack-1.0.6-next.3.tgz#120c1a71c3b591fe13419e84f9c2b28383c22c63"
   integrity sha512-vtRMCAOyfFzfRIaJgpftwPG/gojL0JqPvEFnpoYSWWZmW80C32dXU+Pq7BrWhW6Y4yO7wv/d2toNM7QJJxdW9Q==
@@ -12144,13 +12143,6 @@ react-image-lightbox@5.1.4:
     prop-types "^15.7.2"
     react-modal "^3.11.1"
 
-react-input-autosize@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/react-input-autosize/-/react-input-autosize-3.0.0.tgz#6b5898c790d4478d69420b55441fcc31d5c50a85"
-  integrity sha512-nL9uS7jEs/zu8sqwFE5MAPx6pPkNAriACQ2rGLlqmKr2sPGtN7TXTyDdQt4lbNXVx7Uzadb40x8qotIuru6Rhg==
-  dependencies:
-    prop-types "^15.5.8"
-
 react-is@16.10.2:
   version "16.10.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.10.2.tgz#984120fd4d16800e9a738208ab1fba422d23b5ab"
@@ -12274,17 +12266,17 @@ react-resize-detector@6.7.6, react-resize-detector@^6.6.3:
     lodash.throttle "^4.1.1"
     resize-observer-polyfill "^1.5.1"
 
-react-select@4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/react-select/-/react-select-4.3.1.tgz#389fc07c9bc7cf7d3c377b7a05ea18cd7399cb81"
-  integrity sha512-HBBd0dYwkF5aZk1zP81Wx5UsLIIT2lSvAY2JiJo199LjoLHoivjn9//KsmvQMEFGNhe58xyuOITjfxKCcGc62Q==
+react-select@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-select/-/react-select-5.0.0.tgz#356c0bc20659445bc00104f3aba7350f544fef72"
+  integrity sha512-5a6+Xj9J39OSbZQFPN7YdtRc1qvoXqqoJEIMaGICfLl8QJW56YQmJUr1zfqn+2fVmQomYqCdOHHMmM8sHzj+ZQ==
   dependencies:
     "@babel/runtime" "^7.12.0"
     "@emotion/cache" "^11.4.0"
     "@emotion/react" "^11.1.1"
+    "@types/react-transition-group" "^4.4.0"
     memoize-one "^5.0.0"
     prop-types "^15.6.0"
-    react-input-autosize "^3.0.0"
     react-transition-group "^4.3.0"
 
 react-side-effect@^2.1.0:
