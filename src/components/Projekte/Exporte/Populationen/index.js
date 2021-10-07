@@ -45,14 +45,12 @@ const StyledCardContent = styled(CardContent)`
 `
 const DownloadCardButton = styled(Button)`
   flex-basis: 450px;
-  > span:first-of-type {
     text-transform: none !important;
     font-weight: 500;
     display: block;
     text-align: left;
     justify-content: flex-start !important;
     user-select: none;
-  }
 `
 
 const Populationen = () => {
