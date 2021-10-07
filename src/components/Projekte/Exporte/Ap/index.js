@@ -163,7 +163,7 @@ const AP = () => {
     let result
     try {
       result = await client.query({
-        query: await import('./queryApOhnepops').then((m) => m.default),
+        query: await import('./queryApOhnePops').then((m) => m.default),
       })
     } catch (error) {
       enqueNotification({
