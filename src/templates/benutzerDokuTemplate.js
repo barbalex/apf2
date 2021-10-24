@@ -73,7 +73,7 @@ const BenutzerDokuTemplate = ({ data }) => {
             <DokuDate>{frontmatter.date}</DokuDate>
             <HtmlDiv
               pdf={frontmatter.pdf}
-              dangerouslySetInnerHTML={{ __html: html }}
+              dangerouslySetInnerHTML={{ __html: html }} 
             />
           </Doku>
         </Container>

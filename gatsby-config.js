@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'apflora v1.64.10',
+    title: 'apflora v1.64.11',
   },
   plugins: [
     {
@@ -71,9 +71,9 @@ module.exports = {
       resolve: 'gatsby-transformer-remark',
       options: {
         gfm: true,
-        commonmark: false,
+        // commonmark: false,
         footnotes: false,
-        pedantic: false,
+        // pedantic: false,
         excerpt_separator: '<!-- end -->',
         plugins: [
           {
