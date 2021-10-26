@@ -71,9 +71,7 @@ module.exports = {
       resolve: 'gatsby-transformer-remark',
       options: {
         gfm: true,
-        // commonmark: false,
         footnotes: false,
-        // pedantic: false,
         excerpt_separator: '<!-- end -->',
         plugins: [
           {
