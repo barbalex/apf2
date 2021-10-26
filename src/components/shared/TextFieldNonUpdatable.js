@@ -28,9 +28,7 @@ const MyTextField = ({ label, value = '' }) => {
       aria-describedby={`${label}-helper`}
       variant="standard"
     >
-      <InputLabel htmlFor={label} shrink>
-        {label}
-      </InputLabel>
+      <InputLabel shrink>{label}</InputLabel>
       <Input
         id={label}
         value={value || value === 0 ? value : ''}

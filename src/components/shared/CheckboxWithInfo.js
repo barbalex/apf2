@@ -26,6 +26,11 @@ const StyledFormControl = styled(FormControl)`
 `
 const StyledFormControlLabel = styled(FormControlLabel)`
   margin-top: -10px;
+  .MuiFormControlLabel-label {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.5);
+    user-select: none;
+  }
 `
 
 const CheckboxWithInfo = ({ value, label, name, popover, saveToDb, error }) => {
@@ -40,8 +45,9 @@ const CheckboxWithInfo = ({ value, label, name, popover, saveToDb, error }) => {
         variant="standard"
       >
         <FormGroup>
-          <Label label={label} />
+          {/*<Label label={label} />*/}
           <StyledFormControlLabel
+            label={label}
             control={
               <Checkbox
                 checked={value}
