@@ -298,6 +298,7 @@ const Beobzuordnung = ({ type, treeName }) => {
     )
   }
   if (error) return <Error error={error} />
+
   return (
     <ErrorBoundary>
       <FormContainer data-appbar-height={appBarHeight}>
