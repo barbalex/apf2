@@ -8,7 +8,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import InfoWithPopover from './InfoWithPopover'
-import Label from './Label'
 
 const Container = styled.div`
   display: flex;
@@ -45,7 +44,6 @@ const CheckboxWithInfo = ({ value, label, name, popover, saveToDb, error }) => {
         variant="standard"
       >
         <FormGroup>
-          {/*<Label label={label} />*/}
           <StyledFormControlLabel
             label={label}
             control={
