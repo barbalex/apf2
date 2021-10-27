@@ -1541,7 +1541,6 @@ CREATE TABLE apflora.tpopkontr (
     apber_nicht_relevant boolean default null,
     apber_nicht_relevant_grund text DEFAULT NULL,
     ekf_bemerkungen text DEFAULT NULL,
-    zeit_id UUID DEFAULT uuid_generate_v1mc(),
     changed date DEFAULT NOW(),
     changed_by varchar(20) DEFAULT null
 );
@@ -1554,7 +1553,6 @@ CREATE INDEX ON apflora.tpopkontr USING btree (jahr);
 CREATE INDEX ON apflora.tpopkontr USING btree (typ);
 CREATE INDEX ON apflora.tpopkontr USING btree (datum);
 CREATE INDEX ON apflora.tpopkontr USING btree (apber_nicht_relevant);
-CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree (zeit_id);
 COMMENT ON COLUMN apflora.tpopkontr.id IS 'Primärschlüssel. Wird u.a. verwendet für die Identifikation der Beobachtung im nationalen Beobachtungs-Daten-Kreislauf';
 COMMENT ON COLUMN apflora.tpopkontr.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
 COMMENT ON COLUMN apflora.tpopkontr.typ IS 'Typ der Kontrolle. Auswahl aus Tabelle "tpopkontr_typ_werte"';
@@ -1589,7 +1587,6 @@ COMMENT ON COLUMN apflora.tpopkontr.jungpflanzen_vorhanden IS 'Gibt es neben alt
 COMMENT ON COLUMN apflora.tpopkontr.vegetationshoehe_maximum IS 'Maximale Vegetationshöhe in cm. Nur für Freiwilligen-Erfolgskontrolle';
 COMMENT ON COLUMN apflora.tpopkontr.vegetationshoehe_mittel IS 'Mittlere Vegetationshöhe in cm. Nur für Freiwilligen-Erfolgskontrolle';
 COMMENT ON COLUMN apflora.tpopkontr.gefaehrdung IS 'Gefährdung. Nur für Freiwilligen-Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr.zeit_id IS 'GUID für den Export von Zeiten in EvAB';
 COMMENT ON COLUMN apflora.tpopkontr.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant IS 'Pro Jahr sollte maximal eine Kontrolle AP-Bericht-relevant sein. Dient dazu Kontrollen auszuschliessen';
