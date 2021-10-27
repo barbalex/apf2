@@ -388,6 +388,7 @@ CREATE TABLE apflora.beob20210817 (
     changed_by varchar(20) DEFAULT null
 );
 -- 7. insert importdata into temp beob table
+-- TODO: repeat for non-conflicting after adding Checklist to apflora.ae_taxonomies
 insert into apflora.beob20210817 (
     id_field,
     datum,
@@ -427,6 +428,7 @@ select 'obs_id',
 from apflora.infoflora20210817filtered row;
 -- 8. check this table
 -- 9. insert temp beob into beob
+-- TODO: repeat for non-conflicting after adding Checklist to apflora.ae_taxonomies
 insert into apflora.beob (
     id_field,
     datum,
