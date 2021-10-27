@@ -2453,7 +2453,6 @@ create table apflora.ae_taxonomies (
   familie text,
   artname text,
   tax_art_name text,
-  status text,
   artwert integer
 );
 create index on apflora.ae_taxonomies (taxonomie_id);
@@ -2466,25 +2465,25 @@ alter table apflora.ae_taxonomies enable row level security;
 drop policy if exists reader on apflora.ae_taxonomies;
 create policy reader on apflora.ae_taxonomies using (true) with check (current_user = 'apflora_manager');
 -- to update data run:
---truncate apflora.ae_taxonomies;
---insert into apflora.ae_taxonomies(taxonomie_id, taxonomie_name, id, taxid, familie, artname, tax_art_name, status, artwert)
---select
---  taxonomie_id,
---  taxonomie_name,
---  id,
---  taxid,
---  familie,
---  artname,
---  case
---    when taxonomie_id = 'aed47d41-7b0e-11e8-b9a5-bd4f79edbcc4'
---    then concat('SISF2: ', artname)
---    else concat('(Taxonomie unbekannt): ', artname)
---  end,
---  status,
---  artwert
---from apflora.ae_taxonomies_download;
---update apflora.ae_taxonomies
---set tax_art_name = concat('SISF2: ', artname);
+-- insert into apflora.ae_taxonomies(taxonomie_id, taxonomie_name, id, taxid, familie, artname, tax_art_name, artwert)
+-- select
+--   taxonomie_id,
+--   taxonomie_name,
+--   id,
+--   taxid,
+--   familie,
+--   artname,
+--   case
+--     when taxonomie_id = 'aed47d41-7b0e-11e8-b9a5-bd4f79edbcc4'
+--     then concat('Info Flora 2005: ', artname)
+--     when taxonomie_id = 'c87f19f2-1b77-11ea-8282-bbc40e20aff6'
+--     then concat('Info Flora 2018: ', artname)
+--     else concat('(Taxonomie unbekannt): ', artname)
+--   end as tax_art_name,
+--   artwert
+-- from apflora.ae_taxonomies_download
+-- on conflict on constraint ae_taxonomies_pkey 
+-- do update set taxonomie_id = excluded.taxonomie_id, taxonomie_name = excluded.taxonomie_name, taxid = excluded.taxid, familie = excluded.familie, artname = excluded.artname, tax_art_name = excluded.tax_art_name, artwert = excluded.artwert;
 --
 -- beob can collect beob of any provenience by following this convention:
 -- - fields that are used in apflora.ch are appended as regular fields, that is:
