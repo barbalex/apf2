@@ -25,27 +25,14 @@ const ContentContainer = styled.div`
   height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
 `
 
-const query = graphql`
-  query SiteTitleQuery {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-  }
-`
-/**
- * ReactDOMServer does not yet support Suspense
- */
 const Layout = ({ children }) => {
   const store = useContext(storeContext)
   const { appBarHeight } = store
-  const data = useStaticQuery(query)
 
   return (
     <Container>
       <Helmet
-        title={data.site.siteMetadata.title}
+        title="apflora v1.65.1"
         meta={[
           {
             name: 'description',

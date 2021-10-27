@@ -1,7 +1,4 @@
 module.exports = {
-  siteMetadata: {
-    title: 'apflora v1.65.1',
-  },
   plugins: [
     {
       resolve: 'gatsby-plugin-create-client-paths',
