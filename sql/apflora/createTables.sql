@@ -2528,8 +2528,6 @@ CREATE TABLE apflora.beob (
 create index on apflora.beob using gist (geom_point);
 CREATE INDEX ON apflora.beob USING btree (id);
 CREATE INDEX ON apflora.beob USING btree (id_original);
-CREATE INDEX ON apflora.beob USING btree (id_evab);
-CREATE INDEX ON apflora.beob USING btree (id_evab_lc);
 CREATE INDEX ON apflora.beob USING btree (obs_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
 CREATE INDEX ON apflora.beob USING btree (art_id_original);
@@ -2544,6 +2542,8 @@ COMMENT ON COLUMN apflora.beob.infoflora_informiert_datum IS 'Datum, an dem Info
 COMMENT ON COLUMN apflora.beob.bemerkungen IS 'Bemerkungen zur Zuordnung';
 COMMENT ON COLUMN apflora.beob.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.beob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.beob.id_evab IS 'Einmalig? für die Bereinigung von Beobachtungen benutzt, die von Info Flora von EvAB her kamen';
+COMMENT ON COLUMN apflora.beob.id_evab_lc IS 'Einmalig? für die Bereinigung von Beobachtungen benutzt, die von Info Flora von EvAB her kamen';
 alter table apflora.beob enable row level security;
 drop policy if exists reader on apflora.beob;
 create policy reader on apflora.beob using (
