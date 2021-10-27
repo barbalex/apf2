@@ -24,9 +24,9 @@ Damit bei der Art-Auswahl die Taxonomie berücksichtigt werden kann, wird der Ar
 
 ### Technische Umsetzung
 
-apflora ist auf künftige Indizes vorbereitet. Es muss einzig die Artenliste um den neuen Index ergänzt werden (wie ist [hier](https://github.com/barbalex/apf2/blob/master/sql/apflora/createTables.sql#L2470-L2490) erklärt). Anschliessend können in den Formularen (oder mittels Abfragen) die Arten des neuen Index gewählt werden.<br/><br/>
+apflora ist auf künftige Indizes vorbereitet. Es muss einzig die Artenliste um den neuen Index ergänzt werden (wie ist [hier](https://github.com/barbalex/apf2/blob/master/sql/apflora/createTables.sql#L2467-L2486) erklärt). Anschliessend können in den Formularen (oder mittels Abfragen) die Arten des neuen Index gewählt werden.<br/><br/>
 
-Die Artliste wird von arteigenschaften.ch importiert und in der Tabelle ["ae_taxonomies"](https://github.com/barbalex/apf2/blob/master/sql/apflora/createTables.sql#2447-2465) gespeichert. Leider kann keine foreign table verwendet werden, weil die Beziehungen wichtig für die Referenzierung der Namen sind.<br/><br/>
+Die Artliste wird von arteigenschaften.ch importiert und in der Tabelle ["ae_taxonomies"](https://github.com/barbalex/apf2/blob/master/sql/apflora/createTables.sql#L2447-L2465) gespeichert. Leider kann keine foreign table verwendet werden, weil die Beziehungen wichtig für die Referenzierung der Namen sind.<br/><br/>
 
 Nachdem die Checklist 2018 Index in arteigenschaften.ch ergänzt wurde, wurden dessen Daten in der Tabelle "ae_taxonomies" ergänzt, mit dem Kürzel "Info Flora 2018".<br/><br/>
 
