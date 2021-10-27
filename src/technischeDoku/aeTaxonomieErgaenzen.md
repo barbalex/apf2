@@ -18,7 +18,9 @@ Arten können in drei Formularen gewählt werden:
 - Aktionsplan-Art
 - assoziierte Art
 
-Sobald die Checklist 2018 in arteigenschaften.ch eingeführt wurde, sollten Arten in der Regel in dieser Taxonomie gewählt werden. Bei den AP-Arten ist es sinnvoll, Synonyme aus allen gängigen Taxonomien aufzulisten. Damit bei der Art-Auswahl die Taxonomie berücksichtigt werden kann, wird der Art ein Kürzel für die Taxonomie vorangestellt. Für "SISF Index 2 (2005)" ist das zum Beispiel "Info Flora 2005".<br/><br/>
+Sobald die Checklist 2018 in arteigenschaften.ch eingeführt wurde, sollten Arten in der Regel in dieser Taxonomie gewählt werden. Bei den AP-Arten ist es sinnvoll, Synonyme aus allen gängigen Taxonomien aufzulisten.<br/><br/>
+
+Damit bei der Art-Auswahl die Taxonomie berücksichtigt werden kann, wird der Art ein Kürzel für die Taxonomie vorangestellt. Für "SISF Index 2 (2005)" ist das zum Beispiel "Info Flora 2005".<br/><br/>
 
 ### Technische Umsetzung
 
