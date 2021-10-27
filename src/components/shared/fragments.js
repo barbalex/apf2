@@ -22,7 +22,6 @@ export const aeTaxonomies = gql`
     familie
     artname
     taxArtName
-    status
     artwert
   }
 `
