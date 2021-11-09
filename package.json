@@ -100,6 +100,7 @@
     "react-highlight-words": "0.17.0",
     "react-icons": "4.3.1",
     "react-image-lightbox": "5.1.4",
+    "react-is": "^17.0.2",
     "react-leaflet": "3.2.2",
     "react-leaflet-bing-v2": "5.2.3",
     "react-leaflet-control": "2.1.2",
@@ -110,7 +111,6 @@
     "react-resize-detector": "6.7.6",
     "react-select": "5.2.1",
     "react-sortable-hoc": "2.0.0",
-    "react-spinners-kit": "git://github.com/barbalex/react-spinners-kit",
     "react-split-pane": "0.1.92",
     "react-stylable-diff": "2.0.0",
     "react-typography": "0.16.20",
@@ -124,11 +124,7 @@
     "use-debounce": "7.0.1"
   },
   "dependenciesComments": {
-    "react-spinners-kit": "forked because it added dependencies via non-peer-dependencies. See: https://github.com/dmitrymorozoff/react-spinners-kit/pull/18. Wait for release > 1.9.1",
-    "coa": "2.0.2: fixed because of malware attack, see https://github.com/veged/coa/issues/99"
-  },
-  "peerDependencies": {
-    "react-is": "17.0.2"
+    "react-is": "is peer"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.16.0",
@@ -154,8 +150,7 @@
     "vercel": "23.1.2"
   },
   "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-    "coa": "2.0.2"
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -165,5 +160,6 @@
     "not dead",
     "not ie > 0",
     "not op_mini all"
-  ]
+  ],
+  "packageManager": "yarn@3.1.0"
 }

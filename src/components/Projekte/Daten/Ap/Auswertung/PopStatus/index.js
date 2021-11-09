@@ -10,7 +10,7 @@ import {
   Legend,
   CartesianGrid,
 } from 'recharts'
-import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
+import CircularProgress from '@mui/material/CircularProgress'
 import styled from 'styled-components'
 
 import query from './query'
@@ -72,9 +72,8 @@ const ApAuswertungPopStatus = ({
     'angesiedelt (vor Beginn AP)': row?.a4Lpop ? Number(row?.a4Lpop) : 0,
     'angesiedelt (nach Beginn AP)': row?.a5Lpop ? Number(row?.a5Lpop) : 0,
     Ansaatversuch: row?.a9Lpop ? Number(row?.a9Lpop) : 0,
-    'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt': row?.a7Lpop
-      ? Number(row?.a7Lpop)
-      : 0,
+    'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt':
+      row?.a7Lpop ? Number(row?.a7Lpop) : 0,
     'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt': row?.a8Lpop
       ? Number(row?.a8Lpop)
       : 0,
@@ -91,12 +90,7 @@ const ApAuswertungPopStatus = ({
     <>
       {loadingPopStati ? (
         <SpinnerContainer>
-          <Spinner
-            size={50}
-            frontColor="#2e7d32"
-            backColor="#4a148c1a"
-            loading={true}
-          />
+          <CircularProgress />
           <SpinnerText>lade Populations-Stati...</SpinnerText>
         </SpinnerContainer>
       ) : rows.length ? (

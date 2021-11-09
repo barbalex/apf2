@@ -12,7 +12,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from 'recharts'
-import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
+import CircularProgress from '@mui/material/CircularProgress'
 import styled from 'styled-components'
 
 import queryErfolg from './queryErfolg'
@@ -84,12 +84,7 @@ const ApAuswertungApErfolg = ({ id }) => {
     <>
       {loadingErfolg ? (
         <SpinnerContainer>
-          <Spinner
-            size={50}
-            frontColor="#2e7d32"
-            backColor="#4a148c1a"
-            loading={true}
-          />
+          <CircularProgress />
           <SpinnerText>lade AP-Erfolg...</SpinnerText>
         </SpinnerContainer>
       ) : erfolgRawData.length ? (

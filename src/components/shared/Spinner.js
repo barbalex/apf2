@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const SpinnerContainer = styled.div`
   min-height: 100%;
@@ -15,12 +15,7 @@ const SpinnerText = styled.div`
 
 const SpinnerComponent = ({ message }) => (
   <SpinnerContainer>
-    <Spinner
-      size={50}
-      frontColor="#2e7d32"
-      backColor="#4a148c1a"
-      loading={true}
-    />
+    <CircularProgress />
     {!!message && <SpinnerText>{message}</SpinnerText>}
   </SpinnerContainer>
 )

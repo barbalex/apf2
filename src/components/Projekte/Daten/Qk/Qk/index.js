@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { FaExternalLinkAlt } from 'react-icons/fa'
-import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../../modules/standardQkYear'
@@ -145,12 +145,7 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
         {loading ? (
           <AnalyzingButton onClick={() => refetch()} variant="outlined">
             <AnalyzingSpan>Die Daten werden analysiert</AnalyzingSpan>
-            <Spinner
-              size={50}
-              frontColor="#2e7d32"
-              backColor="#4a148c1a"
-              loading={true}
-            />
+            <CircularProgress />
           </AnalyzingButton>
         ) : (
           <div>

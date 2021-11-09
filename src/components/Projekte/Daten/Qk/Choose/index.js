@@ -6,7 +6,7 @@ import FormControl from '@mui/material/FormControl'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import get from 'lodash/get'
-import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import query from './query'
 import RowComponent from './Row'
@@ -68,12 +68,7 @@ const ChooseQk = ({ treeName, refetchTab }) => {
   if (loading) {
     return (
       <SpinnerContainer>
-        <Spinner
-          size={50}
-          frontColor="#2e7d32"
-          backColor="#4a148c1a"
-          loading={true}
-        />
+        <CircularProgress />
         <SpinnerText>lade Daten...</SpinnerText>
       </SpinnerContainer>
     )
