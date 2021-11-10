@@ -1,4 +1,5 @@
 -- this one first because of references to it
+-- user
 DROP TABLE IF EXISTS apflora.user CASCADE;
 CREATE TABLE apflora.user (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -40,6 +41,7 @@ CREATE POLICY reader_writer ON apflora.user USING (
   OR current_user = 'anon'
   or current_user = 'apflora_manager'
 );
+-- adresse
 DROP TABLE IF EXISTS adresse;
 CREATE TABLE apflora.adresse (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -70,6 +72,7 @@ DROP POLICY IF EXISTS writer ON apflora.adresse;
 CREATE POLICY writer ON apflora.adresse USING (true) WITH CHECK (
   current_user in ('apflora_manager', 'apflora_ap_writer')
 );
+-- ap
 DROP TABLE IF EXISTS apflora.ap;
 CREATE TABLE apflora.ap (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -186,6 +189,7 @@ create policy reader on apflora.ap_file using (
     )
   )
 );
+-- ap_history
 DROP TABLE IF EXISTS apflora.ap_history;
 CREATE TABLE apflora.ap_history (
   year integer not null,
@@ -251,6 +255,7 @@ create policy reader on apflora.ap_history using (
     )
   )
 );
+-- userprojekt
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
 CREATE TABLE apflora.userprojekt (
@@ -295,6 +300,7 @@ COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed_by IS 'Von wem wurde der D
 alter table apflora.ap_bearbstand_werte enable row level security;
 drop policy if exists reader on apflora.ap_bearbstand_werte;
 create policy reader on apflora.ap_bearbstand_werte using (true) with check (current_user = 'apflora_manager');
+-- ap_erfbeurtkrit_werte
 -- this table is not used!!!
 DROP TABLE IF EXISTS apflora.ap_erfbeurtkrit_werte;
 CREATE TABLE apflora.ap_erfbeurtkrit_werte (
@@ -333,6 +339,7 @@ COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.changed_by IS 'Von wem wurde der
 alter table apflora.ap_erfbeurtkrit_werte enable row level security;
 drop policy if exists reader on apflora.ap_erfbeurtkrit_werte;
 create policy reader on apflora.ap_erfbeurtkrit_werte using (true) with check (current_user = 'apflora_manager');
+-- ap_erfkrit_werte
 DROP TABLE IF EXISTS apflora.ap_erfkrit_werte;
 CREATE TABLE apflora.ap_erfkrit_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -371,6 +378,7 @@ COMMENT ON COLUMN apflora.ap_erfkrit_werte.changed_by IS 'Von wem wurde der Date
 alter table apflora.ap_erfkrit_werte enable row level security;
 drop policy if exists reader on apflora.ap_erfkrit_werte;
 create policy reader on apflora.ap_erfkrit_werte using (true) with check (current_user = 'apflora_manager');
+-- ap_umsetzung_werte
 DROP TABLE IF EXISTS apflora.ap_umsetzung_werte;
 CREATE TABLE apflora.ap_umsetzung_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -408,6 +416,7 @@ COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed_by IS 'Von wem wurde der Da
 alter table apflora.ap_umsetzung_werte enable row level security;
 drop policy if exists reader on apflora.ap_umsetzung_werte;
 create policy reader on apflora.ap_umsetzung_werte using (true) with check (current_user = 'apflora_manager');
+-- apber
 DROP TABLE IF EXISTS apflora.apber;
 CREATE TABLE apflora.apber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -489,6 +498,7 @@ create policy reader on apflora.apber using (
     )
   )
 );
+-- apberuebersicht
 DROP TABLE IF EXISTS apflora.apberuebersicht;
 CREATE TABLE apflora.apberuebersicht (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -523,6 +533,7 @@ create policy reader on apflora.apberuebersicht using (
     'apflora_ap_reader'
   )
 ) with check (current_user = 'apflora_manager');
+-- assozart
 DROP TABLE IF EXISTS apflora.assozart;
 CREATE TABLE apflora.assozart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -571,6 +582,7 @@ create policy reader on apflora.assozart using (
     )
   )
 );
+-- projekt
 DROP TABLE IF EXISTS apflora.projekt;
 CREATE TABLE apflora.projekt (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -585,6 +597,7 @@ COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zul
 alter table apflora.projekt enable row level security;
 drop policy if exists reader on apflora.projekt;
 create policy reader on apflora.projekt using (true) with check (current_user = 'apflora_manager');
+-- erfkrit
 DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -632,6 +645,7 @@ create policy reader on apflora.erfkrit using (
     )
   )
 );
+-- idealbiotop
 DROP TABLE IF EXISTS apflora.idealbiotop;
 CREATE TABLE apflora.idealbiotop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -760,6 +774,7 @@ create policy reader on apflora.idealbiotop_file using (
     )
   )
 );
+-- pop
 DROP TABLE IF EXISTS apflora.pop;
 CREATE TABLE apflora.pop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -869,6 +884,7 @@ create policy reader on apflora.pop_file using (
     )
   )
 );
+-- pop_history
 DROP TABLE IF EXISTS apflora.pop_history;
 CREATE TABLE apflora.pop_history (
   year integer not null,
@@ -923,6 +939,7 @@ create policy reader on apflora.pop_history using (
     )
   )
 );
+-- pop_status_werte
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 CREATE TABLE apflora.pop_status_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -962,6 +979,7 @@ COMMENT ON COLUMN apflora.pop_status_werte.changed_by IS 'Von wem wurde der Date
 alter table apflora.pop_status_werte enable row level security;
 drop policy if exists reader on apflora.pop_status_werte;
 create policy reader on apflora.pop_status_werte using (true) with check (current_user = 'apflora_manager');
+-- popber
 DROP TABLE IF EXISTS apflora.popber;
 CREATE TABLE apflora.popber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1020,6 +1038,7 @@ create policy reader on apflora.popber using (
     )
   )
 );
+-- popmassnber
 DROP TABLE IF EXISTS apflora.popmassnber;
 CREATE TABLE apflora.popmassnber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1078,6 +1097,7 @@ create policy reader on apflora.popmassnber using (
     )
   )
 );
+-- tpop
 DROP TABLE IF EXISTS apflora.tpop;
 CREATE TABLE apflora.tpop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1263,6 +1283,7 @@ create policy reader on apflora.tpop_file using (
     )
   )
 );
+-- tpop_history
 DROP TABLE IF EXISTS apflora.tpop_history;
 CREATE TABLE apflora.tpop_history (
   year integer not null,
@@ -1357,6 +1378,7 @@ create policy reader on apflora.tpop_history using (
     )
   )
 );
+-- tpop_apberrelevant_grund_werte
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
 CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1396,6 +1418,7 @@ COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed_by IS 'Von wem 
 alter table apflora.tpop_apberrelevant_grund_werte enable row level security;
 drop policy if exists reader on apflora.tpop_apberrelevant_grund_werte;
 create policy reader on apflora.tpop_apberrelevant_grund_werte using (true) with check (current_user = 'apflora_manager');
+-- tpop_entwicklung_werte
 DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
 CREATE TABLE apflora.tpop_entwicklung_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1433,6 +1456,7 @@ COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed_by IS 'Von wem wurde de
 alter table apflora.tpop_entwicklung_werte enable row level security;
 drop policy if exists reader on apflora.tpop_entwicklung_werte;
 create policy reader on apflora.tpop_entwicklung_werte using (true) with check (current_user = 'apflora_manager');
+-- tpopber
 DROP TABLE IF EXISTS apflora.tpopber;
 CREATE TABLE apflora.tpopber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1498,6 +1522,7 @@ create policy reader on apflora.tpopber using (
     )
   )
 );
+-- tpopkontr
 DROP TABLE IF EXISTS apflora.tpopkontr;
 CREATE TABLE apflora.tpopkontr (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1700,6 +1725,7 @@ create policy reader on apflora.tpopkontr_file using (
     )
   )
 );
+-- tpopkontr_idbiotuebereinst_werte
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1739,6 +1765,7 @@ COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed_by IS 'Von we
 alter table apflora.tpopkontr_idbiotuebereinst_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontr_idbiotuebereinst_werte;
 create policy reader on apflora.tpopkontr_idbiotuebereinst_werte using (true) with check (current_user = 'apflora_manager');
+-- tpopkontr_typ_werte
 DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
 CREATE TABLE apflora.tpopkontr_typ_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1776,6 +1803,7 @@ COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed_by IS 'Von wem wurde der D
 alter table apflora.tpopkontr_typ_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontr_typ_werte;
 create policy reader on apflora.tpopkontr_typ_werte using (true) with check (current_user = 'apflora_manager');
+-- tpopkontrzaehl
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 CREATE TABLE apflora.tpopkontrzaehl (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1852,6 +1880,7 @@ create policy reader on apflora.tpopkontrzaehl using (
     )
   )
 );
+-- tpopkontrzaehl_einheit_werte
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1891,6 +1920,7 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.corresponds_to_massn_anz_
 alter table apflora.tpopkontrzaehl_einheit_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontrzaehl_einheit_werte;
 create policy reader on apflora.tpopkontrzaehl_einheit_werte using (true) with check (current_user = 'apflora_manager');
+-- tpopkontrzaehl_methode_werte
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
 CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1931,6 +1961,7 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed_by IS 'Von wem wu
 alter table apflora.tpopkontrzaehl_methode_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontrzaehl_methode_werte;
 create policy reader on apflora.tpopkontrzaehl_methode_werte using (true) with check (current_user = 'apflora_manager');
+-- tpopmassn
 DROP TABLE IF EXISTS apflora.tpopmassn;
 CREATE TABLE apflora.tpopmassn (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2102,6 +2133,7 @@ create policy reader on apflora.tpopmassn_file using (
     )
   )
 );
+-- tpopmassn_erfbeurt_werte
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
 CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2140,6 +2172,7 @@ COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed_by IS 'Von wem wurde 
 alter table apflora.tpopmassn_erfbeurt_werte enable row level security;
 drop policy if exists reader on apflora.tpopmassn_erfbeurt_werte;
 create policy reader on apflora.tpopmassn_erfbeurt_werte using (true) with check (current_user = 'apflora_manager');
+-- tpopmassn_typ_werte
 DROP TABLE IF EXISTS apflora.tpopmassn_typ_werte;
 CREATE TABLE apflora.tpopmassn_typ_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2182,6 +2215,7 @@ COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed_by IS 'Von wem wurde der D
 alter table apflora.tpopmassn_typ_werte enable row level security;
 drop policy if exists reader on apflora.tpopmassn_typ_werte;
 create policy reader on apflora.tpopmassn_typ_werte using (true) with check (current_user = 'apflora_manager');
+-- tpopmassnber
 DROP TABLE IF EXISTS apflora.tpopmassnber;
 CREATE TABLE apflora.tpopmassnber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2248,6 +2282,7 @@ create policy reader on apflora.tpopmassnber using (
     )
   )
 );
+-- message
 DROP TABLE IF EXISTS apflora.message CASCADE;
 CREATE TABLE apflora.message (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2264,6 +2299,7 @@ COMMENT ON COLUMN apflora.message.active IS 'false: diese Nachricht wird nicht m
 alter table apflora.message enable row level security;
 drop policy if exists reader on apflora.message;
 create policy reader on apflora.message using (true) with check (current_user = 'apflora_manager');
+-- currentIssue
 DROP TABLE IF EXISTS apflora.currentIssue CASCADE;
 CREATE TABLE apflora.currentIssue (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2278,6 +2314,7 @@ COMMENT ON COLUMN apflora.currentIssue.issue IS 'Bekannter Fehler';
 alter table apflora.currentIssue enable row level security;
 drop policy if exists reader on apflora.currentIssue;
 create policy reader on apflora.currentIssue using (true) with check (current_user = 'apflora_manager');
+-- usermessage
 -- list of read messages per user
 DROP TABLE IF EXISTS apflora.usermessage;
 CREATE TABLE apflora.usermessage (
@@ -2295,6 +2332,7 @@ create policy reader on apflora.usermessage using (
   user_name = current_user_name()
   or current_user = 'apflora_manager'
 );
+-- ziel
 DROP TABLE IF EXISTS apflora.ziel;
 CREATE TABLE apflora.ziel (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2345,6 +2383,7 @@ create policy reader on apflora.ziel using (
     )
   )
 );
+-- ziel_typ_werte
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
 CREATE TABLE apflora.ziel_typ_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2383,6 +2422,7 @@ COMMENT ON COLUMN apflora.ziel_typ_werte.changed_by IS 'Von wem wurde der Datens
 alter table apflora.ziel_typ_werte enable row level security;
 drop policy if exists reader on apflora.ziel_typ_werte;
 create policy reader on apflora.ziel_typ_werte using (true) with check (current_user = 'apflora_manager');
+-- zielber
 DROP TABLE IF EXISTS apflora.zielber;
 CREATE TABLE apflora.zielber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2494,6 +2534,8 @@ create policy reader on apflora.ae_taxonomies using (true) with check (current_u
 --   Worse: sometimes the id is not absolutely clear because no field contains
 --   strictly unique values... !!
 -- - "id_field" points to the original id in "data"
+--
+-- beob
 DROP TABLE IF EXISTS apflora.beob;
 CREATE TABLE apflora.beob (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2579,8 +2621,8 @@ create policy reader on apflora.beob using (
     )
   )
 );
--- beobprojekt is used to control
--- what beob are seen in what projekt
+-- beobprojekt
+-- is used to control what beob are seen in what projekt
 -- IT IS NOT YET USED!
 DROP TABLE IF EXISTS apflora.beobprojekt;
 CREATE TABLE apflora.beobprojekt (
@@ -2591,6 +2633,7 @@ CREATE TABLE apflora.beobprojekt (
   SET NULL ON UPDATE CASCADE,
     UNIQUE (proj_id, beob_id)
 );
+-- apart
 DROP TABLE IF EXISTS apflora.apart;
 CREATE TABLE apflora.apart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2635,6 +2678,7 @@ create policy reader on apflora.apart using (
     )
   )
 );
+-- ekzaehleinheit
 drop table if exists apflora.ekzaehleinheit;
 create table apflora.ekzaehleinheit(
   id uuid primary key default uuid_generate_v1mc(),
@@ -2667,10 +2711,12 @@ COMMENT ON COLUMN apflora.ekzaehleinheit.changed_by IS 'Wer hat den Datensatz zu
 alter table apflora.ekzaehleinheit enable row level security;
 DROP POLICY IF EXISTS writer ON apflora.ekzaehleinheit;
 CREATE POLICY writer ON apflora.ekzaehleinheit USING (true) WITH CHECK (current_user = 'apflora_manager');
+-- ek_type
 drop type if exists ek_type;
 create type ek_type as enum ('ek', 'ekf');
 drop type if exists ek_kontrolljahre_ab;
 create type ek_kontrolljahre_ab as enum ('ek', 'ansiedlung');
+-- ekfrequenz
 drop table if exists apflora.ekfrequenz;
 create table apflora.ekfrequenz(
   id uuid primary key default uuid_generate_v1mc(),
@@ -2714,6 +2760,7 @@ COMMENT ON COLUMN apflora.ekfrequenz.changed_by IS 'Wer hat den Datensatz zuletz
 alter table apflora.ekfrequenz enable row level security;
 DROP POLICY IF EXISTS writer ON apflora.ekfrequenz;
 CREATE POLICY writer ON apflora.ekfrequenz USING (true) WITH CHECK (current_user = 'apflora_manager');
+-- ek_abrechnungstyp_werte
 DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
 CREATE TABLE apflora.ek_abrechnungstyp_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2735,6 +2782,7 @@ COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed_by IS 'Von wem wurde d
 alter table apflora.ek_abrechnungstyp_werte enable row level security;
 drop policy if exists reader on apflora.ek_abrechnungstyp_werte;
 create policy reader on apflora.ek_abrechnungstyp_werte using (true) with check (current_user = 'apflora_manager');
+-- ekplan
 DROP TABLE IF EXISTS apflora.ekplan;
 CREATE TABLE apflora.ekplan (
   id uuid primary key default uuid_generate_v1mc(),
