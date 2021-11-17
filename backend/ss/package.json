@@ -8,8 +8,8 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@hapi/hapi": "20.0.3",
-    "axios": "0.21.1",
-    "querystring": "0.2.0"
+    "@hapi/hapi": "20.2.1",
+    "axios": "0.24.0",
+    "querystring": "0.2.1"
   }
 }
