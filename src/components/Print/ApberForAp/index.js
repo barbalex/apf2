@@ -209,7 +209,7 @@ const ApberForAp = ({
     }
   }, [apId, client, getMengen, jahr, node, store])
 
-  const data = node ?? mengenData?.jberAbc?.nodes?.[0]
+  const data = node ?? mengenData?.jberAbcByApId?.nodes?.[0]
   const loading = node ? false : mengenLoading
   const error = node ? false : mengenError
 
