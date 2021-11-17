@@ -68,28 +68,27 @@ services:
         '--enable-query-batching',
         '--retry-on-init-fail',
       ]
-  # uncomment and rebuild caddy when vercel points api.apflora.ch to this server
-  # caddy:
-  #   build:
-  #     context: ./caddy
-  #   container_name: apf_caddy
-  #   networks:
-  #     - network
-  #   depends_on:
-  #     - graphql
-  #   restart: always
-  #   # original image downgrades user but that seems not to work
-  #   # see: https://caddy.community/t/basic-docker-compose-setup-failing/6892/7?u=alexander_gabriel
-  #   user: root
-  #   ports:
-  #     - '80:80'
-  #     - '443:443'
-  #   env_file:
-  #     - ./.env
-  #   volumes:
-  #     - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-  #     - caddy_data:/data
-  #     - caddy_config:/config
+  caddy:
+    build:
+      context: ./caddy
+    container_name: apf_caddy
+    networks:
+      - network
+    depends_on:
+      - graphql
+    restart: always
+    # original image downgrades user but that seems not to work
+    # see: https://caddy.community/t/basic-docker-compose-setup-failing/6892/7?u=alexander_gabriel
+    user: root
+    ports:
+      - '80:80'
+      - '443:443'
+    env_file:
+      - ./.env
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
 volumes:
   db_data:
   sik_data:
