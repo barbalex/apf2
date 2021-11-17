@@ -6,34 +6,17 @@ COPY ./apflora.backup /sik_data/apflora.backup
 RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh
 
 # Install Cron and curl
-RUN apt-get update
-RUN apt-get -y install cron
-RUN apt-get -y install curl
-RUN apt-get -y install bash
-RUN apt-get -y install nano
-
-# install dropbox uploader
-ADD dropbox_uploader.conf /dropbox_uploader.conf
-RUN curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o dropbox_uploader.sh
-RUN chmod +x dropbox_uploader.sh
+# log less: https://askubuntu.com/a/668859
+RUN apt-get install -y -qq curl
+RUN apt-get install -y -qq bash
+RUN apt-get install -y -qq nano
+RUN apt-get install -y -qq rclone
+RUN apt-get install -y -qq dos2unix
 
 # add the backup script
 ADD backup.sh /backup.sh
+# Change line ending format to LF
+RUN dos2unix /backup.sh
 RUN chmod +x /backup.sh
 # see: https://stackoverflow.com/a/37458519/712005
 RUN chmod 0744 /backup.sh
-
-# Add crontab file in the cron directory
-ADD crontab /etc/cron.d/backup-cron
-# Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/backup-cron
-
-# Apply cron job
-RUN crontab /etc/cron.d/backup-cron
-
-# Create the log file to be able to run tail
-RUN touch /var/log/cron.log
-
-# Run the command on container startup
-# TODO: this causes database to not start !?
-#CMD cron && tail -f /var/log/cron.log
