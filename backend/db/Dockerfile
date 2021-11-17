@@ -5,7 +5,8 @@ COPY ./apflora.backup /sik_data/apflora.backup
 
 RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh
 
-# Install Cron and curl
+# Install some helpful stuff
+RUN apt-get -qq update
 # log less: https://askubuntu.com/a/668859
 RUN apt-get install -y -qq curl
 RUN apt-get install -y -qq bash
