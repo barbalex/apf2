@@ -3682,6 +3682,12 @@ CREATE TABLE apflora.apart (
   changed_by varchar(20) DEFAULT NULL --UNIQUE (art_id) --no, maybe after beob were rearranged
 );
 
+ALTER TABLE apflora.apart
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.apart
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.apart USING btree (id);
 
 CREATE INDEX ON apflora.apart USING btree (ap_id);
@@ -3736,6 +3742,12 @@ CREATE TABLE apflora.ekzaehleinheit (
   changed date DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.ekzaehleinheit
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ekzaehleinheit
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE UNIQUE INDEX ekzaehleinheit_single_zielrelevant_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zielrelevant)
 WHERE
@@ -3817,6 +3829,12 @@ CREATE TABLE apflora.ekfrequenz (
   UNIQUE (ap_id, code)
 );
 
+ALTER TABLE apflora.ekfrequenz
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ekfrequenz
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.ekfrequenz USING btree (id);
 
 CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
@@ -3882,6 +3900,12 @@ CREATE TABLE apflora.ek_abrechnungstyp_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
+ALTER TABLE apflora.ek_abrechnungstyp_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ek_abrechnungstyp_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (id);
 
 CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (code);
@@ -3919,6 +3943,12 @@ CREATE TABLE apflora.ekplan (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.ekplan
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ekplan
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.ekplan USING btree (id);
 
@@ -3977,6 +4007,12 @@ CREATE TABLE apflora.qk (
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
+
+ALTER TABLE apflora.qk
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.qk
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.qk USING btree (name);
 

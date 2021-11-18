@@ -932,3 +932,139 @@ CREATE TRIGGER beob_updated
   FOR EACH ROW
   EXECUTE PROCEDURE beob_updated ();
 
+-- beobprojekt
+-- DROP TRIGGER IF EXISTS beobprojekt_updated ON apflora.beobprojekt CASCADE;
+-- DROP FUNCTION IF EXISTS beobprojekt_updated () CASCADE;
+-- CREATE FUNCTION beobprojekt_updated ()
+--   RETURNS TRIGGER
+--   AS $$
+-- BEGIN
+--   NEW.updated_at = now();
+--   RETURN NEW;
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
+-- CREATE TRIGGER beobprojekt_updated
+--   BEFORE UPDATE ON apflora.beobprojekt
+--   FOR EACH ROW
+--   EXECUTE PROCEDURE beobprojekt_updated ();
+-- apart
+DROP TRIGGER IF EXISTS apart_updated ON apflora.apart CASCADE;
+
+DROP FUNCTION IF EXISTS apart_updated () CASCADE;
+
+CREATE FUNCTION apart_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER apart_updated
+  BEFORE UPDATE ON apflora.apart
+  FOR EACH ROW
+  EXECUTE PROCEDURE apart_updated ();
+
+-- ekzaehleinheit
+DROP TRIGGER IF EXISTS ekzaehleinheit_updated ON apflora.ekzaehleinheit CASCADE;
+
+DROP FUNCTION IF EXISTS ekzaehleinheit_updated () CASCADE;
+
+CREATE FUNCTION ekzaehleinheit_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER ekzaehleinheit_updated
+  BEFORE UPDATE ON apflora.ekzaehleinheit
+  FOR EACH ROW
+  EXECUTE PROCEDURE ekzaehleinheit_updated ();
+
+-- ekfrequenz
+DROP TRIGGER IF EXISTS ekfrequenz_updated ON apflora.ekfrequenz CASCADE;
+
+DROP FUNCTION IF EXISTS ekfrequenz_updated () CASCADE;
+
+CREATE FUNCTION ekfrequenz_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER ekfrequenz_updated
+  BEFORE UPDATE ON apflora.ekfrequenz
+  FOR EACH ROW
+  EXECUTE PROCEDURE ekfrequenz_updated ();
+
+-- ek_abrechnungstyp_werte
+DROP TRIGGER IF EXISTS ek_abrechnungstyp_werte_updated ON apflora.ek_abrechnungstyp_werte CASCADE;
+
+DROP FUNCTION IF EXISTS ek_abrechnungstyp_werte_updated () CASCADE;
+
+CREATE FUNCTION ek_abrechnungstyp_werte_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER ek_abrechnungstyp_werte_updated
+  BEFORE UPDATE ON apflora.ek_abrechnungstyp_werte
+  FOR EACH ROW
+  EXECUTE PROCEDURE ek_abrechnungstyp_werte_updated ();
+
+-- ekplan
+DROP TRIGGER IF EXISTS ekplan_updated ON apflora.ekplan CASCADE;
+
+DROP FUNCTION IF EXISTS ekplan_updated () CASCADE;
+
+CREATE FUNCTION ekplan_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER ekplan_updated
+  BEFORE UPDATE ON apflora.ekplan
+  FOR EACH ROW
+  EXECUTE PROCEDURE ekplan_updated ();
+
+-- qk
+DROP TRIGGER IF EXISTS qk_updated ON apflora.qk CASCADE;
+
+DROP FUNCTION IF EXISTS qk_updated () CASCADE;
+
+CREATE FUNCTION qk_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER qk_updated
+  BEFORE UPDATE ON apflora.qk
+  FOR EACH ROW
+  EXECUTE PROCEDURE qk_updated ();
+
