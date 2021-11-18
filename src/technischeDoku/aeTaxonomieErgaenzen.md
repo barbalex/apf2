@@ -8,7 +8,7 @@ sort: 11
 
 ### Herkunft der Art-Listen
 
-Artenlisten stammen aus [arteigenschaften.ch](https://arteigenschaften.ch). Momentan werden die Arten aus den Taxonomien ["SISF (2005)"](https://arteigenschaften.ch/Arten/aed47d41-7b0e-11e8-b9a5-bd4f79edbcc4) und ["SISF (2018)"](https://arteigenschaften.ch/Arten/c87f19f2-1b77-11ea-8282-bbc40e20aff6) verwendet.<br/><br/>
+Artenlisten stammen aus [arteigenschaften.ch](https://arteigenschaften.ch). Momentan werden die Arten aus den Taxonomien ["SISF (2005)"](https://arteigenschaften.ch/Arten/aed47d41-7b0e-11e8-b9a5-bd4f79edbcc4) und ["DB-TAXREF (2017)"](https://arteigenschaften.ch/Arten/c87f19f2-1b77-11ea-8282-bbc40e20aff6) verwendet.<br/><br/>
 
 ### Rolle der Taxonomie in der Art-Auswahl
 
