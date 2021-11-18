@@ -863,6 +863,12 @@ CREATE TABLE apflora.projekt (
   changed_by varchar(20) DEFAULT NULL
 );
 
+ALTER TABLE apflora.projekt
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.projekt
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.projekt USING btree (id);
 
 CREATE INDEX ON apflora.projekt USING btree (name);
@@ -892,6 +898,12 @@ CREATE TABLE apflora.erfkrit (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.erfkrit
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.erfkrit
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.erfkrit USING btree (id);
 
@@ -962,6 +974,12 @@ CREATE TABLE apflora.idealbiotop (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.idealbiotop
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.idealbiotop
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.idealbiotop USING btree (id);
 

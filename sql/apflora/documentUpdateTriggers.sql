@@ -292,3 +292,63 @@ CREATE TRIGGER assozart_updated
   FOR EACH ROW
   EXECUTE PROCEDURE assozart_updated ();
 
+-- projekt
+DROP TRIGGER IF EXISTS projekt_updated ON apflora.projekt CASCADE;
+
+DROP FUNCTION IF EXISTS projekt_updated () CASCADE;
+
+CREATE FUNCTION projekt_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER projekt_updated
+  BEFORE UPDATE ON apflora.projekt
+  FOR EACH ROW
+  EXECUTE PROCEDURE projekt_updated ();
+
+-- erfkrit
+DROP TRIGGER IF EXISTS erfkrit_updated ON apflora.erfkrit CASCADE;
+
+DROP FUNCTION IF EXISTS erfkrit_updated () CASCADE;
+
+CREATE FUNCTION erfkrit_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER erfkrit_updated
+  BEFORE UPDATE ON apflora.erfkrit
+  FOR EACH ROW
+  EXECUTE PROCEDURE erfkrit_updated ();
+
+-- idealbiotop
+DROP TRIGGER IF EXISTS idealbiotop_updated ON apflora.idealbiotop CASCADE;
+
+DROP FUNCTION IF EXISTS idealbiotop_updated () CASCADE;
+
+CREATE FUNCTION idealbiotop_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER idealbiotop_updated
+  BEFORE UPDATE ON apflora.idealbiotop
+  FOR EACH ROW
+  EXECUTE PROCEDURE idealbiotop_updated ();
+
