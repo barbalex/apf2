@@ -2639,7 +2639,7 @@ CREATE TABLE apflora.apart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   art_id UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO ACTION ON UPDATE CASCADE,
   ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  changed date DEFAULT NULL,
+  changed date DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL --UNIQUE (art_id) --no, maybe after beob were rearranged
 );
 CREATE INDEX ON apflora.apart USING btree (id);
