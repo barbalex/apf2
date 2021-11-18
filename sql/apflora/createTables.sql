@@ -12,8 +12,16 @@ CREATE TABLE apflora.user (
   role name NOT NULL DEFAULT 'apflora_ap_reader' CHECK role_length_maximum_512 (length(ROLE) < 512),
   pass text DEFAULT NULL CHECK pass_length_minimum_6 (length(pass) > 5),
   adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   CONSTRAINT proper_email CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')
 );
+
+ALTER TABLE apflora.user
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.user
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 ALTER TABLE apflora.user
   DROP CONSTRAINT IF EXISTS user_pass_check;
@@ -379,6 +387,10 @@ CREATE TABLE apflora.userprojekt (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- ALTER TABLE apflora.userprojekt
+--   ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+-- ALTER TABLE apflora.userprojekt
+--   ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 DROP TABLE IF EXISTS apflora.ap_bearbstand_werte;
 
 CREATE TABLE apflora.ap_bearbstand_werte (
@@ -447,9 +459,17 @@ CREATE TABLE apflora.ap_erfbeurtkrit_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.ap_erfbeurtkrit_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ap_erfbeurtkrit_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.ap_erfbeurtkrit_werte_code_seq owned BY apflora.ap_erfbeurtkrit_werte.code;
 
@@ -498,9 +518,17 @@ CREATE TABLE apflora.ap_erfkrit_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.ap_erfkrit_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ap_erfkrit_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.ap_erfkrit_werte_code_seq owned BY apflora.ap_erfkrit_werte.code;
 
@@ -551,9 +579,17 @@ CREATE TABLE apflora.ap_umsetzung_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.ap_umsetzung_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ap_umsetzung_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.ap_umsetzung_werte_code_seq owned BY apflora.ap_umsetzung_werte.code;
 
@@ -616,9 +652,17 @@ CREATE TABLE apflora.apber (
   wirkung_auf_art text,
   datum date DEFAULT NULL,
   bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.apber
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.apber
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.apber USING btree (id);
 
@@ -702,10 +746,18 @@ CREATE TABLE apflora.apberuebersicht (
   jahr smallint,
   history_date date DEFAULT NULL,
   bemerkungen text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL,
   UNIQUE (proj_id, jahr)
 );
+
+ALTER TABLE apflora.apberuebersicht
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.apberuebersicht
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.apberuebersicht USING btree (id);
 
@@ -746,9 +798,17 @@ CREATE TABLE apflora.assozart (
   ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   ae_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO action ON UPDATE CASCADE,
   bemerkungen text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.assozart
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.assozart
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.assozart USING btree (id);
 
@@ -797,6 +857,8 @@ DROP TABLE IF EXISTS apflora.projekt;
 CREATE TABLE apflora.projekt (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
   name varchar(150) DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -825,6 +887,8 @@ CREATE TABLE apflora.erfkrit (
   ap_id uuid NOT NULL DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   kriterien text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -893,6 +957,8 @@ CREATE TABLE apflora.idealbiotop (
   strauchschicht text,
   baumschicht text,
   bemerkungen text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -975,7 +1041,9 @@ CREATE TABLE apflora.idealbiotop_file (
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
-  beschreibung text DEFAULT NULL
+  beschreibung text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE INDEX ON apflora.idealbiotop USING btree (id);
@@ -1035,6 +1103,8 @@ CREATE TABLE apflora.pop (
   status_unklar_begruendung text DEFAULT NULL,
   bekannt_seit smallint DEFAULT NULL,
   geom_point geometry(point, 4326) DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -1103,7 +1173,9 @@ CREATE TABLE apflora.pop_file (
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
-  beschreibung text DEFAULT NULL
+  beschreibung text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE INDEX ON apflora.pop USING btree (id);
@@ -1162,6 +1234,8 @@ CREATE TABLE apflora.pop_history (
   status_unklar_begruendung text DEFAULT NULL,
   bekannt_seit smallint DEFAULT NULL,
   geom_point geometry(point, 4326) DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL,
   PRIMARY KEY (id, year)
@@ -1216,6 +1290,8 @@ CREATE TABLE apflora.pop_status_werte (
   text varchar(60) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -1271,6 +1347,8 @@ CREATE TABLE apflora.popber (
   jahr smallint DEFAULT NULL,
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -1342,6 +1420,8 @@ CREATE TABLE apflora.popmassnber (
   jahr smallint DEFAULT NULL,
   beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -1442,6 +1522,8 @@ CREATE TABLE apflora.tpop (
   ekfrequenz_abweichend boolean DEFAULT FALSE,
   ekf_kontrolleur uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -1582,7 +1664,9 @@ CREATE TABLE apflora.tpop_file (
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
-  beschreibung text DEFAULT NULL
+  beschreibung text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE INDEX ON apflora.tpop USING btree (id);
@@ -1680,6 +1764,8 @@ CREATE TABLE apflora.tpop_history (
   ekfrequenz_abweichend boolean DEFAULT FALSE,
   ekf_kontrolleur uuid DEFAULT NULL,
   bemerkungen text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL,
   PRIMARY KEY (id, year)
@@ -1757,6 +1843,8 @@ CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
   text text,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -1808,6 +1896,8 @@ CREATE TABLE apflora.tpop_entwicklung_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -1858,6 +1948,8 @@ CREATE TABLE apflora.tpopber (
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -1971,6 +2063,8 @@ CREATE TABLE apflora.tpopkontr (
   apber_nicht_relevant boolean DEFAULT NULL,
   apber_nicht_relevant_grund text DEFAULT NULL,
   ekf_bemerkungen text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -2123,7 +2217,9 @@ CREATE TABLE apflora.tpopkontr_file (
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
-  beschreibung text DEFAULT NULL
+  beschreibung text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
@@ -2201,6 +2297,8 @@ CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -2252,6 +2350,8 @@ CREATE TABLE apflora.tpopkontr_typ_werte (
   text varchar(50) UNIQUE DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -2303,6 +2403,8 @@ CREATE TABLE apflora.tpopkontrzaehl (
   anzahl integer DEFAULT NULL,
   einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL,
   UNIQUE (id, einheit)
@@ -2398,6 +2500,8 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   corresponds_to_massn_anz_pflanzen boolean DEFAULT FALSE,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -2453,6 +2557,8 @@ CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -2525,6 +2631,8 @@ CREATE TABLE apflora.tpopmassn (
   von_anzahl_individuen integer DEFAULT NULL,
   form text DEFAULT NULL,
   pflanzanordnung text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -2645,7 +2753,9 @@ CREATE TABLE apflora.tpopmassn_file (
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
-  beschreibung text DEFAULT NULL
+  beschreibung text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE INDEX ON apflora.tpopmassn USING btree (id);
@@ -2723,6 +2833,8 @@ CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -2778,6 +2890,8 @@ CREATE TABLE apflora.tpopmassn_typ_werte (
   ansiedlung boolean DEFAULT FALSE,
   anpflanzung boolean DEFAULT FALSE,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -2835,6 +2949,8 @@ CREATE TABLE apflora.tpopmassnber (
   jahr smallint DEFAULT NULL,
   beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -2995,6 +3111,8 @@ CREATE TABLE apflora.ziel (
   typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   bezeichnung text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -3052,6 +3170,8 @@ CREATE TABLE apflora.ziel_typ_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) NOT NULL
 );
@@ -3105,6 +3225,8 @@ CREATE TABLE apflora.zielber (
   jahr smallint DEFAULT NULL,
   erreichung text DEFAULT NULL,
   bemerkungen text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -3261,6 +3383,8 @@ CREATE TABLE apflora.beob (
   nicht_zuordnen boolean DEFAULT FALSE,
   infoflora_informiert_datum date DEFAULT NULL,
   bemerkungen text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -3348,6 +3472,8 @@ CREATE TABLE apflora.beobprojekt (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
   proj_id uuid NOT NULL REFERENCES apflora.projekt (id) ON DELETE SET NULL ON UPDATE CASCADE,
   beob_id uuid NOT NULL REFERENCES apflora.beob (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (proj_id, beob_id)
 );
 
@@ -3358,6 +3484,8 @@ CREATE TABLE apflora.apart (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
   art_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO ACTION ON UPDATE CASCADE,
   ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL --UNIQUE (art_id) --no, maybe after beob were rearranged
 );
@@ -3411,6 +3539,8 @@ CREATE TABLE apflora.ekzaehleinheit (
   not_massn_count_unit boolean DEFAULT FALSE,
   sort smallint DEFAULT NULL,
   bemerkungen text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -3488,6 +3618,8 @@ CREATE TABLE apflora.ekfrequenz (
   bemerkungen text DEFAULT NULL,
   sort smallint DEFAULT NULL,
   ek_abrechnungstyp text DEFAULT NULL REFERENCES apflora.ek_abrechnungstyp_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL,
   UNIQUE (ap_id, code)
@@ -3552,6 +3684,8 @@ CREATE TABLE apflora.ek_abrechnungstyp_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -3588,6 +3722,8 @@ CREATE TABLE apflora.ekplan (
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   type ek_type DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -3645,7 +3781,9 @@ CREATE TABLE apflora.qk (
   name text PRIMARY KEY,
   titel text,
   beschreibung text,
-  sort smallint DEFAULT NULL
+  sort smallint DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE INDEX ON apflora.qk USING btree (name);
@@ -3669,6 +3807,8 @@ DROP TABLE IF EXISTS apflora.apqk;
 CREATE TABLE apflora.apqk (
   ap_id uuid NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES apflora.qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (ap_id, qk_name)
 );
 

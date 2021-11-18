@@ -135,3 +135,160 @@ CREATE TRIGGER ap_bearbstand_werte_updated
   FOR EACH ROW
   EXECUTE PROCEDURE ap_bearbstand_werte_updated ();
 
+-- user
+DROP TRIGGER IF EXISTS user_updated ON apflora.user CASCADE;
+
+DROP FUNCTION IF EXISTS user_updated () CASCADE;
+
+CREATE FUNCTION user_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER user_updated
+  BEFORE UPDATE ON apflora.user
+  FOR EACH ROW
+  EXECUTE PROCEDURE user_updated ();
+
+-- userprojekt
+-- DROP TRIGGER IF EXISTS userprojekt_updated ON apflora.userprojekt CASCADE;
+-- DROP FUNCTION IF EXISTS userprojekt_updated () CASCADE;
+-- CREATE FUNCTION userprojekt_updated ()
+--   RETURNS TRIGGER
+--   AS $$
+-- BEGIN
+--   NEW.updated_at = now();
+--   RETURN NEW;
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
+-- CREATE TRIGGER userprojekt_updated
+--   BEFORE UPDATE ON apflora.userprojekt
+--   FOR EACH ROW
+--   EXECUTE PROCEDURE userprojekt_updated ();
+--
+-- ap_erfbeurtkrit_werte
+DROP TRIGGER IF EXISTS ap_erfbeurtkrit_werte_updated ON apflora.ap_erfbeurtkrit_werte CASCADE;
+
+DROP FUNCTION IF EXISTS ap_erfbeurtkrit_werte_updated () CASCADE;
+
+CREATE FUNCTION ap_erfbeurtkrit_werte_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_erfbeurtkrit_werte_updated
+  BEFORE UPDATE ON apflora.ap_erfbeurtkrit_werte
+  FOR EACH ROW
+  EXECUTE PROCEDURE ap_erfbeurtkrit_werte_updated ();
+
+-- ap_erfkrit_werte
+DROP TRIGGER IF EXISTS ap_erfkrit_werte_updated ON apflora.ap_erfkrit_werte CASCADE;
+
+DROP FUNCTION IF EXISTS ap_erfkrit_werte_updated () CASCADE;
+
+CREATE FUNCTION ap_erfkrit_werte_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_erfkrit_werte_updated
+  BEFORE UPDATE ON apflora.ap_erfkrit_werte
+  FOR EACH ROW
+  EXECUTE PROCEDURE ap_erfkrit_werte_updated ();
+
+-- ap_umsetzung_werte
+DROP TRIGGER IF EXISTS ap_umsetzung_werte_updated ON apflora.ap_umsetzung_werte CASCADE;
+
+DROP FUNCTION IF EXISTS ap_umsetzung_werte_updated () CASCADE;
+
+CREATE FUNCTION ap_umsetzung_werte_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_umsetzung_werte_updated
+  BEFORE UPDATE ON apflora.ap_umsetzung_werte
+  FOR EACH ROW
+  EXECUTE PROCEDURE ap_umsetzung_werte_updated ();
+
+-- apber
+DROP TRIGGER IF EXISTS apber_updated ON apflora.apber CASCADE;
+
+DROP FUNCTION IF EXISTS apber_updated () CASCADE;
+
+CREATE FUNCTION apber_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER apber_updated
+  BEFORE UPDATE ON apflora.apber
+  FOR EACH ROW
+  EXECUTE PROCEDURE apber_updated ();
+
+-- apberuebersicht
+DROP TRIGGER IF EXISTS apberuebersicht_updated ON apflora.apberuebersicht CASCADE;
+
+DROP FUNCTION IF EXISTS apberuebersicht_updated () CASCADE;
+
+CREATE FUNCTION apberuebersicht_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER apberuebersicht_updated
+  BEFORE UPDATE ON apflora.apberuebersicht
+  FOR EACH ROW
+  EXECUTE PROCEDURE apberuebersicht_updated ();
+
+-- assozart
+DROP TRIGGER IF EXISTS assozart_updated ON apflora.assozart CASCADE;
+
+DROP FUNCTION IF EXISTS assozart_updated () CASCADE;
+
+CREATE FUNCTION assozart_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER assozart_updated
+  BEFORE UPDATE ON apflora.assozart
+  FOR EACH ROW
+  EXECUTE PROCEDURE assozart_updated ();
+
