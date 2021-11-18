@@ -12,9 +12,6 @@ create role apflora_reader;
 create role apflora_ap_reader;
 create role apflora_manager in group apflora_reader;
 create role apflora_ap_writer in group apflora_reader;
--- seems this role though not used any more is needed when restoring a backup:
-create role apflora_artverantwortlich;
--- TODO: drop role apflora_artverantwortlich;
 create role apflora_freiwillig;
 create role anon;
 create role authenticator with login password '${AUTHENTICATOR_PASSWORD}' noinherit;
