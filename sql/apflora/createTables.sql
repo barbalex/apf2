@@ -1064,6 +1064,12 @@ CREATE TABLE apflora.idealbiotop_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+ALTER TABLE apflora.idealbiotop_file
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.idealbiotop_file
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.idealbiotop USING btree (id);
 
 CREATE INDEX ON apflora.idealbiotop_file USING btree (idealbiotop_id);
@@ -1126,6 +1132,12 @@ CREATE TABLE apflora.pop (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.pop
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.pop
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.pop USING gist (geom_point);
 
@@ -1196,6 +1208,12 @@ CREATE TABLE apflora.pop_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+ALTER TABLE apflora.pop_file
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.pop_file
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.pop USING btree (id);
 
 CREATE INDEX ON apflora.pop_file USING btree (pop_id);
@@ -1259,6 +1277,12 @@ CREATE TABLE apflora.pop_history (
   PRIMARY KEY (id, year)
 );
 
+ALTER TABLE apflora.pop_history
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.pop_history
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.pop_history USING btree (id);
 
 CREATE INDEX ON apflora.pop_history USING btree (year);
@@ -1313,6 +1337,12 @@ CREATE TABLE apflora.pop_status_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.pop_status_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.pop_status_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.pop_status_werte_code_seq owned BY apflora.pop_status_werte.code;
 
@@ -1370,6 +1400,12 @@ CREATE TABLE apflora.popber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.popber
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.popber
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 COMMENT ON COLUMN apflora.popber.id IS 'Primärschlüssel';
 
@@ -1443,6 +1479,12 @@ CREATE TABLE apflora.popmassnber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.popmassnber
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.popmassnber
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.popmassnber USING btree (id);
 

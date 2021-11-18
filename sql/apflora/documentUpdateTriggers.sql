@@ -352,3 +352,143 @@ CREATE TRIGGER idealbiotop_updated
   FOR EACH ROW
   EXECUTE PROCEDURE idealbiotop_updated ();
 
+-- idealbiotop_file
+DROP TRIGGER IF EXISTS idealbiotop_file_updated ON apflora.idealbiotop_file CASCADE;
+
+DROP FUNCTION IF EXISTS idealbiotop_file_updated () CASCADE;
+
+CREATE FUNCTION idealbiotop_file_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER idealbiotop_file_updated
+  BEFORE UPDATE ON apflora.idealbiotop_file
+  FOR EACH ROW
+  EXECUTE PROCEDURE idealbiotop_file_updated ();
+
+-- pop
+DROP TRIGGER IF EXISTS pop_updated ON apflora.pop CASCADE;
+
+DROP FUNCTION IF EXISTS pop_updated () CASCADE;
+
+CREATE FUNCTION pop_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER pop_updated
+  BEFORE UPDATE ON apflora.pop
+  FOR EACH ROW
+  EXECUTE PROCEDURE pop_updated ();
+
+-- pop_file
+DROP TRIGGER IF EXISTS pop_file_updated ON apflora.pop_file CASCADE;
+
+DROP FUNCTION IF EXISTS pop_file_updated () CASCADE;
+
+CREATE FUNCTION pop_file_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER pop_file_updated
+  BEFORE UPDATE ON apflora.pop_file
+  FOR EACH ROW
+  EXECUTE PROCEDURE pop_file_updated ();
+
+-- pop_history
+DROP TRIGGER IF EXISTS pop_history_updated ON apflora.pop_history CASCADE;
+
+DROP FUNCTION IF EXISTS pop_history_updated () CASCADE;
+
+CREATE FUNCTION pop_history_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER pop_history_updated
+  BEFORE UPDATE ON apflora.pop_history
+  FOR EACH ROW
+  EXECUTE PROCEDURE pop_history_updated ();
+
+-- pop_status_werte
+DROP TRIGGER IF EXISTS pop_status_werte_updated ON apflora.pop_status_werte CASCADE;
+
+DROP FUNCTION IF EXISTS pop_status_werte_updated () CASCADE;
+
+CREATE FUNCTION pop_status_werte_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER pop_status_werte_updated
+  BEFORE UPDATE ON apflora.pop_status_werte
+  FOR EACH ROW
+  EXECUTE PROCEDURE pop_status_werte_updated ();
+
+-- popber
+DROP TRIGGER IF EXISTS popber_updated ON apflora.popber CASCADE;
+
+DROP FUNCTION IF EXISTS popber_updated () CASCADE;
+
+CREATE FUNCTION popber_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER popber_updated
+  BEFORE UPDATE ON apflora.popber
+  FOR EACH ROW
+  EXECUTE PROCEDURE popber_updated ();
+
+-- popmassnber
+DROP TRIGGER IF EXISTS popmassnber_updated ON apflora.popmassnber CASCADE;
+
+DROP FUNCTION IF EXISTS popmassnber_updated () CASCADE;
+
+CREATE FUNCTION popmassnber_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER popmassnber_updated
+  BEFORE UPDATE ON apflora.popmassnber
+  FOR EACH ROW
+  EXECUTE PROCEDURE popmassnber_updated ();
+
