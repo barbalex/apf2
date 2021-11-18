@@ -2470,6 +2470,12 @@ CREATE TABLE apflora.tpopkontr_typ_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
+ALTER TABLE apflora.tpopkontr_typ_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopkontr_typ_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE SEQUENCE apflora.tpopkontr_typ_werte_code_seq owned BY apflora.tpopkontr_typ_werte.code;
 
 ALTER TABLE apflora.tpopkontr_typ_werte
@@ -2523,6 +2529,12 @@ CREATE TABLE apflora.tpopkontrzaehl (
   changed_by varchar(20) DEFAULT NULL,
   UNIQUE (id, einheit)
 );
+
+ALTER TABLE apflora.tpopkontrzaehl
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopkontrzaehl
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 -- 2019 10 29: alter table apflora.tpopkontrzaehl add constraint id_einheit_unique unique (id, einheit);
 COMMENT ON COLUMN apflora.tpopkontrzaehl.anzahl IS 'Anzahl Zaehleinheiten';
@@ -2620,6 +2632,12 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
+ALTER TABLE apflora.tpopkontrzaehl_einheit_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopkontrzaehl_einheit_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE SEQUENCE apflora.tpopkontrzaehl_einheit_werte_code_seq owned BY apflora.tpopkontrzaehl_einheit_werte.code;
 
 ALTER TABLE apflora.tpopkontrzaehl_einheit_werte
@@ -2676,6 +2694,12 @@ CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.tpopkontrzaehl_methode_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopkontrzaehl_methode_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.tpopkontrzaehl_methode_werte_code_seq owned BY apflora.tpopkontrzaehl_methode_werte.code;
 
@@ -2750,6 +2774,12 @@ CREATE TABLE apflora.tpopmassn (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.tpopmassn
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopmassn
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree (id);
 
@@ -2872,6 +2902,12 @@ CREATE TABLE apflora.tpopmassn_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+ALTER TABLE apflora.tpopmassn_file
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopmassn_file
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.tpopmassn USING btree (id);
 
 CREATE INDEX ON apflora.tpopmassn_file USING btree (tpopmassn_id);
@@ -2953,6 +2989,12 @@ CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
+ALTER TABLE apflora.tpopmassn_erfbeurt_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopmassn_erfbeurt_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE SEQUENCE apflora.tpopmassn_erfbeurt_werte_code_seq owned BY apflora.tpopmassn_erfbeurt_werte.code;
 
 ALTER TABLE apflora.tpopmassn_erfbeurt_werte
@@ -3009,6 +3051,12 @@ CREATE TABLE apflora.tpopmassn_typ_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.tpopmassn_typ_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopmassn_typ_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.tpopmassn_typ_werte_code_seq owned BY apflora.tpopmassn_typ_werte.code;
 
@@ -3068,6 +3116,12 @@ CREATE TABLE apflora.tpopmassnber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.tpopmassnber
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopmassnber
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.tpopmassnber USING btree (id);
 
@@ -3231,6 +3285,12 @@ CREATE TABLE apflora.ziel (
   changed_by varchar(20) DEFAULT NULL
 );
 
+ALTER TABLE apflora.ziel
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ziel
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.ziel USING btree (id);
 
 CREATE INDEX ON apflora.ziel USING btree (ap_id);
@@ -3290,6 +3350,12 @@ CREATE TABLE apflora.ziel_typ_werte (
   changed_by varchar(20) NOT NULL
 );
 
+ALTER TABLE apflora.ziel_typ_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ziel_typ_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE SEQUENCE apflora.ziel_typ_werte_code_seq owned BY apflora.ziel_typ_werte.code;
 
 ALTER TABLE apflora.ziel_typ_werte
@@ -3344,6 +3410,12 @@ CREATE TABLE apflora.zielber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.zielber
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.zielber
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.zielber USING btree (id);
 
@@ -3502,6 +3574,12 @@ CREATE TABLE apflora.beob (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.beob
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.beob
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.beob USING gist (geom_point);
 
