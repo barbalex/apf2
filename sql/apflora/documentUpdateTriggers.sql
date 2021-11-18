@@ -58,3 +58,80 @@ CREATE TRIGGER ap_user_updated
   FOR EACH ROW
   EXECUTE PROCEDURE ap_user_updated ();
 
+-- ap_file
+DROP TRIGGER IF EXISTS ap_file_updated ON apflora.ap_file CASCADE;
+
+DROP FUNCTION IF EXISTS ap_file_updated () CASCADE;
+
+CREATE FUNCTION ap_file_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_file_updated
+  BEFORE UPDATE ON apflora.ap_file
+  FOR EACH ROW
+  EXECUTE PROCEDURE ap_file_updated ();
+
+-- ap_history
+DROP TRIGGER IF EXISTS ap_history_updated ON apflora.ap_history CASCADE;
+
+DROP FUNCTION IF EXISTS ap_history_updated () CASCADE;
+
+CREATE FUNCTION ap_history_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_history_updated
+  BEFORE UPDATE ON apflora.ap_history
+  FOR EACH ROW
+  EXECUTE PROCEDURE ap_history_updated ();
+
+-- userprojekt
+-- DROP TRIGGER IF EXISTS userprojekt_updated ON apflora.userprojekt CASCADE;
+-- DROP FUNCTION IF EXISTS userprojekt_updated () CASCADE;
+-- CREATE FUNCTION userprojekt_updated ()
+--   RETURNS TRIGGER
+--   AS $$
+-- BEGIN
+--   NEW.updated_at = now();
+--   RETURN NEW;
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
+-- CREATE TRIGGER userprojekt_updated
+--   BEFORE UPDATE ON apflora.userprojekt
+--   FOR EACH ROW
+--   EXECUTE PROCEDURE userprojekt_updated ();
+--
+-- ap_bearbstand_werte
+DROP TRIGGER IF EXISTS ap_bearbstand_werte_updated ON apflora.ap_bearbstand_werte CASCADE;
+
+DROP FUNCTION IF EXISTS ap_bearbstand_werte_updated () CASCADE;
+
+CREATE FUNCTION ap_bearbstand_werte_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_bearbstand_werte_updated
+  BEFORE UPDATE ON apflora.ap_bearbstand_werte
+  FOR EACH ROW
+  EXECUTE PROCEDURE ap_bearbstand_werte_updated ();
+

@@ -241,8 +241,16 @@ CREATE TABLE apflora.ap_file (
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
-  beschreibung text DEFAULT NULL
+  beschreibung text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
 );
+
+ALTER TABLE apflora.ap_file
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ap_file
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.ap USING btree (id);
 
@@ -287,10 +295,18 @@ CREATE TABLE apflora.ap_history (
   umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   ekf_beobachtungszeitpunkt text DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL,
   PRIMARY KEY (id, year)
 );
+
+ALTER TABLE apflora.ap_history
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ap_history
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.ap_history USING btree (id);
 
@@ -358,10 +374,10 @@ DROP TABLE IF EXISTS apflora.userprojekt;
 
 CREATE TABLE apflora.userprojekt (
   username varchar(30) REFERENCES apflora.user (name) ON DELETE CASCADE ON UPDATE CASCADE,
-  proj_id uuid REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE
+  proj_id uuid REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
 );
-
-CREATE INDEX ON apflora.userprojekt USING btree (username, proj_id);
 
 DROP TABLE IF EXISTS apflora.ap_bearbstand_werte;
 
@@ -371,9 +387,17 @@ CREATE TABLE apflora.ap_bearbstand_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.ap_bearbstand_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.ap_bearbstand_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.ap_bearbstand_werte_code_seq owned BY apflora.ap_bearbstand_werte.code;
 
