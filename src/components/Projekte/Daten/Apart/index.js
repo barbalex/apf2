@@ -191,8 +191,9 @@ const ApArt = ({ treeName }) => {
                 <ul>
                   <li>Die AP-Art hat Synonyme</li>
                   <li>
-                    Beobachtungen liegen in unterschiedlichen Taxonomien vor,
-                    z.B. SISF 2 und SISF 3 bzw. Checklist 2017
+                    {
+                      'Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B. SISF (2005) und DB-TAXREF (2017) bzw. Checklist 2017'
+                    }
                   </li>
                   <li>
                     Wenn eine Art im Rahmen des Aktionsplans inklusive nicht
