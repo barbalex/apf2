@@ -30,13 +30,6 @@ export default gql`
         tpop_exposition: tpopExposition
         tpop_klima: tpopKlima
         tpop_neigung: tpopNeigung
-        tpop_boden_typ: kontrBodenTyp
-        tpop_boden_kalkgehalt: kontrBodenKalkgehalt
-        tpop_boden_durchlaessigkeit: kontrBodenDurchlaessigkeit
-        tpop_boden_humus: kontrBodenHumus
-        tpop_boden_naehrstoffgehalt: kontrBodenNaehrstoffgehalt
-        tpop_boden_abtrag: kontrBodenAbtrag
-        tpop_wasserhaushalt: kontrWasserhaushalt
         tpop_beschreibung: tpopBeschreibung
         tpop_kataster_nr: tpopKatasterNr
         tpop_apber_relevant: tpopApberRelevant

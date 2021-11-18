@@ -51,6 +51,13 @@ export default gql`
             nutzungszone
             bewirtschafter
             bewirtschaftung
+            bodenTyp
+            bodenKalkgehalt
+            bodenDurchlaessigkeit
+            bodenHumus
+            bodenNaehrstoffgehalt
+            bodenAbtrag
+            wasserhaushalt
             ekfrequenz
             ekfrequenzAbweichend
             changed
@@ -77,13 +84,6 @@ export default gql`
             ersteKontrolleKrautschicht
             ersteKontrolleStrauchschicht
             ersteKontrolleBaumschicht
-            ersteKontrolleBodenTyp
-            ersteKontrolleBodenKalkgehalt
-            ersteKontrolleBodenDurchlaessigkeit
-            ersteKontrolleBodenHumus
-            ersteKontrolleBodenNaehrstoffgehalt
-            ersteKontrolleBodenAbtrag
-            ersteKontrolleWasserhaushalt
             ersteKontrolleIdealbiotopUebereinstimmung
             ersteKontrolleHandlungsbedarf
             ersteKontrolleFlaecheUeberprueft
@@ -125,13 +125,6 @@ export default gql`
             letzteKontrolleKrautschicht
             letzteKontrolleStrauchschicht
             letzteKontrolleBaumschicht
-            letzteKontrolleBodenTyp
-            letzteKontrolleBodenKalkgehalt
-            letzteKontrolleBodenDurchlaessigkeit
-            letzteKontrolleBodenHumus
-            letzteKontrolleBodenNaehrstoffgehalt
-            letzteKontrolleBodenAbtrag
-            letzteKontrolleWasserhaushalt
             letzteKontrolleIdealbiotopUebereinstimmung
             letzteKontrolleHandlungsbedarf
             letzteKontrolleFlaecheUeberprueft
