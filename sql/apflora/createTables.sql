@@ -4040,6 +4040,12 @@ CREATE TABLE apflora.apqk (
   UNIQUE (ap_id, qk_name)
 );
 
+ALTER TABLE apflora.apqk
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.apqk
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.apqk USING btree (ap_id);
 
 CREATE INDEX ON apflora.apqk USING btree (qk_name);

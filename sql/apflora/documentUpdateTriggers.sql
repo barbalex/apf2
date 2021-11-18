@@ -1068,3 +1068,23 @@ CREATE TRIGGER qk_updated
   FOR EACH ROW
   EXECUTE PROCEDURE qk_updated ();
 
+-- apqk
+DROP TRIGGER IF EXISTS apqk_updated ON apflora.apqk CASCADE;
+
+DROP FUNCTION IF EXISTS apqk_updated () CASCADE;
+
+CREATE FUNCTION apqk_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER apqk_updated
+  BEFORE UPDATE ON apflora.apqk
+  FOR EACH ROW
+  EXECUTE PROCEDURE apqk_updated ();
+
