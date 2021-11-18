@@ -492,3 +492,183 @@ CREATE TRIGGER popmassnber_updated
   FOR EACH ROW
   EXECUTE PROCEDURE popmassnber_updated ();
 
+-- tpop
+DROP TRIGGER IF EXISTS tpop_updated ON apflora.tpop CASCADE;
+
+DROP FUNCTION IF EXISTS tpop_updated () CASCADE;
+
+CREATE FUNCTION tpop_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER tpop_updated
+  BEFORE UPDATE ON apflora.tpop
+  FOR EACH ROW
+  EXECUTE PROCEDURE tpop_updated ();
+
+-- tpop_file
+DROP TRIGGER IF EXISTS tpop_file_updated ON apflora.tpop_file CASCADE;
+
+DROP FUNCTION IF EXISTS tpop_file_updated () CASCADE;
+
+CREATE FUNCTION tpop_file_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER tpop_file_updated
+  BEFORE UPDATE ON apflora.tpop_file
+  FOR EACH ROW
+  EXECUTE PROCEDURE tpop_file_updated ();
+
+-- tpop_history
+DROP TRIGGER IF EXISTS tpop_history_updated ON apflora.tpop_history CASCADE;
+
+DROP FUNCTION IF EXISTS tpop_history_updated () CASCADE;
+
+CREATE FUNCTION tpop_history_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER tpop_history_updated
+  BEFORE UPDATE ON apflora.tpop_history
+  FOR EACH ROW
+  EXECUTE PROCEDURE tpop_history_updated ();
+
+-- tpop_apberrelevant_grund_werte
+DROP TRIGGER IF EXISTS tpop_apberrelevant_grund_werte_updated ON apflora.tpop_apberrelevant_grund_werte CASCADE;
+
+DROP FUNCTION IF EXISTS tpop_apberrelevant_grund_werte_updated () CASCADE;
+
+CREATE FUNCTION tpop_apberrelevant_grund_werte_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER tpop_apberrelevant_grund_werte_updated
+  BEFORE UPDATE ON apflora.tpop_apberrelevant_grund_werte
+  FOR EACH ROW
+  EXECUTE PROCEDURE tpop_apberrelevant_grund_werte_updated ();
+
+-- tpop_entwicklung_werte
+DROP TRIGGER IF EXISTS tpop_entwicklung_werte_updated ON apflora.tpop_entwicklung_werte CASCADE;
+
+DROP FUNCTION IF EXISTS tpop_entwicklung_werte_updated () CASCADE;
+
+CREATE FUNCTION tpop_entwicklung_werte_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER tpop_entwicklung_werte_updated
+  BEFORE UPDATE ON apflora.tpop_entwicklung_werte
+  FOR EACH ROW
+  EXECUTE PROCEDURE tpop_entwicklung_werte_updated ();
+
+-- tpopber
+DROP TRIGGER IF EXISTS tpopber_updated ON apflora.tpopber CASCADE;
+
+DROP FUNCTION IF EXISTS tpopber_updated () CASCADE;
+
+CREATE FUNCTION tpopber_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER tpopber_updated
+  BEFORE UPDATE ON apflora.tpopber
+  FOR EACH ROW
+  EXECUTE PROCEDURE tpopber_updated ();
+
+-- tpopkontr
+DROP TRIGGER IF EXISTS tpopkontr_updated ON apflora.tpopkontr CASCADE;
+
+DROP FUNCTION IF EXISTS tpopkontr_updated () CASCADE;
+
+CREATE FUNCTION tpopkontr_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER tpopkontr_updated
+  BEFORE UPDATE ON apflora.tpopkontr
+  FOR EACH ROW
+  EXECUTE PROCEDURE tpopkontr_updated ();
+
+-- tpopkontr_file
+DROP TRIGGER IF EXISTS tpopkontr_file_updated ON apflora.tpopkontr_file CASCADE;
+
+DROP FUNCTION IF EXISTS tpopkontr_file_updated () CASCADE;
+
+CREATE FUNCTION tpopkontr_file_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER tpopkontr_file_updated
+  BEFORE UPDATE ON apflora.tpopkontr_file
+  FOR EACH ROW
+  EXECUTE PROCEDURE tpopkontr_file_updated ();
+
+-- tpopkontr_idbiotuebereinst_werte
+DROP TRIGGER IF EXISTS tpopkontr_idbiotuebereinst_werte_updated ON apflora.tpopkontr_idbiotuebereinst_werte CASCADE;
+
+DROP FUNCTION IF EXISTS tpopkontr_idbiotuebereinst_werte_updated () CASCADE;
+
+CREATE FUNCTION tpopkontr_idbiotuebereinst_werte_updated ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER tpopkontr_idbiotuebereinst_werte_updated
+  BEFORE UPDATE ON apflora.tpopkontr_idbiotuebereinst_werte
+  FOR EACH ROW
+  EXECUTE PROCEDURE tpopkontr_idbiotuebereinst_werte_updated ();
+

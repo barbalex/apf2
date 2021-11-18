@@ -1588,6 +1588,12 @@ CREATE TABLE apflora.tpop (
   changed_by varchar(20) DEFAULT NULL
 );
 
+ALTER TABLE apflora.tpop
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpop
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.tpop USING gist (geom_point);
 
 CREATE INDEX ON apflora.tpop USING btree (id);
@@ -1729,6 +1735,12 @@ CREATE TABLE apflora.tpop_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+ALTER TABLE apflora.tpop_file
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpop_file
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.tpop USING btree (id);
 
 CREATE INDEX ON apflora.tpop_file USING btree (tpop_id);
@@ -1832,6 +1844,12 @@ CREATE TABLE apflora.tpop_history (
 );
 
 ALTER TABLE apflora.tpop_history
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpop_history
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpop_history
   ADD CONSTRAINT fk_pop_history FOREIGN KEY (year, pop_id) REFERENCES apflora.pop_history (year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 COMMENT ON TABLE apflora.tpop_history IS E '@foreignKey (pop_id) references pop (id)\n@foreignKey (status) references pop_status_werte (code)\n@foreignKey (apber_relevant_grund) references tpop_apberrelevant_grund_werte (code)\n@foreignKey (ekfrequenz) references ekfrequenz (id)\n@foreignKey (ekf_kontrolleur) references adresse (id)';
@@ -1909,6 +1927,12 @@ CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
+ALTER TABLE apflora.tpop_apberrelevant_grund_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpop_apberrelevant_grund_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE SEQUENCE apflora.tpop_apberrelevant_grund_werte_code_seq owned BY apflora.tpop_apberrelevant_grund_werte.code;
 
 ALTER TABLE apflora.tpop_apberrelevant_grund_werte
@@ -1962,6 +1986,12 @@ CREATE TABLE apflora.tpop_entwicklung_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
+ALTER TABLE apflora.tpop_entwicklung_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpop_entwicklung_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE SEQUENCE apflora.tpop_entwicklung_werte_code_seq owned BY apflora.tpop_entwicklung_werte.code;
 
 ALTER TABLE apflora.tpop_entwicklung_werte
@@ -2013,6 +2043,12 @@ CREATE TABLE apflora.tpopber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.tpopber
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopber
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 COMMENT ON COLUMN apflora.tpopber.id IS 'Primärschlüssel der Tabelle "tpopber"';
 
@@ -2128,6 +2164,12 @@ CREATE TABLE apflora.tpopkontr (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.tpopkontr
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopkontr
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
 
@@ -2282,6 +2324,12 @@ CREATE TABLE apflora.tpopkontr_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+ALTER TABLE apflora.tpopkontr_file
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopkontr_file
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
 
 CREATE INDEX ON apflora.tpopkontr_file USING btree (tpopkontr_id);
@@ -2362,6 +2410,12 @@ CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte
+  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
+
+ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte
+  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.tpopkontr_idbiotuebereinst_werte_code_seq owned BY apflora.tpopkontr_idbiotuebereinst_werte.code;
 
