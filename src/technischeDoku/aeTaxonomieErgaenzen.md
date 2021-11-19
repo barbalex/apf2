@@ -28,6 +28,6 @@ apflora ist auf künftige Indizes vorbereitet. Es muss einzig die Artenliste um 
 
 Die Artliste wird von arteigenschaften.ch importiert und in der Tabelle ["ae_taxonomies"](https://github.com/barbalex/apf2/blob/master/sql/apflora/createTables.sql#L2447-L2465) gespeichert. Leider kann keine foreign table verwendet werden, weil die Beziehungen wichtig für die Referenzierung der Namen sind.<br/><br/>
 
-Nachdem die Checklist 2018 Index in arteigenschaften.ch ergänzt wurde, wurden dessen Daten in der Tabelle "ae_taxonomies" ergänzt, mit dem Kürzel "Info Flora 2018".<br/><br/>
+Nachdem die Checklist 2018 Index in arteigenschaften.ch ergänzt wurde, wurden dessen Daten in der Tabelle "ae_taxonomies" ergänzt, mit dem Kürzel "DB-TAXREF (2017)".<br/><br/>
 
 Mehr Informationen [im entsprechenden Issue](https://github.com/barbalex/apf2/issues/230).
