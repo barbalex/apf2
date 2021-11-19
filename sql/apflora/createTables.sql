@@ -3244,25 +3244,33 @@ CREATE POLICY reader ON apflora.ae_taxonomies
   WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- to update data run:
--- insert into apflora.ae_taxonomies(taxonomie_id, taxonomie_name, id, taxid, familie, artname, tax_art_name, artwert)
--- select
+-- INSERT INTO apflora.ae_taxonomies (taxonomie_id, taxonomie_name, id, taxid, familie, artname, tax_art_name, artwert)
+-- SELECT
 --   taxonomie_id,
 --   taxonomie_name,
 --   id,
 --   taxid,
 --   familie,
 --   artname,
---   case
---     when taxonomie_id = 'aed47d41-7b0e-11e8-b9a5-bd4f79edbcc4'
---     then concat('Info Flora 2005: ', artname)
---     when taxonomie_id = 'c87f19f2-1b77-11ea-8282-bbc40e20aff6'
---     then concat('Info Flora 2018: ', artname)
---     else concat('(Taxonomie unbekannt): ', artname)
---   end as tax_art_name,
+--   CASE WHEN taxonomie_id = 'aed47d41-7b0e-11e8-b9a5-bd4f79edbcc4' THEN
+--     concat('Info Flora 2005: ', artname)
+--   WHEN taxonomie_id = 'c87f19f2-1b77-11ea-8282-bbc40e20aff6' THEN
+--     concat('DB-TAXREF (2017): ', artname)
+--   ELSE
+--     concat('(Taxonomie unbekannt): ', artname)
+--   END AS tax_art_name,
 --   artwert
--- from apflora.ae_taxonomies_download
--- on conflict on constraint ae_taxonomies_pkey
--- do update set taxonomie_id = excluded.taxonomie_id, taxonomie_name = excluded.taxonomie_name, taxid = excluded.taxid, familie = excluded.familie, artname = excluded.artname, tax_art_name = excluded.tax_art_name, artwert = excluded.artwert;
+-- FROM
+--   apflora.ae_taxonomies_download
+-- ON CONFLICT ON CONSTRAINT ae_taxonomies_pkey
+--   DO UPDATE SET
+--     taxonomie_id = excluded.taxonomie_id,
+--     taxonomie_name = excluded.taxonomie_name,
+--     taxid = excluded.taxid,
+--     familie = excluded.familie,
+--     artname = excluded.artname,
+--     tax_art_name = excluded.tax_art_name,
+--     artwert = excluded.artwert;
 --
 -- beob can collect beob of any provenience by following this convention:
 -- - fields that are used in apflora.ch are appended as regular fields, that is:
