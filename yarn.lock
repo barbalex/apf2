@@ -5,9 +5,9 @@ __metadata:
   version: 5
   cacheKey: 8
 
-"@apollo/client@npm:3.5.2":
-  version: 3.5.2
-  resolution: "@apollo/client@npm:3.5.2"
+"@apollo/client@npm:3.5.3":
+  version: 3.5.3
+  resolution: "@apollo/client@npm:3.5.3"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -30,7 +30,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 9180e83ce9388e5dcdb2ac6d86d15e99c5be9271f026eae83bb30dccab2a56dcab5ec3fc085fb33be212f158c1a7f04f2095e0b33b9811f5bd4727dda090d6df
+  checksum: 935f432fd59f84141f6b6ab2e092ed92cba6ad3deeecb7fc3f7e01266d162b3b26a0bc98f1635d458b5cf3c839ae2d7d139bde594fb6dfa1de1afeee610f4aff
   languageName: node
   linkType: hard
 
@@ -4584,7 +4584,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "apf2@workspace:."
   dependencies:
-    "@apollo/client": 3.5.2
+    "@apollo/client": 3.5.3
     "@babel/core": 7.16.0
     "@babel/eslint-parser": 7.16.3
     "@babel/plugin-syntax-flow": 7.16.0
@@ -4614,14 +4614,14 @@ __metadata:
     browser-update: 3.3.33
     copyfiles: 2.4.1
     cypress: 9.0.0
-    date-fns: 2.25.0
-    dexie: 3.0.3
+    date-fns: 2.26.0
+    dexie: 3.2.0
     eslint: 8.2.0
     eslint-config-react-app: 6.0.0
     eslint-plugin-flowtype: 8.0.3
     eslint-plugin-import: 2.25.3
     eslint-plugin-jsx-a11y: 6.5.1
-    eslint-plugin-react: 7.27.0
+    eslint-plugin-react: 7.27.1
     eslint-plugin-react-hooks: 4.3.0
     eslint-webpack-plugin: 3.1.1
     exceljs: 4.3.0
@@ -7295,7 +7295,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:2.25.0, date-fns@npm:^2.24.0, date-fns@npm:^2.25.0":
+"date-fns@npm:2.26.0":
+  version: 2.26.0
+  resolution: "date-fns@npm:2.26.0"
+  checksum: 49ad59bc788134a6552ef4e4af0d18792001c1ca0070d543de4f36aba5761058b6e6a57b8ca51dd3b0f07f3bd55376b8bc69602bd7940648ba3869c5253c6ae8
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^2.24.0, date-fns@npm:^2.25.0":
   version: 2.25.0
   resolution: "date-fns@npm:2.25.0"
   checksum: 8896dc1dde0ee5ef77616942423bfa11fa2017a5ac19457293b7aaedc8822ff94f0a14eaf93da573b09b601dc0149eb430988a046cc9f79a2eb15f8c66c9c50c
@@ -7585,10 +7592,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dexie@npm:3.0.3":
-  version: 3.0.3
-  resolution: "dexie@npm:3.0.3"
-  checksum: 5419ad5cb81d5a45926886645c30dc77e16e994cc1c67ff626f89ffd70f39253b79b696c79abaae3b891c369f61989ccf95909f2d04877d12fc6855fe97a2256
+"dexie@npm:3.2.0":
+  version: 3.2.0
+  resolution: "dexie@npm:3.2.0"
+  checksum: 59b6fd600ad23fab57d70ed86e97b0c16a4ca570e7aa4556a9e6ad1fe594bd539d9ab9315b64d5523864fc8f89e26f371d98cf72d4a13ae77068825d1e09ed57
   languageName: node
   linkType: hard
 
@@ -8326,9 +8333,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.27.0":
-  version: 7.27.0
-  resolution: "eslint-plugin-react@npm:7.27.0"
+"eslint-plugin-react@npm:7.27.1":
+  version: 7.27.1
+  resolution: "eslint-plugin-react@npm:7.27.1"
   dependencies:
     array-includes: ^3.1.4
     array.prototype.flatmap: ^1.2.5
@@ -8346,7 +8353,7 @@ __metadata:
     string.prototype.matchall: ^4.0.6
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
-  checksum: 47d75e003898129a56ca2416d3aa038b4c4a752df3edf71174c3017788eb8b83d786091fc6c3702abf870a2abe5d25cc367d5aa7c1417153cf5b5b707aec6446
+  checksum: db1ce303b597ede0bc8873d3f575b05873b06a058162c80f76604c9096eee8f72f299d7f849a86ac2e59f269c196575e6bcfb1ef9d7cbb23f533d081bcc15ea0
   languageName: node
   linkType: hard
 
