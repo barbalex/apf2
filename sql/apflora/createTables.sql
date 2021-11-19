@@ -11,17 +11,12 @@ CREATE TABLE apflora.user (
   -- enforce role to prevent errors when no role is set
   role name NOT NULL DEFAULT 'apflora_ap_reader' CHECK role_length_maximum_512 (length(ROLE) < 512),
   pass text DEFAULT NULL CHECK pass_length_minimum_6 (length(pass) > 5),
-  adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  CONSTRAINT proper_email CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')
+  adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE
+  -- reverted created_at and updated_at: authorizing apflora_ap_writer did not work any more!
+  --created_at timestamptz NOT NULL DEFAULT now(),
+  --updated_at timestamptz NOT NULL DEFAULT now()
+  --CONSTRAINT proper_email CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')
 );
-
-ALTER TABLE apflora.user
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.user
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 ALTER TABLE apflora.user
   DROP CONSTRAINT IF EXISTS user_pass_check;
@@ -88,12 +83,6 @@ CREATE TABLE apflora.adresse (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.adresse
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.adresse
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.adresse USING btree (id);
 
 CREATE INDEX ON apflora.adresse USING btree (name);
@@ -145,12 +134,6 @@ CREATE TABLE apflora.ap (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.ap
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ap
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.ap USING btree (id);
 
@@ -219,12 +202,6 @@ CREATE TABLE apflora.ap_user (
   UNIQUE (ap_id, user_name)
 );
 
-ALTER TABLE apflora.ap_user
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ap_user
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.ap_user USING btree (id);
 
 CREATE INDEX ON apflora.ap_user USING btree (ap_id);
@@ -253,12 +230,6 @@ CREATE TABLE apflora.ap_file (
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
-
-ALTER TABLE apflora.ap_file
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ap_file
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.ap USING btree (id);
 
@@ -309,12 +280,6 @@ CREATE TABLE apflora.ap_history (
   changed_by varchar(20) DEFAULT NULL,
   PRIMARY KEY (id, year)
 );
-
-ALTER TABLE apflora.ap_history
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ap_history
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.ap_history USING btree (id);
 
@@ -405,12 +370,6 @@ CREATE TABLE apflora.ap_bearbstand_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.ap_bearbstand_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ap_bearbstand_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE SEQUENCE apflora.ap_bearbstand_werte_code_seq owned BY apflora.ap_bearbstand_werte.code;
 
 ALTER TABLE apflora.ap_bearbstand_werte
@@ -465,12 +424,6 @@ CREATE TABLE apflora.ap_erfbeurtkrit_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.ap_erfbeurtkrit_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ap_erfbeurtkrit_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE SEQUENCE apflora.ap_erfbeurtkrit_werte_code_seq owned BY apflora.ap_erfbeurtkrit_werte.code;
 
 ALTER TABLE apflora.ap_erfbeurtkrit_werte
@@ -523,12 +476,6 @@ CREATE TABLE apflora.ap_erfkrit_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.ap_erfkrit_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ap_erfkrit_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.ap_erfkrit_werte_code_seq owned BY apflora.ap_erfkrit_werte.code;
 
@@ -584,12 +531,6 @@ CREATE TABLE apflora.ap_umsetzung_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.ap_umsetzung_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ap_umsetzung_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.ap_umsetzung_werte_code_seq owned BY apflora.ap_umsetzung_werte.code;
 
@@ -657,12 +598,6 @@ CREATE TABLE apflora.apber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.apber
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.apber
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.apber USING btree (id);
 
@@ -753,12 +688,6 @@ CREATE TABLE apflora.apberuebersicht (
   UNIQUE (proj_id, jahr)
 );
 
-ALTER TABLE apflora.apberuebersicht
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.apberuebersicht
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.apberuebersicht USING btree (id);
 
 CREATE INDEX ON apflora.apberuebersicht USING btree (jahr);
@@ -803,12 +732,6 @@ CREATE TABLE apflora.assozart (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.assozart
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.assozart
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.assozart USING btree (id);
 
@@ -863,12 +786,6 @@ CREATE TABLE apflora.projekt (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.projekt
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.projekt
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.projekt USING btree (id);
 
 CREATE INDEX ON apflora.projekt USING btree (name);
@@ -898,12 +815,6 @@ CREATE TABLE apflora.erfkrit (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.erfkrit
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.erfkrit
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.erfkrit USING btree (id);
 
@@ -974,12 +885,6 @@ CREATE TABLE apflora.idealbiotop (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.idealbiotop
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.idealbiotop
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.idealbiotop USING btree (id);
 
@@ -1064,12 +969,6 @@ CREATE TABLE apflora.idealbiotop_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-ALTER TABLE apflora.idealbiotop_file
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.idealbiotop_file
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.idealbiotop USING btree (id);
 
 CREATE INDEX ON apflora.idealbiotop_file USING btree (idealbiotop_id);
@@ -1132,12 +1031,6 @@ CREATE TABLE apflora.pop (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.pop
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.pop
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.pop USING gist (geom_point);
 
@@ -1208,12 +1101,6 @@ CREATE TABLE apflora.pop_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-ALTER TABLE apflora.pop_file
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.pop_file
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.pop USING btree (id);
 
 CREATE INDEX ON apflora.pop_file USING btree (pop_id);
@@ -1277,12 +1164,6 @@ CREATE TABLE apflora.pop_history (
   PRIMARY KEY (id, year)
 );
 
-ALTER TABLE apflora.pop_history
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.pop_history
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.pop_history USING btree (id);
 
 CREATE INDEX ON apflora.pop_history USING btree (year);
@@ -1337,12 +1218,6 @@ CREATE TABLE apflora.pop_status_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.pop_status_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.pop_status_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.pop_status_werte_code_seq owned BY apflora.pop_status_werte.code;
 
@@ -1400,12 +1275,6 @@ CREATE TABLE apflora.popber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.popber
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.popber
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 COMMENT ON COLUMN apflora.popber.id IS 'Primärschlüssel';
 
@@ -1479,12 +1348,6 @@ CREATE TABLE apflora.popmassnber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.popmassnber
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.popmassnber
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.popmassnber USING btree (id);
 
@@ -1587,12 +1450,6 @@ CREATE TABLE apflora.tpop (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.tpop
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpop
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.tpop USING gist (geom_point);
 
@@ -1735,12 +1592,6 @@ CREATE TABLE apflora.tpop_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-ALTER TABLE apflora.tpop_file
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpop_file
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.tpop USING btree (id);
 
 CREATE INDEX ON apflora.tpop_file USING btree (tpop_id);
@@ -1844,12 +1695,6 @@ CREATE TABLE apflora.tpop_history (
 );
 
 ALTER TABLE apflora.tpop_history
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpop_history
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpop_history
   ADD CONSTRAINT fk_pop_history FOREIGN KEY (year, pop_id) REFERENCES apflora.pop_history (year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 COMMENT ON TABLE apflora.tpop_history IS E '@foreignKey (pop_id) references pop (id)\n@foreignKey (status) references pop_status_werte (code)\n@foreignKey (apber_relevant_grund) references tpop_apberrelevant_grund_werte (code)\n@foreignKey (ekfrequenz) references ekfrequenz (id)\n@foreignKey (ekf_kontrolleur) references adresse (id)';
@@ -1927,12 +1772,6 @@ CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.tpop_apberrelevant_grund_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpop_apberrelevant_grund_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE SEQUENCE apflora.tpop_apberrelevant_grund_werte_code_seq owned BY apflora.tpop_apberrelevant_grund_werte.code;
 
 ALTER TABLE apflora.tpop_apberrelevant_grund_werte
@@ -1986,12 +1825,6 @@ CREATE TABLE apflora.tpop_entwicklung_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.tpop_entwicklung_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpop_entwicklung_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE SEQUENCE apflora.tpop_entwicklung_werte_code_seq owned BY apflora.tpop_entwicklung_werte.code;
 
 ALTER TABLE apflora.tpop_entwicklung_werte
@@ -2043,12 +1876,6 @@ CREATE TABLE apflora.tpopber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.tpopber
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopber
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 COMMENT ON COLUMN apflora.tpopber.id IS 'Primärschlüssel der Tabelle "tpopber"';
 
@@ -2164,12 +1991,6 @@ CREATE TABLE apflora.tpopkontr (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.tpopkontr
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopkontr
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
 
@@ -2324,12 +2145,6 @@ CREATE TABLE apflora.tpopkontr_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-ALTER TABLE apflora.tpopkontr_file
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopkontr_file
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
 
 CREATE INDEX ON apflora.tpopkontr_file USING btree (tpopkontr_id);
@@ -2411,12 +2226,6 @@ CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE SEQUENCE apflora.tpopkontr_idbiotuebereinst_werte_code_seq owned BY apflora.tpopkontr_idbiotuebereinst_werte.code;
 
 ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte
@@ -2469,12 +2278,6 @@ CREATE TABLE apflora.tpopkontr_typ_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.tpopkontr_typ_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopkontr_typ_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.tpopkontr_typ_werte_code_seq owned BY apflora.tpopkontr_typ_werte.code;
 
@@ -2529,12 +2332,6 @@ CREATE TABLE apflora.tpopkontrzaehl (
   changed_by varchar(20) DEFAULT NULL,
   UNIQUE (id, einheit)
 );
-
-ALTER TABLE apflora.tpopkontrzaehl
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopkontrzaehl
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 -- 2019 10 29: alter table apflora.tpopkontrzaehl add constraint id_einheit_unique unique (id, einheit);
 COMMENT ON COLUMN apflora.tpopkontrzaehl.anzahl IS 'Anzahl Zaehleinheiten';
@@ -2632,12 +2429,6 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.tpopkontrzaehl_einheit_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopkontrzaehl_einheit_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE SEQUENCE apflora.tpopkontrzaehl_einheit_werte_code_seq owned BY apflora.tpopkontrzaehl_einheit_werte.code;
 
 ALTER TABLE apflora.tpopkontrzaehl_einheit_werte
@@ -2694,12 +2485,6 @@ CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.tpopkontrzaehl_methode_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopkontrzaehl_methode_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.tpopkontrzaehl_methode_werte_code_seq owned BY apflora.tpopkontrzaehl_methode_werte.code;
 
@@ -2774,12 +2559,6 @@ CREATE TABLE apflora.tpopmassn (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.tpopmassn
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopmassn
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree (id);
 
@@ -2902,12 +2681,6 @@ CREATE TABLE apflora.tpopmassn_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-ALTER TABLE apflora.tpopmassn_file
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopmassn_file
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.tpopmassn USING btree (id);
 
 CREATE INDEX ON apflora.tpopmassn_file USING btree (tpopmassn_id);
@@ -2989,12 +2762,6 @@ CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.tpopmassn_erfbeurt_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopmassn_erfbeurt_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE SEQUENCE apflora.tpopmassn_erfbeurt_werte_code_seq owned BY apflora.tpopmassn_erfbeurt_werte.code;
 
 ALTER TABLE apflora.tpopmassn_erfbeurt_werte
@@ -3051,12 +2818,6 @@ CREATE TABLE apflora.tpopmassn_typ_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.tpopmassn_typ_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopmassn_typ_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE SEQUENCE apflora.tpopmassn_typ_werte_code_seq owned BY apflora.tpopmassn_typ_werte.code;
 
@@ -3116,12 +2877,6 @@ CREATE TABLE apflora.tpopmassnber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.tpopmassnber
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.tpopmassnber
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.tpopmassnber USING btree (id);
 
@@ -3285,12 +3040,6 @@ CREATE TABLE apflora.ziel (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.ziel
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ziel
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.ziel USING btree (id);
 
 CREATE INDEX ON apflora.ziel USING btree (ap_id);
@@ -3350,12 +3099,6 @@ CREATE TABLE apflora.ziel_typ_werte (
   changed_by varchar(20) NOT NULL
 );
 
-ALTER TABLE apflora.ziel_typ_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ziel_typ_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE SEQUENCE apflora.ziel_typ_werte_code_seq owned BY apflora.ziel_typ_werte.code;
 
 ALTER TABLE apflora.ziel_typ_werte
@@ -3410,12 +3153,6 @@ CREATE TABLE apflora.zielber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.zielber
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.zielber
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.zielber USING btree (id);
 
@@ -3575,12 +3312,6 @@ CREATE TABLE apflora.beob (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.beob
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.beob
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.beob USING gist (geom_point);
 
 CREATE INDEX ON apflora.beob USING btree (id);
@@ -3682,12 +3413,6 @@ CREATE TABLE apflora.apart (
   changed_by varchar(20) DEFAULT NULL --UNIQUE (art_id) --no, maybe after beob were rearranged
 );
 
-ALTER TABLE apflora.apart
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.apart
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.apart USING btree (id);
 
 CREATE INDEX ON apflora.apart USING btree (ap_id);
@@ -3742,12 +3467,6 @@ CREATE TABLE apflora.ekzaehleinheit (
   changed date DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.ekzaehleinheit
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ekzaehleinheit
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE UNIQUE INDEX ekzaehleinheit_single_zielrelevant_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zielrelevant)
 WHERE
@@ -3829,12 +3548,6 @@ CREATE TABLE apflora.ekfrequenz (
   UNIQUE (ap_id, code)
 );
 
-ALTER TABLE apflora.ekfrequenz
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ekfrequenz
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.ekfrequenz USING btree (id);
 
 CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
@@ -3900,12 +3613,6 @@ CREATE TABLE apflora.ek_abrechnungstyp_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
-ALTER TABLE apflora.ek_abrechnungstyp_werte
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ek_abrechnungstyp_werte
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (id);
 
 CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (code);
@@ -3943,12 +3650,6 @@ CREATE TABLE apflora.ekplan (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-
-ALTER TABLE apflora.ekplan
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.ekplan
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.ekplan USING btree (id);
 
@@ -4008,12 +3709,6 @@ CREATE TABLE apflora.qk (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-ALTER TABLE apflora.qk
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.qk
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
-
 CREATE INDEX ON apflora.qk USING btree (name);
 
 CREATE INDEX ON apflora.qk USING btree (titel);
@@ -4039,12 +3734,6 @@ CREATE TABLE apflora.apqk (
   updated_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (ap_id, qk_name)
 );
-
-ALTER TABLE apflora.apqk
-  ADD COLUMN created_at timestamptz NOT NULL DEFAULT now();
-
-ALTER TABLE apflora.apqk
-  ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE INDEX ON apflora.apqk USING btree (ap_id);
 

@@ -1,7 +1,7 @@
 -- TODO: this is copied from ae. Apply it to apflora!
 \c apflora
 
-ALTER DATABASE apflora SET "app.jwt_secret" TO '${JWT_SECRET}';
+ALTER DATABASE apflora SET "app.jwt_secret" TO '${JWT_SECRET}'; 
 
 revoke connect on database apflora from public;
 revoke all on all tables in schema apflora from public;
