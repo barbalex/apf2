@@ -5,6 +5,7 @@ services:
     container_name: apf_db
     restart: always
     image: db
+    shm_size: 1g
     build:
       context: ./db
     env_file:
