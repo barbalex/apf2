@@ -1406,7 +1406,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-react@npm:^7.14.0":
+"@babel/preset-react@npm:^7.14.0, @babel/preset-react@npm:^7.16.0":
   version: 7.16.0
   resolution: "@babel/preset-react@npm:7.16.0"
   dependencies:
@@ -4476,6 +4476,7 @@ __metadata:
     "@babel/eslint-parser": 7.16.3
     "@babel/plugin-syntax-flow": 7.16.0
     "@babel/plugin-transform-react-jsx": 7.16.0
+    "@babel/preset-react": ^7.16.0
     "@fontsource/roboto": 4.5.1
     "@fontsource/roboto-mono": 4.5.0
     "@graphile-contrib/pg-order-by-related": 1.0.0-beta.6

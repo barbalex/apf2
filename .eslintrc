@@ -1,5 +1,11 @@
 {
   "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "babelOptions": {
+       "presets": ["@babel/preset-react"]
+    }
+  },
   "rules": {
     "strict": 0,
     "react/prop-types": 0,
