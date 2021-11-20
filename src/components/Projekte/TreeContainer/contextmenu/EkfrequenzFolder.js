@@ -6,6 +6,11 @@ import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu'
 
+// TODO:
+// check if ekfrequenz exist
+// if not:
+// add MenuItem to copy all from AP
+
 // create objects outside render
 const insertData = {
   action: 'insert',
