@@ -5,9 +5,9 @@ __metadata:
   version: 5
   cacheKey: 8
 
-"@apollo/client@npm:3.5.3":
-  version: 3.5.3
-  resolution: "@apollo/client@npm:3.5.3"
+"@apollo/client@npm:3.5.4":
+  version: 3.5.4
+  resolution: "@apollo/client@npm:3.5.4"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -30,7 +30,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 935f432fd59f84141f6b6ab2e092ed92cba6ad3deeecb7fc3f7e01266d162b3b26a0bc98f1635d458b5cf3c839ae2d7d139bde594fb6dfa1de1afeee610f4aff
+  checksum: a160450b3364152ff680921e0134331c81707d0db85d6275cb57584221d5da2406a7e8d2dd1bba338a6b8878cb9921579f4b4b22b4abcc560ad065cbbfcf8b62
   languageName: node
   linkType: hard
 
@@ -4584,7 +4584,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "apf2@workspace:."
   dependencies:
-    "@apollo/client": 3.5.3
+    "@apollo/client": 3.5.4
     "@babel/core": 7.16.0
     "@babel/eslint-parser": 7.16.3
     "@babel/plugin-syntax-flow": 7.16.0

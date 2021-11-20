@@ -18,7 +18,7 @@
     "svgr": "svgr -d src/icons/ svg/"
   },
   "dependencies": {
-    "@apollo/client": "3.5.3",
+    "@apollo/client": "3.5.4",
     "@babel/core": "7.16.0",
     "@fontsource/roboto": "4.5.1",
     "@fontsource/roboto-mono": "4.5.0",
