@@ -97,8 +97,9 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
   const onChooseAp = useCallback((option) => {
     console.log('option choosen: ', option)
     // TODO:
+    // 0. choosing no option is not possible so needs not be catched
     // 1. delete existing ekfrequenz
-    // 2. add from other ap
+    // 2. add ekfrequenz from other ap
     // 3. if other ap has no ekfrequenz, tell user
     // 4. if ekfrequenz were added, tell user
     setOpenChooseAp(false)
@@ -113,7 +114,19 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
       let result
       try {
         result = await client.query({
-          query: apValuesQuery,
+          query: gql`
+            query apForEkfrequenzfolder($filter: ApFilter) {
+              allAps(orderBy: [LABEL_ASC], filter: $filter) {
+                nodes {
+                  value: id
+                  label
+                  ekfrequenzsByApId {
+                    totalCount
+                  }
+                }
+              }
+            }
+          `,
           variables: {
             filter: filter,
           },
