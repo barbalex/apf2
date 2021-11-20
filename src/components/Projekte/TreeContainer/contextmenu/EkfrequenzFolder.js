@@ -6,7 +6,6 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import { makeStyles } from '@mui/styles'
 import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import { gql, useApolloClient } from '@apollo/client'
@@ -28,9 +27,9 @@ const insertData = {
 }
 
 const SelectContainer = styled.div`
-  padding-top: 10px;
-  min-height: 350px;
-  max-height: 350px;
+  padding-top: 15px;
+  min-height: 360px;
+  max-height: 360px;
 `
 const SelectLabel = styled.div`
   font-size: 12px;
@@ -70,19 +69,7 @@ const SelectStyled = styled(AsyncSelect)`
     /* ability to hide caret when not enough space */
     width: ${(props) => (props.nocaret ? '0' : '1px')};
   }
-  .react-select__menu {
-    /* position: relative !important; */
-    /* z-index: 9999999 !important; */
-  }
 `
-const useStyles = makeStyles({
-  paperFullWidth: {
-    overflowY: 'visible',
-  },
-  dialogContentRoot: {
-    overflowY: 'visible',
-  },
-})
 
 const apValuesQuery = gql`
   query apForEkfrequenzfolder($filter: ApFilter) {
@@ -97,7 +84,6 @@ const apValuesQuery = gql`
 
 const EkfrequenzFolder = ({ onClick, treeName }) => {
   const client = useApolloClient()
-  const classes = useStyles()
   const { user } = useContext(storeContext)
 
   const [openChooseAp, setOpenChooseAp] = useState(false)
@@ -105,9 +91,13 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
   const onOpenChooseApDialog = useCallback(() => setOpenChooseAp(true), [])
   const onChooseAp = useCallback((option) => {
     console.log('option choosen: ', option)
-    //setOpenChooseAp(false)
+    // TODO:
+    // 1. delete existing ekfrequenz
+    // 2. add from other ap
+    // 3. if other ap has no ekfrequenz, tell user
+    // 4. if ekfrequenz were added, tell user
+    setOpenChooseAp(false)
   }, [])
-  console.log('openChooseAp:', openChooseAp)
 
   const apOptions = useCallback(
     async (inputValue, cb) => {
@@ -148,21 +138,11 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
           </>
         )}
       </ContextMenu>
-      <Dialog
-        open={openChooseAp}
-        onClose={onCloseChooseApDialog}
-        classes={{
-          paperFullWidth: classes.paperFullWidth,
-        }}
-      >
+      <Dialog open={openChooseAp} onClose={onCloseChooseApDialog}>
         <DialogTitle>
           EK-Frequenzen aus anderem Aktionsplan kopieren
         </DialogTitle>
-        <DialogContent
-          classes={{
-            root: classes.dialogContentRoot,
-          }}
-        >
+        <DialogContent>
           <DialogContentText>
             Achtung: Allfällige bestehende EK-Frequenzen werden gelöscht und mit
             den kopierten ersetzt, sobald Sie einen Aktionsplän wählen
