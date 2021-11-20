@@ -71,12 +71,17 @@ const SelectStyled = styled(AsyncSelect)`
   }
 `
 
+// would be elegant to query only ap with ekfrequenz
+// one solution: https://github.com/graphile/pg-aggregates
 const apValuesQuery = gql`
   query apForEkfrequenzfolder($filter: ApFilter) {
     allAps(orderBy: [LABEL_ASC], filter: $filter) {
       nodes {
         value: id
         label
+        ekfrequenzsByApId {
+          totalCount
+        }
       }
     }
   }
@@ -118,7 +123,11 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
       }
       const { data } = result
       const options = data?.allAps?.nodes ?? []
-      cb(options)
+      // only show options with ekfrequenzs
+      const optionsWithEkfrequenzs = options.filter(
+        (e) => e.ekfrequenzsByApId.totalCount > 0,
+      )
+      cb(optionsWithEkfrequenzs)
     },
     [client],
   )
@@ -148,7 +157,9 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
             den kopierten ersetzt, sobald Sie einen Aktionsplän wählen
           </DialogContentText>
           <SelectContainer>
-            <SelectLabel>Aktionsplan</SelectLabel>
+            <SelectLabel>
+              Aktionsplan (nur solche mit EK-Frequenzen)
+            </SelectLabel>
             <SelectStyled
               autoFocus
               defaultOptions
