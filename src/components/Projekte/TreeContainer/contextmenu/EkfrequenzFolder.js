@@ -118,7 +118,7 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
       const existingEkfrequenzs = (
         existingEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
       ).map((e) => e.id)
-      console.log('existingEkfrequenzResult:', existingEkfrequenzResult)
+
       // 1.2: delete existing ekfrequenz
       try {
         await Promise.allSettled(
@@ -185,6 +185,7 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
       }
       const newEkfrequenzs =
         newEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
+
       // 2.2: insert ekfrequenz
       try {
         await Promise.allSettled(
