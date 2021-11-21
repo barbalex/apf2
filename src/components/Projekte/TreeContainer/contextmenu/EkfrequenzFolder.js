@@ -72,7 +72,7 @@ const Error = styled.div`
 
 const EkfrequenzFolder = ({ onClick, treeName }) => {
   const client = useApolloClient()
-  const { user, refetch } = useContext(storeContext)
+  const { user } = useContext(storeContext)
 
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
@@ -249,6 +249,8 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
                 sort: ekf.sort,
                 changedBy: user.name,
               },
+              refetchQueries: ['TreeAllQuery'],
+              awaitRefetchQueries: true,
             })
           }),
         )
@@ -258,14 +260,12 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
           `Fehler beim Kopieren der EK-Frequenzen: ${error.message}`,
         )
       }
-      //await existingEkfrequenzResult.refetch()
-      refetch.tree()
 
       // 3. TODO: inform user
       //    happens by showing new ekfrequenzs in the tree
       setOpenChooseAp(false)
     },
-    [apId, client, refetch, user.name],
+    [apId, client, user.name],
   )
 
   const [apOptionsError, setApOptionsError] = useState(undefined)
