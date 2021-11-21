@@ -188,7 +188,7 @@ const PrintIconContainer = styled.div`
   }
 `
 
-const Row = ({ index, style, node, treeName }) => {
+const Row = ({ style, node, treeName }) => {
   const store = useContext(storeContext)
   const {
     activeApfloraLayers,
@@ -208,7 +208,6 @@ const Row = ({ index, style, node, treeName }) => {
   const { idsFiltered: mapIdsFiltered } = store[treeName].map
 
   const activeNodeArray = get(store, `${treeName}.activeNodeArray`)
-  const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath({
     node,
     activeNodeArray,
@@ -280,8 +279,10 @@ const Row = ({ index, style, node, treeName }) => {
     <div style={style}>
       <ContextMenuTrigger
         id={`${treeName}${node.menuType}`}
-        collect={(props) => myProps}
+        //collect={(props) => ({ key: index })}
+        collect={(props) => props}
         nodeId={node.id}
+        tableId={node.tableId}
         nodeLabel={node.label}
         key={`${node.menuType}${node.id}`}
       >

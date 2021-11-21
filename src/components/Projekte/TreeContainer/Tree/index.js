@@ -78,7 +78,6 @@ const Tree = ({ treeName, nodes, loading, height = 1000 }) => {
               <Row
                 key={index}
                 style={style}
-                index={index}
                 node={nodes[index]}
                 treeName={treeName}
               />

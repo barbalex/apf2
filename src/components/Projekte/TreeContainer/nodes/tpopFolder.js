@@ -30,7 +30,7 @@ const tpopFolderNode = ({
 
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${children.length} gefiltert`
     : children.length
 

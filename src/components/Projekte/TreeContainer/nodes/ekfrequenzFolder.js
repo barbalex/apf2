@@ -30,7 +30,7 @@ const ekfrequenzFolderNode = ({
   )()
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${ekfrequenzNodesLength} gefiltert`
     : ekfrequenzNodesLength
 

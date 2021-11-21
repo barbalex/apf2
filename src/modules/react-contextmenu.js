@@ -197,8 +197,7 @@ object-assign
           }
     },
     function (e, t, n) {
-      var o,
-        r /*!
+      var o, r /*!
   Copyright (c) 2017 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/classnames
@@ -506,13 +505,14 @@ object-assign
             for (var u = arguments.length, s = Array(u), l = 0; l < u; l++)
               s[l] = arguments[l]
             return (
-              (n = o = i(
-                this,
-                (e = t.__proto__ || Object.getPrototypeOf(t)).call.apply(
-                  e,
-                  [this].concat(s),
-                ),
-              )),
+              (n = o =
+                i(
+                  this,
+                  (e = t.__proto__ || Object.getPrototypeOf(t)).call.apply(
+                    e,
+                    [this].concat(s),
+                  ),
+                )),
               (o.handleClick = function (e) {
                 0 !== e.button && 1 !== e.button && e.preventDefault(),
                   o.props.disabled ||
@@ -1035,13 +1035,14 @@ object-assign
             for (var u = arguments.length, s = Array(u), l = 0; l < u; l++)
               s[l] = arguments[l]
             return (
-              (n = i = r(
-                this,
-                (e = t.__proto__ || Object.getPrototypeOf(t)).call.apply(
-                  e,
-                  [this].concat(s),
-                ),
-              )),
+              (n = i =
+                r(
+                  this,
+                  (e = t.__proto__ || Object.getPrototypeOf(t)).call.apply(
+                    e,
+                    [this].concat(s),
+                  ),
+                )),
               (i.touchHandled = !1),
               (i.handleMouseDown = function (e) {
                 i.props.holdToDisplay >= 0 &&

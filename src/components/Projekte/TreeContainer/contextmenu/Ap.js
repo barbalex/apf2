@@ -37,14 +37,14 @@ const Ap = ({ onClick, treeName }) => {
           alle schliessen
         </MenuItem>
         {mayWrite && (
-          <Fragment>
+          <>
             <MenuItem onClick={onClick} data={insertData}>
               erstelle neuen
             </MenuItem>
             <MenuItem onClick={onClick} data={deleteData}>
               lösche
             </MenuItem>
-          </Fragment>
+          </>
         )}
         {isMoving && (
           <MenuItem onClick={onClick} data={moveData}>

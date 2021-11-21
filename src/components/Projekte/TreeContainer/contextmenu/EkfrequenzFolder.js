@@ -71,10 +71,6 @@ const SelectStyled = styled(AsyncSelect)`
   }
 `
 
-const copyEkFromApData = {
-  action: 'copyEkFromData',
-}
-
 const EkfrequenzFolder = ({ onClick, treeName }) => {
   const client = useApolloClient()
   const { user } = useContext(storeContext)
@@ -135,17 +131,31 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
     [client],
   )
 
+  // eslint-disable-next-line no-unused-vars
+  const [apId, changeApId] = useState(0)
+  // according to https://github.com/vkbansal/react-contextmenu/issues/65
+  // this is how to pass data from ContextMenuTrigger to ContextMenu
+  const onShow = useCallback(
+    (event) => changeApId(event.detail.data.tableId),
+    [],
+  )
+  console.log('EkfrequenzFolder, id:', apId)
+
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}ekfrequenzFolder`}>
+      <ContextMenu
+        id={`${treeName}ekfrequenzFolder`}
+        collect={(props) => props}
+        onShow={onShow}
+      >
         <div className="react-contextmenu-title">EK-Frequenz</div>
         {!userIsReadOnly(user.token) && (
           <>
             <MenuItem onClick={onClick} data={insertData}>
               erstelle neue
             </MenuItem>
-            <MenuItem onClick={onOpenChooseApDialog} data={copyEkFromApData}>
-              Aus anderem Aktionsplan kopieren
+            <MenuItem onClick={onOpenChooseApDialog}>
+              aus anderem Aktionsplan kopieren
             </MenuItem>
           </>
         )}

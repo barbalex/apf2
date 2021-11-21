@@ -376,6 +376,12 @@ const TreeContainer = ({
       }
       const { table, action, actionTable } = data
       const { firstElementChild } = element
+      console.log('tree, handleClick', {
+        firstElementChild,
+        table,
+        action,
+        actionTable,
+      })
       if (!firstElementChild) {
         return enqueNotification({
           message: 'no firstElementChild passed with click',
@@ -391,10 +397,15 @@ const TreeContainer = ({
       const label = firstElementChild.getAttribute('data-label')
       const nodeType = firstElementChild.getAttribute('data-nodetype')
       const menuType = firstElementChild.getAttribute('data-menutype')
+      console.log('tree, handleClick', {
+        id,
+        parentId,
+        urlPassed,
+        label,
+        nodeType,
+        menuType,
+      })
       const actions = {
-        copyEkFromApData() {
-          console.log('should copy EK from AP data')
-        },
         insert() {
           if (nodeType === 'table') {
             url.pop()

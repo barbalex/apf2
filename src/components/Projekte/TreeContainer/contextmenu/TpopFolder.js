@@ -30,23 +30,12 @@ const resetCopyingData = {
 const TpopFolder = ({ treeName, onClick }) => {
   const { copying, user, moving } = useContext(storeContext)
 
-  // eslint-disable-next-line no-unused-vars
-  const [id, changeId] = useState(0)
-
   const isMoving = moving.table && moving.table === 'tpop'
   const isCopying = copying.table && copying.table === 'tpop'
 
-  // according to https://github.com/vkbansal/react-contextmenu/issues/65
-  // this is how to pass data from ContextMenuTrigger to ContextMenu
-  const onShow = useCallback((event) => changeId(event.detail.data.nodeId), [])
-
   return (
     <ErrorBoundary>
-      <ContextMenu
-        id={`${treeName}tpopFolder`}
-        collect={(props) => props}
-        onShow={onShow}
-      >
+      <ContextMenu id={`${treeName}tpopFolder`}>
         <div className="react-contextmenu-title">Teil-Populationen</div>
         <MenuItem onClick={onClick} data={openLowerNodesData}>
           alle öffnen
