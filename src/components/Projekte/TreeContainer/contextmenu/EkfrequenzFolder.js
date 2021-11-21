@@ -8,7 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
-import { gql, useApolloClient, useLazyQuery } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import storeContext from '../../../../storeContext'
