@@ -15,11 +15,6 @@ import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu'
 
-// TODO:
-// check if ekfrequenz exist
-// if not:
-// add MenuItem to copy all from AP
-
 // create objects outside render
 const insertData = {
   action: 'insert',
@@ -93,21 +88,59 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
   const onCloseChooseApDialog = useCallback(() => setOpenChooseAp(false), [])
   const onOpenChooseApDialog = useCallback(() => setOpenChooseAp(true), [])
 
-  const onChooseAp = useCallback((option) => {
-    console.log('option choosen: ', option)
-    // TODO:
-    // 0. choosing no option is not possible so needs not be catched
-    // 1. delete existing ekfrequenz
-    // 2. add ekfrequenz from other ap
-    // 3. if other ap has no ekfrequenz, tell user
-    // 4. if ekfrequenz were added, tell user
-    setOpenChooseAp(false)
-  }, [])
+  const onChooseAp = useCallback(
+    async (option) => {
+      console.log('option choosen: ', option)
+      // TODO:
+      // 0. choosing no option is not possible so needs not be catched
+      // 1. delete existing ekfrequenz
+      // 1.1: query existing ekfrequenz
+      let existingEkfrequenzResult
+      try {
+        existingEkfrequenzResult = await client.query({
+          // would be elegant to query only ap with ekfrequenz
+          // solution: https://github.com/graphile/pg-aggregates
+          query: gql`
+            query getExistingEkfrequenzForEkfrequenzFolder($apId: UUID) {
+              allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
+                nodes {
+                  id
+                }
+              }
+            }
+          `,
+          variables: {
+            apId,
+          },
+        })
+      } catch (error) {
+        console.log({ error })
+        setApOptionsError(
+          `Fehler beim Abfragen der Aktionspläne: ${error.message}`,
+        )
+      }
+      const existingEkfrequenzs = (
+        existingEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
+      ).map((e) => e.id)
+      console.log('EkfrequenzFolder', {
+        existingEkfrequenzResult,
+        apId,
+        existingEkfrequenzs,
+      })
+      // 1.2: delete existing ekfrequenz
+      // 2. add ekfrequenz from other ap
+      // 2.1: query ekfrequenz
+      //      if other ap has no ekfrequenz, tell user and return
+      // 2.2: insert ekfrequenz
+      // 3. inform user
+      setOpenChooseAp(false)
+    },
+    [apId, client],
+  )
 
   const [apOptionsError, setApOptionsError] = useState(undefined)
   const apOptions = useCallback(
     async (inputValue, cb) => {
-      console.log('apOptionsCallback, inputValue:', inputValue)
       const filter = inputValue
         ? { label: { includesInsensitive: inputValue } }
         : { label: { isNull: false } }
@@ -135,10 +168,11 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
         })
       } catch (error) {
         console.log({ error })
-        setApOptionsError(error?.message ?? error)
+        setApOptionsError(
+          `Fehler beim Abfragen der Aktionspläne: ${error.message}`,
+        )
       }
-      const { data } = result
-      const options = data?.allAps?.nodes ?? []
+      const options = result?.data?.allAps?.nodes ?? []
       // only show options with ekfrequenzs
       const optionsWithEkfrequenzs = options.filter(
         (e) => e.ekfrequenzsByApId.totalCount > 0,

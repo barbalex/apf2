@@ -89,7 +89,7 @@ const SelectTypable = ({
 
   const loadOptions = useCallback(
     async (inputValue, cb) => {
-      const ownFilter = !!inputValue
+      const ownFilter = inputValue
         ? { artname: { includesInsensitive: inputValue } }
         : { artname: { isNull: false } }
       let result
