@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
@@ -18,20 +18,10 @@ const deleteData = {
 
 const Tpopber = ({ treeName, onClick }) => {
   const { user } = useContext(storeContext)
-  // eslint-disable-next-line no-unused-vars
-  const [label, changeLabel] = useState('')
-  const onShow = useCallback(
-    (event) => changeLabel(event.detail.data.nodeLabel),
-    [],
-  )
 
   return (
     <ErrorBoundary>
-      <ContextMenu
-        id={`${treeName}tpopber`}
-        collect={(props) => props}
-        onShow={onShow}
-      >
+      <ContextMenu id={`${treeName}tpopber`}>
         <div className="react-contextmenu-title">Kontroll-Bericht</div>
         {!userIsReadOnly(user.token) && (
           <>

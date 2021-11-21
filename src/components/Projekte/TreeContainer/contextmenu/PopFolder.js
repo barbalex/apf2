@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
@@ -30,26 +30,12 @@ const resetCopyingData = {
 const PopFolder = ({ treeName, onClick }) => {
   const { copying, user, moving } = useContext(storeContext)
 
-  // eslint-disable-next-line no-unused-vars
-  const [label, changeLabel] = useState('')
-
   const isMoving = moving.table && moving.table === 'pop'
   const isCopying = copying.table && copying.table === 'pop'
 
-  // according to https://github.com/vkbansal/react-contextmenu/issues/65
-  // this is how to pass data from ContextMenuTrigger to ContextMenu
-  const onShow = useCallback(
-    (event) => changeLabel(event.detail.data.nodeLabel),
-    [],
-  )
-
   return (
     <ErrorBoundary>
-      <ContextMenu
-        id={`${treeName}popFolder`}
-        collect={(props) => props}
-        onShow={onShow}
-      >
+      <ContextMenu id={`${treeName}popFolder`}>
         <div className="react-contextmenu-title">Populationen</div>
         <MenuItem onClick={onClick} data={openLowerNodesData}>
           alle öffnen

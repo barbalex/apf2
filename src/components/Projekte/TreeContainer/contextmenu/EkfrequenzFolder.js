@@ -131,10 +131,10 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
     [client],
   )
 
-  // eslint-disable-next-line no-unused-vars
-  const [apId, changeApId] = useState(0)
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
+  // i.e. to know what node was clicked
+  const [apId, changeApId] = useState(0)
   const onShow = useCallback(
     (event) => changeApId(event.detail.data.tableId),
     [],

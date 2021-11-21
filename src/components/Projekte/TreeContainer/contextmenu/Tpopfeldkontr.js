@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
@@ -40,22 +40,9 @@ const resetCopyingBiotopData = {
 const Tpopfeldkontr = ({ treeName, onClick }) => {
   const { copying, user, copyingBiotop } = useContext(storeContext)
 
-  // eslint-disable-next-line no-unused-vars
-  const [label, changeLabel] = useState('')
-
-  // according to https://github.com/vkbansal/react-contextmenu/issues/65
-  // this is how to pass data from ContextMenuTrigger to ContextMenu
-  const onShow = useCallback(
-    (event) => changeLabel(event.detail.data.nodeLabel),
-    [],
-  )
   return (
     <ErrorBoundary>
-      <ContextMenu
-        id={`${treeName}tpopfeldkontr`}
-        collect={(props) => props}
-        onShow={onShow}
-      >
+      <ContextMenu id={`${treeName}tpopfeldkontr`}>
         <div className="react-contextmenu-title">Feld-Kontrolle</div>
         {!userIsReadOnly(user.token) && (
           <>

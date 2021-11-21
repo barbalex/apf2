@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
@@ -30,23 +30,9 @@ const resetCopyingData = {
 const Tpopfreiwkontr = ({ treeName, onClick }) => {
   const { copying, user } = useContext(storeContext)
 
-  // eslint-disable-next-line no-unused-vars
-  const [label, changeLabel] = useState('')
-
-  // according to https://github.com/vkbansal/react-contextmenu/issues/65
-  // this is how to pass data from ContextMenuTrigger to ContextMenu
-  const onShow = useCallback(
-    (event) => changeLabel(event.detail.data.nodeLabel),
-    [],
-  )
-
   return (
     <ErrorBoundary>
-      <ContextMenu
-        id={`${treeName}tpopfreiwkontr`}
-        collect={(props) => props}
-        onShow={onShow}
-      >
+      <ContextMenu id={`${treeName}tpopfreiwkontr`}>
         <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
         {!userIsReadOnly(user.token, 'freiw') && (
           <>
