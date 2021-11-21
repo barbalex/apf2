@@ -75,9 +75,20 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
   const client = useApolloClient()
   const { user } = useContext(storeContext)
 
+  // according to https://github.com/vkbansal/react-contextmenu/issues/65
+  // this is how to pass data from ContextMenuTrigger to ContextMenu
+  // i.e. to know what node was clicked
+  const [apId, changeApId] = useState(0)
+  const onShow = useCallback(
+    (event) => changeApId(event.detail.data.tableId),
+    [],
+  )
+  console.log('EkfrequenzFolder, id:', apId)
+
   const [openChooseAp, setOpenChooseAp] = useState(false)
   const onCloseChooseApDialog = useCallback(() => setOpenChooseAp(false), [])
   const onOpenChooseApDialog = useCallback(() => setOpenChooseAp(true), [])
+
   const onChooseAp = useCallback((option) => {
     console.log('option choosen: ', option)
     // TODO:
@@ -130,16 +141,6 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
     },
     [client],
   )
-
-  // according to https://github.com/vkbansal/react-contextmenu/issues/65
-  // this is how to pass data from ContextMenuTrigger to ContextMenu
-  // i.e. to know what node was clicked
-  const [apId, changeApId] = useState(0)
-  const onShow = useCallback(
-    (event) => changeApId(event.detail.data.tableId),
-    [],
-  )
-  console.log('EkfrequenzFolder, id:', apId)
 
   return (
     <ErrorBoundary>
