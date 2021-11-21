@@ -71,21 +71,9 @@ const SelectStyled = styled(AsyncSelect)`
   }
 `
 
-// would be elegant to query only ap with ekfrequenz
-// one solution: https://github.com/graphile/pg-aggregates
-const apValuesQuery = gql`
-  query apForEkfrequenzfolder($filter: ApFilter) {
-    allAps(orderBy: [LABEL_ASC], filter: $filter) {
-      nodes {
-        value: id
-        label
-        ekfrequenzsByApId {
-          totalCount
-        }
-      }
-    }
-  }
-`
+const copyEkFromApData = {
+  action: 'copyEkFromData',
+}
 
 const EkfrequenzFolder = ({ onClick, treeName }) => {
   const client = useApolloClient()
@@ -114,6 +102,8 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
       let result
       try {
         result = await client.query({
+          // would be elegant to query only ap with ekfrequenz
+          // solution: https://github.com/graphile/pg-aggregates
           query: gql`
             query apForEkfrequenzfolder($filter: ApFilter) {
               allAps(orderBy: [LABEL_ASC], filter: $filter) {
@@ -154,7 +144,7 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
             <MenuItem onClick={onClick} data={insertData}>
               erstelle neue
             </MenuItem>
-            <MenuItem onClick={onOpenChooseApDialog}>
+            <MenuItem onClick={onOpenChooseApDialog} data={copyEkFromApData}>
               Aus anderem Aktionsplan kopieren
             </MenuItem>
           </>

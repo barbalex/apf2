@@ -392,6 +392,9 @@ const TreeContainer = ({
       const nodeType = firstElementChild.getAttribute('data-nodetype')
       const menuType = firstElementChild.getAttribute('data-menutype')
       const actions = {
+        copyEkFromApData() {
+          console.log('should copy EK from AP data')
+        },
         insert() {
           if (nodeType === 'table') {
             url.pop()
