@@ -8,7 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
-import { gql, useApolloClient } from '@apollo/client'
+import { gql, useApolloClient, useLazyQuery } from '@apollo/client'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import storeContext from '../../../../storeContext'
@@ -72,7 +72,7 @@ const Error = styled.div`
 
 const EkfrequenzFolder = ({ onClick, treeName }) => {
   const client = useApolloClient()
-  const { user, enqueNotification } = useContext(storeContext)
+  const { user, refetch } = useContext(storeContext)
 
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
@@ -82,7 +82,6 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
     (event) => changeApId(event.detail.data.tableId),
     [],
   )
-  console.log('EkfrequenzFolder, id:', apId)
 
   const [openChooseAp, setOpenChooseAp] = useState(false)
   const onCloseChooseApDialog = useCallback(() => setOpenChooseAp(false), [])
@@ -90,16 +89,13 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
 
   const onChooseAp = useCallback(
     async (option) => {
-      console.log('option choosen: ', option)
-      // TODO:
+      const newApId = option.value
       // 0. choosing no option is not possible so needs not be catched
       // 1. delete existing ekfrequenz
       // 1.1: query existing ekfrequenz
       let existingEkfrequenzResult
       try {
         existingEkfrequenzResult = await client.query({
-          // would be elegant to query only ap with ekfrequenz
-          // solution: https://github.com/graphile/pg-aggregates
           query: gql`
             query getExistingEkfrequenzForEkfrequenzFolder($apId: UUID) {
               allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
@@ -122,27 +118,29 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
       const existingEkfrequenzs = (
         existingEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
       ).map((e) => e.id)
-      console.log('EkfrequenzFolder, existingEkfrequenzs:', existingEkfrequenzs)
+      console.log('existingEkfrequenzResult:', existingEkfrequenzResult)
       // 1.2: delete existing ekfrequenz
       try {
         await Promise.allSettled(
-          existingEkfrequenzs.map((id) =>
-            client.query({
-              // would be elegant to query only ap with ekfrequenz
-              // solution: https://github.com/graphile/pg-aggregates
-              query: gql`
-                mutation deleteExistingEkfrequenzForEkfrequenzFolder(
-                  $id: UUID!
-                ) {
-                  deleteEkfrequenzById(input: { id: $id }) {
-                    deletedEkfrequenzId
+          existingEkfrequenzs.map(
+            async (id) =>
+              await client.mutate({
+                mutation: gql`
+                  mutation deleteExistingEkfrequenzForEkfrequenzFolder(
+                    $id: UUID!
+                  ) {
+                    deleteEkfrequenzById(input: { id: $id }) {
+                      deletedEkfrequenzId
+                    }
                   }
-                }
-              `,
-              variables: {
-                id,
-              },
-            }),
+                `,
+                variables: {
+                  id,
+                },
+                update(cache) {
+                  cache.evict({ id })
+                },
+              }),
           ),
         )
       } catch (error) {
@@ -151,16 +149,122 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
           `Fehler beim Löschen der existierenden EK-Frequenzen: ${error.message}`,
         )
       }
-      console.log('EkfrequenzFolder, all existing ekfrequenzs deleted')
 
       // 2. add ekfrequenz from other ap
       // 2.1: query ekfrequenz
-      //      if other ap has no ekfrequenz, tell user and return
+      let newEkfrequenzResult
+      try {
+        newEkfrequenzResult = await client.query({
+          query: gql`
+            query getNewEkfrequenzForEkfrequenzFolder($apId: UUID) {
+              allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
+                nodes {
+                  id
+                  anwendungsfall
+                  apId
+                  bemerkungen
+                  code
+                  ekAbrechnungstyp
+                  ektyp
+                  kontrolljahre
+                  kontrolljahreAb
+                  sort
+                }
+              }
+            }
+          `,
+          variables: {
+            apId: newApId,
+          },
+        })
+      } catch (error) {
+        console.log({ error })
+        setApOptionsError(
+          `Fehler beim Abfragen der Aktionspläne: ${error.message}`,
+        )
+      }
+      const newEkfrequenzs =
+        newEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
       // 2.2: insert ekfrequenz
-      // 3. inform user
+      try {
+        await Promise.allSettled(
+          newEkfrequenzs.map(async (ekf) => {
+            client.mutate({
+              mutation: gql`
+                mutation insertEkfrequenzForEkfrequenzFolder(
+                  $apId: UUID!
+                  $anwendungsfall: String
+                  $bemerkungen: String
+                  $changedBy: String
+                  $code: String
+                  $ekAbrechnungstyp: String
+                  $ektyp: EkType
+                  $kontrolljahre: [Int]
+                  $kontrolljahreAb: EkKontrolljahreAb
+                  $sort: Int
+                ) {
+                  createEkfrequenz(
+                    input: {
+                      ekfrequenz: {
+                        apId: $apId
+                        anwendungsfall: $anwendungsfall
+                        bemerkungen: $bemerkungen
+                        changedBy: $changedBy
+                        code: $code
+                        ekAbrechnungstyp: $ekAbrechnungstyp
+                        ektyp: $ektyp
+                        kontrolljahre: $kontrolljahre
+                        kontrolljahreAb: $kontrolljahreAb
+                        sort: $sort
+                      }
+                    }
+                  ) {
+                    ekfrequenz {
+                      __typename
+                      id
+                      anwendungsfall
+                      apId
+                      bemerkungen
+                      code
+                      ekAbrechnungstyp
+                      ektyp
+                      kontrolljahre
+                      kontrolljahreAb
+                      sort
+                      changedBy
+                    }
+                  }
+                }
+              `,
+              variables: {
+                anwendungsfall: ekf.anwendungsfall,
+                apId: apId,
+                bemerkungen: ekf.bemerkungen,
+                code: ekf.code,
+                ekAbrechnungstyp: ekf.ekAbrechnungstyp,
+                ektyp: ekf.ektyp,
+                kontrolljahre: ekf.kontrolljahre,
+                kontrolljahreAb: ekf.kontrolljahreAb,
+                sort: ekf.sort,
+                changedBy: user.name,
+              },
+            })
+          }),
+        )
+      } catch (error) {
+        console.log({ error })
+        setApOptionsError(
+          `Fehler beim Kopieren der EK-Frequenzen: ${error.message}`,
+        )
+      }
+      //await existingEkfrequenzResult.refetch()
+      refetch.tree()
+
+      // 3. TODO: inform user
+      //    happens by showing new ekfrequenzs in the tree
       setOpenChooseAp(false)
     },
-    [apId, client],
+    [apId, client, refetch, user.name],
   )
 
   const [apOptionsError, setApOptionsError] = useState(undefined)
@@ -208,7 +312,7 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
       )
       cb(optionsWithEkfrequenzs)
     },
-    [client],
+    [apId, client],
   )
 
   return (
