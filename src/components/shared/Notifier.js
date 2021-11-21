@@ -11,7 +11,7 @@ const Notifier = () => {
   const [displayed, setDisplayed] = useState([])
 
   useEffect(() => {
-    notifications.forEach(notification => {
+    notifications.forEach((notification) => {
       // Do nothing if snackbar is already displayed
       if (displayed.includes(notification.key)) return
       // Display snackbar using notistack

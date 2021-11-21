@@ -70,10 +70,14 @@ const SelectStyled = styled(AsyncSelect)`
     width: ${(props) => (props.nocaret ? '0' : '1px')};
   }
 `
+const Error = styled.div`
+  font-size: 12px;
+  color: red;
+`
 
 const EkfrequenzFolder = ({ onClick, treeName }) => {
   const client = useApolloClient()
-  const { user } = useContext(storeContext)
+  const { user, enqueNotification } = useContext(storeContext)
 
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
@@ -100,6 +104,7 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
     setOpenChooseAp(false)
   }, [])
 
+  const [apOptionsError, setApOptionsError] = useState(undefined)
   const apOptions = useCallback(
     async (inputValue, cb) => {
       console.log('apOptionsCallback, inputValue:', inputValue)
@@ -130,6 +135,7 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
         })
       } catch (error) {
         console.log({ error })
+        setApOptionsError(error?.message ?? error)
       }
       const { data } = result
       const options = data?.allAps?.nodes ?? []
@@ -194,6 +200,7 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
               loadOptions={apOptions}
               openMenuOnFocus
             />
+            {apOptionsError && <Error>{apOptionsError}</Error>}
           </SelectContainer>
         </DialogContent>
         <DialogActions>
