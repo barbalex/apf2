@@ -122,12 +122,37 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
       const existingEkfrequenzs = (
         existingEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
       ).map((e) => e.id)
-      console.log('EkfrequenzFolder', {
-        existingEkfrequenzResult,
-        apId,
-        existingEkfrequenzs,
-      })
+      console.log('EkfrequenzFolder, existingEkfrequenzs:', existingEkfrequenzs)
       // 1.2: delete existing ekfrequenz
+      try {
+        await Promise.allSettled(
+          existingEkfrequenzs.map((id) =>
+            client.query({
+              // would be elegant to query only ap with ekfrequenz
+              // solution: https://github.com/graphile/pg-aggregates
+              query: gql`
+                mutation deleteExistingEkfrequenzForEkfrequenzFolder(
+                  $id: UUID!
+                ) {
+                  deleteEkfrequenzById(input: { id: $id }) {
+                    deletedEkfrequenzId
+                  }
+                }
+              `,
+              variables: {
+                id,
+              },
+            }),
+          ),
+        )
+      } catch (error) {
+        console.log({ error })
+        setApOptionsError(
+          `Fehler beim Löschen der existierenden EK-Frequenzen: ${error.message}`,
+        )
+      }
+      console.log('EkfrequenzFolder, all existing ekfrequenzs deleted')
+
       // 2. add ekfrequenz from other ap
       // 2.1: query ekfrequenz
       //      if other ap has no ekfrequenz, tell user and return
@@ -141,9 +166,13 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
   const [apOptionsError, setApOptionsError] = useState(undefined)
   const apOptions = useCallback(
     async (inputValue, cb) => {
+      if (apId === 0) return
       const filter = inputValue
-        ? { label: { includesInsensitive: inputValue } }
-        : { label: { isNull: false } }
+        ? {
+            label: { includesInsensitive: inputValue },
+            id: { notEqualTo: apId },
+          }
+        : { label: { isNull: false }, id: { notEqualTo: apId } }
       let result
       try {
         result = await client.query({
