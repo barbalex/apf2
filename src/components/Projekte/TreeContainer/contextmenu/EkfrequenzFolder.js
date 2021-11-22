@@ -72,7 +72,7 @@ const Error = styled.div`
 
 const EkfrequenzFolder = ({ onClick, treeName }) => {
   const client = useApolloClient()
-  const { user } = useContext(storeContext)
+  const { user, enqueNotification } = useContext(storeContext)
 
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
@@ -108,8 +108,8 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
           variables: {
             apId,
           },
-          // got errors when not setting this policy
-          // because apollo seemed to use local cache which was not up to date
+          // got errors when not setting 'network-only' policy
+          // because apollo seemed to use local cache which was not up to date any more
           fetchPolicy: 'network-only',
         })
       } catch (error) {
@@ -182,8 +182,8 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
         })
       } catch (error) {
         console.log({ error })
-        setApOptionsError(
-          `Fehler beim Abfragen der Aktionspläne: ${error.message}`,
+        return setApOptionsError(
+          `Fehler beim Abfragen der neuen EK-Frequenzen: ${error.message}`,
         )
       }
       const newEkfrequenzs =
@@ -259,16 +259,21 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
         )
       } catch (error) {
         console.log({ error })
-        setApOptionsError(
+        return setApOptionsError(
           `Fehler beim Kopieren der EK-Frequenzen: ${error.message}`,
         )
       }
 
-      // 3. TODO: inform user
-      //    happens by showing new ekfrequenzs in the tree
+      // 3. inform user
       setOpenChooseAp(false)
+      enqueNotification({
+        message: `Die EK-Frequenzen wurden kopiert`,
+        options: {
+          variant: 'info',
+        },
+      })
     },
-    [apId, client, user.name],
+    [apId, client, enqueNotification, user.name],
   )
 
   const [apOptionsError, setApOptionsError] = useState(undefined)

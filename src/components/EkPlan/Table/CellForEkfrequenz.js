@@ -37,10 +37,10 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
   const [focused, setFocused] = useState(false)
   const { closeSnackbar } = useSnackbar()
 
-  const onMouseEnter = useCallback(() => hovered.setTpopId(row.id), [
-    hovered,
-    row.id,
-  ])
+  const onMouseEnter = useCallback(
+    () => hovered.setTpopId(row.id),
+    [hovered, row.id],
+  )
   const onChange = useCallback(
     async (e) => {
       const value = e.target.value || null
@@ -95,7 +95,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
       }
       // set EK-Frequenz Startjahr
       let ekfrequenzStartjahr
-      if (!!value) {
+      if (value) {
         ekfrequenzStartjahr = await setStartjahr({
           row,
           ekfrequenz: value,
