@@ -108,6 +108,9 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
           variables: {
             apId,
           },
+          // got errors when not setting this policy
+          // because apollo seemed to use local cache which was not up to date
+          fetchPolicy: 'network-only',
         })
       } catch (error) {
         console.log({ error })
