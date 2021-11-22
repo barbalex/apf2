@@ -4494,7 +4494,7 @@ __metadata:
     "@turf/nearest-point": 6.5.0
     "@turf/points-within-polygon": 6.5.0
     autosuggest-highlight: 3.2.0
-    babel-plugin-styled-components: 1.13.3
+    babel-plugin-styled-components: 2.0.1
     blueimp-md5: 2.19.0
     browser-update: 3.3.33
     copyfiles: 2.4.1
@@ -5097,7 +5097,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-styled-components@npm:1.13.3, babel-plugin-styled-components@npm:>= 1.12.0":
+"babel-plugin-styled-components@npm:2.0.1":
+  version: 2.0.1
+  resolution: "babel-plugin-styled-components@npm:2.0.1"
+  dependencies:
+    "@babel/helper-annotate-as-pure": ^7.16.0
+    "@babel/helper-module-imports": ^7.16.0
+    babel-plugin-syntax-jsx: ^6.18.0
+    lodash: ^4.17.11
+  peerDependencies:
+    styled-components: ">= 2"
+  checksum: 0b0e57fd3fd997a1a2a83d8b109213c9160f59200246d780417184edc0808a8ca38da92bffeeac5b9a903f97f147c023c7942dd1bf4a6e4e069f1bbcb1ccfda9
+  languageName: node
+  linkType: hard
+
+"babel-plugin-styled-components@npm:>= 1.12.0":
   version: 1.13.3
   resolution: "babel-plugin-styled-components@npm:1.13.3"
   dependencies:

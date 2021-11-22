@@ -34,7 +34,7 @@
     "@turf/nearest-point": "6.5.0",
     "@turf/points-within-polygon": "6.5.0",
     "autosuggest-highlight": "3.2.0",
-    "babel-plugin-styled-components": "1.13.3",
+    "babel-plugin-styled-components": "2.0.1",
     "blueimp-md5": "2.19.0",
     "browser-update": "3.3.33",
     "date-fns": "2.26.0",
