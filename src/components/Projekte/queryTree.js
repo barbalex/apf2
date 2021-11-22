@@ -159,8 +159,10 @@ export default gql`
         ...EkzaehleinheitFields
       }
     }
-    allErfkrits(filter: $erfkritsFilter, orderBy: LABEL_ASC)
-      @include(if: $isAp) {
+    allErfkrits(
+      filter: $erfkritsFilter
+      orderBy: AP_ERFKRIT_WERTE_BY_ERFOLG__SORT_ASC
+    ) @include(if: $isAp) {
       nodes {
         ...ErfkritFields
       }

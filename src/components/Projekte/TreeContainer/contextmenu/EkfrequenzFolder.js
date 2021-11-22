@@ -109,7 +109,10 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
             apId,
           },
           // got errors when not setting 'network-only' policy
-          // because apollo seemed to use local cache which was not up to date any more
+          // when copying repeatedly
+          // apollo seemed to use local cache which was not up to date any more
+          // so probably not the newly inserted were queried but the earlier deleted ones
+          // which created conflicts with uniqueness
           fetchPolicy: 'network-only',
         })
       } catch (error) {

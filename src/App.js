@@ -6,7 +6,7 @@ import React from 'react'
 import 'isomorphic-fetch'
 import queryString from 'query-string'
 
-import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import theme from './utils/materialTheme'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import de from 'date-fns/locale/de'
@@ -52,7 +52,7 @@ setDefaultLocale('de')
 const App = ({ element }) => {
   const idb = initializeIdb()
   const store = MobxStore.create()
-  const client = buildClient({ idb, store })
+  const client = buildClient({ store })
   const idbContext = { idb }
 
   if (typeof window !== 'undefined') {
@@ -156,7 +156,7 @@ const App = ({ element }) => {
         </ApolloProvider>
       </MobxProvider>
     </IdbProvider>
-  );
+  )
 }
 
 export default App
