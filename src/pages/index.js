@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Typography from '@mui/material/Typography'
 import MaterialCard from '@mui/material/Card'
 import styled from 'styled-components'
@@ -7,11 +7,14 @@ import SimpleBar from 'simplebar-react'
 
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
-import storeContext from '../storeContext'
 
+const OuterContainer = styled.div`
+  overflow-y: auto;
+  height: 100%;
+`
 const StyledSimpleBar = styled(SimpleBar)`
-  max-height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  max-height: 100%;
+  height: 100%;
   .simplebar-content {
     /* without this image did not cover 100% on large screens */
     height: 100%;
@@ -109,14 +112,11 @@ const bgImageStyle = {
   zIndex: -1,
 }
 
-const Home = () => {
-  const store = useContext(storeContext)
-  const { appBarHeight } = store
-
-  return (
-    <ErrorBoundary>
-      <Layout>
-        <StyledSimpleBar data-appbar-height={appBarHeight}>
+const Home = () => (
+  <ErrorBoundary>
+    <Layout>
+      <OuterContainer>
+        <StyledSimpleBar>
           <Container>
             <StaticImage
               style={bgImageStyle}
@@ -235,9 +235,9 @@ const Home = () => {
             </CardContainer>
           </Container>
         </StyledSimpleBar>
-      </Layout>
-    </ErrorBoundary>
-  )
-}
+      </OuterContainer>
+    </Layout>
+  </ErrorBoundary>
+)
 
 export default Home

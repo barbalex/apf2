@@ -12,6 +12,10 @@ const createGlobalStyleModule = () => createGlobalStyle`
     color: rgba(0,0,0,0.87);
   }
 
+  #gatsby-focus-wrapper{
+    height: 100%;
+  }
+
   @media print {
     * {
       overflow: visible !important;
