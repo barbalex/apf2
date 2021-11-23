@@ -54,6 +54,9 @@ const Checkbox3StatesFormik = ({ label, handleSubmit, ...props }) => {
     }
     onChange(fakeEvent)
     onBlur(fakeEvent)
+    // It is possible to directly click an option after editing an other field
+    // this creates a race condition in the two submits which can lead to lost inputs!
+    // so timeout inputs in option fields
     setTimeout(() => handleSubmit())
   }, [value, name, onChange, onBlur, handleSubmit])
 

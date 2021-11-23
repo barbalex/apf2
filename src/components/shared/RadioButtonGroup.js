@@ -56,7 +56,10 @@ const RadioButtonGroup = ({
             name,
           },
         }
-        return saveToDb(fakeEvent)
+        // It is possible to directly click an option after editing an other field
+        // this creates a race condition in the two submits which can lead to lost inputs!
+        // so timeout inputs in option fields
+        return setTimeout(() => saveToDb(fakeEvent))
       }
     },
     [value, name, saveToDb],
