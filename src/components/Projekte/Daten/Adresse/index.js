@@ -28,7 +28,7 @@ const LoadingContainer = styled.div`
   padding: 10px;
 `
 const FieldsContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const StyledForm = styled(Form)`
   padding: 10px;
@@ -114,8 +114,6 @@ const Adresse = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
-
   if (loading) {
     return (
       <LoadingContainer data-appbar-height={appBarHeight}>
@@ -133,9 +131,8 @@ const Adresse = ({ treeName }) => {
           title="Adresse"
           treeName={treeName}
           table="adresse"
-          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+        <FieldsContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',
