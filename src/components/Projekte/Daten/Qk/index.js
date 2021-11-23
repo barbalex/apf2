@@ -17,9 +17,10 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const LoadingContainer = styled.div`
@@ -30,8 +31,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 const TabContent = styled.div`
-  height: ${(props) =>
-    `calc(100% - ${props['data-form-title-height']}px - 48px)`};
+  height: 100%;
   fieldset {
     padding-right: 30px;
   }
@@ -39,7 +39,7 @@ const TabContent = styled.div`
 
 const QkForm = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { urlQuery, setUrlQuery, appBarHeight } = store
+  const { urlQuery, setUrlQuery } = store
   const { activeNodeArray } = store[treeName]
   const apId = activeNodeArray[3]
 
@@ -80,17 +80,12 @@ const QkForm = ({ treeName }) => {
     [setUrlQuery, urlQuery],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(43)
-
   if (error) return <Error error={error} />
+
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
-        <FormTitle
-          title="Qualitätskontrollen"
-          treeName={treeName}
-          setFormTitleHeight={setFormTitleHeight}
-        />
+      <Container>
+        <FormTitle title="Qualitätskontrollen" treeName={treeName} />
         <Tabs
           value={tab}
           onChange={onChangeTab}
@@ -100,36 +95,38 @@ const QkForm = ({ treeName }) => {
         >
           <StyledTab label="ausführen" value="qk" data-id="qk" />
           <StyledTab
-            label={`auswählen${!!qkCount ? ` (${apqkCount}/${qkCount})` : ''}`}
+            label={`auswählen${qkCount ? ` (${apqkCount}/${qkCount})` : ''}`}
             value="waehlen"
             data-id="waehlen"
           />
         </Tabs>
-        <TabContent data-form-title-height={formTitleHeight}>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-          >
-            {tab === 'qk' ? (
-              <>
-                {loading ? (
-                  <LoadingContainer>Lade Daten...</LoadingContainer>
-                ) : (
-                  <Qk
-                    key={qkCount}
-                    treeName={treeName}
-                    qkNameQueries={qkNameQueries}
-                    qks={qks}
-                  />
-                )}
-              </>
-            ) : (
-              <Choose treeName={treeName} refetchTab={refetch} />
-            )}
-          </SimpleBar>
-        </TabContent>
+        <div style={{ overflowY: 'auto' }}>
+          <TabContent>
+            <SimpleBar
+              style={{
+                maxHeight: '100%',
+                height: '100%',
+              }}
+            >
+              {tab === 'qk' ? (
+                <>
+                  {loading ? (
+                    <LoadingContainer>Lade Daten...</LoadingContainer>
+                  ) : (
+                    <Qk
+                      key={qkCount}
+                      treeName={treeName}
+                      qkNameQueries={qkNameQueries}
+                      qks={qks}
+                    />
+                  )}
+                </>
+              ) : (
+                <Choose treeName={treeName} refetchTab={refetch} />
+              )}
+            </SimpleBar>
+          </TabContent>
+        </div>
       </Container>
     </ErrorBoundary>
   )

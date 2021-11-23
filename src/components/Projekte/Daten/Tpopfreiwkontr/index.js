@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
@@ -18,12 +18,10 @@ import Error from '../../../shared/Error'
 import TpopfreiwkontrForm from './Form'
 
 const Container = styled.div`
-  height: ${(props) =>
-    props.showfilter
-      ? `calc(100% - ${props['data-filter-title-height']}px)`
-      : `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
   @media print {
     font-size: 11px;
@@ -36,27 +34,21 @@ const Container = styled.div`
   }
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const ScrollContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const StyledIconButton = styled(IconButton)`
   color: white !important;
   margin-right: 10px !important;
 `
 
-const Tpopfreiwkontr = ({
-  treeName,
-  showFilter = false,
-  id: idPassed,
-  filterTitleHeight = 81,
-}) => {
+const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, isPrint, setIsPrint, view, user, appBarHeight } =
-    store
+  const { enqueNotification, isPrint, setIsPrint, view, user } = store
   const tree = store[treeName]
   const { activeNodeArray, dataFilter } = tree
 
@@ -194,23 +186,12 @@ const Tpopfreiwkontr = ({
     }
   }, [setIsPrint])
 
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
-
-  if (loading)
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+  if (loading) return <LoadingContainer>Lade...</LoadingContainer>
   if (error) return <Error error={error} />
   if (Object.keys(row).length === 0) return null
 
   return (
-    <Container
-      showfilter={showFilter}
-      data-appbar-height={appBarHeight}
-      data-filter-title-height={filterTitleHeight}
-    >
+    <Container showfilter={showFilter}>
       {!(view === 'ekf') && showFilter && (
         <FilterTitle
           title="Freiwilligen-Kontrollen"
@@ -220,7 +201,6 @@ const Tpopfreiwkontr = ({
           filteredNr={tpopkontrFilteredCount}
           totalApNr={tpopkontrsOfApTotalCount}
           filteredApNr={tpopkontrsOfApFilteredCount}
-          setFormTitleHeight={setFormTitleHeight}
         />
       )}
       {!(view === 'ekf') && !showFilter && (
@@ -228,7 +208,6 @@ const Tpopfreiwkontr = ({
           apId={apId}
           title="Freiwilligen-Kontrolle"
           treeName={treeName}
-          setFormTitleHeight={setFormTitleHeight}
           buttons={
             <>
               <StyledIconButton onClick={onClickPrint} title="drucken">
@@ -250,7 +229,7 @@ const Tpopfreiwkontr = ({
           refetch={refetch}
         />
       ) : (
-        <ScrollContainer data-form-title-height={formTitleHeight}>
+        <ScrollContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',

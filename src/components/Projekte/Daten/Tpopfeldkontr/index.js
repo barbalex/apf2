@@ -36,22 +36,20 @@ import Error from '../../../shared/Error'
 import { tpopfeldkontr } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: ${(props) =>
-    props.showfilter
-      ? `calc(100% - ${props['data-filter-title-height']}px)`
-      : `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FieldsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow: hidden;
   > div:first-child {
     > div:first-child {
       display: block !important;
@@ -78,7 +76,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 const TabContent = styled.div`
-  height: ${(props) => `calc(100% - 48px)`};
+  height: 100%;
 `
 
 const fieldTypes = {
@@ -136,15 +134,10 @@ const tpopkontrTypWerte = [
   },
 ]
 
-const Tpopfeldkontr = ({
-  treeName,
-  showFilter = false,
-  width = 1000,
-  filterTitleHeight = 81,
-}) => {
+const Tpopfeldkontr = ({ treeName, showFilter = false, width = 1000 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { dataFilterSetValue, urlQuery, setUrlQuery, appBarHeight } = store
+  const { dataFilterSetValue, urlQuery, setUrlQuery } = store
   const { activeNodeArray, dataFilter } = store[treeName]
 
   let id =
@@ -332,17 +325,11 @@ const Tpopfeldkontr = ({
     )
     .map((o) => ({ value: o, label: o }))
 
-  const [formTitleHeight, setFormTitleHeight] = useState(43)
-
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
 
   const errors = [
@@ -354,11 +341,7 @@ const Tpopfeldkontr = ({
 
   return (
     <ErrorBoundary>
-      <Container
-        showfilter={showFilter}
-        data-appbar-height={appBarHeight}
-        data-filter-title-height={filterTitleHeight}
-      >
+      <Container showfilter={showFilter}>
         {showFilter ? (
           <FilterTitle
             title="Feld-Kontrollen"
@@ -368,17 +351,15 @@ const Tpopfeldkontr = ({
             filteredNr={tpopkontrFilteredCount}
             totalApNr={tpopkontrsOfApTotalCount}
             filteredApNr={tpopkontrsOfApFilteredCount}
-            setFormTitleHeight={setFormTitleHeight}
           />
         ) : (
           <FormTitle
             apId={activeNodeArray[3]}
             title="Feld-Kontrolle"
             treeName={treeName}
-            setFormTitleHeight={setFormTitleHeight}
           />
         )}
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+        <FieldsContainer>
           <Tabs
             value={tab}
             onChange={onChangeTab}
@@ -396,223 +377,225 @@ const Tpopfeldkontr = ({
               <StyledTab label="Dateien" value="dateien" data-id="dateien" />
             )}
           </Tabs>
-          <TabContent>
-            {tab === 'entwicklung' && (
-              <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-                <FormContainer data-column-width={columnWidth}>
-                  <Formik
-                    key={showFilter ? JSON.stringify(row) : row.id}
-                    initialValues={row}
-                    onSubmit={onSubmit}
-                    enableReinitialize
-                  >
-                    {({ handleSubmit, dirty }) => (
-                      <Form onBlur={() => dirty && handleSubmit()}>
-                        <TextField
-                          name="jahr"
-                          label="Jahr"
-                          type="number"
-                          handleSubmit={handleSubmit}
-                        />
-                        <DateField
-                          name="datum"
-                          label="Datum"
-                          handleSubmit={handleSubmit}
-                        />
-                        <RadioButtonGroup
-                          name="typ"
-                          label="Kontrolltyp"
-                          dataSource={tpopkontrTypWerte}
-                          handleSubmit={handleSubmit}
-                        />
-                        <Select
-                          name="bearbeiter"
-                          label="BearbeiterIn"
-                          options={dataAdresses?.allAdresses?.nodes ?? []}
-                          loading={loadingAdresses}
-                          handleSubmit={handleSubmit}
-                        />
-                        <JesNoFormik
-                          name="jungpflanzenVorhanden"
-                          label="Jungpflanzen vorhanden"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="vitalitaet"
-                          label="Vitalität"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="ueberlebensrate"
-                          label="Überlebensrate (in Prozent)"
-                          type="number"
-                          handleSubmit={handleSubmit}
-                        />
-                        <RadioButtonGroupWithInfo
-                          name="entwicklung"
-                          label="Entwicklung"
-                          dataSource={
-                            dataLists?.allTpopEntwicklungWertes?.nodes ?? []
-                          }
-                          loading={loadingLists}
-                          popover={TpopfeldkontrentwicklungPopover}
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="ursachen"
-                          label="Ursachen"
-                          hintText="Standort: ..., Klima: ..., anderes: ..."
-                          type="text"
-                          multiLine
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="gefaehrdung"
-                          label="Gefährdung"
-                          type="text"
-                          multiLine
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="erfolgsbeurteilung"
-                          label="Erfolgsbeurteilung"
-                          type="text"
-                          multiLine
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="umsetzungAendern"
-                          label="Änderungs-Vorschläge Umsetzung"
-                          type="text"
-                          multiLine
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="kontrolleAendern"
-                          label="Änderungs-Vorschläge Kontrolle"
-                          type="text"
-                          multiLine
-                          handleSubmit={handleSubmit}
-                        />
-                        <MdField name="bemerkungen" label="Bemerkungen" />
-                        <JesNoFormik
-                          name="apberNichtRelevant"
-                          label="Im Jahresbericht nicht berücksichtigen"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="apberNichtRelevantGrund"
-                          label="Wieso im Jahresbericht nicht berücksichtigen?"
-                          type="text"
-                          multiLine
-                          handleSubmit={handleSubmit}
-                        />
-                        {!showFilter && (
-                          <StringToCopy text={row.id} label="id" />
-                        )}
-                      </Form>
-                    )}
-                  </Formik>
-                </FormContainer>
-              </SimpleBar>
-            )}
-            {tab === 'biotop' && (
-              <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-                <FormContainer data-column-width={columnWidth}>
-                  <Formik
-                    initialValues={row}
-                    onSubmit={onSubmit}
-                    enableReinitialize
-                  >
-                    {({ handleSubmit, dirty }) => (
-                      <Form onBlur={() => dirty && handleSubmit()}>
-                        <TextField
-                          name="flaeche"
-                          label="Fläche"
-                          type="number"
-                          handleSubmit={handleSubmit}
-                        />
-                        <Section>Vegetation</Section>
-                        <Select
-                          data-id="lrDelarze"
-                          name="lrDelarze"
-                          label="Lebensraum nach Delarze"
-                          options={aeLrWerte}
-                          loading={loadingLists}
-                          handleSubmit={handleSubmit}
-                        />
-                        <Select
-                          name="lrUmgebungDelarze"
-                          label="Umgebung nach Delarze"
-                          options={aeLrWerte}
-                          loading={loadingLists}
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="vegetationstyp"
-                          label="Vegetationstyp"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="konkurrenz"
-                          label="Konkurrenz"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="moosschicht"
-                          label="Moosschicht"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="krautschicht"
-                          label="Krautschicht"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="strauchschicht"
-                          label="Strauchschicht"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          name="baumschicht"
-                          label="Baumschicht"
-                          type="text"
-                          handleSubmit={handleSubmit}
-                        />
-                        <Section>Beurteilung</Section>
-                        <TextField
-                          name="handlungsbedarf"
-                          label="Handlungsbedarf"
-                          type="text"
-                          multiline
-                          handleSubmit={handleSubmit}
-                        />
-                        <RadioButtonGroup
-                          name="idealbiotopUebereinstimmung"
-                          label="Übereinstimmung mit Idealbiotop"
-                          dataSource={
-                            dataLists?.allTpopkontrIdbiotuebereinstWertes
-                              ?.nodes ?? []
-                          }
-                          loading={loadingLists}
-                          handleSubmit={handleSubmit}
-                        />
-                      </Form>
-                    )}
-                  </Formik>
-                </FormContainer>
-              </SimpleBar>
-            )}
-            {tab === 'dateien' && !showFilter && (
-              <Files parentId={row.id} parent="tpopkontr" />
-            )}
-          </TabContent>
+          <div style={{ overflowY: 'auto' }}>
+            <TabContent>
+              {tab === 'entwicklung' && (
+                <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+                  <FormContainer data-column-width={columnWidth}>
+                    <Formik
+                      key={showFilter ? JSON.stringify(row) : row.id}
+                      initialValues={row}
+                      onSubmit={onSubmit}
+                      enableReinitialize
+                    >
+                      {({ handleSubmit, dirty }) => (
+                        <Form onBlur={() => dirty && handleSubmit()}>
+                          <TextField
+                            name="jahr"
+                            label="Jahr"
+                            type="number"
+                            handleSubmit={handleSubmit}
+                          />
+                          <DateField
+                            name="datum"
+                            label="Datum"
+                            handleSubmit={handleSubmit}
+                          />
+                          <RadioButtonGroup
+                            name="typ"
+                            label="Kontrolltyp"
+                            dataSource={tpopkontrTypWerte}
+                            handleSubmit={handleSubmit}
+                          />
+                          <Select
+                            name="bearbeiter"
+                            label="BearbeiterIn"
+                            options={dataAdresses?.allAdresses?.nodes ?? []}
+                            loading={loadingAdresses}
+                            handleSubmit={handleSubmit}
+                          />
+                          <JesNoFormik
+                            name="jungpflanzenVorhanden"
+                            label="Jungpflanzen vorhanden"
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="vitalitaet"
+                            label="Vitalität"
+                            type="text"
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="ueberlebensrate"
+                            label="Überlebensrate (in Prozent)"
+                            type="number"
+                            handleSubmit={handleSubmit}
+                          />
+                          <RadioButtonGroupWithInfo
+                            name="entwicklung"
+                            label="Entwicklung"
+                            dataSource={
+                              dataLists?.allTpopEntwicklungWertes?.nodes ?? []
+                            }
+                            loading={loadingLists}
+                            popover={TpopfeldkontrentwicklungPopover}
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="ursachen"
+                            label="Ursachen"
+                            hintText="Standort: ..., Klima: ..., anderes: ..."
+                            type="text"
+                            multiLine
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="gefaehrdung"
+                            label="Gefährdung"
+                            type="text"
+                            multiLine
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="erfolgsbeurteilung"
+                            label="Erfolgsbeurteilung"
+                            type="text"
+                            multiLine
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="umsetzungAendern"
+                            label="Änderungs-Vorschläge Umsetzung"
+                            type="text"
+                            multiLine
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="kontrolleAendern"
+                            label="Änderungs-Vorschläge Kontrolle"
+                            type="text"
+                            multiLine
+                            handleSubmit={handleSubmit}
+                          />
+                          <MdField name="bemerkungen" label="Bemerkungen" />
+                          <JesNoFormik
+                            name="apberNichtRelevant"
+                            label="Im Jahresbericht nicht berücksichtigen"
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="apberNichtRelevantGrund"
+                            label="Wieso im Jahresbericht nicht berücksichtigen?"
+                            type="text"
+                            multiLine
+                            handleSubmit={handleSubmit}
+                          />
+                          {!showFilter && (
+                            <StringToCopy text={row.id} label="id" />
+                          )}
+                        </Form>
+                      )}
+                    </Formik>
+                  </FormContainer>
+                </SimpleBar>
+              )}
+              {tab === 'biotop' && (
+                <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+                  <FormContainer data-column-width={columnWidth}>
+                    <Formik
+                      initialValues={row}
+                      onSubmit={onSubmit}
+                      enableReinitialize
+                    >
+                      {({ handleSubmit, dirty }) => (
+                        <Form onBlur={() => dirty && handleSubmit()}>
+                          <TextField
+                            name="flaeche"
+                            label="Fläche"
+                            type="number"
+                            handleSubmit={handleSubmit}
+                          />
+                          <Section>Vegetation</Section>
+                          <Select
+                            data-id="lrDelarze"
+                            name="lrDelarze"
+                            label="Lebensraum nach Delarze"
+                            options={aeLrWerte}
+                            loading={loadingLists}
+                            handleSubmit={handleSubmit}
+                          />
+                          <Select
+                            name="lrUmgebungDelarze"
+                            label="Umgebung nach Delarze"
+                            options={aeLrWerte}
+                            loading={loadingLists}
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="vegetationstyp"
+                            label="Vegetationstyp"
+                            type="text"
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="konkurrenz"
+                            label="Konkurrenz"
+                            type="text"
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="moosschicht"
+                            label="Moosschicht"
+                            type="text"
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="krautschicht"
+                            label="Krautschicht"
+                            type="text"
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="strauchschicht"
+                            label="Strauchschicht"
+                            type="text"
+                            handleSubmit={handleSubmit}
+                          />
+                          <TextField
+                            name="baumschicht"
+                            label="Baumschicht"
+                            type="text"
+                            handleSubmit={handleSubmit}
+                          />
+                          <Section>Beurteilung</Section>
+                          <TextField
+                            name="handlungsbedarf"
+                            label="Handlungsbedarf"
+                            type="text"
+                            multiline
+                            handleSubmit={handleSubmit}
+                          />
+                          <RadioButtonGroup
+                            name="idealbiotopUebereinstimmung"
+                            label="Übereinstimmung mit Idealbiotop"
+                            dataSource={
+                              dataLists?.allTpopkontrIdbiotuebereinstWertes
+                                ?.nodes ?? []
+                            }
+                            loading={loadingLists}
+                            handleSubmit={handleSubmit}
+                          />
+                        </Form>
+                      )}
+                    </Formik>
+                  </FormContainer>
+                </SimpleBar>
+              )}
+              {tab === 'dateien' && !showFilter && (
+                <Files parentId={row.id} parent="tpopkontr" />
+              )}
+            </TabContent>
+          </div>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

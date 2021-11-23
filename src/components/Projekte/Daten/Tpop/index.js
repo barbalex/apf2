@@ -28,17 +28,15 @@ import {
 } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: ${(props) =>
-    props.showfilter
-      ? `calc(100% - ${props['data-filter-title-height']}px)`
-      : `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   overflow: hidden !important;
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
   fieldset {
     padding-right: 30px;
   }
@@ -90,11 +88,10 @@ const fieldTypes = {
   statusUnklar: 'Boolean',
 }
 
-const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
+const TpopForm = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { dataFilterSetValue, refetch, urlQuery, setUrlQuery, appBarHeight } =
-    store
+  const { dataFilterSetValue, refetch, urlQuery, setUrlQuery } = store
 
   const { activeNodeArray, dataFilter } = store[treeName]
   const [tab, setTab] = useState(urlQuery?.tpopTab ?? 'tpop')
@@ -274,16 +271,10 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
     ],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
-
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container
-        showfilter={showFilter}
-        data-appbar-height={appBarHeight}
-        data-filter-title-height={filterTitleHeight}
-      >
+      <Container showfilter={showFilter}>
         {showFilter ? (
           <FilterTitle
             title="Teil-Population"
@@ -293,17 +284,15 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
             filteredNr={tpopFilteredCount}
             totalApNr={tpopOfApTotalCount}
             filteredApNr={tpopOfApFilteredCount}
-            setFormTitleHeight={setFormTitleHeight}
           />
         ) : (
           <FormTitle
             apId={data?.tpopById?.popByPopId?.apId}
             title="Teil-Population"
             treeName={treeName}
-            setFormTitleHeight={setFormTitleHeight}
           />
         )}
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+        <FieldsContainer>
           <Tabs
             value={tab}
             onChange={onChangeTab}
