@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import Button from '@mui/material/Button'
 import get from 'lodash/get'
@@ -32,7 +32,7 @@ const LoadingContainer = styled.div`
   padding: 10px;
 `
 const FieldsContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const StyledForm = styled(Form)`
   padding: 10px;
@@ -233,8 +233,6 @@ const Apberuebersicht = ({ treeName }) => {
     refetch()
   }, [client, enqueNotification, refetch, row])
 
-  const [formTitleHeight, setFormTitleHeight] = useState(43)
-
   if (loading) {
     return (
       <LoadingContainer data-appbar-height={appBarHeight}>
@@ -251,9 +249,8 @@ const Apberuebersicht = ({ treeName }) => {
           title="AP-Bericht Jahresübersicht"
           treeName={treeName}
           table="apberuebersicht"
-          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+        <FieldsContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',

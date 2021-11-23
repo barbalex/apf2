@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useMemo, useState } from 'react'
+import React, { useContext, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -30,7 +30,7 @@ const Container = styled.div`
   background-color: #ffd3a7;
 `
 const FieldsContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const StyledForm = styled(Form)`
   padding: 10px;
@@ -165,7 +165,7 @@ const ApFilter = ({ treeName, filterTitleHeight = 81 }) => {
 
   const aeTaxonomiesFilter = useCallback(
     (inputValue) =>
-      !!inputValue
+      inputValue
         ? {
             apByArtIdExists: true,
             artname: { includesInsensitive: inputValue },
@@ -175,8 +175,6 @@ const ApFilter = ({ treeName, filterTitleHeight = 81 }) => {
           },
     [],
   )
-
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
 
   const errors = [
     ...(errorAdresses ? [errorAdresses] : []),
@@ -196,11 +194,10 @@ const ApFilter = ({ treeName, filterTitleHeight = 81 }) => {
           title="Aktionsplan"
           treeName={treeName}
           table="ap"
-          totalNr={get(apsData, 'allAps.totalCount', '...')}
-          filteredNr={get(apsData, 'filteredAps.totalCount', '...')}
-          setFormTitleHeight={setFormTitleHeight}
+          totalNr={apsData?.allAps?.totalCount ?? '...'}
+          filteredNr={apsData?.filteredAps?.totalCount ?? '...'}
         />
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+        <FieldsContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',
