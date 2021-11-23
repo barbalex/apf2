@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 import Typography from '@mui/material/Typography'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
@@ -7,10 +7,9 @@ import Button from '@mui/material/Button'
 
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
-import storeContext from '../storeContext'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
 `
 const TextContainer = styled.div`
   display: flex;
@@ -46,14 +45,11 @@ const bgImageStyle = {
 }
 
 const FourOFour = () => {
-  const store = useContext(storeContext)
-  const { appBarHeight } = store
-
   const onClickBack = useCallback(() => navigate('/'), [])
 
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <Layout>
           <StaticImage
             style={bgImageStyle}

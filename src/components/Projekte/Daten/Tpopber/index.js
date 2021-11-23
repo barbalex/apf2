@@ -14,13 +14,13 @@ import Error from '../../../shared/Error'
 import { tpopber } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -40,7 +40,6 @@ const fieldTypes = {
 const Tpopber = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { appBarHeight } = store
   const { activeNodeArray } = store[treeName]
 
   const [fieldErrors, setFieldErrors] = useState({})
@@ -131,18 +130,14 @@ const Tpopber = ({ treeName }) => {
   )
 
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
 
   if (error) return <Error errors={[error]} />
 
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <FormTitle
           apId={activeNodeArray[3]}
           title="Kontroll-Bericht Teil-Population"

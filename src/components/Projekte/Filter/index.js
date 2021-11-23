@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import ApFilter from '../Daten/ApFilter'
@@ -8,26 +8,23 @@ import TpopmassnFilter from '../Daten/TpopmassnFilter'
 import Tpopfeldkontr from '../Daten/Tpopfeldkontr'
 import Tpopfreiwkontr from '../Daten/Tpopfreiwkontr'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import storeContext from '../../../storeContext'
 import Title from './Title'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background-color: #ffd3a7;
 `
 
 const Filter = ({ treeName }) => {
-  const store = useContext(storeContext)
-  const { appBarHeight } = store
-
   const [activeTab, setActiveTab] = useState('ap')
   const [titleHeight, setTitleHeight] = useState(81)
 
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <Title
           activeTab={activeTab}
           setActiveTab={setActiveTab}
