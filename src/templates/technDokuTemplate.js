@@ -1,15 +1,15 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 
 import Layout from '../components/Layout'
 import Sidebar from './Sidebar'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
-import storeContext from '../storeContext'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
+  overflow: hidden;
   background-color: #fffde7;
 `
 const Doku = styled.div`
@@ -44,13 +44,10 @@ const TechnDokuTemplate = ({ data }) => {
   const { frontmatter, html } = markdownRemark
   const { edges } = allMarkdownRemark
 
-  const store = useContext(storeContext)
-  const { appBarHeight } = store
-
   return (
     <ErrorBoundary>
       <Layout>
-        <Container data-appbar-height={appBarHeight}>
+        <Container>
           <Sidebar
             title="Technische Dokumentation"
             titleLink="/Dokumentation/Technisch/"

@@ -1,16 +1,16 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 
 import Layout from '../components/Layout'
 import Sidebar from './Sidebar'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
-import storeContext from '../storeContext'
 import './benutzerDoku.css'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
+  overflow: hidden;
   background-color: #fffde7;
 `
 const Doku = styled.div`
@@ -56,13 +56,10 @@ const BenutzerDokuTemplate = ({ data }) => {
   const { frontmatter, html } = markdownRemark
   const edges = data.allMarkdownRemark.edges
 
-  const store = useContext(storeContext)
-  const { appBarHeight } = store
-
   return (
     <ErrorBoundary>
       <Layout>
-        <Container data-appbar-height={appBarHeight}>
+        <Container>
           <Sidebar
             title="Benutzer-Dokumentation"
             titleLink="/Dokumentation/Benutzer/"
@@ -73,7 +70,7 @@ const BenutzerDokuTemplate = ({ data }) => {
             <DokuDate>{frontmatter.date}</DokuDate>
             <HtmlDiv
               pdf={frontmatter.pdf}
-              dangerouslySetInnerHTML={{ __html: html }} 
+              dangerouslySetInnerHTML={{ __html: html }}
             />
           </Doku>
         </Container>
@@ -83,7 +80,7 @@ const BenutzerDokuTemplate = ({ data }) => {
 }
 
 export const pageQuery = graphql`
-  query($path: String!) {
+  query ($path: String!) {
     markdownRemark(frontmatter: { path: { eq: $path } }) {
       html
       frontmatter {
