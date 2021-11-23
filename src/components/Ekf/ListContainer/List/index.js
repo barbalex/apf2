@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react'
 import { FixedSizeList as List } from 'react-window'
-import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
@@ -12,7 +11,7 @@ import storeContext from '../../../../storeContext'
 import initiateDataFromUrl from '../initiateDataFromUrl'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   border-right: 1px solid rgb(46, 125, 50);
 `
 const NoDataContainer = styled.div`
@@ -20,40 +19,25 @@ const NoDataContainer = styled.div`
 `
 
 const getEkfFromData = ({ data, ekfAdresseId }) => {
-  const ekfNodes = !!ekfAdresseId
-    ? get(data, 'adresseById.tpopkontrsByBearbeiter.nodes', [])
-    : get(
-        data,
-        'userByName.adresseByAdresseId.tpopkontrsByBearbeiter.nodes',
-        [],
-      )
+  const ekfNodes = ekfAdresseId
+    ? data?.adresseById?.tpopkontrsByBearbeiter?.nodes ?? []
+    : data?.userByName?.adresseByAdresseId?.tpopkontrsByBearbeiter?.nodes ?? []
   const ekf = ekfNodes.map((e) => ({
-    projekt: get(
-      e,
-      'tpopByTpopId.popByPopId.apByApId.projektByProjId.name',
-      '',
-    ),
-    projId: get(e, 'tpopByTpopId.popByPopId.apByApId.projektByProjId.id'),
-    art: get(
-      e,
-      'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.artname',
-      '',
-    ),
-    apId: get(e, 'tpopByTpopId.popByPopId.apByApId.id'),
-    pop: `${get(e, 'tpopByTpopId.popByPopId.nr', '(keine Nr)')}: ${get(
-      e,
-      'tpopByTpopId.popByPopId.name',
-      '(kein Name)',
-    )}`,
-    popId: get(e, 'tpopByTpopId.popByPopId.id'),
-    popSort: get(e, 'tpopByTpopId.popByPopId.nr', '(keine Nr)'),
-    tpop: `${get(e, 'tpopByTpopId.nr', '(keine Nr)')}: ${get(
-      e,
-      'tpopByTpopId.flurname',
-      '(kein Flurname)',
-    )}`,
-    tpopId: get(e, 'tpopByTpopId.id'),
-    tpopSort: get(e, 'tpopByTpopId.nr', '(keine Nr)'),
+    projekt: e?.tpopByTpopId?.popByPopId?.apByApId?.projektByProjId?.name ?? '',
+    projId: e?.tpopByTpopId?.popByPopId?.apByApId?.projektByProjId?.id,
+    art:
+      e?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
+    apId: e?.tpopByTpopId?.popByPopId?.apByApId?.id,
+    pop: `${e?.tpopByTpopId?.popByPopId?.nr ?? '(keine Nr)'}: ${
+      e?.tpopByTpopId?.popByPopId?.name ?? '(kein Name)'
+    }`,
+    popId: e?.tpopByTpopId?.popByPopId?.id,
+    popSort: e?.tpopByTpopId?.popByPopId?.nr ?? '(keine Nr)',
+    tpop: `${e?.tpopByTpopId?.nr ?? '(keine Nr)'}: ${
+      e?.tpopByTpopId?.flurname ?? '(kein Flurname)'
+    }`,
+    tpopId: e?.tpopByTpopId?.id,
+    tpopSort: e?.tpopByTpopId?.nr ?? '(keine Nr)',
     id: e.id,
   }))
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
@@ -61,7 +45,7 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
 
 const EkfList = ({ data, loading, height = 1000 }) => {
   const store = useContext(storeContext)
-  const { ekfYear, ekfAdresseId, tree, setEkfIds, appBarHeight } = store
+  const { ekfYear, ekfAdresseId, tree, setEkfIds } = store
   const ekf = getEkfFromData({ data, ekfAdresseId })
   setEkfIds(ekf.map((e) => e.id))
 
@@ -107,7 +91,7 @@ const EkfList = ({ data, loading, height = 1000 }) => {
   }
 
   return (
-    <Container data-appbar-height={appBarHeight}>
+    <Container>
       <List
         height={height}
         itemCount={ekf.length}
