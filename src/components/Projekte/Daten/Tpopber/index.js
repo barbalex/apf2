@@ -1,19 +1,14 @@
 import React, { useCallback, useContext, useState, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
-import TextField from '../../../shared/TextFieldFormik'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
-import query from './query'
-import queryLists from './queryLists'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import { tpopber } from '../../../shared/fragments'
@@ -22,15 +17,16 @@ const Container = styled.div`
   height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const LoadingContainer = styled.div`
   height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
   padding: 10px;
 `
 const FieldsContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
-const StyledForm = styled(Form)`
+const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -42,87 +38,97 @@ const fieldTypes = {
 }
 
 const Tpopber = ({ treeName }) => {
-  console.log('Tpopber rendering')
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { appBarHeight } = store
   const { activeNodeArray } = store[treeName]
 
-  const { data, loading, error } = useQuery(query, {
-    variables: {
-      id:
-        activeNodeArray.length > 9
-          ? activeNodeArray[9]
-          : '99999999-9999-9999-9999-999999999999',
-    },
-  })
+  const [fieldErrors, setFieldErrors] = useState({})
 
-  const {
-    data: dataLists,
-    loading: loadingLists,
-    error: errorLists,
-  } = useQuery(queryLists)
+  const { data, loading, error } = useQuery(
+    gql`
+      query tpopberByIdQuery($id: UUID!) {
+        tpopberById(id: $id) {
+          ...TpopberFields
+        }
+        allTpopEntwicklungWertes(orderBy: SORT_ASC) {
+          nodes {
+            value: code
+            label: text
+          }
+        }
+      }
+      ${tpopber}
+    `,
+    {
+      variables: {
+        id:
+          activeNodeArray.length > 9
+            ? activeNodeArray[9]
+            : '99999999-9999-9999-9999-999999999999',
+      },
+    },
+  )
+  console.log('Tpopber rendering', { loading, fieldErrors })
 
   const row = useMemo(() => data?.tpopberById ?? {}, [data?.tpopberById])
+  //console.log('Tpopber, row:', row)
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: store.user.name,
       }
+      //console.log('Tpopber, variables:', variables)
       try {
         await client.mutate({
           mutation: gql`
-            mutation updateTpopber(
-              $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
-              $changedBy: String
-            ) {
-              updateTpopberById(
-                input: {
-                  id: $id
-                  tpopberPatch: {
-                    ${changedField}: $${changedField}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpopber {
-                  ...TpopberFields
+          mutation updateTpopber(
+            $id: UUID!
+            $${field}: ${fieldTypes[field]}
+            $changedBy: String
+          ) {
+            updateTpopberById(
+              input: {
+                id: $id
+                tpopberPatch: {
+                  ${field}: $${field}
+                  changedBy: $changedBy
                 }
               }
+            ) {
+              tpopber {
+                ...TpopberFields
+              }
             }
-            ${tpopber}
-          `,
+          }
+          ${tpopber}
+        `,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updateTpopberById: {
               tpopber: {
+                ...row,
                 ...variables,
-                __typename: 'Tpopber',
+                //__typename: 'Tpopber',
               },
               __typename: 'Tpopber',
             },
           },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      setFieldErrors({})
     },
     [client, row, store.user.name],
   )
-
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
 
   if (loading) {
     return (
@@ -132,11 +138,7 @@ const Tpopber = ({ treeName }) => {
     )
   }
 
-  const errors = [
-    ...(error ? [error] : []),
-    ...(errorLists ? [errorLists] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
+  if (error) return <Error errors={[error]} />
 
   return (
     <ErrorBoundary>
@@ -146,45 +148,42 @@ const Tpopber = ({ treeName }) => {
           title="Kontroll-Bericht Teil-Population"
           treeName={treeName}
           table="tpopber"
-          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+        <FieldsContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',
               height: '100%',
             }}
           >
-            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-              {({ handleSubmit, dirty }) => (
-                <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <TextField
-                    name="jahr"
-                    label="Jahr"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <RadioButtonGroup
-                    name="entwicklung"
-                    label="Entwicklung"
-                    dataSource={get(
-                      dataLists,
-                      'allTpopEntwicklungWertes.nodes',
-                      [],
-                    )}
-                    loading={loadingLists}
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="bemerkungen"
-                    label="Bemerkungen"
-                    type="text"
-                    multiLine
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
-              )}
-            </Formik>
+            <FormContainer>
+              <TextField
+                name="jahr"
+                label="Jahr"
+                type="number"
+                value={row.jahr}
+                saveToDb={saveToDb}
+                error={fieldErrors.jahr}
+              />
+              <RadioButtonGroup
+                name="entwicklung"
+                label="Entwicklung"
+                dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
+                loading={loading}
+                value={row.entwicklung}
+                saveToDb={saveToDb}
+                error={fieldErrors.entwicklung}
+              />
+              <TextField
+                name="bemerkungen"
+                label="Bemerkungen"
+                type="text"
+                value={row.bemerkungen}
+                multiLine
+                saveToDb={saveToDb}
+                error={fieldErrors.bemerkungen}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>
