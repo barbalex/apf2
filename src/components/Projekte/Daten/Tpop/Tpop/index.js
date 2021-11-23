@@ -29,7 +29,6 @@ const Container = styled.div`
 `
 
 const Tpop = ({
-  treeName,
   showFilter,
   onSubmit,
   row,
@@ -77,7 +76,6 @@ const Tpop = ({
               />
               <Status
                 apJahr={apJahr}
-                treeName={treeName}
                 showFilter={showFilter}
                 handleSubmit={handleSubmit}
               />

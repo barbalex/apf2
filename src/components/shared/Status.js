@@ -67,7 +67,7 @@ const StyledLabel = styled.div`
   color: ${(props) => (props.error ? '#f44336' : 'unset')};
 `
 
-const Status = ({ apJahr, treeName, showFilter, handleSubmit, ...props }) => {
+const Status = ({ apJahr, showFilter, handleSubmit, ...props }) => {
   const [field, meta] = useField(props)
   const { onChange, onBlur } = field
   const { value, error: errors } = meta

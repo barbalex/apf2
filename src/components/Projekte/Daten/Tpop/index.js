@@ -50,7 +50,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 const TabContent = styled.div`
-  height: ${(props) => `calc(100% - 48px)`};
+  height: calc(100% - 48px);
 `
 
 const fieldTypes = {
@@ -323,7 +323,6 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
               <LoadingDiv>Lade...</LoadingDiv>
             ) : tab === 'tpop' ? (
               <Tpop
-                treeName={treeName}
                 showFilter={showFilter}
                 onSubmit={onSubmit}
                 row={row}
