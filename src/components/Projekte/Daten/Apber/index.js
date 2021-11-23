@@ -26,12 +26,12 @@ import { apber } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -71,7 +71,6 @@ const fieldTypes = {
 
 const Apber = ({ treeName, width = 1000 }) => {
   const store = useContext(storeContext)
-  const { appBarHeight } = store
   const client = useApolloClient()
   const { activeNodeArray } = store[treeName]
 
@@ -158,11 +157,7 @@ const Apber = ({ treeName, width = 1000 }) => {
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
 
   const errors = [
@@ -174,7 +169,7 @@ const Apber = ({ treeName, width = 1000 }) => {
 
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <FormTitle
           apId={row.apId}
           title="AP-Bericht"

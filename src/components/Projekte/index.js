@@ -23,7 +23,7 @@ import queryTree from './queryTree'
 import buildNodes from './TreeContainer/nodes'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
 
   @media print {
     height: auto !important;
@@ -70,7 +70,7 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
 const Projekte = () => {
   const store = useContext(storeContext)
-  const { isPrint, urlQuery, setRefetchKey, user, tree, appBarHeight } = store
+  const { isPrint, urlQuery, setRefetchKey, user, tree } = store
   const { projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
   // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
   // to prevent it from causing unnessecary renders
@@ -85,10 +85,10 @@ const Projekte = () => {
   ]
 
   const { projekteTabs } = urlQuery
-  const treeTabs = useMemo(() => intersection(treeTabValues, projekteTabs), [
-    projekteTabs,
-    treeTabValues,
-  ])
+  const treeTabs = useMemo(
+    () => intersection(treeTabValues, projekteTabs),
+    [projekteTabs, treeTabValues],
+  )
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
   const treeDataFilter = getSnapshot(store.tree.dataFilter)
@@ -227,7 +227,7 @@ const Projekte = () => {
 
   if (tree2Tabs.length === 0 || isPrint) {
     return (
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <ProjektContainer
           treeName="tree"
           tabs={treeTabs}
@@ -242,7 +242,7 @@ const Projekte = () => {
   }
 
   return (
-    <Container data-appbar-height={appBarHeight}>
+    <Container>
       <StyledSplitPane split="vertical" defaultSize="50%">
         <ProjektContainer
           treeName="tree"

@@ -6,21 +6,18 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
 
 import AppBar from './AppBar'
 
 const Container = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 
   @media print {
     height: auto;
     overflow: visible !important;
   }
-`
-// TODO: is this element necessary?
-const ContentContainer = styled.div`
-  height: 100%;
 `
 
 const Layout = ({ children }) => (
@@ -41,8 +38,8 @@ const Layout = ({ children }) => (
       <html lang="de" />
     </Helmet>
     <AppBar />
-    <ContentContainer>{children}</ContentContainer>
+    {children}
   </Container>
 )
 
-export default observer(Layout)
+export default Layout
