@@ -1,18 +1,20 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 
 import Layout from '../../components/Layout'
 import Sidebar from '../../templates/Sidebar'
 import ErrorBoundary from '../../components/shared/ErrorBoundary'
-import storeContext from '../../storeContext'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background-color: #fffde7;
 `
 const Doku = styled.div`
+  height: 100%;
   width: 100%;
   padding: 25px;
   overflow-y: auto;
@@ -37,13 +39,10 @@ const Doku = styled.div`
 const Template = ({ data }) => {
   const edges = data.allMarkdownRemark.edges
 
-  const store = useContext(storeContext)
-  const { appBarHeight } = store
-
   return (
     <ErrorBoundary>
       <Layout>
-        <Container data-appbar-height={appBarHeight}>
+        <Container>
           <Sidebar
             title="Benutzer-Dokumentation"
             titleLink="/Dokumentation/Benutzer/"

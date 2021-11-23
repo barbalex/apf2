@@ -1,8 +1,8 @@
 ---
 typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Was-kann-man-mit-apflora-machen"
-date: "2019-04-15"
-title: "Was kann man mit apflora.ch machen?"
+path: '/Dokumentation/Benutzer/Was-kann-man-mit-apflora-machen'
+date: '2019-04-15'
+title: 'Was kann man mit apflora.ch machen?'
 sort: 1
 ---
 
@@ -110,3 +110,5 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos und Gabriel-Softwa
 - In regelmässigen Abständen werden sie aus der Cloud auf mehrere unabhängige Festplatten gesichert
 - Ihre gesamthafte Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts regelmässig getestet (war aber noch nie nötig)
 - Während einer Sitzung gelöschte Daten können direkt von den Benutzern wiederhergestellt werden
+
+<br/>

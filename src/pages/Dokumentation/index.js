@@ -1,16 +1,18 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import Layout from '../../components/Layout'
 import ErrorBoundary from '../../components/shared/ErrorBoundary'
-import storeContext from '../../storeContext'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background-color: #fffde7;
 `
 const Doku = styled.div`
+  height: 100%;
   width: 100%;
   padding: 25px;
   overflow-y: auto;
@@ -32,21 +34,16 @@ const Doku = styled.div`
   }
 `
 
-const Template = () => {
-  const store = useContext(storeContext)
-  const { appBarHeight } = store
-
-  return (
-    <ErrorBoundary>
-      <Layout>
-        <Container data-appbar-height={appBarHeight}>
-          <Doku>
-            <p>{`Bitte wählen Sie einen Bereich.`}</p>
-          </Doku>
-        </Container>
-      </Layout>
-    </ErrorBoundary>
-  )
-}
+const Template = () => (
+  <ErrorBoundary>
+    <Layout>
+      <Container>
+        <Doku>
+          <p>{`Bitte wählen Sie einen Bereich.`}</p>
+        </Doku>
+      </Container>
+    </Layout>
+  </ErrorBoundary>
+)
 
 export default Template
