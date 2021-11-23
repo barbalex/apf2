@@ -23,12 +23,13 @@ import {
 } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -50,7 +51,6 @@ const fieldTypes = {
 const Ekzaehleinheit = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { appBarHeight } = store
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -156,11 +156,7 @@ const Ekzaehleinheit = ({ treeName }) => {
   )
 
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
 
   const errors = [
@@ -171,7 +167,7 @@ const Ekzaehleinheit = ({ treeName }) => {
 
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <FormTitle
           apId={row.apId}
           title="EK-Zähleinheit"

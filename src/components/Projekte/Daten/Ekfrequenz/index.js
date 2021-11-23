@@ -22,12 +22,13 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -87,7 +88,6 @@ const kontrolljahreAbWertes = [
 const Ekfrequenz = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { appBarHeight } = store
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -167,16 +167,12 @@ const Ekfrequenz = ({ treeName }) => {
   )
 
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <FormTitle
           apId={row.apId}
           title="EK-Frequenz"

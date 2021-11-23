@@ -14,12 +14,13 @@ import Error from '../../../shared/Error'
 const mdParser = new MarkdownIt({ breaks: true })
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -40,7 +41,6 @@ const query = gql`
 
 const CurrentIssue = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { appBarHeight } = store
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -55,17 +55,13 @@ const CurrentIssue = ({ treeName }) => {
   const row = get(data, 'currentissueById', {})
 
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
   if (error) return <Error error={error} />
   if (!row) return null
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <FormTitle
           apId={row.id}
           title="Aktueller Fehler"
