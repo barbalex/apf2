@@ -70,15 +70,16 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
 
   const apId = activeNodeArray[3]
 
-  const { data: dataEk, loading: loadingEk, error: errorEk } = useQuery(
-    queryEk,
-    {
-      variables: {
-        id: row.id || '99999999-9999-9999-9999-999999999999',
-        isEk: true,
-      },
+  const {
+    data: dataEk,
+    loading: loadingEk,
+    error: errorEk,
+  } = useQuery(queryEk, {
+    variables: {
+      id: row?.id || '99999999-9999-9999-9999-999999999999',
+      isEk: true,
     },
-  )
+  })
 
   const { data: dataEkfrequenzs, loading: loadingEkfrequenzs } = useQuery(
     queryEkfrequenzs,
@@ -89,9 +90,8 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
     },
   )
 
-  const { data: dataAdresses, loading: loadingAdresses } = useQuery(
-    queryAdresses,
-  )
+  const { data: dataAdresses, loading: loadingAdresses } =
+    useQuery(queryAdresses)
 
   const ekfrequenzOptions0 = get(dataEkfrequenzs, 'allEkfrequenzs.nodes', [])
   const longestAnwendungsfall = max(
@@ -118,6 +118,8 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
     ],
     'jahr',
   )
+
+  if (!row) return null
 
   return (
     <SimpleBar
