@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
@@ -18,7 +18,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-filter-title-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -32,7 +32,7 @@ const StyledForm = styled(Form)`
   padding-top: 0;
 `
 
-const PopFilter = ({ treeName, filterTitleHeight = 81 }) => {
+const PopFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
   const { activeNodeArray, dataFilter } = store[treeName]
@@ -104,7 +104,7 @@ const PopFilter = ({ treeName, filterTitleHeight = 81 }) => {
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container data-filter-title-height={filterTitleHeight}>
+      <Container>
         <FilterTitle
           title="Population"
           treeName={treeName}
