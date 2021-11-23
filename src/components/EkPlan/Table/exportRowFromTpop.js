@@ -3,7 +3,7 @@ import sum from 'lodash/sum'
 
 import appBaseUrl from '../../../modules/appBaseUrl'
 
-const exportRowFromTpop = ({ tpop, dataLists, years, store }) => {
+const exportRowFromTpop = ({ tpop, years, store }) => {
   const {
     einheitsByAp,
     showCount,
@@ -14,43 +14,43 @@ const exportRowFromTpop = ({ tpop, dataLists, years, store }) => {
     ekfrequenzs,
   } = store.ekPlan
   const row = {
-    apId: get(tpop, 'popByPopId.apByApId.id'),
+    apId: tpop?.popByPopId?.apByApId?.id,
   }
   if (fields.includes('ap')) {
-    row.apName = get(tpop, 'popByPopId.apByApId.label')
+    row.apName = tpop?.popByPopId?.apByApId?.label
   }
-  row.popId = get(tpop, 'popByPopId.id')
+  row.popId = tpop?.popByPopId?.id
   if (fields.includes('popNr')) {
-    row.popNr = get(tpop, 'popByPopId.nr') || '-'
+    row.popNr = tpop?.popByPopId?.nr ?? '-'
   }
   if (fields.includes('popName')) {
-    row.popName = get(tpop, 'popByPopId.name') || '-'
+    row.popName = tpop?.popByPopId?.name ?? '-'
   }
   if (fields.includes('popStatus')) {
-    row.popStatus = get(tpop, 'popByPopId.popStatusWerteByStatus.text') || '-'
+    row.popStatus = tpop?.popByPopId?.popStatusWerteByStatus?.text ?? '-'
   }
   row.tpopId = tpop.id
   if (fields.includes('nr')) {
-    row.tpopNr = get(tpop, 'nr') || '-'
+    row.tpopNr = tpop?.nr ?? '-'
   }
   if (fields.includes('gemeinde')) {
-    row.tpopGemeinde = get(tpop, 'gemeinde') || '-'
+    row.tpopGemeinde = tpop?.gemeinde ?? '-'
   }
   if (fields.includes('flurname')) {
-    row.tpopFlurname = get(tpop, 'flurname') || '-'
+    row.tpopFlurname = tpop?.flurname ?? '-'
   }
   if (fields.includes('status')) {
-    row.tpopStatus = get(tpop, 'popStatusWerteByStatus.text') || '-'
+    row.tpopStatus = tpop?.popStatusWerteByStatus?.text ?? '-'
   }
   // check till here
   if (fields.includes('bekanntSeit')) {
-    row.tpopBekanntSeit = get(tpop, 'bekanntSeit') || '-'
+    row.tpopBekanntSeit = tpop?.bekanntSeit ?? '-'
   }
   if (fields.includes('lv95X')) {
-    row.lv95X = get(tpop, 'lv95X') || '-'
+    row.lv95X = tpop?.lv95X ?? '-'
   }
   if (fields.includes('lv95Y')) {
-    row.lv95Y = get(tpop, 'lv95Y') || '-'
+    row.lv95Y = tpop?.lv95Y ?? '-'
   }
   if (fields.includes('ekfKontrolleur')) {
     row.ekfKontrolleur = tpop?.adresseByEkfKontrolleur?.name ?? '-'
@@ -68,7 +68,7 @@ const exportRowFromTpop = ({ tpop, dataLists, years, store }) => {
         ?.text ?? ''
   }
   if (fields.includes('ekfrequenz')) {
-    let ekfrequenz = get(tpop, 'ekfrequenz') || null
+    let ekfrequenz = tpop?.ekfrequenz ?? null
     if (ekfrequenz) {
       ekfrequenz = get(
         ekfrequenzs.find((f) => f.id === ekfrequenz),
@@ -79,15 +79,15 @@ const exportRowFromTpop = ({ tpop, dataLists, years, store }) => {
     row.ekfrequenz = ekfrequenz
   }
   if (fields.includes('ekfrequenzStartjahr')) {
-    row.ekfrequenzStartjahr = get(tpop, 'ekfrequenzStartjahr') || null
+    row.ekfrequenzStartjahr = tpop?.ekfrequenzStartjahr ?? null
   }
   if (fields.includes('ekfrequenzAbweichend')) {
-    row.ekfrequenzAbweichend = get(tpop, 'ekfrequenzAbweichend') === true
+    row.ekfrequenzAbweichend = tpop?.ekfrequenzAbweichend === true
   }
 
-  const ekplans = get(tpop, 'ekplansByTpopId.nodes')
-  const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
-  const ansiedlungs = get(tpop, 'tpopmassnsByTpopId.nodes')
+  const ekplans = tpop?.ekplansByTpopId?.nodes
+  const kontrs = tpop?.tpopkontrsByTpopId?.nodes
+  const ansiedlungs = tpop?.tpopmassnsByTpopId?.nodes
   const einheits = einheitsByAp[row.apId]
 
   years.forEach((year) => {
@@ -106,15 +106,14 @@ const exportRowFromTpop = ({ tpop, dataLists, years, store }) => {
       if (showCount) {
         const ekSumCounted = sum(
           eks.flatMap((ek) =>
-            get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
+            (ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
               .filter(
                 (z) =>
                   einheits.includes(z.einheit) &&
                   z.anzahl !== null &&
-                  get(
-                    z,
-                    'tpopkontrzaehlEinheitWerteByEinheit.ekzaehleinheitsByZaehleinheitId.nodes',
-                    [],
+                  (
+                    z?.tpopkontrzaehlEinheitWerteByEinheit
+                      ?.ekzaehleinheitsByZaehleinheitId?.nodes ?? []
                   ).length > 0,
               )
               .flatMap((z) => z.anzahl),
@@ -139,15 +138,14 @@ const exportRowFromTpop = ({ tpop, dataLists, years, store }) => {
       if (showCount) {
         const ekfSumCounted = sum(
           ekfs.flatMap((ek) =>
-            get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
+            (ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
               .filter(
                 (z) =>
                   einheits.includes(z.einheit) &&
                   z.anzahl !== null &&
-                  get(
-                    z,
-                    'tpopkontrzaehlEinheitWerteByEinheit.ekzaehleinheitsByZaehleinheitId.nodes',
-                    [],
+                  (
+                    z?.tpopkontrzaehlEinheitWerteByEinheit
+                      ?.ekzaehleinheitsByZaehleinheitId?.nodes ?? []
                   ).length > 0,
               )
               .flatMap((z) => z.anzahl),

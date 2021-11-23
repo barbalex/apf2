@@ -179,6 +179,7 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
+      console.log('Tpop onSubmit:', { values, row })
       const changedField = objectsFindChangedKey(values, row)
       // BEWARE: react-select fires twice when a value is cleared
       // second event leads to an error as the values passed are same as before
@@ -191,6 +192,7 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
       if (changedField === null) return
 
       const value = values[changedField]
+      console.log('Tpop onSubmit:', { changedField, value })
       if (showFilter) {
         return dataFilterSetValue({
           treeName,
@@ -206,7 +208,7 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
         try {
           await client.mutate({
             mutation: gql`
-              mutation updateTpop(
+              mutation updateTpop${changedField}(
                 $id: UUID!
                 $${changedField}: ${fieldTypes[changedField]}
                 $changedBy: String
@@ -248,8 +250,8 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
         // update tpop on map
         if (
           (value &&
-            ((changedField === 'ylv95Y' && row.lv95X) ||
-              (changedField === 'lv95X' && row.y))) ||
+            ((changedField === 'ylv95Y' && row?.lv95X) ||
+              (changedField === 'lv95X' && row?.y))) ||
           (!value && (changedField === 'ylv95Y' || changedField === 'lv95X'))
         ) {
           if (refetch.tpopForMap) {
@@ -337,7 +339,7 @@ const TpopForm = ({ treeName, showFilter = false, filterTitleHeight = 81 }) => {
                 row={row}
               />
             ) : tab === 'dateien' ? (
-              <Files parentId={row.id} parent="tpop" />
+              <Files parentId={row?.id} parent="tpop" />
             ) : (
               <TpopHistory tpopId={id} />
             )}

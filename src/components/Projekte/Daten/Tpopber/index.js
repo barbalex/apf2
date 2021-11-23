@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -42,6 +42,7 @@ const fieldTypes = {
 }
 
 const Tpopber = ({ treeName }) => {
+  console.log('Tpopber rendering')
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { appBarHeight } = store
@@ -62,7 +63,7 @@ const Tpopber = ({ treeName }) => {
     error: errorLists,
   } = useQuery(queryLists)
 
-  const row = get(data, 'tpopberById', {})
+  const row = useMemo(() => data?.tpopberById ?? {}, [data?.tpopberById])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
