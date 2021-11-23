@@ -50,6 +50,8 @@ const Tpop = ({
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
+  if (!row) return null
+
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
       <Container data-column-width={columnWidth}>
