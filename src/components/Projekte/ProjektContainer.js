@@ -20,7 +20,7 @@ import ApberForApFromAp from '../Print/ApberForApFromAp'
 import ApberForYear from '../Print/ApberForYear'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
 
   @media print {
     display: block;
@@ -82,7 +82,7 @@ const ProjektContainer = ({
   height = 1000,
 }) => {
   const store = useContext(storeContext)
-  const { isPrint, appBarHeight } = store
+  const { isPrint } = store
   const { setTreeWidth, activeNodeArray } = store[treeName]
 
   const showApberForAp =
@@ -163,7 +163,7 @@ const ProjektContainer = ({
     const component = <ApberForYear />
     if (isPrint) return component
     return (
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <StyledSplitPane
           split="vertical"
           size={paneSize}
@@ -183,7 +183,7 @@ const ProjektContainer = ({
     const component = <ApberForApFromAp />
     if (isPrint) return component
     return (
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <StyledSplitPane
           split="vertical"
           size={paneSize}
@@ -210,7 +210,7 @@ const ProjektContainer = ({
     // add empty div to prevent split-pane from
     // missing a second div
     return (
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <StyledSplitPane
           split="vertical"
           size="100%"
@@ -227,7 +227,7 @@ const ProjektContainer = ({
 
   if (tabs.length === 2) {
     return (
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <StyledSplitPane
           split="vertical"
           size={paneSize}
@@ -244,7 +244,7 @@ const ProjektContainer = ({
 
   if (tabs.length === 3) {
     return (
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <StyledSplitPane
           split="vertical"
           size="33%"
@@ -271,7 +271,7 @@ const ProjektContainer = ({
 
   if (tabs.length === 4) {
     return (
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <StyledSplitPane
           split="vertical"
           size="25%"
@@ -307,7 +307,7 @@ const ProjektContainer = ({
 
   if (tabs.length === 5) {
     return (
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <StyledSplitPane
           split="vertical"
           size="20%"

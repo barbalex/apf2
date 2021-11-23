@@ -89,7 +89,6 @@ const myTypes = types
       types.union(types.string, types.number),
       '',
     ),
-    appBarHeight: types.optional(types.number, 64),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -210,9 +209,6 @@ const myTypes = types
     },
     setHideMapControls(val) {
       self.hideMapControls = val
-    },
-    setAppBarHeight(val) {
-      self.appBarHeight = val
     },
     setEkfIds(ids) {
       self.ekfIds = [...ids]

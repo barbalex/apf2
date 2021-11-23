@@ -1,16 +1,13 @@
-import React, { useEffect, useContext } from 'react'
+import React from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
 import { Location } from '@reach/router'
-import { withResizeDetector } from 'react-resize-detector'
 
 import Home from './Home'
 import Doku from './Doku'
 import Projekte from './Projekte'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import storeContext from '../../../storeContext'
 
 const StyledAppBar = styled(AppBar)`
   min-height: 64px !important;
@@ -24,33 +21,24 @@ const StyledToolbar = styled(Toolbar)`
   padding-right: 4px !important;
 `
 
-const MyAppBar = ({ height }) => {
-  const store = useContext(storeContext)
-  const { setAppBarHeight } = store
+const MyAppBar = () => (
+  <Location>
+    {({ location }) => {
+      const { pathname } = location
+      const isHome = pathname === '/'
+      const isProjekte = pathname.startsWith('/Daten')
 
-  useEffect(() => {
-    setAppBarHeight(height)
-  }, [height, setAppBarHeight])
+      return (
+        <ErrorBoundary>
+          <StyledAppBar position="static">
+            <StyledToolbar>
+              {isHome ? <Home /> : isProjekte ? <Projekte /> : <Doku />}
+            </StyledToolbar>
+          </StyledAppBar>
+        </ErrorBoundary>
+      )
+    }}
+  </Location>
+)
 
-  return (
-    <Location>
-      {({ location }) => {
-        const { pathname } = location
-        const isHome = pathname === '/'
-        const isProjekte = pathname.startsWith('/Daten')
-
-        return (
-          <ErrorBoundary>
-            <StyledAppBar position="static">
-              <StyledToolbar>
-                {isHome ? <Home /> : isProjekte ? <Projekte /> : <Doku />}
-              </StyledToolbar>
-            </StyledAppBar>
-          </ErrorBoundary>
-        )
-      }}
-    </Location>
-  )
-}
-
-export default withResizeDetector(observer(MyAppBar))
+export default MyAppBar
