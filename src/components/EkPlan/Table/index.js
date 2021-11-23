@@ -259,7 +259,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
       apIds: apValues,
     },
   })
-  const ekfrequenzs = get(dataLists, 'allEkfrequenzs.nodes', [])
+  const ekfrequenzs = dataLists?.allEkfrequenzs?.nodes ?? []
   setEkfrequenzs(ekfrequenzs)
 
   const {
@@ -337,7 +337,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   if (headerYearFieldsWidth < 0) headerYearFieldsWidth = 0
 
   const showsLength = [showEk, showEkf, showMassn].filter((s) => !!s).length
-  const rowHeight = 23 + (!!showsLength ? showsLength - 1 : 0) * 16
+  const rowHeight = 23 + (showsLength ? showsLength - 1 : 0) * 16
 
   /**
    * See https://github.com/bvaughn/react-window/issues/69
@@ -367,15 +367,13 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   )
 
   const onClickExport = useCallback(() => {
-    const data = tpops.map((tpop) =>
-      exportRowFromTpop({ tpop, dataLists, years, store }),
-    )
+    const data = tpops.map((tpop) => exportRowFromTpop({ tpop, years, store }))
     exportModule({
       data,
       fileName: 'ek-planung',
       store,
     })
-  }, [tpops, store, dataLists, years])
+  }, [tpops, store, years])
 
   if (aps.length > 0 && loadingTpop) {
     return <TempContainer>Lade...</TempContainer>
