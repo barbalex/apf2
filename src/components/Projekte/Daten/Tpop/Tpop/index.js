@@ -39,6 +39,8 @@ const Tpop = ({
   const store = useContext(storeContext)
   const client = useApolloClient()
 
+  console.log('Tpop rendering')
+
   const { enqueNotification } = store
 
   const {

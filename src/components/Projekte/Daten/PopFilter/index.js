@@ -21,10 +21,11 @@ const Container = styled.div`
   height: ${(props) => `calc(100% - ${props['data-filter-title-height']}px)`};
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background-color: #ffd3a7;
 `
 const FormContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const StyledForm = styled(Form)`
   padding: 10px;
@@ -100,8 +101,6 @@ const PopFilter = ({ treeName, filterTitleHeight = 81 }) => {
     [dataFilterSetValue, row, treeName],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
-
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
@@ -114,9 +113,8 @@ const PopFilter = ({ treeName, filterTitleHeight = 81 }) => {
           filteredNr={popFilteredCount}
           totalApNr={popOfApTotalCount}
           filteredApNr={popOfApFilteredCount}
-          setFormTitleHeight={setFormTitleHeight}
         />
-        <FormContainer data-form-title-height={formTitleHeight}>
+        <FormContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',

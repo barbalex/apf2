@@ -27,12 +27,13 @@ import { pop } from '../../../shared/fragments'
 import PopHistory from './History'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FormContainer = styled.div`
@@ -44,8 +45,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 const TabContent = styled.div`
-  height: ${(props) =>
-    `calc(100% - ${props['data-form-title-height']}px - 48px)`};
+  overflow-y: auto;
 `
 
 const fieldTypes = {
@@ -61,7 +61,7 @@ const fieldTypes = {
 const Pop = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { refetch, urlQuery, setUrlQuery, appBarHeight } = store
+  const { refetch, urlQuery, setUrlQuery } = store
   const { activeNodeArray } = store[treeName]
 
   let id =
@@ -69,7 +69,12 @@ const Pop = ({ treeName }) => {
       ? activeNodeArray[5]
       : '99999999-9999-9999-9999-999999999999'
 
-  const { data, loading, error, refetch: refetchPop } = useQuery(query, {
+  const {
+    data,
+    loading,
+    error,
+    refetch: refetchPop,
+  } = useQuery(query, {
     variables: {
       id,
     },
@@ -154,24 +159,17 @@ const Pop = ({ treeName }) => {
     [client, refetch, row, store.user.name],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(43)
-
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <FormTitle
-          apId={get(data, 'popById.apId')}
+          apId={data?.popById?.apId}
           title="Population"
           treeName={treeName}
-          setFormTitleHeight={setFormTitleHeight}
         />
         <Tabs
           value={tab}
@@ -184,68 +182,70 @@ const Pop = ({ treeName }) => {
           <StyledTab label="Dateien" value="dateien" data-id="dateien" />
           <StyledTab label="Historien" value="history" data-id="history" />
         </Tabs>
-        <TabContent data-form-title-height={formTitleHeight}>
-          {tab === 'pop' && (
-            <SimpleBar
-              style={{
-                maxHeight: '100%',
-                height: '100%',
-              }}
-            >
-              <FormContainer>
-                <Formik
-                  key={row.id}
-                  initialValues={row}
-                  onSubmit={onSubmit}
-                  enableReinitialize
-                >
-                  {({ handleSubmit, dirty }) => (
-                    <Form onBlur={() => dirty && handleSubmit()}>
-                      <TextField
-                        label="Nr."
-                        name="nr"
-                        type="number"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextFieldWithInfo
-                        label="Name"
-                        name="name"
-                        type="text"
-                        popover="Dieses Feld möglichst immer ausfüllen"
-                        handleSubmit={handleSubmit}
-                      />
-                      <Status
-                        apJahr={get(row, 'apByApId.startJahr')}
-                        treeName={treeName}
-                        showFilter={false}
-                        handleSubmit={handleSubmit}
-                      />
-                      <Checkbox2States
-                        label="Status unklar"
-                        name="statusUnklar"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        label="Begründung"
-                        name="statusUnklarBegruendung"
-                        type="text"
-                        multiLine
-                        handleSubmit={handleSubmit}
-                      />
-                      <Coordinates
-                        row={row}
-                        refetchForm={refetchPop}
-                        table="pop"
-                      />
-                    </Form>
-                  )}
-                </Formik>
-              </FormContainer>
-            </SimpleBar>
-          )}
-          {tab === 'dateien' && <Files parentId={row.id} parent="pop" />}
-          {tab === 'history' && <PopHistory popId={id} />}
-        </TabContent>
+        <div style={{ overflowY: 'auto' }}>
+          <TabContent>
+            {tab === 'pop' && (
+              <SimpleBar
+                style={{
+                  maxHeight: '100%',
+                  height: '100%',
+                }}
+              >
+                <FormContainer>
+                  <Formik
+                    key={row.id}
+                    initialValues={row}
+                    onSubmit={onSubmit}
+                    enableReinitialize
+                  >
+                    {({ handleSubmit, dirty }) => (
+                      <Form onBlur={() => dirty && handleSubmit()}>
+                        <TextField
+                          label="Nr."
+                          name="nr"
+                          type="number"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextFieldWithInfo
+                          label="Name"
+                          name="name"
+                          type="text"
+                          popover="Dieses Feld möglichst immer ausfüllen"
+                          handleSubmit={handleSubmit}
+                        />
+                        <Status
+                          apJahr={get(row, 'apByApId.startJahr')}
+                          treeName={treeName}
+                          showFilter={false}
+                          handleSubmit={handleSubmit}
+                        />
+                        <Checkbox2States
+                          label="Status unklar"
+                          name="statusUnklar"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          label="Begründung"
+                          name="statusUnklarBegruendung"
+                          type="text"
+                          multiLine
+                          handleSubmit={handleSubmit}
+                        />
+                        <Coordinates
+                          row={row}
+                          refetchForm={refetchPop}
+                          table="pop"
+                        />
+                      </Form>
+                    )}
+                  </Formik>
+                </FormContainer>
+              </SimpleBar>
+            )}
+            {tab === 'dateien' && <Files parentId={row.id} parent="pop" />}
+            {tab === 'history' && <PopHistory popId={id} />}
+          </TabContent>
+        </div>
       </Container>
     </ErrorBoundary>
   )
