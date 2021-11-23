@@ -76,7 +76,6 @@ const standardWidth = 500
 const ProjektContainer = ({
   treeName,
   tabs: tabsPassed,
-  projekteTabs,
   nodes,
   treeLoading,
   treeRefetch,

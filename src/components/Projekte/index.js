@@ -231,7 +231,6 @@ const Projekte = () => {
         <ProjektContainer
           treeName="tree"
           tabs={treeTabs}
-          projekteTabs={projekteTabs}
           nodes={treeNodes}
           treeLoading={treeLoading}
           treeRefetch={treeRefetch}
@@ -247,7 +246,6 @@ const Projekte = () => {
         <ProjektContainer
           treeName="tree"
           tabs={treeTabs}
-          projekteTabs={projekteTabs}
           nodes={treeNodes}
           treeLoading={treeLoading}
           treeRefetch={treeRefetch}
@@ -256,7 +254,6 @@ const Projekte = () => {
         <ProjektContainer
           treeName="tree2"
           tabs={tree2Tabs}
-          projekteTabs={projekteTabs}
           nodes={tree2Nodes}
           treeLoading={tree2Loading}
           treeRefetch={tree2Refetch}
