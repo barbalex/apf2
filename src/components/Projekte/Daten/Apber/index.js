@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -35,7 +35,7 @@ const LoadingContainer = styled.div`
   padding: 10px;
 `
 const FieldsContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const StyledForm = styled(Form)`
   padding: 10px;
@@ -154,8 +154,6 @@ const Apber = ({ treeName, width = 1000 }) => {
     [client, row, store.user.name],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(43)
-
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
@@ -182,9 +180,8 @@ const Apber = ({ treeName, width = 1000 }) => {
           title="AP-Bericht"
           treeName={treeName}
           table="apber"
-          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+        <FieldsContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',
