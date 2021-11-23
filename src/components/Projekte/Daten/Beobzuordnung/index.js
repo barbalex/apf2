@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import flatten from 'lodash/flatten'
@@ -46,7 +46,7 @@ const FormContainer = styled.div`
   flex-direction: column;
 `
 const DataContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -125,7 +125,7 @@ const nichtZuordnenPopover = (
   </PopoverContainer>
 )
 
-const getTpopZuordnenSource = ({ row, apId, ap }) => {
+const getTpopZuordnenSource = ({ row, ap }) => {
   // get all popIds of active ap
   const popList = ap?.popsByApId?.nodes ?? []
   // get all tpop
@@ -184,7 +184,7 @@ const Beobzuordnung = ({ type, treeName }) => {
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
   const aeTaxonomiesfilter = useCallback(
     (inputValue) =>
-      !!inputValue
+      inputValue
         ? {
             artname: { includesInsensitive: inputValue },
             apartsByArtIdExist: true,
@@ -288,8 +288,6 @@ const Beobzuordnung = ({ type, treeName }) => {
     [client, id, store.user.name],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(43)
-
   if (loading) {
     return (
       <LoadingContainer data-appbar-height={appBarHeight}>
@@ -307,9 +305,8 @@ const Beobzuordnung = ({ type, treeName }) => {
           title="Beobachtung"
           treeName={treeName}
           table="beob"
-          setFormTitleHeight={setFormTitleHeight}
         />
-        <DataContainer data-form-title-height={formTitleHeight}>
+        <DataContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',
@@ -347,11 +344,11 @@ const Beobzuordnung = ({ type, treeName }) => {
                 value={row.tpopId ?? ''}
                 field="tpopId"
                 label={
-                  !!row.tpopId
+                  row.tpopId
                     ? 'Einer anderen Teilpopulation zuordnen'
                     : 'Einer Teilpopulation zuordnen'
                 }
-                options={getTpopZuordnenSource({ row, apId, ap })}
+                options={getTpopZuordnenSource({ row, ap })}
                 saveToDb={onSaveTpopIdToDb}
               />
               <TextField

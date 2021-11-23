@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -28,7 +28,7 @@ const LoadingContainer = styled.div`
   padding: 10px;
 `
 const FieldsContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const StyledForm = styled(Form)`
   padding: 10px;
@@ -63,7 +63,7 @@ const Assozart = ({ treeName }) => {
     // but do include the art included in the row
     .filter((o) => o !== row.aeId)
   const aeTaxonomiesfilter = (inputValue) =>
-    !!inputValue
+    inputValue
       ? assozartenOfAp.length
         ? {
             taxArtName: { includesInsensitive: inputValue },
@@ -141,8 +141,6 @@ const Assozart = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(43)
-
   if (loading) {
     return (
       <LoadingContainer data-appbar-height={appBarHeight}>
@@ -160,9 +158,8 @@ const Assozart = ({ treeName }) => {
           title="assoziierte Art"
           treeName={treeName}
           table="assozart"
-          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+        <FieldsContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',
