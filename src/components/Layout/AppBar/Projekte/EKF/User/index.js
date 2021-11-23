@@ -118,7 +118,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
           await client.mutate({
             mutation: updateUserByIdGql,
             variables: {
-              id: row.id,
+              id: row?.id,
               pass: password2,
             },
           })
