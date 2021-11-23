@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -16,16 +16,17 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FieldsContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const StyledForm = styled(Form)`
   padding: 10px;
@@ -38,7 +39,6 @@ const fieldTypes = {
 const Projekt = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { appBarHeight } = store
   const { activeNodeArray, projIdInActiveNodeArray: projId } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -109,26 +109,15 @@ const Projekt = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
-
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
-        <FormTitle
-          title="Projekt"
-          treeName={treeName}
-          table={filterTable}
-          setFormTitleHeight={setFormTitleHeight}
-        />
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+      <Container>
+        <FormTitle title="Projekt" treeName={treeName} table={filterTable} />
+        <FieldsContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',
