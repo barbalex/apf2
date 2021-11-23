@@ -3,7 +3,7 @@
  * need to compare row and values
  * to find changed field
  */
-const objectsFindChangedKey = (a, b) => {
+const objectsFindChangedKey = (a, b = {}) => {
   for (const [key, value] of Object.entries(a)) {
     // DANGER
     // if query fetched dependent data, there will be objects with that data contained
