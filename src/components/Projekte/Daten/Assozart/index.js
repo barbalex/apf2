@@ -19,12 +19,13 @@ import { assozart } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -43,7 +44,6 @@ const fieldTypes = {
 const Assozart = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { appBarHeight } = store
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -142,17 +142,13 @@ const Assozart = ({ treeName }) => {
   )
 
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <Container data-id="assozart" data-appbar-height={appBarHeight}>
+      <Container data-id="assozart">
         <FormTitle
           apId={row.apId}
           title="assoziierte Art"

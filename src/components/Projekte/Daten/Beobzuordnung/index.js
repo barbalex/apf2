@@ -37,13 +37,14 @@ const PopoverContainer = styled.div`
   border-top-right-radius: 4px;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FormContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const DataContainer = styled.div`
   overflow-y: auto;
@@ -162,7 +163,6 @@ const getTpopZuordnenSource = ({ row, ap }) => {
 const Beobzuordnung = ({ type, treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { appBarHeight } = store
   const tree = store[treeName]
   const { activeNodeArray } = tree
   const id = activeNodeArray[activeNodeArray.length - 1]
@@ -289,17 +289,13 @@ const Beobzuordnung = ({ type, treeName }) => {
   )
 
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <FormContainer data-appbar-height={appBarHeight}>
+      <FormContainer>
         <FormTitle
           apId={apId ?? null}
           title="Beobachtung"
