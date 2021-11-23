@@ -124,7 +124,7 @@ const Tpop = ({
                   options={dataLists?.allChGemeindes?.nodes ?? []}
                   loading={loadingLists}
                   showLocate={!showFilter}
-                  onClickLocate={async (setStateValue) => {
+                  onClickLocate={async () => {
                     if (!row.lv95X) {
                       return setErrors({
                         gemeinde: 'Es fehlen Koordinaten',
