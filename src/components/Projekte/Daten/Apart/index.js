@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -29,7 +29,7 @@ const LoadingContainer = styled.div`
   padding: 10px;
 `
 const FieldsContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const FieldsSubContainer = styled.div`
   padding: 10px 10px 0 10px;
@@ -76,7 +76,7 @@ const ApArt = ({ treeName }) => {
     .filter((o) => !!o)
   const aeTaxonomiesfilter = useCallback(
     (inputValue) =>
-      !!inputValue
+      inputValue
         ? apartenOfAp.length
           ? {
               taxArtName: { includesInsensitive: inputValue },
@@ -149,8 +149,6 @@ const ApArt = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(43)
-
   if (loading || loadingAeEigById) {
     return (
       <LoadingContainer data-appbar-height={appBarHeight}>
@@ -173,9 +171,8 @@ const ApArt = ({ treeName }) => {
           title="Aktionsplan-Art"
           treeName={treeName}
           table="apart"
-          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+        <FieldsContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',
@@ -184,10 +181,9 @@ const ApArt = ({ treeName }) => {
           >
             <FieldsSubContainer>
               <div>
-                "Aktionsplan-Arten" sind alle Arten, welche der Aktionsplan
-                behandelt. Häufig dürfte das bloss eine einzige Art sein.
-                Folgende Gründe können dazu führen, dass hier mehrere
-                aufgelistet werden:
+                {
+                  '"Aktionsplan-Arten" sind alle Arten, welche der Aktionsplan behandelt. Häufig dürfte das bloss eine einzige Art sein. Folgende Gründe können dazu führen, dass hier mehrere aufgelistet werden:'
+                }
                 <ul>
                   <li>Die AP-Art hat Synonyme</li>
                   <li>
@@ -203,9 +199,9 @@ const ApArt = ({ treeName }) => {
                 </ul>
               </div>
               <div>
-                Beobachtungen aller AP-Arten stehen im Ordner "Beobachtungen
-                nicht beurteilt" zur Verfügung und können Teilpopulationen
-                zugeordnet werden.
+                {
+                  'Beobachtungen aller AP-Arten stehen im Ordner "Beobachtungen nicht beurteilt" zur Verfügung und können Teilpopulationen zugeordnet werden.'
+                }
                 <br />
                 <br />
               </div>
