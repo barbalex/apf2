@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { withResizeDetector } from 'react-resize-detector'
 
 import TestdataMessage from './TestdataMessage'
 
@@ -31,18 +30,7 @@ const Buttons = styled.div`
   padding: 3px 0 3px 10px;
 `
 
-const FormTitle = ({
-  title,
-  apId,
-  treeName,
-  buttons,
-  height = 43,
-  setFormTitleHeight = () => {},
-}) => {
-  useEffect(() => {
-    setFormTitleHeight(height)
-  }, [height, setFormTitleHeight])
-
+const FormTitle = ({ title, apId, treeName, buttons }) => {
   if (!treeName) {
     console.log('FormTitle was not passed a treeName, bailing out!')
     return
@@ -59,4 +47,4 @@ const FormTitle = ({
   )
 }
 
-export default withResizeDetector(FormTitle)
+export default FormTitle

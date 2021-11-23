@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
@@ -27,13 +27,14 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-filter-title-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background-color: #ffd3a7;
 `
 const FormScrollContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const ColumnContainer = styled.div`
   padding: 10px;
@@ -42,11 +43,7 @@ const ColumnContainer = styled.div`
     `column-width: ${props['data-column-width']}px;`}
 `
 
-const TpopmassnFilter = ({
-  treeName,
-  width = 1000,
-  filterTitleHeight = 81,
-}) => {
+const TpopmassnFilter = ({ treeName, width = 1000 }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
 
@@ -138,8 +135,6 @@ const TpopmassnFilter = ({
     [dataFilterSetValue, row, treeName],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
-
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
@@ -151,7 +146,7 @@ const TpopmassnFilter = ({
   if (errors.length) return <Error errors={errors} />
 
   return (
-    <Container data-filter-title-height={filterTitleHeight}>
+    <Container>
       <ErrorBoundary>
         <FilterTitle
           title="Massnahmen"
@@ -161,9 +156,8 @@ const TpopmassnFilter = ({
           filteredNr={tpopmassnFilteredCount}
           totalApNr={tpopmassnsOfApTotalCount}
           filteredApNr={tpopmassnsOfApFilteredCount}
-          setFormTitleHeight={setFormTitleHeight}
         />
-        <FormScrollContainer data-form-title-height={formTitleHeight}>
+        <FormScrollContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',

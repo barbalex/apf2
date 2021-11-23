@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
 
@@ -18,12 +18,13 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   @media print {
     display: none !important;
   }
 `
 const ScrollContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const InnerContainer = styled.div`
   padding: 10px;
@@ -33,18 +34,12 @@ const ExporteContainer = styled.div`
 `
 
 const Exporte = () => {
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
-
   return (
     <ExporteContainer data-id={`exporte-container`}>
       <ErrorBoundary>
         <Container>
-          <FormTitle
-            title="Exporte"
-            treeName="tree"
-            setFormTitleHeight={setFormTitleHeight}
-          />
-          <ScrollContainer data-form-title-height={formTitleHeight}>
+          <FormTitle title="Exporte" treeName="tree" />
+          <ScrollContainer>
             <SimpleBar
               style={{
                 maxHeight: '100%',

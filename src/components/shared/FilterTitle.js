@@ -1,11 +1,10 @@
-import React, { useContext, useCallback, useEffect } from 'react'
+import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 // this does not exist in any icon library, not even in md!!!!
 import DeleteSweepOutlined from '@mui/icons-material/DeleteSweepOutlined'
 import { MdDeleteSweep } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
-import { withResizeDetector } from 'react-resize-detector'
 
 import storeContext from '../../storeContext'
 import exists from '../../modules/exists'
@@ -53,8 +52,6 @@ const FilterTitle = ({
   filteredNr,
   totalApNr,
   filteredApNr,
-  height = 43,
-  setFormTitleHeight = () => {},
 }) => {
   const store = useContext(storeContext)
   const {
@@ -63,10 +60,6 @@ const FilterTitle = ({
     dataFilterEmptyTable,
     dataFilterEmptyTree,
   } = store
-
-  useEffect(() => {
-    setFormTitleHeight(height)
-  }, [height, setFormTitleHeight])
 
   const existsTableFilter = dataFilterTableIsFiltered({
     treeName,
@@ -78,10 +71,10 @@ const FilterTitle = ({
     () => dataFilterEmptyTable({ treeName, table }),
     [dataFilterEmptyTable, treeName, table],
   )
-  const onEmptyTree = useCallback(() => dataFilterEmptyTree(treeName), [
-    dataFilterEmptyTree,
-    treeName,
-  ])
+  const onEmptyTree = useCallback(
+    () => dataFilterEmptyTree(treeName),
+    [dataFilterEmptyTree, treeName],
+  )
 
   return (
     <Container>
@@ -127,4 +120,4 @@ const FilterTitle = ({
   )
 }
 
-export default withResizeDetector(observer(FilterTitle))
+export default observer(FilterTitle)

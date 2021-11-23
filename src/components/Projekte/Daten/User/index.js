@@ -30,16 +30,17 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const ScrollContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const StyledForm = styled.div`
   padding: 10px;
@@ -96,7 +97,7 @@ const fieldTypes = {
 
 const User = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { setEkfAdresseId, setView, appBarHeight } = store
+  const { setEkfAdresseId, setView } = store
   const { activeNodeArray } = store[treeName]
   const client = useApolloClient()
 
@@ -133,7 +134,7 @@ const User = ({ treeName }) => {
     queryEkfTpops,
     {
       variables: {
-        id: row.adresseId || 9999999999999999999999999,
+        id: row.adresseId || '9999999999999999999999999',
         jahr: thisYear,
         include: !!row.adresseId,
       },
@@ -315,14 +316,8 @@ const User = ({ treeName }) => {
     thisYear,
   ])
 
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
-
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
 
   const queryErrors = [
@@ -335,13 +330,12 @@ const User = ({ treeName }) => {
 
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <FormTitle
           apId={row.id}
           title="Benutzer"
           treeName={treeName}
           table="user"
-          setFormTitleHeight={setFormTitleHeight}
           buttons={
             <>
               {!editPassword && !passwordMessage && (
@@ -382,7 +376,7 @@ const User = ({ treeName }) => {
             </>
           }
         />
-        <ScrollContainer data-form-title-height={formTitleHeight}>
+        <ScrollContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',
