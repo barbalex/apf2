@@ -3,14 +3,12 @@
  * because neither StaticQuery nor AppQuery
  * work there :-(
  */
-import React, { useContext } from 'react'
+import React from 'react'
 import { Helmet } from 'react-helmet'
-import { useStaticQuery, graphql } from 'gatsby'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import AppBar from './AppBar'
-import storeContext from '../../storeContext'
 
 const Container = styled.div`
   height: 100%;
@@ -22,36 +20,29 @@ const Container = styled.div`
 `
 // TODO: is this element necessary?
 const ContentContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
 `
 
-const Layout = ({ children }) => {
-  const store = useContext(storeContext)
-  const { appBarHeight } = store
-
-  return (
-    <Container>
-      <Helmet
-        title="apflora v1.66.0"
-        meta={[
-          {
-            name: 'description',
-            content: 'Bedrohte Pflanzenarten fördern',
-          },
-          {
-            name: 'keywords',
-            content: 'Naturschutz, Artenschutz, Flora, Pflanzen',
-          },
-        ]}
-      >
-        <html lang="de" />
-      </Helmet>
-      <AppBar />
-      <ContentContainer data-appbar-height={appBarHeight}>
-        {children}
-      </ContentContainer>
-    </Container>
-  )
-}
+const Layout = ({ children }) => (
+  <Container>
+    <Helmet
+      title="apflora v1.66.0"
+      meta={[
+        {
+          name: 'description',
+          content: 'Bedrohte Pflanzenarten fördern',
+        },
+        {
+          name: 'keywords',
+          content: 'Naturschutz, Artenschutz, Flora, Pflanzen',
+        },
+      ]}
+    >
+      <html lang="de" />
+    </Helmet>
+    <AppBar />
+    <ContentContainer>{children}</ContentContainer>
+  </Container>
+)
 
 export default observer(Layout)
