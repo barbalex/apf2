@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
 import { withResizeDetector } from 'react-resize-detector'
 
 import TestdataMessage from './TestdataMessage'
@@ -60,4 +59,4 @@ const FormTitle = ({
   )
 }
 
-export default withResizeDetector(observer(FormTitle))
+export default withResizeDetector(FormTitle)
