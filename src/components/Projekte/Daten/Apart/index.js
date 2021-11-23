@@ -20,12 +20,12 @@ import { apart } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -42,7 +42,6 @@ const fieldTypes = {
 
 const ApArt = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { appBarHeight } = store
   const client = useApolloClient()
   const { activeNodeArray } = store[treeName]
 
@@ -150,11 +149,7 @@ const ApArt = ({ treeName }) => {
   )
 
   if (loading || loadingAeEigById) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
 
   const errors = [
@@ -165,7 +160,7 @@ const ApArt = ({ treeName }) => {
 
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <FormTitle
           apId={row.apId}
           title="Aktionsplan-Art"

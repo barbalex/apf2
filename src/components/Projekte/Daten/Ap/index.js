@@ -15,9 +15,10 @@ import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const StyledTab = styled(Tab)`
   text-transform: none !important;
@@ -28,7 +29,7 @@ const TabContent = styled.div`
 
 const ApTabs = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { urlQuery, setUrlQuery, appBarHeight } = store
+  const { urlQuery, setUrlQuery } = store
   const { activeNodeArray } = store[treeName]
 
   let id =
@@ -52,7 +53,7 @@ const ApTabs = ({ treeName }) => {
 
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <FormTitle apId={id} title="Aktionsplan" treeName={treeName} />
         <Tabs
           value={tab}

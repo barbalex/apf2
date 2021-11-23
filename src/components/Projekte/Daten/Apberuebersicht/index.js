@@ -23,12 +23,13 @@ import { apberuebersicht } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -56,7 +57,7 @@ const fieldTypes = {
 const Apberuebersicht = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { user, enqueNotification, appBarHeight } = store
+  const { user, enqueNotification } = store
   const { token } = user
   const role = token ? jwtDecode(token).role : null
   const userIsManager = role === 'apflora_manager'
@@ -234,17 +235,13 @@ const Apberuebersicht = ({ treeName }) => {
   }, [client, enqueNotification, refetch, row])
 
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <FormTitle
           title="AP-Bericht Jahresübersicht"
           treeName={treeName}
