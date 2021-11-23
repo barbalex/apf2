@@ -80,7 +80,7 @@ const crs = new window.L.Proj.CRS(
 )*/
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   overflow: hidden;
   .map-control-scalebar-text {
     width: 83px;
@@ -429,7 +429,6 @@ const Karte = ({ treeName }) => {
     activeBaseLayer,
     bounds: boundsRaw,
     assigningBeob,
-    appBarHeight,
     hideMapControls,
   } = store
   const tree = store[treeName]
@@ -505,10 +504,7 @@ const Karte = ({ treeName }) => {
   // see: https://github.com/barbalex/apf2/issues/467
 
   return (
-    <Container
-      data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}
-      data-appbar-height={appBarHeight}
-    >
+    <Container data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}>
       <ErrorBoundary>
         <StyledMapContainer
           // bounds need to be set using ma.fitBounds sice v3
