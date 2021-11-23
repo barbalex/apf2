@@ -34,12 +34,13 @@ import Error from '../../../shared/Error'
 import { tpopmassn } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const LoadingContainer = styled.div`
-  height: ${(props) => `calc(100vh - ${props['data-appbar-height']}px)`};
+  height: 100%;
   padding: 10px;
 `
 const ColumnContainer = styled.div`
@@ -52,8 +53,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 const TabContent = styled.div`
-  height: ${(props) =>
-    `calc(100% - ${props['data-form-title-height']}px - 48px)`};
+  height: 100%;
 `
 
 const fieldTypes = {
@@ -84,7 +84,7 @@ const fieldTypes = {
 const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { urlQuery, setUrlQuery, appBarHeight } = store
+  const { urlQuery, setUrlQuery } = store
 
   const { activeNodeArray } = store[treeName]
 
@@ -379,19 +379,13 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
     [setUrlQuery, urlQuery],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(43)
-
   //console.log('Tpopmassn rendering')
 
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
   if (loading) {
-    return (
-      <LoadingContainer data-appbar-height={appBarHeight}>
-        Lade...
-      </LoadingContainer>
-    )
+    return <LoadingContainer>Lade...</LoadingContainer>
   }
 
   const errors = [
@@ -403,12 +397,11 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
 
   return (
     <ErrorBoundary>
-      <Container data-appbar-height={appBarHeight}>
+      <Container>
         <FormTitle
           apId={activeNodeArray[3]}
           title="Massnahme"
           treeName={treeName}
-          setFormTitleHeight={setFormTitleHeight}
         />
         <Tabs
           value={tab}
@@ -420,167 +413,171 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
           <StyledTab label="Massnahme" value="tpopmassn" data-id="tpopmassn" />
           <StyledTab label="Dateien" value="dateien" data-id="dateien" />
         </Tabs>
-        <TabContent data-form-title-height={formTitleHeight}>
-          {tab === 'tpopmassn' && (
-            <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-              <ColumnContainer data-column-width={columnWidth}>
-                <Formik
-                  key={showFilter ? row : row.id}
-                  initialValues={row}
-                  onSubmit={onSubmit}
-                  enableReinitialize
-                >
-                  {({ handleSubmit, dirty }) => (
-                    <Form onBlur={() => dirty && handleSubmit()}>
-                      <TextField
-                        name="jahr"
-                        label="Jahr"
-                        type="number"
-                        handleSubmit={handleSubmit}
-                      />
-                      <DateField
-                        name="datum"
-                        label="Datum"
-                        handleSubmit={handleSubmit}
-                      />
-                      <RadioButtonGroup
-                        name="typ"
-                        label="Typ"
-                        dataSource={
-                          dataLists?.allTpopmassnTypWertes?.nodes ?? []
-                        }
-                        loading={loadingLists}
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="beschreibung"
-                        label="Massnahme"
-                        type="text"
-                        handleSubmit={handleSubmit}
-                      />
-                      <Select
-                        name="bearbeiter"
-                        value={row.bearbeiter}
-                        label="BearbeiterIn"
-                        options={dataAdresses?.allAdresses?.nodes ?? []}
-                        loading={loadingAdresses}
-                        handleSubmit={handleSubmit}
-                      />
-                      <MdField name="bemerkungen" label="Bemerkungen" />
-                      <Checkbox2States
-                        name="planVorhanden"
-                        label="Plan vorhanden"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="planBezeichnung"
-                        label="Plan Bezeichnung"
-                        type="text"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="flaeche"
-                        label="Fläche (m2)"
-                        type="number"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="form"
-                        label="Form der Ansiedlung"
-                        type="text"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="pflanzanordnung"
-                        label="Pflanzanordnung"
-                        type="text"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="markierung"
-                        label="Markierung"
-                        type="text"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="anzTriebe"
-                        label="Anzahl Triebe"
-                        type="number"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="anzPflanzen"
-                        label="Anzahl Pflanzen"
-                        type="number"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="anzPflanzstellen"
-                        label="Anzahl Pflanzstellen"
-                        type="number"
-                        handleSubmit={handleSubmit}
-                      />
-                      {isAnpflanzung && (
-                        <>
-                          <Select
-                            name="zieleinheitEinheit"
-                            label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
-                            options={
-                              dataLists?.allTpopkontrzaehlEinheitWertes
-                                ?.nodes ?? []
-                            }
-                            loading={loadingLists}
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextField
-                            name="zieleinheitAnzahl"
-                            label={
-                              notMassnCountUnit === true
-                                ? 'Ziel-Einheit: Anzahl'
-                                : 'Ziel-Einheit: Anzahl (wird automatisch gesetzt)'
-                            }
-                            type="number"
-                            handleSubmit={handleSubmit}
-                          />
-                        </>
-                      )}
-                      <SelectLoadingOptionsTypable
-                        key={`${id}${!!row.wirtspflanze}`}
-                        name="wirtspflanze"
-                        label="Wirtspflanze"
-                        handleSubmit={handleSubmit}
-                        query={queryAeTaxonomies}
-                        queryNodesName="allAeTaxonomies"
-                      />
-                      <TextField
-                        name="herkunftPop"
-                        label="Herkunftspopulation"
-                        type="text"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="sammeldatum"
-                        label="Sammeldatum"
-                        type="text"
-                        handleSubmit={handleSubmit}
-                      />
-                      <TextField
-                        name="vonAnzahlIndividuen"
-                        label="Anzahl besammelte Individuen der Herkunftspopulation"
-                        type="number"
-                        handleSubmit={handleSubmit}
-                      />
-                      {!showFilter && <StringToCopy text={row.id} label="id" />}
-                    </Form>
-                  )}
-                </Formik>
-              </ColumnContainer>
-            </SimpleBar>
-          )}
-          {tab === 'dateien' && !showFilter && (
-            <Files parentId={row.id} parent="tpopmassn" />
-          )}
-        </TabContent>
+        <div style={{ overflowY: 'auto' }}>
+          <TabContent>
+            {tab === 'tpopmassn' && (
+              <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+                <ColumnContainer data-column-width={columnWidth}>
+                  <Formik
+                    key={showFilter ? row : row.id}
+                    initialValues={row}
+                    onSubmit={onSubmit}
+                    enableReinitialize
+                  >
+                    {({ handleSubmit, dirty }) => (
+                      <Form onBlur={() => dirty && handleSubmit()}>
+                        <TextField
+                          name="jahr"
+                          label="Jahr"
+                          type="number"
+                          handleSubmit={handleSubmit}
+                        />
+                        <DateField
+                          name="datum"
+                          label="Datum"
+                          handleSubmit={handleSubmit}
+                        />
+                        <RadioButtonGroup
+                          name="typ"
+                          label="Typ"
+                          dataSource={
+                            dataLists?.allTpopmassnTypWertes?.nodes ?? []
+                          }
+                          loading={loadingLists}
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="beschreibung"
+                          label="Massnahme"
+                          type="text"
+                          handleSubmit={handleSubmit}
+                        />
+                        <Select
+                          name="bearbeiter"
+                          value={row.bearbeiter}
+                          label="BearbeiterIn"
+                          options={dataAdresses?.allAdresses?.nodes ?? []}
+                          loading={loadingAdresses}
+                          handleSubmit={handleSubmit}
+                        />
+                        <MdField name="bemerkungen" label="Bemerkungen" />
+                        <Checkbox2States
+                          name="planVorhanden"
+                          label="Plan vorhanden"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="planBezeichnung"
+                          label="Plan Bezeichnung"
+                          type="text"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="flaeche"
+                          label="Fläche (m2)"
+                          type="number"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="form"
+                          label="Form der Ansiedlung"
+                          type="text"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="pflanzanordnung"
+                          label="Pflanzanordnung"
+                          type="text"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="markierung"
+                          label="Markierung"
+                          type="text"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="anzTriebe"
+                          label="Anzahl Triebe"
+                          type="number"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="anzPflanzen"
+                          label="Anzahl Pflanzen"
+                          type="number"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="anzPflanzstellen"
+                          label="Anzahl Pflanzstellen"
+                          type="number"
+                          handleSubmit={handleSubmit}
+                        />
+                        {isAnpflanzung && (
+                          <>
+                            <Select
+                              name="zieleinheitEinheit"
+                              label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
+                              options={
+                                dataLists?.allTpopkontrzaehlEinheitWertes
+                                  ?.nodes ?? []
+                              }
+                              loading={loadingLists}
+                              handleSubmit={handleSubmit}
+                            />
+                            <TextField
+                              name="zieleinheitAnzahl"
+                              label={
+                                notMassnCountUnit === true
+                                  ? 'Ziel-Einheit: Anzahl'
+                                  : 'Ziel-Einheit: Anzahl (wird automatisch gesetzt)'
+                              }
+                              type="number"
+                              handleSubmit={handleSubmit}
+                            />
+                          </>
+                        )}
+                        <SelectLoadingOptionsTypable
+                          key={`${id}${!!row.wirtspflanze}`}
+                          name="wirtspflanze"
+                          label="Wirtspflanze"
+                          handleSubmit={handleSubmit}
+                          query={queryAeTaxonomies}
+                          queryNodesName="allAeTaxonomies"
+                        />
+                        <TextField
+                          name="herkunftPop"
+                          label="Herkunftspopulation"
+                          type="text"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="sammeldatum"
+                          label="Sammeldatum"
+                          type="text"
+                          handleSubmit={handleSubmit}
+                        />
+                        <TextField
+                          name="vonAnzahlIndividuen"
+                          label="Anzahl besammelte Individuen der Herkunftspopulation"
+                          type="number"
+                          handleSubmit={handleSubmit}
+                        />
+                        {!showFilter && (
+                          <StringToCopy text={row.id} label="id" />
+                        )}
+                      </Form>
+                    )}
+                  </Formik>
+                </ColumnContainer>
+              </SimpleBar>
+            )}
+            {tab === 'dateien' && !showFilter && (
+              <Files parentId={row.id} parent="tpopmassn" />
+            )}
+          </TabContent>
+        </div>
       </Container>
     </ErrorBoundary>
   )
