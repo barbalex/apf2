@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { FaPlus, FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import styled from 'styled-components'
@@ -31,7 +31,7 @@ const LoadingContainer = styled.div`
   padding: 10px;
 `
 const FieldsContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const StyledForm = styled(Form)`
   padding: 10px;
@@ -166,8 +166,6 @@ const Ekfrequenz = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
-
   if (loading) {
     return (
       <LoadingContainer data-appbar-height={appBarHeight}>
@@ -184,9 +182,8 @@ const Ekfrequenz = ({ treeName }) => {
           title="EK-Frequenz"
           treeName={treeName}
           table="ekfrequenz"
-          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+        <FieldsContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',

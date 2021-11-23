@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { useQuery, gql } from '@apollo/client'
@@ -23,7 +23,7 @@ const LoadingContainer = styled.div`
   padding: 10px;
 `
 const FieldsContainer = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-form-title-height']}px)`};
+  overflow-y: auto;
 `
 const Content = styled.div`
   padding: 10px;
@@ -54,8 +54,6 @@ const CurrentIssue = ({ treeName }) => {
 
   const row = get(data, 'currentissueById', {})
 
-  const [formTitleHeight, setFormTitleHeight] = useState(0)
-
   if (loading) {
     return (
       <LoadingContainer data-appbar-height={appBarHeight}>
@@ -73,9 +71,8 @@ const CurrentIssue = ({ treeName }) => {
           title="Aktueller Fehler"
           treeName={treeName}
           table="currentissue"
-          setFormTitleHeight={setFormTitleHeight}
         />
-        <FieldsContainer data-form-title-height={formTitleHeight}>
+        <FieldsContainer>
           <SimpleBar
             style={{
               maxHeight: '100%',
