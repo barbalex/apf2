@@ -6,7 +6,6 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
 
 import exists from '../../modules/exists'
 
@@ -142,4 +141,4 @@ RadioButtonGroup.defaultProps = {
   value: null,
 }
 
-export default observer(RadioButtonGroup)
+export default RadioButtonGroup
