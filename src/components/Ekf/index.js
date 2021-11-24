@@ -11,9 +11,8 @@ import Tpopfreiwkontr from '../Projekte/Daten/Tpopfreiwkontr'
 import storeContext from '../../storeContext'
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
   height: 100%;
+  overflow: hidden;
 
   @media print {
     display: block;
