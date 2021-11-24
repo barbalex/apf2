@@ -7,8 +7,6 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
-import { useField } from 'formik'
 
 import InfoWithPopover from './InfoWithPopover'
 import ifIsNumericAsNumber from '../../modules/ifIsNumericAsNumber'
@@ -67,12 +65,9 @@ const StyledLabel = styled.div`
   color: ${(props) => (props.error ? '#f44336' : 'unset')};
 `
 
-const Status = ({ apJahr, showFilter, handleSubmit, ...props }) => {
-  const [field, meta] = useField(props)
-  const { onChange, onBlur } = field
-  const { value, error: errors } = meta
-  const herkunftValue = value.status
-  const bekanntSeitValue = value.bekanntSeit
+const Status = ({ apJahr, showFilter, saveToDb, row, errors }) => {
+  const herkunftValue = row.status
+  const bekanntSeitValue = row.bekanntSeit
   const error = errors?.status || errors?.bekanntSeit
 
   const [bekanntSeitStateValue, setBekanntSeitStateValue] = useState(
@@ -109,16 +104,14 @@ const Status = ({ apJahr, showFilter, handleSubmit, ...props }) => {
         const fakeEvent = {
           target: { value: null, name: 'status' },
         }
-        onChange(fakeEvent)
-        onBlur(fakeEvent)
         // It is possible to directly click an option after editing an other field
         // this creates a race condition in the two submits which can lead to lost inputs!
         // so timeout inputs in option fields
-        setTimeout(() => handleSubmit())
+        setTimeout(() => saveToDb(fakeEvent))
         return
       }
     },
-    [onBlur, onChange, handleSubmit, herkunftValue],
+    [saveToDb, herkunftValue],
   )
   const onChangeStatus = useCallback(
     (event) => {
@@ -130,14 +123,12 @@ const Status = ({ apJahr, showFilter, handleSubmit, ...props }) => {
           name: 'status',
         },
       }
-      onChange(fakeEvent)
-      onBlur(fakeEvent)
       // It is possible to directly click an option after editing an other field
       // this creates a race condition in the two submits which can lead to lost inputs!
       // so timeout inputs in option fields
-      setTimeout(() => handleSubmit())
+      setTimeout(() => saveToDb(fakeEvent))
     },
-    [onBlur, onChange, handleSubmit],
+    [saveToDb],
   )
   const onChangeBekanntSeit = useCallback(
     (event) =>
@@ -150,11 +141,9 @@ const Status = ({ apJahr, showFilter, handleSubmit, ...props }) => {
       const fakeEvent = {
         target: { value: ifIsNumericAsNumber(value), name: 'bekanntSeit' },
       }
-      onChange(fakeEvent)
-      onBlur(fakeEvent)
-      handleSubmit()
+      saveToDb(fakeEvent)
     },
-    [onBlur, onChange, handleSubmit],
+    [saveToDb],
   )
 
   useEffect(() => {
@@ -273,4 +262,4 @@ Status.defaultProps = {
   bekanntSeitValue: '',
 }
 
-export default observer(Status)
+export default Status
