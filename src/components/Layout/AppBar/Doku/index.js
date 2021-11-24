@@ -25,27 +25,29 @@ const MenuDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
-// need to prevent boolean props from being passed to dom
-const StyledButton = ({ preceded, followed, ...rest }) => {
-  const StyledButton = styled(Button)`
-    color: white !important;
-    border-color: rgba(255, 255, 255, 0.5) !important;
-    border-right-color: ${followed
-      ? ' rgba(255, 255, 255, 0.25)'
-      : ' rgba(255, 255, 255, 0.5)'} !important;
-    border-left-color: ${preceded
-      ? ' rgba(255, 255, 255, 0.25)'
-      : ' rgba(255, 255, 255, 0.5)'} !important;
-    border-top-left-radius: ${preceded ? '0' : '4px'} !important;
-    border-bottom-left-radius: ${preceded ? '0' : '4px'} !important;
-    border-top-right-radius: ${followed ? '0' : '4px'} !important;
-    border-bottom-right-radius: ${followed ? '0' : '4px'} !important;
-    margin-right: ${followed ? '-1px' : 'unset'} !important;
-    text-transform: none !important;
-  `
-  return <StyledButton {...rest} />
-}
 
+const StyledButton = styled(Button)`
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-right-color: ${(props) =>
+    props.followed
+      ? ' rgba(255, 255, 255, 0.25)'
+      : ' rgba(255, 255, 255, 0.5)'} !important;
+  border-left-color: ${(props) =>
+    props.preceded
+      ? ' rgba(255, 255, 255, 0.25)'
+      : ' rgba(255, 255, 255, 0.5)'} !important;
+  border-top-left-radius: ${(props) =>
+    props.preceded ? '0' : '4px'} !important;
+  border-bottom-left-radius: ${(props) =>
+    props.preceded ? '0' : '4px'} !important;
+  border-top-right-radius: ${(props) =>
+    props.followed ? '0' : '4px'} !important;
+  border-bottom-right-radius: ${(props) =>
+    props.followed ? '0' : '4px'} !important;
+  margin-right: ${(props) => (props.followed ? '-1px' : 'unset')} !important;
+  text-transform: none !important;
+`
 const DokuAppBar = () => {
   const isMobile = isMobilePhone()
   const location = useLocation()

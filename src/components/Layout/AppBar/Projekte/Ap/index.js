@@ -30,26 +30,29 @@ const MenuDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
-// need to prevent boolean props from being passed to dom
-const StyledButton = ({ preceded, followed, ...rest }) => {
-  const StyledButton = styled(Button)`
-    color: white !important;
-    border-color: rgba(255, 255, 255, 0.5) !important;
-    border-right-color: ${followed
+
+const StyledButton = styled(Button)`
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-right-color: ${(props) =>
+    props.followed
       ? ' rgba(255, 255, 255, 0.25)'
       : ' rgba(255, 255, 255, 0.5)'} !important;
-    border-left-color: ${preceded
+  border-left-color: ${(props) =>
+    props.preceded
       ? ' rgba(255, 255, 255, 0.25)'
       : ' rgba(255, 255, 255, 0.5)'} !important;
-    border-top-left-radius: ${preceded ? '0' : '4px'} !important;
-    border-bottom-left-radius: ${preceded ? '0' : '4px'} !important;
-    border-top-right-radius: ${followed ? '0' : '4px'} !important;
-    border-bottom-right-radius: ${followed ? '0' : '4px'} !important;
-    margin-right: ${followed ? '-1px' : 'unset'} !important;
-    text-transform: none !important;
-  `
-  return <StyledButton {...rest} />
-}
+  border-top-left-radius: ${(props) =>
+    props.preceded ? '0' : '4px'} !important;
+  border-bottom-left-radius: ${(props) =>
+    props.preceded ? '0' : '4px'} !important;
+  border-top-right-radius: ${(props) =>
+    props.followed ? '0' : '4px'} !important;
+  border-bottom-right-radius: ${(props) =>
+    props.followed ? '0' : '4px'} !important;
+  margin-right: ${(props) => (props.followed ? '-1px' : 'unset')} !important;
+  text-transform: none !important;
+`
 const DokuButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
@@ -131,21 +134,26 @@ const ProjekteAppBar = () => {
     ],
   )
   const onClickTree = useCallback(() => onClickButton('tree'), [onClickButton])
-  const onClickKarte = useCallback(() => onClickButton('karte'), [
-    onClickButton,
-  ])
-  const onClickFilter = useCallback(() => onClickButton('filter'), [
-    onClickButton,
-  ])
-  const onClickFilter2 = useCallback(() => onClickButton('filter2'), [
-    onClickButton,
-  ])
-  const onClickExporte = useCallback(() => onClickButton('exporte'), [
-    onClickButton,
-  ])
-  const onClickTree2 = useCallback(() => onClickButton('tree2'), [
-    onClickButton,
-  ])
+  const onClickKarte = useCallback(
+    () => onClickButton('karte'),
+    [onClickButton],
+  )
+  const onClickFilter = useCallback(
+    () => onClickButton('filter'),
+    [onClickButton],
+  )
+  const onClickFilter2 = useCallback(
+    () => onClickButton('filter2'),
+    [onClickButton],
+  )
+  const onClickExporte = useCallback(
+    () => onClickButton('exporte'),
+    [onClickButton],
+  )
+  const onClickTree2 = useCallback(
+    () => onClickButton('tree2'),
+    [onClickButton],
+  )
   const setViewEkf = useCallback(() => setView('ekf'), [setView])
   const onClickEkPlanung = useCallback(() => {
     // eslint-disable-next-line no-unused-vars
