@@ -407,9 +407,9 @@ const TpopForm = ({ treeName, showFilter = false }) => {
             ) : tab === 'tpop' ? (
               <Tpop
                 showFilter={showFilter}
-                onSubmit={onSubmit}
                 saveToDb={saveToDb}
                 fieldErrors={fieldErrors}
+                setFieldErrors={setFieldErrors}
                 row={row}
                 apJahr={apJahr}
                 refetchTpop={refetchTpop}
