@@ -1,8 +1,7 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
-import { withResizeDetector } from 'react-resize-detector'
 
 const StyledTabs = styled(Tabs)`
   [role='tab'][aria-selected='false'],
@@ -23,28 +22,20 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-const FilterTitle = ({
-  activeTab,
-  setActiveTab,
-  setTitleHeight,
-  height = 81,
-}) => {
-  useEffect(() => {
-    setTitleHeight(height)
-  }, [height, setTitleHeight])
+const titleObject = {
+  ap: 'Aktionsplan Filter',
+  pop: 'Population Filter',
+  tpop: 'Teil-Population Filter',
+  tpopmassn: 'Massnahmen Filter',
+  tpopfeldkontr: 'Feld-Kontrollen Filter',
+  tpopfreiwkontr: 'Freiwilligen-Kontrollen Filter',
+}
 
-  const onChangeTab = useCallback((event, value) => setActiveTab(value), [
-    setActiveTab,
-  ])
-
-  const titleObject = {
-    ap: 'Aktionsplan Filter',
-    pop: 'Population Filter',
-    tpop: 'Teil-Population Filter',
-    tpopmassn: 'Massnahmen Filter',
-    tpopfeldkontr: 'Feld-Kontrollen Filter',
-    tpopfreiwkontr: 'Freiwilligen-Kontrollen Filter',
-  }
+const FilterTitle = ({ activeTab, setActiveTab }) => {
+  const onChangeTab = useCallback(
+    (event, value) => setActiveTab(value),
+    [setActiveTab],
+  )
 
   return (
     <TitleRow>
@@ -72,4 +63,4 @@ const FilterTitle = ({
   )
 }
 
-export default withResizeDetector(FilterTitle)
+export default FilterTitle

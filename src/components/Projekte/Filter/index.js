@@ -20,48 +20,20 @@ const Container = styled.div`
 
 const Filter = ({ treeName }) => {
   const [activeTab, setActiveTab] = useState('ap')
-  const [titleHeight, setTitleHeight] = useState(81)
 
   return (
     <ErrorBoundary>
       <Container>
-        <Title
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          setTitleHeight={setTitleHeight}
-        />
-        {activeTab === 'ap' && (
-          <ApFilter treeName={treeName} filterTitleHeight={titleHeight} />
-        )}
-        {activeTab === 'pop' && (
-          <PopFilter treeName={treeName} filterTitleHeight={titleHeight} />
-        )}
-        {activeTab === 'tpop' && (
-          <Tpop
-            treeName={treeName}
-            filterTitleHeight={titleHeight}
-            showFilter={true}
-          />
-        )}
-        {activeTab === 'tpopmassn' && (
-          <TpopmassnFilter
-            treeName={treeName}
-            filterTitleHeight={titleHeight}
-          />
-        )}
+        <Title activeTab={activeTab} setActiveTab={setActiveTab} />
+        {activeTab === 'ap' && <ApFilter treeName={treeName} />}
+        {activeTab === 'pop' && <PopFilter treeName={treeName} />}
+        {activeTab === 'tpop' && <Tpop treeName={treeName} showFilter={true} />}
+        {activeTab === 'tpopmassn' && <TpopmassnFilter treeName={treeName} />}
         {activeTab === 'tpopfeldkontr' && (
-          <Tpopfeldkontr
-            treeName={treeName}
-            filterTitleHeight={titleHeight}
-            showFilter={true}
-          />
+          <Tpopfeldkontr treeName={treeName} showFilter={true} />
         )}
         {activeTab === 'tpopfreiwkontr' && (
-          <Tpopfreiwkontr
-            treeName={treeName}
-            filterTitleHeight={titleHeight}
-            showFilter={true}
-          />
+          <Tpopfreiwkontr treeName={treeName} showFilter={true} />
         )}
       </Container>
     </ErrorBoundary>
