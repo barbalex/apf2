@@ -3,8 +3,6 @@ import CreatableSelect from 'react-select/creatable'
 import styled from 'styled-components'
 import IconButton from '@mui/material/IconButton'
 import { IoMdLocate } from 'react-icons/io'
-import { observer } from 'mobx-react-lite'
-import { useField } from 'formik'
 
 import exists from '../../modules/exists'
 
@@ -84,6 +82,9 @@ const StyledIconButton = styled(IconButton)`
 
 const SharedSelectCreatable = ({
   label,
+  value,
+  name,
+  error,
   options: optionsIn,
   loading,
   showLocate,
@@ -91,13 +92,7 @@ const SharedSelectCreatable = ({
   maxHeight = null,
   noCaret = false,
   saveToDb,
-  ...props
 }) => {
-  const [field, meta] = useField(props)
-  const { onChange, onBlur, value, name } = field
-  const { error: errors } = meta
-  const error = errors?.[name]
-
   const [stateValue, setStateValue] = useState(null)
 
   const onMyChange = useCallback(
@@ -108,11 +103,9 @@ const SharedSelectCreatable = ({
           value: option ? option.value : null,
         },
       }
-      onChange(fakeEvent)
-      onBlur(fakeEvent)
       saveToDb(fakeEvent)
     },
-    [name, onBlur, onChange, saveToDb],
+    [name, saveToDb],
   )
   const onInputChange = useCallback((value) => setStateValue(value), [])
   const onMyBlur = useCallback(() => {
@@ -123,11 +116,9 @@ const SharedSelectCreatable = ({
           value: stateValue,
         },
       }
-      onChange(fakeEvent)
-      onBlur(fakeEvent)
       saveToDb(fakeEvent)
     }
-  }, [stateValue, name, onChange, onBlur, saveToDb])
+  }, [stateValue, name, saveToDb])
 
   useEffect(() => {
     setStateValue(value)
@@ -188,4 +179,4 @@ const SharedSelectCreatable = ({
   )
 }
 
-export default observer(SharedSelectCreatable)
+export default SharedSelectCreatable
