@@ -9,7 +9,6 @@ import ErrorBoundary from '../../components/shared/ErrorBoundary'
 const Container = styled.div`
   height: 100%;
   display: flex;
-  flex-direction: column;
   overflow: hidden;
   background-color: #fffde7;
 `
