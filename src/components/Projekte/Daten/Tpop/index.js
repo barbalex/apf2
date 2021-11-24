@@ -15,6 +15,7 @@ import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopType } from '../../../../store/Tree/DataFilter/tpop'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import Ek from './Ek'
 import Tpop from './Tpop'
 import TpopHistory from './History'
@@ -174,6 +175,99 @@ const TpopForm = ({ treeName, showFilter = false }) => {
     row = data?.tpopById ?? {}
   }
 
+  const [fieldErrors, setFieldErrors] = useState({})
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+
+      if (showFilter) {
+        return dataFilterSetValue({
+          treeName,
+          table: 'tpop',
+          key: field,
+          value,
+        })
+      } else {
+        const variables = {
+          id: row.id,
+          [field]: value,
+          changedBy: store.user.name,
+        }
+        try {
+          await client.mutate({
+            mutation: gql`
+            mutation updateTpop${field}(
+              $id: UUID!
+              $${field}: ${fieldTypes[field]}
+              $changedBy: String
+            ) {
+              updateTpopById(
+                input: {
+                  id: $id
+                  tpopPatch: {
+                    ${field}: $${field}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                tpop {
+                  ...TpopFields
+                  popStatusWerteByStatus {
+                    ...PopStatusWerteFields
+                  }
+                  tpopApberrelevantGrundWerteByApberRelevantGrund {
+                    ...TpopApberrelevantGrundWerteFields
+                  }
+                  popByPopId {
+                    id
+                    apId
+                  }
+                }
+              }
+            }
+            ${popStatusWerte}
+            ${tpop}
+            ${tpopApberrelevantGrundWerte}
+          `,
+            variables,
+            // no optimistic responce as geomPoint
+          })
+        } catch (error) {
+          return setFieldErrors({ [field]: error.message })
+        }
+        // update tpop on map
+        if (
+          (value &&
+            ((field === 'ylv95Y' && row?.lv95X) ||
+              (field === 'lv95X' && row?.y))) ||
+          (!value && (field === 'ylv95Y' || field === 'lv95X'))
+        ) {
+          if (refetch.tpopForMap) {
+            // need to also refetch pop in case pop was new
+            refetch.popForMap && refetch.popForMap()
+            refetch.tpopForMap()
+          }
+        }
+        if (Object.keys(fieldErrors).length) {
+          setFieldErrors({})
+        }
+      }
+    },
+    [
+      client,
+      dataFilterSetValue,
+      fieldErrors,
+      refetch,
+      row.id,
+      row?.lv95X,
+      row?.y,
+      showFilter,
+      store.user.name,
+      treeName,
+    ],
+  )
+
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       console.log('Tpop onSubmit:', { values, row })
@@ -316,6 +410,8 @@ const TpopForm = ({ treeName, showFilter = false }) => {
               <Tpop
                 showFilter={showFilter}
                 onSubmit={onSubmit}
+                saveToDb={saveToDb}
+                fieldErrors={fieldErrors}
                 row={row}
                 apJahr={apJahr}
                 refetchTpop={refetchTpop}
@@ -325,6 +421,8 @@ const TpopForm = ({ treeName, showFilter = false }) => {
                 treeName={treeName}
                 showFilter={showFilter}
                 onSubmit={onSubmit}
+                saveToDb={saveToDb}
+                fieldErrors={fieldErrors}
                 row={row}
               />
             ) : tab === 'dateien' ? (

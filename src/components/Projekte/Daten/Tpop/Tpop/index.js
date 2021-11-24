@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
@@ -6,8 +6,10 @@ import { Formik, Form } from 'formik'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
-import TextField from '../../../../shared/TextFieldFormik'
-import TextFieldWithInfo from '../../../../shared/TextFieldWithInfoFormik'
+import TextFieldFormik from '../../../../shared/TextFieldFormik'
+import TextField from '../../../../shared/TextField'
+import TextFieldWithInfoFormik from '../../../../shared/TextFieldWithInfoFormik'
+import TextFieldWithInfo from '../../../../shared/TextFieldWithInfo'
 import MdField from '../../../../shared/MarkdownFieldFormik'
 import Status from '../../../../shared/Status'
 import SelectCreatable from '../../../../shared/SelectCreatableGemeinde'
@@ -30,6 +32,8 @@ const Container = styled.div`
 const Tpop = ({
   showFilter,
   onSubmit,
+  saveToDb,
+  fieldErrors,
   row,
   apJahr,
   refetchTpop,
@@ -86,9 +90,11 @@ const Tpop = ({
                 name="nr"
                 label="Nr."
                 type="number"
-                handleSubmit={handleSubmit}
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
               />
-              <TextFieldWithInfo
+              <TextFieldWithInfoFormik
                 name="flurname"
                 label="Flurname"
                 type="text"
@@ -105,7 +111,7 @@ const Tpop = ({
                 label="Status unklar"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="statusUnklarGrund"
                 label="Begründung"
                 type="text"
@@ -202,116 +208,116 @@ const Tpop = ({
                   handleSubmit={handleSubmit}
                 />
               )}
-              <TextField
+              <TextFieldFormik
                 name="radius"
                 label="Radius (m)"
                 type="number"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="hoehe"
                 label="Höhe (m.ü.M.)"
                 type="number"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="exposition"
                 label="Exposition, Besonnung"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="klima"
                 label="Klima"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="neigung"
                 label="Hangneigung"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="bodenTyp"
                 label="Boden: Typ"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="bodenKalkgehalt"
                 label="Boden: Kalkgehalt"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="bodenDurchlaessigkeit"
                 label="Boden: Durchlässigkeit"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="bodenHumus"
                 label="Boden: Humusgehalt"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="bodenNaehrstoffgehalt"
                 label="Boden: Nährstoffgehalt"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="bodenAbtrag"
                 label="Boden: Abtrag"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="wasserhaushalt"
                 label="Boden: Wasserhaushalt"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="beschreibung"
                 label="Beschreibung"
                 type="text"
                 multiline
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="katasterNr"
                 label="Kataster-Nr."
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="eigentuemer"
                 label="EigentümerIn"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="kontakt"
                 label="Kontakt vor Ort"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="nutzungszone"
                 label="Nutzungszone"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="bewirtschafter"
                 label="BewirtschafterIn"
                 type="text"
                 handleSubmit={handleSubmit}
               />
-              <TextField
+              <TextFieldFormik
                 name="bewirtschaftung"
                 label="Bewirtschaftung"
                 type="text"
