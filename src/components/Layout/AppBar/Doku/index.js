@@ -2,7 +2,7 @@ import React from 'react'
 import Button from '@mui/material/Button'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { Location } from '@reach/router'
+import { useLocation } from '@reach/router'
 import { Link } from 'gatsby'
 
 import isMobilePhone from '../../../../modules/isMobilePhone'
@@ -48,59 +48,46 @@ const StyledButton = ({ preceded, followed, ...rest }) => {
 
 const DokuAppBar = () => {
   const isMobile = isMobilePhone()
+  const location = useLocation()
+  const { pathname } = location
 
   return (
-    <Location>
-      {({ location }) => {
-        const { pathname } = location
-
-        return (
-          <>
-            {!isMobile && (
-              <SiteTitle
-                variant="outlined"
-                component={Link}
-                to="/"
-                title="Home"
-              >
-                AP Flora
-              </SiteTitle>
-            )}
-            <MenuDiv>
-              <StyledButton
-                variant={
-                  pathname.startsWith('/Dokumentation/Benutzer')
-                    ? 'outlined'
-                    : 'text'
-                }
-                component={Link}
-                to="/Dokumentation/Benutzer/"
-              >
-                Benutzer Doku
-              </StyledButton>
-              <StyledButton
-                variant={
-                  pathname.startsWith('/Dokumentation/Technisch')
-                    ? 'outlined'
-                    : 'text'
-                }
-                component={Link}
-                to="/Dokumentation/Technisch/"
-              >
-                Technische Doku
-              </StyledButton>
-              <StyledButton
-                variant="text"
-                component={Link}
-                to="/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13"
-              >
-                Aktionspläne bearbeiten
-              </StyledButton>
-            </MenuDiv>
-          </>
-        )
-      }}
-    </Location>
+    <>
+      {!isMobile && (
+        <SiteTitle variant="outlined" component={Link} to="/" title="Home">
+          AP Flora
+        </SiteTitle>
+      )}
+      <MenuDiv>
+        <StyledButton
+          variant={
+            pathname.startsWith('/Dokumentation/Benutzer') ? 'outlined' : 'text'
+          }
+          component={Link}
+          to="/Dokumentation/Benutzer/"
+        >
+          Benutzer Doku
+        </StyledButton>
+        <StyledButton
+          variant={
+            pathname.startsWith('/Dokumentation/Technisch')
+              ? 'outlined'
+              : 'text'
+          }
+          component={Link}
+          to="/Dokumentation/Technisch/"
+        >
+          Technische Doku
+        </StyledButton>
+        <StyledButton
+          variant="text"
+          component={Link}
+          to="/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13"
+        >
+          Aktionspläne bearbeiten
+        </StyledButton>
+      </MenuDiv>
+    </>
   )
 }
 

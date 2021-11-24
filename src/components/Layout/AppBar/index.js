@@ -2,7 +2,7 @@ import React from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import styled from 'styled-components'
-import { Location } from '@reach/router'
+import { useLocation } from '@reach/router'
 
 import Home from './Home'
 import Doku from './Doku'
@@ -21,24 +21,21 @@ const StyledToolbar = styled(Toolbar)`
   padding-right: 4px !important;
 `
 
-const MyAppBar = () => (
-  <Location>
-    {({ location }) => {
-      const { pathname } = location
-      const isHome = pathname === '/'
-      const isProjekte = pathname.startsWith('/Daten')
+const MyAppBar = () => {
+  const location = useLocation()
+  const { pathname } = location
+  const isHome = pathname === '/'
+  const isProjekte = pathname.startsWith('/Daten')
 
-      return (
-        <ErrorBoundary>
-          <StyledAppBar position="static">
-            <StyledToolbar>
-              {isHome ? <Home /> : isProjekte ? <Projekte /> : <Doku />}
-            </StyledToolbar>
-          </StyledAppBar>
-        </ErrorBoundary>
-      )
-    }}
-  </Location>
-)
+  return (
+    <ErrorBoundary>
+      <StyledAppBar position="static">
+        <StyledToolbar>
+          {isHome ? <Home /> : isProjekte ? <Projekte /> : <Doku />}
+        </StyledToolbar>
+      </StyledAppBar>
+    </ErrorBoundary>
+  )
+}
 
 export default MyAppBar
