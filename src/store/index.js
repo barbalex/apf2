@@ -102,6 +102,7 @@ const myTypes = types
     get apGqlFilter() {
       const result = Object.fromEntries(
         Object.entries(getSnapshot(self.tree.dataFilter.ap))
+          // eslint-disable-next-line no-unused-vars
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
@@ -120,6 +121,7 @@ const myTypes = types
     get popGqlFilter() {
       const result = Object.fromEntries(
         Object.entries(getSnapshot(self.tree.dataFilter.pop))
+          // eslint-disable-next-line no-unused-vars
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
@@ -138,6 +140,7 @@ const myTypes = types
     get tpopGqlFilter() {
       const result = Object.fromEntries(
         Object.entries(getSnapshot(self.tree.dataFilter.tpop))
+          // eslint-disable-next-line no-unused-vars
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
@@ -156,6 +159,7 @@ const myTypes = types
     get tpopmassnGqlFilter() {
       const result = Object.fromEntries(
         Object.entries(getSnapshot(self.tree.dataFilter.tpopmassn))
+          // eslint-disable-next-line no-unused-vars
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
@@ -174,6 +178,7 @@ const myTypes = types
     get tpopkontrGqlFilter() {
       const ek = Object.fromEntries(
         Object.entries(getSnapshot(self.tree.dataFilter.tpopfeldkontr))
+          // eslint-disable-next-line no-unused-vars
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
@@ -186,6 +191,7 @@ const myTypes = types
       )
       const ekf = Object.fromEntries(
         Object.entries(getSnapshot(self.tree.dataFilter.tpopfreiwkontr))
+          // eslint-disable-next-line no-unused-vars
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
