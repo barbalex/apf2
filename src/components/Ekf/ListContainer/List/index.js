@@ -4,7 +4,7 @@ import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { withResizeDetector } from 'react-resize-detector'
+import SimpleBar from 'simplebar-react'
 
 import Item from './Item'
 import storeContext from '../../../../storeContext'
@@ -12,7 +12,13 @@ import initiateDataFromUrl from '../initiateDataFromUrl'
 
 const Container = styled.div`
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   border-right: 1px solid rgb(46, 125, 50);
+`
+const Scrollcontainer = styled.div`
+  overflow-y: auto;
 `
 const NoDataContainer = styled.div`
   padding 15px;
@@ -43,7 +49,7 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
 }
 
-const EkfList = ({ data, loading, height = 1000 }) => {
+const EkfList = ({ data, loading }) => {
   const store = useContext(storeContext)
   const { ekfYear, ekfAdresseId, tree, setEkfIds } = store
   const ekf = getEkfFromData({ data, ekfAdresseId })
@@ -56,7 +62,7 @@ const EkfList = ({ data, loading, height = 1000 }) => {
       : '99999999-9999-9999-9999-999999999999'
 
   const projektCount = uniq(ekf.map((e) => e.projekt)).length
-  const itemSize = projektCount > 1 ? 110 : 91
+  const itemHeight = projektCount > 1 ? 110 : 91
 
   useEffect(() => {
     // set initial kontrId so form is shown for first ekf
@@ -92,23 +98,32 @@ const EkfList = ({ data, loading, height = 1000 }) => {
 
   return (
     <Container>
-      <List
-        height={height}
-        itemCount={ekf.length}
-        itemSize={itemSize}
-        width={treeWidth}
-      >
-        {({ index, style }) => (
-          <Item
-            activeTpopkontrId={activeTpopkontrId}
-            projektCount={projektCount}
-            style={style}
-            row={ekf[index]}
-          />
-        )}
-      </List>
+      <Scrollcontainer>
+        <SimpleBar
+          style={{
+            maxHeight: '100%',
+            height: '100%',
+          }}
+        >
+          <List
+            height={ekf.length * itemHeight}
+            itemCount={ekf.length}
+            itemSize={itemHeight}
+            width={treeWidth}
+          >
+            {({ index, style }) => (
+              <Item
+                activeTpopkontrId={activeTpopkontrId}
+                projektCount={projektCount}
+                style={style}
+                row={ekf[index]}
+              />
+            )}
+          </List>
+        </SimpleBar>
+      </Scrollcontainer>
     </Container>
   )
 }
 
-export default withResizeDetector(observer(EkfList))
+export default observer(EkfList)
