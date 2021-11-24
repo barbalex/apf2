@@ -5,7 +5,6 @@ import Linkify from 'react-linkify'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { DateTime } from 'luxon'
-import { withResizeDetector } from 'react-resize-detector'
 
 import createUsermessage from '../createUsermessage'
 import storeContext from '../../../storeContext'
@@ -31,7 +30,7 @@ const OkButton = styled(Button)`
   right: 12px;
 `
 
-const UserMessages = ({ unreadMessages, height = 200 }) => {
+const UserMessages = ({ unreadMessages }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { user } = store
@@ -69,4 +68,4 @@ const UserMessages = ({ unreadMessages, height = 200 }) => {
   )
 }
 
-export default withResizeDetector(observer(UserMessages))
+export default observer(UserMessages)

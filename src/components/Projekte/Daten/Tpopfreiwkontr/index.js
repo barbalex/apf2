@@ -221,11 +221,9 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
         <TpopfreiwkontrForm
           treeName={treeName}
           showFilter={showFilter}
-          id={idPassed}
           data={data}
           row={row}
           apId={apId}
-          error={error}
           refetch={refetch}
         />
       ) : (
@@ -239,11 +237,9 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
             <TpopfreiwkontrForm
               treeName={treeName}
               showFilter={showFilter}
-              id={idPassed}
               data={data}
               row={row}
               apId={apId}
-              error={error}
               refetch={refetch}
             />
           </SimpleBar>

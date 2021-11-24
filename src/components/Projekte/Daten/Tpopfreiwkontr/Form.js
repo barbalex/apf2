@@ -151,10 +151,8 @@ const fieldTypes = {
 const TpopfreiwkontrForm = ({
   treeName,
   showFilter = false,
-  id: idPassed,
   width = 1000,
   data,
-  error,
   refetch,
   row,
   apId,

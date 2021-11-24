@@ -438,7 +438,7 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
               rowCount={1}
               columnWidth={() => yearColumnWidth}
             >
-              {({ columnIndex, rowIndex, style }) => (
+              {({ columnIndex, style }) => (
                 <CellHeaderYear
                   style={style}
                   column={years[columnIndex]}
