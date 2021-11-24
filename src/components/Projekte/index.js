@@ -35,7 +35,6 @@ const StyledSplitPane = styled(SplitPane)`
   .Resizer {
     background: #388e3c;
     opacity: 1;
-    z-index: 1;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
