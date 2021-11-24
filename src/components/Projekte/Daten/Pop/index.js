@@ -11,7 +11,7 @@ import SimpleBar from 'simplebar-react'
 
 import TextField from '../../../shared/TextFieldFormik'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfoFormik'
-import Status from '../../../shared/Status'
+import Status from '../../../shared/StatusFormik'
 import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
