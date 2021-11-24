@@ -71,7 +71,6 @@ const Tpopber = ({ treeName }) => {
   console.log('Tpopber rendering', { loading, fieldErrors })
 
   const row = useMemo(() => data?.tpopberById ?? {}, [data?.tpopberById])
-  //console.log('Tpopber, row:', row)
 
   const saveToDb = useCallback(
     async (event) => {
@@ -83,7 +82,6 @@ const Tpopber = ({ treeName }) => {
         [field]: value,
         changedBy: store.user.name,
       }
-      //console.log('Tpopber, variables:', variables)
       try {
         await client.mutate({
           mutation: gql`
@@ -115,7 +113,6 @@ const Tpopber = ({ treeName }) => {
               tpopber: {
                 ...row,
                 ...variables,
-                //__typename: 'Tpopber',
               },
               __typename: 'Tpopber',
             },
@@ -124,9 +121,12 @@ const Tpopber = ({ treeName }) => {
       } catch (error) {
         return setFieldErrors({ [field]: error.message })
       }
-      setFieldErrors({})
+      // only set if necessary (to reduce renders)
+      if (Object.keys(fieldErrors).length) {
+        setFieldErrors({})
+      }
     },
-    [client, row, store.user.name],
+    [client, fieldErrors, row, store.user.name],
   )
 
   if (loading) {
