@@ -24,7 +24,7 @@ const Container = styled.div`
 const Layout = ({ children }) => (
   <Container>
     <Helmet
-      title="apflora v1.66.0"
+      title="apflora v1.66.1"
       meta={[
         {
           name: 'description',
