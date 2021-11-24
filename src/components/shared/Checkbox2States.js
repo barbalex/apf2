@@ -4,8 +4,6 @@ import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
-import { useField } from 'formik'
 
 // without slight padding radio is slightly cut off!
 const StyledFormControl = styled(FormControl)`
@@ -25,12 +23,7 @@ const StyledCheckbox = styled(Checkbox)`
   width: 24px;
 `
 
-const Checkbox2StatesFormik = ({ label, saveToDb, ...props }) => {
-  const [field, meta] = useField(props)
-  const { onChange, onBlur, value, name } = field
-  const { error: errors } = meta
-  const error = errors?.[name]
-
+const Checkbox2States = ({ label, saveToDb, value, name, error }) => {
   const onClickButton = useCallback(() => {
     const fakeEvent = {
       target: {
@@ -38,13 +31,11 @@ const Checkbox2StatesFormik = ({ label, saveToDb, ...props }) => {
         name,
       },
     }
-    onChange(fakeEvent)
-    onBlur(fakeEvent)
     // It is possible to directly click an option after editing an other field
     // this creates a race condition in the two submits which can lead to lost inputs!
     // so timeout inputs in option fields
     setTimeout(() => saveToDb(fakeEvent))
-  }, [value, name, onChange, onBlur, saveToDb])
+  }, [value, name, saveToDb])
 
   const checked = value === true
 
@@ -71,4 +62,4 @@ const Checkbox2StatesFormik = ({ label, saveToDb, ...props }) => {
   )
 }
 
-export default observer(Checkbox2StatesFormik)
+export default Checkbox2States
