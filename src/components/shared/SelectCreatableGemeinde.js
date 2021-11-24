@@ -90,7 +90,7 @@ const SharedSelectCreatable = ({
   onClickLocate,
   maxHeight = null,
   noCaret = false,
-  handleSubmit,
+  saveToDb,
   ...props
 }) => {
   const [field, meta] = useField(props)
@@ -110,27 +110,24 @@ const SharedSelectCreatable = ({
       }
       onChange(fakeEvent)
       onBlur(fakeEvent)
-      setTimeout(() => handleSubmit())
+      saveToDb(fakeEvent)
     },
-    [handleSubmit, name, onBlur, onChange],
+    [name, onBlur, onChange, saveToDb],
   )
   const onInputChange = useCallback((value) => setStateValue(value), [])
-  const onMyBlur = useCallback(
-    (event) => {
-      if (stateValue) {
-        const fakeEvent = {
-          target: {
-            name,
-            value: stateValue,
-          },
-        }
-        onChange(fakeEvent)
-        onBlur(fakeEvent)
-        setTimeout(() => handleSubmit())
+  const onMyBlur = useCallback(() => {
+    if (stateValue) {
+      const fakeEvent = {
+        target: {
+          name,
+          value: stateValue,
+        },
       }
-    },
-    [stateValue, name, onChange, onBlur, handleSubmit],
-  )
+      onChange(fakeEvent)
+      onBlur(fakeEvent)
+      saveToDb(fakeEvent)
+    }
+  }, [stateValue, name, onChange, onBlur, saveToDb])
 
   useEffect(() => {
     setStateValue(value)

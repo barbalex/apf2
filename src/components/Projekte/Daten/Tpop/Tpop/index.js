@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
@@ -8,13 +8,12 @@ import SimpleBar from 'simplebar-react'
 
 import TextFieldFormik from '../../../../shared/TextFieldFormik'
 import TextField from '../../../../shared/TextField'
-import TextFieldWithInfoFormik from '../../../../shared/TextFieldWithInfoFormik'
 import TextFieldWithInfo from '../../../../shared/TextFieldWithInfo'
 import MdField from '../../../../shared/MarkdownFieldFormik'
 import Status from '../../../../shared/Status'
 import SelectCreatable from '../../../../shared/SelectCreatableGemeinde'
-import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
-import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfoFormik'
+import Checkbox2States from '../../../../shared/Checkbox2States'
+import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfo'
 import TpopAbBerRelevantInfoPopover from '../../TpopAbBerRelevantInfoPopover'
 //import getGemeindeForKoord from '../../../../../modules/getGemeindeForKoord'
 import constants from '../../../../../modules/constants'
@@ -94,12 +93,14 @@ const Tpop = ({
                 saveToDb={saveToDb}
                 error={fieldErrors.nr}
               />
-              <TextFieldWithInfoFormik
+              <TextFieldWithInfo
                 name="flurname"
                 label="Flurname"
                 type="text"
+                value={row.flurname}
+                saveToDb={saveToDb}
                 popover="Dieses Feld möglichst immer ausfüllen"
-                handleSubmit={handleSubmit}
+                error={fieldErrors.flurname}
               />
               <Status
                 apJahr={apJahr}
@@ -109,19 +110,21 @@ const Tpop = ({
               <Checkbox2States
                 name="statusUnklar"
                 label="Status unklar"
-                handleSubmit={handleSubmit}
+                saveToDb={saveToDb}
               />
-              <TextFieldFormik
+              <TextField
                 name="statusUnklarGrund"
                 label="Begründung"
                 type="text"
+                value={row.statusUnklarGrund}
+                saveToDb={saveToDb}
                 multiLine
-                handleSubmit={handleSubmit}
+                error={fieldErrors.statusUnklarGrund}
               />
               <Checkbox2States
                 name="apberRelevant"
                 label="Für AP-Bericht relevant"
-                handleSubmit={handleSubmit}
+                saveToDb={saveToDb}
               />
               {errorLists ? (
                 <div>errorLists.message</div>
@@ -131,10 +134,11 @@ const Tpop = ({
                   dataSource={
                     dataLists?.allTpopApberrelevantGrundWertes?.nodes ?? []
                   }
-                  loading={loadingLists}
                   popover={TpopAbBerRelevantInfoPopover}
                   label="Grund für AP-Bericht (Nicht-)Relevanz"
-                  handleSubmit={handleSubmit}
+                  value={row.apberRelevantGrund}
+                  saveToDb={saveToDb}
+                  error={fieldErrors.apberRelevantGrund}
                 />
               )}
               {!showFilter && (
@@ -205,38 +209,48 @@ const Tpop = ({
                       setTimeout(() => handleSubmit())
                     }
                   }}
-                  handleSubmit={handleSubmit}
+                  saveToDb={saveToDb}
                 />
               )}
-              <TextFieldFormik
+              <TextField
                 name="radius"
                 label="Radius (m)"
                 type="number"
-                handleSubmit={handleSubmit}
+                value={row.radius}
+                saveToDb={saveToDb}
+                error={fieldErrors.radius}
               />
-              <TextFieldFormik
+              <TextField
                 name="hoehe"
                 label="Höhe (m.ü.M.)"
                 type="number"
-                handleSubmit={handleSubmit}
+                value={row.hoehe}
+                saveToDb={saveToDb}
+                error={fieldErrors.hoehe}
               />
-              <TextFieldFormik
+              <TextField
                 name="exposition"
                 label="Exposition, Besonnung"
                 type="text"
-                handleSubmit={handleSubmit}
+                value={row.exposition}
+                saveToDb={saveToDb}
+                error={fieldErrors.exposition}
               />
-              <TextFieldFormik
+              <TextField
                 name="klima"
                 label="Klima"
                 type="text"
-                handleSubmit={handleSubmit}
+                value={row.klima}
+                saveToDb={saveToDb}
+                error={fieldErrors.klima}
               />
-              <TextFieldFormik
+              <TextField
                 name="neigung"
                 label="Hangneigung"
                 type="text"
-                handleSubmit={handleSubmit}
+                value={row.neigung}
+                saveToDb={saveToDb}
+                error={fieldErrors.neigung}
               />
               <TextFieldFormik
                 name="bodenTyp"
@@ -244,11 +258,27 @@ const Tpop = ({
                 type="text"
                 handleSubmit={handleSubmit}
               />
+              <TextField
+                name="bodenTyp"
+                label="Boden: Typ"
+                type="text"
+                value={row.bodenTyp}
+                saveToDb={saveToDb}
+                error={fieldErrors.bodenTyp}
+              />
               <TextFieldFormik
                 name="bodenKalkgehalt"
                 label="Boden: Kalkgehalt"
                 type="text"
                 handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
               />
               <TextFieldFormik
                 name="bodenDurchlaessigkeit"
@@ -256,11 +286,27 @@ const Tpop = ({
                 type="text"
                 handleSubmit={handleSubmit}
               />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
+              />
               <TextFieldFormik
                 name="bodenHumus"
                 label="Boden: Humusgehalt"
                 type="text"
                 handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
               />
               <TextFieldFormik
                 name="bodenNaehrstoffgehalt"
@@ -268,17 +314,41 @@ const Tpop = ({
                 type="text"
                 handleSubmit={handleSubmit}
               />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
+              />
               <TextFieldFormik
                 name="bodenAbtrag"
                 label="Boden: Abtrag"
                 type="text"
                 handleSubmit={handleSubmit}
               />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
+              />
               <TextFieldFormik
                 name="wasserhaushalt"
                 label="Boden: Wasserhaushalt"
                 type="text"
                 handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
               />
               <TextFieldFormik
                 name="beschreibung"
@@ -287,11 +357,27 @@ const Tpop = ({
                 multiline
                 handleSubmit={handleSubmit}
               />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
+              />
               <TextFieldFormik
                 name="katasterNr"
                 label="Kataster-Nr."
                 type="text"
                 handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
               />
               <TextFieldFormik
                 name="eigentuemer"
@@ -299,11 +385,27 @@ const Tpop = ({
                 type="text"
                 handleSubmit={handleSubmit}
               />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
+              />
               <TextFieldFormik
                 name="kontakt"
                 label="Kontakt vor Ort"
                 type="text"
                 handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
               />
               <TextFieldFormik
                 name="nutzungszone"
@@ -311,17 +413,41 @@ const Tpop = ({
                 type="text"
                 handleSubmit={handleSubmit}
               />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
+              />
               <TextFieldFormik
                 name="bewirtschafter"
                 label="BewirtschafterIn"
                 type="text"
                 handleSubmit={handleSubmit}
               />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
+              />
               <TextFieldFormik
                 name="bewirtschaftung"
                 label="Bewirtschaftung"
                 type="text"
                 handleSubmit={handleSubmit}
+              />
+              <TextField
+                name="nr"
+                label="Nr."
+                type="number"
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={fieldErrors.nr}
               />
               <MdField name="bemerkungen" label="Bemerkungen" />
             </Form>

@@ -270,7 +270,6 @@ const TpopForm = ({ treeName, showFilter = false }) => {
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
-      console.log('Tpop onSubmit:', { values, row })
       const changedField = objectsFindChangedKey(values, row)
       // BEWARE: react-select fires twice when a value is cleared
       // second event leads to an error as the values passed are same as before
@@ -283,7 +282,6 @@ const TpopForm = ({ treeName, showFilter = false }) => {
       if (changedField === null) return
 
       const value = values[changedField]
-      console.log('Tpop onSubmit:', { changedField, value })
       if (showFilter) {
         return dataFilterSetValue({
           treeName,
