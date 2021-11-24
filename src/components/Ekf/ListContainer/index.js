@@ -18,16 +18,16 @@ const EkfListContainer = () => {
   const store = useContext(storeContext)
   const { ekfYear, ekfAdresseId, user } = store
 
-  let query = !!ekfAdresseId ? dataByAdresseIdGql : dataByUserNameGql
+  let query = ekfAdresseId ? dataByAdresseIdGql : dataByUserNameGql
   const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
   const ekfRefYear = new Date(ekfRefDate).getFullYear()
   if (ekfRefYear !== ekfYear) {
-    query = !!ekfAdresseId
+    query = ekfAdresseId
       ? dataWithDateByAdresseIdGql
       : dataWithDateByUserNameGql
   }
   const { name: userName } = user
-  const variables = !!ekfAdresseId
+  const variables = ekfAdresseId
     ? { id: ekfAdresseId, jahr: ekfYear }
     : { userName, jahr: ekfYear }
 
