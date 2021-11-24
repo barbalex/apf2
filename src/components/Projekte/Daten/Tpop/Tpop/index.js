@@ -14,7 +14,6 @@ import SelectCreatable from '../../../../shared/SelectCreatableGemeinde'
 import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
 import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfoFormik'
 import TpopAbBerRelevantInfoPopover from '../../TpopAbBerRelevantInfoPopover'
-import queryLists from './queryLists'
 //import getGemeindeForKoord from '../../../../../modules/getGemeindeForKoord'
 import constants from '../../../../../modules/constants'
 import storeContext from '../../../../../storeContext'
@@ -47,7 +46,25 @@ const Tpop = ({
     data: dataLists,
     loading: loadingLists,
     error: errorLists,
-  } = useQuery(queryLists)
+  } = useQuery(gql`
+    query TpopListsQueryForTpop {
+      allTpopApberrelevantGrundWertes(
+        orderBy: SORT_ASC
+        filter: { code: { isNull: false } }
+      ) {
+        nodes {
+          value: code
+          label: text
+        }
+      }
+      allChGemeindes(orderBy: NAME_ASC) {
+        nodes {
+          value: name
+          label: name
+        }
+      }
+    }
+  `)
 
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
