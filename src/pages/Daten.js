@@ -18,7 +18,7 @@ import getActiveNodeArrayFromPathname from '../modules/getActiveNodeArrayFromPat
 
 const Container = styled.div`
   background-color: #fffde7;
-  height: 100%;
+  height: ${(props) => `calc(100% - ${props['data-appbar-height']}px)`};
 
   @media print {
     margin-top: 0;
@@ -30,8 +30,10 @@ const Container = styled.div`
 
 const DatenPage = ({ location }) => {
   const store = useContext(storeContext)
-  const { view, showDeletions, user, setIsPrint, setEkfIds } = store
+  const { view, showDeletions, user, setIsPrint, setEkfIds, appBarHeight } =
+    store
   const { activeNodeArray, setActiveNodeArray, setLastTouchedNode } = store.tree
+  console.log('DatenPage, appBarHeight:', appBarHeight)
 
   useEffect(() => {
     // set last touched node in case project is directly opened on it
@@ -86,7 +88,7 @@ const DatenPage = ({ location }) => {
   return (
     <ErrorBoundary>
       <Layout>
-        <Container>
+        <Container data-appbar-height={appBarHeight}>
           {!!user.token && (
             <>
               {form === 'ekf' && <Ekf />}

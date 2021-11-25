@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import Button from '@mui/material/Button'
+import { useResizeDetector } from 'react-resize-detector'
 
 import ApList from './ApList'
 import Table from './Table'
@@ -16,14 +17,9 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 const Container = styled.div`
   height: 100%;
   width: 100vw;
-  /* Turned off flex, because with of children slightly changed every fraction of a second!!!! */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
 `
 const Header = styled.div`
   padding: 5px 10px 0 10px;
-  flex: 0 1 auto;
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
@@ -63,11 +59,23 @@ const EkPlan = () => {
     }
   }, [])
 
+  const {
+    width = 0,
+    height = 0,
+    ref: resizeRef,
+  } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 2500,
+    refreshOptions: { leading: true },
+  })
+
+  console.log('EkPlan', { height, width })
+
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <Container>
+      <Container ref={resizeRef}>
         <Header>
           <ApList />
           <AnleitungButton
@@ -79,7 +87,7 @@ const EkPlan = () => {
           </AnleitungButton>
           <Choose />
         </Header>
-        <Table />
+        <Table height={height} width={width} />
       </Container>
     </ErrorBoundary>
   )
