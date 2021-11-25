@@ -40,6 +40,8 @@ const EkPlan = () => {
   const store = useContext(storeContext)
   const { aps, setApsData, setApsDataLoading } = store.ekPlan
 
+  console.log('EkPlan rendering')
+
   const { data, loading, error } = useQuery(queryAps, {
     variables: {
       ids: aps.map((ap) => ap.value),

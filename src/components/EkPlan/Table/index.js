@@ -5,7 +5,7 @@ import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
 import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import Button from '@mui/material/Button'
 
 import queryAll from './queryAll'
@@ -124,8 +124,7 @@ const ExportButton = styled(Button)`
   z-index: 5;
 `
 
-const EkPlanTable = ({ width = 0, height = 0 }) => {
-  console.log('EkPlanTable rendering')
+const EkPlanTable = () => {
   const store = useContext(storeContext)
   const {
     aps,
@@ -160,6 +159,17 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     filterEkplanYear,
     pastYears,
   } = store.ekPlan
+
+  const {
+    width,
+    height,
+    ref: resizeRef,
+  } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 1000,
+    refreshOptions: { leading: true },
+  })
+  console.log('EkPlanTable rendering', { width, height })
 
   const tpopFilter = { popByPopId: { apId: { in: apValues } } }
   if (filterAp) {
@@ -367,11 +377,10 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     return <TempContainer>Lade...</TempContainer>
   }
 
-  const errors = error ? [error] : []
-  if (errors.length) return <Error errors={errors} />
+  if (error) return <Error errors={[error]} />
 
   return (
-    <OuterContainer>
+    <OuterContainer ref={resizeRef}>
       <ErrorBoundary>
         <ExportButton
           variant="outlined"
@@ -546,4 +555,4 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   )
 }
 
-export default withResizeDetector(observer(EkPlanTable))
+export default observer(EkPlanTable)
