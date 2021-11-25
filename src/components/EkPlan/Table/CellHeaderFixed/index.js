@@ -38,6 +38,7 @@ const Title = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   user-select: none;
+  ${(props) => props['data-label'] === 'AP' && 'padding-left: 5px;'}
 `
 const Dropdown = styled.div`
   font-size: 1.3em;
@@ -72,7 +73,7 @@ const CellHeaderFixed = ({ style, column }) => {
         aria-haspopup="true"
         onClick={onClickCell}
       >
-        <Title>{label}</Title>
+        <Title data-label={label}>{label}</Title>
         {!nofilter && (
           <Dropdown>{filterValue ? <StyledFaFilter /> : <Caret />}</Dropdown>
         )}
