@@ -1,4 +1,11 @@
-import React, { useContext, useMemo, useCallback, useRef } from 'react'
+import React, {
+  useContext,
+  useMemo,
+  useCallback,
+  useRef,
+  useState,
+  useEffect,
+} from 'react'
 import { useQuery } from '@apollo/client'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
@@ -37,7 +44,9 @@ const TempContainer = styled.div`
   user-select: none !important;
 `
 const OuterContainer = styled.div`
-  height: calc(100% - 86px);
+  height: 100%;
+  overflow-y: auto;
+  /*height: calc(100% - 86px);*/
 `
 const Container = styled.div`
   position: relative;
@@ -45,6 +54,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const HeaderContainer = styled.div`
   display: flex;
@@ -53,6 +63,7 @@ const HeaderContainer = styled.div`
 `
 // TODO: how to use simplebar here?
 const BodyContainer = styled.div`
+  overflow-y: auto;
   display: flex;
   flex-direction: row;
   height: 100%;
@@ -160,6 +171,20 @@ const EkPlanTable = () => {
     pastYears,
   } = store.ekPlan
 
+  // const [size, setSize] = useState({ width: 0, height: 0 })
+  // useEffect(() => setSize({ width: 0, height: 0 }), [])
+  // console.log('Table, size:', size)
+  // const onResize = useCallback(
+  //   ({ width, height }) => {
+  //     console.log('Table, onResize:', { width, height })
+  //     // const absValue = { width: Math.abs(width), height: Math.abs(height) }
+  //     // console.log('Table, absValue:', absValue)
+  //     // if (size.width !== absValue.width || size.height !== absValue.height) {
+  //     //   setSize(absValue)
+  //     // }
+  //   },
+  //   [size.height, size.width],
+  // )
   const {
     width,
     height,
@@ -168,8 +193,9 @@ const EkPlanTable = () => {
     refreshMode: 'debounce',
     refreshRate: 1000,
     refreshOptions: { leading: true },
+    //onResize,
   })
-  console.log('EkPlanTable rendering', { width, height })
+  console.log('EkPlanTable rendering, size:', { width, height })
 
   const tpopFilter = { popByPopId: { apId: { in: apValues } } }
   if (filterAp) {
@@ -380,7 +406,7 @@ const EkPlanTable = () => {
   if (error) return <Error errors={[error]} />
 
   return (
-    <OuterContainer ref={resizeRef}>
+    <OuterContainer>
       <ErrorBoundary>
         <ExportButton
           variant="outlined"
@@ -389,7 +415,7 @@ const EkPlanTable = () => {
         >
           exportieren
         </ExportButton>
-        <Container>
+        <Container ref={resizeRef}>
           <HeaderContainer>
             <TpopTitle>{`${tpops.length} Teilpopulationen`}</TpopTitle>
             <VariableSizeList
