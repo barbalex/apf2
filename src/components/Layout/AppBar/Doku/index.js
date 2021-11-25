@@ -29,19 +29,16 @@ const MenuDiv = styled.div`
 const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
-  border-right-color: rgba(255, 255, 255, 0.5) !important;
-  border-left-color: rgba(255, 255, 255, 0.5) !important;
-  border-top-left-radius: 4px !important;
-  border-bottom-left-radius: 4px !important;
-  border-top-right-radius: 4px !important;
-  border-bottom-right-radius: 4px !important;
   text-transform: none !important;
 `
 const DokuAppBar = () => {
   const isMobile = isMobilePhone()
   const location = useLocation()
   const { pathname } = location
-  console.log('hi')
+  console.log(
+    'pathname.startsWith(/Dokumentation/Benutzer):',
+    pathname.startsWith('/Dokumentation/Benutzer'),
+  )
 
   return (
     <>
