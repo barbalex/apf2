@@ -5,9 +5,9 @@ __metadata:
   version: 5
   cacheKey: 8
 
-"@apollo/client@npm:3.5.4":
-  version: 3.5.4
-  resolution: "@apollo/client@npm:3.5.4"
+"@apollo/client@npm:3.5.5":
+  version: 3.5.5
+  resolution: "@apollo/client@npm:3.5.5"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -30,7 +30,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: a160450b3364152ff680921e0134331c81707d0db85d6275cb57584221d5da2406a7e8d2dd1bba338a6b8878cb9921579f4b4b22b4abcc560ad065cbbfcf8b62
+  checksum: 765675a25d2e983c1ed0050a2a2d168e581d98de6771c9ebd8a67e7cf9b13275b08d1b2e4a3fe50d66c46e56f8c206909ff5c0145bf86a906830b6bc3d5e4ed7
   languageName: node
   linkType: hard
 
@@ -2615,13 +2615,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/base@npm:5.0.0-alpha.55":
-  version: 5.0.0-alpha.55
-  resolution: "@mui/base@npm:5.0.0-alpha.55"
+"@mui/base@npm:5.0.0-alpha.57":
+  version: 5.0.0-alpha.57
+  resolution: "@mui/base@npm:5.0.0-alpha.57"
   dependencies:
     "@babel/runtime": ^7.16.3
     "@emotion/is-prop-valid": ^1.1.1
-    "@mui/utils": ^5.1.1
+    "@mui/utils": ^5.2.1
     "@popperjs/core": ^2.4.4
     clsx: ^1.1.1
     prop-types: ^15.7.2
@@ -2633,13 +2633,13 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: db82bb927b7326bafc8750fc3cfced7cf5aecb680976c5d8afbce306ee23115e42ed401cd921277e238d2dd40928a8a124fa7b4b41ec5433437545e37cd94ac6
+  checksum: 945d1828d0467aa53e8c900cb83b0f4a222d93ee0d0d83f908daa9fb842e361ceba839bf0ea3b7373124f96a815c340210380d8870b8116108e82867dcc3d9c9
   languageName: node
   linkType: hard
 
-"@mui/icons-material@npm:5.1.1":
-  version: 5.1.1
-  resolution: "@mui/icons-material@npm:5.1.1"
+"@mui/icons-material@npm:5.2.0":
+  version: 5.2.0
+  resolution: "@mui/icons-material@npm:5.2.0"
   dependencies:
     "@babel/runtime": ^7.16.3
   peerDependencies:
@@ -2649,22 +2649,22 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: a82407cd77ef2625fd59bb0f5573f40cfc48d9fe439d18bc5dc9cdd8f4a1c75b090d3649390587924f81523af37a251527106b47758413d2709c83401fa57f9d
+  checksum: 02b5eeec1c5ee2b85ce36373bd37d70485d6bf64deb8b9cac6ad3077c3f85679736cc8380b9ee6f640d5f211e05dd4ed8afa116a873b2e1745be7f86860ff925
   languageName: node
   linkType: hard
 
-"@mui/material@npm:5.1.1":
-  version: 5.1.1
-  resolution: "@mui/material@npm:5.1.1"
+"@mui/material@npm:5.2.1":
+  version: 5.2.1
+  resolution: "@mui/material@npm:5.2.1"
   dependencies:
     "@babel/runtime": ^7.16.3
-    "@mui/base": 5.0.0-alpha.55
-    "@mui/system": ^5.1.1
+    "@mui/base": 5.0.0-alpha.57
+    "@mui/system": ^5.2.1
     "@mui/types": ^7.1.0
-    "@mui/utils": ^5.1.1
+    "@mui/utils": ^5.2.1
     "@types/react-transition-group": ^4.4.4
     clsx: ^1.1.1
-    csstype: ^3.0.9
+    csstype: ^3.0.10
     hoist-non-react-statics: ^3.3.2
     prop-types: ^15.7.2
     react-is: ^17.0.2
@@ -2682,16 +2682,16 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: ef735e17cab87dfcab774e3fcd19fb9bc3ad7b09fd8970517b5190bd09cc87122f09cbbb27034732842dcee118208e124050649d4a3e925957d418640bcbfe0d
+  checksum: e466af92f322960bedb64eb69a46596f7aef12795ae08771487de2cdd5117a863f8fcad3ab1456372343b5acefee4f23fe72d92d9f55efbac8390803691e30bd
   languageName: node
   linkType: hard
 
-"@mui/private-theming@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "@mui/private-theming@npm:5.1.1"
+"@mui/private-theming@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "@mui/private-theming@npm:5.2.1"
   dependencies:
     "@babel/runtime": ^7.16.3
-    "@mui/utils": ^5.1.1
+    "@mui/utils": ^5.2.1
     prop-types: ^15.7.2
   peerDependencies:
     "@types/react": ^16.8.6 || ^17.0.0
@@ -2699,7 +2699,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 0f10e74c7c35bffb0fea5bd777cabb999aec1fb2644125ad5d1144ce9ab1322a9740da52cf275de81a3748e901b29bef38902f4de9e6c2811fd7b2667cc546d6
+  checksum: 555dccfa5814bc7ad6a404aa7f14ce1fc69f34987752f410f85372458fd8ea1a54ee068921132d96815177e85c5c32c7b80c72400af95820d71cb0280abadf99
   languageName: node
   linkType: hard
 
@@ -2718,17 +2718,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/styles@npm:5.1.1":
-  version: 5.1.1
-  resolution: "@mui/styles@npm:5.1.1"
+"@mui/styles@npm:5.2.1":
+  version: 5.2.1
+  resolution: "@mui/styles@npm:5.2.1"
   dependencies:
     "@babel/runtime": ^7.16.3
     "@emotion/hash": ^0.8.0
-    "@mui/private-theming": ^5.1.1
+    "@mui/private-theming": ^5.2.1
     "@mui/types": ^7.1.0
-    "@mui/utils": ^5.1.1
+    "@mui/utils": ^5.2.1
     clsx: ^1.1.1
-    csstype: ^3.0.9
+    csstype: ^3.0.10
     hoist-non-react-statics: ^3.3.2
     jss: ^10.8.2
     jss-plugin-camel-case: ^10.8.2
@@ -2745,21 +2745,21 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 5ba481d72fc712495b0aeb762b8d8405be414335f2b9a794f729803bd099199e3850ad8c0ed8a50aa5fbdc8532c36dc862875be20da77777d2031bfce3a201a6
+  checksum: e88c2be9efc2f11d2e4fc3a8068f14dde46ad032154e9bcf47baed21a79421fe94c523b4708751b9d77d10dfd8f656ba535a74f71e82e9d4ed36b1c56be3d7ca
   languageName: node
   linkType: hard
 
-"@mui/system@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "@mui/system@npm:5.1.1"
+"@mui/system@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "@mui/system@npm:5.2.1"
   dependencies:
     "@babel/runtime": ^7.16.3
-    "@mui/private-theming": ^5.1.1
-    "@mui/styled-engine": ^5.1.1
+    "@mui/private-theming": ^5.2.1
+    "@mui/styled-engine": ^5.2.0
     "@mui/types": ^7.1.0
-    "@mui/utils": ^5.1.1
+    "@mui/utils": ^5.2.1
     clsx: ^1.1.1
-    csstype: ^3.0.9
+    csstype: ^3.0.10
     prop-types: ^15.7.2
   peerDependencies:
     "@emotion/react": ^11.5.0
@@ -2773,7 +2773,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: d8041d79cebe2582c95d58a022fbd7a5156e947bd912a5e79907f6673cdd3c3b209a073df99631bee8cba7e8a7b120d76ab03fd74ed41361d61a4777a3a50ff9
+  checksum: 7bed84b781cee23b7f9612488c9a171080b2a85d22688c03e786b5ad84a730807238c89d8595c617825fcf5918674dccaa066ca7ce1dd29ae182afd12702060d
   languageName: node
   linkType: hard
 
@@ -2789,9 +2789,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/utils@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "@mui/utils@npm:5.1.1"
+"@mui/utils@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "@mui/utils@npm:5.2.1"
   dependencies:
     "@babel/runtime": ^7.16.3
     "@types/prop-types": ^15.7.4
@@ -2800,7 +2800,7 @@ __metadata:
     react-is: ^17.0.2
   peerDependencies:
     react: ^17.0.2
-  checksum: cebbd4e9e53d41e55dac2a30dabdc93700b17d1efab569416b2a3c7f960acbddf9ec2df2daf8cde9f6a0a8885fbb6014dd9612e2467a465a949d050018642488
+  checksum: 6deb9ef29db835cf52e887c4f1751ca5b34dcff9307e5c4ea032cafc251a9b274e8f7fc77218b3eb80e99b93cd61c775b48ec6f58912a6869cfad6ed147fb947
   languageName: node
   linkType: hard
 
@@ -4471,7 +4471,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "apf2@workspace:."
   dependencies:
-    "@apollo/client": 3.5.4
+    "@apollo/client": 3.5.5
     "@babel/core": 7.16.0
     "@babel/eslint-parser": 7.16.3
     "@babel/plugin-syntax-flow": 7.16.0
@@ -4481,11 +4481,11 @@ __metadata:
     "@fontsource/roboto-mono": 4.5.0
     "@graphile-contrib/pg-order-by-related": 1.0.0-beta.6
     "@graphile/postgis": 0.1.0
-    "@mui/icons-material": 5.1.1
-    "@mui/material": 5.1.1
+    "@mui/icons-material": 5.2.0
+    "@mui/material": 5.2.1
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
     "@mui/styled-engine-sc": 5.1.0
-    "@mui/styles": 5.1.1
+    "@mui/styles": 5.2.1
     "@reach/router": 1.3.4
     "@svgr/cli": 5.5.0
     "@turf/bbox-polygon": 6.5.0
@@ -4498,7 +4498,7 @@ __metadata:
     blueimp-md5: 2.19.0
     browser-update: 3.3.33
     copyfiles: 2.4.1
-    cypress: 9.0.0
+    cypress: 9.1.0
     date-fns: 2.26.0
     dexie: 3.2.0
     eslint: 8.3.0
@@ -4563,7 +4563,7 @@ __metadata:
     postgraphile: 4.12.5
     postgraphile-plugin-connection-filter: 2.2.2
     postgraphile-plugin-connection-filter-postgis: 1.0.0-alpha.6
-    prettier: 2.4.1
+    prettier: 2.5.0
     prismjs: 1.25.0
     proj4: 2.7.5
     proj4leaflet: 1.0.2
@@ -4604,7 +4604,7 @@ __metadata:
     uploadcare-widget: 3.14.0
     use-debounce: 7.0.1
     vercel: 23.1.2
-    webpack: 5.64.2
+    webpack: 5.64.3
   languageName: unknown
   linkType: soft
 
@@ -5343,7 +5343,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bluebird@npm:^3.7.2":
+"bluebird@npm:3.7.2, bluebird@npm:^3.7.2":
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
   checksum: 869417503c722e7dc54ca46715f70e15f4d9c602a423a02c825570862d12935be59ed9c7ba34a9b31f186c017c23cac6b54e35446f8353059c101da73eac22ef
@@ -6991,16 +6991,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csstype@npm:^3.0.2, csstype@npm:^3.0.9":
+"csstype@npm:^3.0.10, csstype@npm:^3.0.2":
   version: 3.0.10
   resolution: "csstype@npm:3.0.10"
   checksum: 20a8fa324f2b33ddf94aa7507d1b6ab3daa6f3cc308888dc50126585d7952f2471de69b2dbe0635d1fdc31223fef8e070842691877e725caf456e2378685a631
   languageName: node
   linkType: hard
 
-"cypress@npm:9.0.0":
-  version: 9.0.0
-  resolution: "cypress@npm:9.0.0"
+"cypress@npm:9.1.0":
+  version: 9.1.0
+  resolution: "cypress@npm:9.1.0"
   dependencies:
     "@cypress/request": ^2.88.7
     "@cypress/xvfb": ^1.2.4
@@ -7009,7 +7009,7 @@ __metadata:
     "@types/sizzle": ^2.3.2
     arch: ^2.2.0
     blob-util: ^2.0.2
-    bluebird: ^3.7.2
+    bluebird: 3.7.2
     cachedir: ^2.3.0
     chalk: ^4.1.0
     check-more-types: ^2.24.0
@@ -7045,7 +7045,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: ae481f26f6a51370bad6571b7edd525559c0b4e36fb9c33ac26c822610bd2f0b419614f12c1d87aff59c46afb3c2f06f7e167f924023da65fe2a3987927255c8
+  checksum: 37f2cd704d9e67c4b525e2e8a723f82b0e0eb573cd276fa6460d86ce665cf2a53fd490a4a0ca79394694ba0d91306a03194479089b57457fdc6b9cb9e9747b54
   languageName: node
   linkType: hard
 
@@ -16621,7 +16621,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.4.1, prettier@npm:^2.1.2, prettier@npm:^2.4.1":
+"prettier@npm:2.5.0":
+  version: 2.5.0
+  resolution: "prettier@npm:2.5.0"
+  bin:
+    prettier: bin-prettier.js
+  checksum: aad1b35b73e7c14596d389d90977a83dad0db689ba5802a0ef319c357b7867f55b885db197972aa6a56c30f53088c9f8e0d7f7930ae074c275a4e9cbe091d21d
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^2.1.2, prettier@npm:^2.4.1":
   version: 2.4.1
   resolution: "prettier@npm:2.4.1"
   bin:
@@ -20983,9 +20992,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.64.2":
-  version: 5.64.2
-  resolution: "webpack@npm:5.64.2"
+"webpack@npm:5.64.3":
+  version: 5.64.3
+  resolution: "webpack@npm:5.64.3"
   dependencies:
     "@types/eslint-scope": ^3.7.0
     "@types/estree": ^0.0.50
@@ -21016,7 +21025,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: e02fcd3bfdc7e3322291b476af60f46dc4a31ec4349af4d1d47018b8e449820968d4ab8f1e8b313dd5cfcf1b47c7f976fe39fde73411d03c173a692c3dae428e
+  checksum: dc773c260b5db95d7c0e9aec079e9ed30a154420e3fc7fb46bd4f9b98714f322d8effe6534d5a3a17157f2c514a6edb26494585de4f1c92329980e04de235dd3
   languageName: node
   linkType: hard
 
