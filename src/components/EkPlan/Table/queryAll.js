@@ -1,8 +1,21 @@
 import { gql } from '@apollo/client'
+import { ekfrequenz } from '../../shared/fragments'
 
 export default gql`
-  query EkplanTpopQuery($tpopFilter: TpopFilter!) {
-    allTpops(filter: $tpopFilter, orderBy: [POP_BY_POP_ID__NR_ASC, NR_ASC]) {
+  query EkplanTpopQuery($tpopFilter: TpopFilter!, $apIds: [UUID!]) {
+    allEkfrequenzs(filter: { apId: { in: $apIds } }, orderBy: SORT_ASC) {
+      nodes {
+        ...EkfrequenzFields
+        ekAbrechnungstypWerteByEkAbrechnungstyp {
+          id
+          text
+        }
+      }
+    }
+    allTpops(
+      filter: $tpopFilter
+      orderBy: [AP_NAME_ASC, POP_BY_POP_ID__NR_ASC, NR_ASC]
+    ) {
       totalCount
       nodes {
         id
@@ -99,4 +112,5 @@ export default gql`
       }
     }
   }
+  ${ekfrequenz}
 `

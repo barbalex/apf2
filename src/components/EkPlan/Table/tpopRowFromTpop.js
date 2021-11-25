@@ -5,7 +5,7 @@ import appBaseUrl from '../../../modules/appBaseUrl'
 
 const isOdd = (num) => num % 2 === 0
 
-const tpopRowFromTpop = ({ tpop, index, dataLists }) => {
+const tpopRowFromTpop = ({ tpop, index }) => {
   let lv95X = get(tpop, 'lv95X')
   if (lv95X && lv95X.toLocaleString) {
     lv95X = lv95X.toLocaleString('de-ch')

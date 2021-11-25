@@ -1,7 +1,6 @@
 import React, { useContext, useMemo, useCallback, useRef } from 'react'
 import { useQuery } from '@apollo/client'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
@@ -9,8 +8,7 @@ import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
 import Button from '@mui/material/Button'
 
-import queryTpop from './queryTpop'
-import queryLists from './queryLists'
+import queryAll from './queryAll'
 import CellForYearMenu from './CellForYearMenu'
 import storeContext from '../../../storeContext'
 import yearsFromTpops from './yearsFromTpops'
@@ -127,6 +125,7 @@ const ExportButton = styled(Button)`
 `
 
 const EkPlanTable = ({ width = 0, height = 0 }) => {
+  console.log('EkPlanTable rendering')
   const store = useContext(storeContext)
   const {
     aps,
@@ -254,27 +253,17 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     }
   }
 
-  const { data: dataLists, error: errorLists } = useQuery(queryLists, {
+  const { data, loading, error, refetch } = useQuery(queryAll, {
     variables: {
+      tpopFilter,
       apIds: apValues,
     },
   })
-  const ekfrequenzs = dataLists?.allEkfrequenzs?.nodes ?? []
+  const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
   setEkfrequenzs(ekfrequenzs)
-
-  const {
-    data: dataTpop,
-    loading: loadingTpop,
-    error: errorTpop,
-    refetch,
-  } = useQuery(queryTpop, {
-    variables: {
-      tpopFilter,
-    },
-  })
-  const tpops = sortBy(
-    get(dataTpop, 'allTpops.nodes', []),
-    (t) => t.popByPopId.apByApId.label,
+  const tpops = useMemo(
+    () => data?.allTpops?.nodes ?? [],
+    [data?.allTpops?.nodes],
   )
   const years = useMemo(
     () => yearsFromTpops({ tpops, pastYears }),
@@ -305,10 +294,9 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
   // solution is to pass stringified version
   const tpopsStringified = JSON.stringify(tpops)
   const tpopRows = useMemo(
-    () =>
-      tpops.map((tpop, index) => tpopRowFromTpop({ tpop, index, dataLists })),
+    () => tpops.map((tpop, index) => tpopRowFromTpop({ tpop, index })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dataLists, tpopsStringified],
+    [tpopsStringified],
   )
   const tpopColumns = tpopRows.length
     ? sortBy(
@@ -375,14 +363,11 @@ const EkPlanTable = ({ width = 0, height = 0 }) => {
     })
   }, [tpops, store, years])
 
-  if (aps.length > 0 && loadingTpop) {
+  if (aps.length > 0 && loading) {
     return <TempContainer>Lade...</TempContainer>
   }
 
-  const errors = [
-    ...(errorTpop ? [errorTpop] : []),
-    ...(errorLists ? [errorLists] : []),
-  ]
+  const errors = error ? [error] : []
   if (errors.length) return <Error errors={errors} />
 
   return (
