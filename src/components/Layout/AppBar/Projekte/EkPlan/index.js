@@ -31,24 +31,6 @@ const MenuDiv = styled.div`
 `
 const StyledButton = styled(Button)`
   color: white !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  border-right-color: ${(props) =>
-    props.followed
-      ? ' rgba(255, 255, 255, 0.25)'
-      : ' rgba(255, 255, 255, 0.5)'} !important;
-  border-left-color: ${(props) =>
-    props.preceded
-      ? ' rgba(255, 255, 255, 0.25)'
-      : ' rgba(255, 255, 255, 0.5)'} !important;
-  border-top-left-radius: ${(props) =>
-    props.preceded ? '0' : '4px'} !important;
-  border-bottom-left-radius: ${(props) =>
-    props.preceded ? '0' : '4px'} !important;
-  border-top-right-radius: ${(props) =>
-    props.followed ? '0' : '4px'} !important;
-  border-bottom-right-radius: ${(props) =>
-    props.followed ? '0' : '4px'} !important;
-  margin-right: ${(props) => (props.followed ? '-1px' : 'unset')} !important;
   text-transform: none !important;
 `
 const DokuButton = styled(Button)`
@@ -140,7 +122,6 @@ const EkPlanAppBar = () => {
         <StyledButton
           variant="text"
           preceded="false"
-          followed="false"
           onClick={onClickAp}
           data-id="ek-planung"
           title="EK und EKF planen"

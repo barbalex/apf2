@@ -5,7 +5,6 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { MdEdit as EditIcon, MdViewList as ListIcon } from 'react-icons/md'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient } from '@apollo/client'
 
@@ -63,9 +62,9 @@ const CellForYearMenu = () => {
   const [ekfsAnchor, setEkfsAnchor] = useState(null)
   const [massnsAnchor, setMassnsAnchor] = useState(null)
 
-  const closeEksMenu = useCallback((event) => setEksAnchor(null), [])
-  const closeEkfsMenu = useCallback((event) => setEkfsAnchor(null), [])
-  const closeMassnsMenu = useCallback((event) => setMassnsAnchor(null), [])
+  const closeEksMenu = useCallback(() => setEksAnchor(null), [])
+  const closeEkfsMenu = useCallback(() => setEkfsAnchor(null), [])
+  const closeMassnsMenu = useCallback(() => setMassnsAnchor(null), [])
 
   const removeEkPlan = useCallback(
     async (typ) => {
@@ -108,12 +107,14 @@ const CellForYearMenu = () => {
     },
     [client, closeYearCellMenu, store, tpopId, year],
   )
-  const onClickEkEntfernen = useCallback(() => removeEkPlan('EK'), [
-    removeEkPlan,
-  ])
-  const onClickEkfEntfernen = useCallback(() => removeEkPlan('EKF'), [
-    removeEkPlan,
-  ])
+  const onClickEkEntfernen = useCallback(
+    () => removeEkPlan('EK'),
+    [removeEkPlan],
+  )
+  const onClickEkfEntfernen = useCallback(
+    () => removeEkPlan('EKF'),
+    [removeEkPlan],
+  )
 
   const addEkPlan = useCallback(
     async (typ) => {
@@ -160,10 +161,10 @@ const CellForYearMenu = () => {
       showMassn,
     },
   })
-  const tpop = get(data, 'tpopById', {})
-  const eks = get(data, 'tpopById.eks.nodes', [])
-  const ekfs = get(data, 'tpopById.ekfs.nodes', [])
-  const massns = get(data, 'tpopById.massns.nodes', [])
+  const tpop = data?.tpopById ?? {}
+  const eks = data?.tpopById?.eks?.nodes ?? []
+  const ekfs = data?.tpopById?.ekfs?.nodes ?? []
+  const massns = data?.tpopById?.massns?.nodes ?? []
 
   return (
     <>

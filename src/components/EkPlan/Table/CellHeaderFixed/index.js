@@ -74,7 +74,7 @@ const CellHeaderFixed = ({ style, column }) => {
       >
         <Title>{label}</Title>
         {!nofilter && (
-          <Dropdown>{!!filterValue ? <StyledFaFilter /> : <Caret />}</Dropdown>
+          <Dropdown>{filterValue ? <StyledFaFilter /> : <Caret />}</Dropdown>
         )}
       </StyledCell>
       <Menu

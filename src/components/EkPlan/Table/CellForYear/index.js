@@ -29,7 +29,7 @@ const CellForYear = ({ field, row, style }) => {
   const clicked = year === label && tpopId === row.id
   const einheits = einheitsByAp[row.apId]
   const onClickCell = useCallback(
-    event => {
+    (event) => {
       setYearClicked({
         year: label,
         tpopId: row.id,

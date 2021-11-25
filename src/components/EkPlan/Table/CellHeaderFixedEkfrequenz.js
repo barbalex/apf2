@@ -58,7 +58,10 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
 
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const closeMenu = useCallback(() => setAnchorEl(null), [])
+  const closeMenu = useCallback(() => {
+    console.log('CellHeaderFixedEkfrequenz closing menu')
+    setAnchorEl(null)
+  }, [])
   const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
   const onClickFilterEmptyValues = useCallback(() => {
     if (!filterEkfrequenzEmpty && filterEkfrequenz) {
@@ -74,6 +77,10 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
   ])
 
   const { label } = column
+  console.log('CellHeaderFixedEkfrequenz', {
+    anchorEl,
+    open: Boolean(anchorEl),
+  })
 
   return (
     <>
@@ -93,13 +100,13 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
         </Dropdown>
       </StyledCell>
       <Menu
-        id="ekfrequenzHeaderMenu"
+        //id="ekfrequenzHeaderMenu"
         anchorEl={anchorEl}
-        keepMounted
+        //keepMounted={false}
         open={Boolean(anchorEl)}
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}
-        getContentAnchorEl={null}
+        //getContentAnchorEl={null}
       >
         <MenuItem onClick={onClickFilterEmptyValues} dense>
           {filterEkfrequenzEmpty
