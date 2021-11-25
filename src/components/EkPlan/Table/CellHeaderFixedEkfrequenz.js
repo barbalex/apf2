@@ -77,10 +77,10 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
   ])
 
   const { label } = column
-  console.log('CellHeaderFixedEkfrequenz', {
-    anchorEl,
-    open: Boolean(anchorEl),
-  })
+  // console.log('CellHeaderFixedEkfrequenz', {
+  //   anchorEl,
+  //   open: Boolean(anchorEl),
+  // })
 
   return (
     <>
