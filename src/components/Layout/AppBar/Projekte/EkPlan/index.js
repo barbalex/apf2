@@ -121,7 +121,6 @@ const EkPlanAppBar = () => {
       <MenuDiv>
         <StyledButton
           variant="text"
-          preceded="false"
           onClick={onClickAp}
           data-id="ek-planung"
           title="EK und EKF planen"
