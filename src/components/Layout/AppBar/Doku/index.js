@@ -29,29 +29,19 @@ const MenuDiv = styled.div`
 const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
-  border-right-color: ${(props) =>
-    props.followed
-      ? ' rgba(255, 255, 255, 0.25)'
-      : ' rgba(255, 255, 255, 0.5)'} !important;
-  border-left-color: ${(props) =>
-    props.preceded
-      ? ' rgba(255, 255, 255, 0.25)'
-      : ' rgba(255, 255, 255, 0.5)'} !important;
-  border-top-left-radius: ${(props) =>
-    props.preceded ? '0' : '4px'} !important;
-  border-bottom-left-radius: ${(props) =>
-    props.preceded ? '0' : '4px'} !important;
-  border-top-right-radius: ${(props) =>
-    props.followed ? '0' : '4px'} !important;
-  border-bottom-right-radius: ${(props) =>
-    props.followed ? '0' : '4px'} !important;
-  margin-right: ${(props) => (props.followed ? '-1px' : 'unset')} !important;
+  border-right-color: rgba(255, 255, 255, 0.5) !important;
+  border-left-color: rgba(255, 255, 255, 0.5) !important;
+  border-top-left-radius: 4px !important;
+  border-bottom-left-radius: 4px !important;
+  border-top-right-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
   text-transform: none !important;
 `
 const DokuAppBar = () => {
   const isMobile = isMobilePhone()
   const location = useLocation()
   const { pathname } = location
+  console.log('hi')
 
   return (
     <>
