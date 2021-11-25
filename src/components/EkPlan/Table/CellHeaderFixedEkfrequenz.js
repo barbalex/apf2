@@ -45,6 +45,11 @@ const StyledFaFilter = styled(FaFilter)`
 const TextFilterContainer = styled.div`
   padding: 0 16px;
 `
+const StyledMenu = styled(Menu)`
+  & .MuiPaper-root {
+    overflow: hidden !important;
+  }
+`
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 const CellHeaderFixedEkfrequenz = ({ style, column }) => {
@@ -95,10 +100,8 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
           )}
         </Dropdown>
       </StyledCell>
-      <Menu
-        //id="ekfrequenzHeaderMenu"
+      <StyledMenu
         anchorEl={anchorEl}
-        //keepMounted={false}
         open={Boolean(anchorEl)}
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}
@@ -111,7 +114,7 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
         <TextFilterContainer>
           <TextFilter column={column} closeMenu={closeMenu} />
         </TextFilterContainer>
-      </Menu>
+      </StyledMenu>
     </>
   )
 }

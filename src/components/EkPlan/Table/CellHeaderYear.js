@@ -138,9 +138,7 @@ const CellHeaderYear = ({ style, column, rows }) => {
         <Dropdown>{filterSet ? <FaFilter /> : <Caret />}</Dropdown>
       </StyledCell>
       <Menu
-        id="yearHeaderMenu"
         anchorEl={anchorEl}
-        keepMounted
         open={Boolean(anchorEl)}
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}

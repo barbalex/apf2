@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import Button from '@mui/material/Button'
-import { useResizeDetector } from 'react-resize-detector'
 
 import ApList from './ApList'
 import Table from './Table'
@@ -59,23 +58,11 @@ const EkPlan = () => {
     }
   }, [])
 
-  const {
-    width = 0,
-    height = 0,
-    ref: resizeRef,
-  } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 2500,
-    refreshOptions: { leading: true },
-  })
-
-  console.log('EkPlan', { height, width })
-
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <Container ref={resizeRef}>
+      <Container>
         <Header>
           <ApList />
           <AnleitungButton
@@ -87,7 +74,7 @@ const EkPlan = () => {
           </AnleitungButton>
           <Choose />
         </Header>
-        <Table height={height} width={width} />
+        <Table />
       </Container>
     </ErrorBoundary>
   )

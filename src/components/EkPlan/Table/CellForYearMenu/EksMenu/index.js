@@ -7,9 +7,7 @@ const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
 const EksMenu = ({ tpop, eks, eksAnchor, closeEksMenu }) => (
   <Menu
-    id="eksMenu"
     anchorEl={eksAnchor}
-    keepMounted
     open={Boolean(eksAnchor)}
     onClose={closeEksMenu}
     anchorOrigin={anchorOrigin}

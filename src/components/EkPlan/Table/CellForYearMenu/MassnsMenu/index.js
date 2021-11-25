@@ -8,9 +8,7 @@ const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 const MassnsMenu = ({ tpop, massns, massnsAnchor, closeMassnsMenu }) => {
   return (
     <Menu
-      id="massnsMenu"
       anchorEl={massnsAnchor}
-      keepMounted
       open={Boolean(massnsAnchor)}
       onClose={closeMassnsMenu}
       anchorOrigin={anchorOrigin}

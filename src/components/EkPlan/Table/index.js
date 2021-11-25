@@ -6,6 +6,7 @@ import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
 import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
 import Button from '@mui/material/Button'
+import { useResizeDetector } from 'react-resize-detector'
 
 import queryAll from './queryAll'
 import CellForYearMenu from './CellForYearMenu'
@@ -118,7 +119,7 @@ const ExportButton = styled(Button)`
   z-index: 5;
 `
 
-const EkPlanTable = ({ height, width }) => {
+const EkPlanTable = () => {
   const store = useContext(storeContext)
   const {
     aps,
@@ -153,6 +154,26 @@ const EkPlanTable = ({ height, width }) => {
     filterEkplanYear,
     pastYears,
   } = store.ekPlan
+
+  /**
+   * BIG TROUBLE with height
+   * ideally we would use flex with column and let css do the sizing
+   * BUT: Chrome goes crazy when two columnal flexes are stacked
+   * it keeps changing size by a fraction of a point permanently
+   * which wrecks EVERYTHING as table rerenders permanently
+   * So we need to:
+   * 1. know appBarHeight
+   * 2. NOT use columnal flex but boxes with calculated size
+   */
+  const {
+    width = 0,
+    height = 0,
+    ref: resizeRef,
+  } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 100,
+    refreshOptions: { leading: true },
+  })
 
   const tpopFilter = { popByPopId: { apId: { in: apValues } } }
   if (filterAp) {
@@ -368,7 +389,7 @@ const EkPlanTable = ({ height, width }) => {
       <ExportButton variant="outlined" onClick={onClickExport} color="inherit">
         exportieren
       </ExportButton>
-      <Container>
+      <Container ref={resizeRef}>
         <HeaderContainer>
           <TpopTitle>{`${tpops.length} Teilpopulationen`}</TpopTitle>
           <VariableSizeList
@@ -427,7 +448,7 @@ const EkPlanTable = ({ height, width }) => {
             style={{ overflowY: 'hidden' }}
             columnCount={tpopColumns.length}
             columnWidth={(index) => tpopColumns[index].width}
-            height={height - 86 - 60}
+            height={height - 60}
             rowCount={tpopRows.length}
             rowHeight={() => rowHeight}
             width={headerFieldsFixedWidth}
@@ -508,7 +529,7 @@ const EkPlanTable = ({ height, width }) => {
           <FixedSizeGrid
             columnCount={yearColumns.length}
             columnWidth={yearColumnWidth}
-            height={height - 86 - 60}
+            height={height - 60}
             rowCount={yearRows.length}
             rowHeight={rowHeight}
             width={width - headerFieldsFixedWidth}

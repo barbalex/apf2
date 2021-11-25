@@ -33,7 +33,6 @@ const DatenPage = ({ location }) => {
   const { view, showDeletions, user, setIsPrint, setEkfIds, appBarHeight } =
     store
   const { activeNodeArray, setActiveNodeArray, setLastTouchedNode } = store.tree
-  console.log('DatenPage, appBarHeight:', appBarHeight)
 
   useEffect(() => {
     // set last touched node in case project is directly opened on it

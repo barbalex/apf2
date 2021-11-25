@@ -7,9 +7,7 @@ const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
 const EkfsMenu = ({ tpop, ekfs, ekfsAnchor, closeEkfsMenu }) => (
   <Menu
-    id="ekfsMenu"
     anchorEl={ekfsAnchor}
-    keepMounted
     open={Boolean(ekfsAnchor)}
     onClose={closeEkfsMenu}
     anchorOrigin={anchorOrigin}

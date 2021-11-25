@@ -172,7 +172,6 @@ const CellForYearMenu = () => {
         anchorReference="anchorPosition"
         anchorPosition={{ top: yearMenuAnchor.top, left: yearMenuAnchor.right }}
         anchorOrigin={anchorOrigin}
-        keepMounted
         open={Boolean(yearMenuAnchor)}
         onClose={closeYearCellMenu}
       >
