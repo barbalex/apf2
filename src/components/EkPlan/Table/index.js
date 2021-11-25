@@ -44,9 +44,7 @@ const TempContainer = styled.div`
   user-select: none !important;
 `
 const OuterContainer = styled.div`
-  height: 100%;
-  overflow-y: auto;
-  /*height: calc(100% - 86px);*/
+  flex: 1 1 auto;
 `
 const Container = styled.div`
   position: relative;
@@ -63,7 +61,6 @@ const HeaderContainer = styled.div`
 `
 // TODO: how to use simplebar here?
 const BodyContainer = styled.div`
-  overflow-y: auto;
   display: flex;
   flex-direction: row;
   height: 100%;
@@ -171,31 +168,15 @@ const EkPlanTable = () => {
     pastYears,
   } = store.ekPlan
 
-  // const [size, setSize] = useState({ width: 0, height: 0 })
-  // useEffect(() => setSize({ width: 0, height: 0 }), [])
-  // console.log('Table, size:', size)
-  // const onResize = useCallback(
-  //   ({ width, height }) => {
-  //     console.log('Table, onResize:', { width, height })
-  //     // const absValue = { width: Math.abs(width), height: Math.abs(height) }
-  //     // console.log('Table, absValue:', absValue)
-  //     // if (size.width !== absValue.width || size.height !== absValue.height) {
-  //     //   setSize(absValue)
-  //     // }
-  //   },
-  //   [size.height, size.width],
-  // )
   const {
-    width,
-    height,
+    width = 0,
+    height = 0,
     ref: resizeRef,
   } = useResizeDetector({
     refreshMode: 'debounce',
-    refreshRate: 1000,
+    refreshRate: 500,
     refreshOptions: { leading: true },
-    //onResize,
   })
-  console.log('EkPlanTable rendering, size:', { width, height })
 
   const tpopFilter = { popByPopId: { apId: { in: apValues } } }
   if (filterAp) {
@@ -295,6 +276,7 @@ const EkPlanTable = () => {
       apIds: apValues,
     },
   })
+  console.log('EkPlanTable rendering, size:', { width, height, loading })
   const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
   setEkfrequenzs(ekfrequenzs)
   const tpops = useMemo(
@@ -415,7 +397,7 @@ const EkPlanTable = () => {
         >
           exportieren
         </ExportButton>
-        <Container ref={resizeRef}>
+        <Container ref={resizeRef} data-height={height}>
           <HeaderContainer>
             <TpopTitle>{`${tpops.length} Teilpopulationen`}</TpopTitle>
             <VariableSizeList

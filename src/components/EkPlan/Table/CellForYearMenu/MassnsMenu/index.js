@@ -14,7 +14,6 @@ const MassnsMenu = ({ tpop, massns, massnsAnchor, closeMassnsMenu }) => {
       open={Boolean(massnsAnchor)}
       onClose={closeMassnsMenu}
       anchorOrigin={anchorOrigin}
-      getContentAnchorEl={null}
     >
       {massns.map((massn, i) => (
         <Massn

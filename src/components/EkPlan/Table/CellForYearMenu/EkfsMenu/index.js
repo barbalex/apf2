@@ -13,7 +13,6 @@ const EkfsMenu = ({ tpop, ekfs, ekfsAnchor, closeEkfsMenu }) => (
     open={Boolean(ekfsAnchor)}
     onClose={closeEkfsMenu}
     anchorOrigin={anchorOrigin}
-    getContentAnchorEl={null}
   >
     {ekfs.map((ekf, i) => (
       <Ekf key={ekf.id} tpop={tpop} ekf={ekf} border={i + 1 < ekfs.length} />

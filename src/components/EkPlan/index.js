@@ -17,9 +17,13 @@ const Container = styled.div`
   height: 100%;
   width: 100vw;
   /* Turned off flex, because with of children slightly changed every fraction of a second!!!! */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `
 const Header = styled.div`
   padding: 5px 10px 0 10px;
+  flex: 0 1 auto;
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;

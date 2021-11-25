@@ -175,7 +175,6 @@ const CellForYearMenu = () => {
         keepMounted
         open={Boolean(yearMenuAnchor)}
         onClose={closeYearCellMenu}
-        getContentAnchorEl={null}
       >
         <YearCellMenuTitle>{yearClicked.title}</YearCellMenuTitle>
         {showEk && (

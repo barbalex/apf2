@@ -83,7 +83,6 @@ const CellHeaderFixed = ({ style, column }) => {
         open={Boolean(anchorEl)}
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}
-        getContentAnchorEl={null}
       >
         {typeIsBoolean ? (
           <BooleanFilter column={column} closeMenu={closeMenu} />

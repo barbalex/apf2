@@ -77,10 +77,6 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
   ])
 
   const { label } = column
-  // console.log('CellHeaderFixedEkfrequenz', {
-  //   anchorEl,
-  //   open: Boolean(anchorEl),
-  // })
 
   return (
     <>
@@ -106,7 +102,6 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
         open={Boolean(anchorEl)}
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}
-        //getContentAnchorEl={null}
       >
         <MenuItem onClick={onClickFilterEmptyValues} dense>
           {filterEkfrequenzEmpty

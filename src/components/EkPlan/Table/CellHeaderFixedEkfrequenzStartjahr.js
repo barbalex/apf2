@@ -100,7 +100,6 @@ const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
         open={Boolean(anchorEl)}
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}
-        getContentAnchorEl={null}
       >
         <MenuItem onClick={onClickFilterEmptyValues} dense>
           {filterEkfrequenzStartjahrEmpty

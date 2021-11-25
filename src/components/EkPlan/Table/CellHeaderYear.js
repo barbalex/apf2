@@ -117,10 +117,10 @@ const CellHeaderYear = ({ style, column, rows }) => {
     setAnchorEl(null)
   }, [column, filterEkplanYear, setFilterEkplanYear, yearHasEkplan])
 
-  const onMouseEnter = useCallback(() => hovered.setYear(column), [
-    column,
-    hovered,
-  ])
+  const onMouseEnter = useCallback(
+    () => hovered.setYear(column),
+    [column, hovered],
+  )
   const className = hovered.year === column ? 'column-hovered' : ''
 
   return (
@@ -144,7 +144,6 @@ const CellHeaderYear = ({ style, column, rows }) => {
         open={Boolean(anchorEl)}
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}
-        getContentAnchorEl={null}
       >
         <StyledMenuItem
           onClick={onClickFilterKontrolleYear}
