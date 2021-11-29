@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import sum from 'lodash/sum'
 import { observer } from 'mobx-react-lite'
 
@@ -64,14 +63,13 @@ const EkIcon = ({ planned, eks, einheits }) => {
     eksHaveCountedZielrelevanteEinheits =
       eks
         .flatMap((ek) =>
-          get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', []).filter(
+          (ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []).filter(
             (z) =>
               einheits.includes(z.einheit) &&
               z.anzahl !== null &&
-              get(
-                z,
-                'tpopkontrzaehlEinheitWerteByEinheit.ekzaehleinheitsByZaehleinheitId.nodes',
-                [],
+              (
+                z?.tpopkontrzaehlEinheitWerteByEinheit
+                  ?.ekzaehleinheitsByZaehleinheitId?.nodes ?? []
               ).length > 0,
           ),
         )
@@ -80,15 +78,14 @@ const EkIcon = ({ planned, eks, einheits }) => {
   if (eksHaveCountedZielrelevanteEinheits) {
     sumCounted = sum(
       eks.flatMap((ek) =>
-        get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
+        (ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
           .filter(
             (z) =>
               einheits.includes(z.einheit) &&
               z.anzahl !== null &&
-              get(
-                z,
-                'tpopkontrzaehlEinheitWerteByEinheit.ekzaehleinheitsByZaehleinheitId.nodes',
-                [],
+              (
+                z?.tpopkontrzaehlEinheitWerteByEinheit
+                  ?.ekzaehleinheitsByZaehleinheitId?.nodes ?? []
               ).length > 0,
           )
           .flatMap((z) => z.anzahl),

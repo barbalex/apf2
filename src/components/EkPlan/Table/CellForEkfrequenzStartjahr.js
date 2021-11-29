@@ -2,7 +2,6 @@ import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import styled from 'styled-components'
-import { useSnackbar } from 'notistack'
 
 import storeContext from '../../../storeContext'
 import { tpop } from '../../shared/fragments'
@@ -71,7 +70,6 @@ const CellForEkfrequenzStartjahr = ({ row, style, refetchTpop }) => {
       ? row.ekfrequenzStartjahr.value
       : '',
   )
-  const { closeSnackbar } = useSnackbar()
 
   useEffect(() => {
     setStateValue(
@@ -81,10 +79,10 @@ const CellForEkfrequenzStartjahr = ({ row, style, refetchTpop }) => {
     )
   }, [row.ekfrequenzStartjahr.value, row.id])
 
-  const onMouseEnter = useCallback(() => hovered.setTpopId(row.id), [
-    hovered,
-    row.id,
-  ])
+  const onMouseEnter = useCallback(
+    () => hovered.setTpopId(row.id),
+    [hovered, row.id],
+  )
   const onChange = useCallback((e) => {
     const value = e.target.value || e.target.value === 0 ? e.target.value : ''
     setStateValue(value)
@@ -151,13 +149,12 @@ const CellForEkfrequenzStartjahr = ({ row, style, refetchTpop }) => {
           refetchTpop,
           client,
           store,
-          closeSnackbar,
         })
       } else {
         refetchTpop()
       }
     },
-    [row, client, store, enqueNotification, refetchTpop, closeSnackbar],
+    [row, client, store, enqueNotification, refetchTpop],
   )
 
   return (
