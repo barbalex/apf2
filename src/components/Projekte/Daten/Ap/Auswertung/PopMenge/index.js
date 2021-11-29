@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useContext } from 'react'
 import { useQuery, useMutation, gql } from '@apollo/client'
-import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import {
   AreaChart,
@@ -91,16 +90,19 @@ const ApAuswertungPopMenge = ({
     variables: { id, jahr },
   })
 
-  const popsData = get(dataPopMenge, 'allPops.nodes') || []
-  const popMengeRawData = get(dataPopMenge, 'allVApAuswPopMenges.nodes') || []
+  const popsData = dataPopMenge?.allPops?.nodes ?? []
+  const popMengeRawData = dataPopMenge?.allVApAuswPopMenges?.nodes ?? []
   const popMengeData = popMengeRawData.map((e) => ({
     jahr: e.jahr,
     ...JSON.parse(e.values),
   }))
   const nonUniquePopIdsWithData = popMengeData.flatMap((d) =>
     Object.entries(d)
+      // eslint-disable-next-line no-unused-vars
       .filter(([key, value]) => key !== 'jahr')
+      // eslint-disable-next-line no-unused-vars
       .filter(([key, value]) => exists(value))
+      // eslint-disable-next-line no-unused-vars
       .map(([key, value]) => key),
   )
   const popIdsWithData = [...new Set(nonUniquePopIdsWithData)]
@@ -110,10 +112,9 @@ const ApAuswertungPopMenge = ({
     return id
   })
 
-  const zielEinheit = get(
-    dataPopMenge,
-    'allEkzaehleinheits.nodes[0].tpopkontrzaehlEinheitWerteByZaehleinheitId.text',
-  )
+  const zielEinheit =
+    dataPopMenge?.allEkzaehleinheits?.nodes?.[0]
+      ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text
 
   const [refreshing, setRefreshing] = useState(false)
   const [refreshData] = useMutation(gql`

@@ -3,14 +3,17 @@ import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 
 import Select from '../../../../../shared/Select'
-import get from 'lodash/get'
 
 const NewUser = ({ apId, apUsers, refetch }) => {
   const client = useApolloClient()
 
   const [error, setError] = useState(null)
 
-  const { data, loading, error: queryError } = useQuery(
+  const {
+    data,
+    loading,
+    error: queryError,
+  } = useQuery(
     gql`
       query benutzerForNewUser {
         allUsers(
@@ -26,8 +29,8 @@ const NewUser = ({ apId, apUsers, refetch }) => {
       }
     `,
   )
-  const userData = data ? get(data, 'allUsers.nodes') || [] : []
-  const apUserIds = apUsers.map((u) => get(u, 'userByUserName.id'))
+  const userData = data ? data?.allUsers?.nodes ?? [] : []
+  const apUserIds = apUsers.map((u) => u?.userByUserName?.id)
   const options = userData
     .filter((d) => !apUserIds.includes(d.id))
     .map((d) => ({

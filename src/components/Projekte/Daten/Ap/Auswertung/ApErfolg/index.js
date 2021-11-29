@@ -1,6 +1,5 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
-import get from 'lodash/get'
 import range from 'lodash/range'
 import min from 'lodash/min'
 import max from 'lodash/max'
@@ -67,7 +66,7 @@ const ApAuswertungApErfolg = ({ id }) => {
   } = useQuery(queryErfolg, {
     variables: { id },
   })
-  const erfolgRawData = get(dataErfolg, 'allApbers.nodes', []).map((e) => ({
+  const erfolgRawData = (dataErfolg?.allApbers?.nodes ?? []).map((e) => ({
     jahr: e.jahr,
     value: erfValueFromCode[e.beurteilung],
   }))
