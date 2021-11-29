@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -73,7 +72,7 @@ const Tpopkontrzaehl = ({ treeName }) => {
     },
   )
 
-  const codes = get(dataZaehlOfEk, 'allTpopkontrzaehls.nodes', [])
+  const codes = (dataZaehlOfEk?.allTpopkontrzaehls?.nodes ?? [])
     .map((n) => n.einheit)
     // prevent null values which cause error in query
     .filter((e) => !!e)
@@ -87,7 +86,10 @@ const Tpopkontrzaehl = ({ treeName }) => {
     },
   })
 
-  const row = get(data, 'tpopkontrzaehlById', {})
+  const row = useMemo(
+    () => data?.tpopkontrzaehlById ?? {},
+    [data?.tpopkontrzaehlById],
+  )
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -179,11 +181,9 @@ const Tpopkontrzaehl = ({ treeName }) => {
                   <Select
                     name="einheit"
                     label="Einheit"
-                    options={get(
-                      dataLists,
-                      'allTpopkontrzaehlEinheitWertes.nodes',
-                      [],
-                    )}
+                    options={
+                      dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+                    }
                     loading={loadingLists}
                     handleSubmit={handleSubmit}
                   />
@@ -196,11 +196,9 @@ const Tpopkontrzaehl = ({ treeName }) => {
                   <RadioButtonGroup
                     name="methode"
                     label="Methode"
-                    dataSource={get(
-                      dataLists,
-                      'allTpopkontrzaehlMethodeWertes.nodes',
-                      [],
-                    )}
+                    dataSource={
+                      dataLists?.allTpopkontrzaehlMethodeWertes?.nodes ?? []
+                    }
                     handleSubmit={handleSubmit}
                   />
                 </StyledForm>

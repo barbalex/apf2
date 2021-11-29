@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 
@@ -226,13 +225,9 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
     ],
   )
 
-  const userCount = get(
-    row,
-    'adresseByBearbeiter.usersByAdresseId.totalCount',
-    0,
-  )
+  const userCount = row?.adresseByBearbeiter?.usersByAdresseId?.totalCount ?? 0
 
-  const statusValue = get(tpop, 'status', '')
+  const statusValue = tpop?.status ?? ''
   const status = [200, 201, 202].includes(statusValue)
     ? 'angesiedelt'
     : 'natürlich'
@@ -241,17 +236,13 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
   return (
     <Container>
       <PopLabel>Population</PopLabel>
-      <PopVal>{get(pop, 'name', '')}</PopVal>
+      <PopVal>{pop?.name ?? ''}</PopVal>
       <TpopLabel>Teilpopulation</TpopLabel>
-      <TpopVal>{get(tpop, 'flurname', '')}</TpopVal>
+      <TpopVal>{tpop?.flurname ?? ''}</TpopVal>
       <KoordLabel>Koordinaten</KoordLabel>
-      <KoordVal>{`${get(tpop, 'lv95X', '')} / ${get(
-        tpop,
-        'lv95Y',
-        '',
-      )}`}</KoordVal>
+      <KoordVal>{`${tpop?.lv95X ?? ''} / ${tpop?.lv95Y ?? ''}`}</KoordVal>
       <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
-      <TpopNrVal>{`${get(pop, 'nr', '')}.${get(tpop, 'nr', '')}`}</TpopNrVal>
+      <TpopNrVal>{`${pop?.nr ?? ''}.${tpop?.nr ?? ''}`}</TpopNrVal>
       <BearbLabel>BeobachterIn</BearbLabel>
       <BearbVal>
         <Select
@@ -259,7 +250,7 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
           name="bearbeiter"
           value={row.bearbeiter}
           field="bearbeiter"
-          options={get(data, 'allAdresses.nodes', [])}
+          options={data?.allAdresses?.nodes ?? []}
           loading={loading}
           saveToDb={saveToDb}
           error={
