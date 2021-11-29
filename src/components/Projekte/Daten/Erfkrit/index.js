@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -61,7 +60,7 @@ const Erfkrit = ({ treeName }) => {
     error: errorLists,
   } = useQuery(queryLists)
 
-  const row = get(data, 'erfkritById', {})
+  const row = useMemo(() => data?.erfkritById ?? {}, [data?.erfkritById])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -152,7 +151,7 @@ const Erfkrit = ({ treeName }) => {
                   <RadioButtonGroup
                     name="erfolg"
                     label="Beurteilung"
-                    dataSource={get(dataLists, 'allApErfkritWertes.nodes', [])}
+                    dataSource={dataLists?.allApErfkritWertes?.nodes ?? []}
                     loading={loadingLists}
                     handleSubmit={handleSubmit}
                   />

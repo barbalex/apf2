@@ -1,8 +1,7 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, { useContext, useCallback, useState, useMemo } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -80,7 +79,7 @@ const Pop = ({ treeName }) => {
     },
   })
 
-  const [tab, setTab] = useState(get(urlQuery, 'popTab', 'pop'))
+  const [tab, setTab] = useState(urlQuery?.popTab ?? 'pop')
   const onChangeTab = useCallback(
     (event, value) => {
       setUrlQueryValue({
@@ -94,7 +93,7 @@ const Pop = ({ treeName }) => {
     [setUrlQuery, urlQuery],
   )
 
-  const row = get(data, 'popById', {})
+  const row = useMemo(() => data?.popById ?? {}, [data?.popById])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -214,7 +213,7 @@ const Pop = ({ treeName }) => {
                           handleSubmit={handleSubmit}
                         />
                         <Status
-                          apJahr={get(row, 'apByApId.startJahr')}
+                          apJahr={row?.apByApId?.startJahr}
                           treeName={treeName}
                           showFilter={false}
                           handleSubmit={handleSubmit}

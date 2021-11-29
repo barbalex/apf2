@@ -1,6 +1,5 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import Tabs from '@mui/material/Tabs'
@@ -94,7 +93,7 @@ const Idealbiotop = ({ treeName, width = 1000 }) => {
   const { urlQuery, setUrlQuery } = store
   const client = useApolloClient()
 
-  const [tab, setTab] = useState(get(urlQuery, 'idealbiotopTab', 'idealbiotop'))
+  const [tab, setTab] = useState(urlQuery?.idealbiotopTab ?? 'idealbiotop')
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -106,7 +105,10 @@ const Idealbiotop = ({ treeName, width = 1000 }) => {
     },
   })
 
-  const row = get(data, 'allIdealbiotops.nodes[0]', {})
+  const row = useMemo(
+    () => data?.allIdealbiotops?.nodes?.[0] ?? {},
+    [data?.allIdealbiotops?.nodes],
+  )
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {

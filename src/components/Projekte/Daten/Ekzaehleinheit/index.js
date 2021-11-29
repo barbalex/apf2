@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -62,12 +61,13 @@ const Ekzaehleinheit = ({ treeName }) => {
     },
   })
 
-  const row = get(data, 'ekzaehleinheitById', {})
+  const row = useMemo(
+    () => data?.ekzaehleinheitById ?? {},
+    [data?.ekzaehleinheitById],
+  )
 
-  const ekzaehleinheitenOfAp = get(
-    row,
-    'apByApId.ekzaehleinheitsByApId.nodes',
-    [],
+  const ekzaehleinheitenOfAp = (
+    row?.apByApId?.ekzaehleinheitsByApId?.nodes ?? []
   ).map((o) => o.zaehleinheitId)
   // re-add this ones id
   const notToShow = ekzaehleinheitenOfAp.filter((o) => o !== row.zaehleinheitId)
@@ -187,11 +187,9 @@ const Ekzaehleinheit = ({ treeName }) => {
                   <Select
                     name="zaehleinheitId"
                     label="Zähleinheit"
-                    options={get(
-                      dataLists,
-                      'allTpopkontrzaehlEinheitWertes.nodes',
-                      [],
-                    )}
+                    options={
+                      dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+                    }
                     loading={loadingLists}
                     handleSubmit={handleSubmit}
                   />
