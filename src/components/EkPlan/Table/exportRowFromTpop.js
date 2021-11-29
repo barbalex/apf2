@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import sum from 'lodash/sum'
 
 import appBaseUrl from '../../../modules/appBaseUrl'
@@ -70,11 +69,7 @@ const exportRowFromTpop = ({ tpop, years, store }) => {
   if (fields.includes('ekfrequenz')) {
     let ekfrequenz = tpop?.ekfrequenz ?? null
     if (ekfrequenz) {
-      ekfrequenz = get(
-        ekfrequenzs.find((f) => f.id === ekfrequenz),
-        'code',
-        null,
-      )
+      ekfrequenz = ekfrequenzs.find((f) => f.id === ekfrequenz)?.code ?? null
     }
     row.ekfrequenz = ekfrequenz
   }

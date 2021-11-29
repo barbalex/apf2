@@ -1,18 +1,16 @@
-import get from 'lodash/get'
-
 import fields from './fields'
 import appBaseUrl from '../../../modules/appBaseUrl'
 
 const isOdd = (num) => num % 2 === 0
 
 const tpopRowFromTpop = ({ tpop, index }) => {
-  let lv95X = get(tpop, 'lv95X')
+  let lv95X = tpop?.lv95X
   if (lv95X && lv95X.toLocaleString) {
     lv95X = lv95X.toLocaleString('de-ch')
   } else {
     lv95X = '-'
   }
-  let lv95Y = get(tpop, 'lv95Y')
+  let lv95Y = tpop?.lv95Y
   if (lv95Y && lv95Y.toLocaleString) {
     lv95Y = lv95Y.toLocaleString('de-ch')
   } else {
@@ -23,42 +21,42 @@ const tpopRowFromTpop = ({ tpop, index }) => {
     isOdd: isOdd(index),
     id: tpop.id,
     tpop: tpop,
-    apId: get(tpop, 'popByPopId.apByApId.id'),
+    apId: tpop?.popByPopId?.apByApId?.id,
     ap: {
       ...fields.ap,
-      value: get(tpop, 'popByPopId.apByApId.label'),
+      value: tpop?.popByPopId?.apByApId?.label,
     },
     popNr: {
       ...fields.popNr,
-      value: get(tpop, 'popByPopId.nr') || '-',
+      value: tpop?.popByPopId?.nr ?? '-',
     },
     popName: {
       ...fields.popName,
-      value: get(tpop, 'popByPopId.name') || '-',
+      value: tpop?.popByPopId?.name ?? '-',
     },
     popStatus: {
       ...fields.popStatus,
-      value: get(tpop, 'popByPopId.popStatusWerteByStatus.text') || '-',
+      value: tpop?.popByPopId?.popStatusWerteByStatus?.text ?? '-',
     },
     nr: {
       ...fields.nr,
-      value: get(tpop, 'nr') || '-',
+      value: tpop?.nr ?? '-',
     },
     gemeinde: {
       ...fields.gemeinde,
-      value: get(tpop, 'gemeinde') || '-',
+      value: tpop?.gemeinde ?? '-',
     },
     flurname: {
       ...fields.flurname,
-      value: get(tpop, 'flurname') || '-',
+      value: tpop?.flurname ?? '-',
     },
     status: {
       ...fields.status,
-      value: get(tpop, 'popStatusWerteByStatus.text') || '-',
+      value: tpop?.popStatusWerteByStatus?.text ?? '-',
     },
     bekanntSeit: {
       ...fields.bekanntSeit,
-      value: get(tpop, 'bekanntSeit') || '-',
+      value: tpop?.bekanntSeit ?? '-',
     },
     lv95X: {
       ...fields.lv95X,
@@ -88,15 +86,15 @@ const tpopRowFromTpop = ({ tpop, index }) => {
     },
     ekfrequenz: {
       ...fields.ekfrequenz,
-      value: get(tpop, 'ekfrequenz') || null,
+      value: tpop?.ekfrequenz ?? null,
     },
     ekfrequenzStartjahr: {
       ...fields.ekfrequenzStartjahr,
-      value: get(tpop, 'ekfrequenzStartjahr') || null,
+      value: tpop?.ekfrequenzStartjahr ?? null,
     },
     ekfrequenzAbweichend: {
       ...fields.ekfrequenzAbweichend,
-      value: get(tpop, 'ekfrequenzAbweichend') === true,
+      value: tpop?.ekfrequenzAbweichend === true,
     },
     yearTitle: fields.yearTitle,
   }

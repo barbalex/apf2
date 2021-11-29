@@ -124,7 +124,6 @@ const EkPlanTable = () => {
   const {
     aps,
     apValues,
-    showCount,
     fields: fieldsShown,
     yearMenuAnchor,
     setEkfrequenzs,
@@ -290,11 +289,10 @@ const EkPlanTable = () => {
         yearRowFromTpop({
           tpop,
           years,
-          showCount,
           index,
         }),
       ),
-    [tpops, years, showCount],
+    [tpops, years],
   )
   const yearColumns = yearRows.length
     ? sortBy(
