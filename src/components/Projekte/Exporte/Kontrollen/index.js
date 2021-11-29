@@ -267,31 +267,22 @@ const Kontrollen = () => {
                 (n) => ({
                   apId: n?.tpopByTpopId?.popByPopId?.apByApId?.id ?? null,
                   apFamilie:
-                    get(
-                      n,
-                      'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.familie',
-                    ) ?? null,
+                    n?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId
+                      ?.familie ?? null,
                   apArtname:
-                    get(
-                      n,
-                      'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.artname',
-                    ) ?? null,
+                    n?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId
+                      ?.artname ?? null,
                   apBearbeitung:
-                    get(
-                      n,
-                      'tpopByTpopId.popByPopId.apByApId.apBearbstandWerteByBearbeitung.text',
-                    ) ?? null,
+                    n?.tpopByTpopId?.popByPopId?.apByApId
+                      ?.apBearbstandWerteByBearbeitung?.text ?? null,
                   apStartJahr:
-                    get(n, 'tpopByTpopId.popByPopId.apByApId.startJahr') ??
-                    null,
+                    n?.tpopByTpopId?.popByPopId?.apByApId?.startJahr ?? null,
                   apUmsetzung:
-                    get(
-                      n,
-                      'tpopByTpopId.popByPopId.apByApId.apUmsetzungWerteByUmsetzung.text',
-                    ) ?? null,
-                  popId: get(n, 'tpopByTpopId.popByPopId.id') ?? null,
-                  popNr: get(n, 'tpopByTpopId.popByPopId.nr') ?? null,
-                  popName: get(n, 'tpopByTpopId.popByPopId.name') ?? null,
+                    n?.tpopByTpopId?.popByPopId?.apByApId
+                      ?.apUmsetzungWerteByUmsetzung?.text ?? null,
+                  popId: n?.tpopByTpopId?.popByPopId?.id ?? null,
+                  popNr: n?.tpopByTpopId?.popByPopId?.nr ?? null,
+                  popName: n?.tpopByTpopId?.popByPopId?.name ?? null,
                   popStatus:
                     get(
                       n,

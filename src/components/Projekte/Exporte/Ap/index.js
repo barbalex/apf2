@@ -443,17 +443,17 @@ const AP = () => {
       anz_pop_urspr_zuvor:
         z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopUrsprZuvor ?? '',
       anz_pop_anges_zuvor:
-        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAngesZuvor') ?? '',
+        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopAngesZuvor ?? '',
 
       anz_pop_aktuell_zuvor:
-        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAktuellZuvor') ?? '',
+        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopAktuellZuvor ?? '',
       anz_pop_ursp_zuletzt:
-        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopUrsprZuletzt') ?? '',
+        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopUrsprZuletzt ?? '',
       anz_pop_anges_zuletzt:
-        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAngesZuletzt') ?? '',
+        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopAngesZuletzt ?? '',
       anz_pop_aktuell_zuletzt:
-        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAktuellZuletzt') ?? '',
-      diff_pop_urspr: get(z, 'vApPopEkPriosByApId.nodes[0].diffPopUrspr') ?? '',
+        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopAktuellZuletzt ?? '',
+      diff_pop_urspr: z?.vApPopEkPriosByApId?.nodes?.[0]?.diffPopUrspr ?? '',
       diff_pop_anges: get(z, 'vApPopEkPriosByApId.nodes[0].diffPopAnges') ?? '',
       diff_pop_aktuell:
         get(z, 'vApPopEkPriosByApId.nodes[0].diffPopAktuell') ?? '',

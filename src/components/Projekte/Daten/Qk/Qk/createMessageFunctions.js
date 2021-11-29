@@ -183,10 +183,9 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       text: `Erfolgskriterium: ${n.id}`,
     })),
   erfkritOhneKriterien: () =>
-    get(
-      data,
-      'erfkritOhneKriterien.apsByProjId.nodes[0].erfkritsByApId.nodes',
-      [],
+    (
+      data?.erfkritOhneKriterien?.apsByProjId?.nodes?.[0]?.erfkritsByApId
+        ?.nodes ?? []
     ).map((n) => ({
       url: [
         'Projekte',
@@ -199,26 +198,24 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       text: `Erfolgskriterium: ${n.id}`,
     })),
   apberOhneJahr: () =>
-    get(data, 'apberOhneJahr.apsByProjId.nodes[0].apbersByApId.nodes', []).map(
-      (n) => ({
-        url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
-        text: `AP-Bericht: ${n.id}`,
-      }),
-    ),
+    (
+      data?.apberOhneJahr?.apsByProjId?.nodes?.[0]?.apbersByApId?.nodes ?? []
+    ).map((n) => ({
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
+      text: `AP-Bericht: ${n.id}`,
+    })),
   apberOhneVergleichVorjahrGesamtziel: () =>
-    get(
-      data,
-      'apberOhneVergleichVorjahrGesamtziel.apsByProjId.nodes[0].apbersByApId.nodes',
-      [],
+    (
+      data?.apberOhneVergleichVorjahrGesamtziel?.apsByProjId?.nodes?.[0]
+        ?.apbersByApId?.nodes ?? []
     ).map((n) => ({
       url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
       text: `AP-Bericht: ${n.jahr || n.id}`,
     })),
   apberOhneBeurteilung: () =>
-    get(
-      data,
-      'apberOhneBeurteilung.apsByProjId.nodes[0].apbersByApId.nodes',
-      [],
+    (
+      data?.apberOhneBeurteilung?.apsByProjId?.nodes?.[0]?.apbersByApId
+        ?.nodes ?? []
     ).map((n) => ({
       url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
       text: `AP-Bericht: ${n.jahr || n.id}`,
