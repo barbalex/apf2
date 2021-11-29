@@ -37,8 +37,8 @@ const PopMarker = ({ treeName, pop }) => {
     store[treeName]
   const { idsFiltered, popIcon: popIconName, popLabel: popLabelName } = map
   const projId =
-    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+    projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
 
   const nrLabel = pop.nr ? pop.nr.toString() : '(keine Nr)'
   let title = nrLabel

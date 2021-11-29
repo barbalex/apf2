@@ -22,8 +22,8 @@ const Line = ({ treeName, beob }) => {
   const { openTree2WithActiveNodeArray } = store
   const { projIdInActiveNodeArray, apIdInActiveNodeArray } = store[treeName]
   const projId =
-    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+    projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
   const { idsFiltered } = store[treeName].map
 
   const isHighlighted = idsFiltered.includes(beob.id)
@@ -44,10 +44,10 @@ const Line = ({ treeName, beob }) => {
   let datum = '(kein Datum)'
   if (!isValid(new Date(beob.datum))) {
     datum = '(ungültiges Datum)'
-  } else if (!!beob.datum) {
+  } else if (beob.datum) {
     datum = format(new Date(beob.datum), 'yyyy.MM.dd')
   }
-  const autor = beob.autor || '(kein Autor)'
+  const autor = beob.autor ?? '(kein Autor)'
   const quelle = get(beob, 'quelle', '')
 
   const popId = get(beob, 'tpopByTpopId.popId', '')

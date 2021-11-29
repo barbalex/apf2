@@ -15,8 +15,8 @@ const BeobZugeordnetAssignPolylines = ({ treeName }) => {
   const { projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
 
   const projId =
-    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+    projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes(
     'beobZugeordnetAssignPolylines',
   )
@@ -26,7 +26,7 @@ const BeobZugeordnetAssignPolylines = ({ treeName }) => {
     nichtZuordnen: { equalTo: false },
     wgs84Lat: { isNull: false },
   }
-  if (!!tree.nodeLabelFilter.beob) {
+  if (tree.nodeLabelFilter.beob) {
     beobFilter.label = {
       includesInsensitive: tree.nodeLabelFilter.beob,
     }
