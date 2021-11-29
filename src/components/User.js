@@ -18,7 +18,6 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
@@ -116,7 +115,7 @@ const User = () => {
       idb.currentUser.clear()
       await idb.currentUser.put({
         name,
-        token: get(result, 'data.login.jwtToken'),
+        token: result?.data?.login?.jwtToken,
       })
       // this is easiest way to make sure everything is correct
       // as client is rebuilt with new settings

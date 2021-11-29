@@ -4,7 +4,6 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import storeContext from '../../../storeContext'
 
@@ -65,7 +64,7 @@ const CellHeaderYear = ({ style, column, rows }) => {
     return (
       rows.filter(
         (row) =>
-          get(row, 'tpop.tpopkontrsByTpopId.nodes', []).filter(
+          (row?.tpop?.tpopkontrsByTpopId?.nodes ?? []).filter(
             (node) => node.jahr === column,
           ).length > 0,
       ).length > 0
@@ -76,7 +75,7 @@ const CellHeaderYear = ({ style, column, rows }) => {
     return (
       rows.filter(
         (row) =>
-          get(row, 'tpop.tpopmassnsByTpopId.nodes', []).filter(
+          (row?.tpop?.tpopmassnsByTpopId?.nodes ?? []).filter(
             (node) => node.jahr === column,
           ).length > 0,
       ).length > 0
@@ -87,7 +86,7 @@ const CellHeaderYear = ({ style, column, rows }) => {
     return (
       rows.filter(
         (row) =>
-          get(row, 'tpop.ekplansByTpopId.nodes', []).filter(
+          (row?.tpop?.ekplansByTpopId?.nodes ?? []).filter(
             (node) => node.jahr === column,
           ).length > 0,
       ).length > 0

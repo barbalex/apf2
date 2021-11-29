@@ -1,7 +1,6 @@
 import React, { useContext, useCallback, useRef } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
@@ -86,7 +85,7 @@ const EkPlan = ({ setShowChoose }) => {
   const error = useRef({})
   const loadOptions = useCallback(
     async (inputValue, cb) => {
-      const filter = !!inputValue
+      const filter = inputValue
         ? {
             label: { includesInsensitive: inputValue },
             id: { notIn: apValues },
@@ -109,7 +108,7 @@ const EkPlan = ({ setShowChoose }) => {
         error.current = err
       }
       data.current = result.data
-      const options = get(data.current, 'allAps.nodes', [])
+      const options = data.current?.allAps?.nodes ?? []
       cb(options)
     },
     [apValues, client, projId],
@@ -157,7 +156,7 @@ const EkPlan = ({ setShowChoose }) => {
         />
         {error.current && <Error>{error.current.message}</Error>}
       </SelectContainer>
-    </ErrorBoundary> 
+    </ErrorBoundary>
   )
 }
 
