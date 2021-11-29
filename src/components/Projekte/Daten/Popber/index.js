@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -62,7 +61,7 @@ const Popber = ({ treeName }) => {
     error: errorLists,
   } = useQuery(queryLists)
 
-  const row = get(data, 'popberById', {})
+  const row = useMemo(() => data?.popberById ?? {}, [data?.popberById])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -143,7 +142,7 @@ const Popber = ({ treeName }) => {
     <ErrorBoundary>
       <Container>
         <FormTitle
-          apId={get(data, 'popberById.popByPopId.apId')}
+          apId={data?.popberById?.popByPopId?.apId}
           title="Kontroll-Bericht Population"
           treeName={treeName}
           table="popber"
@@ -167,11 +166,9 @@ const Popber = ({ treeName }) => {
                   <RadioButtonGroup
                     name="entwicklung"
                     label="Entwicklung"
-                    dataSource={get(
-                      dataLists,
-                      'allTpopEntwicklungWertes.nodes',
-                      [],
-                    )}
+                    dataSource={
+                      dataLists?.allTpopEntwicklungWertes?.nodes ?? []
+                    }
                     loading={loadingLists}
                     handleSubmit={handleSubmit}
                   />

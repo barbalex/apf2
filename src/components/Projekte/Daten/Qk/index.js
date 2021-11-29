@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useState } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
@@ -51,22 +50,21 @@ const QkForm = ({ treeName }) => {
    * DO NOT get allQks.nodes.apqksByQkName.totalCount
    * AS THIS IS NEVER UPDATED
    */
-  const allQks = get(data, 'allQks.nodes') || []
+  const allQks = data?.allQks.nodes ?? []
   const qks = allQks.filter(
-    (qk) =>
-      !!(get(data, 'allApqks.nodes') || []).find((no) => no.qkName === qk.name),
+    (qk) => !!(data?.allApqks?.nodes ?? []).find((no) => no.qkName === qk.name),
   )
   const qkNameQueries = Object.fromEntries(
     allQks.map((n) => [
       n.name,
-      !!(get(data, 'allApqks.nodes') || []).find((no) => no.qkName === n.name),
+      !!(data?.allApqks?.nodes ?? []).find((no) => no.qkName === n.name),
     ]),
   )
 
-  const qkCount = loading ? '...' : get(data, 'allQks.totalCount')
-  const apqkCount = loading ? '...' : get(data, 'allApqks.totalCount')
+  const qkCount = loading ? '...' : data?.allQks?.totalCount
+  const apqkCount = loading ? '...' : data?.allApqks?.totalCount
 
-  const [tab, setTab] = useState(get(urlQuery, 'qkTab', 'qk'))
+  const [tab, setTab] = useState(urlQuery?.qkTab ?? 'qk')
   const onChangeTab = useCallback(
     (event, value) => {
       setUrlQueryValue({
