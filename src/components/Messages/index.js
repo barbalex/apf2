@@ -3,7 +3,6 @@ import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
@@ -52,13 +51,13 @@ const UserMessages = () => {
     variables: { name: userName, aYearAgo },
   })
   // ensure username exists
-  const userNames = (get(data, 'allUsers.nodes') || []).map((u) => u.name)
+  const userNames = (data?.allUsers?.nodes ?? []).map((u) => u.name)
   const userNameExists = userNames.includes(userName)
   // DANGER: if no userName or non-existing, results are returned!
   const allMessages =
-    userName && userNameExists ? get(data, 'allMessages.nodes', []) : []
+    userName && userNameExists ? data?.allMessages?.nodes ?? [] : []
   const unreadMessages = allMessages.filter(
-    (m) => get(m, 'usermessagesByMessageId.totalCount', 0) === 0,
+    (m) => (m?.usermessagesByMessageId?.totalCount ?? 0) === 0,
   )
 
   const onClickReadAll = useCallback(async () => {

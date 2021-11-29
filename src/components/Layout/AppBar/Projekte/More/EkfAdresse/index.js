@@ -1,6 +1,5 @@
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 
@@ -37,7 +36,7 @@ const EkfAdresse = ({ closeMenu }) => {
       <Select
         value={''}
         label="EKF sehen als"
-        options={get(data, 'allAdresses.nodes', [])}
+        options={data?.allAdresses?.nodes ?? []}
         loading={loading}
         saveToDb={choose}
         maxHeight={120}

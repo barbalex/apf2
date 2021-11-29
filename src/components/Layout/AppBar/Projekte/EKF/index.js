@@ -6,7 +6,6 @@ import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { Link } from 'gatsby'
-import get from 'lodash/get'
 import { MdPrint, MdHourglassEmpty } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Badge from '@mui/material/Badge'
@@ -109,7 +108,7 @@ const ProjekteAppBar = () => {
         ekfAdresseId || userAdresseId || '99999999-9999-9999-9999-999999999999',
     },
   })
-  const adresseName = get(data, 'adresseById.name') || null
+  const adresseName = data?.adresseById?.name ?? null
   const ekfCount = ekfIds.length
 
   const [userOpen, setUserOpen] = useState(false)
@@ -156,9 +155,10 @@ const ProjekteAppBar = () => {
       urlQuery,
     ],
   )
-  const onClickExporte = useCallback(() => onClickButton('exporte'), [
-    onClickButton,
-  ])
+  const onClickExporte = useCallback(
+    () => onClickButton('exporte'),
+    [onClickButton],
+  )
   const setViewNormal = useCallback(() => setView('normal'), [setView])
   const toggleUserOpen = useCallback(() => setUserOpen(!userOpen), [userOpen])
 
