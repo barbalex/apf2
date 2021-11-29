@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import camelCase from 'lodash/camelCase'
 import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
@@ -60,7 +59,10 @@ const Werte = ({ treeName, table }) => {
     },
   })
 
-  const row = get(data, `${tableCamelCased}ById`, {})
+  const row = useMemo(
+    () => data?.[`${tableCamelCased}ById`] ?? {},
+    [data, tableCamelCased],
+  )
 
   let codeGqlType = 'Int'
   let codeFieldType = 'number'

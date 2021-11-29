@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -127,7 +126,7 @@ const User = ({ treeName }) => {
     error: errorAdresses,
   } = useQuery(queryAdresses, { variables: { id } })
 
-  const row = get(data, 'userById', {})
+  const row = data?.userById ?? {}
 
   const thisYear = new Date().getFullYear()
   const { data: dataEkfTpops, refetch: refetchEkfTpops } = useQuery(
@@ -140,10 +139,10 @@ const User = ({ treeName }) => {
       },
     },
   )
-  const ekfTpops = get(dataEkfTpops, 'ekfTpops.nodes') || []
+  const ekfTpops = dataEkfTpops?.ekfTpops?.nodes ?? []
   const hasEkfTpops = !!ekfTpops.length
   const ekfTpopsWithoutEkfThisYear = ekfTpops
-    .filter((e) => get(e, 'ekfInJahr.totalCount') === 0)
+    .filter((e) => e?.ekfInJahr?.totalCount === 0)
     .map((e) => e.id)
   const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
 
@@ -416,7 +415,7 @@ const User = ({ treeName }) => {
                 value={row.adresseId}
                 field="adresseId"
                 label="Zugehörige Adresse"
-                options={get(dataAdresses, 'allAdresses.nodes', [])}
+                options={dataAdresses?.allAdresses?.nodes ?? []}
                 loading={loadingAdresses}
                 saveToDb={saveToDb}
                 error={errors.adresseId}
