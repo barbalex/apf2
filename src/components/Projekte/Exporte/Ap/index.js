@@ -605,17 +605,15 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allZielbers.nodes', []).map((z) => ({
-      ap_id: get(z, 'zielByZielId.apByApId.id') ?? '',
-      artname: get(z, 'zielByZielId.apByApId.aeTaxonomyByArtId.artname') ?? '',
+    const rows = (result.data?.allZielbers?.nodes ?? []).map((z) => ({
+      ap_id: z?.zielByZielId?.apByApId?.id ?? '',
+      artname: z?.zielByZielId?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
       ap_bearbeitung:
-        get(z, 'zielByZielId.apByApId.apBearbstandWerteByBearbeitung.text') ??
-        '',
-      ap_start_jahr: get(z, 'zielByZielId.apByApId.startJahr') ?? '',
+        z?.zielByZielId?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
+      ap_start_jahr: z?.zielByZielId?.apByApId?.startJahr ?? '',
       ap_umsetzung:
-        get(z, 'zielByZielId.apByApId.apUmsetzungWerteByUmsetzung.text') ?? '',
-      ap_bearbeiter:
-        get(z, 'zielByZielId.apByApId.adresseByBearbeiter.name') ?? '',
+        z?.zielByZielId?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
+      ap_bearbeiter: z?.zielByZielId?.apByApId?.adresseByBearbeiter?.name ?? '',
       ziel_id: get(z, 'zielByZielId.id') ?? '',
       ziel_jahr: get(z, 'zielByZielId.jahr') ?? '',
       ziel_typ: get(z, 'zielByZielId.zielTypWerteByTyp.text') ?? '',

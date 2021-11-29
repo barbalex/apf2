@@ -250,31 +250,29 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       }),
     ),
   popOhneStatus: () =>
-    get(data, 'popOhneStatus.apsByProjId.nodes[0].popsByApId.nodes', []).map(
+    (data?.popOhneStatus?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []).map(
       (n) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
       }),
     ),
   popOhneBekanntSeit: () =>
-    get(
-      data,
-      'popOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes',
-      [],
+    (
+      data?.popOhneBekanntSeit?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
     ).map((n) => ({
       url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
       text: `Population: ${n.nr || n.id}`,
     })),
   popOhneKoord: () =>
-    get(data, 'popOhneKoord.apsByProjId.nodes[0].popsByApId.nodes', []).map(
+    (data?.popOhneKoord?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []).map(
       (n) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
       }),
     ),
   popOhneTpop: () =>
-    get(data, 'popOhneTpop.apsByProjId.nodes[0].popsByApId.nodes', [])
-      .filter((n) => get(n, 'tpopsByPopId.totalCount') === 0)
+    (data?.popOhneTpop?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? [])
+      .filter((n) => n?.tpopsByPopId?.totalCount === 0)
       .map((n) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
