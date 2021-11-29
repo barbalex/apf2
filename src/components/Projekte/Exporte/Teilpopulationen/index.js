@@ -187,33 +187,33 @@ const Teilpopulationen = ({ treeName }) => {
       })
     }
     const rows = get(result.data, 'allTpops.nodes', []).map((n) => ({
-      apId: get(n, 'popByPopId.apByApId.id') || null,
+      apId: get(n, 'popByPopId.apByApId.id') ?? null,
       apFamilie:
-        get(n, 'popByPopId.apByApId.aeTaxonomyByArtId.familie') || null,
+        get(n, 'popByPopId.apByApId.aeTaxonomyByArtId.familie') ?? null,
       apArtname:
-        get(n, 'popByPopId.apByApId.aeTaxonomyByArtId.artname') || null,
+        get(n, 'popByPopId.apByApId.aeTaxonomyByArtId.artname') ?? null,
       apBearbeitung:
-        get(n, 'popByPopId.apByApId.apBearbstandWerteByBearbeitung.text') ||
+        get(n, 'popByPopId.apByApId.apBearbstandWerteByBearbeitung.text') ??
         null,
-      apStartJahr: get(n, 'popByPopId.apByApId.startJahr') || null,
+      apStartJahr: get(n, 'popByPopId.apByApId.startJahr') ?? null,
       apUmsetzung:
-        get(n, 'popByPopId.apByApId.apUmsetzungWerteByUmsetzung.text') || null,
-      popId: get(n, 'popByPopId.id') || null,
-      popNr: get(n, 'popByPopId.nr') || null,
-      popName: get(n, 'popByPopId.name') || null,
-      popStatus: get(n, 'popByPopId.popStatusWerteByStatus.text') || null,
-      popBekanntSeit: get(n, 'popByPopId.bekanntSeit') || null,
-      popStatusUnklar: get(n, 'popByPopId.statusUnklar') || null,
+        get(n, 'popByPopId.apByApId.apUmsetzungWerteByUmsetzung.text') ?? null,
+      popId: get(n, 'popByPopId.id') ?? null,
+      popNr: get(n, 'popByPopId.nr') ?? null,
+      popName: get(n, 'popByPopId.name') ?? null,
+      popStatus: get(n, 'popByPopId.popStatusWerteByStatus.text') ?? null,
+      popBekanntSeit: get(n, 'popByPopId.bekanntSeit') ?? null,
+      popStatusUnklar: get(n, 'popByPopId.statusUnklar') ?? null,
       popStatusUnklarBegruendung:
-        get(n, 'popByPopId.statusUnklarBegruendung') || null,
-      popX: get(n, 'popByPopId.x') || null,
-      popY: get(n, 'popByPopId.y') || null,
+        get(n, 'popByPopId.statusUnklarBegruendung') ?? null,
+      popX: get(n, 'popByPopId.x') ?? null,
+      popY: get(n, 'popByPopId.y') ?? null,
       id: n.id,
       nr: n.nr,
       gemeinde: n.gemeinde,
       flurname: n.flurname,
       status: n.status,
-      statusDecodiert: get(n, 'popStatusWerteByStatus.text') || null,
+      statusDecodiert: get(n, 'popStatusWerteByStatus.text') ?? null,
       bekanntSeit: n.bekanntSeit,
       statusUnklar: n.statusUnklar,
       statusUnklarGrund: n.statusUnklarGrund,
@@ -235,7 +235,7 @@ const Teilpopulationen = ({ treeName }) => {
       bewirtschaftung: n.bewirtschaftung,
       ekfrequenz: n.ekfrequenz,
       ekfrequenzAbweichend: n.ekfrequenzAbweichend,
-      ekfKontrolleur: get(n, 'adresseByEkfKontrolleur.name') || null,
+      ekfKontrolleur: get(n, 'adresseByEkfKontrolleur.name') ?? null,
       changed: n.changed,
       changedBy: n.changedBy,
     }))

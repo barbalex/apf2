@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -55,7 +54,7 @@ const Zielber = ({ treeName }) => {
     },
   })
 
-  const row = get(data, 'zielberById', {})
+  const row = useMemo(() => data?.zielberById ?? {}, [data?.zielberById])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
