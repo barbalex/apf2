@@ -117,12 +117,12 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allAps.nodes', []).map((n) => ({
+    const rows = (result.data?.allAps?.nodes ?? []).map((n) => ({
       id: n.id,
-      artname: get(n, 'aeTaxonomyByArtId.artname') || null,
-      bearbeitung: get(n, 'apBearbstandWerteByBearbeitung.text') || null,
+      artname: n?.aeTaxonomyByArtId?.artname ?? null,
+      bearbeitung: n?.apBearbstandWerteByBearbeitung?.text ?? null,
       startJahr: n.startJahr,
-      umsetzung: get(n, 'apUmsetzungWerteByUmsetzung.text') || null,
+      umsetzung: n?.apUmsetzungWerteByUmsetzung?.text ?? null,
       changed: n.changed,
       changedBy: n.changedBy,
     }))
@@ -171,14 +171,14 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allAps.nodes', [])
-      .filter((z) => get(z, 'popsByApId.totalCount') === 0)
+    const rows = (result.data?.allAps?.nodes ?? [])
+      .filter((z) => z?.popsByApId?.totalCount === 0)
       .map((z) => ({
         id: z.id,
-        artname: get(z, 'aeTaxonomyByArtId.artname') || '',
-        bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+        artname: z?.aeTaxonomyByArtId.artname ?? '',
+        bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
         start_jahr: z.startJahr,
-        umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
+        umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
       }))
     removeNotification(notif)
     closeSnackbar(notif)
@@ -218,14 +218,14 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allAps.nodes', []).map((z) => ({
+    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
       id: z.id,
-      artname: get(z, 'aeTaxonomyByArtId.artname') || '',
-      bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+      artname: z?.aeTaxonomyByArtId?.artname ?? '',
+      bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
       start_jahr: z.startJahr,
-      umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
+      umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
       anzahl_kontrollen:
-        get(z, 'vApAnzmassnsById.nodes[0].anzahlMassnahmen') || '',
+        z?.vApAnzmassnsById?.nodes?.[0]?.anzahlMassnahmen ?? '',
     }))
     removeNotification(notif)
     closeSnackbar(notif)
@@ -265,14 +265,14 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allAps.nodes', []).map((z) => ({
+    const rows = (result.data?.allAps.nodes ?? []).map((z) => ({
       id: z.id,
-      artname: get(z, 'aeTaxonomyByArtId.artname') || '',
-      bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+      artname: z?.aeTaxonomyByArtId?.artname ?? '',
+      bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
       start_jahr: z.startJahr,
-      umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
+      umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
       anzahl_kontrollen:
-        get(z, 'vApAnzkontrsById.nodes[0].anzahlKontrollen') || '',
+        z?.vApAnzkontrsById?.nodes?.[0]?.anzahlKontrollen ?? '',
     }))
     removeNotification(notif)
     closeSnackbar(notif)
@@ -312,15 +312,15 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allApbers.nodes', []).map((z) => ({
+    const rows = (result.data?.allApbers?.nodes ?? []).map((z) => ({
       id: z.id,
       ap_id: z.apId,
-      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
+      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
       jahr: z.jahr,
       situation: z.situation,
       vergleich_vorjahr_gesamtziel: z.vergleichVorjahrGesamtziel,
       beurteilung: z.beurteilung,
-      beurteilung_decodiert: get(z, 'apErfkritWerteByBeurteilung.text') || '',
+      beurteilung_decodiert: z?.apErfkritWerteByBeurteilung?.text ?? '',
       veraenderung_zum_vorjahr: z.veraenderungZumVorjahr,
       apber_analyse: z.apberAnalyse,
       konsequenzen_umsetzung: z.konsequenzenUmsetzung,
@@ -335,7 +335,7 @@ const AP = () => {
       massnahmen_planung_vs_ausfuehrung: z.massnahmenPlanungVsAusfuehrung,
       datum: z.datum,
       bearbeiter: z.bearbeiter,
-      bearbeiter_decodiert: get(z, 'adresseByBearbeiter.name') || '',
+      bearbeiter_decodiert: z?.adresseByBearbeiter?.name ?? '',
     }))
     removeNotification(notif)
     closeSnackbar(notif)
@@ -375,20 +375,20 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allAps.nodes', []).map((z) => ({
+    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
       ap_id: z.id,
-      artname: get(z, 'aeTaxonomyByArtId.artname') || '',
-      ap_bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+      artname: z?.aeTaxonomyByArtId?.artname ?? '',
+      ap_bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
       ap_start_jahr: z.startJahr,
-      ap_umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
-      ap_bearbeiter: get(z, 'adresseByBearbeiter.name') || '',
-      artwert: get(z, 'aeTaxonomyByArtId.artwert') || '',
-      massn_jahr: get(z, 'vApApberundmassnsById.nodes[0].massnJahr') || '',
-      massn_anzahl: get(z, 'vApApberundmassnsById.nodes[0].massnAnzahl') || '',
+      ap_umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
+      ap_bearbeiter: z?.adresseByBearbeiter?.name ?? '',
+      artwert: z?.aeTaxonomyByArtId?.artwert ?? '',
+      massn_jahr: z?.vApApberundmassnsById?.nodes?.[0]?.massnJahr ?? '',
+      massn_anzahl: z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahl ?? '',
       massn_anzahl_bisher:
-        get(z, 'vApApberundmassnsById.nodes[0].massnAnzahlBisher') || '',
+        z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahlBisher ?? '',
       bericht_erstellt:
-        get(z, 'vApApberundmassnsById.nodes[0].berichtErstellt') || '',
+        z?.vApApberundmassnsById?.nodes?.[0]?.berichtErstellt ?? '',
       changed: z.changed,
       changed_by: z.changedBy,
     }))
@@ -430,35 +430,35 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allAps.nodes', []).map((z) => ({
+    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
       ap_id: z.id,
-      artname: get(z, 'aeTaxonomyByArtId.artname') || '',
-      ap_bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+      artname: z?.aeTaxonomyByArtId.artname ?? '',
+      ap_bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
       ap_start_jahr: z.startJahr,
-      ap_umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
-      ap_bearbeiter: get(z, 'adresseByBearbeiter.name') || '',
-      artwert: get(z, 'aeTaxonomyByArtId.artwert') || '',
-      jahr_zuvor: get(z, 'vApPopEkPriosByApId.nodes[0].jahrZuvor') || '',
-      jahr_zuletzt: get(z, 'vApPopEkPriosByApId.nodes[0].jahrZuletzt') || '',
+      ap_umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
+      ap_bearbeiter: z?.adresseByBearbeiter?.name ?? '',
+      artwert: z?.aeTaxonomyByArtId?.artwert ?? '',
+      jahr_zuvor: z?.vApPopEkPriosByApId?.nodes?.[0]?.jahrZuvor ?? '',
+      jahr_zuletzt: z?.vApPopEkPriosByApId?.nodes?.[0]?.jahrZuletzt ?? '',
       anz_pop_urspr_zuvor:
-        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopUrsprZuvor') || '',
+        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopUrsprZuvor ?? '',
       anz_pop_anges_zuvor:
-        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAngesZuvor') || '',
+        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAngesZuvor') ?? '',
 
       anz_pop_aktuell_zuvor:
-        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAktuellZuvor') || '',
+        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAktuellZuvor') ?? '',
       anz_pop_ursp_zuletzt:
-        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopUrsprZuletzt') || '',
+        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopUrsprZuletzt') ?? '',
       anz_pop_anges_zuletzt:
-        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAngesZuletzt') || '',
+        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAngesZuletzt') ?? '',
       anz_pop_aktuell_zuletzt:
-        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAktuellZuletzt') || '',
-      diff_pop_urspr: get(z, 'vApPopEkPriosByApId.nodes[0].diffPopUrspr') || '',
-      diff_pop_anges: get(z, 'vApPopEkPriosByApId.nodes[0].diffPopAnges') || '',
+        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAktuellZuletzt') ?? '',
+      diff_pop_urspr: get(z, 'vApPopEkPriosByApId.nodes[0].diffPopUrspr') ?? '',
+      diff_pop_anges: get(z, 'vApPopEkPriosByApId.nodes[0].diffPopAnges') ?? '',
       diff_pop_aktuell:
-        get(z, 'vApPopEkPriosByApId.nodes[0].diffPopAktuell') || '',
+        get(z, 'vApPopEkPriosByApId.nodes[0].diffPopAktuell') ?? '',
       beurteilung_zuletzt:
-        get(z, 'vApPopEkPriosByApId.nodes[0].beurteilungZuletzt') || '',
+        get(z, 'vApPopEkPriosByApId.nodes[0].beurteilungZuletzt') ?? '',
     }))
     removeNotification(notif)
     closeSnackbar(notif)
@@ -557,15 +557,15 @@ const AP = () => {
     }
     const rows = get(result.data, 'allZiels.nodes', []).map((z) => ({
       ap_id: z.id,
-      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
+      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') ?? '',
       ap_bearbeitung:
-        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') || '',
-      ap_start_jahr: get(z, 'apByApId.startJahr') || '',
-      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') || '',
-      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') || '',
+        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') ?? '',
+      ap_start_jahr: get(z, 'apByApId.startJahr') ?? '',
+      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') ?? '',
+      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') ?? '',
       id: z.id,
       jahr: z.jahr,
-      typ: get(z, 'zielTypWerteByTyp.text') || '',
+      typ: get(z, 'zielTypWerteByTyp.text') ?? '',
       bezeichnung: z.bezeichnung,
     }))
     removeNotification(notif)
@@ -607,20 +607,20 @@ const AP = () => {
       })
     }
     const rows = get(result.data, 'allZielbers.nodes', []).map((z) => ({
-      ap_id: get(z, 'zielByZielId.apByApId.id') || '',
-      artname: get(z, 'zielByZielId.apByApId.aeTaxonomyByArtId.artname') || '',
+      ap_id: get(z, 'zielByZielId.apByApId.id') ?? '',
+      artname: get(z, 'zielByZielId.apByApId.aeTaxonomyByArtId.artname') ?? '',
       ap_bearbeitung:
-        get(z, 'zielByZielId.apByApId.apBearbstandWerteByBearbeitung.text') ||
+        get(z, 'zielByZielId.apByApId.apBearbstandWerteByBearbeitung.text') ??
         '',
-      ap_start_jahr: get(z, 'zielByZielId.apByApId.startJahr') || '',
+      ap_start_jahr: get(z, 'zielByZielId.apByApId.startJahr') ?? '',
       ap_umsetzung:
-        get(z, 'zielByZielId.apByApId.apUmsetzungWerteByUmsetzung.text') || '',
+        get(z, 'zielByZielId.apByApId.apUmsetzungWerteByUmsetzung.text') ?? '',
       ap_bearbeiter:
-        get(z, 'zielByZielId.apByApId.adresseByBearbeiter.name') || '',
-      ziel_id: get(z, 'zielByZielId.id') || '',
-      ziel_jahr: get(z, 'zielByZielId.jahr') || '',
-      ziel_typ: get(z, 'zielByZielId.zielTypWerteByTyp.text') || '',
-      ziel_bezeichnung: get(z, 'zielByZielId.bezeichnung') || '',
+        get(z, 'zielByZielId.apByApId.adresseByBearbeiter.name') ?? '',
+      ziel_id: get(z, 'zielByZielId.id') ?? '',
+      ziel_jahr: get(z, 'zielByZielId.jahr') ?? '',
+      ziel_typ: get(z, 'zielByZielId.zielTypWerteByTyp.text') ?? '',
+      ziel_bezeichnung: get(z, 'zielByZielId.bezeichnung') ?? '',
       id: z.id,
       jahr: z.jahr,
       erreichung: z.erreichung,
@@ -668,14 +668,14 @@ const AP = () => {
     }
     const rows = get(result.data, 'allErfkrits.nodes', []).map((z) => ({
       ap_id: z.apId,
-      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
+      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') ?? '',
       ap_bearbeitung:
-        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') || '',
-      ap_start_jahr: get(z, 'apByApId.startJahr') || '',
-      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') || '',
-      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') || '',
+        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') ?? '',
+      ap_start_jahr: get(z, 'apByApId.startJahr') ?? '',
+      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') ?? '',
+      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') ?? '',
       id: z.id,
-      beurteilung: get(z, 'apErfkritWerteByErfolg.text') || '',
+      beurteilung: get(z, 'apErfkritWerteByErfolg.text') ?? '',
       kriterien: z.kriterien,
       changed: z.changed,
       changed_by: z.changedBy,
@@ -720,12 +720,12 @@ const AP = () => {
     }
     const rows = get(result.data, 'allIdealbiotops.nodes', []).map((z) => ({
       ap_id: z.apId,
-      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
+      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') ?? '',
       ap_bearbeitung:
-        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') || '',
-      ap_start_jahr: get(z, 'apByApId.startJahr') || '',
-      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') || '',
-      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') || '',
+        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') ?? '',
+      ap_start_jahr: get(z, 'apByApId.startJahr') ?? '',
+      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') ?? '',
+      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') ?? '',
       id: z.id,
       erstelldatum: z.erstelldatum,
       hoehenlage: z.hoehenlage,
@@ -788,14 +788,14 @@ const AP = () => {
     }
     const rows = get(result.data, 'allAssozarts.nodes', []).map((z) => ({
       ap_id: z.apId,
-      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
+      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') ?? '',
       ap_bearbeitung:
-        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') || '',
-      ap_start_jahr: get(z, 'apByApId.startJahr') || '',
-      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') || '',
-      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') || '',
+        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') ?? '',
+      ap_start_jahr: get(z, 'apByApId.startJahr') ?? '',
+      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') ?? '',
+      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') ?? '',
       id: z.id,
-      artname_assoziiert: get(z, 'aeTaxonomyByAeId.artname') || '',
+      artname_assoziiert: get(z, 'aeTaxonomyByAeId.artname') ?? '',
       bemerkungen: z.bemerkungen,
       changed: z.changed,
       changed_by: z.changedBy,

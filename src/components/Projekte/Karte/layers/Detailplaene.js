@@ -45,15 +45,15 @@ const DetailplaeneLayer = () => {
     }
   `)
 
-  const nodes = get(data, 'allDetailplaenes.nodes') || []
+  const nodes = get(data, 'allDetailplaenes.nodes') ?? []
   const detailplaene = nodes.map((n) => ({
     type: 'Feature',
     properties: {
-      Gebiet: n.gebiet || '',
-      FlächenNr: n.fleachennu || '',
-      Substrat: n.substrat || '',
-      PflegeSzp: n.pflege_szp || '',
-      Fläche: n.shape_area || '',
+      Gebiet: n.gebiet ?? '',
+      FlächenNr: n.fleachennu ?? '',
+      Substrat: n.substrat ?? '',
+      PflegeSzp: n.pflege_szp ?? '',
+      Fläche: n.shape_area ?? '',
     },
     geometry: JSON.parse(get(n, 'wkbGeometry.geojson')),
   }))

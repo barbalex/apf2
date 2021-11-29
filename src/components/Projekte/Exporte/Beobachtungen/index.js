@@ -8,7 +8,6 @@ import Icon from '@mui/material/Icon'
 import Button from '@mui/material/Button'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 import { useSnackbar } from 'notistack'
@@ -85,7 +84,7 @@ const Beobachtungen = () => {
         },
       })
     }
-    const rows = get(result.data, 'allVBeobArtChangeds.nodes', [])
+    const rows = result.data?.allVBeobArtChangeds?.nodes ?? []
     removeNotification(notif)
     closeSnackbar(notif)
     if (rows.length === 0) {
@@ -138,7 +137,7 @@ const Beobachtungen = () => {
                   query: queryBeobZugeordnet,
                 })
                 exportModule({
-                  data: get(data, 'allVBeobs.nodes', []),
+                  data: data?.allVBeobs?.nodes ?? [],
                   fileName: 'Beobachtungen',
                   store,
                 })
@@ -171,7 +170,7 @@ const Beobachtungen = () => {
                   query: queryBeobNichtZuzuordnen,
                 })
                 exportModule({
-                  data: get(data, 'allVBeobs.nodes', []),
+                  data: data?.allVBeobs?.nodes ?? [],
                   fileName: 'Beobachtungen',
                   store,
                 })
