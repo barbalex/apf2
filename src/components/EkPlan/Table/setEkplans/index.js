@@ -1,5 +1,3 @@
-import get from 'lodash/get'
-
 import queryEkplans from './queryEkplans'
 import queryEkfrequenz from './queryEkfrequenz'
 import mutationDeleteEkplan from './mutationDeleteEkplan'
@@ -12,7 +10,6 @@ const setEkplans = async ({
   refetchTpop,
   client,
   store,
-  closeSnackbar,
 }) => {
   // TODO:
   // only return if set ekfrequenz has kontrolljahre?
@@ -39,9 +36,8 @@ const setEkplans = async ({
       },
     })
   }
-  const ekplansToDelete = get(
-    ekplansToDeleteResult,
-    'data.allEkplans.nodes',
+  const ekplansToDelete = (
+    ekplansToDeleteResult?.data?.allEkplans?.nodes ?? []
   ).map((e) => e.id)
   // 2. delete them
   for (let id of ekplansToDelete) {
@@ -78,7 +74,7 @@ const setEkplans = async ({
       },
     })
   }
-  const ekfrequenz = get(ekfrequenzsResult, 'data.allEkfrequenzs.nodes.[0]')
+  const ekfrequenz = ekfrequenzsResult?.data?.allEkfrequenzs?.nodes?.[0]
   // 4. add kontrolljahre to ekplan
   const typ = ekfrequenz.ektyp.toUpperCase()
   const kontrolljahre = ekfrequenz.kontrolljahre || []

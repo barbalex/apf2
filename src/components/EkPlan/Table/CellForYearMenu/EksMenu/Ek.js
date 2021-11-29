@@ -8,7 +8,6 @@ import {
   MdExpandLess as CloseIcon,
 } from 'react-icons/md'
 import { FaExternalLinkAlt } from 'react-icons/fa'
-import get from 'lodash/get'
 import styled from 'styled-components'
 
 import appBaseUrl from '../../../../../modules/appBaseUrl'
@@ -48,12 +47,12 @@ const OutsideLink = styled.div`
 const EkMenu = ({ tpop, ek, border }) => {
   const [open, setOpen] = useState(true)
   const toggleOpen = useCallback(() => setOpen(!open), [open])
-  const zaehls = get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
-  const bearbeiter = get(ek, 'adresseByBearbeiter.name') || '(kein Bearbeiter)'
+  const zaehls = ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+  const bearbeiter = ek?.adresseByBearbeiter?.name ?? '(kein Bearbeiter)'
   const title = `${ek.datum || '(kein Datum)'}: ${ek.typ}, ${bearbeiter}`
-  const projId = get(tpop, 'popByPopId.apByApId.projId')
-  const apId = get(tpop, 'popByPopId.apByApId.id')
-  const popId = get(tpop, 'popByPopId.id')
+  const projId = tpop?.popByPopId?.apByApId?.projId
+  const apId = tpop?.popByPopId?.apByApId?.id
+  const popId = tpop?.popByPopId?.id
   const tpopId = tpop.id
   const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${
     ek.id
@@ -82,11 +81,9 @@ const EkMenu = ({ tpop, ek, border }) => {
         <InnerList>
           {zaehls.map((z) => {
             const einheit =
-              get(z, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
-              '(keine Einheit)'
+              z?.tpopkontrzaehlEinheitWerteByEinheit?.text ?? '(keine Einheit)'
             const methode =
-              get(z, 'tpopkontrzaehlMethodeWerteByMethode.text') ||
-              '(keine Methode)'
+              z?.tpopkontrzaehlMethodeWerteByMethode?.text ?? '(keine Methode)'
             const anzahl =
               z.anzahl !== null ? z.anzahl : '(Anzahl nicht erfasst)'
 
