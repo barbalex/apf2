@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -46,16 +46,16 @@ const MyTextField = ({
 
   // only working solution to prevent whell scrolling from changing number values
   // see: https://github.com/mui-org/material-ui/issues/7960#issuecomment-497945204
-  const textFieldRef = useRef(null)
-  useEffect(() => {
-    const handleWheel = (e) => e.preventDefault()
-    const current = textFieldRef.current
-    current.addEventListener('wheel', handleWheel)
+  // const textFieldRef = useRef(null)
+  // useEffect(() => {
+  //   const handleWheel = (e) => e.preventDefault()
+  //   const current = textFieldRef.current
+  //   current.addEventListener('wheel', handleWheel)
 
-    return () => {
-      current.removeEventListener('wheel', handleWheel)
-    }
-  }, [])
+  //   return () => {
+  //     current.removeEventListener('wheel', handleWheel)
+  //   }
+  // }, [])
 
   return (
     <StyledFormControl
@@ -70,7 +70,7 @@ const MyTextField = ({
       </InputLabel>
       <Input
         id={name}
-        ref={textFieldRef}
+        // ref={textFieldRef}
         name={name}
         value={stateValue}
         type={type}

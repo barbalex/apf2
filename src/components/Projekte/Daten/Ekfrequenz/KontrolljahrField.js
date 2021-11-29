@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import Input from '@mui/material/Input'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -18,25 +18,25 @@ const MyTextField = ({ handleSubmit, ...props }) => {
 
   // only working solution
   // see: https://github.com/mui-org/material-ui/issues/7960#issuecomment-497945204
-  const textFieldRef = useRef(null)
-  useEffect(() => {
-    const handleWheel = (e) => e.preventDefault()
-    const current = textFieldRef.current
-    current.addEventListener('wheel', handleWheel)
+  // const textFieldRef = useRef(null)
+  // useEffect(() => {
+  //   const handleWheel = (e) => e.preventDefault()
+  //   const current = textFieldRef.current
+  //   current.addEventListener('wheel', handleWheel)
 
-    return () => {
-      current.removeEventListener('wheel', handleWheel)
-    }
-  }, [])
+  //   return () => {
+  //     current.removeEventListener('wheel', handleWheel)
+  //   }
+  // }, [])
 
-  const onKeyDown = useCallback((e) => e.key === 'Enter' && handleSubmit(), [
-    handleSubmit,
-  ])
+  const onKeyDown = useCallback(
+    (e) => e.key === 'Enter' && handleSubmit(),
+    [handleSubmit],
+  )
 
   return (
     <StyledInput
       id={name}
-      ref={textFieldRef}
       name={name}
       value={value || value === 0 ? value : ''}
       type="number"

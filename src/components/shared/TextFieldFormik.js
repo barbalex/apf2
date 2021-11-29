@@ -31,16 +31,17 @@ const MyTextField = (props) => {
 
   // only working solution to prevent whell scrolling from changing number values
   // see: https://github.com/mui-org/material-ui/issues/7960#issuecomment-497945204
-  const textFieldRef = useRef(null)
-  useEffect(() => {
-    const handleWheel = (e) => e.preventDefault()
-    const current = textFieldRef.current
-    current.addEventListener('wheel', handleWheel)
+  // const textFieldRef = useRef(null)
+  // useEffect(() => {
+  //   const handleWheel = (e) => e.preventDefault()
 
-    return () => {
-      current.removeEventListener('wheel', handleWheel)
-    }
-  }, [])
+  //   const current = textFieldRef.current
+  //   current.addEventListener('wheel', handleWheel, { passive: false })
+
+  //   return () => {
+  //     current.removeEventListener('wheel', handleWheel)
+  //   }
+  // }, [])
 
   // value should immediately update when pressing Enter
   const onKeyDown = useCallback(
@@ -67,7 +68,7 @@ const MyTextField = (props) => {
       </InputLabel>
       <Input
         id={name}
-        ref={textFieldRef}
+        //ref={textFieldRef}
         name={name}
         value={value || value === 0 ? value : ''}
         type={type}
