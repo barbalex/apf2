@@ -53,13 +53,13 @@ const MarkierungenLayer = () => {
     }
   `)
 
-  const nodes = get(data, 'allMarkierungens.nodes') || []
+  const nodes = get(data, 'allMarkierungens.nodes') ?? []
   const markierungen = nodes.map((n) => ({
     type: 'Feature',
     properties: {
-      Gebiet: n.gebiet || '',
-      PfostenNr: n.pfostennum || '',
-      Markierung: n.markierung || '',
+      Gebiet: n.gebiet ?? '',
+      PfostenNr: n.pfostennum ?? '',
+      Markierung: n.markierung ?? '',
     },
     geometry: JSON.parse(get(n, 'wkbGeometry.geojson')),
   }))

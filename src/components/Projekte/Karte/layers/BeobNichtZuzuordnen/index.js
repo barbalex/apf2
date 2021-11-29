@@ -38,8 +38,8 @@ const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
   const { setBeobNichtZuzuordnenIdsFiltered } = map
 
   const projId =
-    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+    projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobNichtZuzuordnen')
 
   // const bounds = leafletMap.getBounds()

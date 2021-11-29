@@ -25,8 +25,8 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
   const { projIdInActiveNodeArray, apIdInActiveNodeArray } = store[treeName]
   const { idsFiltered } = store[treeName].map
   const projId =
-    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+    projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
 
   const isHighlighted = idsFiltered.includes(beob.id)
   const latLng =
@@ -46,10 +46,10 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
   let datum = '(kein Datum)'
   if (!isValid(new Date(beob.datum))) {
     datum = '(ungültiges Datum)'
-  } else if (!!beob.datum) {
+  } else if (beob.datum) {
     datum = format(new Date(beob.datum), 'yyyy.MM.dd')
   }
-  const autor = beob.autor || '(kein Autor)'
+  const autor = beob.autor ?? '(kein Autor)'
   const quelle = get(beob, 'quelle', '')
   const label = `${datum}: ${autor} (${quelle})`
   const openBeobInTree2 = useCallback(() => {
