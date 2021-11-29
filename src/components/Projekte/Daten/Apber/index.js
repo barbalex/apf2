@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -94,7 +93,7 @@ const Apber = ({ treeName, width = 1000 }) => {
     error: errorApErfkritWertes,
   } = useQuery(queryApErfkritWertes)
 
-  const row = get(data, 'apberById', {})
+  const row = useMemo(() => data?.apberById ?? {}, [data?.apberById])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -202,11 +201,9 @@ const Apber = ({ treeName, width = 1000 }) => {
                   <RadioButtonGroup
                     name="beurteilung"
                     label="Beurteilung"
-                    dataSource={get(
-                      dataApErfkritWertes,
-                      'allApErfkritWertes.nodes',
-                      [],
-                    )}
+                    dataSource={
+                      dataApErfkritWertes?.allApErfkritWertes?.nodes ?? []
+                    }
                     loading={loadingApErfkritWertes}
                     handleSubmit={handleSubmit}
                   />
@@ -257,7 +254,7 @@ const Apber = ({ treeName, width = 1000 }) => {
                   <Select
                     name="bearbeiter"
                     label="BearbeiterIn"
-                    options={get(dataAdresses, 'allAdresses.nodes', [])}
+                    options={dataAdresses?.allAdresses?.nodes ?? []}
                     loading={loadingAdresses}
                     handleSubmit={handleSubmit}
                   />

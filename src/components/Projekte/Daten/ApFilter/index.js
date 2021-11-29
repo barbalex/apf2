@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -119,13 +118,13 @@ const ApFilter = ({ treeName }) => {
 
   const artname =
     !!dataFilter.ap.artId && !loadingAeTaxonomiesById
-      ? get(dataAeTaxonomiesById, 'aeTaxonomyById.artname') || ''
+      ? dataAeTaxonomiesById?.aeTaxonomyById?.artname ?? ''
       : ''
 
   const row = dataFilter.ap
 
   const onSubmit = useCallback(
-    (values, { setErrors }) => {
+    (values) => {
       const changedField = objectsFindChangedKey(values, row)
       // BEWARE: react-select fires twice when a value is cleared
       // second event leads to an error as the values passed are same as before
@@ -228,11 +227,7 @@ const ApFilter = ({ treeName }) => {
                   />
                   <RadioButtonGroupWithInfo
                     name="bearbeitung"
-                    dataSource={get(
-                      dataLists,
-                      'allApBearbstandWertes.nodes',
-                      [],
-                    )}
+                    dataSource={dataLists?.allApBearbstandWertes?.nodes ?? []}
                     loading={loadingLists}
                     popover={
                       <>
@@ -267,11 +262,7 @@ const ApFilter = ({ treeName }) => {
                   <FieldContainer>
                     <RadioButtonGroupWithInfo
                       name="umsetzung"
-                      dataSource={get(
-                        dataLists,
-                        'allApUmsetzungWertes.nodes',
-                        [],
-                      )}
+                      dataSource={dataLists?.allApUmsetzungWertes?.nodes ?? []}
                       loading={loadingLists}
                       popover={
                         <>
@@ -304,7 +295,7 @@ const ApFilter = ({ treeName }) => {
                   <Select
                     name="bearbeiter"
                     label="Verantwortlich"
-                    options={get(dataAdresses, 'allAdresses.nodes', [])}
+                    options={dataAdresses?.allAdresses?.nodes ?? []}
                     loading={loadingAdresses}
                     handleSubmit={handleSubmit}
                   />
