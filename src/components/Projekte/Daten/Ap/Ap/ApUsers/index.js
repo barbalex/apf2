@@ -1,7 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
-import get from 'lodash/get'
 import styled from 'styled-components'
 
 import ApUser from './ApUser'
@@ -60,7 +59,7 @@ const ApUsers = ({ apId }) => {
       variables: { apId },
     },
   )
-  const apUsers = data ? get(data, 'allApUsers.nodes', []) : []
+  const apUsers = data ? data?.allApUsers?.nodes ?? [] : []
 
   if (loading) {
     return (
@@ -77,7 +76,7 @@ const ApUsers = ({ apId }) => {
     <Container>
       <Label label={'Benutzer mit Zugriff'} />
       <NewUserContainer>
-        {!!apUsers.length
+        {apUsers.length
           ? apUsers.map((user) => (
               <ApUser key={user.id} user={user} refetch={refetch} />
             ))
@@ -86,16 +85,18 @@ const ApUsers = ({ apId }) => {
           <InfoTitle>Zugriff hängt von der Rolle des Benutzers ab:</InfoTitle>
           <InfoList>
             <InfoRow>
-              "ap_writer" haben Schreib-Rechte, wenn sie oben aufgelistet sind
+              {
+                '"ap_writer" haben Schreib-Rechte, wenn sie oben aufgelistet sind'
+              }
             </InfoRow>
             <InfoRow>
-              "ap_reader" haben Lese-Rechte, wenn sie oben aufgelistet sind
+              {'"ap_reader" haben Lese-Rechte, wenn sie oben aufgelistet sind'}
             </InfoRow>
           </InfoList>
           <InfoTitle>Darüber hinaus haben immer Zugriff:</InfoTitle>
           <InfoList>
-            <InfoRow>"manager" (Schreib-Rechte)</InfoRow>
-            <InfoRow>"reader" (Lese-Rechte)</InfoRow>
+            <InfoRow>{'"manager" (Schreib-Rechte)'}</InfoRow>
+            <InfoRow>{'"reader" (Lese-Rechte)'}</InfoRow>
           </InfoList>
         </Info>
       </NewUserContainer>

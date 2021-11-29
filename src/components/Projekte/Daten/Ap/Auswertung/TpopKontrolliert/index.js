@@ -1,6 +1,5 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
-import get from 'lodash/get'
 import {
   LineChart,
   XAxis,
@@ -55,13 +54,11 @@ const ApAuswertungTpopKontrolliert = ({ id, height = 400, print, jahr }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { id, year: jahr ?? new Date().getFullYear() },
   })
-  const erfolgData = get(data, 'tpopKontrolliertForJber.nodes', []).map(
-    (d) => ({
-      jahr: d.year,
-      'Teil-Populationen': d.anzTpop ? Number(d.anzTpop) : 0,
-      kontrolliert: d.anzTpopber ? Number(d.anzTpopber) : 0,
-    }),
-  )
+  const erfolgData = (data?.tpopKontrolliertForJber?.nodes ?? []).map((d) => ({
+    jahr: d.year,
+    'Teil-Populationen': d.anzTpop ? Number(d.anzTpop) : 0,
+    kontrolliert: d.anzTpopber ? Number(d.anzTpopber) : 0,
+  }))
 
   if (error) return <Error error={error} />
 

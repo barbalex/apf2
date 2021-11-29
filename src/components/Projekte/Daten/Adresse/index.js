@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { Formik, Form } from 'formik'
@@ -54,7 +53,7 @@ const Adresse = ({ treeName }) => {
   })
   const client = useApolloClient()
 
-  const row = get(data, 'adresseById', {})
+  const row = useMemo(() => data?.adresseById ?? {}, [data?.adresseById])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
