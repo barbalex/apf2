@@ -2,7 +2,6 @@ import React, { useContext, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import Ap from './Ap'
@@ -37,7 +36,7 @@ const ApTabs = ({ treeName }) => {
       ? activeNodeArray[3]
       : '99999999-9999-9999-9999-999999999999'
 
-  const [tab, setTab] = useState(get(urlQuery, 'apTab', 'ap'))
+  const [tab, setTab] = useState(urlQuery?.apTab ?? 'ap')
   const onChangeTab = useCallback(
     (event, value) => {
       setUrlQueryValue({

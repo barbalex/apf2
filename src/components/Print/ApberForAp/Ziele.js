@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -41,11 +40,11 @@ const Ziele = ({ ziele }) => (
       <Goal>Ziel</Goal>
     </TitleRow>
     {ziele.map((z) => {
-      const zielBer = get(z, 'zielbersByZielId.nodes', [])[0]
+      const zielBer = (z?.zielbersByZielId?.nodes ?? [])[0]
 
       return (
         <Row key={z.id}>
-          <Typ>{get(z, 'zielTypWerteByTyp.text', '')}</Typ>
+          <Typ>{z?.zielTypWerteByTyp?.text ?? ''}</Typ>
           <ZielColumn>
             <Goal>{z.bezeichnung || ''}</Goal>
             {zielBer && (

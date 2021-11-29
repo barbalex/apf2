@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { DateTime } from 'luxon'
 
 const Container = styled.div`
@@ -115,13 +114,13 @@ const Massnahmen = ({ massns }) => (
 
       return (
         <Row key={m.id}>
-          <PopNr>{get(m, 'tpopByTpopId.popByPopId.nr', '')}</PopNr>
-          <PopName>{get(m, 'tpopByTpopId.popByPopId.name', '')}</PopName>
-          <TpopNr>{get(m, 'tpopByTpopId.nr', '')}</TpopNr>
-          <TpopFlurname>{get(m, 'tpopByTpopId.flurname', '')}</TpopFlurname>
+          <PopNr>{m?.tpopByTpopId?.popByPopId?.nr ?? ''}</PopNr>
+          <PopName>{m?.tpopByTpopId?.popByPopId?.name ?? ''}</PopName>
+          <TpopNr>{m?.tpopByTpopId?.nr ?? ''}</TpopNr>
+          <TpopFlurname>{m?.tpopByTpopId?.flurname ?? ''}</TpopFlurname>
           <MassnDatum>{mDatum}</MassnDatum>
-          <MassnTyp>{get(m, 'tpopmassnTypWerteByTyp.text', '')}</MassnTyp>
-          <MassnBeschreibung>{get(m, 'beschreibung', '')}</MassnBeschreibung>
+          <MassnTyp>{m?.tpopmassnTypWerteByTyp?.text ?? ''}</MassnTyp>
+          <MassnBeschreibung>{m?.beschreibung ?? ''}</MassnBeschreibung>
         </Row>
       )
     })}

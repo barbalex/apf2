@@ -1,6 +1,5 @@
 import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import get from 'lodash/get'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import styled from 'styled-components'
@@ -44,7 +43,7 @@ const ApUser = ({ user, refetch }) => {
   return (
     <div>
       {user.userName}
-      <span>{` (${(get(user, 'userByUserName.role') || '').replace(
+      <span>{` (${(user?.userByUserName?.role ?? '').replace(
         'apflora_',
         '',
       )})`}</span>
