@@ -155,18 +155,18 @@ const Populationen = () => {
                 })
               }
               const rows = get(result?.data, 'allPops.nodes', []).map((n) => ({
-                apId: get(n, 'apByApId.id') || null,
-                apArtname: get(n, 'apByApId.aeTaxonomyByArtId.artname') || null,
+                apId: get(n, 'apByApId.id') ?? null,
+                apArtname: get(n, 'apByApId.aeTaxonomyByArtId.artname') ?? null,
                 apBearbeitung:
-                  get(n, 'apByApId.apBearbstandWerteByBearbeitung.text') ||
+                  get(n, 'apByApId.apBearbstandWerteByBearbeitung.text') ??
                   null,
-                apStartJahr: get(n, 'apByApId.startJahr') || null,
+                apStartJahr: get(n, 'apByApId.startJahr') ?? null,
                 apUmsetzung:
-                  get(n, 'apByApId.apUmsetzungWerteByUmsetzung.text') || null,
+                  get(n, 'apByApId.apUmsetzungWerteByUmsetzung.text') ?? null,
                 id: n.id,
                 nr: n.nr,
                 name: n.name,
-                status: get(n, 'popStatusWerteByStatus.text') || null,
+                status: get(n, 'popStatusWerteByStatus.text') ?? null,
                 bekanntSeit: n.bekanntSeit,
                 statusUnklar: n.statusUnklar,
                 statusUnklarBegruendung: n.statusUnklarBegruendung,

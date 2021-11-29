@@ -41,10 +41,10 @@ const GemeindeLayer = () => {
     }
   `)
 
-  const nodes = get(data, 'allChGemeindes.nodes') || []
+  const nodes = get(data, 'allChGemeindes.nodes') ?? []
   const gemeinden = nodes.map((n) => ({
     type: 'Feature',
-    properties: { Gemeinde: n.name || '' },
+    properties: { Gemeinde: n.name ?? '' },
     geometry: JSON.parse(get(n, 'wkbGeometry.geojson')),
   }))
 

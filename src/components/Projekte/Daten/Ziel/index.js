@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
@@ -64,7 +63,7 @@ const Ziel = ({ treeName }) => {
     error: errorLists,
   } = useQuery(queryLists)
 
-  const row = get(data, 'zielById', {})
+  const row = useMemo(() => data?.zielById ?? {}, [data?.zielById])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -186,7 +185,7 @@ const Ziel = ({ treeName }) => {
                   <RadioButtonGroup
                     name="typ"
                     label="Zieltyp"
-                    dataSource={get(dataLists, 'allZielTypWertes.nodes', [])}
+                    dataSource={dataLists?.allZielTypWertes?.nodes ?? []}
                     loading={loadingLists}
                     handleSubmit={handleSubmit}
                   />
