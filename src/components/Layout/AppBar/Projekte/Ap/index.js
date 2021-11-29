@@ -35,22 +35,23 @@ const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
   border-right-color: ${(props) =>
-    props.followed
+    props.followed === 'true'
       ? ' rgba(255, 255, 255, 0.25)'
       : ' rgba(255, 255, 255, 0.5)'} !important;
   border-left-color: ${(props) =>
-    props.preceded
+    props.preceded === 'true'
       ? ' rgba(255, 255, 255, 0.25)'
       : ' rgba(255, 255, 255, 0.5)'} !important;
   border-top-left-radius: ${(props) =>
-    props.preceded ? '0' : '4px'} !important;
+    props.preceded === 'true' ? '0' : '4px'} !important;
   border-bottom-left-radius: ${(props) =>
-    props.preceded ? '0' : '4px'} !important;
+    props.preceded === 'true' ? '0' : '4px'} !important;
   border-top-right-radius: ${(props) =>
-    props.followed ? '0' : '4px'} !important;
+    props.followed === 'true' ? '0' : '4px'} !important;
   border-bottom-right-radius: ${(props) =>
-    props.followed ? '0' : '4px'} !important;
-  margin-right: ${(props) => (props.followed ? '-1px' : 'unset')} !important;
+    props.followed === 'true' ? '0' : '4px'} !important;
+  margin-right: ${(props) =>
+    props.followed === 'true' ? '-1px' : 'unset'} !important;
   text-transform: none !important;
 `
 const DokuButton = styled(Button)`
@@ -180,7 +181,7 @@ const ProjekteAppBar = () => {
               <StyledButton
                 name="tree"
                 variant={projekteTabs.includes('tree') ? 'outlined' : 'text'}
-                followed={projekteTabs.includes('daten')}
+                followed={projekteTabs.includes('daten')?.toString()}
                 onClick={onClickTree}
                 data-id="nav-tree1"
               >
@@ -189,8 +190,8 @@ const ProjekteAppBar = () => {
               <Daten />
               <StyledButton
                 variant={projekteTabs.includes('filter') ? 'outlined' : 'text'}
-                preceded={projekteTabs.includes('daten')}
-                followed={projekteTabs.includes('karte')}
+                preceded={projekteTabs.includes('daten')?.toString()}
+                followed={projekteTabs.includes('karte')?.toString()}
                 onClick={onClickFilter}
                 data-id="nav-filter1"
                 title="Daten filtern"
@@ -199,15 +200,15 @@ const ProjekteAppBar = () => {
               </StyledButton>
               <StyledButton
                 variant={projekteTabs.includes('karte') ? 'outlined' : 'text'}
-                preceded={projekteTabs.includes('filter')}
-                followed={
+                preceded={projekteTabs.includes('filter')?.toString()}
+                followed={(
                   (!isMobile &&
                     exporteIsActive &&
                     projekteTabs.includes('exporte')) ||
                   (!isMobile &&
                     !exporteIsActive &&
                     projekteTabs.includes('tree2'))
-                }
+                )?.toString()}
                 onClick={onClickKarte}
                 data-id="nav-karte1"
               >
@@ -218,8 +219,8 @@ const ProjekteAppBar = () => {
                   variant={
                     projekteTabs.includes('exporte') ? 'outlined' : 'text'
                   }
-                  preceded={projekteTabs.includes('karte')}
-                  followed={projekteTabs.includes('tree2')}
+                  preceded={projekteTabs.includes('karte')?.toString()}
+                  followed={projekteTabs.includes('tree2')?.toString()}
                   onClick={onClickExporte}
                   data-id="nav-exporte"
                 >
@@ -229,11 +230,11 @@ const ProjekteAppBar = () => {
               {!isMobile && (
                 <StyledButton
                   variant={projekteTabs.includes('tree2') ? 'outlined' : 'text'}
-                  preceded={
+                  preceded={(
                     (exporteIsActive && projekteTabs.includes('exporte')) ||
                     (!exporteIsActive && projekteTabs.includes('karte'))
-                  }
-                  followed={projekteTabs.includes('daten2')}
+                  )?.toString()}
+                  followed={projekteTabs.includes('daten2')?.toString()}
                   onClick={onClickTree2}
                   data-id="nav-tree2"
                 >
@@ -248,8 +249,8 @@ const ProjekteAppBar = () => {
                   variant={
                     projekteTabs.includes('filter2') ? 'outlined' : 'text'
                   }
-                  preceded={projekteTabs.includes('daten2')}
-                  followed={projekteTabs.includes('karte2')}
+                  preceded={projekteTabs.includes('daten2')?.toString()}
+                  followed={projekteTabs.includes('karte2')?.toString()}
                   onClick={onClickFilter2}
                   data-id="nav-filter2"
                   title="Daten filtern"
@@ -260,8 +261,8 @@ const ProjekteAppBar = () => {
               {!isMobile && isProjekt && (
                 <StyledButton
                   variant="text"
-                  preceded={false}
-                  followed={false}
+                  preceded={false?.toString()}
+                  followed={false.toString()}
                   onClick={onClickEkPlanung}
                   data-id="ek-planung"
                   title="EK und EKF planen"
