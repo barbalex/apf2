@@ -7,14 +7,11 @@ import ktZh from './ktZh.json'
 
 const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
   tpopsOutsideZh: () => {
-    const projId = get(data, 'tpopsOutsideZh.projId')
-    const apId = get(data, 'tpopsOutsideZh.apsByProjId.nodes[0].id')
-    const pops = get(
-      data,
-      'tpopsOutsideZh.apsByProjId.nodes[0].popsByApId.nodes',
-      [],
-    )
-    const tpops = flatten(pops.map((p) => get(p, 'tpopsByPopId.nodes', [])))
+    const projId = data?.tpopsOutsideZh?.projId
+    const apId = data?.tpopsOutsideZh?.apsByProjId?.nodes?.[0]?.id
+    const pops =
+      data?.tpopsOutsideZh?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
+    const tpops = flatten(pops.map((p) => p?.tpopsByPopId?.nodes ?? []))
 
     // kontrolliere die Relevanz ausserkantonaler Tpop
     let tpopsOutsideZh = tpops.filter(
@@ -23,10 +20,7 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         !!tpop.wgs84Lat &&
         !isPointInsidePolygon(ktZh, tpop.wgs84Lat, tpop.wgs84Long),
     )
-    tpopsOutsideZh = sortBy(tpopsOutsideZh, (n) => [
-      get(n, 'popByPopId.nr'),
-      n.nr,
-    ])
+    tpopsOutsideZh = sortBy(tpopsOutsideZh, (n) => [n?.popByPopId?.nr, n.nr])
 
     return tpopsOutsideZh.map((tpop) => ({
       url: [
@@ -35,39 +29,37 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         'Aktionspläne',
         apId,
         'Populationen',
-        get(tpop, 'popByPopId.nr'),
+        tpop?.popByPopId?.nr,
         'Teil-Populationen',
         tpop.id,
       ],
       text: `Population: ${
-        get(tpop, 'popByPopId.nr') || get(tpop, 'popByPopId.id')
+        tpop?.popByPopId?.nr ?? tpop?.popByPopId?.id
       }, Teil-Population: ${tpop.nr || tpop.id}`,
     }))
   },
   apOhneBearbeitung: () =>
-    (get(data, 'apOhneBearbeitung.apsByProjId.nodes') || []).map((n) => ({
+    (data?.apOhneBearbeitung?.apsByProjId?.nodes ?? []).map(() => ({
       url: ['Projekte', projId, 'Aktionspläne', apId],
       text: `Feld "Aktionsplan" ist leer`,
     })),
   apMitApOhneUmsetzung: () =>
-    (get(data, 'apMitApOhneUmsetzung.apsByProjId.nodes') || []).map((n) => ({
+    (data?.apMitApOhneUmsetzung?.apsByProjId?.nodes ?? []).map(() => ({
       url: ['Projekte', projId, 'Aktionspläne', apId],
       text: `Feld "Umsetzung" ist leer`,
     })),
   apMitAktKontrOhneZielrelevanteEinheit: () =>
-    (get(data, 'apMitAktKontrOhneZielrelevanteEinheit.nodes') || []).map(
-      (n) => ({
-        url: ['Projekte', projId, 'Aktionspläne', apId],
-        text: `AP mit Kontrollen im aktuellen Jahr. Aber eine Ziel-relevante Einheit fehlt`,
-      }),
-    ),
+    (data?.apMitAktKontrOhneZielrelevanteEinheit?.nodes ?? []).map(() => ({
+      url: ['Projekte', projId, 'Aktionspläne', apId],
+      text: `AP mit Kontrollen im aktuellen Jahr. Aber eine Ziel-relevante Einheit fehlt`,
+    })),
   apOhneVerantwortlich: () =>
-    (get(data, 'apOhneVerantwortlich.apsByProjId.nodes') || []).map((n) => ({
+    (data?.apOhneVerantwortlich?.apsByProjId?.nodes ?? []).map(() => ({
       url: ['Projekte', projId, 'Aktionspläne', apId],
       text: `Feld "Verantwortlich" ist leer`,
     })),
   ekzieleinheitOhneMassnZaehleinheit: () =>
-    get(data, 'ekzieleinheitOhneMassnZaehleinheit.nodes', []).map((n) => ({
+    (data?.ekzieleinheitOhneMassnZaehleinheit?.nodes ?? []).map((n) => ({
       url: [
         'Projekte',
         n.projId,
@@ -79,7 +71,7 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       text: `AP: ${n.artname}, Zähleinheit: ${n.zaehleinheit}`,
     })),
   zielOhneJahr: () =>
-    get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', []).map(
+    (data?.zielOhneJahr?.apsByProjId?.nodes?.[0]?.zielsByApId?.nodes ?? []).map(
       (n) => ({
         url: [
           'Projekte',
@@ -94,7 +86,7 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       }),
     ),
   zielOhneTyp: () =>
-    get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes', []).map(
+    (data?.zielOhneTyp?.apsByProjId?.nodes?.[0]?.zielsByApId?.nodes ?? []).map(
       (n) => ({
         url: [
           'Projekte',
@@ -109,7 +101,7 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       }),
     ),
   zielOhneZiel: () =>
-    get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes', []).map(
+    (data?.zielOhneZiel?.apsByProjId?.nodes?.[0]?.zielsByApId?.nodes ?? []).map(
       (n) => ({
         url: [
           'Projekte',
@@ -124,17 +116,15 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       }),
     ),
   zielberOhneJahr: () => {
-    const zielNodes = get(
-      data,
-      'zielberOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes',
-      [],
-    )
+    const zielNodes =
+      data?.zielberOhneJahr?.apsByProjId?.nodes?.[0]?.zielsByApId?.nodes ?? []
     const zielberNodes = flatten(
-      zielNodes.map((n) => get(n, 'zielbersByZielId.nodes', [])),
+      zielNodes.map((n) => n?.zielbersByZielId?.nodes ?? []),
     )
     return zielberNodes.map((n) => {
-      const zielId = get(n, 'zielByZielId.id')
-      const zielJahr = get(n, 'zielByZielId.jahr')
+      const zielId = n?.zielByZielId?.id
+      const zielJahr = n?.zielByZielId?.jahr
+
       return {
         url: [
           'Projekte',
@@ -142,7 +132,7 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
           'Aktionspläne',
           apId,
           'AP-Ziele',
-          get(n, 'zielByZielId.jahr'),
+          n?.zielByZielId?.jahr,
           zielId,
           'Berichte',
           n.id,
@@ -152,17 +142,15 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
     })
   },
   zielberOhneEntwicklung: () => {
-    const zielNodes = get(
-      data,
-      'zielberOhneEntwicklung.apsByProjId.nodes[0].zielsByApId.nodes',
-      [],
-    )
+    const zielNodes =
+      data?.zielberOhneEntwicklung?.apsByProjId?.nodes?.[0]?.zielsByApId
+        ?.nodes ?? []
     const zielberNodes = flatten(
-      zielNodes.map((n) => get(n, 'zielbersByZielId.nodes', [])),
+      zielNodes.map((n) => n?.zielbersByZielId?.nodes ?? []),
     )
     return zielberNodes.map((n) => {
-      const zielId = get(n, 'zielByZielId.id')
-      const zielJahr = get(n, 'zielByZielId.jahr')
+      const zielId = n?.zielByZielId?.id
+      const zielJahr = n?.zielByZielId?.jahr
       return {
         url: [
           'Projekte',
@@ -170,7 +158,7 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
           'Aktionspläne',
           apId,
           'AP-Ziele',
-          get(n, 'zielByZielId.jahr'),
+          n?.zielByZielId?.jahr,
           zielId,
           'Berichte',
           n.id,
@@ -180,10 +168,9 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
     })
   },
   erfkritOhneBeurteilung: () =>
-    get(
-      data,
-      'erfkritOhneBeurteilung.apsByProjId.nodes[0].erfkritsByApId.nodes',
-      [],
+    (
+      data?.erfkritOhneBeurteilung?.apsByProjId?.nodes?.[0]?.erfkritsByApId
+        ?.nodes ?? []
     ).map((n) => ({
       url: [
         'Projekte',
@@ -1813,10 +1800,16 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       tpopNodes.map((n) => get(n, 'tpopkontrsByTpopId.nodes', [])),
     )
     const tpopkontrMitZaehlungOhneMethode = tpopkontrNodes.filter((n) => {
-      const anzZaehlungenMitMethode = get(n, 'zaehlungenMitMethode.nodes', [])
-        .length
-      const anzZaehlungenOhneMethode = get(n, 'zaehlungenOhneMethode.nodes', [])
-        .length
+      const anzZaehlungenMitMethode = get(
+        n,
+        'zaehlungenMitMethode.nodes',
+        [],
+      ).length
+      const anzZaehlungenOhneMethode = get(
+        n,
+        'zaehlungenOhneMethode.nodes',
+        [],
+      ).length
       return anzZaehlungenMitMethode === 0 && anzZaehlungenOhneMethode > 0
     })
 
@@ -1902,10 +1895,16 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       tpopNodes.map((n) => get(n, 'tpopkontrsByTpopId.nodes', [])),
     )
     const tpopkontrMitZaehlungOhneAnzahl = tpopkontrNodes.filter((n) => {
-      const anzZaehlungenMitAnzahl = get(n, 'zaehlungenMitAnzahl.nodes', [])
-        .length
-      const anzZaehlungenOhneAnzahl = get(n, 'zaehlungenOhneAnzahl.nodes', [])
-        .length
+      const anzZaehlungenMitAnzahl = get(
+        n,
+        'zaehlungenMitAnzahl.nodes',
+        [],
+      ).length
+      const anzZaehlungenOhneAnzahl = get(
+        n,
+        'zaehlungenOhneAnzahl.nodes',
+        [],
+      ).length
       return anzZaehlungenMitAnzahl === 0 && anzZaehlungenOhneAnzahl > 0
     })
 

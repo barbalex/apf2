@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import uniqBy from 'lodash/uniqBy'
 import Button from '@mui/material/Button'
@@ -194,7 +193,7 @@ const Count = ({
 
   const { data: dataLists, error: errorLists } = useQuery(queryLists)
 
-  const row = get(data, 'tpopkontrzaehlById', {}) || {}
+  const row = data?.tpopkontrzaehlById ?? {}
 
   const createNew = useCallback(() => {
     client
@@ -206,11 +205,7 @@ const Count = ({
   }, [client, refetch, tpopkontrId])
 
   const zaehleinheitWerte = useMemo(() => {
-    const allEinheits = get(
-      dataLists,
-      'allTpopkontrzaehlEinheitWertes.nodes',
-      [],
-    )
+    const allEinheits = dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
     // do list this count's einheit
     const einheitsNotToList = einheitsUsed.filter((e) => e !== row.einheit)
     let zaehleinheitWerte = ekzaehleinheits

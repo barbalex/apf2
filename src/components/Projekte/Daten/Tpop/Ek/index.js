@@ -5,7 +5,6 @@ import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import max from 'lodash/max'
 import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
@@ -93,7 +92,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
   const { data: dataAdresses, loading: loadingAdresses } =
     useQuery(queryAdresses)
 
-  const ekfrequenzOptions0 = get(dataEkfrequenzs, 'allEkfrequenzs.nodes', [])
+  const ekfrequenzOptions0 = dataEkfrequenzs?.allEkfrequenzs?.nodes ?? []
   const longestAnwendungsfall = max(
     ekfrequenzOptions0.map((a) => (a.anwendungsfall || '').length),
   )
@@ -109,10 +108,10 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
 
   const ekGroupedByYear = groupBy(
     [
-      ...get(dataEk, 'allTpopkontrs.nodes', [])
+      ...(dataEk?.allTpopkontrs?.nodes ?? [])
         .filter((e) => e.jahr !== null)
         .map((t) => ({ ...t, is: 'ek' })),
-      ...get(dataEk, 'allEkplans.nodes', [])
+      ...(dataEk?.allEkplans?.nodes ?? [])
         .filter((e) => e.jahr !== null)
         .map((t) => ({ ...t, is: 'ekplan' })),
     ],
@@ -138,7 +137,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
             onSubmit={onSubmit}
             enableReinitialize
           >
-            {({ handleSubmit, handleChange, handleBlur, dirty, setErrors }) => (
+            {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
                 <FormContainerNoColumnsInner>
                   <EkfrequenzOptionsContainer>
@@ -164,7 +163,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                   <Select
                     name="ekfKontrolleur"
                     label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
-                    options={get(dataAdresses, 'allAdresses.nodes', [])}
+                    options={dataAdresses?.allAdresses?.nodes ?? []}
                     loading={loadingAdresses}
                     handleSubmit={handleSubmit}
                   />
