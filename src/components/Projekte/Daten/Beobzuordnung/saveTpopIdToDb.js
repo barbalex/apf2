@@ -1,5 +1,4 @@
 import isEqual from 'lodash/isEqual'
-import get from 'lodash/get'
 import { gql } from '@apollo/client'
 
 import updateBeobByIdGql from './updateBeobById'
@@ -12,7 +11,7 @@ const saveTpopIdToDb = async ({ value, id, treeName, type, client, store }) => {
   }
   if (value) variables.nichtZuordnen = false
   // if value, set nichtZuordnen false
-  if (!!value) variables.nichtZuordnen = false
+  if (value) variables.nichtZuordnen = false
   await client.mutate({
     mutation: updateBeobByIdGql,
     variables,
@@ -42,8 +41,8 @@ const saveTpopIdToDb = async ({ value, id, treeName, type, client, store }) => {
       variables: { id: value },
     })
     // aNA = activeNodeArray
-    const popId = get(result, 'data.tpopById.popId')
-    const tpopId = get(result, 'data.tpopById.id')
+    const popId = result?.data?.tpopById?.popId
+    const tpopId = result?.data?.tpopById?.id
     newANA = [
       aNA[0],
       aNA[1],

@@ -1,8 +1,7 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import { FaPlus, FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form, FieldArray } from 'formik'
@@ -105,7 +104,7 @@ const Ekfrequenz = ({ treeName }) => {
     error: errorEkAbrechnungstypWertes,
   } = useQuery(queryEkAbrechnungstypWertes)
 
-  const row = get(data, 'ekfrequenzById', {})
+  const row = useMemo(() => data?.ekfrequenzById ?? {}, [data?.ekfrequenzById])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -287,11 +286,10 @@ const Ekfrequenz = ({ treeName }) => {
                     ) : (
                       <RadioButtonGroup
                         name="ekAbrechnungstyp"
-                        dataSource={get(
-                          dataEkAbrechnungstypWertes,
-                          'allEkAbrechnungstypWertes.nodes',
-                          [],
-                        )}
+                        dataSource={
+                          dataEkAbrechnungstypWertes?.allEkAbrechnungstypWertes
+                            ?.nodes ?? []
+                        }
                         loading={loadingEkAbrechnungstypWertes}
                         label="EK-Abrechnungstyp"
                         handleSubmit={handleSubmit}

@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { useQuery, gql } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
 import SimpleBar from 'simplebar-react'
@@ -52,7 +51,7 @@ const CurrentIssue = ({ treeName }) => {
     },
   })
 
-  const row = get(data, 'currentissueById', {})
+  const row = data?.currentissueById ?? {}
 
   if (loading) {
     return <LoadingContainer>Lade...</LoadingContainer>
