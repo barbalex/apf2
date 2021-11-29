@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
@@ -55,10 +54,10 @@ const Assozart = ({ treeName }) => {
     },
   })
 
-  const row = get(data, 'assozartById', {})
+  const row = useMemo(() => data?.assozartById ?? {}, [data?.assozartById])
 
   // do not include already choosen assozarten
-  const assozartenOfAp = get(row, 'apByApId.assozartsByApId.nodes', [])
+  const assozartenOfAp = (row?.apByApId?.assozartsByApId?.nodes ?? [])
     .map((o) => o.aeId)
     // but do include the art included in the row
     .filter((o) => o !== row.aeId)

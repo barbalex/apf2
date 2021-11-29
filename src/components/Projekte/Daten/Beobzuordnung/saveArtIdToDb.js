@@ -1,5 +1,4 @@
 import isEqual from 'lodash/isEqual'
-import get from 'lodash/get'
 import { gql } from '@apollo/client'
 
 import updateBeobByIdGql from './updateBeobById'
@@ -37,7 +36,7 @@ const saveArtIdToDb = async ({ value, row, treeName, client, store }) => {
       variables: { id: value },
     })
     // aNA = activeNodeArray
-    const newApId = get(result, 'data.aeTaxonomyById.apByArtId.id')
+    const newApId = result?.data?.aeTaxonomyById?.apByArtId?.id
     const newANA = [aNA[0], aNA[1], aNA[2], newApId, aNA[4], aNA[5]]
     const oldParentNodeUrl = [...aNA]
     oldParentNodeUrl.pop()

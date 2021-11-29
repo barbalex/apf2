@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { withResizeDetector } from 'react-resize-detector'
@@ -31,9 +30,10 @@ const Beob = ({ treeName, width = 1000 }) => {
       id: activeNodeArray[activeNodeArray.length - 1],
     },
   })
-  const row = get(data, 'beobById', {})
+  const row = data?.beobById ?? {}
   const beobFields = row.data
-    ? Object.entries(JSON.parse(row.data)).filter(([key, value]) =>
+    ? // eslint-disable-next-line no-unused-vars
+      Object.entries(JSON.parse(row.data)).filter(([key, value]) =>
         exists(value),
       )
     : []
