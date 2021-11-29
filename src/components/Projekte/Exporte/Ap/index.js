@@ -454,11 +454,11 @@ const AP = () => {
       anz_pop_aktuell_zuletzt:
         z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopAktuellZuletzt ?? '',
       diff_pop_urspr: z?.vApPopEkPriosByApId?.nodes?.[0]?.diffPopUrspr ?? '',
-      diff_pop_anges: get(z, 'vApPopEkPriosByApId.nodes[0].diffPopAnges') ?? '',
+      diff_pop_anges: z?.vApPopEkPriosByApId?.nodes?.[0]?.diffPopAnges ?? '',
       diff_pop_aktuell:
-        get(z, 'vApPopEkPriosByApId.nodes[0].diffPopAktuell') ?? '',
+        z?.vApPopEkPriosByApId?.nodes?.[0]?.diffPopAktuell ?? '',
       beurteilung_zuletzt:
-        get(z, 'vApPopEkPriosByApId.nodes[0].beurteilungZuletzt') ?? '',
+        z?.vApPopEkPriosByApId?.nodes?.[0]?.beurteilungZuletzt ?? '',
     }))
     removeNotification(notif)
     closeSnackbar(notif)
@@ -555,17 +555,16 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allZiels.nodes', []).map((z) => ({
+    const rows = (result.data?.allZiels?.nodes ?? []).map((z) => ({
       ap_id: z.id,
-      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') ?? '',
-      ap_bearbeitung:
-        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') ?? '',
-      ap_start_jahr: get(z, 'apByApId.startJahr') ?? '',
-      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') ?? '',
-      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') ?? '',
+      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
+      ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
+      ap_start_jahr: z?.apByApId?.startJahr ?? '',
+      ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
+      ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
       id: z.id,
       jahr: z.jahr,
-      typ: get(z, 'zielTypWerteByTyp.text') ?? '',
+      typ: z?.zielTypWerteByTyp?.text ?? '',
       bezeichnung: z.bezeichnung,
     }))
     removeNotification(notif)

@@ -221,10 +221,9 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       text: `AP-Bericht: ${n.jahr || n.id}`,
     })),
   assozartOhneArt: () =>
-    get(
-      data,
-      'assozartOhneArt.apsByProjId.nodes[0].assozartsByApId.nodes',
-      [],
+    (
+      data?.assozartOhneArt?.apsByProjId?.nodes?.[0]?.assozartsByApId?.nodes ??
+      []
     ).map((n) => ({
       url: [
         'Projekte',
@@ -237,14 +236,14 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       text: `Assoziierte Art: ${n.id}`,
     })),
   popOhneNr: () =>
-    get(data, 'popOhneNr.apsByProjId.nodes[0].popsByApId.nodes', []).map(
+    (data?.popOhneNr?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []).map(
       (n) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.name || n.id}`,
       }),
     ),
   popOhneName: () =>
-    get(data, 'popOhneName.apsByProjId.nodes[0].popsByApId.nodes', []).map(
+    (data?.popOhneName?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []).map(
       (n) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,

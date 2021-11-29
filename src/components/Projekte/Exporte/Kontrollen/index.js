@@ -284,19 +284,17 @@ const Kontrollen = () => {
                   popNr: n?.tpopByTpopId?.popByPopId?.nr ?? null,
                   popName: n?.tpopByTpopId?.popByPopId?.name ?? null,
                   popStatus:
-                    get(
-                      n,
-                      'tpopByTpopId.popByPopId.popStatusWerteByStatus.text',
-                    ) ?? null,
-                  popBekanntSeit:
-                    get(n, 'tpopByTpopId.popByPopId.bekanntSeit') ?? null,
-                  popStatusUnklar:
-                    get(n, 'tpopByTpopId.popByPopId.statusUnklar') ?? null,
-                  popStatusUnklarBegruendung:
-                    get(n, 'tpopByTpopId.popByPopId.statusUnklarBegruendung') ??
+                    n?.tpopByTpopId?.popByPopId?.popStatusWerteByStatus?.text ??
                     null,
-                  popX: get(n, 'tpopByTpopId.popByPopId.x') ?? null,
-                  popY: get(n, 'tpopByTpopId.popByPopId.y') ?? null,
+                  popBekanntSeit:
+                    n?.tpopByTpopId?.popByPopId?.bekanntSeit ?? null,
+                  popStatusUnklar:
+                    n?.tpopByTpopId?.popByPopId?.statusUnklar ?? null,
+                  popStatusUnklarBegruendung:
+                    n?.tpopByTpopId?.popByPopId?.statusUnklarBegruendung ??
+                    null,
+                  popX: n?.tpopByTpopId?.popByPopId?.x ?? null,
+                  popY: n?.tpopByTpopId?.popByPopId?.y ?? null,
                   tpopId: get(n, 'tpopByTpopId.id') ?? null,
                   tpopNr: get(n, 'tpopByTpopId.nr') ?? null,
                   tpopGemeinde: get(n, 'tpopByTpopId.gemeinde') ?? null,
