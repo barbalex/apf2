@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -33,11 +32,8 @@ const Besttime = ({ row }) => {
     <Container>
       <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
       <BesttimeVal>
-        {get(
-          row,
-          'tpopByTpopId.popByPopId.apByApId.ekfBeobachtungszeitpunkt',
-          '',
-        )}
+        {row?.tpopByTpopId?.popByPopId?.apByApId?.ekfBeobachtungszeitpunkt ??
+          ''}
       </BesttimeVal>
     </Container>
   )

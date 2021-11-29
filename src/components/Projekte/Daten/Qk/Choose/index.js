@@ -5,7 +5,6 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import get from 'lodash/get'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import query from './query'
@@ -46,14 +45,14 @@ const ChooseQk = ({ treeName, refetchTab }) => {
   const apId = activeNodeArray[3]
 
   const { data, error, loading } = useQuery(query)
-  const rows = get(data, 'allQks.nodes')
+  const rows = data?.allQks?.nodes
 
   const [filter, setFilter] = useState('')
   const onChangeFilter = useCallback(
     (event) => setFilter(event.target.value),
     [],
   )
-  const rowsFiltered = !!filter
+  const rowsFiltered = filter
     ? rows.filter((r) => {
         if (!r.titel) return false
         const rTitel = r.titel.toLowerCase ? r.titel.toLowerCase() : r.titel
@@ -61,7 +60,7 @@ const ChooseQk = ({ treeName, refetchTab }) => {
         return rTitel.includes(filterValue)
       })
     : rows
-  const label = !!filter
+  const label = filter
     ? `filtern: ${rowsFiltered.length}/${rows.length}`
     : 'filtern'
 

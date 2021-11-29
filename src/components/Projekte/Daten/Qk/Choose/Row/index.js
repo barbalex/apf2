@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import Checkbox from '@mui/material/Checkbox'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@apollo/client'
-import get from 'lodash/get'
 
 import query from './query'
 import Error from '../../../../../shared/Error'
@@ -35,7 +34,7 @@ const ChooseQkRow = ({ apId, qk, refetchTab }) => {
   const { data, error, refetch } = useQuery(query, {
     variables: { apId, qkName: qk.name },
   })
-  const apqk = get(data, 'apqkByApIdAndQkName')
+  const apqk = data?.apqkByApIdAndQkName
 
   const checked = !!apqk
 
