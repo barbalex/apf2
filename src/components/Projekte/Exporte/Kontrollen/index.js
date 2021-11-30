@@ -295,9 +295,9 @@ const Kontrollen = () => {
                     null,
                   popX: n?.tpopByTpopId?.popByPopId?.x ?? null,
                   popY: n?.tpopByTpopId?.popByPopId?.y ?? null,
-                  tpopId: get(n, 'tpopByTpopId.id') ?? null,
-                  tpopNr: get(n, 'tpopByTpopId.nr') ?? null,
-                  tpopGemeinde: get(n, 'tpopByTpopId.gemeinde') ?? null,
+                  tpopId: n?.tpopByTpopId?.id ?? null,
+                  tpopNr: n?.tpopByTpopId?.nr ?? null,
+                  tpopGemeinde: n?.tpopByTpopId?.gemeinde ?? null,
                   tpopFlurname: get(n, 'tpopByTpopId.flurname') ?? null,
                   tpopStatus: get(n, 'tpopByTpopId.status') ?? null,
                   statusDecodiert:

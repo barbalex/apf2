@@ -614,10 +614,10 @@ const AP = () => {
       ap_umsetzung:
         z?.zielByZielId?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
       ap_bearbeiter: z?.zielByZielId?.apByApId?.adresseByBearbeiter?.name ?? '',
-      ziel_id: get(z, 'zielByZielId.id') ?? '',
-      ziel_jahr: get(z, 'zielByZielId.jahr') ?? '',
-      ziel_typ: get(z, 'zielByZielId.zielTypWerteByTyp.text') ?? '',
-      ziel_bezeichnung: get(z, 'zielByZielId.bezeichnung') ?? '',
+      ziel_id: z?.zielByZielId?.id ?? '',
+      ziel_jahr: z?.zielByZielId?.jahr ?? '',
+      ziel_typ: z?.zielByZielId?.zielTypWerteByTyp?.text ?? '',
+      ziel_bezeichnung: z?.zielByZielId?.bezeichnung ?? '',
       id: z.id,
       jahr: z.jahr,
       erreichung: z.erreichung,
@@ -663,16 +663,15 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allErfkrits.nodes', []).map((z) => ({
+    const rows = (result.data?.allErfkrits?.nodes ?? []).map((z) => ({
       ap_id: z.apId,
-      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') ?? '',
-      ap_bearbeitung:
-        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') ?? '',
-      ap_start_jahr: get(z, 'apByApId.startJahr') ?? '',
-      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') ?? '',
-      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') ?? '',
+      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
+      ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
+      ap_start_jahr: z?.apByApId?.startJahr ?? '',
+      ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
+      ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
       id: z.id,
-      beurteilung: get(z, 'apErfkritWerteByErfolg.text') ?? '',
+      beurteilung: z?.apErfkritWerteByErfolg?.text ?? '',
       kriterien: z.kriterien,
       changed: z.changed,
       changed_by: z.changedBy,
@@ -715,14 +714,13 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allIdealbiotops.nodes', []).map((z) => ({
+    const rows = (result.data?.allIdealbiotops?.nodes ?? []).map((z) => ({
       ap_id: z.apId,
-      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') ?? '',
-      ap_bearbeitung:
-        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') ?? '',
-      ap_start_jahr: get(z, 'apByApId.startJahr') ?? '',
-      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') ?? '',
-      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') ?? '',
+      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
+      ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
+      ap_start_jahr: z?.apByApId?.startJahr ?? '',
+      ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
+      ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
       id: z.id,
       erstelldatum: z.erstelldatum,
       hoehenlage: z.hoehenlage,
