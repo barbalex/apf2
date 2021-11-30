@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
-import get from 'lodash/get'
 
 import popupFromProperties from './popupFromProperties'
 import storeContext from '../../../../storeContext'
@@ -45,7 +44,7 @@ const DetailplaeneLayer = () => {
     }
   `)
 
-  const nodes = get(data, 'allDetailplaenes.nodes') ?? []
+  const nodes = data?.allDetailplaenes?.nodes ?? []
   const detailplaene = nodes.map((n) => ({
     type: 'Feature',
     properties: {
@@ -55,7 +54,7 @@ const DetailplaeneLayer = () => {
       PflegeSzp: n.pflege_szp ?? '',
       Fläche: n.shape_area ?? '',
     },
-    geometry: JSON.parse(get(n, 'wkbGeometry.geojson')),
+    geometry: JSON.parse(n?.wkbGeometry?.geojson),
   }))
 
   if (error) {

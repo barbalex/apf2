@@ -3,7 +3,6 @@ import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
-import get from 'lodash/get'
 
 import popupFromProperties from './popupFromProperties'
 import storeContext from '../../../../storeContext'
@@ -53,7 +52,7 @@ const MarkierungenLayer = () => {
     }
   `)
 
-  const nodes = get(data, 'allMarkierungens.nodes') ?? []
+  const nodes = data?.allMarkierungens?.nodes ?? []
   const markierungen = nodes.map((n) => ({
     type: 'Feature',
     properties: {
@@ -61,7 +60,7 @@ const MarkierungenLayer = () => {
       PfostenNr: n.pfostennum ?? '',
       Markierung: n.markierung ?? '',
     },
-    geometry: JSON.parse(get(n, 'wkbGeometry.geojson')),
+    geometry: JSON.parse(n?.wkbGeometry?.geojson),
   }))
 
   if (error) {

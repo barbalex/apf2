@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import { useQuery, gql } from '@apollo/client'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import popupFromProperties from './popupFromProperties'
@@ -41,11 +40,11 @@ const GemeindeLayer = () => {
     }
   `)
 
-  const nodes = get(data, 'allChGemeindes.nodes') ?? []
+  const nodes = data?.allChGemeindes?.nodes ?? []
   const gemeinden = nodes.map((n) => ({
     type: 'Feature',
     properties: { Gemeinde: n.name ?? '' },
-    geometry: JSON.parse(get(n, 'wkbGeometry.geojson')),
+    geometry: JSON.parse(n?.wkbGeometry?.geojson),
   }))
 
   if (error) {
