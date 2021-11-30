@@ -34,12 +34,12 @@ const App = () => (
       <Titel>Wir sind bald zurück!</Titel>
       <div>
         <p>
-          Bitte entschuldigen Sie den Unterbruch. apflora.ch wird gerade
-          unterhalten. Wenn nötig sind wir{' '}
-          <A href="mailto:alex@gabriel-software.ch">erreichbar</A>, ansonsten
-          sind wir bald wieder online!
+          Bitte entschuldige den Unterbruch. apflora wird gerade unterhalten.
+          Wenn nötig sind wir per{' '}
+          <A href="mailto:alex@gabriel-software.ch">email</A> erreichbar,
+          ansonsten sind wir bald wieder online!
         </p>
-        <p>&mdash; Das apflora-Team</p>
+        <p>Dein apflora-Team</p>
       </div>
     </Article>
   </Container>
