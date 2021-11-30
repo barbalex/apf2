@@ -1,6 +1,5 @@
 import React, { useContext, useCallback } from 'react'
 import { Marker, Popup } from 'react-leaflet'
-import get from 'lodash/get'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
@@ -50,7 +49,7 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
     datum = format(new Date(beob.datum), 'yyyy.MM.dd')
   }
   const autor = beob.autor ?? '(kein Autor)'
-  const quelle = get(beob, 'quelle', '')
+  const quelle = beob?.quelle ?? ''
   const label = `${datum}: ${autor} (${quelle})`
   const openBeobInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
@@ -78,11 +77,9 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
     <Marker position={latLng} icon={icon} title={label}>
       <Popup>
         <>
-          <div>{`Beobachtung von ${get(
-            beob,
-            'aeTaxonomyByArtId.artname',
-            '',
-          )}`}</div>
+          <div>{`Beobachtung von ${
+            beob?.aeTaxonomyByArtId?.artname ?? ''
+          }`}</div>
           <StyledH3>{label}</StyledH3>
           <div>
             {`Koordinaten: ${beob.lv95X.toLocaleString(

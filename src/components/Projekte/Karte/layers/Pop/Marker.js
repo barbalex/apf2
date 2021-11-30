@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { Marker, Tooltip, Popup } from 'react-leaflet'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 
@@ -42,7 +41,7 @@ const PopMarker = ({ treeName, pop }) => {
 
   const nrLabel = pop.nr ? pop.nr.toString() : '(keine Nr)'
   let title = nrLabel
-  if (popLabelName === 'name') title = get(pop, 'name', '(kein Name)')
+  if (popLabelName === 'name') title = pop?.name ?? '(kein Name)'
   // beware: leaflet needs title to always be a string
   if (title && title.toString) {
     title = title.toString()
@@ -97,7 +96,7 @@ const PopMarker = ({ treeName, pop }) => {
   const zIndexOffset = -apfloraLayers.findIndex(
     (apfloraLayer) => apfloraLayer.value === 'pop',
   )
-  const artname = get(pop, 'apByApId.aeTaxonomyByArtId.artname', '')
+  const artname = pop?.apByApId?.aeTaxonomyByArtId?.artname ?? ''
 
   return (
     <Marker
@@ -120,11 +119,9 @@ const PopMarker = ({ treeName, pop }) => {
               pop.lv95X ? pop.lv95X.toLocaleString('de-ch') : ''
             } / ${pop.lv95Y ? pop.lv95Y.toLocaleString('de-ch') : ''}`}
           </div>
-          <div>{`Status: ${get(
-            pop,
-            'popStatusWerteByStatus.text',
-            '(kein Status)',
-          )}`}</div>
+          <div>{`Status: ${
+            pop?.popStatusWerteByStatus?.text ?? '(kein Status)'
+          }`}</div>
           <StyledButton
             size="small"
             variant="outlined"
