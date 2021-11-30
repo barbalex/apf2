@@ -1,5 +1,4 @@
 import React, { useContext, useMemo } from 'react'
-import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
@@ -45,15 +44,14 @@ const BeobZugeordnetAssignPolylines = ({ treeName }) => {
     })
   }
 
-  const aparts = get(
-    data,
-    'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
-    [],
+  const aparts = useMemo(
+    () => data?.projektById?.apsByProjId?.nodes?.[0]?.apartsByApId?.nodes ?? [],
+    [data?.projektById?.apsByProjId?.nodes],
   )
   const beobs = useMemo(
     () =>
       flatten(
-        aparts.map((a) => get(a, 'aeTaxonomyByArtId.beobsByArtId.nodes', [])),
+        aparts.map((a) => a?.aeTaxonomyByArtId?.beobsByArtId?.nodes ?? []),
       ),
     [aparts],
   )

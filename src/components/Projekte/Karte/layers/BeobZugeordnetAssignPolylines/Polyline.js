@@ -1,6 +1,5 @@
 import React, { useContext, useCallback } from 'react'
 import { Polyline, Popup } from 'react-leaflet'
-import get from 'lodash/get'
 import styled from 'styled-components'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
@@ -31,8 +30,8 @@ const Line = ({ treeName, beob }) => {
     typeof window !== 'undefined'
       ? new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
       : []
-  const tpopLong = get(beob, 'tpopByTpopId.wgs84Long')
-  const tpopLat = get(beob, 'tpopByTpopId.wgs84Lat')
+  const tpopLong = beob?.tpopByTpopId?.wgs84Long
+  const tpopLat = beob?.tpopByTpopId?.wgs84Lat
   const tpopLatLng =
     tpopLong && tpopLat
       ? typeof window !== 'undefined'
@@ -48,10 +47,10 @@ const Line = ({ treeName, beob }) => {
     datum = format(new Date(beob.datum), 'yyyy.MM.dd')
   }
   const autor = beob.autor ?? '(kein Autor)'
-  const quelle = get(beob, 'quelle', '')
+  const quelle = beob?.quelle ?? ''
 
-  const popId = get(beob, 'tpopByTpopId.popId', '')
-  const tpopId = get(beob, 'tpopByTpopId.id', '')
+  const popId = beob?.tpopByTpopId?.popId ?? ''
+  const tpopId = beob?.tpopByTpopId?.id ?? ''
   const openBeobInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
       'Projekte',
@@ -109,7 +108,7 @@ const Line = ({ treeName, beob }) => {
         <>
           <StyledH3>Zuordnung</StyledH3>
           <div>einer Beobachtung</div>
-          <div>{`von ${get(beob, 'aeTaxonomyByArtId.artname', '')}`}</div>
+          <div>{`von ${beob?.aeTaxonomyByArtId?.artname ?? ''}`}</div>
           <div>{`am ${datum}`}</div>
           <div>{`durch ${autor}`}</div>
           <div>
@@ -117,11 +116,9 @@ const Line = ({ treeName, beob }) => {
               'de-ch',
             )} / ${beob.lv95Y.toLocaleString('de-ch')}`}
           </div>
-          <div>{`zur Teil-Population: ${get(
-            beob,
-            'tpopByTpopId.nr',
-            '(keine Nr)',
-          )}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
+          <div>{`zur Teil-Population: ${
+            beob?.tpopByTpopId?.nr ?? '(keine Nr)'
+          }: ${beob?.tpopByTpopId?.flurname ?? '(kein Flurname)'}`}</div>
           <div>{`Quelle: ${quelle}`}</div>
           <StyledButton
             size="small"

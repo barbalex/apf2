@@ -12,7 +12,6 @@ import {
   MdFilterCenterFocus,
   MdRemove,
 } from 'react-icons/md'
-import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { getSnapshot } from 'mobx-state-tree'
 import { observer } from 'mobx-react-lite'
@@ -112,7 +111,7 @@ const BeobZugeordnetAssignPolylinesIcon = styled(RemoveIcon)`
 `
 const MapIconDiv = styled.div``
 
-const MySortableItem = ({ treeName, apfloraLayer, index }) => {
+const MySortableItem = ({ treeName, apfloraLayer }) => {
   const map = useMap()
   const store = useContext(storeContext)
   const {
@@ -168,11 +167,14 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
     return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
   }, [assigningBeob, assigningispossible])
   // for each layer there must exist a path in data!
-  let layerData = get(data, `${apfloraLayer.value}.nodes`, [])
+  let layerData = useMemo(
+    () => data[`${apfloraLayer.value}.nodes`] ?? [],
+    [apfloraLayer.value, data],
+  )
   if (apfloraLayer.value === 'tpop') {
     // but tpop is special...
-    const pops = get(data, 'tpopByPop.nodes', [])
-    layerData = flatten(pops.map((n) => get(n, 'tpopsByPopId.nodes', [])))
+    const pops = data?.tpopByPop?.nodes ?? []
+    layerData = flatten(pops.map((n) => n?.tpopsByPopId?.nodes ?? []))
   }
   const layerDataHighlighted = layerData.filter((o) =>
     mapIdsFiltered.includes(o.id),
