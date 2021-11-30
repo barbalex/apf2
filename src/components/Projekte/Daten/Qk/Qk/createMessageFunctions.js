@@ -355,101 +355,72 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       text: `Population: ${n.nr || n.id}`,
     })),
   popStatus101TpopStatusAnders: () =>
-    get(data, 'popStatus101TpopStatusAnders.nodes', []).map((n) => ({
+    (data?.popStatus101TpopStatusAnders?.nodes ?? []).map((n) => ({
       url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
       text: `Population: ${n.nr || n.id}`,
     })),
   popStatusErloschenLetzterPopberZunehmend: () =>
-    get(data, 'popStatusErloschenLetzterPopberZunehmend.nodes', []).map(
-      (n) => ({
-        url: [
-          'Projekte',
-          n.projId,
-          'Aktionspläne',
-          n.apId,
-          'Populationen',
-          n.id,
-        ],
-        text: `Population: ${n.nr || n.id}`,
-      }),
-    ),
+    (data?.popStatusErloschenLetzterPopberZunehmend?.nodes ?? []).map((n) => ({
+      url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+      text: `Population: ${n.nr || n.id}`,
+    })),
   popStatusErloschenLetzterPopberStabil: () =>
-    get(data, 'popStatusErloschenLetzterPopberStabil.nodes', []).map((n) => ({
+    (data?.popStatusErloschenLetzterPopberStabil?.nodes ?? []).map((n) => ({
       url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
       text: `Population: ${n.nr || n.id}`,
     })),
   popStatusErloschenLetzterPopberAbnehmend: () =>
-    get(data, 'popStatusErloschenLetzterPopberAbnehmend.nodes', []).map(
-      (n) => ({
-        url: [
-          'Projekte',
-          n.projId,
-          'Aktionspläne',
-          n.apId,
-          'Populationen',
-          n.id,
-        ],
-        text: `Population: ${n.nr || n.id}`,
-      }),
-    ),
+    (data?.popStatusErloschenLetzterPopberAbnehmend?.nodes ?? []).map((n) => ({
+      url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+      text: `Population: ${n.nr || n.id}`,
+    })),
   popStatusErloschenLetzterPopberUnsicher: () =>
-    get(data, 'popStatusErloschenLetzterPopberUnsicher.nodes', []).map((n) => ({
+    (data?.popStatusErloschenLetzterPopberUnsicher?.nodes ?? []).map((n) => ({
       url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
       text: `Population: ${n.nr || n.id}`,
     })),
   popOhnePopmassnber: () =>
-    get(data, 'popOhnePopmassnber.nodes', []).map((n) => ({
+    (data?.popOhnePopmassnber?.nodes ?? []).map((n) => ({
       url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
       text: `Population: ${n.nr || n.id}`,
     })),
   popKoordEntsprechenKeinerTpop: () =>
-    get(data, 'popKoordEntsprechenKeinerTpop.nodes', []).map((n) => ({
+    (data?.popKoordEntsprechenKeinerTpop?.nodes ?? []).map((n) => ({
       url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
       text: `Population: ${n.nr || n.id}`,
     })),
   popStatusAnsaatversuchTpopAktuell: () =>
-    get(data, 'popStatusAnsaatversuchTpopAktuell.nodes', []).map((n) => ({
+    (data?.popStatusAnsaatversuchTpopAktuell?.nodes ?? []).map((n) => ({
       url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
       text: `Population: ${n.nr || n.id}`,
     })),
   popStatusAnsaatversuchAlleTpopErloschen: () =>
-    get(data, 'popStatusAnsaatversuchAlleTpopErloschen.nodes', []).map((n) => ({
+    (data?.popStatusAnsaatversuchAlleTpopErloschen?.nodes ?? []).map((n) => ({
       url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
       text: `Population: ${n.nr}`,
     })),
   popStatusAnsaatversuchMitTpopUrspruenglichErloschen: () =>
-    get(
-      data,
-      'popStatusAnsaatversuchMitTpopUrspruenglichErloschen.nodes',
-      [],
+    (
+      data?.popStatusAnsaatversuchMitTpopUrspruenglichErloschen?.nodes ?? []
     ).map((n) => ({
       url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
       text: `Population: ${n.nr || n.id}`,
     })),
   popStatusErloschenMitTpopAktuell: () =>
-    get(data, 'popStatusErloschenMitTpopAktuell.nodes', []).map((n) => ({
+    (data?.popStatusErloschenMitTpopAktuell?.nodes ?? []).map((n) => ({
       url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
       text: `Population: ${n.nr || n.id}`,
     })),
   popStatusErloschenMitTpopAnsaatversuch: () =>
-    get(data, 'popStatusErloschenMitTpopAnsaatversuch.nodes', []).map((n) => ({
+    (data?.popStatusErloschenMitTpopAnsaatversuch?.nodes ?? []).map((n) => ({
       url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
       text: `Population: ${n.nr || n.id}`,
     })),
   popStatusUrspruenglichWiederauferstanden: () =>
-    get(data, 'popStatusUrspruenglichWiederauferstanden.nodes', []).map(
-      (n) => ({
-        url: [
-          'Projekte',
-          n.projId,
-          'Aktionspläne',
-          n.apId,
-          'Populationen',
-          n.id,
-        ],
-        text: `Population: ${n.nr || n.id}`,
-      }),
-    ),
+    (data?.popStatusUrspruenglichWiederauferstanden?.nodes ?? []).map((n) => ({
+      url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+      text: `Population: ${n.nr || n.id}`,
+    })),
   popStatusAngesiedeltMitTpopUrspruenglich: () =>
     get(data, 'popStatusAngesiedeltMitTpopUrspruenglich.nodes', []).map(
       (n) => ({
