@@ -131,8 +131,6 @@ const App = ({ element }) => {
 
   if (typeof window !== 'undefined') window.store = store
 
-  //console.log('App', { element })
-
   return (
     <IdbProvider value={idbContext}>
       <MobxProvider value={store}>
