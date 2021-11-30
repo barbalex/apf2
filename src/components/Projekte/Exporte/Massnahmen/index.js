@@ -8,7 +8,6 @@ import Icon from '@mui/material/Icon'
 import Button from '@mui/material/Button'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import { useSnackbar } from 'notistack'
@@ -227,91 +226,77 @@ const Massnahmen = () => {
                   },
                 })
               }
-              const rows = get(result.data, 'allTpopmassns.nodes', []).map(
+              const rows = (result.data?.allTpopmassns.nodes ?? []).map(
                 (n) => ({
-                  apId: get(n, 'tpopByTpopId.popByPopId.apByApId.id') ?? null,
+                  apId: n?.tpopByTpopId?.popByPopId?.apByApId?.id ?? null,
                   apFamilie:
-                    get(
-                      n,
-                      'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.familie',
-                    ) ?? null,
+                    n?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId
+                      ?.familie ?? null,
                   apArtname:
-                    get(
-                      n,
-                      'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.artname',
-                    ) ?? null,
+                    n?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId
+                      ?.artname ?? null,
                   apBearbeitung:
-                    get(
-                      n,
-                      'tpopByTpopId.popByPopId.apByApId.apBearbstandWerteByBearbeitung.text',
-                    ) ?? null,
+                    n?.tpopByTpopId?.popByPopId?.apByApId
+                      ?.apBearbstandWerteByBearbeitung?.text ?? null,
                   apStartJahr:
-                    get(n, 'tpopByTpopId.popByPopId.apByApId.startJahr') ??
-                    null,
+                    n?.tpopByTpopId?.popByPopId?.apByApId?.startJahr ?? null,
                   apUmsetzung:
-                    get(
-                      n,
-                      'tpopByTpopId.popByPopId.apByApId.apUmsetzungWerteByUmsetzung.text',
-                    ) ?? null,
-                  popId: get(n, 'tpopByTpopId.popByPopId.id') ?? null,
-                  popNr: get(n, 'tpopByTpopId.popByPopId.nr') ?? null,
-                  popName: get(n, 'tpopByTpopId.popByPopId.name') ?? null,
+                    n?.tpopByTpopId?.popByPopId?.apByApId
+                      ?.apUmsetzungWerteByUmsetzung?.text ?? null,
+                  popId: n?.tpopByTpopId?.popByPopId?.id ?? null,
+                  popNr: n?.tpopByTpopId?.popByPopId?.nr ?? null,
+                  popName: n?.tpopByTpopId?.popByPopId?.name ?? null,
                   popStatus:
-                    get(
-                      n,
-                      'tpopByTpopId.popByPopId.popStatusWerteByStatus.text',
-                    ) ?? null,
-                  popBekanntSeit:
-                    get(n, 'tpopByTpopId.popByPopId.bekanntSeit') ?? null,
-                  popStatusUnklar:
-                    get(n, 'tpopByTpopId.popByPopId.statusUnklar') ?? null,
-                  popStatusUnklarBegruendung:
-                    get(n, 'tpopByTpopId.popByPopId.statusUnklarBegruendung') ??
+                    n?.tpopByTpopId?.popByPopId?.popStatusWerteByStatus?.text ??
                     null,
-                  popX: get(n, 'tpopByTpopId.popByPopId.x') ?? null,
-                  popY: get(n, 'tpopByTpopId.popByPopId.y') ?? null,
-                  tpopId: get(n, 'tpopByTpopId.id') ?? null,
-                  tpopNr: get(n, 'tpopByTpopId.nr') ?? null,
-                  tpopGemeinde: get(n, 'tpopByTpopId.gemeinde') ?? null,
-                  tpopFlurname: get(n, 'tpopByTpopId.flurname') ?? null,
-                  tpopStatus: get(n, 'tpopByTpopId.status') ?? null,
+                  popBekanntSeit:
+                    n?.tpopByTpopId?.popByPopId?.bekanntSeit ?? null,
+                  popStatusUnklar:
+                    n?.tpopByTpopId?.popByPopId?.statusUnklar ?? null,
+                  popStatusUnklarBegruendung:
+                    n?.tpopByTpopId?.popByPopId?.statusUnklarBegruendung ??
+                    null,
+                  popX: n?.tpopByTpopId?.popByPopId?.x ?? null,
+                  popY: n?.tpopByTpopId?.popByPopId?.y ?? null,
+                  tpopId: n?.tpopByTpopId?.id ?? null,
+                  tpopNr: n?.tpopByTpopId?.nr ?? null,
+                  tpopGemeinde: n?.tpopByTpopId?.gemeinde ?? null,
+                  tpopFlurname: n?.tpopByTpopId?.flurname ?? null,
+                  tpopStatus: n?.tpopByTpopId?.status ?? null,
                   statusDecodiert:
-                    get(n, 'tpopByTpopId.popStatusWerteByStatus.text') ?? null,
-                  tpopBekanntSeit: get(n, 'tpopByTpopId.bekanntSeit') ?? null,
-                  tpopStatusUnklar: get(n, 'tpopByTpopId.statusUnklar') ?? null,
+                    n?.tpopByTpopId?.popStatusWerteByStatus?.text ?? null,
+                  tpopBekanntSeit: n?.tpopByTpopId?.bekanntSeit ?? null,
+                  tpopStatusUnklar: n?.tpopByTpopId?.statusUnklar ?? null,
                   tpopStatusUnklarGrund:
-                    get(n, 'tpopByTpopId.statusUnklarGrund') ?? null,
-                  tpopX: get(n, 'tpopByTpopId.x') ?? null,
-                  tpopY: get(n, 'tpopByTpopId.y') ?? null,
-                  tpopRadius: get(n, 'tpopByTpopId.radius') ?? null,
-                  tpopHoehe: get(n, 'tpopByTpopId.hoehe') ?? null,
-                  tpopExposition: get(n, 'tpopByTpopId.exposition') ?? null,
-                  tpopKlima: get(n, 'tpopByTpopId.klima') ?? null,
-                  tpopNeigung: get(n, 'tpopByTpopId.neigung') ?? null,
-                  tpopBeschreibung: get(n, 'tpopByTpopId.beschreibung') ?? null,
-                  tpopKatasterNr: get(n, 'tpopByTpopId.katasterNr') ?? null,
-                  tpopApberRelevant:
-                    get(n, 'tpopByTpopId.apberRelevant') ?? null,
+                    n?.tpopByTpopId?.statusUnklarGrund ?? null,
+                  tpopX: n?.tpopByTpopId?.x ?? null,
+                  tpopY: n?.tpopByTpopId?.y ?? null,
+                  tpopRadius: n?.tpopByTpopId?.radius ?? null,
+                  tpopHoehe: n?.tpopByTpopId?.hoehe ?? null,
+                  tpopExposition: n?.tpopByTpopId?.exposition ?? null,
+                  tpopKlima: n?.tpopByTpopId?.klima ?? null,
+                  tpopNeigung: n?.tpopByTpopId?.neigung ?? null,
+                  tpopBeschreibung: n?.tpopByTpopId?.beschreibung ?? null,
+                  tpopKatasterNr: n?.tpopByTpopId?.katasterNr ?? null,
+                  tpopApberRelevant: n?.tpopByTpopId?.apberRelevant ?? null,
                   tpopApberRelevantGrund:
-                    get(n, 'tpopByTpopId.apberRelevantGrund') ?? null,
-                  tpopEigentuemer: get(n, 'tpopByTpopId.eigentuemer') ?? null,
-                  tpopKontakt: get(n, 'tpopByTpopId.kontakt') ?? null,
-                  tpopNutzungszone: get(n, 'tpopByTpopId.nutzungszone') ?? null,
-                  tpopBewirtschafter:
-                    get(n, 'tpopByTpopId.bewirtschafter') ?? null,
-                  tpopBewirtschaftung:
-                    get(n, 'tpopByTpopId.bewirtschaftung') ?? null,
-                  tpopEkfrequenz: get(n, 'tpopByTpopId.ekfrequenz') ?? null,
+                    n?.tpopByTpopId?.apberRelevantGrund ?? null,
+                  tpopEigentuemer: n?.tpopByTpopId?.eigentuemer ?? null,
+                  tpopKontakt: n?.tpopByTpopId?.kontakt ?? null,
+                  tpopNutzungszone: n?.tpopByTpopId?.nutzungszone ?? null,
+                  tpopBewirtschafter: n?.tpopByTpopId?.bewirtschafter ?? null,
+                  tpopBewirtschaftung: n?.tpopByTpopId?.bewirtschaftung ?? null,
+                  tpopEkfrequenz: n?.tpopByTpopId?.ekfrequenz ?? null,
                   tpopEkfrequenzAbweichend:
-                    get(n, 'tpopByTpopId.ekfrequenzAbweichend') ?? null,
+                    n?.tpopByTpopId?.ekfrequenzAbweichend ?? null,
                   tpopEkfKontrolleur:
-                    get(n, 'tpopByTpopId.adresseByEkfKontrolleur.name') ?? null,
+                    n?.tpopByTpopId?.adresseByEkfKontrolleur?.name ?? null,
                   id: n.id,
                   jahr: n.jahr,
                   datum: n.datum,
-                  typ: get(n, 'tpopmassnTypWerteByTyp.text') ?? null,
+                  typ: n?.tpopmassnTypWerteByTyp?.text ?? null,
                   beschreibung: n.beschreibung,
-                  bearbeiter: get(n, 'adresseByBearbeiter.name') ?? null,
+                  bearbeiter: n?.adresseByBearbeiter?.name ?? null,
                   bemerkungen: n.bemerkungen,
                   planVorhanden: n.planVorhanden,
                   planBezeichnung: n.planBezeichnung,
@@ -323,10 +308,8 @@ const Massnahmen = () => {
                   anzPflanzen: n.anzPflanzen,
                   anzPflanzstellen: n.anzPflanzstellen,
                   zieleinheitEinheit:
-                    get(
-                      n,
-                      'tpopkontrzaehlEinheitWerteByZieleinheitEinheit.text',
-                    ) ?? null,
+                    n?.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text ??
+                    null,
                   zieleinheitAnzahl: n.zieleinheitAnzahl,
                   wirtspflanze: n.wirtspflanze,
                   herkunftPop: n.herkunftPop,
@@ -383,7 +366,7 @@ const Massnahmen = () => {
                   },
                 })
               }
-              const rows = get(result.data, 'allVMassnWebgisbuns.nodes', [])
+              const rows = result.data?.allVMassnWebgisbuns.nodes ?? []
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
