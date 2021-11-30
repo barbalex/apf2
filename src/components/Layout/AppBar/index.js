@@ -1,16 +1,13 @@
-import React, { useContext, useCallback } from 'react'
+import React from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import styled from 'styled-components'
 import { useLocation } from '@reach/router'
-import { useResizeDetector } from 'react-resize-detector'
-import { observer } from 'mobx-react-lite'
 
-import Home from './Home'
-import Doku from './Doku'
-import Projekte from './Projekte'
+import HomeBar from './Home'
+import DokuBar from './Doku'
+import ProjekteBar from './Projekte'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import storeContext from '../../../storeContext'
 
 const StyledAppBar = styled(AppBar)`
   min-height: 64px !important;
@@ -31,29 +28,15 @@ const MyAppBar = () => {
   const isHome = pathname === '/'
   const isProjekte = pathname.startsWith('/Daten')
 
-  const { setAppBarHeight } = useContext(storeContext)
-  const onResize = useCallback(
-    (width, height) => {
-      //console.log('AppBar, height: ', height)
-      setAppBarHeight(height)
-    },
-    [setAppBarHeight],
-  )
-
-  const { ref: resizeRef } = useResizeDetector({
-    onResize,
-    handleWidth: false,
-  })
-
   return (
     <ErrorBoundary>
-      <StyledAppBar position="static" ref={resizeRef}>
+      <StyledAppBar position="static">
         <StyledToolbar>
-          {isHome ? <Home /> : isProjekte ? <Projekte /> : <Doku />}
+          {isHome ? <HomeBar /> : isProjekte ? <ProjekteBar /> : <DokuBar />}
         </StyledToolbar>
       </StyledAppBar>
     </ErrorBoundary>
   )
 }
 
-export default observer(MyAppBar)
+export default MyAppBar

@@ -32,7 +32,6 @@ const ekfYear = new Date(ekfRefDate).getFullYear()
 
 const myTypes = types
   .model({
-    appBarHeight: types.optional(types.number, 64),
     apfloraLayers: types.optional(
       types.array(ApfloraLayer),
       standardApfloraLayers,
@@ -211,9 +210,6 @@ const myTypes = types
     },
   }))
   .actions((self) => ({
-    setAppBarHeight(val) {
-      self.appBarHeight = val
-    },
     setPrintingJberYear(val) {
       self.printingJberYear = val
     },

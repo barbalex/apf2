@@ -18,7 +18,7 @@ import getActiveNodeArrayFromPathname from '../modules/getActiveNodeArrayFromPat
 
 const Container = styled.div`
   background-color: #fffde7;
-  height: ${(props) => `calc(100% - ${props['data-appbar-height']}px)`};
+  height: ${(props) => `calc(100% - ${props.appbarheight}px)`};
 
   @media print {
     margin-top: 0;
@@ -28,10 +28,9 @@ const Container = styled.div`
   }
 `
 
-const DatenPage = ({ location }) => {
+const DatenPage = ({ location, appbarheight }) => {
   const store = useContext(storeContext)
-  const { view, showDeletions, user, setIsPrint, setEkfIds, appBarHeight } =
-    store
+  const { view, showDeletions, user, setIsPrint, setEkfIds } = store
   const { activeNodeArray, setActiveNodeArray, setLastTouchedNode } = store.tree
 
   useEffect(() => {
@@ -65,16 +64,18 @@ const DatenPage = ({ location }) => {
       })
     }
   }, [setEkfIds, setIsPrint])
+
   const isEkPlan =
     activeNodeArray.length === 3 &&
     activeNodeArray[0] === 'Projekte' &&
     activeNodeArray[2] === 'EK-Planung'
-
   const form = useMemo(
     () => (isEkPlan ? 'ekplan' : view === 'ekf' ? 'ekf' : 'projekte'),
     [isEkPlan, view],
   )
+  console.log('DatenPage rendering')
 
+  // set unterhalt to true to show this page when servicing
   const unterhalt = false
   if (unterhalt) {
     return (
@@ -84,10 +85,11 @@ const DatenPage = ({ location }) => {
     )
   }
 
+  // using render props on Layout to pass down appbarheight without using store
   return (
     <ErrorBoundary>
       <Layout>
-        <Container data-appbar-height={appBarHeight}>
+        <Container>
           {!!user.token && (
             <>
               {form === 'ekf' && <Ekf />}

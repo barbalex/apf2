@@ -9,7 +9,7 @@ import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 
 const Container = styled.div`
-  height: 100%;
+  height: ${(props) => `calc(100% - ${props['data-appbar-height']}px)`};
 `
 const TextContainer = styled.div`
   display: flex;
@@ -44,13 +44,13 @@ const bgImageStyle = {
   zIndex: -1,
 }
 
-const FourOFour = () => {
+const FourOFour = ({ appBarHeight }) => {
   const onClickBack = useCallback(() => navigate('/'), [])
 
   return (
     <ErrorBoundary>
       <Container>
-        <Layout>
+        <Layout data-appbar-height={appBarHeight ?? 64}>
           <StaticImage
             style={bgImageStyle}
             src="../images/ophr-ara.jpg"

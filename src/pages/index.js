@@ -10,7 +10,7 @@ import ErrorBoundary from '../components/shared/ErrorBoundary'
 
 const OuterContainer = styled.div`
   overflow-y: auto;
-  height: 100%;
+  height: ${(props) => `calc(100% - ${props.appbarheight}px)`};
 `
 const StyledSimpleBar = styled(SimpleBar)`
   max-height: 100%;

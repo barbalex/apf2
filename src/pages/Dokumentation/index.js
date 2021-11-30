@@ -5,7 +5,7 @@ import Layout from '../../components/Layout'
 import ErrorBoundary from '../../components/shared/ErrorBoundary'
 
 const Container = styled.div`
-  height: 100%;
+  height: ${(props) => `calc(100% - ${props.appbarheight}px)`};
   display: flex;
   flex-direction: column;
   overflow: hidden;
