@@ -447,7 +447,7 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
     const popNodes =
       data?.popberOhneJahr?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
     const popberNodes = flatten(
-      popNodes.map((n) => get(n, 'popbersByPopId.nodes', [])),
+      popNodes.map((n) => n?.popbersByPopId?.nodes ?? []),
     )
     return popberNodes.map((n) => ({
       url: [
@@ -456,13 +456,13 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         'Aktionspläne',
         apId,
         'Populationen',
-        get(n, 'popByPopId.id'),
+        n?.popByPopId?.id,
         'Kontroll-Berichte',
         n.id,
       ],
-      text: `Population: ${
-        get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')
-      }, Bericht: ${n.id}`,
+      text: `Population: ${n?.popByPopId?.nr ?? n?.popByPopId?.id}, Bericht: ${
+        n.id
+      }`,
     }))
   },
   popberOhneEntwicklung: () => {
@@ -470,7 +470,7 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       data?.popberOhneEntwicklung?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ??
       []
     const popberNodes = flatten(
-      popNodes.map((n) => get(n, 'popbersByPopId.nodes', [])),
+      popNodes.map((n) => n?.popbersByPopId?.nodes ?? []),
     )
     return popberNodes.map((n) => ({
       url: [
@@ -479,13 +479,13 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         'Aktionspläne',
         apId,
         'Populationen',
-        get(n, 'popByPopId.id'),
+        n?.popByPopId?.id,
         'Kontroll-Berichte',
         n.id,
       ],
-      text: `Population: ${
-        get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')
-      }, Bericht: ${n.jahr || n.id}`,
+      text: `Population: ${n?.popByPopId?.nr ?? n?.popByPopId?.id}, Bericht: ${
+        n.jahr || n.id
+      }`,
     }))
   },
   popmassnberOhneJahr: () => {
@@ -493,7 +493,7 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       data?.popmassnberOhneJahr?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ??
       []
     const popberNodes = flatten(
-      popNodes.map((n) => get(n, 'popmassnbersByPopId.nodes', [])),
+      popNodes.map((n) => n?.popmassnbersByPopId?.nodes ?? []),
     )
     return popberNodes.map((n) => ({
       url: [
@@ -502,13 +502,13 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         'Aktionspläne',
         apId,
         'Populationen',
-        get(n, 'popByPopId.id'),
+        n?.popByPopId?.id,
         'Massnahmen-Berichte',
         n.id,
       ],
-      text: `Population: ${
-        get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')
-      }, Bericht: ${n.id}`,
+      text: `Population: ${n?.popByPopId?.nr ?? n?.popByPopId?.id}, Bericht: ${
+        n.id
+      }`,
     }))
   },
   popmassnberOhneEntwicklung: () => {
@@ -516,7 +516,7 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
       data?.popmassnberOhneEntwicklung?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
     const popberNodes = flatten(
-      popNodes.map((n) => get(n, 'popmassnbersByPopId.nodes', [])),
+      popNodes.map((n) => n?.popmassnbersByPopId?.nodes ?? []),
     )
     return popberNodes.map((n) => ({
       url: [
@@ -525,13 +525,13 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         'Aktionspläne',
         apId,
         'Populationen',
-        get(n, 'popByPopId.id'),
+        n?.popByPopId?.id,
         'Massnahmen-Berichte',
         n.id,
       ],
-      text: `Population: ${
-        get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')
-      }, Bericht: ${n.jahr || n.id}`,
+      text: `Population: ${n?.popByPopId?.nr ?? n?.popByPopId?.id}, Bericht: ${
+        n.jahr ?? n.id
+      }`,
     }))
   },
   tpopBekanntSeitJuengerAlsAeltesteBeob: () =>
@@ -683,9 +683,7 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
   tpopOhneNr: () => {
     const popNodes =
       data?.tpopOhneNr?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     return tpopNodes.map((n) => ({
       url: [
         'Projekte',
@@ -693,21 +691,19 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         'Aktionspläne',
         apId,
         'Populationen',
-        get(n, 'popByPopId.id'),
+        n?.popByPopId?.id,
         'Teil-Populationen',
         n.id,
       ],
       text: `Population: ${
-        get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')
+        n?.popByPopId?.nr ?? n?.popByPopId?.id
       }, Teil-Population: ${n.id}`,
     }))
   },
   tpopOhneFlurname: () => {
     const popNodes =
       data?.tpopOhneFlurname?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     return tpopNodes.map((n) => ({
       url: [
         'Projekte',
@@ -715,21 +711,19 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         'Aktionspläne',
         apId,
         'Populationen',
-        get(n, 'popByPopId.id'),
+        n?.popByPopId?.id,
         'Teil-Populationen',
         n.id,
       ],
       text: `Population: ${
-        get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')
+        n?.popByPopId?.nr ?? n?.popByPopId?.id
       }, Teil-Population: ${n.nr || n.id}`,
     }))
   },
   tpopOhneStatus: () => {
     const popNodes =
       data?.tpopOhneStatus?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     return tpopNodes.map((n) => ({
       url: [
         'Projekte',
@@ -737,22 +731,20 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         'Aktionspläne',
         apId,
         'Populationen',
-        get(n, 'popByPopId.id'),
+        n?.popByPopId?.id,
         'Teil-Populationen',
         n.id,
       ],
       text: `Population: ${
-        get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')
-      }, Teil-Population: ${n.nr || n.id}`,
+        n?.popByPopId?.nr ?? n?.popByPopId?.id
+      }, Teil-Population: ${n.nr ?? n.id}`,
     }))
   },
   tpopOhneBekanntSeit: () => {
     const popNodes =
       data?.tpopOhneBekanntSeit?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ??
       []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     return tpopNodes.map((n) => ({
       url: [
         'Projekte',
@@ -760,22 +752,20 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         'Aktionspläne',
         apId,
         'Populationen',
-        get(n, 'popByPopId.id'),
+        n?.popByPopId?.id,
         'Teil-Populationen',
         n.id,
       ],
       text: `Population: ${
-        get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')
-      }, Teil-Population: ${n.nr || n.id}`,
+        n?.popByPopId?.nr ?? n?.popByPopId?.id
+      }, Teil-Population: ${n.nr ?? n.id}`,
     }))
   },
   tpopOhneApberRelevant: () => {
     const popNodes =
       data?.tpopOhneApberRelevant?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ??
       []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     return tpopNodes.map((n) => ({
       url: [
         'Projekte',
@@ -783,21 +773,19 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         'Aktionspläne',
         apId,
         'Populationen',
-        get(n, 'popByPopId.id'),
+        n?.popByPopId?.id,
         'Teil-Populationen',
         n.id,
       ],
       text: `Population: ${
-        get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')
-      }, Teil-Population: ${n.nr || n.id}`,
+        n?.popByPopId?.nr ?? n?.popByPopId?.id
+      }, Teil-Population: ${n.nr ?? n.id}`,
     }))
   },
   tpopOhneKoord: () => {
     const popNodes =
       data?.tpopOhneKoord?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     return tpopNodes.map((n) => ({
       url: [
         'Projekte',
@@ -805,22 +793,20 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
         'Aktionspläne',
         apId,
         'Populationen',
-        get(n, 'popByPopId.id'),
+        n?.popByPopId?.id,
         'Teil-Populationen',
         n.id,
       ],
       text: `Population: ${
-        get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')
-      }, Teil-Population: ${n.nr || n.id}`,
+        n?.popByPopId?.nr ?? n?.popByPopId?.id
+      }, Teil-Population: ${n.nr ?? n.id}`,
     }))
   },
   tpopStatusPotentiellApberrelevant: () => {
     const popNodes =
       data?.tpopStatusPotentiellApberrelevant?.apsByProjId?.nodes?.[0]
         ?.popsByApId?.nodes ?? []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     return tpopNodes.map((n) => ({
       url: [
         'Projekte',
