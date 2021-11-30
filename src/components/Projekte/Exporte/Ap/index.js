@@ -8,7 +8,6 @@ import Icon from '@mui/material/Icon'
 import Button from '@mui/material/Button'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
@@ -781,16 +780,15 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allAssozarts.nodes', []).map((z) => ({
+    const rows = (result.data?.allAssozarts?.nodes ?? []).map((z) => ({
       ap_id: z.apId,
-      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') ?? '',
-      ap_bearbeitung:
-        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') ?? '',
-      ap_start_jahr: get(z, 'apByApId.startJahr') ?? '',
-      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') ?? '',
-      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') ?? '',
+      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
+      ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
+      ap_start_jahr: z?.apByApId?.startJahr ?? '',
+      ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
+      ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
       id: z.id,
-      artname_assoziiert: get(z, 'aeTaxonomyByAeId.artname') ?? '',
+      artname_assoziiert: z?.aeTaxonomyByAeId?.artname ?? '',
       bemerkungen: z.bemerkungen,
       changed: z.changed,
       changed_by: z.changedBy,
