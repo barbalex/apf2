@@ -1,5 +1,4 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
-import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
@@ -59,7 +58,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
     // because icons where added every time a tpop left, then reentered the bbox
     // geomPoint: { within: myBbox },
   }
-  if (!!tree.nodeLabelFilter.beob) {
+  if (tree.nodeLabelFilter.beob) {
     beobFilter.label = {
       includesInsensitive: tree.nodeLabelFilter.beob,
     }
@@ -92,29 +91,27 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
     })
   }
 
-  const aparts = get(
-    data,
-    'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
-    [],
+  const aparts = useMemo(
+    () => data?.projektById?.apsByProjId?.nodes?.[0]?.apartsByApId?.nodes ?? [],
+    [data?.projektById?.apsByProjId?.nodes],
   )
   let beobs = useMemo(
     () =>
       flatten(
-        aparts.map((a) => get(a, 'aeTaxonomyByArtId.beobsByArtId.nodes', [])),
+        aparts.map((a) => a?.aeTaxonomyByArtId?.beobsByArtId?.nodes ?? []),
       ),
     [aparts],
   )
 
-  const beobNichtBeurteiltForMapAparts = get(
-    data,
-    `projektById.apsByProjId.nodes[0].apartsByApId.nodes`,
-    [],
+  const beobNichtBeurteiltForMapAparts = useMemo(
+    () => data?.projektById?.apsByProjId?.nodes?.[0]?.apartsByApId?.nodes ?? [],
+    [data?.projektById?.apsByProjId?.nodes],
   )
   const beobNichtBeurteiltForMapNodes = useMemo(
     () =>
       flatten(
-        beobNichtBeurteiltForMapAparts.map((n) =>
-          get(n, 'aeTaxonomyByArtId.beobsByArtId.nodes', []),
+        beobNichtBeurteiltForMapAparts.map(
+          (n) => n?.aeTaxonomyByArtId?.beobsByArtId?.nodes ?? [],
         ),
       ),
     [beobNichtBeurteiltForMapAparts],
