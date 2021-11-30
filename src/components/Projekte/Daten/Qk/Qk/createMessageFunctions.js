@@ -1,11 +1,10 @@
-import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import sortBy from 'lodash/sortBy'
 
 import isPointInsidePolygon from './isPointInsidePolygon'
 import ktZh from './ktZh.json'
 
-const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
+const createMessageFunctions = ({ data, projId, apId }) => ({
   tpopsOutsideZh: () => {
     const projId = data?.tpopsOutsideZh?.projId
     const apId = data?.tpopsOutsideZh?.apsByProjId?.nodes?.[0]?.id
@@ -1531,24 +1530,20 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
     const popNodes =
       data?.freiwkontrzaehlungOhneEinheit?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => get(n, 'tpopkontrsByTpopId.nodes', [])),
+      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
     )
     const tpopkontrzaehlNodes = flatten(
-      tpopkontrNodes.map((n) =>
-        get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []),
-      ),
+      tpopkontrNodes.map((n) => n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []),
     )
     return tpopkontrzaehlNodes.map((n) => {
-      const popId = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.id')
-      const popNr = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.nr')
-      const tpopId = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.id')
-      const tpopNr = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.nr')
-      const tpopkontrId = get(n, 'tpopkontrByTpopkontrId.id')
-      const tpopkontrJahr = get(n, 'tpopkontrByTpopkontrId.jahr')
+      const popId = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.id
+      const popNr = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.nr
+      const tpopId = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.id
+      const tpopNr = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.nr
+      const tpopkontrId = n?.tpopkontrByTpopkontrId?.id
+      const tpopkontrJahr = n?.tpopkontrByTpopkontrId?.jahr
       return {
         url: [
           'Projekte',
@@ -1574,24 +1569,20 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
     const popNodes =
       data?.feldkontrzaehlungOhneMethode?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => get(n, 'tpopkontrsByTpopId.nodes', [])),
+      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
     )
     const tpopkontrzaehlNodes = flatten(
-      tpopkontrNodes.map((n) =>
-        get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []),
-      ),
+      tpopkontrNodes.map((n) => n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []),
     )
     return tpopkontrzaehlNodes.map((n) => {
-      const popId = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.id')
-      const popNr = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.nr')
-      const tpopId = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.id')
-      const tpopNr = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.nr')
-      const tpopkontrId = get(n, 'tpopkontrByTpopkontrId.id')
-      const tpopkontrJahr = get(n, 'tpopkontrByTpopkontrId.jahr')
+      const popId = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.id
+      const popNr = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.nr
+      const tpopId = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.id
+      const tpopNr = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.nr
+      const tpopkontrId = n?.tpopkontrByTpopkontrId?.id
+      const tpopkontrJahr = n?.tpopkontrByTpopkontrId?.jahr
       return {
         url: [
           'Projekte',
@@ -1617,31 +1608,23 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
     const popNodes =
       data?.freiwkontrzaehlungOhneMethode?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => get(n, 'tpopkontrsByTpopId.nodes', [])),
+      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
     )
     const tpopkontrMitZaehlungOhneMethode = tpopkontrNodes.filter((n) => {
-      const anzZaehlungenMitMethode = get(
-        n,
-        'zaehlungenMitMethode.nodes',
-        [],
-      ).length
-      const anzZaehlungenOhneMethode = get(
-        n,
-        'zaehlungenOhneMethode.nodes',
-        [],
-      ).length
+      const anzZaehlungenMitMethode = (n?.zaehlungenMitMethode?.nodes ?? [])
+        .length
+      const anzZaehlungenOhneMethode = (n?.zaehlungenOhneMethode?.nodes ?? [])
+        .length
       return anzZaehlungenMitMethode === 0 && anzZaehlungenOhneMethode > 0
     })
 
     return tpopkontrMitZaehlungOhneMethode.map((n) => {
-      const popId = get(n, 'tpopByTpopId.popByPopId.id')
-      const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
-      const tpopId = get(n, 'tpopByTpopId.id')
-      const tpopNr = get(n, 'tpopByTpopId.nr')
+      const popId = n?.tpopByTpopId?.popByPopId?.id
+      const popNr = n?.tpopByTpopId?.popByPopId?.nr
+      const tpopId = n?.tpopByTpopId?.id
+      const tpopNr = n?.tpopByTpopId?.nr
       return {
         url: [
           'Projekte',
@@ -1665,24 +1648,20 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
     const popNodes =
       data?.feldkontrzaehlungOhneAnzahl?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => get(n, 'tpopkontrsByTpopId.nodes', [])),
+      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
     )
     const tpopkontrzaehlNodes = flatten(
-      tpopkontrNodes.map((n) =>
-        get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []),
-      ),
+      tpopkontrNodes.map((n) => n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []),
     )
     return tpopkontrzaehlNodes.map((n) => {
-      const popId = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.id')
-      const popNr = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.nr')
-      const tpopId = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.id')
-      const tpopNr = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.nr')
-      const tpopkontrId = get(n, 'tpopkontrByTpopkontrId.id')
-      const tpopkontrJahr = get(n, 'tpopkontrByTpopkontrId.jahr')
+      const popId = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.id
+      const popNr = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.nr
+      const tpopId = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.id
+      const tpopNr = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.nr
+      const tpopkontrId = n?.tpopkontrByTpopkontrId?.id
+      const tpopkontrJahr = n?.tpopkontrByTpopkontrId?.jahr
       return {
         url: [
           'Projekte',
@@ -1708,31 +1687,23 @@ const createMessageFunctions = ({ data, berichtjahr, projId, apId }) => ({
     const popNodes =
       data?.freiwkontrzaehlungOhneAnzahl?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(
-      popNodes.map((n) => get(n, 'tpopsByPopId.nodes', [])),
-    )
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => get(n, 'tpopkontrsByTpopId.nodes', [])),
+      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
     )
     const tpopkontrMitZaehlungOhneAnzahl = tpopkontrNodes.filter((n) => {
-      const anzZaehlungenMitAnzahl = get(
-        n,
-        'zaehlungenMitAnzahl.nodes',
-        [],
-      ).length
-      const anzZaehlungenOhneAnzahl = get(
-        n,
-        'zaehlungenOhneAnzahl.nodes',
-        [],
-      ).length
+      const anzZaehlungenMitAnzahl = (n?.zaehlungenMitAnzahl?.nodes ?? [])
+        .length
+      const anzZaehlungenOhneAnzahl = (n?.zaehlungenOhneAnzahl?.nodes ?? [])
+        .length
       return anzZaehlungenMitAnzahl === 0 && anzZaehlungenOhneAnzahl > 0
     })
 
     return tpopkontrMitZaehlungOhneAnzahl.map((n) => {
-      const popId = get(n, 'tpopByTpopId.popByPopId.id')
-      const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
-      const tpopId = get(n, 'tpopByTpopId.id')
-      const tpopNr = get(n, 'tpopByTpopId.nr')
+      const popId = n?.tpopByTpopId?.popByPopId?.id
+      const popNr = n?.tpopByTpopId?.popByPopId?.nr
+      const tpopId = n?.tpopByTpopId?.id
+      const tpopNr = n?.tpopByTpopId?.nr
 
       return {
         url: [

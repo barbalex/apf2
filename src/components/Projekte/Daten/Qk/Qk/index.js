@@ -104,7 +104,6 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
 
   const messageFunctions = createMessageFunctions({
     data,
-    berichtjahr,
     projId,
     apId,
   })
