@@ -1,6 +1,4 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 const assozartFolderNode = ({
   nodes: nodesPassed,
@@ -21,16 +19,14 @@ const assozartFolderNode = ({
     id: apId,
   })
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.assozart`) || ''
+    store?.[`${treeName}.nodeLabelFilter.assozart`] ?? ''
 
-  const assozartNodesLength = memoizeOne(
-    () =>
-      get(data, 'allAssozarts.nodes', []).filter((el) => el.apId === apId)
-        .length,
-  )()
+  const assozartNodesLength = (data?.allAssozarts?.nodes ?? []).filter(
+    (el) => el.apId === apId,
+  ).length
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${assozartNodesLength} gefiltert`
     : assozartNodesLength
 

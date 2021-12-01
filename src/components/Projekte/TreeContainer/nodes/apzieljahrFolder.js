@@ -1,20 +1,15 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
 import union from 'lodash/union'
-import memoizeOne from 'memoize-one'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
 const apzieljahrFolderNode = ({
-  nodes: nodesPassed,
   data,
-  treeName,
   projektNodes,
   projId,
   apNodes,
   openNodes,
   apId,
-  store,
 }) => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -24,27 +19,23 @@ const apzieljahrFolderNode = ({
     id: apId,
   })
 
-  const ziels = memoizeOne(() =>
-    get(data, 'allZiels.nodes', [])
-      // of this ap
-      .filter((el) => el.apId === apId),
-  )()
+  const ziels = (data?.allZiels?.nodes ?? [])
+    // of this ap
+    .filter((el) => el.apId === apId)
 
-  const zieljahre = memoizeOne(() =>
-    ziels
-      .reduce((a, el, index) => union(a, [el.jahr]), [])
-      .filter((jahr) =>
-        allParentNodesAreOpen(openNodes, [
-          'Projekte',
-          projId,
-          'Aktionspläne',
-          apId,
-          'AP-Ziele',
-          jahr,
-        ]),
-      )
-      .sort(),
-  )()
+  const zieljahre = ziels
+    .reduce((a, el) => union(a, [el.jahr]), [])
+    .filter((jahr) =>
+      allParentNodesAreOpen(openNodes, [
+        'Projekte',
+        projId,
+        'Aktionspläne',
+        apId,
+        'AP-Ziele',
+        jahr,
+      ]),
+    )
+    .sort()
 
   return zieljahre.map((jahr, index) => {
     const labelJahr = jahr === null || jahr === undefined ? 'kein Jahr' : jahr

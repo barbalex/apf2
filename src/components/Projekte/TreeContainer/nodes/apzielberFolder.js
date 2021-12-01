@@ -1,6 +1,4 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
@@ -34,15 +32,13 @@ const apzielberFolderNode = ({
   )
   const zielIndex = findIndex(apzielNodes, (el) => el.id === zielId)
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.zielber`) || ''
-  const zielberNodesLength = memoizeOne(
-    () =>
-      get(data, 'allZielbers.nodes', []).filter((el) => el.zielId === zielId)
-        .length,
-  )()
+    store?.[`${treeName}.nodeLabelFilter.zielber`] ?? ''
+  const zielberNodesLength = (data?.allZielbers?.nodes ?? []).filter(
+    (el) => el.zielId === zielId,
+  ).length
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${zielberNodesLength} gefiltert`
     : zielberNodesLength
 
