@@ -145,7 +145,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         nodes = [
           ...nodes,
           ...buildApFolderNodes({
-            nodes,
             data,
             treeName,
             loading,
@@ -331,16 +330,12 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         allParentNodesAreOpen
       ) {
         apzieljahrFolderNodes = buildApzieljahrFolderNodes({
-          nodes,
           data,
-          treeName,
-          loading,
           apNodes,
           openNodes,
           projektNodes,
           projId,
           apId: nodeUrl[3],
-          store,
         })
         nodes = [...nodes, ...apzieljahrFolderNodes]
       }
@@ -401,8 +396,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildApzielberNodes({
             nodes,
             data,
-            treeName,
-            loading,
             apNodes,
             openNodes,
             projektNodes,
@@ -412,7 +405,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
             apzieljahrFolderNodes,
             zielId: nodeUrl[6],
             apzielNodes,
-            store,
           }),
         ]
       }
@@ -439,13 +431,10 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildBeobNichtZuzuordnenNodes({
             nodes,
             data,
-            treeName,
-            loading,
             apNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            store,
           }),
         ]
       }
@@ -458,13 +447,10 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildBeobNichtBeurteiltNodes({
             nodes,
             data,
-            treeName,
-            loading,
             apNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            store,
           }),
         ]
       }
@@ -474,13 +460,10 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildAssozartNodes({
             nodes,
             data,
-            treeName,
-            loading,
             apNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            store,
           }),
         ]
       }
