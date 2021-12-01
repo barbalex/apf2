@@ -8,7 +8,6 @@ import Icon from '@mui/material/Icon'
 import Button from '@mui/material/Button'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
@@ -455,92 +454,50 @@ const Populationen = () => {
               const rows = (result?.data?.allPopmassnbers?.nodes ?? []).map(
                 (n) => ({
                   ap_id: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.apId ?? '',
-                  artname: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]artname',
+                  artname:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.artname ?? '',
+                  ap_bearbeitung:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.apBearbeitung ??
                     '',
-                  ),
-                  ap_bearbeitung: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]apBearbeitung',
-                    '',
-                  ),
-                  ap_start_jahr: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]apStartJahr',
-                    '',
-                  ),
-                  ap_umsetzung: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]apUmsetzung',
-                    '',
-                  ),
+                  ap_start_jahr:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.apStartJahr ?? '',
+                  ap_umsetzung:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.apUmsetzung ?? '',
                   pop_id: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popId ?? '',
                   pop_nr: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popNr ?? '',
-                  pop_name: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]popName',
+                  pop_name:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popName ?? '',
+                  pop_status:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popStatus ?? '',
+                  pop_bekannt_seit:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popBekanntSeit ??
                     '',
-                  ),
-                  pop_status: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]popStatus',
+                  pop_status_unklar:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popStatusUnklar ??
                     '',
-                  ),
-                  pop_bekannt_seit: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]popBekanntSeit',
-                    '',
-                  ),
-                  pop_status_unklar: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]popStatusUnklar',
-                    '',
-                  ),
-                  pop_status_unklar_begruendung: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]popStatusUnklarBegruendung',
-                    '',
-                  ),
+                  pop_status_unklar_begruendung:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]
+                      ?.popStatusUnklarBegruendung ?? '',
                   pop_x: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popX ?? '',
                   pop_y: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popY ?? '',
-                  pop_changed: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]popChanged',
+                  pop_changed:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popChanged ?? '',
+                  pop_changed_by:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popChangedBy ??
                     '',
-                  ),
-                  pop_changed_by: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]popChangedBy',
-                    '',
-                  ),
                   id: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.id ?? '',
                   jahr: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.jahr ?? '',
-                  entwicklung: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]entwicklung',
-                    '',
-                  ),
-                  bemerkungen: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]bemerkungen',
-                    '',
-                  ),
-                  changed: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]changed',
-                    '',
-                  ),
-                  changed_by: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]changedBy',
-                    '',
-                  ),
-                  anzahl_massnahmen: get(
-                    n,
-                    'vPopmassnberAnzmassnsById.nodes[0]anzahlMassnahmen',
-                    '',
-                  ),
+                  entwicklung:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.entwicklung ?? '',
+                  bemerkungen:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.bemerkungen ?? '',
+                  changed:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.changed ?? '',
+                  changed_by:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.changedBy ?? '',
+                  anzahl_massnahmen:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]
+                      ?.anzahlMassnahmen ?? '',
                 }),
               )
               removeNotification(notif)
@@ -732,7 +689,7 @@ const Populationen = () => {
               }
               // need to flatmap because view delivers multiple rows per pop
               const rows = (result?.data?.allPops?.nodes ?? []).flatMap((z0) =>
-                get(z0, 'vPopPopberundmassnbersByPopId.nodes', []).map((z) => ({
+                (z0?.vPopPopberundmassnbersByPopId?.nodes ?? []).map((z) => ({
                   ap_id: z.apId,
                   artname: z.artname,
                   ap_bearbeitung: z.apBearbeitung,
