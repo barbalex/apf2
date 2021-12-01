@@ -1,7 +1,6 @@
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import Switch from '@mui/material/Switch'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 
@@ -52,7 +51,7 @@ const ApFilter = ({ treeName }) => {
           variables: { id: apId },
         })
       }
-      const isAp = [1, 2, 3].includes(get(result, 'data.apById.bearbeitung'))
+      const isAp = [1, 2, 3].includes(result?.data?.apById?.bearbeitung)
       if (!isAp && activeNodeArray[2] === 'Aktionspläne') {
         // not a real ap
         // shorten active node array to Aktionspläne

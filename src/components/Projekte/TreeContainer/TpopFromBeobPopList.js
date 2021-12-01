@@ -7,7 +7,6 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import { observer } from 'mobx-react-lite'
-import get from 'lodash/get'
 
 import storeContext from '../../../storeContext'
 import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
@@ -51,10 +50,10 @@ const TpopFromBeobPopList = ({
     variables: { apId },
   })
 
-  if (loading) return <LoadingContainer>'Lade Daten...'</LoadingContainer>
+  if (loading) return <LoadingContainer>Lade Daten...</LoadingContainer>
   if (error) return <Error error={error} />
 
-  const pops = get(data, 'allPops.nodes', [])
+  const pops = data?.allPops?.nodes ?? []
 
   return (
     <ErrorBoundary>

@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
@@ -79,7 +78,7 @@ const deleteModule = async ({ client, store }) => {
       },
     })
   }
-  let data = { ...get(result, `data.${camelCase(table)}ById`) }
+  let data = { ...result?.[`data.${camelCase(table)}ById`] }
   data = omit(data, '__typename')
 
   // add to datasetsDeleted
@@ -120,7 +119,7 @@ const deleteModule = async ({ client, store }) => {
   // BUT: need to refetch tree
 
   // set new url if necessary
-  const activeNodeArray1 = get(store, 'tree.activeNodeArray')
+  const activeNodeArray1 = store?.tree?.activeNodeArray
   if (
     isEqual(activeNodeArray1, toDeleteUrl) &&
     !isFreiwilligenKontrolle(activeNodeArray1)
@@ -134,7 +133,7 @@ const deleteModule = async ({ client, store }) => {
     }
     store.tree.setActiveNodeArray(newActiveNodeArray1)
   }
-  const activeNodeArray2 = get(store, 'tree2.activeNodeArray')
+  const activeNodeArray2 = store?.tree2?.activeNodeArray
   if (
     isEqual(activeNodeArray2, toDeleteUrl) &&
     !isFreiwilligenKontrolle(activeNodeArray2)
@@ -150,10 +149,10 @@ const deleteModule = async ({ client, store }) => {
   }
 
   // remove from openNodes
-  const openNodes1 = get(store, 'tree.openNodes')
+  const openNodes1 = store?.tree?.openNodes
   const newOpenNodes1 = openNodes1.filter((n) => !isEqual(n, toDeleteUrl))
   store.tree.setOpenNodes(newOpenNodes1)
-  const openNodes2 = get(store, 'tree2.openNodes')
+  const openNodes2 = store?.tree2?.openNodes
   const newOpenNodes2 = openNodes2.filter((n) => !isEqual(n, toDeleteUrl))
   store.tree2.setOpenNodes(newOpenNodes2)
 

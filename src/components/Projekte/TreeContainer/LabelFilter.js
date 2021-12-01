@@ -1,11 +1,16 @@
-import React, { useCallback, useContext, useState, useEffect } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
@@ -48,7 +53,7 @@ const LabelFilter = ({ treeName, nodes }) => {
   let labelText = '(filtern nicht möglich)'
   let filterValue = ''
   if (tableName) {
-    filterValue = get(nodeLabelFilter, tableName, '')
+    filterValue = nodeLabelFilter?.[tableName] ?? ''
     // make sure 0 is kept
     if (!filterValue && filterValue !== 0) filterValue = ''
     const table = tables.find((t) => t.table === tableName)
@@ -61,7 +66,10 @@ const LabelFilter = ({ treeName, nodes }) => {
       labelText = `${tableLabel} filtern`
     }
   }
-  const openNodes = get(store, `${treeName}.openNodes`, [])
+  const openNodes = useMemo(
+    () => store?.[`${treeName}.openNodes`] ?? [],
+    [store, treeName],
+  )
 
   const [value, setValue] = useState('')
 
