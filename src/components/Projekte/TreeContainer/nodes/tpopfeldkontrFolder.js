@@ -1,5 +1,4 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
 
 const tpopfeldkontrFolderNode = ({
@@ -25,9 +24,9 @@ const tpopfeldkontrFolderNode = ({
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.tpopkontr`) || ''
+    store?.[treeName]?.nodeLabelFilter?.tpopkontr ?? ''
 
-  let children = get(data, 'allTpopfeldkontrs.nodes', []).filter(
+  let children = (data?.allTpopfeldkontrs?.nodes ?? []).filter(
     (el) => el.tpopId === tpopId,
   )
 
@@ -42,7 +41,7 @@ const tpopfeldkontrFolderNode = ({
 
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${childrenLength} gefiltert`
     : childrenLength
 

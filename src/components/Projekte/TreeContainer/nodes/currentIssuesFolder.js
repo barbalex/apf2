@@ -1,15 +1,7 @@
-import get from 'lodash/get'
 import max from 'lodash/max'
 
-const currentIssuesFolderNode = ({
-  nodes: nodesPassed,
-  data,
-  treeName,
-  loading,
-  projektNodes,
-  store,
-}) => {
-  const currentIssues = get(data, 'allCurrentissues.nodes', [])
+const currentIssuesFolderNode = ({ data, loading, projektNodes }) => {
+  const currentIssues = data?.allCurrentissues?.nodes ?? []
 
   // fetch sorting indexes of parents
   const currentIssuesIndex = projektNodes.length + 3

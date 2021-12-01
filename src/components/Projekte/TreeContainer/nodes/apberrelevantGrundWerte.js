@@ -1,15 +1,10 @@
-import get from 'lodash/get'
-
 const apberrelevantGrundWerteNodes = ({
   nodes: nodesPassed,
   data,
   projektNodes,
 }) => {
-  const apberrelevantGrundWertes = get(
-    data,
-    'allTpopApberrelevantGrundWertes.nodes',
-    [],
-  )
+  const apberrelevantGrundWertes =
+    data?.allTpopApberrelevantGrundWertes?.nodes ?? []
   const wlIndex = projektNodes.length + 2
   const nodes = apberrelevantGrundWertes
     // only show if parent node exists

@@ -1,5 +1,3 @@
-import get from 'lodash/get'
-
 const ekAbrechnungstypWerteFolderNode = ({
   nodes: nodesPassed,
   data,
@@ -8,22 +6,16 @@ const ekAbrechnungstypWerteFolderNode = ({
   projektNodes,
   store,
 }) => {
-  const ekAbrechnungstypWertes = get(
-    data,
-    'allEkAbrechnungstypWertes.nodes',
-    [],
-  )
+  const ekAbrechnungstypWertes = data?.allEkAbrechnungstypWertes?.nodes ?? []
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.ekAbrechnungstypWerte`) || ''
+    store?.[treeName]?.nodeLabelFilter?.ekAbrechnungstypWerte ?? ''
 
   let ekAbrechnungstypWerteNodesLength = ekAbrechnungstypWertes.length
   // before EkAbrechnungstypWerte folder is active, only total count was fetched, not yet any ekAbrechnungstypWerten nodes
   if (ekAbrechnungstypWertes.length === 0)
-    ekAbrechnungstypWerteNodesLength = get(
-      data,
-      'ekAbrechnungstypWertesUnfiltered.totalCount',
-    )
+    ekAbrechnungstypWerteNodesLength =
+      data?.ekAbrechnungstypWertesUnfiltered?.totalCount
   let message =
     loading && !ekAbrechnungstypWerteNodesLength
       ? '...'

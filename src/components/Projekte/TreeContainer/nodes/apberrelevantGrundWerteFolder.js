@@ -1,5 +1,3 @@
-import get from 'lodash/get'
-
 const apberrelevantGrundWerteFolderNode = ({
   nodes: nodesPassed,
   data,
@@ -8,22 +6,17 @@ const apberrelevantGrundWerteFolderNode = ({
   projektNodes,
   store,
 }) => {
-  const apberrelevantGrundWertes = get(
-    data,
-    'allApberrelevantGrundWertes.nodes',
-    [],
-  )
+  const apberrelevantGrundWertes =
+    data?.allApberrelevantGrundWertes?.nodes ?? []
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.apberrelevantGrundWerte`) || ''
+    store?.[treeName]?.nodeLabelFilter?.apberrelevantGrundWerte ?? ''
 
   let apberrelevantGrundWerteNodesLength = apberrelevantGrundWertes.length
   // before ApberrelevantGrundWerte folder is active, only total count was fetched, not yet any apberrelevantGrundWerten nodes
   if (apberrelevantGrundWertes.length === 0)
-    apberrelevantGrundWerteNodesLength = get(
-      data,
-      'tpopApberrelevantGrundWertesUnfiltered.totalCount',
-    )
+    apberrelevantGrundWerteNodesLength =
+      data?.tpopApberrelevantGrundWertesUnfiltered?.totalCount
   let message =
     loading && !apberrelevantGrundWerteNodesLength
       ? '...'
