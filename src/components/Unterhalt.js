@@ -13,7 +13,7 @@ const Container = styled.div`
 const Article = styled.article`
   display: block;
   text-align: left;
-  width: 650px;
+  max-width: 650px;
   margin: 0 auto;
 `
 const Titel = styled.h1`
