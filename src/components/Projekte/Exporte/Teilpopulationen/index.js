@@ -186,7 +186,7 @@ const Teilpopulationen = ({ treeName }) => {
         options: { variant: 'error' },
       })
     }
-    const rows = get(result.data, 'allTpops.nodes', []).map((n) => ({
+    const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
       apId: get(n, 'popByPopId.apByApId.id') ?? null,
       apFamilie:
         get(n, 'popByPopId.apByApId.aeTaxonomyByArtId.familie') ?? null,
@@ -342,7 +342,7 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              const rows = get(result.data, 'allVTpopWebgisbuns.nodes', [])
+              const rows = result.data?.allVTpopWebgisbuns?.nodes ?? []
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -386,7 +386,7 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              const rows = get(result.data, 'allTpops.nodes', []).map((z) => ({
+              const rows = (result.data?.allTpops?.nodes ?? []).map((z) => ({
                 art: get(z, 'vTpopKmlsById.nodes[0].art', ''),
                 label: get(z, 'vTpopKmlsById.nodes[0].label', ''),
                 inhalte: get(z, 'vTpopKmlsById.nodes[0].inhalte', ''),
@@ -439,7 +439,7 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              const rows = get(result.data, 'allTpops.nodes', []).map((z) => ({
+              const rows = (result.data?.allTpops?.nodes ?? []).map((z) => ({
                 art: get(z, 'vTpopKmlnamenById.nodes[0].art', ''),
                 label: get(z, 'vTpopKmlnamenById.nodes[0].label', ''),
                 inhalte: get(z, 'vTpopKmlnamenById.nodes[0].inhalte', ''),
@@ -588,7 +588,7 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              const rows = get(result.data, 'allTpops.nodes', []).map((n) => ({
+              const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
                 ap_id: get(n, 'vTpopAnzmassnsById.nodes[0].apId', ''),
                 familie: get(n, 'vTpopAnzmassnsById.nodes[0].familie', ''),
                 artname: get(n, 'vTpopAnzmassnsById.nodes[0].artname', ''),
@@ -754,7 +754,7 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              const rows = get(result.data, 'allTpops.nodes', []).map((n) => ({
+              const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
                 ap_id: get(
                   n,
                   'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].apId',
@@ -1498,7 +1498,7 @@ const Teilpopulationen = ({ treeName }) => {
                     options: { variant: 'error' },
                   })
                 }
-                const apId = get(result.data, 'apByArtId.id')
+                const apId = result.data?.apByArtId?.id
                 const { data } = await client.query({
                   query: await import(
                     './queryTpopErsteUndLetzteKontrolleUndLetzterTpopberFiltered'
@@ -2273,7 +2273,7 @@ const Teilpopulationen = ({ treeName }) => {
                   },
                 })
               }
-              const rows = get(result.data, 'allTpops.nodes', []).map((z) => ({
+              const rows = (result.data?.allTpops?.nodes ?? []).map((z) => ({
                 artname: get(z, 'vTpopLastCountsByTpopId.nodes[0].artname', ''),
                 ap_id: get(z, 'vTpopLastCountsByTpopId.nodes[0].apId', ''),
                 pop_id: get(z, 'vTpopLastCountsByTpopId.nodes[0].popId', ''),
