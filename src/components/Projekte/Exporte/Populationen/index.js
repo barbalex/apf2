@@ -155,18 +155,17 @@ const Populationen = () => {
                 })
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((n) => ({
-                apId: get(n, 'apByApId.id') ?? null,
-                apArtname: get(n, 'apByApId.aeTaxonomyByArtId.artname') ?? null,
+                apId: n?.apByApId?.id ?? null,
+                apArtname: n?.apByApId?.aeTaxonomyByArtId?.artname ?? null,
                 apBearbeitung:
-                  get(n, 'apByApId.apBearbstandWerteByBearbeitung.text') ??
-                  null,
-                apStartJahr: get(n, 'apByApId.startJahr') ?? null,
+                  n?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? null,
+                apStartJahr: n?.apByApId?.startJahr ?? null,
                 apUmsetzung:
-                  get(n, 'apByApId.apUmsetzungWerteByUmsetzung.text') ?? null,
+                  n?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? null,
                 id: n.id,
                 nr: n.nr,
                 name: n.name,
-                status: get(n, 'popStatusWerteByStatus.text') ?? null,
+                status: n?.popStatusWerteByStatus?.text ?? null,
                 bekanntSeit: n.bekanntSeit,
                 statusUnklar: n.statusUnklar,
                 statusUnklarBegruendung: n.statusUnklarBegruendung,
@@ -478,7 +477,7 @@ const Populationen = () => {
               }
               const rows = (result?.data?.allPopmassnbers?.nodes ?? []).map(
                 (n) => ({
-                  ap_id: get(n, 'vPopmassnberAnzmassnsById.nodes[0]apId', ''),
+                  ap_id: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.apId ?? '',
                   artname: get(
                     n,
                     'vPopmassnberAnzmassnsById.nodes[0]artname',
@@ -499,8 +498,8 @@ const Populationen = () => {
                     'vPopmassnberAnzmassnsById.nodes[0]apUmsetzung',
                     '',
                   ),
-                  pop_id: get(n, 'vPopmassnberAnzmassnsById.nodes[0]popId', ''),
-                  pop_nr: get(n, 'vPopmassnberAnzmassnsById.nodes[0]popNr', ''),
+                  pop_id: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popId ?? '',
+                  pop_nr: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popNr ?? '',
                   pop_name: get(
                     n,
                     'vPopmassnberAnzmassnsById.nodes[0]popName',
@@ -526,8 +525,8 @@ const Populationen = () => {
                     'vPopmassnberAnzmassnsById.nodes[0]popStatusUnklarBegruendung',
                     '',
                   ),
-                  pop_x: get(n, 'vPopmassnberAnzmassnsById.nodes[0]popX', ''),
-                  pop_y: get(n, 'vPopmassnberAnzmassnsById.nodes[0]popY', ''),
+                  pop_x: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popX ?? '',
+                  pop_y: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popY ?? '',
                   pop_changed: get(
                     n,
                     'vPopmassnberAnzmassnsById.nodes[0]popChanged',
@@ -538,8 +537,8 @@ const Populationen = () => {
                     'vPopmassnberAnzmassnsById.nodes[0]popChangedBy',
                     '',
                   ),
-                  id: get(n, 'vPopmassnberAnzmassnsById.nodes[0]id', ''),
-                  jahr: get(n, 'vPopmassnberAnzmassnsById.nodes[0]jahr', ''),
+                  id: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.id ?? '',
+                  jahr: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.jahr ?? '',
                   entwicklung: get(
                     n,
                     'vPopmassnberAnzmassnsById.nodes[0]entwicklung',
