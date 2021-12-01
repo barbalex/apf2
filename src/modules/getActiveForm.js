@@ -1,11 +1,10 @@
-import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 
 import getTableNameFromActiveNode from './getTableNameFromActiveNode'
 
 const getActiveForm = ({ store, treeName, nodes }) => {
   const { activeNodeArray } = store[treeName]
-  const activeFilterTable = get(store, `${treeName}.dataFilter.activeTable`, '')
+  const activeFilterTable = store?.[treeName]?.dataFilter?.activeTable ?? ''
 
   let key
   if (

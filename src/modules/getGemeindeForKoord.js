@@ -4,7 +4,6 @@
  * Diese Methode behalten - könnte künftig nützlich sein
  */
 import axios from 'redaxios'
-import get from 'lodash/get'
 
 const getGemeindeForKoord = async ({ lv95X, lv95Y, store }) => {
   const { enqueNotification } = store
@@ -20,9 +19,9 @@ const getGemeindeForKoord = async ({ lv95X, lv95Y, store }) => {
       },
     })
   }
-  const data = get(result, 'data', null)
+  const data = result?.data
   const gemeindename = data
-    ? get(JSON.parse(data), 'results[0].attributes.gemeindename', null)
+    ? JSON.parse(data)?.results?.[0]?.attributes?.gemeindename ?? null
     : null
   return gemeindename
 }

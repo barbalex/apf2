@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client'
-import get from 'lodash/get'
 
 import copyTo from './copyTo'
 
@@ -25,7 +24,7 @@ const copyZaehlOfTpopKontr = async ({
     `,
     variables: { tpopkontrId: tpopkontrIdFrom },
   })
-  const tpopkontrzaehl = get(data, 'allTpopkontrzaehls.nodes', [])
+  const tpopkontrzaehl = data?.allTpopkontrzaehls?.nodes ?? []
   // 2. add tpopkontrzaehl to new tpopkontr
   tpopkontrzaehl.forEach((zaehl) =>
     copyTo({

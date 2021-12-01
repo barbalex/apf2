@@ -1,5 +1,3 @@
-import get from 'lodash/get'
-
 import queryBeob from './queryBeob'
 import updateTpopById from './updateTpopById'
 
@@ -19,7 +17,7 @@ const copyBeobZugeordnetKoordToTpop = async ({ id, store, client }) => {
       },
     })
   }
-  const beob = get(beobResult, 'data.beobById')
+  const beob = beobResult?.data?.beobById
   const { wgs84Lat, wgs84Long, tpopId } = beob
   const geomPoint = {
     type: 'Point',
