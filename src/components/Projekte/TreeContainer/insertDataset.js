@@ -1,7 +1,6 @@
 import { gql } from '@apollo/client'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
-import get from 'lodash/get'
 
 import tables from '../../../modules/tables'
 import {
@@ -184,10 +183,8 @@ const insertDataset = async ({
       },
     })
   }
-  const row = get(
-    result,
-    `data.create${upperFirst(camelCase(table))}.${camelCase(table)}`,
-  )
+  const row =
+    result?.data[`create${upperFirst(camelCase(table))}`][`${camelCase(table)}`]
   // set new url
   const newActiveNodeArray = [...url, row[idField]]
   setActiveNodeArray(newActiveNodeArray)
