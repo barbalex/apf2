@@ -96,7 +96,6 @@ const Projekte = () => {
   const treeApFilter = store.tree.apFilter
   const tree2DataFilter = getSnapshot(store.tree2.dataFilter)
   const tree2NodeLabelFilter = getSnapshot(store.tree2.nodeLabelFilter)
-  const tree2ActiveNodeArray = getSnapshot(store.tree2.activeNodeArray)
   const tree2OpenNodes = getSnapshot(store.tree2.openNodes)
   const tree2ApFilter = store.tree2.apFilter
 
@@ -120,17 +119,14 @@ const Projekte = () => {
   const queryTree2Variables = useMemo(
     () =>
       buildTreeQueryVariables({
-        treeName: 'tree2',
         dataFilter: tree2DataFilter,
         openNodes: tree2OpenNodes,
-        activeNodeArray: tree2ActiveNodeArray,
         apFilter: tree2ApFilter,
         nodeLabelFilter: tree2NodeLabelFilter,
         apIdInActiveNodeArray,
       }),
     [
       tree2DataFilter,
-      tree2ActiveNodeArray,
       tree2ApFilter,
       tree2NodeLabelFilter,
       tree2OpenNodes,
