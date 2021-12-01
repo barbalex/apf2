@@ -412,13 +412,10 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         popNodes = buildPopNodes({
           nodes,
           data,
-          treeName,
-          loading,
           apNodes,
           projektNodes,
           projId,
           apId: nodeUrl[3],
-          store,
         })
         nodes = [...nodes, ...popNodes]
       }
@@ -473,13 +470,10 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildEkzaehleinheitNodes({
             nodes,
             data,
-            treeName,
-            loading,
             apNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            store,
           }),
         ]
       }
@@ -489,13 +483,10 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildEkfrequenzNodes({
             nodes,
             data,
-            treeName,
-            loading,
             apNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            store,
           }),
         ]
       }
@@ -596,15 +587,12 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildPopmassnberNodes({
             nodes,
             data,
-            treeName,
-            loading,
             projId,
             projektNodes,
             apId: nodeUrl[3],
             apNodes,
             popId: nodeUrl[5],
             popNodes,
-            store,
           }),
         ]
       }
@@ -618,15 +606,12 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildPopberNodes({
             nodes,
             data,
-            treeName,
-            loading,
             projId,
             projektNodes,
             apId: nodeUrl[3],
             apNodes,
             popId: nodeUrl[5],
             popNodes,
-            store,
           }),
         ]
       }
@@ -764,8 +749,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildBeobZugeordnetNodes({
             nodes,
             data,
-            treeName,
-            loading,
             projId,
             projektNodes,
             apId: nodeUrl[3],
@@ -774,7 +757,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
-            store,
           }),
         ]
       }
@@ -1024,11 +1006,8 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       nodes = [
         ...nodes,
         ...buildCurrentIssuesNodes({
-          nodes,
           data,
-          treeName,
           projektNodes,
-          store,
         }),
       ]
     }
@@ -1116,10 +1095,7 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         ...buildEkAbrechnungstypWerteNodes({
           nodes,
           data,
-          treeName,
-          loading,
           projektNodes,
-          store,
         }),
       ]
     }
