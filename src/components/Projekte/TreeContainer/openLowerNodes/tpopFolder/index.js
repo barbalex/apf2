@@ -4,8 +4,6 @@
  * 3. update openNodes
  * 4. refresh tree
  */
-import get from 'lodash/get'
-
 import dataGql from './data'
 
 const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
@@ -20,7 +18,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
     query: dataGql,
     variables: { id },
   })
-  const tpops = get(data, 'popById.tpopsByPopId.nodes', [])
+  const tpops = data?.popById?.tpopsByPopId?.nodes ?? []
   // 2. add activeNodeArrays for all data to openNodes
   let newOpenNodes = [
     [
@@ -48,12 +46,12 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
       ],
     ]
 
-    const tpopmassns = get(tpop, 'tpopmassnsByTpopId.nodes', [])
-    const tpopmassnbers = get(tpop, 'tpopmassnbersByTpopId.nodes', [])
-    const tpopfeldkontrs = get(tpop, 'tpopfeldkontrs.nodes', [])
-    const tpopfreiwkontrs = get(tpop, 'tpopfreiwkontrs.nodes', [])
-    const tpopbers = get(tpop, 'tpopbersByTpopId.nodes', [])
-    const tpopbeobs = get(tpop, 'beobsByTpopId.nodes', [])
+    const tpopmassns = tpop?.tpopmassnsByTpopId?.nodes ?? []
+    const tpopmassnbers = tpop?.tpopmassnbersByTpopId?.nodes ?? []
+    const tpopfeldkontrs = tpop?.tpopfeldkontrs?.nodes ?? []
+    const tpopfreiwkontrs = tpop?.tpopfreiwkontrs?.nodes ?? []
+    const tpopbers = tpop?.tpopbersByTpopId?.nodes ?? []
+    const tpopbeobs = tpop?.beobsByTpopId?.nodes ?? []
 
     newOpenNodes = [
       ...newOpenNodes,
@@ -197,7 +195,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
           'Zaehlungen',
         ],
       ]
-      const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
+      const zaehls = k?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
       zaehls.forEach((z) => {
         newOpenNodes = [
           ...newOpenNodes,
@@ -247,7 +245,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
           'Zaehlungen',
         ],
       ]
-      const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
+      const zaehls = k?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
       zaehls.forEach((z) => {
         newOpenNodes = [
           ...newOpenNodes,

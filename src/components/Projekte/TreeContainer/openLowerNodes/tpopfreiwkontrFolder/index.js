@@ -5,8 +5,6 @@
  * 4. update openNodes
  * 5. refresh tree
  */
-import get from 'lodash/get'
-
 import dataGql from './data'
 
 const openLowerNodesTpopfreiwkontrFolder = async ({
@@ -32,7 +30,7 @@ const openLowerNodesTpopfreiwkontrFolder = async ({
     query: dataGql,
     variables: { id },
   })
-  const tpopkontrs = get(data, 'tpopById.tpopkontrsByTpopId.nodes', [])
+  const tpopkontrs = data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []
   // 2. add activeNodeArrays for all data to openNodes
   let newOpenNodes = [
     [
@@ -76,7 +74,7 @@ const openLowerNodesTpopfreiwkontrFolder = async ({
         'Zaehlungen',
       ],
     ]
-    const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
+    const zaehls = k?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
     zaehls.forEach((z) => {
       newOpenNodes = [
         ...newOpenNodes,

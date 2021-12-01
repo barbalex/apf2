@@ -95,7 +95,7 @@ const SelectTypable = ({
 
   const loadOptions = useCallback(
     async (inputValue, cb) => {
-      const ownFilter = !!inputValue
+      const ownFilter = inputValue
         ? { artname: { includesInsensitive: inputValue } }
         : { artname: { isNull: false } }
       let result
@@ -110,7 +110,7 @@ const SelectTypable = ({
         console.log({ error })
       }
       const { data } = result
-      const options = get(data, `${queryNodesName}.nodes`, [])
+      const options = data?.[queryNodesName]?.nodes ?? []
       cb(options)
     },
     [client, filter, query, queryNodesName],
@@ -134,7 +134,7 @@ const SelectTypable = ({
 
   const value = {
     value: valuePassed || '',
-    label: valueLabel ? valueLabel : get(row, valueLabelPath) || '',
+    label: valueLabel ? valueLabel : get(row, valueLabelPath) ?? '',
   }
 
   return (
