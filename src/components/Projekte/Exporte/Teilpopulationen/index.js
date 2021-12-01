@@ -384,13 +384,13 @@ const Teilpopulationen = ({ treeName }) => {
                 })
               }
               const rows = (result.data?.allTpops?.nodes ?? []).map((z) => ({
-                art: get(z, 'vTpopKmlsById.nodes[0].art', ''),
-                label: get(z, 'vTpopKmlsById.nodes[0].label', ''),
-                inhalte: get(z, 'vTpopKmlsById.nodes[0].inhalte', ''),
-                id: get(z, 'vTpopKmlsById.nodes[0].id', ''),
-                wgs84Lat: get(z, 'vTpopKmlsById.nodes[0].wgs84Lat', ''),
-                wgs84Long: get(z, 'vTpopKmlsById.nodes[0].wgs84Long', ''),
-                url: get(z, 'vTpopKmlsById.nodes[0].url', ''),
+                art: z?.vTpopKmlsById?.nodes?.[0]?.art ?? '',
+                label: z?.vTpopKmlsById?.nodes?.[0]?.label ?? '',
+                inhalte: z?.vTpopKmlsById?.nodes?.[0]?.inhalte ?? '',
+                id: z?.vTpopKmlsById?.nodes?.[0]?.id ?? '',
+                wgs84Lat: z?.vTpopKmlsById?.nodes?.[0]?.wgs84Lat ?? '',
+                wgs84Long: z?.vTpopKmlsById?.nodes?.[0]?.wgs84Long ?? '',
+                url: z?.vTpopKmlsById?.nodes?.[0]?.url ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
@@ -437,13 +437,13 @@ const Teilpopulationen = ({ treeName }) => {
                 })
               }
               const rows = (result.data?.allTpops?.nodes ?? []).map((z) => ({
-                art: get(z, 'vTpopKmlnamenById.nodes[0].art', ''),
-                label: get(z, 'vTpopKmlnamenById.nodes[0].label', ''),
-                inhalte: get(z, 'vTpopKmlnamenById.nodes[0].inhalte', ''),
-                id: get(z, 'vTpopKmlnamenById.nodes[0].id', ''),
-                wgs84Lat: get(z, 'vTpopKmlnamenById.nodes[0].wgs84Lat', ''),
-                wgs84Long: get(z, 'vTpopKmlnamenById.nodes[0].wgs84Long', ''),
-                url: get(z, 'vTpopKmlnamenById.nodes[0].url', ''),
+                art: z?.vTpopKmlnamenById?.nodes?.[0]?.art ?? '',
+                label: z?.vTpopKmlnamenById?.nodes?.[0]?.label ?? '',
+                inhalte: z?.vTpopKmlnamenById?.nodes?.[0]?.inhalte ?? '',
+                id: z?.vTpopKmlnamenById?.nodes?.[0]?.id ?? '',
+                wgs84Lat: z?.vTpopKmlnamenById?.nodes?.[0]?.wgs84Lat ?? '',
+                wgs84Long: z?.vTpopKmlnamenById?.nodes?.[0]?.wgs84Long ?? '',
+                url: z?.vTpopKmlnamenById?.nodes?.[0]?.url ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
@@ -2271,10 +2271,10 @@ const Teilpopulationen = ({ treeName }) => {
                 })
               }
               const rows = (result.data?.allTpops?.nodes ?? []).map((z) => ({
-                artname: get(z, 'vTpopLastCountsByTpopId.nodes[0].artname', ''),
-                ap_id: get(z, 'vTpopLastCountsByTpopId.nodes[0].apId', ''),
-                pop_id: get(z, 'vTpopLastCountsByTpopId.nodes[0].popId', ''),
-                pop_nr: get(z, 'vTpopLastCountsByTpopId.nodes[0].popNr', ''),
+                artname: z?.vTpopLastCountsByTpopId?.nodes?.[0]?.artname ?? '',
+                ap_id: z?.vTpopLastCountsByTpopId?.nodes?.[0]?.apId ?? '',
+                pop_id: z?.vTpopLastCountsByTpopId?.nodes?.[0]?.popId ?? '',
+                pop_nr: z?.vTpopLastCountsByTpopId?.nodes?.[0]?.popNr ?? '',
                 pop_name: get(
                   z,
                   'vTpopLastCountsByTpopId.nodes[0].popName',
@@ -2285,8 +2285,8 @@ const Teilpopulationen = ({ treeName }) => {
                   'vTpopLastCountsByTpopId.nodes[0].popStatus',
                   '',
                 ),
-                tpop_id: get(z, 'vTpopLastCountsByTpopId.nodes[0].tpopId', ''),
-                tpop_nr: get(z, 'vTpopLastCountsByTpopId.nodes[0].tpopNr', ''),
+                tpop_id: z?.vTpopLastCountsByTpopId?.nodes?.[0]?.tpopId ?? '',
+                tpop_nr: z?.vTpopLastCountsByTpopId?.nodes?.[0]?.tpopNr ?? '',
                 tpop_gemeinde: get(
                   z,
                   'vTpopLastCountsByTpopId.nodes[0].tpopGemeinde',
@@ -2302,7 +2302,7 @@ const Teilpopulationen = ({ treeName }) => {
                   'vTpopLastCountsByTpopId.nodes[0].tpopStatus',
                   '',
                 ),
-                jahr: get(z, 'vTpopLastCountsByTpopId.nodes[0].jahr', ''),
+                jahr: z?.vTpopLastCountsByTpopId?.nodes?.[0]?.jahr ?? '',
                 pflanzenTotal: get(
                   z,
                   'vTpopLastCountsByTpopId.nodes[0].pflanzenTotal',
@@ -2353,7 +2353,7 @@ const Teilpopulationen = ({ treeName }) => {
                   'vTpopLastCountsByTpopId.nodes[0].davonBluhendeTriebe',
                   '',
                 ),
-                blueten: get(z, 'vTpopLastCountsByTpopId.nodes[0].bluten', ''),
+                blueten: z?.vTpopLastCountsByTpopId?.nodes?.[0]?.bluten ?? '',
                 fertile_pflanzen: get(
                   z,
                   'vTpopLastCountsByTpopId.nodes[0].fertilePflanzen',
@@ -2374,8 +2374,8 @@ const Teilpopulationen = ({ treeName }) => {
                   'vTpopLastCountsByTpopId.nodes[0].fruchtstande',
                   '',
                 ),
-                gruppen: get(z, 'vTpopLastCountsByTpopId.nodes[0].gruppen', ''),
-                deckung: get(z, 'vTpopLastCountsByTpopId.nodes[0].deckung', ''),
+                gruppen: z?.vTpopLastCountsByTpopId?.nodes?.[0]?.gruppen ?? '',
+                deckung: z?.vTpopLastCountsByTpopId?.nodes?.[0]?.deckung ?? '',
                 pflanzen_5m2: get(
                   z,
                   'vTpopLastCountsByTpopId.nodes[0].pflanzen5M2',
@@ -2406,7 +2406,7 @@ const Teilpopulationen = ({ treeName }) => {
                   'vTpopLastCountsByTpopId.nodes[0].pflanzstellen',
                   '',
                 ),
-                stellen: get(z, 'vTpopLastCountsByTpopId.nodes[0].stellen', ''),
+                stellen: z?.vTpopLastCountsByTpopId?.nodes?.[0]?.stellen ?? '',
                 andere_zaehleinheit: get(
                   z,
                   'vTpopLastCountsByTpopId.nodes[0].andereZaehleinheit',
