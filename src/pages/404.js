@@ -9,7 +9,7 @@ import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 
 const Container = styled.div`
-  height: ${(props) => `calc(100% - ${props['data-appbar-height']}px)`};
+  height: calc(100% - 64px);
 `
 const TextContainer = styled.div`
   display: flex;
@@ -44,38 +44,40 @@ const bgImageStyle = {
   zIndex: -1,
 }
 
-const FourOFour = ({ appBarHeight }) => {
+const FourOFour = () => {
   const onClickBack = useCallback(() => navigate('/'), [])
 
   return (
     <ErrorBoundary>
       <Container>
-        <Layout data-appbar-height={appBarHeight ?? 64}>
-          <StaticImage
-            style={bgImageStyle}
-            src="../images/ophr-ara.jpg"
-            alt="Ophrys"
-            layout="fullWidth"
-          />
-          <TextContainer>
-            <PageTitle align="center" variant="h6">
-              Oh je
-            </PageTitle>
-          </TextContainer>
-          <TextContainer>
-            <Text align="center" variant="h6">
-              Diese Seite ist nicht verfügbar.
-            </Text>
-          </TextContainer>
-          <TextContainer>
-            <StyledButton
-              variant="outlined"
-              onClick={onClickBack}
-              color="inherit"
-            >
-              Zurück zur Startseite
-            </StyledButton>
-          </TextContainer>
+        <Layout>
+          <div>
+            <StaticImage
+              style={bgImageStyle}
+              src="../images/ophr-ara.jpg"
+              alt="Ophrys"
+              layout="fullWidth"
+            />
+            <TextContainer>
+              <PageTitle align="center" variant="h6">
+                Oh je
+              </PageTitle>
+            </TextContainer>
+            <TextContainer>
+              <Text align="center" variant="h6">
+                Diese Seite ist nicht verfügbar.
+              </Text>
+            </TextContainer>
+            <TextContainer>
+              <StyledButton
+                variant="outlined"
+                onClick={onClickBack}
+                color="inherit"
+              >
+                Zurück zur Startseite
+              </StyledButton>
+            </TextContainer>
+          </div>
         </Layout>
       </Container>
     </ErrorBoundary>
