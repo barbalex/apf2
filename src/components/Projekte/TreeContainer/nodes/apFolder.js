@@ -13,7 +13,7 @@ const apFolderNode = ({
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const nodeLabelFilterString = store?.[`${treeName}.nodeLabelFilter.ap`] ?? ''
+  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.ap ?? ''
 
   const apNodes = (data?.allAps?.nodes ?? [])
     // only show if parent node exists

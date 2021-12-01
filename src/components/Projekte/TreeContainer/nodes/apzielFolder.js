@@ -19,8 +19,7 @@ const apzielFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString =
-    store?.[`${treeName}.nodeLabelFilter.ziel`] ?? ''
+  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.ziel ?? ''
 
   const zieljahre = (data?.allZiels?.nodes ?? [])
     .filter((el) => el.apId === apId)

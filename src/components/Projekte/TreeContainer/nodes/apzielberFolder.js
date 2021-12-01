@@ -32,7 +32,7 @@ const apzielberFolderNode = ({
   )
   const zielIndex = findIndex(apzielNodes, (el) => el.id === zielId)
   const nodeLabelFilterString =
-    store?.[`${treeName}.nodeLabelFilter.zielber`] ?? ''
+    store?.[treeName]?.nodeLabelFilter?.zielber ?? ''
   const zielberNodesLength = (data?.allZielbers?.nodes ?? []).filter(
     (el) => el.zielId === zielId,
   ).length
