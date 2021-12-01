@@ -1,25 +1,12 @@
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
-
-const userFolderNode = ({
-  nodes: nodesPassed,
-  data,
-  treeName,
-  loading,
-  projektNodes,
-  store,
-}) => {
+const userFolderNode = ({ data, treeName, loading, projektNodes, store }) => {
   // fetch sorting indexes of parents
   const userIndex = projektNodes.length + 1
-  const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.user`) || ''
+  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.user ?? ''
 
-  const userNodesLength = memoizeOne(
-    () => get(data, 'allUsers.nodes', []).length,
-  )()
+  const userNodesLength = (data?.allUsers?.nodes ?? []).length
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${userNodesLength} gefiltert`
     : userNodesLength
 

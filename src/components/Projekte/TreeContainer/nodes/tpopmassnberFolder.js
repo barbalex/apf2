@@ -1,6 +1,4 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 const tpopmassnberFolderNode = ({
   nodes: nodesPassed,
@@ -25,18 +23,15 @@ const tpopmassnberFolderNode = ({
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.tpopmassnber`) || ''
+    store?.[treeName]?.nodeLabelFilter?.tpopmassnber ?? ''
 
-  const childrenLength = memoizeOne(
-    () =>
-      get(data, 'allTpopmassnbers.nodes', []).filter(
-        (el) => el.tpopId === tpopId,
-      ).length,
-  )()
+  const childrenLength = (data?.allTpopmassnbers?.nodes ?? []).filter(
+    (el) => el.tpopId === tpopId,
+  ).length
 
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${childrenLength} gefiltert`
     : childrenLength
 
