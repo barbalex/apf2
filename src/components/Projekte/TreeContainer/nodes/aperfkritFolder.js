@@ -1,6 +1,4 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 const aperfkritFolderNode = ({
   nodes: nodesPassed,
@@ -21,16 +19,14 @@ const aperfkritFolderNode = ({
     id: apId,
   })
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.erfkrit`) || ''
+    store?.[`${treeName}.nodeLabelFilter.erfkrit`] ?? ''
 
-  const erfkritNodesLength = memoizeOne(
-    () =>
-      get(data, 'allErfkrits.nodes', []).filter((el) => el.apId === apId)
-        .length,
-  )()
+  const erfkritNodesLength = (data?.allErfkrits?.nodes ?? []).filter(
+    (el) => el.apId === apId,
+  ).length
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${erfkritNodesLength} gefiltert`
     : erfkritNodesLength
 

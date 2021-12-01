@@ -1,9 +1,6 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 const apFolderNode = ({
-  nodes: nodesPassed,
   data,
   treeName,
   loading,
@@ -16,17 +13,14 @@ const apFolderNode = ({
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.ap`) || ''
+  const nodeLabelFilterString = store?.[`${treeName}.nodeLabelFilter.ap`] ?? ''
 
-  const apNodes = memoizeOne(() =>
-    get(data, 'allAps.nodes', [])
-      // only show if parent node exists
-      .filter((el) => projNodeIds.includes(el.projId)),
-  )()
+  const apNodes = (data?.allAps?.nodes ?? [])
+    // only show if parent node exists
+    .filter((el) => projNodeIds.includes(el.projId))
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${apNodes.length} gefiltert`
     : apNodes.length
 
