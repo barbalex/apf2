@@ -11,7 +11,6 @@ import {
   MdMoreHoriz,
   MdPictureAsPdf,
 } from 'react-icons/md'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 
@@ -207,7 +206,7 @@ const Row = ({ style, node, treeName }) => {
   } = tree
   const { idsFiltered: mapIdsFiltered } = store[treeName].map
 
-  const activeNodeArray = get(store, `${treeName}.activeNodeArray`)
+  const activeNodeArray = store?.[treeName]?.activeNodeArray
   const nodeIsInActiveNodePath = isNodeInActiveNodePath({
     node,
     activeNodeArray,

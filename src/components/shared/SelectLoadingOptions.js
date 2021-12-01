@@ -9,7 +9,6 @@ import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
-import get from 'lodash/get'
 
 const Container = styled.div`
   display: flex;
@@ -104,7 +103,7 @@ const SelectTypable = ({
         console.log({ error })
       }
       const { data } = result
-      const options = get(data, `${queryNodesName}.nodes`, [])
+      const options = data?.[queryNodesName]?.nodes ?? []
       cb(options)
     },
     [client, filter, query, queryNodesName],
