@@ -18,8 +18,7 @@ const beobNichtBeurteiltFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString =
-    store?.[`${treeName}.nodeLabelFilter.beob`] ?? ''
+  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.beob ?? ''
 
   const beobNichtBeurteiltNodesLength = (
     data?.allVApbeobsNichtBeurteilt?.nodes ?? []

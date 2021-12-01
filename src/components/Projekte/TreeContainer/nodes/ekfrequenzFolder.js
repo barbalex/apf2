@@ -1,6 +1,4 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 const ekfrequenzFolderNode = ({
   nodes: nodesPassed,
@@ -13,7 +11,7 @@ const ekfrequenzFolderNode = ({
   apId,
   store,
 }) => {
-  const ekfrequenzs = get(data, 'allEkfrequenzs.nodes', [])
+  const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -23,11 +21,11 @@ const ekfrequenzFolderNode = ({
     id: apId,
   })
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.ekfrequenz`) || ''
+    store?.[treeName]?.nodeLabelFilter?.ekfrequenz ?? ''
 
-  const ekfrequenzNodesLength = memoizeOne(
-    () => ekfrequenzs.filter((el) => el.apId === apId).length,
-  )()
+  const ekfrequenzNodesLength = ekfrequenzs.filter(
+    (el) => el.apId === apId,
+  ).length
   const message = loading
     ? '...'
     : nodeLabelFilterString
