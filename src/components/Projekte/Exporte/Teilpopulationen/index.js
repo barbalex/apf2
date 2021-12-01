@@ -70,7 +70,7 @@ const EwmDiv = styled.div`
 const isRemoteHost =
   typeof window !== 'undefined' && window.location.hostname !== 'localhost'
 
-const Teilpopulationen = ({ treeName }) => {
+const Teilpopulationen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
@@ -279,7 +279,7 @@ const Teilpopulationen = ({ treeName }) => {
 
   const aeTaxonomiesfilter = useCallback(
     (inputValue) =>
-      !!inputValue
+      inputValue
         ? {
             artname: { includesInsensitive: inputValue },
             // needed to turn this off because the postgraphile addon caused cors issues in production
@@ -489,11 +489,7 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              const rows = get(
-                result.data,
-                'allVTpopOhnebekanntseits.nodes',
-                [],
-              )
+              const rows = result.data?.allVTpopOhnebekanntseits?.nodes ?? []
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -537,11 +533,8 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              const rows = get(
-                result.data,
-                'allVTpopOhneapberichtrelevants.nodes',
-                [],
-              )
+              const rows =
+                result.data?.allVTpopOhneapberichtrelevants?.nodes ?? []
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -2218,11 +2211,7 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              const rows = get(
-                result.data,
-                'allVTpopPopberundmassnbers.nodes',
-                [],
-              )
+              const rows = result.data?.allVTpopPopberundmassnbers?.nodes ?? []
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -2464,11 +2453,7 @@ const Teilpopulationen = ({ treeName }) => {
                   },
                 })
               }
-              const rows = get(
-                result.data,
-                'allVTpopLastCountWithMassns.nodes',
-                [],
-              )
+              const rows = result.data?.allVTpopLastCountWithMassns?.nodes ?? []
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
