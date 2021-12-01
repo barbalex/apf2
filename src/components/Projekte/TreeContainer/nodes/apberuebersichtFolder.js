@@ -1,9 +1,6 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 const apberuebersichtFolderNode = ({
-  nodes: nodesPassed,
   data,
   treeName,
   loading,
@@ -17,14 +14,11 @@ const apberuebersichtFolderNode = ({
     id: projId,
   })
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.apberuebersicht`) || ''
+    store?.[`${treeName}.nodeLabelFilter.apberuebersicht`] ?? ''
 
-  const apberuebersichtNodesLength = memoizeOne(
-    () =>
-      get(data, 'allApberuebersichts.nodes', []).filter((el) =>
-        projNodeIds.includes(el.projId),
-      ).length,
-  )()
+  const apberuebersichtNodesLength = (
+    data?.allApberuebersichts?.nodes ?? []
+  ).filter((el) => projNodeIds.includes(el.projId)).length
   /*
   let message =
     loading && !apberuebersichtNodesLength ? '...' : apberuebersichtNodesLength
@@ -33,7 +27,7 @@ const apberuebersichtFolderNode = ({
   }*/
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${apberuebersichtNodesLength} gefiltert`
     : apberuebersichtNodesLength
 

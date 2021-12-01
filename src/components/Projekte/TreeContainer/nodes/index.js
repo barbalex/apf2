@@ -1,5 +1,3 @@
-import memoizeOne from 'memoize-one'
-
 import allParentNodesAreOpenModule from '../allParentNodesAreOpen'
 import buildProjektNodes from './projekt'
 import buildUserFolderNodes from './userFolder'
@@ -90,39 +88,30 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
 
   let nodes = [
     ...projektNodes,
-    ...memoizeOne(() =>
-      buildUserFolderNodes({
-        data,
-        treeName,
-        projektNodes,
-        loading,
-        store,
-      }),
-    )(),
-    ...memoizeOne(() =>
-      buildCurrentIssuesFolderNodes({
-        data,
-        treeName,
-        projektNodes,
-        loading,
-        store,
-      }),
-    )(),
-    ...memoizeOne(() =>
-      buildMessagesFolderNodes({
-        data,
-        treeName,
-        projektNodes,
-        loading,
-        store,
-      }),
-    )(),
+    ...buildUserFolderNodes({
+      data,
+      treeName,
+      projektNodes,
+      loading,
+      store,
+    }),
+    ...buildCurrentIssuesFolderNodes({
+      data,
+      treeName,
+      projektNodes,
+      loading,
+      store,
+    }),
+    ...buildMessagesFolderNodes({
+      data,
+      treeName,
+      projektNodes,
+      loading,
+      store,
+    }),
   ]
   if (role === 'apflora_manager') {
-    nodes = [
-      ...nodes,
-      ...memoizeOne(() => buildWlFolderNodes({ projektNodes }))(),
-    ]
+    nodes = [...nodes, ...buildWlFolderNodes({ projektNodes })]
   }
   let apNodes
   let popNodes
@@ -155,28 +144,23 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       if (nodeUrl.length === 2 && nodeUrl[0] === 'Projekte') {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildApFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projektNodes,
-              projId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildApberuebersichtFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projektNodes,
-              projId,
-              store,
-            }),
-          )(),
+          ...buildApFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId,
+            store,
+          }),
+          ...buildApberuebersichtFolderNodes({
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId,
+            store,
+          }),
         ]
       }
       if (
@@ -186,189 +170,158 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildApberuebersichtNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projektNodes,
-              projId,
-              store,
-            }),
-          )(),
-        ]
-      }
-      if (nodeUrl.length === 3 && nodeUrl[2] === 'Aktionspläne') {
-        apNodes = memoizeOne(() =>
-          buildApNodes({
-            nodes,
+          ...buildApberuebersichtNodes({
             data,
-            treeName,
             loading,
             projektNodes,
             projId,
-            store,
           }),
-        )()
+        ]
+      }
+      if (nodeUrl.length === 3 && nodeUrl[2] === 'Aktionspläne') {
+        apNodes = buildApNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          projektNodes,
+          projId,
+          store,
+        })
         nodes = [...nodes, ...apNodes]
       }
       if (nodeUrl.length === 4 && nodeUrl[2] === 'Aktionspläne') {
         const apId = nodeUrl[3]
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildPopFolderNode({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projektNodes,
-              projId,
-              apNodes,
-              apId,
-              dataFilter: dataFilter[treeName],
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildApzielFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildAperfkritFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildApberFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildIdealbiotopFolderNodes({
-              nodes,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildAssozartFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildEkzaehleinheitFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildEkfrequenzFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildApartFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildBeobNichtBeurteiltFolderNodes({
-              nodes,
-              data: data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildBeobNichtZuzuordnenFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            qkFolderNodes({
-              nodes,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-            }),
-          )(),
+          ...buildPopFolderNode({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId,
+            apNodes,
+            apId,
+            dataFilter: dataFilter[treeName],
+            store,
+          }),
+          ...buildApzielFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+            store,
+          }),
+          ...buildAperfkritFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+            store,
+          }),
+          ...buildApberFolderNodes({
+            nodes,
+            data: data?.allApbers?.nodes ?? [],
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+            store,
+          }),
+          ...buildIdealbiotopFolderNodes({
+            nodes,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+            store,
+          }),
+          ...buildAssozartFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+            store,
+          }),
+          ...buildEkzaehleinheitFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+            store,
+          }),
+          ...buildEkfrequenzFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+            store,
+          }),
+          ...buildApartFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+            store,
+          }),
+          ...buildBeobNichtBeurteiltFolderNodes({
+            nodes,
+            data: data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+            store,
+          }),
+          ...buildBeobNichtZuzuordnenFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+            store,
+          }),
+          ...qkFolderNodes({
+            nodes,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
         ]
       }
       // if nodeUrl.length > 4, nodeUrl[2] is always 'Aktionspläne'
@@ -377,20 +330,18 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         nodeUrl[4] === 'AP-Ziele' &&
         allParentNodesAreOpen
       ) {
-        apzieljahrFolderNodes = memoizeOne(() =>
-          buildApzieljahrFolderNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            apNodes,
-            openNodes,
-            projektNodes,
-            projId,
-            apId: nodeUrl[3],
-            store,
-          }),
-        )()
+        apzieljahrFolderNodes = buildApzieljahrFolderNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          apNodes,
+          openNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+          store,
+        })
         nodes = [...nodes, ...apzieljahrFolderNodes]
       }
       if (
@@ -398,22 +349,20 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         nodeUrl[4] === 'AP-Ziele' &&
         allParentNodesAreOpen
       ) {
-        apzielNodes = memoizeOne(() =>
-          buildApzielNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            apNodes,
-            openNodes,
-            projektNodes,
-            projId,
-            apId: nodeUrl[3],
-            jahr: +nodeUrl[5],
-            apzieljahrFolderNodes,
-            store,
-          }),
-        )()
+        apzielNodes = buildApzielNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          apNodes,
+          openNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+          jahr: +nodeUrl[5],
+          apzieljahrFolderNodes,
+          store,
+        })
         nodes = [...nodes, ...apzielNodes]
       }
       if (
@@ -423,24 +372,22 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildApzielberFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              openNodes,
-              projektNodes,
-              projId,
-              apId: nodeUrl[3],
-              zielJahr: +nodeUrl[5],
-              apzieljahrFolderNodes,
-              zielId: nodeUrl[6],
-              apzielNodes,
-              store,
-            }),
-          )(),
+          ...buildApzielberFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            openNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+            zielJahr: +nodeUrl[5],
+            apzieljahrFolderNodes,
+            zielId: nodeUrl[6],
+            apzielNodes,
+            store,
+          }),
         ]
       }
       if (
@@ -451,29 +398,45 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildApzielberNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              openNodes,
-              projektNodes,
-              projId,
-              apId: nodeUrl[3],
-              zielJahr: +nodeUrl[5],
-              apzieljahrFolderNodes,
-              zielId: nodeUrl[6],
-              apzielNodes,
-              store,
-            }),
-          )(),
+          ...buildApzielberNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            openNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+            zielJahr: +nodeUrl[5],
+            apzieljahrFolderNodes,
+            zielId: nodeUrl[6],
+            apzielNodes,
+            store,
+          }),
         ]
       }
       if (nodeUrl.length === 5 && nodeUrl[4] === 'Populationen') {
-        popNodes = memoizeOne(() =>
-          buildPopNodes({
+        popNodes = buildPopNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          apNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+          store,
+        })
+        nodes = [...nodes, ...popNodes]
+      }
+      if (
+        nodeUrl.length === 5 &&
+        nodeUrl[4] === 'nicht-zuzuordnende-Beobachtungen'
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildBeobNichtZuzuordnenNodes({
             nodes,
             data,
             treeName,
@@ -484,28 +447,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
             apId: nodeUrl[3],
             store,
           }),
-        )()
-        nodes = [...nodes, ...popNodes]
-      }
-      if (
-        nodeUrl.length === 5 &&
-        nodeUrl[4] === 'nicht-zuzuordnende-Beobachtungen'
-      ) {
-        nodes = [
-          ...nodes,
-          ...memoizeOne(() =>
-            buildBeobNichtZuzuordnenNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId: nodeUrl[3],
-              store,
-            }),
-          )(),
         ]
       }
       if (
@@ -514,127 +455,106 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildBeobNichtBeurteiltNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId: nodeUrl[3],
-              store,
-            }),
-          )(),
+          ...buildBeobNichtBeurteiltNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+            store,
+          }),
         ]
       }
       if (nodeUrl.length === 5 && nodeUrl[4] === 'assoziierte-Arten') {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildAssozartNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId: nodeUrl[3],
-              store,
-            }),
-          )(),
+          ...buildAssozartNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+            store,
+          }),
         ]
       }
       if (nodeUrl.length === 5 && nodeUrl[4] === 'EK-Zähleinheiten') {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildEkzaehleinheitNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId: nodeUrl[3],
-              store,
-            }),
-          )(),
+          ...buildEkzaehleinheitNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+            store,
+          }),
         ]
       }
       if (nodeUrl.length === 5 && nodeUrl[4] === 'EK-Frequenzen') {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildEkfrequenzNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId: nodeUrl[3],
-              store,
-            }),
-          )(),
+          ...buildEkfrequenzNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+            store,
+          }),
         ]
       }
       if (nodeUrl.length === 5 && nodeUrl[4] === 'AP-Arten') {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildApartNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId: nodeUrl[3],
-              store,
-            }),
-          )(),
+          ...buildApartNodes({
+            nodes,
+            data,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+          }),
         ]
       }
       if (nodeUrl.length === 5 && nodeUrl[4] === 'AP-Berichte') {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildApberNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId: nodeUrl[3],
-              store,
-            }),
-          )(),
+          ...buildApberNodes({
+            nodes,
+            data,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+          }),
         ]
       }
       if (nodeUrl.length === 5 && nodeUrl[4] === 'AP-Erfolgskriterien') {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildAperfkritNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId: nodeUrl[3],
-              store,
-            }),
-          )(),
+          ...buildAperfkritNodes({
+            nodes,
+            data,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+          }),
         ]
       }
       if (nodeUrl.length === 6 && nodeUrl[4] === 'Populationen') {
@@ -642,51 +562,45 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         const popId = nodeUrl[5]
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildTpopFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projektNodes,
-              projId,
-              apNodes,
-              apId,
-              popNodes,
-              popId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildPopberFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projektNodes,
-              projId,
-              apNodes,
-              apId,
-              popNodes,
-              popId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildPopmassnberFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projektNodes,
-              projId,
-              apNodes,
-              apId,
-              popNodes,
-              popId,
-              store,
-            }),
-          )(),
+          ...buildTpopFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId,
+            apNodes,
+            apId,
+            popNodes,
+            popId,
+            store,
+          }),
+          ...buildPopberFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId,
+            apNodes,
+            apId,
+            popNodes,
+            popId,
+            store,
+          }),
+          ...buildPopmassnberFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId,
+            apNodes,
+            apId,
+            popNodes,
+            popId,
+            store,
+          }),
         ]
       }
       if (
@@ -696,54 +610,7 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildPopmassnberNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId: nodeUrl[3],
-              apNodes,
-              popId: nodeUrl[5],
-              popNodes,
-              store,
-            }),
-          )(),
-        ]
-      }
-      if (
-        nodeUrl.length === 7 &&
-        nodeUrl[4] === 'Populationen' &&
-        nodeUrl[6] === 'Kontroll-Berichte'
-      ) {
-        nodes = [
-          ...nodes,
-          ...memoizeOne(() =>
-            buildPopberNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId: nodeUrl[3],
-              apNodes,
-              popId: nodeUrl[5],
-              popNodes,
-              store,
-            }),
-          )(),
-        ]
-      }
-      if (
-        nodeUrl.length === 7 &&
-        nodeUrl[4] === 'Populationen' &&
-        nodeUrl[6] === 'Teil-Populationen'
-      ) {
-        tpopNodes = memoizeOne(() =>
-          buildTpopNodes({
+          ...buildPopmassnberNodes({
             nodes,
             data,
             treeName,
@@ -754,10 +621,51 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
             apNodes,
             popId: nodeUrl[5],
             popNodes,
-            dataFilter: dataFilter[treeName],
             store,
           }),
-        )()
+        ]
+      }
+      if (
+        nodeUrl.length === 7 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Kontroll-Berichte'
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildPopberNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            store,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 7 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen'
+      ) {
+        tpopNodes = buildTpopNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          projId,
+          projektNodes,
+          apId: nodeUrl[3],
+          apNodes,
+          popId: nodeUrl[5],
+          popNodes,
+          dataFilter: dataFilter[treeName],
+          store,
+        })
         nodes = [...nodes, ...tpopNodes]
       }
       if (
@@ -770,108 +678,96 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         const tpopId = nodeUrl[7]
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            tpopmassnFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId,
-              apNodes,
-              popId,
-              popNodes,
-              tpopId,
-              tpopNodes,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildTpopmassnberFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId,
-              apNodes,
-              popId,
-              popNodes,
-              tpopId,
-              tpopNodes,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildTpopfeldkontrFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId,
-              apNodes,
-              popId,
-              popNodes,
-              tpopId,
-              tpopNodes,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildTpopfreiwkontrFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId,
-              apNodes,
-              popId,
-              popNodes,
-              tpopId,
-              tpopNodes,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildTpopberFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId,
-              apNodes,
-              popId,
-              popNodes,
-              tpopId,
-              tpopNodes,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildBeobZugeordnetFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId,
-              apNodes,
-              popId,
-              popNodes,
-              tpopId,
-              tpopNodes,
-              store,
-            }),
-          )(),
+          ...tpopmassnFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+            store,
+          }),
+          ...buildTpopmassnberFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+            store,
+          }),
+          ...buildTpopfeldkontrFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+            store,
+          }),
+          ...buildTpopfreiwkontrFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+            store,
+          }),
+          ...buildTpopberFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+            store,
+          }),
+          ...buildBeobZugeordnetFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+            store,
+          }),
         ]
       }
       if (
@@ -882,23 +778,21 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildBeobZugeordnetNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId: nodeUrl[3],
-              apNodes,
-              popId: nodeUrl[5],
-              popNodes,
-              tpopId: nodeUrl[7],
-              tpopNodes,
-              store,
-            }),
-          )(),
+          ...buildBeobZugeordnetNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            store,
+          }),
         ]
       }
       if (
@@ -909,23 +803,21 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildTpopberNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId: nodeUrl[3],
-              apNodes,
-              popId: nodeUrl[5],
-              popNodes,
-              tpopId: nodeUrl[7],
-              tpopNodes,
-              store,
-            }),
-          )(),
+          ...buildTpopberNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            store,
+          }),
         ]
       }
       if (
@@ -934,23 +826,21 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Freiwilligen-Kontrollen'
       ) {
-        tpopfreiwkontrNodes = memoizeOne(() =>
-          buildTpopfreiwkontrNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            projId,
-            projektNodes,
-            apId: nodeUrl[3],
-            apNodes,
-            popId: nodeUrl[5],
-            popNodes,
-            tpopId: nodeUrl[7],
-            tpopNodes,
-            store,
-          }),
-        )()
+        tpopfreiwkontrNodes = buildTpopfreiwkontrNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          projId,
+          projektNodes,
+          apId: nodeUrl[3],
+          apNodes,
+          popId: nodeUrl[5],
+          popNodes,
+          tpopId: nodeUrl[7],
+          tpopNodes,
+          store,
+        })
         nodes = [...nodes, ...tpopfreiwkontrNodes]
       }
       if (
@@ -959,23 +849,21 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Feld-Kontrollen'
       ) {
-        tpopfeldkontrNodes = memoizeOne(() =>
-          buildTpopfeldkontrNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            projId,
-            projektNodes,
-            apId: nodeUrl[3],
-            apNodes,
-            popId: nodeUrl[5],
-            popNodes,
-            tpopId: nodeUrl[7],
-            tpopNodes,
-            store,
-          }),
-        )()
+        tpopfeldkontrNodes = buildTpopfeldkontrNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          projId,
+          projektNodes,
+          apId: nodeUrl[3],
+          apNodes,
+          popId: nodeUrl[5],
+          popNodes,
+          tpopId: nodeUrl[7],
+          tpopNodes,
+          store,
+        })
         nodes = [...nodes, ...tpopfeldkontrNodes]
       }
       if (
@@ -986,23 +874,21 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildTpopmassnberNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId: nodeUrl[3],
-              apNodes,
-              popId: nodeUrl[5],
-              popNodes,
-              tpopId: nodeUrl[7],
-              tpopNodes,
-              store,
-            }),
-          )(),
+          ...buildTpopmassnberNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            store,
+          }),
         ]
       }
       if (
@@ -1013,23 +899,21 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildTpopmassnNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId: nodeUrl[3],
-              apNodes,
-              popId: nodeUrl[5],
-              popNodes,
-              tpopId: nodeUrl[7],
-              tpopNodes,
-              store,
-            }),
-          )(),
+          ...buildTpopmassnNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            store,
+          }),
         ]
       }
       if (
@@ -1040,25 +924,23 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildTpopfeldkontrzaehlFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId: nodeUrl[3],
-              apNodes,
-              popId: nodeUrl[5],
-              popNodes,
-              tpopId: nodeUrl[7],
-              tpopNodes,
-              tpopkontrId: nodeUrl[9],
-              tpopfeldkontrNodes,
-              store,
-            }),
-          )(),
+          ...buildTpopfeldkontrzaehlFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            tpopkontrId: nodeUrl[9],
+            tpopfeldkontrNodes,
+            store,
+          }),
         ]
       }
       if (
@@ -1069,25 +951,23 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildTpopfreiwkontrzaehlFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId: nodeUrl[3],
-              apNodes,
-              popId: nodeUrl[5],
-              popNodes,
-              tpopId: nodeUrl[7],
-              tpopNodes,
-              tpopkontrId: nodeUrl[9],
-              tpopfreiwkontrNodes,
-              store,
-            }),
-          )(),
+          ...buildTpopfreiwkontrzaehlFolderNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            tpopkontrId: nodeUrl[9],
+            tpopfreiwkontrNodes,
+            store,
+          }),
         ]
       }
       if (
@@ -1098,25 +978,23 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildTpopfeldkontrzaehlNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId: nodeUrl[3],
-              apNodes,
-              popId: nodeUrl[5],
-              popNodes,
-              tpopId: nodeUrl[7],
-              tpopNodes,
-              tpopkontrId: nodeUrl[9],
-              tpopfeldkontrNodes,
-              store,
-            }),
-          )(),
+          ...buildTpopfeldkontrzaehlNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            tpopkontrId: nodeUrl[9],
+            tpopfeldkontrNodes,
+            store,
+          }),
         ]
       }
       if (
@@ -1127,54 +1005,48 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       ) {
         nodes = [
           ...nodes,
-          ...memoizeOne(() =>
-            buildTpopfreiwkontrzaehlNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              projId,
-              projektNodes,
-              apId: nodeUrl[3],
-              apNodes,
-              popId: nodeUrl[5],
-              popNodes,
-              tpopId: nodeUrl[7],
-              tpopNodes,
-              tpopkontrId: nodeUrl[9],
-              tpopfreiwkontrNodes,
-              store,
-            }),
-          )(),
+          ...buildTpopfreiwkontrzaehlNodes({
+            nodes,
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            tpopkontrId: nodeUrl[9],
+            tpopfreiwkontrNodes,
+            store,
+          }),
         ]
       }
     }
     if (nodeUrl.length === 1 && nodeUrl[0] === 'Benutzer') {
       nodes = [
         ...nodes,
-        ...memoizeOne(() =>
-          buildUserNodes({
-            nodes,
-            data,
-            treeName,
-            projektNodes,
-            store,
-          }),
-        )(),
+        ...buildUserNodes({
+          nodes,
+          data,
+          treeName,
+          projektNodes,
+          store,
+        }),
       ]
     }
     if (nodeUrl.length === 1 && nodeUrl[0] === 'Aktuelle-Fehler') {
       nodes = [
         ...nodes,
-        ...memoizeOne(() =>
-          buildCurrentIssuesNodes({
-            nodes,
-            data,
-            treeName,
-            projektNodes,
-            store,
-          }),
-        )(),
+        ...buildCurrentIssuesNodes({
+          nodes,
+          data,
+          treeName,
+          projektNodes,
+          store,
+        }),
       ]
     }
     if (
@@ -1184,46 +1056,38 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
     ) {
       nodes = [
         ...nodes,
-        ...memoizeOne(() =>
-          buildAdresseFolderNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            projektNodes,
-            store,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildApberrelevantGrundWerteFolderNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            projektNodes,
-            store,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildEkAbrechnungstypWerteFolderNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            projektNodes,
-            store,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildTpopkontrzaehlEinheitWerteFolderNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            projektNodes,
-            store,
-          }),
-        )(),
+        ...buildAdresseFolderNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          projektNodes,
+          store,
+        }),
+        ...buildApberrelevantGrundWerteFolderNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          projektNodes,
+          store,
+        }),
+        ...buildEkAbrechnungstypWerteFolderNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          projektNodes,
+          store,
+        }),
+        ...buildTpopkontrzaehlEinheitWerteFolderNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          projektNodes,
+          store,
+        }),
       ]
     }
     if (
@@ -1234,16 +1098,12 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
     ) {
       nodes = [
         ...nodes,
-        ...memoizeOne(() =>
-          buildAdresseNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            projektNodes,
-            store,
-          }),
-        )(),
+        ...buildAdresseNodes({
+          nodes,
+          data,
+          loading,
+          projektNodes,
+        }),
       ]
     }
     if (
@@ -1254,16 +1114,12 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
     ) {
       nodes = [
         ...nodes,
-        ...memoizeOne(() =>
-          buildApberrelevantGrundWerteNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            projektNodes,
-            store,
-          }),
-        )(),
+        ...buildApberrelevantGrundWerteNodes({
+          nodes,
+          data,
+          loading,
+          projektNodes,
+        }),
       ]
     }
     if (
@@ -1274,16 +1130,14 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
     ) {
       nodes = [
         ...nodes,
-        ...memoizeOne(() =>
-          buildEkAbrechnungstypWerteNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            projektNodes,
-            store,
-          }),
-        )(),
+        ...buildEkAbrechnungstypWerteNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          projektNodes,
+          store,
+        }),
       ]
     }
     if (
@@ -1294,16 +1148,14 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
     ) {
       nodes = [
         ...nodes,
-        ...memoizeOne(() =>
-          buildTpopkontrzaehlEinheitWerteNodes({
-            nodes,
-            data,
-            treeName,
-            loading,
-            projektNodes,
-            store,
-          }),
-        )(),
+        ...buildTpopkontrzaehlEinheitWerteNodes({
+          nodes,
+          data,
+          treeName,
+          loading,
+          projektNodes,
+          store,
+        }),
       ]
     }
   })
