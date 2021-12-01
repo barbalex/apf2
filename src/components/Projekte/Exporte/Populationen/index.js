@@ -328,16 +328,10 @@ const Populationen = () => {
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
                 ap_id: z?.vPopVonapohnestatusesById?.nodes?.[0]?.apId ?? '',
-                artname: get(
-                  z,
-                  'vPopVonapohnestatusesById.nodes[0].artname',
-                  '',
-                ),
-                ap_bearbeitung: get(
-                  z,
-                  'vPopVonapohnestatusesById.nodes[0].apBearbeitung',
-                  '',
-                ),
+                artname:
+                  z?.vPopVonapohnestatusesById?.nodes?.[0]?.artname ?? '',
+                ap_bearbeitung:
+                  z?.vPopVonapohnestatusesById?.nodes?.[0]?.apBearbeitung ?? '',
                 id: z?.vPopVonapohnestatusesById?.nodes?.[0]?.id ?? '',
                 nr: z?.vPopVonapohnestatusesById?.nodes?.[0]?.nr ?? '',
                 name: z?.vPopVonapohnestatusesById?.nodes?.[0]?.name ?? '',
@@ -392,40 +386,23 @@ const Populationen = () => {
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
                 ap_id: z?.vPopOhnekoordsById?.nodes?.[0]?.apId ?? '',
                 artname: z?.vPopOhnekoordsById?.nodes?.[0]?.artname ?? '',
-                ap_bearbeitung: get(
-                  z,
-                  'vPopOhnekoordsById.nodes[0].apBearbeitung',
-                  '',
-                ),
-                ap_start_jahr: get(
-                  z,
-                  'vPopOhnekoordsById.nodes[0].apStartJahr',
-                  '',
-                ),
-                ap_umsetzung: get(
-                  z,
-                  'vPopOhnekoordsById.nodes[0].apUmsetzung',
-                  '',
-                ),
+                ap_bearbeitung:
+                  z?.vPopOhnekoordsById?.nodes?.[0]?.apBearbeitung ?? '',
+                ap_start_jahr:
+                  z?.vPopOhnekoordsById?.nodes?.[0]?.apStartJahr ?? '',
+                ap_umsetzung:
+                  z?.vPopOhnekoordsById?.nodes?.[0]?.apUmsetzung ?? '',
                 id: z?.vPopOhnekoordsById?.nodes?.[0]?.id ?? '',
                 nr: z?.vPopOhnekoordsById?.nodes?.[0]?.nr ?? '',
                 name: z?.vPopOhnekoordsById?.nodes?.[0]?.name ?? '',
                 status: z?.vPopOhnekoordsById?.nodes?.[0]?.status ?? '',
-                bekannt_seit: get(
-                  z,
-                  'vPopOhnekoordsById.nodes[0].bekanntSeit',
+                bekannt_seit:
+                  z?.vPopOhnekoordsById?.nodes?.[0]?.bekanntSeit ?? '',
+                status_unklar:
+                  z?.vPopOhnekoordsById?.nodes?.[0]?.statusUnklar ?? '',
+                status_unklar_begruendung:
+                  z?.vPopOhnekoordsById?.nodes?.[0]?.statusUnklarBegruendung ??
                   '',
-                ),
-                status_unklar: get(
-                  z,
-                  'vPopOhnekoordsById.nodes[0].statusUnklar',
-                  '',
-                ),
-                status_unklar_begruendung: get(
-                  z,
-                  'vPopOhnekoordsById.nodes[0].statusUnklarBegruendung',
-                  '',
-                ),
                 lv95X: z?.vPopOhnekoordsById?.nodes?.[0]?.x ?? '',
                 lv95Y: z?.vPopOhnekoordsById?.nodes?.[0]?.y ?? '',
                 changed: z?.vPopOhnekoordsById?.nodes?.[0]?.changed ?? '',
@@ -618,47 +595,27 @@ const Populationen = () => {
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
                 ap_id: z?.vPopAnzmassnsById?.nodes?.[0]?.apId ?? '',
                 artname: z?.vPopAnzmassnsById?.nodes?.[0]?.artname ?? '',
-                ap_bearbeitung: get(
-                  z,
-                  'vPopAnzmassnsById.nodes[0].apBearbeitung',
-                  '',
-                ),
-                ap_start_jahr: get(
-                  z,
-                  'vPopAnzmassnsById.nodes[0].apStartJahr',
-                  '',
-                ),
-                ap_umsetzung: get(
-                  z,
-                  'vPopAnzmassnsById.nodes[0].apUmsetzung',
-                  '',
-                ),
+                ap_bearbeitung:
+                  z?.vPopAnzmassnsById?.nodes?.[0]?.apBearbeitung ?? '',
+                ap_start_jahr:
+                  z?.vPopAnzmassnsById?.nodes?.[0]?.apStartJahr ?? '',
+                ap_umsetzung:
+                  z?.vPopAnzmassnsById?.nodes?.[0]?.apUmsetzung ?? '',
                 id: z?.vPopAnzmassnsById?.nodes?.[0]?.id ?? '',
                 nr: z?.vPopAnzmassnsById?.nodes?.[0]?.nr ?? '',
                 name: z?.vPopAnzmassnsById?.nodes?.[0]?.name ?? '',
                 status: z?.vPopAnzmassnsById?.nodes?.[0]?.status ?? '',
-                bekannt_seit: get(
-                  z,
-                  'vPopAnzmassnsById.nodes[0].bekanntSeit',
+                bekannt_seit:
+                  z?.vPopAnzmassnsById?.nodes?.[0]?.bekanntSeit ?? '',
+                status_unklar:
+                  z?.vPopAnzmassnsById?.nodes?.[0]?.statusUnklar ?? '',
+                status_unklar_begruendung:
+                  z?.vPopAnzmassnsById?.nodes?.[0]?.statusUnklarBegruendung ??
                   '',
-                ),
-                status_unklar: get(
-                  z,
-                  'vPopAnzmassnsById.nodes[0].statusUnklar',
-                  '',
-                ),
-                status_unklar_begruendung: get(
-                  z,
-                  'vPopAnzmassnsById.nodes[0].statusUnklarBegruendung',
-                  '',
-                ),
                 x: z?.vPopAnzmassnsById?.nodes?.[0]?.x ?? '',
                 y: z?.vPopAnzmassnsById?.nodes?.[0]?.y ?? '',
-                anzahl_massnahmen: get(
-                  z,
-                  'vPopAnzmassnsById.nodes[0].anzahlMassnahmen',
-                  '',
-                ),
+                anzahl_massnahmen:
+                  z?.vPopAnzmassnsById?.nodes?.[0]?.anzahlMassnahmen ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
@@ -707,47 +664,27 @@ const Populationen = () => {
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
                 ap_id: z?.vPopAnzkontrsById?.nodes?.[0]?.apId ?? '',
                 artname: z?.vPopAnzkontrsById?.nodes?.[0]?.artname ?? '',
-                ap_bearbeitung: get(
-                  z,
-                  'vPopAnzkontrsById.nodes[0].apBearbeitung',
-                  '',
-                ),
-                ap_start_jahr: get(
-                  z,
-                  'vPopAnzkontrsById.nodes[0].apStartJahr',
-                  '',
-                ),
-                ap_umsetzung: get(
-                  z,
-                  'vPopAnzkontrsById.nodes[0].apUmsetzung',
-                  '',
-                ),
+                ap_bearbeitung:
+                  z?.vPopAnzkontrsById?.nodes?.[0]?.apBearbeitung ?? '',
+                ap_start_jahr:
+                  z?.vPopAnzkontrsById?.nodes?.[0]?.apStartJahr ?? '',
+                ap_umsetzung:
+                  z?.vPopAnzkontrsById?.nodes?.[0]?.apUmsetzung ?? '',
                 id: z?.vPopAnzkontrsById?.nodes?.[0]?.id ?? '',
                 nr: z?.vPopAnzkontrsById?.nodes?.[0]?.nr ?? '',
                 name: z?.vPopAnzkontrsById?.nodes?.[0]?.name ?? '',
                 status: z?.vPopAnzkontrsById?.nodes?.[0]?.status ?? '',
-                bekannt_seit: get(
-                  z,
-                  'vPopAnzkontrsById.nodes[0].bekanntSeit',
+                bekannt_seit:
+                  z?.vPopAnzkontrsById?.nodes?.[0]?.bekanntSeit ?? '',
+                status_unklar:
+                  z?.vPopAnzkontrsById?.nodes?.[0]?.statusUnklar ?? '',
+                status_unklar_begruendung:
+                  z?.vPopAnzkontrsById?.nodes?.[0]?.statusUnklarBegruendung ??
                   '',
-                ),
-                status_unklar: get(
-                  z,
-                  'vPopAnzkontrsById.nodes[0].statusUnklar',
-                  '',
-                ),
-                status_unklar_begruendung: get(
-                  z,
-                  'vPopAnzkontrsById.nodes[0].statusUnklarBegruendung',
-                  '',
-                ),
                 x: z?.vPopAnzkontrsById?.nodes?.[0]?.x ?? '',
                 y: z?.vPopAnzkontrsById?.nodes?.[0]?.y ?? '',
-                anzahl_kontrollen: get(
-                  z,
-                  'vPopAnzkontrsById.nodes[0].anzahlKontrollen',
-                  '',
-                ),
+                anzahl_kontrollen:
+                  z?.vPopAnzkontrsById?.nodes?.[0]?.anzahlKontrollen ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
@@ -876,103 +813,57 @@ const Populationen = () => {
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
                 ap_id: z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.apId ?? '',
-                artname: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].artname',
+                artname:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.artname ?? '',
+                ap_bearbeitung:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.apBearbeitung ??
                   '',
-                ),
-                ap_bearbeitung: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].apBearbeitung',
+                ap_start_jahr:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.apStartJahr ??
                   '',
-                ),
-                ap_start_jahr: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].apStartJahr',
+                ap_umsetzung:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.apUmsetzung ??
                   '',
-                ),
-                ap_umsetzung: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].apUmsetzung',
+                pop_id:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popId ?? '',
+                pop_nr:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popNr ?? '',
+                pop_name:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popName ?? '',
+                pop_status:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popStatus ?? '',
+                pop_bekannt_seit:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popBekanntSeit ??
                   '',
-                ),
-                pop_id: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popId',
-                  '',
-                ),
-                pop_nr: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popNr',
-                  '',
-                ),
-                pop_name: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popName',
-                  '',
-                ),
-                pop_status: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popStatus',
-                  '',
-                ),
-                pop_bekannt_seit: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popBekanntSeit',
-                  '',
-                ),
-                pop_status_unklar: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popStatusUnklar',
-                  '',
-                ),
-                pop_status_unklar_begruendung: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popStatusUnklarBegruendung',
-                  '',
-                ),
+                pop_status_unklar:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
+                    ?.popStatusUnklar ?? '',
+                pop_status_unklar_begruendung:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
+                    ?.popStatusUnklarBegruendung ?? '',
                 pop_x: z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popX ?? '',
                 pop_y: z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popY ?? '',
-                pop_changed: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popChanged',
+                pop_changed:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popChanged ?? '',
+                pop_changed_by:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popChangedBy ??
                   '',
-                ),
-                pop_changed_by: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popChangedBy',
+                popber_id:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popberId ?? '',
+                popber_jahr:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popberJahr ?? '',
+                popber_entwicklung:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
+                    ?.popberEntwicklung ?? '',
+                popber_bemerkungen:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
+                    ?.popberBemerkungen ?? '',
+                popber_changed:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popberChanged ??
                   '',
-                ),
-                popber_id: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popberId',
-                  '',
-                ),
-                popber_jahr: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popberJahr',
-                  '',
-                ),
-                popber_entwicklung: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popberEntwicklung',
-                  '',
-                ),
-                popber_bemerkungen: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popberBemerkungen',
-                  '',
-                ),
-                popber_changed: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popberChanged',
-                  '',
-                ),
-                popber_changed_by: get(
-                  z,
-                  'vPopMitLetzterPopbersByPopId.nodes[0].popberChangedBy',
-                  '',
-                ),
+                popber_changed_by:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
+                    ?.popberChangedBy ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
@@ -1022,116 +913,67 @@ const Populationen = () => {
                 })
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                ap_id: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].apId',
+                ap_id:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]?.apId ?? '',
+                artname:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]?.artname ??
                   '',
-                ),
-                artname: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].artname',
+                ap_bearbeitung:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.apBearbeitung ?? '',
+                ap_start_jahr:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.apStartJahr ?? '',
+                ap_umsetzung:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.apUmsetzung ?? '',
+                pop_id:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]?.popId ?? '',
+                pop_nr:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]?.popNr ?? '',
+                pop_name:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]?.popName ??
                   '',
-                ),
-                ap_bearbeitung: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].apBearbeitung',
+                pop_status:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]?.popStatus ??
                   '',
-                ),
-                ap_start_jahr: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].apStartJahr',
-                  '',
-                ),
-                ap_umsetzung: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].apUmsetzung',
-                  '',
-                ),
-                pop_id: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popId',
-                  '',
-                ),
-                pop_nr: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popNr',
-                  '',
-                ),
-                pop_name: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popName',
-                  '',
-                ),
-                pop_status: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popStatus',
-                  '',
-                ),
-                pop_bekannt_seit: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popBekanntSeit',
-                  '',
-                ),
-                pop_status_unklar: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popStatusUnklar',
-                  '',
-                ),
-                pop_status_unklar_begruendung: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popStatusUnklarBegruendung',
-                  '',
-                ),
-                pop_x: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popX',
-                  '',
-                ),
-                pop_y: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popY',
-                  '',
-                ),
-                pop_changed: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popChanged',
-                  '',
-                ),
-                pop_changed_by: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popChangedBy',
-                  '',
-                ),
-                popmassnber_id: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popmassnberId',
-                  '',
-                ),
-                popmassnber_jahr: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popmassnberJahr',
-                  '',
-                ),
-                popmassnber_entwicklung: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popmassnberEntwicklung',
-                  '',
-                ),
-                popmassnber_bemerkungen: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popmassnberBemerkungen',
-                  '',
-                ),
-                popmassnber_changed: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popmassnberChanged',
-                  '',
-                ),
-                popmassnber_changed_by: get(
-                  z,
-                  'vPopMitLetzterPopmassnbersByPopId.nodes[0].popmassnberChangedBy',
-                  '',
-                ),
+                pop_bekannt_seit:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.popBekanntSeit ?? '',
+                pop_status_unklar:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.popStatusUnklar ?? '',
+                pop_status_unklar_begruendung:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.popStatusUnklarBegruendung ?? '',
+                pop_x:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]?.popX ?? '',
+                pop_y:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]?.popY ?? '',
+                pop_changed:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.popChanged ?? '',
+                pop_changed_by:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.popChangedBy ?? '',
+                popmassnber_id:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.popmassnberId ?? '',
+                popmassnber_jahr:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.popmassnberJahr ?? '',
+                popmassnber_entwicklung:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.popmassnberEntwicklung ?? '',
+                popmassnber_bemerkungen:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.popmassnberBemerkungen ?? '',
+                popmassnber_changed:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.popmassnberChanged ?? '',
+                popmassnber_changed_by:
+                  z?.vPopMitLetzterPopmassnbersByPopId?.nodes?.[0]
+                    ?.popmassnberChangedBy ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
@@ -1186,122 +1028,60 @@ const Populationen = () => {
                 pop_id: z?.vPopLastCountsByPopId?.nodes?.[0]?.popId ?? '',
                 pop_nr: z?.vPopLastCountsByPopId?.nodes?.[0]?.popNr ?? '',
                 pop_name: z?.vPopLastCountsByPopId?.nodes?.[0]?.popName ?? '',
-                pop_status: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].popStatus',
-                  '',
-                ),
+                pop_status:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.popStatus ?? '',
                 jahre: z?.vPopLastCountsByPopId?.nodes?.[0]?.jahre ?? '',
-                pflanzenTotal: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].pflanzenTotal',
-                  '',
-                ),
-                pflanzen_ohne_jungpflanzen: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].pflanzenOhneJungpflanzen',
-                  '',
-                ),
-                triebeTotal: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].triebeTotal',
-                  '',
-                ),
-                triebe_beweidung: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].triebeBeweidung',
-                  '',
-                ),
-                keimlinge: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].keimlinge',
-                  '',
-                ),
-                davonRosetten: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].davonRosetten',
-                  '',
-                ),
-                jungpflanzen: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].jungpflanzen',
-                  '',
-                ),
+                pflanzenTotal:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.pflanzenTotal ?? '',
+                pflanzen_ohne_jungpflanzen:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]
+                    ?.pflanzenOhneJungpflanzen ?? '',
+                triebeTotal:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.triebeTotal ?? '',
+                triebe_beweidung:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.triebeBeweidung ?? '',
+                keimlinge:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.keimlinge ?? '',
+                davonRosetten:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.davonRosetten ?? '',
+                jungpflanzen:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.jungpflanzen ?? '',
                 blaetter: z?.vPopLastCountsByPopId?.nodes?.[0]?.blatter ?? '',
-                davonBluehende_pflanzen: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].davonBluhendePflanzen',
+                davonBluehende_pflanzen:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.davonBluhendePflanzen ??
                   '',
-                ),
-                davonBluehende_triebe: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].davonBluhendeTriebe',
+                davonBluehende_triebe:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.davonBluhendeTriebe ??
                   '',
-                ),
                 blueten: z?.vPopLastCountsByPopId?.nodes?.[0]?.bluten ?? '',
-                fertile_pflanzen: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].fertilePflanzen',
-                  '',
-                ),
-                fruchtende_triebe: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].fruchtendeTriebe',
-                  '',
-                ),
-                bluetenstaende: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].blutenstande',
-                  '',
-                ),
-                fruchtstaende: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].fruchtstande',
-                  '',
-                ),
+                fertile_pflanzen:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.fertilePflanzen ?? '',
+                fruchtende_triebe:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.fruchtendeTriebe ?? '',
+                bluetenstaende:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.blutenstande ?? '',
+                fruchtstaende:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.fruchtstande ?? '',
                 gruppen: z?.vPopLastCountsByPopId?.nodes?.[0]?.gruppen ?? '',
                 deckung: z?.vPopLastCountsByPopId?.nodes?.[0]?.deckung ?? '',
-                pflanzen_5m2: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].pflanzen5M2',
-                  '',
-                ),
-                triebe_in_30m2: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].triebeIn30M2',
-                  '',
-                ),
-                triebe_50m2: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].triebe50M2',
-                  '',
-                ),
-                triebe_maehflaeche: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].triebeMahflache',
-                  '',
-                ),
-                flaeche_m2: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].flacheM2',
-                  '',
-                ),
-                pflanzstellen: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].pflanzstellen',
-                  '',
-                ),
+                pflanzen_5m2:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.pflanzen5M2 ?? '',
+                triebe_in_30m2:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.triebeIn30M2 ?? '',
+                triebe_50m2:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.triebe50M2 ?? '',
+                triebe_maehflaeche:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.triebeMahflache ?? '',
+                flaeche_m2:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.flacheM2 ?? '',
+                pflanzstellen:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.pflanzstellen ?? '',
                 stellen: z?.vPopLastCountsByPopId?.nodes?.[0]?.stellen ?? '',
-                andere_zaehleinheit: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].andereZaehleinheit',
+                andere_zaehleinheit:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.andereZaehleinheit ??
                   '',
-                ),
-                art_ist_vorhanden: get(
-                  z,
-                  'vPopLastCountsByPopId.nodes[0].artIstVorhanden',
-                  '',
-                ),
+                art_ist_vorhanden:
+                  z?.vPopLastCountsByPopId?.nodes?.[0]?.artIstVorhanden ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
@@ -1349,171 +1129,93 @@ const Populationen = () => {
                 })
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                artname: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].artname',
+                artname:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.artname ?? '',
+                ap_id:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.apId ?? '',
+                pop_id:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.popId ?? '',
+                pop_nr:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.popNr ?? '',
+                pop_name:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.popName ?? '',
+                pop_status:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.popStatus ??
                   '',
-                ),
-                ap_id: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].apId',
+                jahre:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.jahre ?? '',
+                pflanzenTotal:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.pflanzenTotal ?? '',
+                pflanzen_ohne_jungpflanzen:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.pflanzenOhneJungpflanzen ?? '',
+                triebeTotal:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.triebeTotal ??
                   '',
-                ),
-                pop_id: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].popId',
+                triebe_beweidung:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.triebeBeweidung ?? '',
+                keimlinge:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.keimlinge ??
                   '',
-                ),
-                pop_nr: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].popNr',
+                davonRosetten:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.davonRosetten ?? '',
+                jungpflanzen:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.jungpflanzen ??
                   '',
-                ),
-                pop_name: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].popName',
+                blaetter:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.blatter ?? '',
+                davonBluehende_pflanzen:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.davonBluhendePflanzen ?? '',
+                davonBluehende_triebe:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.davonBluhendeTriebe ?? '',
+                blueten:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.bluten ?? '',
+                fertile_pflanzen:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.fertilePflanzen ?? '',
+                fruchtende_triebe:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.fruchtendeTriebe ?? '',
+                bluetenstaende:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.blutenstande ??
                   '',
-                ),
-                pop_status: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].popStatus',
+                fruchtstaende:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.fruchtstande ??
                   '',
-                ),
-                jahre: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].jahre',
+                gruppen:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.gruppen ?? '',
+                deckung:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.deckung ?? '',
+                pflanzen_5m2:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.pflanzen5M2 ??
                   '',
-                ),
-                pflanzenTotal: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].pflanzenTotal',
+                triebe_in_30m2:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.triebeIn30M2 ??
                   '',
-                ),
-                pflanzen_ohne_jungpflanzen: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].pflanzenOhneJungpflanzen',
+                triebe_50m2:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.triebe50M2 ??
                   '',
-                ),
-                triebeTotal: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].triebeTotal',
-                  '',
-                ),
-                triebe_beweidung: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].triebeBeweidung',
-                  '',
-                ),
-                keimlinge: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].keimlinge',
-                  '',
-                ),
-                davonRosetten: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].davonRosetten',
-                  '',
-                ),
-                jungpflanzen: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].jungpflanzen',
-                  '',
-                ),
-                blaetter: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].blatter',
-                  '',
-                ),
-                davonBluehende_pflanzen: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].davonBluhendePflanzen',
-                  '',
-                ),
-                davonBluehende_triebe: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].davonBluhendeTriebe',
-                  '',
-                ),
-                blueten: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].bluten',
-                  '',
-                ),
-                fertile_pflanzen: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].fertilePflanzen',
-                  '',
-                ),
-                fruchtende_triebe: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].fruchtendeTriebe',
-                  '',
-                ),
-                bluetenstaende: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].blutenstande',
-                  '',
-                ),
-                fruchtstaende: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].fruchtstande',
-                  '',
-                ),
-                gruppen: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].gruppen',
-                  '',
-                ),
-                deckung: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].deckung',
-                  '',
-                ),
-                pflanzen_5m2: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].pflanzen5M2',
-                  '',
-                ),
-                triebe_in_30m2: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].triebeIn30M2',
-                  '',
-                ),
-                triebe_50m2: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].triebe50M2',
-                  '',
-                ),
-                triebe_maehflaeche: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].triebeMahflache',
-                  '',
-                ),
-                flaeche_m2: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].flacheM2',
-                  '',
-                ),
-                pflanzstellen: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].pflanzstellen',
-                  '',
-                ),
-                stellen: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].stellen',
-                  '',
-                ),
-                andere_zaehleinheit: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].andereZaehleinheit',
-                  '',
-                ),
-                art_ist_vorhanden: get(
-                  z,
-                  'vPopLastCountWithMassnsByPopId.nodes[0].artIstVorhanden',
-                  '',
-                ),
+                triebe_maehflaeche:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.triebeMahflache ?? '',
+                flaeche_m2:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.flacheM2 ?? '',
+                pflanzstellen:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.pflanzstellen ?? '',
+                stellen:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.stellen ?? '',
+                andere_zaehleinheit:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.andereZaehleinheit ?? '',
+                art_ist_vorhanden:
+                  z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
+                    ?.artIstVorhanden ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
