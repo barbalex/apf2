@@ -3,7 +3,6 @@
  */
 import React, { useCallback, useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
@@ -225,7 +224,7 @@ const getAndValidateCoordinatesOfTpop = async ({
       },
     })
   }
-  const tpop = get(tpopResult, 'data.tpopById')
+  const tpop = tpopResult?.data?.tpopById
   const { lv95X, lv95Y } = tpop
   if (!lv95X) {
     enqueNotification({
@@ -258,7 +257,7 @@ const getAndValidateCoordinatesOfBeob = async ({
       },
     })
   }
-  const beob = get(beobResult, 'data.beobById')
+  const beob = beobResult?.data?.beobById
   const { lv95X, lv95Y } = beob
   if (!lv95X) {
     enqueNotification({
