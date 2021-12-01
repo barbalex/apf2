@@ -19,7 +19,7 @@ const assozartFolderNode = ({
     id: apId,
   })
   const nodeLabelFilterString =
-    store?.[`${treeName}.nodeLabelFilter.assozart`] ?? ''
+    store?.[treeName]?.nodeLabelFilter?.assozart ?? ''
 
   const assozartNodesLength = (data?.allAssozarts?.nodes ?? []).filter(
     (el) => el.apId === apId,

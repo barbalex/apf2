@@ -14,7 +14,7 @@ const apberuebersichtFolderNode = ({
     id: projId,
   })
   const nodeLabelFilterString =
-    store?.[`${treeName}.nodeLabelFilter.apberuebersicht`] ?? ''
+    store?.[treeName]?.nodeLabelFilter?.apberuebersicht ?? ''
 
   const apberuebersichtNodesLength = (
     data?.allApberuebersichts?.nodes ?? []

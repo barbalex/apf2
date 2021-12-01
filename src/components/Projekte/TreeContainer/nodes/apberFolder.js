@@ -19,8 +19,7 @@ const apberFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString =
-    store?.[`${treeName}.nodeLabelFilter.apber`] ?? ''
+  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.apber ?? ''
 
   const apberNodesLength = data.filter((el) => el.apId === apId).length
 
