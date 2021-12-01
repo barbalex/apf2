@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import { gql } from '@apollo/client'
 
 import { tpopfeldkontr } from '../components/shared/fragments'
@@ -17,7 +16,7 @@ const copyBiotopTo = async ({ id, client, copyingBiotop }) => {
     `,
     variables: { id: previousId },
   })
-  const from = get(dataFrom, 'tpopkontrById')
+  const from = dataFrom?.tpopkontrById
   await client.mutate({
     mutation: gql`
       mutation updateTpopkontrForCopyBiotopTo(
@@ -62,21 +61,17 @@ const copyBiotopTo = async ({ id, client, copyingBiotop }) => {
     `,
     variables: {
       id,
-      flaeche: get(from, 'flaeche', null),
-      lrDelarze: get(from, 'lrDelarze', null),
-      lrUmgebungDelarze: get(from, 'lrUmgebungDelarze', null),
-      vegetationstyp: get(from, 'vegetationstyp', null),
-      konkurrenz: get(from, 'konkurrenz', null),
-      moosschicht: get(from, 'moosschicht', null),
-      krautschicht: get(from, 'krautschicht', null),
-      strauchschicht: get(from, 'strauchschicht', null),
-      baumschicht: get(from, 'baumschicht', null),
-      handlungsbedarf: get(from, 'handlungsbedarf', null),
-      idealbiotopUebereinstimmung: get(
-        from,
-        'idealbiotopUebereinstimmung',
-        null,
-      ),
+      flaeche: from?.flaeche ?? null,
+      lrDelarze: from?.lrDelarze ?? null,
+      lrUmgebungDelarze: from?.lrUmgebungDelarze ?? null,
+      vegetationstyp: from?.vegetationstyp ?? null,
+      konkurrenz: from?.konkurrenz ?? null,
+      moosschicht: from?.moosschicht ?? null,
+      krautschicht: from?.krautschicht ?? null,
+      strauchschicht: from?.strauchschicht ?? null,
+      baumschicht: from?.baumschicht ?? null,
+      handlungsbedarf: from?.handlungsbedarf ?? null,
+      idealbiotopUebereinstimmung: from?.idealbiotopUebereinstimmung ?? null,
     },
   })
 }

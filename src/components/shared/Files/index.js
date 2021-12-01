@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@mui/material/Button'
@@ -78,7 +77,7 @@ const Files = ({ parentId, parent }) => {
     variables: { parentId },
   })
 
-  const files = get(data, `all${upperFirst(parent)}Files.nodes`, [])
+  const files = data?.[`all${upperFirst(parent)}Files`].nodes ?? []
 
   const onChangeUploader = useCallback(
     (file) => {

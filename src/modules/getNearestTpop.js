@@ -5,7 +5,6 @@
 import nearestPoint from '@turf/nearest-point'
 import { featureCollection, point } from '@turf/helpers'
 import { gql } from '@apollo/client'
-import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 
 const getNearestTpop = async ({ latLng, client, apId }) => {
@@ -34,9 +33,9 @@ const getNearestTpop = async ({ latLng, client, apId }) => {
     `,
     variables: { apId: apId || '99999999-9999-9999-9999-999999999999' },
   })
-  const pops = get(data, 'apById.popsByApId.nodes', [])
+  const pops = data?.apById?.popsByApId?.nodes ?? []
   const tpops = flatten(
-    pops.map((p) => get(p, 'tpopsByPopId.nodes', []).filter((t) => t.wgs84Lat)),
+    pops.map((p) => (p?.tpopsByPopId?.nodes ?? []).filter((t) => t.wgs84Lat)),
   )
   const tpopPoints = featureCollection(
     tpops.map((t) =>
