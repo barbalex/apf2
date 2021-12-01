@@ -1,14 +1,5 @@
-import get from 'lodash/get'
-
-const messagesFolderNode = ({
-  nodes: nodesPassed,
-  data,
-  treeName,
-  loading,
-  projektNodes,
-  store,
-}) => {
-  const messages = get(data, 'allMessages.totalCount') || 0
+const messagesFolderNode = ({ data, loading, projektNodes }) => {
+  const messages = data?.allMessages?.totalCount ?? 0
 
   // fetch sorting indexes of parents
   const messagesIndex = projektNodes.length + 3

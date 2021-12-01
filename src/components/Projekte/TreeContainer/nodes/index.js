@@ -97,17 +97,13 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
     }),
     ...buildCurrentIssuesFolderNodes({
       data,
-      treeName,
       projektNodes,
       loading,
-      store,
     }),
     ...buildMessagesFolderNodes({
       data,
-      treeName,
       projektNodes,
       loading,
-      store,
     }),
   ]
   if (role === 'apflora_manager') {
@@ -804,8 +800,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         tpopfeldkontrNodes = buildTpopfeldkontrNodes({
           nodes,
           data,
-          treeName,
-          loading,
           projId,
           projektNodes,
           apId: nodeUrl[3],
@@ -814,7 +808,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           popNodes,
           tpopId: nodeUrl[7],
           tpopNodes,
-          store,
         })
         nodes = [...nodes, ...tpopfeldkontrNodes]
       }

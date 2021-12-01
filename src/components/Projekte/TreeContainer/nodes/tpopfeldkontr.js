@@ -1,10 +1,8 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
 
 const tpopfeldkontrNodes = ({
   nodes: nodesPassed,
   data,
-  treeName,
   projektNodes,
   apNodes,
   popNodes,
@@ -13,7 +11,6 @@ const tpopfeldkontrNodes = ({
   apId,
   popId,
   tpopId,
-  store,
 }) => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -24,7 +21,7 @@ const tpopfeldkontrNodes = ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
 
   // map through all elements and create array of nodes
-  let nodes = get(data, 'allTpopfeldkontrs.nodes', [])
+  let nodes = (data?.allTpopfeldkontrs?.nodes ?? [])
     // only show if parent node exists
     .filter((el) =>
       nodesPassed.map((n) => n.id).includes(`${el.tpopId}TpopfeldkontrFolder`),

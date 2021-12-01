@@ -4,8 +4,6 @@
  * 3. update openNodes
  * 4. refresh tree
  */
-import get from 'lodash/get'
-
 import dataGql from './data'
 
 const openLowerNodesTpop = async ({ treeName, id, client, store }) => {
@@ -26,12 +24,12 @@ const openLowerNodesTpop = async ({ treeName, id, client, store }) => {
     query: dataGql,
     variables: { id },
   })
-  const tpopmassns = get(data, 'tpopById.tpopmassnsByTpopId.nodes', [])
-  const tpopmassnbers = get(data, 'tpopById.tpopmassnbersByTpopId.nodes', [])
-  const tpopfeldkontrs = get(data, 'tpopById.tpopfeldkontrs.nodes', [])
-  const tpopfreiwkontrs = get(data, 'tpopById.tpopfreiwkontrs.nodes', [])
-  const tpopbers = get(data, 'tpopById.tpopbersByTpopId.nodes', [])
-  const tpopbeobs = get(data, 'tpopById.beobsByTpopId.nodes', [])
+  const tpopmassns = data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []
+  const tpopmassnbers = data?.tpopById?.tpopmassnbersByTpopId?.nodes ?? []
+  const tpopfeldkontrs = data?.tpopById?.tpopfeldkontrs?.nodes ?? []
+  const tpopfreiwkontrs = data?.tpopById?.tpopfreiwkontrs?.nodes ?? []
+  const tpopbers = data?.tpopById?.tpopbersByTpopId?.nodes ?? []
+  const tpopbeobs = data?.tpopById?.beobsByTpopId?.nodes ?? []
   // 2. add activeNodeArrays for all data to openNodes
   // 2.0 add all folders
   let newOpenNodes = [
@@ -181,7 +179,7 @@ const openLowerNodesTpop = async ({ treeName, id, client, store }) => {
       ],
     ]
     /*
-    const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
+    const zaehls = (k?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
     zaehls.forEach(z => {
       newOpenNodes = [
         ...newOpenNodes,
@@ -234,7 +232,7 @@ const openLowerNodesTpop = async ({ treeName, id, client, store }) => {
       ],
     ]
     /*
-    const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
+    const zaehls = (k?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
     zaehls.forEach(z => {
       newOpenNodes = [
         ...newOpenNodes,
