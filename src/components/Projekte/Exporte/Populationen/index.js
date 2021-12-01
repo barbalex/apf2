@@ -217,13 +217,13 @@ const Populationen = () => {
                 })
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                art: get(z, 'vPopKmlsById.nodes[0].art', ''),
-                label: get(z, 'vPopKmlsById.nodes[0].label', ''),
-                inhalte: get(z, 'vPopKmlsById.nodes[0].inhalte', ''),
-                id: get(z, 'vPopKmlsById.nodes[0].id', ''),
-                wgs84Lat: get(z, 'vPopKmlsById.nodes[0].wgs84Lat', ''),
-                wgs84Long: get(z, 'vPopKmlsById.nodes[0].wgs84Long', ''),
-                url: get(z, 'vPopKmlsById.nodes[0].url', ''),
+                art: z?.vPopKmlsById?.nodes?.[0]?.art ?? '',
+                label: z?.vPopKmlsById?.nodes?.[0]?.label ?? '',
+                inhalte: z?.vPopKmlsById?.nodes?.[0]?.inhalte ?? '',
+                id: z?.vPopKmlsById?.nodes?.[0]?.id ?? '',
+                wgs84Lat: z?.vPopKmlsById?.nodes?.[0]?.wgs84Lat ?? '',
+                wgs84Long: z?.vPopKmlsById?.nodes?.[0]?.wgs84Long ?? '',
+                url: z?.vPopKmlsById?.nodes?.[0]?.url ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
@@ -271,13 +271,13 @@ const Populationen = () => {
                 })
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                art: get(z, 'vPopKmlnamenById.nodes[0].art', ''),
-                label: get(z, 'vPopKmlnamenById.nodes[0].label', ''),
-                inhalte: get(z, 'vPopKmlnamenById.nodes[0].inhalte', ''),
-                id: get(z, 'vPopKmlnamenById.nodes[0].id', ''),
-                wgs84Lat: get(z, 'vPopKmlnamenById.nodes[0].wgs84Lat', ''),
-                wgs84Long: get(z, 'vPopKmlnamenById.nodes[0].wgs84Long', ''),
-                url: get(z, 'vPopKmlnamenById.nodes[0].url', ''),
+                art: z?.vPopKmlnamenById?.nodes?.[0]?.art ?? '',
+                label: z?.vPopKmlnamenById?.nodes?.[0]?.label ?? '',
+                inhalte: z?.vPopKmlnamenById?.nodes?.[0]?.inhalte ?? '',
+                id: z?.vPopKmlnamenById?.nodes?.[0]?.id ?? '',
+                wgs84Lat: z?.vPopKmlnamenById?.nodes?.[0]?.wgs84Lat ?? '',
+                wgs84Long: z?.vPopKmlnamenById?.nodes?.[0]?.wgs84Long ?? '',
+                url: z?.vPopKmlnamenById?.nodes?.[0]?.url ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
@@ -327,7 +327,7 @@ const Populationen = () => {
                 })
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                ap_id: get(z, 'vPopVonapohnestatusesById.nodes[0].apId', ''),
+                ap_id: z?.vPopVonapohnestatusesById?.nodes?.[0]?.apId ?? '',
                 artname: get(
                   z,
                   'vPopVonapohnestatusesById.nodes[0].artname',
@@ -338,12 +338,12 @@ const Populationen = () => {
                   'vPopVonapohnestatusesById.nodes[0].apBearbeitung',
                   '',
                 ),
-                id: get(z, 'vPopVonapohnestatusesById.nodes[0].id', ''),
-                nr: get(z, 'vPopVonapohnestatusesById.nodes[0].nr', ''),
-                name: get(z, 'vPopVonapohnestatusesById.nodes[0].name', ''),
-                status: get(z, 'vPopVonapohnestatusesById.nodes[0].status', ''),
-                lv95X: get(z, 'vPopVonapohnestatusesById.nodes[0].x', ''),
-                lv95Y: get(z, 'vPopVonapohnestatusesById.nodes[0].y', ''),
+                id: z?.vPopVonapohnestatusesById?.nodes?.[0]?.id ?? '',
+                nr: z?.vPopVonapohnestatusesById?.nodes?.[0]?.nr ?? '',
+                name: z?.vPopVonapohnestatusesById?.nodes?.[0]?.name ?? '',
+                status: z?.vPopVonapohnestatusesById?.nodes?.[0]?.status ?? '',
+                lv95X: z?.vPopVonapohnestatusesById?.nodes?.[0]?.x ?? '',
+                lv95Y: z?.vPopVonapohnestatusesById?.nodes?.[0]?.y ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
@@ -390,8 +390,8 @@ const Populationen = () => {
                 })
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                ap_id: get(z, 'vPopOhnekoordsById.nodes[0].apId', ''),
-                artname: get(z, 'vPopOhnekoordsById.nodes[0].artname', ''),
+                ap_id: z?.vPopOhnekoordsById?.nodes?.[0]?.apId ?? '',
+                artname: z?.vPopOhnekoordsById?.nodes?.[0]?.artname ?? '',
                 ap_bearbeitung: get(
                   z,
                   'vPopOhnekoordsById.nodes[0].apBearbeitung',
@@ -407,10 +407,10 @@ const Populationen = () => {
                   'vPopOhnekoordsById.nodes[0].apUmsetzung',
                   '',
                 ),
-                id: get(z, 'vPopOhnekoordsById.nodes[0].id', ''),
-                nr: get(z, 'vPopOhnekoordsById.nodes[0].nr', ''),
-                name: get(z, 'vPopOhnekoordsById.nodes[0].name', ''),
-                status: get(z, 'vPopOhnekoordsById.nodes[0].status', ''),
+                id: z?.vPopOhnekoordsById?.nodes?.[0]?.id ?? '',
+                nr: z?.vPopOhnekoordsById?.nodes?.[0]?.nr ?? '',
+                name: z?.vPopOhnekoordsById?.nodes?.[0]?.name ?? '',
+                status: z?.vPopOhnekoordsById?.nodes?.[0]?.status ?? '',
                 bekannt_seit: get(
                   z,
                   'vPopOhnekoordsById.nodes[0].bekanntSeit',
@@ -426,10 +426,10 @@ const Populationen = () => {
                   'vPopOhnekoordsById.nodes[0].statusUnklarBegruendung',
                   '',
                 ),
-                lv95X: get(z, 'vPopOhnekoordsById.nodes[0].x', ''),
-                lv95Y: get(z, 'vPopOhnekoordsById.nodes[0].y', ''),
-                changed: get(z, 'vPopOhnekoordsById.nodes[0].changed', ''),
-                changed_by: get(z, 'vPopOhnekoordsById.nodes[0].changedBy', ''),
+                lv95X: z?.vPopOhnekoordsById?.nodes?.[0]?.x ?? '',
+                lv95Y: z?.vPopOhnekoordsById?.nodes?.[0]?.y ?? '',
+                changed: z?.vPopOhnekoordsById?.nodes?.[0]?.changed ?? '',
+                changed_by: z?.vPopOhnekoordsById?.nodes?.[0]?.changedBy ?? '',
               }))
               removeNotification(notif)
               closeSnackbar(notif)
@@ -616,8 +616,8 @@ const Populationen = () => {
                 })
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                ap_id: get(z, 'vPopAnzmassnsById.nodes[0].apId', ''),
-                artname: get(z, 'vPopAnzmassnsById.nodes[0].artname', ''),
+                ap_id: z?.vPopAnzmassnsById?.nodes?.[0]?.apId ?? '',
+                artname: z?.vPopAnzmassnsById?.nodes?.[0]?.artname ?? '',
                 ap_bearbeitung: get(
                   z,
                   'vPopAnzmassnsById.nodes[0].apBearbeitung',
@@ -633,10 +633,10 @@ const Populationen = () => {
                   'vPopAnzmassnsById.nodes[0].apUmsetzung',
                   '',
                 ),
-                id: get(z, 'vPopAnzmassnsById.nodes[0].id', ''),
-                nr: get(z, 'vPopAnzmassnsById.nodes[0].nr', ''),
-                name: get(z, 'vPopAnzmassnsById.nodes[0].name', ''),
-                status: get(z, 'vPopAnzmassnsById.nodes[0].status', ''),
+                id: z?.vPopAnzmassnsById?.nodes?.[0]?.id ?? '',
+                nr: z?.vPopAnzmassnsById?.nodes?.[0]?.nr ?? '',
+                name: z?.vPopAnzmassnsById?.nodes?.[0]?.name ?? '',
+                status: z?.vPopAnzmassnsById?.nodes?.[0]?.status ?? '',
                 bekannt_seit: get(
                   z,
                   'vPopAnzmassnsById.nodes[0].bekanntSeit',
@@ -652,8 +652,8 @@ const Populationen = () => {
                   'vPopAnzmassnsById.nodes[0].statusUnklarBegruendung',
                   '',
                 ),
-                x: get(z, 'vPopAnzmassnsById.nodes[0].x', ''),
-                y: get(z, 'vPopAnzmassnsById.nodes[0].y', ''),
+                x: z?.vPopAnzmassnsById?.nodes?.[0]?.x ?? '',
+                y: z?.vPopAnzmassnsById?.nodes?.[0]?.y ?? '',
                 anzahl_massnahmen: get(
                   z,
                   'vPopAnzmassnsById.nodes[0].anzahlMassnahmen',
@@ -705,8 +705,8 @@ const Populationen = () => {
                 })
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                ap_id: get(z, 'vPopAnzkontrsById.nodes[0].apId', ''),
-                artname: get(z, 'vPopAnzkontrsById.nodes[0].artname', ''),
+                ap_id: z?.vPopAnzkontrsById?.nodes?.[0]?.apId ?? '',
+                artname: z?.vPopAnzkontrsById?.nodes?.[0]?.artname ?? '',
                 ap_bearbeitung: get(
                   z,
                   'vPopAnzkontrsById.nodes[0].apBearbeitung',
@@ -722,10 +722,10 @@ const Populationen = () => {
                   'vPopAnzkontrsById.nodes[0].apUmsetzung',
                   '',
                 ),
-                id: get(z, 'vPopAnzkontrsById.nodes[0].id', ''),
-                nr: get(z, 'vPopAnzkontrsById.nodes[0].nr', ''),
-                name: get(z, 'vPopAnzkontrsById.nodes[0].name', ''),
-                status: get(z, 'vPopAnzkontrsById.nodes[0].status', ''),
+                id: z?.vPopAnzkontrsById?.nodes?.[0]?.id ?? '',
+                nr: z?.vPopAnzkontrsById?.nodes?.[0]?.nr ?? '',
+                name: z?.vPopAnzkontrsById?.nodes?.[0]?.name ?? '',
+                status: z?.vPopAnzkontrsById?.nodes?.[0]?.status ?? '',
                 bekannt_seit: get(
                   z,
                   'vPopAnzkontrsById.nodes[0].bekanntSeit',
@@ -741,8 +741,8 @@ const Populationen = () => {
                   'vPopAnzkontrsById.nodes[0].statusUnklarBegruendung',
                   '',
                 ),
-                x: get(z, 'vPopAnzkontrsById.nodes[0].x', ''),
-                y: get(z, 'vPopAnzkontrsById.nodes[0].y', ''),
+                x: z?.vPopAnzkontrsById?.nodes?.[0]?.x ?? '',
+                y: z?.vPopAnzkontrsById?.nodes?.[0]?.y ?? '',
                 anzahl_kontrollen: get(
                   z,
                   'vPopAnzkontrsById.nodes[0].anzahlKontrollen',
@@ -875,7 +875,7 @@ const Populationen = () => {
                 })
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                ap_id: get(z, 'vPopMitLetzterPopbersByPopId.nodes[0].apId', ''),
+                ap_id: z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.apId ?? '',
                 artname: get(
                   z,
                   'vPopMitLetzterPopbersByPopId.nodes[0].artname',
@@ -931,8 +931,8 @@ const Populationen = () => {
                   'vPopMitLetzterPopbersByPopId.nodes[0].popStatusUnklarBegruendung',
                   '',
                 ),
-                pop_x: get(z, 'vPopMitLetzterPopbersByPopId.nodes[0].popX', ''),
-                pop_y: get(z, 'vPopMitLetzterPopbersByPopId.nodes[0].popY', ''),
+                pop_x: z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popX ?? '',
+                pop_y: z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popY ?? '',
                 pop_changed: get(
                   z,
                   'vPopMitLetzterPopbersByPopId.nodes[0].popChanged',
@@ -1181,17 +1181,17 @@ const Populationen = () => {
                 })
               }
               const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                artname: get(z, 'vPopLastCountsByPopId.nodes[0].artname', ''),
-                ap_id: get(z, 'vPopLastCountsByPopId.nodes[0].apId', ''),
-                pop_id: get(z, 'vPopLastCountsByPopId.nodes[0].popId', ''),
-                pop_nr: get(z, 'vPopLastCountsByPopId.nodes[0].popNr', ''),
-                pop_name: get(z, 'vPopLastCountsByPopId.nodes[0].popName', ''),
+                artname: z?.vPopLastCountsByPopId?.nodes?.[0]?.artname ?? '',
+                ap_id: z?.vPopLastCountsByPopId?.nodes?.[0]?.apId ?? '',
+                pop_id: z?.vPopLastCountsByPopId?.nodes?.[0]?.popId ?? '',
+                pop_nr: z?.vPopLastCountsByPopId?.nodes?.[0]?.popNr ?? '',
+                pop_name: z?.vPopLastCountsByPopId?.nodes?.[0]?.popName ?? '',
                 pop_status: get(
                   z,
                   'vPopLastCountsByPopId.nodes[0].popStatus',
                   '',
                 ),
-                jahre: get(z, 'vPopLastCountsByPopId.nodes[0].jahre', ''),
+                jahre: z?.vPopLastCountsByPopId?.nodes?.[0]?.jahre ?? '',
                 pflanzenTotal: get(
                   z,
                   'vPopLastCountsByPopId.nodes[0].pflanzenTotal',
@@ -1227,7 +1227,7 @@ const Populationen = () => {
                   'vPopLastCountsByPopId.nodes[0].jungpflanzen',
                   '',
                 ),
-                blaetter: get(z, 'vPopLastCountsByPopId.nodes[0].blatter', ''),
+                blaetter: z?.vPopLastCountsByPopId?.nodes?.[0]?.blatter ?? '',
                 davonBluehende_pflanzen: get(
                   z,
                   'vPopLastCountsByPopId.nodes[0].davonBluhendePflanzen',
@@ -1238,7 +1238,7 @@ const Populationen = () => {
                   'vPopLastCountsByPopId.nodes[0].davonBluhendeTriebe',
                   '',
                 ),
-                blueten: get(z, 'vPopLastCountsByPopId.nodes[0].bluten', ''),
+                blueten: z?.vPopLastCountsByPopId?.nodes?.[0]?.bluten ?? '',
                 fertile_pflanzen: get(
                   z,
                   'vPopLastCountsByPopId.nodes[0].fertilePflanzen',
@@ -1259,8 +1259,8 @@ const Populationen = () => {
                   'vPopLastCountsByPopId.nodes[0].fruchtstande',
                   '',
                 ),
-                gruppen: get(z, 'vPopLastCountsByPopId.nodes[0].gruppen', ''),
-                deckung: get(z, 'vPopLastCountsByPopId.nodes[0].deckung', ''),
+                gruppen: z?.vPopLastCountsByPopId?.nodes?.[0]?.gruppen ?? '',
+                deckung: z?.vPopLastCountsByPopId?.nodes?.[0]?.deckung ?? '',
                 pflanzen_5m2: get(
                   z,
                   'vPopLastCountsByPopId.nodes[0].pflanzen5M2',
@@ -1291,7 +1291,7 @@ const Populationen = () => {
                   'vPopLastCountsByPopId.nodes[0].pflanzstellen',
                   '',
                 ),
-                stellen: get(z, 'vPopLastCountsByPopId.nodes[0].stellen', ''),
+                stellen: z?.vPopLastCountsByPopId?.nodes?.[0]?.stellen ?? '',
                 andere_zaehleinheit: get(
                   z,
                   'vPopLastCountsByPopId.nodes[0].andereZaehleinheit',
