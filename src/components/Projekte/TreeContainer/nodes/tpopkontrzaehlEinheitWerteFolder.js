@@ -1,5 +1,3 @@
-import get from 'lodash/get'
-
 const tpopkontrzaehlEinheitWerteFolderNode = ({
   nodes: nodesPassed,
   data,
@@ -8,22 +6,17 @@ const tpopkontrzaehlEinheitWerteFolderNode = ({
   projektNodes,
   store,
 }) => {
-  const tpopkontrzaehlEinheitWertes = get(
-    data,
-    'allTpopkontrzaehlEinheitWertes.nodes',
-    [],
-  )
+  const tpopkontrzaehlEinheitWertes =
+    data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.tpopkontrzaehlEinheitWerte`) || ''
+    store?.[treeName]?.nodeLabelFilter?.tpopkontrzaehlEinheitWerte ?? ''
 
   let tpopkontrzaehlEinheitWerteNodesLength = tpopkontrzaehlEinheitWertes.length
   // before TpopkontrzaehlEinheitWerte folder is active, only total count was fetched, not yet any tpopkontrzaehlEinheitWerten nodes
   if (tpopkontrzaehlEinheitWertes.length === 0)
-    tpopkontrzaehlEinheitWerteNodesLength = get(
-      data,
-      'tpopkontrzaehlEinheitWertesUnfiltered.totalCount',
-    )
+    tpopkontrzaehlEinheitWerteNodesLength =
+      data?.tpopkontrzaehlEinheitWertesUnfiltered?.totalCount
   let message =
     loading && !tpopkontrzaehlEinheitWerteNodesLength
       ? '...'

@@ -4,8 +4,6 @@
  * 3. update openNodes
  * 4. refresh tree
  */
-import get from 'lodash/get'
-
 import dataGql from './data'
 
 const openLowerNodesPop = async ({ treeName, id, client, store }) => {
@@ -20,9 +18,9 @@ const openLowerNodesPop = async ({ treeName, id, client, store }) => {
     query: dataGql,
     variables: { id },
   })
-  const tpops = get(data, 'popById.tpopsByPopId.nodes', [])
-  const popbers = get(data, 'popById.popbersByPopId.nodes', [])
-  const popmassnbers = get(data, 'popById.popmassnbersByPopId.nodes', [])
+  const tpops = data?.popById?.tpopsByPopId?.nodes ?? []
+  const popbers = data?.popById?.popbersByPopId?.nodes ?? []
+  const popmassnbers = data?.popById?.popmassnbersByPopId?.nodes ?? []
   // 2. add activeNodeArrays for all data to openNodes
   const newOpenNodes = [
     ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', id],

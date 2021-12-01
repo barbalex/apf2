@@ -4,7 +4,6 @@
  * 3. update openNodes
  * 4. refresh tree
  */
-import get from 'lodash/get'
 import groupBy from 'lodash/groupBy'
 
 import dataGql from './data'
@@ -20,10 +19,7 @@ const openLowerNodesZielFolder = async ({ treeName, id, client, store }) => {
     query: dataGql,
     variables: { id },
   })
-  const zielsGrouped = groupBy(
-    get(data, 'apById.zielsByApId.nodes', []),
-    'jahr',
-  )
+  const zielsGrouped = groupBy(data?.apById?.zielsByApId?.nodes ?? [], 'jahr')
 
   // 2. add activeNodeArrays for all data to openNodes
   let newOpenNodes = [['Projekte', projId, 'Aktionspläne', id, 'AP-Ziele']]
@@ -49,7 +45,7 @@ const openLowerNodesZielFolder = async ({ treeName, id, client, store }) => {
           'Berichte',
         ],
       ]
-      const zielbers = get(ziel, 'zielbersByZielId.nodes', [])
+      const zielbers = ziel?.zielbersByZielId?.nodes ?? []
       zielbers.forEach((zielber) => {
         newOpenNodes = [
           ...newOpenNodes,
