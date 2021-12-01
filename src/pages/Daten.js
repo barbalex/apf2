@@ -28,7 +28,7 @@ const Container = styled.div`
   }
 `
 
-const DatenPage = ({ location, appbarheight }) => {
+const DatenPage = ({ location }) => {
   const store = useContext(storeContext)
   const { view, showDeletions, user, setIsPrint, setEkfIds } = store
   const { activeNodeArray, setActiveNodeArray, setLastTouchedNode } = store.tree
