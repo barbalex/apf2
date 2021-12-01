@@ -1,6 +1,4 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 import exists from '../../../../modules/exists'
 
@@ -30,18 +28,15 @@ const tpopfreiwkontrzaehlFolderNode = ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const tpopkontrIndex = findIndex(tpopfreiwkontrNodes, { id: tpopkontrId })
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.tpopkontrzaehl`) || ''
+    store?.[treeName]?.nodeLabelFilter?.tpopkontrzaehl ?? ''
 
-  const childrenLength = memoizeOne(
-    () =>
-      get(data, 'allTpopkontrzaehls.nodes', []).filter(
-        (el) => el.tpopkontrId === tpopkontrId && exists(el.anzahl),
-      ).length,
-  )()
+  const childrenLength = (data?.allTpopkontrzaehls?.nodes ?? []).filter(
+    (el) => el.tpopkontrId === tpopkontrId && exists(el.anzahl),
+  ).length
 
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${childrenLength} gefiltert`
     : childrenLength
 
