@@ -1,6 +1,4 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 const popmassnberFolderNode = ({
   nodes: nodesPassed,
@@ -16,9 +14,9 @@ const popmassnberFolderNode = ({
   store,
 }) => {
   // return empty if ap is not a real ap and apFilter is set
-  const ap = get(data, 'allAps.nodes', []).find((n) => n.id === apId)
+  const ap = (data?.allAps?.nodes ?? []).find((n) => n.id === apId)
   const isAp = ap && [1, 2, 3].includes(ap.bearbeitung)
-  const apFilter = get(store, `${treeName}.apFilter`)
+  const apFilter = store?.[treeName]?.apFilter
   if (!!apFilter && !isAp) return []
 
   // fetch sorting indexes of parents
@@ -28,17 +26,15 @@ const popmassnberFolderNode = ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.popmassnber`) || ''
+    store?.[treeName]?.nodeLabelFilter?.popmassnber ?? ''
 
-  const childrenLength = memoizeOne(
-    () =>
-      get(data, 'allPopmassnbers.nodes', []).filter((el) => el.popId === popId)
-        .length,
-  )()
+  const childrenLength = (data?.allPopmassnbers?.nodes ?? []).filter(
+    (el) => el.popId === popId,
+  ).length
 
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${childrenLength} gefiltert`
     : childrenLength
 

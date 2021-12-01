@@ -1,6 +1,4 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 const popFolderNode = ({
   nodes: nodesPassed,
@@ -13,7 +11,7 @@ const popFolderNode = ({
   apId,
   store,
 }) => {
-  const pops = get(data, 'allPops.nodes', [])
+  const pops = data?.allPops?.nodes ?? []
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -22,15 +20,12 @@ const popFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.pop`) || ''
+  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.pop ?? ''
 
-  const popNodesLength = memoizeOne(
-    () => pops.filter((el) => el.apId === apId).length,
-  )()
+  const popNodesLength = pops.filter((el) => el.apId === apId).length
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${popNodesLength} gefiltert`
     : popNodesLength
 
