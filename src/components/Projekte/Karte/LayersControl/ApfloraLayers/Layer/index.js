@@ -168,8 +168,8 @@ const MySortableItem = ({ treeName, apfloraLayer }) => {
   }, [assigningBeob, assigningispossible])
   // for each layer there must exist a path in data!
   let layerData = useMemo(
-    () => data[`${apfloraLayer.value}.nodes`] ?? [],
-    [apfloraLayer.value, data],
+    () => data?.[apfloraLayer.value]?.nodes ?? [],
+    [apfloraLayer, data],
   )
   if (apfloraLayer.value === 'tpop') {
     // but tpop is special...

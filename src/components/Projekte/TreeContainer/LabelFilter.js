@@ -67,7 +67,7 @@ const LabelFilter = ({ treeName, nodes }) => {
     }
   }
   const openNodes = useMemo(
-    () => store?.[`${treeName}.openNodes`] ?? [],
+    () => store?.[treeName]?.openNodes ?? [],
     [store, treeName],
   )
 

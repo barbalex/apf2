@@ -19,7 +19,7 @@ const aperfkritFolderNode = ({
     id: apId,
   })
   const nodeLabelFilterString =
-    store?.[`${treeName}.nodeLabelFilter.erfkrit`] ?? ''
+    store?.[treeName]?.nodeLabelFilter?.erfkrit ?? ''
 
   const erfkritNodesLength = (data?.allErfkrits?.nodes ?? []).filter(
     (el) => el.apId === apId,
