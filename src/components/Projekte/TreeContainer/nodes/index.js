@@ -84,7 +84,7 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
     // because every lower folder gets previous nodes passed
     .sort(sort)
   //console.log('nodes', { data, openNodes })
-  const projektNodes = [...buildProjektNodes({ data, treeName, store })]
+  const projektNodes = buildProjektNodes({ data })
 
   let nodes = [
     ...projektNodes,
@@ -347,8 +347,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         apzielNodes = buildApzielNodes({
           nodes,
           data,
-          treeName,
-          loading,
           apNodes,
           openNodes,
           projektNodes,
@@ -356,7 +354,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           apId: nodeUrl[3],
           jahr: +nodeUrl[5],
           apzieljahrFolderNodes,
-          store,
         })
         nodes = [...nodes, ...apzielNodes]
       }
@@ -623,16 +620,12 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         tpopNodes = buildTpopNodes({
           nodes,
           data,
-          treeName,
-          loading,
           projId,
           projektNodes,
           apId: nodeUrl[3],
           apNodes,
           popId: nodeUrl[5],
           popNodes,
-          dataFilter: dataFilter[treeName],
-          store,
         })
         nodes = [...nodes, ...tpopNodes]
       }
@@ -771,8 +764,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildTpopberNodes({
             nodes,
             data,
-            treeName,
-            loading,
             projId,
             projektNodes,
             apId: nodeUrl[3],
@@ -781,7 +772,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
-            store,
           }),
         ]
       }
@@ -794,8 +784,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         tpopfreiwkontrNodes = buildTpopfreiwkontrNodes({
           nodes,
           data,
-          treeName,
-          loading,
           projId,
           projektNodes,
           apId: nodeUrl[3],
@@ -804,7 +792,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           popNodes,
           tpopId: nodeUrl[7],
           tpopNodes,
-          store,
         })
         nodes = [...nodes, ...tpopfreiwkontrNodes]
       }
@@ -842,8 +829,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildTpopmassnberNodes({
             nodes,
             data,
-            treeName,
-            loading,
             projId,
             projektNodes,
             apId: nodeUrl[3],
@@ -852,7 +837,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
-            store,
           }),
         ]
       }
@@ -867,8 +851,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildTpopmassnNodes({
             nodes,
             data,
-            treeName,
-            loading,
             projId,
             projektNodes,
             apId: nodeUrl[3],
@@ -877,7 +859,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
-            store,
           }),
         ]
       }
@@ -946,8 +927,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildTpopfeldkontrzaehlNodes({
             nodes,
             data,
-            treeName,
-            loading,
             projId,
             projektNodes,
             apId: nodeUrl[3],
@@ -958,7 +937,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
             tpopNodes,
             tpopkontrId: nodeUrl[9],
             tpopfeldkontrNodes,
-            store,
           }),
         ]
       }
@@ -973,8 +951,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
           ...buildTpopfreiwkontrzaehlNodes({
             nodes,
             data,
-            treeName,
-            loading,
             projId,
             projektNodes,
             apId: nodeUrl[3],
@@ -985,7 +961,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
             tpopNodes,
             tpopkontrId: nodeUrl[9],
             tpopfreiwkontrNodes,
-            store,
           }),
         ]
       }
@@ -994,11 +969,8 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
       nodes = [
         ...nodes,
         ...buildUserNodes({
-          nodes,
           data,
-          treeName,
           projektNodes,
-          store,
         }),
       ]
     }
@@ -1110,10 +1082,7 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
         ...buildTpopkontrzaehlEinheitWerteNodes({
           nodes,
           data,
-          treeName,
-          loading,
           projektNodes,
-          store,
         }),
       ]
     }
