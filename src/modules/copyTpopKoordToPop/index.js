@@ -1,5 +1,3 @@
-import get from 'lodash/get'
-
 import queryTpop from './queryTpop'
 import updatePopById from './updatePopById'
 
@@ -20,7 +18,7 @@ const copyTpopKoordToPop = async ({ id, store, client }) => {
       },
     })
   }
-  const tpop = get(tpopResult, 'data.tpopById')
+  const tpop = tpopResult?.data?.tpopById
   const { geomPoint: geomPoint0, popId } = tpop
 
   // set pop coordinates

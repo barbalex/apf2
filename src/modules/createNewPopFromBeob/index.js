@@ -1,7 +1,6 @@
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import isEqual from 'date-fns/isEqual'
-import get from 'lodash/get'
 
 import queryBeob from './queryBeob'
 import createPop from './createPop'
@@ -36,7 +35,7 @@ const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
       },
     })
   }
-  const beob = get(beobResult, 'data.beobById')
+  const beob = beobResult?.data?.beobById
   const { geomPoint, datum, data } = beob
   const datumIsValid = isValid(new Date(datum))
   const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
@@ -63,7 +62,7 @@ const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
       },
     })
   }
-  const pop = get(popResult, 'data.createPop.pop')
+  const pop = popResult?.data?.createPop?.pop
 
   // create new tpop for pop
   let tpopResult
@@ -86,7 +85,7 @@ const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
       },
     })
   }
-  const tpop = get(tpopResult, 'data.createTpop.tpop')
+  const tpop = tpopResult?.data?.createTpop?.tpop
 
   try {
     await client.mutate({

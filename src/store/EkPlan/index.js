@@ -1,7 +1,6 @@
 import { types } from 'mobx-state-tree'
 import uniq from 'lodash/uniq'
 import groupBy from 'lodash/groupBy'
-import get from 'lodash/get'
 import max from 'lodash/max'
 
 import Ap from './Ap'
@@ -243,10 +242,10 @@ export default types
       return os
     },
     get einheitsByAp() {
-      const e = groupBy(get(self.apsData, 'allAps.nodes', []), 'id')
+      const e = groupBy(self.apsData?.allAps?.nodes ?? [], 'id')
       Object.keys(e).forEach(
         (apId) =>
-          (e[apId] = get(e[apId][0], 'ekzaehleinheitsByApId.nodes', []).map(
+          (e[apId] = (e?.[apId]?.[0]?.ekzaehleinheitsByApId?.nodes ?? []).map(
             (o) => o.tpopkontrzaehlEinheitWerteByZaehleinheitId.code,
           )),
       )
