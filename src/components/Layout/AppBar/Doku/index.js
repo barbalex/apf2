@@ -35,10 +35,6 @@ const DokuAppBar = () => {
   const isMobile = isMobilePhone()
   const location = useLocation()
   const { pathname } = location
-  console.log(
-    'pathname.startsWith(/Dokumentation/Benutzer):',
-    pathname.startsWith('/Dokumentation/Benutzer'),
-  )
 
   return (
     <>
