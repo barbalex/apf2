@@ -1,6 +1,4 @@
 import findIndex from 'lodash/findIndex'
-import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 const apberFolderNode = ({
   nodes: nodesPassed,
@@ -13,6 +11,7 @@ const apberFolderNode = ({
   apId,
   store,
 }) => {
+  console.log('apberFolderNode')
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -21,12 +20,10 @@ const apberFolderNode = ({
     id: apId,
   })
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.apber`) || ''
+    store?.[`${treeName}.nodeLabelFilter.apber`] ?? ''
 
-  const apberNodesLength = memoizeOne(
-    () =>
-      get(data, 'allApbers.nodes', []).filter((el) => el.apId === apId).length,
-  )()
+  const apberNodesLength = data.filter((el) => el.apId === apId).length
+
   /*
   let message = loading && !apberNodesLength ? '...' : apberNodesLength
   if (nodeLabelFilterString) {
@@ -34,7 +31,7 @@ const apberFolderNode = ({
   }*/
   const message = loading
     ? '...'
-    : !!nodeLabelFilterString
+    : nodeLabelFilterString
     ? `${apberNodesLength} gefiltert`
     : apberNodesLength
 

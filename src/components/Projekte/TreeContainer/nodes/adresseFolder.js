@@ -1,5 +1,3 @@
-import get from 'lodash/get'
-
 const adresseFolder = ({
   nodes: nodesPassed,
   data,
@@ -8,15 +6,15 @@ const adresseFolder = ({
   projektNodes,
   store,
 }) => {
-  const adresses = get(data, 'allAdresses.nodes', [])
+  const adresses = data?.allAdresses?.nodes ?? []
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.adresse`) || ''
+    store?.[`${treeName}.nodeLabelFilter.adresse`] ?? ''
 
   let adresseNodesLength = adresses.length
   // before Adressen folder is active, only total count was fetched, not yet any adressen nodes
   if (adresses.length === 0)
-    adresseNodesLength = get(data, 'adressesUnfiltered.totalCount')
+    adresseNodesLength = data?.adressesUnfiltered?.totalCount
   let message = loading && !adresseNodesLength ? '...' : adresseNodesLength
   if (nodeLabelFilterString) {
     message = `${adresseNodesLength} gefiltert`
