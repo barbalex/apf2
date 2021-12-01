@@ -9,10 +9,8 @@ import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tp
 import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
 
 const buildTreeQueryVariables = ({
-  treeName,
   dataFilter,
   openNodes,
-  activeNodeArray,
   apFilter: apFilterSet,
   nodeLabelFilter,
   apIdInActiveNodeArray,
@@ -199,21 +197,21 @@ const buildTreeQueryVariables = ({
     apsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
   }
   const apberuebersichtsFilter = { projId: { in: projekt } }
-  if (!!nodeLabelFilter.apberuebersicht) {
+  if (nodeLabelFilter.apberuebersicht) {
     apberuebersichtsFilter.label = {
       includesInsensitive: nodeLabelFilter.apberuebersicht,
     }
   }
   const apbersFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.apber) {
+  if (nodeLabelFilter.apber) {
     apbersFilter.label = { includesInsensitive: nodeLabelFilter.apber }
   }
   const apartsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.apart) {
+  if (nodeLabelFilter.apart) {
     apartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
   }
   const assozartFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.assozart) {
+  if (nodeLabelFilter.assozart) {
     assozartFilter.label = {
       includesInsensitive: nodeLabelFilter.assozart,
     }
@@ -223,7 +221,7 @@ const buildTreeQueryVariables = ({
     apId: { in: ap },
     tpopId: { isNull: true },
   }
-  if (!!nodeLabelFilter.beob) {
+  if (nodeLabelFilter.beob) {
     beobNichtBeurteiltsFilter.label = {
       includesInsensitive: nodeLabelFilter.beob,
     }
@@ -232,67 +230,67 @@ const buildTreeQueryVariables = ({
     nichtZuordnen: { equalTo: true },
     apId: { in: ap },
   }
-  if (!!nodeLabelFilter.beob) {
+  if (nodeLabelFilter.beob) {
     beobNichtZuzuordnensFilter.label = {
       includesInsensitive: nodeLabelFilter.beob,
     }
   }
   const beobZugeordnetsFilter = { tpopId: { in: tpop } }
-  if (!!nodeLabelFilter.beob) {
+  if (nodeLabelFilter.beob) {
     beobZugeordnetsFilter.label = {
       includesInsensitive: nodeLabelFilter.beob,
     }
   }
   const ekfrequenzsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.ekfrequenz) {
+  if (nodeLabelFilter.ekfrequenz) {
     ekfrequenzsFilter.label = {
       includesInsensitive: nodeLabelFilter.ekfrequenz,
     }
   }
   const ekzaehleinheitsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.ekzaehleinheit) {
+  if (nodeLabelFilter.ekzaehleinheit) {
     ekzaehleinheitsFilter.label = {
       includesInsensitive: nodeLabelFilter.ekzaehleinheit,
     }
   }
   const erfkritsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.erfkrit) {
+  if (nodeLabelFilter.erfkrit) {
     erfkritsFilter.label = {
       includesInsensitive: nodeLabelFilter.erfkrit,
     }
   }
   const popbersFilter = { popId: { in: pop } }
-  if (!!nodeLabelFilter.popber) {
+  if (nodeLabelFilter.popber) {
     popbersFilter.label = {
       includesInsensitive: nodeLabelFilter.popber,
     }
   }
   const popmassnbersFilter = { popId: { in: pop } }
-  if (!!nodeLabelFilter.popmassnber) {
+  if (nodeLabelFilter.popmassnber) {
     popmassnbersFilter.label = {
       includesInsensitive: nodeLabelFilter.popmassnber,
     }
   }
   const popsFilter = { ...popFilter }
-  if (!!nodeLabelFilter.pop) {
+  if (nodeLabelFilter.pop) {
     popsFilter.label = {
       includesInsensitive: nodeLabelFilter.pop,
     }
   }
   const tpopbersFilter = { tpopId: { in: tpop } }
-  if (!!nodeLabelFilter.tpopber) {
+  if (nodeLabelFilter.tpopber) {
     tpopbersFilter.label = {
       includesInsensitive: nodeLabelFilter.tpopber,
     }
   }
   const tpopfeldkontrsFilter = { ...tpopfeldkontrFilter }
-  if (!!nodeLabelFilter.tpopkontr) {
+  if (nodeLabelFilter.tpopkontr) {
     tpopfeldkontrsFilter.labelEk = {
       includesInsensitive: nodeLabelFilter.tpopkontr,
     }
   }
   const tpopfreiwkontrsFilter = { ...tpopfreiwkontrFilter }
-  if (!!nodeLabelFilter.tpopkontr) {
+  if (nodeLabelFilter.tpopkontr) {
     tpopfreiwkontrsFilter.labelEkf = {
       includesInsensitive: nodeLabelFilter.tpopkontr,
     }
@@ -303,31 +301,31 @@ const buildTreeQueryVariables = ({
   // idea: for tpopfreiwkontrs: filter anzahl not null?
   // now done in the nodes
 
-  if (!!nodeLabelFilter.tpopkontrzaehl) {
+  if (nodeLabelFilter.tpopkontrzaehl) {
     tpopkontrzaehlsFilter.label = {
       includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
     }
   }
   const tpopmassnbersFilter = { tpopId: { in: tpop } }
-  if (!!nodeLabelFilter.tpopmassnber) {
+  if (nodeLabelFilter.tpopmassnber) {
     tpopmassnbersFilter.label = {
       includesInsensitive: nodeLabelFilter.tpopmassnber,
     }
   }
   const tpopmassnsFilter = { ...tpopmassnFilter }
-  if (!!nodeLabelFilter.tpopmassn) {
+  if (nodeLabelFilter.tpopmassn) {
     tpopmassnsFilter.label = {
       includesInsensitive: nodeLabelFilter.tpopmassn,
     }
   }
   const tpopsFilter = { ...tpopFilter }
-  if (!!nodeLabelFilter.tpop) {
+  if (nodeLabelFilter.tpop) {
     tpopsFilter.label = {
       includesInsensitive: nodeLabelFilter.tpop,
     }
   }
   const usersFilter = { id: { isNull: false } }
-  if (!!nodeLabelFilter.user) {
+  if (nodeLabelFilter.user) {
     usersFilter.label = {
       includesInsensitive: nodeLabelFilter.user,
     }
@@ -342,26 +340,27 @@ const buildTreeQueryVariables = ({
         },
       }
     : { id: { isNull: false } }
-  const tpopkontrzaehlEinheitWertesFilter = nodeLabelFilter.tpopkontrzaehlEinheitWerte
-    ? {
-        label: {
-          includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
-        },
-      }
-    : { id: { isNull: false } }
+  const tpopkontrzaehlEinheitWertesFilter =
+    nodeLabelFilter.tpopkontrzaehlEinheitWerte
+      ? {
+          label: {
+            includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
+          },
+        }
+      : { id: { isNull: false } }
   const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
     ? {
         label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
       }
     : { id: { isNull: false } }
   const zielbersFilter = { zielId: { in: ziel } }
-  if (!!nodeLabelFilter.zielber) {
+  if (nodeLabelFilter.zielber) {
     zielbersFilter.label = {
       includesInsensitive: nodeLabelFilter.zielber,
     }
   }
   const zielsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.ziel) {
+  if (nodeLabelFilter.ziel) {
     zielsFilter.label = {
       includesInsensitive: nodeLabelFilter.ziel,
     }
