@@ -55,12 +55,14 @@ module.exports = {
         theme_color: '#2e7d32',
         display: 'minimal-ui',
         icon: 'src/images/ophr.png',
-        // not using maskable icon as that con not be transparent
+        // not using maskable icon as that can not be transparent
         // which looks hideous in browser
         //icon_options: {
         //  purpose: `any maskable`,
         //},
         include_favicon: true,
+        lang: 'de-CH',
+        orientation: 'portrait',
         description: 'Aktionspläne für Flora-Projekte',
       },
     },
