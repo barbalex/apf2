@@ -14,7 +14,7 @@ import {
 } from '../../shared/fragments'
 
 export default gql`
-  query apByIdJahr($apId: UUID!, $jahr: Int!) {
+  query apByIdJahrForApberForApFromAp($apId: UUID!, $jahr: Int!) {
     apById(id: $apId) {
       ...ApFields
       aeTaxonomyByArtId {
