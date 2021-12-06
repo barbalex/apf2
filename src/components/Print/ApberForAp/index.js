@@ -205,9 +205,10 @@ const ApberForAp = ({
     // somehow when live jahr can come over as 0
     // which then seems to block querying????
     if (!node && jahr && apId) {
+      console.log('useEffect querying mengen')
       getMengen()
     }
-  }, [apId, client, getMengen, jahr, node, store])
+  }, [apId, getMengen, jahr, node])
 
   const data = node ?? mengenData?.jberAbcByApId?.nodes?.[0]
   const loading = node ? false : mengenLoading
@@ -216,14 +217,23 @@ const ApberForAp = ({
   const onClickPrint = useCallback(() => {
     if (typeof window !== 'undefined') {
       setIsPrint(true)
+      // need a long enough timeout
+      // because the component is loaded anew
       setTimeout(() => {
         window.print()
         setIsPrint(false)
-      })
+      }, 1000)
     }
   }, [setIsPrint])
 
-  //console.log('ApberForAp:', { data, loading, error, node, jahr })
+  console.log('ApberForAp:', {
+    data,
+    loading,
+    mengenLoading,
+    error,
+    node,
+    jahr,
+  })
 
   if (error) return `Fehler beim Laden der Daten: ${error.message}`
   // DANGER: without rerendering when loading mutates from true to false
