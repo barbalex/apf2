@@ -28,20 +28,22 @@ const ApberForApFromAp = ({ apberId: apberIdPassed, apId: apIdPassed }) => {
   const { data: apberData, error: apberDataError } = useQuery(apberQuery, {
     variables: {
       apberId,
+      apId,
     },
   })
 
   const jahr = apberData?.apberById?.jahr ?? 0
 
-  const { data: apData, loading: apDataLoading, error: apDataError } = useQuery(
-    apQuery,
-    {
-      variables: {
-        apId,
-        jahr,
-      },
+  const {
+    data: apData,
+    loading: apDataLoading,
+    error: apDataError,
+  } = useQuery(apQuery, {
+    variables: {
+      apId,
+      jahr,
     },
-  )
+  })
 
   if (apDataLoading) return <Spinner />
   if (apberDataError) return `Fehler: ${apberDataError.message}`
@@ -49,7 +51,12 @@ const ApberForApFromAp = ({ apberId: apberIdPassed, apId: apIdPassed }) => {
 
   return (
     <ErrorBoundary>
-      <ApberForAp apId={apId} jahr={jahr} apData={apData} />
+      <ApberForAp
+        apId={apId}
+        jahr={jahr}
+        apData={apData}
+        node={apData?.jberAbcByApId?.nodes?.[0]}
+      />
     </ErrorBoundary>
   )
 }

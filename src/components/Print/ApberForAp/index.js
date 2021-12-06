@@ -1,14 +1,12 @@
-import React, { useCallback, useContext, useEffect } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { MdPrint } from 'react-icons/md'
 import Fab from '@mui/material/Fab'
-import { useApolloClient, useLazyQuery } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
 
-import queryMengen from './queryMengen'
 import Ziele from './Ziele'
 import Massnahmen from './Massnahmen'
 import AMengen from './AMengen'
@@ -16,7 +14,6 @@ import BMengen from './BMengen'
 import CMengen from './CMengen'
 import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import Spinner from '../../shared/Spinner'
 import PopMenge from '../../Projekte/Daten/Ap/Auswertung/PopMenge'
 import PopStatus from '../../Projekte/Daten/Ap/Auswertung/PopStatus'
 import TpopKontrolliert from '../../Projekte/Daten/Ap/Auswertung/TpopKontrolliert'
@@ -164,18 +161,6 @@ const ApberForAp = ({
 }) => {
   const store = useContext(storeContext)
   const { setIsPrint } = store
-  const client = useApolloClient()
-
-  const [
-    getMengen,
-    { data: mengenData, loading: mengenLoading, error: mengenError },
-  ] = useLazyQuery(queryMengen, {
-    fetchPolicy: 'no-cache',
-    variables: {
-      apId,
-      jahr,
-    },
-  })
 
   const apData = isSubReport ? apDataPassed : apDataPassed.apById
   const apber = apData?.apbersByApId?.nodes?.[0] ?? {}
@@ -201,19 +186,6 @@ const ApberForAp = ({
     ],
   )
 
-  useEffect(() => {
-    // somehow when live jahr can come over as 0
-    // which then seems to block querying????
-    if (!node && jahr && apId) {
-      console.log('useEffect querying mengen')
-      getMengen()
-    }
-  }, [apId, getMengen, jahr, node])
-
-  const data = node ?? mengenData?.jberAbcByApId?.nodes?.[0]
-  const loading = node ? false : mengenLoading
-  const error = node ? false : mengenError
-
   const onClickPrint = useCallback(() => {
     if (typeof window !== 'undefined') {
       setIsPrint(true)
@@ -222,25 +194,11 @@ const ApberForAp = ({
       setTimeout(() => {
         window.print()
         setIsPrint(false)
-      }, 1000)
+      })
     }
   }, [setIsPrint])
 
-  console.log('ApberForAp:', {
-    data,
-    loading,
-    mengenLoading,
-    error,
-    node,
-    jahr,
-  })
-
-  if (error) return `Fehler beim Laden der Daten: ${error.message}`
-  // DANGER: without rerendering when loading mutates from true to false
-  // data remains undefined
-  if (loading) return <Spinner />
-
-  if (!data) {
+  if (!node) {
     return (
       <NoDataContainer issubreport={isSubReport}>
         <div>Sorry, es gibt nicht ausreichend Daten.</div>
@@ -267,22 +225,22 @@ const ApberForAp = ({
         )}
         <ContentContainer issubreport={isSubReport}>
           <Header>
-            {`Jahresbericht ${data?.startJahr ?? '(Jahr fehlt)'},
-              ${data?.artname ?? ''},
+            {`Jahresbericht ${node?.startJahr ?? '(Jahr fehlt)'},
+              ${node?.artname ?? ''},
               ${format(new Date(), 'dd.MM.yyyy')}`}
           </Header>
 
-          <Title1>{data?.artname ?? ''}</Title1>
+          <Title1>{node?.artname ?? ''}</Title1>
 
           <Row>
             <p>{`Start Programm: ${
-              data?.startJahr ?? '(Start-Jahr fehlt)'
+              node?.startJahr ?? '(Start-Jahr fehlt)'
             }`}</p>
-            <p>{`Erste Massnahme: ${data?.firstMassn ?? ''}`}</p>
-            <p>{`Erste Kontrolle: ${data?.b1FirstYear ?? ''}`}</p>
+            <p>{`Erste Massnahme: ${node?.firstMassn ?? ''}`}</p>
+            <p>{`Erste Kontrolle: ${node?.b1FirstYear ?? ''}`}</p>
           </Row>
 
-          <AMengen loading={loading} node={data} jahr={jahr} />
+          <AMengen loading={false} node={node} jahr={jahr} />
           {!!apber.biotopeNeue && (
             <FieldRowFullWidth>
               <TitledLabel>
@@ -297,7 +255,7 @@ const ApberForAp = ({
               </FullWidthField>
             </FieldRowFullWidth>
           )}
-          <BMengen apId={apId} jahr={jahr} loading={loading} node={data} />
+          <BMengen apId={apId} jahr={jahr} loading={false} node={node} />
           <ChartContainer>
             <TpopKontrolliert id={apId} jahr={jahr} height={250} print />
           </ChartContainer>
@@ -322,7 +280,7 @@ const ApberForAp = ({
             </FieldRowFullWidth>
           )}
 
-          <CMengen jahr={jahr} loading={loading} node={data} />
+          <CMengen jahr={jahr} loading={false} node={node} />
           {!!apber.massnahmenPlanungVsAusfuehrung && (
             <FieldRowFullWidth>
               <TitledLabel>Vergleich Ausführung/Planung</TitledLabel>
@@ -460,7 +418,7 @@ const ApberForAp = ({
               apberDatum
                 ? format(new Date(apberDatum), 'dd.MM.yyyy')
                 : '(Datum fehlt)'
-            } / ${data?.bearbeiter ?? '(kein Bearbeiter)'}`}
+            } / ${node?.bearbeiter ?? '(kein Bearbeiter)'}`}
           </Row>
         </ContentContainer>
       </Container>
