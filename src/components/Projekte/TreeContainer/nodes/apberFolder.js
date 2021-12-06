@@ -11,7 +11,7 @@ const apberFolderNode = ({
   apId,
   store,
 }) => {
-  console.log('apberFolderNode')
+  //console.log('apberFolderNode')
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
