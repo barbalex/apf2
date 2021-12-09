@@ -111,6 +111,7 @@ const Client = ({ store }) => {
           'QTpopOhneMassnber',
           'QTpopOhneTpopber',
           'QTpopCountedEinheitMultipleTimesInYear',
+          'VApbeob',
         ].includes(object.__typename)
       ) {
         return defaultDataIdFromObject(object)
