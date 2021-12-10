@@ -148,6 +148,7 @@
     "@babel/preset-react": "7.16.0",
     "@graphile-contrib/pg-order-by-related": "1.0.0-beta.6",
     "@graphile/postgis": "0.1.0",
+    "@playwright/test": "1.17.1",
     "@svgr/cli": "6.1.1",
     "copyfiles": "2.4.1",
     "cypress": "9.1.1",
