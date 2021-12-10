@@ -81,7 +81,7 @@
     "localforage": "1.10.0",
     "lodash": "4.17.21",
     "luxon": "2.1.1",
-    "markdown-it": "12.2.0",
+    "markdown-it": "12.3.0",
     "mobx": "6.3.8",
     "mobx-react-lite": "3.2.2",
     "mobx-state-tree": "5.1.0",

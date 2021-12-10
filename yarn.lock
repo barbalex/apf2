@@ -4557,7 +4557,7 @@ __metadata:
     localforage: 1.10.0
     lodash: 4.17.21
     luxon: 2.1.1
-    markdown-it: 12.2.0
+    markdown-it: 12.3.0
     mobx: 6.3.8
     mobx-react-lite: 3.2.2
     mobx-state-tree: 5.1.0
@@ -13421,9 +13421,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it@npm:12.2.0":
-  version: 12.2.0
-  resolution: "markdown-it@npm:12.2.0"
+"markdown-it@npm:12.3.0":
+  version: 12.3.0
+  resolution: "markdown-it@npm:12.3.0"
   dependencies:
     argparse: ^2.0.1
     entities: ~2.1.0
@@ -13432,7 +13432,7 @@ __metadata:
     uc.micro: ^1.0.5
   bin:
     markdown-it: bin/markdown-it.js
-  checksum: 8e3d6646edf8e7ef19ed707c59d16741bd40804f1e7567407efd2f346ae0f7ddcdeada83e7affebd21b9d7d947b27fc60fd795a970461785030a4e52e750122b
+  checksum: 27af2c2d0ee564ca2bb417514414a4d202a5caa966361fb88525f8a53740a734389f1d59b7d53ac66574b659628d03914b43eda6d58b7eb5ce9c41a758c84fb1
   languageName: node
   linkType: hard
 
