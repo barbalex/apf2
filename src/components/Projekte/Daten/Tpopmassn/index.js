@@ -9,7 +9,6 @@ import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextFieldFormik from '../../../shared/TextFieldFormik'
 import TextField from '../../../shared/TextField'
 import MdFieldFormik from '../../../shared/MarkdownFieldFormik'
 import SelectFormik from '../../../shared/SelectFormik'
@@ -798,7 +797,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                               loading={loading}
                               handleSubmit={handleSubmit}
                             />
-                            <TextFieldFormik
+                            <TextField
                               name="zieleinheitAnzahl"
                               label={
                                 notMassnCountUnit === true
@@ -806,7 +805,9 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                                   : 'Ziel-Einheit: Anzahl (wird automatisch gesetzt)'
                               }
                               type="number"
-                              handleSubmit={handleSubmit}
+                              value={row.zieleinheitAnzahl}
+                              saveToDb={saveToDb}
+                              error={fieldErrors.zieleinheitAnzahl}
                             />
                           </>
                         )}
@@ -818,23 +819,29 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           query={queryAeTaxonomies}
                           queryNodesName="allAeTaxonomies"
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="herkunftPop"
                           label="Herkunftspopulation"
                           type="text"
-                          handleSubmit={handleSubmit}
+                          value={row.herkunftPop}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.herkunftPop}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="sammeldatum"
                           label="Sammeldatum"
                           type="text"
-                          handleSubmit={handleSubmit}
+                          value={row.sammeldatum}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.sammeldatum}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="vonAnzahlIndividuen"
                           label="Anzahl besammelte Individuen der Herkunftspopulation"
                           type="number"
-                          handleSubmit={handleSubmit}
+                          value={row.vonAnzahlIndividuen}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.vonAnzahlIndividuen}
                         />
                         {!showFilter && (
                           <StringToCopy text={row.id} label="id" />
