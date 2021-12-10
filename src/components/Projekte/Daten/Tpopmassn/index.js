@@ -8,9 +8,9 @@ import { Formik, Form } from 'formik'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroupFormik from '../../../shared/RadioButtonGroupFormik'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextFieldFormik from '../../../shared/TextFieldFormik'
+import TextField from '../../../shared/TextField'
 import MdFieldFormik from '../../../shared/MarkdownFieldFormik'
 import SelectFormik from '../../../shared/SelectFormik'
 import SelectLoadingOptionsTypableFormik from '../../../shared/SelectLoadingOptionsTypableFormik'
@@ -678,22 +678,17 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                   >
                     {({ handleSubmit, dirty }) => (
                       <Form onBlur={() => dirty && handleSubmit()}>
-                        <TextFieldFormik
+                        <TextField
                           name="jahr"
                           label="Jahr"
                           type="number"
-                          handleSubmit={handleSubmit}
+                          value={row.jahr}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.jahr}
                         />
                         <DateFieldFormik
                           name="datum"
                           label="Datum"
-                          handleSubmit={handleSubmit}
-                        />
-                        <RadioButtonGroupFormik
-                          name="typ"
-                          label="Typ"
-                          dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
-                          loading={loading}
                           handleSubmit={handleSubmit}
                         />
                         <RadioButtonGroup
@@ -705,11 +700,13 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           saveToDb={saveToDb}
                           error={fieldErrors.typ}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="beschreibung"
                           label="Massnahme"
                           type="text"
-                          handleSubmit={handleSubmit}
+                          value={row.beschreibung}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.beschreibung}
                         />
                         <SelectFormik
                           name="bearbeiter"
@@ -725,53 +722,69 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           label="Plan vorhanden"
                           handleSubmit={handleSubmit}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="planBezeichnung"
                           label="Plan Bezeichnung"
                           type="text"
-                          handleSubmit={handleSubmit}
+                          value={row.planBezeichnung}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.planBezeichnung}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="flaeche"
                           label="Fläche (m2)"
                           type="number"
-                          handleSubmit={handleSubmit}
+                          value={row.flaeche}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.flaeche}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="form"
                           label="Form der Ansiedlung"
                           type="text"
-                          handleSubmit={handleSubmit}
+                          value={row.form}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.form}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="pflanzanordnung"
                           label="Pflanzanordnung"
                           type="text"
-                          handleSubmit={handleSubmit}
+                          value={row.pflanzanordnung}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.pflanzanordnung}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="markierung"
                           label="Markierung"
                           type="text"
-                          handleSubmit={handleSubmit}
+                          value={row.markierung}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.markierung}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="anzTriebe"
                           label="Anzahl Triebe"
                           type="number"
-                          handleSubmit={handleSubmit}
+                          value={row.anzTriebe}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.anzTriebe}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="anzPflanzen"
                           label="Anzahl Pflanzen"
                           type="number"
-                          handleSubmit={handleSubmit}
+                          value={row.anzPflanzen}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.anzPflanzen}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="anzPflanzstellen"
                           label="Anzahl Pflanzstellen"
                           type="number"
-                          handleSubmit={handleSubmit}
+                          value={row.anzPflanzstellen}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.anzPflanzstellen}
                         />
                         {isAnpflanzung && (
                           <>
