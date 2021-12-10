@@ -1,11 +1,37 @@
 import { gql } from '@apollo/client'
 
-import { tpopmassn } from '../../../shared/fragments'
-
 export default gql`
   query tpopmassnByIdQuery($id: UUID!) {
     tpopmassnById(id: $id) {
-      ...TpopmassnFields
+      id
+      label
+      typ
+      tpopmassnTypWerteByTyp {
+        id
+        anpflanzung
+      }
+      beschreibung
+      jahr
+      datum
+      bemerkungen
+      planBezeichnung
+      flaeche
+      markierung
+      anzTriebe
+      anzPflanzen
+      anzPflanzstellen
+      zieleinheitEinheit
+      zieleinheitAnzahl
+      wirtspflanze
+      herkunftPop
+      sammeldatum
+      vonAnzahlIndividuen
+      form
+      pflanzanordnung
+      tpopId
+      bearbeiter
+      planVorhanden
+      changedBy
       tpopByTpopId {
         id
         popByPopId {
@@ -23,6 +49,25 @@ export default gql`
         }
       }
     }
+    allAdresses(orderBy: NAME_ASC) {
+      nodes {
+        value: id
+        label: name
+      }
+    }
+    allTpopmassnTypWertes(orderBy: SORT_ASC) {
+      nodes {
+        value: code
+        label: text
+        historic
+      }
+    }
+    allTpopkontrzaehlEinheitWertes(orderBy: SORT_ASC) {
+      nodes {
+        value: code
+        label: text
+        historic
+      }
+    }
   }
-  ${tpopmassn}
 `

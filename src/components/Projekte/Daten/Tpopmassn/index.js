@@ -19,10 +19,7 @@ import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
 import query from './query'
-import queryLists from './queryLists'
-import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
-import queryIsMassnTypAnpflanzung from './queryIsMassnTypAnpflanzung'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import exists from '../../../../modules/exists'
@@ -30,18 +27,14 @@ import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNu
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Spinner from '../../../shared/Spinner'
 import Error from '../../../shared/Error'
-import { tpopmassn } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const ColumnContainer = styled.div`
   padding: 10px;
@@ -104,27 +97,9 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
     data?.tpopmassnById?.tpopByTpopId?.popByPopId?.apByApId
       ?.ekzaehleinheitsByApId?.nodes?.[0]?.notMassnCountUnit
 
-  const {
-    data: dataAdresses,
-    loading: loadingAdresses,
-    error: errorAdresses,
-  } = useQuery(queryAdresses)
-  const {
-    data: dataLists,
-    loading: loadingLists,
-    error: errorLists,
-  } = useQuery(queryLists)
-
   const row = useMemo(() => data?.tpopmassnById ?? {}, [data?.tpopmassnById])
 
-  const { data: dataIsMassnTypAnpflanzung } = useQuery(
-    queryIsMassnTypAnpflanzung,
-    {
-      variables: { typ: row.typ || 999999999 },
-    },
-  )
-  const isAnpflanzung =
-    dataIsMassnTypAnpflanzung?.allTpopmassnTypWertes?.nodes?.[0]?.anpflanzung
+  const isAnpflanzung = row?.tpopmassnTypWerteByTyp?.anpflanzung
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -339,11 +314,38 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                 }
               ) {
                 tpopmassn {
-                  ...TpopmassnFields
+                  id
+                  label
+                  typ
+                  tpopmassnTypWerteByTyp {
+                    id
+                    anpflanzung
+                  }
+                  beschreibung
+                  jahr
+                  datum
+                  bemerkungen
+                  planBezeichnung
+                  flaeche
+                  markierung
+                  anzTriebe
+                  anzPflanzen
+                  anzPflanzstellen
+                  zieleinheitEinheit
+                  zieleinheitAnzahl
+                  wirtspflanze
+                  herkunftPop
+                  sammeldatum
+                  vonAnzahlIndividuen
+                  form
+                  pflanzanordnung
+                  tpopId
+                  bearbeiter
+                  planVorhanden
+                  changedBy
                 }
               }
             }
-            ${tpopmassn}
           `,
           variables,
           optimisticResponse: {
@@ -379,21 +381,16 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
     [setUrlQuery, urlQuery],
   )
 
-  //console.log('Tpopmassn rendering')
+  // 6-9 / 5
+  // 5 / 2
+  console.log('Tpopmassn rendering')
 
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
 
-  const errors = [
-    ...(error ? [error] : []),
-    ...(errorLists ? [errorLists] : []),
-    ...(errorAdresses ? [errorAdresses] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
+  if (error) return <Error errors={[error]} />
 
   return (
     <ErrorBoundary>
@@ -440,10 +437,8 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                         <RadioButtonGroup
                           name="typ"
                           label="Typ"
-                          dataSource={
-                            dataLists?.allTpopmassnTypWertes?.nodes ?? []
-                          }
-                          loading={loadingLists}
+                          dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
+                          loading={loading}
                           handleSubmit={handleSubmit}
                         />
                         <TextField
@@ -456,8 +451,8 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           name="bearbeiter"
                           value={row.bearbeiter}
                           label="BearbeiterIn"
-                          options={dataAdresses?.allAdresses?.nodes ?? []}
-                          loading={loadingAdresses}
+                          options={data?.allAdresses?.nodes ?? []}
+                          loading={loading}
                           handleSubmit={handleSubmit}
                         />
                         <MdField name="bemerkungen" label="Bemerkungen" />
@@ -520,10 +515,10 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                               name="zieleinheitEinheit"
                               label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
                               options={
-                                dataLists?.allTpopkontrzaehlEinheitWertes
-                                  ?.nodes ?? []
+                                data?.allTpopkontrzaehlEinheitWertes?.nodes ??
+                                []
                               }
-                              loading={loadingLists}
+                              loading={loading}
                               handleSubmit={handleSubmit}
                             />
                             <TextField
