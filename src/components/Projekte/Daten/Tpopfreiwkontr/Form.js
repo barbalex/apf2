@@ -4,7 +4,6 @@ import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import jwtDecode from 'jwt-decode'
-import { withResizeDetector } from 'react-resize-detector'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import Title from './Title'
@@ -151,7 +150,6 @@ const fieldTypes = {
 const TpopfreiwkontrForm = ({
   treeName,
   showFilter = false,
-  width = 1000,
   data,
   refetch,
   row,
@@ -160,6 +158,7 @@ const TpopfreiwkontrForm = ({
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { dataFilterSetValue, isPrint, view, user } = store
+  const { formWidth: width } = store[treeName]
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
@@ -554,4 +553,4 @@ const TpopfreiwkontrForm = ({
   )
 }
 
-export default withResizeDetector(observer(TpopfreiwkontrForm))
+export default observer(TpopfreiwkontrForm)

@@ -5,7 +5,6 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { Formik, Form } from 'formik'
-import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
 import TextField from '../../../shared/TextFieldFormik'
@@ -88,13 +87,13 @@ const fieldTypes = {
   bemerkungen: 'String',
 }
 
-const Idealbiotop = ({ treeName, width = 1000 }) => {
+const Idealbiotop = ({ treeName }) => {
   const store = useContext(storeContext)
   const { urlQuery, setUrlQuery } = store
   const client = useApolloClient()
 
   const [tab, setTab] = useState(urlQuery?.idealbiotopTab ?? 'idealbiotop')
-  const { activeNodeArray } = store[treeName]
+  const { activeNodeArray, formWidth: width } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -365,4 +364,4 @@ const Idealbiotop = ({ treeName, width = 1000 }) => {
   )
 }
 
-export default withResizeDetector(observer(Idealbiotop))
+export default observer(Idealbiotop)

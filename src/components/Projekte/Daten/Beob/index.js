@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import { withResizeDetector } from 'react-resize-detector'
 
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import constants from '../../../../modules/constants'
@@ -22,9 +21,10 @@ const LoadingContainer = styled.div`
   padding: 10px;
 `
 
-const Beob = ({ treeName, width = 1000 }) => {
+const Beob = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { activeNodeArray } = store[treeName]
+  const { activeNodeArray, formWidth: width } = store[treeName]
+
   const { data, loading, error } = useQuery(query, {
     variables: {
       id: activeNodeArray[activeNodeArray.length - 1],
@@ -65,4 +65,4 @@ const Beob = ({ treeName, width = 1000 }) => {
   )
 }
 
-export default withResizeDetector(observer(Beob))
+export default observer(Beob)
