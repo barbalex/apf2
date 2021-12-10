@@ -4,7 +4,6 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
-import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -43,11 +42,11 @@ const ColumnContainer = styled.div`
     `column-width: ${props['data-column-width']}px;`}
 `
 
-const TpopmassnFilter = ({ treeName, width = 1000 }) => {
+const TpopmassnFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
 
-  const { activeNodeArray, dataFilter } = store[treeName]
+  const { activeNodeArray, dataFilter, filterWidth: width } = store[treeName]
 
   const apId = activeNodeArray[3]
 
@@ -116,7 +115,7 @@ const TpopmassnFilter = ({ treeName, width = 1000 }) => {
     dataIsMassnTypAnpflanzung?.allTpopmassnTypWertes?.nodes?.[0]?.anpflanzung
 
   const onSubmit = useCallback(
-    async (values, { setErrors }) => {
+    async (values) => {
       const changedField = objectsFindChangedKey(values, row)
       // BEWARE: react-select fires twice when a value is cleared
       // second event leads to an error as the values passed are same as before
@@ -323,4 +322,4 @@ const TpopmassnFilter = ({ treeName, width = 1000 }) => {
   )
 }
 
-export default withResizeDetector(observer(TpopmassnFilter))
+export default observer(TpopmassnFilter)

@@ -4,7 +4,6 @@ import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
@@ -83,15 +82,6 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
   const apId = activeNodeArray[3]
 
   const [fieldErrors, setFieldErrors] = useState({})
-
-  // no matter what settings are used,
-  // resizeDetector makes the component render TWICE after getting width
-  //const width = 1000
-  // const { width = 1000, ref: resizeRef } = useResizeDetector({
-  //   refreshMode: 'debounce',
-  //   refreshRate: 300,
-  //   refreshOptions: { trailing: true },
-  // })
 
   let id =
     activeNodeArray.length > 9

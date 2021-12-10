@@ -39,6 +39,8 @@ export default types
     map: types.optional(Map, defaultMap),
     treeWidth: types.optional(types.number, 500),
     formWidth: types.optional(types.number, 500),
+    formHeight: types.optional(types.number, 500),
+    filterWidth: types.optional(types.number, 500),
   })
   .actions((self) => ({
     setLastTouchedNode(val) {
@@ -49,6 +51,12 @@ export default types
     },
     setFormWidth(val) {
       self.formWidth = val
+    },
+    setFormHeight(val) {
+      self.formHeight = val
+    },
+    setFilterWidth(val) {
+      self.filterWidth = val
     },
     setOpenNodes(val) {
       // need set to ensure contained arrays are unique
