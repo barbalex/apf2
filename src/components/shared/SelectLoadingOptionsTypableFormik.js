@@ -90,7 +90,7 @@ const SelectTypable = ({
 
   const loadOptions = useCallback(
     async (inputValue, cb) => {
-      const filter = !!inputValue
+      const filter = inputValue
         ? { artname: { includesInsensitive: inputValue } }
         : { artname: { isNull: false } }
       const { data } = await client.query({
@@ -140,7 +140,7 @@ const SelectTypable = ({
   )
 
   const onMyBlur = useCallback(() => {
-    if (!!inputValue) {
+    if (inputValue) {
       onMyChange({ value: inputValue, label: inputValue })
     }
   }, [inputValue, onMyChange])

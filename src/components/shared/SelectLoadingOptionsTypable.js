@@ -66,7 +66,7 @@ const StyledSelect = styled(AsyncSelect)`
   }
 `
 
-const SelectTypable = ({
+const SelectLoadingOptionsTypable = ({
   row,
   field = '',
   label,
@@ -132,7 +132,7 @@ const SelectTypable = ({
   )
 
   const onBlur = useCallback(() => {
-    if (!!inputValue) {
+    if (inputValue) {
       onChange({ value: inputValue, label: inputValue })
     }
   }, [inputValue, onChange])
@@ -169,4 +169,4 @@ const SelectTypable = ({
   )
 }
 
-export default observer(SelectTypable)
+export default observer(SelectLoadingOptionsTypable)

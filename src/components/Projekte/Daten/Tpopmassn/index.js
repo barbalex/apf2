@@ -12,9 +12,9 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import MdField from '../../../shared/MarkdownField'
 import Select from '../../../shared/Select'
-import SelectLoadingOptionsTypableFormik from '../../../shared/SelectLoadingOptionsTypableFormik'
-import Checkbox2StatesFormik from '../../../shared/Checkbox2StatesFormik'
-import DateFieldFormik from '../../../shared/DateFormik'
+import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypable'
+import Checkbox2States from '../../../shared/Checkbox2States'
+import DateField from '../../../shared/Date'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
@@ -48,6 +48,9 @@ const StyledTab = styled(Tab)`
 `
 const TabContent = styled.div`
   height: 100%;
+`
+const FormContainer = styled.div`
+  padding: 10px;
 `
 
 const fieldTypes = {
@@ -685,10 +688,12 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           saveToDb={saveToDb}
                           error={fieldErrors.jahr}
                         />
-                        <DateFieldFormik
+                        <DateField
                           name="datum"
                           label="Datum"
-                          handleSubmit={handleSubmit}
+                          value={row.datum}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.datum}
                         />
                         <RadioButtonGroup
                           name="typ"
@@ -723,10 +728,12 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           saveToDb={saveToDb}
                           error={fieldErrors.bemerkungen}
                         />
-                        <Checkbox2StatesFormik
+                        <Checkbox2States
                           name="planVorhanden"
                           label="Plan vorhanden"
-                          handleSubmit={handleSubmit}
+                          value={row.planVorhanden}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.planVorhanden}
                         />
                         <TextField
                           name="planBezeichnung"
@@ -820,13 +827,14 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                             />
                           </>
                         )}
-                        <SelectLoadingOptionsTypableFormik
+                        <SelectLoadingOptionsTypable
                           key={`${id}${!!row.wirtspflanze}`}
-                          name="wirtspflanze"
                           label="Wirtspflanze"
-                          handleSubmit={handleSubmit}
+                          row={row}
                           query={queryAeTaxonomies}
                           queryNodesName="allAeTaxonomies"
+                          saveToDb={saveToDb}
+                          error={fieldErrors.wirtspflanze}
                         />
                         <TextField
                           name="herkunftPop"
