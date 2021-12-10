@@ -8,16 +8,18 @@ import { Formik, Form } from 'formik'
 import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
-import TextField from '../../../shared/TextFieldFormik'
-import MdField from '../../../shared/MarkdownFieldFormik'
-import Select from '../../../shared/SelectFormik'
-import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypableFormik'
-import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
-import DateField from '../../../shared/DateFormik'
+import RadioButtonGroupFormik from '../../../shared/RadioButtonGroupFormik'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import TextFieldFormik from '../../../shared/TextFieldFormik'
+import MdFieldFormik from '../../../shared/MarkdownFieldFormik'
+import SelectFormik from '../../../shared/SelectFormik'
+import SelectLoadingOptionsTypableFormik from '../../../shared/SelectLoadingOptionsTypableFormik'
+import Checkbox2StatesFormik from '../../../shared/Checkbox2StatesFormik'
+import DateFieldFormik from '../../../shared/DateFormik'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import query from './query'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
@@ -81,6 +83,8 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
 
   const { activeNodeArray } = store[treeName]
 
+  const [fieldErrors, setFieldErrors] = useState({})
+
   let id =
     activeNodeArray.length > 9
       ? activeNodeArray[9]
@@ -100,6 +104,257 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
   const row = useMemo(() => data?.tpopmassnById ?? {}, [data?.tpopmassnById])
 
   const isAnpflanzung = row?.tpopmassnTypWerteByTyp?.anpflanzung
+
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      // BEWARE: react-select fires twice when a value is cleared
+      // second event leads to an error as the values passed are same as before
+      // so prevent this by returning if no changed field exists
+      // https://github.com/JedWatson/react-select/issues/4101
+      if (!field) return
+
+      const variables = {
+        id: row.id,
+        [field]: value,
+        changedBy: store.user.name,
+      }
+      if (field === 'jahr') {
+        variables.datum = null
+      }
+      if (field === 'datum') {
+        variables.jahr =
+          value && value.substring ? +value.substring(0, 4) : value
+      }
+      if (field === 'typ') {
+        // IF typ is anpflanzung
+        // have to set zieleinheit_einheit to
+        // ekzaehleinheit with zielrelevant = true
+        let zieleinheitIdResult
+        try {
+          zieleinheitIdResult = await client.query({
+            query: gql`
+              query tpopmassnZieleinheitQuery($apId: UUID!, $typ: Int!) {
+                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
+                  nodes {
+                    id
+                    anpflanzung
+                  }
+                }
+                allEkzaehleinheits(
+                  filter: {
+                    zielrelevant: { equalTo: true }
+                    apId: { equalTo: $apId }
+                  }
+                ) {
+                  nodes {
+                    id
+                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                      id
+                      code
+                      correspondsToMassnAnzTriebe
+                      correspondsToMassnAnzPflanzen
+                    }
+                  }
+                }
+              }
+            `,
+            variables: { apId, typ: variables.typ || 1 },
+          })
+        } catch (error) {
+          return setFieldErrors({ [field]: error.message })
+        }
+        const isAnpflanzung =
+          zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
+            ?.anpflanzung
+        const zieleinheit =
+          zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
+            ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
+        const zieleinheitCode = zieleinheit?.code
+        if (isAnpflanzung && zieleinheitCode) {
+          variables.zieleinheitEinheit = zieleinheitCode
+          if (!notMassnCountUnit && zieleinheit?.correspondsToMassnAnzTriebe) {
+            variables.zieleinheitAnzahl = row.anzTriebe
+          }
+          if (
+            !notMassnCountUnit &&
+            zieleinheit?.correspondsToMassnAnzPflanzen
+          ) {
+            variables.zieleinheitAnzahl = row.anzPflanzen
+          }
+        }
+      }
+      if (!notMassnCountUnit && field === 'anzTriebe') {
+        // IF zieleinheit corresponds to Anzahl Triebe
+        // have to set zieleinheitAnzahl to anzTriebe
+        let zieleinheitIdResult
+        try {
+          zieleinheitIdResult = await client.query({
+            query: gql`
+              query tpopmassnZieleinheitQuery2($apId: UUID!, $typ: Int!) {
+                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
+                  nodes {
+                    id
+                    anpflanzung
+                  }
+                }
+                allEkzaehleinheits(
+                  filter: {
+                    zielrelevant: { equalTo: true }
+                    apId: { equalTo: $apId }
+                  }
+                ) {
+                  nodes {
+                    id
+                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                      id
+                      correspondsToMassnAnzTriebe
+                    }
+                  }
+                }
+              }
+            `,
+            variables: { apId, typ: variables.typ || 1 },
+          })
+        } catch (error) {
+          return setFieldErrors({ [field]: error.message })
+        }
+        const isAnpflanzung =
+          zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
+            ?.anpflanzung
+        const zieleinheit =
+          zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
+            ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
+        if (isAnpflanzung && zieleinheit?.correspondsToMassnAnzTriebe) {
+          variables.zieleinheitAnzahl = exists(value) ? value : null
+        }
+      }
+      if (!notMassnCountUnit && field === 'anzPflanzen') {
+        // IF zieleinheit corresponds to Anzahl Triebe
+        // have to set zieleinheitAnzahl to anzPflanzen
+        let zieleinheitIdResult
+        try {
+          zieleinheitIdResult = await client.query({
+            query: gql`
+              query tpopmassnZieleinheitQuery3($apId: UUID!, $typ: Int!) {
+                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
+                  nodes {
+                    id
+                    anpflanzung
+                  }
+                }
+                allEkzaehleinheits(
+                  filter: {
+                    zielrelevant: { equalTo: true }
+                    apId: { equalTo: $apId }
+                  }
+                ) {
+                  nodes {
+                    id
+                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                      id
+                      correspondsToMassnAnzPflanzen
+                    }
+                  }
+                }
+              }
+            `,
+            variables: { apId, typ: variables.typ || 1 },
+          })
+        } catch (error) {
+          return setFieldErrors({ [field]: error.message })
+        }
+        const isAnpflanzung =
+          zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
+            ?.anpflanzung
+        const zieleinheit =
+          zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
+            ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
+        if (isAnpflanzung && zieleinheit?.correspondsToMassnAnzPflanzen) {
+          variables.zieleinheitAnzahl = exists(value) ? value : null
+        }
+      }
+      try {
+        await client.mutate({
+          mutation: gql`
+            mutation updateTpopmassn(
+              $id: UUID!
+              $${field}: ${fieldTypes[field]}
+              ${field === 'jahr' ? '$datum: Date' : ''}
+              ${field === 'datum' ? '$jahr: Int' : ''}
+              ${field === 'typ' ? '$zieleinheitEinheit: Int' : ''}
+              ${
+                ['typ', 'anzTriebe', 'anzPflanzen'].includes(field)
+                  ? '$zieleinheitAnzahl: Int'
+                  : ''
+              }
+              $changedBy: String
+            ) {
+              updateTpopmassnById(
+                input: {
+                  id: $id
+                  tpopmassnPatch: {
+                    ${field}: $${field}
+                    ${field === 'jahr' ? 'datum: $datum' : ''}
+                    ${field === 'datum' ? 'jahr: $jahr' : ''}
+                    ${
+                      field === 'typ'
+                        ? 'zieleinheitEinheit: $zieleinheitEinheit'
+                        : ''
+                    }
+                    ${
+                      ['typ', 'anzTriebe', 'anzPflanzen'].includes(field)
+                        ? 'zieleinheitAnzahl: $zieleinheitAnzahl'
+                        : ''
+                    }
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                tpopmassn {
+                  id
+                  label
+                  typ
+                  tpopmassnTypWerteByTyp {
+                    id
+                    anpflanzung
+                  }
+                  beschreibung
+                  jahr
+                  datum
+                  bemerkungen
+                  planBezeichnung
+                  flaeche
+                  markierung
+                  anzTriebe
+                  anzPflanzen
+                  anzPflanzstellen
+                  zieleinheitEinheit
+                  zieleinheitAnzahl
+                  wirtspflanze
+                  herkunftPop
+                  sammeldatum
+                  vonAnzahlIndividuen
+                  form
+                  pflanzanordnung
+                  tpopId
+                  bearbeiter
+                  planVorhanden
+                  changedBy
+                }
+              }
+            }
+          `,
+          variables,
+        })
+      } catch (error) {
+        return setFieldErrors({ [field]: error.message })
+      }
+      setFieldErrors({})
+    },
+    [apId, client, notMassnCountUnit, row, store.user.name],
+  )
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -423,15 +678,22 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                   >
                     {({ handleSubmit, dirty }) => (
                       <Form onBlur={() => dirty && handleSubmit()}>
-                        <TextField
+                        <TextFieldFormik
                           name="jahr"
                           label="Jahr"
                           type="number"
                           handleSubmit={handleSubmit}
                         />
-                        <DateField
+                        <DateFieldFormik
                           name="datum"
                           label="Datum"
+                          handleSubmit={handleSubmit}
+                        />
+                        <RadioButtonGroupFormik
+                          name="typ"
+                          label="Typ"
+                          dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
+                          loading={loading}
                           handleSubmit={handleSubmit}
                         />
                         <RadioButtonGroup
@@ -439,15 +701,17 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           label="Typ"
                           dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
                           loading={loading}
-                          handleSubmit={handleSubmit}
+                          value={row.typ}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.typ}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="beschreibung"
                           label="Massnahme"
                           type="text"
                           handleSubmit={handleSubmit}
                         />
-                        <Select
+                        <SelectFormik
                           name="bearbeiter"
                           value={row.bearbeiter}
                           label="BearbeiterIn"
@@ -455,55 +719,55 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           loading={loading}
                           handleSubmit={handleSubmit}
                         />
-                        <MdField name="bemerkungen" label="Bemerkungen" />
-                        <Checkbox2States
+                        <MdFieldFormik name="bemerkungen" label="Bemerkungen" />
+                        <Checkbox2StatesFormik
                           name="planVorhanden"
                           label="Plan vorhanden"
                           handleSubmit={handleSubmit}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="planBezeichnung"
                           label="Plan Bezeichnung"
                           type="text"
                           handleSubmit={handleSubmit}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="flaeche"
                           label="Fläche (m2)"
                           type="number"
                           handleSubmit={handleSubmit}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="form"
                           label="Form der Ansiedlung"
                           type="text"
                           handleSubmit={handleSubmit}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="pflanzanordnung"
                           label="Pflanzanordnung"
                           type="text"
                           handleSubmit={handleSubmit}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="markierung"
                           label="Markierung"
                           type="text"
                           handleSubmit={handleSubmit}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="anzTriebe"
                           label="Anzahl Triebe"
                           type="number"
                           handleSubmit={handleSubmit}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="anzPflanzen"
                           label="Anzahl Pflanzen"
                           type="number"
                           handleSubmit={handleSubmit}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="anzPflanzstellen"
                           label="Anzahl Pflanzstellen"
                           type="number"
@@ -511,7 +775,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                         />
                         {isAnpflanzung && (
                           <>
-                            <Select
+                            <SelectFormik
                               name="zieleinheitEinheit"
                               label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
                               options={
@@ -521,7 +785,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                               loading={loading}
                               handleSubmit={handleSubmit}
                             />
-                            <TextField
+                            <TextFieldFormik
                               name="zieleinheitAnzahl"
                               label={
                                 notMassnCountUnit === true
@@ -533,7 +797,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                             />
                           </>
                         )}
-                        <SelectLoadingOptionsTypable
+                        <SelectLoadingOptionsTypableFormik
                           key={`${id}${!!row.wirtspflanze}`}
                           name="wirtspflanze"
                           label="Wirtspflanze"
@@ -541,19 +805,19 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           query={queryAeTaxonomies}
                           queryNodesName="allAeTaxonomies"
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="herkunftPop"
                           label="Herkunftspopulation"
                           type="text"
                           handleSubmit={handleSubmit}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="sammeldatum"
                           label="Sammeldatum"
                           type="text"
                           handleSubmit={handleSubmit}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="vonAnzahlIndividuen"
                           label="Anzahl besammelte Individuen der Herkunftspopulation"
                           type="number"
