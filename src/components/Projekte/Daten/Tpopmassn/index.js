@@ -10,8 +10,8 @@ import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
-import MdFieldFormik from '../../../shared/MarkdownFieldFormik'
-import SelectFormik from '../../../shared/SelectFormik'
+import MdField from '../../../shared/MarkdownField'
+import Select from '../../../shared/Select'
 import SelectLoadingOptionsTypableFormik from '../../../shared/SelectLoadingOptionsTypableFormik'
 import Checkbox2StatesFormik from '../../../shared/Checkbox2StatesFormik'
 import DateFieldFormik from '../../../shared/DateFormik'
@@ -134,7 +134,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
         try {
           zieleinheitIdResult = await client.query({
             query: gql`
-              query tpopmassnZieleinheitQuery($apId: UUID!, $typ: Int!) {
+              query tpopmassnZieleinheitQuery1($apId: UUID!, $typ: Int!) {
                 allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
                   nodes {
                     id
@@ -390,7 +390,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
         try {
           zieleinheitIdResult = await client.query({
             query: gql`
-              query tpopmassnZieleinheitQuery($apId: UUID!, $typ: Int!) {
+              query tpopmassnZieleinheitQuery2($apId: UUID!, $typ: Int!) {
                 allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
                   nodes {
                     id
@@ -707,15 +707,22 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                           saveToDb={saveToDb}
                           error={fieldErrors.beschreibung}
                         />
-                        <SelectFormik
+                        <Select
                           name="bearbeiter"
-                          value={row.bearbeiter}
                           label="BearbeiterIn"
+                          value={row.bearbeiter}
                           options={data?.allAdresses?.nodes ?? []}
                           loading={loading}
-                          handleSubmit={handleSubmit}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.bearbeiter}
                         />
-                        <MdFieldFormik name="bemerkungen" label="Bemerkungen" />
+                        <MdField
+                          name="bemerkungen"
+                          label="Bemerkungen"
+                          value={row.bemerkungen}
+                          saveToDb={saveToDb}
+                          error={fieldErrors.bemerkungen}
+                        />
                         <Checkbox2StatesFormik
                           name="planVorhanden"
                           label="Plan vorhanden"
@@ -787,15 +794,17 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
                         />
                         {isAnpflanzung && (
                           <>
-                            <SelectFormik
+                            <Select
                               name="zieleinheitEinheit"
                               label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
+                              value={row.zieleinheitEinheit}
                               options={
                                 data?.allTpopkontrzaehlEinheitWertes?.nodes ??
                                 []
                               }
                               loading={loading}
-                              handleSubmit={handleSubmit}
+                              saveToDb={saveToDb}
+                              error={fieldErrors.zieleinheitEinheit}
                             />
                             <TextField
                               name="zieleinheitAnzahl"
