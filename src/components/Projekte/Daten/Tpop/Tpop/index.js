@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
-import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
 import TextField from '../../../../shared/TextField'
@@ -34,12 +33,13 @@ const Tpop = ({
   row,
   apJahr,
   refetchTpop,
-  width = 1000,
+  treeName,
 }) => {
   const store = useContext(storeContext)
+  const { formWidth: width } = store[treeName]
   const client = useApolloClient()
 
-  console.log('Tpop rendering')
+  //console.log('Tpop rendering')
 
   const { enqueNotification } = store
 
@@ -372,4 +372,4 @@ const Tpop = ({
   )
 }
 
-export default withResizeDetector(observer(Tpop))
+export default observer(Tpop)

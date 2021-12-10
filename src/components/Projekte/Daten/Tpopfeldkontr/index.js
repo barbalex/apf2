@@ -6,7 +6,6 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
-import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -134,17 +133,19 @@ const tpopkontrTypWerte = [
   },
 ]
 
-const Tpopfeldkontr = ({ treeName, showFilter = false, width = 1000 }) => {
+const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { dataFilterSetValue, urlQuery, setUrlQuery } = store
-  const { activeNodeArray, dataFilter } = store[treeName]
+  const { activeNodeArray, dataFilter, formWidth, filterWidth } =
+    store[treeName]
 
   let id =
     activeNodeArray.length > 9
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
+  const width = showFilter ? filterWidth : formWidth
   const apId = activeNodeArray[3]
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -602,4 +603,4 @@ const Tpopfeldkontr = ({ treeName, showFilter = false, width = 1000 }) => {
   )
 }
 
-export default withResizeDetector(observer(Tpopfeldkontr))
+export default observer(Tpopfeldkontr)

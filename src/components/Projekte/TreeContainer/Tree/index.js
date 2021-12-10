@@ -5,7 +5,6 @@ import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
-import { withResizeDetector } from 'react-resize-detector'
 
 import Row from './Row'
 
@@ -40,13 +39,14 @@ const StyledList = styled(List)`
   }
 `
 
-const Tree = ({ treeName, nodes, loading, height = 1000 }) => {
+const Tree = ({ treeName, nodes, loading }) => {
   const store = useContext(storeContext)
   const tree = store[treeName]
   const {
     activeNodeArray,
     treeWidth,
     lastTouchedNode: lastTouchedNodeProxy,
+    formHeight: height,
   } = tree
 
   const listRef = React.createRef()
@@ -89,4 +89,4 @@ const Tree = ({ treeName, nodes, loading, height = 1000 }) => {
   )
 }
 
-export default withResizeDetector(observer(Tree))
+export default observer(Tree)
