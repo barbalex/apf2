@@ -10,6 +10,7 @@ import FormTitle from '../../../shared/FormTitle'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Spinner from '../../../shared/Spinner'
 import Error from '../../../shared/Error'
 import { tpopber } from '../../../shared/fragments'
 
@@ -18,10 +19,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
@@ -68,7 +65,6 @@ const Tpopber = ({ treeName }) => {
       },
     },
   )
-  console.log('Tpopber rendering', { loading, fieldErrors })
 
   const row = useMemo(() => data?.tpopberById ?? {}, [data?.tpopberById])
 
@@ -129,9 +125,7 @@ const Tpopber = ({ treeName }) => {
     [client, fieldErrors, row, store.user.name],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
 
   if (error) return <Error errors={[error]} />
 

@@ -13,6 +13,12 @@ export default gql`
         ...PopFields
       }
     }
+    allTpopEntwicklungWertes(orderBy: SORT_ASC) {
+      nodes {
+        value: code
+        label: text
+      }
+    }
   }
   ${pop}
   ${popber}
