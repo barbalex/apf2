@@ -413,6 +413,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
                 row={row}
                 apJahr={apJahr}
                 refetchTpop={refetchTpop}
+                treeName={treeName}
               />
             ) : tab === 'ek' ? (
               <Ek

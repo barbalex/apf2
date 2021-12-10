@@ -8,7 +8,6 @@ import React, {
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
-import { withResizeDetector } from 'react-resize-detector'
 import { useDebouncedCallback } from 'use-debounce'
 
 import KarteOderNull from './KarteOderNull'
@@ -79,11 +78,17 @@ const ProjektContainer = ({
   nodes,
   treeLoading,
   treeRefetch,
-  height = 1000,
 }) => {
   const store = useContext(storeContext)
   const { isPrint } = store
-  const { setTreeWidth, setFormWidth, activeNodeArray } = store[treeName]
+  const {
+    setTreeWidth,
+    setFormWidth,
+    setFilterWidth,
+    setFormHeight,
+    formHeight: height,
+    activeNodeArray,
+  } = store[treeName]
 
   const showApberForAp =
     activeNodeArray.length === 7 &&
@@ -94,6 +99,7 @@ const ProjektContainer = ({
     activeNodeArray[2] === 'AP-Berichte' &&
     activeNodeArray[4] === 'print'
 
+  const containerEl = useRef(null)
   const treeEl = useRef(null)
   const datenEl = useRef(null)
   const filterEl = useRef(null)
@@ -103,12 +109,10 @@ const ProjektContainer = ({
 
   const setDimensions = useCallback(() => {
     setTreeWidth(treeEl?.current?.clientWidth ?? standardWidth)
-    setFormWidth(
-      datenEl?.current?.clientWidth ??
-        filterEl?.current?.clientWidth ??
-        standardWidth,
-    )
-  }, [setFormWidth, setTreeWidth])
+    setFormWidth(datenEl?.current?.clientWidth ?? standardWidth)
+    setFormHeight(containerEl?.current?.clientHeight ?? standardWidth)
+    setFilterWidth(filterEl?.current?.clientWidth ?? standardWidth)
+  }, [setFilterWidth, setFormHeight, setFormWidth, setTreeWidth])
 
   const setDimensionsDebounced = useDebouncedCallback(setDimensions, 600)
 
@@ -166,7 +170,7 @@ const ProjektContainer = ({
     const component = <ApberForYear />
     if (isPrint) return component
     return (
-      <Container>
+      <Container ref={containerEl}>
         <StyledSplitPane
           split="vertical"
           size={paneSize}
@@ -186,7 +190,7 @@ const ProjektContainer = ({
     const component = <ApberForApFromAp />
     if (isPrint) return component
     return (
-      <Container>
+      <Container ref={containerEl}>
         <StyledSplitPane
           split="vertical"
           size={paneSize}
@@ -213,7 +217,7 @@ const ProjektContainer = ({
     // add empty div to prevent split-pane from
     // missing a second div
     return (
-      <Container>
+      <Container ref={containerEl}>
         <StyledSplitPane
           split="vertical"
           size="100%"
@@ -230,7 +234,7 @@ const ProjektContainer = ({
 
   if (tabs.length === 2) {
     return (
-      <Container>
+      <Container ref={containerEl}>
         <StyledSplitPane
           split="vertical"
           size={paneSize}
@@ -247,7 +251,7 @@ const ProjektContainer = ({
 
   if (tabs.length === 3) {
     return (
-      <Container>
+      <Container ref={containerEl}>
         <StyledSplitPane
           split="vertical"
           size="33%"
@@ -274,7 +278,7 @@ const ProjektContainer = ({
 
   if (tabs.length === 4) {
     return (
-      <Container>
+      <Container ref={containerEl}>
         <StyledSplitPane
           split="vertical"
           size="25%"
@@ -310,7 +314,7 @@ const ProjektContainer = ({
 
   if (tabs.length === 5) {
     return (
-      <Container>
+      <Container ref={containerEl}>
         <StyledSplitPane
           split="vertical"
           size="20%"
@@ -356,4 +360,4 @@ const ProjektContainer = ({
   return null
 }
 
-export default withResizeDetector(observer(ProjektContainer))
+export default observer(ProjektContainer)

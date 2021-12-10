@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
-import { withResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
@@ -68,10 +67,10 @@ const fieldTypes = {
   bearbeiter: 'UUID',
 }
 
-const Apber = ({ treeName, width = 1000 }) => {
+const Apber = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { activeNodeArray } = store[treeName]
+  const { activeNodeArray, formWidth: width } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -268,4 +267,4 @@ const Apber = ({ treeName, width = 1000 }) => {
   )
 }
 
-export default withResizeDetector(observer(Apber))
+export default observer(Apber)
