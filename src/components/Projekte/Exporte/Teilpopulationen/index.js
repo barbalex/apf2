@@ -177,6 +177,8 @@ const Teilpopulationen = () => {
         `,
         variables: {
           filter: tpopGqlFilter,
+          // seems to have no or little influence on ram usage:
+          //fetchPolicy: 'no-cache',
         },
       })
     } catch (error) {
