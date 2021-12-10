@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
@@ -75,7 +75,7 @@ const fieldTypes = {
   planVorhanden: 'Boolean',
 }
 
-const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
+const Tpopmassn = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { urlQuery, setUrlQuery } = store
@@ -83,6 +83,14 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
   const apId = activeNodeArray[3]
 
   const [fieldErrors, setFieldErrors] = useState({})
+
+  // no matter what settings are used,
+  // resizeDetector makes the component render TWICE after getting width
+  const { width = 1000, ref: resizeRef } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 300,
+    refreshOptions: { trailing: true },
+  })
 
   let id =
     activeNodeArray.length > 9
@@ -371,7 +379,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
 
   // 6-9 / 5
   // 5 / 2
-  console.log('Tpopmassn rendering, loading:', loading)
+  console.log('Tpopmassn rendering', { loading, width })
 
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
@@ -382,7 +390,7 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <Container ref={resizeRef}>
         <FormTitle
           apId={activeNodeArray[3]}
           title="Massnahme"
@@ -598,4 +606,4 @@ const Tpopmassn = ({ treeName, showFilter = false, width = 1000 }) => {
   )
 }
 
-export default withResizeDetector(observer(Tpopmassn))
+export default observer(Tpopmassn)
