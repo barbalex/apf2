@@ -79,6 +79,7 @@ const LabelFilter = ({ treeName, nodes }) => {
 
   const setValuesAfterChange = useCallback(
     (val) => {
+      console.log('setting values')
       const { filterTable, url, label } = activeNode
       // pop if is not folder and label does not comply to filter
       if (
@@ -107,9 +108,7 @@ const LabelFilter = ({ treeName, nodes }) => {
       treeName,
     ],
   )
-  const changeDebounced = useDebouncedCallback((val) => {
-    setValuesAfterChange(val)
-  }, 600)
+  const changeDebounced = useDebouncedCallback(setValuesAfterChange, 600)
 
   const onChange = useCallback(
     (e) => {

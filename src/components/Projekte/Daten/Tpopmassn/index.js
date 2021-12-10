@@ -79,18 +79,19 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { urlQuery, setUrlQuery } = store
-  const { activeNodeArray } = store[treeName]
+  const { activeNodeArray, formWidth: width } = store[treeName]
   const apId = activeNodeArray[3]
 
   const [fieldErrors, setFieldErrors] = useState({})
 
   // no matter what settings are used,
   // resizeDetector makes the component render TWICE after getting width
-  const { width = 1000, ref: resizeRef } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 300,
-    refreshOptions: { trailing: true },
-  })
+  //const width = 1000
+  // const { width = 1000, ref: resizeRef } = useResizeDetector({
+  //   refreshMode: 'debounce',
+  //   refreshRate: 300,
+  //   refreshOptions: { trailing: true },
+  // })
 
   let id =
     activeNodeArray.length > 9
@@ -377,10 +378,6 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
     [setUrlQuery, urlQuery],
   )
 
-  // 6-9 / 5
-  // 5 / 2
-  console.log('Tpopmassn rendering', { loading, width })
-
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
@@ -390,7 +387,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container ref={resizeRef}>
+      <Container>
         <FormTitle
           apId={activeNodeArray[3]}
           title="Massnahme"
