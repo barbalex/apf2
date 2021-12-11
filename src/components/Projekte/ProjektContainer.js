@@ -27,8 +27,12 @@ const Container = styled.div`
     height: auto !important;
   }
 `
+/**
+ * need to use || instead of ?? for height
+ * because 0 was passed
+ */
 const StyledSplitPane = styled(SplitPane)`
-  height: ${(props) => props['data-height'] ?? 1000}px !important;
+  height: ${(props) => props['data-height'] || 1000}px !important;
 
   .Resizer {
     background: #388e3c;

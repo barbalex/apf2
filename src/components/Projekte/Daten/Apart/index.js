@@ -1,37 +1,34 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
-import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryAeTaxonomies from './queryAeTaxonomies'
-import queryAeEigById from './queryAeEigById'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { apart } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const FieldsContainer = styled.div`
   overflow-y: auto;
 `
 const FieldsSubContainer = styled.div`
   padding: 10px 10px 0 10px;
+`
+const FormContainer = styled.div`
+  padding: 10px;
 `
 
 const fieldTypes = {
@@ -44,7 +41,9 @@ const ApArt = ({ treeName }) => {
   const client = useApolloClient()
   const { activeNodeArray } = store[treeName]
 
-  const { data, loading, error } = useQuery(query, {
+  const [fieldErrors, setFieldErrors] = useState({})
+
+  const { data, loading, error, refetch } = useQuery(query, {
     variables: {
       id:
         activeNodeArray.length > 5
@@ -55,14 +54,13 @@ const ApArt = ({ treeName }) => {
 
   const row = useMemo(() => data?.apartById ?? {}, [data?.apartById])
 
-  const {
-    data: dataAeEigById,
-    loading: loadingAeEigById,
-    error: errorAeEigById,
-  } = useQuery(queryAeEigById, {
-    variables: {
-      id: row && row.artId ? row.artId : '99999999-9999-9999-9999-999999999999',
-    },
+  console.log('ApArt', {
+    id:
+      activeNodeArray.length > 5
+        ? activeNodeArray[5]
+        : '99999999-9999-9999-9999-999999999999',
+    artId: row?.artId ?? '99999999-9999-9999-9999-999999999999',
+    row,
   })
 
   // do not include already choosen assozarten
@@ -90,17 +88,14 @@ const ApArt = ({ treeName }) => {
   // because apart did not exist...
   // maybe do later
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: store.user.name,
       }
       try {
@@ -108,14 +103,14 @@ const ApArt = ({ treeName }) => {
           mutation: gql`
             mutation updateApart(
               $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
+              $${field}: ${fieldTypes[field]}
               $changedBy: String
             ) {
               updateApartById(
                 input: {
                   id: $id
                   apartPatch: {
-                    ${changedField}: $${changedField}
+                    ${field}: $${field}
                     changedBy: $changedBy
                   }
                 }
@@ -128,34 +123,20 @@ const ApArt = ({ treeName }) => {
             ${apart}
           `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateApartById: {
-              apart: {
-                ...variables,
-                __typename: 'Apart',
-              },
-              __typename: 'Apart',
-            },
-          },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      // without refetch artname is not renewed
+      refetch()
+      setFieldErrors({})
     },
-    [client, row, store.user.name],
+    [client, refetch, row.id, store.user.name],
   )
 
-  if (loading || loadingAeEigById) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
 
-  const errors = [
-    ...(error ? [error] : []),
-    ...(errorAeEigById ? [errorAeEigById] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
+  if (error) return <Error errors={[error]} />
 
   return (
     <ErrorBoundary>
@@ -206,33 +187,19 @@ const ApArt = ({ treeName }) => {
                 <br />
                 <br />
               </div>
-              <Formik
-                initialValues={row}
-                onSubmit={onSubmit}
-                enableReinitialize
-              >
-                {({ handleSubmit, dirty }) => (
-                  <Form
-                    key={row ? row.id : 'artid'}
-                    onBlur={() => dirty && handleSubmit()}
-                  >
-                    <SelectLoadingOptions
-                      name="artId"
-                      valueLabel={
-                        dataAeEigById.aeTaxonomyById
-                          ? dataAeEigById.aeTaxonomyById.taxArtName
-                          : ''
-                      }
-                      label="Art"
-                      row={row}
-                      query={queryAeTaxonomies}
-                      filter={aeTaxonomiesfilter}
-                      queryNodesName="allAeTaxonomies"
-                      handleSubmit={handleSubmit}
-                    />
-                  </Form>
-                )}
-              </Formik>
+              <FormContainer>
+                <SelectLoadingOptions
+                  field="artId"
+                  valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
+                  label="Art"
+                  row={row}
+                  query={queryAeTaxonomies}
+                  filter={aeTaxonomiesfilter}
+                  queryNodesName="allAeTaxonomies"
+                  saveToDb={saveToDb}
+                  error={fieldErrors.artId}
+                />
+              </FormContainer>
             </FieldsSubContainer>
           </SimpleBar>
         </FieldsContainer>
