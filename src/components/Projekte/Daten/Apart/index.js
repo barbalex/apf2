@@ -54,15 +54,6 @@ const ApArt = ({ treeName }) => {
 
   const row = useMemo(() => data?.apartById ?? {}, [data?.apartById])
 
-  console.log('ApArt', {
-    id:
-      activeNodeArray.length > 5
-        ? activeNodeArray[5]
-        : '99999999-9999-9999-9999-999999999999',
-    artId: row?.artId ?? '99999999-9999-9999-9999-999999999999',
-    row,
-  })
-
   // do not include already choosen assozarten
   const apartenOfAp = (row?.apByApId?.apartsByApId?.nodes ?? [])
     .map((o) => o.artId)

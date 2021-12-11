@@ -1,41 +1,34 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
-import TextField from '../../../shared/TextFieldFormik'
-import MdField from '../../../shared/MarkdownFieldFormik'
-import Select from '../../../shared/SelectFormik'
-import DateField from '../../../shared/DateFormik'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import TextField from '../../../shared/TextField'
+import MdField from '../../../shared/MarkdownField'
+import Select from '../../../shared/Select'
+import DateField from '../../../shared/Date'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
 import query from './query'
-import queryAdresses from './queryAdresses'
-import queryApErfkritWertes from './queryApErfkritWertes'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { apber } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const FieldsContainer = styled.div`
   overflow-y: auto;
 `
-const StyledForm = styled(Form)`
+const FormContainer = styled.div`
   padding: 10px;
   ${(props) =>
     props['data-column-width'] &&
@@ -72,6 +65,8 @@ const Apber = ({ treeName }) => {
   const client = useApolloClient()
   const { activeNodeArray, formWidth: width } = store[treeName]
 
+  const [fieldErrors, setFieldErrors] = useState({})
+
   const { data, loading, error } = useQuery(query, {
     variables: {
       id:
@@ -81,30 +76,16 @@ const Apber = ({ treeName }) => {
     },
   })
 
-  const {
-    data: dataAdresses,
-    loading: loadingAdresses,
-    error: errorAdresses,
-  } = useQuery(queryAdresses)
-  const {
-    data: dataApErfkritWertes,
-    loading: loadingApErfkritWertes,
-    error: errorApErfkritWertes,
-  } = useQuery(queryApErfkritWertes)
-
   const row = useMemo(() => data?.apberById ?? {}, [data?.apberById])
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: store.user.name,
       }
       try {
@@ -112,14 +93,14 @@ const Apber = ({ treeName }) => {
           mutation: gql`
             mutation updateApber(
               $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
+              $${field}: ${fieldTypes[field]}
               $changedBy: String
             ) {
               updateApberById(
                 input: {
                   id: $id
                   apberPatch: {
-                    ${changedField}: $${changedField}
+                    ${field}: $${field}
                     changedBy: $changedBy
                   }
                 }
@@ -132,21 +113,11 @@ const Apber = ({ treeName }) => {
             ${apber}
           `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateApberById: {
-              apber: {
-                ...variables,
-                __typename: 'Apber',
-              },
-              __typename: 'Apber',
-            },
-          },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      setFieldErrors({})
     },
     [client, row, store.user.name],
   )
@@ -154,16 +125,11 @@ const Apber = ({ treeName }) => {
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  console.log('apber rendering, loading:', loading)
 
-  const errors = [
-    ...(error ? [error] : []),
-    ...(errorAdresses ? [errorAdresses] : []),
-    ...(errorApErfkritWertes ? [errorApErfkritWertes] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
+  if (loading) return <Spinner />
+
+  if (error) return <Error errors={[error]} />
 
   return (
     <ErrorBoundary>
@@ -181,85 +147,119 @@ const Apber = ({ treeName }) => {
               height: '100%',
             }}
           >
-            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-              {({ handleSubmit, dirty }) => (
-                <StyledForm
-                  onBlur={() => dirty && handleSubmit()}
-                  data-column-width={columnWidth}
-                >
-                  <TextField
-                    name="jahr"
-                    label="Jahr"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <MdField
-                    name="vergleichVorjahrGesamtziel"
-                    label="Vergleich Vorjahr - Gesamtziel"
-                  />
-                  <RadioButtonGroup
-                    name="beurteilung"
-                    label="Beurteilung"
-                    dataSource={
-                      dataApErfkritWertes?.allApErfkritWertes?.nodes ?? []
-                    }
-                    loading={loadingApErfkritWertes}
-                    handleSubmit={handleSubmit}
-                  />
-                  <RadioButtonGroup
-                    name="veraenderungZumVorjahr"
-                    label="Veränderung zum Vorjahr"
-                    dataSource={veraenGegenVorjahrWerte}
-                    handleSubmit={handleSubmit}
-                  />
-                  <MdField name="apberAnalyse" label="Analyse" />
-                  <MdField
-                    name="konsequenzenUmsetzung"
-                    label="Konsequenzen für die Umsetzung"
-                  />
-                  <MdField
-                    name="konsequenzenErfolgskontrolle"
-                    label="Konsequenzen für die Erfolgskontrolle"
-                  />
-                  <MdField
-                    name="biotopeNeue"
-                    label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
-                  />
-                  <MdField
-                    name="biotopeOptimieren"
-                    label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
-                  />
-                  <MdField
-                    name="massnahmenApBearb"
-                    label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
-                  />
-                  <MdField
-                    name="massnahmenPlanungVsAusfuehrung"
-                    label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
-                  />
-                  <MdField
-                    name="massnahmenOptimieren"
-                    label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
-                  />
-                  <MdField
-                    name="wirkungAufArt"
-                    label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
-                  />
-                  <DateField
-                    name="datum"
-                    label="Datum"
-                    handleSubmit={handleSubmit}
-                  />
-                  <Select
-                    name="bearbeiter"
-                    label="BearbeiterIn"
-                    options={dataAdresses?.allAdresses?.nodes ?? []}
-                    loading={loadingAdresses}
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
-              )}
-            </Formik>
+            <FormContainer data-column-width={columnWidth}>
+              <TextField
+                name="jahr"
+                label="Jahr"
+                type="number"
+                value={row.jahr}
+                saveToDb={saveToDb}
+                error={fieldErrors.jahr}
+              />
+              <MdField
+                name="vergleichVorjahrGesamtziel"
+                label="Vergleich Vorjahr - Gesamtziel"
+                value={row.vergleichVorjahrGesamtziel}
+                saveToDb={saveToDb}
+                error={fieldErrors.vergleichVorjahrGesamtziel}
+              />
+              <RadioButtonGroup
+                name="beurteilung"
+                label="Beurteilung"
+                dataSource={data?.allApErfkritWertes?.nodes ?? []}
+                loading={loading}
+                value={row.beurteilung}
+                saveToDb={saveToDb}
+                error={fieldErrors.beurteilung}
+              />
+              <RadioButtonGroup
+                name="veraenderungZumVorjahr"
+                label="Veränderung zum Vorjahr"
+                dataSource={veraenGegenVorjahrWerte}
+                value={row.veraenderungZumVorjahr}
+                saveToDb={saveToDb}
+                error={fieldErrors.beurteilung}
+              />
+              <MdField
+                name="apberAnalyse"
+                label="Analyse"
+                value={row.apberAnalyse}
+                saveToDb={saveToDb}
+                error={fieldErrors.apberAnalyse}
+              />
+              <MdField
+                name="konsequenzenUmsetzung"
+                label="Konsequenzen für die Umsetzung"
+                value={row.konsequenzenUmsetzung}
+                saveToDb={saveToDb}
+                error={fieldErrors.konsequenzenUmsetzung}
+              />
+              <MdField
+                name="konsequenzenErfolgskontrolle"
+                label="Konsequenzen für die Erfolgskontrolle"
+                value={row.konsequenzenErfolgskontrolle}
+                saveToDb={saveToDb}
+                error={fieldErrors.konsequenzenErfolgskontrolle}
+              />
+              <MdField
+                name="biotopeNeue"
+                label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
+                value={row.biotopeNeue}
+                saveToDb={saveToDb}
+                error={fieldErrors.biotopeNeue}
+              />
+              <MdField
+                name="biotopeOptimieren"
+                label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
+                value={row.biotopeOptimieren}
+                saveToDb={saveToDb}
+                error={fieldErrors.biotopeOptimieren}
+              />
+              <MdField
+                name="massnahmenApBearb"
+                label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
+                value={row.massnahmenApBearb}
+                saveToDb={saveToDb}
+                error={fieldErrors.massnahmenApBearb}
+              />
+              <MdField
+                name="massnahmenPlanungVsAusfuehrung"
+                label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
+                value={row.massnahmenPlanungVsAusfuehrung}
+                saveToDb={saveToDb}
+                error={fieldErrors.massnahmenPlanungVsAusfuehrung}
+              />
+              <MdField
+                name="massnahmenOptimieren"
+                label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
+                value={row.massnahmenOptimieren}
+                saveToDb={saveToDb}
+                error={fieldErrors.massnahmenOptimieren}
+              />
+              <MdField
+                name="wirkungAufArt"
+                label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
+                value={row.wirkungAufArt}
+                saveToDb={saveToDb}
+                error={fieldErrors.wirkungAufArt}
+              />
+              <DateField
+                name="datum"
+                label="Datum"
+                value={row.datum}
+                saveToDb={saveToDb}
+                error={fieldErrors.datum}
+              />
+              <Select
+                name="bearbeiter"
+                label="BearbeiterIn"
+                options={data?.allAdresses?.nodes ?? []}
+                loading={loading}
+                value={row.bearbeiter}
+                saveToDb={saveToDb}
+                error={fieldErrors.bearbeiter}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>

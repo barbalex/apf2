@@ -107,7 +107,6 @@ const Popber = ({ treeName }) => {
     },
     [client, fieldErrors, row, store.user.name],
   )
-  console.log('Popber rendering, loading:', loading)
 
   if (loading) return <Spinner />
 
