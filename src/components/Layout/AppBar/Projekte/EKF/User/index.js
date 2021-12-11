@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo, useContext } from 'react'
 import styled from 'styled-components'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -12,15 +12,14 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form } from 'formik'
 
 import query from './data'
-import TextField from '../../../../../shared/TextFieldFormik'
+import TextField from '../../../../../shared/TextField'
 import Error from '../../../../../shared/Error'
 import updateUserByIdGql from './updateUserById'
-import objectsFindChangedKey from '../../../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
+import storeContext from '../../../../../../storeContext'
 
 const Container = styled.div`
   height: 100%;
@@ -41,13 +40,20 @@ const StyledInput = styled(Input)`
 const PasswordMessage = styled.div`
   padding-bottom: 10px;
 `
+const FormContainer = styled.div`
+  padding: 10px;
+`
 
 const User = ({ username, userOpen, toggleUserOpen }) => {
+  const store = useContext(storeContext)
+
   const { data, error, loading } = useQuery(query, {
     variables: { name: username },
   })
   const client = useApolloClient()
   const row = useMemo(() => data?.userByName ?? {}, [data?.userByName])
+
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const [editPassword, setEditPassword] = useState(false)
   const [password, setPassword] = useState('')
@@ -58,16 +64,16 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
   const [password2ErrorText, setPassword2ErrorText] = useState('')
   const [passwordMessage, setPasswordMessage] = useState('')
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
-      const variables = objectsEmptyValuesToNull(values)
+      const variables = {
+        id: row.id,
+        [field]: value,
+        changedBy: store.user.name,
+      }
       try {
         await client.mutate({
           mutation: updateUserByIdGql,
@@ -84,12 +90,13 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      setFieldErrors({})
     },
-    [client, row],
+    [client, row.id, store.user.name],
   )
+
   const onBlurPassword = useCallback((e) => {
     setPasswordErrorText('')
     const password = e.target.value
@@ -100,6 +107,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
       setPassword2('')
     }
   }, [])
+
   const onBlurPassword2 = useCallback(
     async (event) => {
       let value = event.target.value
@@ -154,122 +162,113 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
       <ErrorBoundary>
         <Container>
           <FieldsContainer>
-            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-              {({ handleSubmit, dirty }) => (
-                <Form onBlur={() => dirty && handleSubmit()}>
-                  <TextField
-                    name="email"
-                    label="Email"
-                    helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
-                    handleSubmit={handleSubmit}
-                  />
-                  {!!passwordMessage && (
-                    <PasswordMessage>{passwordMessage}</PasswordMessage>
-                  )}
-                  {!editPassword && !passwordMessage && (
-                    <div>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => {
-                          setEditPassword(true)
-                          setPasswordMessage('')
-                        }}
-                      >
-                        Passwort ändern
-                      </Button>
-                    </div>
-                  )}
-                  {editPassword && (
-                    <FormControl
-                      error={!!passwordErrorText}
-                      fullWidth
-                      aria-describedby="passwortHelper"
-                      variant="standard"
-                    >
-                      <InputLabel htmlFor="passwort">Passwort</InputLabel>
-                      <StyledInput
-                        id="passwort"
-                        type={showPass ? 'text' : 'password'}
-                        defaultValue={password}
-                        onBlur={onBlurPassword}
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter') {
-                            onBlurPassword(e)
-                          }
-                        }}
-                        autoComplete="current-password"
-                        autoCorrect="off"
-                        spellCheck="false"
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              onClick={() => setShowPass(!showPass)}
-                              onMouseDown={(e) => e.preventDefault()}
-                              title={showPass ? 'verstecken' : 'anzeigen'}
-                              size="large"
-                            >
-                              {showPass ? (
-                                <MdVisibilityOff />
-                              ) : (
-                                <MdVisibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                      />
-                      <FormHelperText id="passwortHelper">
-                        {passwordErrorText}
-                      </FormHelperText>
-                    </FormControl>
-                  )}
-                  {editPassword && !!password && (
-                    <FormControl
-                      error={!!password2ErrorText}
-                      fullWidth
-                      aria-describedby="passwortHelper"
-                      variant="standard"
-                    >
-                      <InputLabel htmlFor="passwort">
-                        Passwort wiederholen
-                      </InputLabel>
-                      <StyledInput
-                        id="passwort2"
-                        type={showPass2 ? 'text' : 'password'}
-                        defaultValue={password2}
-                        onBlur={onBlurPassword2}
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter') {
-                            onBlurPassword(e)
-                          }
-                        }}
-                        autoCorrect="off"
-                        spellCheck="false"
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              onClick={() => setShowPass2(!showPass2)}
-                              onMouseDown={(e) => e.preventDefault()}
-                              title={showPass2 ? 'verstecken' : 'anzeigen'}
-                              size="large"
-                            >
-                              {showPass2 ? (
-                                <MdVisibilityOff />
-                              ) : (
-                                <MdVisibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                      />
-                      <FormHelperText id="passwortHelper">
-                        {password2ErrorText}
-                      </FormHelperText>
-                    </FormControl>
-                  )}
-                </Form>
+            <FormContainer>
+              <TextField
+                name="email"
+                label="Email"
+                type="text"
+                value={row.email}
+                saveToDb={saveToDb}
+                helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
+                error={fieldErrors.email}
+              />
+              {!!passwordMessage && (
+                <PasswordMessage>{passwordMessage}</PasswordMessage>
               )}
-            </Formik>
+              {!editPassword && !passwordMessage && (
+                <div>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => {
+                      setEditPassword(true)
+                      setPasswordMessage('')
+                    }}
+                  >
+                    Passwort ändern
+                  </Button>
+                </div>
+              )}
+              {editPassword && (
+                <FormControl
+                  error={!!passwordErrorText}
+                  fullWidth
+                  aria-describedby="passwortHelper"
+                  variant="standard"
+                >
+                  <InputLabel htmlFor="passwort">Passwort</InputLabel>
+                  <StyledInput
+                    id="passwort"
+                    type={showPass ? 'text' : 'password'}
+                    defaultValue={password}
+                    onBlur={onBlurPassword}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        onBlurPassword(e)
+                      }
+                    }}
+                    autoComplete="current-password"
+                    autoCorrect="off"
+                    spellCheck="false"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPass(!showPass)}
+                          onMouseDown={(e) => e.preventDefault()}
+                          title={showPass ? 'verstecken' : 'anzeigen'}
+                          size="large"
+                        >
+                          {showPass ? <MdVisibilityOff /> : <MdVisibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText id="passwortHelper">
+                    {passwordErrorText}
+                  </FormHelperText>
+                </FormControl>
+              )}
+              {editPassword && !!password && (
+                <FormControl
+                  error={!!password2ErrorText}
+                  fullWidth
+                  aria-describedby="passwortHelper"
+                  variant="standard"
+                >
+                  <InputLabel htmlFor="passwort">
+                    Passwort wiederholen
+                  </InputLabel>
+                  <StyledInput
+                    id="passwort2"
+                    type={showPass2 ? 'text' : 'password'}
+                    defaultValue={password2}
+                    onBlur={onBlurPassword2}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        onBlurPassword(e)
+                      }
+                    }}
+                    autoCorrect="off"
+                    spellCheck="false"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPass2(!showPass2)}
+                          onMouseDown={(e) => e.preventDefault()}
+                          title={showPass2 ? 'verstecken' : 'anzeigen'}
+                          size="large"
+                        >
+                          {showPass2 ? <MdVisibilityOff /> : <MdVisibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText id="passwortHelper">
+                    {password2ErrorText}
+                  </FormHelperText>
+                </FormControl>
+              )}
+            </FormContainer>
           </FieldsContainer>
         </Container>
       </ErrorBoundary>
