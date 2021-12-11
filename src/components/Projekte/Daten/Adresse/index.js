@@ -1,20 +1,19 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
-import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
-import TextField from '../../../shared/TextFieldFormik'
+import Checkbox2States from '../../../shared/Checkbox2States'
+import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 import { adresse } from '../../../shared/fragments'
 
 const Container = styled.div`
@@ -22,15 +21,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
+const FormContainer = styled.div`
   padding: 10px;
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
-`
-const StyledForm = styled(Form)`
-  padding: 10px;
 `
 
 const fieldTypes = {
@@ -53,19 +48,18 @@ const Adresse = ({ treeName }) => {
   })
   const client = useApolloClient()
 
+  const [fieldErrors, setFieldErrors] = useState({})
+
   const row = useMemo(() => data?.adresseById ?? {}, [data?.adresseById])
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: store.user.name,
       }
       try {
@@ -73,14 +67,14 @@ const Adresse = ({ treeName }) => {
           mutation: gql`
             mutation updateAdresse(
               $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
+              $${field}: ${fieldTypes[field]}
               $changedBy: String
             ) {
               updateAdresseById(
                 input: {
                   id: $id
                   adressePatch: {
-                    ${changedField}: $${changedField}
+                    ${field}: $${field}
                     changedBy: $changedBy
                   }
                 }
@@ -93,28 +87,16 @@ const Adresse = ({ treeName }) => {
             ${adresse}
           `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateAdresseById: {
-              adresse: {
-                ...variables,
-                __typename: 'Adresse',
-              },
-              __typename: 'Adresse',
-            },
-          },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      setFieldErrors({})
     },
     [client, row, store.user.name],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
   if (error) return <Error error={error} />
 
   return (
@@ -133,41 +115,47 @@ const Adresse = ({ treeName }) => {
               height: '100%',
             }}
           >
-            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-              {({ handleSubmit, dirty }) => (
-                <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <TextField
-                    name="name"
-                    label="Name"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="adresse"
-                    label="Adresse"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="telefon"
-                    label="Telefon"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="email"
-                    label="Email"
-                    type="email"
-                    handleSubmit={handleSubmit}
-                  />
-                  <Checkbox2States
-                    name="freiwErfko"
-                    label="freiwillige ErfolgskontrolleurIn"
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
-              )}
-            </Formik>
+            <FormContainer>
+              <TextField
+                name="name"
+                label="Name"
+                type="text"
+                value={row.name}
+                saveToDb={saveToDb}
+                error={fieldErrors.name}
+              />
+              <TextField
+                name="adresse"
+                label="Adresse"
+                type="text"
+                value={row.adresse}
+                saveToDb={saveToDb}
+                error={fieldErrors.adresse}
+              />
+              <TextField
+                name="telefon"
+                label="Telefon"
+                type="text"
+                value={row.telefon}
+                saveToDb={saveToDb}
+                error={fieldErrors.telefon}
+              />
+              <TextField
+                name="email"
+                label="Email"
+                type="email"
+                value={row.email}
+                saveToDb={saveToDb}
+                error={fieldErrors.email}
+              />
+              <Checkbox2States
+                name="freiwErfko"
+                label="freiwillige ErfolgskontrolleurIn"
+                value={row.freiwErfko}
+                saveToDb={saveToDb}
+                error={fieldErrors.freiwErfko}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>
