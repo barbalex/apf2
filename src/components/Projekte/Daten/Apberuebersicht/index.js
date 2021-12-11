@@ -1,25 +1,24 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import jwtDecode from 'jwt-decode'
 import format from 'date-fns/format'
 import { DateTime } from 'luxon'
 import SimpleBar from 'simplebar-react'
 
-import TextField from '../../../shared/TextFieldFormik'
-import MdField from '../../../shared/MarkdownFieldFormik'
+import TextField from '../../../shared/TextField'
+import MdField from '../../../shared/MarkdownField'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { apberuebersicht } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -27,15 +26,8 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const FieldsContainer = styled.div`
   overflow-y: auto;
-`
-const StyledForm = styled(Form)`
-  padding: 10px;
 `
 const StyledButton = styled(Button)`
   text-transform: none !important;
@@ -44,6 +36,9 @@ const StyledButton = styled(Button)`
   &:hover {
     background-color: rgba(46, 125, 50, 0.1) !important;
   }
+`
+const FormContainer = styled.div`
+  padding: 10px;
 `
 
 const fieldTypes = {
@@ -62,6 +57,8 @@ const Apberuebersicht = ({ treeName }) => {
   const userIsManager = role === 'apflora_manager'
   const { activeNodeArray } = store[treeName]
 
+  const [fieldErrors, setFieldErrors] = useState({})
+
   const { data, loading, error, refetch } = useQuery(query, {
     variables: {
       id:
@@ -76,34 +73,29 @@ const Apberuebersicht = ({ treeName }) => {
     [data?.apberuebersichtById],
   )
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      console.log('Apberuebersicht, onSubmit', { values, row })
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: store.user.name,
       }
-      console.log('Apberuebersicht, onSubmit', { changedField })
       try {
         await client.mutate({
           mutation: gql`
             mutation updateApberuebersicht(
               $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
+              $${field}: ${fieldTypes[field]}
               $changedBy: String
             ) {
               updateApberuebersichtById(
                 input: {
                   id: $id
                   apberuebersichtPatch: {
-                    ${changedField}: $${changedField}
+                    ${field}: $${field}
                     changedBy: $changedBy
                   }
                 }
@@ -116,21 +108,11 @@ const Apberuebersicht = ({ treeName }) => {
             ${apberuebersicht}
           `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateApberuebersichtById: {
-              apberuebersicht: {
-                ...variables,
-                __typename: 'Apberuebersicht',
-              },
-              __typename: 'Apberuebersicht',
-            },
-          },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      setFieldErrors({})
     },
     [client, row, store.user.name],
   )
@@ -236,9 +218,8 @@ const Apberuebersicht = ({ treeName }) => {
     refetch()
   }, [client, enqueNotification, refetch, row])
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
 
   return (
@@ -256,35 +237,39 @@ const Apberuebersicht = ({ treeName }) => {
               height: '100%',
             }}
           >
-            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-              {({ handleSubmit, dirty }) => (
-                <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <TextField
-                    name="jahr"
-                    label="Jahr"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  {!!row.historyDate && (
-                    <TextFieldNonUpdatable
-                      value={format(new Date(row.historyDate), 'dd.MM.yyyy')}
-                      label="Datum, an dem AP, Pop und TPop historisiert wurden"
-                    />
-                  )}
-                  {showHistorize && (
-                    <StyledButton
-                      variant="outlined"
-                      onClick={onClickHistorize}
-                      title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. bis zum März des Folgejahrs"
-                      color="inherit"
-                    >
-                      {`AP, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
-                    </StyledButton>
-                  )}
-                  <MdField name="bemerkungen" label="Bemerkungen" />
-                </StyledForm>
+            <FormContainer>
+              <TextField
+                name="jahr"
+                label="Jahr"
+                type="number"
+                value={row.jahr}
+                saveToDb={saveToDb}
+                error={fieldErrors.jahr}
+              />
+              {!!row.historyDate && (
+                <TextFieldNonUpdatable
+                  value={format(new Date(row.historyDate), 'dd.MM.yyyy')}
+                  label="Datum, an dem AP, Pop und TPop historisiert wurden"
+                />
               )}
-            </Formik>
+              {showHistorize && (
+                <StyledButton
+                  variant="outlined"
+                  onClick={onClickHistorize}
+                  title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. bis zum März des Folgejahrs"
+                  color="inherit"
+                >
+                  {`AP, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
+                </StyledButton>
+              )}
+              <MdField
+                name="bemerkungen"
+                label="Bemerkungen"
+                value={row.bemerkungen}
+                saveToDb={saveToDb}
+                error={fieldErrors.bemerkungen}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>
