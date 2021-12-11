@@ -71,7 +71,7 @@ const ApTabs = ({ treeName }) => {
           <StyledTab label="Historien" value="history" data-id="history" />
         </Tabs>
         <TabContent>
-          {tab === 'ap' && <Ap treeName={treeName} id={id} />}
+          {tab === 'ap' && <Ap id={id} />}
           {tab === 'auswertung' && <Auswertung id={id} />}
           {tab === 'dateien' && <Files parentId={id} parent="ap" />}
           {tab === 'history' && <ApHistory apId={id} />}

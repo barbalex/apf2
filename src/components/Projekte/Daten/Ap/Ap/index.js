@@ -2,20 +2,17 @@ import React, { useContext, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfoFormik'
-import TextField from '../../../../shared/TextFieldFormik'
-import Select from '../../../../shared/SelectFormik'
-import SelectLoadingOptions from '../../../../shared/SelectLoadingOptionsFormik'
+import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfo'
+import TextField from '../../../../shared/TextField'
+import Select from '../../../../shared/Select'
+import SelectLoadingOptions from '../../../../shared/SelectLoadingOptions'
 import TextFieldNonUpdatable from '../../../../shared/TextFieldNonUpdatable'
 import query from './query'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../../storeContext'
-import objectsFindChangedKey from '../../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../../modules/objectsEmptyValuesToNull'
 import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber'
 import ApUsers from './ApUsers'
 import { ap, aeTaxonomies } from '../../../../shared/fragments'
@@ -67,7 +64,7 @@ const fieldTypes = {
   projId: 'UUID',
 }
 
-const ApAp = ({ treeName, id }) => {
+const ApAp = ({ id }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { user } = store
@@ -80,17 +77,14 @@ const ApAp = ({ treeName, id }) => {
 
   const row = useMemo(() => data?.apById ?? {}, [data?.apById])
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: user.name,
       }
       try {
@@ -98,14 +92,14 @@ const ApAp = ({ treeName, id }) => {
           mutation: gql`
             mutation updateAp(
               $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
+              $${field}: ${fieldTypes[field]}
               $changedBy: String
             ) {
               updateApById(
                 input: {
                   id: $id
                   apPatch: {
-                    ${changedField}: $${changedField}
+                    ${field}: $${field}
                     changedBy: $changedBy
                   }
                 }
@@ -122,23 +116,13 @@ const ApAp = ({ treeName, id }) => {
             ${aeTaxonomies}
           `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateApById: {
-              ap: {
-                ...variables,
-                __typename: 'Ap',
-              },
-              __typename: 'Ap',
-            },
-          },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      setFieldErrors({})
     },
-    [client, row, user.name],
+    [client, row.id, user.name],
   )
 
   const aeTaxonomiesfilterForData = useCallback(
@@ -160,9 +144,6 @@ const ApAp = ({ treeName, id }) => {
     [id],
   )
 
-  // 4 / 2
-  console.log('Ap rendering')
-
   if (loading) return <Spinner />
 
   if (error) return <Error errors={[error]} />
@@ -175,116 +156,116 @@ const ApAp = ({ treeName, id }) => {
       }}
     >
       <FormContainer>
-        <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-          {({ handleSubmit, dirty }) => (
-            <Form onBlur={() => dirty && handleSubmit()}>
-              <SelectLoadingOptions
-                name="artId"
-                valueLabelPath="aeTaxonomyByArtId.taxArtName"
-                label="Art (gibt dem Aktionsplan den Namen)"
-                row={row}
-                query={queryAeTaxonomies}
-                filter={aeTaxonomiesfilterForData}
-                queryNodesName="allAeTaxonomies"
-                handleSubmit={handleSubmit}
-              />
-              <RadioButtonGroupWithInfo
-                name="bearbeitung"
-                dataSource={data?.allApBearbstandWertes?.nodes ?? []}
-                loading={loading}
-                popover={
-                  <>
-                    <LabelPopoverTitleRow data-id="info-icon-popover">
-                      Legende
-                    </LabelPopoverTitleRow>
-                    <LabelPopoverContentRow>
-                      <LabelPopoverRowColumnLeft>
-                        keiner:
-                      </LabelPopoverRowColumnLeft>
-                      <LabelPopoverRowColumnRight>
-                        kein Aktionsplan vorgesehen
-                      </LabelPopoverRowColumnRight>
-                    </LabelPopoverContentRow>
-                    <LabelPopoverContentRow>
-                      <LabelPopoverRowColumnLeft>
-                        erstellt:
-                      </LabelPopoverRowColumnLeft>
-                      <LabelPopoverRowColumnRight>
-                        Aktionsplan fertig, auf der Webseite der FNS
-                      </LabelPopoverRowColumnRight>
-                    </LabelPopoverContentRow>
-                  </>
-                }
-                label="Aktionsplan"
-                handleSubmit={handleSubmit}
-              />
-              <TextField
-                name="startJahr"
-                label="Start im Jahr"
-                type="number"
-                handleSubmit={handleSubmit}
-              />
-              <FieldContainer>
-                <RadioButtonGroupWithInfo
-                  name="umsetzung"
-                  dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
-                  loading={loading}
-                  popover={
-                    <>
-                      <LabelPopoverTitleRow data-id="info-icon-popover">
-                        Legende
-                      </LabelPopoverTitleRow>
-                      <LabelPopoverContentRow>
-                        <LabelPopoverRowColumnLeft>
-                          noch keine
-                          <br />
-                          Umsetzung:
-                        </LabelPopoverRowColumnLeft>
-                        <LabelPopoverRowColumnRight>
-                          noch keine Massnahmen ausgeführt
-                        </LabelPopoverRowColumnRight>
-                      </LabelPopoverContentRow>
-                      <LabelPopoverContentRow>
-                        <LabelPopoverRowColumnLeft>
-                          in Umsetzung:
-                        </LabelPopoverRowColumnLeft>
-                        <LabelPopoverRowColumnRight>
-                          bereits Massnahmen ausgeführt (auch wenn AP noch nicht
-                          erstellt)
-                        </LabelPopoverRowColumnRight>
-                      </LabelPopoverContentRow>
-                    </>
-                  }
-                  label="Stand Umsetzung"
-                  handleSubmit={handleSubmit}
-                />
-              </FieldContainer>
-              <Select
-                name="bearbeiter"
-                label="Verantwortlich"
-                options={data?.allAdresses?.nodes ?? []}
-                loading={loading}
-                handleSubmit={handleSubmit}
-              />
-              <ApUsers apId={row.id} />
-              <TextField
-                key={`${row.id}ekfBeobachtungszeitpunkt`}
-                name="ekfBeobachtungszeitpunkt"
-                label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
-                handleSubmit={handleSubmit}
-              />
-              <TextFieldNonUpdatable
-                key={`${row.id}artwert`}
-                label="Artwert"
-                value={
-                  row?.aeTaxonomyByArtId?.artwert ??
-                  'Diese Art hat keinen Artwert'
-                }
-                handleSubmit={handleSubmit}
-              />
-            </Form>
-          )}
-        </Formik>
+        <SelectLoadingOptions
+          field="artId"
+          valueLabelPath="aeTaxonomyByArtId.taxArtName"
+          label="Art (gibt dem Aktionsplan den Namen)"
+          row={row}
+          query={queryAeTaxonomies}
+          filter={aeTaxonomiesfilterForData}
+          queryNodesName="allAeTaxonomies"
+          //value={row.artId}
+          saveToDb={saveToDb}
+          error={fieldErrors.artId}
+        />
+        <RadioButtonGroupWithInfo
+          name="bearbeitung"
+          dataSource={data?.allApBearbstandWertes?.nodes ?? []}
+          loading={loading}
+          popover={
+            <>
+              <LabelPopoverTitleRow data-id="info-icon-popover">
+                Legende
+              </LabelPopoverTitleRow>
+              <LabelPopoverContentRow>
+                <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
+                <LabelPopoverRowColumnRight>
+                  kein Aktionsplan vorgesehen
+                </LabelPopoverRowColumnRight>
+              </LabelPopoverContentRow>
+              <LabelPopoverContentRow>
+                <LabelPopoverRowColumnLeft>erstellt:</LabelPopoverRowColumnLeft>
+                <LabelPopoverRowColumnRight>
+                  Aktionsplan fertig, auf der Webseite der FNS
+                </LabelPopoverRowColumnRight>
+              </LabelPopoverContentRow>
+            </>
+          }
+          label="Aktionsplan"
+          value={row.bearbeitung}
+          saveToDb={saveToDb}
+          error={fieldErrors.bearbeitung}
+        />
+        <TextField
+          name="startJahr"
+          label="Start im Jahr"
+          type="number"
+          value={row.startJahr}
+          saveToDb={saveToDb}
+          error={fieldErrors.startJahr}
+        />
+        <FieldContainer>
+          <RadioButtonGroupWithInfo
+            name="umsetzung"
+            dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
+            loading={loading}
+            popover={
+              <>
+                <LabelPopoverTitleRow data-id="info-icon-popover">
+                  Legende
+                </LabelPopoverTitleRow>
+                <LabelPopoverContentRow>
+                  <LabelPopoverRowColumnLeft>
+                    noch keine
+                    <br />
+                    Umsetzung:
+                  </LabelPopoverRowColumnLeft>
+                  <LabelPopoverRowColumnRight>
+                    noch keine Massnahmen ausgeführt
+                  </LabelPopoverRowColumnRight>
+                </LabelPopoverContentRow>
+                <LabelPopoverContentRow>
+                  <LabelPopoverRowColumnLeft>
+                    in Umsetzung:
+                  </LabelPopoverRowColumnLeft>
+                  <LabelPopoverRowColumnRight>
+                    bereits Massnahmen ausgeführt (auch wenn AP noch nicht
+                    erstellt)
+                  </LabelPopoverRowColumnRight>
+                </LabelPopoverContentRow>
+              </>
+            }
+            label="Stand Umsetzung"
+            value={row.umsetzung}
+            saveToDb={saveToDb}
+            error={fieldErrors.umsetzung}
+          />
+        </FieldContainer>
+        <Select
+          name="bearbeiter"
+          label="Verantwortlich"
+          options={data?.allAdresses?.nodes ?? []}
+          loading={loading}
+          value={row.bearbeiter}
+          saveToDb={saveToDb}
+          error={fieldErrors.bearbeiter}
+        />
+        <ApUsers apId={row.id} />
+        <TextField
+          name="ekfBeobachtungszeitpunkt"
+          label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
+          type="text"
+          value={row.ekfBeobachtungszeitpunkt}
+          saveToDb={saveToDb}
+          error={fieldErrors.ekfBeobachtungszeitpunkt}
+        />
+        <TextFieldNonUpdatable
+          key={`${row.id}artwert`}
+          label="Artwert"
+          value={
+            row?.aeTaxonomyByArtId?.artwert ?? 'Diese Art hat keinen Artwert'
+          }
+        />
       </FormContainer>
     </SimpleBar>
   )
