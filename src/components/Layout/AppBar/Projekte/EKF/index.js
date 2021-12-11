@@ -188,11 +188,13 @@ const ProjekteAppBar = () => {
     }
   }, [ekfCount, setEkfMultiPrint, setIsPrint])
 
+  console.log('EKF, isFreiwillig:', isFreiwillig)
+
   return (
     <>
       {!isMobile && (
         <SiteTitle variant="outlined" component={Link} to="/" title="Home">
-          {!!adresseName
+          {adresseName
             ? `AP Flora: EKF von ${adresseName}`
             : 'AP Flora: Erfolgs-Kontrolle Freiwillige'}
         </SiteTitle>
