@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import React, { useContext, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
@@ -12,23 +12,19 @@ import Select from '../../../../shared/SelectFormik'
 import SelectLoadingOptions from '../../../../shared/SelectLoadingOptionsFormik'
 import TextFieldNonUpdatable from '../../../../shared/TextFieldNonUpdatable'
 import query from './query'
-import queryLists from './queryLists'
-import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../../storeContext'
 import objectsFindChangedKey from '../../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber'
 import ApUsers from './ApUsers'
 import { ap, aeTaxonomies } from '../../../../shared/fragments'
+import Spinner from '../../../../shared/Spinner'
 import Error from '../../../../shared/Error'
 
 const FormContainer = styled.div`
   padding: 10px;
   padding-top: 0;
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const FieldContainer = styled.div`
   display: flex;
@@ -76,20 +72,11 @@ const ApAp = ({ treeName, id }) => {
   const store = useContext(storeContext)
   const { user } = store
 
+  const [fieldErrors, setFieldErrors] = useState({})
+
   const { data, error, loading } = useQuery(query, {
     variables: { id },
   })
-
-  const {
-    data: dataAdresses,
-    error: errorAdresses,
-    loading: loadingAdresses,
-  } = useQuery(queryAdresses)
-  const {
-    data: dataLists,
-    error: errorLists,
-    loading: loadingLists,
-  } = useQuery(queryLists)
 
   const row = useMemo(() => data?.apById ?? {}, [data?.apById])
 
@@ -156,7 +143,7 @@ const ApAp = ({ treeName, id }) => {
 
   const aeTaxonomiesfilterForData = useCallback(
     (inputValue) =>
-      !!inputValue
+      inputValue
         ? {
             or: [
               { apByArtIdExists: false },
@@ -173,15 +160,12 @@ const ApAp = ({ treeName, id }) => {
     [id],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
-  const errors = [
-    ...(errorAdresses ? [errorAdresses] : []),
-    ...(errorLists ? [errorLists] : []),
-    ...(error ? [error] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
+  // 4 / 2
+  console.log('Ap rendering')
+
+  if (loading) return <Spinner />
+
+  if (error) return <Error errors={[error]} />
 
   return (
     <SimpleBar
@@ -206,8 +190,8 @@ const ApAp = ({ treeName, id }) => {
               />
               <RadioButtonGroupWithInfo
                 name="bearbeitung"
-                dataSource={dataLists?.allApBearbstandWertes?.nodes ?? []}
-                loading={loadingLists}
+                dataSource={data?.allApBearbstandWertes?.nodes ?? []}
+                loading={loading}
                 popover={
                   <>
                     <LabelPopoverTitleRow data-id="info-icon-popover">
@@ -243,8 +227,8 @@ const ApAp = ({ treeName, id }) => {
               <FieldContainer>
                 <RadioButtonGroupWithInfo
                   name="umsetzung"
-                  dataSource={dataLists?.allApUmsetzungWertes?.nodes ?? []}
-                  loading={loadingLists}
+                  dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
+                  loading={loading}
                   popover={
                     <>
                       <LabelPopoverTitleRow data-id="info-icon-popover">
@@ -278,8 +262,8 @@ const ApAp = ({ treeName, id }) => {
               <Select
                 name="bearbeiter"
                 label="Verantwortlich"
-                options={dataAdresses?.allAdresses?.nodes ?? []}
-                loading={loadingAdresses}
+                options={data?.allAdresses?.nodes ?? []}
+                loading={loading}
                 handleSubmit={handleSubmit}
               />
               <ApUsers apId={row.id} />
