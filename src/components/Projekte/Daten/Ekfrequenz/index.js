@@ -16,9 +16,11 @@ import queryEkAbrechnungstypWertes from './queryEkAbrechnungstypWertes'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { ekfrequenz } from '../../../shared/fragments'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -26,14 +28,13 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const FieldsContainer = styled.div`
   overflow-y: auto;
 `
 const StyledForm = styled(Form)`
+  padding: 10px;
+`
+const FormContainer = styled.div`
   padding: 10px;
 `
 const KontrolljahrContainer = styled.div`
@@ -165,9 +166,8 @@ const Ekfrequenz = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
