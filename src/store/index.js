@@ -322,7 +322,7 @@ const myTypes = types
         return false
       }
       const tableFilter = self[treeName].dataFilter[table]
-      return Object.values(tableFilter).filter((v) => v || v === 0).length > 0
+      return Object.values(tableFilter).filter((v) => !!v || v === 0).length > 0
     },
     dataFilterTreeIsFiltered(treeName) {
       const tables = Object.keys(self[treeName].dataFilter).filter(

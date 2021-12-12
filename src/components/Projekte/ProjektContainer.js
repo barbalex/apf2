@@ -94,6 +94,8 @@ const ProjektContainer = ({
     activeNodeArray,
   } = store[treeName]
 
+  console.log('ProjektContainer, formHeight:', height)
+
   const showApberForAp =
     activeNodeArray.length === 7 &&
     activeNodeArray[4] === 'AP-Berichte' &&
@@ -112,6 +114,7 @@ const ProjektContainer = ({
   const tabs = [...tabsPassed].map((t) => t.replace('2', ''))
 
   const setDimensions = useCallback(() => {
+    console.log('ProjektContainer setting dimensions')
     setTreeWidth(treeEl?.current?.clientWidth ?? standardWidth)
     setFormWidth(datenEl?.current?.clientWidth ?? standardWidth)
     setFormHeight(containerEl?.current?.clientHeight ?? standardWidth)

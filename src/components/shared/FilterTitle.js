@@ -76,6 +76,13 @@ const FilterTitle = ({
     [dataFilterEmptyTree, treeName],
   )
 
+  // console.log('FilterTitle', {
+  //   existsTableFilter,
+  //   existsTreeFilter,
+  //   filteredApNr,
+  //   totalApNr,
+  // })
+
   return (
     <Container>
       <TitleRow>
