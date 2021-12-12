@@ -1,18 +1,15 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import TextField from '../../../shared/TextFieldFormik'
-import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
+import TextField from '../../../shared/TextField'
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { assozart } from '../../../shared/fragments'
@@ -28,7 +25,7 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   overflow-y: auto;
 `
-const StyledForm = styled(Form)`
+const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -42,6 +39,8 @@ const Assozart = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { activeNodeArray } = store[treeName]
+
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -69,71 +68,58 @@ const Assozart = ({ treeName }) => {
         : { taxArtName: { includesInsensitive: inputValue } }
       : { taxArtName: { isNull: false } }
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: store.user.name,
       }
       try {
         await client.mutate({
           mutation: gql`
-            mutation updateAssozart(
-              $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
-              $changedBy: String
-            ) {
-              updateAssozartById(
-                input: {
-                  id: $id
-                  assozartPatch: {
-                    ${changedField}: $${changedField}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                assozart {
-                  ...AssozartFields
-                  aeTaxonomyByAeId {
-                    id
-                    artname
-                  }
-                  apByApId {
-                    artId
-                    assozartsByApId {
-                      nodes {
-                        ...AssozartFields
+                mutation updateAssozart(
+                  $id: UUID!
+                  $${field}: ${fieldTypes[field]}
+                  $changedBy: String
+                ) {
+                  updateAssozartById(
+                    input: {
+                      id: $id
+                      assozartPatch: {
+                        ${field}: $${field}
+                        changedBy: $changedBy
+                      }
+                    }
+                  ) {
+                    assozart {
+                      ...AssozartFields
+                      aeTaxonomyByAeId {
+                        id
+                        artname
+                      }
+                      apByApId {
+                        artId
+                        assozartsByApId {
+                          nodes {
+                            ...AssozartFields
+                          }
+                        }
                       }
                     }
                   }
                 }
-              }
-            }
-            ${assozart}
-          `,
+                ${assozart}
+              `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateAssozartById: {
-              assozart: {
-                ...variables,
-                __typename: 'Assozart',
-              },
-              __typename: 'Assozart',
-            },
-          },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      setFieldErrors({})
     },
     [client, row, store.user.name],
   )
@@ -158,29 +144,28 @@ const Assozart = ({ treeName }) => {
               height: '100%',
             }}
           >
-            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-              {({ handleSubmit, dirty }) => (
-                <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <SelectLoadingOptions
-                    name="aeId"
-                    valueLabelPath="aeTaxonomyByAeId.taxArtName"
-                    label="Art"
-                    row={row}
-                    query={queryAeTaxonomies}
-                    filter={aeTaxonomiesfilter}
-                    queryNodesName="allAeTaxonomies"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="bemerkungen"
-                    label="Bemerkungen zur Assoziation"
-                    type="text"
-                    multiLine
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
-              )}
-            </Formik>
+            <FormContainer>
+              <SelectLoadingOptions
+                field="aeId"
+                valueLabelPath="aeTaxonomyByAeId.taxArtName"
+                label="Art"
+                row={row}
+                query={queryAeTaxonomies}
+                filter={aeTaxonomiesfilter}
+                queryNodesName="allAeTaxonomies"
+                value={row.aeId}
+                saveToDb={saveToDb}
+                error={fieldErrors.aeId}
+              />
+              <TextField
+                name="bemerkungen"
+                label="Bemerkungen zur Assoziation"
+                type="text"
+                value={row.bemerkungen}
+                saveToDb={saveToDb}
+                error={fieldErrors.bemerkungen}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>
