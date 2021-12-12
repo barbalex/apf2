@@ -13,19 +13,17 @@ import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { assozart } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
@@ -140,9 +138,8 @@ const Assozart = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
 
   return (
