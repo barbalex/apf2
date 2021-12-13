@@ -4,25 +4,25 @@ import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
-import TextField from '../../../shared/TextFieldFormik'
-import TextFieldWithInfo from '../../../shared/TextFieldWithInfoFormik'
-import Status from '../../../shared/StatusFormik'
-import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
+import TextField from '../../../shared/TextField'
+import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
+import Status from '../../../shared/Status'
+import Checkbox2States from '../../../shared/Checkbox2States'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import storeContext from '../../../../storeContext'
 import Coordinates from '../../../shared/Coordinates'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import { pop } from '../../../shared/fragments'
+import Spinner from '../../../shared/Spinner'
+
 import PopHistory from './History'
 
 const Container = styled.div`
@@ -30,10 +30,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const FormContainer = styled.div`
   padding: 10px;
@@ -62,6 +58,8 @@ const Pop = ({ treeName }) => {
   const client = useApolloClient()
   const { refetch, urlQuery, setUrlQuery } = store
   const { activeNodeArray } = store[treeName]
+
+  const [fieldErrors, setFieldErrors] = useState({})
 
   let id =
     activeNodeArray.length > 5
@@ -95,22 +93,14 @@ const Pop = ({ treeName }) => {
 
   const row = useMemo(() => data?.popById ?? {}, [data?.popById])
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
-      // when GeomPoint is changed, Coordinates takes over
-      // need to return
-      if (changedField === null) return
-
-      const value = values[changedField]
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: store.user.name,
       }
       try {
@@ -118,14 +108,14 @@ const Pop = ({ treeName }) => {
           mutation: gql`
             mutation updatePopForPop(
               $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
+              $${field}: ${fieldTypes[field]}
               $changedBy: String
             ) {
               updatePopById(
                 input: {
                   id: $id
                   popPatch: {
-                    ${changedField}: $${changedField}
+                    ${field}: $${field}
                     changedBy: $changedBy
                   }
                 }
@@ -138,30 +128,29 @@ const Pop = ({ treeName }) => {
             ${pop}
           `,
           variables,
-          // no optimistic responce as geomPoint
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
       // update pop on map
       if (
         (value &&
           row &&
-          ((changedField === 'lv95Y' && row.lv95X) ||
-            (changedField === 'lv95X' && row.lv95Y))) ||
-        (!value && (changedField === 'lv95Y' || changedField === 'lv95X'))
+          ((field === 'lv95Y' && row.lv95X) ||
+            (field === 'lv95X' && row.lv95Y))) ||
+        (!value && (field === 'lv95Y' || field === 'lv95X'))
       ) {
         if (refetch.popForMap) refetch.popForMap()
       }
-      setErrors({})
+      setFieldErrors({})
     },
     [client, refetch, row, store.user.name],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
+
   return (
     <ErrorBoundary>
       <Container>
@@ -191,53 +180,47 @@ const Pop = ({ treeName }) => {
                 }}
               >
                 <FormContainer>
-                  <Formik
-                    key={row.id}
-                    initialValues={row}
-                    onSubmit={onSubmit}
-                    enableReinitialize
-                  >
-                    {({ handleSubmit, dirty }) => (
-                      <Form onBlur={() => dirty && handleSubmit()}>
-                        <TextField
-                          label="Nr."
-                          name="nr"
-                          type="number"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextFieldWithInfo
-                          label="Name"
-                          name="name"
-                          type="text"
-                          popover="Dieses Feld möglichst immer ausfüllen"
-                          handleSubmit={handleSubmit}
-                        />
-                        <Status
-                          apJahr={row?.apByApId?.startJahr}
-                          treeName={treeName}
-                          showFilter={false}
-                          handleSubmit={handleSubmit}
-                        />
-                        <Checkbox2States
-                          label="Status unklar"
-                          name="statusUnklar"
-                          handleSubmit={handleSubmit}
-                        />
-                        <TextField
-                          label="Begründung"
-                          name="statusUnklarBegruendung"
-                          type="text"
-                          multiLine
-                          handleSubmit={handleSubmit}
-                        />
-                        <Coordinates
-                          row={row}
-                          refetchForm={refetchPop}
-                          table="pop"
-                        />
-                      </Form>
-                    )}
-                  </Formik>
+                  <TextField
+                    label="Nr."
+                    name="nr"
+                    type="number"
+                    value={row.nr}
+                    saveToDb={saveToDb}
+                    error={fieldErrors.nr}
+                  />
+                  <TextFieldWithInfo
+                    label="Name"
+                    name="name"
+                    type="text"
+                    popover="Dieses Feld möglichst immer ausfüllen"
+                    value={row.name}
+                    saveToDb={saveToDb}
+                    error={fieldErrors.name}
+                  />
+                  <Status
+                    apJahr={row?.apByApId?.startJahr}
+                    showFilter={false}
+                    row={row}
+                    saveToDb={saveToDb}
+                    error={fieldErrors}
+                  />
+                  <Checkbox2States
+                    label="Status unklar"
+                    name="statusUnklar"
+                    value={row.statusUnklar}
+                    saveToDb={saveToDb}
+                    error={fieldErrors.statusUnklar}
+                  />
+                  <TextField
+                    label="Begründung"
+                    name="statusUnklarBegruendung"
+                    type="text"
+                    multiLine
+                    value={row.statusUnklarBegruendung}
+                    saveToDb={saveToDb}
+                    error={fieldErrors.statusUnklarBegruendung}
+                  />
+                  <Coordinates row={row} refetchForm={refetchPop} table="pop" />
                 </FormContainer>
               </SimpleBar>
             )}

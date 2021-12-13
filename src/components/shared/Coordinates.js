@@ -83,17 +83,6 @@ const Coordinates = ({ row, refetchForm, table }) => {
         const mutationTitle = `update${upperFirst(table)}ByIdForCoordinates`
         const mutationName = `update${upperFirst(table)}ById`
         const patchName = `${table}Patch`
-        /*console.log('Coordinates, saveToDb', {
-          geomPoint,
-          table,
-          mutationName,
-          mutationTitle,
-          variables: {
-            id: row.id,
-            geomPoint,
-            changedBy: store.user.name,
-          },
-        })*/
         await client.mutate({
           mutation: gql`
             mutation ${mutationTitle}(
