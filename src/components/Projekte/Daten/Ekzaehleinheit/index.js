@@ -1,21 +1,20 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import TextField from '../../../shared/TextFieldFormik'
-import Select from '../../../shared/SelectFormik'
-import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
+import TextField from '../../../shared/TextField'
+import Select from '../../../shared/Select'
+import Checkbox2States from '../../../shared/Checkbox2States'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryLists from './queryLists'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 import {
   ekzaehleinheit,
   tpopkontrzaehlEinheitWerte,
@@ -27,14 +26,10 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const FieldsContainer = styled.div`
   overflow-y: auto;
 `
-const StyledForm = styled(Form)`
+const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -51,6 +46,8 @@ const Ekzaehleinheit = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { activeNodeArray } = store[treeName]
+
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -84,17 +81,14 @@ const Ekzaehleinheit = ({ treeName }) => {
     },
   })
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: store.user.name,
       }
       try {
@@ -102,14 +96,14 @@ const Ekzaehleinheit = ({ treeName }) => {
           mutation: gql`
             mutation updateEkzaehleinheit(
               $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
+              $${field}: ${fieldTypes[field]}
               $changedBy: String
             ) {
               updateEkzaehleinheitById(
                 input: {
                   id: $id
                   ekzaehleinheitPatch: {
-                    ${changedField}: $${changedField}
+                    ${field}: $${field}
                     changedBy: $changedBy
                   }
                 }
@@ -126,38 +120,27 @@ const Ekzaehleinheit = ({ treeName }) => {
             ${tpopkontrzaehlEinheitWerte}
           `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateEkzaehleinheitById: {
-              ekzaehleinheit: {
-                ...variables,
-                __typename: 'Ekzaehleinheit',
-              },
-              __typename: 'Ekzaehleinheit',
-            },
-          },
         })
       } catch (error) {
         if (
-          changedField === 'zielrelevant' &&
+          field === 'zielrelevant' &&
           (error.message.includes('doppelter Schlüsselwert') ||
             error.message.includes('duplicate key value'))
         ) {
-          return setErrors({
-            [changedField]:
-              'Pro Aktionsplan darf nur eine Einheit zielrelevant sein',
+          return setFieldErrors({
+            [field]: 'Pro Aktionsplan darf nur eine Einheit zielrelevant sein',
           })
         }
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      setFieldErrors({})
     },
     [client, row, store.user.name],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  console.log('Ekzaehleinheit rendering, loading:', loading)
+
+  if (loading) return <Spinner />
 
   const errors = [
     ...(error ? [error] : []),
@@ -181,46 +164,50 @@ const Ekzaehleinheit = ({ treeName }) => {
               height: '100%',
             }}
           >
-            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-              {({ handleSubmit, dirty }) => (
-                <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <Select
-                    name="zaehleinheitId"
-                    label="Zähleinheit"
-                    options={
-                      dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
-                    }
-                    loading={loadingLists}
-                    handleSubmit={handleSubmit}
-                  />
-                  <Checkbox2States
-                    name="zielrelevant"
-                    label="zielrelevant"
-                    handleSubmit={handleSubmit}
-                  />
-                  {row.zielrelevant && (
-                    <Checkbox2States
-                      name="notMassnCountUnit"
-                      label="Entspricht bewusst keiner Massnahmen-Zähleinheit ('Anzahl Pflanzen' oder 'Anzahl Triebe')"
-                      handleSubmit={handleSubmit}
-                    />
-                  )}
-                  <TextField
-                    name="sort"
-                    label="Sortierung"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="bemerkungen"
-                    label="Bemerkungen"
-                    type="text"
-                    multiLine
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
+            <FormContainer>
+              <Select
+                name="zaehleinheitId"
+                label="Zähleinheit"
+                options={dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
+                loading={loadingLists}
+                value={row.zaehleinheitId}
+                saveToDb={saveToDb}
+                error={fieldErrors.zaehleinheitId}
+              />
+              <Checkbox2States
+                name="zielrelevant"
+                label="zielrelevant"
+                value={row.zielrelevant}
+                saveToDb={saveToDb}
+                error={fieldErrors.zielrelevant}
+              />
+              {row.zielrelevant && (
+                <Checkbox2States
+                  name="notMassnCountUnit"
+                  label="Entspricht bewusst keiner Massnahmen-Zähleinheit ('Anzahl Pflanzen' oder 'Anzahl Triebe')"
+                  value={row.notMassnCountUnit}
+                  saveToDb={saveToDb}
+                  error={fieldErrors.notMassnCountUnit}
+                />
               )}
-            </Formik>
+              <TextField
+                name="sort"
+                label="Sortierung"
+                type="number"
+                value={row.sort}
+                saveToDb={saveToDb}
+                error={fieldErrors.sort}
+              />
+              <TextField
+                name="bemerkungen"
+                label="Bemerkungen"
+                type="text"
+                multiLine
+                value={row.bemerkungen}
+                saveToDb={saveToDb}
+                error={fieldErrors.bemerkungen}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>
