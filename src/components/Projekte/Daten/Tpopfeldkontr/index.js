@@ -5,22 +5,14 @@ import styled from 'styled-components'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroupFormik from '../../../shared/RadioButtonGroupFormik'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextFieldFormik from '../../../shared/TextFieldFormik'
 import TextField from '../../../shared/TextField'
-import MdFieldFormik from '../../../shared/MarkdownFieldFormik'
 import MdField from '../../../shared/MarkdownField'
-import SelectFormik from '../../../shared/SelectFormik'
 import Select from '../../../shared/Select'
-import JesNoFormik from '../../../shared/JesNoFormik'
 import JesNo from '../../../shared/JesNo'
-import RadioButtonGroupWithInfoFormik from '../../../shared/RadioButtonGroupWithInfoFormik'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
-import DateFieldFormik from '../../../shared/DateFormik'
 import DateField from '../../../shared/Date'
 import StringToCopy from '../../../shared/StringToCopy'
 import FilterTitle from '../../../shared/FilterTitle'
@@ -49,10 +41,6 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const FieldsContainer = styled.div`
   display: flex;
@@ -602,100 +590,104 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
               {tab === 'biotop' && (
                 <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
                   <FormContainer data-column-width={columnWidth}>
-                    <Formik
-                      initialValues={row}
-                      onSubmit={onSubmit}
-                      enableReinitialize
-                    >
-                      {({ handleSubmit, dirty }) => (
-                        <Form onBlur={() => dirty && handleSubmit()}>
-                          <TextField
-                            name="flaeche"
-                            label="Fläche"
-                            type="number"
-                            value={row.flaeche}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.flaeche}
-                          />
-                          <Section>Vegetation</Section>
-                          <Select
-                            data-id="lrDelarze"
-                            name="lrDelarze"
-                            label="Lebensraum nach Delarze"
-                            options={aeLrWerte}
-                            loading={loadingLists}
-                            value={row.lrDelarze}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.lrDelarze}
-                          />
-                          <Select
-                            name="lrUmgebungDelarze"
-                            label="Umgebung nach Delarze"
-                            options={aeLrWerte}
-                            loading={loadingLists}
-                            value={row.lrUmgebungDelarze}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.lrUmgebungDelarze}
-                          />
-                          <TextField
-                            name="vegetationstyp"
-                            label="Vegetationstyp"
-                            type="text"
-                            value={row.vegetationstyp}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.vegetationstyp}
-                          />
-                          <TextFieldFormik
-                            name="konkurrenz"
-                            label="Konkurrenz"
-                            type="text"
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="moosschicht"
-                            label="Moosschicht"
-                            type="text"
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="krautschicht"
-                            label="Krautschicht"
-                            type="text"
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="strauchschicht"
-                            label="Strauchschicht"
-                            type="text"
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="baumschicht"
-                            label="Baumschicht"
-                            type="text"
-                            handleSubmit={handleSubmit}
-                          />
-                          <Section>Beurteilung</Section>
-                          <TextFieldFormik
-                            name="handlungsbedarf"
-                            label="Handlungsbedarf"
-                            type="text"
-                            multiline
-                            handleSubmit={handleSubmit}
-                          />
-                          <RadioButtonGroupFormik
-                            name="idealbiotopUebereinstimmung"
-                            label="Übereinstimmung mit Idealbiotop"
-                            dataSource={
-                              dataLists?.allTpopkontrIdbiotuebereinstWertes
-                                ?.nodes ?? []
-                            }
-                            loading={loadingLists}
-                            handleSubmit={handleSubmit}
-                          />
-                        </Form>
-                      )}
-                    </Formik>
+                    <TextField
+                      name="flaeche"
+                      label="Fläche"
+                      type="number"
+                      value={row.flaeche}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.flaeche}
+                    />
+                    <Section>Vegetation</Section>
+                    <Select
+                      data-id="lrDelarze"
+                      name="lrDelarze"
+                      label="Lebensraum nach Delarze"
+                      options={aeLrWerte}
+                      loading={loadingLists}
+                      value={row.lrDelarze}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.lrDelarze}
+                    />
+                    <Select
+                      name="lrUmgebungDelarze"
+                      label="Umgebung nach Delarze"
+                      options={aeLrWerte}
+                      loading={loadingLists}
+                      value={row.lrUmgebungDelarze}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.lrUmgebungDelarze}
+                    />
+                    <TextField
+                      name="vegetationstyp"
+                      label="Vegetationstyp"
+                      type="text"
+                      value={row.vegetationstyp}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.vegetationstyp}
+                    />
+                    <TextField
+                      name="konkurrenz"
+                      label="Konkurrenz"
+                      type="text"
+                      value={row.konkurrenz}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.konkurrenz}
+                    />
+                    <TextField
+                      name="moosschicht"
+                      label="Moosschicht"
+                      type="text"
+                      value={row.moosschicht}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.moosschicht}
+                    />
+                    <TextField
+                      name="krautschicht"
+                      label="Krautschicht"
+                      type="text"
+                      value={row.krautschicht}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.krautschicht}
+                    />
+                    <TextField
+                      name="strauchschicht"
+                      label="Strauchschicht"
+                      type="text"
+                      value={row.strauchschicht}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.strauchschicht}
+                    />
+                    <TextField
+                      name="baumschicht"
+                      label="Baumschicht"
+                      type="text"
+                      value={row.baumschicht}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.baumschicht}
+                    />
+                    <Section>Beurteilung</Section>
+                    <TextField
+                      name="handlungsbedarf"
+                      label="Handlungsbedarf"
+                      type="text"
+                      multiline
+                      value={row.handlungsbedarf}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.handlungsbedarf}
+                    />
+                    <RadioButtonGroup
+                      name="idealbiotopUebereinstimmung"
+                      label="Übereinstimmung mit Idealbiotop"
+                      dataSource={
+                        dataLists?.allTpopkontrIdbiotuebereinstWertes?.nodes ??
+                        []
+                      }
+                      loading={loadingLists}
+                      value={row.idealbiotopUebereinstimmung}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.idealbiotopUebereinstimmung}
+                    />
                   </FormContainer>
                 </SimpleBar>
               )}
