@@ -3066,14 +3066,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@svgr/cli@npm:6.1.1":
-  version: 6.1.1
-  resolution: "@svgr/cli@npm:6.1.1"
+"@svgr/cli@npm:6.1.2":
+  version: 6.1.2
+  resolution: "@svgr/cli@npm:6.1.2"
   dependencies:
-    "@svgr/core": ^6.1.1
-    "@svgr/plugin-jsx": ^6.1.0
-    "@svgr/plugin-prettier": ^6.0.0
-    "@svgr/plugin-svgo": ^6.1.0
+    "@svgr/core": ^6.1.2
+    "@svgr/plugin-jsx": ^6.1.2
+    "@svgr/plugin-prettier": ^6.1.2
+    "@svgr/plugin-svgo": ^6.1.2
     camelcase: ^6.2.0
     chalk: ^4.1.2
     commander: ^8.2.0
@@ -3081,18 +3081,18 @@ __metadata:
     glob: ^7.1.7
   bin:
     svgr: bin/svgr
-  checksum: b5be829ece2eda4f46773cdc86a895c68dea8da2d0723c7ff066cdb1f0239190a4aefa01e22be6cc61af2f82bc7867b254ace33a17f2254558f50eeb6f8f701c
+  checksum: 2e1ff5a0484bd1608fe74dc74e76c8869a64a2aa117b58c609b4fee7b487461b42c29b452957495b6c217e57725b1495ac683266977c59a1717db25502891ff3
   languageName: node
   linkType: hard
 
-"@svgr/core@npm:^6.1.1":
-  version: 6.1.1
-  resolution: "@svgr/core@npm:6.1.1"
+"@svgr/core@npm:^6.1.2":
+  version: 6.1.2
+  resolution: "@svgr/core@npm:6.1.2"
   dependencies:
-    "@svgr/plugin-jsx": ^6.1.0
+    "@svgr/plugin-jsx": ^6.1.2
     camelcase: ^6.2.0
     cosmiconfig: ^7.0.1
-  checksum: c66837ce2e5263efc2758fc436d7512d8577c56e8c8a2ec081de13d70c11ac34169f4ddd6f76def0e4a897acf2bc94ac61e7ecbcc2993e45e55dd835753e7497
+  checksum: 8169eb05c58b8c4b9bdc2937c3d4e238e3b35457ae1ea43db09b4e1bcf4c22a6f09c7de6f7a46df5a927726753a7cbf2b6ac64ffe8c0f21b8816cc9f97cd4f52
   languageName: node
   linkType: hard
 
@@ -3106,42 +3106,42 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@svgr/plugin-jsx@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "@svgr/plugin-jsx@npm:6.1.0"
+"@svgr/plugin-jsx@npm:^6.1.2":
+  version: 6.1.2
+  resolution: "@svgr/plugin-jsx@npm:6.1.2"
   dependencies:
     "@babel/core": ^7.15.5
     "@svgr/babel-preset": ^6.1.0
     "@svgr/hast-util-to-babel-ast": ^6.0.0
     svg-parser: ^2.0.2
   peerDependencies:
-    "@svgr/core": ^6.0.0-alpha.0
-  checksum: b2bacecc083c7b9bec2dcf6d3aa23bbb9f0ef85d54b03a30515b273ec833e21cbcea6735ee063b14bfbdafc9a162949cd3dc0c407b7d0eb43b199715b54b9373
+    "@svgr/core": ^6.0.0
+  checksum: a02c2c5f6d72bd8526b41b213757e742218651e290835bc33e27e9057857fd6258149206cb64075c8a005e49dee5a721d4f1fb97f71569df20b76f971d98e44f
   languageName: node
   linkType: hard
 
-"@svgr/plugin-prettier@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@svgr/plugin-prettier@npm:6.0.0"
+"@svgr/plugin-prettier@npm:^6.1.2":
+  version: 6.1.2
+  resolution: "@svgr/plugin-prettier@npm:6.1.2"
   dependencies:
     deepmerge: ^4.2.2
     prettier: ^2.4.0
   peerDependencies:
-    "@svgr/core": ^6.0.0-alpha.0
-  checksum: e5adf6317ab60cec1030529f15e57e2a5f2d5a6c2135c0c53c09f263e9fe3ef71ae6d45788960c0ae90728bb265ad6a0c761166eb29f6c5fe747acc27540b213
+    "@svgr/core": ^6.0.0
+  checksum: 195f1823659e7c82f50bdf8c6c3d77081f4ebb9d2eb78d2e02361a9e34e8067bd6fac3120ce707369471907c1814e69f6fccc1420703d5e223014a1576611b89
   languageName: node
   linkType: hard
 
-"@svgr/plugin-svgo@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "@svgr/plugin-svgo@npm:6.1.0"
+"@svgr/plugin-svgo@npm:^6.1.2":
+  version: 6.1.2
+  resolution: "@svgr/plugin-svgo@npm:6.1.2"
   dependencies:
     cosmiconfig: ^7.0.1
     deepmerge: ^4.2.2
     svgo: ^2.5.0
   peerDependencies:
-    "@svgr/core": ^6.0.0-alpha.0
-  checksum: bad7d3b634db0c55959f460a73c117653b3029b5905e5a5f199a7ef34f097cf00096ff7559a7dd3046aeab0245e631c40595824a1015915c27a27fd0b1e3f92e
+    "@svgr/core": ^6.0.0
+  checksum: b8c83d8f787dddf82dffa2654401acc336de02edda6334a125fdb5d60b23b85d551a82a701aadcf090c2fd7dd3f2cf78cf4a7deaa5f3edc35cce7f147cd7279c
   languageName: node
   linkType: hard
 
@@ -4493,7 +4493,7 @@ __metadata:
     "@mui/styled-engine-sc": 5.1.0
     "@mui/styles": 5.2.3
     "@reach/router": 1.3.4
-    "@svgr/cli": 6.1.1
+    "@svgr/cli": 6.1.2
     "@turf/bbox-polygon": 6.5.0
     "@turf/boolean-point-in-polygon": 6.5.0
     "@turf/helpers": 6.5.0
@@ -4556,7 +4556,7 @@ __metadata:
     leaflet.markercluster: 1.5.3
     localforage: 1.10.0
     lodash: 4.17.21
-    luxon: 2.1.1
+    luxon: 2.2.0
     markdown-it: 12.3.0
     mobx: 6.3.8
     mobx-react-lite: 3.2.2
@@ -13342,10 +13342,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:2.1.1":
-  version: 2.1.1
-  resolution: "luxon@npm:2.1.1"
-  checksum: 6d562796c4df195988f2afdca733e5a36457d6449c196cbf16710c706fde8d6b96c7d47fa54cd37c0cb29e4d2e7d8628a9677f36e23490139a8c90232f489e02
+"luxon@npm:2.2.0":
+  version: 2.2.0
+  resolution: "luxon@npm:2.2.0"
+  checksum: 69c715529b6aaa1f96fad8edfe2681004a1f314191ac243804a90c023fc533b5e3f0b9d34d5c86555d2a41297ddbee96a67a7cbb185f20243e66b7c6d4b809ac
   languageName: node
   linkType: hard
 
