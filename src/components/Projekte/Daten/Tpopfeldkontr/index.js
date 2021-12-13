@@ -8,13 +8,20 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
-import TextField from '../../../shared/TextFieldFormik'
-import MdField from '../../../shared/MarkdownFieldFormik'
-import Select from '../../../shared/SelectFormik'
+import RadioButtonGroupFormik from '../../../shared/RadioButtonGroupFormik'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import TextFieldFormik from '../../../shared/TextFieldFormik'
+import TextField from '../../../shared/TextField'
+import MdFieldFormik from '../../../shared/MarkdownFieldFormik'
+import MdField from '../../../shared/MarkdownField'
+import SelectFormik from '../../../shared/SelectFormik'
+import Select from '../../../shared/Select'
 import JesNoFormik from '../../../shared/JesNoFormik'
-import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'
-import DateField from '../../../shared/DateFormik'
+import JesNo from '../../../shared/JesNo'
+import RadioButtonGroupWithInfoFormik from '../../../shared/RadioButtonGroupWithInfoFormik'
+import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
+import DateFieldFormik from '../../../shared/DateFormik'
+import DateField from '../../../shared/Date'
 import StringToCopy from '../../../shared/StringToCopy'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from '../../../shared/FormTitle'
@@ -30,9 +37,11 @@ import { simpleTypes as tpopfeldkontrType } from '../../../../store/Tree/DataFil
 import Files from '../../../shared/Files'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import { tpopfeldkontr } from '../../../shared/fragments'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -140,6 +149,8 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   const { activeNodeArray, dataFilter, formWidth, filterWidth } =
     store[treeName]
 
+  const [fieldErrors, setFieldErrors] = useState({})
+
   let id =
     activeNodeArray.length > 9
       ? activeNodeArray[9]
@@ -240,6 +251,73 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     row = data?.tpopkontrById ?? {}
   }
 
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+
+      if (showFilter) {
+        dataFilterSetValue({
+          treeName,
+          table: 'tpopfeldkontr',
+          key: field,
+          value,
+        })
+        return
+      }
+
+      const variables = {
+        id: row.id,
+        [field]: value,
+        changedBy: store.user.name,
+      }
+      if (field === 'jahr') {
+        variables.datum = null
+      }
+      if (field === 'datum') {
+        // value can be null so check if substring method exists
+        const newJahr =
+          value && value.substring ? +value.substring(0, 4) : value
+        variables.jahr = newJahr
+      }
+      try {
+        await client.mutate({
+          mutation: gql`
+              mutation updateTpopkontrForEk(
+                $id: UUID!
+                $${field}: ${fieldTypes[field]}
+                ${field === 'jahr' ? '$datum: Date' : ''}
+                ${field === 'datum' ? '$jahr: Int' : ''}
+                $changedBy: String
+              ) {
+                updateTpopkontrById(
+                  input: {
+                    id: $id
+                    tpopkontrPatch: {
+                      ${field}: $${field}
+                      ${field === 'jahr' ? 'datum: $datum' : ''}
+                      ${field === 'datum' ? 'jahr: $jahr' : ''}
+                      changedBy: $changedBy
+                    }
+                  }
+                ) {
+                  tpopkontr {
+                    ...TpopfeldkontrFields
+                  }
+                }
+              }
+              ${tpopfeldkontr}
+            `,
+          variables,
+        })
+      } catch (error) {
+        return setFieldErrors({ [field]: error.message })
+      }
+      setFieldErrors({})
+    },
+    [client, dataFilterSetValue, row, showFilter, store.user.name, treeName],
+  )
+
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
@@ -329,9 +407,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
 
   const errors = [
     ...(error ? [error] : []),
@@ -391,24 +467,24 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     >
                       {({ handleSubmit, dirty }) => (
                         <Form onBlur={() => dirty && handleSubmit()}>
-                          <TextField
+                          <TextFieldFormik
                             name="jahr"
                             label="Jahr"
                             type="number"
                             handleSubmit={handleSubmit}
                           />
-                          <DateField
+                          <DateFieldFormik
                             name="datum"
                             label="Datum"
                             handleSubmit={handleSubmit}
                           />
-                          <RadioButtonGroup
+                          <RadioButtonGroupFormik
                             name="typ"
                             label="Kontrolltyp"
                             dataSource={tpopkontrTypWerte}
                             handleSubmit={handleSubmit}
                           />
-                          <Select
+                          <SelectFormik
                             name="bearbeiter"
                             label="BearbeiterIn"
                             options={dataAdresses?.allAdresses?.nodes ?? []}
@@ -420,19 +496,19 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                             label="Jungpflanzen vorhanden"
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="vitalitaet"
                             label="Vitalität"
                             type="text"
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="ueberlebensrate"
                             label="Überlebensrate (in Prozent)"
                             type="number"
                             handleSubmit={handleSubmit}
                           />
-                          <RadioButtonGroupWithInfo
+                          <RadioButtonGroupWithInfoFormik
                             name="entwicklung"
                             label="Entwicklung"
                             dataSource={
@@ -442,7 +518,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                             popover={TpopfeldkontrentwicklungPopover}
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="ursachen"
                             label="Ursachen"
                             hintText="Standort: ..., Klima: ..., anderes: ..."
@@ -450,41 +526,44 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="gefaehrdung"
                             label="Gefährdung"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="erfolgsbeurteilung"
                             label="Erfolgsbeurteilung"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="umsetzungAendern"
                             label="Änderungs-Vorschläge Umsetzung"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="kontrolleAendern"
                             label="Änderungs-Vorschläge Kontrolle"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <MdField name="bemerkungen" label="Bemerkungen" />
+                          <MdFieldFormik
+                            name="bemerkungen"
+                            label="Bemerkungen"
+                          />
                           <JesNoFormik
                             name="apberNichtRelevant"
                             label="Im Jahresbericht nicht berücksichtigen"
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="apberNichtRelevantGrund"
                             label="Wieso im Jahresbericht nicht berücksichtigen?"
                             type="text"
@@ -510,14 +589,14 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     >
                       {({ handleSubmit, dirty }) => (
                         <Form onBlur={() => dirty && handleSubmit()}>
-                          <TextField
+                          <TextFieldFormik
                             name="flaeche"
                             label="Fläche"
                             type="number"
                             handleSubmit={handleSubmit}
                           />
                           <Section>Vegetation</Section>
-                          <Select
+                          <SelectFormik
                             data-id="lrDelarze"
                             name="lrDelarze"
                             label="Lebensraum nach Delarze"
@@ -525,58 +604,58 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                             loading={loadingLists}
                             handleSubmit={handleSubmit}
                           />
-                          <Select
+                          <SelectFormik
                             name="lrUmgebungDelarze"
                             label="Umgebung nach Delarze"
                             options={aeLrWerte}
                             loading={loadingLists}
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="vegetationstyp"
                             label="Vegetationstyp"
                             type="text"
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="konkurrenz"
                             label="Konkurrenz"
                             type="text"
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="moosschicht"
                             label="Moosschicht"
                             type="text"
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="krautschicht"
                             label="Krautschicht"
                             type="text"
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="strauchschicht"
                             label="Strauchschicht"
                             type="text"
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="baumschicht"
                             label="Baumschicht"
                             type="text"
                             handleSubmit={handleSubmit}
                           />
                           <Section>Beurteilung</Section>
-                          <TextField
+                          <TextFieldFormik
                             name="handlungsbedarf"
                             label="Handlungsbedarf"
                             type="text"
                             multiline
                             handleSubmit={handleSubmit}
                           />
-                          <RadioButtonGroup
+                          <RadioButtonGroupFormik
                             name="idealbiotopUebereinstimmung"
                             label="Übereinstimmung mit Idealbiotop"
                             dataSource={
