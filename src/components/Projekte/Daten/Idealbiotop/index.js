@@ -7,8 +7,10 @@ import Tab from '@mui/material/Tab'
 import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import TextField from '../../../shared/TextFieldFormik'
-import DateField from '../../../shared/DateFormik'
+import TextFieldFormik from '../../../shared/TextFieldFormik'
+import TextField from '../../../shared/TextField'
+import DateFieldFormik from '../../../shared/DateFormik'
+import DateField from '../../../shared/Date'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
 import query from './query'
@@ -17,9 +19,11 @@ import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import { idealbiotop } from '../../../shared/fragments'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -92,6 +96,8 @@ const Idealbiotop = ({ treeName }) => {
   const { urlQuery, setUrlQuery } = store
   const client = useApolloClient()
 
+  const [fieldErrors, setFieldErrors] = useState({})
+
   const [tab, setTab] = useState(urlQuery?.idealbiotopTab ?? 'idealbiotop')
   const { activeNodeArray, formWidth: width } = store[treeName]
 
@@ -107,6 +113,50 @@ const Idealbiotop = ({ treeName }) => {
   const row = useMemo(
     () => data?.allIdealbiotops?.nodes?.[0] ?? {},
     [data?.allIdealbiotops?.nodes],
+  )
+
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+
+      const variables = {
+        id: row.id,
+        [field]: value,
+        changedBy: store.user.name,
+      }
+      try {
+        await client.mutate({
+          mutation: gql`
+            mutation updateIdealbiotop(
+              $id: UUID!
+              $${field}: ${fieldTypes[field]}
+              $changedBy: String
+            ) {
+              updateIdealbiotopById(
+                input: {
+                  id: $id
+                  idealbiotopPatch: {
+                    ${field}: $${field}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                idealbiotop {
+                  ...IdealbiotopFields
+                }
+              }
+            }
+            ${idealbiotop}
+          `,
+          variables,
+        })
+      } catch (error) {
+        return setFieldErrors({ [field]: error.message })
+      }
+      setFieldErrors({})
+    },
+    [client, row, store.user.name],
   )
 
   const onSubmit = useCallback(
@@ -178,10 +228,10 @@ const Idealbiotop = ({ treeName }) => {
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
+
   return (
     <ErrorBoundary>
       <Container>
@@ -221,7 +271,9 @@ const Idealbiotop = ({ treeName }) => {
                           <DateField
                             name="erstelldatum"
                             label="Erstelldatum"
-                            handleSubmit={handleSubmit}
+                            value={row.erstelldatum}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.erstelldatum}
                           />
                           <Section>Lage</Section>
                           <TextField
@@ -229,30 +281,38 @@ const Idealbiotop = ({ treeName }) => {
                             label="Höhe"
                             type="text"
                             multiLine
-                            handleSubmit={handleSubmit}
+                            value={row.hoehenlage}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.hoehenlage}
                           />
                           <TextField
                             name="region"
                             label="Region"
                             type="text"
                             multiLine
-                            handleSubmit={handleSubmit}
+                            value={row.region}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.region}
                           />
                           <TextField
                             name="exposition"
                             label="Exposition"
                             type="text"
                             multiLine
-                            handleSubmit={handleSubmit}
+                            value={row.exposition}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.exposition}
                           />
                           <TextField
                             name="besonnung"
                             label="Besonnung"
                             type="text"
                             multiLine
-                            handleSubmit={handleSubmit}
+                            value={row.besonnung}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.besonnung}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="hangneigung"
                             label="Hangneigung"
                             type="text"
@@ -260,42 +320,42 @@ const Idealbiotop = ({ treeName }) => {
                             handleSubmit={handleSubmit}
                           />
                           <Section>Boden</Section>
-                          <TextField
+                          <TextFieldFormik
                             name="bodenTyp"
                             label="Typ"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="bodenKalkgehalt"
                             label="Kalkgehalt"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="bodenDurchlaessigkeit"
                             label="Durchlässigkeit"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="bodenHumus"
                             label="Humus"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="bodenNaehrstoffgehalt"
                             label="Nährstoffgehalt"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="wasserhaushalt"
                             label="Wasserhaushalt"
                             type="text"
@@ -303,42 +363,42 @@ const Idealbiotop = ({ treeName }) => {
                             handleSubmit={handleSubmit}
                           />
                           <Section>Vegetation</Section>
-                          <TextField
+                          <TextFieldFormik
                             name="konkurrenz"
                             label="Konkurrenz"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="moosschicht"
                             label="Moosschicht"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="krautschicht"
                             label="Krautschicht"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="strauchschicht"
                             label="Strauchschicht"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="baumschicht"
                             label="Baumschicht"
                             type="text"
                             multiLine
                             handleSubmit={handleSubmit}
                           />
-                          <TextField
+                          <TextFieldFormik
                             name="bemerkungen"
                             label="Bemerkungen"
                             type="text"
