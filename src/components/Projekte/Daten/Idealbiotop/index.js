@@ -4,12 +4,9 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import TextFieldFormik from '../../../shared/TextFieldFormik'
 import TextField from '../../../shared/TextField'
-import DateFieldFormik from '../../../shared/DateFormik'
 import DateField from '../../../shared/Date'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
@@ -17,8 +14,6 @@ import query from './query'
 import storeContext from '../../../../storeContext'
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
@@ -29,10 +24,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const FieldsContainer = styled.div`
   display: flex;
@@ -159,59 +150,6 @@ const Idealbiotop = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
-
-      const variables = {
-        ...objectsEmptyValuesToNull(values),
-        changedBy: store.user.name,
-      }
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation updateIdealbiotop(
-              $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
-              $changedBy: String
-            ) {
-              updateIdealbiotopById(
-                input: {
-                  id: $id
-                  idealbiotopPatch: {
-                    ${changedField}: $${changedField}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                idealbiotop {
-                  ...IdealbiotopFields
-                }
-              }
-            }
-            ${idealbiotop}
-          `,
-          variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateIdealbiotopById: {
-              idealbiotop: { ...variables, __typename: 'Idealbiotop' },
-              __typename: 'Idealbiotop',
-            },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [changedField]: error.message })
-      }
-      setErrors({})
-    },
-    [client, row, store.user.name],
-  )
   const onChangeTab = useCallback(
     (event, value) => {
       setUrlQueryValue({
@@ -261,153 +199,169 @@ const Idealbiotop = ({ treeName }) => {
               <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
                 {tab === 'idealbiotop' && (
                   <FormContainer data-column-width={columnWidth}>
-                    <Formik
-                      initialValues={row}
-                      onSubmit={onSubmit}
-                      enableReinitialize
-                    >
-                      {({ handleSubmit, dirty }) => (
-                        <Form onBlur={() => dirty && handleSubmit()}>
-                          <DateField
-                            name="erstelldatum"
-                            label="Erstelldatum"
-                            value={row.erstelldatum}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.erstelldatum}
-                          />
-                          <Section>Lage</Section>
-                          <TextField
-                            name="hoehenlage"
-                            label="Höhe"
-                            type="text"
-                            multiLine
-                            value={row.hoehenlage}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.hoehenlage}
-                          />
-                          <TextField
-                            name="region"
-                            label="Region"
-                            type="text"
-                            multiLine
-                            value={row.region}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.region}
-                          />
-                          <TextField
-                            name="exposition"
-                            label="Exposition"
-                            type="text"
-                            multiLine
-                            value={row.exposition}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.exposition}
-                          />
-                          <TextField
-                            name="besonnung"
-                            label="Besonnung"
-                            type="text"
-                            multiLine
-                            value={row.besonnung}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.besonnung}
-                          />
-                          <TextFieldFormik
-                            name="hangneigung"
-                            label="Hangneigung"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <Section>Boden</Section>
-                          <TextFieldFormik
-                            name="bodenTyp"
-                            label="Typ"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="bodenKalkgehalt"
-                            label="Kalkgehalt"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="bodenDurchlaessigkeit"
-                            label="Durchlässigkeit"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="bodenHumus"
-                            label="Humus"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="bodenNaehrstoffgehalt"
-                            label="Nährstoffgehalt"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="wasserhaushalt"
-                            label="Wasserhaushalt"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <Section>Vegetation</Section>
-                          <TextFieldFormik
-                            name="konkurrenz"
-                            label="Konkurrenz"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="moosschicht"
-                            label="Moosschicht"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="krautschicht"
-                            label="Krautschicht"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="strauchschicht"
-                            label="Strauchschicht"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="baumschicht"
-                            label="Baumschicht"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="bemerkungen"
-                            label="Bemerkungen"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                        </Form>
-                      )}
-                    </Formik>
+                    <DateField
+                      name="erstelldatum"
+                      label="Erstelldatum"
+                      value={row.erstelldatum}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.erstelldatum}
+                    />
+                    <Section>Lage</Section>
+                    <TextField
+                      name="hoehenlage"
+                      label="Höhe"
+                      type="text"
+                      multiLine
+                      value={row.hoehenlage}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.hoehenlage}
+                    />
+                    <TextField
+                      name="region"
+                      label="Region"
+                      type="text"
+                      multiLine
+                      value={row.region}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.region}
+                    />
+                    <TextField
+                      name="exposition"
+                      label="Exposition"
+                      type="text"
+                      multiLine
+                      value={row.exposition}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.exposition}
+                    />
+                    <TextField
+                      name="besonnung"
+                      label="Besonnung"
+                      type="text"
+                      multiLine
+                      value={row.besonnung}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.besonnung}
+                    />
+                    <TextField
+                      name="hangneigung"
+                      label="Hangneigung"
+                      type="text"
+                      multiLine
+                      value={row.hangneigung}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.hangneigung}
+                    />
+                    <Section>Boden</Section>
+                    <TextField
+                      name="bodenTyp"
+                      label="Typ"
+                      type="text"
+                      multiLine
+                      value={row.bodenTyp}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.bodenTyp}
+                    />
+                    <TextField
+                      name="bodenKalkgehalt"
+                      label="Kalkgehalt"
+                      type="text"
+                      multiLine
+                      value={row.bodenKalkgehalt}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.bodenKalkgehalt}
+                    />
+                    <TextField
+                      name="bodenDurchlaessigkeit"
+                      label="Durchlässigkeit"
+                      type="text"
+                      multiLine
+                      value={row.bodenDurchlaessigkeit}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.bodenDurchlaessigkeit}
+                    />
+                    <TextField
+                      name="bodenHumus"
+                      label="Humus"
+                      type="text"
+                      multiLine
+                      value={row.bodenHumus}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.bodenHumus}
+                    />
+                    <TextField
+                      name="bodenNaehrstoffgehalt"
+                      label="Nährstoffgehalt"
+                      type="text"
+                      multiLine
+                      value={row.bodenNaehrstoffgehalt}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.bodenNaehrstoffgehalt}
+                    />
+                    <TextField
+                      name="wasserhaushalt"
+                      label="Wasserhaushalt"
+                      type="text"
+                      multiLine
+                      value={row.wasserhaushalt}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.wasserhaushalt}
+                    />
+                    <Section>Vegetation</Section>
+                    <TextField
+                      name="konkurrenz"
+                      label="Konkurrenz"
+                      type="text"
+                      multiLine
+                      value={row.konkurrenz}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.konkurrenz}
+                    />
+                    <TextField
+                      name="moosschicht"
+                      label="Moosschicht"
+                      type="text"
+                      multiLine
+                      value={row.moosschicht}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.moosschicht}
+                    />
+                    <TextField
+                      name="krautschicht"
+                      label="Krautschicht"
+                      type="text"
+                      multiLine
+                      value={row.krautschicht}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.krautschicht}
+                    />
+                    <TextField
+                      name="strauchschicht"
+                      label="Strauchschicht"
+                      type="text"
+                      multiLine
+                      value={row.strauchschicht}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.strauchschicht}
+                    />
+                    <TextField
+                      name="baumschicht"
+                      label="Baumschicht"
+                      type="text"
+                      multiLine
+                      value={row.baumschicht}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.baumschicht}
+                    />
+                    <TextField
+                      name="bemerkungen"
+                      label="Bemerkungen"
+                      type="text"
+                      multiLine
+                      value={row.bemerkungen}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.bemerkungen}
+                    />
                   </FormContainer>
                 )}
                 {tab === 'dateien' && (
