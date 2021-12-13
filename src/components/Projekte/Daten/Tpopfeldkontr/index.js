@@ -20,15 +20,11 @@ import FormTitle from '../../../shared/FormTitle'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
 import query from './query'
-import queryLists from './queryLists'
-import queryAdresses from './queryAdresses'
 import queryTpopkontrs from './queryTpopkontrs'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopfeldkontrType } from '../../../../store/Tree/DataFilter/tpopfeldkontr'
 import Files from '../../../shared/Files'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
@@ -187,18 +183,6 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     },
   })
 
-  const {
-    data: dataAdresses,
-    loading: loadingAdresses,
-    error: errorAdresses,
-  } = useQuery(queryAdresses)
-
-  const {
-    data: dataLists,
-    loading: loadingLists,
-    error: errorLists,
-  } = useQuery(queryLists)
-
   const [tab, setTab] = useState(urlQuery?.feldkontrTab ?? 'entwicklung')
   const onChangeTab = useCallback(
     (event, value) => {
@@ -306,87 +290,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     [client, dataFilterSetValue, row, showFilter, store.user.name, treeName],
   )
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
-
-      const value = values[changedField]
-      if (showFilter) {
-        dataFilterSetValue({
-          treeName,
-          table: 'tpopfeldkontr',
-          key: changedField,
-          value,
-        })
-      } else {
-        const variables = {
-          ...objectsEmptyValuesToNull(values),
-          changedBy: store.user.name,
-        }
-        if (changedField === 'jahr') {
-          variables.datum = null
-        }
-        if (changedField === 'datum') {
-          // value can be null so check if substring method exists
-          const newJahr =
-            value && value.substring ? +value.substring(0, 4) : value
-          variables.jahr = newJahr
-        }
-        try {
-          await client.mutate({
-            mutation: gql`
-              mutation updateTpopkontrForEk(
-                $id: UUID!
-                $${changedField}: ${fieldTypes[changedField]}
-                ${changedField === 'jahr' ? '$datum: Date' : ''}
-                ${changedField === 'datum' ? '$jahr: Int' : ''}
-                $changedBy: String
-              ) {
-                updateTpopkontrById(
-                  input: {
-                    id: $id
-                    tpopkontrPatch: {
-                      ${changedField}: $${changedField}
-                      ${changedField === 'jahr' ? 'datum: $datum' : ''}
-                      ${changedField === 'datum' ? 'jahr: $jahr' : ''}
-                      changedBy: $changedBy
-                    }
-                  }
-                ) {
-                  tpopkontr {
-                    ...TpopfeldkontrFields
-                  }
-                }
-              }
-              ${tpopfeldkontr}
-            `,
-            variables,
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updateTpopkontrById: {
-                tpopkontr: {
-                  ...variables,
-                  __typename: 'Tpopkontr',
-                },
-                __typename: 'Tpopkontr',
-              },
-            },
-          })
-        } catch (error) {
-          return setErrors({ [changedField]: error.message })
-        }
-        setErrors({})
-      }
-    },
-    [client, dataFilterSetValue, row, showFilter, store.user.name, treeName],
-  )
-
-  const aeLrWerte = (dataLists?.allAeLrDelarzes?.nodes ?? [])
+  const aeLrWerte = (data?.allAeLrDelarzes?.nodes ?? [])
     .map(
       (e) => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`,
     )
@@ -397,12 +301,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
 
   if (loading) return <Spinner />
 
-  const errors = [
-    ...(error ? [error] : []),
-    ...(errorLists ? [errorLists] : []),
-    ...(errorAdresses ? [errorAdresses] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
+  if (error) return <Error errors={[error]} />
 
   return (
     <ErrorBoundary>
@@ -473,8 +372,8 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     <Select
                       name="bearbeiter"
                       label="BearbeiterIn"
-                      options={dataAdresses?.allAdresses?.nodes ?? []}
-                      loading={loadingAdresses}
+                      options={data?.allAdresses?.nodes ?? []}
+                      loading={loading}
                       value={row.bearbeiter}
                       saveToDb={saveToDb}
                       error={fieldErrors.bearbeiter}
@@ -505,10 +404,8 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     <RadioButtonGroupWithInfo
                       name="entwicklung"
                       label="Entwicklung"
-                      dataSource={
-                        dataLists?.allTpopEntwicklungWertes?.nodes ?? []
-                      }
-                      loading={loadingLists}
+                      dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
+                      loading={loading}
                       popover={TpopfeldkontrentwicklungPopover}
                       value={row.entwicklung}
                       saveToDb={saveToDb}
@@ -604,7 +501,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       name="lrDelarze"
                       label="Lebensraum nach Delarze"
                       options={aeLrWerte}
-                      loading={loadingLists}
+                      loading={loading}
                       value={row.lrDelarze}
                       saveToDb={saveToDb}
                       error={fieldErrors.lrDelarze}
@@ -613,7 +510,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       name="lrUmgebungDelarze"
                       label="Umgebung nach Delarze"
                       options={aeLrWerte}
-                      loading={loadingLists}
+                      loading={loading}
                       value={row.lrUmgebungDelarze}
                       saveToDb={saveToDb}
                       error={fieldErrors.lrUmgebungDelarze}
@@ -680,10 +577,9 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       name="idealbiotopUebereinstimmung"
                       label="Übereinstimmung mit Idealbiotop"
                       dataSource={
-                        dataLists?.allTpopkontrIdbiotuebereinstWertes?.nodes ??
-                        []
+                        data?.allTpopkontrIdbiotuebereinstWertes?.nodes ?? []
                       }
-                      loading={loadingLists}
+                      loading={loading}
                       value={row.idealbiotopUebereinstimmung}
                       saveToDb={saveToDb}
                       error={fieldErrors.idealbiotopUebereinstimmung}
