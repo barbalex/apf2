@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Input from '@mui/material/Input'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
 
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -13,32 +12,25 @@ const StyledInput = styled(Input)`
   }
 `
 
-const KontrolljahrField = ({
+const KontrolljahrFieldEmpty = ({
   saveToDb,
   name = 'kontrolljahre',
-  index,
   kontrolljahre,
   refetch,
 }) => {
-  const [value, setValue] = useState(kontrolljahre[index])
-  useEffect(() => {
-    setValue(kontrolljahre[index])
-  }, [index, kontrolljahre])
+  const [value, setValue] = useState('')
 
-  const onChange = useCallback((event) => {
-    setValue(ifIsNumericAsNumber(event.target.value))
-  }, [])
+  const onChange = useCallback(
+    (event) => setValue(ifIsNumericAsNumber(event.target.value)),
+    [],
+  )
 
   const onBlur = useCallback(async () => {
-    const newVal = [...kontrolljahre]
-    if (value || value === 0) {
-      newVal[index] = value
-    } else {
-      newVal.splice(index, 1)
-    }
+    if (value === '') return
+    const newVal = [...kontrolljahre, value]
     await saveToDb({ target: { name, value: newVal } })
     refetch()
-  }, [kontrolljahre, value, saveToDb, name, refetch, index])
+  }, [value, kontrolljahre, saveToDb, name, refetch])
 
   const onKeyDown = useCallback((e) => e.key === 'Enter' && onBlur(), [onBlur])
 
@@ -49,8 +41,9 @@ const KontrolljahrField = ({
       onChange={onChange}
       onBlur={onBlur}
       onKeyDown={onKeyDown}
+      autoFocus={true}
     />
   )
 }
 
-export default observer(KontrolljahrField)
+export default KontrolljahrFieldEmpty

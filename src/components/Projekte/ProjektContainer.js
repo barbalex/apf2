@@ -94,7 +94,7 @@ const ProjektContainer = ({
     activeNodeArray,
   } = store[treeName]
 
-  console.log('ProjektContainer, formHeight:', height)
+  //console.log('ProjektContainer, formHeight:', height)
 
   const showApberForAp =
     activeNodeArray.length === 7 &&

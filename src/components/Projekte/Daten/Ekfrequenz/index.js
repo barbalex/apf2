@@ -1,21 +1,16 @@
-import React, { useCallback, useContext, useMemo } from 'react'
-import { FaPlus, FaTimes } from 'react-icons/fa'
-import IconButton from '@mui/material/IconButton'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form, FieldArray } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import TextField from '../../../shared/TextFieldFormik'
-import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
-import KontrolljahrField from './KontrolljahrField'
+import TextField from '../../../shared/TextField'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import Kontrolljahre from './Kontrolljahre'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryEkAbrechnungstypWertes from './queryEkAbrechnungstypWertes'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { ekfrequenz } from '../../../shared/fragments'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -30,9 +25,6 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
-`
-const StyledForm = styled(Form)`
-  padding: 10px;
 `
 const FormContainer = styled.div`
   padding: 10px;
@@ -54,14 +46,6 @@ const StyledLabel = styled.div`
   pointer-events: none;
   user-select: none;
   padding-bottom: 6px;
-`
-const PlusIcon = styled(IconButton)`
-  font-size: 1rem !important;
-`
-const DelIcon = styled(IconButton)`
-  font-size: 1rem !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
 `
 
 const fieldTypes = {
@@ -90,7 +74,9 @@ const Ekfrequenz = ({ treeName }) => {
   const store = useContext(storeContext)
   const { activeNodeArray } = store[treeName]
 
-  const { data, loading, error } = useQuery(query, {
+  const [fieldErrors, setFieldErrors] = useState({})
+
+  const { data, loading, error, refetch } = useQuery(query, {
     variables: {
       id:
         activeNodeArray.length > 5
@@ -107,11 +93,14 @@ const Ekfrequenz = ({ treeName }) => {
 
   const row = useMemo(() => data?.ekfrequenzById ?? {}, [data?.ekfrequenzById])
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row) || 'kontrolljahre'
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: store.user.name,
       }
       try {
@@ -119,14 +108,14 @@ const Ekfrequenz = ({ treeName }) => {
           mutation: gql`
             mutation updateEkfrequenz(
               $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
+              $${field}: ${fieldTypes[field]}
               $changedBy: String
             ) {
               updateEkfrequenzById(
                 input: {
                   id: $id
                   ekfrequenzPatch: {
-                    ${changedField}: $${changedField}
+                    ${field}: $${field}
                     changedBy: $changedBy
                   }
                 }
@@ -139,29 +128,13 @@ const Ekfrequenz = ({ treeName }) => {
             ${ekfrequenz}
           `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateEkfrequenzById: {
-              ekfrequenz: {
-                ...variables,
-                // sort kontrolljahre here
-                kontrolljahre: values.kontrolljahre
-                  ? values.kontrolljahre.sort((a, b) => {
-                      if (a === '') return -1
-                      if (b === '') return -1
-                      return a - b
-                    })
-                  : null,
-                __typename: 'Ekfrequenz',
-              },
-              __typename: 'Ekfrequenz',
-            },
-          },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        setFieldErrors({ [field]: error.message })
+        return
       }
-      setErrors({})
+      setFieldErrors({})
+      return
     },
     [client, row, store.user.name],
   )
@@ -185,133 +158,89 @@ const Ekfrequenz = ({ treeName }) => {
               height: '100%',
             }}
           >
-            <Formik
-              key={row.kontrolljahre}
-              initialValues={row}
-              onSubmit={onSubmit}
-              enableReinitialize
-            >
-              {({ handleSubmit, dirty, values }) => (
-                <StyledForm
-                  onBlur={(event) => {
-                    // prevent submitting when button blurs
-                    if (event.target.type === 'button') return
-                    dirty && handleSubmit()
-                  }}
-                >
-                  <TextField
-                    name="code"
-                    label="Kürzel"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="anwendungsfall"
-                    label="Anwendungsfall"
-                    type="text"
-                    multiLine
-                    handleSubmit={handleSubmit}
-                  />
+            <FormContainer>
+              <TextField
+                name="code"
+                label="Kürzel"
+                type="text"
+                value={row.code}
+                saveToDb={saveToDb}
+                error={fieldErrors.code}
+              />
+              <TextField
+                name="anwendungsfall"
+                label="Anwendungsfall"
+                type="text"
+                value={row.anwendungsfall}
+                saveToDb={saveToDb}
+                error={fieldErrors.anwendungsfall}
+              />
+              <RadioButtonGroup
+                name="ektyp"
+                dataSource={ektypeWertes}
+                loading={false}
+                label="EK-Typ"
+                value={row.ektyp}
+                saveToDb={saveToDb}
+                error={fieldErrors.ektyp}
+              />
+              <KontrolljahrContainer>
+                <LabelRow>
+                  <StyledLabel>
+                    Kontrolljahre (= Anzahl Jahre nach Start bzw. Ansiedlung)
+                  </StyledLabel>
+                </LabelRow>
+                <Kontrolljahre
+                  kontrolljahre={row?.kontrolljahre.slice()}
+                  saveToDb={saveToDb}
+                  refetch={refetch}
+                  //kontrolljahreString={JSON.stringify(row.kontrolljahre)}
+                />
+              </KontrolljahrContainer>
+              <RadioButtonGroup
+                name="kontrolljahreAb"
+                dataSource={kontrolljahreAbWertes}
+                loading={false}
+                label="Kontrolljahre ab letzter"
+                value={row.kontrolljahreAb}
+                saveToDb={saveToDb}
+                error={fieldErrors.kontrolljahreAb}
+              />
+              <div>
+                {errorEkAbrechnungstypWertes ? (
+                  errorEkAbrechnungstypWertes.message
+                ) : (
                   <RadioButtonGroup
-                    name="ektyp"
-                    dataSource={ektypeWertes}
-                    loading={false}
-                    label="EK-Typ"
-                    handleSubmit={handleSubmit}
+                    name="ekAbrechnungstyp"
+                    dataSource={
+                      dataEkAbrechnungstypWertes?.allEkAbrechnungstypWertes
+                        ?.nodes ?? []
+                    }
+                    loading={loadingEkAbrechnungstypWertes}
+                    label="EK-Abrechnungstyp"
+                    value={row.ekAbrechnungstyp}
+                    saveToDb={saveToDb}
+                    error={fieldErrors.ekAbrechnungstyp}
                   />
-                  <FieldArray
-                    name="kontrolljahre"
-                    render={(arrayHelpers) => (
-                      <KontrolljahrContainer>
-                        <LabelRow>
-                          <StyledLabel>
-                            Kontrolljahre (= Anzahl Jahre nach Start bzw.
-                            Ansiedlung)
-                          </StyledLabel>
-                          <PlusIcon
-                            title="Kontrolljahr hinzufügen"
-                            aria-label="Kontrolljahr hinzufügen"
-                            onClick={() => {
-                              // only accept one empty value
-                              if (
-                                values.kontrolljahre &&
-                                values.kontrolljahre.filter((v) => !v).length >
-                                  1
-                              ) {
-                                return
-                              }
-                              values.kontrolljahre &&
-                              values.kontrolljahre.length > 0
-                                ? arrayHelpers.insert(
-                                    values.kontrolljahre.length,
-                                    '',
-                                  )
-                                : arrayHelpers.push('')
-                            }}
-                          >
-                            <FaPlus />
-                          </PlusIcon>
-                        </LabelRow>
-                        {!!values.kontrolljahre &&
-                          // do not sort here as sorting happens on every change of value
-                          // so after typing every number - bad for multiple digits
-                          values.kontrolljahre.map((kontrolljahr, index) => (
-                            <div key={index}>
-                              <KontrolljahrField
-                                name={`kontrolljahre.${index}`}
-                                handleSubmit={handleSubmit}
-                              />
-                              <DelIcon
-                                title={`${values.kontrolljahre[index]} entfernen`}
-                                aria-label={`${values.kontrolljahre[index]} entfernen`}
-                                onClick={() => arrayHelpers.remove(index)}
-                              >
-                                <FaTimes />
-                              </DelIcon>
-                            </div>
-                          ))}
-                      </KontrolljahrContainer>
-                    )}
-                  />
-                  <RadioButtonGroup
-                    name="kontrolljahreAb"
-                    dataSource={kontrolljahreAbWertes}
-                    loading={false}
-                    label="Kontrolljahre ab letzter"
-                    handleSubmit={handleSubmit}
-                  />
-                  <div>
-                    {errorEkAbrechnungstypWertes ? (
-                      errorEkAbrechnungstypWertes.message
-                    ) : (
-                      <RadioButtonGroup
-                        name="ekAbrechnungstyp"
-                        dataSource={
-                          dataEkAbrechnungstypWertes?.allEkAbrechnungstypWertes
-                            ?.nodes ?? []
-                        }
-                        loading={loadingEkAbrechnungstypWertes}
-                        label="EK-Abrechnungstyp"
-                        handleSubmit={handleSubmit}
-                      />
-                    )}
-                  </div>
-                  <TextField
-                    name="bemerkungen"
-                    label="Bemerkungen"
-                    type="text"
-                    multiLine
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="sort"
-                    label="Sortierung"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
-              )}
-            </Formik>
+                )}
+              </div>
+              <TextField
+                name="bemerkungen"
+                label="Bemerkungen"
+                type="text"
+                value={row.bemerkungen}
+                saveToDb={saveToDb}
+                error={fieldErrors.bemerkungen}
+              />
+              <TextField
+                name="sort"
+                label="Sortierung"
+                type="number"
+                value={row.sort}
+                saveToDb={saveToDb}
+                error={fieldErrors.sort}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>
