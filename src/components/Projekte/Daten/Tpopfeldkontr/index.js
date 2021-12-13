@@ -459,139 +459,143 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
               {tab === 'entwicklung' && (
                 <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
                   <FormContainer data-column-width={columnWidth}>
-                    <Formik
-                      key={showFilter ? JSON.stringify(row) : row.id}
-                      initialValues={row}
-                      onSubmit={onSubmit}
-                      enableReinitialize
-                    >
-                      {({ handleSubmit, dirty }) => (
-                        <Form onBlur={() => dirty && handleSubmit()}>
-                          <TextField
-                            name="jahr"
-                            label="Jahr"
-                            type="number"
-                            value={row.jahr}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.jahr}
-                          />
-                          <DateField
-                            name="datum"
-                            label="Datum"
-                            value={row.datum}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.datum}
-                          />
-                          <RadioButtonGroup
-                            name="typ"
-                            label="Kontrolltyp"
-                            dataSource={tpopkontrTypWerte}
-                            value={row.typ}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.typ}
-                          />
-                          <Select
-                            name="bearbeiter"
-                            label="BearbeiterIn"
-                            options={dataAdresses?.allAdresses?.nodes ?? []}
-                            loading={loadingAdresses}
-                            value={row.bearbeiter}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.bearbeiter}
-                          />
-                          <JesNo
-                            name="jungpflanzenVorhanden"
-                            label="Jungpflanzen vorhanden"
-                            value={row.jungpflanzenVorhanden}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.jungpflanzenVorhanden}
-                          />
-                          <TextField
-                            name="vitalitaet"
-                            label="Vitalität"
-                            type="text"
-                            value={row.vitalitaet}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.vitalitaet}
-                          />
-                          <TextField
-                            name="ueberlebensrate"
-                            label="Überlebensrate (in Prozent)"
-                            type="number"
-                            value={row.ueberlebensrate}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.ueberlebensrate}
-                          />
-                          <RadioButtonGroupWithInfo
-                            name="entwicklung"
-                            label="Entwicklung"
-                            dataSource={
-                              dataLists?.allTpopEntwicklungWertes?.nodes ?? []
-                            }
-                            loading={loadingLists}
-                            popover={TpopfeldkontrentwicklungPopover}
-                            value={row.entwicklung}
-                            saveToDb={saveToDb}
-                            error={fieldErrors.entwicklung}
-                          />
-                          <TextFieldFormik
-                            name="ursachen"
-                            label="Ursachen"
-                            hintText="Standort: ..., Klima: ..., anderes: ..."
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="gefaehrdung"
-                            label="Gefährdung"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="erfolgsbeurteilung"
-                            label="Erfolgsbeurteilung"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="umsetzungAendern"
-                            label="Änderungs-Vorschläge Umsetzung"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="kontrolleAendern"
-                            label="Änderungs-Vorschläge Kontrolle"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          <MdFieldFormik
-                            name="bemerkungen"
-                            label="Bemerkungen"
-                          />
-                          <JesNoFormik
-                            name="apberNichtRelevant"
-                            label="Im Jahresbericht nicht berücksichtigen"
-                            handleSubmit={handleSubmit}
-                          />
-                          <TextFieldFormik
-                            name="apberNichtRelevantGrund"
-                            label="Wieso im Jahresbericht nicht berücksichtigen?"
-                            type="text"
-                            multiLine
-                            handleSubmit={handleSubmit}
-                          />
-                          {!showFilter && (
-                            <StringToCopy text={row.id} label="id" />
-                          )}
-                        </Form>
-                      )}
-                    </Formik>
+                    <TextField
+                      name="jahr"
+                      label="Jahr"
+                      type="number"
+                      value={row.jahr}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.jahr}
+                    />
+                    <DateField
+                      name="datum"
+                      label="Datum"
+                      value={row.datum}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.datum}
+                    />
+                    <RadioButtonGroup
+                      name="typ"
+                      label="Kontrolltyp"
+                      dataSource={tpopkontrTypWerte}
+                      value={row.typ}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.typ}
+                    />
+                    <Select
+                      name="bearbeiter"
+                      label="BearbeiterIn"
+                      options={dataAdresses?.allAdresses?.nodes ?? []}
+                      loading={loadingAdresses}
+                      value={row.bearbeiter}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.bearbeiter}
+                    />
+                    <JesNo
+                      name="jungpflanzenVorhanden"
+                      label="Jungpflanzen vorhanden"
+                      value={row.jungpflanzenVorhanden}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.jungpflanzenVorhanden}
+                    />
+                    <TextField
+                      name="vitalitaet"
+                      label="Vitalität"
+                      type="text"
+                      value={row.vitalitaet}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.vitalitaet}
+                    />
+                    <TextField
+                      name="ueberlebensrate"
+                      label="Überlebensrate (in Prozent)"
+                      type="number"
+                      value={row.ueberlebensrate}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.ueberlebensrate}
+                    />
+                    <RadioButtonGroupWithInfo
+                      name="entwicklung"
+                      label="Entwicklung"
+                      dataSource={
+                        dataLists?.allTpopEntwicklungWertes?.nodes ?? []
+                      }
+                      loading={loadingLists}
+                      popover={TpopfeldkontrentwicklungPopover}
+                      value={row.entwicklung}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.entwicklung}
+                    />
+                    <TextField
+                      name="ursachen"
+                      label="Ursachen"
+                      hintText="Standort: ..., Klima: ..., anderes: ..."
+                      type="text"
+                      multiLine
+                      value={row.ursachen}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.ursachen}
+                    />
+                    <TextField
+                      name="gefaehrdung"
+                      label="Gefährdung"
+                      type="text"
+                      multiLine
+                      value={row.gefaehrdung}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.gefaehrdung}
+                    />
+                    <TextField
+                      name="erfolgsbeurteilung"
+                      label="Erfolgsbeurteilung"
+                      type="text"
+                      multiLine
+                      value={row.erfolgsbeurteilung}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.erfolgsbeurteilung}
+                    />
+                    <TextField
+                      name="umsetzungAendern"
+                      label="Änderungs-Vorschläge Umsetzung"
+                      type="text"
+                      multiLine
+                      value={row.umsetzungAendern}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.umsetzungAendern}
+                    />
+                    <TextField
+                      name="kontrolleAendern"
+                      label="Änderungs-Vorschläge Kontrolle"
+                      type="text"
+                      multiLine
+                      value={row.kontrolleAendern}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.kontrolleAendern}
+                    />
+                    <MdField
+                      name="bemerkungen"
+                      label="Bemerkungen"
+                      value={row.bemerkungen}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.bemerkungen}
+                    />
+                    <JesNo
+                      name="apberNichtRelevant"
+                      label="Im Jahresbericht nicht berücksichtigen"
+                      value={row.apberNichtRelevant}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.apberNichtRelevant}
+                    />
+                    <TextField
+                      name="apberNichtRelevantGrund"
+                      label="Wieso im Jahresbericht nicht berücksichtigen?"
+                      type="text"
+                      multiLine
+                      value={row.apberNichtRelevantGrund}
+                      saveToDb={saveToDb}
+                      error={fieldErrors.apberNichtRelevantGrund}
+                    />
+                    {!showFilter && <StringToCopy text={row.id} label="id" />}
                   </FormContainer>
                 </SimpleBar>
               )}
@@ -605,33 +609,41 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     >
                       {({ handleSubmit, dirty }) => (
                         <Form onBlur={() => dirty && handleSubmit()}>
-                          <TextFieldFormik
+                          <TextField
                             name="flaeche"
                             label="Fläche"
                             type="number"
-                            handleSubmit={handleSubmit}
+                            value={row.flaeche}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.flaeche}
                           />
                           <Section>Vegetation</Section>
-                          <SelectFormik
+                          <Select
                             data-id="lrDelarze"
                             name="lrDelarze"
                             label="Lebensraum nach Delarze"
                             options={aeLrWerte}
                             loading={loadingLists}
-                            handleSubmit={handleSubmit}
+                            value={row.lrDelarze}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.lrDelarze}
                           />
-                          <SelectFormik
+                          <Select
                             name="lrUmgebungDelarze"
                             label="Umgebung nach Delarze"
                             options={aeLrWerte}
                             loading={loadingLists}
-                            handleSubmit={handleSubmit}
+                            value={row.lrUmgebungDelarze}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.lrUmgebungDelarze}
                           />
-                          <TextFieldFormik
+                          <TextField
                             name="vegetationstyp"
                             label="Vegetationstyp"
                             type="text"
-                            handleSubmit={handleSubmit}
+                            value={row.vegetationstyp}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.vegetationstyp}
                           />
                           <TextFieldFormik
                             name="konkurrenz"
