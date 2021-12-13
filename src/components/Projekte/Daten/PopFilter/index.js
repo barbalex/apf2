@@ -2,18 +2,17 @@ import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import TextField from '../../../shared/TextFieldFormik'
-import TextFieldWithInfo from '../../../shared/TextFieldWithInfoFormik'
-import Status from '../../../shared/StatusFormik'
-import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
+import TextField from '../../../shared/TextField'
+import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
+import Status from '../../../shared/Status'
+import Checkbox2States from '../../../shared/Checkbox2States'
 import FilterTitle from '../../../shared/FilterTitle'
 import queryPops from './queryPops'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as popType } from '../../../../store/Tree/DataFilter/pop'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
@@ -25,11 +24,9 @@ const Container = styled.div`
   background-color: #ffd3a7;
 `
 const FormContainer = styled.div`
-  overflow-y: auto;
-`
-const StyledForm = styled(Form)`
   padding: 10px;
   padding-top: 0;
+  overflow-y: auto;
 `
 
 const PopFilter = ({ treeName }) => {
@@ -81,24 +78,15 @@ const PopFilter = ({ treeName }) => {
   popOfApTotalCount = dataPops?.popsOfAp?.totalCount ?? '...'
   popOfApFilteredCount = dataPops?.popsOfApFiltered?.totalCount ?? '...'
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
-
-      const value = values[changedField]
-      return dataFilterSetValue({
+  const saveToDb = useCallback(
+    async (event) =>
+      dataFilterSetValue({
         treeName,
         table: 'pop',
-        key: changedField,
-        value,
-      })
-    },
-    [dataFilterSetValue, row, treeName],
+        key: event.target.name,
+        value: ifIsNumericAsNumber(event.target.value),
+      }),
+    [dataFilterSetValue, treeName],
   )
 
   if (error) return <Error error={error} />
@@ -121,48 +109,41 @@ const PopFilter = ({ treeName }) => {
               height: '100%',
             }}
           >
-            <Formik
-              key={row}
-              initialValues={row}
-              onSubmit={onSubmit}
-              enableReinitialize
-            >
-              {({ handleSubmit, dirty }) => (
-                <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <TextField
-                    label="Nr."
-                    name="nr"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextFieldWithInfo
-                    label="Name"
-                    name="name"
-                    type="text"
-                    popover="Dieses Feld möglichst immer ausfüllen"
-                    handleSubmit={handleSubmit}
-                  />
-                  <Status
-                    apJahr={row?.apByApId?.startJahr}
-                    treeName={treeName}
-                    showFilter={true}
-                    handleSubmit={handleSubmit}
-                  />
-                  <Checkbox2States
-                    label="Status unklar"
-                    name="statusUnklar"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    label="Begründung"
-                    name="statusUnklarBegruendung"
-                    type="text"
-                    multiLine
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
-              )}
-            </Formik>
+            <TextField
+              label="Nr."
+              name="nr"
+              type="number"
+              value={row.nr}
+              saveToDb={saveToDb}
+            />
+            <TextFieldWithInfo
+              label="Name"
+              name="name"
+              type="text"
+              popover="Dieses Feld möglichst immer ausfüllen"
+              value={row.name}
+              saveToDb={saveToDb}
+            />
+            <Status
+              apJahr={row?.apByApId?.startJahr}
+              showFilter={true}
+              saveToDb={saveToDb}
+              row={row}
+            />
+            <Checkbox2States
+              label="Status unklar"
+              name="statusUnklar"
+              value={row.statusUnklar}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              label="Begründung"
+              name="statusUnklarBegruendung"
+              type="text"
+              multiLine
+              value={row.statusUnklarBegruendung}
+              saveToDb={saveToDb}
+            />
           </SimpleBar>
         </FormContainer>
       </Container>
