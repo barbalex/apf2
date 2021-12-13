@@ -9,22 +9,21 @@ import max from 'lodash/max'
 import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
-import RadioButtonGroup from '../../../../shared/RadioButtonGroupFormik'
-import Select from '../../../../shared/SelectFormik'
-import TextField from '../../../../shared/TextFieldFormik'
+import Checkbox2States from '../../../../shared/Checkbox2States'
+import RadioButtonGroup from '../../../../shared/RadioButtonGroup'
+import Select from '../../../../shared/Select'
+import TextField from '../../../../shared/TextField'
 import queryEk from './queryEk'
-import queryEkfrequenzs from './queryEkfrequenzs'
-import queryAdresses from './queryAdresses'
 import storeContext from '../../../../../storeContext'
 import EkYear from './EkYear'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import Spinner from '../../../../shared/Spinner'
 
 const FormContainerNoColumnsInner = styled.div`
   padding: 10px;
+  padding-bottom: 35px;
 `
 const EkfrequenzOptionsContainer = styled.div`
   label:hover {
@@ -62,7 +61,14 @@ const EkplanTitle = styled.h5`
   margin-bottom: 10px;
 `
 
-const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
+const Tpop = ({
+  treeName,
+  showFilter,
+  saveToDb,
+  row,
+  fieldErrors,
+  loading,
+}) => {
   const store = useContext(storeContext)
 
   const { activeNodeArray } = store[treeName]
@@ -77,22 +83,11 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
     variables: {
       id: row?.id || '99999999-9999-9999-9999-999999999999',
       isEk: true,
+      apId,
     },
   })
 
-  const { data: dataEkfrequenzs, loading: loadingEkfrequenzs } = useQuery(
-    queryEkfrequenzs,
-    {
-      variables: {
-        apId,
-      },
-    },
-  )
-
-  const { data: dataAdresses, loading: loadingAdresses } =
-    useQuery(queryAdresses)
-
-  const ekfrequenzOptions0 = dataEkfrequenzs?.allEkfrequenzs?.nodes ?? []
+  const ekfrequenzOptions0 = dataEk?.allEkfrequenzs?.nodes ?? []
   const longestAnwendungsfall = max(
     ekfrequenzOptions0.map((a) => (a.anwendungsfall || '').length),
   )
@@ -118,6 +113,8 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
     'jahr',
   )
 
+  if (loading) return <Spinner />
+
   if (!row) return null
 
   return (
@@ -131,46 +128,43 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
     >
       <ErrorBoundary>
         <>
-          <Formik
-            key={showFilter ? row : row.id}
-            initialValues={row}
-            onSubmit={onSubmit}
-            enableReinitialize
-          >
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <FormContainerNoColumnsInner>
-                  <EkfrequenzOptionsContainer>
-                    <RadioButtonGroup
-                      name="ekfrequenz"
-                      dataSource={ekfrequenzOptions}
-                      loading={loadingEkfrequenzs}
-                      label="EK-Frequenz"
-                      handleSubmit={handleSubmit}
-                    />
-                  </EkfrequenzOptionsContainer>
-                  <Checkbox2States
-                    name="ekfrequenzAbweichend"
-                    label="EK-Frequenz abweichend"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="ekfrequenzStartjahr"
-                    label="Startjahr"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <Select
-                    name="ekfKontrolleur"
-                    label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
-                    options={dataAdresses?.allAdresses?.nodes ?? []}
-                    loading={loadingAdresses}
-                    handleSubmit={handleSubmit}
-                  />
-                </FormContainerNoColumnsInner>
-              </Form>
-            )}
-          </Formik>
+          <FormContainerNoColumnsInner>
+            <EkfrequenzOptionsContainer>
+              <RadioButtonGroup
+                name="ekfrequenz"
+                dataSource={ekfrequenzOptions}
+                loading={loadingEk}
+                label="EK-Frequenz"
+                value={row.ekfrequenz}
+                saveToDb={saveToDb}
+                error={fieldErrors.ekfrequenz}
+              />
+            </EkfrequenzOptionsContainer>
+            <Checkbox2States
+              name="ekfrequenzAbweichend"
+              label="EK-Frequenz abweichend"
+              value={row.ekfrequenzAbweichend}
+              saveToDb={saveToDb}
+              error={fieldErrors.ekfrequenzAbweichend}
+            />
+            <TextField
+              name="ekfrequenzStartjahr"
+              label="Startjahr"
+              type="number"
+              value={row.ekfrequenzStartjahr}
+              saveToDb={saveToDb}
+              error={fieldErrors.ekfrequenzStartjahr}
+            />
+            <Select
+              name="ekfKontrolleur"
+              label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
+              options={dataEk?.allAdresses?.nodes ?? []}
+              loading={loadingEk}
+              value={row.ekfKontrolleur}
+              saveToDb={saveToDb}
+              error={fieldErrors.ekfKontrolleur}
+            />
+          </FormContainerNoColumnsInner>
           {!showFilter && (
             <>
               <EkplanTitle>EK-Plan</EkplanTitle>

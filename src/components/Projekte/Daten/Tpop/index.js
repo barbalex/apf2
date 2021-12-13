@@ -13,8 +13,6 @@ import queryTpops from './queryTpops'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopType } from '../../../../store/Tree/DataFilter/tpop'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import Ek from './Ek'
 import Tpop from './Tpop'
@@ -268,101 +266,6 @@ const TpopForm = ({ treeName, showFilter = false }) => {
     ],
   )
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
-
-      // when GeomPoint is changed, Coordinates takes over
-      // need to return
-      if (changedField === null) return
-
-      const value = values[changedField]
-      if (showFilter) {
-        return dataFilterSetValue({
-          treeName,
-          table: 'tpop',
-          key: changedField,
-          value,
-        })
-      } else {
-        const variables = {
-          ...objectsEmptyValuesToNull(values),
-          changedBy: store.user.name,
-        }
-        try {
-          await client.mutate({
-            mutation: gql`
-              mutation updateTpop${changedField}(
-                $id: UUID!
-                $${changedField}: ${fieldTypes[changedField]}
-                $changedBy: String
-              ) {
-                updateTpopById(
-                  input: {
-                    id: $id
-                    tpopPatch: {
-                      ${changedField}: $${changedField}
-                      changedBy: $changedBy
-                    }
-                  }
-                ) {
-                  tpop {
-                    ...TpopFields
-                    popStatusWerteByStatus {
-                      ...PopStatusWerteFields
-                    }
-                    tpopApberrelevantGrundWerteByApberRelevantGrund {
-                      ...TpopApberrelevantGrundWerteFields
-                    }
-                    popByPopId {
-                      id
-                      apId
-                    }
-                  }
-                }
-              }
-              ${popStatusWerte}
-              ${tpop}
-              ${tpopApberrelevantGrundWerte}
-            `,
-            variables,
-            // no optimistic responce as geomPoint
-          })
-        } catch (error) {
-          return setErrors({ [changedField]: error.message })
-        }
-        // update tpop on map
-        if (
-          (value &&
-            ((changedField === 'ylv95Y' && row?.lv95X) ||
-              (changedField === 'lv95X' && row?.y))) ||
-          (!value && (changedField === 'ylv95Y' || changedField === 'lv95X'))
-        ) {
-          if (refetch.tpopForMap) {
-            // need to also refetch pop in case pop was new
-            refetch.popForMap && refetch.popForMap()
-            refetch.tpopForMap()
-          }
-        }
-        setErrors({})
-      }
-    },
-    [
-      row,
-      showFilter,
-      dataFilterSetValue,
-      treeName,
-      store.user.name,
-      client,
-      refetch,
-    ],
-  )
-
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
@@ -419,10 +322,10 @@ const TpopForm = ({ treeName, showFilter = false }) => {
               <Ek
                 treeName={treeName}
                 showFilter={showFilter}
-                onSubmit={onSubmit}
                 saveToDb={saveToDb}
                 fieldErrors={fieldErrors}
                 row={row}
+                loading={loading}
               />
             ) : tab === 'dateien' ? (
               <Files parentId={row?.id} parent="tpop" />
