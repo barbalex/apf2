@@ -1,21 +1,20 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
-import TextField from '../../../shared/TextFieldFormik'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryLists from './queryLists'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import { erfkrit } from '../../../shared/fragments'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -23,14 +22,10 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const FieldsContainer = styled.div`
   overflow-y: auto;
 `
-const StyledForm = styled(Form)`
+const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -44,6 +39,8 @@ const Erfkrit = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { activeNodeArray } = store[treeName]
+
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -62,17 +59,14 @@ const Erfkrit = ({ treeName }) => {
 
   const row = useMemo(() => data?.erfkritById ?? {}, [data?.erfkritById])
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: store.user.name,
       }
       try {
@@ -80,14 +74,14 @@ const Erfkrit = ({ treeName }) => {
           mutation: gql`
             mutation updateErfkrit(
               $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
+              $${field}: ${fieldTypes[field]}
               $changedBy: String
             ) {
               updateErfkritById(
                 input: {
                   id: $id
                   erfkritPatch: {
-                    ${changedField}: $${changedField}
+                    ${field}: $${field}
                     changedBy: $changedBy
                   }
                 }
@@ -100,28 +94,16 @@ const Erfkrit = ({ treeName }) => {
             ${erfkrit}
           `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateErfkritById: {
-              erfkrit: {
-                ...variables,
-                __typename: 'Erfkrit',
-              },
-              __typename: 'Erfkrit',
-            },
-          },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      setFieldErrors({})
     },
     [client, row, store.user.name],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
 
   const errors = [
     ...(error ? [error] : []),
@@ -145,26 +127,26 @@ const Erfkrit = ({ treeName }) => {
               height: '100%',
             }}
           >
-            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-              {({ handleSubmit, dirty }) => (
-                <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <RadioButtonGroup
-                    name="erfolg"
-                    label="Beurteilung"
-                    dataSource={dataLists?.allApErfkritWertes?.nodes ?? []}
-                    loading={loadingLists}
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="kriterien"
-                    label="Kriterien"
-                    type="text"
-                    multiLine
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
-              )}
-            </Formik>
+            <FormContainer>
+              <RadioButtonGroup
+                name="erfolg"
+                label="Beurteilung"
+                dataSource={dataLists?.allApErfkritWertes?.nodes ?? []}
+                loading={loadingLists}
+                value={row.erfolg}
+                saveToDb={saveToDb}
+                error={fieldErrors.erfolg}
+              />
+              <TextField
+                name="kriterien"
+                label="Kriterien"
+                type="text"
+                multiLine
+                value={row.kriterien}
+                saveToDb={saveToDb}
+                error={fieldErrors.kriterien}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>
