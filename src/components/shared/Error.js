@@ -56,8 +56,8 @@ const Error = ({ errors: errorsPassed, error }) => {
     <ErrorContainer>
       <h5>Fehler:</h5>
       <ul>
-        {uniqueMessages.map((message) => (
-          <li>{message}</li>
+        {uniqueMessages.map((message, index) => (
+          <li key={index}>{message}</li>
         ))}
       </ul>
     </ErrorContainer>

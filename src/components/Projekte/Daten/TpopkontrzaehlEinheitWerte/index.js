@@ -1,18 +1,17 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
+import TextField from '../../../shared/TextField'
+import Checkbox2States from '../../../shared/Checkbox2States'
 import FormTitle from '../../../shared/FormTitle'
-import TextField from '../../../shared/TextFieldFormik'
-import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -20,14 +19,10 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const FieldsContainer = styled.div`
   overflow-y: auto;
 `
-const StyledForm = styled(Form)`
+const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -36,6 +31,8 @@ const TpopkontrzaehlEinheitWerte = ({ treeName, table }) => {
   const store = useContext(storeContext)
   const { refetch: refetchTree } = store
   const { activeNodeArray } = store[treeName]
+
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const id =
     activeNodeArray.length > 2
@@ -64,14 +61,16 @@ const TpopkontrzaehlEinheitWerte = ({ treeName, table }) => {
     [data?.tpopkontrzaehlEinheitWerteById],
   )
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+
+      const variables = {
+        id: row.id,
+        [field]: value,
+        changedBy: store.user.name,
+      }
 
       try {
         const mutation = gql`
@@ -110,38 +109,27 @@ const TpopkontrzaehlEinheitWerte = ({ treeName, table }) => {
             }
           }
         `
-        const variables = {
-          ...objectsEmptyValuesToNull(values),
-          changedBy: store.user.name,
-        }
         //console.log('TpopkontrzaehlEinheitWerte:', { variables, __typename, updateName })
         await client.mutate({
           mutation,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopkontrzaehlEinheitWerte: {
-              id: row.id,
-              __typename: 'TpopkontrzaehlEinheitWerte',
-              content: variables,
-            },
-          },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
       refetch()
       const refetchTableName = `${table}s`
       // for unknown reason refetching is necessary here
       refetchTree[refetchTableName] && refetchTree[refetchTableName]()
-      setErrors({})
+      setFieldErrors({})
     },
     [client, refetch, refetchTree, row, store.user.name, table],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  console.log('TpopkontrzaehlEinheitWerte, loading:', loading)
+
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
 
   return (
@@ -160,45 +148,46 @@ const TpopkontrzaehlEinheitWerte = ({ treeName, table }) => {
               height: '100%',
             }}
           >
-            <Formik
-              row={row}
-              initialValues={row}
-              onSubmit={onSubmit}
-              enableReinitialize
-            >
-              {({ handleSubmit, dirty }) => (
-                <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <TextField
-                    name="text"
-                    label="Text"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="code"
-                    label="Code"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <Checkbox2States
-                    name="correspondsToMassnAnzPflanzen"
-                    label="Entspricht 'Anzahl Pflanzen' in Massnahmen"
-                    handleSubmit={handleSubmit}
-                  />
-                  <Checkbox2States
-                    name="correspondsToMassnAnzTriebe"
-                    label="Entspricht 'Anzahl Triebe' in Massnahmen"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="sort"
-                    label="Sort"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
-              )}
-            </Formik>
+            <FormContainer>
+              <TextField
+                name="text"
+                label="Text"
+                type="text"
+                value={row.text}
+                saveToDb={saveToDb}
+                error={fieldErrors.text}
+              />
+              <TextField
+                name="code"
+                label="Code"
+                type="number"
+                value={row.code}
+                saveToDb={saveToDb}
+                error={fieldErrors.code}
+              />
+              <Checkbox2States
+                name="correspondsToMassnAnzPflanzen"
+                label="Entspricht 'Anzahl Pflanzen' in Massnahmen"
+                value={row.correspondsToMassnAnzPflanzen}
+                saveToDb={saveToDb}
+                error={fieldErrors.correspondsToMassnAnzPflanzen}
+              />
+              <Checkbox2States
+                name="correspondsToMassnAnzTriebe"
+                label="Entspricht 'Anzahl Triebe' in Massnahmen"
+                value={row.correspondsToMassnAnzTriebe}
+                saveToDb={saveToDb}
+                error={fieldErrors.correspondsToMassnAnzTriebe}
+              />
+              <TextField
+                name="sort"
+                label="Sort"
+                type="number"
+                value={row.sort}
+                saveToDb={saveToDb}
+                error={fieldErrors.sort}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>
