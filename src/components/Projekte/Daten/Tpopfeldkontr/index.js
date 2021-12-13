@@ -467,48 +467,62 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     >
                       {({ handleSubmit, dirty }) => (
                         <Form onBlur={() => dirty && handleSubmit()}>
-                          <TextFieldFormik
+                          <TextField
                             name="jahr"
                             label="Jahr"
                             type="number"
-                            handleSubmit={handleSubmit}
+                            value={row.jahr}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.jahr}
                           />
-                          <DateFieldFormik
+                          <DateField
                             name="datum"
                             label="Datum"
-                            handleSubmit={handleSubmit}
+                            value={row.datum}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.datum}
                           />
-                          <RadioButtonGroupFormik
+                          <RadioButtonGroup
                             name="typ"
                             label="Kontrolltyp"
                             dataSource={tpopkontrTypWerte}
-                            handleSubmit={handleSubmit}
+                            value={row.typ}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.typ}
                           />
-                          <SelectFormik
+                          <Select
                             name="bearbeiter"
                             label="BearbeiterIn"
                             options={dataAdresses?.allAdresses?.nodes ?? []}
                             loading={loadingAdresses}
-                            handleSubmit={handleSubmit}
+                            value={row.bearbeiter}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.bearbeiter}
                           />
-                          <JesNoFormik
+                          <JesNo
                             name="jungpflanzenVorhanden"
                             label="Jungpflanzen vorhanden"
-                            handleSubmit={handleSubmit}
+                            value={row.jungpflanzenVorhanden}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.jungpflanzenVorhanden}
                           />
-                          <TextFieldFormik
+                          <TextField
                             name="vitalitaet"
                             label="Vitalität"
                             type="text"
-                            handleSubmit={handleSubmit}
+                            value={row.vitalitaet}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.vitalitaet}
                           />
-                          <TextFieldFormik
+                          <TextField
                             name="ueberlebensrate"
                             label="Überlebensrate (in Prozent)"
                             type="number"
-                            handleSubmit={handleSubmit}
+                            value={row.ueberlebensrate}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.ueberlebensrate}
                           />
-                          <RadioButtonGroupWithInfoFormik
+                          <RadioButtonGroupWithInfo
                             name="entwicklung"
                             label="Entwicklung"
                             dataSource={
@@ -516,7 +530,9 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                             }
                             loading={loadingLists}
                             popover={TpopfeldkontrentwicklungPopover}
-                            handleSubmit={handleSubmit}
+                            value={row.entwicklung}
+                            saveToDb={saveToDb}
+                            error={fieldErrors.entwicklung}
                           />
                           <TextFieldFormik
                             name="ursachen"
