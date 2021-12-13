@@ -1,24 +1,22 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import { gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
-import TextField from '../../../shared/TextFieldFormik'
-import Select from '../../../shared/SelectFormik'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import TextField from '../../../shared/TextField'
+import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
-import queryLists from './queryLists'
 import queryZaehlOfEk from './queryZaehlOfEk'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import { tpopkontrzaehl } from '../../../shared/fragments'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -26,14 +24,10 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const FieldsContainer = styled.div`
   overflow-y: auto;
 `
-const StyledForm = styled(Form)`
+const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -48,6 +42,8 @@ const Tpopkontrzaehl = ({ treeName }) => {
   const store = useContext(storeContext)
   const { activeNodeArray } = store[treeName]
 
+  const [fieldErrors, setFieldErrors] = useState({})
+
   const tpopkontrzaehlId =
     activeNodeArray.length > 11
       ? activeNodeArray[11]
@@ -56,11 +52,6 @@ const Tpopkontrzaehl = ({ treeName }) => {
     activeNodeArray.length > 9
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
-  const { data, loading, error } = useQuery(query, {
-    variables: {
-      id: tpopkontrzaehlId,
-    },
-  })
 
   const { data: dataZaehlOfEk, error: errorZaehlOfEk } = useQuery(
     queryZaehlOfEk,
@@ -76,12 +67,9 @@ const Tpopkontrzaehl = ({ treeName }) => {
     .map((n) => n.einheit)
     // prevent null values which cause error in query
     .filter((e) => !!e)
-  const {
-    data: dataLists,
-    loading: loadingLists,
-    error: errorLists,
-  } = useQuery(queryLists, {
+  const { data, loading, error } = useQuery(query, {
     variables: {
+      id: tpopkontrzaehlId,
       codes,
     },
   })
@@ -91,17 +79,14 @@ const Tpopkontrzaehl = ({ treeName }) => {
     [data?.tpopkontrzaehlById],
   )
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
-        ...objectsEmptyValuesToNull(values),
+        id: row.id,
+        [field]: value,
         changedBy: store.user.name,
       }
       try {
@@ -109,14 +94,14 @@ const Tpopkontrzaehl = ({ treeName }) => {
           mutation: gql`
             mutation updateAnzahlForEkZaehl(
               $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
+              $${field}: ${fieldTypes[field]}
               $changedBy: String
             ) {
               updateTpopkontrzaehlById(
                 input: {
                   id: $id
                   tpopkontrzaehlPatch: {
-                    ${changedField}: $${changedField}
+                    ${field}: $${field}
                     changedBy: $changedBy
                   }
                 }
@@ -129,32 +114,21 @@ const Tpopkontrzaehl = ({ treeName }) => {
             ${tpopkontrzaehl}
           `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopkontrzaehlById: {
-              tpopkontrzaehl: {
-                ...variables,
-                __typename: 'Tpopkontrzaehl',
-              },
-              __typename: 'Tpopkontrzaehl',
-            },
-          },
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      setFieldErrors({})
     },
     [client, row, store.user.name],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  console.log('Tpopkontrzaehl rendering')
+
+  if (loading) return <Spinner />
 
   const errors = [
     ...(error ? [error] : []),
-    ...(errorLists ? [errorLists] : []),
     ...(errorZaehlOfEk ? [errorZaehlOfEk] : []),
   ]
   if (errors.length) return <Error errors={errors} />
@@ -175,35 +149,33 @@ const Tpopkontrzaehl = ({ treeName }) => {
               height: '100%',
             }}
           >
-            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-              {({ handleSubmit, dirty }) => (
-                <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <Select
-                    name="einheit"
-                    label="Einheit"
-                    options={
-                      dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
-                    }
-                    loading={loadingLists}
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextField
-                    name="anzahl"
-                    label="Anzahl (nur ganze Zahlen)"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <RadioButtonGroup
-                    name="methode"
-                    label="Methode"
-                    dataSource={
-                      dataLists?.allTpopkontrzaehlMethodeWertes?.nodes ?? []
-                    }
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
-              )}
-            </Formik>
+            <FormContainer>
+              <Select
+                name="einheit"
+                label="Einheit"
+                options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
+                loading={loading}
+                value={row.einheit}
+                saveToDb={saveToDb}
+                error={fieldErrors.einheit}
+              />
+              <TextField
+                name="anzahl"
+                label="Anzahl (nur ganze Zahlen)"
+                type="number"
+                value={row.anzahl}
+                saveToDb={saveToDb}
+                error={fieldErrors.anzahl}
+              />
+              <RadioButtonGroup
+                name="methode"
+                label="Methode"
+                dataSource={data?.allTpopkontrzaehlMethodeWertes?.nodes ?? []}
+                value={row.methode}
+                saveToDb={saveToDb}
+                error={fieldErrors.methode}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>
