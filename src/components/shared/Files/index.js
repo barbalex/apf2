@@ -50,7 +50,11 @@ const fragmentObject = {
   tpopmassn: tpopmassnFileFragment,
 }
 
-const Files = ({ parentId, parent, loadingParent }) => {
+const Files = ({
+  parentId = '99999999-9999-9999-9999-999999999999',
+  parent,
+  loadingParent,
+}) => {
   const client = useApolloClient()
 
   const [imageIndex, setImageIndex] = useState(0)

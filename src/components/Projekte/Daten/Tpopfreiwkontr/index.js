@@ -15,6 +15,7 @@ import FilterTitle from '../../../shared/FilterTitle'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopfreiwkontrType } from '../../../../store/Tree/DataFilter/tpopfreiwkontr'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 import TpopfreiwkontrForm from './Form'
 
 const Container = styled.div`
@@ -186,8 +187,10 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
     }
   }, [setIsPrint])
 
-  if (loading) return <LoadingContainer>Lade...</LoadingContainer>
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
+
   if (Object.keys(row).length === 0) return null
 
   return (

@@ -13,6 +13,11 @@ export default gql`
         ...TpopkontrzaehlEinheitWerteFields
       }
     }
+    allTpopkontrzaehlEinheitWertes {
+      nodes {
+        ...TpopkontrzaehlEinheitWerteFields
+      }
+    }
   }
   ${tpopkontrzaehl}
   ${tpopkontrzaehlEinheitWerte}

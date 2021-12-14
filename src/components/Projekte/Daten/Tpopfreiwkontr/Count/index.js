@@ -11,10 +11,10 @@ import Einheit from './Einheit'
 import Gezaehlt from './Gezaehlt'
 import Geschaetzt from './Geschaetzt'
 import query from './query'
-import queryLists from './queryLists'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import storeContext from '../../../../../storeContext'
 import Error from '../../../../shared/Error'
+import Spinner from '../../../../shared/Spinner'
 
 const AddIcon = styled(MdAddCircleOutline)`
   font-size: 1.5rem;
@@ -55,9 +55,6 @@ const Container = styled.div`
            'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
            'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   }
-`
-const LoadingContainer = styled.div`
-  padding: 10px;
 `
 const StyledForm = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -191,8 +188,6 @@ const Count = ({
     },
   })
 
-  const { data: dataLists, error: errorLists } = useQuery(queryLists)
-
   const row = data?.tpopkontrzaehlById ?? {}
 
   const createNew = useCallback(() => {
@@ -205,7 +200,7 @@ const Count = ({
   }, [client, refetch, tpopkontrId])
 
   const zaehleinheitWerte = useMemo(() => {
-    const allEinheits = dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+    const allEinheits = data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
     // do list this count's einheit
     const einheitsNotToList = einheitsUsed.filter((e) => e !== row.einheit)
     let zaehleinheitWerte = ekzaehleinheits
@@ -228,7 +223,7 @@ const Count = ({
       label: el.text,
     }))
   }, [
-    dataLists,
+    data?.allTpopkontrzaehlEinheitWertes?.nodes,
     einheitsUsed,
     ekzaehleinheits,
     ekzaehleinheitsOriginal,
@@ -275,15 +270,9 @@ const Count = ({
       </Container>
     )
   }
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
 
-  const errors = [
-    ...(error ? [error] : []),
-    ...(errorLists ? [errorLists] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
+  if (error) return <Error error={error} />
 
   return (
     <StyledForm

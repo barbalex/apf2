@@ -20,7 +20,6 @@ import TpopHistory from './History'
 import Files from '../../../shared/Files'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
-import Spinner from '../../../shared/Spinner'
 import {
   popStatusWerte,
   tpop,
@@ -35,6 +34,7 @@ const Container = styled.div`
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
+  height: 100%;
   overflow: hidden !important;
   overflow-y: auto;
   fieldset {
@@ -303,9 +303,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
             )}
           </Tabs>
           <TabContent>
-            {!showFilter && loading ? (
-              <Spinner />
-            ) : tab === 'tpop' ? (
+            {tab === 'tpop' ? (
               <Tpop
                 showFilter={showFilter}
                 saveToDb={saveToDb}
