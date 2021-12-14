@@ -110,7 +110,7 @@ const Popber = ({ treeName }) => {
 
   if (loading) return <Spinner />
 
-  if (error) return <Error errors={[error]} />
+  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>

@@ -380,7 +380,7 @@ const EkPlanTable = () => {
     return <TempContainer>Lade...</TempContainer>
   }
 
-  if (error) return <Error errors={[error]} />
+  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>

@@ -7,6 +7,12 @@ export default gql`
     zielById(id: $id) {
       ...ZielFields
     }
+    allZielTypWertes(orderBy: SORT_ASC) {
+      nodes {
+        value: code
+        label: text
+      }
+    }
   }
   ${ziel}
 `
