@@ -84,7 +84,7 @@ export const simpleTypes = {
   beschreibung: 'string',
   jahr: 'number',
   datum: 'date',
-  bearbeiter: 'string',
+  bearbeiter: 'uuid',
   bemerkungen: 'string',
   planVorhanden: 'number',
   planBezeichnung: 'string',
