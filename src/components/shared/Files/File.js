@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import styled from 'styled-components'
@@ -10,9 +10,7 @@ import { Formik, Form } from 'formik'
 import upperFirst from 'lodash/upperFirst'
 
 import ErrorBoundary from '../ErrorBoundary'
-
-//import storeContext from '../../../storeContext'
-import TextFieldFormik from '../TextFieldFormik'
+import TextField from '../TextField'
 import {
   apFile as apFileFragment,
   idealbiotopFile as idealbiotopFileFragment,
@@ -22,9 +20,8 @@ import {
   tpopmassnFile as tpopmassnFileFragment,
 } from '../fragments'
 import isImageFile from './isImageFile'
-import objectsFindChangedKey from '../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../modules/objectsEmptyValuesToNull'
 import ifIsNumericAsNumber from '../../../modules/ifIsNumericAsNumber'
+import storeContext from '../../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -77,9 +74,6 @@ const MenuTitle = styled.h3`
     outline: none;
   }
 `
-const FormContainer = styled.div`
-  padding: 10px;
-`
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -92,7 +86,7 @@ const fragmentObject = {
 
 const File = ({ file, parent, refetch }) => {
   const client = useApolloClient()
-  //const store = useContext(storeContext)
+  const store = useContext(storeContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -140,55 +134,13 @@ const File = ({ file, parent, refetch }) => {
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      try {
-        const mutationName = `update${upperFirst(parent)}FileById`
-        const fields = `${upperFirst(parent)}FileFields`
-        const fragment = fragmentObject[parent]
-        const parentId = `${parent}Id`
-        await client.mutate({
-          mutation: gql`
-              mutation UpdateFile(
-                $id: UUID!
-                $${parentId}: UUID
-                $fileId: UUID
-                $fileMimeType: String
-                $name: String
-                $beschreibung: String
-              ) {
-                ${mutationName}(
-                  input: {
-                    id: $id
-                    ${tableName}Patch: {
-                      id: $id
-                      ${parentId}: $${parentId}
-                      fileId: $fileId
-                      fileMimeType: $fileMimeType
-                      name: $name
-                      beschreibung: $beschreibung
-                    }
-                  }
-                ) {
-                  ${tableName} {
-                    ...${fields}
-                  }
-                }
-              }
-              ${fragment}
-            `,
-          variables: objectsEmptyValuesToNull(values),
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
-      setErrors({})
-      refetch()
-    },
-    [client, file, parent, refetch, tableName],
-  )
+      const value = ifIsNumericAsNumber(event.target.value)
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, file)
+      const variables = {
+        id: file.id,
+        [field]: value,
+        changedBy: store.user.name,
+      }
       try {
         const mutationName = `update${upperFirst(parent)}FileById`
         const fields = `${upperFirst(parent)}FileFields`
@@ -224,15 +176,15 @@ const File = ({ file, parent, refetch }) => {
               }
               ${fragment}
             `,
-          variables: objectsEmptyValuesToNull(values),
+          variables,
         })
       } catch (error) {
-        return setErrors({ [changedField]: error.message })
+        return setFieldErrors({ [field]: error.message })
       }
-      setErrors({})
+      setFieldErrors({})
       refetch()
     },
-    [client, file, parent, refetch, tableName],
+    [client, file.id, parent, refetch, store.user.name, tableName],
   )
 
   if (!file) return null
@@ -241,80 +193,78 @@ const File = ({ file, parent, refetch }) => {
 
   return (
     <ErrorBoundary>
-      <Formik initialValues={file} onSubmit={onSubmit} enableReinitialize>
-        {({ handleSubmit, dirty }) => (
-          <Form onBlur={() => dirty && handleSubmit()}>
-            <Container>
-              {isImage ? (
-                <Img
-                  src={`https://ucarecdn.com/${file.fileId}/-/resize/80x/-/quality/lightest/${file.name}`}
-                />
-              ) : (
-                <ImgReplacement>...</ImgReplacement>
-              )}
-              <DateiTypField>
-                <TextFieldFormik
-                  name="fileMimeType"
-                  label="Datei-Typ"
-                  disabled
-                  schrinkLabel
-                  handleSubmit={handleSubmit}
-                />
-              </DateiTypField>
-              <Spacer />
-              <DateiNameField>
-                <TextFieldFormik
-                  name="name"
-                  label="Datei-Name"
-                  disabled
-                  schrinkLabel
-                  handleSubmit={handleSubmit}
-                />
-              </DateiNameField>
-              <Spacer />
-              <BeschreibungField>
-                <TextFieldFormik
-                  name="beschreibung"
-                  label="Beschreibung"
-                  multiLine
-                  schrinkLabel
-                  handleSubmit={handleSubmit}
-                />
-              </BeschreibungField>
-              <DownloadIcon title="herunterladen" onClick={onClickDownload}>
-                <FaDownload />
-              </DownloadIcon>
-              <DelIcon
-                title="löschen"
-                aria-label="löschen"
-                aria-owns={delMenuOpen ? 'delMenu' : undefined}
-                aria-haspopup="true"
-                onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-              >
-                <FaTimes />
-              </DelIcon>
-              <Menu
-                id="delMenu"
-                anchorEl={delMenuAnchorEl}
-                open={delMenuOpen}
-                onClose={() => setDelMenuAnchorEl(null)}
-                PaperProps={{
-                  style: {
-                    maxHeight: 48 * 4.5,
-                    width: 120,
-                  },
-                }}
-              >
-                <MenuTitle>löschen?</MenuTitle>
-                <MenuItem onClick={onClickDelete}>ja</MenuItem>
-                <MenuItem onClick={() => setDelMenuAnchorEl(null)}>
-                  nein
-                </MenuItem>
-              </Menu>
-            </Container>
-          </Form>
+      <Container>
+        {isImage ? (
+          <Img
+            src={`https://ucarecdn.com/${file.fileId}/-/resize/80x/-/quality/lightest/${file.name}`}
+          />
+        ) : (
+          <ImgReplacement>...</ImgReplacement>
         )}
-      </Formik>
+        <DateiTypField>
+          <TextField
+            name="fileMimeType"
+            label="Datei-Typ"
+            disabled
+            schrinkLabel
+            value={file.fileMimeType}
+            saveToDb={saveToDb}
+            error={fieldErrors.fileMimeType}
+          />
+        </DateiTypField>
+        <Spacer />
+        <DateiNameField>
+          <TextField
+            name="name"
+            label="Datei-Name"
+            disabled
+            schrinkLabel
+            value={file.name}
+            saveToDb={saveToDb}
+            error={fieldErrors.name}
+          />
+        </DateiNameField>
+        <Spacer />
+        <BeschreibungField>
+          <TextField
+            name="beschreibung"
+            label="Beschreibung"
+            multiLine
+            schrinkLabel
+            value={file.beschreibung}
+            saveToDb={saveToDb}
+            error={fieldErrors.beschreibung}
+          />
+        </BeschreibungField>
+        <DownloadIcon title="herunterladen" onClick={onClickDownload}>
+          <FaDownload />
+        </DownloadIcon>
+        <DelIcon
+          title="löschen"
+          aria-label="löschen"
+          aria-owns={delMenuOpen ? 'delMenu' : undefined}
+          aria-haspopup="true"
+          onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+        >
+          <FaTimes />
+        </DelIcon>
+        <Menu
+          id="delMenu"
+          anchorEl={delMenuAnchorEl}
+          open={delMenuOpen}
+          onClose={() => setDelMenuAnchorEl(null)}
+          PaperProps={{
+            style: {
+              maxHeight: 48 * 4.5,
+              width: 120,
+            },
+          }}
+        >
+          <MenuTitle>löschen?</MenuTitle>
+          <MenuItem onClick={onClickDelete}>ja</MenuItem>
+          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+        </Menu>
+      </Container>
     </ErrorBoundary>
   )
 }

@@ -9,8 +9,8 @@ import TextField from '../TextField'
 // - TextField if no value exists
 // - markdown presenter if value exists
 // - markdown editor if is focused
-const MdFieldFormik = (props) => {
-  const { name, label, value, saveToDb, error } = props
+const MdField = (props) => {
+  const { label, value } = props
   return (
     <FocusWithin>
       {({ isFocused, focusProps }) => (
@@ -28,4 +28,4 @@ const MdFieldFormik = (props) => {
   )
 }
 
-export default MdFieldFormik
+export default MdField
