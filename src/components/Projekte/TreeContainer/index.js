@@ -631,6 +631,9 @@ const TreeContainer = ({
   }
   if (treeError) return <Error error={treeError} />
 
+  // NOPE: should only show on initial tree loading
+  //if (treeLoading) return <Spinner />
+
   return (
     <ErrorBoundary>
       <Container data-id={`tree-container${treeName === 'tree' ? 1 : 2}`}>
