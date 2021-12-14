@@ -30,7 +30,7 @@ const Key = styled.div`
 `
 
 const ConflictData = ({ dataArray = [], loading }) => {
-  if (loading) return <Spinner message="lade Daten" />
+  if (loading) return <Spinner />
 
   return dataArray.map((d, index) => {
     // need to use get to enable passing paths as key, for instance 'person.name'

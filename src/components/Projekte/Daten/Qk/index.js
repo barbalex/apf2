@@ -14,6 +14,7 @@ import Choose from './Choose'
 import queryQk from './queryQk'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -21,10 +22,6 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const StyledTab = styled(Tab)`
   text-transform: none !important;
@@ -109,7 +106,7 @@ const QkForm = ({ treeName }) => {
               {tab === 'qk' ? (
                 <>
                   {loading ? (
-                    <LoadingContainer>Lade Daten...</LoadingContainer>
+                    <Spinner />
                   ) : (
                     <Qk
                       key={qkCount}

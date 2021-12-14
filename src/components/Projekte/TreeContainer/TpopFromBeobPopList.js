@@ -12,10 +12,8 @@ import storeContext from '../../../storeContext'
 import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Error from '../../shared/Error'
+import Spinner from '../../shared/Spinner'
 
-const LoadingContainer = styled.div`
-  padding: 10px;
-`
 const StyledListItem = styled(ListItem)`
   white-space: nowrap;
   overflow: hidden;
@@ -50,7 +48,8 @@ const TpopFromBeobPopList = ({
     variables: { apId },
   })
 
-  if (loading) return <LoadingContainer>Lade Daten...</LoadingContainer>
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
 
   const pops = data?.allPops?.nodes ?? []
