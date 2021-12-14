@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
+import { useResizeDetector } from 'react-resize-detector'
 
 import KarteOderNull from './KarteOderNull'
 import TreeContainer from './TreeContainer'
@@ -94,8 +95,6 @@ const ProjektContainer = ({
     activeNodeArray,
   } = store[treeName]
 
-  const [height, setHeight] = useState(1000)
-
   const showApberForAp =
     activeNodeArray.length === 7 &&
     activeNodeArray[4] === 'AP-Berichte' &&
@@ -110,19 +109,25 @@ const ProjektContainer = ({
   const datenEl = useRef(null)
   const filterEl = useRef(null)
 
+  /**
+   * using containerEl to set height leaded to weird behaviour
+   */
+  //const [height, setHeight] = useState(1000)
+  const { height = 1000 } = useResizeDetector({ targetRef: containerEl })
+
   // remove 2 to treat all same
   const tabs = [...tabsPassed].map((t) => t.replace('2', ''))
 
   const setDimensions = useCallback(() => {
-    console.log('ProjektContainer setting dimensions')
+    //console.log('ProjektContainer setting dimensions')
     setTreeWidth(treeEl?.current?.clientWidth ?? standardWidth)
     setFormWidth(datenEl?.current?.clientWidth ?? standardWidth)
     setFormHeight(containerEl?.current?.clientHeight ?? standardWidth)
-    setHeight(containerEl?.current?.clientHeight ?? standardWidth)
+    //setHeight(containerEl?.current?.clientHeight ?? standardWidth)
     setFilterWidth(filterEl?.current?.clientWidth ?? standardWidth)
   }, [setFilterWidth, setFormHeight, setFormWidth, setTreeWidth])
 
-  //console.log('ProjektContainer, formHeight:', height)
+  //console.log('ProjektContainer, height:', height)
 
   const setDimensionsDebounced = useDebouncedCallback(setDimensions, 600)
 
