@@ -150,6 +150,7 @@ const TpopmassnFilter = ({ treeName }) => {
       if (!changedField) return
 
       const value = values[changedField]
+
       dataFilterSetValue({
         treeName,
         table: 'tpopmassn',
@@ -198,101 +199,115 @@ const TpopmassnFilter = ({ treeName }) => {
               >
                 {({ handleSubmit, dirty }) => (
                   <Form onBlur={() => dirty && handleSubmit()}>
-                    <TextFieldFormik
+                    <TextField
                       name="jahr"
                       label="Jahr"
                       type="number"
-                      handleSubmit={handleSubmit}
+                      value={row.jahr}
+                      saveToDb={saveToDb}
                     />
-                    <DateFieldFormik
+                    <DateField
                       name="datum"
                       label="Datum"
-                      handleSubmit={handleSubmit}
+                      value={row.datum}
+                      saveToDb={saveToDb}
                     />
-                    <RadioButtonGroupFormik
+                    <RadioButtonGroup
                       name="typ"
                       label="Typ"
                       dataSource={dataLists?.allTpopmassnTypWertes?.nodes ?? []}
                       loading={loadingLists}
-                      handleSubmit={handleSubmit}
+                      value={row.typ}
+                      saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="beschreibung"
                       label="Massnahme"
                       type="text"
-                      handleSubmit={handleSubmit}
+                      value={row.beschreibung}
+                      saveToDb={saveToDb}
                     />
-                    <SelectFormik
+                    <Select
                       name="bearbeiter"
-                      value={row.bearbeiter}
                       label="BearbeiterIn"
                       options={dataAdresses?.allAdresses?.nodes ?? []}
                       loading={loadingAdresses}
-                      handleSubmit={handleSubmit}
+                      value={row.bearbeiter}
+                      saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="bemerkungen"
                       label="Bemerkungen"
                       type="text"
                       multiLine
-                      handleSubmit={handleSubmit}
+                      value={row.bemerkungen}
+                      saveToDb={saveToDb}
                     />
-                    <Checkbox2StatesFormik
+                    <Checkbox2States
                       name="planVorhanden"
                       label="Plan vorhanden"
-                      handleSubmit={handleSubmit}
+                      value={row.planVorhanden}
+                      saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="planBezeichnung"
                       label="Plan Bezeichnung"
                       type="text"
-                      handleSubmit={handleSubmit}
+                      value={row.planBezeichnung}
+                      saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="flaeche"
                       label="Fläche (m2)"
                       type="number"
-                      handleSubmit={handleSubmit}
+                      value={row.flaeche}
+                      saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="form"
                       label="Form der Ansiedlung"
                       type="text"
-                      handleSubmit={handleSubmit}
+                      value={row.form}
+                      saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="pflanzanordnung"
                       label="Pflanzanordnung"
                       type="text"
-                      handleSubmit={handleSubmit}
+                      value={row.pflanzanordnung}
+                      saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="markierung"
                       label="Markierung"
                       type="text"
-                      handleSubmit={handleSubmit}
+                      value={row.markierung}
+                      saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="anzTriebe"
                       label="Anzahl Triebe"
                       type="number"
-                      handleSubmit={handleSubmit}
+                      value={row.anzTriebe}
+                      saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="anzPflanzen"
                       label="Anzahl Pflanzen"
                       type="number"
-                      handleSubmit={handleSubmit}
+                      value={row.anzPflanzen}
+                      saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="anzPflanzstellen"
                       label="Anzahl Pflanzstellen"
                       type="number"
-                      handleSubmit={handleSubmit}
+                      value={row.anzPflanzstellen}
+                      saveToDb={saveToDb}
                     />
                     {isAnpflanzung && (
                       <>
-                        <SelectFormik
+                        <Select
                           name="zieleinheitEinheit"
                           label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
                           options={
@@ -300,42 +315,54 @@ const TpopmassnFilter = ({ treeName }) => {
                             []
                           }
                           loading={loadingLists}
-                          handleSubmit={handleSubmit}
+                          value={row.zieleinheitEinheit}
+                          saveToDb={saveToDb}
                         />
-                        <TextFieldFormik
+                        <TextField
                           name="zieleinheitAnzahl"
                           label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
                           type="number"
-                          handleSubmit={handleSubmit}
+                          value={row.zieleinheitAnzahl}
+                          saveToDb={saveToDb}
                         />
                       </>
                     )}
-                    <SelectLoadingOptionsTypableFormik
-                      key={`any-filter${!!row.wirtspflanze}`}
-                      name="wirtspflanze"
+                    <SelectLoadingOptionsTypable
                       field="wirtspflanze"
                       label="Wirtspflanze"
                       handleSubmit={handleSubmit}
                       query={queryAeTaxonomies}
                       queryNodesName="allAeTaxonomies"
+                      value={row?.wirtspflanze}
+                      saveToDb={saveToDb}
+                      row={row}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="herkunftPop"
                       label="Herkunftspopulation"
                       type="text"
-                      handleSubmit={handleSubmit}
+                      value={row.herkunftPop}
+                      saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
+                    <TextField
                       name="sammeldatum"
                       label="Sammeldatum"
                       type="text"
-                      handleSubmit={handleSubmit}
+                      value={row.sammeldatum}
+                      saveToDb={saveToDb}
                     />
                     <TextFieldFormik
                       name="vonAnzahlIndividuen"
                       label="Anzahl besammelte Individuen der Herkunftspopulation"
                       type="number"
                       handleSubmit={handleSubmit}
+                    />
+                    <TextField
+                      name="vonAnzahlIndividuen"
+                      label="Anzahl besammelte Individuen der Herkunftspopulation"
+                      type="number"
+                      value={row.vonAnzahlIndividuen}
+                      saveToDb={saveToDb}
                     />
                   </Form>
                 )}
