@@ -351,12 +351,6 @@ const TpopmassnFilter = ({ treeName }) => {
                       value={row.sammeldatum}
                       saveToDb={saveToDb}
                     />
-                    <TextFieldFormik
-                      name="vonAnzahlIndividuen"
-                      label="Anzahl besammelte Individuen der Herkunftspopulation"
-                      type="number"
-                      handleSubmit={handleSubmit}
-                    />
                     <TextField
                       name="vonAnzahlIndividuen"
                       label="Anzahl besammelte Individuen der Herkunftspopulation"
