@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import camelCase from 'lodash/camelCase'
 import upperFirst from 'lodash/upperFirst'
@@ -7,13 +7,16 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
+import TextFieldFormik from '../../../shared/TextFieldFormik'
+import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
-import TextField from '../../../shared/TextFieldFormik'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -31,12 +34,17 @@ const FieldsContainer = styled.div`
 const StyledForm = styled(Form)`
   padding: 10px;
 `
+const FormContainer = styled.div`
+  padding: 10px;
+`
 
 const Werte = ({ treeName, table }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { refetch: refetchTree } = store
   const { activeNodeArray } = store[treeName]
+
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const tableCamelCased = camelCase(table)
   const id =
@@ -70,6 +78,74 @@ const Werte = ({ treeName, table }) => {
     codeGqlType = 'String'
     codeFieldType = 'text'
   }
+
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+
+      const variables = {
+        id: row.id,
+        [field]: value,
+        changedBy: store.user.name,
+      }
+
+      const __typename = upperFirst(tableCamelCased)
+      try {
+        const mutation = gql`
+          mutation updateWert(
+            $id: UUID!
+            $code: ${codeGqlType}
+            $text: String
+            $sort: Int
+            $changedBy: String
+          ) {
+            update${__typename}ById(
+              input: {
+                id: $id
+                ${tableCamelCased}Patch: {
+                  id: $id
+                  code: $code
+                  text: $text
+                  sort: $sort
+                  changedBy: $changedBy
+                }
+              }
+            ) {
+              ${tableCamelCased} {
+                id
+                code
+                text
+                sort
+                changedBy
+              }
+            }
+          }
+        `
+        await client.mutate({
+          mutation,
+          variables,
+        })
+      } catch (error) {
+        return setFieldErrors({ [field]: error.message })
+      }
+      refetch()
+      const refetchTableName = `${table}s`
+      // for unknown reason refetching is necessary here
+      refetchTree[refetchTableName] && refetchTree[refetchTableName]()
+      setFieldErrors({})
+    },
+    [
+      client,
+      codeGqlType,
+      refetch,
+      refetchTree,
+      row,
+      store.user.name,
+      table,
+      tableCamelCased,
+    ],
+  )
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -151,9 +227,8 @@ const Werte = ({ treeName, table }) => {
     ],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
 
   return (
@@ -180,19 +255,19 @@ const Werte = ({ treeName, table }) => {
             >
               {({ handleSubmit, dirty }) => (
                 <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <TextField
+                  <TextFieldFormik
                     name="text"
                     label="Text"
                     type="text"
                     handleSubmit={handleSubmit}
                   />
-                  <TextField
+                  <TextFieldFormik
                     name="code"
                     label="Code"
                     type={codeFieldType}
                     handleSubmit={handleSubmit}
                   />
-                  <TextField
+                  <TextFieldFormik
                     name="sort"
                     label="Sort"
                     type="number"

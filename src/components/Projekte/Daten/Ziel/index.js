@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
@@ -6,17 +6,21 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
-import TextField from '../../../shared/TextFieldFormik'
+import RadioButtonGroupFormik from '../../../shared/RadioButtonGroupFormik'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import TextFieldFormik from '../../../shared/TextFieldFormik'
+import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryLists from './queryLists'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import { ziel as zielFragment } from '../../../shared/fragments'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -34,6 +38,9 @@ const FieldsContainer = styled.div`
 const StyledForm = styled(Form)`
   padding: 10px;
 `
+const FormContainer = styled.div`
+  padding: 10px;
+`
 
 const fieldTypes = {
   apId: 'UUID',
@@ -47,6 +54,8 @@ const Ziel = ({ treeName }) => {
   const store = useContext(storeContext)
   const { activeNodeArray, setActiveNodeArray, openNodes, setOpenNodes } =
     store[treeName]
+
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -64,6 +73,74 @@ const Ziel = ({ treeName }) => {
   } = useQuery(queryLists)
 
   const row = useMemo(() => data?.zielById ?? {}, [data?.zielById])
+
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+
+      const variables = {
+        id: row.id,
+        [field]: value,
+        changedBy: store.user.name,
+      }
+      try {
+        await client.mutate({
+          mutation: gql`
+            mutation updateZiel(
+              $id: UUID!
+              $${field}: ${fieldTypes[field]}
+              $changedBy: String
+            ) {
+              updateZielById(
+                input: {
+                  id: $id
+                  zielPatch: {
+                    ${field}: $${field}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                ziel {
+                  ...ZielFields
+                }
+              }
+            }
+            ${zielFragment}
+          `,
+          variables,
+        })
+      } catch (error) {
+        return setFieldErrors({ [field]: error.message })
+      }
+      setFieldErrors({})
+      // if jahr of ziel is updated, activeNodeArray und openNodes need to change
+      if (field === 'jahr') {
+        const newActiveNodeArray = [...activeNodeArray]
+        newActiveNodeArray[5] = +value
+        const oldParentNodeUrl = [...activeNodeArray]
+        oldParentNodeUrl.pop()
+        const newParentNodeUrl = [...newActiveNodeArray]
+        newParentNodeUrl.pop()
+        let newOpenNodes = openNodes.map((n) => {
+          if (isEqual(n, activeNodeArray)) return newActiveNodeArray
+          if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
+          return n
+        })
+        setActiveNodeArray(newActiveNodeArray)
+        setOpenNodes(newOpenNodes)
+      }
+    },
+    [
+      row,
+      client,
+      store.user.name,
+      activeNodeArray,
+      openNodes,
+      setActiveNodeArray,
+      setOpenNodes,
+    ],
+  )
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -147,9 +224,7 @@ const Ziel = ({ treeName }) => {
     ],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
 
   const errors = [
     ...(error ? [error] : []),
@@ -176,20 +251,20 @@ const Ziel = ({ treeName }) => {
             <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
               {({ handleSubmit, dirty }) => (
                 <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <TextField
+                  <TextFieldFormik
                     name="jahr"
                     label="Jahr"
                     type="number"
                     handleSubmit={handleSubmit}
                   />
-                  <RadioButtonGroup
+                  <RadioButtonGroupFormik
                     name="typ"
                     label="Zieltyp"
                     dataSource={dataLists?.allZielTypWertes?.nodes ?? []}
                     loading={loadingLists}
                     handleSubmit={handleSubmit}
                   />
-                  <TextField
+                  <TextFieldFormik
                     name="bezeichnung"
                     label="Ziel"
                     type="text"

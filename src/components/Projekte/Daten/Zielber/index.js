@@ -1,19 +1,22 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import TextField from '../../../shared/TextFieldFormik'
+import TextFieldFormik from '../../../shared/TextFieldFormik'
+import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import { zielber as zielberFragment } from '../../../shared/fragments'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -31,6 +34,9 @@ const FieldsContainer = styled.div`
 const StyledForm = styled(Form)`
   padding: 10px;
 `
+const FormContainer = styled.div`
+  padding: 10px;
+`
 
 const fieldTypes = {
   zielId: 'UUID',
@@ -45,6 +51,8 @@ const Zielber = ({ treeName }) => {
   const store = useContext(storeContext)
   const { activeNodeArray } = store[treeName]
 
+  const [fieldErrors, setFieldErrors] = useState({})
+
   const { data, loading, error } = useQuery(query, {
     variables: {
       id:
@@ -55,6 +63,50 @@ const Zielber = ({ treeName }) => {
   })
 
   const row = useMemo(() => data?.zielberById ?? {}, [data?.zielberById])
+
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+
+      const variables = {
+        id: row.id,
+        [field]: value,
+        changedBy: store.user.name,
+      }
+      try {
+        await client.mutate({
+          mutation: gql`
+            mutation updateZielber(
+              $id: UUID!
+              $${field}: ${fieldTypes[field]}
+              $changedBy: String
+            ) {
+              updateZielberById(
+                input: {
+                  id: $id
+                  zielberPatch: {
+                    ${field}: $${field}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                zielber {
+                  ...ZielberFields
+                }
+              }
+            }
+            ${zielberFragment}
+          `,
+          variables,
+        })
+      } catch (error) {
+        return setFieldErrors({ [field]: error.message })
+      }
+      setFieldErrors({})
+    },
+    [client, row, store.user.name],
+  )
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -113,9 +165,7 @@ const Zielber = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
 
@@ -138,19 +188,19 @@ const Zielber = ({ treeName }) => {
             <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
               {({ handleSubmit, dirty }) => (
                 <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <TextField
+                  <TextFieldFormik
                     name="jahr"
                     label="Jahr"
                     type="number"
                     handleSubmit={handleSubmit}
                   />
-                  <TextField
+                  <TextFieldFormik
                     name="erreichung"
                     label="Ziel-Erreichung"
                     type="text"
                     handleSubmit={handleSubmit}
                   />
-                  <TextField
+                  <TextFieldFormik
                     name="bemerkungen"
                     label="Bemerkungen"
                     type="text"

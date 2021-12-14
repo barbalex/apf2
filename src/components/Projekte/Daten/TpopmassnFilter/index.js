@@ -6,12 +6,19 @@ import { useQuery } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
-import TextField from '../../../shared/TextFieldFormik'
-import Select from '../../../shared/SelectFormik'
-import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypableFormik'
-import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
-import DateField from '../../../shared/DateFormik'
+import RadioButtonGroupFormik from '../../../shared/RadioButtonGroupFormik'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import TextFieldFormik from '../../../shared/TextFieldFormik'
+import TextField from '../../../shared/TextField'
+import SelectFormik from '../../../shared/SelectFormik'
+import Select from '../../../shared/Select'
+import SelectLoadingOptionsTypableFormik from '../../../shared/SelectLoadingOptionsTypableFormik'
+import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypable'
+import Checkbox2StatesFormik from '../../../shared/Checkbox2StatesFormik'
+import Checkbox2States from '../../../shared/Checkbox2States'
+import DateFieldFormik from '../../../shared/DateFormik'
+import DateField from '../../../shared/Date'
+
 import FilterTitle from '../../../shared/FilterTitle'
 import constants from '../../../../modules/constants'
 import queryLists from './queryLists'
@@ -22,6 +29,7 @@ import queryIsMassnTypAnpflanzung from './queryIsMassnTypAnpflanzung'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopmassnType } from '../../../../store/Tree/DataFilter/tpopmassn'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 
@@ -34,6 +42,9 @@ const Container = styled.div`
 `
 const FormScrollContainer = styled.div`
   overflow-y: auto;
+`
+const FormContainer = styled.div`
+  padding: 10px;
 `
 const ColumnContainer = styled.div`
   padding: 10px;
@@ -114,6 +125,21 @@ const TpopmassnFilter = ({ treeName }) => {
   const isAnpflanzung =
     dataIsMassnTypAnpflanzung?.allTpopmassnTypWertes?.nodes?.[0]?.anpflanzung
 
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      const value = ifIsNumericAsNumber(event.target.value)
+
+      dataFilterSetValue({
+        treeName,
+        table: 'tpopmassn',
+        key: field,
+        value,
+      })
+    },
+    [dataFilterSetValue, treeName],
+  )
+
   const onSubmit = useCallback(
     async (values) => {
       const changedField = objectsFindChangedKey(values, row)
@@ -172,31 +198,31 @@ const TpopmassnFilter = ({ treeName }) => {
               >
                 {({ handleSubmit, dirty }) => (
                   <Form onBlur={() => dirty && handleSubmit()}>
-                    <TextField
+                    <TextFieldFormik
                       name="jahr"
                       label="Jahr"
                       type="number"
                       handleSubmit={handleSubmit}
                     />
-                    <DateField
+                    <DateFieldFormik
                       name="datum"
                       label="Datum"
                       handleSubmit={handleSubmit}
                     />
-                    <RadioButtonGroup
+                    <RadioButtonGroupFormik
                       name="typ"
                       label="Typ"
                       dataSource={dataLists?.allTpopmassnTypWertes?.nodes ?? []}
                       loading={loadingLists}
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="beschreibung"
                       label="Massnahme"
                       type="text"
                       handleSubmit={handleSubmit}
                     />
-                    <Select
+                    <SelectFormik
                       name="bearbeiter"
                       value={row.bearbeiter}
                       label="BearbeiterIn"
@@ -204,61 +230,61 @@ const TpopmassnFilter = ({ treeName }) => {
                       loading={loadingAdresses}
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="bemerkungen"
                       label="Bemerkungen"
                       type="text"
                       multiLine
                       handleSubmit={handleSubmit}
                     />
-                    <Checkbox2States
+                    <Checkbox2StatesFormik
                       name="planVorhanden"
                       label="Plan vorhanden"
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="planBezeichnung"
                       label="Plan Bezeichnung"
                       type="text"
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="flaeche"
                       label="Fläche (m2)"
                       type="number"
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="form"
                       label="Form der Ansiedlung"
                       type="text"
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="pflanzanordnung"
                       label="Pflanzanordnung"
                       type="text"
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="markierung"
                       label="Markierung"
                       type="text"
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="anzTriebe"
                       label="Anzahl Triebe"
                       type="number"
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="anzPflanzen"
                       label="Anzahl Pflanzen"
                       type="number"
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="anzPflanzstellen"
                       label="Anzahl Pflanzstellen"
                       type="number"
@@ -266,7 +292,7 @@ const TpopmassnFilter = ({ treeName }) => {
                     />
                     {isAnpflanzung && (
                       <>
-                        <Select
+                        <SelectFormik
                           name="zieleinheitEinheit"
                           label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
                           options={
@@ -276,7 +302,7 @@ const TpopmassnFilter = ({ treeName }) => {
                           loading={loadingLists}
                           handleSubmit={handleSubmit}
                         />
-                        <TextField
+                        <TextFieldFormik
                           name="zieleinheitAnzahl"
                           label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
                           type="number"
@@ -284,7 +310,7 @@ const TpopmassnFilter = ({ treeName }) => {
                         />
                       </>
                     )}
-                    <SelectLoadingOptionsTypable
+                    <SelectLoadingOptionsTypableFormik
                       key={`any-filter${!!row.wirtspflanze}`}
                       name="wirtspflanze"
                       field="wirtspflanze"
@@ -293,19 +319,19 @@ const TpopmassnFilter = ({ treeName }) => {
                       query={queryAeTaxonomies}
                       queryNodesName="allAeTaxonomies"
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="herkunftPop"
                       label="Herkunftspopulation"
                       type="text"
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="sammeldatum"
                       label="Sammeldatum"
                       type="text"
                       handleSubmit={handleSubmit}
                     />
-                    <TextField
+                    <TextFieldFormik
                       name="vonAnzahlIndividuen"
                       label="Anzahl besammelte Individuen der Herkunftspopulation"
                       type="number"
