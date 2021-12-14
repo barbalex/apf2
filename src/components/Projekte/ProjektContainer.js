@@ -90,11 +90,8 @@ const ProjektContainer = ({
     setFormWidth,
     setFilterWidth,
     setFormHeight,
-    formHeight: height,
     activeNodeArray,
   } = store[treeName]
-
-  //console.log('ProjektContainer, formHeight:', height)
 
   const showApberForAp =
     activeNodeArray.length === 7 &&
@@ -120,6 +117,10 @@ const ProjektContainer = ({
     setFormHeight(containerEl?.current?.clientHeight ?? standardWidth)
     setFilterWidth(filterEl?.current?.clientWidth ?? standardWidth)
   }, [setFilterWidth, setFormHeight, setFormWidth, setTreeWidth])
+
+  const height = containerEl?.current?.clientHeight ?? standardWidth
+
+  //console.log('ProjektContainer, formHeight:', { height })
 
   const setDimensionsDebounced = useDebouncedCallback(setDimensions, 600)
 
