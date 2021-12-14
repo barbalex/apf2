@@ -8,16 +8,13 @@ import SimpleBar from 'simplebar-react'
 import query from './query'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const ScrollContainer = styled.div`
   overflow-y: auto;
@@ -56,7 +53,7 @@ const Messages = () => {
 
   const rows = data?.allMessages?.nodes ?? []
 
-  if (loading) return <LoadingContainer>Lade...</LoadingContainer>
+  if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
 

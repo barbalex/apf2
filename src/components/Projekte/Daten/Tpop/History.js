@@ -185,9 +185,7 @@ const TpopHistory = ({ tpopId }) => {
     }
   }, [])
 
-  if (loading) {
-    return <Spinner message="lade Historien" />
-  }
+  if (loading) return <Spinner />
 
   if (error) {
     return <ErrorContainer>{error.message}</ErrorContainer>

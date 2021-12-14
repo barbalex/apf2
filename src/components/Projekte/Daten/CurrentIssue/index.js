@@ -9,6 +9,7 @@ import storeContext from '../../../../storeContext'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
@@ -17,10 +18,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
@@ -53,11 +50,12 @@ const CurrentIssue = ({ treeName }) => {
 
   const row = data?.currentissueById ?? {}
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
+
   if (!row) return null
+
   return (
     <ErrorBoundary>
       <Container>

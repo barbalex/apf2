@@ -4,7 +4,6 @@ import React, {
   useCallback,
   useEffect,
   Suspense,
-  useState,
 } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
@@ -20,6 +19,7 @@ import Filter from './Filter'
 import storeContext from '../../storeContext'
 import ApberForApFromAp from '../Print/ApberForApFromAp'
 import ApberForYear from '../Print/ApberForYear'
+import Spinner from '../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -167,7 +167,7 @@ const ProjektContainer = ({
     ),
     karte: (
       <InnerContainer>
-        <Suspense fallback={<div>Lade...</div>}>
+        <Suspense fallback={<Spinner />}>
           <KarteOderNull treeName={treeName} />
         </Suspense>
       </InnerContainer>

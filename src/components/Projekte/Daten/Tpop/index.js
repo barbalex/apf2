@@ -20,6 +20,7 @@ import TpopHistory from './History'
 import Files from '../../../shared/Files'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 import {
   popStatusWerte,
   tpop,
@@ -39,9 +40,6 @@ const FieldsContainer = styled.div`
   fieldset {
     padding-right: 30px;
   }
-`
-const LoadingDiv = styled.div`
-  padding: 10px;
 `
 const StyledTab = styled(Tab)`
   text-transform: none !important;
@@ -306,7 +304,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
           </Tabs>
           <TabContent>
             {!showFilter && loading ? (
-              <LoadingDiv>Lade...</LoadingDiv>
+              <Spinner />
             ) : tab === 'tpop' ? (
               <Tpop
                 showFilter={showFilter}
@@ -317,6 +315,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
                 apJahr={apJahr}
                 refetchTpop={refetchTpop}
                 treeName={treeName}
+                loadingParent={loading}
               />
             ) : tab === 'ek' ? (
               <Ek
@@ -325,10 +324,10 @@ const TpopForm = ({ treeName, showFilter = false }) => {
                 saveToDb={saveToDb}
                 fieldErrors={fieldErrors}
                 row={row}
-                loading={loading}
+                loadingParent={loading}
               />
             ) : tab === 'dateien' ? (
-              <Files parentId={row?.id} parent="tpop" />
+              <Files parentId={row?.id} parent="tpop" loadingParent={loading} />
             ) : (
               <TpopHistory tpopId={id} />
             )}

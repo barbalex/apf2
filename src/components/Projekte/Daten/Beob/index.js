@@ -10,15 +10,13 @@ import query from './query'
 import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   padding: 15px 10px 0 10px;
   ${(props) =>
     props['data-column-width'] &&
     `column-width: ${props['data-column-width']}px;`}
-`
-const LoadingContainer = styled.div`
-  padding: 10px;
 `
 
 const Beob = ({ treeName }) => {
@@ -45,9 +43,8 @@ const Beob = ({ treeName }) => {
 
   if (!row) return null
   if (!beobFields || beobFields.length === 0) return null
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
 
   return (

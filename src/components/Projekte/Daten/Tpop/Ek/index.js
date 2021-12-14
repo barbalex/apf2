@@ -61,13 +61,13 @@ const EkplanTitle = styled.h5`
   margin-bottom: 10px;
 `
 
-const Tpop = ({
+const Ek = ({
   treeName,
   showFilter,
   saveToDb,
   row,
   fieldErrors,
-  loading,
+  loadingParent,
 }) => {
   const store = useContext(storeContext)
 
@@ -113,7 +113,7 @@ const Tpop = ({
     'jahr',
   )
 
-  if (loading) return <Spinner />
+  if (loadingEk || loadingParent) return <Spinner />
 
   if (!row) return null
 
@@ -202,4 +202,4 @@ const Tpop = ({
   )
 }
 
-export default observer(Tpop)
+export default observer(Ek)

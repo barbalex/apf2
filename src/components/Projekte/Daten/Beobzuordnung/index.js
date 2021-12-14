@@ -24,6 +24,7 @@ import sendMail from '../../../../modules/sendMail'
 import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 import {
   aeTaxonomies,
   beob,
@@ -35,10 +36,6 @@ const PopoverContainer = styled.div`
   overflow-x: auto;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const FormContainer = styled.div`
   height: 100%;
@@ -288,9 +285,8 @@ const Beobzuordnung = ({ type, treeName }) => {
     [client, id, store.user.name],
   )
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
+
   if (error) return <Error error={error} />
 
   return (

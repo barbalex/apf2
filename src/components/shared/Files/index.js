@@ -9,6 +9,7 @@ import SimpleBar from 'simplebar-react'
 
 import ErrorBoundary from '../ErrorBoundary'
 import Error from '../Error'
+import Spinner from '../Spinner'
 
 import {
   apFile as apFileFragment,
@@ -49,7 +50,7 @@ const fragmentObject = {
   tpopmassn: tpopmassnFileFragment,
 }
 
-const Files = ({ parentId, parent }) => {
+const Files = ({ parentId, parent, loadingParent }) => {
   const client = useApolloClient()
 
   const [imageIndex, setImageIndex] = useState(0)
@@ -140,7 +141,7 @@ const Files = ({ parentId, parent }) => {
     [imageIndex, images.length],
   )
 
-  if (loading) return 'Lade...'
+  if (loading || loadingParent) return <Spinner />
 
   if (error) return <Error error={error} />
 

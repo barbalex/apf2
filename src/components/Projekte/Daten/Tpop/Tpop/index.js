@@ -16,6 +16,7 @@ import TpopAbBerRelevantInfoPopover from '../../TpopAbBerRelevantInfoPopover'
 import constants from '../../../../../modules/constants'
 import storeContext from '../../../../../storeContext'
 import Coordinates from '../../../../shared/Coordinates'
+import Spinner from '../../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -34,6 +35,7 @@ const Tpop = ({
   apJahr,
   refetchTpop,
   treeName,
+  loadingParent,
 }) => {
   const store = useContext(storeContext)
   const { formWidth: width } = store[treeName]
@@ -69,6 +71,8 @@ const Tpop = ({
 
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
+
+  if (loadingParent) return <Spinner />
 
   if (!row) return null
 
