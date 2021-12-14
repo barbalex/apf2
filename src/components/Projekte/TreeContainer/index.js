@@ -92,6 +92,7 @@ import storeContext from '../../../storeContext'
 import TpopFromBeobPopList from './TpopFromBeobPopList'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Error from '../../shared/Error'
+import Spinner from '../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -631,8 +632,8 @@ const TreeContainer = ({
   }
   if (treeError) return <Error error={treeError} />
 
-  // NOPE: should only show on initial tree loading
-  //if (treeLoading) return <Spinner />
+  // should only show on initial tree loading
+  if (treeLoading && !nodes.length) return <Spinner />
 
   return (
     <ErrorBoundary>
