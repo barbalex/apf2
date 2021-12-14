@@ -2,16 +2,12 @@ import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import TextFieldFormik from '../../../shared/TextFieldFormik'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
@@ -24,15 +20,8 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const FieldsContainer = styled.div`
   overflow-y: auto;
-`
-const StyledForm = styled(Form)`
-  padding: 10px;
 `
 const FormContainer = styled.div`
   padding: 10px;
@@ -108,63 +97,6 @@ const Zielber = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
-
-      const variables = {
-        ...objectsEmptyValuesToNull(values),
-        changedBy: store.user.name,
-      }
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation updateZielber(
-              $id: UUID!
-              $${changedField}: ${fieldTypes[changedField]}
-              $changedBy: String
-            ) {
-              updateZielberById(
-                input: {
-                  id: $id
-                  zielberPatch: {
-                    ${changedField}: $${changedField}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                zielber {
-                  ...ZielberFields
-                }
-              }
-            }
-            ${zielberFragment}
-          `,
-          variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateZielberById: {
-              zielber: {
-                ...variables,
-                __typename: 'Zielber',
-              },
-              __typename: 'Zielber',
-            },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [changedField]: error.message })
-      }
-      setErrors({})
-    },
-    [client, row, store.user.name],
-  )
-
   if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
@@ -185,31 +117,33 @@ const Zielber = ({ treeName }) => {
               height: '100%',
             }}
           >
-            <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-              {({ handleSubmit, dirty }) => (
-                <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <TextFieldFormik
-                    name="jahr"
-                    label="Jahr"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextFieldFormik
-                    name="erreichung"
-                    label="Ziel-Erreichung"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextFieldFormik
-                    name="bemerkungen"
-                    label="Bemerkungen"
-                    type="text"
-                    multiLine
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
-              )}
-            </Formik>
+            <FormContainer>
+              <TextField
+                name="jahr"
+                label="Jahr"
+                type="number"
+                value={row.jahr}
+                saveToDb={saveToDb}
+                error={fieldErrors.jahr}
+              />
+              <TextField
+                name="erreichung"
+                label="Ziel-Erreichung"
+                type="text"
+                value={row.erreichung}
+                saveToDb={saveToDb}
+                error={fieldErrors.erreichung}
+              />
+              <TextField
+                name="bemerkungen"
+                label="Bemerkungen"
+                type="text"
+                multiLine
+                value={row.bemerkungen}
+                saveToDb={saveToDb}
+                error={fieldErrors.bemerkungen}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>
