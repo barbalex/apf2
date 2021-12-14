@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useEffect,
   Suspense,
+  useState,
 } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
@@ -93,6 +94,8 @@ const ProjektContainer = ({
     activeNodeArray,
   } = store[treeName]
 
+  const [height, setHeight] = useState(1000)
+
   const showApberForAp =
     activeNodeArray.length === 7 &&
     activeNodeArray[4] === 'AP-Berichte' &&
@@ -115,12 +118,11 @@ const ProjektContainer = ({
     setTreeWidth(treeEl?.current?.clientWidth ?? standardWidth)
     setFormWidth(datenEl?.current?.clientWidth ?? standardWidth)
     setFormHeight(containerEl?.current?.clientHeight ?? standardWidth)
+    setHeight(containerEl?.current?.clientHeight ?? standardWidth)
     setFilterWidth(filterEl?.current?.clientWidth ?? standardWidth)
   }, [setFilterWidth, setFormHeight, setFormWidth, setTreeWidth])
 
-  const height = containerEl?.current?.clientHeight ?? standardWidth
-
-  //console.log('ProjektContainer, formHeight:', { height })
+  //console.log('ProjektContainer, formHeight:', height)
 
   const setDimensionsDebounced = useDebouncedCallback(setDimensions, 600)
 
