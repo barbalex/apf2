@@ -16,7 +16,6 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField2'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
-import queryAdresses from './queryAdresses'
 import queryEkfTpops from './queryEkfTpops'
 import Select from '../../../shared/Select'
 import storeContext from '../../../../storeContext'
@@ -27,16 +26,13 @@ import {
 } from '../../../shared/fragments'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
 `
 const ScrollContainer = styled.div`
   overflow-y: auto;
@@ -119,12 +115,6 @@ const User = ({ treeName }) => {
       id,
     },
   })
-
-  const {
-    data: dataAdresses,
-    loading: loadingAdresses,
-    error: errorAdresses,
-  } = useQuery(queryAdresses, { variables: { id } })
 
   const row = data?.userById ?? {}
 
@@ -315,15 +305,9 @@ const User = ({ treeName }) => {
     thisYear,
   ])
 
-  if (loading) {
-    return <LoadingContainer>Lade...</LoadingContainer>
-  }
+  if (loading) return <Spinner />
 
-  const queryErrors = [
-    ...(error ? [error] : []),
-    ...(errorAdresses ? [errorAdresses] : []),
-  ]
-  if (queryErrors.length) return <Error errors={queryErrors} />
+  if (error) return <Error error={error} />
 
   if (!row) return null
 
@@ -415,8 +399,8 @@ const User = ({ treeName }) => {
                 value={row.adresseId}
                 field="adresseId"
                 label="Zugehörige Adresse"
-                options={dataAdresses?.allAdresses?.nodes ?? []}
-                loading={loadingAdresses}
+                options={data?.allAdresses?.nodes ?? []}
+                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.adresseId}
               />
