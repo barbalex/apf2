@@ -4,15 +4,11 @@ import camelCase from 'lodash/camelCase'
 import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { Formik, Form } from 'formik'
 import SimpleBar from 'simplebar-react'
 
-import TextFieldFormik from '../../../shared/TextFieldFormik'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import storeContext from '../../../../storeContext'
-import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
@@ -24,15 +20,8 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const FieldsContainer = styled.div`
   overflow-y: auto;
-`
-const StyledForm = styled(Form)`
-  padding: 10px;
 `
 const FormContainer = styled.div`
   padding: 10px;
@@ -147,86 +136,6 @@ const Werte = ({ treeName, table }) => {
     ],
   )
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedField = objectsFindChangedKey(values, row)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!changedField) return
-
-      const __typename = upperFirst(tableCamelCased)
-      try {
-        const mutation = gql`
-          mutation updateWert(
-            $id: UUID!
-            $code: ${codeGqlType}
-            $text: String
-            $sort: Int
-            $changedBy: String
-          ) {
-            update${__typename}ById(
-              input: {
-                id: $id
-                ${tableCamelCased}Patch: {
-                  id: $id
-                  code: $code
-                  text: $text
-                  sort: $sort
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              ${tableCamelCased} {
-                id
-                code
-                text
-                sort
-                changedBy
-              }
-            }
-          }
-        `
-        const variables = {
-          ...objectsEmptyValuesToNull(values),
-          changedBy: store.user.name,
-        }
-        const updateName = `update${__typename}`
-        //console.log('Werte:', { variables, __typename, updateName })
-        await client.mutate({
-          mutation,
-          variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            [updateName]: {
-              id: row.id,
-              __typename,
-              content: variables,
-            },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [changedField]: error.message })
-      }
-      refetch()
-      const refetchTableName = `${table}s`
-      // for unknown reason refetching is necessary here
-      refetchTree[refetchTableName] && refetchTree[refetchTableName]()
-      setErrors({})
-    },
-    [
-      client,
-      codeGqlType,
-      refetch,
-      refetchTree,
-      row,
-      store.user.name,
-      table,
-      tableCamelCased,
-    ],
-  )
-
   if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
@@ -247,35 +156,32 @@ const Werte = ({ treeName, table }) => {
               height: '100%',
             }}
           >
-            <Formik
-              row={row}
-              initialValues={row}
-              onSubmit={onSubmit}
-              enableReinitialize
-            >
-              {({ handleSubmit, dirty }) => (
-                <StyledForm onBlur={() => dirty && handleSubmit()}>
-                  <TextFieldFormik
-                    name="text"
-                    label="Text"
-                    type="text"
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextFieldFormik
-                    name="code"
-                    label="Code"
-                    type={codeFieldType}
-                    handleSubmit={handleSubmit}
-                  />
-                  <TextFieldFormik
-                    name="sort"
-                    label="Sort"
-                    type="number"
-                    handleSubmit={handleSubmit}
-                  />
-                </StyledForm>
-              )}
-            </Formik>
+            <FormContainer>
+              <TextField
+                name="text"
+                label="Text"
+                type="text"
+                value={row.text}
+                saveToDb={saveToDb}
+                error={fieldErrors.text}
+              />
+              <TextField
+                name="code"
+                label="Code"
+                type={codeFieldType}
+                value={row.code}
+                saveToDb={saveToDb}
+                error={fieldErrors.code}
+              />
+              <TextField
+                name="sort"
+                label="Sort"
+                type="number"
+                value={row.sort}
+                saveToDb={saveToDb}
+                error={fieldErrors.sort}
+              />
+            </FormContainer>
           </SimpleBar>
         </FieldsContainer>
       </Container>
