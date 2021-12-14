@@ -14,11 +14,8 @@ import DateField from '../../../shared/Date'
 
 import FilterTitle from '../../../shared/FilterTitle'
 import constants from '../../../../modules/constants'
-import queryLists from './queryLists'
 import queryTpopmassns from './queryTpopmassns'
-import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
-import queryIsMassnTypAnpflanzung from './queryIsMassnTypAnpflanzung'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopmassnType } from '../../../../store/Tree/DataFilter/tpopmassn'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
@@ -68,7 +65,7 @@ const TpopmassnFilter = ({ treeName }) => {
     const expression = tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
     tpopmassnFilter[key] = { [expression]: value }
   })
-  const { data: dataTpopmassns, error } = useQuery(queryTpopmassns, {
+  const { data, loading, error } = useQuery(queryTpopmassns, {
     variables: {
       tpopmassnFilter,
       allTpopmassnFilter,
@@ -77,22 +74,10 @@ const TpopmassnFilter = ({ treeName }) => {
     },
   })
 
-  const {
-    data: dataAdresses,
-    loading: loadingAdresses,
-    error: errorAdresses,
-  } = useQuery(queryAdresses)
-  const {
-    data: dataLists,
-    loading: loadingLists,
-    error: errorLists,
-  } = useQuery(queryLists)
-
   const row = dataFilter.tpopmassn
-  const tpopmassnTotalCount = dataTpopmassns?.allTpopmassns?.totalCount ?? '...'
-  const tpopmassnFilteredCount =
-    dataTpopmassns?.tpopmassnsFiltered?.totalCount ?? '...'
-  const popsOfAp = dataTpopmassns?.popsOfAp?.nodes ?? []
+  const tpopmassnTotalCount = data?.allTpopmassns?.totalCount ?? '...'
+  const tpopmassnFilteredCount = data?.tpopmassnsFiltered?.totalCount ?? '...'
+  const popsOfAp = data?.popsOfAp?.nodes ?? []
   const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
   const tpopmassnsOfApTotalCount = !tpopsOfAp.length
     ? '...'
@@ -105,14 +90,9 @@ const TpopmassnFilter = ({ treeName }) => {
         .map((p) => p?.tpopmassnsFiltered?.totalCount)
         .reduce((acc = 0, val) => acc + val)
 
-  const { data: dataIsMassnTypAnpflanzung } = useQuery(
-    queryIsMassnTypAnpflanzung,
-    {
-      variables: { typ: row.typ || 999999999 },
-    },
-  )
-  const isAnpflanzung =
-    dataIsMassnTypAnpflanzung?.allTpopmassnTypWertes?.nodes?.[0]?.anpflanzung
+  const isAnpflanzung = data?.allTpopmassnTypWertes?.nodes?.find(
+    (n) => n.value === row.typ,
+  )?.anpflanzung
 
   const saveToDb = useCallback(
     async (event) => {
@@ -132,12 +112,7 @@ const TpopmassnFilter = ({ treeName }) => {
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
-  const errors = [
-    ...(error ? [error] : []),
-    ...(errorLists ? [errorLists] : []),
-    ...(errorAdresses ? [errorAdresses] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
+  if (error) return <Error error={error} />
 
   return (
     <Container>
@@ -175,8 +150,8 @@ const TpopmassnFilter = ({ treeName }) => {
               <RadioButtonGroup
                 name="typ"
                 label="Typ"
-                dataSource={dataLists?.allTpopmassnTypWertes?.nodes ?? []}
-                loading={loadingLists}
+                dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
+                loading={loading}
                 value={row.typ}
                 saveToDb={saveToDb}
               />
@@ -190,8 +165,8 @@ const TpopmassnFilter = ({ treeName }) => {
               <Select
                 name="bearbeiter"
                 label="BearbeiterIn"
-                options={dataAdresses?.allAdresses?.nodes ?? []}
-                loading={loadingAdresses}
+                options={data?.allAdresses?.nodes ?? []}
+                loading={loading}
                 value={row.bearbeiter}
                 saveToDb={saveToDb}
               />
@@ -270,10 +245,8 @@ const TpopmassnFilter = ({ treeName }) => {
                   <Select
                     name="zieleinheitEinheit"
                     label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
-                    options={
-                      dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
-                    }
-                    loading={loadingLists}
+                    options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
+                    loading={loading}
                     value={row.zieleinheitEinheit}
                     saveToDb={saveToDb}
                   />

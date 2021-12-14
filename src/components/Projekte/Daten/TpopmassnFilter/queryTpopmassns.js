@@ -31,5 +31,24 @@ export default gql`
         }
       }
     }
+    allAdresses(orderBy: NAME_ASC) {
+      nodes {
+        value: id
+        label: name
+      }
+    }
+    allTpopmassnTypWertes(orderBy: SORT_ASC) {
+      nodes {
+        value: code
+        label: text
+        anpflanzung
+      }
+    }
+    allTpopkontrzaehlEinheitWertes(orderBy: SORT_ASC) {
+      nodes {
+        value: code
+        label: text
+      }
+    }
   }
 `
