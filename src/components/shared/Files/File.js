@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import styled from 'styled-components'
@@ -12,7 +12,7 @@ import upperFirst from 'lodash/upperFirst'
 import ErrorBoundary from '../ErrorBoundary'
 
 //import storeContext from '../../../storeContext'
-import TextField from '../TextFieldFormik'
+import TextFieldFormik from '../TextFieldFormik'
 import {
   apFile as apFileFragment,
   idealbiotopFile as idealbiotopFileFragment,
@@ -24,6 +24,7 @@ import {
 import isImageFile from './isImageFile'
 import objectsFindChangedKey from '../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../modules/objectsEmptyValuesToNull'
+import ifIsNumericAsNumber from '../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   display: flex;
@@ -76,6 +77,9 @@ const MenuTitle = styled.h3`
     outline: none;
   }
 `
+const FormContainer = styled.div`
+  padding: 10px;
+`
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -89,6 +93,8 @@ const fragmentObject = {
 const File = ({ file, parent, refetch }) => {
   const client = useApolloClient()
   //const store = useContext(storeContext)
+
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -129,6 +135,55 @@ const File = ({ file, parent, refetch }) => {
   const onClickDownload = useCallback(
     () => window.open(`https://ucarecdn.com/${file.fileId}/-/inline/no/`),
     [file],
+  )
+
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      try {
+        const mutationName = `update${upperFirst(parent)}FileById`
+        const fields = `${upperFirst(parent)}FileFields`
+        const fragment = fragmentObject[parent]
+        const parentId = `${parent}Id`
+        await client.mutate({
+          mutation: gql`
+              mutation UpdateFile(
+                $id: UUID!
+                $${parentId}: UUID
+                $fileId: UUID
+                $fileMimeType: String
+                $name: String
+                $beschreibung: String
+              ) {
+                ${mutationName}(
+                  input: {
+                    id: $id
+                    ${tableName}Patch: {
+                      id: $id
+                      ${parentId}: $${parentId}
+                      fileId: $fileId
+                      fileMimeType: $fileMimeType
+                      name: $name
+                      beschreibung: $beschreibung
+                    }
+                  }
+                ) {
+                  ${tableName} {
+                    ...${fields}
+                  }
+                }
+              }
+              ${fragment}
+            `,
+          variables: objectsEmptyValuesToNull(values),
+        })
+      } catch (error) {
+        return setErrors({ [field]: error.message })
+      }
+      setErrors({})
+      refetch()
+    },
+    [client, file, parent, refetch, tableName],
   )
 
   const onSubmit = useCallback(
@@ -198,7 +253,7 @@ const File = ({ file, parent, refetch }) => {
                 <ImgReplacement>...</ImgReplacement>
               )}
               <DateiTypField>
-                <TextField
+                <TextFieldFormik
                   name="fileMimeType"
                   label="Datei-Typ"
                   disabled
@@ -208,7 +263,7 @@ const File = ({ file, parent, refetch }) => {
               </DateiTypField>
               <Spacer />
               <DateiNameField>
-                <TextField
+                <TextFieldFormik
                   name="name"
                   label="Datei-Name"
                   disabled
@@ -218,7 +273,7 @@ const File = ({ file, parent, refetch }) => {
               </DateiNameField>
               <Spacer />
               <BeschreibungField>
-                <TextField
+                <TextFieldFormik
                   name="beschreibung"
                   label="Beschreibung"
                   multiLine

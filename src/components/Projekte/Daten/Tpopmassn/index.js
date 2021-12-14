@@ -106,12 +106,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      let value = ifIsNumericAsNumber(event.target.value)
-      // BEWARE: react-select fires twice when a value is cleared
-      // second event leads to an error as the values passed are same as before
-      // so prevent this by returning if no changed field exists
-      // https://github.com/JedWatson/react-select/issues/4101
-      if (!field) return
+      const value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
         id: row.id,

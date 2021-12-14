@@ -64,7 +64,7 @@ const TpopkontrzaehlEinheitWerte = ({ treeName, table }) => {
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      let value = ifIsNumericAsNumber(event.target.value)
+      const value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
         id: row.id,
