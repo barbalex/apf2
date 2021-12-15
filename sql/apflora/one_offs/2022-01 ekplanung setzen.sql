@@ -207,48 +207,49 @@ ap_with_ekfrequenz AS (
   WHERE
     tpop.ekfrequenz IS NOT NULL
     -- Die AP-Liste ist ein bisschen kompliziert: weil einige künftig zu AP's werden sollen, sind es nicht _nur_ ap's
-    AND pop.ap_id NOT IN ('6c52d11b-4f62-11e7-aebe-e30ba55051d8', '6c52d132-4f62-11e7-aebe-571f196500d9', '6c52d24e-4f62-11e7-aebe-4f55ce8d8aeb', '6c52d24f-4f62-11e7-aebe-9759f2114695', '6c52d251-4f62-11e7-aebe-239f844a5125', '6c52d256-4f62-11e7-aebe-8723d142869e'))
-SELECT
-  tax.artname,
-  ap.id AS ap_id,
-  pop.nr AS pop_nr,
-  pop.status AS pop_status,
-  tpop.id AS tpop_id,
-  tpop.nr AS tpop_nr,
-  tpop.status AS tpop_status,
-  ekf.kontrolljahre_ab,
-  -- ekfrequenz_startjahr depends on letze_kontrolle OR letzte_ansiedlung depending on kontrolljahre_ab
-  CASE WHEN ekf.kontrolljahre_ab = 'ek' THEN
-    tp.jahr
-  WHEN ekf.kontrolljahre_ab = 'ansiedlung' THEN
-    la.jahr
-  ELSE
-    NULL
-  END AS ekfrequenz_startjahr,
-  CASE WHEN ekf.kontrolljahre_ab = 'ek' THEN
-    tp.letzte_anzahl
-  ELSE
-    NULL
-  END AS letzte_anzahl,
-  tp.ekfrequenz_code,
-  tp.ekfrequenz
-FROM
-  apflora.tpop tpop
-  -- nur TPop berücksichtigen, für die eine letzte Kontrolle berechnet wurde
-  INNER JOIN tpop_plus tp
-  INNER JOIN apflora.ekfrequenz ekf ON ekf.id = tp.ekfrequenz ON tp.tpop_id = tpop.id
-  LEFT JOIN letzte_ansiedlung la ON la.tpop_id = tpop.id
-  -- nur TPop berücksichtigen, welche über Pop, AP und Taxonomie verfügen
-  INNER JOIN apflora.pop pop
-  INNER JOIN apflora.ap ap
-  INNER JOIN apflora.ae_taxonomies tax ON ap.art_id = tax.id
-  -- nur ap's mit mindestens einer tpop mit ekfrequenz berücksichtigen
-  -- UND: eine Liste von AP's ausschliessen (siehe def von ap_with_ekfrequenz)
-  INNER JOIN ap_with_ekfrequenz ON ap_with_ekfrequenz.id = ap.id ON ap.id = pop.ap_id ON pop.id = tpop.pop_id
-ORDER BY
-  tax.artname,
-  pop.nr,
-  tpop.nr;
+    -- TODO: uncommented. re-add some if Topos wants
+    --AND pop.ap_id NOT IN ('6c52d11b-4f62-11e7-aebe-e30ba55051d8', '6c52d132-4f62-11e7-aebe-571f196500d9', '6c52d24e-4f62-11e7-aebe-4f55ce8d8aeb', '6c52d24f-4f62-11e7-aebe-9759f2114695', '6c52d251-4f62-11e7-aebe-239f844a5125', '6c52d256-4f62-11e7-aebe-8723d142869e'))
+    SELECT
+      tax.artname,
+      ap.id AS ap_id,
+      pop.nr AS pop_nr,
+      pop.status AS pop_status,
+      tpop.id AS tpop_id,
+      tpop.nr AS tpop_nr,
+      tpop.status AS tpop_status,
+      ekf.kontrolljahre_ab,
+      -- ekfrequenz_startjahr depends on letze_kontrolle OR letzte_ansiedlung depending on kontrolljahre_ab
+      CASE WHEN ekf.kontrolljahre_ab = 'ek' THEN
+        tp.jahr
+      WHEN ekf.kontrolljahre_ab = 'ansiedlung' THEN
+        la.jahr
+      ELSE
+        NULL
+      END AS ekfrequenz_startjahr,
+      CASE WHEN ekf.kontrolljahre_ab = 'ek' THEN
+        tp.letzte_anzahl
+      ELSE
+        NULL
+      END AS letzte_anzahl,
+      tp.ekfrequenz_code,
+      tp.ekfrequenz
+    FROM
+      apflora.tpop tpop
+      -- nur TPop berücksichtigen, für die eine letzte Kontrolle berechnet wurde
+      INNER JOIN tpop_plus tp
+      INNER JOIN apflora.ekfrequenz ekf ON ekf.id = tp.ekfrequenz ON tp.tpop_id = tpop.id
+      LEFT JOIN letzte_ansiedlung la ON la.tpop_id = tpop.id
+      -- nur TPop berücksichtigen, welche über Pop, AP und Taxonomie verfügen
+      INNER JOIN apflora.pop pop
+      INNER JOIN apflora.ap ap
+      INNER JOIN apflora.ae_taxonomies tax ON ap.art_id = tax.id
+      -- nur ap's mit mindestens einer tpop mit ekfrequenz berücksichtigen
+      -- UND: eine Liste von AP's ausschliessen (siehe def von ap_with_ekfrequenz)
+      INNER JOIN ap_with_ekfrequenz ON ap_with_ekfrequenz.id = ap.id ON ap.id = pop.ap_id ON pop.id = tpop.pop_id
+    ORDER BY
+      tax.artname,
+      pop.nr,
+      tpop.nr;
 
 -- DO: if o.k. by Topos:
 UPDATE
