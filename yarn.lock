@@ -4751,7 +4751,7 @@ __metadata:
     lodash: 4.17.21
     luxon: 2.2.0
     markdown-it: 12.3.0
-    mobx: 6.3.8
+    mobx: 6.3.9
     mobx-react-lite: 3.2.2
     mobx-state-tree: 5.1.0
     mst-persist: 0.1.3
@@ -14290,10 +14290,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mobx@npm:6.3.8":
-  version: 6.3.8
-  resolution: "mobx@npm:6.3.8"
-  checksum: 755806b8f9a9782330ff5ef1ebe472f60db5deda9c532269d456d84ecfe81aacbe36d744d2efd117784a142c2732ff3b7093f3c0bef8b9b03917a245972a22de
+"mobx@npm:6.3.9":
+  version: 6.3.9
+  resolution: "mobx@npm:6.3.9"
+  checksum: a77afbadf128b7c7f8ec207c3fa340c8bbc1c973bbdc434ff1e1ee53b15390fcad2966c9fdf5bfb169a95ef7d9c28fe98e1ba2e1bad83046047a7fb0b4624208
   languageName: node
   linkType: hard
 
