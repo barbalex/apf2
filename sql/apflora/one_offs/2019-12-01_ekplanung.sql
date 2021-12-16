@@ -1,96 +1,96 @@
-with kontrolljahre as (
-  select
+WITH kontrolljahre AS (
+  SELECT
     tpop1.id,
     apflora.ekfrequenz.ektyp,
-    tpop1.ekfrequenz_startjahr, 
-    unnest(apflora.ekfrequenz.kontrolljahre) as kontrolljahr
-  from
+    tpop1.ekfrequenz_startjahr,
+    unnest(apflora.ekfrequenz.kontrolljahre) AS kontrolljahr
+  FROM
     apflora.tpop tpop1
-    inner join apflora.ekfrequenz
-    on apflora.ekfrequenz.id = tpop1.ekfrequenz
-  where
-    tpop1.ekfrequenz is not null
-    and tpop1.ekfrequenz_startjahr is not null
-    and apflora.ekfrequenz.kontrolljahre is not null
-    and (
-      select count(*)
-      from apflora.ekplan
-      where tpop_id = tpop1.id
-    ) = 0
-  order by
-    tpop1.id,
-    tpop1.ekfrequenz_startjahr
+    INNER JOIN apflora.ekfrequenz ON apflora.ekfrequenz.id = tpop1.ekfrequenz
+  WHERE
+    tpop1.ekfrequenz IS NOT NULL
+    AND tpop1.ekfrequenz_startjahr IS NOT NULL
+    AND apflora.ekfrequenz.kontrolljahre IS NOT NULL
+    AND (
+      SELECT
+        count(*)
+      FROM
+        apflora.ekplan
+      WHERE
+        tpop_id = tpop1.id) = 0
+    ORDER BY
+      tpop1.id,
+      tpop1.ekfrequenz_startjahr
 ),
-ekplans as (
-  select
-    id as tpop_id,
-    kontrolljahr + ekfrequenz_startjahr as jahr,
-    ektyp as typ,
-    '2019-12-04' as changed,
-    'ag' as changed_by
-  from
-    kontrolljahre
-)
-insert into apflora.ekplan(tpop_id,jahr,typ,changed,changed_by)
-select
-  tpop_id,
-  jahr,
-  typ::ek_type,
-  changed::date,
-  changed_by
-from ekplans;
+ekplans AS (
+  SELECT
+    id AS tpop_id,
+    kontrolljahr + ekfrequenz_startjahr AS jahr,
+    ektyp AS typ,
+    '2019-12-04' AS changed,
+    'ag' AS changed_by
+  FROM
+    kontrolljahre)
+  INSERT INTO apflora.ekplan (tpop_id, jahr, typ, changed, changed_by)
+  SELECT
+    tpop_id,
+    jahr,
+    typ::ek_type,
+    changed::date,
+    changed_by
+  FROM
+    ekplans;
 
 -- to show before updating:
-with kontrolljahre as (
-  select
+WITH kontrolljahre AS (
+  SELECT
     tpop1.id,
     apflora.ekfrequenz.ektyp,
-    tpop1.ekfrequenz_startjahr, 
-    unnest(apflora.ekfrequenz.kontrolljahre) as kontrolljahr
-  from
+    tpop1.ekfrequenz_startjahr,
+    unnest(apflora.ekfrequenz.kontrolljahre) AS kontrolljahr
+  FROM
     apflora.tpop tpop1
-    inner join apflora.ekfrequenz
-    on apflora.ekfrequenz.id = tpop1.ekfrequenz
-  where
-    tpop1.ekfrequenz is not null
-    and tpop1.ekfrequenz_startjahr is not null
-    and apflora.ekfrequenz.kontrolljahre is not null
-    and (
-      select count(*)
-      from apflora.ekplan
-      where tpop_id = tpop1.id
-    ) = 0
-  order by
-    tpop1.id,
-    tpop1.ekfrequenz_startjahr
+    INNER JOIN apflora.ekfrequenz ON apflora.ekfrequenz.id = tpop1.ekfrequenz
+  WHERE
+    tpop1.ekfrequenz IS NOT NULL
+    AND tpop1.ekfrequenz_startjahr IS NOT NULL
+    AND apflora.ekfrequenz.kontrolljahre IS NOT NULL
+    AND (
+      SELECT
+        count(*)
+      FROM
+        apflora.ekplan
+      WHERE
+        tpop_id = tpop1.id) = 0
+    ORDER BY
+      tpop1.id,
+      tpop1.ekfrequenz_startjahr
 ),
-ekplans as (
-  select
-    id as tpop_id,
-    kontrolljahr + ekfrequenz_startjahr as jahr,
-    ektyp as typ,
-    '2019-12-01' as changed,
-    'ag' as changed_by
-  from
+ekplans AS (
+  SELECT
+    id AS tpop_id,
+    kontrolljahr + ekfrequenz_startjahr AS jahr,
+    ektyp AS typ,
+    '2019-12-01' AS changed,
+    'ag' AS changed_by
+  FROM
     kontrolljahre
 )
-select
+SELECT
   tax.artname,
   pop.nr,
   tpop.nr,
   ekplans.jahr,
   ekplans.typ
-from ekplans
-inner join apflora.tpop tpop
-  inner join apflora.pop pop
-    inner join apflora.ap ap
-      inner join apflora.ae_taxonomies tax
-      on ap.art_id = tax.id
-    on ap.id = pop.ap_id
-  on pop.id = tpop.pop_id
-on tpop.id = ekplans.tpop_id
-order by
+FROM
+  ekplans
+  INNER JOIN apflora.tpop tpop
+  INNER JOIN apflora.pop pop
+  INNER JOIN apflora.ap ap
+  INNER JOIN apflora.ae_taxonomies tax ON ap.art_id = tax.id ON ap.id = pop.ap_id ON pop.id = tpop.pop_id ON tpop.id = ekplans.tpop_id
+ORDER BY
   tax.artname,
-  pop.nr as pop_nr,
-  tpop.nr as tpop_nr,
+  pop.nr AS pop_nr,
+  tpop.nr AS tpop_nr,
   jahr;
+
