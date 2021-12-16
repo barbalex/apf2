@@ -19,23 +19,11 @@ const saveNichtZuordnenToDb = async ({
   await client.mutate({
     mutation: updateBeobByIdGql,
     variables,
-    refetchQueries: [
-      'TreeApsQuery',
-      'TreePopsQuery',
-      'TreeTpopQuery',
-      'TreeBeobNichtZuzuordnensQuery',
-      'TreeBeobNichtBeurteiltsQuery',
-      'TreeBeobZugeordnetsQuery',
-      'KarteBeobNichtZuzuordnenQuery',
-    ],
+    refetchQueries: ['TreeAllQuery'],
   })
   // need to update activeNodeArray and openNodes
-  const {
-    activeNodeArray,
-    setActiveNodeArray,
-    openNodes,
-    addOpenNodes,
-  } = store[treeName]
+  const { activeNodeArray, setActiveNodeArray, openNodes, addOpenNodes } =
+    store[treeName]
   let newActiveNodeArray = [...activeNodeArray]
   newActiveNodeArray[4] = value
     ? 'nicht-zuzuordnende-Beobachtungen'
