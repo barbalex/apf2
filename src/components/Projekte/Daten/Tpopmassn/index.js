@@ -153,7 +153,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                 }
               }
             `,
-            variables: { apId, typ: variables.typ || 1 },
+            variables: { apId, typ: value ?? 1 },
           })
         } catch (error) {
           return setFieldErrors({ [field]: error.message })
@@ -208,7 +208,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                 }
               }
             `,
-            variables: { apId, typ: variables.typ || 1 },
+            variables: { apId, typ: row.typ ?? 1 },
           })
         } catch (error) {
           return setFieldErrors({ [field]: error.message })
@@ -253,7 +253,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                 }
               }
             `,
-            variables: { apId, typ: variables.typ || 1 },
+            variables: { apId, typ: row.typ ?? 1 },
           })
         } catch (error) {
           return setFieldErrors({ [field]: error.message })
