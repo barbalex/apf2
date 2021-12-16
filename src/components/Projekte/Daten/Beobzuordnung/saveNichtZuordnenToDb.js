@@ -42,7 +42,6 @@ const saveNichtZuordnenToDb = async ({
   setActiveNodeArray(newActiveNodeArray)
   addOpenNodes(newOpenNodes)
   if (refetchPassed) refetchPassed()
-  //refetchTree('local')
 }
 
 export default saveNichtZuordnenToDb
