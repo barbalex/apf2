@@ -40,8 +40,9 @@ const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
   const datumIsValid = isValid(new Date(datum))
   const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
 
-  let newGeomPoint = geomPoint.geojson || null
-  if (newGeomPoint) newGeomPoint = JSON.parse(newGeomPoint)
+  const newGeomPoint = geomPoint?.geojson
+    ? JSON.parse(geomPoint?.geojson)
+    : null
 
   // create new pop for ap
   let popResult

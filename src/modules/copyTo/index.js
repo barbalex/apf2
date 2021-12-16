@@ -41,41 +41,46 @@ const copyTo = async ({
   // get data
   let row
   switch (table) {
-    case 'tpopkontrzaehl':
+    case 'tpopkontrzaehl': {
       const { data: data0 } = await client.query({
         query: queryTpopKontrzaehlById,
         variables: { id },
       })
       row = data0?.tpopkontrzaehlById
       break
-    case 'tpopkontr':
+    }
+    case 'tpopkontr': {
       const { data: data1 } = await client.query({
         query: queryTpopKontrById,
         variables: { id },
       })
       row = data1?.tpopkontrById
       break
-    case 'tpopmassn':
+    }
+    case 'tpopmassn': {
       const { data: data2 } = await client.query({
         query: queryTpopmassnById,
         variables: { id },
       })
       row = data2?.tpopmassnById
       break
-    case 'tpop':
+    }
+    case 'tpop': {
       const { data: data3 } = await client.query({
         query: queryTpopById,
         variables: { id },
       })
       row = data3?.tpopById
       break
-    case 'pop':
+    }
+    case 'pop': {
       const { data: data4 } = await client.query({
         query: queryPopById,
         variables: { id },
       })
       row = data4?.popById
       break
+    }
     default:
       // do nothing
       break
@@ -179,8 +184,6 @@ const copyTo = async ({
       newId = response?.data?.createTpopmassn?.tpopmassn?.id
       break
     case 'tpop':
-      let geomPointTpop = row?.geomPoint?.geojson || null
-      if (geomPointTpop) geomPointTpop = JSON.parse(geomPointTpop)
       response = await client.mutate({
         mutation: createTpop,
         variables: {
@@ -188,7 +191,9 @@ const copyTo = async ({
           nr: row.nr,
           gemeinde: row.gemeinde,
           flurname: row.flurname,
-          geomPoint: geomPointTpop,
+          geomPoint: row?.geomPoint?.geojson
+            ? JSON.parse(row.geomPoint.geojson)
+            : null,
           radius: row.radius,
           hoehe: row.hoehe,
           exposition: row.exposition,
@@ -223,8 +228,6 @@ const copyTo = async ({
       newId = response?.data?.createTpop?.tpop?.id
       break
     case 'pop':
-      let geomPointPop = row?.geomPoint?.geojson
-      if (geomPointPop) geomPointPop = JSON.parse(geomPointPop)
       response = await client.mutate({
         mutation: createPop,
         variables: {
@@ -235,7 +238,9 @@ const copyTo = async ({
           statusUnklar: row.statusUnklar,
           statusUnklarBegruendung: row.statusUnklarBegruendung,
           bekanntSeit: row.bekanntSeit,
-          geomPoint: geomPointPop,
+          geomPoint: row?.geomPoint?.geojson
+            ? JSON.parse(row.geomPoint.geojson)
+            : null,
         },
       })
       newId = response?.data?.createPop?.pop?.id

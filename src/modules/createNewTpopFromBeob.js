@@ -121,8 +121,9 @@ const createNewTpopFromBeob = async ({
   const { datum, data } = beob
   const datumIsValid = isValid(new Date(datum))
   const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
-  let geomPoint = beob?.geomPoint?.geojson
-  geomPoint = geomPoint ? JSON.parse(geomPoint) : null
+  const geomPoint = beob?.geomPoint?.geojson
+    ? JSON.parse(beob.geomPoint.geojson)
+    : null
 
   // create new tpop for pop
   let tpopResult
