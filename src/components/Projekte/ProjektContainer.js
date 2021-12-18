@@ -34,8 +34,6 @@ const Container = styled.div`
  * because 0 was passed
  */
 const StyledSplitPane = styled(SplitPane)`
-  height: ${(props) => props['data-height'] || 1000}px !important;
-
   .Resizer {
     background: #388e3c;
     opacity: 1;
@@ -75,8 +73,6 @@ const InnerContainer = styled.div`
   width: 100%;
   height: 100%;
 `
-
-const height = '100%'
 
 const standardWidth = 500
 
@@ -184,7 +180,6 @@ const ProjektContainer = ({
           maxSize={-10}
           onDragFinished={onDragSplitter}
           overflow="auto"
-          data-height={height}
         >
           {elObj.tree}
           {component}
@@ -204,7 +199,6 @@ const ProjektContainer = ({
           maxSize={-10}
           onDragFinished={onDragSplitter}
           overflow="auto"
-          data-height={height}
         >
           {elObj.tree}
           <InnerContainer>{component}</InnerContainer>
@@ -230,7 +224,6 @@ const ProjektContainer = ({
           size="100%"
           maxSize={-10}
           onDragFinished={onDragSplitter}
-          data-height={height}
         >
           {elObj[tabs[0]]}
           <></>
@@ -247,7 +240,6 @@ const ProjektContainer = ({
           size={paneSize}
           maxSize={-10}
           onDragFinished={onDragSplitter}
-          data-height={height}
         >
           {elObj[tabs[0]]}
           {elObj[tabs[1]]}
@@ -264,7 +256,6 @@ const ProjektContainer = ({
           size="33%"
           maxSize={-10}
           onDragFinished={onDragSplitter}
-          data-height={height}
         >
           {elObj[tabs[0]]}
 
@@ -273,7 +264,6 @@ const ProjektContainer = ({
             size="50%"
             maxSize={-10}
             onDragFinished={onDragSplitter}
-            data-height={height}
           >
             {elObj[tabs[1]]}
             {elObj[tabs[2]]}
@@ -291,7 +281,6 @@ const ProjektContainer = ({
           size="25%"
           maxSize={-10}
           onDragFinished={onDragSplitter}
-          data-height={height}
         >
           {elObj[tabs[0]]}
 
@@ -300,7 +289,6 @@ const ProjektContainer = ({
             size="33%"
             maxSize={-10}
             onDragFinished={onDragSplitter}
-            data-height={height}
           >
             {elObj[tabs[1]]}
             <StyledSplitPane
@@ -308,7 +296,6 @@ const ProjektContainer = ({
               size="50%"
               maxSize={-10}
               onDragFinished={onDragSplitter}
-              data-height={height}
             >
               {elObj[tabs[2]]}
               {elObj[tabs[3]]}
@@ -327,7 +314,6 @@ const ProjektContainer = ({
           size="20%"
           maxSize={-10}
           onDragFinished={onDragSplitter}
-          data-height={height}
         >
           {elObj[tabs[0]]}
 
@@ -336,7 +322,6 @@ const ProjektContainer = ({
             size="25%"
             maxSize={-10}
             onDragFinished={onDragSplitter}
-            data-height={height}
           >
             {elObj[tabs[1]]}
             <StyledSplitPane
@@ -344,7 +329,6 @@ const ProjektContainer = ({
               size="33%"
               maxSize={-10}
               onDragFinished={onDragSplitter}
-              data-height={height}
             >
               {elObj[tabs[2]]}
               <StyledSplitPane
@@ -352,7 +336,6 @@ const ProjektContainer = ({
                 size="50%"
                 maxSize={-10}
                 onDragFinished={onDragSplitter}
-                data-height={height}
               >
                 {elObj[tabs[3]]}
                 {elObj[tabs[4]]}
