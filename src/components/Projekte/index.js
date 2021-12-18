@@ -24,6 +24,7 @@ import buildNodes from './TreeContainer/nodes'
 
 const Container = styled.div`
   height: 100%;
+  position: relative;
 
   @media print {
     height: auto !important;

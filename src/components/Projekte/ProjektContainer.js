@@ -9,7 +9,6 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
-import { useResizeDetector } from 'react-resize-detector'
 
 import KarteOderNull from './KarteOderNull'
 import TreeContainer from './TreeContainer'
@@ -23,6 +22,7 @@ import Spinner from '../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
+  position: relative;
 
   @media print {
     display: block;
@@ -76,6 +76,8 @@ const InnerContainer = styled.div`
   height: 100%;
 `
 
+const height = '100%'
+
 const standardWidth = 500
 
 const ProjektContainer = ({
@@ -109,25 +111,15 @@ const ProjektContainer = ({
   const datenEl = useRef(null)
   const filterEl = useRef(null)
 
-  /**
-   * using containerEl to set height leaded to weird behaviour
-   */
-  //const [height, setHeight] = useState(1000)
-  const { height = 1000 } = useResizeDetector({ targetRef: containerEl })
-
   // remove 2 to treat all same
   const tabs = [...tabsPassed].map((t) => t.replace('2', ''))
 
   const setDimensions = useCallback(() => {
-    //console.log('ProjektContainer setting dimensions')
     setTreeWidth(treeEl?.current?.clientWidth ?? standardWidth)
     setFormWidth(datenEl?.current?.clientWidth ?? standardWidth)
     setFormHeight(containerEl?.current?.clientHeight ?? standardWidth)
-    //setHeight(containerEl?.current?.clientHeight ?? standardWidth)
     setFilterWidth(filterEl?.current?.clientWidth ?? standardWidth)
   }, [setFilterWidth, setFormHeight, setFormWidth, setTreeWidth])
-
-  //console.log('ProjektContainer, height:', height)
 
   const setDimensionsDebounced = useDebouncedCallback(setDimensions, 600)
 
@@ -189,7 +181,7 @@ const ProjektContainer = ({
         <StyledSplitPane
           split="vertical"
           size={paneSize}
-          minSize={100}
+          maxSize={-10}
           onDragFinished={onDragSplitter}
           overflow="auto"
           data-height={height}
@@ -209,7 +201,7 @@ const ProjektContainer = ({
         <StyledSplitPane
           split="vertical"
           size={paneSize}
-          minSize={100}
+          maxSize={-10}
           onDragFinished={onDragSplitter}
           overflow="auto"
           data-height={height}
@@ -236,7 +228,7 @@ const ProjektContainer = ({
         <StyledSplitPane
           split="vertical"
           size="100%"
-          minSize={100}
+          maxSize={-10}
           onDragFinished={onDragSplitter}
           data-height={height}
         >
@@ -253,7 +245,7 @@ const ProjektContainer = ({
         <StyledSplitPane
           split="vertical"
           size={paneSize}
-          minSize={100}
+          maxSize={-10}
           onDragFinished={onDragSplitter}
           data-height={height}
         >
@@ -270,7 +262,7 @@ const ProjektContainer = ({
         <StyledSplitPane
           split="vertical"
           size="33%"
-          minSize={100}
+          maxSize={-10}
           onDragFinished={onDragSplitter}
           data-height={height}
         >
@@ -279,7 +271,7 @@ const ProjektContainer = ({
           <StyledSplitPane
             split="vertical"
             size="50%"
-            minSize={100}
+            maxSize={-10}
             onDragFinished={onDragSplitter}
             data-height={height}
           >
@@ -297,7 +289,7 @@ const ProjektContainer = ({
         <StyledSplitPane
           split="vertical"
           size="25%"
-          minSize={100}
+          maxSize={-10}
           onDragFinished={onDragSplitter}
           data-height={height}
         >
@@ -306,7 +298,7 @@ const ProjektContainer = ({
           <StyledSplitPane
             split="vertical"
             size="33%"
-            minSize={100}
+            maxSize={-10}
             onDragFinished={onDragSplitter}
             data-height={height}
           >
@@ -314,7 +306,7 @@ const ProjektContainer = ({
             <StyledSplitPane
               split="vertical"
               size="50%"
-              minSize={100}
+              maxSize={-10}
               onDragFinished={onDragSplitter}
               data-height={height}
             >
@@ -333,8 +325,8 @@ const ProjektContainer = ({
         <StyledSplitPane
           split="vertical"
           size="20%"
+          maxSize={-10}
           onDragFinished={onDragSplitter}
-          minSize={100}
           data-height={height}
         >
           {elObj[tabs[0]]}
@@ -342,7 +334,7 @@ const ProjektContainer = ({
           <StyledSplitPane
             split="vertical"
             size="25%"
-            minSize={100}
+            maxSize={-10}
             onDragFinished={onDragSplitter}
             data-height={height}
           >
@@ -350,7 +342,7 @@ const ProjektContainer = ({
             <StyledSplitPane
               split="vertical"
               size="33%"
-              minSize={100}
+              maxSize={-10}
               onDragFinished={onDragSplitter}
               data-height={height}
             >
@@ -358,7 +350,7 @@ const ProjektContainer = ({
               <StyledSplitPane
                 split="vertical"
                 size="50%"
-                minSize={100}
+                maxSize={-10}
                 onDragFinished={onDragSplitter}
                 data-height={height}
               >
