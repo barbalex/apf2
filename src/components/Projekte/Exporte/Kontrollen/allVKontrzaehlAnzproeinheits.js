@@ -73,7 +73,8 @@ export default gql`
         kontr_vegetationshoehe_maximum: kontrVegetationshoeheMaximum
         kontr_vegetationshoehe_mittel: kontrVegetationshoeheMittel
         kontr_gefaehrdung: kontrGefaehrdung
-        kontr_changed: kontrChanged
+        kontr_created_at: kontrCreatedAt
+        kontr_updated_at: kontrUpdatedAt
         kontr_changed_by: kontrChangedBy
         kontr_apber_nicht_relevant: kontrApberNichtRelevant
         apber_nicht_relevant_grund: kontrApberNichtRelevantGrund
