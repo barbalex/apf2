@@ -97,7 +97,8 @@ export default gql`
             ersteKontrolleVegetationshoeheMaximum
             ersteKontrolleVegetationshoeheMittel
             ersteKontrolleGefaehrdung
-            ersteKontrolleChanged
+            ersteKontrolleCreatedAt
+            ersteKontrolleUpdatedAt
             ersteKontrolleChangedBy
             ersteKontrolleApberNichtRelevant
             ersteKontrolleApberNichtRelevantGrund

@@ -925,9 +925,12 @@ const Teilpopulationen = () => {
                 erste_kontrolle_gefaehrdung:
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                     ?.nodes?.[0]?.ersteKontrolleGefaehrdung ?? '',
-                erste_kontrolle_changed:
+                erste_kontrolle_created_at:
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
-                    ?.nodes?.[0]?.ersteKontrolleChanged ?? '',
+                    ?.nodes?.[0]?.ersteKontrolleCreatedAt ?? '',
+                erste_kontrolle_updated_at:
+                  n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
+                    ?.nodes?.[0]?.ersteKontrolleUpdatedAt ?? '',
                 erste_kontrolle_changed_by:
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                     ?.nodes?.[0]?.ersteKontrolleChangedBy ?? '',
@@ -1416,9 +1419,12 @@ const Teilpopulationen = () => {
                   erste_kontrolle_gefaehrdung:
                     n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                       ?.nodes?.[0]?.ersteKontrolleGefaehrdung ?? '',
-                  erste_kontrolle_changed:
+                  erste_kontrolle_created_at:
                     n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
-                      ?.nodes?.[0]?.ersteKontrolleChanged ?? '',
+                      ?.nodes?.[0]?.ersteKontrolleCreatedAt ?? '',
+                  erste_kontrolle_updated_at:
+                    n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
+                      ?.nodes?.[0]?.ersteKontrolleUpdatedAt ?? '',
                   erste_kontrolle_changed_by:
                     n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                       ?.nodes?.[0]?.ersteKontrolleChangedBy ?? '',
