@@ -21,7 +21,8 @@ export default gql`
             statusUnklarBegruendung
             x
             y
-            changed
+            createdAt
+            updatedAt
             changedBy
           }
         }

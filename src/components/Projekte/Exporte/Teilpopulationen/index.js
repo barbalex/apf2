@@ -169,7 +169,8 @@ const Teilpopulationen = () => {
                   id
                   name
                 }
-                changed
+                createdAt
+                updatedAt
                 changedBy
               }
             }
@@ -234,7 +235,8 @@ const Teilpopulationen = () => {
       ekfrequenz: n.ekfrequenz,
       ekfrequenzAbweichend: n.ekfrequenzAbweichend,
       ekfKontrolleur: n?.adresseByEkfKontrolleur?.name ?? null,
-      changed: n.changed,
+      createdAt: n.createdAt,
+      updatedAt: n.updatedAt,
       changedBy: n.changedBy,
     }))
     const enrichedData = rows.map((oWithout) => {
@@ -811,9 +813,12 @@ const Teilpopulationen = () => {
                 ekfrequenz_abweichend:
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                     ?.nodes?.[0]?.ekfrequenzAbweichend ?? '',
-                changed:
+                created_at:
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
-                    ?.nodes?.[0]?.changed ?? '',
+                    ?.nodes?.[0]?.createdAt ?? '',
+                updated_at:
+                  n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
+                    ?.nodes?.[0]?.updatedAt ?? '',
                 changed_by:
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                     ?.nodes?.[0]?.changedBy ?? '',
@@ -1296,9 +1301,12 @@ const Teilpopulationen = () => {
                   ekfrequenz_abweichend:
                     n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                       ?.nodes?.[0]?.ekfrequenzAbweichend ?? '',
-                  changed:
+                  created_at:
                     n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
-                      ?.nodes?.[0]?.changed ?? '',
+                      ?.nodes?.[0]?.createdAt ?? '',
+                  updated_at:
+                    n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
+                      ?.nodes?.[0]?.updatedAt ?? '',
                   changed_by:
                     n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                       ?.nodes?.[0]?.changedBy ?? '',

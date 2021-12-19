@@ -120,7 +120,8 @@ export const apHistory = gql`
     bearbeiter
     ekfBeobachtungszeitpunkt
     projId
-    changed
+    createdAt
+    updatedAt
     changedBy
   }
 `
@@ -353,7 +354,8 @@ export const popHistory = gql`
       x
       y
     }
-    changed
+    createdAt
+    updatedAt
     changedBy
   }
 `
@@ -574,7 +576,8 @@ export const tpopHistory = gql`
     ekfKontrolleur
     bemerkungen
     statusUnklar
-    changed
+    createdAt
+    updatedAt
     changedBy
   }
 `
@@ -796,7 +799,6 @@ export const tpopApberrelevantGrundWerte = gql`
     label
     sort
     historic
-    changed
     changedBy
   }
 `
