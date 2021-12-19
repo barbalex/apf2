@@ -3416,7 +3416,7 @@ CREATE TABLE apflora.apart (
   art_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO ACTION ON UPDATE CASCADE,
   ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz DEFAULT now(),
   changed date DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL --UNIQUE (art_id) --no, maybe after beob were rearranged
 );
