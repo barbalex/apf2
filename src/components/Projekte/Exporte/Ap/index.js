@@ -789,7 +789,7 @@ const AP = () => {
     }
     const rows = (result.data?.allAssozarts?.nodes ?? []).map((z) => ({
       ap_id: z.apId,
-      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
+      artname: z?.apByApId?.label ?? '',
       ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
       ap_start_jahr: z?.apByApId?.startJahr ?? '',
       ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
@@ -812,7 +812,7 @@ const AP = () => {
       })
     }
     exportModule({
-      data: sortBy(rows, ['artname', 'artname_assoziiert']),
+      data: rows,
       fileName: 'AssoziierteArten',
       store,
     })

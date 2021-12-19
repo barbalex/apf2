@@ -2,7 +2,9 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query assozartsForExportQuery {
-    allAssozarts {
+    allAssozarts(
+      orderBy: [AP_BY_AP_ID__LABEL_ASC, AE_TAXONOMY_BY_AE_ID__ARTNAME_ASC]
+    ) {
       nodes {
         id
         apId
@@ -12,10 +14,7 @@ export default gql`
         }
         apByApId {
           id
-          aeTaxonomyByArtId {
-            id
-            artname
-          }
+          label
           apBearbstandWerteByBearbeitung {
             id
             text
