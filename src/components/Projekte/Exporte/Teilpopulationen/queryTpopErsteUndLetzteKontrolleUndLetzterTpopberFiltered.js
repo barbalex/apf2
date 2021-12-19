@@ -142,7 +142,8 @@ export default gql`
             letzteKontrolleVegetationshoeheMaximum
             letzteKontrolleVegetationshoeheMittel
             letzteKontrolleGefaehrdung
-            letzteKontrolleChanged
+            letzteKontrolleCreatedAt
+            letzteKontrolleUpdatedAt
             letzteKontrolleChangedBy
             letzteKontrolleApberNichtRelevant
             letzteKontrolleApberNichtRelevantGrund
@@ -155,7 +156,8 @@ export default gql`
             tpopberJahr
             tpopberEntwicklung
             tpopberBemerkungen
-            tpopberChanged
+            tpopberCreatedAt
+            tpopberUpdatedAt
             tpopberChangedBy
           }
         }

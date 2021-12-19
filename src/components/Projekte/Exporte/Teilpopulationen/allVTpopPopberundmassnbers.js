@@ -47,13 +47,15 @@ export default gql`
         tpopber_jahr: tpopberJahr
         tpopber_entwicklung: tpopberEntwicklung
         tpopber_bemerkungen: tpopberBemerkungen
-        tpopber_changed: tpopberChanged
+        tpopber_created_at: tpopberCreatedAt
+        tpopber_updated_at: tpopberUpdatedAt
         tpopber_changed_by: tpopberChangedBy
         tpopmassnber_id: tpopmassnberId
         tpopmassnber_jahr: tpopmassnberJahr
         tpopmassnber_entwicklung: tpopmassnberEntwicklung
         tpopmassnber_bemerkungen: tpopmassnberBemerkungen
-        tpopmassnber_changed: tpopmassnberChanged
+        tpopmassnber_created_at: tpopmassnberCreatedAt
+        tpopmassnber_updated_at: tpopmassnberUpdatedAt
         tpopmassnber_changed_by: tpopmassnberChangedBy
       }
     }

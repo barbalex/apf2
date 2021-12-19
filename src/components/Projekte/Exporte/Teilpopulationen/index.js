@@ -1088,9 +1088,12 @@ const Teilpopulationen = () => {
                 tpopber_bemerkungen:
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                     ?.nodes?.[0]?.tpopberBemerkungen ?? '',
-                tpopber_changed:
+                tpopber_created_at:
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
-                    ?.nodes?.[0]?.tpopberChanged ?? '',
+                    ?.nodes?.[0]?.tpopberCreatedAt ?? '',
+                tpopber_updated_at:
+                  n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
+                    ?.nodes?.[0]?.tpopberUpdatedAt ?? '',
                 tpopber_changed_by:
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                     ?.nodes?.[0]?.tpopberChangedBy ?? '',
@@ -1578,9 +1581,12 @@ const Teilpopulationen = () => {
                   tpopber_bemerkungen:
                     n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                       ?.nodes?.[0]?.tpopberBemerkungen ?? '',
-                  tpopber_changed:
+                  tpopber_created_at:
                     n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
-                      ?.nodes?.[0]?.tpopberChanged ?? '',
+                      ?.nodes?.[0]?.tpopberCreatedAt ?? '',
+                  tpopber_updated_at:
+                    n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
+                      ?.nodes?.[0]?.tpopberUpdatedAt ?? '',
                   tpopber_changed_by:
                     n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                       ?.nodes?.[0]?.tpopberChangedBy ?? '',
