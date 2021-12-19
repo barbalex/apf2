@@ -11,7 +11,6 @@ const werteById = (table) => {
         code
         text
         sort
-        changed
         changedBy
       }
     }

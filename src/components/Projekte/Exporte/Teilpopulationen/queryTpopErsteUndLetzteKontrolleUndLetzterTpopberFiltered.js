@@ -64,7 +64,8 @@ export default gql`
             wasserhaushalt
             ekfrequenz
             ekfrequenzAbweichend
-            changed
+            createdAt
+            updatedAt
             changedBy
             anzahlKontrollen
             ersteKontrolleId

@@ -41,7 +41,7 @@ Struktur der Tabelle "beob":
 - tpop_id: dieser Teilpopulation wird die Beobachtung zugeordnet
 - nicht_zuordnen: Ja oder nein. Wird ja gesetzt, wenn eine Beobachtung keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder die Beobachtung ist nicht (genau genug) lokalisierbar
 - bemerkungen: Bemerkungen zur Zuordnung
-- changed, changed_by: Dokumentiert die letzte Änderung am Datensatz
+- created_at, update_at, changed_by: Dokumentiert die letzte Änderung am Datensatz
 
 ## 2. Beobachtungen aus EvAB bereitstellen
 

@@ -54,7 +54,6 @@ const deleteModule = async ({ client, store }) => {
           code
           text
           sort
-          changed
           changedBy
         }
       }
