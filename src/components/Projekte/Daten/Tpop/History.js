@@ -63,7 +63,6 @@ const tpopHistoriesQuery = gql`
       }
       bemerkungen
       statusUnklar
-      changed
       changedBy
     }
     allTpopHistories(filter: { id: { equalTo: $tpopId } }, orderBy: YEAR_DESC) {
@@ -123,7 +122,6 @@ const tpopHistoriesQuery = gql`
         }
         bemerkungen
         statusUnklar
-        changed
         changedBy
       }
     }

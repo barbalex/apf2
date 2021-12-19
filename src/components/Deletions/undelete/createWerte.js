@@ -10,7 +10,6 @@ const createWerte = (table) => {
         $code: Int
         $text: String
         $sort: Int
-        $changed: Date
         $changedBy: String
       ) {
         create${upperFirst(tableName)}(input: { ${tableName}: {
@@ -18,7 +17,6 @@ const createWerte = (table) => {
           code: $code
           text: $text
           sort: $sort
-          changed: $changed
           changedBy: $changedBy
         } }) {
           ${tableName} {
@@ -26,7 +24,6 @@ const createWerte = (table) => {
             code
             text
             sort
-            changed
             changedBy
           }
         }

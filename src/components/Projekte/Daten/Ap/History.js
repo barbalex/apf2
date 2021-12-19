@@ -40,7 +40,6 @@ const apHistoriesQuery = gql`
         id
         name
       }
-      changed
       changedBy
     }
     allApHistories(filter: { id: { equalTo: $apId } }, orderBy: YEAR_DESC) {
