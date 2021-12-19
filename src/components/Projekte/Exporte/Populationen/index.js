@@ -135,7 +135,8 @@ const Populationen = () => {
                           statusUnklarBegruendung
                           x: lv95X
                           y: lv95Y
-                          changed
+                          createdAt
+                          updatedAt
                           changedBy
                         }
                       }
@@ -170,7 +171,8 @@ const Populationen = () => {
                 statusUnklarBegruendung: n.statusUnklarBegruendung,
                 x: n.x,
                 y: n.y,
-                changed: n.changed,
+                createdAt: n.createdAt,
+                updatedAt: n.updatedAt,
                 changedBy: n.changedBy,
               }))
               removeNotification(notif)
@@ -404,7 +406,8 @@ const Populationen = () => {
                   '',
                 lv95X: z?.vPopOhnekoordsById?.nodes?.[0]?.x ?? '',
                 lv95Y: z?.vPopOhnekoordsById?.nodes?.[0]?.y ?? '',
-                changed: z?.vPopOhnekoordsById?.nodes?.[0]?.changed ?? '',
+                created_at: z?.vPopOhnekoordsById?.nodes?.[0]?.createdAt ?? '',
+                updated_at: z?.vPopOhnekoordsById?.nodes?.[0]?.updatedAt ?? '',
                 changed_by: z?.vPopOhnekoordsById?.nodes?.[0]?.changedBy ?? '',
               }))
               removeNotification(notif)
@@ -491,8 +494,10 @@ const Populationen = () => {
                     n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.entwicklung ?? '',
                   bemerkungen:
                     n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.bemerkungen ?? '',
-                  changed:
-                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.changed ?? '',
+                  created_at:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.createdAt ?? '',
+                  updated_at:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.updatedAt ?? '',
                   changed_by:
                     n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.changedBy ?? '',
                   anzahl_massnahmen:

@@ -208,7 +208,8 @@ const Massnahmen = () => {
                           herkunftPop
                           sammeldatum
                           vonAnzahlIndividuen
-                          changed
+                          createdAt
+                          updatedAt
                           changedBy
                         }
                       }
@@ -315,7 +316,8 @@ const Massnahmen = () => {
                   herkunftPop: n.herkunftPop,
                   sammeldatum: n.sammeldatum,
                   vonAnzahlIndividuen: n.vonAnzahlIndividuen,
-                  changed: n.changed,
+                  createdAt: n.createdAt,
+                  updatedAt: n.updatedAt,
                   changedBy: n.changedBy,
                 }),
               )

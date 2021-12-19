@@ -227,7 +227,8 @@ const Kontrollen = () => {
                           vegetationshoeheMaximum
                           vegetationshoeheMittel
                           gefaehrdung
-                          changed
+                          createdAt
+                          updatedAt
                           changedBy
                           apberNichtRelevant
                           apberNichtRelevantGrund
@@ -364,7 +365,8 @@ const Kontrollen = () => {
                   vegetationshoeheMaximum: n.vegetationshoeheMaximum,
                   vegetationshoeheMittel: n.vegetationshoeheMittel,
                   gefaehrdung: n.gefaehrdung,
-                  changed: n.changed,
+                  createdAt: n.createdAt,
+                  updatedAt: n.updatedAt,
                   changedBy: n.changedBy,
                   apberNichtRelevant: n.apberNichtRelevant,
                   apberNichtRelevantGrund: n.apberNichtRelevantGrund,

@@ -27,7 +27,8 @@ export default gql`
             jahr
             entwicklung
             bemerkungen
-            changed
+            createdAt
+            updatedAt
             changedBy
             anzahlMassnahmen
           }
