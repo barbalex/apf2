@@ -55,9 +55,7 @@ ALTER TABLE IF EXISTS apflora.popmassnber
 ALTER TABLE IF EXISTS apflora.tpop
   DROP COLUMN IF EXISTS changed;
 
-ALTER TABLE IF EXISTS apflora.tpop_history
-  DROP COLUMN IF EXISTS changed;
-
+-- so far done
 ALTER TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte
   DROP COLUMN IF EXISTS changed;
 
@@ -122,5 +120,9 @@ ALTER TABLE IF EXISTS apflora.ek_abrechnungstyp_werte
   DROP COLUMN IF EXISTS changed;
 
 ALTER TABLE IF EXISTS apflora.ekplan
+  DROP COLUMN IF EXISTS changed;
+
+-- so far done
+ALTER TABLE IF EXISTS apflora.tpop_history
   DROP COLUMN IF EXISTS changed;
 
