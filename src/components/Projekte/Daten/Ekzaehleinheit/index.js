@@ -138,7 +138,7 @@ const Ekzaehleinheit = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  console.log('Ekzaehleinheit rendering, loading:', loading)
+  // console.log('Ekzaehleinheit rendering, loading:', loading)
 
   if (loading) return <Spinner />
 
