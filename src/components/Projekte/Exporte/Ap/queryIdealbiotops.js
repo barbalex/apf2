@@ -44,7 +44,8 @@ export default gql`
         strauchschicht
         baumschicht
         bemerkungen
-        changed
+        createdAt
+        updatedAt
         changedBy
       }
     }

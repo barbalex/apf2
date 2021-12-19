@@ -25,7 +25,8 @@ export default gql`
         autor
         nicht_zuordnen: nichtZuordnen
         bemerkungen
-        changed
+        created_at: createdAt
+        updated_at: updatedAt
         changed_by: changedBy
       }
     }
