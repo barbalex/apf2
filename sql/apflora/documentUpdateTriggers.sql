@@ -7,7 +7,9 @@ CREATE OR REPLACE FUNCTION adresse_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -49,7 +51,9 @@ CREATE OR REPLACE FUNCTION ap_user_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -69,7 +73,9 @@ CREATE OR REPLACE FUNCTION ap_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -89,7 +95,9 @@ CREATE OR REPLACE FUNCTION ap_history_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -100,22 +108,6 @@ CREATE TRIGGER ap_history_updated
   FOR EACH ROW
   EXECUTE PROCEDURE ap_history_updated ();
 
--- userprojekt
--- DROP TRIGGER IF EXISTS userprojekt_updated ON apflora.userprojekt CASCADE;
--- DROP FUNCTION IF EXISTS userprojekt_updated () CASCADE;
--- CREATE or replace FUNCTION userprojekt_updated ()
---   RETURNS TRIGGER
---   AS $$
--- BEGIN
---   NEW.updated_at = now();
---   RETURN NEW;
--- END;
--- $$
--- LANGUAGE plpgsql;
--- CREATE TRIGGER userprojekt_updated
---   BEFORE UPDATE ON apflora.userprojekt
---   FOR EACH ROW
---   EXECUTE PROCEDURE userprojekt_updated ();
 --
 -- ap_bearbstand_werte
 DROP TRIGGER IF EXISTS ap_bearbstand_werte_updated ON apflora.ap_bearbstand_werte CASCADE;
@@ -126,7 +118,9 @@ CREATE OR REPLACE FUNCTION ap_bearbstand_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -138,33 +132,17 @@ CREATE TRIGGER ap_bearbstand_werte_updated
   EXECUTE PROCEDURE ap_bearbstand_werte_updated ();
 
 -- user
-DROP TRIGGER IF EXISTS user_updated ON apflora.user CASCADE;
-
-DROP FUNCTION IF EXISTS user_updated () CASCADE;
-
-CREATE OR REPLACE FUNCTION user_updated ()
-  RETURNS TRIGGER
-  AS $$
-BEGIN
-  NEW.updated_at = now();
-  RETURN NEW;
-END;
-$$
-LANGUAGE plpgsql;
-
-CREATE TRIGGER user_updated
-  BEFORE UPDATE ON apflora.user
-  FOR EACH ROW
-  EXECUTE PROCEDURE user_updated ();
-
+-- NOPE this messed up
 -- userprojekt
 -- DROP TRIGGER IF EXISTS userprojekt_updated ON apflora.userprojekt CASCADE;
 -- DROP FUNCTION IF EXISTS userprojekt_updated () CASCADE;
--- CREATE or replace FUNCTION userprojekt_updated ()
+-- CREATE OR REPLACE FUNCTION userprojekt_updated ()
 --   RETURNS TRIGGER
 --   AS $$
 -- BEGIN
---   NEW.updated_at = now();
+--   IF NEW.updated_at IS NULL THEN
+--     NEW.updated_at = now();
+--   END IF;
 --   RETURN NEW;
 -- END;
 -- $$
@@ -183,7 +161,9 @@ CREATE OR REPLACE FUNCTION ap_erfbeurtkrit_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -203,7 +183,9 @@ CREATE OR REPLACE FUNCTION ap_erfkrit_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -223,7 +205,9 @@ CREATE OR REPLACE FUNCTION ap_umsetzung_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -243,7 +227,9 @@ CREATE OR REPLACE FUNCTION apber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -263,7 +249,9 @@ CREATE OR REPLACE FUNCTION apberuebersicht_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -283,7 +271,9 @@ CREATE OR REPLACE FUNCTION assozart_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -303,7 +293,9 @@ CREATE OR REPLACE FUNCTION projekt_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -323,7 +315,9 @@ CREATE OR REPLACE FUNCTION erfkrit_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -343,7 +337,9 @@ CREATE OR REPLACE FUNCTION idealbiotop_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -363,7 +359,9 @@ CREATE OR REPLACE FUNCTION idealbiotop_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -383,7 +381,9 @@ CREATE OR REPLACE FUNCTION pop_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -403,7 +403,9 @@ CREATE OR REPLACE FUNCTION pop_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -423,7 +425,9 @@ CREATE OR REPLACE FUNCTION pop_history_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -443,7 +447,9 @@ CREATE OR REPLACE FUNCTION pop_status_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -463,7 +469,9 @@ CREATE OR REPLACE FUNCTION popber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -483,7 +491,9 @@ CREATE OR REPLACE FUNCTION popmassnber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -503,7 +513,9 @@ CREATE OR REPLACE FUNCTION tpop_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -523,7 +535,9 @@ CREATE OR REPLACE FUNCTION tpop_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -543,7 +557,9 @@ CREATE OR REPLACE FUNCTION tpop_history_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -563,7 +579,9 @@ CREATE OR REPLACE FUNCTION tpop_apberrelevant_grund_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -583,7 +601,9 @@ CREATE OR REPLACE FUNCTION tpop_entwicklung_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -603,7 +623,9 @@ CREATE OR REPLACE FUNCTION tpopber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -623,7 +645,9 @@ CREATE OR REPLACE FUNCTION tpopkontr_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -643,7 +667,9 @@ CREATE OR REPLACE FUNCTION tpopkontr_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -663,7 +689,9 @@ CREATE OR REPLACE FUNCTION tpopkontr_idbiotuebereinst_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -683,7 +711,9 @@ CREATE OR REPLACE FUNCTION tpopkontr_typ_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -703,7 +733,9 @@ CREATE OR REPLACE FUNCTION tpopkontrzaehl_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -723,7 +755,9 @@ CREATE OR REPLACE FUNCTION tpopkontrzaehl_einheit_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -743,7 +777,9 @@ CREATE OR REPLACE FUNCTION tpopkontrzaehl_methode_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -763,7 +799,9 @@ CREATE OR REPLACE FUNCTION tpopmassn_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -783,7 +821,9 @@ CREATE OR REPLACE FUNCTION tpopmassn_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -803,7 +843,9 @@ CREATE OR REPLACE FUNCTION tpopmassn_erfbeurt_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -823,7 +865,9 @@ CREATE OR REPLACE FUNCTION tpopmassn_typ_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -843,7 +887,9 @@ CREATE OR REPLACE FUNCTION tpopmassnber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -863,7 +909,9 @@ CREATE OR REPLACE FUNCTION ziel_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -883,7 +931,9 @@ CREATE OR REPLACE FUNCTION ziel_typ_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -903,7 +953,9 @@ CREATE OR REPLACE FUNCTION zielber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -923,7 +975,9 @@ CREATE OR REPLACE FUNCTION beob_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -937,11 +991,13 @@ CREATE TRIGGER beob_updated
 -- beobprojekt
 -- DROP TRIGGER IF EXISTS beobprojekt_updated ON apflora.beobprojekt CASCADE;
 -- DROP FUNCTION IF EXISTS beobprojekt_updated () CASCADE;
--- CREATE or replace FUNCTION beobprojekt_updated ()
+-- CREATE OR REPLACE FUNCTION beobprojekt_updated ()
 --   RETURNS TRIGGER
 --   AS $$
 -- BEGIN
---   NEW.updated_at = now();
+--   IF NEW.updated_at IS NULL THEN
+--     NEW.updated_at = now();
+--   END IF;
 --   RETURN NEW;
 -- END;
 -- $$
@@ -959,7 +1015,9 @@ CREATE OR REPLACE FUNCTION apart_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -979,7 +1037,9 @@ CREATE OR REPLACE FUNCTION ekzaehleinheit_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -999,7 +1059,9 @@ CREATE OR REPLACE FUNCTION ekfrequenz_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -1019,7 +1081,9 @@ CREATE OR REPLACE FUNCTION ek_abrechnungstyp_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -1039,7 +1103,9 @@ CREATE OR REPLACE FUNCTION ekplan_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -1059,7 +1125,9 @@ CREATE OR REPLACE FUNCTION qk_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -1079,7 +1147,9 @@ CREATE OR REPLACE FUNCTION apqk_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
