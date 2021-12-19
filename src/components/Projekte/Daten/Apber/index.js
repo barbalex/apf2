@@ -125,8 +125,6 @@ const Apber = ({ treeName }) => {
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
 
-  console.log('apber rendering, loading:', loading)
-
   if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
