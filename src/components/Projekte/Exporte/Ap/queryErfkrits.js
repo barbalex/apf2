@@ -31,7 +31,8 @@ export default gql`
           text
         }
         kriterien
-        changed
+        createdAt
+        updatedAt
         changedBy
       }
     }

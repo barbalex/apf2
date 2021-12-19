@@ -39,7 +39,8 @@ export default gql`
         jahr
         erreichung
         bemerkungen
-        changed
+        createdAt
+        updatedAt
         changedBy
       }
     }

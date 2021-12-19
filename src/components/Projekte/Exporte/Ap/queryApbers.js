@@ -29,7 +29,8 @@ export default gql`
         biotopeOptimieren
         massnahmenOptimieren
         wirkungAufArt
-        changed
+        createdAt
+        updatedAt
         changedBy
         massnahmenApBearb
         massnahmenPlanungVsAusfuehrung

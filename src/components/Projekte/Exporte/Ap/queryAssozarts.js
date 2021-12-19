@@ -31,7 +31,8 @@ export default gql`
           }
         }
         bemerkungen
-        changed
+        createdAt
+        updatedAt
         changedBy
       }
     }
