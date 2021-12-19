@@ -3,7 +3,7 @@ DROP TRIGGER IF EXISTS adresse_updated ON apflora.adresse CASCADE;
 
 DROP FUNCTION IF EXISTS adresse_updated () CASCADE;
 
-CREATE FUNCTION adresse_updated ()
+CREATE OR REPLACE FUNCTION adresse_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -23,11 +23,13 @@ DROP TRIGGER IF EXISTS ap_updated ON apflora.ap CASCADE;
 
 DROP FUNCTION IF EXISTS ap_updated () CASCADE;
 
-CREATE FUNCTION ap_updated ()
+CREATE OR REPLACE FUNCTION ap_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  NEW.updated_at = now();
+  IF NEW.updated_at IS NULL THEN
+    NEW.updated_at = now();
+  END IF;
   RETURN NEW;
 END;
 $$
@@ -43,7 +45,7 @@ DROP TRIGGER IF EXISTS ap_user_updated ON apflora.ap_user CASCADE;
 
 DROP FUNCTION IF EXISTS ap_user_updated () CASCADE;
 
-CREATE FUNCTION ap_user_updated ()
+CREATE OR REPLACE FUNCTION ap_user_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -63,7 +65,7 @@ DROP TRIGGER IF EXISTS ap_file_updated ON apflora.ap_file CASCADE;
 
 DROP FUNCTION IF EXISTS ap_file_updated () CASCADE;
 
-CREATE FUNCTION ap_file_updated ()
+CREATE OR REPLACE FUNCTION ap_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -83,7 +85,7 @@ DROP TRIGGER IF EXISTS ap_history_updated ON apflora.ap_history CASCADE;
 
 DROP FUNCTION IF EXISTS ap_history_updated () CASCADE;
 
-CREATE FUNCTION ap_history_updated ()
+CREATE OR REPLACE FUNCTION ap_history_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -101,7 +103,7 @@ CREATE TRIGGER ap_history_updated
 -- userprojekt
 -- DROP TRIGGER IF EXISTS userprojekt_updated ON apflora.userprojekt CASCADE;
 -- DROP FUNCTION IF EXISTS userprojekt_updated () CASCADE;
--- CREATE FUNCTION userprojekt_updated ()
+-- CREATE or replace FUNCTION userprojekt_updated ()
 --   RETURNS TRIGGER
 --   AS $$
 -- BEGIN
@@ -120,7 +122,7 @@ DROP TRIGGER IF EXISTS ap_bearbstand_werte_updated ON apflora.ap_bearbstand_wert
 
 DROP FUNCTION IF EXISTS ap_bearbstand_werte_updated () CASCADE;
 
-CREATE FUNCTION ap_bearbstand_werte_updated ()
+CREATE OR REPLACE FUNCTION ap_bearbstand_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -140,7 +142,7 @@ DROP TRIGGER IF EXISTS user_updated ON apflora.user CASCADE;
 
 DROP FUNCTION IF EXISTS user_updated () CASCADE;
 
-CREATE FUNCTION user_updated ()
+CREATE OR REPLACE FUNCTION user_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -158,7 +160,7 @@ CREATE TRIGGER user_updated
 -- userprojekt
 -- DROP TRIGGER IF EXISTS userprojekt_updated ON apflora.userprojekt CASCADE;
 -- DROP FUNCTION IF EXISTS userprojekt_updated () CASCADE;
--- CREATE FUNCTION userprojekt_updated ()
+-- CREATE or replace FUNCTION userprojekt_updated ()
 --   RETURNS TRIGGER
 --   AS $$
 -- BEGIN
@@ -177,7 +179,7 @@ DROP TRIGGER IF EXISTS ap_erfbeurtkrit_werte_updated ON apflora.ap_erfbeurtkrit_
 
 DROP FUNCTION IF EXISTS ap_erfbeurtkrit_werte_updated () CASCADE;
 
-CREATE FUNCTION ap_erfbeurtkrit_werte_updated ()
+CREATE OR REPLACE FUNCTION ap_erfbeurtkrit_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -197,7 +199,7 @@ DROP TRIGGER IF EXISTS ap_erfkrit_werte_updated ON apflora.ap_erfkrit_werte CASC
 
 DROP FUNCTION IF EXISTS ap_erfkrit_werte_updated () CASCADE;
 
-CREATE FUNCTION ap_erfkrit_werte_updated ()
+CREATE OR REPLACE FUNCTION ap_erfkrit_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -217,7 +219,7 @@ DROP TRIGGER IF EXISTS ap_umsetzung_werte_updated ON apflora.ap_umsetzung_werte 
 
 DROP FUNCTION IF EXISTS ap_umsetzung_werte_updated () CASCADE;
 
-CREATE FUNCTION ap_umsetzung_werte_updated ()
+CREATE OR REPLACE FUNCTION ap_umsetzung_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -237,7 +239,7 @@ DROP TRIGGER IF EXISTS apber_updated ON apflora.apber CASCADE;
 
 DROP FUNCTION IF EXISTS apber_updated () CASCADE;
 
-CREATE FUNCTION apber_updated ()
+CREATE OR REPLACE FUNCTION apber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -257,7 +259,7 @@ DROP TRIGGER IF EXISTS apberuebersicht_updated ON apflora.apberuebersicht CASCAD
 
 DROP FUNCTION IF EXISTS apberuebersicht_updated () CASCADE;
 
-CREATE FUNCTION apberuebersicht_updated ()
+CREATE OR REPLACE FUNCTION apberuebersicht_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -277,7 +279,7 @@ DROP TRIGGER IF EXISTS assozart_updated ON apflora.assozart CASCADE;
 
 DROP FUNCTION IF EXISTS assozart_updated () CASCADE;
 
-CREATE FUNCTION assozart_updated ()
+CREATE OR REPLACE FUNCTION assozart_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -297,7 +299,7 @@ DROP TRIGGER IF EXISTS projekt_updated ON apflora.projekt CASCADE;
 
 DROP FUNCTION IF EXISTS projekt_updated () CASCADE;
 
-CREATE FUNCTION projekt_updated ()
+CREATE OR REPLACE FUNCTION projekt_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -317,7 +319,7 @@ DROP TRIGGER IF EXISTS erfkrit_updated ON apflora.erfkrit CASCADE;
 
 DROP FUNCTION IF EXISTS erfkrit_updated () CASCADE;
 
-CREATE FUNCTION erfkrit_updated ()
+CREATE OR REPLACE FUNCTION erfkrit_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -337,7 +339,7 @@ DROP TRIGGER IF EXISTS idealbiotop_updated ON apflora.idealbiotop CASCADE;
 
 DROP FUNCTION IF EXISTS idealbiotop_updated () CASCADE;
 
-CREATE FUNCTION idealbiotop_updated ()
+CREATE OR REPLACE FUNCTION idealbiotop_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -357,7 +359,7 @@ DROP TRIGGER IF EXISTS idealbiotop_file_updated ON apflora.idealbiotop_file CASC
 
 DROP FUNCTION IF EXISTS idealbiotop_file_updated () CASCADE;
 
-CREATE FUNCTION idealbiotop_file_updated ()
+CREATE OR REPLACE FUNCTION idealbiotop_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -377,7 +379,7 @@ DROP TRIGGER IF EXISTS pop_updated ON apflora.pop CASCADE;
 
 DROP FUNCTION IF EXISTS pop_updated () CASCADE;
 
-CREATE FUNCTION pop_updated ()
+CREATE OR REPLACE FUNCTION pop_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -397,7 +399,7 @@ DROP TRIGGER IF EXISTS pop_file_updated ON apflora.pop_file CASCADE;
 
 DROP FUNCTION IF EXISTS pop_file_updated () CASCADE;
 
-CREATE FUNCTION pop_file_updated ()
+CREATE OR REPLACE FUNCTION pop_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -417,7 +419,7 @@ DROP TRIGGER IF EXISTS pop_history_updated ON apflora.pop_history CASCADE;
 
 DROP FUNCTION IF EXISTS pop_history_updated () CASCADE;
 
-CREATE FUNCTION pop_history_updated ()
+CREATE OR REPLACE FUNCTION pop_history_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -437,7 +439,7 @@ DROP TRIGGER IF EXISTS pop_status_werte_updated ON apflora.pop_status_werte CASC
 
 DROP FUNCTION IF EXISTS pop_status_werte_updated () CASCADE;
 
-CREATE FUNCTION pop_status_werte_updated ()
+CREATE OR REPLACE FUNCTION pop_status_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -457,7 +459,7 @@ DROP TRIGGER IF EXISTS popber_updated ON apflora.popber CASCADE;
 
 DROP FUNCTION IF EXISTS popber_updated () CASCADE;
 
-CREATE FUNCTION popber_updated ()
+CREATE OR REPLACE FUNCTION popber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -477,7 +479,7 @@ DROP TRIGGER IF EXISTS popmassnber_updated ON apflora.popmassnber CASCADE;
 
 DROP FUNCTION IF EXISTS popmassnber_updated () CASCADE;
 
-CREATE FUNCTION popmassnber_updated ()
+CREATE OR REPLACE FUNCTION popmassnber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -497,7 +499,7 @@ DROP TRIGGER IF EXISTS tpop_updated ON apflora.tpop CASCADE;
 
 DROP FUNCTION IF EXISTS tpop_updated () CASCADE;
 
-CREATE FUNCTION tpop_updated ()
+CREATE OR REPLACE FUNCTION tpop_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -517,7 +519,7 @@ DROP TRIGGER IF EXISTS tpop_file_updated ON apflora.tpop_file CASCADE;
 
 DROP FUNCTION IF EXISTS tpop_file_updated () CASCADE;
 
-CREATE FUNCTION tpop_file_updated ()
+CREATE OR REPLACE FUNCTION tpop_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -537,7 +539,7 @@ DROP TRIGGER IF EXISTS tpop_history_updated ON apflora.tpop_history CASCADE;
 
 DROP FUNCTION IF EXISTS tpop_history_updated () CASCADE;
 
-CREATE FUNCTION tpop_history_updated ()
+CREATE OR REPLACE FUNCTION tpop_history_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -557,7 +559,7 @@ DROP TRIGGER IF EXISTS tpop_apberrelevant_grund_werte_updated ON apflora.tpop_ap
 
 DROP FUNCTION IF EXISTS tpop_apberrelevant_grund_werte_updated () CASCADE;
 
-CREATE FUNCTION tpop_apberrelevant_grund_werte_updated ()
+CREATE OR REPLACE FUNCTION tpop_apberrelevant_grund_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -577,7 +579,7 @@ DROP TRIGGER IF EXISTS tpop_entwicklung_werte_updated ON apflora.tpop_entwicklun
 
 DROP FUNCTION IF EXISTS tpop_entwicklung_werte_updated () CASCADE;
 
-CREATE FUNCTION tpop_entwicklung_werte_updated ()
+CREATE OR REPLACE FUNCTION tpop_entwicklung_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -597,7 +599,7 @@ DROP TRIGGER IF EXISTS tpopber_updated ON apflora.tpopber CASCADE;
 
 DROP FUNCTION IF EXISTS tpopber_updated () CASCADE;
 
-CREATE FUNCTION tpopber_updated ()
+CREATE OR REPLACE FUNCTION tpopber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -617,7 +619,7 @@ DROP TRIGGER IF EXISTS tpopkontr_updated ON apflora.tpopkontr CASCADE;
 
 DROP FUNCTION IF EXISTS tpopkontr_updated () CASCADE;
 
-CREATE FUNCTION tpopkontr_updated ()
+CREATE OR REPLACE FUNCTION tpopkontr_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -637,7 +639,7 @@ DROP TRIGGER IF EXISTS tpopkontr_file_updated ON apflora.tpopkontr_file CASCADE;
 
 DROP FUNCTION IF EXISTS tpopkontr_file_updated () CASCADE;
 
-CREATE FUNCTION tpopkontr_file_updated ()
+CREATE OR REPLACE FUNCTION tpopkontr_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -657,7 +659,7 @@ DROP TRIGGER IF EXISTS tpopkontr_idbiotuebereinst_werte_updated ON apflora.tpopk
 
 DROP FUNCTION IF EXISTS tpopkontr_idbiotuebereinst_werte_updated () CASCADE;
 
-CREATE FUNCTION tpopkontr_idbiotuebereinst_werte_updated ()
+CREATE OR REPLACE FUNCTION tpopkontr_idbiotuebereinst_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -677,7 +679,7 @@ DROP TRIGGER IF EXISTS tpopkontr_typ_werte_updated ON apflora.tpopkontr_typ_wert
 
 DROP FUNCTION IF EXISTS tpopkontr_typ_werte_updated () CASCADE;
 
-CREATE FUNCTION tpopkontr_typ_werte_updated ()
+CREATE OR REPLACE FUNCTION tpopkontr_typ_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -697,7 +699,7 @@ DROP TRIGGER IF EXISTS tpopkontrzaehl_updated ON apflora.tpopkontrzaehl CASCADE;
 
 DROP FUNCTION IF EXISTS tpopkontrzaehl_updated () CASCADE;
 
-CREATE FUNCTION tpopkontrzaehl_updated ()
+CREATE OR REPLACE FUNCTION tpopkontrzaehl_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -717,7 +719,7 @@ DROP TRIGGER IF EXISTS tpopkontrzaehl_einheit_werte_updated ON apflora.tpopkontr
 
 DROP FUNCTION IF EXISTS tpopkontrzaehl_einheit_werte_updated () CASCADE;
 
-CREATE FUNCTION tpopkontrzaehl_einheit_werte_updated ()
+CREATE OR REPLACE FUNCTION tpopkontrzaehl_einheit_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -737,7 +739,7 @@ DROP TRIGGER IF EXISTS tpopkontrzaehl_methode_werte_updated ON apflora.tpopkontr
 
 DROP FUNCTION IF EXISTS tpopkontrzaehl_methode_werte_updated () CASCADE;
 
-CREATE FUNCTION tpopkontrzaehl_methode_werte_updated ()
+CREATE OR REPLACE FUNCTION tpopkontrzaehl_methode_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -757,7 +759,7 @@ DROP TRIGGER IF EXISTS tpopmassn_updated ON apflora.tpopmassn CASCADE;
 
 DROP FUNCTION IF EXISTS tpopmassn_updated () CASCADE;
 
-CREATE FUNCTION tpopmassn_updated ()
+CREATE OR REPLACE FUNCTION tpopmassn_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -777,7 +779,7 @@ DROP TRIGGER IF EXISTS tpopmassn_file_updated ON apflora.tpopmassn_file CASCADE;
 
 DROP FUNCTION IF EXISTS tpopmassn_file_updated () CASCADE;
 
-CREATE FUNCTION tpopmassn_file_updated ()
+CREATE OR REPLACE FUNCTION tpopmassn_file_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -797,7 +799,7 @@ DROP TRIGGER IF EXISTS tpopmassn_erfbeurt_werte_updated ON apflora.tpopmassn_erf
 
 DROP FUNCTION IF EXISTS tpopmassn_erfbeurt_werte_updated () CASCADE;
 
-CREATE FUNCTION tpopmassn_erfbeurt_werte_updated ()
+CREATE OR REPLACE FUNCTION tpopmassn_erfbeurt_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -817,7 +819,7 @@ DROP TRIGGER IF EXISTS tpopmassn_typ_werte_updated ON apflora.tpopmassn_typ_wert
 
 DROP FUNCTION IF EXISTS tpopmassn_typ_werte_updated () CASCADE;
 
-CREATE FUNCTION tpopmassn_typ_werte_updated ()
+CREATE OR REPLACE FUNCTION tpopmassn_typ_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -837,7 +839,7 @@ DROP TRIGGER IF EXISTS tpopmassnber_updated ON apflora.tpopmassnber CASCADE;
 
 DROP FUNCTION IF EXISTS tpopmassnber_updated () CASCADE;
 
-CREATE FUNCTION tpopmassnber_updated ()
+CREATE OR REPLACE FUNCTION tpopmassnber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -857,7 +859,7 @@ DROP TRIGGER IF EXISTS ziel_updated ON apflora.ziel CASCADE;
 
 DROP FUNCTION IF EXISTS ziel_updated () CASCADE;
 
-CREATE FUNCTION ziel_updated ()
+CREATE OR REPLACE FUNCTION ziel_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -877,7 +879,7 @@ DROP TRIGGER IF EXISTS ziel_typ_werte_updated ON apflora.ziel_typ_werte CASCADE;
 
 DROP FUNCTION IF EXISTS ziel_typ_werte_updated () CASCADE;
 
-CREATE FUNCTION ziel_typ_werte_updated ()
+CREATE OR REPLACE FUNCTION ziel_typ_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -897,7 +899,7 @@ DROP TRIGGER IF EXISTS zielber_updated ON apflora.zielber CASCADE;
 
 DROP FUNCTION IF EXISTS zielber_updated () CASCADE;
 
-CREATE FUNCTION zielber_updated ()
+CREATE OR REPLACE FUNCTION zielber_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -917,7 +919,7 @@ DROP TRIGGER IF EXISTS beob_updated ON apflora.beob CASCADE;
 
 DROP FUNCTION IF EXISTS beob_updated () CASCADE;
 
-CREATE FUNCTION beob_updated ()
+CREATE OR REPLACE FUNCTION beob_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -935,7 +937,7 @@ CREATE TRIGGER beob_updated
 -- beobprojekt
 -- DROP TRIGGER IF EXISTS beobprojekt_updated ON apflora.beobprojekt CASCADE;
 -- DROP FUNCTION IF EXISTS beobprojekt_updated () CASCADE;
--- CREATE FUNCTION beobprojekt_updated ()
+-- CREATE or replace FUNCTION beobprojekt_updated ()
 --   RETURNS TRIGGER
 --   AS $$
 -- BEGIN
@@ -953,7 +955,7 @@ DROP TRIGGER IF EXISTS apart_updated ON apflora.apart CASCADE;
 
 DROP FUNCTION IF EXISTS apart_updated () CASCADE;
 
-CREATE FUNCTION apart_updated ()
+CREATE OR REPLACE FUNCTION apart_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -973,7 +975,7 @@ DROP TRIGGER IF EXISTS ekzaehleinheit_updated ON apflora.ekzaehleinheit CASCADE;
 
 DROP FUNCTION IF EXISTS ekzaehleinheit_updated () CASCADE;
 
-CREATE FUNCTION ekzaehleinheit_updated ()
+CREATE OR REPLACE FUNCTION ekzaehleinheit_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -993,7 +995,7 @@ DROP TRIGGER IF EXISTS ekfrequenz_updated ON apflora.ekfrequenz CASCADE;
 
 DROP FUNCTION IF EXISTS ekfrequenz_updated () CASCADE;
 
-CREATE FUNCTION ekfrequenz_updated ()
+CREATE OR REPLACE FUNCTION ekfrequenz_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -1013,7 +1015,7 @@ DROP TRIGGER IF EXISTS ek_abrechnungstyp_werte_updated ON apflora.ek_abrechnungs
 
 DROP FUNCTION IF EXISTS ek_abrechnungstyp_werte_updated () CASCADE;
 
-CREATE FUNCTION ek_abrechnungstyp_werte_updated ()
+CREATE OR REPLACE FUNCTION ek_abrechnungstyp_werte_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -1033,7 +1035,7 @@ DROP TRIGGER IF EXISTS ekplan_updated ON apflora.ekplan CASCADE;
 
 DROP FUNCTION IF EXISTS ekplan_updated () CASCADE;
 
-CREATE FUNCTION ekplan_updated ()
+CREATE OR REPLACE FUNCTION ekplan_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -1053,7 +1055,7 @@ DROP TRIGGER IF EXISTS qk_updated ON apflora.qk CASCADE;
 
 DROP FUNCTION IF EXISTS qk_updated () CASCADE;
 
-CREATE FUNCTION qk_updated ()
+CREATE OR REPLACE FUNCTION qk_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
@@ -1073,7 +1075,7 @@ DROP TRIGGER IF EXISTS apqk_updated ON apflora.apqk CASCADE;
 
 DROP FUNCTION IF EXISTS apqk_updated () CASCADE;
 
-CREATE FUNCTION apqk_updated ()
+CREATE OR REPLACE FUNCTION apqk_updated ()
   RETURNS TRIGGER
   AS $$
 BEGIN
