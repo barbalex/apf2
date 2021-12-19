@@ -21,7 +21,8 @@ export default gql`
             popStatusUnklarBegruendung
             popX
             popY
-            popChanged
+            popCreatedAt
+            popUpdatedAt
             popChangedBy
             jahr
             popberId
@@ -34,7 +35,8 @@ export default gql`
             popmassnberJahr
             popmassnberEntwicklung
             popmassnberBemerkungen
-            popmassnberChanged
+            popmassnberCreatedAt
+            popmassnberUpdatedAt
             popmassnberChangedBy
           }
         }

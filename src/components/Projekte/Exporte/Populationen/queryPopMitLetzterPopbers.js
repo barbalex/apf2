@@ -21,13 +21,15 @@ export default gql`
             popStatusUnklarBegruendung
             popX
             popY
-            popChanged
+            popCreatedAt
+            popUpdatedAt
             popChangedBy
             popberId
             popberJahr
             popberEntwicklung
             popberBemerkungen
-            popberChanged
+            popberCreatedAt
+            popberUpdatedAt
             popberChangedBy
           }
         }

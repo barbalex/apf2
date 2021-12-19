@@ -483,8 +483,12 @@ const Populationen = () => {
                       ?.popStatusUnklarBegruendung ?? '',
                   pop_x: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popX ?? '',
                   pop_y: n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popY ?? '',
-                  pop_changed:
-                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popChanged ?? '',
+                  pop_created_at:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popCreatedAt ??
+                    '',
+                  pop_updated_at:
+                    n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popUpdatedAt ??
+                    '',
                   pop_changed_by:
                     n?.vPopmassnberAnzmassnsById?.nodes?.[0]?.popChangedBy ??
                     '',
@@ -709,20 +713,23 @@ const Populationen = () => {
                   pop_status_unklar_begruendung: z.popStatusUnklarBegruendung,
                   pop_x: z.popX,
                   pop_y: z.popY,
-                  pop_changed: z.popChanged,
+                  pop_created_at: z.popCreatedAt,
+                  pop_updated_at: z.popUpdatedAt,
                   pop_changed_by: z.popChangedBy,
                   jahr: z.jahr,
                   popber_id: z.popberId,
                   popber_jahr: z.popberJahr,
                   popber_entwicklung: z.popberEntwicklung,
                   popber_bemerkungen: z.popberBemerkungen,
-                  popber_changed: z.popberChanged,
+                  popber_created_at: z.popberCreatedAt,
+                  popber_updated_at: z.popberUpdatedAt,
                   popber_changed_by: z.popberChangedBy,
                   popmassnber_id: z.popmassnberId,
                   popmassnber_jahr: z.popmassnberJahr,
                   popmassnber_entwicklung: z.popmassnberEntwicklung,
                   popmassnber_bemerkungen: z.popmassnberBemerkungen,
-                  popmassnber_changed: z.popmassnberChanged,
+                  popmassnber_created_at: z.popmassnberCreatedAt,
+                  popmassnber_updated_at: z.popmassnberUpdatedAt,
                   popmassnber_changed_by: z.popmassnberChangedBy,
                 })),
               )
@@ -805,8 +812,12 @@ const Populationen = () => {
                     ?.popStatusUnklarBegruendung ?? '',
                 pop_x: z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popX ?? '',
                 pop_y: z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popY ?? '',
-                pop_changed:
-                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popChanged ?? '',
+                pop_created_at:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popCreatedAt ??
+                  '',
+                pop_updated_at:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popUpdatedAt ??
+                  '',
                 pop_changed_by:
                   z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popChangedBy ??
                   '',
@@ -820,9 +831,12 @@ const Populationen = () => {
                 popber_bemerkungen:
                   z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
                     ?.popberBemerkungen ?? '',
-                popber_changed:
-                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popberChanged ??
-                  '',
+                popber_created_at:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
+                    ?.popberCreatedAt ?? '',
+                popber_updated_at:
+                  z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
+                    ?.popberUpdatedAt ?? '',
                 popber_changed_by:
                   z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
                     ?.popberChangedBy ?? '',

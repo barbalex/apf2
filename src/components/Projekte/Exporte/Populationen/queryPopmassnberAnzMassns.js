@@ -21,7 +21,8 @@ export default gql`
             popStatusUnklarBegruendung
             popX
             popY
-            popChanged
+            popCreatedAt
+            popUpdatedAt
             popChangedBy
             id
             jahr
