@@ -29,7 +29,7 @@ SELECT
   apflora.pop.status_unklar_begruendung AS pop_status_unklar_begruendung,
   apflora.pop.lv95_x AS pop_x,
   apflora.pop.lv95_y AS pop_y,
-  apflora.pop.created_at AS created_at,
+  apflora.pop.created_at AS pop_created_at,
   apflora.pop.updated_at AS pop_updated_at,
   apflora.pop.changed_by AS pop_changed_by,
   apflora.popber.id AS popber_id,

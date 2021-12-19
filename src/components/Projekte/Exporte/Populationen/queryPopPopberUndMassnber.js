@@ -29,7 +29,8 @@ export default gql`
             popberJahr
             popberEntwicklung
             popberBemerkungen
-            popberChanged
+            popberCreatedAt
+            popberUpdatedAt
             popberChangedBy
             popmassnberId
             popmassnberJahr
