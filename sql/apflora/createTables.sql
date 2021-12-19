@@ -79,7 +79,6 @@ CREATE TABLE apflora.adresse (
   freiw_erfko boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -105,8 +104,6 @@ COMMENT ON COLUMN apflora.adresse.email IS 'Email';
 
 COMMENT ON COLUMN apflora.adresse.freiw_erfko IS 'Ist die Person freiwillige(r) Kontrolleur(in)';
 
-COMMENT ON COLUMN apflora.adresse.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.adresse.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.adresse ENABLE ROW LEVEL SECURITY;
@@ -131,7 +128,6 @@ CREATE TABLE apflora.ap (
   ekf_beobachtungszeitpunkt text DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -164,8 +160,6 @@ COMMENT ON COLUMN apflora.ap.umsetzung IS 'In welchem Umsetzungsstand befindet s
 COMMENT ON COLUMN apflora.ap.bearbeiter IS 'Verantwortliche(r) für die Art';
 
 COMMENT ON COLUMN apflora.ap.ekf_beobachtungszeitpunkt IS 'bester Beobachtungszeitpunkt';
-
-COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -276,7 +270,6 @@ CREATE TABLE apflora.ap_history (
   ekf_beobachtungszeitpunkt text DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL,
   PRIMARY KEY (id, year)
 );
@@ -314,8 +307,6 @@ COMMENT ON COLUMN apflora.ap_history.umsetzung IS 'In welchem Umsetzungsstand be
 COMMENT ON COLUMN apflora.ap_history.bearbeiter IS 'Verantwortliche(r) für die Art';
 
 COMMENT ON COLUMN apflora.ap_history.ekf_beobachtungszeitpunkt IS 'bester Beobachtungszeitpunkt';
-
-COMMENT ON COLUMN apflora.ap_history.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.ap_history.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -366,7 +357,6 @@ CREATE TABLE apflora.ap_bearbstand_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -396,8 +386,6 @@ COMMENT ON COLUMN apflora.ap_bearbstand_werte.id IS 'Primärschlüssel';
 
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.ap_bearbstand_werte ENABLE ROW LEVEL SECURITY;
@@ -420,7 +408,6 @@ CREATE TABLE apflora.ap_erfbeurtkrit_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -450,8 +437,6 @@ COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.id IS 'Primärschlüssel';
 
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.ap_erfbeurtkrit_werte ENABLE ROW LEVEL SECURITY;
@@ -473,7 +458,6 @@ CREATE TABLE apflora.ap_erfkrit_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -505,8 +489,6 @@ COMMENT ON COLUMN apflora.ap_erfkrit_werte.text IS 'Wie werden die durchgefuehrt
 
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.ap_erfkrit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.ap_erfkrit_werte ENABLE ROW LEVEL SECURITY;
@@ -528,7 +510,6 @@ CREATE TABLE apflora.ap_umsetzung_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -557,8 +538,6 @@ CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (historic);
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.id IS 'Primärschlüssel';
 
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -595,7 +574,6 @@ CREATE TABLE apflora.apber (
   bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -643,8 +621,6 @@ COMMENT ON COLUMN apflora.apber.datum IS 'Datum der Nachführung';
 
 COMMENT ON COLUMN apflora.apber.bearbeiter IS 'BerichtsverfasserIn: Auswahl aus der Tabelle "adresse"';
 
-COMMENT ON COLUMN apflora.apber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.apber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.apber
@@ -683,7 +659,6 @@ CREATE TABLE apflora.apberuebersicht (
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL,
   UNIQUE (proj_id, jahr)
 );
@@ -703,8 +678,6 @@ COMMENT ON COLUMN apflora.apberuebersicht.jahr IS 'Berichtsjahr. Zusammen mit pr
 COMMENT ON COLUMN apflora.apberuebersicht.history_date IS 'Datum, an dem die Daten von AP, Pop und TPop historisiert wurden';
 
 COMMENT ON COLUMN apflora.apberuebersicht.bemerkungen IS 'Bemerkungen zur Artübersicht';
-
-COMMENT ON COLUMN apflora.apberuebersicht.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.apberuebersicht.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -729,7 +702,6 @@ CREATE TABLE apflora.assozart (
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -744,8 +716,6 @@ COMMENT ON COLUMN apflora.assozart.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.assozart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 
 COMMENT ON COLUMN apflora.assozart.bemerkungen IS 'Bemerkungen zur Assoziation';
-
-COMMENT ON COLUMN apflora.assozart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.assozart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
@@ -782,15 +752,12 @@ CREATE TABLE apflora.projekt (
   name varchar(150) DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
 CREATE INDEX ON apflora.projekt USING btree (id);
 
 CREATE INDEX ON apflora.projekt USING btree (name);
-
-COMMENT ON COLUMN apflora.projekt.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -812,7 +779,6 @@ CREATE TABLE apflora.erfkrit (
   kriterien text DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -829,8 +795,6 @@ COMMENT ON COLUMN apflora.erfkrit.ap_id IS 'Zugehöriger Aktionsplan. Fremdschl�
 COMMENT ON COLUMN apflora.erfkrit.erfolg IS 'Wie gut werden die Ziele erreicht? Auswahl aus der Tabelle "ap_erfkrit_werte"';
 
 COMMENT ON COLUMN apflora.erfkrit.kriterien IS 'Beschreibung der Kriterien für den Erfolg';
-
-COMMENT ON COLUMN apflora.erfkrit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.erfkrit.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -882,7 +846,6 @@ CREATE TABLE apflora.idealbiotop (
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -929,8 +892,6 @@ COMMENT ON COLUMN apflora.idealbiotop.strauchschicht IS 'Strauchschicht';
 COMMENT ON COLUMN apflora.idealbiotop.baumschicht IS 'Baumschicht';
 
 COMMENT ON COLUMN apflora.idealbiotop.bemerkungen IS 'Bemerkungen';
-
-COMMENT ON COLUMN apflora.idealbiotop.changed IS 'Wann wurde der Datensatz zuletzt verändert?';
 
 COMMENT ON COLUMN apflora.idealbiotop.changed_by IS 'Wer hat den Datensatz zuletzt verändert?';
 
@@ -1028,7 +989,6 @@ CREATE TABLE apflora.pop (
   geom_point geometry(point, 4326) DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -1061,8 +1021,6 @@ COMMENT ON COLUMN apflora.pop.status_unklar IS 'true = die Herkunft der Populati
 COMMENT ON COLUMN apflora.pop.status_unklar_begruendung IS 'Begründung, wieso die Herkunft unklar ist';
 
 COMMENT ON COLUMN apflora.pop.bekannt_seit IS 'Seit wann ist die Population bekannt?';
-
-COMMENT ON COLUMN apflora.pop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.pop.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -1159,7 +1117,6 @@ CREATE TABLE apflora.pop_history (
   geom_point geometry(point, 4326) DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL,
   PRIMARY KEY (id, year)
 );
@@ -1215,7 +1172,6 @@ CREATE TABLE apflora.pop_status_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -1249,8 +1205,6 @@ COMMENT ON COLUMN apflora.pop_status_werte.text IS 'Beschreibung der Herkunft';
 
 COMMENT ON COLUMN apflora.pop_status_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.pop_status_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.pop_status_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.pop_status_werte ENABLE ROW LEVEL SECURITY;
@@ -1272,7 +1226,6 @@ CREATE TABLE apflora.popber (
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -1285,8 +1238,6 @@ COMMENT ON COLUMN apflora.popber.jahr IS 'Für welches Jahr gilt der Bericht?';
 COMMENT ON COLUMN apflora.popber.entwicklung IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "tpop_entwicklung_werte"';
 
 COMMENT ON COLUMN apflora.popber.bemerkungen IS 'Bemerkungen zur Beurteilung';
-
-COMMENT ON COLUMN apflora.popber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.popber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -1345,7 +1296,6 @@ CREATE TABLE apflora.popmassnber (
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -1366,8 +1316,6 @@ COMMENT ON COLUMN apflora.popmassnber.jahr IS 'Für welches Jahr gilt der Berich
 COMMENT ON COLUMN apflora.popmassnber.beurteilung IS 'Wie wird die Wirkung aller im Rahmen des AP durchgeführten Massnahmen beurteilt?';
 
 COMMENT ON COLUMN apflora.popmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
-
-COMMENT ON COLUMN apflora.popmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.popmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -1447,7 +1395,6 @@ CREATE TABLE apflora.tpop (
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -1540,10 +1487,6 @@ COMMENT ON COLUMN apflora.tpop.ekfrequenz_startjahr IS 'Das Basisjahr, von dem a
 COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre';
 
 COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Wer diese TPop freiwillig kontrolliert. Dient dazu, Formulare für die EKF zu generieren';
-
-COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
-COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.tpop ENABLE ROW LEVEL SECURITY;
 
@@ -1689,7 +1632,6 @@ CREATE TABLE apflora.tpop_history (
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL,
   PRIMARY KEY (id, year)
 );
@@ -1768,7 +1710,6 @@ CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -1798,8 +1739,6 @@ COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.id IS 'Primärschlüsse
 
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.tpop_apberrelevant_grund_werte ENABLE ROW LEVEL SECURITY;
@@ -1821,7 +1760,6 @@ CREATE TABLE apflora.tpop_entwicklung_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -1851,8 +1789,6 @@ COMMENT ON COLUMN apflora.tpop_entwicklung_werte.id IS 'Primärschlüssel';
 
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.tpop_entwicklung_werte ENABLE ROW LEVEL SECURITY;
@@ -1873,7 +1809,6 @@ CREATE TABLE apflora.tpopber (
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -1886,8 +1821,6 @@ COMMENT ON COLUMN apflora.tpopber.jahr IS 'Für welches Jahr gilt der Bericht?';
 COMMENT ON COLUMN apflora.tpopber.entwicklung IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "tpop_entwicklung_werte"';
 
 COMMENT ON COLUMN apflora.tpopber.entwicklung IS 'Bemerkungen zur Beurteilung';
-
-COMMENT ON COLUMN apflora.tpopber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.tpopber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -1988,7 +1921,6 @@ CREATE TABLE apflora.tpopkontr (
   ekf_bemerkungen text DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -2077,8 +2009,6 @@ COMMENT ON COLUMN apflora.tpopkontr.vegetationshoehe_maximum IS 'Maximale Vegeta
 COMMENT ON COLUMN apflora.tpopkontr.vegetationshoehe_mittel IS 'Mittlere Vegetationshöhe in cm. Nur für Freiwilligen-Erfolgskontrolle';
 
 COMMENT ON COLUMN apflora.tpopkontr.gefaehrdung IS 'Gefährdung. Nur für Freiwilligen-Erfolgskontrolle';
-
-COMMENT ON COLUMN apflora.tpopkontr.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.tpopkontr.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -2222,7 +2152,6 @@ CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -2252,8 +2181,6 @@ COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.id IS 'Primärschlüs
 
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte ENABLE ROW LEVEL SECURITY;
@@ -2275,7 +2202,6 @@ CREATE TABLE apflora.tpopkontr_typ_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -2305,8 +2231,6 @@ COMMENT ON COLUMN apflora.tpopkontr_typ_werte.id IS 'Primärschlüssel';
 
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.tpopkontr_typ_werte ENABLE ROW LEVEL SECURITY;
@@ -2328,7 +2252,6 @@ CREATE TABLE apflora.tpopkontrzaehl (
   methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL,
   UNIQUE (id, einheit)
 );
@@ -2339,8 +2262,6 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl.anzahl IS 'Anzahl Zaehleinheiten';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabelle "tpopkontrzaehl_einheit_werte"';
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl.methode IS 'Verwendete Methodik. Auswahl aus Tabelle "tpopkontrzaehl_methode_werte"';
-
-COMMENT ON COLUMN apflora.tpopkontrzaehl.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -2425,7 +2346,6 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -2455,8 +2375,6 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.id IS 'Primärschlüssel'
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.corresponds_to_massn_anz_triebe IS 'Entspricht den "Anzahl Triebe" bei Massnahmen. Ermöglicht es, tpopmassn.zieleinheit_anzahl automatisch zu setzen';
@@ -2482,7 +2400,6 @@ CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -2514,8 +2431,6 @@ CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (historic);
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.id IS 'Primärschlüssel';
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -2556,7 +2471,6 @@ CREATE TABLE apflora.tpopmassn (
   pflanzanordnung text DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -2617,8 +2531,6 @@ COMMENT ON COLUMN apflora.tpopmassn.form IS 'Form, Grösse der Ansiedlung';
 COMMENT ON COLUMN apflora.tpopmassn.pflanzanordnung IS 'Anordnung der Pflanzung';
 
 COMMENT ON COLUMN apflora.tpopmassn.id IS 'GUID der Tabelle "tpopmassn"';
-
-COMMENT ON COLUMN apflora.tpopmassn.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.tpopmassn.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -2758,7 +2670,6 @@ CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -2790,8 +2701,6 @@ COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.text IS 'Wie werden die durch
 
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.tpopmassn_erfbeurt_werte ENABLE ROW LEVEL SECURITY;
@@ -2815,7 +2724,6 @@ CREATE TABLE apflora.tpopmassn_typ_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -2851,8 +2759,6 @@ COMMENT ON COLUMN apflora.tpopmassn_typ_werte.ansiedlung IS 'Handelt es sich um 
 
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.tpopmassn_typ_werte ENABLE ROW LEVEL SECURITY;
@@ -2874,7 +2780,6 @@ CREATE TABLE apflora.tpopmassnber (
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -2895,8 +2800,6 @@ COMMENT ON COLUMN apflora.tpopmassnber.jahr IS 'Jahr, für den der Bericht gilt'
 COMMENT ON COLUMN apflora.tpopmassnber.beurteilung IS 'Beurteilung des Erfolgs. Auswahl aus Tabelle "tpopmassn_erfbeurt_werte"';
 
 COMMENT ON COLUMN apflora.tpopmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
-
-COMMENT ON COLUMN apflora.tpopmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.tpopmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -3036,7 +2939,6 @@ CREATE TABLE apflora.ziel (
   bezeichnung text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -3057,8 +2959,6 @@ COMMENT ON COLUMN apflora.ziel.typ IS 'Typ des Ziels. Z.B. Zwischenziel, Gesamtz
 COMMENT ON COLUMN apflora.ziel.jahr IS 'In welchem Jahr soll das Ziel erreicht werden?';
 
 COMMENT ON COLUMN apflora.ziel.bezeichnung IS 'Textliche Beschreibung des Ziels';
-
-COMMENT ON COLUMN apflora.ziel.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.ziel.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -3095,7 +2995,6 @@ CREATE TABLE apflora.ziel_typ_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) NOT NULL
 );
 
@@ -3127,8 +3026,6 @@ COMMENT ON COLUMN apflora.ziel_typ_werte.text IS 'Beschreibung des Ziels';
 
 COMMENT ON COLUMN apflora.ziel_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 
-COMMENT ON COLUMN apflora.ziel_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.ziel_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.ziel_typ_werte ENABLE ROW LEVEL SECURITY;
@@ -3150,7 +3047,6 @@ CREATE TABLE apflora.zielber (
   bemerkungen text DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -3169,8 +3065,6 @@ COMMENT ON COLUMN apflora.zielber.jahr IS 'Für welches Jahr gilt der Bericht?';
 COMMENT ON COLUMN apflora.zielber.erreichung IS 'Beurteilung der Zielerreichung';
 
 COMMENT ON COLUMN apflora.zielber.bemerkungen IS 'Bemerkungen zur Zielerreichung';
-
-COMMENT ON COLUMN apflora.zielber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.zielber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -3316,7 +3210,6 @@ CREATE TABLE apflora.beob (
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -3349,8 +3242,6 @@ COMMENT ON COLUMN apflora.beob.nicht_zuordnen IS 'Wird ja gesetzt, wenn eine Beo
 COMMENT ON COLUMN apflora.beob.infoflora_informiert_datum IS 'Datum, an dem Info Flora über die Verifikation der Beobachtung informiert wurde';
 
 COMMENT ON COLUMN apflora.beob.bemerkungen IS 'Bemerkungen zur Zuordnung';
-
-COMMENT ON COLUMN apflora.beob.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.beob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -3417,7 +3308,6 @@ CREATE TABLE apflora.apart (
   ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz DEFAULT now(),
-  changed date DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL --UNIQUE (art_id) --no, maybe after beob were rearranged
 );
 
@@ -3432,8 +3322,6 @@ COMMENT ON COLUMN apflora.apart.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.apart.art_id IS 'Zugehörige Art. Aus der Tabelle "ae_taxonomies"';
 
 COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-
-COMMENT ON COLUMN apflora.apart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.apart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
@@ -3472,7 +3360,6 @@ CREATE TABLE apflora.ekzaehleinheit (
   bemerkungen text DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -3505,8 +3392,6 @@ COMMENT ON COLUMN apflora.ekzaehleinheit.zielrelevant IS 'Ob die Zähleinheit zi
 COMMENT ON COLUMN apflora.ekzaehleinheit.not_massn_count_unit IS 'Deklariert, dass bewusst keine der zwei Zähleinheiten von Massnahmen gewählt wurde. Ermöglicht, dass eine Qualitätskontrolle auflistet, wo unbewusst Zieleinheiten gewählt wurden, welche keiner der zwei Zähleinheiten von Massnahmen entsprechen';
 
 COMMENT ON COLUMN apflora.ekzaehleinheit.sort IS 'Um die Zähleinheiten untereinander zu sortieren';
-
-COMMENT ON COLUMN apflora.ekzaehleinheit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.ekzaehleinheit.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
@@ -3551,7 +3436,6 @@ CREATE TABLE apflora.ekfrequenz (
   ek_abrechnungstyp text DEFAULT NULL REFERENCES apflora.ek_abrechnungstyp_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL,
   UNIQUE (ap_id, code)
 );
@@ -3594,8 +3478,6 @@ COMMENT ON COLUMN apflora.ekfrequenz.sort IS 'Damit EK-Zähleinheiten untereinan
 
 COMMENT ON COLUMN apflora.ekfrequenz.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
 
-COMMENT ON COLUMN apflora.ekfrequenz.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-
 COMMENT ON COLUMN apflora.ekfrequenz.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
 ALTER TABLE apflora.ekfrequenz ENABLE ROW LEVEL SECURITY;
@@ -3617,7 +3499,6 @@ CREATE TABLE apflora.ek_abrechnungstyp_werte (
   historic boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -3632,8 +3513,6 @@ CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (historic);
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.id IS 'Primärschlüssel';
 
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -3655,7 +3534,6 @@ CREATE TABLE apflora.ekplan (
   type ek_type DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
-  changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
@@ -3674,8 +3552,6 @@ COMMENT ON COLUMN apflora.ekplan.tpop_id IS 'Fremdschlüssel aus der Tabelle tpo
 COMMENT ON COLUMN apflora.ekplan.jahr IS 'Jahr, in dem eine EK geplant ist';
 
 COMMENT ON COLUMN apflora.ekplan.type IS 'ek oder ekf';
-
-COMMENT ON COLUMN apflora.ekplan.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 
 COMMENT ON COLUMN apflora.ekplan.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
