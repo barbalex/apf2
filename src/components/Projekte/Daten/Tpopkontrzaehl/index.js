@@ -123,7 +123,7 @@ const Tpopkontrzaehl = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  console.log('Tpopkontrzaehl rendering')
+  //console.log('Tpopkontrzaehl rendering')
 
   if (loading) return <Spinner />
 
