@@ -34,7 +34,6 @@ const popHistoriesQuery = gql`
         x
         y
       }
-      changed
       changedBy
     }
     allPopHistories(filter: { id: { equalTo: $popId } }, orderBy: YEAR_DESC) {
@@ -65,7 +64,6 @@ const popHistoriesQuery = gql`
           x
           y
         }
-        changed
         changedBy
       }
     }

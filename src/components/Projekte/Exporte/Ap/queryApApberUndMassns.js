@@ -32,7 +32,8 @@ export default gql`
             berichtErstellt
           }
         }
-        changed
+        createdAt
+        updatedAt
         changedBy
       }
     }

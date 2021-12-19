@@ -98,7 +98,8 @@ const AP = () => {
                   id
                   text
                 }
-                changed
+                createdAt
+                updatedAt
                 changedBy
               }
             }
@@ -122,7 +123,8 @@ const AP = () => {
       bearbeitung: n?.apBearbstandWerteByBearbeitung?.text ?? null,
       startJahr: n.startJahr,
       umsetzung: n?.apUmsetzungWerteByUmsetzung?.text ?? null,
-      changed: n.changed,
+      createdAt: n.createdAt,
+      updatedAt: n.updatedAt,
       changedBy: n.changedBy,
     }))
     removeNotification(notif)
@@ -328,7 +330,8 @@ const AP = () => {
       biotope_optimieren: z.biotopeOptimieren,
       massnahmen_optimieren: z.massnahmenOptimieren,
       wirkung_auf_art: z.wirkungAufArt,
-      changed: z.changed,
+      created_at: z.createdAt,
+      updated_at: z.updatedAt,
       changed_by: z.changedBy,
       massnahmen_ap_bearb: z.massnahmenApBearb,
       massnahmen_planung_vs_ausfuehrung: z.massnahmenPlanungVsAusfuehrung,
@@ -388,7 +391,8 @@ const AP = () => {
         z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahlBisher ?? '',
       bericht_erstellt:
         z?.vApApberundmassnsById?.nodes?.[0]?.berichtErstellt ?? '',
-      changed: z.changed,
+      created_at: z.createdAt,
+      updated_at: z.updatedAt,
       changed_by: z.changedBy,
     }))
     removeNotification(notif)
@@ -621,7 +625,8 @@ const AP = () => {
       jahr: z.jahr,
       erreichung: z.erreichung,
       bemerkungen: z.bemerkungen,
-      changed: z.changed,
+      created_at: z.createdAt,
+      updated_at: z.updatedAt,
       changed_by: z.changed_by,
     }))
     removeNotification(notif)
@@ -672,7 +677,8 @@ const AP = () => {
       id: z.id,
       beurteilung: z?.apErfkritWerteByErfolg?.text ?? '',
       kriterien: z.kriterien,
-      changed: z.changed,
+      created_at: z.createdAt,
+      updated_at: z.updatedAt,
       changed_by: z.changedBy,
     }))
     removeNotification(notif)
@@ -739,7 +745,8 @@ const AP = () => {
       strauchschicht: z.strauchschicht,
       baumschicht: z.baumschicht,
       bemerkungen: z.bemerkungen,
-      changed: z.changed,
+      created_at: z.createdAt,
+      updated_at: z.updatedAt,
       changed_by: z.changedBy,
     }))
     removeNotification(notif)
@@ -790,7 +797,8 @@ const AP = () => {
       id: z.id,
       artname_assoziiert: z?.aeTaxonomyByAeId?.artname ?? '',
       bemerkungen: z.bemerkungen,
-      changed: z.changed,
+      created_at: z.createdAt,
+      updated_at: z.updatedAt,
       changed_by: z.changedBy,
     }))
     removeNotification(notif)

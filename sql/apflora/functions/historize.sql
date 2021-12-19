@@ -1,14 +1,16 @@
-CREATE OR REPLACE FUNCTION apflora.historize(year integer)
-  RETURNS boolean AS $$
-  BEGIN
-
-  delete from apflora.tpop_history where apflora.tpop_history.year = $1;
-  delete from apflora.pop_history where apflora.pop_history.year = $1;
-  delete from apflora.ap_history where apflora.ap_history.year = $1;
-
-  insert into apflora.ap_history
-  select
-    $1 as year,
+CREATE OR REPLACE FUNCTION apflora.historize (year integer)
+  RETURNS boolean
+  AS $$
+BEGIN
+  DELETE FROM apflora.tpop_history
+  WHERE apflora.tpop_history.year = $1;
+  DELETE FROM apflora.pop_history
+  WHERE apflora.pop_history.year = $1;
+  DELETE FROM apflora.ap_history
+  WHERE apflora.ap_history.year = $1;
+  INSERT INTO apflora.ap_history
+  SELECT
+    $1 AS year,
     id,
     art_id,
     proj_id,
@@ -17,13 +19,14 @@ CREATE OR REPLACE FUNCTION apflora.historize(year integer)
     umsetzung,
     bearbeiter,
     ekf_beobachtungszeitpunkt,
-    changed,
+    created_at,
+    updated_at,
     changed_by
-  from apflora.ap;
-
-  insert into apflora.pop_history
-  select
-    $1 as year,
+  FROM
+    apflora.ap;
+  INSERT INTO apflora.pop_history
+  SELECT
+    $1 AS year,
     id,
     ap_id,
     nr,
@@ -33,15 +36,17 @@ CREATE OR REPLACE FUNCTION apflora.historize(year integer)
     status_unklar_begruendung,
     bekannt_seit,
     geom_point,
-    changed,
+    created_at,
+    updated_at,
     changed_by
-  from apflora.pop;
-
-  insert into apflora.tpop_history (
-    year,
+  FROM
+    apflora.pop;
+  INSERT INTO apflora.tpop_history (year, id, pop_id, nr, gemeinde, flurname, geom_point, radius, hoehe, exposition, klima, neigung, boden_typ, boden_kalkgehalt, boden_durchlaessigkeit, boden_humus, boden_naehrstoffgehalt, boden_abtrag, wasserhaushalt, beschreibung, kataster_nr, status, status_unklar, status_unklar_grund, apber_relevant, apber_relevant_grund, bekannt_seit, eigentuemer, kontakt, nutzungszone, bewirtschafter, bewirtschaftung, ekfrequenz, ekfrequenz_startjahr, ekfrequenz_abweichend, ekf_kontrolleur, bemerkungen, created_at, updated_at, changed_by)
+  SELECT
+    $1 AS year,
     id,
     pop_id,
-    nr, 
+    nr,
     gemeinde,
     flurname,
     geom_point,
@@ -75,55 +80,16 @@ CREATE OR REPLACE FUNCTION apflora.historize(year integer)
     ekfrequenz_abweichend,
     ekf_kontrolleur,
     bemerkungen,
-    changed,
+    created_at,
+    updated_at,
     changed_by
-  )
-  select
-    $1 as year,
-    id,
-    pop_id,
-    nr, 
-    gemeinde,
-    flurname,
-    geom_point,
-    radius,
-    hoehe,
-    exposition,
-    klima,
-    neigung,
-    boden_typ,
-    boden_kalkgehalt,
-    boden_durchlaessigkeit,
-    boden_humus,
-    boden_naehrstoffgehalt,
-    boden_abtrag,
-    wasserhaushalt,
-    beschreibung,
-    kataster_nr,
-    status,
-    status_unklar,
-    status_unklar_grund,
-    apber_relevant,
-    apber_relevant_grund,
-    bekannt_seit,
-    eigentuemer,
-    kontakt,
-    nutzungszone,
-    bewirtschafter,
-    bewirtschaftung,
-    ekfrequenz,
-    ekfrequenz_startjahr,
-    ekfrequenz_abweichend,
-    ekf_kontrolleur,
-    bemerkungen,
-    changed,
-    changed_by
-  from apflora.tpop;
-
+  FROM
+    apflora.tpop;
   RETURN FOUND;
+END;
+$$
+LANGUAGE plpgsql
+SECURITY DEFINER;
 
- END;
- $$ LANGUAGE plpgsql SECURITY DEFINER;
+ALTER FUNCTION apflora.historize (year integer) OWNER TO postgres;
 
-ALTER FUNCTION apflora.historize(year integer)
-  OWNER TO postgres;
