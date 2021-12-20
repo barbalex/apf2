@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
 import 'leaflet'
-import { useMap } from 'react-leaflet'
+import { createControlComponent } from '@react-leaflet/core'
 import 'leaflet-measure'
 
 const options = {
@@ -14,21 +13,9 @@ const options = {
   thousandsSep: `'`,
   decPoint: '.',
 }
-const style = { display: 'none' }
 
-const MeasureControl = () => {
-  const map = useMap()
-
-  useEffect(() => {
-    const measureControl = new window.L.Control.Measure(options)
-    measureControl.addTo(map)
-
-    return () => {
-      measureControl.remove()
-    }
-  }, [map])
-
-  return <div style={style} />
-}
+const MeasureControl = createControlComponent(
+  () => new window.L.Control.Measure(options),
+)
 
 export default MeasureControl
