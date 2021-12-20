@@ -86,8 +86,8 @@ const Teilpopulationen = () => {
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
   const onClickButton = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "Teilpopulationen" wird vorbereitet...`,
+    const notifQuery = enqueNotification({
+      message: `Export "Teilpopulationen": Daten werden vorbereitet...`,
       options: {
         variant: 'info',
         persist: true,
@@ -256,8 +256,8 @@ const Teilpopulationen = () => {
       o.angesiedeltNachBeginnAp = nachBeginnAp
       return o
     })
-    removeNotification(notif)
-    closeSnackbar(notif)
+    removeNotification(notifQuery)
+    closeSnackbar(notifQuery)
     if (rows.length === 0) {
       return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
@@ -686,6 +686,7 @@ const Teilpopulationen = () => {
                   options: { variant: 'error' },
                 })
               }
+              console.log('data is here')
               const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
                 ap_id:
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
@@ -1101,6 +1102,7 @@ const Teilpopulationen = () => {
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                     ?.nodes?.[0]?.tpopberChangedBy ?? '',
               }))
+              console.log('rows built')
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
