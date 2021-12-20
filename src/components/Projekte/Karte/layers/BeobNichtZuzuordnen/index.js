@@ -122,17 +122,17 @@ const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
   })
   setBeobNichtZuzuordnenIdsFiltered(mapBeobNichtZuzuordnenIdsFiltered)
 
-  if (!clustered && beobs.length > 2000) {
-    enqueNotification({
-      message: `Zuviele Beobachtungen: Es werden maximal 2'000 angezeigt, im aktuellen Ausschnitt sind es: ${beobs.length.toLocaleString(
-        'de-CH',
-      )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
-      options: {
-        variant: 'warning',
-      },
-    })
-    beobs = []
-  }
+  // if (!clustered && beobs.length > 2000) {
+  //   enqueNotification({
+  //     message: `Zuviele Beobachtungen: Es werden maximal 2'000 angezeigt, im aktuellen Ausschnitt sind es: ${beobs.length.toLocaleString(
+  //       'de-CH',
+  //     )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
+  //     options: {
+  //       variant: 'warning',
+  //     },
+  //   })
+  //   beobs = []
+  // }
 
   const beobMarkers = beobs.map((beob) => (
     <Marker key={beob.id} treeName={treeName} beob={beob} />
