@@ -198,58 +198,54 @@ tpop_plus AS (
     AND tpop.apber_relevant = TRUE
     AND tax.taxid > 150
 ),
-ap_with_ekfrequenz AS (
+ap_with_zielrelevante_zaehleinheit AS (
   SELECT DISTINCT
-    pop.ap_id AS id
+    ap.id
   FROM
-    apflora.tpop tpop
-    INNER JOIN apflora.pop pop ON tpop.pop_id = pop.id
-  WHERE
-    tpop.ekfrequenz IS NOT NULL
-    -- Die AP-Liste ist ein bisschen kompliziert: weil einige künftig zu AP's werden sollen, sind es nicht _nur_ ap's
-    -- TODO: uncommented. re-add some if Topos wants
-    --AND pop.ap_id NOT IN ('6c52d11b-4f62-11e7-aebe-e30ba55051d8', '6c52d132-4f62-11e7-aebe-571f196500d9', '6c52d24e-4f62-11e7-aebe-4f55ce8d8aeb', '6c52d24f-4f62-11e7-aebe-9759f2114695', '6c52d251-4f62-11e7-aebe-239f844a5125', '6c52d256-4f62-11e7-aebe-8723d142869e'))
-    SELECT
-      tax.artname,
-      ap.id AS ap_id,
-      pop.nr AS pop_nr,
-      pop.status AS pop_status,
-      tpop.id AS tpop_id,
-      tpop.nr AS tpop_nr,
-      tpop.status AS tpop_status,
-      ekf.kontrolljahre_ab,
-      -- ekfrequenz_startjahr depends on letze_kontrolle OR letzte_ansiedlung depending on kontrolljahre_ab
-      CASE WHEN ekf.kontrolljahre_ab = 'ek' THEN
-        tp.jahr
-      WHEN ekf.kontrolljahre_ab = 'ansiedlung' THEN
-        la.jahr
-      ELSE
-        NULL
-      END AS ekfrequenz_startjahr,
-      CASE WHEN ekf.kontrolljahre_ab = 'ek' THEN
-        tp.letzte_anzahl
-      ELSE
-        NULL
-      END AS letzte_anzahl,
-      tp.ekfrequenz_code,
-      tp.ekfrequenz
-    FROM
-      apflora.tpop tpop
-      -- nur TPop berücksichtigen, für die eine letzte Kontrolle berechnet wurde
-      INNER JOIN tpop_plus tp
-      INNER JOIN apflora.ekfrequenz ekf ON ekf.id = tp.ekfrequenz ON tp.tpop_id = tpop.id
-      LEFT JOIN letzte_ansiedlung la ON la.tpop_id = tpop.id
-      -- nur TPop berücksichtigen, welche über Pop, AP und Taxonomie verfügen
-      INNER JOIN apflora.pop pop
-      INNER JOIN apflora.ap ap
-      INNER JOIN apflora.ae_taxonomies tax ON ap.art_id = tax.id
-      -- nur ap's mit mindestens einer tpop mit ekfrequenz berücksichtigen
-      -- UND: eine Liste von AP's ausschliessen (siehe def von ap_with_ekfrequenz)
-      INNER JOIN ap_with_ekfrequenz ON ap_with_ekfrequenz.id = ap.id ON ap.id = pop.ap_id ON pop.id = tpop.pop_id
-    ORDER BY
-      tax.artname,
-      pop.nr,
-      tpop.nr;
+    apflora.ap ap
+    -- nur AP's berücksichtigen, bei denen eine EK-Zähleinheit als zielrelevant definiert wurde
+    INNER JOIN apflora.ekzaehleinheit ekze ON ap.id = ekze.ap_id
+      AND ekze.zielrelevant = TRUE
+)
+SELECT
+  tax.artname,
+  ap.id AS ap_id,
+  pop.nr AS pop_nr,
+  pop.status AS pop_status,
+  tpop.id AS tpop_id,
+  tpop.nr AS tpop_nr,
+  tpop.status AS tpop_status,
+  ekf.kontrolljahre_ab,
+  -- ekfrequenz_startjahr depends on letze_kontrolle OR letzte_ansiedlung depending on kontrolljahre_ab
+  CASE WHEN ekf.kontrolljahre_ab = 'ek' THEN
+    tp.jahr
+  WHEN ekf.kontrolljahre_ab = 'ansiedlung' THEN
+    la.jahr
+  ELSE
+    NULL
+  END AS ekfrequenz_startjahr,
+  CASE WHEN ekf.kontrolljahre_ab = 'ek' THEN
+    tp.letzte_anzahl
+  ELSE
+    NULL
+  END AS letzte_anzahl,
+  tp.ekfrequenz_code,
+  tp.ekfrequenz
+FROM
+  apflora.tpop tpop
+  -- nur TPop berücksichtigen, für die eine letzte Kontrolle berechnet wurde
+  INNER JOIN tpop_plus tp
+  INNER JOIN apflora.ekfrequenz ekf ON ekf.id = tp.ekfrequenz ON tp.tpop_id = tpop.id
+  LEFT JOIN letzte_ansiedlung la ON la.tpop_id = tpop.id
+  -- nur TPop berücksichtigen, welche über Pop, AP und Taxonomie verfügen
+  INNER JOIN apflora.pop pop
+  INNER JOIN apflora.ap ap
+  INNER JOIN apflora.ae_taxonomies tax ON ap.art_id = tax.id
+  INNER JOIN ap_with_zielrelevante_zaehleinheit ON ap_with_zielrelevante_zaehleinheit.id = ap.id ON ap.id = pop.ap_id ON pop.id = tpop.pop_id
+ORDER BY
+  tax.artname,
+  pop.nr,
+  tpop.nr;
 
 -- DO: if o.k. by Topos:
 UPDATE
@@ -262,6 +258,99 @@ FROM
 WHERE
   apflora.tpop.id = apflora.v_tpop_ekfrequenz_to_set.tpop_id;
 
--- Wäre es möglich, dass bei den dieses Jahr neu erloschenen Teilpopulationen die EK-Frequenz "nie" gesetzt wird?
--- Rebecca fragen, wenn ja: Wie bei 2021-01-11 ekplanung.sql machen
-CREATE OR REPLACE VIEW apflora.v_tpop_ekfrequenz_to_set_nie AS...
+-- Then add ekpläne:
+-- to check before updating:
+WITH kontrolljahre AS (
+  SELECT
+    tpop1.id,
+    apflora.ekfrequenz.ektyp,
+    tpop1.ekfrequenz_startjahr,
+    unnest(apflora.ekfrequenz.kontrolljahre) AS kontrolljahr
+  FROM
+    apflora.tpop tpop1
+    INNER JOIN apflora.ekfrequenz ON apflora.ekfrequenz.id = tpop1.ekfrequenz
+  WHERE (tpop1.ekfrequenz IS NOT NULL
+    AND tpop1.ekfrequenz_startjahr IS NOT NULL
+    AND apflora.ekfrequenz.kontrolljahre IS NOT NULL
+    AND (
+      SELECT
+        count(*)
+      FROM
+        apflora.ekplan
+      WHERE
+        tpop_id = tpop1.id) = 0)
+  ORDER BY
+    tpop1.id,
+    tpop1.ekfrequenz_startjahr
+),
+ekplans AS (
+  SELECT
+    id AS tpop_id,
+    kontrolljahr + ekfrequenz_startjahr AS jahr,
+    ektyp AS typ,
+    '2022-01-10' AS changed,
+    'ag' AS changed_by
+  FROM
+    kontrolljahre
+)
+SELECT
+  tax.artname,
+  pop.nr AS pop_nr,
+  tpop.nr AS tpop_nr,
+  ekplans.jahr,
+  ekplans.typ
+FROM
+  ekplans
+  INNER JOIN apflora.tpop tpop
+  INNER JOIN apflora.pop pop
+  INNER JOIN apflora.ap ap
+  INNER JOIN apflora.ae_taxonomies tax ON ap.art_id = tax.id ON ap.id = pop.ap_id ON pop.id = tpop.pop_id ON tpop.id = ekplans.tpop_id
+ORDER BY
+  tax.artname,
+  pop.nr,
+  tpop.nr,
+  jahr;
+
+WITH kontrolljahre AS (
+  SELECT
+    tpop1.id,
+    apflora.ekfrequenz.ektyp,
+    tpop1.ekfrequenz_startjahr,
+    unnest(apflora.ekfrequenz.kontrolljahre) AS kontrolljahr
+  FROM
+    apflora.tpop tpop1
+    INNER JOIN apflora.ekfrequenz ON apflora.ekfrequenz.id = tpop1.ekfrequenz
+  WHERE
+    tpop1.ekfrequenz IS NOT NULL
+    AND tpop1.ekfrequenz_startjahr IS NOT NULL
+    AND apflora.ekfrequenz.kontrolljahre IS NOT NULL
+    AND (
+      SELECT
+        count(*)
+      FROM
+        apflora.ekplan
+      WHERE
+        tpop_id = tpop1.id) = 0
+    ORDER BY
+      tpop1.id,
+      tpop1.ekfrequenz_startjahr
+),
+ekplans AS (
+  SELECT
+    id AS tpop_id,
+    kontrolljahr + ekfrequenz_startjahr AS jahr,
+    ektyp AS typ,
+    '2022-01-10' AS changed,
+    'ag' AS changed_by
+  FROM
+    kontrolljahre)
+  INSERT INTO apflora.ekplan (tpop_id, jahr, typ, changed, changed_by)
+  SELECT
+    tpop_id,
+    jahr,
+    typ::ek_type,
+    changed::date,
+    changed_by
+  FROM
+    ekplans;
+
