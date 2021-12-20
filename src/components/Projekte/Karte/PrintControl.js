@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
 import 'leaflet'
 import 'leaflet-easyprint'
-import { useMap } from 'react-leaflet'
+import { createControlComponent } from '@react-leaflet/core'
 
 const options = {
   title: 'drucken',
@@ -16,21 +15,12 @@ const options = {
   },
   spinnerBgColor: '#2e7d32',
 }
-const style = { display: 'none' }
 
-const PrintControl = () => {
-  const map = useMap()
-
-  useEffect(() => {
-    const printControl = window.L.easyPrint(options)
-    printControl.addTo(map)
-
-    return () => {
-      printControl.remove()
-    }
-  }, [map])
-
-  return <div style={style} />
-}
+const PrintControl = createControlComponent((props) =>
+  window.L.easyPrint({
+    ...options,
+    ...props,
+  }),
+)
 
 export default PrintControl

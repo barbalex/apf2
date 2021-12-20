@@ -8,10 +8,9 @@ const InnerDiv = styled.div`
   border: none !important;
   box-shadow: none !important;
   /* float children right */
-  > button {
-    float: right;
-    margin-top: 10px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 `
 
 // Classes used by Leaflet to position controls

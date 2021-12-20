@@ -5,7 +5,7 @@
  *
  */
 
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
 import styled from 'styled-components'
 import 'leaflet'
@@ -16,7 +16,6 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
 import Control from './Control'
-import LayersControl from './LayersControl'
 import OsmColor from './layers/OsmColor'
 import OsmBw from './layers/OsmBw'
 import SwissTopoPixelFarbe from './layers/SwisstopoPixelFarbe'
@@ -58,7 +57,7 @@ import MeasureControl from './MeasureControl'
 //import SwitchScaleControl from './ScaleControl'
 import DrawControl from './DrawControl'
 import PrintControl from './PrintControl'
-import PngControl from './PngControl'
+import OwnControls from './OwnControls'
 import CoordinatesControl from './CoordinatesControl'
 import iconFullscreen from './iconFullscreen.png'
 import iconFullscreen2x from './iconFullscreen2x.png'
@@ -88,15 +87,19 @@ const Container = styled.div`
   .leaflet-container.crosshair-cursor-enabled {
     cursor: crosshair;
   }
-`
-const StyledMapContainer = styled(MapContainer)`
-  height: calc(100%);
 
   .leaflet-control-container:not(.first) {
     .leaflet-top.leaflet-right {
-      top: 128px;
+      top: ${(props) => props['data-control-height'] - 6}px !important;
     }
   }
+`
+/**
+ * 140 > 128
+ * so: height - 12
+ */
+const StyledMapContainer = styled(MapContainer)`
+  height: calc(100%);
 
   @media print {
     height: 100%;
@@ -409,6 +412,7 @@ const StyledMapContainer = styled(MapContainer)`
     }
   }
 `
+
 /*const LoadingContainer = styled.div`
   padding: 15px;
 `*/
@@ -438,7 +442,11 @@ const Karte = ({ treeName }) => {
   const activeOverlays = getSnapshot(activeOverlaysRaw)
   const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
 
-  //const mapRef = useRef(null)
+  /**
+   * need to pass the height of the self built controls
+   * to move controls built by leaflet when layer menu changes height
+   */
+  const [controlHeight, setControlHeight] = useState(127)
 
   const clustered = !(
     assigningBeob ||
@@ -499,12 +507,17 @@ const Karte = ({ treeName }) => {
 
   if (typeof window === 'undefined') return null
 
+  //console.log('map rendering, controlHeight:', controlHeight)
+
   // clustered layers receive a key that rebuilds them every time the cluster
   // tool would erroneously add new markers from last time it build
   // see: https://github.com/barbalex/apf2/issues/467
 
   return (
-    <Container data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}>
+    <Container
+      data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}
+      data-control-height={controlHeight}
+    >
       <ErrorBoundary>
         <StyledMapContainer
           // bounds need to be set using ma.fitBounds sice v3
@@ -556,15 +569,13 @@ const Karte = ({ treeName }) => {
           <BeobZugeordnetAssignPolylines treeName={treeName} />
           <ScaleControl imperial={false} />
           <Control position="topright" visible={!hideMapControls}>
-            <>
-              <LayersControl
-                treeName={treeName}
-                // this enforces rerendering when sorting changes
-                activeOverlaysString={activeOverlays.join()}
-                activeApfloraLayersString={activeApfloraLayers.join()}
-              />
-              <PngControl />
-            </>
+            <OwnControls
+              treeName={treeName}
+              setControlHeight={setControlHeight}
+              // this enforces rerendering when sorting changes
+              activeOverlaysString={activeOverlays.join()}
+              activeApfloraLayersString={activeApfloraLayers.join()}
+            />
           </Control>
           <PrintControl />
           <ZoomControl position="topright" />
