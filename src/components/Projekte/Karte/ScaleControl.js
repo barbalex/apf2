@@ -1,11 +1,10 @@
 // https://github.com/Flexberry/leaflet-switch-scale-control
 // but due to semantic ui requirement using this instead:
 // https://github.com/victorzinho/leaflet-switch-scale-control
-import React, { useEffect } from 'react'
 import 'leaflet'
-import { useMap } from 'react-leaflet'
 // eslint-disable-next-line no-unused-vars
 import SwitchScaleControl from 'leaflet-switch-scale-control'
+import { createControlComponent } from '@react-leaflet/core'
 
 const options = {
   position: 'bottomleft', // Leaflet control position.
@@ -37,21 +36,9 @@ const options = {
     return '1 : ' + ratio.toLocaleString('de-ch')
   },
 }
-const style = { display: 'none' }
 
-const ScaleControl = () => {
-  const map = useMap()
-
-  useEffect(() => {
-    const switchScaleControl = new window.L.Control.SwitchScaleControl(options)
-    switchScaleControl.addTo(map)
-
-    return () => {
-      switchScaleControl.remove()
-    }
-  }, [map])
-
-  return <div style={style} />
-}
+const ScaleControl = createControlComponent(
+  () => new window.L.Control.SwitchScaleControl(options),
+)
 
 export default ScaleControl

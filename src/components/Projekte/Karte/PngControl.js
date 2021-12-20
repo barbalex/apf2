@@ -24,6 +24,7 @@ const StyledButton = styled.button`
     padding-top: 2px;
     color: rgba(0, 0, 0, 0.7) !important;
   }
+  margin-top: 7px;
 `
 
 const options = {
