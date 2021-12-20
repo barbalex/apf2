@@ -70,8 +70,8 @@ const DrawControl = () => {
       mapFilter.addLayer(e.layer)
       setMapFilter(mapFilter.toGeoJSON())
     })
-    map.on('draw:edited', (e) => setMapFilter(mapFilter.toGeoJSON()))
-    map.on('draw:deleted', (e) => setMapFilter(mapFilter.toGeoJSON()))
+    map.on('draw:edited', () => setMapFilter(mapFilter.toGeoJSON()))
+    map.on('draw:deleted', () => setMapFilter(mapFilter.toGeoJSON()))
 
     return () => {
       map.removeLayer(mapFilter)
