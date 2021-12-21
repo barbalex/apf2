@@ -61,7 +61,7 @@ const exportModule = async ({
     })
   } else {
     // pass some data in case something goes wrong
-    exportXlsx({
+    await exportXlsx({
       fileName,
       data,
       store,
