@@ -4,6 +4,7 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
+import CircularProgress from '@mui/material/CircularProgress'
 import Icon from '@mui/material/Icon'
 import Button from '@mui/material/Button'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
@@ -53,6 +54,9 @@ const DownloadCardButton = styled(Button)`
   justify-content: flex-start !important;
   user-select: none;
 `
+const StyledProgressIcon = styled(CircularProgress)`
+  margin-left: 10px;
+`
 const AutocompleteContainer = styled.div`
   flex-basis: 450px;
   padding-left: 16px;
@@ -85,14 +89,10 @@ const Teilpopulationen = () => {
   const [ewmMessage, setEwmMessage] = useState('')
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-  const onClickButton = useCallback(async () => {
-    const notifQuery = enqueNotification({
-      message: `Export "Teilpopulationen": Daten werden vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
+  const [tpopLoading, setTpopLoading] = useState(false)
+  const onClickTPop = useCallback(async () => {
+    setTpopLoading(true)
+    console.time('querying')
     let result
     try {
       result = await client.query({
@@ -188,7 +188,8 @@ const Teilpopulationen = () => {
         options: { variant: 'error' },
       })
     }
-    console.log('data fetched')
+    console.timeEnd('querying')
+    console.time('processing')
     const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
       apId: n?.popByPopId?.apByApId?.id ?? null,
       apFamilie: n?.popByPopId?.apByApId?.aeTaxonomyByArtId?.familie ?? null,
@@ -257,9 +258,8 @@ const Teilpopulationen = () => {
       o.angesiedeltNachBeginnAp = nachBeginnAp
       return o
     })
-    console.log('data massaged')
-    removeNotification(notifQuery)
-    closeSnackbar(notifQuery)
+    console.timeEnd('processing')
+    console.time('exporting')
     if (rows.length === 0) {
       return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
@@ -273,15 +273,9 @@ const Teilpopulationen = () => {
       fileName: 'Teilpopulationen',
       store,
     })
-    console.log('data exported')
-  }, [
-    client,
-    closeSnackbar,
-    enqueNotification,
-    removeNotification,
-    store,
-    tpopGqlFilter,
-  ])
+    setTpopLoading(false)
+    console.timeEnd('exporting')
+  }, [client, enqueNotification, store, tpopGqlFilter])
 
   const aeTaxonomiesfilter = useCallback(
     (inputValue) =>
@@ -317,10 +311,13 @@ const Teilpopulationen = () => {
       </StyledCardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
-          <DownloadCardButton onClick={onClickButton} color="inherit">
-            {tpopIsFiltered
-              ? 'Teilpopulationen (gefiltert)'
-              : 'Teilpopulationen'}
+          <DownloadCardButton
+            onClick={onClickTPop}
+            color="inherit"
+            disabled={tpopLoading}
+          >
+            {`Teilpopulationen${tpopIsFiltered ? ' (gefiltert)' : ''}`}
+            {tpopLoading ? <StyledProgressIcon size={14} /> : null}
           </DownloadCardButton>
           <DownloadCardButton
             color="inherit"
@@ -689,7 +686,6 @@ const Teilpopulationen = () => {
                   options: { variant: 'error' },
                 })
               }
-              console.log('data is here')
               const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
                 ap_id:
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
@@ -1105,7 +1101,6 @@ const Teilpopulationen = () => {
                   n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById
                     ?.nodes?.[0]?.tpopberChangedBy ?? '',
               }))
-              console.log('rows built')
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
