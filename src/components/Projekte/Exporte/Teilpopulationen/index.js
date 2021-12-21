@@ -188,6 +188,7 @@ const Teilpopulationen = () => {
         options: { variant: 'error' },
       })
     }
+    console.log('data fetched')
     const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
       apId: n?.popByPopId?.apByApId?.id ?? null,
       apFamilie: n?.popByPopId?.apByApId?.aeTaxonomyByArtId?.familie ?? null,
@@ -256,6 +257,7 @@ const Teilpopulationen = () => {
       o.angesiedeltNachBeginnAp = nachBeginnAp
       return o
     })
+    console.log('data massaged')
     removeNotification(notifQuery)
     closeSnackbar(notifQuery)
     if (rows.length === 0) {
@@ -266,11 +268,12 @@ const Teilpopulationen = () => {
         },
       })
     }
-    exportModule({
+    await exportModule({
       data: enrichedData,
       fileName: 'Teilpopulationen',
       store,
     })
+    console.log('data exported')
   }, [
     client,
     closeSnackbar,
