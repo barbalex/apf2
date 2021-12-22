@@ -10,13 +10,13 @@ import TPop from './TPop'
 import Wollmilchsau from './Wollmilchsau'
 import WollmilchsauSingle from './WollmilchsauSingle'
 import LetzteZaehlungen from './LetzteZaehlungen'
+import LetzteZaehlungenInklAnpflanzungen from './LetzteZaehlungenInklAnpflanzungen'
 import TPopInklBerichte from './TPopInklBerichte'
 import { StyledCardContent, DownloadCardButton } from '../index'
 
 const Teilpopulationen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-
   const { enqueNotification, removeNotification } = store
 
   const { closeSnackbar } = useSnackbar()
@@ -361,53 +361,7 @@ const Teilpopulationen = () => {
       <WollmilchsauSingle />
       <TPopInklBerichte />
       <LetzteZaehlungen />
-      <DownloadCardButton
-        color="inherit"
-        onClick={async () => {
-          const notif = enqueNotification({
-            message: `Export "TPopLetzteZaehlungenInklMassn" wird vorbereitet...`,
-            options: {
-              variant: 'info',
-              persist: true,
-            },
-          })
-          let result
-          try {
-            result = await client.query({
-              // view: v_tpop_last_count_with_massn
-              query: await import('./allVTpopLastCountWithMassns').then(
-                (m) => m.default,
-              ),
-            })
-          } catch (error) {
-            enqueNotification({
-              message: error.message,
-              options: {
-                variant: 'error',
-              },
-            })
-          }
-          const rows = result.data?.allVTpopLastCountWithMassns?.nodes ?? []
-          removeNotification(notif)
-          closeSnackbar(notif)
-          if (rows.length === 0) {
-            return enqueNotification({
-              message: 'Die Abfrage retournierte 0 Datensätze',
-              options: {
-                variant: 'warning',
-              },
-            })
-          }
-          exportModule({
-            data: rows,
-            fileName: 'TPopLetzteZaehlungenInklMassn',
-            idKey: 'pop_id',
-            store,
-          })
-        }}
-      >
-        Letzte Zählungen inklusive noch nicht kontrollierter Anpflanzungen
-      </DownloadCardButton>
+      <LetzteZaehlungenInklAnpflanzungen />
     </StyledCardContent>
   )
 }
