@@ -12,9 +12,9 @@ const Teilpopulationen = () => {
 
   const { enqueNotification, dataFilterTableIsFiltered, tpopGqlFilter } = store
 
-  const [tpopState, setTpopState] = useState()
+  const [queryState, setQueryState] = useState()
   const onClickTPop = useCallback(async () => {
-    setTpopState('lade Daten...')
+    setQueryState('lade Daten...')
     //console.time('querying')
     let result
     try {
@@ -112,7 +112,7 @@ const Teilpopulationen = () => {
       })
     }
     //console.timeEnd('querying')
-    setTpopState('verarbeite...')
+    setQueryState('verarbeite...')
     //console.time('processing')
     const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
       apId: n?.popByPopId?.apByApId?.id ?? null,
@@ -197,7 +197,7 @@ const Teilpopulationen = () => {
       fileName: 'Teilpopulationen',
       store,
     })
-    setTpopState(undefined)
+    setQueryState(undefined)
     //console.timeEnd('exporting')
   }, [client, enqueNotification, store, tpopGqlFilter])
 
@@ -210,10 +210,12 @@ const Teilpopulationen = () => {
     <DownloadCardButton
       onClick={onClickTPop}
       color="inherit"
-      disabled={!!tpopState}
+      disabled={!!queryState}
     >
       {`Teilpopulationen${tpopIsFiltered ? ' (gefiltert)' : ''}`}
-      {tpopState ? <StyledProgressText>{tpopState}</StyledProgressText> : null}
+      {queryState ? (
+        <StyledProgressText>{queryState}</StyledProgressText>
+      ) : null}
     </DownloadCardButton>
   )
 }

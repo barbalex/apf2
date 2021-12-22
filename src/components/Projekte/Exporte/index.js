@@ -56,6 +56,15 @@ export const StyledProgressText = styled.span`
     }
   }
 `
+export const StyledProgressTextNewLine = styled.div`
+  font-style: italic;
+  animation: blinker 1s linear infinite;
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+`
 export const StyledCardContent = styled(CardContent)`
   margin: -15px 0 0 0;
   display: flex;

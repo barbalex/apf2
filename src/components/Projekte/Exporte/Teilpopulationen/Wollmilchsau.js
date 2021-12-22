@@ -2,12 +2,11 @@ import React, { useContext, useState } from 'react'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
-import { useSnackbar } from 'notistack'
 import styled from 'styled-components'
 
 import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
-import { DownloadCardButton } from '../index'
+import { DownloadCardButton, StyledProgressTextNewLine } from '../index'
 
 const Li = styled.li`
   margin-top: -6px;
@@ -18,28 +17,19 @@ const EwmDiv = styled.div`
   margin-bottom: 3px;
 `
 
-const isRemoteHost =
-  typeof window !== 'undefined' && window.location.hostname !== 'localhost'
-
 const Teilpopulationen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { enqueNotification } = store
 
-  const { enqueNotification, removeNotification } = store
-
-  const { closeSnackbar } = useSnackbar()
+  const [queryState, setQueryState] = useState()
 
   return (
     <DownloadCardButton
       color="inherit"
+      disabled={!!queryState}
       onClick={async () => {
-        const notif = enqueNotification({
-          message: `Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...`,
-          options: {
-            variant: 'info',
-            persist: true,
-          },
-        })
+        setQueryState('lade Daten...')
         let result
         try {
           result = await client.query({
@@ -215,6 +205,7 @@ const Teilpopulationen = () => {
             options: { variant: 'error' },
           })
         }
+        setQueryState('verarbeite...')
         const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
           ap_id:
             n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
@@ -628,8 +619,6 @@ const Teilpopulationen = () => {
             n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
               ?.tpopberChangedBy ?? '',
         }))
-        removeNotification(notif)
-        closeSnackbar(notif)
         if (rows.length === 0) {
           return enqueNotification({
             message: 'Die Abfrage retournierte 0 Datensätze',
@@ -644,11 +633,8 @@ const Teilpopulationen = () => {
             'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
           store,
         })
+        setQueryState(undefined)
       }}
-      disabled={false /*isRemoteHost*/}
-      title={
-        isRemoteHost ? 'nur aktiv, wenn apflora lokal installiert wird' : ''
-      }
     >
       <div>Teilpopulationen mit:</div>
       <ul
@@ -668,6 +654,9 @@ const Teilpopulationen = () => {
       <EwmDiv>
         {'= "Eier legende Wollmilchsau". Vorsicht: kann > 2 Minuten dauern!'}
       </EwmDiv>
+      {queryState ? (
+        <StyledProgressTextNewLine>{queryState}</StyledProgressTextNewLine>
+      ) : null}
     </DownloadCardButton>
   )
 }
