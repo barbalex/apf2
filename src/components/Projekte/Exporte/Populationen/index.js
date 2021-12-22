@@ -18,6 +18,7 @@ import {
   DownloadCardButton,
 } from '../index'
 import Pops from './Pops'
+import PopsForGoogleEarth from './PopsForGoogleEarth'
 
 const PopulationenExports = () => {
   const client = useApolloClient()
@@ -45,58 +46,7 @@ const PopulationenExports = () => {
         {expanded ? (
           <StyledCardContent>
             <Pops />
-            <DownloadCardButton
-              color="inherit"
-              onClick={async () => {
-                const notif = enqueNotification({
-                  message: `Export "Populationen" wird vorbereitet...`,
-                  options: {
-                    variant: 'info',
-                    persist: true,
-                  },
-                })
-                let result
-                try {
-                  result = await client.query({
-                    query: await import('./queryPopKml').then((m) => m.default),
-                  })
-                } catch (error) {
-                  enqueNotification({
-                    message: error.message,
-                    options: {
-                      variant: 'error',
-                    },
-                  })
-                }
-                const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                  art: z?.vPopKmlsById?.nodes?.[0]?.art ?? '',
-                  label: z?.vPopKmlsById?.nodes?.[0]?.label ?? '',
-                  inhalte: z?.vPopKmlsById?.nodes?.[0]?.inhalte ?? '',
-                  id: z?.vPopKmlsById?.nodes?.[0]?.id ?? '',
-                  wgs84Lat: z?.vPopKmlsById?.nodes?.[0]?.wgs84Lat ?? '',
-                  wgs84Long: z?.vPopKmlsById?.nodes?.[0]?.wgs84Long ?? '',
-                  url: z?.vPopKmlsById?.nodes?.[0]?.url ?? '',
-                }))
-                removeNotification(notif)
-                closeSnackbar(notif)
-                if (rows.length === 0) {
-                  return enqueNotification({
-                    message: 'Die Abfrage retournierte 0 Datensätze',
-                    options: {
-                      variant: 'warning',
-                    },
-                  })
-                }
-                exportModule({
-                  data: sortBy(rows, ['art', 'label']),
-                  fileName: 'Populationen',
-                  store,
-                  kml: true,
-                })
-              }}
-            >
-              <div>Populationen für Google Earth (beschriftet mit PopNr)</div>
-            </DownloadCardButton>
+            <PopsForGoogleEarth />
             <DownloadCardButton
               color="inherit"
               onClick={async () => {
