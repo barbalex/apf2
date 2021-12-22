@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
 
 import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
@@ -22,21 +22,34 @@ const Teilpopulationen = () => {
         let result
         try {
           result = await client.query({
-            // view: v_tpop_last_count_with_massn
-            query: await import('./allVTpopLastCountWithMassns').then(
-              (m) => m.default,
-            ),
+            query: gql`
+              query viewTpopOhneapberichtrelevants {
+                allVTpopOhneapberichtrelevants {
+                  nodes {
+                    artname
+                    pop_nr: popNr
+                    pop_name: popName
+                    id
+                    nr
+                    gemeinde
+                    flurname
+                    apber_relevant: apberRelevant
+                    apber_relevant_grund: apberRelevantGrund
+                    lv95X: x
+                    lv95Y: y
+                  }
+                }
+              }
+            `,
           })
         } catch (error) {
           enqueNotification({
             message: error.message,
-            options: {
-              variant: 'error',
-            },
+            options: { variant: 'error' },
           })
         }
         setQueryState('verarbeite...')
-        const rows = result.data?.allVTpopLastCountWithMassns?.nodes ?? []
+        const rows = result.data?.allVTpopOhneapberichtrelevants?.nodes ?? []
         if (rows.length === 0) {
           setQueryState(undefined)
           return enqueNotification({
@@ -48,14 +61,13 @@ const Teilpopulationen = () => {
         }
         exportModule({
           data: rows,
-          fileName: 'TPopLetzteZaehlungenInklMassn',
-          idKey: 'pop_id',
+          fileName: 'TeilpopulationenOhneApBerichtRelevant',
           store,
         })
         setQueryState(undefined)
       }}
     >
-      Letzte Zählungen inklusive noch nicht kontrollierter Anpflanzungen
+      {'Teilpopulationen ohne Eintrag im Feld "Für AP-Bericht relevant"'}
       {queryState ? (
         <StyledProgressText>{queryState}</StyledProgressText>
       ) : null}

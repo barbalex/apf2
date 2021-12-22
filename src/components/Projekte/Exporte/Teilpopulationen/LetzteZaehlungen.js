@@ -97,6 +97,7 @@ const Teilpopulationen = () => {
             z?.vTpopLastCountsByTpopId?.nodes?.[0]?.artIstVorhanden ?? '',
         }))
         if (rows.length === 0) {
+          setQueryState(undefined)
           return enqueNotification({
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {

@@ -185,6 +185,7 @@ const Teilpopulationen = () => {
     //console.timeEnd('processing')
     //console.time('exporting')
     if (rows.length === 0) {
+      setQueryState(undefined)
       return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
