@@ -7,7 +7,7 @@ import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const PopulationenExports = () => {
+const OhneKoord = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -80,4 +80,4 @@ const PopulationenExports = () => {
   )
 }
 
-export default observer(PopulationenExports)
+export default observer(OhneKoord)
