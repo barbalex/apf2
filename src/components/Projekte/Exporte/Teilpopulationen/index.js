@@ -56,6 +56,17 @@ const DownloadCardButton = styled(Button)`
 `
 const StyledProgressIcon = styled(CircularProgress)`
   margin-left: 10px;
+  color: rgb(0, 0, 0, 0.54);
+`
+const StyledProgressText = styled.span`
+  margin-left: 10px;
+  font-style: italic;
+  animation: blinker 1s linear infinite;
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
 `
 const AutocompleteContainer = styled.div`
   flex-basis: 450px;
@@ -90,8 +101,10 @@ const Teilpopulationen = () => {
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
   const [tpopLoading, setTpopLoading] = useState(false)
+  const [tpopState, setTpopState] = useState()
   const onClickTPop = useCallback(async () => {
     setTpopLoading(true)
+    setTpopState('lade Daten...')
     console.time('querying')
     let result
     try {
@@ -189,6 +202,7 @@ const Teilpopulationen = () => {
       })
     }
     console.timeEnd('querying')
+    setTpopState('verarbeite...')
     console.time('processing')
     const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
       apId: n?.popByPopId?.apByApId?.id ?? null,
@@ -274,6 +288,7 @@ const Teilpopulationen = () => {
       store,
     })
     setTpopLoading(false)
+    setTpopState(undefined)
     console.timeEnd('exporting')
   }, [client, enqueNotification, store, tpopGqlFilter])
 
@@ -317,7 +332,9 @@ const Teilpopulationen = () => {
             disabled={tpopLoading}
           >
             {`Teilpopulationen${tpopIsFiltered ? ' (gefiltert)' : ''}`}
-            {tpopLoading ? <StyledProgressIcon size={14} /> : null}
+            {tpopState ? (
+              <StyledProgressText>{tpopState}</StyledProgressText>
+            ) : null}
           </DownloadCardButton>
           <DownloadCardButton
             color="inherit"
