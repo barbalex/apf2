@@ -14,7 +14,7 @@ const AutocompleteContainer = styled.div`
   padding-right: 8px;
 `
 
-const Teilpopulationen = () => {
+const WollmilchsauSingle = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
@@ -51,7 +51,13 @@ const Teilpopulationen = () => {
           let result
           try {
             result = await client.query({
-              query: await import('./queryApByArtId').then((m) => m.default),
+              query: gql`
+                query apByArtIdQuery($aeId: UUID!) {
+                  apByArtId(artId: $aeId) {
+                    id
+                  }
+                }
+              `,
               variables: { aeId },
             })
           } catch (error) {
@@ -62,9 +68,172 @@ const Teilpopulationen = () => {
           }
           const apId = result.data?.apByArtId?.id
           const { data } = await client.query({
-            query: await import(
-              './queryTpopErsteUndLetzteKontrolleUndLetzterTpopberFiltered'
-            ).then((m) => m.default),
+            query: gql`
+              query tpopErsteUndLetzteKontrolleUndLetzterTpopbersFilteredQuery(
+                $apId: UUID!
+              ) {
+                allTpops(
+                  filter: {
+                    vTpopErsteUndLetzteKontrolleUndLetzterTpopbersByIdExist: true
+                    popByPopId: { apId: { equalTo: $apId } }
+                  }
+                ) {
+                  totalCount
+                  nodes {
+                    id
+                    vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById {
+                      nodes {
+                        apId
+                        familie
+                        artname
+                        apBearbeitung
+                        apStartJahr
+                        apUmsetzung
+                        popId
+                        popNr
+                        popName
+                        popStatus
+                        popBekanntSeit
+                        popStatusUnklar
+                        popStatusUnklarBegruendung
+                        popX
+                        popY
+                        id
+                        nr
+                        gemeinde
+                        flurname
+                        status
+                        statusDecodiert
+                        bekanntSeit
+                        statusUnklar
+                        statusUnklarGrund
+                        x
+                        y
+                        radius
+                        hoehe
+                        exposition
+                        klima
+                        neigung
+                        beschreibung
+                        katasterNr
+                        apberRelevant
+                        apberRelevantGrund
+                        eigentuemer
+                        kontakt
+                        nutzungszone
+                        bewirtschafter
+                        bewirtschaftung
+                        bodenTyp
+                        bodenKalkgehalt
+                        bodenDurchlaessigkeit
+                        bodenHumus
+                        bodenNaehrstoffgehalt
+                        bodenAbtrag
+                        wasserhaushalt
+                        ekfrequenz
+                        ekfrequenzAbweichend
+                        createdAt
+                        updatedAt
+                        changedBy
+                        anzahlKontrollen
+                        ersteKontrolleId
+                        ersteKontrolleJahr
+                        ersteKontrolleDatum
+                        ersteKontrolleTyp
+                        ersteKontrolleBearbeiter
+                        ersteKontrolleUeberlebensrate
+                        ersteKontrolleVitalitaet
+                        ersteKontrolleEntwicklung
+                        ersteKontrolleUrsachen
+                        ersteKontrolleErfolgsbeurteilung
+                        ersteKontrolleUmsetzungAendern
+                        ersteKontrolleKontrolleAendern
+                        ersteKontrolleBemerkungen
+                        ersteKontrolleLrDelarze
+                        ersteKontrolleLrUmgebungDelarze
+                        ersteKontrolleVegetationstyp
+                        ersteKontrolleKonkurrenz
+                        ersteKontrolleMoosschicht
+                        ersteKontrolleKrautschicht
+                        ersteKontrolleStrauchschicht
+                        ersteKontrolleBaumschicht
+                        ersteKontrolleIdealbiotopUebereinstimmung
+                        ersteKontrolleHandlungsbedarf
+                        ersteKontrolleFlaecheUeberprueft
+                        ersteKontrolleFlaeche
+                        ersteKontrollePlanVorhanden
+                        ersteKontrolleDeckungVegetation
+                        ersteKontrolleDeckungNackterBoden
+                        ersteKontrolleDeckungApArt
+                        ersteKontrolleJungpflanzenVorhanden
+                        ersteKontrolleVegetationshoeheMaximum
+                        ersteKontrolleVegetationshoeheMittel
+                        ersteKontrolleGefaehrdung
+                        ersteKontrolleCreatedAt
+                        ersteKontrolleUpdatedAt
+                        ersteKontrolleChangedBy
+                        ersteKontrolleApberNichtRelevant
+                        ersteKontrolleApberNichtRelevantGrund
+                        ersteKontrolleEkfBemerkungen
+                        ersteKontrolleZaehlungAnzahlen
+                        ersteKontrolleZaehlungEinheiten
+                        ersteKontrolleZaehlungMethoden
+                        letzteKontrolleId
+                        letzteKontrolleJahr
+                        letzteKontrolleDatum
+                        letzteKontrolleTyp
+                        letzteKontrolleBearbeiter
+                        letzteKontrolleUeberlebensrate
+                        letzteKontrolleVitalitaet
+                        letzteKontrolleEntwicklung
+                        letzteKontrolleUrsachen
+                        letzteKontrolleErfolgsbeurteilung
+                        letzteKontrolleUmsetzungAendern
+                        letzteKontrolleKontrolleAendern
+                        letzteKontrolleBemerkungen
+                        letzteKontrolleLrDelarze
+                        letzteKontrolleLrUmgebungDelarze
+                        letzteKontrolleVegetationstyp
+                        letzteKontrolleKonkurrenz
+                        letzteKontrolleMoosschicht
+                        letzteKontrolleKrautschicht
+                        letzteKontrolleStrauchschicht
+                        letzteKontrolleBaumschicht
+                        letzteKontrolleIdealbiotopUebereinstimmung
+                        letzteKontrolleHandlungsbedarf
+                        letzteKontrolleFlaecheUeberprueft
+                        letzteKontrolleFlaeche
+                        letzteKontrollePlanVorhanden
+                        letzteKontrolleDeckungVegetation
+                        letzteKontrolleDeckungNackterBoden
+                        letzteKontrolleDeckungApArt
+                        letzteKontrolleJungpflanzenVorhanden
+                        letzteKontrolleVegetationshoeheMaximum
+                        letzteKontrolleVegetationshoeheMittel
+                        letzteKontrolleGefaehrdung
+                        letzteKontrolleCreatedAt
+                        letzteKontrolleUpdatedAt
+                        letzteKontrolleChangedBy
+                        letzteKontrolleApberNichtRelevant
+                        letzteKontrolleApberNichtRelevantGrund
+                        letzteKontrolleEkfBemerkungen
+                        letzteKontrolleZaehlungAnzahlen
+                        letzteKontrolleZaehlungEinheiten
+                        letzteKontrolleZaehlungMethoden
+                        tpopberAnz
+                        tpopberId
+                        tpopberJahr
+                        tpopberEntwicklung
+                        tpopberBemerkungen
+                        tpopberCreatedAt
+                        tpopberUpdatedAt
+                        tpopberChangedBy
+                      }
+                    }
+                  }
+                }
+              }
+            `,
             variables: { apId },
           })
           const rows = (data?.allTpops?.nodes ?? []).map((n) => ({
@@ -513,4 +682,4 @@ const Teilpopulationen = () => {
   )
 }
 
-export default observer(Teilpopulationen)
+export default observer(WollmilchsauSingle)

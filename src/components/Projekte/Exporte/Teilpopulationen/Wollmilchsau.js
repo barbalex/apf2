@@ -17,7 +17,7 @@ const EwmDiv = styled.div`
   margin-bottom: 3px;
 `
 
-const Teilpopulationen = () => {
+const Wollmilchsau = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -662,4 +662,4 @@ const Teilpopulationen = () => {
   )
 }
 
-export default observer(Teilpopulationen)
+export default observer(Wollmilchsau)

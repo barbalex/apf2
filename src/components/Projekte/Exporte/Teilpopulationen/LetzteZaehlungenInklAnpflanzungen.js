@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
 
 import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const Teilpopulationen = () => {
+const LetzteZaehlungenInklAnpflanzungen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -23,9 +23,52 @@ const Teilpopulationen = () => {
         try {
           result = await client.query({
             // view: v_tpop_last_count_with_massn
-            query: await import('./allVTpopLastCountWithMassns').then(
-              (m) => m.default,
-            ),
+            query: gql`
+              query viewTpopLastCountWithMassns {
+                allVTpopLastCountWithMassns {
+                  nodes {
+                    artname
+                    apId
+                    popId
+                    popNr
+                    popName
+                    popStatus
+                    tpopId
+                    tpopNr
+                    tpopGemeinde
+                    tpopFlurname
+                    tpopStatus
+                    jahr
+                    pflanzenTotal
+                    pflanzenOhneJungpflanzen
+                    triebeTotal
+                    triebeBeweidung
+                    keimlinge
+                    davonRosetten
+                    jungpflanzen
+                    blatter
+                    davonBluhendePflanzen
+                    davonBluhendeTriebe
+                    bluten
+                    fertilePflanzen
+                    fruchtendeTriebe
+                    blutenstande
+                    fruchtstande
+                    gruppen
+                    deckung
+                    pflanzen5M2
+                    triebeIn30M2
+                    triebe50M2
+                    triebeMahflache
+                    flacheM2
+                    pflanzstellen
+                    stellen
+                    andereZaehleinheit
+                    artIstVorhanden
+                  }
+                }
+              }
+            `,
           })
         } catch (error) {
           enqueNotification({
@@ -63,4 +106,4 @@ const Teilpopulationen = () => {
   )
 }
 
-export default observer(Teilpopulationen)
+export default observer(LetzteZaehlungenInklAnpflanzungen)

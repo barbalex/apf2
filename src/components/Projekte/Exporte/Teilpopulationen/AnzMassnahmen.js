@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
 
 import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const Teilpopulationen = () => {
+const TPopAnzMassnahmen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -23,7 +23,61 @@ const Teilpopulationen = () => {
         let result
         try {
           result = await client.query({
-            query: await import('./queryTpopAnzMassns').then((m) => m.default),
+            query: gql`
+              query tpopAnzMassnQuery {
+                allTpops(filter: { vTpopAnzmassnsByIdExist: true }) {
+                  totalCount
+                  nodes {
+                    id
+                    vTpopAnzmassnsById {
+                      nodes {
+                        apId
+                        familie
+                        artname
+                        apBearbeitung
+                        apStartJahr
+                        apUmsetzung
+                        popId
+                        popNr
+                        popName
+                        popStatus
+                        popBekanntSeit
+                        popStatusUnklar
+                        popStatusUnklarBegruendung
+                        popX
+                        popY
+                        id
+                        nr
+                        gemeinde
+                        flurname
+                        status
+                        bekanntSeit
+                        statusUnklar
+                        statusUnklarGrund
+                        x
+                        y
+                        radius
+                        hoehe
+                        exposition
+                        klima
+                        neigung
+                        beschreibung
+                        katasterNr
+                        apberRelevant
+                        apberRelevantGrund
+                        eigentuemer
+                        kontakt
+                        nutzungszone
+                        bewirtschafter
+                        ekfrequenz
+                        ekfrequenzAbweichend
+                        anzahlMassnahmen
+                      }
+                    }
+                  }
+                }
+              }
+            `,
           })
         } catch (error) {
           enqueNotification({
@@ -110,4 +164,4 @@ const Teilpopulationen = () => {
   )
 }
 
-export default observer(Teilpopulationen)
+export default observer(TPopAnzMassnahmen)
