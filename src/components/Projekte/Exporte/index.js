@@ -14,7 +14,7 @@ import Populationen from './Populationen'
 import Teilpopulationen from './Teilpopulationen'
 import Kontrollen from './Kontrollen'
 import MassnahmenExporte from './Massnahmen'
-import Beobachtungen from './Beobachtungen'
+import BeobachtungenExports from './Beobachtungen'
 import Anwendung from './Anwendung'
 import Optionen from './Optionen'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -50,6 +50,7 @@ export const StyledProgressText = styled.span`
   margin-left: 10px;
   font-style: italic;
   animation: blinker 1s linear infinite;
+  white-space: nowrap;
   @keyframes blinker {
     50% {
       opacity: 0;
@@ -113,7 +114,7 @@ const Exporte = () => {
                 <Teilpopulationen />
                 <Kontrollen />
                 <MassnahmenExporte />
-                <Beobachtungen />
+                <BeobachtungenExports />
                 <Anwendung />
               </InnerContainer>
             </SimpleBar>
