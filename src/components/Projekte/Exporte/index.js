@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton'
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
 import Ap from './Ap'
-import Populationen from './Populationen'
+import PopulationenExports from './Populationen'
 import Teilpopulationen from './Teilpopulationen'
 import Kontrollen from './Kontrollen'
 import MassnahmenExporte from './Massnahmen'
@@ -110,7 +110,7 @@ const Exporte = () => {
                 <Optionen />
                 <Tipps />
                 <Ap />
-                <Populationen />
+                <PopulationenExports />
                 <Teilpopulationen />
                 <Kontrollen />
                 <MassnahmenExporte />
