@@ -4,10 +4,17 @@
 // see: https://github.com/guyonroche/exceljs/issues/313
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
-import getDataArrayFromExportObjectsWorker from './getDataArrayFromExportObjectsWorker.js'
+//import getDataArrayFromExportObjectsWorker from './getDataArrayFromExportObjectsWorker.js'
 import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
 
 const getXlsxBuffer = async ({ data, store }) => {
+  /**
+   * using this worker may make the ui more responsive
+   * but only while this code runs
+   * this code is only a small part of the time the user has to wait
+   * most is used by: 1. query 2. other processing steps needing libs
+   * and: using a worker makes it take significantly longer...
+   */
   // const dataArray =
   //   await getDataArrayFromExportObjectsWorker.getDataArrayFromExportObjects(
   //     data,

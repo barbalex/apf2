@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
+import Button from '@mui/material/Button'
 
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
@@ -31,6 +32,25 @@ const InnerContainer = styled.div`
 `
 const ExporteContainer = styled.div`
   height: 100%;
+`
+export const DownloadCardButton = styled(Button)`
+  flex-basis: 450px;
+  text-transform: none !important;
+  font-weight: 500;
+  display: block;
+  text-align: left;
+  justify-content: flex-start !important;
+  user-select: none;
+`
+export const StyledProgressText = styled.span`
+  margin-left: 10px;
+  font-style: italic;
+  animation: blinker 1s linear infinite;
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
 `
 
 const Exporte = () => {
