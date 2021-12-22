@@ -1,5 +1,4 @@
 import React, { useContext, useState, useCallback } from 'react'
-import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
@@ -12,15 +11,8 @@ import exportModule from '../../../../modules/export'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
 import TPop from './TPop'
+import { StyledCardContent } from '../index'
 
-const StyledCardContent = styled(CardContent)`
-  margin: -15px 0 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: stretch;
-  align-content: stretch;
-`
 const DownloadCardButton = styled(Button)`
   flex-basis: 450px;
   text-transform: none !important;
@@ -66,8 +58,6 @@ const Teilpopulationen = () => {
         : { artname: { isNull: false } /*, apByArtIdExists: true*/ },
     [],
   )
-
-  console.log('Teilpopulationen CardContent rendering')
 
   return (
     <StyledCardContent>

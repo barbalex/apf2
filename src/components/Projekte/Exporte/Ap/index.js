@@ -1,13 +1,7 @@
 import React, { useContext, useState, useCallback } from 'react'
-import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
-import CardContent from '@mui/material/CardContent'
 import Collapse from '@mui/material/Collapse'
-import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
-import Button from '@mui/material/Button'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
@@ -15,42 +9,14 @@ import { useSnackbar } from 'notistack'
 
 import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
-
-const StyledCard = styled(Card)`
-  margin: 10px 0;
-  background-color: #fff8e1 !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-`
-const CardActionIconButton = styled(IconButton)`
-  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-  user-select: none;
-`
-const StyledCardContent = styled(CardContent)`
-  margin: -15px 0 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: stretch;
-  align-content: stretch;
-`
-const DownloadCardButton = styled(Button)`
-  flex-basis: 450px;
-  text-transform: none !important;
-  font-weight: 500;
-  display: block;
-  text-align: left;
-  justify-content: flex-start !important;
-  user-select: none;
-`
+import {
+  StyledCardContent,
+  CardActionTitle,
+  StyledCard,
+  StyledCardActions,
+  CardActionIconButton,
+  DownloadCardButton,
+} from '../index'
 
 const AP = () => {
   const client = useApolloClient()
@@ -839,47 +805,49 @@ const AP = () => {
         </CardActionIconButton>
       </StyledCardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <StyledCardContent>
-          <DownloadCardButton onClick={onClickAp} color="inherit">
-            {apIsFiltered ? 'Aktionspläne (gefiltert)' : 'Aktionspläne'}
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickApOhnePop} color="inherit">
-            Aktionspläne ohne Populationen
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickAnzMassnProAp} color="inherit">
-            Anzahl Massnahmen pro Aktionsplan
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickAnzKontrProAp} color="inherit">
-            Anzahl Kontrollen pro Aktionsplan
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickApBer} color="inherit">
-            AP-Berichte (Jahresberichte)
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickApBerUndMassn} color="inherit">
-            AP-Berichte und Massnahmen
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickApPopEkPrio} color="inherit">
-            Priorisierung für EK basierend auf Pop-Entwicklung
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickEkPlanung} color="inherit">
-            EK-Planung pro Jahr nach Abrechnungstyp
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickZiele} color="inherit">
-            Ziele
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickZielber} color="inherit">
-            Ziel-Berichte
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickErfkrit} color="inherit">
-            Erfolgskriterien
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickIdealbiotop} color="inherit">
-            Idealbiotope
-          </DownloadCardButton>
-          <DownloadCardButton onClick={onClickAssozarten} color="inherit">
-            Assoziierte Arten
-          </DownloadCardButton>
-        </StyledCardContent>
+        {expanded ? (
+          <StyledCardContent>
+            <DownloadCardButton onClick={onClickAp} color="inherit">
+              {apIsFiltered ? 'Aktionspläne (gefiltert)' : 'Aktionspläne'}
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickApOhnePop} color="inherit">
+              Aktionspläne ohne Populationen
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickAnzMassnProAp} color="inherit">
+              Anzahl Massnahmen pro Aktionsplan
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickAnzKontrProAp} color="inherit">
+              Anzahl Kontrollen pro Aktionsplan
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickApBer} color="inherit">
+              AP-Berichte (Jahresberichte)
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickApBerUndMassn} color="inherit">
+              AP-Berichte und Massnahmen
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickApPopEkPrio} color="inherit">
+              Priorisierung für EK basierend auf Pop-Entwicklung
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickEkPlanung} color="inherit">
+              EK-Planung pro Jahr nach Abrechnungstyp
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickZiele} color="inherit">
+              Ziele
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickZielber} color="inherit">
+              Ziel-Berichte
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickErfkrit} color="inherit">
+              Erfolgskriterien
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickIdealbiotop} color="inherit">
+              Idealbiotope
+            </DownloadCardButton>
+            <DownloadCardButton onClick={onClickAssozarten} color="inherit">
+              Assoziierte Arten
+            </DownloadCardButton>
+          </StyledCardContent>
+        ) : null}
       </Collapse>
     </StyledCard>
   )
