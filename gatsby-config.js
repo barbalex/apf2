@@ -201,5 +201,6 @@ module.exports = {
       },
     },
     'gatsby-plugin-offline',
+    'gatsby-plugin-workerize-loader',
   ],
 }

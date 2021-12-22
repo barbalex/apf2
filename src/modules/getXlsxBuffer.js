@@ -4,16 +4,23 @@
 // see: https://github.com/guyonroche/exceljs/issues/313
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
-/**
- * Does exceljs not work properly in v1.12.2?
- * in dev all o.k., in prod it silently fails
- * https://github.com/exceljs/exceljs/issues/871
- */
-
+//import getDataArrayFromExportObjectsWorker from './getDataArrayFromExportObjectsWorker.js'
 import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
 
 const getXlsxBuffer = async ({ data, store }) => {
+  /**
+   * using this worker may make the ui more responsive
+   * but only while this code runs
+   * this code is only a small part of the time the user has to wait
+   * most is used by: 1. query 2. other processing steps needing libs
+   * and: using a worker makes it take significantly longer...
+   */
+  // const dataArray =
+  //   await getDataArrayFromExportObjectsWorker.getDataArrayFromExportObjects(
+  //     data,
+  //   )
   const dataArray = getDataArrayFromExportObjects(data)
+
   const numberOfColumns =
     dataArray && dataArray[0] && dataArray[0].length ? dataArray[0].length : 0
   const workbook = new ExcelJs.Workbook()
@@ -58,6 +65,7 @@ const getXlsxBuffer = async ({ data, store }) => {
   try {
     buffer = await workbook.xlsx.writeBuffer()
   } catch (error) {
+    console.log(error)
     return store.enqueNotification({
       message: error.message,
       options: {

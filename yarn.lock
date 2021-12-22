@@ -4719,6 +4719,7 @@ __metadata:
     gatsby-plugin-sharp: 4.4.0
     gatsby-plugin-styled-components: 5.4.0
     gatsby-plugin-typography: 4.4.0
+    gatsby-plugin-workerize-loader: 2.1.0
     gatsby-remark-autolink-headers: 5.4.0
     gatsby-remark-copy-linked-files: 5.4.0
     gatsby-remark-embed-video: 3.1.1
@@ -4803,7 +4804,6 @@ __metadata:
     uploadcare-widget: 3.15.0
     use-debounce: 7.0.1
     vercel: 23.1.2
-    webpack: 5.65.0
   languageName: unknown
   linkType: soft
 
@@ -9769,6 +9769,17 @@ __metadata:
   peerDependencies:
     gatsby: ^4.0.0-next
   checksum: cc658c41b8a8736269cbb03ca37c560c7eae560b83eb89eebfebc4b5ed328738f22a37d5e398071f648a84e3ccdd161eeddf06cbb351bfca4353c48b16c15dcb
+  languageName: node
+  linkType: hard
+
+"gatsby-plugin-workerize-loader@npm:2.1.0":
+  version: 2.1.0
+  resolution: "gatsby-plugin-workerize-loader@npm:2.1.0"
+  dependencies:
+    workerize-loader-wp5: ^2.0.2
+  peerDependencies:
+    gatsby: ^3.0.0 || ^4.0.0
+  checksum: c191da0fc0105f756045841386c3a334ee84fed2724cf3593a4cb6575eaba620e257c4f3de99dcfd2303a4b07c597bc5f310324a39bff305caa6f59fb98ae649
   languageName: node
   linkType: hard
 
@@ -20415,16 +20426,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"watchpack@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "watchpack@npm:2.3.1"
-  dependencies:
-    glob-to-regexp: ^0.4.1
-    graceful-fs: ^4.1.2
-  checksum: 70a34f92842d94b5d842980f866d568d7a467de667c96ae5759c759f46587e49265863171f4650bdbafc5f3870a28f2b4453e9e847098ec4b718b38926d47d22
-  languageName: node
-  linkType: hard
-
 "weak-lru-cache@npm:^1.0.0":
   version: 1.1.3
   resolution: "weak-lru-cache@npm:1.1.3"
@@ -20502,43 +20503,6 @@ __metadata:
   dependencies:
     debug: ^3.0.0
   checksum: a1c19478a23eaebf4ee1ce7fa0a7a33204624a3676dc12f92f02197fa7ff3ef0007883b2fcc22b0ae2f106d3a4abc42fb9f8da103e9bec3ad82012b745bcf593
-  languageName: node
-  linkType: hard
-
-"webpack@npm:5.65.0":
-  version: 5.65.0
-  resolution: "webpack@npm:5.65.0"
-  dependencies:
-    "@types/eslint-scope": ^3.7.0
-    "@types/estree": ^0.0.50
-    "@webassemblyjs/ast": 1.11.1
-    "@webassemblyjs/wasm-edit": 1.11.1
-    "@webassemblyjs/wasm-parser": 1.11.1
-    acorn: ^8.4.1
-    acorn-import-assertions: ^1.7.6
-    browserslist: ^4.14.5
-    chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.8.3
-    es-module-lexer: ^0.9.0
-    eslint-scope: 5.1.1
-    events: ^3.2.0
-    glob-to-regexp: ^0.4.1
-    graceful-fs: ^4.2.4
-    json-parse-better-errors: ^1.0.2
-    loader-runner: ^4.2.0
-    mime-types: ^2.1.27
-    neo-async: ^2.6.2
-    schema-utils: ^3.1.0
-    tapable: ^2.1.1
-    terser-webpack-plugin: ^5.1.3
-    watchpack: ^2.3.1
-    webpack-sources: ^3.2.2
-  peerDependenciesMeta:
-    webpack-cli:
-      optional: true
-  bin:
-    webpack: bin/webpack.js
-  checksum: 221ab8ccd440cb678269e86689704bbef81cf41393eb266625873e30c6980ffaa055bb1a7d14bf9fc0f5a2e6f03d15d068cbb995bc876757c01a4ca27fd2870c
   languageName: node
   linkType: hard
 
@@ -20839,6 +20803,17 @@ __metadata:
   dependencies:
     microevent.ts: ~0.1.1
   checksum: 8f8607506172f44c05490f3ccf13e5c1f430eeb9b6116a405919c186b8b17add13bbb22467a0dbcd18ec7fcb080709a15738182e0003c5fbe2144721ea00f357
+  languageName: node
+  linkType: hard
+
+"workerize-loader-wp5@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "workerize-loader-wp5@npm:2.0.2"
+  dependencies:
+    loader-utils: 2.0.0
+  peerDependencies:
+    webpack: "*"
+  checksum: 210a3437ab05af42d069852a92b57b10bd060e667aaf620571069c682a141774db4a6ef284190ace7f7ba20a62045e148ce5b0844d95e24d074f525b6b805676
   languageName: node
   linkType: hard
 
