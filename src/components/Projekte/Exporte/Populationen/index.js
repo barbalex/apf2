@@ -24,6 +24,8 @@ import ApOhneStatus from './ApOhneStatus'
 import OhneKoord from './OhneKoord'
 import AnzMassnBerichtsjahr from './AnzMassnBerichtsjahr'
 import AnzMassnProPop from './AnzMassnProPop'
+import AnzKontrProPop from './AnzKontrProPop'
+import Berichte from './Berichte'
 
 const PopulationenExports = () => {
   const client = useApolloClient()
@@ -57,163 +59,8 @@ const PopulationenExports = () => {
             <OhneKoord />
             <AnzMassnBerichtsjahr />
             <AnzMassnProPop />
-            <DownloadCardButton
-              color="inherit"
-              onClick={async () => {
-                const notif = enqueNotification({
-                  message: `Export "PopulationenAnzahlKontrollen" wird vorbereitet...`,
-                  options: {
-                    variant: 'info',
-                    persist: true,
-                  },
-                })
-                let result
-                try {
-                  result = await client.query({
-                    query: await import('./queryPopAnzKontrs').then(
-                      (m) => m.default,
-                    ),
-                  })
-                } catch (error) {
-                  enqueNotification({
-                    message: error.message,
-                    options: {
-                      variant: 'error',
-                    },
-                  })
-                }
-                const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-                  ap_id: z?.vPopAnzkontrsById?.nodes?.[0]?.apId ?? '',
-                  artname: z?.vPopAnzkontrsById?.nodes?.[0]?.artname ?? '',
-                  ap_bearbeitung:
-                    z?.vPopAnzkontrsById?.nodes?.[0]?.apBearbeitung ?? '',
-                  ap_start_jahr:
-                    z?.vPopAnzkontrsById?.nodes?.[0]?.apStartJahr ?? '',
-                  ap_umsetzung:
-                    z?.vPopAnzkontrsById?.nodes?.[0]?.apUmsetzung ?? '',
-                  id: z?.vPopAnzkontrsById?.nodes?.[0]?.id ?? '',
-                  nr: z?.vPopAnzkontrsById?.nodes?.[0]?.nr ?? '',
-                  name: z?.vPopAnzkontrsById?.nodes?.[0]?.name ?? '',
-                  status: z?.vPopAnzkontrsById?.nodes?.[0]?.status ?? '',
-                  bekannt_seit:
-                    z?.vPopAnzkontrsById?.nodes?.[0]?.bekanntSeit ?? '',
-                  status_unklar:
-                    z?.vPopAnzkontrsById?.nodes?.[0]?.statusUnklar ?? '',
-                  status_unklar_begruendung:
-                    z?.vPopAnzkontrsById?.nodes?.[0]?.statusUnklarBegruendung ??
-                    '',
-                  x: z?.vPopAnzkontrsById?.nodes?.[0]?.x ?? '',
-                  y: z?.vPopAnzkontrsById?.nodes?.[0]?.y ?? '',
-                  anzahl_kontrollen:
-                    z?.vPopAnzkontrsById?.nodes?.[0]?.anzahlKontrollen ?? '',
-                }))
-                removeNotification(notif)
-                closeSnackbar(notif)
-                if (rows.length === 0) {
-                  return enqueNotification({
-                    message: 'Die Abfrage retournierte 0 Datensätze',
-                    options: {
-                      variant: 'warning',
-                    },
-                  })
-                }
-                exportModule({
-                  data: sortBy(rows, ['artname', 'nr']),
-                  fileName: 'PopulationenAnzahlKontrollen',
-                  store,
-                })
-              }}
-            >
-              Anzahl Kontrollen pro Population
-            </DownloadCardButton>
-            <DownloadCardButton
-              color="inherit"
-              onClick={async () => {
-                const notif = enqueNotification({
-                  message: `Export "PopulationenPopUndMassnBerichte" wird vorbereitet...`,
-                  options: {
-                    variant: 'info',
-                    persist: true,
-                  },
-                })
-                let result
-                try {
-                  result = await client.query({
-                    query: await import('./queryPopPopberUndMassnber').then(
-                      (m) => m.default,
-                    ),
-                  })
-                } catch (error) {
-                  enqueNotification({
-                    message: error.message,
-                    options: {
-                      variant: 'error',
-                    },
-                  })
-                }
-                // need to flatmap because view delivers multiple rows per pop
-                const rows = (result?.data?.allPops?.nodes ?? []).flatMap(
-                  (z0) =>
-                    (z0?.vPopPopberundmassnbersByPopId?.nodes ?? []).map(
-                      (z) => ({
-                        ap_id: z.apId,
-                        artname: z.artname,
-                        ap_bearbeitung: z.apBearbeitung,
-                        ap_start_jahr: z.apStartJahr,
-                        ap_umsetzung: z.apUmsetzung,
-                        pop_id: z.popId,
-                        pop_nr: z.popNr,
-                        pop_name: z.popName,
-                        pop_status: z.popStatus,
-                        pop_bekannt_seit: z.popBekanntSeit,
-                        pop_status_unklar: z.popStatusUnklar,
-                        pop_status_unklar_begruendung:
-                          z.popStatusUnklarBegruendung,
-                        pop_x: z.popX,
-                        pop_y: z.popY,
-                        pop_created_at: z.popCreatedAt,
-                        pop_updated_at: z.popUpdatedAt,
-                        pop_changed_by: z.popChangedBy,
-                        jahr: z.jahr,
-                        popber_id: z.popberId,
-                        popber_jahr: z.popberJahr,
-                        popber_entwicklung: z.popberEntwicklung,
-                        popber_bemerkungen: z.popberBemerkungen,
-                        popber_created_at: z.popberCreatedAt,
-                        popber_updated_at: z.popberUpdatedAt,
-                        popber_changed_by: z.popberChangedBy,
-                        popmassnber_id: z.popmassnberId,
-                        popmassnber_jahr: z.popmassnberJahr,
-                        popmassnber_entwicklung: z.popmassnberEntwicklung,
-                        popmassnber_bemerkungen: z.popmassnberBemerkungen,
-                        popmassnber_created_at: z.popmassnberCreatedAt,
-                        popmassnber_updated_at: z.popmassnberUpdatedAt,
-                        popmassnber_changed_by: z.popmassnberChangedBy,
-                      }),
-                    ),
-                )
-                removeNotification(notif)
-                closeSnackbar(notif)
-                if (rows.length === 0) {
-                  return enqueNotification({
-                    message: 'Die Abfrage retournierte 0 Datensätze',
-                    options: {
-                      variant: 'warning',
-                    },
-                  })
-                }
-                exportModule({
-                  data: sortBy(rows, ['artname', 'pop_nr', 'jahr']),
-                  fileName: 'PopulationenPopUndMassnBerichte',
-                  idKey: 'pop_id',
-                  xKey: 'pop_wgs84lat',
-                  yKey: 'pop_wgs84long',
-                  store,
-                })
-              }}
-            >
-              Populationen inkl. Populations- und Massnahmen-Berichte
-            </DownloadCardButton>
+            <AnzKontrProPop />
+            <Berichte />
             <DownloadCardButton
               color="inherit"
               onClick={async () => {
