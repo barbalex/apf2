@@ -9,10 +9,10 @@ import { DownloadCardButton, StyledProgressText } from '../index'
 const Teilpopulationen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-
   const { enqueNotification, dataFilterTableIsFiltered, tpopGqlFilter } = store
 
   const [queryState, setQueryState] = useState()
+
   const onClickTPop = useCallback(async () => {
     setQueryState('lade Daten...')
     //console.time('querying')

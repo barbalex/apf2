@@ -10,6 +10,7 @@ import TPop from './TPop'
 import Wollmilchsau from './Wollmilchsau'
 import WollmilchsauSingle from './WollmilchsauSingle'
 import LetzteZaehlungen from './LetzteZaehlungen'
+import TPopInklBerichte from './TPopInklBerichte'
 import { StyledCardContent, DownloadCardButton } from '../index'
 
 const Teilpopulationen = () => {
@@ -358,52 +359,7 @@ const Teilpopulationen = () => {
       </DownloadCardButton>
       <Wollmilchsau />
       <WollmilchsauSingle />
-      <DownloadCardButton
-        color="inherit"
-        onClick={async () => {
-          const notif = enqueNotification({
-            message: `Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...`,
-            options: {
-              variant: 'info',
-              persist: true,
-            },
-          })
-          let result
-          try {
-            result = await client.query({
-              query: await import('./allVTpopPopberundmassnbers').then(
-                (m) => m.default,
-              ),
-            })
-          } catch (error) {
-            enqueNotification({
-              message: error.message,
-              options: { variant: 'error' },
-            })
-          }
-          const rows = result.data?.allVTpopPopberundmassnbers?.nodes ?? []
-          removeNotification(notif)
-          closeSnackbar(notif)
-          if (rows.length === 0) {
-            return enqueNotification({
-              message: 'Die Abfrage retournierte 0 Datensätze',
-              options: {
-                variant: 'warning',
-              },
-            })
-          }
-          exportModule({
-            data: rows,
-            fileName: 'TeilpopulationenTPopUndMassnBerichte',
-            idKey: 'tpop_id',
-            xKey: 'tpop_wgs84lat',
-            yKey: 'tpop_wgs84long',
-            store,
-          })
-        }}
-      >
-        Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
-      </DownloadCardButton>
+      <TPopInklBerichte />
       <LetzteZaehlungen />
       <DownloadCardButton
         color="inherit"
