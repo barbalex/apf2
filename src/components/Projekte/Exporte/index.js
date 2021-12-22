@@ -13,7 +13,7 @@ import Ap from './Ap'
 import Populationen from './Populationen'
 import Teilpopulationen from './Teilpopulationen'
 import Kontrollen from './Kontrollen'
-import Massnahmen from './Massnahmen'
+import MassnahmenExporte from './Massnahmen'
 import Beobachtungen from './Beobachtungen'
 import Anwendung from './Anwendung'
 import Optionen from './Optionen'
@@ -112,7 +112,7 @@ const Exporte = () => {
                 <Populationen />
                 <Teilpopulationen />
                 <Kontrollen />
-                <Massnahmen />
+                <MassnahmenExporte />
                 <Beobachtungen />
                 <Anwendung />
               </InnerContainer>
