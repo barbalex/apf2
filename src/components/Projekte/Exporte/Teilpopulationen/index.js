@@ -4,7 +4,6 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
-import CircularProgress from '@mui/material/CircularProgress'
 import Icon from '@mui/material/Icon'
 import Button from '@mui/material/Button'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
@@ -54,10 +53,6 @@ const DownloadCardButton = styled(Button)`
   justify-content: flex-start !important;
   user-select: none;
 `
-const StyledProgressIcon = styled(CircularProgress)`
-  margin-left: 10px;
-  color: rgb(0, 0, 0, 0.54);
-`
 const StyledProgressText = styled.span`
   margin-left: 10px;
   font-style: italic;
@@ -100,10 +95,8 @@ const Teilpopulationen = () => {
   const [ewmMessage, setEwmMessage] = useState('')
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-  const [tpopLoading, setTpopLoading] = useState(false)
   const [tpopState, setTpopState] = useState()
   const onClickTPop = useCallback(async () => {
-    setTpopLoading(true)
     setTpopState('lade Daten...')
     console.time('querying')
     let result
@@ -287,7 +280,6 @@ const Teilpopulationen = () => {
       fileName: 'Teilpopulationen',
       store,
     })
-    setTpopLoading(false)
     setTpopState(undefined)
     console.timeEnd('exporting')
   }, [client, enqueNotification, store, tpopGqlFilter])
@@ -329,7 +321,7 @@ const Teilpopulationen = () => {
           <DownloadCardButton
             onClick={onClickTPop}
             color="inherit"
-            disabled={tpopLoading}
+            disabled={!!tpopState}
           >
             {`Teilpopulationen${tpopIsFiltered ? ' (gefiltert)' : ''}`}
             {tpopState ? (
