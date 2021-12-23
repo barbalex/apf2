@@ -17,112 +17,19 @@ import {
   CardActionIconButton,
   DownloadCardButton,
 } from '../index'
-import Aps from './Aps'
+import Ap from './Ap'
+import ApOhnePop from './ApOhnePop'
+import AnzMassn from './AnzMassn'
 
 const ApExports = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, removeNotification, dataFilterTableIsFiltered } =
-    store
+  const { enqueNotification, removeNotification } = store
 
   const [expanded, setExpanded] = useState(false)
   const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-
-  const onClickApOhnePop = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "ApOhnePopulationen" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryApOhnePops').then((m) => m.default),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allAps?.nodes ?? [])
-      .filter((z) => z?.popsByApId?.totalCount === 0)
-      .map((z) => ({
-        id: z.id,
-        artname: z?.aeTaxonomyByArtId.artname ?? '',
-        bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-        start_jahr: z.startJahr,
-        umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: rows,
-      fileName: 'ApOhnePopulationen',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
-
-  const onClickAnzMassnProAp = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "ApAnzahlMassnahmen" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryApAnzMassns').then((m) => m.default),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
-      id: z.id,
-      artname: z?.aeTaxonomyByArtId?.artname ?? '',
-      bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-      start_jahr: z.startJahr,
-      umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      anzahl_kontrollen:
-        z?.vApAnzmassnsById?.nodes?.[0]?.anzahlMassnahmen ?? '',
-    }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: rows,
-      fileName: 'ApAnzahlMassnahmen',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickAnzKontrProAp = useCallback(async () => {
     const notif = enqueNotification({
@@ -697,11 +604,6 @@ const ApExports = () => {
     })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
-  const apIsFiltered = dataFilterTableIsFiltered({
-    treeName: 'tree',
-    table: 'ap',
-  })
-
   return (
     <StyledCard>
       <StyledCardActions disableSpacing onClick={onClickAction}>
@@ -720,13 +622,9 @@ const ApExports = () => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         {expanded ? (
           <StyledCardContent>
-            <Aps />
-            <DownloadCardButton onClick={onClickApOhnePop} color="inherit">
-              Aktionspläne ohne Populationen
-            </DownloadCardButton>
-            <DownloadCardButton onClick={onClickAnzMassnProAp} color="inherit">
-              Anzahl Massnahmen pro Aktionsplan
-            </DownloadCardButton>
+            <Ap />
+            <ApOhnePop />
+            <AnzMassn />
             <DownloadCardButton onClick={onClickAnzKontrProAp} color="inherit">
               Anzahl Kontrollen pro Aktionsplan
             </DownloadCardButton>
