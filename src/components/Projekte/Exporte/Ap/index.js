@@ -23,6 +23,7 @@ import AnzMassn from './AnzMassn'
 import AnzKontr from './AnzKontr'
 import Ber from './Ber'
 import BerUndMassn from './BerUndMassn'
+import PriorisierungFuerEk from './PriorisierungFuerEk'
 
 const ApExports = () => {
   const client = useApolloClient()
@@ -33,74 +34,6 @@ const ApExports = () => {
   const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-
-  const onClickApPopEkPrio = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "ApPriorisierungFuerEk" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryApPopEkPrio').then((m) => m.default),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
-      ap_id: z.id,
-      artname: z?.aeTaxonomyByArtId.artname ?? '',
-      ap_bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-      ap_start_jahr: z.startJahr,
-      ap_umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      ap_bearbeiter: z?.adresseByBearbeiter?.name ?? '',
-      artwert: z?.aeTaxonomyByArtId?.artwert ?? '',
-      jahr_zuvor: z?.vApPopEkPriosByApId?.nodes?.[0]?.jahrZuvor ?? '',
-      jahr_zuletzt: z?.vApPopEkPriosByApId?.nodes?.[0]?.jahrZuletzt ?? '',
-      anz_pop_urspr_zuvor:
-        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopUrsprZuvor ?? '',
-      anz_pop_anges_zuvor:
-        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopAngesZuvor ?? '',
-
-      anz_pop_aktuell_zuvor:
-        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopAktuellZuvor ?? '',
-      anz_pop_ursp_zuletzt:
-        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopUrsprZuletzt ?? '',
-      anz_pop_anges_zuletzt:
-        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopAngesZuletzt ?? '',
-      anz_pop_aktuell_zuletzt:
-        z?.vApPopEkPriosByApId?.nodes?.[0]?.anzPopAktuellZuletzt ?? '',
-      diff_pop_urspr: z?.vApPopEkPriosByApId?.nodes?.[0]?.diffPopUrspr ?? '',
-      diff_pop_anges: z?.vApPopEkPriosByApId?.nodes?.[0]?.diffPopAnges ?? '',
-      diff_pop_aktuell:
-        z?.vApPopEkPriosByApId?.nodes?.[0]?.diffPopAktuell ?? '',
-      beurteilung_zuletzt:
-        z?.vApPopEkPriosByApId?.nodes?.[0]?.beurteilungZuletzt ?? '',
-    }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: rows,
-      fileName: 'ApPriorisierungFuerEk',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickEkPlanung = useCallback(async () => {
     const notif = enqueNotification({
@@ -464,9 +397,7 @@ const ApExports = () => {
             <AnzKontr />
             <Ber />
             <BerUndMassn />
-            <DownloadCardButton onClick={onClickApPopEkPrio} color="inherit">
-              Priorisierung für EK basierend auf Pop-Entwicklung
-            </DownloadCardButton>
+            <PriorisierungFuerEk />
             <DownloadCardButton onClick={onClickEkPlanung} color="inherit">
               EK-Planung pro Jahr nach Abrechnungstyp
             </DownloadCardButton>
