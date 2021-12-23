@@ -20,6 +20,8 @@ import {
 import Ap from './Ap'
 import ApOhnePop from './ApOhnePop'
 import AnzMassn from './AnzMassn'
+import AnzKontr from './AnzKontr'
+import Ber from './Ber'
 
 const ApExports = () => {
   const client = useApolloClient()
@@ -30,117 +32,6 @@ const ApExports = () => {
   const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-
-  const onClickAnzKontrProAp = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "ApAnzahlKontrollen" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryApAnzKontrs').then((m) => m.default),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allAps.nodes ?? []).map((z) => ({
-      id: z.id,
-      artname: z?.aeTaxonomyByArtId?.artname ?? '',
-      bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-      start_jahr: z.startJahr,
-      umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      anzahl_kontrollen:
-        z?.vApAnzkontrsById?.nodes?.[0]?.anzahlKontrollen ?? '',
-    }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: rows,
-      fileName: 'ApAnzahlKontrollen',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
-
-  const onClickApBer = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "Jahresberichte" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryApbers').then((m) => m.default),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allApbers?.nodes ?? []).map((z) => ({
-      id: z.id,
-      ap_id: z.apId,
-      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
-      jahr: z.jahr,
-      situation: z.situation,
-      vergleich_vorjahr_gesamtziel: z.vergleichVorjahrGesamtziel,
-      beurteilung: z.beurteilung,
-      beurteilung_decodiert: z?.apErfkritWerteByBeurteilung?.text ?? '',
-      veraenderung_zum_vorjahr: z.veraenderungZumVorjahr,
-      apber_analyse: z.apberAnalyse,
-      konsequenzen_umsetzung: z.konsequenzenUmsetzung,
-      konsequenzen_erfolgskontrolle: z.konsequenzenErfolgskontrolle,
-      biotope_neue: z.biotopeNeue,
-      biotope_optimieren: z.biotopeOptimieren,
-      massnahmen_optimieren: z.massnahmenOptimieren,
-      wirkung_auf_art: z.wirkungAufArt,
-      created_at: z.createdAt,
-      updated_at: z.updatedAt,
-      changed_by: z.changedBy,
-      massnahmen_ap_bearb: z.massnahmenApBearb,
-      massnahmen_planung_vs_ausfuehrung: z.massnahmenPlanungVsAusfuehrung,
-      datum: z.datum,
-      bearbeiter: z.bearbeiter,
-      bearbeiter_decodiert: z?.adresseByBearbeiter?.name ?? '',
-    }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: sortBy(rows, ['artname', 'jahr']),
-      fileName: 'Jahresberichte',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickApBerUndMassn = useCallback(async () => {
     const notif = enqueNotification({
@@ -625,12 +516,8 @@ const ApExports = () => {
             <Ap />
             <ApOhnePop />
             <AnzMassn />
-            <DownloadCardButton onClick={onClickAnzKontrProAp} color="inherit">
-              Anzahl Kontrollen pro Aktionsplan
-            </DownloadCardButton>
-            <DownloadCardButton onClick={onClickApBer} color="inherit">
-              AP-Berichte (Jahresberichte)
-            </DownloadCardButton>
+            <AnzKontr />
+            <Ber />
             <DownloadCardButton onClick={onClickApBerUndMassn} color="inherit">
               AP-Berichte und Massnahmen
             </DownloadCardButton>
