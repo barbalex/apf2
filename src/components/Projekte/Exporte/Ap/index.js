@@ -17,105 +17,18 @@ import {
   CardActionIconButton,
   DownloadCardButton,
 } from '../index'
+import Aps from './Aps'
 
-const AP = () => {
+const ApExports = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const {
-    enqueNotification,
-    removeNotification,
-    apGqlFilter,
-    dataFilterTableIsFiltered,
-  } = store
+  const { enqueNotification, removeNotification, dataFilterTableIsFiltered } =
+    store
 
   const [expanded, setExpanded] = useState(false)
   const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-  const onClickAp = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "AP" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: gql`
-          query apForExportQuery($filter: ApFilter) {
-            allAps(
-              filter: $filter
-              orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
-            ) {
-              nodes {
-                id
-                aeTaxonomyByArtId {
-                  id
-                  artname
-                }
-                apBearbstandWerteByBearbeitung {
-                  id
-                  text
-                }
-                startJahr
-                apUmsetzungWerteByUmsetzung {
-                  id
-                  text
-                }
-                createdAt
-                updatedAt
-                changedBy
-              }
-            }
-          }
-        `,
-        variables: {
-          filter: apGqlFilter,
-        },
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allAps?.nodes ?? []).map((n) => ({
-      id: n.id,
-      artname: n?.aeTaxonomyByArtId?.artname ?? null,
-      bearbeitung: n?.apBearbstandWerteByBearbeitung?.text ?? null,
-      startJahr: n.startJahr,
-      umsetzung: n?.apUmsetzungWerteByUmsetzung?.text ?? null,
-      createdAt: n.createdAt,
-      updatedAt: n.updatedAt,
-      changedBy: n.changedBy,
-    }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: rows,
-      fileName: 'AP',
-      store,
-    })
-  }, [
-    apGqlFilter,
-    client,
-    closeSnackbar,
-    enqueNotification,
-    removeNotification,
-    store,
-  ])
 
   const onClickApOhnePop = useCallback(async () => {
     const notif = enqueNotification({
@@ -807,9 +720,7 @@ const AP = () => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         {expanded ? (
           <StyledCardContent>
-            <DownloadCardButton onClick={onClickAp} color="inherit">
-              {apIsFiltered ? 'Aktionspläne (gefiltert)' : 'Aktionspläne'}
-            </DownloadCardButton>
+            <Aps />
             <DownloadCardButton onClick={onClickApOhnePop} color="inherit">
               Aktionspläne ohne Populationen
             </DownloadCardButton>
@@ -853,4 +764,4 @@ const AP = () => {
   )
 }
 
-export default observer(AP)
+export default observer(ApExports)
