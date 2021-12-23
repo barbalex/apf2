@@ -23,9 +23,28 @@ const ApOhneStatus = () => {
         let result
         try {
           result = await client.query({
-            query: await import('./queryPopVonApOhneStatus').then(
-              (m) => m.default,
-            ),
+            query: gql`
+              query popVonApOhneStatusQuery {
+                allPops(filter: { vPopVonapohnestatusesByIdExist: true }) {
+                  nodes {
+                    id
+                    vPopVonapohnestatusesById {
+                      nodes {
+                        apId
+                        artname
+                        apBearbeitung
+                        id
+                        nr
+                        name
+                        status
+                        x
+                        y
+                      }
+                    }
+                  }
+                }
+              }
+            `,
           })
         } catch (error) {
           enqueNotification({

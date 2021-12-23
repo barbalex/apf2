@@ -23,7 +23,36 @@ const OhneKoord = () => {
         let result
         try {
           result = await client.query({
-            query: await import('./queryPopOhneKoords').then((m) => m.default),
+            query: gql`
+              query popOhneKoordsQuery {
+                allPops(filter: { vPopOhnekoordsByIdExist: true }) {
+                  nodes {
+                    id
+                    vPopOhnekoordsById {
+                      nodes {
+                        apId
+                        artname
+                        apBearbeitung
+                        apStartJahr
+                        apUmsetzung
+                        id
+                        nr
+                        name
+                        status
+                        bekanntSeit
+                        statusUnklar
+                        statusUnklarBegruendung
+                        x
+                        y
+                        createdAt
+                        updatedAt
+                        changedBy
+                      }
+                    }
+                  }
+                }
+              }
+            `,
           })
         } catch (error) {
           enqueNotification({

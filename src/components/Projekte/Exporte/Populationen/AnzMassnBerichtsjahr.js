@@ -23,9 +23,46 @@ const AnzMassnBerichtsjahr = () => {
         let result
         try {
           result = await client.query({
-            query: await import('./queryPopmassnberAnzMassns').then(
-              (m) => m.default,
-            ),
+            query: gql`
+              query popmassnberAnzMassnQuery {
+                allPopmassnbers(
+                  filter: { vPopmassnberAnzmassnsByIdExist: true }
+                ) {
+                  nodes {
+                    id
+                    vPopmassnberAnzmassnsById {
+                      nodes {
+                        apId
+                        artname
+                        apBearbeitung
+                        apStartJahr
+                        apUmsetzung
+                        popId
+                        popNr
+                        popName
+                        popStatus
+                        popBekanntSeit
+                        popStatusUnklar
+                        popStatusUnklarBegruendung
+                        popX
+                        popY
+                        popCreatedAt
+                        popUpdatedAt
+                        popChangedBy
+                        id
+                        jahr
+                        entwicklung
+                        bemerkungen
+                        createdAt
+                        updatedAt
+                        changedBy
+                        anzahlMassnahmen
+                      }
+                    }
+                  }
+                }
+              }
+            `,
           })
         } catch (error) {
           enqueNotification({
