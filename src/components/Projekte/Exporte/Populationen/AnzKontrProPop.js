@@ -23,7 +23,34 @@ const AnzKontrProPop = () => {
         let result
         try {
           result = await client.query({
-            query: await import('./queryPopAnzKontrs').then((m) => m.default),
+            query: gql`
+              query popAnzKontrsQuery {
+                allPops {
+                  nodes {
+                    id
+                    vPopAnzkontrsById {
+                      nodes {
+                        apId
+                        artname
+                        apBearbeitung
+                        apStartJahr
+                        apUmsetzung
+                        id
+                        nr
+                        name
+                        status
+                        bekanntSeit
+                        statusUnklar
+                        statusUnklarBegruendung
+                        x
+                        y
+                        anzahlKontrollen
+                      }
+                    }
+                  }
+                }
+              }
+            `,
           })
         } catch (error) {
           enqueNotification({
