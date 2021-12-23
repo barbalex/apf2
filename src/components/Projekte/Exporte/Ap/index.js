@@ -1,20 +1,14 @@
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import { observer } from 'mobx-react-lite'
-import { useApolloClient, gql } from '@apollo/client'
-import { useSnackbar } from 'notistack'
 
-import exportModule from '../../../../modules/export'
-import storeContext from '../../../../storeContext'
 import {
   StyledCardContent,
   CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
-  DownloadCardButton,
 } from '../index'
 import Ap from './Ap'
 import ApOhnePop from './ApOhnePop'
@@ -28,68 +22,12 @@ import Ziele from './Ziele'
 import Zielber from './Zielber'
 import Erfkrit from './Erfkrit'
 import Idealbiotop from './Idealbiotop'
+import Assozart from './Assozart'
 
 const ApExports = () => {
-  const client = useApolloClient()
-  const store = useContext(storeContext)
-  const { enqueNotification, removeNotification } = store
-
   const [expanded, setExpanded] = useState(false)
-  const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-
-  const onClickAssozarten = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "AssoziierteArten" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryAssozarts').then((m) => m.default),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allAssozarts?.nodes ?? []).map((z) => ({
-      ap_id: z.apId,
-      artname: z?.apByApId?.label ?? '',
-      ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
-      ap_start_jahr: z?.apByApId?.startJahr ?? '',
-      ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
-      id: z.id,
-      artname_assoziiert: z?.aeTaxonomyByAeId?.artname ?? '',
-      bemerkungen: z.bemerkungen,
-      created_at: z.createdAt,
-      updated_at: z.updatedAt,
-      changed_by: z.changedBy,
-    }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: rows,
-      fileName: 'AssoziierteArten',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   return (
     <StyledCard>
@@ -121,9 +59,7 @@ const ApExports = () => {
             <Zielber />
             <Erfkrit />
             <Idealbiotop />
-            <DownloadCardButton onClick={onClickAssozarten} color="inherit">
-              Assoziierte Arten
-            </DownloadCardButton>
+            <Assozart />
           </StyledCardContent>
         ) : null}
       </Collapse>
@@ -131,4 +67,4 @@ const ApExports = () => {
   )
 }
 
-export default observer(ApExports)
+export default ApExports
