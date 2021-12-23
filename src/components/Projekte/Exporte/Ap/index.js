@@ -25,6 +25,7 @@ import Ber from './Ber'
 import BerUndMassn from './BerUndMassn'
 import PriorisierungFuerEk from './PriorisierungFuerEk'
 import EkPlanung from './EkPlanung'
+import Ziele from './Ziele'
 
 const ApExports = () => {
   const client = useApolloClient()
@@ -35,56 +36,6 @@ const ApExports = () => {
   const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-
-  const onClickZiele = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "ApZiele" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryZiels').then((m) => m.default),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allZiels?.nodes ?? []).map((z) => ({
-      ap_id: z.id,
-      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
-      ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
-      ap_start_jahr: z?.apByApId?.startJahr ?? '',
-      ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
-      id: z.id,
-      jahr: z.jahr,
-      typ: z?.zielTypWerteByTyp?.text ?? '',
-      bezeichnung: z.bezeichnung,
-    }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: sortBy(rows, 'artname'),
-      fileName: 'ApZiele',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickZielber = useCallback(async () => {
     const notif = enqueNotification({
@@ -343,9 +294,7 @@ const ApExports = () => {
             <BerUndMassn />
             <PriorisierungFuerEk />
             <EkPlanung />
-            <DownloadCardButton onClick={onClickZiele} color="inherit">
-              Ziele
-            </DownloadCardButton>
+            <Ziele />
             <DownloadCardButton onClick={onClickZielber} color="inherit">
               Ziel-Berichte
             </DownloadCardButton>
