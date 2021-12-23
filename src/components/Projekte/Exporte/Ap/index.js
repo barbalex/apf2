@@ -22,6 +22,7 @@ import ApOhnePop from './ApOhnePop'
 import AnzMassn from './AnzMassn'
 import AnzKontr from './AnzKontr'
 import Ber from './Ber'
+import BerUndMassn from './BerUndMassn'
 
 const ApExports = () => {
   const client = useApolloClient()
@@ -32,62 +33,6 @@ const ApExports = () => {
   const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-
-  const onClickApBerUndMassn = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "ApJahresberichteUndMassnahmen" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryApApberUndMassns').then((m) => m.default),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
-      ap_id: z.id,
-      artname: z?.aeTaxonomyByArtId?.artname ?? '',
-      ap_bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-      ap_start_jahr: z.startJahr,
-      ap_umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      ap_bearbeiter: z?.adresseByBearbeiter?.name ?? '',
-      artwert: z?.aeTaxonomyByArtId?.artwert ?? '',
-      massn_jahr: z?.vApApberundmassnsById?.nodes?.[0]?.massnJahr ?? '',
-      massn_anzahl: z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahl ?? '',
-      massn_anzahl_bisher:
-        z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahlBisher ?? '',
-      bericht_erstellt:
-        z?.vApApberundmassnsById?.nodes?.[0]?.berichtErstellt ?? '',
-      created_at: z.createdAt,
-      updated_at: z.updatedAt,
-      changed_by: z.changedBy,
-    }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: rows,
-      fileName: 'ApJahresberichteUndMassnahmen',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickApPopEkPrio = useCallback(async () => {
     const notif = enqueNotification({
@@ -518,9 +463,7 @@ const ApExports = () => {
             <AnzMassn />
             <AnzKontr />
             <Ber />
-            <DownloadCardButton onClick={onClickApBerUndMassn} color="inherit">
-              AP-Berichte und Massnahmen
-            </DownloadCardButton>
+            <BerUndMassn />
             <DownloadCardButton onClick={onClickApPopEkPrio} color="inherit">
               Priorisierung für EK basierend auf Pop-Entwicklung
             </DownloadCardButton>
