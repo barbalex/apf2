@@ -2808,9 +2808,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/base@npm:5.0.0-alpha.60":
-  version: 5.0.0-alpha.60
-  resolution: "@mui/base@npm:5.0.0-alpha.60"
+"@mui/base@npm:5.0.0-alpha.61":
+  version: 5.0.0-alpha.61
+  resolution: "@mui/base@npm:5.0.0-alpha.61"
   dependencies:
     "@babel/runtime": ^7.16.3
     "@emotion/is-prop-valid": ^1.1.1
@@ -2826,13 +2826,13 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 3aa0d5f25fda554ee418a54b9fc34d9744e6350ab3baa114d491935bd5bdeaba33472ac8000fd069affb43b71bc54503dbdb5183443ffdc0b952cd750ee2213b
+  checksum: 98a6b7df59fb7ddd98257bcfc09de15a5ac4d734075ede46f1e1ff54db39b45071aaf292b3dcb45cb8a16cf5576e25a0b16d3b49af7fd554eea0d867ebb09db3
   languageName: node
   linkType: hard
 
-"@mui/icons-material@npm:5.2.4":
-  version: 5.2.4
-  resolution: "@mui/icons-material@npm:5.2.4"
+"@mui/icons-material@npm:5.2.5":
+  version: 5.2.5
+  resolution: "@mui/icons-material@npm:5.2.5"
   dependencies:
     "@babel/runtime": ^7.16.3
   peerDependencies:
@@ -2842,17 +2842,17 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: d2081cf0923183acf9467c060452bcdbef50668be1a0d93b743680be5bae5914ea5aeeb319d214864b4ee5e7c28f775799ba9dcaa01c91ee66aed4543aba1542
+  checksum: 34fc7d9795f19456e0df47712951651969fe44603884da9b08a5bd8dc2bbaba329a34aa80b0cdbb86bbb0e10907f269b91a197d8ed11481eac4907482205dbcd
   languageName: node
   linkType: hard
 
-"@mui/material@npm:5.2.4":
-  version: 5.2.4
-  resolution: "@mui/material@npm:5.2.4"
+"@mui/material@npm:5.2.5":
+  version: 5.2.5
+  resolution: "@mui/material@npm:5.2.5"
   dependencies:
     "@babel/runtime": ^7.16.3
-    "@mui/base": 5.0.0-alpha.60
-    "@mui/system": ^5.2.4
+    "@mui/base": 5.0.0-alpha.61
+    "@mui/system": ^5.2.5
     "@mui/types": ^7.1.0
     "@mui/utils": ^5.2.3
     "@types/react-transition-group": ^4.4.4
@@ -2875,7 +2875,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 09f4c731de02c628271d355e8801e53f363566d6ba61f3e226417e575f8704daf783d3494088cb81ba013696ec7d829318989ef999058b5c1e033b075a9036df
+  checksum: 90a1418f131d8608c6035ae11a49609ac52845c887bd0d89ea91cf4360619bd0298ff19d11d02959e83ecb5f46427fa888c41ec794ba49154dbac058f505497a
   languageName: node
   linkType: hard
 
@@ -2942,13 +2942,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/system@npm:^5.2.4":
-  version: 5.2.4
-  resolution: "@mui/system@npm:5.2.4"
+"@mui/system@npm:^5.2.5":
+  version: 5.2.5
+  resolution: "@mui/system@npm:5.2.5"
   dependencies:
     "@babel/runtime": ^7.16.3
     "@mui/private-theming": ^5.2.3
-    "@mui/styled-engine": ^5.2.4
+    "@mui/styled-engine": ^5.2.5
     "@mui/types": ^7.1.0
     "@mui/utils": ^5.2.3
     clsx: ^1.1.1
@@ -2966,7 +2966,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: ba67104caf30b4b9afa9e7c4d1b2e64b9a45e92c1167d6138200ad10afe5c99ba45be06add53118ae9d5102851ad4404c12b26f66ab8f4fe8381aa70292bbd0e
+  checksum: 95002007f816da47d3349627a2efced5146319af96c75463ea7ca762c1bb3057f15cf6ae69506c6baf3f5f1bfa19f4a72d3819fcccc99a153064e04a04013153
   languageName: node
   linkType: hard
 
@@ -4681,8 +4681,8 @@ __metadata:
     "@fontsource/roboto-mono": 4.5.0
     "@graphile-contrib/pg-order-by-related": 1.0.0-beta.6
     "@graphile/postgis": 0.1.0
-    "@mui/icons-material": 5.2.4
-    "@mui/material": 5.2.4
+    "@mui/icons-material": 5.2.5
+    "@mui/material": 5.2.5
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
     "@mui/styled-engine-sc": 5.1.0
     "@mui/styles": 5.2.3
@@ -4697,14 +4697,14 @@ __metadata:
     autosuggest-highlight: 3.2.0
     babel-plugin-styled-components: 2.0.2
     blueimp-md5: 2.19.0
-    browser-update: 3.3.33
+    browser-update: 3.3.35
     copyfiles: 2.4.1
-    cypress: 9.1.1
+    cypress: 9.2.0
     date-fns: 2.27.0
     dexie: 3.2.0
     eslint: 8.5.0
     eslint-plugin-import: 2.25.3
-    eslint-plugin-react: 7.27.1
+    eslint-plugin-react: 7.28.0
     eslint-plugin-react-hooks: 4.3.0
     eslint-webpack-plugin: 3.1.1
     exceljs: 4.3.0
@@ -4753,21 +4753,21 @@ __metadata:
     lodash: 4.17.21
     luxon: 2.2.0
     markdown-it: 12.3.0
-    mobx: 6.3.9
+    mobx: 6.3.10
     mobx-react-lite: 3.2.2
     mobx-state-tree: 5.1.0
     mst-persist: 0.1.3
     notistack: 2.0.3
     pg: 8.7.1
     pg-sql2: 4.12.1
-    postgraphile: 4.12.6
+    postgraphile: 4.12.8
     postgraphile-plugin-connection-filter: 2.2.2
     postgraphile-plugin-connection-filter-postgis: 1.0.0-alpha.6
     prettier: 2.5.1
     prismjs: 1.25.0
     proj4: 2.7.5
     proj4leaflet: 1.0.2
-    prop-types: 15.7.2
+    prop-types: 15.8.0
     query-string: 7.0.1
     react: 17.0.2
     react-copy-to-clipboard: 5.0.4
@@ -4787,7 +4787,7 @@ __metadata:
     react-leaflet-markercluster: 3.0.0-rc1
     react-linkify: 1.0.0-alpha
     react-markdown-editor-lite: 1.3.2
-    react-resize-detector: 6.7.6
+    react-resize-detector: 6.7.7
     react-select: 5.2.1
     react-sortable-hoc: 2.0.0
     react-split-pane: 0.1.92
@@ -4801,7 +4801,7 @@ __metadata:
     source-map-explorer: 2.5.2
     styled-components: 5.3.3
     typography: 0.16.21
-    uploadcare-widget: 3.15.0
+    uploadcare-widget: 3.16.0
     use-debounce: 7.0.1
     vercel: 23.1.2
   languageName: unknown
@@ -5664,10 +5664,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browser-update@npm:3.3.33":
-  version: 3.3.33
-  resolution: "browser-update@npm:3.3.33"
-  checksum: d99f925d05343bec78c52d6b2ff01ff4a5b8942a84858680b67d56c29eab4e1cdcb1f589e7de28ad708ed6153fbe32967f076edda63bd2b5ca5116c65a167eb6
+"browser-update@npm:3.3.35":
+  version: 3.3.35
+  resolution: "browser-update@npm:3.3.35"
+  checksum: 0c82cfbc4308591424b6bc925d79e53bc3f06c240d071828232d9b4f27dd6c684148bbbe267bc5e88e896e68eb4d2541dde262b9e0461201ffa16ebfa8273953
   languageName: node
   linkType: hard
 
@@ -7176,9 +7176,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:9.1.1":
-  version: 9.1.1
-  resolution: "cypress@npm:9.1.1"
+"cypress@npm:9.2.0":
+  version: 9.2.0
+  resolution: "cypress@npm:9.2.0"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -7223,7 +7223,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: fe8619a7f012b20dd1239275de019a78393bbbec39d21a3a9a1f44add27596f689db36d4f753db4b517838337cd4610d35cc2d7c45f22b93abfb67c16bb55f66
+  checksum: 1378c4d0822c52505cdd71b3bd567c0399bac054a1f99f5e8d9adfb3f6991a0dcbb58de7662b7dbfd2b302bb94dc924c22047152ea8777661fa9b8819308d69f
   languageName: node
   linkType: hard
 
@@ -8342,7 +8342,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.27.1, eslint-plugin-react@npm:^7.27.1":
+"eslint-plugin-react@npm:7.28.0":
+  version: 7.28.0
+  resolution: "eslint-plugin-react@npm:7.28.0"
+  dependencies:
+    array-includes: ^3.1.4
+    array.prototype.flatmap: ^1.2.5
+    doctrine: ^2.1.0
+    estraverse: ^5.3.0
+    jsx-ast-utils: ^2.4.1 || ^3.0.0
+    minimatch: ^3.0.4
+    object.entries: ^1.1.5
+    object.fromentries: ^2.0.5
+    object.hasown: ^1.1.0
+    object.values: ^1.1.5
+    prop-types: ^15.7.2
+    resolve: ^2.0.0-next.3
+    semver: ^6.3.0
+    string.prototype.matchall: ^4.0.6
+  peerDependencies:
+    eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
+  checksum: 90293d0fd53bb1f735ffd32141cdd211fb1120c9f7bbe5342f9e923261a39e52a2b2575d4e46c9cd77d257f42db4a99b8b339689fc5b5c1c26048929f69b1784
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-react@npm:^7.27.1":
   version: 7.27.1
   resolution: "eslint-plugin-react@npm:7.27.1"
   dependencies:
@@ -10792,7 +10816,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-ws@npm:^5.1.2":
+"graphql-ws@npm:^5.5.5":
   version: 5.5.5
   resolution: "graphql-ws@npm:5.5.5"
   peerDependencies:
@@ -14302,10 +14326,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mobx@npm:6.3.9":
-  version: 6.3.9
-  resolution: "mobx@npm:6.3.9"
-  checksum: a77afbadf128b7c7f8ec207c3fa340c8bbc1c973bbdc434ff1e1ee53b15390fcad2966c9fdf5bfb169a95ef7d9c28fe98e1ba2e1bad83046047a7fb0b4624208
+"mobx@npm:6.3.10":
+  version: 6.3.10
+  resolution: "mobx@npm:6.3.10"
+  checksum: d632c656f740ce67eef00c4c73be15acfc8fc057ab08492cba58ef904d617a1df465e059edaf4b2c02659c8d286be88a57eef4544b879ed6092faabf08b7e4ac
   languageName: node
   linkType: hard
 
@@ -16124,9 +16148,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postgraphile@npm:4.12.6":
-  version: 4.12.6
-  resolution: "postgraphile@npm:4.12.6"
+"postgraphile@npm:4.12.8":
+  version: 4.12.8
+  resolution: "postgraphile@npm:4.12.8"
   dependencies:
     "@graphile/lru": 4.11.0
     "@types/json5": ^0.0.30
@@ -16142,7 +16166,7 @@ __metadata:
     graphile-build-pg: 4.12.2
     graphile-utils: ^4.12.2
     graphql: ^0.6.0 || ^0.7.0 || ^0.8.0-b || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.2 || ^15.0.0
-    graphql-ws: ^5.1.2
+    graphql-ws: ^5.5.5
     http-errors: ^1.5.1
     iterall: ^1.0.2
     json5: ^2.1.1
@@ -16157,7 +16181,7 @@ __metadata:
     ws: ^7.4.2
   bin:
     postgraphile: cli.js
-  checksum: 25c2087970df8ebca5fd9a2aaa0829cf1955ac9a3281ae3fb0aabbc4f9fb3be25311380ca22d99f3c33fbb3700712d5396458bc50535f1b8077c52633ac562fa
+  checksum: 156c9a70c1b8271633e2d8bb70095a7db7adf71f73caf3e36e60912bf24ad79d9becbe3dad03b7e4b72988cbb5c64b26320669bc72aad3fd8cceb307ed36ad12
   languageName: node
   linkType: hard
 
@@ -16388,7 +16412,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.7.2, prop-types@npm:^15.5.4, prop-types@npm:^15.5.7, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
+"prop-types@npm:15.8.0":
+  version: 15.8.0
+  resolution: "prop-types@npm:15.8.0"
+  dependencies:
+    loose-envify: ^1.4.0
+    object-assign: ^4.1.1
+    react-is: ^16.13.1
+  checksum: d8d51cf55d70cab207dd1e80df2dc093b8288a4519598a28d25d32d6e02319b2fd66712caa979040451656185f7393341185b0b081158520557aa4cbdcaa4b3a
+  languageName: node
+  linkType: hard
+
+"prop-types@npm:^15.5.4, prop-types@npm:^15.5.7, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
   version: 15.7.2
   resolution: "prop-types@npm:15.7.2"
   dependencies:
@@ -16825,7 +16860,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.10.2, react-is@npm:^16.12.0, react-is@npm:^16.7.0, react-is@npm:^16.8.1":
+"react-is@npm:^16.10.2, react-is@npm:^16.12.0, react-is@npm:^16.13.1, react-is@npm:^16.7.0, react-is@npm:^16.8.1":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
@@ -16995,7 +17030,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-resize-detector@npm:6.7.6, react-resize-detector@npm:^6.6.3":
+"react-resize-detector@npm:6.7.7":
+  version: 6.7.7
+  resolution: "react-resize-detector@npm:6.7.7"
+  dependencies:
+    "@types/resize-observer-browser": ^0.1.6
+    lodash.debounce: ^4.0.8
+    lodash.throttle: ^4.1.1
+    resize-observer-polyfill: ^1.5.1
+  peerDependencies:
+    react: ^16.0.0 || ^17.0.0
+    react-dom: ^16.0.0 || ^17.0.0
+  checksum: e9ebacb00f9f57151d2870a05ccffb1688d9f0a3ed8875b705cf3d1af3d852cea5060b6fb3555ecefa5ca7cd0dd5a2c662dd14cb0e83ed269a3ca158d50563a3
+  languageName: node
+  linkType: hard
+
+"react-resize-detector@npm:^6.6.3":
   version: 6.7.6
   resolution: "react-resize-detector@npm:6.7.6"
   dependencies:
@@ -20159,13 +20209,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uploadcare-widget@npm:3.15.0":
-  version: 3.15.0
-  resolution: "uploadcare-widget@npm:3.15.0"
+"uploadcare-widget@npm:3.16.0":
+  version: 3.16.0
+  resolution: "uploadcare-widget@npm:3.16.0"
   dependencies:
     escape-html: ^1.0.3
     jquery: ^3.6.0
-  checksum: c8b86fffd6b03bc7e9e0b6e399cd52d969cc492732c3902a32640173bbabd5aa92212e3313da0480408782a2a9d44d31c25bc156d16dca1a9f1fe9483539dd6c
+  checksum: 77ac33e9d2f314c54a7ab8e92a0fde6ee5091827a745a996fc447c69632ad4a8d10c193fcc15e2fa5ee6c8cb04017f468bd4119f0ff08641b5f4a74b5a565da5
   languageName: node
   linkType: hard
 
