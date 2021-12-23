@@ -26,6 +26,7 @@ import BerUndMassn from './BerUndMassn'
 import PriorisierungFuerEk from './PriorisierungFuerEk'
 import EkPlanung from './EkPlanung'
 import Ziele from './Ziele'
+import Zielber from './Zielber'
 
 const ApExports = () => {
   const client = useApolloClient()
@@ -36,65 +37,6 @@ const ApExports = () => {
   const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-
-  const onClickZielber = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "Zielberichte" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryZielbers').then((m) => m.default),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allZielbers?.nodes ?? []).map((z) => ({
-      ap_id: z?.zielByZielId?.apByApId?.id ?? '',
-      artname: z?.zielByZielId?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
-      ap_bearbeitung:
-        z?.zielByZielId?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
-      ap_start_jahr: z?.zielByZielId?.apByApId?.startJahr ?? '',
-      ap_umsetzung:
-        z?.zielByZielId?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      ap_bearbeiter: z?.zielByZielId?.apByApId?.adresseByBearbeiter?.name ?? '',
-      ziel_id: z?.zielByZielId?.id ?? '',
-      ziel_jahr: z?.zielByZielId?.jahr ?? '',
-      ziel_typ: z?.zielByZielId?.zielTypWerteByTyp?.text ?? '',
-      ziel_bezeichnung: z?.zielByZielId?.bezeichnung ?? '',
-      id: z.id,
-      jahr: z.jahr,
-      erreichung: z.erreichung,
-      bemerkungen: z.bemerkungen,
-      created_at: z.createdAt,
-      updated_at: z.updatedAt,
-      changed_by: z.changed_by,
-    }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: sortBy(rows, ['artname', 'ziel_jahr', 'ziel_typ', 'jahr']),
-      fileName: 'Zielberichte',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickErfkrit = useCallback(async () => {
     const notif = enqueNotification({
@@ -295,9 +237,7 @@ const ApExports = () => {
             <PriorisierungFuerEk />
             <EkPlanung />
             <Ziele />
-            <DownloadCardButton onClick={onClickZielber} color="inherit">
-              Ziel-Berichte
-            </DownloadCardButton>
+            <Zielber />
             <DownloadCardButton onClick={onClickErfkrit} color="inherit">
               Erfolgskriterien
             </DownloadCardButton>
