@@ -27,6 +27,7 @@ import PriorisierungFuerEk from './PriorisierungFuerEk'
 import EkPlanung from './EkPlanung'
 import Ziele from './Ziele'
 import Zielber from './Zielber'
+import Erfkrit from './Erfkrit'
 
 const ApExports = () => {
   const client = useApolloClient()
@@ -37,58 +38,6 @@ const ApExports = () => {
   const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-
-  const onClickErfkrit = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "Erfolgskriterien" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryErfkrits').then((m) => m.default),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allErfkrits?.nodes ?? []).map((z) => ({
-      ap_id: z.apId,
-      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
-      ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
-      ap_start_jahr: z?.apByApId?.startJahr ?? '',
-      ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
-      id: z.id,
-      beurteilung: z?.apErfkritWerteByErfolg?.text ?? '',
-      kriterien: z.kriterien,
-      created_at: z.createdAt,
-      updated_at: z.updatedAt,
-      changed_by: z.changedBy,
-    }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: sortBy(rows, ['artname', 'beurteilung']),
-      fileName: 'Erfolgskriterien',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickIdealbiotop = useCallback(async () => {
     const notif = enqueNotification({
@@ -238,9 +187,7 @@ const ApExports = () => {
             <EkPlanung />
             <Ziele />
             <Zielber />
-            <DownloadCardButton onClick={onClickErfkrit} color="inherit">
-              Erfolgskriterien
-            </DownloadCardButton>
+            <Erfkrit />
             <DownloadCardButton onClick={onClickIdealbiotop} color="inherit">
               Idealbiotope
             </DownloadCardButton>
