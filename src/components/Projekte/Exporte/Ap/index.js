@@ -24,6 +24,7 @@ import AnzKontr from './AnzKontr'
 import Ber from './Ber'
 import BerUndMassn from './BerUndMassn'
 import PriorisierungFuerEk from './PriorisierungFuerEk'
+import EkPlanung from './EkPlanung'
 
 const ApExports = () => {
   const client = useApolloClient()
@@ -34,63 +35,6 @@ const ApExports = () => {
   const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-
-  const onClickEkPlanung = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "EkPlanungProJahrNachAbrechnungstyp" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryEkPlanungNachAbrechnungstyp').then(
-          (m) => m.default,
-        ),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (
-      result.data?.allVEkPlanungNachAbrechnungstyps?.nodes ?? []
-    ).map((z) => ({
-      ap_id: z?.apId,
-      artname: z?.artname ?? '',
-      artverantwortlich: z?.artverantwortlich ?? '',
-      jahr: z.jahr ?? '',
-      a: z?.a ?? 0,
-      b: z?.b ?? 0,
-      d: z?.d ?? 0,
-      ekf: z?.ekf ?? 0,
-    }))
-    console.log('Exporte AP, rows:', {
-      rows,
-      data: result.data?.allVEkPlanungNachAbrechnungstyps?.nodes ?? [],
-      result,
-    })
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: rows,
-      fileName: 'EkPlanungProJahrNachAbrechnungstyp',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickZiele = useCallback(async () => {
     const notif = enqueNotification({
@@ -398,9 +342,7 @@ const ApExports = () => {
             <Ber />
             <BerUndMassn />
             <PriorisierungFuerEk />
-            <DownloadCardButton onClick={onClickEkPlanung} color="inherit">
-              EK-Planung pro Jahr nach Abrechnungstyp
-            </DownloadCardButton>
+            <EkPlanung />
             <DownloadCardButton onClick={onClickZiele} color="inherit">
               Ziele
             </DownloadCardButton>
