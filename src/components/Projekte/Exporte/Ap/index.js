@@ -2,7 +2,6 @@ import React, { useContext, useState, useCallback } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import { useSnackbar } from 'notistack'
@@ -28,6 +27,7 @@ import EkPlanung from './EkPlanung'
 import Ziele from './Ziele'
 import Zielber from './Zielber'
 import Erfkrit from './Erfkrit'
+import Idealbiotop from './Idealbiotop'
 
 const ApExports = () => {
   const client = useApolloClient()
@@ -38,74 +38,6 @@ const ApExports = () => {
   const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-
-  const onClickIdealbiotop = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "Idealbiotope" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    let result
-    try {
-      result = await client.query({
-        query: await import('./queryIdealbiotops').then((m) => m.default),
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    const rows = (result.data?.allIdealbiotops?.nodes ?? []).map((z) => ({
-      ap_id: z.apId,
-      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
-      ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
-      ap_start_jahr: z?.apByApId?.startJahr ?? '',
-      ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
-      id: z.id,
-      erstelldatum: z.erstelldatum,
-      hoehenlage: z.hoehenlage,
-      region: z.region,
-      exposition: z.exposition,
-      besonnung: z.besonnung,
-      hangneigung: z.hangneigung,
-      boden_typ: z.bodenTyp,
-      boden_kalkgehalt: z.bodenKalkgehalt,
-      boden_durchlaessigkeit: z.bodenDurchlaessigkeit,
-      boden_humus: z.bodenHumus,
-      boden_naehrstoffgehalt: z.bodenNaehrstoffgehalt,
-      wasserhaushalt: z.wasserhaushalt,
-      konkurrenz: z.konkurrenz,
-      moosschicht: z.moosschicht,
-      krautschicht: z.krautschicht,
-      strauchschicht: z.strauchschicht,
-      baumschicht: z.baumschicht,
-      bemerkungen: z.bemerkungen,
-      created_at: z.createdAt,
-      updated_at: z.updatedAt,
-      changed_by: z.changedBy,
-    }))
-    removeNotification(notif)
-    closeSnackbar(notif)
-    if (rows.length === 0) {
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: sortBy(rows, 'artname'),
-      fileName: 'Idealbiotope',
-      store,
-    })
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickAssozarten = useCallback(async () => {
     const notif = enqueNotification({
@@ -188,9 +120,7 @@ const ApExports = () => {
             <Ziele />
             <Zielber />
             <Erfkrit />
-            <DownloadCardButton onClick={onClickIdealbiotop} color="inherit">
-              Idealbiotope
-            </DownloadCardButton>
+            <Idealbiotop />
             <DownloadCardButton onClick={onClickAssozarten} color="inherit">
               Assoziierte Arten
             </DownloadCardButton>
