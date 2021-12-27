@@ -142,7 +142,7 @@ const Home = () => (
               <Card>
                 <CardTitle>Populationen</CardTitle>
                 Die Pflanzen einer Art bilden kleine oder grosse Populationen,
-                je nachdem wie günstig die Bedingungen für die Art sind.
+                je nachdem wie günstig die Bedingungen sind.
               </Card>
               <Card>
                 <CardTitle>Ziele</CardTitle>
@@ -166,9 +166,9 @@ const Home = () => (
               </Card>
               <Card>
                 <CardTitle>Kontrollen</CardTitle>
-                Die Artverantwortlichen, aber auch Freiwillige besuchen
-                Populationen, erfassen die Grösse des Bestandes und überprüfen
-                die Wirkung der Massnahmen.
+                Artverantwortliche und Freiwillige besuchen Populationen,
+                erfassen die Grösse des Bestandes und überprüfen die Wirkung der
+                Massnahmen.
               </Card>
               <Card>
                 <CardTitle>Berichte</CardTitle>
