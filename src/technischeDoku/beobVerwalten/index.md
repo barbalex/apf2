@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: '/Dokumentation/Technisch/Beobachtungen-verwalten'
-date: '2021-02-01'
+date: '2021-12-27'
 title: 'Beobachtungen verwalten'
 sort: 3
 ---
@@ -14,13 +14,13 @@ Beobachtungen werden in der Tabelle `beob` gespeichert:<br/>
 Ein Datensatz besteht aus jeweils zwei Teilen:
 
 1. Den unveränderten Originaldaten der Beobachtung, enthalten im JSONB-Feld `data`
-2. Extrahierten bzw. abgeleiteteten Daten, welche für das effiziente Funktionieren von apflora.ch benötigt werden, in den übrigen Feldern
+2. In den übrigen Feldern: Extrahierten bzw. abgeleiteteten Daten, welche für das effiziente Funktionieren von apflora.ch benötigt werden
 
-Zur Extraktion der Originaldaten aus EvAB wird die in EvAB enthaltene Abfrage `vExportZDSF` verwendet. Daten von Info Spezies werden in derjenigen Struktur importiert, wie sie von der FNS aufbereitet wurden.<br/><br/>
+Daten von Info Spezies werden in derjenigen Struktur importiert, wie sie von der FNS aufbereitet wurden.<br/><br/>
 
 Zweck dieser Datenstruktur:
 
-- Die Struktur von Beobachtungsdaten ist im Prinzip unerheblich. Änderungen daran auch nicht. Wichtig ist einzig, dass zum Zeitpunkt des Imports klar ist, wie aus den Beobachtungsdaten die abgeleiteten Felder in Tabelle `beob` generiert werden können
+- Die Struktur von Beobachtungsdaten ist im Prinzip unerheblich. Änderungen daran auch. Wichtig ist einzig, dass zum Zeitpunkt des Imports klar ist, wie aus den Beobachtungsdaten die abgeleiteten Felder in Tabelle `beob` generiert werden können
 - Somit können jederzeit Beobachtungen unabhängig von ihrer Datenstruktur importiert werden
 - Schon vorhandene Beobachtungen können bei erneutem Import mit aktuelleren ersetzt werden (`quelle` und `id_field` vergleichen)
 - Mit Hilfe der abgeleiteten Felder können gebaut werden:
