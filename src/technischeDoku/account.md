@@ -1,12 +1,13 @@
 ---
 typ: 'technDoku'
-path: "/Dokumentation/Technisch/Benutzer-Konti"
-date: "2020-04-29"
-title: "Benutzer-Konti"
+path: '/Dokumentation/Technisch/Benutzer-Konti'
+date: '2020-04-29'
+title: 'Benutzer-Konti'
 sort: 13
 ---
 
 ### Grundsätze
+
 - Die Projektleitung bestimmt, wer Zugriff auf apflora.ch bekommt (= **Benutzer**)
 - Für Benutzer erstellen Topos-Mitarbeiterinnen ein **Konto**. Dabei wird:
   - ein **Benutzer-Name** vergeben (wechseln zu email?)
