@@ -35,6 +35,6 @@ Leider war sie auch komplex, schwierig zu unterhalten und risikoreich weiter zu 
 
 Web-Technologien entwickelten sich rasant weiter. Ebenso, wie die Bedürfnisse an apflora.ch. 2017 wurde apflora daher von Grund auf neu aufgebaut :rocket:. Hauptziel war es, mit Hilfe einer modernen Architektur (React, GraphQL, MobX) sowie einer flexibleren Datenbank (PostgreSQL, u.a. mit JSON) die Komplexität der Anwendung stark zu reduzieren. Und die Basis zu legen, dass sie auch künftig bedürfnissgerecht weiterentwickelt werden kann.<br/><br/>
 
-Diese Ziele wurden erreicht :sparkles:. Leider hat die neue App zunächst leistungsmässig nicht überzeugt :snail:. Aber das ist mittlerweile überwunden :stuck_out_tongue_winking_eye:.<br/><br/>
+Diese Ziele wurden erreicht :sparkles:.<br/><br/>
 
 Heute wird apflora regelmässig modernisiert. [Hier](/Dokumentation/Technisch/Technologien) finden Sie Informationen über die aktuell verwendeten Technologien.
