@@ -209,7 +209,7 @@ const Home = () => (
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {'topos Marti & Müller AG'}
+                  {'topos'}
                 </a>
                 &nbsp;im Auftrag der&nbsp;
                 <a
