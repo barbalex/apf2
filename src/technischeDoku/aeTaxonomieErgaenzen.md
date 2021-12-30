@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: '/Dokumentation/Technisch/Art-Taxonomien-ergaenzen'
-date: '2021-10-27'
+date: '2021-12-27'
 title: 'Art-Taxonomien ergänzen'
 sort: 11
 ---
@@ -18,7 +18,7 @@ Arten können in drei Formularen gewählt werden:
 - Aktionsplan-Art
 - assoziierte Art
 
-Sobald die Checklist 2018 in arteigenschaften.ch eingeführt wurde, sollten Arten in der Regel in dieser Taxonomie gewählt werden. Bei den AP-Arten ist es sinnvoll, Synonyme aus allen gängigen Taxonomien aufzulisten.<br/><br/>
+In der Regel sollten Arten aus der Taxonomie "DB-TAXREF (2017)" gewählt werden. Bei den AP-Arten ist es sinnvoll, Synonyme aus allen gängigen Taxonomien aufzulisten.<br/><br/>
 
 Damit bei der Art-Auswahl die Taxonomie berücksichtigt werden kann, wird der Art ein Kürzel für die Taxonomie vorangestellt. Für "SISF Index 2 (2005)" ist das zum Beispiel "Info Flora 2005".<br/><br/>
 
@@ -27,7 +27,5 @@ Damit bei der Art-Auswahl die Taxonomie berücksichtigt werden kann, wird der Ar
 apflora ist auf künftige Indizes vorbereitet. Es muss einzig die Artenliste um den neuen Index ergänzt werden (wie ist [hier](https://github.com/barbalex/apf2/blob/master/sql/apflora/createTables.sql#L2467-L2486) erklärt). Anschliessend können in den Formularen (oder mittels Abfragen) die Arten des neuen Index gewählt werden.<br/><br/>
 
 Die Artliste wird von arteigenschaften.ch importiert und in der Tabelle ["ae_taxonomies"](https://github.com/barbalex/apf2/blob/master/sql/apflora/createTables.sql#L2447-L2465) gespeichert. Leider kann keine foreign table verwendet werden, weil die Beziehungen wichtig für die Referenzierung der Namen sind.<br/><br/>
-
-Nachdem die Checklist 2018 Index in arteigenschaften.ch ergänzt wurde, wurden dessen Daten in der Tabelle "ae_taxonomies" ergänzt, mit dem Kürzel "DB-TAXREF (2017)".<br/><br/>
 
 Mehr Informationen [im entsprechenden Issue](https://github.com/barbalex/apf2/issues/230).
