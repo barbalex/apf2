@@ -11,7 +11,7 @@ BEGIN
   WHERE apflora.ap_history.year = $1;
   --
   -- insert ap_history
-  INSERT INTO apflora.ap_history
+  INSERT INTO apflora.ap_history (year, id, art_id, proj_id, bearbeitung, start_jahr, umsetzung, bearbeiter, ekf_beobachtungszeitpunkt, created_at, updated_at, changed_by)
   SELECT
     $1 AS year,
     id,
@@ -29,7 +29,7 @@ BEGIN
     apflora.ap;
   --
   -- insert pop_history
-  INSERT INTO apflora.pop_history
+  INSERT INTO apflora.pop_history (year, id, ap_id, nr, name, status, status_unklar, status_unklar_begruendung, bekannt_seit, geom_point, created_at, updated_at, changed_by)
   SELECT
     $1 AS year,
     id,
