@@ -56,7 +56,7 @@ letzte_ansiedlung AS (
     apflora.tpopmassn.jahr DESC,
     apflora.tpopmassn.datum DESC
 ),
--- Always ensure that the ekfrequenz-codes are defined as listed below!!!!
+-- always ensure that the ekfrequenz-codes are defined as listed below!!!!
 tpop_plus AS (
   SELECT
     tpop.id AS tpop_id,
@@ -202,11 +202,14 @@ tpop_plus AS (
 ap_with_zielrelevante_zaehleinheit AS (
   SELECT DISTINCT
     ap.id
+    -- , ae.artname
   FROM
     apflora.ap ap
+    -- inner join apflora.ae_taxonomies ae on ap.art_id = ae.id
     -- nur AP's berücksichtigen, bei denen eine EK-Zähleinheit als zielrelevant definiert wurde
     INNER JOIN apflora.ekzaehleinheit ekze ON ap.id = ekze.ap_id
       AND ekze.zielrelevant = TRUE
+      -- order by ae.artname
 )
 SELECT
   tax.artname,
