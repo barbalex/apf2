@@ -26,9 +26,9 @@ FROM
   INNER JOIN apflora.pop pop
   INNER JOIN apflora.ap ap
   INNER JOIN apflora.ae_taxonomies tax ON tax.id = ap.art_id
-  -- get this ap's ekfrequenz with 'nie'
+  -- get this ap's ekfrequenz with 'nie (EK)' (not %nie% because would double result rows)
   INNER JOIN apflora.ekfrequenz ekfrequenz_to_set ON ekfrequenz_to_set.ap_id = ap.id
-    AND ekfrequenz_to_set.code LIKE '%nie%' ON ap.id = pop.ap_id ON pop.id = tpop.pop_id
+    AND ekfrequenz_to_set.code = 'nie (EK)' ON ap.id = pop.ap_id ON pop.id = tpop.pop_id
 WHERE
   tpop.status IN (101, 202)
   AND tpophist.status NOT IN (101, 202)
@@ -63,8 +63,7 @@ ORDER BY
 UPDATE
   apflora.tpop tpop
 SET
-  ekfrequenz = (
-    SELECT
+  ekfrequenz = ( SELECT DISTINCT
       ekfrequenz_to_set_id
     FROM
       apflora.v_tpop_ekfrequenz_to_set_nie nie

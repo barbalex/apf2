@@ -292,7 +292,6 @@ ekplans AS (
     id AS tpop_id,
     kontrolljahr + ekfrequenz_startjahr AS jahr,
     ektyp AS typ,
-    '2022-01-10' AS changed,
     'ag' AS changed_by
   FROM
     kontrolljahre
@@ -344,16 +343,14 @@ ekplans AS (
     id AS tpop_id,
     kontrolljahr + ekfrequenz_startjahr AS jahr,
     ektyp AS typ,
-    '2022-01-10' AS changed,
     'ag' AS changed_by
   FROM
     kontrolljahre)
-  INSERT INTO apflora.ekplan (tpop_id, jahr, typ, changed, changed_by)
+  INSERT INTO apflora.ekplan (tpop_id, jahr, typ, changed_by)
   SELECT
     tpop_id,
     jahr,
     typ::ek_type,
-    changed::date,
     changed_by
   FROM
     ekplans;
