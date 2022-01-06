@@ -56,6 +56,7 @@ letzte_ansiedlung AS (
     apflora.tpopmassn.jahr DESC,
     apflora.tpopmassn.datum DESC
 ),
+-- Always ensure that the ekfrequenz-codes are defined as listed below!!!!
 tpop_plus AS (
   SELECT
     tpop.id AS tpop_id,
