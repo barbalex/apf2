@@ -63,7 +63,8 @@ ORDER BY
 UPDATE
   apflora.tpop tpop
 SET
-  ekfrequenz = ( SELECT DISTINCT
+  ekfrequenz = (
+    SELECT
       ekfrequenz_to_set_id
     FROM
       apflora.v_tpop_ekfrequenz_to_set_nie nie
