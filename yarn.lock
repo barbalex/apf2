@@ -3367,18 +3367,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@svgr/babel-plugin-transform-svg-component@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "@svgr/babel-plugin-transform-svg-component@npm:6.1.0"
+"@svgr/babel-plugin-transform-svg-component@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "@svgr/babel-plugin-transform-svg-component@npm:6.2.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 929bd49b3e5f91a2756674b3097895bbb4255dac49f06fa39dd2a0e724648ed45cc8d2b239be76ff6a1d41a0fa1782b6a36f0eeb6a912c15fa186e4e57c06b82
+  checksum: 2d4c4ff27c65d26dc4e6fbbdb85ab1fce701473c0616a7f0a55a671f530c4ad3a56e21c627c4b649b592bb9731fc7238f2c39871bc27a8e090dce8b751b1f9d5
   languageName: node
   linkType: hard
 
-"@svgr/babel-preset@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "@svgr/babel-preset@npm:6.1.0"
+"@svgr/babel-preset@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "@svgr/babel-preset@npm:6.2.0"
   dependencies:
     "@svgr/babel-plugin-add-jsx-attribute": ^6.0.0
     "@svgr/babel-plugin-remove-jsx-attribute": ^6.0.0
@@ -3387,21 +3387,21 @@ __metadata:
     "@svgr/babel-plugin-svg-dynamic-title": ^6.0.0
     "@svgr/babel-plugin-svg-em-dimensions": ^6.0.0
     "@svgr/babel-plugin-transform-react-native-svg": ^6.0.0
-    "@svgr/babel-plugin-transform-svg-component": ^6.1.0
+    "@svgr/babel-plugin-transform-svg-component": ^6.2.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: df8125fc4e8ae5c4137092fcd58c70c4fa888227062e557867f08b8ce7ae4ffabbfa698bb418b56e15118f3b254b08788cdbcc3829383e65ad2eac172e1207d2
+  checksum: 9a5ce414815df2c5f05add8a322ce42182563198a8d379850834d801fda3319eed5a3f7f1174c5163626dd9f8f4af36cad7049b0603c8de21e1bc859b931bcea
   languageName: node
   linkType: hard
 
-"@svgr/cli@npm:6.1.2":
-  version: 6.1.2
-  resolution: "@svgr/cli@npm:6.1.2"
+"@svgr/cli@npm:6.2.0":
+  version: 6.2.0
+  resolution: "@svgr/cli@npm:6.2.0"
   dependencies:
-    "@svgr/core": ^6.1.2
-    "@svgr/plugin-jsx": ^6.1.2
+    "@svgr/core": ^6.2.0
+    "@svgr/plugin-jsx": ^6.2.0
     "@svgr/plugin-prettier": ^6.1.2
-    "@svgr/plugin-svgo": ^6.1.2
+    "@svgr/plugin-svgo": ^6.2.0
     camelcase: ^6.2.0
     chalk: ^4.1.2
     commander: ^8.2.0
@@ -3409,18 +3409,18 @@ __metadata:
     glob: ^7.1.7
   bin:
     svgr: bin/svgr
-  checksum: 2e1ff5a0484bd1608fe74dc74e76c8869a64a2aa117b58c609b4fee7b487461b42c29b452957495b6c217e57725b1495ac683266977c59a1717db25502891ff3
+  checksum: c0c2180771a19e299639ffd6707f4d763ce3714e931703d28596ed2371ebc9e52cbbb0b1a911903a38fad82b6ce585d59bb23d6cc360e853e101f6227e886d4a
   languageName: node
   linkType: hard
 
-"@svgr/core@npm:^6.1.2":
-  version: 6.1.2
-  resolution: "@svgr/core@npm:6.1.2"
+"@svgr/core@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "@svgr/core@npm:6.2.0"
   dependencies:
-    "@svgr/plugin-jsx": ^6.1.2
+    "@svgr/plugin-jsx": ^6.2.0
     camelcase: ^6.2.0
     cosmiconfig: ^7.0.1
-  checksum: 8169eb05c58b8c4b9bdc2937c3d4e238e3b35457ae1ea43db09b4e1bcf4c22a6f09c7de6f7a46df5a927726753a7cbf2b6ac64ffe8c0f21b8816cc9f97cd4f52
+  checksum: 02c7ed5a5ebf1fad03b8e2c844dbb10077e2a6c2f53cebd751397784c6725ae37e426e51c4d47f51fc7eeb9c9bf1ae469b7b60ddf3081709870ed91dfd4df6f1
   languageName: node
   linkType: hard
 
@@ -3434,17 +3434,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@svgr/plugin-jsx@npm:^6.1.2":
-  version: 6.1.2
-  resolution: "@svgr/plugin-jsx@npm:6.1.2"
+"@svgr/plugin-jsx@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "@svgr/plugin-jsx@npm:6.2.0"
   dependencies:
     "@babel/core": ^7.15.5
-    "@svgr/babel-preset": ^6.1.0
+    "@svgr/babel-preset": ^6.2.0
     "@svgr/hast-util-to-babel-ast": ^6.0.0
     svg-parser: ^2.0.2
   peerDependencies:
     "@svgr/core": ^6.0.0
-  checksum: a02c2c5f6d72bd8526b41b213757e742218651e290835bc33e27e9057857fd6258149206cb64075c8a005e49dee5a721d4f1fb97f71569df20b76f971d98e44f
+  checksum: 7f0482603a18d0cda57d66a0449e332394aac9b5b6a852db182943bc5c3a5388f90a1c4b47f4d2c6147ebc6c9f51bebc29bcc2152a2feac87d7ec969baf8164e
   languageName: node
   linkType: hard
 
@@ -3460,16 +3460,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@svgr/plugin-svgo@npm:^6.1.2":
-  version: 6.1.2
-  resolution: "@svgr/plugin-svgo@npm:6.1.2"
+"@svgr/plugin-svgo@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "@svgr/plugin-svgo@npm:6.2.0"
   dependencies:
     cosmiconfig: ^7.0.1
     deepmerge: ^4.2.2
     svgo: ^2.5.0
   peerDependencies:
     "@svgr/core": ^6.0.0
-  checksum: b8c83d8f787dddf82dffa2654401acc336de02edda6334a125fdb5d60b23b85d551a82a701aadcf090c2fd7dd3f2cf78cf4a7deaa5f3edc35cce7f147cd7279c
+  checksum: 74d3aedd0fcaafbfe4985924b4d40e63536a686988eff52a3411cf83851ce2afc1f5e84e203dae18ab896db48c0b824dcfb8c5dd5b071b4ea90d00fc08951254
   languageName: node
   linkType: hard
 
@@ -4831,7 +4831,7 @@ __metadata:
     "@mui/styles": 5.2.3
     "@reach/router": 1.3.4
     "@react-leaflet/core": 1.1.1
-    "@svgr/cli": 6.1.2
+    "@svgr/cli": 6.2.0
     "@turf/bbox-polygon": 6.5.0
     "@turf/boolean-point-in-polygon": 6.5.0
     "@turf/helpers": 6.5.0
@@ -4895,7 +4895,7 @@ __metadata:
     localforage: 1.10.0
     lodash: 4.17.21
     luxon: 2.3.0
-    markdown-it: 12.3.0
+    markdown-it: 12.3.2
     mobx: 6.3.12
     mobx-react-lite: 3.2.3
     mobx-state-tree: 5.1.0
@@ -4914,7 +4914,7 @@ __metadata:
     query-string: 7.1.0
     react: 17.0.2
     react-copy-to-clipboard: 5.0.4
-    react-datepicker: 4.5.0
+    react-datepicker: 4.6.0
     react-dom: 17.0.2
     react-error-boundary: 3.1.4
     react-focus-within: 2.0.2
@@ -4923,7 +4923,7 @@ __metadata:
     react-icons: 4.3.1
     react-image-lightbox: 5.1.4
     react-is: 17.0.2
-    react-leaflet: 3.2.2
+    react-leaflet: 3.2.4
     react-leaflet-bing-v2: 5.2.3
     react-leaflet-control: 2.1.2
     react-leaflet-fullscreen-plugin: 1.0.1
@@ -13806,9 +13806,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it@npm:12.3.0":
-  version: 12.3.0
-  resolution: "markdown-it@npm:12.3.0"
+"markdown-it@npm:12.3.2":
+  version: 12.3.2
+  resolution: "markdown-it@npm:12.3.2"
   dependencies:
     argparse: ^2.0.1
     entities: ~2.1.0
@@ -13817,7 +13817,7 @@ __metadata:
     uc.micro: ^1.0.5
   bin:
     markdown-it: bin/markdown-it.js
-  checksum: 27af2c2d0ee564ca2bb417514414a4d202a5caa966361fb88525f8a53740a734389f1d59b7d53ac66574b659628d03914b43eda6d58b7eb5ce9c41a758c84fb1
+  checksum: 890555711c1c00fa03b936ca2b213001a3b9b37dea140d8445ae4130ce16628392aad24b12e2a0a9935336ca5951f2957a38f4e5309a2e38eab44e25ff32a41e
   languageName: node
   linkType: hard
 
@@ -16892,9 +16892,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:4.5.0":
-  version: 4.5.0
-  resolution: "react-datepicker@npm:4.5.0"
+"react-datepicker@npm:4.6.0":
+  version: 4.6.0
+  resolution: "react-datepicker@npm:4.6.0"
   dependencies:
     "@popperjs/core": ^2.9.2
     classnames: ^2.2.6
@@ -16905,7 +16905,7 @@ __metadata:
   peerDependencies:
     react: ^16.9.0 || ^17
     react-dom: ^16.9.0 || ^17
-  checksum: a1e810707911f48a0c95bacf99d5d012606f1d31fd728ece933d5784ad09d88b4e71e87a91761cc935537f18b8667d0d4365935581e7439ca2746a65441925d2
+  checksum: 30c9f04d4223326572ed9399b39834e1e7e3fcda52e4433adc5dc81e84d8d5cf9699bf728889a80098aea76637a7ff759f0a79ec053ccd61b707de0662612adf
   languageName: node
   linkType: hard
 
@@ -17128,7 +17128,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-leaflet@npm:3.2.2, react-leaflet@npm:^3.0.0, react-leaflet@npm:^3.0.5":
+"react-leaflet@npm:3.2.4":
+  version: 3.2.4
+  resolution: "react-leaflet@npm:3.2.4"
+  dependencies:
+    "@react-leaflet/core": ^1.1.1
+  peerDependencies:
+    leaflet: ^1.7.1
+    react: ^17.0.1
+    react-dom: ^17.0.1
+  checksum: d67a899f524fd4b39ad7b41877894d0bb0dffa86476db89609e428fa3820848ffc947eb99b520ce3456138b9be62f0ad57dc7b985b44ac70febb9621c5a28455
+  languageName: node
+  linkType: hard
+
+"react-leaflet@npm:^3.0.0, react-leaflet@npm:^3.0.5":
   version: 3.2.2
   resolution: "react-leaflet@npm:3.2.2"
   dependencies:
