@@ -1,7 +1,7 @@
 {
   "name": "apf2",
   "description": "Aktionspläne für Flora-Projekte",
-  "version": "1.66.28",
+  "version": "1.66.29",
   "repository": {
     "type": "git",
     "url": "git://github.com/barbalex/apf2.git"
@@ -18,12 +18,12 @@
     "svgr": "svgr -d src/icons/ svg/"
   },
   "dependencies": {
-    "@apollo/client": "3.5.6",
+    "@apollo/client": "3.5.7",
     "@babel/core": "7.16.7",
     "@fontsource/roboto": "4.5.1",
     "@fontsource/roboto-mono": "4.5.0",
     "@mui/icons-material": "5.2.5",
-    "@mui/material": "5.2.7",
+    "@mui/material": "5.2.8",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/styled-engine-sc": "5.1.0",
     "@mui/styles": "5.2.3",
@@ -149,7 +149,7 @@
     "@graphile/postgis": "0.1.0",
     "@svgr/cli": "6.2.0",
     "copyfiles": "2.4.1",
-    "cypress": "9.2.0",
+    "cypress": "9.2.1",
     "eslint": "8.6.0",
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-react": "7.28.0",
