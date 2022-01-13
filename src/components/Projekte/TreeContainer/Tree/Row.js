@@ -104,7 +104,7 @@ const TextSpan = styled.span`
     props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow-x: hidden !important;
+  overflow: hidden !important;
   cursor: pointer;
   &:hover {
     color: #f57c00;
