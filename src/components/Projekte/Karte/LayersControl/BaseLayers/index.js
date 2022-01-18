@@ -26,10 +26,15 @@ export const baseLayers = [
   // https://wms.zh.ch/upwms?SERVICE=WMS&Request=GetCapabilities
   { label: 'ZH Übersichtsplan', value: 'ZhUep', cors: true },
   { label: 'Bing Luftbild', value: 'BingAerial' },
-  // https://wms.zh.ch/OrthoZHWMS?SERVICE=WMS&Request=GetCapabilities
+  // https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
   {
     label: 'ZH Orthofoto aktuell (2020)',
     value: 'ZhOrthoAktuellRgb',
+    cors: true,
+  },
+  {
+    label: 'ZH Orthofoto aktuell (2020) infrarot',
+    value: 'ZhOrthoAktuellIr',
     cors: true,
   },
   {
