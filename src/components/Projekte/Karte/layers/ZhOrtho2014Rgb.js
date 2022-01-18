@@ -1,6 +1,8 @@
 import React from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
+// https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
+
 const ZhOrthoLayer = () => (
   <WMSTileLayer
     url="//wms.zh.ch/OrthoZHWMS"

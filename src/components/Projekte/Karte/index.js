@@ -28,6 +28,7 @@ import ZhOrtho2014Ir from './layers/ZhOrtho2014Ir'
 import ZhOrtho2015Rgb from './layers/ZhOrtho2015Rgb'
 import ZhOrtho2018Rgb from './layers/ZhOrtho2018Rgb'
 import ZhOrthoAktuellRgb from './layers/ZhOrthoAktuellRgb'
+import ZhOrthoAktuellIr from './layers/ZhOrthoAktuellIr'
 import ZhOrtho2018Ir from './layers/ZhOrtho2018Ir'
 import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
 import ZhUep from './layers/ZhUep'
@@ -480,6 +481,7 @@ const Karte = ({ treeName }) => {
       ZhUep: () => <ZhUep />,
       BingAerial: () => <BingAerial />,
       ZhOrthoAktuellRgb: () => <ZhOrthoAktuellRgb />,
+      ZhOrthoAktuellIr: () => <ZhOrthoAktuellIr />,
       ZhOrtho2018Rgb: () => <ZhOrtho2018Rgb />,
       ZhOrtho2018Ir: () => <ZhOrtho2018Ir />,
       ZhOrtho2015Rgb: () => <ZhOrtho2015Rgb />,
