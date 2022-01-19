@@ -2186,9 +2186,9 @@ WHERE
       apflora.beob
     WHERE
       tpop_id = apflora.tpop.id
-      -- Baumann-Manuskript enthält viele Beobachtungen ohne Datum
+      -- Baumann-Manuskript enthält viele Beobachtungen ohne Datum (auch andere haben unvollständige)
       -- Müssen ausgeschlossen werden
-      AND apflora.beob.datum <> '0001-01-01 BC'
+      AND date_part('year', apflora.beob.datum) > 0
     GROUP BY
       tpop_id)
 ORDER BY
