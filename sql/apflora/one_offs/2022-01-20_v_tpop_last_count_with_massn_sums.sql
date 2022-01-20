@@ -1,3 +1,105 @@
+SELECT
+  jahr,
+  datum
+FROM
+  apflora.tpopmassn
+WHERE (datum IS NULL
+  AND jahr IS NOT NULL)
+  OR (jahr IS NULL
+    AND datum IS NOT NULL);
+
+-- 612 rows
+--
+SELECT
+  jahr,
+  datum
+FROM
+  apflora.tpopmassn
+WHERE
+  datum IS NULL
+  AND jahr IS NOT NULL;
+
+-- 612 rows
+--
+SELECT
+  jahr,
+  datum
+FROM
+  apflora.tpopmassn
+WHERE
+  jahr IS NULL
+  AND datum IS NOT NULL;
+
+-- 0 rows
+--
+SELECT
+  tax.artname,
+  massn.*
+FROM
+  apflora.tpopmassn massn
+  INNER JOIN apflora.tpop tpop ON tpop.id = massn.tpop_id
+  INNER JOIN apflora.pop pop ON pop.id = tpop.pop_id
+  INNER JOIN apflora.ap ap ON ap.id = pop.ap_id
+  INNER JOIN apflora.ae_taxonomies tax ON tax.id = ap.art_id
+WHERE
+  massn.jahr IS NULL
+  AND massn.datum IS NULL
+  AND tax.artname NOT IN ('Abies alba Mill. (Edel-Tanne, Weiss-Tanne)', 'Abutilon theophrasti Medik.');
+
+-- 3 rows
+--
+SELECT
+  jahr,
+  datum
+FROM
+  apflora.tpopkontr
+WHERE (datum IS NULL
+  AND jahr IS NOT NULL)
+  OR (jahr IS NULL
+    AND datum IS NOT NULL);
+
+-- 1441 rows
+--
+SELECT
+  jahr,
+  datum
+FROM
+  apflora.tpopkontr
+WHERE
+  datum IS NULL
+  AND jahr IS NOT NULL;
+
+-- 1441 rows
+--
+SELECT
+  jahr,
+  datum
+FROM
+  apflora.tpopkontr
+WHERE
+  jahr IS NULL
+  AND datum IS NOT NULL;
+
+-- 0 rows
+--
+SELECT
+  tax.artname,
+  kontr.*
+FROM
+  apflora.tpopkontr kontr
+  INNER JOIN apflora.tpop tpop ON tpop.id = kontr.tpop_id
+  INNER JOIN apflora.pop pop ON pop.id = tpop.pop_id
+  INNER JOIN apflora.ap ap ON ap.id = pop.ap_id
+  INNER JOIN apflora.ae_taxonomies tax ON tax.id = ap.art_id
+WHERE
+  kontr.jahr IS NULL
+  AND kontr.datum IS NULL
+  AND tax.artname NOT IN ('Abies alba Mill. (Edel-Tanne, Weiss-Tanne)', 'Abutilon theophrasti Medik.')
+ORDER BY
+  tax.artname;
+
+-- 4 rows
+--
 DROP VIEW IF EXISTS apflora.v_tpop_last_count_with_massn CASCADE;
 
 CREATE OR REPLACE VIEW apflora.v_tpop_last_count_with_massn AS
@@ -17,7 +119,7 @@ FROM
   crosstab ($$
     SELECT
       tpop_id, jahr, zaehleinheit, anzahl FROM ( WITH letzte_kontrollen AS ( SELECT DISTINCT ON (tpop5.id, apflora.tpopkontrzaehl_einheit_werte.text)
-  tpop5.id AS tpop_id, kontr5.jahr, apflora.tpopkontrzaehl_einheit_werte.text AS zaehleinheit, zaehl5.anzahl FROM apflora.tpopkontrzaehl zaehl5
+  tpop5.id AS tpop_id, kontr5.jahr, kontr5.datum, apflora.tpopkontrzaehl_einheit_werte.text AS zaehleinheit, zaehl5.anzahl FROM apflora.tpopkontrzaehl zaehl5
   INNER JOIN apflora.tpopkontrzaehl_einheit_werte ON apflora.tpopkontrzaehl_einheit_werte.code = zaehl5.einheit
   INNER JOIN apflora.tpopkontr kontr5
   INNER JOIN apflora.tpop tpop5 ON tpop5.id = kontr5.tpop_id ON zaehl5.tpopkontr_id = kontr5.id
@@ -48,42 +150,57 @@ FROM
         -- nur die jüngste
         kontr6.jahr DESC, kontr6.datum DESC LIMIT 1)
 ORDER BY tpop5.id, apflora.tpopkontrzaehl_einheit_werte.text, kontr5.jahr DESC, kontr5.datum DESC
-), massn_triebe AS ( SELECT DISTINCT ON (tpop2.id)
-    tpop2.id AS tpop_id, massn2.jahr, 'Triebe total' AS zaehleinheit, massn2.anz_triebe AS anzahl FROM apflora.tpopmassn massn2
-    INNER JOIN apflora.tpop tpop2
-    LEFT JOIN letzte_kontrollen letzte_kontrolle ON letzte_kontrolle.tpop_id = tpop2.id ON tpop2.id = massn2.tpop_id
+), massn_triebe AS ( SELECT DISTINCT ON (tpop.id)
+    tpop.id AS tpop_id, massn.jahr, 'Triebe total' AS zaehleinheit, massn.anz_triebe AS anzahl FROM apflora.tpopmassn massn
+    INNER JOIN apflora.tpop tpop
+    LEFT JOIN letzte_kontrollen letzte_kontrolle ON letzte_kontrolle.tpop_id = tpop.id ON tpop.id = massn.tpop_id
   WHERE
-    tpop2.apber_relevant IS TRUE
-    AND massn2.jahr IS NOT NULL
-    AND tpop2.status IN (200, 201)
-    AND massn2.anz_triebe IS NOT NULL
-    AND (massn2.jahr > letzte_kontrolle.jahr
-      OR letzte_kontrolle.tpop_id IS NULL)
-  ORDER BY tpop2.id, massn2.jahr DESC, massn2.datum DESC
-), massn_pflanzen AS ( SELECT DISTINCT ON (tpop3.id)
-    tpop3.id AS tpop_id, massn3.jahr, 'Pflanzen total' AS zaehleinheit, massn3.anz_pflanzen AS anzahl FROM apflora.tpopmassn massn3
-    INNER JOIN apflora.tpop tpop3
-    LEFT JOIN letzte_kontrollen letzte_kontrolle ON letzte_kontrolle.tpop_id = tpop3.id ON tpop3.id = massn3.tpop_id
+    tpop.apber_relevant IS TRUE
+    AND massn.jahr IS NOT NULL
+    -- nur Ansiedlungen
+    AND tpop.status IN (200, 201)
+    -- bei denen anz_triebe gezählt wurde
+    AND massn.anz_triebe IS NOT NULL
+    AND (((massn.datum IS NOT NULL
+      AND letzte_kontrolle.datum IS NOT NULL
+      AND massn.datum > letzte_kontrolle.datum)
+    OR massn.jahr > letzte_kontrolle.jahr)
+  OR letzte_kontrolle.tpop_id IS NULL)
+ORDER BY tpop.id, massn.jahr DESC, massn.datum DESC
+), massn_pflanzen AS ( SELECT DISTINCT ON (tpop.id)
+    tpop.id AS tpop_id, massn.jahr, 'Pflanzen total' AS zaehleinheit, massn.anz_pflanzen AS anzahl FROM apflora.tpopmassn massn
+    INNER JOIN apflora.tpop tpop
+    LEFT JOIN letzte_kontrollen letzte_kontrolle ON letzte_kontrolle.tpop_id = tpop.id ON tpop.id = massn.tpop_id
   WHERE
-    tpop3.apber_relevant IS TRUE
-    AND massn3.jahr IS NOT NULL
-    AND tpop3.status IN (200, 201)
-  AND massn3.anz_pflanzen IS NOT NULL
-  AND (massn3.jahr > letzte_kontrolle.jahr
-    OR letzte_kontrolle.tpop_id IS NULL)
-ORDER BY tpop3.id, massn3.jahr DESC, massn3.datum DESC
-), massn_pflanzstellen AS ( SELECT DISTINCT ON (tpop4.id)
-    tpop4.id AS tpop_id, massn4.jahr, 'Pflanzstellen' AS zaehleinheit, massn4.anz_pflanzstellen AS anzahl FROM apflora.tpopmassn massn4
-    INNER JOIN apflora.tpop tpop4
-    LEFT JOIN letzte_kontrollen letzte_kontrolle ON letzte_kontrolle.tpop_id = tpop4.id ON tpop4.id = massn4.tpop_id
+    tpop.apber_relevant IS TRUE
+    AND massn.jahr IS NOT NULL
+    -- nur Ansiedlungen
+    AND tpop.status IN (200, 201)
+  -- bei denen anz_pflanzen gezählt wurde
+  AND massn.anz_pflanzen IS NOT NULL
+  AND (((massn.datum IS NOT NULL
+    AND letzte_kontrolle.datum IS NOT NULL
+    AND massn.datum > letzte_kontrolle.datum)
+  OR massn.jahr > letzte_kontrolle.jahr)
+  OR letzte_kontrolle.tpop_id IS NULL)
+ORDER BY tpop.id, massn.jahr DESC, massn.datum DESC
+), massn_pflanzstellen AS ( SELECT DISTINCT ON (tpop.id)
+    tpop.id AS tpop_id, massn.jahr, 'Pflanzstellen' AS zaehleinheit, massn.anz_pflanzstellen AS anzahl FROM apflora.tpopmassn massn
+    INNER JOIN apflora.tpop tpop
+    LEFT JOIN letzte_kontrollen letzte_kontrolle ON letzte_kontrolle.tpop_id = tpop.id ON tpop.id = massn.tpop_id
   WHERE
-    tpop4.apber_relevant IS TRUE
-    AND massn4.jahr IS NOT NULL
-    AND tpop4.status IN (200, 201)
-    AND massn4.anz_pflanzstellen IS NOT NULL
-    AND (massn4.jahr > letzte_kontrolle.jahr
-      OR letzte_kontrolle.tpop_id IS NULL)
-  ORDER BY tpop4.id, massn4.jahr DESC, massn4.datum DESC
+    tpop.apber_relevant IS TRUE
+    AND massn.jahr IS NOT NULL
+    -- nur Ansiedlungen
+    AND tpop.status IN (200, 201)
+    -- bei denen anz_pflanzstellen gezählt wurde
+    AND massn.anz_pflanzstellen IS NOT NULL
+    AND (((massn.datum IS NOT NULL
+      AND letzte_kontrolle.datum IS NOT NULL
+      AND massn.datum > letzte_kontrolle.datum)
+    OR massn.jahr > letzte_kontrolle.jahr)
+  OR letzte_kontrolle.tpop_id IS NULL)
+ORDER BY tpop.id, massn.jahr DESC, massn.datum DESC
 ), letzte_kontrolle_und_ansiedlungen AS (
   SELECT
     * FROM massn_triebe
@@ -96,7 +213,7 @@ ORDER BY tpop3.id, massn3.jahr DESC, massn3.datum DESC
     -- 3. get all einheits from tpopkontr counts
   UNION ALL
   SELECT
-    * FROM letzte_kontrollen)
+    tpop_id, jahr, zaehleinheit, anzahl FROM letzte_kontrollen)
   -- sum all kontr and anpflanzung
   SELECT
     tpop_id, max(jahr) AS jahr, zaehleinheit, sum(anzahl) AS anzahl FROM letzte_kontrolle_und_ansiedlungen GROUP BY tpop_id, zaehleinheit ORDER BY tpop_id, jahr, zaehleinheit) AS tbl ORDER BY 1, 2, 3 $$, $$
@@ -135,6 +252,9 @@ ORDER BY tpop3.id, massn3.jahr DESC, massn3.datum DESC
     INNER JOIN apflora.pop_status_werte psw ON psw.code = pop.status
     INNER JOIN apflora.ap
     INNER JOIN apflora.ae_taxonomies tax ON ap.art_id = tax.id ON apflora.ap.id = pop.ap_id ON pop.id = tpop.pop_id ON tpop.id = anzahl.tpop_id
+  WHERE
+    -- keine Testarten
+    tax.taxid > 150
   ORDER BY
     tax.artname,
     pop.nr,
