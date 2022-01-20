@@ -86,26 +86,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.16.7":
-  version: 7.16.7
-  resolution: "@babel/core@npm:7.16.7"
+"@babel/core@npm:7.16.10":
+  version: 7.16.10
+  resolution: "@babel/core@npm:7.16.10"
   dependencies:
     "@babel/code-frame": ^7.16.7
-    "@babel/generator": ^7.16.7
+    "@babel/generator": ^7.16.8
     "@babel/helper-compilation-targets": ^7.16.7
     "@babel/helper-module-transforms": ^7.16.7
     "@babel/helpers": ^7.16.7
-    "@babel/parser": ^7.16.7
+    "@babel/parser": ^7.16.10
     "@babel/template": ^7.16.7
-    "@babel/traverse": ^7.16.7
-    "@babel/types": ^7.16.7
+    "@babel/traverse": ^7.16.10
+    "@babel/types": ^7.16.8
     convert-source-map: ^1.7.0
     debug: ^4.1.0
     gensync: ^1.0.0-beta.2
     json5: ^2.1.2
     semver: ^6.3.0
     source-map: ^0.5.0
-  checksum: 3206e077e76db189726c4da19a5296eae11c6c1f5abea7013e74f18708bb91616914717ff8d8ca466cc0ba9d2d2147e9a84c3c357b9ad4cba601da14107838ed
+  checksum: d34c5edf9258e620d0cbea4ed25a2615f5ab86dc7f7c1b96ac19817fb7d57bfae9af72dc244385a724225dbc701cb878d9559158aee9659e2a3c69d03f93f3e1
   languageName: node
   linkType: hard
 
@@ -611,6 +611,15 @@ __metadata:
   bin:
     parser: ./bin/babel-parser.js
   checksum: ce0a8f92f440f2a12bc932f070a7b60c5133bf8a63f461841f9e39af0194f573707959d606c6fad1a2fd496a45148553afd9b74d3b8dd36cdb7861598d1f3e36
+  languageName: node
+  linkType: hard
+
+"@babel/parser@npm:^7.16.10":
+  version: 7.16.10
+  resolution: "@babel/parser@npm:7.16.10"
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: d760606039de8ab8c68e993b7d3ae461754ef51dbf1fbd88d1428bf37d7e13bfb7205105332f0ac0a55d3534c231da527ab7b2db26e7cef6e0f9c8940a3c91a3
   languageName: node
   linkType: hard
 
@@ -1744,6 +1753,24 @@ __metadata:
     debug: ^4.1.0
     globals: ^11.1.0
   checksum: abb14857b1104c73124612954865e28f95a86eb6741f35851369b4f9eabc17e394c9aa6f21fba6ce23813592353090d409772be828717cbe5154a5e981a753c1
+  languageName: node
+  linkType: hard
+
+"@babel/traverse@npm:^7.16.10":
+  version: 7.16.10
+  resolution: "@babel/traverse@npm:7.16.10"
+  dependencies:
+    "@babel/code-frame": ^7.16.7
+    "@babel/generator": ^7.16.8
+    "@babel/helper-environment-visitor": ^7.16.7
+    "@babel/helper-function-name": ^7.16.7
+    "@babel/helper-hoist-variables": ^7.16.7
+    "@babel/helper-split-export-declaration": ^7.16.7
+    "@babel/parser": ^7.16.10
+    "@babel/types": ^7.16.8
+    debug: ^4.1.0
+    globals: ^11.1.0
+  checksum: 58f52314f8a02157cd3004712e703e6b22dff57cee4bc1ab1954c511c6f885fd7763ea68d2d5f006891bc7b77b1f2e9c8c7cb0354f580c8343d5559ed971d087
   languageName: node
   linkType: hard
 
@@ -4073,10 +4100,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sinonjs__fake-timers@npm:^6.0.2":
-  version: 6.0.4
-  resolution: "@types/sinonjs__fake-timers@npm:6.0.4"
-  checksum: 200cb24235409964269465e8a94ad735ec8bab98f3b2405cd6351fa6f6399be268cbbd4e824c9d361d9431ae11070cff4c3b6400b18aff03cb7933985853c0c9
+"@types/sinonjs__fake-timers@npm:8.1.1":
+  version: 8.1.1
+  resolution: "@types/sinonjs__fake-timers@npm:8.1.1"
+  checksum: ca09d54d47091d87020824a73f026300fa06b17cd9f2f9b9387f28b549364b141ef194ee28db762f6588de71d8febcd17f753163cb7ea116b8387c18e80ebd5c
   languageName: node
   linkType: hard
 
@@ -4730,7 +4757,7 @@ __metadata:
   resolution: "apf2@workspace:."
   dependencies:
     "@apollo/client": 3.5.7
-    "@babel/core": 7.16.7
+    "@babel/core": 7.16.10
     "@babel/eslint-parser": 7.16.5
     "@babel/plugin-syntax-flow": 7.16.7
     "@babel/plugin-transform-react-jsx": 7.16.7
@@ -4757,7 +4784,7 @@ __metadata:
     blueimp-md5: 2.19.0
     browser-update: 3.3.37
     copyfiles: 2.4.1
-    cypress: 9.2.1
+    cypress: 9.3.1
     date-fns: 2.28.0
     dexie: 3.2.0
     eslint: 8.7.0
@@ -4767,7 +4794,7 @@ __metadata:
     eslint-webpack-plugin: 3.1.1
     exceljs: 4.3.0
     file-saver: 2.0.5
-    gatsby: 4.5.3
+    gatsby: 4.5.4
     gatsby-cli: 4.5.2
     gatsby-plugin-create-client-paths: 4.5.0
     gatsby-plugin-image: 2.5.2
@@ -5599,7 +5626,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bluebird@npm:3.7.2, bluebird@npm:^3.7.2":
+"bluebird@npm:^3.7.2":
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
   checksum: 869417503c722e7dc54ca46715f70e15f4d9c602a423a02c825570862d12935be59ed9c7ba34a9b31f186c017c23cac6b54e35446f8353059c101da73eac22ef
@@ -5808,7 +5835,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer@npm:^5.2.0, buffer@npm:^5.5.0, buffer@npm:^5.7.0":
+"buffer@npm:^5.2.0, buffer@npm:^5.5.0, buffer@npm:^5.6.0, buffer@npm:^5.7.0":
   version: 5.7.1
   resolution: "buffer@npm:5.7.1"
   dependencies:
@@ -7207,18 +7234,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:9.2.1":
-  version: 9.2.1
-  resolution: "cypress@npm:9.2.1"
+"cypress@npm:9.3.1":
+  version: 9.3.1
+  resolution: "cypress@npm:9.3.1"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
     "@types/node": ^14.14.31
-    "@types/sinonjs__fake-timers": ^6.0.2
+    "@types/sinonjs__fake-timers": 8.1.1
     "@types/sizzle": ^2.3.2
     arch: ^2.2.0
     blob-util: ^2.0.2
-    bluebird: 3.7.2
+    bluebird: ^3.7.2
+    buffer: ^5.6.0
     cachedir: ^2.3.0
     chalk: ^4.1.0
     check-more-types: ^2.24.0
@@ -7254,7 +7282,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 9d8d6ea74f92088d11261b8879154a063a041f77eac54c7a2ab11f16c35aa586e48f411f465049dd17b5f63f9dd9893d4c4c77007b099d51d3887f6fd9ea1c6c
+  checksum: 6992e0f293618d1dec2cbd278fae08c9c3375ce462a1f767f735b06faa9a52ad375d174f2371103e443f3dc1d5cbb2c93d2ca73204d99bbd845db033d9891270
   languageName: node
   linkType: hard
 
@@ -10079,9 +10107,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gatsby@npm:4.5.3":
-  version: 4.5.3
-  resolution: "gatsby@npm:4.5.3"
+"gatsby@npm:4.5.4":
+  version: 4.5.4
+  resolution: "gatsby@npm:4.5.4"
   dependencies:
     "@babel/code-frame": ^7.14.0
     "@babel/core": ^7.15.5
@@ -10237,7 +10265,7 @@ __metadata:
     react-dom: ^16.9.0 || ^17.0.0
   bin:
     gatsby: ./cli.js
-  checksum: a86444b3d033bdf7e3dcbf886d1e4d74efeba48c79edbdf24e3945301635152fb7b6d3a04fba0da7356ac725a44ac3ee6e3ea8ebfdc29d217670fb36c143f6b5
+  checksum: 73b7f221b6c2036d66c68bd2e509502b3c5ffc1529e2bba3c5f1102ce58d5fe33c1fde344dd0fa3753381a719e5950c2b03e54697727cfee61475089779b6bff
   languageName: node
   linkType: hard
 
