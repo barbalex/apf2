@@ -98,7 +98,7 @@ const LetzteZaehlungenInklAnpflanzungen = () => {
         setQueryState(undefined)
       }}
     >
-      Letzte Zählungen inklusive noch nicht kontrollierter Anpflanzungen
+      Aktuellste Zählung inklusive seither erfolgter Anpflanzungen
       {queryState ? (
         <StyledProgressText>{queryState}</StyledProgressText>
       ) : null}
