@@ -225,7 +225,7 @@ const ApberForAp = ({
         )}
         <ContentContainer issubreport={isSubReport}>
           <Header>
-            {`Jahresbericht ${node?.startJahr ?? '(Jahr fehlt)'},
+            {`Jahresbericht ${jahr},
               ${node?.artname ?? ''},
               ${format(new Date(), 'dd.MM.yyyy')}`}
           </Header>
