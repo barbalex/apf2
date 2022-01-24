@@ -86,16 +86,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.16.10":
-  version: 7.16.10
-  resolution: "@babel/core@npm:7.16.10"
+"@babel/core@npm:7.16.12":
+  version: 7.16.12
+  resolution: "@babel/core@npm:7.16.12"
   dependencies:
     "@babel/code-frame": ^7.16.7
     "@babel/generator": ^7.16.8
     "@babel/helper-compilation-targets": ^7.16.7
     "@babel/helper-module-transforms": ^7.16.7
     "@babel/helpers": ^7.16.7
-    "@babel/parser": ^7.16.10
+    "@babel/parser": ^7.16.12
     "@babel/template": ^7.16.7
     "@babel/traverse": ^7.16.10
     "@babel/types": ^7.16.8
@@ -105,7 +105,7 @@ __metadata:
     json5: ^2.1.2
     semver: ^6.3.0
     source-map: ^0.5.0
-  checksum: d34c5edf9258e620d0cbea4ed25a2615f5ab86dc7f7c1b96ac19817fb7d57bfae9af72dc244385a724225dbc701cb878d9559158aee9659e2a3c69d03f93f3e1
+  checksum: 29b56f3cb7c329fc038a2efaccf64ac3025835676b3d90f57f2265b6acd477a970114d09021b38d019ac8f20b2bb1596a9e79ce1f820d6b8cf0e4a802891817c
   languageName: node
   linkType: hard
 
@@ -620,6 +620,15 @@ __metadata:
   bin:
     parser: ./bin/babel-parser.js
   checksum: d760606039de8ab8c68e993b7d3ae461754ef51dbf1fbd88d1428bf37d7e13bfb7205105332f0ac0a55d3534c231da527ab7b2db26e7cef6e0f9c8940a3c91a3
+  languageName: node
+  linkType: hard
+
+"@babel/parser@npm:^7.16.12":
+  version: 7.16.12
+  resolution: "@babel/parser@npm:7.16.12"
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: af287f0f3dfa564958a7dddfeb62e08c0de9ce9bd8447fcde0997da26ec477bf19f37161b9d970e2c7e0d1f77e441258907d3347beddd0d42cae85ed46947703
   languageName: node
   linkType: hard
 
@@ -4757,7 +4766,7 @@ __metadata:
   resolution: "apf2@workspace:."
   dependencies:
     "@apollo/client": 3.5.7
-    "@babel/core": 7.16.10
+    "@babel/core": 7.16.12
     "@babel/eslint-parser": 7.16.5
     "@babel/plugin-syntax-flow": 7.16.7
     "@babel/plugin-transform-react-jsx": 7.16.7
@@ -4794,7 +4803,7 @@ __metadata:
     eslint-webpack-plugin: 3.1.1
     exceljs: 4.3.0
     file-saver: 2.0.5
-    gatsby: 4.5.4
+    gatsby: 4.5.5
     gatsby-cli: 4.5.2
     gatsby-plugin-create-client-paths: 4.5.0
     gatsby-plugin-image: 2.5.2
@@ -4838,7 +4847,7 @@ __metadata:
     lodash: 4.17.21
     luxon: 2.3.0
     markdown-it: 12.3.2
-    mobx: 6.3.12
+    mobx: 6.3.13
     mobx-react-lite: 3.2.3
     mobx-state-tree: 5.1.0
     mst-persist: 0.1.3
@@ -10107,9 +10116,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gatsby@npm:4.5.4":
-  version: 4.5.4
-  resolution: "gatsby@npm:4.5.4"
+"gatsby@npm:4.5.5":
+  version: 4.5.5
+  resolution: "gatsby@npm:4.5.5"
   dependencies:
     "@babel/code-frame": ^7.14.0
     "@babel/core": ^7.15.5
@@ -10265,7 +10274,7 @@ __metadata:
     react-dom: ^16.9.0 || ^17.0.0
   bin:
     gatsby: ./cli.js
-  checksum: 73b7f221b6c2036d66c68bd2e509502b3c5ffc1529e2bba3c5f1102ce58d5fe33c1fde344dd0fa3753381a719e5950c2b03e54697727cfee61475089779b6bff
+  checksum: aff0a3dbe3f3d038ca32a751213b8b75a8dae76eb38cbeeb98aa1c7d4a521e6993e5f18e4a67c7c0f61cdf295a712ca31fd8423916f5197fd20cd8c7d42cd9a1
   languageName: node
   linkType: hard
 
@@ -14239,10 +14248,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mobx@npm:6.3.12":
-  version: 6.3.12
-  resolution: "mobx@npm:6.3.12"
-  checksum: 1f1e414ffa1ed1efa92ff91e470d08e2a602d07dcf316ea12dc48d1077adb291643148badee4a052170260e3b0161842ddeae3cf3fdedd13599fee72cdf85c38
+"mobx@npm:6.3.13":
+  version: 6.3.13
+  resolution: "mobx@npm:6.3.13"
+  checksum: 2ab413a323d127081cfc749771aea5f6f6fc3c0f573dc147144356694c2f804df1a0b19cc0cac0e37d236d47d0c767571fa7a6b448dd1f9cb7e05dcad90506bc
   languageName: node
   linkType: hard
 
