@@ -22,7 +22,7 @@ const BeobachtungenExports = () => {
         mapFilter?.features?.[0]?.geometry && exportApplyMapFilter
           ? await client.query({
               query: gql`
-                query allBeobsArtChanged {
+                query allBeobsArtChangedFilteredByMap {
                   allVBeobArtChangeds {
                     nodes {
                       id
