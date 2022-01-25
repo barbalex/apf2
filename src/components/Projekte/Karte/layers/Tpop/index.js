@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect, useState } from 'react'
+import React, { useContext, useMemo, useEffect } from 'react'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
@@ -9,7 +9,6 @@ import { useMapEvents } from 'react-leaflet'
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
-import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 import { simpleTypes as popType } from '../../../../../store/Tree/DataFilter/pop'
 import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
 import updateTpopById from './updateTpopById'
@@ -31,12 +30,11 @@ const iconCreateFunction = (cluster) => {
   })
 }
 
-const Tpop = ({ treeName, clustered, leaflet }) => {
+const Tpop = ({ treeName, clustered }) => {
   const client = useApolloClient()
 
   const store = useContext(storeContext)
   const {
-    mapFilter,
     activeApfloraLayers,
     setRefetchKey,
     enqueNotification,
@@ -122,7 +120,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   const { setTpopIdsFiltered } = map
 
   useEffect(() => {
-    if (!!idOfTpopBeingLocalized) {
+    if (idOfTpopBeingLocalized) {
       // see: https://stackoverflow.com/a/28724847/712005
       // altering the maps css corrupted the map ui
       window.L.DomUtil.addClass(
@@ -168,7 +166,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
     popFilter[key] = { [expression]: value }
   })
-  if (!!tree.nodeLabelFilter.pop) {
+  if (tree.nodeLabelFilter.pop) {
     popFilter.label = {
       includesInsensitive: tree.nodeLabelFilter.pop,
     }
@@ -189,10 +187,14 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
     tpopFilter[key] = { [expression]: value }
   })
-  if (!!tree.nodeLabelFilter.tpop) {
+  if (tree.nodeLabelFilter.tpop) {
     tpopFilter.label = {
       includesInsensitive: tree.nodeLabelFilter.tpop,
     }
+  }
+  // if mapFilter is set, filter by its geometry
+  if (self.mapFilter?.features?.length) {
+    tpopFilter.geomPoint = { coveredBy: self.mapFilter.features[0]?.geometry }
   }
 
   const [fetchTpopDataForMap, { error: errorLoadingTpopForMap, data }] =
@@ -240,10 +242,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     [pops],
   )
 
-  const mapTpopIdsFiltered = idsInsideFeatureCollection({
-    mapFilter,
-    data: tpops,
-  })
+  const mapTpopIdsFiltered = tpops.map((t) => t.id)
   setTpopIdsFiltered(mapTpopIdsFiltered)
   //console.log('layers Tpop, tpops.length:', tpops.length)
 

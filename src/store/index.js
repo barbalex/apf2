@@ -132,6 +132,15 @@ const myTypes = types
             return [key, { equalTo: value }]
           }),
       )
+      // if mapFilter is set, filter by its geometry
+      if (
+        self.mapFilter?.features?.[0]?.geometry &&
+        self.exportApplyMapFilter
+      ) {
+        result.geomPoint = {
+          coveredBy: self.mapFilter.features[0].geometry,
+        }
+      }
       // return a valid filter even if no filter criterias exist
       // but ensure it returns all rows
       if (Object.entries(result).length === 0) return { id: { isNull: false } }
@@ -151,6 +160,15 @@ const myTypes = types
             return [key, { equalTo: value }]
           }),
       )
+      // if mapFilter is set, filter by its geometry
+      if (
+        self.mapFilter?.features?.[0]?.geometry &&
+        self.exportApplyMapFilter
+      ) {
+        result.geomPoint = {
+          coveredBy: self.mapFilter.features[0].geometry,
+        }
+      }
       // return a valid filter even if no filter criterias exist
       // but ensure it returns all rows
       if (Object.entries(result).length === 0) return { id: { isNull: false } }
@@ -170,6 +188,17 @@ const myTypes = types
             return [key, { equalTo: value }]
           }),
       )
+      // if mapFilter is set, filter by its geometry
+      if (
+        self.mapFilter?.features?.[0]?.geometry &&
+        self.exportApplyMapFilter
+      ) {
+        result.tpopByTpopId = {
+          geomPoint: {
+            coveredBy: self.mapFilter.features[0].geometry,
+          },
+        }
+      }
       // return a valid filter even if no filter criterias exist
       // but ensure it returns all rows
       if (Object.entries(result).length === 0) return { id: { isNull: false } }
@@ -203,6 +232,17 @@ const myTypes = types
           }),
       )
       const k = { ...ekf, ...ek }
+      // if mapFilter is set, filter by its geometry
+      if (
+        self.mapFilter?.features?.[0]?.geometry &&
+        self.exportApplyMapFilter
+      ) {
+        k.tpopByTpopId = {
+          geomPoint: {
+            coveredBy: self.mapFilter.features[0].geometry,
+          },
+        }
+      }
       // return a valid filter even if no filter criterias exist
       // but ensure it returns all rows
       if (Object.entries(k).length === 0) return { id: { isNull: false } }

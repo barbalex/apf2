@@ -9,7 +9,6 @@ import { useMap } from 'react-leaflet'
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
-import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 import { simpleTypes as popType } from '../../../../../store/Tree/DataFilter/pop'
 import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
 
@@ -30,8 +29,7 @@ const iconCreateFunction = function (cluster) {
 const Pop = ({ treeName }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { activeApfloraLayers, enqueNotification, mapFilter, setRefetchKey } =
-    store
+  const { activeApfloraLayers, enqueNotification, setRefetchKey } = store
   const tree = store[treeName]
   const { map, dataFilter, projIdInActiveNodeArray, apIdInActiveNodeArray } =
     tree
@@ -67,7 +65,7 @@ const Pop = ({ treeName }) => {
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
     popFilter[key] = { [expression]: value }
   })
-  if (!!tree.nodeLabelFilter.pop) {
+  if (tree.nodeLabelFilter.pop) {
     popFilter.label = {
       includesInsensitive: tree.nodeLabelFilter.pop,
     }
@@ -84,10 +82,14 @@ const Pop = ({ treeName }) => {
     const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
     tpopFilter[key] = { [expression]: value }
   })
-  if (!!tree.nodeLabelFilter.tpop) {
+  if (tree.nodeLabelFilter.tpop) {
     tpopFilter.label = {
       includesInsensitive: tree.nodeLabelFilter.tpop,
     }
+  }
+  // if mapFilter is set, filter by its geometry
+  if (self.mapFilter?.features?.length) {
+    tpopFilter.geomPoint = { coveredBy: self.mapFilter.features[0]?.geometry }
   }
 
   var { data, error, refetch } = useQuery(query, {
@@ -132,7 +134,7 @@ const Pop = ({ treeName }) => {
   }
 
   const aps = useMemo(
-    () => data?.projektById?.[!!perAp ? 'perAp' : 'perProj']?.nodes ?? [],
+    () => data?.projektById?.[perAp ? 'perAp' : 'perProj']?.nodes ?? [],
     [data?.projektById, perAp],
   )
   let pops = useMemo(
@@ -151,10 +153,7 @@ const Pop = ({ treeName }) => {
     pops = pops.filter((p) => popIdsOfTpops.includes(p.id))
   }
 
-  const mapPopIdsFiltered = idsInsideFeatureCollection({
-    mapFilter,
-    data: pops,
-  })
+  const mapPopIdsFiltered = pops.map((p) => p.id)
   setPopIdsFiltered(mapPopIdsFiltered)
   //console.log('layers Pop, pops.length:', pops.length)
 
