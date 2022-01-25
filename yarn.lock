@@ -3531,7 +3531,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@turf/boolean-point-in-polygon@npm:6.5.0, @turf/boolean-point-in-polygon@npm:^6.5.0":
+"@turf/boolean-point-in-polygon@npm:6.5.0":
   version: 6.5.0
   resolution: "@turf/boolean-point-in-polygon@npm:6.5.0"
   dependencies:
@@ -3640,17 +3640,6 @@ __metadata:
     "@turf/helpers": ^6.5.0
     "@turf/meta": ^6.5.0
   checksum: 23826c73c8bd574b80e7b4ade81aab90342f65ee1f55e1352971af1227b738a64e9cfb3e1b1281561a293d4076d10074c84ca347016f5ef2863bb5eb9d659d2c
-  languageName: node
-  linkType: hard
-
-"@turf/points-within-polygon@npm:6.5.0":
-  version: 6.5.0
-  resolution: "@turf/points-within-polygon@npm:6.5.0"
-  dependencies:
-    "@turf/boolean-point-in-polygon": ^6.5.0
-    "@turf/helpers": ^6.5.0
-    "@turf/meta": ^6.5.0
-  checksum: cd5f26c89ad381a1284ea54bb43f0bd15fde23c992bc62986c3124737486e7d44c8de0677eb78bb3d09402e6ae7339f647583adfec0317874b20e59eb4be658a
   languageName: node
   linkType: hard
 
@@ -4787,7 +4776,6 @@ __metadata:
     "@turf/boolean-point-in-polygon": 6.5.0
     "@turf/helpers": 6.5.0
     "@turf/nearest-point": 6.5.0
-    "@turf/points-within-polygon": 6.5.0
     autosuggest-highlight: 3.2.0
     babel-plugin-styled-components: 2.0.2
     blueimp-md5: 2.19.0

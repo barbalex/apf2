@@ -5,11 +5,11 @@ import { useQuery } from '@apollo/client'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 // import bboxPolygon from '@turf/bbox-polygon'
 import { useMap } from 'react-leaflet'
+import { toJS } from 'mobx'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
-import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -30,8 +30,7 @@ const iconCreateFunction = function (cluster) {
 const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { setRefetchKey, enqueNotification, mapFilter, activeApfloraLayers } =
-    store
+  const { setRefetchKey, enqueNotification, activeApfloraLayers } = store
   const tree = store[treeName]
   const { apIdInActiveNodeArray, projIdInActiveNodeArray } = tree
   const { setBeobNichtBeurteiltIdsFiltered } = store[treeName].map
@@ -62,6 +61,10 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
     beobFilter.label = {
       includesInsensitive: tree.nodeLabelFilter.beob,
     }
+  }
+  // if mapFilter is set, filter by its geometry
+  if (self.mapFilter?.features?.length) {
+    beobFilter.geomPoint = { coveredBy: self.mapFilter.features[0]?.geometry }
   }
   var { data, error, refetch } = useQuery(query, {
     variables: { projId, apId, isActiveInMap, beobFilter },
@@ -116,10 +119,9 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
       ),
     [beobNichtBeurteiltForMapAparts],
   )
-  const mapBeobNichtBeurteiltIdsFiltered = idsInsideFeatureCollection({
-    mapFilter,
-    data: beobNichtBeurteiltForMapNodes,
-  })
+  const mapBeobNichtBeurteiltIdsFiltered = beobNichtBeurteiltForMapNodes.map(
+    (b) => b.id,
+  )
   setBeobNichtBeurteiltIdsFiltered(mapBeobNichtBeurteiltIdsFiltered)
 
   // if (!clustered && beobs.length > 2000) {

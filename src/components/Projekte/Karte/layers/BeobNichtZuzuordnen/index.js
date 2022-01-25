@@ -9,7 +9,6 @@ import { useMap } from 'react-leaflet'
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
-import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -30,8 +29,7 @@ const iconCreateFunction = function (cluster) {
 const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { activeApfloraLayers, mapFilter, setRefetchKey, enqueNotification } =
-    store
+  const { activeApfloraLayers, setRefetchKey, enqueNotification } = store
   const tree = store[treeName]
   const { map, projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
   const { setBeobNichtZuzuordnenIdsFiltered } = map
@@ -62,6 +60,10 @@ const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
     beobFilter.label = {
       includesInsensitive: tree.nodeLabelFilter.beob,
     }
+  }
+  // if mapFilter is set, filter by its geometry
+  if (self.mapFilter?.features?.length) {
+    beobFilter.geomPoint = { coveredBy: self.mapFilter.features[0]?.geometry }
   }
   var { data, error, refetch } = useQuery(query, {
     variables: { projId, apId, isActiveInMap, beobFilter },
@@ -116,10 +118,9 @@ const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
       ),
     [beobNichtZuzuordnenForMapNodesAparts],
   )
-  const mapBeobNichtZuzuordnenIdsFiltered = idsInsideFeatureCollection({
-    mapFilter,
-    data: beobNichtZuzuordnenForMapNodes,
-  })
+  const mapBeobNichtZuzuordnenIdsFiltered = beobNichtZuzuordnenForMapNodes.map(
+    (b) => b.id,
+  )
   setBeobNichtZuzuordnenIdsFiltered(mapBeobNichtZuzuordnenIdsFiltered)
 
   // if (!clustered && beobs.length > 2000) {
