@@ -191,7 +191,7 @@ const Ekfrequenz = ({ treeName }) => {
                   </StyledLabel>
                 </LabelRow>
                 <Kontrolljahre
-                  kontrolljahre={row?.kontrolljahre.slice()}
+                  kontrolljahre={row?.kontrolljahre?.slice()}
                   saveToDb={saveToDb}
                   refetch={refetch}
                   //kontrolljahreString={JSON.stringify(row.kontrolljahre)}
