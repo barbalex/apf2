@@ -51,9 +51,11 @@ const DrawControl = () => {
       'Punkte ziehen, um Filter-Umriss(e) zu verändern'
     window.L.drawLocal.edit.handlers.remove.tooltip.text = `zum Löschen auf Filter-Umriss klicken, dann auf 'speichern'`
 
+    // solution to allow only one geometry to be drawn
+    // see: https://github.com/Leaflet/Leaflet.draw/issues/315#issuecomment-500246272
     const mapFilter = new window.L.FeatureGroup()
     map.addLayer(mapFilter)
-    const drawControl = new window.L.Control.Draw({
+    const drawControlFull = new window.L.Control.Draw({
       draw: {
         marker: false,
         polyline: false,
@@ -64,18 +66,32 @@ const DrawControl = () => {
         featureGroup: mapFilter,
       },
     })
+    const drawControlEditOnly = new window.L.Control.Draw({
+      draw: false,
+      edit: {
+        featureGroup: mapFilter,
+      },
+    })
 
-    map.addControl(drawControl)
+    map.addControl(drawControlFull)
     map.on('draw:created', (e) => {
       mapFilter.addLayer(e.layer)
+      drawControlFull.remove(map)
+      drawControlEditOnly.addTo(map)
       setMapFilter(mapFilter.toGeoJSON()?.features)
     })
     map.on('draw:edited', () => setMapFilter(mapFilter.toGeoJSON()?.features))
-    map.on('draw:deleted', () => setMapFilter(mapFilter.toGeoJSON()?.features))
+    map.on('draw:deleted', () => {
+      setMapFilter(mapFilter.toGeoJSON()?.features)
+      if (mapFilter.getLayers().length === 0) {
+        drawControlEditOnly.remove(map)
+        drawControlFull.addTo(map)
+      }
+    })
 
     return () => {
       map.removeLayer(mapFilter)
-      map.removeControl(drawControl)
+      map.removeControl(drawControlFull)
       map.off('draw:created')
       map.off('draw:edited')
       map.off('draw:deleted')
