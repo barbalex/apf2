@@ -74,11 +74,11 @@ const Optionen = () => {
               />
             }
             label={
-              mapFilter.features.length > 0
+              mapFilter.length > 0
                 ? 'Karten-Filter anwenden'
                 : 'Karten-Filter anwenden (verfügbar, wenn ein Karten-Filter erstellt wurde)'
             }
-            disabled={!(mapFilter.features.length > 0)}
+            disabled={!(mapFilter.length > 0)}
           />
         </StyledCardContent>
       </Collapse>

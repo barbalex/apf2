@@ -19,7 +19,7 @@ const BeobachtungenExports = () => {
     try {
       // view: v_beob_art_changed
       result =
-        mapFilter?.features?.[0]?.geometry && exportApplyMapFilter
+        mapFilter?.[0]?.geometry && exportApplyMapFilter
           ? await client.query({
               query: gql`
                 query allBeobsArtChangedFilteredByMap {
@@ -59,7 +59,7 @@ const BeobachtungenExports = () => {
               variables: {
                 filter: {
                   geomPoint: {
-                    coveredBy: mapFilter.features[0].geometry,
+                    coveredBy: mapFilter?.[0]?.geometry,
                   },
                 },
               },

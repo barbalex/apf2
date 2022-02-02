@@ -435,6 +435,7 @@ const Karte = ({ treeName }) => {
     bounds: boundsRaw,
     assigningBeob,
     hideMapControls,
+    mapFilter,
   } = store
   const tree = store[treeName]
   const { apIdInActiveNodeArray } = tree
@@ -507,9 +508,9 @@ const Karte = ({ treeName }) => {
     fullscreenElement: false, // Dom element to render in full screen, false by default, fallback to map._container
   }
 
-  if (typeof window === 'undefined') return null
+  console.log('map rendering, mapFilter:', mapFilter)
 
-  //console.log('map rendering, controlHeight:', controlHeight)
+  if (typeof window === 'undefined') return null
 
   // clustered layers receive a key that rebuilds them every time the cluster
   // tool would erroneously add new markers from last time it build
@@ -545,11 +546,15 @@ const Karte = ({ treeName }) => {
             })
             .reverse()}
           <Pop
-            key={`${apId}/pop/${activeApfloraLayers.join()}`}
+            key={`${apId}/pop/${activeApfloraLayers.join()}/${
+              mapFilter?.length ?? 99
+            }`}
             treeName={treeName}
           />
           <Tpop
-            key={`${apId}/tpop/${activeApfloraLayers.join()}`}
+            key={`${apId}/tpop/${activeApfloraLayers.join()}/${
+              mapFilter?.length ?? 99
+            }`}
             treeName={treeName}
             clustered={clustered}
           />

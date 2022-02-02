@@ -68,10 +68,10 @@ const DrawControl = () => {
     map.addControl(drawControl)
     map.on('draw:created', (e) => {
       mapFilter.addLayer(e.layer)
-      setMapFilter(mapFilter.toGeoJSON())
+      setMapFilter(mapFilter.toGeoJSON()?.features)
     })
-    map.on('draw:edited', () => setMapFilter(mapFilter.toGeoJSON()))
-    map.on('draw:deleted', () => setMapFilter(mapFilter.toGeoJSON()))
+    map.on('draw:edited', () => setMapFilter(mapFilter.toGeoJSON()?.features))
+    map.on('draw:deleted', () => setMapFilter(mapFilter.toGeoJSON()?.features))
 
     return () => {
       map.removeLayer(mapFilter)
@@ -79,10 +79,7 @@ const DrawControl = () => {
       map.off('draw:created')
       map.off('draw:edited')
       map.off('draw:deleted')
-      setMapFilter({
-        features: [],
-        type: 'FeatureCollection',
-      })
+      setMapFilter([])
     }
   }, [map, setMapFilter])
 

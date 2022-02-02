@@ -6,7 +6,7 @@ import { navigate } from 'gatsby'
 import { getSnapshot } from 'mobx-state-tree'
 
 import ApfloraLayer from './ApfloraLayer'
-import MapFilter from './MapFilter'
+import Geojson from './Geojson'
 import Copying, { defaultValue as defaultCopying } from './Copying'
 import CopyingBiotop, {
   defaultValue as defaultCopyingBiotop,
@@ -24,6 +24,7 @@ import Tree, { defaultValue as defaultTree } from './Tree'
 import EkPlan, { defaultValue as defaultEkPlan } from './EkPlan'
 import getOpenNodesFromActiveNodeArray from '../modules/getOpenNodesFromActiveNodeArray'
 import exists from '../modules/exists'
+import setIdsFiltered from '../modules/setIdsFiltered'
 import simpleTypes from './Tree/DataFilter/simpleTypes'
 
 // substract 3 Months to now so user sees previous year in February
@@ -47,10 +48,7 @@ const myTypes = types
       [47.159, 8.354],
       [47.696, 8.984],
     ]),
-    mapFilter: types.optional(MapFilter, {
-      features: [],
-      type: 'FeatureCollection',
-    }),
+    mapFilter: types.array(Geojson),
     toDeleteTable: types.maybeNull(types.string),
     toDeleteId: types.maybeNull(types.string),
     toDeleteLabel: types.maybeNull(types.string),
@@ -97,6 +95,7 @@ const myTypes = types
     deletedDatasets: [],
     refetch: {},
     notifications: [],
+    client: null,
   }))
   .views((self) => ({
     get apGqlFilter() {
@@ -133,12 +132,9 @@ const myTypes = types
           }),
       )
       // if mapFilter is set, filter by its geometry
-      if (
-        self.mapFilter?.features?.[0]?.geometry &&
-        self.exportApplyMapFilter
-      ) {
+      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
         result.geomPoint = {
-          coveredBy: self.mapFilter.features[0].geometry,
+          coveredBy: self.mapFilter[0].geometry,
         }
       }
       // return a valid filter even if no filter criterias exist
@@ -161,12 +157,9 @@ const myTypes = types
           }),
       )
       // if mapFilter is set, filter by its geometry
-      if (
-        self.mapFilter?.features?.[0]?.geometry &&
-        self.exportApplyMapFilter
-      ) {
+      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
         result.geomPoint = {
-          coveredBy: self.mapFilter.features[0].geometry,
+          coveredBy: self.mapFilter[0].geometry,
         }
       }
       // return a valid filter even if no filter criterias exist
@@ -189,13 +182,10 @@ const myTypes = types
           }),
       )
       // if mapFilter is set, filter by its geometry
-      if (
-        self.mapFilter?.features?.[0]?.geometry &&
-        self.exportApplyMapFilter
-      ) {
+      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
         result.tpopByTpopId = {
           geomPoint: {
-            coveredBy: self.mapFilter.features[0].geometry,
+            coveredBy: self.mapFilter[0].geometry,
           },
         }
       }
@@ -233,13 +223,10 @@ const myTypes = types
       )
       const k = { ...ekf, ...ek }
       // if mapFilter is set, filter by its geometry
-      if (
-        self.mapFilter?.features?.[0]?.geometry &&
-        self.exportApplyMapFilter
-      ) {
+      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
         k.tpopByTpopId = {
           geomPoint: {
-            coveredBy: self.mapFilter.features[0].geometry,
+            coveredBy: self.mapFilter[0].geometry,
           },
         }
       }
@@ -250,6 +237,9 @@ const myTypes = types
     },
   }))
   .actions((self) => ({
+    setClient(val) {
+      self.client = val
+    },
     setPrintingJberYear(val) {
       self.printingJberYear = val
     },
@@ -330,7 +320,9 @@ const myTypes = types
       self.bounds = val
     },
     setMapFilter(val) {
+      //console.log('store, setMapFilter, val:', val)
       self.mapFilter = val
+      setIdsFiltered(self)
     },
     dataFilterClone1To2() {
       self.tree2.dataFilter = cloneDeep(self.tree.dataFilter)

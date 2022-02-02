@@ -22,7 +22,7 @@ export default types
       if (!activeApfloraLayers.includes('mapFilter')) {
         return activeNodeArray.toJSON()
       }
-      // TODO: dynamic spatial filter using mapFilter?
+
       return [
         ...self.popIdsFiltered,
         ...self.tpopIdsFiltered,

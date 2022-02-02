@@ -29,7 +29,8 @@ const iconCreateFunction = function (cluster) {
 const BeobZugeordnetMarker = ({ treeName, clustered }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { setRefetchKey, enqueNotification, activeApfloraLayers } = store
+  const { setRefetchKey, enqueNotification, activeApfloraLayers, mapFilter } =
+    store
   const tree = store[treeName]
   const { map, apIdInActiveNodeArray, projIdInActiveNodeArray } = tree
   const { setBeobZugeordnetIdsFiltered } = map
@@ -62,8 +63,8 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
     }
   }
   // if mapFilter is set, filter by its geometry
-  if (self.mapFilter?.features?.length) {
-    beobFilter.geomPoint = { coveredBy: self.mapFilter.features[0]?.geometry }
+  if (mapFilter?.length) {
+    beobFilter.geomPoint = { coveredBy: mapFilter?.[0]?.geometry }
   }
   var { data, error, refetch } = useQuery(query, {
     variables: { projId, apId, isActiveInMap, beobFilter },

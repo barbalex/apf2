@@ -29,11 +29,10 @@ const iconCreateFunction = function (cluster) {
 const Pop = ({ treeName }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { activeApfloraLayers, enqueNotification, setRefetchKey } = store
+  const { activeApfloraLayers, enqueNotification, setRefetchKey, mapFilter } =
+    store
   const tree = store[treeName]
-  const { map, dataFilter, projIdInActiveNodeArray, apIdInActiveNodeArray } =
-    tree
-  const { setPopIdsFiltered } = map
+  const { dataFilter, projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
 
   const projId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
@@ -88,8 +87,8 @@ const Pop = ({ treeName }) => {
     }
   }
   // if mapFilter is set, filter by its geometry
-  if (self.mapFilter?.features?.length) {
-    tpopFilter.geomPoint = { coveredBy: self.mapFilter.features[0]?.geometry }
+  if (mapFilter?.length) {
+    tpopFilter.geomPoint = { coveredBy: mapFilter[0]?.geometry }
   }
 
   var { data, error, refetch } = useQuery(query, {
@@ -152,10 +151,6 @@ const Pop = ({ treeName }) => {
     const popIdsOfTpops = tpops.map((t) => t.popId)
     pops = pops.filter((p) => popIdsOfTpops.includes(p.id))
   }
-
-  const mapPopIdsFiltered = pops.map((p) => p.id)
-  setPopIdsFiltered(mapPopIdsFiltered)
-  //console.log('layers Pop, pops.length:', pops.length)
 
   return (
     <MarkerClusterGroup

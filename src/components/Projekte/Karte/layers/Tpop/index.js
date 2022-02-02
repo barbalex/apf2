@@ -115,9 +115,7 @@ const Tpop = ({ treeName, clustered }) => {
     },
   })
   const tree = store[treeName]
-  const { map, dataFilter, projIdInActiveNodeArray, apIdInActiveNodeArray } =
-    tree
-  const { setTpopIdsFiltered } = map
+  const { dataFilter, projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
 
   useEffect(() => {
     if (idOfTpopBeingLocalized) {
@@ -192,10 +190,6 @@ const Tpop = ({ treeName, clustered }) => {
       includesInsensitive: tree.nodeLabelFilter.tpop,
     }
   }
-  // if mapFilter is set, filter by its geometry
-  if (self.mapFilter?.features?.length) {
-    tpopFilter.geomPoint = { coveredBy: self.mapFilter.features[0]?.geometry }
-  }
 
   const [fetchTpopDataForMap, { error: errorLoadingTpopForMap, data }] =
     useLazyQuery(query, {
@@ -241,22 +235,19 @@ const Tpop = ({ treeName, clustered }) => {
     () => flatten(pops.map((pop) => pop?.tpopsByPopId?.nodes ?? [])),
     [pops],
   )
-
-  const mapTpopIdsFiltered = tpops.map((t) => t.id)
-  setTpopIdsFiltered(mapTpopIdsFiltered)
   //console.log('layers Tpop, tpops.length:', tpops.length)
 
-  if (!clustered && tpops.length > 2000) {
-    enqueNotification({
-      message: `Zuviele Teil-Populationen: Es werden maximal 2'000 angezeigt, im aktuellen Ausschnitt sind es: ${tpops.length.toLocaleString(
-        'de-CH',
-      )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
-      options: {
-        variant: 'warning',
-      },
-    })
-    tpops = []
-  }
+  // if (!clustered && tpops.length > 2000) {
+  //   enqueNotification({
+  //     message: `Zuviele Teil-Populationen: Es werden maximal 2'000 angezeigt, im aktuellen Ausschnitt sind es: ${tpops.length.toLocaleString(
+  //       'de-CH',
+  //     )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
+  //     options: {
+  //       variant: 'warning',
+  //     },
+  //   })
+  //   tpops = []
+  // }
 
   const tpopMarkers = tpops.map((tpop) => (
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />

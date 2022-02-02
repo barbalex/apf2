@@ -193,6 +193,8 @@ const Client = ({ store }) => {
     cache,
     defaultOptions: { fetchPolicy: 'cache-and-network' },
   })
+  // make client available in store
+  store.setClient(client)
   return client
 }
 
