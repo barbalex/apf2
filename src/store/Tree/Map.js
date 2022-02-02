@@ -4,9 +4,7 @@ export default types
   .model('Map', {
     popIdsFiltered: types.array(types.string),
     tpopIdsFiltered: types.array(types.string),
-    beobNichtBeurteiltIdsFiltered: types.array(types.string),
-    beobNichtZuzuordnenIdsFiltered: types.array(types.string),
-    beobZugeordnetIdsFiltered: types.array(types.string),
+    beobIdsFiltered: types.array(types.string),
     // icons: oneOf: normal, statusGroup, statusGroupSymbols
     popIcon: types.string,
     tpopIcon: types.string,
@@ -26,9 +24,7 @@ export default types
       return [
         ...self.popIdsFiltered,
         ...self.tpopIdsFiltered,
-        ...self.beobNichtBeurteiltIdsFiltered,
-        ...self.beobNichtZuzuordnenIdsFiltered,
-        ...self.beobZugeordnetIdsFiltered,
+        ...self.beobIdsFiltered,
       ]
     },
   }))
@@ -39,14 +35,8 @@ export default types
     setTpopIdsFiltered(val) {
       self.tpopIdsFiltered = val
     },
-    setBeobNichtBeurteiltIdsFiltered(val) {
-      self.beobNichtBeurteiltIdsFiltered = val
-    },
-    setBeobNichtZuzuordnenIdsFiltered(val) {
-      self.beobNichtZuzuordnenIdsFiltered = val
-    },
-    setBeobZugeordnetIdsFiltered(val) {
-      self.beobZugeordnetIdsFiltered = val
+    setBeobIdsFiltered(val) {
+      self.beobIdsFiltered = val
     },
     setPopIcon(val) {
       self.popIcon = val
@@ -66,9 +56,7 @@ export const defaultValue = {
   idsFiltered: [],
   popIdsFiltered: [],
   tpopIdsFiltered: [],
-  beobNichtBeurteiltIdsFiltered: [],
-  beobNichtZuzuordnenIdsFiltered: [],
-  beobZugeordnetIdsFiltered: [],
+  beobIdsFiltered: [],
   popIcon: 'normal',
   tpopIcon: 'normal',
   popLabel: 'nr',

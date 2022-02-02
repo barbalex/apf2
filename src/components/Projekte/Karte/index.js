@@ -559,17 +559,23 @@ const Karte = ({ treeName }) => {
             clustered={clustered}
           />
           <BeobNichtBeurteilt
-            key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}`}
+            key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}/${
+              mapFilter?.length ?? 99
+            }`}
             treeName={treeName}
             clustered={clustered}
           />
           <BeobNichtZuzuordnen
-            key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}`}
+            key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}/${
+              mapFilter?.length ?? 99
+            }`}
             treeName={treeName}
             clustered={clustered}
           />
           <BeobZugeordnet
-            key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}`}
+            key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}/${
+              mapFilter?.length ?? 99
+            }`}
             treeName={treeName}
             clustered={clustered}
           />

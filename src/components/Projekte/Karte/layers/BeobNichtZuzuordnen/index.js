@@ -29,11 +29,9 @@ const iconCreateFunction = function (cluster) {
 const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { activeApfloraLayers, setRefetchKey, enqueNotification, mapFilter } =
-    store
+  const { activeApfloraLayers, setRefetchKey, enqueNotification } = store
   const tree = store[treeName]
-  const { map, projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
-  const { setBeobNichtZuzuordnenIdsFiltered } = map
+  const { projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
 
   const projId =
     projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
@@ -61,10 +59,6 @@ const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
     beobFilter.label = {
       includesInsensitive: tree.nodeLabelFilter.beob,
     }
-  }
-  // if mapFilter is set, filter by its geometry
-  if (mapFilter?.length) {
-    beobFilter.geomPoint = { coveredBy: mapFilter?.[0]?.geometry }
   }
   var { data, error, refetch } = useQuery(query, {
     variables: { projId, apId, isActiveInMap, beobFilter },
@@ -105,24 +99,6 @@ const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
       ),
     [aparts],
   )
-
-  const beobNichtZuzuordnenForMapNodesAparts = useMemo(
-    () => data?.projektById?.apsByProjId?.nodes?.[0]?.apartsByApId?.nodes ?? [],
-    [data?.projektById?.apsByProjId?.nodes],
-  )
-  const beobNichtZuzuordnenForMapNodes = useMemo(
-    () =>
-      flatten(
-        beobNichtZuzuordnenForMapNodesAparts.map(
-          (n) => n?.aeTaxonomyByArtId?.beobsByArtId?.nodes ?? [],
-        ),
-      ),
-    [beobNichtZuzuordnenForMapNodesAparts],
-  )
-  const mapBeobNichtZuzuordnenIdsFiltered = beobNichtZuzuordnenForMapNodes.map(
-    (b) => b.id,
-  )
-  setBeobNichtZuzuordnenIdsFiltered(mapBeobNichtZuzuordnenIdsFiltered)
 
   // if (!clustered && beobs.length > 2000) {
   //   enqueNotification({

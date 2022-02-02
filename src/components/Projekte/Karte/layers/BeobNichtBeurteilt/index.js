@@ -29,11 +29,9 @@ const iconCreateFunction = function (cluster) {
 const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { setRefetchKey, enqueNotification, activeApfloraLayers, mapFilter } =
-    store
+  const { setRefetchKey, enqueNotification, activeApfloraLayers } = store
   const tree = store[treeName]
   const { apIdInActiveNodeArray, projIdInActiveNodeArray } = tree
-  const { setBeobNichtBeurteiltIdsFiltered } = store[treeName].map
 
   const projId =
     projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
@@ -62,10 +60,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
       includesInsensitive: tree.nodeLabelFilter.beob,
     }
   }
-  // if mapFilter is set, filter by its geometry
-  if (mapFilter?.length) {
-    beobFilter.geomPoint = { coveredBy: mapFilter?.[0]?.geometry }
-  }
+
   var { data, error, refetch } = useQuery(query, {
     variables: { projId, apId, isActiveInMap, beobFilter },
   })
@@ -105,24 +100,6 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
       ),
     [aparts],
   )
-
-  const beobNichtBeurteiltForMapAparts = useMemo(
-    () => data?.projektById?.apsByProjId?.nodes?.[0]?.apartsByApId?.nodes ?? [],
-    [data?.projektById?.apsByProjId?.nodes],
-  )
-  const beobNichtBeurteiltForMapNodes = useMemo(
-    () =>
-      flatten(
-        beobNichtBeurteiltForMapAparts.map(
-          (n) => n?.aeTaxonomyByArtId?.beobsByArtId?.nodes ?? [],
-        ),
-      ),
-    [beobNichtBeurteiltForMapAparts],
-  )
-  const mapBeobNichtBeurteiltIdsFiltered = beobNichtBeurteiltForMapNodes.map(
-    (b) => b.id,
-  )
-  setBeobNichtBeurteiltIdsFiltered(mapBeobNichtBeurteiltIdsFiltered)
 
   // if (!clustered && beobs.length > 2000) {
   //   enqueNotification({

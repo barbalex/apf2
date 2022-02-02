@@ -2,11 +2,13 @@ import { gql } from '@apollo/client'
 
 const setIdsFiltered = async (store) => {
   const { enqueNotification, mapFilter, client } = store
-  const { setPopIdsFiltered, setTpopIdsFiltered } = store.tree.map
+  const { setPopIdsFiltered, setTpopIdsFiltered, setBeobIdsFiltered } =
+    store.tree.map
   const geometry = mapFilter?.[0]?.geometry
   if (!geometry) {
     setPopIdsFiltered([])
     setTpopIdsFiltered([])
+    setBeobIdsFiltered([])
     return
   }
 
@@ -67,6 +69,35 @@ const setIdsFiltered = async (store) => {
   }
   const tpopIds = tpopResult?.data?.allTpops?.nodes?.map((n) => n.id) ?? []
   setTpopIdsFiltered(tpopIds)
+
+  let beobResult
+  try {
+    beobResult = await client.query({
+      query: gql`
+        query BeobsFilteredQuery($filter: BeobFilter!) {
+          allBeobs(filter: $filter) {
+            nodes {
+              id
+            }
+          }
+        }
+      `,
+      variables: {
+        filter: {
+          geomPoint: { coveredBy: mapFilter?.[0]?.geometry },
+        },
+      },
+    })
+  } catch (error) {
+    enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
+  }
+  const beobIds = beobResult?.data?.allBeobs?.nodes?.map((n) => n.id) ?? []
+  setBeobIdsFiltered(beobIds)
 }
 
 export default setIdsFiltered
