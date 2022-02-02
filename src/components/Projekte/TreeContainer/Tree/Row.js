@@ -251,22 +251,16 @@ const Row = ({ style, node, treeName }) => {
   const amCopyingBiotop =
     node.nodeType === 'table' && node.id === copyingBiotop.id
 
-  const onClickNode = useCallback(
-    (event) => {
-      toggleNode({
-        treeName,
-        node,
-        store,
-      })
-    },
-    [treeName, node, store],
-  )
-  const onClickNodeSymbol = useCallback(
-    (event) => {
-      toggleNodeSymbol({ treeName, node, store })
-    },
-    [treeName, node, store],
-  )
+  const onClickNode = useCallback(() => {
+    toggleNode({
+      treeName,
+      node,
+      store,
+    })
+  }, [treeName, node, store])
+  const onClickNodeSymbol = useCallback(() => {
+    toggleNodeSymbol({ treeName, node, store })
+  }, [treeName, node, store])
   const onClickPrint = useCallback(() => {
     setPrintingJberYear(+node.label)
     setActiveNodeArray([...node.url, 'print'])
