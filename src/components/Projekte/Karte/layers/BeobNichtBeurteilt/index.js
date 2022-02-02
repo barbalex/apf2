@@ -5,7 +5,6 @@ import { useQuery } from '@apollo/client'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 // import bboxPolygon from '@turf/bbox-polygon'
 import { useMap } from 'react-leaflet'
-import { toJS } from 'mobx'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
