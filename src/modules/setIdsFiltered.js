@@ -84,7 +84,19 @@ const setIdsFiltered = async (store) => {
       `,
       variables: {
         filter: {
-          geomPoint: { coveredBy: mapFilter?.[0]?.geometry },
+          and: {
+            geomPoint: { coveredBy: mapFilter?.[0]?.geometry },
+            // don't know why but returns no results?????
+            // aeTaxonomyByArtId: {
+            //   apartsByArtId: {
+            //     some: {
+            //       aeTaxonomyByArtId: {
+            //         apByArtId: { bearbeitung: { lessThan: 4 } },
+            //       },
+            //     },
+            //   },
+            // },
+          },
         },
       },
     })
