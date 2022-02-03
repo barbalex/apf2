@@ -508,8 +508,6 @@ const Karte = ({ treeName }) => {
     fullscreenElement: false, // Dom element to render in full screen, false by default, fallback to map._container
   }
 
-  console.log('map rendering, mapFilter:', mapFilter)
-
   if (typeof window === 'undefined') return null
 
   // clustered layers receive a key that rebuilds them every time the cluster
