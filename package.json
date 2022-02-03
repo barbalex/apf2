@@ -31,8 +31,6 @@
     "@react-leaflet/core": "1.1.1",
     "@turf/bbox-polygon": "6.5.0",
     "@turf/boolean-point-in-polygon": "6.5.0",
-    "@turf/helpers": "6.5.0",
-    "@turf/nearest-point": "6.5.0",
     "autosuggest-highlight": "3.2.0",
     "babel-plugin-styled-components": "2.0.2",
     "blueimp-md5": "2.19.0",
