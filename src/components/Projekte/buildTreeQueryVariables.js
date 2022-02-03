@@ -8,6 +8,10 @@ import { simpleTypes as tpopmassnType } from '../../store/Tree/DataFilter/tpopma
 import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tpopfeldkontr'
 import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
 
+/**
+ * returns a filter for every branch of the nav tree
+ */
+
 const buildTreeQueryVariables = ({
   dataFilter,
   openNodes,
