@@ -173,7 +173,6 @@ const Projekte = () => {
           data: treeData,
           loading: treeLoading,
           store,
-          dataFilter: treeDataFilter,
         }),
       )
     }
@@ -195,7 +194,6 @@ const Projekte = () => {
           buildNodes({
             treeName: 'tree2',
             role,
-            dataFilter: tree2DataFilter,
             data: tree2Data,
             loading: tree2Loading,
             store,

@@ -77,7 +77,7 @@ const compare = (a, b) => {
   return a - b
 }
 
-const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
+const nodes = ({ data, loading, store, role, treeName }) => {
   const openNodes = store[treeName].openNodes
     .toJSON()
     // need to sort so folders are added in correct order
@@ -198,7 +198,6 @@ const nodes = ({ data, loading, store, role, treeName, dataFilter }) => {
             projId,
             apNodes,
             apId,
-            dataFilter: dataFilter[treeName],
             store,
           }),
           ...buildApzielFolderNodes({
