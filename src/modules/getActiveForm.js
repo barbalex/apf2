@@ -4,7 +4,7 @@ import getTableNameFromActiveNode from './getTableNameFromActiveNode'
 
 const getActiveForm = ({ store, treeName, nodes }) => {
   const { activeNodeArray } = store[treeName]
-  const activeFilterTable = store?.[treeName]?.dataFilter?.activeTable ?? ''
+  const activeFilterTable = store?.[treeName]?.dataFilter?.activeTable
 
   let key
   if (
@@ -41,7 +41,7 @@ const getActiveForm = ({ store, treeName, nodes }) => {
     key = getTableNameFromActiveNode(activeNode)
   }
 
-  const fOKey = activeFilterTable || key
+  const fOKey = activeFilterTable ?? key
   switch (fOKey) {
     case 'adresse':
     case 'ap':
