@@ -3,7 +3,6 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from '@apollo/client'
-// import bboxPolygon from '@turf/bbox-polygon'
 import { useMap } from 'react-leaflet'
 
 import Marker from './Marker'
@@ -41,15 +40,6 @@ const Pop = ({ treeName }) => {
   const tpopLayerIsActive = activeApfloraLayers.includes('tpop')
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
-
-  // const bounds = leafletMap.getBounds()
-  // const boundsArray = [
-  //   bounds.getWest(),
-  //   bounds.getSouth(),
-  //   bounds.getEast(),
-  //   bounds.getNorth(),
-  // ]
-  // const myBbox = bboxPolygon(boundsArray).geometry
 
   const popFilter = {
     wgs84Lat: { isNull: false },

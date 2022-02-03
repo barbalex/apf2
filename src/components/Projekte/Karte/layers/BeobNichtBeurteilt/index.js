@@ -3,7 +3,6 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-// import bboxPolygon from '@turf/bbox-polygon'
 import { useMap } from 'react-leaflet'
 
 import Marker from './Marker'
@@ -37,15 +36,6 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
     projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
   const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobNichtBeurteilt')
-
-  // const bounds = leafletMap.getBounds()
-  // const boundsArray = [
-  //   bounds.getWest(),
-  //   bounds.getSouth(),
-  //   bounds.getEast(),
-  //   bounds.getNorth(),
-  // ]
-  // const myBbox = bboxPolygon(boundsArray).geometry
 
   const beobFilter = {
     tpopId: { isNull: true },
@@ -100,18 +90,6 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
       ),
     [aparts],
   )
-
-  // if (!clustered && beobs.length > 2000) {
-  //   enqueNotification({
-  //     message: `Zuviele Beobachtungen: Es werden maximal 2'000 angezeigt, im aktuellen Ausschnitt sind es: ${beobs.length.toLocaleString(
-  //       'de-CH',
-  //     )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
-  //     options: {
-  //       variant: 'warning',
-  //     },
-  //   })
-  //   beobs = []
-  // }
 
   const beobMarkers = beobs.map((beob) => (
     <Marker key={beob.id} treeName={treeName} beob={beob} />

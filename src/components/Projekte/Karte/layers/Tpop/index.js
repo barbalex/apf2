@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useApolloClient, useLazyQuery } from '@apollo/client'
 import { useMapEvents } from 'react-leaflet'
-// import bboxPolygon from '@turf/bbox-polygon'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
@@ -140,15 +139,6 @@ const Tpop = ({ treeName, clustered }) => {
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
-  // const bounds = leafletMap.getBounds()
-  // const boundsArray = [
-  //   bounds.getWest(),
-  //   bounds.getSouth(),
-  //   bounds.getEast(),
-  //   bounds.getNorth(),
-  // ]
-  // const myBbox = bboxPolygon(boundsArray).geometry
-
   const popFilter = useMemo(
     () => ({
       // used to filter: wgs84Lat: { isNull: false }
@@ -235,28 +225,10 @@ const Tpop = ({ treeName, clustered }) => {
     () => flatten(pops.map((pop) => pop?.tpopsByPopId?.nodes ?? [])),
     [pops],
   )
-  //console.log('layers Tpop, tpops.length:', tpops.length)
-
-  // if (!clustered && tpops.length > 2000) {
-  //   enqueNotification({
-  //     message: `Zuviele Teil-Populationen: Es werden maximal 2'000 angezeigt, im aktuellen Ausschnitt sind es: ${tpops.length.toLocaleString(
-  //       'de-CH',
-  //     )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
-  //     options: {
-  //       variant: 'warning',
-  //     },
-  //   })
-  //   tpops = []
-  // }
 
   const tpopMarkers = tpops.map((tpop) => (
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
-
-  //console.log('Tpop rendering, tpops.length: ', tpops.length)
-  //console.log('Tpop rendering, tpopMarkers.length: ', tpopMarkers.length)
-  // console.log('Tpop rendering, clustered: ', clustered)
-  //console.log('Tpop rendering, apId:', apId)
 
   if (clustered) {
     return (
