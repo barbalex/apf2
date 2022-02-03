@@ -336,9 +336,6 @@ const myTypes = types
     dataFilterEmptyTable({ treeName, table }) {
       self[treeName].dataFilter[table] = initialDataFilterTreeValues[table]
     },
-    dataFilterSetActiveTable({ treeName, activeTable }) {
-      self[treeName].dataFilter.activeTable = activeTable
-    },
     dataFilterTableIsFiltered({ treeName, table }) {
       if (
         ![
@@ -357,9 +354,7 @@ const myTypes = types
       return Object.values(tableFilter).filter((v) => !!v || v === 0).length > 0
     },
     dataFilterTreeIsFiltered(treeName) {
-      const tables = Object.keys(self[treeName].dataFilter).filter(
-        (t) => t !== 'activeTable',
-      )
+      const tables = Object.keys(self[treeName].dataFilter)
       return tables.some((table) =>
         self.dataFilterTableIsFiltered({ treeName, table }),
       )

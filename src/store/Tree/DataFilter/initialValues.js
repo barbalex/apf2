@@ -6,7 +6,6 @@ import { initial as tpopfeldkontr } from './tpopfeldkontr'
 import { initial as tpopfreiwkontr } from './tpopfreiwkontr'
 
 const initialValues = {
-  activeTable: null,
   ap,
   pop,
   tpop,

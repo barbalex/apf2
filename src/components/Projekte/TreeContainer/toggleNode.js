@@ -3,21 +3,8 @@ import openNode from './openNode'
 
 const toggleNode = ({ treeName, node, store }) => {
   if (!node.url) throw new Error('passed node has no url')
-  const { dataFilterSetActiveTable } = store
-  const {
-    openNodes,
-    setActiveNodeArray,
-    activeNodeArray,
-    dataFilter,
-    setLastTouchedNode,
-  } = store[treeName]
-
-  if (dataFilter) {
-    const show = !!dataFilter.activeTable
-    if (show) {
-      dataFilterSetActiveTable({ treeName: treeName, activeTable: null })
-    }
-  }
+  const { openNodes, setActiveNodeArray, activeNodeArray, setLastTouchedNode } =
+    store[treeName]
 
   if (!isNodeOpen({ openNodes, url: node.url })) {
     // node is closed

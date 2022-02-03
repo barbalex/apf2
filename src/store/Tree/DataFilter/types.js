@@ -8,7 +8,6 @@ import { type as tpopfreiwkontr } from './tpopfreiwkontr'
 import { type as tpopmassn } from './tpopmassn'
 
 export default types.model({
-  activeTable: types.optional(types.maybeNull(types.string), null),
   ap,
   pop,
   tpop,
