@@ -19,7 +19,7 @@ import isNodeOpen from '../isNodeOpen'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../../storeContext'
-import { ContextMenuTrigger } from '../../../../modules/react-contextmenu'
+import { ContextMenuTrigger } from 'react-contextmenu/dist/react-contextmenu'
 
 const PrintIcon = styled(MdPictureAsPdf)`
   font-size: 1.5rem;

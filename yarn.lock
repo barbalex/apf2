@@ -4821,6 +4821,7 @@ __metadata:
     prop-types: 15.8.1
     query-string: 7.1.0
     react: 17.0.2
+    react-contextmenu: ^2.14.0
     react-copy-to-clipboard: 5.0.4
     react-datepicker: 4.6.0
     react-dom: 17.0.2
@@ -16592,6 +16593,20 @@ __metadata:
     nan: ^2.15.0
     node-gyp: ^8.4.1
   checksum: df5bf2a4183bedb6e28a5a17fd2ce833369e4c4af0a2ae081a9c36fa814ac60d42dc69ee47c206f7fd64663bac80e2abda3a81cbd8b7e9b56c79becb635e253a
+  languageName: node
+  linkType: hard
+
+"react-contextmenu@npm:^2.14.0":
+  version: 2.14.0
+  resolution: "react-contextmenu@npm:2.14.0"
+  dependencies:
+    classnames: ^2.2.5
+    object-assign: ^4.1.0
+  peerDependencies:
+    prop-types: ^15.0.0
+    react: ^0.14.0 || ^15.0.0 || ^16.0.1
+    react-dom: ^0.14.0 || ^15.0.0 || ^16.0.1
+  checksum: a250ed92535b339fb5dd8ec11b6a75e28b46fe46b43771ea4fefad6ca88afc44a157620c1596ced90c9fc9fe5270502f4cd1d0b29d71e698ec93a87b3c43b13e
   languageName: node
   linkType: hard
 
