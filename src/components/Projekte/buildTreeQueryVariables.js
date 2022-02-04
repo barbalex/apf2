@@ -12,6 +12,24 @@ import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/t
  * returns a filter for every branch of the nav tree
  */
 
+/**
+ *
+ * idea: build this in a psql function
+ * pass in array/list of composite types (https://www.postgresql.org/docs/14/rowtypes.html)
+ * composite type describes filtercriteria:
+ * - table
+ * - field
+ * - comparator
+ * - value
+ * - type
+ * in function build sql query string with these filtercriteria
+ * TODO: how to deal with or?
+ * - Possible to pass in a list of a list of composite types?
+ * - or: accept a fixed number of the composite type list?
+ * - Solution: define a ridicoulous number of arguments and loop through them,
+ *   https://stackoverflow.com/a/32906179/712005
+ */
+
 const buildTreeQueryVariables = ({
   dataFilter,
   openNodes,
