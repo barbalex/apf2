@@ -3741,3 +3741,7 @@ CREATE INDEX IF NOT EXISTS sidx_ch_administrative_unit_geom ON apflora.ch_admini
 -- added this myself:
 CREATE INDEX ON apflora.ch_administrative_unit USING btree (id);
 
+CREATE INDEX ON apflora.ch_administrative_unit USING btree (localisedcharacterstring);
+
+CREATE INDEX ON apflora.ch_administrative_unit USING btree (text);
+
