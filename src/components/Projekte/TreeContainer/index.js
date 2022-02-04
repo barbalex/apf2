@@ -110,7 +110,7 @@ const Container = styled.div`
     flex-direction: column;
     min-width: 100px;
     padding: 5px 0;
-    margin: 2px 0 0;
+    margin: -1px;
     font-size: 14px;
     text-align: left;
     background-color: rgb(66, 66, 66);
