@@ -21,7 +21,7 @@ const Tpopmassnber = ({ treeName, onClick }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}tpopmassnber`}>
+      <ContextMenu id={`${treeName}tpopmassnber`} hideOnLeave={true}>
         <div className="react-contextmenu-title" style={{ width: '180px' }}>
           Massnahmen-Bericht
         </div>

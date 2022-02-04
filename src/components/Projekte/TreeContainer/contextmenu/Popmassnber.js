@@ -21,7 +21,7 @@ const Popmassnber = ({ treeName, onClick }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}popmassnber`}>
+      <ContextMenu id={`${treeName}popmassnber`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Massnahmen-Bericht</div>
         {!userIsReadOnly(user.token) && (
           <>

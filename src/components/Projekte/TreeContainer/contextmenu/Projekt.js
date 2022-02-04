@@ -11,7 +11,7 @@ const closeLowerNodesData = {
 // TODO: add MenuItem for admins to add new projekt
 const Projekt = ({ onClick, treeName }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${treeName}projekt`}>
+    <ContextMenu id={`${treeName}projekt`} hideOnLeave={true}>
       <div className="react-contextmenu-title">Projekt</div>
       <MenuItem onClick={onClick} data={closeLowerNodesData}>
         alle schliessen

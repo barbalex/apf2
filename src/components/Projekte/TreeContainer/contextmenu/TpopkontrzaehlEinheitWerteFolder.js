@@ -14,7 +14,10 @@ const insertData = {
 
 const TpopkontrzaehlEinheitWerteFolder = ({ onClick, treeName }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${treeName}tpopkontrzaehlEinheitWerteFolder`}>
+    <ContextMenu
+      id={`${treeName}tpopkontrzaehlEinheitWerteFolder`}
+      hideOnLeave={true}
+    >
       <div className="react-contextmenu-title">Zähl-Einheiten</div>
       <MenuItem onClick={onClick} data={closeLowerNodesData}>
         alle schliessen

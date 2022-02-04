@@ -17,7 +17,7 @@ const EkzaehleinheitFolder = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}ekzaehleinheitFolder`}>
+      <ContextMenu id={`${treeName}ekzaehleinheitFolder`} hideOnLeave={true}>
         <div className="react-contextmenu-title">EK-Zähleinheit</div>
         {!userIsReadOnly(user.token) && (
           <MenuItem onClick={onClick} data={insertData}>

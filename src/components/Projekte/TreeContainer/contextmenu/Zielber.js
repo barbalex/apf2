@@ -21,7 +21,7 @@ const Zielber = ({ treeName, onClick }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}zielber`}>
+      <ContextMenu id={`${treeName}zielber`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Bericht</div>
         {!userIsReadOnly(user.token) && (
           <>

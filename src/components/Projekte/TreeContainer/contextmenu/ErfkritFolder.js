@@ -298,6 +298,7 @@ const ErfkritFolder = ({ onClick, treeName }) => {
         id={`${treeName}erfkritFolder`}
         collect={(props) => props}
         onShow={onShow}
+        hideOnLeave={true}
       >
         <div className="react-contextmenu-title">AP-Erfolgskriterien</div>
         {!userIsReadOnly(user.token) && (

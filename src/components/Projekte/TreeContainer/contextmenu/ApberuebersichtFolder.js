@@ -17,7 +17,7 @@ const ApberuebersichtFolder = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}apberuebersichtFolder`}>
+      <ContextMenu id={`${treeName}apberuebersichtFolder`} hideOnLeave={true}>
         <div className="react-contextmenu-title">AP-Bericht</div>
         {!userIsReadOnly(user.token) && (
           <MenuItem onClick={onClick} data={insertData}>

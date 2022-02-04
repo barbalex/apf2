@@ -14,7 +14,10 @@ const insertData = {
 
 const EkAbrechnungstypWerteFolder = ({ onClick, treeName }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${treeName}ekAbrechnungstypWerteFolder`}>
+    <ContextMenu
+      id={`${treeName}ekAbrechnungstypWerteFolder`}
+      hideOnLeave={true}
+    >
       <div className="react-contextmenu-title">EK-Abrechnungstyp</div>
       <MenuItem onClick={onClick} data={closeLowerNodesData}>
         alle schliessen

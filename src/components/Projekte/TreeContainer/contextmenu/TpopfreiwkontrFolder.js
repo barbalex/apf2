@@ -35,7 +35,7 @@ const TpopfreiwkontrFolder = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}tpopfreiwkontrFolder`}>
+      <ContextMenu id={`${treeName}tpopfreiwkontrFolder`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Freiwilligen-Kontrollen</div>
         <MenuItem onClick={onClick} data={openLowerNodesData}>
           alle öffnen

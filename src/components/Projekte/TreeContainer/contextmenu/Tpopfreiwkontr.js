@@ -32,7 +32,7 @@ const Tpopfreiwkontr = ({ treeName, onClick }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}tpopfreiwkontr`}>
+      <ContextMenu id={`${treeName}tpopfreiwkontr`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
         {!userIsReadOnly(user.token, 'freiw') && (
           <>

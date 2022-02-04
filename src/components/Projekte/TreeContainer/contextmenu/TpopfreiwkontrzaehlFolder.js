@@ -17,7 +17,10 @@ const TpopfreiwkontrzaehlFolder = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}tpopfreiwkontrzaehlFolder`}>
+      <ContextMenu
+        id={`${treeName}tpopfreiwkontrzaehlFolder`}
+        hideOnLeave={true}
+      >
         <div className="react-contextmenu-title">Zählungen</div>
         {!userIsReadOnly(user.token, 'freiw') && (
           <MenuItem onClick={onClick} data={insertData}>

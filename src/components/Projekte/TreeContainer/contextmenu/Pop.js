@@ -51,7 +51,7 @@ const Pop = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}pop`}>
+      <ContextMenu id={`${treeName}pop`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Population</div>
         <MenuItem onClick={onClick} data={openLowerNodesData}>
           alle öffnen

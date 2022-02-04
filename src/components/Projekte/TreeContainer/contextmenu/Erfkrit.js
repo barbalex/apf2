@@ -21,7 +21,7 @@ const Erfkrit = ({ treeName, onClick }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}erfkrit`}>
+      <ContextMenu id={`${treeName}erfkrit`} hideOnLeave={true}>
         <div className="react-contextmenu-title">AP-Erfolgskriterium</div>
         {!userIsReadOnly(user.token) && (
           <>

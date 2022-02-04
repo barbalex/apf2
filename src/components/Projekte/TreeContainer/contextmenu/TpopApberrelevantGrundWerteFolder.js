@@ -14,7 +14,10 @@ const insertData = {
 
 const TpopApberrelevantGrundWerteFolder = ({ onClick, treeName }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${treeName}tpopApberrelevantGrundWerteFolder`}>
+    <ContextMenu
+      id={`${treeName}tpopApberrelevantGrundWerteFolder`}
+      hideOnLeave={true}
+    >
       <div className="react-contextmenu-title">Gründe</div>
       <MenuItem onClick={onClick} data={closeLowerNodesData}>
         alle schliessen

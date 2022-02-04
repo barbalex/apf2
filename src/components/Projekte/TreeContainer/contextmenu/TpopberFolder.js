@@ -17,7 +17,7 @@ const TpopberFolder = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}tpopberFolder`}>
+      <ContextMenu id={`${treeName}tpopberFolder`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Kontroll-Berichte</div>
         {!userIsReadOnly(user.token) && (
           <MenuItem onClick={onClick} data={insertData}>

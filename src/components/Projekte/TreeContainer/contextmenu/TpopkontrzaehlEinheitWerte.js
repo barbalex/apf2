@@ -15,7 +15,10 @@ const deleteData = {
 
 const TpopkontrzaehlEinheitWerte = ({ onClick, treeName }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${treeName}tpopkontrzaehlEinheitWerte`}>
+    <ContextMenu
+      id={`${treeName}tpopkontrzaehlEinheitWerte`}
+      hideOnLeave={true}
+    >
       <div className="react-contextmenu-title">Zähl-Einheit</div>
       <MenuItem onClick={onClick} data={insertData}>
         erstelle neue

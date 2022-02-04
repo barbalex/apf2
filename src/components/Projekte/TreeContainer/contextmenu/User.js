@@ -23,7 +23,7 @@ const User = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}user`}>
+      <ContextMenu id={`${treeName}user`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Benutzer</div>
         {mayWrite && (
           <>

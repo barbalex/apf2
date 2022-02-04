@@ -21,7 +21,7 @@ const AssozartFolder = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}assozart`}>
+      <ContextMenu id={`${treeName}assozart`} hideOnLeave={true}>
         <div className="react-contextmenu-title">assoziierte Art</div>
         {!userIsReadOnly(user.token) && (
           <>

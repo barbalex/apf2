@@ -21,7 +21,7 @@ const Apart = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}apart`}>
+      <ContextMenu id={`${treeName}apart`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Aktionsplan-Art</div>
         {!userIsReadOnly(user.token) && (
           <>

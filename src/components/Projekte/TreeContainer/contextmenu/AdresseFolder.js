@@ -14,7 +14,7 @@ const insertData = {
 
 const Apfolder = ({ onClick, treeName }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${treeName}adresseFolder`}>
+    <ContextMenu id={`${treeName}adresseFolder`} hideOnLeave={true}>
       <div className="react-contextmenu-title">Adressen</div>
       <MenuItem onClick={onClick} data={closeLowerNodesData}>
         alle schliessen

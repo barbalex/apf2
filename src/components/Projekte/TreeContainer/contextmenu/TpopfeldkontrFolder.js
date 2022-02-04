@@ -35,7 +35,7 @@ const TpopfeldkontrFolder = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}tpopfeldkontrFolder`}>
+      <ContextMenu id={`${treeName}tpopfeldkontrFolder`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Feld-Kontrollen</div>
         <MenuItem onClick={onClick} data={openLowerNodesData}>
           alle öffnen

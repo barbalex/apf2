@@ -10,7 +10,7 @@ const closeLowerNodesData = {
 
 const WerteListen = ({ onClick, treeName }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${treeName}wlFolder`}>
+    <ContextMenu id={`${treeName}wlFolder`} hideOnLeave={true}>
       <div className="react-contextmenu-title">WerteListen</div>
       <MenuItem onClick={onClick} data={closeLowerNodesData}>
         alle schliessen

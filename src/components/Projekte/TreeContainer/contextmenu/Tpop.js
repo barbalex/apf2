@@ -66,7 +66,7 @@ const Tpop = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}tpop`}>
+      <ContextMenu id={`${treeName}tpop`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Teil-Population</div>
         <MenuItem onClick={onClick} data={openLowerNodesData}>
           alle öffnen

@@ -332,7 +332,7 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
       <ContextMenu
         id={`${treeName}ekfrequenzFolder`}
         collect={(props) => props}
-        onShow={onShow}
+        onShow={onShow} hideOnLeave={true}
       >
         <div className="react-contextmenu-title">EK-Frequenz</div>
         {!userIsReadOnly(user.token) && (

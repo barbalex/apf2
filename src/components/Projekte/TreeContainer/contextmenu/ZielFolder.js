@@ -23,7 +23,7 @@ const ZielFolder = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}zielFolder`}>
+      <ContextMenu id={`${treeName}zielFolder`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Ziele</div>
         <MenuItem onClick={onClick} data={openLowerNodesData}>
           alle öffnen

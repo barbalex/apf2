@@ -42,7 +42,7 @@ const Tpopfeldkontr = ({ treeName, onClick }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}tpopfeldkontr`}>
+      <ContextMenu id={`${treeName}tpopfeldkontr`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Feld-Kontrolle</div>
         {!userIsReadOnly(user.token) && (
           <>

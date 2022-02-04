@@ -21,7 +21,7 @@ const Apberuebersicht = ({ onClick, treeName }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}apberuebersicht`}>
+      <ContextMenu id={`${treeName}apberuebersicht`} hideOnLeave={true}>
         <div className="react-contextmenu-title">AP-Bericht</div>
         {!userIsReadOnly(user.token) && (
           <>

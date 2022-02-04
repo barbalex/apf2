@@ -15,7 +15,7 @@ const deleteData = {
 
 const Adresse = ({ onClick, treeName }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${treeName}adresse`}>
+    <ContextMenu id={`${treeName}adresse`} hideOnLeave={true}>
       <div className="react-contextmenu-title">Adresse</div>
       <MenuItem onClick={onClick} data={insertData}>
         erstelle neue

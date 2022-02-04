@@ -22,7 +22,7 @@ const BeobZugeordnet = ({ treeName, onClick }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}beobZugeordnet`}>
+      <ContextMenu id={`${treeName}beobZugeordnet`} hideOnLeave={true}>
         <div className="react-contextmenu-title">Beobachtung</div>
         {!userIsReadOnly(user.token) && (
           <MenuItem onClick={onClick} data={copyBeobZugeordnetKoordToTpopData}>
