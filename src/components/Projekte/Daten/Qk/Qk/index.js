@@ -155,7 +155,7 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
             </Badge>
           </div>
         )}
-        {messageGroupsFiltered.map((messageGroup, index) => (
+        {messageGroupsFiltered.map((messageGroup) => (
           <StyledPaper key={messageGroup.title} elevation={2}>
             <Title>{messageGroup.title}</Title>
             {messageGroup.messages.map((m, i) => (

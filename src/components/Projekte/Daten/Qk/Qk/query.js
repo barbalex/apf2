@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { ap, pop, ziel } from '../../../../shared/fragments'
+import { ap, ziel } from '../../../../shared/fragments'
 
 export default gql`
   query QkQuery(
@@ -113,32 +113,15 @@ export default gql`
     $zielOhneZiel: Boolean!
     $zielberOhneEntwicklung: Boolean!
     $zielberOhneJahr: Boolean!
-    $tpopsOutsideZh: Boolean!
   ) {
-    tpopsOutsideZh: projektById(id: $projId) @include(if: $tpopsOutsideZh) {
-      projId: id
-      apsByProjId(filter: { id: { equalTo: $apId } }) {
-        nodes {
-          id
-          popsByApId {
-            nodes {
-              id
-              tpopsByPopId(filter: { lv95X: { isNull: false } }) {
-                nodes {
-                  id
-                  nr
-                  flurname
-                  wgs84Lat
-                  wgs84Long
-                  apberRelevant
-                  popByPopId {
-                    ...PopFields
-                  }
-                }
-              }
-            }
-          }
-        }
+    tpopsOutsideZh: tpopOutsideZhForApFunction(apId: $apId, projId: $projId) {
+      nodes {
+        projId
+        apId
+        popId
+        popNr
+        id
+        nr
       }
     }
     apOhneBearbeitung: projektById(id: $projId)
@@ -2284,6 +2267,5 @@ export default gql`
     }
   }
   ${ap}
-  ${pop}
   ${ziel}
 `

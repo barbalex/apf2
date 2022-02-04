@@ -3697,3 +3697,47 @@ CREATE POLICY reader ON apflora.ns_betreuung
   USING (TRUE)
   WITH CHECK (CURRENT_USER = 'apflora_manager');
 
+-- Table: apflora.ch_administrative_unit
+-- source: https://opendata.swiss/en/dataset/administrative-units-switzerland-inspire
+-- import according to: https://gis.stackexchange.com/a/194722/13491
+-- DROP TABLE IF EXISTS apflora.ch_administrative_unit;
+CREATE TABLE IF NOT EXISTS apflora.ch_administrative_unit (
+  id integer NOT NULL DEFAULT nextval('apflora.ch_administrative_unit_id_seq'::regclass),
+  geom geometry(MultiPolygon, 4326),
+  gml_id character varying COLLATE pg_catalog."default",
+  nationalcode character varying(2) COLLATE pg_catalog."default",
+  localid character varying(32) COLLATE pg_catalog."default",
+  namespace character varying(57) COLLATE pg_catalog."default",
+  versionid character varying(3) COLLATE pg_catalog."default",
+  localisedcharacterstring character varying(8) COLLATE pg_catalog."default",
+  country character varying(2) COLLATE pg_catalog."default",
+  language character
+  varying COLLATE pg_catalog."default",
+  nativeness character varying COLLATE pg_catalog."default",
+  sourceofname character varying COLLATE pg_catalog."default",
+  pronunciation character varying COLLATE pg_catalog."default",
+  text character varying(31) COLLATE pg_catalog."default",
+  script character varying COLLATE pg_catalog."default",
+  residenceofauthority character varying COLLATE pg_catalog."default",
+  beginlifespanversion character varying(20) COLLATE pg_catalog."default",
+  boundary character varying COLLATE pg_catalog."default",
+  CONSTRAINT ch_administrative_unit_pkey PRIMARY KEY (id))
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS apflora.ch_administrative_unit OWNER TO postgres;
+
+GRANT SELECT ON TABLE apflora.ch_administrative_unit TO apflora_ap_reader;
+
+GRANT ALL ON TABLE apflora.ch_administrative_unit TO apflora_ap_writer;
+
+GRANT ALL ON TABLE apflora.ch_administrative_unit TO apflora_manager;
+
+GRANT SELECT ON TABLE apflora.ch_administrative_unit TO apflora_reader;
+
+GRANT ALL ON TABLE apflora.ch_administrative_unit TO postgres;
+
+CREATE INDEX IF NOT EXISTS sidx_ch_administrative_unit_geom ON apflora.ch_administrative_unit USING gist (geom) TABLESPACE pg_default;
+
+-- added this myself:
+CREATE INDEX ON apflora.ch_administrative_unit USING btree (id);
+

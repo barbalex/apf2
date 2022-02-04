@@ -1,42 +1,22 @@
 import flatten from 'lodash/flatten'
-import sortBy from 'lodash/sortBy'
-
-import isPointInsidePolygon from './isPointInsidePolygon'
-import ktZh from './ktZh.json'
 
 const createMessageFunctions = ({ data, projId, apId }) => ({
-  tpopsOutsideZh: () => {
-    const projId = data?.tpopsOutsideZh?.projId
-    const apId = data?.tpopsOutsideZh?.apsByProjId?.nodes?.[0]?.id
-    const pops =
-      data?.tpopsOutsideZh?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
-    const tpops = flatten(pops.map((p) => p?.tpopsByPopId?.nodes ?? []))
-
-    // kontrolliere die Relevanz ausserkantonaler Tpop
-    let tpopsOutsideZh = tpops.filter(
-      (tpop) =>
-        tpop.apberRelevant &&
-        !!tpop.wgs84Lat &&
-        !isPointInsidePolygon(ktZh, tpop.wgs84Lat, tpop.wgs84Long),
-    )
-    tpopsOutsideZh = sortBy(tpopsOutsideZh, (n) => [n?.popByPopId?.nr, n.nr])
-
-    return tpopsOutsideZh.map((tpop) => ({
+  tpopsOutsideZh: () =>
+    (data?.tpopsOutsideZh?.nodes ?? []).map((r) => ({
       url: [
         'Projekte',
-        projId,
+        r.projId,
         'Aktionspläne',
-        apId,
+        r.apId,
         'Populationen',
-        tpop?.popByPopId?.nr,
+        r.nr,
         'Teil-Populationen',
-        tpop.id,
+        r.id,
       ],
-      text: `Population: ${
-        tpop?.popByPopId?.nr ?? tpop?.popByPopId?.id
-      }, Teil-Population: ${tpop.nr || tpop.id}`,
-    }))
-  },
+      text: `Population: ${r.pop_nr ?? r?.pop_id}, Teil-Population: ${
+        r.nr || r.id
+      }`,
+    })),
   apOhneBearbeitung: () =>
     (data?.apOhneBearbeitung?.apsByProjId?.nodes ?? []).map(() => ({
       url: ['Projekte', projId, 'Aktionspläne', apId],
