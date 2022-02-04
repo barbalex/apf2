@@ -60,10 +60,13 @@ const Tpop = ({
           label: text
         }
       }
-      allChGemeindes(orderBy: NAME_ASC) {
+      allChAdministrativeUnits(
+        filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
+        orderBy: TEXT_ASC
+      ) {
         nodes {
-          value: name
-          label: name
+          value: text
+          label: text
         }
       }
     }
@@ -150,7 +153,7 @@ const Tpop = ({
             value={row.gemeinde}
             error={fieldErrors.gemeinde}
             label="Gemeinde"
-            options={dataLists?.allChGemeindes?.nodes ?? []}
+            options={dataLists?.allChAdministrativeUnits?.nodes ?? []}
             loading={loadingLists}
             showLocate={!showFilter}
             onClickLocate={async () => {
@@ -170,15 +173,15 @@ const Tpop = ({
                   // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
                   query: gql`
                         query tpopGemeindeQuery {
-                          allChGemeindes(
+                          allChAdministrativeUnits(
                             filter: {
-                              wkbGeometry: { containsProperly: {type: "${geojsonParsed.type}", coordinates: [${geojsonParsed.coordinates}]} }
+                              geom: { containsProperly: {type: "${geojsonParsed.type}", coordinates: [${geojsonParsed.coordinates}]} }
                             }
                           ) {
                             nodes {
                               # apollo wants an id for its cache
-                              id: objectid
-                              name
+                              id
+                              text
                             }
                           }
                         }
@@ -193,8 +196,8 @@ const Tpop = ({
                 })
               }
               const gemeinde =
-                result?.data?.allChGemeindes?.nodes?.[0]?.name ?? ''
-              // keep following method in case table ch_gemeinden is removed again
+                result?.data?.allChAdministrativeUnits?.nodes?.[0]?.text ?? ''
+              // keep following method in case table ch_administrative_units is removed again
               /*const gemeinde = await getGemeindeForKoord({
                     lv95X: row.lv95X,
                     lv95Y: row.lv95Y,

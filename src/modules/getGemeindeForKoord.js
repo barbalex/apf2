@@ -1,6 +1,6 @@
 /**
  * Diese Methode um Gemeinden zu ermitteln wird momentan nicht benutzt
- * Stattdessen wird tabelle ch_gemeinden ausgewertet
+ * Stattdessen wird tabelle ch_administrative_units ausgewertet
  * Diese Methode behalten - könnte künftig nützlich sein
  */
 import axios from 'redaxios'

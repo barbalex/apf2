@@ -3642,17 +3642,6 @@ CREATE POLICY reader ON apflora.apqk
 --select ap.id, qk.name
 --from apflora.qk, apflora.ap
 --on conflict do nothing;
--- apflora.ch_gemeinde is imported from:
--- https://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/gdb/2056/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill.zip
-CREATE INDEX ON apflora.ch_gemeinde USING btree (name);
-
-COMMENT ON TABLE apflora.ch_gemeinde IS 'Quelle: https://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/gdb/2056/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill.zip' ALTER TABLE apflora.ch_gemeinde ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.ch_gemeinde;
-
-CREATE POLICY reader ON apflora.ch_gemeinde
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- apflora.markierungen was received from topos
 COMMENT ON TABLE apflora.markierungen IS 'Markierungen, die im Rahmen von apflora gesetzt wurden. Quelle: Topos' ALTER TABLE apflora.markierungen ENABLE ROW LEVEL SECURITY;

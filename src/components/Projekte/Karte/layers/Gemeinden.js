@@ -28,11 +28,14 @@ const GemeindeLayer = () => {
 
   const { data, error } = useQuery(gql`
     query karteGemeindesQuery {
-      allChGemeindes {
+      allChAdministrativeUnits(
+        filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
+        orderBy: TEXT_ASC
+      ) {
         nodes {
-          id: ogcFid
-          name
-          wkbGeometry {
+          id
+          text
+          geom {
             geojson
           }
         }
@@ -40,11 +43,11 @@ const GemeindeLayer = () => {
     }
   `)
 
-  const nodes = data?.allChGemeindes?.nodes ?? []
+  const nodes = data?.allChAdministrativeUnits?.nodes ?? []
   const gemeinden = nodes.map((n) => ({
     type: 'Feature',
-    properties: { Gemeinde: n.name ?? '' },
-    geometry: JSON.parse(n?.wkbGeometry?.geojson),
+    properties: { Gemeinde: n.text ?? '' },
+    geometry: JSON.parse(n?.geom?.geojson),
   }))
 
   if (error) {
