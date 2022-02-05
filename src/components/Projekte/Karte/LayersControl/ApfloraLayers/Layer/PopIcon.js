@@ -42,34 +42,22 @@ const PopIcon = ({ treeName }) => {
     [],
   )
   const onClose = useCallback(() => setAnchorEl(null), [])
-  const onClickAllSame = useCallback(
-    (e) => {
-      setPopIcon('normal')
-      onClose()
-    },
-    [onClose, setPopIcon],
-  )
-  const onClickByStatusGroup = useCallback(
-    (e) => {
-      setPopIcon('statusGroup')
-      onClose()
-    },
-    [onClose, setPopIcon],
-  )
-  const onClickPopTpopNr = useCallback(
-    (e) => {
-      setPopLabel('nr')
-      onClose()
-    },
-    [onClose, setPopLabel],
-  )
-  const onClickFlurname = useCallback(
-    (e) => {
-      setPopLabel('name')
-      onClose()
-    },
-    [onClose, setPopLabel],
-  )
+  const onClickAllSame = useCallback(() => {
+    setPopIcon('normal')
+    onClose()
+  }, [onClose, setPopIcon])
+  const onClickByStatusGroup = useCallback(() => {
+    setPopIcon('statusGroup')
+    onClose()
+  }, [onClose, setPopIcon])
+  const onClickPopTpopNr = useCallback(() => {
+    setPopLabel('nr')
+    onClose()
+  }, [onClose, setPopLabel])
+  const onClickFlurname = useCallback(() => {
+    setPopLabel('name')
+    onClose()
+  }, [onClose, setPopLabel])
 
   return (
     <>
