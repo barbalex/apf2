@@ -15,18 +15,16 @@ import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/t
 /**
  *
  * idea: build this in a psql function
- * pass in array/list of composite types (https://www.postgresql.org/docs/14/rowtypes.html)
- * composite type describes filtercriteria:
+ * pass in array of composite types (https://www.postgresql.org/docs/14/rowtypes.html)
+ * composite type describes filter criteria:
  * - table
  * - field
  * - comparator
  * - value
  * - type
- * in function build sql query string with these filtercriteria
+ * in function build sql query string with these filter criteria
  * TODO: how to deal with or?
- * - Possible to pass in a list of a list of composite types?
- * - or: accept a fixed number of the composite type list?
- * - Solution: define a ridicoulous number of arguments and loop through them,
+ * - Solution: define the function as variadic and loop through all the composite type arrays,
  *   https://stackoverflow.com/a/32906179/712005
  */
 
