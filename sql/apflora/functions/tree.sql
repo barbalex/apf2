@@ -1,0 +1,40 @@
+-- idea: build tree in a psql function
+-- Query each branch in separate with clause
+-- filter each branch by passed in filter criteria
+-- every row gets sort string
+-- union all branches
+-- sort rows by sort string
+--
+-- filter criteria:
+-- pass in array of composite types (https://www.postgresql.org/docs/14/rowtypes.html)
+-- composite type describes filter criteria:
+-- - branch (not table: ek/ekf)
+-- - field
+-- - comparator
+-- - value
+-- - type (to cast the value correctly)
+-- build sql query string using these filter criteria
+-- This is same principle used in kapla/personal
+-- For example see: https://stackoverflow.com/a/8146245/712005
+-- to prevent injection, see: https://dba.stackexchange.com/a/49718/51861
+--
+-- How to deal with or-queries?
+-- Define the function as variadic and loop through all the composite type arrays
+-- which are passed in as last arguments
+-- https://stackoverflow.com/a/32906179/712005
+--
+-- cons:
+-- - lots of work to build (but: work needed for or-filters anyway)
+-- - much more processing server side (but: peaks are comparatively reduced, see pros)
+-- - rows fetched are not added to table cache of apollo
+-- - passing filter criteria adds to data transfered (but: that happens in graphql too)
+-- - sort string: dangerous. Fill each entry to equal lengths?
+--
+-- pros:
+-- - much less data transfered?
+-- - sql allows more powerfull queries
+-- - much less processing client side
+-- - easier to change to offline client side filtering later?
+-- - more server side base processing makes peaks less extreme
+--
+--
