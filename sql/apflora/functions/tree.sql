@@ -1,6 +1,8 @@
 -- idea: build tree in a psql function
 -- Query each branch in separate with clause
--- filter each branch by passed in filter criteria
+-- filter each branch by:
+-- 1. passed in openNodes (like in ae, only array instead of single)
+-- 2. passed in filter criteria
 -- every row gets sort string
 -- union all branches
 -- sort rows by sort string
@@ -37,4 +39,8 @@
 -- - easier to change to offline client side filtering later?
 -- - more server side base processing makes peaks less extreme
 --
---
+-- data measurements
+-- Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d173-4f62-11e7-aebe-2bd3a2ea4576
+-- TreeAllQuery + UsermessagesQuery: 202 kb
+-- Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne
+-- TreeAllQuery + UsermessagesQuery: 147 kb
