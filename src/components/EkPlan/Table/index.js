@@ -33,10 +33,6 @@ import exportModule from '../../../modules/export'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner'
 
-const TempContainer = styled.div`
-  padding: 10px;
-  user-select: none !important;
-`
 const Container = styled.div`
   position: relative;
   width: 100%;
