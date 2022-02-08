@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
@@ -10,13 +10,11 @@ import { Virtuoso } from 'react-virtuoso'
 import Row from './Row'
 
 import storeContext from '../../../../storeContext'
-import { initial } from 'lodash'
 
 const Container = styled.div`
   height: calc(100% - 53px - 8px);
   width: 100%;
 
-  cursor: ${(props) => (props['data-loading'] ? 'wait' : 'inherit')};
   ul {
     margin: 0;
     list-style: none;
@@ -24,7 +22,7 @@ const Container = styled.div`
   }
 `
 
-const Tree = ({ treeName, nodes, loading }) => {
+const Tree = ({ treeName, nodes }) => {
   const store = useContext(storeContext)
   const tree = store[treeName]
   const {
@@ -40,17 +38,16 @@ const Tree = ({ treeName, nodes, loading }) => {
 
   useEffect(() => {
     const index = findIndex(nodes, (node) => isEqual(node.url, urlToFocus))
-    console.log('useEffect, index:', index)
-    if (index >= 0 && initialTopMostIndex !== undefined) {
-      console.log('setting initialTopMostIndex to index:', index)
+    if (index > -1 && initialTopMostIndex === undefined) {
       setInitialTopMostIndex(index)
     }
-  }, [nodes, loading, urlToFocus, initialTopMostIndex])
+  }, [nodes, urlToFocus, initialTopMostIndex])
 
+  // only return once initial top most index is clear (better performance)
   if (initialTopMostIndex === undefined) return null
 
   return (
-    <Container data-loading={loading}>
+    <Container>
       <Virtuoso
         initialTopMostItemIndex={initialTopMostIndex}
         height={height}
