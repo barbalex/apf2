@@ -3872,6 +3872,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@virtuoso.dev/react-urx@npm:^0.2.12":
+  version: 0.2.12
+  resolution: "@virtuoso.dev/react-urx@npm:0.2.12"
+  dependencies:
+    "@virtuoso.dev/urx": ^0.2.12
+  peerDependencies:
+    react: ">=16"
+  checksum: e2ca981d2c51ad47a66dd95509900b4e0b3a5871cde3206ce752ffb61a687306f7a36659faf7c22a12874cc989daa3a53e784f7dcbe987949485cf94b6e46881
+  languageName: node
+  linkType: hard
+
+"@virtuoso.dev/urx@npm:^0.2.12":
+  version: 0.2.12
+  resolution: "@virtuoso.dev/urx@npm:0.2.12"
+  checksum: a90ed84da1f389228b5eca818d19d30ffcbe27e7aedfd454a43ef02758ee6e7d58c73017b25c60278ae40eaa9bf0010e4dfe6f6c48bfd3bf13cc423d0271acaf
+  languageName: node
+  linkType: hard
+
 "@webassemblyjs/ast@npm:1.11.1":
   version: 1.11.1
   resolution: "@webassemblyjs/ast@npm:1.11.1"
@@ -4422,6 +4440,7 @@ __metadata:
     react-split-pane: 0.1.92
     react-stylable-diff: 2.0.0
     react-typography: 0.16.20
+    react-virtuoso: ^2.6.0
     react-window: 1.8.6
     recharts: 2.1.8
     redaxios: 0.4.1
@@ -16450,6 +16469,18 @@ __metadata:
   peerDependencies:
     react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: 610f59de95dda917d5c48668b829d2eea4f255f381258663a81717f7360f84574061362b68a1be1c3b519c6b0b1df9659262af07f9b4fe55a95a5b8d372a6234
+  languageName: node
+  linkType: hard
+
+"react-virtuoso@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "react-virtuoso@npm:2.6.0"
+  dependencies:
+    "@virtuoso.dev/react-urx": ^0.2.12
+    "@virtuoso.dev/urx": ^0.2.12
+  peerDependencies:
+    react: ">=16"
+  checksum: 93f7754e8ed0af2097fec92ba5de52f0bd2e1563c2cb82831b02bdcf101333964be05ae6388a98f5ae5f2a9b888022ef995428bd48577cb9f85756ffea098491
   languageName: node
   linkType: hard
 

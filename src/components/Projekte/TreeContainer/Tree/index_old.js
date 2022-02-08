@@ -5,7 +5,6 @@ import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
-import { Virtuoso } from 'react-virtuoso'
 
 import Row from './Row'
 
@@ -64,13 +63,28 @@ const Tree = ({ treeName, nodes, loading }) => {
 
   return (
     <Container data-loading={loading}>
-      <Virtuoso
-        height={height}
-        totalCount={nodes.length}
-        itemContent={(index) => (
-          <Row key={index} node={nodes[index]} treeName={treeName} />
+      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+        {({ scrollableNodeRef, contentNodeRef }) => (
+          <StyledList
+            height={height}
+            itemCount={nodes.length}
+            itemSize={singleRowHeight}
+            width={treeWidth}
+            ref={listRef}
+            innerRef={contentNodeRef}
+            outerRef={scrollableNodeRef}
+          >
+            {({ index, style }) => (
+              <Row
+                key={index}
+                style={style}
+                node={nodes[index]}
+                treeName={treeName}
+              />
+            )}
+          </StyledList>
         )}
-      />
+      </SimpleBar>
     </Container>
   )
 }
