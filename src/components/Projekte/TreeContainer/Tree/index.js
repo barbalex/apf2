@@ -1,17 +1,17 @@
-import React, { useContext, useEffect } from 'react'
-import { FixedSizeList as List } from 'react-window'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
-import SimpleBar from 'simplebar-react'
+// 2022 02 08: removed simplebar as was hard to get to work with virtuoso
+// see: https://github.com/petyosi/react-virtuoso/issues/253
 import { Virtuoso } from 'react-virtuoso'
 
 import Row from './Row'
 
 import storeContext from '../../../../storeContext'
+import { initial } from 'lodash'
 
-const singleRowHeight = 23
 const Container = styled.div`
   height: calc(100% - 53px - 8px);
   width: 100%;
@@ -23,48 +23,36 @@ const Container = styled.div`
     padding: 0 0 0 1.1em;
   }
 `
-const StyledList = styled(List)`
-  overflow-x: hidden !important;
-
-  /* hide native scrollbar */
-  &::-webkit-scrollbar {
-    width: 0;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-    box-shadow: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    box-shadow: none;
-  }
-`
 
 const Tree = ({ treeName, nodes, loading }) => {
   const store = useContext(storeContext)
   const tree = store[treeName]
   const {
     activeNodeArray,
-    treeWidth,
     lastTouchedNode: lastTouchedNodeProxy,
     formHeight: height,
   } = tree
 
-  const listRef = React.createRef()
   const lastTouchedNode = lastTouchedNodeProxy?.slice()
   // when loading on url, lastTouchedNode may not be set
   const urlToFocus = lastTouchedNode.length ? lastTouchedNode : activeNodeArray
+  const [initialTopMostIndex, setInitialTopMostIndex] = useState(undefined)
 
   useEffect(() => {
-    if (listRef && listRef.current) {
-      const index = findIndex(nodes, (node) => isEqual(node.url, urlToFocus))
-      listRef.current.scrollToItem(index)
+    const index = findIndex(nodes, (node) => isEqual(node.url, urlToFocus))
+    console.log('useEffect, index:', index)
+    if (index >= 0 && initialTopMostIndex !== undefined) {
+      console.log('setting initialTopMostIndex to index:', index)
+      setInitialTopMostIndex(index)
     }
-  }, [listRef, nodes, loading, urlToFocus])
+  }, [nodes, loading, urlToFocus, initialTopMostIndex])
+
+  if (initialTopMostIndex === undefined) return null
 
   return (
     <Container data-loading={loading}>
       <Virtuoso
+        initialTopMostItemIndex={initialTopMostIndex}
         height={height}
         totalCount={nodes.length}
         itemContent={(index) => (
