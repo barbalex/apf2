@@ -38,6 +38,7 @@
 -- - much less processing client side
 -- - easier to change to offline client side filtering later?
 -- - more server side base processing makes peaks less extreme
+-- - enables simple endless scrolling i.e. only loading needed data!!!! https://virtuoso.dev/endless-scrolling
 --
 -- data measurements
 -- Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d173-4f62-11e7-aebe-2bd3a2ea4576
