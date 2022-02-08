@@ -1704,17 +1704,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/roboto-mono@npm:4.5.1":
-  version: 4.5.1
-  resolution: "@fontsource/roboto-mono@npm:4.5.1"
-  checksum: dbb7478732225d430dd4a5f2c259ffe9a67a3756e7e1a8becd5ee88f98347222fa5e2be2703bb3e4c27d14973947c1d3c77aa1794e70154fd79d1f95b435c5fb
+"@fontsource/roboto-mono@npm:4.5.2":
+  version: 4.5.2
+  resolution: "@fontsource/roboto-mono@npm:4.5.2"
+  checksum: 1ab280c1df43832fdded9f099df039027ec18d4cd67bed626aa38cfba1f25eba09bbc0a0120000c75469ebd1cb992b9d6d8502978b1fabc67eaca01261986f13
   languageName: node
   linkType: hard
 
-"@fontsource/roboto@npm:4.5.2":
-  version: 4.5.2
-  resolution: "@fontsource/roboto@npm:4.5.2"
-  checksum: 053bdfcb21c6bbdeb20c9c21c60ec21f9cd36760022344dbdc15ade39567bcfa5bb1ba2c9a0ba48f4608c2ab55440299182f369235f340d620ab91f834931c36
+"@fontsource/roboto@npm:4.5.3":
+  version: 4.5.3
+  resolution: "@fontsource/roboto@npm:4.5.3"
+  checksum: 5c25485184dcb9162834ef2633528b8c21812ae4bbb37e9a32f07b4db93226361d6b60fe71c61b60aeea7e9fe69be6c9d80b05eea477ec71f166a0fd3feb3df5
   languageName: node
   linkType: hard
 
@@ -4310,8 +4310,8 @@ __metadata:
     "@babel/plugin-syntax-flow": 7.16.7
     "@babel/plugin-transform-react-jsx": 7.16.7
     "@babel/preset-react": 7.16.7
-    "@fontsource/roboto": 4.5.2
-    "@fontsource/roboto-mono": 4.5.1
+    "@fontsource/roboto": 4.5.3
+    "@fontsource/roboto-mono": 4.5.2
     "@graphile-contrib/pg-order-by-related": 1.0.0-beta.6
     "@graphile/postgis": 0.1.0
     "@mui/icons-material": 5.3.1
@@ -4383,7 +4383,7 @@ __metadata:
     markdown-it: 12.3.2
     mobx: 6.3.13
     mobx-react-lite: 3.2.3
-    mobx-state-tree: 5.1.0
+    mobx-state-tree: 5.1.3
     mst-persist: 0.1.3
     notistack: 2.0.3
     pg: 8.7.3
@@ -4396,7 +4396,7 @@ __metadata:
     proj4: 2.7.5
     proj4leaflet: 1.0.2
     prop-types: 15.8.1
-    query-string: 7.1.0
+    query-string: 7.1.1
     react: 17.0.2
     react-contextmenu: 2.14.0
     react-copy-to-clipboard: 5.0.4
@@ -13662,12 +13662,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mobx-state-tree@npm:5.1.0":
-  version: 5.1.0
-  resolution: "mobx-state-tree@npm:5.1.0"
+"mobx-state-tree@npm:5.1.3":
+  version: 5.1.3
+  resolution: "mobx-state-tree@npm:5.1.3"
   peerDependencies:
     mobx: ^6.3.0
-  checksum: 6f4d17e40108ace6d6660c64fd272e6fed96468b41f992e8cffcac7e772be49f7adc9457aeef011ebf594cd544860e3fb71b4729c59b78bed72d16c277d56abd
+  checksum: 8bf429465905e97f100d782a482beff14c2c0570a1a02448ee34dd077add2ed2db3cc1e3982733d491e0fd81af9297ed8bc34fe694cc2e8f89410c94874c5239
   languageName: node
   linkType: hard
 
@@ -15826,15 +15826,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"query-string@npm:7.1.0":
-  version: 7.1.0
-  resolution: "query-string@npm:7.1.0"
+"query-string@npm:7.1.1":
+  version: 7.1.1
+  resolution: "query-string@npm:7.1.1"
   dependencies:
     decode-uri-component: ^0.2.0
     filter-obj: ^1.1.0
     split-on-first: ^1.0.0
     strict-uri-encode: ^2.0.0
-  checksum: 4594a0a092772eb6854310feea85e34f8dcf70df494776a45b9e5be53621ffbcf930ae669974e4e171ce5e0f29a837e9821d48db843106dd94ee390f6f5ac857
+  checksum: b227d1f588ae93f9f0ad078c6b811295fa151dc5a160a03bb2bac5fa0e6919cb1daa570aad1d288e77c8e89fde5362ba505b1014e6e793da9b1e885b59a690a6
   languageName: node
   linkType: hard
 
