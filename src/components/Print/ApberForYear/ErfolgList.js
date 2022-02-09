@@ -10,7 +10,7 @@ const Container = styled.div`
     margin-top: 3cm;
   }
   @media print {
-    padding-top: 0.3cm !important;
+    margin-top: 0.3cm !important;
     /* get background colors to show */
     -webkit-print-color-adjust: exact;
   }
@@ -34,6 +34,7 @@ const Table = styled.div`
     border: 1px solid rgba(0,0,0,0.1);
     box-sizing: border-box;
     border-collapse: collapse;
+    page-break-inside: avoid;
   }
 `
 const OverallTitle = styled.p`

@@ -17,7 +17,7 @@ const Container = styled.div`
     margin-top: 1.5cm;
   }
   @media print {
-    padding-top: 0.3cm !important;
+    margin-top: 0.3cm !important;
   }
 `
 const Title = styled.p`
@@ -28,6 +28,7 @@ const Title = styled.p`
 const ApRow = styled.div`
   display: flex;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  page-break-inside: avoid;
   > div {
     padding: 0.05cm 0;
   }

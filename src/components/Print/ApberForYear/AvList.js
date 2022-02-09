@@ -15,13 +15,15 @@ const Container = styled.div`
     margin-top: 1cm;
   }
   @media print {
-    padding-top: 0.3cm !important;
+    /*padding-top: 0.3cm !important;*/
+    margin-top: 0.3cm !important;
   }
 `
 const AvRow = styled.div`
   display: flex;
   padding: 0.05cm 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+  page-break-inside: avoid;
 `
 const NonAvRow = styled.div`
   display: flex;
