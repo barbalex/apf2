@@ -15,7 +15,7 @@ const Row = styled.div`
   display: flex;
   padding: 0.05cm 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  page-break-inside: avoid;
+  break-inside: avoid;
 `
 const YearRow = styled.div`
   display: flex;
