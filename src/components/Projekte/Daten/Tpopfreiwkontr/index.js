@@ -31,8 +31,12 @@ const Container = styled.div`
     margin: 0 !important;
     padding: 0.5cm !important;
     overflow: hidden;
-    break-after: always;
+    page-break-after: always;
   }
+`
+const LoadingContainer = styled.div`
+  height: 100%;
+  padding: 10px;
 `
 const ScrollContainer = styled.div`
   overflow-y: auto;

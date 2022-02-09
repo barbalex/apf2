@@ -12,8 +12,8 @@ const Title = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
   font-weight: 700;
   break-after: avoid;
-  break-after: avoid;
-  break-inside: avoid;
+  page-break-after: avoid;
+  page-break-inside: avoid;
 `
 const Row = styled.div`
   display: flex;
@@ -26,8 +26,8 @@ const TitleRow = styled(Row)`
   color: grey;
   max-width: 18cm;
   break-after: avoid;
-  break-after: avoid;
-  break-inside: avoid;
+  page-break-after: avoid;
+  page-break-inside: avoid;
 `
 const TitleSubRow = styled.div`
   display: flex;

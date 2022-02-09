@@ -34,6 +34,7 @@ const Table = styled.div`
     border: 1px solid rgba(0,0,0,0.1);
     box-sizing: border-box;
     border-collapse: collapse;
+    page-break-inside: avoid;
   }
 `
 const OverallTitle = styled.p`
@@ -49,17 +50,11 @@ const ApTitle = styled(Title)`
   grid-row: 1 / span 2;
   padding-top: 4px;
 `
-/**
- * Should use:
- * break-inside: avoid;
- * on grid-row
- * but does not seem to work: https://stackoverflow.com/a/58880333/712005, https://stackoverflow.com/a/49185717/712005
- */
 const Cell = styled.div`
   display: inline-block;
   @media print {
-    /* does not work - break-before also not */
-    break-inside: avoid;
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
   }
 `
 const Ap = styled(Cell)`

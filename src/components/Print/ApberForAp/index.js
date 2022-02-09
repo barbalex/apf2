@@ -50,7 +50,7 @@ const Container = styled.div`
     padding: ${(props) => (props.issubreport ? '0' : '0.5cm !important')};
     /*padding-left: 0 !important;*/
     /* try this */
-    break-before: always !important;
+    page-break-before: always !important;
 
     box-shadow: unset;
   }
@@ -74,7 +74,7 @@ const Title1 = styled.h3`
   font-size: 16px;
   font-weight: 700;
   break-after: avoid;
-  break-after: avoid;
+  page-break-after: avoid;
 `
 const TitledLabel = styled.label`
   text-decoration: underline;
