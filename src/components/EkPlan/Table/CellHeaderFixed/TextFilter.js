@@ -82,7 +82,7 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
       // prevent blur event which would close menu
       event.stopPropagation()
       //console.log('onClickEmpty', { localValue })
-      if (!!localValue) {
+      if (localValue) {
         setLocalValue('')
       }
       inputRef.current.focus()

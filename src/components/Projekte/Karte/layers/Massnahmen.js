@@ -32,6 +32,7 @@ const MassnahmenLayer = () => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
+    let isActive = true
     /**
      * BEWARE: https://maps.zh.ch does not include cors headers
      * so need to query server side
@@ -41,9 +42,13 @@ const MassnahmenLayer = () => {
       url: 'https://ss.apflora.ch/karte/massnahmen',
     })
       .then((response) => {
+        if (!isActive) return
+
         setData(response.data.features)
       })
       .catch((error) => {
+        if (!isActive) return
+
         enqueNotification({
           message: `Fehler beim Laden der Massnahmen für die Karte: ${error.message}`,
           options: {
@@ -52,6 +57,10 @@ const MassnahmenLayer = () => {
         })
         return console.log(error)
       })
+
+    return () => {
+      isActive = false
+    }
   }, [enqueNotification])
 
   if (!data) return null

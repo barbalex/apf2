@@ -128,6 +128,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   }
 
   useEffect(() => {
+    let isActive = true
     if (!loading) {
       // loading data just finished
       // check if tpopkontr exist
@@ -155,16 +156,25 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
             }),
           ),
         )
-          .then(() => refetch())
-          .catch((error) =>
+          .then(() => {
+            if (!isActive) return
+
+            refetch()
+          })
+          .catch((error) => {
+            if (!isActive) return
+
             enqueNotification({
               message: error.message,
               options: {
                 variant: 'error',
               },
-            }),
-          )
+            })
+          })
       }
+    }
+    return () => {
+      isActive = false
     }
   }, [
     client,

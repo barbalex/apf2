@@ -97,20 +97,17 @@ const SharedSelectCreatable = ({
     [name, saveToDb],
   )
   const onInputChange = useCallback((value) => setStateValue(value), [])
-  const onBlur = useCallback(
-    (event) => {
-      if (stateValue) {
-        const fakeEvent = {
-          target: {
-            name,
-            value: stateValue,
-          },
-        }
-        saveToDb(fakeEvent)
+  const onBlur = useCallback(() => {
+    if (stateValue) {
+      const fakeEvent = {
+        target: {
+          name,
+          value: stateValue,
+        },
       }
-    },
-    [stateValue, name, saveToDb],
-  )
+      saveToDb(fakeEvent)
+    }
+  }, [stateValue, name, saveToDb])
 
   useEffect(() => {
     setStateValue(value)

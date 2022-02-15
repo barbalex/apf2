@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
-import ReactDOM from 'react-dom'
 import 'leaflet'
 import styled from 'styled-components'
 import Input from '@mui/material/Input'

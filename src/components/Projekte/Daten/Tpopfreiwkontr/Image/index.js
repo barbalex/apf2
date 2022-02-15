@@ -31,12 +31,12 @@ const Title = styled.div`
 // https://www.voorhoede.nl/en/blog/say-no-to-image-reflow/
 const ImageContainer = styled.div`
   grid-area: myImage;
-  background-image: ${props => `url("${props.src}") !important`};
+  background-image: ${(props) => `url("${props.src}") !important`};
   background-origin: border-box;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  padding-bottom: ${props => (props.padding ? props.padding : 85)}%;
+  padding-bottom: ${(props) => (props.padding ? props.padding : 85)}%;
 `
 const NotifContainer = styled.div`
   grid-area: myImage;
@@ -51,14 +51,19 @@ const fetchImageIfNeeded = async ({
   setNotif,
   apId,
   artname,
+  isActive,
 }) => {
   if (!image && !!apId) {
     let newImage
     try {
       newImage = await import(`./${apId}.png`)
     } catch (error) {
+      if (!isActive) return
+
       return setNotif(`Für ${artname} wurde kein Bild gefunden`)
     }
+    if (!isActive) return
+
     if (newImage && newImage.default) setImage(newImage.default)
   }
 }
@@ -73,7 +78,12 @@ const Image = ({ artname, apId }) => {
   }, [apId])
 
   useEffect(() => {
-    fetchImageIfNeeded({ apId, artname, image, setImage, setNotif })
+    let isActive = true
+    fetchImageIfNeeded({ apId, artname, image, setImage, setNotif, isActive })
+
+    return () => {
+      isActive = false
+    }
   }, [apId, artname, image])
 
   return (

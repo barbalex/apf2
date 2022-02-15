@@ -20,10 +20,13 @@ const ApberForYearContainer = () => {
   const [year, setYear] = useState(printingJberYear)
   const [error, setError] = useState(undefined)
   const [loading, setLoading] = useState(false)
+
   useEffect(() => {
     setYear(printingJberYear)
   }, [printingJberYear])
+
   useEffect(() => {
+    let isActive = true
     if (printingJberYear) return
 
     setLoading(true)
@@ -48,8 +51,12 @@ const ApberForYearContainer = () => {
           },
         })
       } catch (error) {
+        if (!isActive) return
+
         setError(error)
       }
+      if (!isActive) return
+
       /*console.log('ApberForYear, useEffect setting year:', {
         year: result?.data?.apberuebersichtById?.jahr,
         result,
@@ -60,6 +67,10 @@ const ApberForYearContainer = () => {
     }
 
     run()
+
+    return () => {
+      isActive = false
+    }
   }, [
     apberuebersichtId,
     apberuebersichtIdInActiveNodeArray,

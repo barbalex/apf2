@@ -55,6 +55,7 @@ const BetreuungsgebieteLayer = () => {
   }
 
   useEffect(() => {
+    let isActive = true
     /**
      * BEWARE: https://maps.zh.ch does not include cors headers
      * so need to query server side
@@ -64,9 +65,13 @@ const BetreuungsgebieteLayer = () => {
       url: 'https://ss.apflora.ch/karte/betreuungsgebiete',
     })
       .then((response) => {
+        if (!isActive) return
+
         setGbData(response.data.features)
       })
       .catch((error) => {
+        if (!isActive) return
+
         enqueNotification({
           message: `Fehler beim Laden der Betreuungsgebiete für die Karte: ${error.message}`,
           options: {
@@ -75,6 +80,9 @@ const BetreuungsgebieteLayer = () => {
         })
         return console.log(error)
       })
+    return () => {
+      isActive = false
+    }
   }, [enqueNotification])
 
   useEffect(() => {

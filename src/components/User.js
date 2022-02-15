@@ -161,7 +161,10 @@ const User = () => {
   const onMouseDownShowPass = useCallback((e) => e.preventDefault(), [])
 
   useEffect(() => {
+    let isActive = true
     getUserFromIdb({ idb }).then((user) => {
+      if (!isActive) return
+
       dispatchTokenState({
         type: 'set',
         payload: user.token,
@@ -171,6 +174,10 @@ const User = () => {
         store.setUser({ name: user.name, token: user.token })
       }
     })
+
+    return () => {
+      isActive = false
+    }
   }, [idb, store, store.user.token])
 
   const { token, fetchingToken } = tokenState
