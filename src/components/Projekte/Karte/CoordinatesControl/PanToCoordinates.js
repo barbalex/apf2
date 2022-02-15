@@ -53,9 +53,7 @@ const PanToCoordinates = ({ setControlType, map }) => {
   const xkoordField = useRef(null)
 
   useEffect(() => {
-    ReactDOM.findDOMNode(xkoordField.current)
-      .getElementsByTagName('input')[0]
-      .focus()
+    xkoordField.current.getElementsByTagName('input')[0].focus()
   }, [])
 
   const [x, setX] = useState('')
@@ -68,15 +66,12 @@ const PanToCoordinates = ({ setControlType, map }) => {
   const [timeoutId, changeTimeoutId] = useState('')
   const [gotoFocused, changeGotoFocused] = useState(false)
 
-  const onFocusGotoContainer = useCallback(
-    (event) => {
-      clearTimeout(timeoutId)
-      if (!gotoFocused) {
-        changeGotoFocused(true)
-      }
-    },
-    [gotoFocused, timeoutId],
-  )
+  const onFocusGotoContainer = useCallback(() => {
+    clearTimeout(timeoutId)
+    if (!gotoFocused) {
+      changeGotoFocused(true)
+    }
+  }, [gotoFocused, timeoutId])
   const onClickClear = useCallback(() => {
     setMarker(null)
     if (marker) map.removeLayer(marker)
