@@ -1,9 +1,9 @@
 ---
 typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Fehler-Ideen-Vorschlaege-melden"
-date: "2019-04-16"
-title: "Fehler, Ideen, Vorschläge melden"
-sort: 24
+path: '/Dokumentation/Benutzer/Fehler-Ideen-Vorschlaege-melden'
+date: '2019-04-16'
+title: 'Fehler, Ideen, Vorschläge melden'
+sort: 25
 ---
 
 ## Artverantwortliche und Freiwillige
