@@ -38,10 +38,14 @@ const Tree = ({ treeName, nodes }) => {
 
   useEffect(() => {
     const index = findIndex(nodes, (node) => isEqual(node.url, urlToFocus))
-    if (index > -1 && initialTopMostIndex === undefined) {
-      setInitialTopMostIndex(index)
+    const indexToSet = index === -1 ? 0 : index
+    //console.log('Tree, effect:', { nodes, index, urlToFocus, indexToSet })
+    if (initialTopMostIndex === undefined) {
+      setInitialTopMostIndex(indexToSet)
     }
   }, [nodes, urlToFocus, initialTopMostIndex])
+
+  //console.log('Tree, height:', { height, initialTopMostIndex })
 
   // only return once initial top most index is clear (better performance)
   if (initialTopMostIndex === undefined) return null
