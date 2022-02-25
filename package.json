@@ -135,7 +135,8 @@
     "graphile-build-pg": "is peer",
     "graphile-build": "is peer",
     "pg": "is peer",
-    "simplebar": "is peer"
+    "simplebar": "is peer",
+    "eslint-plugin-react": "do not upgrade from 7.28.0 to 7.29.0, see: https://github.com/yannickcr/eslint-plugin-react/issues/3215"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.17.0",
@@ -149,7 +150,7 @@
     "cypress": "9.5.0",
     "eslint": "8.9.0",
     "eslint-plugin-import": "2.25.4",
-    "eslint-plugin-react": "7.29.0",
+    "eslint-plugin-react": "7.28.0",
     "eslint-plugin-react-hooks": "4.3.0",
     "eslint-webpack-plugin": "3.1.1",
     "gatsby-cli": "4.8.0",

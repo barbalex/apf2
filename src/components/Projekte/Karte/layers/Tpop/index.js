@@ -71,6 +71,8 @@ const Tpop = ({ treeName, clustered }) => {
           },
         },
       }
+      // TODO:
+      // Idea: set Gemeinde?
       //console.log('Tpop, on dblclick', { lat, lng, geomPoint })
       // DANGER:
       // need to stop propagation of the event
@@ -91,7 +93,7 @@ const Tpop = ({ treeName, clustered }) => {
             geomPoint,
           },
         })
-        console.log('Tpop, on dblclick', { refetch })
+        //console.log('Tpop, on dblclick', { refetch })
         // refetch so it appears on map
         if (refetch.tpopForMap) {
           // need to also refetch pop in case it was new

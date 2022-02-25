@@ -175,7 +175,8 @@ const Tpop = ({
                         query tpopGemeindeQuery {
                           allChAdministrativeUnits(
                             filter: {
-                              geom: { containsProperly: {type: "${geojsonParsed.type}", coordinates: [${geojsonParsed.coordinates}]} }
+                              geom: { containsProperly: {type: "${geojsonParsed.type}", coordinates: [${geojsonParsed.coordinates}]} },
+                              localisedcharacterstring: {equalTo: "Gemeinde"}
                             }
                           ) {
                             nodes {
