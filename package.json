@@ -159,7 +159,7 @@
     "graphile-build-pg": "4.12.2",
     "pg": "8.7.3",
     "pg-sql2": "4.12.1",
-    "postgraphile": "4.12.8",
+    "postgraphile": "4.12.9",
     "postgraphile-plugin-connection-filter": "2.2.2",
     "postgraphile-plugin-connection-filter-postgis": "1.0.0-alpha.6",
     "prettier": "2.5.1",

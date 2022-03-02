@@ -5135,7 +5135,7 @@ __metadata:
     notistack: 2.0.3
     pg: 8.7.3
     pg-sql2: 4.12.1
-    postgraphile: 4.12.8
+    postgraphile: 4.12.9
     postgraphile-plugin-connection-filter: 2.2.2
     postgraphile-plugin-connection-filter-postgis: 1.0.0-alpha.6
     prettier: 2.5.1
@@ -11145,7 +11145,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-ws@npm:^5.5.5":
+"graphql-ws@npm:^5.6.2":
   version: 5.6.2
   resolution: "graphql-ws@npm:5.6.2"
   peerDependencies:
@@ -16382,9 +16382,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postgraphile@npm:4.12.8":
-  version: 4.12.8
-  resolution: "postgraphile@npm:4.12.8"
+"postgraphile@npm:4.12.9":
+  version: 4.12.9
+  resolution: "postgraphile@npm:4.12.9"
   dependencies:
     "@graphile/lru": 4.11.0
     "@types/json5": ^0.0.30
@@ -16400,7 +16400,7 @@ __metadata:
     graphile-build-pg: 4.12.2
     graphile-utils: ^4.12.2
     graphql: ^0.6.0 || ^0.7.0 || ^0.8.0-b || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.2 || ^15.0.0
-    graphql-ws: ^5.5.5
+    graphql-ws: ^5.6.2
     http-errors: ^1.5.1
     iterall: ^1.0.2
     json5: ^2.1.1
@@ -16415,7 +16415,7 @@ __metadata:
     ws: ^7.4.2
   bin:
     postgraphile: cli.js
-  checksum: 156c9a70c1b8271633e2d8bb70095a7db7adf71f73caf3e36e60912bf24ad79d9becbe3dad03b7e4b72988cbb5c64b26320669bc72aad3fd8cceb307ed36ad12
+  checksum: 8497b2c8cab17d1b5d539477d2b09bc7e18f01293b5c0df2563cc85c715f1388c9f8def1faeded182b3d2c2ab11371e1a7cbde4819f02fcac2f5b232ae87ca07
   languageName: node
   linkType: hard
 
