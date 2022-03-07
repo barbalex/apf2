@@ -2681,14 +2681,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/base@npm:5.0.0-alpha.70":
-  version: 5.0.0-alpha.70
-  resolution: "@mui/base@npm:5.0.0-alpha.70"
+"@mui/base@npm:5.0.0-alpha.71":
+  version: 5.0.0-alpha.71
+  resolution: "@mui/base@npm:5.0.0-alpha.71"
   dependencies:
     "@babel/runtime": ^7.17.2
     "@emotion/is-prop-valid": ^1.1.2
     "@mui/utils": ^5.4.4
-    "@popperjs/core": ^2.4.4
+    "@popperjs/core": ^2.11.2
     clsx: ^1.1.1
     prop-types: ^15.7.2
     react-is: ^17.0.2
@@ -2699,13 +2699,13 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: aeed05cc8aab79e2dd1fcb89b40f5a108deb9c3eb5824bb7314355045d379c773b30c262dd3dbb1b260067004fd58d7648b3e93e499335dd41801aef64e59b86
+  checksum: 550a044930aa3b8808953c9eb85721c9385686fe500d296fe04d5609f263b34dafb21160a84de3e9dcc10ab4da871643c9428f803ecb81819d96a996ac2bbebd
   languageName: node
   linkType: hard
 
-"@mui/icons-material@npm:5.4.4":
-  version: 5.4.4
-  resolution: "@mui/icons-material@npm:5.4.4"
+"@mui/icons-material@npm:5.5.0":
+  version: 5.5.0
+  resolution: "@mui/icons-material@npm:5.5.0"
   dependencies:
     "@babel/runtime": ^7.17.2
   peerDependencies:
@@ -2715,22 +2715,22 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: c8207018a28a32b6447c682705ab0235e6250046c726bfb5bd9b65f81d633e02bdda8c0efa09906b52b2b31bea8c34a06465a60332c6b6057134c874e1ac600a
+  checksum: ca2623e1e0ef88c9c4539dddfe44dff4c1f3a09838e8cb7f8ae61c02ebb7a5a869019d216a338c25db36cb712d9bdcc39ae7943f164bf3e082faf02052af2134
   languageName: node
   linkType: hard
 
-"@mui/material@npm:5.4.4":
-  version: 5.4.4
-  resolution: "@mui/material@npm:5.4.4"
+"@mui/material@npm:5.5.0":
+  version: 5.5.0
+  resolution: "@mui/material@npm:5.5.0"
   dependencies:
     "@babel/runtime": ^7.17.2
-    "@mui/base": 5.0.0-alpha.70
-    "@mui/system": ^5.4.4
+    "@mui/base": 5.0.0-alpha.71
+    "@mui/system": ^5.5.0
     "@mui/types": ^7.1.2
     "@mui/utils": ^5.4.4
     "@types/react-transition-group": ^4.4.4
     clsx: ^1.1.1
-    csstype: ^3.0.10
+    csstype: ^3.0.11
     hoist-non-react-statics: ^3.3.2
     prop-types: ^15.7.2
     react-is: ^17.0.2
@@ -2748,7 +2748,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: c24017266a6ae20b9aaaed86a60a418e496f38b44732d3de472e797133009027bcc5a984579de9ff2afe8a25f5cb8df4a20def24b3dfccdcf775f41f15996bf8
+  checksum: 684e126a50017391b2ed45ca0fe9a2b8ad9cae3bb7dcb42f4e5ef8b3d989187cee3889513e28d985585f610c05bec460f9aec96320285ac6258c78effb4a6d71
   languageName: node
   linkType: hard
 
@@ -2799,9 +2799,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/styles@npm:5.4.4":
-  version: 5.4.4
-  resolution: "@mui/styles@npm:5.4.4"
+"@mui/styles@npm:5.5.0":
+  version: 5.5.0
+  resolution: "@mui/styles@npm:5.5.0"
   dependencies:
     "@babel/runtime": ^7.17.2
     "@emotion/hash": ^0.8.0
@@ -2809,7 +2809,7 @@ __metadata:
     "@mui/types": ^7.1.2
     "@mui/utils": ^5.4.4
     clsx: ^1.1.1
-    csstype: ^3.0.10
+    csstype: ^3.0.11
     hoist-non-react-statics: ^3.3.2
     jss: ^10.8.2
     jss-plugin-camel-case: ^10.8.2
@@ -2826,13 +2826,13 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 4b7efdac096f30e37ac18c5c4fb1bfd10bcc7e52b93d9d94efd373a1f40c08ff2f07d4da8275611b6929dec25778831c9438b4c9704b7208afe4a75a4fec68a7
+  checksum: 62ac7f1cec400f5f9f60054b207615989cacfbfbe8e1f28b2d51f4b5c3f04363455b06cd53b2ac1ca89e44e0d5840c87595d6774b5eeff6827b40b97810e0462
   languageName: node
   linkType: hard
 
-"@mui/system@npm:^5.4.4":
-  version: 5.4.4
-  resolution: "@mui/system@npm:5.4.4"
+"@mui/system@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "@mui/system@npm:5.5.0"
   dependencies:
     "@babel/runtime": ^7.17.2
     "@mui/private-theming": ^5.4.4
@@ -2840,7 +2840,7 @@ __metadata:
     "@mui/types": ^7.1.2
     "@mui/utils": ^5.4.4
     clsx: ^1.1.1
-    csstype: ^3.0.10
+    csstype: ^3.0.11
     prop-types: ^15.7.2
   peerDependencies:
     "@emotion/react": ^11.5.0
@@ -2854,7 +2854,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 8a296a3315bbe4822ae1a65f9b5b56c2223bd682065b88ada45dbe82b6039d6046a7aab5296a56ab42d4e922d6807bc6575034a99b5affbf2a9ad3d6e9496216
+  checksum: 1869c2d5567ea5be4e955cc46853338abdf909d6fff8d075ee2a9ae2c3b30fa9358fdde3f0048732b97f3cf56dfb8aeec7aa672a3240325d5736d1841322221c
   languageName: node
   linkType: hard
 
@@ -3554,7 +3554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.4.4, @popperjs/core@npm:^2.9.2":
+"@popperjs/core@npm:^2.11.2, @popperjs/core@npm:^2.9.2":
   version: 2.11.2
   resolution: "@popperjs/core@npm:2.11.2"
   checksum: 5695bf020eda54636e16a62dc9b5fdd92beaf7b2d19f62fcef049d57c5cff92773562d80cbf760b217c3ec928da310eb24994ab6a00fd39dffa0af9b5dfc01a6
@@ -5061,11 +5061,11 @@ __metadata:
     "@fontsource/roboto-mono": 4.5.3
     "@graphile-contrib/pg-order-by-related": 1.0.0-beta.6
     "@graphile/postgis": 0.1.0
-    "@mui/icons-material": 5.4.4
-    "@mui/material": 5.4.4
+    "@mui/icons-material": 5.5.0
+    "@mui/material": 5.5.0
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
     "@mui/styled-engine-sc": 5.4.2
-    "@mui/styles": 5.4.4
+    "@mui/styles": 5.5.0
     "@reach/router": 1.3.4
     "@react-leaflet/core": 1.1.1
     "@svgr/cli": 6.2.1
@@ -5079,12 +5079,12 @@ __metadata:
     dexie: 3.2.1
     eslint: 8.10.0
     eslint-plugin-import: 2.25.4
-    eslint-plugin-react: 7.29.2
+    eslint-plugin-react: 7.29.3
     eslint-plugin-react-hooks: 4.3.0
     eslint-webpack-plugin: 3.1.1
     exceljs: 4.3.0
     file-saver: 2.0.5
-    gatsby: 4.9.0
+    gatsby: 4.9.2
     gatsby-cli: 4.9.0
     gatsby-plugin-create-client-paths: 4.9.0
     gatsby-plugin-image: 2.9.0
@@ -5169,7 +5169,7 @@ __metadata:
     react-split-pane: 0.1.92
     react-stylable-diff: 2.0.0
     react-typography: 0.16.20
-    react-virtuoso: 2.7.2
+    react-virtuoso: 2.8.0
     react-window: 1.8.6
     recharts: 2.1.9
     redaxios: 0.4.1
@@ -7543,7 +7543,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csstype@npm:^3.0.10, csstype@npm:^3.0.2":
+"csstype@npm:^3.0.11":
+  version: 3.0.11
+  resolution: "csstype@npm:3.0.11"
+  checksum: 95e56abfe9ca219ae065acb4e43f61771a03170eed919127f558dfa168240867aba7629c8d98a201a0dd06d9a5ce82686f0570031c928516c61816adbc7c877f
+  languageName: node
+  linkType: hard
+
+"csstype@npm:^3.0.2":
   version: 3.0.10
   resolution: "csstype@npm:3.0.10"
   checksum: 20a8fa324f2b33ddf94aa7507d1b6ab3daa6f3cc308888dc50126585d7952f2471de69b2dbe0635d1fdc31223fef8e070842691877e725caf456e2378685a631
@@ -8718,7 +8725,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.29.2, eslint-plugin-react@npm:^7.29.2":
+"eslint-plugin-react@npm:7.29.3":
+  version: 7.29.3
+  resolution: "eslint-plugin-react@npm:7.29.3"
+  dependencies:
+    array-includes: ^3.1.4
+    array.prototype.flatmap: ^1.2.5
+    doctrine: ^2.1.0
+    estraverse: ^5.3.0
+    jsx-ast-utils: ^2.4.1 || ^3.0.0
+    minimatch: ^3.1.2
+    object.entries: ^1.1.5
+    object.fromentries: ^2.0.5
+    object.hasown: ^1.1.0
+    object.values: ^1.1.5
+    prop-types: ^15.8.1
+    resolve: ^2.0.0-next.3
+    semver: ^6.3.0
+    string.prototype.matchall: ^4.0.6
+  peerDependencies:
+    eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
+  checksum: 5a7b0b5700a3ed9bc52f5e7caab31a60bba586d356d07b49aa78c4b7b83fb54f2e4f6d59f61a9a315f1f89ea74f422a41846ff3432647dd1e8ae629a96dc2814
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-react@npm:^7.29.2":
   version: 7.29.2
   resolution: "eslint-plugin-react@npm:7.29.2"
   dependencies:
@@ -10435,9 +10466,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gatsby@npm:4.9.0":
-  version: 4.9.0
-  resolution: "gatsby@npm:4.9.0"
+"gatsby@npm:4.9.2":
+  version: 4.9.2
+  resolution: "gatsby@npm:4.9.2"
   dependencies:
     "@babel/code-frame": ^7.14.0
     "@babel/core": ^7.15.5
@@ -10535,7 +10566,7 @@ __metadata:
     joi: ^17.4.2
     json-loader: ^0.5.7
     latest-version: 5.1.0
-    lmdb: 2.2.1
+    lmdb: ^2.2.3
     lodash: ^4.17.21
     md5-file: ^5.0.0
     meant: ^1.0.3
@@ -10600,7 +10631,7 @@ __metadata:
       optional: true
   bin:
     gatsby: ./cli.js
-  checksum: 0e84bdc731b976f5f15372e7f22ea2fc5de6ce6d516da149d367c8dcc2a607b8daf951953923bed4ed11adc40235be64e950d1a365eacd84f6f172eefef5447b
+  checksum: a38f9897566688feb53b9148d34b0b040ac8235e8aa29b5e12380a9143b31fee98bafbd54f46344869d5acf504dcbbdddad9455446a0efb6d0c785c63dc11cca
   languageName: node
   linkType: hard
 
@@ -13288,20 +13319,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lmdb@npm:2.2.1":
-  version: 2.2.1
-  resolution: "lmdb@npm:2.2.1"
-  dependencies:
-    msgpackr: ^1.5.4
-    nan: ^2.14.2
-    node-gyp: latest
-    node-gyp-build: ^4.2.3
-    ordered-binary: ^1.2.4
-    weak-lru-cache: ^1.2.2
-  checksum: ee47e0dbfab6950f24ec252534149b789105d87ceb3a3ce4e8d0f3966e5b710a9ba92302f7c873d7910e7dd899f2994410627363a17f80092487184467029569
-  languageName: node
-  linkType: hard
-
 "lmdb@npm:^2.0.2":
   version: 2.2.3
   resolution: "lmdb@npm:2.2.3"
@@ -13327,6 +13344,20 @@ __metadata:
     ordered-binary: ^1.2.4
     weak-lru-cache: ^1.2.2
   checksum: 6030a2ddc80bbc72e5ec5174efea8d7b714575fe2894f4cc843fa1da29c1f097501f8f802649f2f74fa76c02b3d4bcb031a4d61109406094977dd1ecbccec2e7
+  languageName: node
+  linkType: hard
+
+"lmdb@npm:^2.2.3":
+  version: 2.2.4
+  resolution: "lmdb@npm:2.2.4"
+  dependencies:
+    msgpackr: ^1.5.4
+    nan: ^2.14.2
+    node-gyp: latest
+    node-gyp-build: ^4.2.3
+    ordered-binary: ^1.2.4
+    weak-lru-cache: ^1.2.2
+  checksum: df75e8ae266fb0676320366ba8847fe1e6c3c43af1c28c08eba35a35cb68c8f0be06ae305a9fecd6e2db2504dc92462da442272778facc6a8a0d953fbf0267ff
   languageName: node
   linkType: hard
 
@@ -17389,15 +17420,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-virtuoso@npm:2.7.2":
-  version: 2.7.2
-  resolution: "react-virtuoso@npm:2.7.2"
+"react-virtuoso@npm:2.8.0":
+  version: 2.8.0
+  resolution: "react-virtuoso@npm:2.8.0"
   dependencies:
     "@virtuoso.dev/react-urx": ^0.2.12
     "@virtuoso.dev/urx": ^0.2.12
   peerDependencies:
     react: ">=16"
-  checksum: 3d0018875ed5ae316ae8676b92ec1d35c6b5b41e4d8753f72d9058adac4f81c0d8443f60cf8fcaee1533c9fa2117d59fe4a05cecdadc00fe2a9eb320bc942c66
+  checksum: 7032b00db64cecea60c1d3f079491dbc7319cbfdb649e981a4bffff62fb16539ea24b593da11757d398e8d5c321fafa38998ead3d57186198935f690a82a142e
   languageName: node
   linkType: hard
 
