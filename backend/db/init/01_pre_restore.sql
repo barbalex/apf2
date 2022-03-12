@@ -1,7 +1,6 @@
 CREATE DATABASE apflora WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'C.UTF-8' LC_CTYPE = 'C.UTF-8';
 
-c apflora;
-
+\connect apflora;
 -- not sure if this hyphen is correct
 CREATE ROLE apflora_reader;
 
