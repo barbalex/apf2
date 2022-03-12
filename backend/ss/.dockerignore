@@ -4,7 +4,7 @@
 .vscode
 node_modules
 npm-debug.log
-.yarn\cache
+.yarn/cache
 
 *Dockerfile*
 *docker-compose*

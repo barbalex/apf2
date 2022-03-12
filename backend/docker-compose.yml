@@ -27,7 +27,7 @@ services:
       context: ./ss
     networks:
       - network
-    container_name: ss
+    container_name: apf_ss
     restart: always
     env_file:
       - ./.env

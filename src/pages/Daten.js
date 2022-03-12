@@ -76,7 +76,7 @@ const DatenPage = ({ location }) => {
   //console.log('DatenPage rendering')
 
   // set unterhalt to true to show this page when servicing
-  const unterhalt = true
+  const unterhalt = false
   if (unterhalt) {
     return (
       <Layout>
