@@ -1,4 +1,4 @@
-FROM postgis/postgis:14-3.1
+FROM postgis/postgis:14-3.2
 
 COPY ./init/ /docker-entrypoint-initdb.d/
 COPY ./apflora.backup /sik_data/apflora.backup

@@ -43,9 +43,8 @@ async function start() {
   server.route({
     method: '*',
     path: '/',
-    handler: (request, h) => {
-      return `Hello there`
-    },
+    handler: () =>
+      `Hello, you found the api for non-cors-compatible web services`,
   })
   server.route({
     method: 'GET',
