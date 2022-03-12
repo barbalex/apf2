@@ -69,7 +69,6 @@ services:
         '--cors',
         '--disable-query-log',
         '--enable-query-batching',
-        ' --enhance-graphiql',
         '--retry-on-init-fail',
       ]
   caddy:
