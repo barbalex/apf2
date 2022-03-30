@@ -5,7 +5,7 @@ CREATE TABLE apflora.infoflora20220330original (
   GUID text,
   interpretation_note text,
   no_isfs integer,
-  taxon_id integer,
+  tax_id_intern integer,
   taxon text,
   validation_status integer,
   determinavit_cf text,
@@ -73,6 +73,8 @@ CREATE TABLE apflora.infoflora20220330original (
 );
 
 CREATE INDEX ON apflora.infoflora20220330original USING btree (no_isfs);
+
+CREATE INDEX ON apflora.infoflora20220330original USING btree (tax_id_intern);
 
 CREATE INDEX ON apflora.infoflora20220330original USING btree (obs_id);
 
