@@ -1,11 +1,18 @@
 import React from 'react'
 import { TileLayer } from 'react-leaflet'
+import styled from 'styled-components'
+
+const StyledTileLayer = styled(TileLayer)`
+  .leaflet-tile-container {
+    filter: grayscale(100%) !important;
+  }
+`
 
 const OsmBwLayer = () => (
-  <TileLayer
-    url="//tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+  <StyledTileLayer
+    url="//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
     attribution='&copy; <a href="//osm.org/copyright">OpenStreetMap</a>'
-    maxNativeZoom={18}
+    maxNativeZoom={19}
     minZoom={0}
     maxZoom={22}
   />
