@@ -1,5 +1,26 @@
--- TODO: filter as in 2021-11-19_import_info_flora.sql
--- TODO: 1. import if obs_id doesn't exist yet, 2. update data where obs_id exists already
+-- basic method:
+-- 1. import if obs_id doesn't exist yet
+-- 2. update data where obs_id exists already
+-- 3. ignore where tpop guid is in guid field
+--
+-- 0. update obs_id field in beob where null
+SELECT
+  obs_id,
+  data ->> 'obs_id' AS obs_id_from_data
+FROM
+  apflora.beob
+WHERE
+  obs_id IS NULL
+  AND data ->> 'obs_id' IS NOT NULL;
+
+UPDATE
+  apflora.beob
+SET
+  obs_id = (data ->> 'obs_id')::bigint
+WHERE
+  obs_id IS NULL
+  AND data ->> 'obs_id' IS NOT NULL;
+
 -- 1. create temporary table for import data
 CREATE TABLE apflora.infoflora20220330original (
   GUID text,
@@ -79,11 +100,15 @@ CREATE INDEX ON apflora.infoflora20220330original USING btree (tax_id_intern);
 CREATE INDEX ON apflora.infoflora20220330original USING btree (obs_id);
 
 -- 2. import into apflora.infoflora20220330original
--- directly with pgAdmin?
+-- using pgAdmin from csv
 --
 -- 3. build temp beob table
 CREATE TABLE apflora.infoflora20220330beob (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  guid uuid DEFAULT NULL,
+  obs_id integer,
+  is_apflora_ek boolean DEFAULT FALSE,
+  already_imported boolean DEFAULT FALSE,
   quelle text DEFAULT NULL,
   -- this field in data contains this datasets id
   id_field varchar(38) DEFAULT NULL,
@@ -100,17 +125,19 @@ CREATE TABLE apflora.infoflora20220330beob (
   geom_point geometry(point, 4326) DEFAULT NULL,
   -- maybe later add a geojson field for polygons?
   data jsonb,
-  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  nicht_zuordnen boolean DEFAULT FALSE,
-  infoflora_informiert_datum date DEFAULT NULL,
-  bemerkungen text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 
+CREATE INDEX ON apflora.infoflora20220330beob USING btree (obs_id);
+
+CREATE INDEX ON apflora.infoflora20220330beob USING btree (already_imported);
+
 -- 4. insert importdata into temp beob table
-INSERT INTO apflora.infoflora20220330beob (id_field, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
+INSERT INTO apflora.infoflora20220330beob (guid, obs_id, id_field, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
 SELECT
+  uuid_or_null (guid),
+  obs_id,
   'obs_id',
   format('%s-%s-%s', obs_year, coalesce(obs_month, '01'), coalesce(obs_day, '01'))::date,
   observers,
@@ -119,29 +146,69 @@ SELECT
     SELECT
       id
     FROM
-      apflora.ae_taxonomies
+      apflora.ae_taxonomies tax
     WHERE
-      taxid = no_isfs
-      AND taxonomie_name = 'DB-TAXREF (2017)'),
+      tax.taxid_intern = tax_id_intern
+      AND tax.taxonomie_name = 'DB-TAXREF (2017)'),
   (
     SELECT
       id
     FROM
-      apflora.ae_taxonomies
+      apflora.ae_taxonomies tax
     WHERE
-      taxid = no_isfs
-      AND taxonomie_name = 'DB-TAXREF (2017)'),
+      tax.taxid_intern = tax_id_intern
+      AND tax.taxonomie_name = 'DB-TAXREF (2017)'),
   'ag (import)',
   ST_Transform (ST_SetSRID (ST_MakePoint (x_swiss, y_swiss), 2056), 4326),
-  'Info Flora 2022.01'
+  'Info Flora 2022.03'
 FROM
   apflora.infoflora20220330original ROW;
 
--- 5. check this table
--- 6. insert temp beob into beob
-INSERT INTO apflora.beob (id_field, datum, autor, data, art_id, changed_by, geom_point, quelle)
+-- 5. mark apflora kontrollen with is_apflora_ek = TRUE
+UPDATE
+  apflora.infoflora20220330beob
+SET
+  is_apflora_ek = TRUE
+WHERE
+  guid IN (
+    SELECT
+      id
+    FROM
+      apflora.tpopkontr);
+
+--
+-- 6. mark beob already imported with already_imported = TRUE
+SELECT
+  *
+FROM
+  apflora.infoflora20220330beob
+WHERE
+  id IN (
+    SELECT
+      info.id
+    FROM
+      apflora.infoflora20220330beob info
+      INNER JOIN apflora.beob beob ON beob.obs_id = info.obs_id);
+
+UPDATE
+  apflora.infoflora20220330beob
+SET
+  already_imported = TRUE
+WHERE
+  id IN (
+    SELECT
+      info.id
+    FROM
+      apflora.infoflora20220330beob info
+      INNER JOIN apflora.beob beob ON beob.obs_id = info.obs_id);
+
+-- 5. check infoflora20220330beob
+--
+-- 6. insert new temp beob into beob
+INSERT INTO apflora.beob (id_field, obs_id, datum, autor, data, art_id, changed_by, geom_point, quelle)
 SELECT
   id_field,
+  obs_id,
   datum,
   autor,
   data,
@@ -150,5 +217,87 @@ SELECT
   geom_point,
   quelle
 FROM
-  apflora.infoflora20220330beob;
+  apflora.infoflora20220330beob
+WHERE
+  is_apflora_ek = FALSE
+  AND already_imported = FALSE;
 
+-- INSERT 0 15012
+--
+-- 7. update data for already_imported = true
+SELECT
+  outerbeob.id,
+  outerbeob.data,
+  (
+    SELECT
+      data
+    FROM
+      apflora.infoflora20220330beob
+    WHERE
+      outerbeob.obs_id = obs_id) AS new_data
+FROM
+  apflora.beob outerbeob
+WHERE
+  obs_id IS NOT NULL
+  AND obs_id IN (
+    SELECT
+      obs_id
+    FROM
+      apflora.infoflora20220330beob
+    WHERE
+      already_imported = TRUE);
+
+UPDATE
+  apflora.beob
+SET
+  data = (
+    SELECT
+      data
+    FROM
+      apflora.infoflora20220330beob
+    WHERE
+      apflora.beob.obs_id = obs_id)
+WHERE
+  obs_id IS NOT NULL
+  AND obs_id IN (
+    SELECT
+      obs_id
+    FROM
+      apflora.infoflora20220330beob
+    WHERE
+      already_imported = TRUE);
+
+-- UPDATE 21630
+--
+-- 8. get stats
+SELECT
+  quelle,
+  count(id)
+FROM
+  apflora.beob
+GROUP BY
+  quelle
+ORDER BY
+  count(id) DESC;
+
+-- "EvAB 2016"          232595
+-- "Info Flora 2017"	  192606
+-- "FloZ 2017"	        30935
+-- "Info Flora 2021.05"	17638
+-- "Info Flora 2022.03"	15012
+-- "Info Flora 2022.01"	459
+--
+SELECT
+  beob.art_id,
+  tax.artname,
+  count(beob.id)
+FROM
+  apflora.beob beob
+  INNER JOIN apflora.ae_taxonomies tax ON tax.id = beob.art_id
+GROUP BY
+  beob.art_id,
+  tax.artname
+ORDER BY
+  count(beob.id) DESC;
+
+-- 2491 rows
