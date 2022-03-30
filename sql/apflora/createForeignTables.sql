@@ -39,6 +39,7 @@ CREATE FOREIGN TABLE apflora.ae_taxonomies_download (
   taxonomie_name text,
   id uuid,
   taxid integer,
+  taxid_intern integer,
   familie text,
   artname text,
   artwert integer)
