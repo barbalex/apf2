@@ -101,6 +101,7 @@ CREATE INDEX ON apflora.infoflora20220330original USING btree (obs_id);
 
 -- 2. import into apflora.infoflora20220330original
 -- using pgAdmin from csv
+-- 43'009 Beobachtungen
 --
 -- 3. build temp beob table
 CREATE TABLE apflora.infoflora20220330beob (
@@ -164,6 +165,7 @@ SELECT
 FROM
   apflora.infoflora20220330original ROW;
 
+-- 43'009
 -- 5. mark apflora kontrollen with is_apflora_ek = TRUE
 UPDATE
   apflora.infoflora20220330beob
@@ -176,6 +178,7 @@ WHERE
     FROM
       apflora.tpopkontr);
 
+-- 6'367
 --
 -- 6. mark beob already imported with already_imported = TRUE
 SELECT
@@ -202,6 +205,8 @@ WHERE
       apflora.infoflora20220330beob info
       INNER JOIN apflora.beob beob ON beob.obs_id = info.obs_id);
 
+-- 21'630
+--
 -- 5. check infoflora20220330beob
 --
 -- 6. insert new temp beob into beob
@@ -222,7 +227,7 @@ WHERE
   is_apflora_ek = FALSE
   AND already_imported = FALSE;
 
--- INSERT 0 15012
+-- 15'012
 --
 -- 7. update data for already_imported = true
 SELECT
@@ -267,7 +272,7 @@ WHERE
     WHERE
       already_imported = TRUE);
 
--- UPDATE 21630
+-- 21'630
 --
 -- 8. get stats
 SELECT
