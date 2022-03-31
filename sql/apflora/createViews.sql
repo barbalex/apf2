@@ -1699,7 +1699,8 @@ SELECT
   beob.id_field,
   beob.data ->> (
     SELECT
-      id_field FROM apflora.beob
+      id_field
+    FROM apflora.beob
     WHERE
       id = beob2.id) AS "OriginalId",
 apflora.beob.art_id,
@@ -1752,7 +1753,8 @@ SELECT
   beob.id_field,
   beob.data ->> (
     SELECT
-      id_field FROM apflora.beob
+      id_field
+    FROM apflora.beob
     WHERE
       id = beob2.id) AS "original_id",
 apflora.beob.art_id_original,
@@ -2586,11 +2588,11 @@ WHERE
     -- Ansiedlungen since apflora.tpopber.jahr
     SELECT
       apflora.tpopmassn.tpop_id FROM apflora.tpopmassn
-    WHERE
-      apflora.tpopmassn.tpop_id = apflora.tpop.id
-      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr > apflora.tpopber.jahr);
+      WHERE
+        apflora.tpopmassn.tpop_id = apflora.tpop.id
+        AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr IS NOT NULL
+        AND apflora.tpopmassn.jahr > apflora.tpopber.jahr);
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberaktuell CASCADE;
 
@@ -2820,11 +2822,11 @@ WHERE
     -- Ansiedlungen since apflora.tpopber.jahr
     SELECT
       apflora.tpopmassn.tpop_id FROM apflora.tpopmassn
-    WHERE
-      apflora.tpopmassn.tpop_id = apflora.tpop.id
-      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr >= lasttpopber.jahr)
+      WHERE
+        apflora.tpopmassn.tpop_id = apflora.tpop.id
+        AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr IS NOT NULL
+        AND apflora.tpopmassn.jahr >= lasttpopber.jahr)
 ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
@@ -2899,9 +2901,9 @@ WHERE
     SELECT DISTINCT
       apflora.tpop.pop_id FROM apflora.tpop
       INNER JOIN apflora.tpopmassn ON apflora.tpop.id = apflora.tpopmassn.tpop_id
-    WHERE
-      apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr >= lastpopber.jahr)
+      WHERE
+        apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr >= lastpopber.jahr)
 ORDER BY
   apflora.pop.nr;
 
@@ -2941,11 +2943,11 @@ WHERE
     -- Ansiedlungen since apflora.tpopber.jahr
     SELECT
       apflora.tpopmassn.tpop_id FROM apflora.tpopmassn
-    WHERE
-      apflora.tpopmassn.tpop_id = apflora.tpop.id
-      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr >= lasttpopber.jahr)
+      WHERE
+        apflora.tpopmassn.tpop_id = apflora.tpop.id
+        AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr IS NOT NULL
+        AND apflora.tpopmassn.jahr >= lasttpopber.jahr)
 ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
@@ -2984,9 +2986,9 @@ WHERE
     SELECT DISTINCT
       apflora.tpop.pop_id FROM apflora.tpop
       INNER JOIN apflora.tpopmassn ON apflora.tpop.id = apflora.tpopmassn.tpop_id
-    WHERE
-      apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr >= lastpopber.jahr)
+      WHERE
+        apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr >= lastpopber.jahr)
 ORDER BY
   apflora.pop.nr;
 
@@ -3026,11 +3028,11 @@ WHERE
     -- Ansiedlungen since apflora.tpopber.jahr
     SELECT
       apflora.tpopmassn.tpop_id FROM apflora.tpopmassn
-    WHERE
-      apflora.tpopmassn.tpop_id = apflora.tpop.id
-      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr >= lasttpopber.jahr)
+      WHERE
+        apflora.tpopmassn.tpop_id = apflora.tpop.id
+        AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr IS NOT NULL
+        AND apflora.tpopmassn.jahr >= lasttpopber.jahr)
 ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
@@ -3069,9 +3071,9 @@ WHERE
     SELECT DISTINCT
       apflora.tpop.pop_id FROM apflora.tpop
       INNER JOIN apflora.tpopmassn ON apflora.tpop.id = apflora.tpopmassn.tpop_id
-    WHERE
-      apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr >= lastpopber.jahr)
+      WHERE
+        apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr >= lastpopber.jahr)
 ORDER BY
   apflora.pop.nr;
 
@@ -3111,11 +3113,11 @@ WHERE
     -- Ansiedlungen since apflora.tpopber.jahr
     SELECT
       apflora.tpopmassn.tpop_id FROM apflora.tpopmassn
-    WHERE
-      apflora.tpopmassn.tpop_id = apflora.tpop.id
-      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr >= lasttpopber.jahr)
+      WHERE
+        apflora.tpopmassn.tpop_id = apflora.tpop.id
+        AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr IS NOT NULL
+        AND apflora.tpopmassn.jahr >= lasttpopber.jahr)
 ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
@@ -3154,9 +3156,9 @@ WHERE
     SELECT DISTINCT
       apflora.tpop.pop_id FROM apflora.tpop
       INNER JOIN apflora.tpopmassn ON apflora.tpop.id = apflora.tpopmassn.tpop_id
-    WHERE
-      apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr >= lastpopber.jahr)
+      WHERE
+        apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr >= lastpopber.jahr)
 ORDER BY
   apflora.pop.nr;
 
@@ -3196,11 +3198,11 @@ WHERE
     -- Ansiedlungen since jahr
     SELECT
       apflora.tpopmassn.tpop_id FROM apflora.tpopmassn
-    WHERE
-      apflora.tpopmassn.tpop_id = apflora.tpop.id
-      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr >= lasttpopber.jahr)
+      WHERE
+        apflora.tpopmassn.tpop_id = apflora.tpop.id
+        AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr IS NOT NULL
+        AND apflora.tpopmassn.jahr >= lasttpopber.jahr)
 ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
@@ -3239,9 +3241,9 @@ WHERE
     SELECT DISTINCT
       apflora.tpop.pop_id FROM apflora.tpop
       INNER JOIN apflora.tpopmassn ON apflora.tpop.id = apflora.tpopmassn.tpop_id
-    WHERE
-      apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr >= lastpopber.jahr)
+      WHERE
+        apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr >= lastpopber.jahr)
 ORDER BY
   apflora.pop.nr;
 
@@ -3426,9 +3428,9 @@ WHERE
     SELECT DISTINCT
       apflora.tpop.pop_id FROM apflora.tpop
       INNER JOIN apflora.tpopmassn ON apflora.tpop.id = apflora.tpopmassn.tpop_id
-    WHERE
-      apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr > lastpopber.jahr)
+      WHERE
+        apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr > lastpopber.jahr)
 ORDER BY
   apflora.pop.nr;
 
@@ -3468,11 +3470,11 @@ WHERE
     -- Ansiedlungen since apflora.tpopber.jahr
     SELECT
       apflora.tpopmassn.tpop_id FROM apflora.tpopmassn
-    WHERE
-      apflora.tpopmassn.tpop_id = apflora.tpop.id
-      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr > lasttpopber.jahr)
+      WHERE
+        apflora.tpopmassn.tpop_id = apflora.tpop.id
+        AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr IS NOT NULL
+        AND apflora.tpopmassn.jahr > lasttpopber.jahr)
 ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
@@ -3548,24 +3550,25 @@ FROM
   INNER JOIN apflora.tpopkontrzaehl_einheit_werte ON apflora.tpopkontrzaehl_einheit_werte.code = zaehl2.einheit
   INNER JOIN apflora.tpopkontr kontr2
   INNER JOIN apflora.tpop tpop2 ON tpop2.id = kontr2.tpop_id ON zaehl2.tpopkontr_id = kontr2.id
-WHERE
-  tpop2.apber_relevant IS TRUE
-  -- nur Kontrollen mit Jahr berücksichtigen
-  AND kontr2.jahr IS NOT NULL
-  AND kontr2.apber_nicht_relevant IS NOT TRUE
-  -- nur Zählungen mit Anzahl berücksichtigen
-  AND zaehl2.anzahl IS NOT NULL
-  AND kontr2.id = (
-    SELECT
-      kontr3.id FROM apflora.tpopkontrzaehl zaehl3
+  WHERE
+    tpop2.apber_relevant IS TRUE
+    -- nur Kontrollen mit Jahr berücksichtigen
+    AND kontr2.jahr IS NOT NULL
+    AND kontr2.apber_nicht_relevant IS NOT TRUE
+    -- nur Zählungen mit Anzahl berücksichtigen
+    AND zaehl2.anzahl IS NOT NULL
+    AND kontr2.id = (
+      SELECT
+        kontr3.id
+      FROM apflora.tpopkontrzaehl zaehl3
       INNER JOIN apflora.tpopkontr kontr3
       INNER JOIN apflora.tpop tpop3 ON tpop3.id = kontr3.tpop_id ON zaehl3.tpopkontr_id = kontr3.id
-    WHERE
-      tpop3.apber_relevant IS TRUE
-      AND kontr3.jahr IS NOT NULL
-      AND zaehl3.anzahl IS NOT NULL
-      AND kontr3.tpop_id = tpop2.id
-      AND kontr3.apber_nicht_relevant IS NOT TRUE ORDER BY kontr3.jahr DESC, kontr3.datum DESC LIMIT 1)
+      WHERE
+        tpop3.apber_relevant IS TRUE
+        AND kontr3.jahr IS NOT NULL
+        AND zaehl3.anzahl IS NOT NULL
+        AND kontr3.tpop_id = tpop2.id
+        AND kontr3.apber_nicht_relevant IS NOT TRUE ORDER BY kontr3.jahr DESC, kontr3.datum DESC LIMIT 1)
 ORDER BY tpop2.id, apflora.tpopkontrzaehl_einheit_werte.text, kontr2.jahr DESC, kontr2.datum DESC) AS tbl ORDER BY 1, 2, 3 $$, $$
   SELECT
     unnest('{Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl ("tpop_id" uuid,
@@ -3634,32 +3637,33 @@ FROM
   INNER JOIN apflora.tpopkontrzaehl_einheit_werte ON apflora.tpopkontrzaehl_einheit_werte.code = zaehl5.einheit
   INNER JOIN apflora.tpopkontr kontr5
   INNER JOIN apflora.tpop tpop5 ON tpop5.id = kontr5.tpop_id ON zaehl5.tpopkontr_id = kontr5.id
-  WHERE
-    tpop5.apber_relevant IS TRUE
-    -- nur Kontrollen mit Jahr berücksichtigen
-    AND kontr5.jahr IS NOT NULL
-    AND kontr5.apber_nicht_relevant IS NOT TRUE
-    -- nur Zählungen mit Anzahl berücksichtigen
-    AND zaehl5.anzahl IS NOT NULL
-    -- letzte zu berücksichtigende Kontrolle dieser tpop
-    AND kontr5.id = (
-      SELECT
-        kontr6.id FROM apflora.tpopkontrzaehl zaehl6
+    WHERE
+      tpop5.apber_relevant IS TRUE
+      -- nur Kontrollen mit Jahr berücksichtigen
+      AND kontr5.jahr IS NOT NULL
+      AND kontr5.apber_nicht_relevant IS NOT TRUE
+      -- nur Zählungen mit Anzahl berücksichtigen
+      AND zaehl5.anzahl IS NOT NULL
+      -- letzte zu berücksichtigende Kontrolle dieser tpop
+      AND kontr5.id = (
+        SELECT
+          kontr6.id
+        FROM apflora.tpopkontrzaehl zaehl6
         INNER JOIN apflora.tpopkontr kontr6
         INNER JOIN apflora.tpop tpop6 ON tpop6.id = kontr6.tpop_id ON zaehl6.tpopkontr_id = kontr6.id
-      WHERE
-        -- nur Berichts-relevante tpop
-        tpop6.apber_relevant IS TRUE
-        -- nur Kontrollen mit Jahr berücksichtigen
-        AND kontr6.jahr IS NOT NULL
-        -- nur Berichts-relevante kontrollen
-        AND kontr6.apber_nicht_relevant IS NOT TRUE
-        -- nur Zählungen mit Anzahl berücksichtigen
-        AND zaehl6.anzahl IS NOT NULL
-        -- derselben tpop
-        AND kontr6.tpop_id = tpop5.id ORDER BY
-        -- nur die jüngste
-        kontr6.jahr DESC, kontr6.datum DESC LIMIT 1)
+        WHERE
+          -- nur Berichts-relevante tpop
+          tpop6.apber_relevant IS TRUE
+          -- nur Kontrollen mit Jahr berücksichtigen
+          AND kontr6.jahr IS NOT NULL
+          -- nur Berichts-relevante kontrollen
+          AND kontr6.apber_nicht_relevant IS NOT TRUE
+          -- nur Zählungen mit Anzahl berücksichtigen
+          AND zaehl6.anzahl IS NOT NULL
+          -- derselben tpop
+          AND kontr6.tpop_id = tpop5.id ORDER BY
+          -- nur die jüngste
+          kontr6.jahr DESC, kontr6.datum DESC LIMIT 1)
 ORDER BY tpop5.id, apflora.tpopkontrzaehl_einheit_werte.text, kontr5.jahr DESC, kontr5.datum DESC
 ), massn_triebe AS ( SELECT DISTINCT ON (tpop.id)
     tpop.id AS tpop_id, massn.jahr, 'Triebe total' AS zaehleinheit, massn.anz_triebe AS anzahl FROM apflora.tpopmassn massn
