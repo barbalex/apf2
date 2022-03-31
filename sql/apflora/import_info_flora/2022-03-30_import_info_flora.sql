@@ -1,9 +1,9 @@
 -- basic method:
--- 1. import if obs_id doesn't exist yet
--- 2. update data where obs_id exists already
--- 3. ignore where tpop guid is in guid field
+-- 1 import if obs_id doesn't exist yet
+-- 2 update data where obs_id exists already
+-- 3 ignore where tpop guid is in guid field
 --
--- 0. update obs_id field in beob where null
+-- 0 update obs_id field in beob where null
 SELECT
   obs_id,
   data ->> 'obs_id' AS obs_id_from_data
@@ -21,7 +21,7 @@ WHERE
   obs_id IS NULL
   AND data ->> 'obs_id' IS NOT NULL;
 
--- 1. create temporary table for import data
+-- 1 create temporary table for import data
 CREATE TABLE apflora.infoflora20220330original (
   GUID text,
   interpretation_note text,
@@ -99,11 +99,11 @@ CREATE INDEX ON apflora.infoflora20220330original USING btree (tax_id_intern);
 
 CREATE INDEX ON apflora.infoflora20220330original USING btree (obs_id);
 
--- 2. import into apflora.infoflora20220330original
--- using pgAdmin from csv
--- 43'009 Beobachtungen
+-- 2 import into apflora.infoflora20220330original
+--   using pgAdmin from csv
+--   43'009 Beobachtungen
 --
--- 3. build temp beob table
+-- 3 build temp beob table
 CREATE TABLE apflora.infoflora20220330beob (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
   guid uuid DEFAULT NULL,
@@ -134,7 +134,7 @@ CREATE INDEX ON apflora.infoflora20220330beob USING btree (obs_id);
 
 CREATE INDEX ON apflora.infoflora20220330beob USING btree (already_imported);
 
--- 4. insert importdata into temp beob table
+-- 4 insert importdata into temp beob table
 INSERT INTO apflora.infoflora20220330beob (guid, obs_id, id_field, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
 SELECT
   uuid_or_null (guid),
@@ -178,7 +178,7 @@ FROM
   apflora.infoflora20220330original ROW;
 
 -- 43'009
--- 5. mark apflora kontrollen with is_apflora_ek = TRUE
+-- 5 mark apflora kontrollen with is_apflora_ek = TRUE
 UPDATE
   apflora.infoflora20220330beob
 SET
@@ -192,7 +192,7 @@ WHERE
 
 -- 6'367
 --
--- 6. mark beob already imported with already_imported = TRUE
+-- 6 mark beob already imported with already_imported = TRUE
 SELECT
   *
 FROM
@@ -219,18 +219,21 @@ WHERE
 
 -- 21'630
 --
--- 5. check infoflora20220330beob
+-- 7 check infoflora20220330beob
 --
--- 6. insert new temp beob into beob
---    TODO: next time add id from infoflora20220330beob!
-INSERT INTO apflora.beob (id_field, obs_id, datum, autor, data, art_id, changed_by, geom_point, quelle)
+-- 8 insert new temp beob into beob
+--   added id from infoflora20220330beob after the fact
+--   added art_id_original after the fact
+INSERT INTO apflora.beob (id, id_field, obs_id, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
 SELECT
+  id,
   id_field,
   obs_id,
   datum,
   autor,
   data,
   art_id,
+  art_id_original,
   changed_by,
   geom_point,
   quelle
@@ -242,7 +245,7 @@ WHERE
 
 -- 15'012
 --
--- 7. update data for already_imported = true
+-- 9 update data for already_imported = true
 SELECT
   outerbeob.id,
   outerbeob.data,
@@ -287,7 +290,7 @@ WHERE
 
 -- 21'630
 --
--- 8. get stats
+-- 10 get stats
 SELECT
   quelle,
   count(id)
@@ -320,9 +323,9 @@ ORDER BY
 
 -- 2491 rows
 --
--- 9. correct empty art_id's
+-- 11 correct empty art_id's
 --    not needed next time
--- 9.1. select in infoflora20220330beob
+-- 12.1 select in infoflora20220330beob
 SELECT
   obs_id,
   (
@@ -339,7 +342,7 @@ FROM
 WHERE
   art_id IS NULL;
 
--- 9.2. select in beob
+-- 12.2 select in beob
 SELECT
   obs_id,
   art_id,
@@ -363,26 +366,35 @@ WHERE
       apflora.infoflora20220330beob
     WHERE
       art_id IS NULL)
-  AND quelle = 'Info Flora 2022.03'
-  -- 9.3. update in beob
-  UPDATE
-    apflora.beob
-  SET
-    art_id = (
-      SELECT
-        id
-      FROM
-        apflora.ae_taxonomies tax
-      WHERE
-        tax.taxid = (data ->> 'tax_id_intern')::bigint
-        AND tax.taxonomie_name = 'SISF (2005)')
-  WHERE
-    obs_id IN (
-      SELECT
-        obs_id
-      FROM
-        apflora.infoflora20220330beob
-      WHERE
-        art_id IS NULL)
-    AND quelle = 'Info Flora 2022.03';
+  AND quelle = 'Info Flora 2022.03';
+
+-- 12.3 update in beob
+UPDATE
+  apflora.beob
+SET
+  art_id = (
+    SELECT
+      id
+    FROM
+      apflora.ae_taxonomies tax
+    WHERE
+      tax.taxid = (data ->> 'tax_id_intern')::bigint
+      AND tax.taxonomie_name = 'SISF (2005)')
+WHERE
+  obs_id IN (
+    SELECT
+      obs_id
+    FROM
+      apflora.infoflora20220330beob
+    WHERE
+      art_id IS NULL)
+  AND quelle = 'Info Flora 2022.03';
+
+-- 12.4 add forgotten art_id_original
+UPDATE
+  apflora.beob
+SET
+  art_id_original = art_id
+WHERE
+  quelle = 'Info Flora 2022.03';
 
