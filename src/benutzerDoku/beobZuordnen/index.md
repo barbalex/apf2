@@ -46,4 +46,5 @@ Episodisch und bei Bedarf werden Beobachtungen importiert. Ziel: mindestens ein 
 - 2021: 17'638 von [Info Spezies](https://www.infoflora.ch/de/allgemeines/info-species.html) (nur für von Topos ausgewählte Arten)
 - 2022.01: 459 von [Info Spezies](https://www.infoflora.ch/de/allgemeines/info-species.html) (von den AP-Verantwortlichen neu erfasste)
 - 2022.03: 15'012 von [Info Spezies](https://www.infoflora.ch/de/allgemeines/info-species.html) (nur für von Topos ausgewählte Arten, inklusive von den AP-Verantwortlichen neu erfasste)
+- 2022.04: 1'147 von [Info Spezies](https://www.infoflora.ch/de/allgemeines/info-species.html) (von den AP-Verantwortlichen neu erfasste ausserhalb des von der Infoflora mit normalen Exporten gelieferten Gebiets, d.h. mehr als 30km vom Kt. Zürich entfernt)
   <br/><br/>

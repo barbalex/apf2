@@ -74,3 +74,7 @@ Feld- und Freiwilligen-Kontrollen entsprechen Beobachtungen. Ein mal jährlich (
 - `expertise_introduite_nom` ist der AP-Verantwortliche oder - bei dessen Fehlen - Topos
 - `projekt`: AP Flora ZH
 - `aktionsplan`: Bearbeitungsstand, Startjahr und Umsetzungsstand des Aktionsplans (sofern vorhanden)
+
+### Ich will es genauer wissen
+
+O.k., selber schuld :wink:: https://github.com/barbalex/apf2/blob/master/sql/apflora/export_info_flora/2022-03-31_export_info_flora.sql
