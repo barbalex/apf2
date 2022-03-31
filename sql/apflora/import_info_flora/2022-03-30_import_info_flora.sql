@@ -143,22 +143,34 @@ SELECT
   format('%s-%s-%s', obs_year, coalesce(obs_month, '01'), coalesce(obs_day, '01'))::date,
   observers,
   row_to_json(ROW),
-  (
+  -- TODO: next time: use COALESCE(expression,replacement) to choose from sisf 2005 for Makroalgen
+  -- https://www.postgresqltutorial.com/postgresql-isnull/
+  COALESCE((
     SELECT
       id
-    FROM
-      apflora.ae_taxonomies tax
+    FROM apflora.ae_taxonomies tax
     WHERE
       tax.taxid_intern = tax_id_intern
-      AND tax.taxonomie_name = 'DB-TAXREF (2017)'),
-  (
+      AND tax.taxonomie_name = 'DB-TAXREF (2017)'), (
     SELECT
       id
-    FROM
-      apflora.ae_taxonomies tax
+    FROM apflora.ae_taxonomies tax
+    WHERE
+      tax.taxid = (data ->> 'tax_id_intern')::bigint
+    AND tax.taxonomie_name = 'SISF (2005)')),
+  coalesce((
+    SELECT
+      id
+    FROM apflora.ae_taxonomies tax
     WHERE
       tax.taxid_intern = tax_id_intern
-      AND tax.taxonomie_name = 'DB-TAXREF (2017)'),
+      AND tax.taxonomie_name = 'DB-TAXREF (2017)'), (
+    SELECT
+      id
+    FROM apflora.ae_taxonomies tax
+  WHERE
+    tax.taxid = (data ->> 'tax_id_intern')::bigint
+  AND tax.taxonomie_name = 'SISF (2005)')),
   'ag (import)',
   ST_Transform (ST_SetSRID (ST_MakePoint (x_swiss, y_swiss), 2056), 4326),
   'Info Flora 2022.03'
@@ -210,6 +222,7 @@ WHERE
 -- 5. check infoflora20220330beob
 --
 -- 6. insert new temp beob into beob
+--    TODO: next time add id from infoflora20220330beob!
 INSERT INTO apflora.beob (id_field, obs_id, datum, autor, data, art_id, changed_by, geom_point, quelle)
 SELECT
   id_field,
@@ -306,3 +319,70 @@ ORDER BY
   count(beob.id) DESC;
 
 -- 2491 rows
+--
+-- 9. correct empty art_id's
+--    not needed next time
+-- 9.1. select in infoflora20220330beob
+SELECT
+  obs_id,
+  (
+    SELECT
+      id
+    FROM
+      apflora.ae_taxonomies tax
+    WHERE
+      tax.taxid = (data ->> 'tax_id_intern')::bigint
+      AND tax.taxonomie_name = 'SISF (2005)') AS art_id
+  --, data
+FROM
+  apflora.infoflora20220330beob
+WHERE
+  art_id IS NULL;
+
+-- 9.2. select in beob
+SELECT
+  obs_id,
+  art_id,
+  quelle,
+  (
+    SELECT
+      id
+    FROM
+      apflora.ae_taxonomies tax
+    WHERE
+      tax.taxid = (data ->> 'tax_id_intern')::bigint
+      AND tax.taxonomie_name = 'SISF (2005)') AS new_art_id,
+  data
+FROM
+  apflora.beob
+WHERE
+  obs_id IN (
+    SELECT
+      obs_id
+    FROM
+      apflora.infoflora20220330beob
+    WHERE
+      art_id IS NULL)
+  AND quelle = 'Info Flora 2022.03'
+  -- 9.3. update in beob
+  UPDATE
+    apflora.beob
+  SET
+    art_id = (
+      SELECT
+        id
+      FROM
+        apflora.ae_taxonomies tax
+      WHERE
+        tax.taxid = (data ->> 'tax_id_intern')::bigint
+        AND tax.taxonomie_name = 'SISF (2005)')
+  WHERE
+    obs_id IN (
+      SELECT
+        obs_id
+      FROM
+        apflora.infoflora20220330beob
+      WHERE
+        art_id IS NULL)
+    AND quelle = 'Info Flora 2022.03';
+
