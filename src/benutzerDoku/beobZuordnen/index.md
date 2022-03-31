@@ -38,7 +38,12 @@ Hier gibt es zwei Methoden, die mit einem einzigen Klick ausgelöst werden könn
 
 ## 2. Verfügbare Beobachtungen
 
-- Im September 2017 wurden alle Beobachtungen der [Info Spezies](https://www.infoflora.ch/de/allgemeines/info-species.html) und der Fachstelle Naturschutz für den Kanton Zürich integriert
-- Im April 2017 wurden die Beobachtungen des Projekts [Floz](https://www.floz.zbg.ch/) integriert
-- Im November 2021 wurden Beobachtungen der [Info Spezies](https://www.infoflora.ch/de/allgemeines/info-species.html) importiert (nur für von Topos ausgewählte Arten)
+Episodisch und bei Bedarf werden Beobachtungen importiert. Ziel: mindestens ein mal jährlich. Folgende Importe haben bisher stattgefunden:
+
+- 2016: 232'595 von der Fachstelle Naturschutz
+- 2017: 192'606 von [Info Spezies](https://www.infoflora.ch/de/allgemeines/info-species.html)
+- 2017: 30'935 des Projekts [Floz](https://www.floz.zbg.ch/) (offenbar nur Herbarbelege)
+- 2021: 17'638 von [Info Spezies](https://www.infoflora.ch/de/allgemeines/info-species.html) (nur für von Topos ausgewählte Arten)
+- 2022.01: 459 von [Info Spezies](https://www.infoflora.ch/de/allgemeines/info-species.html) (von den AP-Verantwortlichen neu erfasste)
+- 2022.03: 15'012 von [Info Spezies](https://www.infoflora.ch/de/allgemeines/info-species.html) (nur für von Topos ausgewählte Arten, inklusive von den AP-Verantwortlichen neu erfasste)
   <br/><br/>
