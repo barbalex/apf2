@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: '/Dokumentation/Technisch/Info-Flora-Export'
-date: '2021-03-03'
+date: '2022-03-31'
 title: 'Info-Flora-Export'
 sort: 10
 ---
@@ -22,12 +22,15 @@ Feld- und Freiwilligen-Kontrollen entsprechen Beobachtungen. Ein mal jährlich (
 - Kontrolle:
   - Ein gültiger Bearbeiter ist erfasst (nicht der Bearbeiter "Unbekannt")
   - Es existiert ein Kontrolljahr. Es liegt vor dem aktuellen (Kontrollen aus dem aktuellen Jahr wurden ev. noch nicht verifiziert)
+  - Es werden immer alle exportiert. Info Flora kann selber bestimmen, was sie mit früher bereits gelieferten machen will (erkennbar an `id_projektintern`)
 
 ### Folgende Felder werden exportiert
 
 - `id_projektintern`: id der Kontrolle
 - `id_in_evab`: id der Kontrolle, so geschrieben wie sie EvAB erwartete und wie sie früher von EvAB an Info Flora geliefert wurde
-- `sisf_nr_2005`: Taxonomie-ID der Pflanzenart. Nach dem Index 2005
+- `taxonomie_id`: ID der Pflanzenart in der verwendeten Taxonomie
+- `taxonomie`: Welche Taxonomie für die Pflanzenart verwendet wird.<br/>
+  Bei AP-Arten sollte das normalerweise `DB-TAXREF (2017)` sein, die übrigen sind meist noch auf `SISF (2005)`
 - `artname`: Name der Pflanzenart
 - `beobachtungstyp`: `O` (Feldbeobachtung)
 - `herkunft`:
