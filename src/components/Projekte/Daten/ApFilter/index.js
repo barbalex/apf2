@@ -43,7 +43,7 @@ const LabelPopoverRow = styled.div`
 const LabelPopoverTitleRow = styled(LabelPopoverRow)`
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  background-color: #565656;
+  background-color: rgb(46, 125, 50);
   color: white;
 `
 const LabelPopoverContentRow = styled(LabelPopoverRow)`
