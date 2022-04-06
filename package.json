@@ -1,7 +1,7 @@
 {
   "name": "apf2",
   "description": "Aktionspläne für Flora-Projekte",
-  "version": "1.68.13",
+  "version": "1.68.14",
   "repository": {
     "type": "git",
     "url": "git://github.com/barbalex/apf2.git"
@@ -22,11 +22,11 @@
     "@babel/core": "7.17.8",
     "@fontsource/roboto": "4.5.5",
     "@fontsource/roboto-mono": "4.5.5",
-    "@mui/icons-material": "5.5.1",
-    "@mui/material": "5.5.3",
+    "@mui/icons-material": "5.6.0",
+    "@mui/material": "5.6.0",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/styled-engine-sc": "5.5.2",
-    "@mui/styles": "5.5.3",
+    "@mui/styles": "5.6.0",
     "@reach/router": "1.3.4",
     "@react-leaflet/core": "1.1.1",
     "autosuggest-highlight": "3.2.1",
@@ -37,7 +37,7 @@
     "dexie": "3.2.1",
     "exceljs": "4.3.0",
     "file-saver": "2.0.5",
-    "gatsby": "4.11.1",
+    "gatsby": "4.11.2",
     "gatsby-plugin-create-client-paths": "4.9.0",
     "gatsby-plugin-image": "2.11.1",
     "gatsby-plugin-manifest": "4.11.1",
@@ -119,7 +119,7 @@
     "simplebar-react": "2.3.6",
     "styled-components": "5.3.5",
     "typography": "0.16.21",
-    "uploadcare-widget": "3.17.1",
+    "uploadcare-widget": "3.17.2",
     "use-debounce": "7.0.1"
   },
   "dependenciesComments": {
@@ -149,11 +149,11 @@
     "copyfiles": "2.4.1",
     "cypress": "9.5.3",
     "eslint": "8.12.0",
-    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-import": "2.26.0",
     "eslint-plugin-react": "7.29.4",
     "eslint-plugin-react-hooks": "4.4.0",
     "eslint-webpack-plugin": "3.1.1",
-    "gatsby-cli": "4.11.1",
+    "gatsby-cli": "4.11.2",
     "gatsby-plugin-workerize-loader": "2.1.0",
     "graphile-build": "4.12.2",
     "graphile-build-pg": "4.12.2",
@@ -176,5 +176,5 @@
     "not ie > 0",
     "not op_mini all"
   ],
-  "packageManager": "yarn@3.1.0"
+  "packageManager": "yarn@3.2.0"
 }

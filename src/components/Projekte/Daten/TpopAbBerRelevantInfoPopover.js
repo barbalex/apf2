@@ -57,6 +57,11 @@ const TpopApBerRelevantInfoPopover = (
           {'siehe bei Populationen "überprüft, kein Vorkommen"'}
         </LabelPopoverRowColumnRight>
       </LabelPopoverContentRow>
+      <LabelPopoverContentRow>
+        {
+          'Bei historischen, ausserkantonalen Populationen ist der Status "ausserkantonal" zu verwenden.'
+        }
+      </LabelPopoverContentRow>
     </Container>
   </ErrorBoundary>
 )
