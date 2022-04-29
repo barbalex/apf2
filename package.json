@@ -136,7 +136,6 @@
     "graphile-build": "is peer",
     "pg": "is peer",
     "simplebar": "is peer",
-    "eslint-plugin-react": "do not upgrade from 7.28.0 to 7.29.0, see: https://github.com/yannickcr/eslint-plugin-react/issues/3215",
     "react-leaflet": "3.2.5: do not upgrade as react-leaflet-markercluster creates errors"
   },
   "devDependencies": {
