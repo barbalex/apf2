@@ -871,7 +871,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-jsx@npm:^7.16.7":
+"@babel/plugin-syntax-jsx@npm:^7.12.13, @babel/plugin-syntax-jsx@npm:^7.16.7":
   version: 7.16.7
   resolution: "@babel/plugin-syntax-jsx@npm:7.16.7"
   dependencies:
@@ -1738,6 +1738,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emotion/babel-plugin@npm:^11.7.1":
+  version: 11.9.2
+  resolution: "@emotion/babel-plugin@npm:11.9.2"
+  dependencies:
+    "@babel/helper-module-imports": ^7.12.13
+    "@babel/plugin-syntax-jsx": ^7.12.13
+    "@babel/runtime": ^7.13.10
+    "@emotion/hash": ^0.8.0
+    "@emotion/memoize": ^0.7.5
+    "@emotion/serialize": ^1.0.2
+    babel-plugin-macros: ^2.6.1
+    convert-source-map: ^1.5.0
+    escape-string-regexp: ^4.0.0
+    find-root: ^1.1.0
+    source-map: ^0.5.7
+    stylis: 4.0.13
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  checksum: 2d2c4fadd389862896bcbc5f42c9b9c1a199810173fcf14e5520506c7179c2ddb991b8832fd273f42104cf0dae98886ad8e767b5e38ad235b652d903c3b8a328
+  languageName: node
+  linkType: hard
+
 "@emotion/cache@npm:^11.4.0, @emotion/cache@npm:^11.7.1":
   version: 11.7.1
   resolution: "@emotion/cache@npm:11.7.1"
@@ -1767,22 +1789,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/memoize@npm:^0.7.4":
+"@emotion/memoize@npm:^0.7.4, @emotion/memoize@npm:^0.7.5":
   version: 0.7.5
   resolution: "@emotion/memoize@npm:0.7.5"
   checksum: 83da8d4a7649a92c72f960817692bc6be13cc13e107b9f7e878d63766525ed4402881bfeb3cda61145c050281e7e260f114a0a2870515527346f2ef896b915b3
   languageName: node
   linkType: hard
 
-"@emotion/react@npm:^11.1.1":
-  version: 11.7.1
-  resolution: "@emotion/react@npm:11.7.1"
+"@emotion/react@npm:^11.8.1":
+  version: 11.9.0
+  resolution: "@emotion/react@npm:11.9.0"
   dependencies:
     "@babel/runtime": ^7.13.10
+    "@emotion/babel-plugin": ^11.7.1
     "@emotion/cache": ^11.7.1
-    "@emotion/serialize": ^1.0.2
-    "@emotion/sheet": ^1.1.0
-    "@emotion/utils": ^1.0.0
+    "@emotion/serialize": ^1.0.3
+    "@emotion/utils": ^1.1.0
     "@emotion/weak-memoize": ^0.2.5
     hoist-non-react-statics: ^3.3.1
   peerDependencies:
@@ -1793,7 +1815,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 3392aa71f9c68c16022947959f7f842174e6b075b3baf58e185462411cd9b5a87557109a9225b1abaa2d7200a08b7cb9d7f21aa035f0d36b2c89e19b2a124e02
+  checksum: 4ceb004f942fb7557a55ea17aad2c48c4cd48ed5a780ccdc2993e4bded2f94d7c1764bd2f4fbe53f5b26059263599cec64ff66d29447e281a58c60b39c72e5cc
   languageName: node
   linkType: hard
 
@@ -1807,6 +1829,19 @@ __metadata:
     "@emotion/utils": ^1.0.0
     csstype: ^3.0.2
   checksum: ff84fbe09ec06e7ad3deaef5c5b5ea6af6a522e8efe49c2b398b875d06872626284a83b6b18b7f777750c94264a61e7924157d869d9bca2f675731bbb91a6055
+  languageName: node
+  linkType: hard
+
+"@emotion/serialize@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@emotion/serialize@npm:1.0.3"
+  dependencies:
+    "@emotion/hash": ^0.8.0
+    "@emotion/memoize": ^0.7.4
+    "@emotion/unitless": ^0.7.5
+    "@emotion/utils": ^1.0.0
+    csstype: ^3.0.2
+  checksum: 99a9053bd98c99d63af542ebee029281eeaf653e3a12e97ee79bad7330c68408104c30be6fc07a528e38bb69aba680655181744b76ec6c6f459c121cb805fac2
   languageName: node
   linkType: hard
 
@@ -1835,6 +1870,13 @@ __metadata:
   version: 1.0.0
   resolution: "@emotion/utils@npm:1.0.0"
   checksum: 3ce8048441a915447d9ef51eb6d1d4cbcce8c8d1647bc7a23333ce2fb2249e74cf9471670d6f49a716e93ff633c9e7a6633517698e17391aebfc40c9d0cabcc0
+  languageName: node
+  linkType: hard
+
+"@emotion/utils@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@emotion/utils@npm:1.1.0"
+  checksum: d3b681ca3a23b07033ac6c6937e71010a5549ac8ccec325eb6c91a7e48d9a73db83fa5dadc58be981bb125d7c00fedca868ea4362b1da9e02866615f96be4df1
   languageName: node
   linkType: hard
 
@@ -4720,50 +4762,50 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/build-utils@npm:2.15.1":
-  version: 2.15.1
-  resolution: "@vercel/build-utils@npm:2.15.1"
-  checksum: 54dc74463717f45d184b2152d1ba68672c42e735b161f4f381910243e634a082375a6a0c6875806669d630cbca0be62ab327338a21231decd8f42982982031fd
+"@vercel/build-utils@npm:2.16.0":
+  version: 2.16.0
+  resolution: "@vercel/build-utils@npm:2.16.0"
+  checksum: eb2ebfe6820796462eb830d10c1173f26271af11e04d36efc465e9200f6432b0e2c0cb997d10c3cc5f5eac92ae957d88a72eb43784e5450b6f3e8e7bae58f245
   languageName: node
   linkType: hard
 
-"@vercel/go@npm:1.3.2":
-  version: 1.3.2
-  resolution: "@vercel/go@npm:1.3.2"
-  checksum: 52c5add9ef41614b8a41ba61b7e08ee9c9e3f9e5a420da5ed56292c08cf7fce1bdc97fdf6d76d73a7c442e676d07f5b3d9cd8a129cf8cd162f3ec3b0c7d4c9dd
+"@vercel/go@npm:1.4.0":
+  version: 1.4.0
+  resolution: "@vercel/go@npm:1.4.0"
+  checksum: a69afdd535297541b46ee0fd309f6205580e0015d01f29e249fce5b6481a247b1a8f827ec129e77b6470c545383ad5a8aa96ee8a93ddf47413dfa2b7979e0b38
   languageName: node
   linkType: hard
 
-"@vercel/node-bridge@npm:2.2.0":
-  version: 2.2.0
-  resolution: "@vercel/node-bridge@npm:2.2.0"
-  checksum: 7ba972a005304d96b0c12bde62cf791b700fe726ac2c7cf83088a34912d0e79d130226502e97f71834d1182a43b504437d300075c74e8f6e786c772a79b0af90
+"@vercel/node-bridge@npm:2.2.1":
+  version: 2.2.1
+  resolution: "@vercel/node-bridge@npm:2.2.1"
+  checksum: f7301a1d4f9405bfc5863c18379aa97e415ebd14dbedd75a4435ba41026756b879082c60d61b6d7ce36d66acb645f1733dc190a44dc16a1cc7494050ae51f606
   languageName: node
   linkType: hard
 
-"@vercel/node@npm:1.14.1":
-  version: 1.14.1
-  resolution: "@vercel/node@npm:1.14.1"
+"@vercel/node@npm:1.15.0":
+  version: 1.15.0
+  resolution: "@vercel/node@npm:1.15.0"
   dependencies:
     "@types/node": "*"
-    "@vercel/node-bridge": 2.2.0
+    "@vercel/node-bridge": 2.2.1
     ts-node: 8.9.1
     typescript: 4.3.4
-  checksum: 4365ae19000ff99af0d9879570370617b635a8313e3f8039b9f51ada96f4dfffac612937fb2e68ac466e2ac6496104e5668b4a3b60829a18f49dae70281e4225
+  checksum: 41cc34953e29c1c4fb3ec265a183132b6593b503224556b6c0d5c87cfdf2be6cd6a640ed36512d97bec62a52f1048c68d3c8e5f292e16c70256079d17a366157
   languageName: node
   linkType: hard
 
-"@vercel/python@npm:2.2.2":
-  version: 2.2.2
-  resolution: "@vercel/python@npm:2.2.2"
-  checksum: 0a8ba1a2d9a269c77492b2d385fc30edc1fe21104010e4c6ae2bfe5d58e5ca3fd60e00fac1292da3251a74d8ae5c1ad121e0fd67f3e2e7e065b8173a8f42f704
+"@vercel/python@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@vercel/python@npm:2.3.0"
+  checksum: 5821d430f205913b161e77dc3658b8fdcdeb18e6c0af5d08dbeb9d432504ef65a04097d070508def4233eb5340bd50c9a19b0e5327318129e71d5af7b09519f0
   languageName: node
   linkType: hard
 
-"@vercel/ruby@npm:1.3.2":
-  version: 1.3.2
-  resolution: "@vercel/ruby@npm:1.3.2"
-  checksum: 99d14217e3dad692034e520001357843689f1b821957158289a8ded85d13725235ed5ad43ebec051766d95ea0f2277d1ddc712afddd961da487e7219fefa73f4
+"@vercel/ruby@npm:1.3.3":
+  version: 1.3.3
+  resolution: "@vercel/ruby@npm:1.3.3"
+  checksum: efe1d31dc6ef6b859be6f8afffd189777f638a1498d158c08485f150cde0443caf40aafcf3926c2a5d04b82b17a6331c1e2a741a22300d76e9074635a8d406eb
   languageName: node
   linkType: hard
 
@@ -5290,7 +5332,7 @@ __metadata:
     get-urls: 11.0.0
     graphile-build: 4.12.2
     graphile-build-pg: 4.12.2
-    graphql: 16.3.0
+    graphql: 16.4.0
     graphql.macro: 1.4.2
     is-uuid: 1.0.2
     isomorphic-fetch: 3.0.0
@@ -5306,7 +5348,7 @@ __metadata:
     leaflet.markercluster: 1.5.3
     localforage: 1.10.0
     lodash: 4.17.21
-    luxon: 2.3.1
+    luxon: 2.3.2
     markdown-it: 12.3.2
     mobx: 6.5.0
     mobx-react-lite: 3.3.0
@@ -5319,23 +5361,23 @@ __metadata:
     postgraphile-plugin-connection-filter: 2.3.0
     postgraphile-plugin-connection-filter-postgis: 1.0.0-alpha.6
     prettier: 2.6.2
-    prismjs: 1.27.0
+    prismjs: 1.28.0
     proj4: 2.8.0
     proj4leaflet: 1.0.2
     prop-types: 15.8.1
     query-string: 7.1.1
-    react: 18.0.0
+    react: 18.1.0
     react-contextmenu: 2.14.0
     react-copy-to-clipboard: 5.1.0
     react-datepicker: 4.7.0
-    react-dom: 18.0.0
+    react-dom: 18.1.0
     react-error-boundary: 3.1.4
     react-focus-within: 2.0.2
     react-helmet: 6.1.0
     react-highlight-words: 0.18.0
     react-icons: 4.3.1
     react-image-lightbox: 5.1.4
-    react-is: 18.0.0
+    react-is: 18.1.0
     react-leaflet: 3.2.5
     react-leaflet-bing-v2: 5.2.3
     react-leaflet-control: 2.1.2
@@ -5344,23 +5386,23 @@ __metadata:
     react-linkify: 1.0.0-alpha
     react-markdown-editor-lite: 1.3.2
     react-resize-detector: 7.0.0
-    react-select: 5.3.0
+    react-select: 5.3.1
     react-sortable-hoc: 2.0.0
     react-split-pane: 0.1.92
     react-stylable-diff: 2.0.0
     react-typography: 0.16.20
-    react-virtuoso: 2.9.1
-    react-window: 1.8.6
+    react-virtuoso: 2.10.2
+    react-window: 1.8.7
     recharts: 2.1.9
     redaxios: 0.4.1
     simplebar: 5.3.6
-    simplebar-react: 2.3.6
+    simplebar-react: 2.3.7
     source-map-explorer: 2.5.2
     styled-components: 5.3.5
     typography: 0.16.21
     uploadcare-widget: 3.17.2
     use-debounce: 7.0.1
-    vercel: 24.1.0
+    vercel: 24.2.0
   languageName: unknown
   linkType: soft
 
@@ -5810,7 +5852,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-macros@npm:^2.5.0, babel-plugin-macros@npm:^2.8.0":
+"babel-plugin-macros@npm:^2.5.0, babel-plugin-macros@npm:^2.6.1, babel-plugin-macros@npm:^2.8.0":
   version: 2.8.0
   resolution: "babel-plugin-macros@npm:2.8.0"
   dependencies:
@@ -7221,7 +7263,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"convert-source-map@npm:^1.7.0":
+"convert-source-map@npm:^1.5.0, convert-source-map@npm:^1.7.0":
   version: 1.8.0
   resolution: "convert-source-map@npm:1.8.0"
   dependencies:
@@ -9808,6 +9850,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"find-root@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "find-root@npm:1.1.0"
+  checksum: b2a59fe4b6c932eef36c45a048ae8f93c85640212ebe8363164814990ee20f154197505965f3f4f102efc33bfb1cbc26fd17c4a2fc739ebc51b886b137cbefaf
+  languageName: node
+  linkType: hard
+
 "find-up@npm:4.1.0, find-up@npm:^4.0.0, find-up@npm:^4.1.0":
   version: 4.1.0
   resolution: "find-up@npm:4.1.0"
@@ -11427,10 +11476,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.3.0":
-  version: 16.3.0
-  resolution: "graphql@npm:16.3.0"
-  checksum: ba540641e9cd2a8de5b989ff1433b015f232fa73aaef478d6709c1339cd43113347917acb965a5799c004667687852fc8ff0cfaa935eb26374c91c1fd7fdaeb1
+"graphql@npm:16.4.0":
+  version: 16.4.0
+  resolution: "graphql@npm:16.4.0"
+  checksum: 8cac2c466891b6c6ace2fa3807f93815dea53cbec372998c139e796a321a6882c2324cc605e5f9aa45356890239aa9e731a04d8c59ec524db82bd18fb48aafee
   languageName: node
   linkType: hard
 
@@ -14158,10 +14207,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:2.3.1":
-  version: 2.3.1
-  resolution: "luxon@npm:2.3.1"
-  checksum: ce5eec873a0172a0956618531e28010e8d8319a8b3a836b893d0f92239413a1fc5f77841ca24988e27bd61e8b2748e160e9dfcb13e92d7f031c1e31ad1c8ae91
+"luxon@npm:2.3.2":
+  version: 2.3.2
+  resolution: "luxon@npm:2.3.2"
+  checksum: ba4f9daa56d03771c2ddf00e3bf996ec7937badfdc2f85f5b58d63c75bb511369b3316f54ab9ce5ab42bfc9118513971f6599128529b68620b876a4b7c16570b
   languageName: node
   linkType: hard
 
@@ -16918,10 +16967,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prismjs@npm:1.27.0":
-  version: 1.27.0
-  resolution: "prismjs@npm:1.27.0"
-  checksum: 85c7f4a3e999073502cc9e1882af01e3709706369ec254b60bff1149eda701f40d02512acab956012dc7e61cfd61743a3a34c1bd0737e8dbacd79141e5698bbc
+"prismjs@npm:1.28.0":
+  version: 1.28.0
+  resolution: "prismjs@npm:1.28.0"
+  checksum: bde93fb2beb45b7243219fc53855f59ee54b3fa179f315e8f9d66244d756ef984462e10561bbdc6713d3d7e051852472d7c284f5794a8791eeaefea2fb910b16
   languageName: node
   linkType: hard
 
@@ -17354,15 +17403,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:18.0.0":
-  version: 18.0.0
-  resolution: "react-dom@npm:18.0.0"
+"react-dom@npm:18.1.0":
+  version: 18.1.0
+  resolution: "react-dom@npm:18.1.0"
   dependencies:
     loose-envify: ^1.1.0
-    scheduler: ^0.21.0
+    scheduler: ^0.22.0
   peerDependencies:
-    react: ^18.0.0
-  checksum: dd0ba9f2f31dd728076c892a95b2f5a8dfe79136431b0289afb46eec39d0ca6b6f0f40a60fd8aa6ef702c98ce7c26100d3d4dbc35c7c9e87429cd04f84cb58bd
+    react: ^18.1.0
+  checksum: bb0d48eeb0b297c79c2a03978baa29f5b3ff7ba3d070b21e34c9af1a6e7fdf0ca8b8d73e41f9214d91ad40eeb6d1f3559f884cbbc338713374a51320637c23df
   languageName: node
   linkType: hard
 
@@ -17452,10 +17501,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:18.0.0":
-  version: 18.0.0
-  resolution: "react-is@npm:18.0.0"
-  checksum: d38f6afee4d8d791cdd69c715841c01a503c9b06da6158e0893447cea6ba50cd262dca9bde84127720cf44fd05c58185eafc32accace4bb2deb03b3cdbeb6b6b
+"react-is@npm:18.1.0":
+  version: 18.1.0
+  resolution: "react-is@npm:18.1.0"
+  checksum: d206a0fe6790851bff168727bfb896de02c5591695afb0c441163e8630136a3e13ee1a7ddd59fdccddcc93968b4721ae112c10f790b194b03b35a3dc13a355ef
   languageName: node
   linkType: hard
 
@@ -17663,13 +17712,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-select@npm:5.3.0":
-  version: 5.3.0
-  resolution: "react-select@npm:5.3.0"
+"react-select@npm:5.3.1":
+  version: 5.3.1
+  resolution: "react-select@npm:5.3.1"
   dependencies:
     "@babel/runtime": ^7.12.0
     "@emotion/cache": ^11.4.0
-    "@emotion/react": ^11.1.1
+    "@emotion/react": ^11.8.1
     "@types/react-transition-group": ^4.4.0
     memoize-one: ^5.0.0
     prop-types: ^15.6.0
@@ -17677,7 +17726,7 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 4a37248c6f711c7b0ffe2c3414abc501d36b65ef8a51ac3962d850a713f5dec3d9ce8b38f88909b3731e9295def5279240ad2e421db866a52c868d7a5f58321d
+  checksum: d84581571b6374183ab176c9c95ec16858ea43d115de8daf417f83d1f2bd84f1d9b07e6f3d6f87bfb0f46e3691904ea54ded0e6801815bc9e6db1c988329e985
   languageName: node
   linkType: hard
 
@@ -17793,37 +17842,38 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-virtuoso@npm:2.9.1":
-  version: 2.9.1
-  resolution: "react-virtuoso@npm:2.9.1"
+"react-virtuoso@npm:2.10.2":
+  version: 2.10.2
+  resolution: "react-virtuoso@npm:2.10.2"
   dependencies:
     "@virtuoso.dev/react-urx": ^0.2.12
     "@virtuoso.dev/urx": ^0.2.12
   peerDependencies:
-    react: ">=16"
-  checksum: 5581278dac6d20ed99923ad23412cf7b0a6d95e9bfe1e02fb08c4fbb92bde3d84fabb2a48e4e4e5560af967180adb70e75ea4a91576904ec9573238f66daa7e1
+    react: ">=16 || >=17 || >= 18"
+    react-dom: ">=16 || >=17 || >= 18"
+  checksum: d94981eb8244f783e4e763fa31369f98484ce11046487ed0a38032d184496492941a39a3e0ccc30875db0f83a5955179403533ab601da80c1bc3147220e52f72
   languageName: node
   linkType: hard
 
-"react-window@npm:1.8.6":
-  version: 1.8.6
-  resolution: "react-window@npm:1.8.6"
+"react-window@npm:1.8.7":
+  version: 1.8.7
+  resolution: "react-window@npm:1.8.7"
   dependencies:
     "@babel/runtime": ^7.0.0
     memoize-one: ">=3.1.1 <6"
   peerDependencies:
-    react: ^15.0.0 || ^16.0.0 || ^17.0.0
-    react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 54ccf2b16c921a1acfadbe6de5dc19fe0981d84c5a913e4607afbf24448b96e938020704bf5125ec528e43a710643fc05e86fc117219fc4936e231ecd19be0b2
+    react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 1e122c29224781e70359978287a2e850ccdf509cd71ba16b16ea258725687a62f5c16ab69f52f732b4ed20df583196dbe2a04804f3e4a176bb3e62f3fc910452
   languageName: node
   linkType: hard
 
-"react@npm:18.0.0":
-  version: 18.0.0
-  resolution: "react@npm:18.0.0"
+"react@npm:18.1.0":
+  version: 18.1.0
+  resolution: "react@npm:18.1.0"
   dependencies:
     loose-envify: ^1.1.0
-  checksum: 293020b96536b3c7113ee57ca5c990a3f25649d1751b1c7a3aabd16dff0691fe9f1eed1206616d0906d05933536052037340a0c8d0941ff870b0eb469a2f975b
+  checksum: 5bb296b561b43ef2220395da4faac86c14a087c8c80e1a7598a5740f01ee605c11eaf249985c1e2000971c4cd32ccb46d40f00479bbd9fb6b1c7cf857393b7d4
   languageName: node
   linkType: hard
 
@@ -18551,12 +18601,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.21.0":
-  version: 0.21.0
-  resolution: "scheduler@npm:0.21.0"
+"scheduler@npm:^0.22.0":
+  version: 0.22.0
+  resolution: "scheduler@npm:0.22.0"
   dependencies:
     loose-envify: ^1.1.0
-  checksum: 4f8285076041ed2c81acdd1faa987f1655fdbd30554bc667c1ea64743fc74fb3a04ca7d27454b3d678735df5a230137a3b84756061b43dc5796e80701b66d124
+  checksum: a8ef5cab769c020cd6382ad9ecc3f72dbde56a50a36639b3a42ad9c11f7724f03700bcad373044059b8067d4a6365154dc7c0ca8027ef20ff4900cf58a0fc2c5
   languageName: node
   linkType: hard
 
@@ -18861,16 +18911,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simplebar-react@npm:2.3.6":
-  version: 2.3.6
-  resolution: "simplebar-react@npm:2.3.6"
+"simplebar-react@npm:2.3.7":
+  version: 2.3.7
+  resolution: "simplebar-react@npm:2.3.7"
   dependencies:
     prop-types: ^15.6.1
     simplebar: ^5.3.6
   peerDependencies:
-    react: ^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0
-    react-dom: ^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0
-  checksum: 5487200fefd8f9f7aba349637b6f5f777aab4470239bc4f3fcb4e86ff4fa5d12dea68684df80e6cea644d9dffb062fbde7d9504762d9d82f7e5083cc260cf0c1
+    react: ^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0 || ^18.0.0
+    react-dom: ^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0 || ^18.0.0
+  checksum: ab4f2701836d8002193afe8d9690485e4e732f69806b92826da66d05ce657cca665d7879cdae1093220e51172cccf7ac54cfda285a0931895510873fde0b3221
   languageName: node
   linkType: hard
 
@@ -19119,7 +19169,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map@npm:^0.5.0, source-map@npm:^0.5.6":
+"source-map@npm:^0.5.0, source-map@npm:^0.5.6, source-map@npm:^0.5.7":
   version: 0.5.7
   resolution: "source-map@npm:0.5.7"
   checksum: 5dc2043b93d2f194142c7f38f74a24670cd7a0063acdaf4bf01d2964b402257ae843c2a8fa822ad5b71013b5fcafa55af7421383da919752f22ff488bc553f4d
@@ -20905,20 +20955,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vercel@npm:24.1.0":
-  version: 24.1.0
-  resolution: "vercel@npm:24.1.0"
+"vercel@npm:24.2.0":
+  version: 24.2.0
+  resolution: "vercel@npm:24.2.0"
   dependencies:
-    "@vercel/build-utils": 2.15.1
-    "@vercel/go": 1.3.2
-    "@vercel/node": 1.14.1
-    "@vercel/python": 2.2.2
-    "@vercel/ruby": 1.3.2
+    "@vercel/build-utils": 2.16.0
+    "@vercel/go": 1.4.0
+    "@vercel/node": 1.15.0
+    "@vercel/python": 2.3.0
+    "@vercel/ruby": 1.3.3
     update-notifier: 4.1.0
   bin:
     vc: dist/index.js
     vercel: dist/index.js
-  checksum: 6b48b90217c473c56a89a8edb57c9bc17cc74502aa1de2c83195246be46d206f37991198c2a958c9dd98a5361ab845e124d7a6fb5c6dcee56cf74a57cde5bd52
+  checksum: 129b7e8d3643c8f602d900a8db36b423f16fd1784cfc741d906d8c3374058744546ccf7c57e825f6cfc9eebfff22582810ff630c4a6611edea1b5584da1f5c65
   languageName: node
   linkType: hard
 
