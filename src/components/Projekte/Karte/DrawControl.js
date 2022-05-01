@@ -92,6 +92,7 @@ const DrawControl = () => {
     return () => {
       map.removeLayer(mapFilter)
       map.removeControl(drawControlFull)
+      map.removeControl(drawControlEditOnly)
       map.off('draw:created')
       map.off('draw:edited')
       map.off('draw:deleted')
