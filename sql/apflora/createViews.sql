@@ -1692,7 +1692,13 @@ ORDER BY
 -- used for export
 DROP VIEW IF EXISTS apflora.v_beob CASCADE;
 
-CREATE OR REPLACE VIEW apflora.v_beob AS
+CREATE OR REPLACE VIEW apflora.v_beob AS beob.datum DESC;
+
+-- used for exports
+-- much faster than v_beob
+DROP VIEW IF EXISTS apflora.v_beob_zugeordnet CASCADE;
+
+CREATE OR REPLACE VIEW apflora.v_beob_zugeordnet AS
 SELECT
   beob.id,
   beob.quelle,
@@ -1705,7 +1711,7 @@ SELECT
   pop.nr AS pop_nr,
   tpop.id AS tpop_id,
   tpop.nr AS tpop_nr,
-  pop_status_werte.text AS tpop_status,
+  tpop_status_werte.text AS tpop_status,
   tpop.gemeinde AS tpop_gemeinde,
   tpop.flurname AS tpop_flurname,
   beob.lv95_x AS x,
@@ -1723,12 +1729,14 @@ SELECT
   beob.created_at,
   beob.updated_at,
   beob.changed_by
-FROM (apflora.beob beob
-  INNER JOIN apflora.ae_taxonomies tax
-  INNER JOIN apflora.ap ap ON ap.art_id = tax.id ON beob.art_id = tax.id)
-  LEFT JOIN apflora.tpop tpop ON tpop.id = beob.tpop_id
-  LEFT JOIN apflora.pop_status_werte AS pop_status_werte ON tpop.status = pop_status_werte.code
-  LEFT JOIN apflora.pop pop ON pop.id = tpop.pop_id
+FROM
+  apflora.beob beob
+  INNER JOIN apflora.ae_taxonomies tax ON beob.art_id = tax.id
+  INNER JOIN apflora.apart apart ON apart.art_id = tax.id
+  INNER JOIN apflora.ap ap ON ap.id = apart.ap_id
+  INNER JOIN apflora.tpop tpop ON tpop.id = beob.tpop_id
+  INNER JOIN apflora.pop pop ON pop.id = tpop.pop_id
+  LEFT JOIN apflora.pop_status_werte AS tpop_status_werte ON tpop.status = tpop_status_werte.code
 WHERE
   tax.taxid > 150
 ORDER BY
@@ -1742,62 +1750,54 @@ DROP VIEW IF EXISTS apflora.v_beob_art_changed CASCADE;
 
 CREATE OR REPLACE VIEW apflora.v_beob_art_changed AS
 SELECT
-  apflora.beob.id,
-  apflora.beob.quelle,
+  beob.id,
+  beob.quelle,
   beob.id_field,
-  beob.data ->> (
-    SELECT
-      id_field
-    FROM apflora.beob
-    WHERE
-      id = beob2.id) AS "original_id",
-apflora.beob.art_id_original,
-ae_artidoriginal.artname AS "artname_original",
-ae_artidoriginal.taxid AS "taxonomie_id_original",
-apflora.beob.art_id,
-ae_artid.artname AS "artname",
-ae_artid.taxid AS "taxonomie_id",
-apflora.pop.id AS pop_id,
-apflora.pop.nr AS pop_nr,
-apflora.tpop.id AS tpop_id,
-apflora.tpop.nr AS tpop_nr,
-pop_status_werte.text AS tpop_status,
-apflora.tpop.gemeinde AS tpop_gemeinde,
-apflora.tpop.flurname AS tpop_flurname,
-apflora.beob.lv95_x AS x,
-apflora.beob.lv95_y AS y,
-CASE WHEN apflora.beob.lv95_x > 0
-  AND apflora.tpop.lv95_x > 0 THEN
-  round(ST_Distance (ST_Transform (apflora.beob.geom_point, 2056), ST_Transform (apflora.tpop.geom_point, 2056)))
-ELSE
-  NULL
-END AS distanz_zur_teilpopulation,
-apflora.beob.datum,
-apflora.beob.autor,
-apflora.beob.nicht_zuordnen,
-apflora.beob.geom_point,
-apflora.beob.bemerkungen,
-apflora.beob.created_at,
-apflora.beob.updated_at,
-apflora.beob.changed_by
+  beob.data ->> beob.id_field AS "original_id",
+  beob.art_id_original,
+  tax_original.artname AS "artname_original",
+  tax_original.taxid AS "taxonomie_id_original",
+  beob.art_id,
+  tax.artname AS "artname",
+  tax.taxid AS "taxonomie_id",
+  apflora.pop.id AS pop_id,
+  apflora.pop.nr AS pop_nr,
+  apflora.tpop.id AS tpop_id,
+  apflora.tpop.nr AS tpop_nr,
+  pop_status_werte.text AS tpop_status,
+  apflora.tpop.gemeinde AS tpop_gemeinde,
+  apflora.tpop.flurname AS tpop_flurname,
+  beob.lv95_x AS x,
+  beob.lv95_y AS y,
+  CASE WHEN beob.lv95_x > 0
+    AND apflora.tpop.lv95_x > 0 THEN
+    round(ST_Distance (ST_Transform (beob.geom_point, 2056), ST_Transform (apflora.tpop.geom_point, 2056)))
+  ELSE
+    NULL
+  END AS distanz_zur_teilpopulation,
+  beob.datum,
+  beob.autor,
+  beob.nicht_zuordnen,
+  beob.geom_point,
+  beob.bemerkungen,
+  beob.created_at,
+  beob.updated_at,
+  beob.changed_by
 FROM
-  apflora.beob
-  INNER JOIN apflora.beob AS beob2 ON beob2.id = beob.id
-  INNER JOIN apflora.ae_taxonomies AS ae_artid
-  INNER JOIN apflora.ap AS artidsap ON artidsap.art_id = ae_artid.id ON apflora.beob.art_id = ae_artid.id
-  INNER JOIN apflora.ae_taxonomies AS ae_artidoriginal
-  INNER JOIN apflora.ap AS artidoriginalsap ON artidoriginalsap.art_id = ae_artidoriginal.id ON apflora.beob.art_id_original = ae_artidoriginal.id
-  LEFT JOIN apflora.tpop ON apflora.tpop.id = apflora.beob.tpop_id
-  LEFT JOIN apflora.pop_status_werte AS pop_status_werte ON apflora.tpop.status = pop_status_werte.code
+  apflora.beob beob
+  INNER JOIN apflora.ae_taxonomies tax ON beob.art_id = tax.id
+  INNER JOIN apflora.ae_taxonomies tax_original ON beob.art_id_original = tax_original.id
+  LEFT JOIN apflora.tpop ON apflora.tpop.id = beob.tpop_id
+  LEFT JOIN apflora.pop_status_werte pop_status_werte ON apflora.tpop.status = pop_status_werte.code
   LEFT JOIN apflora.pop ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
-  ae_artid.taxid > 150
-  AND apflora.beob.art_id <> apflora.beob.art_id_original
+  tax.taxid > 150
+  AND beob.art_id <> beob.art_id_original
 ORDER BY
-  ae_artid.artname ASC,
+  tax.artname ASC,
   apflora.pop.nr ASC,
   apflora.tpop.nr ASC,
-  apflora.beob.datum DESC;
+  beob.datum DESC;
 
 -- used in exports
 DROP VIEW IF EXISTS apflora.v_tpop_kml CASCADE;
