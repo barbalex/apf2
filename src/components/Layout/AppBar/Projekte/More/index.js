@@ -107,7 +107,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
         <MenuItem onClick={onClickUptime}>
           Verfügbarkeit der Server von apflora.ch
         </MenuItem>
-        <Version>Version: 1.68.16 vom 3.05.2022</Version>
+        <Version>Version: 1.68.17 vom 6.05.2022</Version>
       </Menu>
     </Container>
   )
