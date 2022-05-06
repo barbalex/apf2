@@ -2202,44 +2202,46 @@ ORDER BY
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_popnrtpopnrmehrdeutig CASCADE;
 
+-- 2022.05.06 correct to solve 534
 CREATE OR REPLACE VIEW apflora.v_q_tpop_popnrtpopnrmehrdeutig AS
+with multiples AS (
+  SELECT
+    ap.id AS ap_id,
+    pop.nr AS pop_nr,
+    tpop.nr AS tpop_nr,
+    count(tpop.id) AS tpop_id_count
+  FROM
+    apflora.ap ap
+    INNER JOIN apflora.pop pop ON ap.id = pop.ap_id
+    INNER JOIN apflora.tpop tpop ON tpop.pop_id = pop.id
+  GROUP BY
+    ap.id,
+    pop.nr,
+    tpop.nr
+  HAVING
+    count(tpop.id) > 1
+)
 SELECT
-  apflora.projekt.id AS proj_id,
-  apflora.ap.id AS ap_id,
-  apflora.pop.id AS pop_id,
-  apflora.pop.nr AS pop_nr,
-  apflora.tpop.id,
-  apflora.tpop.nr
+  projekt.id AS proj_id,
+  ap.id AS ap_id,
+  pop.id AS pop_id,
+  pop.nr AS pop_nr,
+  tpop.id,
+  tpop.nr,
+  m.tpop_id_count AS count
 FROM
-  apflora.projekt
-  INNER JOIN apflora.ap
-  INNER JOIN apflora.pop
-  INNER JOIN apflora.tpop ON apflora.tpop.pop_id = apflora.pop.id ON apflora.pop.ap_id = apflora.ap.id ON apflora.projekt.id = apflora.ap.proj_id
-WHERE
-  apflora.tpop.pop_id IN ( SELECT DISTINCT
-      pop_id
-    FROM
-      apflora.tpop
-    GROUP BY
-      pop_id,
-      nr
-    HAVING
-      COUNT(*) > 1)
-  AND apflora.tpop.nr IN (
-    SELECT
-      nr
-    FROM
-      apflora.tpop
-    GROUP BY
-      apflora.tpop.pop_id,
-      apflora.tpop.nr
-    HAVING
-      COUNT(*) > 1)
-ORDER BY
-  apflora.projekt.id,
-  apflora.ap.id,
-  apflora.pop.nr,
-  apflora.tpop.nr;
+  apflora.projekt projekt
+  INNER JOIN apflora.ap ap
+  INNER JOIN apflora.pop pop
+  INNER JOIN apflora.tpop tpop ON tpop.pop_id = pop.id ON pop.ap_id = ap.id ON projekt.id = ap.proj_id
+  INNER JOIN multiples m ON m.ap_id = ap.id
+    AND m.pop_nr = pop.nr
+    AND m.tpop_nr = tpop.nr
+  ORDER BY
+    projekt.id,
+    ap.id,
+    pop.nr,
+    tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_bekanntseit_nicht_aeltestetpop CASCADE;
 
@@ -4388,26 +4390,26 @@ SELECT
   coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0) AS anz_pop_aktuell_zuletzt,
   coalesce(count_urspr_last.anzahl, 0) - coalesce(count_urspr_prev.anzahl, 0) AS diff_pop_urspr,
   coalesce(count_anges_last.anzahl, 0) - coalesce(count_anges_prev.anzahl, 0) AS diff_pop_anges,
-  (coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0)) - (coalesce(count_urspr_prev.anzahl, 0) + coalesce(count_anges_prev.anzahl, 0)) AS diff_pop_aktuell,
-  apflora.ap_erfkrit_werte.text AS beurteilung_zuletzt
-FROM
-  last_year,
-  previous_year,
-  apflora.ap_history
-  INNER JOIN apflora.ae_taxonomies ON apflora.ae_taxonomies.id = apflora.ap_history.art_id
-  LEFT JOIN apflora.apber
-  LEFT JOIN apflora.ap_erfkrit_werte ON apflora.ap_erfkrit_werte.code = apflora.apber.beurteilung ON apflora.apber.ap_id = apflora.ap_history.id
-  LEFT JOIN count_urspr_last ON count_urspr_last.ap_id = apflora.ap_history.id
-  LEFT JOIN count_anges_last ON count_anges_last.ap_id = apflora.ap_history.id
-  LEFT JOIN count_urspr_prev ON count_urspr_prev.ap_id = apflora.ap_history.id
-  LEFT JOIN count_anges_prev ON count_anges_prev.ap_id = apflora.ap_history.id
-WHERE
-  apflora.ap_history.bearbeitung < 4
-  AND apflora.ap_history.year = last_year.year
-  AND (apflora.apber.jahr = last_year.year
-    OR apflora.apber.jahr IS NULL)
-ORDER BY
-  apflora.ae_taxonomies.artname;
+    (coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0)) - (coalesce(count_urspr_prev.anzahl, 0) + coalesce(count_anges_prev.anzahl, 0)) AS diff_pop_aktuell,
+    apflora.ap_erfkrit_werte.text AS beurteilung_zuletzt
+  FROM
+    last_year,
+    previous_year,
+    apflora.ap_history
+    INNER JOIN apflora.ae_taxonomies ON apflora.ae_taxonomies.id = apflora.ap_history.art_id
+    LEFT JOIN apflora.apber
+    LEFT JOIN apflora.ap_erfkrit_werte ON apflora.ap_erfkrit_werte.code = apflora.apber.beurteilung ON apflora.apber.ap_id = apflora.ap_history.id
+    LEFT JOIN count_urspr_last ON count_urspr_last.ap_id = apflora.ap_history.id
+    LEFT JOIN count_anges_last ON count_anges_last.ap_id = apflora.ap_history.id
+    LEFT JOIN count_urspr_prev ON count_urspr_prev.ap_id = apflora.ap_history.id
+    LEFT JOIN count_anges_prev ON count_anges_prev.ap_id = apflora.ap_history.id
+  WHERE
+    apflora.ap_history.bearbeitung < 4
+    AND apflora.ap_history.year = last_year.year
+    AND (apflora.apber.jahr = last_year.year
+      OR apflora.apber.jahr IS NULL)
+  ORDER BY
+    apflora.ae_taxonomies.artname;
 
 COMMENT ON VIEW apflora.v_ap_pop_ek_prio IS '@foreignKey (ap_id) references ap (id)';
 
