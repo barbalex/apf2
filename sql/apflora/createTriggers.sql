@@ -155,25 +155,25 @@ DROP TRIGGER IF EXISTS ap_update_add_apart ON apflora.ap;
 
 DROP FUNCTION IF EXISTS apflora.ap_update_add_apart ();
 
-CREATE FUNCTION apflora.ap_update_add_apart ()
+-- corrected 2022.05.06 to solve 532:
+CREATE OR REPLACE  FUNCTION apflora.ap_update_add_apart ()
   RETURNS TRIGGER
   AS $ap_update_add_apart$
   -- on insert, art_id is not yet set
   -- so need to do this on update
 BEGIN
   -- if apart with this ap and new art_id does not exist yet
-  IF NOT EXISTS (
+  IF NEW.art_id IS NOT NULL AND NOT EXISTS (
     SELECT
       1
     FROM
       apflora.apart
     WHERE
-      ap_id = NEW.id
-      AND art_id = NEW.art_id) THEN
-  -- create it
-  INSERT INTO apflora.apart (ap_id, art_id)
-    VALUES (NEW.id, NEW.art_id);
-END IF;
+      ap_id = NEW.id AND art_id = NEW.art_id) THEN
+    -- create it
+    INSERT INTO apflora.apart (ap_id, art_id)
+      VALUES (NEW.id, NEW.art_id);
+  END IF;
   RETURN NEW;
 END;
 $ap_update_add_apart$
