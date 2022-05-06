@@ -1689,9 +1689,6 @@ ORDER BY
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum;
 
--- TODO: drop. Was used for export
-DROP VIEW IF EXISTS apflora.v_beob CASCADE;
-
 -- used for exports
 DROP VIEW IF EXISTS apflora.v_beob_nicht_zuzuordnen CASCADE;
 
