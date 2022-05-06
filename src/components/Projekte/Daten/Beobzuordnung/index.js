@@ -123,40 +123,6 @@ const nichtZuordnenPopover = (
   </PopoverContainer>
 )
 
-const getTpopZuordnenSource = ({ row, ap }) => {
-  // get all popIds of active ap
-  const popList = ap?.popsByApId?.nodes ?? []
-  // get all tpop
-  let tpopList = flatten(popList.map((p) => p?.tpopsByPopId?.nodes ?? []))
-    // with coordinates
-    // and also: even keep own tpop if it has no coordinates
-    .filter((t) => !!t.lv95X || t.id === row.tpopId)
-    .map((t) => {
-      // calculate their distance to this beob
-      const dX = Math.abs(row.lv95X - t.lv95X)
-      const dY = Math.abs(row.lv95Y - t.lv95Y)
-      const distNr = Math.round((dX ** 2 + dY ** 2) ** 0.5)
-      const distance = distNr.toLocaleString('de-ch')
-      // build label
-      const tpopStatus = t?.popStatusWerteByStatus?.text ?? 'ohne Status'
-      const popNr = t?.popByPopId?.nr ?? '(keine Nr)'
-      const tpopNr = t.nr ?? '(keine Nr)'
-
-      return {
-        id: t.id,
-        distNr,
-        label: `${distance}m: ${popNr}/${tpopNr} (${tpopStatus})`,
-      }
-    })
-  // order them by distance
-  tpopList = sortBy(tpopList, 'distNr')
-  // return array of id, label
-  return tpopList.map((t) => ({
-    value: t.id,
-    label: t.label,
-  }))
-}
-
 const Beobzuordnung = ({ type, treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
@@ -285,6 +251,40 @@ const Beobzuordnung = ({ type, treeName }) => {
     [client, id, store.user.name],
   )
 
+  const tpopZuordnenSource = useMemo(() => {
+    // get all popIds of active ap
+    const popList = ap?.popsByApId?.nodes ?? []
+    // get all tpop
+    let tpopList = flatten(popList.map((p) => p?.tpopsByPopId?.nodes ?? []))
+      // with coordinates
+      // and also: even keep own tpop if it has no coordinates
+      .filter((t) => !!t.lv95X || t.id === row.tpopId)
+      .map((t) => {
+        // calculate their distance to this beob
+        const dX = Math.abs(row.lv95X - t.lv95X)
+        const dY = Math.abs(row.lv95Y - t.lv95Y)
+        const distNr = Math.round((dX ** 2 + dY ** 2) ** 0.5)
+        const distance = distNr.toLocaleString('de-ch')
+        // build label
+        const tpopStatus = t?.popStatusWerteByStatus?.text ?? 'ohne Status'
+        const popNr = t?.popByPopId?.nr ?? '(keine Nr)'
+        const tpopNr = t.nr ?? '(keine Nr)'
+
+        return {
+          id: t.id,
+          distNr,
+          label: `${distance}m: ${popNr}/${tpopNr} (${tpopStatus})`,
+        }
+      })
+    // order them by distance
+    tpopList = sortBy(tpopList, 'distNr')
+    // return array of id, label
+    return tpopList.map((t) => ({
+      value: t.id,
+      label: t.label,
+    }))
+  }, [row, ap])
+
   if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
@@ -340,7 +340,7 @@ const Beobzuordnung = ({ type, treeName }) => {
                     ? 'Einer anderen Teilpopulation zuordnen'
                     : 'Einer Teilpopulation zuordnen'
                 }
-                options={getTpopZuordnenSource({ row, ap })}
+                options={tpopZuordnenSource}
                 saveToDb={onSaveTpopIdToDb}
               />
               <TextField
