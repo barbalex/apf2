@@ -1697,39 +1697,33 @@ SELECT
   apflora.beob.id,
   apflora.beob.quelle,
   beob.id_field,
-  beob.data ->> (
-    SELECT
-      id_field
-    FROM apflora.beob
-    WHERE
-      id = beob2.id) AS "OriginalId",
-apflora.beob.art_id,
-apflora.beob.art_id_original,
-apflora.ae_taxonomies.artname AS "Artname",
-apflora.pop.id AS pop_id,
-apflora.pop.nr AS pop_nr,
-apflora.tpop.id AS tpop_id,
-apflora.tpop.nr AS tpop_nr,
-pop_status_werte.text AS tpop_status,
-apflora.tpop.gemeinde AS tpop_gemeinde,
-apflora.tpop.flurname AS tpop_flurname,
-apflora.beob.lv95_x AS x,
-apflora.beob.lv95_y AS y,
-CASE WHEN apflora.beob.lv95_x > 0
-  AND apflora.tpop.lv95_x > 0 THEN
-  round(ST_Distance (ST_Transform (apflora.beob.geom_point, 2056), ST_Transform (apflora.tpop.geom_point, 2056)))
-ELSE
-  NULL
-END AS distanz_zur_teilpopulation,
-apflora.beob.datum,
-apflora.beob.autor,
-apflora.beob.nicht_zuordnen,
-apflora.beob.bemerkungen,
-apflora.beob.created_at,
-apflora.beob.updated_at,
-apflora.beob.changed_by
-FROM ((apflora.beob
-    INNER JOIN apflora.beob AS beob2 ON beob2.id = beob.id)
+  beob.data ->> beob.id_field AS "OriginalId",
+  apflora.beob.art_id,
+  apflora.beob.art_id_original,
+  apflora.ae_taxonomies.artname AS "Artname",
+  apflora.pop.id AS pop_id,
+  apflora.pop.nr AS pop_nr,
+  apflora.tpop.id AS tpop_id,
+  apflora.tpop.nr AS tpop_nr,
+  pop_status_werte.text AS tpop_status,
+  apflora.tpop.gemeinde AS tpop_gemeinde,
+  apflora.tpop.flurname AS tpop_flurname,
+  apflora.beob.lv95_x AS x,
+  apflora.beob.lv95_y AS y,
+  CASE WHEN apflora.beob.lv95_x > 0
+    AND apflora.tpop.lv95_x > 0 THEN
+    round(ST_Distance (ST_Transform (apflora.beob.geom_point, 2056), ST_Transform (apflora.tpop.geom_point, 2056)))
+  ELSE
+    NULL
+  END AS distanz_zur_teilpopulation,
+  apflora.beob.datum,
+  apflora.beob.autor,
+  apflora.beob.nicht_zuordnen,
+  apflora.beob.bemerkungen,
+  apflora.beob.created_at,
+  apflora.beob.updated_at,
+  apflora.beob.changed_by
+FROM (apflora.beob
   INNER JOIN apflora.ae_taxonomies
   INNER JOIN apflora.ap ON apflora.ap.art_id = apflora.ae_taxonomies.id ON apflora.beob.art_id = apflora.ae_taxonomies.id)
   LEFT JOIN apflora.tpop ON apflora.tpop.id = apflora.beob.tpop_id

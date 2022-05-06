@@ -24,7 +24,7 @@ const BeobachtungenExports = () => {
           result = await client.query({
             query: gql`
               query ZugeordnetForExport {
-                allVBeobs(filter: { tpopId: { isNull: false } }) {
+                allVBeobs(filter: { tpopId: { isNull: false } }) { 
                   nodes {
                     id
                     quelle
