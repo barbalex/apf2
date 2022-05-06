@@ -18,7 +18,7 @@
     "svgr": "svgr -d src/icons/ svg/"
   },
   "dependencies": {
-    "@apollo/client": "3.6.2",
+    "@apollo/client": "3.6.3",
     "@babel/core": "7.17.10",
     "@fontsource/roboto": "4.5.5",
     "@fontsource/roboto-mono": "4.5.7",
@@ -79,7 +79,7 @@
     "markdown-it": "13.0.1",
     "mobx": "6.5.0",
     "mobx-react-lite": "3.3.0",
-    "mobx-state-tree": "5.1.3",
+    "mobx-state-tree": "5.1.4",
     "mst-persist": "0.1.3",
     "notistack": "2.0.4",
     "prismjs": "1.28.0",
