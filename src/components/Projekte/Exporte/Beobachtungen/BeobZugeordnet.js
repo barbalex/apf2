@@ -24,7 +24,7 @@ const BeobachtungenExports = () => {
           result = await client.query({
             query: gql`
               query ZugeordnetForExport {
-                allVBeobs(filter: { tpopId: { isNull: false } }) { 
+                allVBeobZugeordnets {
                   nodes {
                     id
                     quelle
@@ -66,8 +66,8 @@ const BeobachtungenExports = () => {
         }
         setQueryState('verarbeite...')
         exportModule({
-          data: result?.data?.allVBeobs?.nodes ?? [],
-          fileName: 'Beobachtungen',
+          data: result?.data?.allVBeobZugeordnets?.nodes ?? [],
+          fileName: 'BeobachtungenZugeordnet',
           store,
         })
         setQueryState(undefined)
