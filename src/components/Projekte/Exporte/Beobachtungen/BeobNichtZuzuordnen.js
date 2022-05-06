@@ -24,7 +24,7 @@ const BeobNichtZuzuordnen = () => {
           result = await client.query({
             query: gql`
               query allBeobsNichtZuzuordnenForExport {
-                allVBeobs(filter: { nichtZuordnen: { equalTo: true } }) {
+                allVBeobNichtZuzuordnens {
                   nodes {
                     id
                     quelle
@@ -66,7 +66,7 @@ const BeobNichtZuzuordnen = () => {
         }
         setQueryState('verarbeite...')
         exportModule({
-          data: result?.data?.allVBeobs?.nodes ?? [],
+          data: result?.data?.allVBeobNichtZuzuordnens?.nodes ?? [],
           fileName: 'Beobachtungen',
           store,
         })

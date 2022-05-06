@@ -1689,10 +1689,57 @@ ORDER BY
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum;
 
--- used for export
+-- TODO: drop. Was used for export
 DROP VIEW IF EXISTS apflora.v_beob CASCADE;
 
-CREATE OR REPLACE VIEW apflora.v_beob AS beob.datum DESC;
+-- used for exports
+DROP VIEW IF EXISTS apflora.v_beob_nicht_zuzuordnen CASCADE;
+
+CREATE OR REPLACE VIEW apflora.v_beob_nicht_zuzuordnen AS
+SELECT
+  beob.id,
+  beob.quelle,
+  beob.id_field,
+  beob.data ->> beob.id_field AS "OriginalId",
+  beob.art_id,
+  beob.art_id_original,
+  tax.artname AS "Artname",
+  pop.id AS pop_id,
+  pop.nr AS pop_nr,
+  tpop.id AS tpop_id,
+  tpop.nr AS tpop_nr,
+  tpop_status_werte.text AS tpop_status,
+  tpop.gemeinde AS tpop_gemeinde,
+  tpop.flurname AS tpop_flurname,
+  beob.lv95_x AS x,
+  beob.lv95_y AS y,
+  CASE WHEN beob.lv95_x > 0
+    AND tpop.lv95_x > 0 THEN
+    round(ST_Distance (ST_Transform (beob.geom_point, 2056), ST_Transform (tpop.geom_point, 2056)))
+  ELSE
+    NULL
+  END AS distanz_zur_teilpopulation,
+  beob.datum,
+  beob.autor,
+  beob.nicht_zuordnen,
+  beob.bemerkungen,
+  beob.created_at,
+  beob.updated_at,
+  beob.changed_by
+FROM
+  apflora.beob beob
+  INNER JOIN apflora.ae_taxonomies tax ON beob.art_id = tax.id
+  LEFT JOIN apflora.tpop tpop ON tpop.id = beob.tpop_id
+  LEFT JOIN apflora.pop pop ON pop.id = tpop.pop_id
+  LEFT JOIN apflora.pop_status_werte AS tpop_status_werte ON tpop.status = tpop_status_werte.code
+WHERE
+  tax.taxid > 150
+  AND beob.nicht_zuordnen IS TRUE
+ORDER BY
+  tax.artname ASC,
+  pop.nr ASC,
+  tpop.nr ASC,
+  beob.datum DESC;
 
 -- used for exports
 -- much faster than v_beob
@@ -1732,8 +1779,6 @@ SELECT
 FROM
   apflora.beob beob
   INNER JOIN apflora.ae_taxonomies tax ON beob.art_id = tax.id
-  INNER JOIN apflora.apart apart ON apart.art_id = tax.id
-  INNER JOIN apflora.ap ap ON ap.id = apart.ap_id
   INNER JOIN apflora.tpop tpop ON tpop.id = beob.tpop_id
   INNER JOIN apflora.pop pop ON pop.id = tpop.pop_id
   LEFT JOIN apflora.pop_status_werte AS tpop_status_werte ON tpop.status = tpop_status_werte.code
