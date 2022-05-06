@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 
 import updateBeobByIdGql from './updateBeobById'
 
-const saveTpopIdToDb = async ({ value, id, treeName, type, client, store }) => {
+const saveTpopIdToDb = async ({ value, id, treeName, type, client, store }) => { 
   const { refetch } = store
   const variables = {
     id,

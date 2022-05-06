@@ -47,7 +47,7 @@ export default gql`
     ) {
       beob {
         ...BeobFields
-        aeTaxonomyByArtId {
+        aeTaxonomyByArtId { 
           ...AeTaxonomiesFields
           apByArtId {
             id
