@@ -1694,48 +1694,48 @@ DROP VIEW IF EXISTS apflora.v_beob CASCADE;
 
 CREATE OR REPLACE VIEW apflora.v_beob AS
 SELECT
-  apflora.beob.id,
-  apflora.beob.quelle,
+  beob.id,
+  beob.quelle,
   beob.id_field,
   beob.data ->> beob.id_field AS "OriginalId",
-  apflora.beob.art_id,
-  apflora.beob.art_id_original,
-  apflora.ae_taxonomies.artname AS "Artname",
-  apflora.pop.id AS pop_id,
-  apflora.pop.nr AS pop_nr,
-  apflora.tpop.id AS tpop_id,
-  apflora.tpop.nr AS tpop_nr,
+  beob.art_id,
+  beob.art_id_original,
+  tax.artname AS "Artname",
+  pop.id AS pop_id,
+  pop.nr AS pop_nr,
+  tpop.id AS tpop_id,
+  tpop.nr AS tpop_nr,
   pop_status_werte.text AS tpop_status,
-  apflora.tpop.gemeinde AS tpop_gemeinde,
-  apflora.tpop.flurname AS tpop_flurname,
-  apflora.beob.lv95_x AS x,
-  apflora.beob.lv95_y AS y,
-  CASE WHEN apflora.beob.lv95_x > 0
-    AND apflora.tpop.lv95_x > 0 THEN
-    round(ST_Distance (ST_Transform (apflora.beob.geom_point, 2056), ST_Transform (apflora.tpop.geom_point, 2056)))
+  tpop.gemeinde AS tpop_gemeinde,
+  tpop.flurname AS tpop_flurname,
+  beob.lv95_x AS x,
+  beob.lv95_y AS y,
+  CASE WHEN beob.lv95_x > 0
+    AND tpop.lv95_x > 0 THEN
+    round(ST_Distance (ST_Transform (beob.geom_point, 2056), ST_Transform (tpop.geom_point, 2056)))
   ELSE
     NULL
   END AS distanz_zur_teilpopulation,
-  apflora.beob.datum,
-  apflora.beob.autor,
-  apflora.beob.nicht_zuordnen,
-  apflora.beob.bemerkungen,
-  apflora.beob.created_at,
-  apflora.beob.updated_at,
-  apflora.beob.changed_by
-FROM (apflora.beob
-  INNER JOIN apflora.ae_taxonomies
-  INNER JOIN apflora.ap ON apflora.ap.art_id = apflora.ae_taxonomies.id ON apflora.beob.art_id = apflora.ae_taxonomies.id)
-  LEFT JOIN apflora.tpop ON apflora.tpop.id = apflora.beob.tpop_id
-  LEFT JOIN apflora.pop_status_werte AS pop_status_werte ON apflora.tpop.status = pop_status_werte.code
-  LEFT JOIN apflora.pop ON apflora.pop.id = apflora.tpop.pop_id
+  beob.datum,
+  beob.autor,
+  beob.nicht_zuordnen,
+  beob.bemerkungen,
+  beob.created_at,
+  beob.updated_at,
+  beob.changed_by
+FROM (apflora.beob beob
+  INNER JOIN apflora.ae_taxonomies tax
+  INNER JOIN apflora.ap ap ON ap.art_id = tax.id ON beob.art_id = tax.id)
+  LEFT JOIN apflora.tpop tpop ON tpop.id = beob.tpop_id
+  LEFT JOIN apflora.pop_status_werte AS pop_status_werte ON tpop.status = pop_status_werte.code
+  LEFT JOIN apflora.pop pop ON pop.id = tpop.pop_id
 WHERE
-  apflora.ae_taxonomies.taxid > 150
+  tax.taxid > 150
 ORDER BY
-  apflora.ae_taxonomies.artname ASC,
-  apflora.pop.nr ASC,
-  apflora.tpop.nr ASC,
-  apflora.beob.datum DESC;
+  tax.artname ASC,
+  pop.nr ASC,
+  tpop.nr ASC,
+  beob.datum DESC;
 
 -- unsed in exports
 DROP VIEW IF EXISTS apflora.v_beob_art_changed CASCADE;
