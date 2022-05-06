@@ -14,7 +14,7 @@ import getNearestTpop from '../../../../../modules/getNearestTpop'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import updateBeobByIdGql from './updateBeobById'
 
-const StyledH3 = styled.h3`
+const StyledH3 = styled.h3` 
   margin: 7px 0;
 `
 const StyledButton = styled(Button)`

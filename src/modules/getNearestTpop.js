@@ -4,7 +4,7 @@
  */
 import { gql } from '@apollo/client'
 
-const getNearestTpop = async ({ latLng, client, apId }) => {
+const getNearestTpop = async ({ latLng, client, apId }) => { 
   const { lat, lng } = latLng
   const { data } = await client.query({
     query: gql`
