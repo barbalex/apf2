@@ -2,7 +2,7 @@
  * gets a latLng wgs 84
  * returns tpopId of nearest tpop
  */
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client' 
 
 const getNearestTpop = async ({ latLng, client, apId }) => { 
   const { lat, lng } = latLng
