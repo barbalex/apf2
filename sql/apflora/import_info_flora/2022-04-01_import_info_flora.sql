@@ -227,6 +227,8 @@ WHERE
 -- 1'147
 --
 -- 9 update data for already_imported = true (NOT this time)
+-- TODO: next time export previous state of these to compare
+--       and list where species changed
 SELECT
   outerbeob.id,
   outerbeob.data,
