@@ -177,6 +177,8 @@ const Client = ({ store }) => {
           'VApbeobsNichtBeurteilt',
           'VApbeobsNichtZuzuordnen',
           'VApbeobsZugeordnet',
+          'NearestTpopForApResp',
+          'nearestTpopForApFunction',
         ].includes(object.__typename)
       ) {
         return defaultDataIdFromObject(object)
