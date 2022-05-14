@@ -89,7 +89,7 @@ const TextFieldWithUrl = ({
         <div key={index} title={`${url} öffnen`}>
           <StyledOpenInNewIcon
             onClick={() =>
-              typeof window !== 'undefined' && window.open(url, '_blank')
+              typeof window !== 'undefined' && window.open(url, '_blank') 
             }
             data-id="open-url"
           />
