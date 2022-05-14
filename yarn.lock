@@ -4778,17 +4778,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/build-utils@npm:2.16.0":
-  version: 2.16.0
-  resolution: "@vercel/build-utils@npm:2.16.0"
-  checksum: eb2ebfe6820796462eb830d10c1173f26271af11e04d36efc465e9200f6432b0e2c0cb997d10c3cc5f5eac92ae957d88a72eb43784e5450b6f3e8e7bae58f245
+"@vercel/build-utils@npm:3.0.1":
+  version: 3.0.1
+  resolution: "@vercel/build-utils@npm:3.0.1"
+  checksum: e6096f1a212bcac06ecba4589823f4c9b8a038affd352066d6ae183b73bf586f786ba231894c1291bfe525e380b357724f47c426c7480d549fbdbde69b61bf91
   languageName: node
   linkType: hard
 
-"@vercel/go@npm:1.4.0":
-  version: 1.4.0
-  resolution: "@vercel/go@npm:1.4.0"
-  checksum: a69afdd535297541b46ee0fd309f6205580e0015d01f29e249fce5b6481a247b1a8f827ec129e77b6470c545383ad5a8aa96ee8a93ddf47413dfa2b7979e0b38
+"@vercel/go@npm:1.4.2":
+  version: 1.4.2
+  resolution: "@vercel/go@npm:1.4.2"
+  checksum: 0cfb5b2d3b4202ee4b1af12623c433e7dbcb319fef340ea221ca6d2ba63b7f3192dbd7c635191d774f2f54c6a7cfe60069497846fb335a771b6b29532207e5a4
   languageName: node
   linkType: hard
 
@@ -4799,29 +4799,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/node@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@vercel/node@npm:1.15.0"
+"@vercel/node@npm:1.15.2":
+  version: 1.15.2
+  resolution: "@vercel/node@npm:1.15.2"
   dependencies:
     "@types/node": "*"
     "@vercel/node-bridge": 2.2.1
     ts-node: 8.9.1
     typescript: 4.3.4
-  checksum: 41cc34953e29c1c4fb3ec265a183132b6593b503224556b6c0d5c87cfdf2be6cd6a640ed36512d97bec62a52f1048c68d3c8e5f292e16c70256079d17a366157
+  checksum: 049523b3567bb13a65aff59466949de383508f4ed626bc0c404cd413682fa340c44a509ea33eac3d5cb76afd0ffe457f624429cf15947ca708544880071207e8
   languageName: node
   linkType: hard
 
-"@vercel/python@npm:2.3.0":
-  version: 2.3.0
-  resolution: "@vercel/python@npm:2.3.0"
-  checksum: 5821d430f205913b161e77dc3658b8fdcdeb18e6c0af5d08dbeb9d432504ef65a04097d070508def4233eb5340bd50c9a19b0e5327318129e71d5af7b09519f0
+"@vercel/python@npm:2.3.2":
+  version: 2.3.2
+  resolution: "@vercel/python@npm:2.3.2"
+  checksum: b9fab917163e32ee1547f1e6f5088e5a94f400d445527ad38e7fb96f8d6ca4ddc5f94010b1b131f283fb2aa059460b8481e58a81754809f194e1bd7f5dff837c
   languageName: node
   linkType: hard
 
-"@vercel/ruby@npm:1.3.3":
-  version: 1.3.3
-  resolution: "@vercel/ruby@npm:1.3.3"
-  checksum: efe1d31dc6ef6b859be6f8afffd189777f638a1498d158c08485f150cde0443caf40aafcf3926c2a5d04b82b17a6331c1e2a741a22300d76e9074635a8d406eb
+"@vercel/ruby@npm:1.3.5":
+  version: 1.3.5
+  resolution: "@vercel/ruby@npm:1.3.5"
+  checksum: 3ccf2fa1c8ac6ad0a189d90e78a1f5df2d192ca3a7002242f0d6681432e9aa0804dcca6397dbdbae88232a8c381db4695b7ee17f994186d3813c8f0f14506870
   languageName: node
   linkType: hard
 
@@ -5357,7 +5357,7 @@ __metadata:
     get-urls: 11.0.0
     graphile-build: 4.12.2
     graphile-build-pg: 4.12.2
-    graphql: 16.4.0
+    graphql: 16.5.0
     graphql.macro: 1.4.2
     is-uuid: 1.0.2
     isomorphic-fetch: 3.0.0
@@ -5373,13 +5373,13 @@ __metadata:
     leaflet.markercluster: 1.5.3
     localforage: 1.10.0
     lodash: 4.17.21
-    luxon: 2.3.2
+    luxon: 2.4.0
     markdown-it: 13.0.1
     mobx: 6.5.0
-    mobx-react-lite: 3.3.0
-    mobx-state-tree: 5.1.4
+    mobx-react-lite: 3.4.0
+    mobx-state-tree: 5.1.5
     mst-persist: 0.1.3
-    notistack: 2.0.4
+    notistack: 2.0.5
     pg: 8.7.3
     pg-sql2: 4.12.1
     postgraphile: 4.12.10
@@ -5411,7 +5411,7 @@ __metadata:
     react-linkify: 1.0.0-alpha
     react-markdown-editor-lite: 1.3.2
     react-resize-detector: 7.0.0
-    react-select: 5.3.1
+    react-select: 5.3.2
     react-sortable-hoc: 2.0.0
     react-split-pane: 0.1.92
     react-stylable-diff: 2.0.0
@@ -5427,7 +5427,7 @@ __metadata:
     typography: 0.16.21
     uploadcare-widget: 3.17.2
     use-debounce: 8.0.1
-    vercel: 24.2.0
+    vercel: 24.2.3
   languageName: unknown
   linkType: soft
 
@@ -11494,10 +11494,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.4.0":
-  version: 16.4.0
-  resolution: "graphql@npm:16.4.0"
-  checksum: 8cac2c466891b6c6ace2fa3807f93815dea53cbec372998c139e796a321a6882c2324cc605e5f9aa45356890239aa9e731a04d8c59ec524db82bd18fb48aafee
+"graphql@npm:16.5.0":
+  version: 16.5.0
+  resolution: "graphql@npm:16.5.0"
+  checksum: a82a926d085818934d04fdf303a269af170e79de943678bd2726370a96194f9454ade9d6d76c2de69afbd7b9f0b4f8061619baecbbddbe82125860e675ac219e
   languageName: node
   linkType: hard
 
@@ -14225,10 +14225,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:2.3.2":
-  version: 2.3.2
-  resolution: "luxon@npm:2.3.2"
-  checksum: ba4f9daa56d03771c2ddf00e3bf996ec7937badfdc2f85f5b58d63c75bb511369b3316f54ab9ce5ab42bfc9118513971f6599128529b68620b876a4b7c16570b
+"luxon@npm:2.4.0":
+  version: 2.4.0
+  resolution: "luxon@npm:2.4.0"
+  checksum: 6071028d65cc3d3bdab5e6a3995dd97411c92bb3b3163a02deb7b7014318ad3a6fd750ae77131c42141b717c14aef8880d3130f265281d500ef2365f7265b3f3
   languageName: node
   linkType: hard
 
@@ -15008,27 +15008,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mobx-react-lite@npm:3.3.0":
-  version: 3.3.0
-  resolution: "mobx-react-lite@npm:3.3.0"
+"mobx-react-lite@npm:3.4.0":
+  version: 3.4.0
+  resolution: "mobx-react-lite@npm:3.4.0"
   peerDependencies:
     mobx: ^6.1.0
-    react: ^16.8.0 || ^17
+    react: ^16.8.0 || ^17 || ^18
   peerDependenciesMeta:
     react-dom:
       optional: true
     react-native:
       optional: true
-  checksum: 0f55bd2009a9cedc6b81d70b88b57dc4161362a16ba6ae0af341e673ca1c627bc3c4088c0cb13133e57e6fa6748b09b4c26aff7fab26c60ed95d27e939846fa3
+  checksum: 9294e127e281c8b37ec7bcaf17de479f50519e6ad485b58d7b991291900511541a5a718653759d3cf6503462c70325d025e1c2ed376d4584fb1b2d3aac9d9b48
   languageName: node
   linkType: hard
 
-"mobx-state-tree@npm:5.1.4":
-  version: 5.1.4
-  resolution: "mobx-state-tree@npm:5.1.4"
+"mobx-state-tree@npm:5.1.5":
+  version: 5.1.5
+  resolution: "mobx-state-tree@npm:5.1.5"
   peerDependencies:
     mobx: ^6.3.0
-  checksum: 12f7d559d4a5ca51a84af59eae51d11c9bfbb98e2bdc1c04fb44ef7ac38fb4e2c2394e1cc9c0fb9c50686ea78effeb074d67853e92986ef201a9792ec9cc5370
+  checksum: 7d88e6018668e0fe21908301848a724810640d8271e287bc90cbe63f87172d8353dc9f7fb922899e0ba70efba290c6cc7166b90032c76b957faec42a4dd27923
   languageName: node
   linkType: hard
 
@@ -15446,9 +15446,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"notistack@npm:2.0.4":
-  version: 2.0.4
-  resolution: "notistack@npm:2.0.4"
+"notistack@npm:2.0.5":
+  version: 2.0.5
+  resolution: "notistack@npm:2.0.5"
   dependencies:
     clsx: ^1.1.0
     hoist-non-react-statics: ^3.3.0
@@ -15463,7 +15463,7 @@ __metadata:
       optional: true
     "@emotion/styled":
       optional: true
-  checksum: 11e47b3f0359847362d9a78fe5866a55080d073a8e395bc7a24c95c7c8230893510334425f143607124833c9344de08049c04a90e59d33e9dbf5c00fe6fb997e
+  checksum: afbf8bf8878c610b3ca58b70164784d2f5683f345bc4b670b5c4114a9155104f087a501422d7883ec8fd90299d6c66029f8bd6b11396baba157fad70c27e167a
   languageName: node
   linkType: hard
 
@@ -17730,9 +17730,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-select@npm:5.3.1":
-  version: 5.3.1
-  resolution: "react-select@npm:5.3.1"
+"react-select@npm:5.3.2":
+  version: 5.3.2
+  resolution: "react-select@npm:5.3.2"
   dependencies:
     "@babel/runtime": ^7.12.0
     "@emotion/cache": ^11.4.0
@@ -17744,7 +17744,7 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: d84581571b6374183ab176c9c95ec16858ea43d115de8daf417f83d1f2bd84f1d9b07e6f3d6f87bfb0f46e3691904ea54ded0e6801815bc9e6db1c988329e985
+  checksum: c8c0ecd75704098ef1010fba4df68bcc5e7d76ffcd6d3bac40bc3017758a9c035a887fa82ead9105dc719c14e04c4164d8b7a8e8fa61d0ed39e4bdf48ee3bf1c
   languageName: node
   linkType: hard
 
@@ -20973,20 +20973,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vercel@npm:24.2.0":
-  version: 24.2.0
-  resolution: "vercel@npm:24.2.0"
+"vercel@npm:24.2.3":
+  version: 24.2.3
+  resolution: "vercel@npm:24.2.3"
   dependencies:
-    "@vercel/build-utils": 2.16.0
-    "@vercel/go": 1.4.0
-    "@vercel/node": 1.15.0
-    "@vercel/python": 2.3.0
-    "@vercel/ruby": 1.3.3
+    "@vercel/build-utils": 3.0.1
+    "@vercel/go": 1.4.2
+    "@vercel/node": 1.15.2
+    "@vercel/python": 2.3.2
+    "@vercel/ruby": 1.3.5
     update-notifier: 4.1.0
   bin:
     vc: dist/index.js
     vercel: dist/index.js
-  checksum: 129b7e8d3643c8f602d900a8db36b423f16fd1784cfc741d906d8c3374058744546ccf7c57e825f6cfc9eebfff22582810ff630c4a6611edea1b5584da1f5c65
+  checksum: c4562a5d5602c0a8ba20ca0f25902ec4fd2a4ec8f1c531b767f48bbf327cad8d02535573417fd37d5f818b2ab00c786164604859a6ff0b95061203a9c54c4ad5
   languageName: node
   linkType: hard
 
