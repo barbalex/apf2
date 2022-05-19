@@ -9,11 +9,11 @@ const createMessageFunctions = ({ data, projId, apId }) => ({
         'Aktionspläne',
         r.apId,
         'Populationen',
-        r.nr,
+        r.popId,
         'Teil-Populationen',
         r.id,
       ],
-      text: `Population: ${r.pop_nr ?? r?.pop_id}, Teil-Population: ${
+      text: `Population: ${r.popNr ?? r?.popId}, Teil-Population: ${
         r.nr || r.id
       }`,
     })),
