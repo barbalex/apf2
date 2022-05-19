@@ -179,6 +179,7 @@ const Client = ({ store }) => {
           'VApbeobsZugeordnet',
           'NearestTpopForApResp',
           'nearestTpopForApFunction',
+          'TpopOutsideZhForAp',
         ].includes(object.__typename)
       ) {
         return defaultDataIdFromObject(object)
