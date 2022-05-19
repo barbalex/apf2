@@ -2308,16 +2308,16 @@ DROP VIEW IF EXISTS apflora.v_q_pop_popnrmehrdeutig CASCADE;
 
 CREATE OR REPLACE VIEW apflora.v_q_pop_popnrmehrdeutig AS
 SELECT
-  apflora.projekt.id AS proj_id,
-  apflora.ap.id AS ap_id,
-  apflora.pop.id,
-  apflora.pop.nr
+  projekt.id AS proj_id,
+  ap.id AS ap_id,
+  pop.id,
+  pop.nr
 FROM
-  apflora.projekt
-  INNER JOIN apflora.ap
-  INNER JOIN apflora.pop ON apflora.pop.ap_id = apflora.ap.id ON apflora.projekt.id = apflora.ap.proj_id
+  apflora.projekt projekt
+  INNER JOIN apflora.ap ap ON projekt.id = ap.proj_id
+  INNER JOIN apflora.pop pop ON pop.ap_id = ap.id
 WHERE
-  apflora.pop.ap_id IN ( SELECT DISTINCT
+  pop.ap_id IN ( SELECT DISTINCT
       ap_id
     FROM
       apflora.pop
@@ -2326,7 +2326,7 @@ WHERE
       nr
     HAVING
       COUNT(*) > 1)
-  AND apflora.pop.nr IN ( SELECT DISTINCT
+  AND pop.nr IN ( SELECT DISTINCT
       nr
     FROM
       apflora.pop
@@ -2336,9 +2336,9 @@ WHERE
     HAVING
       COUNT(*) > 1)
 ORDER BY
-  apflora.projekt.id,
-  apflora.ap.id,
-  apflora.pop.nr;
+  projekt.id,
+  ap.id,
+  pop.nr;
 
 -- TODO: seems only to output pops with koord but no tpop
 DROP VIEW IF EXISTS apflora.v_q_pop_koordentsprechenkeinertpop CASCADE;
