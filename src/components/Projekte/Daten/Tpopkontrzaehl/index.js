@@ -10,7 +10,7 @@ import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
-import queryZaehlOfEk from './queryZaehlOfEk'
+import queryOtherZaehlOfEk from './queryOtherZaehlOfEk'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -53,8 +53,8 @@ const Tpopkontrzaehl = ({ treeName }) => {
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
 
-  const { data: dataZaehlOfEk, error: errorZaehlOfEk } = useQuery(
-    queryZaehlOfEk,
+  const { data: dataOtherZaehlOfEk, error: errorOtherZaehlOfEk } = useQuery(
+    queryOtherZaehlOfEk,
     {
       variables: {
         tpopkontrId,
@@ -63,14 +63,16 @@ const Tpopkontrzaehl = ({ treeName }) => {
     },
   )
 
-  const codes = (dataZaehlOfEk?.allTpopkontrzaehls?.nodes ?? [])
+  const zaehlEinheitCodesAlreadyUsed = (
+    dataOtherZaehlOfEk?.allTpopkontrzaehls?.nodes ?? []
+  )
     .map((n) => n.einheit)
     // prevent null values which cause error in query
     .filter((e) => !!e)
   const { data, loading, error } = useQuery(query, {
     variables: {
       id: tpopkontrzaehlId,
-      codes,
+      codes: zaehlEinheitCodesAlreadyUsed,
     },
   })
 
@@ -129,7 +131,7 @@ const Tpopkontrzaehl = ({ treeName }) => {
 
   const errors = [
     ...(error ? [error] : []),
-    ...(errorZaehlOfEk ? [errorZaehlOfEk] : []),
+    ...(errorOtherZaehlOfEk ? [errorOtherZaehlOfEk] : []),
   ]
   if (errors.length) return <Error errors={errors} />
 

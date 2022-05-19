@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 import { tpopkontrzaehl } from '../../../shared/fragments'
 
 export default gql`
-  query TpopkontrzaehlQueryForEkZaehl($id: UUID!, $codes: [Int!]) {
+  query TpopkontrzaehlQueryForEkZaehl($id: UUID!, $codes: [Int!]) { 
     tpopkontrzaehlById(id: $id) {
       ...TpopkontrzaehlFields
     }
