@@ -178,7 +178,6 @@ const Client = ({ store }) => {
           'VApbeobsNichtZuzuordnen',
           'VApbeobsZugeordnet',
           'NearestTpopForApResp',
-          'nearestTpopForApFunction',
           'TpopOutsideZhForAp',
         ].includes(object.__typename)
       ) {
