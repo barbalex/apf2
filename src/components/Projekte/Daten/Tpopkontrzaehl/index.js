@@ -10,7 +10,6 @@ import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
-import queryOtherZaehlOfEk from './queryOtherZaehlOfEk'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -53,28 +52,22 @@ const Tpopkontrzaehl = ({ treeName }) => {
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
 
-  const { data: dataOtherZaehlOfEk, error: errorOtherZaehlOfEk } = useQuery(
-    queryOtherZaehlOfEk,
-    {
-      variables: {
-        tpopkontrId,
-        id: tpopkontrzaehlId,
-      },
-    },
-  )
-
-  const zaehlEinheitCodesAlreadyUsed = (
-    dataOtherZaehlOfEk?.otherZaehlOfEk?.nodes ?? []
-  )
-    .map((n) => n.einheit)
-    // prevent null values which cause error in query
-    .filter((e) => !!e)
   const { data, loading, error } = useQuery(query, {
     variables: {
       id: tpopkontrzaehlId,
-      codes: zaehlEinheitCodesAlreadyUsed,
+      tpopkontrId,
     },
   })
+
+  const zaehlEinheitCodesAlreadyUsed = (data?.otherZaehlOfEk?.nodes ?? [])
+    .map((n) => n.einheit)
+    // prevent null values which cause error in query
+    .filter((e) => !!e)
+
+  // filter out already used in other zaehlung of same kontr
+  const zaehlEinheitOptions = (
+    data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+  ).filter((o) => !zaehlEinheitCodesAlreadyUsed.includes(o.value))
 
   const row = useMemo(
     () => data?.tpopkontrzaehlById ?? {},
@@ -125,19 +118,11 @@ const Tpopkontrzaehl = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  // TODO:
-  // filter out already used in other zaehlung of same kontr
-  const zaehlEinheitOptions = data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
-
-  //console.log('Tpopkontrzaehl rendering')
+  // console.log('Tpopkontrzaehl rendering')
 
   if (loading) return <Spinner />
 
-  const errors = [
-    ...(error ? [error] : []),
-    ...(errorOtherZaehlOfEk ? [errorOtherZaehlOfEk] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
+  if (error) return <Error errors={[error]} />
 
   return (
     <ErrorBoundary>
