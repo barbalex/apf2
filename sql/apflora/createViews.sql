@@ -2307,34 +2307,33 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_q_pop_popnrmehrdeutig CASCADE;
 
 CREATE OR REPLACE VIEW apflora.v_q_pop_popnrmehrdeutig AS
+WITH multiples AS (
+  SELECT
+    projekt.id AS proj_id,
+    ap.id AS ap_id,
+    pop.nr AS pop_nr,
+    count(pop.id)
+  FROM
+    apflora.projekt projekt
+    INNER JOIN apflora.ap ap ON projekt.id = ap.proj_id
+    INNER JOIN apflora.pop pop ON pop.ap_id = ap.id
+  GROUP BY
+    projekt.id,
+    ap.id,
+    pop.nr
+  HAVING
+    count(pop.id) > 1
+)
 SELECT
   projekt.id AS proj_id,
   ap.id AS ap_id,
   pop.id,
   pop.nr
 FROM
-  apflora.projekt projekt
-  INNER JOIN apflora.ap ap ON projekt.id = ap.proj_id
-  INNER JOIN apflora.pop pop ON pop.ap_id = ap.id
-WHERE
-  pop.ap_id IN ( SELECT DISTINCT
-      ap_id
-    FROM
-      apflora.pop
-    GROUP BY
-      ap_id,
-      nr
-    HAVING
-      COUNT(*) > 1)
-  AND pop.nr IN ( SELECT DISTINCT
-      nr
-    FROM
-      apflora.pop
-    GROUP BY
-      ap_id,
-      nr
-    HAVING
-      COUNT(*) > 1)
+  multiples
+  INNER JOIN apflora.pop pop ON pop.nr = multiples.pop_nr
+  INNER JOIN apflora.ap ap ON pop.ap_id = ap.id and multiples.ap_id = ap.id
+  INNER JOIN apflora.projekt projekt ON projekt.id = ap.proj_id and multiples.proj_id = projekt.id
 ORDER BY
   projekt.id,
   ap.id,
