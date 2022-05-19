@@ -9,9 +9,7 @@ SELECT
   pop.nr AS pop_nr,
   tpop.id AS tpop_id,
   tpop.nr AS tpop_nr,
-  beob.quelle AS beob_quelle,
-  beob.created_at AS beob_created_at,
-  beob.updated_at AS beob_updated_at
+  beob.quelle AS beob_quelle
 FROM
   apflora.beob beob
   INNER JOIN apflora.ae_taxonomies tax ON beob.art_id = tax.id
