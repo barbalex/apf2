@@ -64,7 +64,7 @@ const Tpopkontrzaehl = ({ treeName }) => {
   )
 
   const zaehlEinheitCodesAlreadyUsed = (
-    dataOtherZaehlOfEk?.allTpopkontrzaehls?.nodes ?? []
+    dataOtherZaehlOfEk?.otherZaehlOfEk?.nodes ?? []
   )
     .map((n) => n.einheit)
     // prevent null values which cause error in query
@@ -125,6 +125,10 @@ const Tpopkontrzaehl = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
+  // TODO:
+  // filter out already used in other zaehlung of same kontr
+  const zaehlEinheitOptions = data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+
   //console.log('Tpopkontrzaehl rendering')
 
   if (loading) return <Spinner />
@@ -155,7 +159,7 @@ const Tpopkontrzaehl = ({ treeName }) => {
               <Select
                 name="einheit"
                 label="Einheit"
-                options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
+                options={zaehlEinheitOptions}
                 loading={loading}
                 value={row.einheit}
                 saveToDb={saveToDb}

@@ -2,10 +2,10 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query otherZaehlOfEkQuery($tpopkontrId: UUID!, $id: UUID!) {
-    allTpopkontrzaehls(
+    otherZaehlOfEk: allTpopkontrzaehls(
       filter: {
         tpopkontrId: { equalTo: $tpopkontrId }
-        id: { notEqualTo: $id } 
+        id: { notEqualTo: $id }
       }
     ) {
       nodes {
