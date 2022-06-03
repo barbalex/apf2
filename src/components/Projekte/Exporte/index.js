@@ -49,7 +49,7 @@ export const DownloadCardButton = styled(Button)`
 export const StyledProgressText = styled.span`
   margin-left: 10px;
   font-style: italic;
-  animation: blinker 1s linear infinite;
+  animation: blinker 1s linear infinite; 
   white-space: nowrap;
   @keyframes blinker {
     50% {

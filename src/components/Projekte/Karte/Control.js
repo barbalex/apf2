@@ -7,7 +7,7 @@ const OuterDiv = styled.div`
 const InnerDiv = styled.div`
   border: none !important;
   box-shadow: none !important;
-  /* float children right */
+  /* float children right */ 
   display: flex;
   flex-direction: column;
   align-items: flex-end;
