@@ -147,7 +147,7 @@
     "@graphile/postgis": "0.1.0",
     "@svgr/cli": "6.2.1",
     "copyfiles": "2.4.1",
-    "cypress": "9.7.0",
+    "cypress": "10.0.3",
     "eslint": "8.17.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-react": "7.30.0",
