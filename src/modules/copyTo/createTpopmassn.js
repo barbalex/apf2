@@ -10,7 +10,7 @@ export default gql`
     $datum: Date
     $bemerkungen: String
     $planBezeichnung: String
-    $flaeche: Int
+    $flaeche: Float
     $markierung: String
     $anzTriebe: Int
     $anzPflanzen: Int
