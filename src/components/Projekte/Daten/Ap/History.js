@@ -142,7 +142,7 @@ const ApHistory = ({ apId }) => {
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
       <InnerContainer>
         <DocLine>
-          Jährlich historisierte Daten des Aktionsplans (
+          Jährlich historisierte Daten der Art (
           <DocLink onClick={openDocs}>Dokumentation</DocLink>
           ).
         </DocLine>

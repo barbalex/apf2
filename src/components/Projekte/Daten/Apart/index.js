@@ -152,9 +152,8 @@ const ApArt = ({ treeName }) => {
                 <ul>
                   <li>Die Art hat Synonyme</li>
                   <li>
-                    Eine Art wird im Rahmen des Aktionsplans inklusive nicht
-                    synonymer aber eng verwandter Arten gefasst (z.B.
-                    Unterarten)
+                    Die Art umfasst nicht synonyme aber eng verwandte Arten
+                    (z.B. Unterarten)
                   </li>
                   <li>
                     Beobachtungen liegen in unterschiedlichen Taxonomien vor,
