@@ -17,7 +17,7 @@ export default gql`
     $kontrolleAendern: String
     $bemerkungen: String
     $lrDelarze: String
-    $flaeche: Float
+    $flaeche: Int
     $lrUmgebungDelarze: String
     $vegetationstyp: String
     $konkurrenz: String
