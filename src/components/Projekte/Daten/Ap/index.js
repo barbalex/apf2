@@ -61,7 +61,7 @@ const ApTabs = ({ treeName }) => {
           textColor="primary"
           centered
         >
-          <StyledTab label="AP" value="ap" data-id="ap" />
+          <StyledTab label="Art" value="ap" data-id="ap" />
           <StyledTab
             label="Auswertung"
             value="auswertung"

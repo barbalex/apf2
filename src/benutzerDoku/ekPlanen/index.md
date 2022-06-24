@@ -14,7 +14,7 @@ sort: 12
    - [Pro Art](#pro-art)
    - [Pro Teilpopulation](#pro-teilpopulation)
 1. [Formular EK-Planung](#3-formular-ek-planung)
-   - [AP's wählen](#aps-wählen)
+   - [Arten wählen](#arten-wählen)
    - [Dargestellte Informationen wählen](#dargestellte-informationen-wählen)
    - [Kontrollen planen](#kontrollen-planen)
    - [Mehr Informationen](#mehr-informationen)
@@ -47,15 +47,15 @@ Durch die Koordinationsstelle. Im Strukturbaum in den Werte-Listen.
 Durch Koordinationsstelle und Artverantwortliche.
 
 - Welche Zähleinheiten sind zielrelevant und sollen daher immer erfasst werden
-- Frequenzen, nach denen in diesem AP kontrolliert werden soll. Inklusive Abrechnungstyp (EK-Frequenzen)
+- Frequenzen, nach denen in dieser Art kontrolliert werden soll. Inklusive Abrechnungstyp (EK-Frequenzen)
   ![im Strukturbaum](ekplanen_ap.png)
 
 ### Pro Teilpopulation
 
 Durch Artverantwortliche.
 
-- Aus den für den AP bestimmten Frequenzen wird die für diese Teil-Population passende gewählt
-- Weicht die EK-Frequenz von der auf AP-Ebene für diesen Fall bestimmten Wert ab, wird das besonders markiert ("EK-Frequenz abweichend")
+- Aus den für die Art bestimmten Frequenzen wird die für diese Teil-Population passende gewählt
+- Weicht die EK-Frequenz von der auf Art-Ebene für diesen Fall bestimmten Wert ab, wird das besonders markiert ("EK-Frequenz abweichend")
 - In welchen Jahren Kontrollen erfolgen sollen, differenziert nach EK und EKF
 
 Letzteres ist die eigentliche EK-Planung und sie geschieht primär im entsprechenden Formular:<br/><br/>
@@ -65,12 +65,12 @@ Letzteres ist die eigentliche EK-Planung und sie geschieht primär im entspreche
 Das Formular ist für die Darstellung und Bearbeitung grosser Datenmengen konzipiert.<br/>
 Je grösser und höher aufgelöst der Bildschirm, desto übersichtlicher kann man arbeiten. Auf kleinen Bildschirmen (z.B. Handy) ist es kaum brauchbar.<br/><br/>
 
-### AP's wählen
+### Arten wählen
 
-Oben links wählt man, von welchen Aktionsplänen Teil-Populationen angezeigt werden sollen:<br/>
+Oben links wählt man, von welchen Arten Teil-Populationen angezeigt werden sollen:<br/>
 ![Formular](ekplanen_form_2.png)<br/>
 
-Sobald ein AP gewählt wurde, erscheinen die zugehörigen Teil-Populationen in der Liste.<br/>
+Sobald eine Art gewählt wurde, erscheinen die zugehörigen Teil-Populationen in der Liste.<br/>
 ![Formular](ekplanen_form_1.png)<br/>
 Klickt man auf einen Spaltenkopf eines Felds, dass die Teil-Population beschreibt, erscheint eine Filter-Menu:<br/>
 ![Filtern](filtern.gif)<br/><br/>

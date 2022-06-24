@@ -40,7 +40,7 @@ const WollmilchsauSingle = () => {
         row={{}}
         field="ewm"
         valueLabelPath="aeTaxonomyByArtId.artname"
-        label={`"Eier legende Wollmilchsau" für einzelne AP's: AP wählen`}
+        label={`"Eier legende Wollmilchsau" für einzelne Arten's: Art wählen`}
         labelSize={14}
         saveToDb={async (e) => {
           const aeId = e.target.value

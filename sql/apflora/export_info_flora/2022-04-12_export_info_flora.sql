@@ -159,7 +159,7 @@ SELECT
   concat('Anzahlen: ', array_to_string(array_agg(zaehl.anzahl), ', '), ', Zaehleinheiten: ', string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', '), ', Methoden: ', string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ')) AS zaehlungen,
   'C'::text AS expertise_introduit,
   /*
-   * AP-Verantwortliche oder topos als EXPERTISE_INTRODUITE_NOM setzen
+   * Art-Verantwortliche oder topos als EXPERTISE_INTRODUITE_NOM setzen
    */
   CASE WHEN ap_bearbeiter_adresse.name IS NOT NULL THEN
     ap_bearbeiter_adresse.name

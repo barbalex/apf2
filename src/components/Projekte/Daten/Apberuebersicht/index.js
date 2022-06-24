@@ -210,7 +210,7 @@ const Apberuebersicht = ({ treeName }) => {
     })
     // notify user
     enqueNotification({
-      message: `AP, Pop und TPop wurden für das Jahr ${row.jahr} historisiert`,
+      message: `Arten, Pop und TPop wurden für das Jahr ${row.jahr} historisiert`,
       options: {
         variant: 'info',
       },
@@ -249,7 +249,7 @@ const Apberuebersicht = ({ treeName }) => {
               {!!row.historyDate && (
                 <TextFieldNonUpdatable
                   value={format(new Date(row.historyDate), 'dd.MM.yyyy')}
-                  label="Datum, an dem AP, Pop und TPop historisiert wurden"
+                  label="Datum, an dem Arten, Pop und TPop historisiert wurden"
                 />
               )}
               {showHistorize && (
@@ -259,7 +259,7 @@ const Apberuebersicht = ({ treeName }) => {
                   title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. bis zum März des Folgejahrs"
                   color="inherit"
                 >
-                  {`AP, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
+                  {`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
                 </StyledButton>
               )}
               <MdField

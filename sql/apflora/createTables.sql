@@ -202,7 +202,7 @@ CREATE INDEX ON apflora.ap_user USING btree (ap_id);
 
 CREATE INDEX ON apflora.ap_user USING btree (user_name);
 
-COMMENT ON TABLE apflora.ap IS 'Hier wird bestimmt, welche Benutzer mit den rollen "apflora_ap_writer" oder "apflora_reader" Zugriff auf einen AP erhalten';
+COMMENT ON TABLE apflora.ap IS 'Hier wird bestimmt, welche Benutzer mit den rollen "apflora_ap_writer" oder "apflora_reader" Zugriff auf eine Art erhalten';
 
 ALTER TABLE apflora.ap_user ENABLE ROW LEVEL SECURITY;
 
@@ -675,7 +675,7 @@ COMMENT ON COLUMN apflora.apberuebersicht.proj_id IS 'Zugehöriges Projekt. Zusa
 
 COMMENT ON COLUMN apflora.apberuebersicht.jahr IS 'Berichtsjahr. Zusammen mit proj_id eindeutig';
 
-COMMENT ON COLUMN apflora.apberuebersicht.history_date IS 'Datum, an dem die Daten von AP, Pop und TPop historisiert wurden';
+COMMENT ON COLUMN apflora.apberuebersicht.history_date IS 'Datum, an dem die Daten von Art, Pop und TPop historisiert wurden';
 
 COMMENT ON COLUMN apflora.apberuebersicht.bemerkungen IS 'Bemerkungen zur Artübersicht';
 

@@ -30,7 +30,7 @@ const createMessageFunctions = ({ data, projId, apId }) => ({
   apMitAktKontrOhneZielrelevanteEinheit: () =>
     (data?.apMitAktKontrOhneZielrelevanteEinheit?.nodes ?? []).map(() => ({
       url: ['Projekte', projId, 'Arten', apId],
-      text: `AP mit Kontrollen im aktuellen Jahr. Aber eine Ziel-relevante Einheit fehlt`,
+      text: `Art mit Kontrollen im aktuellen Jahr. Aber eine Ziel-relevante Einheit fehlt`,
     })),
   apOhneVerantwortlich: () =>
     (data?.apOhneVerantwortlich?.apsByProjId?.nodes ?? []).map(() => ({
@@ -40,7 +40,7 @@ const createMessageFunctions = ({ data, projId, apId }) => ({
   ekzieleinheitOhneMassnZaehleinheit: () =>
     (data?.ekzieleinheitOhneMassnZaehleinheit?.nodes ?? []).map((n) => ({
       url: ['Projekte', n.projId, 'Arten', n.apId, 'EK-Zähleinheiten', n.id],
-      text: `AP: ${n.artname}, Zähleinheit: ${n.zaehleinheit}`,
+      text: `Art: ${n.artname}, Zähleinheit: ${n.zaehleinheit}`,
     })),
   zielOhneJahr: () =>
     (data?.zielOhneJahr?.apsByProjId?.nodes?.[0]?.zielsByApId?.nodes ?? []).map(

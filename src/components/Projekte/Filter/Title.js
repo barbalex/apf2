@@ -48,7 +48,7 @@ const FilterTitle = ({ activeTab, setActiveTab }) => {
         variant="scrollable"
         scrollButtons="auto"
       >
-        <StyledTab label="AP" value="ap" data-id="ap" />
+        <StyledTab label="Art" value="ap" data-id="ap" />
         <StyledTab label="Pop" value="pop" data-id="pop" />
         <StyledTab label="T-Pop" value="tpop" data-id="tpop" />
         <StyledTab label="Massn" value="tpopmassn" data-id="tpopmassn" />

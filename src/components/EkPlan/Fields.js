@@ -29,7 +29,7 @@ const Fields = () => {
               onClick={() => toggleField('ap')}
             />
           }
-          label="AP"
+          label="Art"
           labelPlacement="end"
         />
         <FormControlLabel
