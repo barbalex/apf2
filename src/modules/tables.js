@@ -232,7 +232,7 @@ const tables = [
   {
     table: 'apart',
     parentTable: 'ap',
-    label: 'AP-Art',
+    label: 'Taxon',
     idField: 'id',
     parentIdField: 'ap_id',
   },

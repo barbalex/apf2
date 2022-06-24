@@ -482,7 +482,7 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           }),
         ]
       }
-      if (nodeUrl.length === 5 && nodeUrl[4] === 'AP-Arten') {
+      if (nodeUrl.length === 5 && nodeUrl[4] === 'Taxa') {
         nodes = [
           ...nodes,
           ...buildApartNodes({
