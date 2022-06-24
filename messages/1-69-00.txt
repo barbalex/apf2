@@ -1,1 +1,1 @@
-Ab v1.69.00 können in den folgenden Feldern neu Dezimalzahlen erfasst werden: Feldkontrolle-Anzahl, Freiwilligenkontrolle-gezählt/geschätzt, Massnahme-Fläche
+Ab v1.69.00 können in den folgenden Feldern neu Dezimalzahlen erfasst werden: Feldkontrolle-Anzahl, Freiwilligenkontrolle-gezählt/geschätzt, Massnahme-Fläche. Ausserdem wurden umgenannt: Aktionspläne zu Arten, AP-Arten zu Taxa.
