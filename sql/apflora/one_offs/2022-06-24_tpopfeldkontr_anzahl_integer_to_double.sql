@@ -511,6 +511,8 @@ ORDER BY tpop2.id, apflora.tpopkontrzaehl_einheit_werte.text, kontr2.jahr DESC, 
     pop.nr,
     tpop.nr;
 
+COMMENT ON VIEW apflora.v_tpop_last_count_with_massn IS '@foreignKey (tpop_id) references tpop (id)';
+
 CREATE OR REPLACE VIEW apflora.v_pop_last_count AS
 SELECT
   artname,
@@ -959,6 +961,8 @@ ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
   apflora.tpop.nr;
+
+COMMENT ON VIEW apflora.v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber IS '@foreignKey (id) references tpop (id)';
 
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_webgisbun AS
 SELECT
