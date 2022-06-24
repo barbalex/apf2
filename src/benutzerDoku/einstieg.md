@@ -1,18 +1,16 @@
 ---
 typ: 'benutzerDoku'
 path: '/Dokumentation/Benutzer/Tipps-fuer-den-Einstieg'
-date: '2021-01-09'
+date: '2022-02-24'
 title: 'Tipps für den Einstieg'
 sort: 5
 ---
 
 - Die **Anwendung** ist hier: [https://apflora.ch/Daten](https://apflora.ch/Daten)
 - Ihr braucht ein **Login**. Das wird von Topos vergeben, z.B. von [Rebecca Kurz](mailto:kurz@toposmm.ch)
-- Nach erfolgreichem Login wählt ihr den **Aktionsplan**, mit dem ihr arbeiten wollt.
+- Nach erfolgreichem Login wählt ihr die **Art**, mit dem ihr arbeiten wollt.
 
-  Der Begriff "Aktionsplan" wurde gewählt, weil es keine Arten sind, sondern Massnahmen, Kontrollen und Berichte für/mit/über Arten.
-
-  "Aktionsplan" kennzeichnet im Grunde genommen Förderprograme für [ein paar Dutzend besonders geförderte Arten](https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html). Daher wäre wohl ein Begriff wie "Artförderprogramm" angebrachter.
+  "Aktionsplan" kennzeichnet im Grunde genommen Förderprograme für [ein paar Dutzend besonders geförderte Arten](https://www.zh.ch/de/umwelt-tiere/naturschutz/artenschutz.html#-161530551).
 
 - Die **Menübefehle** erscheinen, wenn ihr mit der rechten Maustaste im Strukturbaum auf ein Objekt (z.B. eine Population) klickt. Mit dem Finger: lange drücken
 - Ein Teil der **Objekte können verschoben werden**: Populationen, Teil-Populationen, Massnahmen, Feldkontrollen und Freiwilligen-Kontrollen. Das macht ihr mittels "ausschneiden"/"kopieren" und anschliessendem "einfügen" mit dem Menu

@@ -381,8 +381,8 @@ const TpopfreiwkontrForm = ({
             )}
             {zaehl1ShowEmpty && (
               <CountHint>
-                Sie müssen auf Ebene Aktionsplan EK-Zähleinheiten definieren, um
-                hier Zählungen erfassen zu können.
+                Sie müssen auf Ebene Art EK-Zähleinheiten definieren, um hier
+                Zählungen erfassen zu können.
               </CountHint>
             )}
             {zaehls2 && (

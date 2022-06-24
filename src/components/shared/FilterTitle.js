@@ -90,13 +90,8 @@ const FilterTitle = ({
           {exists(filteredApNr) && (
             <>
               {`AP: `}
-              <span title="gefilterte Anzahl im Aktionsplan">
-                {filteredApNr}
-              </span>
-              /
-              <span title="ungefilterte Anzahl im Aktionsplan">
-                {totalApNr}
-              </span>
+              <span title="gefilterte Anzahl in Art">{filteredApNr}</span>/
+              <span title="ungefilterte Anzahl in Art">{totalApNr}</span>
               {`, `}
             </>
           )}

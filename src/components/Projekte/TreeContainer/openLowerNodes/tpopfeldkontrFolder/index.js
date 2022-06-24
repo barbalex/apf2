@@ -35,7 +35,7 @@ const openLowerNodesTpopfeldkontrFolder = async ({
     [
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       popId,
@@ -50,7 +50,7 @@ const openLowerNodesTpopfeldkontrFolder = async ({
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         popId,
@@ -62,7 +62,7 @@ const openLowerNodesTpopfeldkontrFolder = async ({
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         popId,
@@ -80,7 +80,7 @@ const openLowerNodesTpopfeldkontrFolder = async ({
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'Populationen',
           popId,

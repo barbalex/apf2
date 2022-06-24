@@ -39,15 +39,7 @@ const apzielNodes = ({
       parentTableId: el.apId,
       urlLabel: el.id,
       label: el.label,
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        el.apId,
-        'AP-Ziele',
-        el.jahr,
-        el.id,
-      ],
+      url: ['Projekte', projId, 'Arten', el.apId, 'AP-Ziele', el.jahr, el.id],
       hasChildren: true,
     }))
     .filter((el) => allParentNodesAreOpen(openNodes, el.url))

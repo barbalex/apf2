@@ -70,11 +70,11 @@ const roleWerte = [
   },
   {
     value: 'apflora_ap_writer',
-    label: `ap_writer (sieht fast alle Daten, ändert freigegebene Aktionspläne)`,
+    label: `ap_writer (sieht fast alle Daten, ändert freigegebene Arten)`,
   },
   {
     value: 'apflora_ap_reader',
-    label: 'ap_reader (sieht freigegebene Aktionspläne)',
+    label: 'ap_reader (sieht freigegebene Arten)',
   },
   {
     value: 'apflora_manager',

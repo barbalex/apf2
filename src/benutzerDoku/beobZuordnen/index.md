@@ -17,7 +17,7 @@ Verworfen werden Beobachtungen in der Regel, wenn:
 
 ### 1.1 Im Formular
 
-1. Aktionsplan wählen
+1. Art wählen
 2. Im Strukturbaum eine nicht beurteilte Beobachtung wählen
 3. Im Formular bei "Einer Teilpopulation zuordnen" die gewünschte wählen<br/><br/>
 

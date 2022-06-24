@@ -23,7 +23,7 @@ const TestdataMessage = ({ treeName, apId }) => {
   if (isTestAp) {
     return (
       <Div data-id="testdata-message">
-        Das ist ein Test-Aktionsplan. Sie können alles ausprobieren!
+        Das ist eine Test-Art. Sie können alles ausprobieren!
       </Div>
     )
   }

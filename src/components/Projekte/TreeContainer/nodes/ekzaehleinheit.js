@@ -31,14 +31,7 @@ const ekzaehleinheitNodes = ({
       parentTableId: el.apId,
       urlLabel: el.id,
       label: el.label,
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'EK-Zähleinheiten',
-        el.id,
-      ],
+      url: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten', el.id],
       hasChildren: false,
     }))
     .map((el, index) => {

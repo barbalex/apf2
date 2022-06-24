@@ -32,7 +32,7 @@ const apzielFolderNode = ({
     ? `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'} gefiltert`
     : `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'}`
 
-  const url = ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele']
+  const url = ['Projekte', projId, 'Arten', apId, 'AP-Ziele']
 
   // only show if parent node exists
   if (!nodesPassed.map((n) => n.id).includes(apId)) return []

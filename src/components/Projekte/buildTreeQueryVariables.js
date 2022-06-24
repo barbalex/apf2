@@ -73,7 +73,7 @@ const buildTreeQueryVariables = ({
       .map((a) =>
         a.length > 3 &&
         a[0] === 'Projekte' &&
-        decodeURIComponent(a[2]) === 'Aktionspläne'
+        decodeURIComponent(a[2]) === 'Arten'
           ? a[3]
           : null,
       )
@@ -81,14 +81,13 @@ const buildTreeQueryVariables = ({
       .filter((v) => isUuid.anyNonNil(v)),
   )
   const isAp =
-    isProjekt &&
-    openNodes.some((nArray) => nArray[2] === 'Aktionspläne' && nArray[3])
+    isProjekt && openNodes.some((nArray) => nArray[2] === 'Arten' && nArray[3])
   const ziel = uniq(
     openNodes
       .map((a) =>
         a.length > 7 &&
         a[0] === 'Projekte' &&
-        decodeURIComponent(a[2]) === 'Aktionspläne' &&
+        decodeURIComponent(a[2]) === 'Arten' &&
         a[4] === 'AP-Ziele'
           ? a[6]
           : null,
@@ -106,7 +105,7 @@ const buildTreeQueryVariables = ({
       .map((a) =>
         a.length > 5 &&
         a[0] === 'Projekte' &&
-        decodeURIComponent(a[2]) === 'Aktionspläne' &&
+        decodeURIComponent(a[2]) === 'Arten' &&
         a[4] === 'Populationen'
           ? a[5]
           : null,
@@ -130,7 +129,7 @@ const buildTreeQueryVariables = ({
       .map((a) =>
         a.length > 7 &&
         a[0] === 'Projekte' &&
-        decodeURIComponent(a[2]) === 'Aktionspläne' &&
+        decodeURIComponent(a[2]) === 'Arten' &&
         a[4] === 'Populationen' &&
         a[6] === 'Teil-Populationen'
           ? a[7]
@@ -156,7 +155,7 @@ const buildTreeQueryVariables = ({
       .map((a) =>
         a.length > 9 &&
         a[0] === 'Projekte' &&
-        decodeURIComponent(a[2]) === 'Aktionspläne' &&
+        decodeURIComponent(a[2]) === 'Arten' &&
         a[4] === 'Populationen' &&
         a[6] === 'Teil-Populationen' &&
         ['Feld-Kontrollen', 'Freiwilligen-Kontrollen'].includes(a[8])

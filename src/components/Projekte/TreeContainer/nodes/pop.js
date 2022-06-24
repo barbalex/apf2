@@ -31,7 +31,7 @@ const popNodes = ({
       parentTableId: el.apId,
       urlLabel: el.id,
       label: el.label,
-      url: ['Projekte', projId, 'Aktionspläne', el.apId, 'Populationen', el.id],
+      url: ['Projekte', projId, 'Arten', el.apId, 'Populationen', el.id],
       hasChildren: true,
       nr: el.nr || 0,
     }))

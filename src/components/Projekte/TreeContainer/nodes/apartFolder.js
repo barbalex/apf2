@@ -52,7 +52,7 @@ const apartFolderNode = ({
       tableId: apId,
       urlLabel: 'AP-Arten',
       label: `AP-Arten (${message})`,
-      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Arten'],
+      url: ['Projekte', projId, 'Arten', apId, 'AP-Arten'],
       sort: [projIndex, 1, apIndex, 7],
       hasChildren: apartNodesLength > 0,
     },

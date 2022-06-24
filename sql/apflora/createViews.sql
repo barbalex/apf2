@@ -1850,7 +1850,7 @@ SELECT
   concat(apflora.pop.nr, '/', apflora.tpop.nr) AS "label",
   substring(concat('Population: ', apflora.pop.nr, ' ', apflora.pop.name, '<br /> Teilpopulation: ', apflora.tpop.nr, ' ', apflora.tpop.gemeinde, ' ', apflora.tpop.flurname)
     FROM 1 FOR 225) AS "inhalte",
-  concat('https://apflora.ch/Daten/Projekte/', apflora.ap.proj_id, '/Aktionspläne/', apflora.ap.id, '/Populationen/', apflora.pop.id, '/Teil-Populationen/', apflora.tpop.id) AS url,
+  concat('https://apflora.ch/Daten/Projekte/', apflora.ap.proj_id, '/Arten/', apflora.ap.id, '/Populationen/', apflora.pop.id, '/Teil-Populationen/', apflora.tpop.id) AS url,
   apflora.tpop.id,
   apflora.tpop.wgs84_lat,
   apflora.tpop.wgs84_long
@@ -1879,7 +1879,7 @@ SELECT
   concat(apflora.ae_taxonomies.artname, ' ', apflora.pop.nr, '/', apflora.tpop.nr) AS "label",
   substring(concat('Population: ', apflora.pop.nr, ' ', apflora.pop.name, '<br /> Teilpopulation: ', apflora.tpop.nr, ' ', apflora.tpop.gemeinde, ' ', apflora.tpop.flurname)
     FROM 1 FOR 225) AS "inhalte",
-  concat('https://apflora.ch/Daten/Projekte/', apflora.ap.proj_id, '/Aktionspläne/', apflora.ap.id, '/Populationen/', apflora.pop.id, '/Teil-Populationen/', apflora.tpop.id) AS url,
+  concat('https://apflora.ch/Daten/Projekte/', apflora.ap.proj_id, '/Arten/', apflora.ap.id, '/Populationen/', apflora.pop.id, '/Teil-Populationen/', apflora.tpop.id) AS url,
   apflora.tpop.id,
   apflora.tpop.wgs84_lat,
   apflora.tpop.wgs84_long
@@ -1908,7 +1908,7 @@ SELECT
   apflora.pop.nr AS "label",
   substring(concat('Population: ', apflora.pop.nr, ' ', apflora.pop.name)
     FROM 1 FOR 225) AS "inhalte",
-  concat('https://apflora.ch/Daten/Projekte/', apflora.ap.proj_id, '/Aktionspläne/', apflora.ap.id, '/Populationen/', apflora.pop.id) AS url,
+  concat('https://apflora.ch/Daten/Projekte/', apflora.ap.proj_id, '/Arten/', apflora.ap.id, '/Populationen/', apflora.pop.id) AS url,
   apflora.pop.id,
   apflora.pop.wgs84_lat,
   apflora.pop.wgs84_long
@@ -1934,7 +1934,7 @@ SELECT
   concat(apflora.ae_taxonomies.artname, ' ', apflora.pop.nr) AS "label",
   substring(concat('Population: ', apflora.pop.nr, ' ', apflora.pop.name)
     FROM 1 FOR 225) AS "inhalte",
-  concat('https://apflora.ch/Daten/Projekte/', apflora.ap.proj_id, '/Aktionspläne/', apflora.ap.id, '/Populationen/', apflora.pop.id) AS url,
+  concat('https://apflora.ch/Daten/Projekte/', apflora.ap.proj_id, '/Arten/', apflora.ap.id, '/Populationen/', apflora.pop.id) AS url,
   apflora.pop.id,
   apflora.pop.wgs84_lat,
   apflora.pop.wgs84_long
@@ -2332,12 +2332,14 @@ SELECT
 FROM
   multiples
   INNER JOIN apflora.pop pop ON pop.nr = multiples.pop_nr
-  INNER JOIN apflora.ap ap ON pop.ap_id = ap.id and multiples.ap_id = ap.id
-  INNER JOIN apflora.projekt projekt ON projekt.id = ap.proj_id and multiples.proj_id = projekt.id
-ORDER BY
-  projekt.id,
-  ap.id,
-  pop.nr;
+  INNER JOIN apflora.ap ap ON pop.ap_id = ap.id
+    AND multiples.ap_id = ap.id
+  INNER JOIN apflora.projekt projekt ON projekt.id = ap.proj_id
+    AND multiples.proj_id = projekt.id
+  ORDER BY
+    projekt.id,
+    ap.id,
+    pop.nr;
 
 -- TODO: seems only to output pops with koord but no tpop
 DROP VIEW IF EXISTS apflora.v_q_pop_koordentsprechenkeinertpop CASCADE;
@@ -4425,26 +4427,26 @@ SELECT
   coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0) AS anz_pop_aktuell_zuletzt,
   coalesce(count_urspr_last.anzahl, 0) - coalesce(count_urspr_prev.anzahl, 0) AS diff_pop_urspr,
   coalesce(count_anges_last.anzahl, 0) - coalesce(count_anges_prev.anzahl, 0) AS diff_pop_anges,
-    (coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0)) - (coalesce(count_urspr_prev.anzahl, 0) + coalesce(count_anges_prev.anzahl, 0)) AS diff_pop_aktuell,
-    apflora.ap_erfkrit_werte.text AS beurteilung_zuletzt
-  FROM
-    last_year,
-    previous_year,
-    apflora.ap_history
-    INNER JOIN apflora.ae_taxonomies ON apflora.ae_taxonomies.id = apflora.ap_history.art_id
-    LEFT JOIN apflora.apber
-    LEFT JOIN apflora.ap_erfkrit_werte ON apflora.ap_erfkrit_werte.code = apflora.apber.beurteilung ON apflora.apber.ap_id = apflora.ap_history.id
-    LEFT JOIN count_urspr_last ON count_urspr_last.ap_id = apflora.ap_history.id
-    LEFT JOIN count_anges_last ON count_anges_last.ap_id = apflora.ap_history.id
-    LEFT JOIN count_urspr_prev ON count_urspr_prev.ap_id = apflora.ap_history.id
-    LEFT JOIN count_anges_prev ON count_anges_prev.ap_id = apflora.ap_history.id
-  WHERE
-    apflora.ap_history.bearbeitung < 4
-    AND apflora.ap_history.year = last_year.year
-    AND (apflora.apber.jahr = last_year.year
-      OR apflora.apber.jahr IS NULL)
-  ORDER BY
-    apflora.ae_taxonomies.artname;
+  (coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0)) - (coalesce(count_urspr_prev.anzahl, 0) + coalesce(count_anges_prev.anzahl, 0)) AS diff_pop_aktuell,
+  apflora.ap_erfkrit_werte.text AS beurteilung_zuletzt
+FROM
+  last_year,
+  previous_year,
+  apflora.ap_history
+  INNER JOIN apflora.ae_taxonomies ON apflora.ae_taxonomies.id = apflora.ap_history.art_id
+  LEFT JOIN apflora.apber
+  LEFT JOIN apflora.ap_erfkrit_werte ON apflora.ap_erfkrit_werte.code = apflora.apber.beurteilung ON apflora.apber.ap_id = apflora.ap_history.id
+  LEFT JOIN count_urspr_last ON count_urspr_last.ap_id = apflora.ap_history.id
+  LEFT JOIN count_anges_last ON count_anges_last.ap_id = apflora.ap_history.id
+  LEFT JOIN count_urspr_prev ON count_urspr_prev.ap_id = apflora.ap_history.id
+  LEFT JOIN count_anges_prev ON count_anges_prev.ap_id = apflora.ap_history.id
+WHERE
+  apflora.ap_history.bearbeitung < 4
+  AND apflora.ap_history.year = last_year.year
+  AND (apflora.apber.jahr = last_year.year
+    OR apflora.apber.jahr IS NULL)
+ORDER BY
+  apflora.ae_taxonomies.artname;
 
 COMMENT ON VIEW apflora.v_ap_pop_ek_prio IS '@foreignKey (ap_id) references ap (id)';
 

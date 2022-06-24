@@ -72,7 +72,7 @@ const EkfList = ({ data, loading }) => {
       const url = [
         'Projekte',
         row.projId,
-        'Aktionspläne',
+        'Arten',
         row.apId,
         'Populationen',
         row.popId,

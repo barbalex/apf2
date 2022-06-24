@@ -30,7 +30,7 @@ const aperfkritFolderNode = ({
     ? `${erfkritNodesLength} gefiltert`
     : erfkritNodesLength
 
-  const url = ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien']
+  const url = ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien']
 
   // only show if parent node exists
   if (!nodesPassed.map((n) => n.id).includes(apId)) return []

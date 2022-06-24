@@ -32,7 +32,7 @@ const ekfrequenzFolderNode = ({
     ? `${ekfrequenzNodesLength} gefiltert`
     : ekfrequenzNodesLength
 
-  const url = ['Projekte', projId, 'Aktionspläne', apId, 'EK-Frequenzen']
+  const url = ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen']
 
   // only show if parent node exists
   const apNodesIds = nodesPassed.map((n) => n.id)

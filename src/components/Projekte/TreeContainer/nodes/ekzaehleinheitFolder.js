@@ -32,7 +32,7 @@ const ekzaehleinheitFolderNode = ({
     ? `${ekzaehleinheitNodesLength} gefiltert`
     : ekzaehleinheitNodesLength
 
-  const url = ['Projekte', projId, 'Aktionspläne', apId, 'EK-Zähleinheiten']
+  const url = ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten']
 
   // only show if parent node exists
   const apNodesIds = nodesPassed.map((n) => n.id)

@@ -23,11 +23,11 @@ const openLowerNodesPop = async ({ treeName, id, client, store }) => {
   const popmassnbers = data?.popById?.popmassnbersByPopId?.nodes ?? []
   // 2. add activeNodeArrays for all data to openNodes
   const newOpenNodes = [
-    ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', id],
+    ['Projekte', projId, 'Arten', apId, 'Populationen', id],
     [
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       id,
@@ -36,7 +36,7 @@ const openLowerNodesPop = async ({ treeName, id, client, store }) => {
     [
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       id,
@@ -45,7 +45,7 @@ const openLowerNodesPop = async ({ treeName, id, client, store }) => {
     [
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       id,
@@ -54,7 +54,7 @@ const openLowerNodesPop = async ({ treeName, id, client, store }) => {
     popbers.map((o) => [
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       id,
@@ -64,7 +64,7 @@ const openLowerNodesPop = async ({ treeName, id, client, store }) => {
     popmassnbers.map((o) => [
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       id,
@@ -74,7 +74,7 @@ const openLowerNodesPop = async ({ treeName, id, client, store }) => {
     tpops.map((o) => [
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       id,

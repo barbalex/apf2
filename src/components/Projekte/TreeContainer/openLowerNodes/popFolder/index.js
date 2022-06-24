@@ -20,7 +20,7 @@ const openLowerNodesPopFolder = async ({ treeName, id, client, store }) => {
   const pops = data?.apById?.popsByApId?.nodes ?? []
 
   // 2. add activeNodeArrays for all data to openNodes
-  let newOpenNodes = [['Projekte', projId, 'Aktionspläne', id, 'Populationen']]
+  let newOpenNodes = [['Projekte', projId, 'Arten', id, 'Populationen']]
 
   pops.forEach((pop) => {
     const tpops = pop?.tpopsByPopId?.nodes ?? []
@@ -28,11 +28,11 @@ const openLowerNodesPopFolder = async ({ treeName, id, client, store }) => {
     const popmassnbers = pop?.popmassnbersByPopId?.nodes ?? []
     newOpenNodes = [
       ...newOpenNodes,
-      ['Projekte', projId, 'Aktionspläne', id, 'Populationen', pop.id],
+      ['Projekte', projId, 'Arten', id, 'Populationen', pop.id],
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         id,
         'Populationen',
         pop.id,
@@ -41,7 +41,7 @@ const openLowerNodesPopFolder = async ({ treeName, id, client, store }) => {
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         id,
         'Populationen',
         pop.id,
@@ -50,7 +50,7 @@ const openLowerNodesPopFolder = async ({ treeName, id, client, store }) => {
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         id,
         'Populationen',
         pop.id,
@@ -63,7 +63,7 @@ const openLowerNodesPopFolder = async ({ treeName, id, client, store }) => {
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           id,
           'Populationen',
           pop.id,
@@ -78,7 +78,7 @@ const openLowerNodesPopFolder = async ({ treeName, id, client, store }) => {
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           id,
           'Populationen',
           pop.id,
@@ -93,7 +93,7 @@ const openLowerNodesPopFolder = async ({ treeName, id, client, store }) => {
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           id,
           'Populationen',
           pop.id,

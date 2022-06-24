@@ -36,7 +36,7 @@ const openLowerNodesTpopfreiwkontrFolder = async ({
     [
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       popId,
@@ -51,7 +51,7 @@ const openLowerNodesTpopfreiwkontrFolder = async ({
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         popId,
@@ -63,7 +63,7 @@ const openLowerNodesTpopfreiwkontrFolder = async ({
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         popId,
@@ -81,7 +81,7 @@ const openLowerNodesTpopfreiwkontrFolder = async ({
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'Populationen',
           popId,

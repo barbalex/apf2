@@ -30,7 +30,7 @@ const ap = ({
       parentTableId: el.projId,
       urlLabel: el.id,
       label: el.label,
-      url: ['Projekte', el.projId, 'Aktionspläne', el.id],
+      url: ['Projekte', el.projId, 'Arten', el.id],
       hasChildren: true,
     }))
     .filter((el) => allParentNodesAreOpen(store[treeName].openNodes, el.url))

@@ -75,7 +75,7 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
       const newActiveNodeArray = [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         nearestTpop.popId,
@@ -105,7 +105,7 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
     openTree2WithActiveNodeArray([
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       popId,
@@ -116,7 +116,7 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
     ])
   }, [apId, beob.id, openTree2WithActiveNodeArray, popId, projId, tpopId])
   const openBeobInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
       beob.id
     }`
     if (typeof window !== 'undefined') {

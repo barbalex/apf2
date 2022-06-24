@@ -125,7 +125,7 @@ const EkPlanAppBar = () => {
           data-id="ek-planung"
           title="EK und EKF planen"
         >
-          Aktionspläne bearbeiten
+          Arten bearbeiten
         </StyledButton>
         <DokuButton
           variant="text"

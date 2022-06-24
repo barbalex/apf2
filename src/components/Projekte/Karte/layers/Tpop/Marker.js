@@ -91,7 +91,7 @@ const TpopMarker = ({ treeName, tpop }) => {
     openTree2WithActiveNodeArray([
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       popId,
@@ -100,7 +100,7 @@ const TpopMarker = ({ treeName, tpop }) => {
     ])
   }, [apId, openTree2WithActiveNodeArray, popId, projId, tpop.id])
   const openTpopInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${
       tpop.id
     }`
     if (typeof window !== 'undefined') {
@@ -133,7 +133,7 @@ const TpopMarker = ({ treeName, tpop }) => {
               tpop.flurname || '(kein Flurname)'
             }`}
           </StyledH3>
-          <div>{`Aktionsplan: ${artname}`}</div>
+          <div>{`Art: ${artname}`}</div>
           <div>
             {`Population: ${tpop?.popByPopId?.nr ?? '(keine Nr)'}: ${
               tpop?.popByPopId?.name ?? '(kein Name)'

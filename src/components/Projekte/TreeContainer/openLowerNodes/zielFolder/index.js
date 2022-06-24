@@ -22,22 +22,22 @@ const openLowerNodesZielFolder = async ({ treeName, id, client, store }) => {
   const zielsGrouped = groupBy(data?.apById?.zielsByApId?.nodes ?? [], 'jahr')
 
   // 2. add activeNodeArrays for all data to openNodes
-  let newOpenNodes = [['Projekte', projId, 'Aktionspläne', id, 'AP-Ziele']]
+  let newOpenNodes = [['Projekte', projId, 'Arten', id, 'AP-Ziele']]
 
   Object.keys(zielsGrouped).forEach((jahr) => {
     newOpenNodes = [
       ...newOpenNodes,
-      ['Projekte', projId, 'Aktionspläne', id, 'AP-Ziele', +jahr],
+      ['Projekte', projId, 'Arten', id, 'AP-Ziele', +jahr],
     ]
     const ziels = zielsGrouped[+jahr]
     ziels.forEach((ziel) => {
       newOpenNodes = [
         ...newOpenNodes,
-        ['Projekte', projId, 'Aktionspläne', id, 'AP-Ziele', +jahr, ziel.id],
+        ['Projekte', projId, 'Arten', id, 'AP-Ziele', +jahr, ziel.id],
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           id,
           'AP-Ziele',
           +jahr,
@@ -52,7 +52,7 @@ const openLowerNodesZielFolder = async ({ treeName, id, client, store }) => {
           [
             'Projekte',
             projId,
-            'Aktionspläne',
+            'Arten',
             id,
             'AP-Ziele',
             +jahr,

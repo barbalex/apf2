@@ -34,7 +34,7 @@ const apberFolderNode = ({
     ? `${apberNodesLength} gefiltert`
     : apberNodesLength
 
-  const url = ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte']
+  const url = ['Projekte', projId, 'Arten', apId, 'AP-Berichte']
 
   // only show if parent node exists
   if (!nodesPassed.map((n) => n.id).includes(apId)) return []

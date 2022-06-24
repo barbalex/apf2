@@ -173,7 +173,7 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           }),
         ]
       }
-      if (nodeUrl.length === 3 && nodeUrl[2] === 'Aktionspläne') {
+      if (nodeUrl.length === 3 && nodeUrl[2] === 'Arten') {
         apNodes = buildApNodes({
           nodes,
           data,
@@ -185,7 +185,7 @@ const nodes = ({ data, loading, store, role, treeName }) => {
         })
         nodes = [...nodes, ...apNodes]
       }
-      if (nodeUrl.length === 4 && nodeUrl[2] === 'Aktionspläne') {
+      if (nodeUrl.length === 4 && nodeUrl[2] === 'Arten') {
         const apId = nodeUrl[3]
         nodes = [
           ...nodes,
@@ -318,7 +318,7 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           }),
         ]
       }
-      // if nodeUrl.length > 4, nodeUrl[2] is always 'Aktionspläne'
+      // if nodeUrl.length > 4, nodeUrl[2] is always 'Arten'
       if (
         nodeUrl.length === 5 &&
         nodeUrl[4] === 'AP-Ziele' &&

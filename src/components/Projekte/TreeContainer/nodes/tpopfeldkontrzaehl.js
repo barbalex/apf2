@@ -45,7 +45,7 @@ const tpopfeldkontrzaehlNodes = ({
       url: [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         popId,

@@ -6,9 +6,9 @@ title: 'Was kann man mit apflora.ch machen?'
 sort: 1
 ---
 
-### Aktionspläne verwalten
+### Arten verwalten
 
-- Aktionspläne, Populationen und Teilpopulationen beschreiben
+- Arten, Populationen und Teilpopulationen beschreiben
 - Ziele und Erfolgskriterien bestimmen
 - Kontrollen der Teilpopulationen und...
 - ...Massnahmen zur Förderung dokumentieren
@@ -24,12 +24,12 @@ sort: 1
 - Alle Beobachtungen aus Projekten der Fachstelle Naturschutz des Kantons Zürich
 - Eigene Beobachtungen aus [EvAB](https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content)
 - Grundsätzlich alle verfügbaren Beobachtungen, unabhängig von ihrer Datenstruktur
-- Beobachtungen von beliebigen (synonymen) Arten im selben Aktionsplan zuordnen
+- Beobachtungen von beliebigen (synonymen) Taxa der selben Art zuordnen
 - [Anleitung](./docs/beobZuordnen)
 
 ### Auf Karten darstellen
 
-- Aktionspläne, Populationen, Teilpopulationen und Beobachtungen...
+- Arten, Populationen, Teilpopulationen und Beobachtungen...
 - ...auf Luftbild, Übersichtsplan und Landeskarten anzeigen
 - Diverse Ebenen einblenden (z.B. Bundesinventare, Kantonale Inventare, Parzellen)
 - Beobachtungen durch Ziehen mit der Maus Teilpopulationen zuordnen
@@ -39,7 +39,7 @@ sort: 1
 
 ### Über den Erfolg berichten
 
-- Für einzelne Aktionspläne...
+- Für einzelne Arten...
 - ...oder für alle...
 - ...über Massnahmen, Kontrollen und Entwicklung berichten
 - direkt aus apflora.ch heraus pdf-Berichte erzeugen
@@ -81,7 +81,7 @@ sort: 1
 
 ### Freiwilligen-Erfolgskontrollen vorbereiten
 
-- Aktionsplan-Verantwortliche erfassen, wer welche Teilpopulationen kontrolliert...
+- Art-Verantwortliche erfassen, wer welche Teilpopulationen kontrolliert...
 - ...und drucken gleich die Feld-Formulare aus
 - [Anleitung](/Dokumentation/Benutzer/Erfolgs-Kontrollen-Freiwillige)
 
@@ -92,7 +92,7 @@ sort: 1
 
 ### Freiwilligen-Erfolgskontrollen für Jahres-Berichte nutzen
 
-- Aktionsplan-Verantwortliche überprüfen die Kontrollen von Freiwilligen und entscheiden, ob sie in den Jahres-Berichten berücksichtigt werden
+- Art-Verantwortliche überprüfen die Kontrollen von Freiwilligen und entscheiden, ob sie in den Jahres-Berichten berücksichtigt werden
 
 ### Projektdaten verwalten
 

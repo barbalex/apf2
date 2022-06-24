@@ -1,8 +1,8 @@
 ---
 typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/langsam"
-date: "2019-04-18"
-title: "Ist apflora langsam?"
+path: '/Dokumentation/Benutzer/langsam'
+date: '2019-04-18'
+title: 'Ist apflora langsam?'
 sort: 8
 ---
 
@@ -17,7 +17,8 @@ Nach einer BenutzerInnen-Aktion (z.B. Klicken oder Tippen) dauert es mehrere Sek
 Bis ca. Mitte April 2019 war apflora.ch generell langsam. Dieses Problem sollte behoben sein :simple_smile:<br/><br/>
 
 Die folgenden Vorgänge dauern immer (etwas) länger, weil sie mit sehr vielen Daten arbeiten oder sehr viel rechnen müssen:
-- Im Strukturbaum einen Aktionsplan öffnen, der sehr viele Daten enthält
+
+- Im Strukturbaum eine Art öffnen, die sehr viele Daten enthält
 - Einen (zweiten) Strukturbaum öffnen
 - In der Karte Daten aller Arten anzeigen
 - In der Karte (viele) apflora-Ebenen einblenden, wenn sie sehr viele Daten enthalten
@@ -31,6 +32,7 @@ Wir sind bestrebt, apflora.ch so schnell wie möglich zu machen. Wenn ihr beobac
 **Wenn wir das Problem selber provozieren können, können wir es am ehesten lösen**. Daher: Je genauer ihr das Problem beschreiben könnt, umso besser.<br/><br/>
 
 Umgehungen, bis wir den Fehler behoben haben:
+
 - apflora.ch neu laden.<br/>
   Das kann bei Web-Apps generell bei Fehlern helfen. Dafür benutzt man die F5-Taste (alle Browser) oder das dafür vorgesehene Symbol (je nach Browser)<br/>
 - Den cache des Browsers leeren. Danach müsst ihr neu anmelden.<br/>

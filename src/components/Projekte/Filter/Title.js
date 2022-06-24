@@ -23,7 +23,7 @@ const Title = styled.div`
 `
 
 const titleObject = {
-  ap: 'Aktionsplan Filter',
+  ap: 'Art Filter',
   pop: 'Population Filter',
   tpop: 'Teil-Population Filter',
   tpopmassn: 'Massnahmen Filter',

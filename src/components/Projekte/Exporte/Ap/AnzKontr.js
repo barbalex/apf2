@@ -88,7 +88,7 @@ const AnzKontr = () => {
       color="inherit"
       disabled={!!queryState}
     >
-      Anzahl Kontrollen pro Aktionsplan
+      Anzahl Kontrollen pro Art
       {queryState ? (
         <StyledProgressText>{queryState}</StyledProgressText>
       ) : null}

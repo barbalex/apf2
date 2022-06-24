@@ -11,7 +11,7 @@ sort: 12
 1. [Ziele](#1-ziele)
 1. [Diese Daten werden erfasst](#2-diese-daten-werden-erfasst)
    - [Global](#global)
-   - [Pro Aktionsplan](#pro-aktionsplan)
+   - [Pro Art](#pro-art)
    - [Pro Teilpopulation](#pro-teilpopulation)
 1. [Formular EK-Planung](#3-formular-ek-planung)
    - [AP's wählen](#aps-wählen)
@@ -42,7 +42,7 @@ Durch die Koordinationsstelle. Im Strukturbaum in den Werte-Listen.
 - Zähleinheiten
   ![im Strukturbaum](ekplanen_global.png)
 
-### Pro Aktionsplan
+### Pro Art
 
 Durch Koordinationsstelle und Artverantwortliche.
 

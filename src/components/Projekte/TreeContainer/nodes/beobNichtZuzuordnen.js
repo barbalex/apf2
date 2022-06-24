@@ -49,7 +49,7 @@ const beobNichtZuzuordnenNodes = ({
         url: [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'nicht-zuzuordnende-Beobachtungen',
           el.id,

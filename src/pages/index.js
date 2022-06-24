@@ -129,7 +129,7 @@ const Home = () => (
             </PageTitle>
             <CardContainer>
               <Card>
-                <CardTitle>Aktionsplanarten</CardTitle>
+                <CardTitle>Arten</CardTitle>
                 Sehr seltene und gefährdete Pflanzenarten, für welche der Kanton
                 Zürich eine besondere Verantwortung hat. Für jede wurde ein
                 Aktionsplan erstellt.

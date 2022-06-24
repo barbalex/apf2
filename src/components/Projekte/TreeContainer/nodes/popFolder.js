@@ -29,7 +29,7 @@ const popFolderNode = ({
     ? `${popNodesLength} gefiltert`
     : popNodesLength
 
-  const url = ['Projekte', projId, 'Aktionspläne', apId, 'Populationen']
+  const url = ['Projekte', projId, 'Arten', apId, 'Populationen']
 
   // only show if parent node exists
   if (!nodesPassed.map((n) => n.id).includes(apId)) return []

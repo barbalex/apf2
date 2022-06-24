@@ -53,7 +53,7 @@ const ApTabs = ({ treeName }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle apId={id} title="Aktionsplan" treeName={treeName} />
+        <FormTitle apId={id} title="Art" treeName={treeName} />
         <Tabs
           value={tab}
           onChange={onChangeTab}

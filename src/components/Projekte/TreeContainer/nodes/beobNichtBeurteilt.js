@@ -49,7 +49,7 @@ const beobNichtBeurteiltNodes = ({
         url: [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'nicht-beurteilte-Beobachtungen',
           el.id,

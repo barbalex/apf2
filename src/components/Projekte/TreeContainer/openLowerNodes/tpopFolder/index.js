@@ -24,7 +24,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
     [
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       id,
@@ -37,7 +37,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         id,
@@ -58,7 +58,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         id,
@@ -68,7 +68,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         id,
@@ -79,7 +79,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         id,
@@ -90,7 +90,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         id,
@@ -101,7 +101,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         id,
@@ -112,7 +112,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         id,
@@ -123,7 +123,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         id,
@@ -138,7 +138,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'Populationen',
           id,
@@ -155,7 +155,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'Populationen',
           id,
@@ -172,7 +172,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'Populationen',
           id,
@@ -184,7 +184,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'Populationen',
           id,
@@ -202,7 +202,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
           [
             'Projekte',
             projId,
-            'Aktionspläne',
+            'Arten',
             apId,
             'Populationen',
             id,
@@ -222,7 +222,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'Populationen',
           id,
@@ -234,7 +234,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'Populationen',
           id,
@@ -252,7 +252,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
           [
             'Projekte',
             projId,
-            'Aktionspläne',
+            'Arten',
             apId,
             'Populationen',
             id,
@@ -272,7 +272,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'Populationen',
           id,
@@ -289,7 +289,7 @@ const openLowerNodesTpopFolder = async ({ treeName, id, client, store }) => {
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'Populationen',
           id,

@@ -215,7 +215,7 @@ const Apber = ({ treeName }) => {
               />
               <MdField
                 name="massnahmenApBearb"
-                label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
+                label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Art-Verantwortlichen"
                 value={row.massnahmenApBearb}
                 saveToDb={saveToDb}
                 error={fieldErrors.massnahmenApBearb}

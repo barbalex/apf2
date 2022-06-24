@@ -57,7 +57,7 @@ const exportRowFromTpop = ({ tpop, years, store }) => {
   if (fields.includes('link')) {
     row.tpopLink = `${appBaseUrl()}Daten/Projekte/${
       tpop.popByPopId.apByApId.projId
-    }/Aktionspläne/${tpop.popByPopId.apByApId.id}/Populationen/${
+    }/Arten/${tpop.popByPopId.apByApId.id}/Populationen/${
       tpop.popByPopId.id
     }/Teil-Populationen/${tpop.id}`
   }

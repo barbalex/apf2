@@ -109,7 +109,7 @@ const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
   const newActiveNodeArray = [
     `Projekte`,
     projId,
-    `Aktionspläne`,
+    `Arten`,
     apId,
     `Populationen`,
     tpop.popId,
@@ -122,12 +122,12 @@ const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
   let newOpenNodes = [
     ...tree.openNodes,
     // add Beob and it's not yet existing parents to open nodes
-    [`Projekte`, projId, `Aktionspläne`, apId, `Populationen`],
-    [`Projekte`, projId, `Aktionspläne`, apId, `Populationen`, tpop.popId],
+    [`Projekte`, projId, `Arten`, apId, `Populationen`],
+    [`Projekte`, projId, `Arten`, apId, `Populationen`, tpop.popId],
     [
       `Projekte`,
       projId,
-      `Aktionspläne`,
+      `Arten`,
       apId,
       `Populationen`,
       tpop.popId,
@@ -136,7 +136,7 @@ const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
     [
       `Projekte`,
       projId,
-      `Aktionspläne`,
+      `Arten`,
       apId,
       `Populationen`,
       tpop.popId,
@@ -146,7 +146,7 @@ const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
     [
       `Projekte`,
       projId,
-      `Aktionspläne`,
+      `Arten`,
       apId,
       `Populationen`,
       tpop.popId,
@@ -157,7 +157,7 @@ const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
     [
       `Projekte`,
       projId,
-      `Aktionspläne`,
+      `Arten`,
       apId,
       `Populationen`,
       tpop.popId,

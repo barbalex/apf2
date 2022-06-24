@@ -174,7 +174,7 @@ const ApFilter = ({ treeName }) => {
     <ErrorBoundary>
       <Container>
         <FilterTitle
-          title="Aktionsplan"
+          title="Art"
           treeName={treeName}
           table="ap"
           totalNr={apsData?.allAps?.totalCount ?? '...'}
@@ -194,7 +194,7 @@ const ApFilter = ({ treeName }) => {
               <SelectLoadingOptions
                 field="artId"
                 valueLabelPath="aeTaxonomyByArtId.artname"
-                label="Art (gibt dem Aktionsplan den Namen)"
+                label="Art (das namensgebende Taxon)"
                 row={{
                   ...row,
                   ...{

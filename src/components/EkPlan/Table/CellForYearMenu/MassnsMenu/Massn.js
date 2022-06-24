@@ -61,7 +61,7 @@ const MassnMenu = ({ tpop, massn, border }) => {
   const apId = tpop?.popByPopId?.apByApId?.id
   const popId = tpop?.popByPopId?.id
   const tpopId = tpop.id
-  const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${
+  const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${
     massn.id
   }`
 

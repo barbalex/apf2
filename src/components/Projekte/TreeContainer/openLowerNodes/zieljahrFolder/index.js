@@ -27,18 +27,16 @@ const openLowerNodesZieljahrFolder = async ({
   const ziels = data?.apById?.zielsByApId?.nodes ?? []
 
   // 2. add activeNodeArrays for all data to openNodes
-  let newOpenNodes = [
-    ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', jahr],
-  ]
+  let newOpenNodes = [['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr]]
 
   ziels.forEach((ziel) => {
     newOpenNodes = [
       ...newOpenNodes,
-      ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', jahr, ziel.id],
+      ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, ziel.id],
       [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'AP-Ziele',
         jahr,
@@ -53,7 +51,7 @@ const openLowerNodesZieljahrFolder = async ({
         [
           'Projekte',
           projId,
-          'Aktionspläne',
+          'Arten',
           apId,
           'AP-Ziele',
           jahr,

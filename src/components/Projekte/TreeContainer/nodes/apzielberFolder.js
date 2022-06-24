@@ -45,7 +45,7 @@ const apzielberFolderNode = ({
   const url = [
     'Projekte',
     projId,
-    'Aktionspläne',
+    'Arten',
     apId,
     'AP-Ziele',
     zielJahr,

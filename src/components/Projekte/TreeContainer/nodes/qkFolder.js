@@ -15,7 +15,7 @@ const qkFolderNode = ({
     id: apId,
   })
 
-  const url = ['Projekte', projId, 'Aktionspläne', apId, 'Qualitaetskontrollen']
+  const url = ['Projekte', projId, 'Arten', apId, 'Qualitaetskontrollen']
 
   // only show if parent node exists
   const apNodesIds = nodesPassed.map((n) => n.id)
