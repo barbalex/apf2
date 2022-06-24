@@ -178,7 +178,7 @@ const ApArt = ({ treeName }) => {
                 <SelectLoadingOptions
                   field="artId"
                   valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
-                  label="Art"
+                  label="Taxon"
                   row={row}
                   query={queryAeTaxonomies}
                   filter={aeTaxonomiesfilter}
