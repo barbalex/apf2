@@ -6,6 +6,7 @@ export default gql`
   ) {
     allTpopkontrzaehlEinheitWertes(filter: $filter, orderBy: TEXT_ASC) {
       nodes {
+        id
         value: id
         label: text
       }
