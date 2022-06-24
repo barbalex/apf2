@@ -2247,7 +2247,7 @@ DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 CREATE TABLE apflora.tpopkontrzaehl (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
   tpopkontr_id uuid DEFAULT NULL REFERENCES apflora.tpopkontr (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  anzahl integer DEFAULT NULL,
+  anzahl real DEFAULT NULL,
   einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -2456,7 +2456,7 @@ CREATE TABLE apflora.tpopmassn (
   bemerkungen text,
   plan_vorhanden boolean DEFAULT FALSE,
   plan_bezeichnung text DEFAULT NULL,
-  flaeche integer DEFAULT NULL,
+  flaeche real DEFAULT NULL,
   markierung text DEFAULT NULL,
   anz_triebe integer DEFAULT NULL,
   anz_pflanzen integer DEFAULT NULL,

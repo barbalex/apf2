@@ -4,7 +4,7 @@ import { tpopkontrzaehl } from '../../components/shared/fragments'
 
 export default gql`
   mutation createTpopkontrzaehlForCopyTo(
-    $anzahl: Int
+    $anzahl: Float
     $einheit: Int
     $methode: Int
     $tpopkontrId: UUID

@@ -31,7 +31,7 @@ const FormContainer = styled.div`
 `
 
 const fieldTypes = {
-  anzahl: 'Int',
+  anzahl: 'Float',
   einheit: 'Int',
   methode: 'Int',
 }
@@ -152,7 +152,7 @@ const Tpopkontrzaehl = ({ treeName }) => {
               />
               <TextField
                 name="anzahl"
-                label="Anzahl (nur ganze Zahlen)"
+                label="Anzahl"
                 type="number"
                 value={row.anzahl}
                 saveToDb={saveToDb}

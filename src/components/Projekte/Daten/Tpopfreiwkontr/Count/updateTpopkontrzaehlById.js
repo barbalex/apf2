@@ -5,7 +5,7 @@ import { tpopkontrzaehl } from '../../../../shared/fragments'
 export default gql`
   mutation updateAnzahlForCount(
     $id: UUID!
-    $anzahl: Int
+    $anzahl: Float
     $einheit: Int
     $methode: Int
   ) {
