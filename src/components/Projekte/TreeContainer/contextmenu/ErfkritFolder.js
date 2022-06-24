@@ -116,9 +116,7 @@ const ErfkritFolder = ({ onClick, treeName }) => {
         })
       } catch (error) {
         console.log({ error })
-        setApOptionsError(
-          `Fehler beim Abfragen der Aktionspläne: ${error.message}`,
-        )
+        setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
       }
       const existingErfkrits = (
         existingErfkritResult?.data?.allErfkrits?.nodes ?? []
@@ -278,9 +276,7 @@ const ErfkritFolder = ({ onClick, treeName }) => {
         })
       } catch (error) {
         console.log({ error })
-        setApOptionsError(
-          `Fehler beim Abfragen der Aktionspläne: ${error.message}`,
-        )
+        setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
       }
       const options = result?.data?.allAps?.nodes ?? []
       // only show options with erfkrits
@@ -307,24 +303,20 @@ const ErfkritFolder = ({ onClick, treeName }) => {
               erstelle neues
             </MenuItem>
             <MenuItem onClick={onOpenChooseApDialog}>
-              aus anderem Aktionsplan kopieren
+              aus anderer Art kopieren
             </MenuItem>
           </>
         )}
       </ContextMenu>
       <Dialog open={openChooseAp} onClose={onCloseChooseApDialog}>
-        <DialogTitle>
-          Erfolgskriterien aus anderem Aktionsplan kopieren
-        </DialogTitle>
+        <DialogTitle>Erfolgskriterien aus anderer Art kopieren</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Achtung: Allfällige bestehende Erfolgskriterien werden gelöscht und
             mit den kopierten ersetzt, sobald Sie einen Aktionsplän wählen
           </DialogContentText>
           <SelectContainer>
-            <SelectLabel>
-              Aktionsplan (nur solche mit Erfolgskriterien)
-            </SelectLabel>
+            <SelectLabel>Art (nur solche mit Erfolgskriterien)</SelectLabel>
             <SelectStyled
               autoFocus
               defaultOptions

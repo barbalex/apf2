@@ -1,7 +1,7 @@
 const fields = {
   ap: {
     name: 'ap',
-    label: 'AP',
+    label: 'Art',
     sort: 1,
     width: 200,
   },

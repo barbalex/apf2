@@ -14,8 +14,8 @@ Artenlisten stammen aus [arteigenschaften.ch](https://arteigenschaften.ch). Mome
 
 Arten können in drei Formularen gewählt werden:
 
-- Aktionsplan
-- Aktionsplan-Art
+- Art
+- Taxon
 - assoziierte Art
 
 In der Regel sollten Arten aus der Taxonomie "DB-TAXREF (2017)" gewählt werden. Bei den AP-Arten ist es sinnvoll, Synonyme aus allen gängigen Taxonomien aufzulisten.<br/><br/>

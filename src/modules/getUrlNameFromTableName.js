@@ -1,6 +1,6 @@
 const getUrlNameFromTableName = (table) => {
   const names = {
-    ap: 'Aktionspläne',
+    ap: 'Arten',
     apber: 'AP-Berichte',
     apberuebersicht: 'AP-Berichte',
     assozart: 'assoziierte-Arten',

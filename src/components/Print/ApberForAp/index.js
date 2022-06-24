@@ -313,7 +313,7 @@ const ApberForAp = ({
           {!!apber.massnahmenApBearb && (
             <FieldRowFullWidth>
               <TitledLabel>
-                Weitere Aktivitäten der Aktionsplan-Verantwortlichen
+                Weitere Aktivitäten der Art-Verantwortlichen
               </TitledLabel>
               <FullWidthField>
                 <div

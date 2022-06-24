@@ -32,7 +32,7 @@ const ApExports = () => {
   return (
     <StyledCard>
       <StyledCardActions disableSpacing onClick={onClickAction}>
-        <CardActionTitle>Aktionsplan</CardActionTitle>
+        <CardActionTitle>Art</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
           aria-expanded={expanded}

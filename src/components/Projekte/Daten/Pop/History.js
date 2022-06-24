@@ -151,7 +151,7 @@ const PopHistory = ({ popId }) => {
               valueInRow:
                 row?.apByApId?.aeTaxonomyByArtId?.artname ?? row?.apId,
               valueInHist: r?.apByApId?.aeTaxonomyByArtId?.artname ?? r?.apId,
-              label: 'Aktionsplan',
+              label: 'Art',
             },
             {
               valueInRow: row?.nr,

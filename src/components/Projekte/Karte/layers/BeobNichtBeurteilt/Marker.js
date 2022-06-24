@@ -14,7 +14,7 @@ import getNearestTpop from '../../../../../modules/getNearestTpop'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import updateBeobByIdGql from './updateBeobById'
 
-const StyledH3 = styled.h3` 
+const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 const StyledButton = styled(Button)`
@@ -75,7 +75,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
       const newActiveNodeArray = [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         nearestTpop.popId,
@@ -102,14 +102,14 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
     openTree2WithActiveNodeArray([
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'nicht-beurteilte-Beobachtungen',
       beob.id,
     ])
   }, [apId, beob.id, openTree2WithActiveNodeArray, projId])
   const openBeobInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/nicht-beurteilte-Beobachtungen/${
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/nicht-beurteilte-Beobachtungen/${
       beob.id
     }`
     if (typeof window !== 'undefined') {

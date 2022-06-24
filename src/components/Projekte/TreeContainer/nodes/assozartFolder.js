@@ -30,7 +30,7 @@ const assozartFolderNode = ({
     ? `${assozartNodesLength} gefiltert`
     : assozartNodesLength
 
-  const url = ['Projekte', projId, 'Aktionspläne', apId, 'assoziierte-Arten']
+  const url = ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten']
 
   // only show if parent node exists
   const apNodesIds = nodesPassed.map((n) => n.id)

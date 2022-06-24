@@ -37,7 +37,7 @@ const tpopNodes = ({
       url: [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'Populationen',
         el.popId,

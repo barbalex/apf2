@@ -10,7 +10,7 @@ sort: 3
 
 :white_check_mark: In Massnahmen die zielrelevante Einheit zählen
 
-:white_check_mark: Aktionspläne, Populationen und Teil-Populationen werden ein mal jährlich historisiert. Daten werden rückwirkend bis 2014 aus Sicherungen importiert :rocket:
+:white_check_mark: Arten, Populationen und Teil-Populationen werden ein mal jährlich historisiert. Daten werden rückwirkend bis 2014 aus Sicherungen importiert :rocket:
 
 :white_check_mark: Auswertungen der Aktions-Pläne, grafisch und tabellarisch :rocket:
 

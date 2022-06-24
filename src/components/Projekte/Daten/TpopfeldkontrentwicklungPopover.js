@@ -60,7 +60,7 @@ const TpopfeldkontrentwicklungPopover = (
         </LabelPopoverRowColumnLeft>
         <LabelPopoverRowColumnRight>
           {
-            'nach 2 aufeinander folgenden Kontrollen ohne Funde oder nach Einschätzung AP-VerantwortlicheR'
+            'nach 2 aufeinander folgenden Kontrollen ohne Funde oder nach Einschätzung Art-VerantwortlicheR'
           }
         </LabelPopoverRowColumnRight>
       </LabelPopoverContentRow>

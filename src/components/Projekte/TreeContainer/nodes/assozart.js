@@ -31,14 +31,7 @@ const assozartNodes = ({
       parentTableId: el.apId,
       urlLabel: el.id,
       label: el.label,
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'assoziierte-Arten',
-        el.id,
-      ],
+      url: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten', el.id],
       hasChildren: false,
     }))
     .map((el, index) => {

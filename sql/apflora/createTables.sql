@@ -202,7 +202,7 @@ CREATE INDEX ON apflora.ap_user USING btree (ap_id);
 
 CREATE INDEX ON apflora.ap_user USING btree (user_name);
 
-COMMENT ON TABLE apflora.ap IS 'Hier wird bestimmt, welche Benutzer mit den rollen "apflora_ap_writer" oder "apflora_reader" Zugriff auf einen AP erhalten';
+COMMENT ON TABLE apflora.ap IS 'Hier wird bestimmt, welche Benutzer mit den rollen "apflora_ap_writer" oder "apflora_reader" Zugriff auf eine Art erhalten';
 
 ALTER TABLE apflora.ap_user ENABLE ROW LEVEL SECURITY;
 
@@ -611,7 +611,7 @@ COMMENT ON COLUMN apflora.apber.biotope_optimieren IS 'Bemerkungen zum Aussagebe
 
 COMMENT ON COLUMN apflora.apber.massnahmen_optimieren IS 'Bemerkungen zum Aussagebereich C: Zwischenbilanz zur Wirkung von Massnahmen';
 
-COMMENT ON COLUMN apflora.apber.massnahmen_ap_bearb IS 'Bemerkungen zum Aussagebereich C: Weitere Aktivitäten der Aktionsplan-Verantwortlichen';
+COMMENT ON COLUMN apflora.apber.massnahmen_ap_bearb IS 'Bemerkungen zum Aussagebereich C: Weitere Aktivitäten der Art-Verantwortlichen';
 
 COMMENT ON COLUMN apflora.apber.massnahmen_planung_vs_ausfuehrung IS 'Bemerkungen zum Aussagebereich C: Vergleich Ausführung/Planung';
 
@@ -675,7 +675,7 @@ COMMENT ON COLUMN apflora.apberuebersicht.proj_id IS 'Zugehöriges Projekt. Zusa
 
 COMMENT ON COLUMN apflora.apberuebersicht.jahr IS 'Berichtsjahr. Zusammen mit proj_id eindeutig';
 
-COMMENT ON COLUMN apflora.apberuebersicht.history_date IS 'Datum, an dem die Daten von AP, Pop und TPop historisiert wurden';
+COMMENT ON COLUMN apflora.apberuebersicht.history_date IS 'Datum, an dem die Daten von Art, Pop und TPop historisiert wurden';
 
 COMMENT ON COLUMN apflora.apberuebersicht.bemerkungen IS 'Bemerkungen zur Artübersicht';
 
@@ -713,7 +713,7 @@ CREATE INDEX ON apflora.assozart USING btree (ae_id);
 
 COMMENT ON COLUMN apflora.assozart.id IS 'Primärschlüssel';
 
-COMMENT ON COLUMN apflora.assozart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.assozart.ap_id IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ap"';
 
 COMMENT ON COLUMN apflora.assozart.bemerkungen IS 'Bemerkungen zur Assoziation';
 
@@ -790,7 +790,7 @@ CREATE INDEX ON apflora.erfkrit USING btree (erfolg);
 
 COMMENT ON COLUMN apflora.erfkrit.id IS 'Primärschlüssel';
 
-COMMENT ON COLUMN apflora.erfkrit.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.erfkrit.ap_id IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ap"';
 
 COMMENT ON COLUMN apflora.erfkrit.erfolg IS 'Wie gut werden die Ziele erreicht? Auswahl aus der Tabelle "ap_erfkrit_werte"';
 
@@ -1008,7 +1008,7 @@ CREATE INDEX ON apflora.pop USING btree (bekannt_seit);
 
 COMMENT ON COLUMN apflora.pop.id IS 'Primärschlüssel der Tabelle "pop"';
 
-COMMENT ON COLUMN apflora.pop.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.pop.ap_id IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ap"';
 
 COMMENT ON COLUMN apflora.pop.nr IS 'Nummer der Population';
 
@@ -2952,7 +2952,7 @@ CREATE INDEX ON apflora.ziel USING btree (jahr);
 
 COMMENT ON COLUMN apflora.ziel.id IS 'Primärschlüssel';
 
-COMMENT ON COLUMN apflora.ziel.ap_id IS 'Zugehöriger Aktionsplan. Fremdschluessel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.ziel.ap_id IS 'Zugehörige Art. Fremdschluessel aus der Tabelle "ap"';
 
 COMMENT ON COLUMN apflora.ziel.typ IS 'Typ des Ziels. Z.B. Zwischenziel, Gesamtziel. Auswahl aus Tabelle "ziel_typ_werte"';
 
@@ -3329,7 +3329,7 @@ COMMENT ON COLUMN apflora.apart.id IS 'Primärschlüssel';
 
 COMMENT ON COLUMN apflora.apart.art_id IS 'Zugehörige Art. Aus der Tabelle "ae_taxonomies"';
 
-COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ap"';
 
 COMMENT ON COLUMN apflora.apart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
@@ -3389,7 +3389,7 @@ CREATE INDEX ON apflora.ekzaehleinheit USING btree (sort);
 
 COMMENT ON COLUMN apflora.ekzaehleinheit.id IS 'Primärschlüssel';
 
-COMMENT ON COLUMN apflora.ekzaehleinheit.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.ekzaehleinheit.ap_id IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ap"';
 
 COMMENT ON COLUMN apflora.ekzaehleinheit.zaehleinheit_id IS 'Zugehörige Zähleinheit. Fremdschlüssel aus der Tabelle "tpopkontrzaehl_einheit_werte"';
 
@@ -3470,7 +3470,7 @@ CREATE INDEX ON apflora.ekfrequenz USING btree (ek_abrechnungstyp);
 
 COMMENT ON COLUMN apflora.ekfrequenz.id IS 'Primärschlüssel';
 
-COMMENT ON COLUMN apflora.ekfrequenz.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.ekfrequenz.ap_id IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ap"';
 
 COMMENT ON COLUMN apflora.ekfrequenz.anwendungsfall IS 'Beschreibt, in welchen Fällen diese Frequenz angewandt wird. Wahrscheinliche Werte: autochthone Population, angepflanzte Population, angesäte Population, Spezialfall';
 

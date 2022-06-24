@@ -121,9 +121,7 @@ const EkPlan = ({ setShowChoose }) => {
     }
   }
 
-  const label = apValues.length
-    ? 'Aktionsplan hinzufügen'
-    : 'Aktionsplan wählen'
+  const label = apValues.length ? 'Art hinzufügen' : 'Art wählen'
   const value = {
     value: '',
     label: '',

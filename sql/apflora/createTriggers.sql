@@ -204,7 +204,7 @@ BEGIN
     WHERE
       ap_id = NEW.ap_id);
   IF count > 2 THEN
-    RAISE EXCEPTION 'Pro Aktionsplan dürfen maximal drei EK-Zähleinheiten erfasst werden';
+    RAISE EXCEPTION 'Pro Art dürfen maximal drei EK-Zähleinheiten erfasst werden';
   END IF;
   RETURN NEW;
 END;

@@ -44,7 +44,7 @@ const apzielberNodes = ({
       url: [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'AP-Ziele',
         zielJahr,

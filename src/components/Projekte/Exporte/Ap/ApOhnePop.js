@@ -85,7 +85,7 @@ const ApOhnePop = () => {
       color="inherit"
       disabled={!!queryState}
     >
-      Aktionspläne ohne Populationen
+      Arten ohne Populationen
       {queryState ? (
         <StyledProgressText>{queryState}</StyledProgressText>
       ) : null}

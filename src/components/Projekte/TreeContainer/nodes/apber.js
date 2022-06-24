@@ -32,7 +32,7 @@ const apberNodes = ({
       parentTableId: el.apId,
       urlLabel: el.id,
       label: el.label,
-      url: ['Projekte', projId, 'Aktionspläne', el.apId, 'AP-Berichte', el.id],
+      url: ['Projekte', projId, 'Arten', el.apId, 'AP-Berichte', el.id],
       hasChildren: false,
     }))
     .map((el, index) => {

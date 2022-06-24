@@ -39,18 +39,18 @@ const ApList = () => {
   return (
     <Container>
       <TitleRow>
-        <ApTitle>Aktionspläne</ApTitle>
+        <ApTitle>Arten</ApTitle>
         {!showChoose && (
           <PlusIcon
-            title="Aktionsplan hinzufügen"
-            aria-label="Aktionsplan hinzufügen"
+            title="Art hinzufügen"
+            aria-label="Art hinzufügen"
             onClick={onClickAdd}
           >
             <FaPlus />
           </PlusIcon>
         )}
       </TitleRow>
-      {aps.map(ap => (
+      {aps.map((ap) => (
         <Ap key={ap.value} ap={ap} />
       ))}
       {(aps.length === 0 || showChoose) && (

@@ -159,7 +159,7 @@ const ApAp = ({ id }) => {
         <SelectLoadingOptions
           field="artId"
           valueLabelPath="aeTaxonomyByArtId.taxArtName"
-          label="Art (gibt dem Aktionsplan den Namen)"
+          label="Art (das namensgebende Taxon)"
           row={row}
           query={queryAeTaxonomies}
           filter={aeTaxonomiesfilterForData}

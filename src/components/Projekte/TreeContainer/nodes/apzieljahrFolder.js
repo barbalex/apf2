@@ -29,7 +29,7 @@ const apzieljahrFolderNode = ({
       allParentNodesAreOpen(openNodes, [
         'Projekte',
         projId,
-        'Aktionspläne',
+        'Arten',
         apId,
         'AP-Ziele',
         jahr,
@@ -51,7 +51,7 @@ const apzieljahrFolderNode = ({
       parentId: apId,
       urlLabel: `${jahr === null || jahr === undefined ? 'kein Jahr' : jahr}`,
       label: `${labelJahr} (${labelJahreLength})`,
-      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', jahr],
+      url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr],
       sort: [projIndex, 1, apIndex, 2, index],
       hasChildren: true,
     }

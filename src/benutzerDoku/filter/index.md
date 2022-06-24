@@ -12,7 +12,7 @@ Am 15.03.2019 wurden sie verändert, um die Benutzerfreundlichkeit zu erhöhen.<
 
 ## In diesen Formularen kann man filtern
 
-- Aktionsplan
+- Art
 - Population
 - Teil-Population
 - Massnahmen
@@ -42,7 +42,7 @@ Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `S
 
 Im Formular erscheinen oben zwei Symbole, sobald ein Filter angewendet wird:
 
-- Mit dem linken Symbol kann man den Filter in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Aktionsplan)
+- Mit dem linken Symbol kann man den Filter in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Art)
 - Mit dem rechten Symbol kann man alle angewendeten Filter entfernen<br/>
   ![Filter entfernen](filterRemove2.png)
 

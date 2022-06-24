@@ -117,9 +117,7 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
         })
       } catch (error) {
         console.log({ error })
-        setApOptionsError(
-          `Fehler beim Abfragen der Aktionspläne: ${error.message}`,
-        )
+        setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
       }
       const existingEkfrequenzs = (
         existingEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
@@ -313,9 +311,7 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
         })
       } catch (error) {
         console.log({ error })
-        setApOptionsError(
-          `Fehler beim Abfragen der Aktionspläne: ${error.message}`,
-        )
+        setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
       }
       const options = result?.data?.allAps?.nodes ?? []
       // only show options with ekfrequenzs
@@ -332,7 +328,8 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
       <ContextMenu
         id={`${treeName}ekfrequenzFolder`}
         collect={(props) => props}
-        onShow={onShow} hideOnLeave={true}
+        onShow={onShow}
+        hideOnLeave={true}
       >
         <div className="react-contextmenu-title">EK-Frequenz</div>
         {!userIsReadOnly(user.token) && (
@@ -341,24 +338,20 @@ const EkfrequenzFolder = ({ onClick, treeName }) => {
               erstelle neue
             </MenuItem>
             <MenuItem onClick={onOpenChooseApDialog}>
-              aus anderem Aktionsplan kopieren
+              aus anderer Art kopieren
             </MenuItem>
           </>
         )}
       </ContextMenu>
       <Dialog open={openChooseAp} onClose={onCloseChooseApDialog}>
-        <DialogTitle>
-          EK-Frequenzen aus anderem Aktionsplan kopieren
-        </DialogTitle>
+        <DialogTitle>EK-Frequenzen aus anderer Art kopieren</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Achtung: Allfällige bestehende EK-Frequenzen werden gelöscht und mit
             den kopierten ersetzt, sobald Sie einen Aktionsplän wählen
           </DialogContentText>
           <SelectContainer>
-            <SelectLabel>
-              Aktionsplan (nur solche mit EK-Frequenzen)
-            </SelectLabel>
+            <SelectLabel>Art (nur solche mit EK-Frequenzen)</SelectLabel>
             <SelectStyled
               autoFocus
               defaultOptions

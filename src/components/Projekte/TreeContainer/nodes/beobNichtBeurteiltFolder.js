@@ -32,7 +32,7 @@ const beobNichtBeurteiltFolderNode = ({
   const url = [
     'Projekte',
     projId,
-    'Aktionspläne',
+    'Arten',
     apId,
     'nicht-beurteilte-Beobachtungen',
   ]

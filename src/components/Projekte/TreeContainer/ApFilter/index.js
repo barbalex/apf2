@@ -52,9 +52,9 @@ const ApFilter = ({ treeName }) => {
         })
       }
       const isAp = [1, 2, 3].includes(result?.data?.apById?.bearbeitung)
-      if (!isAp && activeNodeArray[2] === 'Aktionspläne') {
+      if (!isAp && activeNodeArray[2] === 'Arten') {
         // not a real ap
-        // shorten active node array to Aktionspläne
+        // shorten active node array to Arten
         const newActiveNodeArray = [
           activeNodeArray[0],
           activeNodeArray[1],

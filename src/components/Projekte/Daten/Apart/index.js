@@ -134,7 +134,7 @@ const ApArt = ({ treeName }) => {
       <Container>
         <FormTitle
           apId={row.apId}
-          title="Aktionsplan-Art"
+          title="Taxon"
           treeName={treeName}
           table="apart"
         />
@@ -147,34 +147,30 @@ const ApArt = ({ treeName }) => {
           >
             <FieldsSubContainer>
               <div>
-                {
-                  '"Aktionsplan-Arten" sind alle Arten, welche der Aktionsplan behandelt. Häufig dürfte das bloss eine einzige Art sein. Folgende Gründe können dazu führen, dass hier mehrere aufgelistet werden:'
-                }
+                In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
+                Gründe um mehrere zu erfassen:
                 <ul>
-                  <li>Die AP-Art hat Synonyme</li>
+                  <li>Die Art hat Synonyme</li>
                   <li>
-                    {
-                      'Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B. SISF (2005) und DB-TAXREF (2017) bzw. Checklist 2017'
-                    }
+                    Die Art umfasst nicht synonyme aber eng verwandte Arten
+                    (z.B. Unterarten)
                   </li>
                   <li>
-                    Wenn eine Art im Rahmen des Aktionsplans inklusive nicht
-                    synonymer aber eng verwandter Arten gefasst wid (z.B.
-                    Unterarten)
+                    Beobachtungen liegen in unterschiedlichen Taxonomien vor,
+                    z.B. SISF (2005) und DB-TAXREF (2017)
                   </li>
                 </ul>
               </div>
               <div>
                 {
-                  'Beobachtungen aller AP-Arten stehen im Ordner "Beobachtungen nicht beurteilt" zur Verfügung und können Teilpopulationen zugeordnet werden.'
+                  'Beobachtungen aller Taxa stehen im Ordner "Beobachtungen nicht beurteilt" zur Verfügung und können Teilpopulationen zugeordnet werden.'
                 }
                 <br />
                 <br />
               </div>
               <div>
-                Die im Aktionsplan gewählte namensgebende Art gibt dem
-                Aktionsplan nicht nur den Namen. Unter ihrer id werden auch die
-                Kontrollen an InfoFlora geliefert.
+                Das namensgebende Taxon gibt nicht nur den Namen. Unter ihrer id
+                werden auch die Kontrollen an InfoFlora geliefert.
                 <br />
                 <br />
               </div>

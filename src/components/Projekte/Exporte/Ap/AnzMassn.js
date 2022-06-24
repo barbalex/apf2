@@ -88,7 +88,7 @@ const AnzMassn = () => {
       color="inherit"
       disabled={!!queryState}
     >
-      Anzahl Massnahmen pro Aktionsplan
+      Anzahl Massnahmen pro Art
       {queryState ? (
         <StyledProgressText>{queryState}</StyledProgressText>
       ) : null}

@@ -55,7 +55,7 @@ const Line = ({ treeName, beob }) => {
     openTree2WithActiveNodeArray([
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       popId,
@@ -66,7 +66,7 @@ const Line = ({ treeName, beob }) => {
     ])
   }, [apId, beob.id, openTree2WithActiveNodeArray, popId, projId, tpopId])
   const openBeobInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
       beob.id
     }`
     if (typeof window !== 'undefined') {
@@ -81,7 +81,7 @@ const Line = ({ treeName, beob }) => {
     openTree2WithActiveNodeArray([
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       popId,
@@ -90,7 +90,7 @@ const Line = ({ treeName, beob }) => {
     ])
   }, [apId, openTree2WithActiveNodeArray, popId, projId, tpopId])
   const openTpopInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}`
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

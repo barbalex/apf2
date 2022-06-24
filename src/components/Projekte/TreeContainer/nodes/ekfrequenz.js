@@ -31,7 +31,7 @@ const ekfrequenzNodes = ({
       parentTableId: el.apId,
       urlLabel: el.id,
       label: el.code || '(kein Code)',
-      url: ['Projekte', projId, 'Aktionspläne', apId, 'EK-Frequenzen', el.id],
+      url: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen', el.id],
       hasChildren: false,
     }))
     .map((el, index) => {

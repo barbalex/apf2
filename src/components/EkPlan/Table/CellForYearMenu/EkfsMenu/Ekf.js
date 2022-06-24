@@ -54,7 +54,7 @@ const EkfMenu = ({ tpop, ekf, border }) => {
   const apId = tpop?.popByPopId?.apByApId?.id
   const popId = tpop?.popByPopId?.id
   const tpopId = tpop.id
-  const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${
+  const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${
     ekf.id
   }`
 

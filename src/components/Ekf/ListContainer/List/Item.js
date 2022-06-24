@@ -39,7 +39,7 @@ const EkfList = ({ activeTpopkontrId, projektCount, style, row }) => {
     const url = [
       'Projekte',
       row.projId,
-      'Aktionspläne',
+      'Arten',
       row.apId,
       'Populationen',
       row.popId,

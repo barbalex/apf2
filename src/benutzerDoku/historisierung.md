@@ -2,7 +2,7 @@
 typ: 'benutzerDoku'
 path: '/Dokumentation/Benutzer/historisierung'
 date: '2020-12-10'
-title: 'Historisierung von AP, Pop und TPop'
+title: 'Historisierung von Art, Pop und TPop'
 sort: 16
 ---
 
@@ -22,7 +22,7 @@ Beispiele:
 
 Stand: Ende 2019<br/><br/>
 
-Das Problem ist, dass die Daten von AP, Pop und TPop bei jeder Aktualisierung überschrieben werden. Die Veränderung mit der Zeit ist so nicht auswertbar.<br/><br/>
+Das Problem ist, dass die Daten von Art, Pop und TPop bei jeder Aktualisierung überschrieben werden. Die Veränderung mit der Zeit ist so nicht auswertbar.<br/><br/>
 
 Mit der aktuellen Datenstruktur ist es wohl möglich, nachzuvollziehen, in welchen Jahren Populationen geschaffen wurden. Das heisst: **In welchem Jahr gab es wie viele Populationen**. Wenn ihr es zuverlässig nachführt, kann das Feld "Bekannt seit" dafür verwendet werden. Davon gehe ich aus. Bloss: Wenn eine Population entfernt wird, verschwindet sie dann auch in den Vorjahren aus der Statistik 🤔. Das sollte vermutlich nicht passieren, passiert aber vermutlich schon.<br/><br/>
 
@@ -30,7 +30,7 @@ Hingegen ist es nicht möglich, zu **wissen, wann Stati geändert wurden**. Bzw.
 
 ## Lösung
 
-- Ein mal im Jahr (wenn der Jahresbericht erzeugt wird) werden alle AP, Pop und TPop in eigene Tabellen kopiert<br/>
+- Ein mal im Jahr (wenn der Jahresbericht erzeugt wird) werden alle Arten, Pop und TPop in eigene Tabellen kopiert<br/>
   Nachtrag am 10.12.2020: Im verlauf eines Jahrs können die Daten jederzeit historisiert werden, bis spätestens Ende März des Folgejahrs. Wurde das betreffende Jahr schon historisiert, werden die alten Daten einfach überschrieben
 - Abfragen könnten Historien verwenden, um die Änderung wesentlicher Felder wie z.B. Status oder AP-Bearbeitungsstand auszulesen
 - Daten für Vorjahre wurden aus Sicherungen importiert
@@ -48,7 +48,7 @@ Hingegen ist es nicht möglich, zu **wissen, wann Stati geändert wurden**. Bzw.
   - und mit dem **VOR**-Jahr zu ergänzen (weil man das wohl gegen Ende Februar des Folge-Jahrs macht)
 - In der Tabelle `apberuebersicht` gibt es ein neues Feld: history_date. Es wird von apflora gesetzt, wenn obige Funktion ausgeführt wird
 - Im Formular "AP-Berichte" > "AP-Bericht Jahresübersicht"
-  - Gibt es einen neuen Befehl "AP, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können"
+  - Gibt es einen neuen Befehl "Art, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können"
   - Dieser Befehl kann nur von Managern ausgeführt werden
   - Er kann nur ein Mal durchgeführt werden (sollte er ein mal zu früh ausgeführt worden sein und wiederholt werden müssen, müsstet ihr Alex darum bitten)
   - Solltet ihr einmal vergessen, diesen Befehl im richtigen Moment auszuführen, müsste ich mit Daten aus Sicherungen dies nachträglich manuell machen

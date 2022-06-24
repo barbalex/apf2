@@ -41,7 +41,7 @@
 -- - enables simple endless scrolling i.e. only loading needed data!!!! https://virtuoso.dev/endless-scrolling
 --
 -- data measurements
--- Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d173-4f62-11e7-aebe-2bd3a2ea4576
+-- Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Arten/6c52d173-4f62-11e7-aebe-2bd3a2ea4576
 -- TreeAllQuery + UsermessagesQuery: 202 kb
--- Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne
+-- Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Arten
 -- TreeAllQuery + UsermessagesQuery: 147 kb

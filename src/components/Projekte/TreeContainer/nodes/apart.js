@@ -29,7 +29,7 @@ const apartNodes = ({
       parentTableId: el.apId,
       urlLabel: el.id,
       label: el.label,
-      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Arten', el.id],
+      url: ['Projekte', projId, 'Arten', apId, 'Taxa', el.id],
       hasChildren: false,
     }))
     .map((el, index) => {

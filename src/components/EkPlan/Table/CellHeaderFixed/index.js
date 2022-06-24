@@ -38,7 +38,7 @@ const Title = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   user-select: none;
-  ${(props) => props['data-label'] === 'AP' && 'padding-left: 5px;'}
+  ${(props) => props['data-label'] === 'Art' && 'padding-left: 5px;'}
 `
 const Dropdown = styled.div`
   font-size: 1.3em;

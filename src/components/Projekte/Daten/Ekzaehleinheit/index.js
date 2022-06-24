@@ -128,7 +128,7 @@ const Ekzaehleinheit = ({ treeName }) => {
             error.message.includes('duplicate key value'))
         ) {
           return setFieldErrors({
-            [field]: 'Pro Aktionsplan darf nur eine Einheit zielrelevant sein',
+            [field]: 'Pro Art darf nur eine Einheit zielrelevant sein',
           })
         }
         return setFieldErrors({ [field]: error.message })

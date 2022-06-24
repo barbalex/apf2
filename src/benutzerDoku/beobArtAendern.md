@@ -1,13 +1,14 @@
 ---
 typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Falsch-bestimmte-Beobachtungen"
-date: "2019-01-30"
-title: "Falsch bestimmte Beobachtungen"
+path: '/Dokumentation/Benutzer/Falsch-bestimmte-Beobachtungen'
+date: '2019-01-30'
+title: 'Falsch bestimmte Beobachtungen'
 sort: 11
 ---
 
 Bei AP-Arten ist vorgesehen:
-- die richtige Art anzugeben
+
+- das richtige Taxon anzugeben
 - die Beobachtung einer Teil-Population der richtigen Art zuzuordnen
 - ein Email an Infoflora zu schicken, um sie auf die falsche Bestimmung hinzuweisen
 

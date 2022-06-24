@@ -68,14 +68,14 @@ const PopMarker = ({ treeName, pop }) => {
     openTree2WithActiveNodeArray([
       'Projekte',
       projId,
-      'Aktionspläne',
+      'Arten',
       apId,
       'Populationen',
       pop.id,
     ])
   }, [apId, openTree2WithActiveNodeArray, pop.id, projId])
   const openPopInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${
+    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/Populationen/${
       pop.id
     }`
     if (typeof window !== 'undefined') {
@@ -113,7 +113,7 @@ const PopMarker = ({ treeName, pop }) => {
               pop.name ? pop.name : '(kein Name)'
             }`}
           </StyledH3>
-          <div>{`Aktionsplan: ${artname}`}</div>
+          <div>{`Art: ${artname}`}</div>
           <div>
             {`Koordinaten: ${
               pop.lv95X ? pop.lv95X.toLocaleString('de-ch') : ''

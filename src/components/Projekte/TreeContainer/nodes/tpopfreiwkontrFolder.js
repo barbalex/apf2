@@ -39,7 +39,7 @@ const tpopfreiwkontrFolderNode = ({
   const url = [
     'Projekte',
     projId,
-    'Aktionspläne',
+    'Arten',
     apId,
     'Populationen',
     popId,

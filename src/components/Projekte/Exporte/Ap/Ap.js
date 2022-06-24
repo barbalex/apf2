@@ -80,7 +80,7 @@ const Ap = () => {
     }
     exportModule({
       data: rows,
-      fileName: 'AP',
+      fileName: 'Art',
       store,
     })
     setQueryState(undefined)
@@ -97,7 +97,7 @@ const Ap = () => {
       color="inherit"
       disabled={!!queryState}
     >
-      {apIsFiltered ? 'Aktionspläne (gefiltert)' : 'Aktionspläne'}
+      {apIsFiltered ? 'Arten (gefiltert)' : 'Arten'}
       {queryState ? (
         <StyledProgressText>{queryState}</StyledProgressText>
       ) : null}

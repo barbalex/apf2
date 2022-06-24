@@ -36,7 +36,7 @@ const beobZugeordnetFolderNode = ({
   const url = [
     'Projekte',
     projId,
-    'Aktionspläne',
+    'Arten',
     apId,
     'Populationen',
     popId,

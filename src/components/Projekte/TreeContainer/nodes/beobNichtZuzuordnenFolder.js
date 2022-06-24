@@ -32,7 +32,7 @@ const beobNichtZuzuordnenFolderNode = ({
   const url = [
     'Projekte',
     projId,
-    'Aktionspläne',
+    'Arten',
     apId,
     'nicht-zuzuordnende-Beobachtungen',
   ]

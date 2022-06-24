@@ -15,7 +15,7 @@ const idealbiotopFolderNode = ({
     id: apId,
   })
 
-  const url = ['Projekte', projId, 'Aktionspläne', apId, 'Idealbiotop']
+  const url = ['Projekte', projId, 'Arten', apId, 'Idealbiotop']
 
   // only show if parent node exists
   const apNodesIds = nodesPassed.map((n) => n.id)

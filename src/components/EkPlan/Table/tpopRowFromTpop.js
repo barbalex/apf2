@@ -70,7 +70,7 @@ const tpopRowFromTpop = ({ tpop, index }) => {
       ...fields.link,
       value: `${appBaseUrl()}Daten/Projekte/${
         tpop.popByPopId.apByApId.projId
-      }/Aktionspläne/${tpop.popByPopId.apByApId.id}/Populationen/${
+      }/Arten/${tpop.popByPopId.apByApId.id}/Populationen/${
         tpop.popByPopId.id
       }/Teil-Populationen/${tpop.id}`,
     },
