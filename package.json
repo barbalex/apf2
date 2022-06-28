@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.6.9",
-    "@babel/core": "7.18.5",
+    "@babel/core": "7.18.6",
     "@fontsource/roboto": "4.5.7",
     "@fontsource/roboto-mono": "4.5.7",
     "@mui/icons-material": "5.8.4",
@@ -140,9 +140,9 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.18.2",
-    "@babel/plugin-syntax-flow": "7.17.12",
-    "@babel/plugin-transform-react-jsx": "7.17.12",
-    "@babel/preset-react": "7.17.12",
+    "@babel/plugin-syntax-flow": "7.18.6",
+    "@babel/plugin-transform-react-jsx": "7.18.6",
+    "@babel/preset-react": "7.18.6",
     "@graphile-contrib/pg-order-by-related": "1.0.0-beta.6",
     "@graphile/postgis": "0.1.0",
     "@svgr/cli": "6.2.1",
