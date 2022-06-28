@@ -1,6 +1,6 @@
 export const overlays = [
   { label: 'Markierungen', value: 'Markierungen' },
-  { label: 'Detailpläne', value: 'Detailplaene' },
+  { label: 'Detailpläne', value: 'Detailplaene' }, 
   {
     label: 'Massnahmenpläne (funktioniert leider noch nicht)',
     value: 'Massnahmen',
