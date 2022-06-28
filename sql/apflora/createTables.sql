@@ -3670,6 +3670,7 @@ CREATE POLICY reader ON apflora.markierungen
 --   gebiet character varying COLLATE pg_catalog."default",
 --   CONSTRAINT detailplaene_pk PRIMARY KEY (ogc_fid)
 -- );
+drop table if exists apflora.detailplaene;
 CREATE TABLE IF NOT EXISTS apflora.detailplaene (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
   data jsonb DEFAULT NULL,
