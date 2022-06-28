@@ -28,15 +28,11 @@ const DetailplaeneLayer = () => {
 
   const { data, error } = useQuery(gql`
     query karteDetailplaenesQuery {
-      allDetailplaenes: allDetailplaene0S {
+      allDetailplaenes {
         nodes {
-          id: ogcFid
-          gebiet
-          fleachennu
-          substrat
-          pflegeSzp
-          shapeArea
-          wkbGeometry {
+          id
+          data
+          geom {
             geojson
           }
         }
@@ -47,19 +43,14 @@ const DetailplaeneLayer = () => {
   const nodes = data?.allDetailplaenes?.nodes ?? []
   const detailplaene = nodes.map((n) => ({
     type: 'Feature',
-    properties: {
-      Gebiet: n.gebiet ?? '',
-      FlächenNr: n.fleachennu ?? '',
-      Substrat: n.substrat ?? '',
-      PflegeSzp: n.pflege_szp ?? '',
-      Fläche: n.shape_area ?? '',
-    },
-    geometry: JSON.parse(n?.wkbGeometry?.geojson),
+    properties: n.data ? JSON.parse(n.data) : null,
+    geometry: JSON.parse(n?.geom?.geojson),
   }))
+  console.log('DetailplaeneLayer', { nodes, detailplaene })
 
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der Markierungen für die Karte: ${error.message}`,
+      message: `Fehler beim Laden der Detailpläne: ${error.message}`,
       options: {
         variant: 'error',
       },
