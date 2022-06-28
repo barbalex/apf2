@@ -1,0 +1,1 @@
+In v1.70.0 wurde die Daten-Struktur der Detailpläne stark vereinfacht. Es ist jetzt wieder möglich, über Topos Daten importieren zu lassen

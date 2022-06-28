@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { GeoJSON } from 'react-leaflet'
+import React, { useContext, useCallback } from 'react'
+import { GeoJSON, useMap } from 'react-leaflet'
 import 'leaflet'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
@@ -14,11 +14,6 @@ const style = () => ({
   weight: 1,
   opacity: 1,
 })
-const onEachFeature = (feature, layer) => {
-  if (feature.properties) {
-    layer.bindPopup(popupFromProperties(feature.properties))
-  }
-}
 const pTLOptions = {
   radius: 3,
   fillColor: '#ff7800',
@@ -33,6 +28,7 @@ const pointToLayer = (feature, latlng) => {
 }
 
 const MarkierungenLayer = () => {
+  const map = useMap()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
@@ -62,6 +58,22 @@ const MarkierungenLayer = () => {
     },
     geometry: JSON.parse(n?.wkbGeometry?.geojson),
   }))
+
+  const onEachFeature = useCallback(
+    (feature, layer) => {
+      if (feature.properties) {
+        // console.log('Markierungen, onEachFeature, mapSize:', mapSize)
+        layer.bindPopup(
+          popupFromProperties({
+            properties: feature.properties,
+            layerName: 'Markierungen',
+            mapSize: map.getSize(),
+          }),
+        )
+      }
+    },
+    [map],
+  )
 
   if (error) {
     enqueNotification({

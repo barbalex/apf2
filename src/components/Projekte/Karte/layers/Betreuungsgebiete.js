@@ -1,8 +1,8 @@
 // https://stackoverflow.com/a/25296972/712005
 // also: https://gis.stackexchange.com/a/130553/13491
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import { GeoJSON } from 'react-leaflet'
+import { GeoJSON, useMap } from 'react-leaflet'
 import 'leaflet'
 import axios from 'redaxios'
 import { useQuery, gql } from '@apollo/client'
@@ -10,12 +10,6 @@ import { useQuery, gql } from '@apollo/client'
 import storeContext from '../../../../storeContext'
 import popupFromProperties from './popupFromProperties'
 import { nsBetreuung } from '../../../shared/fragments'
-
-const onEachFeature = (feature, layer) => {
-  if (feature.properties) {
-    layer.bindPopup(popupFromProperties(feature.properties))
-  }
-}
 
 // see: https://leafletjs.com/reference-1.6.0.html#path-option
 // need to fill or else popup will only happen when line is clicked
@@ -29,6 +23,7 @@ const style = () => ({
 })
 
 const BetreuungsgebieteLayer = () => {
+  const map = useMap()
   const { enqueNotification } = useContext(storeContext)
 
   const [gbData, setGbData] = useState(null)
@@ -44,6 +39,21 @@ const BetreuungsgebieteLayer = () => {
     }
     ${nsBetreuung}
   `)
+
+  const onEachFeature = useCallback(
+    (feature, layer) => {
+      if (feature.properties) {
+        layer.bindPopup(
+          popupFromProperties({
+            properties: feature.properties,
+            layerName: 'Betreuungsgebiete',
+            mapSize: map.getSize(),
+          }),
+        )
+      }
+    },
+    [map],
+  )
 
   if (nsbError) {
     enqueNotification({

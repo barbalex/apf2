@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { GeoJSON } from 'react-leaflet'
+import React, { useContext, useCallback } from 'react'
+import { GeoJSON, useMap } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
 
@@ -17,26 +17,17 @@ const style = () => ({
   opacity: 1,
 })
 
-const onEachFeature = (feature, layer) => {
-  if (feature.properties) {
-    layer.bindPopup(popupFromProperties(feature.properties))
-  }
-}
-
 const DetailplaeneLayer = () => {
+  const map = useMap()
   const { enqueNotification } = useContext(storeContext)
 
   const { data, error } = useQuery(gql`
     query karteDetailplaenesQuery {
-      allDetailplaenes: allDetailplaene0S {
+      allDetailplaenes {
         nodes {
-          id: ogcFid
-          gebiet
-          fleachennu
-          substrat
-          pflegeSzp
-          shapeArea
-          wkbGeometry {
+          id
+          data
+          geom {
             geojson
           }
         }
@@ -47,19 +38,28 @@ const DetailplaeneLayer = () => {
   const nodes = data?.allDetailplaenes?.nodes ?? []
   const detailplaene = nodes.map((n) => ({
     type: 'Feature',
-    properties: {
-      Gebiet: n.gebiet ?? '',
-      FlächenNr: n.fleachennu ?? '',
-      Substrat: n.substrat ?? '',
-      PflegeSzp: n.pflege_szp ?? '',
-      Fläche: n.shape_area ?? '',
-    },
-    geometry: JSON.parse(n?.wkbGeometry?.geojson),
+    properties: n.data ? JSON.parse(n.data) : null,
+    geometry: JSON.parse(n?.geom?.geojson),
   }))
+
+  const onEachFeature = useCallback(
+    (feature, layer) => {
+      if (feature.properties) {
+        layer.bindPopup(
+          popupFromProperties({
+            properties: feature.properties,
+            layerName: 'Detailpläne',
+            mapSize: map.getSize(),
+          }),
+        )
+      }
+    },
+    [map],
+  )
 
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der Markierungen für die Karte: ${error.message}`,
+      message: `Fehler beim Laden der Detailpläne: ${error.message}`,
       options: {
         variant: 'error',
       },
