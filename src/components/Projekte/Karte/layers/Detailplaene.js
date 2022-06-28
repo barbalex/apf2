@@ -28,7 +28,7 @@ const DetailplaeneLayer = () => {
 
   const { data, error } = useQuery(gql`
     query karteDetailplaenesQuery {
-      allDetailplaene0S {
+      allDetailplaenes: allDetailplaene0S {
         nodes {
           id: ogcFid
           gebiet
