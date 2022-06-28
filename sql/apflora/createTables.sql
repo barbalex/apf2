@@ -3659,26 +3659,17 @@ CREATE POLICY reader ON apflora.markierungen
   USING (TRUE)
   WITH CHECK (CURRENT_USER = 'apflora_manager');
 
--- CREATE TABLE IF NOT EXISTS apflora.detailplaene (
---   ogc_fid integer NOT NULL DEFAULT nextval('apflora.detailplaene_ogc_fid_seq'::regclass),
---   wkb_geometry geometry(MultiPolygon, 4326),
---   shape_leng double precision,
---   shape_area double precision,
---   pflege_szp character varying COLLATE pg_catalog."default",
---   substrat character varying COLLATE pg_catalog."default",
---   fleachennu character varying COLLATE pg_catalog."default",
---   gebiet character varying COLLATE pg_catalog."default",
---   CONSTRAINT detailplaene_pk PRIMARY KEY (ogc_fid)
--- );
-drop table if exists apflora.detailplaene;
+DROP TABLE IF EXISTS apflora.detailplaene;
+
 CREATE TABLE IF NOT EXISTS apflora.detailplaene (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
   data jsonb DEFAULT NULL,
-  geom geometry(MultiPolygon, 4326) default null,
+  geom geometry(MultiPolygon, 4326) DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
+
 CREATE INDEX ON apflora.detailplaene USING btree (id);
 
 -- apflora.detailplaene was received from topos
