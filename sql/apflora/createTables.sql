@@ -3679,6 +3679,7 @@ CREATE TABLE IF NOT EXISTS apflora.detailplaene (
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
+CREATE INDEX ON apflora.detailplaene USING btree (id);
 
 -- apflora.detailplaene was received from topos
 COMMENT ON TABLE apflora.detailplaene IS 'Detailpläne, die im Rahmen von apflora gesetzt wurden. Quelle: Topos';
