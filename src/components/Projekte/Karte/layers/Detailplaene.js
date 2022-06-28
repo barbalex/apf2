@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { GeoJSON } from 'react-leaflet'
+import React, { useContext, useCallback } from 'react'
+import { GeoJSON, useMap } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
 
@@ -17,18 +17,8 @@ const style = () => ({
   opacity: 1,
 })
 
-const onEachFeature = (feature, layer) => {
-  if (feature.properties) {
-    layer.bindPopup(
-      popupFromProperties({
-        properties: feature.properties,
-        layerName: 'Detailpläne',
-      }),
-    )
-  }
-}
-
 const DetailplaeneLayer = () => {
+  const map = useMap()
   const { enqueNotification } = useContext(storeContext)
 
   const { data, error } = useQuery(gql`
@@ -51,6 +41,21 @@ const DetailplaeneLayer = () => {
     properties: n.data ? JSON.parse(n.data) : null,
     geometry: JSON.parse(n?.geom?.geojson),
   }))
+
+  const onEachFeature = useCallback(
+    (feature, layer) => {
+      if (feature.properties) {
+        layer.bindPopup(
+          popupFromProperties({
+            properties: feature.properties,
+            layerName: 'Detailpläne',
+            mapSize: map.getSize(),
+          }),
+        )
+      }
+    },
+    [map],
+  )
 
   if (error) {
     enqueNotification({
