@@ -1,8 +1,8 @@
 // alternative: renderToString
 // see: https://gis.stackexchange.com/a/356513/13491
-const PopupFromProperties = (p) =>
+const PopupFromProperties = ({ properties, layerName }) =>
   `<div>
-  ${Object.entries(p)
+  ${Object.entries(properties)
     .filter((e) => !!e[1])
     .sort()
     .map(

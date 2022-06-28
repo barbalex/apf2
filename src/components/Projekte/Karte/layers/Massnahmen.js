@@ -11,7 +11,12 @@ import popupFromProperties from './popupFromProperties'
 
 const onEachFeature = (feature, layer) => {
   if (feature.properties) {
-    layer.bindPopup(popupFromProperties(feature.properties))
+    layer.bindPopup(
+      popupFromProperties({
+        properties: feature.properties,
+        layerName: 'Massnahmen',
+      }),
+    )
   }
 }
 

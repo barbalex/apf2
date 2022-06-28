@@ -19,7 +19,12 @@ const style = () => ({
 
 const onEachFeature = (feature, layer) => {
   if (feature.properties) {
-    layer.bindPopup(popupFromProperties(feature.properties))
+    layer.bindPopup(
+      popupFromProperties({
+        properties: feature.properties,
+        layerName: 'Detailpläne',
+      }),
+    )
   }
 }
 
@@ -46,7 +51,6 @@ const DetailplaeneLayer = () => {
     properties: n.data ? JSON.parse(n.data) : null,
     geometry: JSON.parse(n?.geom?.geojson),
   }))
-  console.log('DetailplaeneLayer', { nodes, detailplaene })
 
   if (error) {
     enqueNotification({
