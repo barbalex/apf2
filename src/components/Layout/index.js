@@ -31,7 +31,7 @@ const Layout = ({ children }) => {
   return (
     <Container>
       <Helmet
-        title="apflora v1.69.1"
+        title="apflora v1.69.2"
         meta={[
           {
             name: 'description',
