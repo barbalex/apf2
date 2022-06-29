@@ -141,7 +141,7 @@ export default gql`
       apsByProjId(
         filter: {
           id: { equalTo: $apId }
-          bearbeitung: { lessThan: 4 }
+          bearbeitung: { lessThan: 4 } #@485
           umsetzung: { isNull: true }
         }
       ) {

@@ -51,7 +51,7 @@ const ApFilter = ({ treeName }) => {
           variables: { id: apId },
         })
       }
-      const isAp = [1, 2, 3].includes(result?.data?.apById?.bearbeitung)
+      const isAp = [1, 2, 3].includes(result?.data?.apById?.bearbeitung) //@485
       if (!isAp && activeNodeArray[2] === 'Arten') {
         // not a real ap
         // shorten active node array to Arten

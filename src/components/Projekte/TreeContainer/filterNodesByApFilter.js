@@ -4,7 +4,7 @@
 // but unfortunately query does not immediatly update
 const filterNodesByApFilter = ({ node, apFilter }) => {
   if (apFilter) {
-    return [1, 2, 3].includes(node.bearbeitung)
+    return [1, 2, 3].includes(node.bearbeitung) //@485
   }
   return true
 }
