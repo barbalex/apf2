@@ -50,7 +50,7 @@ const BodyContainer = styled.div`
   height: calc(100% - 60px);
   width: 100%;
   > div:nth-child(2) {
-    overflow-y: overlay !important;
+    scrollbar-gutter: stable;
   }
 `
 export const StyledTableCell = styled.div`
