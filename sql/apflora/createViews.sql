@@ -285,7 +285,7 @@ ap_massn_jahre AS (
     apflora.ap,
     massn_jahre
   WHERE
-    apflora.ap.bearbeitung < 4
+    apflora.ap.bearbeitung < 4 --@485
   ORDER BY
     apflora.ap.id,
     massn_jahre.jahr
@@ -301,7 +301,7 @@ ap_anzmassnprojahr0 AS (
     INNER JOIN apflora.tpop ON apflora.pop.id = apflora.tpop.pop_id
     INNER JOIN apflora.tpopmassn ON apflora.tpop.id = apflora.tpopmassn.tpop_id ON apflora.ap.id = apflora.pop.ap_id
   WHERE
-    apflora.ap.bearbeitung BETWEEN 1 AND 3
+    apflora.ap.bearbeitung BETWEEN 1 AND 3 --@485
     AND apflora.tpop.apber_relevant = TRUE
     AND apflora.pop.status <> 300
   GROUP BY
@@ -1431,7 +1431,7 @@ INNER JOIN (apflora.pop
   INNER JOIN apflora.tpop ON apflora.pop.id = apflora.tpop.pop_id) ON apflora.ap.id = apflora.pop.ap_id
 WHERE
   apflora.tpop.bekannt_seit IS NULL
-  AND apflora.ap.bearbeitung BETWEEN 1 AND 3
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3 -- --@485
 ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
@@ -4441,7 +4441,7 @@ FROM
   LEFT JOIN count_urspr_prev ON count_urspr_prev.ap_id = apflora.ap_history.id
   LEFT JOIN count_anges_prev ON count_anges_prev.ap_id = apflora.ap_history.id
 WHERE
-  apflora.ap_history.bearbeitung < 4
+  apflora.ap_history.bearbeitung < 4 -- --@485
   AND apflora.ap_history.year = last_year.year
   AND (apflora.apber.jahr = last_year.year
     OR apflora.apber.jahr IS NULL)

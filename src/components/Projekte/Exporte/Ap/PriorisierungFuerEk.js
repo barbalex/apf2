@@ -22,7 +22,7 @@ const PriorisierungFuerEk = () => {
           query apPopEkPrioForExportQuery {
             allAps(
               orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
-              filter: { bearbeitung: { lessThan: 4 } }
+              filter: { bearbeitung: { lessThan: 4 } } #@485
             ) {
               nodes {
                 id

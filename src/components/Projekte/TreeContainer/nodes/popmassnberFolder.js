@@ -15,7 +15,7 @@ const popmassnberFolderNode = ({
 }) => {
   // return empty if ap is not a real ap and apFilter is set
   const ap = (data?.allAps?.nodes ?? []).find((n) => n.id === apId)
-  const isAp = ap && [1, 2, 3].includes(ap.bearbeitung)
+  const isAp = ap && [1, 2, 3].includes(ap.bearbeitung) //@485
   const apFilter = store?.[treeName]?.apFilter
   if (!!apFilter && !isAp) return []
 
