@@ -54,7 +54,13 @@ const createGlobalStyleModule = () => createGlobalStyle`
     display: none;
   }
 
+  /* newer syntax for firefox */
+  html {
+    scrollbar-color:  #2e7d32#F2FEF3;
+    scrollbar-width: thin;
+  }
 
+  /* own syntax for webkit */
   ::-webkit-scrollbar {
     width: 8px;
   }
