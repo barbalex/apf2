@@ -1,5 +1,5 @@
 import { types } from 'mobx-state-tree'
-
+ 
 export const type = types.model({
   artId: types.optional(
     types.maybeNull(types.union(types.string, types.number)),

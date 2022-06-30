@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import React, { useContext, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
@@ -19,6 +19,7 @@ import { simpleTypes as apType } from '../../../../store/Tree/DataFilter/ap'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import OrTabs from './Tabs'
 
 const Container = styled.div`
   height: 100%;
@@ -162,6 +163,8 @@ const ApFilter = ({ treeName }) => {
     [],
   )
 
+  const [activeTab, setActiveTab] = useState(0)
+
   const errors = [
     ...(errorAdresses ? [errorAdresses] : []),
     ...(apsError ? [apsError] : []),
@@ -183,6 +186,7 @@ const ApFilter = ({ treeName }) => {
           // to ensure title re-renders an change of row
           row={row}
         />
+        <OrTabs />
         <FieldsContainer>
           <SimpleBar
             style={{
