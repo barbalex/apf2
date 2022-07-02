@@ -327,6 +327,9 @@ const myTypes = types
 		dataFilterClone1To2() {
 			self.tree2.dataFilter = cloneDeep(self.tree.dataFilter)
 		},
+    dataFilterAddOr({ treeName, table, val }){
+      self[treeName].dataFilter[table]?.push(val)
+    },
 		dataFilterSetValue({ treeName, table, key, value, index }) {
 			if (index !== undefined) {
 				self[treeName].dataFilter[table][index][key] = value

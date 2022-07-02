@@ -208,6 +208,7 @@ const ApFilter = ({ treeName }) => {
           dataFilter={dataFilter.ap}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          treeName={treeName}
         />
         <FieldsContainer>
           <SimpleBar
