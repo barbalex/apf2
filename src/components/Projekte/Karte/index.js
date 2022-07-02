@@ -446,6 +446,7 @@ const Karte = ({ treeName }) => {
 		assigningBeob,
 		hideMapControls,
 		mapFilter,
+		idOfTpopBeingLocalized,
 	} = store
 	const tree = store[treeName]
 	const { apIdInActiveNodeArray } = tree
@@ -453,6 +454,9 @@ const Karte = ({ treeName }) => {
 	const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
 	const activeOverlays = getSnapshot(activeOverlaysRaw)
 	const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+
+	const localizing = !!idOfTpopBeingLocalized
+	// console.log('Karte', { localizing, idOfTpopBeingLocalized })
 
 	/**
 	 * need to pass the height of the self built controls
@@ -467,7 +471,10 @@ const Karte = ({ treeName }) => {
 	const OverlayComponents = useMemo(
 		() => ({
 			ZhUep: () => <ZhUepOverlay />,
-			Detailplaene: () => <Detailplaene />,
+			// rebuild detailplaene on localizing change to close popups and rebuild without popups
+			Detailplaene: () => (
+				<Detailplaene key={localizing} localizing={localizing} />
+			),
 			Markierungen: () => <Markierungen />,
 			Massnahmen: () => <Massnahmen />,
 			Betreuungsgebiete: () => <Betreuungsgebiete />,
@@ -479,7 +486,7 @@ const Karte = ({ treeName }) => {
 			ZhLichteWaelder: () => <ZhLichteWaelder />,
 			ZhWaelderVegetation: () => <ZhWaelderVegetation />,
 		}),
-		[],
+		[localizing],
 	)
 	const BaseLayerComponents = useMemo(
 		() => ({
@@ -541,6 +548,7 @@ const Karte = ({ treeName }) => {
 							// prevent bad error if wrong overlayName was passed
 							// for instance after an overlay was renamed but user still has old name in cache
 							if (!OverlayComponent) return null
+
 							return <OverlayComponent key={overlayName} />
 						})
 						.reverse()}
