@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
+import { getSnapshot } from 'mobx-state-tree'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
@@ -78,17 +79,25 @@ const ApFilter = ({ treeName }) => {
   const projId = activeNodeArray[1]
 
   const apFilter = useMemo(() => {
-    const apFilter = { projId: { equalTo: projId } }
-    const dataFilterAp = { ...dataFilter.ap }
-    const apFilterValues = Object.entries(dataFilterAp).filter(
-      (e) => e[1] || e[1] === 0,
-    )
-    apFilterValues.forEach(([key, value]) => {
-      const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-      apFilter[key] = { [expression]: value }
-    })
-    return apFilter
+    const filterArrayInStore = getSnapshot(dataFilter.ap)
+    const filterArray = []
+    for (const filter of filterArrayInStore) {
+      const apFilter = { projId: { equalTo: projId } }
+      const dataFilterAp = { ...filter }
+      const apFilterValues = Object.entries(dataFilterAp).filter(
+        (e) => e[1] || e[1] === 0,
+      )
+      apFilterValues.forEach(([key, value]) => {
+        const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
+        apFilter[key] = { [expression]: value }
+      })
+      filterArray.push(apFilter)
+      console.log('ApFilter in for 1', apFilter)
+    }
+    console.log('ApFilter in for 2', { filterArray, filterArrayInStore })
+    return { or: filterArray }
   }, [dataFilter.ap, projId])
+  console.log('ApFilter after for:', apFilter)
   const { data: apsData, error: apsError } = useQuery(queryAps, {
     variables: { apFilter },
   })
@@ -186,7 +195,11 @@ const ApFilter = ({ treeName }) => {
           // to ensure title re-renders an change of row
           row={row}
         />
-        <OrTabs />
+        <OrTabs
+          dataFilter={dataFilter.ap}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
         <FieldsContainer>
           <SimpleBar
             style={{

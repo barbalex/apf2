@@ -135,6 +135,7 @@ const Projekte = () => {
     ],
   )
 
+  console.log('Projekte, queryTreeVariables:', queryTreeVariables)
   const {
     data: treeData,
     error: treeError,

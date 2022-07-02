@@ -14,7 +14,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 
-const OrTabs = ({ activeTab, setActiveTab }) => {
+const OrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
   const onChangeTab = useCallback(
     (event, value) => setActiveTab(value),
     [setActiveTab],

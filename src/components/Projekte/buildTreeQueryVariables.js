@@ -1,5 +1,6 @@
 import uniq from 'lodash/uniq'
 import isUuid from 'is-uuid'
+import { getSnapshot } from 'mobx-state-tree'
 
 import { simpleTypes as apType } from '../../store/Tree/DataFilter/ap'
 import { simpleTypes as popType } from '../../store/Tree/DataFilter/pop'
@@ -51,23 +52,34 @@ const buildTreeQueryVariables = ({
   const isProjekt = openNodes.some(
     (nArray) => nArray[0] === 'Projekte' && nArray[1],
   )
-  let apFilter = { projId: { in: projId } }
-  const apFilterValues = Object.entries(dataFilter.ap).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  apFilterValues.forEach(([key, value]) => {
-    const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-    apFilter[key] = { [expression]: value }
-  })
-  // for unknown reason the following only works belated, so not
-  if (apFilterSet) {
-    apFilter.bearbeitung = { in: [1, 2, 3] }
+  const filterArrayInStore = getSnapshot(dataFilter.ap)
+  const filterArray = []
+  for (const filter of filterArrayInStore) {
+    let singleFilter = { projId: { equalTo: projId } }
+    const dataFilterAp = { ...filter }
+    const apFilterValues = Object.entries(dataFilterAp).filter(
+      (e) => e[1] || e[1] === 0,
+    )
+    apFilterValues.forEach(([key, value]) => {
+      const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+    // for unknown reason the following only works belated, so not
+    if (apFilterSet) {
+      singleFilter.bearbeitung = { in: [1, 2, 3] }
+    }
+    if (apIdInActiveNodeArray) {
+      // if apId in activeNodeArray
+      // allow showing this ap
+      singleFilter = {
+        or: [singleFilter, { id: { equalTo: apIdInActiveNodeArray } }],
+      }
+    }
+    filterArray.push(singleFilter)
+    console.log('ApFilter in for 1', singleFilter)
   }
-  if (apIdInActiveNodeArray) {
-    // if apId in activeNodeArray
-    // allow showing this ap
-    apFilter = { or: [apFilter, { id: { equalTo: apIdInActiveNodeArray } }] }
-  }
+  console.log('ApFilter in for 2', { filterArray, filterArrayInStore })
+  const apFilter = { or: filterArray }
   const ap = uniq(
     openNodes
       .map((a) =>
@@ -211,9 +223,12 @@ const buildTreeQueryVariables = ({
     tpopmassnFilter[key] = { [expression]: value }
   })
 
-  const apsFilter = { ...apFilter }
+  const apsFilter = apFilter
   if (nodeLabelFilter.ap) {
-    apsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
+    // apsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
+    for (const filter of apFilter.or) {
+      filter.label = { includesInsensitive: nodeLabelFilter.ap }
+    }
   }
   const apberuebersichtsFilter = { projId: { in: projekt } }
   if (nodeLabelFilter.apberuebersicht) {
