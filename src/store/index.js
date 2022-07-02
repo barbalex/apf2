@@ -38,7 +38,7 @@ const myTypes = types
       standardApfloraLayers,
     ),
     activeApfloraLayers: types.array(types.string),
-    overlays: types.optional(types.array(ApfloraLayer), standardOverlays),
+    overlays: types.optional(types.array(ApfloraLayer), standardOverlays), 
     activeOverlays: types.array(types.string),
     activeBaseLayer: types.optional(types.maybeNull(types.string), 'OsmColor'),
     idOfTpopBeingLocalized: types.optional(types.maybeNull(types.string), null),
