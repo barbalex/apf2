@@ -1,4 +1,10 @@
-import React, { useContext, useCallback, useMemo, useState } from 'react'
+import React, {
+  useContext,
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
@@ -79,6 +85,12 @@ const ApFilter = ({ treeName }) => {
   const projId = activeNodeArray[1]
 
   const [activeTab, setActiveTab] = useState(0)
+  useEffect(() => {
+    if (dataFilter.ap.length - 1 < activeTab) {
+      // filter was emtied, need to set correct tab
+      setActiveTab(0)
+    }
+  }, [activeTab, dataFilter.ap.length])
 
   const apFilter = useMemo(() => {
     const filterArrayInStore = dataFilter.ap ? getSnapshot(dataFilter.ap) : []
@@ -94,12 +106,12 @@ const ApFilter = ({ treeName }) => {
         apFilter[key] = { [expression]: value }
       })
       filterArray.push(apFilter)
-      console.log('ApFilter in for 1', apFilter)
+      // console.log('ApFilter in for 1', apFilter)
     }
-    console.log('ApFilter in for 2', { filterArray, filterArrayInStore })
+    // console.log('ApFilter in for 2', { filterArray, filterArrayInStore })
     return { or: filterArray }
   }, [dataFilter.ap, projId])
-  console.log('ApFilter after for:', apFilter)
+  // console.log('ApFilter after for:', apFilter)
   const { data: apsData, error: apsError } = useQuery(queryAps, {
     variables: { apFilter },
   })
@@ -133,7 +145,7 @@ const ApFilter = ({ treeName }) => {
       : ''
 
   const row = dataFilter.ap[activeTab]
-  console.log('ApFilter', { row: row ? getSnapshot(row) : undefined, artname })
+  // console.log('ApFilter', { row: row ? getSnapshot(row) : undefined, artname })
 
   const saveToDb = useCallback(
     (event) => {
@@ -233,7 +245,7 @@ const ApFilter = ({ treeName }) => {
                 query={queryAeTaxonomies}
                 filter={aeTaxonomiesFilter}
                 queryNodesName="allAeTaxonomies"
-                value={row.artId}
+                value={row?.artId}
                 saveToDb={saveToDb}
               />
               <RadioButtonGroupWithInfo
@@ -262,14 +274,14 @@ const ApFilter = ({ treeName }) => {
                   </>
                 }
                 label="Aktionsplan"
-                value={row.bearbeitung}
+                value={row?.bearbeitung}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="startJahr"
                 label="Start im Jahr"
                 type="number"
-                value={row.startJahr}
+                value={row?.startJahr}
                 saveToDb={saveToDb}
               />
               <FieldContainer>
@@ -302,7 +314,7 @@ const ApFilter = ({ treeName }) => {
                     </>
                   }
                   label="Stand Umsetzung"
-                  value={row.umsetzung}
+                  value={row?.umsetzung}
                   saveToDb={saveToDb}
                 />
               </FieldContainer>
@@ -311,14 +323,14 @@ const ApFilter = ({ treeName }) => {
                 label="Verantwortlich"
                 options={dataAdresses?.allAdresses?.nodes ?? []}
                 loading={loadingAdresses}
-                value={row.bearbeiter}
+                value={row?.bearbeiter}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="ekfBeobachtungszeitpunkt"
                 label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
                 type="text"
-                value={row.ekfBeobachtungszeitpunkt}
+                value={row?.ekfBeobachtungszeitpunkt}
                 saveToDb={saveToDb}
               />
             </FormContainer>

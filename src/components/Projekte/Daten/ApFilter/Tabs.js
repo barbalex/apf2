@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import { initial as ap } from '../../../../store/Tree/DataFilter/ap'
 import storeContext from '../../../../storeContext'
 
-
 const StyledTabs = styled(Tabs)`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 `
@@ -23,6 +22,8 @@ const OrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
     (event, value) => {
       if (value > dataFilter.length - 1) {
         dataFilterAddOr({ treeName, table: 'ap', val: ap })
+        setTimeout(() => setActiveTab(value), 0)
+        return
       }
       setActiveTab(value)
     },
