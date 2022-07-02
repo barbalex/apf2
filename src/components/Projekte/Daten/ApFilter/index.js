@@ -78,6 +78,8 @@ const ApFilter = ({ treeName }) => {
 
   const projId = activeNodeArray[1]
 
+  const [activeTab, setActiveTab] = useState(0)
+
   const apFilter = useMemo(() => {
     const filterArrayInStore = getSnapshot(dataFilter.ap)
     const filterArray = []
@@ -120,17 +122,18 @@ const ApFilter = ({ treeName }) => {
     loading: loadingAeTaxonomiesById,
   } = useQuery(queryAeTaxonomiesById, {
     variables: {
-      id: dataFilter.ap.artId,
-      run: !!dataFilter.ap.artId,
+      id: dataFilter.ap[activeTab].artId,
+      run: !!dataFilter.ap[activeTab].artId,
     },
   })
 
   const artname =
-    !!dataFilter.ap.artId && !loadingAeTaxonomiesById
+    !!dataFilter.ap[activeTab].artId && !loadingAeTaxonomiesById
       ? dataAeTaxonomiesById?.aeTaxonomyById?.artname ?? ''
       : ''
 
-  const row = dataFilter.ap
+  const row = dataFilter.ap[activeTab]
+  console.log('ApFilter', { row: getSnapshot(row), artname })
 
   const saveToDb = useCallback(
     (event) => {
@@ -154,9 +157,17 @@ const ApFilter = ({ treeName }) => {
         table: 'ap',
         key: field,
         value,
+        index: activeTab,
       })
     },
-    [dataFilterSetValue, enqueNotification, nurApFilter, setApFilter, treeName],
+    [
+      activeTab,
+      dataFilterSetValue,
+      enqueNotification,
+      nurApFilter,
+      setApFilter,
+      treeName,
+    ],
   )
 
   const aeTaxonomiesFilter = useCallback(
@@ -171,8 +182,6 @@ const ApFilter = ({ treeName }) => {
           },
     [],
   )
-
-  const [activeTab, setActiveTab] = useState(0)
 
   const errors = [
     ...(errorAdresses ? [errorAdresses] : []),
