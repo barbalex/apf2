@@ -6,6 +6,14 @@ import styled from 'styled-components'
 import { initial as ap } from '../../../../store/Tree/DataFilter/ap'
 import storeContext from '../../../../storeContext'
 
+const Row = styled.div``
+const Title = styled.div`
+  margin-top: -8px;
+  margin-bottom: -8px;
+  font-size: 0.75em;
+  padding-left: 10px;
+  color: rgba(0, 0, 0, 0.54);
+`
 const StyledTabs = styled(Tabs)`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 `
@@ -31,23 +39,26 @@ const OrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
   )
 
   return (
-    <StyledTabs
-      value={activeTab}
-      onChange={onChangeTab}
-      indicatorColor="primary"
-      textColor="primary"
-      variant="scrollable"
-      scrollButtons="auto"
-    >
-      {dataFilter.map((filter, index) => (
-        <StyledTab key={index} label={index + 1} value={index} />
-      ))}
-      <StyledTab
-        key={dataFilter.length}
-        label="oder"
-        value={dataFilter.length}
-      />
-    </StyledTabs>
+    <Row>
+      <Title>Filter-Kriterien:</Title>
+      <StyledTabs
+        value={activeTab}
+        onChange={onChangeTab}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="scrollable"
+        scrollButtons="auto"
+      >
+        {dataFilter.map((filter, index) => (
+          <StyledTab key={index} label={index + 1} value={index} />
+        ))}
+        <StyledTab
+          key={dataFilter.length}
+          label="oder"
+          value={dataFilter.length}
+        />
+      </StyledTabs>
+    </Row>
   )
 }
 
