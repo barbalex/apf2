@@ -81,7 +81,7 @@ const ApFilter = ({ treeName }) => {
   const [activeTab, setActiveTab] = useState(0)
 
   const apFilter = useMemo(() => {
-    const filterArrayInStore = getSnapshot(dataFilter.ap)
+    const filterArrayInStore = dataFilter.ap ? getSnapshot(dataFilter.ap) : []
     const filterArray = []
     for (const filter of filterArrayInStore) {
       const apFilter = { projId: { equalTo: projId } }
@@ -122,18 +122,18 @@ const ApFilter = ({ treeName }) => {
     loading: loadingAeTaxonomiesById,
   } = useQuery(queryAeTaxonomiesById, {
     variables: {
-      id: dataFilter.ap[activeTab].artId,
-      run: !!dataFilter.ap[activeTab].artId,
+      id: dataFilter.ap?.[activeTab]?.artId,
+      run: !!dataFilter.ap?.[activeTab]?.artId,
     },
   })
 
   const artname =
-    !!dataFilter.ap[activeTab].artId && !loadingAeTaxonomiesById
+    !!dataFilter.ap?.[activeTab]?.artId && !loadingAeTaxonomiesById
       ? dataAeTaxonomiesById?.aeTaxonomyById?.artname ?? ''
       : ''
 
   const row = dataFilter.ap[activeTab]
-  console.log('ApFilter', { row: getSnapshot(row), artname })
+  console.log('ApFilter', { row: row ? getSnapshot(row) : undefined, artname })
 
   const saveToDb = useCallback(
     (event) => {
