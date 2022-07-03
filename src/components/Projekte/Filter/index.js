@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
 
 import ApFilter from '../Daten/ApFilter'
@@ -10,6 +10,8 @@ import Tpopfreiwkontr from '../Daten/Tpopfreiwkontr'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Title from './Title'
 
+import storeContext from '../../../storeContext'
+
 const Container = styled.div`
   height: 100%;
   display: flex;
@@ -19,6 +21,8 @@ const Container = styled.div`
 `
 
 const Filter = ({ treeName }) => {
+  const store = useContext(storeContext)
+  const { dataFilter } = store[treeName]
   const [activeTab, setActiveTab] = useState('ap')
 
   return (

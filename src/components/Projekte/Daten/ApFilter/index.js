@@ -92,6 +92,9 @@ const ApFilter = ({ treeName }) => {
     }
   }, [activeTab, dataFilter.ap.length])
 
+  // need this so apFilter changes on any change inside a member of dataFilter.ap
+  const dataFilterApStringified = JSON.stringify(dataFilter.ap)
+
   const apFilter = useMemo(() => {
     const filterArrayInStore = dataFilter.ap ? getSnapshot(dataFilter.ap) : []
     const filterArray = []
@@ -106,15 +109,15 @@ const ApFilter = ({ treeName }) => {
         apFilter[key] = { [expression]: value }
       })
       filterArray.push(apFilter)
-      // console.log('ApFilter in for 1', apFilter)
     }
-    // console.log('ApFilter in for 2', { filterArray, filterArrayInStore })
     return { or: filterArray }
-  }, [dataFilter.ap, projId])
-  // console.log('ApFilter after for:', apFilter)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataFilterApStringified, projId, dataFilter.ap])
+
   const { data: apsData, error: apsError } = useQuery(queryAps, {
     variables: { apFilter },
   })
+  console.log('ApFilter apsData:', apsData)
 
   const {
     data: dataAdresses,
