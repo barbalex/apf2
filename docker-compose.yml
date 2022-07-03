@@ -1,0 +1,33 @@
+version: "3.3"
+services:
+    graphql:
+        container_name: apf
+        restart: always
+        build:
+            context: ./graphql
+        env_file:
+            - ./.env
+        networks:
+            - network
+        expose:
+            - '5000'
+        ports:
+            - 5000:5000
+        command: [
+            "--connection", "${DATABASE_URL}",
+            #"--port", "5433",
+            "--schema", "apflora",
+            "--append-plugins", "postgraphile-plugin-connection-filter,@graphile-contrib/pg-order-by-related,@graphile/postgis,postgraphile-plugin-connection-filter-postgis",
+            "--jwt-token-identifier", "auth.jwt_token",
+            "--default-role", "postgres",
+            "--jwt-secret", "${JWT_SECRET}",
+            "--cors",
+            "--enable-query-batching",
+            "--enhance-graphiql",
+            "--retry-on-init-fail",
+            "--watch",
+            "--body-size-limit", "300kb"
+        ]
+
+networks:
+    network:
