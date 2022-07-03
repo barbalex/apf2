@@ -5,7 +5,7 @@ export default gql`
     $popFilter: PopFilter!
     $popApFilter: PopFilter!
     $allPopsFilter: PopFilter!
-    $apId: UUID!
+    $apId: UUID
     $apIdExists: Boolean!
   ) {
     allPops(filter: $allPopsFilter) @include(if: $apIdExists) {

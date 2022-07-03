@@ -7,7 +7,7 @@ import { initial as tpopfreiwkontr } from './tpopfreiwkontr'
 
 const initialValues = {
 	ap: [ap],
-	pop,
+	pop:[pop],
 	tpop,
 	tpopfeldkontr,
 	tpopfreiwkontr,
