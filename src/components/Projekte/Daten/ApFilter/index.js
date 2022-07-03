@@ -97,8 +97,12 @@ const ApFilter = ({ treeName }) => {
 
   const apFilter = useMemo(() => {
     const filterArrayInStore = dataFilter.ap ? getSnapshot(dataFilter.ap) : []
+    // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
+    const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
+      (f) => Object.values(f).filter((v) => v !== null).length !== 0,
+    )
     const filterArray = []
-    for (const filter of filterArrayInStore) {
+    for (const filter of filterArrayInStoreWithoutEmpty) {
       const apFilter = { projId: { equalTo: projId } }
       const dataFilterAp = { ...filter }
       const apFilterValues = Object.entries(dataFilterAp).filter(
@@ -117,7 +121,6 @@ const ApFilter = ({ treeName }) => {
   const { data: apsData, error: apsError } = useQuery(queryAps, {
     variables: { apFilter },
   })
-  console.log('ApFilter apsData:', apsData)
 
   const {
     data: dataAdresses,

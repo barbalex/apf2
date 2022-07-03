@@ -52,16 +52,16 @@ const buildTreeQueryVariables = ({
   const isProjekt = openNodes.some(
     (nArray) => nArray[0] === 'Projekte' && nArray[1],
   )
-  // console.log('buildTreeQueryVariables, dataFilter:', dataFilter)
   const filterArrayInStore = dataFilter.ap
-  // console.log(
-  // 	'buildTreeQueryVariables, filterArrayInStore:',
-  // 	filterArrayInStore,
-  // )
+  // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
+  const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
+    (f) => Object.values(f).filter((v) => v !== null).length !== 0,
+  )
   const filterArray = []
-  for (const filter of filterArrayInStore) {
+  for (const filter of filterArrayInStoreWithoutEmpty) {
     let singleFilter = { projId: { equalTo: projId } }
     const dataFilterAp = { ...filter }
+    // console.log('buildTreeQueryVariables, dataFilterAp:', dataFilterAp)
     const apFilterValues = Object.entries(dataFilterAp).filter(
       (e) => e[1] || e[1] === 0,
     )

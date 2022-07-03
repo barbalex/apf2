@@ -332,14 +332,6 @@ const myTypes = types
     },
     dataFilterSetValue({ treeName, table, key, value, index }) {
       if (index !== undefined) {
-        console.log('store, dataFilterSetValue:', {
-          treeName,
-          table,
-          key,
-          value,
-          index,
-          dataFilterTable: getSnapshot(self[treeName].dataFilter[table]),
-        })
         self[treeName].dataFilter[table][index][key] = value
         return
       }
