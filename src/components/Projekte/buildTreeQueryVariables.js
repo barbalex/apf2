@@ -61,7 +61,6 @@ const buildTreeQueryVariables = ({
   for (const filter of filterArrayInStoreWithoutEmpty) {
     let singleFilter = { projId: { equalTo: projId } }
     const dataFilterAp = { ...filter }
-    // console.log('buildTreeQueryVariables, dataFilterAp:', dataFilterAp)
     const apFilterValues = Object.entries(dataFilterAp).filter(
       (e) => e[1] || e[1] === 0,
     )
@@ -81,9 +80,7 @@ const buildTreeQueryVariables = ({
       }
     }
     filterArray.push(singleFilter)
-    // console.log('ApFilter in for 1', singleFilter)
   }
-  // console.log('ApFilter in for 2', { filterArray, filterArrayInStore })
   const apFilter = { or: filterArray }
   const ap = uniq(
     openNodes
