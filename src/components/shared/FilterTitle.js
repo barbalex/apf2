@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import { MdDeleteSweep, MdOutlineDeleteSweep } from 'react-icons/md'
-import { FaTrash, FaTrashAlt } from 'react-icons/fa'
+import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 
@@ -29,15 +29,17 @@ const FilterNumbers = styled.div`
   user-select: none;
   margin-top: 2px;
 `
-const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
+const StyledDeleteFilterIcon = styled(FaTrash)`
   cursor: pointer;
   pointer-events: auto;
-  font-size: 1.4rem;
 `
-const StyledDeleteFilterIcon2 = styled(MdOutlineDeleteSweep)`
+const StyledDeleteFilterIcon2 = styled(FaTrashAlt)`
   cursor: pointer;
   pointer-events: auto;
-  font-size: 1.4rem;
+`
+const StyledDeleteFilterIcon3 = styled(FaRegTrashAlt)`
+  cursor: pointer;
+  pointer-events: auto;
 `
 
 const FilterTitle = ({
@@ -48,11 +50,13 @@ const FilterTitle = ({
   filteredNr,
   totalApNr,
   filteredApNr,
+  activeTab,
 }) => {
   const store = useContext(storeContext)
   const {
     dataFilterTableIsFiltered,
     dataFilterTreeIsFiltered,
+    dataFilterEmptyTab,
     dataFilterEmptyTable,
     dataFilterEmptyTree,
   } = store
@@ -63,6 +67,10 @@ const FilterTitle = ({
   })
   const existsTreeFilter = dataFilterTreeIsFiltered(treeName)
 
+  const onEmptyTab = useCallback(
+    () => dataFilterEmptyTab({ treeName, table, activeTab }),
+    [dataFilterEmptyTab, treeName, table, activeTab],
+  )
   const onEmptyTable = useCallback(
     () => dataFilterEmptyTable({ treeName, table }),
     [dataFilterEmptyTable, treeName, table],
@@ -71,13 +79,6 @@ const FilterTitle = ({
     () => dataFilterEmptyTree(treeName),
     [dataFilterEmptyTree, treeName],
   )
-
-  // console.log('FilterTitle', {
-  //   existsTableFilter,
-  //   existsTreeFilter,
-  //   filteredApNr,
-  //   totalApNr,
-  // })
 
   return (
     <Container>
@@ -95,26 +96,35 @@ const FilterTitle = ({
           <span title="gefilterte Anzahl im Projekt">{filteredNr}</span>/
           <span title="ungefilterte Anzahl im Projekt">{totalNr}</span>
         </FilterNumbers>
-        {existsTableFilter && (
+        {activeTab !== undefined && (
           <IconButton
-            aria-label={`${title}-Filter entfernen`}
-            title={`${title}-Filter entfernen`}
-            onClick={onEmptyTable}
+            aria-label={`Aktuelles Filter-Kriterium entfernen`}
+            title={`Aktuelles Filter-Kriterium entfernen`}
+            onClick={onEmptyTab}
             size="small"
+            disabled={!existsTableFilter}
           >
-            <StyledDeleteFilterIcon2 />
+            <StyledDeleteFilterIcon3 />
           </IconButton>
         )}
-        {existsTreeFilter && (
-          <IconButton
-            aria-label="Alle Filter entfernen"
-            title="Alle Filter entfernen"
-            onClick={onEmptyTree}
-            size="small"
-          >
-            <StyledDeleteFilterIcon />
-          </IconButton>
-        )}
+        <IconButton
+          aria-label={`${title}-Filter entfernen`}
+          title={`${title}-Filter entfernen`}
+          onClick={onEmptyTable}
+          size="small"
+          disabled={!existsTableFilter}
+        >
+          <StyledDeleteFilterIcon2 />
+        </IconButton>
+        <IconButton
+          aria-label="Alle Filter entfernen"
+          title="Alle Filter entfernen"
+          onClick={onEmptyTree}
+          size="small"
+          disabled={!existsTreeFilter}
+        >
+          <StyledDeleteFilterIcon />
+        </IconButton>
       </TitleRow>
     </Container>
   )

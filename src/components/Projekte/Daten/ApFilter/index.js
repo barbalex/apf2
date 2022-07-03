@@ -221,6 +221,7 @@ const ApFilter = ({ treeName }) => {
           // need to pass row even though not used
           // to ensure title re-renders an change of row
           row={row}
+          activeTab={activeTab}
         />
         <OrTabs
           dataFilter={dataFilter.ap}
