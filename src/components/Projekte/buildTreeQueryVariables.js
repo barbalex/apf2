@@ -1,6 +1,5 @@
 import uniq from 'lodash/uniq'
 import isUuid from 'is-uuid'
-import { getSnapshot } from 'mobx-state-tree'
 
 import { simpleTypes as apType } from '../../store/Tree/DataFilter/ap'
 import { simpleTypes as popType } from '../../store/Tree/DataFilter/pop'

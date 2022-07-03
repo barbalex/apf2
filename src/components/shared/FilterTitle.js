@@ -1,6 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import { MdDeleteSweep, MdOutlineDeleteSweep } from 'react-icons/md'
+import { FaTrash, FaTrashAlt } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 
@@ -20,28 +21,23 @@ const Container = styled.div`
 const TitleRow = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
 `
 const FilterNumbers = styled.div`
-  padding-top: 11px;
   padding-right: 8px;
   cursor: default;
   user-select: none;
-`
-const StyledIconButton = styled(IconButton)`
-  width: 34px !important;
-  margin-top: -2px !important;
+  margin-top: 2px;
 `
 const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   cursor: pointer;
   pointer-events: auto;
-  font-size: 1.5rem;
-  flex-shrink: 0;
+  font-size: 1.4rem;
 `
 const StyledDeleteFilterIcon2 = styled(MdOutlineDeleteSweep)`
   cursor: pointer;
   pointer-events: auto;
-  font-size: 1.5rem;
-  flex-shrink: 0;
+  font-size: 1.4rem;
 `
 
 const FilterTitle = ({
@@ -100,22 +96,24 @@ const FilterTitle = ({
           <span title="ungefilterte Anzahl im Projekt">{totalNr}</span>
         </FilterNumbers>
         {existsTableFilter && (
-          <StyledIconButton
+          <IconButton
             aria-label={`${title}-Filter entfernen`}
             title={`${title}-Filter entfernen`}
             onClick={onEmptyTable}
+            size="small"
           >
             <StyledDeleteFilterIcon2 />
-          </StyledIconButton>
+          </IconButton>
         )}
         {existsTreeFilter && (
-          <StyledIconButton
+          <IconButton
             aria-label="Alle Filter entfernen"
             title="Alle Filter entfernen"
             onClick={onEmptyTree}
+            size="small"
           >
             <StyledDeleteFilterIcon />
-          </StyledIconButton>
+          </IconButton>
         )}
       </TitleRow>
     </Container>
