@@ -1,8 +1,15 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import React, {
+  useContext,
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
+import { getSnapshot } from 'mobx-state-tree'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
@@ -19,6 +26,7 @@ import { simpleTypes as apType } from '../../../../store/Tree/DataFilter/ap'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import OrTabs from './Tabs'
 
 const Container = styled.div`
   height: 100%;
@@ -76,18 +84,40 @@ const ApFilter = ({ treeName }) => {
 
   const projId = activeNodeArray[1]
 
+  const [activeTab, setActiveTab] = useState(0)
+  useEffect(() => {
+    if (dataFilter.ap.length - 1 < activeTab) {
+      // filter was emtied, need to set correct tab
+      setActiveTab(0)
+    }
+  }, [activeTab, dataFilter.ap.length])
+
+  // need this so apFilter changes on any change inside a member of dataFilter.ap
+  const dataFilterApStringified = JSON.stringify(dataFilter.ap)
+
   const apFilter = useMemo(() => {
-    const apFilter = { projId: { equalTo: projId } }
-    const dataFilterAp = { ...dataFilter.ap }
-    const apFilterValues = Object.entries(dataFilterAp).filter(
-      (e) => e[1] || e[1] === 0,
+    const filterArrayInStore = dataFilter.ap ? getSnapshot(dataFilter.ap) : []
+    // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
+    const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
+      (f) => Object.values(f).filter((v) => v !== null).length !== 0,
     )
-    apFilterValues.forEach(([key, value]) => {
-      const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-      apFilter[key] = { [expression]: value }
-    })
-    return apFilter
-  }, [dataFilter.ap, projId])
+    const filterArray = []
+    for (const filter of filterArrayInStoreWithoutEmpty) {
+      const apFilter = { projId: { equalTo: projId } }
+      const dataFilterAp = { ...filter }
+      const apFilterValues = Object.entries(dataFilterAp).filter(
+        (e) => e[1] || e[1] === 0,
+      )
+      apFilterValues.forEach(([key, value]) => {
+        const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
+        apFilter[key] = { [expression]: value }
+      })
+      filterArray.push(apFilter)
+    }
+    return { or: filterArray }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataFilterApStringified, projId, dataFilter.ap])
+
   const { data: apsData, error: apsError } = useQuery(queryAps, {
     variables: { apFilter },
   })
@@ -110,17 +140,18 @@ const ApFilter = ({ treeName }) => {
     loading: loadingAeTaxonomiesById,
   } = useQuery(queryAeTaxonomiesById, {
     variables: {
-      id: dataFilter.ap.artId,
-      run: !!dataFilter.ap.artId,
+      id: dataFilter.ap?.[activeTab]?.artId,
+      run: !!dataFilter.ap?.[activeTab]?.artId,
     },
   })
 
   const artname =
-    !!dataFilter.ap.artId && !loadingAeTaxonomiesById
+    !!dataFilter.ap?.[activeTab]?.artId && !loadingAeTaxonomiesById
       ? dataAeTaxonomiesById?.aeTaxonomyById?.artname ?? ''
       : ''
 
-  const row = dataFilter.ap
+  const row = dataFilter.ap[activeTab]
+  // console.log('ApFilter', { row: row ? getSnapshot(row) : undefined, artname })
 
   const saveToDb = useCallback(
     (event) => {
@@ -144,9 +175,17 @@ const ApFilter = ({ treeName }) => {
         table: 'ap',
         key: field,
         value,
+        index: activeTab,
       })
     },
-    [dataFilterSetValue, enqueNotification, nurApFilter, setApFilter, treeName],
+    [
+      activeTab,
+      dataFilterSetValue,
+      enqueNotification,
+      nurApFilter,
+      setApFilter,
+      treeName,
+    ],
   )
 
   const aeTaxonomiesFilter = useCallback(
@@ -182,6 +221,13 @@ const ApFilter = ({ treeName }) => {
           // need to pass row even though not used
           // to ensure title re-renders an change of row
           row={row}
+          activeTab={activeTab}
+        />
+        <OrTabs
+          dataFilter={dataFilter.ap}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          treeName={treeName}
         />
         <FieldsContainer>
           <SimpleBar
@@ -206,7 +252,7 @@ const ApFilter = ({ treeName }) => {
                 query={queryAeTaxonomies}
                 filter={aeTaxonomiesFilter}
                 queryNodesName="allAeTaxonomies"
-                value={row.artId}
+                value={row?.artId}
                 saveToDb={saveToDb}
               />
               <RadioButtonGroupWithInfo
@@ -235,14 +281,14 @@ const ApFilter = ({ treeName }) => {
                   </>
                 }
                 label="Aktionsplan"
-                value={row.bearbeitung}
+                value={row?.bearbeitung}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="startJahr"
                 label="Start im Jahr"
                 type="number"
-                value={row.startJahr}
+                value={row?.startJahr}
                 saveToDb={saveToDb}
               />
               <FieldContainer>
@@ -275,7 +321,7 @@ const ApFilter = ({ treeName }) => {
                     </>
                   }
                   label="Stand Umsetzung"
-                  value={row.umsetzung}
+                  value={row?.umsetzung}
                   saveToDb={saveToDb}
                 />
               </FieldContainer>
@@ -284,14 +330,14 @@ const ApFilter = ({ treeName }) => {
                 label="Verantwortlich"
                 options={dataAdresses?.allAdresses?.nodes ?? []}
                 loading={loadingAdresses}
-                value={row.bearbeiter}
+                value={row?.bearbeiter}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="ekfBeobachtungszeitpunkt"
                 label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
                 type="text"
-                value={row.ekfBeobachtungszeitpunkt}
+                value={row?.ekfBeobachtungszeitpunkt}
                 saveToDb={saveToDb}
               />
             </FormContainer>

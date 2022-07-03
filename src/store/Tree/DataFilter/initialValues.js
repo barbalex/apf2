@@ -6,12 +6,12 @@ import { initial as tpopfeldkontr } from './tpopfeldkontr'
 import { initial as tpopfreiwkontr } from './tpopfreiwkontr'
 
 const initialValues = {
-  ap,
-  pop,
-  tpop,
-  tpopfeldkontr,
-  tpopfreiwkontr,
-  tpopmassn,
+	ap: [ap],
+	pop,
+	tpop,
+	tpopfeldkontr,
+	tpopfreiwkontr,
+	tpopmassn,
 }
 
 export default initialValues

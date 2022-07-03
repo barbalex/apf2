@@ -27,6 +27,22 @@ import exists from '../modules/exists'
 import setIdsFiltered from '../modules/setIdsFiltered'
 import simpleTypes from './Tree/DataFilter/simpleTypes'
 
+import { initial as apInitial } from './Tree/DataFilter/ap'
+import { initial as popInitial } from './Tree/DataFilter/pop'
+import { initial as tpopInitial } from './Tree/DataFilter/tpop'
+import { initial as tpopmassnInitial } from './Tree/DataFilter/tpopmassn'
+import { initial as tpopfeldkontrInitial } from './Tree/DataFilter/tpopfeldkontr'
+import { initial as tpopfreiwkontrInitial } from './Tree/DataFilter/tpopfreiwkontr'
+
+const dataFilterInitialValues = {
+  ap: apInitial,
+  pop: popInitial,
+  tpop: tpopInitial,
+  tpopmassn: tpopmassnInitial,
+  tpopfeldkontr: tpopfeldkontrInitial,
+  tpopfreiwkontr: tpopfreiwkontrInitial,
+}
+
 // substract 3 Months to now so user sees previous year in February
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
 const ekfYear = new Date(ekfRefDate).getFullYear()
@@ -38,7 +54,7 @@ const myTypes = types
       standardApfloraLayers,
     ),
     activeApfloraLayers: types.array(types.string),
-    overlays: types.optional(types.array(ApfloraLayer), standardOverlays), 
+    overlays: types.optional(types.array(ApfloraLayer), standardOverlays),
     activeOverlays: types.array(types.string),
     activeBaseLayer: types.optional(types.maybeNull(types.string), 'OsmColor'),
     idOfTpopBeingLocalized: types.optional(types.maybeNull(types.string), null),
@@ -327,11 +343,27 @@ const myTypes = types
     dataFilterClone1To2() {
       self.tree2.dataFilter = cloneDeep(self.tree.dataFilter)
     },
-    dataFilterSetValue({ treeName, table, key, value }) {
+    dataFilterAddOr({ treeName, table, val }) {
+      self?.[treeName]?.dataFilter?.[table]?.push(val)
+    },
+    dataFilterSetValue({ treeName, table, key, value, index }) {
+      if (index !== undefined) {
+        if (!self[treeName].dataFilter[table][index]) {
+          self?.[treeName]?.dataFilter?.[table]?.push(
+            dataFilterInitialValues[table],
+          )
+        }
+        self[treeName].dataFilter[table][index][key] = value
+        return
+      }
       self[treeName].dataFilter[table][key] = value
     },
     dataFilterEmptyTree(treeName) {
       self[treeName].dataFilter = initialDataFilterTreeValues
+    },
+    dataFilterEmptyTab({ treeName, table, activeTab }) {
+      // self[treeName].dataFilter[table] = self[treeName].dataFilter[table].splice(activeTab, 1)
+      self[treeName].dataFilter[table].splice(activeTab, 1)
     },
     dataFilterEmptyTable({ treeName, table }) {
       self[treeName].dataFilter[table] = initialDataFilterTreeValues[table]

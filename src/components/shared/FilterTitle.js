@@ -1,8 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-// this does not exist in any icon library, not even in md!!!!
-import DeleteSweepOutlined from '@mui/icons-material/DeleteSweepOutlined'
-import { MdDeleteSweep } from 'react-icons/md'
+import { MdDeleteSweep, MdOutlineDeleteSweep } from 'react-icons/md'
+import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 
@@ -22,24 +21,23 @@ const Container = styled.div`
 const TitleRow = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
 `
 const FilterNumbers = styled.div`
-  padding-top: 11px;
   padding-right: 8px;
   cursor: default;
   user-select: none;
+  margin-top: 2px;
 `
-const StyledIconButton = styled(IconButton)`
-  width: 34px !important;
-  margin-top: -2px !important;
-`
-const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
+const StyledDeleteFilterIcon = styled(FaTrash)`
   cursor: pointer;
   pointer-events: auto;
-  font-size: 1.5rem;
-  flex-shrink: 0;
 `
-const StyledDeleteFilterIcon2 = styled(DeleteSweepOutlined)`
+const StyledDeleteFilterIcon2 = styled(FaTrashAlt)`
+  cursor: pointer;
+  pointer-events: auto;
+`
+const StyledDeleteFilterIcon3 = styled(FaRegTrashAlt)`
   cursor: pointer;
   pointer-events: auto;
 `
@@ -52,11 +50,13 @@ const FilterTitle = ({
   filteredNr,
   totalApNr,
   filteredApNr,
+  activeTab,
 }) => {
   const store = useContext(storeContext)
   const {
     dataFilterTableIsFiltered,
     dataFilterTreeIsFiltered,
+    dataFilterEmptyTab,
     dataFilterEmptyTable,
     dataFilterEmptyTree,
   } = store
@@ -67,6 +67,10 @@ const FilterTitle = ({
   })
   const existsTreeFilter = dataFilterTreeIsFiltered(treeName)
 
+  const onEmptyTab = useCallback(
+    () => dataFilterEmptyTab({ treeName, table, activeTab }),
+    [dataFilterEmptyTab, treeName, table, activeTab],
+  )
   const onEmptyTable = useCallback(
     () => dataFilterEmptyTable({ treeName, table }),
     [dataFilterEmptyTable, treeName, table],
@@ -75,13 +79,6 @@ const FilterTitle = ({
     () => dataFilterEmptyTree(treeName),
     [dataFilterEmptyTree, treeName],
   )
-
-  // console.log('FilterTitle', {
-  //   existsTableFilter,
-  //   existsTreeFilter,
-  //   filteredApNr,
-  //   totalApNr,
-  // })
 
   return (
     <Container>
@@ -99,24 +96,35 @@ const FilterTitle = ({
           <span title="gefilterte Anzahl im Projekt">{filteredNr}</span>/
           <span title="ungefilterte Anzahl im Projekt">{totalNr}</span>
         </FilterNumbers>
-        {existsTableFilter && (
-          <StyledIconButton
-            aria-label={`${title}-Filter entfernen`}
-            title={`${title}-Filter entfernen`}
-            onClick={onEmptyTable}
+        {activeTab !== undefined && (
+          <IconButton
+            aria-label={`Aktuelles Filter-Kriterium entfernen`}
+            title={`Aktuelles Filter-Kriterium entfernen`}
+            onClick={onEmptyTab}
+            size="small"
+            disabled={!existsTableFilter}
           >
-            <StyledDeleteFilterIcon2 />
-          </StyledIconButton>
+            <StyledDeleteFilterIcon3 />
+          </IconButton>
         )}
-        {existsTreeFilter && (
-          <StyledIconButton
-            aria-label="Alle Filter entfernen"
-            title="Alle Filter entfernen"
-            onClick={onEmptyTree}
-          >
-            <StyledDeleteFilterIcon />
-          </StyledIconButton>
-        )}
+        <IconButton
+          aria-label={`${title}-Filter entfernen`}
+          title={`${title}-Filter entfernen`}
+          onClick={onEmptyTable}
+          size="small"
+          disabled={!existsTableFilter}
+        >
+          <StyledDeleteFilterIcon2 />
+        </IconButton>
+        <IconButton
+          aria-label="Alle Filter entfernen"
+          title="Alle Filter entfernen"
+          onClick={onEmptyTree}
+          size="small"
+          disabled={!existsTreeFilter}
+        >
+          <StyledDeleteFilterIcon />
+        </IconButton>
       </TitleRow>
     </Container>
   )

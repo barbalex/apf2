@@ -1,0 +1,1 @@
+Ab Version 1.72.0: Beim Filter der Art mehrere Filter-Kriterien mit "oder" verbinden. Z.B.: "AP in Bearbeitung" ODER "AP erstellt". Bitte meldet mir Anregungen/Erfahrungen. Wird in den nächsten Wochen auf die übrigen Filter ausgeweitet

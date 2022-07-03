@@ -6,7 +6,7 @@ export default gql`
       totalCount
     }
     filteredAps: allAps(filter: $apFilter) {
-      totalCount
+      totalCount 
     }
   }
 `

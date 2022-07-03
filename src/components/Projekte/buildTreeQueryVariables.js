@@ -51,23 +51,36 @@ const buildTreeQueryVariables = ({
   const isProjekt = openNodes.some(
     (nArray) => nArray[0] === 'Projekte' && nArray[1],
   )
-  let apFilter = { projId: { in: projId } }
-  const apFilterValues = Object.entries(dataFilter.ap).filter(
-    (e) => e[1] || e[1] === 0,
+  const filterArrayInStore = dataFilter.ap
+  // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
+  const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
+    (f) => Object.values(f).filter((v) => v !== null).length !== 0,
   )
-  apFilterValues.forEach(([key, value]) => {
-    const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-    apFilter[key] = { [expression]: value }
-  })
-  // for unknown reason the following only works belated, so not
-  if (apFilterSet) {
-    apFilter.bearbeitung = { in: [1, 2, 3] }
+  const filterArray = []
+  for (const filter of filterArrayInStoreWithoutEmpty) {
+    let singleFilter = { projId: { equalTo: projId } }
+    const dataFilterAp = { ...filter }
+    const apFilterValues = Object.entries(dataFilterAp).filter(
+      (e) => e[1] || e[1] === 0,
+    )
+    apFilterValues.forEach(([key, value]) => {
+      const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+    // for unknown reason the following only works belated, so not
+    if (apFilterSet) {
+      singleFilter.bearbeitung = { in: [1, 2, 3] }
+    }
+    if (apIdInActiveNodeArray) {
+      // if apId in activeNodeArray
+      // allow showing this ap
+      singleFilter = {
+        or: [singleFilter, { id: { equalTo: apIdInActiveNodeArray } }],
+      }
+    }
+    filterArray.push(singleFilter)
   }
-  if (apIdInActiveNodeArray) {
-    // if apId in activeNodeArray
-    // allow showing this ap
-    apFilter = { or: [apFilter, { id: { equalTo: apIdInActiveNodeArray } }] }
-  }
+  const apFilter = { or: filterArray }
   const ap = uniq(
     openNodes
       .map((a) =>
@@ -211,9 +224,12 @@ const buildTreeQueryVariables = ({
     tpopmassnFilter[key] = { [expression]: value }
   })
 
-  const apsFilter = { ...apFilter }
+  const apsFilter = apFilter
   if (nodeLabelFilter.ap) {
-    apsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
+    // apsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
+    for (const filter of apFilter.or) {
+      filter.label = { includesInsensitive: nodeLabelFilter.ap }
+    }
   }
   const apberuebersichtsFilter = { projId: { in: projekt } }
   if (nodeLabelFilter.apberuebersicht) {

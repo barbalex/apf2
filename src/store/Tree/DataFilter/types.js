@@ -8,7 +8,7 @@ import { type as tpopfreiwkontr } from './tpopfreiwkontr'
 import { type as tpopmassn } from './tpopmassn'
 
 export default types.model({
-  ap,
+  ap: types.array(ap),
   pop,
   tpop,
   tpopfeldkontr,
