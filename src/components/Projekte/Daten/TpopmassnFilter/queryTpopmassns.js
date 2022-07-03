@@ -5,7 +5,7 @@ export default gql`
     $apIdExists: Boolean!
     $tpopmassnFilter: TpopmassnFilter!
     $allTpopmassnFilter: TpopmassnFilter!
-    $apId: UUID!
+    $apId: UUID
   ) {
     allTpopmassns(filter: $allTpopmassnFilter) @include(if: $apIdExists) {
       totalCount
