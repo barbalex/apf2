@@ -105,6 +105,8 @@ const Tpop = ({
           saveToDb={saveToDb}
           errors={fieldErrors}
           row={row}
+          // this is just to enforce re-render on change
+          status={row.status}
         />
         <Checkbox2States
           name="statusUnklar"

@@ -1,8 +1,15 @@
-import React, { useContext, useCallback } from 'react'
+import React, {
+  useContext,
+  useCallback,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
+import { getSnapshot } from 'mobx-state-tree'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -15,6 +22,7 @@ import { simpleTypes as popType } from '../../../../store/Tree/DataFilter/pop'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import PopOrTabs from './Tabs'
 
 const Container = styled.div`
   height: 100%;
@@ -25,7 +33,6 @@ const Container = styled.div`
 `
 const FormContainer = styled.div`
   padding: 10px;
-  padding-top: 0;
   overflow-y: auto;
 `
 
@@ -34,49 +41,59 @@ const PopFilter = ({ treeName }) => {
   const { dataFilterSetValue } = store
   const { activeNodeArray, dataFilter } = store[treeName]
 
-  const apId = activeNodeArray[3]
+  // need to slice to rerender on change
+  const apId = activeNodeArray.slice()[3]
 
-  const allPopsFilter = {
-    apByApId: { projId: { equalTo: activeNodeArray[1] } },
-  }
-  const popFilter = {
-    apId: { isNull: false },
-    apByApId: { projId: { equalTo: activeNodeArray[1] } },
-  }
-  const popFilterValues = Object.entries(dataFilter.pop).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  popFilterValues.forEach(([key, value]) => {
-    const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-    popFilter[key] = { [expression]: value }
-  })
-  const popApFilter = { apId: { equalTo: apId } }
-  const popApFilterValues = Object.entries(dataFilter.pop).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  popApFilterValues.forEach(([key, value]) => {
-    const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-    popApFilter[key] = { [expression]: value }
-  })
+  const [activeTab, setActiveTab] = useState(0)
+  useEffect(() => {
+    if (dataFilter.pop.length - 1 < activeTab) {
+      // filter was emtied, need to set correct tab
+      setActiveTab(0)
+    }
+  }, [activeTab, dataFilter.pop.length])
+
+  // need this so apFilter changes on any change inside a member of dataFilter.ap
+  const dataFilterPopStringified = JSON.stringify(dataFilter.pop)
+
+  const popFilter = useMemo(() => {
+    const filterArrayInStore = dataFilter.pop ? getSnapshot(dataFilter.pop) : []
+    // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
+    const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
+      (f) => Object.values(f).filter((v) => v !== null).length !== 0,
+    )
+    const filterArray = []
+    for (const filter of filterArrayInStoreWithoutEmpty) {
+      const popFilter = apId ? { apId: { equalTo: apId } } : {}
+      const dataFilterPop = { ...filter }
+      const popApFilterValues = Object.entries(dataFilterPop).filter(
+        (e) => e[1] || e[1] === 0,
+      )
+      popApFilterValues.forEach(([key, value]) => {
+        const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
+        popFilter[key] = { [expression]: value }
+      })
+      filterArray.push(popFilter)
+    }
+    return { or: filterArray }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apId, dataFilter.pop, dataFilterPopStringified])
+
   const { data: dataPops, error } = useQuery(queryPops, {
     variables: {
-      allPopsFilter,
       popFilter,
-      popApFilter,
       apId,
       apIdExists: !!apId,
+      apIdNotExists: !apId,
     },
   })
 
-  let popTotalCount
-  let popFilteredCount
-  let popOfApTotalCount
-  let popOfApFilteredCount
-  const row = dataFilter.pop
-  popTotalCount = dataPops?.allPops?.totalCount ?? '...'
-  popFilteredCount = dataPops?.popsFiltered?.totalCount ?? '...'
-  popOfApTotalCount = dataPops?.popsOfAp?.totalCount ?? '...'
-  popOfApFilteredCount = dataPops?.popsOfApFiltered?.totalCount ?? '...'
+  const row = dataFilter.pop[activeTab]
+  const totalNr = apId
+    ? dataPops?.pops?.totalCount ?? '...'
+    : dataPops?.allPops?.totalCount ?? '...'
+  const filteredNr = apId
+    ? dataPops?.popsFiltered?.totalCount ?? '...'
+    : dataPops?.allPopsFiltered?.totalCount ?? '...'
 
   const saveToDb = useCallback(
     async (event) =>
@@ -85,11 +102,15 @@ const PopFilter = ({ treeName }) => {
         table: 'pop',
         key: event.target.name,
         value: ifIsNumericAsNumber(event.target.value),
+        index: activeTab,
       }),
-    [dataFilterSetValue, treeName],
+    [activeTab, dataFilterSetValue, treeName],
   )
 
   if (error) return <Error error={error} />
+
+  // if (!row) return null
+
   return (
     <ErrorBoundary>
       <Container>
@@ -97,10 +118,15 @@ const PopFilter = ({ treeName }) => {
           title="Population"
           treeName={treeName}
           table="pop"
-          totalNr={popTotalCount}
-          filteredNr={popFilteredCount}
-          totalApNr={popOfApTotalCount}
-          filteredApNr={popOfApFilteredCount}
+          totalNr={totalNr}
+          filteredNr={filteredNr}
+          activeTab={activeTab}
+        />
+        <PopOrTabs
+          dataFilter={dataFilter.pop}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          treeName={treeName}
         />
         <FormContainer>
           <SimpleBar
@@ -113,7 +139,7 @@ const PopFilter = ({ treeName }) => {
               label="Nr."
               name="nr"
               type="number"
-              value={row.nr}
+              value={row?.nr}
               saveToDb={saveToDb}
             />
             <TextFieldWithInfo
@@ -121,7 +147,7 @@ const PopFilter = ({ treeName }) => {
               name="name"
               type="text"
               popover="Dieses Feld möglichst immer ausfüllen"
-              value={row.name}
+              value={row?.name}
               saveToDb={saveToDb}
             />
             <Status
@@ -133,7 +159,7 @@ const PopFilter = ({ treeName }) => {
             <Checkbox2States
               label="Status unklar"
               name="statusUnklar"
-              value={row.statusUnklar}
+              value={row?.statusUnklar}
               saveToDb={saveToDb}
             />
             <TextField
@@ -141,7 +167,7 @@ const PopFilter = ({ treeName }) => {
               name="statusUnklarBegruendung"
               type="text"
               multiLine
-              value={row.statusUnklarBegruendung}
+              value={row?.statusUnklarBegruendung}
               saveToDb={saveToDb}
             />
           </SimpleBar>

@@ -1,6 +1,5 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-import { MdDeleteSweep, MdOutlineDeleteSweep } from 'react-icons/md'
 import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
@@ -46,10 +45,8 @@ const FilterTitle = ({
   title,
   table,
   treeName,
-  totalNr,
-  filteredNr,
-  totalApNr,
-  filteredApNr,
+   totalNr,
+   filteredNr,
   activeTab,
 }) => {
   const store = useContext(storeContext)
@@ -84,17 +81,12 @@ const FilterTitle = ({
     <Container>
       <TitleRow>
         <FilterNumbers>
-          {exists(filteredApNr) && (
+          {exists(filteredNr) && (
             <>
-              {`Art: `}
-              <span title="gefilterte Anzahl in Art">{filteredApNr}</span>/
-              <span title="ungefilterte Anzahl in Art">{totalApNr}</span>
-              {`, `}
+              <span title="gefilterte Anzahl in Art">{filteredNr}</span>/
+              <span title="ungefilterte Anzahl in Art">{totalNr}</span>
             </>
           )}
-          {`Projekt: `}
-          <span title="gefilterte Anzahl im Projekt">{filteredNr}</span>/
-          <span title="ungefilterte Anzahl im Projekt">{totalNr}</span>
         </FilterNumbers>
         {activeTab !== undefined && (
           <IconButton

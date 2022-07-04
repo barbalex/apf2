@@ -123,13 +123,12 @@ const TpopForm = ({ treeName, showFilter = false }) => {
   })
   const apJahr = data?.tpopById?.popByPopId?.apByApId?.startJahr ?? null
 
-  const allTpopsFilter = {
-    popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-  }
-  const tpopFilter = {
-    popId: { isNull: false },
-    popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-  }
+  const tpopFilter = apId
+    ? {
+        popId: { isNull: false },
+        popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
+      }
+    : { popId: { isNull: false } }
   const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
     (e) => e[1] || e[1] === 0,
   )
@@ -140,33 +139,34 @@ const TpopForm = ({ treeName, showFilter = false }) => {
 
   const { data: dataTpops } = useQuery(queryTpops, {
     variables: {
-      allTpopsFilter,
       tpopFilter,
       apId,
       apIdExists: !!apId && showFilter,
+      apIdNotExists: !apId,
     },
   })
 
-  let tpopTotalCount
-  let tpopFilteredCount
-  let tpopOfApTotalCount
-  let tpopOfApFilteredCount
+  let totalNr
+  let filteredNr
   let row
   if (showFilter) {
     row = dataFilter.tpop
-    tpopTotalCount = dataTpops?.allTpops?.totalCount ?? '...'
-    tpopFilteredCount = dataTpops?.tpopsFiltered?.totalCount ?? '...'
-    const popsOfAp = dataTpops?.popsOfAp?.nodes ?? []
-    tpopOfApTotalCount = !popsOfAp.length
-      ? '...'
-      : popsOfAp
-          .map((p) => p?.tpops?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-    tpopOfApFilteredCount = !popsOfAp.length
-      ? '...'
-      : popsOfAp
-          .map((p) => p?.tpopsFiltered?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
+    if (apId) {
+      const pops = dataTpops?.allPops?.nodes ?? []
+      totalNr = !pops.length
+        ? '...'
+        : pops
+            .map((p) => p?.tpops?.totalCount)
+            .reduce((acc = 0, val) => acc + val)
+      filteredNr = !pops.length
+        ? '...'
+        : pops
+            .map((p) => p?.tpopsFiltered?.totalCount)
+            .reduce((acc = 0, val) => acc + val)
+    } else {
+      totalNr = dataTpops?.allTpops?.totalCount
+      filteredNr = dataTpops?.allTpopsFiltered?.totalCount
+    }
   } else {
     row = data?.tpopById ?? {}
   }
@@ -265,6 +265,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
   )
 
   if (error) return <Error error={error} />
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -273,10 +274,8 @@ const TpopForm = ({ treeName, showFilter = false }) => {
             title="Teil-Population"
             treeName={treeName}
             table="tpop"
-            totalNr={tpopTotalCount}
-            filteredNr={tpopFilteredCount}
-            totalApNr={tpopOfApTotalCount}
-            filteredApNr={tpopOfApFilteredCount}
+            totalNr={totalNr}
+            filteredNr={filteredNr}
           />
         ) : (
           <FormTitle

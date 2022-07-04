@@ -71,24 +71,30 @@ const TpopmassnFilter = ({ treeName }) => {
       allTpopmassnFilter,
       apId,
       apIdExists: !!apId,
+      apIdNotExists: !apId,
     },
   })
 
   const row = dataFilter.tpopmassn
-  const tpopmassnTotalCount = data?.allTpopmassns?.totalCount ?? '...'
-  const tpopmassnFilteredCount = data?.tpopmassnsFiltered?.totalCount ?? '...'
-  const popsOfAp = data?.popsOfAp?.nodes ?? []
-  const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
-  const tpopmassnsOfApTotalCount = !tpopsOfAp.length
-    ? '...'
-    : tpopsOfAp
-        .map((p) => p?.tpopmassns?.totalCount)
-        .reduce((acc = 0, val) => acc + val)
-  const tpopmassnsOfApFilteredCount = !tpopsOfAp.length
-    ? '...'
-    : tpopsOfAp
-        .map((p) => p?.tpopmassnsFiltered?.totalCount)
-        .reduce((acc = 0, val) => acc + val)
+  let totalNr
+  let filteredNr
+  if (apId) {
+    const popsOfAp = data?.popsOfAp?.nodes ?? []
+    const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
+    totalNr = !tpopsOfAp.length
+      ? '...'
+      : tpopsOfAp
+          .map((p) => p?.tpopmassns?.totalCount)
+          .reduce((acc = 0, val) => acc + val)
+    filteredNr = !tpopsOfAp.length
+      ? '...'
+      : tpopsOfAp
+          .map((p) => p?.tpopmassnsFiltered?.totalCount)
+          .reduce((acc = 0, val) => acc + val)
+  } else {
+    totalNr = data?.allTpopmassns?.totalCount ?? '...'
+    filteredNr = data?.tpopmassnsFiltered?.totalCount ?? '...'
+  }
 
   const isAnpflanzung = data?.allTpopmassnTypWertes?.nodes?.find(
     (n) => n.value === row.typ,
@@ -121,10 +127,8 @@ const TpopmassnFilter = ({ treeName }) => {
           title="Massnahmen"
           treeName={treeName}
           table="tpopmassn"
-          totalNr={tpopmassnTotalCount}
-          filteredNr={tpopmassnFilteredCount}
-          totalApNr={tpopmassnsOfApTotalCount}
-          filteredApNr={tpopmassnsOfApFilteredCount}
+          totalNr={totalNr}
+          filteredNr={filteredNr}
         />
         <FormScrollContainer>
           <SimpleBar

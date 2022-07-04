@@ -51,13 +51,14 @@ const buildTreeQueryVariables = ({
   const isProjekt = openNodes.some(
     (nArray) => nArray[0] === 'Projekte' && nArray[1],
   )
-  const filterArrayInStore = dataFilter.ap
+
+  const apFilterArrayInStore = dataFilter.ap
   // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-  const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
+  const apFilterArrayInStoreWithoutEmpty = apFilterArrayInStore.filter(
     (f) => Object.values(f).filter((v) => v !== null).length !== 0,
   )
-  const filterArray = []
-  for (const filter of filterArrayInStoreWithoutEmpty) {
+  const apFilterArray = []
+  for (const filter of apFilterArrayInStoreWithoutEmpty) {
     let singleFilter = { projId: { equalTo: projId } }
     const dataFilterAp = { ...filter }
     const apFilterValues = Object.entries(dataFilterAp).filter(
@@ -78,9 +79,10 @@ const buildTreeQueryVariables = ({
         or: [singleFilter, { id: { equalTo: apIdInActiveNodeArray } }],
       }
     }
-    filterArray.push(singleFilter)
+    apFilterArray.push(singleFilter)
   }
-  const apFilter = { or: filterArray }
+  const apFilter = { or: apFilterArray }
+
   const ap = uniq(
     openNodes
       .map((a) =>
@@ -129,14 +131,27 @@ const buildTreeQueryVariables = ({
   const isPop =
     isAp &&
     openNodes.some((nArray) => nArray[4] === 'Populationen' && nArray[5])
-  const popFilter = { apId: { in: ap } }
-  const popFilterValues = Object.entries(dataFilter.pop).filter(
-    (e) => e[1] || e[1] === 0,
+
+  const popFilterArrayInStore = dataFilter.pop
+  // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
+  const popFilterArrayInStoreWithoutEmpty = popFilterArrayInStore.filter(
+    (f) => Object.values(f).filter((v) => v !== null).length !== 0,
   )
-  popFilterValues.forEach(([key, value]) => {
-    const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-    popFilter[key] = { [expression]: value }
-  })
+  const popFilterArray = []
+  for (const filter of popFilterArrayInStoreWithoutEmpty) {
+    const singleFilter = { apId: { in: ap } }
+    const dataFilterPop = { ...filter }
+    const popFilterValues = Object.entries(dataFilterPop).filter(
+      (e) => e[1] || e[1] === 0,
+    )
+    popFilterValues.forEach(([key, value]) => {
+      const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+    popFilterArray.push(singleFilter)
+  }
+  const popFilter = { or: popFilterArray }
+
   const tpop = uniq(
     openNodes
       .map((a) =>
@@ -226,7 +241,6 @@ const buildTreeQueryVariables = ({
 
   const apsFilter = apFilter
   if (nodeLabelFilter.ap) {
-    // apsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
     for (const filter of apFilter.or) {
       filter.label = { includesInsensitive: nodeLabelFilter.ap }
     }
@@ -308,8 +322,10 @@ const buildTreeQueryVariables = ({
   }
   const popsFilter = { ...popFilter }
   if (nodeLabelFilter.pop) {
-    popsFilter.label = {
-      includesInsensitive: nodeLabelFilter.pop,
+    for (const filter of popsFilter.or) {
+      filter.label = {
+        includesInsensitive: nodeLabelFilter.pop,
+      }
     }
   }
   const tpopbersFilter = { tpopId: { in: tpop } }

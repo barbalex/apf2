@@ -41,24 +41,36 @@ const Pop = ({ treeName }) => {
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
-  const popFilter = {
-    wgs84Lat: { isNull: false },
-    // 2021.08.16: needed to remove this filter
-    // because icons where added every time a tpop left, then reentered the bbox
-    //geomPoint: { within: myBbox },
-  }
-  const popFilterValues = Object.entries(dataFilter.pop).filter(
-    (e) => e[1] || e[1] === 0,
+  const popFilterArrayInStore = dataFilter.pop
+  // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
+  const popFilterArrayInStoreWithoutEmpty = popFilterArrayInStore.filter(
+    (f) => Object.values(f).filter((v) => v !== null).length !== 0,
   )
-  popFilterValues.forEach(([key, value]) => {
-    const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-    popFilter[key] = { [expression]: value }
-  })
-  if (tree.nodeLabelFilter.pop) {
-    popFilter.label = {
-      includesInsensitive: tree.nodeLabelFilter.pop,
+  const popFilterArray = []
+  for (const filter of popFilterArrayInStoreWithoutEmpty) {
+    const singleFilter = {
+      apId: { equalTo: apId },
+      wgs84Lat: { isNull: false },
+      // 2021.08.16: needed to remove this filter
+      // because icons where added every time a tpop left, then reentered the bbox
+      //geomPoint: { within: myBbox },
     }
+    const dataFilterPop = { ...filter }
+    const popFilterValues = Object.entries(dataFilterPop).filter(
+      (e) => e[1] || e[1] === 0,
+    )
+    popFilterValues.forEach(([key, value]) => {
+      const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+    if (tree.nodeLabelFilter.pop) {
+      singleFilter.label = {
+        includesInsensitive: tree.nodeLabelFilter.pop,
+      }
+    }
+    popFilterArray.push(singleFilter)
   }
+  const popFilter = { or: popFilterArray }
 
   const tpopFilter = {
     wgs84Lat: { isNull: false },

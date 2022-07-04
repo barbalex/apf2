@@ -94,35 +94,36 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
     variables: {
       tpopkontrFilter,
       allTpopkontrFilter,
-      apId,
-      apIdExists: !!apId && showFilter,
+      apId: activeNodeArray[3],
+      apIdExists: !!activeNodeArray[3] && showFilter,
+      apIdNotExists: !activeNodeArray[3] && showFilter,
     },
   })
 
   const zaehls = data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
 
-  let tpopkontrTotalCount
-  let tpopkontrFilteredCount
-  let tpopkontrsOfApTotalCount
-  let tpopkontrsOfApFilteredCount
+  let totalNr
+  let filteredNr
   let row
   if (showFilter) {
     row = dataFilter.tpopfreiwkontr
-    tpopkontrTotalCount = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
-    tpopkontrFilteredCount =
-      dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
-    const popsOfAp = dataTpopkontrs?.popsOfAp?.nodes ?? []
-    const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
-    tpopkontrsOfApTotalCount = !tpopsOfAp.length
-      ? '...'
-      : tpopsOfAp
-          .map((p) => p?.tpopkontrs?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-    tpopkontrsOfApFilteredCount = !tpopsOfAp.length
-      ? '...'
-      : tpopsOfAp
-          .map((p) => p?.tpopkontrsFiltered?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
+    if (activeNodeArray[3]) {
+      const popsOfAp = dataTpopkontrs?.popsOfAp?.nodes ?? []
+      const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
+      totalNr = !tpopsOfAp.length
+        ? '...'
+        : tpopsOfAp
+            .map((p) => p?.tpopkontrs?.totalCount)
+            .reduce((acc = 0, val) => acc + val)
+      filteredNr = !tpopsOfAp.length
+        ? '...'
+        : tpopsOfAp
+            .map((p) => p?.tpopkontrsFiltered?.totalCount)
+            .reduce((acc = 0, val) => acc + val)
+    } else {
+      totalNr = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
+      filteredNr = dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
+    }
   } else {
     row = data?.tpopkontrById ?? {}
   }
@@ -210,10 +211,8 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
           title="Freiwilligen-Kontrollen"
           treeName={treeName}
           table="tpopfreiwkontr"
-          totalNr={tpopkontrTotalCount}
-          filteredNr={tpopkontrFilteredCount}
-          totalApNr={tpopkontrsOfApTotalCount}
-          filteredApNr={tpopkontrsOfApFilteredCount}
+          totalNr={totalNr}
+          filteredNr={filteredNr}
         />
       )}
       {!(view === 'ekf') && !showFilter && (
