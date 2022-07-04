@@ -15,7 +15,7 @@ export default gql`
       totalCount
     }
     allPops: allPops @include(if: $apIdNotExists) {
-      totalCount
+      totalCount 
     }
     allPopsFiltered: allPops(filter: $popFilter) @include(if: $apIdNotExists) {
       totalCount

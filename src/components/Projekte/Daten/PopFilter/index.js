@@ -74,6 +74,10 @@ const PopFilter = ({ treeName }) => {
       })
       filterArray.push(popFilter)
     }
+    // need to filter by apId
+    if (filterArray.length === 0 && apId) {
+      filterArray.push({ apId: { equalTo: apId } })
+    }
     return { or: filterArray }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apId, dataFilter.pop, dataFilterPopStringified])
@@ -94,6 +98,8 @@ const PopFilter = ({ treeName }) => {
   const filteredNr = apId
     ? dataPops?.popsFiltered?.totalCount ?? '...'
     : dataPops?.allPopsFiltered?.totalCount ?? '...'
+
+  console.log('PopFilter', { apId, dataPops, totalNr, filteredNr, popFilter })
 
   const saveToDb = useCallback(
     async (event) =>
