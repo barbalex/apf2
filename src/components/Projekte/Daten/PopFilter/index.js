@@ -130,8 +130,9 @@ const PopFilter = ({ treeName }) => {
         table: 'pop',
         key: event.target.name,
         value: ifIsNumericAsNumber(event.target.value),
+        index: activeTab,
       }),
-    [dataFilterSetValue, treeName],
+    [activeTab, dataFilterSetValue, treeName],
   )
 
   if (error) return <Error error={error} />
