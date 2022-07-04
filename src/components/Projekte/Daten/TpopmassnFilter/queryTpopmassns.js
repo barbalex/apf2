@@ -3,15 +3,16 @@ import { gql } from '@apollo/client'
 export default gql`
   query tpopmassnsFilterQuery(
     $apIdExists: Boolean!
+    $apIdNotExists: Boolean!
     $tpopmassnFilter: TpopmassnFilter!
     $allTpopmassnFilter: TpopmassnFilter!
     $apId: UUID
   ) {
-    allTpopmassns(filter: $allTpopmassnFilter) @include(if: $apIdExists) {
+    allTpopmassns(filter: $allTpopmassnFilter) @include(if: $apIdNotExists) {
       totalCount
     }
     tpopmassnsFiltered: allTpopmassns(filter: $tpopmassnFilter)
-      @include(if: $apIdExists) {
+      @include(if: $apIdNotExists) {
       totalCount
     }
     popsOfAp: allPops(filter: { apId: { equalTo: $apId } })

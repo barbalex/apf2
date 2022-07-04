@@ -147,7 +147,6 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
       id,
     },
   })
-
   const allTpopkontrFilter = {
     or: [
       { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
@@ -176,10 +175,11 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   })
   const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
     variables: {
-      tpopkontrFilter,
       allTpopkontrFilter,
+      tpopkontrFilter,
       apId,
       apIdExists: !!apId && showFilter,
+      apIdNotExists: !apId && showFilter,
     },
   })
 
@@ -197,28 +197,28 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     [setUrlQuery, urlQuery],
   )
 
-  let tpopkontrTotalCount
-  let tpopkontrFilteredCount
-  let tpopkontrsOfApTotalCount
-  let tpopkontrsOfApFilteredCount
+  let totalNr
+  let filteredNr
   let row
   if (showFilter) {
     row = dataFilter.tpopfeldkontr
-    tpopkontrTotalCount = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
-    tpopkontrFilteredCount =
-      dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
-    const popsOfAp = dataTpopkontrs?.popsOfAp?.nodes ?? []
-    const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
-    tpopkontrsOfApTotalCount = !tpopsOfAp.length
-      ? '...'
-      : tpopsOfAp
-          .map((p) => p?.tpopkontrs?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-    tpopkontrsOfApFilteredCount = !tpopsOfAp.length
-      ? '...'
-      : tpopsOfAp
-          .map((p) => p?.tpopkontrsFiltered?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
+    if (apId) {
+      const pops = dataTpopkontrs?.allPops?.nodes ?? []
+      const tpops = flatten(pops.map((p) => p?.tpops?.nodes ?? []))
+      totalNr = !tpops.length
+        ? '...'
+        : tpops
+            .map((p) => p?.tpopkontrs?.totalCount)
+            .reduce((acc = 0, val) => acc + val)
+      filteredNr = !tpops.length
+        ? '...'
+        : tpops
+            .map((p) => p?.tpopkontrsFiltered?.totalCount)
+            .reduce((acc = 0, val) => acc + val)
+    } else {
+      totalNr = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
+      filteredNr = dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
+    }
   } else {
     row = data?.tpopkontrById ?? {}
   }
@@ -311,10 +311,8 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
             title="Feld-Kontrollen"
             treeName={treeName}
             table="tpopfeldkontr"
-            totalNr={tpopkontrTotalCount}
-            filteredNr={tpopkontrFilteredCount}
-            totalApNr={tpopkontrsOfApTotalCount}
-            filteredApNr={tpopkontrsOfApFilteredCount}
+            totalNr={totalNr}
+            filteredNr={filteredNr}
           />
         ) : (
           <FormTitle

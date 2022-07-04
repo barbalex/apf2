@@ -41,7 +41,8 @@ const PopFilter = ({ treeName }) => {
   const { dataFilterSetValue } = store
   const { activeNodeArray, dataFilter } = store[treeName]
 
-  const apId = activeNodeArray[3]
+  // need to slice to rerender on change
+  const apId = activeNodeArray.slice()[3]
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -62,7 +63,7 @@ const PopFilter = ({ treeName }) => {
     )
     const filterArray = []
     for (const filter of filterArrayInStoreWithoutEmpty) {
-      const popFilter = { apId: { equalTo: apId } }
+      const popFilter = apId ? { apId: { equalTo: apId } } : {}
       const dataFilterPop = { ...filter }
       const popApFilterValues = Object.entries(dataFilterPop).filter(
         (e) => e[1] || e[1] === 0,
@@ -82,12 +83,17 @@ const PopFilter = ({ treeName }) => {
       popFilter,
       apId,
       apIdExists: !!apId,
+      apIdNotExists: !apId,
     },
   })
 
   const row = dataFilter.pop[activeTab]
-  const popOfApTotalCount = dataPops?.pops?.totalCount ?? '...'
-  const popOfApFilteredCount = dataPops?.popsFiltered?.totalCount ?? '...'
+  const totalNr = apId
+    ? dataPops?.pops?.totalCount ?? '...'
+    : dataPops?.allPops?.totalCount ?? '...'
+  const filteredNr = apId
+    ? dataPops?.popsFiltered?.totalCount ?? '...'
+    : dataPops?.allPopsFiltered?.totalCount ?? '...'
 
   const saveToDb = useCallback(
     async (event) =>
@@ -101,6 +107,13 @@ const PopFilter = ({ treeName }) => {
     [activeTab, dataFilterSetValue, treeName],
   )
 
+  console.log('PopFilter', {
+    filteredNr,
+    totalNr,
+    // activeNodeArray: activeNodeArray.slice(),
+    apId,
+  })
+
   if (error) return <Error error={error} />
 
   // if (!row) return null
@@ -112,8 +125,8 @@ const PopFilter = ({ treeName }) => {
           title="Population"
           treeName={treeName}
           table="pop"
-          totalNr={popOfApTotalCount}
-          filteredNr={popOfApFilteredCount}
+          totalNr={totalNr}
+          filteredNr={filteredNr}
           activeTab={activeTab}
         />
         <PopOrTabs

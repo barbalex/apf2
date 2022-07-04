@@ -3,18 +3,18 @@ import { gql } from '@apollo/client'
 export default gql`
   query tpopsQuery(
     $tpopFilter: TpopFilter!
-    $allTpopsFilter: TpopFilter!
-    $apId: UUID!
+    $apId: UUID
     $apIdExists: Boolean!
+    $apIdNotExists: Boolean!
   ) {
-    allTpops(filter: $allTpopsFilter) @include(if: $apIdExists) {
+    allTpops @include(if: $apIdNotExists) {
       totalCount
     }
-    tpopsFiltered: allTpops(filter: $tpopFilter) @include(if: $apIdExists) {
+    allTpopsFiltered: allTpops(filter: $tpopFilter)
+      @include(if: $apIdNotExists) {
       totalCount
     }
-    popsOfAp: allPops(filter: { apId: { equalTo: $apId } })
-      @include(if: $apIdExists) {
+    allPops(filter: { apId: { equalTo: $apId } }) @include(if: $apIdExists) {
       nodes {
         id
         tpops: tpopsByPopId {

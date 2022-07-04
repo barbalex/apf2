@@ -27,7 +27,7 @@ const PopOrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
   const { dataFilterAddOr } = store
 
   const lastFilterIsEmpty =
-    Object.values(dataFilter[dataFilter.length - 1]).filter((v) => v !== null)
+    Object.values(dataFilter[dataFilter.length - 1]??{}).filter((v) => v !== null)
       .length === 0
 
   const onChangeTab = useCallback(
