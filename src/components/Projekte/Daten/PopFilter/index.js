@@ -54,10 +54,6 @@ const PopFilter = ({ treeName }) => {
   // need this so apFilter changes on any change inside a member of dataFilter.ap
   const dataFilterPopStringified = JSON.stringify(dataFilter.pop)
 
-  const allPopsFilter = {
-    apByApId: { projId: { equalTo: activeNodeArray[1] } },
-  }
-
   const popFilter = useMemo(() => {
     const filterArrayInStore = dataFilter.pop ? getSnapshot(dataFilter.pop) : []
     // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
@@ -66,15 +62,12 @@ const PopFilter = ({ treeName }) => {
     )
     const filterArray = []
     for (const filter of filterArrayInStoreWithoutEmpty) {
-      const popFilter = {
-        apId: { isNull: false },
-        apByApId: { projId: { equalTo: activeNodeArray[1] } },
-      }
+      const popFilter = { apId: { equalTo: apId } }
       const dataFilterPop = { ...filter }
-      const popFilterValues = Object.entries(dataFilterPop).filter(
+      const popApFilterValues = Object.entries(dataFilterPop).filter(
         (e) => e[1] || e[1] === 0,
       )
-      popFilterValues.forEach(([key, value]) => {
+      popApFilterValues.forEach(([key, value]) => {
         const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
         popFilter[key] = { [expression]: value }
       })
@@ -82,49 +75,19 @@ const PopFilter = ({ treeName }) => {
     }
     return { or: filterArray }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeNodeArray, dataFilter.pop, dataFilterPopStringified])
-
-  const popApFilter = useMemo(() => {
-    const filterArrayInStore = dataFilter.pop ? getSnapshot(dataFilter.pop) : []
-    // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-    const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
-      (f) => Object.values(f).filter((v) => v !== null).length !== 0,
-    )
-    const filterArray = []
-    for (const filter of filterArrayInStoreWithoutEmpty) {
-      const popApFilter = { apId: { equalTo: apId } }
-      const dataFilterPop = { ...filter }
-      const popApFilterValues = Object.entries(dataFilterPop).filter(
-        (e) => e[1] || e[1] === 0,
-      )
-      popApFilterValues.forEach(([key, value]) => {
-        const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-        popApFilter[key] = { [expression]: value }
-      })
-      filterArray.push(popFilter)
-    }
-    return { or: filterArray }
-  }, [apId, dataFilter.pop, popFilter])
+  }, [apId, dataFilter.pop, dataFilterPopStringified])
 
   const { data: dataPops, error } = useQuery(queryPops, {
     variables: {
-      allPopsFilter,
       popFilter,
-      popApFilter,
       apId,
       apIdExists: !!apId,
     },
   })
 
-  let popTotalCount
-  let popFilteredCount
-  let popOfApTotalCount
-  let popOfApFilteredCount
   const row = dataFilter.pop[activeTab]
-  popTotalCount = dataPops?.allPops?.totalCount ?? '...'
-  popFilteredCount = dataPops?.popsFiltered?.totalCount ?? '...'
-  popOfApTotalCount = dataPops?.popsOfAp?.totalCount ?? '...'
-  popOfApFilteredCount = dataPops?.popsOfApFiltered?.totalCount ?? '...'
+  const popOfApTotalCount = dataPops?.pops?.totalCount ?? '...'
+  const popOfApFilteredCount = dataPops?.popsFiltered?.totalCount ?? '...'
 
   const saveToDb = useCallback(
     async (event) =>
@@ -149,10 +112,8 @@ const PopFilter = ({ treeName }) => {
           title="Population"
           treeName={treeName}
           table="pop"
-          totalNr={popTotalCount}
-          filteredNr={popFilteredCount}
-          totalApNr={popOfApTotalCount}
-          filteredApNr={popOfApFilteredCount}
+          totalNr={popOfApTotalCount}
+          filteredNr={popOfApFilteredCount}
           activeTab={activeTab}
         />
         <PopOrTabs
