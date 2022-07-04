@@ -27,7 +27,6 @@ const Container = styled.div`
 `
 
 const Tpop = ({
-  showFilter,
   saveToDb,
   fieldErrors,
   setFieldErrors,
@@ -101,7 +100,7 @@ const Tpop = ({
         />
         <Status
           apJahr={apJahr}
-          showFilter={showFilter}
+          showFilter={false}
           saveToDb={saveToDb}
           errors={fieldErrors}
           row={row}
@@ -144,9 +143,7 @@ const Tpop = ({
             error={fieldErrors.apberRelevantGrund}
           />
         )}
-        {!showFilter && (
-          <Coordinates row={row} refetchForm={refetchTpop} table="tpop" />
-        )}
+        <Coordinates row={row} refetchForm={refetchTpop} table="tpop" />
         {errorLists ? (
           <div>errorLists.message</div>
         ) : (
@@ -157,7 +154,7 @@ const Tpop = ({
             label="Gemeinde"
             options={dataLists?.allChAdministrativeUnits?.nodes ?? []}
             loading={loadingLists}
-            showLocate={!showFilter}
+            showLocate={true}
             onClickLocate={async () => {
               if (!row.lv95X) {
                 return setFieldErrors({

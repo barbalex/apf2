@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import max from 'lodash/max'
-import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
@@ -32,20 +31,15 @@ const EkfrequenzOptionsContainer = styled.div`
   }
 `
 
-const Ek = ({ treeName,  saveToDb, row, fieldErrors }) => {
+const Ek = ({ treeName, saveToDb, row, fieldErrors }) => {
   const store = useContext(storeContext)
 
   const { activeNodeArray } = store[treeName]
 
   const apId = activeNodeArray[3]
 
-  const {
-    data: dataEk,
-    loading: loadingEk,
-  } = useQuery(queryEk, {
+  const { data: dataEk, loading: loadingEk } = useQuery(queryEk, {
     variables: {
-      id: row?.id || '99999999-9999-9999-9999-999999999999',
-      isEk: true,
       apId,
     },
   })

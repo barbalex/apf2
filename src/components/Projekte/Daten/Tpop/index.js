@@ -7,12 +7,9 @@ import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
 
 import FormTitle from '../../../shared/FormTitle'
-import FilterTitle from '../../../shared/FilterTitle'
 import query from './query'
-import queryTpops from './queryTpops'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopType } from '../../../../store/Tree/DataFilter/tpop'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import Ek from './Ek'
 import Tpop from './Tpop'
@@ -31,7 +28,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   height: 100%;
@@ -85,12 +81,12 @@ const fieldTypes = {
   statusUnklar: 'Boolean',
 }
 
-const TpopForm = ({ treeName, showFilter = false }) => {
+const TpopForm = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { dataFilterSetValue, refetch, urlQuery, setUrlQuery } = store
+  const { refetch, urlQuery, setUrlQuery } = store
 
-  const { activeNodeArray, dataFilter } = store[treeName]
+  const { activeNodeArray } = store[treeName]
   const [tab, setTab] = useState(urlQuery?.tpopTab ?? 'tpop')
   const onChangeTab = useCallback(
     (event, value) => {
@@ -109,8 +105,6 @@ const TpopForm = ({ treeName, showFilter = false }) => {
     activeNodeArray.length > 7
       ? activeNodeArray[7]
       : '99999999-9999-9999-9999-999999999999'
-  if (showFilter) id = '99999999-9999-9999-9999-999999999999'
-  const apId = activeNodeArray[3]
   const {
     data,
     loading,
@@ -123,53 +117,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
   })
   const apJahr = data?.tpopById?.popByPopId?.apByApId?.startJahr ?? null
 
-  const tpopFilter = apId
-    ? {
-        popId: { isNull: false },
-        popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-      }
-    : { popId: { isNull: false } }
-  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  tpopFilterValues.forEach(([key, value]) => {
-    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopFilter[key] = { [expression]: value }
-  })
-
-  const { data: dataTpops } = useQuery(queryTpops, {
-    variables: {
-      tpopFilter,
-      apId,
-      apIdExists: !!apId && showFilter,
-      apIdNotExists: !apId,
-    },
-  })
-
-  let totalNr
-  let filteredNr
-  let row
-  if (showFilter) {
-    row = dataFilter.tpop
-    if (apId) {
-      const pops = dataTpops?.allPops?.nodes ?? []
-      totalNr = !pops.length
-        ? '...'
-        : pops
-            .map((p) => p?.tpops?.totalCount)
-            .reduce((acc = 0, val) => acc + val)
-      filteredNr = !pops.length
-        ? '...'
-        : pops
-            .map((p) => p?.tpopsFiltered?.totalCount)
-            .reduce((acc = 0, val) => acc + val)
-    } else {
-      totalNr = dataTpops?.allTpops?.totalCount
-      filteredNr = dataTpops?.allTpopsFiltered?.totalCount
-    }
-  } else {
-    row = data?.tpopById ?? {}
-  }
+  const row = data?.tpopById ?? {}
 
   const [fieldErrors, setFieldErrors] = useState({})
   const saveToDb = useCallback(
@@ -177,22 +125,14 @@ const TpopForm = ({ treeName, showFilter = false }) => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
 
-      if (showFilter) {
-        return dataFilterSetValue({
-          treeName,
-          table: 'tpop',
-          key: field,
-          value,
-        })
-      } else {
-        const variables = {
-          id: row.id,
-          [field]: value,
-          changedBy: store.user.name,
-        }
-        try {
-          await client.mutate({
-            mutation: gql`
+      const variables = {
+        id: row.id,
+        [field]: value,
+        changedBy: store.user.name,
+      }
+      try {
+        await client.mutate({
+          mutation: gql`
             mutation updateTpop${field}(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -226,64 +166,42 @@ const TpopForm = ({ treeName, showFilter = false }) => {
             ${tpop}
             ${tpopApberrelevantGrundWerte}
           `,
-            variables,
-            // no optimistic responce as geomPoint
-          })
-        } catch (error) {
-          return setFieldErrors({ [field]: error.message })
-        }
-        // update tpop on map
-        if (
-          (value &&
-            ((field === 'ylv95Y' && row?.lv95X) ||
-              (field === 'lv95X' && row?.y))) ||
-          (!value && (field === 'ylv95Y' || field === 'lv95X'))
-        ) {
-          if (refetch.tpopForMap) {
-            // need to also refetch pop in case pop was new
-            refetch.popForMap && refetch.popForMap()
-            refetch.tpopForMap()
-          }
-        }
-        if (Object.keys(fieldErrors).length) {
-          setFieldErrors({})
+          variables,
+          // no optimistic responce as geomPoint
+        })
+      } catch (error) {
+        return setFieldErrors({ [field]: error.message })
+      }
+      // update tpop on map
+      if (
+        (value &&
+          ((field === 'ylv95Y' && row?.lv95X) ||
+            (field === 'lv95X' && row?.y))) ||
+        (!value && (field === 'ylv95Y' || field === 'lv95X'))
+      ) {
+        if (refetch.tpopForMap) {
+          // need to also refetch pop in case pop was new
+          refetch.popForMap && refetch.popForMap()
+          refetch.tpopForMap()
         }
       }
+      if (Object.keys(fieldErrors).length) {
+        setFieldErrors({})
+      }
     },
-    [
-      client,
-      dataFilterSetValue,
-      fieldErrors,
-      refetch,
-      row.id,
-      row?.lv95X,
-      row?.y,
-      showFilter,
-      store.user.name,
-      treeName,
-    ],
+    [client, fieldErrors, refetch, row.id, row?.lv95X, row?.y, store.user.name],
   )
 
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
-          <FilterTitle
-            title="Teil-Population"
-            treeName={treeName}
-            table="tpop"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
-          />
-        ) : (
-          <FormTitle
-            apId={data?.tpopById?.popByPopId?.apId}
-            title="Teil-Population"
-            treeName={treeName}
-          />
-        )}
+      <Container>
+        <FormTitle
+          apId={data?.tpopById?.popByPopId?.apId}
+          title="Teil-Population"
+          treeName={treeName}
+        />
         <FieldsContainer>
           <Tabs
             value={tab}
@@ -294,17 +212,12 @@ const TpopForm = ({ treeName, showFilter = false }) => {
           >
             <StyledTab label="Teil-Population" value="tpop" data-id="tpop" />
             <StyledTab label="EK" value="ek" data-id="ek" />
-            {!showFilter && (
-              <StyledTab label="Dateien" value="dateien" data-id="dateien" />
-            )}
-            {!showFilter && (
-              <StyledTab label="Historien" value="history" data-id="history" />
-            )}
+            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+            <StyledTab label="Historien" value="history" data-id="history" />
           </Tabs>
           <TabContent>
             {tab === 'tpop' ? (
               <Tpop
-                showFilter={showFilter}
                 saveToDb={saveToDb}
                 fieldErrors={fieldErrors}
                 setFieldErrors={setFieldErrors}
@@ -317,7 +230,6 @@ const TpopForm = ({ treeName, showFilter = false }) => {
             ) : tab === 'ek' ? (
               <Ek
                 treeName={treeName}
-                showFilter={showFilter}
                 saveToDb={saveToDb}
                 fieldErrors={fieldErrors}
                 row={row}

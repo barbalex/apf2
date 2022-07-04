@@ -77,8 +77,6 @@ const Status = ({ apJahr, showFilter, saveToDb, row = {}, errors }) => {
   const statusSelected =
     herkunftValue !== null && herkunftValue !== undefined ? herkunftValue : ''
 
-  console.log('Status', { row, apJahr })
-
   let angesiedeltLabel = 'angesiedelt:'
   if (!!apJahr && !!bekanntSeitStateValue) {
     if (apJahr <= bekanntSeitStateValue) {
