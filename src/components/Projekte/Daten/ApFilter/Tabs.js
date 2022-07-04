@@ -30,8 +30,6 @@ const OrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
     dataFilter.length === 1 &&
     Object.values(dataFilter[0]).filter((v) => v !== null).length === 0
 
-  console.log('ApOrTabs, filter is empty:', filterIsEmpty)
-
   const onChangeTab = useCallback(
     (event, value) => {
       if (filterIsEmpty) return
