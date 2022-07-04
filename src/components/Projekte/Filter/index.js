@@ -30,7 +30,7 @@ const Filter = ({ treeName }) => {
         {activeTab === 'tpop' && <TpopFilter treeName={treeName} />}
         {activeTab === 'tpopmassn' && <TpopmassnFilter treeName={treeName} />}
         {activeTab === 'tpopfeldkontr' && (
-          <TpopfeldkontrFilter treeName={treeName} showFilter={true} />
+          <TpopfeldkontrFilter treeName={treeName} />
         )}
         {activeTab === 'tpopfreiwkontr' && (
           <Tpopfreiwkontr treeName={treeName} showFilter={true} />
