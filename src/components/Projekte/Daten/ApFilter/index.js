@@ -207,7 +207,10 @@ const ApFilter = ({ treeName }) => {
     ...(errorLists ? [errorLists] : []),
     ...(errorAeTaxonomiesById ? [errorAeTaxonomiesById] : []),
   ]
+
   if (errors.length) return <Error errors={errors} />
+
+  if (!row) return null
 
   return (
     <ErrorBoundary>

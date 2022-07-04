@@ -22,7 +22,7 @@ import { simpleTypes as popType } from '../../../../store/Tree/DataFilter/pop'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
-import OrTabs from './Tabs'
+import PopOrTabs from './Tabs'
 
 const Container = styled.div`
   height: 100%;
@@ -33,7 +33,6 @@ const Container = styled.div`
 `
 const FormContainer = styled.div`
   padding: 10px;
-  padding-top: 0;
   overflow-y: auto;
 `
 
@@ -51,6 +50,9 @@ const PopFilter = ({ treeName }) => {
       setActiveTab(0)
     }
   }, [activeTab, dataFilter.pop.length])
+
+  // need this so apFilter changes on any change inside a member of dataFilter.ap
+  const dataFilterPopStringified = JSON.stringify(dataFilter.pop)
 
   const allPopsFilter = {
     apByApId: { projId: { equalTo: activeNodeArray[1] } },
@@ -79,7 +81,8 @@ const PopFilter = ({ treeName }) => {
       filterArray.push(popFilter)
     }
     return { or: filterArray }
-  }, [activeNodeArray, dataFilter.pop])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeNodeArray, dataFilter.pop, dataFilterPopStringified])
 
   const popApFilter = useMemo(() => {
     const filterArrayInStore = dataFilter.pop ? getSnapshot(dataFilter.pop) : []
@@ -117,7 +120,7 @@ const PopFilter = ({ treeName }) => {
   let popFilteredCount
   let popOfApTotalCount
   let popOfApFilteredCount
-  const row = dataFilter.pop
+  const row = dataFilter.pop[activeTab]
   popTotalCount = dataPops?.allPops?.totalCount ?? '...'
   popFilteredCount = dataPops?.popsFiltered?.totalCount ?? '...'
   popOfApTotalCount = dataPops?.popsOfAp?.totalCount ?? '...'
@@ -136,6 +139,9 @@ const PopFilter = ({ treeName }) => {
   )
 
   if (error) return <Error error={error} />
+
+  // if (!row) return null
+
   return (
     <ErrorBoundary>
       <Container>
@@ -149,7 +155,7 @@ const PopFilter = ({ treeName }) => {
           filteredApNr={popOfApFilteredCount}
           activeTab={activeTab}
         />
-        <OrTabs
+        <PopOrTabs
           dataFilter={dataFilter.pop}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -166,7 +172,7 @@ const PopFilter = ({ treeName }) => {
               label="Nr."
               name="nr"
               type="number"
-              value={row.nr}
+              value={row?.nr}
               saveToDb={saveToDb}
             />
             <TextFieldWithInfo
@@ -174,7 +180,7 @@ const PopFilter = ({ treeName }) => {
               name="name"
               type="text"
               popover="Dieses Feld möglichst immer ausfüllen"
-              value={row.name}
+              value={row?.name}
               saveToDb={saveToDb}
             />
             <Status
@@ -186,7 +192,7 @@ const PopFilter = ({ treeName }) => {
             <Checkbox2States
               label="Status unklar"
               name="statusUnklar"
-              value={row.statusUnklar}
+              value={row?.statusUnklar}
               saveToDb={saveToDb}
             />
             <TextField
@@ -194,7 +200,7 @@ const PopFilter = ({ treeName }) => {
               name="statusUnklarBegruendung"
               type="text"
               multiLine
-              value={row.statusUnklarBegruendung}
+              value={row?.statusUnklarBegruendung}
               saveToDb={saveToDb}
             />
           </SimpleBar>

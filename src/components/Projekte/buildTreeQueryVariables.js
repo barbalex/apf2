@@ -132,7 +132,7 @@ const buildTreeQueryVariables = ({
     isAp &&
     openNodes.some((nArray) => nArray[4] === 'Populationen' && nArray[5])
 
-  const popFilterArrayInStore = dataFilter.ap
+  const popFilterArrayInStore = dataFilter.pop
   // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
   const popFilterArrayInStoreWithoutEmpty = popFilterArrayInStore.filter(
     (f) => Object.values(f).filter((v) => v !== null).length !== 0,

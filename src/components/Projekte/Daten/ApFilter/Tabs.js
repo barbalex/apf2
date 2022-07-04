@@ -26,13 +26,12 @@ const OrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterAddOr } = store
 
-  const filterIsEmpty =
-    dataFilter.length === 1 &&
-    Object.values(dataFilter[0]).filter((v) => v !== null).length === 0
+  const lastFilterIsEmpty =
+    Object.values(dataFilter[dataFilter.length - 1]).filter((v) => v !== null)
+      .length === 0
 
   const onChangeTab = useCallback(
     (event, value) => {
-      if (filterIsEmpty) return
       if (value > dataFilter.length - 1) {
         dataFilterAddOr({ treeName, table: 'ap', val: ap })
         setTimeout(() => setActiveTab(value), 0)
@@ -40,7 +39,7 @@ const OrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
       }
       setActiveTab(value)
     },
-    [dataFilter.length, dataFilterAddOr, filterIsEmpty, setActiveTab, treeName],
+    [dataFilter.length, dataFilterAddOr, setActiveTab, treeName],
   )
 
   return (
@@ -61,7 +60,7 @@ const OrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
           key={dataFilter.length}
           label="oder"
           value={dataFilter.length}
-          disabled={filterIsEmpty}
+          disabled={lastFilterIsEmpty}
         />
       </StyledTabs>
     </Row>
