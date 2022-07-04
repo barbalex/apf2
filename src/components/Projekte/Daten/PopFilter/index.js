@@ -107,13 +107,6 @@ const PopFilter = ({ treeName }) => {
     [activeTab, dataFilterSetValue, treeName],
   )
 
-  console.log('PopFilter', {
-    filteredNr,
-    totalNr,
-    // activeNodeArray: activeNodeArray.slice(),
-    apId,
-  })
-
   if (error) return <Error error={error} />
 
   // if (!row) return null
