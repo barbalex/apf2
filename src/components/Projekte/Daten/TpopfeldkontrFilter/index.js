@@ -14,7 +14,6 @@ import Select from '../../../shared/Select'
 import JesNo from '../../../shared/JesNo'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import DateField from '../../../shared/Date'
-import StringToCopy from '../../../shared/StringToCopy'
 import FilterTitle from '../../../shared/FilterTitle'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
@@ -84,16 +83,9 @@ const TpopfeldkontrFilter = ({ treeName }) => {
   const { dataFilterSetValue, urlQuery, setUrlQuery } = store
   const { activeNodeArray, dataFilter, filterWidth } = store[treeName]
 
-  const [fieldErrors, setFieldErrors] = useState({})
-
-  const id = '99999999-9999-9999-9999-999999999999'
   const width = filterWidth
   const apId = activeNodeArray[3]
-  const { data, loading, error } = useQuery(query, {
-    variables: {
-      id,
-    },
-  })
+  const { data, loading, error } = useQuery(query)
   const allTpopkontrFilter = {
     or: [
       { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
@@ -225,14 +217,12 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       type="number"
                       value={row.jahr}
                       saveToDb={saveToDb}
-                      error={fieldErrors.jahr}
                     />
                     <DateField
                       name="datum"
                       label="Datum"
                       value={row.datum}
                       saveToDb={saveToDb}
-                      error={fieldErrors.datum}
                     />
                     <RadioButtonGroup
                       name="typ"
@@ -240,7 +230,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       dataSource={tpopkontrTypWerte}
                       value={row.typ}
                       saveToDb={saveToDb}
-                      error={fieldErrors.typ}
                     />
                     <Select
                       name="bearbeiter"
@@ -249,14 +238,12 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       loading={loading}
                       value={row.bearbeiter}
                       saveToDb={saveToDb}
-                      error={fieldErrors.bearbeiter}
                     />
                     <JesNo
                       name="jungpflanzenVorhanden"
                       label="Jungpflanzen vorhanden"
                       value={row.jungpflanzenVorhanden}
                       saveToDb={saveToDb}
-                      error={fieldErrors.jungpflanzenVorhanden}
                     />
                     <TextField
                       name="vitalitaet"
@@ -264,7 +251,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       type="text"
                       value={row.vitalitaet}
                       saveToDb={saveToDb}
-                      error={fieldErrors.vitalitaet}
                     />
                     <TextField
                       name="ueberlebensrate"
@@ -272,7 +258,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       type="number"
                       value={row.ueberlebensrate}
                       saveToDb={saveToDb}
-                      error={fieldErrors.ueberlebensrate}
                     />
                     <RadioButtonGroupWithInfo
                       name="entwicklung"
@@ -282,7 +267,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       popover={TpopfeldkontrentwicklungPopover}
                       value={row.entwicklung}
                       saveToDb={saveToDb}
-                      error={fieldErrors.entwicklung}
                     />
                     <TextField
                       name="ursachen"
@@ -292,7 +276,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       multiLine
                       value={row.ursachen}
                       saveToDb={saveToDb}
-                      error={fieldErrors.ursachen}
                     />
                     <TextField
                       name="gefaehrdung"
@@ -301,7 +284,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       multiLine
                       value={row.gefaehrdung}
                       saveToDb={saveToDb}
-                      error={fieldErrors.gefaehrdung}
                     />
                     <TextField
                       name="erfolgsbeurteilung"
@@ -310,7 +292,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       multiLine
                       value={row.erfolgsbeurteilung}
                       saveToDb={saveToDb}
-                      error={fieldErrors.erfolgsbeurteilung}
                     />
                     <TextField
                       name="umsetzungAendern"
@@ -319,7 +300,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       multiLine
                       value={row.umsetzungAendern}
                       saveToDb={saveToDb}
-                      error={fieldErrors.umsetzungAendern}
                     />
                     <TextField
                       name="kontrolleAendern"
@@ -328,21 +308,18 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       multiLine
                       value={row.kontrolleAendern}
                       saveToDb={saveToDb}
-                      error={fieldErrors.kontrolleAendern}
                     />
                     <MdField
                       name="bemerkungen"
                       label="Bemerkungen"
                       value={row.bemerkungen}
                       saveToDb={saveToDb}
-                      error={fieldErrors.bemerkungen}
                     />
                     <JesNo
                       name="apberNichtRelevant"
                       label="Im Jahresbericht nicht berücksichtigen"
                       value={row.apberNichtRelevant}
                       saveToDb={saveToDb}
-                      error={fieldErrors.apberNichtRelevant}
                     />
                     <TextField
                       name="apberNichtRelevantGrund"
@@ -351,7 +328,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       multiLine
                       value={row.apberNichtRelevantGrund}
                       saveToDb={saveToDb}
-                      error={fieldErrors.apberNichtRelevantGrund}
                     />
                   </FormContainer>
                 </SimpleBar>
@@ -365,7 +341,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       type="number"
                       value={row.flaeche}
                       saveToDb={saveToDb}
-                      error={fieldErrors.flaeche}
                     />
                     <Section>Vegetation</Section>
                     <Select
@@ -376,7 +351,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       loading={loading}
                       value={row.lrDelarze}
                       saveToDb={saveToDb}
-                      error={fieldErrors.lrDelarze}
                     />
                     <Select
                       name="lrUmgebungDelarze"
@@ -385,7 +359,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       loading={loading}
                       value={row.lrUmgebungDelarze}
                       saveToDb={saveToDb}
-                      error={fieldErrors.lrUmgebungDelarze}
                     />
                     <TextField
                       name="vegetationstyp"
@@ -393,7 +366,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       type="text"
                       value={row.vegetationstyp}
                       saveToDb={saveToDb}
-                      error={fieldErrors.vegetationstyp}
                     />
                     <TextField
                       name="konkurrenz"
@@ -401,7 +373,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       type="text"
                       value={row.konkurrenz}
                       saveToDb={saveToDb}
-                      error={fieldErrors.konkurrenz}
                     />
                     <TextField
                       name="moosschicht"
@@ -409,7 +380,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       type="text"
                       value={row.moosschicht}
                       saveToDb={saveToDb}
-                      error={fieldErrors.moosschicht}
                     />
                     <TextField
                       name="krautschicht"
@@ -417,7 +387,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       type="text"
                       value={row.krautschicht}
                       saveToDb={saveToDb}
-                      error={fieldErrors.krautschicht}
                     />
                     <TextField
                       name="strauchschicht"
@@ -425,7 +394,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       type="text"
                       value={row.strauchschicht}
                       saveToDb={saveToDb}
-                      error={fieldErrors.strauchschicht}
                     />
                     <TextField
                       name="baumschicht"
@@ -433,7 +401,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       type="text"
                       value={row.baumschicht}
                       saveToDb={saveToDb}
-                      error={fieldErrors.baumschicht}
                     />
                     <Section>Beurteilung</Section>
                     <TextField
@@ -443,7 +410,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       multiline
                       value={row.handlungsbedarf}
                       saveToDb={saveToDb}
-                      error={fieldErrors.handlungsbedarf}
                     />
                     <RadioButtonGroup
                       name="idealbiotopUebereinstimmung"
@@ -454,7 +420,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       loading={loading}
                       value={row.idealbiotopUebereinstimmung}
                       saveToDb={saveToDb}
-                      error={fieldErrors.idealbiotopUebereinstimmung}
                     />
                   </FormContainer>
                 </SimpleBar>

@@ -3,10 +3,7 @@ import { gql } from '@apollo/client'
 import { tpopfeldkontr } from '../../../shared/fragments'
 
 export default gql`
-  query tpopkontrByIdQueryForEk($id: UUID!) {
-    tpopkontrById(id: $id) {
-      ...TpopfeldkontrFields
-    }
+  query tpopkontrByIdQueryForEk {
     allTpopkontrIdbiotuebereinstWertes(orderBy: SORT_ASC) {
       nodes {
         value: code
