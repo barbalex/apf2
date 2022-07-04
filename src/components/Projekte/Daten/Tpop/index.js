@@ -265,6 +265,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
   )
 
   if (error) return <Error error={error} />
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
