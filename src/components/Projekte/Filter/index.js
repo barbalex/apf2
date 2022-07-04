@@ -6,7 +6,7 @@ import PopFilter from '../Daten/PopFilter'
 import TpopFilter from '../Daten/TpopFilter'
 import TpopmassnFilter from '../Daten/TpopmassnFilter'
 import TpopfeldkontrFilter from '../Daten/TpopfeldkontrFilter'
-import Tpopfreiwkontr from '../Daten/Tpopfreiwkontr'
+import TpopfreiwkontrFilter from '../Daten/TpopfreiwkontrFilter'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Title from './Title'
 
@@ -33,7 +33,7 @@ const Filter = ({ treeName }) => {
           <TpopfeldkontrFilter treeName={treeName} />
         )}
         {activeTab === 'tpopfreiwkontr' && (
-          <Tpopfreiwkontr treeName={treeName} showFilter={true} />
+          <TpopfreiwkontrFilter treeName={treeName} />
         )}
       </Container>
     </ErrorBoundary>
