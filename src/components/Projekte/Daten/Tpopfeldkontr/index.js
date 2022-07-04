@@ -2,7 +2,6 @@ import React, { useState, useCallback, useContext } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
-import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
@@ -15,15 +14,12 @@ import JesNo from '../../../shared/JesNo'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import DateField from '../../../shared/Date'
 import StringToCopy from '../../../shared/StringToCopy'
-import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from '../../../shared/FormTitle'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
 import query from './query'
-import queryTpopkontrs from './queryTpopkontrs'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopfeldkontrType } from '../../../../store/Tree/DataFilter/tpopfeldkontr'
 import Files from '../../../shared/Files'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -36,7 +32,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   display: flex;
@@ -126,12 +121,11 @@ const tpopkontrTypWerte = [
   },
 ]
 
-const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
+const Tpopfeldkontr = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { dataFilterSetValue, urlQuery, setUrlQuery } = store
-  const { activeNodeArray, dataFilter, formWidth, filterWidth } =
-    store[treeName]
+  const { urlQuery, setUrlQuery } = store
+  const { activeNodeArray, formWidth } = store[treeName]
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -139,47 +133,10 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     activeNodeArray.length > 9
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
-  if (showFilter) id = '99999999-9999-9999-9999-999999999999'
-  const width = showFilter ? filterWidth : formWidth
-  const apId = activeNodeArray[3]
+  const width = formWidth
   const { data, loading, error } = useQuery(query, {
     variables: {
       id,
-    },
-  })
-  const allTpopkontrFilter = {
-    or: [
-      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
-      { typ: { isNull: true } },
-    ],
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopkontrFilter = {
-    or: [
-      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
-      { typ: { isNull: true } },
-    ],
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopfeldkontrFilterValues = Object.entries(
-    dataFilter.tpopfeldkontr,
-  ).filter((e) => e[1] || e[1] === 0)
-  tpopfeldkontrFilterValues.forEach(([key, value]) => {
-    const expression =
-      tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopkontrFilter[key] = { [expression]: value }
-  })
-  const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
-    variables: {
-      allTpopkontrFilter,
-      tpopkontrFilter,
-      apId,
-      apIdExists: !!apId && showFilter,
-      apIdNotExists: !apId && showFilter,
     },
   })
 
@@ -197,46 +154,12 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     [setUrlQuery, urlQuery],
   )
 
-  let totalNr
-  let filteredNr
-  let row
-  if (showFilter) {
-    row = dataFilter.tpopfeldkontr
-    if (apId) {
-      const pops = dataTpopkontrs?.allPops?.nodes ?? []
-      const tpops = flatten(pops.map((p) => p?.tpops?.nodes ?? []))
-      totalNr = !tpops.length
-        ? '...'
-        : tpops
-            .map((p) => p?.tpopkontrs?.totalCount)
-            .reduce((acc = 0, val) => acc + val)
-      filteredNr = !tpops.length
-        ? '...'
-        : tpops
-            .map((p) => p?.tpopkontrsFiltered?.totalCount)
-            .reduce((acc = 0, val) => acc + val)
-    } else {
-      totalNr = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
-      filteredNr = dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
-    }
-  } else {
-    row = data?.tpopkontrById ?? {}
-  }
+  const row = data?.tpopkontrById ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
-
-      if (showFilter) {
-        dataFilterSetValue({
-          treeName,
-          table: 'tpopfeldkontr',
-          key: field,
-          value,
-        })
-        return
-      }
 
       const variables = {
         id: row.id,
@@ -287,7 +210,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
       }
       setFieldErrors({})
     },
-    [client, dataFilterSetValue, row, showFilter, store.user.name, treeName],
+    [client, row.id, store.user.name],
   )
 
   const aeLrWerte = (data?.allAeLrDelarzes?.nodes ?? [])
@@ -305,22 +228,12 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
-          <FilterTitle
-            title="Feld-Kontrollen"
-            treeName={treeName}
-            table="tpopfeldkontr"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
-          />
-        ) : (
-          <FormTitle
-            apId={activeNodeArray[3]}
-            title="Feld-Kontrolle"
-            treeName={treeName}
-          />
-        )}
+      <Container>
+        <FormTitle
+          apId={activeNodeArray[3]}
+          title="Feld-Kontrolle"
+          treeName={treeName}
+        />
         <FieldsContainer>
           <Tabs
             value={tab}
@@ -335,9 +248,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
               data-id="entwicklung"
             />
             <StyledTab label="Biotop" value="biotop" data-id="biotop" />
-            {!showFilter && (
-              <StyledTab label="Dateien" value="dateien" data-id="dateien" />
-            )}
+            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
           </Tabs>
           <div style={{ overflowY: 'auto' }}>
             <TabContent>
@@ -478,7 +389,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       saveToDb={saveToDb}
                       error={fieldErrors.apberNichtRelevantGrund}
                     />
-                    {!showFilter && <StringToCopy text={row.id} label="id" />}
+                    <StringToCopy text={row.id} label="id" />
                   </FormContainer>
                 </SimpleBar>
               )}
@@ -585,7 +496,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                   </FormContainer>
                 </SimpleBar>
               )}
-              {tab === 'dateien' && !showFilter && (
+              {tab === 'dateien' && (
                 <Files parentId={row.id} parent="tpopkontr" />
               )}
             </TabContent>
