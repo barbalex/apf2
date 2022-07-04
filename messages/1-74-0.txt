@@ -1,1 +1,1 @@
-Ab Version 1.74.0: Man kann auf auf Stufe Population mehrere Filter mit "oder" verbinden. Zum Beispiel: Status "ursprünglich, aktuell" oder "ursprünglich, erloschen"
+Ab Version 1.74.1: Man kann auf auf Stufe Population mehrere Filter mit "oder" verbinden. Zum Beispiel: Status "ursprünglich, aktuell" oder "ursprünglich, erloschen"
