@@ -10,6 +10,7 @@ import Map, { defaultValue as defaultMap } from './Map'
 import initialDataFilterValues from './DataFilter/initialValues'
 import DataFilter from './DataFilter/types'
 import simpleTypes from './DataFilter/simpleTypes'
+import { simpleTypes as popType, initial as initialPop } from './DataFilter/pop'
 import apIdInUrl from '../../modules/apIdInUrl'
 import projIdInUrl from '../../modules/projIdInUrl'
 import ekfIdInUrl from '../../modules/ekfIdInUrl'
@@ -131,6 +132,46 @@ export default types
       return result
     },
     get popGqlFilter() {
+      // need to slice to rerender on change
+      const apId = self.activeNodeArray.slice()[3]
+      const filterArrayInStore = self.dataFilter.pop
+        ? getSnapshot(self.dataFilter.pop)
+        : []
+      // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
+      const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
+        (f) => Object.values(f).filter((v) => v !== null).length !== 0,
+      )
+      if (filterArrayInStoreWithoutEmpty.length === 0) {
+        // add empty filter
+        filterArrayInStoreWithoutEmpty.push(initialPop)
+      }
+      const filterArray = []
+      for (const filter of filterArrayInStoreWithoutEmpty) {
+        const popFilter = apId ? { apId: { equalTo: apId } } : {}
+        const dataFilterPop = { ...filter }
+        const popApFilterValues = Object.entries(dataFilterPop).filter(
+          (e) => e[1] || e[1] === 0,
+        )
+        popApFilterValues.forEach(([key, value]) => {
+          const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
+          popFilter[key] = { [expression]: value }
+        })
+        if (self.nodeLabelFilter.pop) {
+          popFilter.label = {
+            includesInsensitive: self.nodeLabelFilter.pop,
+          }
+        }
+        // do not add empty object
+        if (Object.keys(popFilter).length === 0) break
+        filterArray.push(popFilter)
+      }
+      // need to filter by apId
+      if (filterArray.length === 0 && apId) {
+        filterArray.push({ apId: { equalTo: apId } })
+      }
+      return { or: filterArray }
+    },
+    get popGqlFilterOld() {
       const result = Object.fromEntries(
         Object.entries(getSnapshot(self.dataFilter.pop))
           // eslint-disable-next-line no-unused-vars

@@ -19,8 +19,6 @@ const Pops = ({ treeName }) => {
     table: 'pop',
   })
 
-  console.log('Exporte, Pops, popGqlFilter:', popGqlFilter)
-
   return (
     <DownloadCardButton
       color="inherit"

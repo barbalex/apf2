@@ -99,6 +99,8 @@ const Projekte = () => {
   const tree2NodeLabelFilter = getSnapshot(store.tree2.nodeLabelFilter)
   const tree2OpenNodes = getSnapshot(store.tree2.openNodes)
   const tree2ApFilter = store.tree2.apFilter
+  const popGqlFilterTree = store.tree.popGqlFilter
+  const popGqlFilterTree2 = store.tree2.popGqlFilter
 
   const queryTreeVariables = useMemo(
     () =>
@@ -108,6 +110,7 @@ const Projekte = () => {
         apFilter: treeApFilter,
         nodeLabelFilter: treeNodeLabelFilter,
         apIdInActiveNodeArray,
+        popGqlFilter: popGqlFilterTree,
       }),
     [
       treeDataFilter,
@@ -115,6 +118,7 @@ const Projekte = () => {
       treeNodeLabelFilter,
       treeOpenNodes,
       apIdInActiveNodeArray,
+      popGqlFilterTree,
     ],
   )
   const queryTree2Variables = useMemo(
@@ -125,6 +129,7 @@ const Projekte = () => {
         apFilter: tree2ApFilter,
         nodeLabelFilter: tree2NodeLabelFilter,
         apIdInActiveNodeArray,
+        popGqlFilter: popGqlFilterTree2,
       }),
     [
       tree2DataFilter,
@@ -132,6 +137,7 @@ const Projekte = () => {
       tree2NodeLabelFilter,
       tree2OpenNodes,
       apIdInActiveNodeArray,
+      popGqlFilterTree2,
     ],
   )
 

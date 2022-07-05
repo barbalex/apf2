@@ -2,13 +2,11 @@ import uniq from 'lodash/uniq'
 import isUuid from 'is-uuid'
 
 import { simpleTypes as apType } from '../../store/Tree/DataFilter/ap'
-import { simpleTypes as popType } from '../../store/Tree/DataFilter/pop'
 import { simpleTypes as tpopType } from '../../store/Tree/DataFilter/tpop'
 import { simpleTypes as tpopmassnType } from '../../store/Tree/DataFilter/tpopmassn'
 import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tpopfeldkontr'
 import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
 import { initial as apInitialValue } from '../../store/Tree/DataFilter/ap'
-import { initial as popInitialValue } from '../../store/Tree/DataFilter/pop'
 
 /**
  * returns a filter for every branch of the nav tree
@@ -35,7 +33,7 @@ const buildTreeQueryVariables = ({
   openNodes,
   apFilter: apFilterSet,
   nodeLabelFilter,
-  apIdInActiveNodeArray,
+  apIdInActiveNodeArray,popGqlFilter
 }) => {
   // apFilter is used for form nodeLabelFilter AND apFilter of tree :-(
   const isWerteListen = openNodes.some(
@@ -138,34 +136,6 @@ const buildTreeQueryVariables = ({
   const isPop =
     isAp &&
     openNodes.some((nArray) => nArray[4] === 'Populationen' && nArray[5])
-
-  const popFilterArrayInStore = dataFilter.pop
-  // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-  const popFilterArrayInStoreWithoutEmpty = popFilterArrayInStore.filter(
-    (f) => Object.values(f).filter((v) => v !== null).length !== 0,
-  )
-  if (popFilterArrayInStoreWithoutEmpty.length === 0) {
-    popFilterArrayInStoreWithoutEmpty.push(popInitialValue)
-  }
-  const popFilterArray = []
-  for (const filter of popFilterArrayInStoreWithoutEmpty) {
-    const singleFilter = { apId: { in: ap } }
-    const dataFilterPop = { ...filter }
-    const popFilterValues = Object.entries(dataFilterPop).filter(
-      (e) => e[1] || e[1] === 0,
-    )
-    popFilterValues.forEach(([key, value]) => {
-      const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-      singleFilter[key] = { [expression]: value }
-    })
-    if (nodeLabelFilter.pop) {
-      singleFilter.label = {
-        includesInsensitive: nodeLabelFilter.pop,
-      }
-    }
-    popFilterArray.push(singleFilter)
-  }
-  const popFilter = { or: popFilterArray }
 
   const tpop = uniq(
     openNodes
@@ -340,7 +310,7 @@ const buildTreeQueryVariables = ({
       includesInsensitive: nodeLabelFilter.popmassnber,
     }
   }
-  const popsFilter = { ...popFilter }
+  const popsFilter = popGqlFilter
   const tpopbersFilter = { tpopId: { in: tpop } }
   if (nodeLabelFilter.tpopber) {
     tpopbersFilter.label = {

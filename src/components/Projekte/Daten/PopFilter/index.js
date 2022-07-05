@@ -1,15 +1,8 @@
-import React, {
-  useContext,
-  useCallback,
-  useState,
-  useEffect,
-  useMemo,
-} from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
-import { getSnapshot } from 'mobx-state-tree'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -18,10 +11,6 @@ import Checkbox2States from '../../../shared/Checkbox2States'
 import FilterTitle from '../../../shared/FilterTitle'
 import queryPops from './queryPops'
 import storeContext from '../../../../storeContext'
-import {
-  simpleTypes as popType,
-  initial as initialPop,
-} from '../../../../store/Tree/DataFilter/pop'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
@@ -47,7 +36,8 @@ const NodeLabelFilterComment = styled.div`
 const PopFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
-  const { activeNodeArray, dataFilter, nodeLabelFilter } = store[treeName]
+  const { activeNodeArray, dataFilter, nodeLabelFilter, popGqlFilter } =
+    store[treeName]
 
   // need to slice to rerender on change
   const apId = activeNodeArray.slice()[3]
@@ -60,48 +50,9 @@ const PopFilter = ({ treeName }) => {
     }
   }, [activeTab, dataFilter.pop.length])
 
-  // need this so apFilter changes on any change inside a member of dataFilter.ap
-  const dataFilterPopStringified = JSON.stringify(dataFilter.pop)
-
-  const popFilter = useMemo(() => {
-    const filterArrayInStore = dataFilter.pop ? getSnapshot(dataFilter.pop) : []
-    // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-    const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
-      (f) => Object.values(f).filter((v) => v !== null).length !== 0,
-    )
-    if (filterArrayInStoreWithoutEmpty.length === 0) {
-      // add empty filter
-      filterArrayInStoreWithoutEmpty.push(initialPop)
-    }
-    const filterArray = []
-    for (const filter of filterArrayInStoreWithoutEmpty) {
-      const popFilter = apId ? { apId: { equalTo: apId } } : {}
-      const dataFilterPop = { ...filter }
-      const popApFilterValues = Object.entries(dataFilterPop).filter(
-        (e) => e[1] || e[1] === 0,
-      )
-      popApFilterValues.forEach(([key, value]) => {
-        const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-        popFilter[key] = { [expression]: value }
-      })
-      if (nodeLabelFilter.pop) {
-        popFilter.label = {
-          includesInsensitive: nodeLabelFilter.pop,
-        }
-      }
-      filterArray.push(popFilter)
-    }
-    // need to filter by apId
-    if (filterArray.length === 0 && apId) {
-      filterArray.push({ apId: { equalTo: apId } })
-    }
-    return { or: filterArray }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apId, dataFilter.pop, dataFilterPopStringified, nodeLabelFilter.pop])
-
   const { data: dataPops, error } = useQuery(queryPops, {
     variables: {
-      popFilter,
+      popFilter: popGqlFilter,
       apId,
       apIdExists: !!apId,
       apIdNotExists: !apId,
@@ -115,8 +66,6 @@ const PopFilter = ({ treeName }) => {
   const filteredNr = apId
     ? dataPops?.popsFiltered?.totalCount ?? '...'
     : dataPops?.allPopsFiltered?.totalCount ?? '...'
-
-  // console.log('PopFilter', { apId, dataPops, totalNr, filteredNr, popFilter })
 
   const saveToDb = useCallback(
     async (event) =>
