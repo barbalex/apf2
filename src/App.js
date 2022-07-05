@@ -65,8 +65,6 @@ const App = ({ element }) => {
       'notifications',
       'ekfIds',
       'hideMapControls',
-      'tree.dataFilter',
-      'tree2.dataFilter',
     ]
     import('mst-persist').then((module) =>
       module
