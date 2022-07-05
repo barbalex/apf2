@@ -6,12 +6,15 @@ import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const Ap = () => {
+const Ap = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, apGqlFilter, dataFilterTableIsFiltered } = store
+  const { enqueNotification, dataFilterTableIsFiltered } = store
+  const { apGqlFilter } = store[treeName]
 
   const [queryState, setQueryState] = useState()
+
+  console.log('Exporte, Ap', { treeName, apGqlFilter })
 
   const onClickAp = useCallback(async () => {
     setQueryState('lade Daten...')

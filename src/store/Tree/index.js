@@ -1,4 +1,4 @@
-import { types, getParent } from 'mobx-state-tree'
+import { types, getParent, getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 import queryString from 'query-string'
 import { navigate } from 'gatsby'
@@ -9,6 +9,7 @@ import NodeLabelFilter, {
 import Map, { defaultValue as defaultMap } from './Map'
 import initialDataFilterValues from './DataFilter/initialValues'
 import DataFilter from './DataFilter/types'
+import simpleTypes from './DataFilter/simpleTypes'
 import apIdInUrl from '../../modules/apIdInUrl'
 import projIdInUrl from '../../modules/projIdInUrl'
 import ekfIdInUrl from '../../modules/ekfIdInUrl'
@@ -16,6 +17,7 @@ import apberuebersichtIdInUrl from '../../modules/apberuebersichtIdInUrl'
 import apberIdInUrl from '../../modules/apberIdInUrl'
 import popIdInUrl from '../../modules/popIdInUrl'
 import tpopIdInUrl from '../../modules/tpopIdInUrl'
+import exists from '../../modules/exists'
 
 export default types
   .model('Tree', {
@@ -108,6 +110,143 @@ export default types
     },
     get tpopIdInActiveNodeArray() {
       return tpopIdInUrl(self.activeNodeArray)
+    },
+    get apGqlFilter() {
+      const result = Object.fromEntries(
+        Object.entries(getSnapshot(self.dataFilter.ap))
+          // eslint-disable-next-line no-unused-vars
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.ap[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      // return a valid filter even if no filter criterias exist
+      // but ensure it returns all rows
+      if (Object.entries(result).length === 0) return { id: { isNull: false } }
+      return result
+    },
+    get popGqlFilter() {
+      const result = Object.fromEntries(
+        Object.entries(getSnapshot(self.dataFilter.pop))
+          // eslint-disable-next-line no-unused-vars
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.pop[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      // if mapFilter is set, filter by its geometry
+      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
+        result.geomPoint = {
+          coveredBy: self.mapFilter[0].geometry,
+        }
+      }
+      // return a valid filter even if no filter criterias exist
+      // but ensure it returns all rows
+      if (Object.entries(result).length === 0) return { id: { isNull: false } }
+      return result
+    },
+    get tpopGqlFilter() {
+      const result = Object.fromEntries(
+        Object.entries(getSnapshot(self.dataFilter.tpop))
+          // eslint-disable-next-line no-unused-vars
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.tpop[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      // if mapFilter is set, filter by its geometry
+      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
+        result.geomPoint = {
+          coveredBy: self.mapFilter[0].geometry,
+        }
+      }
+      // return a valid filter even if no filter criterias exist
+      // but ensure it returns all rows
+      if (Object.entries(result).length === 0) return { id: { isNull: false } }
+      return result
+    },
+    get tpopmassnGqlFilter() {
+      const result = Object.fromEntries(
+        Object.entries(getSnapshot(self.dataFilter.tpopmassn))
+          // eslint-disable-next-line no-unused-vars
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.tpopmassn[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      // if mapFilter is set, filter by its geometry
+      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
+        result.tpopByTpopId = {
+          geomPoint: {
+            coveredBy: self.mapFilter[0].geometry,
+          },
+        }
+      }
+      // return a valid filter even if no filter criterias exist
+      // but ensure it returns all rows
+      if (Object.entries(result).length === 0) return { id: { isNull: false } }
+      return result
+    },
+    get tpopkontrGqlFilter() {
+      const ek = Object.fromEntries(
+        Object.entries(getSnapshot(self.dataFilter.tpopfeldkontr))
+          // eslint-disable-next-line no-unused-vars
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.tpopfeldkontr[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      const ekf = Object.fromEntries(
+        Object.entries(getSnapshot(self.dataFilter.tpopfreiwkontr))
+          // eslint-disable-next-line no-unused-vars
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.tpopfreiwkontr[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      const k = { ...ekf, ...ek }
+      // if mapFilter is set, filter by its geometry
+      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
+        k.tpopByTpopId = {
+          geomPoint: {
+            coveredBy: self.mapFilter[0].geometry,
+          },
+        }
+      }
+      // return a valid filter even if no filter criterias exist
+      // but ensure it returns all rows
+      if (Object.entries(k).length === 0) return { id: { isNull: false } }
+      return k
     },
   }))
 
