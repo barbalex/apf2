@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useEffect } from 'react'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import MarkerClusterGroup from 'react-leaflet-markercluster'
+import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useApolloClient, useLazyQuery } from '@apollo/client'
 import { useMapEvents } from 'react-leaflet'
 

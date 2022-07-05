@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
-import MarkerClusterGroup from 'react-leaflet-markercluster'
+import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useQuery } from '@apollo/client'
 import { useMap } from 'react-leaflet'
 
