@@ -68,7 +68,6 @@ const App = ({ element }) => {
       'tree.dataFilter',
       'tree2.dataFilter',
     ]
-    console.log('App, will fetch persisted data')
     import('mst-persist').then((module) =>
       module
         .default('store', store, {
