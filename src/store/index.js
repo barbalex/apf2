@@ -114,58 +114,6 @@ const myTypes = types
     client: null,
   }))
   .views((self) => ({
-    get tpopGqlFilter() {
-      const result = Object.fromEntries(
-        Object.entries(getSnapshot(self.tree.dataFilter.tpop))
-          // eslint-disable-next-line no-unused-vars
-          .filter(([key, value]) => exists(value))
-          .map(([key, value]) => {
-            // if is string: includes, else: equalTo
-            const type = simpleTypes.tpop[key]
-            if (type === 'string') {
-              return [key, { includes: value }]
-            }
-            return [key, { equalTo: value }]
-          }),
-      )
-      // if mapFilter is set, filter by its geometry
-      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
-        result.geomPoint = {
-          coveredBy: self.mapFilter[0].geometry,
-        }
-      }
-      // return a valid filter even if no filter criterias exist
-      // but ensure it returns all rows
-      if (Object.entries(result).length === 0) return { id: { isNull: false } }
-      return result
-    },
-    get tpopmassnGqlFilter() {
-      const result = Object.fromEntries(
-        Object.entries(getSnapshot(self.tree.dataFilter.tpopmassn))
-          // eslint-disable-next-line no-unused-vars
-          .filter(([key, value]) => exists(value))
-          .map(([key, value]) => {
-            // if is string: includes, else: equalTo
-            const type = simpleTypes.tpopmassn[key]
-            if (type === 'string') {
-              return [key, { includes: value }]
-            }
-            return [key, { equalTo: value }]
-          }),
-      )
-      // if mapFilter is set, filter by its geometry
-      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
-        result.tpopByTpopId = {
-          geomPoint: {
-            coveredBy: self.mapFilter[0].geometry,
-          },
-        }
-      }
-      // return a valid filter even if no filter criterias exist
-      // but ensure it returns all rows
-      if (Object.entries(result).length === 0) return { id: { isNull: false } }
-      return result
-    },
     get tpopkontrGqlFilter() {
       const ek = Object.fromEntries(
         Object.entries(getSnapshot(self.tree.dataFilter.tpopfeldkontr))

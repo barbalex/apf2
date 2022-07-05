@@ -6,12 +6,15 @@ import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const Teilpopulationen = () => {
+const Teilpopulationen = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, dataFilterTableIsFiltered, tpopGqlFilter } = store
+  const { enqueNotification, dataFilterTableIsFiltered } = store
+  const { tpopGqlFilter } = store[treeName]
 
   const [queryState, setQueryState] = useState()
+
+  console.log('Exporte, TPop', { tpopGqlFilter, treeName })
 
   const onClickTPop = useCallback(async () => {
     setQueryState('lade Daten...')

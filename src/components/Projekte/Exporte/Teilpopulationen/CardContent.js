@@ -14,9 +14,9 @@ import TPopFuerGoogleEarth from './TPopFuerGoogleEarth'
 import TPopFuerWebgisBun from './TPopFuerWebgisBun'
 import { StyledCardContent } from '../index'
 
-const Teilpopulationen = () => (
+const Teilpopulationen = ({ treeName }) => (
   <StyledCardContent>
-    <TPop />
+    <TPop treeName={treeName} />
     <TPopFuerWebgisBun />
     <TPopFuerGoogleEarth />
     <TPopFuerGEArtname />

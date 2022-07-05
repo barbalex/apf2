@@ -13,8 +13,8 @@ import Ap from './Ap'
 import Populationen from './Populationen'
 import Teilpopulationen from './Teilpopulationen'
 import Kontrollen from './Kontrollen'
-import MassnahmenExporte from './Massnahmen'
-import BeobachtungenExports from './Beobachtungen'
+import Massnahmen from './Massnahmen'
+import Beobachtungen from './Beobachtungen'
 import Anwendung from './Anwendung'
 import Optionen from './Optionen'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -113,8 +113,8 @@ const Exporte = ({ treeName }) => {
                 <Populationen treeName={treeName} />
                 <Teilpopulationen treeName={treeName} />
                 <Kontrollen treeName={treeName} />
-                <MassnahmenExporte treeName={treeName} />
-                <BeobachtungenExports />
+                <Massnahmen treeName={treeName} />
+                <Beobachtungen />
                 <Anwendung />
               </InnerContainer>
             </SimpleBar>

@@ -14,8 +14,6 @@ const Ap = ({ treeName }) => {
 
   const [queryState, setQueryState] = useState()
 
-  console.log('Exporte, Ap', { treeName, apGqlFilter })
-
   const onClickAp = useCallback(async () => {
     setQueryState('lade Daten...')
     let result
