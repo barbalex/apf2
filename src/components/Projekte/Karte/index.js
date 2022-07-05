@@ -63,6 +63,10 @@ import CoordinatesControl from './CoordinatesControl'
 import iconFullscreen from './iconFullscreen.png'
 import iconFullscreen2x from './iconFullscreen2x.png'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+/**
+ * Fullscreen is not compatible with new react/react-leaflet versions?
+ * https://github.com/elangobharathi/react-leaflet-fullscreen-plugin/issues/1
+ */
 // import Fullscreen from 'react-leaflet-fullscreen-plugin'
 
 import storeContext from '../../../storeContext'
