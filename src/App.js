@@ -16,9 +16,11 @@ import MobxStore from './store'
 import { SnackbarProvider } from 'notistack'
 import { navigate } from 'gatsby'
 //import { onPatch } from 'mobx-state-tree'
+import { getSnapshot } from 'mobx-state-tree'
 
 import initializeIdb from './modules/initializeIdb'
 import buildClient from './client'
+import isObject from './modules/isObject'
 
 // see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
 import '@fontsource/roboto-mono'
@@ -63,7 +65,10 @@ const App = ({ element }) => {
       'notifications',
       'ekfIds',
       'hideMapControls',
+      'tree.dataFilter',
+      'tree2.dataFilter',
     ]
+    console.log('App, will fetch persisted data')
     import('mst-persist').then((module) =>
       module
         .default('store', store, {
@@ -72,6 +77,22 @@ const App = ({ element }) => {
           blacklist,
         })
         .then(async () => {
+          /**
+           * TODO:
+           * This is temporary after rebuilding the structure of dataFilter
+           * Goal: prevent errors because previous persisted structure was invalid
+           * Idea: test if is object. Only then empty
+           */
+          const dataFilterTreeAp = getSnapshot(store.tree.dataFilter.ap)
+          const dataFilterTreePop = getSnapshot(store.tree.dataFilter.pop)
+          const dataFilterTree2Ap = getSnapshot(store.tree2.dataFilter.ap)
+          const dataFilterTree2Pop = getSnapshot(store.tree2.dataFilter.pop)
+          if (isObject(dataFilterTreeAp) || isObject(dataFilterTreePop)) {
+            [store.dataFilterEmptyTree('tree')]
+          }
+          if (isObject(dataFilterTree2Ap) || isObject(dataFilterTree2Pop)) {
+            store.dataFilterEmptyTree('tree2')
+          }
           const username = await setUserFromIdb({ idb, store })
           const isUser = !!username
           // set last activeNodeArray
