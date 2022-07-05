@@ -243,7 +243,7 @@ const TpopfreiwkontrForm = ({
       try {
         await client.mutate({
           mutation: gql`
-            mutation updateTpopkontrForEkf(
+            mutation updateTpopkontrForEkfFilter(
               $id: UUID!
                 $${field}: ${fieldTypes[field]}
                 ${field === 'jahr' ? '$datum: Date' : ''}

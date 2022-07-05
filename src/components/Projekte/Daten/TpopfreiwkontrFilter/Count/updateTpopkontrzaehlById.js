@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 import { tpopkontrzaehl } from '../../../../shared/fragments'
 
 export default gql`
-  mutation updateAnzahlForCount(
+  mutation updateAnzahlForCountFilter(
     $id: UUID!
     $anzahl: Float
     $einheit: Int

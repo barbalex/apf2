@@ -104,7 +104,7 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
       try {
         await client.mutate({
           mutation: gql`
-            mutation updateTpopkontrForEkf(
+            mutation updateTpopkontrForEkfHeaddata(
               $id: UUID!
               $bearbeiter: UUID
               $changedBy: String

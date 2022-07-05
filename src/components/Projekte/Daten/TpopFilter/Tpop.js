@@ -46,7 +46,7 @@ const Tpop = ({
     loading: loadingLists,
     error: errorLists,
   } = useQuery(gql`
-    query TpopListsQueryForTpop {
+    query TpopListsQueryForTpopFilter {
       allTpopApberrelevantGrundWertes(
         orderBy: SORT_ASC
         filter: { code: { isNull: false } }
@@ -165,7 +165,7 @@ const Tpop = ({
                   // this is a hack
                   // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
                   query: gql`
-                        query tpopGemeindeQuery {
+                        query tpopGemeindeFilterQuery {
                           allChAdministrativeUnits(
                             filter: {
                               geom: { containsProperly: {type: "${geojsonParsed.type}", coordinates: [${geojsonParsed.coordinates}]} },

@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  query tpopkontrQueryForEkf(
+  query tpopkontrQueryForEkfFilter(
     $apIdExists: Boolean!
     $apIdNotExists: Boolean!
     $tpopkontrFilter: TpopkontrFilter!

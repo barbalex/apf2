@@ -6,7 +6,7 @@ import {
 } from '../../../../shared/fragments'
 
 export default gql`
-  query TpopkontrzaehlQueryForCount($id: UUID!) {
+  query TpopkontrzaehlFilterQueryForCount($id: UUID!) {
     tpopkontrzaehlById(id: $id) {
       ...TpopkontrzaehlFields
       tpopkontrzaehlEinheitWerteByEinheit {
