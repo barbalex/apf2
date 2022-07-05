@@ -11,6 +11,10 @@ import initialDataFilterValues from './DataFilter/initialValues'
 import DataFilter from './DataFilter/types'
 import simpleTypes from './DataFilter/simpleTypes'
 import { simpleTypes as popType, initial as initialPop } from './DataFilter/pop'
+import {
+  simpleTypes as tpopType,
+  initial as initialTpop,
+} from './DataFilter/tpop'
 import { simpleTypes as apType, initial as initialAp } from './DataFilter/ap'
 import apIdInUrl from '../../modules/apIdInUrl'
 import projIdInUrl from '../../modules/projIdInUrl'
@@ -164,10 +168,10 @@ export default types
       for (const filter of filterArrayInStoreWithoutEmpty) {
         const popFilter = apId ? { apId: { equalTo: apId } } : {}
         const dataFilterPop = { ...filter }
-        const popApFilterValues = Object.entries(dataFilterPop).filter(
+        const popFilterValues = Object.entries(dataFilterPop).filter(
           (e) => e[1] || e[1] === 0,
         )
-        popApFilterValues.forEach(([key, value]) => {
+        popFilterValues.forEach(([key, value]) => {
           const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
           popFilter[key] = { [expression]: value }
         })
@@ -187,6 +191,56 @@ export default types
       return { or: filterArray }
     },
     get tpopGqlFilter() {
+      // need to slice to rerender on change
+      const apId = self.activeNodeArray.slice()[3]
+      const popId = self.activeNodeArray.slice()[5]
+      const filterArrayInStore = self.dataFilter.tpop
+        ? getSnapshot(self.dataFilter.tpop)
+        : []
+      // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
+      const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
+        (f) => Object.values(f).filter((v) => v !== null).length !== 0,
+      )
+      if (filterArrayInStoreWithoutEmpty.length === 0) {
+        // add empty filter
+        filterArrayInStoreWithoutEmpty.push(initialTpop)
+      }
+      const filterArray = []
+      for (const filter of filterArrayInStoreWithoutEmpty) {
+        const tpopFilter = popId ? { popId: { equalTo: popId } } : {}
+        const dataFilterTpop = { ...filter }
+        const tpopFilterValues = Object.entries(dataFilterTpop).filter(
+          (e) => e[1] || e[1] === 0,
+        )
+        tpopFilterValues.forEach(([key, value]) => {
+          const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
+          tpopFilter[key] = { [expression]: value }
+        })
+        if (self.nodeLabelFilter.tpop) {
+          tpopFilter.label = {
+            includesInsensitive: self.nodeLabelFilter.tpop,
+          }
+        }
+        // TODO: if mapFilter is set, filter by its geometry
+        if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
+          tpopFilter.geomPoint = {
+            coveredBy: self.mapFilter[0].geometry,
+          }
+        }
+        // do not add empty object
+        if (Object.keys(tpopFilter).length === 0) break
+        filterArray.push(tpopFilter)
+      }
+      // need to filter by popId
+      if (filterArray.length === 0 && popId) {
+        filterArray.push({ popId: { equalTo: popId } })
+      }
+      if (filterArray.length === 0 && apId) {
+        filterArray.push({ apId: { equalTo: apId } })
+      }
+      return { or: filterArray }
+    },
+    get tpopGqlFilter_old() {
       const result = Object.fromEntries(
         Object.entries(getSnapshot(self.dataFilter.tpop))
           // eslint-disable-next-line no-unused-vars
@@ -200,7 +254,7 @@ export default types
             return [key, { equalTo: value }]
           }),
       )
-      // if mapFilter is set, filter by its geometry
+      // TODO: if mapFilter is set, filter by its geometry
       if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
         result.geomPoint = {
           coveredBy: self.mapFilter[0].geometry,

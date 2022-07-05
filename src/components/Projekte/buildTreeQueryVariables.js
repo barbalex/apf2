@@ -1,12 +1,9 @@
 import uniq from 'lodash/uniq'
 import isUuid from 'is-uuid'
 
-import { simpleTypes as apType } from '../../store/Tree/DataFilter/ap'
-import { simpleTypes as tpopType } from '../../store/Tree/DataFilter/tpop'
 import { simpleTypes as tpopmassnType } from '../../store/Tree/DataFilter/tpopmassn'
 import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tpopfeldkontr'
 import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
-import { initial as apInitialValue } from '../../store/Tree/DataFilter/ap'
 
 /**
  * returns a filter for every branch of the nav tree
@@ -31,10 +28,9 @@ import { initial as apInitialValue } from '../../store/Tree/DataFilter/ap'
 const buildTreeQueryVariables = ({
   dataFilter,
   openNodes,
-  apFilter: apFilterSet,
   nodeLabelFilter,
-  apIdInActiveNodeArray,
   popGqlFilter,
+  tpopGqlFilter,
   apGqlFilter,
 }) => {
   // apFilter is used for form nodeLabelFilter AND apFilter of tree :-(
@@ -118,14 +114,6 @@ const buildTreeQueryVariables = ({
   const isTpop =
     isPop &&
     openNodes.some((nArray) => nArray[6] === 'Teil-Populationen' && nArray[7])
-  const tpopFilter = { popId: { in: pop } }
-  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  tpopFilterValues.forEach(([key, value]) => {
-    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopFilter[key] = { [expression]: value }
-  })
 
   const tpopkontr = uniq(
     openNodes
@@ -304,12 +292,7 @@ const buildTreeQueryVariables = ({
       includesInsensitive: nodeLabelFilter.tpopmassn,
     }
   }
-  const tpopsFilter = { ...tpopFilter }
-  if (nodeLabelFilter.tpop) {
-    tpopsFilter.label = {
-      includesInsensitive: nodeLabelFilter.tpop,
-    }
-  }
+  const tpopsFilter = tpopGqlFilter
   const usersFilter = { id: { isNull: false } }
   if (nodeLabelFilter.user) {
     usersFilter.label = {

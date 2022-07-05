@@ -41,7 +41,7 @@ const TpopFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue, urlQuery } = store
 
-  const { activeNodeArray, dataFilter } = store[treeName]
+  const { activeNodeArray, dataFilter, tpopGqlFilter } = store[treeName]
   const [tab, setTab] = useState(urlQuery?.tpopTab ?? 'tpop')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
