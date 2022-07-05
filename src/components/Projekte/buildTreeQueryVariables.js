@@ -233,6 +233,11 @@ const buildTreeQueryVariables = ({
       tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
     tpopfeldkontrFilter[key] = { [expression]: value }
   })
+  if (nodeLabelFilter.tpopkontr) {
+    tpopfeldkontrFilter.labelEk = {
+      includesInsensitive: nodeLabelFilter.tpopkontr,
+    }
+  }
 
   const tpopfreiwkontrFilter = {
     typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
@@ -246,6 +251,11 @@ const buildTreeQueryVariables = ({
       tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
     tpopfreiwkontrFilter[key] = { [expression]: value }
   })
+  if (nodeLabelFilter.tpopkontr) {
+    tpopfreiwkontrFilter.labelEkf = {
+      includesInsensitive: nodeLabelFilter.tpopkontr,
+    }
+  }
 
   const tpopmassnFilter = { tpopId: { in: tpop } }
   const tpopmassnFilterValues = Object.entries(dataFilter.tpopmassn).filter(
@@ -340,23 +350,11 @@ const buildTreeQueryVariables = ({
     }
   }
   const tpopfeldkontrsFilter = { ...tpopfeldkontrFilter }
-  if (nodeLabelFilter.tpopkontr) {
-    tpopfeldkontrsFilter.labelEk = {
-      includesInsensitive: nodeLabelFilter.tpopkontr,
-    }
-  }
   const tpopfreiwkontrsFilter = { ...tpopfreiwkontrFilter }
-  if (nodeLabelFilter.tpopkontr) {
-    tpopfreiwkontrsFilter.labelEkf = {
-      includesInsensitive: nodeLabelFilter.tpopkontr,
-    }
-  }
+
   const tpopkontrzaehlsFilter = {
     tpopkontrId: { in: tpopkontr },
   }
-  // idea: for tpopfreiwkontrs: filter anzahl not null?
-  // now done in the nodes
-
   if (nodeLabelFilter.tpopkontrzaehl) {
     tpopkontrzaehlsFilter.label = {
       includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
