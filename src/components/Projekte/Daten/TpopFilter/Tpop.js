@@ -4,19 +4,18 @@ import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
-import TextField from '../../../../shared/TextField'
-import TextFieldWithInfo from '../../../../shared/TextFieldWithInfo'
-import MdField from '../../../../shared/MarkdownField'
-import Status from '../../../../shared/Status'
-import SelectCreatable from '../../../../shared/SelectCreatableGemeinde'
-import Checkbox2States from '../../../../shared/Checkbox2States'
-import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfo'
-import TpopAbBerRelevantInfoPopover from '../../TpopAbBerRelevantInfoPopover'
-//import getGemeindeForKoord from '../../../../../modules/getGemeindeForKoord'
-import constants from '../../../../../modules/constants'
-import storeContext from '../../../../../storeContext'
-import Coordinates from '../../../../shared/Coordinates'
-import Spinner from '../../../../shared/Spinner'
+import TextField from '../../../shared/TextField'
+import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
+import MdField from '../../../shared/MarkdownField'
+import Status from '../../../shared/Status'
+import SelectCreatable from '../../../shared/SelectCreatableGemeinde'
+import Checkbox2States from '../../../shared/Checkbox2States'
+import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
+import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
+//import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
+import constants from '../../../../modules/constants'
+import storeContext from '../../../../storeContext'
+import Coordinates from '../../../shared/Coordinates'
 
 const Container = styled.div`
   height: 100%;
@@ -27,15 +26,12 @@ const Container = styled.div`
 `
 
 const Tpop = ({
-  showFilter,
   saveToDb,
   fieldErrors,
   setFieldErrors,
   row,
   apJahr,
-  refetchTpop,
   treeName,
-  loadingParent,
 }) => {
   const store = useContext(storeContext)
   const { formWidth: width } = store[treeName]
@@ -50,7 +46,7 @@ const Tpop = ({
     loading: loadingLists,
     error: errorLists,
   } = useQuery(gql`
-    query TpopListsQueryForTpop {
+    query TpopListsQueryForTpopFilter {
       allTpopApberrelevantGrundWertes(
         orderBy: SORT_ASC
         filter: { code: { isNull: false } }
@@ -74,8 +70,6 @@ const Tpop = ({
 
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
-
-  if (loadingParent) return <Spinner />
 
   if (!row) return null
 
@@ -101,7 +95,7 @@ const Tpop = ({
         />
         <Status
           apJahr={apJahr}
-          showFilter={showFilter}
+          showFilter={true}
           saveToDb={saveToDb}
           errors={fieldErrors}
           row={row}
@@ -144,9 +138,6 @@ const Tpop = ({
             error={fieldErrors.apberRelevantGrund}
           />
         )}
-        {!showFilter && (
-          <Coordinates row={row} refetchForm={refetchTpop} table="tpop" />
-        )}
         {errorLists ? (
           <div>errorLists.message</div>
         ) : (
@@ -157,7 +148,7 @@ const Tpop = ({
             label="Gemeinde"
             options={dataLists?.allChAdministrativeUnits?.nodes ?? []}
             loading={loadingLists}
-            showLocate={!showFilter}
+            showLocate={false}
             onClickLocate={async () => {
               if (!row.lv95X) {
                 return setFieldErrors({
@@ -174,7 +165,7 @@ const Tpop = ({
                   // this is a hack
                   // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
                   query: gql`
-                        query tpopGemeindeQuery {
+                        query tpopGemeindeFilterQuery {
                           allChAdministrativeUnits(
                             filter: {
                               geom: { containsProperly: {type: "${geojsonParsed.type}", coordinates: [${geojsonParsed.coordinates}]} },

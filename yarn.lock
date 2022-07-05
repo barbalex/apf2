@@ -110,7 +110,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.14.0, @babel/core@npm:^7.15.5, @babel/core@npm:^7.18.6":
+"@babel/core@npm:7.18.6, @babel/core@npm:^7.14.0, @babel/core@npm:^7.15.5":
   version: 7.18.6
   resolution: "@babel/core@npm:7.18.6"
   dependencies:
@@ -1619,7 +1619,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/is-prop-valid@npm:^1.1.0, @emotion/is-prop-valid@npm:^1.1.2":
+"@emotion/is-prop-valid@npm:^1.1.0, @emotion/is-prop-valid@npm:^1.1.3":
   version: 1.1.3
   resolution: "@emotion/is-prop-valid@npm:1.1.3"
   dependencies:
@@ -3029,16 +3029,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/base@npm:5.0.0-alpha.87":
-  version: 5.0.0-alpha.87
-  resolution: "@mui/base@npm:5.0.0-alpha.87"
+"@mui/base@npm:5.0.0-alpha.88":
+  version: 5.0.0-alpha.88
+  resolution: "@mui/base@npm:5.0.0-alpha.88"
   dependencies:
     "@babel/runtime": ^7.17.2
-    "@emotion/is-prop-valid": ^1.1.2
+    "@emotion/is-prop-valid": ^1.1.3
     "@mui/types": ^7.1.4
     "@mui/utils": ^5.8.6
     "@popperjs/core": ^2.11.5
-    clsx: ^1.1.1
+    clsx: ^1.2.0
     prop-types: ^15.8.1
     react-is: ^17.0.2
   peerDependencies:
@@ -3048,21 +3048,21 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: ec6ce5f710a7073115043997fd1bbe4dc2b15a4d9211485969bfb2eb79c45b9c5c95018754346730892971f737a89aca89c564dbd08f4eb4635f4fed6047f2da
+  checksum: 4e7278310450c370e6c0d573100c3143fa5096dd8582d4ccadaeccd2cf98735df31a8c0900885fef039d296752e459ab3be8cbaccf79cf82da6b244cd5562b45
   languageName: node
   linkType: hard
 
-"@mui/material@npm:5.8.6":
-  version: 5.8.6
-  resolution: "@mui/material@npm:5.8.6"
+"@mui/material@npm:5.8.7":
+  version: 5.8.7
+  resolution: "@mui/material@npm:5.8.7"
   dependencies:
     "@babel/runtime": ^7.17.2
-    "@mui/base": 5.0.0-alpha.87
-    "@mui/system": ^5.8.6
+    "@mui/base": 5.0.0-alpha.88
+    "@mui/system": ^5.8.7
     "@mui/types": ^7.1.4
     "@mui/utils": ^5.8.6
-    "@types/react-transition-group": ^4.4.4
-    clsx: ^1.1.1
+    "@types/react-transition-group": ^4.4.5
+    clsx: ^1.2.0
     csstype: ^3.1.0
     prop-types: ^15.8.1
     react-is: ^17.0.2
@@ -3080,7 +3080,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 46454541b5ceca578273453b8513e973419fc919329a4b850190bdeb6c602fc61a40c791d844a130560607eb3b798aa2d5f033e21eb98c14e898a431c1071756
+  checksum: 3dffeda204432ba6f2316d020f71a57002b72cf65bcdf4c1b88058f6fe185bf97a917f5919fae0a9fd496e9c71c0a6ca2da473951990bff79fa8153ea8125169
   languageName: node
   linkType: hard
 
@@ -3116,16 +3116,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/styles@npm:5.8.6":
-  version: 5.8.6
-  resolution: "@mui/styles@npm:5.8.6"
+"@mui/styles@npm:5.8.7":
+  version: 5.8.7
+  resolution: "@mui/styles@npm:5.8.7"
   dependencies:
     "@babel/runtime": ^7.17.2
     "@emotion/hash": ^0.8.0
     "@mui/private-theming": ^5.8.6
     "@mui/types": ^7.1.4
     "@mui/utils": ^5.8.6
-    clsx: ^1.1.1
+    clsx: ^1.2.0
     csstype: ^3.1.0
     hoist-non-react-statics: ^3.3.2
     jss: ^10.8.2
@@ -3143,20 +3143,20 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: e766102a12c52a8cc27b61774520f5cc5c83b7355d2d629f9a5b04a11b84eed331e5e22c10b2c0edcd45b81c6cecec913e349f084b2190e0343b2495f6691714
+  checksum: b958391d39c6de5865bd833e526ea0b9739e04d5e800c8894ac0e0fbf9303e7864f8d00134372fc26da6577dcc899bc5b229de243060e9477b1748322bdf91d0
   languageName: node
   linkType: hard
 
-"@mui/system@npm:^5.8.6":
-  version: 5.8.6
-  resolution: "@mui/system@npm:5.8.6"
+"@mui/system@npm:^5.8.7":
+  version: 5.8.7
+  resolution: "@mui/system@npm:5.8.7"
   dependencies:
     "@babel/runtime": ^7.17.2
     "@mui/private-theming": ^5.8.6
-    "@mui/styled-engine": ^5.8.0
+    "@mui/styled-engine": ^5.8.7
     "@mui/types": ^7.1.4
     "@mui/utils": ^5.8.6
-    clsx: ^1.1.1
+    clsx: ^1.2.0
     csstype: ^3.1.0
     prop-types: ^15.8.1
   peerDependencies:
@@ -3171,7 +3171,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 89917c16efe1d42adad0bb84a55e6fe43d72deb52151ee7ab76d450f7ffba36b33f96de436ebd3c4d176835fa7c0030ff645fdc2dfd3eec80f485bec3ce0aa15
+  checksum: 703ab43ba94cbddf42ea875767d7fa9e848e6853148548e6980a5b81b26e179a50998f92a30c9d76e0e69e2feadf6d1924023c8490481fe316343be367b70912
   languageName: node
   linkType: hard
 
@@ -4448,7 +4448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-transition-group@npm:^4.4.0, @types/react-transition-group@npm:^4.4.4":
+"@types/react-transition-group@npm:^4.4.0, @types/react-transition-group@npm:^4.4.5":
   version: 4.4.5
   resolution: "@types/react-transition-group@npm:4.4.5"
   dependencies:
@@ -5325,7 +5325,7 @@ __metadata:
   resolution: "apf2@workspace:."
   dependencies:
     "@apollo/client": 3.6.9
-    "@babel/core": ^7.18.6
+    "@babel/core": 7.18.6
     "@babel/eslint-parser": 7.18.2
     "@babel/plugin-syntax-flow": 7.18.6
     "@babel/plugin-transform-react-jsx": 7.18.6
@@ -5334,22 +5334,22 @@ __metadata:
     "@fontsource/roboto-mono": 4.5.7
     "@graphile-contrib/pg-order-by-related": 1.0.0-beta.6
     "@graphile/postgis": 0.1.0
-    "@mui/material": 5.8.6
+    "@mui/material": 5.8.7
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
     "@mui/styled-engine-sc": 5.8.0
-    "@mui/styles": 5.8.6
+    "@mui/styles": 5.8.7
     "@reach/router": 1.3.4
     "@react-leaflet/core": 1.1.1
     "@svgr/cli": 6.2.1
     autosuggest-highlight: 3.3.0
-    babel-plugin-styled-components: ^2.0.7
+    babel-plugin-styled-components: 2.0.7
     blueimp-md5: 2.19.0
     browser-update: 3.3.38
     copyfiles: 2.4.1
     cypress: 10.3.0
     date-fns: 2.28.0
     dexie: 3.2.2
-    eslint: ^8.19.0
+    eslint: 8.19.0
     eslint-plugin-import: 2.26.0
     eslint-plugin-react: latest
     eslint-plugin-react-hooks: 4.6.0
@@ -5415,7 +5415,7 @@ __metadata:
     proj4: 2.8.0
     proj4leaflet: 1.0.2
     prop-types: 15.8.1
-    punycode: ^2.1.1
+    punycode: 2.1.1
     query-string: 7.1.1
     react: 18.2.0
     react-contextmenu: 2.14.0
@@ -5945,7 +5945,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-styled-components@npm:>= 1.12.0, babel-plugin-styled-components@npm:^2.0.7":
+"babel-plugin-styled-components@npm:2.0.7, babel-plugin-styled-components@npm:>= 1.12.0":
   version: 2.0.7
   resolution: "babel-plugin-styled-components@npm:2.0.7"
   dependencies:
@@ -6947,7 +6947,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^1.1.0, clsx@npm:^1.1.1":
+"clsx@npm:^1.1.0, clsx@npm:^1.2.0":
   version: 1.2.0
   resolution: "clsx@npm:1.2.0"
   checksum: 551a0b4f182270cf9ab26b5f4f93d3b01a663b66adeaff58e4c51bc5170a2bfaed03779513925c63d2d31d748c5bc4f1cbad7d3e76a051f5a9301754563ff43a
@@ -9378,6 +9378,51 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint@npm:8.19.0":
+  version: 8.19.0
+  resolution: "eslint@npm:8.19.0"
+  dependencies:
+    "@eslint/eslintrc": ^1.3.0
+    "@humanwhocodes/config-array": ^0.9.2
+    ajv: ^6.10.0
+    chalk: ^4.0.0
+    cross-spawn: ^7.0.2
+    debug: ^4.3.2
+    doctrine: ^3.0.0
+    escape-string-regexp: ^4.0.0
+    eslint-scope: ^7.1.1
+    eslint-utils: ^3.0.0
+    eslint-visitor-keys: ^3.3.0
+    espree: ^9.3.2
+    esquery: ^1.4.0
+    esutils: ^2.0.2
+    fast-deep-equal: ^3.1.3
+    file-entry-cache: ^6.0.1
+    functional-red-black-tree: ^1.0.1
+    glob-parent: ^6.0.1
+    globals: ^13.15.0
+    ignore: ^5.2.0
+    import-fresh: ^3.0.0
+    imurmurhash: ^0.1.4
+    is-glob: ^4.0.0
+    js-yaml: ^4.1.0
+    json-stable-stringify-without-jsonify: ^1.0.1
+    levn: ^0.4.1
+    lodash.merge: ^4.6.2
+    minimatch: ^3.1.2
+    natural-compare: ^1.4.0
+    optionator: ^0.9.1
+    regexpp: ^3.2.0
+    strip-ansi: ^6.0.1
+    strip-json-comments: ^3.1.0
+    text-table: ^0.2.0
+    v8-compile-cache: ^2.0.3
+  bin:
+    eslint: bin/eslint.js
+  checksum: 0bc9df1a3a09dcd5a781ec728f280aa8af3ab19c2d1f14e2668b5ee5b8b1fb0e72dde5c3acf738e7f4281685fb24ec149b6154255470b06cf41de76350bca7a4
+  languageName: node
+  linkType: hard
+
 "eslint@npm:^7.32.0":
   version: 7.32.0
   resolution: "eslint@npm:7.32.0"
@@ -9425,51 +9470,6 @@ __metadata:
   bin:
     eslint: bin/eslint.js
   checksum: cc85af9985a3a11085c011f3d27abe8111006d34cc274291b3c4d7bea51a4e2ff6135780249becd919ba7f6d6d1ecc38a6b73dacb6a7be08d38453b344dc8d37
-  languageName: node
-  linkType: hard
-
-"eslint@npm:^8.19.0":
-  version: 8.19.0
-  resolution: "eslint@npm:8.19.0"
-  dependencies:
-    "@eslint/eslintrc": ^1.3.0
-    "@humanwhocodes/config-array": ^0.9.2
-    ajv: ^6.10.0
-    chalk: ^4.0.0
-    cross-spawn: ^7.0.2
-    debug: ^4.3.2
-    doctrine: ^3.0.0
-    escape-string-regexp: ^4.0.0
-    eslint-scope: ^7.1.1
-    eslint-utils: ^3.0.0
-    eslint-visitor-keys: ^3.3.0
-    espree: ^9.3.2
-    esquery: ^1.4.0
-    esutils: ^2.0.2
-    fast-deep-equal: ^3.1.3
-    file-entry-cache: ^6.0.1
-    functional-red-black-tree: ^1.0.1
-    glob-parent: ^6.0.1
-    globals: ^13.15.0
-    ignore: ^5.2.0
-    import-fresh: ^3.0.0
-    imurmurhash: ^0.1.4
-    is-glob: ^4.0.0
-    js-yaml: ^4.1.0
-    json-stable-stringify-without-jsonify: ^1.0.1
-    levn: ^0.4.1
-    lodash.merge: ^4.6.2
-    minimatch: ^3.1.2
-    natural-compare: ^1.4.0
-    optionator: ^0.9.1
-    regexpp: ^3.2.0
-    strip-ansi: ^6.0.1
-    strip-json-comments: ^3.1.0
-    text-table: ^0.2.0
-    v8-compile-cache: ^2.0.3
-  bin:
-    eslint: bin/eslint.js
-  checksum: 0bc9df1a3a09dcd5a781ec728f280aa8af3ab19c2d1f14e2668b5ee5b8b1fb0e72dde5c3acf738e7f4281685fb24ec149b6154255470b06cf41de76350bca7a4
   languageName: node
   linkType: hard
 
@@ -17328,7 +17328,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"punycode@npm:^2.1.0, punycode@npm:^2.1.1":
+"punycode@npm:2.1.1, punycode@npm:^2.1.0, punycode@npm:^2.1.1":
   version: 2.1.1
   resolution: "punycode@npm:2.1.1"
   checksum: 823bf443c6dd14f669984dea25757b37993f67e8d94698996064035edd43bed8a5a17a9f12e439c2b35df1078c6bec05a6c86e336209eb1061e8025c481168e8

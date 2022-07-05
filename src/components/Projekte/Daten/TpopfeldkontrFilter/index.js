@@ -2,8 +2,9 @@ import React, { useState, useCallback, useContext } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
+import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
@@ -13,18 +14,17 @@ import Select from '../../../shared/Select'
 import JesNo from '../../../shared/JesNo'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import DateField from '../../../shared/Date'
-import StringToCopy from '../../../shared/StringToCopy'
-import FormTitle from '../../../shared/FormTitle'
+import FilterTitle from '../../../shared/FilterTitle'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
 import query from './query'
+import queryTpopkontrs from './queryTpopkontrs'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
-import Files from '../../../shared/Files'
+import { simpleTypes as tpopfeldkontrType } from '../../../../store/Tree/DataFilter/tpopfeldkontr'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
-import { tpopfeldkontr } from '../../../shared/fragments'
 import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
@@ -32,6 +32,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background-color: #ffd3a7;
 `
 const FieldsContainer = styled.div`
   display: flex;
@@ -66,50 +67,6 @@ const TabContent = styled.div`
   height: 100%;
 `
 
-const fieldTypes = {
-  typ: 'String',
-  datum: 'Date',
-  jahr: 'Int',
-  vitalitaet: 'String',
-  ueberlebensrate: 'Int',
-  entwicklung: 'Int',
-  ursachen: 'String',
-  erfolgsbeurteilung: 'String',
-  umsetzungAendern: 'String',
-  kontrolleAendern: 'String',
-  bemerkungen: 'String',
-  lrDelarze: 'String',
-  flaeche: 'Int',
-  lrUmgebungDelarze: 'String',
-  vegetationstyp: 'String',
-  konkurrenz: 'String',
-  moosschicht: 'String',
-  krautschicht: 'String',
-  strauchschicht: 'String',
-  baumschicht: 'String',
-  bodenTyp: 'String',
-  bodenKalkgehalt: 'String',
-  bodenDurchlaessigkeit: 'String',
-  bodenHumus: 'String',
-  bodenNaehrstoffgehalt: 'String',
-  bodenAbtrag: 'String',
-  idealbiotopUebereinstimmung: 'Int',
-  handlungsbedarf: 'String',
-  flaecheUeberprueft: 'Int',
-  deckungVegetation: 'Int',
-  deckungNackterBoden: 'Int',
-  deckungApArt: 'Int',
-  vegetationshoeheMaximum: 'Int',
-  vegetationshoeheMittel: 'Int',
-  gefaehrdung: 'String',
-  tpopId: 'UUID',
-  bearbeiter: 'UUID',
-  planVorhanden: 'Boolean',
-  jungpflanzenVorhanden: 'Boolean',
-  apberNichtRelevant: 'Boolean',
-  apberNichtRelevantGrund: 'String',
-}
-
 const tpopkontrTypWerte = [
   {
     value: 'Ausgangszustand',
@@ -121,22 +78,47 @@ const tpopkontrTypWerte = [
   },
 ]
 
-const Tpopfeldkontr = ({ treeName }) => {
-  const client = useApolloClient()
+const TpopfeldkontrFilter = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { urlQuery, setUrlQuery } = store
-  const { activeNodeArray, formWidth } = store[treeName]
+  const { dataFilterSetValue, urlQuery, setUrlQuery } = store
+  const { activeNodeArray, dataFilter, filterWidth } = store[treeName]
 
-  const [fieldErrors, setFieldErrors] = useState({})
-
-  let id =
-    activeNodeArray.length > 9
-      ? activeNodeArray[9]
-      : '99999999-9999-9999-9999-999999999999'
-  const width = formWidth
-  const { data, loading, error } = useQuery(query, {
+  const width = filterWidth
+  const apId = activeNodeArray[3]
+  const { data, loading, error } = useQuery(query)
+  const allTpopkontrFilter = {
+    or: [
+      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
+      { typ: { isNull: true } },
+    ],
+    tpopByTpopId: {
+      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
+    },
+  }
+  const tpopkontrFilter = {
+    or: [
+      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
+      { typ: { isNull: true } },
+    ],
+    tpopByTpopId: {
+      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
+    },
+  }
+  const tpopfeldkontrFilterValues = Object.entries(
+    dataFilter.tpopfeldkontr,
+  ).filter((e) => e[1] || e[1] === 0)
+  tpopfeldkontrFilterValues.forEach(([key, value]) => {
+    const expression =
+      tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
+    tpopkontrFilter[key] = { [expression]: value }
+  })
+  const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
     variables: {
-      id,
+      allTpopkontrFilter,
+      tpopkontrFilter,
+      apId,
+      apIdExists: !!apId,
+      apIdNotExists: !apId,
     },
   })
 
@@ -154,63 +136,36 @@ const Tpopfeldkontr = ({ treeName }) => {
     [setUrlQuery, urlQuery],
   )
 
-  const row = data?.tpopkontrById ?? {}
+  let totalNr
+  let filteredNr
+  const row = dataFilter.tpopfeldkontr
+  if (apId) {
+    const pops = dataTpopkontrs?.allPops?.nodes ?? []
+    const tpops = flatten(pops.map((p) => p?.tpops?.nodes ?? []))
+    totalNr = !tpops.length
+      ? '...'
+      : tpops
+          .map((p) => p?.tpopkontrs?.totalCount)
+          .reduce((acc = 0, val) => acc + val)
+    filteredNr = !tpops.length
+      ? '...'
+      : tpops
+          .map((p) => p?.tpopkontrsFiltered?.totalCount)
+          .reduce((acc = 0, val) => acc + val)
+  } else {
+    totalNr = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
+    filteredNr = dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
+  }
 
   const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
-
-      const variables = {
-        id: row.id,
-        [field]: value,
-        changedBy: store.user.name,
-      }
-      if (field === 'jahr') {
-        variables.datum = null
-      }
-      if (field === 'datum') {
-        // value can be null so check if substring method exists
-        const newJahr =
-          value && value.substring ? +value.substring(0, 4) : value
-        variables.jahr = newJahr
-      }
-      try {
-        await client.mutate({
-          mutation: gql`
-              mutation updateTpopkontrForEk(
-                $id: UUID!
-                $${field}: ${fieldTypes[field]}
-                ${field === 'jahr' ? '$datum: Date' : ''}
-                ${field === 'datum' ? '$jahr: Int' : ''}
-                $changedBy: String
-              ) {
-                updateTpopkontrById(
-                  input: {
-                    id: $id
-                    tpopkontrPatch: {
-                      ${field}: $${field}
-                      ${field === 'jahr' ? 'datum: $datum' : ''}
-                      ${field === 'datum' ? 'jahr: $jahr' : ''}
-                      changedBy: $changedBy
-                    }
-                  }
-                ) {
-                  tpopkontr {
-                    ...TpopfeldkontrFields
-                  }
-                }
-              }
-              ${tpopfeldkontr}
-            `,
-          variables,
-        })
-      } catch (error) {
-        return setFieldErrors({ [field]: error.message })
-      }
-      setFieldErrors({})
-    },
-    [client, row.id, store.user.name],
+    async (event) =>
+      dataFilterSetValue({
+        treeName,
+        table: 'tpopfeldkontr',
+        key: event.target.name,
+        value: ifIsNumericAsNumber(event.target.value),
+      }),
+    [dataFilterSetValue, treeName],
   )
 
   const aeLrWerte = (data?.allAeLrDelarzes?.nodes ?? [])
@@ -229,10 +184,12 @@ const Tpopfeldkontr = ({ treeName }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle
-          apId={activeNodeArray[3]}
-          title="Feld-Kontrolle"
+        <FilterTitle
+          title="Feld-Kontrollen"
           treeName={treeName}
+          table="tpopfeldkontr"
+          totalNr={totalNr}
+          filteredNr={filteredNr}
         />
         <FieldsContainer>
           <Tabs
@@ -248,7 +205,6 @@ const Tpopfeldkontr = ({ treeName }) => {
               data-id="entwicklung"
             />
             <StyledTab label="Biotop" value="biotop" data-id="biotop" />
-            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
           </Tabs>
           <div style={{ overflowY: 'auto' }}>
             <TabContent>
@@ -261,14 +217,12 @@ const Tpopfeldkontr = ({ treeName }) => {
                       type="number"
                       value={row.jahr}
                       saveToDb={saveToDb}
-                      error={fieldErrors.jahr}
                     />
                     <DateField
                       name="datum"
                       label="Datum"
                       value={row.datum}
                       saveToDb={saveToDb}
-                      error={fieldErrors.datum}
                     />
                     <RadioButtonGroup
                       name="typ"
@@ -276,7 +230,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       dataSource={tpopkontrTypWerte}
                       value={row.typ}
                       saveToDb={saveToDb}
-                      error={fieldErrors.typ}
                     />
                     <Select
                       name="bearbeiter"
@@ -285,14 +238,12 @@ const Tpopfeldkontr = ({ treeName }) => {
                       loading={loading}
                       value={row.bearbeiter}
                       saveToDb={saveToDb}
-                      error={fieldErrors.bearbeiter}
                     />
                     <JesNo
                       name="jungpflanzenVorhanden"
                       label="Jungpflanzen vorhanden"
                       value={row.jungpflanzenVorhanden}
                       saveToDb={saveToDb}
-                      error={fieldErrors.jungpflanzenVorhanden}
                     />
                     <TextField
                       name="vitalitaet"
@@ -300,7 +251,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       type="text"
                       value={row.vitalitaet}
                       saveToDb={saveToDb}
-                      error={fieldErrors.vitalitaet}
                     />
                     <TextField
                       name="ueberlebensrate"
@@ -308,7 +258,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       type="number"
                       value={row.ueberlebensrate}
                       saveToDb={saveToDb}
-                      error={fieldErrors.ueberlebensrate}
                     />
                     <RadioButtonGroupWithInfo
                       name="entwicklung"
@@ -318,7 +267,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       popover={TpopfeldkontrentwicklungPopover}
                       value={row.entwicklung}
                       saveToDb={saveToDb}
-                      error={fieldErrors.entwicklung}
                     />
                     <TextField
                       name="ursachen"
@@ -328,7 +276,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       multiLine
                       value={row.ursachen}
                       saveToDb={saveToDb}
-                      error={fieldErrors.ursachen}
                     />
                     <TextField
                       name="gefaehrdung"
@@ -337,7 +284,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       multiLine
                       value={row.gefaehrdung}
                       saveToDb={saveToDb}
-                      error={fieldErrors.gefaehrdung}
                     />
                     <TextField
                       name="erfolgsbeurteilung"
@@ -346,7 +292,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       multiLine
                       value={row.erfolgsbeurteilung}
                       saveToDb={saveToDb}
-                      error={fieldErrors.erfolgsbeurteilung}
                     />
                     <TextField
                       name="umsetzungAendern"
@@ -355,7 +300,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       multiLine
                       value={row.umsetzungAendern}
                       saveToDb={saveToDb}
-                      error={fieldErrors.umsetzungAendern}
                     />
                     <TextField
                       name="kontrolleAendern"
@@ -364,21 +308,18 @@ const Tpopfeldkontr = ({ treeName }) => {
                       multiLine
                       value={row.kontrolleAendern}
                       saveToDb={saveToDb}
-                      error={fieldErrors.kontrolleAendern}
                     />
                     <MdField
                       name="bemerkungen"
                       label="Bemerkungen"
                       value={row.bemerkungen}
                       saveToDb={saveToDb}
-                      error={fieldErrors.bemerkungen}
                     />
                     <JesNo
                       name="apberNichtRelevant"
                       label="Im Jahresbericht nicht berücksichtigen"
                       value={row.apberNichtRelevant}
                       saveToDb={saveToDb}
-                      error={fieldErrors.apberNichtRelevant}
                     />
                     <TextField
                       name="apberNichtRelevantGrund"
@@ -387,9 +328,7 @@ const Tpopfeldkontr = ({ treeName }) => {
                       multiLine
                       value={row.apberNichtRelevantGrund}
                       saveToDb={saveToDb}
-                      error={fieldErrors.apberNichtRelevantGrund}
                     />
-                    <StringToCopy text={row.id} label="id" />
                   </FormContainer>
                 </SimpleBar>
               )}
@@ -402,7 +341,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       type="number"
                       value={row.flaeche}
                       saveToDb={saveToDb}
-                      error={fieldErrors.flaeche}
                     />
                     <Section>Vegetation</Section>
                     <Select
@@ -413,7 +351,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       loading={loading}
                       value={row.lrDelarze}
                       saveToDb={saveToDb}
-                      error={fieldErrors.lrDelarze}
                     />
                     <Select
                       name="lrUmgebungDelarze"
@@ -422,7 +359,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       loading={loading}
                       value={row.lrUmgebungDelarze}
                       saveToDb={saveToDb}
-                      error={fieldErrors.lrUmgebungDelarze}
                     />
                     <TextField
                       name="vegetationstyp"
@@ -430,7 +366,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       type="text"
                       value={row.vegetationstyp}
                       saveToDb={saveToDb}
-                      error={fieldErrors.vegetationstyp}
                     />
                     <TextField
                       name="konkurrenz"
@@ -438,7 +373,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       type="text"
                       value={row.konkurrenz}
                       saveToDb={saveToDb}
-                      error={fieldErrors.konkurrenz}
                     />
                     <TextField
                       name="moosschicht"
@@ -446,7 +380,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       type="text"
                       value={row.moosschicht}
                       saveToDb={saveToDb}
-                      error={fieldErrors.moosschicht}
                     />
                     <TextField
                       name="krautschicht"
@@ -454,7 +387,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       type="text"
                       value={row.krautschicht}
                       saveToDb={saveToDb}
-                      error={fieldErrors.krautschicht}
                     />
                     <TextField
                       name="strauchschicht"
@@ -462,7 +394,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       type="text"
                       value={row.strauchschicht}
                       saveToDb={saveToDb}
-                      error={fieldErrors.strauchschicht}
                     />
                     <TextField
                       name="baumschicht"
@@ -470,7 +401,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       type="text"
                       value={row.baumschicht}
                       saveToDb={saveToDb}
-                      error={fieldErrors.baumschicht}
                     />
                     <Section>Beurteilung</Section>
                     <TextField
@@ -480,7 +410,6 @@ const Tpopfeldkontr = ({ treeName }) => {
                       multiline
                       value={row.handlungsbedarf}
                       saveToDb={saveToDb}
-                      error={fieldErrors.handlungsbedarf}
                     />
                     <RadioButtonGroup
                       name="idealbiotopUebereinstimmung"
@@ -491,13 +420,9 @@ const Tpopfeldkontr = ({ treeName }) => {
                       loading={loading}
                       value={row.idealbiotopUebereinstimmung}
                       saveToDb={saveToDb}
-                      error={fieldErrors.idealbiotopUebereinstimmung}
                     />
                   </FormContainer>
                 </SimpleBar>
-              )}
-              {tab === 'dateien' && (
-                <Files parentId={row.id} parent="tpopkontr" />
               )}
             </TabContent>
           </div>
@@ -507,4 +432,4 @@ const Tpopfeldkontr = ({ treeName }) => {
   )
 }
 
-export default observer(Tpopfeldkontr)
+export default observer(TpopfeldkontrFilter)

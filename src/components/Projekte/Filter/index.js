@@ -3,10 +3,10 @@ import styled from 'styled-components'
 
 import ApFilter from '../Daten/ApFilter'
 import PopFilter from '../Daten/PopFilter'
-import Tpop from '../Daten/Tpop'
+import TpopFilter from '../Daten/TpopFilter'
 import TpopmassnFilter from '../Daten/TpopmassnFilter'
-import Tpopfeldkontr from '../Daten/Tpopfeldkontr'
-import Tpopfreiwkontr from '../Daten/Tpopfreiwkontr'
+import TpopfeldkontrFilter from '../Daten/TpopfeldkontrFilter'
+import TpopfreiwkontrFilter from '../Daten/TpopfreiwkontrFilter'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Title from './Title'
 
@@ -27,13 +27,13 @@ const Filter = ({ treeName }) => {
         <Title activeTab={activeTab} setActiveTab={setActiveTab} />
         {activeTab === 'ap' && <ApFilter treeName={treeName} />}
         {activeTab === 'pop' && <PopFilter treeName={treeName} />}
-        {activeTab === 'tpop' && <Tpop treeName={treeName} showFilter={true} />}
+        {activeTab === 'tpop' && <TpopFilter treeName={treeName} />}
         {activeTab === 'tpopmassn' && <TpopmassnFilter treeName={treeName} />}
         {activeTab === 'tpopfeldkontr' && (
-          <Tpopfeldkontr treeName={treeName} showFilter={true} />
+          <TpopfeldkontrFilter treeName={treeName} />
         )}
         {activeTab === 'tpopfreiwkontr' && (
-          <Tpopfreiwkontr treeName={treeName} showFilter={true} />
+          <TpopfreiwkontrFilter treeName={treeName} />
         )}
       </Container>
     </ErrorBoundary>

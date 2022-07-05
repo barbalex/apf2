@@ -61,14 +61,7 @@ const EkplanTitle = styled.h5`
   margin-bottom: 10px;
 `
 
-const Ek = ({
-  treeName,
-  showFilter,
-  saveToDb,
-  row,
-  fieldErrors,
-  loadingParent,
-}) => {
+const Ek = ({ treeName, saveToDb, row, fieldErrors, loadingParent }) => {
   const store = useContext(storeContext)
 
   const { activeNodeArray } = store[treeName]
@@ -127,76 +120,70 @@ const Ek = ({
       }}
     >
       <ErrorBoundary>
-        <>
-          <FormContainerNoColumnsInner>
-            <EkfrequenzOptionsContainer>
-              <RadioButtonGroup
-                name="ekfrequenz"
-                dataSource={ekfrequenzOptions}
-                loading={loadingEk}
-                label="EK-Frequenz"
-                value={row.ekfrequenz}
-                saveToDb={saveToDb}
-                error={fieldErrors.ekfrequenz}
-              />
-            </EkfrequenzOptionsContainer>
-            <Checkbox2States
-              name="ekfrequenzAbweichend"
-              label="EK-Frequenz abweichend"
-              value={row.ekfrequenzAbweichend}
-              saveToDb={saveToDb}
-              error={fieldErrors.ekfrequenzAbweichend}
-            />
-            <TextField
-              name="ekfrequenzStartjahr"
-              label="Startjahr"
-              type="number"
-              value={row.ekfrequenzStartjahr}
-              saveToDb={saveToDb}
-              error={fieldErrors.ekfrequenzStartjahr}
-            />
-            <Select
-              name="ekfKontrolleur"
-              label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
-              options={dataEk?.allAdresses?.nodes ?? []}
+        <FormContainerNoColumnsInner>
+          <EkfrequenzOptionsContainer>
+            <RadioButtonGroup
+              name="ekfrequenz"
+              dataSource={ekfrequenzOptions}
               loading={loadingEk}
-              value={row.ekfKontrolleur}
+              label="EK-Frequenz"
+              value={row.ekfrequenz}
               saveToDb={saveToDb}
-              error={fieldErrors.ekfKontrolleur}
+              error={fieldErrors.ekfrequenz}
             />
-          </FormContainerNoColumnsInner>
-          {!showFilter && (
-            <>
-              <EkplanTitle>EK-Plan</EkplanTitle>
-              <StyledTable size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Jahr</TableCell>
-                    <TableCell>geplant</TableCell>
-                    <TableCell>ausgeführt</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {loadingEk ? (
-                    <TableRow>
-                      <TableCell>Lade...</TableCell>
-                    </TableRow>
-                  ) : errorEk ? (
-                    <TableRow>
-                      <TableCell>{errorEk.message}</TableCell>
-                    </TableRow>
-                  ) : (
-                    Object.keys(ekGroupedByYear)
-                      .reverse()
-                      .map((year) => (
-                        <EkYear key={year} data={ekGroupedByYear[year]} />
-                      ))
-                  )}
-                </TableBody>
-              </StyledTable>
-            </>
-          )}
-        </>
+          </EkfrequenzOptionsContainer>
+          <Checkbox2States
+            name="ekfrequenzAbweichend"
+            label="EK-Frequenz abweichend"
+            value={row.ekfrequenzAbweichend}
+            saveToDb={saveToDb}
+            error={fieldErrors.ekfrequenzAbweichend}
+          />
+          <TextField
+            name="ekfrequenzStartjahr"
+            label="Startjahr"
+            type="number"
+            value={row.ekfrequenzStartjahr}
+            saveToDb={saveToDb}
+            error={fieldErrors.ekfrequenzStartjahr}
+          />
+          <Select
+            name="ekfKontrolleur"
+            label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
+            options={dataEk?.allAdresses?.nodes ?? []}
+            loading={loadingEk}
+            value={row.ekfKontrolleur}
+            saveToDb={saveToDb}
+            error={fieldErrors.ekfKontrolleur}
+          />
+        </FormContainerNoColumnsInner>
+        <EkplanTitle>EK-Plan</EkplanTitle>
+        <StyledTable size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Jahr</TableCell>
+              <TableCell>geplant</TableCell>
+              <TableCell>ausgeführt</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {loadingEk ? (
+              <TableRow>
+                <TableCell>Lade...</TableCell>
+              </TableRow>
+            ) : errorEk ? (
+              <TableRow>
+                <TableCell>{errorEk.message}</TableCell>
+              </TableRow>
+            ) : (
+              Object.keys(ekGroupedByYear)
+                .reverse()
+                .map((year) => (
+                  <EkYear key={year} data={ekGroupedByYear[year]} />
+                ))
+            )}
+          </TableBody>
+        </StyledTable>
       </ErrorBoundary>
     </SimpleBar>
   )
