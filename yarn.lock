@@ -1511,6 +1511,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@changey/react-leaflet-markercluster@npm:^4.0.0-rc1":
+  version: 4.0.0-rc1
+  resolution: "@changey/react-leaflet-markercluster@npm:4.0.0-rc1"
+  dependencies:
+    "@react-leaflet/core": ^2.0.0
+    leaflet: ^1.8.0
+    leaflet.markercluster: ^1.5.3
+    react-leaflet: ^4.0.0
+  peerDependencies:
+    leaflet: ^1.8.0
+    leaflet.markercluster: ^1.5.3
+    react-leaflet: ^4.0.0
+  checksum: 3ee8cffc3f94d9065763a82b815aec68c66791687b957f612b362d676a9271ba8b7f8bedb9499ed8e02b82adef0c74de0112e7ae3a21c05bac3fda19604af517
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.5.0":
   version: 1.5.0
   resolution: "@colors/colors@npm:1.5.0"
@@ -3731,7 +3747,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-leaflet/core@npm:1.1.1, @react-leaflet/core@npm:^1.0.2, @react-leaflet/core@npm:^1.1.0, @react-leaflet/core@npm:^1.1.1":
+"@react-leaflet/core@npm:2.0.0, @react-leaflet/core@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@react-leaflet/core@npm:2.0.0"
+  peerDependencies:
+    leaflet: ^1.8.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: 8528b05bb3f2218dc783d508fad571ed34986bb9a15e8296f3ca6e090934ee4b9858172cab25bc2ae3255c880660d648477bb609c496bee70d1c0e3fb99f0533
+  languageName: node
+  linkType: hard
+
+"@react-leaflet/core@npm:^1.0.2, @react-leaflet/core@npm:^1.1.0, @react-leaflet/core@npm:^1.1.1":
   version: 1.1.1
   resolution: "@react-leaflet/core@npm:1.1.1"
   peerDependencies:
@@ -5330,6 +5357,7 @@ __metadata:
     "@babel/plugin-syntax-flow": 7.18.6
     "@babel/plugin-transform-react-jsx": 7.18.6
     "@babel/preset-react": 7.18.6
+    "@changey/react-leaflet-markercluster": ^4.0.0-rc1
     "@fontsource/roboto": 4.5.7
     "@fontsource/roboto-mono": 4.5.7
     "@graphile-contrib/pg-order-by-related": 1.0.0-beta.6
@@ -5339,7 +5367,7 @@ __metadata:
     "@mui/styled-engine-sc": 5.8.0
     "@mui/styles": 5.8.7
     "@reach/router": 1.3.4
-    "@react-leaflet/core": 1.1.1
+    "@react-leaflet/core": 2.0.0
     "@svgr/cli": 6.2.1
     autosuggest-highlight: 3.3.0
     babel-plugin-styled-components: 2.0.7
@@ -5389,7 +5417,7 @@ __metadata:
     js-file-download: 0.4.12
     json2csv: 5.0.7
     jwt-decode: 3.1.2
-    leaflet: 1.7.1
+    leaflet: 1.8.0
     leaflet-draw: 1.0.4
     leaflet-easyprint: 2.1.9
     leaflet-image: 0.4.0
@@ -5429,11 +5457,10 @@ __metadata:
     react-icons: 4.4.0
     react-image-lightbox: 5.1.4
     react-is: 18.2.0
-    react-leaflet: 3.2.5
+    react-leaflet: 4.0.1
     react-leaflet-bing-v2: 5.2.3
     react-leaflet-control: 2.1.2
     react-leaflet-fullscreen-plugin: 1.0.1
-    react-leaflet-markercluster: 3.0.0-rc1
     react-linkify: 1.0.0-alpha
     react-markdown-editor-lite: 1.3.2
     react-resize-detector: 7.1.2
@@ -13669,7 +13696,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leaflet.markercluster@npm:1.5.3, leaflet.markercluster@npm:^1.4.1":
+"leaflet.markercluster@npm:1.5.3, leaflet.markercluster@npm:^1.5.3":
   version: 1.5.3
   resolution: "leaflet.markercluster@npm:1.5.3"
   peerDependencies:
@@ -13678,14 +13705,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leaflet@npm:1.7.1":
-  version: 1.7.1
-  resolution: "leaflet@npm:1.7.1"
-  checksum: f69149ab482eeb6cdabd837939c4782c97a7a18bc0b2a9330d4a828ca0dc6e035981f2ecdb71c6646aa173bc369cd3b4fd6bbe5d81df4c59c45254f9e9361d03
-  languageName: node
-  linkType: hard
-
-"leaflet@npm:^1.0.0, leaflet@npm:^1.6.0":
+"leaflet@npm:1.8.0, leaflet@npm:^1.0.0, leaflet@npm:^1.8.0":
   version: 1.8.0
   resolution: "leaflet@npm:1.8.0"
   checksum: 4a27895d4253844f2f13f94cbc52a2030b10833cdf553085d931b834745236a8d2a38844a01eb968cc109eb43268bfadb97aad85b51deffb17b6ccd106542e00
@@ -17745,23 +17765,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-leaflet-markercluster@npm:3.0.0-rc1":
-  version: 3.0.0-rc1
-  resolution: "react-leaflet-markercluster@npm:3.0.0-rc1"
+"react-leaflet@npm:4.0.1, react-leaflet@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "react-leaflet@npm:4.0.1"
   dependencies:
-    "@react-leaflet/core": ^1.0.2
-    leaflet: ^1.6.0
-    leaflet.markercluster: ^1.4.1
-    react-leaflet: ^3.0.0
+    "@react-leaflet/core": ^2.0.0
   peerDependencies:
-    leaflet: ^1.6.0
-    leaflet.markercluster: ^1.4.1
-    react-leaflet: ^3.0.0
-  checksum: 9eb0a9259efdcbe03fcdbd9e0db330c1e6c2901d58f2f75be73a795bfa9fd211fd5dc1e88b81cb9fe778db3d9e160ba9f93297f93e0182205847a00e71c3cbaf
+    leaflet: ^1.8.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: f5e94c0e3b49f8d7d3c464185f8624ab0ad6958a950dd153974183ed93be1b61216c1cddd09967a85e65762f6696a39dfac086ab770980689405e80b3c43a6c1
   languageName: node
   linkType: hard
 
-"react-leaflet@npm:3.2.5, react-leaflet@npm:^3.0.0, react-leaflet@npm:^3.0.5":
+"react-leaflet@npm:^3.0.5":
   version: 3.2.5
   resolution: "react-leaflet@npm:3.2.5"
   dependencies:

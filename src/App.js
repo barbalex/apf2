@@ -43,7 +43,7 @@ import getActiveNodeArrayFromPathname from './modules/getActiveNodeArrayFromPath
 
 import 'simplebar/dist/simplebar.min.css'
 
-import 'react-leaflet-markercluster/dist/styles.min.css'
+import '@changey/react-leaflet-markercluster/dist/styles.min.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
 const GlobalStyle = createGlobalStyle()
