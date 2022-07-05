@@ -166,7 +166,7 @@
     "prettier": "2.7.1",
     "simplebar": "5.3.8",
     "source-map-explorer": "2.5.2",
-    "vercel": "25.2.3"
+    "vercel": "26.0.0"
   },
   "resolutions": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
