@@ -14,6 +14,7 @@ import styled from 'styled-components'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
+import { getSnapshot } from 'mobx-state-tree'
 
 import tables from '../../../modules/tables'
 import storeContext from '../../../storeContext'
@@ -79,7 +80,7 @@ const LabelFilter = ({ treeName, nodes }) => {
 
   const setValuesAfterChange = useCallback(
     (val) => {
-      //console.log('setting values')
+      console.log('setting values')
       const { filterTable, url, label } = activeNode
       // pop if is not folder and label does not comply to filter
       if (
@@ -124,6 +125,8 @@ const LabelFilter = ({ treeName, nodes }) => {
     empty()
     setValue('')
   }, [empty])
+
+  console.log('LabelFilter, nodeLabelFilter:', getSnapshot(nodeLabelFilter))
 
   return (
     <StyledFormControl fullWidth variant="standard">

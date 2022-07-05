@@ -7,6 +7,10 @@ import { simpleTypes as tpopType } from '../../store/Tree/DataFilter/tpop'
 import { simpleTypes as tpopmassnType } from '../../store/Tree/DataFilter/tpopmassn'
 import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tpopfeldkontr'
 import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
+import {
+  ap as apInitialValue,
+  pop as popInitialValue,
+} from '../../store/Tree/DataFilter/initialValues'
 
 /**
  * returns a filter for every branch of the nav tree
@@ -57,6 +61,8 @@ const buildTreeQueryVariables = ({
   const apFilterArrayInStoreWithoutEmpty = apFilterArrayInStore.filter(
     (f) => Object.values(f).filter((v) => v !== null).length !== 0,
   )
+  if (apFilterArrayInStoreWithoutEmpty.length === 0)
+    apFilterArrayInStoreWithoutEmpty.push(apInitialValue)
   const apFilterArray = []
   for (const filter of apFilterArrayInStoreWithoutEmpty) {
     let singleFilter = { projId: { equalTo: projId } }
@@ -78,6 +84,9 @@ const buildTreeQueryVariables = ({
       singleFilter = {
         or: [singleFilter, { id: { equalTo: apIdInActiveNodeArray } }],
       }
+    }
+    if (nodeLabelFilter.ap) {
+      singleFilter.label = { includesInsensitive: nodeLabelFilter.ap }
     }
     apFilterArray.push(singleFilter)
   }
@@ -137,6 +146,9 @@ const buildTreeQueryVariables = ({
   const popFilterArrayInStoreWithoutEmpty = popFilterArrayInStore.filter(
     (f) => Object.values(f).filter((v) => v !== null).length !== 0,
   )
+  if (popFilterArrayInStoreWithoutEmpty.length === 0) {
+    popFilterArrayInStoreWithoutEmpty.push(popInitialValue)
+  }
   const popFilterArray = []
   for (const filter of popFilterArrayInStoreWithoutEmpty) {
     const singleFilter = { apId: { in: ap } }
@@ -148,6 +160,11 @@ const buildTreeQueryVariables = ({
       const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
       singleFilter[key] = { [expression]: value }
     })
+    if (nodeLabelFilter.pop) {
+      singleFilter.label = {
+        includesInsensitive: nodeLabelFilter.pop,
+      }
+    }
     popFilterArray.push(singleFilter)
   }
   const popFilter = { or: popFilterArray }
@@ -240,11 +257,6 @@ const buildTreeQueryVariables = ({
   })
 
   const apsFilter = apFilter
-  if (nodeLabelFilter.ap) {
-    for (const filter of apFilter.or) {
-      filter.label = { includesInsensitive: nodeLabelFilter.ap }
-    }
-  }
   const apberuebersichtsFilter = { projId: { in: projekt } }
   if (nodeLabelFilter.apberuebersicht) {
     apberuebersichtsFilter.label = {
@@ -321,13 +333,6 @@ const buildTreeQueryVariables = ({
     }
   }
   const popsFilter = { ...popFilter }
-  if (nodeLabelFilter.pop) {
-    for (const filter of popsFilter.or) {
-      filter.label = {
-        includesInsensitive: nodeLabelFilter.pop,
-      }
-    }
-  }
   const tpopbersFilter = { tpopId: { in: tpop } }
   if (nodeLabelFilter.tpopber) {
     tpopbersFilter.label = {
