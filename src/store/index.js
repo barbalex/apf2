@@ -113,49 +113,6 @@ const myTypes = types
     notifications: [],
     client: null,
   }))
-  .views((self) => ({
-    get tpopkontrGqlFilter() {
-      const ek = Object.fromEntries(
-        Object.entries(getSnapshot(self.tree.dataFilter.tpopfeldkontr))
-          // eslint-disable-next-line no-unused-vars
-          .filter(([key, value]) => exists(value))
-          .map(([key, value]) => {
-            // if is string: includes, else: equalTo
-            const type = simpleTypes.tpopfeldkontr[key]
-            if (type === 'string') {
-              return [key, { includes: value }]
-            }
-            return [key, { equalTo: value }]
-          }),
-      )
-      const ekf = Object.fromEntries(
-        Object.entries(getSnapshot(self.tree.dataFilter.tpopfreiwkontr))
-          // eslint-disable-next-line no-unused-vars
-          .filter(([key, value]) => exists(value))
-          .map(([key, value]) => {
-            // if is string: includes, else: equalTo
-            const type = simpleTypes.tpopfreiwkontr[key]
-            if (type === 'string') {
-              return [key, { includes: value }]
-            }
-            return [key, { equalTo: value }]
-          }),
-      )
-      const k = { ...ekf, ...ek }
-      // if mapFilter is set, filter by its geometry
-      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
-        k.tpopByTpopId = {
-          geomPoint: {
-            coveredBy: self.mapFilter[0].geometry,
-          },
-        }
-      }
-      // return a valid filter even if no filter criterias exist
-      // but ensure it returns all rows
-      if (Object.entries(k).length === 0) return { id: { isNull: false } }
-      return k
-    },
-  }))
   .actions((self) => ({
     setClient(val) {
       self.client = val

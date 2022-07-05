@@ -10,11 +10,11 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index'
-import KontrollenButton from './Kontrollen'
+import Kontrollen from './Kontrollen'
 import KontrFuerWebgisBun from './KontrFuerWebgisBun'
 import KontrAnzProZaehlEinheit from './KontrAnzProZaehlEinheit'
 
-const Kontrollen = () => {
+const KontrollenComponent = ({ treeName }) => {
   const [expanded, setExpanded] = useState(false)
 
   return (
@@ -35,7 +35,7 @@ const Kontrollen = () => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         {expanded ? (
           <StyledCardContent>
-            <KontrollenButton />
+            <Kontrollen treeName={treeName} />
             <KontrFuerWebgisBun />
             <KontrAnzProZaehlEinheit />
           </StyledCardContent>
@@ -45,4 +45,4 @@ const Kontrollen = () => {
   )
 }
 
-export default Kontrollen
+export default KontrollenComponent
