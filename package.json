@@ -136,7 +136,6 @@
     "graphile-build": "is peer",
     "pg": "is peer",
     "simplebar": "is peer",
-    "react-leaflet": "3.2.5: do not upgrade as react-leaflet-markercluster creates errors",
     "punycode": "UNDECLARED dependency of markdown-it, see: https://github.com/markdown-it/markdown-it/issues/230 and many others",
     "react-leaflet-markercluster": "got weird problems. Trying to solve with @changey/react-leaflet-markercluster and upgrading leaflet deps"
   },
