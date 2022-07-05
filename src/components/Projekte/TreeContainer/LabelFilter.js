@@ -126,8 +126,6 @@ const LabelFilter = ({ treeName, nodes }) => {
     setValue('')
   }, [empty])
 
-  console.log('LabelFilter, nodeLabelFilter:', getSnapshot(nodeLabelFilter))
-
   return (
     <StyledFormControl fullWidth variant="standard">
       <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
