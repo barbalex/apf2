@@ -11,6 +11,7 @@ import initialDataFilterValues from './DataFilter/initialValues'
 import DataFilter from './DataFilter/types'
 import simpleTypes from './DataFilter/simpleTypes'
 import { simpleTypes as popType, initial as initialPop } from './DataFilter/pop'
+import { simpleTypes as apType, initial as initialAp } from './DataFilter/ap'
 import apIdInUrl from '../../modules/apIdInUrl'
 import projIdInUrl from '../../modules/projIdInUrl'
 import ekfIdInUrl from '../../modules/ekfIdInUrl'
@@ -113,23 +114,37 @@ export default types
       return tpopIdInUrl(self.activeNodeArray)
     },
     get apGqlFilter() {
-      const result = Object.fromEntries(
-        Object.entries(getSnapshot(self.dataFilter.ap))
-          // eslint-disable-next-line no-unused-vars
-          .filter(([key, value]) => exists(value))
-          .map(([key, value]) => {
-            // if is string: includes, else: equalTo
-            const type = simpleTypes.ap[key]
-            if (type === 'string') {
-              return [key, { includes: value }]
-            }
-            return [key, { equalTo: value }]
-          }),
+      const projId = self.activeNodeArray[1]
+      const filterArrayInStore = self.dataFilter.ap
+        ? getSnapshot(self.dataFilter.ap)
+        : []
+      // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
+      const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
+        (f) => Object.values(f).filter((v) => v !== null).length !== 0,
       )
-      // return a valid filter even if no filter criterias exist
-      // but ensure it returns all rows
-      if (Object.entries(result).length === 0) return { id: { isNull: false } }
-      return result
+      if (filterArrayInStoreWithoutEmpty.length === 0) {
+        // add empty filter
+        filterArrayInStoreWithoutEmpty.push(initialAp)
+      }
+      const filterArray = []
+      for (const filter of filterArrayInStoreWithoutEmpty) {
+        const apFilter = { projId: { equalTo: projId } }
+        const dataFilterAp = { ...filter }
+        const apFilterValues = Object.entries(dataFilterAp).filter(
+          (e) => e[1] || e[1] === 0,
+        )
+        apFilterValues.forEach(([key, value]) => {
+          const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
+          apFilter[key] = { [expression]: value }
+        })
+        if (self.nodeLabelFilter.ap) {
+          apFilter.label = {
+            includesInsensitive: self.nodeLabelFilter.ap,
+          }
+        }
+        filterArray.push(apFilter)
+      }
+      return { or: filterArray }
     },
     get popGqlFilter() {
       // need to slice to rerender on change
