@@ -22,7 +22,10 @@ import queryAps from './queryAps'
 import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as apType } from '../../../../store/Tree/DataFilter/ap'
+import {
+  simpleTypes as apType,
+  initial as initialAp,
+} from '../../../../store/Tree/DataFilter/ap'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
@@ -71,6 +74,11 @@ const LabelPopoverRowColumnLeft = styled.div`
 const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
+const NodeLabelFilterComment = styled.div`
+  margin-top: -10px;
+  padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+`
 
 const ApFilter = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -80,6 +88,7 @@ const ApFilter = ({ treeName }) => {
     dataFilter,
     setApFilter,
     apFilter: nurApFilter,
+    nodeLabelFilter,
   } = store[treeName]
 
   const projId = activeNodeArray[1]
@@ -101,6 +110,10 @@ const ApFilter = ({ treeName }) => {
     const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
       (f) => Object.values(f).filter((v) => v !== null).length !== 0,
     )
+    if (filterArrayInStoreWithoutEmpty.length === 0) {
+      // add empty filter
+      filterArrayInStoreWithoutEmpty.push(initialAp)
+    }
     const filterArray = []
     for (const filter of filterArrayInStoreWithoutEmpty) {
       const apFilter = { projId: { equalTo: projId } }
@@ -112,11 +125,16 @@ const ApFilter = ({ treeName }) => {
         const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
         apFilter[key] = { [expression]: value }
       })
+      if (nodeLabelFilter.ap) {
+        apFilter.label = {
+          includesInsensitive: nodeLabelFilter.ap,
+        }
+      }
       filterArray.push(apFilter)
     }
     return { or: filterArray }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataFilterApStringified, projId, dataFilter.ap])
+  }, [dataFilterApStringified, projId, dataFilter.ap, nodeLabelFilter.ap])
 
   const { data: apsData, error: apsError } = useQuery(queryAps, {
     variables: { apFilter },
@@ -226,6 +244,9 @@ const ApFilter = ({ treeName }) => {
           row={row}
           activeTab={activeTab}
         />
+        {!!nodeLabelFilter.ap && (
+          <NodeLabelFilterComment>{`Hinweis: Im Navigationsbaum wird das Label der Arten nach "${nodeLabelFilter.ap}" gefiltert.`}</NodeLabelFilterComment>
+        )}
         <OrTabs
           dataFilter={dataFilter.ap}
           activeTab={activeTab}
