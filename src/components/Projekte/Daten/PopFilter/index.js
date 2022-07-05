@@ -18,7 +18,10 @@ import Checkbox2States from '../../../shared/Checkbox2States'
 import FilterTitle from '../../../shared/FilterTitle'
 import queryPops from './queryPops'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as popType } from '../../../../store/Tree/DataFilter/pop'
+import {
+  simpleTypes as popType,
+  initial as initialPop,
+} from '../../../../store/Tree/DataFilter/pop'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
@@ -35,11 +38,16 @@ const FormContainer = styled.div`
   padding: 10px;
   overflow-y: auto;
 `
+const NodeLabelFilterComment = styled.div`
+  margin-top: -10px;
+  padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+`
 
 const PopFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
-  const { activeNodeArray, dataFilter } = store[treeName]
+  const { activeNodeArray, dataFilter, nodeLabelFilter } = store[treeName]
 
   // need to slice to rerender on change
   const apId = activeNodeArray.slice()[3]
@@ -61,6 +69,10 @@ const PopFilter = ({ treeName }) => {
     const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
       (f) => Object.values(f).filter((v) => v !== null).length !== 0,
     )
+    if (filterArrayInStoreWithoutEmpty.length === 0) {
+      // add empty filter
+      filterArrayInStoreWithoutEmpty.push(initialPop)
+    }
     const filterArray = []
     for (const filter of filterArrayInStoreWithoutEmpty) {
       const popFilter = apId ? { apId: { equalTo: apId } } : {}
@@ -72,6 +84,11 @@ const PopFilter = ({ treeName }) => {
         const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
         popFilter[key] = { [expression]: value }
       })
+      if (nodeLabelFilter.pop) {
+        popFilter.label = {
+          includesInsensitive: nodeLabelFilter.pop,
+        }
+      }
       filterArray.push(popFilter)
     }
     // need to filter by apId
@@ -80,7 +97,7 @@ const PopFilter = ({ treeName }) => {
     }
     return { or: filterArray }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apId, dataFilter.pop, dataFilterPopStringified])
+  }, [apId, dataFilter.pop, dataFilterPopStringified, nodeLabelFilter.pop])
 
   const { data: dataPops, error } = useQuery(queryPops, {
     variables: {
@@ -99,7 +116,7 @@ const PopFilter = ({ treeName }) => {
     ? dataPops?.popsFiltered?.totalCount ?? '...'
     : dataPops?.allPopsFiltered?.totalCount ?? '...'
 
-  console.log('PopFilter', { apId, dataPops, totalNr, filteredNr, popFilter })
+  // console.log('PopFilter', { apId, dataPops, totalNr, filteredNr, popFilter })
 
   const saveToDb = useCallback(
     async (event) =>
@@ -128,6 +145,9 @@ const PopFilter = ({ treeName }) => {
           filteredNr={filteredNr}
           activeTab={activeTab}
         />
+        {!!nodeLabelFilter.pop && (
+          <NodeLabelFilterComment>{`Hinweis: Im Navigationsbaum wird das Label der Populationen nach "${nodeLabelFilter.pop}" gefiltert.`}</NodeLabelFilterComment>
+        )}
         <PopOrTabs
           dataFilter={dataFilter.pop}
           activeTab={activeTab}

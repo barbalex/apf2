@@ -70,7 +70,7 @@ const Pop = ({ treeName }) => {
     }
     popFilterArray.push(singleFilter)
   }
-  const popFilter = { or: popFilterArray }
+  const popFilter = { or: popFilterArray } 
 
   const tpopFilter = {
     wgs84Lat: { isNull: false },
