@@ -7,10 +7,8 @@ import { simpleTypes as tpopType } from '../../store/Tree/DataFilter/tpop'
 import { simpleTypes as tpopmassnType } from '../../store/Tree/DataFilter/tpopmassn'
 import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tpopfeldkontr'
 import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
-import {
-  ap as apInitialValue,
-  pop as popInitialValue,
-} from '../../store/Tree/DataFilter/initialValues'
+import { initial as apInitialValue } from '../../store/Tree/DataFilter/ap'
+import { initial as popInitialValue } from '../../store/Tree/DataFilter/pop'
 
 /**
  * returns a filter for every branch of the nav tree
