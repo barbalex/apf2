@@ -33,7 +33,9 @@ const buildTreeQueryVariables = ({
   openNodes,
   apFilter: apFilterSet,
   nodeLabelFilter,
-  apIdInActiveNodeArray,popGqlFilter
+  apIdInActiveNodeArray,
+  popGqlFilter,
+  apGqlFilter,
 }) => {
   // apFilter is used for form nodeLabelFilter AND apFilter of tree :-(
   const isWerteListen = openNodes.some(
@@ -45,48 +47,10 @@ const buildTreeQueryVariables = ({
       .filter((v) => v !== null)
       .filter((v) => isUuid.anyNonNil(v)),
   )
-  let projId = '99999999-9999-9999-9999-999999999999'
-  if (projekt && projekt[0]) projId = projekt[0]
 
   const isProjekt = openNodes.some(
     (nArray) => nArray[0] === 'Projekte' && nArray[1],
   )
-
-  const apFilterArrayInStore = dataFilter.ap
-  // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-  const apFilterArrayInStoreWithoutEmpty = apFilterArrayInStore.filter(
-    (f) => Object.values(f).filter((v) => v !== null).length !== 0,
-  )
-  if (apFilterArrayInStoreWithoutEmpty.length === 0)
-    apFilterArrayInStoreWithoutEmpty.push(apInitialValue)
-  const apFilterArray = []
-  for (const filter of apFilterArrayInStoreWithoutEmpty) {
-    let singleFilter = { projId: { equalTo: projId } }
-    const dataFilterAp = { ...filter }
-    const apFilterValues = Object.entries(dataFilterAp).filter(
-      (e) => e[1] || e[1] === 0,
-    )
-    apFilterValues.forEach(([key, value]) => {
-      const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-      singleFilter[key] = { [expression]: value }
-    })
-    // for unknown reason the following only works belated, so not
-    if (apFilterSet) {
-      singleFilter.bearbeitung = { in: [1, 2, 3] }
-    }
-    if (apIdInActiveNodeArray) {
-      // if apId in activeNodeArray
-      // allow showing this ap
-      singleFilter = {
-        or: [singleFilter, { id: { equalTo: apIdInActiveNodeArray } }],
-      }
-    }
-    if (nodeLabelFilter.ap) {
-      singleFilter.label = { includesInsensitive: nodeLabelFilter.ap }
-    }
-    apFilterArray.push(singleFilter)
-  }
-  const apFilter = { or: apFilterArray }
 
   const ap = uniq(
     openNodes
@@ -234,7 +198,7 @@ const buildTreeQueryVariables = ({
     tpopmassnFilter[key] = { [expression]: value }
   })
 
-  const apsFilter = apFilter
+  const apsFilter = apGqlFilter
   const apberuebersichtsFilter = { projId: { in: projekt } }
   if (nodeLabelFilter.apberuebersicht) {
     apberuebersichtsFilter.label = {
