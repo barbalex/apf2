@@ -62,7 +62,6 @@ const TpopFilter = ({ treeName }) => {
     }
   }, [activeTab, dataFilter.tpop.length])
 
-  console.log('TPopFilter, tpopGqlFilter:', tpopGqlFilter)
   const { data: dataTpops, error } = useQuery(queryTpops, {
     variables: {
       filteredFilter: tpopGqlFilter.filtered,

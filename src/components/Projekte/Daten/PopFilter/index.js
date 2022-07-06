@@ -50,7 +50,6 @@ const PopFilter = ({ treeName }) => {
     }
   }, [activeTab, dataFilter.pop.length])
 
-  console.log('PopFilter, popGqlFilter:', popGqlFilter)
   const { data: dataPops, error } = useQuery(queryPops, {
     variables: {
       filteredFilter: popGqlFilter.filtered,
