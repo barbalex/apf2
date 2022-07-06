@@ -14,7 +14,7 @@ import BeobNichtZuzuordnen from './BeobNichtZuzuordnen'
 import BeobZugeordnet from './BeobZugeordnet'
 import BeobArtChanged from './BeobArtChanged'
 
-const BeobachtungenExports = () => {
+const BeobachtungenExports = ({ treeName }) => {
   const [expanded, setExpanded] = useState(false)
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
@@ -37,7 +37,7 @@ const BeobachtungenExports = () => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         {expanded ? (
           <StyledCardContent>
-            <BeobArtChanged />
+            <BeobArtChanged treeName={treeName} />
             <BeobZugeordnet />
             <BeobNichtZuzuordnen />
           </StyledCardContent>

@@ -24,15 +24,15 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-const Optionen = () => {
+const Optionen = ({ treeName }) => {
+  const store = useContext(storeContext)
   const {
-    mapFilter: mapFilterRaw,
     setExportFileType,
     setExportApplyMapFilter,
     exportApplyMapFilter,
     exportFileType,
-  } = useContext(storeContext)
-  const mapFilter = mapFilterRaw.toJSON()
+  } = store
+  const { mapFilter } = store[treeName]
   const [expanded, setExpanded] = useState(true)
 
   return (
@@ -73,12 +73,13 @@ const Optionen = () => {
                 color="primary"
               />
             }
+            // TODO: test if type is undefined when mapFilter is not set
             label={
-              mapFilter.length > 0
+              mapFilter
                 ? 'Karten-Filter anwenden'
                 : 'Karten-Filter anwenden (verfügbar, wenn ein Karten-Filter erstellt wurde)'
             }
-            disabled={!(mapFilter.length > 0)}
+            disabled={!mapFilter}
           />
         </StyledCardContent>
       </Collapse>

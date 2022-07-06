@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client'
 
-const setIdsFiltered = async (store) => {
-  const { enqueNotification, mapFilter, client } = store
+const setIdsFiltered = async ({ store, treeName }) => {
+  const { enqueNotification, client } = store
+  const { mapFilter } = store[treeName]
   const { setPopIdsFiltered, setTpopIdsFiltered, setBeobIdsFiltered } =
     store.tree.map
-  const geometry = mapFilter?.[0]?.geometry
-  if (!geometry) {
+  if (!mapFilter) {
     setPopIdsFiltered([])
     setTpopIdsFiltered([])
     setBeobIdsFiltered([])
@@ -26,7 +26,7 @@ const setIdsFiltered = async (store) => {
       `,
       variables: {
         filter: {
-          geomPoint: { coveredBy: mapFilter?.[0]?.geometry },
+          geomPoint: { coveredBy: mapFilter },
         },
       },
     })
@@ -55,7 +55,7 @@ const setIdsFiltered = async (store) => {
       `,
       variables: {
         filter: {
-          geomPoint: { coveredBy: mapFilter?.[0]?.geometry },
+          geomPoint: { coveredBy: mapFilter },
         },
       },
     })
@@ -85,7 +85,7 @@ const setIdsFiltered = async (store) => {
       variables: {
         filter: {
           and: {
-            geomPoint: { coveredBy: mapFilter?.[0]?.geometry },
+            geomPoint: { coveredBy: mapFilter },
             // don't know why but returns no results?????
             // aeTaxonomyByArtId: {
             //   apartsByArtId: {

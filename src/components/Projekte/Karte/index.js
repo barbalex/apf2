@@ -449,11 +449,10 @@ const Karte = ({ treeName }) => {
     bounds: boundsRaw,
     assigningBeob,
     hideMapControls,
-    mapFilter,
     idOfTpopBeingLocalized,
   } = store
   const tree = store[treeName]
-  const { apIdInActiveNodeArray } = tree
+  const { apIdInActiveNodeArray, mapFilter } = tree
   const bounds = getSnapshot(boundsRaw)
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const activeOverlays = getSnapshot(activeOverlaysRaw)
@@ -558,34 +557,34 @@ const Karte = ({ treeName }) => {
             .reverse()}
           <Pop
             key={`${apId}/pop/${activeApfloraLayers.join()}/${
-              mapFilter?.length ?? 99
+              mapFilter?.coordinates ?? 99
             }`}
             treeName={treeName}
           />
           <Tpop
             key={`${apId}/tpop/${activeApfloraLayers.join()}/${
-              mapFilter?.length ?? 99
+              mapFilter?.coordinates ?? 99
             }`}
             treeName={treeName}
             clustered={clustered}
           />
           <BeobNichtBeurteilt
             key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}/${
-              mapFilter?.length ?? 99
+              mapFilter?.coordinates ?? 99
             }`}
             treeName={treeName}
             clustered={clustered}
           />
           <BeobNichtZuzuordnen
             key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}/${
-              mapFilter?.length ?? 99
+              mapFilter?.coordinates ?? 99
             }`}
             treeName={treeName}
             clustered={clustered}
           />
           <BeobZugeordnet
             key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}/${
-              mapFilter?.length ?? 99
+              mapFilter?.coordinates ?? 99
             }`}
             treeName={treeName}
             clustered={clustered}
@@ -605,7 +604,7 @@ const Karte = ({ treeName }) => {
           <ZoomControl position="topright" />
           {/* <Fullscreen {...fullscreenOptions} /> */}
           <MeasureControl />
-          {showMapFilter && <DrawControl />}
+          {showMapFilter && <DrawControl treeName={treeName} />}
           <Control position="bottomright">
             <CoordinatesControl />
           </Control>

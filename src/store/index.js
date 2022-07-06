@@ -5,7 +5,6 @@ import queryString from 'query-string'
 import { navigate } from 'gatsby'
 
 import ApfloraLayer from './ApfloraLayer'
-import Geojson from './Geojson'
 import Copying, { defaultValue as defaultCopying } from './Copying'
 import CopyingBiotop, {
   defaultValue as defaultCopyingBiotop,
@@ -22,7 +21,6 @@ import User, { defaultValue as defaultUser } from './User'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import EkPlan, { defaultValue as defaultEkPlan } from './EkPlan'
 import getOpenNodesFromActiveNodeArray from '../modules/getOpenNodesFromActiveNodeArray'
-import setIdsFiltered from '../modules/setIdsFiltered'
 
 import { initial as apInitial } from './Tree/DataFilter/ap'
 import { initial as popInitial } from './Tree/DataFilter/pop'
@@ -61,7 +59,6 @@ const myTypes = types
       [47.159, 8.354],
       [47.696, 8.984],
     ]),
-    mapFilter: types.array(Geojson),
     toDeleteTable: types.maybeNull(types.string),
     toDeleteId: types.maybeNull(types.string),
     toDeleteLabel: types.maybeNull(types.string),
@@ -192,11 +189,6 @@ const myTypes = types
     },
     setBounds(val) {
       self.bounds = val
-    },
-    setMapFilter(val) {
-      //console.log('store, setMapFilter, val:', val)
-      self.mapFilter = val
-      setIdsFiltered(self)
     },
     dataFilterClone1To2() {
       self.tree2.dataFilter = cloneDeep(self.tree.dataFilter)

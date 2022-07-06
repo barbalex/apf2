@@ -8,7 +8,6 @@ import { useMap } from 'react-leaflet'
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
-import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
 
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -27,11 +26,9 @@ const iconCreateFunction = function (cluster) {
 const Pop = ({ treeName }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { activeApfloraLayers, enqueNotification, setRefetchKey, mapFilter } =
-    store
+  const { activeApfloraLayers, enqueNotification, setRefetchKey } = store
   const tree = store[treeName]
   const {
-    dataFilter,
     projIdInActiveNodeArray,
     apIdInActiveNodeArray,
     popGqlFilter,
