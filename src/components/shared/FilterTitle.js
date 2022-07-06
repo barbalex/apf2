@@ -83,8 +83,8 @@ const FilterTitle = ({
         <FilterNumbers>
           {exists(filteredNr) && (
             <>
-              <span title="gefilterte Anzahl in Art">{filteredNr}</span>/
-              <span title="ungefilterte Anzahl in Art">{totalNr}</span>
+              <span title="gefilterte Anzahl">{filteredNr}</span>/
+              <span title="ungefilterte Anzahl">{totalNr}</span>
             </>
           )}
         </FilterNumbers>
