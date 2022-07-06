@@ -164,9 +164,10 @@ export default types
         // add empty filter
         filterArrayInStoreWithoutEmpty.push(initialPop)
       }
+      const singleFilterByUrl = apId ? { apId: { equalTo: apId } } : undefined
       const filterArray = []
       for (const filter of filterArrayInStoreWithoutEmpty) {
-        const popFilter = apId ? { apId: { equalTo: apId } } : {}
+        const popFilter = singleFilterByUrl ?? {}
         const dataFilterPop = { ...filter }
         const popFilterValues = Object.entries(dataFilterPop).filter(
           (e) => e[1] || e[1] === 0,
@@ -184,9 +185,9 @@ export default types
         if (Object.keys(popFilter).length === 0) break
         filterArray.push(popFilter)
       }
-      // need to filter by apId
-      if (filterArray.length === 0 && apId) {
-        filterArray.push({ apId: { equalTo: apId } })
+      // filter by url
+      if (filterArray.length === 0 && singleFilterByUrl) {
+        filterArray.push(singleFilterByUrl)
       }
       return { or: filterArray }
     },
@@ -207,7 +208,6 @@ export default types
         filterArrayInStoreWithoutEmpty.push(initialTpop)
       }
       const filterArray = []
-      // TODO: add singleFilterByUrl to popGqlFilter
       const singleFilterByUrl = popId ? { popId: { equalTo: popId } } : {}
       if (apId) {
         singleFilterByUrl.popByPopId = { apId: { equalTo: apId } }

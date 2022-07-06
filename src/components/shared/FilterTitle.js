@@ -6,7 +6,6 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext'
 import exists from '../../modules/exists'
-import NodeLabelFilter from '../../store/Tree/NodeLabelFilter'
 
 const Container = styled.div`
   background-color: #ffd3a7;

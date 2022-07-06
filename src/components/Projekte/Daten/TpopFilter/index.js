@@ -36,7 +36,7 @@ const StyledTab = styled(Tab)`
 const TabContent = styled.div`
   height: calc(100% - 48px);
 `
-const NodeLabelFilterComment = styled.div`
+const FilterComment = styled.div`
   margin-top: -10px;
   padding: 0 10px 16px 10px;
   font-size: 0.75em;
@@ -52,6 +52,7 @@ const TpopFilter = ({ treeName }) => {
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
   const apId = activeNodeArray[3]
+  const popId = activeNodeArray[5]
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -102,6 +103,11 @@ const TpopFilter = ({ treeName }) => {
       }),
     [activeTab, dataFilterSetValue, treeName],
   )
+  const hiearchyComment = popId
+    ? 'Eine Population ist gewählt. Es werden (nur) die Teil-Populationen dieser Population berücksichtigt.'
+    : apId
+    ? 'Eine Art ist gewählt. Es werden (nur) die Teil-Populationen dieser Art berücksichtigt.'
+    : 'Es werden alle Teil-Populationen des Projekts berücksichtigt.'
 
   if (error) return <Error error={error} />
 
@@ -115,8 +121,9 @@ const TpopFilter = ({ treeName }) => {
           totalNr={totalNr}
           filteredNr={filteredNr}
         />
+        <FilterComment>{hiearchyComment}</FilterComment>
         {!!nodeLabelFilter.tpop && (
-          <NodeLabelFilterComment>{`Hinweis: Gemäss Navigationsbaum wird das Label der Teil-Populationen nach "${nodeLabelFilter.tpop}" gefiltert.`}</NodeLabelFilterComment>
+          <FilterComment>{`Hinweis: Gemäss Navigationsbaum wird das Label der Teil-Populationen nach "${nodeLabelFilter.tpop}" gefiltert.`}</FilterComment>
         )}
         <PopOrTabs
           dataFilter={dataFilter.tpop}

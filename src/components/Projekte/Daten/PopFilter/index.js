@@ -27,7 +27,7 @@ const FormContainer = styled.div`
   padding: 10px;
   overflow-y: auto;
 `
-const NodeLabelFilterComment = styled.div`
+const FilterComment = styled.div`
   margin-top: -10px;
   padding: 0 10px 16px 10px;
   font-size: 0.75em;
@@ -79,6 +79,10 @@ const PopFilter = ({ treeName }) => {
     [activeTab, dataFilterSetValue, treeName],
   )
 
+  const hiearchyComment = apId
+    ? 'Eine Art ist gewählt. Es werden (nur) die Populationen dieser Art berücksichtigt.'
+    : 'Es werden alle Populationen des Projekts berücksichtigt.'
+
   if (error) return <Error error={error} />
 
   // if (!row) return null
@@ -94,8 +98,9 @@ const PopFilter = ({ treeName }) => {
           filteredNr={filteredNr}
           activeTab={activeTab}
         />
+        <FilterComment>{hiearchyComment}</FilterComment>
         {!!nodeLabelFilter.pop && (
-          <NodeLabelFilterComment>{`Hinweis: Gemäss Navigationsbaum wird das Label der Populationen nach "${nodeLabelFilter.pop}" gefiltert.`}</NodeLabelFilterComment>
+          <FilterComment>{`Gemäss Navigationsbaum wird das Label der Populationen nach "${nodeLabelFilter.pop}" gefiltert.`}</FilterComment>
         )}
         <PopOrTabs
           dataFilter={dataFilter.pop}
