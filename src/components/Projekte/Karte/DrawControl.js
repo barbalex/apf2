@@ -78,11 +78,6 @@ const DrawControl = ({ treeName }) => {
       mapFilter.addLayer(e.layer)
       drawControlFull.remove(map)
       drawControlEditOnly.addTo(map)
-      console.log('DrawControl mapFilter:', mapFilter.toGeoJSON())
-      console.log(
-        'DrawControl setting map filter to:',
-        mapFilter.toGeoJSON()?.features?.[0]?.geometry,
-      )
       setMapFilter(mapFilter.toGeoJSON()?.features?.[0]?.geometry)
     })
     map.on('draw:edited', () =>

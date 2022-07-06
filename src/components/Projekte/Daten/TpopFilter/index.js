@@ -4,7 +4,6 @@ import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import { getSnapshot } from 'mobx-state-tree'
 
 import FilterTitle from '../../../shared/FilterTitle'
 import queryTpops from './queryTpops'
@@ -52,6 +51,7 @@ const TpopFilter = ({ treeName }) => {
     dataFilter,
     tpopGqlFilter,
     nodeLabelFilter,
+    mapFilter,
   } = store[treeName]
   const [tab, setTab] = useState(urlQuery?.tpopTab ?? 'tpop')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
@@ -111,7 +111,10 @@ const TpopFilter = ({ treeName }) => {
         />
         <FilterComment>{hiearchyComment}</FilterComment>
         {!!nodeLabelFilter.tpop && (
-          <FilterComment>{`Hinweis: Gemäss Navigationsbaum wird das Label der Teil-Populationen nach "${nodeLabelFilter.tpop}" gefiltert.`}</FilterComment>
+          <FilterComment>{`Gemäss Navigationsbaum wird das Label der Teil-Populationen nach "${nodeLabelFilter.tpop}" gefiltert.`}</FilterComment>
+        )}
+        {!!mapFilter && (
+          <FilterComment>{`Der gesetzte Karten-Filter wird angewendet`}</FilterComment>
         )}
         <PopOrTabs
           dataFilter={dataFilter.tpop}
