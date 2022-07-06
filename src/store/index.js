@@ -227,32 +227,25 @@ const myTypes = types
       self[treeName].dataFilter[table] = initialDataFilterTreeValues[table]
     },
     dataFilterTableIsFiltered({ treeName, table }) {
-      // TODO: ensure nodeLabelFilter is always checked
-      // TODO: ensure mapFilter is checked
-      if (
-        ![
-          'ap',
-          'pop',
-          'tpop',
-          'tpopfeldkontr',
-          'tpopfreiwkontr',
-          'tpopmassn',
-        ].includes(table)
-      ) {
-        // there exist no filter for this table
-        return false
-      }
+      // check nodeLabelFilter
       const nodeLabelFilterExists = !!self[treeName].nodeLabelFilter[table]
       if (nodeLabelFilterExists) return true
-
+      // TODO: ensure hierarchy filter is set and checked
+      // TODO: ensure mapFilter is checked
       const tableFilter = getSnapshot(self[treeName].dataFilter[table])
       if (['ap', 'pop', 'tpop'].includes(table)) {
+        // or filter
         return tableFilter.some(
           (filter) =>
             Object.values(filter).filter((v) => v !== null).length > 0,
         )
       }
-      return Object.values(tableFilter).filter((v) => v !== null).length > 0
+      if (['tpopfeldkontr', 'tpopfreiwkontr', 'tpopmassn'].includes(table)) {
+        // single filter
+        return Object.values(tableFilter).filter((v) => v !== null).length > 0
+      }
+      // this table is not filtered beyond nodeLabelFilter
+      return false
     },
     dataFilterTreeIsFiltered(treeName) {
       const tables = Object.keys(self[treeName].dataFilter)
