@@ -72,7 +72,7 @@ const Pops = ({ treeName }) => {
               }
             `,
             variables: {
-              filter: popGqlFilter,
+              filter: popGqlFilter.filtered,
             },
           })
         } catch (error) {

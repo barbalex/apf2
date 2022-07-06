@@ -50,22 +50,17 @@ const PopFilter = ({ treeName }) => {
     }
   }, [activeTab, dataFilter.pop.length])
 
+  console.log('PopFilter, popGqlFilter:', popGqlFilter)
   const { data: dataPops, error } = useQuery(queryPops, {
     variables: {
-      popFilter: popGqlFilter,
-      apId,
-      apIdExists: !!apId,
-      apIdNotExists: !apId,
+      filteredFilter: popGqlFilter.filtered,
+      allFilter: popGqlFilter.all,
     },
   })
 
   const row = dataFilter.pop[activeTab]
-  const totalNr = apId
-    ? dataPops?.pops?.totalCount ?? '...'
-    : dataPops?.allPops?.totalCount ?? '...'
-  const filteredNr = apId
-    ? dataPops?.popsFiltered?.totalCount ?? '...'
-    : dataPops?.allPopsFiltered?.totalCount ?? '...'
+  const totalNr = dataPops?.pops?.totalCount ?? '...'
+  const filteredNr = dataPops?.popsFiltered?.totalCount ?? '...'
 
   const saveToDb = useCallback(
     async (event) =>

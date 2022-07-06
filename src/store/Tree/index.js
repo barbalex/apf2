@@ -164,10 +164,10 @@ export default types
         // add empty filter
         filterArrayInStoreWithoutEmpty.push(initialPop)
       }
-      const singleFilterByUrl = apId ? { apId: { equalTo: apId } } : undefined
+      const singleFilterByUrl = apId ? { apId: { equalTo: apId } } : {}
       const filterArray = []
       for (const filter of filterArrayInStoreWithoutEmpty) {
-        const popFilter = singleFilterByUrl ?? {}
+        const popFilter = { ...singleFilterByUrl }
         const dataFilterPop = { ...filter }
         const popFilterValues = Object.entries(dataFilterPop).filter(
           (e) => e[1] || e[1] === 0,
@@ -186,10 +186,16 @@ export default types
         filterArray.push(popFilter)
       }
       // filter by url
-      if (filterArray.length === 0 && singleFilterByUrl) {
+      if (filterArray.length === 0 && Object.keys(singleFilterByUrl).length) {
         filterArray.push(singleFilterByUrl)
       }
-      return { or: filterArray }
+
+      return {
+        all: Object.keys(singleFilterByUrl).length
+          ? singleFilterByUrl
+          : { or: [] },
+        filtered: { or: filterArray },
+      }
     },
     get tpopGqlFilter() {
       // need to slice to rerender on change
@@ -249,7 +255,7 @@ export default types
       if (filterArray.length === 0 && Object.keys(singleFilterByUrl).length) {
         filterArray.push(singleFilterByUrl)
       }
-      // return { or: filterArray }
+
       return { all: singleFilterByUrl, filtered: { or: filterArray } }
     },
     get tpopmassnGqlFilter() {

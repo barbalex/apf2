@@ -151,7 +151,7 @@ const Tpop = ({ treeName, clustered }) => {
         perAp,
         perProj,
         isActiveInMap,
-        popFilter: popGqlFilter,
+        popFilter: popGqlFilter.filtered,
         tpopFilter: tpopGqlFilter.filtered,
       },
     })

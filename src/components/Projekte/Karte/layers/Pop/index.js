@@ -54,7 +54,7 @@ const Pop = ({ treeName }) => {
       projId,
       tpopLayerIsActive,
       isActiveInMap,
-      popFilter: popGqlFilter,
+      popFilter: popGqlFilter.filtered,
       tpopFilter: tpopGqlFilter.filtered,
     },
   })

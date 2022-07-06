@@ -262,7 +262,7 @@ const buildTreeQueryVariables = ({
       includesInsensitive: nodeLabelFilter.popmassnber,
     }
   }
-  const popsFilter = popGqlFilter
+  const popsFilter = popGqlFilter.filtered
   const tpopbersFilter = { tpopId: { in: tpop } }
   if (nodeLabelFilter.tpopber) {
     tpopbersFilter.label = {

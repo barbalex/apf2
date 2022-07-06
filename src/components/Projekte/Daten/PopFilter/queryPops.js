@@ -2,22 +2,13 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query allPopsQueryForPopFilter(
-    $popFilter: PopFilter!
-    $apId: UUID
-    $apIdExists: Boolean!
-    $apIdNotExists: Boolean!
+    $filteredFilter: PopFilter!
+    $allFilter: PopFilter!
   ) {
-    pops: allPops(filter: { apId: { equalTo: $apId } })
-      @include(if: $apIdExists) {
+    pops: allPops(filter: $allFilter) {
       totalCount
     }
-    popsFiltered: allPops(filter: $popFilter) @include(if: $apIdExists) {
-      totalCount
-    }
-    allPops: allPops @include(if: $apIdNotExists) {
-      totalCount 
-    }
-    allPopsFiltered: allPops(filter: $popFilter) @include(if: $apIdNotExists) {
+    popsFiltered: allPops(filter: $filteredFilter) {
       totalCount
     }
   }
