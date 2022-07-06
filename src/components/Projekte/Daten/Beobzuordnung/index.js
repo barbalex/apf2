@@ -264,7 +264,7 @@ const Beobzuordnung = ({ type, treeName }) => {
         const dX = Math.abs(row.lv95X - t.lv95X)
         const dY = Math.abs(row.lv95Y - t.lv95Y)
         const distNr = Math.round((dX ** 2 + dY ** 2) ** 0.5)
-        const distance = distNr.toLocaleString('de-ch')
+        const distance = distNr?.toLocaleString('de-ch')
         // build label
         const tpopStatus = t?.popStatusWerteByStatus?.text ?? 'ohne Status'
         const popNr = t?.popByPopId?.nr ?? '(keine Nr)'

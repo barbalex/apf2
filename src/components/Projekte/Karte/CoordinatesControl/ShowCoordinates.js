@@ -18,8 +18,8 @@ const StyledDiv = styled.div`
 
 const ShowCoordinates = ({ setControlType }) => {
   const { mapMouseCoordinates } = useContext(storeContext)
-  const x = mapMouseCoordinates.x.toLocaleString('de-ch')
-  const y = mapMouseCoordinates.y.toLocaleString('de-ch')
+  const x = mapMouseCoordinates.x?.toLocaleString('de-ch')
+  const y = mapMouseCoordinates.y?.toLocaleString('de-ch')
 
   const onClick = useCallback(() => setControlType('goto'), [setControlType])
 

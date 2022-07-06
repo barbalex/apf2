@@ -116,8 +116,8 @@ const PopMarker = ({ treeName, pop }) => {
           <div>{`Art: ${artname}`}</div>
           <div>
             {`Koordinaten: ${
-              pop.lv95X ? pop.lv95X.toLocaleString('de-ch') : ''
-            } / ${pop.lv95Y ? pop.lv95Y.toLocaleString('de-ch') : ''}`}
+              pop.lv95X ? pop.lv95X?.toLocaleString('de-ch') : ''
+            } / ${pop.lv95Y ? pop.lv95Y?.toLocaleString('de-ch') : ''}`}
           </div>
           <div>{`Status: ${
             pop?.popStatusWerteByStatus?.text ?? '(kein Status)'

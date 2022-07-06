@@ -34,8 +34,8 @@ const CustomTooltip = ({ payload = [], label, active, color, reverse }) => {
       <Title>{label}</Title>
       {data.map((o, i) => {
         const value =
-          exists(o.value) && o.value.toLocaleString
-            ? o.value.toLocaleString('de-ch')
+          exists(o.value) && o.value?.toLocaleString
+            ? o.value?.toLocaleString('de-ch')
             : null
 
         return (

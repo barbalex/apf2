@@ -142,9 +142,9 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
           }`}</div>
           <StyledH3>{label}</StyledH3>
           <div>
-            {`Koordinaten: ${beob.lv95X.toLocaleString(
+            {`Koordinaten: ${beob.lv95X?.toLocaleString(
               'de-ch',
-            )} / ${beob.lv95Y.toLocaleString('de-ch')}`}
+            )} / ${beob.lv95Y?.toLocaleString('de-ch')}`}
           </div>
           <div>{`Teil-Population: ${beob?.tpopByTpopId?.nr ?? '(keine Nr)'}: ${
             beob?.tpopByTpopId?.flurname ?? '(kein Flurname)'
