@@ -1,4 +1,4 @@
-import { types } from 'mobx-state-tree'
+import { types, getSnapshot } from 'mobx-state-tree'
 import cloneDeep from 'lodash/cloneDeep'
 import isEqual from 'lodash/isEqual'
 import queryString from 'query-string'
@@ -227,6 +227,8 @@ const myTypes = types
       self[treeName].dataFilter[table] = initialDataFilterTreeValues[table]
     },
     dataFilterTableIsFiltered({ treeName, table }) {
+      // TODO: ensure nodeLabelFilter is always checked
+      // TODO: ensure mapFilter is checked
       if (
         ![
           'ap',
@@ -240,8 +242,17 @@ const myTypes = types
         // there exist no filter for this table
         return false
       }
-      const tableFilter = self[treeName].dataFilter[table]
-      return Object.values(tableFilter).filter((v) => !!v || v === 0).length > 0
+      const nodeLabelFilterExists = !!self[treeName].nodeLabelFilter[table]
+      if (nodeLabelFilterExists) return true
+
+      const tableFilter = getSnapshot(self[treeName].dataFilter[table])
+      if (['ap', 'pop', 'tpop'].includes(table)) {
+        return tableFilter.some(
+          (filter) =>
+            Object.values(filter).filter((v) => v !== null).length > 0,
+        )
+      }
+      return Object.values(tableFilter).filter((v) => v !== null).length > 0
     },
     dataFilterTreeIsFiltered(treeName) {
       const tables = Object.keys(self[treeName].dataFilter)
