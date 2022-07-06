@@ -197,7 +197,7 @@ const ApFilter = ({ treeName }) => {
           activeTab={activeTab}
         />
         {!!nodeLabelFilter.ap && (
-          <NodeLabelFilterComment>{`Hinweis: Im Navigationsbaum wird das Label der Arten nach "${nodeLabelFilter.ap}" gefiltert.`}</NodeLabelFilterComment>
+          <NodeLabelFilterComment>{`Hinweis: Gemäss Navigationsbaum wird das Label der Arten nach "${nodeLabelFilter.ap}" gefiltert.`}</NodeLabelFilterComment>
         )}
         <OrTabs
           dataFilter={dataFilter.ap}

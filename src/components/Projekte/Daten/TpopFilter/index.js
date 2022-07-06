@@ -1,9 +1,10 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
+import { getSnapshot } from 'mobx-state-tree'
 
 import FilterTitle from '../../../shared/FilterTitle'
 import queryTpops from './queryTpops'
@@ -14,6 +15,7 @@ import Ek from './Ek'
 import Tpop from './Tpop'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import PopOrTabs from './Tabs'
 
 const Container = styled.div`
   height: 100%;
@@ -36,34 +38,34 @@ const StyledTab = styled(Tab)`
 const TabContent = styled.div`
   height: calc(100% - 48px);
 `
+const NodeLabelFilterComment = styled.div`
+  margin-top: -10px;
+  padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+`
 
 const TpopFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue, urlQuery } = store
 
-  const { activeNodeArray, dataFilter, tpopGqlFilter } = store[treeName]
+  const { activeNodeArray, dataFilter, tpopGqlFilter, nodeLabelFilter } =
+    store[treeName]
   const [tab, setTab] = useState(urlQuery?.tpopTab ?? 'tpop')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
   const apId = activeNodeArray[3]
 
-  const tpopFilter = apId
-    ? {
-        popId: { isNull: false },
-        popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-      }
-    : { popId: { isNull: false } }
-  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  tpopFilterValues.forEach(([key, value]) => {
-    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopFilter[key] = { [expression]: value }
-  })
+  const [activeTab, setActiveTab] = useState(0)
+  useEffect(() => {
+    if (dataFilter.tpop.length - 1 < activeTab) {
+      // filter was emtied, need to set correct tab
+      setActiveTab(0)
+    }
+  }, [activeTab, dataFilter.tpop.length])
 
   const { data: dataTpops, error } = useQuery(queryTpops, {
     variables: {
-      tpopFilter,
+      tpopFilter: tpopGqlFilter,
       apId,
       apIdExists: !!apId,
       apIdNotExists: !apId,
@@ -72,7 +74,7 @@ const TpopFilter = ({ treeName }) => {
 
   let totalNr
   let filteredNr
-  let row = dataFilter.tpop
+  let row = dataFilter.tpop[activeTab]
   if (apId) {
     const pops = dataTpops?.allPops?.nodes ?? []
     totalNr = !pops.length
@@ -98,8 +100,9 @@ const TpopFilter = ({ treeName }) => {
         table: 'tpop',
         key: event.target.name,
         value: ifIsNumericAsNumber(event.target.value),
+        index: activeTab,
       }),
-    [dataFilterSetValue, treeName],
+    [activeTab, dataFilterSetValue, treeName],
   )
 
   if (error) return <Error error={error} />
@@ -113,6 +116,15 @@ const TpopFilter = ({ treeName }) => {
           table="tpop"
           totalNr={totalNr}
           filteredNr={filteredNr}
+        />
+        {!!nodeLabelFilter.tpop && (
+          <NodeLabelFilterComment>{`Hinweis: Gemäss Navigationsbaum wird das Label der Teil-Populationen nach "${nodeLabelFilter.tpop}" gefiltert.`}</NodeLabelFilterComment>
+        )}
+        <PopOrTabs
+          dataFilter={dataFilter.tpop}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          treeName={treeName}
         />
         <FieldsContainer>
           <Tabs
@@ -133,6 +145,7 @@ const TpopFilter = ({ treeName }) => {
                 setFieldErrors={setFieldErrors}
                 row={row}
                 treeName={treeName}
+                rowStringified={JSON.stringify(row)}
               />
             ) : (
               <Ek

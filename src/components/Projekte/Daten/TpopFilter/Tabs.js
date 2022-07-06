@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
 
-import { initial as pop } from '../../../../store/Tree/DataFilter/pop'
+import { initial as tpop } from '../../../../store/Tree/DataFilter/tpop'
 import storeContext from '../../../../storeContext' 
 
 const Row = styled.div``
@@ -22,7 +22,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 
-const PopOrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
+const TpopOrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterAddOr } = store
 
@@ -33,7 +33,7 @@ const PopOrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
   const onChangeTab = useCallback(
     (event, value) => {
       if (value > dataFilter.length - 1) {
-        dataFilterAddOr({ treeName, table: 'pop', val: pop })
+        dataFilterAddOr({ treeName, table: 'tpop', val: tpop })
         setTimeout(() => setActiveTab(value), 0)
         return
       }
@@ -67,4 +67,4 @@ const PopOrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
   )
 }
 
-export default PopOrTabs
+export default TpopOrTabs

@@ -42,7 +42,7 @@ const Tpop = ({ treeName, clustered }) => {
     idOfTpopBeingLocalized,
     refetch,
   } = store
-  const { popGqlFilter } = store[treeName]
+  const { popGqlFilter, tpopGqlFilter } = store[treeName]
 
   const leafletMap = useMapEvents({
     async dblclick(event) {
@@ -143,28 +143,6 @@ const Tpop = ({ treeName, clustered }) => {
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
-  const tpopFilter = useMemo(
-    () => ({
-      wgs84Lat: { isNull: false },
-      // 2021.08.16: needed to remove this filter
-      // because icons where added every time a tpop left, then reentered the bbox
-      //geomPoint: { within: myBbox },
-    }),
-    [],
-  )
-  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  tpopFilterValues.forEach(([key, value]) => {
-    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopFilter[key] = { [expression]: value }
-  })
-  if (tree.nodeLabelFilter.tpop) {
-    tpopFilter.label = {
-      includesInsensitive: tree.nodeLabelFilter.tpop,
-    }
-  }
-
   const [fetchTpopDataForMap, { error: errorLoadingTpopForMap, data }] =
     useLazyQuery(query, {
       variables: {
@@ -174,7 +152,7 @@ const Tpop = ({ treeName, clustered }) => {
         perProj,
         isActiveInMap,
         popFilter: popGqlFilter,
-        tpopFilter,
+        tpopFilter: tpopGqlFilter,
       },
     })
 

@@ -152,7 +152,7 @@ const Status = ({ apJahr, showFilter, saveToDb, row = {}, errors }) => {
     )
   }, [bekanntSeitValue])
 
-  //console.log('Status rendering')
+  // console.log('Status rendering', { statusSelected, apJahr, showFilter, row })
 
   return (
     <div>

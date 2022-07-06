@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
+import { getSnapshot } from 'mobx-state-tree'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -15,7 +16,6 @@ import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
 //import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import constants from '../../../../modules/constants'
 import storeContext from '../../../../storeContext'
-import Coordinates from '../../../shared/Coordinates'
 
 const Container = styled.div`
   height: 100%;
@@ -70,6 +70,8 @@ const Tpop = ({
 
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
+
+  // console.log('TpopFilter, tpop', { row: getSnapshot(row) })
 
   if (!row) return null
 

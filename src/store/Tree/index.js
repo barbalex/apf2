@@ -192,6 +192,7 @@ export default types
     },
     get tpopGqlFilter() {
       // need to slice to rerender on change
+      const projId = self.activeNodeArray.slice()[1]
       const apId = self.activeNodeArray.slice()[3]
       const popId = self.activeNodeArray.slice()[5]
       const filterArrayInStore = self.dataFilter.tpop
@@ -206,64 +207,49 @@ export default types
         filterArrayInStoreWithoutEmpty.push(initialTpop)
       }
       const filterArray = []
+      // TODO: add singleFilterByUrl to popGqlFilter
+      const singleFilterByUrl = popId ? { popId: { equalTo: popId } } : {}
+      if (apId) {
+        singleFilterByUrl.popByPopId = { apId: { equalTo: apId } }
+      }
+      if (projId) {
+        if (!singleFilterByUrl.popByPopId) singleFilterByUrl.popByPopId = {}
+        singleFilterByUrl.popByPopId.apByApId = { projId: { equalTo: projId } }
+      }
       for (const filter of filterArrayInStoreWithoutEmpty) {
-        const tpopFilter = popId ? { popId: { equalTo: popId } } : {}
+        // add parents according to url
+        const singleFilter = { ...singleFilterByUrl }
+        // add filter criteria from data filter
         const dataFilterTpop = { ...filter }
         const tpopFilterValues = Object.entries(dataFilterTpop).filter(
           (e) => e[1] || e[1] === 0,
         )
         tpopFilterValues.forEach(([key, value]) => {
           const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-          tpopFilter[key] = { [expression]: value }
+          singleFilter[key] = { [expression]: value }
         })
+        // add tree node label filter
         if (self.nodeLabelFilter.tpop) {
-          tpopFilter.label = {
+          singleFilter.label = {
             includesInsensitive: self.nodeLabelFilter.tpop,
           }
         }
-        // TODO: if mapFilter is set, filter by its geometry
+        // if mapFilter is set, add it too
+        // TODO: add mapFilter to popGqlFilter
         if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
-          tpopFilter.geomPoint = {
+          singleFilter.geomPoint = {
             coveredBy: self.mapFilter[0].geometry,
           }
         }
         // do not add empty object
-        if (Object.keys(tpopFilter).length === 0) break
-        filterArray.push(tpopFilter)
+        if (Object.keys(singleFilter).length === 0) break
+        filterArray.push(singleFilter)
       }
-      // need to filter by popId
-      if (filterArray.length === 0 && popId) {
-        filterArray.push({ popId: { equalTo: popId } })
-      }
-      if (filterArray.length === 0 && apId) {
-        filterArray.push({ apId: { equalTo: apId } })
+      // need to filter by url, if exists
+      if (filterArray.length === 0 && Object.keys(singleFilterByUrl).length) {
+        filterArray.push(singleFilterByUrl)
       }
       return { or: filterArray }
-    },
-    get tpopGqlFilter_old() {
-      const result = Object.fromEntries(
-        Object.entries(getSnapshot(self.dataFilter.tpop))
-          // eslint-disable-next-line no-unused-vars
-          .filter(([key, value]) => exists(value))
-          .map(([key, value]) => {
-            // if is string: includes, else: equalTo
-            const type = simpleTypes.tpop[key]
-            if (type === 'string') {
-              return [key, { includes: value }]
-            }
-            return [key, { equalTo: value }]
-          }),
-      )
-      // TODO: if mapFilter is set, filter by its geometry
-      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
-        result.geomPoint = {
-          coveredBy: self.mapFilter[0].geometry,
-        }
-      }
-      // return a valid filter even if no filter criterias exist
-      // but ensure it returns all rows
-      if (Object.entries(result).length === 0) return { id: { isNull: false } }
-      return result
     },
     get tpopmassnGqlFilter() {
       const result = Object.fromEntries(

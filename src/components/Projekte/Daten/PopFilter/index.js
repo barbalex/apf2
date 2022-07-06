@@ -95,7 +95,7 @@ const PopFilter = ({ treeName }) => {
           activeTab={activeTab}
         />
         {!!nodeLabelFilter.pop && (
-          <NodeLabelFilterComment>{`Hinweis: Im Navigationsbaum wird das Label der Populationen nach "${nodeLabelFilter.pop}" gefiltert.`}</NodeLabelFilterComment>
+          <NodeLabelFilterComment>{`Hinweis: Gemäss Navigationsbaum wird das Label der Populationen nach "${nodeLabelFilter.pop}" gefiltert.`}</NodeLabelFilterComment>
         )}
         <PopOrTabs
           dataFilter={dataFilter.pop}
