@@ -102,6 +102,7 @@ const TpopFilter = ({ treeName }) => {
           table="tpop"
           totalNr={totalNr}
           filteredNr={filteredNr}
+          activeTab={activeTab}
         />
         <FilterComment>{hiearchyComment}</FilterComment>
         {!!nodeLabelFilter.tpop && (

@@ -88,7 +88,7 @@ const FilterTitle = ({
             </>
           )}
         </FilterNumbers>
-        {activeTab !== undefined && (
+        {activeTab !== undefined && ( 
           <IconButton
             aria-label={`Aktuelles Filter-Kriterium entfernen`}
             title={`Aktuelles Filter-Kriterium entfernen`}
