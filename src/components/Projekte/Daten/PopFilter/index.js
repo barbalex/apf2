@@ -1,15 +1,8 @@
-import React, {
-  useContext,
-  useCallback,
-  useState,
-  useEffect,
-  useMemo,
-} from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
-import { getSnapshot } from 'mobx-state-tree'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -18,7 +11,6 @@ import Checkbox2States from '../../../shared/Checkbox2States'
 import FilterTitle from '../../../shared/FilterTitle'
 import queryPops from './queryPops'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as popType } from '../../../../store/Tree/DataFilter/pop'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
@@ -35,11 +27,17 @@ const FormContainer = styled.div`
   padding: 10px;
   overflow-y: auto;
 `
+const FilterComment = styled.div`
+  margin-top: -10px;
+  padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+`
 
 const PopFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
-  const { activeNodeArray, dataFilter } = store[treeName]
+  const { activeNodeArray, dataFilter, nodeLabelFilter, popGqlFilter } =
+    store[treeName]
 
   // need to slice to rerender on change
   const apId = activeNodeArray.slice()[3]
@@ -52,54 +50,16 @@ const PopFilter = ({ treeName }) => {
     }
   }, [activeTab, dataFilter.pop.length])
 
-  // need this so apFilter changes on any change inside a member of dataFilter.ap
-  const dataFilterPopStringified = JSON.stringify(dataFilter.pop)
-
-  const popFilter = useMemo(() => {
-    const filterArrayInStore = dataFilter.pop ? getSnapshot(dataFilter.pop) : []
-    // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-    const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
-      (f) => Object.values(f).filter((v) => v !== null).length !== 0,
-    )
-    const filterArray = []
-    for (const filter of filterArrayInStoreWithoutEmpty) {
-      const popFilter = apId ? { apId: { equalTo: apId } } : {}
-      const dataFilterPop = { ...filter }
-      const popApFilterValues = Object.entries(dataFilterPop).filter(
-        (e) => e[1] || e[1] === 0,
-      )
-      popApFilterValues.forEach(([key, value]) => {
-        const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-        popFilter[key] = { [expression]: value }
-      })
-      filterArray.push(popFilter)
-    }
-    // need to filter by apId
-    if (filterArray.length === 0 && apId) {
-      filterArray.push({ apId: { equalTo: apId } })
-    }
-    return { or: filterArray }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apId, dataFilter.pop, dataFilterPopStringified])
-
   const { data: dataPops, error } = useQuery(queryPops, {
     variables: {
-      popFilter,
-      apId,
-      apIdExists: !!apId,
-      apIdNotExists: !apId,
+      filteredFilter: popGqlFilter.filtered,
+      allFilter: popGqlFilter.all,
     },
   })
 
   const row = dataFilter.pop[activeTab]
-  const totalNr = apId
-    ? dataPops?.pops?.totalCount ?? '...'
-    : dataPops?.allPops?.totalCount ?? '...'
-  const filteredNr = apId
-    ? dataPops?.popsFiltered?.totalCount ?? '...'
-    : dataPops?.allPopsFiltered?.totalCount ?? '...'
-
-  console.log('PopFilter', { apId, dataPops, totalNr, filteredNr, popFilter })
+  const totalNr = dataPops?.pops?.totalCount ?? '...'
+  const filteredNr = dataPops?.popsFiltered?.totalCount ?? '...'
 
   const saveToDb = useCallback(
     async (event) =>
@@ -112,6 +72,10 @@ const PopFilter = ({ treeName }) => {
       }),
     [activeTab, dataFilterSetValue, treeName],
   )
+
+  const hiearchyComment = apId
+    ? 'Eine Art ist gewählt. Es werden (nur) die Populationen dieser Art berücksichtigt.'
+    : 'Es werden alle Populationen des Projekts berücksichtigt.'
 
   if (error) return <Error error={error} />
 
@@ -128,6 +92,10 @@ const PopFilter = ({ treeName }) => {
           filteredNr={filteredNr}
           activeTab={activeTab}
         />
+        <FilterComment>{hiearchyComment}</FilterComment>
+        {!!nodeLabelFilter.pop && (
+          <FilterComment>{`Gemäss Navigationsbaum wird das Label der Populationen nach "${nodeLabelFilter.pop}" gefiltert.`}</FilterComment>
+        )}
         <PopOrTabs
           dataFilter={dataFilter.pop}
           activeTab={activeTab}

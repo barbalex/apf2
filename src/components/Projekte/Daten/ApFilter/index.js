@@ -1,15 +1,8 @@
-import React, {
-  useContext,
-  useCallback,
-  useMemo,
-  useState,
-  useEffect,
-} from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
-import { getSnapshot } from 'mobx-state-tree'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
@@ -22,7 +15,6 @@ import queryAps from './queryAps'
 import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as apType } from '../../../../store/Tree/DataFilter/ap'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
@@ -71,18 +63,22 @@ const LabelPopoverRowColumnLeft = styled.div`
 const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
+const NodeLabelFilterComment = styled.div`
+  margin-top: -10px;
+  padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+`
 
 const ApFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue, enqueNotification } = store
   const {
-    activeNodeArray,
     dataFilter,
     setApFilter,
     apFilter: nurApFilter,
+    nodeLabelFilter,
+    apGqlFilter,
   } = store[treeName]
-
-  const projId = activeNodeArray[1]
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -92,34 +88,8 @@ const ApFilter = ({ treeName }) => {
     }
   }, [activeTab, dataFilter.ap.length])
 
-  // need this so apFilter changes on any change inside a member of dataFilter.ap
-  const dataFilterApStringified = JSON.stringify(dataFilter.ap)
-
-  const apFilter = useMemo(() => {
-    const filterArrayInStore = dataFilter.ap ? getSnapshot(dataFilter.ap) : []
-    // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-    const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
-      (f) => Object.values(f).filter((v) => v !== null).length !== 0,
-    )
-    const filterArray = []
-    for (const filter of filterArrayInStoreWithoutEmpty) {
-      const apFilter = { projId: { equalTo: projId } }
-      const dataFilterAp = { ...filter }
-      const apFilterValues = Object.entries(dataFilterAp).filter(
-        (e) => e[1] || e[1] === 0,
-      )
-      apFilterValues.forEach(([key, value]) => {
-        const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-        apFilter[key] = { [expression]: value }
-      })
-      filterArray.push(apFilter)
-    }
-    return { or: filterArray }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataFilterApStringified, projId, dataFilter.ap])
-
   const { data: apsData, error: apsError } = useQuery(queryAps, {
-    variables: { apFilter },
+    variables: { apFilter: apGqlFilter },
   })
 
   const {
@@ -226,6 +196,9 @@ const ApFilter = ({ treeName }) => {
           row={row}
           activeTab={activeTab}
         />
+        {!!nodeLabelFilter.ap && (
+          <NodeLabelFilterComment>{`Hinweis: Gemäss Navigationsbaum wird das Label der Arten nach "${nodeLabelFilter.ap}" gefiltert.`}</NodeLabelFilterComment>
+        )}
         <OrTabs
           dataFilter={dataFilter.ap}
           activeTab={activeTab}

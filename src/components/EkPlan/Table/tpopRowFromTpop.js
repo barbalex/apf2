@@ -5,14 +5,14 @@ const isOdd = (num) => num % 2 === 0
 
 const tpopRowFromTpop = ({ tpop, index }) => {
   let lv95X = tpop?.lv95X
-  if (lv95X && lv95X.toLocaleString) {
-    lv95X = lv95X.toLocaleString('de-ch')
+  if (lv95X && lv95X?.toLocaleString) {
+    lv95X = lv95X?.toLocaleString('de-ch')
   } else {
     lv95X = '-'
   }
   let lv95Y = tpop?.lv95Y
-  if (lv95Y && lv95Y.toLocaleString) {
-    lv95Y = lv95Y.toLocaleString('de-ch')
+  if (lv95Y && lv95Y?.toLocaleString) {
+    lv95Y = lv95Y?.toLocaleString('de-ch')
   } else {
     lv95Y = '-'
   }

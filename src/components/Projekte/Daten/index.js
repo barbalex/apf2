@@ -110,7 +110,7 @@ const Daten = ({ treeName, nodes }) => {
       break
     }
     case 'exporte': {
-      form = <Exporte />
+      form = <Exporte treeName={treeName} />
       break
     }
     case 'idealbiotop': {

@@ -112,9 +112,9 @@ const Line = ({ treeName, beob }) => {
           <div>{`am ${datum}`}</div>
           <div>{`durch ${autor}`}</div>
           <div>
-            {`bei: ${beob.lv95X.toLocaleString(
+            {`bei: ${beob.lv95X?.toLocaleString(
               'de-ch',
-            )} / ${beob.lv95Y.toLocaleString('de-ch')}`}
+            )} / ${beob.lv95Y?.toLocaleString('de-ch')}`}
           </div>
           <div>{`zur Teil-Population: ${
             beob?.tpopByTpopId?.nr ?? '(keine Nr)'

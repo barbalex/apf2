@@ -45,8 +45,8 @@ const FilterTitle = ({
   title,
   table,
   treeName,
-   totalNr,
-   filteredNr,
+  totalNr,
+  filteredNr,
   activeTab,
 }) => {
   const store = useContext(storeContext)
@@ -72,10 +72,10 @@ const FilterTitle = ({
     () => dataFilterEmptyTable({ treeName, table }),
     [dataFilterEmptyTable, treeName, table],
   )
-  const onEmptyTree = useCallback(
-    () => dataFilterEmptyTree(treeName),
-    [dataFilterEmptyTree, treeName],
-  )
+  const onEmptyTree = useCallback(() => {
+    store[treeName].nodeLabelFilter.empty()
+    dataFilterEmptyTree(treeName)
+  }, [dataFilterEmptyTree, store, treeName])
 
   return (
     <Container>
@@ -83,8 +83,8 @@ const FilterTitle = ({
         <FilterNumbers>
           {exists(filteredNr) && (
             <>
-              <span title="gefilterte Anzahl in Art">{filteredNr}</span>/
-              <span title="ungefilterte Anzahl in Art">{totalNr}</span>
+              <span title="gefilterte Anzahl">{filteredNr}</span>/
+              <span title="ungefilterte Anzahl">{totalNr}</span>
             </>
           )}
         </FilterNumbers>

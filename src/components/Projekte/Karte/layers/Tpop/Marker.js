@@ -140,9 +140,9 @@ const TpopMarker = ({ treeName, tpop }) => {
             }`}
           </div>
           <div>
-            {`Koordinaten: ${tpop.lv95X.toLocaleString(
+            {`Koordinaten: ${tpop.lv95X?.toLocaleString(
               'de-ch',
-            )} / ${tpop.lv95Y.toLocaleString('de-ch')}`}
+            )} / ${tpop.lv95Y?.toLocaleString('de-ch')}`}
           </div>
           <div>{`Status: ${
             tpop?.popStatusWerteByStatus?.text ?? '(kein Status)'

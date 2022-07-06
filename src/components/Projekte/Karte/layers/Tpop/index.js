@@ -42,6 +42,7 @@ const Tpop = ({ treeName, clustered }) => {
     idOfTpopBeingLocalized,
     refetch,
   } = store
+  const { popGqlFilter, tpopGqlFilter } = store[treeName]
 
   const leafletMap = useMapEvents({
     async dblclick(event) {
@@ -142,63 +143,6 @@ const Tpop = ({ treeName, clustered }) => {
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
-  // need this so apFilter changes on any change inside a member of dataFilter.ap
-  const dataFilterPopStringified = JSON.stringify(dataFilter.pop)
-
-  const popFilter = useMemo(() => {
-    const filterArrayInStore = dataFilter.pop ? getSnapshot(dataFilter.pop) : []
-    // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-    const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
-      (f) => Object.values(f).filter((v) => v !== null).length !== 0,
-    )
-    const filterArray = []
-    for (const filter of filterArrayInStoreWithoutEmpty) {
-      const popFilter = apId ? { apId: { equalTo: apId } } : {}
-      const dataFilterPop = { ...filter }
-      const popApFilterValues = Object.entries(dataFilterPop).filter(
-        (e) => e[1] || e[1] === 0,
-      )
-      popApFilterValues.forEach(([key, value]) => {
-        const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-        popFilter[key] = { [expression]: value }
-      })
-      if (tree.nodeLabelFilter.pop) {
-        popFilter.label = {
-          includesInsensitive: tree.nodeLabelFilter.pop,
-        }
-      }
-      filterArray.push(popFilter)
-    }
-    // need to filter by apId
-    if (filterArray.length === 0 && apId) {
-      filterArray.push({ apId: { equalTo: apId } })
-    }
-    return { or: filterArray }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apId, dataFilter.pop, dataFilterPopStringified])
-
-  const tpopFilter = useMemo(
-    () => ({
-      wgs84Lat: { isNull: false },
-      // 2021.08.16: needed to remove this filter
-      // because icons where added every time a tpop left, then reentered the bbox
-      //geomPoint: { within: myBbox },
-    }),
-    [],
-  )
-  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  tpopFilterValues.forEach(([key, value]) => {
-    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopFilter[key] = { [expression]: value }
-  })
-  if (tree.nodeLabelFilter.tpop) {
-    tpopFilter.label = {
-      includesInsensitive: tree.nodeLabelFilter.tpop,
-    }
-  }
-
   const [fetchTpopDataForMap, { error: errorLoadingTpopForMap, data }] =
     useLazyQuery(query, {
       variables: {
@@ -207,8 +151,8 @@ const Tpop = ({ treeName, clustered }) => {
         perAp,
         perProj,
         isActiveInMap,
-        popFilter,
-        tpopFilter,
+        popFilter: popGqlFilter.filtered,
+        tpopFilter: tpopGqlFilter.filtered,
       },
     })
 
@@ -240,7 +184,10 @@ const Tpop = ({ treeName, clustered }) => {
     [aps],
   )
   let tpops = useMemo(
-    () => flatten(pops.map((pop) => pop?.tpopsByPopId?.nodes ?? [])),
+    () =>
+      flatten(pops.map((pop) => pop?.tpopsByPopId?.nodes ?? [])).filter(
+        (tpop) => !!tpop.wgs84Lat,
+      ),
     [pops],
   )
 

@@ -46,8 +46,8 @@ const CustomTooltip = ({ payload = [], label, active, popsData }) => {
           label = `${pop.nr || '(keine Nr)'}: ${pop.name || '(kein Name)'}`
         }
         const value =
-          exists(p.value) && p.value.toLocaleString
-            ? p.value.toLocaleString('de-ch')
+          exists(p.value) && p.value?.toLocaleString
+            ? p.value?.toLocaleString('de-ch')
             : null
         let color
         if (!pop) {

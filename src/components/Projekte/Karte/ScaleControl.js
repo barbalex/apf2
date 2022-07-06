@@ -33,7 +33,7 @@ const options = {
     return 6378137 * 2 * Math.PI * Math.cos((currentLan * Math.PI) / 180)
   },
   render: function (ratio) {
-    return '1 : ' + ratio.toLocaleString('de-ch')
+    return '1 : ' + ratio?.toLocaleString('de-ch')
   },
 }
 

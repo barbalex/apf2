@@ -82,9 +82,9 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
           }`}</div>
           <StyledH3>{label}</StyledH3>
           <div>
-            {`Koordinaten: ${beob.lv95X.toLocaleString(
+            {`Koordinaten: ${beob.lv95X?.toLocaleString(
               'de-ch',
-            )} / ${beob.lv95Y.toLocaleString('de-ch')}`}
+            )} / ${beob.lv95Y?.toLocaleString('de-ch')}`}
           </div>
           <StyledButton
             size="small"

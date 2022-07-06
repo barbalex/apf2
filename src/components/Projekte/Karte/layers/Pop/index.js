@@ -8,7 +8,6 @@ import { useMap } from 'react-leaflet'
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
-import { simpleTypes as popType } from '../../../../../store/Tree/DataFilter/pop'
 import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
 
 const iconCreateFunction = function (cluster) {
@@ -31,7 +30,13 @@ const Pop = ({ treeName }) => {
   const { activeApfloraLayers, enqueNotification, setRefetchKey, mapFilter } =
     store
   const tree = store[treeName]
-  const { dataFilter, projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
+  const {
+    dataFilter,
+    projIdInActiveNodeArray,
+    apIdInActiveNodeArray,
+    popGqlFilter,
+    tpopGqlFilter,
+  } = tree
 
   const projId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
@@ -41,58 +46,6 @@ const Pop = ({ treeName }) => {
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
-  const popFilterArrayInStore = dataFilter.pop
-  // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-  const popFilterArrayInStoreWithoutEmpty = popFilterArrayInStore.filter(
-    (f) => Object.values(f).filter((v) => v !== null).length !== 0,
-  )
-  const popFilterArray = []
-  for (const filter of popFilterArrayInStoreWithoutEmpty) {
-    const singleFilter = {
-      apId: { equalTo: apId },
-      wgs84Lat: { isNull: false },
-      // 2021.08.16: needed to remove this filter
-      // because icons where added every time a tpop left, then reentered the bbox
-      //geomPoint: { within: myBbox },
-    }
-    const dataFilterPop = { ...filter }
-    const popFilterValues = Object.entries(dataFilterPop).filter(
-      (e) => e[1] || e[1] === 0,
-    )
-    popFilterValues.forEach(([key, value]) => {
-      const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-      singleFilter[key] = { [expression]: value }
-    })
-    if (tree.nodeLabelFilter.pop) {
-      singleFilter.label = {
-        includesInsensitive: tree.nodeLabelFilter.pop,
-      }
-    }
-    popFilterArray.push(singleFilter)
-  }
-  const popFilter = { or: popFilterArray }
-
-  const tpopFilter = {
-    wgs84Lat: { isNull: false },
-    //geomPoint: { within: myBbox },
-  }
-  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  tpopFilterValues.forEach(([key, value]) => {
-    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopFilter[key] = { [expression]: value }
-  })
-  if (tree.nodeLabelFilter.tpop) {
-    tpopFilter.label = {
-      includesInsensitive: tree.nodeLabelFilter.tpop,
-    }
-  }
-  // if mapFilter is set, filter by its geometry
-  if (mapFilter?.length) {
-    tpopFilter.geomPoint = { coveredBy: mapFilter[0]?.geometry }
-  }
-
   var { data, error, refetch } = useQuery(query, {
     variables: {
       perAp,
@@ -101,8 +54,8 @@ const Pop = ({ treeName }) => {
       projId,
       tpopLayerIsActive,
       isActiveInMap,
-      popFilter,
-      tpopFilter,
+      popFilter: popGqlFilter.filtered,
+      tpopFilter: tpopGqlFilter.filtered,
     },
   })
   setRefetchKey({ key: 'popForMap', value: refetch })
@@ -139,7 +92,10 @@ const Pop = ({ treeName }) => {
     [data?.projektById, perAp],
   )
   let pops = useMemo(
-    () => flatten(aps.map((ap) => ap?.popsByApId?.nodes ?? [])),
+    () =>
+      flatten(aps.map((ap) => ap?.popsByApId?.nodes ?? [])).filter(
+        (pop) => !!pop.wgs84Lat,
+      ),
     [aps],
   )
 

@@ -10,11 +10,11 @@ import IconButton from '@mui/material/IconButton'
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
 import Ap from './Ap'
-import PopulationenExports from './Populationen'
+import Populationen from './Populationen'
 import Teilpopulationen from './Teilpopulationen'
 import Kontrollen from './Kontrollen'
-import MassnahmenExporte from './Massnahmen'
-import BeobachtungenExports from './Beobachtungen'
+import Massnahmen from './Massnahmen'
+import Beobachtungen from './Beobachtungen'
 import Anwendung from './Anwendung'
 import Optionen from './Optionen'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -49,7 +49,7 @@ export const DownloadCardButton = styled(Button)`
 export const StyledProgressText = styled.span`
   margin-left: 10px;
   font-style: italic;
-  animation: blinker 1s linear infinite; 
+  animation: blinker 1s linear infinite;
   white-space: nowrap;
   @keyframes blinker {
     50% {
@@ -93,12 +93,12 @@ export const CardActionIconButton = styled(IconButton)`
   transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 
-const Exporte = () => {
+const Exporte = ({ treeName }) => {
   return (
     <ExporteContainer data-id={`exporte-container`}>
       <ErrorBoundary>
         <Container>
-          <FormTitle title="Exporte" treeName="tree" />
+          <FormTitle title="Exporte" treeName={treeName} />
           <ScrollContainer>
             <SimpleBar
               style={{
@@ -109,12 +109,12 @@ const Exporte = () => {
               <InnerContainer>
                 <Optionen />
                 <Tipps />
-                <Ap />
-                <PopulationenExports />
-                <Teilpopulationen />
-                <Kontrollen />
-                <MassnahmenExporte />
-                <BeobachtungenExports />
+                <Ap treeName={treeName} />
+                <Populationen treeName={treeName} />
+                <Teilpopulationen treeName={treeName} />
+                <Kontrollen treeName={treeName} />
+                <Massnahmen treeName={treeName} />
+                <Beobachtungen />
                 <Anwendung />
               </InnerContainer>
             </SimpleBar>

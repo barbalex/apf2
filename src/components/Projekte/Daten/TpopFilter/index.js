@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
@@ -8,12 +8,12 @@ import { useQuery } from '@apollo/client'
 import FilterTitle from '../../../shared/FilterTitle'
 import queryTpops from './queryTpops'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopType } from '../../../../store/Tree/DataFilter/tpop'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import Ek from './Ek'
 import Tpop from './Tpop'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import PopOrTabs from './Tabs'
 
 const Container = styled.div`
   height: 100%;
@@ -36,59 +36,42 @@ const StyledTab = styled(Tab)`
 const TabContent = styled.div`
   height: calc(100% - 48px);
 `
+const FilterComment = styled.div`
+  margin-top: -10px;
+  padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+`
 
 const TpopFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue, urlQuery } = store
 
-  const { activeNodeArray, dataFilter } = store[treeName]
+  const { activeNodeArray, dataFilter, tpopGqlFilter, nodeLabelFilter } =
+    store[treeName]
   const [tab, setTab] = useState(urlQuery?.tpopTab ?? 'tpop')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
   const apId = activeNodeArray[3]
+  const popId = activeNodeArray[5]
 
-  const tpopFilter = apId
-    ? {
-        popId: { isNull: false },
-        popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-      }
-    : { popId: { isNull: false } }
-  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  tpopFilterValues.forEach(([key, value]) => {
-    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopFilter[key] = { [expression]: value }
-  })
+  const [activeTab, setActiveTab] = useState(0)
+  useEffect(() => {
+    if (dataFilter.tpop.length - 1 < activeTab) {
+      // filter was emtied, need to set correct tab
+      setActiveTab(0)
+    }
+  }, [activeTab, dataFilter.tpop.length])
 
   const { data: dataTpops, error } = useQuery(queryTpops, {
     variables: {
-      tpopFilter,
-      apId,
-      apIdExists: !!apId,
-      apIdNotExists: !apId,
+      filteredFilter: tpopGqlFilter.filtered,
+      allFilter: tpopGqlFilter.all,
     },
   })
 
-  let totalNr
-  let filteredNr
-  let row = dataFilter.tpop
-  if (apId) {
-    const pops = dataTpops?.allPops?.nodes ?? []
-    totalNr = !pops.length
-      ? '...'
-      : pops
-          .map((p) => p?.tpops?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-    filteredNr = !pops.length
-      ? '...'
-      : pops
-          .map((p) => p?.tpopsFiltered?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-  } else {
-    totalNr = dataTpops?.allTpops?.totalCount
-    filteredNr = dataTpops?.allTpopsFiltered?.totalCount
-  }
+  const row = dataFilter.tpop[activeTab]
+  const totalNr = dataTpops?.allTpops?.totalCount
+  const filteredNr = dataTpops?.allTpopsFiltered?.totalCount
 
   const [fieldErrors, setFieldErrors] = useState({})
   const saveToDb = useCallback(
@@ -98,9 +81,15 @@ const TpopFilter = ({ treeName }) => {
         table: 'tpop',
         key: event.target.name,
         value: ifIsNumericAsNumber(event.target.value),
+        index: activeTab,
       }),
-    [dataFilterSetValue, treeName],
+    [activeTab, dataFilterSetValue, treeName],
   )
+  const hiearchyComment = popId
+    ? 'Eine Population ist gewählt. Es werden (nur) die Teil-Populationen dieser Population berücksichtigt.'
+    : apId
+    ? 'Eine Art ist gewählt. Es werden (nur) die Teil-Populationen dieser Art berücksichtigt.'
+    : 'Es werden alle Teil-Populationen des Projekts berücksichtigt.'
 
   if (error) return <Error error={error} />
 
@@ -113,6 +102,16 @@ const TpopFilter = ({ treeName }) => {
           table="tpop"
           totalNr={totalNr}
           filteredNr={filteredNr}
+        />
+        <FilterComment>{hiearchyComment}</FilterComment>
+        {!!nodeLabelFilter.tpop && (
+          <FilterComment>{`Hinweis: Gemäss Navigationsbaum wird das Label der Teil-Populationen nach "${nodeLabelFilter.tpop}" gefiltert.`}</FilterComment>
+        )}
+        <PopOrTabs
+          dataFilter={dataFilter.tpop}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          treeName={treeName}
         />
         <FieldsContainer>
           <Tabs
@@ -133,6 +132,7 @@ const TpopFilter = ({ treeName }) => {
                 setFieldErrors={setFieldErrors}
                 row={row}
                 treeName={treeName}
+                rowStringified={JSON.stringify(row)}
               />
             ) : (
               <Ek

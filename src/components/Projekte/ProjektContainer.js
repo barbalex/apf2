@@ -162,7 +162,7 @@ const ProjektContainer = ({
     ),
     exporte: (
       <InnerContainer>
-        <Exporte />
+        <Exporte treeName={treeName}  />
       </InnerContainer>
     ),
   }

@@ -65,7 +65,7 @@ const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 const formatNumber = (tickItem) => {
   const value =
-    exists(tickItem) && tickItem.toLocaleString
+    exists(tickItem) && tickItem?.toLocaleString
       ? tickItem.toLocaleString('de-ch')
       : null
   return value
