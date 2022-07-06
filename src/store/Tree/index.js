@@ -259,7 +259,6 @@ export default types
           }
         }
         // if mapFilter is set, add it too
-        // TODO: add mapFilter to popGqlFilter
         if (self.mapFilter) {
           singleFilter.geomPoint = {
             coveredBy: self.mapFilter,
