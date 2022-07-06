@@ -91,8 +91,6 @@ const TpopFilter = ({ treeName }) => {
     ? 'Eine Art ist gewählt. Es werden (nur) die Teil-Populationen dieser Art berücksichtigt.'
     : 'Es werden alle Teil-Populationen des Projekts berücksichtigt.'
 
-  console.log('TpopFilter, tpopGqlFilter:', tpopGqlFilter)
-
   if (error) return <Error error={error} />
 
   return (
