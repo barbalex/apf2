@@ -36,8 +36,13 @@ const FilterComment = styled.div`
 const PopFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
-  const { activeNodeArray, dataFilter, nodeLabelFilter, popGqlFilter } =
-    store[treeName]
+  const {
+    activeNodeArray,
+    dataFilter,
+    nodeLabelFilter,
+    popGqlFilter,
+    mapFilter,
+  } = store[treeName]
 
   // need to slice to rerender on change
   const apId = activeNodeArray.slice()[3]
@@ -74,7 +79,7 @@ const PopFilter = ({ treeName }) => {
   )
 
   const hiearchyComment = apId
-    ? 'Eine Art ist gewählt. Es werden (nur) die Populationen dieser Art berücksichtigt.'
+    ? 'Im Navigationsbaum ist eine Art gewählt. Es werden (nur) ihre Populationen berücksichtigt.'
     : 'Es werden alle Populationen des Projekts berücksichtigt.'
 
   if (error) return <Error error={error} />
@@ -95,6 +100,11 @@ const PopFilter = ({ treeName }) => {
         <FilterComment>{hiearchyComment}</FilterComment>
         {!!nodeLabelFilter.pop && (
           <FilterComment>{`Gemäss Navigationsbaum wird das Label der Populationen nach "${nodeLabelFilter.pop}" gefiltert.`}</FilterComment>
+        )}
+        {!!mapFilter && (
+          <FilterComment>
+            Der gesetzte Karten-Filter wird angewendet.
+          </FilterComment>
         )}
         <PopOrTabs
           dataFilter={dataFilter.pop}

@@ -7,6 +7,7 @@ import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
 } from './NodeLabelFilter'
 import Map, { defaultValue as defaultMap } from './Map'
+import Geojson from './Geojson'
 import initialDataFilterValues from './DataFilter/initialValues'
 import DataFilter from './DataFilter/types'
 import simpleTypes from './DataFilter/simpleTypes'
@@ -24,6 +25,7 @@ import apberIdInUrl from '../../modules/apberIdInUrl'
 import popIdInUrl from '../../modules/popIdInUrl'
 import tpopIdInUrl from '../../modules/tpopIdInUrl'
 import exists from '../../modules/exists'
+import setIdsFiltered from '../../modules/setIdsFiltered'
 
 export default types
   .model('Tree', {
@@ -45,12 +47,22 @@ export default types
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     map: types.optional(Map, defaultMap),
+    mapFilter: types.maybe(Geojson),
+    // mapFilter: types.optional(
+    //   types.union(Geojson, types.literal(undefined)),
+    //   undefined,
+    // ),
     treeWidth: types.optional(types.number, 500),
     formWidth: types.optional(types.number, 500),
     formHeight: types.optional(types.number, 500),
     filterWidth: types.optional(types.number, 500),
   })
   .actions((self) => ({
+    setMapFilter(val) {
+      const store = getParent(self)
+      self.mapFilter = val
+      setIdsFiltered({ store, treeName: self.name })
+    },
     setLastTouchedNode(val) {
       self.lastTouchedNode = val
     },
@@ -167,23 +179,29 @@ export default types
       const singleFilterByUrl = apId ? { apId: { equalTo: apId } } : {}
       const filterArray = []
       for (const filter of filterArrayInStoreWithoutEmpty) {
-        const popFilter = { ...singleFilterByUrl }
+        const singleFilter = { ...singleFilterByUrl }
         const dataFilterPop = { ...filter }
         const popFilterValues = Object.entries(dataFilterPop).filter(
           (e) => e[1] || e[1] === 0,
         )
         popFilterValues.forEach(([key, value]) => {
           const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-          popFilter[key] = { [expression]: value }
+          singleFilter[key] = { [expression]: value }
         })
         if (self.nodeLabelFilter.pop) {
-          popFilter.label = {
+          singleFilter.label = {
             includesInsensitive: self.nodeLabelFilter.pop,
           }
         }
+        // if mapFilter is set, add it too
+        if (self.mapFilter) {
+          singleFilter.geomPoint = {
+            coveredBy: self.mapFilter,
+          }
+        }
         // do not add empty object
-        if (Object.keys(popFilter).length === 0) break
-        filterArray.push(popFilter)
+        if (Object.keys(singleFilter).length === 0) break
+        filterArray.push(singleFilter)
       }
       // filter by url
       if (filterArray.length === 0 && Object.keys(singleFilterByUrl).length) {
@@ -241,10 +259,9 @@ export default types
           }
         }
         // if mapFilter is set, add it too
-        // TODO: add mapFilter to popGqlFilter
-        if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
+        if (self.mapFilter) {
           singleFilter.geomPoint = {
-            coveredBy: self.mapFilter[0].geometry,
+            coveredBy: self.mapFilter,
           }
         }
         // do not add empty object
@@ -273,10 +290,10 @@ export default types
           }),
       )
       // if mapFilter is set, filter by its geometry
-      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
+      if (self.mapFilter) {
         result.tpopByTpopId = {
           geomPoint: {
-            coveredBy: self.mapFilter[0].geometry,
+            coveredBy: self.mapFilter,
           },
         }
       }
@@ -314,10 +331,10 @@ export default types
       )
       const k = { ...ekf, ...ek }
       // if mapFilter is set, filter by its geometry
-      if (self.mapFilter?.[0]?.geometry && self.exportApplyMapFilter) {
+      if (self.mapFilter) {
         k.tpopByTpopId = {
           geomPoint: {
-            coveredBy: self.mapFilter[0].geometry,
+            coveredBy: self.mapFilter,
           },
         }
       }

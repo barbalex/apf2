@@ -6,10 +6,11 @@ import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const BeobachtungenExports = () => {
+const BeobachtungenExports = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, exportApplyMapFilter, mapFilter } = store
+  const { enqueNotification } = store
+  const { mapFilter } = store[treeName]
 
   const [queryState, setQueryState] = useState()
 
@@ -18,89 +19,88 @@ const BeobachtungenExports = () => {
     let result
     try {
       // view: v_beob_art_changed
-      result =
-        mapFilter?.[0]?.geometry && exportApplyMapFilter
-          ? await client.query({
-              query: gql`
-                query allBeobsArtChangedFilteredByMap {
-                  allVBeobArtChangeds {
-                    nodes {
-                      id
-                      quelle
-                      id_field: idField
-                      original_id: originalId
-                      art_id_original: artIdOriginal
-                      artname_original: artnameOriginal
-                      taxonomie_id_original: taxonomieIdOriginal
-                      art_id: artId
-                      artname
-                      taxonomie_id: taxonomieId
-                      pop_id: popId
-                      pop_nr: popNr
-                      tpop_id: tpopId
-                      tpop_nr: tpopNr
-                      tpop_status: tpopStatus
-                      tpop_gemeinde: tpopGemeinde
-                      tpop_flurname: tpopFlurname
-                      lv95X: x
-                      lv95Y: y
-                      distanz_zur_teilpopulation: distanzZurTeilpopulation
-                      datum
-                      autor
-                      nicht_zuordnen: nichtZuordnen
-                      bemerkungen
-                      created_at: createdAt
-                      updated_at: updatedAt
-                      changed_by: changedBy
-                    }
+      result = mapFilter
+        ? await client.query({
+            query: gql`
+              query allBeobsArtChangedFilteredByMap {
+                allVBeobArtChangeds {
+                  nodes {
+                    id
+                    quelle
+                    id_field: idField
+                    original_id: originalId
+                    art_id_original: artIdOriginal
+                    artname_original: artnameOriginal
+                    taxonomie_id_original: taxonomieIdOriginal
+                    art_id: artId
+                    artname
+                    taxonomie_id: taxonomieId
+                    pop_id: popId
+                    pop_nr: popNr
+                    tpop_id: tpopId
+                    tpop_nr: tpopNr
+                    tpop_status: tpopStatus
+                    tpop_gemeinde: tpopGemeinde
+                    tpop_flurname: tpopFlurname
+                    lv95X: x
+                    lv95Y: y
+                    distanz_zur_teilpopulation: distanzZurTeilpopulation
+                    datum
+                    autor
+                    nicht_zuordnen: nichtZuordnen
+                    bemerkungen
+                    created_at: createdAt
+                    updated_at: updatedAt
+                    changed_by: changedBy
                   }
                 }
-              `,
-              variables: {
-                filter: {
-                  geomPoint: {
-                    coveredBy: mapFilter?.[0]?.geometry,
-                  },
+              }
+            `,
+            variables: {
+              filter: {
+                geomPoint: {
+                  coveredBy: mapFilter,
                 },
               },
-            })
-          : await client.query({
-              query: gql`
-                query allBeobsArtChanged {
-                  allVBeobArtChangeds {
-                    nodes {
-                      id
-                      quelle
-                      id_field: idField
-                      original_id: originalId
-                      art_id_original: artIdOriginal
-                      artname_original: artnameOriginal
-                      taxonomie_id_original: taxonomieIdOriginal
-                      art_id: artId
-                      artname
-                      taxonomie_id: taxonomieId
-                      pop_id: popId
-                      pop_nr: popNr
-                      tpop_id: tpopId
-                      tpop_nr: tpopNr
-                      tpop_status: tpopStatus
-                      tpop_gemeinde: tpopGemeinde
-                      tpop_flurname: tpopFlurname
-                      lv95X: x
-                      lv95Y: y
-                      distanz_zur_teilpopulation: distanzZurTeilpopulation
-                      datum
-                      autor
-                      nicht_zuordnen: nichtZuordnen
-                      bemerkungen
-                      created_at: createdAt
-                      updated_at: updatedAt
-                      changed_by: changedBy
-                    }
+            },
+          })
+        : await client.query({
+            query: gql`
+              query allBeobsArtChanged {
+                allVBeobArtChangeds {
+                  nodes {
+                    id
+                    quelle
+                    id_field: idField
+                    original_id: originalId
+                    art_id_original: artIdOriginal
+                    artname_original: artnameOriginal
+                    taxonomie_id_original: taxonomieIdOriginal
+                    art_id: artId
+                    artname
+                    taxonomie_id: taxonomieId
+                    pop_id: popId
+                    pop_nr: popNr
+                    tpop_id: tpopId
+                    tpop_nr: tpopNr
+                    tpop_status: tpopStatus
+                    tpop_gemeinde: tpopGemeinde
+                    tpop_flurname: tpopFlurname
+                    lv95X: x
+                    lv95Y: y
+                    distanz_zur_teilpopulation: distanzZurTeilpopulation
+                    datum
+                    autor
+                    nicht_zuordnen: nichtZuordnen
+                    bemerkungen
+                    created_at: createdAt
+                    updated_at: updatedAt
+                    changed_by: changedBy
                   }
                 }
-              `,
-            })
+              }
+            `,
+          })
     } catch (error) {
       setQueryState(undefined)
       return enqueNotification({

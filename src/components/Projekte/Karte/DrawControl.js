@@ -6,10 +6,10 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../storeContext'
 
-const DrawControl = () => {
+const DrawControl = ({ treeName }) => {
   const map = useMap()
   const store = useContext(storeContext)
-  const { setMapFilter } = store
+  const { setMapFilter } = store[treeName]
 
   //console.log('DrawControl, map:', map)
 
@@ -78,11 +78,13 @@ const DrawControl = () => {
       mapFilter.addLayer(e.layer)
       drawControlFull.remove(map)
       drawControlEditOnly.addTo(map)
-      setMapFilter(mapFilter.toGeoJSON()?.features)
+      setMapFilter(mapFilter.toGeoJSON()?.features?.[0]?.geometry)
     })
-    map.on('draw:edited', () => setMapFilter(mapFilter.toGeoJSON()?.features))
+    map.on('draw:edited', () =>
+      setMapFilter(mapFilter.toGeoJSON()?.features?.[0]?.geometry),
+    )
     map.on('draw:deleted', () => {
-      setMapFilter(mapFilter.toGeoJSON()?.features)
+      setMapFilter(mapFilter.toGeoJSON()?.features?.[0]?.geometry)
       if (mapFilter.getLayers().length === 0) {
         drawControlEditOnly.remove(map)
         drawControlFull.addTo(map)
@@ -96,7 +98,7 @@ const DrawControl = () => {
       map.off('draw:created')
       map.off('draw:edited')
       map.off('draw:deleted')
-      setMapFilter([])
+      setMapFilter(undefined)
     }
   }, [map, setMapFilter])
 

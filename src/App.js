@@ -102,6 +102,9 @@ const App = ({ element }) => {
           }
           const username = await setUserFromIdb({ idb, store })
           const isUser = !!username
+
+          // window.store = store
+
           // set last activeNodeArray
           // only if top domain was visited
           if (isUser && visitedTopDomain) {
