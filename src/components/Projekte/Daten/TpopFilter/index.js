@@ -91,9 +91,9 @@ const TpopFilter = ({ treeName }) => {
     [activeTab, dataFilterSetValue, treeName],
   )
   const hiearchyComment = popId
-    ? 'Eine Population ist gewählt. Es werden (nur) die Teil-Populationen dieser Population berücksichtigt.'
+    ? 'Im Navigationsbaum ist eine Population gewählt. Es werden (nur) ihre Teil-Populationen berücksichtigt.'
     : apId
-    ? 'Eine Art ist gewählt. Es werden (nur) die Teil-Populationen dieser Art berücksichtigt.'
+    ? 'Im Navigationsbaum ist eine Art gewählt. Es werden (nur) ihre Teil-Populationen berücksichtigt.'
     : 'Es werden alle Teil-Populationen des Projekts berücksichtigt.'
 
   if (error) return <Error error={error} />
@@ -114,7 +114,9 @@ const TpopFilter = ({ treeName }) => {
           <FilterComment>{`Gemäss Navigationsbaum wird das Label der Teil-Populationen nach "${nodeLabelFilter.tpop}" gefiltert.`}</FilterComment>
         )}
         {!!mapFilter && (
-          <FilterComment>{`Der gesetzte Karten-Filter wird angewendet`}</FilterComment>
+          <FilterComment>
+            Der gesetzte Karten-Filter wird angewendet.
+          </FilterComment>
         )}
         <PopOrTabs
           dataFilter={dataFilter.tpop}
