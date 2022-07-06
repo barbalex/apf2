@@ -184,7 +184,10 @@ const Tpop = ({ treeName, clustered }) => {
     [aps],
   )
   let tpops = useMemo(
-    () => flatten(pops.map((pop) => pop?.tpopsByPopId?.nodes ?? [])),
+    () =>
+      flatten(pops.map((pop) => pop?.tpopsByPopId?.nodes ?? [])).filter(
+        (tpop) => !!tpop.wgs84Lat,
+      ),
     [pops],
   )
 

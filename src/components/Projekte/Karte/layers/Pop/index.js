@@ -35,6 +35,7 @@ const Pop = ({ treeName }) => {
     projIdInActiveNodeArray,
     apIdInActiveNodeArray,
     popGqlFilter,
+    tpopGqlFilter,
   } = tree
 
   const projId =
@@ -45,27 +46,6 @@ const Pop = ({ treeName }) => {
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
-  const tpopFilter = {
-    wgs84Lat: { isNull: false },
-    //geomPoint: { within: myBbox },
-  }
-  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  tpopFilterValues.forEach(([key, value]) => {
-    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopFilter[key] = { [expression]: value }
-  })
-  if (tree.nodeLabelFilter.tpop) {
-    tpopFilter.label = {
-      includesInsensitive: tree.nodeLabelFilter.tpop,
-    }
-  }
-  // if mapFilter is set, filter by its geometry
-  if (mapFilter?.length) {
-    tpopFilter.geomPoint = { coveredBy: mapFilter[0]?.geometry }
-  }
-
   var { data, error, refetch } = useQuery(query, {
     variables: {
       perAp,
@@ -75,7 +55,7 @@ const Pop = ({ treeName }) => {
       tpopLayerIsActive,
       isActiveInMap,
       popFilter: popGqlFilter,
-      tpopFilter,
+      tpopFilter: tpopGqlFilter,
     },
   })
   setRefetchKey({ key: 'popForMap', value: refetch })
@@ -112,7 +92,10 @@ const Pop = ({ treeName }) => {
     [data?.projektById, perAp],
   )
   let pops = useMemo(
-    () => flatten(aps.map((ap) => ap?.popsByApId?.nodes ?? [])),
+    () =>
+      flatten(aps.map((ap) => ap?.popsByApId?.nodes ?? [])).filter(
+        (pop) => !!pop.wgs84Lat,
+      ),
     [aps],
   )
 
