@@ -82,12 +82,22 @@ const App = ({ element }) => {
            */
           const dataFilterTreeAp = getSnapshot(store.tree.dataFilter.ap)
           const dataFilterTreePop = getSnapshot(store.tree.dataFilter.pop)
+          const dataFilterTreeTpop = getSnapshot(store.tree.dataFilter.tpop)
           const dataFilterTree2Ap = getSnapshot(store.tree2.dataFilter.ap)
           const dataFilterTree2Pop = getSnapshot(store.tree2.dataFilter.pop)
-          if (isObject(dataFilterTreeAp) || isObject(dataFilterTreePop)) {
+          const dataFilterTree2Tpop = getSnapshot(store.tree2.dataFilter.tpop)
+          if (
+            isObject(dataFilterTreeAp) ||
+            isObject(dataFilterTreePop) ||
+            isObject(dataFilterTreeTpop)
+          ) {
             [store.dataFilterEmptyTree('tree')]
           }
-          if (isObject(dataFilterTree2Ap) || isObject(dataFilterTree2Pop)) {
+          if (
+            isObject(dataFilterTree2Ap) ||
+            isObject(dataFilterTree2Pop) ||
+            isObject(dataFilterTree2Tpop)
+          ) {
             store.dataFilterEmptyTree('tree2')
           }
           const username = await setUserFromIdb({ idb, store })
