@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext'
 import exists from '../../modules/exists'
+import NodeLabelFilter from '../../store/Tree/NodeLabelFilter'
 
 const Container = styled.div`
   background-color: #ffd3a7;
@@ -45,8 +46,8 @@ const FilterTitle = ({
   title,
   table,
   treeName,
-   totalNr,
-   filteredNr,
+  totalNr,
+  filteredNr,
   activeTab,
 }) => {
   const store = useContext(storeContext)
@@ -72,10 +73,10 @@ const FilterTitle = ({
     () => dataFilterEmptyTable({ treeName, table }),
     [dataFilterEmptyTable, treeName, table],
   )
-  const onEmptyTree = useCallback(
-    () => dataFilterEmptyTree(treeName),
-    [dataFilterEmptyTree, treeName],
-  )
+  const onEmptyTree = useCallback(() => {
+    store[treeName].nodeLabelFilter.empty()
+    dataFilterEmptyTree(treeName)
+  }, [dataFilterEmptyTree, store, treeName])
 
   return (
     <Container>
