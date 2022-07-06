@@ -179,23 +179,29 @@ export default types
       const singleFilterByUrl = apId ? { apId: { equalTo: apId } } : {}
       const filterArray = []
       for (const filter of filterArrayInStoreWithoutEmpty) {
-        const popFilter = { ...singleFilterByUrl }
+        const singleFilter = { ...singleFilterByUrl }
         const dataFilterPop = { ...filter }
         const popFilterValues = Object.entries(dataFilterPop).filter(
           (e) => e[1] || e[1] === 0,
         )
         popFilterValues.forEach(([key, value]) => {
           const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-          popFilter[key] = { [expression]: value }
+          singleFilter[key] = { [expression]: value }
         })
         if (self.nodeLabelFilter.pop) {
-          popFilter.label = {
+          singleFilter.label = {
             includesInsensitive: self.nodeLabelFilter.pop,
           }
         }
+        // if mapFilter is set, add it too
+        if (self.mapFilter) {
+          singleFilter.geomPoint = {
+            coveredBy: self.mapFilter,
+          }
+        }
         // do not add empty object
-        if (Object.keys(popFilter).length === 0) break
-        filterArray.push(popFilter)
+        if (Object.keys(singleFilter).length === 0) break
+        filterArray.push(singleFilter)
       }
       // filter by url
       if (filterArray.length === 0 && Object.keys(singleFilterByUrl).length) {
@@ -210,7 +216,6 @@ export default types
       }
     },
     get tpopGqlFilter() {
-      const store = getParent(self)
       // need to slice to rerender on change
       const projId = self.activeNodeArray.slice()[1]
       const apId = self.activeNodeArray.slice()[3]
