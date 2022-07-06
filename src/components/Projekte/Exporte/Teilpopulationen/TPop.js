@@ -103,7 +103,7 @@ const Teilpopulationen = ({ treeName }) => {
           }
         `,
         variables: {
-          filter: tpopGqlFilter,
+          filter: tpopGqlFilter.filtered,
           // seems to have no or little influence on ram usage:
           //fetchPolicy: 'no-cache',
         },

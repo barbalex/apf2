@@ -292,7 +292,7 @@ const buildTreeQueryVariables = ({
       includesInsensitive: nodeLabelFilter.tpopmassn,
     }
   }
-  const tpopsFilter = tpopGqlFilter
+  const tpopsFilter = tpopGqlFilter.filtered
   const usersFilter = { id: { isNull: false } }
   if (nodeLabelFilter.user) {
     usersFilter.label = {

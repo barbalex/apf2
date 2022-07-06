@@ -249,7 +249,8 @@ export default types
       if (filterArray.length === 0 && Object.keys(singleFilterByUrl).length) {
         filterArray.push(singleFilterByUrl)
       }
-      return { or: filterArray }
+      // return { or: filterArray }
+      return { all: singleFilterByUrl, filtered: { or: filterArray } }
     },
     get tpopmassnGqlFilter() {
       const result = Object.fromEntries(

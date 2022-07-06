@@ -55,7 +55,7 @@ const Pop = ({ treeName }) => {
       tpopLayerIsActive,
       isActiveInMap,
       popFilter: popGqlFilter,
-      tpopFilter: tpopGqlFilter,
+      tpopFilter: tpopGqlFilter.filtered,
     },
   })
   setRefetchKey({ key: 'popForMap', value: refetch })

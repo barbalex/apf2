@@ -62,34 +62,17 @@ const TpopFilter = ({ treeName }) => {
     }
   }, [activeTab, dataFilter.tpop.length])
 
+  console.log('TPopFilter, tpopGqlFilter:', tpopGqlFilter)
   const { data: dataTpops, error } = useQuery(queryTpops, {
     variables: {
-      tpopFilter: tpopGqlFilter,
-      apId,
-      apIdExists: !!apId,
-      apIdNotExists: !apId,
+      filteredFilter: tpopGqlFilter.filtered,
+      allFilter: tpopGqlFilter.all,
     },
   })
 
-  let totalNr
-  let filteredNr
-  let row = dataFilter.tpop[activeTab]
-  if (apId) {
-    const pops = dataTpops?.allPops?.nodes ?? []
-    totalNr = !pops.length
-      ? '...'
-      : pops
-          .map((p) => p?.tpops?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-    filteredNr = !pops.length
-      ? '...'
-      : pops
-          .map((p) => p?.tpopsFiltered?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-  } else {
-    totalNr = dataTpops?.allTpops?.totalCount
-    filteredNr = dataTpops?.allTpopsFiltered?.totalCount
-  }
+  const row = dataFilter.tpop[activeTab]
+  const totalNr = dataTpops?.allTpops?.totalCount
+  const filteredNr = dataTpops?.allTpopsFiltered?.totalCount
 
   const [fieldErrors, setFieldErrors] = useState({})
   const saveToDb = useCallback(
@@ -108,6 +91,8 @@ const TpopFilter = ({ treeName }) => {
     : apId
     ? 'Eine Art ist gewählt. Es werden (nur) die Teil-Populationen dieser Art berücksichtigt.'
     : 'Es werden alle Teil-Populationen des Projekts berücksichtigt.'
+
+  console.log('TpopFilter, tpopGqlFilter:', tpopGqlFilter)
 
   if (error) return <Error error={error} />
 
