@@ -6,7 +6,7 @@ import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const Pops = ({ treeName }) => {
+const Pops = ({ treeName, filtered = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification, tableIsFiltered } = store
@@ -22,7 +22,7 @@ const Pops = ({ treeName }) => {
   return (
     <DownloadCardButton
       color="inherit"
-      disabled={!!queryState}
+      disabled={!!queryState || (filtered && !popIsFiltered)}
       onClick={async () => {
         setQueryState('lade Daten...')
         let result
@@ -72,7 +72,7 @@ const Pops = ({ treeName }) => {
               }
             `,
             variables: {
-              filter: popGqlFilter.filtered,
+              filter: filtered ? popGqlFilter.filtered : { or: [] },
             },
           })
         } catch (error) {
@@ -115,13 +115,13 @@ const Pops = ({ treeName }) => {
         }
         exportModule({
           data: rows,
-          fileName: 'Populationen',
+          fileName: `Populationen${filtered ? '_gefiltert' : ''}`,
           store,
         })
         setQueryState(undefined)
       }}
     >
-      {popIsFiltered ? 'Populationen (gefiltert)' : 'Populationen'}
+      {filtered ? 'Populationen (gefiltert)' : 'Populationen'}
       {queryState ? (
         <StyledProgressText>{queryState}</StyledProgressText>
       ) : null}

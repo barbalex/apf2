@@ -46,6 +46,7 @@ const PopulationenExports = ({ treeName }) => {
         {expanded ? (
           <StyledCardContent>
             <Pops treeName={treeName} />
+            <Pops treeName={treeName} filtered={true} />
             <PopsForGoogleEarth />
             <PopsForGEArtname />
             <ApOhneStatus />
