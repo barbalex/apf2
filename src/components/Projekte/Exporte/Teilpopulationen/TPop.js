@@ -6,15 +6,13 @@ import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const Teilpopulationen = ({ treeName }) => {
+const Teilpopulationen = ({ treeName, filtered = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification, tableIsFiltered } = store
   const { tpopGqlFilter } = store[treeName]
 
   const [queryState, setQueryState] = useState()
-
-  console.log('Exporte, TPop', { tpopGqlFilter, treeName })
 
   const onClickTPop = useCallback(async () => {
     setQueryState('lade Daten...')
@@ -103,7 +101,7 @@ const Teilpopulationen = ({ treeName }) => {
           }
         `,
         variables: {
-          filter: tpopGqlFilter.filtered,
+          filter: filtered ? tpopGqlFilter.filtered : { or: [] },
           // seems to have no or little influence on ram usage:
           //fetchPolicy: 'no-cache',
         },
@@ -203,7 +201,7 @@ const Teilpopulationen = ({ treeName }) => {
     })
     setQueryState(undefined)
     //console.timeEnd('exporting')
-  }, [client, enqueNotification, store, tpopGqlFilter])
+  }, [client, enqueNotification, filtered, store, tpopGqlFilter.filtered])
 
   const tpopIsFiltered = tableIsFiltered({
     treeName,
@@ -214,9 +212,9 @@ const Teilpopulationen = ({ treeName }) => {
     <DownloadCardButton
       onClick={onClickTPop}
       color="inherit"
-      disabled={!!queryState}
+      disabled={!!queryState || (filtered && !tpopIsFiltered)}
     >
-      {`Teilpopulationen${tpopIsFiltered ? ' (gefiltert)' : ''}`}
+      {filtered ? 'Teilpopulationen (gefiltert)' : 'Teilpopulationen'}
       {queryState ? (
         <StyledProgressText>{queryState}</StyledProgressText>
       ) : null}

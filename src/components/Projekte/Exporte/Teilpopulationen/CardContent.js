@@ -17,6 +17,7 @@ import { StyledCardContent } from '../index'
 const Teilpopulationen = ({ treeName }) => (
   <StyledCardContent>
     <TPop treeName={treeName} />
+    <TPop treeName={treeName} filtered={true} />
     <TPopFuerWebgisBun />
     <TPopFuerGoogleEarth />
     <TPopFuerGEArtname />
