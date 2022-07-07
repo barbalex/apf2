@@ -30,7 +30,13 @@ const Buttons = styled.div`
   padding: 3px 0 3px 10px;
 `
 
-const FormTitle = ({ title, apId, treeName, buttons }) => {
+const FormTitle = ({
+  title,
+  apId,
+  treeName,
+  buttons,
+  noTestDataMessage = false,
+}) => {
   if (!treeName) {
     console.log('FormTitle was not passed a treeName, bailing out!')
     return
@@ -42,7 +48,9 @@ const FormTitle = ({ title, apId, treeName, buttons }) => {
         <Title data-id="form-title">{title}</Title>
         <Buttons>{buttons}</Buttons>
       </TitleRow>
-      <TestdataMessage treeName={treeName} apId={apId} />
+      {!noTestDataMessage && (
+        <TestdataMessage treeName={treeName} apId={apId} />
+      )}
     </Container>
   )
 }

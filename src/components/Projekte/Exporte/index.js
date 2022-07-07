@@ -98,7 +98,7 @@ const Exporte = ({ treeName }) => {
     <ExporteContainer data-id={`exporte-container`}>
       <ErrorBoundary>
         <Container>
-          <FormTitle title="Exporte" treeName={treeName} />
+          <FormTitle title="Exporte" treeName={treeName} noTestDataMessage={true} />
           <ScrollContainer>
             <SimpleBar
               style={{
