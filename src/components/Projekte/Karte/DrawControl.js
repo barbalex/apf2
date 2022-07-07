@@ -9,9 +9,7 @@ import storeContext from '../../../storeContext'
 const DrawControl = ({ treeName }) => {
   const map = useMap()
   const store = useContext(storeContext)
-  const { setMapFilter } = store[treeName]
-
-  //console.log('DrawControl, map:', map)
+  const { setMapFilter, mapFilter } = store[treeName]
 
   useEffect(() => {
     window.L.drawLocal.draw.toolbar.buttons.polygon =
@@ -53,8 +51,12 @@ const DrawControl = ({ treeName }) => {
 
     // solution to allow only one geometry to be drawn
     // see: https://github.com/Leaflet/Leaflet.draw/issues/315#issuecomment-500246272
-    const mapFilter = new window.L.FeatureGroup()
-    map.addLayer(mapFilter)
+    // also: pass in mapFilter if exists
+    const drawnItems = mapFilter
+      ? window.L.geoJSON(mapFilter)
+      : new window.L.FeatureGroup()
+    map.addLayer(drawnItems)
+
     const drawControlFull = new window.L.Control.Draw({
       draw: {
         marker: false,
@@ -63,43 +65,54 @@ const DrawControl = ({ treeName }) => {
         circlemarker: false,
       },
       edit: {
-        featureGroup: mapFilter,
+        featureGroup: drawnItems,
       },
     })
     const drawControlEditOnly = new window.L.Control.Draw({
       draw: false,
       edit: {
-        featureGroup: mapFilter,
+        featureGroup: drawnItems,
       },
     })
 
-    map.addControl(drawControlFull)
-    map.on('draw:created', (e) => {
-      mapFilter.addLayer(e.layer)
+    if (mapFilter) {
       drawControlFull.remove(map)
       drawControlEditOnly.addTo(map)
-      setMapFilter(mapFilter.toGeoJSON()?.features?.[0]?.geometry)
+    } else {
+      map.addControl(drawControlFull)
+    }
+    map.on('draw:created', (e) => {
+      drawnItems.addLayer(e.layer)
+      drawControlFull.remove(map)
+      drawControlEditOnly.addTo(map)
+      setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
     })
-    map.on('draw:edited', () =>
-      setMapFilter(mapFilter.toGeoJSON()?.features?.[0]?.geometry),
-    )
+    map.on('draw:edited', () => {
+      setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
+    })
     map.on('draw:deleted', () => {
-      setMapFilter(mapFilter.toGeoJSON()?.features?.[0]?.geometry)
-      if (mapFilter.getLayers().length === 0) {
+      setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
+      if (drawnItems.getLayers().length === 0) {
         drawControlEditOnly.remove(map)
         drawControlFull.addTo(map)
       }
     })
+    map.on('draw:deletedFromOutside', () => {
+      drawnItems.clearLayers()
+      map.removeControl(drawControlEditOnly)
+      drawControlFull.addTo(map)
+    })
 
     return () => {
-      map.removeLayer(mapFilter)
+      map.removeLayer(drawnItems)
       map.removeControl(drawControlFull)
       map.removeControl(drawControlEditOnly)
       map.off('draw:created')
       map.off('draw:edited')
       map.off('draw:deleted')
-      setMapFilter(undefined)
     }
+    // do not want this to re-run on every change of mapFilter!
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, setMapFilter])
 
   return <div style={{ display: 'none' }} />

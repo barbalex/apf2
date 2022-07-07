@@ -2,7 +2,6 @@
 import { types } from 'mobx-state-tree'
 
 export default types.model('Node', {
-  idsFiltered: types.array(types.union(types.string, types.number)),
   nodeType: types.optional(types.string, ''),
   menuType: types.optional(types.string, ''),
   filterTable: types.optional(types.string, ''),
@@ -15,7 +14,6 @@ export default types.model('Node', {
 })
 
 export const defaultValue = {
-  idsFiltered: [],
   nodeType: '',
   menuType: '',
   filterTable: '',

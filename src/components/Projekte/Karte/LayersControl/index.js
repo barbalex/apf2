@@ -22,12 +22,16 @@ const CardContainer = styled.div`
 `
 const Card = styled.div`
   padding-top: 3px;
+  /* padding-bottom: 3px; */
   color: rgb(48, 48, 48);
+  /* &:nth-child(3) {
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+  } */
 `
 const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-left: 7px;
+  padding-left: 6px;
   padding-right: 2px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   cursor: pointer;

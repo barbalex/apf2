@@ -63,8 +63,6 @@ const PopFilter = ({ treeName }) => {
   })
 
   const row = dataFilter.pop[activeTab]
-  const totalNr = dataPops?.pops?.totalCount ?? '...'
-  const filteredNr = dataPops?.popsFiltered?.totalCount ?? '...'
 
   const saveToDb = useCallback(
     async (event) =>
@@ -93,8 +91,8 @@ const PopFilter = ({ treeName }) => {
           title="Population"
           treeName={treeName}
           table="pop"
-          totalNr={totalNr}
-          filteredNr={filteredNr}
+          totalNr={dataPops?.pops?.totalCount ?? '...'}
+          filteredNr={dataPops?.popsFiltered?.totalCount ?? '...'}
           activeTab={activeTab}
         />
         <FilterComment>{hiearchyComment}</FilterComment>

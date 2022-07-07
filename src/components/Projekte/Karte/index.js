@@ -63,6 +63,8 @@ import CoordinatesControl from './CoordinatesControl'
 import iconFullscreen from './iconFullscreen.png'
 import iconFullscreen2x from './iconFullscreen2x.png'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import MapFilterListener from './MapFilterListener'
+
 /**
  * Fullscreen is not compatible with new react/react-leaflet versions?
  * https://github.com/elangobharathi/react-leaflet-fullscreen-plugin/issues/1
@@ -608,6 +610,7 @@ const Karte = ({ treeName }) => {
           <Control position="bottomright">
             <CoordinatesControl />
           </Control>
+          <MapFilterListener treeName={treeName} />
         </StyledMapContainer>
       </ErrorBoundary>
     </Container>

@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
+import { getSnapshot } from 'mobx-state-tree'
 
 import FilterTitle from '../../../shared/FilterTitle'
 import queryTpops from './queryTpops'
@@ -75,8 +76,11 @@ const TpopFilter = ({ treeName }) => {
   })
 
   const row = dataFilter.tpop[activeTab]
-  const totalNr = dataTpops?.allTpops?.totalCount
-  const filteredNr = dataTpops?.allTpopsFiltered?.totalCount
+
+  // console.log('TpopFilter', {
+  //   dataTpops,
+  //   mapFilter: mapFilter ? getSnapshot(mapFilter) : undefined,
+  // })
 
   const [fieldErrors, setFieldErrors] = useState({})
   const saveToDb = useCallback(
@@ -105,8 +109,8 @@ const TpopFilter = ({ treeName }) => {
           title="Teil-Population"
           treeName={treeName}
           table="tpop"
-          totalNr={totalNr}
-          filteredNr={filteredNr}
+          totalNr={dataTpops?.allTpops?.totalCount ?? '...'}
+          filteredNr={dataTpops?.allTpopsFiltered?.totalCount ?? '...'}
           activeTab={activeTab}
         />
         <FilterComment>{hiearchyComment}</FilterComment>
