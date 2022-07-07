@@ -99,11 +99,8 @@ const DrawControl = ({ treeName }) => {
     })
     map.on('draw:deletedFromOutside', () => {
       drawnItems.clearLayers()
-      setMapFilter(undefined)
-      if (drawnItems.getLayers().length === 0) {
-        drawControlEditOnly.remove(map)
-        drawControlFull.addTo(map)
-      }
+      map.removeControl(drawControlEditOnly)
+      drawControlFull.addTo(map)
     })
 
     return () => {
