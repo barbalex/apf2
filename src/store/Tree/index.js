@@ -234,7 +234,7 @@ export default types
     },
     get tpopGqlFilter() {
       // 1. prepare hiearchy filter
-      // need to slice to rerender on change
+      // need to slice proxy to rerender on change
       const aNA = self.activeNodeArray.slice()
       const projId = aNA[1]
       const apId = aNA[3]
@@ -256,22 +256,19 @@ export default types
       let filterArrayInStore = self.dataFilter.tpop
         ? getSnapshot(self.dataFilter.tpop)
         : []
-      // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-      // they result in all tpops being filtered before user add criteria
-      //
-      // before looping we need an extra empty element to apply hiearchy
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
-        // remove it or filter result will be wrong _if criteria.length >1_!
+        // remove it or filter result will be wrong (show all) if criteria.length > 1!
         const last = filterArrayInStore[filterArrayInStore.length - 1]
         const lastIsEmpty =
           Object.values(last).filter((v) => v !== null).length === 0
         if (lastIsEmpty) {
+          // popping did not work
           filterArrayInStore = filterArrayInStore.slice(0, -1)
         }
       } else if (filterArrayInStore.length === 0) {
-        // Add empty filter _if no criteria exist yet_
+        // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
         // If no filters were added: this empty element will be removed after loopin
         filterArrayInStore.push(initialTpop)
@@ -303,19 +300,24 @@ export default types
           }
         }
         // Object could be empty if no filters exist
-        // do not add empty objects
-        if (Object.keys(singleFilter).length === 0) break
+        // Do not add empty objects
+        if (
+          Object.values(singleFilter).filter((v) => v !== null).length === 0
+        ) {
+          break
+        }
+        // Object has filter criteria. Add it!
         filterArray.push(singleFilter)
       }
 
       // extra check to ensure no empty objects exist
-      const filterArrayWithoutEmptyObjects = filterArray.filter(
-        (el) => Object.keys(el).length > 0,
-      )
+      // const filterArrayWithoutEmptyObjects = filterArray.filter(
+      //   (el) => Object.keys(el).length > 0,
+      // )
 
       return {
         all: singleFilterByHierarchy,
-        filtered: { or: filterArrayWithoutEmptyObjects },
+        filtered: { or: filterArray },
       }
     },
     get tpopmassnGqlFilter() {

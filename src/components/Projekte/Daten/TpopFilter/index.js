@@ -75,8 +75,6 @@ const TpopFilter = ({ treeName }) => {
   })
 
   const row = dataFilter.tpop[activeTab]
-  const totalNr = dataTpops?.allTpops?.totalCount
-  const filteredNr = dataTpops?.allTpopsFiltered?.totalCount
 
   const [fieldErrors, setFieldErrors] = useState({})
   const saveToDb = useCallback(
@@ -105,8 +103,8 @@ const TpopFilter = ({ treeName }) => {
           title="Teil-Population"
           treeName={treeName}
           table="tpop"
-          totalNr={totalNr}
-          filteredNr={filteredNr}
+          totalNr={dataTpops?.allTpops?.totalCount ?? '...'}
+          filteredNr={dataTpops?.allTpopsFiltered?.totalCount ?? '...'}
           activeTab={activeTab}
         />
         <FilterComment>{hiearchyComment}</FilterComment>
