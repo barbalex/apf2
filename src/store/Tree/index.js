@@ -162,7 +162,13 @@ export default types
         if (Object.keys(singleFilter).length === 0) break
         filterArray.push(singleFilter)
       }
-      return { or: filterArray }
+
+      // extra check
+      const filterArrayWithoutEmptyObjects = filterArray.filter(
+        (el) => Object.keys(el).length > 0,
+      )
+
+      return { or: filterArrayWithoutEmptyObjects }
     },
     get popGqlFilter() {
       // need to slice to rerender on change
@@ -210,11 +216,16 @@ export default types
         filterArray.push(singleFilterByUrl)
       }
 
+      // extra check
+      const filterArrayWithoutEmptyObjects = filterArray.filter(
+        (el) => Object.keys(el).length > 0,
+      )
+
       return {
         all: Object.keys(singleFilterByUrl).length
           ? singleFilterByUrl
           : { or: [] },
-        filtered: { or: filterArray },
+        filtered: { or: filterArrayWithoutEmptyObjects },
       }
     },
     get tpopGqlFilter() {
@@ -275,7 +286,15 @@ export default types
         filterArray.push(singleFilterByUrl)
       }
 
-      return { all: singleFilterByUrl, filtered: { or: filterArray } }
+      // extra check
+      const filterArrayWithoutEmptyObjects = filterArray.filter(
+        (el) => Object.keys(el).length > 0,
+      )
+
+      return {
+        all: singleFilterByUrl,
+        filtered: { or: filterArrayWithoutEmptyObjects },
+      }
     },
     get tpopmassnGqlFilter() {
       const result = Object.fromEntries(
