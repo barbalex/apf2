@@ -64,6 +64,9 @@ export default types
       self.mapFilter = val
       setIdsFiltered({ store, treeName: self.name })
     },
+    emptyMapFilter() {
+      self.setMapFilter(undefined)
+    },
     setLastTouchedNode(val) {
       self.lastTouchedNode = val
     },
