@@ -88,7 +88,7 @@ const Ap = ({ treeName }) => {
   }, [apGqlFilter, client, enqueNotification, store])
 
   const apIsFiltered = dataFilterTableIsFiltered({
-    treeName: 'tree',
+    treeName,
     table: 'ap',
   })
 

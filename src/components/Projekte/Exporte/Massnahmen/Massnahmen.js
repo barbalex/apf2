@@ -17,7 +17,7 @@ const Massnahmen = ({treeName}) => {
   const [queryState, setQueryState] = useState()
 
   const tpopmassnIsFiltered = dataFilterTableIsFiltered({
-    treeName: 'tree',
+    treeName,
     table: 'tpopmassn',
   })
 

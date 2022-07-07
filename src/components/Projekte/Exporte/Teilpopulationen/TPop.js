@@ -206,7 +206,7 @@ const Teilpopulationen = ({ treeName }) => {
   }, [client, enqueNotification, store, tpopGqlFilter])
 
   const tpopIsFiltered = dataFilterTableIsFiltered({
-    treeName: 'tree',
+    treeName,
     table: 'tpop',
   })
 

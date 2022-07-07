@@ -15,7 +15,7 @@ const Pops = ({ treeName }) => {
   const [queryState, setQueryState] = useState()
 
   const popIsFiltered = dataFilterTableIsFiltered({
-    treeName: 'tree',
+    treeName,
     table: 'pop',
   })
 

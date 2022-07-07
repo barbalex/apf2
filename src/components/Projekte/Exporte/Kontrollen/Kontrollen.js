@@ -16,11 +16,11 @@ const KontrollenButton = ({ treeName }) => {
 
   const tpopkontrIsFiltered =
     dataFilterTableIsFiltered({
-      treeName: 'tree',
+      treeName,
       table: 'tpopfreiwkontr',
     }) ??
     dataFilterTableIsFiltered({
-      treeName: 'tree',
+      treeName,
       table: 'tpopfeldkontr',
     })
 
