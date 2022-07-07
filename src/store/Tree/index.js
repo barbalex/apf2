@@ -230,9 +230,10 @@ export default types
     },
     get tpopGqlFilter() {
       // need to slice to rerender on change
-      const projId = self.activeNodeArray.slice()[1]
-      const apId = self.activeNodeArray.slice()[3]
-      const popId = self.activeNodeArray.slice()[5]
+      const aNA = self.activeNodeArray.slice()
+      const projId = aNA[1]
+      const apId = aNA[3]
+      const popId = aNA[5]
       const filterArrayInStore = self.dataFilter.tpop
         ? getSnapshot(self.dataFilter.tpop)
         : []
@@ -244,7 +245,6 @@ export default types
         // add empty filter
         filterArrayInStoreWithoutEmpty.push(initialTpop)
       }
-      const filterArray = []
       const singleFilterByUrl = popId ? { popId: { equalTo: popId } } : {}
       if (apId) {
         singleFilterByUrl.popByPopId = { apId: { equalTo: apId } }
@@ -253,6 +253,7 @@ export default types
         if (!singleFilterByUrl.popByPopId) singleFilterByUrl.popByPopId = {}
         singleFilterByUrl.popByPopId.apByApId = { projId: { equalTo: projId } }
       }
+      const filterArray = []
       for (const filter of filterArrayInStoreWithoutEmpty) {
         // add parents according to url
         const singleFilter = { ...singleFilterByUrl }
