@@ -144,21 +144,23 @@ export default types
       }
       const filterArray = []
       for (const filter of filterArrayInStoreWithoutEmpty) {
-        const apFilter = { projId: { equalTo: projId } }
+        const singleFilter = { projId: { equalTo: projId } }
         const dataFilterAp = { ...filter }
         const apFilterValues = Object.entries(dataFilterAp).filter(
           (e) => e[1] || e[1] === 0,
         )
         apFilterValues.forEach(([key, value]) => {
           const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-          apFilter[key] = { [expression]: value }
+          singleFilter[key] = { [expression]: value }
         })
         if (self.nodeLabelFilter.ap) {
-          apFilter.label = {
+          singleFilter.label = {
             includesInsensitive: self.nodeLabelFilter.ap,
           }
         }
-        filterArray.push(apFilter)
+        // do not add empty object
+        if (Object.keys(singleFilter).length === 0) break
+        filterArray.push(singleFilter)
       }
       return { or: filterArray }
     },
