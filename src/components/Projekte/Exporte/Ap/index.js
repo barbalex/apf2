@@ -48,6 +48,7 @@ const ApExports = ({ treeName }) => {
         {expanded ? (
           <StyledCardContent>
             <Ap treeName={treeName} />
+            <Ap treeName={treeName} filtered={true} />
             <ApOhnePop />
             <AnzMassn />
             <AnzKontr />

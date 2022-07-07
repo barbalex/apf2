@@ -6,7 +6,7 @@ import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const Ap = ({ treeName }) => {
+const Ap = ({ treeName, filtered = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification, tableIsFiltered } = store
@@ -48,7 +48,7 @@ const Ap = ({ treeName }) => {
           }
         `,
         variables: {
-          filter: apGqlFilter,
+          filter: filtered ? apGqlFilter : { or: [] },
         },
       })
     } catch (error) {
@@ -81,11 +81,11 @@ const Ap = ({ treeName }) => {
     }
     exportModule({
       data: rows,
-      fileName: 'Art',
+      fileName: `Arten${filtered ? '_gefiltert' : ''}`,
       store,
     })
     setQueryState(undefined)
-  }, [apGqlFilter, client, enqueNotification, store])
+  }, [apGqlFilter, client, enqueNotification, filtered, store])
 
   const apIsFiltered = tableIsFiltered({
     treeName,
@@ -96,9 +96,9 @@ const Ap = ({ treeName }) => {
     <DownloadCardButton
       onClick={onClickAp}
       color="inherit"
-      disabled={!!queryState}
+      disabled={!!queryState || (filtered && !apIsFiltered)}
     >
-      {apIsFiltered ? 'Arten (gefiltert)' : 'Arten'}
+      {filtered ? 'Arten (gefiltert)' : 'Arten'}
       {queryState ? (
         <StyledProgressText>{queryState}</StyledProgressText>
       ) : null}
