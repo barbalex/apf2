@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
+import { getSnapshot } from 'mobx-state-tree'
 
 import FilterTitle from '../../../shared/FilterTitle'
 import queryTpops from './queryTpops'
@@ -75,6 +76,11 @@ const TpopFilter = ({ treeName }) => {
   })
 
   const row = dataFilter.tpop[activeTab]
+
+  console.log('TpopFilter', {
+    dataTpops,
+    mapFilter: mapFilter ? getSnapshot(mapFilter) : undefined,
+  })
 
   const [fieldErrors, setFieldErrors] = useState({})
   const saveToDb = useCallback(
