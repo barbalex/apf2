@@ -27,7 +27,7 @@ const StyledCheckbox = styled(Checkbox)`
 const Optionen = () => {
   const store = useContext(storeContext)
   const { setExportFileType, exportFileType } = store
-  const [expanded, setExpanded] = useState(true)
+  const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
