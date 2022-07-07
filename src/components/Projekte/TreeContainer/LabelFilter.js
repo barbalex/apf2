@@ -14,7 +14,6 @@ import styled from 'styled-components'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
-import { getSnapshot } from 'mobx-state-tree'
 
 import tables from '../../../modules/tables'
 import storeContext from '../../../storeContext'
