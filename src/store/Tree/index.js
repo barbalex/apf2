@@ -2,6 +2,7 @@ import { types, getParent, getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 import queryString from 'query-string'
 import { navigate } from 'gatsby'
+import nestedObjectAssign from 'nested-object-assign'
 
 import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
@@ -232,42 +233,55 @@ export default types
       }
     },
     get tpopGqlFilter() {
+      // 1. prepare hiearchy filter
       // need to slice to rerender on change
       const aNA = self.activeNodeArray.slice()
       const projId = aNA[1]
       const apId = aNA[3]
       const popId = aNA[5]
-      const filterArrayInStore = self.dataFilter.tpop
+      const popHierarchyFilter = popId ? { popId: { equalTo: popId } } : {}
+      const apHiearchyFilter = apId
+        ? { popByPopId: { apId: { equalTo: apId } } }
+        : {}
+      const projHiearchyFilter = projId
+        ? { popByPopId: { apByApId: { projId: { equalTo: projId } } } }
+        : {}
+      const singleFilterByHierarchy = nestedObjectAssign(
+        {},
+        popHierarchyFilter,
+        apHiearchyFilter,
+        projHiearchyFilter,
+      )
+      // 2. prepare data filter
+      let filterArrayInStore = self.dataFilter.tpop
         ? getSnapshot(self.dataFilter.tpop)
         : []
-      // 1. prepare hiearchy filter
-      const singleFilterByHierarchy = popId ? { popId: { equalTo: popId } } : {}
-      if (apId) {
-        singleFilterByHierarchy.popByPopId = { apId: { equalTo: apId } }
-      }
-      if (projId) {
-        if (!singleFilterByHierarchy.popByPopId)
-          singleFilterByHierarchy.popByPopId = {}
-        singleFilterByHierarchy.popByPopId.apByApId = {
-          projId: { equalTo: projId },
-        }
-      }
-      // 2. prepare data filter
       // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
       // they result in all tpops being filtered before user add criteria
       //
       // before looping we need an extra empty element to apply hiearchy
-      if (filterArrayInStore.length === 0) {
-        // add empty filter _if no criteria exist yet_
+      if (filterArrayInStore.length > 1) {
+        // check if last is empty
+        // empty last is just temporary because user created new "oder" and has not yet input criteria
+        // remove it or filter result will be wrong _if criteria.length >1_!
+        const last = filterArrayInStore[filterArrayInStore.length - 1]
+        const lastIsEmpty =
+          Object.values(last).filter((v) => v !== null).length === 0
+        if (lastIsEmpty) {
+          filterArrayInStore = filterArrayInStore.slice(0, -1)
+        }
+      } else if (filterArrayInStore.length === 0) {
+        // Add empty filter _if no criteria exist yet_
         // Goal: enable adding filters for hierarchy, label and geometry
+        // If no filters were added: this empty element will be removed after loopin
         filterArrayInStore.push(initialTpop)
       }
       // 3. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter to each or
+        // add hiearchy filter
         const singleFilter = { ...singleFilterByHierarchy }
-        // add filter criteria from data filter
+        // add data filter
         const dataFilterTpop = { ...filter }
         const tpopFilterValues = Object.entries(dataFilterTpop).filter(
           (e) => e[1] || e[1] === 0,
@@ -276,30 +290,22 @@ export default types
           const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
           singleFilter[key] = { [expression]: value }
         })
-        // add tree node label filter
+        // add node label filter
         if (self.nodeLabelFilter.tpop) {
           singleFilter.label = {
             includesInsensitive: self.nodeLabelFilter.tpop,
           }
         }
-        // if mapFilter is set, add it too
+        // add mapFilter
         if (self.mapFilter) {
           singleFilter.geomPoint = {
             coveredBy: self.mapFilter,
           }
         }
-        // do not add empty object
+        // Object could be empty if no filters exist
+        // do not add empty objects
         if (Object.keys(singleFilter).length === 0) break
         filterArray.push(singleFilter)
-      }
-      // If there are multiple elements and the last one contains no filter criteria
-      // this is just temporary because user created new "oder" and has not yet input criteria
-      // remove it or filter result will be wrong!
-      const lastDataFilter = filterArrayInStore[filterArrayInStore.length - 1]
-      const lastDataFilterIsEmpty =
-        Object.values(lastDataFilter).filter((v) => v !== null).length === 0
-      if (filterArray.length > 1 && lastDataFilterIsEmpty) {
-        filterArray.pop()
       }
 
       // extra check to ensure no empty objects exist

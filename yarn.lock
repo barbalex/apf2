@@ -5432,6 +5432,7 @@ __metadata:
     mobx-react-lite: 3.4.0
     mobx-state-tree: 5.1.5
     mst-persist: 0.1.3
+    nested-object-assign: ^1.0.4
     notistack: 2.0.5
     pg: 8.7.3
     pg-sql2: 4.12.3
@@ -15347,6 +15348,13 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
+  languageName: node
+  linkType: hard
+
+"nested-object-assign@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "nested-object-assign@npm:1.0.4"
+  checksum: 7373f14c23bbf8f05f354e3f5b127af936c89642e81ceaa011d67105b40445ee4517d8138bf571bcc5bf7f00eebaf82b2f10860400894a8a4af72eb390e1cabd
   languageName: node
   linkType: hard
 
