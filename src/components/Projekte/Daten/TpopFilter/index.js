@@ -77,10 +77,10 @@ const TpopFilter = ({ treeName }) => {
 
   const row = dataFilter.tpop[activeTab]
 
-  console.log('TpopFilter', {
-    dataTpops,
-    mapFilter: mapFilter ? getSnapshot(mapFilter) : undefined,
-  })
+  // console.log('TpopFilter', {
+  //   dataTpops,
+  //   mapFilter: mapFilter ? getSnapshot(mapFilter) : undefined,
+  // })
 
   const [fieldErrors, setFieldErrors] = useState({})
   const saveToDb = useCallback(
