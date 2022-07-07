@@ -16,7 +16,7 @@ const StyledButton = styled(Button)`
   margin-top: 5px !important;
 `
 
-const Line = ({ treeName, beob }) => {
+const PolylineComponent = ({ treeName, beob }) => {
   const store = useContext(storeContext)
   const { openTree2WithActiveNodeArray } = store
   const { projIdInActiveNodeArray, apIdInActiveNodeArray, activeNodeArray } =
@@ -158,4 +158,4 @@ const Line = ({ treeName, beob }) => {
   )
 }
 
-export default observer(Line)
+export default observer(PolylineComponent)

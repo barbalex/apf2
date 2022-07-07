@@ -26,7 +26,6 @@ import apberIdInUrl from '../../modules/apberIdInUrl'
 import popIdInUrl from '../../modules/popIdInUrl'
 import tpopIdInUrl from '../../modules/tpopIdInUrl'
 import exists from '../../modules/exists'
-import setIdsFiltered from '../../modules/setIdsFiltered'
 
 export default types
   .model('Tree', {
@@ -60,14 +59,7 @@ export default types
   })
   .actions((self) => ({
     setMapFilter(val) {
-      // const store = getParent(self)
       self.mapFilter = val
-      // TODO: get rid of idsFiltered
-      // Reasons:
-      // 1. not any more needed
-      // 2. makes no more sense: why should one filter type be presented different than another?
-      // 3. is probably a real ressource hog (beob!)
-      // setIdsFiltered({ store, treeName: self.name })
     },
     emptyMapFilter() {
       self.setMapFilter(undefined)
