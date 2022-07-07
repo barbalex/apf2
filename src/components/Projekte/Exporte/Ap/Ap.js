@@ -9,7 +9,7 @@ import { DownloadCardButton, StyledProgressText } from '../index'
 const Ap = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, dataFilterTableIsFiltered } = store
+  const { enqueNotification, tableIsFiltered } = store
   const { apGqlFilter } = store[treeName]
 
   const [queryState, setQueryState] = useState()
@@ -87,7 +87,7 @@ const Ap = ({ treeName }) => {
     setQueryState(undefined)
   }, [apGqlFilter, client, enqueNotification, store])
 
-  const apIsFiltered = dataFilterTableIsFiltered({
+  const apIsFiltered = tableIsFiltered({
     treeName,
     table: 'ap',
   })

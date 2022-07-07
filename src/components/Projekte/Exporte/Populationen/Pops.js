@@ -9,12 +9,12 @@ import { DownloadCardButton, StyledProgressText } from '../index'
 const Pops = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, dataFilterTableIsFiltered } = store
+  const { enqueNotification, tableIsFiltered } = store
   const { popGqlFilter } = store[treeName]
 
   const [queryState, setQueryState] = useState()
 
-  const popIsFiltered = dataFilterTableIsFiltered({
+  const popIsFiltered = tableIsFiltered({
     treeName,
     table: 'pop',
   })

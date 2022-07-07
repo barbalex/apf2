@@ -218,7 +218,7 @@ const myTypes = types
     dataFilterEmptyTable({ treeName, table }) {
       self[treeName].dataFilter[table] = initialDataFilterTreeValues[table]
     },
-    dataFilterTableIsFiltered({ treeName, table }) {
+    tableIsFiltered({ treeName, table }) {
       // check nodeLabelFilter
       const nodeLabelFilterExists = !!self[treeName].nodeLabelFilter[table]
       if (nodeLabelFilterExists) return true
@@ -254,9 +254,7 @@ const myTypes = types
     },
     dataFilterTreeIsFiltered(treeName) {
       const tables = Object.keys(self[treeName].dataFilter)
-      return tables.some((table) =>
-        self.dataFilterTableIsFiltered({ treeName, table }),
-      )
+      return tables.some((table) => self.tableIsFiltered({ treeName, table }))
     },
     setUser(val) {
       self.user = val

@@ -51,14 +51,14 @@ const FilterTitle = ({
 }) => {
   const store = useContext(storeContext)
   const {
-    dataFilterTableIsFiltered,
+    tableIsFiltered,
     dataFilterTreeIsFiltered,
     dataFilterEmptyTab,
     dataFilterEmptyTable,
     dataFilterEmptyTree,
   } = store
 
-  const existsTableFilter = dataFilterTableIsFiltered({
+  const existsTableFilter = tableIsFiltered({
     treeName,
     table,
   })
