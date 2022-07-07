@@ -26,17 +26,16 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
   const store = useContext(storeContext)
   const { assigningBeob, refetch, openTree2WithActiveNodeArray } = store
   const {
-    map,
     setActiveNodeArray,
     apIdInActiveNodeArray,
     projIdInActiveNodeArray,
+    activeNodeArray,
   } = store[treeName]
-  const { idsFiltered } = map
   const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
   const projId =
     projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
 
-  const isHighlighted = idsFiltered.includes(beob.id)
+  const isHighlighted = activeNodeArray[activeNodeArray.length - 1] === beob.id
   const latLng =
     typeof window !== 'undefined'
       ? new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)

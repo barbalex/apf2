@@ -19,13 +19,13 @@ const StyledButton = styled(Button)`
 const Line = ({ treeName, beob }) => {
   const store = useContext(storeContext)
   const { openTree2WithActiveNodeArray } = store
-  const { projIdInActiveNodeArray, apIdInActiveNodeArray } = store[treeName]
+  const { projIdInActiveNodeArray, apIdInActiveNodeArray, activeNodeArray } =
+    store[treeName]
   const projId =
     projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
   const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
-  const { idsFiltered } = store[treeName].map
 
-  const isHighlighted = idsFiltered.includes(beob.id)
+  const isHighlighted = activeNodeArray[activeNodeArray.length - 1] === beob.id
   const beobLatLng =
     typeof window !== 'undefined'
       ? new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)

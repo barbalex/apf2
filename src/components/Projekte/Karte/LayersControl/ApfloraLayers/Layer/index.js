@@ -122,10 +122,8 @@ const MySortableItem = ({ treeName, apfloraLayer }) => {
     setBounds,
   } = store
   const tree = store[treeName]
-  const { apIdInActiveNodeArray } = tree
-  const { idsFiltered } = tree.map
+  const { apIdInActiveNodeArray, activeNodeArray } = tree
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
-  const mapIdsFiltered = idsFiltered
   const layer = apfloraLayer.value
   const pop = layer === 'pop' && activeApfloraLayers.includes('pop')
   const tpop = layer === 'tpop' && activeApfloraLayers.includes('tpop')
@@ -173,11 +171,11 @@ const MySortableItem = ({ treeName, apfloraLayer }) => {
   )
   if (apfloraLayer.value === 'tpop') {
     // but tpop is special...
-    const pops = data?.tpopByPop?.nodes ?? []
-    layerData = flatten(pops.map((n) => n?.tpopsByPopId?.nodes ?? []))
+    const tpops = data?.tpopByPop?.nodes ?? []
+    layerData = flatten(tpops.map((n) => n?.tpopsByPopId?.nodes ?? []))
   }
-  const layerDataHighlighted = layerData.filter((o) =>
-    mapIdsFiltered.includes(o.id),
+  const layerDataHighlighted = layerData.filter(
+    (o) => o.id === activeNodeArray[activeNodeArray.length - 1],
   )
   const onChangeCheckbox = useCallback(() => {
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
@@ -202,19 +200,23 @@ const MySortableItem = ({ treeName, apfloraLayer }) => {
     }
   }, [layerData, activeApfloraLayers, apfloraLayer.value, map, setBounds])
   const onClickZoomToActive = useCallback(() => {
-    // only zoom if a tpop is highlighted
-    if (layerDataHighlighted.length === 0) return
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
-      const newBounds = getBounds(layerDataHighlighted)
-      map.fitBounds(newBounds)
-      setBounds(newBounds)
+      const highlightedObjects = layerData.filter(
+        (o) => o.id === activeNodeArray[activeNodeArray.length - 1],
+      )
+      const newBounds = getBounds(highlightedObjects)
+      if (newBounds) {
+        map.fitBounds(newBounds)
+        setBounds(newBounds)
+      }
     }
   }, [
-    layerDataHighlighted,
+    layerData,
     activeApfloraLayers,
     apfloraLayer.value,
     map,
     setBounds,
+    activeNodeArray,
   ])
   const zoomToAllIconStyle = useMemo(
     () => ({

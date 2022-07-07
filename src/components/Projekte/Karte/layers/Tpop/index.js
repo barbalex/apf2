@@ -1,7 +1,6 @@
 import React, { useContext, useMemo, useEffect } from 'react'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useApolloClient, useLazyQuery } from '@apollo/client'
 import { useMapEvents } from 'react-leaflet'
@@ -9,8 +8,6 @@ import { useMapEvents } from 'react-leaflet'
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
-import { simpleTypes as popType } from '../../../../../store/Tree/DataFilter/pop'
-import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
 import updateTpopById from './updateTpopById'
 
 const iconCreateFunction = (cluster) => {
