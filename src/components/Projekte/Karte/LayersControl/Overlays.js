@@ -40,8 +40,8 @@ const StyledLegendIcon = styled(InfoOutlineIcon)`
   cursor: pointer;
 `
 const LayerDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 180px 180px 20px;
   padding-top: 4px;
   &:not(:last-of-type) {
     border-bottom: 1px solid #ececec;
@@ -57,8 +57,13 @@ const LayerDiv = styled.div`
    */
   font-size: 12px;
 `
-const IconsDivs = styled.div`
+const CheckDiv = styled.div`
+  flex-grow: 1;
+`
+const InfoIconsDivs = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 `
 const IconsDiv = styled.div`
   display: flex;
@@ -195,20 +200,22 @@ const DragHandle = SortableHandle(() => (
 const SortableItem = SortableElement(
   ({ overlay, activeOverlays, setActiveOverlays }) => (
     <LayerDiv>
-      <Checkbox
-        value={overlay.value}
-        label={overlay.label}
-        checked={activeOverlays.includes(overlay.value)}
-        onChange={async () => {
-          if (activeOverlays.includes(overlay.value)) {
-            return setActiveOverlays(
-              activeOverlays.filter((o) => o !== overlay.value),
-            )
-          }
-          return setActiveOverlays([...activeOverlays, overlay.value])
-        }}
-      />
-      <IconsDivs>
+      <CheckDiv>
+        <Checkbox
+          value={overlay.value}
+          label={overlay.label}
+          checked={activeOverlays.includes(overlay.value)}
+          onChange={async () => {
+            if (activeOverlays.includes(overlay.value)) {
+              return setActiveOverlays(
+                activeOverlays.filter((o) => o !== overlay.value),
+              )
+            }
+            return setActiveOverlays([...activeOverlays, overlay.value])
+          }}
+        />
+      </CheckDiv>
+      <InfoIconsDivs>
         {(layerLegends[overlay.value] || [])
           .filter((layer) => !!layer.url)
           .map((layer) => (
@@ -228,12 +235,14 @@ const SortableItem = SortableElement(
               </div>
             </IconsDiv>
           ))}
+      </InfoIconsDivs>
+      <IconsDiv>
         <IconsDiv>
           <div>
             <DragHandle />
           </div>
         </IconsDiv>
-      </IconsDivs>
+      </IconsDiv>
     </LayerDiv>
   ),
 )

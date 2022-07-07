@@ -1,10 +1,6 @@
 export const overlays = [
   { label: 'Markierungen', value: 'Markierungen' },
-  { label: 'Detailpläne', value: 'Detailplaene' }, 
-  {
-    label: 'Massnahmenpläne (funktioniert leider noch nicht)',
-    value: 'Massnahmen',
-  },
+  { label: 'Detailpläne', value: 'Detailplaene' },
   { label: 'NS-Gebiete Betreuung', value: 'Betreuungsgebiete' },
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
   { label: 'Gemeinden', value: 'Gemeinden' },
@@ -17,4 +13,11 @@ export const overlays = [
   },
   { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
   { label: 'Wälder: Vegetation', value: 'ZhWaelderVegetation' },
+]
+
+const unused = [
+  {
+    label: 'Massnahmenpläne (funktioniert leider noch nicht)',
+    value: 'Massnahmen',
+  },
 ]
