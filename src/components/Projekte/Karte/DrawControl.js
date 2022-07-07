@@ -11,8 +11,6 @@ const DrawControl = ({ treeName }) => {
   const store = useContext(storeContext)
   const { setMapFilter } = store[treeName]
 
-  //console.log('DrawControl, map:', map)
-
   useEffect(() => {
     window.L.drawLocal.draw.toolbar.buttons.polygon =
       'Polygon(e) zeichnen, um zu filtern'
@@ -53,8 +51,8 @@ const DrawControl = ({ treeName }) => {
 
     // solution to allow only one geometry to be drawn
     // see: https://github.com/Leaflet/Leaflet.draw/issues/315#issuecomment-500246272
-    const mapFilter = new window.L.FeatureGroup()
-    map.addLayer(mapFilter)
+    const _mapFilterLayer = new window.L.FeatureGroup()
+    map.addLayer(_mapFilterLayer)
     const drawControlFull = new window.L.Control.Draw({
       draw: {
         marker: false,
@@ -63,36 +61,36 @@ const DrawControl = ({ treeName }) => {
         circlemarker: false,
       },
       edit: {
-        featureGroup: mapFilter,
+        featureGroup: _mapFilterLayer,
       },
     })
     const drawControlEditOnly = new window.L.Control.Draw({
       draw: false,
       edit: {
-        featureGroup: mapFilter,
+        featureGroup: _mapFilterLayer,
       },
     })
 
     map.addControl(drawControlFull)
     map.on('draw:created', (e) => {
-      mapFilter.addLayer(e.layer)
+      _mapFilterLayer.addLayer(e.layer)
       drawControlFull.remove(map)
       drawControlEditOnly.addTo(map)
-      setMapFilter(mapFilter.toGeoJSON()?.features?.[0]?.geometry)
+      setMapFilter(_mapFilterLayer.toGeoJSON()?.features?.[0]?.geometry)
     })
     map.on('draw:edited', () =>
-      setMapFilter(mapFilter.toGeoJSON()?.features?.[0]?.geometry),
+      setMapFilter(_mapFilterLayer.toGeoJSON()?.features?.[0]?.geometry),
     )
     map.on('draw:deleted', () => {
-      setMapFilter(mapFilter.toGeoJSON()?.features?.[0]?.geometry)
-      if (mapFilter.getLayers().length === 0) {
+      setMapFilter(_mapFilterLayer.toGeoJSON()?.features?.[0]?.geometry)
+      if (_mapFilterLayer.getLayers().length === 0) {
         drawControlEditOnly.remove(map)
         drawControlFull.addTo(map)
       }
     })
 
     return () => {
-      map.removeLayer(mapFilter)
+      map.removeLayer(_mapFilterLayer)
       map.removeControl(drawControlFull)
       map.removeControl(drawControlEditOnly)
       map.off('draw:created')
