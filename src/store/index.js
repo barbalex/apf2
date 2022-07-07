@@ -83,7 +83,6 @@ const myTypes = types
     ),
     hideMapControls: types.optional(types.boolean, false),
     exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
-    exportApplyMapFilter: types.optional(types.boolean, false),
     assigningBeob: types.optional(types.boolean, false),
     tree: types.optional(Tree, defaultTree),
     tree2: types.optional(Tree, defaultTree),
@@ -316,9 +315,6 @@ const myTypes = types
     },
     setExportFileType(val) {
       self.exportFileType = val
-    },
-    setExportApplyMapFilter(val) {
-      self.exportApplyMapFilter = val
     },
     setAssigningBeob(val) {
       self.assigningBeob = val

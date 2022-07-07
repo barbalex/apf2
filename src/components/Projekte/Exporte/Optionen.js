@@ -24,15 +24,9 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-const Optionen = ({ treeName }) => {
+const Optionen = () => {
   const store = useContext(storeContext)
-  const {
-    setExportFileType,
-    setExportApplyMapFilter,
-    exportApplyMapFilter,
-    exportFileType,
-  } = store
-  const { mapFilter } = store[treeName]
+  const { setExportFileType, exportFileType } = store
   const [expanded, setExpanded] = useState(true)
 
   return (
@@ -63,23 +57,6 @@ const Optionen = ({ treeName }) => {
               />
             }
             label="Dateien im .csv-Format exportieren (Standard ist das xlsx-Format von Excel)"
-          />
-          <StyledFormControlLabel
-            control={
-              <StyledCheckbox
-                checked={exportApplyMapFilter}
-                onChange={() => setExportApplyMapFilter(!exportApplyMapFilter)}
-                value={exportApplyMapFilter.toString()}
-                color="primary"
-              />
-            }
-            // TODO: test if type is undefined when mapFilter is not set
-            label={
-              mapFilter
-                ? 'Karten-Filter anwenden'
-                : 'Karten-Filter anwenden (verfügbar, wenn ein Karten-Filter erstellt wurde)'
-            }
-            disabled={!mapFilter}
           />
         </StyledCardContent>
       </Collapse>
