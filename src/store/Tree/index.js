@@ -184,10 +184,10 @@ export default types
         // add empty filter
         filterArrayInStoreWithoutEmpty.push(initialPop)
       }
-      const singleFilterByUrl = apId ? { apId: { equalTo: apId } } : {}
+      const singleFilterByHierarchy = apId ? { apId: { equalTo: apId } } : {}
       const filterArray = []
       for (const filter of filterArrayInStoreWithoutEmpty) {
-        const singleFilter = { ...singleFilterByUrl }
+        const singleFilter = { ...singleFilterByHierarchy }
         const dataFilterPop = { ...filter }
         const popFilterValues = Object.entries(dataFilterPop).filter(
           (e) => e[1] || e[1] === 0,
@@ -212,8 +212,11 @@ export default types
         filterArray.push(singleFilter)
       }
       // filter by url
-      if (filterArray.length === 0 && Object.keys(singleFilterByUrl).length) {
-        filterArray.push(singleFilterByUrl)
+      if (
+        filterArray.length === 0 &&
+        Object.keys(singleFilterByHierarchy).length
+      ) {
+        filterArray.push(singleFilterByHierarchy)
       }
 
       // extra check
@@ -222,8 +225,8 @@ export default types
       )
 
       return {
-        all: Object.keys(singleFilterByUrl).length
-          ? singleFilterByUrl
+        all: Object.keys(singleFilterByHierarchy).length
+          ? singleFilterByHierarchy
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
@@ -237,26 +240,33 @@ export default types
       const filterArrayInStore = self.dataFilter.tpop
         ? getSnapshot(self.dataFilter.tpop)
         : []
-      // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-      const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
-        (f) => Object.values(f).filter((v) => v !== null).length !== 0,
-      )
-      if (filterArrayInStoreWithoutEmpty.length === 0) {
-        // add empty filter
-        filterArrayInStoreWithoutEmpty.push(initialTpop)
-      }
-      const singleFilterByUrl = popId ? { popId: { equalTo: popId } } : {}
+      // 1. prepare hiearchy filter
+      const singleFilterByHierarchy = popId ? { popId: { equalTo: popId } } : {}
       if (apId) {
-        singleFilterByUrl.popByPopId = { apId: { equalTo: apId } }
+        singleFilterByHierarchy.popByPopId = { apId: { equalTo: apId } }
       }
       if (projId) {
-        if (!singleFilterByUrl.popByPopId) singleFilterByUrl.popByPopId = {}
-        singleFilterByUrl.popByPopId.apByApId = { projId: { equalTo: projId } }
+        if (!singleFilterByHierarchy.popByPopId)
+          singleFilterByHierarchy.popByPopId = {}
+        singleFilterByHierarchy.popByPopId.apByApId = {
+          projId: { equalTo: projId },
+        }
       }
+      // 2. prepare data filter
+      // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
+      // they result in all tpops being filtered before user add criteria
+      //
+      // before looping we need an extra empty element to apply hiearchy
+      if (filterArrayInStore.length === 0) {
+        // add empty filter _if no criteria exist yet_
+        // Goal: enable adding filters for hierarchy, label and geometry
+        filterArrayInStore.push(initialTpop)
+      }
+      // 3. build data filter
       const filterArray = []
-      for (const filter of filterArrayInStoreWithoutEmpty) {
-        // add parents according to url
-        const singleFilter = { ...singleFilterByUrl }
+      for (const filter of filterArrayInStore) {
+        // add hiearchy filter to each or
+        const singleFilter = { ...singleFilterByHierarchy }
         // add filter criteria from data filter
         const dataFilterTpop = { ...filter }
         const tpopFilterValues = Object.entries(dataFilterTpop).filter(
@@ -282,18 +292,23 @@ export default types
         if (Object.keys(singleFilter).length === 0) break
         filterArray.push(singleFilter)
       }
-      // need to filter by url, if exists
-      if (filterArray.length === 0 && Object.keys(singleFilterByUrl).length) {
-        filterArray.push(singleFilterByUrl)
+      // If there are multiple elements and the last one contains no filter criteria
+      // this is just temporary because user created new "oder" and has not yet input criteria
+      // remove it or filter result will be wrong!
+      const lastDataFilter = filterArrayInStore[filterArrayInStore.length - 1]
+      const lastDataFilterIsEmpty =
+        Object.values(lastDataFilter).filter((v) => v !== null).length === 0
+      if (filterArray.length > 1 && lastDataFilterIsEmpty) {
+        filterArray.pop()
       }
 
-      // extra check
+      // extra check to ensure no empty objects exist
       const filterArrayWithoutEmptyObjects = filterArray.filter(
         (el) => Object.keys(el).length > 0,
       )
 
       return {
-        all: singleFilterByUrl,
+        all: singleFilterByHierarchy,
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
     },

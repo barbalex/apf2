@@ -83,12 +83,17 @@ const FilterTitle = ({
         <FilterNumbers>
           {exists(filteredNr) && (
             <>
-              <span title="gefilterte Anzahl">{filteredNr}</span>/
-              <span title="ungefilterte Anzahl">{totalNr}</span>
+              <span title="gefilterte Anzahl">
+                {filteredNr?.toLocaleString('de-ch')}
+              </span>
+              /
+              <span title="ungefilterte Anzahl">
+                {totalNr?.toLocaleString('de-ch')}
+              </span>
             </>
           )}
         </FilterNumbers>
-        {activeTab !== undefined && ( 
+        {activeTab !== undefined && (
           <IconButton
             aria-label={`Aktuelles Filter-Kriterium entfernen`}
             title={`Aktuelles Filter-Kriterium entfernen`}
