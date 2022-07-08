@@ -139,7 +139,7 @@ export default types
       const singleFilterByHierarchy = { projId: { equalTo: projId } }
       // 2. prepare data filter
       let filterArrayInStore = self.dataFilter.ap
-        ? getSnapshot(self.dataFilter.ap)
+        ? [...getSnapshot(self.dataFilter.ap)]
         : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
@@ -233,24 +233,52 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
     },
+    get artIsFiltered() {
+      const firstFilterObject = {
+        ...(self.apGqlFilter?.filtered.or?.[0] ?? {}),
+      }
+      let entries = Object.entries(firstFilterObject).filter(
+        (e) => e[0] !== 'projId',
+      )
+      // if apFilter is set: ignore that value
+      if (self.apFilter) {
+        entries = entries.filter(
+          (e) => !(e[0] === 'bearbeitung' && isEqual(e[1], { in: [1, 2, 3] })),
+        )
+      }
+      return entries.length > 0
+    },
     get popGqlFilter() {
       // 1. prepare hiearchy filter
       // need to slice proxy to rerender on change
       const aNA = self.activeNodeArray.slice()
       const projId = aNA[1]
       const apId = aNA[3]
+      const popId = aNA[5]
+      const popHierarchyFilter = popId ? { id: { equalTo: popId } } : {}
       const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
       const projHiearchyFilter = projId
         ? { apByApId: { projId: { equalTo: projId } } }
         : {}
       const singleFilterByHierarchy = nestedObjectAssign(
         {},
+        popHierarchyFilter,
         apHiearchyFilter,
         projHiearchyFilter,
       )
+      const singleFilterByParentFiltersForAll = {
+        apByApId: self.apGqlFilter.all,
+      }
+      const singleFilterForAll = nestedObjectAssign(
+        singleFilterByHierarchy,
+        singleFilterByParentFiltersForAll,
+      )
+      const singleFilterByParentFiltersForFiltered = {
+        apByApId: self.apGqlFilter.filtered,
+      }
       // 2. prepare data filter
       let filterArrayInStore = self.dataFilter.pop
-        ? getSnapshot(self.dataFilter.pop)
+        ? [...getSnapshot(self.dataFilter.pop)]
         : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
@@ -273,7 +301,12 @@ export default types
       const filterArray = []
       for (const filter of filterArrayInStore) {
         // add hiearchy filter
-        const singleFilter = { ...singleFilterByHierarchy }
+        // const singleFilter = { ...singleFilterByHierarchy }
+        const singleFilter = nestedObjectAssign(
+          {},
+          singleFilterByHierarchy,
+          singleFilterByParentFiltersForFiltered,
+        )
         // add data filter
         const dataFilterPop = { ...filter }
         const popFilterValues = Object.entries(dataFilterPop).filter(
@@ -311,8 +344,8 @@ export default types
       )
 
       return {
-        all: Object.keys(singleFilterByHierarchy).length
-          ? singleFilterByHierarchy
+        all: Object.keys(singleFilterForAll).length
+          ? singleFilterForAll
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
@@ -339,7 +372,7 @@ export default types
       )
       // 2. prepare data filter
       let filterArrayInStore = self.dataFilter.tpop
-        ? getSnapshot(self.dataFilter.tpop)
+        ? [...getSnapshot(self.dataFilter.tpop)]
         : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
