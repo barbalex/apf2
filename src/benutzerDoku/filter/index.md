@@ -11,7 +11,7 @@ Zuletzt im Juli 2022.<br/><br/>
 
 ## Welche Filter gibt es?
 
-### Navigationsbaum, Hiearchie-Filter
+### 1. Navigationsbaum, Hiearchie-Filter
 
 Die Position in der aktuellen Navigation beeinflusst den aktuell angewandten Filter.<br/><br/>
 
@@ -20,7 +20,7 @@ Beispiele:<br/>
 - Wechseln Sie mit offener Karte und darauf eingeblendeten Populationen von Art zu Art, werden immer deren jeweiligen Populationen angezeigt.
 - Wechseln Sie mit offener Karte und darauf eingeblendeten Teil-Populationen von Population zu Population, werden immer deren jeweiligen Teil-Populationen angezeigt.
 
-### Navigationsbaum, Label-Filter
+### 2. Navigationsbaum, Label-Filter
 
 Im Navigationsbaum gibt es oben links den Label-Filter. Er heisst jeweils so, wie die entsprechene Ebene, auf der man sich befindet. Z.B. "Arten filtern" oder "Populationen filtern".<br/>
 ![Navigationsbaum-Filter](nav_label_filter_1.png)<br/>
@@ -28,19 +28,19 @@ Im Navigationsbaum gibt es oben links den Label-Filter. Er heisst jeweils so, wi
 Beispiel:<br/>
 Erfassen Sie im Label-Filter auf Stufe Art "carex", wird nach den Arten mit dieser Zeichenfolge im Namen gefiltert.<br/><br/>
 
-### Navigationsbaum, nur-AP-Filter
+### 3. Navigationsbaum, nur-AP-Filter
 
 Weil das Anzeigen nur der AP-Arten ein häufiger Vorgang ist (und es früher keine oder-Filterung gab), kann man im Navigationsbaum oben recht mit einem Klick diesen Filter ein- oder ausschalten.<br/>
 ![nur-AP-Filter](nur_ap_filter_1.png)<br/><br/>
 
-### Karten-Filter
+### 4. Karten-Filter
 
 Auf der Karte kann man im Layer-Tool oben rechts unter `apflora` ein Werkzeug für Karten-Filter einschalten. Danach erscheinen in der Karte oben links Werkzeuge zum Zeichnen eines Umrisses, für dessen Bearbeitung und Löschung.<br/>
 ![Karten-Filter](karten_filter_1.png)<br/>
 
 Ist ein Umriss gezeichnet, wird er auf die Filter der Stufe Population und Teil-Population angewandt. Es werden also nur noch Populationen angezeigt, die innerhalb dieses Umrisses liegen.<br/><br/>
 
-### Formular-Filter
+### 5. Formular-Filter
 
 Das ist der leistungsfähigste Filter.<br/><br/>
 
@@ -84,9 +84,9 @@ Will man alle ursprünglichen Populationen, filtert man im Filter-Formular für 
 
 ## Wo werden Filter angewendet?
 
-- Im Navigationsbaum auf der gefilterten Ebene.
-- In der Karte (Populationen, Teil-Populationen).
-- In einigen Exporten gibt es zwei Befehle: Neben dem normalen, der alle Objekte (die Sie zugreifen dürfen) ungefiltert exportiert, einen zusätzlichen der den aktuellen Filter anwendet.
+- Im Navigationsbaum
+- In der Karte (Populationen, Teil-Populationen)
+- In einigen Exporten gibt es zwei Befehle: Neben dem normalen, der alle Objekte (abhängig von den Zugriffsrechten) ungefiltert exportiert, einen zusätzlichen der den aktuellen Filter anwendet
 
 ## Es gibt so viele Filter. Wie spielen sie zusammen?
 
@@ -96,7 +96,7 @@ Wenn Sie im Formular-Filter mach mehreren oder-Kriterien filtern, werden alle ü
 
 Das geht sogar so weit, dass Filter von hierarchisch höheren Filtern beeinflusst werden.<br/><br/>
 
-Beispiel:<br/>
+**Beispiel**<br/>
 Sie haben folgende Filter gesetzt:
 
 - Im Navigationsbaum-Label-Filter `Art filtern: "carex"`
@@ -115,7 +115,7 @@ Im Formular-Filter gibt es oben drei Symbole:<br/>
 
 - Mit dem linken Symbol kann man das aktuelle Filterkriterium der oder-Filterung entfernen
 - Mit dem mittleren Symbol kann man den Filter (alle oder-Kriterien) in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Art)
-- Mit dem rechten Symbol kann man alle angewendeten Filter entfernen. Das betrifft auch Navigationsbaum-Label-Filter, nur-AP-Filter und Karten-Filter. Nicht aber den hierarchischen Navigationsbaum-Filter (dafür wäre eine Navigation nötig und weil es nicht sicher ist, dass Sie das wollen, müssen selber navigieren)
+- Mit dem rechten Symbol kann man alle aktiven Filter entfernen. Das betrifft auch Navigationsbaum-Label-Filter, nur-AP-Filter und Karten-Filter. Nicht aber den hierarchischen Navigationsbaum-Filter - dafür wäre eine Navigation nötig und die könnte Benutzer überraschen bzw. nicht gewollt sein
 
 ## Es gibt so viele Filter. Wie weiss ich, welche aktiv sind?
 

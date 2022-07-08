@@ -1,11 +1,14 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
+import { MdInfoOutline } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
+import { Link } from 'gatsby'
 
 import storeContext from '../../storeContext'
 import exists from '../../modules/exists'
+import appBaseUrl from '../../modules/appBaseUrl'
 
 const Container = styled.div`
   background-color: #ffd3a7;
@@ -40,6 +43,7 @@ const StyledDeleteFilterIcon3 = styled(FaRegTrashAlt)`
   cursor: pointer;
   pointer-events: auto;
 `
+const StyledInfoIcon = styled(MdInfoOutline)``
 
 const FilterTitle = ({
   title,
@@ -79,6 +83,16 @@ const FilterTitle = ({
     emptyMapFilter()
     setApFilter(false)
   }, [dataFilterEmptyTree, emptyMapFilter, setApFilter, store, treeName])
+
+  const onClickInfo = useCallback(() => {
+    const url = `${appBaseUrl()}Dokumentation/Benutzer/Filter`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        return window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
+  }, [])
 
   return (
     <Container>
@@ -124,6 +138,14 @@ const FilterTitle = ({
           disabled={!existsTreeFilter}
         >
           <StyledDeleteFilterIcon />
+        </IconButton>
+        <IconButton
+          aria-label="Filter-Dokumentation"
+          title="Filter-Dokumentation"
+          size="medium"
+          onClick={onClickInfo}
+        >
+          <StyledInfoIcon />
         </IconButton>
       </TitleRow>
     </Container>
