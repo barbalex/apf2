@@ -192,28 +192,54 @@ export default types
       )
 
       return {
-        all: singleFilterByHierarchy,
+        all: Object.keys(singleFilterByHierarchy).length
+          ? singleFilterByHierarchy
+          : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
     },
     get popGqlFilter() {
-      // need to slice to rerender on change
-      const apId = self.activeNodeArray.slice()[3]
-      const filterArrayInStore = self.dataFilter.pop
+      // 1. prepare hiearchy filter
+      // need to slice proxy to rerender on change
+      const aNA = self.activeNodeArray.slice()
+      const projId = aNA[1]
+      const apId = aNA[3]
+      const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
+      const projHiearchyFilter = projId
+        ? { apByApId: { projId: { equalTo: projId } } }
+        : {}
+      const singleFilterByHierarchy = nestedObjectAssign(
+        {},
+        apHiearchyFilter,
+        projHiearchyFilter,
+      )
+      // 2. prepare data filter
+      let filterArrayInStore = self.dataFilter.pop
         ? getSnapshot(self.dataFilter.pop)
         : []
-      // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-      const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
-        (f) => Object.values(f).filter((v) => v !== null).length !== 0,
-      )
-      if (filterArrayInStoreWithoutEmpty.length === 0) {
-        // add empty filter
-        filterArrayInStoreWithoutEmpty.push(initialPop)
+      if (filterArrayInStore.length > 1) {
+        // check if last is empty
+        // empty last is just temporary because user created new "oder" and has not yet input criteria
+        // remove it or filter result will be wrong (show all) if criteria.length > 1!
+        const last = filterArrayInStore[filterArrayInStore.length - 1]
+        const lastIsEmpty =
+          Object.values(last).filter((v) => v !== null).length === 0
+        if (lastIsEmpty) {
+          // popping did not work
+          filterArrayInStore = filterArrayInStore.slice(0, -1)
+        }
+      } else if (filterArrayInStore.length === 0) {
+        // Add empty filter if no criteria exist yet
+        // Goal: enable adding filters for hierarchy, label and geometry
+        // If no filters were added: this empty element will be removed after loopin
+        filterArrayInStore.push(initialTpop)
       }
-      const singleFilterByHierarchy = apId ? { apId: { equalTo: apId } } : {}
+      // 3. build data filter
       const filterArray = []
-      for (const filter of filterArrayInStoreWithoutEmpty) {
+      for (const filter of filterArrayInStore) {
+        // add hiearchy filter
         const singleFilter = { ...singleFilterByHierarchy }
+        // add data filter
         const dataFilterPop = { ...filter }
         const popFilterValues = Object.entries(dataFilterPop).filter(
           (e) => e[1] || e[1] === 0,
@@ -222,30 +248,29 @@ export default types
           const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
           singleFilter[key] = { [expression]: value }
         })
+        // add node label filter
         if (self.nodeLabelFilter.pop) {
           singleFilter.label = {
             includesInsensitive: self.nodeLabelFilter.pop,
           }
         }
-        // if mapFilter is set, add it too
+        // add mapFilter
         if (self.mapFilter) {
           singleFilter.geomPoint = {
             coveredBy: self.mapFilter,
           }
         }
-        // do not add empty object
-        if (Object.keys(singleFilter).length === 0) break
+        // Object could be empty if no filters exist
+        // Do not add empty objects
+        if (
+          Object.values(singleFilter).filter((v) => v !== null).length === 0
+        ) {
+          break
+        }
         filterArray.push(singleFilter)
       }
-      // filter by url
-      if (
-        filterArray.length === 0 &&
-        Object.keys(singleFilterByHierarchy).length
-      ) {
-        filterArray.push(singleFilterByHierarchy)
-      }
 
-      // extra check
+      // extra check to ensure no empty objects exist
       const filterArrayWithoutEmptyObjects = filterArray.filter(
         (el) => Object.keys(el).length > 0,
       )
@@ -271,7 +296,7 @@ export default types
       const projHiearchyFilter = projId
         ? { popByPopId: { apByApId: { projId: { equalTo: projId } } } }
         : {}
-      const singleFilterByHierarchy = nestedObjectAssign(
+      let singleFilterByHierarchy = nestedObjectAssign(
         {},
         popHierarchyFilter,
         apHiearchyFilter,
@@ -341,7 +366,9 @@ export default types
       )
 
       return {
-        all: singleFilterByHierarchy,
+        all: Object.keys(singleFilterByHierarchy).length
+          ? singleFilterByHierarchy
+          : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
     },
