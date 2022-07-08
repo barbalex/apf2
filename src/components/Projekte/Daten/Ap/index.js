@@ -28,8 +28,10 @@ const TabContent = styled.div`
 
 const ApTabs = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { urlQuery, setUrlQuery } = store
+  const { urlQuery, setUrlQuery, notifications } = store
   const { activeNodeArray } = store[treeName]
+
+  console.log('Ap, notifications:', notifications)
 
   let id =
     activeNodeArray.length > 3

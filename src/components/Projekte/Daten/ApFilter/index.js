@@ -71,10 +71,9 @@ const NodeLabelFilterComment = styled.div`
 
 const ApFilter = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { dataFilterSetValue, enqueNotification } = store
+  const { dataFilterSetValue } = store
   const {
     dataFilter,
-    setApFilter,
     apFilter: nurApFilter,
     nodeLabelFilter,
     apGqlFilter,
@@ -89,8 +88,10 @@ const ApFilter = ({ treeName }) => {
   }, [activeTab, dataFilter.ap.length])
 
   const { data: apsData, error: apsError } = useQuery(queryAps, {
-    variables: { filteredFilter: apGqlFilter.filtered,
-      allFilter: apGqlFilter.all, },
+    variables: {
+      filteredFilter: apGqlFilter.filtered,
+      allFilter: apGqlFilter.all,
+    },
   })
 
   const {
@@ -126,18 +127,6 @@ const ApFilter = ({ treeName }) => {
 
   const saveToDb = useCallback(
     (event) => {
-      // if showFilter, turn off 'nurAp' and tell user
-      if (nurApFilter) {
-        setApFilter(false)
-        enqueNotification({
-          message:
-            'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
-          options: {
-            variant: 'info',
-          },
-        })
-      }
-
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
 
@@ -149,27 +138,17 @@ const ApFilter = ({ treeName }) => {
         index: activeTab,
       })
     },
-    [
-      activeTab,
-      dataFilterSetValue,
-      enqueNotification,
-      nurApFilter,
-      setApFilter,
-      treeName,
-    ],
+    [activeTab, dataFilterSetValue, treeName],
   )
 
   const aeTaxonomiesFilter = useCallback(
-    (inputValue) =>
-      inputValue
-        ? {
-            apByArtIdExists: true,
-            artname: { includesInsensitive: inputValue },
-          }
-        : {
-            apByArtIdExists: true,
-          },
-    [],
+    (inputValue) => {
+      let filter = { apByArtIdExists: true }
+      if (inputValue) filter.artname = { includesInsensitive: inputValue }
+      if (nurApFilter) filter.apByArtId = { bearbeitung: { in: [1, 2, 3] } }
+      return filter
+    },
+    [nurApFilter],
   )
 
   const errors = [

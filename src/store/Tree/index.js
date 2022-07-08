@@ -12,12 +12,12 @@ import Geojson from './Geojson'
 import initialDataFilterValues from './DataFilter/initialValues'
 import DataFilter from './DataFilter/types'
 import simpleTypes from './DataFilter/simpleTypes'
-import { simpleTypes as popType, initial as initialPop } from './DataFilter/pop'
+import { simpleTypes as popType } from './DataFilter/pop'
 import {
   simpleTypes as tpopType,
   initial as initialTpop,
 } from './DataFilter/tpop'
-import { simpleTypes as apType, initial as initialAp } from './DataFilter/ap'
+import { simpleTypes as apType } from './DataFilter/ap'
 import apIdInUrl from '../../modules/apIdInUrl'
 import projIdInUrl from '../../modules/projIdInUrl'
 import ekfIdInUrl from '../../modules/ekfIdInUrl'
@@ -131,6 +131,7 @@ export default types
       return tpopIdInUrl(self.activeNodeArray)
     },
     get apGqlFilter() {
+      const store = getParent(self)
       // 1. prepare hiearchy filter
       // need to slice proxy to rerender on change
       const aNA = self.activeNodeArray.slice()
@@ -157,10 +158,44 @@ export default types
         // If no filters were added: this empty element will be removed after loopin
         filterArrayInStore.push(initialTpop)
       }
+      let setApFilter = false
+      if (self.apFilter) {
+        setApFilter = true
+        const conflictingFilterExists = filterArrayInStore.some((filter) => {
+          const apFilterKeys = Object.entries(filter)
+            .filter((e) => e[1] !== null)
+            .map(([key]) => key)
+          return apFilterKeys.some((val) =>
+            ['bearbeitung', 'apId'].includes(val),
+          )
+        })
+        if (conflictingFilterExists) {
+          setApFilter = false
+          self.setApFilter(false)
+          console.log(
+            'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
+          )
+          // need timeout or notification will not appear
+          setTimeout(() =>
+            store.enqueNotification({
+              message:
+                'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
+              options: {
+                variant: 'info',
+              },
+            }),
+          )
+        }
+      }
       const filterArray = []
       for (const filter of filterArrayInStore) {
         // add hiearchy filter
         const singleFilter = { ...singleFilterByHierarchy }
+        // add apFilter
+        if (setApFilter) {
+          // add apFilter if no conflicting values are set
+          singleFilter.bearbeitung = { in: [1, 2, 3] }
+        }
         // add data filter
         const dataFilterAp = { ...filter }
         const apFilterValues = Object.entries(dataFilterAp).filter(
