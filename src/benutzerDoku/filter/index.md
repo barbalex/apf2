@@ -18,7 +18,7 @@ Die Position in der aktuellen Navigation beeinflusst den aktuell angewandten Fil
 Beispiele:<br/>
 
 - Wechseln Sie mit offener Karte und darauf eingeblendeten Populationen von Art zu Art, werden immer deren jeweiligen Populationen angezeigt.
-- Wechseln Sie mit offener Karte und darauf eingeblendeten Teil-Populationen von Population zu Population, werden immer deren jeweiligen Teil-Populationen angezeigt.
+- Wechseln Sie mit offener Karte und darauf eingeblendeten Teil-Populationen von Population zu Population, werden immer deren jeweilige Teil-Populationen angezeigt.
 
 ### 2. Navigationsbaum, Label-Filter
 
@@ -30,7 +30,7 @@ Erfassen Sie im Label-Filter auf Stufe Art "carex", wird nach den Arten mit dies
 
 ### 3. Navigationsbaum, nur-AP-Filter
 
-Weil das Anzeigen nur der AP-Arten ein häufiger Vorgang ist (und es früher keine oder-Filterung gab), kann man im Navigationsbaum oben recht mit einem Klick diesen Filter ein- oder ausschalten.<br/>
+Weil das Anzeigen nur der AP-Arten ein häufiger Vorgang ist (und es früher keine oder-Filterung gab), kann man im Navigationsbaum oben rechts mit einem Klick diesen Filter ein- oder ausschalten.<br/>
 ![nur-AP-Filter](nur_ap_filter_1.png)<br/><br/>
 
 ### 4. Karten-Filter
@@ -44,7 +44,7 @@ Ist ein Umriss gezeichnet, wird er auf die Filter der Stufe Population und Teil-
 
 Das ist der leistungsfähigste Filter.<br/><br/>
 
-Den Formular-Filter öffnet man mit der Schaltfläche oben in der Navigationszeile, rechts neben der Daten-Schaltfläche<br/>
+Man öffnet ihn mit der Schaltfläche oben in der Navigationszeile, rechts neben der Daten-Schaltfläche:<br/>
 ![Filter öffnen](formular_filter_1.png)
 <br/>
 
@@ -54,8 +54,8 @@ Es gibt ihn für diese Formulare:
 - Population
 - Teil-Population
 - Massnahmen
-- Feld-Kontrollen
-- Freiwilligen-Kontrollen (nur in der Normal-Ansicht. Freiwillige können das also nicht)
+- Feld-Kontrollen (EK)
+- Freiwilligen-Kontrollen (EKF) (nur in der Normal-Ansicht. Freiwillige können das also nicht)
 
 Filter-Formulare entsprechen (fast) genau den normalen Formularen. Sie sind aber orange hinterlegt, damit nicht aus Versehen beim Filtern echte Daten verändert werden.<br/>
 ![Formular-Filter](formular_filter_2.png)<br/>
@@ -70,14 +70,14 @@ Erfasst man in einem Filter-Formular in mehreren Feldern Werte, müssen diese gl
 
 Beispiel:<br/>
 
-Erfasst man im Filter-Formular für die Art `Aktionsplan = erstellt` UND `Stand Umsetzung = in Umsetzung`, werden Arten gefiltert, deren Aktionsplan erstellt ist und sich in Umsetzung befindet.<br/><br/>
+Erfasst man für die Art `Aktionsplan = erstellt` UND `Stand Umsetzung = in Umsetzung`, werden Arten gefiltert, deren Aktionsplan erstellt ist und sich in Umsetzung befindet.<br/><br/>
 
 #### Oder-Filter
 
 Im Formular-Filter gibt es bei Arten, Populationen und Teil-Populationen nummerierte Register. Und rechts daneben ein (zunächst inaktives) mit `oder` beschriftetes.<br/>
 ![Register](formular_filter_3.png)<br/>
 
-Die Nummern nummerieren Kriterien der Oder-Filterung. Sobald in einem Register ein Wert erfasst wurde (oder mehrere, siehe Und-Filter), wird das mit `oder` beschriftete Register aktiv. Klickt man darauf und erfasst darin weitere Werte, hat man eine Oder-Filterung geschaffen. Will heissen: Es wird nach Datensätzen gefiltert, die entweder die Kriterien im Register 1 oder diejenigen im Register 2 erfüllen. Es können beliebig viele Register gechaffen werden.<br/><br/>
+Die Nummern nummerieren Kriterien der Oder-Filterung. Sobald in einem Register ein Wert erfasst wurde (oder mehrere, siehe Und-Filter), wird das mit `oder` beschriftete Register aktiv. Klickt man darauf und erfasst darin weitere Werte, hat man eine Oder-Filterung geschaffen. Will heissen: Es wird nach Datensätzen gefiltert, die entweder die Kriterien im Register 1 oder diejenigen im Register 2 erfüllen. Die Anzahl Register bzw. oder-Kriterien ist unbeschränkt.<br/><br/>
 
 Beispiel:<br/>
 Will man alle ursprünglichen Populationen, filtert man im Filter-Formular für Populationen nach `ursprünglich, aktuell` oder `ursprünglich, erloschen`.<br/><br/>
@@ -90,7 +90,7 @@ Will man alle ursprünglichen Populationen, filtert man im Filter-Formular für 
 
 ## Es gibt so viele Filter. Wie spielen sie zusammen?
 
-Grundsätzlich additiv. Will heissen: sie werden alle gleichzeitig angewandt.<br/><br/>
+Additiv. Will heissen: sie werden alle gleichzeitig angewandt.<br/><br/>
 
 Wenn Sie im Formular-Filter mach mehreren oder-Kriterien filtern, werden alle übrigen Filter bei jedem einzelnen oder-Kriterium additiv d.h. zusätzlich angewandt.<br/><br/>
 
@@ -113,13 +113,13 @@ Im Navigationsbaum, in der Karte und in den filterbaren Exporten sehen Sie nur n
 Im Formular-Filter gibt es oben drei Symbole:<br/>
 ![Entfernen](entfernen_1.png)<br/>
 
-- Mit dem linken Symbol kann man das aktuelle Filterkriterium der oder-Filterung entfernen
-- Mit dem mittleren Symbol kann man den Filter (alle oder-Kriterien) in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Art)
-- Mit dem rechten Symbol kann man alle aktiven Filter entfernen. Das betrifft auch Navigationsbaum-Label-Filter, nur-AP-Filter und Karten-Filter. Nicht aber den hierarchischen Navigationsbaum-Filter - dafür wäre eine Navigation nötig und die könnte Benutzer überraschen bzw. nicht gewollt sein
+- Mit dem linken Symbol kann man das aktuelle Kriterium der oder-Filterung entfernen (sichtbar als das aktivierte Register)
+- Mit dem mittleren Symbol kann man den Filter (alle oder-Kriterien) in der aktiven Ebene entfernen (z.B. Population). Filter in anderen Ebenen bleiben erhalten (z.B. Art)
+- Mit dem rechten Symbol kann man alle aktiven Filter entfernen. Das betrifft auch Navigationsbaum-Label-Filter, nur-AP-Filter und Karten-Filter. Nicht aber den hierarchischen Navigationsbaum-Filter - dafür wäre eine Navigation nötig und die könnte Benutzer überraschen bzw. ungewollt sein
 
 ## Es gibt so viele Filter. Wie weiss ich, welche aktiv sind?
 
 Sie können natürlich im Navigationsbaum, in der Karte und im Formular-Filter an allen relevanten Orten nachschauen.<br/><br/>
 
-Eine gute Übersicht erhalten Sie aber im Formular-Filter der jeweiligen Ebene. Dort wird nämlich aufgelistet, welche der übrigen Filter auf dieser Ebene wirksam sind.<br/>
+Eine gute Übersicht erhalten Sie aber im Formular-Filter der jeweiligen Ebene. Dort wird aufgelistet, welche der übrigen Filter auf dieser Ebene wirksam sind.<br/>
 ![Übersicht](uebersicht_1.png)<br/><br/>
