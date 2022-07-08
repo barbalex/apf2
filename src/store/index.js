@@ -123,7 +123,6 @@ const myTypes = types
       self.ekfMultiPrint = val
     },
     enqueNotification(note) {
-      console.log('store enqueNotification', note)
       const key = note.options && note.options.key
       self.notifications = [
         ...self.notifications,
