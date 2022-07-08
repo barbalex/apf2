@@ -13,7 +13,7 @@ Zuletzt im Juli 2022.<br/>
 
 ### Navigationsbaum, Hiearchie-Filter
 
-Die Position in der aktuellen Navigation beeinflusst den aktuell angewandten Filter.<br/>
+Die Position in der aktuellen Navigation beeinflusst den aktuell angewandten Filter.<br/><br/>
 
 Beispiele:<br/>
 
@@ -26,19 +26,19 @@ Im Navigationsbaum gibt es oben links den Label-Filter. Er heisst jeweils so, wi
 ![Navigationsbaum-Filter](nav_label_filter_1.png)<br/>
 
 Beispiel:<br/>
-Erfassen Sie im Label-Filter auf Stufe Art "carex", wird nach den Arten mit dieser Zeichenfolge im Namen gefiltert.
+Erfassen Sie im Label-Filter auf Stufe Art "carex", wird nach den Arten mit dieser Zeichenfolge im Namen gefiltert.<br/><br/>
 
 ### Navigationsbaum, nur-AP-Filter
 
 Weil das Anzeigen nur der AP-Arten ein häufiger Vorgang ist (und es früher keine oder-Filterung gab), kann man im Navigationsbaum oben recht mit einem Klick diesen Filter ein- oder ausschalten.<br/>
-![nur-AP-Filter](nur_ap_filter_1.png)<br/>
+![nur-AP-Filter](nur_ap_filter_1.png)<br/><br/>
 
 ### Karten-Filter
 
 Auf der Karte kann man im Layer-Tool oben rechts unter `apflora` ein Werkzeug für Karten-Filter einschalten. Danach erscheinen in der Karte oben links Werkzeuge zum Zeichnen eines Umrisses, für dessen Bearbeitung und Löschung.<br/>
 ![Karten-Filter](karten_filter_1.png)<br/>
 
-Ist ein Umriss gezeichnet, wird er auf die Filter der Stufe Population und Teil-Population angewandt. Es werden also nur noch Populationen angezeigt, die innerhalb dieses Umrisses liegen.
+Ist ein Umriss gezeichnet, wird er auf die Filter der Stufe Population und Teil-Population angewandt. Es werden also nur noch Populationen angezeigt, die innerhalb dieses Umrisses liegen.<br/><br/>
 
 ### Formular-Filter
 
@@ -58,7 +58,7 @@ Es gibt ihn für diese Formulare:
 - Freiwilligen-Kontrollen (nur in der Normal-Ansicht. Freiwillige können das also nicht)
 
 Filter-Formulare entsprechen (fast) genau den normalen Formularen. Sie sind aber orange hinterlegt, damit nicht aus Versehen beim Filtern echte Daten verändert werden.<br/>
-![Formular-Filter](formular_filter_2.png)
+![Formular-Filter](formular_filter_2.png)<br/>
 
 Erfasst man in einem Filter-Feld Daten, wird der entsprechende Filter nach Verlassen des Feldes oder nach Drücken der Enter-Taste angewendet (bei Auswahl-Feldern sofort).<br/><br/>
 
@@ -70,7 +70,7 @@ Erfasst man in einem Filter-Formular in mehreren Feldern Werte, müssen diese gl
 
 Beispiel:<br/>
 
-Erfasst man im Filter-Formular für die Art `Aktionsplan = erstellt` UND `Stand Umsetzung = in Umsetzung`, werden Arten gefiltert, deren Aktionsplan erstellt ist und sich in Umsetzung befindet.
+Erfasst man im Filter-Formular für die Art `Aktionsplan = erstellt` UND `Stand Umsetzung = in Umsetzung`, werden Arten gefiltert, deren Aktionsplan erstellt ist und sich in Umsetzung befindet.<br/><br/>
 
 #### Oder-Filter
 
@@ -80,7 +80,7 @@ Im Formular-Filter gibt es bei Arten, Populationen und Teil-Populationen nummeri
 Die Nummern nummerieren Kriterien der Oder-Filterung. Sobald in einem Register ein Wert erfasst wurde (oder mehrere, siehe Und-Filter), wird das mit `oder` beschriftete Register aktiv. Klickt man darauf und erfasst darin weitere Werte, hat man eine Oder-Filterung geschaffen. Will heissen: Es wird nach Datensätzen gefiltert, die entweder die Kriterien im Register 1 oder diejenigen im Register 2 erfüllen. Es können beliebig viele Register gechaffen werden.<br/><br/>
 
 Beispiel:<br/>
-Will man alle ursprünglichen Populationen, filtert man im Filter-Formular für Populationen nach `ursprünglich, aktuell` oder `ursprünglich, erloschen`.
+Will man alle ursprünglichen Populationen, filtert man im Filter-Formular für Populationen nach `ursprünglich, aktuell` oder `ursprünglich, erloschen`.<br/><br/>
 
 ## Wo werden Filter angewendet?
 
@@ -105,13 +105,13 @@ Sie haben folgende Filter gesetzt:
 - Im Karten-Filter haben Sie den Sie interessierenden Umriss gezeichnet
 
 Resultat:<br/>
-Im Navigationsbaum, in der Karte und in den filterbaren Exporten sehen Sie nur noch ursprüngliche Populationen der drei Carex-Arten, für die Aktionspläne bestehen oder vorgesehen sind und die im interessierenden Gebiet liegen.
-![Zusammenspiel](zusammenspiel.png)
+Im Navigationsbaum, in der Karte und in den filterbaren Exporten sehen Sie nur noch ursprüngliche Populationen der drei Carex-Arten, für die Aktionspläne bestehen oder vorgesehen sind und die im interessierenden Gebiet liegen.<br/>
+![Zusammenspiel](zusammenspiel.png)<br/>
 
 ## Wie werden Filter entfernt?
 
 Im Formular-Filter gibt es oben drei Symbole:<br/>
-![Entfernen](entfernen_1.png)
+![Entfernen](entfernen_1.png)<br/>
 
 - Mit dem linken Symbol kann man das aktuelle Filterkriterium der oder-Filterung entfernen
 - Mit dem mittleren Symbol kann man den Filter (alle oder-Kriterien) in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Art)
@@ -122,4 +122,4 @@ Im Formular-Filter gibt es oben drei Symbole:<br/>
 Sie können natürlich im Navigationsbaum, in der Karte und im Formular-Filter an allen relevanten Orten nachschauen.<br/><br/>
 
 Eine gute Übersicht erhalten Sie aber im Formular-Filter der jeweiligen Ebene. Dort wird nämlich aufgelistet, welche der übrigen Filter auf dieser Ebene wirksam sind.<br/>
-![Übersicht](uebersicht_1.png)
+![Übersicht](uebersicht_1.png)<br/><br/>
