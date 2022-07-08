@@ -211,7 +211,11 @@ const myTypes = types
       self[treeName].dataFilter = initialDataFilterTreeValues
     },
     dataFilterEmptyTab({ treeName, table, activeTab }) {
-      // self[treeName].dataFilter[table] = self[treeName].dataFilter[table].splice(activeTab, 1)
+      if (self[treeName].dataFilter[table].length === 1) {
+        const firstElement = self[treeName].dataFilter[table][0]
+        Object.keys(firstElement).forEach((key) => (firstElement[key] = null))
+        return
+      }
       self[treeName].dataFilter[table].splice(activeTab, 1)
     },
     dataFilterEmptyTable({ treeName, table }) {
