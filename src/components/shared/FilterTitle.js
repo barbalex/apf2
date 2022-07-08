@@ -57,7 +57,7 @@ const FilterTitle = ({
     dataFilterEmptyTable,
     dataFilterEmptyTree,
   } = store
-  const { emptyMapFilter } = store[treeName]
+  const { emptyMapFilter, setApFilter } = store[treeName]
 
   const existsTableFilter = tableIsFiltered({
     treeName,
@@ -77,7 +77,8 @@ const FilterTitle = ({
     store[treeName].nodeLabelFilter.empty()
     dataFilterEmptyTree(treeName)
     emptyMapFilter()
-  }, [dataFilterEmptyTree, emptyMapFilter, store, treeName])
+    setApFilter(false)
+  }, [dataFilterEmptyTree, emptyMapFilter, setApFilter, store, treeName])
 
   return (
     <Container>
