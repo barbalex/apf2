@@ -7,7 +7,7 @@ sort: 14
 ---
 
 Filtern hat in apflora eine lange Geschichte und wurde Schritt um Schritt erweitert.<br/>
-Zuletzt im Juli 2022.<br/>
+Zuletzt im Juli 2022.<br/><br/>
 
 ## Welche Filter gibt es?
 
