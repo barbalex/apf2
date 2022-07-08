@@ -32,6 +32,7 @@ const FilterCommentTitle = styled.div`
   padding: 0 10px 16px 10px;
   font-size: 0.75em;
   font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
 `
 const FilterCommentList = styled.ul`
   margin-bottom: 10px;
@@ -49,7 +50,6 @@ const PopFilter = ({ treeName }) => {
     activeNodeArray,
     dataFilter,
     nodeLabelFilter,
-    apGqlFilter,
     popGqlFilter,
     mapFilter,
     artIsFiltered,

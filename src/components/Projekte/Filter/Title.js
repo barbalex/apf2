@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from 'styled-components' 
+import styled from 'styled-components'
 
 const StyledTabs = styled(Tabs)`
   [role='tab'][aria-selected='false'],
@@ -12,6 +12,9 @@ const StyledTabs = styled(Tabs)`
 const StyledTab = styled(Tab)`
   min-width: 70px !important;
   text-transform: none !important;
+  &.Mui-selected {
+    font-weight: 900;
+  }
 `
 const TitleRow = styled.div`
   background-color: #d84315;

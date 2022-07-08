@@ -12,7 +12,8 @@ const Title = styled.div`
   margin-bottom: -8px;
   font-size: 0.75em;
   padding-left: 10px;
-  color: rgba(0, 0, 0, 0.54);
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
 `
 const StyledTabs = styled(Tabs)`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
