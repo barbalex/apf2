@@ -352,7 +352,7 @@ export default types
         ...(self.popGqlFilter?.filtered.or?.[0] ?? {}),
       }
       let entries = Object.entries(firstFilterObject).filter(
-        (e) => !['projId', 'apByApId', 'geomPoint'].includes(e[0]),
+        (e) => !['projId', 'apId', 'apByApId', 'geomPoint'].includes(e[0]),
       )
       return entries.length > 0
     },

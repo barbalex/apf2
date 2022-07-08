@@ -93,8 +93,8 @@ const TpopFilter = ({ treeName }) => {
   const row = dataFilter.tpop[activeTab]
 
   // console.log('TpopFilter', {
-  //   dataTpops,
-  //   mapFilter: mapFilter ? getSnapshot(mapFilter) : undefined,
+  //   popGqlFilter,
+  //   popIsFiltered,
   // })
 
   const [fieldErrors, setFieldErrors] = useState({})
