@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
-import { getSnapshot } from 'mobx-state-tree'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
@@ -88,12 +87,7 @@ const ApFilter = ({ treeName }) => {
     apFilter: nurApFilter,
     nodeLabelFilter,
     apGqlFilter,
-    activeNodeArray,
   } = store[treeName]
-
-  // need to slice to rerender on change
-  const aNA = activeNodeArray.slice()
-  const apId = aNA[3]
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -177,15 +171,11 @@ const ApFilter = ({ treeName }) => {
   const navApFilterComment = nurApFilter
     ? `Navigationsbaum, "nur AP"-Filter: Nur AP-Arten werden berücksichtigt.`
     : undefined
-  const navHiearchyComment = apId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es wird nur diese berücksichtigt.'
-    : undefined
   const navLabelComment = nodeLabelFilter.ap
     ? `Navigationsbaum, Label-Filter: Das Label der Art wird nach "${nodeLabelFilter.ap}" gefiltert.`
     : undefined
 
-  const showFilterComments =
-    !!navApFilterComment || !!navHiearchyComment || !!navLabelComment
+  const showFilterComments = !!navApFilterComment || !!navLabelComment
 
   if (errors.length) return <Error errors={errors} />
 
@@ -211,9 +201,6 @@ const ApFilter = ({ treeName }) => {
             <FilterCommentList>
               {!!navApFilterComment && (
                 <FilterComment>{navApFilterComment}</FilterComment>
-              )}
-              {!!navHiearchyComment && (
-                <FilterComment>{navHiearchyComment}</FilterComment>
               )}
               {!!navLabelComment && (
                 <FilterComment>{navLabelComment}</FilterComment>
