@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
+import { getSnapshot } from 'mobx-state-tree'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
@@ -63,9 +64,18 @@ const LabelPopoverRowColumnLeft = styled.div`
 const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
-const NodeLabelFilterComment = styled.div`
+const FilterCommentTitle = styled.div`
   margin-top: -10px;
   padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+  font-weight: bold;
+`
+const FilterCommentList = styled.ul`
+  margin-bottom: 10px;
+`
+const FilterComment = styled.li`
+  margin-top: -10px;
+  padding: 0 10px 0 10px;
   font-size: 0.75em;
 `
 
@@ -77,7 +87,12 @@ const ApFilter = ({ treeName }) => {
     apFilter: nurApFilter,
     nodeLabelFilter,
     apGqlFilter,
+    activeNodeArray,
   } = store[treeName]
+
+  // need to slice to rerender on change
+  const aNA = activeNodeArray.slice()
+  const apId = aNA[3]
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -158,6 +173,29 @@ const ApFilter = ({ treeName }) => {
     ...(errorAeTaxonomiesById ? [errorAeTaxonomiesById] : []),
   ]
 
+  const navApFilterComment = nurApFilter
+    ? `Navigationsbaum, "nur AP"-Filter: Nur AP-Arten werden berücksichtigt.`
+    : undefined
+  const navHiearchyComment = apId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es wird nur diese berücksichtigt.'
+    : undefined
+  const navLabelComment = nodeLabelFilter.ap
+    ? `Navigationsbaum, Label-Filter: Das Label der Art wird nach "${nodeLabelFilter.ap}" gefiltert.`
+    : undefined
+
+  const showFilterComments =
+    !!navApFilterComment || !!navHiearchyComment || !!navLabelComment
+
+  console.log('ApFilter rendering', {
+    row,
+    errors,
+    apsData,
+    apGqlFilter,
+    activeTab,
+    dataFilter: getSnapshot(dataFilter),
+    dataFilterAp: getSnapshot(dataFilter.ap),
+  })
+
   if (errors.length) return <Error errors={errors} />
 
   if (!row) return null
@@ -176,8 +214,21 @@ const ApFilter = ({ treeName }) => {
           row={row}
           activeTab={activeTab}
         />
-        {!!nodeLabelFilter.ap && (
-          <NodeLabelFilterComment>{`Hinweis: Gemäss Navigationsbaum wird das Label der Arten nach "${nodeLabelFilter.ap}" gefiltert.`}</NodeLabelFilterComment>
+        {showFilterComments && (
+          <>
+            <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
+            <FilterCommentList>
+              {!!navApFilterComment && (
+                <FilterComment>{navApFilterComment}</FilterComment>
+              )}
+              {!!navHiearchyComment && (
+                <FilterComment>{navHiearchyComment}</FilterComment>
+              )}
+              {!!navLabelComment && (
+                <FilterComment>{navLabelComment}</FilterComment>
+              )}
+            </FilterCommentList>
+          </>
         )}
         <OrTabs
           dataFilter={dataFilter.ap}

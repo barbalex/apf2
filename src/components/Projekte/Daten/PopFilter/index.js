@@ -27,9 +27,18 @@ const FormContainer = styled.div`
   padding: 10px;
   overflow-y: auto;
 `
-const FilterComment = styled.div`
+const FilterCommentTitle = styled.div`
   margin-top: -10px;
   padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+  font-weight: bold;
+`
+const FilterCommentList = styled.ul`
+  margin-bottom: 10px;
+`
+const FilterComment = styled.li`
+  margin-top: -10px;
+  padding: 0 10px 0 10px;
   font-size: 0.75em;
 `
 
@@ -40,12 +49,17 @@ const PopFilter = ({ treeName }) => {
     activeNodeArray,
     dataFilter,
     nodeLabelFilter,
+    apGqlFilter,
     popGqlFilter,
     mapFilter,
+    artIsFiltered,
+    apFilter,
   } = store[treeName]
 
   // need to slice to rerender on change
-  const apId = activeNodeArray.slice()[3]
+  const aNA = activeNodeArray.slice()
+  const apId = aNA[3]
+  const popId = aNA[5]
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -76,13 +90,39 @@ const PopFilter = ({ treeName }) => {
     [activeTab, dataFilterSetValue, treeName],
   )
 
-  const hiearchyComment = apId
-    ? 'Im Navigationsbaum ist eine Art gewählt. Es werden (nur) ihre Populationen berücksichtigt.'
-    : 'Es werden alle Populationen des Projekts berücksichtigt.'
+  console.log({
+    apGqlFilter,
+    popGqlFilter,
+    artIsFiltered,
+    apFilter,
+  })
+
+  const navApFilterComment = apFilter
+    ? `Navigationsbaum, "nur AP"-Filter: Nur Populationen von AP-Arten werden berücksichtigt.`
+    : undefined
+  const navHiearchyComment = popId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es wird nur diese berücksichtigt.'
+    : apId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Populationen berücksichtigt.'
+    : undefined
+  const navLabelComment = nodeLabelFilter.pop
+    ? `Navigationsbaum, Label-Filter: Das Label der Populationen wird nach "${nodeLabelFilter.pop}" gefiltert.`
+    : undefined
+  const hierarchyComment = artIsFiltered
+    ? 'Formular-Filter, Ebene Art: Es werden nur Populationen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const mapFilterComment = mapFilter
+    ? 'Karten-Filter: wird angewendet.'
+    : undefined
+
+  const showFilterComments =
+    !!navApFilterComment ||
+    !!navHiearchyComment ||
+    !!navLabelComment ||
+    !!hierarchyComment ||
+    !!mapFilter
 
   if (error) return <Error error={error} />
-
-  // if (!row) return null
 
   return (
     <ErrorBoundary>
@@ -95,14 +135,27 @@ const PopFilter = ({ treeName }) => {
           filteredNr={dataPops?.popsFiltered?.totalCount ?? '...'}
           activeTab={activeTab}
         />
-        <FilterComment>{hiearchyComment}</FilterComment>
-        {!!nodeLabelFilter.pop && (
-          <FilterComment>{`Gemäss Navigationsbaum wird das Label der Populationen nach "${nodeLabelFilter.pop}" gefiltert.`}</FilterComment>
-        )}
-        {!!mapFilter && (
-          <FilterComment>
-            Der gesetzte Karten-Filter wird angewendet.
-          </FilterComment>
+        {showFilterComments && (
+          <>
+            <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
+            <FilterCommentList>
+              {!!navApFilterComment && (
+                <FilterComment>{navApFilterComment}</FilterComment>
+              )}
+              {!!navHiearchyComment && (
+                <FilterComment>{navHiearchyComment}</FilterComment>
+              )}
+              {!!navLabelComment && (
+                <FilterComment>{navLabelComment}</FilterComment>
+              )}
+              {!!hierarchyComment && (
+                <FilterComment>{hierarchyComment}</FilterComment>
+              )}
+              {!!mapFilterComment && (
+                <FilterComment>{mapFilterComment}</FilterComment>
+              )}
+            </FilterCommentList>
+          </>
         )}
         <PopOrTabs
           dataFilter={dataFilter.pop}
