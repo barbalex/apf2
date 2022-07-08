@@ -186,16 +186,6 @@ const ApFilter = ({ treeName }) => {
   const showFilterComments =
     !!navApFilterComment || !!navHiearchyComment || !!navLabelComment
 
-  console.log('ApFilter rendering', {
-    row,
-    errors,
-    apsData,
-    apGqlFilter,
-    activeTab,
-    dataFilter: getSnapshot(dataFilter),
-    dataFilterAp: getSnapshot(dataFilter.ap),
-  })
-
   if (errors.length) return <Error errors={errors} />
 
   if (!row) return null

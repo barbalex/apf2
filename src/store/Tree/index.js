@@ -350,6 +350,15 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
     },
+    get popIsFiltered() {
+      const firstFilterObject = {
+        ...(self.popGqlFilter?.filtered.or?.[0] ?? {}),
+      }
+      let entries = Object.entries(firstFilterObject).filter(
+        (e) => !['projId', 'apByApId', 'geomPoint'].includes(e[0]),
+      )
+      return entries.length > 0
+    },
     get tpopGqlFilter() {
       // 1. prepare hiearchy filter
       // need to slice proxy to rerender on change

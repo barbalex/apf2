@@ -90,13 +90,6 @@ const PopFilter = ({ treeName }) => {
     [activeTab, dataFilterSetValue, treeName],
   )
 
-  console.log({
-    apGqlFilter,
-    popGqlFilter,
-    artIsFiltered,
-    apFilter,
-  })
-
   const navApFilterComment = apFilter
     ? `Navigationsbaum, "nur AP"-Filter: Nur Populationen von AP-Arten werden berücksichtigt.`
     : undefined

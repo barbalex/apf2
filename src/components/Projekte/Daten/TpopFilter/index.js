@@ -36,9 +36,18 @@ const StyledTab = styled(Tab)`
 const TabContent = styled.div`
   height: calc(100% - 48px);
 `
-const FilterComment = styled.div`
+const FilterCommentTitle = styled.div`
   margin-top: -10px;
   padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+  font-weight: bold;
+`
+const FilterCommentList = styled.ul`
+  margin-bottom: 10px;
+`
+const FilterComment = styled.li`
+  margin-top: -10px;
+  padding: 0 10px 0 10px;
   font-size: 0.75em;
 `
 
@@ -52,12 +61,19 @@ const TpopFilter = ({ treeName }) => {
     tpopGqlFilter,
     nodeLabelFilter,
     mapFilter,
+    apFilter,
+    artIsFiltered,
+    popIsFiltered,
+    popGqlFilter,
   } = store[treeName]
   const [tab, setTab] = useState(urlQuery?.tpopTab ?? 'tpop')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const apId = activeNodeArray[3]
-  const popId = activeNodeArray[5]
+  // need to slice to rerender on change
+  const aNA = activeNodeArray.slice()
+  const apId = aNA[3]
+  const popId = aNA[5]
+  const tpopId = aNA[7]
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -93,11 +109,40 @@ const TpopFilter = ({ treeName }) => {
       }),
     [activeTab, dataFilterSetValue, treeName],
   )
-  const hiearchyComment = popId
-    ? 'Im Navigationsbaum ist eine Population gewählt. Es werden (nur) ihre Teil-Populationen berücksichtigt.'
+
+  const navApFilterComment = apFilter
+    ? `Navigationsbaum, "nur AP"-Filter: Nur Teil-Populationen von AP-Arten werden berücksichtigt.`
+    : undefined
+  const navHiearchyComment = tpopId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es wird nur diese berücksichtigt.'
+    : popId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.'
     : apId
-    ? 'Im Navigationsbaum ist eine Art gewählt. Es werden (nur) ihre Teil-Populationen berücksichtigt.'
-    : 'Es werden alle Teil-Populationen des Projekts berücksichtigt.'
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.'
+    : undefined
+  const navLabelComment = nodeLabelFilter.tpop
+    ? `Navigationsbaum, Label-Filter: Das Label der Teil-Populationen wird nach "${nodeLabelFilter.tpop}" gefiltert.`
+    : undefined
+  // TODO: expand to pop
+  const artHierarchyComment = artIsFiltered
+    ? 'Formular-Filter, Ebene Art: Es werden nur Teil-Populationen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const popHierarchyComment = popIsFiltered
+    ? 'Formular-Filter, Ebene Population: Es werden nur Teil-Populationen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const mapFilterComment = mapFilter
+    ? 'Karten-Filter: wird angewendet.'
+    : undefined
+
+  const showFilterComments =
+    !!navApFilterComment ||
+    !!navHiearchyComment ||
+    !!navLabelComment ||
+    !!artHierarchyComment ||
+    !!popHierarchyComment ||
+    !!mapFilter
+
+  console.log('TPopFilter', { popGqlFilter })
 
   if (error) return <Error error={error} />
 
@@ -112,14 +157,30 @@ const TpopFilter = ({ treeName }) => {
           filteredNr={dataTpops?.allTpopsFiltered?.totalCount ?? '...'}
           activeTab={activeTab}
         />
-        <FilterComment>{hiearchyComment}</FilterComment>
-        {!!nodeLabelFilter.tpop && (
-          <FilterComment>{`Gemäss Navigationsbaum wird das Label der Teil-Populationen nach "${nodeLabelFilter.tpop}" gefiltert.`}</FilterComment>
-        )}
-        {!!mapFilter && (
-          <FilterComment>
-            Der gesetzte Karten-Filter wird angewendet.
-          </FilterComment>
+        {showFilterComments && (
+          <>
+            <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
+            <FilterCommentList>
+              {!!navApFilterComment && (
+                <FilterComment>{navApFilterComment}</FilterComment>
+              )}
+              {!!navHiearchyComment && (
+                <FilterComment>{navHiearchyComment}</FilterComment>
+              )}
+              {!!navLabelComment && (
+                <FilterComment>{navLabelComment}</FilterComment>
+              )}
+              {!!artHierarchyComment && (
+                <FilterComment>{artHierarchyComment}</FilterComment>
+              )}
+              {!!popHierarchyComment && (
+                <FilterComment>{popHierarchyComment}</FilterComment>
+              )}
+              {!!mapFilterComment && (
+                <FilterComment>{mapFilterComment}</FilterComment>
+              )}
+            </FilterCommentList>
+          </>
         )}
         <PopOrTabs
           dataFilter={dataFilter.tpop}
