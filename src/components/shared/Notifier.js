@@ -10,8 +10,6 @@ const Notifier = () => {
   const { notifications, removeNotification } = store
   const [displayed, setDisplayed] = useState([])
 
-  console.log('Notifier, displayed:', displayed)
-
   useEffect(() => {
     notifications.forEach((notification) => {
       // Do nothing if snackbar is already displayed
