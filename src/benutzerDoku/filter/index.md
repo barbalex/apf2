@@ -8,7 +8,6 @@ sort: 14
 
 Filtern hat in apflora eine lange Geschichte und wurde Schritt um Schritt erweitert.<br/>
 Zuletzt im Juli 2022.<br/>
-<img src="filterForm.png" title="Filter-Formular" width="600" /><br/>
 
 ## Welche Filter gibt es?
 
@@ -111,12 +110,12 @@ Im Navigationsbaum, in der Karte und in den filterbaren Exporten sehen Sie nur n
 
 ## Wie werden Filter entfernt?
 
-Im Formular-Filter gibt es oben drei Symbole:
+Im Formular-Filter gibt es oben drei Symbole:<br/>
+![Entfernen](entfernen_1.png)
 
 - Mit dem linken Symbol kann man das aktuelle Filterkriterium der oder-Filterung entfernen
 - Mit dem mittleren Symbol kann man den Filter (alle oder-Kriterien) in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Art)
-- Mit dem rechten Symbol kann man alle angewendeten Filter entfernen. Das betrifft auch Navigationsbaum-Label-Filter, nur-AP-Filter und Karten-Filter. Nicht aber den hierarchischen Navigationsbaum-Filter (dafür wäre eine Navigation nötig und weil es nicht sicher ist, dass Sie das wollen, müssen selber navigieren)<br/>
-  ![Entfernen](entfernen_1.png)
+- Mit dem rechten Symbol kann man alle angewendeten Filter entfernen. Das betrifft auch Navigationsbaum-Label-Filter, nur-AP-Filter und Karten-Filter. Nicht aber den hierarchischen Navigationsbaum-Filter (dafür wäre eine Navigation nötig und weil es nicht sicher ist, dass Sie das wollen, müssen selber navigieren)
 
 ## Es gibt so viele Filter. Wie weiss ich, welche aktiv sind?
 
