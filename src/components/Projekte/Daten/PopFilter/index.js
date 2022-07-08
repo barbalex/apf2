@@ -59,7 +59,6 @@ const PopFilter = ({ treeName }) => {
   // need to slice to rerender on change
   const aNA = activeNodeArray.slice()
   const apId = aNA[3]
-  const popId = aNA[5]
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -93,9 +92,7 @@ const PopFilter = ({ treeName }) => {
   const navApFilterComment = apFilter
     ? `Navigationsbaum, "nur AP"-Filter: Nur Populationen von AP-Arten werden berücksichtigt.`
     : undefined
-  const navHiearchyComment = popId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es wird nur diese berücksichtigt.'
-    : apId
+  const navHiearchyComment = apId
     ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Populationen berücksichtigt.'
     : undefined
   const navLabelComment = nodeLabelFilter.pop

@@ -74,7 +74,6 @@ const TpopFilter = ({ treeName }) => {
   const aNA = activeNodeArray.slice()
   const apId = aNA[3]
   const popId = aNA[5]
-  const tpopId = aNA[7]
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -114,9 +113,7 @@ const TpopFilter = ({ treeName }) => {
   const navApFilterComment = apFilter
     ? `Navigationsbaum, "nur AP"-Filter: Nur Teil-Populationen von AP-Arten werden berücksichtigt.`
     : undefined
-  const navHiearchyComment = tpopId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es wird nur diese berücksichtigt.'
-    : popId
+  const navHiearchyComment = popId
     ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.'
     : apId
     ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.'
@@ -124,7 +121,6 @@ const TpopFilter = ({ treeName }) => {
   const navLabelComment = nodeLabelFilter.tpop
     ? `Navigationsbaum, Label-Filter: Das Label der Teil-Populationen wird nach "${nodeLabelFilter.tpop}" gefiltert.`
     : undefined
-  // TODO: expand to pop
   const artHierarchyComment = artIsFiltered
     ? 'Formular-Filter, Ebene Art: Es werden nur Teil-Populationen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
@@ -143,7 +139,7 @@ const TpopFilter = ({ treeName }) => {
     !!popHierarchyComment ||
     !!mapFilter
 
-  console.log('TPopFilter', { popGqlFilter })
+  // console.log('TPopFilter', { popGqlFilter })
 
   if (error) return <Error error={error} />
 

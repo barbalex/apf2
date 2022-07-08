@@ -1,16 +1,53 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/Formular-Filter'
-date: '2021-01-22'
-title: 'Formular-Filter'
+path: '/Dokumentation/Benutzer/Filter'
+date: '2022-07-08'
+title: 'Filter'
 sort: 14
 ---
 
-Am 12.09.2018 wurden Formular-Filter eingeführt.<br/>
-Am 15.03.2019 wurden sie verändert, um die Benutzerfreundlichkeit zu erhöhen.<br/>
+Filtern hat in apflora eine lange Geschichte und wurde Schritt um Schritt erweitert.<br/>
+Zuletzt im Juli 2022.<br/>
 <img src="filterForm.png" title="Filter-Formular" width="600" /><br/>
 
-## In diesen Formularen kann man filtern
+## Welche Filter gibt es?
+
+### Navigationsbaum, Hiearchie-Filter
+
+Die Position in der aktuellen Navigation beeinflusst den aktuell angewandten Filter.<br/>
+
+Beispiele:<br/>
+
+- Wechseln Sie mit offener Karte und darauf eingeblendeten Populationen von Art zu Art, werden immer deren jeweiligen Populationen angezeigt.
+- Wechseln Sie mit offener Karte und darauf eingeblendeten Teil-Populationen von Population zu Population, werden immer deren jeweiligen Teil-Populationen angezeigt.
+
+### Navigationsbaum, Label-Filter
+
+Im Navigationsbaum gibt es oben links den Label-Filter. Er heisst jeweils so, wie die entsprechene Ebene, auf der man sich befindet. Z.B. "Arten filtern" oder "Populationen filtern".<br/>
+![Strukturbaum-Filter](filterTree.png)<br/>
+
+Beispiel:<br/>
+Erfassen Sie im Label-Filter auf Stufe Art "carex", wird nach den Arten mit dieser Zeichenfolge im Namen gefiltert.
+
+### Navigationsbaum, nur-AP-Filter
+
+Weil das Anzeigen nur der AP-Arten ein häufiger Vorgang ist (und es früher keine oder-Filterung gab), kann man im Navigationsbaum oben recht mit einem Klick diesen Filter ein- oder ausschalten.
+
+### Karten-Filter
+
+Auf der Karte kann man im Layer-Tool oben rechts unter `apflora` ein Werkzeug für Karten-Filter einschalten. Danach erscheinen in der Karte oben links Werkzeuge zum Zeichnen eines Umrisses, für dessen Bearbeitung und Löschung.<br/><br/>
+
+Ist ein Umriss gezeichnet, wird er auf die Filter der Stufe Population und Teil-Population angewandt. Es werden also nur noch Populationen angezeigt, die innerhalb dieses Umrisses liegen.
+
+### Formular-Filter
+
+Das ist der leistungsfähigste Filter.<br/><br/>
+
+Den Formular-Filter öffnet man mit der Schaltfläche oben in der Navigationszeile, rechts neben der Daten-Schaltfläche<br/>
+![Filter öffnen](filterButton.png)
+<br/>
+
+Es gibt ihn für diese Formulare:
 
 - Art
 - Population
@@ -19,31 +56,60 @@ Am 15.03.2019 wurden sie verändert, um die Benutzerfreundlichkeit zu erhöhen.<
 - Feld-Kontrollen
 - Freiwilligen-Kontrollen (nur in der Normal-Ansicht. Freiwillige können das also nicht)
 
-Die Filter-Formulare entsprechen (fast) genau den normalen Formularen. Sie sind aber rot hinterlegt, damit nicht aus Versehen echte Daten verändert werden.
+Filter-Formulare entsprechen (fast) genau den normalen Formularen. Sie sind aber orange hinterlegt, damit nicht aus Versehen beim Filtern echte Daten verändert werden.
 
 Erfasst man in einem Filter-Feld Daten, wird der entsprechende Filter nach Verlassen des Feldes oder nach Drücken der Enter-Taste angewendet (bei Auswahl-Feldern sofort).
 
-Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `Strukturbaum 2`, entspricht er genau dem `Strukturbaum`, d.h. es wird auch ein allfälliger Filter kopiert. Danach sind die Filter unabhängig.<br/><br/>
+Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `Strukturbaum 2`, entspricht er genau dem `Strukturbaum`, d.h. es wird auch ein allfälliger Filter kopiert. Danach sind die Filter unabhängig im jeweiligen Navigationsbaum gültig.<br/><br/>
 
-## Wie öffnet man ein Filter-Formular?
+#### Und-Filter
 
-- Mit der Schaltfläche oben in der Navigationszeile, rechts neben der Daten-Schaltfläche<br/>
-  ![Filter öffnen](filterButton.png)
+Erfasst man in einem Filter-Formular in mehreren Feldern Werte, müssen diese gleichzeitig bzw. kummulativ erfüllt sein.<br/><br/>
 
-## Wo wird der Filter angewendet?
+Beispiel:<br/>
 
-- Im Strukturbaum auf der gefilterten Ebene.<br/>
-  Ein Filter auf Ebene Teil-Population wirkt sich also nicht auf die Populationen aus
-- In der Karte (Populationen, Teil-Populationen).<br/>
-  Ein Filter auf Ebene Teil-Population wirkt sich hier auch auf der Ebene Population aus. Und umgekehrt.
-- In Exporten der entsprechenden Ebene
+Erfasst man im Filter-Formular für die Art `Aktionsplan = erstellt` UND `Stand Umsetzung = in Umsetzung`, werden Arten gefiltert, deren Aktionsplan erstellt ist und sich in Umsetzung befindet.
+
+#### Oder-Filter
+
+Im Formular-Filter gibt es bei Arten, Populationen und Teil-Populationen nummerierte Register. Und rechts daneben ein (zunächst inaktives) mit `oder` beschriftetes.<br/><br/>
+
+Die Nummern nummerieren Kriterien der Oder-Filterung. Sobald in einem Register ein Wert erfasst wurde (oder mehrere, siehe Und-Filter), wird das mit `oder` beschriftete Register aktiv. Klickt man darauf und erfasst darin weitere Werte, hat man eine Oder-Filterung geschaffen. Will heissen: Es wird nach Datensätzen gefiltert, die entweder die Kriterien im Register 1 oder diejenigen im Register 2 erfüllen. Es können beliebig viele Register gechaffen werden.<br/><br/>
+
+Beispiel:<br/>
+Will man alle ursprünglichen Populationen, filtert man im Filter-Formular für Populationen nach `ursprünglich, aktuell` oder `ursprünglich, erloschen`.
+
+## Wo werden Filter angewendet?
+
+- Im Navigationsbaum auf der gefilterten Ebene.
+- In der Karte (Populationen, Teil-Populationen).
+- In einigen Exporten gibt es zwei Befehle: Neben dem normalen, der alle Objekte (die Sie zugreifen dürfen) ungefiltert exportiert, einen zusätzlichen der den aktuellen Filter anwendet.
+
+## Es gibt so viele Filter. Wie spielen sie zusammen?
+
+Grundsätzlich additiv. Will heissen: sie werden alle gleichzeitig angewandt.<br/><br/>
+
+Wenn Sie im Formular-Filter mach mehreren oder-Kriterien filtern, werden alle übrigen Filter bei jedem einzelnen oder-Kriterium additiv d.h. zusätzlich angewandt.<br/><br/>
+
+Das geht sogar so weit, dass Filter von hierarchisch höheren Filtern beeinflusst werden.<br/><br/>
+
+Beispiel:<br/>
+Sie haben folgende Filter gesetzt:
+
+- Im Navigationsbaum-Label-Filter `Art filtern: "carex"`
+- Im Navigationsbaum den "nur AP"-Filter eingeschaltet
+- Im Filter-Formular für Populationen die Kriterien `Status = "ursprünglich aktuell"` oder `Status = "ursprünglich erloschen"`
+
+Resultat:<br/>
+Im Navigationsbaum, in der Karte und in den filterbaren Exporten sehen Sie nur noch ursprüngliche Populationen der drei Carex-Arten, für die Aktionspläne bestehen oder vorgesehen sind.
 
 ## Wie werden Filter entfernt?
 
-Im Formular erscheinen oben zwei Symbole, sobald ein Filter angewendet wird:
+Im Formular-Filter gibt es oben drei Symbole:
 
-- Mit dem linken Symbol kann man den Filter in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Art)
-- Mit dem rechten Symbol kann man alle angewendeten Filter entfernen<br/>
+- Mit dem linken Symbol kann man das aktuelle Filterkriterium der oder-Filterung entfernen
+- Mit dem mittleren Symbol kann man den Filter (alle oder-Kriterien) in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Art)
+- Mit dem rechten Symbol kann man alle angewendeten Filter entfernen. Das betrifft auch Navigationsbaum-Label-Filter, nur-AP-Filter und Karten-Filter. Nicht aber den hierarchischen Navigationsbaum-Filter (dafür wäre eine Navigation nötig und weil es nicht sicher ist, dass Sie das wollen, müssen selber navigieren)<br/>
   ![Filter entfernen](filterRemove2.png)
 
 ## Welche Möglichkeiten eröffnet mir das?

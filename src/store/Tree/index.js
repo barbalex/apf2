@@ -254,15 +254,12 @@ export default types
       const aNA = self.activeNodeArray.slice()
       const projId = aNA[1]
       const apId = aNA[3]
-      const popId = aNA[5]
-      const popHierarchyFilter = popId ? { id: { equalTo: popId } } : {}
       const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
       const projHiearchyFilter = projId
         ? { apByApId: { projId: { equalTo: projId } } }
         : {}
       const singleFilterByHierarchy = nestedObjectAssign(
         {},
-        popHierarchyFilter,
         apHiearchyFilter,
         projHiearchyFilter,
       )
