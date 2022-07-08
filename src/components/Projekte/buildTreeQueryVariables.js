@@ -186,7 +186,7 @@ const buildTreeQueryVariables = ({
     tpopmassnFilter[key] = { [expression]: value }
   })
 
-  const apsFilter = apGqlFilter
+  const apsFilter = apGqlFilter.filtered
   const apberuebersichtsFilter = { projId: { in: projekt } }
   if (nodeLabelFilter.apberuebersicht) {
     apberuebersichtsFilter.label = {

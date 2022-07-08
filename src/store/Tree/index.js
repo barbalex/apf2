@@ -131,21 +131,37 @@ export default types
       return tpopIdInUrl(self.activeNodeArray)
     },
     get apGqlFilter() {
-      const projId = self.activeNodeArray[1]
-      const filterArrayInStore = self.dataFilter.ap
+      // 1. prepare hiearchy filter
+      // need to slice proxy to rerender on change
+      const aNA = self.activeNodeArray.slice()
+      const projId = aNA[1]
+      const singleFilterByHierarchy = { projId: { equalTo: projId } }
+      // 2. prepare data filter
+      let filterArrayInStore = self.dataFilter.ap
         ? getSnapshot(self.dataFilter.ap)
         : []
-      // need to remove empty filters - they exist when user clicks "oder" but has not entered a value yet
-      const filterArrayInStoreWithoutEmpty = filterArrayInStore.filter(
-        (f) => Object.values(f).filter((v) => v !== null).length !== 0,
-      )
-      if (filterArrayInStoreWithoutEmpty.length === 0) {
-        // add empty filter
-        filterArrayInStoreWithoutEmpty.push(initialAp)
+      if (filterArrayInStore.length > 1) {
+        // check if last is empty
+        // empty last is just temporary because user created new "oder" and has not yet input criteria
+        // remove it or filter result will be wrong (show all) if criteria.length > 1!
+        const last = filterArrayInStore[filterArrayInStore.length - 1]
+        const lastIsEmpty =
+          Object.values(last).filter((v) => v !== null).length === 0
+        if (lastIsEmpty) {
+          // popping did not work
+          filterArrayInStore = filterArrayInStore.slice(0, -1)
+        }
+      } else if (filterArrayInStore.length === 0) {
+        // Add empty filter if no criteria exist yet
+        // Goal: enable adding filters for hierarchy, label and geometry
+        // If no filters were added: this empty element will be removed after loopin
+        filterArrayInStore.push(initialTpop)
       }
       const filterArray = []
-      for (const filter of filterArrayInStoreWithoutEmpty) {
-        const singleFilter = { projId: { equalTo: projId } }
+      for (const filter of filterArrayInStore) {
+        // add hiearchy filter
+        const singleFilter = { ...singleFilterByHierarchy }
+        // add data filter
         const dataFilterAp = { ...filter }
         const apFilterValues = Object.entries(dataFilterAp).filter(
           (e) => e[1] || e[1] === 0,
@@ -154,13 +170,19 @@ export default types
           const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
           singleFilter[key] = { [expression]: value }
         })
+        // add node label filter
         if (self.nodeLabelFilter.ap) {
           singleFilter.label = {
             includesInsensitive: self.nodeLabelFilter.ap,
           }
         }
-        // do not add empty object
-        if (Object.keys(singleFilter).length === 0) break
+        // Object could be empty if no filters exist
+        // Do not add empty objects
+        if (
+          Object.values(singleFilter).filter((v) => v !== null).length === 0
+        ) {
+          break
+        }
         filterArray.push(singleFilter)
       }
 
@@ -169,7 +191,10 @@ export default types
         (el) => Object.keys(el).length > 0,
       )
 
-      return { or: filterArrayWithoutEmptyObjects }
+      return {
+        all: singleFilterByHierarchy,
+        filtered: { or: filterArrayWithoutEmptyObjects },
+      }
     },
     get popGqlFilter() {
       // need to slice to rerender on change
@@ -311,13 +336,13 @@ export default types
       }
 
       // extra check to ensure no empty objects exist
-      // const filterArrayWithoutEmptyObjects = filterArray.filter(
-      //   (el) => Object.keys(el).length > 0,
-      // )
+      const filterArrayWithoutEmptyObjects = filterArray.filter(
+        (el) => Object.keys(el).length > 0,
+      )
 
       return {
         all: singleFilterByHierarchy,
-        filtered: { or: filterArray },
+        filtered: { or: filterArrayWithoutEmptyObjects },
       }
     },
     get tpopmassnGqlFilter() {

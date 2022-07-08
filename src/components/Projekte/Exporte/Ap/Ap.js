@@ -48,7 +48,7 @@ const Ap = ({ treeName, filtered = false }) => {
           }
         `,
         variables: {
-          filter: filtered ? apGqlFilter : { or: [] },
+          filter: filtered ? apGqlFilter.filtered : { or: [] },
         },
       })
     } catch (error) {

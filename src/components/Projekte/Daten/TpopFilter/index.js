@@ -4,7 +4,6 @@ import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import { getSnapshot } from 'mobx-state-tree'
 
 import FilterTitle from '../../../shared/FilterTitle'
 import queryTpops from './queryTpops'

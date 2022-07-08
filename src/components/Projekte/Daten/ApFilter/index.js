@@ -89,7 +89,8 @@ const ApFilter = ({ treeName }) => {
   }, [activeTab, dataFilter.ap.length])
 
   const { data: apsData, error: apsError } = useQuery(queryAps, {
-    variables: { apFilter: apGqlFilter },
+    variables: { filteredFilter: apGqlFilter.filtered,
+      allFilter: apGqlFilter.all, },
   })
 
   const {

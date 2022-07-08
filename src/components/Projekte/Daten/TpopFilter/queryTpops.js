@@ -7,6 +7,6 @@ export default gql`
     }
     allTpopsFiltered: allTpops(filter: $filteredFilter) {
       totalCount
-    }
+    } 
   }
 `

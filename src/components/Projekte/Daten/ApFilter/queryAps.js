@@ -1,12 +1,12 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  query AllApsQuery($apFilter: ApFilter!) {
-    allAps {
+  query AllApsQuery($filteredFilter: ApFilter!, $allFilter: ApFilter!) {
+    allAps(filter: $allFilter) {
       totalCount
     }
-    filteredAps: allAps(filter: $apFilter) {
-      totalCount 
+    filteredAps: allAps(filter: $filteredFilter) {
+      totalCount
     }
   }
 `
