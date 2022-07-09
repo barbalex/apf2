@@ -11,18 +11,18 @@ Zuletzt im Juli 2022.<br/><br/>
 
 ## Welche Filter gibt es?
 
-### 1. Navigationsbaum, Hiearchie-Filter
+### 1. Navigationsbaum, Hierarchie-Filter
 
 Die Position in der aktuellen Navigation beeinflusst den aktuell angewandten Filter.<br/><br/>
 
 Beispiele:<br/>
 
 - Wechseln Sie mit offener Karte und darauf eingeblendeten Populationen von Art zu Art, werden immer deren jeweiligen Populationen angezeigt.
-- Wechseln Sie mit offener Karte und darauf eingeblendeten Teil-Populationen von Population zu Population, werden immer deren jeweilige Teil-Populationen angezeigt.
+- Wechseln Sie mit offener Karte und darauf eingeblendeten Teil-Populationen von Population zu Population, werden immer deren jeweiligen Teil-Populationen angezeigt.
 
 ### 2. Navigationsbaum, Label-Filter
 
-Im Navigationsbaum gibt es oben links den Label-Filter. Er heisst jeweils so, wie die entsprechene Ebene, auf der man sich befindet. Z.B. "Arten filtern" oder "Populationen filtern".<br/>
+Im Navigationsbaum gibt es oben links den Label-Filter. Er heisst jeweils so, wie die aktive Ebene, z.B. "Arten filtern" oder "Populationen filtern".<br/>
 ![Navigationsbaum-Filter](nav_label_filter_1.png)<br/>
 
 Beispiel:<br/>
@@ -38,11 +38,11 @@ Weil das Anzeigen nur der AP-Arten ein häufiger Vorgang ist (und es früher kei
 Auf der Karte kann man im Layer-Tool oben rechts unter `apflora` ein Werkzeug für Karten-Filter einschalten. Danach erscheinen in der Karte oben links Werkzeuge zum Zeichnen eines Umrisses, für dessen Bearbeitung und Löschung.<br/>
 ![Karten-Filter](karten_filter_1.png)<br/>
 
-Ist ein Umriss gezeichnet, wird er auf die Filter der Stufe Population und Teil-Population angewandt. Es werden also nur noch Populationen angezeigt, die innerhalb dieses Umrisses liegen.<br/><br/>
+Ist ein Umriss gezeichnet, wird er auf die Filter der Stufe Population, Teil-Population und Massnahmen angewandt. Es werden also nur noch Populationen/Teil-Populationen/Massnahmen von Teil-Populationen angezeigt, die innerhalb dieses Umrisses liegen.<br/><br/>
 
 ### 5. Formular-Filter
 
-Das ist der leistungsfähigste Filter.<br/><br/>
+Das ist der flexibelste Filter.<br/><br/>
 
 Man öffnet ihn mit der Schaltfläche oben in der Navigationszeile, rechts neben der Daten-Schaltfläche:<br/>
 ![Filter öffnen](formular_filter_1.png)
@@ -60,7 +60,7 @@ Es gibt ihn für diese Formulare:
 Filter-Formulare entsprechen (fast) genau den normalen Formularen. Sie sind aber orange hinterlegt, damit nicht aus Versehen beim Filtern echte Daten verändert werden.<br/>
 ![Formular-Filter](formular_filter_2.png)<br/>
 
-Erfasst man in einem Filter-Feld Daten, wird der entsprechende Filter nach Verlassen des Feldes oder nach Drücken der Enter-Taste angewendet (bei Auswahl-Feldern sofort).<br/><br/>
+Erfasst man Werte, wird der Filter nach Verlassen des Feldes oder nach Drücken der Enter-Taste angewandt (bei Auswahl-Feldern sofort).<br/><br/>
 
 Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `Strukturbaum 2`, entspricht er genau dem `Strukturbaum`, d.h. es wird auch ein allfälliger Filter kopiert. Danach sind die Filter unabhängig im jeweiligen Navigationsbaum gültig.<br/><br/>
 
@@ -70,11 +70,11 @@ Erfasst man in einem Filter-Formular in mehreren Feldern Werte, müssen diese gl
 
 Beispiel:<br/>
 
-Erfasst man für die Art `Aktionsplan = erstellt` UND `Stand Umsetzung = in Umsetzung`, werden Arten gefiltert, deren Aktionsplan erstellt ist und sich in Umsetzung befindet.<br/><br/>
+Erfasst man für die Art `Aktionsplan = erstellt` UND `Stand Umsetzung = in Umsetzung`, werden Arten gefiltert, deren Aktionsplan erstellt ist _und_ sich in Umsetzung befindet.<br/><br/>
 
 #### Oder-Filter
 
-Im Formular-Filter gibt es bei Arten, Populationen und Teil-Populationen nummerierte Register. Und rechts daneben ein (zunächst inaktives) mit `oder` beschriftetes.<br/>
+Im Formular-Filter gibt es bei Arten, Populationen, Teil-Populationen und Massnahmen nummerierte Register. Und rechts daneben ein (zunächst inaktives) mit `oder` beschriftetes.<br/>
 ![Register](formular_filter_3.png)<br/>
 
 Die Nummern nummerieren Kriterien der Oder-Filterung. Sobald in einem Register ein Wert erfasst wurde (oder mehrere, siehe Und-Filter), wird das mit `oder` beschriftete Register aktiv. Klickt man darauf und erfasst darin weitere Werte, hat man eine Oder-Filterung geschaffen. Will heissen: Es wird nach Datensätzen gefiltert, die entweder die Kriterien im Register 1 oder diejenigen im Register 2 erfüllen. Die Anzahl Register bzw. oder-Kriterien ist unbeschränkt.<br/><br/>
