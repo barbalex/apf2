@@ -1,7 +1,6 @@
 import uniq from 'lodash/uniq'
 import isUuid from 'is-uuid'
 
-import { simpleTypes as tpopmassnType } from '../../store/Tree/DataFilter/tpopmassn'
 import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tpopfeldkontr'
 import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
 
