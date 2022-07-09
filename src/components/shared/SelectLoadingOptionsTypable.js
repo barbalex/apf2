@@ -76,11 +76,11 @@ const SelectLoadingOptionsTypable = ({
   queryNodesName,
 }) => {
   const client = useApolloClient()
-  const [inputValue, setInputValue] = useState(row.wirtspflanze || '')
+  const [inputValue, setInputValue] = useState(row?.wirtspflanze || '')
 
   useEffect(() => {
-    setInputValue(row.wirtspflanze || '')
-  }, [row.wirtspflanze])
+    setInputValue(row?.wirtspflanze || '')
+  }, [row?.wirtspflanze])
 
   const loadOptions = useCallback(
     async (inputValue, cb) => {
@@ -137,7 +137,10 @@ const SelectLoadingOptionsTypable = ({
     }
   }, [inputValue, onChange])
 
-  const value = { value: row.wirtspflanze || '', label: row.wirtspflanze || '' }
+  const value = {
+    value: row?.wirtspflanze || '',
+    label: row?.wirtspflanze || '',
+  }
 
   return (
     <Container data-id={field}>
