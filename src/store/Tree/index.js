@@ -17,6 +17,10 @@ import {
   simpleTypes as tpopType,
   initial as initialTpop,
 } from './DataFilter/tpop'
+import {
+  simpleTypes as tpopmassnType,
+  initial as initialTpopmassn,
+} from './DataFilter/tpopmassn'
 import { simpleTypes as apType } from './DataFilter/ap'
 import apIdInUrl from '../../modules/apIdInUrl'
 import projIdInUrl from '../../modules/projIdInUrl'
@@ -446,7 +450,114 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
     },
+    get tpopIsFiltered() {
+      const firstFilterObject = {
+        ...(self.popGqlFilter?.filtered.or?.[0] ?? {}),
+      }
+      let entries = Object.entries(firstFilterObject).filter(
+        (e) =>
+          !['projId', 'apId', 'popId', 'popByPopId', 'geomPoint'].includes(
+            e[0],
+          ),
+      )
+      return entries.length > 0
+    },
     get tpopmassnGqlFilter() {
+      // 1. prepare hiearchy filter
+      // need to slice proxy to rerender on change
+      const aNA = self.activeNodeArray.slice()
+      const projId = aNA[1]
+      const apId = aNA[3]
+      const popId = aNA[5]
+      const tpopId = aNA[7]
+      const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
+      const popHierarchyFilter = popId
+        ? { tpopByPopId: { popId: { equalTo: popId } } }
+        : {}
+      const apHiearchyFilter = apId
+        ? { popByPopId: { apId: { equalTo: apId } } }
+        : {}
+      const projHiearchyFilter = projId
+        ? { popByPopId: { apByApId: { projId: { equalTo: projId } } } }
+        : {}
+      let singleFilterByHierarchy = nestedObjectAssign(
+        {},
+        tpopHierarchyFilter,
+        popHierarchyFilter,
+        apHiearchyFilter,
+        projHiearchyFilter,
+      )
+      // 2. prepare data filter
+      let filterArrayInStore = self.dataFilter.tpopmassn
+        ? [...getSnapshot(self.dataFilter.tpopmassn)]
+        : []
+      if (filterArrayInStore.length > 1) {
+        // check if last is empty
+        // empty last is just temporary because user created new "oder" and has not yet input criteria
+        // remove it or filter result will be wrong (show all) if criteria.length > 1!
+        const last = filterArrayInStore[filterArrayInStore.length - 1]
+        const lastIsEmpty =
+          Object.values(last).filter((v) => v !== null).length === 0
+        if (lastIsEmpty) {
+          // popping did not work
+          filterArrayInStore = filterArrayInStore.slice(0, -1)
+        }
+      } else if (filterArrayInStore.length === 0) {
+        // Add empty filter if no criteria exist yet
+        // Goal: enable adding filters for hierarchy, label and geometry
+        // If no filters were added: this empty element will be removed after loopin
+        filterArrayInStore.push(initialTpopmassn)
+      }
+      // 3. build data filter
+      const filterArray = []
+      for (const filter of filterArrayInStore) {
+        // add hiearchy filter
+        const singleFilter = { ...singleFilterByHierarchy }
+        // add data filter
+        const dataFilterTpopmassn = { ...filter }
+        const tpopmassnFilterValues = Object.entries(
+          dataFilterTpopmassn,
+        ).filter((e) => e[1] || e[1] === 0)
+        tpopmassnFilterValues.forEach(([key, value]) => {
+          const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
+          singleFilter[key] = { [expression]: value }
+        })
+        // add node label filter
+        if (self.nodeLabelFilter.tpopmassn) {
+          singleFilter.label = {
+            includesInsensitive: self.nodeLabelFilter.tpopmassn,
+          }
+        }
+        // add mapFilter
+        if (self.mapFilter) {
+          singleFilter.tpopByTpopId.geomPoint = {
+            coveredBy: self.mapFilter,
+          }
+        }
+        // Object could be empty if no filters exist
+        // Do not add empty objects
+        if (
+          Object.values(singleFilter).filter((v) => v !== null).length === 0
+        ) {
+          break
+        }
+        // Object has filter criteria. Add it!
+        filterArray.push(singleFilter)
+      }
+
+      // extra check to ensure no empty objects exist
+      const filterArrayWithoutEmptyObjects = filterArray.filter(
+        (el) => Object.keys(el).length > 0,
+      )
+
+      return {
+        all: Object.keys(singleFilterByHierarchy).length
+          ? singleFilterByHierarchy
+          : { or: [] },
+        filtered: { or: filterArrayWithoutEmptyObjects },
+      }
+    },
+    get tpopmassnGqlFilter_old() {
       const result = Object.fromEntries(
         Object.entries(getSnapshot(self.dataFilter.tpopmassn))
           // eslint-disable-next-line no-unused-vars
