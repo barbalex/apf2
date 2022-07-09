@@ -83,20 +83,28 @@ const App = ({ element }) => {
           const dataFilterTreeAp = getSnapshot(store.tree.dataFilter.ap)
           const dataFilterTreePop = getSnapshot(store.tree.dataFilter.pop)
           const dataFilterTreeTpop = getSnapshot(store.tree.dataFilter.tpop)
+          const dataFilterTreeTpopmassn = getSnapshot(
+            store.tree.dataFilter.tpopmassn,
+          )
           const dataFilterTree2Ap = getSnapshot(store.tree2.dataFilter.ap)
           const dataFilterTree2Pop = getSnapshot(store.tree2.dataFilter.pop)
           const dataFilterTree2Tpop = getSnapshot(store.tree2.dataFilter.tpop)
+          const dataFilterTree2Tpopmassn = getSnapshot(
+            store.tree2.dataFilter.tpopmassn,
+          )
           if (
             isObject(dataFilterTreeAp) ||
             isObject(dataFilterTreePop) ||
-            isObject(dataFilterTreeTpop)
+            isObject(dataFilterTreeTpop) ||
+            isObject(dataFilterTreeTpopmassn)
           ) {
             [store.dataFilterEmptyTree('tree')]
           }
           if (
             isObject(dataFilterTree2Ap) ||
             isObject(dataFilterTree2Pop) ||
-            isObject(dataFilterTree2Tpop)
+            isObject(dataFilterTree2Tpop) ||
+            isObject(dataFilterTree2Tpopmassn)
           ) {
             store.dataFilterEmptyTree('tree2')
           }

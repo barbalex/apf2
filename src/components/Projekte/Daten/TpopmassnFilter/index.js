@@ -1,6 +1,5 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
-import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
@@ -17,10 +16,10 @@ import constants from '../../../../modules/constants'
 import queryTpopmassns from './queryTpopmassns'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopmassnType } from '../../../../store/Tree/DataFilter/tpopmassn'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
+import OrTabs from './Tabs'
 
 const Container = styled.div`
   height: 100%;
@@ -38,85 +37,115 @@ const ColumnContainer = styled.div`
     props['data-column-width'] &&
     `column-width: ${props['data-column-width']}px;`}
 `
+const FilterCommentTitle = styled.div`
+  margin-top: -10px;
+  padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
+`
+const FilterCommentList = styled.ul`
+  margin-bottom: 10px;
+`
+const FilterComment = styled.li`
+  margin-top: -10px;
+  padding: 0 10px 0 10px;
+  font-size: 0.75em;
+`
 
 const TpopmassnFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
 
-  const { activeNodeArray, dataFilter, filterWidth: width } = store[treeName]
+  const {
+    activeNodeArray,
+    dataFilter,
+    filterWidth: width,
+    tpopmassnGqlFilter,
+    nodeLabelFilter,
+    mapFilter,
+    apFilter,
+    artIsFiltered,
+    popIsFiltered,
+    tpopIsFiltered,
+  } = store[treeName]
 
-  const apId = activeNodeArray[3]
+  // need to slice to rerender on change
+  const aNA = activeNodeArray.slice()
+  const apId = aNA[3]
+  const popId = aNA[5]
+  const tpopId = aNA[7]
 
-  const allTpopmassnFilter = {
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopmassnFilter = {
-    tpopId: { isNull: false },
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopmassnFilterValues = Object.entries(dataFilter.tpopmassn).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  tpopmassnFilterValues.forEach(([key, value]) => {
-    const expression = tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopmassnFilter[key] = { [expression]: value }
-  })
+  const [activeTab, setActiveTab] = useState(0)
+  useEffect(() => {
+    if (dataFilter.tpopmassn.length - 1 < activeTab) {
+      // filter was emptied, need to set correct tab
+      setActiveTab(0)
+    }
+  }, [activeTab, dataFilter.tpopmassn.length])
+
   const { data, loading, error } = useQuery(queryTpopmassns, {
     variables: {
-      tpopmassnFilter,
-      allTpopmassnFilter,
-      apId,
-      apIdExists: !!apId,
-      apIdNotExists: !apId,
+      filteredFilter: tpopmassnGqlFilter.filtered,
+      allFilter: tpopmassnGqlFilter.all,
     },
   })
 
-  const row = dataFilter.tpopmassn
-  let totalNr
-  let filteredNr
-  if (apId) {
-    const popsOfAp = data?.popsOfAp?.nodes ?? []
-    const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
-    totalNr = !tpopsOfAp.length
-      ? '...'
-      : tpopsOfAp
-          .map((p) => p?.tpopmassns?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-    filteredNr = !tpopsOfAp.length
-      ? '...'
-      : tpopsOfAp
-          .map((p) => p?.tpopmassnsFiltered?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-  } else {
-    totalNr = data?.allTpopmassns?.totalCount ?? '...'
-    filteredNr = data?.tpopmassnsFiltered?.totalCount ?? '...'
-  }
+  const row = dataFilter.tpopmassn[activeTab]
 
   const isAnpflanzung = data?.allTpopmassnTypWertes?.nodes?.find(
-    (n) => n.value === row.typ,
+    (n) => n.value === row?.typ,
   )?.anpflanzung
 
   const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
-
+    async (event) =>
       dataFilterSetValue({
         treeName,
         table: 'tpopmassn',
-        key: field,
-        value,
-      })
-    },
-    [dataFilterSetValue, treeName],
+        key: event.target.name,
+        value: ifIsNumericAsNumber(event.target.value),
+        index: activeTab,
+      }),
+    [dataFilterSetValue, treeName, activeTab],
   )
 
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
+
+  const navApFilterComment = apFilter
+    ? `Navigationsbaum, "nur AP"-Filter: Nur Massnahmen von AP-Arten werden berücksichtigt.`
+    : undefined
+  const navHiearchyComment = tpopId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
+    : popId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
+    : apId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
+    : undefined
+  const navLabelComment = nodeLabelFilter.tpopmassn
+    ? `Navigationsbaum, Label-Filter: Das Label der Massnahmen wird nach "${nodeLabelFilter.tpopmassn}" gefiltert.`
+    : undefined
+  const artHierarchyComment = artIsFiltered
+    ? 'Formular-Filter, Ebene Art: Es werden nur Massnahmen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const popHierarchyComment = popIsFiltered
+    ? 'Formular-Filter, Ebene Population: Es werden nur Massnahmen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const tpopHierarchyComment = tpopIsFiltered
+    ? 'Formular-Filter, Ebene Teil-Population: Es werden nur Massnahmen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const mapFilterComment = mapFilter
+    ? 'Karten-Filter: Nur Massnahmen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
+    : undefined
+
+  const showFilterComments =
+    !!navApFilterComment ||
+    !!navHiearchyComment ||
+    !!navLabelComment ||
+    !!artHierarchyComment ||
+    !!popHierarchyComment ||
+    !!tpopHierarchyComment ||
+    !!mapFilter
 
   if (error) return <Error error={error} />
 
@@ -127,8 +156,43 @@ const TpopmassnFilter = ({ treeName }) => {
           title="Massnahmen"
           treeName={treeName}
           table="tpopmassn"
-          totalNr={totalNr}
-          filteredNr={filteredNr}
+          totalNr={data?.allTpopmassns?.totalCount ?? '...'}
+          filteredNr={data?.tpopmassnsFiltered?.totalCount ?? '...'}
+          activeTab={activeTab}
+        />
+        {showFilterComments && (
+          <>
+            <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
+            <FilterCommentList>
+              {!!navApFilterComment && (
+                <FilterComment>{navApFilterComment}</FilterComment>
+              )}
+              {!!navHiearchyComment && (
+                <FilterComment>{navHiearchyComment}</FilterComment>
+              )}
+              {!!navLabelComment && (
+                <FilterComment>{navLabelComment}</FilterComment>
+              )}
+              {!!artHierarchyComment && (
+                <FilterComment>{artHierarchyComment}</FilterComment>
+              )}
+              {!!popHierarchyComment && (
+                <FilterComment>{popHierarchyComment}</FilterComment>
+              )}
+              {!!tpopHierarchyComment && (
+                <FilterComment>{tpopHierarchyComment}</FilterComment>
+              )}
+              {!!mapFilterComment && (
+                <FilterComment>{mapFilterComment}</FilterComment>
+              )}
+            </FilterCommentList>
+          </>
+        )}
+        <OrTabs
+          dataFilter={dataFilter.tpopmassn}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          treeName={treeName}
         />
         <FormScrollContainer>
           <SimpleBar
@@ -142,13 +206,13 @@ const TpopmassnFilter = ({ treeName }) => {
                 name="jahr"
                 label="Jahr"
                 type="number"
-                value={row.jahr}
+                value={row?.jahr}
                 saveToDb={saveToDb}
               />
               <DateField
                 name="datum"
                 label="Datum"
-                value={row.datum}
+                value={row?.datum}
                 saveToDb={saveToDb}
               />
               <RadioButtonGroup
@@ -156,14 +220,14 @@ const TpopmassnFilter = ({ treeName }) => {
                 label="Typ"
                 dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
                 loading={loading}
-                value={row.typ}
+                value={row?.typ}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="beschreibung"
                 label="Massnahme"
                 type="text"
-                value={row.beschreibung}
+                value={row?.beschreibung}
                 saveToDb={saveToDb}
               />
               <Select
@@ -171,7 +235,7 @@ const TpopmassnFilter = ({ treeName }) => {
                 label="BearbeiterIn"
                 options={data?.allAdresses?.nodes ?? []}
                 loading={loading}
-                value={row.bearbeiter}
+                value={row?.bearbeiter}
                 saveToDb={saveToDb}
               />
               <TextField
@@ -179,69 +243,69 @@ const TpopmassnFilter = ({ treeName }) => {
                 label="Bemerkungen"
                 type="text"
                 multiLine
-                value={row.bemerkungen}
+                value={row?.bemerkungen}
                 saveToDb={saveToDb}
               />
               <Checkbox2States
                 name="planVorhanden"
                 label="Plan vorhanden"
-                value={row.planVorhanden}
+                value={row?.planVorhanden}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="planBezeichnung"
                 label="Plan Bezeichnung"
                 type="text"
-                value={row.planBezeichnung}
+                value={row?.planBezeichnung}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="flaeche"
                 label="Fläche (m2)"
                 type="number"
-                value={row.flaeche}
+                value={row?.flaeche}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="form"
                 label="Form der Ansiedlung"
                 type="text"
-                value={row.form}
+                value={row?.form}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="pflanzanordnung"
                 label="Pflanzanordnung"
                 type="text"
-                value={row.pflanzanordnung}
+                value={row?.pflanzanordnung}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="markierung"
                 label="Markierung"
                 type="text"
-                value={row.markierung}
+                value={row?.markierung}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="anzTriebe"
                 label="Anzahl Triebe"
                 type="number"
-                value={row.anzTriebe}
+                value={row?.anzTriebe}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="anzPflanzen"
                 label="Anzahl Pflanzen"
                 type="number"
-                value={row.anzPflanzen}
+                value={row?.anzPflanzen}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="anzPflanzstellen"
                 label="Anzahl Pflanzstellen"
                 type="number"
-                value={row.anzPflanzstellen}
+                value={row?.anzPflanzstellen}
                 saveToDb={saveToDb}
               />
               {isAnpflanzung && (
@@ -251,14 +315,14 @@ const TpopmassnFilter = ({ treeName }) => {
                     label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
                     options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
                     loading={loading}
-                    value={row.zieleinheitEinheit}
+                    value={row?.zieleinheitEinheit}
                     saveToDb={saveToDb}
                   />
                   <TextField
                     name="zieleinheitAnzahl"
                     label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
                     type="number"
-                    value={row.zieleinheitAnzahl}
+                    value={row?.zieleinheitAnzahl}
                     saveToDb={saveToDb}
                   />
                 </>
@@ -276,21 +340,21 @@ const TpopmassnFilter = ({ treeName }) => {
                 name="herkunftPop"
                 label="Herkunftspopulation"
                 type="text"
-                value={row.herkunftPop}
+                value={row?.herkunftPop}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="sammeldatum"
                 label="Sammeldatum"
                 type="text"
-                value={row.sammeldatum}
+                value={row?.sammeldatum}
                 saveToDb={saveToDb}
               />
               <TextField
                 name="vonAnzahlIndividuen"
                 label="Anzahl besammelte Individuen der Herkunftspopulation"
                 type="number"
-                value={row.vonAnzahlIndividuen}
+                value={row?.vonAnzahlIndividuen}
                 saveToDb={saveToDb}
               />
             </ColumnContainer>

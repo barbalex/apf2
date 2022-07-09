@@ -13,5 +13,5 @@ export default types.model({
   tpop: types.array(tpop),
   tpopfeldkontr,
   tpopfreiwkontr,
-  tpopmassn,
+  tpopmassn: types.array(tpopmassn),
 })

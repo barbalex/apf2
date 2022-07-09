@@ -452,7 +452,7 @@ export default types
     },
     get tpopIsFiltered() {
       const firstFilterObject = {
-        ...(self.popGqlFilter?.filtered.or?.[0] ?? {}),
+        ...(self.tpopGqlFilter?.filtered.or?.[0] ?? {}),
       }
       let entries = Object.entries(firstFilterObject).filter(
         (e) =>
@@ -472,13 +472,17 @@ export default types
       const tpopId = aNA[7]
       const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
       const popHierarchyFilter = popId
-        ? { tpopByPopId: { popId: { equalTo: popId } } }
+        ? { tpopByTpopId: { popId: { equalTo: popId } } }
         : {}
       const apHiearchyFilter = apId
-        ? { popByPopId: { apId: { equalTo: apId } } }
+        ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
       const projHiearchyFilter = projId
-        ? { popByPopId: { apByApId: { projId: { equalTo: projId } } } }
+        ? {
+            tpopByTpopId: {
+              popByPopId: { apByApId: { projId: { equalTo: projId } } },
+            },
+          }
         : {}
       let singleFilterByHierarchy = nestedObjectAssign(
         {},
@@ -519,7 +523,8 @@ export default types
           dataFilterTpopmassn,
         ).filter((e) => e[1] || e[1] === 0)
         tpopmassnFilterValues.forEach(([key, value]) => {
-          const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
+          const expression =
+            tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
