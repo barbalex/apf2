@@ -1,7 +1,7 @@
 {
   "name": "apf2",
   "description": "Aktionspläne für Flora-Projekte",
-  "version": "1.76.3",
+  "version": "1.76.4",
   "repository": {
     "type": "git",
     "url": "git://github.com/barbalex/apf2.git"
@@ -75,7 +75,7 @@
     "leaflet.markercluster": "1.5.3",
     "localforage": "1.10.0",
     "lodash": "4.17.21",
-    "luxon": "2.4.0",
+    "luxon": "3.0.1",
     "markdown-it": "13.0.1",
     "mobx": "6.6.1",
     "mobx-react-lite": "3.4.0",
