@@ -1,7 +1,7 @@
 import isUuid from 'is-uuid'
 
 const apIdInUrl = (url) => {
-  if (url.length > 3 && decodeURIComponent(url[2]) === 'Arten') {
+  if (url.length > 3 && url[2] === 'Arten') {
     const id = url[3]
     if (isUuid.anyNonNil(id)) return id
   }
