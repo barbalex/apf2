@@ -45,4 +45,4 @@ ALTER FUNCTION apflora.nearest_tpop_for_ap_function (ap_id uuid, point text) OWN
 --> 76b716f8-4f62-11e7-aebe-4f638aa25b01
 -- with 99999999-9999-9999-9999-999999999999: null in sql, 76b716f8-4f62-11e7-aebe-4f638aa25b01 in graphiQl!!!!
 -- with 6c52d126-4f62-11e7-aebe-cbb8319e1712: ede0e882-38a0-11eb-aea7-dbff9ac7ac7b in sql, 76b716f8-4f62-11e7-aebe-4f638aa25b01 in graphiQl!!!
--- WTF: graphql is re-using previous values!!!
+-- WTF: graphql is re-using previous values!!! need to use fetchPolicy: 'no-cache'
