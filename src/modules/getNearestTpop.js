@@ -21,6 +21,8 @@ const getNearestTpop = async ({ latLng, client, apId }) => {
       apId: apId || '99999999-9999-9999-9999-999999999999',
       point: `SRID=4326;POINT(${lng} ${lat})`,
     },
+    // WARNING: caching can lead to completely incomprehensible behavior where previous values are returned
+    // https://github.com/barbalex/apf2/issues/536
     fetchPolicy: 'no-cache',
   })
   const val = data?.nearestTpopForApFunction?.nodes?.[0]
