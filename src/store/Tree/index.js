@@ -302,7 +302,6 @@ export default types
       const filterArray = []
       for (const filter of filterArrayInStore) {
         // add hiearchy filter
-        // const singleFilter = { ...singleFilterByHierarchy }
         const singleFilter = nestedObjectAssign(
           {},
           singleFilterByHierarchy,
@@ -380,6 +379,16 @@ export default types
         apHiearchyFilter,
         projHiearchyFilter,
       )
+      const singleFilterByParentFiltersForAll = {
+        popByPopId: self.popGqlFilter.all,
+      }
+      const singleFilterForAll = nestedObjectAssign(
+        singleFilterByHierarchy,
+        singleFilterByParentFiltersForAll,
+      )
+      const singleFilterByParentFiltersForFiltered = {
+        popByPopId: self.popGqlFilter.filtered,
+      }
       // 2. prepare data filter
       let filterArrayInStore = self.dataFilter.tpop
         ? [...getSnapshot(self.dataFilter.tpop)]
@@ -405,7 +414,11 @@ export default types
       const filterArray = []
       for (const filter of filterArrayInStore) {
         // add hiearchy filter
-        const singleFilter = { ...singleFilterByHierarchy }
+        const singleFilter = nestedObjectAssign(
+          {},
+          singleFilterByHierarchy,
+          singleFilterByParentFiltersForFiltered,
+        )
         // add data filter
         const dataFilterTpop = { ...filter }
         const tpopFilterValues = Object.entries(dataFilterTpop).filter(
@@ -444,8 +457,8 @@ export default types
       )
 
       return {
-        all: Object.keys(singleFilterByHierarchy).length
-          ? singleFilterByHierarchy
+        all: Object.keys(singleFilterForAll).length
+          ? singleFilterForAll
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
