@@ -5,7 +5,7 @@ export default gql`
     allTpops(filter: $allFilter) {
       totalCount
     }
-    allTpopsFiltered: allTpops(filter: $filteredFilter) {
+    allTpopsFiltered: allTpops(filter: $filteredFilter) { 
       totalCount
     } 
   }

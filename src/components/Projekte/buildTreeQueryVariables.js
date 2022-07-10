@@ -1,7 +1,6 @@
 import uniq from 'lodash/uniq'
 import isUuid from 'is-uuid'
 
-import { simpleTypes as tpopmassnType } from '../../store/Tree/DataFilter/tpopmassn'
 import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tpopfeldkontr'
 import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
 
@@ -31,6 +30,7 @@ const buildTreeQueryVariables = ({
   nodeLabelFilter,
   popGqlFilter,
   tpopGqlFilter,
+  tpopmassnGqlFilter,
   apGqlFilter,
 }) => {
   // apFilter is used for form nodeLabelFilter AND apFilter of tree :-(
@@ -177,15 +177,6 @@ const buildTreeQueryVariables = ({
     }
   }
 
-  const tpopmassnFilter = { tpopId: { in: tpop } }
-  const tpopmassnFilterValues = Object.entries(dataFilter.tpopmassn).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  tpopmassnFilterValues.forEach(([key, value]) => {
-    const expression = tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopmassnFilter[key] = { [expression]: value }
-  })
-
   const apsFilter = apGqlFilter.filtered
   const apberuebersichtsFilter = { projId: { in: projekt } }
   if (nodeLabelFilter.apberuebersicht) {
@@ -286,12 +277,7 @@ const buildTreeQueryVariables = ({
       includesInsensitive: nodeLabelFilter.tpopmassnber,
     }
   }
-  const tpopmassnsFilter = { ...tpopmassnFilter }
-  if (nodeLabelFilter.tpopmassn) {
-    tpopmassnsFilter.label = {
-      includesInsensitive: nodeLabelFilter.tpopmassn,
-    }
-  }
+  const tpopmassnsFilter = tpopmassnGqlFilter.filtered
   const tpopsFilter = tpopGqlFilter.filtered
   const usersFilter = { id: { isNull: false } }
   if (nodeLabelFilter.user) {

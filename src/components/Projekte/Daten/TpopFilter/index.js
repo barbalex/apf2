@@ -13,7 +13,7 @@ import Ek from './Ek'
 import Tpop from './Tpop'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
-import PopOrTabs from './Tabs'
+import OrTabs from './Tabs'
 
 const Container = styled.div`
   height: 100%;
@@ -65,7 +65,6 @@ const TpopFilter = ({ treeName }) => {
     apFilter,
     artIsFiltered,
     popIsFiltered,
-    popGqlFilter,
   } = store[treeName]
   const [tab, setTab] = useState(urlQuery?.tpopTab ?? 'tpop')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
@@ -179,7 +178,7 @@ const TpopFilter = ({ treeName }) => {
             </FilterCommentList>
           </>
         )}
-        <PopOrTabs
+        <OrTabs
           dataFilter={dataFilter.tpop}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
