@@ -1,5 +1,6 @@
 DROP FUNCTION IF EXISTS apflora.jber_abc (jahr int);
 
+-- GraphQL name: JberAbc
 CREATE OR REPLACE FUNCTION apflora.jber_abc (jahr int)
   RETURNS SETOF apflora.jber_abc
   AS $$
