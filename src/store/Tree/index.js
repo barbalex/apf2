@@ -647,7 +647,7 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
-      console.log('tpopmassnGqlFilter:', tpopmassnGqlFilter)
+      // console.log('tpopmassnGqlFilter:', tpopmassnGqlFilter)
 
       return tpopmassnGqlFilter
     },
@@ -764,7 +764,7 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
-      console.log('ekGqlFilter:', ekGqlFilter)
+      // console.log('ekGqlFilter:', ekGqlFilter)
 
       return ekGqlFilter
     },
@@ -890,7 +890,7 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
-      console.log('ekfGqlFilter:', ekfGqlFilter)
+      // console.log('ekfGqlFilter:', ekfGqlFilter)
 
       return ekfGqlFilter
     },

@@ -51,12 +51,14 @@ export default gql`
     }
     allAdresses(orderBy: NAME_ASC) {
       nodes {
+        id
         value: id
         label: name
       }
     }
     allTpopmassnTypWertes(orderBy: SORT_ASC) {
       nodes {
+        id
         value: code
         label: text
         historic
