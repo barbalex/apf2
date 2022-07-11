@@ -2,7 +2,6 @@ import React, { useState, useCallback, useContext, useEffect } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
-import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
@@ -21,7 +20,6 @@ import query from './query'
 import queryTpopkontrs from './queryTpopkontrs'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopfeldkontrType } from '../../../../store/Tree/DataFilter/tpopfeldkontr'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
@@ -98,7 +96,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue, urlQuery, setUrlQuery } = store
   const {
-    activeNodeArray,
     dataFilter,
     filterWidth,
     ekGqlFilter,

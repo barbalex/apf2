@@ -1,18 +1,11 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useQuery, useApolloClient, gql } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 
 import Select from '../../../../shared/Select'
 import storeContext from '../../../../../storeContext'
 import queryAdresses from './queryAdresses'
-import {
-  adresse as adresseFragment,
-  pop as popFragment,
-  tpop as tpopFragment,
-  tpopfreiwkontr as tpopfreiwkontrFragment,
-  tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
-} from '../../../../shared/fragments'
 import Error from '../../../../shared/Error'
 
 const Area = styled.div`
@@ -78,154 +71,21 @@ const StatusLabel = styled(Label)`
   grid-area: statusVal;
 `
 
-const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
-  const client = useApolloClient()
+const Headdata = ({ pop, tpop, row, treeName }) => {
   const store = useContext(storeContext)
-  const { dataFilterSetValue, user } = store
+  const { dataFilterSetValue } = store
   const { data, loading, error } = useQuery(queryAdresses)
-  const [errors, setErrors] = useState(null)
 
   const saveToDb = useCallback(
-    async (event) => {
-      const { value } = event.target
-      if (showFilter) {
-        return dataFilterSetValue({
-          treeName,
-          table: 'tpopfreiwkontr',
-          key: 'bearbeiter',
-          value,
-        })
-      }
-      const variables = {
-        id: row.id,
-        bearbeiter: value,
-        changedBy: user.name,
-      }
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation updateTpopkontrForEkfHeaddataFilter(
-              $id: UUID!
-              $bearbeiter: UUID
-              $changedBy: String
-            ) {
-              updateTpopkontrById(
-                input: {
-                  id: $id
-                  tpopkontrPatch: {
-                    bearbeiter: $bearbeiter
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpopkontr {
-                  ...TpopfreiwkontrFields
-                  adresseByBearbeiter {
-                    ...AdresseFields
-                    usersByAdresseId {
-                      totalCount
-                    }
-                  }
-                  tpopByTpopId {
-                    ...TpopFields
-                    popByPopId {
-                      ...PopFields
-                      apByApId {
-                        id
-                        ekzaehleinheitsByApId {
-                          nodes {
-                            id
-                            tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                              ...TpopkontrzaehlEinheitWerteFields
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                  tpopkontrzaehlsByTpopkontrId {
-                    nodes {
-                      id
-                      anzahl
-                      einheit
-                    }
-                  }
-                }
-              }
-            }
-            ${adresseFragment}
-            ${popFragment}
-            ${tpopFragment}
-            ${tpopfreiwkontrFragment}
-            ${tpopkontrzaehlEinheitWerteFragment}
-          `,
-          variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopkontrById: {
-              tpopkontr: {
-                id: row.id,
-                typ: row.typ,
-                jahr: row.jahr,
-                datum: row.datum,
-                bemerkungen: row.bemerkungen,
-                flaecheUeberprueft: row.flaecheUeberprueft,
-                deckungVegetation: row.deckungVegetation,
-                deckungNackterBoden: row.deckungNackterBoden,
-                deckungApArt: row.deckungApArt,
-                vegetationshoeheMaximum: row.vegetationshoeheMaximum,
-                vegetationshoeheMittel: row.vegetationshoeheMittel,
-                gefaehrdung: row.gefaehrdung,
-                tpopId: row.tpopId,
-                bearbeiter: value,
-                planVorhanden: row.planVorhanden,
-                jungpflanzenVorhanden: row.jungpflanzenVorhanden,
-                apberNichtRelevant: row.apberNichtRelevant,
-                apberNichtRelevantGrund: row.apberNichtRelevantGrund,
-                ekfBemerkungen: row.ekfBemerkungen,
-                tpopByTpopId: row.tpopByTpopId,
-                tpopkontrzaehlsByTpopkontrId: row.tpopkontrzaehlsByTpopkontrId,
-                __typename: 'Tpopkontr',
-              },
-              __typename: 'Tpopkontr',
-            },
-          },
-        })
-      } catch (error) {
-        return setErrors(error.message)
-      }
-      setErrors(null)
-    },
-    [
-      showFilter,
-      row.id,
-      row.typ,
-      row.jahr,
-      row.datum,
-      row.bemerkungen,
-      row.flaecheUeberprueft,
-      row.deckungVegetation,
-      row.deckungNackterBoden,
-      row.deckungApArt,
-      row.vegetationshoeheMaximum,
-      row.vegetationshoeheMittel,
-      row.gefaehrdung,
-      row.tpopId,
-      row.planVorhanden,
-      row.jungpflanzenVorhanden,
-      row.apberNichtRelevant,
-      row.apberNichtRelevantGrund,
-      row.ekfBemerkungen,
-      row.tpopByTpopId,
-      row.tpopkontrzaehlsByTpopkontrId,
-      user.name,
-      dataFilterSetValue,
-      treeName,
-      client,
-    ],
+    async (event) =>
+      dataFilterSetValue({
+        treeName,
+        table: 'tpopfreiwkontr',
+        key: 'bearbeiter',
+        value: event.target.value,
+      }),
+    [dataFilterSetValue, treeName],
   )
-
-  const userCount = row?.adresseByBearbeiter?.usersByAdresseId?.totalCount ?? 0
 
   const statusValue = tpop?.status ?? ''
   const status = [200, 201, 202].includes(statusValue)
@@ -253,11 +113,6 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
           options={data?.allAdresses?.nodes ?? []}
           loading={loading}
           saveToDb={saveToDb}
-          error={
-            !showFilter && row.bearbeiter && !userCount
-              ? 'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, dem diese Adresse zugeordnet wurde.'
-              : errors
-          }
         />
       </BearbVal>
       <StatusLabel>{status}</StatusLabel>

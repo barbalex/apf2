@@ -210,134 +210,14 @@ const TpopfreiwkontrForm = ({
   const { ekfBemerkungen } = row
 
   const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
-      if (showFilter) {
-        return dataFilterSetValue({
-          treeName,
-          table: 'tpopfreiwkontr',
-          key: field,
-          value,
-        })
-      }
-      /**
-       * enable passing two values
-       * with same update
-       */
-      const variables = {
-        id: row.id,
-        [field]: value,
-        changedBy: user.name,
-      }
-      let field2
-      if (field === 'datum') field2 = 'jahr'
-      let value2
-      if (field === 'datum') {
-        // this broke 13.2.2019
-        // value2 = !!value ? +format(new Date(value), 'yyyy') : null
-        // value can be null so check if substring method exists
-        value2 = value && value.substring ? +value.substring(0, 4) : value
-      }
-      if (field2) variables[field2] = value2
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation updateTpopkontrForEkfFilter(
-              $id: UUID!
-                $${field}: ${fieldTypes[field]}
-                ${field === 'jahr' ? '$datum: Date' : ''}
-                ${field === 'datum' ? '$jahr: Int' : ''}
-              $changedBy: String
-            ) {
-              updateTpopkontrById(
-                input: {
-                  id: $id
-                  tpopkontrPatch: {
-                      ${field}: $${field}
-                      ${field === 'jahr' ? 'datum: $datum' : ''}
-                      ${field === 'datum' ? 'jahr: $jahr' : ''}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpopkontr {
-                  ...TpopfreiwkontrFields
-                  adresseByBearbeiter {
-                    ...AdresseFields
-                    usersByAdresseId {
-                      totalCount
-                    }
-                  }
-                  tpopByTpopId {
-                    ...TpopFields
-                    popByPopId {
-                      ...PopFields
-                      apByApId {
-                        id
-                        ekzaehleinheitsByApId {
-                          nodes {
-                            id
-                            tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                              ...TpopkontrzaehlEinheitWerteFields
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                  tpopkontrzaehlsByTpopkontrId {
-                    nodes {
-                      id
-                      anzahl
-                      einheit
-                    }
-                  }
-                }
-              }
-            }
-            ${adresseFragment}
-            ${popFragment}
-            ${tpopFragment}
-            ${tpopfreiwkontrFragment}
-            ${tpopkontrzaehlEinheitWerteFragment}
-          `,
-          variables,
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
-      setErrors({})
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      showFilter,
-      row.id,
-      row.typ,
-      row.jahr,
-      row.datum,
-      row.bemerkungen,
-      row.flaecheUeberprueft,
-      row.deckungVegetation,
-      row.deckungNackterBoden,
-      row.deckungApArt,
-      row.vegetationshoeheMaximum,
-      row.vegetationshoeheMittel,
-      row.gefaehrdung,
-      row.tpopId,
-      row.bearbeiter,
-      row.planVorhanden,
-      row.jungpflanzenVorhanden,
-      row.apberNichtRelevant,
-      row.apberNichtRelevantGrund,
-      row.ekfBemerkungen,
-      row.tpopByTpopId,
-      row.tpopkontrzaehlsByTpopkontrId,
-      user.name,
-      dataFilterSetValue,
-      treeName,
-      client,
-    ],
+    async (event) =>
+      dataFilterSetValue({
+        treeName,
+        table: 'tpopfreiwkontr',
+        key: event.target.name,
+        value: ifIsNumericAsNumber(event.target.value),
+      }),
+    [dataFilterSetValue, treeName],
   )
 
   useEffect(() => {
@@ -348,13 +228,7 @@ const TpopfreiwkontrForm = ({
     <FormContainer>
       <GridContainer width={width}>
         <Title row={row} />
-        <Headdata
-          pop={pop}
-          tpop={tpop}
-          row={row}
-          showFilter={showFilter}
-          treeName={treeName}
-        />
+        <Headdata pop={pop} tpop={tpop} row={row} treeName={treeName} />
         <Besttime row={row} />
         <Date saveToDb={saveToDb} row={row} errors={errors} />
         <Map

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useEffect, useContext, useState } from 'react'
 import styled from 'styled-components'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
@@ -17,13 +17,14 @@ import { simpleTypes as tpopfreiwkontrType } from '../../../../store/Tree/DataFi
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner'
 import TpopfreiwkontrForm from './Form'
+import OrTabs from './Tabs'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: #ffd3a7;
   @media print {
     font-size: 11px;
     height: auto;
@@ -41,13 +42,41 @@ const StyledIconButton = styled(IconButton)`
   color: white !important;
   margin-right: 10px !important;
 `
+const FilterCommentTitle = styled.div`
+  margin-top: -10px;
+  padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
+`
+const FilterCommentList = styled.ul`
+  margin-bottom: 10px;
+`
+const FilterComment = styled.li`
+  margin-top: -10px;
+  padding: 0 10px 0 10px;
+  font-size: 0.75em;
+`
 
 const Tpopfreiwkontr = ({ treeName, showFilter = true }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification, isPrint, setIsPrint, view, user } = store
   const tree = store[treeName]
-  const { activeNodeArray, dataFilter } = tree
+  const {
+    activeNodeArray,
+    dataFilter,
+    ekfGqlFilter,
+    nodeLabelFilter,
+    mapFilter,
+    apFilter,
+    artIsFiltered,
+    popIsFiltered,
+    tpopIsFiltered,
+    apIdInActiveNodeArray,
+    popIdInActiveNodeArray,
+    tpopIdInActiveNodeArray,
+  } = tree
 
   const id = '99999999-9999-9999-9999-999999999999'
   const { data, loading, error, refetch } = useQuery(query, {
@@ -86,8 +115,8 @@ const Tpopfreiwkontr = ({ treeName, showFilter = true }) => {
       tpopkontrFilter,
       allTpopkontrFilter,
       apId: activeNodeArray[3],
-      apIdExists: !!activeNodeArray[3] && showFilter,
-      apIdNotExists: !activeNodeArray[3] && showFilter,
+      apIdExists: !!activeNodeArray[3],
+      apIdNotExists: !activeNodeArray[3],
     },
   })
 
@@ -95,28 +124,23 @@ const Tpopfreiwkontr = ({ treeName, showFilter = true }) => {
 
   let totalNr
   let filteredNr
-  let row
-  if (showFilter) {
-    row = dataFilter.tpopfreiwkontr
-    if (activeNodeArray[3]) {
-      const popsOfAp = dataTpopkontrs?.popsOfAp?.nodes ?? []
-      const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
-      totalNr = !tpopsOfAp.length
-        ? '...'
-        : tpopsOfAp
-            .map((p) => p?.tpopkontrs?.totalCount)
-            .reduce((acc = 0, val) => acc + val)
-      filteredNr = !tpopsOfAp.length
-        ? '...'
-        : tpopsOfAp
-            .map((p) => p?.tpopkontrsFiltered?.totalCount)
-            .reduce((acc = 0, val) => acc + val)
-    } else {
-      totalNr = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
-      filteredNr = dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
-    }
+  let row = dataFilter.tpopfreiwkontr
+  if (activeNodeArray[3]) {
+    const popsOfAp = dataTpopkontrs?.popsOfAp?.nodes ?? []
+    const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
+    totalNr = !tpopsOfAp.length
+      ? '...'
+      : tpopsOfAp
+          .map((p) => p?.tpopkontrs?.totalCount)
+          .reduce((acc = 0, val) => acc + val)
+    filteredNr = !tpopsOfAp.length
+      ? '...'
+      : tpopsOfAp
+          .map((p) => p?.tpopkontrsFiltered?.totalCount)
+          .reduce((acc = 0, val) => acc + val)
   } else {
-    row = data?.tpopkontrById ?? {}
+    totalNr = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
+    filteredNr = dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
   }
 
   useEffect(() => {
@@ -196,58 +220,31 @@ const Tpopfreiwkontr = ({ treeName, showFilter = true }) => {
   if (Object.keys(row).length === 0) return null
 
   return (
-    <Container showfilter={showFilter}>
-      {!(view === 'ekf') && showFilter && (
-        <FilterTitle
-          title="Freiwilligen-Kontrollen"
-          treeName={treeName}
-          table="tpopfreiwkontr"
-          totalNr={totalNr}
-          filteredNr={filteredNr}
-        />
-      )}
-      {!(view === 'ekf') && !showFilter && (
-        <FormTitle
-          apId={apId}
-          title="Freiwilligen-Kontrolle"
-          treeName={treeName}
-          buttons={
-            <>
-              <StyledIconButton onClick={onClickPrint} title="drucken">
-                <MdPrint />
-              </StyledIconButton>
-            </>
-          }
-        />
-      )}
-      {isPrint ? (
-        <TpopfreiwkontrForm
-          treeName={treeName}
-          showFilter={showFilter}
-          data={data}
-          row={row}
-          apId={apId}
-          refetch={refetch}
-        />
-      ) : (
-        <ScrollContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-          >
-            <TpopfreiwkontrForm
-              treeName={treeName}
-              showFilter={showFilter}
-              data={data}
-              row={row}
-              apId={apId}
-              refetch={refetch}
-            />
-          </SimpleBar>
-        </ScrollContainer>
-      )}
+    <Container>
+      <FilterTitle
+        title="Freiwilligen-Kontrollen"
+        treeName={treeName}
+        table="tpopfreiwkontr"
+        totalNr={totalNr}
+        filteredNr={filteredNr}
+      />
+      <ScrollContainer>
+        <SimpleBar
+          style={{
+            maxHeight: '100%',
+            height: '100%',
+          }}
+        >
+          <TpopfreiwkontrForm
+            treeName={treeName}
+            showFilter={showFilter}
+            data={data}
+            row={row}
+            apId={apId}
+            refetch={refetch}
+          />
+        </SimpleBar>
+      </ScrollContainer>
     </Container>
   )
 }
