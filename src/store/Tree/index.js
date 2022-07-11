@@ -3,6 +3,7 @@ import isEqual from 'lodash/isEqual'
 import queryString from 'query-string'
 import { navigate } from 'gatsby'
 import nestedObjectAssign from 'nested-object-assign'
+import isUuid from 'is-uuid'
 
 import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
@@ -22,13 +23,6 @@ import {
   initial as initialTpopmassn,
 } from './DataFilter/tpopmassn'
 import { simpleTypes as apType } from './DataFilter/ap'
-import apIdInUrl from '../../modules/apIdInUrl'
-import projIdInUrl from '../../modules/projIdInUrl'
-import ekfIdInUrl from '../../modules/ekfIdInUrl'
-import apberuebersichtIdInUrl from '../../modules/apberuebersichtIdInUrl'
-import apberIdInUrl from '../../modules/apberIdInUrl'
-import popIdInUrl from '../../modules/popIdInUrl'
-import tpopIdInUrl from '../../modules/tpopIdInUrl'
 import exists from '../../modules/exists'
 
 export default types
@@ -114,32 +108,80 @@ export default types
   }))
   .views((self) => ({
     get apIdInActiveNodeArray() {
-      return apIdInUrl(self.activeNodeArray)
+      if (
+        self.activeNodeArray.length > 3 &&
+        self.activeNodeArray[2] === 'Arten'
+      ) {
+        const id = self.activeNodeArray[3]
+        if (isUuid.anyNonNil(id)) return id
+      }
+      return undefined
     },
     get projIdInActiveNodeArray() {
-      return projIdInUrl(self.activeNodeArray)
+      if (self.activeNodeArray.includes('Projekte')) {
+        const indexOfId = self.activeNodeArray.indexOf('Projekte') + 1
+        if (self.activeNodeArray.length > indexOfId) {
+          const id = self.activeNodeArray?.[indexOfId]
+          if (isUuid.anyNonNil(id)) return id
+        }
+      }
+      return undefined
     },
     get ekfIdInActiveNodeArray() {
-      return ekfIdInUrl(self.activeNodeArray)
+      if (self.activeNodeArray.includes('Freiwilligen-Kontrollen')) {
+        const indexOfId =
+          self.activeNodeArray.indexOf('Freiwilligen-Kontrollen') + 1
+        if (self.activeNodeArray.length > indexOfId) {
+          const id = self.activeNodeArray?.[indexOfId]
+          if (isUuid.anyNonNil(id)) return id
+        }
+      }
+      return undefined
     },
     get apberIdInActiveNodeArray() {
-      return apberIdInUrl(self.activeNodeArray)
+      if (self.activeNodeArray[4] === 'AP-Berichte') {
+        const indexOfId = self.activeNodeArray.indexOf('AP-Berichte') + 1
+        if (self.activeNodeArray.length > indexOfId) {
+          const id = self.activeNodeArray?.[indexOfId]
+          if (isUuid.anyNonNil(id)) return id
+        }
+      }
+      return undefined
     },
     get apberuebersichtIdInActiveNodeArray() {
-      return apberuebersichtIdInUrl(self.activeNodeArray)
+      if (self.activeNodeArray[2] === 'AP-Berichte') {
+        const indexOfId = self.activeNodeArray.indexOf('AP-Berichte') + 1
+        if (self.activeNodeArray.length > indexOfId) {
+          const id = self.activeNodeArray?.[indexOfId]
+          if (isUuid.anyNonNil(id)) return id
+        }
+      }
+      return undefined
     },
     get popIdInActiveNodeArray() {
-      return popIdInUrl(self.activeNodeArray)
+      if (
+        self.activeNodeArray.length > 5 &&
+        self.activeNodeArray[4] === 'Populationen'
+      ) {
+        const id = self.activeNodeArray[5]
+        if (isUuid.anyNonNil(id)) return id
+      }
+      return undefined
     },
     get tpopIdInActiveNodeArray() {
-      return tpopIdInUrl(self.activeNodeArray)
+      if (self.activeNodeArray.includes('Teil-Populationen')) {
+        const indexOfId = self.activeNodeArray.indexOf('Teil-Populationen') + 1
+        if (self.activeNodeArray.length > indexOfId) {
+          const id = self.activeNodeArray?.[indexOfId]
+          if (isUuid.anyNonNil(id)) return id
+        }
+      }
+      return undefined
     },
     get apGqlFilter() {
       const store = getParent(self)
       // 1. prepare hiearchy filter
-      // need to slice proxy to rerender on change
-      const aNA = self.activeNodeArray.slice()
-      const projId = aNA[0] === 'Projekte' ? aNA[1] : undefined
+      const projId = self.projIdInActiveNodeArray
       const singleFilterByHierarchy = projId
         ? { projId: { equalTo: projId } }
         : {}
@@ -260,10 +302,8 @@ export default types
     },
     get popGqlFilter() {
       // 1. prepare hiearchy filter
-      // need to slice proxy to rerender on change
-      const aNA = self.activeNodeArray.slice()
-      const projId = aNA[0] === 'Projekte' ? aNA[1] : undefined
-      const apId = aNA[2] === 'Arten' ? aNA[3] : undefined
+      const projId = self.projIdInActiveNodeArray
+      const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
       const projHiearchyFilter = projId
         ? { apByApId: { projId: { equalTo: projId } } }
@@ -371,11 +411,9 @@ export default types
     },
     get tpopGqlFilter() {
       // 1. prepare hiearchy filter
-      // need to slice proxy to rerender on change
-      const aNA = self.activeNodeArray.slice()
-      const projId = aNA[0] === 'Projekte' ? aNA[1] : undefined
-      const apId = aNA[2] === 'Arten' ? aNA[3] : undefined
-      const popId = aNA[4] === 'Populationen' ? aNA[5] : undefined
+      const projId = self.projIdInActiveNodeArray
+      const apId = self.apIdInActiveNodeArray
+      const popId = self.popIdInActiveNodeArray
       const popHierarchyFilter = popId ? { popId: { equalTo: popId } } : {}
       const apHiearchyFilter = apId
         ? { popByPopId: { apId: { equalTo: apId } } }
@@ -491,12 +529,10 @@ export default types
     },
     get tpopmassnGqlFilter() {
       // 1. prepare hiearchy filter
-      // need to slice proxy to rerender on change
-      const aNA = self.activeNodeArray.slice()
-      const projId = aNA[0] === 'Projekte' ? aNA[1] : undefined
-      const apId = aNA[3] === 'Arten' ? aNA[3] : undefined
-      const popId = aNA[4] === 'Populationen' ? aNA[5] : undefined
-      const tpopId = aNA[6] === 'Teil-Populationen' ? aNA[7] : undefined
+      const projId = self.projIdInActiveNodeArray
+      const apId = self.apIdInActiveNodeArray
+      const popId = self.popIdInActiveNodeArray
+      const tpopId = self.tpopIdInActiveNodeArray
       const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
       const popHierarchyFilter = popId
         ? { tpopByTpopId: { popId: { equalTo: popId } } }
