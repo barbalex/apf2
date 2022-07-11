@@ -1,7 +1,5 @@
 import { gql } from '@apollo/client'
 
-import { tpopfeldkontr } from '../../../shared/fragments'
-
 export default gql`
   query tpopkontrByIdQueryForEkFilter {
     allTpopkontrIdbiotuebereinstWertes(orderBy: SORT_ASC) {
@@ -30,5 +28,4 @@ export default gql`
       }
     }
   }
-  ${tpopfeldkontr}
 `
