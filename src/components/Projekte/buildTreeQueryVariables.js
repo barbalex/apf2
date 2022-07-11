@@ -1,9 +1,6 @@
 import uniq from 'lodash/uniq'
 import isUuid from 'is-uuid'
 
-import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tpopfeldkontr'
-import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
-
 /**
  * returns a filter for every branch of the nav tree
  */
@@ -25,12 +22,13 @@ import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/t
  */
 
 const buildTreeQueryVariables = ({
-  dataFilter,
   openNodes,
   nodeLabelFilter,
   popGqlFilter,
   tpopGqlFilter,
   tpopmassnGqlFilter,
+  ekGqlFilter,
+  ekfGqlFilter,
   apGqlFilter,
 }) => {
   // apFilter is used for form nodeLabelFilter AND apFilter of tree :-(
@@ -138,45 +136,6 @@ const buildTreeQueryVariables = ({
         nArray[9],
     )
 
-  const tpopfeldkontrFilter = {
-    or: [
-      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
-      { typ: { isNull: true } },
-    ],
-    tpopId: { in: tpop },
-  }
-  const tpopfeldkontrFilterValues = Object.entries(
-    dataFilter.tpopfeldkontr,
-  ).filter((e) => e[1] || e[1] === 0)
-  tpopfeldkontrFilterValues.forEach(([key, value]) => {
-    const expression =
-      tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopfeldkontrFilter[key] = { [expression]: value }
-  })
-  if (nodeLabelFilter.tpopkontr) {
-    tpopfeldkontrFilter.labelEk = {
-      includesInsensitive: nodeLabelFilter.tpopkontr,
-    }
-  }
-
-  const tpopfreiwkontrFilter = {
-    typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
-    tpopId: { in: tpop },
-  }
-  const tpopfreiwkontrFilterValues = Object.entries(
-    dataFilter.tpopfreiwkontr,
-  ).filter((e) => e[1] || e[1] === 0)
-  tpopfreiwkontrFilterValues.forEach(([key, value]) => {
-    const expression =
-      tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopfreiwkontrFilter[key] = { [expression]: value }
-  })
-  if (nodeLabelFilter.tpopkontr) {
-    tpopfreiwkontrFilter.labelEkf = {
-      includesInsensitive: nodeLabelFilter.tpopkontr,
-    }
-  }
-
   const apsFilter = apGqlFilter.filtered
   const apberuebersichtsFilter = { projId: { in: projekt } }
   if (nodeLabelFilter.apberuebersicht) {
@@ -260,8 +219,8 @@ const buildTreeQueryVariables = ({
       includesInsensitive: nodeLabelFilter.tpopber,
     }
   }
-  const tpopfeldkontrsFilter = { ...tpopfeldkontrFilter }
-  const tpopfreiwkontrsFilter = { ...tpopfreiwkontrFilter }
+  const tpopfeldkontrsFilter = ekGqlFilter.filtered
+  const tpopfreiwkontrsFilter = ekfGqlFilter.filtered
 
   const tpopkontrzaehlsFilter = {
     tpopkontrId: { in: tpopkontr },

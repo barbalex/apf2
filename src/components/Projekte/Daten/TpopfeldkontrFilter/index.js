@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback, useContext, useEffect } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
@@ -26,6 +26,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner'
+import OrTabs from './Tabs'
 
 const Container = styled.div`
   height: 100%;
@@ -66,6 +67,21 @@ const StyledTab = styled(Tab)`
 const TabContent = styled.div`
   height: 100%;
 `
+const FilterCommentTitle = styled.div`
+  margin-top: -10px;
+  padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
+`
+const FilterCommentList = styled.ul`
+  margin-bottom: 10px;
+`
+const FilterComment = styled.li`
+  margin-top: -10px;
+  padding: 0 10px 0 10px;
+  font-size: 0.75em;
+`
 
 const tpopkontrTypWerte = [
   {
@@ -81,44 +97,42 @@ const tpopkontrTypWerte = [
 const TpopfeldkontrFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue, urlQuery, setUrlQuery } = store
-  const { activeNodeArray, dataFilter, filterWidth } = store[treeName]
+  const {
+    activeNodeArray,
+    dataFilter,
+    filterWidth,
+    ekGqlFilter,
+    nodeLabelFilter,
+    mapFilter,
+    apFilter,
+    artIsFiltered,
+    popIsFiltered,
+    tpopIsFiltered,
+    apIdInActiveNodeArray,
+    popIdInActiveNodeArray,
+    tpopIdInActiveNodeArray,
+  } = store[treeName]
+
+  const apId = apIdInActiveNodeArray
+  const popId = popIdInActiveNodeArray
+  const tpopId = tpopIdInActiveNodeArray
+
+  const [activeTab, setActiveTab] = useState(0)
+  useEffect(() => {
+    if (dataFilter.tpopfeldkontr.length - 1 < activeTab) {
+      // filter was emptied, need to set correct tab
+      setActiveTab(0)
+    }
+  }, [activeTab, dataFilter.tpopfeldkontr.length])
+
+  const row = dataFilter.tpopfeldkontr[activeTab]
 
   const width = filterWidth
-  const apId = activeNodeArray[3]
   const { data, loading, error } = useQuery(query)
-  const allTpopkontrFilter = {
-    or: [
-      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
-      { typ: { isNull: true } },
-    ],
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopkontrFilter = {
-    or: [
-      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
-      { typ: { isNull: true } },
-    ],
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopfeldkontrFilterValues = Object.entries(
-    dataFilter.tpopfeldkontr,
-  ).filter((e) => e[1] || e[1] === 0)
-  tpopfeldkontrFilterValues.forEach(([key, value]) => {
-    const expression =
-      tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopkontrFilter[key] = { [expression]: value }
-  })
   const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
     variables: {
-      allTpopkontrFilter,
-      tpopkontrFilter,
-      apId,
-      apIdExists: !!apId,
-      apIdNotExists: !apId,
+      filteredFilter: ekGqlFilter.filtered,
+      allFilter: ekGqlFilter.all,
     },
   })
 
@@ -136,27 +150,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
     [setUrlQuery, urlQuery],
   )
 
-  let totalNr
-  let filteredNr
-  const row = dataFilter.tpopfeldkontr
-  if (apId) {
-    const pops = dataTpopkontrs?.allPops?.nodes ?? []
-    const tpops = flatten(pops.map((p) => p?.tpops?.nodes ?? []))
-    totalNr = !tpops.length
-      ? '...'
-      : tpops
-          .map((p) => p?.tpopkontrs?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-    filteredNr = !tpops.length
-      ? '...'
-      : tpops
-          .map((p) => p?.tpopkontrsFiltered?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-  } else {
-    totalNr = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
-    filteredNr = dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
-  }
-
   const saveToDb = useCallback(
     async (event) =>
       dataFilterSetValue({
@@ -164,8 +157,9 @@ const TpopfeldkontrFilter = ({ treeName }) => {
         table: 'tpopfeldkontr',
         key: event.target.name,
         value: ifIsNumericAsNumber(event.target.value),
+        index: activeTab,
       }),
-    [dataFilterSetValue, treeName],
+    [activeTab, dataFilterSetValue, treeName],
   )
 
   const aeLrWerte = (data?.allAeLrDelarzes?.nodes ?? [])
@@ -176,6 +170,41 @@ const TpopfeldkontrFilter = ({ treeName }) => {
 
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
+
+    const navApFilterComment = apFilter
+      ? `Navigationsbaum, "nur AP"-Filter: Nur Massnahmen von AP-Arten werden berücksichtigt.`
+      : undefined
+    const navHiearchyComment = tpopId
+      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
+      : popId
+      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
+      : apId
+      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
+      : undefined
+    const navLabelComment = nodeLabelFilter.tpopmassn
+      ? `Navigationsbaum, Label-Filter: Das Label der Massnahmen wird nach "${nodeLabelFilter.tpopmassn}" gefiltert.`
+      : undefined
+    const artHierarchyComment = artIsFiltered
+      ? 'Formular-Filter, Ebene Art: Es werden nur Massnahmen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+      : undefined
+    const popHierarchyComment = popIsFiltered
+      ? 'Formular-Filter, Ebene Population: Es werden nur Massnahmen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+      : undefined
+    const tpopHierarchyComment = tpopIsFiltered
+      ? 'Formular-Filter, Ebene Teil-Population: Es werden nur Massnahmen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+      : undefined
+    const mapFilterComment = mapFilter
+      ? 'Karten-Filter: Nur Massnahmen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
+      : undefined
+  
+    const showFilterComments =
+      !!navApFilterComment ||
+      !!navHiearchyComment ||
+      !!navLabelComment ||
+      !!artHierarchyComment ||
+      !!popHierarchyComment ||
+      !!tpopHierarchyComment ||
+      !!mapFilter
 
   if (loading) return <Spinner />
 
@@ -188,8 +217,8 @@ const TpopfeldkontrFilter = ({ treeName }) => {
           title="Feld-Kontrollen"
           treeName={treeName}
           table="tpopfeldkontr"
-          totalNr={totalNr}
-          filteredNr={filteredNr}
+          totalNr={dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'}
+          filteredNr={dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'}
         />
         <FieldsContainer>
           <Tabs

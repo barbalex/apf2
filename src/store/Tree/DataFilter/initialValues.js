@@ -9,8 +9,8 @@ const initialValues = {
   ap: [ap],
   pop: [pop],
   tpop: [tpop],
-  tpopfeldkontr,
-  tpopfreiwkontr,
+  tpopfeldkontr: [tpopfeldkontr],
+  tpopfreiwkontr: [tpopfreiwkontr],
   tpopmassn: [tpopmassn],
 }
 

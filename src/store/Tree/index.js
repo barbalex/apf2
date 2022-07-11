@@ -22,6 +22,14 @@ import {
   simpleTypes as tpopmassnType,
   initial as initialTpopmassn,
 } from './DataFilter/tpopmassn'
+import {
+  simpleTypes as tpopfeldkontrType,
+  initial as initialTpopfeldkontr,
+} from './DataFilter/tpopfeldkontr'
+import {
+  simpleTypes as tpopfreiwkontrType,
+  initial as initialTpopfreiwkontr,
+} from './DataFilter/tpopfreiwkontr'
 import { simpleTypes as apType } from './DataFilter/ap'
 import exists from '../../modules/exists'
 
@@ -281,7 +289,7 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
-      console.log('apGqlFilter:', apGqlFilter)
+      // console.log('apGqlFilter:', apGqlFilter)
 
       return apGqlFilter
     },
@@ -396,7 +404,7 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
-      console.log('popGqlFilter:', popGqlFilter)
+      // console.log('popGqlFilter:', popGqlFilter)
 
       return popGqlFilter
     },
@@ -511,7 +519,7 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
-      console.log('tpopGqlFilter:', tpopGqlFilter)
+      // console.log('tpopGqlFilter:', tpopGqlFilter)
 
       return tpopGqlFilter
     },
@@ -711,13 +719,13 @@ export default types
           singleFilterByParentFiltersForFiltered,
         )
         // add data filter
-        const dataFilterTpopmassn = { ...filter }
-        const tpopmassnFilterValues = Object.entries(
-          dataFilterTpopmassn,
-        ).filter((e) => e[1] || e[1] === 0)
-        tpopmassnFilterValues.forEach(([key, value]) => {
+        const dataFilter = { ...filter }
+        const filterValues = Object.entries(dataFilter).filter(
+          (e) => e[1] || e[1] === 0,
+        )
+        filterValues.forEach(([key, value]) => {
           const expression =
-            tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
+            tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
@@ -836,13 +844,13 @@ export default types
           singleFilterByParentFiltersForFiltered,
         )
         // add data filter
-        const dataFilterTpopmassn = { ...filter }
-        const tpopmassnFilterValues = Object.entries(
-          dataFilterTpopmassn,
-        ).filter((e) => e[1] || e[1] === 0)
-        tpopmassnFilterValues.forEach(([key, value]) => {
+        const dataFilter = { ...filter }
+        const filterValues = Object.entries(dataFilter).filter(
+          (e) => e[1] || e[1] === 0,
+        )
+        filterValues.forEach(([key, value]) => {
           const expression =
-            tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
+            tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
