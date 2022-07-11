@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
-import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { MdPrint } from 'react-icons/md'
@@ -8,12 +7,9 @@ import IconButton from '@mui/material/IconButton'
 import SimpleBar from 'simplebar-react'
 
 import query from './query'
-import queryTpopkontrs from './queryTpopkontrs'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import FormTitle from '../../../shared/FormTitle'
-import FilterTitle from '../../../shared/FilterTitle'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopfreiwkontrType } from '../../../../store/Tree/DataFilter/tpopfreiwkontr'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner'
 import TpopfreiwkontrForm from './Form'
@@ -23,7 +19,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
   @media print {
     font-size: 11px;
     height: auto;
@@ -34,10 +29,6 @@ const Container = styled.div`
     page-break-after: always;
   }
 `
-const LoadingContainer = styled.div`
-  height: 100%;
-  padding: 10px;
-`
 const ScrollContainer = styled.div`
   overflow-y: auto;
 `
@@ -46,19 +37,18 @@ const StyledIconButton = styled(IconButton)`
   margin-right: 10px !important;
 `
 
-const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
+const Tpopfreiwkontr = ({ treeName, id: idPassed }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification, isPrint, setIsPrint, view, user } = store
   const tree = store[treeName]
-  const { activeNodeArray, dataFilter } = tree
+  const { activeNodeArray } = tree
 
   let id = idPassed
     ? idPassed
     : activeNodeArray.length > 9
     ? activeNodeArray[9]
     : '99999999-9999-9999-9999-999999999999'
-  if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const { data, loading, error, refetch } = useQuery(query, {
     variables: {
       id,
@@ -70,63 +60,9 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
     data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??
     '99999999-9999-9999-9999-999999999999'
 
-  const allTpopkontrFilter = {
-    typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopkontrFilter = {
-    typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopkontrFilterValues = Object.entries(
-    dataFilter.tpopfreiwkontr,
-  ).filter((e) => e[1] || e[1] === 0)
-  tpopkontrFilterValues.forEach(([key, value]) => {
-    const expression =
-      tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopkontrFilter[key] = { [expression]: value }
-  })
-  const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
-    variables: {
-      tpopkontrFilter,
-      allTpopkontrFilter,
-      apId: activeNodeArray[3],
-      apIdExists: !!activeNodeArray[3] && showFilter,
-      apIdNotExists: !activeNodeArray[3] && showFilter,
-    },
-  })
-
   const zaehls = data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
 
-  let totalNr
-  let filteredNr
-  let row
-  if (showFilter) {
-    row = dataFilter.tpopfreiwkontr
-    if (activeNodeArray[3]) {
-      const popsOfAp = dataTpopkontrs?.popsOfAp?.nodes ?? []
-      const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
-      totalNr = !tpopsOfAp.length
-        ? '...'
-        : tpopsOfAp
-            .map((p) => p?.tpopkontrs?.totalCount)
-            .reduce((acc = 0, val) => acc + val)
-      filteredNr = !tpopsOfAp.length
-        ? '...'
-        : tpopsOfAp
-            .map((p) => p?.tpopkontrsFiltered?.totalCount)
-            .reduce((acc = 0, val) => acc + val)
-    } else {
-      totalNr = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
-      filteredNr = dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
-    }
-  } else {
-    row = data?.tpopkontrById ?? {}
-  }
+  const row = data?.tpopkontrById ?? {}
 
   useEffect(() => {
     let isActive = true
@@ -205,17 +141,8 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   if (Object.keys(row).length === 0) return null
 
   return (
-    <Container showfilter={showFilter}>
-      {!(view === 'ekf') && showFilter && (
-        <FilterTitle
-          title="Freiwilligen-Kontrollen"
-          treeName={treeName}
-          table="tpopfreiwkontr"
-          totalNr={totalNr}
-          filteredNr={filteredNr}
-        />
-      )}
-      {!(view === 'ekf') && !showFilter && (
+    <Container>
+      {!(view === 'ekf') && (
         <FormTitle
           apId={apId}
           title="Freiwilligen-Kontrolle"
@@ -232,7 +159,6 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
       {isPrint ? (
         <TpopfreiwkontrForm
           treeName={treeName}
-          showFilter={showFilter}
           data={data}
           row={row}
           apId={apId}
@@ -248,7 +174,6 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
           >
             <TpopfreiwkontrForm
               treeName={treeName}
-              showFilter={showFilter}
               data={data}
               row={row}
               apId={apId}
