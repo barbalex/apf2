@@ -143,7 +143,7 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const More = ({ saveToDb, row, errors }) => (
+const More = ({ saveToDb, row }) => (
   <Container>
     <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
     <MoreFlVal>
@@ -153,7 +153,6 @@ const More = ({ saveToDb, row, errors }) => (
         row={row}
         type="number"
         saveToDb={saveToDb}
-        errors={errors}
       />
     </MoreFlVal>
     <MoreFlMeasure>
@@ -181,7 +180,6 @@ const More = ({ saveToDb, row, errors }) => (
           }
           saveToDb(fakeEvent)
         }}
-        error={errors.jungpflanzenVorhanden}
       />
     </JungPflVal2>
     <VeghoeheLabel0>Vegetationshöhe</VeghoeheLabel0>
@@ -196,7 +194,6 @@ const More = ({ saveToDb, row, errors }) => (
         row={row}
         type="number"
         saveToDb={saveToDb}
-        errors={errors}
       />
     </VeghoeheMaxVal>
     <VeghoeheMittLabel>Mittel (cm)</VeghoeheMittLabel>
@@ -207,7 +204,6 @@ const More = ({ saveToDb, row, errors }) => (
         row={row}
         type="number"
         saveToDb={saveToDb}
-        errors={errors}
       />
     </VeghoeheMittVal>
     <VeghoeheMinLabel>(Minimum)</VeghoeheMinLabel>

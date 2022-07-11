@@ -34,7 +34,7 @@ const RemarksVal = styled.div`
   }
 `
 
-const Remarks = ({ saveToDb, row, errors }) => {
+const Remarks = ({ saveToDb, row }) => {
   //console.log('Remarks rendering')
 
   return (
@@ -54,7 +54,6 @@ const Remarks = ({ saveToDb, row, errors }) => {
           type="text"
           multiLine
           saveToDb={saveToDb}
-          errors={errors}
         />
       </RemarksVal>
     </Container>

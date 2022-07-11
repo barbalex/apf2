@@ -52,7 +52,7 @@ const MapVal2 = styled.div`
   }
 `
 
-const Map = ({ saveToDb, row, errors }) => {
+const Map = ({ saveToDb, row }) => {
   const store = useContext(storeContext)
   const { isPrint } = store
 
@@ -85,7 +85,6 @@ const Map = ({ saveToDb, row, errors }) => {
           name="planVorhanden"
           value={falseValue}
           saveToDb={onSaveFalse}
-          error={errors.planVorhanden}
         />
       </MapVal2>
     </Container>

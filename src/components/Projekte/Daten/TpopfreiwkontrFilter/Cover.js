@@ -78,7 +78,7 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const Cover = ({ saveToDb, row, errors }) => {
+const Cover = ({ saveToDb, row }) => {
   //console.log('Cover rendering')
 
   return (
@@ -91,7 +91,6 @@ const Cover = ({ saveToDb, row, errors }) => {
           row={row}
           type="number"
           saveToDb={saveToDb}
-          errors={errors}
         />
       </DeckApArtVal>
       <DeckApArtMass>%</DeckApArtMass>
@@ -103,7 +102,6 @@ const Cover = ({ saveToDb, row, errors }) => {
           row={row}
           type="number"
           saveToDb={saveToDb}
-          errors={errors}
         />
       </DeckNaBoVal>
       <DeckNaBoMass>%</DeckNaBoMass>

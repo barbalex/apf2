@@ -34,7 +34,7 @@ const DangerVal = styled.div`
   }
 `
 
-const Danger = ({ saveToDb, row, errors }) => {
+const Danger = ({ saveToDb, row }) => {
   //console.log('Danger rendering')
 
   return (
@@ -53,7 +53,6 @@ const Danger = ({ saveToDb, row, errors }) => {
           type="text"
           multiLine
           saveToDb={saveToDb}
-          errors={errors}
         />
       </DangerVal>
     </Container>

@@ -37,7 +37,7 @@ const DateVal = styled.div`
   }
 `
 
-const Date = ({ saveToDb, row, errors }) => (
+const Date = ({ saveToDb, row }) => (
   <Container>
     <DateLabel>Aufnahme-datum</DateLabel>
     <DateVal>
@@ -46,7 +46,6 @@ const Date = ({ saveToDb, row, errors }) => (
         name="datum"
         value={row.datum}
         saveToDb={saveToDb}
-        error={errors.datum}
       />
     </DateVal>
   </Container>

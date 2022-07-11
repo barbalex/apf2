@@ -42,7 +42,7 @@ const Grund = styled.div`
   }
 `
 
-const Verification = ({ saveToDb, row, errors }) => (
+const Verification = ({ saveToDb, row }) => (
   <Container>
     <Relevant>
       <RadioButton
@@ -51,7 +51,6 @@ const Verification = ({ saveToDb, row, errors }) => (
         label="Im Jahresbericht nicht berücksichtigen"
         value={row.apberNichtRelevant}
         saveToDb={saveToDb}
-        error={errors.apberNichtRelevant}
       />
     </Relevant>
     <Grund>
@@ -63,7 +62,6 @@ const Verification = ({ saveToDb, row, errors }) => (
         type="text"
         multiLine
         saveToDb={saveToDb}
-        errors={errors}
       />
     </Grund>
   </Container>

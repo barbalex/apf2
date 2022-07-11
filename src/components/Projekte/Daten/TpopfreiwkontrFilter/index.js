@@ -3,14 +3,12 @@ import styled from 'styled-components'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { MdPrint } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import SimpleBar from 'simplebar-react'
 
 import query from './query'
 import queryTpopkontrs from './queryTpopkontrs'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
-import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopfreiwkontrType } from '../../../../store/Tree/DataFilter/tpopfreiwkontr'
@@ -58,10 +56,10 @@ const FilterComment = styled.li`
   font-size: 0.75em;
 `
 
-const Tpopfreiwkontr = ({ treeName, showFilter = true }) => {
+const Tpopfreiwkontr = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, isPrint, setIsPrint, view, user } = store
+  const { enqueNotification, user } = store
   const tree = store[treeName]
   const {
     activeNodeArray,
@@ -203,16 +201,6 @@ const Tpopfreiwkontr = ({ treeName, showFilter = true }) => {
     zaehls.length,
   ])
 
-  const onClickPrint = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      setIsPrint(true)
-      setTimeout(() => {
-        window.print()
-        setIsPrint(false)
-      })
-    }
-  }, [setIsPrint])
-
   if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
@@ -237,7 +225,6 @@ const Tpopfreiwkontr = ({ treeName, showFilter = true }) => {
         >
           <TpopfreiwkontrForm
             treeName={treeName}
-            showFilter={showFilter}
             data={data}
             row={row}
             apId={apId}
