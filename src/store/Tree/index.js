@@ -139,8 +139,10 @@ export default types
       // 1. prepare hiearchy filter
       // need to slice proxy to rerender on change
       const aNA = self.activeNodeArray.slice()
-      const projId = aNA[1]
-      const singleFilterByHierarchy = { projId: { equalTo: projId } }
+      const projId = aNA[0] === 'Projekte' ? aNA[1] : undefined
+      const singleFilterByHierarchy = projId
+        ? { projId: { equalTo: projId } }
+        : {}
       // 2. prepare data filter
       let filterArrayInStore = self.dataFilter.ap
         ? [...getSnapshot(self.dataFilter.ap)]
@@ -230,12 +232,16 @@ export default types
         (el) => Object.keys(el).length > 0,
       )
 
-      return {
+      const apGqlFilter = {
         all: Object.keys(singleFilterByHierarchy).length
           ? singleFilterByHierarchy
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
+
+      console.log('apGqlFilter:', apGqlFilter)
+
+      return apGqlFilter
     },
     get artIsFiltered() {
       const firstFilterObject = {
@@ -256,8 +262,8 @@ export default types
       // 1. prepare hiearchy filter
       // need to slice proxy to rerender on change
       const aNA = self.activeNodeArray.slice()
-      const projId = aNA[1]
-      const apId = aNA[3]
+      const projId = aNA[0] === 'Projekte' ? aNA[1] : undefined
+      const apId = aNA[2] === 'Arten' ? aNA[3] : undefined
       const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
       const projHiearchyFilter = projId
         ? { apByApId: { projId: { equalTo: projId } } }
@@ -343,12 +349,16 @@ export default types
         (el) => Object.keys(el).length > 0,
       )
 
-      return {
+      const popGqlFilter = {
         all: Object.keys(singleFilterForAll).length
           ? singleFilterForAll
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
+
+      console.log('popGqlFilter:', popGqlFilter)
+
+      return popGqlFilter
     },
     get popIsFiltered() {
       const firstFilterObject = {
@@ -363,9 +373,9 @@ export default types
       // 1. prepare hiearchy filter
       // need to slice proxy to rerender on change
       const aNA = self.activeNodeArray.slice()
-      const projId = aNA[1]
-      const apId = aNA[3]
-      const popId = aNA[5]
+      const projId = aNA[0] === 'Projekte' ? aNA[1] : undefined
+      const apId = aNA[2] === 'Arten' ? aNA[3] : undefined
+      const popId = aNA[4] === 'Populationen' ? aNA[5] : undefined
       const popHierarchyFilter = popId ? { popId: { equalTo: popId } } : {}
       const apHiearchyFilter = apId
         ? { popByPopId: { apId: { equalTo: apId } } }
@@ -456,12 +466,16 @@ export default types
         (el) => Object.keys(el).length > 0,
       )
 
-      return {
+      const tpopGqlFilter = {
         all: Object.keys(singleFilterForAll).length
           ? singleFilterForAll
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
+
+      console.log('tpopGqlFilter:', tpopGqlFilter)
+
+      return tpopGqlFilter
     },
     get tpopIsFiltered() {
       const firstFilterObject = {
@@ -479,10 +493,10 @@ export default types
       // 1. prepare hiearchy filter
       // need to slice proxy to rerender on change
       const aNA = self.activeNodeArray.slice()
-      const projId = aNA[1]
-      const apId = aNA[3]
-      const popId = aNA[5]
-      const tpopId = aNA[7]
+      const projId = aNA[0] === 'Projekte' ? aNA[1] : undefined
+      const apId = aNA[3] === 'Arten' ? aNA[3] : undefined
+      const popId = aNA[4] === 'Populationen' ? aNA[5] : undefined
+      const tpopId = aNA[6] === 'Teil-Populationen' ? aNA[7] : undefined
       const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
       const popHierarchyFilter = popId
         ? { tpopByTpopId: { popId: { equalTo: popId } } }
@@ -582,39 +596,16 @@ export default types
         (el) => Object.keys(el).length > 0,
       )
 
-      return {
+      const tpopmassnGqlFilter = {
         all: Object.keys(singleFilterForAll).length
           ? singleFilterForAll
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
-    },
-    get tpopmassnGqlFilter_old() {
-      const result = Object.fromEntries(
-        Object.entries(getSnapshot(self.dataFilter.tpopmassn))
-          // eslint-disable-next-line no-unused-vars
-          .filter(([key, value]) => exists(value))
-          .map(([key, value]) => {
-            // if is string: includes, else: equalTo
-            const type = simpleTypes.tpopmassn[key]
-            if (type === 'string') {
-              return [key, { includes: value }]
-            }
-            return [key, { equalTo: value }]
-          }),
-      )
-      // if mapFilter is set, filter by its geometry
-      if (self.mapFilter) {
-        result.tpopByTpopId = {
-          geomPoint: {
-            coveredBy: self.mapFilter,
-          },
-        }
-      }
-      // return a valid filter even if no filter criterias exist
-      // but ensure it returns all rows
-      if (Object.entries(result).length === 0) return { id: { isNull: false } }
-      return result
+
+      console.log('tpopmassnGqlFilter:', tpopmassnGqlFilter)
+
+      return tpopmassnGqlFilter
     },
     get tpopkontrGqlFilter() {
       const ek = Object.fromEntries(
