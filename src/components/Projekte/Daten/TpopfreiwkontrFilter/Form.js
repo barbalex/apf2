@@ -105,7 +105,7 @@ const GridContainer = styled.div`
   }
 `
 
-const TpopfreiwkontrForm = ({ treeName, row }) => {
+const TpopfreiwkontrForm = ({ treeName, row, activeTab }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
   const { formWidth: width } = store[treeName]
@@ -120,8 +120,9 @@ const TpopfreiwkontrForm = ({ treeName, row }) => {
         table: 'tpopfreiwkontr',
         key: event.target.name,
         value: ifIsNumericAsNumber(event.target.value),
+        index: activeTab,
       }),
-    [dataFilterSetValue, treeName],
+    [activeTab, dataFilterSetValue, treeName],
   )
 
   return (

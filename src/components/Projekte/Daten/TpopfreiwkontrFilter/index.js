@@ -2,18 +2,14 @@ import React, { useCallback, useEffect, useContext, useState } from 'react'
 import styled from 'styled-components'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import IconButton from '@mui/material/IconButton'
 import SimpleBar from 'simplebar-react'
 
-import query from './query'
 import queryTpopkontrs from './queryTpopkontrs'
-import createTpopkontrzaehl from './createTpopkontrzaehl'
 import FilterTitle from '../../../shared/FilterTitle'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopfreiwkontrType } from '../../../../store/Tree/DataFilter/tpopfreiwkontr'
-import Error from '../../../shared/Error'
-import Spinner from '../../../shared/Spinner'
 import TpopfreiwkontrForm from './Form'
 import OrTabs from './Tabs'
 
@@ -57,9 +53,7 @@ const FilterComment = styled.li`
 `
 
 const Tpopfreiwkontr = ({ treeName }) => {
-  const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, user } = store
   const tree = store[treeName]
   const {
     activeNodeArray,
@@ -76,134 +70,61 @@ const Tpopfreiwkontr = ({ treeName }) => {
     tpopIdInActiveNodeArray,
   } = tree
 
-  const id = '99999999-9999-9999-9999-999999999999'
-  const { data, loading, error, refetch } = useQuery(query, {
-    variables: {
-      id,
-    },
-  })
-  // DO NOT fetch apId from activeNodeArray because this form is also used for mass prints
-  //const apId = activeNodeArray[3]
-  const apId =
-    data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??
-    '99999999-9999-9999-9999-999999999999'
+  const apId = apIdInActiveNodeArray
+  const popId = popIdInActiveNodeArray
+  const tpopId = tpopIdInActiveNodeArray
 
-  const allTpopkontrFilter = {
-    typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopkontrFilter = {
-    typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopkontrFilterValues = Object.entries(
-    dataFilter.tpopfreiwkontr,
-  ).filter((e) => e[1] || e[1] === 0)
-  tpopkontrFilterValues.forEach(([key, value]) => {
-    const expression =
-      tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopkontrFilter[key] = { [expression]: value }
-  })
+  const [activeTab, setActiveTab] = useState(0)
+  useEffect(() => {
+    if (dataFilter.tpopfreiwkontr.length - 1 < activeTab) {
+      // filter was emptied, need to set correct tab
+      setActiveTab(0)
+    }
+  }, [activeTab, dataFilter.tpopfreiwkontr.length])
+
+  const row = dataFilter.tpopfreiwkontr[activeTab]
+
   const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
     variables: {
-      tpopkontrFilter,
-      allTpopkontrFilter,
-      apId: activeNodeArray[3],
-      apIdExists: !!activeNodeArray[3],
-      apIdNotExists: !activeNodeArray[3],
+      filteredFilter: ekfGqlFilter.filtered,
+      allFilter: ekfGqlFilter.all,
     },
   })
 
-  const zaehls = data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+  const navApFilterComment = apFilter
+    ? `Navigationsbaum, "nur AP"-Filter: Nur Freiwilligen-Kontrollen von AP-Arten werden berücksichtigt.`
+    : undefined
+  const navHiearchyComment = tpopId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.'
+    : popId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.'
+    : apId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.'
+    : undefined
+  const navLabelComment = nodeLabelFilter.tpopfeldkontr
+    ? `Navigationsbaum, Label-Filter: Das Label der Freiwilligen-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
+    : undefined
+  const artHierarchyComment = artIsFiltered
+    ? 'Formular-Filter, Ebene Art: Es werden nur Freiwilligen-Kontrollen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const popHierarchyComment = popIsFiltered
+    ? 'Formular-Filter, Ebene Population: Es werden nur Freiwilligen-Kontrollen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const tpopHierarchyComment = tpopIsFiltered
+    ? 'Formular-Filter, Ebene Teil-Population: Es werden nur Freiwilligen-Kontrollen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const mapFilterComment = mapFilter
+    ? 'Karten-Filter: Nur Freiwilligen-Kontrollen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
+    : undefined
 
-  let totalNr
-  let filteredNr
-  let row = dataFilter.tpopfreiwkontr
-  if (activeNodeArray[3]) {
-    const popsOfAp = dataTpopkontrs?.popsOfAp?.nodes ?? []
-    const tpopsOfAp = flatten(popsOfAp.map((p) => p?.tpops?.nodes ?? []))
-    totalNr = !tpopsOfAp.length
-      ? '...'
-      : tpopsOfAp
-          .map((p) => p?.tpopkontrs?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-    filteredNr = !tpopsOfAp.length
-      ? '...'
-      : tpopsOfAp
-          .map((p) => p?.tpopkontrsFiltered?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-  } else {
-    totalNr = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
-    filteredNr = dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
-  }
-
-  useEffect(() => {
-    let isActive = true
-    if (!loading) {
-      // loading data just finished
-      // check if tpopkontr exist
-      const tpopkontrCount = zaehls.length
-      if (tpopkontrCount === 0) {
-        // add counts for all ekzaehleinheit
-        // BUT DANGER: only for ekzaehleinheit with zaehleinheit_id
-        const ekzaehleinheits = (
-          data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
-            ?.ekzaehleinheitsByApId?.nodes ?? []
-        )
-          // remove ekzaehleinheits without zaehleinheit_id
-          .filter((z) => !!z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code)
-
-        Promise.all(
-          ekzaehleinheits.map((z) =>
-            client.mutate({
-              mutation: createTpopkontrzaehl,
-              variables: {
-                tpopkontrId: row.id,
-                einheit:
-                  z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code ?? null,
-                changedBy: user.name,
-              },
-            }),
-          ),
-        )
-          .then(() => {
-            if (!isActive) return
-
-            refetch()
-          })
-          .catch((error) => {
-            if (!isActive) return
-
-            enqueNotification({
-              message: error.message,
-              options: {
-                variant: 'error',
-              },
-            })
-          })
-      }
-    }
-    return () => {
-      isActive = false
-    }
-  }, [
-    client,
-    data,
-    enqueNotification,
-    loading,
-    refetch,
-    row.id,
-    user.name,
-    zaehls.length,
-  ])
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
+  const showFilterComments =
+    !!navApFilterComment ||
+    !!navHiearchyComment ||
+    !!navLabelComment ||
+    !!artHierarchyComment ||
+    !!popHierarchyComment ||
+    !!tpopHierarchyComment ||
+    !!mapFilter
 
   if (Object.keys(row).length === 0) return null
 
@@ -213,8 +134,43 @@ const Tpopfreiwkontr = ({ treeName }) => {
         title="Freiwilligen-Kontrollen"
         treeName={treeName}
         table="tpopfreiwkontr"
-        totalNr={totalNr}
-        filteredNr={filteredNr}
+        totalNr={dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'}
+        filteredNr={dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'}
+        activeTab={activeTab}
+      />
+      {showFilterComments && (
+        <>
+          <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
+          <FilterCommentList>
+            {!!navApFilterComment && (
+              <FilterComment>{navApFilterComment}</FilterComment>
+            )}
+            {!!navHiearchyComment && (
+              <FilterComment>{navHiearchyComment}</FilterComment>
+            )}
+            {!!navLabelComment && (
+              <FilterComment>{navLabelComment}</FilterComment>
+            )}
+            {!!artHierarchyComment && (
+              <FilterComment>{artHierarchyComment}</FilterComment>
+            )}
+            {!!popHierarchyComment && (
+              <FilterComment>{popHierarchyComment}</FilterComment>
+            )}
+            {!!tpopHierarchyComment && (
+              <FilterComment>{tpopHierarchyComment}</FilterComment>
+            )}
+            {!!mapFilterComment && (
+              <FilterComment>{mapFilterComment}</FilterComment>
+            )}
+          </FilterCommentList>
+        </>
+      )}
+      <OrTabs
+        dataFilter={dataFilter.tpopfreiwkontr}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        treeName={treeName}
       />
       <ScrollContainer>
         <SimpleBar
@@ -223,13 +179,7 @@ const Tpopfreiwkontr = ({ treeName }) => {
             height: '100%',
           }}
         >
-          <TpopfreiwkontrForm
-            treeName={treeName}
-            data={data}
-            row={row}
-            apId={apId}
-            refetch={refetch}
-          />
+          <TpopfreiwkontrForm treeName={treeName} row={row} activeTab={activeTab} />
         </SimpleBar>
       </ScrollContainer>
     </Container>
