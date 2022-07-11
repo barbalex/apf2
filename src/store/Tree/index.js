@@ -12,7 +12,6 @@ import Map, { defaultValue as defaultMap } from './Map'
 import Geojson from './Geojson'
 import initialDataFilterValues from './DataFilter/initialValues'
 import DataFilter from './DataFilter/types'
-import simpleTypes from './DataFilter/simpleTypes'
 import { simpleTypes as popType } from './DataFilter/pop'
 import {
   simpleTypes as tpopType,
@@ -31,7 +30,6 @@ import {
   initial as initialTpopfreiwkontr,
 } from './DataFilter/tpopfreiwkontr'
 import { simpleTypes as apType } from './DataFilter/ap'
-import exists from '../../modules/exists'
 
 export default types
   .model('Tree', {
@@ -708,7 +706,7 @@ export default types
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
         // If no filters were added: this empty element will be removed after loopin
-        filterArrayInStore.push(initialTpopmassn)
+        filterArrayInStore.push(initialTpopfeldkontr)
       }
       // 3. build data filter
       const filterArray = []
@@ -834,7 +832,7 @@ export default types
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
         // If no filters were added: this empty element will be removed after loopin
-        filterArrayInStore.push(initialTpopmassn)
+        filterArrayInStore.push(initialTpopfreiwkontr)
       }
       // 3. build data filter
       const filterArray = []
