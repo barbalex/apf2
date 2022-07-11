@@ -10,7 +10,7 @@ const KontrollenButton = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification, tableIsFiltered } = store
-  const { tpopkontrGqlFilter } = store[treeName]
+  const { ekGqlFilter, ekfGqlFilter } = store[treeName]
 
   const [queryState, setQueryState] = useState()
 
@@ -182,7 +182,9 @@ const KontrollenButton = ({ treeName }) => {
               }
             `,
             variables: {
-              filter: tpopkontrGqlFilter,
+              filter: {
+                or: [ekGqlFilter?.filtered, ekfGqlFilter.filtered],
+              },
             },
           })
         } catch (error) {
