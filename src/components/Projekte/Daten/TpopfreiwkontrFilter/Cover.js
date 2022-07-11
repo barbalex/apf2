@@ -86,7 +86,7 @@ const Cover = ({ saveToDb, row }) => {
       <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
       <DeckApArtVal>
         <TextField
-          key={`${row.id}deckungApArt`}
+          key={`${row?.id}deckungApArt`}
           name="deckungApArt"
           row={row}
           type="number"
@@ -97,7 +97,7 @@ const Cover = ({ saveToDb, row }) => {
       <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
       <DeckNaBoVal>
         <TextField
-          key={`${row.id}deckungNackterBoden`}
+          key={`${row?.id}deckungNackterBoden`}
           name="deckungNackterBoden"
           row={row}
           type="number"

@@ -32,30 +32,6 @@ const Container = styled(Area)`
 const Label = styled.div`
   font-weight: 700;
 `
-const PopLabel = styled(Label)`
-  grid-area: popLabel;
-`
-const PopVal = styled.div`
-  grid-area: popVal;
-`
-const TpopLabel = styled(Label)`
-  grid-area: tpopLabel;
-`
-const TpopVal = styled.div`
-  grid-area: tpopVal;
-`
-const KoordLabel = styled(Label)`
-  grid-area: koordLabel;
-`
-const KoordVal = styled.div`
-  grid-area: koordVal;
-`
-const TpopNrLabel = styled(Label)`
-  grid-area: tpopNrLabel;
-`
-const TpopNrVal = styled.div`
-  grid-area: tpopNrVal;
-`
 const BearbLabel = styled(Label)`
   grid-area: bearbLabel;
   margin-top: 5px;
@@ -67,55 +43,41 @@ const BearbVal = styled.div`
     padding-bottom: 0;
   }
 `
-const StatusLabel = styled(Label)`
-  grid-area: statusVal;
-`
 
-const Headdata = ({ pop, tpop, row, treeName }) => {
+const Headdata = ({ row, treeName, activeTab }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue } = store
   const { data, loading, error } = useQuery(queryAdresses)
 
   const saveToDb = useCallback(
-    async (event) =>
+    async (event) => {
+      console.log('Headdata setting:', { value: event.target.value })
       dataFilterSetValue({
         treeName,
         table: 'tpopfreiwkontr',
         key: 'bearbeiter',
         value: event.target.value,
-      }),
-    [dataFilterSetValue, treeName],
+        index: activeTab,
+      })
+    },
+    [activeTab, dataFilterSetValue, treeName],
   )
-
-  const statusValue = tpop?.status ?? ''
-  const status = [200, 201, 202].includes(statusValue)
-    ? 'angesiedelt'
-    : 'natürlich'
 
   if (error) return <Error error={error} />
   return (
     <Container>
-      <PopLabel>Population</PopLabel>
-      <PopVal>{pop?.name ?? ''}</PopVal>
-      <TpopLabel>Teilpopulation</TpopLabel>
-      <TpopVal>{tpop?.flurname ?? ''}</TpopVal>
-      <KoordLabel>Koordinaten</KoordLabel>
-      <KoordVal>{`${tpop?.lv95X ?? ''} / ${tpop?.lv95Y ?? ''}`}</KoordVal>
-      <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
-      <TpopNrVal>{`${pop?.nr ?? ''}.${tpop?.nr ?? ''}`}</TpopNrVal>
       <BearbLabel>BeobachterIn</BearbLabel>
       <BearbVal>
         <Select
-          key={`${row.id}bearbeiter`}
+          key={`${row?.id}${activeTab}bearbeiter`}
           name="bearbeiter"
-          value={row.bearbeiter}
+          value={row?.bearbeiter}
           field="bearbeiter"
           options={data?.allAdresses?.nodes ?? []}
           loading={loading}
           saveToDb={saveToDb}
         />
       </BearbVal>
-      <StatusLabel>{status}</StatusLabel>
     </Container>
   )
 }

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import Headdata from './Headdata'
-import Besttime from './Besttime'
 import Date from './Date'
 import Map from './Map'
 import Cover from './Cover'
@@ -109,26 +108,24 @@ const TpopfreiwkontrForm = ({ treeName, row, activeTab }) => {
   const { dataFilterSetValue } = store
   const { formWidth: width } = store[treeName]
 
-  const pop = row?.tpopByTpopId?.popByPopId ?? {}
-  const tpop = row?.tpopByTpopId ?? {}
-
   const saveToDb = useCallback(
-    async (event) =>
+    async (event) => {
+      console.log('TpopfreiwkontrForm, saveToDb, event:', event)
       dataFilterSetValue({
         treeName,
         table: 'tpopfreiwkontr',
         key: event.target.name,
         value: ifIsNumericAsNumber(event.target.value),
         index: activeTab,
-      }),
+      })
+    },
     [activeTab, dataFilterSetValue, treeName],
   )
 
   return (
     <FormContainer>
       <GridContainer width={width}>
-        <Headdata pop={pop} tpop={tpop} row={row} treeName={treeName} />
-        <Besttime row={row} />
+        <Headdata row={row} treeName={treeName} activeTab={activeTab} />
         <Date saveToDb={saveToDb} row={row} />
         <Map saveToDb={saveToDb} row={row} />
         <Cover saveToDb={saveToDb} row={row} />

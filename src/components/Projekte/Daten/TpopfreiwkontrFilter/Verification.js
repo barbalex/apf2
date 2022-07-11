@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -42,29 +42,41 @@ const Grund = styled.div`
   }
 `
 
-const Verification = ({ saveToDb, row }) => (
-  <Container>
-    <Relevant>
-      <RadioButton
-        key={`${row.id}apberNichtRelevant`}
-        name="apberNichtRelevant"
-        label="Im Jahresbericht nicht berücksichtigen"
-        value={row.apberNichtRelevant}
-        saveToDb={saveToDb}
-      />
-    </Relevant>
-    <Grund>
-      <TextField
-        key={`${row.id}apberNichtRelevantGrund`}
-        name="apberNichtRelevantGrund"
-        label="Wieso nicht?"
-        row={row}
-        type="text"
-        multiLine
-        saveToDb={saveToDb}
-      />
-    </Grund>
-  </Container>
-)
+const Verification = ({ saveToDb, row }) => {
+  const onSaveTrue = useCallback(() => {
+    const fakeEvent = {
+      target: {
+        name: 'apberNichtRelevant',
+        value: row?.apberNichtRelevant === true ? null : true,
+      },
+    }
+    saveToDb(fakeEvent)
+  }, [row?.apberNichtRelevant, saveToDb])
+
+  return (
+    <Container>
+      <Relevant>
+        <RadioButton
+          key={`${row?.id}apberNichtRelevant`}
+          name="apberNichtRelevant"
+          label="Im Jahresbericht nicht berücksichtigen"
+          value={row?.apberNichtRelevant}
+          saveToDb={onSaveTrue}
+        />
+      </Relevant>
+      <Grund>
+        <TextField
+          key={`${row?.id}apberNichtRelevantGrund`}
+          name="apberNichtRelevantGrund"
+          label="Wieso nicht?"
+          row={row}
+          type="text"
+          multiLine
+          saveToDb={saveToDb}
+        />
+      </Grund>
+    </Container>
+  )
+}
 
 export default observer(Verification)

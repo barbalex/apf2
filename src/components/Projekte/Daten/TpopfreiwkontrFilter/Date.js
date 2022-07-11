@@ -42,9 +42,9 @@ const Date = ({ saveToDb, row }) => (
     <DateLabel>Aufnahme-datum</DateLabel>
     <DateVal>
       <DateField
-        key={`${row.id}datum`}
+        key={`${row?.id}datum`}
         name="datum"
-        value={row.datum}
+        value={row?.datum}
         saveToDb={saveToDb}
       />
     </DateVal>

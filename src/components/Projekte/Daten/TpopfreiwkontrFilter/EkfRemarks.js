@@ -31,7 +31,7 @@ const EkfRemarks = ({ saveToDb, row }) => (
     <RemarksLabel>Mitteilungen zwischen AV/Topos und Freiwilligen</RemarksLabel>
     <RemarksVal>
       <TextField
-        key={`${row.id}ekfBemerkungen`}
+        key={`${row?.id}ekfBemerkungen`}
         name="ekfBemerkungen"
         row={row}
         type="text"

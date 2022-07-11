@@ -48,7 +48,7 @@ const Remarks = ({ saveToDb, row }) => {
       </RemarksLabel>
       <RemarksVal>
         <TextField
-          key={`${row.id}bemerkungen`}
+          key={`${row?.id}bemerkungen`}
           name="bemerkungen"
           row={row}
           type="text"

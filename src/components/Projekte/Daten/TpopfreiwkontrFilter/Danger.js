@@ -47,7 +47,7 @@ const Danger = ({ saveToDb, row }) => {
       </DangerLabel>
       <DangerVal>
         <TextField
-          key={`${row.id}gefaehrdung`}
+          key={`${row?.id}gefaehrdung`}
           name="gefaehrdung"
           row={row}
           type="text"

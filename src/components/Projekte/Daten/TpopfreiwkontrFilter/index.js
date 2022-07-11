@@ -1,4 +1,4 @@
-import React, {  useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
@@ -118,8 +118,6 @@ const Tpopfreiwkontr = ({ treeName }) => {
     !!tpopHierarchyComment ||
     !!mapFilter
 
-  if (Object.keys(row).length === 0) return null
-
   return (
     <Container>
       <FilterTitle
@@ -171,7 +169,11 @@ const Tpopfreiwkontr = ({ treeName }) => {
             height: '100%',
           }}
         >
-          <TpopfreiwkontrForm treeName={treeName} row={row} activeTab={activeTab} />
+          <TpopfreiwkontrForm
+            treeName={treeName}
+            row={row}
+            activeTab={activeTab}
+          />
         </SimpleBar>
       </ScrollContainer>
     </Container>

@@ -848,7 +848,7 @@ export default types
         // add data filter
         const dataFilter = { ...filter }
         const filterValues = Object.entries(dataFilter).filter(
-          (e) => e[1] || e[1] === 0,
+          (e) => e[1] !== null,
         )
         filterValues.forEach(([key, value]) => {
           const expression =
