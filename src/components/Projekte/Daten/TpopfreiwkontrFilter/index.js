@@ -1,15 +1,12 @@
-import React, { useCallback, useEffect, useContext, useState } from 'react'
+import React, {  useEffect, useContext, useState } from 'react'
 import styled from 'styled-components'
-import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import IconButton from '@mui/material/IconButton'
 import SimpleBar from 'simplebar-react'
 
 import queryTpopkontrs from './queryTpopkontrs'
 import FilterTitle from '../../../shared/FilterTitle'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopfreiwkontrType } from '../../../../store/Tree/DataFilter/tpopfreiwkontr'
 import TpopfreiwkontrForm from './Form'
 import OrTabs from './Tabs'
 
@@ -32,10 +29,6 @@ const Container = styled.div`
 const ScrollContainer = styled.div`
   overflow-y: auto;
 `
-const StyledIconButton = styled(IconButton)`
-  color: white !important;
-  margin-right: 10px !important;
-`
 const FilterCommentTitle = styled.div`
   margin-top: -10px;
   padding: 0 10px 16px 10px;
@@ -56,7 +49,6 @@ const Tpopfreiwkontr = ({ treeName }) => {
   const store = useContext(storeContext)
   const tree = store[treeName]
   const {
-    activeNodeArray,
     dataFilter,
     ekfGqlFilter,
     nodeLabelFilter,

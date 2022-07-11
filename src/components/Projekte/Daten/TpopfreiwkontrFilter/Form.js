@@ -2,7 +2,6 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import Title from './Title'
 import Headdata from './Headdata'
 import Besttime from './Besttime'
 import Date from './Date'
@@ -128,7 +127,6 @@ const TpopfreiwkontrForm = ({ treeName, row, activeTab }) => {
   return (
     <FormContainer>
       <GridContainer width={width}>
-        <Title row={row} />
         <Headdata pop={pop} tpop={tpop} row={row} treeName={treeName} />
         <Besttime row={row} />
         <Date saveToDb={saveToDb} row={row} />

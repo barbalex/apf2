@@ -673,6 +673,7 @@ export default types
         : {}
       let singleFilterByHierarchy = nestedObjectAssign(
         {},
+        { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
         tpopHierarchyFilter,
         popHierarchyFilter,
         apHiearchyFilter,
@@ -796,8 +797,9 @@ export default types
             },
           }
         : {}
-      let singleFilterByHierarchy = nestedObjectAssign(
+      const singleFilterByHierarchy = nestedObjectAssign(
         {},
+        { typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' } },
         tpopHierarchyFilter,
         popHierarchyFilter,
         apHiearchyFilter,

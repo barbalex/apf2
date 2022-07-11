@@ -6,7 +6,7 @@ export default gql`
     $allFilter: TpopkontrFilter!
   ) {
     allTpopkontrs(filter: $allFilter)  {
-      totalCount
+      totalCount 
     }
     tpopkontrsFiltered: allTpopkontrs(filter: $filteredFilter)
       {
