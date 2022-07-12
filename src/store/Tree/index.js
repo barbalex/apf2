@@ -293,7 +293,7 @@ export default types
     },
     get artIsFiltered() {
       const firstFilterObject = {
-        ...(self.apGqlFilter?.filtered.or?.[0] ?? {}),
+        ...(self.apGqlFilter?.filtered?.or?.[0] ?? {}),
       }
       let entries = Object.entries(firstFilterObject).filter(
         (e) => e[0] !== 'projId',
@@ -408,7 +408,7 @@ export default types
     },
     get popIsFiltered() {
       const firstFilterObject = {
-        ...(self.popGqlFilter?.filtered.or?.[0] ?? {}),
+        ...(self.popGqlFilter?.filtered?.or?.[0] ?? {}),
       }
       let entries = Object.entries(firstFilterObject).filter(
         (e) => !['projId', 'apId', 'apByApId', 'geomPoint'].includes(e[0]),
@@ -523,7 +523,7 @@ export default types
     },
     get tpopIsFiltered() {
       const firstFilterObject = {
-        ...(self.tpopGqlFilter?.filtered.or?.[0] ?? {}),
+        ...(self.tpopGqlFilter?.filtered?.or?.[0] ?? {}),
       }
       let entries = Object.entries(firstFilterObject).filter(
         (e) =>
@@ -768,7 +768,7 @@ export default types
     },
     get ekIsFiltered() {
       const firstFilterObject = {
-        ...(self.ekGqlFilter?.filtered.or?.[0] ?? {}),
+        ...(self.ekGqlFilter?.filtered?.or?.[0] ?? {}),
       }
       let entries = Object.entries(firstFilterObject).filter(
         (e) => !['tpopByTpopId'].includes(e[0]),
@@ -894,18 +894,21 @@ export default types
     },
     get ekfIsFiltered() {
       const firstFilterObject = {
-        ...(self.ekfGqlFilter?.filtered.or?.[0] ?? {}),
+        ...(self.ekfGqlFilter?.filtered?.or?.[0] ?? {}),
       }
       let entries = Object.entries(firstFilterObject).filter(
         (e) => !['tpopByTpopId'].includes(e[0]),
       )
       return entries.length > 0
     },
-    // get tpopkontrGqlFilter() {
-    //   return {
-    //     or: [self.ekGqlFilter?.filtered, self.ekfGqlFilter.filtered],
-    //   }
-    // },
+    get tpopkontrGqlFilter() {
+      return {
+        or: [self.ekGqlFilter?.filtered, self.ekfGqlFilter.filtered],
+      }
+    },
+    get tpopkontrIsFiltered() {
+      return self.ekfIsFiltered ?? self.ekIsFiltered
+    },
   }))
 
 export const defaultValue = {
