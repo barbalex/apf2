@@ -5,10 +5,13 @@ export default gql`
     $ap: [UUID!]
     $pop: Boolean!
     $tpop: Boolean!
-    $beobNichtBeurteilt: Boolean!
-    $beobNichtZuzuordnen: Boolean!
-    $beobZugeordnet: Boolean!
-    $beobZugeordnetAssignPolylines: Boolean!
+    $showBeobNichtBeurteilt: Boolean!
+    $beobNichtBeurteiltFilter: BeobFilter!
+    $showBeobNichtZuzuordnen: Boolean!
+    $beobNichtZuzuordnenFilter: BeobFilter!
+    $showBeobZugeordnet: Boolean!
+    $beobZugeordnetFilter: BeobFilter!
+    $showBeobZugeordnetAssignPolylines: Boolean!
   ) {
     pop: allPops(filter: { apId: { in: $ap }, wgs84Lat: { isNull: false } })
       @include(if: $pop) {
@@ -40,52 +43,32 @@ export default gql`
         }
       }
     }
-    beobNichtBeurteilt: allVApbeobs(
-      filter: {
-        apId: { in: $ap }
-        nichtZuordnen: { equalTo: false }
-        tpopId: { isNull: true }
-      }
-    ) @include(if: $beobNichtBeurteilt) {
+    beobNichtBeurteilt: allBeobs(filter: $beobNichtBeurteiltFilter)
+      @include(if: $showBeobNichtBeurteilt) {
       nodes {
         id
         wgs84Lat
         wgs84Long
       }
     }
-    beobNichtZuzuordnen: allVApbeobs(
-      filter: {
-        apId: { in: $ap }
-        nichtZuordnen: { equalTo: true }
-        tpopId: { isNull: true }
-      }
-    ) @include(if: $beobNichtZuzuordnen) {
+    beobNichtZuzuordnen: allBeobs(filter: $beobNichtZuzuordnenFilter)
+      @include(if: $showBeobNichtZuzuordnen) {
       nodes {
         id
         wgs84Lat
         wgs84Long
       }
     }
-    beobZugeordnet: allVApbeobs(
-      filter: {
-        apId: { in: $ap }
-        nichtZuordnen: { equalTo: false }
-        tpopId: { isNull: false }
-      }
-    ) @include(if: $beobZugeordnet) {
+    beobZugeordnet: allBeobs(filter: $beobZugeordnetFilter)
+      @include(if: $showBeobZugeordnet) {
       nodes {
         id
         wgs84Lat
         wgs84Long
       }
     }
-    beobZugeordnetAssignPolylines: allVApbeobs(
-      filter: {
-        apId: { in: $ap }
-        nichtZuordnen: { equalTo: false }
-        tpopId: { isNull: false }
-      }
-    ) @include(if: $beobZugeordnetAssignPolylines) {
+    beobZugeordnetAssignPolylines: allBeobs(filter: $beobZugeordnetFilter)
+      @include(if: $showBeobZugeordnetAssignPolylines) {
       nodes {
         id
         wgs84Lat
