@@ -24,7 +24,7 @@ const beobZugeordnetFolderNode = ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.beob ?? ''
 
-  const childrenLength = (data?.allVApbeobsZugeordnet?.nodes ?? []).filter(
+  const childrenLength = (data?.apBeobsZugeordnet?.nodes ?? []).filter(
     (el) => el.tpopId === tpopId,
   ).length
   const message = loading

@@ -36,7 +36,7 @@ export default gql`
     $assozartFilter: AssozartFilter!
     $beobNichtBeurteiltsFilter: BeobFilter
     $beobNichtZuzuordnensFilter: BeobFilter
-    $beobZugeordnetsFilter: VApbeobFilter!
+    $beobZugeordnetsFilter: BeobFilter!
     $ekfrequenzsFilter: EkfrequenzFilter!
     $ekzaehleinheitsFilter: EkzaehleinheitFilter!
     $erfkritsFilter: ErfkritFilter!
@@ -143,7 +143,7 @@ export default gql`
         }
       }
     }
-    allVApbeobsZugeordnet: allVApbeobs(filter: $beobZugeordnetsFilter)
+    apBeobsZugeordnet: allBeobs(filter: $beobZugeordnetsFilter)
       @include(if: $isTpop) {
       nodes {
         id

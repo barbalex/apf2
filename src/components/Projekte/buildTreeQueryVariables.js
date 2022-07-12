@@ -169,12 +169,7 @@ const buildTreeQueryVariables = ({
   //     includesInsensitive: nodeLabelFilter.beob,
   //   }
   // }
-  const beobZugeordnetsFilter = { tpopId: { in: tpop } }
-  if (nodeLabelFilter.beob) {
-    beobZugeordnetsFilter.label = {
-      includesInsensitive: nodeLabelFilter.beob,
-    }
-  }
+  const beobZugeordnetsFilter = beobGqlFilter('zugeordnet').filtered
   const ekfrequenzsFilter = { apId: { in: ap } }
   if (nodeLabelFilter.ekfrequenz) {
     ekfrequenzsFilter.label = {
