@@ -125,7 +125,7 @@ export default types
     },
     tableIsFiltered({ table }) {
       return (
-        Object.values(self[table] || {}).filter((v) => v || v === 0).length > 0
+        Object.values(self[table] || {}).filter((v) => v !== null).length > 0
       )
     },
     isFiltered() {
