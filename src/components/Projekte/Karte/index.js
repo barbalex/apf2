@@ -557,41 +557,53 @@ const Karte = ({ treeName }) => {
               return <OverlayComponent key={overlayName} />
             })
             .reverse()}
-          <Pop
-            key={`${apId}/pop/${activeApfloraLayers.join()}/${
-              mapFilter?.coordinates ?? 99
-            }`}
-            treeName={treeName}
-          />
-          <Tpop
-            key={`${apId}/tpop/${activeApfloraLayers.join()}/${
-              mapFilter?.coordinates ?? 99
-            }`}
-            treeName={treeName}
-            clustered={clustered}
-          />
-          <BeobNichtBeurteilt
-            key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}/${
-              mapFilter?.coordinates ?? 99
-            }`}
-            treeName={treeName}
-            clustered={clustered}
-          />
-          <BeobNichtZuzuordnen
-            key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}/${
-              mapFilter?.coordinates ?? 99
-            }`}
-            treeName={treeName}
-            clustered={clustered}
-          />
-          <BeobZugeordnet
-            key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}/${
-              mapFilter?.coordinates ?? 99
-            }`}
-            treeName={treeName}
-            clustered={clustered}
-          />
-          <BeobZugeordnetAssignPolylines treeName={treeName} />
+          {activeApfloraLayers.includes('pop') && (
+            <Pop
+              key={`${apId}/pop/${activeApfloraLayers.join()}/${
+                mapFilter?.coordinates ?? 99
+              }`}
+              treeName={treeName}
+            />
+          )}
+          {activeApfloraLayers.includes('tpop') && (
+            <Tpop
+              key={`${apId}/tpop/${activeApfloraLayers.join()}/${
+                mapFilter?.coordinates ?? 99
+              }`}
+              treeName={treeName}
+              clustered={clustered}
+            />
+          )}
+          {activeApfloraLayers.includes('beobNichtBeurteilt') && (
+            <BeobNichtBeurteilt
+              key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}/${
+                mapFilter?.coordinates ?? 99
+              }`}
+              treeName={treeName}
+              clustered={clustered}
+            />
+          )}
+          {activeApfloraLayers.includes('beobNichtZuzuordnen') && (
+            <BeobNichtZuzuordnen
+              key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}/${
+                mapFilter?.coordinates ?? 99
+              }`}
+              treeName={treeName}
+              clustered={clustered}
+            />
+          )}
+          {activeApfloraLayers.includes('beobZugeordnet') && (
+            <BeobZugeordnet
+              key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}/${
+                mapFilter?.coordinates ?? 99
+              }`}
+              treeName={treeName}
+              clustered={clustered}
+            />
+          )}
+          {activeApfloraLayers.includes('beobZugeordnetAssignPolylines') && (
+            <BeobZugeordnetAssignPolylines treeName={treeName} />
+          )}
           <ScaleControl imperial={false} />
           <Control position="topright" visible={!hideMapControls}>
             <OwnControls

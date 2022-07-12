@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useApolloClient, useLazyQuery } from '@apollo/client'
@@ -136,7 +136,7 @@ const Tpop = ({ treeName, clustered }) => {
   const [fetchTpopDataForMap, { error: errorLoadingTpopForMap, data }] =
     useLazyQuery(query, {
       variables: {
-        tpopFilter: tpopFilter,
+        tpopFilter,
       },
     })
 
