@@ -21,8 +21,12 @@ const beobNichtBeurteiltFolderNode = ({
   const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.beob ?? ''
 
   const beobNichtBeurteiltNodesLength = (
-    data?.allVApbeobsNichtBeurteilt?.nodes ?? []
-  ).filter((el) => el.apId === apId).length
+    data?.apBeobsNichtBeurteilt?.nodes ?? []
+  ).filter((el) =>
+    el?.aeTaxonomyByArtId?.apartsByArtId?.nodes?.some(
+      (el) => el?.apId === apId,
+    ),
+  ).length
   const message = loading
     ? '...'
     : nodeLabelFilterString

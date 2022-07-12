@@ -111,6 +111,8 @@ const Projekte = () => {
   const ekGqlFilterTree2 = store.tree2.ekGqlFilter
   const ekfGqlFilterTree = store.tree.ekfGqlFilter
   const ekfGqlFilterTree2 = store.tree2.ekfGqlFilter
+  const beobGqlFilterTree = store.tree.beobGqlFilter
+  const beobGqlFilterTree2 = store.tree2.beobGqlFilter
 
   const queryTreeVariables = useMemo(
     () =>
@@ -126,6 +128,7 @@ const Projekte = () => {
         ekGqlFilter: ekGqlFilterTree,
         ekfGqlFilter: ekfGqlFilterTree,
         apGqlFilter: apGqlFilterTree,
+        beobGqlFilter: beobGqlFilterTree,
       }),
     [
       treeDataFilter,
@@ -139,6 +142,7 @@ const Projekte = () => {
       ekGqlFilterTree,
       ekfGqlFilterTree,
       apGqlFilterTree,
+      beobGqlFilterTree,
     ],
   )
   const queryTree2Variables = useMemo(
@@ -155,6 +159,7 @@ const Projekte = () => {
         ekGqlFilter: ekGqlFilterTree2,
         ekfGqlFilter: ekfGqlFilterTree2,
         apGqlFilter: apGqlFilterTree2,
+        beobGqlFilter: beobGqlFilterTree2,
       }),
     [
       tree2DataFilter,
@@ -168,6 +173,7 @@ const Projekte = () => {
       ekGqlFilterTree2,
       ekfGqlFilterTree2,
       apGqlFilterTree2,
+      beobGqlFilterTree2,
     ],
   )
 

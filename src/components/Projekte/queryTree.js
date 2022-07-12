@@ -34,8 +34,8 @@ export default gql`
     $apbersFilter: ApberFilter!
     $apberuebersichtsFilter: ApberuebersichtFilter!
     $assozartFilter: AssozartFilter!
-    $beobNichtBeurteiltsFilter: VApbeobFilter
-    $beobNichtZuzuordnensFilter: VApbeobFilter
+    $beobNichtBeurteiltsFilter: BeobFilter
+    $beobNichtZuzuordnensFilter: BeobFilter
     $beobZugeordnetsFilter: VApbeobFilter!
     $ekfrequenzsFilter: EkfrequenzFilter!
     $ekzaehleinheitsFilter: EkzaehleinheitFilter!
@@ -104,7 +104,7 @@ export default gql`
         aeId
       }
     }
-    allVApbeobsNichtBeurteilt: allVApbeobs(filter: $beobNichtBeurteiltsFilter)
+    apBeobsNichtBeurteilt: allBeobs(filter: $beobNichtBeurteiltsFilter)
       @include(if: $isAp) {
       nodes {
         id
@@ -112,20 +112,35 @@ export default gql`
         datum
         autor
         quelle
-        apId
+        aeTaxonomyByArtId {
+          id
+          apartsByArtId {
+            nodes {
+              id
+              apId
+            }
+          }
+        }
       }
     }
-    allVApbeobsNichtZuzuordnen: allVApbeobs(
-      filter: $beobNichtZuzuordnensFilter
-    ) @include(if: $isAp) {
+    apBeobsNichtZuzuordnen: allBeobs(filter: $beobNichtZuzuordnensFilter)
+      @include(if: $isAp) {
       nodes {
         id
         label
         datum
         autor
         quelle
-        apId
         artId
+        aeTaxonomyByArtId {
+          id
+          apartsByArtId {
+            nodes {
+              id
+              apId
+            }
+          }
+        }
       }
     }
     allVApbeobsZugeordnet: allVApbeobs(filter: $beobZugeordnetsFilter)

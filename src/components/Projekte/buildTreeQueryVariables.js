@@ -30,6 +30,7 @@ const buildTreeQueryVariables = ({
   ekGqlFilter,
   ekfGqlFilter,
   apGqlFilter,
+  beobGqlFilter,
 }) => {
   // apFilter is used for form nodeLabelFilter AND apFilter of tree :-(
   const isWerteListen = openNodes.some(
@@ -157,25 +158,17 @@ const buildTreeQueryVariables = ({
       includesInsensitive: nodeLabelFilter.assozart,
     }
   }
-  const beobNichtBeurteiltsFilter = {
-    nichtZuordnen: { equalTo: false },
-    apId: { in: ap },
-    tpopId: { isNull: true },
-  }
-  if (nodeLabelFilter.beob) {
-    beobNichtBeurteiltsFilter.label = {
-      includesInsensitive: nodeLabelFilter.beob,
-    }
-  }
-  const beobNichtZuzuordnensFilter = {
-    nichtZuordnen: { equalTo: true },
-    apId: { in: ap },
-  }
-  if (nodeLabelFilter.beob) {
-    beobNichtZuzuordnensFilter.label = {
-      includesInsensitive: nodeLabelFilter.beob,
-    }
-  }
+  const beobNichtBeurteiltsFilter = beobGqlFilter('nichtBeurteilt').filtered
+  const beobNichtZuzuordnensFilter = beobGqlFilter('nichtZuzuordnen').filtered
+  // const beobNichtZuzuordnensFilter = {
+  //   nichtZuordnen: { equalTo: true },
+  //   apId: { in: ap },
+  // }
+  // if (nodeLabelFilter.beob) {
+  //   beobNichtZuzuordnensFilter.label = {
+  //     includesInsensitive: nodeLabelFilter.beob,
+  //   }
+  // }
   const beobZugeordnetsFilter = { tpopId: { in: tpop } }
   if (nodeLabelFilter.beob) {
     beobZugeordnetsFilter.label = {

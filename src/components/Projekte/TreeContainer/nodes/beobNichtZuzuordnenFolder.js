@@ -21,8 +21,12 @@ const beobNichtZuzuordnenFolderNode = ({
   const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.beob ?? ''
 
   const beobNichtZuzuordnenNodesLength = (
-    data?.allVApbeobsNichtZuzuordnen?.nodes ?? []
-  ).filter((el) => el.apId === apId).length
+    data?.apBeobsNichtZuzuordnen?.nodes ?? []
+  ).filter((el) =>
+    el?.aeTaxonomyByArtId?.apartsByArtId?.nodes?.some(
+      (el) => el?.apId === apId,
+    ),
+  ).length
   const message = loading
     ? '...'
     : nodeLabelFilterString
