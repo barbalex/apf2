@@ -952,10 +952,10 @@ export default types
       const typeFilter = {
         wgs84Lat: { isNull: false },
       }
-      if (type !== 'zugeordnet') {
+      if (type === 'zugeordnet') {
         typeFilter.tpopId = { isNull: false }
       }
-      if (type !== 'nichtBeurteilt') {
+      if (type === 'nichtBeurteilt') {
         typeFilter.tpopId = { isNull: true }
       }
       if (type === 'nichtZuzuordnen') {
@@ -1012,7 +1012,7 @@ export default types
         filtered: singleFilter,
       }
 
-      console.log('beobGqlFilter:', { beobGqlFilter, type })
+      // console.log('beobGqlFilter:', { beobGqlFilter, type })
 
       return beobGqlFilter
     },

@@ -32,7 +32,7 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
   const { beobGqlFilter } = tree
 
   var { data, error, refetch } = useQuery(query, {
-    variables: { beobFilter: beobGqlFilter('nichtZugeordnet').filtered },
+    variables: { beobFilter: beobGqlFilter('zugeordnet').filtered },
   })
   setRefetchKey({ key: 'beobZugeordnetForMap', value: refetch })
 

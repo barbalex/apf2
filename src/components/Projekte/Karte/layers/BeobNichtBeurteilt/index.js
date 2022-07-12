@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
-import { useMap } from 'react-leaflet'
+// import { useMap } from 'react-leaflet'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
@@ -25,7 +25,7 @@ const iconCreateFunction = function (cluster) {
 }
 
 const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
-  const leafletMap = useMap()
+  // const leafletMap = useMap()
   const store = useContext(storeContext)
   const { setRefetchKey, enqueNotification } = store
   const tree = store[treeName]
@@ -39,18 +39,18 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   setRefetchKey({ key: 'beobNichtBeurteiltForMap', value: refetch })
 
   // eslint-disable-next-line no-unused-vars
-  const [refetchProvoker, setRefetchProvoker] = useState(1)
-  useEffect(() => {
-    // DO NOT use:
-    // leafletMap.on('zoomend dragend', refetch
-    // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
-    // Also: leafletMap.on('zoomend dragend', ()=> refetch()) never refetches!!??
-    // Also: use dragend, not moveend because moveend fires on zoomend as well
-    leafletMap.on('zoomend dragend', () => setRefetchProvoker(Math.random()))
-    return () => {
-      leafletMap.off('zoomend dragend', () => setRefetchProvoker(Math.random()))
-    }
-  }, [leafletMap])
+  // const [refetchProvoker, setRefetchProvoker] = useState(1)
+  // useEffect(() => {
+  //   // DO NOT use:
+  //   // leafletMap.on('zoomend dragend', refetch
+  //   // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
+  //   // Also: leafletMap.on('zoomend dragend', ()=> refetch()) never refetches!!??
+  //   // Also: use dragend, not moveend because moveend fires on zoomend as well
+  //   leafletMap.on('zoomend dragend', () => setRefetchProvoker(Math.random()))
+  //   return () => {
+  //     leafletMap.off('zoomend dragend', () => setRefetchProvoker(Math.random()))
+  //   }
+  // }, [leafletMap])
 
   if (error) {
     enqueNotification({
