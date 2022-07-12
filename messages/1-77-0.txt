@@ -1,0 +1,1 @@
+Ab Version 1.77.0: Massn, EK und EKF können "oder" gefiltert werden
