@@ -1,40 +1,20 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  query BeobNichtBeurteiltForMapQuery(
-    $projId: UUID!
-    $apId: UUID
-    $beobFilter: BeobFilter!
-  ) {
-    projektById(id: $projId) {
-      id
-      apsByProjId(filter: { id: { equalTo: $apId } }) {
-        nodes {
+  query BeobNichtBeurteiltForMapQuery($beobFilter: BeobFilter!) {
+    allBeobs(filter: $beobFilter) {
+      nodes {
+        id
+        wgs84Lat
+        wgs84Long
+        lv95X
+        lv95Y
+        datum
+        autor
+        quelle
+        aeTaxonomyByArtId {
           id
-          apartsByApId {
-            nodes {
-              id
-              aeTaxonomyByArtId {
-                id
-                beobsByArtId(filter: $beobFilter) {
-                  nodes {
-                    id
-                    wgs84Lat
-                    wgs84Long
-                    lv95X
-                    lv95Y
-                    datum
-                    autor
-                    quelle
-                    aeTaxonomyByArtId {
-                      id
-                      artname
-                    }
-                  }
-                }
-              }
-            }
-          }
+          artname
         }
       }
     }

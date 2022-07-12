@@ -917,6 +917,17 @@ export default types
       const popId = self.popIdInActiveNodeArray
       const tpopId = self.tpopIdInActiveNodeArray
 
+      const apFilter = {
+        aeTaxonomyByArtId: {
+          apartsByArtId: {
+            // important: NEVER load from all species!
+            some: {
+              apId: { equalTo: apId ?? '99999999-9999-9999-9999-999999999999' },
+            },
+          },
+        },
+      }
+
       const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
       const popHierarchyFilter = popId
         ? { tpopByTpopId: { popId: { equalTo: popId } } }
@@ -940,8 +951,15 @@ export default types
       )
       const typeFilter = {
         wgs84Lat: { isNull: false },
-        tpopId: { isNull: type !== 'zugeordnet' },
-        nichtZuordnen: { equalTo: type === 'nichtZuzuordnen' },
+      }
+      if (type !== 'zugeordnet') {
+        typeFilter.tpopId = { isNull: false }
+      }
+      if (type !== 'nichtBeurteilt') {
+        typeFilter.tpopId = { isNull: true }
+      }
+      if (type === 'nichtZuzuordnen') {
+        typeFilter.nichtZuordnen = { equalTo: true }
       }
 
       const singleFilterByParentFiltersForAll = {
@@ -951,10 +969,11 @@ export default types
         type === 'zugeordnet'
           ? nestedObjectAssign(
               typeFilter,
+              apFilter,
               singleFilterByHierarchy,
               singleFilterByParentFiltersForAll,
             )
-          : typeFilter
+          : nestedObjectAssign(typeFilter, apFilter)
       const singleFilterByParentFiltersForFiltered = {
         tpopByTpopId: self.tpopGqlFilter.filtered,
       }
@@ -979,6 +998,7 @@ export default types
         : {}
       const singleFilter = nestedObjectAssign(
         typeFilter,
+        apFilter,
         type === 'zugeordnet' ? singleFilterByHierarchy : {},
         type === 'zugeordnet' ? singleFilterByParentFiltersForFiltered : {},
         nodeLabelFilter,

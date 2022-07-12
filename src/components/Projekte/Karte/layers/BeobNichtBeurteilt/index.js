@@ -1,5 +1,4 @@
-import React, { useContext, useMemo, useEffect, useState } from 'react'
-import flatten from 'lodash/flatten'
+import React, { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
@@ -30,16 +29,10 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   const store = useContext(storeContext)
   const { setRefetchKey, enqueNotification } = store
   const tree = store[treeName]
-  const { apIdInActiveNodeArray, projIdInActiveNodeArray, beobGqlFilter } = tree
-
-  const projId =
-    projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
-  const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
+  const { beobGqlFilter } = tree
 
   var { data, error, refetch } = useQuery(query, {
     variables: {
-      projId,
-      apId,
       beobFilter: beobGqlFilter('nichtBeurteilt').filtered,
     },
   })
@@ -68,19 +61,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
     })
   }
 
-  const aparts = useMemo(
-    () => data?.projektById?.apsByProjId?.nodes?.[0]?.apartsByApId?.nodes ?? [],
-    [data?.projektById?.apsByProjId?.nodes],
-  )
-  let beobs = useMemo(
-    () =>
-      flatten(
-        aparts.map((a) => a?.aeTaxonomyByArtId?.beobsByArtId?.nodes ?? []),
-      ),
-    [aparts],
-  )
-
-  const beobMarkers = beobs.map((beob) => (
+  const beobMarkers = (data?.allBeobs?.nodes ?? []).map((beob) => (
     <Marker key={beob.id} treeName={treeName} beob={beob} />
   ))
 
