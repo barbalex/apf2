@@ -6,11 +6,11 @@ import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const KontrollenButton = ({ treeName }) => {
+const KontrollenButton = ({ treeName, filtered = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
-  const { tpopkontrGqlFilter, tpopkontrIsFiltered } = store[treeName]
+  const { tpopkontrGqlFilter } = store[treeName]
 
   const [queryState, setQueryState] = useState()
 
@@ -172,7 +172,7 @@ const KontrollenButton = ({ treeName }) => {
               }
             `,
             variables: {
-              filter: tpopkontrGqlFilter,
+              filter: filtered ? tpopkontrGqlFilter : { or: [] },
             },
           })
         } catch (error) {
@@ -313,7 +313,7 @@ const KontrollenButton = ({ treeName }) => {
         setQueryState(undefined)
       }}
     >
-      {tpopkontrIsFiltered ? 'Kontrollen (gefiltert)' : 'Kontrollen'}
+      {filtered ? 'Kontrollen (gefiltert)' : 'Kontrollen'}
       {queryState ? (
         <StyledProgressText>{queryState}</StyledProgressText>
       ) : null}

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import TPop from './TPop'
+import TPop from './TPop' 
 import Wollmilchsau from './Wollmilchsau'
 import WollmilchsauSingle from './WollmilchsauSingle'
 import LetzteZaehlungen from './LetzteZaehlungen'

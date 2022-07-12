@@ -6,7 +6,7 @@ import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const Teilpopulationen = ({ treeName, filtered = false }) => {
+const Teilpopulationen = ({ treeName, filtered = false }) => { 
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification, tableIsFiltered } = store
