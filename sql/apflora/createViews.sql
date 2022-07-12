@@ -3520,6 +3520,9 @@ ORDER BY
 
 -- need this because filtering on apart
 -- in graphql overwhelms the server
+-- no more needed, 2022.07.12
+DROP VIEW apflora.v_apbeob;
+
 CREATE OR REPLACE VIEW apflora.v_apbeob AS
 SELECT
   beob.id,
