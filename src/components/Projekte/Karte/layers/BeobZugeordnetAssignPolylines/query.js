@@ -4,10 +4,9 @@ export default gql`
   query BeobAssignLinesQuery(
     $projId: UUID!
     $apId: UUID
-    $isActiveInMap: Boolean!
     $beobFilter: BeobFilter!
   ) {
-    projektById(id: $projId) @include(if: $isActiveInMap) {
+    projektById(id: $projId) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {

@@ -9,16 +9,13 @@ import query from './query'
 
 const BeobZugeordnetAssignPolylines = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { setRefetchKey, enqueNotification, activeApfloraLayers } = store
+  const { setRefetchKey, enqueNotification,  } = store
   const tree = store[treeName]
   const { projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
 
   const projId =
     projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
   const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
-  const isActiveInMap = activeApfloraLayers.includes(
-    'beobZugeordnetAssignPolylines',
-  )
 
   const beobFilter = {
     tpopId: { isNull: false },
@@ -31,7 +28,7 @@ const BeobZugeordnetAssignPolylines = ({ treeName }) => {
     }
   }
   var { data, error, refetch } = useQuery(query, {
-    variables: { projId, apId, isActiveInMap, beobFilter },
+    variables: { projId, apId,  beobFilter },
   })
   setRefetchKey({ key: 'beobAssignLines', value: refetch })
 

@@ -28,16 +28,15 @@ const iconCreateFunction = function (cluster) {
 const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { setRefetchKey, enqueNotification, activeApfloraLayers } = store
+  const { setRefetchKey, enqueNotification } = store
   const tree = store[treeName]
   const { apIdInActiveNodeArray, projIdInActiveNodeArray } = tree
 
   const projId =
     projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
   const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
-  const isActiveInMap = activeApfloraLayers.includes('beobNichtBeurteilt')
 
-  const beobFilter = { 
+  const beobFilter = {
     tpopId: { isNull: true },
     nichtZuordnen: { equalTo: false },
     wgs84Lat: { isNull: false },
@@ -52,7 +51,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   }
 
   var { data, error, refetch } = useQuery(query, {
-    variables: { projId, apId, isActiveInMap, beobFilter },
+    variables: { projId, apId, beobFilter },
   })
   setRefetchKey({ key: 'beobNichtBeurteiltForMap', value: refetch })
 
