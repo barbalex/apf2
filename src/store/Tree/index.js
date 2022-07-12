@@ -909,7 +909,8 @@ export default types
     get tpopkontrIsFiltered() {
       return self.ekfIsFiltered ?? self.ekIsFiltered
     },
-    get beobGqlFilter() {
+    beobGqlFilter(type) {
+      // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
@@ -932,20 +933,28 @@ export default types
         : {}
       let singleFilterByHierarchy = nestedObjectAssign(
         {},
-        // { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
         tpopHierarchyFilter,
         popHierarchyFilter,
         apHiearchyFilter,
         projHiearchyFilter,
       )
+      const typeFilter = {
+        wgs84Lat: { isNull: false },
+        tpopId: { isNull: type !== 'zugeordnet' },
+        nichtZuordnen: { equalTo: type === 'nichtZuzuordnen' },
+      }
 
       const singleFilterByParentFiltersForAll = {
         tpopByTpopId: self.tpopGqlFilter.all,
       }
-      const singleFilterForAll = nestedObjectAssign(
-        singleFilterByHierarchy,
-        singleFilterByParentFiltersForAll,
-      )
+      const singleFilterForAll =
+        type === 'zugeordnet'
+          ? nestedObjectAssign(
+              typeFilter,
+              singleFilterByHierarchy,
+              singleFilterByParentFiltersForAll,
+            )
+          : typeFilter
       const singleFilterByParentFiltersForFiltered = {
         tpopByTpopId: self.tpopGqlFilter.filtered,
       }
@@ -968,18 +977,13 @@ export default types
             },
           }
         : {}
-      let singleFilter = nestedObjectAssign(
-        {},
-        singleFilterByHierarchy,
-        singleFilterByParentFiltersForFiltered,
+      const singleFilter = nestedObjectAssign(
+        typeFilter,
+        type === 'zugeordnet' ? singleFilterByHierarchy : {},
+        type === 'zugeordnet' ? singleFilterByParentFiltersForFiltered : {},
         nodeLabelFilter,
         mapFilter,
       )
-      // Object could be empty if no filters exist
-      // Do not add empty objects
-      if (Object.values(singleFilter).filter((v) => v !== null).length === 0) {
-        singleFilter = { or: [] }
-      }
 
       const beobGqlFilter = {
         all: Object.keys(singleFilterForAll).length
@@ -988,7 +992,7 @@ export default types
         filtered: singleFilter,
       }
 
-      // console.log('ekGqlFilter:', ekGqlFilter)
+      console.log('beobGqlFilter:', { beobGqlFilter, type })
 
       return beobGqlFilter
     },

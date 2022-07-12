@@ -30,28 +30,18 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   const store = useContext(storeContext)
   const { setRefetchKey, enqueNotification } = store
   const tree = store[treeName]
-  const { apIdInActiveNodeArray, projIdInActiveNodeArray } = tree
+  const { apIdInActiveNodeArray, projIdInActiveNodeArray, beobGqlFilter } = tree
 
   const projId =
     projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
   const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
 
-  const beobFilter = {
-    tpopId: { isNull: true },
-    nichtZuordnen: { equalTo: false },
-    wgs84Lat: { isNull: false },
-    // 2021.08.16: needed to remove this filter
-    // because icons where added every time a tpop left, then reentered the bbox
-    // geomPoint: { within: myBbox },
-  }
-  if (tree.nodeLabelFilter.beob) {
-    beobFilter.label = {
-      includesInsensitive: tree.nodeLabelFilter.beob,
-    }
-  }
-
   var { data, error, refetch } = useQuery(query, {
-    variables: { projId, apId, beobFilter },
+    variables: {
+      projId,
+      apId,
+      beobFilter: beobGqlFilter('nichtBeurteilt').filtered,
+    },
   })
   setRefetchKey({ key: 'beobNichtBeurteiltForMap', value: refetch })
 
