@@ -909,6 +909,89 @@ export default types
     get tpopkontrIsFiltered() {
       return self.ekfIsFiltered ?? self.ekIsFiltered
     },
+    get beobGqlFilter() {
+      // 1. prepare hiearchy filter
+      const projId = self.projIdInActiveNodeArray
+      const apId = self.apIdInActiveNodeArray
+      const popId = self.popIdInActiveNodeArray
+      const tpopId = self.tpopIdInActiveNodeArray
+
+      const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
+      const popHierarchyFilter = popId
+        ? { tpopByTpopId: { popId: { equalTo: popId } } }
+        : {}
+      const apHiearchyFilter = apId
+        ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+        : {}
+      const projHiearchyFilter = projId
+        ? {
+            tpopByTpopId: {
+              popByPopId: { apByApId: { projId: { equalTo: projId } } },
+            },
+          }
+        : {}
+      let singleFilterByHierarchy = nestedObjectAssign(
+        {},
+        // { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
+        tpopHierarchyFilter,
+        popHierarchyFilter,
+        apHiearchyFilter,
+        projHiearchyFilter,
+      )
+
+      const singleFilterByParentFiltersForAll = {
+        tpopByTpopId: self.tpopGqlFilter.all,
+      }
+      const singleFilterForAll = nestedObjectAssign(
+        singleFilterByHierarchy,
+        singleFilterByParentFiltersForAll,
+      )
+      const singleFilterByParentFiltersForFiltered = {
+        tpopByTpopId: self.tpopGqlFilter.filtered,
+      }
+
+      // node label filter
+      const nodeLabelFilter = self.nodeLabelFilter.beob
+        ? {
+            label: {
+              includesInsensitive: self.nodeLabelFilter.beob,
+            },
+          }
+        : {}
+      // mapFilter
+      const mapFilter = self.mapFilter
+        ? {
+            tpopByTpopId: {
+              geomPoint: {
+                coveredBy: self.mapFilter,
+              },
+            },
+          }
+        : {}
+      let singleFilter = nestedObjectAssign(
+        {},
+        singleFilterByHierarchy,
+        singleFilterByParentFiltersForFiltered,
+        nodeLabelFilter,
+        mapFilter,
+      )
+      // Object could be empty if no filters exist
+      // Do not add empty objects
+      if (Object.values(singleFilter).filter((v) => v !== null).length === 0) {
+        singleFilter = { or: [] }
+      }
+
+      const beobGqlFilter = {
+        all: Object.keys(singleFilterForAll).length
+          ? singleFilterForAll
+          : { or: [] },
+        filtered: singleFilter,
+      }
+
+      // console.log('ekGqlFilter:', ekGqlFilter)
+
+      return beobGqlFilter
+    },
   }))
 
 export const defaultValue = {
