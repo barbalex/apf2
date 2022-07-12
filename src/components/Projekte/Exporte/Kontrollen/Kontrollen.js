@@ -9,20 +9,10 @@ import { DownloadCardButton, StyledProgressText } from '../index'
 const KontrollenButton = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, tableIsFiltered } = store
-  const { ekGqlFilter, ekfGqlFilter } = store[treeName]
+  const { enqueNotification } = store
+  const { tpopkontrGqlFilter, tpopkontrIsFiltered } = store[treeName]
 
   const [queryState, setQueryState] = useState()
-
-  const tpopkontrIsFiltered =
-    tableIsFiltered({
-      treeName,
-      table: 'tpopfreiwkontr',
-    }) ??
-    tableIsFiltered({
-      treeName,
-      table: 'tpopfeldkontr',
-    })
 
   return (
     <DownloadCardButton
@@ -182,9 +172,7 @@ const KontrollenButton = ({ treeName }) => {
               }
             `,
             variables: {
-              filter: {
-                or: [ekGqlFilter?.filtered, ekfGqlFilter.filtered],
-              },
+              filter: tpopkontrGqlFilter,
             },
           })
         } catch (error) {
