@@ -253,7 +253,7 @@ export default types
         // add data filter
         const dataFilterAp = { ...filter }
         const apFilterValues = Object.entries(dataFilterAp).filter(
-          (e) => e[1] || e[1] === 0,
+          (e) => e[1] !== null,
         )
         apFilterValues.forEach(([key, value]) => {
           const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
@@ -362,7 +362,7 @@ export default types
         // add data filter
         const dataFilterPop = { ...filter }
         const popFilterValues = Object.entries(dataFilterPop).filter(
-          (e) => e[1] || e[1] === 0,
+          (e) => e[1] !== null,
         )
         popFilterValues.forEach(([key, value]) => {
           const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
@@ -476,7 +476,7 @@ export default types
         // add data filter
         const dataFilterTpop = { ...filter }
         const tpopFilterValues = Object.entries(dataFilterTpop).filter(
-          (e) => e[1] || e[1] === 0,
+          (e) => e[1] !== null,
         )
         tpopFilterValues.forEach(([key, value]) => {
           const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
@@ -604,7 +604,7 @@ export default types
         const dataFilterTpopmassn = { ...filter }
         const tpopmassnFilterValues = Object.entries(
           dataFilterTpopmassn,
-        ).filter((e) => e[1] || e[1] === 0)
+        ).filter((e) => e[1] !== null)
         tpopmassnFilterValues.forEach(([key, value]) => {
           const expression =
             tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
@@ -720,7 +720,7 @@ export default types
         // add data filter
         const dataFilter = { ...filter }
         const filterValues = Object.entries(dataFilter).filter(
-          (e) => e[1] || e[1] === 0,
+          (e) => e[1] !== null,
         )
         filterValues.forEach(([key, value]) => {
           const expression =
