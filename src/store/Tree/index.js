@@ -989,10 +989,8 @@ export default types
       // mapFilter
       const mapFilter = self.mapFilter
         ? {
-            tpopByTpopId: {
-              geomPoint: {
-                coveredBy: self.mapFilter,
-              },
+            geomPoint: {
+              coveredBy: self.mapFilter,
             },
           }
         : {}
@@ -1012,7 +1010,7 @@ export default types
         filtered: singleFilter,
       }
 
-      // console.log('beobGqlFilter:', { beobGqlFilter, type })
+      console.log('beobGqlFilter:', { beobGqlFilter, type })
 
       return beobGqlFilter
     },
