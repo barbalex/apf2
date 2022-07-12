@@ -1,9 +1,9 @@
 import React, { useContext, useMemo, useEffect } from 'react'
-import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useApolloClient, useLazyQuery } from '@apollo/client'
 import { useMapEvents } from 'react-leaflet'
+import cloneDeep from 'lodash/cloneDeep'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
@@ -32,14 +32,13 @@ const Tpop = ({ treeName, clustered }) => {
 
   const store = useContext(storeContext)
   const {
-    activeApfloraLayers,
     setRefetchKey,
     enqueNotification,
     setIdOfTpopBeingLocalized,
     idOfTpopBeingLocalized,
     refetch,
   } = store
-  const { popGqlFilter, tpopGqlFilter } = store[treeName]
+  const { tpopGqlFilter } = store[treeName]
 
   const leafletMap = useMapEvents({
     async dblclick(event) {
@@ -114,8 +113,6 @@ const Tpop = ({ treeName, clustered }) => {
       setIdOfTpopBeingLocalized(null)
     },
   })
-  const tree = store[treeName]
-  const { dataFilter, projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
 
   useEffect(() => {
     if (idOfTpopBeingLocalized) {
@@ -133,23 +130,13 @@ const Tpop = ({ treeName, clustered }) => {
     }
   }, [idOfTpopBeingLocalized, leafletMap._container])
 
-  const projId =
-    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const isActiveInMap = activeApfloraLayers.includes('tpop')
-  const perProj = apId === '99999999-9999-9999-9999-999999999999'
-  const perAp = apId !== '99999999-9999-9999-9999-999999999999'
+  const tpopFilter = cloneDeep(tpopGqlFilter.filtered)
+  tpopFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
 
   const [fetchTpopDataForMap, { error: errorLoadingTpopForMap, data }] =
     useLazyQuery(query, {
       variables: {
-        projId,
-        apId,
-        perAp,
-        perProj,
-        isActiveInMap,
-        popFilter: popGqlFilter.filtered,
-        tpopFilter: tpopGqlFilter.filtered,
+        tpopFilter: tpopFilter,
       },
     })
 
@@ -169,26 +156,7 @@ const Tpop = ({ treeName, clustered }) => {
     }
   }, [enqueNotification, fetchTpopDataForMap, setRefetchKey])
 
-  const aps = useMemo(
-    () =>
-      perAp
-        ? data?.projektById?.perAp?.nodes ?? []
-        : data?.projektById?.perProj?.nodes ?? [],
-    [data?.projektById?.perAp?.nodes, data?.projektById?.perProj?.nodes, perAp],
-  )
-  const pops = useMemo(
-    () => flatten(aps.map((ap) => ap?.popsByApId?.nodes ?? [])),
-    [aps],
-  )
-  let tpops = useMemo(
-    () =>
-      flatten(pops.map((pop) => pop?.tpopsByPopId?.nodes ?? [])).filter(
-        (tpop) => !!tpop.wgs84Lat,
-      ),
-    [pops],
-  )
-
-  const tpopMarkers = tpops.map((tpop) => (
+  const tpopMarkers = (data?.allTpops?.nodes ?? []).map((tpop) => (
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
 

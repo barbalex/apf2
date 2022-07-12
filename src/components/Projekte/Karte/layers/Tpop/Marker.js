@@ -53,7 +53,7 @@ const TpopMarker = ({ treeName, tpop }) => {
   const projId =
     projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
   const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const {  tpopIcon: tpopIconName, tpopLabel: tpopLabelName } = map
+  const { tpopIcon: tpopIconName, tpopLabel: tpopLabelName } = map
 
   const popNr = tpop?.popByPopId?.nr ?? '(keine Nr)'
   const tpopNr = tpop?.nr ?? '(keine Nr)'
@@ -133,8 +133,8 @@ const TpopMarker = ({ treeName, tpop }) => {
         <>
           <div>Teil-Population</div>
           <StyledH3>
-            {`${tpop.nr || '(keine Nr)'}: ${
-              tpop.flurname || '(kein Flurname)'
+            {`${tpop.nr ?? '(keine Nr)'}: ${
+              tpop.flurname ?? '(kein Flurname)'
             }`}
           </StyledH3>
           <div>{`Art: ${artname}`}</div>
