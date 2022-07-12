@@ -1,9 +1,6 @@
 import uniq from 'lodash/uniq'
 import isUuid from 'is-uuid'
 
-import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tpopfeldkontr'
-import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
-
 /**
  * returns a filter for every branch of the nav tree
  */
@@ -25,13 +22,15 @@ import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/t
  */
 
 const buildTreeQueryVariables = ({
-  dataFilter,
   openNodes,
   nodeLabelFilter,
   popGqlFilter,
   tpopGqlFilter,
   tpopmassnGqlFilter,
+  ekGqlFilter,
+  ekfGqlFilter,
   apGqlFilter,
+  beobGqlFilter,
 }) => {
   // apFilter is used for form nodeLabelFilter AND apFilter of tree :-(
   const isWerteListen = openNodes.some(
@@ -138,45 +137,6 @@ const buildTreeQueryVariables = ({
         nArray[9],
     )
 
-  const tpopfeldkontrFilter = {
-    or: [
-      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
-      { typ: { isNull: true } },
-    ],
-    tpopId: { in: tpop },
-  }
-  const tpopfeldkontrFilterValues = Object.entries(
-    dataFilter.tpopfeldkontr,
-  ).filter((e) => e[1] || e[1] === 0)
-  tpopfeldkontrFilterValues.forEach(([key, value]) => {
-    const expression =
-      tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopfeldkontrFilter[key] = { [expression]: value }
-  })
-  if (nodeLabelFilter.tpopkontr) {
-    tpopfeldkontrFilter.labelEk = {
-      includesInsensitive: nodeLabelFilter.tpopkontr,
-    }
-  }
-
-  const tpopfreiwkontrFilter = {
-    typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
-    tpopId: { in: tpop },
-  }
-  const tpopfreiwkontrFilterValues = Object.entries(
-    dataFilter.tpopfreiwkontr,
-  ).filter((e) => e[1] || e[1] === 0)
-  tpopfreiwkontrFilterValues.forEach(([key, value]) => {
-    const expression =
-      tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopfreiwkontrFilter[key] = { [expression]: value }
-  })
-  if (nodeLabelFilter.tpopkontr) {
-    tpopfreiwkontrFilter.labelEkf = {
-      includesInsensitive: nodeLabelFilter.tpopkontr,
-    }
-  }
-
   const apsFilter = apGqlFilter.filtered
   const apberuebersichtsFilter = { projId: { in: projekt } }
   if (nodeLabelFilter.apberuebersicht) {
@@ -198,31 +158,18 @@ const buildTreeQueryVariables = ({
       includesInsensitive: nodeLabelFilter.assozart,
     }
   }
-  const beobNichtBeurteiltsFilter = {
-    nichtZuordnen: { equalTo: false },
-    apId: { in: ap },
-    tpopId: { isNull: true },
-  }
-  if (nodeLabelFilter.beob) {
-    beobNichtBeurteiltsFilter.label = {
-      includesInsensitive: nodeLabelFilter.beob,
-    }
-  }
-  const beobNichtZuzuordnensFilter = {
-    nichtZuordnen: { equalTo: true },
-    apId: { in: ap },
-  }
-  if (nodeLabelFilter.beob) {
-    beobNichtZuzuordnensFilter.label = {
-      includesInsensitive: nodeLabelFilter.beob,
-    }
-  }
-  const beobZugeordnetsFilter = { tpopId: { in: tpop } }
-  if (nodeLabelFilter.beob) {
-    beobZugeordnetsFilter.label = {
-      includesInsensitive: nodeLabelFilter.beob,
-    }
-  }
+  const beobNichtBeurteiltsFilter = beobGqlFilter('nichtBeurteilt').filtered
+  const beobNichtZuzuordnensFilter = beobGqlFilter('nichtZuzuordnen').filtered
+  // const beobNichtZuzuordnensFilter = {
+  //   nichtZuordnen: { equalTo: true },
+  //   apId: { in: ap },
+  // }
+  // if (nodeLabelFilter.beob) {
+  //   beobNichtZuzuordnensFilter.label = {
+  //     includesInsensitive: nodeLabelFilter.beob,
+  //   }
+  // }
+  const beobZugeordnetsFilter = beobGqlFilter('zugeordnet').filtered
   const ekfrequenzsFilter = { apId: { in: ap } }
   if (nodeLabelFilter.ekfrequenz) {
     ekfrequenzsFilter.label = {
@@ -260,8 +207,8 @@ const buildTreeQueryVariables = ({
       includesInsensitive: nodeLabelFilter.tpopber,
     }
   }
-  const tpopfeldkontrsFilter = { ...tpopfeldkontrFilter }
-  const tpopfreiwkontrsFilter = { ...tpopfreiwkontrFilter }
+  const tpopfeldkontrsFilter = ekGqlFilter.filtered
+  const tpopfreiwkontrsFilter = ekfGqlFilter.filtered
 
   const tpopkontrzaehlsFilter = {
     tpopkontrId: { in: tpopkontr },

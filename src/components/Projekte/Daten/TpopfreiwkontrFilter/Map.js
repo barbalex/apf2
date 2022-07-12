@@ -1,9 +1,8 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import RadioButton from '../../../shared/RadioButton'
-import storeContext from '../../../../storeContext'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -52,19 +51,25 @@ const MapVal2 = styled.div`
   }
 `
 
-const Map = ({ saveToDb, row, errors }) => {
-  const store = useContext(storeContext)
-  const { isPrint } = store
-
+const Map = ({ saveToDb, row }) => {
   const onSaveFalse = useCallback(() => {
     const fakeEvent = {
-      target: { name: 'planVorhanden', value: false },
+      target: {
+        name: 'planVorhanden',
+        value: row?.planVorhanden === false ? null : false,
+      },
     }
     saveToDb(fakeEvent)
-  }, [saveToDb])
-
-  // in print nein shall not be set as it is preset in db
-  const falseValue = isPrint ? false : row.planVorhanden === false
+  }, [row?.planVorhanden, saveToDb])
+  const onSaveTrue = useCallback(() => {
+    const fakeEvent = {
+      target: {
+        name: 'planVorhanden',
+        value: row?.planVorhanden === true ? null : true,
+      },
+    }
+    saveToDb(fakeEvent)
+  }, [row?.planVorhanden, saveToDb])
 
   return (
     <Container>
@@ -72,20 +77,19 @@ const Map = ({ saveToDb, row, errors }) => {
       <MapLabel1>ja</MapLabel1>
       <MapVal1 data-id="planVorhanden_true">
         <RadioButton
-          key={`${row.id}planVorhanden`}
+          key={`${row?.id}planVorhanden`}
           name="planVorhanden"
-          value={row.planVorhanden}
-          saveToDb={saveToDb}
+          value={row?.planVorhanden}
+          saveToDb={onSaveTrue}
         />
       </MapVal1>
       <MapLabel2>nein</MapLabel2>
       <MapVal2 data-id="planVorhanden_false">
         <RadioButton
-          key={`${row.id}planVorhanden2`}
+          key={`${row?.id}planVorhanden2`}
           name="planVorhanden"
-          value={falseValue}
+          value={row?.planVorhanden === false}
           saveToDb={onSaveFalse}
-          error={errors.planVorhanden}
         />
       </MapVal2>
     </Container>

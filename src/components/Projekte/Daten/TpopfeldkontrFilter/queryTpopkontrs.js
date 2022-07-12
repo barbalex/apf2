@@ -2,41 +2,14 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query tpopkontrQueryForEk(
-    $apIdExists: Boolean!
-    $apIdNotExists: Boolean!
-    $tpopkontrFilter: TpopkontrFilter!
-    $allTpopkontrFilter: TpopkontrFilter!
-    $apId: UUID
+    $filteredFilter: TpopkontrFilter!
+    $allFilter: TpopkontrFilter!
   ) {
-    allTpopkontrs(filter: $allTpopkontrFilter) @include(if: $apIdNotExists) {
+    allTpopkontrs(filter: $allFilter) {
       totalCount
     }
-    tpopkontrsFiltered: allTpopkontrs(filter: $tpopkontrFilter)
-      @include(if: $apIdNotExists) {
+    tpopkontrsFiltered: allTpopkontrs(filter: $filteredFilter) {
       totalCount
-    }
-    allPops(filter: { apId: { equalTo: $apId } }) @include(if: $apIdExists) {
-      nodes {
-        id
-        tpops: tpopsByPopId {
-          nodes {
-            id
-            tpopkontrs: tpopkontrsByTpopId(
-              filter: {
-                or: [
-                  { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } }
-                  { typ: { isNull: true } }
-                ]
-              }
-            ) {
-              totalCount
-            }
-            tpopkontrsFiltered: tpopkontrsByTpopId(filter: $tpopkontrFilter) {
-              totalCount
-            }
-          }
-        }
-      }
     }
   }
 `

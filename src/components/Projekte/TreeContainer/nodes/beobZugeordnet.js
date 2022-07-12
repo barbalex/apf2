@@ -22,7 +22,7 @@ const beobZugeordnetNodes = ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
 
   // map through all elements and create array of nodes
-  const nodes = (data?.allVApbeobsZugeordnet?.nodes ?? [])
+  const nodes = (data?.apBeobsZugeordnet?.nodes ?? [])
     // only show if parent node exists
     .filter((el) =>
       nodesPassed.map((n) => n.id).includes(`${el.tpopId}BeobZugeordnetFolder`),

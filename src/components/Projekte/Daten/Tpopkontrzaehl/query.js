@@ -16,6 +16,7 @@ export default gql`
     }
     allTpopkontrzaehlMethodeWertes(orderBy: SORT_ASC) {
       nodes {
+        id
         value: code
         label: text
       }

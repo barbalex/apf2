@@ -22,7 +22,7 @@ import Checkbox from '../../shared/Checkbox'
 import Error from '../../../../../shared/Error'
 import getBounds from '../../../../../../modules/getBounds'
 import storeContext from '../../../../../../storeContext'
-import query from './data'
+import query from './query'
 import PopIcon from './PopIcon'
 import TpopIcon from './TpopIcon'
 
@@ -122,20 +122,20 @@ const MySortableItem = ({ treeName, apfloraLayer }) => {
     setBounds,
   } = store
   const tree = store[treeName]
-  const { apIdInActiveNodeArray, activeNodeArray } = tree
+  const { apIdInActiveNodeArray, activeNodeArray, beobGqlFilter } = tree
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const layer = apfloraLayer.value
   const pop = layer === 'pop' && activeApfloraLayers.includes('pop')
   const tpop = layer === 'tpop' && activeApfloraLayers.includes('tpop')
-  const beobNichtBeurteilt =
+  const showBeobNichtBeurteilt =
     layer === 'beobNichtBeurteilt' &&
     activeApfloraLayers.includes('beobNichtBeurteilt')
-  const beobNichtZuzuordnen =
+  const showBeobNichtZuzuordnen =
     layer === 'beobNichtZuzuordnen' &&
     activeApfloraLayers.includes('beobNichtZuzuordnen')
-  const beobZugeordnet =
+  const showBeobZugeordnet =
     layer === 'beobZugeordnet' && activeApfloraLayers.includes('beobZugeordnet')
-  const beobZugeordnetAssignPolylines =
+  const showBeobZugeordnetAssignPolylines =
     layer === 'beobZugeordnetAssignPolylines' &&
     activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
 
@@ -143,10 +143,13 @@ const MySortableItem = ({ treeName, apfloraLayer }) => {
     ap: apIdInActiveNodeArray ? [apIdInActiveNodeArray] : [],
     pop,
     tpop,
-    beobNichtBeurteilt,
-    beobNichtZuzuordnen,
-    beobZugeordnet,
-    beobZugeordnetAssignPolylines,
+    showBeobNichtBeurteilt,
+    beobNichtBeurteiltFilter: beobGqlFilter('nichtBeurteilt').filtered,
+    showBeobNichtZuzuordnen,
+    beobNichtZuzuordnenFilter: beobGqlFilter('nichtZuordnen').filtered,
+    showBeobZugeordnet,
+    beobZugeordnetFilter: beobGqlFilter('zugeordnet').filtered,
+    showBeobZugeordnetAssignPolylines,
   }
 
   const { data, error } = useQuery(query, {
@@ -257,6 +260,7 @@ const MySortableItem = ({ treeName, apfloraLayer }) => {
   )
 
   if (error) return <Error error={error} />
+
   return (
     <LayerDiv>
       <Checkbox

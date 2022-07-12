@@ -147,14 +147,7 @@ const fieldTypes = {
   ekfBemerkungen: 'String',
 }
 
-const TpopfreiwkontrForm = ({
-  treeName,
-  showFilter = false,
-  data,
-  refetch,
-  row,
-  apId,
-}) => {
+const TpopfreiwkontrForm = ({ treeName, data, refetch, row, apId }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { dataFilterSetValue, isPrint, view, user } = store
@@ -213,14 +206,6 @@ const TpopfreiwkontrForm = ({
     async (event) => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
-      if (showFilter) {
-        return dataFilterSetValue({
-          treeName,
-          table: 'tpopfreiwkontr',
-          key: field,
-          value,
-        })
-      }
       /**
        * enable passing two values
        * with same update
@@ -311,7 +296,6 @@ const TpopfreiwkontrForm = ({
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
-      showFilter,
       row.id,
       row.typ,
       row.jahr,
@@ -348,124 +332,109 @@ const TpopfreiwkontrForm = ({
     <FormContainer>
       <GridContainer width={width}>
         <Title row={row} />
-        <Headdata
-          pop={pop}
-          tpop={tpop}
-          row={row}
-          showFilter={showFilter}
-          treeName={treeName}
-        />
+        <Headdata pop={pop} tpop={tpop} row={row} />
         <Besttime row={row} />
         <Date saveToDb={saveToDb} row={row} errors={errors} />
-        <Map
-          saveToDb={saveToDb}
-          row={row}
-          errors={errors}
-          showFilter={showFilter}
-        />
-        {!showFilter && (
-          <>
-            <Image key={apId} apId={apId} artname={artname} />
-            {zaehls1 && (
-              <Count
-                key={zaehls1.id}
-                id={zaehls1.id}
-                tpopkontrId={row.id}
-                nr="1"
-                refetch={refetch}
-                einheitsUsed={einheitsUsed}
-                ekzaehleinheits={ekzaehleinheits}
-                ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                treeName={treeName}
-              />
-            )}
-            {zaehl1ShowEmpty && (
-              <CountHint>
-                Sie müssen auf Ebene Art EK-Zähleinheiten definieren, um hier
-                Zählungen erfassen zu können.
-              </CountHint>
-            )}
-            {zaehls2 && (
-              <Count
-                key={zaehls2.id}
-                id={zaehls2.id}
-                tpopkontrId={row.id}
-                nr="2"
-                refetch={refetch}
-                einheitsUsed={einheitsUsed}
-                ekzaehleinheits={ekzaehleinheits}
-                ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                treeName={treeName}
-              />
-            )}
-            {zaehl2ShowNew && (
-              <Count
-                id={null}
-                tpopkontrId={row.id}
-                nr="2"
-                showNew
-                refetch={refetch}
-                einheitsUsed={einheitsUsed}
-                ekzaehleinheits={ekzaehleinheits}
-                ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                treeName={treeName}
-              />
-            )}
-            {zaehl2ShowEmpty && !zaehl1ShowEmpty && (
-              <Count
-                id={null}
-                tpopkontrId={row.id}
-                nr="2"
-                showEmpty
-                showNew
-                refetch={refetch}
-                einheitsUsed={einheitsUsed}
-                ekzaehleinheits={ekzaehleinheits}
-                ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                treeName={treeName}
-              />
-            )}
-            {zaehls3 && (
-              <Count
-                key={zaehls3.id}
-                id={zaehls3.id}
-                tpopkontrId={row.id}
-                nr="3"
-                refetch={refetch}
-                einheitsUsed={einheitsUsed}
-                ekzaehleinheits={ekzaehleinheits}
-                ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                treeName={treeName}
-              />
-            )}
-            {zaehl3ShowNew && (
-              <Count
-                id={null}
-                tpopkontrId={row.id}
-                nr="3"
-                showNew
-                refetch={refetch}
-                einheitsUsed={einheitsUsed}
-                ekzaehleinheits={ekzaehleinheits}
-                ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                treeName={treeName}
-              />
-            )}
-            {zaehl3ShowEmpty && !zaehl2ShowEmpty && (
-              <Count
-                id={null}
-                tpopkontrId={row.id}
-                nr="3"
-                showEmpty
-                showNew
-                refetch={refetch}
-                einheitsUsed={einheitsUsed}
-                ekzaehleinheits={ekzaehleinheits}
-                ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-                treeName={treeName}
-              />
-            )}
-          </>
+        <Map saveToDb={saveToDb} row={row} errors={errors} />
+        <Image key={apId} apId={apId} artname={artname} />
+        {zaehls1 && (
+          <Count
+            key={zaehls1.id}
+            id={zaehls1.id}
+            tpopkontrId={row.id}
+            nr="1"
+            refetch={refetch}
+            einheitsUsed={einheitsUsed}
+            ekzaehleinheits={ekzaehleinheits}
+            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            treeName={treeName}
+          />
+        )}
+        {zaehl1ShowEmpty && (
+          <CountHint>
+            Sie müssen auf Ebene Art EK-Zähleinheiten definieren, um hier
+            Zählungen erfassen zu können.
+          </CountHint>
+        )}
+        {zaehls2 && (
+          <Count
+            key={zaehls2.id}
+            id={zaehls2.id}
+            tpopkontrId={row.id}
+            nr="2"
+            refetch={refetch}
+            einheitsUsed={einheitsUsed}
+            ekzaehleinheits={ekzaehleinheits}
+            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            treeName={treeName}
+          />
+        )}
+        {zaehl2ShowNew && (
+          <Count
+            id={null}
+            tpopkontrId={row.id}
+            nr="2"
+            showNew
+            refetch={refetch}
+            einheitsUsed={einheitsUsed}
+            ekzaehleinheits={ekzaehleinheits}
+            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            treeName={treeName}
+          />
+        )}
+        {zaehl2ShowEmpty && !zaehl1ShowEmpty && (
+          <Count
+            id={null}
+            tpopkontrId={row.id}
+            nr="2"
+            showEmpty
+            showNew
+            refetch={refetch}
+            einheitsUsed={einheitsUsed}
+            ekzaehleinheits={ekzaehleinheits}
+            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            treeName={treeName}
+          />
+        )}
+        {zaehls3 && (
+          <Count
+            key={zaehls3.id}
+            id={zaehls3.id}
+            tpopkontrId={row.id}
+            nr="3"
+            refetch={refetch}
+            einheitsUsed={einheitsUsed}
+            ekzaehleinheits={ekzaehleinheits}
+            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            treeName={treeName}
+          />
+        )}
+        {zaehl3ShowNew && (
+          <Count
+            id={null}
+            tpopkontrId={row.id}
+            nr="3"
+            showNew
+            refetch={refetch}
+            einheitsUsed={einheitsUsed}
+            ekzaehleinheits={ekzaehleinheits}
+            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            treeName={treeName}
+          />
+        )}
+        {zaehl3ShowEmpty && !zaehl2ShowEmpty && (
+          <Count
+            id={null}
+            tpopkontrId={row.id}
+            nr="3"
+            showEmpty
+            showNew
+            refetch={refetch}
+            einheitsUsed={einheitsUsed}
+            ekzaehleinheits={ekzaehleinheits}
+            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            treeName={treeName}
+          />
         )}
         <Cover saveToDb={saveToDb} row={row} errors={errors} />
         <More saveToDb={saveToDb} row={row} errors={errors} />
@@ -474,12 +443,12 @@ const TpopfreiwkontrForm = ({
         {((isPrint && ekfBemerkungen) || !isPrint) && (
           <EkfRemarks saveToDb={saveToDb} row={row} errors={errors} />
         )}
-        {!isPrint && !showFilter && <Files row={row} />}
+        {!isPrint && <Files row={row} />}
         {!isPrint && !isFreiwillig && !(view === 'ekf') && (
           <Verification saveToDb={saveToDb} row={row} errors={errors} />
         )}
       </GridContainer>
-      {!showFilter && !isPrint && !isFreiwillig && !(view === 'ekf') && (
+      {!isPrint && !isFreiwillig && !(view === 'ekf') && (
         <StringToCopy text={row.id} label="GUID" />
       )}
       {!isPrint && <div style={{ height: '64px' }} />}

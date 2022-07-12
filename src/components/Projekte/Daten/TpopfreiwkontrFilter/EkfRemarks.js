@@ -26,18 +26,17 @@ const RemarksVal = styled.div`
   }
 `
 
-const EkfRemarks = ({ saveToDb, row, errors }) => (
+const EkfRemarks = ({ saveToDb, row }) => (
   <Container>
     <RemarksLabel>Mitteilungen zwischen AV/Topos und Freiwilligen</RemarksLabel>
     <RemarksVal>
       <TextField
-        key={`${row.id}ekfBemerkungen`}
+        key={`${row?.id}ekfBemerkungen`}
         name="ekfBemerkungen"
         row={row}
         type="text"
         multiLine
         saveToDb={saveToDb}
-        errors={errors}
       />
     </RemarksVal>
   </Container>

@@ -78,7 +78,7 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const Cover = ({ saveToDb, row, errors }) => {
+const Cover = ({ saveToDb, row }) => {
   //console.log('Cover rendering')
 
   return (
@@ -86,24 +86,22 @@ const Cover = ({ saveToDb, row, errors }) => {
       <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
       <DeckApArtVal>
         <TextField
-          key={`${row.id}deckungApArt`}
+          key={`${row?.id}deckungApArt`}
           name="deckungApArt"
           row={row}
           type="number"
           saveToDb={saveToDb}
-          errors={errors}
         />
       </DeckApArtVal>
       <DeckApArtMass>%</DeckApArtMass>
       <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
       <DeckNaBoVal>
         <TextField
-          key={`${row.id}deckungNackterBoden`}
+          key={`${row?.id}deckungNackterBoden`}
           name="deckungNackterBoden"
           row={row}
           type="number"
           saveToDb={saveToDb}
-          errors={errors}
         />
       </DeckNaBoVal>
       <DeckNaBoMass>%</DeckNaBoMass>

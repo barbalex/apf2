@@ -1,8 +1,7 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback, useContext, useEffect } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from 'styled-components'
-import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
@@ -21,11 +20,11 @@ import query from './query'
 import queryTpopkontrs from './queryTpopkontrs'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopfeldkontrType } from '../../../../store/Tree/DataFilter/tpopfeldkontr'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner'
+import OrTabs from './Tabs'
 
 const Container = styled.div`
   height: 100%;
@@ -66,6 +65,21 @@ const StyledTab = styled(Tab)`
 const TabContent = styled.div`
   height: 100%;
 `
+const FilterCommentTitle = styled.div`
+  margin-top: -10px;
+  padding: 0 10px 16px 10px;
+  font-size: 0.75em;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
+`
+const FilterCommentList = styled.ul`
+  margin-bottom: 10px;
+`
+const FilterComment = styled.li`
+  margin-top: -10px;
+  padding: 0 10px 0 10px;
+  font-size: 0.75em;
+`
 
 const tpopkontrTypWerte = [
   {
@@ -81,44 +95,41 @@ const tpopkontrTypWerte = [
 const TpopfeldkontrFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { dataFilterSetValue, urlQuery, setUrlQuery } = store
-  const { activeNodeArray, dataFilter, filterWidth } = store[treeName]
+  const {
+    dataFilter,
+    filterWidth,
+    ekGqlFilter,
+    nodeLabelFilter,
+    mapFilter,
+    apFilter,
+    artIsFiltered,
+    popIsFiltered,
+    tpopIsFiltered,
+    apIdInActiveNodeArray,
+    popIdInActiveNodeArray,
+    tpopIdInActiveNodeArray,
+  } = store[treeName]
+
+  const apId = apIdInActiveNodeArray
+  const popId = popIdInActiveNodeArray
+  const tpopId = tpopIdInActiveNodeArray
+
+  const [activeTab, setActiveTab] = useState(0)
+  useEffect(() => {
+    if (dataFilter.tpopfeldkontr.length - 1 < activeTab) {
+      // filter was emptied, need to set correct tab
+      setActiveTab(0)
+    }
+  }, [activeTab, dataFilter.tpopfeldkontr.length])
+
+  const row = dataFilter.tpopfeldkontr[activeTab]
 
   const width = filterWidth
-  const apId = activeNodeArray[3]
   const { data, loading, error } = useQuery(query)
-  const allTpopkontrFilter = {
-    or: [
-      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
-      { typ: { isNull: true } },
-    ],
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopkontrFilter = {
-    or: [
-      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
-      { typ: { isNull: true } },
-    ],
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopfeldkontrFilterValues = Object.entries(
-    dataFilter.tpopfeldkontr,
-  ).filter((e) => e[1] || e[1] === 0)
-  tpopfeldkontrFilterValues.forEach(([key, value]) => {
-    const expression =
-      tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopkontrFilter[key] = { [expression]: value }
-  })
   const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
     variables: {
-      allTpopkontrFilter,
-      tpopkontrFilter,
-      apId,
-      apIdExists: !!apId,
-      apIdNotExists: !apId,
+      filteredFilter: ekGqlFilter.filtered,
+      allFilter: ekGqlFilter.all,
     },
   })
 
@@ -136,27 +147,6 @@ const TpopfeldkontrFilter = ({ treeName }) => {
     [setUrlQuery, urlQuery],
   )
 
-  let totalNr
-  let filteredNr
-  const row = dataFilter.tpopfeldkontr
-  if (apId) {
-    const pops = dataTpopkontrs?.allPops?.nodes ?? []
-    const tpops = flatten(pops.map((p) => p?.tpops?.nodes ?? []))
-    totalNr = !tpops.length
-      ? '...'
-      : tpops
-          .map((p) => p?.tpopkontrs?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-    filteredNr = !tpops.length
-      ? '...'
-      : tpops
-          .map((p) => p?.tpopkontrsFiltered?.totalCount)
-          .reduce((acc = 0, val) => acc + val)
-  } else {
-    totalNr = dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'
-    filteredNr = dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'
-  }
-
   const saveToDb = useCallback(
     async (event) =>
       dataFilterSetValue({
@@ -164,8 +154,9 @@ const TpopfeldkontrFilter = ({ treeName }) => {
         table: 'tpopfeldkontr',
         key: event.target.name,
         value: ifIsNumericAsNumber(event.target.value),
+        index: activeTab,
       }),
-    [dataFilterSetValue, treeName],
+    [activeTab, dataFilterSetValue, treeName],
   )
 
   const aeLrWerte = (data?.allAeLrDelarzes?.nodes ?? [])
@@ -176,6 +167,41 @@ const TpopfeldkontrFilter = ({ treeName }) => {
 
   const columnWidth =
     width > 2 * constants.columnWidth ? constants.columnWidth : undefined
+
+  const navApFilterComment = apFilter
+    ? `Navigationsbaum, "nur AP"-Filter: Nur Feld-Kontrollen von AP-Arten werden berücksichtigt.`
+    : undefined
+  const navHiearchyComment = tpopId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
+    : popId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
+    : apId
+    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
+    : undefined
+  const navLabelComment = nodeLabelFilter.tpopfeldkontr
+    ? `Navigationsbaum, Label-Filter: Das Label der Feld-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
+    : undefined
+  const artHierarchyComment = artIsFiltered
+    ? 'Formular-Filter, Ebene Art: Es werden nur Feld-Kontrollen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const popHierarchyComment = popIsFiltered
+    ? 'Formular-Filter, Ebene Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const tpopHierarchyComment = tpopIsFiltered
+    ? 'Formular-Filter, Ebene Teil-Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const mapFilterComment = mapFilter
+    ? 'Karten-Filter: Nur Feld-Kontrollen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
+    : undefined
+
+  const showFilterComments =
+    !!navApFilterComment ||
+    !!navHiearchyComment ||
+    !!navLabelComment ||
+    !!artHierarchyComment ||
+    !!popHierarchyComment ||
+    !!tpopHierarchyComment ||
+    !!mapFilter
 
   if (loading) return <Spinner />
 
@@ -188,8 +214,43 @@ const TpopfeldkontrFilter = ({ treeName }) => {
           title="Feld-Kontrollen"
           treeName={treeName}
           table="tpopfeldkontr"
-          totalNr={totalNr}
-          filteredNr={filteredNr}
+          totalNr={dataTpopkontrs?.allTpopkontrs?.totalCount ?? '...'}
+          filteredNr={dataTpopkontrs?.tpopkontrsFiltered?.totalCount ?? '...'}
+          activeTab={activeTab}
+        />
+        {showFilterComments && (
+          <>
+            <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
+            <FilterCommentList>
+              {!!navApFilterComment && (
+                <FilterComment>{navApFilterComment}</FilterComment>
+              )}
+              {!!navHiearchyComment && (
+                <FilterComment>{navHiearchyComment}</FilterComment>
+              )}
+              {!!navLabelComment && (
+                <FilterComment>{navLabelComment}</FilterComment>
+              )}
+              {!!artHierarchyComment && (
+                <FilterComment>{artHierarchyComment}</FilterComment>
+              )}
+              {!!popHierarchyComment && (
+                <FilterComment>{popHierarchyComment}</FilterComment>
+              )}
+              {!!tpopHierarchyComment && (
+                <FilterComment>{tpopHierarchyComment}</FilterComment>
+              )}
+              {!!mapFilterComment && (
+                <FilterComment>{mapFilterComment}</FilterComment>
+              )}
+            </FilterCommentList>
+          </>
+        )}
+        <OrTabs
+          dataFilter={dataFilter.tpopfeldkontr}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          treeName={treeName}
         />
         <FieldsContainer>
           <Tabs
@@ -215,20 +276,20 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       name="jahr"
                       label="Jahr"
                       type="number"
-                      value={row.jahr}
+                      value={row?.jahr}
                       saveToDb={saveToDb}
                     />
                     <DateField
                       name="datum"
                       label="Datum"
-                      value={row.datum}
+                      value={row?.datum}
                       saveToDb={saveToDb}
                     />
                     <RadioButtonGroup
                       name="typ"
                       label="Kontrolltyp"
                       dataSource={tpopkontrTypWerte}
-                      value={row.typ}
+                      value={row?.typ}
                       saveToDb={saveToDb}
                     />
                     <Select
@@ -236,27 +297,27 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       label="BearbeiterIn"
                       options={data?.allAdresses?.nodes ?? []}
                       loading={loading}
-                      value={row.bearbeiter}
+                      value={row?.bearbeiter}
                       saveToDb={saveToDb}
                     />
                     <JesNo
                       name="jungpflanzenVorhanden"
                       label="Jungpflanzen vorhanden"
-                      value={row.jungpflanzenVorhanden}
+                      value={row?.jungpflanzenVorhanden}
                       saveToDb={saveToDb}
                     />
                     <TextField
                       name="vitalitaet"
                       label="Vitalität"
                       type="text"
-                      value={row.vitalitaet}
+                      value={row?.vitalitaet}
                       saveToDb={saveToDb}
                     />
                     <TextField
                       name="ueberlebensrate"
                       label="Überlebensrate (in Prozent)"
                       type="number"
-                      value={row.ueberlebensrate}
+                      value={row?.ueberlebensrate}
                       saveToDb={saveToDb}
                     />
                     <RadioButtonGroupWithInfo
@@ -265,7 +326,7 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
                       loading={loading}
                       popover={TpopfeldkontrentwicklungPopover}
-                      value={row.entwicklung}
+                      value={row?.entwicklung}
                       saveToDb={saveToDb}
                     />
                     <TextField
@@ -274,7 +335,7 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       hintText="Standort: ..., Klima: ..., anderes: ..."
                       type="text"
                       multiLine
-                      value={row.ursachen}
+                      value={row?.ursachen}
                       saveToDb={saveToDb}
                     />
                     <TextField
@@ -282,7 +343,7 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       label="Gefährdung"
                       type="text"
                       multiLine
-                      value={row.gefaehrdung}
+                      value={row?.gefaehrdung}
                       saveToDb={saveToDb}
                     />
                     <TextField
@@ -290,7 +351,7 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       label="Erfolgsbeurteilung"
                       type="text"
                       multiLine
-                      value={row.erfolgsbeurteilung}
+                      value={row?.erfolgsbeurteilung}
                       saveToDb={saveToDb}
                     />
                     <TextField
@@ -298,7 +359,7 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       label="Änderungs-Vorschläge Umsetzung"
                       type="text"
                       multiLine
-                      value={row.umsetzungAendern}
+                      value={row?.umsetzungAendern}
                       saveToDb={saveToDb}
                     />
                     <TextField
@@ -306,19 +367,19 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       label="Änderungs-Vorschläge Kontrolle"
                       type="text"
                       multiLine
-                      value={row.kontrolleAendern}
+                      value={row?.kontrolleAendern}
                       saveToDb={saveToDb}
                     />
                     <MdField
                       name="bemerkungen"
                       label="Bemerkungen"
-                      value={row.bemerkungen}
+                      value={row?.bemerkungen}
                       saveToDb={saveToDb}
                     />
                     <JesNo
                       name="apberNichtRelevant"
                       label="Im Jahresbericht nicht berücksichtigen"
-                      value={row.apberNichtRelevant}
+                      value={row?.apberNichtRelevant}
                       saveToDb={saveToDb}
                     />
                     <TextField
@@ -326,7 +387,7 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       label="Wieso im Jahresbericht nicht berücksichtigen?"
                       type="text"
                       multiLine
-                      value={row.apberNichtRelevantGrund}
+                      value={row?.apberNichtRelevantGrund}
                       saveToDb={saveToDb}
                     />
                   </FormContainer>
@@ -339,7 +400,7 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       name="flaeche"
                       label="Fläche"
                       type="number"
-                      value={row.flaeche}
+                      value={row?.flaeche}
                       saveToDb={saveToDb}
                     />
                     <Section>Vegetation</Section>
@@ -349,7 +410,7 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       label="Lebensraum nach Delarze"
                       options={aeLrWerte}
                       loading={loading}
-                      value={row.lrDelarze}
+                      value={row?.lrDelarze}
                       saveToDb={saveToDb}
                     />
                     <Select
@@ -357,49 +418,49 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       label="Umgebung nach Delarze"
                       options={aeLrWerte}
                       loading={loading}
-                      value={row.lrUmgebungDelarze}
+                      value={row?.lrUmgebungDelarze}
                       saveToDb={saveToDb}
                     />
                     <TextField
                       name="vegetationstyp"
                       label="Vegetationstyp"
                       type="text"
-                      value={row.vegetationstyp}
+                      value={row?.vegetationstyp}
                       saveToDb={saveToDb}
                     />
                     <TextField
                       name="konkurrenz"
                       label="Konkurrenz"
                       type="text"
-                      value={row.konkurrenz}
+                      value={row?.konkurrenz}
                       saveToDb={saveToDb}
                     />
                     <TextField
                       name="moosschicht"
                       label="Moosschicht"
                       type="text"
-                      value={row.moosschicht}
+                      value={row?.moosschicht}
                       saveToDb={saveToDb}
                     />
                     <TextField
                       name="krautschicht"
                       label="Krautschicht"
                       type="text"
-                      value={row.krautschicht}
+                      value={row?.krautschicht}
                       saveToDb={saveToDb}
                     />
                     <TextField
                       name="strauchschicht"
                       label="Strauchschicht"
                       type="text"
-                      value={row.strauchschicht}
+                      value={row?.strauchschicht}
                       saveToDb={saveToDb}
                     />
                     <TextField
                       name="baumschicht"
                       label="Baumschicht"
                       type="text"
-                      value={row.baumschicht}
+                      value={row?.baumschicht}
                       saveToDb={saveToDb}
                     />
                     <Section>Beurteilung</Section>
@@ -408,7 +469,7 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                       label="Handlungsbedarf"
                       type="text"
                       multiline
-                      value={row.handlungsbedarf}
+                      value={row?.handlungsbedarf}
                       saveToDb={saveToDb}
                     />
                     <RadioButtonGroup
@@ -418,7 +479,7 @@ const TpopfeldkontrFilter = ({ treeName }) => {
                         data?.allTpopkontrIdbiotuebereinstWertes?.nodes ?? []
                       }
                       loading={loading}
-                      value={row.idealbiotopUebereinstimmung}
+                      value={row?.idealbiotopUebereinstimmung}
                       saveToDb={saveToDb}
                     />
                   </FormContainer>

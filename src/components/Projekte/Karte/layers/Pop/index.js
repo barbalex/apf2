@@ -1,9 +1,9 @@
-import React, { useContext, useMemo, useEffect, useState } from 'react'
-import flatten from 'lodash/flatten'
+import React, { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useQuery } from '@apollo/client'
 import { useMap } from 'react-leaflet'
+import cloneDeep from 'lodash/cloneDeep'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
@@ -26,33 +26,16 @@ const iconCreateFunction = function (cluster) {
 const Pop = ({ treeName }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { activeApfloraLayers, enqueNotification, setRefetchKey } = store
+  const { enqueNotification, setRefetchKey } = store
   const tree = store[treeName]
-  const {
-    projIdInActiveNodeArray,
-    apIdInActiveNodeArray,
-    popGqlFilter,
-    tpopGqlFilter,
-  } = tree
+  const { popGqlFilter } = tree
 
-  const projId =
-    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const isActiveInMap = activeApfloraLayers.includes('pop')
-  const tpopLayerIsActive = activeApfloraLayers.includes('tpop')
-  const perProj = apId === '99999999-9999-9999-9999-999999999999'
-  const perAp = apId !== '99999999-9999-9999-9999-999999999999'
+  const popFilter = cloneDeep(popGqlFilter.filtered)
+  popFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
 
   var { data, error, refetch } = useQuery(query, {
     variables: {
-      perAp,
-      apId,
-      perProj,
-      projId,
-      tpopLayerIsActive,
-      isActiveInMap,
-      popFilter: popGqlFilter.filtered,
-      tpopFilter: tpopGqlFilter.filtered,
+      popFilter,
     },
   })
   setRefetchKey({ key: 'popForMap', value: refetch })
@@ -84,35 +67,12 @@ const Pop = ({ treeName }) => {
     })
   }
 
-  const aps = useMemo(
-    () => data?.projektById?.[perAp ? 'perAp' : 'perProj']?.nodes ?? [],
-    [data?.projektById, perAp],
-  )
-  let pops = useMemo(
-    () =>
-      flatten(aps.map((ap) => ap?.popsByApId?.nodes ?? [])).filter(
-        (pop) => !!pop.wgs84Lat,
-      ),
-    [aps],
-  )
-
-  // if tpop are filtered, only show their pop
-  if (activeApfloraLayers.includes('tpop')) {
-    const popsForTpops = flatten(aps.map((ap) => ap?.popsByApId?.nodes ?? []))
-    // adding useMemo here results in error ???
-    const tpops = flatten(
-      popsForTpops.map((pop) => pop?.tpopsByPopId?.nodes ?? []),
-    )
-    const popIdsOfTpops = tpops.map((t) => t.popId)
-    pops = pops.filter((p) => popIdsOfTpops.includes(p.id))
-  }
-
   return (
     <MarkerClusterGroup
       maxClusterRadius={66}
       iconCreateFunction={iconCreateFunction}
     >
-      {pops.map((pop) => (
+      {(data?.allPops?.nodes ?? []).map((pop) => (
         <Marker key={pop.id} treeName={treeName} pop={pop} />
       ))}
     </MarkerClusterGroup>

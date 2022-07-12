@@ -36,6 +36,7 @@ const KontrollenComponent = ({ treeName }) => {
         {expanded ? (
           <StyledCardContent>
             <Kontrollen treeName={treeName} />
+            <Kontrollen treeName={treeName} filtered={true} />
             <KontrFuerWebgisBun />
             <KontrAnzProZaehlEinheit />
           </StyledCardContent>

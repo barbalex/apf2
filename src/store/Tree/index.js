@@ -12,7 +12,6 @@ import Map, { defaultValue as defaultMap } from './Map'
 import Geojson from './Geojson'
 import initialDataFilterValues from './DataFilter/initialValues'
 import DataFilter from './DataFilter/types'
-import simpleTypes from './DataFilter/simpleTypes'
 import { simpleTypes as popType } from './DataFilter/pop'
 import {
   simpleTypes as tpopType,
@@ -22,8 +21,15 @@ import {
   simpleTypes as tpopmassnType,
   initial as initialTpopmassn,
 } from './DataFilter/tpopmassn'
+import {
+  simpleTypes as tpopfeldkontrType,
+  initial as initialTpopfeldkontr,
+} from './DataFilter/tpopfeldkontr'
+import {
+  simpleTypes as tpopfreiwkontrType,
+  initial as initialTpopfreiwkontr,
+} from './DataFilter/tpopfreiwkontr'
 import { simpleTypes as apType } from './DataFilter/ap'
-import exists from '../../modules/exists'
 
 export default types
   .model('Tree', {
@@ -247,7 +253,7 @@ export default types
         // add data filter
         const dataFilterAp = { ...filter }
         const apFilterValues = Object.entries(dataFilterAp).filter(
-          (e) => e[1] || e[1] === 0,
+          (e) => e[1] !== null,
         )
         apFilterValues.forEach(([key, value]) => {
           const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
@@ -281,13 +287,13 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
-      console.log('apGqlFilter:', apGqlFilter)
+      // console.log('apGqlFilter:', apGqlFilter)
 
       return apGqlFilter
     },
     get artIsFiltered() {
       const firstFilterObject = {
-        ...(self.apGqlFilter?.filtered.or?.[0] ?? {}),
+        ...(self.apGqlFilter?.filtered?.or?.[0] ?? {}),
       }
       let entries = Object.entries(firstFilterObject).filter(
         (e) => e[0] !== 'projId',
@@ -356,7 +362,7 @@ export default types
         // add data filter
         const dataFilterPop = { ...filter }
         const popFilterValues = Object.entries(dataFilterPop).filter(
-          (e) => e[1] || e[1] === 0,
+          (e) => e[1] !== null,
         )
         popFilterValues.forEach(([key, value]) => {
           const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
@@ -396,13 +402,13 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
-      console.log('popGqlFilter:', popGqlFilter)
+      // console.log('popGqlFilter:', popGqlFilter)
 
       return popGqlFilter
     },
     get popIsFiltered() {
       const firstFilterObject = {
-        ...(self.popGqlFilter?.filtered.or?.[0] ?? {}),
+        ...(self.popGqlFilter?.filtered?.or?.[0] ?? {}),
       }
       let entries = Object.entries(firstFilterObject).filter(
         (e) => !['projId', 'apId', 'apByApId', 'geomPoint'].includes(e[0]),
@@ -470,7 +476,7 @@ export default types
         // add data filter
         const dataFilterTpop = { ...filter }
         const tpopFilterValues = Object.entries(dataFilterTpop).filter(
-          (e) => e[1] || e[1] === 0,
+          (e) => e[1] !== null,
         )
         tpopFilterValues.forEach(([key, value]) => {
           const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
@@ -511,13 +517,13 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
-      console.log('tpopGqlFilter:', tpopGqlFilter)
+      // console.log('tpopGqlFilter:', tpopGqlFilter)
 
       return tpopGqlFilter
     },
     get tpopIsFiltered() {
       const firstFilterObject = {
-        ...(self.tpopGqlFilter?.filtered.or?.[0] ?? {}),
+        ...(self.tpopGqlFilter?.filtered?.or?.[0] ?? {}),
       }
       let entries = Object.entries(firstFilterObject).filter(
         (e) =>
@@ -598,7 +604,7 @@ export default types
         const dataFilterTpopmassn = { ...filter }
         const tpopmassnFilterValues = Object.entries(
           dataFilterTpopmassn,
-        ).filter((e) => e[1] || e[1] === 0)
+        ).filter((e) => e[1] !== null)
         tpopmassnFilterValues.forEach(([key, value]) => {
           const expression =
             tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
@@ -639,50 +645,374 @@ export default types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
-      console.log('tpopmassnGqlFilter:', tpopmassnGqlFilter)
+      // console.log('tpopmassnGqlFilter:', tpopmassnGqlFilter)
 
       return tpopmassnGqlFilter
     },
-    get tpopkontrGqlFilter() {
-      const ek = Object.fromEntries(
-        Object.entries(getSnapshot(self.dataFilter.tpopfeldkontr))
-          // eslint-disable-next-line no-unused-vars
-          .filter(([key, value]) => exists(value))
-          .map(([key, value]) => {
-            // if is string: includes, else: equalTo
-            const type = simpleTypes.tpopfeldkontr[key]
-            if (type === 'string') {
-              return [key, { includes: value }]
-            }
-            return [key, { equalTo: value }]
-          }),
+    get ekGqlFilter() {
+      // 1. prepare hiearchy filter
+      const projId = self.projIdInActiveNodeArray
+      const apId = self.apIdInActiveNodeArray
+      const popId = self.popIdInActiveNodeArray
+      const tpopId = self.tpopIdInActiveNodeArray
+      const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
+      const popHierarchyFilter = popId
+        ? { tpopByTpopId: { popId: { equalTo: popId } } }
+        : {}
+      const apHiearchyFilter = apId
+        ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+        : {}
+      const projHiearchyFilter = projId
+        ? {
+            tpopByTpopId: {
+              popByPopId: { apByApId: { projId: { equalTo: projId } } },
+            },
+          }
+        : {}
+      let singleFilterByHierarchy = nestedObjectAssign(
+        {},
+        { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
+        tpopHierarchyFilter,
+        popHierarchyFilter,
+        apHiearchyFilter,
+        projHiearchyFilter,
       )
-      const ekf = Object.fromEntries(
-        Object.entries(getSnapshot(self.dataFilter.tpopfreiwkontr))
-          // eslint-disable-next-line no-unused-vars
-          .filter(([key, value]) => exists(value))
-          .map(([key, value]) => {
-            // if is string: includes, else: equalTo
-            const type = simpleTypes.tpopfreiwkontr[key]
-            if (type === 'string') {
-              return [key, { includes: value }]
-            }
-            return [key, { equalTo: value }]
-          }),
-      )
-      const k = { ...ekf, ...ek }
-      // if mapFilter is set, filter by its geometry
-      if (self.mapFilter) {
-        k.tpopByTpopId = {
-          geomPoint: {
-            coveredBy: self.mapFilter,
-          },
-        }
+      const singleFilterByParentFiltersForAll = {
+        tpopByTpopId: self.tpopGqlFilter.all,
       }
-      // return a valid filter even if no filter criterias exist
-      // but ensure it returns all rows
-      if (Object.entries(k).length === 0) return { id: { isNull: false } }
-      return k
+      const singleFilterForAll = nestedObjectAssign(
+        singleFilterByHierarchy,
+        singleFilterByParentFiltersForAll,
+      )
+      const singleFilterByParentFiltersForFiltered = {
+        tpopByTpopId: self.tpopGqlFilter.filtered,
+      }
+      // 2. prepare data filter
+      let filterArrayInStore = self.dataFilter.tpopfeldkontr
+        ? [...getSnapshot(self.dataFilter.tpopfeldkontr)]
+        : []
+      if (filterArrayInStore.length > 1) {
+        // check if last is empty
+        // empty last is just temporary because user created new "oder" and has not yet input criteria
+        // remove it or filter result will be wrong (show all) if criteria.length > 1!
+        const last = filterArrayInStore[filterArrayInStore.length - 1]
+        const lastIsEmpty =
+          Object.values(last).filter((v) => v !== null).length === 0
+        if (lastIsEmpty) {
+          // popping did not work
+          filterArrayInStore = filterArrayInStore.slice(0, -1)
+        }
+      } else if (filterArrayInStore.length === 0) {
+        // Add empty filter if no criteria exist yet
+        // Goal: enable adding filters for hierarchy, label and geometry
+        // If no filters were added: this empty element will be removed after loopin
+        filterArrayInStore.push(initialTpopfeldkontr)
+      }
+      // 3. build data filter
+      const filterArray = []
+      for (const filter of filterArrayInStore) {
+        // add hiearchy filter
+        const singleFilter = nestedObjectAssign(
+          {},
+          singleFilterByHierarchy,
+          singleFilterByParentFiltersForFiltered,
+        )
+        // add data filter
+        const dataFilter = { ...filter }
+        const filterValues = Object.entries(dataFilter).filter(
+          (e) => e[1] !== null,
+        )
+        filterValues.forEach(([key, value]) => {
+          const expression =
+            tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
+          singleFilter[key] = { [expression]: value }
+        })
+        // add node label filter
+        if (self.nodeLabelFilter.tpopfeldkontr) {
+          singleFilter.label = {
+            includesInsensitive: self.nodeLabelFilter.tpopfeldkontr,
+          }
+        }
+        // add mapFilter
+        if (self.mapFilter) {
+          singleFilter.tpopByTpopId.geomPoint = {
+            coveredBy: self.mapFilter,
+          }
+        }
+        // Object could be empty if no filters exist
+        // Do not add empty objects
+        if (
+          Object.values(singleFilter).filter((v) => v !== null).length === 0
+        ) {
+          break
+        }
+        // Object has filter criteria. Add it!
+        filterArray.push(singleFilter)
+      }
+
+      // extra check to ensure no empty objects exist
+      const filterArrayWithoutEmptyObjects = filterArray.filter(
+        (el) => Object.keys(el).length > 0,
+      )
+
+      const ekGqlFilter = {
+        all: Object.keys(singleFilterForAll).length
+          ? singleFilterForAll
+          : { or: [] },
+        filtered: { or: filterArrayWithoutEmptyObjects },
+      }
+
+      // console.log('ekGqlFilter:', ekGqlFilter)
+
+      return ekGqlFilter
+    },
+    get ekIsFiltered() {
+      const firstFilterObject = {
+        ...(self.ekGqlFilter?.filtered?.or?.[0] ?? {}),
+      }
+      let entries = Object.entries(firstFilterObject).filter(
+        (e) => !['tpopByTpopId'].includes(e[0]),
+      )
+      return entries.length > 0
+    },
+    get ekfGqlFilter() {
+      // 1. prepare hiearchy filter
+      const projId = self.projIdInActiveNodeArray
+      const apId = self.apIdInActiveNodeArray
+      const popId = self.popIdInActiveNodeArray
+      const tpopId = self.tpopIdInActiveNodeArray
+      const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
+      const popHierarchyFilter = popId
+        ? { tpopByTpopId: { popId: { equalTo: popId } } }
+        : {}
+      const apHiearchyFilter = apId
+        ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+        : {}
+      const projHiearchyFilter = projId
+        ? {
+            tpopByTpopId: {
+              popByPopId: { apByApId: { projId: { equalTo: projId } } },
+            },
+          }
+        : {}
+      const singleFilterByHierarchy = nestedObjectAssign(
+        {},
+        { typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' } },
+        tpopHierarchyFilter,
+        popHierarchyFilter,
+        apHiearchyFilter,
+        projHiearchyFilter,
+      )
+      const singleFilterByParentFiltersForAll = {
+        tpopByTpopId: self.tpopGqlFilter.all,
+      }
+      const singleFilterForAll = nestedObjectAssign(
+        singleFilterByHierarchy,
+        singleFilterByParentFiltersForAll,
+      )
+      const singleFilterByParentFiltersForFiltered = {
+        tpopByTpopId: self.tpopGqlFilter.filtered,
+      }
+      // 2. prepare data filter
+      let filterArrayInStore = self.dataFilter.tpopfreiwkontr
+        ? [...getSnapshot(self.dataFilter.tpopfreiwkontr)]
+        : []
+      if (filterArrayInStore.length > 1) {
+        // check if last is empty
+        // empty last is just temporary because user created new "oder" and has not yet input criteria
+        // remove it or filter result will be wrong (show all) if criteria.length > 1!
+        const last = filterArrayInStore[filterArrayInStore.length - 1]
+        const lastIsEmpty =
+          Object.values(last).filter((v) => v !== null).length === 0
+        if (lastIsEmpty) {
+          // popping did not work
+          filterArrayInStore = filterArrayInStore.slice(0, -1)
+        }
+      } else if (filterArrayInStore.length === 0) {
+        // Add empty filter if no criteria exist yet
+        // Goal: enable adding filters for hierarchy, label and geometry
+        // If no filters were added: this empty element will be removed after loopin
+        filterArrayInStore.push(initialTpopfreiwkontr)
+      }
+      // 3. build data filter
+      const filterArray = []
+      for (const filter of filterArrayInStore) {
+        // add hiearchy filter
+        const singleFilter = nestedObjectAssign(
+          {},
+          singleFilterByHierarchy,
+          singleFilterByParentFiltersForFiltered,
+        )
+        // add data filter
+        const dataFilter = { ...filter }
+        const filterValues = Object.entries(dataFilter).filter(
+          (e) => e[1] !== null,
+        )
+        filterValues.forEach(([key, value]) => {
+          const expression =
+            tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
+          singleFilter[key] = { [expression]: value }
+        })
+        // add node label filter
+        if (self.nodeLabelFilter.tpopfreiwkontr) {
+          singleFilter.label = {
+            includesInsensitive: self.nodeLabelFilter.tpopfreiwkontr,
+          }
+        }
+        // add mapFilter
+        if (self.mapFilter) {
+          singleFilter.tpopByTpopId.geomPoint = {
+            coveredBy: self.mapFilter,
+          }
+        }
+        // Object could be empty if no filters exist
+        // Do not add empty objects
+        if (
+          Object.values(singleFilter).filter((v) => v !== null).length === 0
+        ) {
+          break
+        }
+        // Object has filter criteria. Add it!
+        filterArray.push(singleFilter)
+      }
+
+      // extra check to ensure no empty objects exist
+      const filterArrayWithoutEmptyObjects = filterArray.filter(
+        (el) => Object.keys(el).length > 0,
+      )
+
+      const ekfGqlFilter = {
+        all: Object.keys(singleFilterForAll).length
+          ? singleFilterForAll
+          : { or: [] },
+        filtered: { or: filterArrayWithoutEmptyObjects },
+      }
+
+      // console.log('ekfGqlFilter:', ekfGqlFilter)
+
+      return ekfGqlFilter
+    },
+    get ekfIsFiltered() {
+      const firstFilterObject = {
+        ...(self.ekfGqlFilter?.filtered?.or?.[0] ?? {}),
+      }
+      let entries = Object.entries(firstFilterObject).filter(
+        (e) => !['tpopByTpopId'].includes(e[0]),
+      )
+      return entries.length > 0
+    },
+    get tpopkontrGqlFilter() {
+      return {
+        or: [self.ekGqlFilter?.filtered, self.ekfGqlFilter.filtered],
+      }
+    },
+    get tpopkontrIsFiltered() {
+      return self.ekfIsFiltered ?? self.ekIsFiltered
+    },
+    beobGqlFilter(type) {
+      // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet
+      // 1. prepare hiearchy filter
+      const projId = self.projIdInActiveNodeArray
+      const apId = self.apIdInActiveNodeArray
+      const popId = self.popIdInActiveNodeArray
+      const tpopId = self.tpopIdInActiveNodeArray
+
+      const apFilter = {
+        aeTaxonomyByArtId: {
+          apartsByArtId: {
+            // important: NEVER load from all species!
+            some: {
+              apId: { equalTo: apId ?? '99999999-9999-9999-9999-999999999999' },
+            },
+          },
+        },
+      }
+
+      const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
+      const popHierarchyFilter = popId
+        ? { tpopByTpopId: { popId: { equalTo: popId } } }
+        : {}
+      const apHiearchyFilter = apId
+        ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+        : {}
+      const projHiearchyFilter = projId
+        ? {
+            tpopByTpopId: {
+              popByPopId: { apByApId: { projId: { equalTo: projId } } },
+            },
+          }
+        : {}
+      let singleFilterByHierarchy = nestedObjectAssign(
+        {},
+        tpopHierarchyFilter,
+        popHierarchyFilter,
+        apHiearchyFilter,
+        projHiearchyFilter,
+      )
+      const typeFilter = {
+        wgs84Lat: { isNull: false },
+      }
+      if (type === 'zugeordnet') {
+        typeFilter.tpopId = { isNull: false }
+      }
+      if (type === 'nichtBeurteilt') {
+        typeFilter.tpopId = { isNull: true }
+      }
+      if (type === 'nichtZuzuordnen') {
+        typeFilter.nichtZuordnen = { equalTo: true }
+      }
+
+      const singleFilterByParentFiltersForAll = {
+        tpopByTpopId: self.tpopGqlFilter.all,
+      }
+      const singleFilterForAll =
+        type === 'zugeordnet'
+          ? nestedObjectAssign(
+              typeFilter,
+              apFilter,
+              singleFilterByHierarchy,
+              singleFilterByParentFiltersForAll,
+            )
+          : nestedObjectAssign(typeFilter, apFilter)
+      const singleFilterByParentFiltersForFiltered = {
+        tpopByTpopId: self.tpopGqlFilter.filtered,
+      }
+
+      // node label filter
+      const nodeLabelFilter = self.nodeLabelFilter.beob
+        ? {
+            label: {
+              includesInsensitive: self.nodeLabelFilter.beob,
+            },
+          }
+        : {}
+      // mapFilter
+      const mapFilter = self.mapFilter
+        ? {
+            geomPoint: {
+              coveredBy: self.mapFilter,
+            },
+          }
+        : {}
+      const singleFilter = nestedObjectAssign(
+        typeFilter,
+        apFilter,
+        type === 'zugeordnet' ? singleFilterByHierarchy : {},
+        type === 'zugeordnet' ? singleFilterByParentFiltersForFiltered : {},
+        nodeLabelFilter,
+        mapFilter,
+      )
+
+      const beobGqlFilter = {
+        all: Object.keys(singleFilterForAll).length
+          ? singleFilterForAll
+          : { or: [] },
+        filtered: singleFilter,
+      }
+
+      // console.log('beobGqlFilter:', { beobGqlFilter, type })
+
+      return beobGqlFilter
     },
   }))
 

@@ -196,8 +196,10 @@ const myTypes = types
       self?.[treeName]?.dataFilter?.[table]?.push(val)
     },
     dataFilterSetValue({ treeName, table, key, value, index }) {
+      // console.log('dataFilterSetValue', { table, key, value, index })
       if (index !== undefined) {
         if (!self[treeName].dataFilter[table][index]) {
+          // console.log('dataFilterSetValue adding new initial value')
           self?.[treeName]?.dataFilter?.[table]?.push(
             dataFilterInitialValues[table],
           )

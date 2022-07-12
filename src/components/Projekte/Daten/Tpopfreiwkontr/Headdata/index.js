@@ -78,24 +78,16 @@ const StatusLabel = styled(Label)`
   grid-area: statusVal;
 `
 
-const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
+const Headdata = ({ pop, tpop, row }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { dataFilterSetValue, user } = store
+  const { user } = store
   const { data, loading, error } = useQuery(queryAdresses)
   const [errors, setErrors] = useState(null)
 
   const saveToDb = useCallback(
     async (event) => {
       const { value } = event.target
-      if (showFilter) {
-        return dataFilterSetValue({
-          treeName,
-          table: 'tpopfreiwkontr',
-          key: 'bearbeiter',
-          value,
-        })
-      }
       const variables = {
         id: row.id,
         bearbeiter: value,
@@ -197,7 +189,6 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
       setErrors(null)
     },
     [
-      showFilter,
       row.id,
       row.typ,
       row.jahr,
@@ -219,8 +210,6 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
       row.tpopByTpopId,
       row.tpopkontrzaehlsByTpopkontrId,
       user.name,
-      dataFilterSetValue,
-      treeName,
       client,
     ],
   )
@@ -254,7 +243,7 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
           loading={loading}
           saveToDb={saveToDb}
           error={
-            !showFilter && row.bearbeiter && !userCount
+            row.bearbeiter && !userCount
               ? 'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, dem diese Adresse zugeordnet wurde.'
               : errors
           }

@@ -58,7 +58,6 @@ const TpopmassnFilter = ({ treeName }) => {
   const { dataFilterSetValue } = store
 
   const {
-    activeNodeArray,
     dataFilter,
     filterWidth: width,
     tpopmassnGqlFilter,
@@ -68,13 +67,14 @@ const TpopmassnFilter = ({ treeName }) => {
     artIsFiltered,
     popIsFiltered,
     tpopIsFiltered,
+    apIdInActiveNodeArray,
+    popIdInActiveNodeArray,
+    tpopIdInActiveNodeArray,
   } = store[treeName]
 
-  // need to slice to rerender on change
-  const aNA = activeNodeArray.slice()
-  const apId = aNA[3]
-  const popId = aNA[5]
-  const tpopId = aNA[7]
+  const apId = apIdInActiveNodeArray
+  const popId = popIdInActiveNodeArray
+  const tpopId = tpopIdInActiveNodeArray
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {

@@ -1,5 +1,4 @@
-import React, { useContext, useMemo } from 'react'
-import flatten from 'lodash/flatten'
+import React, { useContext } from 'react'
 import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
@@ -9,29 +8,11 @@ import query from './query'
 
 const BeobZugeordnetAssignPolylines = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { setRefetchKey, enqueNotification, activeApfloraLayers } = store
-  const tree = store[treeName]
-  const { projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
+  const { setRefetchKey, enqueNotification } = store
+  const { beobGqlFilter } = store[treeName]
 
-  const projId =
-    projIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
-  const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
-  const isActiveInMap = activeApfloraLayers.includes(
-    'beobZugeordnetAssignPolylines',
-  )
-
-  const beobFilter = {
-    tpopId: { isNull: false },
-    nichtZuordnen: { equalTo: false },
-    wgs84Lat: { isNull: false },
-  }
-  if (tree.nodeLabelFilter.beob) {
-    beobFilter.label = {
-      includesInsensitive: tree.nodeLabelFilter.beob,
-    }
-  }
   var { data, error, refetch } = useQuery(query, {
-    variables: { projId, apId, isActiveInMap, beobFilter },
+    variables: { beobFilter: beobGqlFilter('zugeordnet').filtered },
   })
   setRefetchKey({ key: 'beobAssignLines', value: refetch })
 
@@ -44,19 +25,7 @@ const BeobZugeordnetAssignPolylines = ({ treeName }) => {
     })
   }
 
-  const aparts = useMemo(
-    () => data?.projektById?.apsByProjId?.nodes?.[0]?.apartsByApId?.nodes ?? [],
-    [data?.projektById?.apsByProjId?.nodes],
-  )
-  const beobs = useMemo(
-    () =>
-      flatten(
-        aparts.map((a) => a?.aeTaxonomyByArtId?.beobsByArtId?.nodes ?? []),
-      ),
-    [aparts],
-  )
-
-  return beobs.map((beob) => (
+  return (data?.allBeobs?.nodes ?? []).map((beob) => (
     <Polyline key={beob.id} beob={beob} treeName={treeName} />
   ))
 }

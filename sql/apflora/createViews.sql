@@ -3520,33 +3520,35 @@ ORDER BY
 
 -- need this because filtering on apart
 -- in graphql overwhelms the server
-CREATE OR REPLACE VIEW apflora.v_apbeob AS
-SELECT
-  beob.id,
-  beob.quelle,
-  beob.id_field,
-  beob.art_id,
-  beob.datum,
-  beob.autor,
-  beob.geom_point,
-  beob.data,
-  beob.tpop_id,
-  beob.nicht_zuordnen,
-  beob.infoflora_informiert_datum,
-  beob.bemerkungen,
-  beob.changed_by,
-  beob.wgs84_lat,
-  beob.wgs84_long,
-  apflora.apart.ap_id,
-  concat(to_char(beob.datum, 'YYYY.MM.DD'), ': ', coalesce(beob.autor, '(kein Autor)'), ' (', beob.quelle, ')') AS label
-FROM
-  apflora.beob beob
-  INNER JOIN apflora.apart ON apflora.apart.art_id = beob.art_id
-ORDER BY
-  beob.datum DESC,
-  beob.autor ASC,
-  beob.quelle ASC;
+-- no more needed, 2022.07.12
+DROP VIEW apflora.v_apbeob;
 
+-- CREATE OR REPLACE VIEW apflora.v_apbeob AS
+-- SELECT
+--   beob.id,
+--   beob.quelle,
+--   beob.id_field,
+--   beob.art_id,
+--   beob.datum,
+--   beob.autor,
+--   beob.geom_point,
+--   beob.data,
+--   beob.tpop_id,
+--   beob.nicht_zuordnen,
+--   beob.infoflora_informiert_datum,
+--   beob.bemerkungen,
+--   beob.changed_by,
+--   beob.wgs84_lat,
+--   beob.wgs84_long,
+--   apflora.apart.ap_id,
+--   concat(to_char(beob.datum, 'YYYY.MM.DD'), ': ', coalesce(beob.autor, '(kein Autor)'), ' (', beob.quelle, ')') AS label
+-- FROM
+--   apflora.beob beob
+--   INNER JOIN apflora.apart ON apflora.apart.art_id = beob.art_id
+-- ORDER BY
+--   beob.datum DESC,
+--   beob.autor ASC,
+--   beob.quelle ASC;
 -- used in exports
 -- use https://github.com/hnsl/colpivot instead?
 DROP VIEW IF EXISTS apflora.v_tpop_last_count CASCADE;

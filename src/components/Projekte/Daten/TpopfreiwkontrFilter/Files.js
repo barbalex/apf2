@@ -23,7 +23,7 @@ const EkfFiles = ({ row }) => (
   <Container>
     <RemarksLabel>Dateien</RemarksLabel>
     <RemarksVal>
-      <Files parentId={row.id} parent="tpopkontr" />
+      <Files parentId={row?.id} parent="tpopkontr" />
     </RemarksVal>
   </Container>
 )

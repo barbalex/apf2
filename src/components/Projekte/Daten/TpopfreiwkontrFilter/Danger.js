@@ -34,7 +34,7 @@ const DangerVal = styled.div`
   }
 `
 
-const Danger = ({ saveToDb, row, errors }) => {
+const Danger = ({ saveToDb, row }) => {
   //console.log('Danger rendering')
 
   return (
@@ -47,13 +47,12 @@ const Danger = ({ saveToDb, row, errors }) => {
       </DangerLabel>
       <DangerVal>
         <TextField
-          key={`${row.id}gefaehrdung`}
+          key={`${row?.id}gefaehrdung`}
           name="gefaehrdung"
           row={row}
           type="text"
           multiLine
           saveToDb={saveToDb}
-          errors={errors}
         />
       </DangerVal>
     </Container>

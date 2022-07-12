@@ -107,6 +107,12 @@ const Projekte = () => {
   const tpopGqlFilterTree2 = store.tree2.tpopGqlFilter
   const tpopmassnGqlFilterTree = store.tree.tpopmassnGqlFilter
   const tpopmassnGqlFilterTree2 = store.tree2.tpopmassnGqlFilter
+  const ekGqlFilterTree = store.tree.ekGqlFilter
+  const ekGqlFilterTree2 = store.tree2.ekGqlFilter
+  const ekfGqlFilterTree = store.tree.ekfGqlFilter
+  const ekfGqlFilterTree2 = store.tree2.ekfGqlFilter
+  const beobGqlFilterTree = store.tree.beobGqlFilter
+  const beobGqlFilterTree2 = store.tree2.beobGqlFilter
 
   const queryTreeVariables = useMemo(
     () =>
@@ -119,7 +125,10 @@ const Projekte = () => {
         popGqlFilter: popGqlFilterTree,
         tpopGqlFilter: tpopGqlFilterTree,
         tpopmassnGqlFilter: tpopmassnGqlFilterTree,
+        ekGqlFilter: ekGqlFilterTree,
+        ekfGqlFilter: ekfGqlFilterTree,
         apGqlFilter: apGqlFilterTree,
+        beobGqlFilter: beobGqlFilterTree,
       }),
     [
       treeDataFilter,
@@ -130,7 +139,10 @@ const Projekte = () => {
       popGqlFilterTree,
       tpopGqlFilterTree,
       tpopmassnGqlFilterTree,
+      ekGqlFilterTree,
+      ekfGqlFilterTree,
       apGqlFilterTree,
+      beobGqlFilterTree,
     ],
   )
   const queryTree2Variables = useMemo(
@@ -144,7 +156,10 @@ const Projekte = () => {
         popGqlFilter: popGqlFilterTree2,
         tpopGqlFilter: tpopGqlFilterTree2,
         tpopmassnGqlFilter: tpopmassnGqlFilterTree2,
+        ekGqlFilter: ekGqlFilterTree2,
+        ekfGqlFilter: ekfGqlFilterTree2,
         apGqlFilter: apGqlFilterTree2,
+        beobGqlFilter: beobGqlFilterTree2,
       }),
     [
       tree2DataFilter,
@@ -155,7 +170,10 @@ const Projekte = () => {
       popGqlFilterTree2,
       tpopGqlFilterTree2,
       tpopmassnGqlFilterTree2,
+      ekGqlFilterTree2,
+      ekfGqlFilterTree2,
       apGqlFilterTree2,
+      beobGqlFilterTree2,
     ],
   )
 
