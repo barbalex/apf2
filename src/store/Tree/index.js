@@ -1010,7 +1010,7 @@ export default types
         filtered: singleFilter,
       }
 
-      console.log('beobGqlFilter:', { beobGqlFilter, type })
+      // console.log('beobGqlFilter:', { beobGqlFilter, type })
 
       return beobGqlFilter
     },
