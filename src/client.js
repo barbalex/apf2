@@ -111,7 +111,6 @@ const Client = ({ store }) => {
           'QTpopOhneMassnber',
           'QTpopOhneTpopber',
           'QTpopCountedEinheitMultipleTimesInYear',
-          'VApbeob',
           'VApAuswPopMenge',
           'VQApMitAktuellenKontrollenOhneZielrelevanteEinheit',
           'VQEkzieleinheitOhneMassnZaehleinheit',
@@ -174,9 +173,6 @@ const Client = ({ store }) => {
           'VTpopOhnebekanntseit',
           'VTpopPopberundmassnber',
           'VTpopWebgisbun',
-          'VApbeobsNichtBeurteilt',
-          'VApbeobsNichtZuzuordnen',
-          'VApbeobsZugeordnet',
           'NearestTpopForApResp',
           'TpopOutsideZhForAp',
         ].includes(object.__typename)
