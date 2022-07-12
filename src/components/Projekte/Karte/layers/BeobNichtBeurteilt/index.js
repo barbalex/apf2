@@ -37,7 +37,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   const apId = apIdInActiveNodeArray ?? '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobNichtBeurteilt')
 
-  const beobFilter = {
+  const beobFilter = { 
     tpopId: { isNull: true },
     nichtZuordnen: { equalTo: false },
     wgs84Lat: { isNull: false },

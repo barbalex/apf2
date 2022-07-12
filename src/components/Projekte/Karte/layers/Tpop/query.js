@@ -1,7 +1,5 @@
 import { gql } from '@apollo/client'
 
-import { tpop } from '../../../../shared/fragments'
-
 export default gql`
   query TpopForMapQuery($tpopFilter: TpopFilter!) {
     allTpops(filter: $tpopFilter) {
