@@ -671,7 +671,12 @@ export default types
         : {}
       let singleFilterByHierarchy = nestedObjectAssign(
         {},
-        { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
+        {
+          or: [
+            { typ: { isNull: true } },
+            { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
+          ],
+        },
         tpopHierarchyFilter,
         popHierarchyFilter,
         apHiearchyFilter,
