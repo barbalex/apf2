@@ -74,7 +74,7 @@ Erfasst man für die Art `Aktionsplan = erstellt` UND `Stand Umsetzung = in Umse
 
 #### Oder-Filter
 
-Im Formular-Filter gibt es bei Arten, Populationen, Teil-Populationen und Massnahmen nummerierte Register. Und rechts daneben ein (zunächst inaktives) mit `oder` beschriftetes.<br/>
+Im Formular-Filter gibt es nummerierte Register. Und rechts daneben ein (zunächst inaktives) mit `oder` beschriftetes.<br/>
 ![Register](formular_filter_3.png)<br/>
 
 Die Nummern nummerieren Kriterien der Oder-Filterung. Sobald in einem Register ein Wert erfasst wurde (oder mehrere, siehe Und-Filter), wird das mit `oder` beschriftete Register aktiv. Klickt man darauf und erfasst darin weitere Werte, hat man eine Oder-Filterung geschaffen. Will heissen: Es wird nach Datensätzen gefiltert, die entweder die Kriterien im Register 1 oder diejenigen im Register 2 erfüllen. Die Anzahl Register bzw. oder-Kriterien ist unbeschränkt.<br/><br/>
@@ -86,7 +86,7 @@ Will man alle ursprünglichen Populationen, filtert man im Filter-Formular für 
 
 - Im Navigationsbaum
 - In der Karte (Populationen, Teil-Populationen)
-- In einigen Exporten gibt es zwei Befehle: Neben dem normalen, der alle Objekte (abhängig von den Zugriffsrechten) ungefiltert exportiert, einen zusätzlichen der den aktuellen Filter anwendet
+- In einigen Exporten gibt es zwei Befehle: Neben dem normalen, der alle Objekte (abhängig von den Zugriffsrechten) ungefiltert exportiert, einen zusätzlichen der den aktuellen Filter anwendet. Er ist deaktiviert, wenn kein Filter existiert
 
 ## Es gibt so viele Filter. Wie spielen sie zusammen?
 
@@ -113,8 +113,8 @@ Im Navigationsbaum, in der Karte und in den filterbaren Exporten sehen Sie nur n
 Im Formular-Filter gibt es oben drei Symbole:<br/>
 ![Entfernen](entfernen_1.png)<br/>
 
-- Mit dem linken Symbol kann man das aktuelle Kriterium der oder-Filterung entfernen (sichtbar als das aktivierte Register)
-- Mit dem mittleren Symbol kann man den Filter (alle oder-Kriterien) in der aktiven Ebene entfernen (z.B. Population). Filter in anderen Ebenen bleiben erhalten (z.B. Art)
+- Mit dem linken Symbol kann man das aktuelle Kriterium der oder-Filterung entfernen (sichtbar als das aktive Register)
+- Mit dem mittleren Symbol kann man den Filter in der aktiven Ebene entfernen (z.B. Population). Filter in anderen Ebenen bleiben erhalten (z.B. Art)
 - Mit dem rechten Symbol kann man alle aktiven Filter entfernen. Das betrifft auch Navigationsbaum-Label-Filter, nur-AP-Filter und Karten-Filter. Nicht aber den hierarchischen Navigationsbaum-Filter - dafür wäre eine Navigation nötig und die könnte Benutzer überraschen bzw. ungewollt sein
 
 ## Es gibt so viele Filter. Wie weiss ich, welche aktiv sind?
