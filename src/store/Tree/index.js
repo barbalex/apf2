@@ -649,6 +649,19 @@ export default types
 
       return tpopmassnGqlFilter
     },
+    get tpopmassnIsFiltered() {
+      const firstFilterObject = {
+        ...(self.tpopmassnGqlFilter?.filtered?.or?.[0] ?? {}),
+      }
+      // console.log('tpopmassnIsFiltered, firstFilterObject:', firstFilterObject)
+      let entries = Object.entries(firstFilterObject).filter(
+        (e) =>
+          !['projId', 'apId', 'popId', 'tpopByTpopId', 'geomPoint'].includes(
+            e[0],
+          ),
+      )
+      return entries.length > 0
+    },
     get ekGqlFilter() {
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray

@@ -127,7 +127,7 @@ const BeobachtungenExports = ({ treeName }) => {
       store,
     })
     setQueryState(undefined)
-  }, [client, enqueNotification, store])
+  }, [client, enqueNotification, mapFilter, store])
 
   return (
     <DownloadCardButton

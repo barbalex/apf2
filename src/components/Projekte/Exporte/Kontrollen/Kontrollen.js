@@ -305,9 +305,6 @@ const KontrollenButton = ({ treeName, filtered = false }) => {
         exportModule({
           data: rows,
           fileName: 'Kontrollen',
-          idKey: 'tpop_id',
-          xKey: 'tpop_wgs84lat',
-          yKey: 'tpop_wgs84long',
           store,
         })
         setQueryState(undefined)

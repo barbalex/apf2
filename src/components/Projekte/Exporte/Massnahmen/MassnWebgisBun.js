@@ -88,9 +88,6 @@ const MassnahmenExporte = () => {
         exportModule({
           data: rows,
           fileName: 'MassnahmenWebGisBun',
-          idKey: 'TPOPGUID',
-          xKey: 'TPOP_WGS84LAT',
-          yKey: 'TPOP_WGS84LONG',
           store,
         })
         setQueryState(undefined)

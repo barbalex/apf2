@@ -35,6 +35,7 @@ const MassnahmenExporte = ({ treeName }) => {
         {expanded ? (
           <StyledCardContent>
             <Massnahmen treeName={treeName} />
+            <Massnahmen treeName={treeName} filtered={true} />
             <MassnWebgisBun />
           </StyledCardContent>
         ) : null}

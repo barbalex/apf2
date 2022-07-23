@@ -104,9 +104,6 @@ const TPopInklBerichte = () => {
         exportModule({
           data: rows,
           fileName: 'TeilpopulationenTPopUndMassnBerichte',
-          idKey: 'tpop_id',
-          xKey: 'tpop_wgs84lat',
-          yKey: 'tpop_wgs84long',
           store,
         })
         setQueryState(undefined)

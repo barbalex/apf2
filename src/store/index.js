@@ -240,22 +240,12 @@ const myTypes = types
       ) {
         return true
       }
-      // check hierarchy filter: is included in dataFilter
-      // check dataFilter
-      const dataFilter = getSnapshot(self[treeName].dataFilter[table])
-      if (['ap', 'pop', 'tpop'].includes(table)) {
-        // or filter
-        return dataFilter.some(
-          (filter) =>
-            Object.values(filter).filter((v) => v !== null).length > 0,
-        )
-      }
-      if (['tpopfeldkontr', 'tpopfreiwkontr', 'tpopmassn'].includes(table)) {
-        // single filter
-        return Object.values(dataFilter).filter((v) => v !== null).length > 0
-      }
-      // this table is not filtered beyond nodeLabelFilter
-      return false
+      // check data and hierarchy filter: is included in gqlFilter
+      // check gql filter
+      const gqlFilter =
+        self?.[treeName]?.[`${table}GqlFilter`]?.filtered?.or?.[0] ?? {}
+      const isGqlFilter = Object.keys(gqlFilter).length > 0
+      return isGqlFilter
     },
     dataFilterTreeIsFiltered(treeName) {
       const tables = Object.keys(self[treeName].dataFilter)

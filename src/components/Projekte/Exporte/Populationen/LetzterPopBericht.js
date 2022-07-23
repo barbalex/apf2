@@ -128,9 +128,6 @@ const LetzterPopBericht = () => {
         exportModule({
           data: sortBy(rows, ['artname', 'pop_nr']),
           fileName: 'PopulationenMitLetzemPopBericht',
-          idKey: 'pop_id',
-          xKey: 'pop_wgs84lat',
-          yKey: 'pop_wgs84long',
           store,
         })
         setQueryState(undefined)

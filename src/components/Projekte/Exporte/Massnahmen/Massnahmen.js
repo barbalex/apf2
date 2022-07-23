@@ -6,13 +6,11 @@ import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
-const Massnahmen = ({treeName}) => {
+const Massnahmen = ({ treeName, filtered = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, tableIsFiltered } =
-    store
-  const {  tpopmassnGqlFilter } =
-    store[treeName]
+  const { enqueNotification, tableIsFiltered } = store
+  const { tpopmassnGqlFilter } = store[treeName]
 
   const [queryState, setQueryState] = useState()
 
@@ -24,7 +22,7 @@ const Massnahmen = ({treeName}) => {
   return (
     <DownloadCardButton
       color="inherit"
-      disabled={!!queryState}
+      disabled={!!queryState || (filtered && !tpopmassnIsFiltered)}
       onClick={async () => {
         setQueryState('lade Daten...')
         let result
@@ -148,7 +146,7 @@ const Massnahmen = ({treeName}) => {
               }
             `,
             variables: {
-              filter: tpopmassnGqlFilter,
+              filter: filtered ? tpopmassnGqlFilter.filtered : { or: [] },
             },
           })
         } catch (error) {
@@ -160,7 +158,7 @@ const Massnahmen = ({treeName}) => {
           })
         }
         setQueryState('verarbeite...')
-        const rows = (result.data?.allTpopmassns.nodes ?? []).map((n) => ({
+        const rows = (result?.data?.allTpopmassns.nodes ?? []).map((n) => ({
           apId: n?.tpopByTpopId?.popByPopId?.apByApId?.id ?? null,
           apFamilie:
             n?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.familie ??
@@ -256,15 +254,12 @@ const Massnahmen = ({treeName}) => {
         exportModule({
           data: rows,
           fileName: 'Massnahmen',
-          idKey: 'tpop_id',
-          xKey: 'tpop_wgs84lat',
-          yKey: 'tpop_wgs84long',
           store,
         })
         setQueryState(undefined)
       }}
     >
-      {tpopmassnIsFiltered ? 'Massnahmen (gefiltert)' : 'Massnahmen'}
+      {filtered ? 'Massnahmen (gefiltert)' : 'Massnahmen'}
       {queryState ? (
         <StyledProgressText>{queryState}</StyledProgressText>
       ) : null}

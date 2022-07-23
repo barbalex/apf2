@@ -102,9 +102,6 @@ const Kontrollen = () => {
         exportModule({
           data: rows,
           fileName: 'KontrollenWebGisBun',
-          idKey: 'TPOPGUID',
-          xKey: 'KONTR_WGS84LAT',
-          yKey: 'KONTR_WGS84LONG',
           store,
         })
         setQueryState(undefined)

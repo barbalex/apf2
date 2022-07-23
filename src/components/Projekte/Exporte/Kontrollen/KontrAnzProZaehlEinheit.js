@@ -132,9 +132,6 @@ const KontrAnzProZaehlEinheit = () => {
         exportModule({
           data: rows,
           fileName: 'KontrollenAnzahlProZaehleinheit',
-          idKey: 'tpop_id',
-          xKey: 'tpop_wgs84lat',
-          yKey: 'tpop_wgs84long',
           store,
         })
       }}

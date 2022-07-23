@@ -94,9 +94,6 @@ const Teilpopulationen = () => {
         exportModule({
           data: rows,
           fileName: 'TeilpopulationenWebGisBun',
-          idKey: 'TPOPID',
-          xKey: 'TPOP_WGS84LAT',
-          yKey: 'TPOP_WGS84LONG',
           store,
         })
         setQueryState(undefined)
