@@ -2,32 +2,51 @@
  * gets a latLng wgs 84
  * returns tpopId of nearest tpop
  */
+import nearestPoint from '@turf/nearest-point'
+import { featureCollection, point } from '@turf/helpers'
 import { gql } from '@apollo/client'
-import { tpop } from '../components/shared/fragments'
+import flatten from 'lodash/flatten'
 
 const getNearestTpop = async ({ latLng, client, apId }) => {
   const { lat, lng } = latLng
+  const myPoint = point([lat, lng])
   const { data } = await client.query({
     query: gql`
-      query nearestTpopForApQuery($apId: UUID, $point: String) {
-        nearestTpopForApFunction(apId: $apId, point: $point) {
-          nodes {
-            ...TpopFields
+      query getNearestTpopQuery($apId: UUID!) {
+        apById(id: $apId) {
+          id
+          popsByApId {
+            nodes {
+              id
+              tpopsByPopId(filter: { wgs84Lat: { isNull: false } }) {
+                nodes {
+                  id
+                  popId
+                  wgs84Lat
+                  wgs84Long
+                }
+              }
+            }
           }
         }
       }
-      ${tpop}
     `,
-    variables: {
-      apId: apId || '99999999-9999-9999-9999-999999999999',
-      point: `SRID=4326;POINT(${lng} ${lat})`,
-    },
-    // WARNING: caching can lead to completely incomprehensible behavior where previous values are returned
-    // https://github.com/barbalex/apf2/issues/536
-    fetchPolicy: 'no-cache',
+    variables: { apId: apId || '99999999-9999-9999-9999-999999999999' },
   })
-  const val = data?.nearestTpopForApFunction?.nodes?.[0]
-  return val
+  const pops = data?.apById?.popsByApId?.nodes ?? []
+  const tpops = flatten(
+    pops.map((p) => (p?.tpopsByPopId?.nodes ?? []).filter((t) => t.wgs84Lat)),
+  )
+  const tpopPoints = featureCollection(
+    tpops.map((t) =>
+      point([t.wgs84Lat, t.wgs84Long], {
+        id: t.id,
+        popId: t.popId,
+      }),
+    ),
+  )
+  const nearestTpopFeature = nearestPoint(myPoint, tpopPoints)
+  return nearestTpopFeature.properties
 }
 
 export default getNearestTpop
