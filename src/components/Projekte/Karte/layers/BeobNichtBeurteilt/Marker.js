@@ -91,9 +91,9 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
           tpopId: nearestTpop.id,
         },
       })
-      refetch.beobNichtBeurteiltForMap()
-      refetch.beobZugeordnetForMap()
-      refetch.beobAssignLines()
+      refetch?.beobNichtBeurteiltForMap?.()
+      refetch?.beobZugeordnetForMap?.()
+      refetch?.beobAssignLines?.()
     },
     [apId, beob.id, client, projId, refetch, setActiveNodeArray],
   )
