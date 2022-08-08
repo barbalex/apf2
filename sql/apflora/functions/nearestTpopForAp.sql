@@ -1,3 +1,6 @@
+-- no more in use. Reason:
+-- apollographql completely fucked up return values
+-- tried lots of stuff but all ended in data errors
 DROP TYPE IF EXISTS apflora.nearest_tpop_for_ap_resp CASCADE;
 
 CREATE TYPE apflora.nearest_tpop_for_ap_resp AS (
