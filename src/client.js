@@ -173,7 +173,6 @@ const Client = ({ store }) => {
           'VTpopOhnebekanntseit',
           'VTpopPopberundmassnber',
           'VTpopWebgisbun',
-          'NearestTpopForApResp',
           'TpopOutsideZhForAp',
         ].includes(object.__typename)
       ) {

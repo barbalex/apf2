@@ -3,6 +3,7 @@
  * returns tpopId of nearest tpop
  */
 import { gql } from '@apollo/client'
+import { tpop } from '../components/shared/fragments'
 
 const getNearestTpop = async ({ latLng, client, apId }) => {
   const { lat, lng } = latLng
@@ -11,11 +12,11 @@ const getNearestTpop = async ({ latLng, client, apId }) => {
       query nearestTpopForApQuery($apId: UUID, $point: String) {
         nearestTpopForApFunction(apId: $apId, point: $point) {
           nodes {
-            popId
-            id
+            ...TpopFields
           }
         }
       }
+      ${tpop}
     `,
     variables: {
       apId: apId || '99999999-9999-9999-9999-999999999999',
