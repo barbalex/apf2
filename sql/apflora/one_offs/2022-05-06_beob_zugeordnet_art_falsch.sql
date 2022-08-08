@@ -1,4 +1,4 @@
--- CREATE OR REPLACE VIEW apflora.v_beob_zugeordnet_art_falsch AS
+-- CREATE OR REPLACE VIEW apflora.v_beob_zugeordnet_art_falsch AS 
 SELECT
   beob.id AS beob_id,
   beob.art_id AS beob_art_id,
