@@ -1,7 +1,7 @@
 ---
 typ: 'benutzerDoku'
 path: '/Dokumentation/Benutzer/Filter'
-date: '2022-07-08'
+date: '2022-08-08'
 title: 'Filter'
 sort: 14
 ---
@@ -18,7 +18,7 @@ Die Position in der aktuellen Navigation beeinflusst den aktuell angewandten Fil
 Beispiele:<br/>
 
 - Wechseln Sie mit offener Karte und darauf eingeblendeten Populationen von Art zu Art, werden immer deren jeweiligen Populationen angezeigt.
-- Wechseln Sie mit offener Karte und darauf eingeblendeten Teil-Populationen von Population zu Population, werden immer deren jeweiligen Teil-Populationen angezeigt.
+- <s>Wechseln Sie mit offener Karte und darauf eingeblendeten Teil-Populationen von Population zu Population, werden immer deren jeweiligen Teil-Populationen angezeigt.</s> _Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt._
 
 ### 2. Navigationsbaum, Label-Filter
 
