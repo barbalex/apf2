@@ -58,13 +58,13 @@ const Tpopfreiwkontr = ({ treeName }) => {
     popIsFiltered,
     tpopIsFiltered,
     apIdInActiveNodeArray,
-    popIdInActiveNodeArray,
-    tpopIdInActiveNodeArray,
+    // popIdInActiveNodeArray,
+    // tpopIdInActiveNodeArray,
   } = tree
 
   const apId = apIdInActiveNodeArray
-  const popId = popIdInActiveNodeArray
-  const tpopId = tpopIdInActiveNodeArray
+  // const popId = popIdInActiveNodeArray
+  // const tpopId = tpopIdInActiveNodeArray
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -86,13 +86,13 @@ const Tpopfreiwkontr = ({ treeName }) => {
   const navApFilterComment = apFilter
     ? `Navigationsbaum, "nur AP"-Filter: Nur Freiwilligen-Kontrollen von AP-Arten werden berücksichtigt.`
     : undefined
-  const navHiearchyComment = tpopId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.'
-    : popId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.'
-    : apId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.'
-    : undefined
+  const navHiearchyComment =
+    // tpopId ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.'
+    // : popId
+    // ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.' :
+    apId
+      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.'
+      : undefined
   const navLabelComment = nodeLabelFilter.tpopfeldkontr
     ? `Navigationsbaum, Label-Filter: Das Label der Freiwilligen-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
     : undefined

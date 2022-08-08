@@ -72,7 +72,7 @@ const TpopFilter = ({ treeName }) => {
   // need to slice to rerender on change
   const aNA = activeNodeArray.slice()
   const apId = aNA[3]
-  const popId = aNA[5]
+  // const popId = aNA[5]
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -112,11 +112,11 @@ const TpopFilter = ({ treeName }) => {
   const navApFilterComment = apFilter
     ? `Navigationsbaum, "nur AP"-Filter: Nur Teil-Populationen von AP-Arten werden berücksichtigt.`
     : undefined
-  const navHiearchyComment = popId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.'
-    : apId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.'
-    : undefined
+  const navHiearchyComment =
+    // popId ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.' :
+    apId
+      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.'
+      : undefined
   const navLabelComment = nodeLabelFilter.tpop
     ? `Navigationsbaum, Label-Filter: Das Label der Teil-Populationen wird nach "${nodeLabelFilter.tpop}" gefiltert.`
     : undefined

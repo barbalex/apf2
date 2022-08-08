@@ -106,13 +106,13 @@ const TpopfeldkontrFilter = ({ treeName }) => {
     popIsFiltered,
     tpopIsFiltered,
     apIdInActiveNodeArray,
-    popIdInActiveNodeArray,
-    tpopIdInActiveNodeArray,
+    // popIdInActiveNodeArray,
+    // tpopIdInActiveNodeArray,
   } = store[treeName]
 
   const apId = apIdInActiveNodeArray
-  const popId = popIdInActiveNodeArray
-  const tpopId = tpopIdInActiveNodeArray
+  // const popId = popIdInActiveNodeArray
+  // const tpopId = tpopIdInActiveNodeArray
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -171,13 +171,13 @@ const TpopfeldkontrFilter = ({ treeName }) => {
   const navApFilterComment = apFilter
     ? `Navigationsbaum, "nur AP"-Filter: Nur Feld-Kontrollen von AP-Arten werden berücksichtigt.`
     : undefined
-  const navHiearchyComment = tpopId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
-    : popId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
-    : apId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
-    : undefined
+  const navHiearchyComment =
+    // tpopId ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
+    // : popId
+    // ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.' :
+    apId
+      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
+      : undefined
   const navLabelComment = nodeLabelFilter.tpopfeldkontr
     ? `Navigationsbaum, Label-Filter: Das Label der Feld-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
     : undefined

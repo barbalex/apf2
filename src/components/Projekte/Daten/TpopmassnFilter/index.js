@@ -68,13 +68,13 @@ const TpopmassnFilter = ({ treeName }) => {
     popIsFiltered,
     tpopIsFiltered,
     apIdInActiveNodeArray,
-    popIdInActiveNodeArray,
-    tpopIdInActiveNodeArray,
+    // popIdInActiveNodeArray,
+    // tpopIdInActiveNodeArray,
   } = store[treeName]
 
   const apId = apIdInActiveNodeArray
-  const popId = popIdInActiveNodeArray
-  const tpopId = tpopIdInActiveNodeArray
+  // const popId = popIdInActiveNodeArray
+  // const tpopId = tpopIdInActiveNodeArray
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -115,13 +115,13 @@ const TpopmassnFilter = ({ treeName }) => {
   const navApFilterComment = apFilter
     ? `Navigationsbaum, "nur AP"-Filter: Nur Massnahmen von AP-Arten werden berücksichtigt.`
     : undefined
-  const navHiearchyComment = tpopId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
-    : popId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
-    : apId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
-    : undefined
+  const navHiearchyComment =
+    // tpopId ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
+    // : popId
+    // ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Massnahmen berücksichtigt.' :
+    apId
+      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
+      : undefined
   const navLabelComment = nodeLabelFilter.tpopmassn
     ? `Navigationsbaum, Label-Filter: Das Label der Massnahmen wird nach "${nodeLabelFilter.tpopmassn}" gefiltert.`
     : undefined
