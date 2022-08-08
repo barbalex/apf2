@@ -419,8 +419,9 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      const popId = self.popIdInActiveNodeArray
-      const popHierarchyFilter = popId ? { popId: { equalTo: popId } } : {}
+      // Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt
+      // const popId = self.popIdInActiveNodeArray
+      // const popHierarchyFilter = popId ? { popId: { equalTo: popId } } : {}
       const apHiearchyFilter = apId
         ? { popByPopId: { apId: { equalTo: apId } } }
         : {}
@@ -429,7 +430,7 @@ export default types
         : {}
       let singleFilterByHierarchy = nestedObjectAssign(
         {},
-        popHierarchyFilter,
+        // popHierarchyFilter,
         apHiearchyFilter,
         projHiearchyFilter,
       )
@@ -537,12 +538,13 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      const popId = self.popIdInActiveNodeArray
-      const tpopId = self.tpopIdInActiveNodeArray
-      const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
-      const popHierarchyFilter = popId
-        ? { tpopByTpopId: { popId: { equalTo: popId } } }
-        : {}
+      // Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt
+      // const popId = self.popIdInActiveNodeArray
+      // const tpopId = self.tpopIdInActiveNodeArray
+      // const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
+      // const popHierarchyFilter = popId
+      //   ? { tpopByTpopId: { popId: { equalTo: popId } } }
+      //   : {}
       const apHiearchyFilter = apId
         ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
@@ -555,8 +557,8 @@ export default types
         : {}
       let singleFilterByHierarchy = nestedObjectAssign(
         {},
-        tpopHierarchyFilter,
-        popHierarchyFilter,
+        // tpopHierarchyFilter,
+        // popHierarchyFilter,
         apHiearchyFilter,
         projHiearchyFilter,
       )
@@ -666,12 +668,13 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      const popId = self.popIdInActiveNodeArray
-      const tpopId = self.tpopIdInActiveNodeArray
-      const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
-      const popHierarchyFilter = popId
-        ? { tpopByTpopId: { popId: { equalTo: popId } } }
-        : {}
+      // Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt
+      // const popId = self.popIdInActiveNodeArray
+      // const tpopId = self.tpopIdInActiveNodeArray
+      // const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
+      // const popHierarchyFilter = popId
+      //   ? { tpopByTpopId: { popId: { equalTo: popId } } }
+      //   : {}
       const apHiearchyFilter = apId
         ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
@@ -690,8 +693,8 @@ export default types
             { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
           ],
         },
-        tpopHierarchyFilter,
-        popHierarchyFilter,
+        // tpopHierarchyFilter,
+        // popHierarchyFilter,
         apHiearchyFilter,
         projHiearchyFilter,
       )
@@ -797,12 +800,13 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      const popId = self.popIdInActiveNodeArray
-      const tpopId = self.tpopIdInActiveNodeArray
-      const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
-      const popHierarchyFilter = popId
-        ? { tpopByTpopId: { popId: { equalTo: popId } } }
-        : {}
+      // Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt
+      // const popId = self.popIdInActiveNodeArray
+      // const tpopId = self.tpopIdInActiveNodeArray
+      // const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
+      // const popHierarchyFilter = popId
+      //   ? { tpopByTpopId: { popId: { equalTo: popId } } }
+      //   : {}
       const apHiearchyFilter = apId
         ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
@@ -816,8 +820,8 @@ export default types
       const singleFilterByHierarchy = nestedObjectAssign(
         {},
         { typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' } },
-        tpopHierarchyFilter,
-        popHierarchyFilter,
+        // tpopHierarchyFilter,
+        // popHierarchyFilter,
         apHiearchyFilter,
         projHiearchyFilter,
       )
@@ -932,8 +936,8 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      const popId = self.popIdInActiveNodeArray
-      const tpopId = self.tpopIdInActiveNodeArray
+      // const popId = self.popIdInActiveNodeArray
+      // const tpopId = self.tpopIdInActiveNodeArray
 
       const apFilter = {
         aeTaxonomyByArtId: {
@@ -946,10 +950,11 @@ export default types
         },
       }
 
-      const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
-      const popHierarchyFilter = popId
-        ? { tpopByTpopId: { popId: { equalTo: popId } } }
-        : {}
+      // Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt
+      // const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
+      // const popHierarchyFilter = popId
+      //   ? { tpopByTpopId: { popId: { equalTo: popId } } }
+      //   : {}
       const apHiearchyFilter = apId
         ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
@@ -962,8 +967,8 @@ export default types
         : {}
       let singleFilterByHierarchy = nestedObjectAssign(
         {},
-        tpopHierarchyFilter,
-        popHierarchyFilter,
+        // tpopHierarchyFilter,
+        // popHierarchyFilter,
         apHiearchyFilter,
         projHiearchyFilter,
       )
