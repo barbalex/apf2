@@ -1,0 +1,1 @@
+Ab Version 1.78.0: Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt
