@@ -91,9 +91,9 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
           tpopId: nearestTpop.id,
         },
       })
-      refetch.beobNichtBeurteiltForMap()
-      refetch.beobZugeordnetForMap()
-      refetch.beobAssignLines()
+      refetch?.beobNichtBeurteiltForMap?.()
+      refetch?.beobZugeordnetForMap?.()
+      refetch?.beobAssignLines?.()
       //map.redraw()
     },
     [apId, beob.id, client, projId, refetch, setActiveNodeArray],
