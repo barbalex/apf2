@@ -980,6 +980,7 @@ export default types
       }
       if (type === 'nichtBeurteilt') {
         typeFilter.tpopId = { isNull: true }
+        typeFilter.nichtZuordnen = { equalTo: false }
       }
       if (type === 'nichtZuzuordnen') {
         typeFilter.nichtZuordnen = { equalTo: true }
