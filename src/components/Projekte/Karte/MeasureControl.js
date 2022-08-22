@@ -14,6 +14,22 @@ const options = {
   decPoint: '.',
 }
 
+// see: https://github.com/ljagis/leaflet-measure/issues/171#issuecomment-1137483548
+window.L.Control.Measure.include({
+  // set icon on the capture marker
+  _setCaptureMarkerIcon: function () {
+    // disable autopan
+    this._captureMarker.options.autoPanOnFocus = false
+
+    // default function
+    this._captureMarker.setIcon(
+      window.L.divIcon({
+        iconSize: this._map.getSize().multiplyBy(2),
+      }),
+    )
+  },
+})
+
 const MeasureControl = createControlComponent(
   () => new window.L.Control.Measure(options),
 )
