@@ -29,6 +29,7 @@ const CoordinatesControl = () => {
 
   const setMouseCoords = useCallback(
     (e) => {
+      // console.log('setMouseCoordinates')
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
       setMapMouseCoordinates({ x, y })
     },

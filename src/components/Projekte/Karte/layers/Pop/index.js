@@ -49,6 +49,7 @@ const Pop = ({ treeName }) => {
     // Also: leafletMap.on('zoomend dragend', ()=> refetch()) never refetches!!??
     // Also: use dragend, not moveend because moveend fires on zoomend as well
     leafletMap.on('zoomend dragend', () => {
+      // console.log('zoomend dragend')
       setRefetchProvoker(Math.random())
     })
     return () => {

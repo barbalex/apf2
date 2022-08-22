@@ -194,6 +194,7 @@ const MySortableItem = ({ treeName, apfloraLayer }) => {
     }
   }, [activeApfloraLayers, setAssigningBeob, assigningBeob])
   const onClickZoomToAll = useCallback(() => {
+    // console.log('zoomToAll')
     // only zoom if there is data to zoom on
     if (layerData.length === 0) return
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
@@ -203,6 +204,7 @@ const MySortableItem = ({ treeName, apfloraLayer }) => {
     }
   }, [layerData, activeApfloraLayers, apfloraLayer.value, map, setBounds])
   const onClickZoomToActive = useCallback(() => {
+    // console.log('zoomToActive')
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
       const highlightedObjects = layerData.filter(
         (o) => o.id === activeNodeArray[activeNodeArray.length - 1],
