@@ -15,9 +15,9 @@ export const overlays = [
   { label: 'Wälder: Vegetation', value: 'ZhWaelderVegetation' },
 ]
 
-const unused = [
-  {
-    label: 'Massnahmenpläne (funktioniert leider noch nicht)',
-    value: 'Massnahmen',
-  },
-]
+// const unused = [
+//   {
+//     label: 'Massnahmenpläne (funktioniert leider noch nicht)',
+//     value: 'Massnahmen',
+//   },
+// ]
