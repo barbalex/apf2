@@ -104,8 +104,10 @@ export default gql`
         aeId
       }
     }
-    apBeobsNichtBeurteilt: allBeobs(filter: $beobNichtBeurteiltsFilter)
-      @include(if: $isAp) {
+    apBeobsNichtBeurteilt: allBeobs(
+      filter: $beobNichtBeurteiltsFilter
+      orderBy: DATUM_DESC
+    ) @include(if: $isAp) {
       nodes {
         id
         label
@@ -123,8 +125,10 @@ export default gql`
         }
       }
     }
-    apBeobsNichtZuzuordnen: allBeobs(filter: $beobNichtZuzuordnensFilter)
-      @include(if: $isAp) {
+    apBeobsNichtZuzuordnen: allBeobs(
+      filter: $beobNichtZuzuordnensFilter
+      orderBy: DATUM_DESC
+    ) @include(if: $isAp) {
       nodes {
         id
         label
@@ -143,8 +147,10 @@ export default gql`
         }
       }
     }
-    apBeobsZugeordnet: allBeobs(filter: $beobZugeordnetsFilter)
-      @include(if: $isTpop) {
+    apBeobsZugeordnet: allBeobs(
+      filter: $beobZugeordnetsFilter
+      orderBy: DATUM_DESC
+    ) @include(if: $isTpop) {
       nodes {
         id
         label
