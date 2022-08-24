@@ -193,6 +193,7 @@ WHERE
 -- 6'367
 --
 -- 6 mark beob already imported with already_imported = TRUE
+-- 6.1 beob already imported, originally from info flora
 SELECT
   *
 FROM
@@ -217,6 +218,21 @@ WHERE
       apflora.infoflora20220330beob info
       INNER JOIN apflora.beob beob ON beob.obs_id = info.obs_id);
 
+-- TODO:
+-- 6.1 beob already imported, originally from EvAB
+SELECT
+  *
+FROM
+  apflora.infoflora20220330beob
+WHERE
+  id IN (
+    SELECT
+      info.id
+    FROM
+      apflora.infoflora20220330beob info
+      INNER JOIN apflora.beob beob ON beob.id_evab_lc = info.guid);
+
+--
 -- 21'630
 --
 -- 7 check infoflora20220330beob
