@@ -81,39 +81,39 @@ CREATE INDEX ON apflora.infoflora20220824original USING btree (tax_id_intern);
 
 CREATE INDEX ON apflora.infoflora20220824original USING btree (obs_id);
 
--- 1.1: add human readable value to doubt_status
--- TODO: test, is new
+-- 2 import into apflora.infoflora20220824original
+--   using pgAdmin from csv
+--   208
+--
+-- 2.1: add human readable value to doubt_status
 UPDATE
   apflora.infoflora20220824original
 SET
   doubt_status = '0  (validiert)'
 WHERE
-  doubt_status 0 '0';
+  doubt_status = '0';
 
 UPDATE
   apflora.infoflora20220824original
 SET
   doubt_status = '1  (zu validieren)'
 WHERE
-  doubt_status 0 '1';
+  doubt_status = '1';
 
 UPDATE
   apflora.infoflora20220824original
 SET
   doubt_status = '2  (zweifelhaft)'
 WHERE
-  doubt_status 0 '2';
+  doubt_status = '2';
 
 UPDATE
   apflora.infoflora20220824original
 SET
   doubt_status = '3  (falsch)'
 WHERE
-  doubt_status 0 '3';
+  doubt_status = '3';
 
--- 2 import into apflora.infoflora20220824original
---   using pgAdmin from csv
---   TODO: count
 --
 -- 3 build temp beob table
 CREATE TABLE apflora.infoflora20220824beob (
@@ -185,11 +185,11 @@ SELECT
     AND tax.taxonomie_name = 'SISF (2005)')),
   'ag (import)',
   ST_Transform (ST_SetSRID (ST_MakePoint (x_swiss, y_swiss), 2056), 4326),
-  'Info Flora 2022.04'
+  'Info Flora 2022.08' -- TODO: set value
 FROM
   apflora.infoflora20220824original ROW;
 
--- TODO: count
+-- 208
 --
 -- 5 mark apflora kontrollen with is_apflora_ek = TRUE
 UPDATE
@@ -203,7 +203,7 @@ WHERE
     FROM
       apflora.tpopkontr);
 
--- TODO: count
+-- 0
 --
 -- 6 mark beob already imported with already_imported = TRUE
 SELECT
@@ -230,7 +230,7 @@ WHERE
       apflora.infoflora20220824beob info
       INNER JOIN apflora.beob beob ON beob.obs_id = info.obs_id);
 
--- TODO: count
+-- 0
 --
 -- 7 check infoflora20220824beob
 --
@@ -254,7 +254,7 @@ WHERE
   is_apflora_ek = FALSE
   AND already_imported = FALSE;
 
--- TODO: count
+-- 208
 --
 -- 9 update data for already_imported = true (NOT this time)
 -- TODO: next time export previous state of these to compare
@@ -301,7 +301,7 @@ WHERE
     WHERE
       already_imported = TRUE);
 
--- TODO: count
+-- 0
 --
 -- 10 get stats
 SELECT
@@ -314,15 +314,15 @@ GROUP BY
 ORDER BY
   count(id) DESC;
 
--- TODO: count
--- "EvAB 2016"	        232595
--- "Info Flora 2017"	  192606
--- "FloZ 2017"	         30935
--- "Info Flora 2021.05"  17638
--- "Info Flora 2022.03"	 15012
--- "Info Flora 2022.04"	  1147
--- "Info Flora 2022.01"	   459
--- Beachte: viele Arten haben keine Taxref-AP-Art. Daher erscheinen die Beob nicht
+-- result:
+-- "EvAB 2016"	232595
+-- "Info Flora 2017"	192606
+-- "FloZ 2017"	30935
+-- "Info Flora 2021.05"	17638
+-- "Info Flora 2022.03"	15012
+-- "Info Flora 2022.04"	1147
+-- "Info Flora 2022.01"	459
+-- "Info Flora 2022.08"	208
 --
 SELECT
   beob.art_id,
@@ -338,3 +338,15 @@ ORDER BY
   count(beob.id) DESC;
 
 -- ? rows
+-- correct quelle as forgot to change
+UPDATE
+  apflora.beob
+SET
+  quelle = 'Info Flora 2022.08'
+WHERE
+  obs_id IN (
+    SELECT
+      obs_id
+    FROM
+      apflora.infoflora20220824beob);
+
