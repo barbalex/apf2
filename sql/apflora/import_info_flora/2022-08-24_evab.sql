@@ -105,12 +105,27 @@ WITH dat AS (
     beob.id AS if_id,
     beob.quelle AS if_quelle,
     beob.tpop_id AS if_tpop_id,
+    beob_tpop.nr AS if_tpop_nr,
+    beob_pop.nr AS if_pop_nr,
+    beob_ae_taxonomies.artname AS if_artname,
     beob_from_evab.id AS evab_id,
     beob_from_evab.quelle AS evab_quelle,
-    beob_from_evab.tpop_id AS evab_tpop_id
+    beob_from_evab.tpop_id AS evab_tpop_id,
+    beob_from_evab_tpop.nr AS evab_tpop_nr,
+    beob_from_evab_pop.nr AS evab_pop_nr,
+    beob_from_evab_ae_taxonomies.artname AS evab_artname
   FROM
     apflora.beob beob
     INNER JOIN apflora.beob beob_from_evab ON beob_from_evab.id_evab_lc = beob.data ->> 'guid'
+    INNER JOIN apflora.tpop beob_tpop ON beob_tpop.id = beob.tpop_id
+    INNER JOIN apflora.pop beob_pop ON beob_pop.id = beob_tpop.pop_id
+    INNER JOIN apflora.ap beob_ap ON beob_ap.id = beob_pop.ap_id
+    INNER JOIN apflora.ae_taxonomies beob_ae_taxonomies ON beob_ae_taxonomies.id = beob_ap.art_id
+    --
+    INNER JOIN apflora.tpop beob_from_evab_tpop ON beob_from_evab_tpop.id = beob_from_evab.tpop_id
+    INNER JOIN apflora.pop beob_from_evab_pop ON beob_from_evab_pop.id = beob_from_evab_tpop.pop_id
+    INNER JOIN apflora.ap beob_from_evab_ap ON beob_from_evab_ap.id = beob_from_evab_pop.ap_id
+    INNER JOIN apflora.ae_taxonomies beob_from_evab_ae_taxonomies ON beob_from_evab_ae_taxonomies.id = beob_from_evab_ap.art_id
   WHERE
     beob.quelle <> 'EvAB 2016'
     AND beob_from_evab.quelle = 'EvAB 2016'
@@ -119,13 +134,27 @@ WITH dat AS (
     beob_from_evab.id_evab_lc
 )
 SELECT
-  *
+  guid AS evab_guid,
+  if_id,
+  if_quelle,
+  if_artname,
+  if_pop_nr,
+  if_tpop_nr,
+  evab_id,
+  evab_quelle,
+  evab_artname,
+  evab_pop_nr,
+  evab_tpop_nr
 FROM
   dat
 WHERE
   if_tpop_id IS NOT NULL
   AND evab_tpop_id IS NOT NULL
-  AND if_tpop_id <> evab_tpop_id;
+  AND if_tpop_id <> evab_tpop_id
+ORDER BY
+  if_artname,
+  if_pop_nr,
+  if_tpop_nr;
 
 -- 86
 --
