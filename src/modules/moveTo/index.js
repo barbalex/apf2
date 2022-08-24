@@ -44,64 +44,29 @@ const moveTo = async ({ id: newParentId, store, client }) => {
       client.mutate({
         mutation: updateTpopkontrById,
         variables: { id, tpopId: newParentId },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopkontrById: {
-            tpopkontr: {
-              tpopId: newParentId,
-              __typename: 'Tpopkontr',
-            },
-            __typename: 'Tpopkontr',
-          },
-        },
+        refetchQueries: ['TreeAllQuery'],
       })
       break
     case 'tpopmassn':
       client.mutate({
         mutation: updateTpopmassnById,
         variables: { id, tpopId: newParentId },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopmassnById: {
-            tpopmassn: {
-              tpopId: newParentId,
-              __typename: 'Tpopmassn',
-            },
-            __typename: 'Tpopmassn',
-          },
-        },
+        refetchQueries: ['TreeAllQuery'],
       })
       break
     case 'tpop':
       client.mutate({
         mutation: updateTpopById,
         variables: { id, popId: newParentId },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopById: {
-            tpop: {
-              popId: newParentId,
-              __typename: 'Tpop',
-            },
-            __typename: 'Tpop',
-          },
-        },
+        refetchQueries: ['TreeAllQuery'],
       })
       break
     case 'pop':
+      console.log('will move pop', { id, newParentId })
       client.mutate({
         mutation: updatePopById,
         variables: { id, apId: newParentId },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updatePopById: {
-            pop: {
-              apId: newParentId,
-              __typename: 'Pop',
-            },
-            __typename: 'Pop',
-          },
-        },
+        refetchQueries: ['TreeAllQuery'],
       })
       break
     default:
