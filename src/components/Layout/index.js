@@ -30,21 +30,6 @@ const Layout = ({ children }) => {
 
   return (
     <Container>
-      <Helmet
-        title="apflora v1.78.8"
-        meta={[
-          {
-            name: 'description',
-            content: 'Bedrohte Pflanzenarten fördern',
-          },
-          {
-            name: 'keywords',
-            content: 'Naturschutz, Artenschutz, Flora, Pflanzen',
-          },
-        ]}
-      >
-        <html lang="de" />
-      </Helmet>
       <div ref={resizeRef}>
         <AppBar />
       </div>

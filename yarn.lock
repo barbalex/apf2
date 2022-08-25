@@ -5138,7 +5138,6 @@ __metadata:
     gatsby-plugin-image: 2.21.0
     gatsby-plugin-manifest: 4.21.0
     gatsby-plugin-offline: 5.21.0
-    gatsby-plugin-react-helmet: 5.21.0
     gatsby-plugin-sharp: 4.21.0
     gatsby-plugin-styled-components: 5.21.0
     gatsby-plugin-typography: 4.21.0
@@ -10398,18 +10397,6 @@ __metadata:
   peerDependencies:
     gatsby: ^4.0.0-next
   checksum: 389fa7acd5feb30d2a059667fb9f3d0af4bc0917e0c4e7d767196e2447b4fbcc91aef8bad1ff6bbf77e5cc85decd2f424b99875a3b13ea818f7d886c9f1d2e67
-  languageName: node
-  linkType: hard
-
-"gatsby-plugin-react-helmet@npm:5.21.0":
-  version: 5.21.0
-  resolution: "gatsby-plugin-react-helmet@npm:5.21.0"
-  dependencies:
-    "@babel/runtime": ^7.15.4
-  peerDependencies:
-    gatsby: ^4.0.0-next
-    react-helmet: ^5.1.3 || ^6.0.0
-  checksum: ffe61dc1915e58b33d2219cca0a5edfe7547a11f80275a3973f5fb74094978441dfdb3ef5a03ce7100ce2f10851a53066b38b8f31eea0d86810eb75e3fd44ddd
   languageName: node
   linkType: hard
 

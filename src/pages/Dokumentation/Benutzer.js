@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import Layout from '../../components/Layout'
 import Sidebar from '../../templates/Sidebar'
 import ErrorBoundary from '../../components/shared/ErrorBoundary'
+import Header from '../../components/Head'
 
 const Container = styled.div`
   height: ${(props) => `calc(100% - ${props.appbarheight}px)`};
@@ -77,3 +78,5 @@ export const pageQuery = graphql`
 `
 
 export default Template
+
+export const Head = () => <Header />

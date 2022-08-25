@@ -15,6 +15,7 @@ import EkPlan from '../components/EkPlan'
 import Unterhalt from '../components/Unterhalt'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import getActiveNodeArrayFromPathname from '../modules/getActiveNodeArrayFromPathname'
+import Header from '../components/Head'
 
 const Container = styled.div`
   background-color: #fffde7;
@@ -107,3 +108,5 @@ const DatenPage = ({ location }) => {
 }
 
 export default observer(DatenPage)
+
+export const Head = () => <Header />

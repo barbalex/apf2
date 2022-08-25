@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import Layout from '../../components/Layout'
 import ErrorBoundary from '../../components/shared/ErrorBoundary'
+import Header from '../../components/Head'
 
 const Container = styled.div`
   height: ${(props) => `calc(100% - ${props.appbarheight}px)`};
@@ -47,3 +48,5 @@ const Template = () => (
 )
 
 export default Template
+
+export const Head = () => <Header />

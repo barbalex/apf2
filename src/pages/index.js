@@ -7,6 +7,7 @@ import SimpleBar from 'simplebar-react'
 
 import Layout from '../components/Layout'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
+import Header from '../components/Head'
 
 const OuterContainer = styled.div`
   overflow-y: auto;
@@ -241,3 +242,5 @@ const Home = () => (
 )
 
 export default Home
+
+export const Head = () => <Header />

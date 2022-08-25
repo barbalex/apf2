@@ -28,7 +28,7 @@ module.exports = {
       },
     },
     'gatsby-plugin-image',
-    { resolve: 'gatsby-plugin-sharp', options: { failOnError: false } },
+    { resolve: 'gatsby-plugin-sharp', options: { failOn: 'none' } },
     'gatsby-transformer-sharp',
     {
       resolve: 'gatsby-plugin-typography',
@@ -37,7 +37,6 @@ module.exports = {
         omitGoogleFont: true,
       },
     },
-    'gatsby-plugin-react-helmet',
     'gatsby-plugin-styled-components',
     {
       resolve: 'gatsby-plugin-manifest',
