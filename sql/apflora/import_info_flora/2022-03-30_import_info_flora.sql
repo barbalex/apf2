@@ -1,5 +1,6 @@
 -- basic method:
 -- 1 import if obs_id doesn't exist yet
+-- TODO: next time: replace EVAB beobs with incoming by updating av's data, see 2022-08-24 pt. 5
 -- 2 update data where obs_id exists already
 -- 3 ignore where tpop guid is in guid field
 --
