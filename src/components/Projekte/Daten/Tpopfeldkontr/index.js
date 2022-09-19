@@ -374,7 +374,7 @@ const Tpopfeldkontr = ({ treeName }) => {
                       saveToDb={saveToDb}
                       error={fieldErrors.bemerkungen}
                     />
-                    <JesNo
+                    <Checkbox2States
                       name="apberNichtRelevant"
                       label="Im Jahresbericht nicht berücksichtigen"
                       value={row.apberNichtRelevant}
