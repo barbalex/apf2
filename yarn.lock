@@ -3997,6 +3997,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jquery-deferred@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@types/jquery-deferred@npm:0.3.0"
+  checksum: a99664ae895c83dbbc656c0b9cd4021631b5a96a0477f9d8dff71e24be2d27a6fb53a8a265fa7bf5c89edcb69397169a579c8854c54490ebad7816a43edc5638
+  languageName: node
+  linkType: hard
+
+"@types/jquery@npm:^3.5.14":
+  version: 3.5.14
+  resolution: "@types/jquery@npm:3.5.14"
+  dependencies:
+    "@types/sizzle": "*"
+  checksum: 159d6f804ed1a204b3f79f2d591a271d82e866bd45bd49fb6ef40561a25dbe0f47ec7815681b44cc2db5598425f72811e7e80ab0e983d980470998ac56feb375
+  languageName: node
+  linkType: hard
+
 "@types/json-buffer@npm:~3.0.0":
   version: 3.0.0
   resolution: "@types/json-buffer@npm:3.0.0"
@@ -4229,7 +4245,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sizzle@npm:^2.3.2":
+"@types/sizzle@npm:*, @types/sizzle@npm:^2.3.2":
   version: 2.3.3
   resolution: "@types/sizzle@npm:2.3.3"
   checksum: 586a9fb1f6ff3e325e0f2cc1596a460615f0bc8a28f6e276ac9b509401039dd242fa8b34496d3a30c52f5b495873922d09a9e76c50c2ab2bcc70ba3fb9c4e160
@@ -4372,6 +4388,31 @@ __metadata:
     "@typescript-eslint/types": 4.33.0
     eslint-visitor-keys: ^2.0.0
   checksum: 59953e474ad4610c1aa23b2b1a964445e2c6201521da6367752f37939d854352bbfced5c04ea539274065e012b1337ba3ffa49c2647a240a4e87155378ba9873
+  languageName: node
+  linkType: hard
+
+"@uploadcare/client-suspense@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@uploadcare/client-suspense@npm:1.1.0"
+  peerDependencies:
+    react: ^16.8.6 || ^17.0.0 || ^18.0.0
+  checksum: 917b91d7deb8590f87b6afcc954af58f446785f445aaff991ccee345e069989f79c75d99cdacba5da6ca9230c60c6e35d8a55d67b2051a56a6c27b84d3ae06ed
+  languageName: node
+  linkType: hard
+
+"@uploadcare/react-widget@npm:^2.1.6":
+  version: 2.1.6
+  resolution: "@uploadcare/react-widget@npm:2.1.6"
+  dependencies:
+    "@types/jquery": ^3.5.14
+    "@types/jquery-deferred": ^0.3.0
+    "@uploadcare/client-suspense": ^1.1.0
+    react-fast-compare: ^3.2.0
+    uploadcare-widget: ^3.17.2
+  peerDependencies:
+    react: ^16.10.2 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.10.2 || ^17.0.0 || ^18.0.0
+  checksum: b47d2b36ff7adb00d9cc00fa887eb5c4d1d25e4fbec9d270bad76590e7abb021e6c16056711f89e4eb58a23b2962a4095d6a70cc9efe82fd89c8872ab5ed11d3
   languageName: node
   linkType: hard
 
@@ -5029,6 +5070,7 @@ __metadata:
     "@svgr/cli": 6.3.1
     "@turf/helpers": ^6.5.0
     "@turf/nearest-point": ^6.5.0
+    "@uploadcare/react-widget": ^2.1.6
     autosuggest-highlight: 3.3.4
     babel-plugin-styled-components: 2.0.7
     blueimp-md5: 2.19.0
@@ -5138,7 +5180,6 @@ __metadata:
     source-map-explorer: 2.5.2
     styled-components: 5.3.5
     typography: 0.16.21
-    uploadcare-widget: 3.19.0
     use-debounce: 8.0.4
     vercel: 28.2.5
   languageName: unknown
@@ -16684,7 +16725,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-fast-compare@npm:^3.0.1, react-fast-compare@npm:^3.1.1":
+"react-fast-compare@npm:^3.0.1, react-fast-compare@npm:^3.1.1, react-fast-compare@npm:^3.2.0":
   version: 3.2.0
   resolution: "react-fast-compare@npm:3.2.0"
   checksum: 8ef272c825ae329f61633ce4ce7f15aa5b84e5214d88bc0823880236e03e985a13195befa2c7a4eda7db3b017dc7985729152d88445823f652403cf36c2b86aa
@@ -19778,7 +19819,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uploadcare-widget@npm:3.19.0":
+"uploadcare-widget@npm:^3.17.2":
   version: 3.19.0
   resolution: "uploadcare-widget@npm:3.19.0"
   dependencies:

@@ -86,10 +86,12 @@ const Files = ({
 
   const onChangeUploader = useCallback(
     (file) => {
+      console.log('onChangeUploader, file:', file)
       if (file) {
         file.done(async (info) => {
+          let responce
           try {
-            await client.mutate({
+            responce = await client.mutate({
               mutation: gql`
               mutation insertFile {
                 create${upperFirst(parent)}File(
@@ -120,10 +122,12 @@ const Files = ({
               },
             })*/
           }
-          //console.log('File uploaded: ', { info, responce })
+          console.log('File uploaded: ', { info, responce })
           refetch()
           // TODO: reinitiate uploader
+          return null
         })
+        return null
       }
     },
     [client, fields, fragment, parent, parentId, refetch],
@@ -159,12 +163,7 @@ const Files = ({
       <ErrorBoundary>
         <Container>
           <ButtonsContainer>
-            <Uploader
-              id="file"
-              name="file"
-              onChange={onChangeUploader}
-              content="test"
-            />
+            <Uploader onChange={onChangeUploader} />
             {!!images.length && (
               <LightboxButton
                 color="primary"
