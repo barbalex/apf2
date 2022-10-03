@@ -84,15 +84,15 @@ const Files = ({
 
   const files = data?.[`all${upperFirst(parent)}Files`].nodes ?? []
 
+  const [uploaderId, setUploaderId] = useState(0)
+  console.log('Files, uploaderId:', uploaderId)
   const onChangeUploader = useCallback(
-    (file) => {
-      console.log('onChangeUploader, file:', file)
-      if (file) {
-        file.done(async (info) => {
-          let responce
-          try {
-            responce = await client.mutate({
-              mutation: gql`
+    async (info) => {
+      if (info) {
+        let responce
+        try {
+          responce = await client.mutate({
+            mutation: gql`
               mutation insertFile {
                 create${upperFirst(parent)}File(
                   input: {
@@ -111,26 +111,27 @@ const Files = ({
               }
               ${fragment}
             `,
-            })
-          } catch (error) {
-            return console.log(error)
-            // TODO: add enqueNotification
-            /*return store.enqueNotification({
+          })
+        } catch (error) {
+          return console.log(error)
+          // TODO: add enqueNotification
+          /*return store.enqueNotification({
               message: error.message,
               options: {
                 variant: 'error',
               },
             })*/
-          }
-          console.log('File uploaded: ', { info, responce })
-          refetch()
-          // TODO: reinitiate uploader
-          return null
-        })
+        }
+        console.log('File uploaded: ', { info, responce })
+        refetch()
+        // TODO: reinitiate uploader
+        setUploaderId(uploaderId + 1)
         return null
       }
+      setUploaderId(uploaderId + 1)
+      return null
     },
-    [client, fields, fragment, parent, parentId, refetch],
+    [client, fields, fragment, parent, parentId, refetch, uploaderId],
   )
 
   const images = files.filter((f) => isImageFile(f))
@@ -163,7 +164,7 @@ const Files = ({
       <ErrorBoundary>
         <Container>
           <ButtonsContainer>
-            <Uploader onChange={onChangeUploader} />
+            <Uploader id={uploaderId} onChange={onChangeUploader} />
             {!!images.length && (
               <LightboxButton
                 color="primary"
