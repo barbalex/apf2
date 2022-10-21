@@ -8,7 +8,7 @@ import createTpop from './createTpop'
 import updateBeobById from './updateBeobById'
 
 const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
-  const { enqueNotification, refetch } = store
+  const { enqueNotification } = store
   const tree = store[treeName]
   const {
     setActiveNodeArray,
@@ -174,9 +174,15 @@ const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
   setActiveNodeArray(newActiveNodeArray)
 
   // TODO: what is this for?
-  //refetchTree('local')
-  refetch.tree()
-  if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
+  client.refetchQueries({
+    include: [
+      'TreeAllQuery',
+      'KarteBeobNichtZuzuordnenQuery',
+      'BeobZugeordnetForMapQuery',
+      'BeobNichtBeurteiltForMapQuery',
+      'BeobAssignLinesQuery',
+    ],
+  })
 }
 
 export default createNewPopFromBeob

@@ -13,7 +13,6 @@ const openLowerNodesTpopfeldkontrFolder = async ({
   store,
 }) => {
   const tree = store[treeName]
-  const { refetch } = store
   const {
     addOpenNodes,
     apIdInActiveNodeArray,
@@ -99,7 +98,9 @@ const openLowerNodesTpopfeldkontrFolder = async ({
   addOpenNodes(newOpenNodes)
 
   // 4. refresh tree
-  refetch.tree()
+  client.refetchQueries({
+    include: ['TreeAllQuery'],
+  })
 }
 
 export default openLowerNodesTpopfeldkontrFolder
