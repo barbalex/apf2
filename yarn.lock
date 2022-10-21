@@ -4933,7 +4933,7 @@ __metadata:
     js-file-download: 0.4.12
     json2csv: 5.0.7
     jwt-decode: 3.1.2
-    leaflet: 1.9.1
+    leaflet: 1.9.2
     leaflet-draw: 1.0.4
     leaflet-easyprint: 2.1.9
     leaflet-image: 0.4.0
@@ -12846,14 +12846,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leaflet@npm:1.9.1":
-  version: 1.9.1
-  resolution: "leaflet@npm:1.9.1"
-  checksum: e91f71c9979c8988e11c49ca456f827f1fbe92bdda8ad266defd32a2272b5108678ba13d7564e4edbca9b2c1b40d310c01174222fd148445733ba1166c520350
-  languageName: node
-  linkType: hard
-
-"leaflet@npm:^1.0.0, leaflet@npm:^1.8.0":
+"leaflet@npm:1.9.2, leaflet@npm:^1.0.0, leaflet@npm:^1.8.0":
   version: 1.9.2
   resolution: "leaflet@npm:1.9.2"
   checksum: ab6edb278c6bbd05db9a9395694fc517557433bedbcb233941ea42327ee90650f2d61dd3f9caf861040c8b25abfd8e1f79018f6ae899181e280287c7481ba4bf
