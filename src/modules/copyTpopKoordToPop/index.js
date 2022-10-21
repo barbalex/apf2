@@ -2,7 +2,6 @@ import queryTpop from './queryTpop'
 import updatePopById from './updatePopById'
 
 const copyTpopKoordToPop = async ({ id, store, client }) => {
-  const { refetch } = store
   // fetch tpop
   let tpopResult
   try {
@@ -53,8 +52,9 @@ const copyTpopKoordToPop = async ({ id, store, client }) => {
       },
     })
   }
-  if (refetch.popForMap) refetch.popForMap()
-  if (refetch.tpopForMap) refetch.tpopForMap()
+  client.refetchQueries({
+    include: ['TpopForMapQuery', 'PopForMapQuery'],
+  })
 }
 
 export default copyTpopKoordToPop

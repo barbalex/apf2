@@ -48,7 +48,6 @@ const Coordinates = ({ row, refetchForm, table }) => {
 
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { refetch } = store
 
   const [lv95XState, setLv95XState] = useState(lv95X || '')
   const [lv95YState, setLv95YState] = useState(lv95Y || '')
@@ -121,12 +120,9 @@ const Coordinates = ({ row, refetchForm, table }) => {
           : setWgs84LatError(error.message)
       }
       // update on map
-      if (table === 'pop' && refetch.popForMap) refetch.popForMap()
-      if (table === 'tpop' && refetch.tpopForMap) {
-        // need to also refetch pop in case pop is new
-        refetch.popForMap && refetch.popForMap()
-        refetch.tpopForMap()
-      }
+      client.refetchQueries({
+        include: ['TpopForMapQuery', 'PopForMapQuery'],
+      })
       // refetch form ONLY if id exists
       // if user has right clicked tpop without activating it, there is now row id
       refetchForm()
@@ -136,7 +132,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       setWgs84LongError('')
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [client, id, refetch, refetchForm, row, row.id, store.user.name, table],
+    [client, id, refetchForm, row, row.id, store.user.name, table],
   )
   const saveToDbLv95 = useCallback(
     (x, y) => {

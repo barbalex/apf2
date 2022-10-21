@@ -102,7 +102,6 @@ const myTypes = types
   .volatile(() => ({
     toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
-    refetch: {},
     notifications: [],
     client: null,
   }))
@@ -314,9 +313,6 @@ const myTypes = types
     },
     setAssigningBeob(val) {
       self.assigningBeob = val
-    },
-    setRefetchKey({ key, value }) {
-      self.refetch[key] = value
     },
     cloneTree2From1() {
       self.tree2 = cloneDeep(self.tree)

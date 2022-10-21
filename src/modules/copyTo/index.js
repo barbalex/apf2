@@ -26,7 +26,7 @@ const copyTo = async ({
   client,
   store,
 }) => {
-  const { refetch, copying, enqueNotification } = store
+  const { copying, enqueNotification } = store
   let table = tablePassed || copying.table
   const id = idPassed || copying.id
   const withNextLevel = copying.withNextLevel
@@ -249,7 +249,9 @@ const copyTo = async ({
       // do nothing
       break
   }
-  refetch.tree()
+  client.refetchQueries({
+    include: ['TreeAllQuery'],
+  })
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
