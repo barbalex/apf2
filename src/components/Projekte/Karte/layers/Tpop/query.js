@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  query TpopForMapQuery($tpopFilter: TpopFilter!) {
+  query TpopForMapQuery($tpopFilter: TpopFilter!) { 
     allTpops(filter: $tpopFilter) {
       nodes {
         id

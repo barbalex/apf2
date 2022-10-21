@@ -26,19 +26,18 @@ const iconCreateFunction = function (cluster) {
 const Pop = ({ treeName }) => {
   const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { enqueNotification, setRefetchKey } = store
+  const { enqueNotification } = store
   const tree = store[treeName]
   const { popGqlFilter } = tree
 
   const popFilter = cloneDeep(popGqlFilter.filtered)
   popFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
 
-  var { data, error, refetch } = useQuery(query, {
+  var { data, error } = useQuery(query, {
     variables: {
       popFilter,
     },
   })
-  setRefetchKey({ key: 'popForMap', value: refetch })
 
   // eslint-disable-next-line no-unused-vars
   const [refetchProvoker, setRefetchProvoker] = useState(1)

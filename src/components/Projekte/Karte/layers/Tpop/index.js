@@ -32,13 +32,21 @@ const Tpop = ({ treeName, clustered }) => {
 
   const store = useContext(storeContext)
   const {
-    setRefetchKey,
     enqueNotification,
     setIdOfTpopBeingLocalized,
     idOfTpopBeingLocalized,
-    refetch,
   } = store
   const { tpopGqlFilter } = store[treeName]
+
+  const tpopFilter = cloneDeep(tpopGqlFilter.filtered)
+  tpopFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
+
+  const [fetchTpopDataForMap, { error: errorLoadingTpopForMap, data }] =
+    useLazyQuery(query, {
+      variables: {
+        tpopFilter,
+      },
+    })
 
   const leafletMap = useMapEvents({
     async dblclick(event) {
@@ -91,17 +99,11 @@ const Tpop = ({ treeName, clustered }) => {
             geomPoint,
           },
         })
-        //console.log('Tpop, on dblclick', { refetch })
         // refetch so it appears on map
-        if (refetch.tpopForMap) {
-          // need to also refetch pop in case it was new
-          refetch.popForMap && refetch.popForMap()
-          refetch.tpopForMap()
-        }
-        // TODO: if layers are visible
-        // client.refetchQueries({
-        //   include: ['TpopForMapQuery', 'PopForMapQuery'],
-        // })
+        // need to also refetch pop in case it was new
+        client.refetchQueries({
+          include: ['TpopForMapQuery', 'PopForMapQuery'],
+        })
       } catch (error) {
         enqueNotification({
           message: error.message,
@@ -130,16 +132,6 @@ const Tpop = ({ treeName, clustered }) => {
     }
   }, [idOfTpopBeingLocalized, leafletMap._container])
 
-  const tpopFilter = cloneDeep(tpopGqlFilter.filtered)
-  tpopFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
-
-  const [fetchTpopDataForMap, { error: errorLoadingTpopForMap, data }] =
-    useLazyQuery(query, {
-      variables: {
-        tpopFilter,
-      },
-    })
-
   if (errorLoadingTpopForMap) {
     enqueNotification({
       message: `Fehler beim Laden der Teil-Populationen für die Karte: ${errorLoadingTpopForMap.message}`,
@@ -152,9 +144,8 @@ const Tpop = ({ treeName, clustered }) => {
   useEffect(() => {
     if (fetchTpopDataForMap !== undefined) {
       fetchTpopDataForMap()
-      setRefetchKey({ key: 'tpopForMap', value: fetchTpopDataForMap })
     }
-  }, [enqueNotification, fetchTpopDataForMap, setRefetchKey])
+  }, [fetchTpopDataForMap])
 
   const tpopMarkers = (data?.allTpops?.nodes ?? []).map((tpop) => (
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />

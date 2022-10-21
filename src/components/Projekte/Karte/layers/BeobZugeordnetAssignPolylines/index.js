@@ -8,13 +8,12 @@ import query from './query'
 
 const BeobZugeordnetAssignPolylines = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { setRefetchKey, enqueNotification } = store
+  const { enqueNotification } = store
   const { beobGqlFilter } = store[treeName]
 
-  var { data, error, refetch } = useQuery(query, {
+  var { data, error } = useQuery(query, {
     variables: { beobFilter: beobGqlFilter('zugeordnet').filtered },
   })
-  setRefetchKey({ key: 'beobAssignLines', value: refetch })
 
   if (error) {
     enqueNotification({
