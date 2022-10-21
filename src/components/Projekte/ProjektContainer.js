@@ -81,7 +81,6 @@ const ProjektContainer = ({
   tabs: tabsPassed,
   nodes,
   treeLoading,
-  treeRefetch,
 }) => {
   const store = useContext(storeContext)
   const { isPrint } = store
@@ -139,7 +138,6 @@ const ProjektContainer = ({
           treeName={treeName}
           nodes={nodes}
           treeLoading={treeLoading}
-          treeRefetch={treeRefetch}
         />
       </InnerContainer>
     ),

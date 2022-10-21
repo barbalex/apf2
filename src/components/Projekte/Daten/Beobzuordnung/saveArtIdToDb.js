@@ -4,7 +4,6 @@ import { gql } from '@apollo/client'
 import updateBeobByIdGql from './updateBeobById'
 
 const saveArtIdToDb = async ({ value, row, treeName, client, store }) => {
-  const { refetch } = store
   const {
     activeNodeArray: aNA,
     openNodes,
@@ -65,9 +64,9 @@ const saveArtIdToDb = async ({ value, row, treeName, client, store }) => {
     ]
     setActiveNodeArray(newANA)
     setOpenNodes(newOpenNodes)
-    //refetchTree('local')
-    refetch.tree()
-    if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
+    client.refetchQueries({
+      include: ['TreeAllQuery', 'KarteBeobNichtZuzuordnenQuery'],
+    })
   }
 }
 

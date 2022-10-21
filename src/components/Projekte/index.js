@@ -70,7 +70,7 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
 const Projekte = () => {
   const store = useContext(storeContext)
-  const { isPrint, urlQuery, setRefetchKey, user, tree } = store
+  const { isPrint, urlQuery, user, tree } = store
   const { projIdInActiveNodeArray, apIdInActiveNodeArray } = tree
   // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
   // to prevent it from causing unnessecary renders
@@ -181,20 +181,13 @@ const Projekte = () => {
     data: treeData,
     error: treeError,
     loading: treeLoading,
-    refetch: treeRefetch,
   } = useQuery(queryTree, {
     variables: queryTreeVariables,
-  })
-  // TODO: make this tree dependant
-  setRefetchKey({
-    key: 'tree',
-    value: treeRefetch,
   })
   const {
     data: tree2Data,
     error: tree2Error,
     loading: tree2Loading,
-    refetch: tree2Refetch,
   } = useQuery(queryTree, {
     variables: queryTree2Variables,
   })
@@ -302,7 +295,6 @@ const Projekte = () => {
           tabs={treeTabs}
           nodes={treeNodes}
           treeLoading={treeLoading}
-          treeRefetch={treeRefetch}
           treeError={treeError}
         />
       </Container>
@@ -317,7 +309,6 @@ const Projekte = () => {
           tabs={treeTabs}
           nodes={treeNodes}
           treeLoading={treeLoading}
-          treeRefetch={treeRefetch}
           treeError={treeError}
         />
         <ProjektContainer
@@ -325,7 +316,6 @@ const Projekte = () => {
           tabs={tree2Tabs}
           nodes={tree2Nodes}
           treeLoading={tree2Loading}
-          treeRefetch={tree2Refetch}
           treeError={tree2Error}
         />
       </StyledSplitPane>
