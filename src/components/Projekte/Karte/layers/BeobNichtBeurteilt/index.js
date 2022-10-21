@@ -27,16 +27,15 @@ const iconCreateFunction = function (cluster) {
 const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   // const leafletMap = useMap()
   const store = useContext(storeContext)
-  const { setRefetchKey, enqueNotification } = store
+  const { enqueNotification } = store
   const tree = store[treeName]
   const { beobGqlFilter } = tree
 
-  var { data, error, refetch } = useQuery(query, {
+  var { data, error } = useQuery(query, {
     variables: {
       beobFilter: beobGqlFilter('nichtBeurteilt').filtered,
     },
   })
-  setRefetchKey({ key: 'beobNichtBeurteiltForMap', value: refetch })
 
   // eslint-disable-next-line no-unused-vars
   // const [refetchProvoker, setRefetchProvoker] = useState(1)

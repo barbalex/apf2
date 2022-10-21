@@ -24,7 +24,7 @@ const StyledButton = styled(Button)`
 const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { assigningBeob, refetch, openTree2WithActiveNodeArray } = store
+  const { assigningBeob, openTree2WithActiveNodeArray } = store
   const {
     setActiveNodeArray,
     apIdInActiveNodeArray,
@@ -91,11 +91,15 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
           tpopId: nearestTpop.id,
         },
       })
-      refetch?.beobNichtBeurteiltForMap?.()
-      refetch?.beobZugeordnetForMap?.()
-      refetch?.beobAssignLines?.()
+      client.refetchQueries({
+        include: [
+          'BeobZugeordnetForMapQuery',
+          'BeobNichtBeurteiltForMapQuery',
+          'BeobAssignLinesQuery',
+        ],
+      })
     },
-    [apId, beob.id, client, projId, refetch, setActiveNodeArray],
+    [apId, beob.id, client, projId, setActiveNodeArray],
   )
   const openBeobInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
