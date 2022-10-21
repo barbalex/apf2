@@ -24,7 +24,6 @@ const StyledSwitch = styled(Switch)`
 const ApFilter = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { refetch } = store
   const {
     apFilter,
     setApFilter,
@@ -41,7 +40,9 @@ const ApFilter = ({ treeName }) => {
     setApFilter(!apFilter)
     if (!previousApFilter) {
       // need to fetch previously not had aps
-      refetch.tree()
+      client.refetchQueries({
+        include: ['TreeAllQuery'],
+      })
       // apFilter was set to true
       let result
       if (apId) {
@@ -81,7 +82,6 @@ const ApFilter = ({ treeName }) => {
     apId,
     client,
     openNodes,
-    refetch,
     setActiveNodeArray,
     setApFilter,
     setOpenNodes,

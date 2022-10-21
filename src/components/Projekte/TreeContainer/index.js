@@ -276,7 +276,6 @@ const TreeContainer = ({
   treeName,
   nodes,
   treeLoading,
-  treeRefetch,
   treeError,
 }) => {
   const client = useApolloClient()
@@ -437,7 +436,9 @@ const TreeContainer = ({
             afterDeletionHook: () => {
               const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
               setOpenNodes(newOpenNodes)
-              treeRefetch()
+              client.refetchQueries({
+                include: ['TreeAllQuery'],
+              })
             },
           })
         },
@@ -590,7 +591,6 @@ const TreeContainer = ({
       setToDelete,
       openNodes,
       setOpenNodes,
-      treeRefetch,
       urlQuery,
       showMapIfNotYetVisible,
       activeApfloraLayers,

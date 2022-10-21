@@ -30,7 +30,7 @@ const insertDataset = async ({
   client,
   store,
 }) => {
-  const { enqueNotification, refetch } = store
+  const { enqueNotification } = store
   const { setActiveNodeArray, openNodes, setOpenNodes } = store[treeName]
   let table = tablePassed
   // insert new dataset in db and fetch id
@@ -218,7 +218,9 @@ const insertDataset = async ({
     newOpenNodes = [...newOpenNodes, newOpenFolder, newOpenNode]
   }
   setOpenNodes(newOpenNodes)
-  refetch.tree()
+  client.refetchQueries({
+    include: ['TreeAllQuery'],
+  })
 }
 
 export default insertDataset
