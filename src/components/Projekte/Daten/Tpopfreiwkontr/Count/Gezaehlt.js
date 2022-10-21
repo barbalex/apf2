@@ -35,7 +35,9 @@ const Gezaehlt = ({ row, refetch }) => {
         return setErrors({ anzahl: error.message })
       }
       refetch()
-      !!store && store.refetch && store.refetch.tree && store.refetch.tree()
+      client.refetchQueries({
+        include: ['TreeAllQuery'],
+      })
     },
     [
       client,

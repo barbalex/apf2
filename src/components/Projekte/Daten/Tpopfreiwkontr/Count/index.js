@@ -236,7 +236,9 @@ const Count = ({
     ({ row }) => {
       const afterDeletionHook = () => {
         refetch()
-        store.refetch.tree()
+        client.refetchQueries({
+          include: ['TreeAllQuery'],
+        })
       }
       setToDelete({
         table: 'tpopkontrzaehl',
@@ -246,7 +248,7 @@ const Count = ({
         afterDeletionHook,
       })
     },
-    [setToDelete, activeNodeArray, refetch, store.refetch],
+    [setToDelete, activeNodeArray, refetch, client],
   )
 
   //console.log('Count, row:', row)

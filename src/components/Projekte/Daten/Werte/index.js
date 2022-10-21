@@ -30,7 +30,6 @@ const FormContainer = styled.div`
 const Werte = ({ treeName, table }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { refetch: refetchTree } = store
   const { activeNodeArray } = store[treeName]
 
   const [fieldErrors, setFieldErrors] = useState({})
@@ -119,21 +118,9 @@ const Werte = ({ treeName, table }) => {
         return setFieldErrors({ [field]: error.message })
       }
       refetch()
-      const refetchTableName = `${table}s`
-      // for unknown reason refetching is necessary here
-      refetchTree[refetchTableName] && refetchTree[refetchTableName]()
       setFieldErrors({})
     },
-    [
-      client,
-      codeGqlType,
-      refetch,
-      refetchTree,
-      row,
-      store.user.name,
-      table,
-      tableCamelCased,
-    ],
+    [client, codeGqlType, refetch, row.id, store.user.name, tableCamelCased],
   )
 
   if (loading) return <Spinner />

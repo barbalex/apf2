@@ -39,7 +39,9 @@ const Geschaetzt = ({ row, refetch }) => {
         return setErrors({ anzahl: error.message })
       }
       refetch()
-      store.refetch.tree()
+      client.refetchQueries({
+        include: ['TreeAllQuery'],
+      })
     },
     [
       client,
@@ -48,7 +50,6 @@ const Geschaetzt = ({ row, refetch }) => {
       row.einheit,
       row.id,
       row.methode,
-      store.refetch,
       store.user.name,
     ],
   )
