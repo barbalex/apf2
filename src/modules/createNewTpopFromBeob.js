@@ -85,7 +85,7 @@ const createNewTpopFromBeob = async ({
   client,
   store,
 }) => {
-  const { enqueNotification, refetch } = store
+  const { enqueNotification } = store
   const tree = store[treeName]
   const {
     setActiveNodeArray,
@@ -242,8 +242,15 @@ const createNewTpopFromBeob = async ({
   addOpenNodes(newOpenNodes)
   setActiveNodeArray(newActiveNodeArray)
 
-  refetch.tree()
-  if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
+  client.refetchQueries({
+    include: [
+      'TreeAllQuery',
+      'KarteBeobNichtZuzuordnenQuery',
+      'BeobZugeordnetForMapQuery',
+      'BeobNichtBeurteiltForMapQuery',
+      'BeobAssignLinesQuery',
+    ],
+  })
 }
 
 export default createNewTpopFromBeob

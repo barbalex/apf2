@@ -14,7 +14,6 @@ const openLowerNodesZieljahrFolder = async ({
   store,
 }) => {
   const tree = store[treeName]
-  const { refetch } = store
   const jahr = +jahrString
   const { addOpenNodes, projIdInActiveNodeArray } = tree
   const projId =
@@ -67,7 +66,9 @@ const openLowerNodesZieljahrFolder = async ({
   addOpenNodes(newOpenNodes)
 
   // 4. refresh tree
-  refetch.tree()
+  client.refetchQueries({
+    include: ['TreeAllQuery'],
+  })
 }
 
 export default openLowerNodesZieljahrFolder

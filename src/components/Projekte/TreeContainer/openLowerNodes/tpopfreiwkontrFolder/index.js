@@ -14,7 +14,6 @@ const openLowerNodesTpopfreiwkontrFolder = async ({
   store,
 }) => {
   const tree = store[treeName]
-  const { refetch } = store
   const {
     addOpenNodes,
     projIdInActiveNodeArray,
@@ -100,7 +99,9 @@ const openLowerNodesTpopfreiwkontrFolder = async ({
   addOpenNodes(newOpenNodes)
 
   // 4. refresh tree
-  refetch.tree()
+  client.refetchQueries({
+    include: ['TreeAllQuery'],
+  })
 }
 
 export default openLowerNodesTpopfreiwkontrFolder
