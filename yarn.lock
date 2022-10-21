@@ -5221,7 +5221,7 @@ __metadata:
     react-split-pane: 0.1.92
     react-stylable-diff: 2.0.0
     react-typography: 0.16.20
-    react-virtuoso: 2.19.1
+    react-virtuoso: 3.1.1
     react-window: 1.8.7
     recharts: 2.1.15
     redaxios: 0.5.1
@@ -17196,16 +17196,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-virtuoso@npm:2.19.1":
-  version: 2.19.1
-  resolution: "react-virtuoso@npm:2.19.1"
+"react-virtuoso@npm:3.1.1":
+  version: 3.1.1
+  resolution: "react-virtuoso@npm:3.1.1"
   dependencies:
     "@virtuoso.dev/react-urx": ^0.2.12
     "@virtuoso.dev/urx": ^0.2.12
   peerDependencies:
     react: ">=16 || >=17 || >= 18"
     react-dom: ">=16 || >=17 || >= 18"
-  checksum: a87c6550cc20e9f3de8763ecf1fa3b6bf7ca201eafc17bcf40626f43cb78a7dcb5643124707f021621df0d3048b696c63b78e2dc00025cceb68cc7a8f38703d3
+  checksum: 0d4951a9b90f6bc5370d53ca48d2072cd1c8acecdc872cdde9d4c9876695041903dcfa030ac29d30ad1307ad4968484b1611ce666c3f37252856b34eb7e47972
   languageName: node
   linkType: hard
 
