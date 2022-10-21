@@ -84,7 +84,7 @@ const fieldTypes = {
 const TpopForm = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { refetch, urlQuery, setUrlQuery } = store
+  const { urlQuery, setUrlQuery } = store
 
   const { activeNodeArray } = store[treeName]
   const [tab, setTab] = useState(urlQuery?.tpopTab ?? 'tpop')
@@ -179,17 +179,16 @@ const TpopForm = ({ treeName }) => {
             (field === 'lv95X' && row?.y))) ||
         (!value && (field === 'ylv95Y' || field === 'lv95X'))
       ) {
-        if (refetch.tpopForMap) {
-          // need to also refetch pop in case pop was new
-          refetch.popForMap && refetch.popForMap()
-          refetch.tpopForMap()
-        }
+        
+      client.refetchQueries({
+        include: ['TpopForMapQuery', 'PopForMapQuery'],
+      })
       }
       if (Object.keys(fieldErrors).length) {
         setFieldErrors({})
       }
     },
-    [client, fieldErrors, refetch, row.id, row?.lv95X, row?.y, store.user.name],
+    [client, fieldErrors, row.id, row?.lv95X, row?.y, store.user.name],
   )
 
   if (error) return <Error error={error} />

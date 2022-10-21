@@ -57,17 +57,11 @@ const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
         return setErrors(error.message)
       }
       refetch()
-      store.refetch.tree()
+      client.refetchQueries({
+        include: ['TreeAllQuery'],
+      })
     },
-    [
-      client,
-      refetch,
-      row.anzahl,
-      row.id,
-      row.methode,
-      store.refetch,
-      store.user.name,
-    ],
+    [client, refetch, row.anzahl, row.id, row.methode, store.user.name],
   )
 
   return (

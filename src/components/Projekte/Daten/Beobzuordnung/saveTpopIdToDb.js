@@ -3,8 +3,7 @@ import { gql } from '@apollo/client'
 
 import updateBeobByIdGql from './updateBeobById'
 
-const saveTpopIdToDb = async ({ value, id, treeName, type, client, store }) => { 
-  const { refetch } = store
+const saveTpopIdToDb = async ({ value, id, treeName, type, client, store }) => {
   const variables = {
     id,
     tpopId: value,
@@ -217,11 +216,9 @@ const saveTpopIdToDb = async ({ value, id, treeName, type, client, store }) => {
   }
   setActiveNodeArray(newANA)
   setOpenNodes(newOpenNodes)
-  refetch.tree()
-  if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
-  if (refetch.beobZugeordnetForMap) refetch.beobZugeordnetForMap()
-  if (refetch.beobNichtBeurteiltForMap) refetch.beobNichtBeurteiltForMap()
-  if (refetch.beobAssignLines) refetch.beobAssignLines()
+  client.refetchQueries({
+    include: ['TreeAllQuery', 'KarteBeobNichtZuzuordnenQuery', 'BeobZugeordnetForMapQuery', 'BeobNichtBeurteiltForMapQuery', 'BeobAssignLinesQuery'],
+  })
 }
 
 export default saveTpopIdToDb

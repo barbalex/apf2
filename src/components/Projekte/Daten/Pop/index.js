@@ -56,7 +56,7 @@ const fieldTypes = {
 const Pop = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { refetch, urlQuery, setUrlQuery } = store
+  const {  urlQuery, setUrlQuery } = store
   const { activeNodeArray } = store[treeName]
 
   const [fieldErrors, setFieldErrors] = useState({})
@@ -140,11 +140,13 @@ const Pop = ({ treeName }) => {
             (field === 'lv95X' && row.lv95Y))) ||
         (!value && (field === 'lv95Y' || field === 'lv95X'))
       ) {
-        if (refetch.popForMap) refetch.popForMap()
+        client.refetchQueries({
+          include: ['PopForMapQuery'],
+        })
       }
       setFieldErrors({})
     },
-    [client, refetch, row, store.user.name],
+    [client,  row, store.user.name],
   )
 
   if (loading) return <Spinner />
