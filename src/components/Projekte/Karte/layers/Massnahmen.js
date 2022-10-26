@@ -1,83 +1,129 @@
-// https://stackoverflow.com/a/25296972/712005
-// also: https://gis.stackexchange.com/a/130553/13491
-import React, { useEffect, useContext, useState, useCallback } from 'react'
-import { observer } from 'mobx-react-lite'
-import { GeoJSON, useMap } from 'react-leaflet'
-import 'leaflet'
+import React, { useContext } from 'react'
+import { WMSTileLayer, useMapEvent, useMap } from 'react-leaflet'
 import axios from 'redaxios'
+import * as ReactDOMServer from 'react-dom/server'
+import styled from 'styled-components'
 
+import xmlToLayersData from '../../../../modules/xmlToLayersData'
+import Popup from './Popup'
 import storeContext from '../../../../storeContext'
-import popupFromProperties from './popupFromProperties'
 
-// see: https://leafletjs.com/reference-1.6.0.html#path-option
-// need to fill or else popup will only happen when line is clicked
-// when fill is true, need to give stroke an opacity
-const style = () => ({
-  fill: true,
-  fillOpacity: 0.2,
-  color: 'red',
-  weight: 3,
-  opacity: 1,
-})
+const StyledPopupContent = styled.div`
+  white-space: pre;
+`
+const PopupContainer = styled.div`
+  overflow: auto;
+  max-height: ${(props) => `${props.maxheight}px`};
+  span {
+    font-size: x-small !important;
+  }
+`
 
+const layers =
+  '6c52d122-4f62-11e7-aebe-df3ec54ed945 Agrimonia procera F,6c52d122-4f62-11e7-aebe-df3ec54ed945 Agrimonia procera L,6c52d122-4f62-11e7-aebe-df3ec54ed945 Agrimonia procera P'
+const version = '1.3.0'
+const format = 'image/png'
+
+// TODO: use active apId
 const MassnahmenLayer = () => {
   const map = useMap()
-  const { enqueNotification } = useContext(storeContext)
+  const store = useContext(storeContext)
+  const apId = store.tree.apIdInActiveNodeArray
 
-  const [data, setData] = useState(null)
-
-  useEffect(() => {
-    let isActive = true
-    /**
-     * BEWARE: https://maps.zh.ch does not include cors headers
-     * so need to query server side
-     */
-    axios({
-      method: 'get',
-      url: 'https://ss.apflora.ch/karte/massnahmen',
-    })
-      .then((response) => {
-        if (!isActive) return
-
-        setData(response.data.features)
-      })
-      .catch((error) => {
-        if (!isActive) return
-
-        enqueNotification({
-          message: `Fehler beim Laden der Massnahmen für die Karte: ${error.message}`,
-          options: {
-            variant: 'error',
-          },
-        })
-        return console.log(error)
-      })
-
-    return () => {
-      isActive = false
-    }
-  }, [enqueNotification])
-
-  const onEachFeature = useCallback(
-    (feature, layer) => {
-      if (feature.properties) {
-        layer.bindPopup(
-          popupFromProperties({
-            properties: feature.properties,
-            layerName: 'Massnahmen',
-            mapSize: map.getSize(),
-          }),
-        )
+  useMapEvent('click', async (e) => {
+    const mapSize = map.getSize()
+    const bounds = map.getBounds()
+    let res
+    let failedToFetch = false
+    try {
+      const bbox = `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`
+      const params = {
+        service: 'WMS',
+        version,
+        request: 'GetFeatureInfo',
+        layers,
+        crs: 'EPSG:4326',
+        format,
+        info_format: 'application/vnd.ogc.gml',
+        query_layers: layers,
+        x: Math.round(e.containerPoint.x),
+        y: Math.round(e.containerPoint.y),
+        width: mapSize.x,
+        height: mapSize.y,
+        bbox,
       }
-    },
-    [map],
+      res = await axios({
+        method: 'get',
+        url: `https://wms.prod.qgiscloud.com/FNS/${apId}`,
+        params,
+      })
+    } catch (error) {
+      // console.log(`error fetching ${row.label}`, error?.toJSON())
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('error.response.data', error.response.data)
+        console.error('error.response.status', error.response.status)
+        console.error('error.response.headers', error.response.headers)
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.error('error.request:', error.request)
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('error.message', error.message)
+      }
+      if (error.message?.toLowerCase()?.includes('failed to fetch')) {
+        failedToFetch = true
+      } else {
+        return
+      }
+    }
+
+    // console.log({ mapSize, y: mapSize.y })
+
+    // build popup depending on wms_info_format
+    let popupContent
+    // see for values: https://docs.geoserver.org/stable/en/user/services/wms/reference.html#getfeatureinfo
+    if (failedToFetch) {
+      popupContent = ReactDOMServer.renderToString(
+        <PopupContainer>
+          <StyledPopupContent>{`Sie könnten offline sein.\n\nOffline können keine WMS-Informationen\nabgerufen werden.`}</StyledPopupContent>
+        </PopupContainer>,
+      )
+    } else {
+      const parser = new window.DOMParser()
+      const layersData = xmlToLayersData(
+        parser.parseFromString(res.data, 'text/html'),
+      )
+
+      // do not open empty popups
+      if (!layersData.length) return
+
+      popupContent = ReactDOMServer.renderToString(
+        <Popup layersData={layersData} mapSize={mapSize} />,
+      )
+    }
+
+    window?.L.popup().setLatLng(e.latlng).setContent(popupContent).openOn(map)
+  })
+
+  // TODO: use active apId
+  // TODO: catch case if url does not exist
+  return (
+    <WMSTileLayer
+      url={`//wms.prod.qgiscloud.com/FNS/${apId}`}
+      layers={layers}
+      opacity={0.5}
+      transparent={true}
+      version={version}
+      format={format}
+      maxNativeZoom={18}
+      minZoom={0}
+      maxZoom={22}
+    />
   )
-
-  if (!data) return null
-
-  //console.log('Massnahmen, data:', data)
-
-  return <GeoJSON data={data} style={style} onEachFeature={onEachFeature} />
 }
 
-export default observer(MassnahmenLayer)
+export default MassnahmenLayer

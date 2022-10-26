@@ -13,11 +13,8 @@ export const overlays = [
   },
   { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
   { label: 'Wälder: Vegetation', value: 'ZhWaelderVegetation' },
+  {
+    label: 'Massnahmenpläne',
+    value: 'Massnahmen',
+  },
 ]
-
-// const unused = [
-//   {
-//     label: 'Massnahmenpläne (funktioniert leider noch nicht)',
-//     value: 'Massnahmen',
-//   },
-// ]
