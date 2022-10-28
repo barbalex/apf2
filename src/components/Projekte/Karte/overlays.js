@@ -1,6 +1,10 @@
 export const overlays = [
   { label: 'Markierungen', value: 'Markierungen' },
   { label: 'Detailpläne', value: 'Detailplaene' },
+  {
+    label: 'Massnahmenpläne (WMS der FNS)',
+    value: 'Massnahmen',
+  },
   { label: 'NS-Gebiete Betreuung', value: 'Betreuungsgebiete' },
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
   { label: 'Gemeinden', value: 'Gemeinden' },
@@ -13,8 +17,4 @@ export const overlays = [
   },
   { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
   { label: 'Wälder: Vegetation', value: 'ZhWaelderVegetation' },
-  {
-    label: 'Massnahmenpläne',
-    value: 'Massnahmen',
-  },
 ]
