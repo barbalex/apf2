@@ -64,7 +64,8 @@ const App = ({ element }) => {
       'notifications',
       'ekfIds',
       'hideMapControls',
-      'overlays', // 2022.10.26 added overlay. Need to refresh or users will not get the new one
+      'overlays', // 2022.10.26 added overlay. Need to refresh or users will not get new ones
+      'apfloraLayers', // 2022.10.28 added. Need to refresh or users will not get new ones
     ]
     import('mst-persist').then((module) =>
       module
