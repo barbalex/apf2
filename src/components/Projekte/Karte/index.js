@@ -481,7 +481,9 @@ const Karte = ({ treeName }) => {
         <Detailplaene key={localizing} localizing={localizing} />
       ),
       Markierungen: () => <Markierungen />,
-      Massnahmen: () => <Massnahmen />,
+      MassnahmenFlaechen: () => <Massnahmen layer="flaechen" />,
+      MassnahmenLinien: () => <Massnahmen layer="linien" />,
+      MassnahmenPunkte: () => <Massnahmen layer="punkte" />,
       Betreuungsgebiete: () => <Betreuungsgebiete />,
       Gemeinden: () => <Gemeinden />,
       ZhSvoColor: () => <ZhSvoColor />,
