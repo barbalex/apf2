@@ -189,7 +189,6 @@ const layerLegends = ({ apId }) => ({
       url: 'https://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagerung2-aktuell&format=image/png&STYLE=default',
     },
   ],
-  // TODO: add in apId for correct urls
   Massnahmen: [
     {
       name: 'Flächen',
