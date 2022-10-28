@@ -20,16 +20,17 @@ const PopupContainer = styled.div`
   }
 `
 
-const layers = 'flaechen,linien,punkte'
 const version = '1.3.0'
 const format = 'image/png'
 
-const MassnahmenLayer = () => {
+const MassnahmenLayer = ({ layer }) => {
   const map = useMap()
   const store = useContext(storeContext)
   const apId = store.tree.apIdInActiveNodeArray
 
   useMapEvent('click', async (e) => {
+    if (!apId) return
+
     const mapSize = map.getSize()
     const bounds = map.getBounds()
     let res
@@ -40,11 +41,11 @@ const MassnahmenLayer = () => {
         service: 'WMS',
         version,
         request: 'GetFeatureInfo',
-        layers,
+        layers: layer,
         crs: 'EPSG:4326',
         format,
         info_format: 'application/vnd.ogc.gml',
-        query_layers: layers,
+        query_layers: layer,
         x: Math.round(e.containerPoint.x),
         y: Math.round(e.containerPoint.y),
         width: mapSize.x,
@@ -57,7 +58,7 @@ const MassnahmenLayer = () => {
         params,
       })
     } catch (error) {
-      console.log({ error, errorToJSON: error?.toJSON() })
+      console.log({ error, errorToJSON: error?.toJSON?.(), res })
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -108,11 +109,13 @@ const MassnahmenLayer = () => {
     window?.L.popup().setLatLng(e.latlng).setContent(popupContent).openOn(map)
   })
 
+  if (!apId) return null
+
   return (
     <WMSTileLayer
-      key={apId}
+      key={`${apId}/${layer}`}
       url={`//wms.prod.qgiscloud.com/FNS/${apId}`}
-      layers={layers}
+      layers={layer}
       opacity={0.5}
       transparent={true}
       version={version}
