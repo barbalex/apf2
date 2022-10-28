@@ -461,7 +461,7 @@ const Karte = ({ treeName }) => {
   const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
 
   const localizing = !!idOfTpopBeingLocalized
-  // console.log('Karte', { localizing, idOfTpopBeingLocalized })
+  // console.log('Karte', { apIdInActiveNodeArray })
 
   /**
    * need to pass the height of the self built controls
