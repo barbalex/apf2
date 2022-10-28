@@ -58,7 +58,7 @@ const MassnahmenLayer = ({ layer }) => {
         params,
       })
     } catch (error) {
-      console.log({ error, errorToJSON: error?.toJSON?.(), res })
+      // console.log({ error, errorToJSON: error?.toJSON?.(), res })
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -94,6 +94,7 @@ const MassnahmenLayer = ({ layer }) => {
       )
     } else {
       const parser = new window.DOMParser()
+      // console.log('MassnahmenLayer, res.data:', res.data)
       const layersData = xmlToLayersData(
         parser.parseFromString(res.data, 'text/html'),
       )
