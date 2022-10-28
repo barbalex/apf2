@@ -3,6 +3,7 @@ import { WMSTileLayer, useMapEvent, useMap } from 'react-leaflet'
 import axios from 'redaxios'
 import * as ReactDOMServer from 'react-dom/server'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 import xmlToLayersData from '../../../../modules/xmlToLayersData'
 import Popup from './Popup'
@@ -23,7 +24,6 @@ const layers = 'flaechen,linien,punkte'
 const version = '1.3.0'
 const format = 'image/png'
 
-// TODO: use active apId
 const MassnahmenLayer = () => {
   const map = useMap()
   const store = useContext(storeContext)
@@ -108,10 +108,9 @@ const MassnahmenLayer = () => {
     window?.L.popup().setLatLng(e.latlng).setContent(popupContent).openOn(map)
   })
 
-  // TODO: use active apId
-  // TODO: catch case if url does not exist
   return (
     <WMSTileLayer
+      key={apId}
       url={`//wms.prod.qgiscloud.com/FNS/${apId}`}
       layers={layers}
       opacity={0.5}
@@ -125,4 +124,4 @@ const MassnahmenLayer = () => {
   )
 }
 
-export default MassnahmenLayer
+export default observer(MassnahmenLayer)
