@@ -59,7 +59,14 @@ const App = ({ element }) => {
 
   if (typeof window !== 'undefined') {
     const visitedTopDomain = window.location.pathname === '/'
-    const blacklist = ['user', 'notifications', 'ekfIds', 'hideMapControls']
+    const blacklist = [
+      'user',
+      'notifications',
+      'ekfIds',
+      'hideMapControls',
+      'overlays', // 2022.10.26 added overlay. Need to refresh or users will not get new ones
+      'apfloraLayers', // 2022.10.28 added. Need to refresh or users will not get new ones
+    ]
     import('mst-persist').then((module) =>
       module
         .default('store', store, {

@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext' 
 import Layer from './Layer'
 
 const CardContent = styled.div`

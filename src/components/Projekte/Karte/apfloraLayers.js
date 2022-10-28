@@ -24,7 +24,7 @@ const apfloraLayers = [
     value: 'beobZugeordnetAssignPolylines',
   },
   {
-    label: 'Karten-Filter',
+    label: 'Karten-Filter', 
     value: 'mapFilter',
   },
 ]

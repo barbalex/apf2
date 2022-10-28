@@ -1,6 +1,18 @@
 export const overlays = [
   { label: 'Markierungen', value: 'Markierungen' },
   { label: 'Detailpläne', value: 'Detailplaene' },
+  {
+    label: 'Massnahmenpläne der aktiven Art, Flächen',
+    value: 'MassnahmenFlaechen',
+  },
+  {
+    label: 'Massnahmenpläne der aktiven Art, Linien',
+    value: 'MassnahmenLinien',
+  },
+  {
+    label: 'Massnahmenpläne der aktiven Art, Punkte',
+    value: 'MassnahmenPunkte',
+  },
   { label: 'NS-Gebiete Betreuung', value: 'Betreuungsgebiete' },
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
   { label: 'Gemeinden', value: 'Gemeinden' },
@@ -14,10 +26,3 @@ export const overlays = [
   { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
   { label: 'Wälder: Vegetation', value: 'ZhWaelderVegetation' },
 ]
-
-// const unused = [
-//   {
-//     label: 'Massnahmenpläne (funktioniert leider noch nicht)',
-//     value: 'Massnahmen',
-//   },
-// ]

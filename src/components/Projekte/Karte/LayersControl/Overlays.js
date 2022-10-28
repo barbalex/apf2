@@ -43,7 +43,7 @@ const StyledLegendIcon = styled(InfoOutlineIcon)`
 `
 const LayerDiv = styled.div`
   display: grid;
-  grid-template-columns: 180px 180px 20px;
+  grid-template-columns: 360px 20px;
   padding-top: 4px;
   &:not(:last-of-type) {
     border-bottom: 1px solid #ececec;
@@ -59,6 +59,9 @@ const LayerDiv = styled.div`
    */
   font-size: 12px;
 `
+const LabelDiv = styled.div`
+  display: flex;
+`
 const CheckDiv = styled.div`
   flex-grow: 1;
 `
@@ -72,7 +75,7 @@ const IconsDiv = styled.div`
 `
 // TODO: add icon: https://material.io/icons/#ic_info
 // for layers with legend
-const layerLegends = {
+const layerLegends = ({ apId }) => ({
   ZhSvoGrey: [
     {
       name: 'Zonen Schutzverordnungen (Raster)',
@@ -189,7 +192,25 @@ const layerLegends = {
       url: 'https://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagerung2-aktuell&format=image/png&STYLE=default',
     },
   ],
-}
+  MassnahmenFlaechen: [
+    {
+      name: 'Flächen',
+      url: `https://wms.prod.qgiscloud.com/FNS/${apId}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&LAYER=flaechen&FORMAT=image/png&STYLE=default&SLD_VERSION=1.1.0`,
+    },
+  ],
+  MassnahmenLinien: [
+    {
+      name: 'Linien',
+      url: `https://wms.prod.qgiscloud.com/FNS/${apId}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&LAYER=linien&FORMAT=image/png&STYLE=default&SLD_VERSION=1.1.0`,
+    },
+  ],
+  MassnahmenPunkte: [
+    {
+      name: 'Punkte',
+      url: `https://wms.prod.qgiscloud.com/FNS/${apId}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&LAYER=punkte&FORMAT=image/png&STYLE=default&SLD_VERSION=1.1.0`,
+    },
+  ],
+})
 const DragHandle = SortableHandle(() => (
   <StyledIconButton
     title="ziehen, um Layer höher/tiefer zu stapeln"
@@ -200,44 +221,46 @@ const DragHandle = SortableHandle(() => (
 ))
 
 const SortableItem = SortableElement(
-  ({ overlay, activeOverlays, setActiveOverlays }) => (
+  ({ overlay, activeOverlays, setActiveOverlays, apId }) => (
     <LayerDiv>
-      <CheckDiv>
-        <Checkbox
-          value={overlay.value}
-          label={overlay.label}
-          checked={activeOverlays.includes(overlay.value)}
-          onChange={async () => {
-            if (activeOverlays.includes(overlay.value)) {
-              return setActiveOverlays(
-                activeOverlays.filter((o) => o !== overlay.value),
-              )
-            }
-            return setActiveOverlays([...activeOverlays, overlay.value])
-          }}
-        />
-      </CheckDiv>
-      <InfoIconsDivs>
-        {(layerLegends[overlay.value] || [])
-          .filter((layer) => !!layer.url)
-          .map((layer) => (
-            <IconsDiv key={layer.name}>
-              <div>
-                <StyledIconButton
-                  color="inherit"
-                  title={`Legende für ${layer.name} öffnen`}
-                  onClick={() => {
-                    if (typeof window !== 'undefined') {
-                      window.open(layer.url, '_blank')
-                    }
-                  }}
-                >
-                  <StyledLegendIcon />
-                </StyledIconButton>
-              </div>
-            </IconsDiv>
-          ))}
-      </InfoIconsDivs>
+      <LabelDiv>
+        <CheckDiv>
+          <Checkbox
+            value={overlay.value}
+            label={overlay.label}
+            checked={activeOverlays.includes(overlay.value)}
+            onChange={async () => {
+              if (activeOverlays.includes(overlay.value)) {
+                return setActiveOverlays(
+                  activeOverlays.filter((o) => o !== overlay.value),
+                )
+              }
+              return setActiveOverlays([...activeOverlays, overlay.value])
+            }}
+          />
+        </CheckDiv>
+        <InfoIconsDivs>
+          {(layerLegends({ apId })[overlay.value] || [])
+            .filter((layer) => !!layer.url)
+            .map((layer) => (
+              <IconsDiv key={layer.name}>
+                <div>
+                  <StyledIconButton
+                    color="inherit"
+                    title={`Legende für ${layer.name} öffnen`}
+                    onClick={() => {
+                      if (typeof window !== 'undefined') {
+                        window.open(layer.url, '_blank')
+                      }
+                    }}
+                  >
+                    <StyledLegendIcon />
+                  </StyledIconButton>
+                </div>
+              </IconsDiv>
+            ))}
+        </InfoIconsDivs>
+      </LabelDiv>
       <IconsDiv>
         <IconsDiv>
           <div>
@@ -250,7 +273,7 @@ const SortableItem = SortableElement(
 )
 
 const SortableList = SortableContainer(
-  ({ items, activeOverlays, setActiveOverlays }) => (
+  ({ items, activeOverlays, setActiveOverlays, apId }) => (
     <div>
       {items.map((overlay, index) => (
         <SortableItem
@@ -259,6 +282,7 @@ const SortableList = SortableContainer(
           overlay={overlay}
           activeOverlays={activeOverlays}
           setActiveOverlays={setActiveOverlays}
+          apId={apId}
         />
       ))}
     </div>
@@ -266,14 +290,17 @@ const SortableList = SortableContainer(
 )
 
 const Overlays = () => {
-  const { overlays, setOverlays, activeOverlays, setActiveOverlays } =
-    useContext(storeContext)
+  const store = useContext(storeContext)
+  const { overlays, setOverlays, activeOverlays, setActiveOverlays } = store
+  const apId = store.tree.apIdInActiveNodeArray
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) =>
       setOverlays(arrayMove(overlays, oldIndex, newIndex)),
     [overlays, setOverlays],
   )
+
+  // console.log('Overlays', overlays)
 
   return (
     <CardContent>
@@ -284,6 +311,7 @@ const Overlays = () => {
         lockAxis="y"
         activeOverlays={getSnapshot(activeOverlays)}
         setActiveOverlays={setActiveOverlays}
+        apId={apId}
       />
     </CardContent>
   )
