@@ -19,8 +19,7 @@ const PopupContainer = styled.div`
   }
 `
 
-const layers =
-  '6c52d122-4f62-11e7-aebe-df3ec54ed945 Agrimonia procera F,6c52d122-4f62-11e7-aebe-df3ec54ed945 Agrimonia procera L,6c52d122-4f62-11e7-aebe-df3ec54ed945 Agrimonia procera P'
+const layers = 'flaechen,linien,punkte'
 const version = '1.3.0'
 const format = 'image/png'
 
@@ -58,7 +57,7 @@ const MassnahmenLayer = () => {
         params,
       })
     } catch (error) {
-      // console.log(`error fetching ${row.label}`, error?.toJSON())
+      console.log({ error, errorToJSON: error?.toJSON() })
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
