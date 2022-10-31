@@ -7,6 +7,9 @@
 -- union all branches
 -- sort rows by sort string
 --
+-- possible beginning in pg15 as row level security possible in views:
+-- https://www.cybertec-postgresql.com/en/view-permissions-and-row-level-security-in-postgresql/
+--
 -- filter criteria:
 -- pass in array of composite types (https://www.postgresql.org/docs/14/rowtypes.html)
 -- composite type describes filter criteria:
