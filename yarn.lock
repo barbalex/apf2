@@ -2476,9 +2476,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/base@npm:5.0.0-alpha.103":
-  version: 5.0.0-alpha.103
-  resolution: "@mui/base@npm:5.0.0-alpha.103"
+"@mui/base@npm:5.0.0-alpha.104":
+  version: 5.0.0-alpha.104
+  resolution: "@mui/base@npm:5.0.0-alpha.104"
   dependencies:
     "@babel/runtime": ^7.19.0
     "@emotion/is-prop-valid": ^1.2.0
@@ -2495,25 +2495,25 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: beabe1be30534f39faf62dc586aaf2e97fb1b3a986fa002fe66124e7a0bc582ef9430ca1945069c4d375e3cf7ffad02f825fdcb9983b472e120bc4ba8f15f19a
+  checksum: f66693b4659bb50cc89b6b0e055db45d091bb546f82a4c6cc230f3699e647b68c941dcb8e8d42648e3470f83da5600f400ff21af9a8f7aaf6b018ac5ad3ceeb1
   languageName: node
   linkType: hard
 
-"@mui/core-downloads-tracker@npm:^5.10.11":
-  version: 5.10.11
-  resolution: "@mui/core-downloads-tracker@npm:5.10.11"
-  checksum: 16a1cab20098e55bb217fdbf20fe18e56a3f52ef0daef74f9f078cebf1b2e47906e28f707f70b8d6132bca2b0a56d9a9870364ea1dfce89c53567f30af9205ce
+"@mui/core-downloads-tracker@npm:^5.10.12":
+  version: 5.10.12
+  resolution: "@mui/core-downloads-tracker@npm:5.10.12"
+  checksum: 894c7ee810851de2ee5de43648822e6f5ea639e4ab494fd54c9a6cb6dbace608b5634699fab05978f2d21efc4378bbce83b8352ef7aa958afd3d387c32373244
   languageName: node
   linkType: hard
 
-"@mui/material@npm:5.10.11":
-  version: 5.10.11
-  resolution: "@mui/material@npm:5.10.11"
+"@mui/material@npm:5.10.12":
+  version: 5.10.12
+  resolution: "@mui/material@npm:5.10.12"
   dependencies:
     "@babel/runtime": ^7.19.0
-    "@mui/base": 5.0.0-alpha.103
-    "@mui/core-downloads-tracker": ^5.10.11
-    "@mui/system": ^5.10.10
+    "@mui/base": 5.0.0-alpha.104
+    "@mui/core-downloads-tracker": ^5.10.12
+    "@mui/system": ^5.10.12
     "@mui/types": ^7.2.0
     "@mui/utils": ^5.10.9
     "@types/react-transition-group": ^4.4.5
@@ -2535,7 +2535,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 208312fc063ccdfad393e0e86f1d22d1e8e45fdcf6ba9ce5e0914211944f7dec04a2784d04f728f6014d3fe17b1b102e0279a51d9cf94147c45520c662f3be40
+  checksum: 37b3d605d0cdb5136ac5a568d1c3c00ad5a3e01242cea6bccad5ccb08512e3c600dde75af852515c947b994fb5afa972044faac07416d347cbb6e503651c23a3
   languageName: node
   linkType: hard
 
@@ -2603,9 +2603,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/system@npm:^5.10.10":
-  version: 5.10.10
-  resolution: "@mui/system@npm:5.10.10"
+"@mui/system@npm:^5.10.12":
+  version: 5.10.12
+  resolution: "@mui/system@npm:5.10.12"
   dependencies:
     "@babel/runtime": ^7.19.0
     "@mui/private-theming": ^5.10.9
@@ -2627,7 +2627,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: a2cb5bcc8e3a07038672f955d8352d3fa7a6239665efac3c7b4adf59fa64dc258b844f2decb0db3dd378b9fc0e0ca856ec5172e077702ff94e3a635b6ca8c462
+  checksum: 1803a6f54bc1fda304834f362c60697b2ee157df7629b26337cb3d180093cbc244a94df45719da436b2917f98674687a98fea353a9ec8e6de7c5c3b5ba592bc8
   languageName: node
   linkType: hard
 
@@ -4876,7 +4876,7 @@ __metadata:
     "@fontsource/roboto-mono": 4.5.8
     "@graphile-contrib/pg-order-by-related": 1.0.0-beta.6
     "@graphile/postgis": 0.2.0-0
-    "@mui/material": 5.10.11
+    "@mui/material": 5.10.12
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
     "@mui/styled-engine-sc": 5.10.6
     "@mui/styles": 5.10.10
@@ -4940,7 +4940,7 @@ __metadata:
     leaflet.markercluster: 1.5.3
     localforage: 1.10.0
     lodash: 4.17.21
-    luxon: 3.0.4
+    luxon: 3.1.0
     markdown-it: 13.0.1
     mobx: 6.6.2
     mobx-react-lite: 3.4.0
@@ -4979,13 +4979,13 @@ __metadata:
     react-linkify: 1.0.0-alpha
     react-markdown-editor-lite: 1.3.3
     react-resize-detector: 7.1.2
-    react-select: 5.5.7
+    react-select: 5.5.8
     react-sortable-hoc: 2.0.0
     react-split-pane: 0.1.92
     react-stylable-diff: 2.0.0
     react-typography: 0.16.20
-    react-virtuoso: 3.1.1
-    react-window: 1.8.7
+    react-virtuoso: 3.1.2
+    react-window: 1.8.8
     recharts: 2.1.16
     redaxios: 0.5.1
     simplebar: 5.3.9
@@ -13435,10 +13435,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:3.0.4":
-  version: 3.0.4
-  resolution: "luxon@npm:3.0.4"
-  checksum: d0908c3951da2a10ccf23040210ead23b0da5366a9d0954e7d5db3560189a7bd703d8af1e00084f197effc9cd7158d1bddf32886d98a70d59ce9bc3fe88bbce0
+"luxon@npm:3.1.0":
+  version: 3.1.0
+  resolution: "luxon@npm:3.1.0"
+  checksum: f8a850b759ba7a2e009d904c522ed7bc264bf4add57578f8948e52a0ed96b627b025b5aad8032295b570ae19fac41f0ffab91bdb128715fb0cc020798a7ba886
   languageName: node
   linkType: hard
 
@@ -16694,9 +16694,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-select@npm:5.5.7":
-  version: 5.5.7
-  resolution: "react-select@npm:5.5.7"
+"react-select@npm:5.5.8":
+  version: 5.5.8
+  resolution: "react-select@npm:5.5.8"
   dependencies:
     "@babel/runtime": ^7.12.0
     "@emotion/cache": ^11.4.0
@@ -16710,7 +16710,7 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: c6b1752c8c5b89c9dc5c27ba985dce693049891c0942a19ec516658fecbba535a4e3b5fa7c815a326617704eeba8ae65f395ef68dd7dfa618acd1dc234774b01
+  checksum: 329485b8e81fd3937f60f7918a334408cba98fa7fc1fd4e1a3b8b34d5486e31bfd1bd276228a92aa82f196e7b94d7277ebcc1d29af3ff6af0f53ba225cc41906
   languageName: node
   linkType: hard
 
@@ -16839,29 +16839,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-virtuoso@npm:3.1.1":
-  version: 3.1.1
-  resolution: "react-virtuoso@npm:3.1.1"
+"react-virtuoso@npm:3.1.2":
+  version: 3.1.2
+  resolution: "react-virtuoso@npm:3.1.2"
   dependencies:
     "@virtuoso.dev/react-urx": ^0.2.12
     "@virtuoso.dev/urx": ^0.2.12
   peerDependencies:
     react: ">=16 || >=17 || >= 18"
     react-dom: ">=16 || >=17 || >= 18"
-  checksum: 0d4951a9b90f6bc5370d53ca48d2072cd1c8acecdc872cdde9d4c9876695041903dcfa030ac29d30ad1307ad4968484b1611ce666c3f37252856b34eb7e47972
+  checksum: 509132c8eb761e2aaa78a1c6573692a66de0346b698f9661ce12dc78703fd7a69c05d3c58d28fa45f2d7521b497411ee147a54c4a4ffcf413b08c5df182d32b5
   languageName: node
   linkType: hard
 
-"react-window@npm:1.8.7":
-  version: 1.8.7
-  resolution: "react-window@npm:1.8.7"
+"react-window@npm:1.8.8":
+  version: 1.8.8
+  resolution: "react-window@npm:1.8.8"
   dependencies:
     "@babel/runtime": ^7.0.0
     memoize-one: ">=3.1.1 <6"
   peerDependencies:
     react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
     react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 1e122c29224781e70359978287a2e850ccdf509cd71ba16b16ea258725687a62f5c16ab69f52f732b4ed20df583196dbe2a04804f3e4a176bb3e62f3fc910452
+  checksum: a19f43b9015fb84e16db983617dac618a8b298881d2ca96ffc2fb00534afd958ee57a00fd0017733b56f8c34dd84e5be59337877aed3c66329ed3b84e8d018ba
   languageName: node
   linkType: hard
 
