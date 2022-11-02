@@ -329,7 +329,7 @@ FROM ( WITH dat AS (
 WHERE
   beob.id = dat.if_id;
 
-1878
+-- 1878
 -- TODO: when this is done, can't filter by existence of tpop_id any more!
 -- need to filter by delete-signal
 -- 5.2
