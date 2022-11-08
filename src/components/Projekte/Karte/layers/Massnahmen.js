@@ -45,6 +45,7 @@ const MassnahmenLayer = ({ layer }) => {
         crs: 'EPSG:4326',
         format,
         info_format: 'application/vnd.ogc.gml',
+        feature_count: 40,
         query_layers: layer,
         x: Math.round(e.containerPoint.x),
         y: Math.round(e.containerPoint.y),
