@@ -9,4 +9,4 @@ const Head = () => (
   </>
 )
 
-export default Head 
+export default Head  
