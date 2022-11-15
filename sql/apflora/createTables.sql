@@ -208,6 +208,7 @@ ALTER TABLE apflora.ap_user ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS reader ON apflora.ap_user;
 
+-- Idea: maybe let ap_writer see who may also read and write?
 CREATE POLICY reader ON apflora.ap_user
   USING (TRUE)
   WITH CHECK (CURRENT_USER = 'apflora_manager');
