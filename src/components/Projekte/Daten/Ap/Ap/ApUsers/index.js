@@ -80,7 +80,7 @@ const ApUsers = ({ apId }) => {
           ? apUsers.map((user) => (
               <ApUser key={user.id} user={user} refetch={refetch} />
             ))
-          : 'Es wurden noch keine Zugriffe erteilt'}
+          : 'Es wurden noch keine Zugriffe erteilt oder Sie haben nicht die Rechte, die Liste der Benutzer zu sehen'}
         <Info>
           <InfoTitle>Zugriff hängt von der Rolle des Benutzers ab:</InfoTitle>
           <InfoList>
@@ -91,6 +91,9 @@ const ApUsers = ({ apId }) => {
             </InfoRow>
             <InfoRow>
               {'"ap_reader" haben Lese-Rechte, wenn sie oben aufgelistet sind'}
+            </InfoRow>
+            <InfoRow>
+              {'Nur apflora_manager sehen die Liste der Benutzer mit Zugriff'}
             </InfoRow>
           </InfoList>
           <InfoTitle>Darüber hinaus haben immer Zugriff:</InfoTitle>
