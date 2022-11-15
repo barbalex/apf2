@@ -210,7 +210,7 @@ DROP POLICY IF EXISTS reader ON apflora.ap_user;
 
 -- Idea: maybe let ap_writer see who may also read and write?
 CREATE POLICY reader ON apflora.ap_user
-  USING (TRUE)
+  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_ap_reader', 'apflora_freiwillig'))
   WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 DROP TABLE IF EXISTS apflora.ap_file;
