@@ -39,9 +39,10 @@ const ApUsers = ({ apId }) => {
         allApUsers(
           filter: {
             apId: { equalTo: $apId }
-            userByUserName: {
-              role: { in: ["apflora_ap_writer", "apflora_ap_reader"] }
-            }
+            # uncommented because ap_writer's dont see other names otherwise
+            # userByUserName: {
+            #   role: { in: ["apflora_ap_writer", "apflora_ap_reader"] }
+            # }
           }
         ) {
           nodes {
@@ -80,7 +81,7 @@ const ApUsers = ({ apId }) => {
           ? apUsers.map((user) => (
               <ApUser key={user.id} user={user} refetch={refetch} />
             ))
-          : 'Es wurden noch keine Zugriffe erteilt oder Sie haben nicht die Rechte, die Liste der Benutzer zu sehen'}
+          : 'Es wurden noch keine Zugriffe erteilt'}
         <Info>
           <InfoTitle>Zugriff hängt von der Rolle des Benutzers ab:</InfoTitle>
           <InfoList>
@@ -92,15 +93,15 @@ const ApUsers = ({ apId }) => {
             <InfoRow>
               {'"ap_reader" haben Lese-Rechte, wenn sie oben aufgelistet sind'}
             </InfoRow>
-            <InfoRow>
-              {'Nur apflora_manager sehen die Liste der Benutzer mit Zugriff'}
-            </InfoRow>
           </InfoList>
           <InfoTitle>Darüber hinaus haben immer Zugriff:</InfoTitle>
           <InfoList>
             <InfoRow>{'"manager" (Schreib-Rechte)'}</InfoRow>
             <InfoRow>{'"reader" (Lese-Rechte)'}</InfoRow>
           </InfoList>
+          <InfoTitle>
+            Nur apflora_manager sehen die Rollen von Benutzern.
+          </InfoTitle>
         </Info>
       </NewUserContainer>
       <NewUser apId={apId} apUsers={apUsers} refetch={refetch} />

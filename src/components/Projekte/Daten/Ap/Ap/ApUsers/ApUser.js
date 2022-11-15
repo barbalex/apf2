@@ -40,13 +40,13 @@ const ApUser = ({ user, refetch }) => {
     refetch()
   }, [client, enqueNotification, refetch, user.id])
 
+  const role = (user?.userByUserName?.role ?? '').replace('apflora_', '')
+
+  // non-managers do not see role, so don't show it if there is none
   return (
     <div>
       {user.userName}
-      <span>{` (${(user?.userByUserName?.role ?? '').replace(
-        'apflora_',
-        '',
-      )})`}</span>
+      {!!role && <span>{` (${role})`}</span>}
       <DelIcon
         title={`${user.userName} entfernen`}
         aria-label={`${user.userName} entfernen`}
