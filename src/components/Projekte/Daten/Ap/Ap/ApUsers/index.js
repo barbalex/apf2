@@ -100,7 +100,9 @@ const ApUsers = ({ apId }) => {
             <InfoRow>{'"reader" (Lese-Rechte)'}</InfoRow>
           </InfoList>
           <InfoTitle>
-            Nur apflora_manager sehen die Rollen von Benutzern.
+            {
+              'Nur "manager" sehen die Rollen von Benutzern (Benutzer-Infos sind geschützt).'
+            }
           </InfoTitle>
         </Info>
       </NewUserContainer>
