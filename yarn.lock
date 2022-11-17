@@ -5036,7 +5036,6 @@ __metadata:
     file-saver: 2.0.5
     gatsby: 4.24.8
     gatsby-cli: 4.24.0
-    gatsby-plugin-create-client-paths: 4.9.0
     gatsby-plugin-image: 2.24.0
     gatsby-plugin-manifest: 4.24.0
     gatsby-plugin-offline: 5.24.0
@@ -5100,7 +5099,6 @@ __metadata:
     react-dom: 18.2.0
     react-error-boundary: 3.1.4
     react-focus-within: 2.0.2
-    react-helmet: 6.1.0
     react-highlight-words: 0.18.0
     react-icons: 4.6.0
     react-image-lightbox: 5.1.4
@@ -9979,17 +9977,6 @@ __metadata:
   peerDependencies:
     "@parcel/core": ^2.0.0
   checksum: d1d906daeee447aee8709f1953b44a98c067c4971484c747881ead4fcf86206383b98e2ac05669aecca49ba6d1502e97d6a21efcd9c09c82a1d987691c21241c
-  languageName: node
-  linkType: hard
-
-"gatsby-plugin-create-client-paths@npm:4.9.0":
-  version: 4.9.0
-  resolution: "gatsby-plugin-create-client-paths@npm:4.9.0"
-  dependencies:
-    "@babel/runtime": ^7.15.4
-  peerDependencies:
-    gatsby: ^4.0.0-next
-  checksum: 6f6a28f0e2b719ab4c91d4a174047945d9340a3a12f511aade947d4420e28e4ad112d04d217df07d4311599d1bbcde4dc08a5601305f4199eb0a5d75f21e21d8
   languageName: node
   linkType: hard
 
@@ -16573,7 +16560,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-fast-compare@npm:^3.0.1, react-fast-compare@npm:^3.1.1, react-fast-compare@npm:^3.2.0":
+"react-fast-compare@npm:^3.0.1, react-fast-compare@npm:^3.2.0":
   version: 3.2.0
   resolution: "react-fast-compare@npm:3.2.0"
   checksum: 8ef272c825ae329f61633ce4ce7f15aa5b84e5214d88bc0823880236e03e985a13195befa2c7a4eda7db3b017dc7985729152d88445823f652403cf36c2b86aa
@@ -16589,20 +16576,6 @@ __metadata:
   peerDependencies:
     react: ^15.0.0 || ^16.0.0
   checksum: e188ad2ad0e1d7fef61529721e18e69bde2bd693fc0b156b4a7929d1ed1d9829977034986b4d4f2515c2d28ab591455ee6830e370c74a6906499a244fadce372
-  languageName: node
-  linkType: hard
-
-"react-helmet@npm:6.1.0":
-  version: 6.1.0
-  resolution: "react-helmet@npm:6.1.0"
-  dependencies:
-    object-assign: ^4.1.1
-    prop-types: ^15.7.2
-    react-fast-compare: ^3.1.1
-    react-side-effect: ^2.1.0
-  peerDependencies:
-    react: ">=16.3.0"
-  checksum: a4998479dab7fc1c2799eddefb1870a9d881b5f71cfdf97979a9882e42f4bb50402d55335f308f461e735e01a06f46b16cc7b4e6bcb22c7a4a6f85a753c5c106
   languageName: node
   linkType: hard
 
@@ -16859,15 +16832,6 @@ __metadata:
     react: 0.0.0-experimental-c8b778b7f-20220825
     webpack: ^5.59.0
   checksum: 55fc67030b775ededaafc149aa17ebdac6cd4df7f9d61f194f3e3d98bb5cf83a67bd313ce25b9c597df55fa88162840690ba2b61e22d36532478a008c5209385
-  languageName: node
-  linkType: hard
-
-"react-side-effect@npm:^2.1.0":
-  version: 2.1.2
-  resolution: "react-side-effect@npm:2.1.2"
-  peerDependencies:
-    react: ^16.3.0 || ^17.0.0 || ^18.0.0
-  checksum: c5eb1f42b464fb093bca59aaae0f1b2060373a2aaff95275b8781493628cdbbb6acdd6014e7883782c65c361f35a30f28cc515d68a1263ddb39cbbc47110be53
   languageName: node
   linkType: hard
 

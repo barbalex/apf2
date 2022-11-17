@@ -1,37 +1,19 @@
-import React, { useContext, useMemo, useEffect } from 'react'
-import styled from 'styled-components'
+import React, { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 
-import Layout from '../components/Layout'
-import storeContext from '../storeContext'
-import Projekte from '../components/Projekte'
-import User from '../components/User'
-import Messages from '../components/Messages'
-import Ekf from '../components/Ekf'
-import Deletions from '../components/Deletions'
-import EkPlan from '../components/EkPlan'
-import Unterhalt from '../components/Unterhalt'
-import ErrorBoundary from '../components/shared/ErrorBoundary'
-import getActiveNodeArrayFromPathname from '../modules/getActiveNodeArrayFromPathname'
-import Header from '../components/Head'
-
-const Container = styled.div`
-  background-color: #fffde7;
-  height: ${(props) => `calc(100% - ${props.appbarheight}px)`};
-
-  @media print {
-    margin-top: 0;
-    height: auto;
-    overflow: visible !important;
-    background-color: white;
-  }
-`
+import Layout from '../../components/Layout'
+import storeContext from '../../storeContext'
+import Unterhalt from '../../components/Unterhalt'
+import ErrorBoundary from '../../components/shared/ErrorBoundary'
+import getActiveNodeArrayFromPathname from '../../modules/getActiveNodeArrayFromPathname'
+import Header from '../../components/Head'
+import DatenPageRouter from './_Router'
 
 const DatenPage = ({ location }) => {
   const store = useContext(storeContext)
-  const { view, showDeletions, user, setIsPrint, setEkfIds } = store
+  const { setIsPrint, setEkfIds } = store
   const { activeNodeArray, setActiveNodeArray, setLastTouchedNode } = store.tree
 
   useEffect(() => {
@@ -53,6 +35,8 @@ const DatenPage = ({ location }) => {
   /**
    * In Firefox this does not work! Bug is open since 7 years:
    * see: https://bugzilla.mozilla.org/show_bug.cgi?id=774398
+   * TODO: seems to have been solved 8.2022
+   * BUT: regression: https://bugzilla.mozilla.org/show_bug.cgi?id=1800897
    */
   useEffect(() => {
     window.matchMedia('print').addListener((mql) => {
@@ -66,15 +50,7 @@ const DatenPage = ({ location }) => {
     }
   }, [setEkfIds, setIsPrint])
 
-  const isEkPlan =
-    activeNodeArray.length === 3 &&
-    activeNodeArray[0] === 'Projekte' &&
-    activeNodeArray[2] === 'EK-Planung'
-  const form = useMemo(
-    () => (isEkPlan ? 'ekplan' : view === 'ekf' ? 'ekf' : 'projekte'),
-    [isEkPlan, view],
-  )
-  //console.log('DatenPage rendering')
+  console.log('DatenPage rendering')
 
   // set unterhalt to true to show this page when servicing
   const unterhalt = false
@@ -87,21 +63,11 @@ const DatenPage = ({ location }) => {
   }
 
   // using render props on Layout to pass down appbarheight without using store
+  // TODO: need to pass appbarheight down to DatenPageComponent
   return (
     <ErrorBoundary>
       <Layout>
-        <Container>
-          {!!user.token && (
-            <>
-              {form === 'ekf' && <Ekf />}
-              {form === 'projekte' && <Projekte />}
-              {form === 'ekplan' && <EkPlan />}
-              <Messages />
-              {showDeletions && <Deletions />}
-            </>
-          )}
-          <User />
-        </Container>
+        <DatenPageRouter />
       </Layout>
     </ErrorBoundary>
   )

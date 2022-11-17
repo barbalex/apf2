@@ -4,7 +4,6 @@
  * work there :-(
  */
 import React from 'react'
-import { Helmet } from 'react-helmet'
 import styled from 'styled-components'
 import { useResizeDetector } from 'react-resize-detector'
 
@@ -33,7 +32,7 @@ const Layout = ({ children }) => {
       <div ref={resizeRef}>
         <AppBar />
       </div>
-      {React.cloneElement(children, { appbarheight })}
+      {React.cloneElement(children, { appbarheight })} 
     </Container>
   )
 }
