@@ -287,6 +287,8 @@ const Projekte = () => {
     }
   }, [])
 
+  // console.log('Projekte rendering')
+
   if (tree2Tabs.length === 0 || isPrint) {
     return (
       <Container>
