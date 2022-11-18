@@ -123,13 +123,10 @@
   },
   "dependenciesComments": {
     "react-is": "is peer",
-    "graphql": "is peer",
     "babel-plugin-styled-components": "is peer",
-    "@reach/router": "is peer",
     "@babel/core": "is peer",
     "@babel/plugin-transform-react-jsx": "is peer",
     "@babel/plugin-syntax-flow": "is peer",
-    "simplebar": "is peer",
     "punycode": "UNDECLARED dependency of markdown-it, see: https://github.com/markdown-it/markdown-it/issues/230 and many others",
     "react-leaflet-markercluster": "got weird problems. Trying to solve with @changey/react-leaflet-markercluster and upgrading leaflet deps"
   },
@@ -149,7 +146,6 @@
     "gatsby-cli": "4.24.0",
     "gatsby-plugin-workerize-loader": "2.1.0",
     "prettier": "2.7.1",
-    "simplebar": "5.3.9",
     "source-map-explorer": "2.5.3",
     "vercel": "28.5.3"
   },
