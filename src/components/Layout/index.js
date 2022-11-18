@@ -1,8 +1,3 @@
-/**
- * Cant move Helmet to App
- * because neither StaticQuery nor AppQuery
- * work there :-(
- */
 import React from 'react'
 import styled from 'styled-components'
 import { useResizeDetector } from 'react-resize-detector'
@@ -32,7 +27,7 @@ const Layout = ({ children }) => {
       <div ref={resizeRef}>
         <AppBar />
       </div>
-      {React.cloneElement(children, { appbarheight })} 
+      {React.cloneElement(children, { appbarheight })}
     </Container>
   )
 }
