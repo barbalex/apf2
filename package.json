@@ -97,7 +97,6 @@
     "react-highlight-words": "0.18.0",
     "react-icons": "4.6.0",
     "react-image-lightbox": "5.1.4",
-    "react-is": "18.2.0",
     "react-leaflet": "4.1.0",
     "react-leaflet-bing-v2": "5.2.3",
     "react-leaflet-control": "2.1.2",
@@ -120,7 +119,6 @@
     "use-debounce": "8.0.4"
   },
   "dependenciesComments": {
-    "react-is": "is peer",
     "babel-plugin-styled-components": "is recommended by styled components: https://styled-components.com/docs/tooling#babel-plugin",
     "@babel/plugin-transform-react-jsx": "is peer",
     "@babel/plugin-syntax-flow": "is peer",
