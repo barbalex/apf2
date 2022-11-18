@@ -63,7 +63,6 @@ const DatenPage = ({ location }) => {
   }
 
   // using render props on Layout to pass down appbarheight without using store
-  // TODO: need to pass appbarheight down to DatenPageComponent
   return (
     <ErrorBoundary>
       <Layout>
