@@ -55,8 +55,8 @@ const TechnDokuTemplate = ({ data }) => {
             edges={edges}
           />
           <Doku>
-            <h1>{frontmatter.title ?? ''}</h1>
-            <DokuDate>{frontmatter.date ?? ''}</DokuDate>
+            <h1>{frontmatter?.title ?? ''}</h1>
+            <DokuDate>{frontmatter?.date ?? ''}</DokuDate>
             <div dangerouslySetInnerHTML={{ __html: html }} />
           </Doku>
         </Container>
