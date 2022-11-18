@@ -702,7 +702,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-flow@npm:7.18.6, @babel/plugin-syntax-flow@npm:^7.0.0, @babel/plugin-syntax-flow@npm:^7.18.6":
+"@babel/plugin-syntax-flow@npm:^7.0.0, @babel/plugin-syntax-flow@npm:^7.18.6":
   version: 7.18.6
   resolution: "@babel/plugin-syntax-flow@npm:7.18.6"
   dependencies:
@@ -4802,7 +4802,6 @@ __metadata:
   dependencies:
     "@apollo/client": 3.7.1
     "@babel/eslint-parser": 7.19.1
-    "@babel/plugin-syntax-flow": 7.18.6
     "@babel/plugin-transform-react-jsx": 7.19.0
     "@babel/preset-react": 7.18.6
     "@changey/react-leaflet-markercluster": 4.0.0-rc1

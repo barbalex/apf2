@@ -121,13 +121,11 @@
   "dependenciesComments": {
     "babel-plugin-styled-components": "is recommended by styled components: https://styled-components.com/docs/tooling#babel-plugin",
     "@babel/plugin-transform-react-jsx": "is peer",
-    "@babel/plugin-syntax-flow": "is peer",
     "punycode": "UNDECLARED dependency of markdown-it, see: https://github.com/markdown-it/markdown-it/issues/230 and many others",
     "react-leaflet-markercluster": "got weird problems. Trying to solve with @changey/react-leaflet-markercluster and upgrading leaflet deps"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.19.1",
-    "@babel/plugin-syntax-flow": "7.18.6",
     "@babel/plugin-transform-react-jsx": "7.19.0",
     "@babel/preset-react": "7.18.6",
     "@svgr/cli": "6.5.1",
