@@ -92,3 +92,4 @@ dropbox_uploader.conf
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.vercel
