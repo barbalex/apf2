@@ -40,8 +40,9 @@ const DokuDate = styled.p`
 `
 
 const TechnDokuTemplate = ({ data }) => {
-  const { markdownRemark, allMarkdownRemark } = data
-  const { frontmatter, html } = markdownRemark
+  const { allMarkdownRemark } = data
+  const frontmatter = data?.markdownRemark?.frontmatter
+  const html = data?.markdownRemark?.html
   const { edges } = allMarkdownRemark
 
   return (
@@ -54,8 +55,8 @@ const TechnDokuTemplate = ({ data }) => {
             edges={edges}
           />
           <Doku>
-            <h1>{frontmatter.title}</h1>
-            <DokuDate>{frontmatter.date}</DokuDate>
+            <h1>{frontmatter.title ?? ''}</h1>
+            <DokuDate>{frontmatter.date ?? ''}</DokuDate>
             <div dangerouslySetInnerHTML={{ __html: html }} />
           </Doku>
         </Container>

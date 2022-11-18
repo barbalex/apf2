@@ -52,8 +52,8 @@ const Title = styled.h1`
 `
 
 const BenutzerDokuTemplate = ({ data }) => {
-  const { markdownRemark } = data
-  const { frontmatter, html } = markdownRemark
+  const frontmatter = data?.markdownRemark?.frontmatter
+  const html = data?.markdownRemark?.html
   const edges = data.allMarkdownRemark.edges
 
   return (
@@ -66,11 +66,11 @@ const BenutzerDokuTemplate = ({ data }) => {
             edges={edges}
           />
           <Doku>
-            <Title>{frontmatter.title}</Title>
-            <DokuDate>{frontmatter.date}</DokuDate>
+            <Title>{frontmatter?.title ?? ''}</Title>
+            <DokuDate>{frontmatter?.date ?? ''}</DokuDate>
             <HtmlDiv
-              pdf={frontmatter.pdf}
-              dangerouslySetInnerHTML={{ __html: html }}
+              pdf={frontmatter?.pdf ?? ''}
+              dangerouslySetInnerHTML={{ __html: html ?? '<div>nothing</div>' }}
             />
           </Doku>
         </Container>
@@ -91,7 +91,7 @@ export const pageQuery = graphql`
       }
     }
     allMarkdownRemark(
-      sort: {frontmatter: {sort: ASC}}
+      sort: { frontmatter: { sort: ASC } }
       filter: { fileAbsolutePath: { regex: "/(/benutzerDoku)/.*.md$/" } }
     ) {
       edges {
