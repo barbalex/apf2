@@ -1,1 +1,15 @@
-{"projectId":"QmatirtdVfBTdniDc9xGWg8jF6xjC9yiKEEPfzHVvvTf3z","orgId":"team_gcgJA9RlIJuODHgp4lXEhyZW"}
+{
+  "projectId": "QmatirtdVfBTdniDc9xGWg8jF6xjC9yiKEEPfzHVvvTf3z",
+  "orgId": "team_gcgJA9RlIJuODHgp4lXEhyZW",
+  "settings": {
+    "createdAt": 1555113303201,
+    "framework": "gatsby",
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": null,
+    "outputDirectory": null,
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "16.x"
+  }
+}
