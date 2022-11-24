@@ -116,7 +116,7 @@
   },
   "dependenciesComments": {
     "babel-plugin-styled-components": "is recommended by styled components: https://styled-components.com/docs/tooling#babel-plugin",
-    "resolutions for @mui/styled-engine": "Was needed in this project using yarn - not needed when using npm. No idea why",
+    "resolutions for @mui/styled-engine": "Is needed in this project using yarn - not needed when using npm. No idea why",
     "punycode": "UNDECLARED dependency of markdown-it, see: https://github.com/markdown-it/markdown-it/issues/230 and many others",
     "react-leaflet-markercluster": "got weird problems. Trying to solve with @changey/react-leaflet-markercluster and upgrading leaflet deps"
   },
