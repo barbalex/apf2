@@ -28,7 +28,6 @@
     "@mui/material": "5.10.14",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/styled-engine-sc": "5.10.14",
-    "@mui/styles": "5.10.14",
     "@reach/router": "1.3.4",
     "@react-leaflet/core": "2.1.0",
     "@turf/helpers": "6.5.0",

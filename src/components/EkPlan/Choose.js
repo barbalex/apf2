@@ -14,7 +14,6 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
 import { observer } from 'mobx-react-lite'
-import withStyles from '@mui/styles/withStyles'
 
 import Fields from './Fields'
 import storeContext from '../../storeContext'
@@ -67,12 +66,16 @@ const StyledTextField = styled(TextField)`
     font-size: 13px;
   }
 `
+const CheckboxDensifier = styled.div`
+  margin: -8px 2px -8px -4px;
+`
 
 // placing mateiral-ui checkboxes denser
 // see: https://github.com/mui-org/material-ui/issues/6098#issuecomment-380451242
-const DenserPrimaryAction = withStyles((theme) => ({
-  root: { margin: '-8px 2px -8px -4px' },
-}))((props) => <div className={props.classes.root}>{props.children}</div>)
+// but styling with styled-components
+const DenserCheckbox = (props) => (
+  <CheckboxDensifier>{props.children}</CheckboxDensifier>
+)
 
 const EkPlanChoose = () => {
   const store = useContext(storeContext)
@@ -162,65 +165,65 @@ const EkPlanChoose = () => {
         </FelderButton>
         <Label
           control={
-            <DenserPrimaryAction>
+            <DenserCheckbox>
               <Checkbox
                 checked={showEk}
                 onChange={onChangeShowEk}
                 color="primary"
               />
-            </DenserPrimaryAction>
+            </DenserCheckbox>
           }
           label="EK"
           labelPlacement="start"
         />
         <Label
           control={
-            <DenserPrimaryAction>
+            <DenserCheckbox>
               <Checkbox
                 checked={showEkf}
                 onChange={onChangeShowEkf}
                 color="primary"
               />
-            </DenserPrimaryAction>
+            </DenserCheckbox>
           }
           label="EKF"
           labelPlacement="start"
         />
         <Label
           control={
-            <DenserPrimaryAction>
+            <DenserCheckbox>
               <Checkbox
                 checked={showMassn}
                 onChange={onChangeShowMassn}
                 color="primary"
               />
-            </DenserPrimaryAction>
+            </DenserCheckbox>
           }
           label="Ansiedlungen"
           labelPlacement="start"
         />
         <Label
           control={
-            <DenserPrimaryAction>
+            <DenserCheckbox>
               <Checkbox
                 checked={showCount}
                 onChange={onChangeShowCount}
                 color="primary"
               />
-            </DenserPrimaryAction>
+            </DenserCheckbox>
           }
           label="Zählungen"
           labelPlacement="start"
         />
         <Label
           control={
-            <DenserPrimaryAction>
+            <DenserCheckbox>
               <Checkbox
                 checked={showEkCount}
                 onChange={onChangeShowEkCount}
                 color="primary"
               />
-            </DenserPrimaryAction>
+            </DenserCheckbox>
           }
           label="mehrmals ausgeführt"
           labelPlacement="start"
