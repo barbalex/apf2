@@ -22,7 +22,7 @@
     "node": true,
     "es2021": true
   },
-  "plugins": ["react", "react-hooks"],
+  "plugins": ["babel-plugin-styled-components", "react", "react-hooks"],
   "settings": {
     "react": {
       "version": "999.999.999"
