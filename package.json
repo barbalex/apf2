@@ -23,7 +23,6 @@
   "dependencies": {
     "@apollo/client": "3.7.1",
     "@changey/react-leaflet-markercluster": "4.0.0-rc1",
-    "@emotion/css": "^11.10.5",
     "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
     "@fontsource/roboto": "4.5.8",
