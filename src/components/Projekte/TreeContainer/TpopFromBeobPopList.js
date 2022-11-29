@@ -2,7 +2,7 @@
  * need to keep class because of ref
  */
 import React, { useContext } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'

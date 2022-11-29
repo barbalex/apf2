@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import camelCase from 'lodash/camelCase'
 import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'

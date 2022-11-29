@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@mui/material/Checkbox'
 import { useApolloClient, gql } from '@apollo/client'

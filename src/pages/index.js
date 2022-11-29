@@ -1,7 +1,7 @@
 import React from 'react'
 import Typography from '@mui/material/Typography'
 import MaterialCard from '@mui/material/Card'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { StaticImage } from 'gatsby-plugin-image'
 import SimpleBar from 'simplebar-react'
 

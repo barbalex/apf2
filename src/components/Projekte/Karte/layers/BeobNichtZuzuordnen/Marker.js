@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { Marker, Popup } from 'react-leaflet'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 

@@ -20,7 +20,7 @@ Die wichtigsten verwendeten Technologien sind:
   - GraphQL ist die kommende API-Technologie. Verglichen mit REST ist GraphQL einfach zu verstehen und extrem flexibel. Somit steht ein aussergewöhnlich benutzerfreundlicher API-Server zur Verfügung
 - [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten
 - [Apollo](https://www.apollodata.com). Komponenten definieren, welche Daten sie brauchen. Apollo stellt sie via GraphQL bereit
-- [styled-components](https://github.com/styled-components/styled-components): modular stylen
+- [emotion](https://emotion.sh/docs/introduction): modular stylen
 - [Cypress](https://www.cypress.io): automatisiert testen
 - Als Datenbank dient [PostgreSQL](//postgresql.org/). Hier ein [Diagramm der Beziehungen](//raw.githubusercontent.com/barbalex/apf2/master/src/etc/beziehungen.png):
   ![Beziehungs-Diagramm](beziehungen.png)

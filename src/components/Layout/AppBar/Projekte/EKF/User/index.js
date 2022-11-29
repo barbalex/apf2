@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useContext } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogActions from '@mui/material/DialogActions'

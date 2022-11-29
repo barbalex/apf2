@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'

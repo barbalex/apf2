@@ -1,5 +1,5 @@
 import React, { useContext, useCallback } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import {
   MdLocalFlorist,
   MdSwapVerticalCircle,

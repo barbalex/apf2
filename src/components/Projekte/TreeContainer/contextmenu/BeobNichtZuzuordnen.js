@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import storeContext from '../../../../storeContext'

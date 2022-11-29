@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import KontrolljahrField from './KontrolljahrField'
 import KontrolljahrFieldEmpty from './KontrolljahrFieldEmpty'

@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Switch from '@mui/material/Switch'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'

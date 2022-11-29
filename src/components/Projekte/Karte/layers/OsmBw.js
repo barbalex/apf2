@@ -1,6 +1,6 @@
 import React from 'react'
 import { TileLayer } from 'react-leaflet'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const StyledTileLayer = styled(TileLayer)`
   .leaflet-tile-container {

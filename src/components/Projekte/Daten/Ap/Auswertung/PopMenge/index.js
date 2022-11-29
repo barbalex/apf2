@@ -11,7 +11,8 @@ import {
   CartesianGrid,
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
-import styled, { keyframes } from 'styled-components'
+import styled from '@emotion/styled'
+import { keyframes } from '@emotion/css'
 import { FaRedo } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'

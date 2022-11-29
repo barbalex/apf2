@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const StyledTabs = styled(Tabs)`
   [role='tab'][aria-selected='false'],

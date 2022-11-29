@@ -12,7 +12,7 @@ import {
   CartesianGrid,
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import queryErfolg from './queryErfolg'
 import CustomTick from './CustomTick'

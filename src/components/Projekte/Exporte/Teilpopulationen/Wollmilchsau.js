@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'

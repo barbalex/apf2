@@ -1,5 +1,5 @@
 import React, { useContext, useCallback, useState } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { observer } from 'mobx-react-lite'

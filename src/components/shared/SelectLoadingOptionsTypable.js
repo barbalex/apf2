@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 

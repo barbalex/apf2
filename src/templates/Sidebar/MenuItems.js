@@ -1,7 +1,7 @@
 import React from 'react'
 import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import MenuItem from './MenuItem'
 

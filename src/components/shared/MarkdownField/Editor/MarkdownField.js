@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useEffect, useState } from 'react'
 import 'react-markdown-editor-lite/lib/index.css'
 import MarkdownIt from 'markdown-it'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Editor, { Plugins } from 'react-markdown-editor-lite'
 
 import Label from '../../Label'

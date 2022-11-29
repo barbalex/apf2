@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'

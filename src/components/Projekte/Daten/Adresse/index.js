@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'

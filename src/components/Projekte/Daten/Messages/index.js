@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client'
 import Linkify from 'react-linkify'
 import { DateTime } from 'luxon'

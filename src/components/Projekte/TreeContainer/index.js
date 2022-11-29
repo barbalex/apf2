@@ -2,7 +2,7 @@
  * need to keep class because of ref
  */
 import React, { useCallback, useContext, useState, useEffect } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'

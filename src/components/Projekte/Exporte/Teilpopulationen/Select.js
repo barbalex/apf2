@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import Select from 'react-select'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`

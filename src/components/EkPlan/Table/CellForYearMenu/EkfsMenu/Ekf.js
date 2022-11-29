@@ -8,7 +8,7 @@ import {
   MdExpandLess as CloseIcon,
 } from 'react-icons/md'
 import { FaExternalLinkAlt } from 'react-icons/fa'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 

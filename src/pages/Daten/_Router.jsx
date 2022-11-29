@@ -3,7 +3,7 @@
 // see: https://github.com/gatsbyjs/gatsby/issues/26554#issuecomment-677915552
 import React from 'react'
 import { Router } from '@reach/router'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import DatenPageComponent from './_DatenComponent'
 

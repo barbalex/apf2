@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import query from './query'
 import CustomTooltip from '../CustomTooltip'

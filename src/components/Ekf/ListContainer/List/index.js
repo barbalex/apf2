@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { FixedSizeList as List } from 'react-window'
 import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 

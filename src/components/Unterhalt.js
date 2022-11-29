@@ -1,6 +1,6 @@
 // This is the entry file for the application
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const Container = styled.div`
   font: 20px Helvetica, sans-serif;

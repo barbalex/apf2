@@ -4,7 +4,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const StyledInput = styled(Input)`
   div hr {

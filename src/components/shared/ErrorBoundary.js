@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 
 import logout from '../../modules/logout'

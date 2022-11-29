@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import ApUser from './ApUser'
 import NewUser from './NewUser'

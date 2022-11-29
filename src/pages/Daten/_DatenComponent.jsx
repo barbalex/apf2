@@ -2,7 +2,7 @@
 // otherwise weird things happen (edits are not registered)
 // see: https://github.com/gatsbyjs/gatsby/issues/26554#issuecomment-677915552
 import React, { useContext, useMemo } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext'

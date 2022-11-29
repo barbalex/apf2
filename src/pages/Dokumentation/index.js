@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import Layout from '../../components/Layout'
 import ErrorBoundary from '../../components/shared/ErrorBoundary'

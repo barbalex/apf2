@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { useQuery, gql } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
 import SimpleBar from 'simplebar-react'

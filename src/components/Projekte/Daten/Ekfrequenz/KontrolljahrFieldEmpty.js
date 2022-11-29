@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import Input from '@mui/material/Input'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 

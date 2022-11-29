@@ -9,7 +9,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import { green } from '@mui/material/colors'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import getUrls from 'get-urls'
 import { observer } from 'mobx-react-lite'
 

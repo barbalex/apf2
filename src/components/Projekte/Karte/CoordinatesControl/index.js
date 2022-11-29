@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import 'leaflet'
 import { useMapEvents } from 'react-leaflet'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import debounce from 'lodash/debounce'
 
 import ShowCoordinates from './ShowCoordinates'

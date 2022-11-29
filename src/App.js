@@ -29,7 +29,7 @@ import '@fontsource/roboto-mono/700.css'
 import '@fontsource/roboto'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
-import createGlobalStyle from './utils/createGlobalStyle'
+import GlobalStyle from './components/GlobalStyle'
 
 import { Provider as MobxProvider } from './storeContext'
 import { Provider as IdbProvider } from './idbContext'
@@ -45,8 +45,6 @@ import 'simplebar/dist/simplebar.min.css'
 
 import '@changey/react-leaflet-markercluster/dist/styles.min.css'
 import 'react-datepicker/dist/react-datepicker.css'
-
-const GlobalStyle = createGlobalStyle()
 
 registerLocale('de', de)
 setDefaultLocale('de')

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);

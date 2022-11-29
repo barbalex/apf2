@@ -1,5 +1,5 @@
 import React, { useContext, useCallback } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
 import { MdInfoOutline } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'

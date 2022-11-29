@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@mui/material/Button'

@@ -1,6 +1,6 @@
 import React from 'react'
 import MarkdownIt from 'markdown-it'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import Label from '../Label'
 

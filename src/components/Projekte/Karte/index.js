@@ -7,7 +7,7 @@
 
 import React, { useContext, useMemo, useState } from 'react'
 import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'

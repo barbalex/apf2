@@ -3,7 +3,7 @@ import CardContent from '@mui/material/CardContent'
 import Collapse from '@mui/material/Collapse'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import WasIstCsv from './WasIstCsv'
 import CsvOeffnen from './CsvOeffnen'

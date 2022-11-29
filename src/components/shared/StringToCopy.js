@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@mui/material/Button'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from './ErrorBoundary'

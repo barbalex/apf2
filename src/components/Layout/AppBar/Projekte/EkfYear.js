@@ -1,6 +1,6 @@
 import React, { useContext, useState, useCallback, useEffect } from 'react'
 import Input from '@mui/material/Input'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import initiateDataFromUrl from '../../../../modules/initiateDataFromUrl'

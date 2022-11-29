@@ -2,7 +2,7 @@ import React, { useContext, useState, useCallback } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import isMobilePhone from '../../../../../modules/isMobilePhone'

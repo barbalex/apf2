@@ -1,7 +1,7 @@
 import React from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { useLocation } from '@reach/router'
 
 import HomeBar from './Home'

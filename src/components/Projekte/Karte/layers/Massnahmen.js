@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { WMSTileLayer, useMapEvent, useMap } from 'react-leaflet'
 import axios from 'redaxios'
 import * as ReactDOMServer from 'react-dom/server'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import xmlToLayersData from '../../../../modules/xmlToLayersData'

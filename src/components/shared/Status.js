@@ -6,7 +6,7 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import InfoWithPopover from './InfoWithPopover'
 import ifIsNumericAsNumber from '../../modules/ifIsNumericAsNumber'

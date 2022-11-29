@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { Polyline, Popup } from 'react-leaflet'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import { observer } from 'mobx-react-lite'

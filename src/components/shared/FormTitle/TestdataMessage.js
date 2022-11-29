@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import constants from '../../../modules/constants'
 import storeContext from '../../../storeContext'

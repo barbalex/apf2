@@ -3,7 +3,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 // without slight padding radio is slightly cut off!
 const StyledFormControl = styled(FormControl)`

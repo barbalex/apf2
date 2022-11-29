@@ -1,5 +1,5 @@
 import React, { useContext, useCallback, useRef, useEffect } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import SplitPane from 'react-split-pane'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'

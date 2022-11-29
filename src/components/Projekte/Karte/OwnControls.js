@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 import { useDebouncedCallback } from 'use-debounce'
 

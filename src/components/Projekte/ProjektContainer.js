@@ -5,7 +5,7 @@ import React, {
   useEffect,
   Suspense,
 } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'

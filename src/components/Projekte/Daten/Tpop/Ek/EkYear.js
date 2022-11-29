@@ -2,7 +2,7 @@ import React from 'react'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import sortBy from 'lodash/sortBy'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const StyledTableRow = styled(TableRow)`
   &:hover {

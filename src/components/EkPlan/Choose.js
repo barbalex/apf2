@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useEffect,
 } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'

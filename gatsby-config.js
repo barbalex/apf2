@@ -31,7 +31,6 @@ module.exports = {
         omitGoogleFont: true,
       },
     },
-    'gatsby-plugin-styled-components',
     {
       resolve: 'gatsby-plugin-manifest',
       options: {

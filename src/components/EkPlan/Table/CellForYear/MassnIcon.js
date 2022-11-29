@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import sum from 'lodash/sum'
 import { GoZap } from 'react-icons/go'
 import { observer } from 'mobx-react-lite'

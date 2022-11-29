@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import storeContext from '../../../storeContext'
 

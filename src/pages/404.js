@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import Typography from '@mui/material/Typography'
 import { navigate } from 'gatsby'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { StaticImage } from 'gatsby-plugin-image'
 import Button from '@mui/material/Button'
 

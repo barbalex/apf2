@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import Diff from 'react-stylable-diff'
 import { observer } from 'mobx-react-lite'
 

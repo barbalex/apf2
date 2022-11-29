@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect, useContext } from 'react'
 import 'leaflet'
 import { useMap } from 'react-leaflet'
 import 'leaflet-easyprint'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { MdGetApp } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 

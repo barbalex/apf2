@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'

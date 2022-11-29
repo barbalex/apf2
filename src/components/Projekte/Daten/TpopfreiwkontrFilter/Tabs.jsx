@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import { initial as tpopfreiwkontr } from '../../../../store/Tree/DataFilter/tpopfreiwkontr'
 import storeContext from '../../../../storeContext'

@@ -1,6 +1,6 @@
 import React, { useContext, useMemo, useCallback, useRef } from 'react'
 import { useQuery } from '@apollo/client'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'

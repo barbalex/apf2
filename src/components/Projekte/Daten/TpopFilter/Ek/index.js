@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import max from 'lodash/max'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
