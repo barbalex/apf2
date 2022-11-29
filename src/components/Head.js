@@ -3,7 +3,7 @@ import React from 'react'
 
 const Head = () => (
   <>
-    <title>apflora v1.80.4</title>
+    <title>apflora v1.80.5</title>
     <meta name="description" content="Bedrohte Pflanzenarten fördern" />
     <meta name="keywords" content="Naturschutz, Artenschutz, Flora, Pflanzen" />
   </>
