@@ -112,7 +112,7 @@
     "simplebar-react": "2.4.3",
     "styled-components": "5.3.6",
     "typography": "0.16.21",
-    "use-debounce": "8.0.4"
+    "use-debounce": "9.0.1"
   },
   "dependenciesComments": {
     "babel-plugin-styled-components": "is recommended by styled components: https://styled-components.com/docs/tooling#babel-plugin",

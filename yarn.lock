@@ -4916,7 +4916,7 @@ __metadata:
     source-map-explorer: 2.5.3
     styled-components: 5.3.6
     typography: 0.16.21
-    use-debounce: 8.0.4
+    use-debounce: 9.0.1
     vercel: 28.5.6
   languageName: unknown
   linkType: soft
@@ -19039,12 +19039,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-debounce@npm:8.0.4":
-  version: 8.0.4
-  resolution: "use-debounce@npm:8.0.4"
+"use-debounce@npm:9.0.1":
+  version: 9.0.1
+  resolution: "use-debounce@npm:9.0.1"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 0f8b9e571f68a4694033ec00690bf73d781ac890140ae9ed4b330f71f7adb3f7d7df5cdaa32923c4d03fdc9de8a11be0f84301175ae4f66208af52ad03c55504
+  checksum: dcb4652a512f1d0153038d0a15257879cd8988963fefaaceaec8c76c0d66ce737519cb018d144858e3e0ee811024c55639954b69400f775143d9ec3f46ce83b0
   languageName: node
   linkType: hard
 
