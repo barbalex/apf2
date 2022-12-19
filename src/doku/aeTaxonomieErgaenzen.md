@@ -1,6 +1,5 @@
 ---
-typ: 'technDoku'
-slug: '/art-taxonomien-ergaenzen'
+slug: 'art-taxonomien-ergaenzen'
 date: '2021-12-27'
 title: 'Art-Taxonomien ergänzen'
 sort: 35

@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/formatierbare-felder'
+slug: 'formatierbare-felder'
 date: '2020-05-04'
 title: 'Formatierbare Felder'
 sort: 15

@@ -1,5 +1,4 @@
 ---
-typ: 'technDoku'
 slug: "/daten-sichern"
 date: "2019-04-18"
 title: "Daten sichern"

@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/anleitung-eingabe'
+slug: 'anleitung-eingabe'
 date: '2022-02-14'
 title: 'Anleitung zur Eingabe (inhaltlich), topos'
 sort: 7

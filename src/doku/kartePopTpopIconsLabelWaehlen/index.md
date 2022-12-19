@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/karte-symbole-und-label-fuer-populationen-und-teil-populationen-waehlen'
+slug: 'karte-symbole-und-label-fuer-populationen-und-teil-populationen-waehlen'
 date: '2019-01-30'
 title: 'Karte: Symbole und Label für (Teil-)Populationen wählen'
 sort: 19

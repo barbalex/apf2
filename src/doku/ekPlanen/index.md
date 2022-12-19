@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/erfolgs-kontrollen-planen'
+slug: 'erfolgs-kontrollen-planen'
 date: '2019-09-10'
 title: 'Erfolgs-Kontrollen planen'
 sort: 12

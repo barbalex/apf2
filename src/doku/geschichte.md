@@ -1,6 +1,5 @@
 ---
-typ: 'technDoku'
-slug: '/entstehung'
+slug: 'entstehung'
 date: '2019-04-18'
 title: 'Entstehungs-Geschichte'
 sort: 33

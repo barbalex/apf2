@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/karte-filter'
+slug: 'karte-filter'
 date: '2022-02-09'
 title: 'Karte: Filter'
 sort: 19

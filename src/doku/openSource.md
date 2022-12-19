@@ -1,5 +1,4 @@
 ---
-typ: 'technDoku'
 slug: "/open-source"
 date: "2019-01-30"
 title: "Open source"

@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/ap-auswertung-pop-menge'
+slug: 'ap-auswertung-pop-menge'
 date: '2020-03-27'
 title: 'Art: Auswertung Population Mengen'
 sort: 9

@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/karte-drucken'
+slug: 'karte-drucken'
 date: '2019-09-14'
 title: 'Karte: Drucken'
 sort: 21

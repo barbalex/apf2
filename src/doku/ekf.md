@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/erfolgs-kontrollen-freiwillige'
+slug: 'erfolgs-kontrollen-freiwillige'
 date: '2020-01-13'
 title: 'Erfolgs-Kontrollen Freiwillige (EKF)'
 sort: 13

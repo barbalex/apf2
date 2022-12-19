@@ -1,6 +1,5 @@
 ---
-typ: 'technDoku'
-slug: '/benutzer-konti'
+slug: 'benutzer-konti'
 date: '2020-04-29'
 title: 'Benutzer-Konti'
 sort: 13

@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/tipps-fuer-den-einstieg'
+slug: 'tipps-fuer-den-einstieg'
 date: '2022-02-24'
 title: 'Tipps für den Einstieg'
 sort: 5

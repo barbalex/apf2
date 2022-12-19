@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/videos-fuer-den-einstieg'
+slug: 'videos-fuer-den-einstieg'
 date: '2017-09-15'
 title: 'Videos für den Einstieg'
 sort: 6

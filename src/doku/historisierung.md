@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/historisierung'
+slug: 'historisierung'
 date: '2020-12-10'
 title: 'Historisierung von Art, Pop und TPop'
 sort: 16

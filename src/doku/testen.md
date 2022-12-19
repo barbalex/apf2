@@ -1,5 +1,4 @@
 ---
-typ: 'technDoku'
 slug: "/testen"
 date: "2019-04-18"
 title: "Funktionalität testen"

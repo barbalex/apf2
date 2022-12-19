@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/dateien'
+slug: 'dateien'
 date: '2019-05-27'
 title: 'Dateien anfügen'
 sort: 23

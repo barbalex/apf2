@@ -23,7 +23,7 @@ const MenuItem = ({ node }) => {
 
   return (
     <>
-      <ListItemButton onClick={onClickMenuItem} selected={active} divider>
+      <ListItemButton onClick={onClickMenuItem} selected={active} divider dense>
         <ListItemText onClick={onClickMenuItem}>
           {node?.frontmatter?.title ?? '(Titel fehlt)'}
         </ListItemText>

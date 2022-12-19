@@ -1,6 +1,5 @@
 ---
-typ: 'technDoku'
-slug: '/beobachtungen-verwalten'
+slug: 'beobachtungen-verwalten'
 date: '2021-12-27'
 title: 'Beobachtungen verwalten'
 sort: 28

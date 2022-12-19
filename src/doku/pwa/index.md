@@ -1,6 +1,5 @@
 ---
-typ: 'technDoku'
-slug: '/pwa'
+slug: 'pwa'
 date: '2021-12-27'
 title: 'Progressive Web App'
 sort: 26

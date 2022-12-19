@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/was-kann-man-mit-apflora-machen'
+slug: 'was-kann-man-mit-apflora-machen'
 date: '2019-04-15'
 title: 'Was kann man mit apflora.ch machen?'
 sort: 1

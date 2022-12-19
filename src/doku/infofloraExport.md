@@ -1,6 +1,5 @@
 ---
-typ: 'technDoku'
-slug: '/info-flora-export'
+slug: 'info-flora-export'
 date: '2022-03-31'
 title: 'Info-Flora-Export'
 sort: 35

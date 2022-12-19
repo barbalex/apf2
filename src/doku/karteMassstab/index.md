@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/karte-massstab'
+slug: 'karte-massstab'
 date: '2019-04-18'
 title: 'Karte: Massstab'
 sort: 20

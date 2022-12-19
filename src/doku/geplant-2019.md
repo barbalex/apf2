@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/geplant-2019'
+slug: 'geplant-2019'
 date: '2020-03-27'
 title: '2019 geplant'
 sort: 2

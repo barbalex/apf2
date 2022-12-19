@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/falsch-bestimmte-beobachtungen'
+slug: 'falsch-bestimmte-beobachtungen'
 date: '2019-01-30'
 title: 'Falsch bestimmte Beobachtungen'
 sort: 11

@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/fehler-ideen-vorschlaege-melden'
+slug: 'fehler-ideen-vorschlaege-melden'
 date: '2019-04-16'
 title: 'Fehler, Ideen, Vorschläge melden'
 sort: 25

@@ -1,6 +1,5 @@
 ---
-typ: 'technDoku'
-slug: '/technologien'
+slug: 'technologien'
 date: '2021-12-27'
 title: 'Technologien'
 sort: 27

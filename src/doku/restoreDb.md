@@ -1,6 +1,5 @@
 ---
-typ: 'technDoku'
-slug: '/daten-wiederherstellen'
+slug: 'daten-wiederherstellen'
 date: '2021-11-18'
 title: 'Datenbank aus Sicherung herstellen'
 sort: 31

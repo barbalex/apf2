@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/technische-voraussetzungen'
+slug: 'technische-voraussetzungen'
 date: '2020-04-29'
 title: 'Technische Voraussetzungen'
 sort: 4

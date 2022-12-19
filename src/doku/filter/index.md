@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-slug: '/filter'
+slug: 'filter'
 date: '2022-08-08'
 title: 'Filter'
 sort: 14
