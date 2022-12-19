@@ -4828,7 +4828,7 @@ __metadata:
     blueimp-md5: 2.19.0
     browser-update: 3.3.44
     copyfiles: 2.4.1
-    cypress: 11.2.0
+    cypress: 12.1.0
     date-fns: 2.29.3
     dexie: 3.2.2
     eslint: 8.30.0
@@ -7114,9 +7114,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:11.2.0":
-  version: 11.2.0
-  resolution: "cypress@npm:11.2.0"
+"cypress@npm:12.1.0":
+  version: 12.1.0
+  resolution: "cypress@npm:12.1.0"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -7162,7 +7162,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: e13649fb4b62a3c9dff7cc571f4e01dba009d8179b05c4f885c5ceb4ed76b78a7323fec491d992da35527708b54e596bfc9edb1d702f788317889f794d8c1e76
+  checksum: 238ea125f396594a84ba096e0eaebe6f0d6b60b3b232a3f6e36420f9fa7a9218211df8dc6ad2a4f6cc0cc2fd77d4e0eb0932b409a73ff8434e78e880a36f59a7
   languageName: node
   linkType: hard
 
