@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/Erfolgs-Kontrollen-Freiwillige'
+slug: '/Erfolgs-Kontrollen-Freiwillige'
 date: '2020-01-13'
 title: 'Erfolgs-Kontrollen Freiwillige (EKF)'
 sort: 13

@@ -11,14 +11,14 @@ module.exports = {
       resolve: 'gatsby-source-filesystem',
       options: {
         path: `${__dirname}/src/technischeDoku`,
-        name: 'technischeDoku-pages',
+        name: 'technischeDoku',
       },
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
         path: `${__dirname}/src/benutzerDoku`,
-        name: 'benutzerDoku-pages',
+        name: 'benutzerDoku',
       },
     },
     'gatsby-plugin-image',
@@ -128,6 +128,5 @@ module.exports = {
       },
     },
     'gatsby-plugin-offline',
-    'gatsby-plugin-workerize-loader',
   ],
 }

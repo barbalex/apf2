@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/Karte-Teil-Populationen-aller-Arten-anzeigen'
+slug: '/Karte-Teil-Populationen-aller-Arten-anzeigen'
 date: '2020-05-20'
 title: 'Karte: (Teil-)Populationen aller Arten anzeigen'
 sort: 17

@@ -1,8 +1,8 @@
 ---
 typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Karte-Symbole-und-Label-fuer-Populationen-und-Teil-Populationen-waehlen"
-date: "2019-01-30"
-title: "Karte: Symbole und Label für (Teil-)Populationen wählen"
+slug: '/Karte-Symbole-und-Label-fuer-Populationen-und-Teil-Populationen-waehlen'
+date: '2019-01-30'
+title: 'Karte: Symbole und Label für (Teil-)Populationen wählen'
 sort: 19
 ---
 
@@ -15,6 +15,7 @@ Darin kann man wählen, mit welcher Symbolisierung und Labels Populationen und T
 Aktuell stehen zur Verfügung:<br/><br/>
 
 #### Symbole:
+
 - alle Populationen/Teil-Populationen gleich (wie bisher)
 - Populationen/Teil-Populationen nach Statusgruppen unterschieden:
   - ursprünglich: U
@@ -22,9 +23,9 @@ Aktuell stehen zur Verfügung:<br/><br/>
   - potentiell: P
   - ohne Status: ?
 
-
 ![Neue Symbole](tpopSymbols3.png)<br/>
 
 #### Label:
+
 - Nr. (Populationen) bzw. Pop-Nr./Tpop-Nr. (Teil-Populationen)
 - Name (Populationen) bzw. Flurname (Teil-Populationen)

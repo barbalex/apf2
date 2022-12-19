@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/Beobachtungen-einer-Teil-Population-zuordnen'
+slug: '/Beobachtungen-einer-Teil-Population-zuordnen'
 date: '2019-06-05'
 title: 'Beobachtungen Teil-Populationen zuordnen'
 sort: 10

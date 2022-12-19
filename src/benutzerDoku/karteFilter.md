@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/Karte-Filter'
+slug: '/Karte-Filter'
 date: '2022-02-09'
 title: 'Karte: Filter'
 sort: 19

@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/Koordinaten'
+slug: '/Koordinaten'
 date: '2019-06-02'
 title: 'Koordinaten'
 sort: 23

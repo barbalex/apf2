@@ -5,57 +5,57 @@
  */
 const path = require('path')
 
-exports.createPages = async ({ actions, graphql }) => {
-  const { createPage } = actions
+// exports.createPages = async ({ actions, graphql }) => {
+//   const { createPage } = actions
 
-  const technDokuTemplate = path.resolve(`src/templates/technDokuTemplate.js`)
-  const benutzerDokuTemplate = path.resolve(
-    `src/templates/benutzerDokuTemplate.js`,
-  )
+//   const technDokuTemplate = path.resolve(`src/templates/technDokuTemplate.js`)
+//   const benutzerDokuTemplate = path.resolve(
+//     `src/templates/benutzerDokuTemplate.js`,
+//   )
 
-  let resultMd
-  try {
-    resultMd = await graphql(`
-      {
-        allMarkdownRemark(
-          sort: {frontmatter: {sort: ASC}}
-          limit: 1000
-        ) {
-          edges {
-            node {
-              frontmatter {
-                path
-                typ
-              }
-            }
-          }
-        }
-      }
-    `)
-  } catch (error) {
-    return error
-  }
+//   let resultMd
+//   try {
+//     resultMd = await graphql(`
+//       {
+//         allMarkdownRemark(
+//           sort: {frontmatter: {sort: ASC}}
+//           limit: 1000
+//         ) {
+//           edges {
+//             node {
+//               frontmatter {
+//                 slug
+//                 typ
+//               }
+//             }
+//           }
+//         }
+//       }
+//     `)
+//   } catch (error) {
+//     return error
+//   }
 
-  const edges = [...resultMd.data.allMarkdownRemark.edges]
-  return edges.forEach(({ node }) => {
-    if (node.frontmatter.typ === 'technDoku') {
-      return createPage({
-        path: node.frontmatter.path,
-        component: technDokuTemplate,
-      })
-    } else if (node.frontmatter.typ === 'benutzerDoku') {
-      createPage({
-        path: node.frontmatter.path,
-        component: benutzerDokuTemplate,
-      })
-    } else {
-      console.log(
-        'gatsby-node, node: NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!',
-        node,
-      )
-    }
-  })
-}
+//   const edges = [...resultMd.data.allMarkdownRemark.edges]
+//   return edges.forEach(({ node }) => {
+//     if (node.frontmatter.typ === 'technDoku') {
+//       return createPage({
+//         path: node.frontmatter.path,
+//         component: technDokuTemplate,
+//       })
+//     } else if (node.frontmatter.typ === 'benutzerDoku') {
+//       createPage({
+//         path: node.frontmatter.path,
+//         component: benutzerDokuTemplate,
+//       })
+//     } else {
+//       console.log(
+//         'gatsby-node, node: NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!',
+//         node,
+//       )
+//     }
+//   })
+// }
 
 // exports.onCreateWebpackConfig = ({ actions }) => {
 //   actions.setWebpackConfig({

@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/langsam'
+slug: '/langsam'
 date: '2019-04-18'
 title: 'Ist apflora langsam?'
 sort: 8

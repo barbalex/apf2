@@ -29,6 +29,7 @@ const MenuTitleLink = styled(Link)`
 `
 
 const Sidebar = ({ title, titleLink, edges }) => {
+  console.log('Sidebar', { title, titleLink, edges })
   const store = useContext(storeContext)
   const {
     technDokuFilter,

@@ -5,14 +5,14 @@ import ListItemText from '@mui/material/ListItemText'
 import { useLocation } from '@reach/router'
 
 const MenuItem = ({ node }) => {
-  const onClickMenuItem = useCallback(
-    () => navigate(`${node.frontmatter.path}/`),
-    [node],
-  )
   const location = useLocation()
+  const activeUrl = `${location.pathname.slice(0, -1)}${node.frontmatter.slug}`
   const active =
-    `${node.frontmatter.path}` === location.pathname ||
-    `${node.frontmatter.path}/` === location.pathname
+    activeUrl === location.pathname || `${activeUrl}/` === location.pathname
+  const onClickMenuItem = useCallback(
+    () => navigate(`${activeUrl}/`),
+    [activeUrl],
+  )
 
   return (
     <>

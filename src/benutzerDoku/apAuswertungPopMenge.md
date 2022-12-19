@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/ap-auswertung-pop-menge'
+slug: '/ap-auswertung-pop-menge'
 date: '2020-03-27'
 title: 'Art: Auswertung Population Mengen'
 sort: 9
@@ -17,7 +17,7 @@ sort: 9
 - Ap, Pop und TPop aus den jährlich historisierten Daten: `ap_history`, `pop_history` und `tpop_history`
   - nur Pop und TPop mit den Stati 100, 200, 201
   - nur für den AP-Bericht relevante TPop
-    Mehr zu der Historisierung von Art, Pop und TPop hier: https://apflora.ch/Dokumentation/Benutzer/historisierung
+    Mehr zu der Historisierung von Art, Pop und TPop hier: https://apflora.ch/historisierung
 - Die für das entsprechende Jahr jüngste Kontrolle
   - mit der ziel-relevanten Einheit
   - mit einer Anzahl

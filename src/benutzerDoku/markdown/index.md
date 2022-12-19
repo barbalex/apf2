@@ -1,8 +1,8 @@
 ---
 typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Formatierbare-Felder"
-date: "2020-05-04"
-title: "Formatierbare Felder"
+slug: '/Formatierbare-Felder'
+date: '2020-05-04'
+title: 'Formatierbare Felder'
 sort: 15
 ---
 

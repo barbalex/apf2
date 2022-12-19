@@ -2,10 +2,10 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import styled from '@emotion/styled'
 
-import Layout from '../components/Layout'
-import Sidebar from './Sidebar'
-import ErrorBoundary from '../components/shared/ErrorBoundary'
-import './benutzerDoku.css'
+import Layout from '../../../components/Layout'
+import Sidebar from '../../../templates/Sidebar'
+import ErrorBoundary from '../../../components/shared/ErrorBoundary'
+import '../../../templates/benutzerDoku.css'
 
 const Container = styled.div`
   height: ${(props) => `calc(100% - ${props.appbarheight}px)`};
@@ -54,8 +54,8 @@ const Title = styled.h1`
 const BenutzerDokuTemplate = ({ data }) => {
   const frontmatter = data?.markdownRemark?.frontmatter
   const html = data?.markdownRemark?.html
-  const edges = data.allMarkdownRemark.edges
-  console.log('BenutzerDokuTemplate', { data, frontmatter, html, edges })
+  const edges = data?.allMarkdownRemark?.edges
+  console.log('BenutzerDokuTemplate: ', { data, frontmatter, html, edges })
 
   return (
     <ErrorBoundary>
@@ -99,9 +99,9 @@ export const pageQuery = graphql`
         node {
           id
           frontmatter {
+            title
             date(formatString: "DD.MM.YYYY")
             slug
-            title
           }
         }
       }

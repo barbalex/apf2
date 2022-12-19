@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/Karte-Massstab'
+slug: '/Karte-Massstab'
 date: '2019-04-18'
 title: 'Karte: Massstab'
 sort: 20

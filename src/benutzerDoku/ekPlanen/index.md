@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/Erfolgs-Kontrollen-planen'
+slug: '/Erfolgs-Kontrollen-planen'
 date: '2019-09-10'
 title: 'Erfolgs-Kontrollen planen'
 sort: 12

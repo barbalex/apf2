@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/Gedächtnis'
+slug: '/Gedächtnis'
 date: '2022-06-24'
 title: 'apflora erinnert sich an euch'
 sort: 23

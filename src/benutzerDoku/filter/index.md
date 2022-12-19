@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/Filter'
+slug: '/Filter'
 date: '2022-08-08'
 title: 'Filter'
 sort: 14

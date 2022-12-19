@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: '/Dokumentation/Benutzer/Dateien'
+slug: '/Dateien'
 date: '2019-05-27'
 title: 'Dateien anfügen'
 sort: 23
