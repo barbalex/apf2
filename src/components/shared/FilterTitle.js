@@ -85,7 +85,7 @@ const FilterTitle = ({
   }, [dataFilterEmptyTree, emptyMapFilter, setApFilter, store, treeName])
 
   const onClickInfo = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/Benutzer/Filter`
+    const url = `${appBaseUrl()}Dokumentation/filter`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

@@ -19,7 +19,7 @@ sort: 1
 ### Beobachtungen den Teilpopulationen zuordnen
 
 - Alle Beobachtungen der [Info Flora](https://infoflora.ch) innerhalb des Kantons Zürich und im nahen Umfeld
-- Von InfoFlora bezogene Beobachtungen können korrigiert und die Änderung per mail an InfoFlora gemeldet werden [(Anleitung)](/Dokumentation/Benutzer/Falsch-bestimmte-Beobachtungen/)
+- Von InfoFlora bezogene Beobachtungen können korrigiert und die Änderung per mail an InfoFlora gemeldet werden [(Anleitung)](/Dokumentation/falsch-bestimmte-beobachtungen/)
 - Alle Beobachtungen aus Projekten der Fachstelle Naturschutz des Kantons Zürich
 - Eigene Beobachtungen aus [EvAB](https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content)
 - Grundsätzlich alle verfügbaren Beobachtungen, unabhängig von ihrer Datenstruktur
@@ -70,7 +70,7 @@ sort: 1
 ### Effizient arbeiten
 
 - Im Strukturbaum in jeder Ebene nach dem Label filtern
-- [Fomular-basiert filtern](/Dokumentation/Benutzer/Formular-Filter)
+- [Fomular-basiert filtern](/Dokumentation/formular-filter)
 - Strukturelemente wie z.B. Teilpopulationen im Baum zu anderen Strukturelementen desselben Typs verschieben oder kopieren
 - Für übersichtliches Kopieren/Verschieben zweites Strukturbaum-Formular-Paar einblenden
 - Beobachtungen Teilpopulationen zuordnen: In einer nach Abstand zu den Teilpopulationen geordneten Liste im Formular. Oder mit drag and drop auf der Karte
@@ -82,7 +82,7 @@ sort: 1
 
 - Art-Verantwortliche erfassen, wer welche Teilpopulationen kontrolliert...
 - ...und drucken gleich die Feld-Formulare aus
-- [Anleitung](/Dokumentation/Benutzer/Erfolgs-Kontrollen-Freiwillige)
+- [Anleitung](/Dokumentation/erfolgs-kontrollen-freiwillige)
 
 ### Freiwillige erfassen ihre Kontrollen selber
 

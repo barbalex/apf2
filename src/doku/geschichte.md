@@ -36,4 +36,4 @@ Web-Technologien entwickelten sich rasant weiter. Ebenso, wie die Bedürfnisse a
 
 Diese Ziele wurden erreicht :sparkles:.<br/><br/>
 
-Heute wird apflora regelmässig modernisiert. [Hier](/Dokumentation/Technisch/Technologien) finden Sie Informationen über die aktuell verwendeten Technologien.
+Heute wird apflora regelmässig modernisiert. [Hier](/Dokumentation/technologien) finden Sie Informationen über die aktuell verwendeten Technologien.

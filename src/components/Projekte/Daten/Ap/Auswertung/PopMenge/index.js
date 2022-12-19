@@ -155,7 +155,7 @@ const ApAuswertungPopMenge = ({
 
   const onClickMoreInfo = useCallback(() => {
     const url =
-      'https://apflora.ch/Dokumentation/Benutzer/ap-auswertung-pop-menge'
+      'https://apflora.ch/Dokumentation/ap-auswertung-pop-menge'
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

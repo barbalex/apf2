@@ -47,7 +47,7 @@ const HomeAppBar = () => {
         <StyledButton
           variant={pathname.startsWith('/Dokumentation') ? 'outlined' : 'text'}
           component={Link}
-          to="/Dokumentation/Benutzer/"
+          to="/Dokumentation/"
         >
           Dokumentation
         </StyledButton>

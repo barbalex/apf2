@@ -239,11 +239,7 @@ const ProjekteAppBar = () => {
               />
             </>
           )}
-          <StyledButton
-            variant="text"
-            component={Link}
-            to="/Dokumentation/Benutzer/"
-          >
+          <StyledButton variant="text" component={Link} to="/Dokumentation/">
             Dokumentation
           </StyledButton>
           <More onClickExporte={onClickExporte} role={role} />

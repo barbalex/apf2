@@ -116,7 +116,7 @@ const PopHistory = ({ popId }) => {
   const rows = data?.allPopHistories.nodes ?? []
 
   const openDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Benutzer/historisierung`
+    const url = `${appBaseUrl()}/Dokumentation/historisierung`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

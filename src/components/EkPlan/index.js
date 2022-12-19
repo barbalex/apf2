@@ -47,7 +47,7 @@ const EkPlan = () => {
   setApsDataLoading(loading)
 
   const onClickAnleitung = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/Benutzer/Erfolgs-Kontrollen-planen`
+    const url = `${appBaseUrl()}Dokumentation/erfolgs-kontrollen-planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
