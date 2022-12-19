@@ -272,11 +272,7 @@ const ProjekteAppBar = () => {
               )}
             </>
           )}
-          <DokuButton
-            variant="text"
-            component={Link}
-            to="/Dokumentation/Benutzer/"
-          >
+          <DokuButton variant="text" component={Link} to="/Dokumentation/">
             Dokumentation
           </DokuButton>
           <More onClickExporte={onClickExporte} role={role} />

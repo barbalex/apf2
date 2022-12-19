@@ -4845,7 +4845,6 @@ __metadata:
     gatsby-plugin-offline: 6.3.1
     gatsby-plugin-sharp: 5.3.2
     gatsby-plugin-typography: 5.3.0
-    gatsby-plugin-workerize-loader: 2.1.0
     gatsby-remark-autolink-headers: 6.3.1
     gatsby-remark-copy-linked-files: 6.3.0
     gatsby-remark-embed-video: 3.2.1
@@ -9872,17 +9871,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gatsby-plugin-workerize-loader@npm:2.1.0":
-  version: 2.1.0
-  resolution: "gatsby-plugin-workerize-loader@npm:2.1.0"
-  dependencies:
-    workerize-loader-wp5: ^2.0.2
-  peerDependencies:
-    gatsby: ^3.0.0 || ^4.0.0
-  checksum: c191da0fc0105f756045841386c3a334ee84fed2724cf3593a4cb6575eaba620e257c4f3de99dcfd2303a4b07c597bc5f310324a39bff305caa6f59fb98ae649
-  languageName: node
-  linkType: hard
-
 "gatsby-react-router-scroll@npm:^6.3.0":
   version: 6.3.0
   resolution: "gatsby-react-router-scroll@npm:6.3.0"
@@ -12555,17 +12543,6 @@ __metadata:
   version: 4.3.0
   resolution: "loader-runner@npm:4.3.0"
   checksum: a90e00dee9a16be118ea43fec3192d0b491fe03a32ed48a4132eb61d498f5536a03a1315531c19d284392a8726a4ecad71d82044c28d7f22ef62e029bf761569
-  languageName: node
-  linkType: hard
-
-"loader-utils@npm:2.0.0":
-  version: 2.0.0
-  resolution: "loader-utils@npm:2.0.0"
-  dependencies:
-    big.js: ^5.2.2
-    emojis-list: ^3.0.0
-    json5: ^2.1.2
-  checksum: 6856423131b50b6f5f259da36f498cfd7fc3c3f8bb17777cf87fdd9159e797d4ba4288d9a96415fd8da62c2906960e88f74711dee72d03a9003bddcd0d364a51
   languageName: node
   linkType: hard
 
@@ -19466,17 +19443,6 @@ __metadata:
   dependencies:
     workbox-core: ^4.3.1
   checksum: 60b854fb0febdde236b0285eb050131043446a0c011629f8480224b1cee3a2f9f13f4c851f4a30dd8a76aa58503436c16f17662ef0eb40d0e1c630842165e718
-  languageName: node
-  linkType: hard
-
-"workerize-loader-wp5@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "workerize-loader-wp5@npm:2.0.2"
-  dependencies:
-    loader-utils: 2.0.0
-  peerDependencies:
-    webpack: "*"
-  checksum: 210a3437ab05af42d069852a92b57b10bd060e667aaf620571069c682a141774db4a6ef284190ace7f7ba20a62045e148ce5b0844d95e24d074f525b6b805676
   languageName: node
   linkType: hard
 

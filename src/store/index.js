@@ -88,14 +88,7 @@ const myTypes = types
     tree2: types.optional(Tree, defaultTree),
     ekPlan: types.optional(EkPlan, defaultEkPlan),
     showDeletions: types.optional(types.boolean, false),
-    technDokuFilter: types.optional(
-      types.union(types.string, types.number),
-      '',
-    ),
-    benutzerDokuFilter: types.optional(
-      types.union(types.string, types.number),
-      '',
-    ),
+    dokuFilter: types.optional(types.union(types.string, types.number), ''),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -134,11 +127,8 @@ const myTypes = types
     removeNotification(note) {
       self.notifications = self.notifications.filter((n) => n.key !== note)
     },
-    setTechnDokuFilter(val) {
-      self.technDokuFilter = val
-    },
-    setBenutzerDokuFilter(val) {
-      self.benutzerDokuFilter = val
+    setDokuFilter(val) {
+      self.dokuFilter = val
     },
     setShowDeletions(val) {
       self.showDeletions = val
