@@ -37,12 +37,12 @@ exports.createPages = async ({ actions, graphql }) => {
   return edges.forEach(({ node }) => {
     if (node.frontmatter.typ === 'technDoku') {
       return createPage({
-        path: `/Dokumentation/Benutzer/${node.frontmatter.slug}`,
+        path: `/Dokumentation/Benutzer${node.frontmatter.slug}`,
         component: technDokuTemplate,
       })
     } else if (node.frontmatter.typ === 'benutzerDoku') {
       createPage({
-        path: `/Dokumentation/Technisch/${node.frontmatter.slug}`,
+        path: `/Dokumentation/Technisch${node.frontmatter.slug}`,
         component: benutzerDokuTemplate,
       })
     } else {
