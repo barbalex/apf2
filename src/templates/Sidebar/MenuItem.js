@@ -6,13 +6,20 @@ import { useLocation } from '@reach/router'
 
 const MenuItem = ({ node }) => {
   const location = useLocation()
-  const activeUrl = `${location.pathname.slice(0, -1)}${node.frontmatter.slug}`
+  // TODO: // in path is bad
+  const activeUrl = `/Dokumentation/${node.frontmatter.slug}`
   const active =
     activeUrl === location.pathname || `${activeUrl}/` === location.pathname
-  const onClickMenuItem = useCallback(
-    () => navigate(`${activeUrl}/`),
-    [activeUrl],
-  )
+  console.log('MenuItem', {
+    activeUrl,
+    active,
+    location,
+    slug: node.frontmatter.slug,
+  })
+  const onClickMenuItem = useCallback(() => {
+    console.log('MenuItem, onClickMenuItem', { activeUrl })
+    navigate(`${activeUrl}/`)
+  }, [activeUrl])
 
   return (
     <>

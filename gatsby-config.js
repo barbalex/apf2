@@ -10,15 +10,8 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        path: `${__dirname}/src/technischeDoku`,
-        name: 'technischeDoku',
-      },
-    },
-    {
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        path: `${__dirname}/src/benutzerDoku`,
-        name: 'benutzerDoku',
+        path: `${__dirname}/src/doku`,
+        name: 'doku',
       },
     },
     'gatsby-plugin-image',

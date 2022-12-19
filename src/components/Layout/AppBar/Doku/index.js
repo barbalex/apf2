@@ -45,24 +45,11 @@ const DokuAppBar = () => {
       )}
       <MenuDiv>
         <StyledButton
-          variant={
-            pathname.startsWith('/Dokumentation/Benutzer') ? 'outlined' : 'text'
-          }
+          variant={pathname.startsWith('/Dokumentation') ? 'outlined' : 'text'}
           component={Link}
-          to="/Dokumentation/Benutzer/"
+          to="/Dokumentation/"
         >
-          Benutzer Doku
-        </StyledButton>
-        <StyledButton
-          variant={
-            pathname.startsWith('/Dokumentation/Technisch')
-              ? 'outlined'
-              : 'text'
-          }
-          component={Link}
-          to="/Dokumentation/Technisch/"
-        >
-          Technische Doku
+          Dokumentation
         </StyledButton>
         <StyledButton
           variant="text"
