@@ -66,12 +66,12 @@ const TechnDokuTemplate = ({ data }) => {
 }
 
 export const pageQuery = graphql`
-  query ($path: String!) {
-    markdownRemark(frontmatter: { path: { eq: $path } }) {
+  query ($id: String!)  {
+    markdownRemark(id: { eq: $id }) {
       html
       frontmatter {
         date(formatString: "DD.MM.YYYY")
-        path
+        slug
         title
       }
     }
@@ -84,7 +84,7 @@ export const pageQuery = graphql`
           id
           frontmatter {
             date(formatString: "DD.MM.YYYY")
-            path
+            slug
             title
           }
         }

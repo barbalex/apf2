@@ -54,7 +54,7 @@ const Title = styled.h1`
 const BenutzerDokuTemplate = ({ data }) => {
   const frontmatter = data?.markdownRemark?.frontmatter
   const html = data?.markdownRemark?.html
-  const edges = data.allMarkdownRemark.edges
+  const edges = data?.allMarkdownRemark.edges
   console.log('BenutzerDokuTemplate', { data, frontmatter, html, edges })
 
   return (
