@@ -14,7 +14,7 @@ const xmlToLayersData = (xml) => {
 
   // extract layers
   const outputs =
-    obj?.HTML?.BODY?.['WFS:FEATURECOLLECTION']?.['GML:FEATUREMEMBER']
+    obj?.HTML?.BODY?.['WFS:FEATURECOLLECTION']?.['GML:FEATUREMEMBER'] ?? []
 
   const returnValues = []
   for (const output1 of outputs) {
