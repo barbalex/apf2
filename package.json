@@ -1,7 +1,7 @@
 {
   "name": "apf2",
   "description": "Aktionspläne für Flora-Projekte",
-  "version": "1.80.8",
+  "version": "1.80.9",
   "repository": {
     "type": "git",
     "url": "git://github.com/barbalex/apf2.git"
@@ -23,7 +23,6 @@
   "dependencies": {
     "@apollo/client": "3.7.3",
     "@changey/react-leaflet-markercluster": "4.0.0-rc1",
-    "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
     "@fontsource/roboto": "4.5.8",
     "@fontsource/roboto-mono": "4.5.8",
