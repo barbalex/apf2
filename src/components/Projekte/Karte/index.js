@@ -523,7 +523,7 @@ const Karte = ({ treeName }) => {
 
   const showMapFilter = activeApfloraLayers.includes('mapFilter')
 
-  // TODO: explicitly sort Layers 
+  // TODO: explicitly sort Layers
   // Use Pane with z-index: https://github.com/PaulLeCam/react-leaflet/issues/271#issuecomment-609752044
   // Idea:
   // 1. create pane for each layer, give it className of layer name
@@ -564,61 +564,92 @@ const Karte = ({ treeName }) => {
         >
           {activeBaseLayer && <BaseLayerComponent />}
           {activeOverlaysSorted
-            .map((overlayName) => {
+            .map((overlayName, index) => {
               const OverlayComponent = OverlayComponents[overlayName]
               // prevent bad error if wrong overlayName was passed
               // for instance after an overlay was renamed but user still has old name in cache
               if (!OverlayComponent) return null
 
-              return <OverlayComponent key={overlayName} />
+              return (
+                <Pane
+                  key={overlayName}
+                  className={overlayName}
+                  name={overlayName}
+                  style={{ zIndex: 100 + index }}
+                >
+                  <OverlayComponent />
+                </Pane>
+              )
             })
             .reverse()}
           {activeApfloraLayers.includes('pop') && (
-            <Pop
+            <Pane
               key={`${apId}/pop/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
               }`}
-              treeName={treeName}
-            />
+              className="pop"
+              name="pop"
+              style={{ zIndex: 200 }}
+            >
+              <Pop treeName={treeName} />
+            </Pane>
           )}
           {activeApfloraLayers.includes('tpop') && (
-            <Tpop
+            <Pane
               key={`${apId}/tpop/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
               }`}
-              treeName={treeName}
-              clustered={clustered}
-            />
+              className="tpop"
+              name="tpop"
+              style={{ zIndex: 201 }}
+            >
+              <Tpop treeName={treeName} clustered={clustered} />
+            </Pane>
           )}
           {activeApfloraLayers.includes('beobNichtBeurteilt') && (
-            <BeobNichtBeurteilt
+            <Pane
               key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
               }`}
-              treeName={treeName}
-              clustered={clustered}
-            />
+              className="beobNichtBeurteilt"
+              name="beobNichtBeurteilt"
+              style={{ zIndex: 203 }}
+            >
+              <BeobNichtBeurteilt treeName={treeName} clustered={clustered} />
+            </Pane>
           )}
           {activeApfloraLayers.includes('beobNichtZuzuordnen') && (
-            <BeobNichtZuzuordnen
+            <Pane
               key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
               }`}
-              treeName={treeName}
-              clustered={clustered}
-            />
+              className="beobNichtZuzuordnen"
+              name="beobNichtZuzuordnen"
+              style={{ zIndex: 204 }}
+            >
+              <BeobNichtZuzuordnen treeName={treeName} clustered={clustered} />
+            </Pane>
           )}
           {activeApfloraLayers.includes('beobZugeordnet') && (
-            <BeobZugeordnet
+            <Pane
               key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
               }`}
-              treeName={treeName}
-              clustered={clustered}
-            />
+              className="beobZugeordnet"
+              name="beobZugeordnet"
+              style={{ zIndex: 205 }}
+            >
+              <BeobZugeordnet treeName={treeName} clustered={clustered} />
+            </Pane>
           )}
           {activeApfloraLayers.includes('beobZugeordnetAssignPolylines') && (
-            <BeobZugeordnetAssignPolylines treeName={treeName} />
+            <Pane
+              className="beobZugeordnetAssignPolylines"
+              name="beobZugeordnetAssignPolylines"
+              style={{ zIndex: 206 }}
+            >
+              <BeobZugeordnetAssignPolylines treeName={treeName} />
+            </Pane>
           )}
           <ScaleControl imperial={false} />
           <Control position="topright" visible={!hideMapControls}>
