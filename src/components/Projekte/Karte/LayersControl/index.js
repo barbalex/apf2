@@ -30,7 +30,7 @@ const Card = styled.div`
   padding-top: 3px;
   /* padding-bottom: 3px; */
   color: rgb(48, 48, 48);
-  /* &:nth-child(3) {
+  /* &:nth-of-type(3) {
     border-top: 1px solid rgba(0, 0, 0, 0.2);
   } */
 `

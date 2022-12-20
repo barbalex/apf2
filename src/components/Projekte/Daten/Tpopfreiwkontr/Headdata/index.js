@@ -32,7 +32,7 @@ const Container = styled(Area)`
     'tpopNrLabel tpopNrVal statusVal'
     'bearbLabel bearbVal bearbVal';
   grid-column-gap: 10px;
-  div:nth-child(n + 3) {
+  div:nth-of-type(n + 3) {
     padding-top: 10px;
   }
 `

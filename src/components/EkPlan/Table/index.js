@@ -49,7 +49,7 @@ const BodyContainer = styled.div`
   flex-direction: row;
   height: calc(100% - 60px);
   width: 100%;
-  > div:nth-child(2) {
+  > div:nth-of-type(2) {
     scrollbar-gutter: stable;
   }
 `
