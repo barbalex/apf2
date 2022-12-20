@@ -1,4 +1,5 @@
 import React from 'react'
+import { Pane } from 'react-leaflet'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 /**
@@ -12,7 +13,14 @@ const bingKey =
 
 const BingAerial = () => (
   <ErrorBoundary>
-    <BingLayer bingkey={bingKey} maxNativeZoom={18} minZoom={0} maxZoom={22} />
+    <Pane className="BingAerial" name="BingAerial" style={{ zIndex: 100 }}>
+      <BingLayer
+        bingkey={bingKey}
+        maxNativeZoom={18}
+        minZoom={0}
+        maxZoom={23}
+      />
+    </Pane>
   </ErrorBoundary>
 )
 

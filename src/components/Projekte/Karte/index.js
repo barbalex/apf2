@@ -6,7 +6,7 @@
  */
 
 import React, { useContext, useMemo, useState } from 'react'
-import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
+import { MapContainer, ScaleControl, ZoomControl, Pane } from 'react-leaflet'
 import styled from '@emotion/styled'
 import 'leaflet'
 import 'proj4'
@@ -523,7 +523,21 @@ const Karte = ({ treeName }) => {
 
   const showMapFilter = activeApfloraLayers.includes('mapFilter')
 
+  // TODO: explicitly sort Layers 
+  // Use Pane with z-index: https://github.com/PaulLeCam/react-leaflet/issues/271#issuecomment-609752044
+  // Idea:
+  // 1. create pane for each layer, give it className of layer name
+  // 2. give base layer pane z-index: 100
+  // 3. give overlays 100 + index in activeOverlaysSorted
+  // 4. apflora layers always on top
+
   if (typeof window === 'undefined') return null
+
+  console.log('Map', {
+    activeBaseLayer,
+    activeOverlaysSorted,
+    activeApfloraLayers,
+  })
 
   // clustered layers receive a key that rebuilds them every time the cluster
   // tool would erroneously add new markers from last time it build
@@ -543,7 +557,7 @@ const Karte = ({ treeName }) => {
           // need max and min zoom because otherwise
           // something errors
           // probably clustering function
-          maxZoom={22}
+          maxZoom={23}
           minZoom={0}
           doubleClickZoom={false}
           zoomControl={false}

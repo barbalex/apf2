@@ -122,9 +122,9 @@ const MassnahmenLayer = ({ layer }) => {
       transparent={true}
       version={version}
       format={format}
-      maxNativeZoom={18}
+      maxNativeZoom={23}
       minZoom={0}
-      maxZoom={22}
+      maxZoom={23}
     />
   )
 }
