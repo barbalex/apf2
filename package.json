@@ -32,6 +32,7 @@
     "@turf/helpers": "6.5.0",
     "@turf/nearest-point": "6.5.0",
     "@uploadcare/react-widget": "2.4.0",
+    "array-move": "4.0.0",
     "autosuggest-highlight": "3.3.4",
     "blueimp-md5": "2.19.0",
     "browser-update": "3.3.44",

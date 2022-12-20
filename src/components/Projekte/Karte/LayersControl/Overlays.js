@@ -9,8 +9,8 @@ import {
   SortableContainer,
   SortableElement,
   SortableHandle,
-  arrayMove,
 } from 'react-sortable-hoc'
+import { arrayMoveImmutable } from 'array-move'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
@@ -296,7 +296,7 @@ const Overlays = () => {
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) =>
-      setOverlays(arrayMove(overlays, oldIndex, newIndex)),
+      setOverlays(arrayMoveImmutable(overlays, oldIndex, newIndex)),
     [overlays, setOverlays],
   )
 

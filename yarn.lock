@@ -4823,6 +4823,7 @@ __metadata:
     "@turf/helpers": 6.5.0
     "@turf/nearest-point": 6.5.0
     "@uploadcare/react-widget": 2.4.0
+    array-move: ^4.0.0
     autosuggest-highlight: 3.3.4
     blueimp-md5: 2.19.0
     browser-update: 3.3.44
@@ -5053,6 +5054,13 @@ __metadata:
   version: 1.1.4
   resolution: "array-iterate@npm:1.1.4"
   checksum: 8adc65525dfa871577b7ab91b41efd61d29c4067a08ec927340d6975e45797b9f04254dda115e366fbef11fb49277ac1c166405389886c7a251e1eddca89bd08
+  languageName: node
+  linkType: hard
+
+"array-move@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "array-move@npm:4.0.0"
+  checksum: 307e6716e83567918cf8dd0050cdb44ce500d9969cd734ecbf1f8ae547df151dbf10713255a9db6a8950ca917f4817a778f0116f6d13944c3f3cd1fd1845f13f
   languageName: node
   linkType: hard
 
