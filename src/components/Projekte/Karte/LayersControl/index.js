@@ -1,4 +1,10 @@
-import React, { useContext, useState, useCallback, useEffect } from 'react'
+import React, {
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react'
 import styled from '@emotion/styled'
 import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
@@ -106,8 +112,16 @@ const LayersControl = ({ treeName }) => {
     setBaseLayersExpanded(false)
   }, [])
 
+  // prevent click propagation on to map
+  // https://stackoverflow.com/a/57013052/712005
+  const ref = useRef()
+  useEffect(() => {
+    window.L.DomEvent.disableClickPropagation(ref.current)
+    window.L.DomEvent.disableScrollPropagation(ref.current)
+  }, [])
+
   return (
-    <CardContainer>
+    <CardContainer ref={ref}>
       <Card>
         <CardHeader onClick={onToggleApfloraLayersExpanded}>
           <ApfloraCard>apflora</ApfloraCard>
