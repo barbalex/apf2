@@ -15,7 +15,7 @@ import EkPlan from '../../components/EkPlan'
 
 const Container = styled.div`
   background-color: #fffde7;
-  height: ${(props) => `calc(100% - ${props.appbarheight}px)`};
+  height: 100%;
 
   @media print {
     margin-top: 0;
@@ -25,7 +25,7 @@ const Container = styled.div`
   }
 `
 
-const DatenPageComponent = ({ appbarheight }) => {
+const DatenPageComponent = () => {
   const store = useContext(storeContext)
   const { view, showDeletions, user } = store
   const { activeNodeArray } = store.tree
@@ -41,7 +41,7 @@ const DatenPageComponent = ({ appbarheight }) => {
 
   // using render props on Layout to pass down appbarheight without using store
   return (
-    <Container appbarheight={appbarheight} path="/*">
+    <Container  path="/*">
       {!!user.token && (
         <>
           {form === 'ekf' && <Ekf />}

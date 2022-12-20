@@ -103,12 +103,11 @@ const TpopTitle = styled.h4`
 `
 const ExportButton = styled(Button)`
   position: absolute !important;
-  top: 70px !important;
-  right: 555px !important;
+  top: 72px !important;
+  right: 539px !important;
   min-width: 100px !important;
   text-transform: none !important;
   height: 2.2em;
-  top: 30px;
   font-size: 0.75rem !important;
   right: 10px;
   padding: 2px 15px !important;

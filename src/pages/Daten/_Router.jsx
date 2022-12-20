@@ -1,17 +1,16 @@
 // file name need underscore
 // otherwise weird things happen (edits are not registered)
 // see: https://github.com/gatsbyjs/gatsby/issues/26554#issuecomment-677915552
-import React, { useContext } from 'react'
+import React from 'react'
 import { Router } from '@reach/router'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import DatenPageComponent from './_DatenComponent'
-import storeContext from '../../storeContext'
 
 const StyledRouter = styled(Router)`
-  ${(props) => !props.flex && 'height:100%;'}
-  ${(props) => props.flex && 'flex:1;'}
+  overflow: hidden;
+  height: ${(props) => `calc(100% - ${props.appbarheight}px)`};
 `
 
 // needed to build own component to pass down appbarheight
@@ -23,20 +22,10 @@ const StyledRouter = styled(Router)`
 // flex: 1 works for ekTable and docs but not for data
 // HACK: use flex: 1 only for ekPlan
 
-const DatenPageRouter = ({ appbarheight }) => {
-  const store = useContext(storeContext)
-  const { activeNodeArray } = store.tree
-
-  const isEkPlan =
-    activeNodeArray.length === 3 &&
-    activeNodeArray[0] === 'Projekte' &&
-    activeNodeArray[2] === 'EK-Planung'
-
-  return (
-    <StyledRouter flex={isEkPlan}>
-      <DatenPageComponent path="*" appbarheight={appbarheight} />
-    </StyledRouter>
-  )
-}
+const DatenPageRouter = ({ appbarheight }) => (
+  <StyledRouter appbarheight={appbarheight}>
+    <DatenPageComponent path="*" />
+  </StyledRouter>
+)
 
 export default observer(DatenPageRouter)

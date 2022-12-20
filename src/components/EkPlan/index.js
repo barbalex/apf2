@@ -28,9 +28,9 @@ const AnleitungButton = styled(Button)`
   height: 2.2em;
   min-width: 100px !important;
   font-size: 0.75rem !important;
-  top: 30px;
-  right: 115px;
   padding: 2px 15px !important;
+  margin-right: 30px;
+  margin-top: 34px;
   line-height: unset !important;
 `
 

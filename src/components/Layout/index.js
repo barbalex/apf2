@@ -20,7 +20,6 @@ const Layout = ({ children }) => {
    */
   const { height: appbarheight, ref: resizeRef } = useResizeDetector()
 
-  // console.log('layout rendering:', {  children })
   return (
     <Container>
       <div ref={resizeRef}>

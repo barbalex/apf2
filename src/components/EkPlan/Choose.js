@@ -20,6 +20,9 @@ import storeContext from '../../storeContext'
 import { allFields } from '../../store/EkPlan'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
+const Container = styled.div`
+  display: flex;
+`
 const ChooseContainer = styled.div`
   position: relative;
   flex-basis: 430px;
@@ -33,11 +36,9 @@ const ChooseContainer = styled.div`
   height: 88px;
   margin-bottom: -7px;
 `
-const ChooseTitle = styled.h5`
-  position: absolute;
-  left: -77px;
+const Title = styled.h5`
   top: 3px;
-  margin-bottom: 0;
+  margin: 0 8px 0 0;
 `
 const Label = styled(FormControlLabel)`
   float: right;
@@ -139,8 +140,10 @@ const EkPlanChoose = () => {
 
   return (
     <ErrorBoundary>
+      <Container>
+        <Title>anzeigen:</Title>
+      </Container>
       <ChooseContainer>
-        <ChooseTitle>anzeigen:</ChooseTitle>
         <PastYearsContainer>
           <StyledTextField
             label="vergangene Jahre"

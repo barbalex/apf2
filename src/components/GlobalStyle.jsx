@@ -19,6 +19,7 @@ const GlobalStyle = () => (
       #gatsby-focus-wrapper {
         /* This div is added by reach-router: https://github.com/reach/router/issues/63 */
         height: 100%;
+        overflow: hidden;
       }
 
       @media print {
