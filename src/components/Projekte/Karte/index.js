@@ -564,6 +564,7 @@ const Karte = ({ treeName }) => {
         >
           {activeBaseLayer && <BaseLayerComponent />}
           {activeOverlaysSorted
+            .reverse()
             .map((overlayName, index) => {
               const OverlayComponent = OverlayComponents[overlayName]
               // prevent bad error if wrong overlayName was passed
@@ -572,10 +573,10 @@ const Karte = ({ treeName }) => {
 
               return (
                 <Pane
-                  key={overlayName}
+                  key={`${overlayName}/${index}`}
                   className={overlayName}
                   name={overlayName}
-                  style={{ zIndex: 100 + index }}
+                  style={{ zIndex: 200 + index }}
                 >
                   <OverlayComponent />
                 </Pane>
@@ -589,7 +590,7 @@ const Karte = ({ treeName }) => {
               }`}
               className="pop"
               name="pop"
-              style={{ zIndex: 200 }}
+              style={{ zIndex: 300 }}
             >
               <Pop treeName={treeName} />
             </Pane>
@@ -601,7 +602,7 @@ const Karte = ({ treeName }) => {
               }`}
               className="tpop"
               name="tpop"
-              style={{ zIndex: 201 }}
+              style={{ zIndex: 301 }}
             >
               <Tpop treeName={treeName} clustered={clustered} />
             </Pane>
@@ -613,7 +614,7 @@ const Karte = ({ treeName }) => {
               }`}
               className="beobNichtBeurteilt"
               name="beobNichtBeurteilt"
-              style={{ zIndex: 203 }}
+              style={{ zIndex: 303 }}
             >
               <BeobNichtBeurteilt treeName={treeName} clustered={clustered} />
             </Pane>
@@ -625,7 +626,7 @@ const Karte = ({ treeName }) => {
               }`}
               className="beobNichtZuzuordnen"
               name="beobNichtZuzuordnen"
-              style={{ zIndex: 204 }}
+              style={{ zIndex: 304 }}
             >
               <BeobNichtZuzuordnen treeName={treeName} clustered={clustered} />
             </Pane>
@@ -637,7 +638,7 @@ const Karte = ({ treeName }) => {
               }`}
               className="beobZugeordnet"
               name="beobZugeordnet"
-              style={{ zIndex: 205 }}
+              style={{ zIndex: 305 }}
             >
               <BeobZugeordnet treeName={treeName} clustered={clustered} />
             </Pane>
@@ -646,7 +647,7 @@ const Karte = ({ treeName }) => {
             <Pane
               className="beobZugeordnetAssignPolylines"
               name="beobZugeordnetAssignPolylines"
-              style={{ zIndex: 206 }}
+              style={{ zIndex: 306 }}
             >
               <BeobZugeordnetAssignPolylines treeName={treeName} />
             </Pane>
