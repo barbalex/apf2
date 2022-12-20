@@ -50,7 +50,7 @@ const DatenPage = ({ location }) => {
     }
   }, [setEkfIds, setIsPrint])
 
-  console.log('DatenPage rendering')
+  // console.log('DatenPage rendering')
 
   // set unterhalt to true to show this page when servicing
   const unterhalt = false
