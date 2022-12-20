@@ -13,8 +13,14 @@ const xmlToLayersData = (xml) => {
   const obj = xmlToJson(xml)
 
   // extract layers
-  const outputs =
+  let outputs =
     obj?.HTML?.BODY?.['WFS:FEATURECOLLECTION']?.['GML:FEATUREMEMBER'] ?? []
+
+  // the output is object in points and lines, array in polygons
+  // want array in all cases
+  if (outputs.constructor !== Array) {
+    outputs = [outputs]
+  }
 
   const returnValues = []
   for (const output1 of outputs) {
@@ -24,6 +30,7 @@ const xmlToLayersData = (xml) => {
     const neededKey = keysOfOutput1.filter((v) => v.startsWith('QGS:'))
     const output = output1[neededKey]
     if (!output) break
+    if (!Object.entries(output)) break
 
     // build simpler object
     let properties = {}
