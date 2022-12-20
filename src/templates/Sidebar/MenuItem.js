@@ -10,12 +10,6 @@ const MenuItem = ({ node }) => {
   const activeUrl = `/Dokumentation/${node.frontmatter.slug}`
   const active =
     activeUrl === location.pathname || `${activeUrl}/` === location.pathname
-  console.log('MenuItem', {
-    activeUrl,
-    active,
-    location,
-    slug: node.frontmatter.slug,
-  })
   const onClickMenuItem = useCallback(() => {
     console.log('MenuItem, onClickMenuItem', { activeUrl })
     navigate(`${activeUrl}/`)
