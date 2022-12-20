@@ -13,9 +13,11 @@ const GlobalStyle = () => (
         width: 100%;
         margin: 0;
         color: rgba(0, 0, 0, 0.87);
+        background-color: #fffde7;
       }
 
       #gatsby-focus-wrapper {
+        /* This div is added by reach-router: https://github.com/reach/router/issues/63 */
         height: 100%;
       }
 
