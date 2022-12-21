@@ -16,7 +16,7 @@ const iconCreateFunction = function (cluster) {
   )
   const className = hasHighlightedPop ? 'popClusterHighlighted' : 'popCluster'
   if (typeof window === 'undefined') return () => {}
-  return window.L.divIcon({
+  return window.L.divIcon({ 
     html: markers.length,
     className,
     iconSize: window.L.point(40, 40),

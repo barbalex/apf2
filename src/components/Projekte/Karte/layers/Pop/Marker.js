@@ -102,6 +102,8 @@ const PopMarker = ({ treeName, pop }) => {
   )
   const artname = pop?.apByApId?.aeTaxonomyByArtId?.artname ?? ''
 
+  console.log('Pop Marker', { iconUrl, popIcon })
+
   return (
     <Marker
       position={latLng}
