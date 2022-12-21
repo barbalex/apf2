@@ -584,73 +584,54 @@ const Karte = ({ treeName }) => {
             })
             .reverse()}
           {activeApfloraLayers.includes('pop') && (
-            <Pane
+            // add no pane
+            // it prevented pop svgs from appearing
+            // leaflet sets z-index to 600 anyway
+            <Pop
               key={`${apId}/pop/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
               }`}
-              className="pop"
-              name="pop"
-              style={{ zIndex: 300 }}
-            >
-              <Pop treeName={treeName} />
-            </Pane>
+              treeName={treeName}
+            />
           )}
           {activeApfloraLayers.includes('tpop') && (
-            <Pane
+            <Tpop
               key={`${apId}/tpop/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
               }`}
-              className="tpop"
-              name="tpop"
-              style={{ zIndex: 301 }}
-            >
-              <Tpop treeName={treeName} clustered={clustered} />
-            </Pane>
+              treeName={treeName}
+              clustered={clustered}
+            />
           )}
           {activeApfloraLayers.includes('beobNichtBeurteilt') && (
-            <Pane
+            <BeobNichtBeurteilt
               key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
               }`}
-              className="beobNichtBeurteilt"
-              name="beobNichtBeurteilt"
-              style={{ zIndex: 303 }}
-            >
-              <BeobNichtBeurteilt treeName={treeName} clustered={clustered} />
-            </Pane>
+              treeName={treeName}
+              clustered={clustered}
+            />
           )}
           {activeApfloraLayers.includes('beobNichtZuzuordnen') && (
-            <Pane
+            <BeobNichtZuzuordnen
               key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
               }`}
-              className="beobNichtZuzuordnen"
-              name="beobNichtZuzuordnen"
-              style={{ zIndex: 304 }}
-            >
-              <BeobNichtZuzuordnen treeName={treeName} clustered={clustered} />
-            </Pane>
+              treeName={treeName}
+              clustered={clustered}
+            />
           )}
           {activeApfloraLayers.includes('beobZugeordnet') && (
-            <Pane
+            <BeobZugeordnet
               key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
               }`}
-              className="beobZugeordnet"
-              name="beobZugeordnet"
-              style={{ zIndex: 305 }}
-            >
-              <BeobZugeordnet treeName={treeName} clustered={clustered} />
-            </Pane>
+              treeName={treeName}
+              clustered={clustered}
+            />
           )}
           {activeApfloraLayers.includes('beobZugeordnetAssignPolylines') && (
-            <Pane
-              className="beobZugeordnetAssignPolylines"
-              name="beobZugeordnetAssignPolylines"
-              style={{ zIndex: 306 }}
-            >
-              <BeobZugeordnetAssignPolylines treeName={treeName} />
-            </Pane>
+            <BeobZugeordnetAssignPolylines treeName={treeName} />
           )}
           <ScaleControl imperial={false} />
           <Control position="topright" visible={!hideMapControls}>
