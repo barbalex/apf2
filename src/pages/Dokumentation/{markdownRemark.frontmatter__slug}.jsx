@@ -55,7 +55,6 @@ const BenutzerDokuTemplate = ({ data }) => {
   const frontmatter = data?.markdownRemark?.frontmatter
   const html = data?.markdownRemark?.html
   const edges = data?.allMarkdownRemark?.edges
-  console.log('DokuTemplate: ', { data, frontmatter, html, edges })
 
   return (
     <ErrorBoundary>
