@@ -9,6 +9,7 @@ const MenuItem = ({ node }) => {
   const activeUrl = `/Dokumentation/${node.frontmatter.slug}`
   const active =
     activeUrl === location.pathname || `${activeUrl}/` === location.pathname
+
   const onClickMenuItem = useCallback(
     () => navigate(`${activeUrl}/`),
     [activeUrl],
