@@ -418,7 +418,6 @@ const nodes = ({ data, loading, store, role }) => {
         nodes = [
           ...nodes,
           ...buildBeobNichtBeurteiltNodes({
-            nodes,
             data,
             apNodes,
             projektNodes,

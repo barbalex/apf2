@@ -357,6 +357,7 @@ const TreeContainer = () => {
           ekfGqlFilter,
           apGqlFilter,
           beobGqlFilter,
+          openAps: store.tree.openAps,
         }),
         // DANGER: without, refetches by react-query do not work!
         fetchPolicy: 'no-cache',

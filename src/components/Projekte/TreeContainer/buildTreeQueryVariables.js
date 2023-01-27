@@ -19,6 +19,7 @@ import isUuid from 'is-uuid'
  * TODO: how to deal with or?
  * - Solution: define the function as variadic and loop through all the composite type arrays,
  *   https://stackoverflow.com/a/32906179/712005
+ * BUT: in ae this function is too slow
  */
 
 const buildTreeQueryVariables = ({
@@ -31,6 +32,7 @@ const buildTreeQueryVariables = ({
   ekfGqlFilter,
   apGqlFilter,
   beobGqlFilter,
+  openAps,
 }) => {
   // apFilter is used for form nodeLabelFilter AND apFilter of tree :-(
   const isWerteListen = openNodes.some(
@@ -173,6 +175,7 @@ const buildTreeQueryVariables = ({
   }
   const beobNichtBeurteiltsFilter = beobGqlFilter('nichtBeurteilt').filtered
   const beobNichtZuzuordnensFilter = beobGqlFilter('nichtZuzuordnen').filtered
+  // console.log('buildTreeQueryVariables', { beobNichtBeurteiltsFilter, isAp })
   // const beobNichtZuzuordnensFilter = {
   //   nichtZuordnen: { equalTo: true },
   //   apId: { in: ap },
@@ -324,6 +327,7 @@ const buildTreeQueryVariables = ({
     ekAbrechnungstypWertesFilter,
     zielbersFilter,
     zielsFilter,
+    openAps,
   }
 }
 

@@ -42,7 +42,41 @@ export default gql`
     $isApBerUebersicht: Boolean!
     $isCurrentIssues: Boolean!
     $isUsers: Boolean!
+    $openAps: [UUID!]
   ) {
+    openAps: allAps(filter: { id: { in: $openAps } }) {
+      nodes {
+        id
+        label
+        beobNichtBeurteilt: apartsByApId {
+          nodes {
+            id
+            aeTaxonomyByArtId {
+              id
+              beobsByArtId(filter: $beobNichtBeurteiltsFilter) {
+                totalCount
+                nodes @include(if: $isBeobNichtBeurteilt) {
+                  id
+                  label
+                  datum
+                  autor
+                  quelle
+                  aeTaxonomyByArtId {
+                    id
+                    apartsByArtId {
+                      nodes {
+                        id
+                        apId
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     allAps(filter: $apsFilter, orderBy: LABEL_ASC) @include(if: $isProjekt) {
       totalCount
       nodes @include(if: $isAps) {
@@ -80,27 +114,6 @@ export default gql`
         label
         apId
         aeId
-      }
-    }
-    apBeobsNichtBeurteilt: allBeobs(
-      filter: $beobNichtBeurteiltsFilter
-      orderBy: DATUM_DESC
-    ) @include(if: $isAp) {
-      nodes {
-        id
-        label @include(if: $isBeobNichtBeurteilt)
-        datum @include(if: $isBeobNichtBeurteilt)
-        autor @include(if: $isBeobNichtBeurteilt)
-        quelle @include(if: $isBeobNichtBeurteilt)
-        aeTaxonomyByArtId {
-          id
-          apartsByArtId {
-            nodes {
-              id
-              apId
-            }
-          }
-        }
       }
     }
     apBeobsNichtZuzuordnen: allBeobs(
