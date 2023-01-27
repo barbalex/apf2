@@ -33,6 +33,7 @@ export default gql`
     $isProjekt: Boolean!
     $isAps: Boolean!
     $isAp: Boolean!
+    $isApPop: Boolean!
     $isBeobNichtBeurteilt: Boolean!
     $isPop: Boolean!
     $isTpop: Boolean!
@@ -48,6 +49,9 @@ export default gql`
       nodes {
         id
         label
+        popsByApId(filter: $popsFilter) {
+          totalCount
+        }
         beobNichtBeurteilt: apartsByApId {
           nodes {
             id
@@ -207,7 +211,7 @@ export default gql`
       }
     }
     allPops(filter: $popsFilter, orderBy: [NR_ASC, NAME_ASC])
-      @include(if: $isAp) {
+      @include(if: $isApPop) {
       nodes {
         id
         apId

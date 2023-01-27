@@ -10,7 +10,8 @@ const popFolderNode = ({
   apId,
   store,
 }) => {
-  const pops = data?.allPops?.nodes ?? []
+  const ap = (data?.openAps?.nodes ?? [])?.find((a) => a.id === apId)
+  const count = ap?.popsByApId?.totalCount ?? 0
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -21,12 +22,11 @@ const popFolderNode = ({
   })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.pop ?? ''
 
-  const popNodesLength = pops.filter((el) => el.apId === apId).length
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${popNodesLength} gefiltert`
-    : popNodesLength
+    ? `${count} gefiltert`
+    : count
 
   const url = ['Projekte', projId, 'Arten', apId, 'Populationen']
 
@@ -44,7 +44,7 @@ const popFolderNode = ({
       label: `Populationen (${message})`,
       url,
       sort: [projIndex, 1, apIndex, 1],
-      hasChildren: popNodesLength > 0,
+      hasChildren: count > 0,
     },
   ]
 }
