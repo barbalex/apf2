@@ -23,7 +23,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 
-const TpopmassnOrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
+const TpopmassnOrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
   const store = useContext(storeContext)
   const { dataFilterAddOr } = store
 
@@ -36,7 +36,6 @@ const TpopmassnOrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
     (event, value) => {
       if (value > dataFilter.length - 1) {
         dataFilterAddOr({
-          treeName,
           table: 'tpopfeldkontr',
           val: tpopfeldkontr,
         })
@@ -45,7 +44,7 @@ const TpopmassnOrTabs = ({ activeTab, setActiveTab, dataFilter, treeName }) => {
       }
       setActiveTab(value)
     },
-    [dataFilter.length, dataFilterAddOr, setActiveTab, treeName],
+    [dataFilter.length, dataFilterAddOr, setActiveTab],
   )
 
   return (

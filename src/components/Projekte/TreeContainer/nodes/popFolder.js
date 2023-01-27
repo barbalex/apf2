@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const popFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   projId,
@@ -20,7 +19,7 @@ const popFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.pop ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.pop ?? ''
 
   const popNodesLength = pops.filter((el) => el.apId === apId).length
   const message = loading

@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const tpopfeldkontrzaehlFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   apNodes,
@@ -26,7 +25,7 @@ const tpopfeldkontrzaehlFolderNode = ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const tpopkontrIndex = findIndex(tpopfeldkontrNodes, { id: tpopkontrId })
   const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.tpopkontrzaehl ?? ''
+    store.tree?.nodeLabelFilter?.tpopkontrzaehl ?? ''
 
   const childrenLength = (data?.allTpopkontrzaehls?.nodes ?? []).filter(
     (el) => el.tpopkontrId === tpopkontrId,

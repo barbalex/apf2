@@ -16,8 +16,8 @@ export default types
     qkTab: types.optional(types.maybeNull(types.string), 'qk'),
   })
   .actions((self) => ({
-    addProjekteTab(tab) {
-      self.projekteTabs = uniq([...self.projekteTabs, tab])
+    addProjekteTabs(tabs) {
+      self.projekteTabs = uniq([...self.projekteTabs, ...tabs])
     },
   }))
 

@@ -4,10 +4,10 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../storeContext'
 
-const MapFilterListener = ({ treeName }) => {
+const MapFilterListener = () => {
   const map = useMap()
   const store = useContext(storeContext)
-  const { mapFilter } = store[treeName]
+  const { mapFilter } = store.tree
 
   useEffect(() => {
     if (!mapFilter) {

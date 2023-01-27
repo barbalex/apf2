@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const tpopmassnFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   apNodes,
@@ -22,8 +21,7 @@ const tpopmassnFolderNode = ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.tpopmassn ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpopmassn ?? ''
 
   let children = (data?.allTpopmassns?.nodes ?? []).filter(
     (el) => el.tpopId === tpopId,

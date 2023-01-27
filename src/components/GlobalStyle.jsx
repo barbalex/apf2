@@ -6,20 +6,15 @@ const GlobalStyle = () => (
     styles={css`
       html,
       body,
-      #___gatsby {
+      #root {
         overflow: hidden !important;
         font-family: Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        height: 100%;
+        height: 100vh;
         width: 100%;
         margin: 0;
         color: rgba(0, 0, 0, 0.87);
         background-color: #fffde7;
-      }
-
-      #gatsby-focus-wrapper {
-        /* This div is added by reach-router: https://github.com/reach/router/issues/63 */
-        height: 100%;
-        overflow: hidden;
+        hyphens: auto;
       }
 
       @media print {
@@ -33,14 +28,14 @@ const GlobalStyle = () => (
           overflow: visible !important;
         }
 
-        #___gatsby {
+        #root {
           background-color: white !important;
           height: auto !important;
           min-height: auto !important;
           overflow: visible !important;
         }
 
-        #___gatsby > div {
+        #root > div {
           height: auto !important;
           overflow: visible;
         }

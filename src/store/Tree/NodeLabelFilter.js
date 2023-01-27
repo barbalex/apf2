@@ -123,7 +123,7 @@ export default types
         self[key] = value
       }
     },
-    tableIsFiltered({ table }) {
+    tableIsFiltered(table) {
       return (
         Object.values(self[table] || {}).filter((v) => v !== null).length > 0
       )
@@ -131,7 +131,7 @@ export default types
     isFiltered() {
       // DO NOT USE VIEW, THE RESULT WILL BE WRONG!!!!
       const tables = Object.keys(self)
-      return tables.some((table) => self.tableIsFiltered({ table }))
+      return tables.some((table) => self.tableIsFiltered(table))
     },
     empty() {
       Object.keys(self).forEach((key) => (self[key] = null))

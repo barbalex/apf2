@@ -1,7 +1,6 @@
 const ekAbrechnungstypWerteFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   store,
@@ -9,7 +8,7 @@ const ekAbrechnungstypWerteFolderNode = ({
   const ekAbrechnungstypWertes = data?.allEkAbrechnungstypWertes?.nodes ?? []
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.ekAbrechnungstypWerte ?? ''
+    store.tree?.nodeLabelFilter?.ekAbrechnungstypWerte ?? ''
 
   let ekAbrechnungstypWerteNodesLength = ekAbrechnungstypWertes.length
   // before EkAbrechnungstypWerte folder is active, only total count was fetched, not yet any ekAbrechnungstypWerten nodes

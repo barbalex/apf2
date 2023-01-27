@@ -7,19 +7,18 @@ import createPop from './createPop'
 import createTpop from './createTpop'
 import updateBeobById from './updateBeobById'
 
-const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
+const createNewPopFromBeob = async ({
+  id,
+  apId = '99999999-9999-9999-9999-999999999999',
+  projId = '99999999-9999-9999-9999-999999999999',
+  client,
+  store,
+  queryClient,
+  search,
+}) => {
   const { enqueNotification } = store
-  const tree = store[treeName]
-  const {
-    setActiveNodeArray,
-    addOpenNodes,
-    apIdInActiveNodeArray,
-    projIdInActiveNodeArray,
-  } = tree
-
-  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const projId =
-    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const tree = store.tree
+  const { addOpenNodes } = tree
 
   let beobResult
   try {
@@ -171,18 +170,18 @@ const createNewPopFromBeob = async ({ treeName, id, client, store }) => {
     .filter((n) => !isEqual(n, tree.activeNodeArray))
 
   addOpenNodes(newOpenNodes)
-  setActiveNodeArray(newActiveNodeArray)
+  store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
   // TODO: what is this for?
   client.refetchQueries({
     include: [
-      'TreeAllQuery',
       'KarteBeobNichtZuzuordnenQuery',
       'BeobZugeordnetForMapQuery',
       'BeobNichtBeurteiltForMapQuery',
       'BeobAssignLinesQuery',
     ],
   })
+  queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
 }
 
 export default createNewPopFromBeob

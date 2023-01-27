@@ -1,28 +1,20 @@
 import findIndex from 'lodash/findIndex'
 
-const apFolderNode = ({
-  data,
-  treeName,
-  loading,
-  projektNodes,
-  projId,
-  store,
-}) => {
+const apFolderNode = ({ data, loading, projektNodes, projId, store }) => {
   // fetch sorting indexes of parents
   const projNodeIds = projektNodes.map((n) => n.id)
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.ap ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ap ?? ''
 
-  const apNodes = (data?.allAps?.nodes ?? [])
-    // only show if parent node exists
-    .filter((el) => projNodeIds.includes(el.projId))
+  const count = data?.allAps?.totalCount ?? 0
+
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${apNodes.length} gefiltert`
-    : apNodes.length
+    ? `${count} gefiltert`
+    : count
 
   // only show if parent node exists
   if (!projNodeIds.includes(projId)) return []
@@ -38,7 +30,7 @@ const apFolderNode = ({
       label: `Arten (${message})`,
       url: ['Projekte', projId, 'Arten'],
       sort: [projIndex, 1],
-      hasChildren: apNodes.length > 0,
+      hasChildren: count > 0,
     },
   ]
 }

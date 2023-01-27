@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const aperfkritFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   projId,
@@ -18,8 +17,7 @@ const aperfkritFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.erfkrit ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.erfkrit ?? ''
 
   const erfkritNodesLength = (data?.allErfkrits?.nodes ?? []).filter(
     (el) => el.apId === apId,

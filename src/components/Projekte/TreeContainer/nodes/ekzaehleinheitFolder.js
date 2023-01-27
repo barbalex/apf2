@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const ekzaehleinheitFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   projId,
@@ -21,7 +20,7 @@ const ekzaehleinheitFolderNode = ({
     id: apId,
   })
   const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.ekzaehleinheit ?? ''
+    store.tree?.nodeLabelFilter?.ekzaehleinheit ?? ''
 
   const ekzaehleinheitNodesLength = ekzaehleinheits.filter(
     (el) => el.apId === apId,

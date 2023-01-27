@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const ekfrequenzFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   projId,
@@ -20,8 +19,7 @@ const ekfrequenzFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.ekfrequenz ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ekfrequenz ?? ''
 
   const ekfrequenzNodesLength = ekfrequenzs.filter(
     (el) => el.apId === apId,

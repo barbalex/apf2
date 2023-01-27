@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const popmassnberFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   apNodes,
@@ -16,7 +15,7 @@ const popmassnberFolderNode = ({
   // return empty if ap is not a real ap and apFilter is set
   const ap = (data?.allAps?.nodes ?? []).find((n) => n.id === apId)
   const isAp = ap && [1, 2, 3].includes(ap.bearbeitung) //@485
-  const apFilter = store?.[treeName]?.apFilter
+  const apFilter = store.tree?.apFilter
   if (!!apFilter && !isAp) return []
 
   // fetch sorting indexes of parents
@@ -25,8 +24,7 @@ const popmassnberFolderNode = ({
   })
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
-  const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.popmassnber ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.popmassnber ?? ''
 
   const childrenLength = (data?.allPopmassnbers?.nodes ?? []).filter(
     (el) => el.popId === popId,

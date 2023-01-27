@@ -4,7 +4,6 @@ import union from 'lodash/union'
 const apzielFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   projId,
@@ -19,7 +18,7 @@ const apzielFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.ziel ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ziel ?? ''
 
   const zieljahre = (data?.allZiels?.nodes ?? [])
     .filter((el) => el.apId === apId)

@@ -1,7 +1,6 @@
 const apberrelevantGrundWerteFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   store,
@@ -10,7 +9,7 @@ const apberrelevantGrundWerteFolderNode = ({
     data?.allApberrelevantGrundWertes?.nodes ?? []
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.apberrelevantGrundWerte ?? ''
+    store.tree?.nodeLabelFilter?.apberrelevantGrundWerte ?? ''
 
   let apberrelevantGrundWerteNodesLength = apberrelevantGrundWertes.length
   // before ApberrelevantGrundWerte folder is active, only total count was fetched, not yet any apberrelevantGrundWerten nodes

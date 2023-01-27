@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const beobNichtZuzuordnenFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   projId,
@@ -18,7 +17,7 @@ const beobNichtZuzuordnenFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.beob ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
 
   const beobNichtZuzuordnenNodesLength = (
     data?.apBeobsNichtZuzuordnen?.nodes ?? []
