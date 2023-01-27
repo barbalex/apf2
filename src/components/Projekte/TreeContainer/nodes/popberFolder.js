@@ -12,12 +12,6 @@ const popberFolderNode = ({
   popId,
   store,
 }) => {
-  // return empty if ap is not a real ap and apFilter is set
-  const ap = (data?.allAps?.nodes ?? []).find((n) => n.id === apId)
-  const isAp = ap && [1, 2, 3].includes(ap.bearbeitung) //@485
-  const apFilter = store.tree?.apFilter
-  if (!!apFilter && !isAp) return []
-
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
