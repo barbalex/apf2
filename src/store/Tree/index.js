@@ -121,6 +121,17 @@ export default types
     },
   }))
   .views((self) => ({
+    get openAps() {
+      const openNodes = getSnapshot(self.openNodes)
+      const openAps = [
+        ...new Set(
+          openNodes
+            .filter((n) => n[0] === 'Projekte' && n[2] === 'Arten' && n[3])
+            .map((n) => n[3]),
+        ),
+      ]
+      return openAps
+    },
     get projIdInActiveNodeArray() {
       if (self.activeNodeArray.includes('Projekte')) {
         const indexOfId = self.activeNodeArray.indexOf('Projekte') + 1
