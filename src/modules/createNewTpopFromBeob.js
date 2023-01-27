@@ -79,23 +79,18 @@ const updateBeobById = gql`
 `
 
 const createNewTpopFromBeob = async ({
-  treeName,
   pop,
   beobId,
+  projId = '99999999-9999-9999-9999-999999999999',
+  apId = '99999999-9999-9999-9999-999999999999',
   client,
   store,
+  queryClient,
+  search,
 }) => {
   const { enqueNotification } = store
-  const tree = store[treeName]
-  const {
-    setActiveNodeArray,
-    addOpenNodes,
-    projIdInActiveNodeArray,
-    apIdInActiveNodeArray,
-  } = tree
-  const projId =
-    projIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
-  const apId = apIdInActiveNodeArray || '99999999-9999-9999-9999-999999999999'
+  const tree = store.tree
+  const { addOpenNodes } = tree
   let beobResult
   try {
     beobResult = await client.query({
@@ -188,7 +183,7 @@ const createNewTpopFromBeob = async ({
     beobId,
   ]
 
-  let newOpenNodes = [
+  const newOpenNodes = [
     ...tree.openNodes,
     // add Beob and it's not yet existing parents to open nodes
     [`Projekte`, projId, `Arten`, apId, `Populationen`],
@@ -240,17 +235,17 @@ const createNewTpopFromBeob = async ({
     .filter((n) => !isEqual(n, tree.activeNodeArray))
 
   addOpenNodes(newOpenNodes)
-  setActiveNodeArray(newActiveNodeArray)
+  store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
   client.refetchQueries({
     include: [
-      'TreeAllQuery',
       'KarteBeobNichtZuzuordnenQuery',
       'BeobZugeordnetForMapQuery',
       'BeobNichtBeurteiltForMapQuery',
       'BeobAssignLinesQuery',
     ],
   })
+  queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
 }
 
 export default createNewTpopFromBeob

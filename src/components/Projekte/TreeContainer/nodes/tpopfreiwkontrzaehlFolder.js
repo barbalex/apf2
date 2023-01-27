@@ -5,7 +5,6 @@ import exists from '../../../../modules/exists'
 const tpopfreiwkontrzaehlFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   apNodes,
@@ -28,7 +27,7 @@ const tpopfreiwkontrzaehlFolderNode = ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const tpopkontrIndex = findIndex(tpopfreiwkontrNodes, { id: tpopkontrId })
   const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.tpopkontrzaehl ?? ''
+    store.tree?.nodeLabelFilter?.tpopkontrzaehl ?? ''
 
   const childrenLength = (data?.allTpopkontrzaehls?.nodes ?? []).filter(
     (el) => el.tpopkontrId === tpopkontrId && exists(el.anzahl),

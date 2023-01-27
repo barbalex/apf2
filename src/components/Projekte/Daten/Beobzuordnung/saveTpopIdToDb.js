@@ -3,7 +3,15 @@ import { gql } from '@apollo/client'
 
 import updateBeobByIdGql from './updateBeobById'
 
-const saveTpopIdToDb = async ({ value, id, treeName, type, client, store }) => {
+const saveTpopIdToDb = async ({
+  value,
+  id,
+  type,
+  client,
+  store,
+  queryClient,
+  search,
+}) => {
   const variables = {
     id,
     tpopId: value,
@@ -17,12 +25,7 @@ const saveTpopIdToDb = async ({ value, id, treeName, type, client, store }) => {
   })
 
   // need to update activeNodeArray and openNodes
-  const {
-    activeNodeArray: aNA,
-    setActiveNodeArray,
-    openNodes,
-    setOpenNodes,
-  } = store[treeName]
+  const { activeNodeArray: aNA, openNodes, setOpenNodes } = store.tree
   let newANA
   let newOpenNodes
 
@@ -214,11 +217,17 @@ const saveTpopIdToDb = async ({ value, id, treeName, type, client, store }) => {
       ]
     }
   }
-  setActiveNodeArray(newANA)
+  store.navigate(`/Daten/${newANA.join('/')}${search}`)
   setOpenNodes(newOpenNodes)
   client.refetchQueries({
-    include: ['TreeAllQuery', 'KarteBeobNichtZuzuordnenQuery', 'BeobZugeordnetForMapQuery', 'BeobNichtBeurteiltForMapQuery', 'BeobAssignLinesQuery'],
+    include: [
+      'KarteBeobNichtZuzuordnenQuery',
+      'BeobZugeordnetForMapQuery',
+      'BeobNichtBeurteiltForMapQuery',
+      'BeobAssignLinesQuery',
+    ],
   })
+  queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
 }
 
 export default saveTpopIdToDb

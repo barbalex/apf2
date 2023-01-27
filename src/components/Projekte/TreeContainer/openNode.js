@@ -1,6 +1,6 @@
 import isNodeOpen from './isNodeOpen'
 
-const openNode = async ({ treeName, node, openNodes, store }) => {
+const openNode = async ({ node, openNodes, store }) => {
   const { treeNodeLabelFilterResetExceptAp } = store
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
@@ -16,12 +16,12 @@ const openNode = async ({ treeName, node, openNodes, store }) => {
     newOpenNodes.push([...node.url, 'Berichte'])
   }
 
-  store[treeName].setOpenNodes(newOpenNodes)
+  store.tree.setOpenNodes(newOpenNodes)
 
   if (node.menuType === 'ap') {
     // if ap is changed, need to empty nodeLabelFilter,
     // with exception of the ap key
-    treeNodeLabelFilterResetExceptAp({ tree: treeName })
+    treeNodeLabelFilterResetExceptAp()
   }
 }
 

@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const assozartFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   projId,
@@ -18,8 +17,7 @@ const assozartFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.assozart ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.assozart ?? ''
 
   const assozartNodesLength = (data?.allAssozarts?.nodes ?? []).filter(
     (el) => el.apId === apId,

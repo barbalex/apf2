@@ -20,7 +20,7 @@ const apberuebersichtNodes = ({ data, projektNodes, projId }) => {
       id: el.id,
       parentId: el.projId,
       parentTableId: el.projId,
-      urlLabel: el.jahr || '(kein Jahr)',
+      urlLabel: el.label || '(kein Jahr)',
       label: el.label,
       url: ['Projekte', el.projId, 'AP-Berichte', el.id],
       hasChildren: false,

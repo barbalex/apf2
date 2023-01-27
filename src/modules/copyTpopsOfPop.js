@@ -2,7 +2,13 @@ import { gql } from '@apollo/client'
 
 import copyTo from './copyTo'
 
-const copyTpopsOfPop = async ({ popIdFrom, popIdTo, client, store }) => {
+const copyTpopsOfPop = async ({
+  popIdFrom,
+  popIdTo,
+  client,
+  store,
+  queryClient,
+}) => {
   // 1. fetch all tpops
   const { data } = await client.query({
     query: gql`
@@ -26,6 +32,7 @@ const copyTpopsOfPop = async ({ popIdFrom, popIdTo, client, store }) => {
       id: tpop.id,
       client,
       store,
+      queryClient,
     }),
   )
 }

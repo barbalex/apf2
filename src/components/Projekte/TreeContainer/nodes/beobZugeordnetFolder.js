@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const beobZugeordnetFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   apNodes,
@@ -22,7 +21,7 @@ const beobZugeordnetFolderNode = ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.beob ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
 
   const childrenLength = (data?.apBeobsZugeordnet?.nodes ?? []).filter(
     (el) => el.tpopId === tpopId,

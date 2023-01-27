@@ -6,7 +6,6 @@ import allParentNodesExist from '../allParentNodesExist'
 const apzielberFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   projId,
@@ -31,8 +30,7 @@ const apzielberFolderNode = ({
     (el) => el.jahr === zielJahr,
   )
   const zielIndex = findIndex(apzielNodes, (el) => el.id === zielId)
-  const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.zielber ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.zielber ?? ''
   const zielberNodesLength = (data?.allZielbers?.nodes ?? []).filter(
     (el) => el.zielId === zielId,
   ).length

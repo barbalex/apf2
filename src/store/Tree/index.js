@@ -1,14 +1,12 @@
 import { types, getParent, getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
+import merge from 'lodash/merge'
 import queryString from 'query-string'
-import { navigate } from 'gatsby'
-import nestedObjectAssign from 'nested-object-assign'
 import isUuid from 'is-uuid'
 
 import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
 } from './NodeLabelFilter'
-import Map, { defaultValue as defaultMap } from './Map'
 import Geojson from './Geojson'
 import initialDataFilterValues from './DataFilter/initialValues'
 import DataFilter from './DataFilter/types'
@@ -30,10 +28,12 @@ import {
   initial as initialTpopfreiwkontr,
 } from './DataFilter/tpopfreiwkontr'
 import { simpleTypes as apType } from './DataFilter/ap'
+import appBaseUrl from '../../modules/appBaseUrl'
 
 export default types
   .model('Tree', {
-    name: types.optional(types.string, 'tree'),
+    // used to open tree2 on a specific activeNodeArray
+    tree2Src: types.optional(types.string, ''),
     activeNodeArray: types.array(types.union(types.string, types.number)),
     // lastTouchedNode is needed to keep the last clicked arrow known
     // so it does not jump
@@ -50,18 +50,36 @@ export default types
     apFilter: types.optional(types.boolean, true),
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
-    map: types.optional(Map, defaultMap),
     mapFilter: types.maybe(Geojson),
-    // mapFilter: types.optional(
-    //   types.union(Geojson, types.literal(undefined)),
-    //   undefined,
-    // ),
-    treeWidth: types.optional(types.number, 500),
-    formWidth: types.optional(types.number, 500),
-    formHeight: types.optional(types.number, 500),
-    filterWidth: types.optional(types.number, 500),
   })
   .actions((self) => ({
+    resetTree2Src() {
+      self.tree2Src = ''
+    },
+    setTree2SrcByActiveNodeArray({ activeNodeArray, search }) {
+      const iFrameSearch = queryString.parse(search)
+      // need to alter projekteTabs:
+      if (Array.isArray(iFrameSearch.projekteTabs)) {
+        iFrameSearch.projekteTabs = iFrameSearch.projekteTabs
+          // - remove non-tree2 values
+          .filter((t) => t.includes('2'))
+          // - rewrite tree2 values to tree values
+          .map((t) => t.replace('2', ''))
+      } else if (iFrameSearch.projekteTabs) {
+        iFrameSearch.projekteTabs = [iFrameSearch.projekteTabs]
+          // - remove non-tree2 values
+          .filter((t) => t.includes('2'))
+          // - rewrite tree2 values to tree values
+          .map((t) => t.replace('2', ''))
+      }
+      const newSearch = queryString.stringify(iFrameSearch)
+      // pass this via src to iframe
+      const iFrameSrc = `${appBaseUrl().slice(
+        0,
+        -1,
+      )}${`/Daten/${activeNodeArray.join('/')}`}?${newSearch}`
+      self.tree2Src = iFrameSrc
+    },
     setMapFilter(val) {
       self.mapFilter = val
     },
@@ -70,18 +88,6 @@ export default types
     },
     setLastTouchedNode(val) {
       self.lastTouchedNode = val
-    },
-    setTreeWidth(val) {
-      self.treeWidth = val
-    },
-    setFormWidth(val) {
-      self.formWidth = val
-    },
-    setFormHeight(val) {
-      self.formHeight = val
-    },
-    setFilterWidth(val) {
-      self.filterWidth = val
     },
     setOpenNodes(val) {
       // need set to ensure contained arrays are unique
@@ -93,35 +99,38 @@ export default types
       const set = new Set([...self.openNodes, ...nodes].map(JSON.stringify))
       self.openNodes = Array.from(set).map(JSON.parse)
     },
+    addOpenNodesForNodeArray(nodeArray) {
+      const extraOpenNodes = []
+      nodeArray.forEach((v, i) => {
+        extraOpenNodes.push(nodeArray.slice(0, i + 1))
+      })
+      this.addOpenNodes(extraOpenNodes)
+    },
     setApFilter(val) {
       self.apFilter = val
     },
-    setActiveNodeArray(val, nonavigate) {
+    setActiveNodeArray(val) {
       if (isEqual(val, self.activeNodeArray)) {
         // do not do this if already set
         // trying to stop vicious cycle of reloading in first start after update
         return
       }
-      if (self.name === 'tree' && !nonavigate) {
-        const store = getParent(self)
-        const { urlQuery } = store
-        const search = queryString.stringify(urlQuery)
-        const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
-        navigate(`/Daten/${val.join('/')}${query}`)
-      }
+      // always set missing open nodes?
+      self.addOpenNodesForNodeArray(val)
       self.activeNodeArray = val
     },
   }))
   .views((self) => ({
-    get apIdInActiveNodeArray() {
-      if (
-        self.activeNodeArray.length > 3 &&
-        self.activeNodeArray[2] === 'Arten'
-      ) {
-        const id = self.activeNodeArray[3]
-        if (isUuid.anyNonNil(id)) return id
-      }
-      return undefined
+    get openAps() {
+      const openNodes = getSnapshot(self.openNodes)
+      const openAps = [
+        ...new Set(
+          openNodes
+            .filter((n) => n[0] === 'Projekte' && n[2] === 'Arten' && n[3])
+            .map((n) => n[3]),
+        ),
+      ]
+      return openAps
     },
     get projIdInActiveNodeArray() {
       if (self.activeNodeArray.includes('Projekte')) {
@@ -133,54 +142,13 @@ export default types
       }
       return undefined
     },
-    get ekfIdInActiveNodeArray() {
-      if (self.activeNodeArray.includes('Freiwilligen-Kontrollen')) {
-        const indexOfId =
-          self.activeNodeArray.indexOf('Freiwilligen-Kontrollen') + 1
-        if (self.activeNodeArray.length > indexOfId) {
-          const id = self.activeNodeArray?.[indexOfId]
-          if (isUuid.anyNonNil(id)) return id
-        }
-      }
-      return undefined
-    },
-    get apberIdInActiveNodeArray() {
-      if (self.activeNodeArray[4] === 'AP-Berichte') {
-        const indexOfId = self.activeNodeArray.indexOf('AP-Berichte') + 1
-        if (self.activeNodeArray.length > indexOfId) {
-          const id = self.activeNodeArray?.[indexOfId]
-          if (isUuid.anyNonNil(id)) return id
-        }
-      }
-      return undefined
-    },
-    get apberuebersichtIdInActiveNodeArray() {
-      if (self.activeNodeArray[2] === 'AP-Berichte') {
-        const indexOfId = self.activeNodeArray.indexOf('AP-Berichte') + 1
-        if (self.activeNodeArray.length > indexOfId) {
-          const id = self.activeNodeArray?.[indexOfId]
-          if (isUuid.anyNonNil(id)) return id
-        }
-      }
-      return undefined
-    },
-    get popIdInActiveNodeArray() {
+    get apIdInActiveNodeArray() {
       if (
-        self.activeNodeArray.length > 5 &&
-        self.activeNodeArray[4] === 'Populationen'
+        self.activeNodeArray.length > 3 &&
+        self.activeNodeArray[2] === 'Arten'
       ) {
-        const id = self.activeNodeArray[5]
+        const id = self.activeNodeArray[3]
         if (isUuid.anyNonNil(id)) return id
-      }
-      return undefined
-    },
-    get tpopIdInActiveNodeArray() {
-      if (self.activeNodeArray.includes('Teil-Populationen')) {
-        const indexOfId = self.activeNodeArray.indexOf('Teil-Populationen') + 1
-        if (self.activeNodeArray.length > indexOfId) {
-          const id = self.activeNodeArray?.[indexOfId]
-          if (isUuid.anyNonNil(id)) return id
-        }
       }
       return undefined
     },
@@ -226,9 +194,6 @@ export default types
         if (conflictingFilterExists) {
           setApFilter = false
           self.setApFilter(false)
-          console.log(
-            'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
-          )
           // need timeout or notification will not appear
           setTimeout(() =>
             store.enqueNotification({
@@ -314,15 +279,14 @@ export default types
       const projHiearchyFilter = projId
         ? { apByApId: { projId: { equalTo: projId } } }
         : {}
-      const singleFilterByHierarchy = nestedObjectAssign(
-        {},
+      const singleFilterByHierarchy = merge(
         apHiearchyFilter,
         projHiearchyFilter,
       )
       const singleFilterByParentFiltersForAll = {
         apByApId: self.apGqlFilter.all,
       }
-      const singleFilterForAll = nestedObjectAssign(
+      const singleFilterForAll = merge(
         singleFilterByHierarchy,
         singleFilterByParentFiltersForAll,
       )
@@ -354,8 +318,7 @@ export default types
       const filterArray = []
       for (const filter of filterArrayInStore) {
         // add hiearchy filter
-        const singleFilter = nestedObjectAssign(
-          {},
+        const singleFilter = merge(
           singleFilterByHierarchy,
           singleFilterByParentFiltersForFiltered,
         )
@@ -410,7 +373,7 @@ export default types
       const firstFilterObject = {
         ...(self.popGqlFilter?.filtered?.or?.[0] ?? {}),
       }
-      let entries = Object.entries(firstFilterObject).filter(
+      const entries = Object.entries(firstFilterObject).filter(
         (e) => !['projId', 'apId', 'apByApId', 'geomPoint'].includes(e[0]),
       )
       return entries.length > 0
@@ -419,25 +382,20 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      // Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt
-      // const popId = self.popIdInActiveNodeArray
-      // const popHierarchyFilter = popId ? { popId: { equalTo: popId } } : {}
       const apHiearchyFilter = apId
         ? { popByPopId: { apId: { equalTo: apId } } }
         : {}
       const projHiearchyFilter = projId
         ? { popByPopId: { apByApId: { projId: { equalTo: projId } } } }
         : {}
-      let singleFilterByHierarchy = nestedObjectAssign(
-        {},
-        // popHierarchyFilter,
+      const singleFilterByHierarchy = merge(
         apHiearchyFilter,
         projHiearchyFilter,
       )
       const singleFilterByParentFiltersForAll = {
         popByPopId: self.popGqlFilter.all,
       }
-      const singleFilterForAll = nestedObjectAssign(
+      const singleFilterForAll = merge(
         singleFilterByHierarchy,
         singleFilterByParentFiltersForAll,
       )
@@ -469,8 +427,7 @@ export default types
       const filterArray = []
       for (const filter of filterArrayInStore) {
         // add hiearchy filter
-        const singleFilter = nestedObjectAssign(
-          {},
+        const singleFilter = merge(
           singleFilterByHierarchy,
           singleFilterByParentFiltersForFiltered,
         )
@@ -526,7 +483,7 @@ export default types
       const firstFilterObject = {
         ...(self.tpopGqlFilter?.filtered?.or?.[0] ?? {}),
       }
-      let entries = Object.entries(firstFilterObject).filter(
+      const entries = Object.entries(firstFilterObject).filter(
         (e) =>
           !['projId', 'apId', 'popId', 'popByPopId', 'geomPoint'].includes(
             e[0],
@@ -538,13 +495,6 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      // Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt
-      // const popId = self.popIdInActiveNodeArray
-      // const tpopId = self.tpopIdInActiveNodeArray
-      // const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
-      // const popHierarchyFilter = popId
-      //   ? { tpopByTpopId: { popId: { equalTo: popId } } }
-      //   : {}
       const apHiearchyFilter = apId
         ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
@@ -555,17 +505,14 @@ export default types
             },
           }
         : {}
-      let singleFilterByHierarchy = nestedObjectAssign(
-        {},
-        // tpopHierarchyFilter,
-        // popHierarchyFilter,
+      const singleFilterByHierarchy = merge(
         apHiearchyFilter,
         projHiearchyFilter,
       )
       const singleFilterByParentFiltersForAll = {
         tpopByTpopId: self.tpopGqlFilter.all,
       }
-      const singleFilterForAll = nestedObjectAssign(
+      const singleFilterForAll = merge(
         singleFilterByHierarchy,
         singleFilterByParentFiltersForAll,
       )
@@ -597,8 +544,7 @@ export default types
       const filterArray = []
       for (const filter of filterArrayInStore) {
         // add hiearchy filter
-        const singleFilter = nestedObjectAssign(
-          {},
+        const singleFilter = merge(
           singleFilterByHierarchy,
           singleFilterByParentFiltersForFiltered,
         )
@@ -656,7 +602,7 @@ export default types
         ...(self.tpopmassnGqlFilter?.filtered?.or?.[0] ?? {}),
       }
       // console.log('tpopmassnIsFiltered, firstFilterObject:', firstFilterObject)
-      let entries = Object.entries(firstFilterObject).filter(
+      const entries = Object.entries(firstFilterObject).filter(
         (e) =>
           !['projId', 'apId', 'popId', 'tpopByTpopId', 'geomPoint'].includes(
             e[0],
@@ -668,13 +614,6 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      // Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt
-      // const popId = self.popIdInActiveNodeArray
-      // const tpopId = self.tpopIdInActiveNodeArray
-      // const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
-      // const popHierarchyFilter = popId
-      //   ? { tpopByTpopId: { popId: { equalTo: popId } } }
-      //   : {}
       const apHiearchyFilter = apId
         ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
@@ -685,23 +624,22 @@ export default types
             },
           }
         : {}
-      let singleFilterByHierarchy = nestedObjectAssign(
-        {},
-        {
-          or: [
-            { typ: { isNull: true } },
-            { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
-          ],
-        },
-        // tpopHierarchyFilter,
-        // popHierarchyFilter,
-        apHiearchyFilter,
+      const singleFilterByHierarchy = merge(
+        merge(
+          {
+            or: [
+              { typ: { isNull: true } },
+              { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
+            ],
+          },
+          apHiearchyFilter,
+        ),
         projHiearchyFilter,
       )
       const singleFilterByParentFiltersForAll = {
         tpopByTpopId: self.tpopGqlFilter.all,
       }
-      const singleFilterForAll = nestedObjectAssign(
+      const singleFilterForAll = merge(
         singleFilterByHierarchy,
         singleFilterByParentFiltersForAll,
       )
@@ -733,8 +671,7 @@ export default types
       const filterArray = []
       for (const filter of filterArrayInStore) {
         // add hiearchy filter
-        const singleFilter = nestedObjectAssign(
-          {},
+        const singleFilter = merge(
           singleFilterByHierarchy,
           singleFilterByParentFiltersForFiltered,
         )
@@ -791,7 +728,7 @@ export default types
       const firstFilterObject = {
         ...(self.ekGqlFilter?.filtered?.or?.[0] ?? {}),
       }
-      let entries = Object.entries(firstFilterObject).filter(
+      const entries = Object.entries(firstFilterObject).filter(
         (e) => !['tpopByTpopId'].includes(e[0]),
       )
       return entries.length > 0
@@ -800,13 +737,6 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      // Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt
-      // const popId = self.popIdInActiveNodeArray
-      // const tpopId = self.tpopIdInActiveNodeArray
-      // const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
-      // const popHierarchyFilter = popId
-      //   ? { tpopByTpopId: { popId: { equalTo: popId } } }
-      //   : {}
       const apHiearchyFilter = apId
         ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
@@ -817,18 +747,17 @@ export default types
             },
           }
         : {}
-      const singleFilterByHierarchy = nestedObjectAssign(
-        {},
-        { typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' } },
-        // tpopHierarchyFilter,
-        // popHierarchyFilter,
-        apHiearchyFilter,
+      const singleFilterByHierarchy = merge(
+        merge(
+          { typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' } },
+          apHiearchyFilter,
+        ),
         projHiearchyFilter,
       )
       const singleFilterByParentFiltersForAll = {
         tpopByTpopId: self.tpopGqlFilter.all,
       }
-      const singleFilterForAll = nestedObjectAssign(
+      const singleFilterForAll = merge(
         singleFilterByHierarchy,
         singleFilterByParentFiltersForAll,
       )
@@ -860,8 +789,7 @@ export default types
       const filterArray = []
       for (const filter of filterArrayInStore) {
         // add hiearchy filter
-        const singleFilter = nestedObjectAssign(
-          {},
+        const singleFilter = merge(
           singleFilterByHierarchy,
           singleFilterByParentFiltersForFiltered,
         )
@@ -918,7 +846,7 @@ export default types
       const firstFilterObject = {
         ...(self.ekfGqlFilter?.filtered?.or?.[0] ?? {}),
       }
-      let entries = Object.entries(firstFilterObject).filter(
+      const entries = Object.entries(firstFilterObject).filter(
         (e) => !['tpopByTpopId'].includes(e[0]),
       )
       return entries.length > 0
@@ -935,26 +863,23 @@ export default types
       // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
+      // need list of all open apIds
+      const openApIds = [
+        ...new Set(self.openNodes.filter((n) => n[3]).map((n) => n[3])),
+      ]
       const apId = self.apIdInActiveNodeArray
-      // const popId = self.popIdInActiveNodeArray
-      // const tpopId = self.tpopIdInActiveNodeArray
 
       const apFilter = {
         aeTaxonomyByArtId: {
           apartsByArtId: {
             // important: NEVER load from all species!
             some: {
-              apId: { equalTo: apId ?? '99999999-9999-9999-9999-999999999999' },
+              apId: { in: openApIds },
             },
           },
         },
       }
 
-      // Der Hierarchie-Filter auf Ebene Population und Teil-Population hat sich nicht bewährt und wurde nach kurzer Zeit wieder entfernt
-      // const tpopHierarchyFilter = tpopId ? { tpopId: { equalTo: tpopId } } : {}
-      // const popHierarchyFilter = popId
-      //   ? { tpopByTpopId: { popId: { equalTo: popId } } }
-      //   : {}
       const apHiearchyFilter = apId
         ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
@@ -965,10 +890,7 @@ export default types
             },
           }
         : {}
-      let singleFilterByHierarchy = nestedObjectAssign(
-        {},
-        // tpopHierarchyFilter,
-        // popHierarchyFilter,
+      const singleFilterByHierarchy = merge(
         apHiearchyFilter,
         projHiearchyFilter,
       )
@@ -991,13 +913,11 @@ export default types
       }
       const singleFilterForAll =
         type === 'zugeordnet'
-          ? nestedObjectAssign(
-              typeFilter,
-              apFilter,
-              singleFilterByHierarchy,
+          ? merge(
+              merge(merge(typeFilter, apFilter), singleFilterByHierarchy),
               singleFilterByParentFiltersForAll,
             )
-          : nestedObjectAssign(typeFilter, apFilter)
+          : merge(typeFilter, apFilter)
       const singleFilterByParentFiltersForFiltered = {
         tpopByTpopId: self.tpopGqlFilter.filtered,
       }
@@ -1018,14 +938,16 @@ export default types
             },
           }
         : {}
-      const singleFilter = nestedObjectAssign(
-        typeFilter,
-        apFilter,
-        type === 'zugeordnet' ? singleFilterByHierarchy : {},
-        type === 'zugeordnet' ? singleFilterByParentFiltersForFiltered : {},
-        nodeLabelFilter,
-        mapFilter,
-      )
+      let singleFilter = merge(typeFilter, apFilter)
+      if (type === 'zugeordnet') {
+        singleFilter = merge(singleFilter, singleFilterByHierarchy)
+        singleFilter = merge(
+          singleFilter,
+          singleFilterByParentFiltersForFiltered,
+        )
+      }
+      singleFilter = merge(singleFilter, nodeLabelFilter)
+      singleFilter = merge(singleFilter, mapFilter)
 
       const beobGqlFilter = {
         all: Object.keys(singleFilterForAll).length
@@ -1041,11 +963,9 @@ export default types
   }))
 
 export const defaultValue = {
-  name: 'tree',
   activeNodeArray: [],
   lastTouchedNode: [],
   openNodes: [],
   apFilter: true,
   nodeLabelFilter: defaultNodeLabelFilter,
-  map: defaultMap,
 }

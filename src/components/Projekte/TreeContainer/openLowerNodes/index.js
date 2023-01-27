@@ -8,12 +8,15 @@ import zielFolder from './zielFolder'
 import zieljahrFolder from './zieljahrFolder'
 
 const openLowerNodes = ({
-  treeName,
   id,
   parentId,
+  popId,
+  apId,
+  projId,
   menuType,
   client,
   store,
+  queryClient,
 }) => {
   /**
    * 1. load all data
@@ -25,43 +28,50 @@ const openLowerNodes = ({
    */
   switch (menuType) {
     case 'popFolder':
-      popFolder({ treeName, id, client, store })
+      popFolder({ id, projId, client, store, queryClient })
       break
     case 'pop':
-      pop({ treeName, id, client, store })
+      pop({ id, apId, projId, client, store, queryClient })
       break
     case 'tpopFolder':
-      tpopFolder({ treeName, id, client, store })
+      tpopFolder({ id, apId, projId, client, store, queryClient })
       break
     case 'tpop':
-      tpop({ treeName, id, client, store })
+      tpop({ id, popId, apId, projId, client, store, queryClient })
       break
     case 'tpopfeldkontrFolder':
       tpopfeldkontrFolder({
-        treeName,
         id,
+        apId,
+        projId,
+        popId,
         client,
         store,
+        queryClient,
       })
       break
     case 'tpopfreiwkontrFolder':
       tpopfreiwkontrFolder({
-        treeName,
         id,
+        apId,
+        projId,
+        popId,
         client,
         store,
+        queryClient,
       })
       break
     case 'zielFolder':
-      zielFolder({ treeName, id, client, store })
+      zielFolder({ id, projId, client, store, queryClient })
       break
     case 'zieljahrFolder':
       zieljahrFolder({
-        treeName,
         id,
+        projId,
         parentId,
         store,
         client,
+        queryClient,
       })
       break
     default:

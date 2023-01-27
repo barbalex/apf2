@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const apberFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   projId,
@@ -19,20 +18,15 @@ const apberFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.apber ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.apber ?? ''
+  const apbers = (data?.allApbers?.nodes ?? []).filter((n) => n.apId === apId)
+  const count = apbers.length
 
-  const apberNodesLength = data.filter((el) => el.apId === apId).length
-
-  /*
-  let message = loading && !apberNodesLength ? '...' : apberNodesLength
-  if (nodeLabelFilterString) {
-    message = `${apberNodesLength} gefiltert`
-  }*/
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${apberNodesLength} gefiltert`
-    : apberNodesLength
+    ? `${count} gefiltert`
+    : count
 
   const url = ['Projekte', projId, 'Arten', apId, 'AP-Berichte']
 
@@ -50,7 +44,7 @@ const apberFolderNode = ({
       label: `AP-Berichte (${message})`,
       url,
       sort: [projIndex, 1, apIndex, 4],
-      hasChildren: apberNodesLength > 0,
+      hasChildren: count > 0,
     },
   ]
 }

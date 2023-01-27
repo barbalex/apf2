@@ -1,15 +1,11 @@
 import { types } from 'mobx-state-tree'
-import cloneDeep from 'lodash/cloneDeep'
-import isEqual from 'lodash/isEqual'
-import queryString from 'query-string'
-import { navigate } from 'gatsby'
 
 import ApfloraLayer from './ApfloraLayer'
 import Copying, { defaultValue as defaultCopying } from './Copying'
 import CopyingBiotop, {
   defaultValue as defaultCopyingBiotop,
 } from './CopyingBiotop'
-import UrlQuery, { defaultValue as defaultUrlQuery } from './UrlQuery'
+import Map, { defaultValue as defaultMap } from './Map'
 import Moving, { defaultValue as defaultMoving } from './Moving'
 import MapMouseCoordinates, {
   defaultValue as defaultMapMouseCoordinates,
@@ -20,7 +16,6 @@ import initialDataFilterTreeValues from './Tree/DataFilter/initialValues'
 import User, { defaultValue as defaultUser } from './User'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import EkPlan, { defaultValue as defaultEkPlan } from './EkPlan'
-import getOpenNodesFromActiveNodeArray from '../modules/getOpenNodesFromActiveNodeArray'
 
 import { initial as apInitial } from './Tree/DataFilter/ap'
 import { initial as popInitial } from './Tree/DataFilter/pop'
@@ -37,10 +32,6 @@ const dataFilterInitialValues = {
   tpopfeldkontr: tpopfeldkontrInitial,
   tpopfreiwkontr: tpopfreiwkontrInitial,
 }
-
-// substract 3 Months to now so user sees previous year in February
-const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
-const ekfYear = new Date(ekfRefDate).getFullYear()
 
 const myTypes = types
   .model({
@@ -67,15 +58,10 @@ const myTypes = types
     ),
     user: types.optional(User, defaultUser),
     isPrint: types.optional(types.boolean, false),
+    isEkfSinglePrint: types.optional(types.boolean, false),
     printingJberYear: types.optional(types.number, 0),
-    view: types.optional(types.string, 'normal'),
-    ekfYear: types.optional(types.number, ekfYear),
-    ekfAdresseId: types.optional(types.maybeNull(types.string), null),
-    ekfIds: types.array(types.string),
-    ekfMultiPrint: types.optional(types.boolean, false),
     copying: types.optional(Copying, defaultCopying),
     copyingBiotop: types.optional(CopyingBiotop, defaultCopyingBiotop),
-    urlQuery: types.optional(UrlQuery, defaultUrlQuery),
     moving: types.optional(Moving, defaultMoving),
     mapMouseCoordinates: types.optional(
       MapMouseCoordinates,
@@ -85,10 +71,10 @@ const myTypes = types
     exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
     assigningBeob: types.optional(types.boolean, false),
     tree: types.optional(Tree, defaultTree),
-    tree2: types.optional(Tree, defaultTree),
     ekPlan: types.optional(EkPlan, defaultEkPlan),
     showDeletions: types.optional(types.boolean, false),
     dokuFilter: types.optional(types.union(types.string, types.number), ''),
+    map: types.optional(Map, defaultMap),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -97,8 +83,12 @@ const myTypes = types
     deletedDatasets: [],
     notifications: [],
     client: null,
+    navigate: undefined,
   }))
   .actions((self) => ({
+    setNavigate(val) {
+      self.navigate = val
+    },
     setClient(val) {
       self.client = val
     },
@@ -107,12 +97,6 @@ const myTypes = types
     },
     setHideMapControls(val) {
       self.hideMapControls = val
-    },
-    setEkfIds(ids) {
-      self.ekfIds = [...ids]
-    },
-    setEkfMultiPrint(val) {
-      self.ekfMultiPrint = val
     },
     enqueNotification(note) {
       const key = note.options && note.options.key
@@ -178,43 +162,36 @@ const myTypes = types
     setBounds(val) {
       self.bounds = val
     },
-    dataFilterClone1To2() {
-      self.tree2.dataFilter = cloneDeep(self.tree.dataFilter)
+    dataFilterAddOr({ table, val }) {
+      self.tree?.dataFilter?.[table]?.push(val)
     },
-    dataFilterAddOr({ treeName, table, val }) {
-      self?.[treeName]?.dataFilter?.[table]?.push(val)
-    },
-    dataFilterSetValue({ treeName, table, key, value, index }) {
-      // console.log('dataFilterSetValue', { table, key, value, index })
+    dataFilterSetValue({ table, key, value, index }) {
       if (index !== undefined) {
-        if (!self[treeName].dataFilter[table][index]) {
-          // console.log('dataFilterSetValue adding new initial value')
-          self?.[treeName]?.dataFilter?.[table]?.push(
-            dataFilterInitialValues[table],
-          )
+        if (!self.tree.dataFilter[table][index]) {
+          self.tree?.dataFilter?.[table]?.push(dataFilterInitialValues[table])
         }
-        self[treeName].dataFilter[table][index][key] = value
+        self.tree.dataFilter[table][index][key] = value
         return
       }
-      self[treeName].dataFilter[table][key] = value
+      self.tree.dataFilter[table][key] = value
     },
-    dataFilterEmptyTree(treeName) {
-      self[treeName].dataFilter = initialDataFilterTreeValues
+    dataFilterEmpty() {
+      self.tree.dataFilter = initialDataFilterTreeValues
     },
-    dataFilterEmptyTab({ treeName, table, activeTab }) {
-      if (self[treeName].dataFilter[table].length === 1) {
-        const firstElement = self[treeName].dataFilter[table][0]
+    dataFilterEmptyTab({ table, activeTab }) {
+      if (self.tree.dataFilter[table].length === 1) {
+        const firstElement = self.tree.dataFilter[table][0]
         Object.keys(firstElement).forEach((key) => (firstElement[key] = null))
         return
       }
-      self[treeName].dataFilter[table].splice(activeTab, 1)
+      self.tree.dataFilter[table].splice(activeTab, 1)
     },
-    dataFilterEmptyTable({ treeName, table }) {
-      self[treeName].dataFilter[table] = initialDataFilterTreeValues[table]
+    dataFilterEmptyTable({ table }) {
+      self.tree.dataFilter[table] = initialDataFilterTreeValues[table]
     },
-    tableIsFiltered({ treeName, table }) {
+    tableIsFiltered(table) {
       // check nodeLabelFilter
-      const nodeLabelFilterExists = !!self[treeName].nodeLabelFilter[table]
+      const nodeLabelFilterExists = !!self.tree.nodeLabelFilter[table]
       if (nodeLabelFilterExists) return true
       // check mapFilter in tables with (parent) coordinates
       if (
@@ -225,20 +202,20 @@ const myTypes = types
           'tpopfreiwkontr',
           'tpopmassn',
         ].includes(table) &&
-        self[treeName].mapFilter
+        self.tree.mapFilter
       ) {
         return true
       }
       // check data and hierarchy filter: is included in gqlFilter
       // check gql filter
       const gqlFilter =
-        self?.[treeName]?.[`${table}GqlFilter`]?.filtered?.or?.[0] ?? {}
+        self.tree?.[`${table}GqlFilter`]?.filtered?.or?.[0] ?? {}
       const isGqlFilter = Object.keys(gqlFilter).length > 0
       return isGqlFilter
     },
-    dataFilterTreeIsFiltered(treeName) {
-      const tables = Object.keys(self[treeName].dataFilter)
-      return tables.some((table) => self.tableIsFiltered({ treeName, table }))
+    dataFilterTreeIsFiltered() {
+      const tables = Object.keys(self.tree.dataFilter)
+      return tables.some((table) => self.tableIsFiltered(table))
     },
     setUser(val) {
       self.user = val
@@ -246,51 +223,14 @@ const myTypes = types
     setIsPrint(val) {
       self.isPrint = val
     },
-    setView(val) {
-      self.view = val
-    },
-    setEkfYear(val) {
-      self.ekfYear = val
-    },
-    setEkfAdresseId(val) {
-      self.ekfAdresseId = val
+    setIsEkfSinglePrint(val) {
+      self.isEkfSinglePrint = val
     },
     setCopying({ table, id, label, withNextLevel }) {
       self.copying = { table, id, label, withNextLevel }
     },
     setCopyingBiotop({ id, label }) {
       self.copyingBiotop = { id, label }
-    },
-    setUrlQuery({
-      projekteTabs,
-      popTab,
-      tpopTab,
-      tpopmassnTab,
-      apTab,
-      feldkontrTab,
-      idealbiotopTab,
-      qkTab,
-    }) {
-      const newUrlQuery = {
-        projekteTabs,
-        popTab,
-        tpopTab,
-        tpopmassnTab,
-        apTab,
-        feldkontrTab,
-        idealbiotopTab,
-        qkTab,
-      }
-      // only write if changed
-      if (!isEqual(self.urlQuery, newUrlQuery)) {
-        self.urlQuery = newUrlQuery
-        const search = queryString.stringify(newUrlQuery)
-        const query = `${
-          Object.keys(newUrlQuery).length > 0 ? `?${search}` : ''
-        }`
-        const { activeNodeArray } = self.tree
-        navigate(`/Daten/${activeNodeArray.join('/')}${query}`)
-      }
     },
     setMoving({ table, id, label }) {
       self.moving = { table, id, label }
@@ -304,18 +244,18 @@ const myTypes = types
     setAssigningBeob(val) {
       self.assigningBeob = val
     },
-    cloneTree2From1() {
-      self.tree2 = cloneDeep(self.tree)
+    openTree2WithActiveNodeArray({
+      activeNodeArray,
+      search,
+      projekteTabs,
+      setProjekteTabs,
+    }) {
+      self.tree.setTree2SrcByActiveNodeArray({ activeNodeArray, search })
+      setProjekteTabs([...projekteTabs, 'tree2', 'daten2'])
     },
-    openTree2WithActiveNodeArray(activeNodeArray) {
-      const openNodes = getOpenNodesFromActiveNodeArray(activeNodeArray)
-      self.tree2 = { ...defaultTree, activeNodeArray, openNodes }
-      self.urlQuery.addProjekteTab('tree2')
-      self.urlQuery.addProjekteTab('daten2')
-    },
-    treeNodeLabelFilterResetExceptAp({ tree }) {
-      self[tree].nodeLabelFilter = {
-        ap: self[tree].nodeLabelFilter.ap,
+    treeNodeLabelFilterResetExceptAp() {
+      self.tree.nodeLabelFilter = {
+        ap: self.tree.nodeLabelFilter.ap,
         pop: null,
         tpop: null,
         tpopkontr: null,

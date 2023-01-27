@@ -1,3 +1,4 @@
+import { QueryClient } from '@tanstack/react-query'
 /**
  * moves a dataset to a different parent
  * used when copying for instance tpop to other pop in tree
@@ -25,6 +26,7 @@ const copyTo = async ({
   id: idPassed,
   client,
   store,
+  queryClient,
 }) => {
   const { copying, enqueNotification } = store
   let table = tablePassed || copying.table
@@ -249,9 +251,7 @@ const copyTo = async ({
       // do nothing
       break
   }
-  client.refetchQueries({
-    include: ['TreeAllQuery'],
-  })
+  queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
@@ -260,6 +260,7 @@ const copyTo = async ({
       popIdTo: newId,
       client,
       store,
+      QueryClient,
     })
   }
   if (table === 'tpopkontr') {
@@ -269,6 +270,7 @@ const copyTo = async ({
       tpopkontrIdTo: newId,
       client,
       store,
+      queryClient,
     })
   }
 }

@@ -6,6 +6,8 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "parser": "@typescript-eslint/parser",
+  "root": true,
   "rules": {
     "strict": 0,
     "react/prop-types": 0,
@@ -14,19 +16,24 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "no-unused-vars": 1,
-    "no-empty": ["error", { "allowEmptyCatch": true }]
+    "no-empty": ["error", { "allowEmptyCatch": true }],
+    "react/react-in-jsx-scope": "off"
   },
   "env": {
     "browser": true,
     "amd": true,
     "node": true,
-    "es2021": true
+    "es2022": true
   },
-  "plugins": [ "react", "react-hooks"],
+  "plugins": ["@typescript-eslint", "react", "react-hooks"],
   "settings": {
     "react": {
-      "version": "999.999.999"
+      "version": "detect"
     }
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended"]
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended"
+  ]
 }

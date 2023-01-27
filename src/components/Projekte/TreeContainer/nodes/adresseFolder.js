@@ -1,15 +1,13 @@
 const adresseFolder = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   store,
 }) => {
   const adresses = data?.allAdresses?.nodes ?? []
   const wlIndex = projektNodes.length + 2
-  const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.adresse ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.adresse ?? ''
 
   let adresseNodesLength = adresses.length
   // before Adressen folder is active, only total count was fetched, not yet any adressen nodes

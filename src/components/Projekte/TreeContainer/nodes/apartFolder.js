@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 const apartFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   projId,
@@ -11,13 +10,9 @@ const apartFolderNode = ({
   apId,
   store,
 }) => {
-  // return empty if ap is not a real ap and apFilter is set
-  const ap = (data?.allAps?.nodes ?? []).find((n) => n.id === apId)
-  const isAp = ap && [1, 2, 3].includes(ap.bearbeitung) //@485
-  const apFilter = store?.[treeName]?.apFilter
-  if (!!apFilter && !isAp) return []
-
-  const aparts = data?.allAparts?.nodes ?? []
+  const count = (data?.allAparts?.nodes ?? []).filter(
+    (n) => n.apId === apId,
+  ).length
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -26,18 +21,13 @@ const apartFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.apart ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.apart ?? ''
 
-  const apartNodesLength = aparts.filter((el) => el.apId === apId).length
-  /*let message = loading && !apartNodesLength ? '...' : apartNodesLength
-  if (nodeLabelFilterString) {
-    message = `${apartNodesLength} gefiltert`
-  }*/
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${apartNodesLength} gefiltert`
-    : apartNodesLength
+    ? `${count} gefiltert`
+    : count
 
   // only show if parent node exists
   const apNodesIds = nodesPassed.map((n) => n.id)
@@ -54,7 +44,7 @@ const apartFolderNode = ({
       label: `Taxa (${message})`,
       url: ['Projekte', projId, 'Arten', apId, 'Taxa'],
       sort: [projIndex, 1, apIndex, 7],
-      hasChildren: apartNodesLength > 0,
+      hasChildren: count > 0,
     },
   ]
 }

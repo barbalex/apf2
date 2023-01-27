@@ -4,7 +4,6 @@ import uniqBy from 'lodash/uniqBy'
 const tpopfeldkontrFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   apNodes,
@@ -23,8 +22,7 @@ const tpopfeldkontrFolderNode = ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.tpopkontr ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpopkontr ?? ''
 
   let children = (data?.allTpopfeldkontrs?.nodes ?? []).filter(
     (el) => el.tpopId === tpopId,

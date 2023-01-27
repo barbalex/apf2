@@ -1,8 +1,8 @@
 import findIndex from 'lodash/findIndex'
 import { DateTime } from 'luxon'
+import sortBy from 'lodash/sortBy'
 
 const beobNichtBeurteiltNodes = ({
-  nodes: nodesPassed,
   data,
   projektNodes,
   apNodes,
@@ -16,17 +16,18 @@ const beobNichtBeurteiltNodes = ({
   const apIndex = findIndex(apNodes, { id: apId })
 
   // map through all elements and create array of nodes
-  const nodes = (data?.apBeobsNichtBeurteilt?.nodes ?? [])
-    // only show if parent node exists
-    .filter(() =>
-      nodesPassed.map((n) => n.id).includes(`${apId}BeobNichtBeurteiltFolder`),
-    )
-    // only show nodes of this parent
-    .filter((el) =>
-      el?.aeTaxonomyByArtId?.apartsByArtId?.nodes?.some(
-        (el) => el?.apId === apId,
-      ),
-    )
+  const aparts = (data?.openAps?.nodes ?? []).find((el) => el?.id === apId)
+    ?.beobNichtBeurteilt?.nodes
+  const nodesUnsorted = aparts.flatMap(
+    (a) => a.aeTaxonomyByArtId?.beobsByArtId?.nodes ?? [],
+  )
+  const nodesSorted = sortBy(nodesUnsorted, [
+    'datum',
+    'autor',
+    'quelle',
+  ]).reverse()
+
+  const nodes = nodesSorted
     .map((el) => {
       // somehow the label passed by the view gets corrupted when the node is active ????!!!
       // instead of '2010.07.02: Dickenmann Regula (EvAB 2016)' it gives: '2010.07.02: Dickenmann RegulaEvAB 2016)'

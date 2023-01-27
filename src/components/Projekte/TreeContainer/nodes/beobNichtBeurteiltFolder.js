@@ -1,9 +1,9 @@
+import sum from 'lodash/sum'
 import findIndex from 'lodash/findIndex'
 
 const beobNichtBeurteiltFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   projId,
@@ -18,20 +18,19 @@ const beobNichtBeurteiltFolderNode = ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = store?.[treeName]?.nodeLabelFilter?.beob ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
+  const aparts = (data?.openAps?.nodes ?? []).find((el) => el?.id === apId)
+    ?.beobNichtBeurteilt?.nodes
+  const counts = aparts.map(
+    (a) => a.aeTaxonomyByArtId?.beobsByArtId?.totalCount ?? 0,
+  )
+  const count = sum(counts)
 
-  const beobNichtBeurteiltNodesLength = (
-    data?.apBeobsNichtBeurteilt?.nodes ?? []
-  ).filter((el) =>
-    el?.aeTaxonomyByArtId?.apartsByArtId?.nodes?.some(
-      (el) => el?.apId === apId,
-    ),
-  ).length
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${beobNichtBeurteiltNodesLength} gefiltert`
-    : beobNichtBeurteiltNodesLength
+    ? `${count} gefiltert`
+    : count
 
   const url = [
     'Projekte',
@@ -56,7 +55,7 @@ const beobNichtBeurteiltFolderNode = ({
       label: `Beobachtungen nicht beurteilt (${message})`,
       url,
       sort: [projIndex, 1, apIndex, 11],
-      hasChildren: beobNichtBeurteiltNodesLength > 0,
+      hasChildren: count > 0,
     },
   ]
 }

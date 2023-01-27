@@ -77,8 +77,8 @@ const compare = (a, b) => {
   return a - b
 }
 
-const nodes = ({ data, loading, store, role, treeName }) => {
-  const openNodes = store[treeName].openNodes
+const nodes = ({ data, loading, store, role }) => {
+  const openNodes = store.tree.openNodes
     .toJSON()
     // need to sort so folders are added in correct order
     // because every lower folder gets previous nodes passed
@@ -90,7 +90,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
     ...projektNodes,
     ...buildUserFolderNodes({
       data,
-      treeName,
       projektNodes,
       loading,
       store,
@@ -142,7 +141,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...nodes,
           ...buildApFolderNodes({
             data,
-            treeName,
             loading,
             projektNodes,
             projId,
@@ -150,7 +148,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           }),
           ...buildApberuebersichtFolderNodes({
             data,
-            treeName,
             loading,
             projektNodes,
             projId,
@@ -177,7 +174,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
         apNodes = buildApNodes({
           nodes,
           data,
-          treeName,
           loading,
           projektNodes,
           projId,
@@ -192,7 +188,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildPopFolderNode({
             nodes,
             data,
-            treeName,
             loading,
             projektNodes,
             projId,
@@ -203,7 +198,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildApzielFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             apNodes,
             projektNodes,
@@ -214,7 +208,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildAperfkritFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             apNodes,
             projektNodes,
@@ -224,8 +217,7 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           }),
           ...buildApberFolderNodes({
             nodes,
-            data: data?.allApbers?.nodes ?? [],
-            treeName,
+            data,
             loading,
             apNodes,
             projektNodes,
@@ -235,7 +227,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           }),
           ...buildIdealbiotopFolderNodes({
             nodes,
-            treeName,
             loading,
             apNodes,
             projektNodes,
@@ -246,7 +237,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildAssozartFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             apNodes,
             projektNodes,
@@ -257,7 +247,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildEkzaehleinheitFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             apNodes,
             projektNodes,
@@ -268,7 +257,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildEkfrequenzFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             apNodes,
             projektNodes,
@@ -279,7 +267,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildApartFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             apNodes,
             projektNodes,
@@ -289,8 +276,7 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           }),
           ...buildBeobNichtBeurteiltFolderNodes({
             nodes,
-            data: data,
-            treeName,
+            data,
             loading,
             apNodes,
             projektNodes,
@@ -301,7 +287,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildBeobNichtZuzuordnenFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             apNodes,
             projektNodes,
@@ -362,7 +347,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildApzielberFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             apNodes,
             openNodes,
@@ -434,7 +418,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
         nodes = [
           ...nodes,
           ...buildBeobNichtBeurteiltNodes({
-            nodes,
             data,
             apNodes,
             projektNodes,
@@ -531,7 +514,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildTpopFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             projektNodes,
             projId,
@@ -544,7 +526,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildPopberFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             projektNodes,
             projId,
@@ -557,7 +538,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildPopmassnberFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             projektNodes,
             projId,
@@ -637,7 +617,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...tpopmassnFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             projId,
             projektNodes,
@@ -652,7 +631,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildTpopmassnberFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             projId,
             projektNodes,
@@ -667,7 +645,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildTpopfeldkontrFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             projId,
             projektNodes,
@@ -682,7 +659,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildTpopfreiwkontrFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             projId,
             projektNodes,
@@ -697,7 +673,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildTpopberFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             projId,
             projektNodes,
@@ -712,7 +687,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildBeobZugeordnetFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             projId,
             projektNodes,
@@ -865,7 +839,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildTpopfeldkontrzaehlFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             projId,
             projektNodes,
@@ -892,7 +865,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
           ...buildTpopfreiwkontrzaehlFolderNodes({
             nodes,
             data,
-            treeName,
             loading,
             projId,
             projektNodes,
@@ -985,7 +957,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
         ...buildAdresseFolderNodes({
           nodes,
           data,
-          treeName,
           loading,
           projektNodes,
           store,
@@ -993,7 +964,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
         ...buildApberrelevantGrundWerteFolderNodes({
           nodes,
           data,
-          treeName,
           loading,
           projektNodes,
           store,
@@ -1001,7 +971,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
         ...buildEkAbrechnungstypWerteFolderNodes({
           nodes,
           data,
-          treeName,
           loading,
           projektNodes,
           store,
@@ -1009,7 +978,6 @@ const nodes = ({ data, loading, store, role, treeName }) => {
         ...buildTpopkontrzaehlEinheitWerteFolderNodes({
           nodes,
           data,
-          treeName,
           loading,
           projektNodes,
           store,

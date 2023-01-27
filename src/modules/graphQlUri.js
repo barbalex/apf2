@@ -1,7 +1,4 @@
 const graphQlUri = () => {
-  if (typeof window === 'undefined') {
-    return 'https://api.apflora.ch/graphql'
-  }
   const hostnameWithoutWww = window.location.hostname.replace('www.', '')
   const isLocalhost = hostnameWithoutWww === 'localhost'
 

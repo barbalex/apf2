@@ -6,11 +6,11 @@ import tables from '../../../modules/tables'
 import {
   adresse as adresseFragment,
   user as userFragment,
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   tpopApberrelevantGrundWerte as tpopApberrelevantGrundWerteFragment,
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ekAbrechnungstypWerte as ekAbrechnungstypWerteFragment,
 } from '../../shared/fragments'
 
@@ -21,7 +21,6 @@ const fragments = {
 }
 
 const insertDataset = async ({
-  treeName,
   tablePassed,
   parentId,
   id,
@@ -29,9 +28,11 @@ const insertDataset = async ({
   url,
   client,
   store,
+  queryClient,
+  search,
 }) => {
   const { enqueNotification } = store
-  const { setActiveNodeArray, openNodes, setOpenNodes } = store[treeName]
+  const { openNodes, setOpenNodes } = store.tree
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata = tables.find((t) => t.table === table)
@@ -187,7 +188,7 @@ const insertDataset = async ({
     result?.data[`create${upperFirst(camelCase(table))}`][`${camelCase(table)}`]
   // set new url
   const newActiveNodeArray = [...url, row[idField]]
-  setActiveNodeArray(newActiveNodeArray)
+  store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
   // set open nodes
   let newOpenNodes = [...openNodes, newActiveNodeArray]
   if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
@@ -218,9 +219,7 @@ const insertDataset = async ({
     newOpenNodes = [...newOpenNodes, newOpenFolder, newOpenNode]
   }
   setOpenNodes(newOpenNodes)
-  client.refetchQueries({
-    include: ['TreeAllQuery'],
-  })
+  queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
 }
 
 export default insertDataset

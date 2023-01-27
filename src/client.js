@@ -15,6 +15,20 @@ import existsPermissionsError from './modules/existsPermissionError'
 
 const Client = ({ store }) => {
   const { enqueNotification } = store
+  const cleanTypeName = new ApolloLink((operation, forward) => {
+    if (operation.variables) {
+      const omitTypename = (key, value) =>
+        key === '__typename' ? undefined : value
+      operation.variables = JSON.parse(
+        JSON.stringify(operation.variables),
+        omitTypename,
+      )
+    }
+    return forward(operation).map((data) => {
+      return data
+    })
+  })
+
   // TODO: use new functionality
   // https://www.apollographql.com/docs/react/migrating/apollo-client-3-migration/?mc_cid=e593721cc7&mc_eid=c8e91f2f0a#apollo-link-and-apollo-link-http
   const authLink = setContext((_, { headers }) => {
@@ -185,9 +199,13 @@ const Client = ({ store }) => {
     },
   })
 
-  const batchHttpLink = new BatchHttpLink({ uri: graphQlUri() })
+  const batchHttpLink = new BatchHttpLink({
+    uri: graphQlUri(),
+    // remove after debugging
+    batchMax: 1,
+  })
   const client = new ApolloClient({
-    link: ApolloLink.from([errorLink, authLink, batchHttpLink]),
+    link: ApolloLink.from([cleanTypeName, errorLink, authLink, batchHttpLink]),
     cache,
     defaultOptions: { fetchPolicy: 'cache-and-network' },
   })

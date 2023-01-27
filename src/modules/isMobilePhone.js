@@ -2,7 +2,6 @@
 /* eslint-disable */
 const isMobilePhone = () => {
   let check = false
-  if (typeof window === 'undefined') return false
   const a = navigator.userAgent || navigator.vendor || window.opera
 
   if (
@@ -15,6 +14,7 @@ const isMobilePhone = () => {
   ) {
     check = true
   }
+
   return check
 }
 

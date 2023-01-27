@@ -1,7 +1,6 @@
 const tpopkontrzaehlEinheitWerteFolderNode = ({
   nodes: nodesPassed,
   data,
-  treeName,
   loading,
   projektNodes,
   store,
@@ -10,7 +9,7 @@ const tpopkontrzaehlEinheitWerteFolderNode = ({
     data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
-    store?.[treeName]?.nodeLabelFilter?.tpopkontrzaehlEinheitWerte ?? ''
+    store.tree?.nodeLabelFilter?.tpopkontrzaehlEinheitWerte ?? ''
 
   let tpopkontrzaehlEinheitWerteNodesLength = tpopkontrzaehlEinheitWertes.length
   // before TpopkontrzaehlEinheitWerte folder is active, only total count was fetched, not yet any tpopkontrzaehlEinheitWerten nodes
