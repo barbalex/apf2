@@ -1,14 +1,11 @@
 import { gql } from '@apollo/client'
-import { el } from 'date-fns/locale'
-
 import apFolder from './apFolder'
+import apberuebersichtFolder from './apberuebersichtFolder'
 
 const projektNodes = async ({ store, treeQueryVariables, params }) => {
-  const { client } = store
-
-  const { data } = await client.query({
+  const { data } = await store.client.query({
     query: gql`
-      query TreeAllQuery {
+      query TreeProjektQuery {
         allProjekts(orderBy: NAME_ASC) {
           nodes {
             id
@@ -21,26 +18,48 @@ const projektNodes = async ({ store, treeQueryVariables, params }) => {
   })
   const projekts = data?.allProjekts?.nodes ?? []
 
-  console.log('nodes, projekt', { projekts, params })
+  if (!params.projId) {
+    return projekts.map((el) => ({
+      nodeType: 'table',
+      menuType: 'projekt',
+      filterTable: 'projekt',
+      id: el.id,
+      urlLabel: el.id,
+      label: el.label,
+      url: ['Projekte', el.id],
+      hasChildren: true,
+      children: [],
+    }))
+  }
 
-  const apFolderNode = await apFolder({
-    projId: el.id,
-    store,
-    treeQueryVariables,
-  })
+  const nodes = []
+  for (const projekt of projekts) {
+    const apFolderNode = await apFolder({
+      projId: projekt.id,
+      store,
+      treeQueryVariables,
+    })
+    const apberuebersichtFolderNode = await apberuebersichtFolder({
+      projId: projekt.id,
+      store,
+      treeQueryVariables,
+    })
+    const children = store.tree.openProjekts.includes(projekt.id)
+      ? [apFolderNode, apberuebersichtFolderNode]
+      : []
 
-  const nodes = projekts.map((el) => ({
-    nodeType: 'table',
-    menuType: 'projekt',
-    filterTable: 'projekt',
-    id: el.id,
-    urlLabel: el.id,
-    label: el.label,
-    url: ['Projekte', el.id],
-    hasChildren: true,
-    children: params.projId ? [apFolderNode] : [],
-  }))
-
+    nodes.push({
+      nodeType: 'table',
+      menuType: 'projekt',
+      filterTable: 'projekt',
+      id: projekt.id,
+      urlLabel: projekt.id,
+      label: projekt.label,
+      url: ['Projekte', projekt.id],
+      hasChildren: true,
+      children,
+    })
+  }
   return nodes
 }
 

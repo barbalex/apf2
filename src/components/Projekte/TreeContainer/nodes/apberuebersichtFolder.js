@@ -1,20 +1,30 @@
 import { gql } from '@apollo/client'
-import findIndex from 'lodash/findIndex'
 
-const apberuebersichtFolderNode = ({ 
-  data,
-  loading,
-  projektNodes,
+const apberuebersichtFolderNode = async ({
   projId,
   store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projNodeIds = projektNodes.map((n) => n.id)
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
+  const { client } = store
+
   const nodeLabelFilterString =
     store.tree?.nodeLabelFilter?.apberuebersicht ?? ''
+
+  const { data, loading } = await client.query({
+    query: gql`
+      query TreeApberuebersichtsFolderQuery(
+        $apberuebersichtsFilter: ApberuebersichtFilter!
+      ) {
+        allApberuebersichts(filter: $apberuebersichtsFilter) {
+          totalCount
+        }
+      }
+    `,
+    variables: {
+      apberuebersichtsFilter: treeQueryVariables.apberuebersichtsFilter,
+    },
+  })
+
   const count = data?.allApberuebersichts?.totalCount ?? 0
 
   const message = loading
@@ -23,22 +33,16 @@ const apberuebersichtFolderNode = ({
     ? `${count} gefiltert`
     : count
 
-  // only show if parent node exists
-  if (!projNodeIds.includes(projId)) return []
-
-  return [
-    {
-      menuType: 'apberuebersichtFolder',
-      filterTable: 'apberuebersicht',
-      id: projId,
-      tableId: projId,
-      urlLabel: 'AP-Berichte',
-      label: `AP-Berichte (${message})`,
-      url: ['Projekte', projId, 'AP-Berichte'],
-      sort: [projIndex, 2],
-      hasChildren: count > 0,
-    },
-  ]
+  return {
+    menuType: 'apberuebersichtFolder',
+    filterTable: 'apberuebersicht',
+    id: `${projId}ApberuebersichtsFolder`,
+    tableId: projId,
+    urlLabel: 'AP-Berichte',
+    label: `AP-Berichte (${message})`,
+    url: ['Projekte', projId, 'AP-Berichte'],
+    hasChildren: count > 0,
+  }
 }
 
 export default apberuebersichtFolderNode

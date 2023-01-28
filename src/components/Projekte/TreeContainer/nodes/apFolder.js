@@ -7,8 +7,8 @@ const apFolderNode = async ({ projId, store, treeQueryVariables }) => {
 
   const { data, loading } = await client.query({
     query: gql`
-      query TreeAllQuery($apsFilter: ApFilter!) {
-        allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
+      query TreeApFolderQuery($apsFilter: ApFilter!) {
+        allAps(filter: $apsFilter) {
           totalCount
         }
       }

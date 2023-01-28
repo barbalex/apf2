@@ -121,6 +121,15 @@ export default types
     },
   }))
   .views((self) => ({
+    get openProjekts() {
+      const openNodes = getSnapshot(self.openNodes)
+      const openProjekts = [
+        ...new Set(
+          openNodes.filter((n) => n[0] === 'Projekte' && n[1]).map((n) => n[1]),
+        ),
+      ]
+      return openProjekts
+    },
     get openAps() {
       const openNodes = getSnapshot(self.openNodes)
       const openAps = [
