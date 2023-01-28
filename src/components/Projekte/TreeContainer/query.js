@@ -219,12 +219,6 @@ export default gql`
         label
       }
     }
-    allProjekts(orderBy: NAME_ASC) {
-      nodes {
-        id
-        label
-      }
-    }
     allTpopbers(filter: $tpopbersFilter, orderBy: LABEL_ASC)
       @include(if: $isTpop) {
       nodes {

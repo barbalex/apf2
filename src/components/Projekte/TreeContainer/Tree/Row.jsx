@@ -222,9 +222,9 @@ const Row = ({ node }) => {
   let useSymbolSpan = false
   let symbolIcon
   let showPrintIcon = false
-  if (node.data.childrenCount > 0 && nodeIsOpen) {
+  if (node.data.hasChildren && nodeIsOpen) {
     symbolIcon = 'expandMore'
-  } else if (node.data.childrenCount > 0) {
+  } else if (node.data.hasChildren) {
     symbolIcon = 'chevronRight'
   } else if (node.data.label === 'lade Daten...') {
     symbolIcon = 'moreHoriz'
