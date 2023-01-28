@@ -109,8 +109,11 @@ const nodes = async ({ store, role, params }) => {
     openAps,
   })
 
-  const projektNodes = await buildProjektNodes({ store, treeQueryVariables, params })
-  console.log('nodes, projektNodes:', projektNodes)
+  const projektNodes = await buildProjektNodes({
+    store,
+    treeQueryVariables,
+    params,
+  })
 
   let nodes = [
     ...projektNodes,
@@ -1073,7 +1076,7 @@ const nodes = async ({ store, role, params }) => {
   //     ]
   //   }
   // })
-  console.log('nodes', nodes)
+  // console.log('nodes', nodes)
 
   return nodes
 }
