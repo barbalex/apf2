@@ -197,7 +197,7 @@ const Row = ({ node }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
 
-  console.log('Row', { node })
+  // console.log('Row', { node })
 
   const store = useContext(storeContext)
   const {

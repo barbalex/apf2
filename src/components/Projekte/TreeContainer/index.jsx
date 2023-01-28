@@ -319,72 +319,28 @@ const TreeContainer = () => {
   const ekfGqlFilter = store.tree.ekfGqlFilter
   const beobGqlFilter = store.tree.beobGqlFilter
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: [
-      'treeQuery',
-      dataFilter,
-      openNodes,
-      apFilter,
-      nodeLabelFilter,
-      apId,
-      // TODO: these filters react late
-      // eliminate them?
-      // popGqlFilter,
-      // tpopGqlFilter,
-      // tpopmassnGqlFilter,
-      // ekGqlFilter,
-      // ekfGqlFilter,
-      // apGqlFilter,
-      // beobGqlFilter,
-      beobGqlFilter('nichtBeurteilt'),
-      beobGqlFilter('nichtZuzuordnen'),
-      beobGqlFilter('zugeordnet'),
-      role,
-    ],
-    queryFn: () =>
-      client.query({
-        query,
-        variables: buildTreeQueryVariables({
-          dataFilter,
-          openNodes,
-          apFilter,
-          nodeLabelFilter,
-          artId: apId,
-          popGqlFilter,
-          tpopGqlFilter,
-          tpopmassnGqlFilter,
-          ekGqlFilter,
-          ekfGqlFilter,
-          apGqlFilter,
-          beobGqlFilter,
-          openAps: store.tree.openAps,
-        }),
-        // DANGER: without, refetches by react-query do not work!
-        fetchPolicy: 'no-cache',
-      }),
-  })
-
-  const treeData = data?.data
-
   const [treeNodes, setTreeNodes] = useState([])
 
   useEffect(() => {
-    if (!isLoading) {
-      buildNodes({
-        role,
-        data: treeData,
-        loading: isLoading,
-        store,
-      }).then((nodes) => setTreeNodes(nodes))
-    }
+    buildNodes({
+      role,
+      store,
+    }).then((nodes) => setTreeNodes(nodes))
   }, [
-    isLoading,
     openNodes,
     openNodes.length,
-    treeData,
     dataFilter,
     role,
     store,
+    nodeLabelFilter,
+    apFilter,
+    popGqlFilter,
+    apGqlFilter,
+    tpopGqlFilter,
+    tpopmassnGqlFilter,
+    ekGqlFilter,
+    ekfGqlFilter,
+    beobGqlFilter,
   ])
 
   // deactivated because toggling the project node would not close the project
@@ -684,34 +640,35 @@ const TreeContainer = () => {
   //console.log('TreeContainer',{data})
   // console.log('TreeContainer rendering')
 
-  const existsPermissionError =
-    !!error &&
-    (error.message.includes('permission denied') ||
-      error.message.includes('keine Berechtigung'))
-  if (existsPermissionError) {
-    // during login don't show permission error
-    if (!token) return null
-    // if token is not accepted, ask user to logout
-    return (
-      <ErrorContainer>
-        <div>Ihre Anmeldung ist nicht mehr gültig.</div>
-        <div>Bitte melden Sie sich neu an.</div>
-        <LogoutButton
-          variant="outlined"
-          color="inherit"
-          onClick={() => {
-            logout(idb)
-          }}
-        >
-          Neu anmelden
-        </LogoutButton>
-      </ErrorContainer>
-    )
-  }
-  if (error) return <Error error={error} />
+  // TODO: use this somewhere
+  // const existsPermissionError =
+  //   !!error &&
+  //   (error.message.includes('permission denied') ||
+  //     error.message.includes('keine Berechtigung'))
+  // if (existsPermissionError) {
+  //   // during login don't show permission error
+  //   if (!token) return null
+  //   // if token is not accepted, ask user to logout
+  //   return (
+  //     <ErrorContainer>
+  //       <div>Ihre Anmeldung ist nicht mehr gültig.</div>
+  //       <div>Bitte melden Sie sich neu an.</div>
+  //       <LogoutButton
+  //         variant="outlined"
+  //         color="inherit"
+  //         onClick={() => {
+  //           logout(idb)
+  //         }}
+  //       >
+  //         Neu anmelden
+  //       </LogoutButton>
+  //     </ErrorContainer>
+  //   )
+  // }
+  // if (error) return <Error error={error} />
 
   // should only show on initial tree loading
-  if (isLoading && !treeNodes.length) return <Spinner />
+  // if (isLoading && !treeNodes.length) return <Spinner />
 
   return (
     <ErrorBoundary>
