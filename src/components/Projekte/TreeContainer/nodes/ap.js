@@ -1,34 +1,35 @@
-import findIndex from 'lodash/findIndex'
+import { gql } from '@apollo/client'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-
-const ap = ({ nodes: nodesPassed, data, projektNodes, projId, store }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
+const ap = async ({ projId, store, treeQueryVariables }) => {
+  const { data } = await store.client.query({
+    query: gql`
+      query TreeApFolderQuery($apsFilter: ApFilter!) {
+        allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
+          nodes {
+            id
+            label
+          }
+        }
+      }
+    `,
+    variables: { apsFilter: treeQueryVariables.apsFilter },
   })
 
+  const aps = data?.allAps?.nodes ?? []
+
   // map through all elements and create array of nodes
-  const nodes = (data?.allAps?.nodes ?? [])
-    // only show if parent node exists
-    .filter(() => nodesPassed.map((n) => n.id).includes(projId))
-    .map((el) => ({
-      nodeType: 'table',
-      menuType: 'ap',
-      filterTable: 'ap',
-      id: el.id,
-      parentId: projId,
-      parentTableId: projId,
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Projekte', projId, 'Arten', el.id],
-      hasChildren: true,
-    }))
-    .filter((el) => allParentNodesAreOpen(store.tree.openNodes, el.url))
-    .map((el, index) => {
-      el.sort = [projIndex, 1, index]
-      return el
-    })
+  const nodes = aps.map((el) => ({
+    nodeType: 'table',
+    menuType: 'ap',
+    filterTable: 'ap',
+    id: el.id,
+    parentId: projId,
+    parentTableId: projId,
+    urlLabel: el.id,
+    label: el.label,
+    url: ['Projekte', projId, 'Arten', el.id],
+    hasChildren: true,
+  }))
 
   return nodes
 }
