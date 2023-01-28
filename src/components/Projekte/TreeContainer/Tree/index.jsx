@@ -5,7 +5,9 @@ import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 // 2022 02 08: removed simplebar as was hard to get to work with virtuoso
 // see: https://github.com/petyosi/react-virtuoso/issues/253
-import { Virtuoso } from 'react-virtuoso'
+// import { Virtuoso } from 'react-virtuoso'
+import { Tree } from 'react-arborist'
+// import AutoSizer from 'react-virtualized-auto-sizer'
 import { useResizeDetector } from 'react-resize-detector'
 
 import Row from './Row'
@@ -23,12 +25,28 @@ const Container = styled.div`
   }
 `
 
-const Tree = ({ nodes }) => {
+const data = [
+  {
+    id: 'e57f56f4-4376-11e8-ab21-4314b6749d13',
+    label: 'label',
+    type: 'project',
+    object: {},
+    url: ['Projekte', 1],
+    children: [],
+    childrenCount: 0,
+  },
+]
+
+const TreeComponent = ({ nodes }) => {
   const store = useContext(storeContext)
   const tree = store.tree
   const { activeNodeArray, lastTouchedNode: lastTouchedNodeProxy } = tree
 
-  const { height = 500, ref: resizeRef } = useResizeDetector({
+  const {
+    height = 500,
+    width = 500,
+    ref: resizeRef,
+  } = useResizeDetector({
     refreshMode: 'debounce',
     refreshRate: 100,
     refreshOptions: { leading: true },
@@ -55,14 +73,24 @@ const Tree = ({ nodes }) => {
 
   return (
     <Container ref={resizeRef}>
-      <Virtuoso
-        initialTopMostItemIndex={initialTopMostIndex}
+      <Tree
+        key={JSON.stringify(nodes)}
+        data={nodes}
         height={height}
-        totalCount={nodes.length}
-        itemContent={(index) => <Row key={index} node={nodes[index]} />}
-      />
+        width={width}
+      >
+        {({ node, style, tree, dragHandle }) => (
+          <Row
+            node={node}
+            style={style}
+            tree={tree}
+            dragHandle={dragHandle}
+            nodes={nodes}
+          />
+        )}
+      </Tree>
     </Container>
   )
 }
 
-export default observer(Tree)
+export default observer(TreeComponent)

@@ -19,7 +19,7 @@ import jwtDecode from 'jwt-decode'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
-import Tree from './Tree'
+import TreeComponent from './Tree'
 import idbContext from '../../../idbContext'
 import logout from '../../../modules/logout'
 import CmApFolder from './contextmenu/ApFolder'
@@ -370,14 +370,12 @@ const TreeContainer = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      setTreeNodes(
-        buildNodes({
-          role,
-          data: treeData,
-          loading: isLoading,
-          store,
-        }),
-      )
+      buildNodes({
+        role,
+        data: treeData,
+        loading: isLoading,
+        store,
+      }).then((nodes) => setTreeNodes(nodes))
     }
   }, [
     isLoading,
@@ -723,7 +721,7 @@ const TreeContainer = () => {
           <LabelFilter nodes={treeNodes} />
           {!!projId && <ApFilter />}
         </LabelFilterContainer>
-        <Tree nodes={treeNodes} />
+        <TreeComponent nodes={treeNodes} />
         <CmApFolder onClick={handleClick} />
         <CmAp onClick={handleClick} />
         <CmApberuebersichtFolder onClick={handleClick} />
