@@ -5,7 +5,6 @@ export default gql`
     $apsFilter: ApFilter!
     $apartsFilter: ApartFilter!
     $apbersFilter: ApberFilter!
-    $apberuebersichtsFilter: ApberuebersichtFilter!
     $assozartFilter: AssozartFilter!
     $beobNichtBeurteiltsFilter: BeobFilter
     $beobNichtZuzuordnensFilter: BeobFilter
@@ -99,15 +98,6 @@ export default gql`
       nodes {
         id
         apId
-        label
-      }
-    }
-    allApberuebersichts(filter: $apberuebersichtsFilter, orderBy: LABEL_ASC)
-      @include(if: $isProjekt) {
-      totalCount
-      nodes @include(if: $isApBerUebersicht) {
-        id
-        projId
         label
       }
     }
