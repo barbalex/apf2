@@ -80,7 +80,7 @@ const compare = (a, b) => {
   return a - b
 }
 
-const nodes = async ({ store, role }) => {
+const nodes = async ({ store, role, params }) => {
   //console.log('nodes', { data, openNodes })
 
   const dataFilter = getSnapshot(store.tree.dataFilter)
@@ -109,7 +109,7 @@ const nodes = async ({ store, role }) => {
     openAps,
   })
 
-  const projektNodes = await buildProjektNodes({ store, treeQueryVariables })
+  const projektNodes = await buildProjektNodes({ store, treeQueryVariables, params })
   console.log('nodes, projektNodes:', projektNodes)
 
   let nodes = [

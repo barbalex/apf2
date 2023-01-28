@@ -3,7 +3,7 @@ import { el } from 'date-fns/locale'
 
 import apFolder from './apFolder'
 
-const projektNodes = async ({ store, treeQueryVariables }) => {
+const projektNodes = async ({ store, treeQueryVariables, params }) => {
   const { client } = store
 
   const { data } = await client.query({
@@ -21,6 +21,8 @@ const projektNodes = async ({ store, treeQueryVariables }) => {
   })
   const projekts = data?.allProjekts?.nodes ?? []
 
+  console.log('nodes, projekt', { projekts, params })
+
   const apFolderNode = await apFolder({
     projId: el.id,
     store,
@@ -36,7 +38,7 @@ const projektNodes = async ({ store, treeQueryVariables }) => {
     label: el.label,
     url: ['Projekte', el.id],
     hasChildren: true,
-    children: [apFolderNode],
+    children: params.projId ? [apFolderNode] : [],
   }))
 
   return nodes

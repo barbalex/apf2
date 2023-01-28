@@ -317,23 +317,9 @@ const TreeContainer = () => {
     console.log('TreeContainer building nodes')
     buildNodes({
       store,
+      params,
     }).then((nodes) => setTreeNodes(nodes))
-  }, [
-    openNodes,
-    openNodes.length,
-    dataFilter,
-    role,
-    store,
-    // nodeLabelFilter,
-    // apFilter,
-    // popGqlFilter,
-    // apGqlFilter,
-    // tpopGqlFilter,
-    // tpopmassnGqlFilter,
-    // ekGqlFilter,
-    // ekfGqlFilter,
-    // beobGqlFilter,
-  ])
+  }, [openNodes, openNodes.length, dataFilter, role, store, params])
 
   // deactivated because toggling the project node would not close the project
   // useEffect(() => {
