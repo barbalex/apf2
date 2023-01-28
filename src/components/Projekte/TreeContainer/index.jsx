@@ -310,6 +310,16 @@ const TreeContainer = () => {
 
   const dataFilter = getSnapshot(store.tree.dataFilter)
   const openNodes = getSnapshot(store.tree.openNodes)
+  const nodeLabelFilter = getSnapshot(store.tree.nodeLabelFilter)
+  const apFilter = store.tree.apFilter
+  const popGqlFilter = store.tree.popGqlFilter
+  const apGqlFilter = store.tree.apGqlFilter
+  const tpopGqlFilter = store.tree.tpopGqlFilter
+  const tpopmassnGqlFilter = store.tree.tpopmassnGqlFilter
+  const ekGqlFilter = store.tree.ekGqlFilter
+  const ekfGqlFilter = store.tree.ekfGqlFilter
+  const beobGqlFilter = store.tree.beobGqlFilter
+  const openAps = store.tree.openAps
 
   const [treeNodes, setTreeNodes] = useState([])
 
@@ -319,7 +329,24 @@ const TreeContainer = () => {
       store,
       params,
     }).then((nodes) => setTreeNodes(nodes))
-  }, [openNodes, openNodes.length, dataFilter, role, store, params])
+  }, [
+    openNodes,
+    openNodes.length,
+    dataFilter,
+    role,
+    store,
+    params,
+    openNodes,
+    nodeLabelFilter,
+    popGqlFilter,
+    tpopGqlFilter,
+    tpopmassnGqlFilter,
+    ekGqlFilter,
+    ekfGqlFilter,
+    apGqlFilter,
+    beobGqlFilter,
+    openAps,
+  ])
 
   // deactivated because toggling the project node would not close the project
   // useEffect(() => {
