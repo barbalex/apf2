@@ -1,6 +1,9 @@
 import { gql } from '@apollo/client'
+import { el } from 'date-fns/locale'
 
-const projektNodes = async ({ store }) => {
+import apFolder from './apFolder'
+
+const projektNodes = async ({ store, treeQueryVariables }) => {
   const { client } = store
 
   const { data } = await client.query({
@@ -18,7 +21,13 @@ const projektNodes = async ({ store }) => {
   })
   const projekts = data?.allProjekts?.nodes ?? []
 
-  const nodes = projekts.map((el, index) => ({
+  const apFolderNode = await apFolder({
+    projId: el.id,
+    store,
+    treeQueryVariables,
+  })
+
+  const nodes = projekts.map((el) => ({
     nodeType: 'table',
     menuType: 'projekt',
     filterTable: 'projekt',
@@ -26,8 +35,8 @@ const projektNodes = async ({ store }) => {
     urlLabel: el.id,
     label: el.label,
     url: ['Projekte', el.id],
-    sort: [index],
     hasChildren: true,
+    children: [apFolderNode],
   }))
 
   return nodes

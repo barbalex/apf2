@@ -1,3 +1,5 @@
+import { getSnapshot } from 'mobx-state-tree'
+
 import allParentNodesAreOpenModule from '../allParentNodesAreOpen'
 import buildProjektNodes from './projekt'
 import buildUserFolderNodes from './userFolder'
@@ -67,6 +69,7 @@ import buildTpopfreiwkontrzaehlFolderNodes from './tpopfreiwkontrzaehlFolder'
 import buildTpopfreiwkontrzaehlNodes from './tpopfreiwkontrzaehl'
 import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
+import buildTreeQueryVariables from '../buildTreeQueryVariables'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -77,14 +80,37 @@ const compare = (a, b) => {
   return a - b
 }
 
-const nodes = async ({ data, loading, store, role }) => {
-  const openNodes = store.tree.openNodes
-    .toJSON()
-    // need to sort so folders are added in correct order
-    // because every lower folder gets previous nodes passed
-    .sort(sort)
+const nodes = async ({ store, role }) => {
   //console.log('nodes', { data, openNodes })
-  const projektNodes = await buildProjektNodes({ store })
+
+  const dataFilter = getSnapshot(store.tree.dataFilter)
+  const nodeLabelFilter = getSnapshot(store.tree.nodeLabelFilter)
+  const openNodes = getSnapshot(store.tree.openNodes)
+  const apFilter = store.tree.apFilter
+  const popGqlFilter = store.tree.popGqlFilter
+  const apGqlFilter = store.tree.apGqlFilter
+  const tpopGqlFilter = store.tree.tpopGqlFilter
+  const tpopmassnGqlFilter = store.tree.tpopmassnGqlFilter
+  const ekGqlFilter = store.tree.ekGqlFilter
+  const ekfGqlFilter = store.tree.ekfGqlFilter
+  const beobGqlFilter = store.tree.beobGqlFilter
+  const openAps = store.tree.openAps
+
+  const treeQueryVariables = buildTreeQueryVariables({
+    openNodes,
+    nodeLabelFilter,
+    popGqlFilter,
+    tpopGqlFilter,
+    tpopmassnGqlFilter,
+    ekGqlFilter,
+    ekfGqlFilter,
+    apGqlFilter,
+    beobGqlFilter,
+    openAps,
+  })
+
+  const projektNodes = await buildProjektNodes({ store, treeQueryVariables })
+  console.log('nodes, projektNodes:', projektNodes)
 
   let nodes = [
     ...projektNodes,
@@ -1047,8 +1073,8 @@ const nodes = async ({ data, loading, store, role }) => {
   //     ]
   //   }
   // })
-console.log('nodes', nodes)
- 
+  console.log('nodes', nodes)
+
   return nodes
 }
 

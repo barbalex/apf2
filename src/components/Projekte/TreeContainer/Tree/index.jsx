@@ -25,18 +25,6 @@ const Container = styled.div`
   }
 `
 
-const data = [
-  {
-    id: 'e57f56f4-4376-11e8-ab21-4314b6749d13',
-    label: 'label',
-    type: 'project',
-    object: {},
-    url: ['Projekte', 1],
-    children: [],
-    childrenCount: 0,
-  },
-]
-
 const TreeComponent = ({ nodes }) => {
   const store = useContext(storeContext)
   const tree = store.tree

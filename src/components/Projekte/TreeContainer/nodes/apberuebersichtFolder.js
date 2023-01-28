@@ -1,6 +1,7 @@
+import { gql } from '@apollo/client'
 import findIndex from 'lodash/findIndex'
 
-const apberuebersichtFolderNode = ({
+const apberuebersichtFolderNode = ({ 
   data,
   loading,
   projektNodes,

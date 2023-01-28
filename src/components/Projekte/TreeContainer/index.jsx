@@ -281,7 +281,8 @@ const getAndValidateCoordinatesOfBeob = async ({
 }
 
 const TreeContainer = () => {
-  const { apId, projId, popId } = useParams()
+  const params = useParams()
+  const { apId, projId, popId } = params
   const { search } = useLocation()
 
   const client = useApolloClient()
@@ -308,22 +309,13 @@ const TreeContainer = () => {
   const role = token ? jwtDecode(token).role : null
 
   const dataFilter = getSnapshot(store.tree.dataFilter)
-  const nodeLabelFilter = getSnapshot(store.tree.nodeLabelFilter)
   const openNodes = getSnapshot(store.tree.openNodes)
-  const apFilter = store.tree.apFilter
-  const popGqlFilter = store.tree.popGqlFilter
-  const apGqlFilter = store.tree.apGqlFilter
-  const tpopGqlFilter = store.tree.tpopGqlFilter
-  const tpopmassnGqlFilter = store.tree.tpopmassnGqlFilter
-  const ekGqlFilter = store.tree.ekGqlFilter
-  const ekfGqlFilter = store.tree.ekfGqlFilter
-  const beobGqlFilter = store.tree.beobGqlFilter
 
   const [treeNodes, setTreeNodes] = useState([])
 
   useEffect(() => {
+    console.log('TreeContainer building nodes')
     buildNodes({
-      role,
       store,
     }).then((nodes) => setTreeNodes(nodes))
   }, [
@@ -332,15 +324,15 @@ const TreeContainer = () => {
     dataFilter,
     role,
     store,
-    nodeLabelFilter,
-    apFilter,
-    popGqlFilter,
-    apGqlFilter,
-    tpopGqlFilter,
-    tpopmassnGqlFilter,
-    ekGqlFilter,
-    ekfGqlFilter,
-    beobGqlFilter,
+    // nodeLabelFilter,
+    // apFilter,
+    // popGqlFilter,
+    // apGqlFilter,
+    // tpopGqlFilter,
+    // tpopmassnGqlFilter,
+    // ekGqlFilter,
+    // ekfGqlFilter,
+    // beobGqlFilter,
   ])
 
   // deactivated because toggling the project node would not close the project
