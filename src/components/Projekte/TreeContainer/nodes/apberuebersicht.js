@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 const apberuebersichtNodes = async ({ store, treeQueryVariables }) => {
   const { data } = await store.client.query({
     query: gql`
-      query TreeApberuebersichtsFolderQuery(
+      query TreeApberuebersichtsQuery(
         $apberuebersichtsFilter: ApberuebersichtFilter!
       ) {
         allApberuebersichts(
