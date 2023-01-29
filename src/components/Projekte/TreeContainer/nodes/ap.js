@@ -5,6 +5,7 @@ import apzielFolder from './apzielFolder'
 import aperfkritFolder from './aperfkritFolder'
 import apberFolder from './apberFolder'
 import idealbiotopFolder from './idealbiotopFolder'
+import assozartFolder from './assozartFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
   const { data } = await store.client.query({
@@ -42,6 +43,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
             $zielsFilter: ZielFilter!
             $erfkritsFilter: ErfkritFilter!
             $apbersFilter: ApberFilter!
+            $assozartFilter: AssozartFilter!
           ) {
             apById(id: $id) {
               id
@@ -61,6 +63,9 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
               apbersByApId(filter: $apbersFilter) {
                 totalCount
               }
+              assozartsByApId(filter: $assozartFilter) {
+                totalCount
+              }
             }
           }
         `,
@@ -70,6 +75,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           zielsFilter: treeQueryVariables.zielsFilter,
           erfkritsFilter: treeQueryVariables.erfkritsFilter,
           apbersFilter: treeQueryVariables.apbersFilter,
+          assozartFilter: treeQueryVariables.assozartFilter,
         },
       })
       // 2. build children
@@ -101,6 +107,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         count: data?.apById?.apbersByApId?.totalCount ?? 0,
       })
       const idealbiotopFolderNode = idealbiotopFolder({ projId, apId: ap.id })
+      const assozartFolderNode = assozartFolder({
+        projId,
+        apId: ap.id,
+        loading,
+        count: data?.apById?.assozartsByApId?.totalCount ?? 0,
+        store,
+      })
 
       nodes.push({
         nodeType: 'table',
@@ -119,6 +132,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           aperfkritFolderNode,
           apberFolderNode,
           idealbiotopFolderNode,
+          assozartFolderNode,
         ],
       })
       continue
