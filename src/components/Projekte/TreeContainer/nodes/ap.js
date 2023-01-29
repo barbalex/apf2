@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 
 import popFolder from './popFolder'
+import apzielFolder from './apzielFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
   const { data } = await store.client.query({
@@ -32,12 +33,22 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
       // 1. fetch counts for children
       const { data } = await store.client.query({
         query: gql`
-          query TreeApQuery($id: UUID!, $popsFilter: PopFilter!) {
+          query TreeApQuery(
+            $id: UUID!
+            $popsFilter: PopFilter!
+            $zielsFilter: ZielFilter!
+          ) {
             apById(id: $id) {
               id
               label
               popsByApId(filter: $popsFilter) {
                 totalCount
+              }
+              zielsByApId(filter: $zielsFilter) {
+                nodes {
+                  id
+                  jahr
+                }
               }
             }
           }
@@ -45,6 +56,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         variables: {
           id: ap.id,
           popsFilter: treeQueryVariables.popsFilter,
+          zielsFilter: treeQueryVariables.zielsFilter,
         },
       })
       // 2. build children
@@ -53,6 +65,12 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         apId: ap.id,
         store,
         count: data?.apById?.popsByApId?.totalCount ?? 0,
+      })
+      const apzielFolderNode = apzielFolder({
+        data,
+        projId,
+        apId: ap.id,
+        store,
       })
 
       nodes.push({
@@ -66,7 +84,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         label: ap.label,
         url: ['Projekte', projId, 'Arten', ap.id],
         hasChildren: true,
-        children: [popFolderNode],
+        children: [popFolderNode, apzielFolderNode],
       })
       continue
     }

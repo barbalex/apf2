@@ -151,70 +151,9 @@ const nodes = async ({ store, role }) => {
     //   openNodes,
     //   nodeUrl,
     // )
-    // if (
-    //   nodeUrl[0] === 'Projekte' &&
-    //   // do not process ['Projekte']
-    //   nodeUrl.length > 1
-    // ) {
-    //   const projId = nodeUrl[1]
-    //   if (nodeUrl.length === 2 && nodeUrl[0] === 'Projekte') {
-    //     nodes = [
-    //       ...nodes,
-    //       ...buildApFolderNodes({
-    //         data,
-    //         loading,
-    //         projektNodes,
-    //         projId,
-    //         store,
-    //       }),
-    //       ...buildApberuebersichtFolderNodes({
-    //         data,
-    //         loading,
-    //         projektNodes,
-    //         projId,
-    //         store,
-    //       }),
-    //     ]
-    //   }
-    //   if (
-    //     nodeUrl.length === 3 &&
-    //     nodeUrl[2] === 'AP-Berichte' &&
-    //     allParentNodesAreOpen
-    //   ) {
-    //     nodes = [
-    //       ...nodes,
-    //       ...buildApberuebersichtNodes({
-    //         data,
-    //         loading,
-    //         projektNodes,
-    //         projId,
-    //       }),
-    //     ]
-    //   }
-    //   if (nodeUrl.length === 3 && nodeUrl[2] === 'Arten') {
-    //     apNodes = buildApNodes({
-    //       nodes,
-    //       data,
-    //       loading,
-    //       projektNodes,
-    //       projId,
-    //       store,
-    //     })
-    //     nodes = [...nodes, ...apNodes]
-    //   }
     // if (nodeUrl.length === 4 && nodeUrl[2] === 'Arten') {
     //   const apId = nodeUrl[3]
     //   nodes = [
-    // ...buildApzielFolderNodes({
-    //   nodes,
-    //   data,
-    //   loading,
-    //   apNodes,
-    //   projektNodes,
-    //   projId,
-    //   apId,
-    //   store,
-    // }),
     // ...buildAperfkritFolderNodes({
     //   nodes,
     //   data,
