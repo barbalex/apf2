@@ -15,21 +15,17 @@ import qkFolder from './qkFolder'
 const ap = async ({ projId, store, treeQueryVariables }) => {
   const { data } = await store.client.query({
     query: gql`
-      query TreeApsQuery($apsFilter: ApFilter!, $popsFilter: PopFilter!) {
+      query TreeApsQuery($apsFilter: ApFilter!) {
         allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
           nodes {
             id
             label
-            popsByApId(filter: $popsFilter) {
-              totalCount
-            }
           }
         }
       }
     `,
     variables: {
       apsFilter: treeQueryVariables.apsFilter,
-      popsFilter: treeQueryVariables.popsFilter,
     },
   })
 
