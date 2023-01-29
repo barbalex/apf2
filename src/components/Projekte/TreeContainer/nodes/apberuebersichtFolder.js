@@ -1,37 +1,15 @@
-import { gql } from '@apollo/client'
-
 import apberuersicht from './apberuebersicht'
 
 const apberuebersichtFolderNode = async ({
   projId,
   store,
+  count,
   treeQueryVariables,
 }) => {
   const nodeLabelFilterString =
     store.tree?.nodeLabelFilter?.apberuebersicht ?? ''
 
-  const { data, loading } = await store.client.query({
-    query: gql`
-      query TreeApberuebersichtsFolderQuery(
-        $apberuebersichtsFilter: ApberuebersichtFilter!
-      ) {
-        allApberuebersichts(filter: $apberuebersichtsFilter) {
-          totalCount
-        }
-      }
-    `,
-    variables: {
-      apberuebersichtsFilter: treeQueryVariables.apberuebersichtsFilter,
-    },
-  })
-
-  const count = data?.allApberuebersichts?.totalCount ?? 0
-
-  const message = loading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${count} gefiltert`
-    : count
+  const message = nodeLabelFilterString ? `${count} gefiltert` : count
 
   const showChildren =
     store.tree.openNodes.filter(

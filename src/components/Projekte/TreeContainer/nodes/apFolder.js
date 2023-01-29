@@ -1,30 +1,9 @@
-import { gql } from '@apollo/client'
-
 import ap from './ap'
 
-const apFolderNode = async ({ projId, store, treeQueryVariables }) => {
-  const { client } = store
-
+const apFolderNode = async ({ projId, store, treeQueryVariables, count }) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ap ?? ''
 
-  const { data, loading } = await client.query({
-    query: gql`
-      query TreeApFolderQuery($apsFilter: ApFilter!) {
-        allAps(filter: $apsFilter) {
-          totalCount
-        }
-      }
-    `,
-    variables: { apsFilter: treeQueryVariables.apsFilter },
-  })
-
-  const count = data?.allAps?.totalCount ?? 0
-
-  const message = loading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${count} gefiltert`
-    : count
+  const message = nodeLabelFilterString ? `${count} gefiltert` : count
 
   const showChildren =
     store.tree.openNodes.filter(
