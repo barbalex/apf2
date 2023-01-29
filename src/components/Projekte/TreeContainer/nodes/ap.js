@@ -6,6 +6,7 @@ import aperfkritFolder from './aperfkritFolder'
 import apberFolder from './apberFolder'
 import idealbiotopFolder from './idealbiotopFolder'
 import assozartFolder from './assozartFolder'
+import ekfrequenzFolder from './ekfrequenzFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
   const { data } = await store.client.query({
@@ -44,6 +45,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
             $erfkritsFilter: ErfkritFilter!
             $apbersFilter: ApberFilter!
             $assozartFilter: AssozartFilter!
+            $ekfrequenzsFilter: EkfrequenzFilter!
           ) {
             apById(id: $id) {
               id
@@ -66,6 +68,9 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
               assozartsByApId(filter: $assozartFilter) {
                 totalCount
               }
+              ekfrequenzsByApId(filter: $ekfrequenzsFilter) {
+                totalCount
+              }
             }
           }
         `,
@@ -76,6 +81,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           erfkritsFilter: treeQueryVariables.erfkritsFilter,
           apbersFilter: treeQueryVariables.apbersFilter,
           assozartFilter: treeQueryVariables.assozartFilter,
+          ekfrequenzsFilter: treeQueryVariables.ekfrequenzsFilter,
         },
       })
       // 2. build children
@@ -114,6 +120,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         count: data?.apById?.assozartsByApId?.totalCount ?? 0,
         store,
       })
+      const ekfrequenzFolderNode = ekfrequenzFolder({
+        projId,
+        apId: ap.id,
+        loading,
+        count: data?.apById?.ekfrequenzsByApId?.totalCount ?? 0,
+        store,
+      })
 
       nodes.push({
         nodeType: 'table',
@@ -133,6 +146,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           apberFolderNode,
           idealbiotopFolderNode,
           assozartFolderNode,
+          ekfrequenzFolderNode,
         ],
       })
       continue
