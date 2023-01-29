@@ -5,6 +5,7 @@ import apzielFolder from './apzielFolder'
 import aperfkritFolder from './aperfkritFolder'
 import apberFolder from './apberFolder'
 import idealbiotopFolder from './idealbiotopFolder'
+import apartFolder from './apartFolder'
 import assozartFolder from './assozartFolder'
 import ekfrequenzFolder from './ekfrequenzFolder'
 import ekzaehleinheitFolder from './ekzaehleinheitFolder'
@@ -44,6 +45,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
             $zielsFilter: ZielFilter!
             $erfkritsFilter: ErfkritFilter!
             $apbersFilter: ApberFilter!
+            $apartsFilter: ApartFilter!
             $assozartFilter: AssozartFilter!
             $ekfrequenzsFilter: EkfrequenzFilter!
             $ekzaehleinheitsFilter: EkzaehleinheitFilter!
@@ -66,6 +68,9 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
                 totalCount
               }
               apbersByApId(filter: $apbersFilter) {
+                totalCount
+              }
+              apartsByApId(filter: $apartsFilter) {
                 totalCount
               }
               assozartsByApId(filter: $assozartFilter) {
@@ -115,6 +120,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
             treeQueryVariables.beobNichtBeurteiltsFilter,
           beobNichtZuzuordnensFilter:
             treeQueryVariables.beobNichtZuzuordnensFilter,
+          apartsFilter: treeQueryVariables.apartsFilter,
         },
       })
       // 2. build children
@@ -146,6 +152,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         count: data?.apById?.apbersByApId?.totalCount ?? 0,
       })
       const idealbiotopFolderNode = idealbiotopFolder({ projId, apId: ap.id })
+      const apartFolderNode = apartFolder({
+        count: data?.apById?.apartsByApId?.totalCount ?? 0,
+        loading,
+        projId,
+        apId: ap.id,
+        store,
+      })
       const assozartFolderNode = assozartFolder({
         projId,
         apId: ap.id,
@@ -200,6 +213,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           aperfkritFolderNode,
           apberFolderNode,
           idealbiotopFolderNode,
+          apartFolderNode,
           assozartFolderNode,
           ekfrequenzFolderNode,
           ekzaehleinheitFolderNode,
