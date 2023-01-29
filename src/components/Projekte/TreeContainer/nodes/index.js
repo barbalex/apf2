@@ -16,23 +16,6 @@ import buildEkAbrechnungstypWerteFolderNodes from './ekAbrechnungstypWerteFolder
 import buildEkAbrechnungstypWerteNodes from './ekAbrechnungstypWerte'
 import buildUserNodes from './user'
 import buildCurrentIssuesNodes from './currentIssues'
-import buildApFolderNodes from './apFolder'
-import buildApberuebersichtFolderNodes from './apberuebersichtFolder'
-import buildApberuebersichtNodes from './apberuebersicht'
-import buildApNodes from './ap'
-import buildPopFolderNode from './popFolder'
-import qkFolderNodes from './qkFolder'
-import buildBeobNichtZuzuordnenFolderNodes from './beobNichtZuzuordnenFolder'
-import buildBeobNichtBeurteiltFolderNodes from './beobNichtBeurteiltFolder'
-import buildAssozartFolderNodes from './assozartFolder'
-import buildEkzaehleinheitFolderNodes from './ekzaehleinheitFolder'
-import buildEkfrequenzFolderNodes from './ekfrequenzFolder'
-import buildApartFolderNodes from './apartFolder'
-import buildIdealbiotopFolderNodes from './idealbiotopFolder'
-import buildApberFolderNodes from './apberFolder'
-import buildAperfkritFolderNodes from './aperfkritFolder'
-import buildApzielFolderNodes from './apzielFolder'
-import buildApzieljahrFolderNodes from './apzieljahrFolder'
 import buildApzielNodes from './apziel'
 import buildApzielberFolderNodes from './apzielberFolder'
 import buildApzielberNodes from './apzielber'
@@ -147,19 +130,6 @@ const nodes = async ({ store, role }) => {
   //  * or some filter is active
   //  */
   for (const nodeUrl of openNodes) {
-    // TODO:
-    // ...buildApartFolderNodes({
-    //   nodes,
-    //   data,
-    //   loading,
-    //   apNodes,
-    //   projektNodes,
-    //   projId,
-    //   apId,
-    //   store,
-    // }),
-    //   ]
-    // }
     //   // if nodeUrl.length > 4, nodeUrl[2] is always 'Arten'
     //   if (
     //     nodeUrl.length === 5 &&
