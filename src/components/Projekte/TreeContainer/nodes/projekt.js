@@ -14,7 +14,6 @@ const projektNodes = async ({ store, treeQueryVariables, params }) => {
         }
       }
     `,
-    variables: { id: 1 },
   })
   const projekts = data?.allProjekts?.nodes ?? []
 

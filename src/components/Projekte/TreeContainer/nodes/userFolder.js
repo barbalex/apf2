@@ -1,7 +1,18 @@
-const userFolderNode = ({ data, loading, projektNodes, store }) => {
-  // fetch sorting indexes of parents
-  const userIndex = projektNodes.length + 1
+import { gql } from '@apollo/client'
+
+const userFolderNode = async ({ store, treeQueryVariables }) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.user ?? ''
+
+  const { data, loading } = await store.client.query({
+    query: gql`
+      query TreeUsersFolderQuery($usersFilter: UserFilter!) {
+        allUsers(filter: $usersFilter) {
+          totalCount
+        }
+      }
+    `,
+    variables: { usersFilter: treeQueryVariables.usersFilter },
+  })
 
   const count = data?.allUsers?.totalCount ?? 0
   const message = loading
@@ -19,7 +30,6 @@ const userFolderNode = ({ data, loading, projektNodes, store }) => {
       urlLabel: 'Benutzer',
       label: `Benutzer (${message})`,
       url: ['Benutzer'],
-      sort: [userIndex],
       hasChildren: count > 0,
     },
   ]

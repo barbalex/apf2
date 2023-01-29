@@ -114,15 +114,14 @@ const nodes = async ({ store, role, params }) => {
     treeQueryVariables,
     params,
   })
+  const userFolderNodes = await buildUserFolderNodes({
+    store,
+    treeQueryVariables,
+  })
 
   let nodes = [
     ...projektNodes,
-    // ...buildUserFolderNodes({
-    //   data,
-    //   projektNodes,
-    //   loading,
-    //   store,
-    // }),
+    ...userFolderNodes,
     // ...buildCurrentIssuesFolderNodes({
     //   data,
     //   projektNodes,
