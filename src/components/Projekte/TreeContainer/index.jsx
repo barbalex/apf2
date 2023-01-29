@@ -327,7 +327,7 @@ const TreeContainer = () => {
     console.log('TreeContainer building nodes')
     buildNodes({
       store,
-      params,
+      role,
     }).then((nodes) => setTreeNodes(nodes))
   }, [
     openNodes,

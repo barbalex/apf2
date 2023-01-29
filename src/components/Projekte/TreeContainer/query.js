@@ -22,7 +22,6 @@ export default gql`
     $tpopmassnbersFilter: TpopmassnberFilter!
     $tpopmassnsFilter: TpopmassnFilter!
     $tpopsFilter: TpopFilter!
-    $usersFilter: UserFilter!
     $adressesFilter: AdresseFilter!
     $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
     $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
@@ -268,13 +267,6 @@ export default gql`
         popId
         label
         nr
-      }
-    }
-    allUsers(filter: $usersFilter, orderBy: LABEL_ASC) {
-      totalCount
-      nodes @include(if: $isUsers) {
-        id
-        label
       }
     }
     adressesUnfiltered: allAdresses {

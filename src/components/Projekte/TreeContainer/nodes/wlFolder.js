@@ -1,6 +1,4 @@
-const wlFolderNode = ({ projektNodes }) => {
-  // fetch sorting indexes of parents
-  const wlIndex = projektNodes.length + 2
+const wlFolderNode = () => {
 
   return [
     {
@@ -10,7 +8,6 @@ const wlFolderNode = ({ projektNodes }) => {
       urlLabel: 'Werte-Listen',
       label: `Werte-Listen`,
       url: ['Werte-Listen'],
-      sort: [wlIndex],
       hasChildren: true,
     },
   ]

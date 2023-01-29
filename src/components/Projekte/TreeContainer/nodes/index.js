@@ -80,7 +80,7 @@ const compare = (a, b) => {
   return a - b
 }
 
-const nodes = async ({ store, role, params }) => {
+const nodes = async ({ store, role }) => {
   //console.log('nodes', { data, openNodes })
 
   const dataFilter = getSnapshot(store.tree.dataFilter)
@@ -118,9 +118,12 @@ const nodes = async ({ store, role, params }) => {
     treeQueryVariables,
   })
 
+  console.log('nodes', { role })
+
   let nodes = [
     ...projektNodes,
     ...userFolderNodes,
+    ...(role === 'apflora_manager' ? buildWlFolderNodes() : []),
     // ...buildCurrentIssuesFolderNodes({
     //   data,
     //   projektNodes,
@@ -132,9 +135,6 @@ const nodes = async ({ store, role, params }) => {
     //   loading,
     // }),
   ]
-  // if (role === 'apflora_manager') {
-  //   nodes = [...nodes, ...buildWlFolderNodes({ projektNodes })]
-  // }
   // let apNodes
   // let popNodes
   // let tpopNodes
