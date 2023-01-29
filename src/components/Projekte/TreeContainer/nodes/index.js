@@ -954,15 +954,10 @@ const nodes = async ({ store, role }) => {
       const userNodes = await buildUserNodes({ store, treeQueryVariables })
       nodes = [...nodes, ...userNodes]
     }
-    // if (nodeUrl.length === 1 && nodeUrl[0] === 'Aktuelle-Fehler') {
-    //   nodes = [
-    //     ...nodes,
-    //     ...buildCurrentIssuesNodes({
-    //       data,
-    //       projektNodes,
-    //     }),
-    //   ]
-    // }
+    if (nodeUrl.length === 1 && nodeUrl[0] === 'Aktuelle-Fehler') {
+      const currentIssueNodes = await buildCurrentIssuesNodes({ store })
+      nodes = [...nodes, ...currentIssueNodes]
+    }
     // if (
     //   role === 'apflora_manager' &&
     //   nodeUrl.length === 1 &&
