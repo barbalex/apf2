@@ -8,6 +8,7 @@ import idealbiotopFolder from './idealbiotopFolder'
 import assozartFolder from './assozartFolder'
 import ekfrequenzFolder from './ekfrequenzFolder'
 import ekzaehleinheitFolder from './ekzaehleinheitFolder'
+import beobNichtBeurteiltFolder from './beobNichtBeurteiltFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
   const { data } = await store.client.query({
@@ -48,6 +49,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
             $assozartFilter: AssozartFilter!
             $ekfrequenzsFilter: EkfrequenzFilter!
             $ekzaehleinheitsFilter: EkzaehleinheitFilter!
+            $beobNichtBeurteiltsFilter: BeobFilter # $beobNichtZuzuordnensFilter: BeobFilter
           ) {
             apById(id: $id) {
               id
@@ -76,6 +78,17 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
               ekzaehleinheitsByApId(filter: $ekzaehleinheitsFilter) {
                 totalCount
               }
+              beobNichtBeurteilt: apartsByApId {
+                nodes {
+                  id
+                  aeTaxonomyByArtId {
+                    id
+                    beobsByArtId(filter: $beobNichtBeurteiltsFilter) {
+                      totalCount
+                    }
+                  }
+                }
+              }
             }
           }
         `,
@@ -88,6 +101,8 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           assozartFilter: treeQueryVariables.assozartFilter,
           ekfrequenzsFilter: treeQueryVariables.ekfrequenzsFilter,
           ekzaehleinheitsFilter: treeQueryVariables.ekzaehleinheitsFilter,
+          beobNichtBeurteiltsFilter:
+            treeQueryVariables.beobNichtBeurteiltsFilter,
         },
       })
       // 2. build children
@@ -140,6 +155,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         count: data?.apById?.ekzaehleinheitsByApId?.totalCount ?? 0,
         store,
       })
+      const beobNichtBeurteiltFolderNode = beobNichtBeurteiltFolder({
+        data,
+        loading,
+        projId,
+        apId: ap.id,
+        store,
+      })
 
       nodes.push({
         nodeType: 'table',
@@ -161,6 +183,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           assozartFolderNode,
           ekfrequenzFolderNode,
           ekzaehleinheitFolderNode,
+          beobNichtBeurteiltFolderNode,
         ],
       })
       continue
