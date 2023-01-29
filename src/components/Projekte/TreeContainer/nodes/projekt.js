@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 import apFolder from './apFolder'
 import apberuebersichtFolder from './apberuebersichtFolder'
 
-const projektNodes = async ({ store, treeQueryVariables, params }) => {
+const projektNodes = async ({ store, treeQueryVariables }) => {
   const { data } = await store.client.query({
     query: gql`
       query TreeProjektQuery {
@@ -17,34 +17,35 @@ const projektNodes = async ({ store, treeQueryVariables, params }) => {
   })
   const projekts = data?.allProjekts?.nodes ?? []
 
-  if (!params.projId) {
-    return projekts.map((el) => ({
-      nodeType: 'table',
-      menuType: 'projekt',
-      filterTable: 'projekt',
-      id: el.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Projekte', el.id],
-      hasChildren: true,
-      children: [],
-    }))
-  }
-
   const nodes = []
   for (const projekt of projekts) {
+    if (!store.tree.openProjekts.includes(projekt.id)) {
+      // this project is not open
+      // no children, apFolder or apUebersichtFolder
+      nodes.push({
+        nodeType: 'table',
+        menuType: 'projekt',
+        filterTable: 'projekt',
+        id: projekt.id,
+        urlLabel: projekt.id,
+        label: projekt.label,
+        url: ['Projekte', projekt.id],
+        hasChildren: true,
+      })
+      continue
+    }
     const apFolderNode = await apFolder({
       projId: projekt.id,
       store,
       treeQueryVariables,
     })
-    const apberuebersichtFolderNode = await apberuebersichtFolder({
+    const apberUebersichtFolderNode = await apberuebersichtFolder({
       projId: projekt.id,
       store,
       treeQueryVariables,
     })
     const children = store.tree.openProjekts.includes(projekt.id)
-      ? [apFolderNode, apberuebersichtFolderNode]
+      ? [apFolderNode, apberUebersichtFolderNode]
       : []
 
     nodes.push({
@@ -59,6 +60,7 @@ const projektNodes = async ({ store, treeQueryVariables, params }) => {
       children,
     })
   }
+
   return nodes
 }
 

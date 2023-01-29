@@ -202,7 +202,7 @@ const Client = ({ store }) => {
   const batchHttpLink = new BatchHttpLink({
     uri: graphQlUri(),
     // remove after debugging
-    // batchMax: 1,
+    batchMax: 1,
   })
   const client = new ApolloClient({
     link: ApolloLink.from([cleanTypeName, errorLink, authLink, batchHttpLink]),
