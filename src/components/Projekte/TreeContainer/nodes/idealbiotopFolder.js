@@ -4,7 +4,7 @@ const idealbiotopFolderNode = ({ projId, apId }) => {
   return {
     nodeType: 'folder',
     menuType: 'idealbiotopFolder',
-    id: apId,
+    id: `${apId}IdealbiotopFolder`,
     tableId: apId,
     urlLabel: 'Idealbiotop',
     label: 'Idealbiotop',

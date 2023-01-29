@@ -19,7 +19,7 @@ const apzielFolderNode = ({ data, loading, projId, apId, store }) => {
     nodeType: 'folder',
     menuType: 'zielFolder',
     filterTable: 'ziel',
-    id: apId,
+    id: `${apId}ApzielFolder`,
     tableId: apId,
     urlLabel: 'AP-Ziele',
     label: `AP-Ziele (${message})`,

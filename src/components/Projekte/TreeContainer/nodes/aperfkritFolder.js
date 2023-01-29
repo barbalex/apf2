@@ -13,7 +13,7 @@ const aperfkritFolderNode = ({ loading, projId, apId, store, count }) => {
     nodeType: 'folder',
     menuType: 'erfkritFolder',
     filterTable: 'erfkrit',
-    id: `${apId}Erfkrit`,
+    id: `${apId}ErfkritFolder`,
     tableId: apId,
     urlLabel: 'AP-Erfolgskriterien',
     label: `AP-Erfolgskriterien (${message})`,
