@@ -334,7 +334,7 @@ const TreeContainer = () => {
     })
     setTreeNodes(nodes)
   }, [role, store])
-  const buildNodesDebounced = useDebouncedCallback(buildNodesCallback, 10)
+  const buildNodesDebounced = useDebouncedCallback(buildNodesCallback, 0)
 
   useEffect(() => {
     buildNodesDebounced()
