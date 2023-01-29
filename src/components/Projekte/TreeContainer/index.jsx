@@ -8,7 +8,7 @@ import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useApolloClient } from '@apollo/client'
-import { useQueryClient, useQuery } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -16,6 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import { useParams, useLocation } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
+import { useDebouncedCallback } from 'use-debounce'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -323,12 +324,20 @@ const TreeContainer = () => {
 
   const [treeNodes, setTreeNodes] = useState([])
 
-  useEffect(() => {
+  // need to debounce building nodes because:
+  // sometimes navigation and activeNodeArray-Setting happen right after each other
+  const buildNodesCallback = useCallback(async () => {
     console.log('TreeContainer building nodes')
-    buildNodes({
+    const nodes = await buildNodes({
       store,
       role,
-    }).then((nodes) => setTreeNodes(nodes))
+    })
+    setTreeNodes(nodes)
+  }, [role, store])
+  const buildNodesDebounced = useDebouncedCallback(buildNodesCallback, 10)
+
+  useEffect(() => {
+    buildNodesDebounced()
   }, [
     openNodes,
     openNodes.length,
@@ -346,6 +355,7 @@ const TreeContainer = () => {
     apGqlFilter,
     beobGqlFilter,
     openAps,
+    buildNodesDebounced,
   ])
 
   // deactivated because toggling the project node would not close the project
