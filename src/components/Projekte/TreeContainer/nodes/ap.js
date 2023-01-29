@@ -3,6 +3,7 @@ import { gql } from '@apollo/client'
 import popFolder from './popFolder'
 import apzielFolder from './apzielFolder'
 import aperfkritFolder from './aperfkritFolder'
+import apberFolder from './apberFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
   const { data } = await store.client.query({
@@ -39,6 +40,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
             $popsFilter: PopFilter!
             $zielsFilter: ZielFilter!
             $erfkritsFilter: ErfkritFilter!
+            $apbersFilter: ApberFilter!
           ) {
             apById(id: $id) {
               id
@@ -55,6 +57,9 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
               erfkritsByApId(filter: $erfkritsFilter) {
                 totalCount
               }
+              apbersByApId(filter: $apbersFilter) {
+                totalCount
+              }
             }
           }
         `,
@@ -63,6 +68,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           popsFilter: treeQueryVariables.popsFilter,
           zielsFilter: treeQueryVariables.zielsFilter,
           erfkritsFilter: treeQueryVariables.erfkritsFilter,
+          apbersFilter: treeQueryVariables.apbersFilter,
         },
       })
       // 2. build children
@@ -86,6 +92,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         store,
         count: data?.apById?.erfkritsByApId?.totalCount ?? 0,
       })
+      const apberFolderNode = apberFolder({
+        loading,
+        projId,
+        apId: ap.id,
+        store,
+        count: data?.apById?.apbersByApId?.totalCount ?? 0,
+      })
 
       nodes.push({
         nodeType: 'table',
@@ -98,7 +111,12 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         label: ap.label,
         url: ['Projekte', projId, 'Arten', ap.id],
         hasChildren: true,
-        children: [popFolderNode, apzielFolderNode, aperfkritFolderNode],
+        children: [
+          popFolderNode,
+          apzielFolderNode,
+          aperfkritFolderNode,
+          apberFolderNode,
+        ],
       })
       continue
     }
