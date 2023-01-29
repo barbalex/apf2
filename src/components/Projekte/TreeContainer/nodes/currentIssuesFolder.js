@@ -1,10 +1,19 @@
+import { gql } from '@apollo/client'
 import max from 'lodash/max'
 
-const currentIssuesFolderNode = ({ data, loading, projektNodes }) => {
-  const count = data?.allCurrentissues?.totalCount ?? 0
+const currentIssuesFolderNode = async ({ store }) => {
 
-  // fetch sorting indexes of parents
-  const currentIssuesIndex = projektNodes.length + 3
+  const { data, loading } = await store.client.query({
+    query: gql`
+      query TreeCurrentIssuesFolderQuery {
+        allCurrentissues(orderBy: SORT_ASC) {
+      totalCount
+    }
+      }
+    `,
+  })
+
+  const count = data?.allCurrentissues?.totalCount ?? 0
 
   let message = loading && !count ? '...' : max([count - 1, 0])
 
@@ -16,7 +25,6 @@ const currentIssuesFolderNode = ({ data, loading, projektNodes }) => {
       urlLabel: 'Aktuelle-Fehler',
       label: `Aktuelle Fehler (${message})`,
       url: ['Aktuelle-Fehler'],
-      sort: [currentIssuesIndex],
       hasChildren: count > 0,
     },
   ]

@@ -180,9 +180,6 @@ export default gql`
         label
       }
     }
-    allMessages {
-      totalCount
-    }
     allPopbers(filter: $popbersFilter, orderBy: LABEL_ASC)
       @include(if: $isPop) {
       nodes {

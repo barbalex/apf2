@@ -117,23 +117,17 @@ const nodes = async ({ store, role }) => {
     store,
     treeQueryVariables,
   })
-
-  console.log('nodes', { role })
+  const messagesFolderNodes = await buildMessagesFolderNodes({ store })
+  const currentIssuesFolderNodes = await buildCurrentIssuesFolderNodes({
+    store,
+  })
 
   let nodes = [
     ...projektNodes,
     ...userFolderNodes,
     ...(role === 'apflora_manager' ? buildWlFolderNodes() : []),
-    // ...buildCurrentIssuesFolderNodes({
-    //   data,
-    //   projektNodes,
-    //   loading,
-    // }),
-    // ...buildMessagesFolderNodes({
-    //   data,
-    //   projektNodes,
-    //   loading,
-    // }),
+    ...messagesFolderNodes,
+    ...currentIssuesFolderNodes,
   ]
   // let apNodes
   // let popNodes

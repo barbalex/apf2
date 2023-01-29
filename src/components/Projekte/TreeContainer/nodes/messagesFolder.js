@@ -1,8 +1,16 @@
-const messagesFolderNode = ({ data, loading, projektNodes }) => {
-  const messages = data?.allMessages?.totalCount ?? 0
+import { gql } from '@apollo/client'
 
-  // fetch sorting indexes of parents
-  const messagesIndex = projektNodes.length + 3
+const messagesFolderNode = async ({ store }) => {
+  const { data, loading } = await store.client.query({
+    query: gql`
+      query TreeMessagesFolderQuery {
+        allMessages {
+          totalCount
+        }
+      }
+    `,
+  })
+  const messages = data?.allMessages?.totalCount ?? 0
 
   let message = loading && !messages ? '...' : messages
 
@@ -15,7 +23,6 @@ const messagesFolderNode = ({ data, loading, projektNodes }) => {
       urlLabel: 'Mitteilungen',
       label: `Mitteilungen (${message})`,
       url: ['Mitteilungen'],
-      sort: [messagesIndex],
       hasChildren: false,
     },
   ]
