@@ -1,7 +1,11 @@
-const popFolderNode = ({ projId, apId, store, count }) => {
+const popFolderNode = ({ projId, apId, store, count, loading }) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.pop ?? ''
 
-  const message = nodeLabelFilterString ? `${count} gefiltert` : count
+  const message = loading
+    ? '...'
+    : nodeLabelFilterString
+    ? `${count} gefiltert`
+    : count
 
   const url = ['Projekte', projId, 'Arten', apId, 'Populationen']
 

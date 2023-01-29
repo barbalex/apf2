@@ -2,6 +2,7 @@ import { gql } from '@apollo/client'
 
 import popFolder from './popFolder'
 import apzielFolder from './apzielFolder'
+import aperfkritFolder from './aperfkritFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
   const { data } = await store.client.query({
@@ -31,12 +32,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
   for (const ap of aps) {
     if (store.tree.openAps.includes(ap.id)) {
       // 1. fetch counts for children
-      const { data } = await store.client.query({
+      const { data, loading } = await store.client.query({
         query: gql`
           query TreeApQuery(
             $id: UUID!
             $popsFilter: PopFilter!
             $zielsFilter: ZielFilter!
+            $erfkritsFilter: ErfkritFilter!
           ) {
             apById(id: $id) {
               id
@@ -50,6 +52,9 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
                   jahr
                 }
               }
+              erfkritsByApId(filter: $erfkritsFilter) {
+                totalCount
+              }
             }
           }
         `,
@@ -57,6 +62,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           id: ap.id,
           popsFilter: treeQueryVariables.popsFilter,
           zielsFilter: treeQueryVariables.zielsFilter,
+          erfkritsFilter: treeQueryVariables.erfkritsFilter,
         },
       })
       // 2. build children
@@ -68,9 +74,17 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
       })
       const apzielFolderNode = apzielFolder({
         data,
+        loading,
         projId,
         apId: ap.id,
         store,
+      })
+      const aperfkritFolderNode = aperfkritFolder({
+        loading,
+        projId,
+        apId: ap.id,
+        store,
+        count: data?.apById?.erfkritsByApId?.totalCount ?? 0,
       })
 
       nodes.push({
@@ -84,7 +98,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         label: ap.label,
         url: ['Projekte', projId, 'Arten', ap.id],
         hasChildren: true,
-        children: [popFolderNode, apzielFolderNode],
+        children: [popFolderNode, apzielFolderNode, aperfkritFolderNode],
       })
       continue
     }
