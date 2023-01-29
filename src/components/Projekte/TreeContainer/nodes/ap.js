@@ -4,6 +4,7 @@ import popFolder from './popFolder'
 import apzielFolder from './apzielFolder'
 import aperfkritFolder from './aperfkritFolder'
 import apberFolder from './apberFolder'
+import idealbiotopFolder from './idealbiotopFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
   const { data } = await store.client.query({
@@ -99,6 +100,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         store,
         count: data?.apById?.apbersByApId?.totalCount ?? 0,
       })
+      const idealbiotopFolderNode = idealbiotopFolder({ projId, apId: ap.id })
 
       nodes.push({
         nodeType: 'table',
@@ -116,6 +118,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           apzielFolderNode,
           aperfkritFolderNode,
           apberFolderNode,
+          idealbiotopFolderNode,
         ],
       })
       continue
