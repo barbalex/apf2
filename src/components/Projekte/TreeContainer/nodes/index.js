@@ -147,72 +147,7 @@ const nodes = async ({ store, role }) => {
   //  * or some filter is active
   //  */
   for (const nodeUrl of openNodes) {
-    // const allParentNodesAreOpen = allParentNodesAreOpenModule(
-    //   openNodes,
-    //   nodeUrl,
-    // )
-    // if (nodeUrl.length === 4 && nodeUrl[2] === 'Arten') {
-    //   const apId = nodeUrl[3]
-    //   nodes = [
-    // ...buildAperfkritFolderNodes({
-    //   nodes,
-    //   data,
-    //   loading,
-    //   apNodes,
-    //   projektNodes,
-    //   projId,
-    //   apId,
-    //   store,
-    // }),
-    // ...buildApberFolderNodes({
-    //   nodes,
-    //   data,
-    //   loading,
-    //   apNodes,
-    //   projektNodes,
-    //   projId,
-    //   apId,
-    //   store,
-    // }),
-    // ...buildIdealbiotopFolderNodes({
-    //   nodes,
-    //   loading,
-    //   apNodes,
-    //   projektNodes,
-    //   projId,
-    //   apId,
-    //   store,
-    // }),
-    // ...buildAssozartFolderNodes({
-    //   nodes,
-    //   data,
-    //   loading,
-    //   apNodes,
-    //   projektNodes,
-    //   projId,
-    //   apId,
-    //   store,
-    // }),
-    // ...buildEkzaehleinheitFolderNodes({
-    //   nodes,
-    //   data,
-    //   loading,
-    //   apNodes,
-    //   projektNodes,
-    //   projId,
-    //   apId,
-    //   store,
-    // }),
-    // ...buildEkfrequenzFolderNodes({
-    //   nodes,
-    //   data,
-    //   loading,
-    //   apNodes,
-    //   projektNodes,
-    //   projId,
-    //   apId,
-    //   store,
-    // }),
+    // TODO:
     // ...buildApartFolderNodes({
     //   nodes,
     //   data,
@@ -222,33 +157,6 @@ const nodes = async ({ store, role }) => {
     //   projId,
     //   apId,
     //   store,
-    // }),
-    // ...buildBeobNichtBeurteiltFolderNodes({
-    //   nodes,
-    //   data,
-    //   loading,
-    //   apNodes,
-    //   projektNodes,
-    //   projId,
-    //   apId,
-    //   store,
-    // }),
-    // ...buildBeobNichtZuzuordnenFolderNodes({
-    //   nodes,
-    //   data,
-    //   loading,
-    //   apNodes,
-    //   projektNodes,
-    //   projId,
-    //   apId,
-    //   store,
-    // }),
-    // ...qkFolderNodes({
-    //   nodes,
-    //   apNodes,
-    //   projektNodes,
-    //   projId,
-    //   apId,
     // }),
     //   ]
     // }
