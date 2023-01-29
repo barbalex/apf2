@@ -7,6 +7,7 @@ import apberFolder from './apberFolder'
 import idealbiotopFolder from './idealbiotopFolder'
 import assozartFolder from './assozartFolder'
 import ekfrequenzFolder from './ekfrequenzFolder'
+import ekzaehleinheitFolder from './ekzaehleinheitFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
   const { data } = await store.client.query({
@@ -46,6 +47,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
             $apbersFilter: ApberFilter!
             $assozartFilter: AssozartFilter!
             $ekfrequenzsFilter: EkfrequenzFilter!
+            $ekzaehleinheitsFilter: EkzaehleinheitFilter!
           ) {
             apById(id: $id) {
               id
@@ -71,6 +73,9 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
               ekfrequenzsByApId(filter: $ekfrequenzsFilter) {
                 totalCount
               }
+              ekzaehleinheitsByApId(filter: $ekzaehleinheitsFilter) {
+                totalCount
+              }
             }
           }
         `,
@@ -82,6 +87,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           apbersFilter: treeQueryVariables.apbersFilter,
           assozartFilter: treeQueryVariables.assozartFilter,
           ekfrequenzsFilter: treeQueryVariables.ekfrequenzsFilter,
+          ekzaehleinheitsFilter: treeQueryVariables.ekzaehleinheitsFilter,
         },
       })
       // 2. build children
@@ -127,6 +133,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         count: data?.apById?.ekfrequenzsByApId?.totalCount ?? 0,
         store,
       })
+      const ekzaehleinheitFolderNode = ekzaehleinheitFolder({
+        projId,
+        apId: ap.id,
+        loading,
+        count: data?.apById?.ekzaehleinheitsByApId?.totalCount ?? 0,
+        store,
+      })
 
       nodes.push({
         nodeType: 'table',
@@ -147,6 +160,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           idealbiotopFolderNode,
           assozartFolderNode,
           ekfrequenzFolderNode,
+          ekzaehleinheitFolderNode,
         ],
       })
       continue
