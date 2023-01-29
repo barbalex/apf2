@@ -10,6 +10,7 @@ import ekfrequenzFolder from './ekfrequenzFolder'
 import ekzaehleinheitFolder from './ekzaehleinheitFolder'
 import beobNichtBeurteiltFolder from './beobNichtBeurteiltFolder'
 import beobNichtZuzuordnenFolder from './beobNichtZuzuordnenFolder'
+import qkFolder from './qkFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
   const { data } = await store.client.query({
@@ -184,6 +185,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         apId: ap.id,
         store,
       })
+      const qkFolderNode = qkFolder({ projId, apId: ap.id })
 
       nodes.push({
         nodeType: 'table',
@@ -207,6 +209,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           ekzaehleinheitFolderNode,
           beobNichtBeurteiltFolderNode,
           beobNichtZuzuordnenFolderNode,
+          qkFolderNode,
         ],
       })
       continue
