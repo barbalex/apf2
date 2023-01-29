@@ -38,8 +38,6 @@ export default gql`
     $isTpopkontr: Boolean!
     $isWerteListen: Boolean!
     $isZiel: Boolean!
-    $isApBerUebersicht: Boolean!
-    $isCurrentIssues: Boolean!
     $isUsers: Boolean!
     $openAps: [UUID!]
   ) {
@@ -143,13 +141,6 @@ export default gql`
         quelle
         tpopId
         artId
-      }
-    }
-    allCurrentissues(orderBy: SORT_ASC) {
-      totalCount
-      nodes @include(if: $isCurrentIssues) {
-        id
-        label
       }
     }
     allEkfrequenzs(filter: $ekfrequenzsFilter, orderBy: SORT_ASC)
