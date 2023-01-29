@@ -41,49 +41,6 @@ export default gql`
     $isUsers: Boolean!
     $openAps: [UUID!]
   ) {
-    openAps: allAps(filter: { id: { in: $openAps } }) {
-      nodes {
-        id
-        label
-        popsByApId(filter: $popsFilter) {
-          totalCount
-        }
-        beobNichtBeurteilt: apartsByApId {
-          nodes {
-            id
-            aeTaxonomyByArtId {
-              id
-              beobsByArtId(filter: $beobNichtBeurteiltsFilter) {
-                totalCount
-                nodes @include(if: $isBeobNichtBeurteilt) {
-                  id
-                  label
-                  datum
-                  autor
-                  quelle
-                  aeTaxonomyByArtId {
-                    id
-                    apartsByArtId {
-                      nodes {
-                        id
-                        apId
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    allAps(filter: $apsFilter, orderBy: LABEL_ASC) @include(if: $isProjekt) {
-      totalCount
-      nodes @include(if: $isAps) {
-        id
-        label
-      }
-    }
     allAparts(filter: $apartsFilter, orderBy: LABEL_ASC) @include(if: $isAp) {
       nodes {
         id
