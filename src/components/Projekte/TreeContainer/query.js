@@ -6,11 +6,8 @@ export default gql`
     $apartsFilter: ApartFilter!
     $apbersFilter: ApberFilter!
     $assozartFilter: AssozartFilter!
-    $beobNichtBeurteiltsFilter: BeobFilter
-    $beobNichtZuzuordnensFilter: BeobFilter
     $beobZugeordnetsFilter: BeobFilter!
     $ekfrequenzsFilter: EkfrequenzFilter!
-    $ekzaehleinheitsFilter: EkzaehleinheitFilter!
     $erfkritsFilter: ErfkritFilter!
     $popbersFilter: PopberFilter!
     $popmassnbersFilter: PopmassnberFilter!
@@ -62,28 +59,6 @@ export default gql`
         label
         apId
         aeId
-      }
-    }
-    apBeobsNichtZuzuordnen: allBeobs(
-      filter: $beobNichtZuzuordnensFilter
-      orderBy: DATUM_DESC
-    ) @include(if: $isAp) {
-      nodes {
-        id
-        label
-        datum
-        autor
-        quelle
-        artId
-        aeTaxonomyByArtId {
-          id
-          apartsByArtId {
-            nodes {
-              id
-              apId
-            }
-          }
-        }
       }
     }
     apBeobsZugeordnet: allBeobs(

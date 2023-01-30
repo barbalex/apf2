@@ -159,12 +159,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         apId: ap.id,
         store,
       })
-      const assozartFolderNode = assozartFolder({
+      const assozartFolderNode = await assozartFolder({
         projId,
         apId: ap.id,
         loading,
         count: data?.apById?.assozartsByApId?.totalCount ?? 0,
         store,
+        treeQueryVariables,
       })
       const ekfrequenzFolderNode = await ekfrequenzFolder({
         projId,
@@ -174,12 +175,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         store,
         treeQueryVariables,
       })
-      const ekzaehleinheitFolderNode = ekzaehleinheitFolder({
+      const ekzaehleinheitFolderNode = await ekzaehleinheitFolder({
         projId,
         apId: ap.id,
         loading,
         count: data?.apById?.ekzaehleinheitsByApId?.totalCount ?? 0,
         store,
+        treeQueryVariables,
       })
       const beobNichtBeurteiltFolderNode = await beobNichtBeurteiltFolder({
         data,
