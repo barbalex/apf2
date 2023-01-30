@@ -3,7 +3,10 @@ import { gql } from '@apollo/client'
 const ekfrequenzNodes = async ({ treeQueryVariables, projId, apId, store }) => {
   const { data } = await store.client.query({
     query: gql`
-      query TreeApQuery($apId: UUID!, $ekfrequenzsFilter: EkfrequenzFilter!) {
+      query TreeEkfrequenzQuery(
+        $apId: UUID!
+        $ekfrequenzsFilter: EkfrequenzFilter!
+      ) {
         apById(id: $apId) {
           id
           ekfrequenzsByApId(filter: $ekfrequenzsFilter, orderBy: SORT_ASC) {

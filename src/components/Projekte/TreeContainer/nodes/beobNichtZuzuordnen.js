@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client'
-import findIndex from 'lodash/findIndex'
 import { DateTime } from 'luxon'
 
 const beobNichtZuzuordnenNodes = ({
