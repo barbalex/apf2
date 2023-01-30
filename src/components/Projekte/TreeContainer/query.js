@@ -5,7 +5,6 @@ export default gql`
     $apsFilter: ApFilter!
     $apartsFilter: ApartFilter!
     $apbersFilter: ApberFilter!
-    $assozartFilter: AssozartFilter!
     $beobZugeordnetsFilter: BeobFilter!
     $ekfrequenzsFilter: EkfrequenzFilter!
     $erfkritsFilter: ErfkritFilter!
@@ -50,15 +49,6 @@ export default gql`
         id
         apId
         label
-      }
-    }
-    allAssozarts(filter: $assozartFilter, orderBy: LABEL_ASC)
-      @include(if: $isAp) {
-      nodes {
-        id
-        label
-        apId
-        aeId
       }
     }
     apBeobsZugeordnet: allBeobs(
