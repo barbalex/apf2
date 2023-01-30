@@ -1,25 +1,39 @@
 import { gql } from '@apollo/client'
 
-const apberNodes = ({
-  data,
-  projId,
-  apId,
-}) => {
-  const apbers = data?.allApbers?.nodes ?? []
-  // map through all elements and create array of nodes
-  let nodes = apbers
-    .map((el) => ({
-      nodeType: 'table',
-      menuType: 'apber',
-      filterTable: 'apber',
-      id: el.id,
-      parentId: el.apId,
-      parentTableId: el.apId,
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Projekte', projId, 'Arten', el.apId, 'AP-Berichte', el.id],
-      hasChildren: false,
-    }))
+const apberNodes = async ({ projId, apId, treeQueryVariables, store }) => {
+  const { data } = await store.client.query({
+    query: gql`
+      query TreeApberQuery($apId: UUID!, $apbersFilter: ApberFilter!) {
+        apById(id: $apId) {
+          id
+          apbersByApId(filter: $apbersFilter, orderBy: LABEL_ASC) {
+            nodes {
+              id
+              label
+            }
+          }
+        }
+      }
+    `,
+    variables: {
+      apId,
+      apbersFilter: treeQueryVariables.apbersFilter,
+    },
+  })
+
+  const apbers = data?.apById?.apbersByApId?.nodes ?? []
+  const nodes = apbers.map((el) => ({
+    nodeType: 'table',
+    menuType: 'apber',
+    filterTable: 'apber',
+    id: el.id,
+    parentId: apId,
+    parentTableId: apId,
+    urlLabel: el.id,
+    label: el.label,
+    url: ['Projekte', projId, 'Arten', el.apId, 'AP-Berichte', el.id],
+    hasChildren: false,
+  }))
 
   return nodes
 }

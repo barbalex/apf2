@@ -144,12 +144,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         store,
         count: data?.apById?.erfkritsByApId?.totalCount ?? 0,
       })
-      const apberFolderNode = apberFolder({
+      const apberFolderNode = await apberFolder({
         loading,
         projId,
         apId: ap.id,
         store,
         count: data?.apById?.apbersByApId?.totalCount ?? 0,
+        treeQueryVariables,
       })
       const idealbiotopFolderNode = idealbiotopFolder({ projId, apId: ap.id })
       const apartFolderNode = await apartFolder({
