@@ -137,12 +137,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         apId: ap.id,
         store,
       })
-      const aperfkritFolderNode = aperfkritFolder({
+      const aperfkritFolderNode = await aperfkritFolder({
         loading,
         projId,
         apId: ap.id,
         store,
         count: data?.apById?.erfkritsByApId?.totalCount ?? 0,
+        treeQueryVariables,
       })
       const apberFolderNode = await apberFolder({
         loading,

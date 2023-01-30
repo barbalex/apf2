@@ -3,10 +3,7 @@ import { gql } from '@apollo/client'
 export default gql`
   query TreeAllQuery(
     $apsFilter: ApFilter!
-    $apbersFilter: ApberFilter!
     $beobZugeordnetsFilter: BeobFilter!
-    $ekfrequenzsFilter: EkfrequenzFilter!
-    $erfkritsFilter: ErfkritFilter!
     $popbersFilter: PopberFilter!
     $popmassnbersFilter: PopmassnberFilter!
     $popsFilter: PopFilter!
@@ -36,13 +33,6 @@ export default gql`
     $isUsers: Boolean!
     $openAps: [UUID!]
   ) {
-    allApbers(filter: $apbersFilter, orderBy: LABEL_ASC) @include(if: $isAp) {
-      nodes {
-        id
-        apId
-        label
-      }
-    }
     apBeobsZugeordnet: allBeobs(
       filter: $beobZugeordnetsFilter
       orderBy: DATUM_DESC
@@ -55,34 +45,6 @@ export default gql`
         quelle
         tpopId
         artId
-      }
-    }
-    allEkfrequenzs(filter: $ekfrequenzsFilter, orderBy: SORT_ASC)
-      @include(if: $isAp) {
-      nodes {
-        id
-        apId
-        code
-      }
-    }
-    allEkzaehleinheits(
-      filter: $ekzaehleinheitsFilter
-      orderBy: [SORT_ASC, LABEL_ASC]
-    ) @include(if: $isAp) {
-      nodes {
-        id
-        apId
-        label
-      }
-    }
-    allErfkrits(
-      filter: $erfkritsFilter
-      orderBy: AP_ERFKRIT_WERTE_BY_ERFOLG__SORT_ASC
-    ) @include(if: $isAp) {
-      nodes {
-        id
-        apId
-        label
       }
     }
     allPopbers(filter: $popbersFilter, orderBy: LABEL_ASC)

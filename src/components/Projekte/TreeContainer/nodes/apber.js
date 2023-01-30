@@ -31,7 +31,7 @@ const apberNodes = async ({ projId, apId, treeQueryVariables, store }) => {
     parentTableId: apId,
     urlLabel: el.id,
     label: el.label,
-    url: ['Projekte', projId, 'Arten', el.apId, 'AP-Berichte', el.id],
+    url: ['Projekte', projId, 'Arten', apId, 'AP-Berichte', el.id],
     hasChildren: false,
   }))
 
