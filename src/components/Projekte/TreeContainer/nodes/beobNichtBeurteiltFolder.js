@@ -1,11 +1,14 @@
 import sum from 'lodash/sum'
 
-const beobNichtBeurteiltFolderNode = ({
+import beobNichtBeurteilt from './beobNichtBeurteilt'
+
+const beobNichtBeurteiltFolderNode = async ({
   data,
   loading,
   projId,
   apId,
   store,
+  treeQueryVariables,
 }) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
 
@@ -29,6 +32,19 @@ const beobNichtBeurteiltFolderNode = ({
     'nicht-beurteilte-Beobachtungen',
   ]
 
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n.length > 4 &&
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'nicht-beurteilte-Beobachtungen',
+    ).length > 0
+
+  const children = isOpen
+    ? await beobNichtBeurteilt({ treeQueryVariables, projId, apId, store })
+    : []
+
   return {
     nodeType: 'folder',
     menuType: 'beobNichtBeurteiltFolder',
@@ -39,6 +55,7 @@ const beobNichtBeurteiltFolderNode = ({
     label: `Beobachtungen nicht beurteilt (${message})`,
     url,
     hasChildren: count > 0,
+    children,
   }
 }
 

@@ -181,12 +181,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         count: data?.apById?.ekzaehleinheitsByApId?.totalCount ?? 0,
         store,
       })
-      const beobNichtBeurteiltFolderNode = beobNichtBeurteiltFolder({
+      const beobNichtBeurteiltFolderNode = await beobNichtBeurteiltFolder({
         data,
         loading,
         projId,
         apId: ap.id,
         store,
+        treeQueryVariables,
       })
       const beobNichtZuzuordnenFolderNode = beobNichtZuzuordnenFolder({
         data,
