@@ -189,12 +189,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         store,
         treeQueryVariables,
       })
-      const beobNichtZuzuordnenFolderNode = beobNichtZuzuordnenFolder({
+      const beobNichtZuzuordnenFolderNode = await beobNichtZuzuordnenFolder({
         data,
         loading,
         projId,
         apId: ap.id,
         store,
+        treeQueryVariables,
       })
       const qkFolderNode = qkFolder({ projId, apId: ap.id })
 
