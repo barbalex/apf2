@@ -4,7 +4,7 @@ const qkFolderNode = ({ projId, apId }) => {
   return {
     nodeType: 'folder',
     menuType: 'qkFolder',
-    id: apId,
+    id: `${apId}QkFolder`,
     tableId: apId,
     parentTableId: apId,
     urlLabel: 'Qualitaetskontrollen',

@@ -166,12 +166,13 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         count: data?.apById?.assozartsByApId?.totalCount ?? 0,
         store,
       })
-      const ekfrequenzFolderNode = ekfrequenzFolder({
+      const ekfrequenzFolderNode = await ekfrequenzFolder({
         projId,
         apId: ap.id,
         loading,
         count: data?.apById?.ekfrequenzsByApId?.totalCount ?? 0,
         store,
+        treeQueryVariables,
       })
       const ekzaehleinheitFolderNode = ekzaehleinheitFolder({
         projId,
