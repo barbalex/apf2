@@ -278,8 +278,8 @@ $$ language sql stable;
 comment on function apflora.user_label(apflora.user) is e'@sortable';
 
 drop function if exists apflora.beob_label(beob apflora.beob);
-create function apflora.beob_label(beob apflora.beob) returns text as $$
-  select to_char(beob.datum, 'YYYY.MM.DD') || ': ' || coalesce(beob.autor, '(kein Autor)') || beob.quelle || ')'
+create or replace function apflora.beob_label(beob apflora.beob) returns text as $$
+  select to_char(beob.datum, 'YYYY.MM.DD') || ': ' || coalesce(beob.autor, '(kein Autor)') || ' (' || beob.quelle || ')'
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.beob_label(apflora.beob) is e'@sortable';
