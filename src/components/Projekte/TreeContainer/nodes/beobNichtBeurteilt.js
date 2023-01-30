@@ -1,20 +1,12 @@
 import { gql } from '@apollo/client'
-import findIndex from 'lodash/findIndex'
 import { DateTime } from 'luxon'
 import sortBy from 'lodash/sortBy'
 
 const beobNichtBeurteiltNodes = ({
   data,
-  projektNodes,
-  apNodes,
   projId,
   apId,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, { id: apId })
 
   // map through all elements and create array of nodes
   const aparts = (data?.openAps?.nodes ?? []).find((el) => el?.id === apId)
@@ -60,10 +52,6 @@ const beobNichtBeurteiltNodes = ({
         ],
         hasChildren: false,
       }
-    })
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 11, index]
-      return el
     })
 
   return nodes
