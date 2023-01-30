@@ -130,12 +130,11 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         store,
         count: data?.apById?.popsByApId?.totalCount ?? 0,
       })
-      const apzielFolderNode = apzielFolder({
-        data,
-        loading,
+      const apzielFolderNode = await apzielFolder({
         projId,
         apId: ap.id,
         store,
+        treeQueryVariables,
       })
       const aperfkritFolderNode = await aperfkritFolder({
         loading,

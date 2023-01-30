@@ -1,61 +1,53 @@
-import findIndex from 'lodash/findIndex'
-import union from 'lodash/union'
+import apziel from './apziel'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-
-const apzieljahrFolderNode = ({
-  data,
-  projektNodes,
+const apzieljahrFolderNode = async ({
+  ziels,
   projId,
-  apNodes,
-  openNodes,
   apId,
+  store,
+  zieljahre = [],
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, {
-    id: apId,
-  })
-
-  const ziels = (data?.allZiels?.nodes ?? [])
-    // of this ap
-    .filter((el) => el.apId === apId)
-
-  const zieljahre = ziels
-    .reduce((a, el) => union(a, [el.jahr]), [])
-    .filter((jahr) =>
-      allParentNodesAreOpen(openNodes, [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'AP-Ziele',
-        jahr,
-      ]),
-    )
-    .sort()
-
-  return zieljahre.map((jahr, index) => {
+  const nodes = []
+  for (const jahr of zieljahre) {
     const labelJahr = jahr === null || jahr === undefined ? 'kein Jahr' : jahr
     const zieleOfJahr = ziels.filter((el) => el.jahr === jahr)
     const labelJahreLength = zieleOfJahr.length
 
-    return {
+    const isOpen =
+      store.tree.openNodes.filter(
+        (n) =>
+          n.length > 5 &&
+          n[1] === projId &&
+          n[3] === apId &&
+          n[4] === 'AP-Ziele' &&
+          n[5] === jahr,
+      ).length > 0
+
+    const children = isOpen
+      ? await apziel({
+          projId,
+          apId,
+          store,
+          ziels: ziels.filter((z) => z.jahr === jahr),
+        })
+      : []
+
+    nodes.push({
       nodeType: 'folder',
       menuType: 'zieljahrFolder',
       filterTable: 'ziel',
-      id: jahr || 'keinJahr',
+      id: `${apId}Ziele${jahr || 'keinJahr'}`,
       jahr,
       parentId: apId,
       urlLabel: `${jahr === null || jahr === undefined ? 'kein Jahr' : jahr}`,
       label: `${labelJahr} (${labelJahreLength})`,
       url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr],
-      sort: [projIndex, 1, apIndex, 2, index],
       hasChildren: true,
-    }
-  })
+      children,
+    })
+  }
+
+  return nodes
 }
 
 export default apzieljahrFolderNode
