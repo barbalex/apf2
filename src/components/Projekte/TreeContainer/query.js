@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 export default gql`
   query TreeAllQuery(
     $apsFilter: ApFilter!
-    $apartsFilter: ApartFilter!
     $apbersFilter: ApberFilter!
     $beobZugeordnetsFilter: BeobFilter!
     $ekfrequenzsFilter: EkfrequenzFilter!
@@ -37,13 +36,6 @@ export default gql`
     $isUsers: Boolean!
     $openAps: [UUID!]
   ) {
-    allAparts(filter: $apartsFilter, orderBy: LABEL_ASC) @include(if: $isAp) {
-      nodes {
-        id
-        apId
-        label
-      }
-    }
     allApbers(filter: $apbersFilter, orderBy: LABEL_ASC) @include(if: $isAp) {
       nodes {
         id
