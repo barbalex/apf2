@@ -47,21 +47,26 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
 
     let children = []
     if (isOpen) {
-      const { data, loading: isLoading } = await store.queryClient.fetchQuery({
+      const { data, isLoading } = await store.queryClient.fetchQuery({
         queryKey: ['treePop', node.id],
         queryFn: () =>
           store.client.query({
             query: gql`
-              query TreePopQuery($id: UUID!) {
+              query TreePopQuery(
+                $id: UUID!
+                $tpopsFilter: TpopFilter!
+                $popbersFilter: PopberFilter!
+                $popmassnbersFilter: PopmassnberFilter!
+              ) {
                 popById(id: $id) {
                   id
-                  tpopsByPopId {
+                  tpopsByPopId(filter: $tpopsFilter) {
                     totalCount
                   }
-                  popmassnbersByPopId {
+                  popmassnbersByPopId(filter: $popmassnbersFilter) {
                     totalCount
                   }
-                  popbersByPopId {
+                  popbersByPopId(filter: $popbersFilter) {
                     totalCount
                   }
                 }
@@ -69,6 +74,9 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
             `,
             variables: {
               id: node.id,
+              tpopsFilter: treeQueryVariables.tpopsFilter,
+              popbersFilter: treeQueryVariables.popbersFilter,
+              popmassnbersFilter: treeQueryVariables.popmassnbersFilter,
             },
             fetchPolicy: 'no-cache',
           }),

@@ -35,30 +35,83 @@ const tpopNodes = async ({
       }),
   })
 
+  const nodes = []
   // map through all elements and create array of nodes
-  const nodes = (data?.popById?.tpopsByPopId?.nodes ?? []).map((el) => ({
-    nodeType: 'table',
-    menuType: 'tpop',
-    filterTable: 'tpop',
-    id: el.id,
-    parentId: `${popId}TpopFolder`,
-    parentTableId: popId,
-    urlLabel: el.id,
-    label: el.label,
-    url: [
-      'Projekte',
-      projId,
-      'Arten',
-      apId,
-      'Populationen',
-      popId,
-      'Teil-Populationen',
-      el.id,
-    ],
-    hasChildren: true,
-  }))
-  // TODO: check: sort again to sort (keine Nr) on top
-  // .sort((a, b) => a.nr - b.nr)
+  for (const node of data?.popById?.tpopsByPopId?.nodes ?? []) {
+    const isOpen =
+      store.tree.openNodes.filter(
+        (n) =>
+          n.length > 5 &&
+          n[1] === projId &&
+          n[3] === apId &&
+          n[4] === 'Populationen' &&
+          n[5] === popId &&
+          n[6] === 'Teil-Populationen' &&
+          n[7] === node.id,
+      ).length > 0
+
+    let children = []
+
+    if (isOpen) {
+      const { data, isLoading } = await store.queryClient.fetchQuery({
+        queryKey: ['treeTpop', node.id],
+        queryFn: () =>
+          store.client.query({
+            query: gql`
+              query TreeTpopQuery(
+                $id: UUID!
+                $tpopmassnsFilter: TpopmassnFilter!
+                $tpopmassnbersFilter: TpopmassnberFilter!
+                $tpopbersFilter: TpopberFilter!
+              ) {
+                tpopById(id: $id) {
+                  id
+                  tpopmassnsByTpopId(filter: $tpopmassnsFilter) {
+                    totalCount
+                  }
+                  tpopmassnbersByTpopId(filter: $tpopmassnbersFilter) {
+                    totalCount
+                  }
+                  tpopbersByTpopId(filter: $tpopbersFilter) {
+                    totalCount
+                  }
+                }
+              }
+            `,
+            variables: {
+              id: node.id,
+              tpopmassnsFilter: treeQueryVariables.tpopmassnsFilter,
+              tpopmassnbersFilter: treeQueryVariables.tpopmassnbersFilter,
+              tpopbersFilter: treeQueryVariables.tpopbersFilter,
+            },
+            fetchPolicy: 'no-cache',
+          }),
+      })
+    }
+
+    nodes.push({
+      nodeType: 'table',
+      menuType: 'tpop',
+      filterTable: 'tpop',
+      id: node.id,
+      parentId: `${popId}TpopFolder`,
+      parentTableId: popId,
+      urlLabel: node.id,
+      label: node.label,
+      url: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        node.id,
+      ],
+      hasChildren: true,
+      children,
+    })
+  }
 
   return nodes
 }

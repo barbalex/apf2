@@ -2,7 +2,7 @@ import uniq from 'lodash/uniq'
 import isUuid from 'is-uuid'
 
 /**
- * returns a filter for every branch of the nav tree
+ * returns a filter for every branch of the nav tree 
  */
 
 /**
