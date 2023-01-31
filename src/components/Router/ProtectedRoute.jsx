@@ -13,6 +13,7 @@ import Deletions from '../Deletions'
 import inIframe from '../../modules/inIframe'
 import ActiveNodeArraySetter from '../ActiveNodeArraySetter'
 import NavigateSetter from '../NavigateSetter'
+import QueryClientSetter from '../QueryClientSetter'
 
 const isInIframe = inIframe()
 
@@ -40,7 +41,7 @@ const ProtectedRoute = () => {
   const role = tokenDecoded ? tokenDecoded.role : null
   const isFreiwillig = role === 'apflora_freiwillig'
 
-  // if user is freiwillig 
+  // if user is freiwillig
   // and path is not in /Benutzer/:userId
   // then redirect to /Benutzer/:userId/EKF
   const shouldNavigate =
@@ -62,6 +63,7 @@ const ProtectedRoute = () => {
           {!isFreiwillig && showDeletions && <Deletions />}
           <ActiveNodeArraySetter />
           <NavigateSetter />
+          <QueryClientSetter />
         </>
       )}
       <User />

@@ -54,14 +54,6 @@ import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
 import buildTreeQueryVariables from '../buildTreeQueryVariables'
 
-const compare = (a, b) => {
-  // sort a before, if it has no value at this index
-  if (a !== 0 && !a) return -1
-  // sort a after if b has no value at this index
-  if (b !== 0 && !b) return 1
-  // sort a before if its value is smaller
-  return a - b
-}
 
 const nodes = async ({ store, role }) => {
   //console.log('nodes', { data, openNodes })
