@@ -107,7 +107,7 @@ const Popmassnber = () => {
         return setFieldErrors({ [field]: error.message })
       }
       setFieldErrors({})
-      if (['jahr', 'entwicklung'].includes(field)) {
+      if (['jahr', 'beurteilung'].includes(field)) {
         store.tree.incrementRefetcher()
       }
     },

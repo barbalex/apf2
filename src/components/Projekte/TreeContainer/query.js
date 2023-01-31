@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 export default gql`
   query TreeAllQuery(
     $beobZugeordnetsFilter: BeobFilter!
-    $popbersFilter: PopberFilter!
     $popmassnbersFilter: PopmassnberFilter!
     $tpopbersFilter: TpopberFilter!
     $tpopfeldkontrsFilter: TpopkontrFilter!
@@ -32,14 +31,6 @@ export default gql`
         quelle
         tpopId
         artId
-      }
-    }
-    allPopbers(filter: $popbersFilter, orderBy: LABEL_ASC)
-      @include(if: $isPop) {
-      nodes {
-        id
-        popId
-        label
       }
     }
     allPopmassnbers(filter: $popmassnbersFilter, orderBy: LABEL_ASC)

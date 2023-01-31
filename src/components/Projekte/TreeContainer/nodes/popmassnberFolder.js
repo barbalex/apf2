@@ -1,10 +1,13 @@
-const popmassnberFolderNode = ({
+import popmassnber from './popmassnber'
+
+const popmassnberFolderNode = async ({
   count,
   loading,
   projId,
   apId,
   popId,
   store,
+  treeQueryVariables,
 }) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.popmassnber ?? ''
 
@@ -13,6 +16,20 @@ const popmassnberFolderNode = ({
     : nodeLabelFilterString
     ? `${count} gefiltert`
     : count
+
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'Populationen' &&
+        n[5] === popId &&
+        n[6] === 'Massnahmen-Berichte',
+    ).length > 0
+
+  const children = isOpen
+    ? await popmassnber({ treeQueryVariables, projId, apId, popId, store })
+    : []
 
   return {
     nodeType: 'folder',
@@ -32,6 +49,7 @@ const popmassnberFolderNode = ({
       'Massnahmen-Berichte',
     ],
     hasChildren: count > 0,
+    children,
   }
 }
 
