@@ -7,7 +7,6 @@ const copyZaehlOfTpopKontr = async ({
   tpopkontrIdTo,
   client,
   store,
-  queryClient,
 }) => {
   // 1. fetch all tpopkontrzaehl
   const { data } = await client.query({
@@ -34,7 +33,6 @@ const copyZaehlOfTpopKontr = async ({
       id: zaehl.id,
       client,
       store,
-      queryClient,
     }),
   )
 }
