@@ -6,7 +6,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
 
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
@@ -87,7 +86,6 @@ const TpopForm = () => {
   const { tpopId: id } = useParams()
 
   const client = useApolloClient()
-  const queryClient = useQueryClient()
   const store = useContext(storeContext)
 
   const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
@@ -175,16 +173,16 @@ const TpopForm = () => {
         setFieldErrors({})
       }
       if (['nr', 'flurname'].includes(field)) {
-        queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+        store.tree.incrementRefetcher()
       }
     },
     [
       client,
       fieldErrors,
-      queryClient,
       row.id,
       row?.lv95X,
       row?.y,
+      store.tree,
       store.user.name,
     ],
   )
