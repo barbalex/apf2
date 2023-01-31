@@ -1,7 +1,6 @@
 import { gql } from '@apollo/client'
 
 const tpopfeldkontrNodes = async ({
-  data,
   projId,
   apId,
   popId,
@@ -9,14 +8,48 @@ const tpopfeldkontrNodes = async ({
   store,
   treeQueryVariables,
 }) => {
-  // map through all elements and create array of nodes
-  let nodes = (data?.allTpopfeldkontrs?.nodes ?? []).map((el) => ({
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: [
+      'treeTpopfeldkontr',
+      tpopId,
+      treeQueryVariables.tpopfeldkontrsFilter,
+    ],
+    queryFn: () =>
+      store.client.query({
+        query: gql`
+          query TreeTpopfeldkontrQuery(
+            $id: UUID!
+            $tpopfeldkontrsFilter: TpopkontrFilter!
+          ) {
+            tpopById(id: $id) {
+              id
+              tpopfeldkontrs: tpopkontrsByTpopId(
+                filter: $tpopfeldkontrsFilter
+                orderBy: [JAHR_ASC, DATUM_ASC]
+              ) {
+                nodes {
+                  id
+                  labelEk
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          id: tpopId,
+          tpopfeldkontrsFilter: treeQueryVariables.tpopfeldkontrsFilter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+
+  let nodes = (data?.tpopById?.tpopfeldkontrs?.nodes ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'tpopfeldkontr',
     filterTable: 'tpopkontr',
     id: el.id,
-    parentId: `${el.tpopId}TpopfeldkontrFolder`,
-    parentTableId: el.tpopId,
+    parentId: `${tpopId}TpopfeldkontrFolder`,
+    parentTableId: tpopId,
     urlLabel: el.id,
     label: el.labelEk,
     url: [
