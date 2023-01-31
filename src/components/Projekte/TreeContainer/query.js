@@ -9,7 +9,6 @@ export default gql`
     $tpopfreiwkontrsFilter: TpopkontrFilter!
     $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
     $tpopmassnbersFilter: TpopmassnberFilter!
-    $tpopmassnsFilter: TpopmassnFilter!
     $adressesFilter: AdresseFilter!
     $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
     $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
@@ -78,14 +77,6 @@ export default gql`
       }
     }
     allTpopmassnbers(filter: $tpopmassnbersFilter, orderBy: LABEL_ASC)
-      @include(if: $isTpop) {
-      nodes {
-        id
-        tpopId
-        label
-      }
-    }
-    allTpopmassns(filter: $tpopmassnsFilter, orderBy: [JAHR_ASC, DATUM_ASC])
       @include(if: $isTpop) {
       nodes {
         id

@@ -1,5 +1,8 @@
 import { gql } from '@apollo/client'
 
+import tpopmassnFolder from './tpopmassnFolder'
+import tpopmassnberFolder from './tpopmassnberFolder'
+
 const tpopNodes = async ({
   projId,
   apId,
@@ -87,6 +90,27 @@ const tpopNodes = async ({
             fetchPolicy: 'no-cache',
           }),
       })
+      const tpopmassnFolderNode = await tpopmassnFolder({
+        count: data?.tpopById?.tpopmassnsByTpopId?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
+      const tpopmassnberFolderNode = await tpopmassnberFolder({
+        count: data?.tpopById?.tpopmassnbersByTpopId?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
+      children = [tpopmassnFolderNode, tpopmassnberFolderNode]
     }
 
     nodes.push({

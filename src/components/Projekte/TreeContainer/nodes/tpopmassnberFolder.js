@@ -1,37 +1,19 @@
-import findIndex from 'lodash/findIndex'
-
 const tpopmassnberFolderNode = ({
-  nodes: nodesPassed,
-  data,
+  count,
   loading,
-  projektNodes,
-  apNodes,
-  popNodes,
-  tpopNodes,
   projId,
   apId,
   popId,
   tpopId,
   store,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
-  const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpopmassnber ?? ''
-
-  const childrenLength = (data?.allTpopmassnbers?.nodes ?? []).filter(
-    (el) => el.tpopId === tpopId,
-  ).length
 
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${childrenLength} gefiltert`
-    : childrenLength
+    ? `${count} gefiltert`
+    : count
 
   const url = [
     'Projekte',
@@ -45,24 +27,19 @@ const tpopmassnberFolderNode = ({
     'Massnahmen-Berichte',
   ]
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(tpopId)) return []
+  const node = {
+    nodeType: 'folder',
+    menuType: 'tpopmassnberFolder',
+    filterTable: 'tpopmassnber',
+    id: `${tpopId}TpopmassnberFolder`,
+    tableId: tpopId,
+    urlLabel: 'Massnahmen-Berichte',
+    label: `Massnahmen-Berichte (${message})`,
+    url,
+    hasChildren: count > 0,
+  }
 
-  const nodes = [
-    {
-      nodeType: 'folder',
-      menuType: 'tpopmassnberFolder',
-      filterTable: 'tpopmassnber',
-      id: `${tpopId}TpopmassnberFolder`,
-      tableId: tpopId,
-      urlLabel: 'Massnahmen-Berichte',
-      label: `Massnahmen-Berichte (${message})`,
-      url,
-      sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 2],
-      hasChildren: childrenLength > 0,
-    },
-  ]
-  return nodes
+  return node
 }
 
 export default tpopmassnberFolderNode
