@@ -124,11 +124,12 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         },
       })
       // 2. build children
-      const popFolderNode = popFolder({
+      const popFolderNode = await popFolder({
         projId,
         apId: ap.id,
         store,
         count: data?.apById?.popsByApId?.totalCount ?? 0,
+        treeQueryVariables,
       })
       const apzielFolderNode = await apzielFolder({
         projId,

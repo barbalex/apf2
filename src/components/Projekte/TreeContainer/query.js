@@ -2,7 +2,6 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query TreeAllQuery(
-    $apsFilter: ApFilter!
     $beobZugeordnetsFilter: BeobFilter!
     $popbersFilter: PopberFilter!
     $popmassnbersFilter: PopmassnberFilter!
@@ -18,8 +17,6 @@ export default gql`
     $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
     $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
     $tpopkontrzaehlEinheitWertesFilter: TpopkontrzaehlEinheitWerteFilter!
-    $zielbersFilter: ZielberFilter!
-    $zielsFilter: ZielFilter!
     $isProjekt: Boolean!
     $isAps: Boolean!
     $isAp: Boolean!
@@ -182,22 +179,6 @@ export default gql`
       nodes {
         id
         label
-      }
-    }
-    allZielbers(filter: $zielbersFilter, orderBy: LABEL_ASC)
-      @include(if: $isZiel) {
-      nodes {
-        id
-        zielId
-        label
-      }
-    }
-    allZiels(filter: $zielsFilter, orderBy: LABEL_ASC) @include(if: $isAp) {
-      nodes {
-        id
-        apId
-        label
-        jahr
       }
     }
   }
