@@ -8,7 +8,6 @@ const saveNichtZuordnenToDb = async ({
   refetch: refetchPassed,
   client,
   store,
-  queryClient,
   search,
 }) => {
   const variables = {
@@ -21,7 +20,7 @@ const saveNichtZuordnenToDb = async ({
     mutation: updateBeobByIdGql,
     variables,
   })
-  queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+  store.tree.incrementRefetcher()
   // need to update activeNodeArray and openNodes
   const { activeNodeArray, openNodes, addOpenNodes } = store.tree
 

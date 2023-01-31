@@ -6,7 +6,6 @@ import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useQueryClient } from '@tanstack/react-query'
 import SimpleBar from 'simplebar-react'
 import { useParams, useLocation } from 'react-router-dom'
 
@@ -129,7 +128,6 @@ const Beobzuordnung = ({ type }) => {
   const { beobId: id, apId } = useParams()
   const { search } = useLocation()
 
-  const queryClient = useQueryClient()
   const client = useApolloClient()
   const store = useContext(storeContext)
 
@@ -158,9 +156,9 @@ const Beobzuordnung = ({ type }) => {
   const onSaveArtIdToDb = useCallback(
     (event) => {
       const { value } = event.target
-      saveArtIdToDb({ value, row, client, store, queryClient, search })
+      saveArtIdToDb({ value, row, client, store, search })
     },
-    [client, queryClient, row, search, store],
+    [client, row, search, store],
   )
   const onSaveNichtZuordnenToDb = useCallback(
     (value) => {
@@ -170,11 +168,10 @@ const Beobzuordnung = ({ type }) => {
         refetch,
         client,
         store,
-        queryClient,
         search,
       })
     },
-    [client, id, queryClient, refetch, search, store],
+    [client, id, refetch, search, store],
   )
   const onSaveTpopIdToDb = useCallback(
     (event) => {
