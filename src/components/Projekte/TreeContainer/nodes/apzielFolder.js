@@ -9,26 +9,58 @@ const apzielFolderNode = async ({
   store,
   treeQueryVariables,
 }) => {
-  const { data, loading } = await store.client.query({
-    query: gql`
-      query TreeApZieljahrFolderQuery($apId: UUID!, $zielsFilter: ZielFilter!) {
-        apById(id: $apId) {
-          id
-          zielsByApId(filter: $zielsFilter, orderBy: LABEL_ASC) {
-            nodes {
+  const { data, isLoading } = await store.queryClient.fetchQuery({
+    queryKey: ['treeApZieljahrFolder', apId, treeQueryVariables.zielsFilter],
+    queryFn: async () => {
+      const { data, loading: isLoading } = await store.client.query({
+        query: gql`
+          query TreeApZieljahrFolderQuery(
+            $apId: UUID!
+            $zielsFilter: ZielFilter!
+          ) {
+            apById(id: $apId) {
               id
-              label
-              jahr
+              zielsByApId(filter: $zielsFilter, orderBy: LABEL_ASC) {
+                nodes {
+                  id
+                  label
+                  jahr
+                }
+              }
             }
           }
-        }
-      }
-    `,
-    variables: {
-      apId,
-      zielsFilter: treeQueryVariables.zielsFilter,
+        `,
+        variables: {
+          apId,
+          zielsFilter: treeQueryVariables.zielsFilter,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      console.log('TreeApZieljahrFolderQuery inside', { data, isLoading })
+      return { data, isLoading }
     },
   })
+  console.log('TreeApZieljahrFolderQuery', { data, isLoading })
+  // const { data, loading: isLoading } = await store.client.query({
+  //   query: gql`
+  //     query TreeApZieljahrFolderQuery($apId: UUID!, $zielsFilter: ZielFilter!) {
+  //       apById(id: $apId) {
+  //         id
+  //         zielsByApId(filter: $zielsFilter, orderBy: LABEL_ASC) {
+  //           nodes {
+  //             id
+  //             label
+  //             jahr
+  //           }
+  //         }
+  //       }
+  //     }
+  //   `,
+  //   variables: {
+  //     apId,
+  //     zielsFilter: treeQueryVariables.zielsFilter,
+  //   },
+  // })
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ziel ?? ''
 
@@ -38,7 +70,7 @@ const apzielFolderNode = async ({
     .reduce((a, el) => union(a, [el.jahr]), [])
     .sort()
   const zieljahreLength = zieljahre.length
-  const message = loading
+  const message = isLoading
     ? '...'
     : nodeLabelFilterString
     ? `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'} gefiltert`

@@ -8,7 +8,6 @@ import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useApolloClient } from '@apollo/client'
-import { useQueryClient } from '@tanstack/react-query'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -288,7 +287,6 @@ const TreeContainer = () => {
 
   const client = useApolloClient()
   const { idb } = useContext(idbContext)
-  const queryClient = useQueryClient()
 
   const store = useContext(storeContext)
   const {
@@ -304,7 +302,7 @@ const TreeContainer = () => {
     setCopyingBiotop,
     user,
   } = store
-  const { setOpenNodes } = store.tree
+  const { setOpenNodes, refetcher } = store.tree
 
   const { token } = user
   const role = token ? jwtDecode(token).role : null
@@ -356,6 +354,7 @@ const TreeContainer = () => {
     beobGqlFilter,
     openAps,
     buildNodesDebounced,
+    refetcher,
   ])
 
   // deactivated because toggling the project node would not close the project
@@ -452,7 +451,6 @@ const TreeContainer = () => {
             id,
             client,
             store,
-            queryClient,
             search,
           })
         },
@@ -466,7 +464,6 @@ const TreeContainer = () => {
             menuType,
             client,
             store,
-            queryClient,
           })
         },
         closeLowerNodes() {
@@ -485,7 +482,7 @@ const TreeContainer = () => {
             afterDeletionHook: () => {
               const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
               setOpenNodes(newOpenNodes)
-              queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+              store.tree.incrementRefetcher()
             },
           })
         },
@@ -510,7 +507,7 @@ const TreeContainer = () => {
           setMoving({ table, id, label })
         },
         move() {
-          moveTo({ id, store, client, queryClient })
+          moveTo({ id, store, client })
         },
         markForCopying() {
           setCopying({ table, id, label, withNextLevel: false })
@@ -531,7 +528,6 @@ const TreeContainer = () => {
             parentId: id,
             client,
             store,
-            queryClient,
           })
         },
         markForCopyingBiotop() {
@@ -553,7 +549,6 @@ const TreeContainer = () => {
             projId,
             client,
             store,
-            queryClient,
             search,
           })
         },
@@ -632,7 +627,6 @@ const TreeContainer = () => {
       enqueNotification,
       client,
       store,
-      queryClient,
       apId,
       projId,
       popId,

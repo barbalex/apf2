@@ -95,10 +95,10 @@ const Zielber = () => {
       }
       setFieldErrors({})
       if (['jahr', 'erreichung'].includes(field)) {
-        queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+        store.tree.incrementRefetcher()
       }
     },
-    [client, queryClient, row.id, store.user.name],
+    [client, row.id, store],
   )
 
   if (loading) return <Spinner />
