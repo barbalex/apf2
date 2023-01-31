@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
@@ -75,7 +74,6 @@ const Ekfrequenz = () => {
   const { ekfrequenzId: id } = useParams()
 
   const client = useApolloClient()
-  const queryClient = useQueryClient()
   const store = useContext(storeContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
@@ -136,11 +134,11 @@ const Ekfrequenz = () => {
       }
       setFieldErrors({})
       if (field === 'code') {
-        queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+        store.tree.incrementRefetcher()
       }
       return
     },
-    [client, queryClient, row.id, store.user.name],
+    [client, row.id, store.tree, store.user.name],
   )
 
   if (loading) return <Spinner />
