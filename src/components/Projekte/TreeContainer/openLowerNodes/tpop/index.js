@@ -13,7 +13,6 @@ const openLowerNodesTpop = async ({
   projId = '99999999-9999-9999-9999-999999999999',
   client,
   store,
-  queryClient,
 }) => {
   const tree = store.tree
   const { addOpenNodes } = tree
@@ -294,7 +293,7 @@ const openLowerNodesTpop = async ({
   addOpenNodes(newOpenNodes)
 
   // 4. refresh tree
-  queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+  store.tree.incrementRefetcher()
 }
 
 export default openLowerNodesTpop
