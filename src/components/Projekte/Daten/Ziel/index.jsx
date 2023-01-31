@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -46,7 +45,6 @@ const Ziel = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { activeNodeArray, openNodes, setOpenNodes } = store.tree
-  const queryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -98,7 +96,7 @@ const Ziel = () => {
         return setFieldErrors({ [field]: error.message })
       }
       setFieldErrors({})
-      queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+      store.tree.incrementRefetcher()
       // if jahr of ziel is updated, activeNodeArray und openNodes need to change
       if (field === 'jahr') {
         const newActiveNodeArray = [...activeNodeArray]
@@ -119,7 +117,7 @@ const Ziel = () => {
     [
       row.id,
       store.user.name,
-      queryClient,
+      store.tree,
       client,
       activeNodeArray,
       openNodes,
