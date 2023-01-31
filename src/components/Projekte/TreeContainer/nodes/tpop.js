@@ -2,6 +2,7 @@ import { gql } from '@apollo/client'
 
 import tpopmassnFolder from './tpopmassnFolder'
 import tpopmassnberFolder from './tpopmassnberFolder'
+import tpopfeldkontrFolder from './tpopfeldkontrFolder'
 
 const tpopNodes = async ({
   projId,
@@ -66,6 +67,7 @@ const tpopNodes = async ({
                 $tpopmassnsFilter: TpopmassnFilter!
                 $tpopmassnbersFilter: TpopmassnberFilter!
                 $tpopbersFilter: TpopberFilter!
+                $tpopfeldkontrsFilter: TpopkontrFilter!
               ) {
                 tpopById(id: $id) {
                   id
@@ -78,6 +80,12 @@ const tpopNodes = async ({
                   tpopbersByTpopId(filter: $tpopbersFilter) {
                     totalCount
                   }
+                  tpopfeldkontrs: tpopkontrsByTpopId(
+                    filter: $tpopfeldkontrsFilter
+                    orderBy: [JAHR_ASC, DATUM_ASC]
+                  ) {
+                    totalCount
+                  }
                 }
               }
             `,
@@ -86,6 +94,7 @@ const tpopNodes = async ({
               tpopmassnsFilter: treeQueryVariables.tpopmassnsFilter,
               tpopmassnbersFilter: treeQueryVariables.tpopmassnbersFilter,
               tpopbersFilter: treeQueryVariables.tpopbersFilter,
+              tpopfeldkontrsFilter: treeQueryVariables.tpopfeldkontrsFilter,
             },
             fetchPolicy: 'no-cache',
           }),
@@ -110,7 +119,21 @@ const tpopNodes = async ({
         store,
         treeQueryVariables,
       })
-      children = [tpopmassnFolderNode, tpopmassnberFolderNode]
+      const tpopfeldkontrFolderNode = await tpopfeldkontrFolder({
+        count: data?.tpopById?.tpopfeldkontrs?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
+      children = [
+        tpopmassnFolderNode,
+        tpopmassnberFolderNode,
+        tpopfeldkontrFolderNode,
+      ]
     }
 
     nodes.push({

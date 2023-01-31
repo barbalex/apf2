@@ -8,7 +8,6 @@ export default gql`
     $tpopfeldkontrsFilter: TpopkontrFilter!
     $tpopfreiwkontrsFilter: TpopkontrFilter!
     $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
-    $tpopmassnbersFilter: TpopmassnberFilter!
     $adressesFilter: AdresseFilter!
     $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
     $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
@@ -73,14 +72,6 @@ export default gql`
       nodes {
         id
         tpopkontrId
-        label
-      }
-    }
-    allTpopmassnbers(filter: $tpopmassnbersFilter, orderBy: LABEL_ASC)
-      @include(if: $isTpop) {
-      nodes {
-        id
-        tpopId
         label
       }
     }
