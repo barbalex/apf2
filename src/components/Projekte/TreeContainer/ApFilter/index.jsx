@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import Switch from '@mui/material/Switch'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
-import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 
 import apById from './apById'
@@ -28,7 +27,6 @@ const ApFilter = () => {
   const navigate = useNavigate()
   const { search } = useLocation()
 
-  const queryClient = useQueryClient()
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { apFilter, setApFilter, activeNodeArray, openNodes, setOpenNodes } =
@@ -39,7 +37,7 @@ const ApFilter = () => {
     // console.log('ApFilter, onChange', { apFilter, previousApFilter })
     if (!previousApFilter) {
       // need to fetch previously not had aps
-      queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+      store.tree.incrementRefetcher()
       // apFilter was set to true
       let result
       if (apId) {
@@ -81,10 +79,10 @@ const ApFilter = () => {
     client,
     navigate,
     openNodes,
-    queryClient,
     search,
     setApFilter,
     setOpenNodes,
+    store.tree,
   ])
 
   return (
