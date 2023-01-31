@@ -1,54 +1,64 @@
-import findIndex from 'lodash/findIndex'
+import { gql } from '@apollo/client'
 
-const tpopNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
-  apNodes,
-  popNodes,
+const tpopNodes = async ({
   projId,
   apId,
   popId,
+  store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: ['treeTpop', popId, treeQueryVariables.tpopsFilter],
+    queryFn: () =>
+      store.client.query({
+        query: gql`
+          query TreeTpopQuery($id: UUID!, $tpopsFilter: TpopFilter!) {
+            popById(id: $id) {
+              id
+              tpopsByPopId(
+                filter: $tpopsFilter
+                orderBy: [NR_ASC, FLURNAME_ASC]
+              ) {
+                nodes {
+                  id
+                  label
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          id: popId,
+          tpopsFilter: treeQueryVariables.tpopsFilter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
 
   // map through all elements and create array of nodes
-  const nodes = (data?.allTpops?.nodes ?? [])
-    // only show if parent node exists
-    .filter((el) =>
-      nodesPassed.map((n) => n.id).includes(`${el.popId}TpopFolder`),
-    )
-    // only show nodes of this parent
-    .filter((el) => el.popId === popId)
-    .map((el) => ({
-      nodeType: 'table',
-      menuType: 'tpop',
-      filterTable: 'tpop',
-      id: el.id,
-      parentId: `${el.popId}TpopFolder`,
-      parentTableId: el.popId,
-      urlLabel: el.id,
-      label: el.label,
-      url: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        el.popId,
-        'Teil-Populationen',
-        el.id,
-      ],
-      hasChildren: true,
-      nr: el.nr,
-    }))
-    // TODO: check: sort again to sort (keine Nr) on top
-    // .sort((a, b) => a.nr - b.nr)
+  const nodes = (data?.popById?.tpopsByPopId?.nodes ?? []).map((el) => ({
+    nodeType: 'table',
+    menuType: 'tpop',
+    filterTable: 'tpop',
+    id: el.id,
+    parentId: `${popId}TpopFolder`,
+    parentTableId: popId,
+    urlLabel: el.id,
+    label: el.label,
+    url: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
+      el.id,
+    ],
+    hasChildren: true,
+  }))
+  // TODO: check: sort again to sort (keine Nr) on top
+  // .sort((a, b) => a.nr - b.nr)
 
   return nodes
 }

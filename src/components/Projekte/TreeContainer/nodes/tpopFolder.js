@@ -1,6 +1,14 @@
-import tpop from "./tpop"
+import tpop from './tpop'
 
-const tpopFolderNode = async ({ count, loading, projId, apId, popId, store, treeQueryVariables }) => {
+const tpopFolderNode = async ({
+  count,
+  loading,
+  projId,
+  apId,
+  popId,
+  store,
+  treeQueryVariables,
+}) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpop ?? ''
 
   const message = loading
@@ -24,25 +32,28 @@ const tpopFolderNode = async ({ count, loading, projId, apId, popId, store, tree
       (n) =>
         n[1] === projId &&
         n[3] === apId &&
-        n[4] === 'Populationen' && n[5] === popId && n[6] === 'Teil-Populationen',
+        n[4] === 'Populationen' &&
+        n[5] === popId &&
+        n[6] === 'Teil-Populationen',
     ).length > 0
 
   const children = isOpen
-    ? await pop({ treeQueryVariables, projId, apId, store })
+    ? await tpop({ treeQueryVariables, projId, apId, popId, store })
     : []
 
   return {
-      nodeType: 'folder',
-      menuType: 'tpopFolder',
-      filterTable: 'tpop',
-      id: `${popId}TpopFolder`,
-      tableId: popId,
-      parentTableId: popId,
-      urlLabel: 'Teil-Populationen',
-      label: `Teil-Populationen (${message})`,
-      url,
-      hasChildren: count > 0,
-    }
+    nodeType: 'folder',
+    menuType: 'tpopFolder',
+    filterTable: 'tpop',
+    id: `${popId}TpopFolder`,
+    tableId: popId,
+    parentTableId: popId,
+    urlLabel: 'Teil-Populationen',
+    label: `Teil-Populationen (${message})`,
+    url,
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default tpopFolderNode

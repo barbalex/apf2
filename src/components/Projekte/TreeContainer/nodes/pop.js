@@ -6,7 +6,7 @@ import popmassnberFolder from './popmassnberFolder'
 
 const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
   const { data } = await store.queryClient.fetchQuery({
-    queryKey: ['treePop', apId, treeQueryVariables.popsFilter],
+    queryKey: ['treePops', apId, treeQueryVariables.popsFilter],
     queryFn: () =>
       store.client.query({
         query: gql`
@@ -47,26 +47,31 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
 
     let children = []
     if (isOpen) {
-      const { data, loading } = await store.client.query({
-        query: gql`
-          query TreePopQuery($id: UUID!) {
-            popById(id: $id) {
-              id
-              tpopsByPopId {
-                totalCount
+      const { data, loading: isLoading } = await store.queryClient.fetchQuery({
+        queryKey: ['treePop', node.id],
+        queryFn: () =>
+          store.client.query({
+            query: gql`
+              query TreePopQuery($id: UUID!) {
+                popById(id: $id) {
+                  id
+                  tpopsByPopId {
+                    totalCount
+                  }
+                  popmassnbersByPopId {
+                    totalCount
+                  }
+                  popbersByPopId {
+                    totalCount
+                  }
+                }
               }
-              popmassnbersByPopId {
-                totalCount
-              }
-              popbersByPopId {
-                totalCount
-              }
-            }
-          }
-        `,
-        variables: {
-          id: node.id,
-        },
+            `,
+            variables: {
+              id: node.id,
+            },
+            fetchPolicy: 'no-cache',
+          }),
       })
       const tpopCount = data?.popById?.tpopsByPopId?.totalCount ?? 0
       const popmassnberCount =
@@ -74,7 +79,7 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
       const popberCount = data?.popById?.popbersByPopId?.totalCount ?? 0
       const tpopFolderNodes = await tpopFolder({
         count: tpopCount,
-        loading,
+        loading: isLoading,
         projId,
         apId,
         popId: node.id,
@@ -83,7 +88,7 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
       })
       const popberFolderNodes = await popberFolder({
         count: popberCount,
-        loading,
+        loading: isLoading,
         projId,
         apId,
         popId: node.id,
@@ -92,7 +97,7 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
       })
       const popmassnberFolderNodes = await popmassnberFolder({
         count: popmassnberCount,
-        loading,
+        loading: isLoading,
         projId,
         apId,
         popId: node.id,
