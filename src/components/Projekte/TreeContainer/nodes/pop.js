@@ -9,7 +9,7 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
           popsByApId(filter: $popsFilter, orderBy: [NR_ASC, NAME_ASC]) {
             nodes {
               id
-              nr
+              # nr
               label
             }
           }
@@ -35,7 +35,7 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
     url: ['Projekte', projId, 'Arten', apId, 'Populationen', el.id],
     hasChildren: true,
     // TODO: why is this needed?
-    nr: el.nr || 0,
+    // nr: el.nr || 0,
   }))
 
   return nodes

@@ -5,7 +5,6 @@ export default gql`
     $beobZugeordnetsFilter: BeobFilter!
     $popbersFilter: PopberFilter!
     $popmassnbersFilter: PopmassnberFilter!
-    $popsFilter: PopFilter!
     $tpopbersFilter: TpopberFilter!
     $tpopfeldkontrsFilter: TpopkontrFilter!
     $tpopfreiwkontrsFilter: TpopkontrFilter!
@@ -17,18 +16,10 @@ export default gql`
     $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
     $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
     $tpopkontrzaehlEinheitWertesFilter: TpopkontrzaehlEinheitWerteFilter!
-    $isProjekt: Boolean!
-    $isAps: Boolean!
-    $isAp: Boolean!
-    $isApPop: Boolean!
-    $isBeobNichtBeurteilt: Boolean!
     $isPop: Boolean!
     $isTpop: Boolean!
     $isTpopkontr: Boolean!
     $isWerteListen: Boolean!
-    $isZiel: Boolean!
-    $isUsers: Boolean!
-    $openAps: [UUID!]
   ) {
     apBeobsZugeordnet: allBeobs(
       filter: $beobZugeordnetsFilter
@@ -57,15 +48,6 @@ export default gql`
       nodes {
         id
         popId
-        label
-      }
-    }
-    allPops(filter: $popsFilter, orderBy: [NR_ASC, NAME_ASC])
-      @include(if: $isApPop) {
-      nodes {
-        id
-        apId
-        nr
         label
       }
     }
