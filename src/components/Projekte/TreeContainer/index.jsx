@@ -304,6 +304,7 @@ const TreeContainer = () => {
   } = store
   const { setOpenNodes, refetcher } = store.tree
 
+
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 

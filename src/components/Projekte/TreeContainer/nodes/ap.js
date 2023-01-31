@@ -14,21 +14,25 @@ import beobNichtZuzuordnenFolder from './beobNichtZuzuordnenFolder'
 import qkFolder from './qkFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
-  // const {data}=await store.queryClient.fetchQuery({})
-  const { data } = await store.client.query({
-    query: gql`
-      query TreeApsQuery($apsFilter: ApFilter!) {
-        allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
-          nodes {
-            id
-            label
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: ['treeAps', treeQueryVariables.apsFilter],
+    queryFn: () =>
+      store.client.query({
+        query: gql`
+          query TreeApsQuery($apsFilter: ApFilter!) {
+            allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
+              nodes {
+                id
+                label
+              }
+            }
           }
-        }
-      }
-    `,
-    variables: {
-      apsFilter: treeQueryVariables.apsFilter,
-    },
+        `,
+        variables: {
+          apsFilter: treeQueryVariables.apsFilter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   const aps = data?.allAps?.nodes ?? []
@@ -38,91 +42,109 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
   for (const ap of aps) {
     if (store.tree.openAps.includes(ap.id)) {
       // 1. fetch counts for children
-      const { data, loading } = await store.client.query({
-        query: gql`
-          query TreeApQuery(
-            $id: UUID!
-            $popsFilter: PopFilter!
-            $zielsFilter: ZielFilter!
-            $erfkritsFilter: ErfkritFilter!
-            $apbersFilter: ApberFilter!
-            $apartsFilter: ApartFilter!
-            $assozartFilter: AssozartFilter!
-            $ekfrequenzsFilter: EkfrequenzFilter!
-            $ekzaehleinheitsFilter: EkzaehleinheitFilter!
-            $beobNichtBeurteiltsFilter: BeobFilter
-            $beobNichtZuzuordnensFilter: BeobFilter
-          ) {
-            apById(id: $id) {
-              id
-              label
-              popsByApId(filter: $popsFilter) {
-                totalCount
-              }
-              zielsByApId(filter: $zielsFilter) {
-                nodes {
+      const { data, isLoading } = await store.queryClient.fetchQuery({
+        queryKey: [
+          'treeAp',
+          ap.id,
+          treeQueryVariables.popsFilter,
+          treeQueryVariables.zielsFilter,
+          treeQueryVariables.erfkritsFilter,
+          treeQueryVariables.apbersFilter,
+          treeQueryVariables.assozartFilter,
+          treeQueryVariables.ekfrequenzsFilter,
+          treeQueryVariables.ekzaehleinheitsFilter,
+          treeQueryVariables.beobNichtBeurteiltsFilter,
+          treeQueryVariables.beobNichtZuzuordnensFilter,
+          treeQueryVariables.apartsFilter,
+        ],
+        queryFn: () =>
+          store.client.query({
+            query: gql`
+              query TreeApQuery(
+                $id: UUID!
+                $popsFilter: PopFilter!
+                $zielsFilter: ZielFilter!
+                $erfkritsFilter: ErfkritFilter!
+                $apbersFilter: ApberFilter!
+                $apartsFilter: ApartFilter!
+                $assozartFilter: AssozartFilter!
+                $ekfrequenzsFilter: EkfrequenzFilter!
+                $ekzaehleinheitsFilter: EkzaehleinheitFilter!
+                $beobNichtBeurteiltsFilter: BeobFilter
+                $beobNichtZuzuordnensFilter: BeobFilter
+              ) {
+                apById(id: $id) {
                   id
-                  jahr
-                }
-              }
-              erfkritsByApId(filter: $erfkritsFilter) {
-                totalCount
-              }
-              apbersByApId(filter: $apbersFilter) {
-                totalCount
-              }
-              apartsByApId(filter: $apartsFilter) {
-                totalCount
-              }
-              assozartsByApId(filter: $assozartFilter) {
-                totalCount
-              }
-              ekfrequenzsByApId(filter: $ekfrequenzsFilter) {
-                totalCount
-              }
-              ekzaehleinheitsByApId(filter: $ekzaehleinheitsFilter) {
-                totalCount
-              }
-              beobNichtBeurteilt: apartsByApId {
-                nodes {
-                  id
-                  aeTaxonomyByArtId {
-                    id
-                    beobsByArtId(filter: $beobNichtBeurteiltsFilter) {
-                      totalCount
+                  label
+                  popsByApId(filter: $popsFilter) {
+                    totalCount
+                  }
+                  zielsByApId(filter: $zielsFilter) {
+                    nodes {
+                      id
+                      jahr
+                    }
+                  }
+                  erfkritsByApId(filter: $erfkritsFilter) {
+                    totalCount
+                  }
+                  apbersByApId(filter: $apbersFilter) {
+                    totalCount
+                  }
+                  apartsByApId(filter: $apartsFilter) {
+                    totalCount
+                  }
+                  assozartsByApId(filter: $assozartFilter) {
+                    totalCount
+                  }
+                  ekfrequenzsByApId(filter: $ekfrequenzsFilter) {
+                    totalCount
+                  }
+                  ekzaehleinheitsByApId(filter: $ekzaehleinheitsFilter) {
+                    totalCount
+                  }
+                  beobNichtBeurteilt: apartsByApId {
+                    nodes {
+                      id
+                      aeTaxonomyByArtId {
+                        id
+                        beobsByArtId(filter: $beobNichtBeurteiltsFilter) {
+                          totalCount
+                        }
+                      }
+                    }
+                  }
+                  beobNichtZuzuordnen: apartsByApId {
+                    nodes {
+                      id
+                      aeTaxonomyByArtId {
+                        id
+                        beobsByArtId(filter: $beobNichtZuzuordnensFilter) {
+                          totalCount
+                        }
+                      }
                     }
                   }
                 }
               }
-              beobNichtZuzuordnen: apartsByApId {
-                nodes {
-                  id
-                  aeTaxonomyByArtId {
-                    id
-                    beobsByArtId(filter: $beobNichtZuzuordnensFilter) {
-                      totalCount
-                    }
-                  }
-                }
-              }
-            }
-          }
-        `,
-        variables: {
-          id: ap.id,
-          popsFilter: treeQueryVariables.popsFilter,
-          zielsFilter: treeQueryVariables.zielsFilter,
-          erfkritsFilter: treeQueryVariables.erfkritsFilter,
-          apbersFilter: treeQueryVariables.apbersFilter,
-          assozartFilter: treeQueryVariables.assozartFilter,
-          ekfrequenzsFilter: treeQueryVariables.ekfrequenzsFilter,
-          ekzaehleinheitsFilter: treeQueryVariables.ekzaehleinheitsFilter,
-          beobNichtBeurteiltsFilter:
-            treeQueryVariables.beobNichtBeurteiltsFilter,
-          beobNichtZuzuordnensFilter:
-            treeQueryVariables.beobNichtZuzuordnensFilter,
-          apartsFilter: treeQueryVariables.apartsFilter,
-        },
+            `,
+            variables: {
+              id: ap.id,
+              popsFilter: treeQueryVariables.popsFilter,
+              zielsFilter: treeQueryVariables.zielsFilter,
+              erfkritsFilter: treeQueryVariables.erfkritsFilter,
+              apbersFilter: treeQueryVariables.apbersFilter,
+              assozartFilter: treeQueryVariables.assozartFilter,
+              ekfrequenzsFilter: treeQueryVariables.ekfrequenzsFilter,
+              ekzaehleinheitsFilter: treeQueryVariables.ekzaehleinheitsFilter,
+              beobNichtBeurteiltsFilter:
+                treeQueryVariables.beobNichtBeurteiltsFilter,
+              beobNichtZuzuordnensFilter:
+                treeQueryVariables.beobNichtZuzuordnensFilter,
+              apartsFilter: treeQueryVariables.apartsFilter,
+            },
+            fetchPolicy: 'no-cache',
+          }),
       })
       // 2. build children
       const popFolderNode = await popFolder({
@@ -139,7 +161,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         treeQueryVariables,
       })
       const aperfkritFolderNode = await aperfkritFolder({
-        loading,
+        loading: isLoading,
         projId,
         apId: ap.id,
         store,
@@ -147,7 +169,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
         treeQueryVariables,
       })
       const apberFolderNode = await apberFolder({
-        loading,
+        loading: isLoading,
         projId,
         apId: ap.id,
         store,
@@ -157,7 +179,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
       const idealbiotopFolderNode = idealbiotopFolder({ projId, apId: ap.id })
       const apartFolderNode = await apartFolder({
         count: data?.apById?.apartsByApId?.totalCount ?? 0,
-        loading,
+        loading: isLoading,
         projId,
         apId: ap.id,
         store,
@@ -166,7 +188,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
       const assozartFolderNode = await assozartFolder({
         projId,
         apId: ap.id,
-        loading,
+        loading: isLoading,
         count: data?.apById?.assozartsByApId?.totalCount ?? 0,
         store,
         treeQueryVariables,
@@ -174,7 +196,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
       const ekfrequenzFolderNode = await ekfrequenzFolder({
         projId,
         apId: ap.id,
-        loading,
+        loading: isLoading,
         count: data?.apById?.ekfrequenzsByApId?.totalCount ?? 0,
         store,
         treeQueryVariables,
@@ -182,14 +204,14 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
       const ekzaehleinheitFolderNode = await ekzaehleinheitFolder({
         projId,
         apId: ap.id,
-        loading,
+        loading: isLoading,
         count: data?.apById?.ekzaehleinheitsByApId?.totalCount ?? 0,
         store,
         treeQueryVariables,
       })
       const beobNichtBeurteiltFolderNode = await beobNichtBeurteiltFolder({
         data,
-        loading,
+        loading: isLoading,
         projId,
         apId: ap.id,
         store,
@@ -197,7 +219,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
       })
       const beobNichtZuzuordnenFolderNode = await beobNichtZuzuordnenFolder({
         data,
-        loading,
+        loading: isLoading,
         projId,
         apId: ap.id,
         store,

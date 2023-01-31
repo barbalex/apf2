@@ -7,8 +7,8 @@ import popmassnberFolder from './popmassnberFolder'
 const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
   const { data } = await store.queryClient.fetchQuery({
     queryKey: ['treePop', apId, treeQueryVariables.popsFilter],
-    queryFn: async () => {
-      const { data } = await store.client.query({
+    queryFn: () =>
+      store.client.query({
         query: gql`
           query TreePopQuery($apId: UUID!, $popsFilter: PopFilter!) {
             apById(id: $apId) {
@@ -29,9 +29,7 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
         // without 'network-only' or using tanstack,
         // ui does not update when inserting and deleting
         fetchPolicy: 'no-cache',
-      })
-      return { data }
-    },
+      }),
   })
 
   const nodes = []
