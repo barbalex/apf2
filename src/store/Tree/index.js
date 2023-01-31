@@ -51,8 +51,12 @@ export default types
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     mapFilter: types.maybe(Geojson),
+    refetcher: types.optional(types.number, 0),
   })
   .actions((self) => ({
+    incrementRefetcher() {
+      self.refetcher += 1
+    },
     resetTree2Src() {
       self.tree2Src = ''
     },

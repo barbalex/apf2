@@ -8,7 +8,7 @@ import updateTpopmassnById from './updateTpopmassnById'
 import updateTpopById from './updateTpopById'
 import updatePopById from './updatePopById'
 
-const moveTo = async ({ id: newParentId, store, client, queryClient }) => {
+const moveTo = async ({ id: newParentId, store, client }) => {
   const { enqueNotification, moving, setMoving } = store
   let { table } = moving
   const { id } = moving
@@ -45,21 +45,21 @@ const moveTo = async ({ id: newParentId, store, client, queryClient }) => {
         mutation: updateTpopkontrById,
         variables: { id, tpopId: newParentId },
       })
-      queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+      store.tree.incrementRefetcher()
       break
     case 'tpopmassn':
       client.mutate({
         mutation: updateTpopmassnById,
         variables: { id, tpopId: newParentId },
       })
-      queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+      store.tree.incrementRefetcher()
       break
     case 'tpop':
       client.mutate({
         mutation: updateTpopById,
         variables: { id, popId: newParentId },
       })
-      queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+      store.tree.incrementRefetcher()
       break
     case 'pop':
       console.log('will move pop', { id, newParentId })
@@ -67,7 +67,7 @@ const moveTo = async ({ id: newParentId, store, client, queryClient }) => {
         mutation: updatePopById,
         variables: { id, apId: newParentId },
       })
-      queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+      store.tree.incrementRefetcher()
       break
     default:
       // do nothing

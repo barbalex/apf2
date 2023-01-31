@@ -26,7 +26,6 @@ const copyTo = async ({
   id: idPassed,
   client,
   store,
-  queryClient,
 }) => {
   const { copying, enqueNotification } = store
   let table = tablePassed || copying.table
@@ -251,7 +250,7 @@ const copyTo = async ({
       // do nothing
       break
   }
-  queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+  store.tree.incrementRefetcher()
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
@@ -270,7 +269,6 @@ const copyTo = async ({
       tpopkontrIdTo: newId,
       client,
       store,
-      queryClient,
     })
   }
 }
