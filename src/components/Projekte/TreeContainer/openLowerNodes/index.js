@@ -16,7 +16,6 @@ const openLowerNodes = ({
   menuType,
   client,
   store,
-  queryClient,
 }) => {
   /**
    * 1. load all data
@@ -28,16 +27,16 @@ const openLowerNodes = ({
    */
   switch (menuType) {
     case 'popFolder':
-      popFolder({ id, projId, client, store, queryClient })
+      popFolder({ id, projId, client, store })
       break
     case 'pop':
-      pop({ id, apId, projId, client, store, queryClient })
+      pop({ id, apId, projId, client, store })
       break
     case 'tpopFolder':
-      tpopFolder({ id, apId, projId, client, store, queryClient })
+      tpopFolder({ id, apId, projId, client, store })
       break
     case 'tpop':
-      tpop({ id, popId, apId, projId, client, store, queryClient })
+      tpop({ id, popId, apId, projId, client, store })
       break
     case 'tpopfeldkontrFolder':
       tpopfeldkontrFolder({
@@ -47,7 +46,6 @@ const openLowerNodes = ({
         popId,
         client,
         store,
-        queryClient,
       })
       break
     case 'tpopfreiwkontrFolder':
@@ -58,11 +56,10 @@ const openLowerNodes = ({
         popId,
         client,
         store,
-        queryClient,
       })
       break
     case 'zielFolder':
-      zielFolder({ id, projId, client, store, queryClient })
+      zielFolder({ id, projId, client, store })
       break
     case 'zieljahrFolder':
       zieljahrFolder({
@@ -71,7 +68,6 @@ const openLowerNodes = ({
         parentId,
         store,
         client,
-        queryClient,
       })
       break
     default:
