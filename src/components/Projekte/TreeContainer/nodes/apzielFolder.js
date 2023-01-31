@@ -9,6 +9,7 @@ const apzielFolderNode = async ({
   store,
   treeQueryVariables,
 }) => {
+  // tried using tanstack query to refetch only this data - but it does not work
   const { data, isLoading } = await store.queryClient.fetchQuery({
     queryKey: ['treeApZieljahrFolder', apId, treeQueryVariables.zielsFilter],
     queryFn: async () => {
@@ -36,31 +37,9 @@ const apzielFolderNode = async ({
         },
         fetchPolicy: 'no-cache',
       })
-      console.log('TreeApZieljahrFolderQuery inside', { data, isLoading })
       return { data, isLoading }
     },
   })
-  console.log('TreeApZieljahrFolderQuery', { data, isLoading })
-  // const { data, loading: isLoading } = await store.client.query({
-  //   query: gql`
-  //     query TreeApZieljahrFolderQuery($apId: UUID!, $zielsFilter: ZielFilter!) {
-  //       apById(id: $apId) {
-  //         id
-  //         zielsByApId(filter: $zielsFilter, orderBy: LABEL_ASC) {
-  //           nodes {
-  //             id
-  //             label
-  //             jahr
-  //           }
-  //         }
-  //       }
-  //     }
-  //   `,
-  //   variables: {
-  //     apId,
-  //     zielsFilter: treeQueryVariables.zielsFilter,
-  //   },
-  // })
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ziel ?? ''
 
