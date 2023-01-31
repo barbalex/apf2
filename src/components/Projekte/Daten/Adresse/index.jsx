@@ -93,10 +93,10 @@ const Adresse = () => {
       }
       setFieldErrors({})
       if (field === 'name') {
-        queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+        store.tree.incrementRefetcher()
       }
     },
-    [client, queryClient, row.id, store.user.name],
+    [client, row.id, store.tree, store.user.name],
   )
 
   if (loading) return <Spinner />

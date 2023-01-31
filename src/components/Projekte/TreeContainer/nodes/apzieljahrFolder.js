@@ -6,6 +6,7 @@ const apzieljahrFolderNode = async ({
   apId,
   store,
   zieljahre = [],
+  treeQueryVariables,
 }) => {
   const nodes = []
   for (const jahr of zieljahre) {
@@ -16,7 +17,6 @@ const apzieljahrFolderNode = async ({
     const isOpen =
       store.tree.openNodes.filter(
         (n) =>
-          n.length > 5 &&
           n[1] === projId &&
           n[3] === apId &&
           n[4] === 'AP-Ziele' &&
@@ -27,8 +27,10 @@ const apzieljahrFolderNode = async ({
       ? await apziel({
           projId,
           apId,
+          jahr,
           store,
           ziels: ziels.filter((z) => z.jahr === jahr),
+          treeQueryVariables,
         })
       : []
 
