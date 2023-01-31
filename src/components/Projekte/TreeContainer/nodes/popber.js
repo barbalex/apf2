@@ -1,55 +1,59 @@
-import findIndex from 'lodash/findIndex'
+import { gql } from '@apollo/client'
 
-const popberNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
-  apNodes,
-  popNodes,
+const popberNodes = async ({
   projId,
   apId,
   popId,
+  store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: ['treeTpop', popId, treeQueryVariables.popbersFilter],
+    queryFn: () =>
+      store.client.query({
+        query: gql`
+          query TreePopberQuery($id: UUID!, $popbersFilter: PopberFilter!) {
+            popById(id: $id) {
+              id
+              popbersByPopId(filter: $popbersFilter, orderBy: LABEL_ASC) {
+                nodes {
+                  id
+                  label
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          id: popId,
+          popbersFilter: treeQueryVariables.popbersFilter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
 
   // map through all elements and create array of nodes
-  const nodes = (data?.allPopbers?.nodes ?? [])
-    // only show if parent node exists
-    .filter((el) =>
-      nodesPassed.map((n) => n.id).includes(`${el.popId}PopberFolder`),
-    )
-    // only show nodes of this parent
-    .filter((el) => el.popId === popId)
-    .map((el) => ({
-      nodeType: 'table',
-      menuType: 'popber',
-      filterTable: 'popber',
-      id: el.id,
-      parentId: el.popId,
-      parentTableId: el.popId,
-      urlLabel: el.id,
-      label: el.label,
-      url: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        popId,
-        'Kontroll-Berichte',
-        el.id,
-      ],
-      hasChildren: false,
-    }))
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 2, index]
-      return el
-    })
+  const nodes = (data?.popById?.popbersByPopId?.nodes ?? []).map((el) => ({
+    nodeType: 'table',
+    menuType: 'popber',
+    filterTable: 'popber',
+    id: el.id,
+    parentId: popId,
+    parentTableId: popId,
+    urlLabel: el.id,
+    label: el.label,
+    url: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Kontroll-Berichte',
+      el.id,
+    ],
+    hasChildren: false,
+  }))
 
   return nodes
 }

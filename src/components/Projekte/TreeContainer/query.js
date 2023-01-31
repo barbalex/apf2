@@ -11,7 +11,6 @@ export default gql`
     $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
     $tpopmassnbersFilter: TpopmassnberFilter!
     $tpopmassnsFilter: TpopmassnFilter!
-    $tpopsFilter: TpopFilter!
     $adressesFilter: AdresseFilter!
     $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
     $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
@@ -101,15 +100,6 @@ export default gql`
         id
         tpopId
         label
-      }
-    }
-    allTpops(filter: $tpopsFilter, orderBy: [NR_ASC, FLURNAME_ASC])
-      @include(if: $isPop) {
-      nodes {
-        id
-        popId
-        label
-        nr
       }
     }
     adressesUnfiltered: allAdresses {
