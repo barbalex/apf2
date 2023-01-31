@@ -1,34 +1,11 @@
-import findIndex from 'lodash/findIndex'
-
-const tpopFolderNode = ({
-  nodes: nodesPassed,
-  data,
-  loading,
-  projektNodes,
-  apNodes,
-  popNodes,
-  projId,
-  apId,
-  popId,
-  store,
-}) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
+const tpopFolderNode = async ({ count, loading, projId, apId, popId, store }) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpop ?? ''
-
-  const children = (data?.allTpops?.nodes ?? []).filter(
-    (el) => el.popId === popId,
-  )
 
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${children.length} gefiltert`
-    : children.length
+    ? `${count} gefiltert`
+    : count
 
   const url = [
     'Projekte',
@@ -40,11 +17,7 @@ const tpopFolderNode = ({
     'Teil-Populationen',
   ]
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(popId)) return []
-
-  return [
-    {
+  return {
       nodeType: 'folder',
       menuType: 'tpopFolder',
       filterTable: 'tpop',
@@ -54,10 +27,8 @@ const tpopFolderNode = ({
       urlLabel: 'Teil-Populationen',
       label: `Teil-Populationen (${message})`,
       url,
-      sort: [projIndex, 1, apIndex, 1, popIndex, 1],
-      hasChildren: children.length > 0,
-    },
-  ]
+      hasChildren: count > 0,
+    }
 }
 
 export default tpopFolderNode

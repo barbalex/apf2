@@ -1,40 +1,13 @@
-import findIndex from 'lodash/findIndex'
-
-const popberFolderNode = ({
-  nodes: nodesPassed,
-  data,
-  loading,
-  projektNodes,
-  apNodes,
-  popNodes,
-  projId,
-  apId,
-  popId,
-  store,
-}) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
+const popberFolderNode = ({ count, loading, projId, apId, popId, store }) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.popber ?? ''
-
-  const childrenLength = (data?.allPopbers?.nodes ?? []).filter(
-    (el) => el.popId === popId,
-  ).length
 
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${childrenLength} gefiltert`
-    : childrenLength
+    ? `${count} gefiltert`
+    : count
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(popId)) return []
-
-  return [
-    {
+  return {
       nodeType: 'folder',
       menuType: 'popberFolder',
       filterTable: 'popber',
@@ -51,10 +24,8 @@ const popberFolderNode = ({
         popId,
         'Kontroll-Berichte',
       ],
-      sort: [projIndex, 1, apIndex, 1, popIndex, 2],
-      hasChildren: childrenLength > 0,
-    },
-  ]
+      hasChildren: count > 0,
+    }
 }
 
 export default popberFolderNode

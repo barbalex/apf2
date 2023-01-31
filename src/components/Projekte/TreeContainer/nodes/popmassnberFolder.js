@@ -1,60 +1,38 @@
-import findIndex from 'lodash/findIndex'
-
 const popmassnberFolderNode = ({
-  nodes: nodesPassed,
-  data,
+  count,
   loading,
-  projektNodes,
-  apNodes,
-  popNodes,
   projId,
   apId,
   popId,
   store,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.popmassnber ?? ''
-
-  const childrenLength = (data?.allPopmassnbers?.nodes ?? []).filter(
-    (el) => el.popId === popId,
-  ).length
 
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${childrenLength} gefiltert`
-    : childrenLength
+    ? `${count} gefiltert`
+    : count
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(popId)) return []
-
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'popmassnberFolder',
-      filterTable: 'popmassnber',
-      id: `${popId}PopmassnberFolder`,
-      tableId: popId,
-      urlLabel: 'Massnahmen-Berichte',
-      label: `Massnahmen-Berichte (${message})`,
-      url: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        popId,
-        'Massnahmen-Berichte',
-      ],
-      sort: [projIndex, 1, apIndex, 1, popIndex, 3],
-      hasChildren: childrenLength > 0,
-    },
-  ]
+  return {
+    nodeType: 'folder',
+    menuType: 'popmassnberFolder',
+    filterTable: 'popmassnber',
+    id: `${popId}PopmassnberFolder`,
+    tableId: popId,
+    urlLabel: 'Massnahmen-Berichte',
+    label: `Massnahmen-Berichte (${message})`,
+    url: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Massnahmen-Berichte',
+    ],
+    hasChildren: count > 0,
+  }
 }
 
 export default popmassnberFolderNode
