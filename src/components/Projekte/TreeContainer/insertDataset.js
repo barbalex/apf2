@@ -218,7 +218,8 @@ const insertDataset = async ({
     newOpenNodes = [...newOpenNodes, newOpenFolder, newOpenNode]
   }
   setOpenNodes(newOpenNodes)
-  store.tree.incrementRefetcher()
+  // when using tanstack query to query nodes in tree, this seems not needed
+  // store.tree.incrementRefetcher()
 }
 
 export default insertDataset

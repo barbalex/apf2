@@ -14,6 +14,7 @@ import beobNichtZuzuordnenFolder from './beobNichtZuzuordnenFolder'
 import qkFolder from './qkFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
+  // const {data}=await store.queryClient.fetchQuery({})
   const { data } = await store.client.query({
     query: gql`
       query TreeApsQuery($apsFilter: ApFilter!) {

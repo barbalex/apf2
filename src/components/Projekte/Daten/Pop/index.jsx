@@ -130,7 +130,7 @@ const Pop = () => {
         })
       }
       setFieldErrors({})
-      if (field === 'name') {
+      if (['name', 'nr'].includes(field)) {
         store.tree.incrementRefetcher()
       }
     },

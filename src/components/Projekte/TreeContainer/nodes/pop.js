@@ -5,24 +5,32 @@ import popberFolder from './popberFolder'
 import popmassnberFolder from './popmassnberFolder'
 
 const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
-  const { data } = await store.client.query({
-    query: gql`
-      query TreePopQuery($apId: UUID!, $popsFilter: PopFilter!) {
-        apById(id: $apId) {
-          id
-          popsByApId(filter: $popsFilter, orderBy: [NR_ASC, NAME_ASC]) {
-            nodes {
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: ['treePop', apId, treeQueryVariables.popsFilter],
+    queryFn: async () => {
+      const { data } = await store.client.query({
+        query: gql`
+          query TreePopQuery($apId: UUID!, $popsFilter: PopFilter!) {
+            apById(id: $apId) {
               id
-              # nr
-              label
+              popsByApId(filter: $popsFilter, orderBy: [NR_ASC, NAME_ASC]) {
+                nodes {
+                  id
+                  label
+                }
+              }
             }
           }
-        }
-      }
-    `,
-    variables: {
-      apId,
-      popsFilter: treeQueryVariables.popsFilter,
+        `,
+        variables: {
+          apId,
+          popsFilter: treeQueryVariables.popsFilter,
+        },
+        // without 'network-only' or using tanstack,
+        // ui does not update when inserting and deleting
+        fetchPolicy: 'no-cache',
+      })
+      return { data }
     },
   })
 
@@ -73,6 +81,7 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
         apId,
         popId: node.id,
         store,
+        treeQueryVariables,
       })
       const popberFolderNodes = await popberFolder({
         count: popberCount,
@@ -81,6 +90,7 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
         apId,
         popId: node.id,
         store,
+        treeQueryVariables,
       })
       const popmassnberFolderNodes = await popmassnberFolder({
         count: popmassnberCount,
@@ -89,6 +99,7 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
         apId,
         popId: node.id,
         store,
+        treeQueryVariables,
       })
       children = [tpopFolderNodes, popberFolderNodes, popmassnberFolderNodes]
     }
@@ -105,8 +116,6 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
       url: ['Projekte', projId, 'Arten', apId, 'Populationen', node.id],
       hasChildren: true,
       children,
-      // TODO: why is this needed?
-      // nr: el.nr || 0,
     })
   }
 

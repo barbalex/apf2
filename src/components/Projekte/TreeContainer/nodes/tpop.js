@@ -47,12 +47,8 @@ const tpopNodes = ({
       hasChildren: true,
       nr: el.nr,
     }))
-    // sort again to sort (keine Nr) on top
-    .sort((a, b) => a.nr - b.nr)
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, index]
-      return el
-    })
+    // TODO: check: sort again to sort (keine Nr) on top
+    // .sort((a, b) => a.nr - b.nr)
 
   return nodes
 }
