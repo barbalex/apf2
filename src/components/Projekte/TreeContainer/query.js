@@ -2,28 +2,12 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query TreeAllQuery(
-    $beobZugeordnetsFilter: BeobFilter!
     $adressesFilter: AdresseFilter!
     $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
     $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
     $tpopkontrzaehlEinheitWertesFilter: TpopkontrzaehlEinheitWerteFilter!
-    $isTpop: Boolean!
     $isWerteListen: Boolean!
   ) {
-    apBeobsZugeordnet: allBeobs(
-      filter: $beobZugeordnetsFilter
-      orderBy: DATUM_DESC
-    ) @include(if: $isTpop) {
-      nodes {
-        id
-        label
-        datum
-        autor
-        quelle
-        tpopId
-        artId
-      }
-    }
     adressesUnfiltered: allAdresses {
       totalCount
     }

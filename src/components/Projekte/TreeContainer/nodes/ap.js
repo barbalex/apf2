@@ -14,12 +14,7 @@ import beobNichtZuzuordnenFolder from './beobNichtZuzuordnenFolder'
 import qkFolder from './qkFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
-  // TODO: seems this query is not fetched from cache when changing between EK?
-  console.log('nodes, ap', {
-    projId,
-    dataFilterAp: store.dataFilter?.ap,
-    apFilter: store.apFilter,
-  })
+  // TODO: seems this query (and others) is not fetched from cache when changing between EK?
   const { data } = await store.queryClient.fetchQuery({
     queryKey: ['treeAps', projId, store.dataFilter?.ap, store.apFilter],
     queryFn: () =>
