@@ -1,43 +1,119 @@
-import findIndex from 'lodash/findIndex'
+import tpopfreiwkontrzaehlFolder from './tpopfreiwkontrzaehlFolder'
 
-const tpopfreiwkontrNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
-  apNodes,
-  popNodes,
-  tpopNodes,
+import { gql } from '@apollo/client'
+
+const tpopfreiwkontrNodes = async ({
   projId,
   apId,
   popId,
   tpopId,
+  store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: [
+      'treeTpopfreiwkontr',
+      tpopId,
+      treeQueryVariables.tpopfreiwkontrsFilter,
+    ],
+    queryFn: () =>
+      store.client.query({
+        query: gql`
+          query TreeTpopfreiwkontrQuery(
+            $id: UUID!
+            $tpopfreiwkontrsFilter: TpopkontrFilter!
+          ) {
+            tpopById(id: $id) {
+              id
+              tpopfreiwkontrs: tpopkontrsByTpopId(
+                filter: $tpopfreiwkontrsFilter
+                orderBy: [JAHR_ASC, DATUM_ASC]
+              ) {
+                nodes {
+                  id
+                  labelEkf
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          id: tpopId,
+          tpopfreiwkontrsFilter: treeQueryVariables.tpopfreiwkontrsFilter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
-  const tpopIndex = findIndex(tpopNodes, { id: tpopId })
 
-  // map through all elements and create array of nodes
-  const nodes = (data?.allTpopfreiwkontrs?.nodes ?? [])
-    // only show if parent node exists
-    .filter((el) =>
-      nodesPassed.map((n) => n.id).includes(`${el.tpopId}TpopfreiwkontrFolder`),
-    )
-    // only show nodes of this parent
-    .filter((el) => el.tpopId === tpopId)
-    .map((el) => ({
+  let nodes = []
+
+  for (const node of data?.tpopById?.tpopfreiwkontrs?.nodes ?? []) {
+    const isOpen =
+      store.tree.openNodes.filter(
+        (n) =>
+          n.length > 5 &&
+          n[1] === projId &&
+          n[3] === apId &&
+          n[4] === 'Populationen' &&
+          n[5] === popId &&
+          n[6] === 'Teil-Populationen' &&
+          n[7] === tpopId &&
+          n[8] === 'Freiwilligen-Kontrollen' &&
+          n[9] === node.id,
+      ).length > 0
+
+    let children = []
+    if (isOpen) {
+      // fetch children
+      const { data, isLoading } = await store.queryClient.fetchQuery({
+        queryKey: ['treeTpopkontrzaehls', node.id],
+        queryFn: () =>
+          store.client.query({
+            query: gql`
+              query TreeTpopfreiwkontrzaehlsQuery(
+                $id: UUID!
+                $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
+              ) {
+                tpopkontrById(id: $id) {
+                  id
+                  tpopkontrzaehlsByTpopkontrId(filter: $tpopkontrzaehlsFilter) {
+                    totalCount
+                  }
+                }
+              }
+            `,
+            variables: {
+              id: node.id,
+              tpopkontrzaehlsFilter: treeQueryVariables.tpopkontrzaehlsFilter,
+            },
+            fetchPolicy: 'no-cache',
+          }),
+      })
+      const folderNode = await tpopfreiwkontrzaehlFolder({
+        count:
+          data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId,
+        tpopkontrId: node.id,
+        store,
+        treeQueryVariables,
+      })
+      children = [folderNode]
+    }
+
+    nodes.push({
       nodeType: 'table',
       menuType: 'tpopfreiwkontr',
       filterTable: 'tpopkontr',
-      id: el.id,
-      tableId: el.id,
-      parentId: `${el.tpopId}TpopfreiwkontrFolder`,
-      parentTableId: el.tpopId,
-      urlLabel: el.id,
-      label: el.labelEkf,
+      id: node.id,
+      tableId: node.id,
+      parentId: `${tpopId}TpopfreiwkontrFolder`,
+      parentTableId: tpopId,
+      urlLabel: node.id,
+      label: node.labelEkf,
       url: [
         'Projekte',
         projId,
@@ -48,14 +124,12 @@ const tpopfreiwkontrNodes = ({
         'Teil-Populationen',
         tpopId,
         'Freiwilligen-Kontrollen',
-        el.id,
+        node.id,
       ],
       hasChildren: true,
-    }))
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, index]
-      return el
+      children,
     })
+  }
 
   return nodes
 }

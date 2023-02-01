@@ -1,3 +1,5 @@
+import tpopfreiwkontr from './tpopfreiwkontr'
+
 const tpopfreiwkontrFolderNode = async ({
   count,
   loading,
@@ -6,6 +8,7 @@ const tpopfreiwkontrFolderNode = async ({
   popId,
   tpopId,
   store,
+  treeQueryVariables,
 }) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpopkontr ?? ''
 
@@ -27,6 +30,29 @@ const tpopfreiwkontrFolderNode = async ({
     'Freiwilligen-Kontrollen',
   ]
 
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'Populationen' &&
+        n[5] === popId &&
+        n[6] === 'Teil-Populationen' &&
+        n[7] === tpopId &&
+        n[8] === 'Freiwilligen-Kontrollen',
+    ).length > 0
+
+  const children = isOpen
+    ? await tpopfreiwkontr({
+        treeQueryVariables,
+        projId,
+        apId,
+        popId,
+        tpopId,
+        store,
+      })
+    : []
+
   return {
     nodeType: 'folder',
     menuType: 'tpopfreiwkontrFolder',
@@ -37,6 +63,7 @@ const tpopfreiwkontrFolderNode = async ({
     label: `Freiwilligen-Kontrollen (${message})`,
     url,
     hasChildren: count > 0,
+    children,
   }
 }
 
