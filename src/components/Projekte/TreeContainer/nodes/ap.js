@@ -14,8 +14,14 @@ import beobNichtZuzuordnenFolder from './beobNichtZuzuordnenFolder'
 import qkFolder from './qkFolder'
 
 const ap = async ({ projId, store, treeQueryVariables }) => {
+  // TODO: seems this query is not fetched from cache when changing between EK?
+  console.log('nodes, ap', {
+    projId,
+    dataFilterAp: store.dataFilter?.ap,
+    apFilter: store.apFilter,
+  })
   const { data } = await store.queryClient.fetchQuery({
-    queryKey: ['treeAps', treeQueryVariables.apsFilter],
+    queryKey: ['treeAps', projId, store.dataFilter?.ap, store.apFilter],
     queryFn: () =>
       store.client.query({
         query: gql`
@@ -29,7 +35,7 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
           }
         `,
         variables: {
-          apsFilter: treeQueryVariables.apsFilter,
+          apsFilter: store.tree.apGqlFilter.filtered,
         },
         fetchPolicy: 'no-cache',
       }),

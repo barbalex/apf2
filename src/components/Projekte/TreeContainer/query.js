@@ -3,18 +3,13 @@ import { gql } from '@apollo/client'
 export default gql`
   query TreeAllQuery(
     $beobZugeordnetsFilter: BeobFilter!
-    $popmassnbersFilter: PopmassnberFilter!
     $tpopbersFilter: TpopberFilter!
-    $tpopfeldkontrsFilter: TpopkontrFilter!
     $tpopfreiwkontrsFilter: TpopkontrFilter!
-    $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
     $adressesFilter: AdresseFilter!
     $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
     $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
     $tpopkontrzaehlEinheitWertesFilter: TpopkontrzaehlEinheitWerteFilter!
-    $isPop: Boolean!
     $isTpop: Boolean!
-    $isTpopkontr: Boolean!
     $isWerteListen: Boolean!
   ) {
     apBeobsZugeordnet: allBeobs(
@@ -31,30 +26,12 @@ export default gql`
         artId
       }
     }
-    allPopmassnbers(filter: $popmassnbersFilter, orderBy: LABEL_ASC)
-      @include(if: $isPop) {
-      nodes {
-        id
-        popId
-        label
-      }
-    }
     allTpopbers(filter: $tpopbersFilter, orderBy: LABEL_ASC)
       @include(if: $isTpop) {
       nodes {
         id
         tpopId
         label
-      }
-    }
-    allTpopfeldkontrs: allTpopkontrs(
-      filter: $tpopfeldkontrsFilter
-      orderBy: [JAHR_ASC, DATUM_ASC]
-    ) @include(if: $isTpop) {
-      nodes {
-        id
-        tpopId
-        labelEk
       }
     }
     allTpopfreiwkontrs: allTpopkontrs(
@@ -65,14 +42,6 @@ export default gql`
         id
         tpopId
         labelEkf
-      }
-    }
-    allTpopkontrzaehls(filter: $tpopkontrzaehlsFilter, orderBy: LABEL_ASC)
-      @include(if: $isTpopkontr) {
-      nodes {
-        id
-        tpopkontrId
-        label
       }
     }
     adressesUnfiltered: allAdresses {
