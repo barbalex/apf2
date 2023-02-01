@@ -3,6 +3,7 @@ import { gql } from '@apollo/client'
 import tpopmassnFolder from './tpopmassnFolder'
 import tpopmassnberFolder from './tpopmassnberFolder'
 import tpopfeldkontrFolder from './tpopfeldkontrFolder'
+import tpopfreiwkontrFolder from './tpopfreiwkontrFolder'
 
 const tpopNodes = async ({
   projId,
@@ -68,6 +69,7 @@ const tpopNodes = async ({
                 $tpopmassnbersFilter: TpopmassnberFilter!
                 $tpopbersFilter: TpopberFilter!
                 $tpopfeldkontrsFilter: TpopkontrFilter!
+                $tpopfreiwkontrsFilter: TpopkontrFilter!
               ) {
                 tpopById(id: $id) {
                   id
@@ -86,6 +88,12 @@ const tpopNodes = async ({
                   ) {
                     totalCount
                   }
+                  tpopfreiwkontrs: tpopkontrsByTpopId(
+                    filter: $tpopfreiwkontrsFilter
+                    orderBy: [JAHR_ASC, DATUM_ASC]
+                  ) {
+                    totalCount
+                  }
                 }
               }
             `,
@@ -95,6 +103,7 @@ const tpopNodes = async ({
               tpopmassnbersFilter: treeQueryVariables.tpopmassnbersFilter,
               tpopbersFilter: treeQueryVariables.tpopbersFilter,
               tpopfeldkontrsFilter: treeQueryVariables.tpopfeldkontrsFilter,
+              tpopfreiwkontrsFilter: treeQueryVariables.tpopfreiwkontrsFilter,
             },
             fetchPolicy: 'no-cache',
           }),
@@ -129,10 +138,21 @@ const tpopNodes = async ({
         store,
         treeQueryVariables,
       })
+      const tpopfreiwkontrFolderNode = await tpopfreiwkontrFolder({
+        count: data?.tpopById?.tpopfreiwkontrs?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
       children = [
         tpopmassnFolderNode,
         tpopmassnberFolderNode,
         tpopfeldkontrFolderNode,
+        tpopfreiwkontrFolderNode,
       ]
     }
 
