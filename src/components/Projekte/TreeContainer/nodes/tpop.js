@@ -4,6 +4,7 @@ import tpopmassnFolder from './tpopmassnFolder'
 import tpopmassnberFolder from './tpopmassnberFolder'
 import tpopfeldkontrFolder from './tpopfeldkontrFolder'
 import tpopfreiwkontrFolder from './tpopfreiwkontrFolder'
+import tpopberFolder from './tpopberFolder'
 
 const tpopNodes = async ({
   projId,
@@ -148,11 +149,22 @@ const tpopNodes = async ({
         store,
         treeQueryVariables,
       })
+      const tpopberFolderNode = await tpopberFolder({
+        count: data?.tpopById?.tpopbersByTpopId?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
       children = [
         tpopmassnFolderNode,
         tpopmassnberFolderNode,
         tpopfeldkontrFolderNode,
         tpopfreiwkontrFolderNode,
+        tpopberFolderNode,
       ]
     }
 

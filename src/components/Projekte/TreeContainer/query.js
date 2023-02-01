@@ -3,8 +3,6 @@ import { gql } from '@apollo/client'
 export default gql`
   query TreeAllQuery(
     $beobZugeordnetsFilter: BeobFilter!
-    $tpopbersFilter: TpopberFilter!
-    $tpopfreiwkontrsFilter: TpopkontrFilter!
     $adressesFilter: AdresseFilter!
     $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
     $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
@@ -24,24 +22,6 @@ export default gql`
         quelle
         tpopId
         artId
-      }
-    }
-    allTpopbers(filter: $tpopbersFilter, orderBy: LABEL_ASC)
-      @include(if: $isTpop) {
-      nodes {
-        id
-        tpopId
-        label
-      }
-    }
-    allTpopfreiwkontrs: allTpopkontrs(
-      filter: $tpopfreiwkontrsFilter
-      orderBy: [JAHR_ASC, DATUM_ASC]
-    ) @include(if: $isTpop) {
-      nodes {
-        id
-        tpopId
-        labelEkf
       }
     }
     adressesUnfiltered: allAdresses {

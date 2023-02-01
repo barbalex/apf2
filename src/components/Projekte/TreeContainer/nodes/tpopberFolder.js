@@ -1,37 +1,22 @@
-import findIndex from 'lodash/findIndex'
+import tpopber from './tpopber'
 
-const tpopberFolderNode = ({
-  nodes: nodesPassed,
-  data,
+const tpopberFolderNode = async ({
+  count,
   loading,
-  projektNodes,
-  apNodes,
-  popNodes,
-  tpopNodes,
   projId,
   apId,
   popId,
   tpopId,
   store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
-  const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpopber ?? ''
-
-  const childrenLength = (data?.allTpopbers?.nodes ?? []).filter(
-    (el) => el.tpopId === tpopId,
-  ).length
 
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${childrenLength} gefiltert`
-    : childrenLength
+    ? `${count} gefiltert`
+    : count
 
   const url = [
     'Projekte',
@@ -45,23 +30,41 @@ const tpopberFolderNode = ({
     'Kontroll-Berichte',
   ]
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(tpopId)) return []
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'Populationen' &&
+        n[5] === popId &&
+        n[6] === 'Teil-Populationen' &&
+        n[7] === tpopId &&
+        n[8] === 'Kontroll-Berichte',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'tpopberFolder',
-      filterTable: 'tpopber',
-      id: `${tpopId}TpopberFolder`,
-      tableId: tpopId,
-      urlLabel: 'Kontroll-Berichte',
-      label: `Kontroll-Berichte (${message})`,
-      url,
-      sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 5],
-      hasChildren: childrenLength > 0,
-    },
-  ]
+  const children = isOpen
+    ? await tpopber({
+        treeQueryVariables,
+        projId,
+        apId,
+        popId,
+        tpopId,
+        store,
+      })
+    : []
+
+  return {
+    nodeType: 'folder',
+    menuType: 'tpopberFolder',
+    filterTable: 'tpopber',
+    id: `${tpopId}TpopberFolder`,
+    tableId: tpopId,
+    urlLabel: 'Kontroll-Berichte',
+    label: `Kontroll-Berichte (${message})`,
+    url,
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default tpopberFolderNode
