@@ -1,74 +1,73 @@
-import findIndex from 'lodash/findIndex'
-import { DateTime } from 'luxon'
+import { gql } from '@apollo/client'
 
-const beobZugeordnetNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
-  apNodes,
-  popNodes,
-  tpopNodes,
+const beobZugeordnetNodes = async ({
   projId,
   apId,
   popId,
   tpopId,
+  store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: [
+      'treeBeobZugeordnet',
+      tpopId,
+      treeQueryVariables.beobZugeordnetsFilter,
+    ],
+    queryFn: () =>
+      store.client.query({
+        query: gql`
+          query TreeBeobZugeordnetQuery(
+            $id: UUID!
+            $beobZugeordnetsFilter: BeobFilter!
+          ) {
+            tpopById(id: $id) {
+              id
+              beobsByTpopId(
+                filter: $beobZugeordnetsFilter
+                orderBy: LABEL_DESC
+              ) {
+                nodes {
+                  id
+                  label
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          id: tpopId,
+          beobZugeordnetsFilter: treeQueryVariables.beobZugeordnetsFilter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
-  const tpopIndex = findIndex(tpopNodes, { id: tpopId })
 
-  // map through all elements and create array of nodes
-  const nodes = (data?.apBeobsZugeordnet?.nodes ?? [])
-    // only show if parent node exists
-    .filter((el) =>
-      nodesPassed.map((n) => n.id).includes(`${el.tpopId}BeobZugeordnetFolder`),
-    )
-    // only show nodes of this parent
-    .filter((el) => el.tpopId === tpopId)
-    .map((el) => {
-      // somehow the label passed by the view gets corrupted when the node is active ????!!!
-      // instead of '2010.07.02: Dickenmann Regula (EvAB 2016)' it gives: '2010.07.02: Dickenmann RegulaEvAB 2016)'
-      // so need to build it here
-      const datumIsValid = DateTime.fromSQL(el.datum).isValid
-      const datum = datumIsValid
-        ? DateTime.fromSQL(el.datum).toFormat('yyyy.LL.dd')
-        : '(kein Datum)'
-      const label = `${datum}: ${el?.autor ?? '(kein Autor)'} (${
-        el?.quelle ?? 'keine Quelle'
-      })`
-
-      return {
-        nodeType: 'table',
-        menuType: 'beobZugeordnet',
-        filterTable: 'beob',
-        id: el.id,
-        parentId: `${el.tpopId}BeobZugeordnetFolder`,
-        parentTableId: el.tpopId,
-        urlLabel: el.id,
-        label,
-        url: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'Populationen',
-          popId,
-          'Teil-Populationen',
-          tpopId,
-          'Beobachtungen',
-          el.id,
-        ],
-        hasChildren: false,
-      }
-    })
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6, index]
-      return el
-    })
+  const nodes = (data?.apBeobsZugeordnet?.nodes ?? []).map((el) => {
+    return {
+      nodeType: 'table',
+      menuType: 'beobZugeordnet',
+      filterTable: 'beob',
+      id: el.id,
+      parentId: `${tpopId}BeobZugeordnetFolder`,
+      parentTableId: tpopId,
+      urlLabel: el.id,
+      label: el.label,
+      url: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Beobachtungen',
+        el.id,
+      ],
+      hasChildren: false,
+    }
+  })
 
   return nodes
 }

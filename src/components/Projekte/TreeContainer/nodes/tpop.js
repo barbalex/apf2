@@ -5,6 +5,7 @@ import tpopmassnberFolder from './tpopmassnberFolder'
 import tpopfeldkontrFolder from './tpopfeldkontrFolder'
 import tpopfreiwkontrFolder from './tpopfreiwkontrFolder'
 import tpopberFolder from './tpopberFolder'
+import beobZugeordnetFolder from './beobZugeordnetFolder'
 
 const tpopNodes = async ({
   projId,
@@ -71,6 +72,7 @@ const tpopNodes = async ({
                 $tpopbersFilter: TpopberFilter!
                 $tpopfeldkontrsFilter: TpopkontrFilter!
                 $tpopfreiwkontrsFilter: TpopkontrFilter!
+                $beobZugeordnetsFilter: BeobFilter!
               ) {
                 tpopById(id: $id) {
                   id
@@ -95,6 +97,9 @@ const tpopNodes = async ({
                   ) {
                     totalCount
                   }
+                  beobsByTpopId(filter: $beobZugeordnetsFilter) {
+                    totalCount
+                  }
                 }
               }
             `,
@@ -105,6 +110,7 @@ const tpopNodes = async ({
               tpopbersFilter: treeQueryVariables.tpopbersFilter,
               tpopfeldkontrsFilter: treeQueryVariables.tpopfeldkontrsFilter,
               tpopfreiwkontrsFilter: treeQueryVariables.tpopfreiwkontrsFilter,
+              beobZugeordnetsFilter: treeQueryVariables.beobZugeordnetsFilter,
             },
             fetchPolicy: 'no-cache',
           }),
@@ -159,12 +165,23 @@ const tpopNodes = async ({
         store,
         treeQueryVariables,
       })
+      const beobZugeordnetFolderNode = await beobZugeordnetFolder({
+        count: data?.tpopById?.beobsByTpopId?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
       children = [
         tpopmassnFolderNode,
         tpopmassnberFolderNode,
         tpopfeldkontrFolderNode,
         tpopfreiwkontrFolderNode,
         tpopberFolderNode,
+        beobZugeordnetFolderNode,
       ]
     }
 
