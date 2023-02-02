@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
 
-import Row from '../Row'
+import Row from '../../Row'
 
 const UserFolderNode = ({ usersFilter }) => {
   const client = useApolloClient()

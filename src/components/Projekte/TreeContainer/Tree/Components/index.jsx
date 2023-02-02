@@ -6,9 +6,9 @@ import { observer } from 'mobx-react-lite'
 
 import buildTreeQueryVariables from '../../buildTreeQueryVariables'
 import Projekt from './Projekt'
-import UserFolder from './UserFolder'
+import Users from './Users'
 import Messages from './Messages'
-import WlFolder from './WlFolder'
+import WlFolder from './Werte'
 import CurrentIssues from './CurrentIssues'
 import storeContext from '../../../../../storeContext'
 
@@ -108,7 +108,7 @@ const NodeComponents = ({ role }) => {
         projekt={data?.data?.allProjekts?.nodes?.[0]}
         isProjectOpen={isProjectOpen}
       />
-      <UserFolder
+      <Users
         count={data?.data?.allUsers?.totalCount ?? 0}
         isLoading={isLoading}
         usersFilter={usersFilter}
