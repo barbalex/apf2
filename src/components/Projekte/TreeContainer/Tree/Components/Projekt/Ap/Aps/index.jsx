@@ -3,8 +3,8 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 
-import Row from '../../../Row'
-import storeContext from '../../../../../../../storeContext'
+import Row from '../../../../Row'
+import storeContext from '../../../../../../../../storeContext'
 
 const Aps = ({ projekt }) => {
   const client = useApolloClient()
