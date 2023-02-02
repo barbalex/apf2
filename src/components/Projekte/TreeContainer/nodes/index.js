@@ -8,8 +8,6 @@ import buildWlFolderNodes from './wlFolder'
 import buildTreeQueryVariables from '../buildTreeQueryVariables'
 
 const nodes = async ({ store, role }) => {
-  //console.log('nodes', { data, openNodes })
-
   const nodeLabelFilter = getSnapshot(store.tree.nodeLabelFilter)
   const openNodes = getSnapshot(store.tree.openNodes)
   const popGqlFilter = store.tree.popGqlFilter
