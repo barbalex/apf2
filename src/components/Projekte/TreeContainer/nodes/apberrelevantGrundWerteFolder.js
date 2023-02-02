@@ -32,7 +32,6 @@ const apberrelevantGrundWerteFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'tpopApberrelevantGrundWerteFolder',
-    filterTable: 'tpopApberrelevantGrundWerte',
     id: 'tpopApberrelevantGrundWerteFolder',
     urlLabel: 'ApberrelevantGrundWerte',
     label: `Teil-Population: Grund für AP-Bericht Relevanz (${message})`,

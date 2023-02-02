@@ -16,20 +16,9 @@ const apberuebersichtFolderNode = async ({
       (n) => n[0] === 'Projekte' && n[1] === projId && n[2] === 'AP-Berichte',
     ).length > 0
 
-  if (!showChildren) {
-    return {
-      menuType: 'apberuebersichtFolder',
-      filterTable: 'apberuebersicht',
-      id: `${projId}ApberuebersichtsFolder`,
-      tableId: projId,
-      urlLabel: 'AP-Berichte',
-      label: `AP-Berichte (${message})`,
-      url: ['Projekte', projId, 'AP-Berichte'],
-      hasChildren: count > 0,
-    }
-  }
-
-  const children = await apberuersicht({ store, treeQueryVariables })
+  const children = showChildren
+    ? await apberuersicht({ store, treeQueryVariables })
+    : []
 
   return {
     menuType: 'apberuebersichtFolder',

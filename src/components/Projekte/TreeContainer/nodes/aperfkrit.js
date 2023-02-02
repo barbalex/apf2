@@ -28,7 +28,6 @@ const aperfkritNodes = async ({ projId, apId, treeQueryVariables, store }) => {
   const nodes = (data?.apById?.erfkritsByApId?.nodes ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'erfkrit',
-    filterTable: 'erfkrit',
     id: el.id,
     parentId: apId,
     parentTableId: apId,
