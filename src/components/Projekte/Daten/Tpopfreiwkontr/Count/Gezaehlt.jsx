@@ -35,7 +35,9 @@ const Gezaehlt = ({ row, refetch }) => {
         return setErrors({ anzahl: error.message })
       }
       refetch()
-      store.tree.incrementRefetcher()
+      store.queryClient.invalidateQueries({
+        queryKey: [`treeTpopfreiwkontrzaehl`],
+      })
     },
     [
       client,
@@ -47,6 +49,7 @@ const Gezaehlt = ({ row, refetch }) => {
       store.refetch,
       store.user.name,
       store.tree,
+      store.queryClient,
     ],
   )
   //console.log('Gezaehlt, row:', row)

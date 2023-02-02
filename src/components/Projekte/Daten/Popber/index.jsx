@@ -104,10 +104,12 @@ const Popber = () => {
         setFieldErrors({})
       }
       if (['jahr', 'entwicklung'].includes(field)) {
-        store.tree.incrementRefetcher()
+        store.queryClient.invalidateQueries({
+          queryKey: [`treePopber`],
+        })
       }
     },
-    [client, fieldErrors, row.id, store.tree, store.user.name],
+    [client, fieldErrors, row.id, store.queryClient, store.user.name],
   )
 
   if (loading) return <Spinner />

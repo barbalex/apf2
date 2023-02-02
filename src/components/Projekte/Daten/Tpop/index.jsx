@@ -173,7 +173,9 @@ const TpopForm = () => {
         setFieldErrors({})
       }
       if (['nr', 'flurname'].includes(field)) {
-        store.tree.incrementRefetcher()
+        store.queryClient.invalidateQueries({
+          queryKey: [`treeTpop`],
+        })
       }
     },
     [
@@ -182,7 +184,7 @@ const TpopForm = () => {
       row.id,
       row?.lv95X,
       row?.y,
-      store.tree,
+      store.queryClient,
       store.user.name,
     ],
   )
