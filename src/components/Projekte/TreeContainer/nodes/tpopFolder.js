@@ -44,7 +44,6 @@ const tpopFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'tpopFolder',
-    filterTable: 'tpop',
     id: `${popId}TpopFolder`,
     tableId: popId,
     parentTableId: popId,

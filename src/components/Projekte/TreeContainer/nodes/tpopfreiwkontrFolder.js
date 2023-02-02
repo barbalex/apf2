@@ -56,7 +56,6 @@ const tpopfreiwkontrFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'tpopfreiwkontrFolder',
-    filterTable: 'tpopkontr',
     id: `${tpopId}TpopfreiwkontrFolder`,
     tableId: tpopId,
     urlLabel: 'Freiwilligen-Kontrollen',

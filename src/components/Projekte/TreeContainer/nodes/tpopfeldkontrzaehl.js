@@ -50,7 +50,6 @@ const tpopfeldkontrzaehlNodes = async ({
   ).map((el) => ({
     nodeType: 'table',
     menuType: 'tpopfeldkontrzaehl',
-    filterTable: 'tpopkontrzaehl',
     id: el.id,
     parentId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
     parentTableId: tpopkontrId,
