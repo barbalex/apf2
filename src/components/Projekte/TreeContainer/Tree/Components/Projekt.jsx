@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../Tree/Row'
-import getNode from '../nodes/projekt'
-import storeContext from '../../../../storeContext'
+import Row from '../Row'
+import getNode from '../../nodes/projekt'
+import storeContext from '../../../../../storeContext'
 
 const ProjektNode = ({ treeQueryVariables, projekt, isProjectOpen }) => {
   const store = useContext(storeContext)

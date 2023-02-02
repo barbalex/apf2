@@ -1,19 +1,18 @@
-import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
-import { useApolloClient } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
 
-import Row from '../Tree/Row'
+import Row from '../Row'
 
-const CurrentIssuesNode = () => {
+const UserFolderNode = ({ usersFilter }) => {
   const client = useApolloClient()
 
   const { data } = useQuery({
-    queryKey: ['treeCurrentIssues'],
+    queryKey: ['treeUser', usersFilter],
     queryFn: async () =>
       client.query({
         query: gql`
-          query TreeCurrentIssuesQuery {
-            allCurrentissues(orderBy: [SORT_ASC, TITLE_ASC]) {
+          query TreeUsersQuery($usersFilter: UserFilter!) {
+            allUsers(filter: $usersFilter, orderBy: LABEL_ASC) {
               nodes {
                 id
                 label
@@ -21,22 +20,23 @@ const CurrentIssuesNode = () => {
             }
           }
         `,
+        variables: { usersFilter },
         fetchPolicy: 'no-cache',
       }),
   })
-
-  const currentIssues = data?.data?.allCurrentissues?.nodes ?? []
-  const nodes = currentIssues.map((el) => ({
+  const nodes = (data?.data?.allUsers?.nodes ?? []).map((el) => ({
     nodeType: 'table',
-    menuType: 'currentIssue',
+    menuType: 'user',
     id: el.id,
     urlLabel: el.id,
     label: el.label,
-    url: ['Aktuelle-Fehler', el.id],
+    url: ['Benutzer', el.id],
     hasChildren: false,
   }))
+
+  if (!nodes.length) return null
 
   return nodes.map((node) => <Row key={node.id} node={node} />)
 }
 
-export default CurrentIssuesNode
+export default UserFolderNode

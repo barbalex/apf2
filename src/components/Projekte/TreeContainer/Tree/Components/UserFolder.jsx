@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../Tree/Row'
-import storeContext from '../../../../storeContext'
+import Row from '../Row'
+import storeContext from '../../../../../storeContext'
 import Users from './Users'
 
 const UserFolderNode = ({ count, isLoading, usersFilter }) => {

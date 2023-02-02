@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import jwtDecode from 'jwt-decode'
 
-import Components from '../Components'
+import Components from './Components'
 
 import storeContext from '../../../../storeContext'
 

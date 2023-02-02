@@ -4,13 +4,13 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import buildTreeQueryVariables from '../buildTreeQueryVariables'
+import buildTreeQueryVariables from '../../buildTreeQueryVariables'
 import Projekt from './Projekt'
 import UserFolder from './UserFolder'
 import Messages from './Messages'
 import WlFolder from './WlFolder'
-import CurrentIssue from './CurrentIssueFolder'
-import storeContext from '../../../../storeContext'
+import CurrentIssues from './CurrentIssues'
+import storeContext from '../../../../../storeContext'
 
 const NodeComponents = ({ role }) => {
   const store = useContext(storeContext)
@@ -105,7 +105,7 @@ const NodeComponents = ({ role }) => {
     <>
       <Projekt
         treeQueryVariables={treeQueryVariables}
-        projekt={data?.data?.allProjekts?.nodes[0]}
+        projekt={data?.data?.allProjekts?.nodes?.[0]}
         isProjectOpen={isProjectOpen}
       />
       <UserFolder
@@ -120,7 +120,7 @@ const NodeComponents = ({ role }) => {
         count={data?.data?.allMessages?.totalCount ?? 0}
         isLoading={isLoading}
       />
-      <CurrentIssue
+      <CurrentIssues
         count={data?.data?.allCurrentissues?.totalCount ?? 0}
         isLoading
       />

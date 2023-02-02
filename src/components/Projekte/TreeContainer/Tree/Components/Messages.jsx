@@ -1,7 +1,9 @@
-const messagesFolderNode = async ({ count, isLoading }) => {
+import Row from '../Row'
+
+const MessagesNode = ({ count, isLoading }) => {
   const message = isLoading && !count ? '...' : count
 
-  return {
+  const node = {
     nodeType: 'table',
     menuType: 'message',
     id: 'messagesFolder',
@@ -10,6 +12,8 @@ const messagesFolderNode = async ({ count, isLoading }) => {
     url: ['Mitteilungen'],
     hasChildren: false,
   }
+
+  return <Row node={node} />
 }
 
-export default messagesFolderNode
+export default MessagesNode
