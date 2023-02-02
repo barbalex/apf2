@@ -38,7 +38,6 @@ const tpopkontrzaehlEinheitWerteNodes = async ({
     (el) => ({
       nodeType: 'table',
       menuType: 'tpopkontrzaehlEinheitWerte',
-      filterTable: 'tpopkontrzaehlEinheitWerte',
       id: el.id,
       parentId: 'tpopkontrzaehlEinheitWerteFolder',
       urlLabel: el.id,

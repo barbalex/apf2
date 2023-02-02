@@ -22,7 +22,6 @@ const apberuebersichtFolderNode = async ({
 
   return {
     menuType: 'apberuebersichtFolder',
-    filterTable: 'apberuebersicht',
     id: `${projId}ApberuebersichtsFolder`,
     tableId: projId,
     urlLabel: 'AP-Berichte',

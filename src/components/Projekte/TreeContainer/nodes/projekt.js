@@ -39,7 +39,6 @@ const projektNodes = async ({ store, treeQueryVariables }) => {
       nodes.push({
         nodeType: 'table',
         menuType: 'projekt',
-        filterTable: 'projekt',
         id: projekt.id,
         urlLabel: projekt.id,
         label: projekt.label,
@@ -67,7 +66,6 @@ const projektNodes = async ({ store, treeQueryVariables }) => {
     nodes.push({
       nodeType: 'table',
       menuType: 'projekt',
-      filterTable: 'projekt',
       id: projekt.id,
       urlLabel: projekt.id,
       label: projekt.label,

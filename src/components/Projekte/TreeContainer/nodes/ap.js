@@ -231,7 +231,6 @@ const ap = async ({ projId, store, treeQueryVariables }) => {
       nodes.push({
         nodeType: 'table',
         menuType: 'ap',
-        filterTable: 'ap',
         id: ap.id,
         parentId: projId,
         parentTableId: projId,
