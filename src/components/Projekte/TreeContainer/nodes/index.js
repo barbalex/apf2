@@ -6,14 +6,6 @@ import buildUserFolderNodes from './userFolder'
 import buildCurrentIssuesFolderNodes from './currentIssuesFolder'
 import buildMessagesFolderNodes from './messagesFolder'
 import buildWlFolderNodes from './wlFolder'
-import buildAdresseFolderNodes from './adresseFolder'
-import buildAdresseNodes from './adresse'
-import buildApberrelevantGrundWerteFolderNodes from './apberrelevantGrundWerteFolder'
-import buildApberrelevantGrundWerteNodes from './apberrelevantGrundWerte'
-import buildTpopkontrzaehlEinheitWerteFolderNodes from './tpopkontrzaehlEinheitWerteFolder'
-import buildTpopkontrzaehlEinheitWerteNodes from './tpopkontrzaehlEinheitWerte'
-import buildEkAbrechnungstypWerteFolderNodes from './ekAbrechnungstypWerteFolder'
-import buildEkAbrechnungstypWerteNodes from './ekAbrechnungstypWerte'
 import buildUserNodes from './user'
 import buildCurrentIssuesNodes from './currentIssues'
 import buildApzielNodes from './apziel'
@@ -53,7 +45,6 @@ import buildTpopfreiwkontrzaehlNodes from './tpopfreiwkontrzaehl'
 import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
 import buildTreeQueryVariables from '../buildTreeQueryVariables'
-
 
 const nodes = async ({ store, role }) => {
   //console.log('nodes', { data, openNodes })
@@ -96,11 +87,15 @@ const nodes = async ({ store, role }) => {
   const currentIssuesFolderNodes = await buildCurrentIssuesFolderNodes({
     store,
   })
+  const wlFolderNodes =
+    role === 'apflora_manager'
+      ? await buildWlFolderNodes({ treeQueryVariables, store })
+      : []
 
   let nodes = [
     ...projektNodes,
     ...userFolderNodes,
-    ...(role === 'apflora_manager' ? buildWlFolderNodes() : []),
+    ...wlFolderNodes,
     ...messagesFolderNodes,
     ...currentIssuesFolderNodes,
   ]
