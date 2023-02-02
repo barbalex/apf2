@@ -1,26 +1,13 @@
-import { gql } from '@apollo/client'
 import max from 'lodash/max'
 
 import currentIssues from './currentIssues'
 
-const currentIssuesFolderNode = async ({ store, treeQueryVariables }) => {
-  const { data, isLoading } = await store.queryClient.fetchQuery({
-    queryKey: ['treeCurrentIssuesFolder'],
-    queryFn: async () =>
-      store.client.query({
-        query: gql`
-          query TreeCurrentIssuesFolderQuery {
-            allCurrentissues {
-              totalCount
-            }
-          }
-        `,
-        fetchPolicy: 'no-cache',
-      }),
-  })
-
-  const count = data?.allCurrentissues?.totalCount ?? 0
-
+const currentIssuesFolderNode = async ({
+  store,
+  treeQueryVariables,
+  count,
+  isLoading,
+}) => {
   let message = isLoading && !count ? '...' : max([count - 1, 0])
 
   let children = []

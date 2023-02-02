@@ -18,7 +18,7 @@ const wlFolderNodes = async ({ treeQueryVariables, store }) => {
       queryFn: () =>
         store.client.query({
           query: gql`
-            query TreeProjektQuery(
+            query TreeWlFolderQuery(
               $adressesFilter: AdresseFilter!
               $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
               $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
@@ -73,10 +73,18 @@ const wlFolderNodes = async ({ treeQueryVariables, store }) => {
       store,
       treeQueryVariables,
     })
+    const tpopkontrzaehlEinheitWerteFolderNode =
+      await tpopkontrzaehlEinheitWerteFolder({
+        count: data?.allTpopkontrzaehlEinheitWertes?.totalCount ?? 0,
+        loading: isLoading,
+        store,
+        treeQueryVariables,
+      })
     children = [
       adressenFolderNode,
       apberrelevantGrundWerteFolderNode,
       ekAbrechnungstypWerteFolderNode,
+      tpopkontrzaehlEinheitWerteFolderNode,
     ]
   }
 

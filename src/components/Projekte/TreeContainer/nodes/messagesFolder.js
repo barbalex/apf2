@@ -1,18 +1,5 @@
-import { gql } from '@apollo/client'
-
-const messagesFolderNode = async ({ store }) => {
-  const { data, loading } = await store.client.query({
-    query: gql`
-      query TreeMessagesFolderQuery {
-        allMessages {
-          totalCount
-        }
-      }
-    `,
-  })
-  const messages = data?.allMessages?.totalCount ?? 0
-
-  let message = loading && !messages ? '...' : messages
+const messagesFolderNode = async ({ count, isLoading }) => {
+  const message = isLoading && !count ? '...' : count
 
   return [
     {

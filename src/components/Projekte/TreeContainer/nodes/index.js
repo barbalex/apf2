@@ -1,4 +1,5 @@
 import { getSnapshot } from 'mobx-state-tree'
+import { gql } from '@apollo/client'
 
 import buildProjektNodes from './projekt'
 import buildUserFolderNodes from './userFolder'
@@ -32,6 +33,28 @@ const nodes = async ({ store, role }) => {
     openAps,
   })
 
+  const { data, isLoading } = await store.queryClient.fetchQuery({
+    queryKey: ['treeRootFolder'],
+    queryFn: async () =>
+      store.client.query({
+        query: gql`
+          query TreeRootFolderQuery($usersFilter: UserFilter!) {
+            allCurrentissues {
+              totalCount
+            }
+            allMessages {
+              totalCount
+            }
+            allUsers(filter: $usersFilter) {
+              totalCount
+            }
+          }
+        `,
+        variables: { usersFilter: treeQueryVariables.usersFilter },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+
   const projektNodes = await buildProjektNodes({
     store,
     treeQueryVariables,
@@ -39,10 +62,17 @@ const nodes = async ({ store, role }) => {
   const userFolderNodes = await buildUserFolderNodes({
     store,
     treeQueryVariables,
+    count: data?.allUsers?.totalCount ?? 0,
   })
-  const messagesFolderNodes = await buildMessagesFolderNodes({ store })
+  const messagesFolderNodes = await buildMessagesFolderNodes({
+    count: data?.allMessages?.totalCount ?? 0,
+    isLoading,
+  })
   const currentIssuesFolderNodes = await buildCurrentIssuesFolderNodes({
     store,
+    count: data?.allCurrentissues?.totalCount ?? 0,
+    isLoading,
+    treeQueryVariables,
   })
   const wlFolderNodes =
     role === 'apflora_manager'

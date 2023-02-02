@@ -29,19 +29,17 @@ const tpopkontrzaehlEinheitWerteFolderNode = async ({
     children = adresseNodes
   }
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'tpopkontrzaehlEinheitWerteFolder',
-      filterTable: 'tpopkontrzaehlEinheitWerte',
-      id: 'tpopkontrzaehlEinheitWerteFolder',
-      urlLabel: 'TpopkontrzaehlEinheitWerte',
-      label: `Teil-Population: Zähl-Einheiten (${message})`,
-      url: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
-      hasChildren: count > 0,
-      children,
-    },
-  ]
+  return {
+    nodeType: 'folder',
+    menuType: 'tpopkontrzaehlEinheitWerteFolder',
+    filterTable: 'tpopkontrzaehlEinheitWerte',
+    id: 'tpopkontrzaehlEinheitWerteFolder',
+    urlLabel: 'TpopkontrzaehlEinheitWerte',
+    label: `Teil-Population: Zähl-Einheiten (${message})`,
+    url: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default tpopkontrzaehlEinheitWerteFolderNode

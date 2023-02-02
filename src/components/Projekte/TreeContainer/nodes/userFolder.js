@@ -1,26 +1,12 @@
-import { gql } from '@apollo/client'
-
 import user from './user'
 
-const userFolderNode = async ({ store, treeQueryVariables }) => {
+const userFolderNode = async ({
+  store,
+  treeQueryVariables,
+  count,
+  isLoading,
+}) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.user ?? ''
-  const { data, isLoading } = await store.queryClient.fetchQuery({
-    queryKey: ['treeUserFolder', treeQueryVariables.usersFilter],
-    queryFn: async () =>
-      store.client.query({
-        query: gql`
-          query TreeUsersFolderQuery($usersFilter: UserFilter!) {
-            allUsers(filter: $usersFilter) {
-              totalCount
-            }
-          }
-        `,
-        variables: { usersFilter: treeQueryVariables.usersFilter },
-        fetchPolicy: 'no-cache',
-      }),
-  })
-
-  const count = data?.allUsers?.totalCount ?? 0
   const message = isLoading
     ? '...'
     : nodeLabelFilterString
