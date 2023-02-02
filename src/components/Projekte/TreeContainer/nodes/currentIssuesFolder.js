@@ -1,21 +1,36 @@
 import { gql } from '@apollo/client'
 import max from 'lodash/max'
 
-const currentIssuesFolderNode = async ({ store }) => {
+import currentIssues from './currentIssues'
 
-  const { data, loading } = await store.client.query({
-    query: gql`
-      query TreeCurrentIssuesFolderQuery {
-        allCurrentissues(orderBy: SORT_ASC) {
-      totalCount
-    }
-      }
-    `,
+const currentIssuesFolderNode = async ({ store, treeQueryVariables }) => {
+  const { data, isLoading } = await store.queryClient.fetchQuery({
+    queryKey: ['treeCurrentIssuesFolder'],
+    queryFn: async () =>
+      store.client.query({
+        query: gql`
+          query TreeCurrentIssuesFolderQuery {
+            allCurrentissues {
+              totalCount
+            }
+          }
+        `,
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   const count = data?.allCurrentissues?.totalCount ?? 0
 
-  let message = loading && !count ? '...' : max([count - 1, 0])
+  let message = isLoading && !count ? '...' : max([count - 1, 0])
+
+  let children = []
+  const isOpen = store.tree.openNodes.some(
+    (nodeArray) => nodeArray[0] === 'Aktuelle-Fehler',
+  )
+  if (isOpen) {
+    const userNodes = await currentIssues({ store, treeQueryVariables })
+    children = userNodes
+  }
 
   return [
     {
@@ -26,6 +41,7 @@ const currentIssuesFolderNode = async ({ store }) => {
       label: `Aktuelle Fehler (${message})`,
       url: ['Aktuelle-Fehler'],
       hasChildren: count > 0,
+      children,
     },
   ]
 }

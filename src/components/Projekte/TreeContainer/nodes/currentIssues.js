@@ -1,18 +1,22 @@
 import { gql } from '@apollo/client'
 
 const currentIssuesNodes = async ({ store }) => {
-  const { data } = await store.client.query({
-    query: gql`
-      query TreeCurrentIssuesQuery {
-        allCurrentissues(orderBy: [SORT_ASC, TITLE_ASC]) {
-          totalCount
-          nodes {
-            id
-            label
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: ['treeCurrentIssues'],
+    queryFn: async () =>
+      store.client.query({
+        query: gql`
+          query TreeCurrentIssuesQuery {
+            allCurrentissues(orderBy: [SORT_ASC, TITLE_ASC]) {
+              nodes {
+                id
+                label
+              }
+            }
           }
-        }
-      }
-    `,
+        `,
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   const currentIssues = data?.allCurrentissues?.nodes ?? []
