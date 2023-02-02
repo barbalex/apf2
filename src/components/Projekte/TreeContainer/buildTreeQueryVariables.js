@@ -2,7 +2,7 @@ import uniq from 'lodash/uniq'
 import isUuid from 'is-uuid'
 
 /**
- * returns a filter for every branch of the nav tree 
+ * returns a filter for every branch of the nav tree
  */
 
 /**
@@ -246,13 +246,14 @@ const buildTreeQueryVariables = ({
   const adressesFilter = nodeLabelFilter.adresse
     ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
     : { id: { isNull: false } }
-  const apberrelevantGrundWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
-    ? {
-        label: {
-          includesInsensitive: nodeLabelFilter.apberrelevantGrundWerte,
-        },
-      }
-    : { id: { isNull: false } }
+  const apberrelevantGrundWertesFilter =
+    nodeLabelFilter.tpopApberrelevantGrundWerte
+      ? {
+          label: {
+            includesInsensitive: nodeLabelFilter.tpopApberrelevantGrundWerte,
+          },
+        }
+      : { id: { isNull: false } }
   const tpopkontrzaehlEinheitWertesFilter =
     nodeLabelFilter.tpopkontrzaehlEinheitWerte
       ? {

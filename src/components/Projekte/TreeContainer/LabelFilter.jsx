@@ -12,6 +12,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
 import styled from '@emotion/styled'
 import isEqual from 'lodash/isEqual'
+import snakeCase from 'lodash/snakeCase'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -52,10 +53,6 @@ const LabelFilter = ({ nodes }) => {
   } = nodeLabelFilter
   const isFiltered = runIsFiltered()
   const activeNode = nodes.find((n) => isEqual(n.url, activeNodeArray))
-  console.log('LabelFilter, activeFilterTable', {
-    activeFilterTable,
-    activeNodeArray: activeNodeArray.slice(),
-  })
 
   let labelText = '(filtern nicht möglich)'
   let filterValue = ''
@@ -63,7 +60,8 @@ const LabelFilter = ({ nodes }) => {
     filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     // make sure 0 is kept
     if (!filterValue && filterValue !== 0) filterValue = ''
-    const table = tables.find((t) => t.table === activeFilterTable)
+    // should be to_under_score_case
+    const table = tables.find((t) => t.table === snakeCase(activeFilterTable))
     const tableLabel = table ? table.label : null
     // danger: Projekte can not be filtered because no parent folder
     if (tableLabel !== 'Projekte') {
@@ -71,6 +69,12 @@ const LabelFilter = ({ nodes }) => {
     }
   }
   const openNodes = useMemo(() => store.tree?.openNodes ?? [], [store])
+
+  // console.log('LabelFilter, activeFilterTable', {
+  //   activeFilterTable,
+  //   activeNodeArray: activeNodeArray.slice(),
+  //   tables,
+  // })
 
   const [value, setValue] = useState('')
 
@@ -80,33 +84,26 @@ const LabelFilter = ({ nodes }) => {
 
   const setValuesAfterChange = useCallback(
     (val) => {
-      const { url, label } = activeNode
+      console.log('setValuesAfterChange', { val, activeFilterTable })
+      // const { url, label } = activeNode
       // pop if is not folder and label does not comply to filter
-      if (
-        activeNode.nodeType === 'table' &&
-        !label.includes(val && val.toLowerCase ? val.toLowerCase() : val)
-      ) {
-        const newActiveNodeArray = [...url]
-        const newActiveUrl = [...url]
-        newActiveNodeArray.pop()
-        const newOpenNodes = openNodes.filter((n) => n !== newActiveUrl)
-        navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
-        setOpenNodes(newOpenNodes)
-      }
+      // if (
+      //   activeNode.nodeType === 'table' &&
+      //   !label.includes(val && val.toLowerCase ? val.toLowerCase() : val)
+      // ) {
+      //   const newActiveNodeArray = [...url]
+      //   const newActiveUrl = [...url]
+      //   newActiveNodeArray.pop()
+      //   const newOpenNodes = openNodes.filter((n) => n !== newActiveUrl)
+      //   navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+      //   setOpenNodes(newOpenNodes)
+      // }
       setNodeLabelFilterKey({
         value: val,
         key: activeFilterTable,
       })
     },
-    [
-      activeNode,
-      navigate,
-      openNodes,
-      search,
-      setNodeLabelFilterKey,
-      setOpenNodes,
-      activeFilterTable,
-    ],
+    [setNodeLabelFilterKey, activeFilterTable],
   )
   const changeDebounced = useDebouncedCallback(setValuesAfterChange, 600)
 
