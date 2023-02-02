@@ -28,7 +28,6 @@ const ekfrequenzNodes = async ({ treeQueryVariables, projId, apId, store }) => {
   const nodes = (data?.apById?.ekfrequenzsByApId?.nodes ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'ekfrequenz',
-    filterTable: 'ekfrequenz',
     id: el.id,
     parentId: apId,
     parentTableId: apId,

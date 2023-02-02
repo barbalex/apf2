@@ -18,7 +18,6 @@ const messagesFolderNode = async ({ store }) => {
     {
       nodeType: 'table',
       menuType: 'message',
-      filterTable: 'message',
       id: 'messagesFolder',
       urlLabel: 'Mitteilungen',
       label: `Mitteilungen (${message})`,

@@ -32,7 +32,6 @@ const ekAbrechnungstypWerteFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'ekAbrechnungstypWerteFolder',
-    filterTable: 'ekAbrechnungstypWerte',
     id: 'ekAbrechnungstypWerteFolder',
     urlLabel: 'EkAbrechnungstypWerte',
     label: `Teil-Population: EK-Abrechnungstypen (${message})`,

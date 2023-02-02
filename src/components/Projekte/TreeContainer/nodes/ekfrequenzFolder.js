@@ -34,7 +34,6 @@ const ekfrequenzFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'ekfrequenzFolder',
-    filterTable: 'ekfrequenz',
     id: `${apId}Ekfrequenz`,
     tableId: apId,
     urlLabel: 'EK-Frequenzen',

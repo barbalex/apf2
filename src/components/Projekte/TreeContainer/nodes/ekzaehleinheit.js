@@ -37,7 +37,6 @@ const ekzaehleinheitNodes = async ({
     (el) => ({
       nodeType: 'table',
       menuType: 'ekzaehleinheit',
-      filterTable: 'ekzaehleinheit',
       id: el.id,
       parentId: apId,
       parentTableId: apId,
