@@ -33,16 +33,16 @@ const Aps = ({ projekt }) => {
 
   const aps = data?.data?.allAps?.nodes ?? []
 
-  const nodes = aps.map((el) => ({
+  const nodes = aps.map((ap) => ({
     nodeType: 'table',
-    menuType: 'apberuebersicht',
-    id: el.id,
+    menuType: 'ap',
+    id: ap.id,
     parentId: projekt.id,
     parentTableId: projekt.id,
-    urlLabel: el.label || '(kein Jahr)',
-    label: el.label,
-    url: ['Projekte', projekt.id, 'AP-Berichte', el.id],
-    hasChildren: false,
+    urlLabel: ap.id,
+    label: ap.label,
+    url: ['Projekte', projekt.id, 'Arten', ap.id],
+    hasChildren: true,
   }))
 
   return nodes.map((node) => <Row key={node.id} node={node} />)
