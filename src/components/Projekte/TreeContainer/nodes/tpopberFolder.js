@@ -56,7 +56,6 @@ const tpopberFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'tpopberFolder',
-    filterTable: 'tpopber',
     id: `${tpopId}TpopberFolder`,
     tableId: tpopId,
     urlLabel: 'Kontroll-Berichte',

@@ -107,7 +107,6 @@ const tpopfreiwkontrNodes = async ({
     nodes.push({
       nodeType: 'table',
       menuType: 'tpopfreiwkontr',
-      filterTable: 'tpopkontr',
       id: node.id,
       tableId: node.id,
       parentId: `${tpopId}TpopfreiwkontrFolder`,

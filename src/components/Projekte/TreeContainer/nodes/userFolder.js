@@ -26,7 +26,7 @@ const userFolderNode = async ({ store, treeQueryVariables }) => {
     : nodeLabelFilterString
     ? `${count} gefiltert`
     : count
-    
+
   let children = []
   const isOpen = store.tree.openNodes.some(
     (nodeArray) => nodeArray[0] === 'Benutzer',
@@ -40,7 +40,6 @@ const userFolderNode = async ({ store, treeQueryVariables }) => {
     {
       nodeType: 'folder',
       menuType: 'userFolder',
-      filterTable: 'user',
       id: 'benutzerFolder',
       urlLabel: 'Benutzer',
       label: `Benutzer (${message})`,
