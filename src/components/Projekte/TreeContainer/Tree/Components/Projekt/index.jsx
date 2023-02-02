@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import Row from '../../Row'
 import storeContext from '../../../../../../storeContext'
 import Apberuebersicht from './Apberuebersicht'
+import Ap from './Ap'
 
 const ProjektNode = ({
   treeQueryVariables,
@@ -39,11 +40,14 @@ const ProjektNode = ({
     <>
       <Row node={node} />
       {isProjectOpen && (
-        <Apberuebersicht
-          projekt={projekt}
-          count={projekt?.apberuebersichtsByProjId?.totalCount ?? 0}
-          apberuebersichtsFilter={apberuebersichtsFilter}
-        />
+        <>
+          <Ap projekt={projekt} count={projekt?.apsByProjId?.totalCount ?? 0} />
+          <Apberuebersicht
+            projekt={projekt}
+            count={projekt?.apberuebersichtsByProjId?.totalCount ?? 0}
+            apberuebersichtsFilter={apberuebersichtsFilter}
+          />
+        </>
       )}
     </>
   )

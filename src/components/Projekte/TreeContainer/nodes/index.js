@@ -2,9 +2,6 @@ import { getSnapshot } from 'mobx-state-tree'
 import { gql } from '@apollo/client'
 
 import buildProjektNode from './projekt'
-import buildCurrentIssuesFolderNode from './currentIssuesFolder'
-import buildMessagesFolderNode from './messagesFolder'
-import buildWlFolderNode from './wlFolder'
 import buildTreeQueryVariables from '../buildTreeQueryVariables'
 
 const nodes = async ({ store, role }) => {
@@ -36,44 +33,27 @@ const nodes = async ({ store, role }) => {
   const isProjectOpen = openProjects.length > 0
 
   const { data, isLoading } = await store.queryClient.fetchQuery({
-    queryKey: [
-      'treeRoot',
-      isProjectOpen,
-      treeQueryVariables.apsFilter,
-      treeQueryVariables.apberuebersichtsFilter,
-    ],
+    queryKey: ['treeRoot', isProjectOpen, treeQueryVariables.apsFilter],
     queryFn: async () =>
       store.client.query({
         query: gql`
           query TreeRootFolderQuery(
             $apsFilter: ApFilter!
-            $apberuebersichtsFilter: ApberuebersichtFilter!
             $isProjectOpen: Boolean!
           ) {
             allProjekts {
               nodes {
                 id
                 label
-                apberuebersichtsByProjId(filter: $apberuebersichtsFilter)
-                  @include(if: $isProjectOpen) {
-                  totalCount
-                }
                 apsByProjId(filter: $apsFilter) @include(if: $isProjectOpen) {
                   totalCount
                 }
               }
             }
-            allCurrentissues {
-              totalCount
-            }
-            allMessages {
-              totalCount
-            }
           }
         `,
         variables: {
           apsFilter: treeQueryVariables.apsFilter,
-          apberuebersichtsFilter: treeQueryVariables.apberuebersichtsFilter,
           isProjectOpen,
         },
         fetchPolicy: 'no-cache',
@@ -86,27 +66,8 @@ const nodes = async ({ store, role }) => {
     projekt: data?.allProjekts?.nodes[0],
     isProjectOpen,
   })
-  const messagesFolderNode = await buildMessagesFolderNode({
-    count: data?.allMessages?.totalCount ?? 0,
-    isLoading,
-  })
-  const currentIssuesFolderNode = await buildCurrentIssuesFolderNode({
-    store,
-    count: data?.allCurrentissues?.totalCount ?? 0,
-    isLoading,
-    treeQueryVariables,
-  })
-  const wlFolderNode =
-    role === 'apflora_manager'
-      ? await buildWlFolderNode({ treeQueryVariables, store })
-      : []
 
-  let nodes = [
-    projektNode,
-    wlFolderNode,
-    messagesFolderNode,
-    currentIssuesFolderNode,
-  ]
+  let nodes = [projektNode]
 
   return nodes
 }

@@ -1,11 +1,10 @@
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 
 import Row from '../../../Row'
 
-const Apberuebersichts = ({  apberuebersichtsFilter }) => {
+const Apberuebersichts = ({ apberuebersichtsFilter }) => {
   const client = useApolloClient()
   const { data } = useQuery({
     queryKey: ['treeApberuebersichts', apberuebersichtsFilter],
@@ -48,4 +47,4 @@ const Apberuebersichts = ({  apberuebersichtsFilter }) => {
   return nodes.map((node) => <Row key={node.id} node={node} />)
 }
 
-export default observer(Apberuebersichts)
+export default Apberuebersichts
