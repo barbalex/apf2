@@ -14,7 +14,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import jwtDecode from 'jwt-decode'
 import { useParams } from 'react-router-dom'
 
-import Row from './Row'
+import Components from '../Components'
 
 import storeContext from '../../../../storeContext'
 import buildNodes from '../nodes'
@@ -125,22 +125,7 @@ const TreeComponent = () => {
 
   return (
     <Container ref={resizeRef}>
-      <Tree
-        key={JSON.stringify(treeNodes)}
-        data={treeNodes}
-        height={height}
-        width={width}
-      >
-        {({ node, style, tree, dragHandle }) => (
-          <Row
-            node={node}
-            style={style}
-            tree={tree}
-            dragHandle={dragHandle}
-            nodes={treeNodes}
-          />
-        )}
-      </Tree>
+      <Components />
     </Container>
   )
 }

@@ -1,7 +1,7 @@
 import apFolder from './apFolder'
 import apberuebersichtFolder from './apberuebersichtFolder'
 
-const projektNodes = async ({
+const projektNode = async ({
   store,
   treeQueryVariables,
   projekt,
@@ -49,4 +49,4 @@ const projektNodes = async ({
   }
 }
 
-export default projektNodes
+export default projektNode
