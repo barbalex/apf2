@@ -25,7 +25,7 @@ const beobZugeordnetNodes = async ({
               id
               beobsByTpopId(
                 filter: $beobZugeordnetsFilter
-                orderBy: LABEL_DESC
+                orderBy: [DATUM_DESC, AUTOR_ASC]
               ) {
                 nodes {
                   id
@@ -43,7 +43,7 @@ const beobZugeordnetNodes = async ({
       }),
   })
 
-  const nodes = (data?.apBeobsZugeordnet?.nodes ?? []).map((el) => {
+  const nodes = (data?.tpopById?.beobsByTpopId?.nodes ?? []).map((el) => {
     return {
       nodeType: 'table',
       menuType: 'beobZugeordnet',

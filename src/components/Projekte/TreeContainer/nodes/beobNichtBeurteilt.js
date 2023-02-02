@@ -20,7 +20,10 @@ const beobNichtBeurteiltNodes = async ({
               id
               aeTaxonomyByArtId {
                 id
-                beobsByArtId(filter: $beobNichtBeurteiltsFilter) {
+                beobsByArtId(
+                  filter: $beobNichtBeurteiltsFilter
+                  orderBy: [DATUM_DESC, AUTOR_ASC]
+                ) {
                   nodes {
                     id
                     label

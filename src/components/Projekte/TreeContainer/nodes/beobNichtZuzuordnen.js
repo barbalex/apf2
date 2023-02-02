@@ -20,7 +20,10 @@ const beobNichtZuzuordnenNodes = async ({
               id
               aeTaxonomyByArtId {
                 id
-                beobsByArtId(filter: $beobNichtZuzuordnensFilter) {
+                beobsByArtId(
+                  filter: $beobNichtZuzuordnensFilter
+                  orderBy: [DATUM_DESC, AUTOR_ASC]
+                ) {
                   nodes {
                     id
                     label
