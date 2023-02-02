@@ -2,13 +2,14 @@ import { useContext } from 'react'
 import { getSnapshot } from 'mobx-state-tree'
 import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
+import { observer } from 'mobx-react-lite'
 
 import buildTreeQueryVariables from '../buildTreeQueryVariables'
 import Projekt from './Projekt'
 import UserFolder from './UserFolder'
 import Messages from './Messages'
 import WlFolder from './WlFolder'
-import CurrentIssue from './CurrentIssue'
+import CurrentIssue from './CurrentIssueFolder'
 import storeContext from '../../../../storeContext'
 
 const NodeComponents = ({ role }) => {
@@ -39,6 +40,13 @@ const NodeComponents = ({ role }) => {
 
   const openProjects = openNodes.filter((n) => n[0] === 'Projekte' && !!n[1])
   const isProjectOpen = openProjects.length > 0
+
+  const usersFilter = { id: { isNull: false } }
+  if (nodeLabelFilter.user) {
+    usersFilter.label = {
+      includesInsensitive: nodeLabelFilter.user,
+    }
+  }
 
   const { data, isLoading } = useQuery({
     queryKey: [
@@ -82,7 +90,7 @@ const NodeComponents = ({ role }) => {
           }
         `,
         variables: {
-          usersFilter: treeQueryVariables.usersFilter,
+          usersFilter,
           apsFilter: treeQueryVariables.apsFilter,
           apberuebersichtsFilter: treeQueryVariables.apberuebersichtsFilter,
           isProjectOpen,
@@ -101,9 +109,9 @@ const NodeComponents = ({ role }) => {
         isProjectOpen={isProjectOpen}
       />
       <UserFolder
-        treeQueryVariables={treeQueryVariables}
         count={data?.data?.allUsers?.totalCount ?? 0}
         isLoading={isLoading}
+        usersFilter={usersFilter}
       />
       {role === 'apflora_manager' && (
         <WlFolder treeQueryVariables={treeQueryVariables} />
@@ -113,7 +121,6 @@ const NodeComponents = ({ role }) => {
         isLoading={isLoading}
       />
       <CurrentIssue
-        treeQueryVariables={treeQueryVariables}
         count={data?.data?.allCurrentissues?.totalCount ?? 0}
         isLoading
       />
@@ -121,4 +128,4 @@ const NodeComponents = ({ role }) => {
   )
 }
 
-export default NodeComponents
+export default observer(NodeComponents)

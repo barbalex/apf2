@@ -3,7 +3,7 @@ import ap from './ap'
 const apFolderNode = async ({ projId, store, treeQueryVariables, count }) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ap ?? ''
 
-  const message = nodeLabelFilterString ? `${count} gefiltert` : count
+  const message = nodeLabelFilterString ? `${count} gefiltert` : count 
 
   const showChildren =
     store.tree.openNodes.filter(

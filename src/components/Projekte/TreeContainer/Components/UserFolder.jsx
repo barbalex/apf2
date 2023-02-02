@@ -5,7 +5,7 @@ import Row from '../Tree/Row'
 import storeContext from '../../../../storeContext'
 import Users from './Users'
 
-const UserFolderNode = ({ treeQueryVariables, count, isLoading }) => {
+const UserFolderNode = ({ count, isLoading, usersFilter }) => {
   const store = useContext(storeContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.user ?? ''
@@ -29,12 +29,10 @@ const UserFolderNode = ({ treeQueryVariables, count, isLoading }) => {
     (nodeArray) => nodeArray[0] === 'Benutzer',
   )
 
-  if (!node) return null
-
   return (
     <>
       <Row node={node} />
-      {isOpen && <Users treeQueryVariables={treeQueryVariables} />}
+      {isOpen && <Users usersFilter={usersFilter} />}
     </>
   )
 }

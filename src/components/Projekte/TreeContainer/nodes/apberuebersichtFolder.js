@@ -1,7 +1,7 @@
 import apberuersicht from './apberuebersicht'
 
 const apberuebersichtFolderNode = async ({
-  projId,
+  projId, 
   store,
   count,
   treeQueryVariables,

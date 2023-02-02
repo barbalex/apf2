@@ -37,7 +37,12 @@ const ApFilter = () => {
     // console.log('ApFilter, onChange', { apFilter, previousApFilter })
     if (!previousApFilter) {
       // need to fetch previously not had aps
-      store.tree.incrementRefetcher()
+      store.queryClient.invalidateQueries({
+        queryKey: [`treeAp`],
+      })
+      store.queryClient.invalidateQueries({
+        queryKey: [`treeProject`],
+      })
       // apFilter was set to true
       let result
       if (apId) {

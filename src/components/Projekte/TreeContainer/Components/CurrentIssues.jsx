@@ -1,10 +1,16 @@
 import { gql } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client'
 
-const currentIssuesNodes = async ({ store }) => {
-  const { data } = await store.queryClient.fetchQuery({
+import Row from '../Tree/Row'
+
+const CurrentIssuesNode = () => {
+  const client = useApolloClient()
+
+  const { data } = useQuery({
     queryKey: ['treeCurrentIssues'],
     queryFn: async () =>
-      store.client.query({
+      client.query({
         query: gql`
           query TreeCurrentIssuesQuery {
             allCurrentissues(orderBy: [SORT_ASC, TITLE_ASC]) {
@@ -19,9 +25,7 @@ const currentIssuesNodes = async ({ store }) => {
       }),
   })
 
-  const currentIssues = data?.allCurrentissues?.nodes ?? []
-
-  // map through all elements and create array of nodes
+  const currentIssues = data?.data?.allCurrentissues?.nodes ?? []
   const nodes = currentIssues.map((el) => ({
     nodeType: 'table',
     menuType: 'currentIssue',
@@ -32,7 +36,7 @@ const currentIssuesNodes = async ({ store }) => {
     hasChildren: false,
   }))
 
-  return nodes
+  return nodes.map((node) => <Row key={node.id} node={node} />)
 }
 
-export default currentIssuesNodes
+export default CurrentIssuesNode

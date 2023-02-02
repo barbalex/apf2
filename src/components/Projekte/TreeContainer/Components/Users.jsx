@@ -1,18 +1,15 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useQuery } from '@tanstack/react-query'
-import { gql } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
 
 import Row from '../Tree/Row'
-import storeContext from '../../../../storeContext'
 
-const UserFolderNode = ({ treeQueryVariables }) => {
-  const store = useContext(storeContext)
+const UserFolderNode = ({ usersFilter }) => {
+  const client = useApolloClient()
 
   const { data } = useQuery({
-    queryKey: ['treeUser', treeQueryVariables.usersFilter],
+    queryKey: ['treeUser', usersFilter],
     queryFn: async () =>
-      store.client.query({
+      client.query({
         query: gql`
           query TreeUsersQuery($usersFilter: UserFilter!) {
             allUsers(filter: $usersFilter, orderBy: LABEL_ASC) {
@@ -23,7 +20,7 @@ const UserFolderNode = ({ treeQueryVariables }) => {
             }
           }
         `,
-        variables: { usersFilter: treeQueryVariables.usersFilter },
+        variables: { usersFilter },
         fetchPolicy: 'no-cache',
       }),
   })
@@ -42,4 +39,4 @@ const UserFolderNode = ({ treeQueryVariables }) => {
   return nodes.map((node) => <Row key={node.id} node={node} />)
 }
 
-export default observer(UserFolderNode)
+export default UserFolderNode

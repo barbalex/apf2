@@ -2,7 +2,6 @@ import { getSnapshot } from 'mobx-state-tree'
 import { gql } from '@apollo/client'
 
 import buildProjektNode from './projekt'
-import buildUserFolderNode from './userFolder'
 import buildCurrentIssuesFolderNode from './currentIssuesFolder'
 import buildMessagesFolderNode from './messagesFolder'
 import buildWlFolderNode from './wlFolder'
@@ -40,7 +39,6 @@ const nodes = async ({ store, role }) => {
     queryKey: [
       'treeRoot',
       isProjectOpen,
-      treeQueryVariables.usersFilter,
       treeQueryVariables.apsFilter,
       treeQueryVariables.apberuebersichtsFilter,
     ],
@@ -48,7 +46,6 @@ const nodes = async ({ store, role }) => {
       store.client.query({
         query: gql`
           query TreeRootFolderQuery(
-            $usersFilter: UserFilter!
             $apsFilter: ApFilter!
             $apberuebersichtsFilter: ApberuebersichtFilter!
             $isProjectOpen: Boolean!
@@ -72,13 +69,9 @@ const nodes = async ({ store, role }) => {
             allMessages {
               totalCount
             }
-            allUsers(filter: $usersFilter) {
-              totalCount
-            }
           }
         `,
         variables: {
-          usersFilter: treeQueryVariables.usersFilter,
           apsFilter: treeQueryVariables.apsFilter,
           apberuebersichtsFilter: treeQueryVariables.apberuebersichtsFilter,
           isProjectOpen,
@@ -92,11 +85,6 @@ const nodes = async ({ store, role }) => {
     treeQueryVariables,
     projekt: data?.allProjekts?.nodes[0],
     isProjectOpen,
-  })
-  const userFolderNode = await buildUserFolderNode({
-    store,
-    treeQueryVariables,
-    count: data?.allUsers?.totalCount ?? 0,
   })
   const messagesFolderNode = await buildMessagesFolderNode({
     count: data?.allMessages?.totalCount ?? 0,
@@ -115,7 +103,6 @@ const nodes = async ({ store, role }) => {
 
   let nodes = [
     projektNode,
-    userFolderNode,
     wlFolderNode,
     messagesFolderNode,
     currentIssuesFolderNode,
