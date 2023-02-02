@@ -8,7 +8,7 @@ import buildTreeQueryVariables from '../../buildTreeQueryVariables'
 import Projekt from './Projekt'
 import Users from './Users'
 import Messages from './Messages'
-import WlFolder from './Werte'
+import Werte from './Werte'
 import CurrentIssues from './CurrentIssues'
 import storeContext from '../../../../../storeContext'
 
@@ -47,6 +47,14 @@ const NodeComponents = ({ role }) => {
       includesInsensitive: nodeLabelFilter.user,
     }
   }
+  const apberuebersichtsFilter = {
+    projId: { in: ['e57f56f4-4376-11e8-ab21-4314b6749d13'] },
+  }
+  if (nodeLabelFilter.apberuebersicht) {
+    apberuebersichtsFilter.label = {
+      includesInsensitive: nodeLabelFilter.apberuebersicht,
+    }
+  }
 
   const { data, isLoading } = useQuery({
     queryKey: [
@@ -54,7 +62,7 @@ const NodeComponents = ({ role }) => {
       isProjectOpen,
       treeQueryVariables.usersFilter,
       treeQueryVariables.apsFilter,
-      treeQueryVariables.apberuebersichtsFilter,
+      apberuebersichtsFilter,
     ],
     queryFn: async () =>
       store.client.query({
@@ -92,7 +100,7 @@ const NodeComponents = ({ role }) => {
         variables: {
           usersFilter,
           apsFilter: treeQueryVariables.apsFilter,
-          apberuebersichtsFilter: treeQueryVariables.apberuebersichtsFilter,
+          apberuebersichtsFilter,
           isProjectOpen,
         },
         fetchPolicy: 'no-cache',
@@ -107,6 +115,7 @@ const NodeComponents = ({ role }) => {
         treeQueryVariables={treeQueryVariables}
         projekt={data?.data?.allProjekts?.nodes?.[0]}
         isProjectOpen={isProjectOpen}
+        apberuebersichtsFilter={apberuebersichtsFilter}
       />
       <Users
         count={data?.data?.allUsers?.totalCount ?? 0}
@@ -114,7 +123,7 @@ const NodeComponents = ({ role }) => {
         usersFilter={usersFilter}
       />
       {role === 'apflora_manager' && (
-        <WlFolder treeQueryVariables={treeQueryVariables} />
+        <Werte treeQueryVariables={treeQueryVariables} />
       )}
       <Messages
         count={data?.data?.allMessages?.totalCount ?? 0}

@@ -25,7 +25,7 @@ const apberuebersichtNodes = async ({ store, treeQueryVariables }) => {
 
   const nodes = (data?.allApberuebersichts?.nodes ?? []).map((el) => ({
     nodeType: 'table',
-    menuType: 'apberuebersicht',
+    menuType: 'apberuebersicht',  
     id: el.id,
     parentId: el.projId,
     parentTableId: el.projId,

@@ -1,11 +1,16 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../Row'
-import getNode from '../../nodes/projekt'
-import storeContext from '../../../../../storeContext'
+import Row from '../../Row'
+import storeContext from '../../../../../../storeContext'
+import Apberuebersicht from './Apberuebersicht'
 
-const ProjektNode = ({ treeQueryVariables, projekt, isProjectOpen }) => {
+const ProjektNode = ({
+  treeQueryVariables,
+  projekt,
+  isProjectOpen,
+  apberuebersichtsFilter,
+}) => {
   const store = useContext(storeContext)
 
   const node = {
@@ -18,10 +23,6 @@ const ProjektNode = ({ treeQueryVariables, projekt, isProjectOpen }) => {
     hasChildren: true,
   }
 
-  if (!isProjectOpen) {
-    return <Row node={node} />
-  }
-
   // TODO:
   // add apFolder and apberuebersichtFolder
   // const apFolderNode = await apFolder({
@@ -30,12 +31,6 @@ const ProjektNode = ({ treeQueryVariables, projekt, isProjectOpen }) => {
   //   treeQueryVariables,
   //   count: projekt?.apsByProjId?.totalCount ?? 0,
   // })
-  // const apberUebersichtFolderNode = await apberuebersichtFolder({
-  //   projId: projekt.id,
-  //   store,
-  //   count: projekt?.apberuebersichtsByProjId?.totalCount ?? 0,
-  //   treeQueryVariables,
-  // })
   // const children = store.tree.openProjekts.includes(projekt.id)
   //   ? [apFolderNode, apberUebersichtFolderNode]
   //   : []
@@ -43,6 +38,13 @@ const ProjektNode = ({ treeQueryVariables, projekt, isProjectOpen }) => {
   return (
     <>
       <Row node={node} />
+      {isProjectOpen && (
+        <Apberuebersicht
+          projekt={projekt}
+          count={projekt?.apberuebersichtsByProjId?.totalCount ?? 0}
+          apberuebersichtsFilter={apberuebersichtsFilter}
+        />
+      )}
     </>
   )
 }
