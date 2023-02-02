@@ -188,7 +188,6 @@ const tpopNodes = async ({
     nodes.push({
       nodeType: 'table',
       menuType: 'tpop',
-      filterTable: 'tpop',
       id: node.id,
       parentId: `${popId}TpopFolder`,
       parentTableId: popId,

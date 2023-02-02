@@ -118,7 +118,6 @@ const popNodes = async ({ projId, apId, store, treeQueryVariables }) => {
     nodes.push({
       nodeType: 'table',
       menuType: 'pop',
-      filterTable: 'pop',
       id: node.id,
       parentId: `${apId}PopFolder`,
       parentTableId: apId,
