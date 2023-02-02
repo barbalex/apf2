@@ -2,24 +2,11 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query TreeAllQuery(
-    $adressesFilter: AdresseFilter!
     $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
     $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
     $tpopkontrzaehlEinheitWertesFilter: TpopkontrzaehlEinheitWerteFilter!
     $isWerteListen: Boolean!
   ) {
-    adressesUnfiltered: allAdresses {
-      totalCount
-    }
-    allAdresses(filter: $adressesFilter, orderBy: LABEL_ASC)
-      @include(if: $isWerteListen) {
-      totalCount
-      nodes {
-        id
-        name
-        label
-      }
-    }
     tpopApberrelevantGrundWertesUnfiltered: allTpopApberrelevantGrundWertes {
       totalCount
     }

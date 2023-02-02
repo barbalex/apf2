@@ -13,49 +13,61 @@ const wlFolderNodes = async ({ treeQueryVariables, store }) => {
   let children = []
 
   if (isOpen) {
-    const { data, loading } = await store.client.query({
-      query: gql`
-        query TreeProjektQuery(
-          $adressesFilter: AdresseFilter!
-          $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
-          $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
-          $tpopkontrzaehlEinheitWertesFilter: TpopkontrzaehlEinheitWerteFilter!
-        ) {
-          allAdresses(filter: $adressesFilter) {
-            totalCount
-          }
-          allTpopApberrelevantGrundWertes(
-            filter: $apberrelevantGrundWertesFilter
-          ) {
-            totalCount
-          }
-          allEkAbrechnungstypWertes(filter: $ekAbrechnungstypWertesFilter) {
-            totalCount
-          }
-          allTpopkontrzaehlEinheitWertes(
-            filter: $tpopkontrzaehlEinheitWertesFilter
-          ) {
-            totalCount
-          }
-        }
-      `,
-      variables: {
-        adressesFilter: treeQueryVariables.adressesFilter,
-        apberrelevantGrundWertesFilter:
-          treeQueryVariables.apberrelevantGrundWertesFilter,
-        ekAbrechnungstypWertesFilter:
-          treeQueryVariables.ekAbrechnungstypWertesFilter,
-        tpopkontrzaehlEinheitWertesFilter:
-          treeQueryVariables.tpopkontrzaehlEinheitWertesFilter,
-      },
+    const { data, isLoading } = await store.queryClient.fetchQuery({
+      queryKey: [],
+      queryFn: () =>
+        store.client.query({
+          query: gql`
+            query TreeProjektQuery(
+              $adressesFilter: AdresseFilter!
+              $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
+              $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
+              $tpopkontrzaehlEinheitWertesFilter: TpopkontrzaehlEinheitWerteFilter!
+            ) {
+              allAdresses(filter: $adressesFilter) {
+                totalCount
+              }
+              allTpopApberrelevantGrundWertes(
+                filter: $apberrelevantGrundWertesFilter
+              ) {
+                totalCount
+              }
+              allEkAbrechnungstypWertes(filter: $ekAbrechnungstypWertesFilter) {
+                totalCount
+              }
+              allTpopkontrzaehlEinheitWertes(
+                filter: $tpopkontrzaehlEinheitWertesFilter
+              ) {
+                totalCount
+              }
+            }
+          `,
+          variables: {
+            adressesFilter: treeQueryVariables.adressesFilter,
+            apberrelevantGrundWertesFilter:
+              treeQueryVariables.apberrelevantGrundWertesFilter,
+            ekAbrechnungstypWertesFilter:
+              treeQueryVariables.ekAbrechnungstypWertesFilter,
+            tpopkontrzaehlEinheitWertesFilter:
+              treeQueryVariables.tpopkontrzaehlEinheitWertesFilter,
+          },
+          fetchPolicy: 'no-cache',
+        }),
     })
     const adressenFolderNode = await adresseFolder({
       count: data?.allAdresses?.totalCount ?? 0,
-      loading,
+      loading: isLoading,
       store,
       treeQueryVariables,
     })
-    children = [adressenFolderNode]
+    const apberrelevantGrundWerteFolderNode =
+      await apberrelevantGrundWerteFolder({
+        count: data?.allTpopApberrelevantGrundWertes?.totalCount ?? 0,
+        loading: isLoading,
+        store,
+        treeQueryVariables,
+      })
+    children = [adressenFolderNode, apberrelevantGrundWerteFolderNode]
   }
 
   return [
