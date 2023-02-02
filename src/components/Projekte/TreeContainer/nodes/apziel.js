@@ -37,7 +37,6 @@ const apzielNodes = async ({
     nodes.push({
       nodeType: 'table',
       menuType: 'ziel',
-      filterTable: 'ziel',
       id: el.id,
       parentId: apId,
       parentTableId: apId,

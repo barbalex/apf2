@@ -27,7 +27,6 @@ const assozartNodes = async ({ projId, apId, treeQueryVariables, store }) => {
   const nodes = (data?.apById?.assozartsByApId?.nodes ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'assozart',
-    filterTable: 'assozart',
     id: el.id,
     parentId: apId,
     parentTableId: apId,

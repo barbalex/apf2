@@ -112,7 +112,6 @@ const apzielberFolderNode = async ({
     {
       nodeType: 'folder',
       menuType: 'zielberFolder',
-      filterTable: 'zielber',
       id: `${zielId}ZielberFolder`,
       tableId: zielId,
       urlLabel: 'Berichte',

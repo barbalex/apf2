@@ -3,7 +3,6 @@ const apzielberNodes = ({ zielbers, projId, apId, jahr, zielId }) => {
   const nodes = (zielbers ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'zielber',
-    filterTable: 'zielber',
     id: el.id,
     parentId: zielId,
     parentTableId: zielId,

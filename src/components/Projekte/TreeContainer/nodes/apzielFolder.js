@@ -77,7 +77,6 @@ const apzielFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'zielFolder',
-    filterTable: 'ziel',
     id: `${apId}ApzielFolder`,
     tableId: apId,
     urlLabel: 'AP-Ziele',
