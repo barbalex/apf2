@@ -39,20 +39,15 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   font-size: 1.5rem;
 `
 
-const LabelFilter = ({ nodes }) => {
-  const navigate = useNavigate()
-  const { search } = useLocation()
-
+const LabelFilter = () => {
   const store = useContext(storeContext)
-  const { nodeLabelFilter, activeNodeArray, setOpenNodes, activeFilterTable } =
-    store.tree
+  const { nodeLabelFilter, activeFilterTable } = store.tree
   const {
     setKey: setNodeLabelFilterKey,
     isFiltered: runIsFiltered,
     empty,
   } = nodeLabelFilter
   const isFiltered = runIsFiltered()
-  const activeNode = nodes.find((n) => isEqual(n.url, activeNodeArray))
 
   let labelText = '(filtern nicht möglich)'
   let filterValue = ''
@@ -68,13 +63,6 @@ const LabelFilter = ({ nodes }) => {
       labelText = `${tableLabel} filtern`
     }
   }
-  const openNodes = useMemo(() => store.tree?.openNodes ?? [], [store])
-
-  // console.log('LabelFilter, activeFilterTable', {
-  //   activeFilterTable,
-  //   activeNodeArray: activeNodeArray.slice(),
-  //   tables,
-  // })
 
   const [value, setValue] = useState('')
 
@@ -83,26 +71,11 @@ const LabelFilter = ({ nodes }) => {
   }, [filterValue, activeFilterTable])
 
   const setValuesAfterChange = useCallback(
-    (val) => {
-      console.log('setValuesAfterChange', { val, activeFilterTable })
-      // const { url, label } = activeNode
-      // pop if is not folder and label does not comply to filter
-      // if (
-      //   activeNode.nodeType === 'table' &&
-      //   !label.includes(val && val.toLowerCase ? val.toLowerCase() : val)
-      // ) {
-      //   const newActiveNodeArray = [...url]
-      //   const newActiveUrl = [...url]
-      //   newActiveNodeArray.pop()
-      //   const newOpenNodes = openNodes.filter((n) => n !== newActiveUrl)
-      //   navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
-      //   setOpenNodes(newOpenNodes)
-      // }
+    (val) =>
       setNodeLabelFilterKey({
         value: val,
         key: activeFilterTable,
-      })
-    },
+      }),
     [setNodeLabelFilterKey, activeFilterTable],
   )
   const changeDebounced = useDebouncedCallback(setValuesAfterChange, 600)

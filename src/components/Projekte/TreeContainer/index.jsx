@@ -640,7 +640,7 @@ const TreeContainer = () => {
       <Container data-id="tree-container1">
         {!!toDeleteId && <DeleteDatasetModal />}
         <LabelFilterContainer>
-          <LabelFilter nodes={treeNodes} />
+          <LabelFilter />
           {!!projId && <ApFilter />}
         </LabelFilterContainer>
         <TreeComponent nodes={treeNodes} />
