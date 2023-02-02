@@ -13,10 +13,7 @@ const tpopberNodes = async ({
     queryFn: () =>
       store.client.query({
         query: gql`
-          query TreeTpopberQuery(
-            $id: UUID!
-            $tpopbersFilter: TpopberFilter!
-          ) {
+          query TreeTpopberQuery($id: UUID!, $tpopbersFilter: TpopberFilter!) {
             tpopById(id: $id) {
               id
               tpopbersByTpopId(filter: $tpopbersFilter, orderBy: LABEL_ASC) {
@@ -39,7 +36,6 @@ const tpopberNodes = async ({
   const nodes = (data?.tpopById?.tpopbersByTpopId?.nodes ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'tpopber',
-    filterTable: 'tpopber',
     parentId: `${tpopId}TpopberFolder`,
     parentTableId: tpopId,
     id: el.id,

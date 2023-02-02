@@ -51,7 +51,6 @@ const beobNichtZuzuordnenNodes = async ({
   const nodes = nodesSorted.map((el) => ({
     nodeType: 'table',
     menuType: 'beobNichtZuzuordnen',
-    filterTable: 'beob',
     id: el.id,
     parentId: apId,
     parentTableId: apId,

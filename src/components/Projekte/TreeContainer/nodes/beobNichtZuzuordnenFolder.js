@@ -47,7 +47,6 @@ const beobNichtZuzuordnenFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'beobNichtZuzuordnenFolder',
-    filterTable: 'beob',
     id: `${apId}BeobNichtZuzuordnenFolder`,
     tableId: apId,
     urlLabel: 'nicht-zuzuordnende-Beobachtungen',

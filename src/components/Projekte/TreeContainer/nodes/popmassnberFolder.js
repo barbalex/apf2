@@ -34,7 +34,6 @@ const popmassnberFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'popmassnberFolder',
-    filterTable: 'popmassnber',
     id: `${popId}PopmassnberFolder`,
     tableId: popId,
     urlLabel: 'Massnahmen-Berichte',
