@@ -27,7 +27,6 @@ const adresse = async ({ store, treeQueryVariables }) => {
   const nodes = adresses.map((el) => ({
     nodeType: 'table',
     menuType: 'adresse',
-    filterTable: 'adresse',
     id: el.id,
     parentId: 'adresseFolder',
     urlLabel: el.id,

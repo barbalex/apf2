@@ -23,7 +23,6 @@ const adresseFolder = async ({ count, loading, store, treeQueryVariables }) => {
   return {
     nodeType: 'folder',
     menuType: 'adresseFolder',
-    filterTable: 'adresse',
     id: 'adresseFolder',
     urlLabel: 'Adressen',
     label: `Adressen (${message})`,

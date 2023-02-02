@@ -34,7 +34,6 @@ const apberFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'apberFolder',
-    filterTable: 'apber',
     id: `${apId}ApberFolder`,
     tableId: apId,
     urlLabel: 'AP-Berichte',

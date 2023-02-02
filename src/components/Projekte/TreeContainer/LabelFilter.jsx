@@ -43,7 +43,8 @@ const LabelFilter = ({ nodes }) => {
   const { search } = useLocation()
 
   const store = useContext(storeContext)
-  const { nodeLabelFilter, activeNodeArray, setOpenNodes } = store.tree
+  const { nodeLabelFilter, activeNodeArray, setOpenNodes, activeFilterTable } =
+    store.tree
   const {
     setKey: setNodeLabelFilterKey,
     isFiltered: runIsFiltered,
@@ -51,15 +52,18 @@ const LabelFilter = ({ nodes }) => {
   } = nodeLabelFilter
   const isFiltered = runIsFiltered()
   const activeNode = nodes.find((n) => isEqual(n.url, activeNodeArray))
-  const tableName = activeNode ? activeNode.filterTable : null
+  console.log('LabelFilter, activeFilterTable', {
+    activeFilterTable,
+    activeNodeArray: activeNodeArray.slice(),
+  })
 
   let labelText = '(filtern nicht möglich)'
   let filterValue = ''
-  if (tableName) {
-    filterValue = nodeLabelFilter?.[tableName] ?? ''
+  if (activeFilterTable) {
+    filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     // make sure 0 is kept
     if (!filterValue && filterValue !== 0) filterValue = ''
-    const table = tables.find((t) => t.table === tableName)
+    const table = tables.find((t) => t.table === activeFilterTable)
     const tableLabel = table ? table.label : null
     // danger: Projekte can not be filtered because no parent folder
     if (tableLabel !== 'Projekte') {
@@ -72,11 +76,11 @@ const LabelFilter = ({ nodes }) => {
 
   useEffect(() => {
     setValue(filterValue)
-  }, [filterValue, tableName])
+  }, [filterValue, activeFilterTable])
 
   const setValuesAfterChange = useCallback(
     (val) => {
-      const { filterTable, url, label } = activeNode
+      const { url, label } = activeNode
       // pop if is not folder and label does not comply to filter
       if (
         activeNode.nodeType === 'table' &&
@@ -91,7 +95,7 @@ const LabelFilter = ({ nodes }) => {
       }
       setNodeLabelFilterKey({
         value: val,
-        key: filterTable,
+        key: activeFilterTable,
       })
     },
     [
@@ -101,6 +105,7 @@ const LabelFilter = ({ nodes }) => {
       search,
       setNodeLabelFilterKey,
       setOpenNodes,
+      activeFilterTable,
     ],
   )
   const changeDebounced = useDebouncedCallback(setValuesAfterChange, 600)

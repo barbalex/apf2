@@ -42,7 +42,6 @@ const tpopmassnNodes = async ({
   const nodes = (data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'tpopmassn',
-    filterTable: 'tpopmassn',
     id: el.id,
     parentId: tpopId,
     parentTableId: tpopId,
