@@ -122,9 +122,19 @@ const TpopkontrzaehlEinheitWerte = ({ table }) => {
       // for unknown reason refetching is necessary here
       refetchTree[refetchTableName] && refetchTree[refetchTableName]()
       setFieldErrors({})
-      store.tree.incrementRefetcher()
+      store.queryClient.invalidateQueries({
+        queryKey: [`treeTpopkontrzaehlEinheitWerte`],
+      })
     },
-    [client, refetch, refetchTree, row.id, store.tree, store.user.name, table],
+    [
+      client,
+      refetch,
+      refetchTree,
+      row.id,
+      store.queryClient,
+      store.user.name,
+      table,
+    ],
   )
 
   console.log('TpopkontrzaehlEinheitWerte, loading:', loading)

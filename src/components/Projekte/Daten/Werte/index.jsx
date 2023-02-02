@@ -113,10 +113,20 @@ const Werte = ({ table }) => {
       refetch()
       setFieldErrors({})
       if (['text', 'sort'].includes(field)) {
-        store.tree.incrementRefetcher()
+        store.queryClient.invalidateQueries({
+          queryKey: [`tree${upperFirst(table)}`],
+        })
       }
     },
-    [client, codeGqlType, refetch, row.id, store.tree, store.user.name, table],
+    [
+      client,
+      codeGqlType,
+      refetch,
+      row.id,
+      store.queryClient,
+      store.user.name,
+      table,
+    ],
   )
 
   if (loading) return <Spinner />

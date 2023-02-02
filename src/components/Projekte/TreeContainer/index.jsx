@@ -5,6 +5,7 @@ import React, { useCallback, useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
+import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -411,7 +412,9 @@ const TreeContainer = () => {
             afterDeletionHook: () => {
               const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
               setOpenNodes(newOpenNodes)
-              store.tree.incrementRefetcher()
+              store.queryClient.invalidateQueries({
+                queryKey: [`tree${upperFirst(table)}`],
+              })
             },
           })
         },

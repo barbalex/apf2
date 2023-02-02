@@ -95,7 +95,9 @@ const Zielber = () => {
       }
       setFieldErrors({})
       if (['jahr', 'erreichung'].includes(field)) {
-        store.tree.incrementRefetcher()
+        store.queryClient.invalidateQueries({
+          queryKey: [`treeZielber`],
+        })
       }
     },
     [client, row.id, store],

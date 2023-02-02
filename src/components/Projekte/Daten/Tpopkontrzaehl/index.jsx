@@ -107,9 +107,11 @@ const Tpopkontrzaehl = () => {
         return setFieldErrors({ [field]: error.message })
       }
       setFieldErrors({})
-      store.tree.incrementRefetcher()
+      store.queryClient.invalidateQueries({
+        queryKey: [`treeTpopfeldkontrzaehl`],
+      })
     },
-    [client, row.id, store.tree, store.user.name],
+    [client, row.id, store.queryClient, store.user.name],
   )
 
   // console.log('Tpopkontrzaehl rendering')
