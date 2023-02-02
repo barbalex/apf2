@@ -34,7 +34,6 @@ const ekAbrechnungstypWerteNodes = async ({ store, treeQueryVariables }) => {
   const nodes = (data?.allEkAbrechnungstypWertes?.nodes ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'ekAbrechnungstypWerte',
-    filterTable: 'ekAbrechnungstypWerte',
     id: el.id,
     parentId: 'ekAbrechnungstypWerteFolder',
     urlLabel: el.id,

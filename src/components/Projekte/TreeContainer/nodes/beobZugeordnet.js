@@ -47,7 +47,6 @@ const beobZugeordnetNodes = async ({
     return {
       nodeType: 'table',
       menuType: 'beobZugeordnet',
-      filterTable: 'beob',
       id: el.id,
       parentId: `${tpopId}BeobZugeordnetFolder`,
       parentTableId: tpopId,

@@ -35,7 +35,6 @@ const ekzaehleinheitFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'ekzaehleinheitFolder',
-    filterTable: 'ekzaehleinheit',
     id: `${apId}Ekzaehleinheit`,
     tableId: apId,
     urlLabel: 'EK-Zähleinheiten',

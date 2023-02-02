@@ -36,7 +36,6 @@ const popberNodes = async ({
   const nodes = (data?.popById?.popbersByPopId?.nodes ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'popber',
-    filterTable: 'popber',
     id: el.id,
     parentId: popId,
     parentTableId: popId,

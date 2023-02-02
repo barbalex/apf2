@@ -56,7 +56,6 @@ const beobZugeordnetFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'beobZugeordnetFolder',
-    filterTable: 'beob',
     id: `${tpopId}BeobZugeordnetFolder`,
     tableId: tpopId,
     urlLabel: 'Beobachtungen',
