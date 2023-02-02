@@ -131,10 +131,12 @@ const Pop = () => {
       }
       setFieldErrors({})
       if (['name', 'nr'].includes(field)) {
-        store.tree.incrementRefetcher()
+        store.queryClient.invalidateQueries({
+          queryKey: [`treePop`],
+        })
       }
     },
-    [client, row, store.tree, store.user.name],
+    [client, row, store.queryClient, store.user.name],
   )
 
   if (loading) return <Spinner />

@@ -129,9 +129,11 @@ const Apber = () => {
       if (field === 'jahr') {
         queryClient.invalidateQueries({ queryKey: [`apberQuery`] })
       }
-      store.tree.incrementRefetcher()
+      store.queryClient.invalidateQueries({
+        queryKey: [`treeApber`],
+      })
     },
-    [client, queryClient, row.id, store.tree, store.user.name],
+    [client, queryClient, row.id, store.queryClient, store.user.name],
   )
 
   const columnWidth =
