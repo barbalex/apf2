@@ -50,7 +50,6 @@ const beobNichtBeurteiltNodes = async ({
   const nodes = nodesSorted.map((el) => ({
     nodeType: 'table',
     menuType: 'beobNichtBeurteilt',
-    filterTable: 'beob',
     id: el.id,
     parentId: apId,
     parentTableId: apId,

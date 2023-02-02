@@ -24,7 +24,6 @@ const apartNodes = async ({ projId, apId, treeQueryVariables, store }) => {
   const nodes = (data?.apById?.apartsByApId?.nodes ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'apart',
-    filterTable: 'apart',
     id: el.id,
     parentId: apId,
     parentTableId: apId,

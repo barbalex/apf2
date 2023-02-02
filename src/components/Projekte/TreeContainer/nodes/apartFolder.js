@@ -29,7 +29,6 @@ const apartFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'apartFolder',
-    filterTable: 'apart',
     id: `${apId}Apart`,
     tableId: apId,
     urlLabel: 'Taxa',

@@ -25,7 +25,6 @@ const apberNodes = async ({ projId, apId, treeQueryVariables, store }) => {
   const nodes = apbers.map((el) => ({
     nodeType: 'table',
     menuType: 'apber',
-    filterTable: 'apber',
     id: el.id,
     parentId: apId,
     parentTableId: apId,
