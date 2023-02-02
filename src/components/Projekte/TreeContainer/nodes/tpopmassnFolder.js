@@ -56,7 +56,6 @@ const tpopmassnFolderNode = async ({
   const node = {
     nodeType: 'folder',
     menuType: 'tpopmassnFolder',
-    filterTable: 'tpopmassn',
     id: `${tpopId}TpopmassnFolder`,
     tableId: tpopId,
     urlLabel: 'Massnahmen',

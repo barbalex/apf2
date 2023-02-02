@@ -24,7 +24,6 @@ const userNodes = async ({ store, treeQueryVariables }) => {
   const nodes = (data?.allUsers?.nodes ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'user',
-    filterTable: 'user',
     id: el.id,
     urlLabel: el.id,
     label: el.label,

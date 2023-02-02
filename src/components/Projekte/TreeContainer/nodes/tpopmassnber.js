@@ -47,7 +47,6 @@ const tpopmassnberNodes = async ({
     (el) => ({
       nodeType: 'table',
       menuType: 'tpopmassnber',
-      filterTable: 'tpopmassnber',
       parentId: tpopId,
       parentTableId: tpopId,
       id: el.id,
