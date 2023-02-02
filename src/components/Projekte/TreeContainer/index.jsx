@@ -1,12 +1,11 @@
 /**
  * need to keep class because of ref
  */
-import React, { useCallback, useContext, useState, useEffect } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { useApolloClient } from '@apollo/client'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -14,8 +13,6 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import { useParams, useLocation } from 'react-router-dom'
-import jwtDecode from 'jwt-decode'
-import { useDebouncedCallback } from 'use-debounce'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -92,7 +89,6 @@ import insertDataset from './insertDataset'
 import storeContext from '../../../storeContext'
 import TpopFromBeobPopList from './TpopFromBeobPopList'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import buildNodes from './nodes'
 import useSearchParamsState from '../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../modules/isMobilePhone'
 
@@ -287,61 +283,8 @@ const TreeContainer = () => {
     setMoving,
     copyingBiotop,
     setCopyingBiotop,
-    user,
   } = store
-  const { setOpenNodes, refetcher } = store.tree
-
-  const { token } = user
-  const role = token ? jwtDecode(token).role : null
-
-  const dataFilter = getSnapshot(store.tree.dataFilter)
-  const openNodes = getSnapshot(store.tree.openNodes)
-  const nodeLabelFilter = getSnapshot(store.tree.nodeLabelFilter)
-  const popGqlFilter = store.tree.popGqlFilter
-  const apGqlFilter = store.tree.apGqlFilter
-  const tpopGqlFilter = store.tree.tpopGqlFilter
-  const tpopmassnGqlFilter = store.tree.tpopmassnGqlFilter
-  const ekGqlFilter = store.tree.ekGqlFilter
-  const ekfGqlFilter = store.tree.ekfGqlFilter
-  const beobGqlFilter = store.tree.beobGqlFilter
-  const openAps = store.tree.openAps
-
-  const [treeNodes, setTreeNodes] = useState([])
-
-  // need to debounce building nodes because:
-  // sometimes navigation and activeNodeArray-Setting happen right after each other
-  const buildNodesCallback = useCallback(async () => {
-    console.log('TreeContainer building nodes')
-    const nodes = await buildNodes({
-      store,
-      role,
-    })
-    setTreeNodes(nodes)
-  }, [role, store])
-  const buildNodesDebounced = useDebouncedCallback(buildNodesCallback, 0)
-
-  useEffect(() => {
-    buildNodesDebounced()
-  }, [
-    openNodes,
-    openNodes.length,
-    dataFilter,
-    role,
-    store,
-    params,
-    openNodes,
-    nodeLabelFilter,
-    popGqlFilter,
-    tpopGqlFilter,
-    tpopmassnGqlFilter,
-    ekGqlFilter,
-    ekfGqlFilter,
-    apGqlFilter,
-    beobGqlFilter,
-    openAps,
-    buildNodesDebounced,
-    refetcher,
-  ])
+  const { setOpenNodes, openNodes } = store.tree
 
   // deactivated because toggling the project node would not close the project
   // useEffect(() => {
@@ -643,7 +586,7 @@ const TreeContainer = () => {
           <LabelFilter />
           {!!projId && <ApFilter />}
         </LabelFilterContainer>
-        <TreeComponent nodes={treeNodes} />
+        <TreeComponent />
         <CmApFolder onClick={handleClick} />
         <CmAp onClick={handleClick} />
         <CmApberuebersichtFolder onClick={handleClick} />
