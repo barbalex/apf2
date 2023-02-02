@@ -34,7 +34,6 @@ const aperfkritFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'erfkritFolder',
-    filterTable: 'erfkrit',
     id: `${apId}ErfkritFolder`,
     tableId: apId,
     urlLabel: 'AP-Erfolgskriterien',

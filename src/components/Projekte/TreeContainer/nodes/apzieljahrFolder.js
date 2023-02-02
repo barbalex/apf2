@@ -37,7 +37,6 @@ const apzieljahrFolderNode = async ({
     nodes.push({
       nodeType: 'folder',
       menuType: 'zieljahrFolder',
-      filterTable: 'ziel',
       id: `${apId}Ziele${jahr || 'keinJahr'}`,
       jahr,
       parentId: apId,

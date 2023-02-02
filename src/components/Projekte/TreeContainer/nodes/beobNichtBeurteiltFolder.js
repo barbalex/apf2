@@ -48,7 +48,6 @@ const beobNichtBeurteiltFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'beobNichtBeurteiltFolder',
-    filterTable: 'beob',
     id: `${apId}BeobNichtBeurteiltFolder`,
     tableId: apId,
     urlLabel: 'nicht-beurteilte-Beobachtungen',

@@ -34,7 +34,6 @@ const assozartFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'assozartFolder',
-    filterTable: 'assozart',
     id: `${apId}AssozartFolder`,
     tableId: apId,
     urlLabel: 'assoziierte-Arten',

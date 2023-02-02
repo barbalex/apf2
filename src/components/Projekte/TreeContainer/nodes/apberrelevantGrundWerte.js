@@ -35,7 +35,6 @@ const apberrelevantGrundWerteNodes = async ({ store, treeQueryVariables }) => {
     (el) => ({
       nodeType: 'table',
       menuType: 'tpopApberrelevantGrundWerte',
-      filterTable: 'tpopApberrelevantGrundWerte',
       id: el.id,
       parentId: 'tpopApberrelevantGrundWerteFolder',
       urlLabel: el.id,
