@@ -10,7 +10,6 @@ const adresse = async ({ store, treeQueryVariables }) => {
             allAdresses(filter: $adressesFilter, orderBy: LABEL_ASC) {
               nodes {
                 id
-                name
                 label
               }
             }

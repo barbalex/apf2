@@ -67,7 +67,17 @@ const wlFolderNodes = async ({ treeQueryVariables, store }) => {
         store,
         treeQueryVariables,
       })
-    children = [adressenFolderNode, apberrelevantGrundWerteFolderNode]
+    const ekAbrechnungstypWerteFolderNode = await ekAbrechnungstypWerteFolder({
+      count: data?.allEkAbrechnungstypWertes?.totalCount ?? 0,
+      loading: isLoading,
+      store,
+      treeQueryVariables,
+    })
+    children = [
+      adressenFolderNode,
+      apberrelevantGrundWerteFolderNode,
+      ekAbrechnungstypWerteFolderNode,
+    ]
   }
 
   return [

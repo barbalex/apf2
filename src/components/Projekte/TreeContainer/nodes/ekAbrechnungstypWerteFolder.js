@@ -1,44 +1,45 @@
-const ekAbrechnungstypWerteFolderNode = ({
-  nodes: nodesPassed,
-  data,
+import ekAbrechnungstypWert from './ekAbrechnungstypWerte'
+
+const ekAbrechnungstypWerteFolderNode = async ({
+  count,
   loading,
-  projektNodes,
   store,
+  treeQueryVariables,
 }) => {
-  const ekAbrechnungstypWertes = data?.allEkAbrechnungstypWertes?.nodes ?? []
-  const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
     store.tree?.nodeLabelFilter?.ekAbrechnungstypWerte ?? ''
 
-  let ekAbrechnungstypWerteNodesLength = ekAbrechnungstypWertes.length
-  // before EkAbrechnungstypWerte folder is active, only total count was fetched, not yet any ekAbrechnungstypWerten nodes
-  if (ekAbrechnungstypWertes.length === 0)
-    ekAbrechnungstypWerteNodesLength =
-      data?.ekAbrechnungstypWertesUnfiltered?.totalCount
-  let message =
-    loading && !ekAbrechnungstypWerteNodesLength
-      ? '...'
-      : ekAbrechnungstypWerteNodesLength
+  let message = loading && !count ? '...' : count
   if (nodeLabelFilterString) {
-    message = `${ekAbrechnungstypWerteNodesLength} gefiltert`
+    message = `${count} gefiltert`
   }
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes('wlFolder')) return []
+  const showChildren =
+    store.tree.openNodes.filter(
+      (n) => n[0] === 'Werte-Listen' && n[1] === 'EkAbrechnungstypWerte',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'ekAbrechnungstypWerteFolder',
-      filterTable: 'ekAbrechnungstypWerte',
-      id: 'ekAbrechnungstypWerteFolder',
-      urlLabel: 'EkAbrechnungstypWerte',
-      label: `Teil-Population: EK-Abrechnungstypen (${message})`,
-      url: ['Werte-Listen', 'EkAbrechnungstypWerte'],
-      sort: [wlIndex, 3],
-      hasChildren: ekAbrechnungstypWerteNodesLength > 0,
-    },
-  ]
+  let children = []
+
+  if (showChildren) {
+    const adresseNodes = await ekAbrechnungstypWert({
+      store,
+      treeQueryVariables,
+    })
+    children = adresseNodes
+  }
+
+  return {
+    nodeType: 'folder',
+    menuType: 'ekAbrechnungstypWerteFolder',
+    filterTable: 'ekAbrechnungstypWerte',
+    id: 'ekAbrechnungstypWerteFolder',
+    urlLabel: 'EkAbrechnungstypWerte',
+    label: `Teil-Population: EK-Abrechnungstypen (${message})`,
+    url: ['Werte-Listen', 'EkAbrechnungstypWerte'],
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default ekAbrechnungstypWerteFolderNode
