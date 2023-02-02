@@ -96,7 +96,9 @@ const Ziel = () => {
         return setFieldErrors({ [field]: error.message })
       }
       setFieldErrors({})
-      store.tree.incrementRefetcher()
+      store.queryClient.invalidateQueries({
+        queryKey: [`treeZiel`],
+      })
       // if jahr of ziel is updated, activeNodeArray und openNodes need to change
       if (field === 'jahr') {
         const newActiveNodeArray = [...activeNodeArray]

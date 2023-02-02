@@ -343,7 +343,9 @@ const Tpopmassn = ({ showFilter = false }) => {
       }
       setFieldErrors({})
       if (['jahr', 'datum', 'typ'].includes(field)) {
-        store.tree.incrementRefetcher()
+        store.queryClient.invalidateQueries({
+          queryKey: [`treeTpopmassn`],
+        })
       }
     },
     [
@@ -354,7 +356,7 @@ const Tpopmassn = ({ showFilter = false }) => {
       row.anzTriebe,
       row.id,
       row.typ,
-      store.tree,
+      store.queryClient,
       store.user.name,
     ],
   )

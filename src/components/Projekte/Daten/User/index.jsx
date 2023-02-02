@@ -175,10 +175,12 @@ const User = () => {
       }
       setErrors({})
       if (field === 'name') {
-        store.tree.incrementRefetcher()
+        store.queryClient.invalidateQueries({
+          queryKey: [`treeUser`],
+        })
       }
     },
-    [client, row.id, store.tree],
+    [client, row.id, store.queryClient],
   )
   const onBlurPassword = useCallback((event) => {
     setPasswordErrorText('')

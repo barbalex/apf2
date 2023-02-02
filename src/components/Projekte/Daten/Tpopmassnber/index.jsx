@@ -103,10 +103,12 @@ const Tpopmassnber = () => {
       }
       setFieldErrors({})
       if (['jahr', 'beurteilung'].includes(field)) {
-        store.tree.incrementRefetcher()
+        store.queryClient.invalidateQueries({
+          queryKey: [`treeTpopmassnber`],
+        })
       }
     },
-    [client, row.id, store.tree, store.user.name],
+    [client, row.id, store.queryClient, store.user.name],
   )
 
   if (loading) return <Spinner />
