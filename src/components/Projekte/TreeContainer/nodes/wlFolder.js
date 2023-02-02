@@ -5,7 +5,7 @@ import apberrelevantGrundWerteFolder from './apberrelevantGrundWerteFolder'
 import ekAbrechnungstypWerteFolder from './ekAbrechnungstypWerteFolder'
 import tpopkontrzaehlEinheitWerteFolder from './tpopkontrzaehlEinheitWerteFolder'
 
-const wlFolderNodes = async ({ treeQueryVariables, store }) => {
+const wlFolderNode = async ({ treeQueryVariables, store }) => {
   const isOpen = store.tree.openNodes.some(
     (nodeArray) => nodeArray[0] === 'Werte-Listen',
   )
@@ -88,18 +88,16 @@ const wlFolderNodes = async ({ treeQueryVariables, store }) => {
     ]
   }
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'wlFolder',
-      id: 'wlFolder',
-      urlLabel: 'Werte-Listen',
-      label: `Werte-Listen`,
-      url: ['Werte-Listen'],
-      hasChildren: true,
-      children,
-    },
-  ]
+  return {
+    nodeType: 'folder',
+    menuType: 'wlFolder',
+    id: 'wlFolder',
+    urlLabel: 'Werte-Listen',
+    label: `Werte-Listen`,
+    url: ['Werte-Listen'],
+    hasChildren: true,
+    children,
+  }
 }
 
-export default wlFolderNodes
+export default wlFolderNode

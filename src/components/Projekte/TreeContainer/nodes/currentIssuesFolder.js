@@ -19,18 +19,16 @@ const currentIssuesFolderNode = async ({
     children = userNodes
   }
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'currentIssuesFolder',
-      id: 'currentIssuesFolder',
-      urlLabel: 'Aktuelle-Fehler',
-      label: `Aktuelle Fehler (${message})`,
-      url: ['Aktuelle-Fehler'],
-      hasChildren: count > 0,
-      children,
-    },
-  ]
+  return {
+    nodeType: 'folder',
+    menuType: 'currentIssuesFolder',
+    id: 'currentIssuesFolder',
+    urlLabel: 'Aktuelle-Fehler',
+    label: `Aktuelle Fehler (${message})`,
+    url: ['Aktuelle-Fehler'],
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default currentIssuesFolderNode

@@ -22,18 +22,16 @@ const userFolderNode = async ({
     children = userNodes
   }
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'userFolder',
-      id: 'benutzerFolder',
-      urlLabel: 'Benutzer',
-      label: `Benutzer (${message})`,
-      url: ['Benutzer'],
-      hasChildren: count > 0,
-      children,
-    },
-  ]
+  return {
+    nodeType: 'folder',
+    menuType: 'userFolder',
+    id: 'benutzerFolder',
+    urlLabel: 'Benutzer',
+    label: `Benutzer (${message})`,
+    url: ['Benutzer'],
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default userFolderNode
