@@ -1,17 +1,41 @@
-const tpopkontrzaehlEinheitWerteNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
+import { gql } from '@apollo/client'
+
+const tpopkontrzaehlEinheitWerteNodes = async ({
+  store,
+  treeQueryVariables,
 }) => {
-  const tpopkontrzaehlEinheitWertes =
-    data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
-  const wlIndex = projektNodes.length + 2
-  const nodes = tpopkontrzaehlEinheitWertes
-    // only show if parent node exists
-    .filter(() =>
-      nodesPassed.map((n) => n.id).includes('tpopkontrzaehlEinheitWerteFolder'),
-    )
-    .map((el) => ({
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: [
+      'treeTpopkontrzaehlEinheitWertes',
+      treeQueryVariables.tpopkontrzaehlEinheitWertesFilter,
+    ],
+    queryFn: () =>
+      store.client.query({
+        query: gql`
+          query TreeTpopkontrzaehlEinheitWertesQuery(
+            $tpopkontrzaehlEinheitWertesFilter: TpopkontrzaehlEinheitWerteFilter!
+          ) {
+            allTpopkontrzaehlEinheitWertes(
+              filter: $tpopkontrzaehlEinheitWertesFilter
+              orderBy: SORT_ASC
+            ) {
+              nodes {
+                id
+                label
+              }
+            }
+          }
+        `,
+        variables: {
+          tpopkontrzaehlEinheitWertesFilter:
+            treeQueryVariables.tpopkontrzaehlEinheitWertesFilter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+
+  const nodes = (data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map(
+    (el) => ({
       nodeType: 'table',
       menuType: 'tpopkontrzaehlEinheitWerte',
       filterTable: 'tpopkontrzaehlEinheitWerte',
@@ -21,11 +45,8 @@ const tpopkontrzaehlEinheitWerteNodes = ({
       label: el.label,
       url: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte', el.id],
       hasChildren: false,
-    }))
-    .map((el, index) => {
-      el.sort = [wlIndex, 4, index]
-      return el
-    })
+    }),
+  )
 
   return nodes
 }

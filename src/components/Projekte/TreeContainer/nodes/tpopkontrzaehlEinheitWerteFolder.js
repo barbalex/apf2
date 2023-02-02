@@ -1,31 +1,33 @@
-const tpopkontrzaehlEinheitWerteFolderNode = ({
-  nodes: nodesPassed,
-  data,
+import tpopkontrzaehlEinheitWerte from './tpopkontrzaehlEinheitWerte'
+
+const tpopkontrzaehlEinheitWerteFolderNode = async ({
+  count,
   loading,
-  projektNodes,
   store,
+  treeQueryVariables,
 }) => {
-  const tpopkontrzaehlEinheitWertes =
-    data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
-  const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
     store.tree?.nodeLabelFilter?.tpopkontrzaehlEinheitWerte ?? ''
 
-  let tpopkontrzaehlEinheitWerteNodesLength = tpopkontrzaehlEinheitWertes.length
-  // before TpopkontrzaehlEinheitWerte folder is active, only total count was fetched, not yet any tpopkontrzaehlEinheitWerten nodes
-  if (tpopkontrzaehlEinheitWertes.length === 0)
-    tpopkontrzaehlEinheitWerteNodesLength =
-      data?.tpopkontrzaehlEinheitWertesUnfiltered?.totalCount
-  let message =
-    loading && !tpopkontrzaehlEinheitWerteNodesLength
-      ? '...'
-      : tpopkontrzaehlEinheitWerteNodesLength
+  let message = loading && !count ? '...' : count
   if (nodeLabelFilterString) {
-    message = `${tpopkontrzaehlEinheitWerteNodesLength} gefiltert`
+    message = `${count} gefiltert`
   }
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes('wlFolder')) return []
+  const showChildren =
+    store.tree.openNodes.filter(
+      (n) => n[0] === 'Werte-Listen' && n[1] === 'TpopkontrzaehlEinheitWerte',
+    ).length > 0
+
+  let children = []
+
+  if (showChildren) {
+    const adresseNodes = await tpopkontrzaehlEinheitWerte({
+      store,
+      treeQueryVariables,
+    })
+    children = adresseNodes
+  }
 
   return [
     {
@@ -36,8 +38,8 @@ const tpopkontrzaehlEinheitWerteFolderNode = ({
       urlLabel: 'TpopkontrzaehlEinheitWerte',
       label: `Teil-Population: Zähl-Einheiten (${message})`,
       url: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
-      sort: [wlIndex, 4],
-      hasChildren: tpopkontrzaehlEinheitWerteNodesLength > 0,
+      hasChildren: count > 0,
+      children,
     },
   ]
 }
