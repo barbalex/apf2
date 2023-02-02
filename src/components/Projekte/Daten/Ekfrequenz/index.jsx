@@ -134,11 +134,13 @@ const Ekfrequenz = () => {
       }
       setFieldErrors({})
       if (field === 'code') {
-        store.tree.incrementRefetcher()
+        store.queryClient.invalidateQueries({
+          queryKey: [`treeEkfrequenz`],
+        })
       }
       return
     },
-    [client, row.id, store.tree, store.user.name],
+    [client, row.id, store.queryClient, store.user.name],
   )
 
   if (loading) return <Spinner />

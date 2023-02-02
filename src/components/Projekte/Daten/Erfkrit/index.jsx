@@ -98,9 +98,11 @@ const Erfkrit = () => {
         return setFieldErrors({ [field]: error.message })
       }
       setFieldErrors({})
-      store.tree.incrementRefetcher()
+      store.queryClient.invalidateQueries({
+        queryKey: [`treeErfkrit`],
+      })
     },
-    [client, row.id, store.tree, store.user.name],
+    [client, row.id, store.queryClient, store.user.name],
   )
 
   if (loading) return <Spinner />
