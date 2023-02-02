@@ -9,7 +9,8 @@ import buildCurrentIssuesFolderNode from '../nodes/currentIssuesFolder'
 import buildMessagesFolderNode from '../nodes/messagesFolder'
 import buildWlFolderNode from '../nodes/wlFolder'
 import buildTreeQueryVariables from '../buildTreeQueryVariables'
-import Projekt from './projekt'
+import Projekt from './Projekt'
+import UserFolder from './UserFolder'
 import storeContext from '../../../../storeContext'
 
 const NodeComponents = ({ role }) => {
@@ -92,11 +93,6 @@ const NodeComponents = ({ role }) => {
       }),
   })
 
-  // const userFolderNode = await buildUserFolderNode({
-  //   store,
-  //   treeQueryVariables,
-  //   count: data?.allUsers?.totalCount ?? 0,
-  // })
   // const messagesFolderNode = await buildMessagesFolderNode({
   //   count: data?.allMessages?.totalCount ?? 0,
   //   isLoading,
@@ -125,11 +121,18 @@ const NodeComponents = ({ role }) => {
   if (!data) return null
 
   return (
-    <Projekt
-      treeQueryVariables={treeQueryVariables}
-      projekt={data?.data?.allProjekts?.nodes[0]}
-      isProjectOpen={isProjectOpen}
-    />
+    <>
+      <Projekt
+        treeQueryVariables={treeQueryVariables}
+        projekt={data?.data?.allProjekts?.nodes[0]}
+        isProjectOpen={isProjectOpen}
+      />
+      <UserFolder
+        treeQueryVariables={treeQueryVariables}
+        count={data?.data?.allUsers?.totalCount ?? 0}
+        isLoading={isLoading}
+      />
+    </>
   )
 }
 
