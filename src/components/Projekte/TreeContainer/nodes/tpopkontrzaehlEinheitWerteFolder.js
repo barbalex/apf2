@@ -32,7 +32,6 @@ const tpopkontrzaehlEinheitWerteFolderNode = async ({
   return {
     nodeType: 'folder',
     menuType: 'tpopkontrzaehlEinheitWerteFolder',
-    filterTable: 'tpopkontrzaehlEinheitWerte',
     id: 'tpopkontrzaehlEinheitWerteFolder',
     urlLabel: 'TpopkontrzaehlEinheitWerte',
     label: `Teil-Population: Zähl-Einheiten (${message})`,

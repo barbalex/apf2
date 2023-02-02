@@ -167,8 +167,11 @@ export default types
       }
       if (aNA.length > 1) {
         if (aNA[1] === 'Adressen') return 'adresse'
-        if (aNA[1] === 'ApberrelevantGrundWerte') return 'tpopApberrelevantGrundWerte'
+        if (aNA[1] === 'ApberrelevantGrundWerte')
+          return 'tpopApberrelevantGrundWerte'
         if (aNA[1] === 'EkAbrechnungstypWerte') return 'ekAbrechnungstypWerte'
+        if (aNA[1] === 'TpopkontrzaehlEinheitWerte')
+          return 'tpopkontrzaehlEinheitWerte'
       }
       if (aNA[0] === 'Benutzer') return 'user'
       return undefined
