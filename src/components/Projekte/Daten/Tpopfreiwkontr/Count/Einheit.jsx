@@ -57,7 +57,9 @@ const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
         return setErrors(error.message)
       }
       refetch()
-      store.tree.incrementRefetcher()
+      store.queryClient.invalidateQueries({
+        queryKey: [`treeTpopfreiwkontrzaehl`],
+      })
     },
     [
       client,
@@ -65,7 +67,7 @@ const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
       row.anzahl,
       row.id,
       row.methode,
-      store.tree,
+      store.queryClient,
       store.user.name,
     ],
   )

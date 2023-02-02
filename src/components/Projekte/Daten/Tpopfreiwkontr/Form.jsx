@@ -295,7 +295,9 @@ const TpopfreiwkontrForm = ({ data, refetch, row, apId }) => {
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      store.tree.incrementRefetcher()
+      store.queryClient.invalidateQueries({
+        queryKey: [`treeTpopfreiwkontr`],
+      })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -324,6 +326,7 @@ const TpopfreiwkontrForm = ({ data, refetch, row, apId }) => {
       dataFilterSetValue,
       client,
       store.tree,
+      store.queryClient,
     ],
   )
 
