@@ -1,8 +1,16 @@
+import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useQuery } from '@tanstack/react-query'
 import { gql } from '@apollo/client'
 
-const userNodes = async ({ store, treeQueryVariables }) => {
-  const { data } = await store.queryClient.fetchQuery({
-    queryKey: ['treeUsers', treeQueryVariables.usersFilter],
+import Row from '../Tree/Row'
+import storeContext from '../../../../storeContext'
+
+const UserFolderNode = ({ treeQueryVariables }) => {
+  const store = useContext(storeContext)
+
+  const { data } = useQuery({
+    queryKey: ['treeUser', treeQueryVariables.usersFilter],
     queryFn: async () =>
       store.client.query({
         query: gql`
@@ -19,9 +27,7 @@ const userNodes = async ({ store, treeQueryVariables }) => {
         fetchPolicy: 'no-cache',
       }),
   })
-
-  // map through all elements and create array of nodes
-  const nodes = (data?.allUsers?.nodes ?? []).map((el) => ({
+  const nodes = (data?.data?.allUsers?.nodes ?? []).map((el) => ({
     nodeType: 'table',
     menuType: 'user',
     id: el.id,
@@ -31,7 +37,9 @@ const userNodes = async ({ store, treeQueryVariables }) => {
     hasChildren: false,
   }))
 
-  return nodes
+  if (!nodes.length) return null
+
+  return nodes.map((node) => <Row key={node.id} node={node} />)
 }
 
-export default userNodes
+export default observer(UserFolderNode)

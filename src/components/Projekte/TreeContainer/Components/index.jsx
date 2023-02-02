@@ -1,16 +1,14 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { getSnapshot } from 'mobx-state-tree'
 import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 
-import buildProjektNode from '../nodes/projekt'
-import buildUserFolderNode from '../nodes/userFolder'
-import buildCurrentIssuesFolderNode from '../nodes/currentIssuesFolder'
-import buildMessagesFolderNode from '../nodes/messagesFolder'
-import buildWlFolderNode from '../nodes/wlFolder'
 import buildTreeQueryVariables from '../buildTreeQueryVariables'
 import Projekt from './Projekt'
 import UserFolder from './UserFolder'
+import Messages from './Messages'
+import WlFolder from './WlFolder'
+import CurrentIssue from './CurrentIssue'
 import storeContext from '../../../../storeContext'
 
 const NodeComponents = ({ role }) => {
@@ -44,7 +42,7 @@ const NodeComponents = ({ role }) => {
 
   const { data, isLoading } = useQuery({
     queryKey: [
-      'treeRootFolder',
+      'treeRoot',
       isProjectOpen,
       treeQueryVariables.usersFilter,
       treeQueryVariables.apsFilter,
@@ -93,31 +91,6 @@ const NodeComponents = ({ role }) => {
       }),
   })
 
-  // const messagesFolderNode = await buildMessagesFolderNode({
-  //   count: data?.allMessages?.totalCount ?? 0,
-  //   isLoading,
-  // })
-  // const currentIssuesFolderNode = await buildCurrentIssuesFolderNode({
-  //   store,
-  //   count: data?.allCurrentissues?.totalCount ?? 0,
-  //   isLoading,
-  //   treeQueryVariables,
-  // })
-  // const wlFolderNode =
-  //   role === 'apflora_manager'
-  //     ? await buildWlFolderNode({ treeQueryVariables, store })
-  //     : []
-
-  // let nodes = [
-  //   projektNode,
-  //   userFolderNode,
-  //   wlFolderNode,
-  //   messagesFolderNode,
-  //   currentIssuesFolderNode,
-  // ]
-
-  console.log('NodeComponents', { data })
-
   if (!data) return null
 
   return (
@@ -131,6 +104,18 @@ const NodeComponents = ({ role }) => {
         treeQueryVariables={treeQueryVariables}
         count={data?.data?.allUsers?.totalCount ?? 0}
         isLoading={isLoading}
+      />
+      {role === 'apflora_manager' && (
+        <WlFolder treeQueryVariables={treeQueryVariables} />
+      )}
+      <Messages
+        count={data?.data?.allMessages?.totalCount ?? 0}
+        isLoading={isLoading}
+      />
+      <CurrentIssue
+        treeQueryVariables={treeQueryVariables}
+        count={data?.data?.allCurrentissues?.totalCount ?? 0}
+        isLoading
       />
     </>
   )

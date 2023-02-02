@@ -137,6 +137,13 @@ const deleteModule = async ({ client, store, search }) => {
   const openNodes1 = store?.tree?.openNodes
   const newOpenNodes1 = openNodes1.filter((n) => !isEqual(n, toDeleteUrl))
   store.tree.setOpenNodes(newOpenNodes1)
+  // invalidate tree queries for count and data
+  if (['user', 'message', 'currentissue'].includes(table)) {
+    store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
+  }
+  store.queryClient.invalidateQueries({
+    queryKey: [`tree${upperFirst(table)}`],
+  })
 
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()
 

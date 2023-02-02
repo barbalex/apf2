@@ -2,22 +2,20 @@ import { useContext, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../Tree/Row'
-import getNode from '../nodes/projekt'
+import getNode from '../nodes/wlFolder'
 import storeContext from '../../../../storeContext'
 
-const ProjektNode = ({ treeQueryVariables, projekt, isProjectOpen }) => {
+const WlFolderNode = ({ treeQueryVariables }) => {
   const store = useContext(storeContext)
 
   const [node, setNode] = useState()
   useEffect(() => {
-    getNode({ treeQueryVariables, projekt, isProjectOpen, store }).then(
-      (node) => setNode(node),
-    )
-  }, [isProjectOpen, projekt, store, treeQueryVariables])
+    getNode({ treeQueryVariables, store }).then((node) => setNode(node))
+  }, [store, treeQueryVariables])
 
   if (!node) return null
 
   return <Row node={node} />
 }
 
-export default observer(ProjektNode)
+export default observer(WlFolderNode)

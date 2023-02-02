@@ -38,7 +38,7 @@ const nodes = async ({ store, role }) => {
 
   const { data, isLoading } = await store.queryClient.fetchQuery({
     queryKey: [
-      'treeRootFolder',
+      'treeRoot',
       isProjectOpen,
       treeQueryVariables.usersFilter,
       treeQueryVariables.apsFilter,
