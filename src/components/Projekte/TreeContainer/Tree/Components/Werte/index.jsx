@@ -6,11 +6,37 @@ import { gql } from '@apollo/client'
 import Row from '../../Row'
 import storeContext from '../../../../../../storeContext'
 
-const WlFolderNode = ({ treeQueryVariables }) => {
+const WlFolderNode = () => {
   const store = useContext(storeContext)
+  const { nodeLabelFilter } = store.tree
   const isOpen = store.tree.openNodes.some(
     (nodeArray) => nodeArray[0] === 'Werte-Listen',
   )
+
+  const adressesFilter = nodeLabelFilter.adresse
+    ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
+    : { id: { isNull: false } }
+  const apberrelevantGrundWertesFilter =
+    nodeLabelFilter.tpopApberrelevantGrundWerte
+      ? {
+          label: {
+            includesInsensitive: nodeLabelFilter.tpopApberrelevantGrundWerte,
+          },
+        }
+      : { id: { isNull: false } }
+  const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
+    ? {
+        label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
+      }
+    : { id: { isNull: false } }
+  const tpopkontrzaehlEinheitWertesFilter =
+    nodeLabelFilter.tpopkontrzaehlEinheitWerte
+      ? {
+          label: {
+            includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
+          },
+        }
+      : { id: { isNull: false } }
 
   const { data, isLoading } = useQuery({
     queryKey: [],
@@ -44,13 +70,10 @@ const WlFolderNode = ({ treeQueryVariables }) => {
           }
         `,
         variables: {
-          adressesFilter: treeQueryVariables.adressesFilter,
-          apberrelevantGrundWertesFilter:
-            treeQueryVariables.apberrelevantGrundWertesFilter,
-          ekAbrechnungstypWertesFilter:
-            treeQueryVariables.ekAbrechnungstypWertesFilter,
-          tpopkontrzaehlEinheitWertesFilter:
-            treeQueryVariables.tpopkontrzaehlEinheitWertesFilter,
+          adressesFilter,
+          apberrelevantGrundWertesFilter,
+          ekAbrechnungstypWertesFilter,
+          tpopkontrzaehlEinheitWertesFilter,
           isOpen,
         },
         fetchPolicy: 'no-cache',

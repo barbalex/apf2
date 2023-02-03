@@ -1,12 +1,8 @@
 import Row from '../../Row'
-import Apberuebersicht from './Apberuebersicht'
-import Ap from './Ap'
+import ApberuebersichtFolder from './ApberuebersichtFolder'
+import ApFolder from './ApFolder'
 
-const ProjektNode = ({
-  projekt,
-  isProjectOpen,
-  apberuebersichtsFilter,
-}) => {
+const ProjektNode = ({ projekt, isProjectOpen, apberuebersichtsFilter }) => {
   const node = {
     nodeType: 'table',
     menuType: 'projekt',
@@ -22,8 +18,11 @@ const ProjektNode = ({
       <Row node={node} />
       {isProjectOpen && (
         <>
-          <Ap projekt={projekt} count={projekt?.apsByProjId?.totalCount ?? 0} />
-          <Apberuebersicht
+          <ApFolder
+            projekt={projekt}
+            count={projekt?.apsByProjId?.totalCount ?? 0}
+          />
+          <ApberuebersichtFolder
             projekt={projekt}
             count={projekt?.apberuebersichtsByProjId?.totalCount ?? 0}
             apberuebersichtsFilter={apberuebersichtsFilter}

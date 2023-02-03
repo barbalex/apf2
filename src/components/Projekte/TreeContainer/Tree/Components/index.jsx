@@ -16,27 +16,7 @@ const NodeComponents = ({ role }) => {
   const store = useContext(storeContext)
   const nodeLabelFilter = getSnapshot(store.tree.nodeLabelFilter)
   const openNodes = getSnapshot(store.tree.openNodes)
-  const popGqlFilter = store.tree.popGqlFilter
   const apGqlFilter = store.tree.apGqlFilter
-  const tpopGqlFilter = store.tree.tpopGqlFilter
-  const tpopmassnGqlFilter = store.tree.tpopmassnGqlFilter
-  const ekGqlFilter = store.tree.ekGqlFilter
-  const ekfGqlFilter = store.tree.ekfGqlFilter
-  const beobGqlFilter = store.tree.beobGqlFilter
-  const openAps = store.tree.openAps
-
-  const treeQueryVariables = buildTreeQueryVariables({
-    openNodes,
-    nodeLabelFilter,
-    popGqlFilter,
-    tpopGqlFilter,
-    tpopmassnGqlFilter,
-    ekGqlFilter,
-    ekfGqlFilter,
-    apGqlFilter,
-    beobGqlFilter,
-    openAps,
-  })
 
   const openProjects = openNodes.filter((n) => n[0] === 'Projekte' && !!n[1])
   const isProjectOpen = openProjects.length > 0
@@ -55,13 +35,14 @@ const NodeComponents = ({ role }) => {
       includesInsensitive: nodeLabelFilter.apberuebersicht,
     }
   }
+  const apsFilter = apGqlFilter.filtered
 
   const { data, isLoading } = useQuery({
     queryKey: [
       'treeRoot',
       isProjectOpen,
-      treeQueryVariables.usersFilter,
-      treeQueryVariables.apsFilter,
+      usersFilter,
+      apsFilter,
       apberuebersichtsFilter,
     ],
     queryFn: async () =>
@@ -99,7 +80,7 @@ const NodeComponents = ({ role }) => {
         `,
         variables: {
           usersFilter,
-          apsFilter: treeQueryVariables.apsFilter,
+          apsFilter,
           apberuebersichtsFilter,
           isProjectOpen,
         },
@@ -121,9 +102,7 @@ const NodeComponents = ({ role }) => {
         isLoading={isLoading}
         usersFilter={usersFilter}
       />
-      {role === 'apflora_manager' && (
-        <Werte treeQueryVariables={treeQueryVariables} />
-      )}
+      {role === 'apflora_manager' && <Werte />}
       <Messages
         count={data?.data?.allMessages?.totalCount ?? 0}
         isLoading={isLoading}
