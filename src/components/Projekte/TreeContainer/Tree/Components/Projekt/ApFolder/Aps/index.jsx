@@ -11,10 +11,10 @@ import Folders from './Folders'
 const Aps = ({ projekt }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { openNodes } = store.tree
+  const { openNodes, apGqlFilterForTree } = store.tree
 
   const { data } = useQuery({
-    queryKey: ['treeAps', projekt.id, store.dataFilter?.ap, store.apFilter],
+    queryKey: ['treeAps', projekt.id, apGqlFilterForTree],
     queryFn: () =>
       client.query({
         query: gql`
@@ -28,7 +28,7 @@ const Aps = ({ projekt }) => {
           }
         `,
         variables: {
-          apsFilter: store.tree.apGqlFilter.filtered,
+          apsFilter: apGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
       }),

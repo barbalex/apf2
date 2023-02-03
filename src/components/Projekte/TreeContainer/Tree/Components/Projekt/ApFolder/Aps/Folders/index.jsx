@@ -8,13 +8,14 @@ import storeContext from '../../../../../../../../../storeContext'
 import PopFolder from './Pop'
 import ApZielFolder from './ApZiel'
 import ApErfkritFolder from './ApErfkrit'
+import ApBerFolder from './ApBer'
 
 const ApFolders = ({ ap, projekt }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { nodeLabelFilter, beobGqlFilter, popGqlFilter } = store.tree
+  const { nodeLabelFilter, beobGqlFilter, popGqlFilterForTree } = store.tree
 
-  const popsFilter = popGqlFilter.filtered
+  const popsFilter = popGqlFilterForTree
   const erfkritsFilter = { apId: { equalTo: ap.id } }
   if (nodeLabelFilter.erfkrit) {
     erfkritsFilter.label = {
@@ -161,6 +162,13 @@ const ApFolders = ({ ap, projekt }) => {
         projekt={projekt}
         ap={ap}
         count={data?.data?.apById?.erfkritsByApId?.totalCount ?? 0}
+        isLoading={isLoading}
+      />
+      <ApBerFolder
+        key={`${ap.id}ApBerFolder`}
+        projekt={projekt}
+        ap={ap}
+        count={data?.data?.apById?.apbersByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
     </>
