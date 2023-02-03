@@ -1,24 +1,21 @@
+import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import sum from 'lodash/sum'
 
-import beobNichtBeurteilt from './beobNichtBeurteilt'
+import Row from '../../../../../../Row'
+import storeContext from '../../../../../../../../../../storeContext'
 
-const beobNichtBeurteiltFolderNode = async ({
-  data,
-  loading,
-  projId,
-  apId,
-  store,
-  treeQueryVariables,
-}) => {
+const BeobNichtBeurteiltFolder = ({ projekt, ap, aparts, isLoading }) => {
+  const store = useContext(storeContext)
+
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
 
-  const aparts = data?.apById?.beobNichtBeurteilt?.nodes ?? []
   const counts = aparts.map(
     (a) => a.aeTaxonomyByArtId?.beobsByArtId?.totalCount ?? 0,
   )
   const count = sum(counts)
 
-  const message = loading
+  const message = isLoading
     ? '...'
     : nodeLabelFilterString
     ? `${count} gefiltert`
@@ -26,9 +23,9 @@ const beobNichtBeurteiltFolderNode = async ({
 
   const url = [
     'Projekte',
-    projId,
+    projekt.id,
     'Arten',
-    apId,
+    ap.id,
     'nicht-beurteilte-Beobachtungen',
   ]
 
@@ -36,26 +33,28 @@ const beobNichtBeurteiltFolderNode = async ({
     store.tree.openNodes.filter(
       (n) =>
         n.length > 4 &&
-        n[1] === projId &&
-        n[3] === apId &&
+        n[1] === projekt.id &&
+        n[3] === ap.id &&
         n[4] === 'nicht-beurteilte-Beobachtungen',
     ).length > 0
 
-  const children = isOpen
-    ? await beobNichtBeurteilt({ treeQueryVariables, projId, apId, store })
-    : []
-
-  return {
+  const node = {
     nodeType: 'folder',
     menuType: 'beobNichtBeurteiltFolder',
-    id: `${apId}BeobNichtBeurteiltFolder`,
-    tableId: apId,
+    id: `${ap.id}BeobNichtBeurteiltFolder`,
+    tableId: ap.id,
     urlLabel: 'nicht-beurteilte-Beobachtungen',
     label: `Beobachtungen nicht beurteilt (${message})`,
     url,
     hasChildren: count > 0,
-    children,
   }
+
+  return (
+    <>
+      <Row key={node.id} node={node} />
+      {isOpen && <div>pops</div>}
+    </>
+  )
 }
 
-export default beobNichtBeurteiltFolderNode
+export default observer(BeobNichtBeurteiltFolder)

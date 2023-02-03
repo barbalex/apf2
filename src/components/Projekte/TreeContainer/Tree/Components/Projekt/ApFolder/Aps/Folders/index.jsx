@@ -13,11 +13,14 @@ import IdealbiotopFolder from './Idealbiotop'
 import ApArtFolder from './ApArt'
 import AssozArtFolder from './AssozArt'
 import EkFrequenzFolder from './EkFrequenz'
+import EkZaehleinheitFolder from './EkZaehleinheit'
+import BeobNichtBeurteiltFolder from './BeobNichtBeurteilt'
 
 const ApFolders = ({ ap, projekt }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { nodeLabelFilter, beobGqlFilter, popGqlFilterForTree } = store.tree
+  const { nodeLabelFilter, beobGqlFilterForTree, popGqlFilterForTree } =
+    store.tree
 
   const popsFilter = popGqlFilterForTree
   const erfkritsFilter = { apId: { equalTo: ap.id } }
@@ -48,8 +51,8 @@ const ApFolders = ({ ap, projekt }) => {
       includesInsensitive: nodeLabelFilter.ekzaehleinheit,
     }
   }
-  const beobNichtBeurteiltsFilter = beobGqlFilter('nichtBeurteilt').filtered
-  const beobNichtZuzuordnensFilter = beobGqlFilter('nichtZuzuordnen').filtered
+  const beobNichtBeurteiltsFilter = beobGqlFilterForTree('nichtBeurteilt')
+  const beobNichtZuzuordnensFilter = beobGqlFilterForTree('nichtZuzuordnen')
   const apartsFilter = { apId: { equalTo: ap.id } }
   if (nodeLabelFilter.apart) {
     apartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
@@ -195,6 +198,20 @@ const ApFolders = ({ ap, projekt }) => {
         projekt={projekt}
         ap={ap}
         count={data?.data?.apById?.ekfrequenzsByApId?.totalCount ?? 0}
+        isLoading={isLoading}
+      />
+      <EkZaehleinheitFolder
+        key={`${ap.id}EkZaehleinheitFolder`}
+        projekt={projekt}
+        ap={ap}
+        count={data?.data?.apById?.ekzaehleinheitsByApId?.totalCount ?? 0}
+        isLoading={isLoading}
+      />
+      <BeobNichtBeurteiltFolder
+        key={`${ap.id}BeobNichtBeurteiltFolder`}
+        projekt={projekt}
+        ap={ap}
+        aparts={data?.data?.apById?.beobNichtBeurteilt?.nodes ?? []}
         isLoading={isLoading}
       />
     </>
