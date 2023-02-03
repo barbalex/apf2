@@ -6,14 +6,9 @@ import { useApolloClient } from '@apollo/client'
 import storeContext from '../../../../../../../../storeContext'
 
 const ApFolders = ({ apNode: ap }) => {
+  const client = useApolloClient()
   const store = useContext(storeContext)
-  const { nodeLabelFilter, openAps } = store.tree
-  const apGqlFilter = store.tree.apGqlFilter
-  const tpopGqlFilter = store.tree.tpopGqlFilter
-  const tpopmassnGqlFilter = store.tree.tpopmassnGqlFilter
-  const ekGqlFilter = store.tree.ekGqlFilter
-  const ekfGqlFilter = store.tree.ekfGqlFilter
-  const beobGqlFilter = store.tree.beobGqlFilter
+  const { nodeLabelFilter, openAps, beobGqlFilter } = store.tree
 
   const popsFilter = store.tree.popGqlFilter.filtered
   const zielsFilter = { apId: { equalTo: ap.id } }
@@ -75,7 +70,7 @@ const ApFolders = ({ apNode: ap }) => {
       apartsFilter,
     ],
     queryFn: () =>
-      store.client.query({
+      client.query({
         query: gql`
           query TreeApQuery(
             $id: UUID!
