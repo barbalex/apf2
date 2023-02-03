@@ -1,8 +1,4 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
-
 import Row from '../../Row'
-import storeContext from '../../../../../../storeContext'
 import Apberuebersicht from './Apberuebersicht'
 import Ap from './Ap'
 
@@ -12,8 +8,6 @@ const ProjektNode = ({
   isProjectOpen,
   apberuebersichtsFilter,
 }) => {
-  const store = useContext(storeContext)
-
   const node = {
     nodeType: 'table',
     menuType: 'projekt',
@@ -23,18 +17,6 @@ const ProjektNode = ({
     url: ['Projekte', projekt.id],
     hasChildren: true,
   }
-
-  // TODO:
-  // add apFolder and apberuebersichtFolder
-  // const apFolderNode = await apFolder({
-  //   projId: projekt.id,
-  //   store,
-  //   treeQueryVariables,
-  //   count: projekt?.apsByProjId?.totalCount ?? 0,
-  // })
-  // const children = store.tree.openProjekts.includes(projekt.id)
-  //   ? [apFolderNode, apberUebersichtFolderNode]
-  //   : []
 
   return (
     <>
@@ -53,4 +35,4 @@ const ProjektNode = ({
   )
 }
 
-export default observer(ProjektNode)
+export default ProjektNode
