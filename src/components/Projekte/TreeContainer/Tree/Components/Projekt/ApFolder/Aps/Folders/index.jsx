@@ -12,6 +12,7 @@ import ApBerFolder from './ApBer'
 import IdealbiotopFolder from './Idealbiotop'
 import ApArtFolder from './ApArt'
 import AssozArtFolder from './AssozArt'
+import EkFrequenzFolder from './EkFrequenz'
 
 const ApFolders = ({ ap, projekt }) => {
   const client = useApolloClient()
@@ -187,6 +188,13 @@ const ApFolders = ({ ap, projekt }) => {
         projekt={projekt}
         ap={ap}
         count={data?.data?.apById?.assozartsByApId?.totalCount ?? 0}
+        isLoading={isLoading}
+      />
+      <EkFrequenzFolder
+        key={`${ap.id}EkFrequenzFolder`}
+        projekt={projekt}
+        ap={ap}
+        count={data?.data?.apById?.ekfrequenzsByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
     </>
