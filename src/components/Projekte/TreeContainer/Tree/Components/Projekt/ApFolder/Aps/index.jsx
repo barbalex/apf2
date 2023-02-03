@@ -52,7 +52,7 @@ const Aps = ({ projekt }) => {
   return nodes.map((node) => (
     <>
       <Row key={node.id} node={node} />
-      <Folders key={`${node.id}Folders`} apNode={node} />
+      <Folders key={`${node.id}Folders`} ap={node} projekt={projekt} />
     </>
   ))
 }

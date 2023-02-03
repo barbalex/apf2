@@ -4,11 +4,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 
 import storeContext from '../../../../../../../../../storeContext'
+import PopFolder from './Pop'
 
-const ApFolders = ({ apNode: ap }) => {
+const ApFolders = ({ ap, projekt }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { nodeLabelFilter, openAps, beobGqlFilter } = store.tree
+  const { nodeLabelFilter, beobGqlFilter, openNodes } = store.tree
 
   const popsFilter = store.tree.popGqlFilter.filtered
   const zielsFilter = { apId: { equalTo: ap.id } }
@@ -52,11 +53,21 @@ const ApFolders = ({ apNode: ap }) => {
     apartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
   }
 
-  const isOpen = openAps.includes(ap.id)
+  const isOpen =
+    openNodes.filter(
+      (n) =>
+        n[0] === 'Projekte' &&
+        n[1] === projekt.id &&
+        n[2] === 'Arten' &&
+        n[3] === ap.id,
+    ).length > 0
+
+  console.log('ApFolders', { ap, projekt, isOpen })
 
   const { data, isLoading } = useQuery({
     queryKey: [
-      'treeAp',
+      'treeApFolders',
+      projekt.id,
       ap.id,
       popsFilter,
       zielsFilter,
@@ -72,7 +83,7 @@ const ApFolders = ({ apNode: ap }) => {
     queryFn: () =>
       client.query({
         query: gql`
-          query TreeApQuery(
+          query TreeApFoldersQuery(
             $id: UUID!
             $popsFilter: PopFilter!
             $zielsFilter: ZielFilter!
@@ -159,6 +170,17 @@ const ApFolders = ({ apNode: ap }) => {
   })
 
   if (!isOpen) return null
+
+  return (
+    <>
+      <PopFolder
+        ap={ap}
+        projekt={projekt}
+        count={data?.data?.apById?.popsByApId?.totalCount ?? 0}
+        isLoading={isLoading}
+      />
+    </>
+  )
 }
 
 export default ApFolders

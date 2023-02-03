@@ -6,7 +6,7 @@ const popFolderNode = async ({
   store,
   count,
   loading,
-  treeQueryVariables,
+  treeQueryVariables, 
 }) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.pop ?? ''
 
