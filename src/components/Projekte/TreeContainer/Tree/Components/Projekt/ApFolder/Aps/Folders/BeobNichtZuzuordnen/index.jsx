@@ -1,23 +1,20 @@
+import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import sum from 'lodash/sum'
 
-import beobNichtZuzuordnen from './beobNichtZuzuordnen'
+import Row from '../../../../../../Row'
+import storeContext from '../../../../../../../../../../storeContext'
 
-const beobNichtZuzuordnenFolderNode = async ({
-  data,
-  loading,
-  projId,
-  apId,
-  store,
-  treeQueryVariables,
-}) => {
+const BeobNichtZuzuordnenFolder = ({ projekt, ap, aparts, isLoading }) => {
+  const store = useContext(storeContext)
+
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
 
-  const aparts = data?.apById?.beobNichtZuzuordnen?.nodes ?? []
   const counts = aparts.map(
     (a) => a.aeTaxonomyByArtId?.beobsByArtId?.totalCount ?? 0,
   )
   const count = sum(counts)
-  const message = loading
+  const message = isLoading
     ? '...'
     : nodeLabelFilterString
     ? `${count} gefiltert`
@@ -25,9 +22,9 @@ const beobNichtZuzuordnenFolderNode = async ({
 
   const url = [
     'Projekte',
-    projId,
+    projekt.id,
     'Arten',
-    apId,
+    ap.id,
     'nicht-zuzuordnende-Beobachtungen',
   ]
 
@@ -35,26 +32,28 @@ const beobNichtZuzuordnenFolderNode = async ({
     store.tree.openNodes.filter(
       (n) =>
         n.length > 4 &&
-        n[1] === projId &&
-        n[3] === apId &&
+        n[1] === projekt.id &&
+        n[3] === ap.id &&
         n[4] === 'nicht-zuzuordnende-Beobachtungen',
     ).length > 0
 
-  const children = isOpen
-    ? await beobNichtZuzuordnen({ treeQueryVariables, projId, apId, store })
-    : []
-
-  return {
+  const node = {
     nodeType: 'folder',
     menuType: 'beobNichtZuzuordnenFolder',
-    id: `${apId}BeobNichtZuzuordnenFolder`,
-    tableId: apId,
+    id: `${ap.id}BeobNichtZuzuordnenFolder`,
+    tableId: ap.id,
     urlLabel: 'nicht-zuzuordnende-Beobachtungen',
     label: `Beobachtungen nicht zuzuordnen (${message})`,
     url,
     hasChildren: count > 0,
-    children,
   }
+
+  return (
+    <>
+      <Row key={node.id} node={node} />
+      {isOpen && <div>pops</div>}
+    </>
+  )
 }
 
-export default beobNichtZuzuordnenFolderNode
+export default observer(BeobNichtZuzuordnenFolder)

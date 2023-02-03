@@ -15,6 +15,7 @@ import AssozArtFolder from './AssozArt'
 import EkFrequenzFolder from './EkFrequenz'
 import EkZaehleinheitFolder from './EkZaehleinheit'
 import BeobNichtBeurteiltFolder from './BeobNichtBeurteilt'
+import BeobNichtZuzuordnenFolder from './BeobNichtZuzuordnen'
 
 const ApFolders = ({ ap, projekt }) => {
   const client = useApolloClient()
@@ -212,6 +213,13 @@ const ApFolders = ({ ap, projekt }) => {
         projekt={projekt}
         ap={ap}
         aparts={data?.data?.apById?.beobNichtBeurteilt?.nodes ?? []}
+        isLoading={isLoading}
+      />
+      <BeobNichtZuzuordnenFolder
+        key={`${ap.id}BeobNichtZuzuordnenFolder`}
+        projekt={projekt}
+        ap={ap}
+        aparts={data?.data?.apById?.beobNichtZuzuordnen?.nodes ?? []}
         isLoading={isLoading}
       />
     </>
