@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import storeContext from '../../../../../../../../../storeContext'
 import PopFolder from './Pop'
 import ApZielFolder from './ApZiel'
+import ApErfkritFolder from './ApErfkrit'
 
 const ApFolders = ({ ap, projekt }) => {
   const client = useApolloClient()
@@ -155,6 +156,13 @@ const ApFolders = ({ ap, projekt }) => {
         isLoading={isLoading}
       />
       <ApZielFolder key={`${ap.id}ApZielFolder`} projekt={projekt} ap={ap} />
+      <ApErfkritFolder
+        key={`${ap.id}ApErfkritFolder`}
+        projekt={projekt}
+        ap={ap}
+        count={data?.data?.apById?.erfkritsByApId?.totalCount ?? 0}
+        isLoading={isLoading}
+      />
     </>
   )
 }
