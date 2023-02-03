@@ -3,6 +3,7 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 import union from 'lodash/union'
+import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../Row'
 import storeContext from '../../../../../../../../../../storeContext'
@@ -94,4 +95,4 @@ const ApZielFolder = ({ projekt, ap }) => {
   )
 }
 
-export default ApZielFolder
+export default observer(ApZielFolder)

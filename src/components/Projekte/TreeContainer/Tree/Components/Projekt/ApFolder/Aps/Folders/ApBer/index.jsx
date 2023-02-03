@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../Row'
 import storeContext from '../../../../../../../../../../storeContext'
@@ -44,4 +45,4 @@ const ApBerFolder = ({ projekt, ap, count, isLoading }) => {
   )
 }
 
-export default ApBerFolder
+export default observer(ApBerFolder)

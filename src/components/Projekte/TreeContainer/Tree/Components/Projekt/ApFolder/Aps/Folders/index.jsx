@@ -9,6 +9,7 @@ import PopFolder from './Pop'
 import ApZielFolder from './ApZiel'
 import ApErfkritFolder from './ApErfkrit'
 import ApBerFolder from './ApBer'
+import IdealbiotopFolder from './Idealbiotop'
 
 const ApFolders = ({ ap, projekt }) => {
   const client = useApolloClient()
@@ -171,6 +172,7 @@ const ApFolders = ({ ap, projekt }) => {
         count={data?.data?.apById?.apbersByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
+      <IdealbiotopFolder projekt={projekt} ap={ap} />
     </>
   )
 }
