@@ -4,7 +4,6 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import buildTreeQueryVariables from '../../buildTreeQueryVariables'
 import Projekt from './Projekt'
 import Users from './Users'
 import Messages from './Messages'
@@ -18,8 +17,8 @@ const NodeComponents = ({ role }) => {
   const openNodes = getSnapshot(store.tree.openNodes)
   const apGqlFilter = store.tree.apGqlFilter
 
-  const openProjects = openNodes.filter((n) => n[0] === 'Projekte' && !!n[1])
-  const isProjectOpen = openProjects.length > 0
+  const isProjectOpen =
+    openNodes.filter((n) => n[0] === 'Projekte' && !!n[1]).length > 0
 
   const usersFilter = { id: { isNull: false } }
   if (nodeLabelFilter.user) {
@@ -88,26 +87,32 @@ const NodeComponents = ({ role }) => {
       }),
   })
 
+  console.log('TreeComponents rendering')
+
   if (!data) return null
 
   return (
     <>
       <Projekt
+        key={`e57f56f4-4376-11e8-ab21-4314b6749d13`}
         projekt={data?.data?.allProjekts?.nodes?.[0]}
         isProjectOpen={isProjectOpen}
         apberuebersichtsFilter={apberuebersichtsFilter}
       />
       <Users
+        key="users"
         count={data?.data?.allUsers?.totalCount ?? 0}
         isLoading={isLoading}
         usersFilter={usersFilter}
       />
       {role === 'apflora_manager' && <Werte />}
       <Messages
+        key="messages"
         count={data?.data?.allMessages?.totalCount ?? 0}
         isLoading={isLoading}
       />
       <CurrentIssues
+        key="currentIssues"
         count={data?.data?.allCurrentissues?.totalCount ?? 0}
         isLoading
       />

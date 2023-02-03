@@ -5,7 +5,7 @@ import Row from '../../../Row'
 import storeContext from '../../../../../../../storeContext'
 import Apberuebersichts from './Apberuebersichts'
 
-const ApberuebersichtNode = ({  count, projekt,apberuebersichtsFilter }) => {
+const ApberuebersichtNode = ({ count, projekt, apberuebersichtsFilter }) => {
   const store = useContext(storeContext)
   const nodeLabelFilterString =
     store.tree?.nodeLabelFilter?.apberuebersicht ?? ''
@@ -30,8 +30,10 @@ const ApberuebersichtNode = ({  count, projekt,apberuebersichtsFilter }) => {
 
   return (
     <>
-      <Row node={node} />
-      {isOpen && <Apberuebersichts  apberuebersichtsFilter={apberuebersichtsFilter} />}
+      <Row key={node.id} node={node} />
+      {isOpen && (
+        <Apberuebersichts apberuebersichtsFilter={apberuebersichtsFilter} />
+      )}
     </>
   )
 }

@@ -1,19 +1,28 @@
+import { useContext } from 'react'
 import { gql } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client'
 import union from 'lodash/union'
 
-import apzieljahrFolder from './apzieljahrFolder'
+import Row from '../../../../../../Row'
+import storeContext from '../../../../../../../../../../storeContext'
 
-const apzielFolderNode = async ({
-  projId,
-  apId,
-  store,
-  treeQueryVariables,
-}) => {
-  // tried using tanstack query to refetch only this data - but it does not work
-  const { data, isLoading } = await store.queryClient.fetchQuery({
-    queryKey: ['treeApZieljahrFolder', apId, treeQueryVariables.zielsFilter],
+const ApZielFolder = ({ projekt, ap }) => {
+  const client = useApolloClient()
+  const store = useContext(storeContext)
+  const { nodeLabelFilter, openNodes } = store.tree
+
+  const zielsFilter = { apId: { equalTo: ap.id } }
+  if (nodeLabelFilter.ziel) {
+    zielsFilter.label = {
+      includesInsensitive: nodeLabelFilter.ziel,
+    }
+  }
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['treeApZieljahrFolder', ap.id, zielsFilter],
     queryFn: async () => {
-      const { data, loading: isLoading } = await store.client.query({
+      const { data, loading: isLoading } = await client.query({
         query: gql`
           query TreeApZieljahrFolderQuery(
             $apId: UUID!
@@ -32,8 +41,8 @@ const apzielFolderNode = async ({
           }
         `,
         variables: {
-          apId,
-          zielsFilter: treeQueryVariables.zielsFilter,
+          apId: ap.id,
+          zielsFilter,
         },
         fetchPolicy: 'no-cache',
       })
@@ -43,7 +52,7 @@ const apzielFolderNode = async ({
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ziel ?? ''
 
-  const ziels = data?.apById?.zielsByApId?.nodes ?? []
+  const ziels = data?.data?.apById?.zielsByApId?.nodes ?? []
   const zieljahre = ziels
     // reduce to distinct years
     .reduce((a, el) => union(a, [el.jahr]), [])
@@ -55,36 +64,34 @@ const apzielFolderNode = async ({
     ? `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'} gefiltert`
     : `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'}`
 
-  const url = ['Projekte', projId, 'Arten', apId, 'AP-Ziele']
+  const url = ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Ziele']
 
   const isOpen =
-    store.tree.openNodes.filter(
+    openNodes.filter(
       (n) =>
-        n.length > 4 && n[1] === projId && n[3] === apId && n[4] === 'AP-Ziele',
+        n.length > 4 &&
+        n[1] === projekt.id &&
+        n[3] === ap.id &&
+        n[4] === 'AP-Ziele',
     ).length > 0
 
-  const children = isOpen
-    ? await apzieljahrFolder({
-        treeQueryVariables,
-        projId,
-        apId,
-        store,
-        zieljahre,
-        ziels,
-      })
-    : []
-
-  return {
+  const node = {
     nodeType: 'folder',
     menuType: 'zielFolder',
-    id: `${apId}ApzielFolder`,
-    tableId: apId,
+    id: `${ap.id}ApzielFolder`,
+    tableId: ap.id,
     urlLabel: 'AP-Ziele',
     label: `AP-Ziele (${message})`,
     url,
     hasChildren: zieljahreLength > 0,
-    children,
   }
+
+  return (
+    <>
+      <Row key={node.id} node={node} />
+      {isOpen && <div>ziels</div>}
+    </>
+  )
 }
 
-export default apzielFolderNode
+export default ApZielFolder

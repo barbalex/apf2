@@ -27,7 +27,7 @@ const CurrentIssuesFolderNode = ({ count, isLoading }) => {
 
   return (
     <>
-      <Row node={node} />
+      <Row key={node.id} node={node} />
       {isOpen && <Issues />}
     </>
   )

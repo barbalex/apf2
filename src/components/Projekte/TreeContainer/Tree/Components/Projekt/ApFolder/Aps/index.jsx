@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
+import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../Row'
 import storeContext from '../../../../../../../../storeContext'
@@ -10,6 +11,7 @@ import Folders from './Folders'
 const Aps = ({ projekt }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { openNodes } = store.tree
 
   const { data } = useQuery({
     queryKey: ['treeAps', projekt.id, store.dataFilter?.ap, store.apFilter],
@@ -34,9 +36,17 @@ const Aps = ({ projekt }) => {
 
   const aps = data?.data?.allAps?.nodes ?? []
 
-  let nodes = []
-  for (const ap of aps) {
-    nodes.push({
+  return aps.map((ap) => {
+    const isOpen =
+      openNodes.filter(
+        (n) =>
+          n[0] === 'Projekte' &&
+          n[1] === projekt.id &&
+          n[2] === 'Arten' &&
+          n[3] === ap.id,
+      ).length > 0
+
+    const node = {
       nodeType: 'table',
       menuType: 'ap',
       id: ap.id,
@@ -46,15 +56,17 @@ const Aps = ({ projekt }) => {
       label: ap.label,
       url: ['Projekte', projekt.id, 'Arten', ap.id],
       hasChildren: true,
-    })
-  }
+    }
 
-  return nodes.map((node) => (
-    <>
-      <Row key={node.id} node={node} />
-      <Folders key={`${node.id}Folders`} ap={node} projekt={projekt} />
-    </>
-  ))
+    return (
+      <>
+        <Row key={ap.id} node={node} />
+        {isOpen && (
+          <Folders key={`${ap.id}Folders`} ap={ap} projekt={projekt} />
+        )}
+      </>
+    )
+  })
 }
 
-export default Aps
+export default observer(Aps)

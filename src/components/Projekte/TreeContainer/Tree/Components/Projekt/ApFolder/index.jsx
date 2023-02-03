@@ -7,12 +7,13 @@ import Aps from './Aps'
 
 const Ap = ({ count, projekt }) => {
   const store = useContext(storeContext)
+  const { openNodes } = store.tree
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ap ?? ''
 
   const message = nodeLabelFilterString ? `${count} gefiltert` : count
 
   const isOpen =
-    store.tree.openNodes.filter(
+    openNodes.filter(
       (n) => n[0] === 'Projekte' && n[1] === projekt.id && n[2] === 'Arten',
     ).length > 0
 
@@ -29,8 +30,8 @@ const Ap = ({ count, projekt }) => {
 
   return (
     <>
-      <Row node={node} />
-      {isOpen && <Aps projekt={projekt} />}
+      <Row key={`${projekt.id}ApFolder`} node={node} />
+      {isOpen && <Aps key={`${projekt.id}Aps`} projekt={projekt} />}
     </>
   )
 }

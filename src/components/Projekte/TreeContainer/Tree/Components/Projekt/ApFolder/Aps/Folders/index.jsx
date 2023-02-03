@@ -2,22 +2,18 @@ import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
+import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../../../storeContext'
 import PopFolder from './Pop'
+import ApZielFolder from './ApZiel'
 
 const ApFolders = ({ ap, projekt }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { nodeLabelFilter, beobGqlFilter, openNodes } = store.tree
+  const { nodeLabelFilter, beobGqlFilter, popGqlFilter } = store.tree
 
-  const popsFilter = store.tree.popGqlFilter.filtered
-  const zielsFilter = { apId: { equalTo: ap.id } }
-  if (nodeLabelFilter.ziel) {
-    zielsFilter.label = {
-      includesInsensitive: nodeLabelFilter.ziel,
-    }
-  }
+  const popsFilter = popGqlFilter.filtered
   const erfkritsFilter = { apId: { equalTo: ap.id } }
   if (nodeLabelFilter.erfkrit) {
     erfkritsFilter.label = {
@@ -53,16 +49,7 @@ const ApFolders = ({ ap, projekt }) => {
     apartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
   }
 
-  const isOpen =
-    openNodes.filter(
-      (n) =>
-        n[0] === 'Projekte' &&
-        n[1] === projekt.id &&
-        n[2] === 'Arten' &&
-        n[3] === ap.id,
-    ).length > 0
-
-  console.log('ApFolders', { ap, projekt, isOpen })
+  console.log('ApFolders', { ap, projekt })
 
   const { data, isLoading } = useQuery({
     queryKey: [
@@ -70,7 +57,6 @@ const ApFolders = ({ ap, projekt }) => {
       projekt.id,
       ap.id,
       popsFilter,
-      zielsFilter,
       erfkritsFilter,
       apbersFilter,
       assozartFilter,
@@ -86,7 +72,6 @@ const ApFolders = ({ ap, projekt }) => {
           query TreeApFoldersQuery(
             $id: UUID!
             $popsFilter: PopFilter!
-            $zielsFilter: ZielFilter!
             $erfkritsFilter: ErfkritFilter!
             $apbersFilter: ApberFilter!
             $apartsFilter: ApartFilter!
@@ -95,18 +80,11 @@ const ApFolders = ({ ap, projekt }) => {
             $ekzaehleinheitsFilter: EkzaehleinheitFilter!
             $beobNichtBeurteiltsFilter: BeobFilter
             $beobNichtZuzuordnensFilter: BeobFilter
-            $isOpen: Boolean!
           ) {
-            apById(id: $id) @include(if: $isOpen) {
+            apById(id: $id) {
               id
               popsByApId(filter: $popsFilter) {
                 totalCount
-              }
-              zielsByApId(filter: $zielsFilter) {
-                nodes {
-                  id
-                  jahr
-                }
               }
               erfkritsByApId(filter: $erfkritsFilter) {
                 totalCount
@@ -154,7 +132,6 @@ const ApFolders = ({ ap, projekt }) => {
         variables: {
           id: ap.id,
           popsFilter,
-          zielsFilter,
           erfkritsFilter,
           apbersFilter,
           assozartFilter,
@@ -163,24 +140,23 @@ const ApFolders = ({ ap, projekt }) => {
           beobNichtBeurteiltsFilter,
           beobNichtZuzuordnensFilter,
           apartsFilter,
-          isOpen,
         },
         fetchPolicy: 'no-cache',
       }),
   })
 
-  if (!isOpen) return null
-
   return (
     <>
       <PopFolder
-        ap={ap}
+        key={`${ap.id}PopFolder`}
         projekt={projekt}
+        ap={ap}
         count={data?.data?.apById?.popsByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
+      <ApZielFolder key={`${ap.id}ApZielFolder`} projekt={projekt} ap={ap} />
     </>
   )
 }
 
-export default ApFolders
+export default observer(ApFolders)

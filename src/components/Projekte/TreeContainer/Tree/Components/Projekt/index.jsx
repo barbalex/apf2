@@ -15,14 +15,16 @@ const ProjektNode = ({ projekt, isProjectOpen, apberuebersichtsFilter }) => {
 
   return (
     <>
-      <Row node={node} />
+      <Row key={`${node.id}Project`} node={node} />
       {isProjectOpen && (
         <>
           <ApFolder
+            key={`${projekt.id}ApFolderContainer`}
             projekt={projekt}
             count={projekt?.apsByProjId?.totalCount ?? 0}
           />
           <ApberuebersichtFolder
+            key={`${projekt.id}ApberuebersichtFolderContainer`}
             projekt={projekt}
             count={projekt?.apberuebersichtsByProjId?.totalCount ?? 0}
             apberuebersichtsFilter={apberuebersichtsFilter}

@@ -88,13 +88,13 @@ const WlFolderNode = () => {
   const tpopkontrzaehlEinheitWertesCount =
     data?.data?.allTpopkontrzaehlEinheitWertes?.totalCount ?? 0
 
-  console.log('WlFolderNode', {
-    isOpen,
-    adressenCount,
-    apberrelevantGrundWertesCount,
-    ekAbrechnungstypWertesCount,
-    tpopkontrzaehlEinheitWertesCount,
-  })
+  // console.log('WlFolderNode', {
+  //   isOpen,
+  //   adressenCount,
+  //   apberrelevantGrundWertesCount,
+  //   ekAbrechnungstypWertesCount,
+  //   tpopkontrzaehlEinheitWertesCount,
+  // })
 
   // TODO:
   // children = [

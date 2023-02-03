@@ -13,7 +13,7 @@ const MessagesNode = ({ count, isLoading }) => {
     hasChildren: false,
   }
 
-  return <Row node={node} />
+  return <Row key={node.id} node={node} />
 }
 
 export default MessagesNode
