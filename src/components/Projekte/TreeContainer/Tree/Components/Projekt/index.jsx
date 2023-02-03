@@ -3,7 +3,6 @@ import Apberuebersicht from './Apberuebersicht'
 import Ap from './Ap'
 
 const ProjektNode = ({
-  treeQueryVariables,
   projekt,
   isProjectOpen,
   apberuebersichtsFilter,

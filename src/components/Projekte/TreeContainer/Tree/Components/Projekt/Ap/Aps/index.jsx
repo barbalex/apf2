@@ -5,6 +5,7 @@ import { useApolloClient } from '@apollo/client'
 
 import Row from '../../../../Row'
 import storeContext from '../../../../../../../../storeContext'
+import Folders from './Folders'
 
 const Aps = ({ projekt }) => {
   const client = useApolloClient()
@@ -33,19 +34,27 @@ const Aps = ({ projekt }) => {
 
   const aps = data?.data?.allAps?.nodes ?? []
 
-  const nodes = aps.map((ap) => ({
-    nodeType: 'table',
-    menuType: 'ap',
-    id: ap.id,
-    parentId: projekt.id,
-    parentTableId: projekt.id,
-    urlLabel: ap.id,
-    label: ap.label,
-    url: ['Projekte', projekt.id, 'Arten', ap.id],
-    hasChildren: true,
-  }))
+  let nodes = []
+  for (const ap of aps) {
+    nodes.push({
+      nodeType: 'table',
+      menuType: 'ap',
+      id: ap.id,
+      parentId: projekt.id,
+      parentTableId: projekt.id,
+      urlLabel: ap.id,
+      label: ap.label,
+      url: ['Projekte', projekt.id, 'Arten', ap.id],
+      hasChildren: true,
+    })
+  }
 
-  return nodes.map((node) => <Row key={node.id} node={node} />)
+  return nodes.map((node) => (
+    <>
+      <Row key={node.id} node={node} />
+      <Folders key={`${node.id}Folders`} apNode={node} />
+    </>
+  ))
 }
 
 export default Aps

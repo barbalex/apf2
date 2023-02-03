@@ -112,7 +112,6 @@ const NodeComponents = ({ role }) => {
   return (
     <>
       <Projekt
-        treeQueryVariables={treeQueryVariables}
         projekt={data?.data?.allProjekts?.nodes?.[0]}
         isProjectOpen={isProjectOpen}
         apberuebersichtsFilter={apberuebersichtsFilter}
