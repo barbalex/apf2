@@ -127,11 +127,8 @@ const Apber = () => {
       }
       setFieldErrors({})
       if (field === 'jahr') {
-        queryClient.invalidateQueries({ queryKey: [`apberQuery`] })
+        queryClient.invalidateQueries({ queryKey: [`treeApber`] })
       }
-      queryClient.invalidateQueries({
-        queryKey: [`treeApber`],
-      })
     },
     [client, queryClient, row.id, store.user.name],
   )
