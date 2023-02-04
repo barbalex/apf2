@@ -122,12 +122,12 @@ const Assozart = () => {
       }
       setFieldErrors({})
       if (field === 'aeId') {
-        store.queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: [`treeAssozart`],
         })
       }
     },
-    [client, row.id, store.queryClient, store.user.name],
+    [client, queryClient, row.id, store.user.name],
   )
 
   if (loading) return <Spinner />

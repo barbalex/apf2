@@ -116,12 +116,12 @@ const Apberuebersicht = () => {
       }
       setFieldErrors({})
       if (field === 'jahr') {
-        store.queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: [`treeApberuebersicht`],
         })
       }
     },
-    [client, row.id, store.queryClient, store.user.name],
+    [client, queryClient, row.id, store.user.name],
   )
 
   const isBeforeMarchOfFollowingYear = useMemo(() => {
