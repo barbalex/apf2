@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../../../Row'
 import storeContext from '../../../../../../../../../../../../../storeContext'
+import PopBer from './PopBer'
 
 const PopberFolder = ({ projekt, ap, pop, isLoading, count }) => {
   const store = useContext(storeContext)
@@ -47,7 +48,7 @@ const PopberFolder = ({ projekt, ap, pop, isLoading, count }) => {
   return (
     <>
       <Row key={`${node.id}`} node={node} />
-      {isOpen && <div>PopBer</div>}
+      {isOpen && <PopBer projekt={projekt} ap={ap} pop={pop} />}
     </>
   )
 }
