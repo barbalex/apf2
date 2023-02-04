@@ -6,6 +6,8 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../../../../../../storeContext'
 import TpopFolder from './Tpop'
+import PopBerFolder from './PopBer'
+import PopMassnBerFolder from './PopMassnBer'
 
 const PopFolders = ({ projekt, ap, pop }) => {
   const client = useApolloClient()
@@ -27,11 +29,11 @@ const PopFolders = ({ projekt, ap, pop }) => {
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ['treePop', pop.id],
+    queryKey: ['treePopFolders', pop.id],
     queryFn: () =>
       client.query({
         query: gql`
-          query TreePopQuery(
+          query TreePopFoldersQuery(
             $id: UUID!
             $tpopsFilter: TpopFilter!
             $popbersFilter: PopberFilter!
@@ -73,6 +75,20 @@ const PopFolders = ({ projekt, ap, pop }) => {
         pop={pop}
         isLoading={isLoading}
         count={tpopCount}
+      />
+      <PopBerFolder
+        projekt={projekt}
+        ap={ap}
+        pop={pop}
+        isLoading={isLoading}
+        count={popberCount}
+      />
+      <PopMassnBerFolder
+        projekt={projekt}
+        ap={ap}
+        pop={pop}
+        isLoading={isLoading}
+        count={popmassnberCount}
       />
     </>
   )
