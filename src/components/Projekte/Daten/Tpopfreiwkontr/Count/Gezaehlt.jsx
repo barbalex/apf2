@@ -2,6 +2,7 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../../shared/TextField'
 import storeContext from '../../../../../storeContext'
@@ -11,6 +12,7 @@ import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber'
 const Gezaehlt = ({ row, refetch }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
+  const queryClient = useQueryClient()
 
   const [errors, setErrors] = useState({})
 
@@ -35,7 +37,7 @@ const Gezaehlt = ({ row, refetch }) => {
         return setErrors({ anzahl: error.message })
       }
       refetch()
-      store.queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: [`treeTpopfreiwkontrzaehl`],
       })
     },
@@ -49,7 +51,7 @@ const Gezaehlt = ({ row, refetch }) => {
       store.refetch,
       store.user.name,
       store.tree,
-      store.queryClient,
+      queryClient,
     ],
   )
   //console.log('Gezaehlt, row:', row)

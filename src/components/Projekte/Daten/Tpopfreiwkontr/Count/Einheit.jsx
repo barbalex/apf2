@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 
 import Select from '../../../../shared/Select'
 import storeContext from '../../../../../storeContext'
@@ -35,6 +36,7 @@ const EinheitLabel = styled(Label)`
 const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
+  const queryClient = useQueryClient()
 
   const [error, setErrors] = useState(null)
 
@@ -57,17 +59,17 @@ const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
         return setErrors(error.message)
       }
       refetch()
-      store.queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: [`treeTpopfreiwkontrzaehl`],
       })
     },
     [
       client,
+      queryClient,
       refetch,
       row.anzahl,
       row.id,
       row.methode,
-      store.queryClient,
       store.user.name,
     ],
   )
