@@ -9,6 +9,8 @@ import TPopMassn from './TPopMassn'
 import TPopMassnBer from './TPopMassnBer'
 import TpopFeldkontr from './TpopFeldkontr'
 import TpopFreiwkontr from './TpopFreiwkontr'
+import TpopBer from './TpopBer'
+import BeobZugeordnet from './BeobZugeordnet'
 
 const TpopFolders = ({ projekt, ap, pop, tpop }) => {
   const client = useApolloClient()
@@ -145,6 +147,22 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         tpop={tpop}
         isLoading={isLoading}
         count={tpopfreiwkontrCount}
+      />
+      <TpopBer
+        projekt={projekt}
+        ap={ap}
+        pop={pop}
+        tpop={tpop}
+        isLoading={isLoading}
+        count={tpopberCount}
+      />
+      <BeobZugeordnet
+        projekt={projekt}
+        ap={ap}
+        pop={pop}
+        tpop={tpop}
+        isLoading={isLoading}
+        count={beobZugeordnetCount}
       />
     </>
   )
