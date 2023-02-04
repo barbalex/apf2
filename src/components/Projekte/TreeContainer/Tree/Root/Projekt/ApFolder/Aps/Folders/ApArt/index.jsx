@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../Row'
 import storeContext from '../../../../../../../../../../storeContext'
+import ApArt from './ApArt'
 
 const ApArtFolder = ({ projekt, ap, count, isLoading }) => {
   const store = useContext(storeContext)
@@ -38,7 +39,7 @@ const ApArtFolder = ({ projekt, ap, count, isLoading }) => {
   return (
     <>
       <Row key={node.id} node={node} />
-      {isOpen && <div>Taxa</div>}
+      {isOpen && <ApArt projekt={projekt} ap={ap} />}
     </>
   )
 }
