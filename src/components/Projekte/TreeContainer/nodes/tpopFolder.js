@@ -9,7 +9,7 @@ const tpopFolderNode = async ({
   store,
   treeQueryVariables,
 }) => {
-  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpop ?? ''
+  const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpop ?? '' 
 
   const message = loading
     ? '...'

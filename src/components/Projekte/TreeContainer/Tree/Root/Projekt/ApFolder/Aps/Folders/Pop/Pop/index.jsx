@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../Row'
 import storeContext from '../../../../../../../../../../../storeContext'
+import Folders from './Folders'
 
 const Pop = ({ projekt, ap }) => {
   const client = useApolloClient()
@@ -51,8 +52,29 @@ const Pop = ({ projekt, ap }) => {
       url: ['Projekte', projekt.id, 'Arten', ap.id, 'Populationen', el.id],
       hasChildren: true,
     }
+    const isOpen =
+      store.tree.openNodes.filter(
+        (n) =>
+          n.length > 5 &&
+          n[1] === projekt.id &&
+          n[3] === ap.id &&
+          n[4] === 'Populationen' &&
+          n[5] === el.id,
+      ).length > 0
 
-    return <Row key={el.id} node={node} />
+    return (
+      <>
+        <Row key={el.id} node={node} />
+        {isOpen && (
+          <Folders
+            key={`${el.id}PopFolders`}
+            projekt={projekt}
+            ap={ap}
+            pop={el}
+          />
+        )}
+      </>
+    )
   })
 }
 
