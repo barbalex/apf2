@@ -40,13 +40,16 @@ const TreeRoot = ({ role }) => {
       apsFilter,
       nodeLabelFilter.apberuebersicht,
     ],
-    queryFn: async () => {
-      console.log('TreeRoot querying', {
-        projectIsOpen,
-        nodeLabelFilterUser: nodeLabelFilter.user,
-        apsFilter,
-        nodeLabelFilterApberuebersicht: nodeLabelFilter.apberuebersicht,
-      })
+    queryFn: () => {
+      // WEIRD: this query is re-run under certain circumstances
+      // when focus was out of app and comes back in
+      // EVENT THOUGH component is not re-rendered
+      // console.log('TreeRoot querying', {
+      //   projectIsOpen,
+      //   nodeLabelFilterUser: nodeLabelFilter.user,
+      //   apsFilter,
+      //   nodeLabelFilterApberuebersicht: nodeLabelFilter.apberuebersicht,
+      // })
       return client.query({
         query: gql`
           query TreeRootQuery(
@@ -104,25 +107,25 @@ const TreeRoot = ({ role }) => {
   return (
     <>
       <Projekt
-        key={`e57f56f4-4376-11e8-ab21-4314b6749d13`}
+        key={`root/e57f56f4-4376-11e8-ab21-4314b6749d13`}
         projekt={data?.data?.allProjekts?.nodes?.[0]}
         projectIsOpen={projectIsOpen}
         apberuebersichtsFilter={apberuebersichtsFilter}
       />
       <Users
-        key="users"
+        key="root/users"
         count={data?.data?.allUsers?.totalCount ?? 0}
         isLoading={isLoading}
         usersFilter={usersFilter}
       />
-      {role === 'apflora_manager' && <Werte />}
+      {role === 'apflora_manager' && <Werte key="root/werte" />}
       <Messages
-        key="messages"
+        key="root/messages"
         count={data?.data?.allMessages?.totalCount ?? 0}
         isLoading={isLoading}
       />
       <CurrentIssues
-        key="currentIssues"
+        key="root/currentIssues"
         count={data?.data?.allCurrentissues?.totalCount ?? 0}
         isLoading
       />

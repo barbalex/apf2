@@ -219,7 +219,6 @@ const insertDataset = async ({
   }
   setOpenNodes(newOpenNodes)
   // invalidate tree queries for count and data
-  console.log('insertDataset', { tablePassed, table })
   if (['user', 'message', 'currentissue'].includes(table)) {
     store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
   }
