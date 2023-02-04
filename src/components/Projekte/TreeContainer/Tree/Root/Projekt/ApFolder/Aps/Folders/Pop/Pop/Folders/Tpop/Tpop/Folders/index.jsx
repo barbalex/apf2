@@ -6,6 +6,8 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../../../../../../../../../storeContext'
 import TPopMassn from './TPopMassn'
+import TPopMassnBer from './TPopMassnBer'
+import TpopFeldkontr from './TpopFeldkontr'
 
 const TpopFolders = ({ projekt, ap, pop, tpop }) => {
   const client = useApolloClient()
@@ -97,7 +99,6 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         fetchPolicy: 'no-cache',
       }),
   })
-  const tpopCount = data?.data?.popById?.tpopsByPopId?.totalCount ?? 0
   const tpopmassnCount =
     data?.data?.tpopById?.tpopmassnsByTpopId?.totalCount ?? 0
   const tpopmassnberCount =
@@ -119,6 +120,22 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         tpop={tpop}
         isLoading={isLoading}
         count={tpopmassnCount}
+      />
+      <TPopMassnBer
+        projekt={projekt}
+        ap={ap}
+        pop={pop}
+        tpop={tpop}
+        isLoading={isLoading}
+        count={tpopmassnberCount}
+      />
+      <TpopFeldkontr
+        projekt={projekt}
+        ap={ap}
+        pop={pop}
+        tpop={tpop}
+        isLoading={isLoading}
+        count={tpopfeldkontrCount}
       />
     </>
   )
