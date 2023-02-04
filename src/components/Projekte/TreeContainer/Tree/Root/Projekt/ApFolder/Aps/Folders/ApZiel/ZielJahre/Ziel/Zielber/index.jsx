@@ -20,7 +20,7 @@ const ZielberFolder = ({ projekt, ap, jahr, ziel }) => {
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ['treeApzielberFolder', ziel.id, zielbersFilter],
+    queryKey: ['treeZielber', ziel.id, zielbersFilter],
     queryFn: async () => {
       const { data, loading: isLoading } = await client.query({
         query: gql`
@@ -50,7 +50,7 @@ const ZielberFolder = ({ projekt, ap, jahr, ziel }) => {
   })
 
   const nodeLabelFilterString = nodeLabelFilter?.zielber ?? ''
-  const zielbers = data?.zielById?.zielbersByZielId?.nodes ?? []
+  const zielbers = data?.data?.zielById?.zielbersByZielId?.nodes ?? []
   const zielbersLength = zielbers.length
 
   const message = isLoading
