@@ -7,6 +7,7 @@ import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -58,6 +59,7 @@ const Pop = () => {
   const { popId: id } = useParams()
 
   const store = useContext(storeContext)
+  const queryClient = useQueryClient()
   const client = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState({})
@@ -131,12 +133,12 @@ const Pop = () => {
       }
       setFieldErrors({})
       if (['name', 'nr'].includes(field)) {
-        store.queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: [`treePop`],
         })
       }
     },
-    [client, row, store.queryClient, store.user.name],
+    [client, queryClient, row, store.user.name],
   )
 
   if (loading) return <Spinner />
