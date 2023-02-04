@@ -23,6 +23,7 @@ const deleteModule = async ({ client, store, search }) => {
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find((t) => t.table === tablePassed)
+  const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
     return enqueNotification({
       message: `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`,
@@ -143,6 +144,9 @@ const deleteModule = async ({ client, store, search }) => {
   }
   store.queryClient.invalidateQueries({
     queryKey: [`tree${upperFirst(table)}`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`tree${upperFirst(parentTable)}Folders`],
   })
 
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()

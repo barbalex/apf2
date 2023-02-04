@@ -59,8 +59,6 @@ const ApFolders = ({ ap, projekt }) => {
     apartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
   }
 
-  console.log('ApFolders', { ap, projekt })
-
   const { data, isLoading } = useQuery({
     queryKey: [
       'treeApFolders',

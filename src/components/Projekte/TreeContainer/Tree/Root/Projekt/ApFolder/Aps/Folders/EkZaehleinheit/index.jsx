@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../Row'
 import storeContext from '../../../../../../../../../../storeContext'
+import EkZaehleinheits from './EkZaehleinheits'
 
 const EkZaehleinheitFolder = ({ projekt, ap, count, isLoading }) => {
   const store = useContext(storeContext)
@@ -41,7 +42,7 @@ const EkZaehleinheitFolder = ({ projekt, ap, count, isLoading }) => {
   return (
     <>
       <Row key={node.id} node={node} />
-      {isOpen && <div>pops</div>}
+      {isOpen && <EkZaehleinheits projekt={projekt} ap={ap} />}
     </>
   )
 }

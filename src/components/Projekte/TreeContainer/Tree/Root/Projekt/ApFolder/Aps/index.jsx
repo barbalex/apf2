@@ -14,7 +14,7 @@ const Aps = ({ projekt }) => {
   const { openNodes, apGqlFilterForTree } = store.tree
 
   const { data } = useQuery({
-    queryKey: ['treeAps', projekt.id, apGqlFilterForTree],
+    queryKey: ['treeAp', projekt.id, apGqlFilterForTree],
     queryFn: () =>
       client.query({
         query: gql`

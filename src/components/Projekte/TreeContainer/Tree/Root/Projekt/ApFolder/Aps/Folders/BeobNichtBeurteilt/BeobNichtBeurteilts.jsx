@@ -15,7 +15,7 @@ const BeobNichtBeurteilts = ({ projekt, ap }) => {
   const beobNichtBeurteiltsFilter = beobGqlFilterForTree('nichtBeurteilt')
 
   const { data } = useQuery({
-    queryKey: ['treeBeobNichtBeurteilts', ap.id, beobNichtBeurteiltsFilter],
+    queryKey: ['treeBeobNichtBeurteilt', ap.id, beobNichtBeurteiltsFilter],
     queryFn: () =>
       client.query({
         query: gql`

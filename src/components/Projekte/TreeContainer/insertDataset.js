@@ -35,6 +35,7 @@ const insertDataset = async ({
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata = tables.find((t) => t.table === table)
+  const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
     return enqueNotification({
       message: `no table meta data found for table "${table}"`,
@@ -47,6 +48,14 @@ const insertDataset = async ({
   if (tableMetadata.dbTable) {
     table = tableMetadata.dbTable
   }
+  console.log('insertDataset:', {
+    table,
+    parentId,
+    id,
+    menuType,
+    url,
+    tableMetadata,
+  })
   const parentIdField = camelCase(tableMetadata.parentIdField)
   const idField = tableMetadata.idField
   if (!idField) {
@@ -224,6 +233,9 @@ const insertDataset = async ({
   }
   store.queryClient.invalidateQueries({
     queryKey: [`tree${upperFirst(table)}`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`tree${upperFirst(parentTable)}Folders`],
   })
 }
 

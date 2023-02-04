@@ -15,7 +15,7 @@ const BeobNichtZuzuordnens = ({ projekt, ap }) => {
   const beobNichtZuzuordnensFilter = beobGqlFilterForTree('nichtZuzuordnen')
 
   const { data } = useQuery({
-    queryKey: ['treeBeobNichtZuzuordnens', ap.id, beobNichtZuzuordnensFilter],
+    queryKey: ['treeBeobNichtZuzuordnen', ap.id, beobNichtZuzuordnensFilter],
     queryFn: () =>
       client.query({
         query: gql`

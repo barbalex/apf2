@@ -135,7 +135,7 @@ const Ekzaehleinheit = () => {
         return setFieldErrors({ [field]: error.message })
       }
       setFieldErrors({})
-      if (field === 'zaehleinheitId') {
+      if (['zaehleinheitId', 'sort'].includes(field)) {
         queryClient.invalidateQueries({
           queryKey: [`treeEkzaehleinheit`],
         })

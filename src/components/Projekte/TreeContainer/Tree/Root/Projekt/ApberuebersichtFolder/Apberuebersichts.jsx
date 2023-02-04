@@ -7,7 +7,7 @@ import Row from '../../../Row'
 const Apberuebersichts = ({ apberuebersichtsFilter }) => {
   const client = useApolloClient()
   const { data } = useQuery({
-    queryKey: ['treeApberuebersichts', apberuebersichtsFilter],
+    queryKey: ['treeApberuebersicht', apberuebersichtsFilter],
     queryFn: async () =>
       client.query({
         query: gql`
