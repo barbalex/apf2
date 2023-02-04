@@ -14,8 +14,7 @@ const TreeRoot = ({ role }) => {
   const client = useApolloClient()
 
   const store = useContext(storeContext)
-  const { projectIsOpen, nodeLabelFilter } = store.tree
-  const apGqlFilter = store.tree.apGqlFilter
+  const { projectIsOpen, nodeLabelFilter, apGqlFilterForTree } = store.tree
 
   const usersFilter = { id: { isNull: false } }
   if (nodeLabelFilter.user) {
@@ -31,18 +30,23 @@ const TreeRoot = ({ role }) => {
       includesInsensitive: nodeLabelFilter.apberuebersicht,
     }
   }
-  const apsFilter = apGqlFilter.filtered
+  const apsFilter = apGqlFilterForTree
 
   const { data, isLoading } = useQuery({
     queryKey: [
       'treeRoot',
       projectIsOpen,
-      usersFilter,
+      nodeLabelFilter.user,
       apsFilter,
-      apberuebersichtsFilter,
+      nodeLabelFilter.apberuebersicht,
     ],
     queryFn: async () => {
-      console.log('TreeRoot querying')
+      console.log('TreeRoot querying', {
+        projectIsOpen,
+        nodeLabelFilterUser: nodeLabelFilter.user,
+        apsFilter,
+        nodeLabelFilterApberuebersicht: nodeLabelFilter.apberuebersicht,
+      })
       return client.query({
         query: gql`
           query TreeRootQuery(

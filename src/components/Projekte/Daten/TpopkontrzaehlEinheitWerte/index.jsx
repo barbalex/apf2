@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
@@ -44,6 +45,8 @@ const TpopkontrzaehlEinheitWerte = ({ table }) => {
   const { zaehleinheitId: id } = useParams()
 
   const client = useApolloClient()
+  const queryClient = useQueryClient()
+
   const store = useContext(storeContext)
   const { refetch: refetchTree } = store
 
@@ -122,19 +125,11 @@ const TpopkontrzaehlEinheitWerte = ({ table }) => {
       // for unknown reason refetching is necessary here
       refetchTree[refetchTableName] && refetchTree[refetchTableName]()
       setFieldErrors({})
-      store.queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: [`treeTpopkontrzaehlEinheitWerte`],
       })
     },
-    [
-      client,
-      refetch,
-      refetchTree,
-      row.id,
-      store.queryClient,
-      store.user.name,
-      table,
-    ],
+    [client, queryClient, refetch, refetchTree, row.id, store.user.name, table],
   )
 
   console.log('TpopkontrzaehlEinheitWerte, loading:', loading)
