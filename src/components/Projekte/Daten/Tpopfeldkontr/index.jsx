@@ -7,6 +7,7 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useResizeDetector } from 'react-resize-detector'
 import { useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -128,6 +129,7 @@ const Tpopfeldkontr = () => {
   const { tpopkontrId: id } = useParams()
 
   const client = useApolloClient()
+  const queryClient = useQueryClient()
   const store = useContext(storeContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
@@ -197,12 +199,12 @@ const Tpopfeldkontr = () => {
       }
       setFieldErrors({})
       if (['jahr', 'datum', 'typ'].includes(field)) {
-        store.queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: [`treeTpopfeldkontr`],
         })
       }
     },
-    [client, row.id, store.queryClient, store.user.name],
+    [client, queryClient, row.id, store.user.name],
   )
 
   const aeLrWerte = (data?.allAeLrDelarzes?.nodes ?? [])
