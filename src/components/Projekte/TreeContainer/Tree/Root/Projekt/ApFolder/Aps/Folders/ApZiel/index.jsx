@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../Row'
 import storeContext from '../../../../../../../../../../storeContext'
+import ZielJahre from './ZielJahre'
 
 const ApZielFolder = ({ projekt, ap }) => {
   const client = useApolloClient()
@@ -57,7 +58,7 @@ const ApZielFolder = ({ projekt, ap }) => {
   const zieljahre = ziels
     // reduce to distinct years
     .reduce((a, el) => union(a, [el.jahr]), [])
-    .sort()
+    .sort((a, b) => a - b)
   const zieljahreLength = zieljahre.length
   const message = isLoading
     ? '...'
@@ -90,7 +91,14 @@ const ApZielFolder = ({ projekt, ap }) => {
   return (
     <>
       <Row key={node.id} node={node} />
-      {isOpen && <div>ziels</div>}
+      {isOpen && (
+        <ZielJahre
+          projekt={projekt}
+          ap={ap}
+          ziels={ziels}
+          zieljahre={zieljahre}
+        />
+      )}
     </>
   )
 }
