@@ -78,13 +78,13 @@ COMMENT ON FUNCTION apflora.ap_label (apflora.ap) IS e'@sortable';
 
 DROP FUNCTION IF EXISTS apflora.apart_label (apart apflora.apart);
 
-CREATE FUNCTION apflora.apart_label (apart apflora.apart)
+CREATE OR REPLACE FUNCTION apflora.apart_label (apart apflora.apart)
   RETURNS text
   AS $$
   SELECT
     coalesce((
       SELECT
-        artname
+        tax_art_name
       FROM apflora.ae_taxonomies
       WHERE
         apflora.ae_taxonomies.id = apart.art_id), '(kein Name)')
