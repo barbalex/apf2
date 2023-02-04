@@ -181,7 +181,7 @@ const ApFolders = ({ ap, projekt }) => {
       />
       <IdealbiotopFolder projekt={projekt} ap={ap} />
       <ApArtFolder
-        key={`${ap.id}ApBerFolder`}
+        key={`${ap.id}ApArtFolder`}
         projekt={projekt}
         ap={ap}
         count={data?.data?.apById?.apartsByApId?.totalCount ?? 0}

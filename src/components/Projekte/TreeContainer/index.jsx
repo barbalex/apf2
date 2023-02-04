@@ -14,6 +14,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import { useParams, useLocation } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -271,6 +272,7 @@ const TreeContainer = () => {
   const { search } = useLocation()
 
   const client = useApolloClient()
+  const queryClient = useQueryClient()
 
   const store = useContext(storeContext)
   const {
@@ -412,7 +414,7 @@ const TreeContainer = () => {
             afterDeletionHook: () => {
               const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
               setOpenNodes(newOpenNodes)
-              store.queryClient.invalidateQueries({
+              queryClient.invalidateQueries({
                 queryKey: [`tree${upperFirst(table)}`],
               })
             },
@@ -559,13 +561,14 @@ const TreeContainer = () => {
       enqueNotification,
       client,
       store,
+      search,
       apId,
       projId,
       popId,
-      search,
       setToDelete,
       openNodes,
       setOpenNodes,
+      queryClient,
       showMapIfNotYetVisible,
       projekteTabs,
       activeApfloraLayers,
