@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 
 const ekfrequenzNodes = async ({ treeQueryVariables, projId, apId, store }) => {
+  
   const { data } = await store.client.query({
     query: gql`
       query TreeEkfrequenzQuery(
