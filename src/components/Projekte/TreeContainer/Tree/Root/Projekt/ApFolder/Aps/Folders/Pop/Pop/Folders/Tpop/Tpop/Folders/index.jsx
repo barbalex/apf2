@@ -8,6 +8,7 @@ import storeContext from '../../../../../../../../../../../../../../../storeCont
 import TPopMassn from './TPopMassn'
 import TPopMassnBer from './TPopMassnBer'
 import TpopFeldkontr from './TpopFeldkontr'
+import TpopFreiwkontr from './TpopFreiwkontr'
 
 const TpopFolders = ({ projekt, ap, pop, tpop }) => {
   const client = useApolloClient()
@@ -136,6 +137,14 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         tpop={tpop}
         isLoading={isLoading}
         count={tpopfeldkontrCount}
+      />
+      <TpopFreiwkontr
+        projekt={projekt}
+        ap={ap}
+        pop={pop}
+        tpop={tpop}
+        isLoading={isLoading}
+        count={tpopfreiwkontrCount}
       />
     </>
   )
