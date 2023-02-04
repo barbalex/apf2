@@ -100,7 +100,7 @@ const Ziel = () => {
       }
       setFieldErrors({})
       queryClient.invalidateQueries({
-        queryKey: [`treeZiel`],
+        queryKey: [`treeZieljahrFolders`],
       })
       // if jahr of ziel is updated, activeNodeArray und openNodes need to change
       if (field === 'jahr') {

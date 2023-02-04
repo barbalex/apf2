@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../Row'
 import storeContext from '../../../../../../../../../../../storeContext'
+import Ziel from './Ziel'
 
 const ApZieljahr = ({ projekt, ap, zieljahre, ziels }) => {
   const store = useContext(storeContext)
@@ -24,10 +25,10 @@ const ApZieljahr = ({ projekt, ap, zieljahre, ziels }) => {
     const node = {
       nodeType: 'folder',
       menuType: 'zieljahrFolder',
-      id: `${ap.id}Ziele${jahr || 'keinJahr'}`,
+      id: `${ap.id}Ziele${jahr ?? 'keinJahr'}`,
       jahr,
       parentId: ap.id,
-      urlLabel: `${jahr === null || jahr === undefined ? 'kein Jahr' : jahr}`,
+      urlLabel: `${jahr ?? 'kein Jahr'}`,
       label: `${labelJahr} (${labelJahreLength})`,
       url: ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Ziele', jahr],
       hasChildren: true,
@@ -36,7 +37,9 @@ const ApZieljahr = ({ projekt, ap, zieljahre, ziels }) => {
     return (
       <>
         <Row key={`${ap.id}/${jahr}`} node={node} />
-        {isOpen && <div>Children</div>}
+        {isOpen && (
+          <Ziel projekt={projekt} ap={ap} jahr={jahr} ziels={zieleOfJahr} />
+        )}
       </>
     )
   })

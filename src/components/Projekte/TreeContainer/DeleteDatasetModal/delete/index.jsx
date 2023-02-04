@@ -146,7 +146,9 @@ const deleteModule = async ({ client, store, search }) => {
     queryKey: [`tree${upperFirst(table)}`],
   })
   store.queryClient.invalidateQueries({
-    queryKey: [`tree${upperFirst(parentTable)}Folders`],
+    queryKey: [
+      `tree${upperFirst(table === 'ziel' ? 'zieljahr' : parentTable)}Folders`,
+    ],
   })
 
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()

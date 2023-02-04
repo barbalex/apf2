@@ -29,6 +29,7 @@ const insertDataset = async ({
   client,
   store,
   search,
+  jahr: jahrPassed,
 }) => {
   const { enqueNotification } = store
   const { openNodes, setOpenNodes } = store.tree
@@ -48,14 +49,6 @@ const insertDataset = async ({
   if (tableMetadata.dbTable) {
     table = tableMetadata.dbTable
   }
-  console.log('insertDataset:', {
-    table,
-    parentId,
-    id,
-    menuType,
-    url,
-    tableMetadata,
-  })
   const parentIdField = camelCase(tableMetadata.parentIdField)
   const idField = tableMetadata.idField
   if (!idField) {
@@ -85,12 +78,20 @@ const insertDataset = async ({
   }`
   let variables = { parentId }
 
-  let jahr
+  let jahr = +jahrPassed
   if (menuType === 'zielFolder') {
     jahr = 1
   }
+  console.log('insertDataset:', {
+    table,
+    parentId,
+    id,
+    menuType,
+    url,
+    tableMetadata,
+    jahr,
+  })
   if (menuType === 'zieljahrFolder') {
-    jahr = +id
     mutation = gql`
       mutation create${upperFirst(camelCase(table))}(
         $parentId: UUID!
@@ -110,7 +111,7 @@ const insertDataset = async ({
         }
       }
     }`
-    variables = { parentId, jahr }
+    variables = { parentId, jahr: +jahrPassed }
   }
   if (menuType === 'tpopfreiwkontrFolder') {
     mutation = gql`
@@ -227,6 +228,7 @@ const insertDataset = async ({
     newOpenNodes = [...newOpenNodes, newOpenFolder, newOpenNode]
   }
   setOpenNodes(newOpenNodes)
+  console.log('insertDataset', { table, parentTable })
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {
     store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
@@ -235,7 +237,9 @@ const insertDataset = async ({
     queryKey: [`tree${upperFirst(table)}`],
   })
   store.queryClient.invalidateQueries({
-    queryKey: [`tree${upperFirst(parentTable)}Folders`],
+    queryKey: [
+      `tree${upperFirst(table === 'ziel' ? 'zieljahr' : parentTable)}Folders`,
+    ],
   })
 }
 

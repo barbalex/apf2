@@ -296,6 +296,7 @@ const Row = ({ node }) => {
         data-nodetype={node.nodeType}
         data-label={node.label}
         data-menutype={node.menuType}
+        data-jahr={node.jahr}
       >
         {useSymbolIcon && (
           <SymbolDiv onClick={onClickNodeSymbol}>

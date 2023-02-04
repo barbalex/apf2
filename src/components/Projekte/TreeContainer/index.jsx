@@ -366,6 +366,7 @@ const TreeContainer = () => {
       const label = firstElementChild.getAttribute('data-label')
       const nodeType = firstElementChild.getAttribute('data-nodetype')
       const menuType = firstElementChild.getAttribute('data-menutype')
+      const jahr = firstElementChild.getAttribute('data-jahr')
       const actions = {
         insert() {
           if (nodeType === 'table') {
@@ -384,6 +385,7 @@ const TreeContainer = () => {
             client,
             store,
             search,
+            jahr,
           })
         },
         openLowerNodes() {

@@ -22,7 +22,7 @@ const ApZielFolder = ({ projekt, ap }) => {
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ['treeApZieljahrFolder', ap.id, zielsFilter],
+    queryKey: ['treeZieljahrFolders', ap.id, zielsFilter],
     queryFn: async () => {
       const { data, loading: isLoading } = await client.query({
         query: gql`
