@@ -4,6 +4,7 @@ import sum from 'lodash/sum'
 
 import Row from '../../../../../../Row'
 import storeContext from '../../../../../../../../../../storeContext'
+import BeobNichtBeurteilts from './BeobNichtBeurteilts'
 
 const BeobNichtBeurteiltFolder = ({ projekt, ap, aparts, isLoading }) => {
   const store = useContext(storeContext)
@@ -52,7 +53,7 @@ const BeobNichtBeurteiltFolder = ({ projekt, ap, aparts, isLoading }) => {
   return (
     <>
       <Row key={node.id} node={node} />
-      {isOpen && <div>pops</div>}
+      {isOpen && <BeobNichtBeurteilts projekt={projekt} ap={ap} />}
     </>
   )
 }

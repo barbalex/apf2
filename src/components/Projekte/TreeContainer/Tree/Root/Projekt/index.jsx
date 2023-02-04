@@ -2,7 +2,7 @@ import Row from '../../Row'
 import ApberuebersichtFolder from './ApberuebersichtFolder'
 import ApFolder from './ApFolder'
 
-const ProjektNode = ({ projekt, isProjectOpen, apberuebersichtsFilter }) => {
+const ProjektNode = ({ projekt, projectIsOpen, apberuebersichtsFilter }) => {
   const node = {
     nodeType: 'table',
     menuType: 'projekt',
@@ -16,7 +16,7 @@ const ProjektNode = ({ projekt, isProjectOpen, apberuebersichtsFilter }) => {
   return (
     <>
       <Row key={`${node.id}Project`} node={node} />
-      {isProjectOpen && (
+      {projectIsOpen && (
         <>
           <ApFolder
             key={`${projekt.id}ApFolderContainer`}

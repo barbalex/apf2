@@ -1,12 +1,14 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@tanstack/react-query'
-import { gql } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
 
 import Row from '../../Row'
 import storeContext from '../../../../../../storeContext'
 
 const WlFolderNode = () => {
+  const client = useApolloClient()
+
   const store = useContext(storeContext)
   const { nodeLabelFilter } = store.tree
   const isOpen = store.tree.openNodes.some(
@@ -41,7 +43,7 @@ const WlFolderNode = () => {
   const { data, isLoading } = useQuery({
     queryKey: [],
     queryFn: () =>
-      store.client.query({
+      client.query({
         query: gql`
           query TreeWlFolderQuery(
             $adressesFilter: AdresseFilter!

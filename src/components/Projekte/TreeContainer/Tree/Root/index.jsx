@@ -1,6 +1,5 @@
 import { useContext } from 'react'
-import { getSnapshot } from 'mobx-state-tree'
-import { gql } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
@@ -11,14 +10,12 @@ import Werte from './Werte'
 import CurrentIssues from './CurrentIssues'
 import storeContext from '../../../../../storeContext'
 
-const NodeComponents = ({ role }) => {
-  const store = useContext(storeContext)
-  const nodeLabelFilter = getSnapshot(store.tree.nodeLabelFilter)
-  const openNodes = getSnapshot(store.tree.openNodes)
-  const apGqlFilter = store.tree.apGqlFilter
+const TreeRoot = ({ role }) => {
+  const client = useApolloClient()
 
-  const isProjectOpen =
-    openNodes.filter((n) => n[0] === 'Projekte' && !!n[1]).length > 0
+  const store = useContext(storeContext)
+  const { projectIsOpen, nodeLabelFilter } = store.tree
+  const apGqlFilter = store.tree.apGqlFilter
 
   const usersFilter = { id: { isNull: false } }
   if (nodeLabelFilter.user) {
@@ -39,29 +36,30 @@ const NodeComponents = ({ role }) => {
   const { data, isLoading } = useQuery({
     queryKey: [
       'treeRoot',
-      isProjectOpen,
+      projectIsOpen,
       usersFilter,
       apsFilter,
       apberuebersichtsFilter,
     ],
-    queryFn: async () =>
-      store.client.query({
+    queryFn: async () => {
+      console.log('TreeRoot querying')
+      return client.query({
         query: gql`
-          query TreeRootFolderQuery(
+          query TreeRootQuery(
             $usersFilter: UserFilter!
             $apsFilter: ApFilter!
             $apberuebersichtsFilter: ApberuebersichtFilter!
-            $isProjectOpen: Boolean!
+            $projectIsOpen: Boolean!
           ) {
             allProjekts {
               nodes {
                 id
                 label
                 apberuebersichtsByProjId(filter: $apberuebersichtsFilter)
-                  @include(if: $isProjectOpen) {
+                  @include(if: $projectIsOpen) {
                   totalCount
                 }
-                apsByProjId(filter: $apsFilter) @include(if: $isProjectOpen) {
+                apsByProjId(filter: $apsFilter) @include(if: $projectIsOpen) {
                   totalCount
                 }
               }
@@ -81,13 +79,21 @@ const NodeComponents = ({ role }) => {
           usersFilter,
           apsFilter,
           apberuebersichtsFilter,
-          isProjectOpen,
+          projectIsOpen,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+    },
   })
 
-  console.log('TreeComponents rendering')
+  console.log('TreeComponents rendering', {
+    data,
+    usersFilter,
+    apsFilter,
+    apberuebersichtsFilter,
+    projectIsOpen,
+    nodeLabelFilter,
+  })
 
   if (!data) return null
 
@@ -96,7 +102,7 @@ const NodeComponents = ({ role }) => {
       <Projekt
         key={`e57f56f4-4376-11e8-ab21-4314b6749d13`}
         projekt={data?.data?.allProjekts?.nodes?.[0]}
-        isProjectOpen={isProjectOpen}
+        projectIsOpen={projectIsOpen}
         apberuebersichtsFilter={apberuebersichtsFilter}
       />
       <Users
@@ -120,4 +126,4 @@ const NodeComponents = ({ role }) => {
   )
 }
 
-export default observer(NodeComponents)
+export default observer(TreeRoot)

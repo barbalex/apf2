@@ -125,6 +125,11 @@ export default types
     },
   }))
   .views((self) => ({
+    get projectIsOpen() {
+      return (
+        self.openNodes.filter((n) => n[0] === 'Projekte' && !!n[1]).length > 0
+      )
+    },
     get activeFilterTable() {
       const aNA = getSnapshot(self.activeNodeArray)
       if (aNA.length > 10) {

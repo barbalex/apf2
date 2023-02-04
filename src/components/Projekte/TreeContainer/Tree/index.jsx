@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import jwtDecode from 'jwt-decode'
 
-import Components from './Components'
+import Root from './Root'
 
 import storeContext from '../../../../storeContext'
 
@@ -42,7 +42,7 @@ const TreeComponent = () => {
 
   return (
     <Container>
-      <Components role={role} />
+      <Root role={role} />
     </Container>
   )
 }

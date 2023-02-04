@@ -11,7 +11,7 @@ const beobNichtBeurteiltNodes = async ({
     query: gql`
       query TreeBeobNichtBeurteiltQuery(
         $apId: UUID!
-        $beobNichtBeurteiltsFilter: BeobFilter
+        $beobNichtBeurteiltsFilter: BeobFilter 
       ) {
         apById(id: $apId) {
           id
