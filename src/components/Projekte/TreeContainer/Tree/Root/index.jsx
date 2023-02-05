@@ -44,16 +44,11 @@ const TreeRoot = () => {
       nodeLabelFilter.apberuebersicht,
     ],
     queryFn: () => {
-      // WEIRD: this query is re-run under certain circumstances
+      // This query is re-run under certain circumstances
       // when focus was out of app and comes back in
       // EVENT THOUGH component is not re-rendered
-      // console.log('TreeRoot querying', {
-      //   projectIsOpen,
-      //   nodeLabelFilterUser: nodeLabelFilter.user,
-      //   apsFilter,
-      //   nodeLabelFilterApberuebersicht: nodeLabelFilter.apberuebersicht,
-      // })
-      // See: https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
+      // Seems that was a feature of tanstack-query:
+      // https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
       return client.query({
         query: gql`
           query TreeRootQuery(
