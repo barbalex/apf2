@@ -72,7 +72,7 @@ const TpopFeldkontrZaehlFolder = ({ projekt, ap, pop, tpop, tpopkontr }) => {
     pop.id,
     'Teil-Populationen',
     tpop.id,
-    'Feld-Kontrollen',
+    'Freiwilligen-Kontrollen',
     tpopkontr.id,
     'Zaehlungen',
   ]
@@ -86,15 +86,15 @@ const TpopFeldkontrZaehlFolder = ({ projekt, ap, pop, tpop, tpopkontr }) => {
         n[5] === pop.id &&
         n[6] === 'Teil-Populationen' &&
         n[7] === tpop.id &&
-        n[8] === 'Feld-Kontrollen' &&
+        n[8] === 'Freiwilligen-Kontrollen' &&
         n[9] === tpopkontr.id &&
         n[10] === 'Zaehlungen',
     ).length > 0
 
   const node = {
     nodeType: 'folder',
-    menuType: 'tpopfeldkontrzaehlFolder',
-    id: `${tpopkontr.id}TpopfeldkontrzaehlFolder`,
+    menuType: 'tpopfreiwkontrzaehlFolder',
+    id: `${tpopkontr.id}TpopfreiwkontrzaehlFolder`,
     tableId: tpopkontr.id,
     urlLabel: 'Zaehlungen',
     label: `Zählungen (${message})`,
