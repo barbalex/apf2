@@ -248,14 +248,16 @@ const insertDataset = async ({
       ? 'tpopfeldkontrzaehl'
       : parentTable === 'tpopfreiwkontr'
       ? 'tpopfreiwkontrzaehl'
+      : ['adresse'].includes(table)
+      ? 'werte'
       : parentTable
-  // console.log('insertDataset', {
-  //   table,
-  //   parentTable,
-  //   menuType,
-  //   queryKeyFoldersTable,
-  //   queryKeyTable,
-  // })
+  console.log('insertDataset', {
+    table,
+    parentTable,
+    menuType,
+    queryKeyFoldersTable,
+    queryKeyTable,
+  })
   store.queryClient.invalidateQueries({
     queryKey: [`tree${upperFirst(queryKeyFoldersTable)}Folders`],
   })

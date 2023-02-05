@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../storeContext'
 import Row from '../../../Row'
+import AdresseNodes from './Adresse'
 
 const AdressesFolder = ({ count, isLoading }) => {
   const store = useContext(storeContext)
@@ -30,7 +31,12 @@ const AdressesFolder = ({ count, isLoading }) => {
     hasChildren: count > 0,
   }
 
-  return <Row key="wlAdresseFolder" node={node} />
+  return (
+    <>
+      <Row key="wlAdresseFolder" node={node} />
+      {isOpen && <AdresseNodes />}
+    </>
+  )
 }
 
 export default observer(AdressesFolder)

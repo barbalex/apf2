@@ -100,14 +100,6 @@ const WlFolderNode = () => {
   const zaehlEinheitWertesCount =
     data?.data?.allTpopkontrzaehlEinheitWertes?.totalCount ?? 0
 
-  // console.log('WlFolderNode', {
-  //   isOpen,
-  //   adressenCount,
-  //   apberrelevantGrundWertesCount,
-  //   ekAbrechnungstypWertesCount,
-  //   tpopkontrzaehlEinheitWertesCount,
-  // })
-
   const node = {
     nodeType: 'folder',
     menuType: 'wlFolder',

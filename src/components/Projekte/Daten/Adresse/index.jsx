@@ -94,7 +94,7 @@ const Adresse = () => {
       setFieldErrors({})
       if (field === 'name') {
         queryClient.invalidateQueries({
-          queryKey: [`adresse`],
+          queryKey: [`treeAdresse`],
         })
       }
     },

@@ -160,6 +160,8 @@ const deleteModule = async ({ client, store, search }) => {
       ? 'tpopfeldkontrzaehl'
       : parentTable === 'tpopfreiwkontr'
       ? 'tpopfreiwkontrzaehl'
+      : ['adresse'].includes(table)
+      ? 'werte'
       : parentTable
   store.queryClient.invalidateQueries({
     queryKey: [`tree${upperFirst(queryKeyFoldersTable)}Folders`],
