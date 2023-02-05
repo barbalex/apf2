@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../../../../../../../Row'
 import storeContext from '../../../../../../../../../../../../../../../../../storeContext'
+import ZaehlFolder from './Zaehl'
 
 const TpopFeldkontr = ({ projekt, ap, pop, tpop }) => {
   const client = useApolloClient()
@@ -86,7 +87,16 @@ const TpopFeldkontr = ({ projekt, ap, pop, tpop }) => {
     return (
       <>
         <Row key={el.id} node={node} />
-        {isOpen && <div>children</div>}
+        {isOpen && (
+          <ZaehlFolder
+            key={`${tpop.id}TPopFeldkontrZaehlFolderZaehls`}
+            projekt={projekt}
+            ap={ap}
+            pop={pop}
+            tpop={tpop}
+            tpopkontr={el}
+          />
+        )}
       </>
     )
   })

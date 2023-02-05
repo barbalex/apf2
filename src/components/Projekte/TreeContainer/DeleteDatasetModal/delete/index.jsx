@@ -33,6 +33,7 @@ const deleteModule = async ({ client, store, search }) => {
     })
   }
   const table = tableMetadata.dbTable ? tableMetadata.dbTable : tablePassed
+  console.log('deleteModule', { tableMetadata, table, parentTable })
 
   /**
    * fetch data for dataset
@@ -142,13 +143,26 @@ const deleteModule = async ({ client, store, search }) => {
   if (['user', 'message', 'currentissue'].includes(table)) {
     store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
   }
+
+  const queryKeyTable =
+    parentTable === 'tpopfeldkontr'
+      ? 'tpopfeldkontr'
+      : parentTable === 'tpopfreiwkontr'
+      ? 'tpopfreiwkontr'
+      : table
   store.queryClient.invalidateQueries({
-    queryKey: [`tree${upperFirst(table)}`],
+    queryKey: [`tree${upperFirst(queryKeyTable)}`],
   })
+  const queryKeyFoldersTable =
+    table === 'ziel'
+      ? 'zieljahr'
+      : parentTable === 'tpopfeldkontr'
+      ? 'tpopfeldkontrzaehl'
+      : parentTable === 'tpopfreiwkontr'
+      ? 'tpopfreiwkontrzaehl'
+      : parentTable
   store.queryClient.invalidateQueries({
-    queryKey: [
-      `tree${upperFirst(table === 'ziel' ? 'zieljahr' : parentTable)}Folders`,
-    ],
+    queryKey: [`tree${upperFirst(queryKeyFoldersTable)}Folders`],
   })
 
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()
