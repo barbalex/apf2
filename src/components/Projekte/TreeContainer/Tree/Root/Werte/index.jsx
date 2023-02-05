@@ -5,6 +5,7 @@ import { gql, useApolloClient } from '@apollo/client'
 
 import Row from '../../Row'
 import storeContext from '../../../../../../storeContext'
+import AdresseFolder from './Adresse'
 
 const WlFolderNode = () => {
   const client = useApolloClient()
@@ -41,7 +42,13 @@ const WlFolderNode = () => {
       : { id: { isNull: false } }
 
   const { data, isLoading } = useQuery({
-    queryKey: [],
+    queryKey: [
+      'treeWerteFolders',
+      adressesFilter,
+      apberrelevantGrundWertesFilter,
+      ekAbrechnungstypWertesFilter,
+      tpopkontrzaehlEinheitWertesFilter,
+    ],
     queryFn: () =>
       client.query({
         query: gql`
@@ -116,7 +123,20 @@ const WlFolderNode = () => {
     hasChildren: true,
   }
 
-  return <Row node={node} />
+  return (
+    <>
+      <Row key="wlFolder" node={node} />
+      {isOpen && (
+        <>
+          <AdresseFolder
+            key="wlAdresseFolderComponent"
+            isLoading={isLoading}
+            count={adressenCount}
+          />
+        </>
+      )}
+    </>
+  )
 }
 
 export default observer(WlFolderNode)

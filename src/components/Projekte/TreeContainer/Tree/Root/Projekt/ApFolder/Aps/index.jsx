@@ -1,7 +1,6 @@
 import { useContext } from 'react'
-import { gql } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
-import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../Row'
