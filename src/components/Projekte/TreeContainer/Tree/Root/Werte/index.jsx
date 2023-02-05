@@ -6,6 +6,9 @@ import { gql, useApolloClient } from '@apollo/client'
 import Row from '../../Row'
 import storeContext from '../../../../../../storeContext'
 import AdresseFolder from './Adresse'
+import ApberrelevantGrundFolder from './ApberrelevantGrund'
+import EkAbrechnungstypFolder from './EkAbrechnungstyp'
+import ZaehlEinheitFolder from './ZaehlEinheit'
 
 const WlFolderNode = () => {
   const client = useApolloClient()
@@ -94,7 +97,7 @@ const WlFolderNode = () => {
     data?.data?.allTpopApberrelevantGrundWertes?.totalCount ?? 0
   const ekAbrechnungstypWertesCount =
     data?.data?.allEkAbrechnungstypWertes?.totalCount ?? 0
-  const tpopkontrzaehlEinheitWertesCount =
+  const zaehlEinheitWertesCount =
     data?.data?.allTpopkontrzaehlEinheitWertes?.totalCount ?? 0
 
   // console.log('WlFolderNode', {
@@ -104,14 +107,6 @@ const WlFolderNode = () => {
   //   ekAbrechnungstypWertesCount,
   //   tpopkontrzaehlEinheitWertesCount,
   // })
-
-  // TODO:
-  // children = [
-  //   adressenFolderNode,
-  //   apberrelevantGrundWerteFolderNode,
-  //   ekAbrechnungstypWerteFolderNode,
-  //   tpopkontrzaehlEinheitWerteFolderNode,
-  // ]
 
   const node = {
     nodeType: 'folder',
@@ -132,6 +127,21 @@ const WlFolderNode = () => {
             key="wlAdresseFolderComponent"
             isLoading={isLoading}
             count={adressenCount}
+          />
+          <ApberrelevantGrundFolder
+            key="wlApberrelevantGrundFolderComponent"
+            isLoading={isLoading}
+            count={apberrelevantGrundWertesCount}
+          />
+          <EkAbrechnungstypFolder
+            key="wlEkAbrechnungstypFolderComponent"
+            isLoading={isLoading}
+            count={ekAbrechnungstypWertesCount}
+          />
+          <ZaehlEinheitFolder
+            key="wlZaehlEinheitFolderComponent"
+            isLoading={isLoading}
+            count={zaehlEinheitWertesCount}
           />
         </>
       )}
