@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
+// import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import Root from './Root'
+import IntoViewScroller from './IntoViewScroller'
 
-import storeContext from '../../../../storeContext'
+// import storeContext from '../../../../storeContext'
 
 const Container = styled.div`
   height: calc(100% - 53px - 8px);
@@ -19,26 +20,14 @@ const Container = styled.div`
 `
 
 const TreeComponent = () => {
-  const store = useContext(storeContext)
-  const { refetcher } = store.tree
-
-  // const lastTouchedNode = lastTouchedNodeProxy?.slice()
-  // // when loading on url, lastTouchedNode may not be set
-  // const urlToFocus = lastTouchedNode.length ? lastTouchedNode : activeNodeArray
-  // const [initialTopMostIndex, setInitialTopMostIndex] = useState(undefined)
-  // useEffect(() => {
-  //   const index = findIndex(treeNodes, (node) => isEqual(node.url, urlToFocus))
-  //   const indexToSet = index === -1 ? 0 : index
-  //   if (initialTopMostIndex === undefined) {
-  //     setInitialTopMostIndex(indexToSet)
-  //   }
-  // }, [treeNodes, urlToFocus, initialTopMostIndex])
-
-  //console.log('Tree, height:', { height, initialTopMostIndex })
+  // TODO: needed?
+  // const store = useContext(storeContext)
+  // const { refetcher } = store.tree
 
   return (
     <Container>
       <Root />
+      <IntoViewScroller />
     </Container>
   )
 }
