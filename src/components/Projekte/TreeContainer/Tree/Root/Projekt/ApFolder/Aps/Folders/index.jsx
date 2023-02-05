@@ -16,6 +16,7 @@ import EkFrequenzFolder from './EkFrequenz'
 import EkZaehleinheitFolder from './EkZaehleinheit'
 import BeobNichtBeurteiltFolder from './BeobNichtBeurteilt'
 import BeobNichtZuzuordnenFolder from './BeobNichtZuzuordnen'
+import Qk from './Qk'
 
 const ApFolders = ({ ap, projekt }) => {
   const client = useApolloClient()
@@ -220,6 +221,7 @@ const ApFolders = ({ ap, projekt }) => {
         aparts={data?.data?.apById?.beobNichtZuzuordnen?.nodes ?? []}
         isLoading={isLoading}
       />
+      <Qk projekt={projekt} ap={ap} />
     </>
   )
 }

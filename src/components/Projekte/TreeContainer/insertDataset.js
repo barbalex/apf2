@@ -78,19 +78,14 @@ const insertDataset = async ({
   }`
   let variables = { parentId }
 
-  let jahr = +jahrPassed
-  if (menuType === 'zielFolder') {
-    jahr = 1
-  }
-  console.log('insertDataset:', {
-    table,
-    parentId,
-    id,
-    menuType,
-    url,
-    tableMetadata,
-    jahr,
-  })
+  // console.log('insertDataset:', {
+  //   table,
+  //   parentId,
+  //   id,
+  //   menuType,
+  //   url,
+  //   tableMetadata,
+  // })
   if (menuType === 'zieljahrFolder') {
     mutation = gql`
       mutation create${upperFirst(camelCase(table))}(
@@ -228,7 +223,7 @@ const insertDataset = async ({
     newOpenNodes = [...newOpenNodes, newOpenFolder, newOpenNode]
   }
   setOpenNodes(newOpenNodes)
-  console.log('insertDataset', { table, parentTable })
+  // console.log('insertDataset', { table, parentTable })
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {
     store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
