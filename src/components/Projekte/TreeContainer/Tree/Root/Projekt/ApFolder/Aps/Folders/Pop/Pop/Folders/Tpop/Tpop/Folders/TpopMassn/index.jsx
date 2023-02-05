@@ -3,9 +3,11 @@ import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../../../../../../Row'
 import storeContext from '../../../../../../../../../../../../../../../../storeContext'
+import TpopMassn from './TpopMassn'
 
 const TpopMassnFolder = ({ projekt, ap, pop, tpop, isLoading, count }) => {
   const store = useContext(storeContext)
+  console.log('FpopMassnFolder', { count })
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpopmassn ?? ''
 
@@ -50,10 +52,20 @@ const TpopMassnFolder = ({ projekt, ap, pop, tpop, isLoading, count }) => {
     hasChildren: count > 0,
   }
 
+  console.log('FpopMassnFolder', { node, isOpen })
+
   return (
     <>
       <Row key={`${node.id}`} node={node} />
-      {isOpen && <div>TPopMassn</div>}
+      {isOpen && (
+        <TpopMassn
+          key={`${tpop.id}TPopMassnFolderMassns`}
+          projekt={projekt}
+          ap={ap}
+          pop={pop}
+          tpop={tpop}
+        />
+      )}
     </>
   )
 }
