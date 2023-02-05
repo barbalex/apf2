@@ -3,7 +3,6 @@ import React, {
   useContext,
   useState,
   useEffect,
-  useMemo,
 } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
@@ -11,11 +10,9 @@ import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
 import styled from '@emotion/styled'
-import isEqual from 'lodash/isEqual'
 import snakeCase from 'lodash/snakeCase'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
-import { useNavigate, useLocation } from 'react-router-dom'
 
 import tables from '../../../modules/tables'
 import storeContext from '../../../storeContext'
