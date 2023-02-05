@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../../../../../../../../../storeContext'
-import TPopMassn from './TPopMassn'
+import TpopMassn from './TpopMassn'
 import TPopMassnBer from './TPopMassnBer'
 import TpopFeldkontr from './TpopFeldkontr'
 import TpopFreiwkontr from './TpopFreiwkontr'
@@ -116,7 +116,7 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
 
   return (
     <>
-      <TPopMassn
+      <TpopMassn
         key={`${tpop.id}TPopMassnF`}
         projekt={projekt}
         ap={ap}
