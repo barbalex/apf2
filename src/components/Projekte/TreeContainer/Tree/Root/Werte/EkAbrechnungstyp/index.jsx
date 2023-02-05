@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../storeContext'
 import Row from '../../../Row'
+import EkAbrechnungstypNodes from './EkAbrechnungstyp'
 
 const EkAbrechnungstypFolder = ({ count, isLoading }) => {
   const store = useContext(storeContext)
@@ -30,7 +31,12 @@ const EkAbrechnungstypFolder = ({ count, isLoading }) => {
     hasChildren: count > 0,
   }
 
-  return <Row key="wlEkAbrechnungstypFolder" node={node} />
+  return (
+    <>
+      <Row key="wlEkAbrechnungstypFolder" node={node} />
+      {isOpen && <EkAbrechnungstypNodes />}
+    </>
+  )
 }
 
 export default observer(EkAbrechnungstypFolder)

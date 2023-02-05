@@ -237,6 +237,10 @@ const insertDataset = async ({
       ? 'tpopfeldkontr'
       : menuType.includes('tpopfreiwkontr')
       ? 'tpopfreiwkontr'
+      : table === 'tpop_apberrelevant_grund_werte'
+      ? 'tpopApberrelevantGrundWerte'
+      : table === 'ek_abrechnungstyp_werte'
+      ? 'ekAbrechnungstypWerte'
       : table
   store.queryClient.invalidateQueries({
     queryKey: [`tree${upperFirst(queryKeyTable)}`],
@@ -248,7 +252,11 @@ const insertDataset = async ({
       ? 'tpopfeldkontrzaehl'
       : parentTable === 'tpopfreiwkontr'
       ? 'tpopfreiwkontrzaehl'
-      : ['adresse'].includes(table)
+      : [
+          'adresse',
+          'tpop_apberrelevant_grund_werte',
+          'ek_abrechnungstyp_werte',
+        ].includes(table)
       ? 'werte'
       : parentTable
   console.log('insertDataset', {
