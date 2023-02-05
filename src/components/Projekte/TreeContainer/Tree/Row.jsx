@@ -297,7 +297,7 @@ const Row = ({ node }) => {
         data-label={node.label}
         data-menutype={node.menuType}
         data-jahr={node.jahr}
-        // need id to scroll into view
+        // need id to scroll elements into view
         id={node.id}
       >
         {useSymbolIcon && (

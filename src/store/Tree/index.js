@@ -10,7 +10,7 @@ import NodeLabelFilter, {
 import Geojson from './Geojson'
 import initialDataFilterValues from './DataFilter/initialValues'
 import DataFilter from './DataFilter/types'
-import { simpleTypes as popType, initial as initialPop } from './DataFilter/pop'
+import { simpleTypes as popType } from './DataFilter/pop'
 import {
   simpleTypes as tpopType,
   initial as initialTpop,

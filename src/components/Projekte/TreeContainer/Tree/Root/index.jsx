@@ -11,7 +11,7 @@ import Werte from './Werte'
 import CurrentIssues from './CurrentIssues'
 import storeContext from '../../../../../storeContext'
 
-const TreeRoot = () => { 
+const TreeRoot = () => {
   const client = useApolloClient()
 
   const store = useContext(storeContext)
@@ -53,6 +53,7 @@ const TreeRoot = () => {
       //   apsFilter,
       //   nodeLabelFilterApberuebersicht: nodeLabelFilter.apberuebersicht,
       // })
+      // See: https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
       return client.query({
         query: gql`
           query TreeRootQuery(
@@ -96,14 +97,16 @@ const TreeRoot = () => {
     },
   })
 
-  console.log('TreeComponents rendering', {
-    data,
-    usersFilter,
-    apsFilter,
-    apberuebersichtsFilter,
-    projectIsOpen,
-    nodeLabelFilter,
-  })
+  // console.log('TreeComponents rendering', {
+  //   data,
+  //   usersFilter,
+  //   apsFilter,
+  //   apberuebersichtsFilter,
+  //   projectIsOpen,
+  //   nodeLabelFilter,
+  // })
+
+  //console.log('Tree, height:', { height, initialTopMostIndex })
 
   if (!data) return null
 
