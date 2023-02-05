@@ -33,7 +33,7 @@ const deleteModule = async ({ client, store, search }) => {
     })
   }
   const table = tableMetadata.dbTable ? tableMetadata.dbTable : tablePassed
-  console.log('deleteModule', { tableMetadata, table, parentTable })
+  // console.log('deleteModule', { tableMetadata, table, parentTable })
 
   /**
    * fetch data for dataset

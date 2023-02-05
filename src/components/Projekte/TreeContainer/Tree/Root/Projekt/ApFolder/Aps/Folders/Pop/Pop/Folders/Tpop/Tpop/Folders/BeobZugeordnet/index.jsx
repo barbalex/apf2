@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../../../../../../Row'
 import storeContext from '../../../../../../../../../../../../../../../../storeContext'
+import BeobZugeordnet from './BeobZugeordnet'
 
 const BeobZugeordnetFolder = ({ projekt, ap, pop, tpop, isLoading, count }) => {
   const store = useContext(storeContext)
@@ -53,7 +54,15 @@ const BeobZugeordnetFolder = ({ projekt, ap, pop, tpop, isLoading, count }) => {
   return (
     <>
       <Row key={`${node.id}`} node={node} />
-      {isOpen && <div>BeobZugeordnet</div>}
+      {isOpen && (
+        <BeobZugeordnet
+          key={`${tpop.id}TPopBeobzugeordnetFolderBeobzugeordnet`}
+          projekt={projekt}
+          ap={ap}
+          pop={pop}
+          tpop={tpop}
+        />
+      )}
     </>
   )
 }
