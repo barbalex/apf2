@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import Row from '../../../../../../../../../../../../../../Row'
 import storeContext from '../../../../../../../../../../../../../../../../../../storeContext'
 
-const TpopFreiwkontrzaehl = ({ projekt, ap, pop, tpop, tpopkontr }) => {
+const TpopFeldkontrzaehl = ({ projekt, ap, pop, tpop, tpopkontr }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { nodeLabelFilter } = store.tree
@@ -22,11 +22,11 @@ const TpopFreiwkontrzaehl = ({ projekt, ap, pop, tpop, tpopkontr }) => {
   }
 
   const { data } = useQuery({
-    queryKey: ['treeTpopfreiwkontrzaehl', tpopkontr.id, tpopkontrzaehlsFilter],
+    queryKey: ['treeTpopfeldkontrzaehl', tpopkontr.id, tpopkontrzaehlsFilter],
     queryFn: () =>
       client.query({
         query: gql`
-          query TreeTpopfreiwkontrzaehlQuery(
+          query TreeTpopfeldkontrzaehlQuery(
             $id: UUID!
             $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
           ) {
@@ -59,10 +59,10 @@ const TpopFreiwkontrzaehl = ({ projekt, ap, pop, tpop, tpopkontr }) => {
   ).map((el) => {
     const node = {
       nodeType: 'table',
-      menuType: 'tpopfreiwkontrzaehl',
+      menuType: 'tpopfeldkontrzaehl',
       id: el.id,
-      parentId: `${el.tpopkontrId}TpopfreiwkontrzaehlFolder`,
-      parentTableId: el.tpopkontrId,
+      parentId: `${tpopkontr.id}TpopfeldkontrzaehlFolder`,
+      parentTableId: tpopkontr.id,
       urlLabel: el.id,
       label: el.label,
       url: [
@@ -74,7 +74,7 @@ const TpopFreiwkontrzaehl = ({ projekt, ap, pop, tpop, tpopkontr }) => {
         pop.id,
         'Teil-Populationen',
         tpop.id,
-        'Freiwilligen-Kontrollen',
+        'Feld-Kontrollen',
         tpopkontr.id,
         'Zaehlungen',
         el.id,
@@ -86,4 +86,4 @@ const TpopFreiwkontrzaehl = ({ projekt, ap, pop, tpop, tpopkontr }) => {
   })
 }
 
-export default observer(TpopFreiwkontrzaehl)
+export default observer(TpopFeldkontrzaehl)
