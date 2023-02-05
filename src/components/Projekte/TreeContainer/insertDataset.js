@@ -233,13 +233,18 @@ const insertDataset = async ({
   if (['user', 'message', 'currentissue'].includes(table)) {
     store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
   }
+  const queryKeyTable = menuType.includes('tpopfeldkontr')
+    ? 'tpopfeldkontr'
+    : menuType.includes('tpopfreiwkontr')
+    ? 'tpopfreiwkontr'
+    : table
   store.queryClient.invalidateQueries({
-    queryKey: [`tree${upperFirst(table)}`],
+    queryKey: [`tree${upperFirst(queryKeyTable)}`],
   })
+
+  const queryKeyFoldersTable = table === 'ziel' ? 'zieljahr' : parentTable
   store.queryClient.invalidateQueries({
-    queryKey: [
-      `tree${upperFirst(table === 'ziel' ? 'zieljahr' : parentTable)}Folders`,
-    ],
+    queryKey: [`tree${upperFirst(queryKeyFoldersTable)}Folders`],
   })
 }
 
