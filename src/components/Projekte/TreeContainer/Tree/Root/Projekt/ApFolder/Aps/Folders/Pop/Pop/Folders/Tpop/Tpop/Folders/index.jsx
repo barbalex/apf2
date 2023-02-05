@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../../../../../../../../../storeContext'
 import TpopMassn from './TpopMassn'
-import TPopMassnBer from './TPopMassnBer'
+import TpopMassnBer from './TpopMassnBer'
 import TpopFeldkontr from './TpopFeldkontr'
 import TpopFreiwkontr from './TpopFreiwkontr'
 import TpopBer from './TpopBer'
@@ -125,7 +125,7 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         isLoading={isLoading}
         count={tpopmassnCount}
       />
-      <TPopMassnBer
+      <TpopMassnBer
         key={`${tpop.id}TPopMassnBerF`}
         projekt={projekt}
         ap={ap}
