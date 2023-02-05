@@ -3,14 +3,7 @@ import { gql } from '@apollo/client'
 
 import updateBeobByIdGql from './updateBeobById'
 
-const saveTpopIdToDb = async ({
-  value,
-  id,
-  type,
-  client,
-  store,
-  search,
-}) => {
+const saveTpopIdToDb = async ({ value, id, type, client, store, search }) => {
   const variables = {
     id,
     tpopId: value,
@@ -226,7 +219,15 @@ const saveTpopIdToDb = async ({
       'BeobAssignLinesQuery',
     ],
   })
-  store.tree.incrementRefetcher()
+  store.queryClient.invalidateQueries({
+    queryKey: [`treeBeobZugeordnet`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`treeBeobnichtbeurteilt`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`treeBeobNichtZuzuordnen`],
+  })
 }
 
 export default saveTpopIdToDb

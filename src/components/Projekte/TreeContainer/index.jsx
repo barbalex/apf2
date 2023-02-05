@@ -5,6 +5,7 @@ import React, { useCallback, useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
+import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -13,6 +14,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import { useParams, useLocation } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -270,6 +272,7 @@ const TreeContainer = () => {
   const { search } = useLocation()
 
   const client = useApolloClient()
+  const queryClient = useQueryClient()
 
   const store = useContext(storeContext)
   const {
@@ -363,6 +366,7 @@ const TreeContainer = () => {
       const label = firstElementChild.getAttribute('data-label')
       const nodeType = firstElementChild.getAttribute('data-nodetype')
       const menuType = firstElementChild.getAttribute('data-menutype')
+      const jahr = firstElementChild.getAttribute('data-jahr')
       const actions = {
         insert() {
           if (nodeType === 'table') {
@@ -381,6 +385,7 @@ const TreeContainer = () => {
             client,
             store,
             search,
+            jahr,
           })
         },
         openLowerNodes() {
@@ -411,7 +416,9 @@ const TreeContainer = () => {
             afterDeletionHook: () => {
               const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
               setOpenNodes(newOpenNodes)
-              store.tree.incrementRefetcher()
+              queryClient.invalidateQueries({
+                queryKey: [`tree${upperFirst(table)}`],
+              })
             },
           })
         },
@@ -556,13 +563,14 @@ const TreeContainer = () => {
       enqueNotification,
       client,
       store,
+      search,
       apId,
       projId,
       popId,
-      search,
       setToDelete,
       openNodes,
       setOpenNodes,
+      queryClient,
       showMapIfNotYetVisible,
       projekteTabs,
       activeApfloraLayers,

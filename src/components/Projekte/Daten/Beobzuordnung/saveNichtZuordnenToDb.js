@@ -20,7 +20,12 @@ const saveNichtZuordnenToDb = async ({
     mutation: updateBeobByIdGql,
     variables,
   })
-  store.tree.incrementRefetcher()
+  store.queryClient.invalidateQueries({
+    queryKey: [`treeBeobNichtBeurteilt`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`treeBeobNichtZuzuordnen`],
+  })
   // need to update activeNodeArray and openNodes
   const { activeNodeArray, openNodes, addOpenNodes } = store.tree
 

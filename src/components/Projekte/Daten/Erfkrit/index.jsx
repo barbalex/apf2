@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -39,6 +40,7 @@ const fieldTypes = {
 const Erfkrit = () => {
   const { erfkritId: id } = useParams()
 
+  const queryClient = useQueryClient()
   const client = useApolloClient()
   const store = useContext(storeContext)
 
@@ -98,9 +100,11 @@ const Erfkrit = () => {
         return setFieldErrors({ [field]: error.message })
       }
       setFieldErrors({})
-      store.tree.incrementRefetcher()
+      queryClient.invalidateQueries({
+        queryKey: [`treeErfkrit`],
+      })
     },
-    [client, row.id, store.tree, store.user.name],
+    [client, queryClient, row.id, store.user.name],
   )
 
   if (loading) return <Spinner />

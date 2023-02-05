@@ -36,15 +36,23 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import Router from './components/Router'
 import IsPrintSetter from './components/IsPrintSetter'
-import LastTouchedNodeSetter from './components/LastTouchedNodeSetter'
 import MouseWheelHandler from './components/MouseWheelHandler'
+import LastTouchedNodeSetter from './components/LastTouchedNodeSetter'
 import LegacyBrowserInformer from './components/LegacyBrowserInformer'
 import StorePersister from './components/StorePersister'
 
 registerLocale('de', de)
 setDefaultLocale('de')
 
-const queryClient = new QueryClient()
+// https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
+// If true (standard): leads to entire tree refetching every time window is focused
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 const App = () => {
   const idb = initializeIdb()

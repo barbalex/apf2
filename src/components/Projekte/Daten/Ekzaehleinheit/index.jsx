@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
@@ -46,6 +47,7 @@ const fieldTypes = {
 const Ekzaehleinheit = () => {
   const { zaehleinheitId: id } = useParams()
 
+  const queryClient = useQueryClient()
   const client = useApolloClient()
   const store = useContext(storeContext)
 
@@ -133,11 +135,13 @@ const Ekzaehleinheit = () => {
         return setFieldErrors({ [field]: error.message })
       }
       setFieldErrors({})
-      if (field === 'zaehleinheitId') {
-        store.tree.incrementRefetcher()
+      if (['zaehleinheitId', 'sort'].includes(field)) {
+        queryClient.invalidateQueries({
+          queryKey: [`treeEkzaehleinheit`],
+        })
       }
     },
-    [client, row.id, store.tree, store.user.name],
+    [client, queryClient, row.id, store.user.name],
   )
 
   // console.log('Ekzaehleinheit rendering, loading:', loading)

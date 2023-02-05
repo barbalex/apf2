@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -40,6 +41,7 @@ const Tpopmassnber = () => {
   const { tpopmassnberId: id } = useParams()
 
   const client = useApolloClient()
+  const queryClient = useQueryClient()
   const store = useContext(storeContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
@@ -103,10 +105,12 @@ const Tpopmassnber = () => {
       }
       setFieldErrors({})
       if (['jahr', 'beurteilung'].includes(field)) {
-        store.tree.incrementRefetcher()
+        queryClient.invalidateQueries({
+          queryKey: [`treeTpopmassnber`],
+        })
       }
     },
-    [client, row.id, store.tree, store.user.name],
+    [client, queryClient, row.id, store.user.name],
   )
 
   if (loading) return <Spinner />

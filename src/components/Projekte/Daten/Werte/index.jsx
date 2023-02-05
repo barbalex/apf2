@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
@@ -31,6 +32,7 @@ const Werte = ({ table }) => {
   const { wertId: id } = useParams()
 
   const client = useApolloClient()
+  const queryClient = useQueryClient()
   const store = useContext(storeContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
@@ -113,10 +115,12 @@ const Werte = ({ table }) => {
       refetch()
       setFieldErrors({})
       if (['text', 'sort'].includes(field)) {
-        store.tree.incrementRefetcher()
+        queryClient.invalidateQueries({
+          queryKey: [`tree${upperFirst(table)}`],
+        })
       }
     },
-    [client, codeGqlType, refetch, row.id, store.tree, store.user.name, table],
+    [client, codeGqlType, queryClient, refetch, row.id, store.user.name, table],
   )
 
   if (loading) return <Spinner />

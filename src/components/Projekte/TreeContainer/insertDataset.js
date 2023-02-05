@@ -29,12 +29,14 @@ const insertDataset = async ({
   client,
   store,
   search,
+  jahr: jahrPassed,
 }) => {
   const { enqueNotification } = store
   const { openNodes, setOpenNodes } = store.tree
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata = tables.find((t) => t.table === table)
+  const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
     return enqueNotification({
       message: `no table meta data found for table "${table}"`,
@@ -76,12 +78,15 @@ const insertDataset = async ({
   }`
   let variables = { parentId }
 
-  let jahr
-  if (menuType === 'zielFolder') {
-    jahr = 1
-  }
+  // console.log('insertDataset:', {
+  //   table,
+  //   parentId,
+  //   id,
+  //   menuType,
+  //   url,
+  //   tableMetadata,
+  // })
   if (menuType === 'zieljahrFolder') {
-    jahr = +id
     mutation = gql`
       mutation create${upperFirst(camelCase(table))}(
         $parentId: UUID!
@@ -101,7 +106,7 @@ const insertDataset = async ({
         }
       }
     }`
-    variables = { parentId, jahr }
+    variables = { parentId, jahr: +jahrPassed }
   }
   if (menuType === 'tpopfreiwkontrFolder') {
     mutation = gql`
@@ -218,8 +223,55 @@ const insertDataset = async ({
     newOpenNodes = [...newOpenNodes, newOpenFolder, newOpenNode]
   }
   setOpenNodes(newOpenNodes)
-  // when using tanstack query to query nodes in tree, this seems not needed
-  // store.tree.incrementRefetcher()
+  // console.log('insertDataset', { table, parentTable })
+  // invalidate tree queries for count and data
+  if (['user', 'message', 'currentissue'].includes(table)) {
+    store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
+  }
+  const queryKeyTable =
+    parentTable === 'tpopfeldkontr'
+      ? 'tpopfeldkontrzaehl'
+      : parentTable === 'tpopfreiwkontr'
+      ? 'tpopfreiwkontrzaehl'
+      : menuType.includes('tpopfeldkontr')
+      ? 'tpopfeldkontr'
+      : menuType.includes('tpopfreiwkontr')
+      ? 'tpopfreiwkontr'
+      : table === 'tpop_apberrelevant_grund_werte'
+      ? 'tpopApberrelevantGrundWerte'
+      : table === 'ek_abrechnungstyp_werte'
+      ? 'ekAbrechnungstypWerte'
+      : table === 'tpopkontrzaehl_einheit_werte'
+      ? 'tpopkontrzaehlEinheitWerte'
+      : table
+  store.queryClient.invalidateQueries({
+    queryKey: [`tree${upperFirst(queryKeyTable)}`],
+  })
+  const queryKeyFoldersTable =
+    table === 'ziel'
+      ? 'zieljahr'
+      : parentTable === 'tpopfeldkontr'
+      ? 'tpopfeldkontrzaehl'
+      : parentTable === 'tpopfreiwkontr'
+      ? 'tpopfreiwkontrzaehl'
+      : [
+          'adresse',
+          'tpop_apberrelevant_grund_werte',
+          'ek_abrechnungstyp_werte',
+          'tpopkontrzaehl_einheit_werte',
+        ].includes(table)
+      ? 'werte'
+      : parentTable
+  // console.log('insertDataset', {
+  //   table,
+  //   parentTable,
+  //   menuType,
+  //   queryKeyFoldersTable,
+  //   queryKeyTable,
+  // })
+  store.queryClient.invalidateQueries({
+    queryKey: [`tree${upperFirst(queryKeyFoldersTable)}Folders`],
+  })
 }
 
 export default insertDataset

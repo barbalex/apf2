@@ -23,6 +23,7 @@ const deleteModule = async ({ client, store, search }) => {
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find((t) => t.table === tablePassed)
+  const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
     return enqueNotification({
       message: `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`,
@@ -32,6 +33,7 @@ const deleteModule = async ({ client, store, search }) => {
     })
   }
   const table = tableMetadata.dbTable ? tableMetadata.dbTable : tablePassed
+  // console.log('deleteModule', { tableMetadata, table, parentTable })
 
   /**
    * fetch data for dataset
@@ -137,6 +139,44 @@ const deleteModule = async ({ client, store, search }) => {
   const openNodes1 = store?.tree?.openNodes
   const newOpenNodes1 = openNodes1.filter((n) => !isEqual(n, toDeleteUrl))
   store.tree.setOpenNodes(newOpenNodes1)
+  // invalidate tree queries for count and data
+  if (['user', 'message', 'currentissue'].includes(table)) {
+    store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
+  }
+
+  const queryKeyTable =
+    parentTable === 'tpopfeldkontr'
+      ? 'tpopfeldkontr'
+      : parentTable === 'tpopfreiwkontr'
+      ? 'tpopfreiwkontr'
+      : table === 'tpop_apberrelevant_grund_werte'
+      ? 'tpopApberrelevantGrundWerte'
+      : table === 'ek_abrechnungstyp_werte'
+      ? 'ekAbrechnungstypWerte'
+      : table === 'tpopkontrzaehl_einheit_werte'
+      ? 'tpopkontrzaehlEinheitWerte'
+      : table
+  store.queryClient.invalidateQueries({
+    queryKey: [`tree${upperFirst(queryKeyTable)}`],
+  })
+  const queryKeyFoldersTable =
+    table === 'ziel'
+      ? 'zieljahr'
+      : parentTable === 'tpopfeldkontr'
+      ? 'tpopfeldkontrzaehl'
+      : parentTable === 'tpopfreiwkontr'
+      ? 'tpopfreiwkontrzaehl'
+      : [
+          'adresse',
+          'tpop_apberrelevant_grund_werte',
+          'ek_abrechnungstyp_werte',
+          'tpopkontrzaehl_einheit_werte',
+        ].includes(table)
+      ? 'werte'
+      : parentTable
+  store.queryClient.invalidateQueries({
+    queryKey: [`tree${upperFirst(queryKeyFoldersTable)}Folders`],
+  })
 
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()
 

@@ -6,6 +6,7 @@ import Button from '@mui/material/Button'
 import { MdAddCircleOutline, MdDeleteForever } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 
 import Einheit from './Einheit'
 import Gezaehlt from './Gezaehlt'
@@ -171,6 +172,8 @@ const Count = ({
   ekzaehleinheitsOriginal = [],
 }) => {
   const client = useApolloClient()
+  const queryClient = useQueryClient()
+
   const store = useContext(storeContext)
   const { setToDelete } = useContext(storeContext)
 
@@ -235,7 +238,9 @@ const Count = ({
     ({ row }) => {
       const afterDeletionHook = () => {
         refetch()
-        store.tree.incrementRefetcher()
+        queryClient.invalidateQueries({
+          queryKey: [`treeTpopfreiwkontrzaehl`],
+        })
       }
       setToDelete({
         table: 'tpopkontrzaehl',
@@ -245,7 +250,7 @@ const Count = ({
         afterDeletionHook,
       })
     },
-    [setToDelete, activeNodeArray, refetch, store.tree],
+    [setToDelete, activeNodeArray, refetch, queryClient],
   )
 
   //console.log('Count, row:', row)

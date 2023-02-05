@@ -237,12 +237,7 @@ const buildTreeQueryVariables = ({
   }
   const tpopmassnsFilter = tpopmassnGqlFilter.filtered
   const tpopsFilter = tpopGqlFilter.filtered
-  const usersFilter = { id: { isNull: false } }
-  if (nodeLabelFilter.user) {
-    usersFilter.label = {
-      includesInsensitive: nodeLabelFilter.user,
-    }
-  }
+
   const adressesFilter = nodeLabelFilter.adresse
     ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
     : { id: { isNull: false } }
@@ -313,7 +308,6 @@ const buildTreeQueryVariables = ({
     tpopmassnbersFilter,
     tpopmassnsFilter,
     tpopsFilter,
-    usersFilter,
     adressesFilter,
     apberrelevantGrundWertesFilter,
     tpopkontrzaehlEinheitWertesFilter,
