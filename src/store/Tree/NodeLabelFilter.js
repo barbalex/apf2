@@ -114,6 +114,18 @@ export default types
       types.maybeNull(types.union(types.string, types.number)),
       null,
     ),
+    ekAbrechnungstypWerte: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    tpopApberrelevantGrundWerte: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    tpopkontrzaehlEinheitWerte: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
   })
   .actions((self) => ({
     setKey({ key, value }) {

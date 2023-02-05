@@ -1,52 +1,47 @@
-import findIndex from 'lodash/findIndex'
+import aperfkrit from './aperfkrit'
 
-const aperfkritFolderNode = ({
-  nodes: nodesPassed,
-  data,
+const aperfkritFolderNode = async ({
   loading,
-  projektNodes,
   projId,
-  apNodes,
   apId,
   store,
+  count,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, {
-    id: apId,
-  })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.erfkrit ?? ''
 
-  const erfkritNodesLength = (data?.allErfkrits?.nodes ?? []).filter(
-    (el) => el.apId === apId,
-  ).length
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${erfkritNodesLength} gefiltert`
-    : erfkritNodesLength
+    ? `${count} gefiltert`
+    : count
 
   const url = ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien']
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(apId)) return []
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n.length > 4 &&
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'AP-Erfolgskriterien',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'erfkritFolder',
-      filterTable: 'erfkrit',
-      id: `${apId}Erfkrit`,
-      tableId: apId,
-      urlLabel: 'AP-Erfolgskriterien',
-      label: `AP-Erfolgskriterien (${message})`,
-      url,
-      sort: [projIndex, 1, apIndex, 3],
-      hasChildren: erfkritNodesLength > 0,
-    },
-  ]
+  const children = isOpen
+    ? await aperfkrit({ treeQueryVariables, projId, apId, store })
+    : []
+
+  return {
+    nodeType: 'folder',
+    menuType: 'erfkritFolder',
+    id: `${apId}ErfkritFolder`,
+    tableId: apId,
+    urlLabel: 'AP-Erfolgskriterien',
+    label: `AP-Erfolgskriterien (${message})`,
+    url,
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default aperfkritFolderNode

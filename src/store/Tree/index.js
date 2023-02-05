@@ -51,8 +51,12 @@ export default types
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     mapFilter: types.maybe(Geojson),
+    refetcher: types.optional(types.number, 0),
   })
   .actions((self) => ({
+    incrementRefetcher() {
+      self.refetcher += 1
+    },
     resetTree2Src() {
       self.tree2Src = ''
     },
@@ -121,6 +125,66 @@ export default types
     },
   }))
   .views((self) => ({
+    get activeFilterTable() {
+      const aNA = getSnapshot(self.activeNodeArray)
+      if (aNA.length > 10) {
+        if (aNA[10] === 'Zaehlungen') return 'tpopkontrzaehl'
+      }
+      if (aNA.length > 8) {
+        if (aNA[8] === 'Massnahmen') return 'tpopmassn'
+        if (aNA[8] === 'Freiwilligen-Kontrollen') return 'tpopkontr'
+        if (aNA[8] === 'Feld-Kontrollen') return 'tpopkontr'
+        if (aNA[8] === 'Massnahmen-Berichte') return 'tpopmassnber'
+        if (aNA[8] === 'Kontroll-Berichte') return 'tpopber'
+        if (aNA[8] === 'Beobachtungen') return 'beob'
+      }
+      if (aNA.length > 7) {
+        if (aNA[4] === 'AP-Ziele' && aNA[7] === 'Berichte') return 'zielber'
+      }
+      if (aNA.length > 6) {
+        if (aNA[6] === 'Teil-Populationen') return 'tpop'
+        if (aNA[6] === 'Kontroll-Berichte') return 'popber'
+        if (aNA[6] === 'Massnahmen-Berichte') return 'popmassnber'
+        if (aNA[6] === 'Massnahmen-Berichte') return 'popmassnber'
+      }
+      if (aNA.length > 4) {
+        if (aNA[4] === 'Populationen') return 'pop'
+        if (aNA[4] === 'AP-Ziele') return 'ziel'
+        if (aNA[4] === 'AP-Erfolgskriterien') return 'erfkrit'
+        if (aNA[4] === 'AP-Berichte') return 'apber'
+        if (aNA[4] === 'Idealbiotop') return undefined // or pop?
+        if (aNA[4] === 'Taxa') return 'apart'
+        if (aNA[4] === 'assoziierte-Arten') return 'assozart'
+        if (aNA[4] === 'EK-Frequenzen') return 'ekfrequenz'
+        if (aNA[4] === 'EK-Zähleinheiten') return 'ekzaehleinheit'
+        if (aNA[4] === 'nicht-beurteilte-Beobachtungen') return 'beob'
+        if (aNA[4] === 'nicht-zuzuordnende-Beobachtungen') return 'beob'
+        if (aNA[4] === 'Qualitaetskontrollen') return undefined
+      }
+      if (aNA.length > 2) {
+        if (aNA[2] === 'Arten') return 'ap'
+        if (aNA[2] === 'AP-Berichte') return 'apberuebersicht'
+      }
+      if (aNA.length > 1) {
+        if (aNA[1] === 'Adressen') return 'adresse'
+        if (aNA[1] === 'ApberrelevantGrundWerte')
+          return 'tpopApberrelevantGrundWerte'
+        if (aNA[1] === 'EkAbrechnungstypWerte') return 'ekAbrechnungstypWerte'
+        if (aNA[1] === 'TpopkontrzaehlEinheitWerte')
+          return 'tpopkontrzaehlEinheitWerte'
+      }
+      if (aNA[0] === 'Benutzer') return 'user'
+      return undefined
+    },
+    get openProjekts() {
+      const openNodes = getSnapshot(self.openNodes)
+      const openProjekts = [
+        ...new Set(
+          openNodes.filter((n) => n[0] === 'Projekte' && n[1]).map((n) => n[1]),
+        ),
+      ]
+      return openProjekts
+    },
     get openAps() {
       const openNodes = getSnapshot(self.openNodes)
       const openAps = [

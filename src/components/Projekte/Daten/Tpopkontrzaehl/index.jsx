@@ -5,7 +5,6 @@ import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -43,7 +42,6 @@ const Tpopkontrzaehl = () => {
 
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const queryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -109,9 +107,9 @@ const Tpopkontrzaehl = () => {
         return setFieldErrors({ [field]: error.message })
       }
       setFieldErrors({})
-      queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+      store.tree.incrementRefetcher()
     },
-    [client, queryClient, row.id, store.user.name],
+    [client, row.id, store.tree, store.user.name],
   )
 
   // console.log('Tpopkontrzaehl rendering')

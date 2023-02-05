@@ -1,25 +1,13 @@
-import findIndex from 'lodash/findIndex'
+import pop from './pop'
 
-const popFolderNode = ({
-  nodes: nodesPassed,
-  data,
-  loading,
-  projektNodes,
+const popFolderNode = async ({
   projId,
-  apNodes,
   apId,
   store,
+  count,
+  loading,
+  treeQueryVariables,
 }) => {
-  const ap = (data?.openAps?.nodes ?? [])?.find((a) => a.id === apId)
-  const count = ap?.popsByApId?.totalCount ?? 0
-
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, {
-    id: apId,
-  })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.pop ?? ''
 
   const message = loading
@@ -30,23 +18,30 @@ const popFolderNode = ({
 
   const url = ['Projekte', projId, 'Arten', apId, 'Populationen']
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(apId)) return []
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n.length > 4 &&
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'Populationen',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'popFolder',
-      filterTable: 'pop',
-      id: `${apId}PopFolder`,
-      tableId: apId,
-      urlLabel: 'Populationen',
-      label: `Populationen (${message})`,
-      url,
-      sort: [projIndex, 1, apIndex, 1],
-      hasChildren: count > 0,
-    },
-  ]
+  const children = isOpen
+    ? await pop({ treeQueryVariables, projId, apId, store })
+    : []
+
+  return {
+    nodeType: 'folder',
+    menuType: 'popFolder',
+    id: `${apId}PopFolder`,
+    tableId: apId,
+    urlLabel: 'Populationen',
+    label: `Populationen (${message})`,
+    url,
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default popFolderNode

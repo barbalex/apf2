@@ -4,7 +4,13 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import updateBeobByIdGql from './updateBeobById'
 
-const saveArtIdToDb = async ({ value, row, client, queryClient, store, search }) => {
+const saveArtIdToDb = async ({
+  value,
+  row,
+  client,
+  store,
+  search,
+}) => {
   const { activeNodeArray, openNodes: openNodesRaw, setOpenNodes } = store.tree
   const aNA = getSnapshot(activeNodeArray)
   const openNodes = getSnapshot(openNodesRaw)
@@ -71,7 +77,7 @@ const saveArtIdToDb = async ({ value, row, client, queryClient, store, search })
   client.refetchQueries({
     include: ['KarteBeobNichtZuzuordnenQuery'],
   })
-  queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+  store.tree.incrementRefetcher()
 }
 
 export default saveArtIdToDb

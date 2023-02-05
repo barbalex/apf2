@@ -1,45 +1,44 @@
-const apberrelevantGrundWerteFolderNode = ({
-  nodes: nodesPassed,
-  data,
+import apberrelevantGrundWerte from './apberrelevantGrundWerte'
+
+const apberrelevantGrundWerteFolderNode = async ({
+  count,
   loading,
-  projektNodes,
   store,
+  treeQueryVariables,
 }) => {
-  const apberrelevantGrundWertes =
-    data?.allApberrelevantGrundWertes?.nodes ?? []
-  const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
     store.tree?.nodeLabelFilter?.apberrelevantGrundWerte ?? ''
 
-  let apberrelevantGrundWerteNodesLength = apberrelevantGrundWertes.length
-  // before ApberrelevantGrundWerte folder is active, only total count was fetched, not yet any apberrelevantGrundWerten nodes
-  if (apberrelevantGrundWertes.length === 0)
-    apberrelevantGrundWerteNodesLength =
-      data?.tpopApberrelevantGrundWertesUnfiltered?.totalCount
-  let message =
-    loading && !apberrelevantGrundWerteNodesLength
-      ? '...'
-      : apberrelevantGrundWerteNodesLength
+  let message = loading && !count ? '...' : count
   if (nodeLabelFilterString) {
-    message = `${apberrelevantGrundWerteNodesLength} gefiltert`
+    message = `${count} gefiltert`
   }
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes('wlFolder')) return []
+  const showChildren =
+    store.tree.openNodes.filter(
+      (n) => n[0] === 'Werte-Listen' && n[1] === 'ApberrelevantGrundWerte',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'tpopApberrelevantGrundWerteFolder',
-      filterTable: 'tpopApberrelevantGrundWerte',
-      id: 'tpopApberrelevantGrundWerteFolder',
-      urlLabel: 'ApberrelevantGrundWerte',
-      label: `Teil-Population: Grund für AP-Bericht Relevanz (${message})`,
-      url: ['Werte-Listen', 'ApberrelevantGrundWerte'],
-      sort: [wlIndex, 2],
-      hasChildren: apberrelevantGrundWerteNodesLength > 0,
-    },
-  ]
+  let children = []
+
+  if (showChildren) {
+    const adresseNodes = await apberrelevantGrundWerte({
+      store,
+      treeQueryVariables,
+    })
+    children = adresseNodes
+  }
+
+  return {
+    nodeType: 'folder',
+    menuType: 'tpopApberrelevantGrundWerteFolder',
+    id: 'tpopApberrelevantGrundWerteFolder',
+    urlLabel: 'ApberrelevantGrundWerte',
+    label: `Teil-Population: Grund für AP-Bericht Relevanz (${message})`,
+    url: ['Werte-Listen', 'ApberrelevantGrundWerte'],
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default apberrelevantGrundWerteFolderNode

@@ -1,34 +1,21 @@
-import findIndex from 'lodash/findIndex'
+import tpop from './tpop'
 
-const tpopFolderNode = ({
-  nodes: nodesPassed,
-  data,
+const tpopFolderNode = async ({
+  count,
   loading,
-  projektNodes,
-  apNodes,
-  popNodes,
   projId,
   apId,
   popId,
   store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpop ?? ''
-
-  const children = (data?.allTpops?.nodes ?? []).filter(
-    (el) => el.popId === popId,
-  )
 
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${children.length} gefiltert`
-    : children.length
+    ? `${count} gefiltert`
+    : count
 
   const url = [
     'Projekte',
@@ -40,24 +27,32 @@ const tpopFolderNode = ({
     'Teil-Populationen',
   ]
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(popId)) return []
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'Populationen' &&
+        n[5] === popId &&
+        n[6] === 'Teil-Populationen',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'tpopFolder',
-      filterTable: 'tpop',
-      id: `${popId}TpopFolder`,
-      tableId: popId,
-      parentTableId: popId,
-      urlLabel: 'Teil-Populationen',
-      label: `Teil-Populationen (${message})`,
-      url,
-      sort: [projIndex, 1, apIndex, 1, popIndex, 1],
-      hasChildren: children.length > 0,
-    },
-  ]
+  const children = isOpen
+    ? await tpop({ treeQueryVariables, projId, apId, popId, store })
+    : []
+
+  return {
+    nodeType: 'folder',
+    menuType: 'tpopFolder',
+    id: `${popId}TpopFolder`,
+    tableId: popId,
+    parentTableId: popId,
+    urlLabel: 'Teil-Populationen',
+    label: `Teil-Populationen (${message})`,
+    url,
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default tpopFolderNode

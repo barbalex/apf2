@@ -1,60 +1,55 @@
-import findIndex from 'lodash/findIndex'
+import popmassnber from './popmassnber'
 
-const popmassnberFolderNode = ({
-  nodes: nodesPassed,
-  data,
+const popmassnberFolderNode = async ({
+  count,
   loading,
-  projektNodes,
-  apNodes,
-  popNodes,
   projId,
   apId,
   popId,
   store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.popmassnber ?? ''
-
-  const childrenLength = (data?.allPopmassnbers?.nodes ?? []).filter(
-    (el) => el.popId === popId,
-  ).length
 
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${childrenLength} gefiltert`
-    : childrenLength
+    ? `${count} gefiltert`
+    : count
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(popId)) return []
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'Populationen' &&
+        n[5] === popId &&
+        n[6] === 'Massnahmen-Berichte',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'popmassnberFolder',
-      filterTable: 'popmassnber',
-      id: `${popId}PopmassnberFolder`,
-      tableId: popId,
-      urlLabel: 'Massnahmen-Berichte',
-      label: `Massnahmen-Berichte (${message})`,
-      url: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        popId,
-        'Massnahmen-Berichte',
-      ],
-      sort: [projIndex, 1, apIndex, 1, popIndex, 3],
-      hasChildren: childrenLength > 0,
-    },
-  ]
+  const children = isOpen
+    ? await popmassnber({ treeQueryVariables, projId, apId, popId, store })
+    : []
+
+  return {
+    nodeType: 'folder',
+    menuType: 'popmassnberFolder',
+    id: `${popId}PopmassnberFolder`,
+    tableId: popId,
+    urlLabel: 'Massnahmen-Berichte',
+    label: `Massnahmen-Berichte (${message})`,
+    url: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Massnahmen-Berichte',
+    ],
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default popmassnberFolderNode

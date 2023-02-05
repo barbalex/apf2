@@ -1,40 +1,17 @@
-import findIndex from 'lodash/findIndex'
-
-const qkFolderNode = ({
-  nodes: nodesPassed,
-  projektNodes,
-  projId,
-  apNodes,
-  apId,
-}) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, {
-    id: apId,
-  })
-
+const qkFolderNode = ({ projId, apId }) => {
   const url = ['Projekte', projId, 'Arten', apId, 'Qualitaetskontrollen']
 
-  // only show if parent node exists
-  const apNodesIds = nodesPassed.map((n) => n.id)
-  if (!apNodesIds.includes(apId)) return []
-
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'qkFolder',
-      id: apId,
-      tableId: apId,
-      parentTableId: apId,
-      urlLabel: 'Qualitaetskontrollen',
-      label: 'Qualitätskontrollen',
-      url,
-      sort: [projIndex, 1, apIndex, 13],
-      hasChildren: false,
-    },
-  ]
+  return {
+    nodeType: 'folder',
+    menuType: 'qkFolder',
+    id: `${apId}QkFolder`,
+    tableId: apId,
+    parentTableId: apId,
+    urlLabel: 'Qualitaetskontrollen',
+    label: 'Qualitätskontrollen',
+    url,
+    hasChildren: false,
+  }
 }
 
 export default qkFolderNode

@@ -1,44 +1,80 @@
-import findIndex from 'lodash/findIndex'
+import { gql } from '@apollo/client'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
+import apzielber from './apzielber'
 
-const apzielberFolderNode = ({
-  nodes: nodesPassed,
-  data,
-  loading,
-  projektNodes,
+const apzielberFolderNode = async ({
   projId,
-  apNodes,
-  openNodes,
   apId,
-  zielJahr,
+  jahr,
   zielId,
-  apzieljahrFolderNodes,
-  apzielNodes,
   store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
+  const { data, isLoading } = await store.queryClient.fetchQuery({
+    queryKey: [
+      'treeApzielberFolder',
+      zielId,
+      treeQueryVariables.zielbersFilter,
+    ],
+    queryFn: async () => {
+      const { data, loading: isLoading } = await store.client.query({
+        query: gql`
+          query TreeApzielberFolderQuery(
+            $zielId: UUID!
+            $zielbersFilter: ZielberFilter!
+          ) {
+            zielById(id: $zielId) {
+              id
+              zielbersByZielId(filter: $zielbersFilter, orderBy: LABEL_ASC) {
+                nodes {
+                  id
+                  label
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          zielId,
+          zielbersFilter: treeQueryVariables.zielbersFilter,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      return { data, isLoading }
+    },
   })
-  const apIndex = findIndex(apNodes, {
-    id: apId,
-  })
-  const zieljahrIndex = findIndex(
-    apzieljahrFolderNodes,
-    (el) => el.jahr === zielJahr,
-  )
-  const zielIndex = findIndex(apzielNodes, (el) => el.id === zielId)
+
+  // const { data, loading: isLoading } = await store.client.query({
+  //   query: gql`
+  //     query TreeApzielberFolderQuery(
+  //       $zielId: UUID!
+  //       $zielbersFilter: ZielberFilter!
+  //     ) {
+  //       zielById(id: $zielId) {
+  //         id
+  //         zielbersByZielId(filter: $zielbersFilter, orderBy: LABEL_ASC) {
+  //           nodes {
+  //             id
+  //             label
+  //           }
+  //         }
+  //       }
+  //     }
+  //   `,
+  //   variables: {
+  //     zielId,
+  //     zielbersFilter: treeQueryVariables.zielbersFilter,
+  //   },
+  // })
+
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.zielber ?? ''
-  const zielberNodesLength = (data?.allZielbers?.nodes ?? []).filter(
-    (el) => el.zielId === zielId,
-  ).length
-  const message = loading
+  const zielbers = data?.zielById?.zielbersByZielId?.nodes ?? []
+  const zielbersLength = zielbers.length
+  const message = isLoading
     ? '...'
     : nodeLabelFilterString
-    ? `${zielberNodesLength} gefiltert`
-    : zielberNodesLength
+    ? `${zielbersLength} gefiltert`
+    : zielbersLength
 
   const url = [
     'Projekte',
@@ -46,27 +82,45 @@ const apzielberFolderNode = ({
     'Arten',
     apId,
     'AP-Ziele',
-    zielJahr,
+    jahr,
     zielId,
     'Berichte',
   ]
-  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
-  if (!allParentsOpen) return []
+
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n.length > 7 &&
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'AP-Ziele' &&
+        n[5] === jahr &&
+        n[6] === zielId,
+    ).length > 0
+
+  const children = isOpen
+    ? apzielber({
+        zielbers,
+        projId,
+        apId,
+        jahr,
+        zielId,
+      })
+    : []
 
   return [
     {
       nodeType: 'folder',
       menuType: 'zielberFolder',
-      filterTable: 'zielber',
-      id: zielId,
+      id: `${zielId}ZielberFolder`,
       tableId: zielId,
       urlLabel: 'Berichte',
       label: `Berichte (${message})`,
       url,
-      sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1],
-      hasChildren: zielberNodesLength > 0,
+      hasChildren: zielbersLength > 0,
+      children,
     },
-  ].filter((n) => allParentNodesExist(nodesPassed, n))
+  ]
 }
 
 export default apzielberFolderNode

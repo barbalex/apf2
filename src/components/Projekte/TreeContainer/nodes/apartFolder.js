@@ -1,26 +1,13 @@
-import findIndex from 'lodash/findIndex'
+import apart from './apart'
 
-const apartFolderNode = ({
-  nodes: nodesPassed,
-  data,
+const apartFolderNode = async ({
+  count,
   loading,
-  projektNodes,
   projId,
-  apNodes,
   apId,
   store,
+  treeQueryVariables,
 }) => {
-  const count = (data?.allAparts?.nodes ?? []).filter(
-    (n) => n.apId === apId,
-  ).length
-
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, {
-    id: apId,
-  })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.apart ?? ''
 
   const message = loading
@@ -29,24 +16,27 @@ const apartFolderNode = ({
     ? `${count} gefiltert`
     : count
 
-  // only show if parent node exists
-  const apNodesIds = nodesPassed.map((n) => n.id)
-  if (!apNodesIds.includes(apId)) return []
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n.length > 4 && n[1] === projId && n[3] === apId && n[4] === 'Taxa',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'apartFolder',
-      filterTable: 'apart',
-      id: `${apId}Apart`,
-      tableId: apId,
-      urlLabel: 'Taxa',
-      label: `Taxa (${message})`,
-      url: ['Projekte', projId, 'Arten', apId, 'Taxa'],
-      sort: [projIndex, 1, apIndex, 7],
-      hasChildren: count > 0,
-    },
-  ]
+  const children = isOpen
+    ? await apart({ treeQueryVariables, projId, apId, store })
+    : []
+
+  return {
+    nodeType: 'folder',
+    menuType: 'apartFolder',
+    id: `${apId}Apart`,
+    tableId: apId,
+    urlLabel: 'Taxa',
+    label: `Taxa (${message})`,
+    url: ['Projekte', projId, 'Arten', apId, 'Taxa'],
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default apartFolderNode

@@ -1,27 +1,22 @@
 /**
  * need to keep class because of ref
  */
-import React, { useCallback, useContext, useState, useEffect } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { useApolloClient } from '@apollo/client'
-import { useQueryClient, useQuery } from '@tanstack/react-query'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import { useParams, useLocation } from 'react-router-dom'
-import jwtDecode from 'jwt-decode'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
-import Tree from './Tree'
-import idbContext from '../../../idbContext'
-import logout from '../../../modules/logout'
+import TreeComponent from './Tree'
 import CmApFolder from './contextmenu/ApFolder'
 import CmAp from './contextmenu/Ap'
 import CmUserFolder from './contextmenu/UserFolder'
@@ -94,11 +89,6 @@ import insertDataset from './insertDataset'
 import storeContext from '../../../storeContext'
 import TpopFromBeobPopList from './TpopFromBeobPopList'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import Error from '../../shared/Error'
-import Spinner from '../../shared/Spinner'
-import query from './query'
-import buildTreeQueryVariables from './buildTreeQueryVariables'
-import buildNodes from './nodes'
 import useSearchParamsState from '../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../modules/isMobilePhone'
 
@@ -207,12 +197,6 @@ const StyledDialog = styled(Dialog)`
     overflow-y: hidden;
   }
 `
-const ErrorContainer = styled.div`
-  padding: 15px;
-`
-const LogoutButton = styled(Button)`
-  margin-top: 10px !important;
-`
 
 const getAndValidateCoordinatesOfTpop = async ({
   id,
@@ -281,12 +265,11 @@ const getAndValidateCoordinatesOfBeob = async ({
 }
 
 const TreeContainer = () => {
-  const { apId, projId, popId } = useParams()
+  const params = useParams()
+  const { apId, projId, popId } = params
   const { search } = useLocation()
 
   const client = useApolloClient()
-  const { idb } = useContext(idbContext)
-  const queryClient = useQueryClient()
 
   const store = useContext(storeContext)
   const {
@@ -300,94 +283,8 @@ const TreeContainer = () => {
     setMoving,
     copyingBiotop,
     setCopyingBiotop,
-    user,
   } = store
-  const { setOpenNodes } = store.tree
-
-  const { token } = user
-  const role = token ? jwtDecode(token).role : null
-
-  const dataFilter = getSnapshot(store.tree.dataFilter)
-  const nodeLabelFilter = getSnapshot(store.tree.nodeLabelFilter)
-  const openNodes = getSnapshot(store.tree.openNodes)
-  const apFilter = store.tree.apFilter
-  const popGqlFilter = store.tree.popGqlFilter
-  const apGqlFilter = store.tree.apGqlFilter
-  const tpopGqlFilter = store.tree.tpopGqlFilter
-  const tpopmassnGqlFilter = store.tree.tpopmassnGqlFilter
-  const ekGqlFilter = store.tree.ekGqlFilter
-  const ekfGqlFilter = store.tree.ekfGqlFilter
-  const beobGqlFilter = store.tree.beobGqlFilter
-
-  const { data, error, isLoading } = useQuery({
-    queryKey: [
-      'treeQuery',
-      dataFilter,
-      openNodes,
-      apFilter,
-      nodeLabelFilter,
-      apId,
-      // TODO: these filters react late
-      // eliminate them?
-      // popGqlFilter,
-      // tpopGqlFilter,
-      // tpopmassnGqlFilter,
-      // ekGqlFilter,
-      // ekfGqlFilter,
-      // apGqlFilter,
-      // beobGqlFilter,
-      beobGqlFilter('nichtBeurteilt'),
-      beobGqlFilter('nichtZuzuordnen'),
-      beobGqlFilter('zugeordnet'),
-      role,
-    ],
-    queryFn: () =>
-      client.query({
-        query,
-        variables: buildTreeQueryVariables({
-          dataFilter,
-          openNodes,
-          apFilter,
-          nodeLabelFilter,
-          artId: apId,
-          popGqlFilter,
-          tpopGqlFilter,
-          tpopmassnGqlFilter,
-          ekGqlFilter,
-          ekfGqlFilter,
-          apGqlFilter,
-          beobGqlFilter,
-          openAps: store.tree.openAps,
-        }),
-        // DANGER: without, refetches by react-query do not work!
-        fetchPolicy: 'no-cache',
-      }),
-  })
-
-  const treeData = data?.data
-
-  const [treeNodes, setTreeNodes] = useState([])
-
-  useEffect(() => {
-    if (!isLoading) {
-      setTreeNodes(
-        buildNodes({
-          role,
-          data: treeData,
-          loading: isLoading,
-          store,
-        }),
-      )
-    }
-  }, [
-    isLoading,
-    openNodes,
-    openNodes.length,
-    treeData,
-    dataFilter,
-    role,
-    store,
-  ])
+  const { setOpenNodes, openNodes } = store.tree
 
   // deactivated because toggling the project node would not close the project
   // useEffect(() => {
@@ -483,7 +380,6 @@ const TreeContainer = () => {
             id,
             client,
             store,
-            queryClient,
             search,
           })
         },
@@ -497,7 +393,6 @@ const TreeContainer = () => {
             menuType,
             client,
             store,
-            queryClient,
           })
         },
         closeLowerNodes() {
@@ -516,7 +411,7 @@ const TreeContainer = () => {
             afterDeletionHook: () => {
               const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
               setOpenNodes(newOpenNodes)
-              queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+              store.tree.incrementRefetcher()
             },
           })
         },
@@ -541,7 +436,7 @@ const TreeContainer = () => {
           setMoving({ table, id, label })
         },
         move() {
-          moveTo({ id, store, client, queryClient })
+          moveTo({ id, store, client })
         },
         markForCopying() {
           setCopying({ table, id, label, withNextLevel: false })
@@ -562,7 +457,6 @@ const TreeContainer = () => {
             parentId: id,
             client,
             store,
-            queryClient,
           })
         },
         markForCopyingBiotop() {
@@ -584,7 +478,6 @@ const TreeContainer = () => {
             projId,
             client,
             store,
-            queryClient,
             search,
           })
         },
@@ -663,7 +556,6 @@ const TreeContainer = () => {
       enqueNotification,
       client,
       store,
-      queryClient,
       apId,
       projId,
       popId,
@@ -686,44 +578,15 @@ const TreeContainer = () => {
   //console.log('TreeContainer',{data})
   // console.log('TreeContainer rendering')
 
-  const existsPermissionError =
-    !!error &&
-    (error.message.includes('permission denied') ||
-      error.message.includes('keine Berechtigung'))
-  if (existsPermissionError) {
-    // during login don't show permission error
-    if (!token) return null
-    // if token is not accepted, ask user to logout
-    return (
-      <ErrorContainer>
-        <div>Ihre Anmeldung ist nicht mehr gültig.</div>
-        <div>Bitte melden Sie sich neu an.</div>
-        <LogoutButton
-          variant="outlined"
-          color="inherit"
-          onClick={() => {
-            logout(idb)
-          }}
-        >
-          Neu anmelden
-        </LogoutButton>
-      </ErrorContainer>
-    )
-  }
-  if (error) return <Error error={error} />
-
-  // should only show on initial tree loading
-  if (isLoading && !treeNodes.length) return <Spinner />
-
   return (
     <ErrorBoundary>
       <Container data-id="tree-container1">
         {!!toDeleteId && <DeleteDatasetModal />}
         <LabelFilterContainer>
-          <LabelFilter nodes={treeNodes} />
+          <LabelFilter />
           {!!projId && <ApFilter />}
         </LabelFilterContainer>
-        <Tree nodes={treeNodes} />
+        <TreeComponent />
         <CmApFolder onClick={handleClick} />
         <CmAp onClick={handleClick} />
         <CmApberuebersichtFolder onClick={handleClick} />

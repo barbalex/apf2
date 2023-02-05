@@ -1,37 +1,22 @@
-import findIndex from 'lodash/findIndex'
+import tpopmassnber from './tpopmassnber'
 
-const tpopmassnberFolderNode = ({
-  nodes: nodesPassed,
-  data,
+const tpopmassnberFolderNode = async ({
+  count,
   loading,
-  projektNodes,
-  apNodes,
-  popNodes,
-  tpopNodes,
   projId,
   apId,
   popId,
   tpopId,
   store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
-  const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpopmassnber ?? ''
-
-  const childrenLength = (data?.allTpopmassnbers?.nodes ?? []).filter(
-    (el) => el.tpopId === tpopId,
-  ).length
 
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${childrenLength} gefiltert`
-    : childrenLength
+    ? `${count} gefiltert`
+    : count
 
   const url = [
     'Projekte',
@@ -45,24 +30,42 @@ const tpopmassnberFolderNode = ({
     'Massnahmen-Berichte',
   ]
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(tpopId)) return []
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'Populationen' &&
+        n[5] === popId &&
+        n[6] === 'Teil-Populationen' &&
+        n[7] === tpopId &&
+        n[8] === 'Massnahmen-Berichte',
+    ).length > 0
 
-  const nodes = [
-    {
-      nodeType: 'folder',
-      menuType: 'tpopmassnberFolder',
-      filterTable: 'tpopmassnber',
-      id: `${tpopId}TpopmassnberFolder`,
-      tableId: tpopId,
-      urlLabel: 'Massnahmen-Berichte',
-      label: `Massnahmen-Berichte (${message})`,
-      url,
-      sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 2],
-      hasChildren: childrenLength > 0,
-    },
-  ]
-  return nodes
+  const children = isOpen
+    ? await tpopmassnber({
+        treeQueryVariables,
+        projId,
+        apId,
+        popId,
+        tpopId,
+        store,
+      })
+    : []
+
+  const node = {
+    nodeType: 'folder',
+    menuType: 'tpopmassnberFolder',
+    id: `${tpopId}TpopmassnberFolder`,
+    tableId: tpopId,
+    urlLabel: 'Massnahmen-Berichte',
+    label: `Massnahmen-Berichte (${message})`,
+    url,
+    hasChildren: count > 0,
+    children,
+  }
+
+  return node
 }
 
 export default tpopmassnberFolderNode

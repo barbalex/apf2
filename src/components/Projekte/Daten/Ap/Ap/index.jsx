@@ -127,10 +127,10 @@ const ApAp = () => {
       }
       setFieldErrors({})
       if (field === 'artId') {
-        queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+        store.tree.incrementRefetcher()
       }
     },
-    [client, queryClient, row.id, user.name],
+    [client, row.id, store.tree, user.name],
   )
 
   const aeTaxonomiesfilterForData = useCallback(

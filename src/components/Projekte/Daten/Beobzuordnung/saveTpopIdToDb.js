@@ -9,7 +9,6 @@ const saveTpopIdToDb = async ({
   type,
   client,
   store,
-  queryClient,
   search,
 }) => {
   const variables = {
@@ -227,7 +226,7 @@ const saveTpopIdToDb = async ({
       'BeobAssignLinesQuery',
     ],
   })
-  queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+  store.tree.incrementRefetcher()
 }
 
 export default saveTpopIdToDb

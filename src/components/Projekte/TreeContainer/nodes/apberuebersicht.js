@@ -1,34 +1,39 @@
-import findIndex from 'lodash/findIndex'
+import { gql } from '@apollo/client'
 
-const apberuebersichtNodes = ({ data, projektNodes, projId }) => {
-  // fetch sorting indexes of parents
-  const projNodeIds = projektNodes.map((n) => n.id)
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
+const apberuebersichtNodes = async ({ store, treeQueryVariables }) => {
+  const { data } = await store.client.query({
+    query: gql`
+      query TreeApberuebersichtsQuery(
+        $apberuebersichtsFilter: ApberuebersichtFilter!
+      ) {
+        allApberuebersichts(
+          filter: $apberuebersichtsFilter
+          orderBy: LABEL_ASC
+        ) {
+          nodes {
+            id
+            projId
+            label
+          }
+        }
+      }
+    `,
+    variables: {
+      apberuebersichtsFilter: treeQueryVariables.apberuebersichtsFilter,
+    },
   })
 
-  // map through all elements and create array of nodes
-  const nodes = (data?.allApberuebersichts?.nodes ?? [])
-    // only show if parent node exists
-    .filter((el) => projNodeIds.includes(el.projId))
-    // only show nodes of this parent
-    .filter((el) => el.projId === projId)
-    .map((el) => ({
-      nodeType: 'table',
-      menuType: 'apberuebersicht',
-      filterTable: 'apberuebersicht',
-      id: el.id,
-      parentId: el.projId,
-      parentTableId: el.projId,
-      urlLabel: el.label || '(kein Jahr)',
-      label: el.label,
-      url: ['Projekte', el.projId, 'AP-Berichte', el.id],
-      hasChildren: false,
-    }))
-    .map((el, index) => {
-      el.sort = [projIndex, 2, index]
-      return el
-    })
+  const nodes = (data?.allApberuebersichts?.nodes ?? []).map((el) => ({
+    nodeType: 'table',
+    menuType: 'apberuebersicht',
+    id: el.id,
+    parentId: el.projId,
+    parentTableId: el.projId,
+    urlLabel: el.label || '(kein Jahr)',
+    label: el.label,
+    url: ['Projekte', el.projId, 'AP-Berichte', el.id],
+    hasChildren: false,
+  }))
 
   return nodes
 }

@@ -12,6 +12,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
 import styled from '@emotion/styled'
 import isEqual from 'lodash/isEqual'
+import snakeCase from 'lodash/snakeCase'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -38,70 +39,44 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   font-size: 1.5rem;
 `
 
-const LabelFilter = ({ nodes }) => {
-  const navigate = useNavigate()
-  const { search } = useLocation()
-
+const LabelFilter = () => {
   const store = useContext(storeContext)
-  const { nodeLabelFilter, activeNodeArray, setOpenNodes } = store.tree
+  const { nodeLabelFilter, activeFilterTable } = store.tree
   const {
     setKey: setNodeLabelFilterKey,
     isFiltered: runIsFiltered,
     empty,
   } = nodeLabelFilter
   const isFiltered = runIsFiltered()
-  const activeNode = nodes.find((n) => isEqual(n.url, activeNodeArray))
-  const tableName = activeNode ? activeNode.filterTable : null
 
   let labelText = '(filtern nicht möglich)'
   let filterValue = ''
-  if (tableName) {
-    filterValue = nodeLabelFilter?.[tableName] ?? ''
+  if (activeFilterTable) {
+    filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     // make sure 0 is kept
     if (!filterValue && filterValue !== 0) filterValue = ''
-    const table = tables.find((t) => t.table === tableName)
+    // should be to_under_score_case
+    const table = tables.find((t) => t.table === snakeCase(activeFilterTable))
     const tableLabel = table ? table.label : null
     // danger: Projekte can not be filtered because no parent folder
     if (tableLabel !== 'Projekte') {
       labelText = `${tableLabel} filtern`
     }
   }
-  const openNodes = useMemo(() => store.tree?.openNodes ?? [], [store])
 
   const [value, setValue] = useState('')
 
   useEffect(() => {
     setValue(filterValue)
-  }, [filterValue, tableName])
+  }, [filterValue, activeFilterTable])
 
   const setValuesAfterChange = useCallback(
-    (val) => {
-      const { filterTable, url, label } = activeNode
-      // pop if is not folder and label does not comply to filter
-      if (
-        activeNode.nodeType === 'table' &&
-        !label.includes(val && val.toLowerCase ? val.toLowerCase() : val)
-      ) {
-        const newActiveNodeArray = [...url]
-        const newActiveUrl = [...url]
-        newActiveNodeArray.pop()
-        const newOpenNodes = openNodes.filter((n) => n !== newActiveUrl)
-        navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
-        setOpenNodes(newOpenNodes)
-      }
+    (val) =>
       setNodeLabelFilterKey({
         value: val,
-        key: filterTable,
-      })
-    },
-    [
-      activeNode,
-      navigate,
-      openNodes,
-      search,
-      setNodeLabelFilterKey,
-      setOpenNodes,
-    ],
+        key: activeFilterTable,
+      }),
+    [setNodeLabelFilterKey, activeFilterTable],
   )
   const changeDebounced = useDebouncedCallback(setValuesAfterChange, 600)
 

@@ -1,26 +1,18 @@
 import sum from 'lodash/sum'
-import findIndex from 'lodash/findIndex'
 
-const beobNichtBeurteiltFolderNode = ({
-  nodes: nodesPassed,
+import beobNichtBeurteilt from './beobNichtBeurteilt'
+
+const beobNichtBeurteiltFolderNode = async ({
   data,
   loading,
-  projektNodes,
   projId,
-  apNodes,
   apId,
   store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, {
-    id: apId,
-  })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
-  const aparts = (data?.openAps?.nodes ?? []).find((el) => el?.id === apId)
-    ?.beobNichtBeurteilt?.nodes
+
+  const aparts = data?.apById?.beobNichtBeurteilt?.nodes ?? []
   const counts = aparts.map(
     (a) => a.aeTaxonomyByArtId?.beobsByArtId?.totalCount ?? 0,
   )
@@ -40,24 +32,30 @@ const beobNichtBeurteiltFolderNode = ({
     'nicht-beurteilte-Beobachtungen',
   ]
 
-  // only show if parent node exists
-  const apNodesIds = nodesPassed.map((n) => n.id)
-  if (!apNodesIds.includes(apId)) return []
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n.length > 4 &&
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'nicht-beurteilte-Beobachtungen',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'beobNichtBeurteiltFolder',
-      filterTable: 'beob',
-      id: `${apId}BeobNichtBeurteiltFolder`,
-      tableId: apId,
-      urlLabel: 'nicht-beurteilte-Beobachtungen',
-      label: `Beobachtungen nicht beurteilt (${message})`,
-      url,
-      sort: [projIndex, 1, apIndex, 11],
-      hasChildren: count > 0,
-    },
-  ]
+  const children = isOpen
+    ? await beobNichtBeurteilt({ treeQueryVariables, projId, apId, store })
+    : []
+
+  return {
+    nodeType: 'folder',
+    menuType: 'beobNichtBeurteiltFolder',
+    id: `${apId}BeobNichtBeurteiltFolder`,
+    tableId: apId,
+    urlLabel: 'nicht-beurteilte-Beobachtungen',
+    label: `Beobachtungen nicht beurteilt (${message})`,
+    url,
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default beobNichtBeurteiltFolderNode

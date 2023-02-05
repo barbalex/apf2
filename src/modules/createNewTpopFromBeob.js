@@ -85,7 +85,6 @@ const createNewTpopFromBeob = async ({
   apId = '99999999-9999-9999-9999-999999999999',
   client,
   store,
-  queryClient,
   search,
 }) => {
   const { enqueNotification } = store
@@ -245,7 +244,7 @@ const createNewTpopFromBeob = async ({
       'BeobAssignLinesQuery',
     ],
   })
-  queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+  store.tree.incrementRefetcher()
 }
 
 export default createNewTpopFromBeob

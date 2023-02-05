@@ -1,38 +1,30 @@
-import findIndex from 'lodash/findIndex'
+import ap from './ap'
 
-const apFolderNode = ({ data, loading, projektNodes, projId, store }) => {
-  // fetch sorting indexes of parents
-  const projNodeIds = projektNodes.map((n) => n.id)
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
+const apFolderNode = async ({ projId, store, treeQueryVariables, count }) => {
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ap ?? ''
 
-  const count = data?.allAps?.totalCount ?? 0
+  const message = nodeLabelFilterString ? `${count} gefiltert` : count
 
-  const message = loading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${count} gefiltert`
-    : count
+  const showChildren =
+    store.tree.openNodes.filter(
+      (n) => n[0] === 'Projekte' && n[1] === projId && n[2] === 'Arten',
+    ).length > 0
 
-  // only show if parent node exists
-  if (!projNodeIds.includes(projId)) return []
+  const children = showChildren
+    ? await ap({ projId, store, treeQueryVariables })
+    : []
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'apFolder',
-      filterTable: 'ap',
-      id: `${projId}ApFolder`,
-      tableId: projId,
-      urlLabel: 'Arten',
-      label: `Arten (${message})`,
-      url: ['Projekte', projId, 'Arten'],
-      sort: [projIndex, 1],
-      hasChildren: count > 0,
-    },
-  ]
+  return {
+    nodeType: 'folder',
+    menuType: 'apFolder',
+    id: `${projId}ApFolder`,
+    tableId: projId,
+    urlLabel: 'Arten',
+    label: `Arten (${message})`,
+    url: ['Projekte', projId, 'Arten'],
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default apFolderNode

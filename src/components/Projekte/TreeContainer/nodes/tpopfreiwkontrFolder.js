@@ -1,38 +1,22 @@
-import findIndex from 'lodash/findIndex'
+import tpopfreiwkontr from './tpopfreiwkontr'
 
-const tpopfreiwkontrFolderNode = ({
-  nodes: nodesPassed,
-  data,
+const tpopfreiwkontrFolderNode = async ({
+  count,
   loading,
-  projektNodes,
-  apNodes,
-  popNodes,
-  tpopNodes,
   projId,
   apId,
   popId,
   tpopId,
   store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
-  const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpopkontr ?? ''
 
-  let children = (data?.allTpopfreiwkontrs?.nodes ?? []).filter(
-    (el) => el.tpopId === tpopId,
-  )
-
-  const childrenLength = children.length
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${childrenLength} gefiltert`
-    : childrenLength
+    ? `${count} gefiltert`
+    : count
 
   const url = [
     'Projekte',
@@ -46,23 +30,40 @@ const tpopfreiwkontrFolderNode = ({
     'Freiwilligen-Kontrollen',
   ]
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(tpopId)) return []
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'Populationen' &&
+        n[5] === popId &&
+        n[6] === 'Teil-Populationen' &&
+        n[7] === tpopId &&
+        n[8] === 'Freiwilligen-Kontrollen',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'tpopfreiwkontrFolder',
-      filterTable: 'tpopkontr',
-      id: `${tpopId}TpopfreiwkontrFolder`,
-      tableId: tpopId,
-      urlLabel: 'Freiwilligen-Kontrollen',
-      label: `Freiwilligen-Kontrollen (${message})`,
-      url,
-      sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4],
-      hasChildren: childrenLength > 0,
-    },
-  ]
+  const children = isOpen
+    ? await tpopfreiwkontr({
+        treeQueryVariables,
+        projId,
+        apId,
+        popId,
+        tpopId,
+        store,
+      })
+    : []
+
+  return {
+    nodeType: 'folder',
+    menuType: 'tpopfreiwkontrFolder',
+    id: `${tpopId}TpopfreiwkontrFolder`,
+    tableId: tpopId,
+    urlLabel: 'Freiwilligen-Kontrollen',
+    label: `Freiwilligen-Kontrollen (${message})`,
+    url,
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default tpopfreiwkontrFolderNode

@@ -1,43 +1,35 @@
-import findIndex from 'lodash/findIndex'
+import apberuersicht from './apberuebersicht'
 
-const apberuebersichtFolderNode = ({
-  data,
-  loading,
-  projektNodes,
+const apberuebersichtFolderNode = async ({
   projId,
   store,
+  count,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projNodeIds = projektNodes.map((n) => n.id)
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
   const nodeLabelFilterString =
     store.tree?.nodeLabelFilter?.apberuebersicht ?? ''
-  const count = data?.allApberuebersichts?.totalCount ?? 0
 
-  const message = loading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${count} gefiltert`
-    : count
+  const message = nodeLabelFilterString ? `${count} gefiltert` : count
 
-  // only show if parent node exists
-  if (!projNodeIds.includes(projId)) return []
+  const showChildren =
+    store.tree.openNodes.filter(
+      (n) => n[0] === 'Projekte' && n[1] === projId && n[2] === 'AP-Berichte',
+    ).length > 0
 
-  return [
-    {
-      menuType: 'apberuebersichtFolder',
-      filterTable: 'apberuebersicht',
-      id: projId,
-      tableId: projId,
-      urlLabel: 'AP-Berichte',
-      label: `AP-Berichte (${message})`,
-      url: ['Projekte', projId, 'AP-Berichte'],
-      sort: [projIndex, 2],
-      hasChildren: count > 0,
-    },
-  ]
+  const children = showChildren
+    ? await apberuersicht({ store, treeQueryVariables })
+    : []
+
+  return {
+    menuType: 'apberuebersichtFolder',
+    id: `${projId}ApberuebersichtsFolder`,
+    tableId: projId,
+    urlLabel: 'AP-Berichte',
+    label: `AP-Berichte (${message})`,
+    url: ['Projekte', projId, 'AP-Berichte'],
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default apberuebersichtFolderNode

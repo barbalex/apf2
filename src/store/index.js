@@ -82,7 +82,10 @@ const myTypes = types
     toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
     notifications: [],
+    // apollographql client
     client: null,
+    // tanstack query client
+    queryClient: null,
     navigate: undefined,
   }))
   .actions((self) => ({
@@ -91,6 +94,9 @@ const myTypes = types
     },
     setClient(val) {
       self.client = val
+    },
+    setQueryClient(val) {
+      self.queryClient = val
     },
     setPrintingJberYear(val) {
       self.printingJberYear = val

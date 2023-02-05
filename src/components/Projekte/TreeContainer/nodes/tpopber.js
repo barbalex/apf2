@@ -1,60 +1,60 @@
-import findIndex from 'lodash/findIndex'
+import { gql } from '@apollo/client'
 
-const tpopberNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
-  apNodes,
-  popNodes,
-  tpopNodes,
+const tpopberNodes = async ({
   projId,
   apId,
   popId,
   tpopId,
+  store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: ['treeTpopber', tpopId, treeQueryVariables.tpopbersFilter],
+    queryFn: () =>
+      store.client.query({
+        query: gql`
+          query TreeTpopberQuery($id: UUID!, $tpopbersFilter: TpopberFilter!) {
+            tpopById(id: $id) {
+              id
+              tpopbersByTpopId(filter: $tpopbersFilter, orderBy: LABEL_ASC) {
+                nodes {
+                  id
+                  label
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          id: tpopId,
+          tpopbersFilter: treeQueryVariables.tpopbersFilter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
-  const tpopIndex = findIndex(tpopNodes, { id: tpopId })
 
-  // map through all elements and create array of nodes
-  const nodes = (data?.allTpopbers?.nodes ?? [])
-    // only show if parent node exists
-    .filter((el) =>
-      nodesPassed.map((n) => n.id).includes(`${el.tpopId}TpopberFolder`),
-    )
-    // only show nodes of this parent
-    .filter((el) => el.tpopId === tpopId)
-    .map((el) => ({
-      nodeType: 'table',
-      menuType: 'tpopber',
-      filterTable: 'tpopber',
-      parentId: `${el.tpopId}TpopberFolder`,
-      parentTableId: el.tpopId,
-      id: el.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-        'Kontroll-Berichte',
-        el.id,
-      ],
-      hasChildren: false,
-    }))
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 5, index]
-      return el
-    })
+  const nodes = (data?.tpopById?.tpopbersByTpopId?.nodes ?? []).map((el) => ({
+    nodeType: 'table',
+    menuType: 'tpopber',
+    parentId: `${tpopId}TpopberFolder`,
+    parentTableId: tpopId,
+    id: el.id,
+    urlLabel: el.id,
+    label: el.label,
+    url: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
+      tpopId,
+      'Kontroll-Berichte',
+      el.id,
+    ],
+    hasChildren: false,
+  }))
 
   return nodes
 }

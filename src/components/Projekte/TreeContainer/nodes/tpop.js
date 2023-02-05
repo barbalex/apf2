@@ -1,58 +1,212 @@
-import findIndex from 'lodash/findIndex'
+import { gql } from '@apollo/client'
 
-const tpopNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
-  apNodes,
-  popNodes,
+import tpopmassnFolder from './tpopmassnFolder'
+import tpopmassnberFolder from './tpopmassnberFolder'
+import tpopfeldkontrFolder from './tpopfeldkontrFolder'
+import tpopfreiwkontrFolder from './tpopfreiwkontrFolder'
+import tpopberFolder from './tpopberFolder'
+import beobZugeordnetFolder from './beobZugeordnetFolder'
+
+const tpopNodes = async ({
   projId,
   apId,
   popId,
+  store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: ['treeTpop', popId, treeQueryVariables.tpopsFilter],
+    queryFn: () =>
+      store.client.query({
+        query: gql`
+          query TreeTpopQuery($id: UUID!, $tpopsFilter: TpopFilter!) {
+            popById(id: $id) {
+              id
+              tpopsByPopId(
+                filter: $tpopsFilter
+                orderBy: [NR_ASC, FLURNAME_ASC]
+              ) {
+                nodes {
+                  id
+                  label
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          id: popId,
+          tpopsFilter: treeQueryVariables.tpopsFilter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
 
+  const nodes = []
   // map through all elements and create array of nodes
-  const nodes = (data?.allTpops?.nodes ?? [])
-    // only show if parent node exists
-    .filter((el) =>
-      nodesPassed.map((n) => n.id).includes(`${el.popId}TpopFolder`),
-    )
-    // only show nodes of this parent
-    .filter((el) => el.popId === popId)
-    .map((el) => ({
+  for (const node of data?.popById?.tpopsByPopId?.nodes ?? []) {
+    const isOpen =
+      store.tree.openNodes.filter(
+        (n) =>
+          n.length > 5 &&
+          n[1] === projId &&
+          n[3] === apId &&
+          n[4] === 'Populationen' &&
+          n[5] === popId &&
+          n[6] === 'Teil-Populationen' &&
+          n[7] === node.id,
+      ).length > 0
+
+    let children = []
+
+    if (isOpen) {
+      const { data, isLoading } = await store.queryClient.fetchQuery({
+        queryKey: ['treeTpop', node.id],
+        queryFn: () =>
+          store.client.query({
+            query: gql`
+              query TreeTpopQuery(
+                $id: UUID!
+                $tpopmassnsFilter: TpopmassnFilter!
+                $tpopmassnbersFilter: TpopmassnberFilter!
+                $tpopbersFilter: TpopberFilter!
+                $tpopfeldkontrsFilter: TpopkontrFilter!
+                $tpopfreiwkontrsFilter: TpopkontrFilter!
+                $beobZugeordnetsFilter: BeobFilter!
+              ) {
+                tpopById(id: $id) {
+                  id
+                  tpopmassnsByTpopId(filter: $tpopmassnsFilter) {
+                    totalCount
+                  }
+                  tpopmassnbersByTpopId(filter: $tpopmassnbersFilter) {
+                    totalCount
+                  }
+                  tpopbersByTpopId(filter: $tpopbersFilter) {
+                    totalCount
+                  }
+                  tpopfeldkontrs: tpopkontrsByTpopId(
+                    filter: $tpopfeldkontrsFilter
+                    orderBy: [JAHR_ASC, DATUM_ASC]
+                  ) {
+                    totalCount
+                  }
+                  tpopfreiwkontrs: tpopkontrsByTpopId(
+                    filter: $tpopfreiwkontrsFilter
+                    orderBy: [JAHR_ASC, DATUM_ASC]
+                  ) {
+                    totalCount
+                  }
+                  beobsByTpopId(filter: $beobZugeordnetsFilter) {
+                    totalCount
+                  }
+                }
+              }
+            `,
+            variables: {
+              id: node.id,
+              tpopmassnsFilter: treeQueryVariables.tpopmassnsFilter,
+              tpopmassnbersFilter: treeQueryVariables.tpopmassnbersFilter,
+              tpopbersFilter: treeQueryVariables.tpopbersFilter,
+              tpopfeldkontrsFilter: treeQueryVariables.tpopfeldkontrsFilter,
+              tpopfreiwkontrsFilter: treeQueryVariables.tpopfreiwkontrsFilter,
+              beobZugeordnetsFilter: treeQueryVariables.beobZugeordnetsFilter,
+            },
+            fetchPolicy: 'no-cache',
+          }),
+      })
+      const tpopmassnFolderNode = await tpopmassnFolder({
+        count: data?.tpopById?.tpopmassnsByTpopId?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
+      const tpopmassnberFolderNode = await tpopmassnberFolder({
+        count: data?.tpopById?.tpopmassnbersByTpopId?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
+      const tpopfeldkontrFolderNode = await tpopfeldkontrFolder({
+        count: data?.tpopById?.tpopfeldkontrs?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
+      const tpopfreiwkontrFolderNode = await tpopfreiwkontrFolder({
+        count: data?.tpopById?.tpopfreiwkontrs?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
+      const tpopberFolderNode = await tpopberFolder({
+        count: data?.tpopById?.tpopbersByTpopId?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
+      const beobZugeordnetFolderNode = await beobZugeordnetFolder({
+        count: data?.tpopById?.beobsByTpopId?.totalCount ?? 0,
+        loading: isLoading,
+        projId,
+        apId,
+        popId,
+        tpopId: node.id,
+        store,
+        treeQueryVariables,
+      })
+      children = [
+        tpopmassnFolderNode,
+        tpopmassnberFolderNode,
+        tpopfeldkontrFolderNode,
+        tpopfreiwkontrFolderNode,
+        tpopberFolderNode,
+        beobZugeordnetFolderNode,
+      ]
+    }
+
+    nodes.push({
       nodeType: 'table',
       menuType: 'tpop',
-      filterTable: 'tpop',
-      id: el.id,
-      parentId: `${el.popId}TpopFolder`,
-      parentTableId: el.popId,
-      urlLabel: el.id,
-      label: el.label,
+      id: node.id,
+      parentId: `${popId}TpopFolder`,
+      parentTableId: popId,
+      urlLabel: node.id,
+      label: node.label,
       url: [
         'Projekte',
         projId,
         'Arten',
         apId,
         'Populationen',
-        el.popId,
+        popId,
         'Teil-Populationen',
-        el.id,
+        node.id,
       ],
       hasChildren: true,
-      nr: el.nr,
-    }))
-    // sort again to sort (keine Nr) on top
-    .sort((a, b) => a.nr - b.nr)
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, index]
-      return el
+      children,
     })
+  }
 
   return nodes
 }

@@ -1,22 +1,52 @@
-const projektNodes = ({ data }) => {
-  const projekts = data?.allProjekts?.nodes ?? []
+import apFolder from './apFolder'
+import apberuebersichtFolder from './apberuebersichtFolder'
 
-  // map through all elements and create array of nodes
-  const nodes = projekts
-    // is already sorted by name
-    .map((el, index) => ({
+const projektNodes = async ({
+  store,
+  treeQueryVariables,
+  projekt,
+  isProjectOpen,
+}) => {
+  if (!isProjectOpen) {
+    // this project is not open
+    // no children, apFolder or apUebersichtFolder
+    return {
       nodeType: 'table',
       menuType: 'projekt',
-      filterTable: 'projekt',
-      id: el.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Projekte', el.id],
-      sort: [index],
+      id: projekt.id,
+      urlLabel: projekt.id,
+      label: projekt.label,
+      url: ['Projekte', projekt.id],
       hasChildren: true,
-    }))
+    }
+  }
 
-  return nodes
+  const apFolderNode = await apFolder({
+    projId: projekt.id,
+    store,
+    treeQueryVariables,
+    count: projekt?.apsByProjId?.totalCount ?? 0,
+  })
+  const apberUebersichtFolderNode = await apberuebersichtFolder({
+    projId: projekt.id,
+    store,
+    count: projekt?.apberuebersichtsByProjId?.totalCount ?? 0,
+    treeQueryVariables,
+  })
+  const children = store.tree.openProjekts.includes(projekt.id)
+    ? [apFolderNode, apberUebersichtFolderNode]
+    : []
+
+  return {
+    nodeType: 'table',
+    menuType: 'projekt',
+    id: projekt.id,
+    urlLabel: projekt.id,
+    label: projekt.label,
+    url: ['Projekte', projekt.id],
+    hasChildren: true,
+    children,
+  }
 }
 
 export default projektNodes

@@ -1,43 +1,40 @@
-import findIndex from 'lodash/findIndex'
+import { gql } from '@apollo/client'
 
-const assozartNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
-  apNodes,
-  projId,
-  apId,
-}) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
+const assozartNodes = async ({ projId, apId, treeQueryVariables, store }) => {
+  const { data } = await store.client.query({
+    query: gql`
+      query TreeEkfrequenzQuery(
+        $apId: UUID!
+        $assozartFilter: AssozartFilter!
+      ) {
+        apById(id: $apId) {
+          id
+          assozartsByApId(filter: $assozartFilter, orderBy: LABEL_ASC) {
+            nodes {
+              id
+              label
+            }
+          }
+        }
+      }
+    `,
+    variables: {
+      apId,
+      assozartFilter: treeQueryVariables.assozartFilter,
+    },
   })
-  const apIndex = findIndex(apNodes, { id: apId })
-
   // map through all elements and create array of nodes
-  const nodes = (data?.allAssozarts?.nodes ?? [])
-    // only show if parent node exists
-    .filter((el) =>
-      nodesPassed.map((n) => n.id).includes(`${el.apId}AssozartFolder`),
-    )
-    // only show nodes of this parent
-    .filter((el) => el.apId === apId)
-    .map((el) => ({
-      nodeType: 'table',
-      menuType: 'assozart',
-      filterTable: 'assozart',
-      id: el.id,
-      parentId: el.apId,
-      parentTableId: el.apId,
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten', el.id],
-      hasChildren: false,
-    }))
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 8, index]
-      return el
-    })
+  const nodes = (data?.apById?.assozartsByApId?.nodes ?? []).map((el) => ({
+    nodeType: 'table',
+    menuType: 'assozart',
+    id: el.id,
+    parentId: apId,
+    parentTableId: apId,
+    urlLabel: el.id,
+    label: el.label,
+    url: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten', el.id],
+    hasChildren: false,
+  }))
 
   return nodes
 }

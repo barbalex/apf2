@@ -12,7 +12,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams, useLocation, Link } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField2'
@@ -99,7 +98,6 @@ const User = () => {
   const store = useContext(storeContext)
 
   const client = useApolloClient()
-  const queryClient = useQueryClient()
 
   const [errors, setErrors] = useState({})
   const [editPassword, setEditPassword] = useState(false)
@@ -177,10 +175,10 @@ const User = () => {
       }
       setErrors({})
       if (field === 'name') {
-        queryClient.invalidateQueries({ queryKey: [`treeQuery`] })
+        store.tree.incrementRefetcher()
       }
     },
-    [client, queryClient, row.id],
+    [client, row.id, store.tree],
   )
   const onBlurPassword = useCallback((event) => {
     setPasswordErrorText('')

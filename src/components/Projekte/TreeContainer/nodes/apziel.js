@@ -1,53 +1,52 @@
-import findIndex from 'lodash/findIndex'
+import apzielberFolder from './apzielberFolder'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
-
-const apzielNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
-  apNodes,
-  openNodes,
+const apzielNodes = async ({
   projId,
   apId,
   jahr,
-  apzieljahrFolderNodes,
+  ziels,
+  store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, {
-    id: apId,
-  })
-  const zieljahrIndex = findIndex(
-    apzieljahrFolderNodes,
-    (el) => el.jahr === jahr,
-  )
+  const nodes = []
 
-  // map through all elements and create array of nodes
-  const nodes = (data?.allZiels?.nodes ?? [])
-    .filter((el) => el.apId === apId)
-    .filter((el) => el.jahr === jahr)
-    .map((el) => ({
+  for (const el of ziels) {
+    const isOpen =
+      store.tree.openNodes.filter(
+        (n) =>
+          n.length > 7 &&
+          n[1] === projId &&
+          n[3] === apId &&
+          n[4] === 'AP-Ziele' &&
+          n[5] === jahr &&
+          n[6] === el.id,
+      ).length > 0
+
+    const children = isOpen
+      ? await apzielberFolder({
+          projId,
+          apId,
+          store,
+          zielId: el.id,
+          ziels: ziels.filter((z) => z.jahr === jahr),
+          jahr,
+          treeQueryVariables,
+        })
+      : []
+
+    nodes.push({
       nodeType: 'table',
       menuType: 'ziel',
-      filterTable: 'ziel',
       id: el.id,
-      parentId: el.apId,
-      parentTableId: el.apId,
+      parentId: apId,
+      parentTableId: apId,
       urlLabel: el.id,
       label: el.label,
-      url: ['Projekte', projId, 'Arten', el.apId, 'AP-Ziele', el.jahr, el.id],
+      url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', el.jahr, el.id],
       hasChildren: true,
-    }))
-    .filter((el) => allParentNodesAreOpen(openNodes, el.url))
-    .filter((n) => allParentNodesExist(nodesPassed, n))
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 2, zieljahrIndex, index]
-      return el
+      children,
     })
+  }
 
   return nodes
 }

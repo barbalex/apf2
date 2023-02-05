@@ -1,43 +1,51 @@
-import findIndex from 'lodash/findIndex'
+import { gql } from '@apollo/client'
 
-const ekzaehleinheitNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
-  apNodes,
+const ekzaehleinheitNodes = async ({
   projId,
   apId,
+  treeQueryVariables,
+  store,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
+  const { data } = await store.client.query({
+    query: gql`
+      query TreeEkzaehleinheitQuery(
+        $apId: UUID!
+        $ekzaehleinheitsFilter: EkzaehleinheitFilter!
+      ) {
+        apById(id: $apId) {
+          id
+          ekzaehleinheitsByApId(
+            filter: $ekzaehleinheitsFilter
+            orderBy: [SORT_ASC, LABEL_ASC]
+          ) {
+            nodes {
+              id
+              label
+            }
+          }
+        }
+      }
+    `,
+    variables: {
+      apId,
+      ekzaehleinheitsFilter: treeQueryVariables.ekzaehleinheitsFilter,
+    },
   })
-  const apIndex = findIndex(apNodes, { id: apId })
 
   // map through all elements and create array of nodes
-  const nodes = (data?.allEkzaehleinheits?.nodes ?? [])
-    // only show if parent node exists
-    .filter((el) =>
-      nodesPassed.map((n) => n.id).includes(`${el.apId}Ekzaehleinheit`),
-    )
-    // only show nodes of this parent
-    .filter((el) => el.apId === apId)
-    .map((el) => ({
+  const nodes = (data?.apById?.ekzaehleinheitsByApId?.nodes ?? []).map(
+    (el) => ({
       nodeType: 'table',
       menuType: 'ekzaehleinheit',
-      filterTable: 'ekzaehleinheit',
       id: el.id,
-      parentId: el.apId,
-      parentTableId: el.apId,
+      parentId: apId,
+      parentTableId: apId,
       urlLabel: el.id,
       label: el.label,
       url: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten', el.id],
       hasChildren: false,
-    }))
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 10, index]
-      return el
-    })
+    }),
+  )
 
   return nodes
 }

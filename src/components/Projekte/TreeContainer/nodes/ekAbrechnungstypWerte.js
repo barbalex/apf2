@@ -1,30 +1,46 @@
-const ekAbrechnungstypWerteNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
-}) => {
-  const ekAbrechnungstypWertes = data?.allEkAbrechnungstypWertes?.nodes ?? []
-  const wlIndex = projektNodes.length + 2
-  const nodes = ekAbrechnungstypWertes
-    // only show if parent node exists
-    .filter(() =>
-      nodesPassed.map((n) => n.id).includes('ekAbrechnungstypWerteFolder'),
-    )
-    .map((el) => ({
-      nodeType: 'table',
-      menuType: 'ekAbrechnungstypWerte',
-      filterTable: 'ekAbrechnungstypWerte',
-      id: el.id,
-      parentId: 'ekAbrechnungstypWerteFolder',
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Werte-Listen', 'EkAbrechnungstypWerte', el.id],
-      hasChildren: false,
-    }))
-    .map((el, index) => {
-      el.sort = [wlIndex, 3, index]
-      return el
-    })
+import { gql } from '@apollo/client'
+
+const ekAbrechnungstypWerteNodes = async ({ store, treeQueryVariables }) => {
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: [
+      'treeEkAbrechnungstypWertes',
+      treeQueryVariables.ekAbrechnungstypWertesFilter,
+    ],
+    queryFn: () =>
+      store.client.query({
+        query: gql`
+          query TreeEkAbrechnungstypWertesQuery(
+            $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
+          ) {
+            allEkAbrechnungstypWertes(
+              filter: $ekAbrechnungstypWertesFilter
+              orderBy: SORT_ASC
+            ) {
+              nodes {
+                id
+                label
+              }
+            }
+          }
+        `,
+        variables: {
+          ekAbrechnungstypWertesFilter:
+            treeQueryVariables.ekAbrechnungstypWertesFilter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+
+  const nodes = (data?.allEkAbrechnungstypWertes?.nodes ?? []).map((el) => ({
+    nodeType: 'table',
+    menuType: 'ekAbrechnungstypWerte',
+    id: el.id,
+    parentId: 'ekAbrechnungstypWerteFolder',
+    urlLabel: el.id,
+    label: el.label,
+    url: ['Werte-Listen', 'EkAbrechnungstypWerte', el.id],
+    hasChildren: false,
+  }))
 
   return nodes
 }

@@ -1,33 +1,48 @@
-const apberrelevantGrundWerteNodes = ({
-  nodes: nodesPassed,
-  data,
-  projektNodes,
-}) => {
-  const apberrelevantGrundWertes =
-    data?.allTpopApberrelevantGrundWertes?.nodes ?? []
-  const wlIndex = projektNodes.length + 2
-  const nodes = apberrelevantGrundWertes
-    // only show if parent node exists
-    .filter(() =>
-      nodesPassed
-        .map((n) => n.id)
-        .includes('tpopApberrelevantGrundWerteFolder'),
-    )
-    .map((el) => ({
+import { gql } from '@apollo/client'
+
+const apberrelevantGrundWerteNodes = async ({ store, treeQueryVariables }) => {
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: [
+      'treeApberrelevantGrundWertes',
+      treeQueryVariables.apberrelevantGrundWertesFilter,
+    ],
+    queryFn: () =>
+      store.client.query({
+        query: gql`
+          query TreeApberrelevantGrundWerteQuery(
+            $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
+          ) {
+            allTpopApberrelevantGrundWertes(
+              filter: $apberrelevantGrundWertesFilter
+              orderBy: SORT_ASC
+            ) {
+              nodes {
+                id
+                label
+              }
+            }
+          }
+        `,
+        variables: {
+          apberrelevantGrundWertesFilter:
+            treeQueryVariables.apberrelevantGrundWertesFilter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+
+  const nodes = (data?.allTpopApberrelevantGrundWertes?.nodes ?? []).map(
+    (el) => ({
       nodeType: 'table',
       menuType: 'tpopApberrelevantGrundWerte',
-      filterTable: 'tpopApberrelevantGrundWerte',
       id: el.id,
       parentId: 'tpopApberrelevantGrundWerteFolder',
       urlLabel: el.id,
       label: el.label,
       url: ['Werte-Listen', 'ApberrelevantGrundWerte', el.id],
       hasChildren: false,
-    }))
-    .map((el, index) => {
-      el.sort = [wlIndex, 2, index]
-      return el
-    })
+    }),
+  )
 
   return nodes
 }

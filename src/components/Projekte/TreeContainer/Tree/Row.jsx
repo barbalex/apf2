@@ -197,6 +197,8 @@ const Row = ({ node }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
 
+  // console.log('Row', { node })
+
   const store = useContext(storeContext)
   const {
     activeApfloraLayers,
@@ -214,42 +216,47 @@ const Row = ({ node }) => {
     node,
     activeNodeArray,
   })
-  const nodeIsOpen = isNodeOpen({ openNodes, url: node.url })
+  const nodeIsOpen = isNodeOpen({ openNodes, url: node.data.url })
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
   let symbolIcon
   let showPrintIcon = false
-  if (node.hasChildren && nodeIsOpen) {
+  if (node.data.hasChildren && nodeIsOpen) {
     symbolIcon = 'expandMore'
-  } else if (node.hasChildren) {
+  } else if (node.data.hasChildren) {
     symbolIcon = 'chevronRight'
-  } else if (node.label === 'lade Daten...') {
+  } else if (node.data.label === 'lade Daten...') {
     symbolIcon = 'moreHoriz'
   } else {
     useSymbolSpan = true
     useSymbolIcon = false
   }
-  if (node.menuType === 'apber' || node.menuType === 'apberuebersicht') {
+  if (
+    node.data.menuType === 'apber' ||
+    node.data.menuType === 'apberuebersicht'
+  ) {
     showPrintIcon = true
   }
   const printIconTitle =
-    node.menuType === 'apberuebersicht'
+    node.data.menuType === 'apberuebersicht'
       ? 'Druckversion. Achtung: braucht Minuten, um vollständig zu laden'
       : 'Druckversion'
-  const dataUrl = JSON.stringify(node.url)
+  const dataUrl = JSON.stringify(node.data.url)
   const level =
-    node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
+    node.data.url[0] === 'Projekte'
+      ? node.data.url.length - 1
+      : node.data.url.length
   const isMoving =
-    node.nodeType === 'table' &&
-    node.menuType === moving.table &&
+    node.data.nodeType === 'table' &&
+    node.data.menuType === moving.table &&
     node.id === moving.id
   const isCopying =
-    node.nodeType === 'table' &&
-    node.menuType === copying.table &&
+    node.data.nodeType === 'table' &&
+    node.data.menuType === copying.table &&
     node.id === copying.id
   const amCopyingBiotop =
-    node.nodeType === 'table' && node.id === copyingBiotop.id
+    node.data.nodeType === 'table' && node.id === copyingBiotop.id
 
   const onClickNode = useCallback(() => {
     toggleNode({
@@ -265,9 +272,9 @@ const Row = ({ node }) => {
   }, [navigate, node, search, store])
 
   const onClickPrint = useCallback(() => {
-    setPrintingJberYear(+node.label)
-    navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
-  }, [navigate, node.label, node.url, search, setPrintingJberYear])
+    setPrintingJberYear(+node.data.label)
+    navigate(`/Daten/${[...node.data.url, 'print'].join('/')}${search}`)
+  }, [navigate, node.data.label, node.data.url, search, setPrintingJberYear])
 
   const [projekteTabs] = useSearchParamsState(
     'projekteTabs',
@@ -277,23 +284,23 @@ const Row = ({ node }) => {
 
   return (
     <ContextMenuTrigger
-      id={`tree${upperFirst(node.menuType)}`}
+      id={`tree${upperFirst(node.data.menuType)}`}
       //collect={(props) => ({ key: index })}
       collect={(props) => props}
       nodeId={node.id}
-      tableId={node.tableId}
-      nodeLabel={node.label}
-      key={`${node.menuType}${node.id}`}
+      tableId={node.data.tableId}
+      nodeLabel={node.data.label}
+      key={`${node.data.menuType}${node.id}`}
     >
       <StyledNode
         data-level={level}
         data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-        data-id={node.tableId || node.id}
-        data-parentid={node.parentTableId || node.parentId}
+        data-id={node.data.tableId || node.id}
+        data-parentid={node.data.parentTableId || node.data.parentId}
         data-url={dataUrl}
-        data-nodetype={node.nodeType}
-        data-label={node.label}
-        data-menutype={node.menuType}
+        data-nodetype={node.data.nodeType}
+        data-label={node.data.label}
+        data-menutype={node.data.menuType}
       >
         {useSymbolIcon && (
           <SymbolDiv onClick={onClickNodeSymbol}>
@@ -318,91 +325,91 @@ const Row = ({ node }) => {
         )}
         {karteIsVisible && (
           <>
-            {node.menuType === 'ap' &&
+            {node.data.menuType === 'ap' &&
               node.id === apId &&
               activeApfloraLayers.includes('pop') && (
                 <div title="in Karte sichtbar">
                   <PopMapIcon />
                 </div>
               )}
-            {node.menuType === 'ap' &&
+            {node.data.menuType === 'ap' &&
               node.id === apId &&
               activeApfloraLayers.includes('tpop') && (
                 <div title="in Karte sichtbar">
                   <TpopMapIcon />
                 </div>
               )}
-            {node.menuType === 'beobNichtBeurteiltFolder' &&
+            {node.data.menuType === 'beobNichtBeurteiltFolder' &&
               node.id === apId &&
               activeApfloraLayers.includes('beobNichtBeurteilt') && (
                 <div title="in Karte sichtbar">
                   <BeobNichtBeurteiltMapIcon />
                 </div>
               )}
-            {node.menuType === 'beobNichtZuzuordnenFolder' &&
+            {node.data.menuType === 'beobNichtZuzuordnenFolder' &&
               node.id === apId &&
               activeApfloraLayers.includes('beobNichtZuzuordnen') && (
                 <div title="in Karte sichtbar">
                   <BeobNichtZuzuordnenMapIcon />
                 </div>
               )}
-            {node.menuType === 'beobZugeordnetFolder' &&
+            {node.data.menuType === 'beobZugeordnetFolder' &&
               node.id === tpopId &&
               activeApfloraLayers.includes('beobZugeordnet') && (
                 <div title="in Karte sichtbar">
                   <BeobZugeordnetMapIcon />
                 </div>
               )}
-            {node.menuType === 'pop' &&
+            {node.data.menuType === 'pop' &&
               activeApfloraLayers.includes('pop') &&
               !nodeIsActive && (
                 <div title="in Karte sichtbar">
                   <PopMapIcon />
                 </div>
               )}
-            {node.menuType === 'pop' &&
+            {node.data.menuType === 'pop' &&
               activeApfloraLayers.includes('pop') &&
               nodeIsActive && (
                 <div title="in Karte hervorgehoben">
                   <PopFilteredMapIcon />
                 </div>
               )}
-            {node.menuType === 'tpop' &&
+            {node.data.menuType === 'tpop' &&
               activeApfloraLayers.includes('tpop') &&
               !nodeIsActive && (
                 <div title="in Karte sichtbar">
                   <TpopMapIcon />
                 </div>
               )}
-            {node.menuType === 'tpop' &&
+            {node.data.menuType === 'tpop' &&
               activeApfloraLayers.includes('tpop') &&
               nodeIsActive && (
                 <div title="in Karte hervorgehoben">
                   <TpopFilteredMapIcon />
                 </div>
               )}
-            {node.menuType === 'beobNichtBeurteilt' &&
+            {node.data.menuType === 'beobNichtBeurteilt' &&
               activeApfloraLayers.includes('beobNichtBeurteilt') &&
               !nodeIsActive && (
                 <div title="in Karte sichtbar">
                   <BeobNichtBeurteiltMapIcon />
                 </div>
               )}
-            {node.menuType === 'beobNichtBeurteilt' &&
+            {node.data.menuType === 'beobNichtBeurteilt' &&
               activeApfloraLayers.includes('beobNichtBeurteilt') &&
               nodeIsActive && (
                 <div title="in Karte hervorgehoben">
                   <BeobNichtBeurteiltFilteredMapIcon />
                 </div>
               )}
-            {node.menuType === 'beobNichtZuzuordnen' &&
+            {node.data.menuType === 'beobNichtZuzuordnen' &&
               activeApfloraLayers.includes('beobNichtZuzuordnen') &&
               !nodeIsActive && (
                 <div title="in Karte sichtbar">
                   <BeobNichtZuzuordnenMapIcon />
                 </div>
               )}
-            {node.menuType === 'beobNichtZuzuordnen' &&
+            {node.data.menuType === 'beobNichtZuzuordnen' &&
               activeApfloraLayers.includes('beobNichtZuzuordnen') &&
               nodeIsActive && (
                 <div title="in Karte hervorgehoben">
@@ -410,14 +417,14 @@ const Row = ({ node }) => {
                 </div>
               )}
             {activeApfloraLayers.includes('beobZugeordnet') &&
-              node.menuType === 'beobZugeordnet' &&
+              node.data.menuType === 'beobZugeordnet' &&
               !nodeIsActive && (
                 <div title="in Karte sichtbar">
                   <BeobZugeordnetMapIcon />
                 </div>
               )}
             {activeApfloraLayers.includes('beobZugeordnet') &&
-              node.menuType === 'beobZugeordnet' &&
+              node.data.menuType === 'beobZugeordnet' &&
               nodeIsActive && (
                 <div title="in Karte hervorgehoben">
                   <BeobZugeordnetFilteredMapIcon />
@@ -430,13 +437,13 @@ const Row = ({ node }) => {
           node={node}
           onClick={onClickNode}
         >
-          {nodeLabelFilter?.[node.menuType] ? (
+          {nodeLabelFilter?.[node.data.menuType] ? (
             <Highlighter
-              searchWords={[nodeLabelFilter[node.menuType]]}
-              textToHighlight={node.label}
+              searchWords={[nodeLabelFilter[node.data.menuType]]}
+              textToHighlight={node.data.label}
             />
           ) : (
-            node.label
+            node.data.label
           )}
         </TextSpan>
         {isMoving && (

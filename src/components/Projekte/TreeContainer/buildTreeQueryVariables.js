@@ -81,15 +81,8 @@ const buildTreeQueryVariables = ({
       .filter((v) => v !== null)
       .filter((v) => isUuid.anyNonNil(v)),
   )
-  const isApArt = isAp && openNodes.some((nArray) => nArray[4] === 'Taxa')
-  const isApBer =
-    isAp && openNodes.some((nArray) => nArray[4] === 'AP-Berichte')
   const isApPop =
     isAp && openNodes.some((nArray) => nArray[4] === 'Populationen')
-  const isApBerUebersicht =
-    !isAp && openNodes.some((nArray) => nArray[2] === 'AP-Berichte')
-  const isCurrentIssues =
-    !isAp && openNodes.some((nArray) => nArray[0] === 'Aktuelle-Fehler')
   const isUsers = !isAp && openNodes.some((nArray) => nArray[0] === 'Benutzer')
   const isZiel =
     isAp &&
@@ -253,13 +246,14 @@ const buildTreeQueryVariables = ({
   const adressesFilter = nodeLabelFilter.adresse
     ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
     : { id: { isNull: false } }
-  const apberrelevantGrundWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
-    ? {
-        label: {
-          includesInsensitive: nodeLabelFilter.apberrelevantGrundWerte,
-        },
-      }
-    : { id: { isNull: false } }
+  const apberrelevantGrundWertesFilter =
+    nodeLabelFilter.tpopApberrelevantGrundWerte
+      ? {
+          label: {
+            includesInsensitive: nodeLabelFilter.tpopApberrelevantGrundWerte,
+          },
+        }
+      : { id: { isNull: false } }
   const tpopkontrzaehlEinheitWertesFilter =
     nodeLabelFilter.tpopkontrzaehlEinheitWerte
       ? {
@@ -291,11 +285,7 @@ const buildTreeQueryVariables = ({
     isAp,
     isAps,
     isBeobNichtBeurteilt,
-    isApArt,
-    isApBer,
     isApPop,
-    isApBerUebersicht,
-    isCurrentIssues,
     isUsers,
     isPop,
     isTpop,

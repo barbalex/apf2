@@ -1,26 +1,36 @@
-import sortBy from 'lodash/sortBy'
+import { gql } from '@apollo/client'
 
-const currentIssuesNodes = ({ data, projektNodes }) => {
+const currentIssuesNodes = async ({ store }) => {
+  const { data } = await store.queryClient.fetchQuery({
+    queryKey: ['treeCurrentIssues'],
+    queryFn: async () =>
+      store.client.query({
+        query: gql`
+          query TreeCurrentIssuesQuery {
+            allCurrentissues(orderBy: [SORT_ASC, TITLE_ASC]) {
+              nodes {
+                id
+                label
+              }
+            }
+          }
+        `,
+        fetchPolicy: 'no-cache',
+      }),
+  })
+
   const currentIssues = data?.allCurrentissues?.nodes ?? []
 
-  // fetch sorting indexes of parents
-  const currentIssueIndex = projektNodes.length + 3
-
   // map through all elements and create array of nodes
-  const nodes = sortBy(currentIssues, ['sort', 'title'])
-    .map((el) => ({
-      nodeType: 'table',
-      menuType: 'currentIssue',
-      id: el.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Aktuelle-Fehler', el.id],
-      hasChildren: false,
-    }))
-    .map((el, index) => {
-      el.sort = [currentIssueIndex, index]
-      return el
-    })
+  const nodes = currentIssues.map((el) => ({
+    nodeType: 'table',
+    menuType: 'currentIssue',
+    id: el.id,
+    urlLabel: el.id,
+    label: el.label,
+    url: ['Aktuelle-Fehler', el.id],
+    hasChildren: false,
+  }))
 
   return nodes
 }

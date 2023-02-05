@@ -1,24 +1,15 @@
-const messagesFolderNode = ({ data, loading, projektNodes }) => {
-  const messages = data?.allMessages?.totalCount ?? 0
+const messagesFolderNode = async ({ count, isLoading }) => {
+  const message = isLoading && !count ? '...' : count
 
-  // fetch sorting indexes of parents
-  const messagesIndex = projektNodes.length + 3
-
-  let message = loading && !messages ? '...' : messages
-
-  return [
-    {
-      nodeType: 'table',
-      menuType: 'message',
-      filterTable: 'message',
-      id: 'messagesFolder',
-      urlLabel: 'Mitteilungen',
-      label: `Mitteilungen (${message})`,
-      url: ['Mitteilungen'],
-      sort: [messagesIndex],
-      hasChildren: false,
-    },
-  ]
+  return {
+    nodeType: 'table',
+    menuType: 'message',
+    id: 'messagesFolder',
+    urlLabel: 'Mitteilungen',
+    label: `Mitteilungen (${message})`,
+    url: ['Mitteilungen'],
+    hasChildren: false,
+  }
 }
 
 export default messagesFolderNode

@@ -1,36 +1,27 @@
-import findIndex from 'lodash/findIndex'
+import sum from 'lodash/sum'
 
-const beobNichtZuzuordnenFolderNode = ({
-  nodes: nodesPassed,
+import beobNichtZuzuordnen from './beobNichtZuzuordnen'
+
+const beobNichtZuzuordnenFolderNode = async ({
   data,
   loading,
-  projektNodes,
   projId,
-  apNodes,
   apId,
   store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, {
-    id: apId,
-  })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
 
-  const beobNichtZuzuordnenNodesLength = (
-    data?.apBeobsNichtZuzuordnen?.nodes ?? []
-  ).filter((el) =>
-    el?.aeTaxonomyByArtId?.apartsByArtId?.nodes?.some(
-      (el) => el?.apId === apId,
-    ),
-  ).length
+  const aparts = data?.apById?.beobNichtZuzuordnen?.nodes ?? []
+  const counts = aparts.map(
+    (a) => a.aeTaxonomyByArtId?.beobsByArtId?.totalCount ?? 0,
+  )
+  const count = sum(counts)
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${beobNichtZuzuordnenNodesLength} gefiltert`
-    : beobNichtZuzuordnenNodesLength
+    ? `${count} gefiltert`
+    : count
 
   const url = [
     'Projekte',
@@ -40,24 +31,30 @@ const beobNichtZuzuordnenFolderNode = ({
     'nicht-zuzuordnende-Beobachtungen',
   ]
 
-  // only show if parent node exists
-  const apNodesIds = nodesPassed.map((n) => n.id)
-  if (!apNodesIds.includes(apId)) return []
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n.length > 4 &&
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'nicht-zuzuordnende-Beobachtungen',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'beobNichtZuzuordnenFolder',
-      filterTable: 'beob',
-      id: `${apId}BeobNichtZuzuordnenFolder`,
-      tableId: apId,
-      urlLabel: 'nicht-zuzuordnende-Beobachtungen',
-      label: `Beobachtungen nicht zuzuordnen (${message})`,
-      url,
-      sort: [projIndex, 1, apIndex, 12],
-      hasChildren: beobNichtZuzuordnenNodesLength > 0,
-    },
-  ]
+  const children = isOpen
+    ? await beobNichtZuzuordnen({ treeQueryVariables, projId, apId, store })
+    : []
+
+  return {
+    nodeType: 'folder',
+    menuType: 'beobNichtZuzuordnenFolder',
+    id: `${apId}BeobNichtZuzuordnenFolder`,
+    tableId: apId,
+    urlLabel: 'nicht-zuzuordnende-Beobachtungen',
+    label: `Beobachtungen nicht zuzuordnen (${message})`,
+    url,
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default beobNichtZuzuordnenFolderNode

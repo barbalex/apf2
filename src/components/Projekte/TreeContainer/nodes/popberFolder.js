@@ -1,60 +1,55 @@
-import findIndex from 'lodash/findIndex'
+import popber from './popber'
 
-const popberFolderNode = ({
-  nodes: nodesPassed,
-  data,
+const popberFolderNode = async ({
+  count,
   loading,
-  projektNodes,
-  apNodes,
-  popNodes,
   projId,
   apId,
   popId,
   store,
+  treeQueryVariables,
 }) => {
-  // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes, {
-    id: projId,
-  })
-  const apIndex = findIndex(apNodes, { id: apId })
-  const popIndex = findIndex(popNodes, { id: popId })
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.popber ?? ''
-
-  const childrenLength = (data?.allPopbers?.nodes ?? []).filter(
-    (el) => el.popId === popId,
-  ).length
 
   const message = loading
     ? '...'
     : nodeLabelFilterString
-    ? `${childrenLength} gefiltert`
-    : childrenLength
+    ? `${count} gefiltert`
+    : count
 
-  // only show if parent node exists
-  if (!nodesPassed.map((n) => n.id).includes(popId)) return []
+  const isOpen =
+    store.tree.openNodes.filter(
+      (n) =>
+        n[1] === projId &&
+        n[3] === apId &&
+        n[4] === 'Populationen' &&
+        n[5] === popId &&
+        n[6] === 'Kontroll-Berichte',
+    ).length > 0
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'popberFolder',
-      filterTable: 'popber',
-      id: `${popId}PopberFolder`,
-      tableId: popId,
-      urlLabel: 'Kontroll-Berichte',
-      label: `Kontroll-Berichte (${message})`,
-      url: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        popId,
-        'Kontroll-Berichte',
-      ],
-      sort: [projIndex, 1, apIndex, 1, popIndex, 2],
-      hasChildren: childrenLength > 0,
-    },
-  ]
+  const children = isOpen
+    ? await popber({ treeQueryVariables, projId, apId, popId, store })
+    : []
+
+  return {
+    nodeType: 'folder',
+    menuType: 'popberFolder',
+    id: `${popId}PopberFolder`,
+    tableId: popId,
+    urlLabel: 'Kontroll-Berichte',
+    label: `Kontroll-Berichte (${message})`,
+    url: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Kontroll-Berichte',
+    ],
+    hasChildren: count > 0,
+    children,
+  }
 }
 
 export default popberFolderNode
