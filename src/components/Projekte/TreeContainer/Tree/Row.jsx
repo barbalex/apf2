@@ -297,6 +297,8 @@ const Row = ({ node }) => {
         data-label={node.label}
         data-menutype={node.menuType}
         data-jahr={node.jahr}
+        // need id to scroll into view
+        id={node.id}
       >
         {useSymbolIcon && (
           <SymbolDiv onClick={onClickNodeSymbol}>
