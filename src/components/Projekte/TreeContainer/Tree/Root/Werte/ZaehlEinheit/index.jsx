@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../storeContext'
 import Row from '../../../Row'
+import ZaehlEinheitNodes from './ZaehlEinheit'
 
 const ZaehlEinheitFolder = ({ count, isLoading }) => {
   const store = useContext(storeContext)
@@ -31,7 +32,12 @@ const ZaehlEinheitFolder = ({ count, isLoading }) => {
     hasChildren: count > 0,
   }
 
-  return <Row key="wlZaehlEinheitFolder" node={node} />
+  return (
+    <>
+      <Row key="wlZaehlEinheitFolder" node={node} />
+      {isOpen && <ZaehlEinheitNodes />}
+    </>
+  )
 }
 
 export default observer(ZaehlEinheitFolder)

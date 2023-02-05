@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
+import jwtDecode from 'jwt-decode'
 
 import Projekt from './Projekt'
 import Users from './Users'
@@ -10,11 +11,13 @@ import Werte from './Werte'
 import CurrentIssues from './CurrentIssues'
 import storeContext from '../../../../../storeContext'
 
-const TreeRoot = ({ role }) => {
+const TreeRoot = () => { 
   const client = useApolloClient()
 
   const store = useContext(storeContext)
   const { projectIsOpen, nodeLabelFilter, apGqlFilterForTree } = store.tree
+  const token = store.user?.token
+  const role = token ? jwtDecode(token).role : null
 
   const usersFilter = { id: { isNull: false } }
   if (nodeLabelFilter.user) {

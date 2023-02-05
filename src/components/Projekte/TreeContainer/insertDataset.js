@@ -241,6 +241,8 @@ const insertDataset = async ({
       ? 'tpopApberrelevantGrundWerte'
       : table === 'ek_abrechnungstyp_werte'
       ? 'ekAbrechnungstypWerte'
+      : table === 'tpopkontrzaehl_einheit_werte'
+      ? 'tpopkontrzaehlEinheitWerte'
       : table
   store.queryClient.invalidateQueries({
     queryKey: [`tree${upperFirst(queryKeyTable)}`],
@@ -256,16 +258,17 @@ const insertDataset = async ({
           'adresse',
           'tpop_apberrelevant_grund_werte',
           'ek_abrechnungstyp_werte',
+          'tpopkontrzaehl_einheit_werte',
         ].includes(table)
       ? 'werte'
       : parentTable
-  console.log('insertDataset', {
-    table,
-    parentTable,
-    menuType,
-    queryKeyFoldersTable,
-    queryKeyTable,
-  })
+  // console.log('insertDataset', {
+  //   table,
+  //   parentTable,
+  //   menuType,
+  //   queryKeyFoldersTable,
+  //   queryKeyTable,
+  // })
   store.queryClient.invalidateQueries({
     queryKey: [`tree${upperFirst(queryKeyFoldersTable)}Folders`],
   })

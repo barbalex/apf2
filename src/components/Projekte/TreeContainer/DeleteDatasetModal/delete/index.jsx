@@ -153,6 +153,8 @@ const deleteModule = async ({ client, store, search }) => {
       ? 'tpopApberrelevantGrundWerte'
       : table === 'ek_abrechnungstyp_werte'
       ? 'ekAbrechnungstypWerte'
+      : table === 'tpopkontrzaehl_einheit_werte'
+      ? 'tpopkontrzaehlEinheitWerte'
       : table
   store.queryClient.invalidateQueries({
     queryKey: [`tree${upperFirst(queryKeyTable)}`],
@@ -168,6 +170,7 @@ const deleteModule = async ({ client, store, search }) => {
           'adresse',
           'tpop_apberrelevant_grund_werte',
           'ek_abrechnungstyp_werte',
+          'tpopkontrzaehl_einheit_werte',
         ].includes(table)
       ? 'werte'
       : parentTable

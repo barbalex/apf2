@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import jwtDecode from 'jwt-decode'
 
 import Root from './Root'
 
@@ -21,10 +20,7 @@ const Container = styled.div`
 
 const TreeComponent = () => {
   const store = useContext(storeContext)
-  const { user } = store
   const { refetcher } = store.tree
-  const { token } = user
-  const role = token ? jwtDecode(token).role : null
 
   // const lastTouchedNode = lastTouchedNodeProxy?.slice()
   // // when loading on url, lastTouchedNode may not be set
@@ -42,7 +38,7 @@ const TreeComponent = () => {
 
   return (
     <Container>
-      <Root role={role} />
+      <Root />
     </Container>
   )
 }
