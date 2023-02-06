@@ -41,8 +41,9 @@ const EkAbrechnungstypNodes = () => {
         fetchPolicy: 'no-cache',
       }),
   })
-  const nodes = (data?.data?.allEkAbrechnungstypWertes?.nodes ?? []).map(
-    (el) => ({
+
+  return (data?.data?.allEkAbrechnungstypWertes?.nodes ?? []).map((el) => {
+    const node = {
       nodeType: 'table',
       menuType: 'ekAbrechnungstypWerte',
       id: el.id,
@@ -51,12 +52,10 @@ const EkAbrechnungstypNodes = () => {
       label: el.label,
       url: ['Werte-Listen', 'EkAbrechnungstypWerte', el.id],
       hasChildren: false,
-    }),
-  )
+    }
 
-  if (!nodes.length) return null
-
-  return nodes.map((node) => <Row key={node.id} node={node} />)
+    return <Row key={el.id} node={node} />
+  })
 }
 
 export default EkAbrechnungstypNodes

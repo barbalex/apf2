@@ -34,7 +34,7 @@ const ZaehlEinheitFolder = ({ count, isLoading }) => {
 
   return (
     <>
-      <Row key="wlZaehlEinheitFolder" node={node} />
+      <Row node={node} />
       {isOpen && <ZaehlEinheitNodes />}
     </>
   )

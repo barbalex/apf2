@@ -33,7 +33,7 @@ const EkAbrechnungstypFolder = ({ count, isLoading }) => {
 
   return (
     <>
-      <Row key="wlEkAbrechnungstypFolder" node={node} />
+      <Row node={node} />
       {isOpen && <EkAbrechnungstypNodes />}
     </>
   )

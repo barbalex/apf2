@@ -47,8 +47,9 @@ const ZaehlEinheitNodes = () => {
         fetchPolicy: 'no-cache',
       }),
   })
-  const nodes = (data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map(
-    (el) => ({
+
+  return (data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map((el) => {
+    const node = {
       nodeType: 'table',
       menuType: 'tpopkontrzaehlEinheitWerte',
       id: el.id,
@@ -57,12 +58,10 @@ const ZaehlEinheitNodes = () => {
       label: el.label,
       url: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte', el.id],
       hasChildren: false,
-    }),
-  )
+    }
 
-  if (!nodes.length) return null
-
-  return nodes.map((node) => <Row key={node.id} node={node} />)
+    return <Row key={el.id} node={node} />
+  })
 }
 
 export default ZaehlEinheitNodes

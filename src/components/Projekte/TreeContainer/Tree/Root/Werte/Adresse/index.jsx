@@ -33,7 +33,7 @@ const AdressesFolder = ({ count, isLoading }) => {
 
   return (
     <>
-      <Row key="wlAdresseFolder" node={node} />
+      <Row node={node} />
       {isOpen && <AdresseNodes />}
     </>
   )
