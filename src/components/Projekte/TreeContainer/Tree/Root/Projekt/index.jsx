@@ -2,32 +2,30 @@ import Row from '../../Row'
 import ApberuebersichtFolder from './ApberuebersichtFolder'
 import ApFolder from './ApFolder'
 
-const ProjektNode = ({ projekt, projectIsOpen, apberuebersichtsFilter }) => {
+const ProjektNode = ({ projekt, projectIsOpen }) => {
+  const url = ['Projekte', projekt.id]
   const node = {
     nodeType: 'table',
     menuType: 'projekt',
     id: projekt.id,
     urlLabel: projekt.id,
     label: projekt.label,
-    url: ['Projekte', projekt.id],
+    url,
     hasChildren: true,
   }
 
   return (
     <>
-      <Row key={`${projekt.id}Project`} node={node} />
+      <Row node={node} />
       {projectIsOpen && (
         <>
           <ApFolder
-            key={`${projekt.id}ApFolderContainer`}
             projekt={projekt}
             count={projekt?.apsByProjId?.totalCount ?? 0}
           />
           <ApberuebersichtFolder
-            key={`${projekt.id}ApberuebersichtFolderContainer`}
             projekt={projekt}
             count={projekt?.apberuebersichtsByProjId?.totalCount ?? 0}
-            apberuebersichtsFilter={apberuebersichtsFilter}
           />
         </>
       )}

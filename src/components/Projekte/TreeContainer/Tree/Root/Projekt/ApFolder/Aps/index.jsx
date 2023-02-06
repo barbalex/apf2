@@ -45,6 +45,8 @@ const Aps = ({ projekt }) => {
           n[3] === ap.id,
       ).length > 0
 
+    const url = ['Projekte', projekt.id, 'Arten', ap.id]
+
     const node = {
       nodeType: 'table',
       menuType: 'ap',
@@ -53,17 +55,15 @@ const Aps = ({ projekt }) => {
       parentTableId: projekt.id,
       urlLabel: ap.id,
       label: ap.label,
-      url: ['Projekte', projekt.id, 'Arten', ap.id],
+      url,
       hasChildren: true,
     }
 
     return (
-      <>
-        <Row key={ap.id} node={node} />
-        {isOpen && (
-          <Folders key={`${ap.id}Folders`} ap={ap} projekt={projekt} />
-        )}
-      </>
+      <div key={ap.id}>
+        <Row node={node} />
+        {isOpen && <Folders ap={ap} projekt={projekt} />}
+      </div>
     )
   })
 }

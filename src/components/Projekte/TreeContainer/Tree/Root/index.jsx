@@ -108,25 +108,20 @@ const TreeRoot = () => {
   return (
     <>
       <Projekt
-        key={`root/e57f56f4-4376-11e8-ab21-4314b6749d13`}
         projekt={data?.data?.allProjekts?.nodes?.[0]}
         projectIsOpen={projectIsOpen}
-        apberuebersichtsFilter={apberuebersichtsFilter}
       />
       <Users
-        key="root/users"
         count={data?.data?.allUsers?.totalCount ?? 0}
         isLoading={isLoading}
         usersFilter={usersFilter}
       />
-      {role === 'apflora_manager' && <Werte key="root/werte" />}
+      {role === 'apflora_manager' && <Werte />}
       <Messages
-        key="root/messages"
         count={data?.data?.allMessages?.totalCount ?? 0}
         isLoading={isLoading}
       />
       <CurrentIssues
-        key="root/currentIssues"
         count={data?.data?.allCurrentissues?.totalCount ?? 0}
         isLoading
       />
