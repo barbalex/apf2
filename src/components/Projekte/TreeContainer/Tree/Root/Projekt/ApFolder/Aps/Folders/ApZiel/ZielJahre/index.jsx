@@ -35,12 +35,12 @@ const ApZieljahr = ({ projekt, ap, zieljahre, ziels }) => {
     }
 
     return (
-      <>
-        <Row key={`${ap.id}/${jahr}`} node={node} />
+      <div key={`${ap.id}/${jahr}`}>
+        <Row node={node} />
         {isOpen && (
           <Ziel projekt={projekt} ap={ap} jahr={jahr} ziels={zieleOfJahr} />
         )}
-      </>
+      </div>
     )
   })
 }

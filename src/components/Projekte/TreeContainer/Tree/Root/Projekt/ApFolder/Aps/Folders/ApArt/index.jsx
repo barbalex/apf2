@@ -38,7 +38,7 @@ const ApArtFolder = ({ projekt, ap, count, isLoading }) => {
 
   return (
     <>
-      <Row key={node.id} node={node} />
+      <Row node={node} />
       {isOpen && <ApArt projekt={projekt} ap={ap} />}
     </>
   )

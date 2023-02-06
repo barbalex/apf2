@@ -15,7 +15,7 @@ const IdealbiotopFolder = ({ projekt, ap }) => {
     hasChildren: false,
   }
 
-  return <Row key={node.id} node={node} />
+  return <Row node={node} />
 }
 
 export default IdealbiotopFolder
