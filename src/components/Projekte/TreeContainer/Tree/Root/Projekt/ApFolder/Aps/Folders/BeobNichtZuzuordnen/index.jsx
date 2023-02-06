@@ -6,12 +6,7 @@ import Row from '../../../../../../Row'
 import storeContext from '../../../../../../../../../../storeContext'
 import BeobNichtZuzuordnens from './BeobNichtZuzuordnens'
 
-const BeobNichtZuzuordnenFolder = ({
-  projekt,
-  ap,
-  aparts,
-  isLoading,
-}) => {
+const BeobNichtZuzuordnenFolder = ({ projekt, ap, aparts, isLoading }) => {
   const store = useContext(storeContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
@@ -56,8 +51,8 @@ const BeobNichtZuzuordnenFolder = ({
 
   return (
     <>
-      <Row key={node.id} node={node} />
-      {isOpen && <BeobNichtZuzuordnens projekt={projekt} ap={ap}/>}
+      <Row node={node} />
+      {isOpen && <BeobNichtZuzuordnens projekt={projekt} ap={ap} />}
     </>
   )
 }

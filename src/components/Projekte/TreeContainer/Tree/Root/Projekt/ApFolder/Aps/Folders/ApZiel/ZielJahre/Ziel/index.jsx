@@ -41,12 +41,12 @@ const Ziel = ({ projekt, ap, jahr, ziels }) => {
     }
 
     return (
-      <>
-        <Row key={ziel.id} node={node} />
+      <div key={ziel.id}>
+        <Row node={node} />
         {isOpen && (
           <ZielberFolder projekt={projekt} ap={ap} jahr={jahr} ziel={ziel} />
         )}
-      </>
+      </div>
     )
   })
 }

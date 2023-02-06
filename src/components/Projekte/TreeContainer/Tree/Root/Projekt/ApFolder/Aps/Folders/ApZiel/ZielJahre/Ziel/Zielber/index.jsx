@@ -94,7 +94,7 @@ const ZielberFolder = ({ projekt, ap, jahr, ziel }) => {
 
   return (
     <>
-      <Row key={node.id} node={node} />
+      <Row node={node} />
       {isOpen && (
         <Zielber
           zielbers={zielbers}
