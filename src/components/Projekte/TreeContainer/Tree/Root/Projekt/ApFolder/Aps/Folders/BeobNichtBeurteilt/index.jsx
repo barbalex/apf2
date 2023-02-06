@@ -52,7 +52,7 @@ const BeobNichtBeurteiltFolder = ({ projekt, ap, aparts, isLoading }) => {
 
   return (
     <>
-      <Row key={node.id} node={node} />
+      <Row node={node} />
       {isOpen && <BeobNichtBeurteilts projekt={projekt} ap={ap} />}
     </>
   )

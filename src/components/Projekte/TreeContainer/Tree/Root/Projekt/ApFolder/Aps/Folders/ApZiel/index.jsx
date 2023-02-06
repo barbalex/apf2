@@ -90,7 +90,7 @@ const ApZielFolder = ({ projekt, ap }) => {
 
   return (
     <>
-      <Row key={node.id} node={node} />
+      <Row node={node} />
       {isOpen && (
         <ZielJahre
           projekt={projekt}
