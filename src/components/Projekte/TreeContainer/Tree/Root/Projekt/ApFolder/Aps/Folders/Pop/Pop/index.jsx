@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../storeContext' 
+import storeContext from '../../../../../../../../../../../storeContext'
 import Folders from './Folders'
 
 const Pop = ({ projekt, ap }) => {
@@ -63,17 +63,10 @@ const Pop = ({ projekt, ap }) => {
       ).length > 0
 
     return (
-      <>
-        <Row key={el.id} node={node} />
-        {isOpen && (
-          <Folders
-            key={`${el.id}PopFolders`}
-            projekt={projekt}
-            ap={ap}
-            pop={el}
-          />
-        )}
-      </>
+      <div key={el.id}>
+        <Row node={node} />
+        {isOpen && <Folders projekt={projekt} ap={ap} pop={el} />}
+      </div>
     )
   })
 }

@@ -47,7 +47,7 @@ const PopmassnberFolder = ({ projekt, ap, pop, isLoading, count }) => {
 
   return (
     <>
-      <Row key={`${node.id}`} node={node} />
+      <Row node={node} />
       {isOpen && <PopMassnBer projekt={projekt} ap={ap} pop={pop} />}
     </>
   )

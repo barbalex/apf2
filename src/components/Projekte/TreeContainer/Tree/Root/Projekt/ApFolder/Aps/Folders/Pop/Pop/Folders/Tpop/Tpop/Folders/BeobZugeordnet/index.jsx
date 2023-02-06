@@ -53,15 +53,9 @@ const BeobZugeordnetFolder = ({ projekt, ap, pop, tpop, isLoading, count }) => {
 
   return (
     <>
-      <Row key={`${node.id}`} node={node} />
+      <Row node={node} />
       {isOpen && (
-        <BeobZugeordnet
-          key={`${tpop.id}TPopBeobzugeordnetFolderBeobzugeordnet`}
-          projekt={projekt}
-          ap={ap}
-          pop={pop}
-          tpop={tpop}
-        />
+        <BeobZugeordnet projekt={projekt} ap={ap} pop={pop} tpop={tpop} />
       )}
     </>
   )
