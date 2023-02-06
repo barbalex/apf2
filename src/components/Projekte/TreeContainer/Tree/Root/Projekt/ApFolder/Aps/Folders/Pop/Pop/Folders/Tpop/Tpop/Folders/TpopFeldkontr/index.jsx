@@ -53,15 +53,9 @@ const TpopFeldkontrFolder = ({ projekt, ap, pop, tpop, isLoading, count }) => {
 
   return (
     <>
-      <Row key={`${node.id}`} node={node} />
+      <Row node={node} />
       {isOpen && (
-        <TpopFeldkontr
-          key={`${tpop.id}TPopFeldkontrFolderFeldkontrs`}
-          projekt={projekt}
-          ap={ap}
-          pop={pop}
-          tpop={tpop}
-        />
+        <TpopFeldkontr projekt={projekt} ap={ap} pop={pop} tpop={tpop} />
       )}
     </>
   )

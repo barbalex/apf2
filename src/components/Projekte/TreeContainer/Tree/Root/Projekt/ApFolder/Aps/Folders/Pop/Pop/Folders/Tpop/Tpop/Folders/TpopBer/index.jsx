@@ -53,16 +53,8 @@ const TpopBerFolder = ({ projekt, ap, pop, tpop, isLoading, count }) => {
 
   return (
     <>
-      <Row key={`${node.id}`} node={node} />
-      {isOpen && (
-        <TpopBer
-          key={`${tpop.id}TPopBerFolderBers`}
-          projekt={projekt}
-          ap={ap}
-          pop={pop}
-          tpop={tpop}
-        />
-      )}
+      <Row node={node} />
+      {isOpen && <TpopBer projekt={projekt} ap={ap} pop={pop} tpop={tpop} />}
     </>
   )
 }
