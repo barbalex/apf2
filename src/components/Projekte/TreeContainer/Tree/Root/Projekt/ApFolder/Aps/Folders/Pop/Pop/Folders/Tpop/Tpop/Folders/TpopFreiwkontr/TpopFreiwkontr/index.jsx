@@ -86,11 +86,10 @@ const TpopFreiwkontr = ({ projekt, ap, pop, tpop }) => {
     }
 
     return (
-      <>
-        <Row key={el.id} node={node} />
+      <div key={el.id}>
+        <Row node={node} />
         {isOpen && (
           <ZaehlFolder
-            key={`${tpop.id}TPopFreiwkontrZaehlFolderZaehls`}
             projekt={projekt}
             ap={ap}
             pop={pop}
@@ -98,7 +97,7 @@ const TpopFreiwkontr = ({ projekt, ap, pop, tpop }) => {
             tpopkontr={el}
           />
         )}
-      </>
+      </div>
     )
   })
 }
