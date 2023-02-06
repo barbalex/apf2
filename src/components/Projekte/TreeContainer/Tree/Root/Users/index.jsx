@@ -31,7 +31,7 @@ const UserFolderNode = ({ count, isLoading, usersFilter }) => {
 
   return (
     <>
-      <Row key={node.id} node={node} />
+      <Row node={node} />
       {isOpen && <Users usersFilter={usersFilter} />}
     </>
   )

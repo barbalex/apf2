@@ -157,22 +157,19 @@ const ApFolders = ({ ap, projekt }) => {
   return (
     <>
       <PopFolder
-        key={`${ap.id}PopFolder`}
         projekt={projekt}
         ap={ap}
         count={data?.data?.apById?.popsByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
-      <ApZielFolder key={`${ap.id}ApZielFolder`} projekt={projekt} ap={ap} />
+      <ApZielFolder projekt={projekt} ap={ap} />
       <ApErfkritFolder
-        key={`${ap.id}ApErfkritFolder`}
         projekt={projekt}
         ap={ap}
         count={data?.data?.apById?.erfkritsByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
       <ApBerFolder
-        key={`${ap.id}ApBerFolder`}
         projekt={projekt}
         ap={ap}
         count={data?.data?.apById?.apbersByApId?.totalCount ?? 0}
@@ -180,42 +177,36 @@ const ApFolders = ({ ap, projekt }) => {
       />
       <IdealbiotopFolder projekt={projekt} ap={ap} />
       <ApArtFolder
-        key={`${ap.id}ApArtFolder`}
         projekt={projekt}
         ap={ap}
         count={data?.data?.apById?.apartsByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
       <AssozArtFolder
-        key={`${ap.id}AssozArtFolder`}
         projekt={projekt}
         ap={ap}
         count={data?.data?.apById?.assozartsByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
       <EkFrequenzFolder
-        key={`${ap.id}EkFrequenzFolder`}
         projekt={projekt}
         ap={ap}
         count={data?.data?.apById?.ekfrequenzsByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
       <EkZaehleinheitFolder
-        key={`${ap.id}EkZaehleinheitFolder`}
         projekt={projekt}
         ap={ap}
         count={data?.data?.apById?.ekzaehleinheitsByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
       <BeobNichtBeurteiltFolder
-        key={`${ap.id}BeobNichtBeurteiltFolder`}
         projekt={projekt}
         ap={ap}
         aparts={data?.data?.apById?.beobNichtBeurteilt?.nodes ?? []}
         isLoading={isLoading}
       />
       <BeobNichtZuzuordnenFolder
-        key={`${ap.id}BeobNichtZuzuordnenFolder`}
         projekt={projekt}
         ap={ap}
         aparts={data?.data?.apById?.beobNichtZuzuordnen?.nodes ?? []}

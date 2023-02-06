@@ -34,20 +34,21 @@ const AdresseNodes = () => {
         fetchPolicy: 'no-cache',
       }),
   })
-  const nodes = (data?.data?.allAdresses?.nodes ?? []).map((el) => ({
-    nodeType: 'table',
-    menuType: 'adresse',
-    id: el.id,
-    parentId: 'adresseFolder',
-    urlLabel: el.id,
-    label: el.label,
-    url: ['Werte-Listen', 'Adressen', el.id],
-    hasChildren: false,
-  }))
 
-  if (!nodes.length) return null
+  return (data?.data?.allAdresses?.nodes ?? []).map((el) => {
+    const node = {
+      nodeType: 'table',
+      menuType: 'adresse',
+      id: el.id,
+      parentId: 'adresseFolder',
+      urlLabel: el.id,
+      label: el.label,
+      url: ['Werte-Listen', 'Adressen', el.id],
+      hasChildren: false,
+    }
 
-  return nodes.map((node) => <Row key={node.id} node={node} />)
+    return <Row key={el.id} node={node} />
+  })
 }
 
 export default AdresseNodes

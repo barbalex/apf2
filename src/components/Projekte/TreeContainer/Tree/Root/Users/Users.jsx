@@ -24,19 +24,20 @@ const UserFolderNode = ({ usersFilter }) => {
         fetchPolicy: 'no-cache',
       }),
   })
-  const nodes = (data?.data?.allUsers?.nodes ?? []).map((el) => ({
-    nodeType: 'table',
-    menuType: 'user',
-    id: el.id,
-    urlLabel: el.id,
-    label: el.label,
-    url: ['Benutzer', el.id],
-    hasChildren: false,
-  }))
 
-  if (!nodes.length) return null
+  return (data?.data?.allUsers?.nodes ?? []).map((el) => {
+    const node = {
+      nodeType: 'table',
+      menuType: 'user',
+      id: el.id,
+      urlLabel: el.id,
+      label: el.label,
+      url: ['Benutzer', el.id],
+      hasChildren: false,
+    }
 
-  return nodes.map((node) => <Row key={node.id} node={node} />)
+    return <Row key={el.id} node={node} />
+  })
 }
 
 export default UserFolderNode
