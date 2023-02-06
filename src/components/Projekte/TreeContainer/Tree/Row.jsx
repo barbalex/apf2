@@ -277,15 +277,17 @@ const Row = ({ node }) => {
   )
   const karteIsVisible = projekteTabs.includes('karte')
 
+  // console.log('Row, node:', node)
+
   return (
     <ContextMenuTrigger
+      // need this id fort the menu to work
       id={`tree${upperFirst(node.menuType)}`}
       //collect={(props) => ({ key: index })}
       collect={(props) => props}
       nodeId={node.id}
       tableId={node.tableId}
       nodeLabel={node.label}
-      key={`${node.menuType}${node.id}`}
     >
       <StyledNode
         data-level={level}
@@ -297,7 +299,7 @@ const Row = ({ node }) => {
         data-label={node.label}
         data-menutype={node.menuType}
         data-jahr={node.jahr}
-        // need id to scroll elements into view
+        // need this id to scroll elements into view
         id={node.id}
       >
         {useSymbolIcon && (
