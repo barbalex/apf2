@@ -5,7 +5,7 @@ import Row from '../../../Row'
 import storeContext from '../../../../../../../storeContext'
 import Apberuebersichts from './Apberuebersichts'
 
-const ApberuebersichtNode = ({ count, projekt, apberuebersichtsFilter }) => {
+const ApberuebersichtNode = ({ count, projekt }) => {
   const store = useContext(storeContext)
   const nodeLabelFilterString =
     store.tree?.nodeLabelFilter?.apberuebersicht ?? ''
@@ -20,7 +20,7 @@ const ApberuebersichtNode = ({ count, projekt, apberuebersichtsFilter }) => {
 
   const node = {
     menuType: 'apberuebersichtFolder',
-    id: `${projekt.id}ApberuebersichtsFolder`,
+    id: `${projekt.id}/ApberuebersichtsFolder`,
     tableId: projekt.id,
     urlLabel: 'AP-Berichte',
     label: `AP-Berichte (${message})`,
@@ -30,10 +30,8 @@ const ApberuebersichtNode = ({ count, projekt, apberuebersichtsFilter }) => {
 
   return (
     <>
-      <Row key={node.id} node={node} />
-      {isOpen && (
-        <Apberuebersichts apberuebersichtsFilter={apberuebersichtsFilter} />
-      )}
+      <Row node={node} />
+      {isOpen && <Apberuebersichts />}
     </>
   )
 }

@@ -17,6 +17,8 @@ const Ap = ({ count, projekt }) => {
       (n) => n[0] === 'Projekte' && n[1] === projekt.id && n[2] === 'Arten',
     ).length > 0
 
+  const url = ['Projekte', projekt.id, 'Arten']
+
   const node = {
     nodeType: 'folder',
     menuType: 'apFolder',
@@ -24,14 +26,14 @@ const Ap = ({ count, projekt }) => {
     tableId: projekt.id,
     urlLabel: 'Arten',
     label: `Arten (${message})`,
-    url: ['Projekte', projekt.id, 'Arten'],
+    url,
     hasChildren: count > 0,
   }
 
   return (
     <>
-      <Row key={`${projekt.id}ApFolder`} node={node} />
-      {isOpen && <Aps key={`${projekt.id}Aps`} projekt={projekt} />}
+      <Row node={node} />
+      {isOpen && <Aps projekt={projekt} />}
     </>
   )
 }

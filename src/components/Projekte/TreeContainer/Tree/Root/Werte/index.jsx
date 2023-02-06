@@ -105,33 +105,26 @@ const WlFolderNode = () => {
     menuType: 'wlFolder',
     id: 'wlFolder',
     urlLabel: 'Werte-Listen',
-    label: `Werte-Listen`,
+    label: `Werte-Listen (4)`,
     url: ['Werte-Listen'],
     hasChildren: true,
   }
 
   return (
     <>
-      <Row key="wlFolder" node={node} />
+      <Row node={node} />
       {isOpen && (
         <>
-          <AdresseFolder
-            key="wlAdresseFolderComponent"
-            isLoading={isLoading}
-            count={adressenCount}
-          />
+          <AdresseFolder isLoading={isLoading} count={adressenCount} />
           <ApberrelevantGrundFolder
-            key="wlApberrelevantGrundFolderComponent"
             isLoading={isLoading}
             count={apberrelevantGrundWertesCount}
           />
           <EkAbrechnungstypFolder
-            key="wlEkAbrechnungstypFolderComponent"
             isLoading={isLoading}
             count={ekAbrechnungstypWertesCount}
           />
           <ZaehlEinheitFolder
-            key="wlZaehlEinheitFolderComponent"
             isLoading={isLoading}
             count={zaehlEinheitWertesCount}
           />
