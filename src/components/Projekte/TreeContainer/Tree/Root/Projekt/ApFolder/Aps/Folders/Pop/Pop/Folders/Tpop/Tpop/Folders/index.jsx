@@ -117,7 +117,6 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
   return (
     <>
       <TpopMassn
-        key={`${tpop.id}TPopMassnF`}
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -126,7 +125,6 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         count={tpopmassnCount}
       />
       <TpopMassnBer
-        key={`${tpop.id}TPopMassnBerF`}
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -135,7 +133,6 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         count={tpopmassnberCount}
       />
       <TpopFeldkontr
-        key={`${tpop.id}TPopFeldkontrF`}
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -144,7 +141,6 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         count={tpopfeldkontrCount}
       />
       <TpopFreiwkontr
-        key={`${tpop.id}TPopFreiwkontrF`}
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -153,7 +149,6 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         count={tpopfreiwkontrCount}
       />
       <TpopBer
-        key={`${tpop.id}TPopBerF`}
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -162,7 +157,6 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         count={tpopberCount}
       />
       <BeobZugeordnet
-        key={`${tpop.id}TPopBeobZugeordnetF`}
         projekt={projekt}
         ap={ap}
         pop={pop}

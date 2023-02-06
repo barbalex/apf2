@@ -78,10 +78,10 @@ const Tpop = ({ projekt, ap, pop }) => {
     }
 
     return (
-      <>
-        <Row key={el.id} node={node} />
+      <div key={el.id}>
+        <Row node={node} />
         {isOpen && <Folders projekt={projekt} ap={ap} pop={pop} tpop={el} />}
-      </>
+      </div>
     )
   })
 }
