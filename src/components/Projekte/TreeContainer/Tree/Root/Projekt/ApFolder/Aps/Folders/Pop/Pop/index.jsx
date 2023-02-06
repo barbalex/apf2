@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../storeContext'
+import storeContext from '../../../../../../../../../../../storeContext' 
 import Folders from './Folders'
 
 const Pop = ({ projekt, ap }) => {

@@ -40,7 +40,7 @@ const EkFrequenzFolder = ({ projekt, ap, count, isLoading }) => {
 
   return (
     <>
-      <Row key={node.id} node={node} />
+      <Row node={node} />
       {isOpen && <EkFrequenz projekt={projekt} ap={ap} />}
     </>
   )
