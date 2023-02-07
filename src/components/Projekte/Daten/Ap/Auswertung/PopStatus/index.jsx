@@ -55,6 +55,7 @@ const ApAuswertungPopStatus = ({
   apId: apIdPassed,
   height = 400,
   print,
+  isSubReport,
   year: yearPassed,
 }) => {
   const { apId } = useParams()
@@ -124,7 +125,7 @@ const ApAuswertungPopStatus = ({
                 stroke={color['ursprünglich, aktuell']}
                 fill={color['ursprünglich, aktuell']}
                 legendType="square"
-                isAnimationActive={!print}
+                isAnimationActive={!isSubReport}
               />
               <Area
                 type="monotone"
@@ -133,7 +134,7 @@ const ApAuswertungPopStatus = ({
                 stroke={color['angesiedelt (vor Beginn AP)']}
                 fill={color['angesiedelt (vor Beginn AP)']}
                 legendType="square"
-                isAnimationActive={!print}
+                isAnimationActive={!isSubReport}
               />
               <Area
                 type="monotone"
@@ -142,7 +143,7 @@ const ApAuswertungPopStatus = ({
                 stroke={color['angesiedelt (nach Beginn AP)']}
                 fill={color['angesiedelt (nach Beginn AP)']}
                 legendType="square"
-                isAnimationActive={!print}
+                isAnimationActive={!isSubReport}
               />
               <Area
                 type="monotone"
@@ -151,7 +152,7 @@ const ApAuswertungPopStatus = ({
                 stroke={color['Ansaatversuch']}
                 fill={color['Ansaatversuch']}
                 legendType="square"
-                isAnimationActive={!print}
+                isAnimationActive={!isSubReport}
               />
               <Area
                 type="monotone"
@@ -168,7 +169,7 @@ const ApAuswertungPopStatus = ({
                   ]
                 }
                 legendType="square"
-                isAnimationActive={!print}
+                isAnimationActive={!isSubReport}
               />
               <Area
                 type="monotone"
@@ -185,9 +186,11 @@ const ApAuswertungPopStatus = ({
                   ]
                 }
                 legendType="square"
-                isAnimationActive={!print}
+                isAnimationActive={!isSubReport}
               />
-              {!print && <Tooltip content={<CustomTooltip color={color} />} />}
+              {!isSubReport && (
+                <Tooltip content={<CustomTooltip color={color} />} />
+              )}
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
               <Legend
                 layout="horizontal"

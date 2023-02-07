@@ -256,13 +256,31 @@ const ApberForAp = ({
           )}
           <BMengen apId={apId} jahr={jahr} loading={false} node={node} />
           <ChartContainer>
-            <TpopKontrolliert apId={apId} jahr={jahr} height={250} print />
+            <TpopKontrolliert
+              apId={apId}
+              jahr={jahr}
+              height={250}
+              print
+              isSubReport={isSubReport}
+            />
           </ChartContainer>
           <ChartContainer>
-            <PopStatus apId={apId} year={jahr} height={250} print />
+            <PopStatus
+              apId={apId}
+              year={jahr}
+              height={250}
+              print
+              isSubReport={isSubReport}
+            />
           </ChartContainer>
           <ChartContainer>
-            <PopMenge apId={apId} jahr={jahr} height={250} print />
+            <PopMenge
+              apId={apId}
+              jahr={jahr}
+              height={250}
+              print
+              isSubReport={isSubReport}
+            />
           </ChartContainer>
           {!!apber.biotopeOptimieren && (
             <FieldRowFullWidth>

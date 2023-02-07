@@ -77,6 +77,7 @@ const ApAuswertungPopMenge = ({
   apId: apIdPassed,
   height = 400,
   print,
+  isSubReport,
   jahr: jahrPassed,
 }) => {
   const { apId } = useParams()
@@ -256,11 +257,11 @@ const ApAuswertungPopMenge = ({
                     stroke={color}
                     strokeWidth={2}
                     fill={color}
-                    isAnimationActive={!print}
+                    isAnimationActive={!isSubReport}
                   />
                 )
               })}
-              {!print && (
+              {!isSubReport && (
                 <Tooltip content={<CustomTooltip popsData={popsData} />} />
               )}
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />

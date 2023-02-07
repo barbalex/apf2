@@ -55,6 +55,7 @@ const ApAuswertungTpopKontrolliert = ({
   apId: apIdPassed,
   height = 400,
   print,
+  isSubReport,
   jahr,
 }) => {
   const { apId } = useParams()
@@ -126,7 +127,7 @@ const ApAuswertungTpopKontrolliert = ({
                 fill="rgba(255,253,231,0)"
               />
               <Legend layout="horizontal" align="center" iconSize={22} />
-              {!print && (
+              {!isSubReport && (
                 <Tooltip
                   content={<CustomTooltip color={color} reverse={true} />}
                 />
