@@ -26,6 +26,9 @@ const Doku = styled.div`
     margin-top: 0;
     padding-inline-start: 20px;
   }
+  ol {
+    padding-inline-start: 25px;
+  }
   p,
   li {
     margin-bottom: 3px;
