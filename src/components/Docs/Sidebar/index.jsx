@@ -29,19 +29,11 @@ const MenuTitleLink = styled(Link)`
   }
 `
 
-const Sidebar = ({ nodes = [] }) => {
+const Sidebar = () => {
   const { search } = useLocation()
 
   const store = useContext(storeContext)
   const { dokuFilter, setDokuFilter } = store
-
-  const items = nodes.filter((n) =>
-    dokuFilter
-      ? (n?.title ?? '(Titel fehlt)')
-          .toLowerCase()
-          .includes(dokuFilter.toLowerCase())
-      : true,
-  )
 
   return (
     <Menu>
@@ -51,7 +43,7 @@ const Sidebar = ({ nodes = [] }) => {
         </MenuTitleLink>
         <Filter filter={dokuFilter} setFilter={setDokuFilter} />
       </MenuTitle>
-      <MenuItems items={items} />
+      <MenuItems />
     </Menu>
   )
 }
