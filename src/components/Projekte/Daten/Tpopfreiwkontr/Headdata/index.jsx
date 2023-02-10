@@ -152,66 +152,14 @@ const Headdata = ({ pop, tpop, row }) => {
             ${tpopkontrzaehlEinheitWerteFragment}
           `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopkontrById: {
-              tpopkontr: {
-                id: row.id,
-                typ: row.typ,
-                jahr: row.jahr,
-                datum: row.datum,
-                bemerkungen: row.bemerkungen,
-                flaecheUeberprueft: row.flaecheUeberprueft,
-                deckungVegetation: row.deckungVegetation,
-                deckungNackterBoden: row.deckungNackterBoden,
-                deckungApArt: row.deckungApArt,
-                vegetationshoeheMaximum: row.vegetationshoeheMaximum,
-                vegetationshoeheMittel: row.vegetationshoeheMittel,
-                gefaehrdung: row.gefaehrdung,
-                tpopId: row.tpopId,
-                bearbeiter: value,
-                planVorhanden: row.planVorhanden,
-                jungpflanzenVorhanden: row.jungpflanzenVorhanden,
-                apberNichtRelevant: row.apberNichtRelevant,
-                apberNichtRelevantGrund: row.apberNichtRelevantGrund,
-                ekfBemerkungen: row.ekfBemerkungen,
-                tpopByTpopId: row.tpopByTpopId,
-                tpopkontrzaehlsByTpopkontrId: row.tpopkontrzaehlsByTpopkontrId,
-                __typename: 'Tpopkontr',
-              },
-              __typename: 'Tpopkontr',
-            },
-          },
+          refetchQueries: ['tpopkontrByIdQueryForEkf'],
         })
       } catch (error) {
         return setErrors(error.message)
       }
       setErrors(null)
     },
-    [
-      row.id,
-      row.typ,
-      row.jahr,
-      row.datum,
-      row.bemerkungen,
-      row.flaecheUeberprueft,
-      row.deckungVegetation,
-      row.deckungNackterBoden,
-      row.deckungApArt,
-      row.vegetationshoeheMaximum,
-      row.vegetationshoeheMittel,
-      row.gefaehrdung,
-      row.tpopId,
-      row.planVorhanden,
-      row.jungpflanzenVorhanden,
-      row.apberNichtRelevant,
-      row.apberNichtRelevantGrund,
-      row.ekfBemerkungen,
-      row.tpopByTpopId,
-      row.tpopkontrzaehlsByTpopkontrId,
-      user.name,
-      client,
-    ],
+    [row.id, user.name, client],
   )
 
   const userCount = row?.adresseByBearbeiter?.usersByAdresseId?.totalCount ?? 0
