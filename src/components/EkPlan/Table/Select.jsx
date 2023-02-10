@@ -62,16 +62,7 @@ const SelectComponent = ({ options, row, val, field }) => {
             [field]: value,
             changedBy: store.user.name,
           },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopById: {
-              tpop: {
-                ...row.tpop,
-                [field]: value,
-              },
-              __typename: 'Tpop',
-            },
-          },
+          refetchQueries: ['EkplanTpopQuery'],
         })
       } catch (error) {
         enqueNotification({
@@ -82,7 +73,7 @@ const SelectComponent = ({ options, row, val, field }) => {
         })
       }
     },
-    [client, enqueNotification, field, row.id, row.tpop, store.user.name],
+    [client, enqueNotification, field, row.id, store.user.name],
   )
   const onFocus = useCallback(() => {
     setFocused(true)
