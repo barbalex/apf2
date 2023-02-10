@@ -107,7 +107,7 @@ const ApberForYear = () => {
   const client = useApolloClient()
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['ApberForYearQuery'],
+    queryKey: ['ApberForYearQuery', apberUebersichtId],
     queryFn: async () => {
       // first get year
       const { data: data1 } = await client.query({
