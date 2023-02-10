@@ -1070,12 +1070,9 @@ export default types
             coveredBy: self.mapFilter,
           }
         }
-        // Object could be empty if no filters exist
-        // Do not add empty objects
-        if (
-          Object.values(singleFilter).filter((v) => v !== null).length === 0
-        ) {
-          break
+        // Object needt to filter by typ
+        if (!singleFilter.typ) {
+          singleFilter.typ = { distinctFrom: 'Freiwilligen-Erfolgskontrolle' }
         }
         // Object has filter criteria. Add it!
         filterArray.push(singleFilter)
@@ -1146,12 +1143,9 @@ export default types
             coveredBy: self.mapFilter,
           }
         }
-        // Object could be empty if no filters exist
-        // Do not add empty objects
-        if (
-          Object.values(singleFilter).filter((v) => v !== null).length === 0
-        ) {
-          break
+        // Object needt to filter by typ
+        if (!singleFilter.typ) {
+          singleFilter.typ = { distinctFrom: 'Freiwilligen-Erfolgskontrolle' }
         }
         // Object has filter criteria. Add it!
         filterArray.push(singleFilter)
@@ -1259,14 +1253,10 @@ export default types
             coveredBy: self.mapFilter,
           }
         }
-        // Object could be empty if no filters exist
-        // Do not add empty objects
-        if (
-          Object.values(singleFilter).filter((v) => v !== null).length === 0
-        ) {
-          break
+        // Object needt to filter by typ
+        if (!singleFilter.typ) {
+          singleFilter.typ = { equalTo: 'Freiwilligen-Erfolgskontrolle' }
         }
-        // Object has filter criteria. Add it!
         filterArray.push(singleFilter)
       }
 
@@ -1335,12 +1325,9 @@ export default types
             coveredBy: self.mapFilter,
           }
         }
-        // Object could be empty if no filters exist
-        // Do not add empty objects
-        if (
-          Object.values(singleFilter).filter((v) => v !== null).length === 0
-        ) {
-          break
+        // Object needt to filter by typ
+        if (!singleFilter.typ) {
+          singleFilter.typ = { equalTo: 'Freiwilligen-Erfolgskontrolle' }
         }
         // Object has filter criteria. Add it!
         filterArray.push(singleFilter)

@@ -114,6 +114,8 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
   const beobZugeordnetCount =
     data?.data?.tpopById?.beobsByTpopId?.totalCount ?? 0
 
+  // console.log('Tree TPopFolders', { ekGqlFilterForTree, ekfGqlFilterForTree })
+
   return (
     <>
       <TpopMassn
