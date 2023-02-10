@@ -104,16 +104,7 @@ const Tpopber = () => {
           ${tpopber}
         `,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopberById: {
-              tpopber: {
-                ...row,
-                ...variables,
-              },
-              __typename: 'Tpopber',
-            },
-          },
+          refetchQueries: ['tpopberByIdQuery'],
         })
       } catch (error) {
         return setFieldErrors({ [field]: error.message })
