@@ -1,5 +1,3 @@
-import jwtDecode from 'jwt-decode'
-
 import getUserFromIdb from './getUserFromIdb'
 
 const setUserFromIdb = async ({ idb, store }) => {
