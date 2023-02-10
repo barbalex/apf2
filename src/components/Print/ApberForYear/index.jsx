@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client'
-import { gql } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
 import ApberForYear from './ApberForYear'
