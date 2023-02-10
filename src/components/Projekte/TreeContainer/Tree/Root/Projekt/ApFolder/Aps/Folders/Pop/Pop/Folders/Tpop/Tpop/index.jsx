@@ -14,7 +14,7 @@ const Tpop = ({ projekt, ap, pop }) => {
   const { tpopGqlFilterForTree } = store.tree
 
   const { data } = useQuery({
-    queryKey: ['treeTpop', ap.id, tpopGqlFilterForTree],
+    queryKey: ['treeTpop', pop.id, tpopGqlFilterForTree],
     queryFn: () =>
       client.query({
         query: gql`
