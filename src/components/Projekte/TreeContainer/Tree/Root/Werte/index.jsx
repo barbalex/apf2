@@ -51,6 +51,7 @@ const WlFolderNode = () => {
       apberrelevantGrundWertesFilter,
       ekAbrechnungstypWertesFilter,
       tpopkontrzaehlEinheitWertesFilter,
+      isOpen,
     ],
     queryFn: () =>
       client.query({
