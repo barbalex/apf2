@@ -83,7 +83,7 @@ const App = () => {
                     <LastTouchedNodeSetter />
                     <MouseWheelHandler />
                     <LegacyBrowserInformer />
-                    <StorePersister />
+                    <StorePersister client={client} store={store} idb={idb} />
                   </>
                 </SnackbarProvider>
               </ThemeProvider>
