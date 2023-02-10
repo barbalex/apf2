@@ -143,7 +143,7 @@ const BeobZuordnen = () => (
         >
           Info Spezies
         </a>{' '}
-        (Von den AV's neu erfasste Beobachtungen, die nicht im vorigen
+        (Von den AV&apos;s neu erfasste Beobachtungen, die nicht im vorigen
         Gesamt-Auszug enthalten waren)
       </li>
       <li>
@@ -155,7 +155,7 @@ const BeobZuordnen = () => (
         >
           Info Spezies
         </a>{' '}
-        (Von den AV's erfasste Beobachtungen von Utricularia)
+        (Von den AV&apos;s erfasste Beobachtungen von Utricularia)
       </li>
     </ul>
   </>
