@@ -39,17 +39,6 @@ const copyBeobZugeordnetKoordToTpop = async ({ id, store, client }) => {
         id: tpopId,
         geomPoint,
       },
-      // no optimistic responce as geomPoint
-      /*optimisticResponse: {
-        __typename: 'Mutation',
-        updateTpopById: {
-          tpop: {
-            id: tpopId,
-            __typename: 'Tpop',
-          },
-          __typename: 'Tpop',
-        },
-      },*/
     })
   } catch (error) {
     return store.enqueNotification({
