@@ -52,7 +52,7 @@ const BeobZuordnen = () => (
       mindestens ein mal jährlich. Folgende Importe haben bisher stattgefunden:
     </p>
     <ul>
-      <li>2016: 232&#39;595 von der Fachstelle Naturschutz</li>
+      <li>2016: 228&#39;791 von der Fachstelle Naturschutz</li>
       <li>
         2017: 192&#39;606 von{' '}
         <a href="https://www.infoflora.ch/de/allgemeines/info-species.html">
@@ -124,7 +124,7 @@ const BeobZuordnen = () => (
         </a>{' '}
       </li>
       <li>
-        2022.12: 4&#39;785 von{' '}
+        2022.12: 3&#39;029 von{' '}
         <a
           href="https://www.infoflora.ch/de/allgemeines/info-species.html"
           target="_blank"
@@ -145,6 +145,17 @@ const BeobZuordnen = () => (
         </a>{' '}
         (Von den AV's neu erfasste Beobachtungen, die nicht im vorigen
         Gesamt-Auszug enthalten waren)
+      </li>
+      <li>
+        2023.02: 215 von{' '}
+        <a
+          href="https://www.infoflora.ch/de/allgemeines/info-species.html"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Info Spezies
+        </a>{' '}
+        (Von den AV's erfasste Beobachtungen von Utricularia)
       </li>
     </ul>
   </>
