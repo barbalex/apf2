@@ -72,16 +72,7 @@ const CheckboxComponent = ({ row, value, field }) => {
           [field]: !checked,
           changedBy: store.user.name,
         },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopById: {
-            tpop: {
-              ...row,
-              [field]: !checked,
-            },
-            __typename: 'Tpop',
-          },
-        },
+        refetchQueries: ['EkplanTpopQuery'],
       })
     } catch (error) {
       setChecked(!checked)
