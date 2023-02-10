@@ -122,16 +122,7 @@ const CellForEkfrequenzStartjahr = ({ row, style, refetchTpop }) => {
             ekfrequenzStartjahr: value,
             changedBy: store.user.name,
           },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopById: {
-              tpop: {
-                ...row.tpop,
-                ekfrequenzStartjahr: value,
-              },
-              __typename: 'Tpop',
-            },
-          },
+          refetchQueries: ['EkplanTpopQuery'],
         })
       } catch (error) {
         enqueNotification({
