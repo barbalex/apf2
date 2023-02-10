@@ -72,16 +72,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
             ekfrequenz: value,
             changedBy: store.user.name,
           },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopById: {
-              tpop: {
-                ...row.tpop,
-                ekfrequenz: value,
-              },
-              __typename: 'Tpop',
-            },
-          },
+          refetchQueries: ['EkplanTpopQuery'],
         })
       } catch (error) {
         enqueNotification({
