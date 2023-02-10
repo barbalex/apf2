@@ -186,16 +186,7 @@ const Apberuebersicht = () => {
           ${apberuebersicht}
         `,
         variables,
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateApberuebersichtById: {
-            apberuebersicht: {
-              ...variables,
-              __typename: 'Apberuebersicht',
-            },
-            __typename: 'Apberuebersicht',
-          },
-        },
+        refetchQueries: ['apberuebersichtByIdQuery'],
       })
     } catch (error) {
       return enqueNotification({
