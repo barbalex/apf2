@@ -4,6 +4,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
+import { useApolloClient } from '@apollo/client'
 
 import storeContext from '../../../storeContext'
 
@@ -41,6 +42,8 @@ const StyledMenuItem = styled(MenuItem)`
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 const CellHeaderYear = ({ style, column, rows }) => {
+  const client = useApolloClient()
+
   const store = useContext(storeContext)
   const {
     hovered,
@@ -99,7 +102,9 @@ const CellHeaderYear = ({ style, column, rows }) => {
     if (!yearHasAnsiedlungen) return
     setFilterAnsiedlungYear(filterAnsiedlungYear ? null : column)
     setAnchorEl(null)
+    setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
   }, [
+    client,
     column,
     filterAnsiedlungYear,
     setFilterAnsiedlungYear,
@@ -109,12 +114,20 @@ const CellHeaderYear = ({ style, column, rows }) => {
     if (!yearHasKontrollen) return
     setFilterKontrolleYear(filterKontrolleYear ? null : column)
     setAnchorEl(null)
-  }, [column, filterKontrolleYear, setFilterKontrolleYear, yearHasKontrollen])
+    setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
+  }, [
+    client,
+    column,
+    filterKontrolleYear,
+    setFilterKontrolleYear,
+    yearHasKontrollen,
+  ])
   const onClickFilterEkplanYear = useCallback(() => {
     if (!yearHasEkplan) return
     setFilterEkplanYear(filterEkplanYear ? null : column)
     setAnchorEl(null)
-  }, [column, filterEkplanYear, setFilterEkplanYear, yearHasEkplan])
+    setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
+  }, [client, column, filterEkplanYear, setFilterEkplanYear, yearHasEkplan])
 
   const onMouseEnter = useCallback(
     () => hovered.setYear(column),

@@ -278,7 +278,8 @@ const EkPlanTable = () => {
   setEkfrequenzs(ekfrequenzs)
   const tpops = useMemo(
     () => data?.allTpops?.nodes ?? [],
-    [data?.allTpops?.nodes],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data?.allTpops?.nodes, tpopFilter, apValues],
   )
   const years = useMemo(
     () => yearsFromTpops({ tpops, pastYears }),
@@ -306,11 +307,12 @@ const EkPlanTable = () => {
     : []
   // tpopRows does not update when a single tpop changes if passed tpops
   // solution is to pass stringified version
+  // Also: they need to update when the filter changes
   const tpopsStringified = JSON.stringify(tpops)
   const tpopRows = useMemo(
     () => tpops.map((tpop, index) => tpopRowFromTpop({ tpop, index })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [tpopsStringified],
+    [tpops, tpopFilter, tpopsStringified, apValues],
   )
   const tpopColumns = tpopRows.length
     ? sortBy(
