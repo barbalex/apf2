@@ -80,16 +80,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
         await client.mutate({
           mutation: updateUserByIdGql,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateUserById: {
-              user: {
-                ...variables,
-                __typename: 'User',
-              },
-              __typename: 'User',
-            },
-          },
+          refetchQueries: ['userByNameForEkfBar'],
         })
       } catch (error) {
         return setFieldErrors({ [field]: error.message })
