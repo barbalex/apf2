@@ -130,13 +130,6 @@ const CellForYearMenu = () => {
           mutation: mutationCreateEkplan,
           variables,
           refetchQueries: ['EkplanTpopQuery'],
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopById: {
-              tpop: variables,
-              __typename: 'Tpop',
-            },
-          },
         })
       } catch (error) {
         store.enqueNotification({
