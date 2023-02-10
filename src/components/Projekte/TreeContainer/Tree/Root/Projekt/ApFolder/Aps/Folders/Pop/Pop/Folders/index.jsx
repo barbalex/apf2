@@ -29,7 +29,13 @@ const PopFolders = ({ projekt, ap, pop }) => {
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ['treePopFolders', pop.id],
+    queryKey: [
+      'treePopFolders',
+      pop.id,
+      tpopGqlFilterForTree,
+      popbersFilter,
+      popmassnbersFilter,
+    ],
     queryFn: () =>
       client.query({
         query: gql`
