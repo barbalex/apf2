@@ -20,7 +20,7 @@ const PopBer = ({ projekt, ap, pop }) => {
   }
 
   const { data } = useQuery({
-    queryKey: ['treePopber', ap.id, popbersFilter],
+    queryKey: ['treePopber', pop.id, popbersFilter],
     queryFn: () =>
       client.query({
         query: gql`
