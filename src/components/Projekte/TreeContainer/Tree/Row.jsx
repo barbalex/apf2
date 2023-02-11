@@ -281,7 +281,7 @@ const Row = ({ node }) => {
 
   return (
     <ContextMenuTrigger
-      // need this id fort the menu to work
+      // need this id for the menu to work
       id={`tree${upperFirst(node.menuType)}`}
       //collect={(props) => ({ key: index })}
       collect={(props) => props}
