@@ -68,7 +68,7 @@ export default defineConfig({
         // which looks hideous in browser
         icons: [
           {
-            src: 'psrc/images/ophr_192.png',
+            src: 'android-chrome-192x192.png',
             sizes: '192x192',
             type: 'image/png',
           },
