@@ -44,10 +44,10 @@ export default defineConfig({
       },
       registerType: 'autoUpdate',
       includeAssets: [
-        'favicon.svg',
-        'favicon.ico',
+        'src/images/favicon_package/android-chrome-192x192.png',
+        'src/images/maskable_icon_x512.png',
         'robots.txt',
-        'apple-touch-icon.png',
+        'src/images/ophr_512.png',
       ],
       // https://developer.mozilla.org/en-US/docs/Web/Manifest
       manifest: {
@@ -63,8 +63,6 @@ export default defineConfig({
         background_color: '#2e7d32',
         theme_color: '#2e7d32',
         display: 'minimal-ui',
-        // not using maskable icon as that can not be transparent
-        // which looks hideous in browser
         icons: [
           {
             src: 'src/images/favicon_package/android-chrome-192x192.png',
