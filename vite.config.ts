@@ -49,11 +49,15 @@ export default defineConfig({
       },
     }),
     VitePWA({
-      workbox: {
-        sourcemap: true,
-      },
+      // workbox: {
+      //   sourcemap: true,
+      // },
       registerType: 'autoUpdate',
       includeAssets: [
+        'src/images/favicon_package/apple-touch-icon.png',
+        'src/images/favicon_package/favicon-32x32.png',
+        'src/images/favicon_package/favicon-16x16.png',
+        'src/images/favicon_package/safari-pinned-tab.svg',
         'src/images/ophr_192.png',
         'src/images/maskable_icon_x512.png',
         'robots.txt',
@@ -91,14 +95,12 @@ export default defineConfig({
             type: 'image/png',
           },
         ],
-        include_favicon: true,
-        lang: 'de-CH',
         orientation: 'portrait',
         description: 'Aktionspläne für Flora-Projekte',
       },
-      devOptions: {
-        //enabled: true,
-      },
+      // devOptions: {
+      //   enabled: true,
+      // },
     }),
     react({
       jsxImportSource: '@emotion/react',
