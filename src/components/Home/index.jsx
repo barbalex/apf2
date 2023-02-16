@@ -94,6 +94,7 @@ const PageTitle = styled(Typography)`
 `
 const CardTitle = styled.h3`
   font-weight: 700;
+  margin-top: 4px;
 `
 
 const Home = () => (
