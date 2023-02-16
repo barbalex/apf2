@@ -63,14 +63,19 @@ export default defineConfig({
         background_color: '#2e7d32',
         theme_color: '#2e7d32',
         display: 'minimal-ui',
-        // icon: 'src/images/ophr_1024.png',
         // not using maskable icon as that can not be transparent
         // which looks hideous in browser
         icons: [
           {
-            src: 'android-chrome-192x192.png',
+            src: 'src/images/favicon_package/android-chrome-192x192.png',
             sizes: '192x192',
             type: 'image/png',
+          },
+          {
+            src: 'src/images/maskable_icon_x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
           },
           {
             src: 'src/images/ophr_512.png',
