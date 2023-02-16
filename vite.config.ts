@@ -91,10 +91,14 @@ export default defineConfig({
             purpose: 'maskable',
           },
           {
+            src: 'src/images/maskable_icon_x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+          {
             src: 'src/images/maskable_icon_x192.png',
             sizes: '192x192',
             type: 'image/png',
-            purpose: 'maskable',
           },
           // {
           //   src: 'src/images/ophr_512.png',
