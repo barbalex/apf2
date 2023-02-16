@@ -63,12 +63,21 @@ export default defineConfig({
         background_color: '#2e7d32',
         theme_color: '#2e7d32',
         display: 'minimal-ui',
-        icon: 'src/images/ophr.png',
+        // icon: 'src/images/ophr_1024.png',
         // not using maskable icon as that can not be transparent
         // which looks hideous in browser
-        //icon_options: {
-        //  purpose: `any maskable`,
-        //},
+        icons: [
+          {
+            src: 'psrc/images/ophr_192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: 'src/images/ophr_512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
         include_favicon: true,
         lang: 'de-CH',
         orientation: 'portrait',
