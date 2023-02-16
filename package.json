@@ -13,6 +13,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build_only": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
