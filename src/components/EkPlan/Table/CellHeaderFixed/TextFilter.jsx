@@ -90,7 +90,7 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
   const onKeyDown = useCallback((event) => {
     // need to stop propagation
     // menu focuses next label if that's first character is pressed
-    // this blurs the textfield
+    // this blurs the textfield, so the filter can't be entered
     // See: https://github.com/mui/material-ui/issues/36133
     // https://github.com/barbalex/apf2/issues/609
     event.stopPropagation()
