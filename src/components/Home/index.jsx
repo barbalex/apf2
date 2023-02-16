@@ -4,9 +4,9 @@ import MaterialCard from '@mui/material/Card'
 import styled from '@emotion/styled'
 
 import ProgressiveImg from '../shared/ProgressiveImg'
-import image from '../../images/ophr-ara.jpg'
+import image from '../../images/ophr-ara_2500.jpg'
 // TODO: build small version of image
-import placeholderSrc from '../../images/ophr-ara.jpg'
+import placeholderSrc from '../../images/ophr-ara_300.jpg'
 
 const OuterContainer = styled.div`
   height: 100%;
