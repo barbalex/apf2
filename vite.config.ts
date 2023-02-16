@@ -78,11 +78,11 @@ export default defineConfig({
         theme_color: '#2e7d32',
         display: 'minimal-ui',
         icons: [
-          {
-            src: 'src/images/ophr_256.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
+          // {
+          //   src: 'src/images/ophr_256.png',
+          //   sizes: '192x192',
+          //   type: 'image/png',
+          // },
           {
             src: 'src/images/maskable_icon_x512.png',
             sizes: '512x512',
