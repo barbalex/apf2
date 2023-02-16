@@ -58,7 +58,7 @@ export default defineConfig({
         'src/images/favicon_package/favicon-32x32.png',
         'src/images/favicon_package/favicon-16x16.png',
         'src/images/favicon_package/safari-pinned-tab.svg',
-        'src/images/ophr_192.png',
+        'src/images/ophr_256.png',
         'src/images/maskable_icon_x512.png',
         'robots.txt',
         'src/images/ophr_512.png',
@@ -79,7 +79,7 @@ export default defineConfig({
         display: 'minimal-ui',
         icons: [
           {
-            src: 'src/images/ophr_192.png',
+            src: 'src/images/ophr_256.png',
             sizes: '192x192',
             type: 'image/png',
           },
