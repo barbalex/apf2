@@ -44,7 +44,7 @@ export default defineConfig({
       },
       registerType: 'autoUpdate',
       includeAssets: [
-        'src/images/favicon_package/android-chrome-192x192.png',
+        'src/images/ophr_192.png',
         'src/images/maskable_icon_x512.png',
         'robots.txt',
         'src/images/ophr_512.png',
@@ -65,7 +65,7 @@ export default defineConfig({
         display: 'minimal-ui',
         icons: [
           {
-            src: 'src/images/favicon_package/android-chrome-192x192.png',
+            src: 'src/images/ophr_192.png',
             sizes: '192x192',
             type: 'image/png',
           },
