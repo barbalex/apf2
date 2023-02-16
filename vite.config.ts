@@ -89,11 +89,11 @@ export default defineConfig({
             type: 'image/png',
             purpose: 'maskable',
           },
-          {
-            src: 'src/images/ophr_512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
+          // {
+          //   src: 'src/images/ophr_512.png',
+          //   sizes: '512x512',
+          //   type: 'image/png',
+          // },
         ],
         orientation: 'portrait',
         description: 'Aktionspläne für Flora-Projekte',
