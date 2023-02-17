@@ -48,6 +48,9 @@ export default defineConfig({
         // ...svgr options (https://react-svgr.com/docs/options/)
       },
     }),
+    // need to NOT use complete path to src/images
+    // image files need to be in public instead
+    // https://vitejs.dev/guide/assets.html
     VitePWA({
       // workbox: {
       //   sourcemap: true,
