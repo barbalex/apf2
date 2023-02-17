@@ -79,32 +79,22 @@ export default defineConfig({
         theme_color: '#2e7d32',
         display: 'minimal-ui',
         icons: [
-          // {
-          //   src: 'src/images/ophr_256.png',
-          //   sizes: '192x192',
-          //   type: 'image/png',
-          // },
           {
-            src: 'src/images/maskable_icon_x512.png',
+            src: '/ophr_192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: '/maskable_icon_x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
           },
           {
-            src: 'src/images/maskable_icon_x512.png',
+            src: '/ophr_512.png',
             sizes: '512x512',
             type: 'image/png',
           },
-          {
-            src: 'src/images/maskable_icon_x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          // {
-          //   src: 'src/images/ophr_512.png',
-          //   sizes: '512x512',
-          //   type: 'image/png',
-          // },
         ],
         orientation: 'portrait',
         description: 'Aktionspläne für Flora-Projekte',
