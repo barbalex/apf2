@@ -52,9 +52,13 @@ export default defineConfig({
     // image files need to be in public instead
     // https://vitejs.dev/guide/assets.html
     VitePWA({
-      // workbox: {
-      //   sourcemap: true,
-      // },
+      workbox: {
+        sourcemap: true,
+        globPatterns: [
+          '**/*.{js,jsx,ts,tsx,css,html,ico,png,jpg,svg,webp,json,woff2,woff}',
+        ],
+        maximumFileSizeToCacheInBytes: 1000000000,
+      },
       registerType: 'autoUpdate',
       includeAssets: [
         'src/images/favicon_package/apple-touch-icon.png',
