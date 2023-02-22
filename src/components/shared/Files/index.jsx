@@ -35,6 +35,7 @@ const Spacer = styled.div`
 `
 const ButtonsContainer = styled.div`
   display: flex;
+  margin-top: 8px;
 `
 const LightboxButton = styled(Button)`
   margin-left: 10px !important;
@@ -177,7 +178,10 @@ const Files = ({
             )}
           </ButtonsContainer>
           {lightboxIsOpen && (
-            <ImageGallery items={imageObjects} showPlayButton={false} />
+            <>
+              <Spacer />
+              <ImageGallery items={imageObjects} showPlayButton={false} />
+            </>
           )}
           <Spacer />
           {files.map((file) => (
