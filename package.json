@@ -71,7 +71,7 @@
     "react-focus-within": "2.0.2",
     "react-highlight-words": "0.20.0",
     "react-icons": "4.7.1",
-    "react-image-lightbox": "5.1.4",
+    "react-image-gallery": "^1.2.11",
     "react-leaflet": "4.2.0",
     "react-leaflet-bing-v2": "5.2.3",
     "react-leaflet-fullscreen-plugin": "1.0.1",

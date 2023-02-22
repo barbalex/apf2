@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
-import Lightbox from 'react-image-lightbox'
 import Button from '@mui/material/Button'
 import SimpleBar from 'simplebar-react'
+import ImageGallery from 'react-image-gallery'
 
 import ErrorBoundary from '../ErrorBoundary'
 import Error from '../Error'
@@ -21,7 +21,7 @@ import {
 } from '../fragments'
 import Uploader from '../Uploader'
 import File from './File'
-import 'react-image-lightbox/style.css'
+import 'react-image-gallery/styles/css/image-gallery.css'
 import isImageFile from './isImageFile'
 
 const Container = styled.div`
@@ -57,7 +57,6 @@ const Files = ({
 }) => {
   const client = useApolloClient()
 
-  const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
   const queryName = `all${upperFirst(parent)}Files`
@@ -135,19 +134,19 @@ const Files = ({
   )
 
   const images = files.filter((f) => isImageFile(f))
-  const imageUrls = images.map(
-    (f) =>
-      `https://ucarecdn.com/${f.fileId}/-/resize/1200x/-/quality/lightest/${f.name}`,
-  )
-  const onClickLightboxButton = useCallback(() => setLightboxIsOpen(true), [])
-  const onCloseLightboxRequest = useCallback(() => setLightboxIsOpen(false), [])
-  const onMovePrevImageRequest = useCallback(
-    () => setImageIndex((imageIndex + images.length - 1) % images.length),
-    [imageIndex, images.length],
-  )
-  const onMoveNextImageRequest = useCallback(
-    () => setImageIndex((imageIndex + 1) % images.length),
-    [imageIndex, images.length],
+  const imageObjects = images.map((f) => ({
+    original: `https://ucarecdn.com/${f.fileId}/-/resize/1200x/-/quality/lightest/${f.name}`,
+    thumbnail: `https://ucarecdn.com/${f.fileId}/-/resize/250x/-/quality/lightest/${f.name}`,
+    fullscreen: `https://ucarecdn.com/${f.fileId}/-/resize/1800x/-/quality/lightest/${f.name}`,
+    originalAlt: f.beschreibung || '',
+    thumbnailAlt: f.beschreibung || '',
+    description: f.beschreibung || '',
+    originalTitle: f.name || '',
+    thumbnailTitle: f.name || '',
+  }))
+  const onClickLightboxButton = useCallback(
+    () => setLightboxIsOpen(!lightboxIsOpen),
+    [lightboxIsOpen],
   )
 
   if (loading || loadingParent) return <Spinner />
@@ -171,26 +170,14 @@ const Files = ({
                 variant="outlined"
                 onClick={onClickLightboxButton}
               >
-                Bilder in Gallerie öffnen
+                {lightboxIsOpen
+                  ? 'Gallerie schliessen'
+                  : 'Bilder in Gallerie öffnen'}
               </LightboxButton>
             )}
           </ButtonsContainer>
           {lightboxIsOpen && (
-            <Lightbox
-              mainSrc={imageUrls[imageIndex]}
-              nextSrc={imageUrls[(imageIndex + 1) % images.length]}
-              prevSrc={
-                imageUrls[(imageIndex + images.length - 1) % images.length]
-              }
-              onCloseRequest={onCloseLightboxRequest}
-              onMovePrevRequest={onMovePrevImageRequest}
-              onMoveNextRequest={onMoveNextImageRequest}
-              imageTitle={images[imageIndex].name || ''}
-              imageCaption={images[imageIndex].beschreibung || ''}
-              wrapperClassName="lightbox"
-              nextLabel="Nächstes Bild"
-              prevLabel="Voriges Bild"
-            />
+            <ImageGallery items={imageObjects} showPlayButton={false} />
           )}
           <Spacer />
           {files.map((file) => (
