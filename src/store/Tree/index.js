@@ -1377,6 +1377,10 @@ export default types
             // important: NEVER load from all species!
             some: {
               apId: { in: openApIds },
+              // need to include nodeLabelFilter
+              aeTaxonomyByArtId: {
+                artname: { includesInsensitive: self.nodeLabelFilter.ap ?? '' },
+              },
             },
           },
         },
@@ -1458,7 +1462,7 @@ export default types
         filtered: singleFilter,
       }
 
-      // console.log('beobGqlFilter:', { beobGqlFilter, type })
+      // console.log('beobGqlFilter:', { beobGqlFilter, nodeLabelFilter, type })
 
       return beobGqlFilter
     },
