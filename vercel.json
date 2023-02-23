@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/Daten/.*",
-      "destination": "/Daten"
+      "destination": "/index.html"
     }
   ]
 }
