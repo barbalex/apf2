@@ -54,8 +54,8 @@ const Dateien = () => (
     <p>
       Meist dürfte es sich um Bilder handeln. Daher gibt es auch eine
       Möglichkeit, die Bilder inklusive Beschreibung in einer{' '}
-      <strong>Gallerie-Ansicht</strong> zu öffnen:
-      <img src={files02Gallery} alt="Gallerie-Ansicht" width="100%" />
+      <strong>Galerie-Ansicht</strong> zu öffnen:
+      <img src={files02Gallery} alt="Galerie-Ansicht" width="100%" />
       <br />
     </p>
     <p>

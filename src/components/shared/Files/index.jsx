@@ -172,8 +172,8 @@ const Files = ({
                 onClick={onClickLightboxButton}
               >
                 {lightboxIsOpen
-                  ? 'Gallerie schliessen'
-                  : 'Bilder in Gallerie öffnen'}
+                  ? 'Galerie schliessen'
+                  : 'Bilder in Galerie öffnen'}
               </LightboxButton>
             )}
           </ButtonsContainer>
