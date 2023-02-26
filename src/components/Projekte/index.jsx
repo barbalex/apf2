@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import intersection from 'lodash/intersection'
 import { observer } from 'mobx-react-lite'
@@ -16,7 +16,7 @@ import appBaseUrl from '../../modules/appBaseUrl'
 import inIframe from '../../modules/inIframe'
 import useSearchParamsState from '../../modules/useSearchParamsState'
 import isMobilePhone from '../../modules/isMobilePhone'
-import ApFilterController from './ApFilterController'
+const ApFilterController = lazy(() => import('./ApFilterController'))
 
 const isInIframe = inIframe()
 
@@ -94,7 +94,9 @@ const Projekte = () => {
 
   return (
     <>
-      <ApFilterController />
+      <Suspense fallback={null}>
+        <ApFilterController />
+      </Suspense>
       <Container>
         {tree2Tabs.length === 0 || isPrint ? (
           <ProjektContainer />
