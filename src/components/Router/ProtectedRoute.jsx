@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router-dom'
@@ -7,13 +7,14 @@ import jwtDecode from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router-dom'
 
 import storeContext from '../../storeContext'
-import User from '../User'
-import Messages from '../Messages'
-import Deletions from '../Deletions'
+const User = lazy(() => import('../User'))
+const Messages = lazy(() => import('../Messages'))
+const Deletions = lazy(() => import('../Deletions'))
 import inIframe from '../../modules/inIframe'
-import ActiveNodeArraySetter from '../ActiveNodeArraySetter'
-import NavigateSetter from '../NavigateSetter'
-import QueryClientSetter from '../QueryClientSetter'
+const ActiveNodeArraySetter = lazy(() => import('../ActiveNodeArraySetter'))
+const NavigateSetter = lazy(() => import('../NavigateSetter'))
+const QueryClientSetter = lazy(() => import('../QueryClientSetter'))
+import Spinner from '../shared/Spinner'
 
 const isInIframe = inIframe()
 
@@ -58,15 +59,21 @@ const ProtectedRoute = () => {
     <Container>
       {!!user.token && (
         <>
-          <Outlet />
-          {!isFreiwillig && !isInIframe && <Messages />}
-          {!isFreiwillig && showDeletions && <Deletions />}
-          <ActiveNodeArraySetter />
-          <NavigateSetter />
-          <QueryClientSetter />
+          <Suspense fallback={<Spinner />}>
+            <Outlet />
+            {!isFreiwillig && !isInIframe && <Messages />}
+            {!isFreiwillig && showDeletions && <Deletions />}
+          </Suspense>
+          <Suspense fallback={null}>
+            <ActiveNodeArraySetter />
+            <NavigateSetter />
+            <QueryClientSetter />
+          </Suspense>
         </>
       )}
-      <User />
+      <Suspense fallback={null}>
+        <User />
+      </Suspense>
     </Container>
   )
 }
