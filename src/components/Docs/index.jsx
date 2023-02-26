@@ -1,10 +1,11 @@
-import React from 'react'
+import { Suspense } from 'react'
 import styled from '@emotion/styled'
 import { Outlet } from 'react-router-dom'
 import SimpleBar from 'simplebar-react'
 
 import Sidebar from './Sidebar'
 import ErrorBoundary from '../shared/ErrorBoundary'
+import Spinner from '../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -76,7 +77,9 @@ const Docs = () => (
       <Sidebar />
       <SimpleBar style={{ height: '100%', width: '100%' }}>
         <Doku>
-          <Outlet />
+          <Suspense fallback={<Spinner />}>
+            <Outlet />
+          </Suspense>
         </Doku>
       </SimpleBar>
     </Container>
