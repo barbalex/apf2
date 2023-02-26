@@ -68,7 +68,7 @@ const CmZielFolder = lazy(() => import('./contextmenu/ZielFolder'))
 const CmZielJahrFolder = lazy(() => import('./contextmenu/ZielJahrFolder'))
 const CmZiel = lazy(() => import('./contextmenu/Ziel'))
 const CmZielBerFolder = lazy(() => import('./contextmenu/ZielBerFolder'))
-const CmZielBer = lazy(() => import('./contextmenu/ZielBer'))
+const CmZielBer = lazy(() => import('./contextmenu/Zielber'))
 const CmPopFolder = lazy(() => import('./contextmenu/PopFolder'))
 const CmPop = lazy(() => import('./contextmenu/Pop'))
 const CmPopmassnberFolder = lazy(() =>
