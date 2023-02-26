@@ -1,18 +1,19 @@
-import React, { useContext, useCallback } from 'react'
+import { useContext, useCallback, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import Button from '@mui/material/Button'
 
-import ApList from './ApList'
-import Table from './Table'
-import Choose from './Choose'
+const ApList = lazy(() => import('./ApList'))
+const Table = lazy(() => import('./Table'))
+const Choose = lazy(() => import('./Choose'))
 import queryAps from './queryAps'
 import storeContext from '../../storeContext'
 import appBaseUrl from '../../modules/appBaseUrl'
-import Error from '../shared/Error'
+const Error = lazy(() => import('../shared/Error'))
 import ErrorBoundary from '../shared/ErrorBoundary'
-import User from '../User'
+const User = lazy(() => import('../User'))
+import Spinner from '../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -56,28 +57,36 @@ const EkPlan = () => {
     window.open(url)
   }, [])
 
-  if (error) return <Error error={error} />
+  if (error) {
+    return (
+      <Suspense fallback={<Spinner />}>
+        <Error error={error} />
+      </Suspense>
+    )
+  }
 
   return (
     <ErrorBoundary>
       <Container>
-        {!!user.token && (
-          <>
-            <Header>
-              <ApList />
-              <AnleitungButton
-                variant="outlined"
-                onClick={onClickAnleitung}
-                color="inherit"
-              >
-                Anleitung
-              </AnleitungButton>
-              <Choose />
-            </Header>
-            <Table />
-          </>
-        )}
-        <User />
+        <Suspense fallback={<Spinner />}>
+          {!!user.token && (
+            <>
+              <Header>
+                <ApList />
+                <AnleitungButton
+                  variant="outlined"
+                  onClick={onClickAnleitung}
+                  color="inherit"
+                >
+                  Anleitung
+                </AnleitungButton>
+                <Choose />
+              </Header>
+              <Table />
+            </>
+          )}
+          <User />
+        </Suspense>
       </Container>
     </ErrorBoundary>
   )
