@@ -1,9 +1,8 @@
 import fileSaver from 'file-saver'
 import format from 'date-fns/format'
 
-import getXlsxBuffer from './getXlsxBuffer'
-
 const exportXlsx = async ({ fileName, data, store }) => {
+  const { default: getXlsxBuffer } = await import('./getXlsxBuffer')
   let buffer
   try {
     buffer = await getXlsxBuffer({ data, store })

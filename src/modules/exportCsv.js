@@ -1,6 +1,6 @@
 import { Parser } from '@json2csv/plainjs'
 import fileDownload from 'js-file-download'
-import format from 'date-fns/format'
+import format from 'date-fns/format' 
 
 const exportCsv = ({ fileName, data }) => {
   // maybe use "AsyncParser" if the synchronous "parse" blocks the ui to badly

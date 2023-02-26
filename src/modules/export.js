@@ -1,13 +1,9 @@
-import omit from 'lodash/omit'
-
-import exportXlsx from './exportXlsx'
-import exportCsv from './exportCsv'
-import exportKml from './exportKml'
 // this version is ogc-compatible and can be used for https://map.geo.admin.ch
 //import exportKml from './exportKml_ogc'
 
 const exportModule = async ({ data: dataPassed, fileName, kml, store }) => {
   const { exportFileType } = store
+  const { default: omit } = await import('lodash/omit')
   let data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   // TODO: filter by dataFilterState
@@ -23,16 +19,19 @@ const exportModule = async ({ data: dataPassed, fileName, kml, store }) => {
     })
   }
   if (kml) {
+    const { default: exportKml } = await import('./exportKml')
     exportKml({
       fileName,
       data,
     })
   } else if (exportFileType === 'csv') {
+    const { default: exportCsv } = await import('./exportCsv')
     exportCsv({
       fileName,
       data,
     })
   } else {
+    const { default: exportXlsx } = await import('./exportXlsx')
     // pass some data in case something goes wrong
     await exportXlsx({
       fileName,
