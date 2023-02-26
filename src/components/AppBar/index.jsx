@@ -7,6 +7,7 @@ import { Outlet, useLocation, useParams } from 'react-router-dom'
 import Bar from './Bar'
 import EkfBar from './EkfBar'
 import inIframe from '../../modules/inIframe'
+import Spinner from '../shared/Spinner'
 
 const isInIframe = inIframe()
 
@@ -47,7 +48,9 @@ const AppBarComponent = () => {
       <StyledAppBar position="static">
         <StyledToolbar>{showEkf ? <EkfBar /> : <Bar />}</StyledToolbar>
       </StyledAppBar>
-      <Outlet />
+      <Suspense fallback={<Spinner />}>
+        <Outlet />
+      </Suspense>
     </Container>
   )
 }

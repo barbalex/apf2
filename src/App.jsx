@@ -43,6 +43,7 @@ const LegacyBrowserInformer = lazy(() =>
   import('./components/LegacyBrowserInformer'),
 )
 const StorePersister = lazy(() => import('./components/StorePersister'))
+import Spinner from './components/shared/Spinner'
 
 registerLocale('de', de)
 setDefaultLocale('de')
@@ -80,7 +81,9 @@ const App = () => {
                 >
                   <>
                     <GlobalStyle />
-                    <Router />
+                    <Suspense fallback={<Spinner />}>
+                      <Router />
+                    </Suspense>
                     <Suspense fallback={null}>
                       <Notifier />
                       <IsPrintSetter />
