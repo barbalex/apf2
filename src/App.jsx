@@ -1,5 +1,4 @@
-// This is the entry file for the application
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import theme from './utils/materialTheme'
@@ -26,7 +25,7 @@ import GlobalStyle from './components/GlobalStyle'
 import { Provider as MobxProvider } from './storeContext'
 import { Provider as IdbProvider } from './idbContext'
 
-import Notifier from './components/shared/Notifier'
+const Notifier = lazy(() => import('./components/shared/Notifier'))
 import NotificationDismisser from './components/shared/NotificationDismisser'
 
 import 'simplebar-react/dist/simplebar.min.css'
@@ -35,11 +34,15 @@ import '@changey/react-leaflet-markercluster/dist/styles.min.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import Router from './components/Router'
-import IsPrintSetter from './components/IsPrintSetter'
-import MouseWheelHandler from './components/MouseWheelHandler'
-import LastTouchedNodeSetter from './components/LastTouchedNodeSetter'
-import LegacyBrowserInformer from './components/LegacyBrowserInformer'
-import StorePersister from './components/StorePersister'
+const IsPrintSetter = lazy(() => import('./components/IsPrintSetter'))
+const MouseWheelHandler = lazy(() => import('./components/MouseWheelHandler'))
+const LastTouchedNodeSetter = lazy(() =>
+  import('./components/LastTouchedNodeSetter'),
+)
+const LegacyBrowserInformer = lazy(() =>
+  import('./components/LegacyBrowserInformer'),
+)
+const StorePersister = lazy(() => import('./components/StorePersister'))
 
 registerLocale('de', de)
 setDefaultLocale('de')
@@ -78,12 +81,14 @@ const App = () => {
                   <>
                     <GlobalStyle />
                     <Router />
-                    <Notifier />
-                    <IsPrintSetter />
-                    <LastTouchedNodeSetter />
-                    <MouseWheelHandler />
-                    <LegacyBrowserInformer />
-                    <StorePersister client={client} store={store} idb={idb} />
+                    <Suspense fallback={null}>
+                      <Notifier />
+                      <IsPrintSetter />
+                      <LastTouchedNodeSetter />
+                      <MouseWheelHandler />
+                      <LegacyBrowserInformer />
+                      <StorePersister client={client} store={store} idb={idb} />
+                    </Suspense>
                   </>
                 </SnackbarProvider>
               </ThemeProvider>
