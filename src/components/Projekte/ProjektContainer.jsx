@@ -1,18 +1,19 @@
-import React, { useContext, useMemo } from 'react'
+import { useContext, useMemo, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import intersection from 'lodash/intersection'
 import { Outlet } from 'react-router-dom'
 import { useParams, useLocation } from 'react-router-dom'
 
-import Karte from './Karte'
-import TreeContainer from './TreeContainer'
-import Exporte from './Exporte'
-import Filter from './Filter'
+const Karte = lazy(() => import('./Karte'))
+const TreeContainer = lazy(() => import('./TreeContainer'))
+const Exporte = lazy(() => import('./Exporte'))
+const Filter = lazy(() => import('./Filter'))
 import storeContext from '../../storeContext'
 import StyledSplitPane from '../shared/StyledSplitPane'
 import useSearchParamsState from '../../modules/useSearchParamsState'
 import isMobilePhone from '../../modules/isMobilePhone'
+import Spinner from '../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -64,7 +65,9 @@ const ProjektContainer = () => {
   const elObj = {
     tree: (
       <InnerContainer>
-        <TreeContainer />
+        <Suspense fallback={<Spinner />}>
+          <TreeContainer />
+        </Suspense>
       </InnerContainer>
     ),
     daten: (
@@ -74,17 +77,23 @@ const ProjektContainer = () => {
     ),
     filter: (
       <InnerContainer>
-        <Filter />
+        <Suspense fallback={<Spinner />}>
+          <Filter />
+        </Suspense>
       </InnerContainer>
     ),
     karte: (
       <InnerContainer>
-        <Karte />
+        <Suspense fallback={<Spinner />}>
+          <Karte />
+        </Suspense>
       </InnerContainer>
     ),
     exporte: (
       <InnerContainer>
-        <Exporte />
+        <Suspense fallback={<Spinner />}>
+          <Exporte />
+        </Suspense>
       </InnerContainer>
     ),
   }
