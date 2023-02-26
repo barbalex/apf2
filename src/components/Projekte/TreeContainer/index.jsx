@@ -1,7 +1,7 @@
 /**
  * need to keep class because of ref
  */
-import React, { useCallback, useContext, useState } from 'react'
+import { useCallback, useContext, useState, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
@@ -16,67 +16,101 @@ import DialogContent from '@mui/material/DialogContent'
 import { useParams, useLocation } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
-import LabelFilter from './LabelFilter'
-import ApFilter from './ApFilter'
-import TreeComponent from './Tree'
-import CmApFolder from './contextmenu/ApFolder'
-import CmAp from './contextmenu/Ap'
-import CmUserFolder from './contextmenu/UserFolder'
-import CmUser from './contextmenu/User'
-import CmAdresseFolder from './contextmenu/AdresseFolder'
-import CmAdresse from './contextmenu/Adresse'
-import CmTpopApberrelevantGrundWerteFolder from './contextmenu/TpopApberrelevantGrundWerteFolder'
-import CmTpopApberrelevantGrundWerte from './contextmenu/TpopApberrelevantGrundWerte'
-import CmTpopkontrzaehlEinheitWerteFolder from './contextmenu/TpopkontrzaehlEinheitWerteFolder'
-import CmTpopkontrzaehlEinheitWerte from './contextmenu/TpopkontrzaehlEinheitWerte'
-import CmEkAbrechnungstypWerteFolder from './contextmenu/EkAbrechnungstypWerteFolder'
-import CmEkAbrechnungstypWerte from './contextmenu/EkAbrechnungstypWerte'
-import CmApberuebersichtFolder from './contextmenu/ApberuebersichtFolder'
-import CmApberuebersicht from './contextmenu/Apberuebersicht'
-import CmAssozartFolder from './contextmenu/AssozartFolder'
-import CmAssozart from './contextmenu/Assozart'
-import CmEkzaehleinheitFolder from './contextmenu/EkzaehleinheitFolder'
-import CmEkzaehleinheit from './contextmenu/Ekzaehleinheit'
-import CmEkfrequenzFolder from './contextmenu/EkfrequenzFolder'
-import CmEkfrequenz from './contextmenu/Ekfrequenz'
-import CmApartFolder from './contextmenu/ApartFolder'
-import CmApart from './contextmenu/Apart'
-import CmBeobZugeordnetFolder from './contextmenu/BeobZugeordnetFolder'
-import CmApberFolder from './contextmenu/ApberFolder'
-import CmApber from './contextmenu/Apber'
-import CmErfkritFolder from './contextmenu/ErfkritFolder'
-import CmErfkrit from './contextmenu/Erfkrit'
-import CmZielFolder from './contextmenu/ZielFolder'
-import CmZielJahrFolder from './contextmenu/ZielJahrFolder'
-import CmZiel from './contextmenu/Ziel'
-import CmZielBerFolder from './contextmenu/ZielBerFolder'
-import CmZielBer from './contextmenu/Zielber'
-import CmPopFolder from './contextmenu/PopFolder'
-import CmPop from './contextmenu/Pop'
-import CmPopmassnberFolder from './contextmenu/PopmassnberFolder'
-import CmPopmassnber from './contextmenu/Popmassnber'
-import CmPopberFolder from './contextmenu/PopberFolder'
-import CmPopber from './contextmenu/Popber'
-import CmProjekt from './contextmenu/Projekt'
-import CmWerteListen from './contextmenu/WerteListen'
-import CmTpopFolder from './contextmenu/TpopFolder'
-import CmTpop from './contextmenu/Tpop'
-import CmTpopberFolder from './contextmenu/TpopberFolder'
-import CmTpopber from './contextmenu/Tpopber'
-import CmBeobZugeordnet from './contextmenu/BeobZugeordnet'
-import CmBeobnichtbeurteilt from './contextmenu/Beobnichtbeurteilt'
-import CmBeobNichtZuzuordnen from './contextmenu/BeobNichtZuzuordnen'
-import CmTpopfreiwkontrFolder from './contextmenu/TpopfreiwkontrFolder'
-import CmTpopfreiwkontr from './contextmenu/Tpopfreiwkontr'
-import CmTpopfeldkontrFolder from './contextmenu/TpopfeldkontrFolder'
-import CmTpopfeldkontr from './contextmenu/Tpopfeldkontr'
-import CmTpopfeldkontrzaehlFolder from './contextmenu/TpopfeldkontrzaehlFolder'
-import CmTpopfeldkontrzaehl from './contextmenu/Tpopfeldkontrzaehl'
-import CmTpopmassnberFolder from './contextmenu/TpopmassnberFolder'
-import CmTpopmassnber from './contextmenu/Tpopmassnber'
-import CmTpopmassnFolder from './contextmenu/TpopmassnFolder'
-import CmTpopmassn from './contextmenu/Tpopmassn'
-import DeleteDatasetModal from './DeleteDatasetModal'
+const LabelFilter = lazy(() => import('./LabelFilter'))
+const ApFilter = lazy(() => import('./ApFilter'))
+const TreeComponent = lazy(() => import('./Tree'))
+const CmApFolder = lazy(() => import('./contextmenu/ApFolder'))
+const CmAp = lazy(() => import('./contextmenu/Ap'))
+const CmUserFolder = lazy(() => import('./contextmenu/UserFolder'))
+const CmUser = lazy(() => import('./contextmenu/User'))
+const CmAdresseFolder = lazy(() => import('./contextmenu/AdresseFolder'))
+const CmAdresse = lazy(() => import('./contextmenu/Adresse'))
+const CmTpopApberrelevantGrundWerteFolder = lazy(() =>
+  import('./contextmenu/TpopApberrelevantGrundWerteFolder'),
+)
+const CmTpopApberrelevantGrundWerte = lazy(() =>
+  import('./contextmenu/TpopApberrelevantGrundWerte'),
+)
+const CmTpopkontrzaehlEinheitWerteFolder = lazy(() =>
+  import('./contextmenu/TpopkontrzaehlEinheitWerteFolder'),
+)
+const CmTpopkontrzaehlEinheitWerte = lazy(() =>
+  import('./contextmenu/TpopkontrzaehlEinheitWerte'),
+)
+const CmEkAbrechnungstypWerteFolder = lazy(() =>
+  import('./contextmenu/EkAbrechnungstypWerteFolder'),
+)
+const CmEkAbrechnungstypWerte = lazy(() =>
+  import('./contextmenu/EkAbrechnungstypWerte'),
+)
+const CmApberuebersichtFolder = lazy(() =>
+  import('./contextmenu/ApberuebersichtFolder'),
+)
+const CmApberuebersicht = lazy(() => import('./contextmenu/Apberuebersicht'))
+const CmAssozartFolder = lazy(() => import('./contextmenu/AssozartFolder'))
+const CmAssozart = lazy(() => import('./contextmenu/Assozart'))
+const CmEkzaehleinheitFolder = lazy(() =>
+  import('./contextmenu/EkzaehleinheitFolder'),
+)
+const CmEkzaehleinheit = lazy(() => import('./contextmenu/Ekzaehleinheit'))
+const CmEkfrequenzFolder = lazy(() => import('./contextmenu/EkfrequenzFolder'))
+const CmEkfrequenz = lazy(() => import('./contextmenu/Ekfrequenz'))
+const CmApartFolder = lazy(() => import('./contextmenu/ApartFolder'))
+const CmApart = lazy(() => import('./contextmenu/Apart'))
+const CmBeobZugeordnetFolder = lazy(() =>
+  import('./contextmenu/BeobZugeordnetFolder'),
+)
+const CmApberFolder = lazy(() => import('./contextmenu/ApberFolder'))
+const CmApber = lazy(() => import('./contextmenu/Apber'))
+const CmErfkritFolder = lazy(() => import('./contextmenu/ErfkritFolder'))
+const CmErfkrit = lazy(() => import('./contextmenu/Erfkrit'))
+const CmZielFolder = lazy(() => import('./contextmenu/ZielFolder'))
+const CmZielJahrFolder = lazy(() => import('./contextmenu/ZielJahrFolder'))
+const CmZiel = lazy(() => import('./contextmenu/Ziel'))
+const CmZielBerFolder = lazy(() => import('./contextmenu/ZielBerFolder'))
+const CmZielBer = lazy(() => import('./contextmenu/ZielBer'))
+const CmPopFolder = lazy(() => import('./contextmenu/PopFolder'))
+const CmPop = lazy(() => import('./contextmenu/Pop'))
+const CmPopmassnberFolder = lazy(() =>
+  import('./contextmenu/PopmassnberFolder'),
+)
+const CmPopmassnber = lazy(() => import('./contextmenu/Popmassnber'))
+const CmPopberFolder = lazy(() => import('./contextmenu/PopberFolder'))
+const CmPopber = lazy(() => import('./contextmenu/Popber'))
+const CmProjekt = lazy(() => import('./contextmenu/Projekt'))
+const CmWerteListen = lazy(() => import('./contextmenu/WerteListen'))
+const CmTpopFolder = lazy(() => import('./contextmenu/TpopFolder'))
+const CmTpop = lazy(() => import('./contextmenu/Tpop'))
+const CmTpopberFolder = lazy(() => import('./contextmenu/TpopberFolder'))
+const CmTpopber = lazy(() => import('./contextmenu/Tpopber'))
+const CmBeobZugeordnet = lazy(() => import('./contextmenu/BeobZugeordnet'))
+const CmBeobnichtbeurteilt = lazy(() =>
+  import('./contextmenu/Beobnichtbeurteilt'),
+)
+const CmBeobNichtZuzuordnen = lazy(() =>
+  import('./contextmenu/BeobNichtZuzuordnen'),
+)
+const CmTpopfreiwkontrFolder = lazy(() =>
+  import('./contextmenu/TpopfreiwkontrFolder'),
+)
+const CmTpopfreiwkontr = lazy(() => import('./contextmenu/Tpopfreiwkontr'))
+const CmTpopfeldkontrFolder = lazy(() =>
+  import('./contextmenu/TpopfeldkontrFolder'),
+)
+const CmTpopfeldkontr = lazy(() => import('./contextmenu/Tpopfeldkontr'))
+const CmTpopfeldkontrzaehlFolder = lazy(() =>
+  import('./contextmenu/TpopfeldkontrzaehlFolder'),
+)
+const CmTpopfeldkontrzaehl = lazy(() =>
+  import('./contextmenu/Tpopfeldkontrzaehl'),
+)
+const CmTpopmassnberFolder = lazy(() =>
+  import('./contextmenu/TpopmassnberFolder'),
+)
+const CmTpopmassnber = lazy(() => import('./contextmenu/Tpopmassnber'))
+const CmTpopmassnFolder = lazy(() => import('./contextmenu/TpopmassnFolder'))
+const CmTpopmassn = lazy(() => import('./contextmenu/Tpopmassn'))
+const DeleteDatasetModal = lazy(() => import('./DeleteDatasetModal'))
 import copyBiotopTo from '../../../modules/copyBiotopTo'
 import moveTo from '../../../modules/moveTo'
 import copyTo from '../../../modules/copyTo'
@@ -89,10 +123,11 @@ import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
 import storeContext from '../../../storeContext'
-import TpopFromBeobPopList from './TpopFromBeobPopList'
+const TpopFromBeobPopList = lazy(() => import('./TpopFromBeobPopList'))
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import useSearchParamsState from '../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../modules/isMobilePhone'
+import Spinner from '../../shared/Spinner'
 
 const Container = styled.div`
   height: 100%;
@@ -589,91 +624,105 @@ const TreeContainer = () => {
   return (
     <ErrorBoundary>
       <Container data-id="tree-container1">
-        {!!toDeleteId && <DeleteDatasetModal />}
+        {!!toDeleteId && (
+          <Suspense fallback={null}>
+            <DeleteDatasetModal />
+          </Suspense>
+        )}
         <LabelFilterContainer>
-          <LabelFilter />
-          {!!projId && <ApFilter />}
+          <Suspense fallback={null}>
+            <LabelFilter />
+          </Suspense>
+          {!!projId && (
+            <Suspense fallback={null}>
+              <ApFilter />
+            </Suspense>
+          )}
         </LabelFilterContainer>
-        <TreeComponent />
-        <CmApFolder onClick={handleClick} />
-        <CmAp onClick={handleClick} />
-        <CmApberuebersichtFolder onClick={handleClick} />
-        <CmApberuebersicht onClick={handleClick} />
-        <CmAssozartFolder onClick={handleClick} />
-        <CmAssozart onClick={handleClick} />
-        <CmEkzaehleinheitFolder onClick={handleClick} />
-        <CmEkzaehleinheit onClick={handleClick} />
-        <CmEkfrequenzFolder onClick={handleClick} />
-        <CmEkfrequenz onClick={handleClick} />
-        <CmApartFolder onClick={handleClick} />
-        <CmApart onClick={handleClick} />
-        <CmBeobZugeordnetFolder onClick={handleClick} />
-        <CmApberFolder onClick={handleClick} />
-        <CmApber onClick={handleClick} />
-        <CmErfkritFolder onClick={handleClick} />
-        <CmErfkrit onClick={handleClick} />
-        <CmZielFolder onClick={handleClick} />
-        <CmZielJahrFolder onClick={handleClick} />
-        <CmZiel onClick={handleClick} />
-        <CmZielBerFolder onClick={handleClick} />
-        <CmZielBer onClick={handleClick} />
-        <CmPopFolder onClick={handleClick} />
-        <CmPop onClick={handleClick} />
-        <CmPopmassnberFolder onClick={handleClick} />
-        <CmPopmassnber onClick={handleClick} />
-        <CmPopberFolder onClick={handleClick} />
-        <CmPopber onClick={handleClick} />
-        <CmProjekt onClick={handleClick} />
-        <CmWerteListen onClick={handleClick} />
-        <CmTpopFolder onClick={handleClick} />
-        <CmTpop onClick={handleClick} />
-        <CmTpopberFolder onClick={handleClick} />
-        <CmTpopber onClick={handleClick} />
-        <CmBeobZugeordnet onClick={handleClick} />
-        <CmBeobnichtbeurteilt onClick={handleClick} />
-        <CmBeobNichtZuzuordnen onClick={handleClick} />
-        <CmTpopfreiwkontrFolder onClick={handleClick} />
-        <CmTpopfreiwkontr onClick={handleClick} />
-        <CmTpopfeldkontrFolder onClick={handleClick} />
-        <CmTpopfeldkontr onClick={handleClick} />
-        <CmTpopfeldkontrzaehlFolder onClick={handleClick} />
-        <CmTpopfeldkontrzaehl onClick={handleClick} />
-        <CmTpopmassnberFolder onClick={handleClick} />
-        <CmTpopmassnber onClick={handleClick} />
-        <CmTpopmassnFolder onClick={handleClick} />
-        <CmTpopmassn onClick={handleClick} />
-        <CmUserFolder onClick={handleClick} />
-        <CmUser onClick={handleClick} />
-        <CmAdresseFolder onClick={handleClick} />
-        <CmTpopApberrelevantGrundWerteFolder onClick={handleClick} />
-        <CmEkAbrechnungstypWerteFolder onClick={handleClick} />
-        <CmEkAbrechnungstypWerte onClick={handleClick} />
-        <CmTpopkontrzaehlEinheitWerteFolder onClick={handleClick} />
-        <CmTpopkontrzaehlEinheitWerte onClick={handleClick} />
-        <CmAdresse onClick={handleClick} />
-        <CmTpopApberrelevantGrundWerte onClick={handleClick} />
-        <StyledDialog
-          open={newTpopFromBeobDialogOpen}
-          onClose={closeNewTpopFromBeobDialog}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          maxWidth="xl"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {'Population wählen:'}
-          </DialogTitle>
-          <DialogContent dividers={false}>
-            <TpopFromBeobPopList
-              beobId={newTpopFromBeobBeobId}
-              closeNewTpopFromBeobDialog={closeNewTpopFromBeobDialog}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={closeNewTpopFromBeobDialog} color="inherit">
-              abbrechen
-            </Button>
-          </DialogActions>
-        </StyledDialog>
+        <Suspense fallback={<Spinner />}>
+          <TreeComponent />
+        </Suspense>
+        <Suspense fallback={null}>
+          <CmApFolder onClick={handleClick} />
+          <CmAp onClick={handleClick} />
+          <CmApberuebersichtFolder onClick={handleClick} />
+          <CmApberuebersicht onClick={handleClick} />
+          <CmAssozartFolder onClick={handleClick} />
+          <CmAssozart onClick={handleClick} />
+          <CmEkzaehleinheitFolder onClick={handleClick} />
+          <CmEkzaehleinheit onClick={handleClick} />
+          <CmEkfrequenzFolder onClick={handleClick} />
+          <CmEkfrequenz onClick={handleClick} />
+          <CmApartFolder onClick={handleClick} />
+          <CmApart onClick={handleClick} />
+          <CmBeobZugeordnetFolder onClick={handleClick} />
+          <CmApberFolder onClick={handleClick} />
+          <CmApber onClick={handleClick} />
+          <CmErfkritFolder onClick={handleClick} />
+          <CmErfkrit onClick={handleClick} />
+          <CmZielFolder onClick={handleClick} />
+          <CmZielJahrFolder onClick={handleClick} />
+          <CmZiel onClick={handleClick} />
+          <CmZielBerFolder onClick={handleClick} />
+          <CmZielBer onClick={handleClick} />
+          <CmPopFolder onClick={handleClick} />
+          <CmPop onClick={handleClick} />
+          <CmPopmassnberFolder onClick={handleClick} />
+          <CmPopmassnber onClick={handleClick} />
+          <CmPopberFolder onClick={handleClick} />
+          <CmPopber onClick={handleClick} />
+          <CmProjekt onClick={handleClick} />
+          <CmWerteListen onClick={handleClick} />
+          <CmTpopFolder onClick={handleClick} />
+          <CmTpop onClick={handleClick} />
+          <CmTpopberFolder onClick={handleClick} />
+          <CmTpopber onClick={handleClick} />
+          <CmBeobZugeordnet onClick={handleClick} />
+          <CmBeobnichtbeurteilt onClick={handleClick} />
+          <CmBeobNichtZuzuordnen onClick={handleClick} />
+          <CmTpopfreiwkontrFolder onClick={handleClick} />
+          <CmTpopfreiwkontr onClick={handleClick} />
+          <CmTpopfeldkontrFolder onClick={handleClick} />
+          <CmTpopfeldkontr onClick={handleClick} />
+          <CmTpopfeldkontrzaehlFolder onClick={handleClick} />
+          <CmTpopfeldkontrzaehl onClick={handleClick} />
+          <CmTpopmassnberFolder onClick={handleClick} />
+          <CmTpopmassnber onClick={handleClick} />
+          <CmTpopmassnFolder onClick={handleClick} />
+          <CmTpopmassn onClick={handleClick} />
+          <CmUserFolder onClick={handleClick} />
+          <CmUser onClick={handleClick} />
+          <CmAdresseFolder onClick={handleClick} />
+          <CmTpopApberrelevantGrundWerteFolder onClick={handleClick} />
+          <CmEkAbrechnungstypWerteFolder onClick={handleClick} />
+          <CmEkAbrechnungstypWerte onClick={handleClick} />
+          <CmTpopkontrzaehlEinheitWerteFolder onClick={handleClick} />
+          <CmTpopkontrzaehlEinheitWerte onClick={handleClick} />
+          <CmAdresse onClick={handleClick} />
+          <CmTpopApberrelevantGrundWerte onClick={handleClick} />
+          <StyledDialog
+            open={newTpopFromBeobDialogOpen}
+            onClose={closeNewTpopFromBeobDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth="xl"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {'Population wählen:'}
+            </DialogTitle>
+            <DialogContent dividers={false}>
+              <TpopFromBeobPopList
+                beobId={newTpopFromBeobBeobId}
+                closeNewTpopFromBeobDialog={closeNewTpopFromBeobDialog}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={closeNewTpopFromBeobDialog} color="inherit">
+                abbrechen
+              </Button>
+            </DialogActions>
+          </StyledDialog>
+        </Suspense>
       </Container>
     </ErrorBoundary>
   )
