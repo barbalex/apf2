@@ -5,7 +5,8 @@ import intersection from 'lodash/intersection'
 import { Outlet } from 'react-router-dom'
 import { useParams, useLocation } from 'react-router-dom'
 
-const Karte = lazy(() => import('./Karte'))
+// DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
+import Karte from './Karte'
 const TreeContainer = lazy(() => import('./TreeContainer'))
 const Exporte = lazy(() => import('./Exporte'))
 const Filter = lazy(() => import('./Filter'))
@@ -84,9 +85,7 @@ const ProjektContainer = () => {
     ),
     karte: (
       <InnerContainer>
-        <Suspense fallback={<Spinner />}>
-          <Karte />
-        </Suspense>
+        <Karte />
       </InnerContainer>
     ),
     exporte: (
