@@ -1366,8 +1366,18 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       // need list of all open apIds
+      // issue: 2023 passed. https://github.com/barbalex/apf2/issues/616
+      // reason: ['Benutzer', '738eaf0c-35e5-11e9-97ea-57d86602b143', 'EKF', 2023]
+      // Solution: check all positions in array
       const openApIds = [
-        ...new Set(self.openNodes.filter((n) => n[3]).map((n) => n[3])),
+        ...new Set(
+          self.openNodes
+            .filter((n) => n[0] && n[0] === 'Projekte')
+            .filter((n) => n[1] && n[1] === projId)
+            .filter((n) => n[2] && n[2] === 'Arten')
+            .filter((n) => n[3])
+            .map((n) => n[3]),
+        ),
       ]
       const apId = self.apIdInActiveNodeArray
 
