@@ -248,6 +248,7 @@ const RouterComponent = () => {
           </Route>
         </Route>
         <Route path="/Dokumentation/*" element={<Docs />}>
+          <Route index element={null} />
           <Route
             path="was-kann-man-mit-apflora-machen"
             element={<WasKannApflora />}
@@ -316,6 +317,7 @@ const RouterComponent = () => {
             element={<ArtTaxonomieErgaenzen />}
           />
           <Route path="info-flora-export" element={<InfoFloraExport />} />
+          <Route path="*" element={<FourOhFour />} />
         </Route>
         <Route path="*" element={<FourOhFour />} />
       </Route>,
