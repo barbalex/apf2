@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense } from 'react'
 import styled from '@emotion/styled'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
