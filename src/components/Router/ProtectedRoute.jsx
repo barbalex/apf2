@@ -59,8 +59,8 @@ const ProtectedRoute = () => {
     <Container>
       {!!user.token && (
         <>
+          <Outlet />
           <Suspense fallback={<Spinner />}>
-            <Outlet />
             {!isFreiwillig && !isInIframe && <Messages />}
             {!isFreiwillig && showDeletions && <Deletions />}
           </Suspense>
