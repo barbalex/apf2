@@ -60,6 +60,8 @@ const ProjektContainer = () => {
     [projekteTabs, treeTabValues],
   )
 
+  // console.log('ProjektContainer, treeTabs:', treeTabs)
+
   const showApberForArt = apberId && pathname.endsWith('print')
   const showApberForAll = apberUebersichtId && pathname.endsWith('print')
 
@@ -73,7 +75,9 @@ const ProjektContainer = () => {
     ),
     daten: (
       <InnerContainer>
-        <Outlet />
+        <Suspense fallback={<Spinner />}>
+          <Outlet />
+        </Suspense>
       </InnerContainer>
     ),
     filter: (
@@ -85,7 +89,9 @@ const ProjektContainer = () => {
     ),
     karte: (
       <InnerContainer>
-        <Karte />
+        <Suspense fallback={<Spinner />}>
+          <Karte />
+        </Suspense>
       </InnerContainer>
     ),
     exporte: (
