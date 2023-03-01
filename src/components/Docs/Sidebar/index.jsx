@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 import storeContext from '../../../storeContext'
 import MenuItems from './MenuItems'
 import Filter from './Filter'
+import IntoViewScroller from './IntoViewScroller'
 
 const Menu = styled.div`
   width: 25%;
@@ -44,6 +45,7 @@ const Sidebar = () => {
         <Filter filter={dokuFilter} setFilter={setDokuFilter} />
       </MenuTitle>
       <MenuItems />
+      <IntoViewScroller />
     </Menu>
   )
 }

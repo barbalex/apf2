@@ -17,7 +17,13 @@ const MenuItem = ({ node }) => {
 
   return (
     <>
-      <ListItemButton onClick={onClickMenuItem} selected={active} divider dense>
+      <ListItemButton
+        onClick={onClickMenuItem}
+        selected={active}
+        divider
+        dense
+        id={slug}
+      >
         <ListItemText onClick={onClickMenuItem}>
           {title ?? '(Titel fehlt)'}
         </ListItemText>
