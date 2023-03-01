@@ -8,7 +8,6 @@ const IntoViewScroller = () => {
   const slug = pathname.split('/')[2]
 
   const scroller = useCallback(() => {
-    // console.log('IntoViewScroller running')
     // 1. Get id from url
     if (!slug) return
     // 2. Get its element
