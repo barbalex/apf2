@@ -6,7 +6,6 @@ import isElementInViewport from '../../../modules/isElementInViewport'
 const IntoViewScroller = () => {
   const { pathname } = useLocation()
   const slug = pathname.split('/')[2]
-  console.log('IntoViewScroller slug:', slug)
 
   const scroller = useCallback(() => {
     // console.log('IntoViewScroller running')
