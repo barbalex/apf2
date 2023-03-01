@@ -58,10 +58,10 @@ const CardContainer = styled.div`
 `
 const Card = styled(MaterialCard)`
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.55) !important;
-  font-weight: 500;
-  /*text-shadow: 1px 1px 2px white, -0px -0px 2px white, 1px -0px 2px white,
-    -0px 1px 2px white;*/
+  background-color: rgba(255, 255, 255, 0.711) !important;
+  font-weight: 700;
+  color: black !important;
+  text-shadow: 0 0 1px white;
   ul {
     margin-bottom: 0;
   }
