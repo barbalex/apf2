@@ -3,10 +3,12 @@ import Typography from '@mui/material/Typography'
 import MaterialCard from '@mui/material/Card'
 import styled from '@emotion/styled'
 
-import ProgressiveImg from '../shared/ProgressiveImg'
-import image from '../../images/ophr-ara_2500.jpg'
-// TODO: build small version of image
-import placeholderSrc from '../../images/ophr-ara_300.jpg'
+const Img = styled.img`
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+`
 
 const OuterContainer = styled.div`
   height: 100%;
@@ -99,7 +101,17 @@ const CardTitle = styled.h3`
 
 const Home = () => (
   <OuterContainer>
-    <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
+    <picture>
+      <source
+        srcSet="home_700.avif 700w, home_1000.avif 1000w, home_1400.avif 1400w, home_2000.avif 2000w, home_2500.avif 2500w"
+        type="image/avif"
+      />
+      <Img
+        src="home_700.webp"
+        srcSet="home_700.webp 700w, home_1000.webp 1000w, home_1400.webp 1400w, home_2000.webp 2000w, home_2500.webp 2500w"
+        sizes="100vw"
+      />
+    </picture>
     <ScrollContainer>
       <PageTitle align="center" variant="h6" color="inherit">
         Bedrohte Pflanzenarten fördern
