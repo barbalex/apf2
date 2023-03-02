@@ -4,7 +4,6 @@ import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import jwtDecode from 'jwt-decode'
-import { useResizeDetector } from 'react-resize-detector'
 import { useQueryClient } from '@tanstack/react-query'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
@@ -36,51 +35,51 @@ const FormContainer = styled.div`
   padding: 10px;
   width: 100%;
   box-sizing: border-box;
+  container-type: inline-size;
 `
 const GridContainer = styled.div`
   display: grid;
-  grid-template-areas: ${(props) => {
-    const { width } = props
-    if (width < 600) {
-      return `
-        'title'
-        'image'
-        'headdata'
-        'besttime'
-        'date'
-        'map'
-        'count1'
-        'count2'
-        'count3'
-        'cover'
-        'more'
-        'danger'
-        'remarks'
-        'ekfRemarks'
-        'files'
-        'verification'
-      `
-    }
-    if (width < 800) {
-      return `
-        'title title'
-        'image image'
-        'headdata headdata'
-        'besttime besttime'
-        'date map'
-        'count1 count1'
-        'count2 count2'
-        'count3 count3'
-        'cover cover'
-        'more more'
-        'danger danger'
-        'remarks remarks'
-        'ekfRemarks ekfRemarks'
-        'files files'
-        'verification verification'
-      `
-    }
-    return `
+  @container (max-width: 600px) {
+    grid-template-areas:
+      'title'
+      'image'
+      'headdata'
+      'besttime'
+      'date'
+      'map'
+      'count1'
+      'count2'
+      'count3'
+      'cover'
+      'more'
+      'danger'
+      'remarks'
+      'ekfRemarks'
+      'files'
+      'verification';
+    grid-template-columns: 1fr;
+  }
+  @container (min-width: 600px)and (max-width: 800px) {
+    grid-template-areas:
+      'title title'
+      'image image'
+      'headdata headdata'
+      'besttime besttime'
+      'date map'
+      'count1 count1'
+      'count2 count2'
+      'count3 count3'
+      'cover cover'
+      'more more'
+      'danger danger'
+      'remarks remarks'
+      'ekfRemarks ekfRemarks'
+      'files files'
+      'verification verification';
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @container (min-width: 800px) {
+    grid-template-areas:
       'title title title image image image'
       'headdata headdata headdata image image image'
       'besttime besttime besttime image image image'
@@ -91,15 +90,9 @@ const GridContainer = styled.div`
       'remarks remarks remarks remarks remarks remarks'
       'ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks'
       'files files files files files files'
-      'verification verification verification verification verification verification'
-    `
-  }};
-  grid-template-columns: ${(props) => {
-    const { width } = props
-    if (width < 600) return '1fr'
-    if (width < 800) return 'repeat(2, 1fr)'
-    return 'repeat(6, 1fr)'
-  }};
+      'verification verification verification verification verification verification';
+    grid-template-columns: repeat(6, 1fr);
+  }
   grid-column-gap: 5px;
   grid-row-gap: 5px;
   justify-items: stretch;
@@ -336,15 +329,9 @@ const TpopfreiwkontrForm = ({ data, refetch, row, apId }) => {
     setErrors({})
   }, [row.id])
 
-  const { width = 500, ref: resizeRef } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-    refreshOptions: { leading: true },
-  })
-
   return (
-    <FormContainer ref={resizeRef}>
-      <GridContainer width={width}>
+    <FormContainer>
+      <GridContainer>
         <Title row={row} />
         <Headdata pop={pop} tpop={tpop} row={row} />
         <Besttime row={row} />
