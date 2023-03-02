@@ -82,8 +82,8 @@ export default defineConfig({
         // Think about what the user will want to do once they open your app,
         // and place them there
         start_url: './Daten',
-        background_color: '#2e7d32',
-        theme_color: '#2e7d32',
+        background_color: '#256328',
+        theme_color: '#256328',
         display: 'minimal-ui',
         icons: [
           {
