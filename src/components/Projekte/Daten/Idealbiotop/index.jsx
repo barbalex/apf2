@@ -5,7 +5,6 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import SimpleBar from 'simplebar-react'
-import { useResizeDetector } from 'react-resize-detector'
 import { useParams } from 'react-router-dom'
 
 import TextField from '../../../shared/TextField'
@@ -26,6 +25,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  container-type: inline-size;
 `
 const FieldsContainer = styled.div`
   display: flex;
@@ -40,9 +40,9 @@ const FieldsContainer = styled.div`
 const FormContainer = styled.div`
   padding: 0 10px;
   height: 100%;
-  ${(props) =>
-    props['data-column-width'] &&
-    `column-width: ${props['data-column-width']}px;`}
+  @container (min-width: ${constants.columnWidth}px) {
+    column-width: ${constants.columnWidth}px;
+  }
 `
 const FilesContainer = styled.div`
   height: 100%;
@@ -150,21 +150,13 @@ const Idealbiotop = () => {
     [client, row, store.user.name],
   )
 
-  const { width = 500, ref: resizeRef } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-    refreshOptions: { leading: true },
-  })
-  const columnWidth =
-    width > 2 * constants.columnWidth ? constants.columnWidth : undefined
-
   if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <Container ref={resizeRef}>
+      <Container>
         <FormTitle title="Idealbiotop" />
         <FieldsContainer>
           <Tabs
@@ -185,7 +177,7 @@ const Idealbiotop = () => {
             <TabContent>
               <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
                 {tab === 'idealbiotop' && (
-                  <FormContainer data-column-width={columnWidth}>
+                  <FormContainer>
                     <DateField
                       name="erstelldatum"
                       label="Erstelldatum"
