@@ -33,7 +33,6 @@ import {
 
 const FormContainer = styled.div`
   padding: 10px;
-  width: 100%;
   box-sizing: border-box;
   container-type: inline-size;
 `
@@ -59,7 +58,7 @@ const GridContainer = styled.div`
       'verification';
     grid-template-columns: 1fr;
   }
-  @container (min-width: 600px)and (max-width: 800px) {
+  @container (min-width: 600px) and (max-width: 800px) {
     grid-template-areas:
       'title title'
       'image image'
