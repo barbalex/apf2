@@ -28,16 +28,13 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
   background-color: #ffd3a7;
-  container-type: inline-size;
 `
 const FormScrollContainer = styled.div`
   overflow-y: auto;
 `
 const ColumnContainer = styled.div`
   padding: 10px;
-  @container (min-width: ${constants.columnWidth}px) {
-    column-width: ${constants.columnWidth}px;
-  }
+  column-width: ${constants.columnWidth}px;
 `
 const FilterCommentTitle = styled.div`
   margin-top: -10px;

@@ -35,7 +35,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  container-type: inline-size;
 `
 const FieldsContainer = styled.div`
   display: flex;
@@ -50,9 +49,7 @@ const FieldsContainer = styled.div`
 const FormContainer = styled.div`
   padding: 10px;
   height: 100%;
-  @container (min-width: ${constants.columnWidth}px) {
-    column-width: ${constants.columnWidth}px;
-  }
+  column-width: ${constants.columnWidth}px;
 `
 const Section = styled.div`
   padding-top: 20px;

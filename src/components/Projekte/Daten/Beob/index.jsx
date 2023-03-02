@@ -11,14 +11,9 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner'
 
-const OuterContainer = styled.div`
-  container-type: inline-size;
-`
 const Container = styled.div`
   padding: 15px 10px 0 10px;
-  @container (min-width: ${constants.columnWidth}px) {
-    column-width: ${constants.columnWidth}px;
-  }
+  column-width: ${constants.columnWidth}px;
 `
 
 const Beob = () => {
@@ -47,15 +42,13 @@ const Beob = () => {
 
   return (
     <ErrorBoundary>
-      <OuterContainer>
-        <Container>
-          {beobFields.map(([key, value]) => (
-            <div key={key}>
-              <TextFieldNonUpdatable label={key} value={value} />
-            </div>
-          ))}
-        </Container>
-      </OuterContainer>
+      <Container>
+        {beobFields.map(([key, value]) => (
+          <div key={key}>
+            <TextFieldNonUpdatable label={key} value={value} />
+          </div>
+        ))}
+      </Container>
     </ErrorBoundary>
   )
 }

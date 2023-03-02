@@ -25,7 +25,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  container-type: inline-size;
 `
 const FieldsContainer = styled.div`
   display: flex;
@@ -40,9 +39,7 @@ const FieldsContainer = styled.div`
 const FormContainer = styled.div`
   padding: 0 10px;
   height: 100%;
-  @container (min-width: ${constants.columnWidth}px) {
-    column-width: ${constants.columnWidth}px;
-  }
+  column-width: ${constants.columnWidth}px;
 `
 const FilesContainer = styled.div`
   height: 100%;

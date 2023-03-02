@@ -34,13 +34,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  container-type: inline-size;
 `
 const ColumnContainer = styled.div`
   padding: 10px;
-  @container (min-width: ${constants.columnWidth}px) {
-    column-width: ${constants.columnWidth}px;
-  }
+  column-width: ${constants.columnWidth}px;
 `
 const StyledTab = styled(Tab)`
   text-transform: none !important;
