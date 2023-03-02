@@ -1,7 +1,6 @@
 import React, { useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useResizeDetector } from 'react-resize-detector'
 
 import Headdata from './Headdata'
 import Date from './Date'
@@ -114,15 +113,9 @@ const TpopfreiwkontrForm = ({ row, activeTab }) => {
     [activeTab, dataFilterSetValue],
   )
 
-  const { width = 500, ref: resizeRef } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-    refreshOptions: { leading: true },
-  })
-
   return (
-    <FormContainer ref={resizeRef}>
-      <GridContainer width={width}>
+    <FormContainer>
+      <GridContainer>
         <Headdata row={row} activeTab={activeTab} />
         <Date saveToDb={saveToDb} row={row} />
         <Map saveToDb={saveToDb} row={row} />
