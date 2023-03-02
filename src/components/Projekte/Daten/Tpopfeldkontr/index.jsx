@@ -5,7 +5,6 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
-import { useResizeDetector } from 'react-resize-detector'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -36,6 +35,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  container-type: inline-size;
 `
 const FieldsContainer = styled.div`
   display: flex;
@@ -50,9 +50,9 @@ const FieldsContainer = styled.div`
 const FormContainer = styled.div`
   padding: 10px;
   height: 100%;
-  ${(props) =>
-    props['data-column-width'] &&
-    `column-width: ${props['data-column-width']}px;`}
+  @container (min-width: ${constants.columnWidth}px) {
+    column-width: ${constants.columnWidth}px;
+  }
 `
 const Section = styled.div`
   padding-top: 20px;
@@ -213,21 +213,13 @@ const Tpopfeldkontr = () => {
     )
     .map((o) => ({ value: o, label: o }))
 
-  const { width = 500, ref: resizeRef } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-    refreshOptions: { leading: true },
-  })
-  const columnWidth =
-    width > 2 * constants.columnWidth ? constants.columnWidth : undefined
-
   if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <Container ref={resizeRef}>
+      <Container>
         <FormTitle title="Feld-Kontrolle" />
         <FieldsContainer>
           <Tabs
@@ -249,7 +241,7 @@ const Tpopfeldkontr = () => {
             <TabContent>
               {tab === 'entwicklung' && (
                 <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-                  <FormContainer data-column-width={columnWidth}>
+                  <FormContainer>
                     <TextField
                       name="jahr"
                       label="Jahr"
@@ -390,7 +382,7 @@ const Tpopfeldkontr = () => {
               )}
               {tab === 'biotop' && (
                 <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-                  <FormContainer data-column-width={columnWidth}>
+                  <FormContainer>
                     <TextField
                       name="flaeche"
                       label="Fläche"
