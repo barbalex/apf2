@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import { useResizeDetector } from 'react-resize-detector'
 import { useParams } from 'react-router-dom'
 
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
@@ -12,11 +11,14 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner'
 
+const OuterContainer = styled.div`
+  container-type: inline-size;
+`
 const Container = styled.div`
   padding: 15px 10px 0 10px;
-  ${(props) =>
-    props['data-column-width'] &&
-    `column-width: ${props['data-column-width']}px;`}
+  @container (min-width: ${constants.columnWidth}px) {
+    column-width: ${constants.columnWidth}px;
+  }
 `
 
 const Beob = () => {
@@ -37,15 +39,6 @@ const Beob = () => {
 
   //console.log('Beob', { row, beobFields, data, loading, error })
 
-  const { width = 500, ref: resizeRef } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-    refreshOptions: { leading: true },
-  })
-
-  const columnWidth =
-    width > 2 * constants.columnWidth ? constants.columnWidth : undefined
-
   if (!row) return null
   if (!beobFields || beobFields.length === 0) return null
   if (loading) return <Spinner />
@@ -54,15 +47,15 @@ const Beob = () => {
 
   return (
     <ErrorBoundary>
-      <div ref={resizeRef}>
-        <Container data-column-width={columnWidth}>
+      <OuterContainer>
+        <Container>
           {beobFields.map(([key, value]) => (
             <div key={key}>
               <TextFieldNonUpdatable label={key} value={value} />
             </div>
           ))}
         </Container>
-      </div>
+      </OuterContainer>
     </ErrorBoundary>
   )
 }
