@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
-import { useResizeDetector } from 'react-resize-detector'
 import { useParams } from 'react-router-dom'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
@@ -29,15 +28,16 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
   background-color: #ffd3a7;
+  container-type: inline-size;
 `
 const FormScrollContainer = styled.div`
   overflow-y: auto;
 `
 const ColumnContainer = styled.div`
   padding: 10px;
-  ${(props) =>
-    props['data-column-width'] &&
-    `column-width: ${props['data-column-width']}px;`}
+  @container (min-width: ${constants.columnWidth}px) {
+    column-width: ${constants.columnWidth}px;
+  }
 `
 const FilterCommentTitle = styled.div`
   margin-top: -10px;
@@ -102,14 +102,6 @@ const TpopmassnFilter = () => {
     [dataFilterSetValue, activeTab],
   )
 
-  const { width = 500, ref: resizeRef } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-    refreshOptions: { leading: true },
-  })
-  const columnWidth =
-    width > 2 * constants.columnWidth ? constants.columnWidth : undefined
-
   const navApFilterComment = apFilter
     ? `Navigationsbaum, "nur AP"-Filter: Nur Massnahmen von AP-Arten werden berücksichtigt.`
     : undefined
@@ -148,7 +140,7 @@ const TpopmassnFilter = () => {
   if (error) return <Error error={error} />
 
   return (
-    <Container ref={resizeRef}>
+    <Container>
       <ErrorBoundary>
         <FilterTitle
           title="Massnahmen"
@@ -197,7 +189,7 @@ const TpopmassnFilter = () => {
               height: '100%',
             }}
           >
-            <ColumnContainer data-column-width={columnWidth}>
+            <ColumnContainer>
               <TextField
                 name="jahr"
                 label="Jahr"
