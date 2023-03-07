@@ -123,12 +123,12 @@ const Tpopfreiwkontr = ({ id: idPassed }) => {
 
   const onClickPrint = useCallback(() => {
     setIsPrint(true)
-    // wait for image to load
+    // wait for file to load
     // https://github.com/barbalex/apf2/issues/617
     setTimeout(() => {
       window.print()
       setIsPrint(false)
-    }, 1500)
+    }, 0)
   }, [setIsPrint])
 
   if (loading) return <Spinner />
