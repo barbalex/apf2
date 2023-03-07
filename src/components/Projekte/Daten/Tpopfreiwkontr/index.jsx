@@ -128,7 +128,7 @@ const Tpopfreiwkontr = ({ id: idPassed }) => {
     setTimeout(() => {
       window.print()
       setIsPrint(false)
-    }, 700)
+    }, 1500)
   }, [setIsPrint])
 
   if (loading) return <Spinner />
