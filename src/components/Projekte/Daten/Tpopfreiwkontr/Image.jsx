@@ -44,6 +44,9 @@ const NotifContainer = styled.div`
 const Image = ({ artname, apId }) => {
   const [notif, setNotif] = useState(null)
 
+  // show notification if image is not found
+  // also: do not show image when notification is shown
+  //       because hideous placeholder is shown
   const onError = useCallback(
     () => setNotif(`Für ${artname} wurde kein Bild gefunden`),
     [artname],
