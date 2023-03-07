@@ -81,7 +81,7 @@ const StatusLabel = styled(Label)`
 const Headdata = ({ pop, tpop, row }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { user } = store
+  const { user, isPrint } = store
   const { data, loading, error } = useQuery(queryAdresses)
   const [errors, setErrors] = useState(null)
 
@@ -191,7 +191,7 @@ const Headdata = ({ pop, tpop, row }) => {
           loading={loading}
           saveToDb={saveToDb}
           error={
-            row.bearbeiter && !userCount
+            row.bearbeiter && !userCount && !isPrint
               ? 'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, dem diese Adresse zugeordnet wurde.'
               : errors
           }
