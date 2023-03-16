@@ -6,7 +6,7 @@ const Melden = () => (
     <DokuDate>16.04.2019</DokuDate>
     <h2>Artverantwortliche und Freiwillige</h2>
     <p>
-      Wendet euch bitte an <a href="mailto:salzmann@toposmm.ch">Topos</a>.<br />
+      Wendet euch bitte an <a href="mailto:kurz@toposmm.ch">Topos</a>.<br />
       Reine Software-Fehler könnt ihr auch direkt an{' '}
       <a href="mailto:alex@gabriel-software.ch">Alex, dem Entwickler</a> melden.
     </p>
