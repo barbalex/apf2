@@ -93,7 +93,6 @@ const MassnahmenLayer = ({ layer }) => {
       )
     } else {
       const parser = new window.DOMParser()
-      // console.log('MassnahmenLayer, res.data:', res.data)
       const layersData = xmlToLayersData(
         parser.parseFromString(res.data, 'text/html'),
       )
@@ -123,6 +122,11 @@ const MassnahmenLayer = ({ layer }) => {
       maxNativeZoom={23}
       minZoom={0}
       maxZoom={23}
+      // Wunsch: Nach Status filtern können
+      // https://github.com/barbalex/apf2/issues/619#issuecomment-1472497387
+      // https://docs.qgis.org/3.22/en/docs/server_manual/services/wms.html#wms-filter
+      // params={{ FILTER: `${layer}:"tpopnr" = '1'` }}
+      // params={{ FILTER: `${layer}:"tpopnr" IN ( '1' , '2' , '3' , '4' )` }}
     />
   )
 }
