@@ -52,6 +52,9 @@ const Error = ({ errors: errorsPassed, error }) => {
     return <ErrorContainer>{`Fehler: ${uniqueMessages[0]}`}</ErrorContainer>
   }
 
+  // console.log('Error.jsx: errorsToUse:', errorsToUse)
+  // console.log('Error.jsx: errorMessages:', errorMessages)
+
   return (
     <ErrorContainer>
       <h5>Fehler:</h5>
