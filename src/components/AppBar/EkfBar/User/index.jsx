@@ -12,7 +12,6 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { useQueryClient } from '@tanstack/react-query'
 
 import query from './data'
 import TextField from '../../../shared/TextField'
@@ -21,6 +20,8 @@ import updateUserByIdGql from './updateUserById'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import storeContext from '../../../../storeContext'
+import logout from '../../../../modules/logout'
+import idbContext from '../../../../idbContext'
 
 const Container = styled.div`
   height: 100%;
@@ -44,10 +45,13 @@ const PasswordMessage = styled.div`
 const FormContainer = styled.div`
   padding: 10px;
 `
+const AbmeldenButton = styled(Button)`
+  margin-top: 8px;
+`
 
 const User = ({ username, userOpen, toggleUserOpen }) => {
   const store = useContext(storeContext)
-  const queryClient = useQueryClient()
+  const { idb } = useContext(idbContext)
 
   const { data, error, loading } = useQuery(query, {
     variables: { name: username },
@@ -182,6 +186,15 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                   </Button>
                 </div>
               )}
+              <AbmeldenButton
+                variant="outlined"
+                color="primary"
+                onClick={() => {
+                  logout(idb)
+                }}
+              >
+                Abmelden
+              </AbmeldenButton>
               {editPassword && (
                 <FormControl
                   error={!!passwordErrorText}
