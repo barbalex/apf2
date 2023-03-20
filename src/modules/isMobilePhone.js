@@ -4,7 +4,13 @@ const isMobilePhone = () => {
   let check = false
   const a = navigator.userAgent || navigator.vendor || window.opera
 
-  if (
+  // https://stackoverflow.com/a/11381730/712005
+  // navigator.userAgentData.mobile
+  if ('userAgentData' in navigator && 'mobile' in navigator.userAgentData) {
+    check = navigator.userAgentData.mobile
+  } else if (
+    // userAgentData not supported
+    // https://caniuse.com/mdn-api_navigator_useragentdata
     /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(
       a,
     ) ||
