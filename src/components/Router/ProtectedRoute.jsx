@@ -41,16 +41,20 @@ const ProtectedRoute = () => {
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
   const isFreiwillig = role === 'apflora_freiwillig'
+  const userIdToUse = userId ?? user?.id
 
   // if user is freiwillig
   // and path is not in /Benutzer/:userId
   // then redirect to /Benutzer/:userId/EKF
+  // userId was undefined thus not navigating
   const shouldNavigate =
-    isFreiwillig && userId && !pathname.includes(`Daten/Benutzer/${userId}`)
+    isFreiwillig &&
+    userIdToUse &&
+    !pathname.includes(`Daten/Benutzer/${userIdToUse}`)
   if (shouldNavigate) {
     return (
       <Navigate
-        to={`/Daten/Benutzer/${userId}/EKF/${new Date().getFullYear()}${search}`}
+        to={`/Daten/Benutzer/${userIdToUse}/EKF/${new Date().getFullYear()}${search}`}
       />
     )
   }
