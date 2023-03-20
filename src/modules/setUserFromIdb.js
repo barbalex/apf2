@@ -2,10 +2,10 @@ import getUserFromIdb from './getUserFromIdb'
 
 const setUserFromIdb = async ({ idb, store }) => {
   const user = await getUserFromIdb({ idb })
-  const { name, token } = user
+  const { name, token, id } = user
   const { setUser } = store
 
-  setUser({ name, token })
+  setUser({ name, token, id })
 
   return name
 }
