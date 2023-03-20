@@ -111,11 +111,30 @@ const User = () => {
         }
         return console.log(error)
       }
+      // Need userId to navigate freiwillige to the correct path
+      let userResult
+      try {
+        userResult = await client.query({
+          query: gql`
+            query userLoginQuery($name: String!) {
+              userByName(name: $name) {
+                id
+              }
+            }
+          `,
+          variables: {
+            name: nameToUse,
+          },
+        })
+      } catch (error) {
+        console.log(error)
+      }
       // refresh currentUser in idb
       idb.currentUser.clear()
       await idb.currentUser.put({
         name,
         token: result?.data?.login?.jwtToken,
+        id: userResult?.data?.userByName?.id,
       })
       // this is easiest way to make sure everything is correct
       // as client is rebuilt with new settings
@@ -171,7 +190,7 @@ const User = () => {
       })
       if (store.user.token !== user.token) {
         //console.log('User: setting store.user from idb.user')
-        store.setUser({ name: user.name, token: user.token })
+        store.setUser({ name: user.name, token: user.token, id: user.id })
       }
     })
 
