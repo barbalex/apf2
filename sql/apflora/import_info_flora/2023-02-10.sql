@@ -118,7 +118,7 @@ WHERE
 --
 -- 3 build temp beob table
 CREATE TABLE apflora.infoflora20230210beob (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   guid uuid DEFAULT NULL,
   obs_id integer,
   is_apflora_ek boolean DEFAULT FALSE,

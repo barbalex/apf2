@@ -3,7 +3,7 @@
 DROP TABLE IF EXISTS apflora.user CASCADE;
 
 CREATE TABLE apflora.user (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   name text UNIQUE,
   -- allow other attributes to be null
   -- so names and roles can be set beforehand by topos
@@ -70,7 +70,7 @@ CREATE POLICY reader_writer ON apflora.user
 DROP TABLE IF EXISTS adresse;
 
 CREATE TABLE apflora.adresse (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   id serial PRIMARY KEY,
   name text DEFAULT NULL,
   adresse text DEFAULT NULL,
@@ -118,7 +118,7 @@ CREATE POLICY writer ON apflora.adresse
 DROP TABLE IF EXISTS apflora.ap;
 
 CREATE TABLE apflora.ap (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   art_id uuid UNIQUE DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO action ON UPDATE CASCADE,
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
   bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -188,7 +188,7 @@ CREATE POLICY reader ON apflora.ap
 DROP TABLE IF EXISTS apflora.ap_user;
 
 CREATE TABLE apflora.ap_user (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   user_name text DEFAULT NULL REFERENCES apflora.user (name) ON DELETE CASCADE ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -216,7 +216,7 @@ CREATE POLICY reader ON apflora.ap_user
 DROP TABLE IF EXISTS apflora.ap_file;
 
 CREATE TABLE apflora.ap_file (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
@@ -351,7 +351,7 @@ CREATE TABLE apflora.userprojekt (
 DROP TABLE IF EXISTS apflora.ap_bearbstand_werte;
 
 CREATE TABLE apflora.ap_bearbstand_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -402,7 +402,7 @@ CREATE POLICY reader ON apflora.ap_bearbstand_werte
 DROP TABLE IF EXISTS apflora.ap_erfbeurtkrit_werte;
 
 CREATE TABLE apflora.ap_erfbeurtkrit_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -452,7 +452,7 @@ CREATE POLICY reader ON apflora.ap_erfbeurtkrit_werte
 DROP TABLE IF EXISTS apflora.ap_erfkrit_werte;
 
 CREATE TABLE apflora.ap_erfkrit_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -504,7 +504,7 @@ CREATE POLICY reader ON apflora.ap_erfkrit_werte
 DROP TABLE IF EXISTS apflora.ap_umsetzung_werte;
 
 CREATE TABLE apflora.ap_umsetzung_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -554,7 +554,7 @@ CREATE POLICY reader ON apflora.ap_umsetzung_werte
 DROP TABLE IF EXISTS apflora.apber;
 
 CREATE TABLE apflora.apber (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ap_id uuid NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   situation text,
@@ -653,7 +653,7 @@ CREATE POLICY reader ON apflora.apber
 DROP TABLE IF EXISTS apflora.apberuebersicht;
 
 CREATE TABLE apflora.apberuebersicht (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint,
   history_date date DEFAULT NULL,
@@ -697,7 +697,7 @@ CREATE POLICY reader ON apflora.apberuebersicht
 DROP TABLE IF EXISTS apflora.assozart;
 
 CREATE TABLE apflora.assozart (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   ae_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO action ON UPDATE CASCADE,
   bemerkungen text,
@@ -749,7 +749,7 @@ CREATE POLICY reader ON apflora.assozart
 DROP TABLE IF EXISTS apflora.projekt;
 
 CREATE TABLE apflora.projekt (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   name varchar(150) DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
@@ -774,7 +774,7 @@ CREATE POLICY reader ON apflora.projekt
 DROP TABLE IF EXISTS apflora.erfkrit;
 
 CREATE TABLE apflora.erfkrit (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ap_id uuid NOT NULL DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   kriterien text DEFAULT NULL,
@@ -825,7 +825,7 @@ CREATE POLICY reader ON apflora.erfkrit
 DROP TABLE IF EXISTS apflora.idealbiotop;
 
 CREATE TABLE apflora.idealbiotop (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ap_id uuid UNIQUE DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   erstelldatum date DEFAULT NULL,
   hoehenlage text,
@@ -921,7 +921,7 @@ CREATE POLICY reader ON apflora.idealbiotop
 DROP TABLE IF EXISTS apflora.idealbiotop_file;
 
 CREATE TABLE apflora.idealbiotop_file (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   idealbiotop_id uuid DEFAULT NULL REFERENCES apflora.idealbiotop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
@@ -979,7 +979,7 @@ CREATE POLICY reader ON apflora.idealbiotop_file
 DROP TABLE IF EXISTS apflora.pop;
 
 CREATE TABLE apflora.pop (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
@@ -1050,7 +1050,7 @@ CREATE POLICY reader ON apflora.pop
 DROP TABLE IF EXISTS apflora.pop_file;
 
 CREATE TABLE apflora.pop_file (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
@@ -1166,7 +1166,7 @@ CREATE POLICY reader ON apflora.pop_history
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 
 CREATE TABLE apflora.pop_status_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(60) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -1220,7 +1220,7 @@ CREATE POLICY reader ON apflora.pop_status_werte
 DROP TABLE IF EXISTS apflora.popber;
 
 CREATE TABLE apflora.popber (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -1290,7 +1290,7 @@ CREATE POLICY reader ON apflora.popber
 DROP TABLE IF EXISTS apflora.popmassnber;
 
 CREATE TABLE apflora.popmassnber (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -1358,7 +1358,7 @@ CREATE POLICY reader ON apflora.popmassnber
 DROP TABLE IF EXISTS apflora.tpop;
 
 CREATE TABLE apflora.tpop (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   gemeinde text DEFAULT NULL,
@@ -1526,7 +1526,7 @@ CREATE POLICY reader ON apflora.tpop
 DROP TABLE IF EXISTS apflora.tpop_file;
 
 CREATE TABLE apflora.tpop_file (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
@@ -1704,7 +1704,7 @@ CREATE POLICY reader ON apflora.tpop_history
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
 
 CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text text,
   sort smallint DEFAULT NULL,
@@ -1754,7 +1754,7 @@ CREATE POLICY reader ON apflora.tpop_apberrelevant_grund_werte
 DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
 
 CREATE TABLE apflora.tpop_entwicklung_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -1804,7 +1804,7 @@ CREATE POLICY reader ON apflora.tpop_entwicklung_werte
 DROP TABLE IF EXISTS apflora.tpopber;
 
 CREATE TABLE apflora.tpopber (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -1883,7 +1883,7 @@ CREATE POLICY reader ON apflora.tpopber
 DROP TABLE IF EXISTS apflora.tpopkontr;
 
 CREATE TABLE apflora.tpopkontr (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   typ varchar(50) DEFAULT NULL REFERENCES apflora.tpopkontr_typ_werte (text) ON DELETE SET NULL ON UPDATE CASCADE,
   datum date DEFAULT NULL,
@@ -2066,7 +2066,7 @@ CREATE POLICY reader ON apflora.tpopkontr
 DROP TABLE IF EXISTS apflora.tpopkontr_file;
 
 CREATE TABLE apflora.tpopkontr_file (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   tpopkontr_id uuid DEFAULT NULL REFERENCES apflora.tpopkontr (id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
@@ -2146,7 +2146,7 @@ CREATE POLICY reader ON apflora.tpopkontr_file
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 
 CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -2196,7 +2196,7 @@ CREATE POLICY reader ON apflora.tpopkontr_idbiotuebereinst_werte
 DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
 
 CREATE TABLE apflora.tpopkontr_typ_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) UNIQUE DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -2246,7 +2246,7 @@ CREATE POLICY reader ON apflora.tpopkontr_typ_werte
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 
 CREATE TABLE apflora.tpopkontrzaehl (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   tpopkontr_id uuid DEFAULT NULL REFERENCES apflora.tpopkontr (id) ON DELETE CASCADE ON UPDATE CASCADE,
   anzahl real DEFAULT NULL,
   einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -2338,7 +2338,7 @@ CREATE POLICY reader ON apflora.tpopkontrzaehl
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 
 CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) DEFAULT NULL,
   corresponds_to_massn_anz_triebe boolean DEFAULT FALSE,
@@ -2394,7 +2394,7 @@ CREATE POLICY reader ON apflora.tpopkontrzaehl_einheit_werte
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
 
 CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -2447,7 +2447,7 @@ CREATE POLICY reader ON apflora.tpopkontrzaehl_methode_werte
 DROP TABLE IF EXISTS apflora.tpopmassn;
 
 CREATE TABLE apflora.tpopmassn (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   typ integer DEFAULT NULL REFERENCES apflora.tpopmassn_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   beschreibung text DEFAULT NULL,
@@ -2584,7 +2584,7 @@ CREATE POLICY reader ON apflora.tpopmassn
 DROP TABLE IF EXISTS apflora.tpopmassn_file;
 
 CREATE TABLE apflora.tpopmassn_file (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   tpopmassn_id uuid DEFAULT NULL REFERENCES apflora.tpopmassn (id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
@@ -2664,7 +2664,7 @@ CREATE POLICY reader ON apflora.tpopmassn_file
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
 
 CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -2716,7 +2716,7 @@ CREATE POLICY reader ON apflora.tpopmassn_erfbeurt_werte
 DROP TABLE IF EXISTS apflora.tpopmassn_typ_werte;
 
 CREATE TABLE apflora.tpopmassn_typ_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -2774,7 +2774,7 @@ CREATE POLICY reader ON apflora.tpopmassn_typ_werte
 DROP TABLE IF EXISTS apflora.tpopmassnber;
 
 CREATE TABLE apflora.tpopmassnber (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -2854,7 +2854,7 @@ CREATE POLICY reader ON apflora.tpopmassnber
 DROP TABLE IF EXISTS apflora.message CASCADE;
 
 CREATE TABLE apflora.message (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   message text NOT NULL,
   time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   -- active is used to prevent to many datasets fro being fetched
@@ -2882,7 +2882,7 @@ CREATE POLICY reader ON apflora.message
 DROP TABLE IF EXISTS apflora.currentIssue CASCADE;
 
 CREATE TABLE apflora.currentIssue (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   sort smallint DEFAULT NULL,
   title text DEFAULT NULL,
   issue text DEFAULT NULL
@@ -2933,7 +2933,7 @@ CREATE POLICY reader ON apflora.usermessage
 DROP TABLE IF EXISTS apflora.ziel;
 
 CREATE TABLE apflora.ziel (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ap_id uuid NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
@@ -2989,7 +2989,7 @@ CREATE POLICY reader ON apflora.ziel
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
 
 CREATE TABLE apflora.ziel_typ_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -3041,7 +3041,7 @@ CREATE POLICY reader ON apflora.ziel_typ_werte
 DROP TABLE IF EXISTS apflora.zielber;
 
 CREATE TABLE apflora.zielber (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ziel_id uuid DEFAULT NULL REFERENCES apflora.ziel (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   erreichung text DEFAULT NULL,
@@ -3192,7 +3192,7 @@ CREATE POLICY reader ON apflora.ae_taxonomies
 DROP TABLE IF EXISTS apflora.beob;
 
 CREATE TABLE apflora.beob (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   quelle text DEFAULT NULL,
   -- this field in data contains this datasets id
   id_field varchar(38) DEFAULT NULL,
@@ -3300,7 +3300,7 @@ CREATE POLICY reader ON apflora.beob
 DROP TABLE IF EXISTS apflora.beobprojekt;
 
 CREATE TABLE apflora.beobprojekt (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   proj_id uuid NOT NULL REFERENCES apflora.projekt (id) ON DELETE SET NULL ON UPDATE CASCADE,
   beob_id uuid NOT NULL REFERENCES apflora.beob (id) ON DELETE SET NULL ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -3312,7 +3312,7 @@ CREATE TABLE apflora.beobprojekt (
 DROP TABLE IF EXISTS apflora.apart;
 
 CREATE TABLE apflora.apart (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   art_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO ACTION ON UPDATE CASCADE,
   ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -3360,7 +3360,7 @@ CREATE POLICY reader ON apflora.apart
 DROP TABLE IF EXISTS apflora.ekzaehleinheit;
 
 CREATE TABLE apflora.ekzaehleinheit (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ap_id uuid NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   zaehleinheit_id uuid DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (id) ON DELETE CASCADE ON UPDATE CASCADE,
   zielrelevant boolean DEFAULT FALSE,
@@ -3431,7 +3431,7 @@ CREATE TYPE ek_kontrolljahre_ab AS enum (
 DROP TABLE IF EXISTS apflora.ekfrequenz;
 
 CREATE TABLE apflora.ekfrequenz (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   ap_id uuid NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   ektyp ek_type DEFAULT NULL,
   anwendungsfall text DEFAULT NULL,
@@ -3501,7 +3501,7 @@ CREATE POLICY writer ON apflora.ekfrequenz
 DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
 
 CREATE TABLE apflora.ek_abrechnungstyp_werte (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   code text,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -3537,7 +3537,7 @@ CREATE POLICY reader ON apflora.ek_abrechnungstyp_werte
 DROP TABLE IF EXISTS apflora.ekplan;
 
 CREATE TABLE apflora.ekplan (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   type ek_type DEFAULT NULL,
@@ -3663,7 +3663,7 @@ CREATE POLICY reader ON apflora.markierungen
 DROP TABLE IF EXISTS apflora.detailplaene;
 
 CREATE TABLE IF NOT EXISTS apflora.detailplaene (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   data jsonb DEFAULT NULL,
   geom geometry(MultiPolygon, 4326) DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
