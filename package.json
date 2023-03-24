@@ -14,7 +14,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "build_only": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "cross-env NODE_ENV=dev playwright test",
+    "test-report": "playwright show-report"
   },
   "dependencies": {
     "@apollo/client": "3.7.10",
@@ -35,6 +37,7 @@
     "autosuggest-highlight": "3.3.4",
     "blueimp-md5": "2.19.0",
     "browser-update": "3.3.44",
+    "cross-env": "^7.0.3",
     "date-fns": "2.29.3",
     "dexie": "3.2.3",
     "exceljs": "4.3.0",
