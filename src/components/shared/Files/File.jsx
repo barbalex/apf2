@@ -196,6 +196,7 @@ const File = ({ file, parent, refetch }) => {
         {isImage ? (
           <Img
             src={`https://ucarecdn.com/${file.fileId}/-/resize/80x/-/quality/lightest/${file.name}`}
+            alt={file.name}
           />
         ) : (
           <ImgReplacement>...</ImgReplacement>
