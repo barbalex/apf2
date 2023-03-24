@@ -13,3 +13,10 @@ test('Docs link', async ({ page }) => {
   await page.getByRole('link', { name: 'Dokumentation' }).click()
   await expect(page).toHaveURL('/Dokumentation/')
 })
+
+test('Daten link', async ({ page }) => {
+  await page.goto(`/`)
+  await page.getByRole('link', { name: 'Arten bearbeiten' }).click()
+  await expect(page).toHaveURL(/Daten/)
+  await expect(page.getByLabel('Name')).toBeFocused()
+})
