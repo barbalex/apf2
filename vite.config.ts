@@ -61,15 +61,7 @@ export default defineConfig({
       },
       registerType: 'autoUpdate',
       includeAssets: [
-        'src/images/favicon_package/apple-touch-icon.png',
-        'src/images/favicon_package/favicon-32x32.png',
-        'src/images/favicon_package/favicon-16x16.png',
-        'src/images/favicon_package/safari-pinned-tab.svg',
-        // 'src/images/ophr_256.png',
-        'src/images/maskable_icon_x512.png',
-        'src/images/maskable_icon_x192.png',
         'robots.txt',
-        // 'src/images/ophr_512.png',
       ],
       // https://developer.mozilla.org/en-US/docs/Web/Manifest
       manifest: {
