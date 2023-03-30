@@ -154,8 +154,8 @@ const myTypes = types
     setActiveApfloraLayers(val) {
       self.activeApfloraLayers = val
     },
-    setShowApfLayersForMultipleAps(val) {
-      self.showApfLayersForMultipleAps = val
+    toggleShowApfLayersForMultipleAps() {
+      self.showApfLayersForMultipleAps = !self.showApfLayersForMultipleAps
     },
     setOverlays(val) {
       self.overlays = val
