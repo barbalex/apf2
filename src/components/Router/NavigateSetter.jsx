@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../storeContext'
+import storeContext from '../../storeContext'
 
 const NavigateSetter = () => {
   const navigate = useNavigate()

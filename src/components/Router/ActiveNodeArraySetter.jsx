@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite'
 import isEqual from 'lodash/isEqual'
 import { useLocation } from 'react-router-dom'
 
-import storeContext from '../storeContext'
-import getActiveNodeArrayFromPathname from '../modules/getActiveNodeArrayFromPathname'
+import storeContext from '../../storeContext'
+import getActiveNodeArrayFromPathname from '../../modules/getActiveNodeArrayFromPathname'
 
 const ActiveNodeArraySetter = () => {
   const store = useContext(storeContext)
