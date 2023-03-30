@@ -25,6 +25,27 @@ const iconCreateFunction = function (cluster) {
   })
 }
 
+const Router = ({ clustered }) => {
+  const store = useContext(storeContext)
+  const tree = store.tree
+  const { beobGqlFilter } = tree
+
+  const { apId } = useParams()
+
+  // Problem: gqlFilter updates AFTER apId
+  // if navigating from ap to pop, apId is set before gqlFilter
+  // thus query fetches data for all aps
+  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
+  const gqlFilterHasApId =
+    !!beobGqlFilter('nichtBeurteilt').filtered?.aeTaxonomyByArtId?.apartsByArtId
+      ?.some?.apId
+  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+
+  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+
+  return <ObservedBeobNichtBeurteiltMarker clustered={clustered} />
+}
+
 const BeobNichtBeurteiltMarker = ({ clustered }) => {
   // const leafletMap = useMap()
   const store = useContext(storeContext)
@@ -78,4 +99,6 @@ const BeobNichtBeurteiltMarker = ({ clustered }) => {
   return beobMarkers
 }
 
-export default observer(BeobNichtBeurteiltMarker)
+const ObservedBeobNichtBeurteiltMarker = observer(BeobNichtBeurteiltMarker)
+
+export default observer(Router)

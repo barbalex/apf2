@@ -25,6 +25,7 @@ const iconCreateFunction = (cluster) => {
     iconSize: window.L.point(40, 40),
   })
 }
+
 const TpopRouter = ({ clustered }) => {
   const store = useContext(storeContext)
   const tree = store.tree
