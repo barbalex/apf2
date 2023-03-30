@@ -40,6 +40,7 @@ const myTypes = types
       standardApfloraLayers,
     ),
     activeApfloraLayers: types.array(types.string),
+    showApfLayersForMultipleAps: types.optional(types.boolean, false),
     overlays: types.optional(types.array(ApfloraLayer), standardOverlays),
     activeOverlays: types.array(types.string),
     activeBaseLayer: types.optional(types.maybeNull(types.string), 'OsmColor'),
@@ -152,6 +153,9 @@ const myTypes = types
     },
     setActiveApfloraLayers(val) {
       self.activeApfloraLayers = val
+    },
+    setShowApfLayersForMultipleAps(val) {
+      self.showApfLayersForMultipleAps = val
     },
     setOverlays(val) {
       self.overlays = val
