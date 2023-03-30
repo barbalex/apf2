@@ -465,8 +465,18 @@ const Karte = () => {
 
   const localizing = !!idOfTpopBeingLocalized
 
-  const dontShowApfloraLayerDueToMultipleLoading =
-    !apId && !showApfLayersForMultipleAps
+  const showApfLayers = showApfLayersForMultipleAps || !!apId
+  const showPop = activeApfloraLayers.includes('pop') && showApfLayers
+  const showTpop = activeApfloraLayers.includes('tpop') && showApfLayers
+  const showBeobNichtBeurteilt =
+    activeApfloraLayers.includes('beobNichtBeurteilt') && showApfLayers
+  const showBeobNichtZuzuordnen =
+    activeApfloraLayers.includes('beobNichtZuzuordnen') && showApfLayers
+  const showBeobZugeordnet =
+    activeApfloraLayers.includes('beobZugeordnet') && showApfLayers
+  const showBeobZugeordnetAssignPolylines =
+    activeApfloraLayers.includes('beobZugeordnetAssignPolylines') &&
+    showApfLayers
 
   /**
    * need to pass the height of the self built controls
@@ -583,57 +593,51 @@ const Karte = () => {
               )
             })
             .reverse()}
-          {activeApfloraLayers.includes('pop') &&
-            !dontShowApfloraLayerDueToMultipleLoading && (
-              // add no pane
-              // it prevented pop svgs from appearing
-              // leaflet sets z-index to 600 anyway
-              <Pop
-                key={`${apId}/pop/${activeApfloraLayers.join()}/${
-                  mapFilter?.coordinates ?? 99
-                }`}
-              />
-            )}
-          {activeApfloraLayers.includes('tpop') &&
-            !dontShowApfloraLayerDueToMultipleLoading && (
-              <Tpop
-                key={`${apId}/tpop/${activeApfloraLayers.join()}/${
-                  mapFilter?.coordinates ?? 99
-                }`}
-                clustered={clustered}
-              />
-            )}
-          {activeApfloraLayers.includes('beobNichtBeurteilt') &&
-            !dontShowApfloraLayerDueToMultipleLoading && (
-              <BeobNichtBeurteilt
-                key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}/${
-                  mapFilter?.coordinates ?? 99
-                }`}
-                clustered={clustered}
-              />
-            )}
-          {activeApfloraLayers.includes('beobNichtZuzuordnen') &&
-            !dontShowApfloraLayerDueToMultipleLoading && (
-              <BeobNichtZuzuordnen
-                key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}/${
-                  mapFilter?.coordinates ?? 99
-                }`}
-                clustered={clustered}
-              />
-            )}
-          {activeApfloraLayers.includes('beobZugeordnet') &&
-            !dontShowApfloraLayerDueToMultipleLoading && (
-              <BeobZugeordnet
-                key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}/${
-                  mapFilter?.coordinates ?? 99
-                }`}
-                clustered={clustered}
-              />
-            )}
-          {activeApfloraLayers.includes('beobZugeordnetAssignPolylines') &&
-            !dontShowApfloraLayerDueToMultipleLoading && (
-              <BeobZugeordnetAssignPolylines />
-            )}
+          {showPop && (
+            // add no pane
+            // it prevented pop svgs from appearing
+            // leaflet sets z-index to 600 anyway
+            <Pop
+              key={`${apId ?? ''}/pop/${activeApfloraLayers.join()}/${
+                mapFilter?.coordinates ?? 99
+              }`}
+            />
+          )}
+          {showTpop && (
+            <Tpop
+              key={`${apId}/tpop/${activeApfloraLayers.join()}/${
+                mapFilter?.coordinates ?? 99
+              }`}
+              clustered={clustered}
+            />
+          )}
+          {showBeobNichtBeurteilt && (
+            <BeobNichtBeurteilt
+              key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}/${
+                mapFilter?.coordinates ?? 99
+              }`}
+              clustered={clustered}
+            />
+          )}
+          {showBeobNichtZuzuordnen && (
+            <BeobNichtZuzuordnen
+              key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}/${
+                mapFilter?.coordinates ?? 99
+              }`}
+              clustered={clustered}
+            />
+          )}
+          {showBeobZugeordnet && (
+            <BeobZugeordnet
+              key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}/${
+                mapFilter?.coordinates ?? 99
+              }`}
+              clustered={clustered}
+            />
+          )}
+          {showBeobZugeordnetAssignPolylines && (
+            <BeobZugeordnetAssignPolylines />
+          )}
           <ScaleControl imperial={false} />
           <Control position="topright" visible={!hideMapControls}>
             <OwnControls

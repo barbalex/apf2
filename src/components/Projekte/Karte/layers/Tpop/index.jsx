@@ -4,6 +4,7 @@ import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useApolloClient, useLazyQuery } from '@apollo/client'
 import { useMapEvents } from 'react-leaflet'
 import cloneDeep from 'lodash/cloneDeep'
+import { useParams } from 'react-router-dom'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
@@ -23,6 +24,24 @@ const iconCreateFunction = (cluster) => {
     className,
     iconSize: window.L.point(40, 40),
   })
+}
+const TpopRouter = ({ clustered }) => {
+  const store = useContext(storeContext)
+  const tree = store.tree
+  const { tpopGqlFilter } = tree
+
+  const { apId } = useParams()
+
+  // Problem: gqlFilter updates AFTER apId
+  // if navigating from ap to pop, apId is set before gqlFilter
+  // thus query fetches data for all aps
+  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
+  const gqlFilterHasApId = !!tpopGqlFilter.filtered?.or?.[0]?.popByPopId?.apId
+  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+
+  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+
+  return <ObservedTpop clustered={clustered} />
 }
 
 const Tpop = ({ clustered }) => {
@@ -162,4 +181,6 @@ const Tpop = ({ clustered }) => {
   return tpopMarkers
 }
 
-export default observer(Tpop)
+const ObservedTpop = observer(Tpop)
+
+export default observer(TpopRouter)

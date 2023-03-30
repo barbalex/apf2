@@ -26,7 +26,7 @@ const LayerDiv = styled.div`
   font-size: 12px;
 `
 
-const ShowForMultipleAps = ({ apfloraLayer }) => {
+const ShowForMultipleAps = () => {
   const { apId } = useParams()
 
   const store = useContext(storeContext)

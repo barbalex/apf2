@@ -4,6 +4,7 @@ import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useQuery } from '@apollo/client'
 import { useMap } from 'react-leaflet'
 import cloneDeep from 'lodash/cloneDeep'
+import { useParams } from 'react-router-dom'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
@@ -21,6 +22,24 @@ const iconCreateFunction = function (cluster) {
     className,
     iconSize: window.L.point(40, 40),
   })
+}
+
+const PopRouter = () => {
+  const store = useContext(storeContext)
+  const tree = store.tree
+  const { popGqlFilter } = tree
+
+  const { apId } = useParams()
+
+  // Problem: popGqlFilter updates AFTER apId
+  // if navigating from ap to pop, apId is set before popGqlFilter
+  // thus query fetches data for all aps
+  // Solution: do not return pop if apId exists but popGqlFilter does not contain it (yet)
+  const gqlFilterHasApId = !!popGqlFilter.filtered?.or?.[0]?.apId
+  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+
+  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+  return <ObservedPop />
 }
 
 const Pop = () => {
@@ -79,4 +98,6 @@ const Pop = () => {
   )
 }
 
-export default observer(Pop)
+const ObservedPop = observer(Pop)
+
+export default observer(PopRouter)
