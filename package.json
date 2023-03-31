@@ -116,7 +116,7 @@
     "prettier": "2.8.7",
     "source-map-explorer": "2.5.3",
     "tslint-config-prettier": "1.18.0",
-    "typescript": "5.0.2",
+    "typescript": "5.0.3",
     "vercel": "28.18.3",
     "vite": "4.2.1",
     "vite-plugin-pwa": "0.14.7",
