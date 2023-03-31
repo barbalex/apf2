@@ -157,6 +157,11 @@ const Pop = () => {
           centered
         >
           <StyledTab label="Population" value="pop" data-id="pop" />
+          <StyledTab
+            label="Auswertung"
+            value="auswertung"
+            data-id="auswertung"
+          />
           <StyledTab label="Dateien" value="dateien" data-id="dateien" />
           <StyledTab label="Historien" value="history" data-id="history" />
         </Tabs>
@@ -214,6 +219,7 @@ const Pop = () => {
                 </FormContainer>
               </SimpleBar>
             )}
+            {tab === 'auswertung' && <div>Auswertung</div>}
             {tab === 'dateien' && <Files parentId={row.id} parent="pop" />}
             {tab === 'history' && <PopHistory />}
           </TabContent>
