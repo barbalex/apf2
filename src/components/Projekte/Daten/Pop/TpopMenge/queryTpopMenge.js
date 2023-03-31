@@ -24,11 +24,14 @@ export default gql`
       }
     }
     # do not need to filter further - is done in allVPopAuswTpopMenges
-    allTpops(filter: { popId: { equalTo: $id } }, orderBy: [NR_ASC, NAME_ASC]) {
+    allTpops(
+      filter: { popId: { equalTo: $id } }
+      orderBy: [NR_ASC, LABEL_ASC]
+    ) {
       nodes {
         id
         nr
-        name
+        label
         status
       }
     }

@@ -20,9 +20,9 @@ import { useParams } from 'react-router-dom'
 
 import queryTpopMenge from './queryTpopMenge'
 import CustomTooltip from './CustomTooltip'
-import exists from '../../../../../../modules/exists'
-import storeContext from '../../../../../../storeContext'
-import Error from '../../../../../shared/Error'
+import exists from '../../../../../modules/exists'
+import storeContext from '../../../../../storeContext'
+import Error from '../../../../shared/Error'
 
 const SpinnerContainer = styled.div`
   height: 400px;
@@ -83,13 +83,13 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
     variables: { apId, id: popId },
   })
 
-  const popsData = data?.allPops?.nodes ?? []
-  const popMengeRawData = data?.allVApAuswPopMenges?.nodes ?? []
-  const popMengeData = popMengeRawData.map((e) => ({
+  const tpopsData = data?.allTpops?.nodes ?? []
+  const tpopMengeRawData = data?.allVPopAuswTpopMenges?.nodes ?? []
+  const tpopMengeData = tpopMengeRawData.map((e) => ({
     jahr: e.jahr,
     ...JSON.parse(e.values),
   }))
-  const nonUniquePopIdsWithData = popMengeData.flatMap((d) =>
+  const nonUniqueTpopIdsWithData = tpopMengeData.flatMap((d) =>
     Object.entries(d)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(([key, value]) => key !== 'jahr')
@@ -98,10 +98,10 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .map(([key, value]) => key),
   )
-  const popIdsWithData = [...new Set(nonUniquePopIdsWithData)]
-  const popIdsWithDataSorted = sortBy(popIdsWithData, (id) => {
-    const pop = popsData.find((d) => d.id === id)
-    if (pop) return pop.nr
+  const tpopIdsWithData = [...new Set(nonUniqueTpopIdsWithData)]
+  const tpopIdsWithDataSorted = sortBy(tpopIdsWithData, (id) => {
+    const tpop = tpopsData.find((d) => d.id === id)
+    if (tpop) return tpop.nr
     return id
   })
 
@@ -112,7 +112,7 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
   const [refreshing, setRefreshing] = useState(false)
   const [refreshData] = useMutation(gql`
     mutation vApAuswPopMengeRefreshFromAp {
-      vApAuswPopMengeRefresh(input: { clientMutationId: "bla" }) {
+      vPopAuswTpopMengeRefresh(input: { clientMutationId: "bla" }) {
         boolean
       }
     }
@@ -165,13 +165,13 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
       {loading ? (
         <SpinnerContainer>
           <CircularProgress />
-          <SpinnerText>lade Mengen nach Populationen...</SpinnerText>
+          <SpinnerText>lade Mengen nach Teil-Populationen...</SpinnerText>
         </SpinnerContainer>
-      ) : popMengeData.length ? (
+      ) : tpopMengeData.length ? (
         <>
           <TitleRow>
             <div>
-              <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+              <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
             </div>
             {refreshing ? (
               <RefreshButtonSpinning
@@ -205,7 +205,7 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
             <AreaChart
               width={600}
               height={300}
-              data={popMengeData}
+              data={tpopMengeData}
               margin={{ top: 10, right: 10, left: 27 }}
             >
               <XAxis dataKey="jahr" />
@@ -219,13 +219,13 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
                 }}
                 tickFormatter={formatNumber}
               />
-              {popIdsWithDataSorted.reverse().map((id) => {
-                const pop = popsData.find((p) => p.id === id)
+              {tpopIdsWithDataSorted.reverse().map((id) => {
+                const tpop = tpopsData.find((p) => p.id === id)
                 let color
-                if (!pop) {
+                if (!tpop) {
                   color = 'grey'
                 } else {
-                  const isUrspruenglich = pop?.status < 200
+                  const isUrspruenglich = tpop?.status < 200
                   color = isUrspruenglich
                     ? colorUrspruenglich
                     : colorAngesiedelt
@@ -244,7 +244,7 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
                   />
                 )
               })}
-              <Tooltip content={<CustomTooltip popsData={popsData} />} />
+              <Tooltip content={<CustomTooltip tpopsData={tpopsData} />} />
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
             </AreaChart>
           </ResponsiveContainer>
@@ -253,7 +253,7 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
         <>
           <TitleRow>
             <div>
-              <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+              <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
             </div>
             {refreshing ? (
               <RefreshButtonSpinning

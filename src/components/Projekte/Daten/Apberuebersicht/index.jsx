@@ -203,6 +203,9 @@ const Apberuebersicht = () => {
           vApAuswPopMengeRefresh(input: { clientMutationId: "bla" }) {
             boolean
           }
+          vPopAuswTpopMengeRefresh(input: { clientMutationId: "bla" }) {
+            boolean
+          }
         }
       `,
     })

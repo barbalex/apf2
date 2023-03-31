@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
 
-import exists from '../../../../../../modules/exists'
+import exists from '../../../../../modules/exists'
 
 const Popup = styled.div`
   background-color: white;
@@ -29,10 +29,10 @@ const Value = styled.div``
 const colorUrspruenglich = '#2e7d32'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 
-const CustomTooltip = ({ payload = [], label, active, popsData }) => {
+const CustomTooltip = ({ payload = [], label, active, tpopsData }) => {
   const payloadSorted = sortBy(payload, (p) => {
-    const pop = popsData.find((d) => d.id === p.dataKey)
-    if (pop) return pop.nr
+    const tpop = tpopsData.find((d) => d.id === p.dataKey)
+    if (tpop) return tpop.nr
     return p.dataKey
   })
 
@@ -40,20 +40,20 @@ const CustomTooltip = ({ payload = [], label, active, popsData }) => {
     <Popup>
       <Title>{label}</Title>
       {payloadSorted.map((p, i) => {
-        const pop = popsData.find((d) => d.id === p.dataKey)
+        const tpop = tpopsData.find((d) => d.id === p.dataKey)
         let label = p.dataKey
-        if (pop) {
-          label = `${pop.nr || '(keine Nr)'}: ${pop.name || '(kein Name)'}`
+        if (tpop) {
+          label = tpop.label
         }
         const value =
           exists(p.value) && p.value?.toLocaleString
             ? p.value?.toLocaleString('de-ch')
             : null
         let color
-        if (!pop) {
+        if (!tpop) {
           color = 'grey'
         } else {
-          const isUrspruenglich = pop?.status < 200
+          const isUrspruenglich = tpop?.status < 200
           color = isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
         }
         return (
