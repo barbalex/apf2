@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 
 import storeContext from '../../../../../storeContext'
 import Layer from './Layer'
+import ShowForMultipleAps from './ShowForMultipleAps'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
@@ -22,6 +23,7 @@ const ApfloraLayers = () => {
       {apfloraLayers.map((apfloraLayer, index) => (
         <Layer key={index} apfloraLayer={apfloraLayer} />
       ))}
+      <ShowForMultipleAps />
     </CardContent>
   )
 }

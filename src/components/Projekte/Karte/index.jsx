@@ -448,6 +448,7 @@ const Karte = () => {
   const store = useContext(storeContext)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
+    showApfLayersForMultipleAps,
     overlays,
     activeOverlays: activeOverlaysRaw,
     activeBaseLayer,
@@ -463,6 +464,19 @@ const Karte = () => {
   const activeOverlays = getSnapshot(activeOverlaysRaw)
 
   const localizing = !!idOfTpopBeingLocalized
+
+  const showApfLayers = showApfLayersForMultipleAps || !!apId
+  const showPop = activeApfloraLayers.includes('pop') && showApfLayers
+  const showTpop = activeApfloraLayers.includes('tpop') && showApfLayers
+  const showBeobNichtBeurteilt =
+    activeApfloraLayers.includes('beobNichtBeurteilt') && showApfLayers
+  const showBeobNichtZuzuordnen =
+    activeApfloraLayers.includes('beobNichtZuzuordnen') && showApfLayers
+  const showBeobZugeordnet =
+    activeApfloraLayers.includes('beobZugeordnet') && showApfLayers
+  const showBeobZugeordnetAssignPolylines =
+    activeApfloraLayers.includes('beobZugeordnetAssignPolylines') &&
+    showApfLayers
 
   /**
    * need to pass the height of the self built controls
@@ -579,17 +593,17 @@ const Karte = () => {
               )
             })
             .reverse()}
-          {activeApfloraLayers.includes('pop') && (
+          {showPop && (
             // add no pane
             // it prevented pop svgs from appearing
             // leaflet sets z-index to 600 anyway
             <Pop
-              key={`${apId}/pop/${activeApfloraLayers.join()}/${
+              key={`${apId ?? ''}/pop/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
               }`}
             />
           )}
-          {activeApfloraLayers.includes('tpop') && (
+          {showTpop && (
             <Tpop
               key={`${apId}/tpop/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
@@ -597,7 +611,7 @@ const Karte = () => {
               clustered={clustered}
             />
           )}
-          {activeApfloraLayers.includes('beobNichtBeurteilt') && (
+          {showBeobNichtBeurteilt && (
             <BeobNichtBeurteilt
               key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
@@ -605,7 +619,7 @@ const Karte = () => {
               clustered={clustered}
             />
           )}
-          {activeApfloraLayers.includes('beobNichtZuzuordnen') && (
+          {showBeobNichtZuzuordnen && (
             <BeobNichtZuzuordnen
               key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
@@ -613,7 +627,7 @@ const Karte = () => {
               clustered={clustered}
             />
           )}
-          {activeApfloraLayers.includes('beobZugeordnet') && (
+          {showBeobZugeordnet && (
             <BeobZugeordnet
               key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}/${
                 mapFilter?.coordinates ?? 99
@@ -621,7 +635,7 @@ const Karte = () => {
               clustered={clustered}
             />
           )}
-          {activeApfloraLayers.includes('beobZugeordnetAssignPolylines') && (
+          {showBeobZugeordnetAssignPolylines && (
             <BeobZugeordnetAssignPolylines />
           )}
           <ScaleControl imperial={false} />

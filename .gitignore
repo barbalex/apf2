@@ -29,4 +29,7 @@ dist-ssr
 
 schema.json
 .vercel
+/test-results/
+/playwright-report/
+/playwright/.cache/
 playwright/.auth
