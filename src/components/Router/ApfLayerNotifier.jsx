@@ -33,7 +33,7 @@ const ApfLayerNotifier = () => {
   useEffect(() => {
     if (!apId && activeApfloraLayers.length && showApfLayersForMultipleAps) {
       enqueNotification({
-        message: `Sie laden in der Karte apflora-Informationen für mehrere Arten. Potentiell kann es sich um zehntausende von Datensätzen handeln. Sie müssen mit Verzögerungen bis hin zu Abstürzen rechnen.`,
+        message: `Sie laden in der Karte apflora-Informationen für mehrere Arten. Potentiell kann es sich um zehntausende von Datensätzen handeln. Sie müssen mit Verzögerungen bis hin zu Abstürzen rechnen. Empfehlung bei Problemen: minimieren Sie die Anzahl Arten mit einem Filter`,
         options: {
           variant: 'info',
           autoHideDuration: 10000,
