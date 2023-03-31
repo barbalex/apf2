@@ -3,7 +3,10 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 
 import storeContext from '../../storeContext'
+import useSearchParamsState from '../../modules/useSearchParamsState'
+import isMobilePhone from '../../modules/isMobilePhone'
 
+// TODO: only show messages if map is visible
 const ApfLayerNotifier = () => {
   const store = useContext(storeContext)
   const {
@@ -14,8 +17,21 @@ const ApfLayerNotifier = () => {
 
   const { apId } = useParams()
 
+  const [projekteTabs] = useSearchParamsState(
+    'projekteTabs',
+    isMobilePhone() ? ['tree'] : ['tree', 'daten'],
+  )
+  const mapIsOpen = projekteTabs.includes(`karte`)
+
+  console.log(`ApfLayerNotifier: mapIsOpen:`, mapIsOpen)
+
   useEffect(() => {
-    if (!apId && activeApfloraLayers.length && !showApfLayersForMultipleAps) {
+    if (
+      !apId &&
+      activeApfloraLayers.length &&
+      !showApfLayersForMultipleAps &&
+      mapIsOpen
+    ) {
       // Either: apId was unset
       // Or: with unset apId an apfloraLayer was activated
       enqueNotification({
@@ -28,10 +44,15 @@ const ApfLayerNotifier = () => {
     }
     // do not react to changes in showApfLayersForMultipleAps
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apId, activeApfloraLayers.length])
+  }, [apId, activeApfloraLayers.length, mapIsOpen])
 
   useEffect(() => {
-    if (!apId && activeApfloraLayers.length && showApfLayersForMultipleAps) {
+    if (
+      !apId &&
+      activeApfloraLayers.length &&
+      showApfLayersForMultipleAps &&
+      mapIsOpen
+    ) {
       enqueNotification({
         message: `Sie laden in der Karte apflora-Informationen für mehrere Arten. Potentiell kann es sich um zehntausende von Datensätzen handeln. Sie müssen mit Verzögerungen bis hin zu Abstürzen rechnen. Empfehlung bei Problemen: minimieren Sie die Anzahl Arten mit einem Filter`,
         options: {
@@ -42,7 +63,7 @@ const ApfLayerNotifier = () => {
     }
     // do not react to changes in showApfLayersForMultipleAps
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showApfLayersForMultipleAps, activeApfloraLayers.length, apId])
+  }, [showApfLayersForMultipleAps, activeApfloraLayers.length, apId, mapIsOpen])
 
   return null
 }
