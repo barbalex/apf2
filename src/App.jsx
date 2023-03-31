@@ -76,7 +76,7 @@ const App = () => {
                 <SnackbarProvider
                   maxSnack={3}
                   preventDuplicate
-                  autoHideDuration={20000}
+                  autoHideDuration={10000}
                   action={(key) => <NotificationDismisser nKey={key} />}
                 >
                   <>

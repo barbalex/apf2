@@ -463,8 +463,6 @@ const Karte = () => {
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const activeOverlays = getSnapshot(activeOverlaysRaw)
 
-  console.log('Karte rendering')
-
   const localizing = !!idOfTpopBeingLocalized
 
   const showApfLayers = showApfLayersForMultipleAps || !!apId

@@ -13,6 +13,7 @@ const Deletions = lazy(() => import('../Deletions'))
 import inIframe from '../../modules/inIframe'
 const ActiveNodeArraySetter = lazy(() => import('./ActiveNodeArraySetter'))
 const NavigateSetter = lazy(() => import('./NavigateSetter'))
+const ApfLayerNotifier = lazy(() => import('./ApfLayerNotifier'))
 const QueryClientSetter = lazy(() => import('./QueryClientSetter'))
 import Spinner from '../shared/Spinner'
 
@@ -72,6 +73,7 @@ const ProtectedRoute = () => {
             <ActiveNodeArraySetter />
             <NavigateSetter />
             <QueryClientSetter />
+            <ApfLayerNotifier />
           </Suspense>
         </>
       )}
