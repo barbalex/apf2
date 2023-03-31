@@ -29,3 +29,4 @@ dist-ssr
 
 schema.json
 .vercel
+playwright/.auth
