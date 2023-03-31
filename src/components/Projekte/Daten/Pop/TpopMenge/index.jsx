@@ -62,6 +62,9 @@ const RefreshButtonSpinning = styled(IconButton)`
   animation: ${spinning} 3s linear infinite;
 `
 const RefreshButton = styled(IconButton)``
+const Container = styled(ResponsiveContainer)`
+  overflow: hidden;
+`
 
 const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
@@ -201,7 +204,7 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
               <IoMdInformationCircleOutline />
             </IconButton>
           </TitleRow>
-          <ResponsiveContainer width="99%" height={height}>
+          <Container width="99%" height={height}>
             <AreaChart
               width={600}
               height={300}
@@ -247,7 +250,7 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
               <Tooltip content={<CustomTooltip tpopsData={tpopsData} />} />
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
             </AreaChart>
-          </ResponsiveContainer>
+          </Container>
         </>
       ) : (
         <>
