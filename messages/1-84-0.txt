@@ -1,0 +1,1 @@
+Ab Version 1.84.0: Auswertung der zielrelevanten Zähleinheit bei den Populationen. Ähnlich wie bisher bei der Art. Statt Populationen der Art, stellt sie die Zählungen pro Teil-Populationen der Population dar. Ihr findet sie bei der Population im Register "Auswertung"

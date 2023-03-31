@@ -3,7 +3,7 @@ import { DokuDate } from '..'
 const ArtAuswertungPopMenge = () => (
   <>
     <h1>Art: Auswertung Population Mengen</h1>
-    <DokuDate>27.03.2020</DokuDate>
+    <DokuDate>27.03.2020 (Ebene Population ergänzt am 31.3.2023)</DokuDate>
     <h3>Rahmen-Bedingungen</h3>
     <ul>
       <li>Pro Jahr</li>
@@ -61,6 +61,8 @@ const ArtAuswertungPopMenge = () => (
       Neu-Berechnung selber auslösen: Dafür klickt ihr neben dem Titel der
       Grafik auf die entsprechende Schaltfläche.
     </p>
+    <h3>Population: Auswertung Teil-Population Mengen</h3>
+    <p>In Populationen gibt es eine analoge Auswertung wie auf Ebene Art.</p>
   </>
 )
 

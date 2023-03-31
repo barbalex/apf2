@@ -24,6 +24,7 @@ import Error from '../../../shared/Error'
 import { pop } from '../../../shared/fragments'
 import Spinner from '../../../shared/Spinner'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
+import TpopMenge from './TpopMenge'
 
 import PopHistory from './History'
 
@@ -157,6 +158,11 @@ const Pop = () => {
           centered
         >
           <StyledTab label="Population" value="pop" data-id="pop" />
+          <StyledTab
+            label="Auswertung"
+            value="auswertung"
+            data-id="auswertung"
+          />
           <StyledTab label="Dateien" value="dateien" data-id="dateien" />
           <StyledTab label="Historien" value="history" data-id="history" />
         </Tabs>
@@ -214,6 +220,7 @@ const Pop = () => {
                 </FormContainer>
               </SimpleBar>
             )}
+            {tab === 'auswertung' && <TpopMenge />}
             {tab === 'dateien' && <Files parentId={row.id} parent="pop" />}
             {tab === 'history' && <PopHistory />}
           </TabContent>
