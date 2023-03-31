@@ -25,7 +25,7 @@ const StyledTab = styled(Tab)`
 
 const OrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
   const store = useContext(storeContext)
-  const { dataFilterAddOr } = store
+  const { dataFilterAddOr } = store.tree
 
   const lastFilterIsEmpty =
     Object.values(dataFilter[dataFilter.length - 1] ?? {}).filter(

@@ -46,7 +46,6 @@ const PopFilter = () => {
   const { apId } = useParams()
 
   const store = useContext(storeContext)
-  const { dataFilterSetValue } = store
   const {
     dataFilter,
     nodeLabelFilter,
@@ -54,6 +53,7 @@ const PopFilter = () => {
     mapFilter,
     artIsFiltered,
     apFilter,
+    dataFilterSetValue,
   } = store.tree
 
   const [activeTab, setActiveTab] = useState(0)

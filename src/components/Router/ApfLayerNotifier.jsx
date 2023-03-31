@@ -23,8 +23,6 @@ const ApfLayerNotifier = () => {
   )
   const mapIsOpen = projekteTabs.includes(`karte`)
 
-  console.log(`ApfLayerNotifier: mapIsOpen:`, mapIsOpen)
-
   useEffect(() => {
     if (
       !apId &&

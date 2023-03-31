@@ -54,8 +54,6 @@ const TpopmassnFilter = () => {
   const { apId } = useParams()
 
   const store = useContext(storeContext)
-  const { dataFilterSetValue } = store
-
   const {
     dataFilter,
     tpopmassnGqlFilter,
@@ -65,6 +63,7 @@ const TpopmassnFilter = () => {
     artIsFiltered,
     popIsFiltered,
     tpopIsFiltered,
+    dataFilterSetValue,
   } = store.tree
 
   const [activeTab, setActiveTab] = useState(0)

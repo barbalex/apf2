@@ -50,7 +50,7 @@ const StorePersister = ({ client, store, idb }) => {
         isObject(dataFilterTreeTpopfeldkontr) ||
         isObject(dataFilterTreeTpopfreiwkontr)
       ) {
-        [store.dataFilterEmpty()]
+        [store.tree.dataFilterEmpty()]
       }
 
       const username = await setUserFromIdb({ idb, store })

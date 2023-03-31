@@ -10,13 +10,20 @@ import { splitVendorChunkPlugin } from 'vite'
 export default defineConfig({
   build: {
     sourcemap: true,
-    // rollupOptions: {
-    //   output: {
-    //     manualChunks: {
-    //       reactDatepicker: ['react-datepicker'],
-    //     },
-    //   },
-    // },
+    rollupOptions: {
+      // https://github.com/TanStack/query/issues/5175#issuecomment-1482196558
+      onwarn(warning, warn) {
+        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+          return
+        }
+        warn(warning)
+      },
+      // output: {
+      //   manualChunks: {
+      //     reactDatepicker: ['react-datepicker'],
+      //   },
+      // },
+    },
   },
   // jsc: {
   //   experimental: {
@@ -60,9 +67,7 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 1000000000,
       },
       registerType: 'autoUpdate',
-      includeAssets: [
-        'robots.txt',
-      ],
+      includeAssets: ['robots.txt'],
       // https://developer.mozilla.org/en-US/docs/Web/Manifest
       manifest: {
         scope: '.',

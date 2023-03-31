@@ -93,7 +93,6 @@ const TpopfeldkontrFilter = () => {
   const { apId } = useParams()
 
   const store = useContext(storeContext)
-  const { dataFilterSetValue } = store
   const {
     dataFilter,
     ekGqlFilter,
@@ -103,6 +102,7 @@ const TpopfeldkontrFilter = () => {
     artIsFiltered,
     popIsFiltered,
     tpopIsFiltered,
+    dataFilterSetValue,
   } = store.tree
 
   const [activeTab, setActiveTab] = useState(0)

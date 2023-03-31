@@ -12,7 +12,6 @@ import MapMouseCoordinates, {
 } from './MapMouseCoordinates'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays'
-import initialDataFilterTreeValues from './Tree/DataFilter/initialValues'
 import User, { defaultValue as defaultUser } from './User'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import EkPlan, { defaultValue as defaultEkPlan } from './EkPlan'
@@ -33,7 +32,7 @@ const dataFilterInitialValues = {
   tpopfreiwkontr: tpopfreiwkontrInitial,
 }
 
-const myTypes = types
+const MobxStore = types
   .model({
     apfloraLayers: types.optional(
       types.array(ApfloraLayer),
@@ -172,33 +171,6 @@ const myTypes = types
     setBounds(val) {
       self.bounds = val
     },
-    dataFilterAddOr({ table, val }) {
-      self.tree?.dataFilter?.[table]?.push(val)
-    },
-    dataFilterSetValue({ table, key, value, index }) {
-      if (index !== undefined) {
-        if (!self.tree.dataFilter[table][index]) {
-          self.tree?.dataFilter?.[table]?.push(dataFilterInitialValues[table])
-        }
-        self.tree.dataFilter[table][index][key] = value
-        return
-      }
-      self.tree.dataFilter[table][key] = value
-    },
-    dataFilterEmpty() {
-      self.tree.dataFilter = initialDataFilterTreeValues
-    },
-    dataFilterEmptyTab({ table, activeTab }) {
-      if (self.tree.dataFilter[table].length === 1) {
-        const firstElement = self.tree.dataFilter[table][0]
-        Object.keys(firstElement).forEach((key) => (firstElement[key] = null))
-        return
-      }
-      self.tree.dataFilter[table].splice(activeTab, 1)
-    },
-    dataFilterEmptyTable({ table }) {
-      self.tree.dataFilter[table] = initialDataFilterTreeValues[table]
-    },
     tableIsFiltered(table) {
       // check nodeLabelFilter
       const nodeLabelFilterExists = !!self.tree.nodeLabelFilter[table]
@@ -297,4 +269,4 @@ const myTypes = types
     },
   }))
 
-export default myTypes
+export default MobxStore

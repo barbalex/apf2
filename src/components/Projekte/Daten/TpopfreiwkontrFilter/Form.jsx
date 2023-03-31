@@ -98,7 +98,7 @@ const GridContainer = styled.div`
 
 const TpopfreiwkontrForm = ({ row, activeTab }) => {
   const store = useContext(storeContext)
-  const { dataFilterSetValue } = store
+  const { dataFilterSetValue } = store.tree
 
   const saveToDb = useCallback(
     async (event) => {

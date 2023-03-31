@@ -46,14 +46,14 @@ const StyledInfoIcon = styled(MdInfoOutline)``
 
 const FilterTitle = ({ title, table, totalNr, filteredNr, activeTab }) => {
   const store = useContext(storeContext)
+  const { tableIsFiltered, dataFilterTreeIsFiltered } = store
   const {
-    tableIsFiltered,
-    dataFilterTreeIsFiltered,
+    emptyMapFilter,
+    dataFilterEmpty,
     dataFilterEmptyTab,
     dataFilterEmptyTable,
-    dataFilterEmpty,
-  } = store
-  const { emptyMapFilter, setApFilter } = store.tree
+    setApFilter,
+  } = store.tree
 
   const existsTableFilter = tableIsFiltered(table)
   const existsTreeFilter = dataFilterTreeIsFiltered()

@@ -147,7 +147,8 @@ const TpopfreiwkontrForm = ({ data, refetch, row, apId }) => {
   const queryClient = useQueryClient()
 
   const store = useContext(storeContext)
-  const { dataFilterSetValue, isPrint, user } = store
+  const { isPrint, user } = store
+  const { dataFilterSetValue } = store.tree
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 

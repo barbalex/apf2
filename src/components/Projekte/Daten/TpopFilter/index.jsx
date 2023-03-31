@@ -56,7 +56,6 @@ const TpopFilter = () => {
   const { apId } = useParams()
 
   const store = useContext(storeContext)
-  const { dataFilterSetValue } = store
 
   const {
     dataFilter,
@@ -66,6 +65,7 @@ const TpopFilter = () => {
     apFilter,
     artIsFiltered,
     popIsFiltered,
+    dataFilterSetValue,
   } = store.tree
 
   const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')

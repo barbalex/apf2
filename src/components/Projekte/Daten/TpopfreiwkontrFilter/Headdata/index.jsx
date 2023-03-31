@@ -46,7 +46,7 @@ const BearbVal = styled.div`
 
 const Headdata = ({ row, activeTab }) => {
   const store = useContext(storeContext)
-  const { dataFilterSetValue } = store
+  const { dataFilterSetValue } = store.tree
   const { data, loading, error } = useQuery(queryAdresses)
 
   const saveToDb = useCallback(

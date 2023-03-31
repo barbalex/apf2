@@ -79,12 +79,12 @@ const FilterComment = styled.li`
 
 const ApFilter = () => {
   const store = useContext(storeContext)
-  const { dataFilterSetValue } = store
   const {
     dataFilter,
     apFilter: nurApFilter,
     nodeLabelFilter,
     apGqlFilter,
+    dataFilterSetValue,
   } = store.tree
 
   const [activeTab, setActiveTab] = useState(0)

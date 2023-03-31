@@ -54,6 +54,33 @@ export default types
     refetcher: types.optional(types.number, 0),
   })
   .actions((self) => ({
+    dataFilterEmptyTable({ table }) {
+      self.dataFilter[table] = initialDataFilterValues[table]
+    },
+    dataFilterEmptyTab({ table, activeTab }) {
+      if (self.dataFilter[table].length === 1) {
+        const firstElement = self.dataFilter[table][0]
+        Object.keys(firstElement).forEach((key) => (firstElement[key] = null))
+        return
+      }
+      self.dataFilter[table].splice(activeTab, 1)
+    },
+    dataFilterAddOr({ table, val }) {
+      self.dataFilter?.[table]?.push(val)
+    },
+    dataFilterSetValue({ table, key, value, index }) {
+      if (index !== undefined) {
+        if (!self.dataFilter[table][index]) {
+          self.tree?.dataFilter?.[table]?.push(initialDataFilterValues[table])
+        }
+        self.dataFilter[table][index][key] = value
+        return
+      }
+      self.dataFilter[table][key] = value
+    },
+    dataFilterEmpty() {
+      self.dataFilter = initialDataFilterValues
+    },
     incrementRefetcher() {
       self.refetcher += 1
     },
