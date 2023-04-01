@@ -24,6 +24,18 @@ import storeContext from '../../../../storeContext'
 import { ContextMenuTrigger } from 'react-contextmenu/dist/react-contextmenu'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../modules/isMobilePhone'
+import svg100 from '../../Karte/layers/Tpop/statusGroupSymbols/100.svg'
+import svg100Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/100_highlighted.svg'
+import svg101 from '../../Karte/layers/Tpop/statusGroupSymbols/101.svg'
+import svg101Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/101_highlighted.svg'
+import svg200 from '../../Karte/layers/Tpop/statusGroupSymbols/200.svg'
+import svg200Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/200_highlighted.svg'
+import svg201 from '../../Karte/layers/Tpop/statusGroupSymbols/201.svg'
+import svg201Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/201_highlighted.svg'
+import svg202 from '../../Karte/layers/Tpop/statusGroupSymbols/202.svg'
+import svg202Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/202_highlighted.svg'
+import svg300 from '../../Karte/layers/Tpop/statusGroupSymbols/300.svg'
+import svg300Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/300_highlighted.svg'
 
 const PrintIcon = styled(MdPictureAsPdf)`
   font-size: 1.5rem;
@@ -323,6 +335,7 @@ const Row = ({ node }) => {
             <StyledRemoveIcon />
           </SymbolDiv>
         )}
+        {node.menuType === 'tpop' && <div>{node.status}</div>}
         {karteIsVisible && (
           <>
             {node.menuType === 'ap' &&

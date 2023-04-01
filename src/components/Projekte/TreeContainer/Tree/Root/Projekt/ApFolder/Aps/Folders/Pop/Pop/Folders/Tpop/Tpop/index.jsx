@@ -28,6 +28,7 @@ const Tpop = ({ projekt, ap, pop }) => {
                 nodes {
                   id
                   label
+                  status
                 }
               }
             }
@@ -64,6 +65,7 @@ const Tpop = ({ projekt, ap, pop }) => {
       parentTableId: pop.id,
       urlLabel: el.id,
       label: el.label,
+      status: el.status,
       url: [
         'Projekte',
         projekt.id,
