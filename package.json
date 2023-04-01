@@ -19,7 +19,7 @@
     "test-report": "playwright show-report"
   },
   "dependencies": {
-    "@apollo/client": "3.7.10",
+    "@apollo/client": "3.7.11",
     "@changey/react-leaflet-markercluster": "4.0.0-rc1",
     "@emotion/react": "11.10.6",
     "@emotion/styled": "11.10.6",
