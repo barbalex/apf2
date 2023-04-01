@@ -208,11 +208,6 @@ const PopFilteredMapIcon = styled(PopMapIcon)`
   stroke-width: 8px;
   stroke: #fff900;
 `
-const TpopFilteredMapIcon = styled(TpopMapIcon)`
-  paint-order: stroke;
-  stroke-width: 8px;
-  stroke: #fff900;
-`
 const BeobNichtBeurteiltFilteredMapIcon = styled(BeobNichtBeurteiltMapIcon)`
   paint-order: stroke;
   stroke-width: 8px;
@@ -463,20 +458,6 @@ const Row = ({ node }) => {
                   <PopFilteredMapIcon />
                 </div>
               )}
-            {/* {node.menuType === 'tpop' &&
-              activeApfloraLayers.includes('tpop') &&
-              !nodeIsActive && (
-                <div title="in Karte sichtbar">
-                  <TpopMapIcon />
-                </div>
-              )}
-            {node.menuType === 'tpop' &&
-              activeApfloraLayers.includes('tpop') &&
-              nodeIsActive && (
-                <div title="in Karte hervorgehoben">
-                  <TpopFilteredMapIcon />
-                </div>
-              )} */}
             {node.menuType === 'beobNichtBeurteilt' &&
               activeApfloraLayers.includes('beobNichtBeurteilt') &&
               !nodeIsActive && (
