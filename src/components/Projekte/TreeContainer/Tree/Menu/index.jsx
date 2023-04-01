@@ -11,7 +11,7 @@ import storeContext from '../../../../../storeContext'
 const Container = styled.div`
   position: absolute;
   top: -2px;
-  right: 10px;
+  right: 6px;
 `
 const MenuTitle = styled.div`
   font-size: 14px !important;
