@@ -24,18 +24,73 @@ import storeContext from '../../../../storeContext'
 import { ContextMenuTrigger } from 'react-contextmenu/dist/react-contextmenu'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../modules/isMobilePhone'
-import svg100 from '../../Karte/layers/Tpop/statusGroupSymbols/100.svg'
-import svg100Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/100_highlighted.svg'
-import svg101 from '../../Karte/layers/Tpop/statusGroupSymbols/101.svg'
-import svg101Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/101_highlighted.svg'
-import svg200 from '../../Karte/layers/Tpop/statusGroupSymbols/200.svg'
-import svg200Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/200_highlighted.svg'
-import svg201 from '../../Karte/layers/Tpop/statusGroupSymbols/201.svg'
-import svg201Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/201_highlighted.svg'
-import svg202 from '../../Karte/layers/Tpop/statusGroupSymbols/202.svg'
-import svg202Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/202_highlighted.svg'
-import svg300 from '../../Karte/layers/Tpop/statusGroupSymbols/300.svg'
-import svg300Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/300_highlighted.svg'
+import { ReactComponent as SVG100 } from '../../Karte/layers/Tpop/statusGroupSymbols/100.svg'
+import { ReactComponent as SVG100Highlighted } from '../../Karte/layers/Tpop/statusGroupSymbols/100_highlighted.svg'
+import { ReactComponent as SVG101 } from '../../Karte/layers/Tpop/statusGroupSymbols/101.svg'
+import { ReactComponent as SVG101Highlighted } from '../../Karte/layers/Tpop/statusGroupSymbols/101_highlighted.svg'
+import { ReactComponent as SVG200 } from '../../Karte/layers/Tpop/statusGroupSymbols/200.svg'
+import { ReactComponent as SVG200Highlighted } from '../../Karte/layers/Tpop/statusGroupSymbols/200_highlighted.svg'
+import { ReactComponent as SVG201 } from '../../Karte/layers/Tpop/statusGroupSymbols/201.svg'
+import { ReactComponent as SVG201Highlighted } from '../../Karte/layers/Tpop/statusGroupSymbols/201_highlighted.svg'
+import { ReactComponent as SVG202 } from '../../Karte/layers/Tpop/statusGroupSymbols/202.svg'
+import { ReactComponent as SVG202Highlighted } from '../../Karte/layers/Tpop/statusGroupSymbols/202_highlighted.svg'
+import { ReactComponent as SVG300 } from '../../Karte/layers/Tpop/statusGroupSymbols/300.svg'
+import { ReactComponent as SVG300Highlighted } from '../../Karte/layers/Tpop/statusGroupSymbols/300_highlighted.svg'
+import { ReactComponent as TpopIcon } from '../../Karte/layers/Tpop/tpop.svg'
+import { ReactComponent as TpopIconHighlighted } from '../../Karte/layers/Tpop/tpopHighlighted.svg'
+import { ReactComponent as UIcon } from '../../Karte/layers/Tpop/statusGroup/u.svg'
+import { ReactComponent as UIconHighlighted } from '../../Karte/layers/Tpop/statusGroup/uHighlighted.svg'
+import { ReactComponent as AIcon } from '../../Karte/layers/Tpop/statusGroup/a.svg'
+import { ReactComponent as AIconHighlighted } from '../../Karte/layers/Tpop/statusGroup/aHighlighted.svg'
+import { ReactComponent as PIcon } from '../../Karte/layers/Tpop/statusGroup/p.svg'
+import { ReactComponent as PIconHighlighted } from '../../Karte/layers/Tpop/statusGroup/pHighlighted.svg'
+import { ReactComponent as QIcon } from '../../Karte/layers/Tpop/statusGroup/q.svg'
+import { ReactComponent as QIconHighlighted } from '../../Karte/layers/Tpop/statusGroup/qHighlighted.svg'
+
+const tpopIcons = {
+  normal: {
+    100: TpopIcon,
+    '100Highlighted': TpopIconHighlighted,
+    101: TpopIcon,
+    '101Highlighted': TpopIconHighlighted,
+    200: TpopIcon,
+    '200Highlighted': TpopIconHighlighted,
+    201: TpopIcon,
+    '201Highlighted': TpopIconHighlighted,
+    202: TpopIcon,
+    '202Highlighted': TpopIconHighlighted,
+    300: TpopIcon,
+    '300Highlighted': TpopIconHighlighted,
+  },
+  statusGroup: {
+    100: UIcon,
+    '100Highlighted': UIconHighlighted,
+    101: UIcon,
+    '101Highlighted': UIconHighlighted,
+    200: AIcon,
+    '200Highlighted': AIconHighlighted,
+    201: AIcon,
+    '201Highlighted': AIconHighlighted,
+    202: AIcon,
+    '202Highlighted': AIconHighlighted,
+    300: PIcon,
+    '300Highlighted': PIconHighlighted,
+  },
+  statusGroupSymbols: {
+    100: SVG100,
+    '100Highlighted': SVG100Highlighted,
+    101: SVG101,
+    '101Highlighted': SVG101Highlighted,
+    200: SVG200,
+    '200Highlighted': SVG200Highlighted,
+    201: SVG201,
+    '201Highlighted': SVG201Highlighted,
+    202: SVG202,
+    '202Highlighted': SVG202Highlighted,
+    300: SVG300,
+    '300Highlighted': SVG300Highlighted,
+  },
+}
 
 const PrintIcon = styled(MdPictureAsPdf)`
   font-size: 1.5rem;
@@ -203,6 +258,11 @@ const PrintIconContainer = styled.div`
     }
   }
 `
+const IconContainer = styled.div`
+  padding-right: 4px;
+  margin-left: -2px;
+  font-size: 1.1rem;
+`
 
 const Row = ({ node }) => {
   const { apId, tpopId } = useParams()
@@ -218,9 +278,11 @@ const Row = ({ node }) => {
     moving,
     copyingBiotop,
     setPrintingJberYear,
+    map,
   } = store
   const tree = store.tree
   const { openNodes, nodeLabelFilter, activeNodeArray } = tree
+  const { tpopIcon: tpopIconName } = map
   const activeId = activeNodeArray[activeNodeArray.length - 1]
   const nodeIsActive = node.id === activeId
 
@@ -289,6 +351,16 @@ const Row = ({ node }) => {
   )
   const karteIsVisible = projekteTabs.includes('karte')
 
+  const iconIsHighlighted =
+    karteIsVisible && activeApfloraLayers.includes('tpop') && nodeIsActive
+  const TpopIcon = node.status
+    ? iconIsHighlighted
+      ? tpopIcons[tpopIconName][node.status + 'Highlighted']
+      : tpopIcons[tpopIconName][node.status]
+    : iconIsHighlighted
+    ? QIconHighlighted
+    : QIcon
+
   // console.log('Row, node:', node)
 
   return (
@@ -335,7 +407,11 @@ const Row = ({ node }) => {
             <StyledRemoveIcon />
           </SymbolDiv>
         )}
-        {node.menuType === 'tpop' && <div>{node.status}</div>}
+        {node.menuType === 'tpop' && node.status && (
+          <IconContainer>
+            <TpopIcon />
+          </IconContainer>
+        )}
         {karteIsVisible && (
           <>
             {node.menuType === 'ap' &&
@@ -387,7 +463,7 @@ const Row = ({ node }) => {
                   <PopFilteredMapIcon />
                 </div>
               )}
-            {node.menuType === 'tpop' &&
+            {/* {node.menuType === 'tpop' &&
               activeApfloraLayers.includes('tpop') &&
               !nodeIsActive && (
                 <div title="in Karte sichtbar">
@@ -400,7 +476,7 @@ const Row = ({ node }) => {
                 <div title="in Karte hervorgehoben">
                   <TpopFilteredMapIcon />
                 </div>
-              )}
+              )} */}
             {node.menuType === 'beobNichtBeurteilt' &&
               activeApfloraLayers.includes('beobNichtBeurteilt') &&
               !nodeIsActive && (
