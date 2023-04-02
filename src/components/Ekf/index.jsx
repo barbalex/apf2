@@ -125,4 +125,4 @@ const Ekf = () => {
   )
 }
 
-export default observer(Ekf)
+export const Component = observer(Ekf)
