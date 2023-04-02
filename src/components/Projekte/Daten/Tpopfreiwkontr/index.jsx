@@ -179,4 +179,4 @@ const Tpopfreiwkontr = ({ id: idPassed }) => {
   )
 }
 
-export default observer(Tpopfreiwkontr)
+export const Component = observer(Tpopfreiwkontr)
