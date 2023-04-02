@@ -30,4 +30,4 @@ const KarteFilter = () => (
   </>
 )
 
-export default KarteFilter
+export const Component = KarteFilter

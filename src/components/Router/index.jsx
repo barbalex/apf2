@@ -71,17 +71,6 @@ const EkPlanen = lazy(() => import('../Docs/docs/EkPlanen'))
 const BenutzerKonti = lazy(() => import('../Docs/docs/BenutzerKonti'))
 const EkfDocs = lazy(() => import('../Docs/docs/Ekf'))
 const Filter = lazy(() => import('../Docs/docs/Filter'))
-const Markdown = lazy(() => import('../Docs/docs/Markdown'))
-const Historisierung = lazy(() => import('../Docs/docs/Historisierung'))
-const KarteTpopAllerArten = lazy(() =>
-  import('../Docs/docs/KarteTpopAllerArten'),
-)
-const KarteFilter = lazy(() => import('../Docs/docs/KarteFilter'))
-const KartePopTpopIconsLabelWaehlen = lazy(() =>
-  import('../Docs/docs/KartePopTpopIconsLabelWaehlen'),
-)
-const KarteMassstab = lazy(() => import('../Docs/docs/KarteMassstab'))
-const KarteDrucken = lazy(() => import('../Docs/docs/KarteDrucken'))
 // WARNING: errorElement did not work
 // import ErrorBoundary from '../shared/ErrorBoundary'
 
@@ -266,21 +255,21 @@ const RouterComponent = () => {
             element={<FalschBestimmteBeob />}
           />
           <Route path="erfolgs-kontrollen-planen" element={<EkPlanen />} />
-          <Route path="benutzer-konti" element={<BenutzerKonti />} />
-          <Route path="erfolgs-kontrollen-freiwillige" element={<EkfDocs />} />
-          <Route path="filter" element={<Filter />} />
-          <Route path="markdown" element={<Markdown />} />
-          <Route path="historisierung" element={<Historisierung />} />
+          <Route path="benutzer-konti"  lazy={()=>import('../Docs/docs/BenutzerKonti')} />
+          <Route path="erfolgs-kontrollen-freiwillige"  lazy={()=>import('../Docs/docs/Ekf')} />
+          <Route path="filter"  lazy={()=>import('../Docs/docs/Filter')} />
+          <Route path="markdown" lazy={()=>import('../Docs/docs/Markdown')} />
+          <Route path="historisierung"  lazy={()=>import('../Docs/docs/Historisierung')} />
           <Route
             path="karte-teil-populationen-aller-arten-anzeigen"
-            element={<KarteTpopAllerArten />}
+            lazy={()=>import('../Docs/docs/KarteTpopAllerArten')}
           />
-          <Route path="karte-filter" element={<KarteFilter />} />
+          <Route path="karte-filter"  lazy={()=>import('../Docs/docs/KarteFilter')} />
           <Route
             path="karte-symbole-und-label-fuer-populationen-und-teil-populationen-waehlen"
-            element={<KartePopTpopIconsLabelWaehlen />}
+            lazy={()=>import('../Docs/docs/KartePopTpopIconsLabelWaehlen')}
           />
-          <Route path="karte-massstab" element={<KarteMassstab />} />
+          <Route path="karte-massstab" lazy={()=>import('../Docs/docs/KarteMassstab')} />
           <Route path="karte-drucken"  lazy={()=>import('../Docs/docs/KarteDrucken')} />
           <Route path="gedaechtnis"  lazy={()=>import('../Docs/docs/Gedaechtnis')} />
           <Route path="dateien"  lazy={()=>import('../Docs/docs/Dateien')} />

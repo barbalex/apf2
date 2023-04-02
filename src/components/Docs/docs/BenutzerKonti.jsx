@@ -61,4 +61,4 @@ const BenutzerKonti = () => (
   </>
 )
 
-export default BenutzerKonti
+export const Component = BenutzerKonti

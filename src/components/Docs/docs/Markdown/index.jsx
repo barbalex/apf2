@@ -38,4 +38,4 @@ const Markdown = () => (
   </>
 )
 
-export default Markdown
+export const Component = Markdown

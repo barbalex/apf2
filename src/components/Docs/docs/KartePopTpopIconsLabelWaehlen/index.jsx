@@ -45,4 +45,4 @@ const KartePopTpopIconsLabelWaehlen = () => (
   </>
 )
 
-export default KartePopTpopIconsLabelWaehlen
+export const Component = KartePopTpopIconsLabelWaehlen

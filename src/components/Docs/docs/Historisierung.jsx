@@ -233,4 +233,4 @@ const Historisierung = () => (
   </>
 )
 
-export default Historisierung
+export const Component = Historisierung
