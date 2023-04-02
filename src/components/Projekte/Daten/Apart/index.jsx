@@ -194,4 +194,4 @@ const ApArt = () => {
   )
 }
 
-export default observer(ApArt)
+export const Component = observer(ApArt)

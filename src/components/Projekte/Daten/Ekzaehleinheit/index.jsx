@@ -216,4 +216,4 @@ const Ekzaehleinheit = () => {
   )
 }
 
-export default observer(Ekzaehleinheit)
+export const Component = observer(Ekzaehleinheit)
