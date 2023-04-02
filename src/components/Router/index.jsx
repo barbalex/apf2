@@ -1,12 +1,9 @@
-import { lazy } from 'react'
 import {
   Route,
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
 } from 'react-router-dom'
-
-const Beobzuordnung = lazy(() => import('../Projekte/Daten/Beobzuordnung'))
 
 // WARNING: errorElement did not work
 // import ErrorBoundary from '../shared/ErrorBoundary'
@@ -80,11 +77,11 @@ const RouterComponent = () => {
             />
             <Route
               path="Projekte/:projId/Arten/:apId/nicht-zuzuordnende-Beobachtungen/:beobId"
-              element={<Beobzuordnung type="nichtZuzuordnen" />}
+              lazy={() => import('../Projekte/Daten/Beobzuordnung')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/nicht-beurteilte-Beobachtungen/:beobId"
-              element={<Beobzuordnung type="nichtBeurteilt" />}
+              lazy={() => import('../Projekte/Daten/Beobzuordnung')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/EK-Zähleinheiten/:zaehleinheitId"
@@ -144,7 +141,7 @@ const RouterComponent = () => {
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Beobachtungen/:beobId/*"
-              element={<Beobzuordnung type="zugeordnet" />}
+              lazy={() => import('../Projekte/Daten/Beobzuordnung')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Kontroll-Berichte/:tpopberId/*"
