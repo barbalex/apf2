@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom'
 
 const Home = lazy(() => import('../Home'))
-// const EkPlan = lazy(() => import('../EkPlan'))
 const FourOhFour = lazy(() => import('../404'))
 const Docs = lazy(() => import('../Docs'))
 const ProtectedRoute = lazy(() => import('./ProtectedRoute'))
@@ -101,230 +100,158 @@ const OpenSource = lazy(() => import('../Docs/docs/OpenSource'))
 const ArtTaxonomieErgaenzen = lazy(() =>
   import('../Docs/docs/ArtTaxonomieErgaenzen'),
 )
-const InfoFloraExport = lazy(() => import('../Docs/docs/InfofloraExport'))
-import ErrorBoundary from '../shared/ErrorBoundary'
+// WARNING: errorElement did not work
+// import ErrorBoundary from '../shared/ErrorBoundary'
+
 // import Unterhalt from './components/Unterhalt'
 
 // uncomment unterhalt route for Unterhalt
 const RouterComponent = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<AppBar />} errorElement={<ErrorBoundary />}>
-        <Route index element={<Home />} errorElement={<ErrorBoundary />} />
-        <Route
-          path="/Daten/*"
-          element={<ProtectedRoute />}
-          errorElement={<ErrorBoundary />}
-        >
+      <Route element={<AppBar />}>
+        <Route index lazy={() => import('../Home')} />
+        <Route path="/Daten/*" element={<ProtectedRoute />}>
           {/* <Route path="*" element={<Unterhalt />}></Route> */}
           <Route
             path="Projekte/:projId/EK-Planung"
-            // element={<EkPlan />}
             lazy={() => import('../EkPlan')}
-            // errorElement={<ErrorBoundary />}
           />
-          <Route
-            path="Benutzer/:userId/EKF/:ekfYear/*"
-            element={<Ekf />}
-            errorElement={<ErrorBoundary />}
-          />
+          <Route path="Benutzer/:userId/EKF/:ekfYear/*" element={<Ekf />} />
           <Route
             path="Benutzer/:userId/EKF/:ekfYear/:ekfId"
             element={<Ekf />}
-            errorElement={<ErrorBoundary />}
           />
-          <Route
-            path="*"
-            element={<Projekte />}
-            errorElement={<ErrorBoundary />}
-          >
-            <Route
-              path="Werte-Listen/Adressen/:adrId"
-              element={<Adresse />}
-              errorElement={<ErrorBoundary />}
-            />
+          <Route path="*" element={<Projekte />}>
+            <Route path="Werte-Listen/Adressen/:adrId" element={<Adresse />} />
             <Route
               path="Werte-Listen/ApberrelevantGrundWerte/:wertId"
               element={<Werte table="tpopApberrelevantGrundWerte" />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Werte-Listen/EkAbrechnungstypWerte/:wertId"
               element={<Werte table="ekAbrechnungstypWerte" />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Werte-Listen/TpopkontrzaehlEinheitWerte/:wertId"
               element={<Werte table="tpopkontrzaehlEinheitWerte" />}
-              errorElement={<ErrorBoundary />}
             />
-            <Route
-              path="Mitteilungen"
-              element={<Messages />}
-              errorElement={<ErrorBoundary />}
-            />
-            <Route
-              path="Aktuelle-Fehler/:issueId"
-              element={<CurrentIssue />}
-              errorElement={<ErrorBoundary />}
-            />
-            <Route
-              path="Projekte/:projId/*"
-              element={<Projekt />}
-              errorElement={<ErrorBoundary />}
-            />
+            <Route path="Mitteilungen" element={<Messages />} />
+            <Route path="Aktuelle-Fehler/:issueId" element={<CurrentIssue />} />
+            <Route path="Projekte/:projId/*" element={<Projekt />} />
             <Route
               path="Projekte/:projId/AP-Berichte/:apberUebersichtId"
               element={<Apberuebersicht />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/AP-Berichte/:apberUebersichtId/print"
               element={<ApberForYear />}
-              errorElement={<ErrorBoundary />}
             />
-            <Route
-              path="Projekte/:projId/Arten/:apId/*"
-              element={<Ap />}
-              errorElement={<ErrorBoundary />}
-            />
+            <Route path="Projekte/:projId/Arten/:apId/*" element={<Ap />} />
             <Route
               path="Projekte/:projId/Arten/:apId/Qualitaetskontrollen"
               element={<Qk />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/nicht-zuzuordnende-Beobachtungen/:beobId"
               element={<Beobzuordnung type="nichtZuzuordnen" />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/nicht-beurteilte-Beobachtungen/:beobId"
               element={<Beobzuordnung type="nichtBeurteilt" />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/EK-Zähleinheiten/:zaehleinheitId"
               element={<Ekzaehleinheit />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/EK-Frequenzen/:ekfrequenzId"
               element={<Ekfrequenz />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/assoziierte-Arten/:assozartId"
               element={<Assozart />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Taxa/:taxonId"
               element={<Apart />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Idealbiotop"
               element={<Idealbiotop />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Berichte/:apberId"
               element={<Apber />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Berichte/:apberId/print"
               element={<ApberForApFromAp />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Erfolgskriterien/:erfkritId"
               element={<Erfkrit />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Ziele/:jahr/:zielId/*"
               element={<Ziel />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Ziele/:jahr/:zielId/Berichte/:zielberId"
               element={<Zielber />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/*"
               element={<Pop />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Massnahmen-Berichte/:popmassnberId/*"
               element={<Popmassnber />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Kontroll-Berichte/:popberId/*"
               element={<Popber />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/*"
               element={<Tpop />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Beobachtungen/:beobId/*"
               element={<Beobzuordnung type="zugeordnet" />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Kontroll-Berichte/:tpopberId/*"
               element={<Tpopber />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Freiwilligen-Kontrollen/:tpopkontrId/*"
               element={<Tpopfreiwkontr />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Feld-Kontrollen/:tpopkontrId/*"
               element={<Tpopfeldkontr />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Feld-Kontrollen/:tpopkontrId/Zaehlungen/:tpopkontrzaehlId/*"
               element={<Tpopkontrzaehl />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Massnahmen-Berichte/:tpopmassnberId/*"
               element={<Tpopmassnber />}
-              errorElement={<ErrorBoundary />}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Massnahmen/:tpopmassnId/*"
               element={<Tpopmassn />}
-              errorElement={<ErrorBoundary />}
             />
-            <Route
-              path="Benutzer/:userId/*"
-              element={<User />}
-              errorElement={<ErrorBoundary />}
-            />
+            <Route path="Benutzer/:userId/*" element={<User />} />
             <Route
               path="Benutzer/:userId/EKF/*"
               element={<EkfYearNavigator />}
-              errorElement={<ErrorBoundary />}
             />
           </Route>
         </Route>
-        <Route
-          path="/Dokumentation/*"
-          element={<Docs />}
-          errorElement={<ErrorBoundary />}
-        >
+        <Route path="/Dokumentation/*" element={<Docs />}>
           <Route index element={null} />
           <Route
             path="was-kann-man-mit-apflora-machen"
@@ -384,16 +311,19 @@ const RouterComponent = () => {
           <Route path="daten-sichern" element={<DatenSichern />} />
           <Route
             path="daten-wiederherstellen"
-            element={<DatenWiederherstellen />}
+            lazy={()=>import('../Docs/docs/DatenWiederherstellen')}
           />
-          <Route path="testen" element={<Testen />} />
-          <Route path="geschichte" element={<Geschichte />} />
-          <Route path="open-source" element={<OpenSource />} />
+          <Route path="testen" lazy={()=>import('../Docs/docs/Testen')} />
+          <Route path="geschichte"  lazy={()=>import('../Docs/docs/Geschichte')} />
+          <Route path="open-source" lazy={()=>import('../Docs/docs/OpenSource')} />
           <Route
             path="art-taxonomien-ergaenzen"
-            element={<ArtTaxonomieErgaenzen />}
+            lazy={() => import('../Docs/docs/ArtTaxonomieErgaenzen')}
           />
-          <Route path="info-flora-export" element={<InfoFloraExport />} />
+          <Route
+            path="info-flora-export"
+            lazy={() => import('../Docs/docs/InfofloraExport')}
+          />
           <Route path="*" element={<FourOhFour />} />
         </Route>
         <Route path="*" element={<FourOhFour />} />

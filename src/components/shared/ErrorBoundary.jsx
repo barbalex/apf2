@@ -32,7 +32,7 @@ const Pre = styled.pre`
   background-color: rgba(128, 128, 128, 0.09);
 `
 
-const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
+const ErrorFallback = ({ error, resetErrorBoundary }) => {
   const onReload = useCallback(() => window.location.reload(true), [])
 
   return (
@@ -41,7 +41,7 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
       <PreWrapping>{error.message}</PreWrapping>
       <Details>
         <Summary>Mehr Informationen</Summary>
-        <Pre>{componentStack}</Pre>
+        <Pre>{error?.message ?? error}</Pre>
       </Details>
       <ButtonContainer>
         <StyledButton variant="outlined" onClick={onReload} color="inherit">

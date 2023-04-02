@@ -54,4 +54,4 @@ const OpenSource = () => (
   </>
 )
 
-export default OpenSource
+export const Component = OpenSource
