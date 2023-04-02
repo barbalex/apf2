@@ -114,43 +114,43 @@ const RouterComponent = () => {
             />
             <Route
               path="Projekte/:projId/Arten/:apId/EK-Zähleinheiten/:zaehleinheitId"
-              element={<Ekzaehleinheit />}
+              lazy={()=>import('../Projekte/Daten/Ekzaehleinheit')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/EK-Frequenzen/:ekfrequenzId"
-              element={<Ekfrequenz />}
+              lazy={()=>import('../Projekte/Daten/Ekfrequenz')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/assoziierte-Arten/:assozartId"
-              element={<Assozart />}
+              lazy={()=>import('../Projekte/Daten/Assozart')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Taxa/:taxonId"
-              element={<Apart />}
+              lazy={()=>import('../Projekte/Daten/Apart')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Idealbiotop"
-              element={<Idealbiotop />}
+              lazy={()=>import('../Projekte/Daten/Idealbiotop')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Berichte/:apberId"
-              element={<Apber />}
+              lazy={()=>import('../Projekte/Daten/Apber')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Berichte/:apberId/print"
-              element={<ApberForApFromAp />}
+              lazy={()=>import('../Print/ApberForApFromAp')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Erfolgskriterien/:erfkritId"
-              element={<Erfkrit />}
+              lazy={()=>import('../Projekte/Daten/Erfkrit')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Ziele/:jahr/:zielId/*"
-              element={<Ziel />}
+              lazy={()=>import('../Projekte/Daten/Ziel')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Ziele/:jahr/:zielId/Berichte/:zielberId"
-              element={<Zielber />}
+              lazy={()=>import('../Projekte/Daten/Zielber')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/*"

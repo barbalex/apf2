@@ -153,4 +153,4 @@ const Erfkrit = () => {
   )
 }
 
-export default observer(Erfkrit)
+export const Component = observer(Erfkrit)

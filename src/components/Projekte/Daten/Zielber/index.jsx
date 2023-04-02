@@ -152,4 +152,4 @@ const Zielber = () => {
   )
 }
 
-export default observer(Zielber)
+export const Component = observer(Zielber)
