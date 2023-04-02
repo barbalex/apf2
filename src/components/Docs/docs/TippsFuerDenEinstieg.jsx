@@ -55,4 +55,4 @@ const TippsFuerDenEinstieg = () => (
   </>
 )
 
-export default TippsFuerDenEinstieg
+export const Component = TippsFuerDenEinstieg

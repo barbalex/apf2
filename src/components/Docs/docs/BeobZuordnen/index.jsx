@@ -161,4 +161,4 @@ const BeobZuordnen = () => (
   </>
 )
 
-export default BeobZuordnen
+export const Component = BeobZuordnen

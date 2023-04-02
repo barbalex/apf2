@@ -63,14 +63,7 @@ const IstApfloraLangsam = lazy(() => import('../Docs/docs/IstApfloraLangsam'))
 const ArtAuswertungPopMenge = lazy(() =>
   import('../Docs/docs/ArtAuswertungPopMenge'),
 )
-const BeobZuordnen = lazy(() => import('../Docs/docs/BeobZuordnen'))
-const FalschBestimmteBeob = lazy(() =>
-  import('../Docs/docs/FalschBestimmteBeob'),
-)
-const EkPlanen = lazy(() => import('../Docs/docs/EkPlanen'))
-const BenutzerKonti = lazy(() => import('../Docs/docs/BenutzerKonti'))
-const EkfDocs = lazy(() => import('../Docs/docs/Ekf'))
-const Filter = lazy(() => import('../Docs/docs/Filter'))
+
 // WARNING: errorElement did not work
 // import ErrorBoundary from '../shared/ErrorBoundary'
 
@@ -230,31 +223,31 @@ const RouterComponent = () => {
           />
           <Route
             path="technische-voraussetzungen"
-            element={<TechnischeVoraussetzungen />}
+            lazy={()=>import('../Docs/docs/TechnischeVoraussetzungen')}
           />
           <Route
             path="tipps-fuer-den-einstieg"
-            element={<TippsFuerDenEinstieg />}
+            lazy={()=>import('../Docs/docs/TippsFuerDenEinstieg')}
           />
           <Route
             path="videos-fuer-den-einstieg"
-            element={<VideosFuerDenEinstieg />}
+            lazy={()=>import('../Docs/docs/VideosFuerDenEinstieg')}
           />
-          <Route path="anleitung-eingabe" element={<AnleitungZurEingabe />} />
-          <Route path="ist-apflora-langsam" element={<IstApfloraLangsam />} />
+          <Route path="anleitung-eingabe"  lazy={()=>import('../Docs/docs/AnleitungZurEingabe')}/>
+          <Route path="ist-apflora-langsam"  lazy={()=>import('../Docs/docs/IstApfloraLangsam')} />
           <Route
             path="art-auswertung-pop-menge"
-            element={<ArtAuswertungPopMenge />}
+            lazy={()=>import('../Docs/docs/ArtAuswertungPopMenge')}
           />
           <Route
             path="beobachtungen-einer-teil-population-zuordnen"
-            element={<BeobZuordnen />}
+            lazy={()=>import('../Docs/docs/BeobZuordnen')}
           />
           <Route
             path="falsch-bestimmte-beobachtungen"
-            element={<FalschBestimmteBeob />}
+            lazy={()=>import('../Docs/docs/FalschBestimmteBeob')}
           />
-          <Route path="erfolgs-kontrollen-planen" element={<EkPlanen />} />
+          <Route path="erfolgs-kontrollen-planen"  lazy={()=>import('../Docs/docs/EkPlanen')} />
           <Route path="benutzer-konti"  lazy={()=>import('../Docs/docs/BenutzerKonti')} />
           <Route path="erfolgs-kontrollen-freiwillige"  lazy={()=>import('../Docs/docs/Ekf')} />
           <Route path="filter"  lazy={()=>import('../Docs/docs/Filter')} />
