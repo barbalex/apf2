@@ -46,11 +46,8 @@ const AppBarComponent = () => {
 
   useEffect(() => {
     if (isInIframe) return
-    console.log(
-      'AppBarComponent useEffect, activeNodeArray:',
-      activeNodeArray.toJSON(),
-      navigate('/Daten/' + activeNodeArray.join('/')),
-    )
+
+    navigate('/Daten/' + activeNodeArray.join('/'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -71,4 +68,4 @@ const AppBarComponent = () => {
   )
 }
 
-export default observer(AppBarComponent)
+export const Component = observer(AppBarComponent)
