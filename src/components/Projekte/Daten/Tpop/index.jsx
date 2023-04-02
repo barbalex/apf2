@@ -240,4 +240,4 @@ const TpopForm = () => {
   )
 }
 
-export default observer(TpopForm)
+export const Component = observer(TpopForm)

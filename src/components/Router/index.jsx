@@ -6,36 +6,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
-const FourOhFour = lazy(() => import('../404'))
-const Docs = lazy(() => import('../Docs'))
-const ProtectedRoute = lazy(() => import('./ProtectedRoute'))
-const Ekf = lazy(() => import('../Ekf'))
-const Projekte = lazy(() => import('../Projekte'))
-const Projekt = lazy(() => import('../Projekte/Daten/Projekt'))
-const Apberuebersicht = lazy(() => import('../Projekte/Daten/Apberuebersicht'))
-const ApberForYear = lazy(() => import('../Print/ApberForYear'))
-const Adresse = lazy(() => import('../Projekte/Daten/Adresse'))
-const Werte = lazy(() => import('../Projekte/Daten/Werte'))
-const Messages = lazy(() => import('../Projekte/Daten/Messages'))
-const CurrentIssue = lazy(() => import('../Projekte/Daten/CurrentIssue'))
-const Ap = lazy(() => import('../Projekte/Daten/Ap'))
-const Qk = lazy(() => import('../Projekte/Daten/Qk'))
 const Beobzuordnung = lazy(() => import('../Projekte/Daten/Beobzuordnung'))
-const Ekzaehleinheit = lazy(() => import('../Projekte/Daten/Ekzaehleinheit'))
-const Ekfrequenz = lazy(() => import('../Projekte/Daten/Ekfrequenz'))
-const Assozart = lazy(() => import('../Projekte/Daten/Assozart'))
-const Apart = lazy(() => import('../Projekte/Daten/Apart'))
-const Idealbiotop = lazy(() => import('../Projekte/Daten/Idealbiotop'))
-const Apber = lazy(() => import('../Projekte/Daten/Apber'))
-const ApberForApFromAp = lazy(() => import('../Print/ApberForApFromAp'))
-const Erfkrit = lazy(() => import('../Projekte/Daten/Erfkrit'))
-const Ziel = lazy(() => import('../Projekte/Daten/Ziel'))
-const Zielber = lazy(() => import('../Projekte/Daten/Zielber'))
-const Pop = lazy(() => import('../Projekte/Daten/Pop'))
-const Popmassnber = lazy(() => import('../Projekte/Daten/Popmassnber'))
-const Popber = lazy(() => import('../Projekte/Daten/Popber'))
-const Tpop = lazy(() => import('../Projekte/Daten/Tpop'))
-const AppBar = lazy(() => import('../AppBar'))
 
 // WARNING: errorElement did not work
 // import ErrorBoundary from '../shared/ErrorBoundary'
@@ -46,7 +17,7 @@ const AppBar = lazy(() => import('../AppBar'))
 const RouterComponent = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<AppBar />}>
+      <Route lazy={() => import('../AppBar')}>
         <Route index lazy={() => import('../Home')} />
         <Route path="/Daten/*" lazy={() => import('./ProtectedRoute')}>
           {/* <Route path="*" element={<Unterhalt />}></Route> */}
@@ -69,17 +40,20 @@ const RouterComponent = () => {
             />
             <Route
               path="Werte-Listen/ApberrelevantGrundWerte/:wertId"
-              element={<Werte table="tpopApberrelevantGrundWerte" />}
+              lazy={() => import('../Projekte/Daten/Werte')}
             />
             <Route
               path="Werte-Listen/EkAbrechnungstypWerte/:wertId"
-              element={<Werte table="ekAbrechnungstypWerte" />}
+              lazy={() => import('../Projekte/Daten/Werte')}
             />
             <Route
               path="Werte-Listen/TpopkontrzaehlEinheitWerte/:wertId"
-              element={<Werte table="tpopkontrzaehlEinheitWerte" />}
+              lazy={() => import('../Projekte/Daten/Werte')}
             />
-            <Route path="Mitteilungen" element={<Messages />} />
+            <Route
+              path="Mitteilungen"
+              lazy={() => import('../Projekte/Daten/Messages')}
+            />
             <Route
               path="Aktuelle-Fehler/:issueId"
               lazy={() => import('../Projekte/Daten/CurrentIssue')}
@@ -114,59 +88,59 @@ const RouterComponent = () => {
             />
             <Route
               path="Projekte/:projId/Arten/:apId/EK-Zähleinheiten/:zaehleinheitId"
-              lazy={()=>import('../Projekte/Daten/Ekzaehleinheit')}
+              lazy={() => import('../Projekte/Daten/Ekzaehleinheit')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/EK-Frequenzen/:ekfrequenzId"
-              lazy={()=>import('../Projekte/Daten/Ekfrequenz')}
+              lazy={() => import('../Projekte/Daten/Ekfrequenz')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/assoziierte-Arten/:assozartId"
-              lazy={()=>import('../Projekte/Daten/Assozart')}
+              lazy={() => import('../Projekte/Daten/Assozart')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Taxa/:taxonId"
-              lazy={()=>import('../Projekte/Daten/Apart')}
+              lazy={() => import('../Projekte/Daten/Apart')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Idealbiotop"
-              lazy={()=>import('../Projekte/Daten/Idealbiotop')}
+              lazy={() => import('../Projekte/Daten/Idealbiotop')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Berichte/:apberId"
-              lazy={()=>import('../Projekte/Daten/Apber')}
+              lazy={() => import('../Projekte/Daten/Apber')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Berichte/:apberId/print"
-              lazy={()=>import('../Print/ApberForApFromAp')}
+              lazy={() => import('../Print/ApberForApFromAp')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Erfolgskriterien/:erfkritId"
-              lazy={()=>import('../Projekte/Daten/Erfkrit')}
+              lazy={() => import('../Projekte/Daten/Erfkrit')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Ziele/:jahr/:zielId/*"
-              lazy={()=>import('../Projekte/Daten/Ziel')}
+              lazy={() => import('../Projekte/Daten/Ziel')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Ziele/:jahr/:zielId/Berichte/:zielberId"
-              lazy={()=>import('../Projekte/Daten/Zielber')}
+              lazy={() => import('../Projekte/Daten/Zielber')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/*"
-              element={<Pop />}
+              lazy={() => import('../Projekte/Daten/Pop')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Massnahmen-Berichte/:popmassnberId/*"
-              element={<Popmassnber />}
+              lazy={() => import('../Projekte/Daten/Popmassnber')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Kontroll-Berichte/:popberId/*"
-              element={<Popber />}
+              lazy={() => import('../Projekte/Daten/Popber')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/*"
-              element={<Tpop />}
+              lazy={() => import('../Projekte/Daten/Tpop')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Beobachtungen/:beobId/*"
@@ -206,7 +180,7 @@ const RouterComponent = () => {
             />
           </Route>
         </Route>
-        <Route path="/Dokumentation/*" element={<Docs />}>
+        <Route path="/Dokumentation/*" lazy={() => import('../Docs')}>
           <Route index element={null} />
           <Route
             path="was-kann-man-mit-apflora-machen"
@@ -330,9 +304,9 @@ const RouterComponent = () => {
             path="info-flora-export"
             lazy={() => import('../Docs/docs/InfofloraExport')}
           />
-          <Route path="*" element={<FourOhFour />} />
+          <Route path="*" lazy={() => import('../404')} />
         </Route>
-        <Route path="*" element={<FourOhFour />} />
+        <Route path="*" lazy={() => import('../404')} />
       </Route>,
     ),
   )

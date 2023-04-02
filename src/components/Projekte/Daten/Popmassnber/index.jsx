@@ -168,4 +168,4 @@ const Popmassnber = () => {
   )
 }
 
-export default observer(Popmassnber)
+export const Component = observer(Popmassnber)

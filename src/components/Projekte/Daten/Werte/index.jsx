@@ -4,7 +4,7 @@ import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField'
@@ -28,8 +28,17 @@ const FormContainer = styled.div`
   padding: 10px;
 `
 
-const Werte = ({ table }) => {
+const Werte = () => {
   const { wertId: id } = useParams()
+  const location = useLocation()
+  const { pathname } = location
+  const table = pathname.includes('ApberrelevantGrundWerte')
+    ? 'tpopApberrelevantGrundWerte'
+    : pathname.includes('EkAbrechnungstypWerte')
+    ? 'ekAbrechnungstypWerte'
+    : pathname.includes('TpopkontrzaehlEinheitWerte')
+    ? 'tpopkontrzaehlEinheitWerte'
+    : 'uups'
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
@@ -171,4 +180,4 @@ const Werte = ({ table }) => {
   )
 }
 
-export default observer(Werte)
+export const Component = observer(Werte)
