@@ -167,4 +167,4 @@ const Tpopkontrzaehl = () => {
   )
 }
 
-export default observer(Tpopkontrzaehl)
+export const Component = observer(Tpopkontrzaehl)

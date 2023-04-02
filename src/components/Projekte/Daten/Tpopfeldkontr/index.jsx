@@ -491,4 +491,4 @@ const Tpopfeldkontr = () => {
   )
 }
 
-export default observer(Tpopfeldkontr)
+export const Component = observer(Tpopfeldkontr)

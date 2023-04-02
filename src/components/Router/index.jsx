@@ -175,15 +175,15 @@ const RouterComponent = () => {
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Feld-Kontrollen/:tpopkontrId/*"
-              element={<Tpopfeldkontr />}
+              lazy={()=>import('../Projekte/Daten/Tpopfeldkontr')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Feld-Kontrollen/:tpopkontrId/Zaehlungen/:tpopkontrzaehlId/*"
-              element={<Tpopkontrzaehl />}
+              lazy={()=>import('../Projekte/Daten/Tpopkontrzaehl')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Massnahmen-Berichte/:tpopmassnberId/*"
-              element={<Tpopmassnber />}
+              lazy={()=>import('../Projekte/Daten/Tpopmassnber')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Massnahmen/:tpopmassnId/*"
