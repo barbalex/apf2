@@ -39,7 +39,7 @@ const StyledToolbar = styled(Toolbar)`
 const AppBarComponent = () => {
   const navigate = useNavigate()
   const { userId } = useParams()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
 
   const store = useContext(storeContext)
   const activeNodeArray = store.tree.activeNodeArray
@@ -47,7 +47,7 @@ const AppBarComponent = () => {
   useEffect(() => {
     if (isInIframe) return
 
-    navigate('/Daten/' + activeNodeArray.join('/'))
+    navigate('/Daten/' + activeNodeArray.join('/') + search)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
