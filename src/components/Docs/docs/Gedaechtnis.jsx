@@ -34,4 +34,4 @@ const Gedaechtnis = () => (
   </>
 )
 
-export default Gedaechtnis
+export const Component = Gedaechtnis

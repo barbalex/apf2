@@ -20,4 +20,4 @@ const DatenSichern = () => (
   </>
 )
 
-export default DatenSichern
+export const Component = DatenSichern

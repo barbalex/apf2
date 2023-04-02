@@ -115,4 +115,4 @@ const BeobVerwalten = () => (
   </>
 )
 
-export default BeobVerwalten
+export const Component = BeobVerwalten

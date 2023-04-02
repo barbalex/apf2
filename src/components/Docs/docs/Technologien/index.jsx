@@ -132,4 +132,4 @@ const Technologien = () => (
   </>
 )
 
-export default Technologien
+export const Component = Technologien

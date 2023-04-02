@@ -82,24 +82,6 @@ const KartePopTpopIconsLabelWaehlen = lazy(() =>
 )
 const KarteMassstab = lazy(() => import('../Docs/docs/KarteMassstab'))
 const KarteDrucken = lazy(() => import('../Docs/docs/KarteDrucken'))
-const Gedaechtnis = lazy(() => import('../Docs/docs/Gedaechtnis'))
-const Dateien = lazy(() => import('../Docs/docs/Dateien'))
-const Koordinaten = lazy(() => import('../Docs/docs/Koordinaten'))
-const Melden = lazy(() => import('../Docs/docs/Melden'))
-const Pwa = lazy(() => import('../Docs/docs/Pwa'))
-const Technologien = lazy(() => import('../Docs/docs/Technologien'))
-const BeobVerwalten = lazy(() => import('../Docs/docs/BeobVerwalten'))
-const ProdukteFuerFNS = lazy(() => import('../Docs/docs/ProdukteFuerFNS'))
-const DatenSichern = lazy(() => import('../Docs/docs/DatenSichern'))
-const DatenWiederherstellen = lazy(() =>
-  import('../Docs/docs/DatenWiederherstellen'),
-)
-const Testen = lazy(() => import('../Docs/docs/Testen'))
-const Geschichte = lazy(() => import('../Docs/docs/Geschichte'))
-const OpenSource = lazy(() => import('../Docs/docs/OpenSource'))
-const ArtTaxonomieErgaenzen = lazy(() =>
-  import('../Docs/docs/ArtTaxonomieErgaenzen'),
-)
 // WARNING: errorElement did not work
 // import ErrorBoundary from '../shared/ErrorBoundary'
 
@@ -299,23 +281,41 @@ const RouterComponent = () => {
             element={<KartePopTpopIconsLabelWaehlen />}
           />
           <Route path="karte-massstab" element={<KarteMassstab />} />
-          <Route path="karte-drucken" element={<KarteDrucken />} />
-          <Route path="gedaechtnis" element={<Gedaechtnis />} />
-          <Route path="dateien" element={<Dateien />} />
-          <Route path="koordinaten" element={<Koordinaten />} />
-          <Route path="melden" element={<Melden />} />
-          <Route path="pwa" element={<Pwa />} />
-          <Route path="technologien" element={<Technologien />} />
-          <Route path="beobachtungen-verwalten" element={<BeobVerwalten />} />
-          <Route path="produkte-fuer-die-fns" element={<ProdukteFuerFNS />} />
-          <Route path="daten-sichern" element={<DatenSichern />} />
+          <Route path="karte-drucken"  lazy={()=>import('../Docs/docs/KarteDrucken')} />
+          <Route path="gedaechtnis"  lazy={()=>import('../Docs/docs/Gedaechtnis')} />
+          <Route path="dateien"  lazy={()=>import('../Docs/docs/Dateien')} />
+          <Route path="koordinaten"  lazy={()=>import('../Docs/docs/Koordinaten')} />
+          <Route path="melden"  lazy={()=>import('../Docs/docs/Melden')} />
+          <Route path="pwa" lazy={() => import('../Docs/docs/Pwa')} />
+          <Route
+            path="technologien"
+            lazy={() => import('../Docs/docs/Technologien')}
+          />
+          <Route
+            path="beobachtungen-verwalten"
+            lazy={() => import('../Docs/docs/BeobVerwalten')}
+          />
+          <Route
+            path="produkte-fuer-die-fns"
+            lazy={() => import('../Docs/docs/ProdukteFuerFNS')}
+          />
+          <Route
+            path="daten-sichern"
+            lazy={() => import('../Docs/docs/DatenSichern')}
+          />
           <Route
             path="daten-wiederherstellen"
-            lazy={()=>import('../Docs/docs/DatenWiederherstellen')}
+            lazy={() => import('../Docs/docs/DatenWiederherstellen')}
           />
-          <Route path="testen" lazy={()=>import('../Docs/docs/Testen')} />
-          <Route path="geschichte"  lazy={()=>import('../Docs/docs/Geschichte')} />
-          <Route path="open-source" lazy={()=>import('../Docs/docs/OpenSource')} />
+          <Route path="testen" lazy={() => import('../Docs/docs/Testen')} />
+          <Route
+            path="geschichte"
+            lazy={() => import('../Docs/docs/Geschichte')}
+          />
+          <Route
+            path="open-source"
+            lazy={() => import('../Docs/docs/OpenSource')}
+          />
           <Route
             path="art-taxonomien-ergaenzen"
             lazy={() => import('../Docs/docs/ArtTaxonomieErgaenzen')}
