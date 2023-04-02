@@ -43,26 +43,7 @@ const Tpopfeldkontr = lazy(() => import('../Projekte/Daten/Tpopfeldkontr'))
 const Tpopmassnber = lazy(() => import('../Projekte/Daten/Tpopmassnber'))
 const Tpopmassn = lazy(() => import('../Projekte/Daten/Tpopmassn'))
 const Tpopkontrzaehl = lazy(() => import('../Projekte/Daten/Tpopkontrzaehl'))
-const EkfYearNavigator = lazy(() => import('./EkfYearNavigator'))
 const AppBar = lazy(() => import('../AppBar'))
-// docs:
-const WasKannApflora = lazy(() => import('../Docs/docs/WasKannApflora'))
-const TechnischeVoraussetzungen = lazy(() =>
-  import('../Docs/docs/TechnischeVoraussetzungen'),
-)
-const TippsFuerDenEinstieg = lazy(() =>
-  import('../Docs/docs/TippsFuerDenEinstieg'),
-)
-const VideosFuerDenEinstieg = lazy(() =>
-  import('../Docs/docs/VideosFuerDenEinstieg'),
-)
-const AnleitungZurEingabe = lazy(() =>
-  import('../Docs/docs/AnleitungZurEingabe'),
-)
-const IstApfloraLangsam = lazy(() => import('../Docs/docs/IstApfloraLangsam'))
-const ArtAuswertungPopMenge = lazy(() =>
-  import('../Docs/docs/ArtAuswertungPopMenge'),
-)
 
 // WARNING: errorElement did not work
 // import ErrorBoundary from '../shared/ErrorBoundary'
@@ -206,12 +187,12 @@ const RouterComponent = () => {
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Massnahmen/:tpopmassnId/*"
-              element={<Tpopmassn />}
+              lazy={()=>import('../Projekte/Daten/Tpopmassn')}
             />
-            <Route path="Benutzer/:userId/*" element={<User />} />
+            <Route path="Benutzer/:userId/*"  lazy={()=>import('../Projekte/Daten/User')} />
             <Route
               path="Benutzer/:userId/EKF/*"
-              element={<EkfYearNavigator />}
+              lazy={()=>import('./EkfYearNavigator')}
             />
           </Route>
         </Route>
@@ -219,7 +200,7 @@ const RouterComponent = () => {
           <Route index element={null} />
           <Route
             path="was-kann-man-mit-apflora-machen"
-            element={<WasKannApflora />}
+            lazy={()=>import('../Docs/docs/WasKannApflora')}
           />
           <Route
             path="technische-voraussetzungen"

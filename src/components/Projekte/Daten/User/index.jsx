@@ -485,4 +485,4 @@ const User = () => {
   )
 }
 
-export default observer(User)
+export const Component = observer(User)
