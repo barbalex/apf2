@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom'
 
 const Home = lazy(() => import('../Home'))
-const EkPlan = lazy(() => import('../EkPlan'))
+// const EkPlan = lazy(() => import('../EkPlan'))
 const FourOhFour = lazy(() => import('../404'))
 const Docs = lazy(() => import('../Docs'))
 const ProtectedRoute = lazy(() => import('./ProtectedRoute'))
@@ -119,8 +119,9 @@ const RouterComponent = () => {
           {/* <Route path="*" element={<Unterhalt />}></Route> */}
           <Route
             path="Projekte/:projId/EK-Planung"
-            element={<EkPlan />}
-            errorElement={<ErrorBoundary />}
+            // element={<EkPlan />}
+            lazy={() => import('../EkPlan')}
+            // errorElement={<ErrorBoundary />}
           />
           <Route
             path="Benutzer/:userId/EKF/:ekfYear/*"
