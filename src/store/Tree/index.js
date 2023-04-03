@@ -59,6 +59,9 @@ export default types
     toggleShowPopIcon() {
       self.showPopIcon = !self.showPopIcon
     },
+    setDoShowPopIcon() {
+      self.showPopIcon = true
+    },
     toggleShowTpopIcon() {
       self.showTpopIcon = !self.showTpopIcon
     },
