@@ -46,7 +46,6 @@ import { ReactComponent as TpopPIcon } from '../../Karte/layers/Tpop/statusGroup
 import { ReactComponent as TpopPIconHighlighted } from '../../Karte/layers/Tpop/statusGroup/pHighlighted.svg'
 import { ReactComponent as TpopQIcon } from '../../Karte/layers/Tpop/statusGroup/q.svg'
 import { ReactComponent as TpopQIconHighlighted } from '../../Karte/layers/Tpop/statusGroup/qHighlighted.svg'
-
 import { ReactComponent as PopSvg100 } from '../../Karte/layers/Pop/statusGroupSymbols/100.svg'
 import { ReactComponent as PopSvg100Highlighted } from '../../Karte/layers/Pop/statusGroupSymbols/100_highlighted.svg'
 import { ReactComponent as PopSvg101 } from '../../Karte/layers/Pop/statusGroupSymbols/101.svg'
@@ -112,6 +111,50 @@ const tpopIcons = {
     '202Highlighted': TpopSvg202Highlighted,
     300: TpopSvg300,
     '300Highlighted': TpopSvg300Highlighted,
+  },
+}
+const popIcons = {
+  normal: {
+    100: PopIcon,
+    '100Highlighted': PopIconHighlighted,
+    101: PopIcon,
+    '101Highlighted': PopIconHighlighted,
+    200: PopIcon,
+    '200Highlighted': PopIconHighlighted,
+    201: PopIcon,
+    '201Highlighted': PopIconHighlighted,
+    202: PopIcon,
+    '202Highlighted': PopIconHighlighted,
+    300: PopIcon,
+    '300Highlighted': PopIconHighlighted,
+  },
+  statusGroup: {
+    100: PopUIcon,
+    '100Highlighted': PopUIconHighlighted,
+    101: PopUIcon,
+    '101Highlighted': PopUIconHighlighted,
+    200: PopAIcon,
+    '200Highlighted': PopAIconHighlighted,
+    201: PopAIcon,
+    '201Highlighted': PopAIconHighlighted,
+    202: PopAIcon,
+    '202Highlighted': PopAIconHighlighted,
+    300: PopPIcon,
+    '300Highlighted': PopPIconHighlighted,
+  },
+  statusGroupSymbols: {
+    100: PopSvg100,
+    '100Highlighted': PopSvg100Highlighted,
+    101: PopSvg101,
+    '101Highlighted': PopSvg101Highlighted,
+    200: PopSvg200,
+    '200Highlighted': PopSvg200Highlighted,
+    201: PopSvg201,
+    '201Highlighted': PopSvg201Highlighted,
+    202: PopSvg202,
+    '202Highlighted': PopSvg202Highlighted,
+    300: PopSvg300,
+    '300Highlighted': PopSvg300Highlighted,
   },
 }
 
@@ -226,11 +269,6 @@ const BeobNichtZuzuordnenMapIcon = styled(StyledMapIcon)`
 const BeobZugeordnetMapIcon = styled(StyledMapIcon)`
   color: #ff00ff !important;
 `
-const PopFilteredMapIcon = styled(PopMapIcon)`
-  paint-order: stroke;
-  stroke-width: 8px;
-  stroke: #fff900;
-`
 const BeobNichtBeurteiltFilteredMapIcon = styled(BeobNichtBeurteiltMapIcon)`
   paint-order: stroke;
   stroke-width: 8px;
@@ -300,7 +338,7 @@ const Row = ({ node }) => {
   } = store
   const tree = store.tree
   const { openNodes, nodeLabelFilter, activeNodeArray } = tree
-  const { tpopIcon: tpopIconName } = map
+  const { tpopIcon: tpopIconName, popIcon: popIconName } = map
   const activeId = activeNodeArray[activeNodeArray.length - 1]
   const nodeIsActive = node.id === activeId
 
@@ -369,15 +407,25 @@ const Row = ({ node }) => {
   )
   const karteIsVisible = projekteTabs.includes('karte')
 
-  const iconIsHighlighted =
+  const tpopIconIsHighlighted =
     karteIsVisible && activeApfloraLayers.includes('tpop') && nodeIsActive
   const TpopIcon = node.status
-    ? iconIsHighlighted
+    ? tpopIconIsHighlighted
       ? tpopIcons[tpopIconName][node.status + 'Highlighted']
       : tpopIcons[tpopIconName][node.status]
-    : iconIsHighlighted
+    : tpopIconIsHighlighted
     ? TpopQIconHighlighted
     : TpopQIcon
+
+  const popIconIsHighlighted =
+    karteIsVisible && activeApfloraLayers.includes('pop') && nodeIsActive
+  const PopIcon = node.status
+    ? popIconIsHighlighted
+      ? popIcons[popIconName][node.status + 'Highlighted']
+      : popIcons[popIconName][node.status]
+    : popIconIsHighlighted
+    ? PopQIconHighlighted
+    : PopQIcon
 
   // console.log('Row, node:', node)
 
@@ -425,6 +473,11 @@ const Row = ({ node }) => {
             <StyledRemoveIcon />
           </SymbolDiv>
         )}
+        {node.menuType === 'pop' && node.status && (
+          <IconContainer>
+            <PopIcon />
+          </IconContainer>
+        )}
         {node.menuType === 'tpop' && node.status && (
           <IconContainer>
             <TpopIcon />
@@ -465,20 +518,6 @@ const Row = ({ node }) => {
               activeApfloraLayers.includes('beobZugeordnet') && (
                 <div title="in Karte sichtbar">
                   <BeobZugeordnetMapIcon />
-                </div>
-              )}
-            {node.menuType === 'pop' &&
-              activeApfloraLayers.includes('pop') &&
-              !nodeIsActive && (
-                <div title="in Karte sichtbar">
-                  <PopMapIcon />
-                </div>
-              )}
-            {node.menuType === 'pop' &&
-              activeApfloraLayers.includes('pop') &&
-              nodeIsActive && (
-                <div title="in Karte hervorgehoben">
-                  <PopFilteredMapIcon />
                 </div>
               )}
             {node.menuType === 'beobNichtBeurteilt' &&

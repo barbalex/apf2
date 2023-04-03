@@ -25,6 +25,7 @@ const Pop = ({ projekt, ap }) => {
                 nodes {
                   id
                   label
+                  status
                 }
               }
             }
@@ -49,6 +50,7 @@ const Pop = ({ projekt, ap }) => {
       parentTableId: ap.id,
       urlLabel: el.id,
       label: el.label,
+      status: el.status,
       url: ['Projekte', projekt.id, 'Arten', ap.id, 'Populationen', el.id],
       hasChildren: true,
     }
