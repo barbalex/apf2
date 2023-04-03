@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { MdLocalFlorist } from 'react-icons/md'
+import { FaCheck } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { observer } from 'mobx-react-lite'
-import { FaCheck } from 'react-icons/fa'
 
 import storeContext from '../../../../../../storeContext'
 
@@ -40,12 +40,14 @@ const TpopIcon = () => {
   const store = useContext(storeContext)
   const { map } = store
   const { tpopIcon, setTpopIcon, tpopLabel, setTpopLabel } = map
+
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickIconContainer = useCallback(
     (e) => setAnchorEl(e.currentTarget),
     [],
   )
   const onClose = useCallback(() => setAnchorEl(null), [])
+
   const onClickAllSame = useCallback(() => {
     setTpopIcon('normal')
     onClose()
@@ -74,11 +76,11 @@ const TpopIcon = () => {
   return (
     <>
       <IconContainer
-        aria-label="Mehr"
+        aria-label="Symbole und Beschriftung wählen"
         aria-owns={anchorEl ? 'menu' : null}
         aria-haspopup="true"
         onClick={onClickIconContainer}
-        title="Symbole und Label wählen"
+        title="Symbole und Beschriftung wählen"
       >
         <MapIcon id="TpopMapIcon" />
       </IconContainer>

@@ -52,8 +52,22 @@ export default types
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     mapFilter: types.maybe(Geojson),
     refetcher: types.optional(types.number, 0),
+    showPopIcon: types.optional(types.boolean, true),
+    showTpopIcon: types.optional(types.boolean, true),
   })
   .actions((self) => ({
+    toggleShowPopIcon() {
+      self.showPopIcon = !self.showPopIcon
+    },
+    setDoShowPopIcon() {
+      self.showPopIcon = true
+    },
+    toggleShowTpopIcon() {
+      self.showTpopIcon = !self.showTpopIcon
+    },
+    setDoShowTpopIcon() {
+      self.showTpopIcon = true
+    },
     dataFilterEmptyTable({ table }) {
       self.dataFilter[table] = initialDataFilterValues[table]
     },
