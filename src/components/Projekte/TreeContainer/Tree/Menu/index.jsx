@@ -35,8 +35,9 @@ const StyledFaCog = styled(FaCog)`
 
 const TreeMenu = () => {
   const store = useContext(storeContext)
-  const { map } = store
+  const { map, tree } = store
   const { tpopIcon, setTpopIcon } = map
+  const { showTpopIcon, toggleShowTpopIcon, setDoShowTpopIcon } = tree
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickConfig = useCallback(
@@ -47,16 +48,23 @@ const TreeMenu = () => {
 
   const onClickAllSame = useCallback(() => {
     setTpopIcon('normal')
+    setDoShowTpopIcon()
     onClose()
-  }, [onClose, setTpopIcon])
+  }, [onClose, setDoShowTpopIcon, setTpopIcon])
   const onClickByStatusGroup = useCallback(() => {
     setTpopIcon('statusGroup')
+    setDoShowTpopIcon()
     onClose()
-  }, [onClose, setTpopIcon])
+  }, [onClose, setDoShowTpopIcon, setTpopIcon])
   const onClickByStatusGroupSymbols = useCallback(() => {
     setTpopIcon('statusGroupSymbols')
+    setDoShowTpopIcon()
     onClose()
-  }, [onClose, setTpopIcon])
+  }, [onClose, setDoShowTpopIcon, setTpopIcon])
+  const onClickNoSymbols = useCallback(() => {
+    toggleShowTpopIcon()
+    onClose()
+  }, [onClose, toggleShowTpopIcon])
 
   return (
     <Container>
@@ -77,16 +85,20 @@ const TreeMenu = () => {
       >
         <MenuTitle>Symbole für Teil-Populationen:</MenuTitle>
         <StyledMenuItem onClick={onClickAllSame}>
-          {tpopIcon === 'normal' && <CheckIcon />}
+          {showTpopIcon && tpopIcon === 'normal' && <CheckIcon />}
           {`alle gleich (Blume)`}
         </StyledMenuItem>
         <StyledMenuItem onClick={onClickByStatusGroup}>
-          {tpopIcon === 'statusGroup' && <CheckIcon />}
+          {showTpopIcon && tpopIcon === 'statusGroup' && <CheckIcon />}
           {`nach Status, mit Buchstaben`}
         </StyledMenuItem>
         <StyledMenuItem onClick={onClickByStatusGroupSymbols}>
-          {tpopIcon === 'statusGroupSymbols' && <CheckIcon />}
+          {showTpopIcon && tpopIcon === 'statusGroupSymbols' && <CheckIcon />}
           {`nach Status, mit Symbolen`}
+        </StyledMenuItem>
+        <StyledMenuItem onClick={onClickNoSymbols}>
+          {!showTpopIcon && <CheckIcon />}
+          {`keine`}
         </StyledMenuItem>
       </Menu>
     </Container>

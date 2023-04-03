@@ -337,7 +337,13 @@ const Row = ({ node }) => {
     map,
   } = store
   const tree = store.tree
-  const { openNodes, nodeLabelFilter, activeNodeArray } = tree
+  const {
+    openNodes,
+    nodeLabelFilter,
+    activeNodeArray,
+    showTpopIcon,
+    showPopIcon,
+  } = tree
   const { tpopIcon: tpopIconName, popIcon: popIconName } = map
   const activeId = activeNodeArray[activeNodeArray.length - 1]
   const nodeIsActive = node.id === activeId
@@ -473,12 +479,12 @@ const Row = ({ node }) => {
             <StyledRemoveIcon />
           </SymbolDiv>
         )}
-        {node.menuType === 'pop' && node.status && (
+        {node.menuType === 'pop' && node.status && showPopIcon && (
           <IconContainer>
             <PopIcon />
           </IconContainer>
         )}
-        {node.menuType === 'tpop' && node.status && (
+        {node.menuType === 'tpop' && node.status && showTpopIcon && (
           <IconContainer>
             <TpopIcon />
           </IconContainer>

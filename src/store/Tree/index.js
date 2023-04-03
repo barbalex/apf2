@@ -62,6 +62,9 @@ export default types
     toggleShowTpopIcon() {
       self.showTpopIcon = !self.showTpopIcon
     },
+    setDoShowTpopIcon() {
+      self.showTpopIcon = true
+    },
     dataFilterEmptyTable({ table }) {
       self.dataFilter[table] = initialDataFilterValues[table]
     },
