@@ -1,0 +1,1 @@
+Ab Version 1.85.0: Bei den Teil-Populationen im Navigationsbaum neue Symbole. Dieselben, die man im Layertool der Karte wählen kann. Und wie dort kann man zwischen drei Varianten wählen. Neues Menu oben rechts im Navigationsbaum, um die Darstellung zu wählen. Die Darstllung im Navigationsbaum und in der Karte ist immer gleich
