@@ -47,4 +47,4 @@ const ApberForApFromAp = () => {
   )
 }
 
-export default observer(ApberForApFromAp)
+export const Component = observer(ApberForApFromAp)

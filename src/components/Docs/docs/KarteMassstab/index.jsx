@@ -59,4 +59,4 @@ const KarteMassstab = () => (
   </>
 )
 
-export default KarteMassstab
+export const Component = KarteMassstab

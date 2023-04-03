@@ -91,4 +91,4 @@ const ApberForYearContainer = () => {
   )
 }
 
-export default observer(ApberForYearContainer)
+export const Component = observer(ApberForYearContainer)

@@ -174,4 +174,4 @@ const Assozart = () => {
   )
 }
 
-export default observer(Assozart)
+export const Component = observer(Assozart)

@@ -36,4 +36,4 @@ const KarteDrucken = () => (
   </>
 )
 
-export default KarteDrucken
+export const Component = KarteDrucken

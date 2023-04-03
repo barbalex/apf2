@@ -107,4 +107,4 @@ const QkForm = () => {
   )
 }
 
-export default QkForm
+export const Component = QkForm

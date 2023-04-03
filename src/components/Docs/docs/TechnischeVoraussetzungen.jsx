@@ -42,4 +42,4 @@ const TechnischeVoraussetzungen = () => (
   </>
 )
 
-export default TechnischeVoraussetzungen
+export const Component = TechnischeVoraussetzungen

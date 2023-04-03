@@ -172,4 +172,4 @@ const Tpopber = () => {
   )
 }
 
-export default observer(Tpopber)
+export const Component = observer(Tpopber)

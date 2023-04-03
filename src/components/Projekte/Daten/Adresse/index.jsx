@@ -163,4 +163,4 @@ const Adresse = () => {
   )
 }
 
-export default observer(Adresse)
+export const Component = observer(Adresse)

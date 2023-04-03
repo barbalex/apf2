@@ -78,4 +78,4 @@ const Dateien = () => (
   </>
 )
 
-export default Dateien
+export const Component = Dateien

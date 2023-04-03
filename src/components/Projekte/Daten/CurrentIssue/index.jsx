@@ -74,4 +74,4 @@ const CurrentIssue = () => {
   )
 }
 
-export default CurrentIssue
+export const Component = CurrentIssue

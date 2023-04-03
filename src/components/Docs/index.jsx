@@ -86,4 +86,4 @@ const Docs = () => (
   </ErrorBoundary>
 )
 
-export default Docs
+export const Component = Docs

@@ -47,4 +47,4 @@ const Melden = () => (
   </>
 )
 
-export default Melden
+export const Component = Melden

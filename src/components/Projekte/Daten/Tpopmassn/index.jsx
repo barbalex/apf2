@@ -581,4 +581,4 @@ const Tpopmassn = ({ showFilter = false }) => {
   )
 }
 
-export default observer(Tpopmassn)
+export const Component = observer(Tpopmassn)

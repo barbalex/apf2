@@ -249,4 +249,4 @@ const Ekfrequenz = () => {
   )
 }
 
-export default observer(Ekfrequenz)
+export const Component = observer(Ekfrequenz)

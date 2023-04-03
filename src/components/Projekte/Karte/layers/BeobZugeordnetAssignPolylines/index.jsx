@@ -33,7 +33,7 @@ const BeobZugeordnetAssignPolylines = () => {
   const { enqueNotification } = store
   const { beobGqlFilter } = store.tree
 
-  var { data, error } = useQuery(query, {
+  const { data, error } = useQuery(query, {
     variables: { beobFilter: beobGqlFilter('zugeordnet').filtered },
   })
 

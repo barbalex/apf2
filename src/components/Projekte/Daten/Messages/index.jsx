@@ -93,4 +93,4 @@ const Messages = () => {
   )
 }
 
-export default Messages
+export const Component = Messages

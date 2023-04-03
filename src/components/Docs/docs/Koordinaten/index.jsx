@@ -70,4 +70,4 @@ const Koordinaten = () => (
   </>
 )
 
-export default Koordinaten
+export const Component = Koordinaten

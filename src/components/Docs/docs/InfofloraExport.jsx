@@ -233,4 +233,4 @@ const InfoFloraExport = () => (
   </>
 )
 
-export default InfoFloraExport
+export const Component = InfoFloraExport

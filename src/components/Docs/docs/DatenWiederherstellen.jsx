@@ -55,4 +55,4 @@ const DatenWiederherstellen = () => (
   </>
 )
 
-export default DatenWiederherstellen
+export const Component = DatenWiederherstellen

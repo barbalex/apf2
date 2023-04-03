@@ -124,9 +124,16 @@ const nichtZuordnenPopover = (
   </PopoverContainer>
 )
 
-const Beobzuordnung = ({ type }) => {
+const Beobzuordnung = () => {
   const { beobId: id, apId } = useParams()
-  const { search } = useLocation()
+  const { search, pathname } = useLocation()
+  const type = pathname.includes('nicht-zuzuordnende-Beobachtungen')
+    ? 'nichtZuzuordnen'
+    : pathname.includes('nicht-beurteilte-Beobachtungen')
+    ? 'nichtBeurteilt'
+    : pathname.includes('Beobachtungen')
+    ? 'zugeordnet'
+    : 'uups'
 
   const client = useApolloClient()
   const store = useContext(storeContext)
@@ -405,4 +412,4 @@ const Beobzuordnung = ({ type }) => {
   )
 }
 
-export default observer(Beobzuordnung)
+export const Component = observer(Beobzuordnung)

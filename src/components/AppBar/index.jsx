@@ -1,13 +1,15 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import { Outlet, useLocation, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useParams, useNavigate } from 'react-router-dom'
+import { observer } from 'mobx-react-lite'
 
 import Bar from './Bar'
 import EkfBar from './EkfBar'
 import inIframe from '../../modules/inIframe'
 import Spinner from '../shared/Spinner'
+import storeContext from '../../storeContext'
 
 const isInIframe = inIframe()
 
@@ -35,8 +37,19 @@ const StyledToolbar = styled(Toolbar)`
 `
 
 const AppBarComponent = () => {
+  const navigate = useNavigate()
   const { userId } = useParams()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
+
+  const store = useContext(storeContext)
+  const activeNodeArray = store.tree.activeNodeArray
+
+  useEffect(() => {
+    if (isInIframe) return
+
+    navigate('/Daten/' + activeNodeArray.join('/') + search)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (isInIframe) return <Outlet />
 
@@ -55,4 +68,4 @@ const AppBarComponent = () => {
   )
 }
 
-export default AppBarComponent
+export const Component = observer(AppBarComponent)

@@ -163,4 +163,4 @@ const Tpopmassnber = () => {
   )
 }
 
-export default observer(Tpopmassnber)
+export const Component = observer(Tpopmassnber)

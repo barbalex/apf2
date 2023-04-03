@@ -164,4 +164,4 @@ const Popber = () => {
   )
 }
 
-export default observer(Popber)
+export const Component = observer(Popber)

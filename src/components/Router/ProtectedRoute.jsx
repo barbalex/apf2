@@ -84,4 +84,4 @@ const ProtectedRoute = () => {
   )
 }
 
-export default observer(ProtectedRoute)
+export const Component = observer(ProtectedRoute)

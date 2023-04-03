@@ -182,4 +182,4 @@ const Ziel = () => {
   )
 }
 
-export default observer(Ziel)
+export const Component = observer(Ziel)
