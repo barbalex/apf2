@@ -1,0 +1,1 @@
+Ab Version 1.86.0: In der Karte kann man für Populationen dieselben Symbole wählen, wie für Teil-Populationen (braun statt grün). Im Navigationsbaum werden bei Populationen dieselben Symbole angezeigt. Im Navigationsbaum kann man für Populationen und Teil-Populationen wählen, keine Symbole anzuzeigen
