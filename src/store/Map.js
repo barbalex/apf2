@@ -25,8 +25,8 @@ export default types
   }))
 
 export const defaultValue = {
-  popIcon: 'normal',
-  tpopIcon: 'normal',
+  popIcon: 'statusGroupSymbols',
+  tpopIcon: 'statusGroupSymbols',
   popLabel: 'nr',
   tpopLabel: 'nr',
 }

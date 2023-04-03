@@ -1,0 +1,96 @@
+import { useState, useCallback, useContext } from 'react'
+import { FaCog, FaCheck } from 'react-icons/fa'
+import styled from '@emotion/styled'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import { observer } from 'mobx-react-lite'
+
+import storeContext from '../../../../../storeContext'
+
+const Container = styled.div`
+  position: absolute;
+  top: -2px;
+  right: 6px;
+`
+const MenuTitle = styled.div`
+  font-size: 14px !important;
+  padding: 2px 14px;
+  font-weight: 700;
+  &:focus {
+    outline: none;
+  }
+`
+const StyledMenuItem = styled(MenuItem)`
+  font-size: 14px !important;
+  padding: 5px 14px 5px 15px !important;
+`
+const CheckIcon = styled(FaCheck)`
+  padding-right: 5px;
+  color: #2e7d32;
+`
+const StyledFaCog = styled(FaCog)`
+  color: #2e7d32;
+`
+
+const TreeMenu = () => {
+  const store = useContext(storeContext)
+  const { map } = store
+  const { tpopIcon, setTpopIcon } = map
+
+  const [anchorEl, setAnchorEl] = useState(null)
+  const onClickConfig = useCallback(
+    (event) => setAnchorEl(event.currentTarget),
+    [],
+  )
+  const onClose = useCallback(() => setAnchorEl(null), [])
+
+  const onClickAllSame = useCallback(() => {
+    setTpopIcon('normal')
+    onClose()
+  }, [onClose, setTpopIcon])
+  const onClickByStatusGroup = useCallback(() => {
+    setTpopIcon('statusGroup')
+    onClose()
+  }, [onClose, setTpopIcon])
+  const onClickByStatusGroupSymbols = useCallback(() => {
+    setTpopIcon('statusGroupSymbols')
+    onClose()
+  }, [onClose, setTpopIcon])
+
+  return (
+    <Container>
+      <IconButton
+        size="small"
+        title="Einstellungen"
+        aria-label="Optionen wählen"
+        aria-owns={anchorEl ? 'menu' : null}
+        onClick={onClickConfig}
+      >
+        <StyledFaCog />
+      </IconButton>
+      <Menu
+        id="menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={onClose}
+      >
+        <MenuTitle>Symbole für Teil-Populationen:</MenuTitle>
+        <StyledMenuItem onClick={onClickAllSame}>
+          {tpopIcon === 'normal' && <CheckIcon />}
+          {`alle gleich (Blume)`}
+        </StyledMenuItem>
+        <StyledMenuItem onClick={onClickByStatusGroup}>
+          {tpopIcon === 'statusGroup' && <CheckIcon />}
+          {`nach Status, mit Buchstaben`}
+        </StyledMenuItem>
+        <StyledMenuItem onClick={onClickByStatusGroupSymbols}>
+          {tpopIcon === 'statusGroupSymbols' && <CheckIcon />}
+          {`nach Status, mit Symbolen`}
+        </StyledMenuItem>
+      </Menu>
+    </Container>
+  )
+}
+
+export default observer(TreeMenu)
