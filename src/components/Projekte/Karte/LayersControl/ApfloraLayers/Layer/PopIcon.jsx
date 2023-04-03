@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { MdLocalFlorist } from 'react-icons/md'
+import { FaCheck } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { observer } from 'mobx-react-lite'
@@ -31,23 +32,32 @@ const StyledMenuItem = styled(MenuItem)`
   font-size: 14px !important;
   padding: 5px 14px !important;
 `
+const CheckIcon = styled(FaCheck)`
+  padding-right: 5px;
+`
 
 const PopIcon = () => {
   const store = useContext(storeContext)
   const { map } = store
-  const { setPopIcon, setPopLabel } = map
+  const { popIcon, setPopIcon, setPopLabel, popLabel } = map
+
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickIconContainer = useCallback(
     (e) => setAnchorEl(e.currentTarget),
     [],
   )
   const onClose = useCallback(() => setAnchorEl(null), [])
+
   const onClickAllSame = useCallback(() => {
     setPopIcon('normal')
     onClose()
   }, [onClose, setPopIcon])
   const onClickByStatusGroup = useCallback(() => {
     setPopIcon('statusGroup')
+    onClose()
+  }, [onClose, setPopIcon])
+  const onClickByStatusGroupSymbols = useCallback(() => {
+    setPopIcon('statusGroupSymbols')
     onClose()
   }, [onClose, setPopIcon])
   const onClickPopTpopNr = useCallback(() => {
@@ -58,15 +68,19 @@ const PopIcon = () => {
     setPopLabel('name')
     onClose()
   }, [onClose, setPopLabel])
+  const onClickNoLabel = useCallback(() => {
+    setPopLabel('none')
+    onClose()
+  }, [onClose, setPopLabel])
 
   return (
     <>
       <IconContainer
-        aria-label="Mehr"
+        aria-label="Symbole und Beschriftung wählen"
         aria-owns={anchorEl ? 'menu' : null}
         aria-haspopup="true"
         onClick={onClickIconContainer}
-        title="Symbole und Label wählen"
+        title="Symbole und Beschriftung wählen"
       >
         <MapIcon id="PopMapIcon" />
       </IconContainer>
@@ -77,13 +91,32 @@ const PopIcon = () => {
         onClose={onClose}
       >
         <MenuTitle>Symbole wählen:</MenuTitle>
-        <StyledMenuItem onClick={onClickAllSame}>alle gleich</StyledMenuItem>
+        <StyledMenuItem onClick={onClickAllSame}>
+          {popIcon === 'normal' && <CheckIcon />}
+          {'alle gleich (Blume)'}
+        </StyledMenuItem>
         <StyledMenuItem onClick={onClickByStatusGroup}>
-          angesiedelt / ursprünglich / potentiell
+          {popIcon === 'statusGroup' && <CheckIcon />}
+          {`nach Status, mit Buchstaben`}
+        </StyledMenuItem>
+        <StyledMenuItem onClick={onClickByStatusGroupSymbols}>
+          {popIcon === 'statusGroupSymbols' && <CheckIcon />}
+          {`nach Status, mit Symbolen`}
         </StyledMenuItem>
         <MenuTitle>Beschriftung wählen:</MenuTitle>
-        <StyledMenuItem onClick={onClickPopTpopNr}>Nr.</StyledMenuItem>
-        <StyledMenuItem onClick={onClickFlurname}>Name</StyledMenuItem>
+        <StyledMenuItem onClick={onClickPopTpopNr}>
+          {popLabel === 'nr' && <CheckIcon />}
+          {'Nr.'}
+        </StyledMenuItem>
+        <StyledMenuItem onClick={onClickFlurname}>
+          {popLabel === 'name' && <CheckIcon />}
+          {'Name'}
+        </StyledMenuItem>
+        {/* TODO: add none to Markers */}
+        <StyledMenuItem onClick={onClickNoLabel}>
+          {popLabel === 'none' && <CheckIcon />}
+          {`keine`}
+        </StyledMenuItem>
       </Menu>
     </>
   )
