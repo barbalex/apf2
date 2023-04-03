@@ -28,4 +28,4 @@ const VideosFuerDenEinstieg = () => (
   </>
 )
 
-export default VideosFuerDenEinstieg
+export const Component = VideosFuerDenEinstieg

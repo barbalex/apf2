@@ -243,4 +243,4 @@ const WasKannApflora = () => (
   </>
 )
 
-export default WasKannApflora
+export const Component = WasKannApflora

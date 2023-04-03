@@ -93,3 +93,7 @@ const EkPlan = () => {
 }
 
 export default observer(EkPlan)
+
+export const Component = observer(EkPlan)
+
+export const errorElement = ErrorBoundary

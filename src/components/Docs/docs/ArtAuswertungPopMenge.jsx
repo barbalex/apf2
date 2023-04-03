@@ -66,4 +66,4 @@ const ArtAuswertungPopMenge = () => (
   </>
 )
 
-export default ArtAuswertungPopMenge
+export const Component = ArtAuswertungPopMenge

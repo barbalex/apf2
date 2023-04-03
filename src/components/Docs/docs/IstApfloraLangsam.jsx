@@ -122,4 +122,4 @@ const IstApfloraLangsam = () => (
   </>
 )
 
-export default IstApfloraLangsam
+export const Component = IstApfloraLangsam

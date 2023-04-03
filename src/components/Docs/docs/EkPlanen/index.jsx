@@ -376,4 +376,4 @@ const EkPlanen = () => (
   </>
 )
 
-export default EkPlanen
+export const Component = EkPlanen

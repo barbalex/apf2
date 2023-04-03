@@ -259,4 +259,4 @@ const Apber = () => {
   )
 }
 
-export default observer(Apber)
+export const Component = observer(Apber)

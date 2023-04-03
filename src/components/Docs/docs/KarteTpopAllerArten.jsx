@@ -33,4 +33,4 @@ const KarteTpopAllerArten = () => (
   </>
 )
 
-export default KarteTpopAllerArten
+export const Component = KarteTpopAllerArten

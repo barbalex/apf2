@@ -354,4 +354,4 @@ const Idealbiotop = () => {
   )
 }
 
-export default observer(Idealbiotop)
+export const Component = observer(Idealbiotop)

@@ -71,4 +71,4 @@ const PWA = () => (
   </>
 )
 
-export default PWA
+export const Component = PWA

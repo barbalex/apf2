@@ -216,4 +216,4 @@ const Home = () => (
   </OuterContainer>
 )
 
-export default Home
+export const Component = Home

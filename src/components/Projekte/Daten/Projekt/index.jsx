@@ -129,4 +129,4 @@ const Projekt = () => {
   )
 }
 
-export default observer(Projekt)
+export const Component = observer(Projekt)

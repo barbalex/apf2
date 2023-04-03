@@ -100,4 +100,4 @@ const Testen = () => (
   </>
 )
 
-export default Testen
+export const Component = Testen

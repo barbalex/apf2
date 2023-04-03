@@ -62,4 +62,4 @@ const ApTabs = () => {
   )
 }
 
-export default ApTabs
+export const Component = ApTabs

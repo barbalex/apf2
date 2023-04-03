@@ -78,4 +78,4 @@ const ArtTaxonomieErgaenzen = () => (
   </>
 )
 
-export default ArtTaxonomieErgaenzen
+export const Component = ArtTaxonomieErgaenzen

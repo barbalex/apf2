@@ -77,4 +77,4 @@ const Geschichte = () => (
   </>
 )
 
-export default Geschichte
+export const Component = Geschichte

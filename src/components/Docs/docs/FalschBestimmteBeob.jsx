@@ -39,4 +39,4 @@ const FalschBestimmteBeob = () => (
   </>
 )
 
-export default FalschBestimmteBeob
+export const Component = FalschBestimmteBeob

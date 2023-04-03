@@ -274,4 +274,4 @@ const Apberuebersicht = () => {
   )
 }
 
-export default observer(Apberuebersicht)
+export const Component = observer(Apberuebersicht)

@@ -8,4 +8,4 @@ const EkfYearNavigator = () => {
   return <Navigate to={`${ekfRefYear.toString()}${search}`} />
 }
 
-export default EkfYearNavigator
+export const Component = EkfYearNavigator

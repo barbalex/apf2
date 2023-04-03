@@ -159,4 +159,4 @@ const Ekf = () => (
   </>
 )
 
-export default Ekf
+export const Component = Ekf

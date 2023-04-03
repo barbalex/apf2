@@ -259,4 +259,4 @@ const Filter = () => (
   </>
 )
 
-export default Filter
+export const Component = Filter

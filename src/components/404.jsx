@@ -139,4 +139,4 @@ const FourOhFour = () => {
   )
 }
 
-export default FourOhFour
+export const Component = FourOhFour

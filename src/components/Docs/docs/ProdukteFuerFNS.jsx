@@ -28,4 +28,4 @@ const ProdukteFuerFNS = () => (
   </>
 )
 
-export default ProdukteFuerFNS
+export const Component = ProdukteFuerFNS

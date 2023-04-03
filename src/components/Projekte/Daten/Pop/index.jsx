@@ -230,4 +230,4 @@ const Pop = () => {
   )
 }
 
-export default observer(Pop)
+export const Component = observer(Pop)
