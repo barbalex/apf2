@@ -16,7 +16,6 @@ import pIcon from './statusGroup/p.svg'
 import pIconHighlighted from './statusGroup/pHighlighted.svg'
 import qIcon from './statusGroup/q.svg'
 import qIconHighlighted from './statusGroup/qHighlighted.svg'
-import appBaseUrl from '../../../../../modules/appBaseUrl'
 import svg100 from './statusGroupSymbols/100.svg'
 import svg100Highlighted from './statusGroupSymbols/100_highlighted.svg'
 import svg101 from './statusGroupSymbols/101.svg'
@@ -31,6 +30,7 @@ import svg300 from './statusGroupSymbols/300.svg'
 import svg300Highlighted from './statusGroupSymbols/300_highlighted.svg'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
+import appBaseUrl from '../../../../../modules/appBaseUrl'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -135,7 +135,6 @@ const TpopMarker = ({ tpop }) => {
   const icon = window.L.icon({
     iconUrl,
     iconSize: [24, 24],
-    isHighlighted,
   })
   let title = nrLabel
   if (tpopLabelName === 'name') title = tpop.flurname

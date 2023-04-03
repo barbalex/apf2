@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useMemo } from 'react'
 import { Marker, Tooltip, Popup } from 'react-leaflet'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -9,14 +9,26 @@ import storeContext from '../../../../../storeContext'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import popIcon from './pop.svg'
 import popIconHighlighted from './popHighlighted.svg'
-import uIcon from './u.svg'
-import uIconHighlighted from './uHighlighted.svg'
-import aIcon from './a.svg'
-import aIconHighlighted from './aHighlighted.svg'
-import pIcon from './p.svg'
-import pIconHighlighted from './pHighlighted.svg'
-import qIcon from './q.svg'
-import qIconHighlighted from './qHighlighted.svg'
+import uIcon from './statusGroup/u.svg'
+import uIconHighlighted from './statusGroup/uHighlighted.svg'
+import aIcon from './statusGroup/a.svg'
+import aIconHighlighted from './statusGroup/aHighlighted.svg'
+import pIcon from './statusGroup/p.svg'
+import pIconHighlighted from './statusGroup/pHighlighted.svg'
+import qIcon from './statusGroup/q.svg'
+import qIconHighlighted from './statusGroup/qHighlighted.svg'
+import svg100 from './statusGroupSymbols/100.svg'
+import svg100Highlighted from './statusGroupSymbols/100_highlighted.svg'
+import svg101 from './statusGroupSymbols/101.svg'
+import svg101Highlighted from './statusGroupSymbols/101_highlighted.svg'
+import svg200 from './statusGroupSymbols/200.svg'
+import svg200Highlighted from './statusGroupSymbols/200_highlighted.svg'
+import svg201 from './statusGroupSymbols/201.svg'
+import svg201Highlighted from './statusGroupSymbols/201_highlighted.svg'
+import svg202 from './statusGroupSymbols/202.svg'
+import svg202Highlighted from './statusGroupSymbols/202_highlighted.svg'
+import svg300 from './statusGroupSymbols/300.svg'
+import svg300Highlighted from './statusGroupSymbols/300_highlighted.svg'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 
@@ -40,31 +52,45 @@ const PopMarker = ({ pop }) => {
   const { apfloraLayers, openTree2WithActiveNodeArray, map } = store
   const { popIcon: popIconName, popLabel: popLabelName } = map
 
-  const nrLabel = pop.nr ? pop.nr.toString() : '(keine Nr)'
+  const nrLabel = pop?.nr?.toString?.() ?? '(keine Nr)'
   let title = nrLabel
   if (popLabelName === 'name') title = pop?.name ?? '(kein Name)'
+  if (popLabelName === 'none') title = ''
   // beware: leaflet needs title to always be a string
   if (title && title.toString) {
     title = title.toString()
   }
   const isHighlighted = popId === pop.id
 
-  let iconUrl = popIcon
-  if (isHighlighted) iconUrl = popIconHighlighted
-  if (popIconName === 'statusGroup') {
-    iconUrl = qIcon
-    if (isHighlighted) iconUrl = qIconHighlighted
-    if (pop.status === 300) {
-      iconUrl = pIcon
-      if (isHighlighted) iconUrl = pIconHighlighted
-    } else if (pop.status >= 200) {
-      iconUrl = aIcon
-      if (isHighlighted) iconUrl = aIconHighlighted
-    } else if (pop.status >= 100) {
-      iconUrl = uIcon
-      if (isHighlighted) iconUrl = uIconHighlighted
+  const iconUrl = useMemo(() => {
+    let iconUrl = isHighlighted ? popIconHighlighted : popIcon
+    if (popIconName === 'statusGroup') {
+      iconUrl = isHighlighted ? qIconHighlighted : qIcon
+      if (pop.status === 300) {
+        iconUrl = isHighlighted ? pIconHighlighted : pIcon
+      } else if (pop.status >= 200) {
+        iconUrl = isHighlighted ? aIconHighlighted : aIcon
+      } else if (pop.status >= 100) {
+        iconUrl = isHighlighted ? uIconHighlighted : uIcon
+      }
+    } else if (popIconName === 'statusGroupSymbols') {
+      iconUrl = isHighlighted ? svg100Highlighted : svg100
+      if (pop.status === 100) {
+        iconUrl = isHighlighted ? svg100Highlighted : svg100
+      } else if (pop.status === 101) {
+        iconUrl = isHighlighted ? svg101Highlighted : svg101
+      } else if (pop.status === 200) {
+        iconUrl = isHighlighted ? svg200Highlighted : svg200
+      } else if (pop.status === 201) {
+        iconUrl = isHighlighted ? svg201Highlighted : svg201
+      } else if (pop.status === 202) {
+        iconUrl = isHighlighted ? svg202Highlighted : svg202
+      } else if (pop.status === 300) {
+        iconUrl = isHighlighted ? svg300Highlighted : svg300
+      }
     }
-  }
+    return iconUrl
+  }, [isHighlighted, pop.status, popIconName])
 
   const [projekteTabs, setProjekteTabs] = useSearchParamsState(
     'projekteTabs',
@@ -108,7 +134,6 @@ const PopMarker = ({ pop }) => {
   const icon = window.L.icon({
     iconUrl,
     iconSize: [24, 24],
-    className: isHighlighted ? 'popIconHighlighted' : 'popIcon',
   })
   const zIndexOffset = -apfloraLayers.findIndex(
     (apfloraLayer) => apfloraLayer.value === 'pop',
@@ -126,9 +151,7 @@ const PopMarker = ({ pop }) => {
         <>
           <div>Population</div>
           <StyledH3>
-            {`${pop.nr ? `${pop.nr}: ` : '(keine Nummer): '}${
-              pop.name ? pop.name : '(kein Name)'
-            }`}
+            {`${pop.nr ?? '(keine Nummer)'}: ${pop.name ?? '(kein Name)'}`}
           </StyledH3>
           <div>{`Art: ${artname}`}</div>
           <div>
