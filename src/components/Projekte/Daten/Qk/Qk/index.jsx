@@ -176,6 +176,7 @@ const Qk = ({ qkNameQueries, qks }) => {
                       search,
                       projekteTabs,
                       setProjekteTabs,
+                      onlyShowActivePath: true,
                     })
                   }
                   title="in Strukturbaum 2 öffnen"
@@ -184,7 +185,9 @@ const Qk = ({ qkNameQueries, qks }) => {
                 </StyledA>
                 <OutsideLink
                   onClick={() => {
-                    const url = `${appBaseUrl()}Daten/${m.url.join('/')}`
+                    const url = `${appBaseUrl()}Daten/${m.url.join(
+                      '/',
+                    )}?onlyShowActivePath=true`
                     if (
                       window.matchMedia('(display-mode: standalone)').matches
                     ) {

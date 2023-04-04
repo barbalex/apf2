@@ -7,15 +7,27 @@ import MenuItem from '@mui/material/MenuItem'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../storeContext'
+import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 
 const Container = styled.div`
   position: absolute;
   top: -2px;
   right: 6px;
 `
+const MyMenu = styled(Menu)`
+  ul {
+    padding: 0;
+  }
+`
+const Section = styled.section`
+  padding: 8px 0;
+  &:not(:first-of-type) {
+    border-top: 1px solid #ccc;
+  }
+`
 const MenuTitle = styled.h4`
   font-size: 14px !important;
-  padding: 2px 14px;
+  padding: 5px 14px;
   margin: 0;
   font-weight: 700;
   &:focus {
@@ -60,42 +72,41 @@ const TreeMenu = () => {
   const onClickAllTpopSame = useCallback(() => {
     setTpopIcon('normal')
     setDoShowTpopIcon()
-    onClose()
-  }, [onClose, setDoShowTpopIcon, setTpopIcon])
+  }, [setDoShowTpopIcon, setTpopIcon])
   const onClickTpopByStatusGroup = useCallback(() => {
     setTpopIcon('statusGroup')
     setDoShowTpopIcon()
-    onClose()
-  }, [onClose, setDoShowTpopIcon, setTpopIcon])
+  }, [setDoShowTpopIcon, setTpopIcon])
   const onClickTpopByStatusGroupSymbols = useCallback(() => {
     setTpopIcon('statusGroupSymbols')
     setDoShowTpopIcon()
-    onClose()
-  }, [onClose, setDoShowTpopIcon, setTpopIcon])
+  }, [setDoShowTpopIcon, setTpopIcon])
   const onClickTpopNoSymbols = useCallback(() => {
     toggleShowTpopIcon()
-    onClose()
-  }, [onClose, toggleShowTpopIcon])
+  }, [toggleShowTpopIcon])
 
   const onClickAllPopSame = useCallback(() => {
     setPopIcon('normal')
     setDoShowPopIcon()
-    onClose()
-  }, [onClose, setDoShowPopIcon, setPopIcon])
+  }, [setDoShowPopIcon, setPopIcon])
   const onClickPopByStatusGroup = useCallback(() => {
     setPopIcon('statusGroup')
     setDoShowPopIcon()
-    onClose()
-  }, [onClose, setDoShowPopIcon, setPopIcon])
+  }, [setDoShowPopIcon, setPopIcon])
   const onClickPopByStatusGroupSymbols = useCallback(() => {
     setPopIcon('statusGroupSymbols')
     setDoShowPopIcon()
-    onClose()
-  }, [onClose, setDoShowPopIcon, setPopIcon])
+  }, [setDoShowPopIcon, setPopIcon])
   const onClickPopNoSymbols = useCallback(() => {
     toggleShowPopIcon()
-    onClose()
-  }, [onClose, toggleShowPopIcon])
+  }, [toggleShowPopIcon])
+
+  const [onlyShowActivePathString, setOnlyShowActivePath] =
+    useSearchParamsState('onlyShowActivePath', 'false')
+  const onlyShowActivePath = onlyShowActivePathString === 'true'
+  const onClickOnlyShowActivePath = useCallback(() => {
+    setOnlyShowActivePath(!onlyShowActivePath)
+  }, [onlyShowActivePath, setOnlyShowActivePath])
 
   return (
     <Container>
@@ -108,47 +119,57 @@ const TreeMenu = () => {
       >
         <StyledFaCog />
       </IconButton>
-      <Menu
+      <MyMenu
         id="menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <MenuTitle>Symbole für Populationen:</MenuTitle>
-        <StyledMenuItem onClick={onClickAllPopSame}>
-          {showPopIcon && popIcon === 'normal' && <CheckIcon />}
-          {`alle gleich (Blume)`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickPopByStatusGroup}>
-          {showPopIcon && popIcon === 'statusGroup' && <CheckIcon />}
-          {`nach Status, mit Buchstaben`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickPopByStatusGroupSymbols}>
-          {showPopIcon && popIcon === 'statusGroupSymbols' && <CheckIcon />}
-          {`nach Status, mit Symbolen`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickPopNoSymbols}>
-          {!showPopIcon && <CheckIcon />}
-          {`keine`}
-        </StyledMenuItem>
-        <MenuTitle>Symbole für Teil-Populationen:</MenuTitle>
-        <StyledMenuItem onClick={onClickAllTpopSame}>
-          {showTpopIcon && tpopIcon === 'normal' && <CheckIcon />}
-          {`alle gleich (Blume)`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickTpopByStatusGroup}>
-          {showTpopIcon && tpopIcon === 'statusGroup' && <CheckIcon />}
-          {`nach Status, mit Buchstaben`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickTpopByStatusGroupSymbols}>
-          {showTpopIcon && tpopIcon === 'statusGroupSymbols' && <CheckIcon />}
-          {`nach Status, mit Symbolen`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickTpopNoSymbols}>
-          {!showTpopIcon && <CheckIcon />}
-          {`keine`}
-        </StyledMenuItem>
-      </Menu>
+        <Section>
+          <StyledMenuItem onClick={onClickOnlyShowActivePath}>
+            {onlyShowActivePath && <CheckIcon />}
+            {`nur den aktiven Pfad anzeigen`}
+          </StyledMenuItem>
+        </Section>
+        <Section>
+          <MenuTitle>Symbole für Populationen:</MenuTitle>
+          <StyledMenuItem onClick={onClickAllPopSame}>
+            {showPopIcon && popIcon === 'normal' && <CheckIcon />}
+            {`alle gleich (Blume)`}
+          </StyledMenuItem>
+          <StyledMenuItem onClick={onClickPopByStatusGroup}>
+            {showPopIcon && popIcon === 'statusGroup' && <CheckIcon />}
+            {`nach Status, mit Buchstaben`}
+          </StyledMenuItem>
+          <StyledMenuItem onClick={onClickPopByStatusGroupSymbols}>
+            {showPopIcon && popIcon === 'statusGroupSymbols' && <CheckIcon />}
+            {`nach Status, mit Symbolen`}
+          </StyledMenuItem>
+          <StyledMenuItem onClick={onClickPopNoSymbols}>
+            {!showPopIcon && <CheckIcon />}
+            {`keine`}
+          </StyledMenuItem>
+        </Section>
+        <Section>
+          <MenuTitle>Symbole für Teil-Populationen:</MenuTitle>
+          <StyledMenuItem onClick={onClickAllTpopSame}>
+            {showTpopIcon && tpopIcon === 'normal' && <CheckIcon />}
+            {`alle gleich (Blume)`}
+          </StyledMenuItem>
+          <StyledMenuItem onClick={onClickTpopByStatusGroup}>
+            {showTpopIcon && tpopIcon === 'statusGroup' && <CheckIcon />}
+            {`nach Status, mit Buchstaben`}
+          </StyledMenuItem>
+          <StyledMenuItem onClick={onClickTpopByStatusGroupSymbols}>
+            {showTpopIcon && tpopIcon === 'statusGroupSymbols' && <CheckIcon />}
+            {`nach Status, mit Symbolen`}
+          </StyledMenuItem>
+          <StyledMenuItem onClick={onClickTpopNoSymbols}>
+            {!showTpopIcon && <CheckIcon />}
+            {`keine`}
+          </StyledMenuItem>
+        </Section>
+      </MyMenu>
     </Container>
   )
 }

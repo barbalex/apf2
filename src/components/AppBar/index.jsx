@@ -47,7 +47,10 @@ const AppBarComponent = () => {
   useEffect(() => {
     if (isInIframe) return
 
-    navigate('/Daten/' + activeNodeArray.join('/') + search)
+    // if app was opened on top level, navigate to last active node
+    if (pathname === '/') {
+      navigate('/Daten/' + activeNodeArray.join('/') + search)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

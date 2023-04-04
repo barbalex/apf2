@@ -17,6 +17,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import upperFirst from 'lodash/upperFirst'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
+import isNodeOrParentInActiveNodePath from '../isNodeOrParentInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
 import toggleNode from './toggleNode'
 import toggleNodeSymbol from './toggleNodeSymbol'
@@ -353,6 +354,18 @@ const Row = ({ node }) => {
     activeNodeArray,
   })
   const nodeIsOpen = isNodeOpen({ openNodes, url: node.url })
+
+  const [onlyShowActivePathString] = useSearchParamsState(
+    'onlyShowActivePath',
+    'false',
+  )
+  const onlyShowActivePath = onlyShowActivePathString === 'true'
+
+  // only calculate if needed
+  const nodeOrParentIsInActivePath = onlyShowActivePath
+    ? isNodeOrParentInActiveNodePath({ node, activeNodeArray })
+    : false
+
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
@@ -434,6 +447,8 @@ const Row = ({ node }) => {
     : PopQIcon
 
   // console.log('Row, node:', node)
+
+  if (onlyShowActivePath && !nodeOrParentIsInActivePath) return null
 
   return (
     <ContextMenuTrigger
