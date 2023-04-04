@@ -101,7 +101,11 @@ export default types
     resetTree2Src() {
       self.tree2Src = ''
     },
-    setTree2SrcByActiveNodeArray({ activeNodeArray, search }) {
+    setTree2SrcByActiveNodeArray({
+      activeNodeArray,
+      search,
+      onlyShowActivePath,
+    }) {
       const iFrameSearch = queryString.parse(search)
       // need to alter projekteTabs:
       if (Array.isArray(iFrameSearch.projekteTabs)) {
@@ -116,6 +120,9 @@ export default types
           .filter((t) => t.includes('2'))
           // - rewrite tree2 values to tree values
           .map((t) => t.replace('2', ''))
+      }
+      if (onlyShowActivePath) {
+        iFrameSearch.onlyShowActivePath = true
       }
       const newSearch = queryString.stringify(iFrameSearch)
       // pass this via src to iframe

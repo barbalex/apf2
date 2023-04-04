@@ -231,8 +231,9 @@ const MobxStore = types
       search,
       projekteTabs,
       setProjekteTabs,
+      onlyShowActivePath
     }) {
-      self.tree.setTree2SrcByActiveNodeArray({ activeNodeArray, search })
+      self.tree.setTree2SrcByActiveNodeArray({ activeNodeArray, search, onlyShowActivePath })
       setProjekteTabs([...projekteTabs, 'tree2', 'daten2'])
     },
     treeNodeLabelFilterResetExceptAp() {
