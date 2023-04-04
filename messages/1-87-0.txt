@@ -1,1 +1,1 @@
-Ab Version 1.87.0: Im Options-Menü des Navigationsbaums kann gewählt werden, nur die gerade aktiven (roten) Knoten anzuzeigen. Das kann die Übersicht verbessern. Links in Qualitätskontrollen werden neu immer mit dieser Einstellung geöffnet
+Ab Version 1.87.0: Im Options-Menü des Navigationsbaums kann gewählt werden, nur die gerade aktiven (roten) Knoten anzuzeigen (inklusive der darunter liegenden). Das kann die Übersicht verbessern. Links in Qualitätskontrollen werden neu immer mit dieser Einstellung geöffnet
