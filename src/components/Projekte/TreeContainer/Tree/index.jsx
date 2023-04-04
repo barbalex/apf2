@@ -23,7 +23,7 @@ const Container = styled.div`
 const TreeComponent = () => {
   // TODO: needed?
   // const store = useContext(storeContext)
-  // const { refetcher } = store.tree
+  // const { refetcher } = store.tree  const [onlyShowActivePathString, setOnlyShowActivePath] =
 
   return (
     <Container>

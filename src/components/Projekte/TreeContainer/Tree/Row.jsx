@@ -355,13 +355,12 @@ const Row = ({ node }) => {
   })
   const nodeIsOpen = isNodeOpen({ openNodes, url: node.url })
 
-  const [onlyShowActivePathString, setOnlyShowActivePath] =
-    useSearchParamsState('onlyShowActivePath', 'false')
-  const onlyShowActivePath = Boolean(onlyShowActivePathString)
-  const onChangeOnlyShowActivePath = useCallback(
-    (event, value) => setOnlyShowActivePath(value),
-    [setOnlyShowActivePath],
+  const [onlyShowActivePathString] = useSearchParamsState(
+    'onlyShowActivePath',
+    'false',
   )
+  const onlyShowActivePath = onlyShowActivePathString === 'true'
+
   // only calculate if needed
   const nodeOrParentIsInActivePath = onlyShowActivePath
     ? isNodeOrParentInActiveNodePath({ node, activeNodeArray })
