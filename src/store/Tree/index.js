@@ -54,15 +54,8 @@ export default types
     refetcher: types.optional(types.number, 0),
     showPopIcon: types.optional(types.boolean, true),
     showTpopIcon: types.optional(types.boolean, true),
-    onlyShowActivePath: types.optional(types.boolean, false),
   })
   .actions((self) => ({
-    setOnlyShowActivePath(val) {
-      self.onlyShowActivePath = val
-    },
-    toggleOnlyShowActivePath() {
-      self.onlyShowActivePath = !self.onlyShowActivePath
-    },
     toggleShowPopIcon() {
       self.showPopIcon = !self.showPopIcon
     },
