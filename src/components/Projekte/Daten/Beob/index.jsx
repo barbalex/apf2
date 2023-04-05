@@ -10,17 +10,32 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner'
 
+const OuterContainer = styled.div`
+  container-type: inline-size;
+`
 const Container = styled.div`
   padding: 15px 10px 0 10px;
-  /* column-width: ${constants.columnWidth}px; */
   display: grid;
-  grid-template-columns: auto 1fr;
   div {
     padding: 5px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-collapse: collapse;
   }
-  div:nth-of-type(4n + 2),
+  grid-template-columns: repeat(1, auto 1fr);
+  .label {
+    color: rgb(0, 0, 0, 0.54);
+  }
+  /* div:nth-of-type(4n + 2),
   div:nth-of-type(4n + 1) {
     background-color: rgba(0, 0, 0, 0.03);
+  } */
+  @container (min-width: ${constants.columnWidth * 1.6}px) {
+    grid-template-columns: repeat(2, auto 1fr);
+    /* div:nth-of-type(n + 4),
+    div:nth-of-type(n + 3) {
+      background-color: rgba(0, 0, 0, 0.03);
+    } */
   }
 `
 
@@ -68,14 +83,18 @@ const Beob = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        {beobFields.map(([key, value]) => (
-          <>
-            <div key={key}>{key}</div>
-            <div>{value}</div>
-          </>
-        ))}
-      </Container>
+      <OuterContainer>
+        <Container>
+          {beobFields.map(([key, value]) => (
+            <>
+              <div className="label" key={key}>
+                {key}
+              </div>
+              <div>{value}</div>
+            </>
+          ))}
+        </Container>
+      </OuterContainer>
     </ErrorBoundary>
   )
 }
