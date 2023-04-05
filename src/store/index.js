@@ -32,6 +32,8 @@ const dataFilterInitialValues = {
   tpopfreiwkontr: tpopfreiwkontrInitial,
 }
 
+const defaultSortedBeobFields = ['ESPECE', 'A_NOTE', 'M_NOTE', 'J_NOTE']
+
 const MobxStore = types
   .model({
     apfloraLayers: types.optional(
@@ -75,6 +77,10 @@ const MobxStore = types
     showDeletions: types.optional(types.boolean, false),
     dokuFilter: types.optional(types.union(types.string, types.number), ''),
     map: types.optional(Map, defaultMap),
+    sortedBeobFields: types.optional(
+      types.array(types.string),
+      defaultSortedBeobFields,
+    ),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -89,6 +95,9 @@ const MobxStore = types
     navigate: undefined,
   }))
   .actions((self) => ({
+    setSortedBeobFields(val) {
+      self.sortedBeobFields = val.filter((v) => !!v)
+    },
     setNavigate(val) {
       self.navigate = val
     },
@@ -231,9 +240,13 @@ const MobxStore = types
       search,
       projekteTabs,
       setProjekteTabs,
-      onlyShowActivePath
+      onlyShowActivePath,
     }) {
-      self.tree.setTree2SrcByActiveNodeArray({ activeNodeArray, search, onlyShowActivePath })
+      self.tree.setTree2SrcByActiveNodeArray({
+        activeNodeArray,
+        search,
+        onlyShowActivePath,
+      })
       setProjekteTabs([...projekteTabs, 'tree2', 'daten2'])
     },
     treeNodeLabelFilterResetExceptAp() {
