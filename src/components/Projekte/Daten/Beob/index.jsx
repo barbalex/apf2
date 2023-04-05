@@ -16,6 +16,25 @@ const Container = styled.div`
   column-width: ${constants.columnWidth}px;
 `
 
+const sortedKeys = ['ESPECE', 'A_NOTE', 'M_NOTE', 'J_NOTE']
+
+const sortFn = (a, b) => {
+  const keyA = a[0]
+  const keyB = b[0]
+  const sortByA = sortedKeys.includes(keyA)
+  const sortByB = sortedKeys.includes(keyB)
+
+  if (sortByA && sortByB) {
+    return sortedKeys.indexOf(keyA) - sortedKeys.indexOf(keyB)
+  }
+  if (sortByA || sortByB) {
+    return 1
+  }
+  if (keyA?.toLowerCase?.() > keyB?.toLowerCase?.()) return 1
+  if (keyA?.toLowerCase?.() < keyB?.toLowerCase?.()) return -1
+  return 0
+}
+
 const Beob = () => {
   const { beobId: id } = useParams()
 
@@ -25,14 +44,13 @@ const Beob = () => {
     },
   })
   const row = data?.beobById ?? {}
-  const beobFields = row.data
-    ? // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      Object.entries(JSON.parse(row.data)).filter(([key, value]) =>
-        exists(value),
-      )
-    : []
+  const rowData = row.data ? JSON.parse(row.data) : {}
+  const beobFields = Object.entries(rowData)
+    .filter(([key, value]) => exists(value))
+    .sort(sortFn)
 
-  //console.log('Beob', { row, beobFields, data, loading, error })
+  // TODO: sort beobFields
+  // console.log('Beob', { rowData, beobFields, loading })
 
   if (!row) return null
   if (!beobFields || beobFields.length === 0) return null
