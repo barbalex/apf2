@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
-import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import constants from '../../../../modules/constants'
 import exists from '../../../../modules/exists'
 import query from './query'
@@ -13,7 +12,16 @@ import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
   padding: 15px 10px 0 10px;
-  column-width: ${constants.columnWidth}px;
+  /* column-width: ${constants.columnWidth}px; */
+  display: grid;
+  grid-template-columns: auto 1fr;
+  div {
+    padding: 5px;
+  }
+  div:nth-of-type(4n + 2),
+  div:nth-of-type(4n + 1) {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
 `
 
 const sortedKeys = ['ESPECE', 'A_NOTE', 'M_NOTE', 'J_NOTE']
@@ -62,9 +70,10 @@ const Beob = () => {
     <ErrorBoundary>
       <Container>
         {beobFields.map(([key, value]) => (
-          <div key={key}>
-            <TextFieldNonUpdatable label={key} value={value} />
-          </div>
+          <>
+            <div key={key}>{key}</div>
+            <div>{value}</div>
+          </>
         ))}
       </Container>
     </ErrorBoundary>
