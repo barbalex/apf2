@@ -41,7 +41,7 @@ const fieldTypes = {
 const Adresse = () => {
   const { adrId } = useParams()
   const store = useContext(storeContext)
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient() 
 
   const { data, error, loading } = useQuery(query, {
     variables: { id: adrId },
