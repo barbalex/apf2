@@ -83,11 +83,14 @@ const Ekf = () => {
   useEffect(() => {
     // navigate to first kontrId so form is shown for first ekf
     // IF none is choosen yet
-    if (ekf.length > 0 && !ekfId) {
-      // console.log('Ekf, useEffect, navigating to first ekf')
+    if (!loading && ekf.length > 0 && !ekfId) {
+      console.log('Ekf, useEffect, navigating to first ekf')
       navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${ekf[0].id}${search}`)
     }
-  }, [ekfYear, ekf.length, ekfId, ekf, navigate, userId, search])
+    // adding ekf as dependency causes infinite loop
+    // https://github.com/barbalex/apf2/issues/629
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ekfYear, ekfId, navigate, userId, search, loading])
 
   if (error) {
     return <Error error={error} />
