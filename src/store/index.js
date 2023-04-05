@@ -16,22 +16,6 @@ import User, { defaultValue as defaultUser } from './User'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import EkPlan, { defaultValue as defaultEkPlan } from './EkPlan'
 
-import { initial as apInitial } from './Tree/DataFilter/ap'
-import { initial as popInitial } from './Tree/DataFilter/pop'
-import { initial as tpopInitial } from './Tree/DataFilter/tpop'
-import { initial as tpopmassnInitial } from './Tree/DataFilter/tpopmassn'
-import { initial as tpopfeldkontrInitial } from './Tree/DataFilter/tpopfeldkontr'
-import { initial as tpopfreiwkontrInitial } from './Tree/DataFilter/tpopfreiwkontr'
-
-const dataFilterInitialValues = {
-  ap: apInitial,
-  pop: popInitial,
-  tpop: tpopInitial,
-  tpopmassn: tpopmassnInitial,
-  tpopfeldkontr: tpopfeldkontrInitial,
-  tpopfreiwkontr: tpopfreiwkontrInitial,
-}
-
 const defaultSortedBeobFields = ['ESPECE', 'A_NOTE', 'M_NOTE', 'J_NOTE']
 
 const MobxStore = types
