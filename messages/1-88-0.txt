@@ -1,0 +1,1 @@
+Ab Version 1.88.0: Bei Beobachtungen sind die Daten übersichtlicher angeordnet. Wer will kann die Felder mit drag and drop beliebig anordnen (z.B. damit die gewünschten oben sind)
