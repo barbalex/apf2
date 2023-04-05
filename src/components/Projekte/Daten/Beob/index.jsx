@@ -19,9 +19,9 @@ import storeContext from '../../../../storeContext'
 
 const OuterContainer = styled.div`
   container-type: inline-size;
+  padding: 0 10px 0 10px;
 `
 const Container = styled.div`
-  padding: 15px 10px 0 10px;
   @container (min-width: ${constants.columnWidth * 1.7}px) {
     columns: 2;
   }
@@ -29,6 +29,11 @@ const Container = styled.div`
   constants.columnWidth * 1.7}px) {
     columns: 3;
   }
+`
+const Explainer = styled.p`
+  padding: 10px 5px;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.54);
 `
 
 const BeobsComponent = () => {
@@ -133,6 +138,9 @@ const BeobsComponent = () => {
   return (
     <ErrorBoundary>
       <OuterContainer>
+        <Explainer>
+          Die Felder können beliebig sortiert werden (drag and drop).
+        </Explainer>
         <Container>
           <DndProvider backend={HTML5Backend}>
             {fields.map((field, i) => renderField(field, i))}
