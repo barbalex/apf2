@@ -191,6 +191,11 @@ const LayerComponent = ({ apfloraLayer }) => {
     }
     return setActiveApfloraLayers([...activeApfloraLayers, apfloraLayer.value])
   }, [activeApfloraLayers, apfloraLayer.value, setActiveApfloraLayers])
+
+  const onChangeKtZhGeoCheckbox = useCallback(() => {
+    console.log('TODO: onChangeKtZhGeoCheckbox')
+  }, [])
+
   const onClickZuordnen = useCallback(() => {
     if (activeApfloraLayers.includes('tpop')) {
       setAssigningBeob(!assigningBeob)
@@ -272,6 +277,14 @@ const LayerComponent = ({ apfloraLayer }) => {
         checked={activeApfloraLayers.includes(apfloraLayer.value)}
         onChange={onChangeCheckbox}
       />
+      {apfloraLayer.value === 'mapFilter' && (
+        <Checkbox
+          value="ktZhGeo"
+          label="Kanton Zürich filtern"
+          checked={true}
+          onChange={onChangeKtZhGeoCheckbox}
+        />
+      )}
       <IconsDiv>
         {['beobNichtBeurteilt', 'beobZugeordnet'].includes(
           apfloraLayer.value,
