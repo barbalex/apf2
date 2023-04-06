@@ -1,3 +1,4 @@
+-- prepared but not in use in app
 SELECT
   geom
 FROM
