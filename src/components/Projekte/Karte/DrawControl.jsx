@@ -13,7 +13,7 @@ const DrawControl = () => {
 
   useEffect(() => {
     window.L.drawLocal.draw.toolbar.buttons.polygon =
-      'Polygon zeichnen, um räumlich zu filtern'
+      'Umriss zeichnen, um räumlich zu filtern'
     window.L.drawLocal.draw.toolbar.buttons.rectangle =
       'Rechteck(e) zeichnen, um zu filtern'
     window.L.drawLocal.draw.toolbar.actions.title = 'Zeichnen rückgängig machen'
@@ -39,15 +39,15 @@ const DrawControl = () => {
     window.L.drawLocal.edit.toolbar.actions.clearAll.title =
       'alle Umrisse löschen'
     window.L.drawLocal.edit.toolbar.actions.clearAll.text = 'alle löschen'
-    window.L.drawLocal.edit.toolbar.buttons.edit = 'Filter-Umriss(e) ändern'
+    window.L.drawLocal.edit.toolbar.buttons.edit = 'Filter-Umriss ändern'
     window.L.drawLocal.edit.toolbar.buttons.editDisabled =
-      'Filter-Umriss(e) ändern (aktuell gibt es keine)'
-    window.L.drawLocal.edit.toolbar.buttons.remove = 'Filter-Umriss(e) löschen'
+      'Filter-Umriss ändern (aktuell gibt es keine)'
+    window.L.drawLocal.edit.toolbar.buttons.remove = 'Filter-Umriss löschen'
     window.L.drawLocal.edit.toolbar.buttons.removeDisabled =
-      'Filter-Umriss(e) löschen (aktuell gibt es keine)'
+      'Filter-Umriss löschen (aktuell gibt es keine)'
     window.L.drawLocal.edit.handlers.edit.tooltip.text = `dann auf 'speichern' klicken`
     window.L.drawLocal.edit.handlers.edit.tooltip.subtext =
-      'Punkte ziehen, um Filter-Umriss(e) zu verändern'
+      'Punkte ziehen, um Filter-Umriss zu ändern'
     window.L.drawLocal.edit.handlers.remove.tooltip.text = `zum Löschen auf Filter-Umriss klicken, dann auf 'speichern'`
 
     // solution to allow only one geometry to be drawn
@@ -66,9 +66,9 @@ const DrawControl = () => {
         circlemarker: false,
         rectangle: false,
       },
-      edit: {
-        featureGroup: drawnItems,
-      },
+      // edit: {
+      //   featureGroup: drawnItems,
+      // },
     })
     const drawControlEditOnly = new window.L.Control.Draw({
       draw: false,
