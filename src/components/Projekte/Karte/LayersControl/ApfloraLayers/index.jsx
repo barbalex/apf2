@@ -20,9 +20,12 @@ const ApfloraLayers = () => {
 
   return (
     <CardContent>
-      {apfloraLayers.map((apfloraLayer, index) => (
-        <Layer key={index} apfloraLayer={apfloraLayer} />
-      ))}
+      {apfloraLayers
+        // prevent deprecated layer from showing in case some users still have it in layers
+        .filter((l) => l.value !== 'mapFilter')
+        .map((apfloraLayer, index) => (
+          <Layer key={index} apfloraLayer={apfloraLayer} />
+        ))}
       <ShowForMultipleAps />
       <KtZhFilter />
     </CardContent>
