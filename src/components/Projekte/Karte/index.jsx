@@ -651,7 +651,7 @@ const Karte = () => {
           <ZoomControl position="topright" />
           {/* <Fullscreen {...fullscreenOptions} /> */}
           <MeasureControl />
-          {showMapFilter && <DrawControl />}
+          <DrawControl />
           <Control position="bottomright">
             <CoordinatesControl />
           </Control>

@@ -23,10 +23,6 @@ const apfloraLayers = [
     label: 'Zuordnungs-Linien',
     value: 'beobZugeordnetAssignPolylines',
   },
-  {
-    label: 'Karten-Filter', 
-    value: 'mapFilter',
-  },
 ]
 
 export default apfloraLayers

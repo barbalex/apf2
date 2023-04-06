@@ -125,8 +125,9 @@ const LayerComponent = ({ apfloraLayer }) => {
     setBounds,
   } = store
   const tree = store.tree
-  const { beobGqlFilter } = tree
+  const { beobGqlFilter, setMapFilter, incrementMapFilterResetter } = tree
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
+
   const layer = apfloraLayer.value
   const pop = layer === 'pop' && activeApfloraLayers.includes('pop')
   const tpop = layer === 'tpop' && activeApfloraLayers.includes('tpop')
@@ -183,6 +184,7 @@ const LayerComponent = ({ apfloraLayer }) => {
     layerData = flatten(tpops.map((n) => n?.tpopsByPopId?.nodes ?? []))
   }
   const layerDataHighlighted = layerData.filter((o) => o.id === highlightedId)
+
   const onChangeCheckbox = useCallback(() => {
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
       return setActiveApfloraLayers(
@@ -191,10 +193,6 @@ const LayerComponent = ({ apfloraLayer }) => {
     }
     return setActiveApfloraLayers([...activeApfloraLayers, apfloraLayer.value])
   }, [activeApfloraLayers, apfloraLayer.value, setActiveApfloraLayers])
-
-  const onChangeKtZhGeoCheckbox = useCallback(() => {
-    console.log('TODO: onChangeKtZhGeoCheckbox')
-  }, [])
 
   const onClickZuordnen = useCallback(() => {
     if (activeApfloraLayers.includes('tpop')) {
@@ -277,14 +275,6 @@ const LayerComponent = ({ apfloraLayer }) => {
         checked={activeApfloraLayers.includes(apfloraLayer.value)}
         onChange={onChangeCheckbox}
       />
-      {apfloraLayer.value === 'mapFilter' && (
-        <Checkbox
-          value="ktZhGeo"
-          label="Kanton Zürich filtern"
-          checked={true}
-          onChange={onChangeKtZhGeoCheckbox}
-        />
-      )}
       <IconsDiv>
         {['beobNichtBeurteilt', 'beobZugeordnet'].includes(
           apfloraLayer.value,
@@ -341,26 +331,22 @@ const LayerComponent = ({ apfloraLayer }) => {
             </MapIconDiv>
           )}
         <ZoomToDiv>
-          {apfloraLayer.value !== 'mapFilter' && (
-            <StyledIconButton
-              title={`auf alle ${apfloraLayer.label} zoomen`}
-              onClick={onClickZoomToAll}
-              color="inherit"
-            >
-              <ZoomToIcon style={zoomToAllIconStyle} />
-            </StyledIconButton>
-          )}
+          <StyledIconButton
+            title={`auf alle ${apfloraLayer.label} zoomen`}
+            onClick={onClickZoomToAll}
+            color="inherit"
+          >
+            <ZoomToIcon style={zoomToAllIconStyle} />
+          </StyledIconButton>
         </ZoomToDiv>
         <ZoomToDiv>
-          {apfloraLayer.value !== 'mapFilter' && (
-            <StyledIconButton
-              title={`auf aktive ${apfloraLayer.label} zoomen`}
-              onClick={onClickZoomToActive}
-              color="inherit"
-            >
-              <ZoomToIcon style={zoomToActiveIconStyle} />
-            </StyledIconButton>
-          )}
+          <StyledIconButton
+            title={`auf aktive ${apfloraLayer.label} zoomen`}
+            onClick={onClickZoomToActive}
+            color="inherit"
+          >
+            <ZoomToIcon style={zoomToActiveIconStyle} />
+          </StyledIconButton>
         </ZoomToDiv>
       </IconsDiv>
     </LayerDiv>

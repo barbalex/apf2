@@ -51,11 +51,15 @@ export default types
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     mapFilter: types.maybe(Geojson),
+    mapFilterResetter: types.optional(types.number, 0),
     refetcher: types.optional(types.number, 0),
     showPopIcon: types.optional(types.boolean, true),
     showTpopIcon: types.optional(types.boolean, true),
   })
   .actions((self) => ({
+    incrementMapFilterResetter() {
+      self.mapFilterResetter += 1
+    },
     toggleShowPopIcon() {
       self.showPopIcon = !self.showPopIcon
     },
@@ -916,6 +920,9 @@ export default types
         }
         // add mapFilter
         if (self.mapFilter) {
+          if (!singleFilter.tpopByTpopId) {
+            singleFilter.tpopByTpopId = {}
+          }
           singleFilter.tpopByTpopId.geomPoint = {
             coveredBy: self.mapFilter,
           }
@@ -992,6 +999,9 @@ export default types
         }
         // add mapFilter
         if (self.mapFilter) {
+          if (!singleFilter.tpopByTpopId) {
+            singleFilter.tpopByTpopId = {}
+          }
           singleFilter.tpopByTpopId.geomPoint = {
             coveredBy: self.mapFilter,
           }
@@ -1114,6 +1124,9 @@ export default types
         }
         // add mapFilter
         if (self.mapFilter) {
+          if (!singleFilter.tpopByTpopId) {
+            singleFilter.tpopByTpopId = {}
+          }
           singleFilter.tpopByTpopId.geomPoint = {
             coveredBy: self.mapFilter,
           }
@@ -1187,6 +1200,9 @@ export default types
         }
         // add mapFilter
         if (self.mapFilter) {
+          if (!singleFilter.tpopByTpopId) {
+            singleFilter.tpopByTpopId = {}
+          }
           singleFilter.tpopByTpopId.geomPoint = {
             coveredBy: self.mapFilter,
           }
@@ -1297,6 +1313,9 @@ export default types
         }
         // add mapFilter
         if (self.mapFilter) {
+          if (!singleFilter.tpopByTpopId) {
+            singleFilter.tpopByTpopId = {}
+          }
           singleFilter.tpopByTpopId.geomPoint = {
             coveredBy: self.mapFilter,
           }
@@ -1369,6 +1388,9 @@ export default types
         }
         // add mapFilter
         if (self.mapFilter) {
+          if (!singleFilter.tpopByTpopId) {
+            singleFilter.tpopByTpopId = {}
+          }
           singleFilter.tpopByTpopId.geomPoint = {
             coveredBy: self.mapFilter,
           }

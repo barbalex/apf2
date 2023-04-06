@@ -5,12 +5,12 @@ import styled from '@emotion/styled'
 import storeContext from '../../../../../storeContext'
 import Layer from './Layer'
 import ShowForMultipleAps from './ShowForMultipleAps'
+import KtZhFilter from './KtZhFilter'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
   padding-left: 5px;
   padding-right: 4px;
-  padding-bottom: 3px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 `
 
@@ -24,6 +24,7 @@ const ApfloraLayers = () => {
         <Layer key={index} apfloraLayer={apfloraLayer} />
       ))}
       <ShowForMultipleAps />
+      <KtZhFilter />
     </CardContent>
   )
 }

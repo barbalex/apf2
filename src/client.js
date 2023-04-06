@@ -12,6 +12,7 @@ import uniqBy from 'lodash/uniqBy'
 
 import graphQlUri from './modules/graphQlUri'
 import existsPermissionsError from './modules/existsPermissionError'
+import existsTooLargeError from './modules/existsTooLargeError'
 
 const Client = ({ store }) => {
   const { enqueNotification } = store
@@ -78,6 +79,10 @@ const Client = ({ store }) => {
           // logout reloads the window
           // this must be controlled by the User component inside Daten
           // otherwise UI keeps reloading forever!
+        }
+        if (existsTooLargeError(uniqueQraphQLErrors)) {
+          // could be a too large ktZh geojson file being passed in mapFilter
+          store.tree.setMapFilter(undefined)
         }
         uniqueQraphQLErrors.map(({ message, locations, path }) => {
           console.log(
