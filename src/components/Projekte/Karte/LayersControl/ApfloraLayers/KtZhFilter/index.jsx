@@ -25,7 +25,7 @@ const KtZhFilter = () => {
   const { setMapFilter, incrementMapFilterResetter } = store.tree
 
   const onClickFilterZh = useCallback(() => {
-    import('./KtZh.json').then((module) => {
+    import('./ktZh.json').then((module) => {
       const ktZh = module.default
       incrementMapFilterResetter()
       setMapFilter(ktZh)
