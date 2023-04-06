@@ -1,0 +1,1 @@
+Ab Version 1.89.0: Karten-Filter angepasst. Ist nun immer sichtbar. Daher sieht man auch immer, wenn ein räumlicher Filter gesetzt ist. Neuer Befehl im Layertool bei den apflora-Layern: Räumlichen Filter für den Kanton Zürich setzen. Ist ein Wunsch aus der letzten Feedbackrunde
