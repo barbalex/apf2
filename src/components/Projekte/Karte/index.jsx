@@ -536,8 +536,6 @@ const Karte = () => {
     overlays.findIndex((o) => o.value === activeOverlay),
   )
 
-  const showMapFilter = activeApfloraLayers.includes('mapFilter')
-
   // explicitly sort Layers
   // Use Pane with z-index: https://github.com/PaulLeCam/react-leaflet/issues/271#issuecomment-609752044
   // Idea:
@@ -651,7 +649,7 @@ const Karte = () => {
           <ZoomControl position="topright" />
           {/* <Fullscreen {...fullscreenOptions} /> */}
           <MeasureControl />
-          {showMapFilter && <DrawControl />}
+          <DrawControl />
           <Control position="bottomright">
             <CoordinatesControl />
           </Control>

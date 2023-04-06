@@ -11,7 +11,6 @@ const MapFilterListener = () => {
 
   useEffect(() => {
     if (!mapFilter) {
-      // console.log('firing draw:deletedFromOutside')
       map.fireEvent('draw:deletedFromOutside')
     }
   }, [map, mapFilter])

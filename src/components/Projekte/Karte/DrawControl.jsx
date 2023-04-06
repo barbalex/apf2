@@ -9,11 +9,11 @@ import storeContext from '../../../storeContext'
 const DrawControl = () => {
   const map = useMap()
   const store = useContext(storeContext)
-  const { setMapFilter, mapFilter } = store.tree
+  const { setMapFilter, mapFilter, mapFilterResetter } = store.tree
 
   useEffect(() => {
     window.L.drawLocal.draw.toolbar.buttons.polygon =
-      'Polygon(e) zeichnen, um zu filtern'
+      'Umriss zeichnen, um räumlich zu filtern'
     window.L.drawLocal.draw.toolbar.buttons.rectangle =
       'Rechteck(e) zeichnen, um zu filtern'
     window.L.drawLocal.draw.toolbar.actions.title = 'Zeichnen rückgängig machen'
@@ -36,17 +36,18 @@ const DrawControl = () => {
     window.L.drawLocal.edit.toolbar.actions.cancel.title =
       'Zeichnung abbrechen und verwerfen'
     window.L.drawLocal.edit.toolbar.actions.cancel.text = 'abbrechen'
-    // window.L.drawLocal.edit.toolbar.actions.clearAll.title = 'alle Umrisse löschen'
-    // window.L.drawLocal.edit.toolbar.actions.clearAll.text = 'alle löschen'
-    window.L.drawLocal.edit.toolbar.buttons.edit = 'Filter-Umriss(e) ändern'
+    window.L.drawLocal.edit.toolbar.actions.clearAll.title =
+      'alle Umrisse löschen'
+    window.L.drawLocal.edit.toolbar.actions.clearAll.text = 'alle löschen'
+    window.L.drawLocal.edit.toolbar.buttons.edit = 'Filter-Umriss ändern'
     window.L.drawLocal.edit.toolbar.buttons.editDisabled =
-      'Filter-Umriss(e) ändern (aktuell gibt es keine)'
-    window.L.drawLocal.edit.toolbar.buttons.remove = 'Filter-Umriss(e) löschen'
+      'Filter-Umriss ändern (aktuell gibt es keine)'
+    window.L.drawLocal.edit.toolbar.buttons.remove = 'Filter-Umriss löschen'
     window.L.drawLocal.edit.toolbar.buttons.removeDisabled =
-      'Filter-Umriss(e) löschen (aktuell gibt es keine)'
+      'Filter-Umriss löschen (aktuell gibt es keine)'
     window.L.drawLocal.edit.handlers.edit.tooltip.text = `dann auf 'speichern' klicken`
     window.L.drawLocal.edit.handlers.edit.tooltip.subtext =
-      'Punkte ziehen, um Filter-Umriss(e) zu verändern'
+      'Punkte ziehen, um Filter-Umriss zu ändern'
     window.L.drawLocal.edit.handlers.remove.tooltip.text = `zum Löschen auf Filter-Umriss klicken, dann auf 'speichern'`
 
     // solution to allow only one geometry to be drawn
@@ -63,10 +64,11 @@ const DrawControl = () => {
         polyline: false,
         circle: false,
         circlemarker: false,
+        rectangle: false,
       },
-      edit: {
-        featureGroup: drawnItems,
-      },
+      // edit: {
+      //   featureGroup: drawnItems,
+      // },
     })
     const drawControlEditOnly = new window.L.Control.Draw({
       draw: false,
@@ -82,38 +84,50 @@ const DrawControl = () => {
       map.addControl(drawControlFull)
     }
     map.on('draw:created', (e) => {
+      // console.log('map, draw:created')
       drawnItems.addLayer(e.layer)
       drawControlFull.remove(map)
       drawControlEditOnly.addTo(map)
       setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
     })
     map.on('draw:edited', () => {
+      // console.log('map, draw:edited')
       setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
     })
     map.on('draw:deleted', () => {
-      setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
+      // console.log('map, draw:deleted')
+      setMapFilter(undefined)
       if (drawnItems.getLayers().length === 0) {
         drawControlEditOnly.remove(map)
+        drawControlFull.remove(map)
         drawControlFull.addTo(map)
       }
     })
     map.on('draw:deletedFromOutside', () => {
-      drawnItems.clearLayers()
-      map.removeControl(drawControlEditOnly)
+      // console.log('map, draw:deletedFromOutside')
+      drawControlEditOnly.remove(map)
+      drawControlFull.remove(map)
       drawControlFull.addTo(map)
+    })
+    map.on('draw:clearFromOutside', () => {
+      // console.log('map, draw:clearFromOutside')
+      drawnItems.clearLayers()
     })
 
     return () => {
       map.removeLayer(drawnItems)
-      map.removeControl(drawControlFull)
-      map.removeControl(drawControlEditOnly)
+      drawControlFull.remove(map)
+      drawControlEditOnly.remove(map)
       map.off('draw:created')
       map.off('draw:edited')
       map.off('draw:deleted')
+      map.off('draw:deletedFromOutside')
+      map.off('draw:clearFromOutside')
+      // setMapFilter(undefined)
     }
     // do not want this to re-run on every change of mapFilter!
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, setMapFilter])
+  }, [map, setMapFilter, mapFilterResetter])
 
   return <div style={{ display: 'none' }} />
 }
