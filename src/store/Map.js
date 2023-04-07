@@ -8,8 +8,12 @@ export default types
     // labels: oneOf: nr, name, none
     popLabel: types.string,
     tpopLabel: types.string,
+    beobDetailsOpen: types.optional(types.boolean, false),
   })
   .actions((self) => ({
+    setBeobDetailsOpen(val) {
+      self.beobDetailsOpen = val
+    },
     setPopIcon(val) {
       self.popIcon = val
     },

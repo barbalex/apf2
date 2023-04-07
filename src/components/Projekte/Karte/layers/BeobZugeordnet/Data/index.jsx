@@ -1,5 +1,8 @@
 import { useCallback, useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import { DndProvider } from 'react-dnd'
@@ -32,6 +35,16 @@ const BeobData = ({ id }) => {
   const store = useContext(storeContext)
   const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
     store
+
+  const { setBeobDetailsOpen, beobDetailsOpen } = store.map
+  const onClickDetails = useCallback(
+    (event) => {
+      console.log('onClickDetails', event)
+      setBeobDetailsOpen(!beobDetailsOpen)
+    },
+    [beobDetailsOpen, setBeobDetailsOpen],
+  )
+
   const sortedBeobFields = sortedBeobFieldsPassed.slice()
 
   const sortFn = useCallback(
@@ -134,7 +147,7 @@ const BeobData = ({ id }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <Details>
+        <Details open={beobDetailsOpen} onToggle={onClickDetails}>
           <Summary>Daten</Summary>
           <DndProvider backend={HTML5Backend}>
             {fields.map((field, i) => renderField(field, i))}
