@@ -65,6 +65,7 @@ import iconFullscreen from './iconFullscreen.png'
 import iconFullscreen2x from './iconFullscreen2x.png'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import MapFilterListener from './MapFilterListener'
+import ClickListener from './ClickListener'
 
 /**
  * Fullscreen is not compatible with new react/react-leaflet versions?
@@ -570,6 +571,7 @@ const Karte = () => {
           doubleClickZoom={false}
           zoomControl={false}
         >
+          <ClickListener />
           {activeBaseLayer && <BaseLayerComponent />}
           {activeOverlaysSorted
             .reverse()

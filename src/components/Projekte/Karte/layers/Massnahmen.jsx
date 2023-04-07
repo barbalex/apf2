@@ -100,6 +100,8 @@ const MassnahmenLayer = ({ layer }) => {
       // do not open empty popups
       if (!layersData.length) return
 
+      console.log('MassnahmenLayer, layersData', layersData)
+
       popupContent = ReactDOMServer.renderToString(
         <Popup layersData={layersData} mapSize={mapSize} />,
       )
