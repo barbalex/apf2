@@ -26,7 +26,7 @@ const StyledButton = styled(Button)`
   justify-content: left;
   padding: 2px 0;
 `
-const Info = styled.div`
+export const Info = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
   column-gap: 5px;

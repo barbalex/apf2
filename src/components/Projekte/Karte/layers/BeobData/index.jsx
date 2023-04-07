@@ -17,7 +17,12 @@ import Spinner from '../../../../shared/Spinner'
 import Beob from './Field'
 import storeContext from '../../../../../storeContext'
 import { beob } from '../../../../shared/fragments'
+import { Info } from '../BeobZugeordnet/Marker'
 
+const TopFieldContainer = styled.div`
+  padding-top: 4px;
+  padding-bottom: 4px;
+`
 const Container = styled.div`
   margin-left: -10px;
   margin-right: -10px;
@@ -34,6 +39,14 @@ const StyledAccordionSummary = styled(AccordionSummary)`
 const StyledAccordionDetails = styled(AccordionDetails)`
   padding: 4px 8px;
 `
+
+const topFieldNames = [
+  'PRESENCE',
+  'presence',
+  'XY_PRECISION',
+  'xy_radius',
+  'locality_descript',
+]
 
 const BeobData = ({ id }) => {
   const client = useApolloClient()
@@ -106,6 +119,12 @@ const BeobData = ({ id }) => {
 
   const row = data?.data?.beobById ?? {}
   const rowData = row.data ? JSON.parse(row.data) : {}
+
+  const topFields = Object.entries(rowData)
+    .filter(([key, value]) => exists(value))
+    .filter(([key]) => topFieldNames.includes(key))
+    .sort(sortFn)
+
   const fields = Object.entries(rowData)
     .filter(([key, value]) => exists(value))
     .sort(sortFn)
@@ -167,6 +186,18 @@ const BeobData = ({ id }) => {
 
   return (
     <ErrorBoundary>
+      {!!topFields.length && (
+        <TopFieldContainer>
+          <Info>
+            {topFields.map(([key, value]) => (
+              <>
+                <div>{`${key}:`}</div>
+                <div>{value}</div>
+              </>
+            ))}
+          </Info>
+        </TopFieldContainer>
+      )}
       <Container>
         <StyledAccordion
           expanded={beobDetailsOpen}
