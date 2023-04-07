@@ -16,12 +16,20 @@ import appBaseUrl from '../../../../../modules/appBaseUrl'
 import updateBeobByIdGql from './updateBeobById'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
+import Data from '../BeobData'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 const StyledButton = styled(Button)`
-  margin-top: 5px !important;
+  text-transform: none;
+  justify-content: left;
+  padding: 2px 0;
+`
+export const Info = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 5px;
 `
 
 const BeobZugeordnetMarker = ({ beob }) => {
@@ -140,6 +148,7 @@ const BeobZugeordnetMarker = ({ beob }) => {
     }
     window.open(url)
   }, [apId, beob.id, popId, projId, tpopId])
+  const pop = beob?.tpopByTpopId?.popByPopId
 
   return (
     <Marker
@@ -155,30 +164,39 @@ const BeobZugeordnetMarker = ({ beob }) => {
             beob?.aeTaxonomyByArtId?.artname ?? ''
           }`}</div>
           <StyledH3>{label}</StyledH3>
-          <div>
-            {`Koordinaten: ${beob.lv95X?.toLocaleString(
-              'de-ch',
-            )} / ${beob.lv95Y?.toLocaleString('de-ch')}`}
-          </div>
-          <div>{`Teil-Population: ${beob?.tpopByTpopId?.nr ?? '(keine Nr)'}: ${
-            beob?.tpopByTpopId?.flurname ?? '(kein Flurname)'
-          }`}</div>
+          <Info>
+            <div>Koordinaten:</div>
+            <div>
+              {`${beob.lv95X?.toLocaleString(
+                'de-ch',
+              )} / ${beob.lv95Y?.toLocaleString('de-ch')}`}
+            </div>
+            <div>Population:</div>
+            <div>{pop?.label ?? ''}</div>
+            <div>Teil-Population:</div>
+            <div>{`${beob?.tpopByTpopId?.nr ?? '(keine Nr)'}: ${
+              beob?.tpopByTpopId?.flurname ?? '(kein Flurname)'
+            }`}</div>
+          </Info>
           <StyledButton
             size="small"
-            variant="outlined"
+            variant="text"
             onClick={openBeobInTab}
             color="inherit"
+            fullWidth
           >
             Formular in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"
-            variant="outlined"
+            variant="text"
             color="inherit"
+            fullWidth
             onClick={openBeobInTree2}
           >
             Formular in Strukturbaum 2 öffnen
           </StyledButton>
+          <Data id={beob.id} />
         </>
       </Popup>
     </Marker>

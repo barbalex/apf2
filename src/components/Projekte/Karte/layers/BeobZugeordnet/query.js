@@ -21,6 +21,10 @@ export default gql`
           popId
           nr
           flurname
+          popByPopId {
+            id
+            label
+          }
         }
       }
     }

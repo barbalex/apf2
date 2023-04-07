@@ -41,7 +41,14 @@ const StyledTooltip = styled(Tooltip)`
   }
 `
 const StyledButton = styled(Button)`
-  margin-top: 5px !important;
+  text-transform: none;
+  justify-content: left;
+  padding: 2px 0;
+`
+const Info = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 5px;
 `
 
 const PopMarker = ({ pop }) => {
@@ -153,28 +160,35 @@ const PopMarker = ({ pop }) => {
           <StyledH3>
             {`${pop.nr ?? '(keine Nummer)'}: ${pop.name ?? '(kein Name)'}`}
           </StyledH3>
-          <div>{`Art: ${artname}`}</div>
-          <div>
-            {`Koordinaten: ${
-              pop.lv95X ? pop.lv95X?.toLocaleString('de-ch') : ''
-            } / ${pop.lv95Y ? pop.lv95Y?.toLocaleString('de-ch') : ''}`}
-          </div>
-          <div>{`Status: ${
-            pop?.popStatusWerteByStatus?.text ?? '(kein Status)'
-          }`}</div>
+          <Info>
+            <div>Art:</div>
+            <div>{artname}</div>
+            <div>Koordinaten:</div>
+            <div>
+              {`${pop.lv95X ? pop.lv95X?.toLocaleString('de-ch') : ''} / ${
+                pop.lv95Y ? pop.lv95Y?.toLocaleString('de-ch') : ''
+              }`}
+            </div>
+            <div>Status:</div>
+            <div>{`${
+              pop?.popStatusWerteByStatus?.text ?? '(kein Status)'
+            }`}</div>
+          </Info>
           <StyledButton
             size="small"
-            variant="outlined"
+            variant="text"
             color="inherit"
             onClick={openPopInTab}
+            fullWidth
           >
             Formular in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"
-            variant="outlined"
+            variant="text"
             color="inherit"
             onClick={openPopInTree2}
+            fullWidth
           >
             Formular in Strukturbaum 2 öffnen
           </StyledButton>

@@ -14,7 +14,7 @@ import query from './query'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner'
-import Beob from './Beob'
+import Beob from './Field'
 import storeContext from '../../../../storeContext'
 
 const OuterContainer = styled.div`

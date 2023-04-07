@@ -11,12 +11,20 @@ import storeContext from '../../../../../storeContext'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
+import Data from '../BeobData'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 const StyledButton = styled(Button)`
-  margin-top: 5px !important;
+  text-transform: none;
+  justify-content: left;
+  padding: 2px 0;
+`
+const Info = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 5px;
 `
 
 const PolylineComponent = ({ beob }) => {
@@ -133,50 +141,63 @@ const PolylineComponent = ({ beob }) => {
         <>
           <StyledH3>Zuordnung</StyledH3>
           <div>einer Beobachtung</div>
-          <div>{`von ${beob?.aeTaxonomyByArtId?.artname ?? ''}`}</div>
-          <div>{`am ${datum}`}</div>
-          <div>{`durch ${autor}`}</div>
-          <div>
-            {`bei: ${beob.lv95X?.toLocaleString(
-              'de-ch',
-            )} / ${beob.lv95Y?.toLocaleString('de-ch')}`}
-          </div>
-          <div>{`zur Teil-Population: ${
-            beob?.tpopByTpopId?.nr ?? '(keine Nr)'
-          }: ${beob?.tpopByTpopId?.flurname ?? '(kein Flurname)'}`}</div>
-          <div>{`Quelle: ${quelle}`}</div>
+          <Info>
+            <div>von:</div>
+            <div>{beob?.aeTaxonomyByArtId?.artname ?? ''}</div>
+            <div>am:</div>
+            <div>{datum}</div>
+            <div>durch:</div>
+            <div>{autor}</div>
+            <div>bei:</div>
+            <div>
+              {`${beob.lv95X?.toLocaleString(
+                'de-ch',
+              )} / ${beob.lv95Y?.toLocaleString('de-ch')}`}
+            </div>
+            <div>zur T-Pop:</div>
+            <div>{`${beob?.tpopByTpopId?.nr ?? '(keine Nr)'}: ${
+              beob?.tpopByTpopId?.flurname ?? '(kein Flurname)'
+            }`}</div>
+            <div>Quelle:</div>
+            <div>{quelle}</div>
+          </Info>
           <StyledButton
             size="small"
-            variant="outlined"
+            variant="text"
             color="inherit"
             onClick={openBeobInTab}
+            fullWidth
           >
             Beob. in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"
-            variant="outlined"
+            variant="text"
             color="inherit"
             onClick={openBeobInTree2}
+            fullWidth
           >
             Beob. in Strukturbaum 2 öffnen
           </StyledButton>
           <StyledButton
             size="small"
-            variant="outlined"
+            variant="text"
             color="inherit"
             onClick={openTpopInTab}
+            fullWidth
           >
             TPop. in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"
-            variant="outlined"
+            variant="text"
             color="inherit"
             onClick={openTpopInTree2}
+            fullWidth
           >
             TPop. in Strukturbaum 2 öffnen
           </StyledButton>
+          <Data id={beob.id} />
         </>
       </Popup>
     </Polyline>

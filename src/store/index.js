@@ -65,6 +65,7 @@ const MobxStore = types
       types.array(types.string),
       defaultSortedBeobFields,
     ),
+    sortedBeobFieldsForMap: types.optional(types.array(types.string), []),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -81,6 +82,9 @@ const MobxStore = types
   .actions((self) => ({
     setSortedBeobFields(val) {
       self.sortedBeobFields = val.filter((v) => !!v)
+    },
+    setSortedBeobFieldsForMap(val) {
+      self.sortedBeobFieldsForMap = val.filter((v) => !!v)
     },
     setNavigate(val) {
       self.navigate = val
