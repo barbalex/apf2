@@ -23,6 +23,11 @@ const StyledH3 = styled.h3`
 const StyledButton = styled(Button)`
   margin-top: 5px !important;
 `
+const Info = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 5px;
+`
 
 const BeobZugeordnetMarker = ({ beob }) => {
   const { apId, projId, beobId } = useParams()
@@ -140,6 +145,7 @@ const BeobZugeordnetMarker = ({ beob }) => {
     }
     window.open(url)
   }, [apId, beob.id, popId, projId, tpopId])
+  const pop = beob?.tpopByTpopId?.popByPopId
 
   return (
     <Marker
@@ -155,14 +161,20 @@ const BeobZugeordnetMarker = ({ beob }) => {
             beob?.aeTaxonomyByArtId?.artname ?? ''
           }`}</div>
           <StyledH3>{label}</StyledH3>
-          <div>
-            {`Koordinaten: ${beob.lv95X?.toLocaleString(
-              'de-ch',
-            )} / ${beob.lv95Y?.toLocaleString('de-ch')}`}
-          </div>
-          <div>{`Teil-Population: ${beob?.tpopByTpopId?.nr ?? '(keine Nr)'}: ${
-            beob?.tpopByTpopId?.flurname ?? '(kein Flurname)'
-          }`}</div>
+          <Info>
+            <div>Koordinaten:</div>
+            <div>
+              {`${beob.lv95X?.toLocaleString(
+                'de-ch',
+              )} / ${beob.lv95Y?.toLocaleString('de-ch')}`}
+            </div>
+            <div>Population:</div>
+            <div>{pop?.label ?? ''}</div>
+            <div>Teil-Population:</div>
+            <div>{`${beob?.tpopByTpopId?.nr ?? '(keine Nr)'}: ${
+              beob?.tpopByTpopId?.flurname ?? '(kein Flurname)'
+            }`}</div>
+          </Info>
           <StyledButton
             size="small"
             variant="outlined"
