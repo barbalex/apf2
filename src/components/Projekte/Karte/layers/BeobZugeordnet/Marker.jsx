@@ -16,12 +16,15 @@ import appBaseUrl from '../../../../../modules/appBaseUrl'
 import updateBeobByIdGql from './updateBeobById'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
+import Data from './Data'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 const StyledButton = styled(Button)`
-  margin-top: 5px !important;
+  text-transform: none;
+  justify-content: left;
+  padding: 2px 0;
 `
 const Info = styled.div`
   display: grid;
@@ -177,20 +180,23 @@ const BeobZugeordnetMarker = ({ beob }) => {
           </Info>
           <StyledButton
             size="small"
-            variant="outlined"
+            variant="text"
             onClick={openBeobInTab}
             color="inherit"
+            fullWidth
           >
             Formular in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"
-            variant="outlined"
+            variant="text"
             color="inherit"
+            fullWidth
             onClick={openBeobInTree2}
           >
             Formular in Strukturbaum 2 öffnen
           </StyledButton>
+          <Data id={beob.id} />
         </>
       </Popup>
     </Marker>

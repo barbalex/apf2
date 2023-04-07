@@ -1,43 +1,32 @@
 import { useCallback, useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useApolloClient, gql } from '@apollo/client'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
 
-import constants from '../../../../modules/constants'
-import exists from '../../../../modules/exists'
-import query from './query'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
-import Error from '../../../shared/Error'
-import Spinner from '../../../shared/Spinner'
+import exists from '../../../../../../modules/exists'
+import ErrorBoundary from '../../../../../shared/ErrorBoundary'
+import Error from '../../../../../shared/Error'
+import Spinner from '../../../../../shared/Spinner'
 import Beob from './Field'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../../../storeContext'
+import { beob } from '../../../../../shared/fragments'
 
-const OuterContainer = styled.div`
-  container-type: inline-size;
-  padding: 0 10px 0 10px;
-`
 const Container = styled.div`
-  @container (min-width: ${constants.columnWidth * 1.7}px) {
-    columns: 2;
-  }
-  @container (min-width: ${constants.columnWidth +
-  constants.columnWidth * 1.7}px) {
-    columns: 3;
-  }
+  padding-top: 8px;
 `
-const Explainer = styled.p`
-  padding: 10px 5px;
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
+const Details = styled.details`
+  font-size: 0.8rem;
+`
+const Summary = styled.summary`
+  font-size: 0.8rem;
+  padding-bottom: 3px;
 `
 
-const BeobsComponent = () => {
-  const { beobId: id } = useParams()
+const BeobData = ({ id }) => {
   const client = useApolloClient()
 
   const store = useContext(storeContext)
@@ -71,7 +60,14 @@ const BeobsComponent = () => {
     queryKey: ['beobByIdQueryForBeob', id],
     queryFn: async () =>
       client.query({
-        query,
+        query: gql`
+          query beobByIdQueryForBeobLayer($id: UUID!) {
+            beobById(id: $id) {
+              ...BeobFields
+            }
+          }
+          ${beob}
+        `,
         variables: {
           id,
         },
@@ -137,18 +133,16 @@ const BeobsComponent = () => {
 
   return (
     <ErrorBoundary>
-      <OuterContainer>
-        <Explainer>
-          Die Felder können beliebig sortiert werden (drag and drop).
-        </Explainer>
-        <Container>
+      <Container>
+        <Details>
+          <Summary>Daten</Summary>
           <DndProvider backend={HTML5Backend}>
             {fields.map((field, i) => renderField(field, i))}
           </DndProvider>
-        </Container>
-      </OuterContainer>
+        </Details>
+      </Container>
     </ErrorBoundary>
   )
 }
 
-export default observer(BeobsComponent)
+export default observer(BeobData)
