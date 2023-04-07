@@ -10,13 +10,13 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
 
-import exists from '../../../../../../modules/exists'
-import ErrorBoundary from '../../../../../shared/ErrorBoundary'
-import Error from '../../../../../shared/Error'
-import Spinner from '../../../../../shared/Spinner'
+import exists from '../../../../../modules/exists'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import Error from '../../../../shared/Error'
+import Spinner from '../../../../shared/Spinner'
 import Beob from './Field'
-import storeContext from '../../../../../../storeContext'
-import { beob } from '../../../../../shared/fragments'
+import storeContext from '../../../../../storeContext'
+import { beob } from '../../../../shared/fragments'
 
 const Container = styled.div`
   margin-left: -10px;

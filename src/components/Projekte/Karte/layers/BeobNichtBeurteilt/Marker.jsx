@@ -17,7 +17,7 @@ import appBaseUrl from '../../../../../modules/appBaseUrl'
 import updateBeobByIdGql from './updateBeobById'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
-import Data from '../BeobZugeordnet/Data'
+import Data from '../BeobData'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
