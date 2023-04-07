@@ -94,7 +94,7 @@
     "redaxios": "0.5.1",
     "simplebar-react": "3.2.3",
     "typography": "0.16.21",
-    "use-debounce": "9.0.3"
+    "use-debounce": "9.0.4"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.21.3",
