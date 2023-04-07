@@ -9,6 +9,9 @@ const Row = styled.div`
   border-collapse: collapse;
   font-size: 0.75rem;
   cursor: move;
+  &:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.01);
+  }
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
   }

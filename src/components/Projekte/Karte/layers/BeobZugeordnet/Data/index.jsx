@@ -1,8 +1,8 @@
 import { useCallback, useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
+import Accordion from '@mui/material/Accordion'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import AccordionSummary from '@mui/material/AccordionSummary'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import { DndProvider } from 'react-dnd'
@@ -19,14 +19,20 @@ import storeContext from '../../../../../../storeContext'
 import { beob } from '../../../../../shared/fragments'
 
 const Container = styled.div`
-  padding-top: 8px;
+  margin-left: -10px;
+  margin-right: -10px;
 `
-const Details = styled.details`
-  font-size: 0.8rem;
+const StyledAccordion = styled(Accordion)``
+const StyledAccordionSummary = styled(AccordionSummary)`
+  margin: 0;
+  padding: 0 10px;
+  min-height: 28px;
+  > div {
+    margin: 0;
+  }
 `
-const Summary = styled.summary`
-  font-size: 0.8rem;
-  padding-bottom: 3px;
+const StyledAccordionDetails = styled(AccordionDetails)`
+  padding: 4px 8px;
 `
 
 const BeobData = ({ id }) => {
@@ -147,12 +153,19 @@ const BeobData = ({ id }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <Details open={beobDetailsOpen} onToggle={onClickDetails}>
-          <Summary>Daten</Summary>
-          <DndProvider backend={HTML5Backend}>
-            {fields.map((field, i) => renderField(field, i))}
-          </DndProvider>
-        </Details>
+        <StyledAccordion
+          expanded={beobDetailsOpen}
+          onChange={onClickDetails}
+          disableGutters
+          elevation={1}
+        >
+          <StyledAccordionSummary>Daten</StyledAccordionSummary>
+          <StyledAccordionDetails>
+            <DndProvider backend={HTML5Backend}>
+              {fields.map((field, i) => renderField(field, i))}
+            </DndProvider>
+          </StyledAccordionDetails>
+        </StyledAccordion>
       </Container>
     </ErrorBoundary>
   )
