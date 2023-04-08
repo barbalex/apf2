@@ -25,9 +25,10 @@ const ClickListener = () => {
 
   // idea 4:
   // get all active layers
-  // filter queryable ones
+  // filter queryable ones (Markierungen, Gemeinden, Betreuungsgebiete, Detailplaene, Massnahmen)
   // directly query them
   // build popup from responses
+  // seems to be the best solution
 
   return null
 }
