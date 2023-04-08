@@ -75,8 +75,8 @@ const GemeindeLayer = () => {
     <GeoJSON
       data={gemeinden}
       style={style}
-      onEachFeature={onEachFeature}
-      // interactive={false}
+      // onEachFeature={onEachFeature}
+      interactive={false}
     />
   )
 }

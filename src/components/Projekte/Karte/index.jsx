@@ -571,7 +571,6 @@ const Karte = () => {
           doubleClickZoom={false}
           zoomControl={false}
         >
-          <ClickListener />
           {activeBaseLayer && <BaseLayerComponent />}
           {activeOverlaysSorted
             .reverse()
@@ -638,6 +637,7 @@ const Karte = () => {
           {showBeobZugeordnetAssignPolylines && (
             <BeobZugeordnetAssignPolylines />
           )}
+          <ClickListener />
           <ScaleControl imperial={false} />
           <Control position="topright" visible={!hideMapControls}>
             <OwnControls
