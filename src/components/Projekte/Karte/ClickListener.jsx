@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useMapEvent } from 'react-leaflet/hooks'
 import { useApolloClient, gql } from '@apollo/client'
-import leaflet from 'leaflet'
+import L from 'leaflet'
 
 import storeContext from '../../../storeContext'
 import popupFromProperties from './layers/popupFromProperties'
@@ -49,9 +49,8 @@ const ClickListener = () => {
       lng,
     })
 
-    let gemeindenData
     if (activeOverlays.includes('Gemeinden')) {
-      // TODO:
+      let gemeindenData
       try {
         gemeindenData = await client.query({
           query: gql`query karteGemeindesQuery {
@@ -60,7 +59,6 @@ const ClickListener = () => {
               localisedcharacterstring: { equalTo: "Gemeinde" }, 
               geom: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
             }
-            orderBy: TEXT_ASC
           ) {
             nodes {
               id
@@ -72,14 +70,20 @@ const ClickListener = () => {
       } catch (error) {
         console.log(error)
       }
+
+      const node =
+        gemeindenData?.data?.allChAdministrativeUnits?.nodes?.[0] ?? {}
+      const popup = popupFromProperties({
+        properties: { Gemeinde: node.text ?? '' },
+        layerName: 'Gemeinden',
+        mapSize: map.getSize(),
+      })
+      console.log('ClickListener', {
+        gemeindenData,
+        node,
+      })
+      L.popup().setLatLng(event.latlng).setContent(popup).openOn(map)
     }
-    console.log('ClickListener', {
-      gemeindenData,
-    })
-    // map.eachLayer((layer) => {
-    //   const pane = layer.options?.pane
-    //   console.log('ClickListener', { layer, pane })
-    // })
   })
 
   const panes = map.getPanes()

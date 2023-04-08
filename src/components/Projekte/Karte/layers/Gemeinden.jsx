@@ -1,9 +1,8 @@
-import React, { useContext, useCallback } from 'react'
-import { GeoJSON, useMap } from 'react-leaflet'
+import React, { useContext } from 'react'
+import { GeoJSON } from 'react-leaflet'
 import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import popupFromProperties from './popupFromProperties'
 import storeContext from '../../../../storeContext'
 
 // see: https://leafletjs.com/reference-1.6.0.html#path-option
@@ -18,18 +17,15 @@ const style = () => ({
 })
 
 const GemeindeLayer = () => {
-  const map = useMap()
   const { enqueNotification } = useContext(storeContext)
 
   const { data, error } = useQuery(gql`
     query karteGemeindesQuery {
       allChAdministrativeUnits(
         filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
-        orderBy: TEXT_ASC
       ) {
         nodes {
           id
-          text
           geom {
             geojson
           }
@@ -45,21 +41,6 @@ const GemeindeLayer = () => {
     geometry: JSON.parse(n?.geom?.geojson),
   }))
 
-  const onEachFeature = useCallback(
-    (feature, layer) => {
-      if (feature.properties) {
-        layer.bindPopup(
-          popupFromProperties({
-            properties: feature.properties,
-            layerName: 'Gemeinden',
-            mapSize: map.getSize(),
-          }),
-        )
-      }
-    },
-    [map],
-  )
-
   if (error) {
     enqueNotification({
       message: `Fehler beim Laden der Gemeinden für die Karte: ${error.message}`,
@@ -71,14 +52,7 @@ const GemeindeLayer = () => {
 
   if (!data) return null
 
-  return (
-    <GeoJSON
-      data={gemeinden}
-      style={style}
-      // onEachFeature={onEachFeature}
-      interactive={false}
-    />
-  )
+  return <GeoJSON data={gemeinden} style={style} interactive={false} />
 }
 
 export default observer(GemeindeLayer)
