@@ -27,6 +27,7 @@ const MassnahmenLayer = ({ layer }) => {
   const map = useMap()
 
   useMapEvent('click', async (e) => {
+    console.log('MassnahmenLayer, click', { e, map, apId })
     if (!apId) return
 
     const mapSize = map.getSize()
@@ -124,6 +125,9 @@ const MassnahmenLayer = ({ layer }) => {
       maxNativeZoom={23}
       minZoom={0}
       maxZoom={23}
+      onEachFeature={(feature, layer) => {
+        console.log('onEachFeature', { feature, layer })
+      }}
       // Wunsch: Nach Status filtern können
       // https://github.com/barbalex/apf2/issues/619#issuecomment-1472497387
       // https://docs.qgis.org/3.22/en/docs/server_manual/services/wms.html#wms-filter
