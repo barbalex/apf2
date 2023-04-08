@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import * as ReactDOMServer from 'react-dom/server'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useMapEvent } from 'react-leaflet/hooks'
@@ -6,7 +7,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import L from 'leaflet'
 
 import storeContext from '../../../storeContext'
-import popupFromProperties from './layers/popupFromProperties'
+import Popup from './layers/Popup'
 
 const ClickListener = () => {
   const store = useContext(storeContext)
@@ -49,6 +50,8 @@ const ClickListener = () => {
       lng,
     })
 
+    const layersData = []
+
     if (activeOverlays.includes('Gemeinden')) {
       let gemeindenData
       try {
@@ -73,16 +76,15 @@ const ClickListener = () => {
 
       const node =
         gemeindenData?.data?.allChAdministrativeUnits?.nodes?.[0] ?? {}
-      const popup = popupFromProperties({
-        properties: { Gemeinde: node.text ?? '' },
-        layerName: 'Gemeinden',
-        mapSize: map.getSize(),
+      const properties = { ...node }
+      delete properties.__typename
+      delete properties.id
+      properties.Gemeinde = properties.text
+      delete properties.text
+      layersData.push({
+        label: 'Gemeinden',
+        properties: Object.entries(properties),
       })
-      console.log('ClickListener', {
-        gemeindenData,
-        node,
-      })
-      L.popup().setLatLng(event.latlng).setContent(popup).openOn(map)
     }
     if (activeOverlays.includes('Betreuungsgebiete')) {
       let betreuungsgebieteData
@@ -114,24 +116,24 @@ const ClickListener = () => {
       const properties = { ...node }
       delete properties.__typename
       delete properties.id
-      const popup = popupFromProperties({
-        properties,
-        layerName: 'Betreuungsgebiete',
-        mapSize: map.getSize(),
+      layersData.push({
+        label: 'Betreuungsgebiete',
+        properties: Object.entries(properties),
       })
-      L.popup().setLatLng(event.latlng).setContent(popup).openOn(map)
     }
-  })
 
-  const panes = map.getPanes()
-  const gemeindePane = panes?.Gemeinden
+    if (!layersData.length) return
+
+    const popupContent = ReactDOMServer.renderToString(
+      <Popup layersData={layersData} mapSize={map.getSize()} />,
+    )
+    L.popup().setLatLng(event.latlng).setContent(popupContent).openOn(map)
+  })
 
   console.log('ClickListener', {
     map,
     activeOverlays,
     layers: map._layers,
-    panes,
-    gemeindePane,
   })
 
   return null
