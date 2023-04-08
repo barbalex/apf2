@@ -1,3 +1,4 @@
+-- this was created by exporting from qgis into a pgsql dump file
 DROP TABLE IF EXISTS "apflora"."nsbetreuung" CASCADE;
 CREATE TABLE "apflora"."nsbetreuung" ( "ogc_fid" SERIAL, CONSTRAINT "nsbetreuung_pk" PRIMARY KEY ("ogc_fid") );
 SELECT AddGeometryColumn('apflora','nsbetreuung','wkb_geometry',4326,'MULTIPOLYGON',2);
