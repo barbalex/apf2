@@ -1,15 +1,11 @@
 // https://stackoverflow.com/a/25296972/712005
 // also: https://gis.stackexchange.com/a/130553/13491
-import React, { useEffect, useContext, useState, useCallback } from 'react'
+import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { GeoJSON, useMap } from 'react-leaflet'
-import 'leaflet'
-import axios from 'redaxios'
+import { GeoJSON } from 'react-leaflet'
 import { useQuery, gql } from '@apollo/client'
 
 import storeContext from '../../../../storeContext'
-import popupFromProperties from './popupFromProperties'
-import { nsBetreuung } from '../../../shared/fragments'
 
 // see: https://leafletjs.com/reference-1.6.0.html#path-option
 // need to fill or else popup will only happen when line is clicked
@@ -23,106 +19,40 @@ const style = () => ({
 })
 
 const BetreuungsgebieteLayer = () => {
-  const map = useMap()
   const { enqueNotification } = useContext(storeContext)
 
-  const [gbData, setGbData] = useState(null)
-  const [totalData, setTotalData] = useState(null)
-
-  const { data: nsbData, error: nsbError } = useQuery(gql`
+  const { data, error } = useQuery(gql`
     query nsBetreuungsQuery {
       allNsBetreuungs {
         nodes {
-          ...NsBetreuungFields
+          id: gebietNr
+          geom {
+            geojson
+          }
         }
       }
     }
-    ${nsBetreuung}
   `)
 
-  const onEachFeature = useCallback(
-    (feature, layer) => {
-      if (feature.properties) {
-        layer.bindPopup(
-          popupFromProperties({
-            properties: feature.properties,
-            layerName: 'Betreuungsgebiete',
-            mapSize: map.getSize(),
-          }),
-        )
-      }
-    },
-    [map],
-  )
-
-  if (nsbError) {
+  if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der NS-Gebiets-Betreuer: ${nsbError.message}`,
+      message: `Fehler beim Laden der NS-Gebiets-Betreuer: ${error.message}`,
       options: {
         variant: 'error',
       },
     })
   }
 
-  useEffect(() => {
-    let isActive = true
-    /**
-     * BEWARE: https://maps.zh.ch does not include cors headers
-     * so need to query server side
-     */
-    axios({
-      method: 'get',
-      url: 'https://ss.apflora.ch/karte/betreuungsgebiete',
-    })
-      .then((response) => {
-        if (!isActive) return
+  if (!data) return null
 
-        setGbData(response.data.features)
-      })
-      .catch((error) => {
-        if (!isActive) return
+  const nodes = data?.allNsBetreuungs?.nodes ?? []
+  const betrGebiete = nodes.map((n) => ({
+    type: 'Feature',
+    properties: {},
+    geometry: JSON.parse(n?.geom?.geojson),
+  }))
 
-        enqueNotification({
-          message: `Fehler beim Laden der Betreuungsgebiete für die Karte: ${error.message}`,
-          options: {
-            variant: 'error',
-          },
-        })
-        return console.log(error)
-      })
-    return () => {
-      isActive = false
-    }
-  }, [enqueNotification])
-
-  useEffect(() => {
-    if (gbData && nsbData) {
-      const nsbNodes = nsbData?.allNsBetreuungs?.nodes ?? []
-      const totalData = gbData.map((d) => {
-        const nsb = nsbNodes.find((n) => n.gebietNr === d.properties.nr) || {}
-        const properties = {
-          ...d.properties,
-          firma: nsb.firma || '',
-          projektleiter: nsb.projektleiter || '',
-          telefon: nsb.telefon || '',
-        }
-        delete properties.geodb_oid
-
-        return {
-          geometry: d.geometry,
-          type: d.type,
-          properties,
-        }
-      })
-      setTotalData(totalData)
-    }
-  }, [gbData, nsbData])
-
-  if (!totalData) return null
-
-  return (
-    <GeoJSON data={totalData} style={style} onEachFeature={onEachFeature} />
-  )
+  return <GeoJSON data={betrGebiete} style={style} interactive={false} />
 }
 
 export default observer(BetreuungsgebieteLayer)

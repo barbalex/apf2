@@ -2,16 +2,16 @@
 -- user
 DROP TABLE IF EXISTS apflora.user CASCADE;
 
-CREATE TABLE apflora.user (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.user(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text UNIQUE,
   -- allow other attributes to be null
   -- so names and roles can be set beforehand by topos
   email text UNIQUE DEFAULT NULL,
   -- enforce role to prevent errors when no role is set
-  role name NOT NULL DEFAULT 'apflora_ap_reader' CHECK role_length_maximum_512 (length(ROLE) < 512),
-  pass text DEFAULT NULL CHECK pass_length_minimum_6 (length(pass) > 5),
-  adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE
+  role name NOT NULL DEFAULT 'apflora_ap_reader' CHECK role_length_maximum_512(length(ROLE) < 512),
+  pass text DEFAULT NULL CHECK pass_length_minimum_6(length(pass) > 5),
+  adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse(id) ON DELETE SET NULL ON UPDATE CASCADE
   -- reverted created_at and updated_at: authorizing apflora_ap_writer did not work any more!
   --created_at timestamptz NOT NULL DEFAULT now(),
   --updated_at timestamptz NOT NULL DEFAULT now()
@@ -33,25 +33,24 @@ ALTER TABLE apflora.user
 ALTER TABLE apflora.user
   ADD CONSTRAINT role_length_maximum_512 CHECK (length(ROLE) < 512);
 
-CREATE INDEX ON apflora.user USING btree (id);
+CREATE INDEX ON apflora.user USING btree(id);
 
-CREATE INDEX ON apflora.user USING btree (name);
+CREATE INDEX ON apflora.user USING btree(name);
 
-CREATE INDEX ON apflora.user USING btree (adresse_id);
+CREATE INDEX ON apflora.user USING btree(adresse_id);
 
 COMMENT ON TABLE apflora.user IS 'Konten, um den Zugriff auf apflora.ch zu regeln';
 
 COMMENT ON COLUMN apflora.user.adresse_id IS 'Datensatz bzw. Fremdschlüssel des Users in der Tabelle "adresse". Wird benutzt, damit die EKF-Kontrollen von Freiwilligen-Kontrolleurinnen gefiltert werden können';
 
 ALTER TABLE apflora.user
-  ADD COLUMN adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD COLUMN adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse(id) ON DELETE SET NULL ON UPDATE CASCADE;
 
-CREATE OR REPLACE FUNCTION current_user_name ()
+CREATE OR REPLACE FUNCTION current_user_name()
   RETURNS text
   AS $$
   SELECT
-    nullif (current_setting('jwt.claims.username', TRUE), '')::text;
-
+    nullif(current_setting('jwt.claims.username', TRUE), '')::text;
 $$
 LANGUAGE sql
 STABLE
@@ -62,15 +61,15 @@ ALTER TABLE apflora.user ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader_writer ON apflora.user;
 
 CREATE POLICY reader_writer ON apflora.user
-  USING (name = current_user_name ()
+  USING (name = current_user_name()
     OR CURRENT_USER = 'anon'
     OR CURRENT_USER = 'apflora_manager');
 
 -- adresse
 DROP TABLE IF EXISTS adresse;
 
-CREATE TABLE apflora.adresse (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.adresse(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   id serial PRIMARY KEY,
   name text DEFAULT NULL,
   adresse text DEFAULT NULL,
@@ -82,13 +81,13 @@ CREATE TABLE apflora.adresse (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.adresse USING btree (id);
+CREATE INDEX ON apflora.adresse USING btree(id);
 
-CREATE INDEX ON apflora.adresse USING btree (name);
+CREATE INDEX ON apflora.adresse USING btree(name);
 
-CREATE INDEX ON apflora.adresse USING btree (freiw_erfko);
+CREATE INDEX ON apflora.adresse USING btree(freiw_erfko);
 
-CREATE INDEX ON apflora.adresse USING btree (user_id);
+CREATE INDEX ON apflora.adresse USING btree(user_id);
 
 COMMENT ON TABLE apflora.adresse IS 'Adressen, die in anderen Tabellen zugeordent werden können. Nicht zu verwechseln mit Konten, welche den Zugriff auf apflora.ch ermöglichen (Tabelle apflora.user)';
 
@@ -117,33 +116,33 @@ CREATE POLICY writer ON apflora.adresse
 -- ap
 DROP TABLE IF EXISTS apflora.ap;
 
-CREATE TABLE apflora.ap (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  art_id uuid UNIQUE DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO action ON UPDATE CASCADE,
-  proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+CREATE TABLE apflora.ap(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  art_id uuid UNIQUE DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) ON DELETE NO action ON UPDATE CASCADE,
+  proj_id uuid DEFAULT NULL REFERENCES apflora.projekt(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   start_jahr smallint DEFAULT NULL,
-  umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse(id) ON DELETE SET NULL ON UPDATE CASCADE,
   ekf_beobachtungszeitpunkt text DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.ap USING btree (id);
+CREATE INDEX ON apflora.ap USING btree(id);
 
-CREATE INDEX ON apflora.ap USING btree (art_id);
+CREATE INDEX ON apflora.ap USING btree(art_id);
 
-CREATE INDEX ON apflora.ap USING btree (proj_id);
+CREATE INDEX ON apflora.ap USING btree(proj_id);
 
-CREATE INDEX ON apflora.ap USING btree (bearbeitung);
+CREATE INDEX ON apflora.ap USING btree(bearbeitung);
 
-CREATE INDEX ON apflora.ap USING btree (start_jahr);
+CREATE INDEX ON apflora.ap USING btree(start_jahr);
 
-CREATE INDEX ON apflora.ap USING btree (umsetzung);
+CREATE INDEX ON apflora.ap USING btree(umsetzung);
 
-CREATE INDEX ON apflora.ap USING btree (bearbeiter);
+CREATE INDEX ON apflora.ap USING btree(bearbeiter);
 
 COMMENT ON COLUMN apflora.ap.id IS 'Primärschlüssel';
 
@@ -175,7 +174,7 @@ CREATE POLICY reader ON apflora.ap
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())))
+        user_name = current_user_name())))
       WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
       OR (CURRENT_USER IN ('apflora_ap_writer') AND id IN (
         SELECT
@@ -183,24 +182,24 @@ CREATE POLICY reader ON apflora.ap
         FROM
           apflora.ap_user
         WHERE
-          user_name = current_user_name ())));
+          user_name = current_user_name())));
 
 DROP TABLE IF EXISTS apflora.ap_user;
 
-CREATE TABLE apflora.ap_user (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  user_name text DEFAULT NULL REFERENCES apflora.user (name) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.ap_user(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ap_id uuid DEFAULT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  user_name text DEFAULT NULL REFERENCES apflora.user(name) ON DELETE CASCADE ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (ap_id, user_name)
 );
 
-CREATE INDEX ON apflora.ap_user USING btree (id);
+CREATE INDEX ON apflora.ap_user USING btree(id);
 
-CREATE INDEX ON apflora.ap_user USING btree (ap_id);
+CREATE INDEX ON apflora.ap_user USING btree(ap_id);
 
-CREATE INDEX ON apflora.ap_user USING btree (user_name);
+CREATE INDEX ON apflora.ap_user USING btree(user_name);
 
 COMMENT ON TABLE apflora.ap IS 'Hier wird bestimmt, welche Benutzer mit den rollen "apflora_ap_writer" oder "apflora_reader" Zugriff auf eine Art erhalten';
 
@@ -215,9 +214,9 @@ CREATE POLICY reader ON apflora.ap_user
 
 DROP TABLE IF EXISTS apflora.ap_file;
 
-CREATE TABLE apflora.ap_file (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.ap_file(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ap_id uuid DEFAULT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
@@ -226,13 +225,13 @@ CREATE TABLE apflora.ap_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX ON apflora.ap USING btree (id);
+CREATE INDEX ON apflora.ap USING btree(id);
 
-CREATE INDEX ON apflora.ap_file USING btree (ap_id);
+CREATE INDEX ON apflora.ap_file USING btree(ap_id);
 
-CREATE INDEX ON apflora.ap_file USING btree (file_id);
+CREATE INDEX ON apflora.ap_file USING btree(file_id);
 
-CREATE INDEX ON apflora.ap_file USING btree (file_mime_type);
+CREATE INDEX ON apflora.ap_file USING btree(file_mime_type);
 
 ALTER TABLE apflora.ap_file ENABLE ROW LEVEL SECURITY;
 
@@ -246,7 +245,7 @@ CREATE POLICY reader ON apflora.ap_file
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())))
+        user_name = current_user_name())))
       WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
       OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
         SELECT
@@ -254,20 +253,20 @@ CREATE POLICY reader ON apflora.ap_file
         FROM
           apflora.ap_user
         WHERE
-          user_name = current_user_name ())));
+          user_name = current_user_name())));
 
 -- ap_history
 DROP TABLE IF EXISTS apflora.ap_history;
 
-CREATE TABLE apflora.ap_history (
+CREATE TABLE apflora.ap_history(
   year integer NOT NULL,
   id uuid NOT NULL,
-  art_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO action ON UPDATE CASCADE,
-  proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  art_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) ON DELETE NO action ON UPDATE CASCADE,
+  proj_id uuid DEFAULT NULL REFERENCES apflora.projekt(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   start_jahr smallint DEFAULT NULL,
-  umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse(id) ON DELETE SET NULL ON UPDATE CASCADE,
   ekf_beobachtungszeitpunkt text DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
@@ -275,21 +274,21 @@ CREATE TABLE apflora.ap_history (
   PRIMARY KEY (id, year)
 );
 
-CREATE INDEX ON apflora.ap_history USING btree (id);
+CREATE INDEX ON apflora.ap_history USING btree(id);
 
-CREATE INDEX ON apflora.ap_history USING btree (year);
+CREATE INDEX ON apflora.ap_history USING btree(year);
 
-CREATE INDEX ON apflora.ap_history USING btree (art_id);
+CREATE INDEX ON apflora.ap_history USING btree(art_id);
 
-CREATE INDEX ON apflora.ap_history USING btree (proj_id);
+CREATE INDEX ON apflora.ap_history USING btree(proj_id);
 
-CREATE INDEX ON apflora.ap_history USING btree (bearbeitung);
+CREATE INDEX ON apflora.ap_history USING btree(bearbeitung);
 
-CREATE INDEX ON apflora.ap_history USING btree (start_jahr);
+CREATE INDEX ON apflora.ap_history USING btree(start_jahr);
 
-CREATE INDEX ON apflora.ap_history USING btree (umsetzung);
+CREATE INDEX ON apflora.ap_history USING btree(umsetzung);
 
-CREATE INDEX ON apflora.ap_history USING btree (bearbeiter);
+CREATE INDEX ON apflora.ap_history USING btree(bearbeiter);
 
 COMMENT ON COLUMN apflora.ap_history.year IS 'Jahr: ap_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von ap kopiert';
 
@@ -323,7 +322,7 @@ CREATE POLICY reader ON apflora.ap_history
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())))
+        user_name = current_user_name())))
       WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
       OR (CURRENT_USER IN ('apflora_ap_writer') AND id IN (
         SELECT
@@ -331,15 +330,15 @@ CREATE POLICY reader ON apflora.ap_history
         FROM
           apflora.ap_user
         WHERE
-          user_name = current_user_name ())));
+          user_name = current_user_name())));
 
 -- userprojekt
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
 
-CREATE TABLE apflora.userprojekt (
-  username varchar(30) REFERENCES apflora.user (name) ON DELETE CASCADE ON UPDATE CASCADE,
-  proj_id uuid REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.userprojekt(
+  username varchar(30) REFERENCES apflora.user(name) ON DELETE CASCADE ON UPDATE CASCADE,
+  proj_id uuid REFERENCES apflora.projekt(id) ON DELETE CASCADE ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
@@ -350,8 +349,8 @@ CREATE TABLE apflora.userprojekt (
 --   ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now();
 DROP TABLE IF EXISTS apflora.ap_bearbstand_werte;
 
-CREATE TABLE apflora.ap_bearbstand_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.ap_bearbstand_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -367,7 +366,7 @@ ALTER TABLE apflora.ap_bearbstand_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.ap_bearbstand_werte_code_seq');
 
 SELECT
-  setval('apflora.ap_bearbstand_werte_code_seq', (
+  setval('apflora.ap_bearbstand_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.ap_bearbstand_werte), FALSE);
 
@@ -375,13 +374,13 @@ ALTER TABLE apflora.ap_bearbstand_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (id);
+CREATE INDEX ON apflora.ap_bearbstand_werte USING btree(id);
 
-CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (code);
+CREATE INDEX ON apflora.ap_bearbstand_werte USING btree(code);
 
-CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (sort);
+CREATE INDEX ON apflora.ap_bearbstand_werte USING btree(sort);
 
-CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (historic);
+CREATE INDEX ON apflora.ap_bearbstand_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.id IS 'Primärschlüssel';
 
@@ -401,8 +400,8 @@ CREATE POLICY reader ON apflora.ap_bearbstand_werte
 -- this table is not used!!!
 DROP TABLE IF EXISTS apflora.ap_erfbeurtkrit_werte;
 
-CREATE TABLE apflora.ap_erfbeurtkrit_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.ap_erfbeurtkrit_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -418,7 +417,7 @@ ALTER TABLE apflora.ap_erfbeurtkrit_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.ap_erfbeurtkrit_werte_code_seq');
 
 SELECT
-  setval('apflora.ap_erfbeurtkrit_werte_code_seq', (
+  setval('apflora.ap_erfbeurtkrit_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.ap_erfbeurtkrit_werte), FALSE);
 
@@ -426,13 +425,13 @@ ALTER TABLE apflora.ap_erfbeurtkrit_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (id);
+CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree(id);
 
-CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (code);
+CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree(code);
 
-CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (sort);
+CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree(sort);
 
-CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (historic);
+CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.id IS 'Primärschlüssel';
 
@@ -451,8 +450,8 @@ CREATE POLICY reader ON apflora.ap_erfbeurtkrit_werte
 -- ap_erfkrit_werte
 DROP TABLE IF EXISTS apflora.ap_erfkrit_werte;
 
-CREATE TABLE apflora.ap_erfkrit_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.ap_erfkrit_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -468,7 +467,7 @@ ALTER TABLE apflora.ap_erfkrit_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.ap_erfkrit_werte_code_seq');
 
 SELECT
-  setval('apflora.ap_erfkrit_werte_code_seq', (
+  setval('apflora.ap_erfkrit_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.ap_erfkrit_werte), FALSE);
 
@@ -476,13 +475,13 @@ ALTER TABLE apflora.ap_erfkrit_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (id);
+CREATE INDEX ON apflora.ap_erfkrit_werte USING btree(id);
 
-CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (code);
+CREATE INDEX ON apflora.ap_erfkrit_werte USING btree(code);
 
-CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (sort);
+CREATE INDEX ON apflora.ap_erfkrit_werte USING btree(sort);
 
-CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (historic);
+CREATE INDEX ON apflora.ap_erfkrit_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.id IS 'Primärschlüssel';
 
@@ -503,8 +502,8 @@ CREATE POLICY reader ON apflora.ap_erfkrit_werte
 -- ap_umsetzung_werte
 DROP TABLE IF EXISTS apflora.ap_umsetzung_werte;
 
-CREATE TABLE apflora.ap_umsetzung_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.ap_umsetzung_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -520,7 +519,7 @@ ALTER TABLE apflora.ap_umsetzung_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.ap_umsetzung_werte_code_seq');
 
 SELECT
-  setval('apflora.ap_umsetzung_werte_code_seq', (
+  setval('apflora.ap_umsetzung_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.ap_umsetzung_werte), FALSE);
 
@@ -528,13 +527,13 @@ ALTER TABLE apflora.ap_umsetzung_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (id);
+CREATE INDEX ON apflora.ap_umsetzung_werte USING btree(id);
 
-CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (code);
+CREATE INDEX ON apflora.ap_umsetzung_werte USING btree(code);
 
-CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (sort);
+CREATE INDEX ON apflora.ap_umsetzung_werte USING btree(sort);
 
-CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (historic);
+CREATE INDEX ON apflora.ap_umsetzung_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.id IS 'Primärschlüssel';
 
@@ -553,13 +552,13 @@ CREATE POLICY reader ON apflora.ap_umsetzung_werte
 -- apber
 DROP TABLE IF EXISTS apflora.apber;
 
-CREATE TABLE apflora.apber (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  ap_id uuid NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.apber(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ap_id uuid NOT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   situation text,
   vergleich_vorjahr_gesamtziel text,
-  beurteilung integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  beurteilung integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   veraenderung_zum_vorjahr varchar(2) DEFAULT NULL,
   -- analyse is a reserved word!!!
   apber_analyse text DEFAULT NULL,
@@ -572,21 +571,21 @@ CREATE TABLE apflora.apber (
   massnahmen_planung_vs_ausfuehrung text,
   wirkung_auf_art text,
   datum date DEFAULT NULL,
-  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse(id) ON DELETE SET NULL ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.apber USING btree (id);
+CREATE INDEX ON apflora.apber USING btree(id);
 
-CREATE INDEX ON apflora.apber USING btree (ap_id);
+CREATE INDEX ON apflora.apber USING btree(ap_id);
 
-CREATE INDEX ON apflora.apber USING btree (beurteilung);
+CREATE INDEX ON apflora.apber USING btree(beurteilung);
 
-CREATE INDEX ON apflora.apber USING btree (bearbeiter);
+CREATE INDEX ON apflora.apber USING btree(bearbeiter);
 
-CREATE INDEX ON apflora.apber USING btree (jahr);
+CREATE INDEX ON apflora.apber USING btree(jahr);
 
 COMMENT ON COLUMN apflora.apber.id IS 'Primärschlüssel';
 
@@ -639,7 +638,7 @@ CREATE POLICY reader ON apflora.apber
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())))
+        user_name = current_user_name())))
       WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
       OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
         SELECT
@@ -647,14 +646,14 @@ CREATE POLICY reader ON apflora.apber
         FROM
           apflora.ap_user
         WHERE
-          user_name = current_user_name ())));
+          user_name = current_user_name())));
 
 -- apberuebersicht
 DROP TABLE IF EXISTS apflora.apberuebersicht;
 
-CREATE TABLE apflora.apberuebersicht (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.apberuebersicht(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  proj_id uuid DEFAULT NULL REFERENCES apflora.projekt(id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint,
   history_date date DEFAULT NULL,
   bemerkungen text,
@@ -664,11 +663,11 @@ CREATE TABLE apflora.apberuebersicht (
   UNIQUE (proj_id, jahr)
 );
 
-CREATE INDEX ON apflora.apberuebersicht USING btree (id);
+CREATE INDEX ON apflora.apberuebersicht USING btree(id);
 
-CREATE INDEX ON apflora.apberuebersicht USING btree (jahr);
+CREATE INDEX ON apflora.apberuebersicht USING btree(jahr);
 
-CREATE INDEX ON apflora.apberuebersicht USING btree (proj_id);
+CREATE INDEX ON apflora.apberuebersicht USING btree(proj_id);
 
 COMMENT ON COLUMN apflora.apberuebersicht.id IS 'Primärschlüssel';
 
@@ -696,21 +695,21 @@ CREATE POLICY reader ON apflora.apberuebersicht
 -- assozart
 DROP TABLE IF EXISTS apflora.assozart;
 
-CREATE TABLE apflora.assozart (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  ae_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO action ON UPDATE CASCADE,
+CREATE TABLE apflora.assozart(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ap_id uuid DEFAULT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ae_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) ON DELETE NO action ON UPDATE CASCADE,
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.assozart USING btree (id);
+CREATE INDEX ON apflora.assozart USING btree(id);
 
-CREATE INDEX ON apflora.assozart USING btree (ap_id);
+CREATE INDEX ON apflora.assozart USING btree(ap_id);
 
-CREATE INDEX ON apflora.assozart USING btree (ae_id);
+CREATE INDEX ON apflora.assozart USING btree(ae_id);
 
 COMMENT ON COLUMN apflora.assozart.id IS 'Primärschlüssel';
 
@@ -735,7 +734,7 @@ CREATE POLICY reader ON apflora.assozart
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())))
+        user_name = current_user_name())))
       WITH CHECK (CURRENT_USER IN ('apflora_manager')
       OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
         SELECT
@@ -743,22 +742,22 @@ CREATE POLICY reader ON apflora.assozart
         FROM
           apflora.ap_user
         WHERE
-          user_name = current_user_name ())));
+          user_name = current_user_name())));
 
 -- projekt
 DROP TABLE IF EXISTS apflora.projekt;
 
-CREATE TABLE apflora.projekt (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.projekt(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name varchar(150) DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.projekt USING btree (id);
+CREATE INDEX ON apflora.projekt USING btree(id);
 
-CREATE INDEX ON apflora.projekt USING btree (name);
+CREATE INDEX ON apflora.projekt USING btree(name);
 
 COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -773,21 +772,21 @@ CREATE POLICY reader ON apflora.projekt
 -- erfkrit
 DROP TABLE IF EXISTS apflora.erfkrit;
 
-CREATE TABLE apflora.erfkrit (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  ap_id uuid NOT NULL DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+CREATE TABLE apflora.erfkrit(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ap_id uuid NOT NULL DEFAULT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   kriterien text DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.erfkrit USING btree (id);
+CREATE INDEX ON apflora.erfkrit USING btree(id);
 
-CREATE INDEX ON apflora.erfkrit USING btree (ap_id);
+CREATE INDEX ON apflora.erfkrit USING btree(ap_id);
 
-CREATE INDEX ON apflora.erfkrit USING btree (erfolg);
+CREATE INDEX ON apflora.erfkrit USING btree(erfolg);
 
 COMMENT ON COLUMN apflora.erfkrit.id IS 'Primärschlüssel';
 
@@ -811,7 +810,7 @@ CREATE POLICY reader ON apflora.erfkrit
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())))
+        user_name = current_user_name())))
       WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
       OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
         SELECT
@@ -819,14 +818,14 @@ CREATE POLICY reader ON apflora.erfkrit
         FROM
           apflora.ap_user
         WHERE
-          user_name = current_user_name ())));
+          user_name = current_user_name())));
 
 -- idealbiotop
 DROP TABLE IF EXISTS apflora.idealbiotop;
 
-CREATE TABLE apflora.idealbiotop (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  ap_id uuid UNIQUE DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.idealbiotop(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ap_id uuid UNIQUE DEFAULT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
   erstelldatum date DEFAULT NULL,
   hoehenlage text,
   region text,
@@ -850,9 +849,9 @@ CREATE TABLE apflora.idealbiotop (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.idealbiotop USING btree (id);
+CREATE INDEX ON apflora.idealbiotop USING btree(id);
 
-CREATE INDEX ON apflora.idealbiotop USING btree (ap_id);
+CREATE INDEX ON apflora.idealbiotop USING btree(ap_id);
 
 COMMENT ON COLUMN apflora.idealbiotop.id IS 'Primärschlüssel';
 
@@ -908,7 +907,7 @@ CREATE POLICY reader ON apflora.idealbiotop
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())))
+        user_name = current_user_name())))
       WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
       OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
         SELECT
@@ -916,13 +915,13 @@ CREATE POLICY reader ON apflora.idealbiotop
         FROM
           apflora.ap_user
         WHERE
-          user_name = current_user_name ())));
+          user_name = current_user_name())));
 
 DROP TABLE IF EXISTS apflora.idealbiotop_file;
 
-CREATE TABLE apflora.idealbiotop_file (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  idealbiotop_id uuid DEFAULT NULL REFERENCES apflora.idealbiotop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.idealbiotop_file(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  idealbiotop_id uuid DEFAULT NULL REFERENCES apflora.idealbiotop(id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
@@ -931,13 +930,13 @@ CREATE TABLE apflora.idealbiotop_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX ON apflora.idealbiotop USING btree (id);
+CREATE INDEX ON apflora.idealbiotop USING btree(id);
 
-CREATE INDEX ON apflora.idealbiotop_file USING btree (idealbiotop_id);
+CREATE INDEX ON apflora.idealbiotop_file USING btree(idealbiotop_id);
 
-CREATE INDEX ON apflora.idealbiotop_file USING btree (file_id);
+CREATE INDEX ON apflora.idealbiotop_file USING btree(file_id);
 
-CREATE INDEX ON apflora.idealbiotop_file USING btree (file_mime_type);
+CREATE INDEX ON apflora.idealbiotop_file USING btree(file_mime_type);
 
 ALTER TABLE apflora.idealbiotop_file ENABLE ROW LEVEL SECURITY;
 
@@ -958,7 +957,7 @@ CREATE POLICY reader ON apflora.idealbiotop_file
           FROM
             apflora.ap_user
           WHERE
-            user_name = current_user_name ()))))
+            user_name = current_user_name()))))
           WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
           OR (CURRENT_USER IN ('apflora_ap_writer') AND id IN (
             SELECT
@@ -973,17 +972,17 @@ CREATE POLICY reader ON apflora.idealbiotop_file
                 FROM
                   apflora.ap_user
                 WHERE
-                  user_name = current_user_name ()))));
+                  user_name = current_user_name()))));
 
 -- pop
 DROP TABLE IF EXISTS apflora.pop;
 
-CREATE TABLE apflora.pop (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.pop(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ap_id uuid DEFAULT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
-  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   status_unklar boolean DEFAULT FALSE,
   status_unklar_begruendung text DEFAULT NULL,
   bekannt_seit smallint DEFAULT NULL,
@@ -993,19 +992,19 @@ CREATE TABLE apflora.pop (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.pop USING gist (geom_point);
+CREATE INDEX ON apflora.pop USING gist(geom_point);
 
-CREATE INDEX ON apflora.pop USING btree (id);
+CREATE INDEX ON apflora.pop USING btree(id);
 
-CREATE INDEX ON apflora.pop USING btree (ap_id);
+CREATE INDEX ON apflora.pop USING btree(ap_id);
 
-CREATE INDEX ON apflora.pop USING btree (status);
+CREATE INDEX ON apflora.pop USING btree(status);
 
-CREATE INDEX ON apflora.pop USING btree (nr);
+CREATE INDEX ON apflora.pop USING btree(nr);
 
-CREATE INDEX ON apflora.pop USING btree (name);
+CREATE INDEX ON apflora.pop USING btree(name);
 
-CREATE INDEX ON apflora.pop USING btree (bekannt_seit);
+CREATE INDEX ON apflora.pop USING btree(bekannt_seit);
 
 COMMENT ON COLUMN apflora.pop.id IS 'Primärschlüssel der Tabelle "pop"';
 
@@ -1037,7 +1036,7 @@ CREATE POLICY reader ON apflora.pop
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())))
+        user_name = current_user_name())))
       WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
       OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
         SELECT
@@ -1045,13 +1044,13 @@ CREATE POLICY reader ON apflora.pop
         FROM
           apflora.ap_user
         WHERE
-          user_name = current_user_name ())));
+          user_name = current_user_name())));
 
 DROP TABLE IF EXISTS apflora.pop_file;
 
-CREATE TABLE apflora.pop_file (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.pop_file(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  pop_id uuid DEFAULT NULL REFERENCES apflora.pop(id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
@@ -1060,13 +1059,13 @@ CREATE TABLE apflora.pop_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX ON apflora.pop USING btree (id);
+CREATE INDEX ON apflora.pop USING btree(id);
 
-CREATE INDEX ON apflora.pop_file USING btree (pop_id);
+CREATE INDEX ON apflora.pop_file USING btree(pop_id);
 
-CREATE INDEX ON apflora.pop_file USING btree (file_id);
+CREATE INDEX ON apflora.pop_file USING btree(file_id);
 
-CREATE INDEX ON apflora.pop_file USING btree (file_mime_type);
+CREATE INDEX ON apflora.pop_file USING btree(file_mime_type);
 
 ALTER TABLE apflora.pop_file ENABLE ROW LEVEL SECURITY;
 
@@ -1086,7 +1085,7 @@ CREATE POLICY reader ON apflora.pop_file
           FROM
             apflora.ap_user
           WHERE
-            user_name = current_user_name ()))))
+            user_name = current_user_name()))))
           WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
           OR (CURRENT_USER IN ('apflora_ap_writer') AND pop_id IN (
             SELECT
@@ -1100,18 +1099,18 @@ CREATE POLICY reader ON apflora.pop_file
                 FROM
                   apflora.ap_user
                 WHERE
-                  user_name = current_user_name ()))));
+                  user_name = current_user_name()))));
 
 -- pop_history
 DROP TABLE IF EXISTS apflora.pop_history;
 
-CREATE TABLE apflora.pop_history (
+CREATE TABLE apflora.pop_history(
   year integer NOT NULL,
   id uuid NOT NULL,
-  ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ap_id uuid DEFAULT NULL REFERENCES apflora.ap(id) ON DELETE NO ACTION ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
-  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   status_unklar boolean DEFAULT FALSE,
   status_unklar_begruendung text DEFAULT NULL,
   bekannt_seit smallint DEFAULT NULL,
@@ -1122,19 +1121,19 @@ CREATE TABLE apflora.pop_history (
   PRIMARY KEY (id, year)
 );
 
-CREATE INDEX ON apflora.pop_history USING btree (id);
+CREATE INDEX ON apflora.pop_history USING btree(id);
 
-CREATE INDEX ON apflora.pop_history USING btree (year);
+CREATE INDEX ON apflora.pop_history USING btree(year);
 
-CREATE INDEX ON apflora.pop_history USING btree (ap_id);
+CREATE INDEX ON apflora.pop_history USING btree(ap_id);
 
-CREATE INDEX ON apflora.pop_history USING btree (status);
+CREATE INDEX ON apflora.pop_history USING btree(status);
 
-CREATE INDEX ON apflora.pop_history USING btree (nr);
+CREATE INDEX ON apflora.pop_history USING btree(nr);
 
-CREATE INDEX ON apflora.pop_history USING btree (name);
+CREATE INDEX ON apflora.pop_history USING btree(name);
 
-CREATE INDEX ON apflora.pop_history USING btree (bekannt_seit);
+CREATE INDEX ON apflora.pop_history USING btree(bekannt_seit);
 
 COMMENT ON COLUMN apflora.pop_history.year IS 'Jahr: pop_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von pop kopiert';
 
@@ -1152,7 +1151,7 @@ CREATE POLICY reader ON apflora.pop_history
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())))
+        user_name = current_user_name())))
       WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
       OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
         SELECT
@@ -1160,13 +1159,13 @@ CREATE POLICY reader ON apflora.pop_history
         FROM
           apflora.ap_user
         WHERE
-          user_name = current_user_name ())));
+          user_name = current_user_name())));
 
 -- pop_status_werte
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 
-CREATE TABLE apflora.pop_status_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.pop_status_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(60) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -1182,7 +1181,7 @@ ALTER TABLE apflora.pop_status_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.pop_status_werte_code_seq');
 
 SELECT
-  setval('apflora.pop_status_werte_code_seq', (
+  setval('apflora.pop_status_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.pop_status_werte), FALSE);
 
@@ -1190,15 +1189,15 @@ ALTER TABLE apflora.pop_status_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.pop_status_werte USING btree (id);
+CREATE INDEX ON apflora.pop_status_werte USING btree(id);
 
-CREATE INDEX ON apflora.pop_status_werte USING btree (code);
+CREATE INDEX ON apflora.pop_status_werte USING btree(code);
 
-CREATE INDEX ON apflora.pop_status_werte USING btree (text);
+CREATE INDEX ON apflora.pop_status_werte USING btree(text);
 
-CREATE INDEX ON apflora.pop_status_werte USING btree (sort);
+CREATE INDEX ON apflora.pop_status_werte USING btree(sort);
 
-CREATE INDEX ON apflora.pop_status_werte USING btree (historic);
+CREATE INDEX ON apflora.pop_status_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.pop_status_werte.id IS 'Primärschlüssel';
 
@@ -1219,11 +1218,11 @@ CREATE POLICY reader ON apflora.pop_status_werte
 -- popber
 DROP TABLE IF EXISTS apflora.popber;
 
-CREATE TABLE apflora.popber (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.popber(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  pop_id uuid DEFAULT NULL REFERENCES apflora.pop(id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
-  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
@@ -1242,13 +1241,13 @@ COMMENT ON COLUMN apflora.popber.bemerkungen IS 'Bemerkungen zur Beurteilung';
 
 COMMENT ON COLUMN apflora.popber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-CREATE INDEX ON apflora.popber USING btree (id);
+CREATE INDEX ON apflora.popber USING btree(id);
 
-CREATE INDEX ON apflora.popber USING btree (pop_id);
+CREATE INDEX ON apflora.popber USING btree(pop_id);
 
-CREATE INDEX ON apflora.popber USING btree (entwicklung);
+CREATE INDEX ON apflora.popber USING btree(entwicklung);
 
-CREATE INDEX ON apflora.popber USING btree (jahr);
+CREATE INDEX ON apflora.popber USING btree(jahr);
 
 ALTER TABLE apflora.popber ENABLE ROW LEVEL SECURITY;
 
@@ -1269,7 +1268,7 @@ CREATE POLICY reader ON apflora.popber
             FROM
               apflora.ap_user
             WHERE
-              user_name = current_user_name ()))))
+              user_name = current_user_name()))))
             WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
             OR (CURRENT_USER IN ('apflora_ap_writer') AND pop_id IN (
               SELECT
@@ -1284,29 +1283,29 @@ CREATE POLICY reader ON apflora.popber
                     FROM
                       apflora.ap_user
                     WHERE
-                      user_name = current_user_name ()))));
+                      user_name = current_user_name()))));
 
 -- popmassnber
 DROP TABLE IF EXISTS apflora.popmassnber;
 
-CREATE TABLE apflora.popmassnber (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.popmassnber(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  pop_id uuid DEFAULT NULL REFERENCES apflora.pop(id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
-  beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.popmassnber USING btree (id);
+CREATE INDEX ON apflora.popmassnber USING btree(id);
 
-CREATE INDEX ON apflora.popmassnber USING btree (pop_id);
+CREATE INDEX ON apflora.popmassnber USING btree(pop_id);
 
-CREATE INDEX ON apflora.popmassnber USING btree (beurteilung);
+CREATE INDEX ON apflora.popmassnber USING btree(beurteilung);
 
-CREATE INDEX ON apflora.popmassnber USING btree (jahr);
+CREATE INDEX ON apflora.popmassnber USING btree(jahr);
 
 COMMENT ON COLUMN apflora.popmassnber.id IS 'Primärschlüssel';
 
@@ -1338,7 +1337,7 @@ CREATE POLICY reader ON apflora.popmassnber
           FROM
             apflora.ap_user
           WHERE
-            user_name = current_user_name ()))))
+            user_name = current_user_name()))))
           WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
           OR (CURRENT_USER IN ('apflora_ap_writer') AND pop_id IN (
             SELECT
@@ -1352,14 +1351,14 @@ CREATE POLICY reader ON apflora.popmassnber
                 FROM
                   apflora.ap_user
                 WHERE
-                  user_name = current_user_name ()))));
+                  user_name = current_user_name()))));
 
 -- tpop
 DROP TABLE IF EXISTS apflora.tpop;
 
-CREATE TABLE apflora.tpop (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.tpop(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  pop_id uuid DEFAULT NULL REFERENCES apflora.pop(id) ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   gemeinde text DEFAULT NULL,
   flurname text DEFAULT NULL,
@@ -1378,48 +1377,48 @@ CREATE TABLE apflora.tpop (
   wasserhaushalt text DEFAULT NULL,
   beschreibung text DEFAULT NULL,
   kataster_nr text DEFAULT NULL,
-  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   status_unklar boolean DEFAULT FALSE,
   status_unklar_grund text DEFAULT NULL,
   apber_relevant boolean DEFAULT TRUE,
-  apber_relevant_grund integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_grund_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  apber_relevant_grund integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_grund_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   bekannt_seit smallint DEFAULT NULL,
   eigentuemer text DEFAULT NULL,
   kontakt text DEFAULT NULL,
   nutzungszone text DEFAULT NULL,
   bewirtschafter text DEFAULT NULL,
   bewirtschaftung text DEFAULT NULL,
-  ekfrequenz uuid DEFAULT NULL REFERENCES apflora.ekfrequenz (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  ekfrequenz uuid DEFAULT NULL REFERENCES apflora.ekfrequenz(id) ON DELETE SET NULL ON UPDATE CASCADE,
   ekfrequenz_startjahr smallint DEFAULT NULL,
   ekfrequenz_abweichend boolean DEFAULT FALSE,
-  ekf_kontrolleur uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  ekf_kontrolleur uuid DEFAULT NULL REFERENCES apflora.adresse(id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.tpop USING gist (geom_point);
+CREATE INDEX ON apflora.tpop USING gist(geom_point);
 
-CREATE INDEX ON apflora.tpop USING btree (id);
+CREATE INDEX ON apflora.tpop USING btree(id);
 
-CREATE INDEX ON apflora.tpop USING btree (pop_id);
+CREATE INDEX ON apflora.tpop USING btree(pop_id);
 
-CREATE INDEX ON apflora.tpop USING btree (status);
+CREATE INDEX ON apflora.tpop USING btree(status);
 
-CREATE INDEX ON apflora.tpop USING btree (apber_relevant);
+CREATE INDEX ON apflora.tpop USING btree(apber_relevant);
 
-CREATE INDEX ON apflora.tpop USING btree (nr);
+CREATE INDEX ON apflora.tpop USING btree(nr);
 
-CREATE INDEX ON apflora.tpop USING btree (flurname);
+CREATE INDEX ON apflora.tpop USING btree(flurname);
 
-CREATE INDEX ON apflora.tpop USING btree (ekfrequenz);
+CREATE INDEX ON apflora.tpop USING btree(ekfrequenz);
 
-CREATE INDEX ON apflora.tpop USING btree (ekfrequenz_abweichend);
+CREATE INDEX ON apflora.tpop USING btree(ekfrequenz_abweichend);
 
-CREATE INDEX ON apflora.tpop USING btree (ekf_kontrolleur);
+CREATE INDEX ON apflora.tpop USING btree(ekf_kontrolleur);
 
-CREATE INDEX ON apflora.tpop USING btree (bekannt_seit);
+CREATE INDEX ON apflora.tpop USING btree(bekannt_seit);
 
 COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
 
@@ -1507,7 +1506,7 @@ CREATE POLICY reader ON apflora.tpop
           FROM
             apflora.ap_user
           WHERE
-            user_name = current_user_name ()))))
+            user_name = current_user_name()))))
           WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
           OR (CURRENT_USER IN ('apflora_ap_writer') AND pop_id IN (
             SELECT
@@ -1521,13 +1520,13 @@ CREATE POLICY reader ON apflora.tpop
                 FROM
                   apflora.ap_user
                 WHERE
-                  user_name = current_user_name ()))));
+                  user_name = current_user_name()))));
 
 DROP TABLE IF EXISTS apflora.tpop_file;
 
-CREATE TABLE apflora.tpop_file (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.tpop_file(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop(id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
@@ -1536,13 +1535,13 @@ CREATE TABLE apflora.tpop_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX ON apflora.tpop USING btree (id);
+CREATE INDEX ON apflora.tpop USING btree(id);
 
-CREATE INDEX ON apflora.tpop_file USING btree (tpop_id);
+CREATE INDEX ON apflora.tpop_file USING btree(tpop_id);
 
-CREATE INDEX ON apflora.tpop_file USING btree (file_id);
+CREATE INDEX ON apflora.tpop_file USING btree(file_id);
 
-CREATE INDEX ON apflora.tpop_file USING btree (file_mime_type);
+CREATE INDEX ON apflora.tpop_file USING btree(file_mime_type);
 
 ALTER TABLE apflora.tpop_file ENABLE ROW LEVEL SECURITY;
 
@@ -1568,7 +1567,7 @@ CREATE POLICY reader ON apflora.tpop_file
               FROM
                 apflora.ap_user
               WHERE
-                user_name = current_user_name ())))))
+                user_name = current_user_name())))))
               WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
               OR (CURRENT_USER IN ('apflora_ap_writer') AND tpop_id IN (
                 SELECT
@@ -1588,12 +1587,12 @@ CREATE POLICY reader ON apflora.tpop_file
                         FROM
                           apflora.ap_user
                         WHERE
-                          user_name = current_user_name ())))));
+                          user_name = current_user_name())))));
 
 -- tpop_history
 DROP TABLE IF EXISTS apflora.tpop_history;
 
-CREATE TABLE apflora.tpop_history (
+CREATE TABLE apflora.tpop_history(
   year integer NOT NULL,
   id uuid NOT NULL,
   pop_id uuid DEFAULT NULL,
@@ -1638,29 +1637,29 @@ CREATE TABLE apflora.tpop_history (
 );
 
 ALTER TABLE apflora.tpop_history
-  ADD CONSTRAINT fk_pop_history FOREIGN KEY (year, pop_id) REFERENCES apflora.pop_history (year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT fk_pop_history FOREIGN KEY (year, pop_id) REFERENCES apflora.pop_history(year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 COMMENT ON TABLE apflora.tpop_history IS E '@foreignKey (pop_id) references pop (id)\n@foreignKey (status) references pop_status_werte (code)\n@foreignKey (apber_relevant_grund) references tpop_apberrelevant_grund_werte (code)\n@foreignKey (ekfrequenz) references ekfrequenz (id)\n@foreignKey (ekf_kontrolleur) references adresse (id)';
 
-CREATE INDEX ON apflora.tpop_history USING btree (id);
+CREATE INDEX ON apflora.tpop_history USING btree(id);
 
-CREATE INDEX ON apflora.tpop_history USING btree (year);
+CREATE INDEX ON apflora.tpop_history USING btree(year);
 
-CREATE INDEX ON apflora.tpop_history USING btree (pop_id);
+CREATE INDEX ON apflora.tpop_history USING btree(pop_id);
 
-CREATE INDEX ON apflora.tpop_history USING btree (status);
+CREATE INDEX ON apflora.tpop_history USING btree(status);
 
-CREATE INDEX ON apflora.tpop_history USING btree (apber_relevant);
+CREATE INDEX ON apflora.tpop_history USING btree(apber_relevant);
 
-CREATE INDEX ON apflora.tpop_history USING btree (nr);
+CREATE INDEX ON apflora.tpop_history USING btree(nr);
 
-CREATE INDEX ON apflora.tpop_history USING btree (flurname);
+CREATE INDEX ON apflora.tpop_history USING btree(flurname);
 
-CREATE INDEX ON apflora.tpop_history USING btree (ekf_kontrolleur);
+CREATE INDEX ON apflora.tpop_history USING btree(ekf_kontrolleur);
 
-CREATE INDEX ON apflora.tpop_history USING btree (ekfrequenz);
+CREATE INDEX ON apflora.tpop_history USING btree(ekfrequenz);
 
-CREATE INDEX ON apflora.tpop_history USING btree (apber_relevant_grund);
+CREATE INDEX ON apflora.tpop_history USING btree(apber_relevant_grund);
 
 COMMENT ON COLUMN apflora.tpop_history.year IS 'Jahr: tpop_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von tpop kopiert';
 
@@ -1684,7 +1683,7 @@ CREATE POLICY reader ON apflora.tpop_history
           FROM
             apflora.ap_user
           WHERE
-            user_name = current_user_name ()))))
+            user_name = current_user_name()))))
           WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
           OR (CURRENT_USER IN ('apflora_ap_writer') AND pop_id IN (
             SELECT
@@ -1698,13 +1697,13 @@ CREATE POLICY reader ON apflora.tpop_history
                 FROM
                   apflora.ap_user
                 WHERE
-                  user_name = current_user_name ()))));
+                  user_name = current_user_name()))));
 
 -- tpop_apberrelevant_grund_werte
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
 
-CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.tpop_apberrelevant_grund_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text text,
   sort smallint DEFAULT NULL,
@@ -1720,7 +1719,7 @@ ALTER TABLE apflora.tpop_apberrelevant_grund_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.tpop_apberrelevant_grund_werte_code_seq');
 
 SELECT
-  setval('apflora.tpop_apberrelevant_grund_werte_code_seq', (
+  setval('apflora.tpop_apberrelevant_grund_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.tpop_apberrelevant_grund_werte), FALSE);
 
@@ -1728,13 +1727,13 @@ ALTER TABLE apflora.tpop_apberrelevant_grund_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (id);
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(id);
 
-CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (code);
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(code);
 
-CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (text);
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(text);
 
-CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (historic);
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.id IS 'Primärschlüssel';
 
@@ -1753,8 +1752,8 @@ CREATE POLICY reader ON apflora.tpop_apberrelevant_grund_werte
 -- tpop_entwicklung_werte
 DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
 
-CREATE TABLE apflora.tpop_entwicklung_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.tpop_entwicklung_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -1770,7 +1769,7 @@ ALTER TABLE apflora.tpop_entwicklung_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.tpop_entwicklung_werte_code_seq');
 
 SELECT
-  setval('apflora.tpop_entwicklung_werte_code_seq', (
+  setval('apflora.tpop_entwicklung_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.tpop_entwicklung_werte), FALSE);
 
@@ -1778,13 +1777,13 @@ ALTER TABLE apflora.tpop_entwicklung_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (id);
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(id);
 
-CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (code);
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(code);
 
-CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (sort);
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(sort);
 
-CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (historic);
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.id IS 'Primärschlüssel';
 
@@ -1803,11 +1802,11 @@ CREATE POLICY reader ON apflora.tpop_entwicklung_werte
 -- tpopber
 DROP TABLE IF EXISTS apflora.tpopber;
 
-CREATE TABLE apflora.tpopber (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.tpopber(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop(id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
-  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
@@ -1825,13 +1824,13 @@ COMMENT ON COLUMN apflora.tpopber.entwicklung IS 'Bemerkungen zur Beurteilung';
 
 COMMENT ON COLUMN apflora.tpopber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-CREATE INDEX ON apflora.tpopber USING btree (id);
+CREATE INDEX ON apflora.tpopber USING btree(id);
 
-CREATE INDEX ON apflora.tpopber USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopber USING btree(tpop_id);
 
-CREATE INDEX ON apflora.tpopber USING btree (entwicklung);
+CREATE INDEX ON apflora.tpopber USING btree(entwicklung);
 
-CREATE INDEX ON apflora.tpopber USING btree (jahr);
+CREATE INDEX ON apflora.tpopber USING btree(jahr);
 
 ALTER TABLE apflora.tpopber ENABLE ROW LEVEL SECURITY;
 
@@ -1857,7 +1856,7 @@ CREATE POLICY reader ON apflora.tpopber
               FROM
                 apflora.ap_user
               WHERE
-                user_name = current_user_name ())))))
+                user_name = current_user_name())))))
               WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
               OR (CURRENT_USER IN ('apflora_ap_writer') AND tpop_id IN (
                 SELECT
@@ -1877,21 +1876,21 @@ CREATE POLICY reader ON apflora.tpopber
                         FROM
                           apflora.ap_user
                         WHERE
-                          user_name = current_user_name ())))));
+                          user_name = current_user_name())))));
 
 -- tpopkontr
 DROP TABLE IF EXISTS apflora.tpopkontr;
 
-CREATE TABLE apflora.tpopkontr (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  typ varchar(50) DEFAULT NULL REFERENCES apflora.tpopkontr_typ_werte (text) ON DELETE SET NULL ON UPDATE CASCADE,
+CREATE TABLE apflora.tpopkontr(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  typ varchar(50) DEFAULT NULL REFERENCES apflora.tpopkontr_typ_werte(text) ON DELETE SET NULL ON UPDATE CASCADE,
   datum date DEFAULT NULL,
   jahr smallint DEFAULT NULL,
-  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse(id) ON DELETE SET NULL ON UPDATE CASCADE,
   vitalitaet text DEFAULT NULL,
   ueberlebensrate smallint DEFAULT NULL,
-  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   ursachen text DEFAULT NULL,
   erfolgsbeurteilung text DEFAULT NULL,
   umsetzung_aendern text DEFAULT NULL,
@@ -1906,7 +1905,7 @@ CREATE TABLE apflora.tpopkontr (
   krautschicht varchar(100) DEFAULT NULL,
   strauchschicht text DEFAULT NULL,
   baumschicht varchar(100) DEFAULT NULL,
-  idealbiotop_uebereinstimmung integer DEFAULT NULL REFERENCES apflora.tpopkontr_idbiotuebereinst_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  idealbiotop_uebereinstimmung integer DEFAULT NULL REFERENCES apflora.tpopkontr_idbiotuebereinst_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   handlungsbedarf text,
   flaeche_ueberprueft integer DEFAULT NULL,
   plan_vorhanden boolean DEFAULT FALSE,
@@ -1925,23 +1924,23 @@ CREATE TABLE apflora.tpopkontr (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.tpopkontr USING btree (id);
+CREATE INDEX ON apflora.tpopkontr USING btree(id);
 
-CREATE INDEX ON apflora.tpopkontr USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopkontr USING btree(tpop_id);
 
-CREATE INDEX ON apflora.tpopkontr USING btree (bearbeiter);
+CREATE INDEX ON apflora.tpopkontr USING btree(bearbeiter);
 
-CREATE INDEX ON apflora.tpopkontr USING btree (entwicklung);
+CREATE INDEX ON apflora.tpopkontr USING btree(entwicklung);
 
-CREATE INDEX ON apflora.tpopkontr USING btree (idealbiotop_uebereinstimmung);
+CREATE INDEX ON apflora.tpopkontr USING btree(idealbiotop_uebereinstimmung);
 
-CREATE INDEX ON apflora.tpopkontr USING btree (jahr);
+CREATE INDEX ON apflora.tpopkontr USING btree(jahr);
 
-CREATE INDEX ON apflora.tpopkontr USING btree (typ);
+CREATE INDEX ON apflora.tpopkontr USING btree(typ);
 
-CREATE INDEX ON apflora.tpopkontr USING btree (datum);
+CREATE INDEX ON apflora.tpopkontr USING btree(datum);
 
-CREATE INDEX ON apflora.tpopkontr USING btree (apber_nicht_relevant);
+CREATE INDEX ON apflora.tpopkontr USING btree(apber_nicht_relevant);
 
 COMMENT ON COLUMN apflora.tpopkontr.id IS 'Primärschlüssel. Wird u.a. verwendet für die Identifikation der Beobachtung im nationalen Beobachtungs-Daten-Kreislauf';
 
@@ -2041,7 +2040,7 @@ CREATE POLICY reader ON apflora.tpopkontr
               FROM
                 apflora.ap_user
               WHERE
-                user_name = current_user_name ())))))
+                user_name = current_user_name())))))
               WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
               OR (CURRENT_USER IN ('apflora_ap_writer') AND tpop_id IN (
                 SELECT
@@ -2061,13 +2060,13 @@ CREATE POLICY reader ON apflora.tpopkontr
                         FROM
                           apflora.ap_user
                         WHERE
-                          user_name = current_user_name ())))));
+                          user_name = current_user_name())))));
 
 DROP TABLE IF EXISTS apflora.tpopkontr_file;
 
-CREATE TABLE apflora.tpopkontr_file (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  tpopkontr_id uuid DEFAULT NULL REFERENCES apflora.tpopkontr (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.tpopkontr_file(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tpopkontr_id uuid DEFAULT NULL REFERENCES apflora.tpopkontr(id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
@@ -2076,13 +2075,13 @@ CREATE TABLE apflora.tpopkontr_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX ON apflora.tpopkontr USING btree (id);
+CREATE INDEX ON apflora.tpopkontr USING btree(id);
 
-CREATE INDEX ON apflora.tpopkontr_file USING btree (tpopkontr_id);
+CREATE INDEX ON apflora.tpopkontr_file USING btree(tpopkontr_id);
 
-CREATE INDEX ON apflora.tpopkontr_file USING btree (file_id);
+CREATE INDEX ON apflora.tpopkontr_file USING btree(file_id);
 
-CREATE INDEX ON apflora.tpopkontr_file USING btree (file_mime_type);
+CREATE INDEX ON apflora.tpopkontr_file USING btree(file_mime_type);
 
 ALTER TABLE apflora.tpopkontr_file ENABLE ROW LEVEL SECURITY;
 
@@ -2114,7 +2113,7 @@ CREATE POLICY reader ON apflora.tpopkontr_file
                   FROM
                     apflora.ap_user
                   WHERE
-                    user_name = current_user_name ()))))))
+                    user_name = current_user_name()))))))
                   WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
                   OR (CURRENT_USER IN ('apflora_ap_writer') AND tpopkontr_id IN (
                     SELECT
@@ -2140,13 +2139,13 @@ CREATE POLICY reader ON apflora.tpopkontr_file
                                 FROM
                                   apflora.ap_user
                                 WHERE
-                                  user_name = current_user_name ()))))));
+                                  user_name = current_user_name()))))));
 
 -- tpopkontr_idbiotuebereinst_werte
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 
-CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -2162,7 +2161,7 @@ ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontr_idbiotuebereinst_werte_code_seq');
 
 SELECT
-  setval('apflora.tpopkontr_idbiotuebereinst_werte_code_seq', (
+  setval('apflora.tpopkontr_idbiotuebereinst_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.tpopkontr_idbiotuebereinst_werte), FALSE);
 
@@ -2170,13 +2169,13 @@ ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (id);
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(id);
 
-CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (code);
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(code);
 
-CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (sort);
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(sort);
 
-CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (historic);
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.id IS 'Primärschlüssel';
 
@@ -2195,8 +2194,8 @@ CREATE POLICY reader ON apflora.tpopkontr_idbiotuebereinst_werte
 -- tpopkontr_typ_werte
 DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
 
-CREATE TABLE apflora.tpopkontr_typ_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.tpopkontr_typ_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) UNIQUE DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -2212,7 +2211,7 @@ ALTER TABLE apflora.tpopkontr_typ_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontr_typ_werte_code_seq');
 
 SELECT
-  setval('apflora.tpopkontr_typ_werte_code_seq', (
+  setval('apflora.tpopkontr_typ_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.tpopkontr_typ_werte), FALSE);
 
@@ -2220,13 +2219,13 @@ ALTER TABLE apflora.tpopkontr_typ_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (id);
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(id);
 
-CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (code);
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(code);
 
-CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (sort);
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(sort);
 
-CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (historic);
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.id IS 'Primärschlüssel';
 
@@ -2245,12 +2244,12 @@ CREATE POLICY reader ON apflora.tpopkontr_typ_werte
 -- tpopkontrzaehl
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 
-CREATE TABLE apflora.tpopkontrzaehl (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  tpopkontr_id uuid DEFAULT NULL REFERENCES apflora.tpopkontr (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.tpopkontrzaehl(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tpopkontr_id uuid DEFAULT NULL REFERENCES apflora.tpopkontr(id) ON DELETE CASCADE ON UPDATE CASCADE,
   anzahl real DEFAULT NULL,
-  einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
+  methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL,
@@ -2266,15 +2265,15 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl.methode IS 'Verwendete Methodik. Auswah
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-CREATE INDEX ON apflora.tpopkontrzaehl USING btree (id);
+CREATE INDEX ON apflora.tpopkontrzaehl USING btree(id);
 
-CREATE INDEX ON apflora.tpopkontrzaehl USING btree (tpopkontr_id);
+CREATE INDEX ON apflora.tpopkontrzaehl USING btree(tpopkontr_id);
 
-CREATE INDEX ON apflora.tpopkontrzaehl USING btree (anzahl);
+CREATE INDEX ON apflora.tpopkontrzaehl USING btree(anzahl);
 
-CREATE INDEX ON apflora.tpopkontrzaehl USING btree (einheit);
+CREATE INDEX ON apflora.tpopkontrzaehl USING btree(einheit);
 
-CREATE INDEX ON apflora.tpopkontrzaehl USING btree (methode);
+CREATE INDEX ON apflora.tpopkontrzaehl USING btree(methode);
 
 ALTER TABLE apflora.tpopkontrzaehl ENABLE ROW LEVEL SECURITY;
 
@@ -2306,7 +2305,7 @@ CREATE POLICY reader ON apflora.tpopkontrzaehl
                   FROM
                     apflora.ap_user
                   WHERE
-                    user_name = current_user_name ()))))))
+                    user_name = current_user_name()))))))
                   WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
                   OR (CURRENT_USER IN ('apflora_ap_writer') AND tpopkontr_id IN (
                     SELECT
@@ -2332,13 +2331,13 @@ CREATE POLICY reader ON apflora.tpopkontrzaehl
                                 FROM
                                   apflora.ap_user
                                 WHERE
-                                  user_name = current_user_name ()))))));
+                                  user_name = current_user_name()))))));
 
 -- tpopkontrzaehl_einheit_werte
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 
-CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.tpopkontrzaehl_einheit_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) DEFAULT NULL,
   corresponds_to_massn_anz_triebe boolean DEFAULT FALSE,
@@ -2356,21 +2355,21 @@ ALTER TABLE apflora.tpopkontrzaehl_einheit_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontrzaehl_einheit_werte_code_seq');
 
 SELECT
-  setval('apflora.tpopkontrzaehl_einheit_werte_code_seq', (
+  setval('apflora.tpopkontrzaehl_einheit_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.tpopkontrzaehl_einheit_werte), FALSE);
 
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (id);
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(id);
 
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (code);
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(code);
 
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (sort);
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(sort);
 
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (historic);
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(historic);
 
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (corresponds_to_massn_anz_triebe);
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(corresponds_to_massn_anz_triebe);
 
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (corresponds_to_massn_anz_pflanzen);
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(corresponds_to_massn_anz_pflanzen);
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.id IS 'Primärschlüssel';
 
@@ -2393,8 +2392,8 @@ CREATE POLICY reader ON apflora.tpopkontrzaehl_einheit_werte
 -- tpopkontrzaehl_methode_werte
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
 
-CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.tpopkontrzaehl_methode_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -2410,7 +2409,7 @@ ALTER TABLE apflora.tpopkontrzaehl_methode_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontrzaehl_methode_werte_code_seq');
 
 SELECT
-  setval('apflora.tpopkontrzaehl_methode_werte_code_seq', (
+  setval('apflora.tpopkontrzaehl_methode_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.tpopkontrzaehl_methode_werte), FALSE);
 
@@ -2421,13 +2420,13 @@ ALTER TABLE apflora.tpopkontrzaehl_methode_werte
 ALTER TABLE apflora.tpopkontrzaehl_methode_werte
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (id);
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(id);
 
-CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (code);
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(code);
 
-CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (sort);
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(sort);
 
-CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (historic);
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.id IS 'Primärschlüssel';
 
@@ -2446,14 +2445,14 @@ CREATE POLICY reader ON apflora.tpopkontrzaehl_methode_werte
 -- tpopmassn
 DROP TABLE IF EXISTS apflora.tpopmassn;
 
-CREATE TABLE apflora.tpopmassn (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  typ integer DEFAULT NULL REFERENCES apflora.tpopmassn_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+CREATE TABLE apflora.tpopmassn(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  typ integer DEFAULT NULL REFERENCES apflora.tpopmassn_typ_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   beschreibung text DEFAULT NULL,
   jahr smallint DEFAULT NULL,
   datum date DEFAULT NULL,
-  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse(id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   plan_vorhanden boolean DEFAULT FALSE,
   plan_bezeichnung text DEFAULT NULL,
@@ -2462,7 +2461,7 @@ CREATE TABLE apflora.tpopmassn (
   anz_triebe integer DEFAULT NULL,
   anz_pflanzen integer DEFAULT NULL,
   anz_pflanzstellen integer DEFAULT NULL,
-  zieleinheit_einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  zieleinheit_einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   zieleinheit_anzahl integer DEFAULT NULL,
   wirtspflanze text DEFAULT NULL,
   herkunft_pop text DEFAULT NULL,
@@ -2475,15 +2474,15 @@ CREATE TABLE apflora.tpopmassn (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree (id);
+CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree(id);
 
-CREATE INDEX ON apflora.tpopmassn USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopmassn USING btree(tpop_id);
 
-CREATE INDEX ON apflora.tpopmassn USING btree (bearbeiter);
+CREATE INDEX ON apflora.tpopmassn USING btree(bearbeiter);
 
-CREATE INDEX ON apflora.tpopmassn USING btree (typ);
+CREATE INDEX ON apflora.tpopmassn USING btree(typ);
 
-CREATE INDEX ON apflora.tpopmassn USING btree (jahr);
+CREATE INDEX ON apflora.tpopmassn USING btree(jahr);
 
 COMMENT ON COLUMN apflora.tpopmassn.id IS 'Primärschlüssel der Tabelle "tpopmassn"';
 
@@ -2559,7 +2558,7 @@ CREATE POLICY reader ON apflora.tpopmassn
               FROM
                 apflora.ap_user
               WHERE
-                user_name = current_user_name ())))))
+                user_name = current_user_name())))))
               WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
               OR (CURRENT_USER IN ('apflora_ap_writer') AND tpop_id IN (
                 SELECT
@@ -2579,13 +2578,13 @@ CREATE POLICY reader ON apflora.tpopmassn
                         FROM
                           apflora.ap_user
                         WHERE
-                          user_name = current_user_name ())))));
+                          user_name = current_user_name())))));
 
 DROP TABLE IF EXISTS apflora.tpopmassn_file;
 
-CREATE TABLE apflora.tpopmassn_file (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  tpopmassn_id uuid DEFAULT NULL REFERENCES apflora.tpopmassn (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.tpopmassn_file(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tpopmassn_id uuid DEFAULT NULL REFERENCES apflora.tpopmassn(id) ON DELETE CASCADE ON UPDATE CASCADE,
   file_id uuid DEFAULT NULL,
   file_mime_type text DEFAULT NULL,
   name text DEFAULT NULL,
@@ -2594,13 +2593,13 @@ CREATE TABLE apflora.tpopmassn_file (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX ON apflora.tpopmassn USING btree (id);
+CREATE INDEX ON apflora.tpopmassn USING btree(id);
 
-CREATE INDEX ON apflora.tpopmassn_file USING btree (tpopmassn_id);
+CREATE INDEX ON apflora.tpopmassn_file USING btree(tpopmassn_id);
 
-CREATE INDEX ON apflora.tpopmassn_file USING btree (file_id);
+CREATE INDEX ON apflora.tpopmassn_file USING btree(file_id);
 
-CREATE INDEX ON apflora.tpopmassn_file USING btree (file_mime_type);
+CREATE INDEX ON apflora.tpopmassn_file USING btree(file_mime_type);
 
 ALTER TABLE apflora.tpopmassn_file ENABLE ROW LEVEL SECURITY;
 
@@ -2632,7 +2631,7 @@ CREATE POLICY reader ON apflora.tpopmassn_file
                   FROM
                     apflora.ap_user
                   WHERE
-                    user_name = current_user_name ()))))))
+                    user_name = current_user_name()))))))
                   WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
                   OR (CURRENT_USER IN ('apflora_ap_writer') AND tpopmassn_id IN (
                     SELECT
@@ -2658,13 +2657,13 @@ CREATE POLICY reader ON apflora.tpopmassn_file
                                 FROM
                                   apflora.ap_user
                                 WHERE
-                                  user_name = current_user_name ()))))));
+                                  user_name = current_user_name()))))));
 
 -- tpopmassn_erfbeurt_werte
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
 
-CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.tpopmassn_erfbeurt_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -2680,7 +2679,7 @@ ALTER TABLE apflora.tpopmassn_erfbeurt_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.tpopmassn_erfbeurt_werte_code_seq');
 
 SELECT
-  setval('apflora.tpopmassn_erfbeurt_werte_code_seq', (
+  setval('apflora.tpopmassn_erfbeurt_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.tpopmassn_erfbeurt_werte), FALSE);
 
@@ -2688,13 +2687,13 @@ ALTER TABLE apflora.tpopmassn_erfbeurt_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (id);
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(id);
 
-CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (code);
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(code);
 
-CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (sort);
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(sort);
 
-CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (historic);
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.id IS 'Primärschlüssel';
 
@@ -2715,8 +2714,8 @@ CREATE POLICY reader ON apflora.tpopmassn_erfbeurt_werte
 -- tpopmassn_typ_werte
 DROP TABLE IF EXISTS apflora.tpopmassn_typ_werte;
 
-CREATE TABLE apflora.tpopmassn_typ_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.tpopmassn_typ_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -2734,7 +2733,7 @@ ALTER TABLE apflora.tpopmassn_typ_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.tpopmassn_typ_werte_code_seq');
 
 SELECT
-  setval('apflora.tpopmassn_typ_werte_code_seq', (
+  setval('apflora.tpopmassn_typ_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.tpopmassn_typ_werte), FALSE);
 
@@ -2742,17 +2741,17 @@ ALTER TABLE apflora.tpopmassn_typ_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (id);
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(id);
 
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (code);
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(code);
 
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (sort);
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(sort);
 
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (ansiedlung);
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(ansiedlung);
 
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (anpflanzung);
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(anpflanzung);
 
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (historic);
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.id IS 'Primärschlüssel';
 
@@ -2773,24 +2772,24 @@ CREATE POLICY reader ON apflora.tpopmassn_typ_werte
 -- tpopmassnber
 DROP TABLE IF EXISTS apflora.tpopmassnber;
 
-CREATE TABLE apflora.tpopmassnber (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.tpopmassnber(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop(id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
-  beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.tpopmassnber USING btree (id);
+CREATE INDEX ON apflora.tpopmassnber USING btree(id);
 
-CREATE INDEX ON apflora.tpopmassnber USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopmassnber USING btree(tpop_id);
 
-CREATE INDEX ON apflora.tpopmassnber USING btree (beurteilung);
+CREATE INDEX ON apflora.tpopmassnber USING btree(beurteilung);
 
-CREATE INDEX ON apflora.tpopmassnber USING btree (jahr);
+CREATE INDEX ON apflora.tpopmassnber USING btree(jahr);
 
 COMMENT ON COLUMN apflora.tpopmassnber.id IS 'Primärschlüssel der Tabelle "tpopmassnber"';
 
@@ -2828,7 +2827,7 @@ CREATE POLICY reader ON apflora.tpopmassnber
               FROM
                 apflora.ap_user
               WHERE
-                user_name = current_user_name ())))))
+                user_name = current_user_name())))))
               WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
               OR (CURRENT_USER IN ('apflora_ap_writer') AND tpop_id IN (
                 SELECT
@@ -2848,13 +2847,13 @@ CREATE POLICY reader ON apflora.tpopmassnber
                         FROM
                           apflora.ap_user
                         WHERE
-                          user_name = current_user_name ())))));
+                          user_name = current_user_name())))));
 
 -- message
 DROP TABLE IF EXISTS apflora.message CASCADE;
 
-CREATE TABLE apflora.message (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.message(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   message text NOT NULL,
   time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   -- active is used to prevent to many datasets fro being fetched
@@ -2862,9 +2861,9 @@ CREATE TABLE apflora.message (
   active boolean NOT NULL DEFAULT TRUE
 );
 
-CREATE INDEX ON apflora.message USING btree (id);
+CREATE INDEX ON apflora.message USING btree(id);
 
-CREATE INDEX ON apflora.message USING btree (time);
+CREATE INDEX ON apflora.message USING btree(time);
 
 COMMENT ON COLUMN apflora.message.message IS 'Nachricht an die Benutzer';
 
@@ -2881,18 +2880,18 @@ CREATE POLICY reader ON apflora.message
 -- currentIssue
 DROP TABLE IF EXISTS apflora.currentIssue CASCADE;
 
-CREATE TABLE apflora.currentIssue (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.currentIssue(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   sort smallint DEFAULT NULL,
   title text DEFAULT NULL,
   issue text DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.currentIssue USING btree (id);
+CREATE INDEX ON apflora.currentIssue USING btree(id);
 
-CREATE INDEX ON apflora.currentIssue USING btree (sort);
+CREATE INDEX ON apflora.currentIssue USING btree(sort);
 
-CREATE INDEX ON apflora.currentIssue USING btree (title);
+CREATE INDEX ON apflora.currentIssue USING btree(title);
 
 COMMENT ON COLUMN apflora.currentIssue.issue IS 'Bekannter Fehler';
 
@@ -2908,17 +2907,17 @@ CREATE POLICY reader ON apflora.currentIssue
 -- list of read messages per user
 DROP TABLE IF EXISTS apflora.usermessage;
 
-CREATE TABLE apflora.usermessage (
-  user_name varchar(30) NOT NULL REFERENCES apflora.user (name) ON DELETE CASCADE ON UPDATE CASCADE,
-  message_id uuid NOT NULL REFERENCES apflora.message (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.usermessage(
+  user_name varchar(30) NOT NULL REFERENCES apflora.user(name) ON DELETE CASCADE ON UPDATE CASCADE,
+  message_id uuid NOT NULL REFERENCES apflora.message(id) ON DELETE CASCADE ON UPDATE CASCADE,
   UNIQUE (user_name, message_id)
 );
 
-CREATE INDEX ON apflora.usermessage USING btree (id);
+CREATE INDEX ON apflora.usermessage USING btree(id);
 
-CREATE INDEX ON apflora.usermessage USING btree (user_name);
+CREATE INDEX ON apflora.usermessage USING btree(user_name);
 
-CREATE INDEX ON apflora.usermessage USING btree (message_id);
+CREATE INDEX ON apflora.usermessage USING btree(message_id);
 
 -- this needs to be written by user when he ok's message
 ALTER TABLE apflora.usermessage ENABLE ROW LEVEL SECURITY;
@@ -2926,16 +2925,16 @@ ALTER TABLE apflora.usermessage ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.usermessage;
 
 CREATE POLICY reader ON apflora.usermessage
-  USING (user_name = current_user_name ()
+  USING (user_name = current_user_name()
     OR CURRENT_USER = 'apflora_manager');
 
 -- ziel
 DROP TABLE IF EXISTS apflora.ziel;
 
-CREATE TABLE apflora.ziel (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  ap_id uuid NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+CREATE TABLE apflora.ziel(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ap_id uuid NOT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   bezeichnung text,
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -2943,13 +2942,13 @@ CREATE TABLE apflora.ziel (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.ziel USING btree (id);
+CREATE INDEX ON apflora.ziel USING btree(id);
 
-CREATE INDEX ON apflora.ziel USING btree (ap_id);
+CREATE INDEX ON apflora.ziel USING btree(ap_id);
 
-CREATE INDEX ON apflora.ziel USING btree (typ);
+CREATE INDEX ON apflora.ziel USING btree(typ);
 
-CREATE INDEX ON apflora.ziel USING btree (jahr);
+CREATE INDEX ON apflora.ziel USING btree(jahr);
 
 COMMENT ON COLUMN apflora.ziel.id IS 'Primärschlüssel';
 
@@ -2975,7 +2974,7 @@ CREATE POLICY reader ON apflora.ziel
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())))
+        user_name = current_user_name())))
       WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
       OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
         SELECT
@@ -2983,13 +2982,13 @@ CREATE POLICY reader ON apflora.ziel
         FROM
           apflora.ap_user
         WHERE
-          user_name = current_user_name ())));
+          user_name = current_user_name())));
 
 -- ziel_typ_werte
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
 
-CREATE TABLE apflora.ziel_typ_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.ziel_typ_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -3005,7 +3004,7 @@ ALTER TABLE apflora.ziel_typ_werte
   ALTER COLUMN code SET DEFAULT nextval('apflora.ziel_typ_werte_code_seq');
 
 SELECT
-  setval('apflora.ziel_typ_werte_code_seq', (
+  setval('apflora.ziel_typ_werte_code_seq',(
       SELECT
         max(code) + 1 FROM apflora.ziel_typ_werte), FALSE);
 
@@ -3013,13 +3012,13 @@ ALTER TABLE apflora.ziel_typ_werte
   ALTER COLUMN changed_by DROP NOT NULL,
   ALTER COLUMN changed_by SET DEFAULT NULL;
 
-CREATE INDEX ON apflora.ziel_typ_werte USING btree (id);
+CREATE INDEX ON apflora.ziel_typ_werte USING btree(id);
 
-CREATE INDEX ON apflora.ziel_typ_werte USING btree (code);
+CREATE INDEX ON apflora.ziel_typ_werte USING btree(code);
 
-CREATE INDEX ON apflora.ziel_typ_werte USING btree (sort);
+CREATE INDEX ON apflora.ziel_typ_werte USING btree(sort);
 
-CREATE INDEX ON apflora.ziel_typ_werte USING btree (historic);
+CREATE INDEX ON apflora.ziel_typ_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.ziel_typ_werte.id IS 'Primärschlüssel';
 
@@ -3040,9 +3039,9 @@ CREATE POLICY reader ON apflora.ziel_typ_werte
 -- zielber
 DROP TABLE IF EXISTS apflora.zielber;
 
-CREATE TABLE apflora.zielber (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  ziel_id uuid DEFAULT NULL REFERENCES apflora.ziel (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.zielber(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ziel_id uuid DEFAULT NULL REFERENCES apflora.ziel(id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   erreichung text DEFAULT NULL,
   bemerkungen text DEFAULT NULL,
@@ -3051,11 +3050,11 @@ CREATE TABLE apflora.zielber (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.zielber USING btree (id);
+CREATE INDEX ON apflora.zielber USING btree(id);
 
-CREATE INDEX ON apflora.zielber USING btree (ziel_id);
+CREATE INDEX ON apflora.zielber USING btree(ziel_id);
 
-CREATE INDEX ON apflora.zielber USING btree (jahr);
+CREATE INDEX ON apflora.zielber USING btree(jahr);
 
 COMMENT ON COLUMN apflora.zielber.id IS 'Primärschlüssel';
 
@@ -3087,7 +3086,7 @@ CREATE POLICY reader ON apflora.zielber
           FROM
             apflora.ap_user
           WHERE
-            user_name = current_user_name ()))))
+            user_name = current_user_name()))))
           WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
           OR (CURRENT_USER IN ('apflora_ap_writer') AND ziel_id IN (
             SELECT
@@ -3101,13 +3100,13 @@ CREATE POLICY reader ON apflora.zielber
                 FROM
                   apflora.ap_user
                 WHERE
-                  user_name = current_user_name ()))));
+                  user_name = current_user_name()))));
 
 -- this table can not be used as foreign table
 -- because it needs to be referenced
 DROP TABLE IF EXISTS apflora.ae_taxonomies;
 
-CREATE TABLE apflora.ae_taxonomies (
+CREATE TABLE apflora.ae_taxonomies(
   taxonomie_id uuid,
   taxonomie_name text,
   id uuid PRIMARY KEY,
@@ -3122,19 +3121,19 @@ CREATE TABLE apflora.ae_taxonomies (
 ALTER TABLE apflora.ae_taxonomies
   ADD COLUMN taxid_intern integer;
 
-CREATE INDEX ON apflora.ae_taxonomies (taxonomie_id);
+CREATE INDEX ON apflora.ae_taxonomies(taxonomie_id);
 
-CREATE INDEX ON apflora.ae_taxonomies (taxonomie_name);
+CREATE INDEX ON apflora.ae_taxonomies(taxonomie_name);
 
-CREATE INDEX ON apflora.ae_taxonomies (id);
+CREATE INDEX ON apflora.ae_taxonomies(id);
 
-CREATE INDEX ON apflora.ae_taxonomies (taxid);
+CREATE INDEX ON apflora.ae_taxonomies(taxid);
 
-CREATE INDEX ON apflora.ae_taxonomies (taxid_intern);
+CREATE INDEX ON apflora.ae_taxonomies(taxid_intern);
 
-CREATE INDEX ON apflora.ae_taxonomies (artname);
+CREATE INDEX ON apflora.ae_taxonomies(artname);
 
-CREATE INDEX ON apflora.ae_taxonomies (tax_art_name);
+CREATE INDEX ON apflora.ae_taxonomies(tax_art_name);
 
 ALTER TABLE apflora.ae_taxonomies ENABLE ROW LEVEL SECURITY;
 
@@ -3191,8 +3190,8 @@ CREATE POLICY reader ON apflora.ae_taxonomies
 -- beob
 DROP TABLE IF EXISTS apflora.beob;
 
-CREATE TABLE apflora.beob (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.beob(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   quelle text DEFAULT NULL,
   -- this field in data contains this datasets id
   id_field varchar(38) DEFAULT NULL,
@@ -3200,9 +3199,9 @@ CREATE TABLE apflora.beob (
   id_evab text DEFAULT NULL,
   id_evab_lc text DEFAULT NULL,
   obs_id bigint DEFAULT NULL,
-  art_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO action ON UPDATE CASCADE,
+  art_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) ON DELETE NO action ON UPDATE CASCADE,
   -- art_id can be changed. art_id_original documents this change
-  art_id_original uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO action ON UPDATE CASCADE,
+  art_id_original uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) ON DELETE NO action ON UPDATE CASCADE,
   -- data without year is not imported
   -- when no month exists: month = 01
   -- when no day exists: day = 01
@@ -3213,7 +3212,7 @@ CREATE TABLE apflora.beob (
   geom_point geometry(point, 4326) DEFAULT NULL,
   -- maybe later add a geojson field for polygons?
   data jsonb,
-  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop(id) ON DELETE SET NULL ON UPDATE CASCADE,
   nicht_zuordnen boolean DEFAULT FALSE,
   infoflora_informiert_datum date DEFAULT NULL,
   bemerkungen text,
@@ -3222,25 +3221,25 @@ CREATE TABLE apflora.beob (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.beob USING gist (geom_point);
+CREATE INDEX ON apflora.beob USING gist(geom_point);
 
-CREATE INDEX ON apflora.beob USING btree (id);
+CREATE INDEX ON apflora.beob USING btree(id);
 
-CREATE INDEX ON apflora.beob USING btree (id_original);
+CREATE INDEX ON apflora.beob USING btree(id_original);
 
-CREATE INDEX ON apflora.beob USING btree (obs_id);
+CREATE INDEX ON apflora.beob USING btree(obs_id);
 
-CREATE INDEX ON apflora.beob USING btree (art_id);
+CREATE INDEX ON apflora.beob USING btree(art_id);
 
-CREATE INDEX ON apflora.beob USING btree (art_id_original);
+CREATE INDEX ON apflora.beob USING btree(art_id_original);
 
-CREATE INDEX ON apflora.beob USING btree (quelle);
+CREATE INDEX ON apflora.beob USING btree(quelle);
 
-CREATE INDEX ON apflora.beob USING btree (tpop_id);
+CREATE INDEX ON apflora.beob USING btree(tpop_id);
 
-CREATE INDEX ON apflora.beob USING btree (nicht_zuordnen);
+CREATE INDEX ON apflora.beob USING btree(nicht_zuordnen);
 
-CREATE INDEX ON apflora.beob USING btree (infoflora_informiert_datum);
+CREATE INDEX ON apflora.beob USING btree(infoflora_informiert_datum);
 
 COMMENT ON COLUMN apflora.beob.id IS 'Primärschlüssel';
 
@@ -3277,7 +3276,7 @@ CREATE POLICY reader ON apflora.beob
             FROM
               apflora.ap_user
             WHERE
-              user_name = current_user_name ()))))
+              user_name = current_user_name()))))
             WITH CHECK (CURRENT_USER IN ('apflora_manager')
             OR (CURRENT_USER IN ('apflora_ap_writer') AND art_id IN (
               SELECT
@@ -3292,17 +3291,17 @@ CREATE POLICY reader ON apflora.beob
                     FROM
                       apflora.ap_user
                     WHERE
-                      user_name = current_user_name ()))));
+                      user_name = current_user_name()))));
 
 -- beobprojekt
 -- is used to control what beob are seen in what projekt
 -- IT IS NOT YET USED!
 DROP TABLE IF EXISTS apflora.beobprojekt;
 
-CREATE TABLE apflora.beobprojekt (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  proj_id uuid NOT NULL REFERENCES apflora.projekt (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  beob_id uuid NOT NULL REFERENCES apflora.beob (id) ON DELETE SET NULL ON UPDATE CASCADE,
+CREATE TABLE apflora.beobprojekt(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  proj_id uuid NOT NULL REFERENCES apflora.projekt(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  beob_id uuid NOT NULL REFERENCES apflora.beob(id) ON DELETE SET NULL ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (proj_id, beob_id)
@@ -3311,20 +3310,20 @@ CREATE TABLE apflora.beobprojekt (
 -- apart
 DROP TABLE IF EXISTS apflora.apart;
 
-CREATE TABLE apflora.apart (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  art_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ap_id uuid DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.apart(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  art_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ap_id uuid DEFAULT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL --UNIQUE (art_id) --no, maybe after beob were rearranged
 );
 
-CREATE INDEX ON apflora.apart USING btree (id);
+CREATE INDEX ON apflora.apart USING btree(id);
 
-CREATE INDEX ON apflora.apart USING btree (ap_id);
+CREATE INDEX ON apflora.apart USING btree(ap_id);
 
-CREATE INDEX ON apflora.apart USING btree (art_id);
+CREATE INDEX ON apflora.apart USING btree(art_id);
 
 COMMENT ON COLUMN apflora.apart.id IS 'Primärschlüssel';
 
@@ -3346,7 +3345,7 @@ CREATE POLICY reader ON apflora.apart
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())))
+        user_name = current_user_name())))
       WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
       OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
         SELECT
@@ -3354,15 +3353,15 @@ CREATE POLICY reader ON apflora.apart
         FROM
           apflora.ap_user
         WHERE
-          user_name = current_user_name ())));
+          user_name = current_user_name())));
 
 -- ekzaehleinheit
 DROP TABLE IF EXISTS apflora.ekzaehleinheit;
 
-CREATE TABLE apflora.ekzaehleinheit (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  ap_id uuid NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  zaehleinheit_id uuid DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.ekzaehleinheit(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ap_id uuid NOT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  zaehleinheit_id uuid DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte(id) ON DELETE CASCADE ON UPDATE CASCADE,
   zielrelevant boolean DEFAULT FALSE,
   not_massn_count_unit boolean DEFAULT FALSE,
   sort smallint DEFAULT NULL,
@@ -3372,21 +3371,21 @@ CREATE TABLE apflora.ekzaehleinheit (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE UNIQUE INDEX ekzaehleinheit_single_zielrelevant_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zielrelevant)
+CREATE UNIQUE INDEX ekzaehleinheit_single_zielrelevant_for_ap_idx ON apflora.ekzaehleinheit(ap_id, zielrelevant)
 WHERE
   zielrelevant = 'true';
 
-CREATE UNIQUE INDEX ekzaehleinheit_zaehleinheit_unique_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zaehleinheit_id);
+CREATE UNIQUE INDEX ekzaehleinheit_zaehleinheit_unique_for_ap_idx ON apflora.ekzaehleinheit(ap_id, zaehleinheit_id);
 
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (id);
+CREATE INDEX ON apflora.ekzaehleinheit USING btree(id);
 
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (ap_id);
+CREATE INDEX ON apflora.ekzaehleinheit USING btree(ap_id);
 
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (zaehleinheit_id);
+CREATE INDEX ON apflora.ekzaehleinheit USING btree(zaehleinheit_id);
 
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (not_massn_count_unit);
+CREATE INDEX ON apflora.ekzaehleinheit USING btree(not_massn_count_unit);
 
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (sort);
+CREATE INDEX ON apflora.ekzaehleinheit USING btree(sort);
 
 COMMENT ON COLUMN apflora.ekzaehleinheit.id IS 'Primärschlüssel';
 
@@ -3415,14 +3414,14 @@ CREATE POLICY writer ON apflora.ekzaehleinheit
 -- ek_type
 DROP TYPE IF EXISTS ek_type;
 
-CREATE TYPE ek_type AS enum (
+CREATE TYPE ek_type AS enum(
   'ek',
   'ekf'
 );
 
 DROP TYPE IF EXISTS ek_kontrolljahre_ab;
 
-CREATE TYPE ek_kontrolljahre_ab AS enum (
+CREATE TYPE ek_kontrolljahre_ab AS enum(
   'ek',
   'ansiedlung'
 );
@@ -3430,9 +3429,9 @@ CREATE TYPE ek_kontrolljahre_ab AS enum (
 -- ekfrequenz
 DROP TABLE IF EXISTS apflora.ekfrequenz;
 
-CREATE TABLE apflora.ekfrequenz (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  ap_id uuid NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.ekfrequenz(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ap_id uuid NOT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
   ektyp ek_type DEFAULT NULL,
   anwendungsfall text DEFAULT NULL,
   code text DEFAULT NULL,
@@ -3442,32 +3441,32 @@ CREATE TABLE apflora.ekfrequenz (
   anzahl_max integer DEFAULT NULL,
   bemerkungen text DEFAULT NULL,
   sort smallint DEFAULT NULL,
-  ek_abrechnungstyp text DEFAULT NULL REFERENCES apflora.ek_abrechnungstyp_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  ek_abrechnungstyp text DEFAULT NULL REFERENCES apflora.ek_abrechnungstyp_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL,
   UNIQUE (ap_id, code)
 );
 
-CREATE INDEX ON apflora.ekfrequenz USING btree (id);
+CREATE INDEX ON apflora.ekfrequenz USING btree(id);
 
-CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
+CREATE INDEX ON apflora.ekfrequenz USING btree(ap_id);
 
-CREATE INDEX ON apflora.ekfrequenz USING btree (ektyp);
+CREATE INDEX ON apflora.ekfrequenz USING btree(ektyp);
 
 COMMENT ON COLUMN apflora.ekfrequenz.ektyp IS 'Ob diese Frequenz für EK oder EKF anwendbar ist';
 
-CREATE INDEX ON apflora.ekfrequenz USING btree (anwendungsfall);
+CREATE INDEX ON apflora.ekfrequenz USING btree(anwendungsfall);
 
-CREATE INDEX ON apflora.ekfrequenz USING btree (code);
+CREATE INDEX ON apflora.ekfrequenz USING btree(code);
 
-CREATE INDEX ON apflora.ekfrequenz USING btree (kontrolljahre_ab);
+CREATE INDEX ON apflora.ekfrequenz USING btree(kontrolljahre_ab);
 
 COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre_ab IS 'Referenzjahr für die Kontrolljahre';
 
-CREATE INDEX ON apflora.ekfrequenz USING btree (sort);
+CREATE INDEX ON apflora.ekfrequenz USING btree(sort);
 
-CREATE INDEX ON apflora.ekfrequenz USING btree (ek_abrechnungstyp);
+CREATE INDEX ON apflora.ekfrequenz USING btree(ek_abrechnungstyp);
 
 COMMENT ON COLUMN apflora.ekfrequenz.id IS 'Primärschlüssel';
 
@@ -3500,8 +3499,8 @@ CREATE POLICY writer ON apflora.ekfrequenz
 -- ek_abrechnungstyp_werte
 DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
 
-CREATE TABLE apflora.ek_abrechnungstyp_werte (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE apflora.ek_abrechnungstyp_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code text,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
@@ -3511,13 +3510,13 @@ CREATE TABLE apflora.ek_abrechnungstyp_werte (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (id);
+CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(id);
 
-CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (code);
+CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(code);
 
-CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (sort);
+CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(sort);
 
-CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (historic);
+CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(historic);
 
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.id IS 'Primärschlüssel';
 
@@ -3536,9 +3535,9 @@ CREATE POLICY reader ON apflora.ek_abrechnungstyp_werte
 -- ekplan
 DROP TABLE IF EXISTS apflora.ekplan;
 
-CREATE TABLE apflora.ekplan (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.ekplan(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop(id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   type ek_type DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -3546,13 +3545,13 @@ CREATE TABLE apflora.ekplan (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.ekplan USING btree (id);
+CREATE INDEX ON apflora.ekplan USING btree(id);
 
-CREATE INDEX ON apflora.ekplan USING btree (tpop_id);
+CREATE INDEX ON apflora.ekplan USING btree(tpop_id);
 
-CREATE INDEX ON apflora.ekplan USING btree (jahr);
+CREATE INDEX ON apflora.ekplan USING btree(jahr);
 
-CREATE INDEX ON apflora.ekplan USING btree (type);
+CREATE INDEX ON apflora.ekplan USING btree(type);
 
 COMMENT ON COLUMN apflora.ekplan.id IS 'Primärschlüssel';
 
@@ -3589,11 +3588,11 @@ CREATE POLICY writer ON apflora.ekplan
               FROM
                 apflora.ap_user
               WHERE
-                user_name = current_user_name ())))));
+                user_name = current_user_name())))));
 
 DROP TABLE IF EXISTS apflora.qk;
 
-CREATE TABLE apflora.qk (
+CREATE TABLE apflora.qk(
   name text PRIMARY KEY,
   titel text,
   beschreibung text,
@@ -3602,11 +3601,11 @@ CREATE TABLE apflora.qk (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX ON apflora.qk USING btree (name);
+CREATE INDEX ON apflora.qk USING btree(name);
 
-CREATE INDEX ON apflora.qk USING btree (titel);
+CREATE INDEX ON apflora.qk USING btree(titel);
 
-CREATE INDEX ON apflora.qk USING btree (sort);
+CREATE INDEX ON apflora.qk USING btree(sort);
 
 COMMENT ON COLUMN apflora.qk.name IS 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 
@@ -3620,17 +3619,17 @@ CREATE POLICY reader ON apflora.qk
 
 DROP TABLE IF EXISTS apflora.apqk;
 
-CREATE TABLE apflora.apqk (
-  ap_id uuid NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  qk_name text NOT NULL REFERENCES apflora.qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE apflora.apqk(
+  ap_id uuid NOT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  qk_name text NOT NULL REFERENCES apflora.qk(name) ON DELETE CASCADE ON UPDATE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (ap_id, qk_name)
 );
 
-CREATE INDEX ON apflora.apqk USING btree (ap_id);
+CREATE INDEX ON apflora.apqk USING btree(ap_id);
 
-CREATE INDEX ON apflora.apqk USING btree (qk_name);
+CREATE INDEX ON apflora.apqk USING btree(qk_name);
 
 ALTER TABLE apflora.apqk ENABLE ROW LEVEL SECURITY;
 
@@ -3645,7 +3644,7 @@ CREATE POLICY reader ON apflora.apqk
       FROM
         apflora.ap_user
       WHERE
-        user_name = current_user_name ())));
+        user_name = current_user_name())));
 
 --insert into apflora.apqk (ap_id, qk_name)
 --select ap.id, qk.name
@@ -3662,8 +3661,8 @@ CREATE POLICY reader ON apflora.markierungen
 
 DROP TABLE IF EXISTS apflora.detailplaene;
 
-CREATE TABLE IF NOT EXISTS apflora.detailplaene (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+CREATE TABLE IF NOT EXISTS apflora.detailplaene(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   data jsonb DEFAULT NULL,
   geom geometry(MultiPolygon, 4326) DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -3671,7 +3670,9 @@ CREATE TABLE IF NOT EXISTS apflora.detailplaene (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.detailplaene USING btree (id);
+CREATE INDEX ON apflora.detailplaene USING btree(id);
+
+CREATE INDEX ON apflora.detailplaene USING gist(geom);
 
 -- apflora.detailplaene was received from topos
 COMMENT ON TABLE apflora.detailplaene IS 'Detailpläne, die im Rahmen von apflora gesetzt wurden. Quelle: Topos';
@@ -3689,15 +3690,18 @@ CREATE POLICY reader ON apflora.detailplaene
 --select distinct apflora.ap.id, apflora.qk.name from apflora.ap, apflora.qk where apflora.ap.bearbeitung is null
 DROP TABLE IF EXISTS apflora.ns_betreuung;
 
-CREATE TABLE apflora.ns_betreuung (
+CREATE TABLE apflora.ns_betreuung(
   gebiet_nr integer PRIMARY KEY,
   gebiet_name text,
   firma text,
   projektleiter text,
-  telefon text
+  telefon text,
+  geom geometry(MultiPolygon, 4326) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.ns_betreuung USING btree (gebiet_nr);
+CREATE INDEX ON apflora.ns_betreuung USING gist(geom);
+
+CREATE INDEX ON apflora.ns_betreuung USING btree(gebiet_nr);
 
 COMMENT ON TABLE apflora.ns_betreuung IS 'Von der FNS. Um zu das wfs betreuungsgebiete mit den Betreuern zu verknüpfen';
 
@@ -3713,7 +3717,7 @@ CREATE POLICY reader ON apflora.ns_betreuung
 -- source: https://opendata.swiss/en/dataset/administrative-units-switzerland-inspire
 -- import according to: https://gis.stackexchange.com/a/194722/13491
 -- DROP TABLE IF EXISTS apflora.ch_administrative_unit;
-CREATE TABLE IF NOT EXISTS apflora.ch_administrative_unit (
+CREATE TABLE IF NOT EXISTS apflora.ch_administrative_unit(
   id integer NOT NULL DEFAULT nextval('apflora.ch_administrative_unit_id_seq'::regclass),
   geom geometry(MultiPolygon, 4326),
   gml_id character varying COLLATE pg_catalog."default",
@@ -3733,7 +3737,8 @@ CREATE TABLE IF NOT EXISTS apflora.ch_administrative_unit (
   residenceofauthority character varying COLLATE pg_catalog."default",
   beginlifespanversion character varying(20) COLLATE pg_catalog."default",
   boundary character varying COLLATE pg_catalog."default",
-  CONSTRAINT ch_administrative_unit_pkey PRIMARY KEY (id))
+  CONSTRAINT ch_administrative_unit_pkey PRIMARY KEY (id)
+)
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS apflora.ch_administrative_unit OWNER TO postgres;
@@ -3748,12 +3753,14 @@ GRANT SELECT ON TABLE apflora.ch_administrative_unit TO apflora_reader;
 
 GRANT ALL ON TABLE apflora.ch_administrative_unit TO postgres;
 
-CREATE INDEX IF NOT EXISTS sidx_ch_administrative_unit_geom ON apflora.ch_administrative_unit USING gist (geom) TABLESPACE pg_default;
+CREATE INDEX IF NOT EXISTS sidx_ch_administrative_unit_geom ON apflora.ch_administrative_unit USING gist(geom) TABLESPACE pg_default;
 
 -- added this myself:
-CREATE INDEX ON apflora.ch_administrative_unit USING btree (id);
+CREATE INDEX ON apflora.ch_administrative_unit USING btree(id);
 
-CREATE INDEX ON apflora.ch_administrative_unit USING btree (localisedcharacterstring);
+CREATE INDEX ON apflora.ch_administrative_unit USING btree(localisedcharacterstring);
 
-CREATE INDEX ON apflora.ch_administrative_unit USING btree (text);
+CREATE INDEX ON apflora.ch_administrative_unit USING btree(text);
+
+CREATE INDEX ON apflora.ch_administrative_unit USING gist(geom);
 

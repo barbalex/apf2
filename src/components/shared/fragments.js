@@ -777,6 +777,7 @@ export const nsBetreuung = gql`
     firma
     projektleiter
     telefon
+    geom
   }
 `
 

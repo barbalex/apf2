@@ -34,13 +34,6 @@ const GemeindeLayer = () => {
     }
   `)
 
-  const nodes = data?.allChAdministrativeUnits?.nodes ?? []
-  const gemeinden = nodes.map((n) => ({
-    type: 'Feature',
-    properties: { Gemeinde: n.text ?? '' },
-    geometry: JSON.parse(n?.geom?.geojson),
-  }))
-
   if (error) {
     enqueNotification({
       message: `Fehler beim Laden der Gemeinden für die Karte: ${error.message}`,
@@ -51,6 +44,13 @@ const GemeindeLayer = () => {
   }
 
   if (!data) return null
+
+  const nodes = data?.allChAdministrativeUnits?.nodes ?? []
+  const gemeinden = nodes.map((n) => ({
+    type: 'Feature',
+    properties: { Gemeinde: n.text ?? '' },
+    geometry: JSON.parse(n?.geom?.geojson),
+  }))
 
   return <GeoJSON data={gemeinden} style={style} interactive={false} />
 }

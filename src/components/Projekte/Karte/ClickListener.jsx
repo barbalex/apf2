@@ -84,6 +84,43 @@ const ClickListener = () => {
       })
       L.popup().setLatLng(event.latlng).setContent(popup).openOn(map)
     }
+    if (activeOverlays.includes('Betreuungsgebiete')) {
+      let betreuungsgebieteData
+      try {
+        betreuungsgebieteData = await client.query({
+          query: gql`query karteBetreuungsgebietesQuery {
+          allNsBetreuungs(
+            filter: { 
+              geom: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
+            }
+          ) {
+            nodes {
+              id: gebietNr
+              gebietNr
+              gebietName
+              firma
+              projektleiter
+              telefon
+            }
+          }
+        }`,
+        })
+      } catch (error) {
+        console.log(error)
+      }
+
+      const node =
+        betreuungsgebieteData?.data?.allNsBetreuungs?.nodes?.[0] ?? {}
+      const properties = { ...node }
+      delete properties.__typename
+      delete properties.id
+      const popup = popupFromProperties({
+        properties,
+        layerName: 'Betreuungsgebiete',
+        mapSize: map.getSize(),
+      })
+      L.popup().setLatLng(event.latlng).setContent(popup).openOn(map)
+    }
   })
 
   const panes = map.getPanes()
