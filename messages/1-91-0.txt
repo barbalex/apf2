@@ -1,0 +1,1 @@
+Ab Version 1.91.0: Die Objekte einiger Layer auf der Karte können mit einem Klick abgefragt werden (Markierungen, Detailpläne, Massnahmenpläne, NS-Gebiete Betreuung, Gemeinden). Bisher konnten sie nur einzeln abgefragt werden und sie konnten sich gegenseitig behindern. Neu werden mit einem Klick immer alle Informationen aller Layer gleichzeitig abgefragt und im Popup dargestellt
