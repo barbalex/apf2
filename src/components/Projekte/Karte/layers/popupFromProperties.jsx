@@ -1,3 +1,4 @@
+// NOT IN USE
 import React from 'react'
 import * as ReactDOMServer from 'react-dom/server'
 
@@ -12,10 +13,7 @@ const PopupFromProperties = ({ properties, layerName, mapSize }) => {
     },
   ]
   const popupContent = ReactDOMServer.renderToString(
-    <Popup
-      layersData={layersData}
-      mapSize={mapSize}
-    />,
+    <Popup layersData={layersData} mapSize={mapSize} />,
   )
   return popupContent
 }

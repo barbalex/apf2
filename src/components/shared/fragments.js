@@ -769,17 +769,6 @@ export const apUmsetzungWerte = gql`
   }
 `
 
-export const nsBetreuung = gql`
-  fragment NsBetreuungFields on NsBetreuung {
-    id: gebietNr
-    gebietNr
-    gebietName
-    firma
-    projektleiter
-    telefon
-  }
-`
-
 export const popStatusWerte = gql`
   fragment PopStatusWerteFields on PopStatusWerte {
     id

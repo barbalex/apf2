@@ -40,7 +40,7 @@ const xmlToLayersData = (xml) => {
           value?.['#text'] === 'NULL' ? '' : value?.['#text']
     }
 
-    const label = `${properties.MASSNDAT}: ${properties.MASSTYP}`
+    const label = `${properties.MASSNAHMENDATUM}: ${properties.MASSNAHMENTYP}`
 
     returnValues.push({ label, properties: Object.entries(properties) })
   }

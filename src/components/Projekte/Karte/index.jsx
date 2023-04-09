@@ -65,6 +65,7 @@ import iconFullscreen from './iconFullscreen.png'
 import iconFullscreen2x from './iconFullscreen2x.png'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import MapFilterListener from './MapFilterListener'
+import ClickListener from './ClickListener'
 
 /**
  * Fullscreen is not compatible with new react/react-leaflet versions?
@@ -492,9 +493,7 @@ const Karte = () => {
     () => ({
       ZhUep: () => <ZhUepOverlay />,
       // rebuild detailplaene on localizing change to close popups and rebuild without popups
-      Detailplaene: () => (
-        <Detailplaene key={localizing} localizing={localizing} />
-      ),
+      Detailplaene: () => <Detailplaene />,
       Markierungen: () => <Markierungen />,
       MassnahmenFlaechen: () => <Massnahmen layer="flaechen" />,
       MassnahmenLinien: () => <Massnahmen layer="linien" />,
@@ -508,7 +507,7 @@ const Karte = () => {
       ZhLichteWaelder: () => <ZhLichteWaelder />,
       ZhWaelderVegetation: () => <ZhWaelderVegetation />,
     }),
-    [localizing],
+    [],
   )
   const BaseLayerComponents = useMemo(
     () => ({
@@ -544,11 +543,11 @@ const Karte = () => {
   // 3. give overlays 100 + index in activeOverlaysSorted
   // 4. apflora layers always on top
 
-  // console.log('Map', {
-  //   activeBaseLayer,
-  //   activeOverlaysSorted,
-  //   activeApfloraLayers,
-  // })
+  console.log('Map', {
+    activeBaseLayer,
+    activeOverlaysSorted,
+    activeApfloraLayers,
+  })
 
   // clustered layers receive a key that rebuilds them every time the cluster
   // tool would erroneously add new markers from last time it build
@@ -636,6 +635,7 @@ const Karte = () => {
           {showBeobZugeordnetAssignPolylines && (
             <BeobZugeordnetAssignPolylines />
           )}
+          <ClickListener />
           <ScaleControl imperial={false} />
           <Control position="topright" visible={!hideMapControls}>
             <OwnControls
