@@ -5,6 +5,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { useMapEvent } from 'react-leaflet/hooks'
 import { useApolloClient, gql } from '@apollo/client'
 import L from 'leaflet'
+import ellipse from '@turf/ellipse'
 
 import storeContext from '../../../storeContext'
 import Popup from './layers/Popup'
@@ -18,6 +19,7 @@ const ClickListener = () => {
 
   const map = useMapEvent('click', async (event) => {
     const { lat, lng } = event.latlng
+    const zoom = map.getZoom()
     // idea 1:
     // get all layers
     // run onEachFeature on all layers
@@ -43,12 +45,6 @@ const ClickListener = () => {
     // remove onEachFeature from queryable layers
     // seems to be the best solution
     // may even be more efficient as no need to bind popups when adding layers
-
-    console.log('ClickListener', {
-      event,
-      lat,
-      lng,
-    })
 
     const layersData = []
 
@@ -128,7 +124,7 @@ const ClickListener = () => {
           query: gql`query karteDetailplaenesQuery {
           allDetailplaenes(
             filter: { 
-              geom: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
+              geom: {intersects: {type: "Point", coordinates: [${lng}, ${lat}]}}
             }
           ) {
             nodes {
@@ -149,6 +145,70 @@ const ClickListener = () => {
         properties: Object.entries(properties),
       })
     }
+    if (activeOverlays.includes('Markierungen')) {
+      let markierungenData
+      const radius =
+        zoom > 19
+          ? 1
+          : zoom === 19
+          ? 2
+          : zoom === 18
+          ? 3
+          : zoom === 17
+          ? 6
+          : zoom === 16
+          ? 12
+          : zoom === 15
+          ? 20
+          : zoom === 14
+          ? 50
+          : zoom > 12
+          ? 100
+          : zoom > 10
+          ? 300
+          : zoom > 8
+          ? 800
+          : 1200
+      try {
+        const coordinates = [lng, lat]
+        const options = { steps: 8, units: 'meters' }
+        const circle = ellipse(coordinates, radius, radius, options)
+        markierungenData = await client.query({
+          query: gql`
+            query karteMarkierungesQuery($polygon: GeoJSON!) {
+              allMarkierungens(
+                filter: { wkbGeometry: { coveredBy: $polygon } }
+              ) {
+                nodes {
+                  id: ogcFid
+                  gebiet
+                  pfostennum
+                  markierung
+                }
+              }
+            }
+          `,
+          variables: { polygon: circle.geometry },
+        })
+      } catch (error) {
+        console.log(error)
+      }
+
+      const nodes = markierungenData?.data?.allMarkierungens?.nodes
+      if (nodes?.length) {
+        for (const node of nodes) {
+          const properties = {
+            Gebiet: node.gebiet ?? '',
+            PfostenNr: node.pfostennum ?? '',
+            Markierung: node.markierung ?? '',
+          }
+          layersData.push({
+            label: 'Markierungen',
+            properties: Object.entries(properties),
+          })
+        }
+      }
+    }
 
     if (!layersData.length) return
 
@@ -159,9 +219,7 @@ const ClickListener = () => {
   })
 
   console.log('ClickListener', {
-    map,
     activeOverlays,
-    layers: map._layers,
   })
 
   return null

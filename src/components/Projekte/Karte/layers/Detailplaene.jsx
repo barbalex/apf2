@@ -1,9 +1,8 @@
-import React, { useContext, useCallback } from 'react'
-import { GeoJSON, useMap } from 'react-leaflet'
+import React, { useContext } from 'react'
+import { GeoJSON } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
 
-import popupFromProperties from './popupFromProperties'
 import storeContext from '../../../../storeContext'
 
 // see: https://leafletjs.com/reference-1.6.0.html#path-option
