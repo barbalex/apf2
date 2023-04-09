@@ -22,19 +22,6 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - sik_data:/sik_data
-  ss:
-    build:
-      context: ./ss
-    networks:
-      - network
-    container_name: apf_ss
-    restart: always
-    env_file:
-      - ./.env
-    expose:
-      - '7000'
-    ports:
-      - '7000:7000'
   graphql:
     container_name: apf_graphql
     restart: unless-stopped
@@ -50,14 +37,22 @@ services:
       - db
     env_file:
       - ./.env
-    command: [
-        '--connection', '${DATABASE_URL}',
-        '--schema', 'apflora',
-        '--append-plugins', 'postgraphile-plugin-connection-filter,@graphile-contrib/pg-order-by-related,@graphile/postgis,postgraphile-plugin-connection-filter-postgis',
-        '--jwt-token-identifier', 'auth.jwt_token',
-        '--default-role', 'postgres',
-        '--jwt-secret', '${JWT_SECRET}',
-        '--body-size-limit', '300kb',
+    command:
+      [
+        '--connection',
+        '${DATABASE_URL}',
+        '--schema',
+        'apflora',
+        '--append-plugins',
+        'postgraphile-plugin-connection-filter,@graphile-contrib/pg-order-by-related,@graphile/postgis,postgraphile-plugin-connection-filter-postgis',
+        '--jwt-token-identifier',
+        'auth.jwt_token',
+        '--default-role',
+        'postgres',
+        '--jwt-secret',
+        '${JWT_SECRET}',
+        '--body-size-limit',
+        '300kb',
         '--cors',
         '--disable-query-log',
         '--enable-query-batching',
