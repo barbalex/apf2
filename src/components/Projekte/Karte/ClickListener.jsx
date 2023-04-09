@@ -6,11 +6,16 @@ import { useMapEvent } from 'react-leaflet/hooks'
 import { useApolloClient, gql } from '@apollo/client'
 import L from 'leaflet'
 import ellipse from '@turf/ellipse'
+import { useParams } from 'react-router-dom'
+import axios from 'redaxios'
 
 import storeContext from '../../../storeContext'
 import Popup from './layers/Popup'
+import xmlToLayersData from '../../../modules/xmlToLayersData'
 
 const ClickListener = () => {
+  const { apId } = useParams()
+
   const store = useContext(storeContext)
   const { activeOverlays: activeOverlaysRaw } = store
   const activeOverlays = getSnapshot(activeOverlaysRaw)
@@ -70,17 +75,18 @@ const ClickListener = () => {
         console.log(error)
       }
 
-      const node =
-        gemeindenData?.data?.allChAdministrativeUnits?.nodes?.[0] ?? {}
-      const properties = { ...node }
-      delete properties.__typename
-      delete properties.id
-      properties.Gemeinde = properties.text
-      delete properties.text
-      layersData.push({
-        label: 'Gemeinden',
-        properties: Object.entries(properties),
-      })
+      const node = gemeindenData?.data?.allChAdministrativeUnits?.nodes?.[0]
+      if (node) {
+        const properties = { ...node }
+        delete properties.__typename
+        delete properties.id
+        properties.Gemeinde = properties.text
+        delete properties.text
+        layersData.push({
+          label: 'Gemeinden',
+          properties: Object.entries(properties),
+        })
+      }
     }
     if (activeOverlays.includes('Betreuungsgebiete')) {
       let betreuungsgebieteData
@@ -107,15 +113,16 @@ const ClickListener = () => {
         console.log(error)
       }
 
-      const node =
-        betreuungsgebieteData?.data?.allNsBetreuungs?.nodes?.[0] ?? {}
-      const properties = { ...node }
-      delete properties.__typename
-      delete properties.id
-      layersData.push({
-        label: 'Betreuungsgebiete',
-        properties: Object.entries(properties),
-      })
+      const node = betreuungsgebieteData?.data?.allNsBetreuungs?.nodes?.[0]
+      if (node) {
+        const properties = { ...node }
+        delete properties.__typename
+        delete properties.id
+        layersData.push({
+          label: 'Betreuungsgebiete',
+          properties: Object.entries(properties),
+        })
+      }
     }
     if (activeOverlays.includes('Detailplaene')) {
       let detailplaeneData
@@ -138,12 +145,14 @@ const ClickListener = () => {
         console.log(error)
       }
 
-      const node = detailplaeneData?.data?.allDetailplaenes?.nodes?.[0] ?? {}
-      const properties = node.data ? JSON.parse(node.data) : {}
-      layersData.push({
-        label: 'Detailpläne',
-        properties: Object.entries(properties),
-      })
+      const node = detailplaeneData?.data?.allDetailplaenes?.nodes?.[0]
+      if (node?.data) {
+        const properties = JSON.parse(node.data)
+        layersData.push({
+          label: 'Detailpläne',
+          properties: Object.entries(properties),
+        })
+      }
     }
     if (activeOverlays.includes('Markierungen')) {
       let markierungenData
@@ -205,6 +214,198 @@ const ClickListener = () => {
           layersData.push({
             label: 'Markierungen',
             properties: Object.entries(properties),
+          })
+        }
+      }
+    }
+    if (apId && activeOverlays.includes('MassnahmenFlaechen')) {
+      const mapSize = map.getSize()
+      const bounds = map.getBounds()
+      let res
+      let failedToFetch = false
+      try {
+        const bbox = `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`
+        const params = {
+          service: 'WMS',
+          version: '1.3.0',
+          request: 'GetFeatureInfo',
+          layers: 'flaechen', // linien, punkte
+          crs: 'EPSG:4326',
+          format: 'image/png',
+          info_format: 'application/vnd.ogc.gml',
+          feature_count: 40,
+          query_layers: 'flaechen', // linien, punkte
+          x: Math.round(event.containerPoint.x),
+          y: Math.round(event.containerPoint.y),
+          width: mapSize.x,
+          height: mapSize.y,
+          bbox,
+        }
+        res = await axios({
+          method: 'get',
+          url: `https://wms.prod.qgiscloud.com/FNS/${apId}`,
+          params,
+        })
+      } catch (error) {
+        // console.log({ error, errorToJSON: error?.toJSON?.(), res })
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error('error.response.data', error.response.data)
+          console.error('error.response.status', error.response.status)
+          console.error('error.response.headers', error.response.headers)
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.error('error.request:', error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('error.message', error.message)
+        }
+        if (error.message?.toLowerCase()?.includes('failed to fetch')) {
+          failedToFetch = true
+        } else {
+          return
+        }
+      }
+      if (!failedToFetch) {
+        const parser = new window.DOMParser()
+        const dataArray = xmlToLayersData(
+          parser.parseFromString(res.data, 'text/html'),
+        )
+        // do not open empty popups
+        if (dataArray.length) {
+          dataArray.forEach((data) => {
+            layersData.push(data)
+          })
+        }
+      }
+    }
+    if (apId && activeOverlays.includes('MassnahmenLinien')) {
+      const mapSize = map.getSize()
+      const bounds = map.getBounds()
+      let res
+      let failedToFetch = false
+      try {
+        const bbox = `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`
+        const params = {
+          service: 'WMS',
+          version: '1.3.0',
+          request: 'GetFeatureInfo',
+          layers: 'linien',
+          crs: 'EPSG:4326',
+          format: 'image/png',
+          info_format: 'application/vnd.ogc.gml',
+          feature_count: 40,
+          query_layers: 'linien',
+          x: Math.round(event.containerPoint.x),
+          y: Math.round(event.containerPoint.y),
+          width: mapSize.x,
+          height: mapSize.y,
+          bbox,
+        }
+        res = await axios({
+          method: 'get',
+          url: `https://wms.prod.qgiscloud.com/FNS/${apId}`,
+          params,
+        })
+      } catch (error) {
+        // console.log({ error, errorToJSON: error?.toJSON?.(), res })
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error('error.response.data', error.response.data)
+          console.error('error.response.status', error.response.status)
+          console.error('error.response.headers', error.response.headers)
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.error('error.request:', error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('error.message', error.message)
+        }
+        if (error.message?.toLowerCase()?.includes('failed to fetch')) {
+          failedToFetch = true
+        } else {
+          return
+        }
+      }
+      if (!failedToFetch) {
+        const parser = new window.DOMParser()
+        const dataArray = xmlToLayersData(
+          parser.parseFromString(res.data, 'text/html'),
+        )
+        // do not open empty popups
+        if (dataArray.length) {
+          dataArray.forEach((data) => {
+            layersData.push(data)
+          })
+        }
+      }
+    }
+    if (apId && activeOverlays.includes('MassnahmenPunkte')) {
+      const mapSize = map.getSize()
+      const bounds = map.getBounds()
+      let res
+      let failedToFetch = false
+      try {
+        const bbox = `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`
+        const params = {
+          service: 'WMS',
+          version: '1.3.0',
+          request: 'GetFeatureInfo',
+          layers: 'punkte',
+          crs: 'EPSG:4326',
+          format: 'image/png',
+          info_format: 'application/vnd.ogc.gml',
+          feature_count: 40,
+          query_layers: 'punkte',
+          x: Math.round(event.containerPoint.x),
+          y: Math.round(event.containerPoint.y),
+          width: mapSize.x,
+          height: mapSize.y,
+          bbox,
+        }
+        res = await axios({
+          method: 'get',
+          url: `https://wms.prod.qgiscloud.com/FNS/${apId}`,
+          params,
+        })
+      } catch (error) {
+        // console.log({ error, errorToJSON: error?.toJSON?.(), res })
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error('error.response.data', error.response.data)
+          console.error('error.response.status', error.response.status)
+          console.error('error.response.headers', error.response.headers)
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.error('error.request:', error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('error.message', error.message)
+        }
+        if (error.message?.toLowerCase()?.includes('failed to fetch')) {
+          failedToFetch = true
+        } else {
+          return
+        }
+      }
+      if (!failedToFetch) {
+        const parser = new window.DOMParser()
+        const dataArray = xmlToLayersData(
+          parser.parseFromString(res.data, 'text/html'),
+        )
+        // do not open empty popups
+        if (dataArray.length) {
+          dataArray.forEach((data) => {
+            layersData.push(data)
           })
         }
       }
