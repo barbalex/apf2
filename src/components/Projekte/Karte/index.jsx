@@ -493,9 +493,7 @@ const Karte = () => {
     () => ({
       ZhUep: () => <ZhUepOverlay />,
       // rebuild detailplaene on localizing change to close popups and rebuild without popups
-      Detailplaene: () => (
-        <Detailplaene key={localizing} localizing={localizing} />
-      ),
+      Detailplaene: () => <Detailplaene />,
       Markierungen: () => <Markierungen />,
       MassnahmenFlaechen: () => <Massnahmen layer="flaechen" />,
       MassnahmenLinien: () => <Massnahmen layer="linien" />,
@@ -509,7 +507,7 @@ const Karte = () => {
       ZhLichteWaelder: () => <ZhLichteWaelder />,
       ZhWaelderVegetation: () => <ZhWaelderVegetation />,
     }),
-    [localizing],
+    [],
   )
   const BaseLayerComponents = useMemo(
     () => ({

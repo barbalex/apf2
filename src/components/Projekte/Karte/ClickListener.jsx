@@ -121,6 +121,34 @@ const ClickListener = () => {
         properties: Object.entries(properties),
       })
     }
+    if (activeOverlays.includes('Detailplaene')) {
+      let detailplaeneData
+      try {
+        detailplaeneData = await client.query({
+          query: gql`query karteDetailplaenesQuery {
+          allDetailplaenes(
+            filter: { 
+              geom: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
+            }
+          ) {
+            nodes {
+              id
+              data
+            }
+          }
+        }`,
+        })
+      } catch (error) {
+        console.log(error)
+      }
+
+      const node = detailplaeneData?.data?.allDetailplaenes?.nodes?.[0] ?? {}
+      const properties = node.data ? JSON.parse(node.data) : {}
+      layersData.push({
+        label: 'Detailpläne',
+        properties: Object.entries(properties),
+      })
+    }
 
     if (!layersData.length) return
 
