@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import jwtDecode from 'jwt-decode'
 import format from 'date-fns/format'
-import { DateTime } from 'luxon'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
@@ -23,6 +22,7 @@ import { apberuebersicht } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner'
 import Checkbox2States from '../../../shared/Checkbox2States'
+import historize from '../../../../modules/historize'
 
 const Container = styled.div`
   height: 100%;
@@ -72,7 +72,7 @@ const Apberuebersicht = () => {
 
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { user, enqueNotification } = store
+  const { user } = store
   const { token } = user
   const role = token ? jwtDecode(token).role : null
   const userIsManager = role === 'apflora_manager'
@@ -81,8 +81,6 @@ const Apberuebersicht = () => {
 
   const [fieldErrors, setFieldErrors] = useState({})
   const [historizing, setHistorizing] = useState(false)
-
-  console.log('Apberuebersicht, historizing:', historizing)
 
   const { data, isLoading, error } = useQuery({
     queryKey: [`Apberuebersicht`, apberUebersichtId],
@@ -140,10 +138,10 @@ const Apberuebersicht = () => {
         queryClient.invalidateQueries({
           queryKey: [`treeApberuebersicht`],
         })
-        queryClient.invalidateQueries({
-          queryKey: [`Apberuebersicht`],
-        })
       }
+      queryClient.invalidateQueries({
+        queryKey: [`Apberuebersicht`],
+      })
     },
     [client, queryClient, row?.id, store.user.name],
   )
@@ -169,89 +167,12 @@ const Apberuebersicht = () => {
 
   const onClickHistorize = useCallback(async () => {
     setHistorizing(true)
-    // 1. historize
-    try {
-      await client.mutate({
-        mutation: gql`
-          mutation historize($year: Int!) {
-            historize(input: { clientMutationId: "bla", year: $year }) {
-              boolean
-            }
-          }
-        `,
-        variables: {
-          year: row?.jahr,
-        },
-      })
-    } catch (error) {
-      console.log('Error from mutating historize:', error)
-      return enqueNotification({
-        message: `Die Historisierung ist gescheitert. Fehlermeldung: ${error.message}`,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    // 2. if it worked: mutate historyDate
-    try {
-      const variables = {
-        id: row?.id,
-        historyDate: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd'),
-      }
-      await client.mutate({
-        mutation: gql`
-          mutation updateApberuebersichtForHistoryDate(
-            $id: UUID!
-            $historyDate: Date
-          ) {
-            updateApberuebersichtById(
-              input: {
-                id: $id
-                apberuebersichtPatch: { historyDate: $historyDate }
-              }
-            ) {
-              apberuebersicht {
-                ...ApberuebersichtFields
-              }
-            }
-          }
-          ${apberuebersicht}
-        `,
-        variables,
-      })
-    } catch (error) {
-      return enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    // 3. update materialized view
-    await client.mutate({
-      mutation: gql`
-        mutation vApAuswPopMengeRefreshFromApberuebersicht {
-          vApAuswPopMengeRefresh(input: { clientMutationId: "bla" }) {
-            boolean
-          }
-          vPopAuswTpopMengeRefresh(input: { clientMutationId: "bla" }) {
-            boolean
-          }
-        }
-      `,
-    })
-    // notify user
-    enqueNotification({
-      message: `Arten, Pop und TPop wurden für das Jahr ${row?.jahr} historisiert`,
-      options: {
-        variant: 'info',
-      },
-    })
+    await historize({ store, apberuebersicht: row })
     queryClient.invalidateQueries({
       queryKey: ['Apberuebersicht'],
     })
     setHistorizing(false)
-  }, [client, enqueNotification, row?.id, row?.jahr, queryClient])
+  }, [queryClient, row, store])
 
   if (isLoading) return <Spinner />
 
@@ -291,7 +212,7 @@ const Apberuebersicht = () => {
                     title="historisieren"
                     color="inherit"
                     data-historizing={historizing}
-                    disabled={historizing}
+                    disabled={historizing || row?.historyFixed}
                   >
                     <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
                     <Explainer>
