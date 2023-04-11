@@ -2,13 +2,14 @@ import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
 import jwtDecode from 'jwt-decode'
 import format from 'date-fns/format'
 import { DateTime } from 'luxon'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField'
 import MdField from '../../../shared/MarkdownField'
@@ -21,6 +22,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { apberuebersicht } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner'
+import Checkbox2States from '../../../shared/Checkbox2States'
 
 const Container = styled.div`
   height: 100%;
@@ -43,6 +45,7 @@ const HistorizeButton = styled(Button)`
 const Explainer = styled.div`
   color: rgba(0, 0, 0, 0.6);
   font-size: 0.7rem;
+  font-weight: normal;
   line-height: 0.9rem;
 `
 const FormContainer = styled.div`
@@ -53,6 +56,7 @@ const fieldTypes = {
   projId: 'UUID',
   jahr: 'Int',
   historyDate: 'Date',
+  historyFixed: 'Boolean',
   bemerkungen: 'String',
 }
 
@@ -70,16 +74,13 @@ const Apberuebersicht = () => {
 
   const [fieldErrors, setFieldErrors] = useState({})
 
-  const { data, loading, error, refetch } = useQuery(query, {
-    variables: {
-      id: apberUebersichtId,
-    },
+  const { data, isLoading, error } = useQuery({
+    queryKey: [`Apberuebersicht`, apberUebersichtId],
+    queryFn: () =>
+      client.query({ query, variables: { id: apberUebersichtId } }),
   })
 
-  const row = useMemo(
-    () => data?.apberuebersichtById ?? {},
-    [data?.apberuebersichtById],
-  )
+  const row = data?.data?.apberuebersichtById
 
   const saveToDb = useCallback(
     async (event) => {
@@ -87,7 +88,7 @@ const Apberuebersicht = () => {
       const value = ifIsNumericAsNumber(event.target.value)
 
       const variables = {
-        id: row.id,
+        id: row?.id,
         [field]: value,
         changedBy: store.user.name,
       }
@@ -125,9 +126,12 @@ const Apberuebersicht = () => {
         queryClient.invalidateQueries({
           queryKey: [`treeApberuebersicht`],
         })
+        queryClient.invalidateQueries({
+          queryKey: [`Apberuebersicht`],
+        })
       }
     },
-    [client, queryClient, row.id, store.user.name],
+    [client, queryClient, row?.id, store.user.name],
   )
 
   const isBeforeMarchOfFollowingYear = useMemo(() => {
@@ -136,11 +140,18 @@ const Apberuebersicht = () => {
     const currentYear = now.getFullYear()
     const previousYear = currentYear - 1
     return (
-      (currentMonth < 3 && previousYear === row.jahr) ||
-      currentYear === row.jahr
+      (currentMonth < 3 && previousYear === row?.jahr) ||
+      currentYear === row?.jahr
     )
-  }, [row.jahr])
+  }, [row?.jahr])
   const showHistorize = userIsManager && isBeforeMarchOfFollowingYear
+  // console.log('Apberuebersicht', {
+  //   showHistorize,
+  //   isBeforeMarchOfFollowingYear,
+  //   userIsManager,
+  //   row,
+  //   jahr: row?.jahr,
+  // })
 
   const onClickHistorize = useCallback(async () => {
     // 1. historize
@@ -154,7 +165,7 @@ const Apberuebersicht = () => {
           }
         `,
         variables: {
-          year: row.jahr,
+          year: row?.jahr,
         },
       })
     } catch (error) {
@@ -169,7 +180,7 @@ const Apberuebersicht = () => {
     // 2. if it worked: mutate historyDate
     try {
       const variables = {
-        id: row.id,
+        id: row?.id,
         historyDate: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd'),
       }
       await client.mutate({
@@ -217,15 +228,17 @@ const Apberuebersicht = () => {
     })
     // notify user
     enqueNotification({
-      message: `Arten, Pop und TPop wurden für das Jahr ${row.jahr} historisiert`,
+      message: `Arten, Pop und TPop wurden für das Jahr ${row?.jahr} historisiert`,
       options: {
         variant: 'info',
       },
     })
-    refetch()
-  }, [client, enqueNotification, refetch, row])
+    queryClient.invalidateQueries({
+      queryKey: ['Apberuebersicht'],
+    })
+  }, [client, enqueNotification, row?.id, row?.jahr, queryClient])
 
-  if (loading) return <Spinner />
+  if (isLoading) return <Spinner />
 
   if (error) return <Error error={error} />
 
@@ -266,13 +279,21 @@ const Apberuebersicht = () => {
                     <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
                     <Explainer>
                       Diese Option ist nur sichtbar:
-                      <br /> 1. Wenn Benutzer Manager ist
+                      <br /> 1. Wenn der Benutzer Manager ist
                       <br /> 2. Von Beginn des Berichtjahrs bis zum März des
                       Folgejahrs
                     </Explainer>
                   </HistorizeButton>
                 </>
               )}
+              <Checkbox2States
+                label="Historisierung fixieren"
+                name="historyFixed"
+                value={row?.historyFixed}
+                saveToDb={saveToDb}
+                helperText="Bewahrt die letze Historisierung als offiziellen Jahresbericht"
+                disabled={!row?.historyDate}
+              />
               <MdField
                 name="bemerkungen"
                 label="Bemerkungen"
