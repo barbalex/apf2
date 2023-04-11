@@ -77,7 +77,11 @@ const Apberuebersicht = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: [`Apberuebersicht`, apberUebersichtId],
     queryFn: () =>
-      client.query({ query, variables: { id: apberUebersichtId } }),
+      client.query({
+        query,
+        variables: { id: apberUebersichtId },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   const row = data?.data?.apberuebersichtById
@@ -203,7 +207,6 @@ const Apberuebersicht = () => {
           ${apberuebersicht}
         `,
         variables,
-        refetchQueries: ['apberuebersichtByIdQuery'],
       })
     } catch (error) {
       return enqueNotification({
