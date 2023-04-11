@@ -8,6 +8,7 @@ export default gql`
     $projId: UUID
     $jahr: Int
     $historyDate: Date
+    $historyFixed: Boolean
     $bemerkungen: String
   ) {
     createApberuebersicht(
@@ -17,6 +18,7 @@ export default gql`
           projId: $projId
           jahr: $jahr
           historyDate: $historyDate
+          historyFixed: $historyFixed
           bemerkungen: $bemerkungen
         }
       }
