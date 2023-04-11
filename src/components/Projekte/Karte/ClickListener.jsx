@@ -17,7 +17,7 @@ const ClickListener = () => {
   const { apId } = useParams()
 
   const store = useContext(storeContext)
-  const { activeOverlays: activeOverlaysRaw } = store
+  const { activeOverlays: activeOverlaysRaw, enqueNotification } = store
   const activeOverlays = getSnapshot(activeOverlaysRaw)
 
   const client = useApolloClient()
@@ -265,9 +265,14 @@ const ClickListener = () => {
         }
         if (error.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
-        } else {
-          return
         }
+        failedToFetch = true
+        enqueNotification({
+          message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Sorry!`,
+          options: {
+            variant: 'error',
+          },
+        })
       }
       if (!failedToFetch) {
         const parser = new window.DOMParser()
@@ -329,9 +334,14 @@ const ClickListener = () => {
         }
         if (error.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
-        } else {
-          return
         }
+        failedToFetch = true
+        enqueNotification({
+          message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Sorry!`,
+          options: {
+            variant: 'error',
+          },
+        })
       }
       if (!failedToFetch) {
         const parser = new window.DOMParser()
@@ -393,9 +403,14 @@ const ClickListener = () => {
         }
         if (error.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
-        } else {
-          return
         }
+        failedToFetch = true
+        enqueNotification({
+          message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Sorry!`,
+          options: {
+            variant: 'error',
+          },
+        })
       }
       if (!failedToFetch) {
         const parser = new window.DOMParser()
