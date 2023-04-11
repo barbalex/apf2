@@ -247,34 +247,39 @@ const ClickListener = () => {
           params,
         })
       } catch (error) {
-        // console.log({ error, errorToJSON: error?.toJSON?.(), res })
-        if (error.response) {
+        console.log({ error, errorToJSON: error?.toJSON?.(), res })
+        if (error.status == 406) {
+          // user clicked where no massn exists
+        } else if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
           console.error('error.response.data', error.response.data)
           console.error('error.response.status', error.response.status)
           console.error('error.response.headers', error.response.headers)
+          failedToFetch = true
         } else if (error.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
           console.error('error.request:', error.request)
+          failedToFetch = true
         } else {
           // Something happened in setting up the request that triggered an Error
           console.error('error.message', error.message)
+          failedToFetch = true
         }
         if (error.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
         }
-        failedToFetch = true
-        enqueNotification({
-          message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Sorry!`,
-          options: {
-            variant: 'error',
-          },
-        })
+        failedToFetch &&
+          enqueNotification({
+            message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
+            options: {
+              variant: 'info',
+            },
+          })
       }
-      if (!failedToFetch) {
+      if (!failedToFetch && res?.data) {
         const parser = new window.DOMParser()
         const dataArray = xmlToLayersData(
           parser.parseFromString(res.data, 'text/html'),
@@ -316,34 +321,39 @@ const ClickListener = () => {
           params,
         })
       } catch (error) {
-        // console.log({ error, errorToJSON: error?.toJSON?.(), res })
-        if (error.response) {
+        console.log({ error, errorToJSON: error?.toJSON?.(), res })
+        if (error.status == 406) {
+          // user clicked where no massn exists
+        } else if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
           console.error('error.response.data', error.response.data)
           console.error('error.response.status', error.response.status)
           console.error('error.response.headers', error.response.headers)
+          failedToFetch = true
         } else if (error.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
           console.error('error.request:', error.request)
+          failedToFetch = true
         } else {
           // Something happened in setting up the request that triggered an Error
           console.error('error.message', error.message)
+          failedToFetch = true
         }
         if (error.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
         }
-        failedToFetch = true
-        enqueNotification({
-          message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Sorry!`,
-          options: {
-            variant: 'error',
-          },
-        })
+        failedToFetch &&
+          enqueNotification({
+            message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
+            options: {
+              variant: 'info',
+            },
+          })
       }
-      if (!failedToFetch) {
+      if (!failedToFetch && res?.data) {
         const parser = new window.DOMParser()
         const dataArray = xmlToLayersData(
           parser.parseFromString(res.data, 'text/html'),
@@ -385,34 +395,39 @@ const ClickListener = () => {
           params,
         })
       } catch (error) {
-        // console.log({ error, errorToJSON: error?.toJSON?.(), res })
-        if (error.response) {
+        console.log({ error, errorToJSON: error?.toJSON?.(), res })
+        if (error.status == 406) {
+          // user clicked where no massn exists
+        } else if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
           console.error('error.response.data', error.response.data)
           console.error('error.response.status', error.response.status)
           console.error('error.response.headers', error.response.headers)
+          failedToFetch = true
         } else if (error.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
           console.error('error.request:', error.request)
+          failedToFetch = true
         } else {
           // Something happened in setting up the request that triggered an Error
           console.error('error.message', error.message)
+          failedToFetch = true
         }
         if (error.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
         }
-        failedToFetch = true
-        enqueNotification({
-          message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Sorry!`,
-          options: {
-            variant: 'error',
-          },
-        })
+        failedToFetch &&
+          enqueNotification({
+            message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
+            options: {
+              variant: 'info',
+            },
+          })
       }
-      if (!failedToFetch) {
+      if (!failedToFetch && res?.data) {
         const parser = new window.DOMParser()
         const dataArray = xmlToLayersData(
           parser.parseFromString(res.data, 'text/html'),
