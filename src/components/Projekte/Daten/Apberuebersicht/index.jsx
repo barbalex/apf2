@@ -31,13 +31,18 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   overflow-y: auto;
 `
-const StyledButton = styled(Button)`
+const HistorizeButton = styled(Button)`
   text-transform: none !important;
   border-color: rgba(46, 125, 50, 0.3) !important;
   margin-bottom: 15px !important;
+  display: block;
   &:hover {
     background-color: rgba(46, 125, 50, 0.1) !important;
   }
+`
+const Explainer = styled.span`
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.7rem;
 `
 const FormContainer = styled.div`
   padding: 10px;
@@ -250,14 +255,21 @@ const Apberuebersicht = () => {
                 />
               )}
               {showHistorize && (
-                <StyledButton
-                  variant="outlined"
-                  onClick={onClickHistorize}
-                  title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. bis zum März des Folgejahrs"
-                  color="inherit"
-                >
-                  {`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
-                </StyledButton>
+                <>
+                  <HistorizeButton
+                    variant="outlined"
+                    onClick={onClickHistorize}
+                    title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. bis zum März des Folgejahrs"
+                    color="inherit"
+                  >
+                    <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
+                    <br />
+                    <Explainer>
+                      Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager
+                      ist 2. bis zum März des Folgejahrs
+                    </Explainer>
+                  </HistorizeButton>
+                </>
               )}
               <MdField
                 name="bemerkungen"
