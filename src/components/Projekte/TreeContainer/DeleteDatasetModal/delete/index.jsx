@@ -146,36 +146,41 @@ const deleteModule = async ({ client, store, search }) => {
 
   const queryKeyTable =
     parentTable === 'tpopfeldkontr'
-      ? 'tpopfeldkontr'
+      ? 'treeTpopfeldkontr'
       : parentTable === 'tpopfreiwkontr'
-      ? 'tpopfreiwkontr'
+      ? 'treeTpopfreiwkontr'
       : table === 'tpop_apberrelevant_grund_werte'
-      ? 'tpopApberrelevantGrundWerte'
+      ? 'treeTpopApberrelevantGrundWerte'
       : table === 'ek_abrechnungstyp_werte'
-      ? 'ekAbrechnungstypWerte'
+      ? 'treeEkAbrechnungstypWerte'
       : table === 'tpopkontrzaehl_einheit_werte'
-      ? 'tpopkontrzaehlEinheitWerte'
-      : table
+      ? 'treeTpopkontrzaehlEinheitWerte'
+      : `tree${upperFirst(table)}`
   store.queryClient.invalidateQueries({
-    queryKey: [`tree${upperFirst(queryKeyTable)}`],
+    queryKey: [queryKeyTable],
   })
-  const queryKeyFoldersTable =
-    table === 'ziel'
-      ? 'zieljahr'
-      : parentTable === 'tpopfeldkontr'
-      ? 'tpopfeldkontrzaehl'
-      : parentTable === 'tpopfreiwkontr'
-      ? 'tpopfreiwkontrzaehl'
-      : [
-          'adresse',
-          'tpop_apberrelevant_grund_werte',
-          'ek_abrechnungstyp_werte',
-          'tpopkontrzaehl_einheit_werte',
-        ].includes(table)
-      ? 'werte'
-      : parentTable
+  const queryKeyFolders = ['apberuebersicht'].includes(table)
+    ? 'treeRoot'
+    : table === 'ziel'
+    ? 'treeZieljahrFolders'
+    : parentTable === 'tpopfeldkontr'
+    ? 'treeTpopfeldkontrzaehlFolders'
+    : parentTable === 'tpopfreiwkontr'
+    ? 'treeTpopfreiwkontrzaehlFolders'
+    : [
+        'adresse',
+        'tpop_apberrelevant_grund_werte',
+        'ek_abrechnungstyp_werte',
+        'tpopkontrzaehl_einheit_werte',
+      ].includes(table)
+    ? 'treeWerteFolders'
+    : `tree${upperFirst(parentTable)}Folders`
+  // console.log('Tree: deleting node', {
+  //   queryKeyFoldersTable,parentTable,
+  //   queryToInvalidate: `tree${upperFirst(queryKeyFoldersTable)}Folders`,
+  // })
   store.queryClient.invalidateQueries({
-    queryKey: [`tree${upperFirst(queryKeyFoldersTable)}Folders`],
+    queryKey: [queryKeyFolders],
   })
 
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()

@@ -230,47 +230,55 @@ const insertDataset = async ({
   }
   const queryKeyTable =
     parentTable === 'tpopfeldkontr'
-      ? 'tpopfeldkontrzaehl'
+      ? 'treeTpopfeldkontrzaehl'
       : parentTable === 'tpopfreiwkontr'
-      ? 'tpopfreiwkontrzaehl'
+      ? 'treeTpopfreiwkontrzaehl'
       : menuType.includes('tpopfeldkontr')
-      ? 'tpopfeldkontr'
+      ? 'treeTpopfeldkontr'
       : menuType.includes('tpopfreiwkontr')
-      ? 'tpopfreiwkontr'
+      ? 'treeTpopfreiwkontr'
       : table === 'tpop_apberrelevant_grund_werte'
-      ? 'tpopApberrelevantGrundWerte'
+      ? 'treeTpopApberrelevantGrundWerte'
       : table === 'ek_abrechnungstyp_werte'
-      ? 'ekAbrechnungstypWerte'
+      ? 'treeEkAbrechnungstypWerte'
       : table === 'tpopkontrzaehl_einheit_werte'
-      ? 'tpopkontrzaehlEinheitWerte'
-      : table
+      ? 'treePopkontrzaehlEinheitWerte'
+      : `tree${upperFirst(table)}`
   store.queryClient.invalidateQueries({
-    queryKey: [`tree${upperFirst(queryKeyTable)}`],
+    queryKey: [queryKeyTable],
   })
-  const queryKeyFoldersTable =
-    table === 'ziel'
-      ? 'zieljahr'
-      : parentTable === 'tpopfeldkontr'
-      ? 'tpopfeldkontrzaehl'
-      : parentTable === 'tpopfreiwkontr'
-      ? 'tpopfreiwkontrzaehl'
-      : [
-          'adresse',
-          'tpop_apberrelevant_grund_werte',
-          'ek_abrechnungstyp_werte',
-          'tpopkontrzaehl_einheit_werte',
-        ].includes(table)
-      ? 'werte'
-      : parentTable
   // console.log('insertDataset', {
   //   table,
   //   parentTable,
   //   menuType,
-  //   queryKeyFoldersTable,
   //   queryKeyTable,
   // })
+  const queryKeyFolder = ['apberuebersicht'].includes(table)
+    ? 'treeRoot'
+    : table === 'ziel'
+    ? 'treeZieljahrFolders'
+    : parentTable === 'tpopfeldkontr'
+    ? 'treeTpopfeldkontrzaehlFolders'
+    : parentTable === 'tpopfreiwkontr'
+    ? 'treeTpopfreiwkontrzaehlFolders'
+    : [
+        'adresse',
+        'tpop_apberrelevant_grund_werte',
+        'ek_abrechnungstyp_werte',
+        'tpopkontrzaehl_einheit_werte',
+      ].includes(table)
+    ? 'treeWerteFolders'
+    : `tree${upperFirst(parentTable)}Folders`
+  // console.log('insertDataset', {
+  //   table,
+  //   parentTable,
+  //   menuType,
+  //   queryKeyFoldersTable: queryKeyFolder,
+  //   queryKeyTable,
+  //   queryKeyFolder,
+  // })
   store.queryClient.invalidateQueries({
-    queryKey: [`tree${upperFirst(queryKeyFoldersTable)}Folders`],
+    queryKey: [queryKeyFolder],
   })
 }
 
