@@ -38,6 +38,13 @@ const HistorizeButton = styled(Button)`
   border-color: rgba(46, 125, 50, 0.3) !important;
   margin-bottom: 15px !important;
   display: block;
+  ${(props) =>
+    props['data-historizing'] && 'animation: blinker 1s linear infinite;'}
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
   &:hover {
     background-color: rgba(46, 125, 50, 0.1) !important;
   }
@@ -73,6 +80,9 @@ const Apberuebersicht = () => {
   const queryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState({})
+  const [historizing, setHistorizing] = useState(false)
+
+  console.log('Apberuebersicht, historizing:', historizing)
 
   const { data, isLoading, error } = useQuery({
     queryKey: [`Apberuebersicht`, apberUebersichtId],
@@ -158,6 +168,7 @@ const Apberuebersicht = () => {
   // })
 
   const onClickHistorize = useCallback(async () => {
+    setHistorizing(true)
     // 1. historize
     try {
       await client.mutate({
@@ -239,6 +250,7 @@ const Apberuebersicht = () => {
     queryClient.invalidateQueries({
       queryKey: ['Apberuebersicht'],
     })
+    setHistorizing(false)
   }, [client, enqueNotification, row?.id, row?.jahr, queryClient])
 
   if (isLoading) return <Spinner />
@@ -278,13 +290,21 @@ const Apberuebersicht = () => {
                     onClick={onClickHistorize}
                     title="historisieren"
                     color="inherit"
+                    data-historizing={historizing}
+                    disabled={historizing}
                   >
                     <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
                     <Explainer>
-                      Diese Option ist nur sichtbar:
-                      <br /> 1. Wenn der Benutzer Manager ist
-                      <br /> 2. Von Beginn des Berichtjahrs bis zum März des
-                      Folgejahrs
+                      {historizing ? (
+                        'Bitte warten, das dauert eine Weile...'
+                      ) : (
+                        <>
+                          Diese Option ist nur sichtbar:
+                          <br /> 1. Wenn der Benutzer Manager ist
+                          <br /> 2. Von Beginn des Berichtjahrs bis zum März des
+                          Folgejahrs
+                        </>
+                      )}
                     </Explainer>
                   </HistorizeButton>
                 </>
