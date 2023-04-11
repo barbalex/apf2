@@ -15,6 +15,7 @@ import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import upperFirst from 'lodash/upperFirst'
+import { useApolloClient, gql } from '@apollo/client'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOrParentInActiveNodePath from '../isNodeOrParentInActiveNodePath'
@@ -25,6 +26,7 @@ import storeContext from '../../../../storeContext'
 import { ContextMenuTrigger } from 'react-contextmenu/dist/react-contextmenu'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../modules/isMobilePhone'
+import historize from '../../../../modules/historize'
 import { ReactComponent as TpopSvg100 } from '../../Karte/layers/Tpop/statusGroupSymbols/100.svg'
 import { ReactComponent as TpopSvg100Highlighted } from '../../Karte/layers/Tpop/statusGroupSymbols/100_highlighted.svg'
 import { ReactComponent as TpopSvg101 } from '../../Karte/layers/Tpop/statusGroupSymbols/101.svg'
@@ -326,6 +328,8 @@ const Row = ({ node }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
 
+  const client = useApolloClient()
+
   // console.log('Row, node:', node)
 
   const store = useContext(storeContext)
@@ -336,6 +340,7 @@ const Row = ({ node }) => {
     copyingBiotop,
     setPrintingJberYear,
     map,
+    enqueNotification,
   } = store
   const tree = store.tree
   const {
@@ -415,10 +420,48 @@ const Row = ({ node }) => {
     toggleNodeSymbol({ node, store, search, navigate })
   }, [navigate, node, search, store])
 
-  const onClickPrint = useCallback(() => {
+  const onClickPrint = useCallback(async () => {
+    const { data } = await client.query({
+      query: gql`
+        query apberuebersichtForPrint($id: UUID!) {
+          apberuebersichtById(id: $id) {
+            id
+            jahr
+            historyFixed
+          }
+        }
+      `,
+      variables: { id: node.id },
+    })
+    const apberuebersicht = data?.apberuebersichtById
+    console.log('onClickPrint', { node, data, apberuebersicht })
+    if (apberuebersicht?.historyFixed === false) {
+      enqueNotification({
+        message: 'Arten, Pop und TPop werden historisiert...',
+        options: {
+          variant: 'info',
+        },
+      })
+      // TODO: check if not waiting works
+      // i.e.: is bericht data updated when historize finishes?
+      if (apberuebersicht.historyDate) {
+        historize({ store, apberuebersicht })
+      } else {
+        // await if not yet been historized
+        await historize({ store, apberuebersicht })
+      }
+    }
     setPrintingJberYear(+node.label)
     navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
-  }, [navigate, node.label, node.url, search, setPrintingJberYear])
+  }, [
+    client,
+    enqueNotification,
+    navigate,
+    node,
+    search,
+    setPrintingJberYear,
+    store,
+  ])
 
   const [projekteTabs] = useSearchParamsState(
     'projekteTabs',

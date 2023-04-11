@@ -80,7 +80,7 @@ const historize = async ({ store, apberuebersicht: row }) => {
   enqueNotification({
     message: `Arten, Pop und TPop wurden für das Jahr ${row?.jahr} historisiert`,
     options: {
-      variant: 'info',
+      variant: 'success',
     },
   })
   return
