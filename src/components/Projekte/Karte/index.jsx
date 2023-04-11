@@ -543,11 +543,11 @@ const Karte = () => {
   // 3. give overlays 100 + index in activeOverlaysSorted
   // 4. apflora layers always on top
 
-  console.log('Map', {
-    activeBaseLayer,
-    activeOverlaysSorted,
-    activeApfloraLayers,
-  })
+  // console.log('Map', {
+  //   activeBaseLayer,
+  //   activeOverlaysSorted,
+  //   activeApfloraLayers,
+  // })
 
   // clustered layers receive a key that rebuilds them every time the cluster
   // tool would erroneously add new markers from last time it build
