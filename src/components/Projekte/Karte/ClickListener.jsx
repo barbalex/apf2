@@ -449,10 +449,6 @@ const ClickListener = () => {
     L.popup().setLatLng(event.latlng).setContent(popupContent).openOn(map)
   })
 
-  console.log('ClickListener', {
-    activeOverlays,
-  })
-
   return null
 }
 
