@@ -1,7 +1,8 @@
-FROM postgis/postgis:14-3.2
+FROM postgis/postgis:14-3.3
 
 COPY ./init/ /docker-entrypoint-initdb.d/
-COPY ./apflora.backup /sik_data/apflora.backup
+# enable to seed data
+# COPY ./apflora.backup /sik_data/apflora.backup
 
 RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh
 
