@@ -40,9 +40,10 @@ const HistorizeButton = styled(Button)`
     background-color: rgba(46, 125, 50, 0.1) !important;
   }
 `
-const Explainer = styled.span`
+const Explainer = styled.div`
   color: rgba(0, 0, 0, 0.6);
   font-size: 0.7rem;
+  line-height: 0.9rem;
 `
 const FormContainer = styled.div`
   padding: 10px;
@@ -259,14 +260,15 @@ const Apberuebersicht = () => {
                   <HistorizeButton
                     variant="outlined"
                     onClick={onClickHistorize}
-                    title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. bis zum März des Folgejahrs"
+                    title="historisieren"
                     color="inherit"
                   >
                     <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
-                    <br />
                     <Explainer>
-                      Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager
-                      ist 2. bis zum März des Folgejahrs
+                      Diese Option ist nur sichtbar:
+                      <br /> 1. Wenn Benutzer Manager ist
+                      <br /> 2. Von Beginn des Berichtjahrs bis zum März des
+                      Folgejahrs
                     </Explainer>
                   </HistorizeButton>
                 </>
