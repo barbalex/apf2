@@ -656,12 +656,15 @@ CREATE TABLE apflora.apberuebersicht(
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt(id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint,
   history_date date DEFAULT NULL,
+  history_fixed boolean default false,
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL,
   UNIQUE (proj_id, jahr)
 );
+
+alter table apflora.apberuebersicht add column if not exists history_fixed boolean default false;
 
 CREATE INDEX ON apflora.apberuebersicht USING btree(id);
 
