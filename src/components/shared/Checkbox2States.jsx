@@ -23,7 +23,15 @@ const StyledCheckbox = styled(Checkbox)`
   width: 24px;
 `
 
-const Checkbox2States = ({ label, saveToDb, value, name, error }) => {
+const Checkbox2States = ({
+  label,
+  saveToDb,
+  value,
+  name,
+  error,
+  helperText,
+  disabled = false,
+}) => {
   const onClickButton = useCallback(() => {
     const fakeEvent = {
       target: {
@@ -53,7 +61,13 @@ const Checkbox2States = ({ label, saveToDb, value, name, error }) => {
           onClick={onClickButton}
           color="primary"
           checked={checked}
+          disabled={disabled}
         />
+        {!!helperText && (
+          <FormHelperText id={`${label}helperText`}>
+            {helperText}
+          </FormHelperText>
+        )}
         {!!error && (
           <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
         )}
