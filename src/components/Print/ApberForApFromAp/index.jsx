@@ -1,5 +1,5 @@
-import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
 import apQuery from './apByIdJahr'
@@ -11,24 +11,35 @@ import Spinner from '../../shared/Spinner'
 const ApberForApFromAp = () => {
   const { apberId, apId } = useParams()
 
-  const { data: apberData, error: apberDataError } = useQuery(apberQuery, {
-    variables: {
-      apberId,
-      apId,
-    },
+  const client = useApolloClient()
+
+  const { data: apberData, error: apberDataError } = useQuery({
+    queryKey: ['apberByIdForApFromAp', apberId, apId],
+    queryFn: () =>
+      client.query({
+        query: apberQuery,
+        variables: {
+          apberId,
+          apId,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
-  const jahr = apberData?.apberById?.jahr ?? 0
+  const jahr = apberData?.data?.apberById?.jahr ?? 0
 
   const {
     data: apData,
-    loading: apDataLoading,
+    isLoading: apDataLoading,
     error: apDataError,
-  } = useQuery(apQuery, {
-    variables: {
-      apId,
-      jahr,
-    },
+  } = useQuery({
+    queryKey: ['apByIdJahrForApberForApFromAp', apId, jahr],
+    queryFn: () =>
+      client.query({
+        query: apQuery,
+        variables: { apId, jahr },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   if (apDataLoading) return <Spinner />
@@ -40,11 +51,11 @@ const ApberForApFromAp = () => {
       <ApberForAp
         apId={apId}
         jahr={jahr}
-        apData={apData}
-        node={apData?.jberAbcByApId?.nodes?.[0]}
+        apData={apData?.data}
+        node={apData?.data?.jberAbcByApId?.nodes?.[0]}
       />
     </ErrorBoundary>
   )
 }
 
-export const Component = observer(ApberForApFromAp)
+export const Component = ApberForApFromAp
