@@ -49,7 +49,7 @@ export default gql`
               nodes {
                 id
                 apberRelevant
-                tpopmassnsByTpopId: tpopmassnsByTpopIdAndJahr {
+                tpopmassnsByTpopId(filter: { jahr: { equalTo: $jahr } }) {
                   nodes {
                     id
                     datum

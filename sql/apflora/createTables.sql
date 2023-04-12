@@ -1664,7 +1664,8 @@ ALTER TABLE apflora.tpop_history
 
 -- TODO: run in apflora if works
 COMMENT ON TABLE apflora.tpop_history IS E'@foreignKey (pop_id) references pop (id)\n@foreignKey (status) references pop_status_werte (code)\n@foreignKey (apber_relevant_grund) references tpop_apberrelevant_grund_werte (code)\n@foreignKey (ekfrequenz) references ekfrequenz (id)\n@foreignKey (ekf_kontrolleur) references adresse (id)';
-comment on table apflora.tpopmassn is E'@foreignKey (tpop_id,jahr) references tpop_history (id,year)';
+comment on table apflora.tpopmassn is E'@foreignKey (tpop_id) references tpop_history (id)';
+comment on table apflora.tpopber is E'@foreignKey (tpop_id) references tpop_history (id)';
 --
 CREATE INDEX ON apflora.tpop_history USING btree(id);
 

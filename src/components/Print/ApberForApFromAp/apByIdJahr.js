@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 import {
   adresse,
   aeTaxonomies,
-  ap,
+  apHistory,
   apber,
   tpopber,
   ziel,
@@ -15,15 +15,17 @@ import {
 
 export default gql`
   query apByIdJahrForApberForApFromAp($apId: UUID!, $jahr: Int!) {
-    apById(id: $apId) {
-      ...ApFields
+    apById: apHistoryByIdAndYear(id: $apId, year: $jahr) {
+      ...ApHistoryFields
       aeTaxonomyByArtId {
         ...AeTaxonomiesFields
       }
-      popsByApId {
+      popsByApId: popHistoriesByApIdAndYear {
         nodes {
           id
-          tpopsByPopId(condition: { apberRelevant: true }) {
+          tpopsByPopId: tpopHistoriesByYearAndPopId(
+            condition: { apberRelevant: true }
+          ) {
             nodes {
               id
               apberRelevant
@@ -33,7 +35,7 @@ export default gql`
                   datum
                 }
               }
-              tpopmassnsByTpopId(condition: { jahr: $jahr }) {
+              tpopmassnsByTpopId(filter: { jahr: { equalTo: $jahr } }) {
                 nodes {
                   id
                   datum
@@ -71,7 +73,7 @@ export default gql`
           }
         }
       }
-      zielsByApId(condition: { jahr: $jahr }) {
+      zielsByApId: zielsByApIdAndJahr {
         nodes {
           ...ZielFields
           zielTypWerteByTyp {
@@ -84,7 +86,7 @@ export default gql`
           }
         }
       }
-      apbersByApId(filter: { jahr: { equalTo: $jahr } }) {
+      apbersByApId: apbersByApIdAndJahr {
         nodes {
           ...ApberFields
           apErfkritWerteByBeurteilung {
@@ -144,7 +146,7 @@ export default gql`
   }
   ${adresse}
   ${aeTaxonomies}
-  ${ap}
+  ${apHistory}
   ${apber}
   ${apErfkritWerte}
   ${tpopber}
