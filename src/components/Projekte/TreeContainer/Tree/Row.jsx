@@ -436,7 +436,6 @@ const Row = ({ node }) => {
       variables: { id: node.id },
     })
     const apberuebersicht = data?.apberuebersichtById
-    console.log('onClickPrint', { node, data, apberuebersicht })
     let snackbarKey
     if (apberuebersicht?.historyFixed === false) {
       snackbarKey = enqueueSnackbar(

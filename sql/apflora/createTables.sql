@@ -274,6 +274,14 @@ CREATE TABLE apflora.ap_history(
   PRIMARY KEY (id, year)
 );
 
+-- TODO: run on apflora if works
+COMMENT ON TABLE apflora.ziel IS E'@foreignKey (ap_id,jahr) references ap_history (id,year)';
+
+COMMENT ON TABLE apflora.apber IS E'@foreignKey (ap_id,jahr) references ap_history (id,year)';
+
+COMMENT ON TABLE apflora.erfkrit IS E'@foreignKey (ap_id) references ap_history (id)';
+
+--
 CREATE INDEX ON apflora.ap_history USING btree(id);
 
 CREATE INDEX ON apflora.ap_history USING btree(year);
@@ -656,7 +664,7 @@ CREATE TABLE apflora.apberuebersicht(
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt(id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint,
   history_date date DEFAULT NULL,
-  history_fixed boolean default false,
+  history_fixed boolean DEFAULT FALSE,
   bemerkungen text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
@@ -664,7 +672,8 @@ CREATE TABLE apflora.apberuebersicht(
   UNIQUE (proj_id, jahr)
 );
 
-alter table apflora.apberuebersicht add column if not exists history_fixed boolean default false;
+ALTER TABLE apflora.apberuebersicht
+  ADD COLUMN IF NOT EXISTS history_fixed boolean DEFAULT FALSE;
 
 CREATE INDEX ON apflora.apberuebersicht USING btree(id);
 
@@ -1110,7 +1119,7 @@ DROP TABLE IF EXISTS apflora.pop_history;
 CREATE TABLE apflora.pop_history(
   year integer NOT NULL,
   id uuid NOT NULL,
-  ap_id uuid DEFAULT NULL REFERENCES apflora.ap(id) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ap_id uuid DEFAULT NULL,
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
   status integer DEFAULT NULL REFERENCES apflora.pop_status_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -1123,6 +1132,17 @@ CREATE TABLE apflora.pop_history(
   changed_by varchar(20) DEFAULT NULL,
   PRIMARY KEY (id, year)
 );
+
+-- TODO: run in apflora if works
+COMMENT ON TABLE apflora.pop_history IS E'';
+
+-- TODO: run in apflora if works
+ALTER TABLE apflora.pop_history
+  DROP CONSTRAINT IF EXISTS fk_ap;
+
+-- TODO: run in apflora if works
+ALTER TABLE apflora.pop_history
+  ADD CONSTRAINT fk_ap_history FOREIGN KEY (ap_id, year) REFERENCES apflora.ap_history(id, year) ON DELETE NO action ON UPDATE CASCADE;
 
 CREATE INDEX ON apflora.pop_history USING btree(id);
 
@@ -1642,8 +1662,10 @@ CREATE TABLE apflora.tpop_history(
 ALTER TABLE apflora.tpop_history
   ADD CONSTRAINT fk_pop_history FOREIGN KEY (year, pop_id) REFERENCES apflora.pop_history(year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-COMMENT ON TABLE apflora.tpop_history IS E '@foreignKey (pop_id) references pop (id)\n@foreignKey (status) references pop_status_werte (code)\n@foreignKey (apber_relevant_grund) references tpop_apberrelevant_grund_werte (code)\n@foreignKey (ekfrequenz) references ekfrequenz (id)\n@foreignKey (ekf_kontrolleur) references adresse (id)';
-
+-- TODO: run in apflora if works
+COMMENT ON TABLE apflora.tpop_history IS E'@foreignKey (pop_id) references pop (id)\n@foreignKey (status) references pop_status_werte (code)\n@foreignKey (apber_relevant_grund) references tpop_apberrelevant_grund_werte (code)\n@foreignKey (ekfrequenz) references ekfrequenz (id)\n@foreignKey (ekf_kontrolleur) references adresse (id)';
+comment on table apflora.tpopmassn is E'@foreignKey (tpop_id,jahr) references tpop_history (id,year)';
+--
 CREATE INDEX ON apflora.tpop_history USING btree(id);
 
 CREATE INDEX ON apflora.tpop_history USING btree(year);

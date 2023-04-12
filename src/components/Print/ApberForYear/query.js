@@ -22,10 +22,11 @@ export default gql`
       jahr
       bemerkungen
     }
-    allAps(
+    allAps: allApHistories(
       filter: {
         bearbeitung: { in: [1, 2, 3] }
         projId: { equalTo: $projektId }
+        year: { equalTo: $jahr }
       }
     ) {
       nodes {
@@ -34,10 +35,12 @@ export default gql`
         aeTaxonomyByArtId {
           ...AeTaxonomiesFields
         }
-        popsByApId(filter: { bekanntSeit: { lessThanOrEqualTo: $jahr } }) {
+        popsByApId: popHistoriesByApIdAndYear(
+          filter: { bekanntSeit: { lessThanOrEqualTo: $jahr } }
+        ) {
           nodes {
             id
-            tpopsByPopId(
+            tpopsByPopId: tpopHistoriesByYearAndPopId(
               filter: {
                 apberRelevant: { equalTo: true }
                 bekanntSeit: { lessThanOrEqualTo: $jahr }
@@ -46,7 +49,7 @@ export default gql`
               nodes {
                 id
                 apberRelevant
-                tpopmassnsByTpopId(condition: { jahr: $jahr }) {
+                tpopmassnsByTpopId: tpopmassnsByTpopIdAndJahr {
                   nodes {
                     id
                     datum
@@ -79,7 +82,7 @@ export default gql`
             }
           }
         }
-        zielsByApId(filter: { jahr: { equalTo: $jahr } }) {
+        zielsByApId: zielsByApIdAndJahr(filter: { jahr: { equalTo: $jahr } }) {
           nodes {
             ...ZielFields
             zielTypWerteByTyp {
@@ -92,7 +95,9 @@ export default gql`
             }
           }
         }
-        apbersByApId(filter: { jahr: { equalTo: $jahr } }) {
+        apbersByApId: apbersByApIdAndJahr(
+          filter: { jahr: { equalTo: $jahr } }
+        ) {
           totalCount
           nodes {
             ...ApberFields
