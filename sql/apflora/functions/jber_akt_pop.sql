@@ -8,13 +8,15 @@ CREATE OR REPLACE FUNCTION apflora.jber_akt_pop (jahr int)
       pop.ap_id,
       count(DISTINCT pop.id) AS count
     FROM
-      apflora.pop pop
-      INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id
+      apflora.pop_history pop
+      INNER JOIN apflora.tpop_history tpop ON pop.id = tpop.pop_id
     WHERE
       pop.status = 100
       AND pop.bekannt_seit <= $1
       AND tpop.apber_relevant = TRUE
       AND tpop.bekannt_seit <= $1
+      AND pop.year = $1
+      AND tpop.year = $1
     GROUP BY
       pop.ap_id
 ),
@@ -23,14 +25,17 @@ pop_200 AS (
     pop.ap_id,
     count(DISTINCT pop.id) AS count
   FROM
-    apflora.ap ap
-    INNER JOIN apflora.pop pop
-    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+    apflora.ap_history ap
+    INNER JOIN apflora.pop_history pop
+    INNER JOIN apflora.tpop_history tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
   WHERE
     pop.status = 200
     AND pop.bekannt_seit <= $1
     AND tpop.apber_relevant = TRUE
     AND tpop.bekannt_seit <= $1
+    AND ap.year = $1
+    AND pop.year = $1
+    AND tpop.year = $1
   GROUP BY
     pop.ap_id
 ),
@@ -39,14 +44,17 @@ pop_total AS (
     pop.ap_id,
     count(DISTINCT pop.id) AS count
   FROM
-    apflora.ap ap
-    INNER JOIN apflora.pop pop
-    INNER JOIN apflora.tpop tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
+    apflora.ap_history ap
+    INNER JOIN apflora.pop_history pop
+    INNER JOIN apflora.tpop_history tpop ON pop.id = tpop.pop_id ON pop.ap_id = ap.id
   WHERE
     pop.status IN (100, 200)
     AND pop.bekannt_seit <= $1
     AND tpop.apber_relevant = TRUE
     AND tpop.bekannt_seit <= $1
+    AND ap.year = $1
+    AND pop.year = $1
+    AND tpop.year = $1
   GROUP BY
     pop.ap_id
 ),
@@ -115,7 +123,7 @@ SELECT
   coalesce(pop_200.count, 0)::int - coalesce(pop_200_previous.count, 0)::int AS pop_200_diff,
   coalesce(pop_total.count, 0)::int - coalesce(pop_previous_total.count, 0)::int AS pop_total_diff
 FROM
-  apflora.ap
+  apflora.ap_history ap
   LEFT JOIN pop_100 ON pop_100.ap_id = ap.id
   LEFT JOIN pop_200 ON pop_200.ap_id = ap.id
   LEFT JOIN pop_total ON pop_total.ap_id = ap.id
@@ -125,6 +133,7 @@ FROM
   INNER JOIN apflora.ae_taxonomies tax ON tax.id = ap.art_id
 WHERE
   ap.bearbeitung BETWEEN 1 AND 3 --@485
+  and ap.year = $1
 ORDER BY
   tax.artname
 $$
