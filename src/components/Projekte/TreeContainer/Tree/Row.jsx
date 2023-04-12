@@ -16,6 +16,7 @@ import Highlighter from 'react-highlight-words'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import upperFirst from 'lodash/upperFirst'
 import { useApolloClient, gql } from '@apollo/client'
+import { useSnackbar } from 'notistack'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOrParentInActiveNodePath from '../isNodeOrParentInActiveNodePath'
@@ -340,7 +341,6 @@ const Row = ({ node }) => {
     copyingBiotop,
     setPrintingJberYear,
     map,
-    enqueNotification,
   } = store
   const tree = store.tree
   const {
@@ -420,6 +420,8 @@ const Row = ({ node }) => {
     toggleNodeSymbol({ node, store, search, navigate })
   }, [navigate, node, search, store])
 
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+
   const onClickPrint = useCallback(async () => {
     const { data } = await client.query({
       query: gql`
@@ -435,27 +437,33 @@ const Row = ({ node }) => {
     })
     const apberuebersicht = data?.apberuebersichtById
     console.log('onClickPrint', { node, data, apberuebersicht })
+    let snackbarKey
     if (apberuebersicht?.historyFixed === false) {
-      enqueNotification({
-        message: 'Arten, Pop und TPop werden historisiert...',
-        options: {
+      snackbarKey = enqueueSnackbar(
+        'Arten, Pop und TPop werden historisiert, damit Sie aktuelle Daten sehen. Danach wird der Bericht geöffnet. Sorry, das dauert...',
+        {
           variant: 'info',
+          persist: true,
         },
-      })
+      )
       // TODO: check if not waiting works
       // i.e.: is bericht data updated when historize finishes?
       if (apberuebersicht.historyDate) {
-        historize({ store, apberuebersicht })
+        historize({ store, apberuebersicht }).then(() =>
+          closeSnackbar(snackbarKey),
+        )
       } else {
         // await if not yet been historized
         await historize({ store, apberuebersicht })
+        closeSnackbar(snackbarKey)
       }
     }
     setPrintingJberYear(+node.label)
     navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
   }, [
     client,
-    enqueNotification,
+    closeSnackbar,
+    enqueueSnackbar,
     navigate,
     node,
     search,
