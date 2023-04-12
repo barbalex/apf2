@@ -274,7 +274,6 @@ CREATE TABLE apflora.ap_history(
   PRIMARY KEY (id, year)
 );
 
--- TODO: run on apflora if works
 COMMENT ON TABLE apflora.ziel IS E'@foreignKey (ap_id,jahr) references ap_history (id,year)';
 
 COMMENT ON TABLE apflora.apber IS E'@foreignKey (ap_id,jahr) references ap_history (id,year)';
@@ -1133,14 +1132,11 @@ CREATE TABLE apflora.pop_history(
   PRIMARY KEY (id, year)
 );
 
--- TODO: run in apflora if works
 COMMENT ON TABLE apflora.pop_history IS E'';
 
--- TODO: run in apflora if works
 ALTER TABLE apflora.pop_history
   DROP CONSTRAINT IF EXISTS fk_ap;
 
--- TODO: run in apflora if works
 ALTER TABLE apflora.pop_history
   ADD CONSTRAINT fk_ap_history FOREIGN KEY (ap_id, year) REFERENCES apflora.ap_history(id, year) ON DELETE NO action ON UPDATE CASCADE;
 
@@ -1662,10 +1658,12 @@ CREATE TABLE apflora.tpop_history(
 ALTER TABLE apflora.tpop_history
   ADD CONSTRAINT fk_pop_history FOREIGN KEY (year, pop_id) REFERENCES apflora.pop_history(year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
--- TODO: run in apflora if works
 COMMENT ON TABLE apflora.tpop_history IS E'@foreignKey (pop_id) references pop (id)\n@foreignKey (status) references pop_status_werte (code)\n@foreignKey (apber_relevant_grund) references tpop_apberrelevant_grund_werte (code)\n@foreignKey (ekfrequenz) references ekfrequenz (id)\n@foreignKey (ekf_kontrolleur) references adresse (id)';
-comment on table apflora.tpopmassn is E'@foreignKey (tpop_id) references tpop_history (id)';
-comment on table apflora.tpopber is E'@foreignKey (tpop_id) references tpop_history (id)';
+
+COMMENT ON TABLE apflora.tpopmassn IS E'@foreignKey (tpop_id) references tpop_history (id)';
+
+COMMENT ON TABLE apflora.tpopber IS E'@foreignKey (tpop_id) references tpop_history (id)';
+
 --
 CREATE INDEX ON apflora.tpop_history USING btree(id);
 
