@@ -75,6 +75,7 @@ const BeobsComponent = () => {
         variables: {
           id,
         },
+        fetchPolicy: 'no-cache',
       }),
   })
 

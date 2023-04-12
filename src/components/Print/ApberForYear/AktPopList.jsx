@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import sumBy from 'lodash/sumBy'
-import { useQuery } from '@apollo/client'
-import { gql } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
 import storeContext from '../../../storeContext'
@@ -134,33 +134,38 @@ const TotalDiffColumn = styled.div`
 const AktPopList = ({ year }) => {
   const { projId = '99999999-9999-9999-9999-999999999999' } = useParams()
 
+  const client = useApolloClient()
+
   const previousYear = year - 1
-  const { data, loading, error } = useQuery(
-    gql`
-      query AktPopListAps($jahr: Int!) {
-        jberAktPop(jahr: $jahr) {
-          nodes {
-            artname
-            id
-            pop100
-            pop200
-            popTotal
-            pop100Diff
-            pop200Diff
-            popTotalDiff
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['jberAktPopQuery', projId, previousYear, year],
+    queryFn: () =>
+      client.query({
+        query: gql`
+          query AktPopListAps($jahr: Int!) {
+            jberAktPop(jahr: $jahr) {
+              nodes {
+                artname
+                id
+                pop100
+                pop200
+                popTotal
+                pop100Diff
+                pop200Diff
+                popTotalDiff
+              }
+            }
           }
-        }
-      }
-    `,
-    {
-      variables: {
-        projektId: projId,
-        previousYear,
-        jahr: year,
-      },
-    },
-  )
-  const aps = data?.jberAktPop?.nodes ?? []
+        `,
+        variables: {
+          projektId: projId,
+          previousYear,
+          jahr: year,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+  const aps = data?.data?.jberAktPop?.nodes ?? []
   const pop100 = sumBy(aps, 'pop100')
   const pop200 = sumBy(aps, 'pop200')
   const popsTotal = sumBy(aps, 'popTotal')
@@ -168,13 +173,11 @@ const AktPopList = ({ year }) => {
   const pop200Diff = sumBy(aps, 'pop200Diff')
   const popTotalDiff = sumBy(aps, 'popTotalDiff')
 
-  //console.log('AktPopList', { apRows, aps, data })
-
   if (error) {
     return `Fehler: ${error.message}`
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <ErrorBoundary>
         <Container>
