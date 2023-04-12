@@ -28,6 +28,7 @@ import storeContext from '../../../../storeContext'
 import { ContextMenuTrigger } from 'react-contextmenu/dist/react-contextmenu'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../modules/isMobilePhone'
+import historizeForAp from '../../../../modules/historizeForAp'
 import historize from '../../../../modules/historize'
 import { ReactComponent as TpopSvg100 } from '../../Karte/layers/Tpop/statusGroupSymbols/100.svg'
 import { ReactComponent as TpopSvg100Highlighted } from '../../Karte/layers/Tpop/statusGroupSymbols/100_highlighted.svg'
@@ -425,50 +426,84 @@ const Row = ({ node }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
   const onClickPrint = useCallback(async () => {
-    const { data } = await client.query({
-      query: gql`
-        query apberuebersichtForPrint($id: UUID!) {
-          apberuebersichtById(id: $id) {
-            id
-            jahr
-            historyFixed
+    if (!apId) {
+      // apberuebersicht
+      const { data } = await client.query({
+        query: gql`
+          query apberuebersichtForPrint($id: UUID!) {
+            apberuebersichtById(id: $id) {
+              id
+              jahr
+              historyFixed
+            }
           }
-        }
-      `,
-      variables: { id: node.id },
-    })
-    const apberuebersicht = data?.apberuebersichtById
-    let snackbarKey
-    if (apberuebersicht?.historyFixed === false) {
-      snackbarKey = enqueueSnackbar(
-        'Arten, Pop und TPop werden historisiert, damit Sie aktuelle Daten sehen. Danach wird der Bericht aktualisiert. Sorry, das dauert...',
-        {
-          variant: 'info',
-          persist: true,
-        },
-      )
-      historize({ store, apberuebersicht }).then(() => {
-        closeSnackbar(snackbarKey)
-        queryClient.invalidateQueries({
-          queryKey: [`ApberForYearQuery`],
-        })
-        setTimeout(() =>
-          queryClient.invalidateQueries({
-            queryKey: [`jberAktPopQuery`],
-          }),
-        )
+        `,
+        variables: { id: node.id },
       })
+      const apberuebersicht = data?.apberuebersichtById
+      let snackbarKey
+      if (apberuebersicht?.historyFixed === false) {
+        snackbarKey = enqueueSnackbar(
+          'Arten, Pop und TPop werden historisiert, damit Sie aktuelle Daten sehen. Danach wird der Bericht aktualisiert. Sorry, das dauert...',
+          {
+            variant: 'info',
+            persist: true,
+          },
+        )
+        historize({ store, apberuebersicht }).then(() => {
+          closeSnackbar(snackbarKey)
+          queryClient.invalidateQueries({
+            queryKey: [`ApberForYearQuery`],
+          })
+          setTimeout(() =>
+            queryClient.invalidateQueries({
+              queryKey: [`jberAktPopQuery`],
+            }),
+          )
+        })
+      }
+    } else {
+      // apber
+      const { data } = await client.query({
+        query: gql`
+          query apberForPrint($jahr: Int!) {
+            allApberuebersichts(filter: { jahr: { equalTo: $jahr } }) {
+              nodes {
+                id
+                historyFixed
+              }
+            }
+          }
+        `,
+        variables: { jahr: Number(node.label) },
+      })
+      const apberuebersicht = data?.allApberuebersichts?.nodes?.[0]
+      let snackbarKey
+      if (apberuebersicht?.historyFixed === false) {
+        snackbarKey = enqueueSnackbar(
+          'Art, Pop und TPop werden historisiert, damit Sie aktuelle Daten sehen. Danach wird der Bericht aktualisiert. Sorry, das dauert...',
+          {
+            variant: 'info',
+            persist: true,
+          },
+        )
+        historizeForAp({ store, year: Number(node.label), apId }).then(() => {
+          closeSnackbar(snackbarKey)
+          queryClient.invalidateQueries({
+            queryKey: [`apByIdJahrForApberForApFromAp`],
+          })
+        })
+      }
     }
     setPrintingJberYear(+node.label)
     navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
   }, [
+    apId,
     client,
     closeSnackbar,
     enqueueSnackbar,
     navigate,
-    node.id,
-    node.label,
-    node.url,
+    node,
     queryClient,
     search,
     setPrintingJberYear,
