@@ -1,10 +1,4 @@
--- CREATE TYPE apflora.ausw_tpop_menge AS (
---   pop_id uuid,
---   jahr integer,
--- VALUES
---   json
--- );
-CREATE OR REPLACE FUNCTION apflora.ausw_pop_menge(popid uuid)
+CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
   RETURNS SETOF apflora.ausw_pop_menge
   AS $$
 BEGIN
@@ -168,5 +162,5 @@ $$
 LANGUAGE plpgsql
 SECURITY DEFINER STABLE;
 
-ALTER FUNCTION apflora.ausw_pop_menge(popid uuid) OWNER TO postgres;
+ALTER FUNCTION apflora.pop_ausw_tpop_menge(popid uuid) OWNER TO postgres;
 

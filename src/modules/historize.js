@@ -63,16 +63,6 @@ const historize = async ({ store, apberuebersicht: row }) => {
       },
     })
   }
-  // 3. update materialized view
-  await client.mutate({
-    mutation: gql`
-      mutation vApAuswPopMengeRefreshFromApberuebersicht {
-        vPopAuswTpopMengeRefresh(input: { clientMutationId: "bla" }) {
-          boolean
-        }
-      }
-    `,
-  })
   // notify user
   enqueNotification({
     message: `Arten, Pop und TPop wurden für das Jahr ${row?.jahr} historisiert`,
