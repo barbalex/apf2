@@ -1,11 +1,9 @@
-import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import sumBy from 'lodash/sumBy'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
-import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`

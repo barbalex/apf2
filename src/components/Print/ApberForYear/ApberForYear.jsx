@@ -115,7 +115,6 @@ const ApberForYear = () => {
         variables: {
           id: apberUebersichtId,
         },
-        // DANGER: without, refetches by react-query do not work!
         fetchPolicy: 'no-cache',
       })
       const jahr = data1?.apberuebersichtById?.jahr
@@ -126,7 +125,6 @@ const ApberForYear = () => {
           jahr,
           apberuebersichtId: apberUebersichtId,
         },
-        // DANGER: without, refetches by react-query do not work!
         fetchPolicy: 'no-cache',
       })
 
@@ -137,6 +135,8 @@ const ApberForYear = () => {
   if (error) {
     return `Fehler: ${error.message}`
   }
+
+  console.log('ApberForYear', { data, isLoading })
 
   // DANGER: without rerendering when loading mutates from true to false
   // data remains undefined

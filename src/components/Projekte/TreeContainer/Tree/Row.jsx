@@ -450,18 +450,11 @@ const Row = ({ node }) => {
             persist: true,
           },
         )
-        historize({ store, apberuebersicht }).then(() => {
-          closeSnackbar(snackbarKey)
-          queryClient.invalidateQueries({
-            queryKey: [`ApberForYearQuery`],
-          })
-          setTimeout(() =>
-            queryClient.invalidateQueries({
-              queryKey: [`jberAktPopQuery`],
-            }),
-          )
-        })
+        await historize({ store, apberuebersicht })
+        closeSnackbar(snackbarKey)
       }
+      setPrintingJberYear(+node.label)
+      navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
     } else {
       // apber
       const { data } = await client.query({
@@ -479,7 +472,7 @@ const Row = ({ node }) => {
       })
       const apberuebersicht = data?.allApberuebersichts?.nodes?.[0]
       let snackbarKey
-      if (apberuebersicht?.historyFixed === false) {
+      if (!apberuebersicht || apberuebersicht?.historyFixed === false) {
         snackbarKey = enqueueSnackbar(
           'Art, Pop und TPop werden historisiert, damit Sie aktuelle Daten sehen. Danach wird der Bericht aktualisiert. Sorry, das dauert...',
           {
@@ -487,16 +480,12 @@ const Row = ({ node }) => {
             persist: true,
           },
         )
-        historizeForAp({ store, year: Number(node.label), apId }).then(() => {
-          closeSnackbar(snackbarKey)
-          queryClient.invalidateQueries({
-            queryKey: [`apByIdJahrForApberForApFromAp`],
-          })
-        })
+        await historizeForAp({ store, year: Number(node.label), apId })
+        closeSnackbar(snackbarKey)
       }
+      setPrintingJberYear(+node.label)
+      navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
     }
-    setPrintingJberYear(+node.label)
-    navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
   }, [
     apId,
     client,

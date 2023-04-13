@@ -12,14 +12,10 @@ const ApberForApFromAp = () => {
 
   const client = useApolloClient()
 
-  const {
-    data: apberData,
-    error: apberDataError,
-    loading: apberDataLoading,
-  } = useQuery({
-    queryKey: ['apberByIdForApFromAp', apberId, apId],
-    queryFn: () =>
-      client.query({
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['apByIdJahrForApberForApFromAp', apberId, apId],
+    queryFn: async () => {
+      const { data: apberData, error: apberError } = await client.query({
         query: gql`
           query apberById($apberId: UUID!) {
             apberById(id: $apberId) {
@@ -33,36 +29,33 @@ const ApberForApFromAp = () => {
           apId,
         },
         fetchPolicy: 'no-cache',
-      }),
-  })
+      })
+      const jahr = apberData?.apberById?.jahr
+      if (apberError) throw apberError
+      if (!jahr) throw new Error('im AP-Bericht fehlt das Jahr')
 
-  const jahr = apberData?.data?.apberById?.jahr ?? 0
-
-  const {
-    data: apData,
-    isLoading: apDataLoading,
-    error: apDataError,
-  } = useQuery({
-    queryKey: ['apByIdJahrForApberForApFromAp', apId, jahr],
-    queryFn: () =>
-      client.query({
+      const { data, error } = await client.query({
         query: apQuery,
-        variables: { apId, jahr: jahr ?? 0 },
+        variables: { apId, jahr },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (error) throw error
+      return { data, jahr }
+    },
   })
 
-  if (!jahr || apberDataLoading || apDataLoading) return <Spinner />
-  if (apberDataError) return `Fehler: ${apberDataError.message}`
-  if (apDataError) return `Fehler: ${apDataError.message}`
+  const jahr = data?.jahr
+
+  if (isLoading) return <Spinner />
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <ErrorBoundary>
       <ApberForAp
         apId={apId}
         jahr={jahr}
-        apData={apData?.data}
-        node={apData?.data?.jberAbcByApId?.nodes?.[0]}
+        apData={data?.data}
+        node={data?.data?.jberAbcByApId?.nodes?.[0]}
       />
     </ErrorBoundary>
   )

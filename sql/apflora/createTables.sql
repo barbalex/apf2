@@ -1675,6 +1675,8 @@ CREATE INDEX ON apflora.tpop_history USING btree(status);
 
 CREATE INDEX ON apflora.tpop_history USING btree(apber_relevant);
 
+CREATE INDEX ON apflora.tpop_history USING btree(bekannt_seit);
+
 CREATE INDEX ON apflora.tpop_history USING btree(nr);
 
 CREATE INDEX ON apflora.tpop_history USING btree(flurname);
