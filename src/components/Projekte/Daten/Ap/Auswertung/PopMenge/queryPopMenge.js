@@ -2,11 +2,8 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query apAuswertungPopMenge($id: UUID!, $jahr: Int!) {
-    # view: v_ap_ausw_pop_menge
-    allVApAuswPopMenges(
-      filter: { apId: { equalTo: $id }, jahr: { lessThanOrEqualTo: $jahr } }
-      orderBy: JAHR_ASC
-    ) {
+    # function: apflora.ap_ausw_pop_menge
+    apAuswPopMenge(apid: $id, jahr: $jahr) {
       nodes {
         jahr
         values

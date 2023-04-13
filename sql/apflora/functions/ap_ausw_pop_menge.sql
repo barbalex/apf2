@@ -1,9 +1,10 @@
 CREATE TYPE apflora.ausw_pop_menge AS (
   jahr integer,
-  values json
+VALUES
+  json
 );
 
-CREATE OR REPLACE FUNCTION apflora.ap_ausw_pop_menge(apid uuid)
+CREATE OR REPLACE FUNCTION apflora.ap_ausw_pop_menge(apid uuid, jahr integer)
   RETURNS SETOF apflora.ausw_pop_menge
   AS $$
 BEGIN
@@ -32,6 +33,7 @@ BEGIN
         AND tpop.year = massn.jahr
     WHERE
       massn.jahr IS NOT NULL
+      AND massn.jahr <= $2
       AND tpop.status IN(200, 201)
       AND tpop.apber_relevant = TRUE
       AND massn.zieleinheit_einheit = ze.code
@@ -67,6 +69,7 @@ zaehlungen AS(
       AND zaehlungen.einheit = ze.code
   WHERE
     kontr.jahr IS NOT NULL
+    AND kontr.jahr <= $2
     AND tpop.status IN(100, 200, 201)
     AND tpop.apber_relevant = TRUE
     AND zaehlungen.anzahl IS NOT NULL
@@ -105,6 +108,7 @@ tpop_letzte_anzahlen AS(
         AND massn.datum >= coalesce(zaehl.datum, to_date(concat(tpop.year, '-01-01'), 'YYYY-MM-DD'))
     WHERE
       ap.id = $1
+      AND tpop.year <= $2
     ORDER BY
       tpop.id,
       tpop.year
@@ -112,7 +116,7 @@ tpop_letzte_anzahlen AS(
 tpop_letzte_anzahl AS(
   SELECT
     tpop_id,
-    jahr,
+    la.jahr,
     datum,
     CASE WHEN la.tpop_id IS NULL THEN
       NULL
@@ -160,18 +164,18 @@ FROM
     pop.year
 )
 SELECT
-  jahr,
+  pop_data.jahr,
   json_object_agg(pop_id, anzahl) AS
 VALUES
   FROM pop_data
 GROUP BY
-  jahr
+  pop_data.jahr
 ORDER BY
-  jahr;
+  pop_data.jahr;
 END;
 $$
 LANGUAGE plpgsql
-SECURITY DEFINER;
+SECURITY DEFINER STABLE;
 
-ALTER FUNCTION apflora.ap_ausw_pop_menge(apid uuid) OWNER TO postgres;
+ALTER FUNCTION apflora.ap_ausw_pop_menge(apid uuid, jahr integer) OWNER TO postgres;
 

@@ -2,7 +2,6 @@ import { gql } from '@apollo/client'
 
 const historizeForAp = async ({ store, year, apId }) => {
   const { enqueNotification, client } = store
-  // 1. historize
   try {
     await client.mutate({
       mutation: gql`
@@ -28,19 +27,6 @@ const historizeForAp = async ({ store, year, apId }) => {
       },
     })
   }
-  // 2. update materialized view
-  await client.mutate({
-    mutation: gql`
-      mutation vApAuswPopMengeRefreshFromApberuebersicht {
-        vApAuswPopMengeRefresh(input: { clientMutationId: "bla" }) {
-          boolean
-        }
-        vPopAuswTpopMengeRefresh(input: { clientMutationId: "bla" }) {
-          boolean
-        }
-      }
-    `,
-  })
   // notify user
   enqueNotification({
     message: `Art, Pop und TPop wurden für das Jahr ${year} historisiert`,

@@ -67,9 +67,6 @@ const historize = async ({ store, apberuebersicht: row }) => {
   await client.mutate({
     mutation: gql`
       mutation vApAuswPopMengeRefreshFromApberuebersicht {
-        vApAuswPopMengeRefresh(input: { clientMutationId: "bla" }) {
-          boolean
-        }
         vPopAuswTpopMengeRefresh(input: { clientMutationId: "bla" }) {
           boolean
         }
