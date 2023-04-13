@@ -7,6 +7,7 @@ import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router-dom'
 
 import queryForYear from './query'
+import jberQueryForYear from './jberQuery'
 import queryForApberuebersicht from '../../Projekte/Daten/Apberuebersicht/query'
 import fnslogo from './fnslogo.png'
 import AvList from './AvList'
@@ -118,6 +119,7 @@ const ApberForYear = () => {
         fetchPolicy: 'no-cache',
       })
       const jahr = data1?.apberuebersichtById?.jahr
+      // then get data
       const { data } = await client.query({
         query: queryForYear,
         variables: {
@@ -127,16 +129,23 @@ const ApberForYear = () => {
         },
         fetchPolicy: 'no-cache',
       })
+      // then get jber data
+      // WARNING: this HAS to be queried later or somehow loading never ended
+      const { data: jberData } = await client.query({
+        query: jberQueryForYear,
+        variables: {
+          jahr,
+        },
+        fetchPolicy: 'no-cache',
+      })
 
-      return { data, jahr }
+      return { data, jberData, jahr }
     },
   })
 
   if (error) {
     return `Fehler: ${error.message}`
   }
-
-  console.log('ApberForYear', { data, isLoading })
 
   // DANGER: without rerendering when loading mutates from true to false
   // data remains undefined
@@ -174,10 +183,14 @@ const ApberForYear = () => {
               </SecondPageText>
             </SecondPage>
           )}
-          <AvList data={data?.data} />
-          <ErfolgList jahr={jahr} data={data?.data} />
+          <AvList data={data?.jberData} />
+          <ErfolgList jahr={jahr} data={data?.jberData} />
           <AktPopList year={jahr} />
-          <ApberForAps jahr={jahr} data={data?.data} />
+          <ApberForAps
+            jahr={jahr}
+            data={data?.data}
+            jberData={data?.jberData}
+          />
         </ContentContainer>
       </Container>
     </ErrorBoundary>

@@ -4,12 +4,12 @@ import { observer } from 'mobx-react-lite'
 import ApberForAp from '../ApberForAp'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
-const ApberForYear = ({ jahr, data }) => {
+const ApberForYear = ({ jahr, data, jberData }) => {
   const aps = (data?.allAps?.nodes ?? []).filter(
     (ap) => (ap?.apbersByApId?.totalCount ?? 0) > 0,
   )
 
-  const nodes = data?.jberAbc?.nodes ?? []
+  const nodes = jberData?.jberAbc?.nodes ?? []
 
   return (
     <ErrorBoundary>

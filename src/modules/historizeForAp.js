@@ -6,9 +6,7 @@ const historizeForAp = async ({ store, year, apId }) => {
     await client.mutate({
       mutation: gql`
         mutation historizeForAp($year: Int!, $apId: UUID!) {
-          historizeForAp(
-            input: { clientMutationId: "bla", year: $year, apId: $apId }
-          ) {
+          historizeForAp(input: { _year: $year, apId: $apId }) {
             boolean
           }
         }

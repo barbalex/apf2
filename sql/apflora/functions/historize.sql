@@ -170,12 +170,6 @@ BEGIN
       created_at = excluded.created_at,
       updated_at = excluded.updated_at,
       changed_by = excluded.changed_by;
-  --
-  -- TODO: vacuum?
-  -- TODO: reindex?
-  -- REINDEX TABLE apflora.ap_history;
-  -- REINDEX TABLE apflora.pop_history;
-  -- REINDEX TABLE apflora.tpop_history;
   RETURN FOUND;
 END;
 $$

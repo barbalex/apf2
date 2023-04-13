@@ -444,7 +444,7 @@ const Row = ({ node }) => {
       let snackbarKey
       if (apberuebersicht?.historyFixed === false) {
         snackbarKey = enqueueSnackbar(
-          'Arten, Pop und TPop werden historisiert, damit Sie aktuelle Daten sehen. Danach wird der Bericht aktualisiert. Sorry, das dauert...',
+          'Arten, Pop und TPop werden historisiert, damit Sie aktuelle Daten sehen',
           {
             variant: 'info',
             persist: true,
@@ -473,13 +473,10 @@ const Row = ({ node }) => {
       const apberuebersicht = data?.allApberuebersichts?.nodes?.[0]
       let snackbarKey
       if (!apberuebersicht || apberuebersicht?.historyFixed === false) {
-        snackbarKey = enqueueSnackbar(
-          'Art, Pop und TPop werden historisiert, damit Sie aktuelle Daten sehen. Danach wird der Bericht aktualisiert. Sorry, das dauert...',
-          {
-            variant: 'info',
-            persist: true,
-          },
-        )
+        snackbarKey = enqueueSnackbar('Art, Pop und TPop werden historisiert', {
+          variant: 'info',
+          persist: true,
+        })
         await historizeForAp({ store, year: Number(node.label), apId })
         closeSnackbar(snackbarKey)
       }
@@ -493,7 +490,6 @@ const Row = ({ node }) => {
     enqueueSnackbar,
     navigate,
     node,
-    queryClient,
     search,
     setPrintingJberYear,
     store,
