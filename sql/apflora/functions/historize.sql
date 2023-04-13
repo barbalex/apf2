@@ -11,13 +11,13 @@ BEGIN
   -- 1.2 pop_history
   DELETE FROM apflora.pop_history USING apflora.pop_history h
   LEFT JOIN apflora.pop p ON p.id = h.id
-    AND h.year = $1
-  WHERE p.id IS NULL;
-  -- 1.3 ap_history
+  WHERE p.id IS NULL
+    AND h.year = $1;
+  -- -- 1.3 ap_history
   DELETE FROM apflora.ap_history USING apflora.ap_history h
   LEFT JOIN apflora.ap ap ON ap.id = h.id
-    AND h.year = $1
-  WHERE ap.id IS NULL;
+  WHERE ap.id IS NULL
+    AND h.year = $1;
   --
   -- 2. insert, on conflict update
   -- 2.1 ap_history
@@ -170,6 +170,7 @@ BEGIN
       created_at = excluded.created_at,
       updated_at = excluded.updated_at,
       changed_by = excluded.changed_by;
+  --
   -- TODO: vacuum?
   -- TODO: reindex?
   -- REINDEX TABLE apflora.ap_history;
