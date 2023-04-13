@@ -1,4 +1,5 @@
 -- TODO: on live server after pushing 443
+-- TODO: drop the materialized view
 DROP FUNCTION apflora.v_ap_ausw_pop_menge_refresh;
 
 CREATE OR REPLACE FUNCTION apflora.v_pop_ausw_tpop_menge_refresh()
