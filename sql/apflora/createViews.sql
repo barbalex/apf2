@@ -4026,10 +4026,6 @@ ORDER BY
   ap_id,
   jahr;
 
--- TODO: drop both after pushing 443
-DROP VIEW IF EXISTS apflora.v_pop_ausw_tpop_menge CASCADE;
-
-DROP VIEW IF EXISTS apflora.v_ap_ausw_tpop_kontrolliert CASCADE;
 
 -- original was created here: 2020-04-09_qk_tpop_mit_kontr_keine_zielrelev_einheit.sql
 DROP VIEW IF EXISTS apflora.v_q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit CASCADE;
