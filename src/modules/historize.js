@@ -9,14 +9,15 @@ const historize = async ({ store, apberuebersicht: row }) => {
   try {
     await client.mutate({
       mutation: gql`
-        mutation historize($year: Int!) {
-          historize(input: { clientMutationId: "bla", year: $year }) {
+        mutation historize($year: Int!, $mutId: String!) {
+          historize(input: { clientMutationId: $mutId, year: $year }) {
             boolean
           }
         }
       `,
       variables: {
         year: row?.jahr,
+        mutId: window.crypto.randomUUID().toString(),
       },
     })
   } catch (error) {
