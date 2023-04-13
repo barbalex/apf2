@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION apflora.historize_for_ap(year integer, ap_id uuid)
   RETURNS boolean
   AS $$
 BEGIN
-  -- 1. empty history tables (rows of passed year)
+  -- 1.  empty history tables (rows of passed year)
   -- 1.1 tpop_history
   DELETE FROM apflora.tpop_history h
   INNER JOIN apflora.pop_history hpop ON hpop.id = h.pop_id
