@@ -1,19 +1,17 @@
-import React, { useCallback, useState, useContext } from 'react'
-import { useQuery, useMutation, gql } from '@apollo/client'
+import React, { useCallback } from 'react'
+import { useQuery } from '@apollo/client'
 import sortBy from 'lodash/sortBy'
 import {
   AreaChart,
   Area,
   XAxis,
   YAxis,
-  ResponsiveContainer,
   Tooltip,
   CartesianGrid,
+  ResponsiveContainer,
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
 import styled from '@emotion/styled'
-import { keyframes } from '@emotion/react'
-import { FaRedo } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import { useParams } from 'react-router-dom'
@@ -21,7 +19,6 @@ import { useParams } from 'react-router-dom'
 import queryTpopMenge from './queryTpopMenge'
 import CustomTooltip from './CustomTooltip'
 import exists from '../../../../../modules/exists'
-import storeContext from '../../../../../storeContext'
 import Error from '../../../../shared/Error'
 
 const SpinnerContainer = styled.div`
@@ -50,18 +47,9 @@ const Title = styled.h4`
   margin-bottom: 0;
   padding: 0 10px;
 `
-const spinning = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(359deg);
-  }
+const InfoButton = styled(IconButton)`
+  margin-bottom: -20px;
 `
-const RefreshButtonSpinning = styled(IconButton)`
-  animation: ${spinning} 3s linear infinite;
-`
-const RefreshButton = styled(IconButton)``
 const Container = styled(ResponsiveContainer)`
   overflow: hidden;
 `
@@ -79,15 +67,12 @@ const formatNumber = (tickItem) => {
 const PopAuswertungTpopMenge = ({ height = 400 }) => {
   const { apId, popId } = useParams()
 
-  const store = useContext(storeContext)
-  const { enqueNotification } = store
-
-  const { data, error, loading, refetch } = useQuery(queryTpopMenge, {
+  const { data, error, loading } = useQuery(queryTpopMenge, {
     variables: { apId, id: popId },
   })
 
   const tpopsData = data?.allTpops?.nodes ?? []
-  const tpopMengeRawData = data?.allVPopAuswTpopMenges?.nodes ?? []
+  const tpopMengeRawData = data?.popAuswTpopMenge?.nodes ?? []
   const tpopMengeData = tpopMengeRawData.map((e) => ({
     jahr: e.jahr,
     ...JSON.parse(e.values),
@@ -111,42 +96,6 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
   const zielEinheit =
     data?.allEkzaehleinheits?.nodes?.[0]
       ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text
-
-  const [refreshing, setRefreshing] = useState(false)
-  const [refreshData] = useMutation(gql`
-    mutation vApAuswPopMengeRefreshFromAp {
-      vPopAuswTpopMengeRefresh(input: { clientMutationId: "bla" }) {
-        boolean
-      }
-    }
-  `)
-  const onClickRefresh = useCallback(async () => {
-    if (refreshing) return
-    setRefreshing(true)
-    try {
-      await refreshData()
-    } catch (error) {
-      setRefreshing(false)
-      return enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    try {
-      await refetch()
-    } catch (error) {
-      setRefreshing(false)
-      return enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    setRefreshing(false)
-  }, [enqueNotification, refetch, refreshData, refreshing])
 
   const onClickMoreInfo = useCallback(() => {
     const url = 'https://apflora.ch/Dokumentation/art-auswertung-pop-menge'
@@ -176,33 +125,14 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
             <div>
               <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
             </div>
-            {refreshing ? (
-              <RefreshButtonSpinning
-                title="Daten werden neu berechnet"
-                aria-label="Daten werden neu berechnet"
-                onClick={onClickRefresh}
-                size="small"
-              >
-                <FaRedo />
-              </RefreshButtonSpinning>
-            ) : (
-              <RefreshButton
-                title="Daten neu rechnen"
-                aria-label="Daten neu rechnen"
-                onClick={onClickRefresh}
-                size="small"
-              >
-                <FaRedo />
-              </RefreshButton>
-            )}
-            <IconButton
+            <InfoButton
               aria-label="Mehr Informationen"
               title="Mehr Informationen"
               onClick={onClickMoreInfo}
               size="large"
             >
               <IoMdInformationCircleOutline />
-            </IconButton>
+            </InfoButton>
           </TitleRow>
           <Container width="99%" height={height}>
             <AreaChart
@@ -258,25 +188,6 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
             <div>
               <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
             </div>
-            {refreshing ? (
-              <RefreshButtonSpinning
-                title="Daten werden neu berechnet"
-                aria-label="Daten werden neu berechnet"
-                onClick={onClickRefresh}
-                size="small"
-              >
-                <FaRedo />
-              </RefreshButtonSpinning>
-            ) : (
-              <RefreshButton
-                title="Daten neu rechnen"
-                aria-label="Daten neu rechnen"
-                onClick={onClickRefresh}
-                size="small"
-              >
-                <FaRedo />
-              </RefreshButton>
-            )}
             <IconButton
               aria-label="Mehr Informationen"
               title="Mehr Informationen"

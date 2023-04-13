@@ -114,6 +114,7 @@ const BeobData = ({ id }) => {
         variables: {
           id,
         },
+        fetchPolicy: 'no-cache',
       }),
   })
 

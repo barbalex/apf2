@@ -15,6 +15,9 @@ import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import upperFirst from 'lodash/upperFirst'
+import { useApolloClient, gql } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
+import { useSnackbar } from 'notistack'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOrParentInActiveNodePath from '../isNodeOrParentInActiveNodePath'
@@ -25,6 +28,8 @@ import storeContext from '../../../../storeContext'
 import { ContextMenuTrigger } from 'react-contextmenu/dist/react-contextmenu'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../modules/isMobilePhone'
+import historizeForAp from '../../../../modules/historizeForAp'
+import historize from '../../../../modules/historize'
 import { ReactComponent as TpopSvg100 } from '../../Karte/layers/Tpop/statusGroupSymbols/100.svg'
 import { ReactComponent as TpopSvg100Highlighted } from '../../Karte/layers/Tpop/statusGroupSymbols/100_highlighted.svg'
 import { ReactComponent as TpopSvg101 } from '../../Karte/layers/Tpop/statusGroupSymbols/101.svg'
@@ -326,6 +331,9 @@ const Row = ({ node }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
 
+  const client = useApolloClient()
+  const queryClient = useQueryClient()
+
   // console.log('Row, node:', node)
 
   const store = useContext(storeContext)
@@ -415,10 +423,77 @@ const Row = ({ node }) => {
     toggleNodeSymbol({ node, store, search, navigate })
   }, [navigate, node, search, store])
 
-  const onClickPrint = useCallback(() => {
-    setPrintingJberYear(+node.label)
-    navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
-  }, [navigate, node.label, node.url, search, setPrintingJberYear])
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+
+  const onClickPrint = useCallback(async () => {
+    if (!apId) {
+      // apberuebersicht
+      const { data } = await client.query({
+        query: gql`
+          query apberuebersichtForPrint($id: UUID!) {
+            apberuebersichtById(id: $id) {
+              id
+              jahr
+              historyFixed
+            }
+          }
+        `,
+        variables: { id: node.id },
+      })
+      const apberuebersicht = data?.apberuebersichtById
+      let snackbarKey
+      if (apberuebersicht?.historyFixed === false) {
+        snackbarKey = enqueueSnackbar(
+          'Arten, Pop und TPop werden historisiert, damit Sie aktuelle Daten sehen',
+          {
+            variant: 'info',
+            persist: true,
+          },
+        )
+        await historize({ store, apberuebersicht })
+        closeSnackbar(snackbarKey)
+      }
+      setPrintingJberYear(+node.label)
+      navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
+    } else {
+      // apber
+      const { data } = await client.query({
+        query: gql`
+          query apberForPrint($jahr: Int!) {
+            allApberuebersichts(filter: { jahr: { equalTo: $jahr } }) {
+              nodes {
+                id
+                historyFixed
+              }
+            }
+          }
+        `,
+        variables: { jahr: Number(node.label) },
+      })
+      const apberuebersicht = data?.allApberuebersichts?.nodes?.[0]
+      let snackbarKey
+      if (!apberuebersicht || apberuebersicht?.historyFixed === false) {
+        snackbarKey = enqueueSnackbar('Art, Pop und TPop werden historisiert', {
+          variant: 'info',
+          persist: true,
+        })
+        await historizeForAp({ store, year: Number(node.label), apId })
+        closeSnackbar(snackbarKey)
+      }
+      setPrintingJberYear(+node.label)
+      navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
+    }
+  }, [
+    apId,
+    client,
+    closeSnackbar,
+    enqueueSnackbar,
+    navigate,
+    node,
+    search,
+    setPrintingJberYear,
+    store,
+  ])
 
   const [projekteTabs] = useSearchParamsState(
     'projekteTabs',

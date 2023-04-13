@@ -1712,7 +1712,7 @@ SELECT
   beob.lv95_y AS y,
   CASE WHEN beob.lv95_x > 0
     AND tpop.lv95_x > 0 THEN
-    round(ST_Distance (ST_Transform (beob.geom_point, 2056), ST_Transform (tpop.geom_point, 2056)))
+    round(ST_Distance(ST_Transform(beob.geom_point, 2056), ST_Transform(tpop.geom_point, 2056)))
   ELSE
     NULL
   END AS distanz_zur_teilpopulation,
@@ -1762,7 +1762,7 @@ SELECT
   beob.lv95_y AS y,
   CASE WHEN beob.lv95_x > 0
     AND tpop.lv95_x > 0 THEN
-    round(ST_Distance (ST_Transform (beob.geom_point, 2056), ST_Transform (tpop.geom_point, 2056)))
+    round(ST_Distance(ST_Transform(beob.geom_point, 2056), ST_Transform(tpop.geom_point, 2056)))
   ELSE
     NULL
   END AS distanz_zur_teilpopulation,
@@ -1813,7 +1813,7 @@ SELECT
   beob.lv95_y AS y,
   CASE WHEN beob.lv95_x > 0
     AND apflora.tpop.lv95_x > 0 THEN
-    round(ST_Distance (ST_Transform (beob.geom_point, 2056), ST_Transform (apflora.tpop.geom_point, 2056)))
+    round(ST_Distance(ST_Transform(beob.geom_point, 2056), ST_Transform(apflora.tpop.geom_point, 2056)))
   ELSE
     NULL
   END AS distanz_zur_teilpopulation,
@@ -2218,7 +2218,7 @@ FROM
   INNER JOIN apflora.tpop
   INNER JOIN apflora.beob ON apflora.beob.tpop_id = apflora.tpop.id ON apflora.tpop.pop_id = apflora.pop.id ON apflora.pop.ap_id = apflora.ap.id ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.tpop.bekannt_seit > (
+  apflora.tpop.bekannt_seit >(
     SELECT
       min(date_part('year', apflora.beob.datum)) AS "MinJahr"
     FROM
@@ -2292,7 +2292,7 @@ FROM
   INNER JOIN apflora.ap
   INNER JOIN apflora.pop ON apflora.pop.ap_id = apflora.ap.id ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.pop.bekannt_seit <> (
+  apflora.pop.bekannt_seit <>(
     SELECT
       min(bekannt_seit)
     FROM
@@ -3565,7 +3565,7 @@ SELECT
   tpop.gemeinde AS tpop_gemeinde,
   tpop.flurname AS tpop_flurname,
   tpsw.text AS tpop_status,
-  (
+(
     SELECT
       kontr4.jahr
     FROM
@@ -3584,7 +3584,7 @@ SELECT
     LIMIT 1) AS jahr,
 anzahl.*
 FROM
-  crosstab ($$
+  crosstab($$
     SELECT
       tpop_id, zaehleinheit, anzahl FROM ( SELECT DISTINCT ON (tpop2.id, apflora.tpopkontrzaehl_einheit_werte.text)
   tpop2.id AS tpop_id, apflora.tpopkontrzaehl_einheit_werte.text AS zaehleinheit, zaehl2.anzahl FROM apflora.tpopkontrzaehl zaehl2
@@ -3598,7 +3598,7 @@ FROM
     AND kontr2.apber_nicht_relevant IS NOT TRUE
     -- nur Zählungen mit Anzahl berücksichtigen
     AND zaehl2.anzahl IS NOT NULL
-    AND kontr2.id = (
+    AND kontr2.id =(
       SELECT
         kontr3.id
       FROM apflora.tpopkontrzaehl zaehl3
@@ -3612,7 +3612,7 @@ FROM
         AND kontr3.apber_nicht_relevant IS NOT TRUE ORDER BY kontr3.jahr DESC, kontr3.datum DESC LIMIT 1)
 ORDER BY tpop2.id, apflora.tpopkontrzaehl_einheit_werte.text, kontr2.jahr DESC, kontr2.datum DESC) AS tbl ORDER BY 1, 2, 3 $$, $$
   SELECT
-    unnest('{Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl ("tpop_id" uuid,
+    unnest('{Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl("tpop_id" uuid,
     "Pflanzen total" real,
     "Pflanzen (ohne Jungpflanzen)" real,
     "Triebe total" real,
@@ -3671,7 +3671,7 @@ SELECT
   tpsw.text AS tpop_status,
   anzahl.*
 FROM
-  crosstab ($$
+  crosstab($$
     SELECT
       tpop_id, jahr, zaehleinheit, anzahl FROM ( WITH letzte_kontrollen AS ( SELECT DISTINCT ON (tpop5.id, apflora.tpopkontrzaehl_einheit_werte.text)
   tpop5.id AS tpop_id, kontr5.jahr, kontr5.datum, apflora.tpopkontrzaehl_einheit_werte.text AS zaehleinheit, zaehl5.anzahl FROM apflora.tpopkontrzaehl zaehl5
@@ -3686,7 +3686,7 @@ FROM
       -- nur Zählungen mit Anzahl berücksichtigen
       AND zaehl5.anzahl IS NOT NULL
       -- letzte zu berücksichtigende Kontrolle dieser tpop
-      AND kontr5.id = (
+      AND kontr5.id =(
         SELECT
           kontr6.id
         FROM apflora.tpopkontrzaehl zaehl6
@@ -3774,7 +3774,7 @@ ORDER BY tpop.id, massn.jahr DESC, massn.datum DESC
   SELECT
     tpop_id, max(jahr) AS jahr, zaehleinheit, sum(anzahl) AS anzahl FROM letzte_kontrolle_und_ansiedlungen GROUP BY tpop_id, zaehleinheit ORDER BY tpop_id, jahr, zaehleinheit) AS tbl ORDER BY 1, 2, 3 $$, $$
   SELECT
-    unnest('{Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl ("tpop_id" uuid,
+    unnest('{Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl("tpop_id" uuid,
     "jahr" integer,
     "Pflanzen total" real,
     "Pflanzen (ohne Jungpflanzen)" real,
@@ -3851,18 +3851,18 @@ with data AS (
       year,
       status
 )
-SELECT
-  ap_id,
-  year AS jahr,
-  json_object_agg(status, anzahl) AS
-VALUES
-  FROM data
-GROUP BY
-  ap_id,
-  year
-ORDER BY
-  ap_id,
-  year;
+  SELECT
+    ap_id,
+    year AS jahr,
+    json_object_agg(status, anzahl) AS
+  VALUES
+    FROM data
+  GROUP BY
+    ap_id,
+    year
+  ORDER BY
+    ap_id,
+    year;
 
 -- refresh materialized view apflora.v_ap_ausw_pop_menge;
 -- ACHTUNG: Original dieses Views in 20222-01-21_v_ap_ausw_pop_menge_v5.sql
@@ -3948,7 +3948,7 @@ tpop_letzte_anzahlen AS (
   FROM
     apflora.tpop_history AS tpop
     LEFT JOIN zaehlungen zaehl ON zaehl.tpop_id = tpop.id
-      AND zaehl.datum = (
+      AND zaehl.datum =(
         SELECT
           max(datum)
         FROM
@@ -4026,281 +4026,10 @@ ORDER BY
   ap_id,
   jahr;
 
--- original query here: 2023-03-31_v_pop_ausw_tpop_menge.sql
-DROP MATERIALIZED VIEW IF EXISTS apflora.v_pop_ausw_tpop_menge CASCADE;
+-- TODO: drop both after pushing 443
+DROP VIEW IF EXISTS apflora.v_pop_ausw_tpop_menge CASCADE;
 
-CREATE MATERIALIZED VIEW apflora.v_pop_ausw_tpop_menge AS
-with massnahmen AS (
-  SELECT
-    tpop.id AS tpop_id,
-    massn.jahr,
-    CASE WHEN massn.datum IS NOT NULL THEN
-      massn.datum
-    ELSE
-      to_date(concat(massn.jahr, '-01-01'), 'YYYY-MM-DD')
-    END AS datum,
-    massn.zieleinheit_anzahl AS anzahl
-  FROM
-    apflora.tpopmassn massn
-    INNER JOIN apflora.tpopmassn_typ_werte tw ON tw.code = massn.typ
-      AND tw.anpflanzung = TRUE
-    INNER JOIN apflora.tpop_history tpop
-    INNER JOIN apflora.pop_history pop
-    INNER JOIN apflora.ap_history ap
-    INNER JOIN apflora.ekzaehleinheit ekze
-    INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id ON ekze.ap_id = ap.id
-      AND ekze.zielrelevant = TRUE ON ap.id = pop.ap_id
-      AND ap.year = pop.year ON pop.id = tpop.pop_id
-      AND pop.year = tpop.year ON tpop.id = massn.tpop_id
-      AND tpop.year = massn.jahr
-  WHERE
-    massn.jahr IS NOT NULL
-    AND tpop.status IN (200, 201)
-    AND tpop.apber_relevant = TRUE
-    AND massn.zieleinheit_einheit = ze.code
-    AND massn.zieleinheit_anzahl IS NOT NULL
-  ORDER BY
-    tpop.id,
-    massn.jahr DESC,
-    massn.datum DESC
-),
-zaehlungen AS (
-  SELECT
-    tpop.id AS tpop_id,
-    kontr.jahr,
-    CASE WHEN kontr.datum IS NOT NULL THEN
-      kontr.datum
-    ELSE
-      to_date(concat(kontr.jahr, '-01-01'), 'YYYY-MM-DD')
-    END AS datum,
-    zaehlungen.anzahl
-  FROM
-    apflora.tpopkontrzaehl zaehlungen
-    INNER JOIN apflora.tpopkontr kontr
-    INNER JOIN apflora.tpop_history tpop
-    INNER JOIN apflora.pop_history pop
-    INNER JOIN apflora.ap_history ap
-    INNER JOIN apflora.ekzaehleinheit ekze
-    INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id ON ekze.ap_id = ap.id
-      AND ekze.zielrelevant = TRUE ON ap.id = pop.ap_id
-      AND ap.year = pop.year ON pop.id = tpop.pop_id
-      AND pop.year = tpop.year ON tpop.id = kontr.tpop_id
-      AND tpop.year = kontr.jahr ON zaehlungen.tpopkontr_id = kontr.id
-      AND zaehlungen.einheit = ze.code
-  WHERE
-    kontr.jahr IS NOT NULL
-    AND tpop.status IN (100, 200, 201)
-    AND tpop.apber_relevant = TRUE
-    AND zaehlungen.anzahl IS NOT NULL
-    -- nur Zählungen mit der Ziel-Einheit
-    AND ze.code = zaehlungen.einheit
-  ORDER BY
-    tpop.id,
-    kontr.jahr DESC,
-    kontr.datum DESC
-),
-tpop_letzte_anzahlen AS (
-  SELECT
-    tpop.id AS tpop_id,
-    tpop.year AS jahr,
-    zaehl.anzahl AS letzte_zaehlung_anzahl,
-    zaehl.datum AS datum,
-    massn.anzahl AS massn_anz_seither
-  FROM
-    apflora.tpop_history AS tpop
-    LEFT JOIN zaehlungen zaehl ON zaehl.tpop_id = tpop.id
-      AND zaehl.datum = (
-        SELECT
-          max(datum)
-        FROM
-          zaehlungen
-      WHERE
-        tpop_id = tpop.id
-        AND datum <= to_date(concat(tpop.year, '-12-31'), 'YYYY-MM-DD'))
-      LEFT JOIN massnahmen massn ON massn.tpop_id = tpop.id
-        AND massn.datum <= to_date(concat(tpop.year, '-12-31'), 'YYYY-MM-DD')
-        AND massn.datum >= coalesce(zaehl.datum, to_date(concat(tpop.year, '-01-01'), 'YYYY-MM-DD'))
-      ORDER BY
-        tpop.id,
-        tpop.year
-),
-tpop_letzte_anzahl AS (
-  SELECT
-    tpop_id,
-    jahr,
-    datum,
-    CASE WHEN la.tpop_id IS NULL THEN
-      NULL
-    WHEN la.letzte_zaehlung_anzahl IS NOT NULL
-      AND la.massn_anz_seither IS NOT NULL THEN
-      la.letzte_zaehlung_anzahl + la.massn_anz_seither
-    WHEN la.letzte_zaehlung_anzahl IS NULL
-      AND la.massn_anz_seither IS NOT NULL THEN
-      la.massn_anz_seither
-    WHEN la.letzte_zaehlung_anzahl IS NOT NULL
-      AND la.massn_anz_seither IS NULL THEN
-      la.letzte_zaehlung_anzahl
-    ELSE
-      NULL
-    END AS anzahl
-  FROM
-    tpop_letzte_anzahlen la
-),
-tpop_data AS (
-  SELECT
-    pop.id AS pop_id,
-    tpop.year AS jahr,
-    tpop.id AS tpop_id,
-    sum(anzahl) AS anzahl
-FROM
-  tpop_letzte_anzahl tpla
-  INNER JOIN apflora.tpop_history tpop
-  INNER JOIN apflora.pop_history pop ON pop.id = tpop.pop_id
-    AND pop.year = tpop.year ON tpop.id = tpla.tpop_id
-    AND tpop.year = tpla.jahr
-  WHERE
-    pop.status IN (100, 200, 201)
-    AND tpla.anzahl IS NOT NULL
-    AND pop.bekannt_seit <= pop.year
-    AND tpop.bekannt_seit <= tpop.year
-    AND tpop.apber_relevant = TRUE
-  GROUP BY
-    pop.id,
-    tpop.id,
-    tpop.year
-  ORDER BY
-    tpop.id,
-    tpop.year
-)
-SELECT
-  pop_id,
-  jahr,
-  json_object_agg(tpop_id, anzahl) AS
-VALUES
-  FROM tpop_data
-GROUP BY
-  pop_id,
-  jahr
-ORDER BY
-  pop_id,
-  jahr;
-
--- Achtung: Das Original dieses Views is hier: 2020-03-27_tpop_kontrolliert_pro_jahr.sql
--- used in form ap
 DROP VIEW IF EXISTS apflora.v_ap_ausw_tpop_kontrolliert CASCADE;
-
-CREATE VIEW apflora.v_ap_ausw_tpop_kontrolliert AS
-with anpflanz AS (
-  SELECT DISTINCT ON (tpop0.id,
-    massn0.jahr)
-    tpop0.id AS tpop_id,
-    massn0.jahr
-  FROM
-    apflora.tpopmassn massn0
-    INNER JOIN apflora.tpopmassn_typ_werte tw ON tw.code = massn0.typ
-      AND tw.anpflanzung = TRUE
-    INNER JOIN apflora.tpop_history tpop0
-    INNER JOIN apflora.pop_history pop0
-    INNER JOIN apflora.ap_history ap0
-    INNER JOIN apflora.ekzaehleinheit ekze0
-    INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze0 ON ze0.id = ekze0.zaehleinheit_id ON ekze0.ap_id = ap0.id
-      AND ekze0.zielrelevant = TRUE ON ap0.id = pop0.ap_id
-      AND ap0.year = pop0.year ON pop0.id = tpop0.pop_id
-      AND pop0.year = tpop0.year ON tpop0.id = massn0.tpop_id
-      AND tpop0.year = massn0.jahr
-  WHERE
-    massn0.jahr IS NOT NULL
-    AND tpop0.status IN (200, 201)
-    AND tpop0.apber_relevant = TRUE
-    AND massn0.zieleinheit_einheit = ze0.code
-    AND massn0.zieleinheit_anzahl IS NOT NULL
-  ORDER BY
-    tpop0.id,
-    massn0.jahr DESC
-),
-kontr AS (
-  SELECT DISTINCT ON (tpop2.id,
-    kontr2.jahr)
-    tpop2.id AS tpop_id,
-    kontr2.jahr
-  FROM
-    apflora.tpopkontrzaehl zaehl2
-    INNER JOIN apflora.tpopkontr kontr2
-    INNER JOIN apflora.tpop_history tpop2
-    INNER JOIN apflora.pop_history pop2
-    INNER JOIN apflora.ap_history ap2
-    INNER JOIN apflora.ekzaehleinheit ekze2
-    INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze2 ON ze2.id = ekze2.zaehleinheit_id ON ekze2.ap_id = ap2.id
-      AND ekze2.zielrelevant = TRUE ON ap2.id = pop2.ap_id
-      AND ap2.year = pop2.year ON pop2.id = tpop2.pop_id
-      AND pop2.year = tpop2.year ON tpop2.id = kontr2.tpop_id
-      AND tpop2.year = kontr2.jahr ON zaehl2.tpopkontr_id = kontr2.id
-      AND zaehl2.einheit = ze2.code
-  WHERE
-    -- Jahr muss existieren
-    kontr2.jahr IS NOT NULL
-    -- nur aktuelle Stati
-    AND tpop2.status IN (100, 200, 201)
-    -- nur von berichts-relevanten tpop
-    AND tpop2.apber_relevant = TRUE
-    -- nur wenn eine Anzahl erfasst wurde
-    AND zaehl2.anzahl IS NOT NULL
-    -- nur wenn die Ziel-Einheit erfasst wurde
-    AND ze2.code = zaehl2.einheit
-  ORDER BY
-    tpop2.id,
-    kontr2.jahr DESC
-),
-kontr_oder_anpflanz AS (
-  SELECT
-    *
-  FROM
-    kontr
-  UNION
-  SELECT
-    *
-  FROM
-    anpflanz
-),
-tpop_data AS (
-  SELECT
-    ap4.id AS ap_id,
-    pop4.year AS jahr,
-    tpop4.id AS tpop_id,
-    CASE WHEN koa.tpop_id IS NOT NULL THEN
-      1
-    ELSE
-      0
-    END AS kontrolliert
-  FROM
-    kontr_oder_anpflanz koa
-    RIGHT JOIN apflora.tpop_history tpop4
-    INNER JOIN apflora.pop_history pop4
-    INNER JOIN apflora.ap_history ap4 ON ap4.id = pop4.ap_id
-      AND ap4.year = pop4.year ON pop4.id = tpop4.pop_id
-      AND pop4.year = tpop4.year ON tpop4.id = koa.tpop_id
-      AND tpop4.year = koa.jahr
-  WHERE
-    pop4.status IN (100, 200, 201)
-    AND tpop4.status IN (100, 200, 201)
-    AND tpop4.apber_relevant = TRUE
-  ORDER BY
-    ap4.id,
-    pop4.year
-)
-SELECT
-  ap_id,
-  jahr,
-  count(tpop_id)::int AS anzahl_tpop,
-  sum(kontrolliert)::int AS anzahl_kontrolliert
-FROM
-  tpop_data
-GROUP BY
-  ap_id,
-  jahr
-ORDER BY
-  ap_id,
-  jahr;
 
 -- original was created here: 2020-04-09_qk_tpop_mit_kontr_keine_zielrelev_einheit.sql
 DROP VIEW IF EXISTS apflora.v_q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit CASCADE;
@@ -4588,7 +4317,7 @@ SELECT
   coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0) AS anz_pop_aktuell_zuletzt,
   coalesce(count_urspr_last.anzahl, 0) - coalesce(count_urspr_prev.anzahl, 0) AS diff_pop_urspr,
   coalesce(count_anges_last.anzahl, 0) - coalesce(count_anges_prev.anzahl, 0) AS diff_pop_anges,
-    (coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0)) - (coalesce(count_urspr_prev.anzahl, 0) + coalesce(count_anges_prev.anzahl, 0)) AS diff_pop_aktuell,
+(coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0)) -(coalesce(count_urspr_prev.anzahl, 0) + coalesce(count_anges_prev.anzahl, 0)) AS diff_pop_aktuell,
     apflora.ap_erfkrit_werte.text AS beurteilung_zuletzt
   FROM
     last_year,
@@ -4641,7 +4370,7 @@ SELECT
   ap.id AS ap_id,
   adresse.name AS artverantwortlich,
   ekplan.jahr,
-  (
+(
     SELECT
       anzahl
     FROM
@@ -4650,7 +4379,7 @@ SELECT
       id = ap.id
       AND jahr = ekplan.jahr
       AND ek_abrechnungstyp = 'A') AS A,
-  (
+(
     SELECT
       anzahl
     FROM
@@ -4659,7 +4388,7 @@ SELECT
       id = ap.id
       AND jahr = ekplan.jahr
       AND ek_abrechnungstyp = 'B') AS B,
-  (
+(
     SELECT
       anzahl
     FROM
@@ -4668,7 +4397,7 @@ SELECT
       id = ap.id
       AND jahr = ekplan.jahr
       AND ek_abrechnungstyp = 'D') AS D,
-  (
+(
     SELECT
       anzahl
     FROM

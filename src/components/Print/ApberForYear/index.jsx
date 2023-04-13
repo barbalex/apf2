@@ -9,7 +9,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner'
 
 const ApberForYearContainer = () => {
-  const { apberUebersichtId = '99999999-9999-9999-9999-999999999999' } =
+  const { apberuebersichtId = '99999999-9999-9999-9999-999999999999' } =
     useParams()
 
   const client = useApolloClient()
@@ -46,7 +46,7 @@ const ApberForYearContainer = () => {
             }
           `,
           variables: {
-            apberuebersichtId: apberUebersichtId,
+            apberuebersichtId,
           },
         })
       } catch (error) {
@@ -70,7 +70,7 @@ const ApberForYearContainer = () => {
     return () => {
       isActive = false
     }
-  }, [apberUebersichtId, client, printingJberYear])
+  }, [apberuebersichtId, client, printingJberYear])
 
   if (error) {
     return `Fehler: ${error.message}`
@@ -82,11 +82,9 @@ const ApberForYearContainer = () => {
   // this is important when opening app on jber route
   if (loading || !year) return <Spinner />
 
-  //console.log('ApberForYear, year:', year)
-
   return (
     <ErrorBoundary>
-      <ApberForYear jahr={year} apberuebersichtId={apberUebersichtId} />
+      <ApberForYear jahr={year} apberuebersichtId={apberuebersichtId} />
     </ErrorBoundary>
   )
 }

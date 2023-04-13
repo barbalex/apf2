@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useContext } from 'react'
-import { useQuery, useMutation, gql } from '@apollo/client'
+import React, { useCallback } from 'react'
+import { useQuery } from '@apollo/client'
 import sortBy from 'lodash/sortBy'
 import {
   AreaChart,
@@ -12,8 +12,6 @@ import {
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
 import styled from '@emotion/styled'
-import { keyframes } from '@emotion/react'
-import { FaRedo } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import { useParams } from 'react-router-dom'
@@ -21,7 +19,6 @@ import { useParams } from 'react-router-dom'
 import queryPopMenge from './queryPopMenge'
 import CustomTooltip from './CustomTooltip'
 import exists from '../../../../../../modules/exists'
-import storeContext from '../../../../../../storeContext'
 import Error from '../../../../../shared/Error'
 
 const SpinnerContainer = styled.div`
@@ -50,18 +47,9 @@ const Title = styled.h4`
   margin-bottom: 0;
   padding: 0 10px;
 `
-const spinning = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(359deg);
-  }
+const InfoIcon = styled(IconButton)`
+  margin-bottom: -20px;
 `
-const RefreshButtonSpinning = styled(IconButton)`
-  animation: ${spinning} 3s linear infinite;
-`
-const RefreshButton = styled(IconButton)``
 
 const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
@@ -83,21 +71,17 @@ const ApAuswertungPopMenge = ({
   const { apId } = useParams()
   const id = apIdPassed ?? apId
 
-  const store = useContext(storeContext)
-  const { enqueNotification } = store
-
   const jahr = jahrPassed ?? new Date().getFullYear()
   const {
     data: dataPopMenge,
     error: errorPopMenge,
     loading: loadingPopMenge,
-    refetch: refetchPopMenge,
   } = useQuery(queryPopMenge, {
     variables: { id, jahr },
   })
 
   const popsData = dataPopMenge?.allPops?.nodes ?? []
-  const popMengeRawData = dataPopMenge?.allVApAuswPopMenges?.nodes ?? []
+  const popMengeRawData = dataPopMenge?.apAuswPopMenge?.nodes ?? []
   const popMengeData = popMengeRawData.map((e) => ({
     jahr: e.jahr,
     ...JSON.parse(e.values),
@@ -121,42 +105,6 @@ const ApAuswertungPopMenge = ({
   const zielEinheit =
     dataPopMenge?.allEkzaehleinheits?.nodes?.[0]
       ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text
-
-  const [refreshing, setRefreshing] = useState(false)
-  const [refreshData] = useMutation(gql`
-    mutation vApAuswPopMengeRefreshFromAp {
-      vApAuswPopMengeRefresh(input: { clientMutationId: "bla" }) {
-        boolean
-      }
-    }
-  `)
-  const onClickRefresh = useCallback(async () => {
-    if (refreshing) return
-    setRefreshing(true)
-    try {
-      await refreshData()
-    } catch (error) {
-      setRefreshing(false)
-      return enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    try {
-      await refetchPopMenge()
-    } catch (error) {
-      setRefreshing(false)
-      return enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    setRefreshing(false)
-  }, [enqueNotification, refetchPopMenge, refreshData, refreshing])
 
   const onClickMoreInfo = useCallback(() => {
     const url = 'https://apflora.ch/Dokumentation/art-auswertung-pop-menge'
@@ -187,35 +135,14 @@ const ApAuswertungPopMenge = ({
               <Title>{`"${zielEinheit}" nach Populationen`}</Title>
             </div>
             {!print && (
-              <>
-                {refreshing ? (
-                  <RefreshButtonSpinning
-                    title="Daten werden neu berechnet"
-                    aria-label="Daten werden neu berechnet"
-                    onClick={onClickRefresh}
-                    size="small"
-                  >
-                    <FaRedo />
-                  </RefreshButtonSpinning>
-                ) : (
-                  <RefreshButton
-                    title="Daten neu rechnen"
-                    aria-label="Daten neu rechnen"
-                    onClick={onClickRefresh}
-                    size="small"
-                  >
-                    <FaRedo />
-                  </RefreshButton>
-                )}
-                <IconButton
-                  aria-label="Mehr Informationen"
-                  title="Mehr Informationen"
-                  onClick={onClickMoreInfo}
-                  size="large"
-                >
-                  <IoMdInformationCircleOutline />
-                </IconButton>
-              </>
+              <InfoIcon
+                aria-label="Mehr Informationen"
+                title="Mehr Informationen"
+                onClick={onClickMoreInfo}
+                size="large"
+              >
+                <IoMdInformationCircleOutline />
+              </InfoIcon>
             )}
           </TitleRow>
           <ResponsiveContainer width="99%" height={height}>
@@ -275,35 +202,14 @@ const ApAuswertungPopMenge = ({
               <Title>{`"${zielEinheit}" nach Populationen`}</Title>
             </div>
             {!print && (
-              <>
-                {refreshing ? (
-                  <RefreshButtonSpinning
-                    title="Daten werden neu berechnet"
-                    aria-label="Daten werden neu berechnet"
-                    onClick={onClickRefresh}
-                    size="small"
-                  >
-                    <FaRedo />
-                  </RefreshButtonSpinning>
-                ) : (
-                  <RefreshButton
-                    title="Daten neu rechnen"
-                    aria-label="Daten neu rechnen"
-                    onClick={onClickRefresh}
-                    size="small"
-                  >
-                    <FaRedo />
-                  </RefreshButton>
-                )}
-                <IconButton
-                  aria-label="Mehr Informationen"
-                  title="Mehr Informationen"
-                  onClick={onClickMoreInfo}
-                  size="large"
-                >
-                  <IoMdInformationCircleOutline />
-                </IconButton>
-              </>
+              <InfoIcon
+                aria-label="Mehr Informationen"
+                title="Mehr Informationen"
+                onClick={onClickMoreInfo}
+                size="large"
+              >
+                <IoMdInformationCircleOutline />
+              </InfoIcon>
             )}
           </TitleRow>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>

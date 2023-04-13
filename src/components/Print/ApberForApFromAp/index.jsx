@@ -1,9 +1,8 @@
-import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
 import apQuery from './apByIdJahr'
-import apberQuery from './apberById'
 import ApberForAp from '../ApberForAp'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner'
@@ -11,40 +10,55 @@ import Spinner from '../../shared/Spinner'
 const ApberForApFromAp = () => {
   const { apberId, apId } = useParams()
 
-  const { data: apberData, error: apberDataError } = useQuery(apberQuery, {
-    variables: {
-      apberId,
-      apId,
+  const client = useApolloClient()
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['apByIdJahrForApberForApFromAp', apberId, apId],
+    queryFn: async () => {
+      const { data: apberData, error: apberError } = await client.query({
+        query: gql`
+          query apberById($apberId: UUID!) {
+            apberById(id: $apberId) {
+              id
+              jahr
+            }
+          }
+        `,
+        variables: {
+          apberId,
+          apId,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      const jahr = apberData?.apberById?.jahr
+      if (apberError) throw apberError
+      if (!jahr) throw new Error('im AP-Bericht fehlt das Jahr')
+
+      const { data, error } = await client.query({
+        query: apQuery,
+        variables: { apId, jahr },
+        fetchPolicy: 'no-cache',
+      })
+      if (error) throw error
+      return { data, jahr }
     },
   })
 
-  const jahr = apberData?.apberById?.jahr ?? 0
+  const jahr = data?.jahr
 
-  const {
-    data: apData,
-    loading: apDataLoading,
-    error: apDataError,
-  } = useQuery(apQuery, {
-    variables: {
-      apId,
-      jahr,
-    },
-  })
-
-  if (apDataLoading) return <Spinner />
-  if (apberDataError) return `Fehler: ${apberDataError.message}`
-  if (apDataError) return `Fehler: ${apDataError.message}`
+  if (isLoading) return <Spinner />
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <ErrorBoundary>
       <ApberForAp
         apId={apId}
         jahr={jahr}
-        apData={apData}
-        node={apData?.jberAbcByApId?.nodes?.[0]}
+        apData={data?.data}
+        node={data?.data?.jberAbcByApId?.nodes?.[0]}
       />
     </ErrorBoundary>
   )
 }
 
-export const Component = observer(ApberForApFromAp)
+export const Component = ApberForApFromAp

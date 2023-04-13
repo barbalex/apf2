@@ -43,13 +43,13 @@ const TreeRoot = () => {
       apsFilter,
       nodeLabelFilter.apberuebersicht,
     ],
-    queryFn: () => {
-      // This query is re-run under certain circumstances
-      // when focus was out of app and comes back in
-      // EVENT THOUGH component is not re-rendered
-      // Seems that was a feature of tanstack-query:
-      // https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
-      return client.query({
+    // This query is re-run under certain circumstances
+    // when focus was out of app and comes back in
+    // EVENT THOUGH component is not re-rendered
+    // Seems that was a feature of tanstack-query:
+    // https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
+    queryFn: () =>
+      client.query({
         query: gql`
           query TreeRootQuery(
             $usersFilter: UserFilter!
@@ -88,8 +88,7 @@ const TreeRoot = () => {
           projectIsOpen,
         },
         fetchPolicy: 'no-cache',
-      })
-    },
+      }),
   })
 
   // console.log('TreeComponents rendering', {

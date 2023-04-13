@@ -22,7 +22,7 @@ const Apberuebersichts = () => {
 
   const { data } = useQuery({
     queryKey: ['treeApberuebersicht', apberuebersichtsFilter],
-    queryFn: async () =>
+    queryFn: () =>
       client.query({
         query: gql`
           query TreeApberuebersichtsQuery(
@@ -43,6 +43,7 @@ const Apberuebersichts = () => {
         variables: {
           apberuebersichtsFilter,
         },
+        fetchPolicy: 'no-cache',
       }),
   })
 

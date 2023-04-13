@@ -2,11 +2,8 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query popAuswertungTpopMenge($apId: UUID!, $id: UUID!) {
-    # view: v_pop_ausw_tpop_menge
-    allVPopAuswTpopMenges(
-      filter: { popId: { equalTo: $id } }
-      orderBy: JAHR_ASC
-    ) {
+    # function apflora.pop_ausw_tpop_menge
+    popAuswTpopMenge(popid: $id) {
       nodes {
         jahr
         values
@@ -23,7 +20,7 @@ export default gql`
         }
       }
     }
-    # do not need to filter further - is done in allVPopAuswTpopMenges
+    # do not need to filter further - is done in popAuswTpopMenge
     allTpops(
       filter: { popId: { equalTo: $id } }
       orderBy: [NR_ASC, LABEL_ASC]

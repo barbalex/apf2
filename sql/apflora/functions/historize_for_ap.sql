@@ -1,26 +1,31 @@
-CREATE OR REPLACE FUNCTION apflora.historize(_year integer)
+CREATE OR REPLACE FUNCTION apflora.historize_for_ap(_year integer, ap_id uuid)
   RETURNS boolean
   AS $$
 BEGIN
-  -- 1. delete only rows of this year that do not exist in source
+  -- 1.  empty history tables (rows of passed year)
   -- 1.1 tpop_history
   DELETE FROM apflora.tpop_history USING apflora.tpop_history h
+  INNER JOIN apflora.pop_history hpop ON hpop.id = h.pop_id
+    AND h.year = hpop.year
   LEFT JOIN apflora.tpop t ON t.id = h.id
   WHERE t.id IS NULL
-    AND h.year = $1;
-  -- 1.2 pop_history
+    AND h.year = $1
+    AND hpop.ap_id = $2;
+  -- 1.2. pop_history
   DELETE FROM apflora.pop_history USING apflora.pop_history h
   LEFT JOIN apflora.pop p ON p.id = h.id
   WHERE p.id IS NULL
-    AND h.year = $1;
-  -- -- 1.3 ap_history
+    AND h.year = $1
+    AND h.ap_id = $2;
+  -- 1.3. ap_history
   DELETE FROM apflora.ap_history USING apflora.ap_history h
-  LEFT JOIN apflora.ap ap ON ap.id = h.id
-  WHERE ap.id IS NULL
-    AND h.year = $1;
+  LEFT JOIN apflora.ap a ON a.id = h.id
+  WHERE a.id IS NULL
+    AND h.year = $1
+    AND h.id = $2;
   --
   -- 2. insert, on conflict update
-  -- 2.1 ap_history
+  -- 2.1 insert ap_history
   INSERT INTO apflora.ap_history(year, id, art_id, proj_id, bearbeitung, start_jahr, umsetzung, bearbeiter, ekf_beobachtungszeitpunkt, created_at, updated_at, changed_by)
   SELECT
     $1 AS year,
@@ -37,6 +42,8 @@ BEGIN
     changed_by
   FROM
     apflora.ap
+  WHERE
+    apflora.ap.id = $2
   ON CONFLICT(id,
     year)
     DO UPDATE SET
@@ -51,12 +58,12 @@ BEGIN
       updated_at = excluded.updated_at,
       changed_by = excluded.changed_by;
   --
-  -- 2.2 pop_history
+  -- 2.2 insert pop_history
   INSERT INTO apflora.pop_history(year, id, ap_id, nr, name, status, status_unklar, status_unklar_begruendung, bekannt_seit, geom_point, created_at, updated_at, changed_by)
   SELECT
     $1 AS year,
     id,
-    ap_id,
+    apflora.pop.ap_id,
     nr,
     name,
     status,
@@ -69,6 +76,8 @@ BEGIN
     changed_by
   FROM
     apflora.pop
+  WHERE
+    apflora.pop.ap_id = $2
   ON CONFLICT(id,
     year)
     DO UPDATE SET
@@ -84,51 +93,55 @@ BEGIN
       updated_at = excluded.updated_at,
       changed_by = excluded.changed_by;
   --
-  -- 2.3 tpop_history
+  -- 2.3 insert tpop_history
   INSERT INTO apflora.tpop_history(year, id, pop_id, nr, gemeinde, flurname, geom_point, radius, hoehe, exposition, klima, neigung, boden_typ, boden_kalkgehalt, boden_durchlaessigkeit, boden_humus, boden_naehrstoffgehalt, boden_abtrag, wasserhaushalt, beschreibung, kataster_nr, status, status_unklar, status_unklar_grund, apber_relevant, apber_relevant_grund, bekannt_seit, eigentuemer, kontakt, nutzungszone, bewirtschafter, bewirtschaftung, ekfrequenz, ekfrequenz_startjahr, ekfrequenz_abweichend, ekf_kontrolleur, bemerkungen, created_at, updated_at, changed_by)
   SELECT
     $1 AS year,
-    id,
-    pop_id,
-    nr,
-    gemeinde,
-    flurname,
-    geom_point,
-    radius,
-    hoehe,
-    exposition,
-    klima,
-    neigung,
-    boden_typ,
-    boden_kalkgehalt,
-    boden_durchlaessigkeit,
-    boden_humus,
-    boden_naehrstoffgehalt,
-    boden_abtrag,
-    wasserhaushalt,
-    beschreibung,
-    kataster_nr,
-    status,
-    status_unklar,
-    status_unklar_grund,
-    apber_relevant,
-    apber_relevant_grund,
-    bekannt_seit,
-    eigentuemer,
-    kontakt,
-    nutzungszone,
-    bewirtschafter,
-    bewirtschaftung,
-    ekfrequenz,
-    ekfrequenz_startjahr,
-    ekfrequenz_abweichend,
-    ekf_kontrolleur,
-    bemerkungen,
-    created_at,
-    updated_at,
-    changed_by
+    tpop.id,
+    tpop.pop_id,
+    tpop.nr,
+    tpop.gemeinde,
+    tpop.flurname,
+    tpop.geom_point,
+    tpop.radius,
+    tpop.hoehe,
+    tpop.exposition,
+    tpop.klima,
+    tpop.neigung,
+    tpop.boden_typ,
+    tpop.boden_kalkgehalt,
+    tpop.boden_durchlaessigkeit,
+    tpop.boden_humus,
+    tpop.boden_naehrstoffgehalt,
+    tpop.boden_abtrag,
+    tpop.wasserhaushalt,
+    tpop.beschreibung,
+    tpop.kataster_nr,
+    tpop.status,
+    tpop.status_unklar,
+    tpop.status_unklar_grund,
+    tpop.apber_relevant,
+    tpop.apber_relevant_grund,
+    tpop.bekannt_seit,
+    tpop.eigentuemer,
+    tpop.kontakt,
+    tpop.nutzungszone,
+    tpop.bewirtschafter,
+    tpop.bewirtschaftung,
+    tpop.ekfrequenz,
+    tpop.ekfrequenz_startjahr,
+    tpop.ekfrequenz_abweichend,
+    tpop.ekf_kontrolleur,
+    tpop.bemerkungen,
+    tpop.created_at,
+    tpop.updated_at,
+    tpop.changed_by
   FROM
-    apflora.tpop
+    apflora.tpop tpop
+    INNER JOIN apflora.pop pop ON pop.id = tpop.pop_id
+    INNER JOIN apflora.ap ap ON ap.id = pop.ap_id
+  WHERE
+    ap.id = $2
   ON CONFLICT(id,
     year)
     DO UPDATE SET
@@ -176,5 +189,5 @@ $$
 LANGUAGE plpgsql
 SECURITY DEFINER;
 
-ALTER FUNCTION apflora.historize(year integer) OWNER TO postgres;
+ALTER FUNCTION apflora.historize_for_ap(year integer, ap_id uuid) OWNER TO postgres;
 
