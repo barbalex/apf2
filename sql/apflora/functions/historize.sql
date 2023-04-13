@@ -1,25 +1,20 @@
-CREATE OR REPLACE FUNCTION apflora.historize(year integer)
+CREATE OR REPLACE FUNCTION apflora.historize(_year integer)
   RETURNS boolean
   AS $$
 BEGIN
   -- 1. delete only rows of this year that do not exist in source
   -- 1.1 tpop_history
-  DELETE FROM apflora.tpop_history
-  WHERE apflora.tpop_history.year = $1
-    AND NOT EXISTS(
-      SELECT
-        1
-      FROM
-        apflora.tpop
-      WHERE
-        apflora.tpop.id = apflora.tpop_history.id);
+  DELETE FROM apflora.tpop_history USING apflora.tpop_history h
+  LEFT JOIN apflora.tpop t ON t.id = h.id
+  WHERE t.id IS NULL
+    AND h.year = $1;
   -- 1.2 pop_history
-  DELETE FROM apflora.pop_history h
+  DELETE FROM apflora.pop_history USING apflora.pop_history h
   LEFT JOIN apflora.pop p ON p.id = h.id
     AND h.year = $1
   WHERE p.id IS NULL;
   -- 1.3 ap_history
-  DELETE FROM apflora.ap_history h
+  DELETE FROM apflora.ap_history USING apflora.ap_history h
   LEFT JOIN apflora.ap ap ON ap.id = h.id
     AND h.year = $1
   WHERE ap.id IS NULL;
@@ -41,19 +36,20 @@ BEGIN
     updated_at,
     changed_by
   FROM
-    apflora.ap con CONFLICT(id,
-      year)
-      DO UPDATE SET
-        art_id = excluded.art_id,
-        proj_id = excluded.proj_id,
-        bearbeitung = excluded.bearbeitung,
-        start_jahr = excluded.start_jahr,
-        umsetzung = excluded.umsetzung,
-        bearbeiter = excluded.bearbeiter,
-        ekf_beobachtungszeitpunkt = excluded.ekf_beobachtungszeitpunkt,
-        created_at = excluded.created_at,
-        updated_at = excluded.updated_at,
-        changed_by = excluded.changed_by;
+    apflora.ap
+  ON CONFLICT(id,
+    year)
+    DO UPDATE SET
+      art_id = excluded.art_id,
+      proj_id = excluded.proj_id,
+      bearbeitung = excluded.bearbeitung,
+      start_jahr = excluded.start_jahr,
+      umsetzung = excluded.umsetzung,
+      bearbeiter = excluded.bearbeiter,
+      ekf_beobachtungszeitpunkt = excluded.ekf_beobachtungszeitpunkt,
+      created_at = excluded.created_at,
+      updated_at = excluded.updated_at,
+      changed_by = excluded.changed_by;
   --
   -- 2.2 pop_history
   INSERT INTO apflora.pop_history(year, id, ap_id, nr, name, status, status_unklar, status_unklar_begruendung, bekannt_seit, geom_point, created_at, updated_at, changed_by)
