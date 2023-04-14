@@ -24,8 +24,8 @@ const BeobVerwalten = () => (
       </li>
     </ol>
     <p>
-      Daten von Info Spezies werden in derjenigen Struktur importiert, wie sie
-      von der FNS aufbereitet wurden.
+      Daten von Info Spezies werden in derjenigen Struktur importiert, in der
+      sie geliefert werden.
     </p>
     <p>Zweck dieser Datenstruktur:</p>
     <ul>
@@ -49,6 +49,7 @@ const BeobVerwalten = () => (
         <ul>
           <li>der Strukturbaum</li>
           <li>das Beobachtungs-Formular</li>
+          <li>Popup-Formulare in der Karte</li>
           <li>die Funktion für Meldungen an Info Spezies</li>
         </ul>
       </li>
