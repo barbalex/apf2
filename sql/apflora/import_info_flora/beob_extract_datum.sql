@@ -19,7 +19,7 @@ BEGIN
                 '1'
               ELSE
                 data ->> 'DAY_COLLEC')::date
-              WHEN IN('Info Flora 2021.05', 'Info Flora 2022.03', 'Info Flora 2022.12 gesamt', 'Info Flora 2022.01', 'Info Flora 2023.02 Utricularia') THEN
+              WHEN IN('Info Flora 2021.05', 'Info Flora 2022.03', 'Info Flora 2022.12 gesamt', 'Info Flora 2022.01', 'Info Flora 2023.02 Utricularia', 'Info Flora 2022.08', 'Info Flora 2022.04', 'Info Flora 2022.12 Auszug') THEN
                 RETURN(data ->> 'obs_year' || '-' || CASE WHEN data ->> 'obs_month' = '0' THEN
                     '1'
                   ELSE
@@ -27,12 +27,6 @@ BEGIN
                       '1'
                     ELSE
                       data ->> 'obs_day')::date
-                    WHEN 'Info Flora 2022.08' THEN
-                      RETURN data ->> 'TODO:'::date
-                    WHEN 'Info Flora 2022.04' THEN
-                      RETURN data ->> 'TODO:'::date
-                    WHEN 'Info Flora 2022.12 Auszug' THEN
-                      RETURN data ->> 'TODO:'::date
                     END CASE;
                   END;
 $$

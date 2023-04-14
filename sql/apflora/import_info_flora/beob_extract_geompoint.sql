@@ -9,14 +9,8 @@ BEGIN
     RETURN data ->> 'FNS_XGIS (ex: 682425), FNS_YGIS (ex: 258060), TODO: parse'
   WHEN 'FloZ 2017' THEN
     RETURN data ->> 'TODO:'
-  WHEN IN('Info Flora 2021.05', 'Info Flora 2022.03', 'Info Flora 2022.12 gesamt', 'Info Flora 2022.01', 'Info Flora 2023.02 Utricularia') THEN
+  WHEN IN('Info Flora 2021.05', 'Info Flora 2022.03', 'Info Flora 2022.12 gesamt', 'Info Flora 2022.01', 'Info Flora 2023.02 Utricularia', 'Info Flora 2022.08', 'Info Flora 2022.04', 'Info Flora 2022.12 Auszug') THEN
     RETURN data ->> 'x_swiss (ex: 2712551), y_swiss (ex: 1248936), TODO: parse'
-  WHEN 'Info Flora 2022.08' THEN
-    RETURN data ->> 'TODO:'
-  WHEN 'Info Flora 2022.04' THEN
-    RETURN data ->> 'TODO:'
-  WHEN 'Info Flora 2022.12 Auszug' THEN
-    RETURN data ->> 'TODO:'
   END CASE;
 END;
 $$
