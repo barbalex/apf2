@@ -67,39 +67,48 @@ const BeobVerwalten = () => (
         <Code>id_field</Code>: Feld in den Originaldaten, welches die
         Original-ID enthält. Dient dazu, gemeinsam mit dem Feld{' '}
         <Code>quelle</Code> jederzeit mit neuen Versionen von Originaldaten
-        verbinden zu können
+        verbinden zu können. Extrahiert, um Beobachtungen bei re-Importen
+        effizient aktualisieren zu können
       </li>
       <li>
         <Code>obs_id</Code>: Wie id_field. Weil ab 2022 Importe sowieso nur von
         Info Flora stammen sollen, dies ihre ID ist und komplexe Abfragen beim
-        Import mit Hilfe dieses Feldes vereinfacht und beschleunigt werden
+        Import mit Hilfe dieses Feldes vereinfacht und beschleunigt werden.
+        Extrahiert, um Beobachtungen bei re-Importen effizient aktualisieren zu
+        können
       </li>
       <li>
         <Code>quelle</Code>
         {`: Woher die Beobachtung stammt. Möglichst kurz und klar, ähnlich
-        Literaturzitaten. Beispiel: "Info Spezies 2017"`}
+        Literaturzitaten. Beispiel: "Info Spezies 2017". Extrahiert, um Beobachtungen effizient beschriften zu können`}
       </li>
       <li>
         <Code>art_id</Code>: beschreibt die Art. Fremdschlüssel aus Tabelle{' '}
-        <Code>ae_taxonomies</Code>
+        <Code>ae_taxonomies</Code>. Extrahiert, um Beobachtungen effizient
+        beschriften zu können
       </li>
       <li>
         <Code>art_id_original</Code>: Am Unterschied zwischen art_id_original
         (unverändert) und art_id (verändert) wird erkenntlich, wenn die
-        Zuordnung des Taxon verändert wurde
+        Zuordnung des Taxon verändert wurde. Extrahiert, um Taxon-Änderungen
+        effizient abfragen zu können
       </li>
       <li>
-        <Code>autor</Code>: Autor der Beobachtung
+        <Code>autor</Code>: Autor der Beobachtung. Extrahiert, um Beobachtungen
+        effizient beschriften zu können
       </li>
       <li>
-        <Code>datum</Code>: Datum der Beobachtung
+        <Code>datum</Code>: Datum der Beobachtung. Extrahiert, um Beobachtungen
+        effizient beschriften zu können
       </li>
       <li>
-        <Code>geom_point</Code>: Die Geometrie der Beobachtung
+        <Code>geom_point</Code>: Die Geometrie der Beobachtung. Extrahiert, um
+        Beobachtungen effizient in Karten anzeigen zu können
       </li>
       <li>
-        <Code>tpop_id</Code>: dieser Teilpopulation wird die Beobachtung
-        zugeordnet
+        <Code>tpop_id</Code>
+        {`: dieser Teilpopulation wird die Beobachtung
+        zugeordnet`}
       </li>
       <li>
         <Code>nicht_zuordnen</Code>
