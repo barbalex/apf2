@@ -73,16 +73,25 @@ WHERE
 
 -- correct:
 UPDATE
-  apflora.beob
+  apflora.beob beob1
 SET
-  art_id = beob_extract_art(beob)
-WHERE
-  EXISTS (
+  art_id =(
     SELECT
-      1
+      beob_extract_art(beob2)
     FROM
-      apflora.beob beob
+      apflora.beob beob2
     WHERE
-      art_id <> beob_extract_art(beob)
+      beob1.id = beob2.id
+      AND beob2.art_id <> beob_extract_art(beob2)
+      AND beob2.art_id = beob2.art_id_original)
+WHERE
+  beob1.id IN (
+    SELECT
+      id
+    FROM
+      apflora.beob beob3
+    WHERE
+      art_id <> beob_extract_art(beob3)
       AND art_id = art_id_original);
 
+-- 202'346 rows affected
