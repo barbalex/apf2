@@ -130,7 +130,6 @@ const Client = ({ store }) => {
           'QTpopOhneMassnber',
           'QTpopOhneTpopber',
           'QTpopCountedEinheitMultipleTimesInYear',
-          'VApAuswPopMenge',
           'VQApMitAktuellenKontrollenOhneZielrelevanteEinheit',
           'VQEkzieleinheitOhneMassnZaehleinheit',
           'VQPopBekanntseitNichtAeltestetpop',

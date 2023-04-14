@@ -20,7 +20,7 @@ export default gql`
         }
       }
     }
-    # do not need to filter further - is done in allVApAuswPopMenges
+    # do not need to filter further - is done in apAuswPopMenge
     allPops(filter: { apId: { equalTo: $id } }, orderBy: [NR_ASC, NAME_ASC]) {
       nodes {
         id
