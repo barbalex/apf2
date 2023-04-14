@@ -4,7 +4,8 @@
 -- 3 ignore where tpop guid is in guid field
 --
 -- 1 create temporary table for import data
-CREATE TABLE apflora.infoflora20230210original(
+-- info: _date_ will be replaced by data like 20230414
+CREATE TABLE apflora.infoflora_date_original(
   GUID text,
   interpretation_note text,
   no_isfs integer,
@@ -76,40 +77,40 @@ CREATE TABLE apflora.infoflora20230210original(
   cover_rem text
 );
 
-CREATE INDEX ON apflora.infoflora20230210original USING btree(no_isfs);
+CREATE INDEX ON apflora.infoflora_date_original USING btree(no_isfs);
 
-CREATE INDEX ON apflora.infoflora20230210original USING btree(tax_id_intern);
+CREATE INDEX ON apflora.infoflora_date_original USING btree(tax_id_intern);
 
-CREATE INDEX ON apflora.infoflora20230210original USING btree(obs_id);
+CREATE INDEX ON apflora.infoflora_date_original USING btree(obs_id);
 
--- 2 import into apflora.infoflora20230210original
+-- 2 import into apflora.infoflora_date_original
 --   using pgAdmin from csv
 --   710
 --
 -- 2.1: add human readable value to doubt_status
 UPDATE
-  apflora.infoflora20230210original
+  apflora.infoflora_date_original
 SET
   doubt_status = '0  (validiert)'
 WHERE
   doubt_status = '0';
 
 UPDATE
-  apflora.infoflora20230210original
+  apflora.infoflora_date_original
 SET
   doubt_status = '1  (zu validieren)'
 WHERE
   doubt_status = '1';
 
 UPDATE
-  apflora.infoflora20230210original
+  apflora.infoflora_date_original
 SET
   doubt_status = '2  (zweifelhaft)'
 WHERE
   doubt_status = '2';
 
 UPDATE
-  apflora.infoflora20230210original
+  apflora.infoflora_date_original
 SET
   doubt_status = '3  (falsch)'
 WHERE
@@ -117,7 +118,7 @@ WHERE
 
 --
 -- 3 build temp beob table
-CREATE TABLE apflora.infoflora20230210beob(
+CREATE TABLE apflora.infoflora_date_beob(
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   guid uuid DEFAULT NULL,
   obs_id integer,
@@ -143,20 +144,21 @@ CREATE TABLE apflora.infoflora20230210beob(
   changed_by text DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.infoflora20230210beob USING btree(obs_id);
+CREATE INDEX ON apflora.infoflora_date_beob USING btree(obs_id);
 
-CREATE INDEX ON apflora.infoflora20230210beob USING btree(already_imported);
+CREATE INDEX ON apflora.infoflora_date_beob USING btree(already_imported);
 
 -- 4 insert importdata into temp beob table
-INSERT INTO apflora.infoflora20230210beob(guid, obs_id, id_field, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
+INSERT INTO apflora.infoflora_date_beob(guid, obs_id, id_field, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
 SELECT
+  -- https://stackoverflow.com/a/46433640/712005
   uuid_or_null(guid),
   obs_id,
   'obs_id',
   format('%s-%s-%s', obs_year, coalesce(obs_month, '01'), coalesce(obs_day, '01'))::date,
   observers,
   row_to_json(ROW),
-  -- use COALESCE(expression,replacement) to choose from sisf 2005 for Makroalgen
+  -- use COALESCE(expression,replacement) to choose from sisf 2005 for Makroalgen as they do not exist in DB-TAXREF
   COALESCE((
     SELECT
       id
@@ -187,13 +189,13 @@ SELECT
   ST_Transform(ST_SetSRID(ST_MakePoint(x_swiss, y_swiss), 2056), 4326),
   'Info Flora 2023.02 Utricularia' -- TODO: set value
 FROM
-  apflora.infoflora20230210original ROW;
+  apflora.infoflora_date_original ROW;
 
 -- 710
 --
 -- 5 mark apflora kontrollen with is_apflora_ek = TRUE
 UPDATE
-  apflora.infoflora20230210beob
+  apflora.infoflora_date_beob
 SET
   is_apflora_ek = TRUE
 WHERE
@@ -209,17 +211,17 @@ WHERE
 SELECT
   *
 FROM
-  apflora.infoflora20230210beob
+  apflora.infoflora_date_beob
 WHERE
   id IN (
     SELECT
       info.id
     FROM
-      apflora.infoflora20230210beob info
+      apflora.infoflora_date_beob info
       INNER JOIN apflora.beob beob ON beob.obs_id = info.obs_id);
 
 UPDATE
-  apflora.infoflora20230210beob
+  apflora.infoflora_date_beob
 SET
   already_imported = TRUE
 WHERE
@@ -227,12 +229,12 @@ WHERE
     SELECT
       info.id
     FROM
-      apflora.infoflora20230210beob info
+      apflora.infoflora_date_beob info
       INNER JOIN apflora.beob beob ON beob.obs_id = info.obs_id);
 
 -- 495 von 710
 --
--- 7 check infoflora20230210beob
+-- 7 check infoflora_date_beob
 --
 -- 8 insert new temp beob into beob
 INSERT INTO apflora.beob(id, id_field, obs_id, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
@@ -249,7 +251,7 @@ SELECT
   geom_point,
   quelle
 FROM
-  apflora.infoflora20230210beob
+  apflora.infoflora_date_beob
 WHERE
   is_apflora_ek = FALSE
   AND already_imported = FALSE;
@@ -272,7 +274,7 @@ SELECT
 FROM
   apflora.beob previous
   INNER JOIN apflora.ae_taxonomies tax_previously ON tax_previously.id = previous.art_id
-  INNER JOIN apflora.infoflora20230210beob new ON previous.obs_id = new.obs_id
+  INNER JOIN apflora.infoflora_date_beob new ON previous.obs_id = new.obs_id
   INNER JOIN apflora.ae_taxonomies tax_new ON tax_new.id = new.art_id
 WHERE
   previous.obs_id IS NOT NULL
@@ -286,7 +288,7 @@ SET
     SELECT
       data
     FROM
-      apflora.infoflora20230210beob
+      apflora.infoflora_date_beob
     WHERE
       apflora.beob.obs_id = obs_id)
 WHERE
@@ -295,7 +297,7 @@ WHERE
     SELECT
       obs_id
     FROM
-      apflora.infoflora20230210beob
+      apflora.infoflora_date_beob
     WHERE
       already_imported = TRUE
       AND is_apflora_ek = FALSE);
