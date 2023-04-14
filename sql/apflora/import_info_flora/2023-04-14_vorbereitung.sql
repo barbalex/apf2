@@ -6,7 +6,7 @@
 -- 1 create temporary table for import data
 -- info: _date_ will be replaced by data like 20230414
 CREATE TABLE apflora.infoflora_date_original(
-  GUID text,
+  GUID text, -- this would be the ek uuid if this beob was exported from apflora
   interpretation_note text,
   no_isfs integer,
   tax_id_intern integer,
