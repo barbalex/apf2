@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION beob_extract_id_field(_beob apflora.beob)
+CREATE OR REPLACE FUNCTION beob_extract_id(_beob apflora.beob)
   RETURNS text
   AS $$
 DECLARE
@@ -6,9 +6,9 @@ DECLARE
 BEGIN
   IF _beob.quelle = 'EvAB 2016' THEN
     result = _beob.data ->> 'NO_NOTE_PROJET';
-    elseif 'Info Flora 2017' THEN
+    elseif _beob.quelle = 'Info Flora 2017' THEN
     result = _beob.data ->> 'NO_NOTE';
-    elseif 'FloZ 2017' THEN
+    elseif _beob.quelle = 'FloZ 2017' THEN
     result = _beob.data ->> 'BARCODE';
     elseif _beob.quelle IN ('Info Flora 2021.05', 'Info Flora 2022.03', 'Info Flora 2022.12 gesamt', 'Info Flora 2022.01', 'Info Flora 2023.02 Utricularia', 'Info Flora 2022.08', 'Info Flora 2022.04', 'Info Flora 2022.12 Auszug') THEN
     result = _beob.data ->> 'obs_id';
@@ -20,3 +20,17 @@ END;
 $$
 LANGUAGE plpgsql;
 
+-- test:
+SELECT
+  quelle,
+  beob_extract_id(beob) AS id_extracted,
+  id_field,
+  obs_id,
+  data
+FROM
+  apflora.beob beob
+WHERE
+  beob_extract_id(beob) = 'obs_id'
+  AND obs_id <> beob_extract_id(beob)::bigint;
+
+-- 0 rows
