@@ -46,8 +46,9 @@ FROM
 WHERE
   beob.geom_point IS NOT NULL
   AND beob_extract_geompoint(beob) IS NOT NULL
-  AND NOT ST_Equals(beob_extract_geompoint(beob), beob.geom_point)
+  AND ST_Distance(beob_extract_geompoint(beob), beob.geom_point) > 10
 ORDER BY
+  distance DESC,
   tax.artname,
   pop.nr,
   tpop.nr;
