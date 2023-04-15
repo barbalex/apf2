@@ -94,4 +94,4 @@ WHERE
       art_id <> beob_extract_art(beob3)
       AND art_id = art_id_original);
 
--- 202'346 rows affected
+-- 2023.04.15: 202'346 rows affected

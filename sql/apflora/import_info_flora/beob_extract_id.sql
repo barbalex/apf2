@@ -33,4 +33,4 @@ WHERE
   beob_extract_id(beob) = 'obs_id'
   AND obs_id <> beob_extract_id(beob)::bigint;
 
--- 0 rows
+-- 2023.04.15: 0 rows

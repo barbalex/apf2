@@ -27,21 +27,30 @@ LANGUAGE plpgsql;
 
 -- test:
 SELECT
-  quelle,
+  tax.taxonomie_name,
+  tax.artname,
+  pop.nr AS pop_nr,
+  tpop.nr AS tpop_nr,
+  beob.quelle,
   ST_X(ST_Transform(beob_extract_geompoint(beob), 2056)) AS extracted_x,
   ST_Y(ST_Transform(beob_extract_geompoint(beob), 2056)) AS extracted_y,
-  ST_X(ST_Transform(geom_point, 2056)) AS x,
-  ST_Y(ST_Transform(geom_point, 2056)) AS y,
-  ST_Distance(beob_extract_geompoint(beob), geom_point) AS distance,
-  data
+  ST_X(ST_Transform(beob.geom_point, 2056)) AS x,
+  ST_Y(ST_Transform(beob.geom_point, 2056)) AS y,
+  ST_Distance(beob_extract_geompoint(beob), beob.geom_point) AS distance,
+  beob.data
 FROM
   apflora.beob beob
+  LEFT JOIN apflora.ae_taxonomies tax ON beob.art_id = tax.id
+  LEFT JOIN apflora.tpop tpop ON beob.tpop_id = tpop.id
+  LEFT JOIN apflora.pop pop ON tpop.pop_id = pop.id
 WHERE
-  geom_point IS NOT NULL
+  beob.geom_point IS NOT NULL
   AND beob_extract_geompoint(beob) IS NOT NULL
-  AND NOT ST_Equals(beob_extract_geompoint(beob), geom_point)
+  AND NOT ST_Equals(beob_extract_geompoint(beob), beob.geom_point)
 ORDER BY
-  distance DESC;
+  tax.artname,
+  pop.nr,
+  tpop.nr;
 
 -- 443'184 rows, 2 distance 25, rest below 0.6
 --
@@ -65,6 +74,6 @@ WHERE
     WHERE
       NOT ST_Equals(beob3.geom_point, beob_extract_geompoint(beob3)));
 
--- 443'184 rows affected
+-- 2023.04.15: 443'184 rows affected
 --
 -- conrol: repeat above query and get 0 rows

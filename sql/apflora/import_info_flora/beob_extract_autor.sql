@@ -29,9 +29,10 @@ FROM
 WHERE
   autor <> beob_extract_autor(beob);
 
+-- 2023.04.15: 209 rows
 -- 0 rows
 --
--- TODO: correct:
+-- correct:
 UPDATE
   apflora.beob beob1
 SET
@@ -51,4 +52,4 @@ WHERE
     WHERE
       autor <> beob_extract_autor(beob3));
 
--- 209 updated
+-- 2023.04.15: 209 updated
