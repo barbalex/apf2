@@ -60,18 +60,29 @@ LANGUAGE plpgsql;
 
 -- test:
 SELECT
-  quelle,
-  beob.art_id AS art_id,
+  tax.taxonomie_name,
+  tax.artname,
+  pop.nr AS pop_nr,
+  tpop.nr AS tpop_nr,
+  beob.quelle,
+  beob.art_id,
   beob_extract_art(beob) AS extracted_art_id,
-  art_id_original,
-  data
+  beob.art_id_original,
+  beob.data
 FROM
   apflora.beob beob
+  LEFT JOIN apflora.ae_taxonomies tax ON beob.art_id = tax.id
+  LEFT JOIN apflora.tpop tpop ON beob.tpop_id = tpop.id
+  LEFT JOIN apflora.pop pop ON tpop.pop_id = pop.id
 WHERE
-  art_id <> beob_extract_art(beob)
-  AND art_id = art_id_original;
+  beob.art_id <> beob_extract_art(beob)
+  AND beob.art_id = beob.art_id_original
+ORDER BY
+  tax.artname,
+  pop.nr,
+  tpop.nr;
 
--- TODO: correct:
+-- correct:
 UPDATE
   apflora.beob beob1
 SET
