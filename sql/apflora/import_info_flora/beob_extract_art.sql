@@ -71,7 +71,7 @@ WHERE
   art_id <> beob_extract_art(beob)
   AND art_id = art_id_original;
 
--- correct:
+-- TODO: correct:
 UPDATE
   apflora.beob beob1
 SET
