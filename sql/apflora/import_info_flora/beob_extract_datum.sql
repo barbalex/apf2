@@ -16,3 +16,15 @@ END;
 $$
 LANGUAGE plpgsql;
 
+-- test:
+SELECT
+  quelle,
+  beob_extract_datum(beob) AS datum_extracted,
+  datum,
+  data
+FROM
+  apflora.beob beob
+WHERE
+  datum <> beob_extract_datum(beob);
+
+-- 0 rows
