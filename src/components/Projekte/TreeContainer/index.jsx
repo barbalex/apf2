@@ -15,6 +15,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import { useParams, useLocation } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
+import { getSnapshot } from 'mobx-state-tree'
 
 const LabelFilter = lazy(() => import('./LabelFilter'))
 const ApFilter = lazy(() => import('./ApFilter'))
@@ -322,7 +323,8 @@ const TreeContainer = () => {
     copyingBiotop,
     setCopyingBiotop,
   } = store
-  const { setOpenNodes, openNodes } = store.tree
+  const { setOpenNodes, openNodes: openNodesRaw } = store.tree
+  const openNodes = getSnapshot(openNodesRaw)
 
   // deactivated because toggling the project node would not close the project
   // useEffect(() => {
