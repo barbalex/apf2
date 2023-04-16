@@ -2370,11 +2370,15 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte(
   corresponds_to_massn_anz_pflanzen boolean DEFAULT FALSE,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
-  eedsNoMethodeEinheit boolean DEFAULT FALSE,
+  needs_no_methode_einheit boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
+
+-- alter table apflora.tpopkontrzaehl_einheit_werte drop column needsNoMethodeEinheit;
+-- alter table apflora.tpopkontrzaehl_einheit_werte add column needs_no_methode_einheit boolean DEFAULT FALSE;
+-- CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(needs_no_methode_einheit);
 
 CREATE SEQUENCE apflora.tpopkontrzaehl_einheit_werte_code_seq owned BY apflora.tpopkontrzaehl_einheit_werte.code;
 
@@ -2397,8 +2401,7 @@ CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(historic);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(corresponds_to_massn_anz_triebe);
 
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(corresponds_to_massn_anz_pflanzen);
-
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(needsNoMethodeEinheit);
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(needs_no_methode_einheit);
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.id IS 'Primärschlüssel';
 
