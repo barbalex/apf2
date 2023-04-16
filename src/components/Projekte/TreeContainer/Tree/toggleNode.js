@@ -1,9 +1,17 @@
+import { getSnapshot } from 'mobx-state-tree'
+
 import isNodeOpen from '../isNodeOpen'
 import openNode from '../openNode'
 
 const toggleNode = ({ node, store, navigate, search }) => {
   if (!node.url) throw new Error('passed node has no url')
-  const { openNodes, activeNodeArray, setLastTouchedNode } = store.tree
+  const {
+    openNodes: openNodesRaw,
+    activeNodeArray,
+    setLastTouchedNode,
+  } = store.tree
+  const aNA = getSnapshot(activeNodeArray)
+  const openNodes = getSnapshot(openNodesRaw)
 
   let newActiveNodeArray = []
   if (!isNodeOpen({ openNodes, url: node.url })) {
@@ -13,7 +21,7 @@ const toggleNode = ({ node, store, navigate, search }) => {
     newActiveNodeArray = [...node.url]
     // some elements are numbers but they are contained in url as text
     // eslint-disable-next-line eqeqeq
-  } else if (node.urlLabel == activeNodeArray.slice(-1)[0]) {
+  } else if (node.urlLabel == aNA.slice(-1)[0]) {
     // the node is open
     // AND it is the active node
     // make it's parent the new active node
