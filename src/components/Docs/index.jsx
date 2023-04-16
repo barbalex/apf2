@@ -70,6 +70,10 @@ export const DokuDate = styled.p`
   margin-bottom: 15px !important;
   color: grey;
 `
+export const Code = styled.code`
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0 3px;
+`
 
 const Docs = () => (
   <ErrorBoundary>
