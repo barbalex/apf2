@@ -146,6 +146,8 @@ export default types
       self.lastTouchedNode = val
     },
     setOpenNodes(val) {
+      // val should always be created from a snapshot of openNodes
+      // to ensure not mutating openNodes!!!
       // need set to ensure contained arrays are unique
       const set = new Set(val.map(JSON.stringify))
       self.openNodes = Array.from(set).map(JSON.parse)
