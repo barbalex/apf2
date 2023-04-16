@@ -2370,6 +2370,7 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte(
   corresponds_to_massn_anz_pflanzen boolean DEFAULT FALSE,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
+  eedsNoMethodeEinheit boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
@@ -2396,6 +2397,8 @@ CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(historic);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(corresponds_to_massn_anz_triebe);
 
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(corresponds_to_massn_anz_pflanzen);
+
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(needsNoMethodeEinheit);
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.id IS 'Primärschlüssel';
 
