@@ -133,7 +133,7 @@ const BeobVerwalten = () => (
         importiert werden mussten. Die lc-Variante steht für lower case und wurde generiert, damit eine GUID wirklich immer gleich ist. Wieso? Weil aus EvAB GUID's manchmal upper-case und manchmal lower-case ankamen, womit dieselbe GUID nicht immer gleich war...`}
       </li>
     </ul>
-    <h2>2. Beobachtungen von Info Spezies importieren</h2>
+    <h2>2. Beobachtungen importieren</h2>
     <p>Folgende Import wurden bisher durchgeführt:</p>
     <ul>
       <li>EvAB 2016: 228'791</li>
@@ -149,17 +149,17 @@ const BeobVerwalten = () => (
       <li>Info Flora 2022.12 Auszug: 16</li>
     </ul>
     <p>
-      Künftig sollen Importe nur noch von Info Flora erfolgen. Grund: Alle
+      {`Künftig sollen Importe nur noch von Info Flora erfolgen. Grund: Alle
       Beobachtungen sollten Info Flora gemeldet werden. Will heissen: Zuvor auf
       anderem Weg importierte Beobachtungen werden später nochmals über Info
       Flora importiert. Leider liefert Info Flora Original-ID's nicht
       zuverlässig mit. Womit nicht sichergestellt werden kann, dass dieselbe
       Beobachtung mehrfach importiert wird. Konkret können wir bei den
-      FloZ-Daten nicht 100% sicher sein, dass dies nicht passiert ist.
+      FloZ-Daten nicht 100% sicher sein, dass dies nicht passiert ist.`}
     </p>
     <p>
-      Der eigentliche Importvorgang in der jeweils aktuellsten Abfrage
-      dokumentiert. Beispiel:{' '}
+      {`Der eigentliche Importvorgang in der jeweils aktuellsten Abfrage
+      dokumentiert. Beispiel: `}
       <a
         href="https://github.com/barbalex/apf2/blob/master/sql/apflora/import_info_flora/2023-02-10.sql"
         target="_blank"
@@ -170,18 +170,18 @@ const BeobVerwalten = () => (
       </a>
     </p>
     <p>
-      Wenn Beobachtungen importiert werden, werden jeweils die Daten bereits
+      {`Wenn Beobachtungen importiert werden, werden jeweils die Daten bereits
       früher importierter aktualisiert. Ein Teil der Daten werden extrahiert, um
       die Beobachtungen effizienter darstellen zu können (Taxon, Autor, Datum,
       ID-Feld, Koordinaten). Sie werden bei jedem Import aktualisiert. Solltet
       ihr also Diskrepanzen zwischen den Angaben im Formular und den
       Beschriftungen in Navigationsbaum und Karte oder der Darstellung auf der
-      Karte feststellen, meldet das bitte.
+      Karte feststellen, meldet das bitte.`}
     </p>
     <p>
-      Ausserdem können wir beim Import Listen erstellen, wo wesentliche
+      {`Ausserdem können wir beim Import Listen erstellen, wo wesentliche
       Änderungen an den erwähnten Daten durch Info Flora vorgenommen wurden
-      (v.a. Taxon, Datum und Koordinaten).
+      (v.a. Taxon, Datum und Koordinaten).`}
     </p>
   </>
 )
