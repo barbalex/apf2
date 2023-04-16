@@ -4,7 +4,7 @@ import beobTable from './beobTable.webp'
 const BeobVerwalten = () => (
   <>
     <h1>Beobachtungen verwalten</h1>
-    <DokuDate>14.04.2023</DokuDate>
+    <DokuDate>16.04.2023</DokuDate>
     <h2>1. Datenstruktur</h2>
     <p>
       Beobachtungen werden in der Tabelle <Code>beob</Code> gespeichert:
@@ -134,8 +134,32 @@ const BeobVerwalten = () => (
       </li>
     </ul>
     <h2>2. Beobachtungen von Info Spezies importieren</h2>
+    <p>Folgende Import wurden bisher durchgeführt:</p>
+    <ul>
+      <li>EvAB 2016: 228'791</li>
+      <li>Info Flora 2017: 192'606</li>
+      <li>FloZ 2017: 30'935</li>
+      <li>Info Flora 2021.05: 17'638</li>
+      <li>Info Flora 2022.03: 15'012</li>
+      <li>Info Flora 2022.12 gesamt: 3'029</li>
+      <li>Info Flora 2022.01: 459</li>
+      <li>Info Flora 2023.02 Utricularia: 215</li>
+      <li>Info Flora 2022.08: 208</li>
+      <li>Info Flora 2022.04: 87</li>
+      <li>Info Flora 2022.12 Auszug: 16</li>
+    </ul>
     <p>
-      Ist in der jeweils aktuellsten Abfrage dokumentiert. Beispiel:{' '}
+      Künftig sollen Importe nur noch von Info Flora erfolgen. Grund: Alle
+      Beobachtungen sollten Info Flora gemeldet werden. Will heissen: Zuvor auf
+      anderem Weg importierte Beobachtungen werden später nochmals über Info
+      Flora importiert. Leider liefert Info Flora Original-ID's nicht
+      zuverlässig mit. Womit nicht sichergestellt werden kann, dass dieselbe
+      Beobachtung mehrfach importiert wird. Konkret können wir bei den
+      FloZ-Daten nicht 100% sicher sein, dass dies nicht passiert ist.
+    </p>
+    <p>
+      Der eigentliche Importvorgang in der jeweils aktuellsten Abfrage
+      dokumentiert. Beispiel:{' '}
       <a
         href="https://github.com/barbalex/apf2/blob/master/sql/apflora/import_info_flora/2023-02-10.sql"
         target="_blank"
@@ -144,6 +168,20 @@ const BeobVerwalten = () => (
       >
         https://github.com/barbalex/apf2/blob/master/sql/apflora/import_info_flora/2023-02-10.sql
       </a>
+    </p>
+    <p>
+      Wenn Beobachtungen importiert werden, werden jeweils die Daten bereits
+      früher importierter aktualisiert. Ein Teil der Daten werden extrahiert, um
+      die Beobachtungen effizienter darstellen zu können (Taxon, Autor, Datum,
+      ID-Feld, Koordinaten). Sie werden bei jedem Import aktualisiert. Solltet
+      ihr also Diskrepanzen zwischen den Angaben im Formular und den
+      Beschriftungen in Navigationsbaum und Karte oder der Darstellung auf der
+      Karte feststellen, meldet das bitte.
+    </p>
+    <p>
+      Ausserdem können wir beim Import Listen erstellen, wo wesentliche
+      Änderungen an den erwähnten Daten durch Info Flora vorgenommen wurden
+      (v.a. Taxon, Datum und Koordinaten).
     </p>
   </>
 )
