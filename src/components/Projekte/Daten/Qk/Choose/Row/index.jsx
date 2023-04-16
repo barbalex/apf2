@@ -12,7 +12,6 @@ const Row = styled.div`
   display: flex;
   padding: 5px;
   border-bottom: 1px solid #e8e8e8;
-  min-height: 52px;
 `
 const Check = styled.div`
   padding: 0 5px;
