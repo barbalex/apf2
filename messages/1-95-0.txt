@@ -1,1 +1,1 @@
-Ab Version 1.95.0: Erfasste man bisher den Ausgangszustand einer Teilpopulation, verlangten bisher Qualitätskontrollen auf Ebene Pop und Tpop Populations- bzw. Teilpopulations-Berichte. Ab jetzt verlangen sie das nur noch für Feld- und Freiwilligen-Kontrollen
+Ab Version 1.95.0: Erfasste man bisher den Ausgangszustand einer Teilpopulation, verlangten bisher Qualitätskontrollen Populations- bzw. Teilpopulations-Berichte. Ab jetzt verlangen sie das nur noch für Feld- und Freiwilligen-Kontrollen
