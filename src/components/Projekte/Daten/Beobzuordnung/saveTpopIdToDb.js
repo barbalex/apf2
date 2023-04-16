@@ -1,5 +1,6 @@
 import isEqual from 'lodash/isEqual'
 import { gql } from '@apollo/client'
+import { getSnapshot } from 'mobx-state-tree'
 
 import updateBeobByIdGql from './updateBeobById'
 
@@ -17,7 +18,9 @@ const saveTpopIdToDb = async ({ value, id, type, client, store, search }) => {
   })
 
   // need to update activeNodeArray and openNodes
-  const { activeNodeArray: aNA, openNodes, setOpenNodes } = store.tree
+  const { activeNodeArray, openNodes: openNodesRaw, setOpenNodes } = store.tree
+  const aNA = getSnapshot(activeNodeArray)
+  const openNodes = getSnapshot(openNodesRaw)
   let newANA
   let newOpenNodes
 
