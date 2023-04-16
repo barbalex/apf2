@@ -2081,14 +2081,28 @@ export default gql`
                       id
                       jahr
                       zaehlungenOhneMethode: tpopkontrzaehlsByTpopkontrId(
-                        filter: { methode: { isNull: true } }
+                        filter: {
+                          methode: { isNull: true }
+                          tpopkontrzaehlEinheitWerteByEinheit: {
+                            needsNoMethodeAnzahl: { equalTo: false }
+                          }
+                        }
                       ) {
                         nodes {
                           id
                         }
                       }
                       zaehlungenMitMethode: tpopkontrzaehlsByTpopkontrId(
-                        filter: { methode: { isNull: false } }
+                        filter: {
+                          or: [
+                            { methode: { isNull: false } }
+                            {
+                              tpopkontrzaehlEinheitWerteByEinheit: {
+                                needsNoMethodeAnzahl: { equalTo: true }
+                              }
+                            }
+                          ]
+                        }
                       ) {
                         nodes {
                           id
@@ -2134,7 +2148,12 @@ export default gql`
                       id
                       jahr
                       tpopkontrzaehlsByTpopkontrId(
-                        filter: { methode: { isNull: true } }
+                        filter: {
+                          methode: { isNull: true }
+                          tpopkontrzaehlEinheitWerteByEinheit: {
+                            needsNoMethodeAnzahl: { equalTo: false }
+                          }
+                        }
                         orderBy: ID_ASC
                       ) {
                         nodes {
@@ -2184,14 +2203,28 @@ export default gql`
                       id
                       jahr
                       zaehlungenOhneAnzahl: tpopkontrzaehlsByTpopkontrId(
-                        filter: { anzahl: { isNull: true } }
+                        filter: {
+                          anzahl: { isNull: true }
+                          tpopkontrzaehlEinheitWerteByEinheit: {
+                            needsNoMethodeAnzahl: { equalTo: false }
+                          }
+                        }
                       ) {
                         nodes {
                           id
                         }
                       }
                       zaehlungenMitAnzahl: tpopkontrzaehlsByTpopkontrId(
-                        filter: { anzahl: { isNull: false } }
+                        filter: {
+                          or: [
+                            { anzahl: { isNull: false } }
+                            {
+                              tpopkontrzaehlEinheitWerteByEinheit: {
+                                needsNoMethodeAnzahl: { equalTo: true }
+                              }
+                            }
+                          ]
+                        }
                       ) {
                         nodes {
                           id
@@ -2237,7 +2270,12 @@ export default gql`
                       id
                       jahr
                       tpopkontrzaehlsByTpopkontrId(
-                        filter: { anzahl: { isNull: true } }
+                        filter: {
+                          anzahl: { isNull: true }
+                          tpopkontrzaehlEinheitWerteByEinheit: {
+                            needsNoMethodeAnzahl: { equalTo: false }
+                          }
+                        }
                         orderBy: ID_ASC
                       ) {
                         nodes {

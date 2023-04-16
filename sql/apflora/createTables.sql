@@ -2370,15 +2370,15 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte(
   corresponds_to_massn_anz_pflanzen boolean DEFAULT FALSE,
   sort smallint DEFAULT NULL,
   historic boolean DEFAULT FALSE,
-  needs_no_methode_einheit boolean DEFAULT FALSE,
+  needs_no_methode_anzahl boolean DEFAULT FALSE,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
 );
 
--- alter table apflora.tpopkontrzaehl_einheit_werte drop column needsNoMethodeEinheit;
--- alter table apflora.tpopkontrzaehl_einheit_werte add column needs_no_methode_einheit boolean DEFAULT FALSE;
--- CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(needs_no_methode_einheit);
+alter table apflora.tpopkontrzaehl_einheit_werte drop column needs_no_methode_einheit;
+alter table apflora.tpopkontrzaehl_einheit_werte add column needs_no_methode_anzahl boolean DEFAULT FALSE;
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(needs_no_methode_anzahl);
 
 CREATE SEQUENCE apflora.tpopkontrzaehl_einheit_werte_code_seq owned BY apflora.tpopkontrzaehl_einheit_werte.code;
 
