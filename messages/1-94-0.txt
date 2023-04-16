@@ -1,0 +1,1 @@
+Ab Version 1.94.0: Zählungen mit der Einheit "Art ist vorhanden": Qualitätskontrollen reklamieren nicht mehr, wenn keine Methode oder Anzahl erfasst wird
