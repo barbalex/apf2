@@ -3,6 +3,7 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import omit from 'lodash/omit'
 import { gql } from '@apollo/client'
+import { getSnapshot } from 'mobx-state-tree'
 
 import tables from '../../../../../modules/tables'
 
@@ -136,9 +137,10 @@ const deleteModule = async ({ client, store, search }) => {
   }
 
   // remove from openNodes
-  const openNodes1 = store?.tree?.openNodes
-  const newOpenNodes1 = openNodes1.filter((n) => !isEqual(n, toDeleteUrl))
-  store.tree.setOpenNodes(newOpenNodes1)
+  const openNodesRaw = store?.tree?.openNodes
+  const openNodes = getSnapshot(openNodesRaw)
+  const newOpenNodes = openNodes.filter((n) => !isEqual(n, toDeleteUrl))
+  store.tree.setOpenNodes(newOpenNodes)
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {
     store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
