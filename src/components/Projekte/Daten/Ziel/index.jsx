@@ -6,6 +6,7 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
+import { getSnapshot } from 'mobx-state-tree'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -47,7 +48,9 @@ const Ziel = () => {
   const queryClient = useQueryClient()
 
   const store = useContext(storeContext)
-  const { activeNodeArray, openNodes, setOpenNodes } = store.tree
+  const { activeNodeArray, openNodes: openNodesRaw, setOpenNodes } = store.tree
+  const aNA = getSnapshot(activeNodeArray)
+  const openNodes = getSnapshot(openNodesRaw)
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -104,14 +107,14 @@ const Ziel = () => {
       })
       // if jahr of ziel is updated, activeNodeArray und openNodes need to change
       if (field === 'jahr') {
-        const newActiveNodeArray = [...activeNodeArray]
+        const newActiveNodeArray = [...aNA]
         newActiveNodeArray[5] = +value
-        const oldParentNodeUrl = [...activeNodeArray]
+        const oldParentNodeUrl = [...aNA]
         oldParentNodeUrl.pop()
         const newParentNodeUrl = [...newActiveNodeArray]
         newParentNodeUrl.pop()
         let newOpenNodes = openNodes.map((n) => {
-          if (isEqual(n, activeNodeArray)) return newActiveNodeArray
+          if (isEqual(n, aNA)) return newActiveNodeArray
           if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
           return n
         })
@@ -124,7 +127,7 @@ const Ziel = () => {
       store.user.name,
       queryClient,
       client,
-      activeNodeArray,
+      aNA,
       openNodes,
       navigate,
       search,
