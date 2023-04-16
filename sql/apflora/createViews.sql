@@ -2531,8 +2531,7 @@ WHERE
       apflora.tpopkontr
       INNER JOIN apflora.tpopkontrzaehl ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id
     WHERE
-      apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
-      AND apflora.tpopkontrzaehl.anzahl > 0)
+      apflora.tpopkontrzaehl.anzahl > 0)
 ORDER BY
   apflora.pop.id,
   apflora.tpop.id;
@@ -2560,8 +2559,7 @@ WHERE
       apflora.tpopkontr
       INNER JOIN apflora.tpopkontrzaehl ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id
     WHERE
-      apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
-      AND apflora.tpopkontrzaehl.anzahl > 0)
+      apflora.tpopkontrzaehl.anzahl > 0)
 ORDER BY
   apflora.pop.id,
   apflora.tpop.id;

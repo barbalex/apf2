@@ -68,8 +68,7 @@ CREATE OR REPLACE FUNCTION apflora.q_pop_ohne_popmassnber(projid uuid, apid uuid
               on apflora.pop.id = apflora.tpop.pop_id
             on apflora.tpop.id = apflora.tpopkontr.tpop_id
           WHERE
-            apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
-            AND apflora.tpopkontr.jahr = $3
+            apflora.tpopkontr.jahr = $3
             and apflora.ap.id = $2
             and apflora.ap.proj_id = $1
         )

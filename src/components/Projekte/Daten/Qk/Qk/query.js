@@ -525,6 +525,7 @@ export default gql`
         nr
       }
     }
+    # function: q_pop_ohne_popber
     popOhnePopber: qPopOhnePopber(
       berichtjahr: $berichtjahr
       apid: $apId
@@ -945,6 +946,7 @@ export default gql`
         }
       }
     }
+    # function: q_tpop_ohne_tpopber
     tpopOhneTpopber: qTpopOhneTpopber(
       berichtjahr: $berichtjahr
       apid: $apId
