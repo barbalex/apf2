@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
+import { getSnapshot } from 'mobx-state-tree'
 
 import tables from '../../../modules/tables'
 import {
@@ -32,7 +33,8 @@ const insertDataset = async ({
   jahr: jahrPassed,
 }) => {
   const { enqueNotification } = store
-  const { openNodes, setOpenNodes } = store.tree
+  const { openNodes: openNodesRaw, setOpenNodes } = store.tree
+  const openNodes = getSnapshot(openNodesRaw)
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata = tables.find((t) => t.table === table)
