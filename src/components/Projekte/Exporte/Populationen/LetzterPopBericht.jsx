@@ -28,6 +28,7 @@ const LetzterPopBericht = () => {
                 allPops(filter: { vPopMitLetzterPopbersByPopIdExist: true }) {
                   nodes {
                     id
+                    # view: v_pop_mit_letzter_popber
                     vPopMitLetzterPopbersByPopId {
                       nodes {
                         apId
@@ -44,6 +45,8 @@ const LetzterPopBericht = () => {
                         popStatusUnklarBegruendung
                         popX
                         popY
+                        tpopsApberRelevant
+                        tpopsApberRelevantGrund
                         popCreatedAt
                         popUpdatedAt
                         popChangedBy
@@ -93,6 +96,12 @@ const LetzterPopBericht = () => {
               ?.popStatusUnklarBegruendung ?? '',
           pop_x: z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popX ?? '',
           pop_y: z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popY ?? '',
+          tpops_apber_relevant:
+            z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.tpopsApberRelevant ??
+            '',
+          tpops_apber_relevant_grund:
+            z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
+              ?.tpopsApberRelevantGrund ?? '',
           pop_created_at:
             z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popCreatedAt ?? '',
           pop_updated_at:
