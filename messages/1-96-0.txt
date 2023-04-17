@@ -1,0 +1,1 @@
+Ab Version 1.96.0: Exporte "Aktuellste Zählung inklusive seither erfolgter Apflanzungen" für Pop und TPop: 1. Einheit "Deckung X Fläche" ergänzt, 2. Enthalten neu alle TPop bzw. Pop, also auch diejenigen ohne Zählung
