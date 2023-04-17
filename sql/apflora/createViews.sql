@@ -3610,7 +3610,8 @@ FROM
         AND kontr3.apber_nicht_relevant IS NOT TRUE ORDER BY kontr3.jahr DESC, kontr3.datum DESC LIMIT 1)
 ORDER BY tpop2.id, apflora.tpopkontrzaehl_einheit_werte.text, kontr2.jahr DESC, kontr2.datum DESC) AS tbl ORDER BY 1, 2, 3 $$, $$
   SELECT
-    unnest('{Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl("tpop_id" uuid,
+    unnest('{Deckung X Fläche, Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl("tpop_id" uuid,
+    "Deckung X Fläche" real,
     "Pflanzen total" real,
     "Pflanzen (ohne Jungpflanzen)" real,
     "Triebe total" real,
@@ -3772,8 +3773,9 @@ ORDER BY tpop.id, massn.jahr DESC, massn.datum DESC
   SELECT
     tpop_id, max(jahr) AS jahr, zaehleinheit, sum(anzahl) AS anzahl FROM letzte_kontrolle_und_ansiedlungen GROUP BY tpop_id, zaehleinheit ORDER BY tpop_id, jahr, zaehleinheit) AS tbl ORDER BY 1, 2, 3 $$, $$
   SELECT
-    unnest('{Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl("tpop_id" uuid,
+    unnest('{Deckung X Fläche, Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl("tpop_id" uuid,
     "jahr" integer,
+    "Deckung X Fläche" real,
     "Pflanzen total" real,
     "Pflanzen (ohne Jungpflanzen)" real,
     "Triebe total" real,

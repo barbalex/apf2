@@ -126,11 +126,12 @@ ORDER BY tpop.id, massn.jahr DESC, massn.datum DESC
       FROM letzte_kontrolle_und_ansiedlungen)))
 -- sum all kontr and anpflanzung
 SELECT
-  tpop_id, max(jahr) AS jahr, max(zaehleinheit) AS zaehleinheit, sum(anzahl) AS anzahl
+  tpop_id, max(jahr) AS jahr, zaehleinheit, sum(anzahl) AS anzahl
 FROM letzte_kontrolle_und_ansiedlungen_mit_allen_tpop GROUP BY tpop_id, zaehleinheit ORDER BY tpop_id, jahr, zaehleinheit) AS tbl ORDER BY 1, 2, 3 $$, $$
   SELECT
-    unnest('{Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl("tpop_id" uuid,
+    unnest('{Deckung X Fläche, Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl("tpop_id" uuid,
     "jahr" integer,
+    "Deckung X Fläche" real,
     "Pflanzen total" real,
     "Pflanzen (ohne Jungpflanzen)" real,
     "Triebe total" real,
@@ -158,9 +159,9 @@ FROM letzte_kontrolle_und_ansiedlungen_mit_allen_tpop GROUP BY tpop_id, zaehlein
     "andere Zaehleinheit" real,
     "Art ist vorhanden" text)
   LEFT JOIN apflora.tpop tpop
-  INNER JOIN apflora.pop_status_werte tpsw ON tpsw.code = tpop.status
+  left JOIN apflora.pop_status_werte tpsw ON tpsw.code = tpop.status
   INNER JOIN apflora.pop pop
-  INNER JOIN apflora.pop_status_werte psw ON psw.code = pop.status
+  left JOIN apflora.pop_status_werte psw ON psw.code = pop.status
   INNER JOIN apflora.ap
   INNER JOIN apflora.ae_taxonomies tax ON ap.art_id = tax.id ON apflora.ap.id = pop.ap_id ON pop.id = tpop.pop_id ON tpop.id = anzahl.tpop_id
 WHERE

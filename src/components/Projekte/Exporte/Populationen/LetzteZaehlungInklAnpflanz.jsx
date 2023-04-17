@@ -38,6 +38,7 @@ const LetzteZaehlungInklAnpflanz = () => {
                         popName
                         popStatus
                         jahre
+                        deckungXFlache
                         pflanzenTotal
                         pflanzenOhneJungpflanzen
                         triebeTotal
