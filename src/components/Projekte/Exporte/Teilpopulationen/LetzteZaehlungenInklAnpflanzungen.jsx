@@ -39,6 +39,7 @@ const LetzteZaehlungenInklAnpflanzungen = () => {
                     tpopFlurname
                     tpopStatus
                     jahr
+                    deckungXFlache
                     pflanzenTotal
                     pflanzenOhneJungpflanzen
                     triebeTotal

@@ -23,12 +23,12 @@ const LetzteZaehlungInklAnpflanz = () => {
         let result
         try {
           result = await client.query({
-            // view: v_pop_last_count_with_massn
             query: gql`
               query popLastCountsWithMassnQuery {
                 allPops(filter: { vPopLastCountWithMassnsByPopIdExist: true }) {
                   nodes {
                     id
+                    # view: v_pop_last_count_with_massn
                     vPopLastCountWithMassnsByPopId {
                       nodes {
                         artname
@@ -38,6 +38,7 @@ const LetzteZaehlungInklAnpflanz = () => {
                         popName
                         popStatus
                         jahre
+                        deckungXFlache
                         pflanzenTotal
                         pflanzenOhneJungpflanzen
                         triebeTotal

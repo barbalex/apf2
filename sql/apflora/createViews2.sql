@@ -63,6 +63,7 @@ select
   pop_name,
   pop_status,
   array_to_string (array(SELECT unnest(array_agg(jahr)) AS x group by x ORDER BY x), ', ') as jahre,
+  sum("Deckung X Fläche") as "Deckung X Fläche", 
   sum("Pflanzen total") as "Pflanzen total", 
   sum("Pflanzen (ohne Jungpflanzen)") as "Pflanzen (ohne Jungpflanzen)", 
   sum("Triebe total") as "Triebe total", 
@@ -88,7 +89,7 @@ select
   sum("Pflanzstellen") as "Pflanzstellen", 
   sum("Stellen") as "Stellen", 
   sum("andere Zaehleinheit") as "andere Zaehleinheit", 
-  count("Art ist vorhanden") as "Art ist vorhanden"
+  max("Art ist vorhanden") as "Art ist vorhanden"
 from apflora.v_tpop_last_count_with_massn
 group by
   artname,
