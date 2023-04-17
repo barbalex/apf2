@@ -3653,10 +3653,7 @@ COMMENT ON VIEW apflora.v_tpop_last_count IS '@foreignKey (tpop_id) references t
 
 -- used by: v_pop_last_count_with_massn
 -- also used in export
--- use https://github.com/hnsl/colpivot instead?
-DROP VIEW IF EXISTS apflora.v_tpop_last_count_with_massn CASCADE;
-
-CREATE OR REPLACE VIEW apflora.v_tpop_last_count_with_massn AS
+-- use https://github.com/hnsl/colpivot instead?CREATE OR REPLACE VIEW apflora.v_tpop_last_count_with_massn AS
 SELECT
   tax.artname,
   ap.id AS ap_id,
@@ -3768,10 +3765,24 @@ ORDER BY tpop.id, massn.jahr DESC, massn.datum DESC
     -- 3. get all einheits from tpopkontr counts
   UNION ALL
   SELECT
-    tpop_id, jahr, zaehleinheit, anzahl FROM letzte_kontrollen)
-  -- sum all kontr and anpflanzung
+    tpop_id, jahr, zaehleinheit, anzahl FROM letzte_kontrollen
+), letzte_kontrolle_und_ansiedlungen_mit_allen_tpop AS (
   SELECT
-    tpop_id, max(jahr) AS jahr, zaehleinheit, sum(anzahl) AS anzahl FROM letzte_kontrolle_und_ansiedlungen GROUP BY tpop_id, zaehleinheit ORDER BY tpop_id, jahr, zaehleinheit) AS tbl ORDER BY 1, 2, 3 $$, $$
+    tpop_id, jahr, zaehleinheit, anzahl FROM letzte_kontrolle_und_ansiedlungen
+  UNION ALL (
+    SELECT
+      id AS tpop_id, NULL::smallint AS jahr, NULL::text AS zaehleinheit, NULL::smallint AS anzahl
+    FROM apflora.tpop
+  WHERE
+    tpop.apber_relevant IS TRUE
+    AND id NOT IN (
+      SELECT
+        tpop_id
+      FROM letzte_kontrolle_und_ansiedlungen)))
+-- sum all kontr and anpflanzung
+SELECT
+  tpop_id, max(jahr) AS jahr, zaehleinheit, sum(anzahl) AS anzahl
+FROM letzte_kontrolle_und_ansiedlungen_mit_allen_tpop GROUP BY tpop_id, zaehleinheit ORDER BY tpop_id, jahr, zaehleinheit) AS tbl ORDER BY 1, 2, 3 $$, $$
   SELECT
     unnest('{Deckung X Fläche, Pflanzen total, Pflanzen (ohne Jungpflanzen), Triebe total, Triebe Beweidung, Keimlinge, davon Rosetten, Jungpflanzen, Blätter, davon blühende Pflanzen, davon blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[]) $$) AS anzahl("tpop_id" uuid,
     "jahr" integer,
@@ -3802,19 +3813,19 @@ ORDER BY tpop.id, massn.jahr DESC, massn.datum DESC
     "Stellen" real,
     "andere Zaehleinheit" real,
     "Art ist vorhanden" text)
-    INNER JOIN apflora.tpop tpop
-    INNER JOIN apflora.pop_status_werte tpsw ON tpsw.code = tpop.status
-    INNER JOIN apflora.pop pop
-    INNER JOIN apflora.pop_status_werte psw ON psw.code = pop.status
-    INNER JOIN apflora.ap
-    INNER JOIN apflora.ae_taxonomies tax ON ap.art_id = tax.id ON apflora.ap.id = pop.ap_id ON pop.id = tpop.pop_id ON tpop.id = anzahl.tpop_id
-  WHERE
-    -- keine Testarten
-    tax.taxid > 150
-  ORDER BY
-    tax.artname,
-    pop.nr,
-    tpop.nr;
+  LEFT JOIN apflora.tpop tpop
+  LEFT JOIN apflora.pop_status_werte tpsw ON tpsw.code = tpop.status
+  INNER JOIN apflora.pop pop
+  LEFT JOIN apflora.pop_status_werte psw ON psw.code = pop.status
+  INNER JOIN apflora.ap
+  INNER JOIN apflora.ae_taxonomies tax ON ap.art_id = tax.id ON apflora.ap.id = pop.ap_id ON pop.id = tpop.pop_id ON tpop.id = anzahl.tpop_id
+WHERE
+  -- keine Testarten
+  tax.taxid > 150
+ORDER BY
+  tax.artname,
+  pop.nr,
+  tpop.nr;
 
 COMMENT ON VIEW apflora.v_tpop_last_count_with_massn IS '@foreignKey (tpop_id) references tpop (id)';
 
@@ -4151,25 +4162,25 @@ SELECT
   coalesce(count_urspr_last.anzahl, 0) - coalesce(count_urspr_prev.anzahl, 0) AS diff_pop_urspr,
   coalesce(count_anges_last.anzahl, 0) - coalesce(count_anges_prev.anzahl, 0) AS diff_pop_anges,
 (coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0)) -(coalesce(count_urspr_prev.anzahl, 0) + coalesce(count_anges_prev.anzahl, 0)) AS diff_pop_aktuell,
-    apflora.ap_erfkrit_werte.text AS beurteilung_zuletzt
-  FROM
-    last_year,
-    previous_year,
-    apflora.ap_history
-    INNER JOIN apflora.ae_taxonomies ON apflora.ae_taxonomies.id = apflora.ap_history.art_id
-    LEFT JOIN apflora.apber
-    LEFT JOIN apflora.ap_erfkrit_werte ON apflora.ap_erfkrit_werte.code = apflora.apber.beurteilung ON apflora.apber.ap_id = apflora.ap_history.id
-    LEFT JOIN count_urspr_last ON count_urspr_last.ap_id = apflora.ap_history.id
-    LEFT JOIN count_anges_last ON count_anges_last.ap_id = apflora.ap_history.id
-    LEFT JOIN count_urspr_prev ON count_urspr_prev.ap_id = apflora.ap_history.id
-    LEFT JOIN count_anges_prev ON count_anges_prev.ap_id = apflora.ap_history.id
-  WHERE
-    apflora.ap_history.bearbeitung < 4 -- --@485
-    AND apflora.ap_history.year = last_year.year
-    AND (apflora.apber.jahr = last_year.year
-      OR apflora.apber.jahr IS NULL)
-  ORDER BY
-    apflora.ae_taxonomies.artname;
+  apflora.ap_erfkrit_werte.text AS beurteilung_zuletzt
+FROM
+  last_year,
+  previous_year,
+  apflora.ap_history
+  INNER JOIN apflora.ae_taxonomies ON apflora.ae_taxonomies.id = apflora.ap_history.art_id
+  LEFT JOIN apflora.apber
+  LEFT JOIN apflora.ap_erfkrit_werte ON apflora.ap_erfkrit_werte.code = apflora.apber.beurteilung ON apflora.apber.ap_id = apflora.ap_history.id
+  LEFT JOIN count_urspr_last ON count_urspr_last.ap_id = apflora.ap_history.id
+  LEFT JOIN count_anges_last ON count_anges_last.ap_id = apflora.ap_history.id
+  LEFT JOIN count_urspr_prev ON count_urspr_prev.ap_id = apflora.ap_history.id
+  LEFT JOIN count_anges_prev ON count_anges_prev.ap_id = apflora.ap_history.id
+WHERE
+  apflora.ap_history.bearbeitung < 4 -- --@485
+  AND apflora.ap_history.year = last_year.year
+  AND (apflora.apber.jahr = last_year.year
+    OR apflora.apber.jahr IS NULL)
+ORDER BY
+  apflora.ae_taxonomies.artname;
 
 COMMENT ON VIEW apflora.v_ap_pop_ek_prio IS '@foreignKey (ap_id) references ap (id)';
 
