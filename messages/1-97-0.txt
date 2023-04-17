@@ -1,0 +1,1 @@
+Ab Version 1.97.0: Export "Populationen mit letztem Populationsbericht": Enthält neu zwei Felder "tpops_apber_relevant" und "tpops_apber_relevant_grund". Diese enthalten eine Liste der in den Teilpopulationen enthaltenen Werte
