@@ -91,6 +91,8 @@ const LetzteZaehlungInklAnpflanz = () => {
           pop_status:
             z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.popStatus ?? '',
           jahre: z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.jahre ?? '',
+          deckungXFlache:
+            z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.deckungXFlache ?? '',
           pflanzenTotal:
             z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.pflanzenTotal ?? '',
           pflanzen_ohne_jungpflanzen:
