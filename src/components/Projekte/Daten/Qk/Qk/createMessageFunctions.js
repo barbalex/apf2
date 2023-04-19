@@ -806,6 +806,27 @@ const createMessageFunctions = ({ data, projId, apId }) => ({
       }, Teil-Population: ${n.nr ?? n.id}`,
     }))
   },
+  tpopStatusAnsaatversuchMitAnpflanzung: () => {
+    const popNodes =
+      data?.tpopStatusAnsaatversuchMitAnpflanzung?.apsByProjId
+        ?.nodes?.[0]?.popsByApId?.nodes ?? []
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
+    return tpopNodes.map((n) => ({
+      url: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        n?.popByPopId?.id,
+        'Teil-Populationen',
+        n.id,
+      ],
+      text: `Population: ${
+        n?.popByPopId?.nr ?? n?.popByPopId?.id
+      }, Teil-Population: ${n.nr ?? n.id}`,
+    }))
+  },
   tpopErloschenUndRelevantLetzteBeobVor1950: () =>
     (data?.tpopErloschenUndRelevantLetzteBeobVor1950?.nodes ?? []).map((n) => ({
       url: [

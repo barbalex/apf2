@@ -94,6 +94,7 @@ export default gql`
     $tpopStatusErloschenLetzterTpopberZunehmend: Boolean!
     $tpopStatusPotentiellApberrelevant: Boolean!
     $tpopStatusAngesiedeltAktuellMitAnsaatOhneZaehlung: Boolean!
+    $tpopStatusAnsaatversuchMitAnpflanzung: Boolean!
     $tpopStatusUnklarOhneBegruendung: Boolean!
     $tpopberOhneEntwicklung: Boolean!
     $tpopberOhneJahr: Boolean!
@@ -1478,10 +1479,40 @@ export default gql`
               tpopsByPopId(
                 filter: {
                   status: { equalTo: 200 }
-                  tpopmassnsByTpopId: { some: { typ: { lessThan: 4 } } }
+                  tpopmassnsByTpopId: { some: { typ: { lessThan: 3 } } }
                   tpopkontrsByTpopId: {
                     none: { tpopkontrzaehlsByTpopkontrIdExist: true }
                   }
+                }
+                orderBy: NR_ASC
+              ) {
+                nodes {
+                  id
+                  nr
+                  popByPopId {
+                    id
+                    nr
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    tpopStatusAnsaatversuchMitAnpflanzung: projektById(id: $projId)
+      @include(if: $tpopStatusAnsaatversuchMitAnpflanzung) {
+      id
+      apsByProjId(filter: { id: { equalTo: $apId } }) {
+        nodes {
+          id
+          popsByApId(orderBy: NR_ASC) {
+            nodes {
+              id
+              tpopsByPopId(
+                filter: {
+                  status: { equalTo: 201 } # Ansaatversuch
+                  tpopmassnsByTpopId: { some: { typ: { in: [2, 3] } } } # Anpflanzung
                 }
                 orderBy: NR_ASC
               ) {
