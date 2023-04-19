@@ -1,0 +1,1 @@
+Ab Version 1.100.0: Neue Qualitätskontrolle meldet, wenn eine Teilpopulation den Status "angesiedelt, aktuell" hat, eine Ansaat existiert, aber noch keine Zählung. Status "Ansaatversuch" wäre angezeigt
