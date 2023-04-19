@@ -93,6 +93,7 @@ export default gql`
     $tpopStatusErloschenLetzterTpopberUnsicher: Boolean!
     $tpopStatusErloschenLetzterTpopberZunehmend: Boolean!
     $tpopStatusPotentiellApberrelevant: Boolean!
+    $tpopStatusAngesiedeltAktuellMitAnsaatOhneZaehlung: Boolean!
     $tpopStatusUnklarOhneBegruendung: Boolean!
     $tpopberOhneEntwicklung: Boolean!
     $tpopberOhneJahr: Boolean!
@@ -1463,6 +1464,39 @@ export default gql`
         popNr
         id
         nr
+      }
+    }
+    tpopStatusAngesiedeltAktuellMitAnsaatOhneZaehlung: projektById(id: $projId)
+      @include(if: $tpopStatusAngesiedeltAktuellMitAnsaatOhneZaehlung) {
+      id
+      apsByProjId(filter: { id: { equalTo: $apId } }) {
+        nodes {
+          id
+          popsByApId(orderBy: NR_ASC) {
+            nodes {
+              id
+              tpopsByPopId(
+                filter: {
+                  status: { equalTo: 200 }
+                  tpopmassnsByTpopId: { some: { typ: { lessThan: 4 } } }
+                  tpopkontrsByTpopId: {
+                    none: { tpopkontrzaehlsByTpopkontrIdExist: true }
+                  }
+                }
+                orderBy: NR_ASC
+              ) {
+                nodes {
+                  id
+                  nr
+                  popByPopId {
+                    id
+                    nr
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
     tpopberOhneJahr: projektById(id: $projId) @include(if: $tpopberOhneJahr) {

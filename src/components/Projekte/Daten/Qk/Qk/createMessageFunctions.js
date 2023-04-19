@@ -725,8 +725,8 @@ const createMessageFunctions = ({ data, projId, apId }) => ({
   },
   tpopAbperNichtRelevantGrundHistorischStatusAktuell: () => {
     const popNodes =
-      data?.tpopAbperNichtRelevantGrundHistorischStatusAktuell?.apsByProjId?.nodes?.[0]?.popsByApId
-        ?.nodes ?? []
+      data?.tpopAbperNichtRelevantGrundHistorischStatusAktuell?.apsByProjId
+        ?.nodes?.[0]?.popsByApId?.nodes ?? []
     const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     return tpopNodes.map((n) => ({
       url: [
@@ -768,6 +768,27 @@ const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.tpopStatusPotentiellApberrelevant?.apsByProjId?.nodes?.[0]
         ?.popsByApId?.nodes ?? []
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
+    return tpopNodes.map((n) => ({
+      url: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        n?.popByPopId?.id,
+        'Teil-Populationen',
+        n.id,
+      ],
+      text: `Population: ${
+        n?.popByPopId?.nr ?? n?.popByPopId?.id
+      }, Teil-Population: ${n.nr ?? n.id}`,
+    }))
+  },
+  tpopStatusAngesiedeltAktuellMitAnsaatOhneZaehlung: () => {
+    const popNodes =
+      data?.tpopStatusAngesiedeltAktuellMitAnsaatOhneZaehlung?.apsByProjId
+        ?.nodes?.[0]?.popsByApId?.nodes ?? []
     const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     return tpopNodes.map((n) => ({
       url: [
