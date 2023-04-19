@@ -557,6 +557,7 @@ export default gql`
         berichtjahr
       }
     }
+    # view: q_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend
     popMitBerAbnehmendOhneTpopberAbnehmend: allVQPopMitBerAbnehmendOhneTpopberAbnehmends(
       filter: {
         projId: { equalTo: $projId }
