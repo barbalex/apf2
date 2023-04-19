@@ -1,0 +1,1 @@
+Ab Version 1.101.0: Neue Qualitätskontrolle meldet, wenn der Status einer Teilpopulation "Ansaatversuch" ist, aber eine Anpflanzung existiert und daher der Status "angesiedelt, aktuell" angezeigt wäre
