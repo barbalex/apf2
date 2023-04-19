@@ -74,6 +74,7 @@ export default gql`
     $tpopMitAktuellenAnpflanzungenOhneZielrelevanteEinheit: Boolean!
     $tpopMitStatusPotentiellUndZaehlungMitAnzahl: Boolean!
     $tpopOhneApberRelevant: Boolean!
+    $tpopAbperNichtRelevantOhneGrund: Boolean!
     $tpopOhneBekanntSeit: Boolean!
     $tpopOhneFlurname: Boolean!
     $tpopOhneKoord: Boolean!
@@ -1215,6 +1216,36 @@ export default gql`
               id
               tpopsByPopId(
                 filter: { apberRelevant: { isNull: true } }
+                orderBy: NR_ASC
+              ) {
+                nodes {
+                  id
+                  nr
+                  popByPopId {
+                    id
+                    nr
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    tpopAbperNichtRelevantOhneGrund: projektById(id: $projId)
+      @include(if: $tpopAbperNichtRelevantOhneGrund) {
+      id
+      apsByProjId(filter: { id: { equalTo: $apId } }) {
+        nodes {
+          id
+          popsByApId(orderBy: NR_ASC) {
+            nodes {
+              id
+              tpopsByPopId(
+                filter: {
+                  apberRelevant: { equalTo: false }
+                  apberRelevantGrund: { isNull: true }
+                }
                 orderBy: NR_ASC
               ) {
                 nodes {

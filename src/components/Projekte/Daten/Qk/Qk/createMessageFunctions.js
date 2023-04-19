@@ -702,6 +702,27 @@ const createMessageFunctions = ({ data, projId, apId }) => ({
       }, Teil-Population: ${n.nr ?? n.id}`,
     }))
   },
+  tpopAbperNichtRelevantOhneGrund: () => {
+    const popNodes =
+      data?.tpopAbperNichtRelevantOhneGrund?.apsByProjId?.nodes?.[0]?.popsByApId
+        ?.nodes ?? []
+    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
+    return tpopNodes.map((n) => ({
+      url: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        n?.popByPopId?.id,
+        'Teil-Populationen',
+        n.id,
+      ],
+      text: `Population: ${
+        n?.popByPopId?.nr ?? n?.popByPopId?.id
+      }, Teil-Population: ${n.nr ?? n.id}`,
+    }))
+  },
   tpopOhneKoord: () => {
     const popNodes =
       data?.tpopOhneKoord?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
