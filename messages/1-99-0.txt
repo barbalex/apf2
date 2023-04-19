@@ -1,0 +1,1 @@
+Ab Version 1.99.0: Neue Qualitätskontrolle meldet, wenn der Status einer Teilpopulation aktuell ist, die Begründung für AP-Bericht-Nicht-Relevanz hingegen "historisch"
