@@ -16,8 +16,8 @@ with letzter_popber AS (
 tpop_info AS (
   SELECT
     pop_id,
-    array_to_string(array_agg(nr || ': ' || apber_relevant::text order by nr), ', ') AS apber_relevant,
-  array_to_string(array_agg(nr || ': ' || gw.text order by nr), ', ') AS apber_relevant_grund
+    array_to_string(array_agg(nr || ': ' || apber_relevant::text ORDER BY nr), ', ') AS apber_relevant,
+  array_to_string(array_agg(nr || ': ' || gw.text ORDER BY nr), ', ') AS apber_relevant_grund
 FROM
   apflora.tpop
   LEFT JOIN apflora.tpop_apberrelevant_grund_werte gw ON apflora.tpop.apber_relevant_grund = gw.code
@@ -71,8 +71,6 @@ ORDER BY
   letzter_popber.jahr;
 
 COMMENT ON VIEW apflora.v_pop_mit_letzter_popber IS '@foreignKey (pop_id) references pop (id)';
-
-
 
 -- used in export
 DROP VIEW IF EXISTS apflora.v_pop_mit_letzter_popmassnber CASCADE;
@@ -2770,14 +2768,17 @@ FROM
   INNER JOIN apflora.pop
   INNER JOIN apflora.popber ON apflora.pop.id = apflora.popber.pop_id ON apflora.ap.id = apflora.pop.ap_id
 WHERE
+  -- Populationen mit Bericht abnehmend
   apflora.popber.entwicklung = 1
-  AND apflora.popber.pop_id NOT IN ( SELECT DISTINCT
+  AND apflora.popber.pop_id NOT IN ( 
+    -- ohne Teil-Population mit Bericht abnehmend oder erloschen
+    SELECT DISTINCT
       apflora.tpop.pop_id
     FROM
       apflora.tpop
       INNER JOIN apflora.tpopber ON apflora.tpop.id = apflora.tpopber.tpop_id
     WHERE
-      apflora.tpopber.entwicklung = 1
+      apflora.tpopber.entwicklung IN (1, 8)
       AND apflora.tpopber.jahr = apflora.popber.jahr)
 ORDER BY
   apflora.ap.proj_id,
