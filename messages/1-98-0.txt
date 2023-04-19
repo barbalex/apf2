@@ -1,0 +1,1 @@
+Ab Version 1.98.0: Neue Qualitätskontrolle meldet Teilpopulationen, die nicht für den AP-Bericht relevant sind, bei denen eine Begründung fehlt
