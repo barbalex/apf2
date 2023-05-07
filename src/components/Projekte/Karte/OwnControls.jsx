@@ -16,7 +16,7 @@ const OwnControls = ({ setControlHeight }) => {
   const onResize = useCallback(
     (width, height) => {
       //console.log('height:', height)
-      setControlHeight(Math.round(height))
+      setControlHeight(Math.round(height ?? 127))
     },
     [setControlHeight],
   )
