@@ -26,6 +26,7 @@ dist-ssr
 # dotenv environment variables file
 .env
 .env*
+dropbox_uploader.conf
 
 schema.json
 .vercel
