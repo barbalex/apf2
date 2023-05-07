@@ -456,15 +456,12 @@ const Karte = () => {
     bounds: boundsRaw,
     assigningBeob,
     hideMapControls,
-    idOfTpopBeingLocalized,
   } = store
   const tree = store.tree
   const { mapFilter } = tree
   const bounds = getSnapshot(boundsRaw)
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const activeOverlays = getSnapshot(activeOverlaysRaw)
-
-  const localizing = !!idOfTpopBeingLocalized
 
   const showApfLayers = showApfLayersForMultipleAps || !!apId
   const showPop = activeApfloraLayers.includes('pop') && showApfLayers
