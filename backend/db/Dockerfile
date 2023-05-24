@@ -1,3 +1,4 @@
+# upgrade to 15-3.3?
 FROM postgis/postgis:14-3.3
 
 COPY ./init/ /docker-entrypoint-initdb.d/
