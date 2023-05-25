@@ -175,7 +175,7 @@ const ProjekteBar = () => {
           Filter 2
         </StyledButton>
       )}
-      {!isMobile && (
+      {!isMobile && !!projId && (
         <StyledButton
           variant="text"
           preceded={false?.toString()}
