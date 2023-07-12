@@ -32,9 +32,11 @@ export default styled(SplitPane)`
     border-color: transparent;
   }
   .Pane {
-    overflow: hidden;
+    overflow: ${(props) =>
+      props.overflowPane1 === 'auto' ? 'auto' : 'hidden'};
   }
   .Pane2 {
-    overflow: ${(props) => (props.overflow === 'auto' ? 'auto' : 'hidden')};
+    overflow: ${(props) =>
+      props.overflowPane2 === 'auto' ? 'auto' : 'hidden'};
   }
 `

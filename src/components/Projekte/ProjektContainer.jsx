@@ -103,16 +103,14 @@ const ProjektContainer = () => {
     ),
   }
 
-  // console.log('ProjektContainer', {
-  //   isPrint,
-  //   treeTabs,
-  // })
+  console.log('ProjektContainer', {
+    isPrint,
+    treeTabs,
+  })
 
   if (isPrint) {
     return <Outlet />
   }
-
-  const overflow = showApberForAll || showApberForArt ? 'auto' : 'hidden'
 
   return (
     <Container>
@@ -124,7 +122,18 @@ const ProjektContainer = () => {
             : `${100 / treeTabs.length}%`
         }
         maxSize={-10}
-        overflow={overflow}
+        overflowPane1={
+          treeTabs[0] === 'daten' && (showApberForAll || showApberForArt)
+            ? 'auto'
+            : 'hidden'
+        }
+        overflowPane2={
+          treeTabs[1] === 'daten' &&
+          treeTabs.length === 2 &&
+          (showApberForAll || showApberForArt)
+            ? 'auto'
+            : 'hidden'
+        }
       >
         {elObj[treeTabs[0]]}
         {treeTabs.length === 1 && <></>}
@@ -134,6 +143,13 @@ const ProjektContainer = () => {
             split="vertical"
             size={`${100 / (treeTabs.length - 1)}%`}
             maxSize={-10}
+            overflowPane1={
+              treeTabs[1] === 'daten' &&
+              treeTabs.length > 2 &&
+              (showApberForAll || showApberForArt)
+                ? 'auto'
+                : 'hidden'
+            }
           >
             {elObj[treeTabs[1]]}
             {treeTabs.length === 3 && elObj[treeTabs[2]]}
