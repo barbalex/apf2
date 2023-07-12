@@ -3,6 +3,6 @@
     "**/.yarn": true,
     "**/.pnp.*": true
   },
-  "eslint.nodePath": ".yarn/sdks",
-  "prettier.prettierPath": ".yarn/sdks/prettier/index.js"
+  "eslint.nodePath": "",
+  "prettier.prettierPath": ""
 }
