@@ -114,7 +114,8 @@ const ProjektContainer = () => {
 
   const overflow = showApberForAll || showApberForArt ? 'auto' : 'hidden'
 
-  if (treeTabs.length < 3) {
+  if (treeTabs.length < 4) {
+    console.log('hi')
     return (
       <Container>
         <StyledSplitPane
@@ -130,20 +131,12 @@ const ProjektContainer = () => {
           {elObj[treeTabs[0]]}
           {treeTabs.length === 1 && <></>}
           {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
-        </StyledSplitPane>
-      </Container>
-    )
-  }
-
-  if (treeTabs.length === 3) {
-    return (
-      <Container>
-        <StyledSplitPane split="vertical" size="33%" maxSize={-10}>
-          {elObj[treeTabs[0]]}
-          <StyledSplitPane split="vertical" size="50%" maxSize={-10}>
-            {elObj[treeTabs[1]]}
-            {elObj[treeTabs[2]]}
-          </StyledSplitPane>
+          {treeTabs.length === 3 && (
+            <StyledSplitPane split="vertical" size="50%" maxSize={-10}>
+              {elObj[treeTabs[1]]}
+              {elObj[treeTabs[2]]}
+            </StyledSplitPane>
+          )}
         </StyledSplitPane>
       </Container>
     )
