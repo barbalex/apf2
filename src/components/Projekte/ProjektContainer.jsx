@@ -103,8 +103,6 @@ const ProjektContainer = () => {
     ),
   }
 
-  const paneSize = treeTabs[0] === 'tree' ? '33%' : '50%'
-
   // console.log('ProjektContainer', {
   //   isPrint,
   //   treeTabs,
@@ -116,33 +114,21 @@ const ProjektContainer = () => {
 
   const overflow = showApberForAll || showApberForArt ? 'auto' : 'hidden'
 
-  if (treeTabs.length < 2) {
-    // return WITH split pane
-    // otherwise height is wrong
-    // and opening / closing tabs is slow
-    // add empty div to prevent split-pane from
-    // missing a second div
-    return (
-      <Container>
-        <StyledSplitPane split="vertical" size="100%" maxSize={-10}>
-          {elObj[treeTabs[0]]}
-          <></>
-        </StyledSplitPane>
-      </Container>
-    )
-  }
-
-  if (treeTabs.length === 2) {
+  if (treeTabs.length < 3) {
     return (
       <Container>
         <StyledSplitPane
           split="vertical"
-          size={paneSize}
+          size={
+            treeTabs.length === 2 && treeTabs[0] === 'tree'
+              ? '33%'
+              : `${100 / treeTabs.length}%`
+          }
           maxSize={-10}
           overflow={overflow}
         >
           {elObj[treeTabs[0]]}
-          {elObj[treeTabs[1]]}
+          {treeTabs.length === 2 ? <>{elObj[treeTabs[1]]}</> : <></>}
         </StyledSplitPane>
       </Container>
     )
