@@ -114,65 +114,50 @@ const ProjektContainer = () => {
 
   const overflow = showApberForAll || showApberForArt ? 'auto' : 'hidden'
 
-  if (treeTabs.length < 5) {
-    console.log('hi')
-    return (
-      <Container>
-        <StyledSplitPane
-          split="vertical"
-          size={
-            treeTabs.length === 2 && treeTabs[0] === 'tree'
-              ? '33%'
-              : `${100 / treeTabs.length}%`
-          }
-          maxSize={-10}
-          overflow={overflow}
-        >
-          {elObj[treeTabs[0]]}
-          {treeTabs.length === 1 && <></>}
-          {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
-          {treeTabs.length > 2 && (
-            <StyledSplitPane
-              split="vertical"
-              size={`${100 / (treeTabs.length - 1)}%`}
-              maxSize={-10}
-            >
-              {elObj[treeTabs[1]]}
-              {treeTabs.length === 3 && elObj[treeTabs[2]]}
-              {treeTabs.length === 4 && (
-                <StyledSplitPane split="vertical" size="50%" maxSize={-10}>
-                  {elObj[treeTabs[2]]}
-                  {elObj[treeTabs[3]]}
-                </StyledSplitPane>
-              )}
-            </StyledSplitPane>
-          )}
-        </StyledSplitPane>
-      </Container>
-    )
-  }
-
-  if (treeTabs.length === 5) {
-    return (
-      <Container>
-        <StyledSplitPane split="vertical" size="20%" maxSize={-10}>
-          {elObj[treeTabs[0]]}
-          <StyledSplitPane split="vertical" size="25%" maxSize={-10}>
+  return (
+    <Container>
+      <StyledSplitPane
+        split="vertical"
+        size={
+          treeTabs.length === 2 && treeTabs[0] === 'tree'
+            ? '33%'
+            : `${100 / treeTabs.length}%`
+        }
+        maxSize={-10}
+        overflow={overflow}
+      >
+        {elObj[treeTabs[0]]}
+        {treeTabs.length === 1 && <></>}
+        {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
+        {treeTabs.length > 2 && (
+          <StyledSplitPane
+            split="vertical"
+            size={`${100 / (treeTabs.length - 1)}%`}
+            maxSize={-10}
+          >
             {elObj[treeTabs[1]]}
-            <StyledSplitPane split="vertical" size="33%" maxSize={-10}>
-              {elObj[treeTabs[2]]}
-              <StyledSplitPane split="vertical" size="50%" maxSize={-10}>
-                {elObj[treeTabs[3]]}
-                {elObj[treeTabs[4]]}
+            {treeTabs.length === 3 && elObj[treeTabs[2]]}
+            {treeTabs.length > 3 && (
+              <StyledSplitPane
+                split="vertical"
+                size={`${100 / (treeTabs.length - 2)}%`}
+                maxSize={-10}
+              >
+                {elObj[treeTabs[2]]}
+                {treeTabs.length === 4 && elObj[treeTabs[3]]}
+                {treeTabs.length === 5 && (
+                  <StyledSplitPane split="vertical" size="50%" maxSize={-10}>
+                    {elObj[treeTabs[3]]}
+                    {elObj[treeTabs[4]]}
+                  </StyledSplitPane>
+                )}
               </StyledSplitPane>
-            </StyledSplitPane>
+            )}
           </StyledSplitPane>
-        </StyledSplitPane>
-      </Container>
-    )
-  }
-
-  return null
+        )}
+      </StyledSplitPane>
+    </Container>
+  )
 }
 
 export default observer(ProjektContainer)
