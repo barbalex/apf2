@@ -128,7 +128,8 @@ const ProjektContainer = () => {
           overflow={overflow}
         >
           {elObj[treeTabs[0]]}
-          {treeTabs.length === 2 ? <>{elObj[treeTabs[1]]}</> : <></>}
+          {treeTabs.length === 1 && <></>}
+          {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
         </StyledSplitPane>
       </Container>
     )
