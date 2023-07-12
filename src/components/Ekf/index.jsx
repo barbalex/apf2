@@ -4,13 +4,13 @@ import { observer } from 'mobx-react-lite'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import sortBy from 'lodash/sortBy'
+import { Allotment } from 'allotment'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
 import EkfList from './List'
 import Tpopfreiwkontr from '../Projekte/Daten/Tpopfreiwkontr'
 import storeContext from '../../storeContext'
-import StyledSplitPane from '../shared/StyledSplitPane'
 import dataByUserIdGql from './dataByUserId'
 import dataWithDateByUserIdGql from './dataWithDateByUserId'
 import Error from '../shared/Error'
@@ -120,10 +120,12 @@ const Ekf = () => {
 
   return (
     <Container>
-      <StyledSplitPane split="vertical" size="350px" minSize={100}>
-        <EkfList ekf={ekf} />
+      <Allotment>
+        <Allotment.Pane preferredSize={350} minSize={350} maxSize={350}>
+          <EkfList ekf={ekf} />
+        </Allotment.Pane>
         {ekfId ? <Tpopfreiwkontr id={ekfId} /> : <InnerContainer />}
-      </StyledSplitPane>
+      </Allotment>
     </Container>
   )
 }
