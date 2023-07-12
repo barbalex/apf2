@@ -21,7 +21,6 @@ import '@fontsource/roboto'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import GlobalStyle from './components/GlobalStyle'
-import 'allotment/dist/style.css'
 
 import { Provider as MobxProvider } from './storeContext'
 import { Provider as IdbProvider } from './idbContext'
