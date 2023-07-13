@@ -9,6 +9,7 @@ import TextField from '../TextField'
 // - TextField if no value exists
 // - markdown presenter if value exists
 // - markdown editor if is focused
+// problems with react-focus-within: maybe use https://stackoverflow.com/a/63857071/712005
 const MdField = (props) => {
   const { label, value } = props
   return (
