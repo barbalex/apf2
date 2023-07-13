@@ -103,11 +103,6 @@ const ProjektContainer = () => {
     ),
   }
 
-  console.log('ProjektContainer', {
-    isPrint,
-    treeTabs,
-  })
-
   if (isPrint) {
     return <Outlet />
   }
