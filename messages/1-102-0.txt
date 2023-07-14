@@ -1,0 +1,1 @@
+Ab Version 1.102.0: Die Karte kann maximiert werden (Schaltfläche unter dem Layer-Tool oben rechts benutzen)
