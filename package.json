@@ -21,6 +21,8 @@
   "dependencies": {
     "@apollo/client": "3.7.17",
     "@changey/react-leaflet-markercluster": "4.0.0-rc1",
+    "@dnd-kit/core": "^6.0.8",
+    "@dnd-kit/sortable": "^7.0.2",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
     "@fontsource/roboto": "5.0.5",
@@ -80,7 +82,6 @@
     "react-resize-detector": "9.1.0",
     "react-router-dom": "6.14.1",
     "react-select": "5.7.4",
-    "react-sortable-hoc": "2.0.0",
     "react-split-pane": "0.1.92",
     "react-stylable-diff": "2.0.0",
     "react-typography": "0.16.23",
