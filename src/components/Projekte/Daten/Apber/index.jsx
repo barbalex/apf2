@@ -37,7 +37,7 @@ const FormContainer = styled.div`
 
 const veraenGegenVorjahrWerte = [
   { value: '+', label: '+' },
-  { value: '-', label: '-' },
+  { value: '-', label: '–' },
 ]
 
 const fieldTypes = {
