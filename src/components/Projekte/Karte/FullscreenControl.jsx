@@ -12,10 +12,11 @@ const StyledButton = styled.button`
   border: 2px solid rgba(0, 0, 0, 0.2);
   background-clip: padding-box;
   cursor: pointer;
+  text-align: center;
+  padding: 0 4px;
   svg {
-    padding-top: 3px;
     color: rgba(0, 0, 0, 0.8) !important;
-    font-size: 1.1rem;
+    height: 30px;
   }
   margin-top: 7px;
 `
