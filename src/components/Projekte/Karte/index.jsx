@@ -61,8 +61,6 @@ import DrawControl from './DrawControl'
 import PrintControl from './PrintControl'
 import OwnControls from './OwnControls'
 import CoordinatesControl from './CoordinatesControl'
-import iconFullscreen from './iconFullscreen.png'
-import iconFullscreen2x from './iconFullscreen2x.png'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import MapFilterListener from './MapFilterListener'
 import ClickListener from './ClickListener'
@@ -359,19 +357,6 @@ const StyledMapContainer = styled(MapContainer)`
    */
   .leaflet-control-scale-line {
     background: rgba(255, 255, 255, 0.9) !important;
-  }
-
-  /*
-   * leaflet.fullscreen
-   */
-
-  .fullscreen-icon {
-    background-image: url(${iconFullscreen});
-  }
-
-  .leaflet-retina .fullscreen-icon {
-    background-image: url(${iconFullscreen2x});
-    background-size: 26px 26px;
   }
 
   /* one selector per rule as explained here : https://www.sitepoint.com/html5-full-screen-api/ */

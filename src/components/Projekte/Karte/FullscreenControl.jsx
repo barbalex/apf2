@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import 'leaflet'
 import styled from '@emotion/styled'
 import { FaExpandArrowsAlt, FaCompressArrowsAlt } from 'react-icons/fa'
 import screenfull from 'screenfull'
 
-const StyledButton = styled.button`
+const Button = styled.button`
   background-color: white;
   width: 34px;
   height: 34px;
@@ -23,29 +22,28 @@ const StyledButton = styled.button`
 
 const FullscreenControl = ({ mapRef }) => {
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const onChange = useCallback(
+  const onFullscreenChange = useCallback(
     () => setIsFullscreen(screenfull.isFullscreen),
     [],
   )
   useEffect(() => {
-    screenfull.on('change', onChange)
-
-    return () => screenfull.off('change', onChange)
-  }, [onChange])
+    screenfull.on('change', onFullscreenChange)
+    return () => screenfull.off('change', onFullscreenChange)
+  }, [onFullscreenChange])
 
   const onClick = useCallback(() => {
     if (screenfull.isEnabled) {
-      screenfull?.toggle?.(mapRef.current)
+      screenfull.toggle(mapRef.current)
     }
   }, [mapRef])
 
   return (
-    <StyledButton
+    <Button
       onClick={onClick}
       title={isFullscreen ? 'Karte verkleinern' : 'Karte maximieren'}
     >
       {isFullscreen ? <FaCompressArrowsAlt /> : <FaExpandArrowsAlt />}
-    </StyledButton>
+    </Button>
   )
 }
 
