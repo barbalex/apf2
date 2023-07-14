@@ -5,6 +5,8 @@ import {
   MdDragHandle as DragHandleIcon,
   MdInfoOutline as InfoOutlineIcon,
 } from 'react-icons/md'
+// TODO: react-sortable-hoc is deprecated and has npm install issue (old peer deps)
+// Use https://dndkit.com or other
 import {
   SortableContainer,
   SortableElement,
