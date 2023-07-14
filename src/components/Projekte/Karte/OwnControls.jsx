@@ -4,6 +4,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { useDebouncedCallback } from 'use-debounce'
 
 import LayersControl from './LayersControl'
+import FullscreenControl from './FullscreenControl'
 import PngControl from './PngControl'
 
 const Container = styled.div`
@@ -12,7 +13,7 @@ const Container = styled.div`
   align-items: flex-end;
 `
 
-const OwnControls = ({ setControlHeight }) => {
+const OwnControls = ({ setControlHeight, mapRef }) => {
   const onResize = useCallback(
     (width, height) => {
       //console.log('height:', height)
@@ -28,6 +29,7 @@ const OwnControls = ({ setControlHeight }) => {
   return (
     <Container ref={resizeRef}>
       <LayersControl />
+      <FullscreenControl mapRef={mapRef} />
       <PngControl />
     </Container>
   )

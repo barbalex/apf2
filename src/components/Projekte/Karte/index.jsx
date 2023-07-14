@@ -5,7 +5,7 @@
  *
  */
 
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState, useRef } from 'react'
 import { MapContainer, ScaleControl, ZoomControl, Pane } from 'react-leaflet'
 import styled from '@emotion/styled'
 import 'leaflet'
@@ -66,12 +66,6 @@ import iconFullscreen2x from './iconFullscreen2x.png'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import MapFilterListener from './MapFilterListener'
 import ClickListener from './ClickListener'
-
-/**
- * Fullscreen is not compatible with new react/react-leaflet versions?
- * https://github.com/elangobharathi/react-leaflet-fullscreen-plugin/issues/1
- */
-// import Fullscreen from 'react-leaflet-fullscreen-plugin'
 
 import storeContext from '../../../storeContext'
 
@@ -422,16 +416,6 @@ const StyledMapContainer = styled(MapContainer)`
   }
 `
 
-const fullscreenOptions = {
-  position: 'topright', // change the position of the button can be topleft, topright, bottomright or bottomleft, defaut topleft
-  title: 'Karte maximieren', // change the title of the button, default Full Screen
-  titleCancel: 'Karte verkleinern', // change the title of the button when fullscreen is on, default Exit Full Screen
-  content: null, // change the content of the button, can be HTML, default null
-  forceSeparateButton: false, // force seperate button to detach from zoom buttons, default false
-  forcePseudoFullscreen: false, // force use of pseudo full screen even if full screen API is available, default false
-  fullscreenElement: false, // Dom element to render in full screen, false by default, fallback to map._container
-}
-
 /*const LoadingContainer = styled.div`
   padding: 15px;
 `*/
@@ -445,6 +429,8 @@ const fullscreenOptions = {
 
 const Karte = () => {
   const { apId } = useParams()
+
+  const mapRef = useRef(null)
 
   const store = useContext(storeContext)
   const {
@@ -551,7 +537,11 @@ const Karte = () => {
   // see: https://github.com/barbalex/apf2/issues/467
 
   return (
-    <Container data-id="karten-container1" data-control-height={controlHeight}>
+    <Container
+      data-id="karten-container1"
+      data-control-height={controlHeight}
+      ref={mapRef}
+    >
       <ErrorBoundary>
         <StyledMapContainer
           // bounds need to be set using ma.fitBounds sice v3
@@ -640,11 +630,11 @@ const Karte = () => {
               // this enforces rerendering when sorting changes
               activeOverlaysString={activeOverlays.join()}
               activeApfloraLayersString={activeApfloraLayers.join()}
+              mapRef={mapRef}
             />
           </Control>
           <PrintControl />
           <ZoomControl position="topright" />
-          {/* <Fullscreen {...fullscreenOptions} /> */}
           <MeasureControl />
           <DrawControl />
           <Control position="bottomright">
