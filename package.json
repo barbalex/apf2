@@ -21,6 +21,8 @@
   "dependencies": {
     "@apollo/client": "3.7.17",
     "@changey/react-leaflet-markercluster": "4.0.0-rc1",
+    "@dnd-kit/core": "^6.0.8",
+    "@dnd-kit/sortable": "^7.0.2",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
     "@fontsource/roboto": "5.0.5",
@@ -80,7 +82,6 @@
     "react-resize-detector": "9.1.0",
     "react-router-dom": "6.14.1",
     "react-select": "5.7.4",
-    "react-sortable-hoc": "2.0.0",
     "react-split-pane": "0.1.92",
     "react-stylable-diff": "2.0.0",
     "react-typography": "0.16.23",
@@ -133,6 +134,7 @@
     "react-leaflet-markercluster": "got weird problems. Trying to solve with @changey/react-leaflet-markercluster and upgrading leaflet deps",
     "react-focus-within": "2.0.2 creates dependency conflict and thus forces to npm i --force: https://github.com/ferdaber/react-focus-within/issues/15, https://github.com/ferdaber/react-focus-within/pull/16. So extracted it to FocusWithin shared component",
     "react-leaflet-bing-v2": "5.2.3: reinstall after pull-request accepted: https://github.com/TA-Geoforce/react-leaflet-bing-v2/pull/25",
-    "prettier": "2.8.8: do not update to 3.0.0"
+    "prettier": "2.8.8: do not update to 3.0.0",
+    "react-split-pane": "0.1.92 creates dependency conflict and thus forces to npm i --force: https://github.com/tomkp/react-split-pane/pull/836"
   }
 }
