@@ -1,9 +1,11 @@
 import React from 'react'
-import { FocusWithin } from 'react-focus-within'
+// extracted to shared component due to peer dependency to old react version
+// import { FocusWithin } from 'react-focus-within'
 
 import Editor from './Editor'
 import Presenter from './Presenter'
 import TextField from '../TextField'
+import { FocusWithin } from '../FocusWithin'
 
 // render:
 // - TextField if no value exists
