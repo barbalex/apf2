@@ -64,6 +64,8 @@ import CoordinatesControl from './CoordinatesControl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import MapFilterListener from './MapFilterListener'
 import ClickListener from './ClickListener'
+import MapStateSetter from './MapStateSetter'
+import ZoomListener from './ZoomListener'
 
 import storeContext from '../../../storeContext'
 
@@ -626,6 +628,8 @@ const Karte = () => {
             <CoordinatesControl />
           </Control>
           <MapFilterListener />
+          <MapStateSetter />
+          <ZoomListener />
         </StyledMapContainer>
       </ErrorBoundary>
     </Container>

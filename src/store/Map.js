@@ -10,7 +10,13 @@ export default types
     tpopLabel: types.string,
     beobDetailsOpen: types.optional(types.boolean, false),
   })
+  .volatile(() => ({
+    map: undefined,
+  }))
   .actions((self) => ({
+    setMap(val) {
+      self.map = val
+    },
     setBeobDetailsOpen(val) {
       self.beobDetailsOpen = val
     },
@@ -33,4 +39,5 @@ export const defaultValue = {
   tpopIcon: 'statusGroupSymbols',
   popLabel: 'nr',
   tpopLabel: 'nr',
+  map: undefined,
 }

@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import intersection from 'lodash/intersection'
 import { Outlet } from 'react-router-dom'
 import { useParams, useLocation } from 'react-router-dom'
+import isEqual from 'lodash/isEqual'
 
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
 import Karte from './Karte'
@@ -11,7 +12,7 @@ const TreeContainer = lazy(() => import('./TreeContainer'))
 const Exporte = lazy(() => import('./Exporte'))
 const Filter = lazy(() => import('./Filter'))
 import storeContext from '../../storeContext'
-import StyledSplitPane from '../shared/StyledSplitPane'
+import { Allotment } from 'allotment'
 import useSearchParamsState from '../../modules/useSearchParamsState'
 import isMobilePhone from '../../modules/isMobilePhone'
 import Spinner from '../shared/Spinner'
@@ -37,7 +38,7 @@ const ProjektContainer = () => {
   const { pathname } = useLocation()
 
   const store = useContext(storeContext)
-  const { isPrint } = store
+  const { isPrint, bounds } = store
   // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
   // to prevent it from causing unnessecary renders
   // BUT: this prevents necessary renders: clicking tabs does not cause re-render!
@@ -107,66 +108,111 @@ const ProjektContainer = () => {
     return <Outlet />
   }
 
+  console.log('ProjektContainer, treeTabs:', treeTabs)
+
   return (
     <Container>
-      <StyledSplitPane
-        split="vertical"
-        size={
-          treeTabs.length === 2 && treeTabs[0] === 'tree'
-            ? '33%'
-            : `${100 / treeTabs.length}%`
-        }
-        maxSize={-10}
-        overflowPane1={
-          treeTabs[0] === 'daten' && (showApberForAll || showApberForArt)
-            ? 'auto'
-            : 'hidden'
-        }
-        overflowPane2={
-          treeTabs[1] === 'daten' &&
-          treeTabs.length === 2 &&
-          (showApberForAll || showApberForArt)
-            ? 'auto'
-            : 'hidden'
-        }
+      <Allotment
+        key={JSON.stringify(treeTabs)}
+        onChange={() => {
+          let activeZoom
+          let activeCenter
+          try {
+            activeZoom = store.map?.map?.getZoom?.()
+            activeCenter = store.map?.map?.getCenter?.()
+          } catch (error) {
+            console.log('ProjektContainer, error getting map zoom:', error)
+            return
+          }
+          const activeCenterConverted = [activeCenter?.lat, activeCenter?.lng]
+          console.log('ProjektContainer', {
+            activeCenterConverted,
+            activeCenter,
+            storeCenter: store.center,
+            activeZoom,
+            storeZoom: store.zoom,
+          })
+          // store.map?.map?.invalidateSize?.(false)
+          // fit bounds if they have changed
+          if (
+            isEqual(activeCenterConverted, store.center) &&
+            activeZoom === store.zoom
+          ) {
+            return
+          }
+          try {
+            store.map?.map?.setView?.(store.center, store.zoom)
+          } catch (error) {
+            console.log('ProjektContainer, error fitting map bounds:', error)
+            // do nothing
+          }
+        }}
       >
-        {elObj[treeTabs[0]]}
-        {treeTabs.length === 1 && <></>}
-        {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
+        <Allotment.Pane
+          preferredSize={
+            treeTabs.length === 2 && treeTabs[0] === 'tree'
+              ? '33%'
+              : `${100 / treeTabs.length}%`
+          }
+          // overflowPane1={
+          //   treeTabs[0] === 'daten' && (showApberForAll || showApberForArt)
+          //     ? 'auto'
+          //     : 'hidden'
+          // }
+          // overflowPane2={
+          //   treeTabs[1] === 'daten' &&
+          //   treeTabs.length === 2 &&
+          //   (showApberForAll || showApberForArt)
+          //     ? 'auto'
+          //     : 'hidden'
+          // }
+        >
+          {elObj[treeTabs[0]]}
+        </Allotment.Pane>
+        {treeTabs.length === 1 && (
+          <Allotment.Pane visible={false}></Allotment.Pane>
+        )}
+        {treeTabs.length === 2 && (
+          <Allotment.Pane>{elObj[treeTabs[1]]}</Allotment.Pane>
+        )}
         {treeTabs.length > 2 && (
-          <StyledSplitPane
-            split="vertical"
-            size={`${100 / (treeTabs.length - 1)}%`}
-            maxSize={-10}
-            overflowPane1={
-              treeTabs[1] === 'daten' &&
-              treeTabs.length > 2 &&
-              (showApberForAll || showApberForArt)
-                ? 'auto'
-                : 'hidden'
-            }
+          <Allotment.Pane
+            preferredSize={`${100 / treeTabs.length}%`}
+            // overflowPane1={
+            //   treeTabs[1] === 'daten' &&
+            //   treeTabs.length > 2 &&
+            //   (showApberForAll || showApberForArt)
+            //     ? 'auto'
+            //     : 'hidden'
+            // }
           >
             {elObj[treeTabs[1]]}
-            {treeTabs.length === 3 && elObj[treeTabs[2]]}
-            {treeTabs.length > 3 && (
-              <StyledSplitPane
-                split="vertical"
-                size={`${100 / (treeTabs.length - 2)}%`}
-                maxSize={-10}
-              >
-                {elObj[treeTabs[2]]}
-                {treeTabs.length === 4 && elObj[treeTabs[3]]}
-                {treeTabs.length === 5 && (
-                  <StyledSplitPane split="vertical" size="50%" maxSize={-10}>
-                    {elObj[treeTabs[3]]}
-                    {elObj[treeTabs[4]]}
-                  </StyledSplitPane>
-                )}
-              </StyledSplitPane>
-            )}
-          </StyledSplitPane>
+          </Allotment.Pane>
         )}
-      </StyledSplitPane>
+        {treeTabs.length === 3 && (
+          <Allotment.Pane>{elObj[treeTabs[2]]}</Allotment.Pane>
+        )}
+        {treeTabs.length > 3 && (
+          <Allotment.Pane preferredSize={`${100 / treeTabs.length}%`}>
+            {elObj[treeTabs[2]]}
+          </Allotment.Pane>
+        )}
+        {treeTabs.length === 4 && (
+          <Allotment.Pane preferredSize={`${100 / treeTabs.length}%`}>
+            {elObj[treeTabs[3]]}
+          </Allotment.Pane>
+        )}
+        {treeTabs.length === 5 && (
+          <Allotment.Pane preferredSize={`${100 / treeTabs.length}%`}>
+            {elObj[treeTabs[3]]}
+          </Allotment.Pane>
+        )}
+        {treeTabs.length === 5 && (
+          <Allotment.Pane preferredSize={`${100 / treeTabs.length}%`}>
+            {elObj[treeTabs[4]]}
+          </Allotment.Pane>
+        )}
+      </Allotment>
     </Container>
   )
 }

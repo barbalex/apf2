@@ -36,6 +36,8 @@ const MobxStore = types
       [47.159, 8.354],
       [47.696, 8.984],
     ]),
+    center: types.optional(types.array(types.number), [47.427, 8.718]),
+    zoom: types.optional(types.number, 9),
     toDeleteTable: types.maybeNull(types.string),
     toDeleteId: types.maybeNull(types.string),
     toDeleteLabel: types.maybeNull(types.string),
@@ -167,6 +169,12 @@ const MobxStore = types
     },
     setBounds(val) {
       self.bounds = val
+    },
+    setZoom(val) {
+      self.zoom = val
+    },
+    setCenter(val) {
+      self.center = val
     },
     tableIsFiltered(table) {
       // check nodeLabelFilter

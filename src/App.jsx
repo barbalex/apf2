@@ -29,6 +29,7 @@ const Notifier = lazy(() => import('./components/shared/Notifier'))
 import NotificationDismisser from './components/shared/NotificationDismisser'
 
 import 'simplebar-react/dist/simplebar.min.css'
+import 'allotment/dist/style.css'
 
 import '@changey/react-leaflet-markercluster/dist/styles.min.css'
 import 'react-datepicker/dist/react-datepicker.css'
