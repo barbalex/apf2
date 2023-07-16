@@ -43,7 +43,7 @@ const PopRouter = () => {
 }
 
 const Pop = () => {
-  const leafletMap = useMap()
+  const map = useMap()
   const store = useContext(storeContext)
   const { enqueNotification } = store
   const tree = store.tree
@@ -66,16 +66,16 @@ const Pop = () => {
     // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
     // Also: leafletMap.on('zoomend dragend', ()=> refetch()) never refetches!!??
     // Also: use dragend, not moveend because moveend fires on zoomend as well
-    leafletMap.on('zoomend dragend', () => {
+    map.on('zoomend dragend', () => {
       // console.log('zoomend dragend')
       setRefetchProvoker(Math.random())
     })
     return () => {
-      leafletMap.off('zoomend dragend', () => {
+      map.off('zoomend dragend', () => {
         setRefetchProvoker(Math.random())
       })
     }
-  }, [leafletMap])
+  }, [map])
 
   if (error) {
     enqueNotification({
