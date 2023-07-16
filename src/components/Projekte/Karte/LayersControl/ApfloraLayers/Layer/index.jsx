@@ -207,6 +207,7 @@ const LayerComponent = ({ apfloraLayer }) => {
       const newBounds = getBounds(layerData)
       map.fitBounds(newBounds)
       setBounds(newBounds)
+      // TODO: get center and zoom, then set them
     }
   }, [layerData, activeApfloraLayers, apfloraLayer.value, map, setBounds])
   const onClickZoomToActive = useCallback(() => {
@@ -217,6 +218,7 @@ const LayerComponent = ({ apfloraLayer }) => {
       if (newBounds) {
         map.fitBounds(newBounds)
         setBounds(newBounds)
+        // TODO: get center and zoom, then set them
       }
     }
   }, [

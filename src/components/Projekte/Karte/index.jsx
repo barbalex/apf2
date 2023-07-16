@@ -534,6 +534,7 @@ const Karte = () => {
           // bounds need to be set using ma.fitBounds sice v3
           // but keep bounds in store as last bound will be reapplied
           // when map is re-opened
+          // TODO: get center and zoom, then set them
           bounds={bounds}
           // need max and min zoom because otherwise
           // something errors

@@ -38,7 +38,7 @@ const ProjektContainer = () => {
   const { pathname } = useLocation()
 
   const store = useContext(storeContext)
-  const { isPrint, bounds } = store
+  const { isPrint } = store
   // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
   // to prevent it from causing unnessecary renders
   // BUT: this prevents necessary renders: clicking tabs does not cause re-render!
@@ -62,7 +62,7 @@ const ProjektContainer = () => {
   )
 
   // console.log('ProjektContainer, treeTabs:', treeTabs)
-
+  // TODO: ensure scrolling
   const showApberForArt = apberId && pathname.endsWith('print')
   const showApberForAll = apberUebersichtId && pathname.endsWith('print')
 
@@ -133,7 +133,7 @@ const ProjektContainer = () => {
             storeZoom: store.zoom,
           })
           // store.map?.map?.invalidateSize?.(false)
-          // fit bounds if they have changed
+          // fit center and zoom if they have changed
           if (
             isEqual(activeCenterConverted, store.center) &&
             activeZoom === store.zoom
@@ -143,7 +143,7 @@ const ProjektContainer = () => {
           try {
             store.map?.map?.setView?.(store.center, store.zoom)
           } catch (error) {
-            console.log('ProjektContainer, error fitting map bounds:', error)
+            console.log('ProjektContainer, error setting map view:', error)
             // do nothing
           }
         }}
