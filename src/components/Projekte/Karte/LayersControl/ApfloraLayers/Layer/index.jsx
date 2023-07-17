@@ -205,11 +205,13 @@ const LayerComponent = ({ apfloraLayer }) => {
     if (layerData.length === 0) return
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
       const newBounds = getBounds(layerData)
-      map.fitBounds(newBounds)
-      setBounds(newBounds)
+      store.map.map.fitBounds(newBounds)
+      // map.fitBounds(newBounds)
+      // setBounds(newBounds)
       // TODO: get center and zoom, then set them
+      // https://stackoverflow.com/a/34216075/712005
     }
-  }, [layerData, activeApfloraLayers, apfloraLayer.value, map, setBounds])
+  }, [layerData, activeApfloraLayers, apfloraLayer.value, store.map.map])
   const onClickZoomToActive = useCallback(() => {
     // console.log('zoomToActive')
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
@@ -217,8 +219,9 @@ const LayerComponent = ({ apfloraLayer }) => {
       const newBounds = getBounds(highlightedObjects)
       if (newBounds) {
         map.fitBounds(newBounds)
-        setBounds(newBounds)
+        // setBounds(newBounds)
         // TODO: get center and zoom, then set them
+        // https://stackoverflow.com/a/34216075/712005
       }
     }
   }, [
@@ -227,7 +230,7 @@ const LayerComponent = ({ apfloraLayer }) => {
     layerData,
     highlightedId,
     map,
-    setBounds,
+    // setBounds,
   ])
   const zoomToAllIconStyle = useMemo(
     () => ({

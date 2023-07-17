@@ -168,6 +168,7 @@ const MobxStore = types
       self.idOfTpopBeingLocalized = val
     },
     setBounds(val) {
+      console.log('map setting bounds', val)
       self.bounds = val
     },
     setZoom(val) {

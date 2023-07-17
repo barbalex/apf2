@@ -427,12 +427,17 @@ const Karte = () => {
     activeOverlays: activeOverlaysRaw,
     activeBaseLayer,
     bounds: boundsRaw,
+    center: centerRaw,
+    zoom,
     assigningBeob,
     hideMapControls,
   } = store
   const tree = store.tree
   const { mapFilter } = tree
   const bounds = getSnapshot(boundsRaw)
+  const center = getSnapshot(centerRaw)
+
+  console.log('Karte', { bounds, zoom, center })
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const activeOverlays = getSnapshot(activeOverlaysRaw)
 
@@ -536,6 +541,8 @@ const Karte = () => {
           // when map is re-opened
           // TODO: get center and zoom, then set them
           bounds={bounds}
+          // center={center}
+          // zoom={zoom || 9}
           // need max and min zoom because otherwise
           // something errors
           // probably clustering function
@@ -543,6 +550,11 @@ const Karte = () => {
           minZoom={0}
           doubleClickZoom={false}
           zoomControl={false}
+          whenReady={(event) => {
+            const map = event.target
+            map.setView(center, zoom || 9)
+            console.log('whenReady', { event, map, center, zoom })
+          }}
         >
           {activeBaseLayer && <BaseLayerComponent />}
           {activeOverlaysSorted
