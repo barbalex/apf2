@@ -1,7 +1,9 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, { useContext, useCallback, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
+import groupBy from 'lodash/groupBy'
+import max from 'lodash/max'
 
 import { StyledCellForSelect } from './index'
 import { tpop } from '../../shared/fragments'
@@ -30,8 +32,28 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
-  const { ekfOptionsGroupedPerAp, hovered } = store.ekPlan
+  const { hovered } = store.ekPlan
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+
+  const ekfOptionsGroupedPerAp = useMemo(() => {
+    const longestAnwendungsfall = max(
+      ekfrequenzs.map((a) => (a.anwendungsfall || '').length),
+    )
+    const options = ekfrequenzs.map((o) => {
+      const code = (o.code || '').padEnd(9, '\xA0')
+      const anwendungsfall =
+        `${(o.anwendungsfall || '').padEnd(longestAnwendungsfall, '\xA0')}` ||
+        ''
+      return {
+        value: o.id,
+        label: `${code}: ${anwendungsfall}`,
+        anwendungsfall,
+        apId: o.apId,
+      }
+    })
+    const os = groupBy(options, 'apId')
+    return os
+  }, [ekfrequenzs])
 
   const [focused, setFocused] = useState(false)
 

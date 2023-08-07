@@ -1,7 +1,6 @@
 import { types } from 'mobx-state-tree'
 import uniq from 'lodash/uniq'
 import groupBy from 'lodash/groupBy'
-import max from 'lodash/max'
 
 import Ap from './Ap'
 import Hovered, { defaultValue as defaultHovered } from './Hovered'
@@ -90,14 +89,10 @@ export default types
     yearClicked: initialYearClicked,
     scrollPositions: null,
     apsData: [],
-    ekfrequenzs: [],
   }))
   .actions((self) => ({
     setPastYears(val) {
       self.pastYears = val
-    },
-    setEkfrequenzs(val) {
-      self.ekfrequenzs = val
     },
     setApsDataLoading(val) {
       self.apsDataLoading = val
@@ -221,25 +216,6 @@ export default types
   .views((self) => ({
     get apValues() {
       return self.aps.map((a) => a.value)
-    },
-    get ekfOptionsGroupedPerAp() {
-      const longestAnwendungsfall = max(
-        self.ekfrequenzs.map((a) => (a.anwendungsfall || '').length),
-      )
-      const options = self.ekfrequenzs.map((o) => {
-        const code = (o.code || '').padEnd(9, '\xA0')
-        const anwendungsfall =
-          `${(o.anwendungsfall || '').padEnd(longestAnwendungsfall, '\xA0')}` ||
-          ''
-        return {
-          value: o.id,
-          label: `${code}: ${anwendungsfall}`,
-          anwendungsfall,
-          apId: o.apId,
-        }
-      })
-      const os = groupBy(options, 'apId')
-      return os
     },
     get einheitsByAp() {
       const e = groupBy(self.apsData?.allAps?.nodes ?? [], 'id')

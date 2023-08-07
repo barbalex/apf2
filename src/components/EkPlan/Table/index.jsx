@@ -127,7 +127,6 @@ const EkPlanTable = () => {
     apValues,
     fields: fieldsShown,
     yearMenuAnchor,
-    setEkfrequenzs,
     showEk,
     showEkf,
     showMassn,
@@ -274,8 +273,10 @@ const EkPlanTable = () => {
     },
   })
 
-  const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
-  setEkfrequenzs(ekfrequenzs)
+  const ekfrequenzs = useMemo(
+    () => data?.allEkfrequenzs?.nodes ?? [],
+    [data?.allEkfrequenzs?.nodes],
+  )
   const tpops = useMemo(
     () => data?.allTpops?.nodes ?? [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -371,13 +372,15 @@ const EkPlanTable = () => {
   )
 
   const onClickExport = useCallback(() => {
-    const data = tpops.map((tpop) => exportRowFromTpop({ tpop, years, store }))
+    const data = tpops.map((tpop) =>
+      exportRowFromTpop({ tpop, years, store, ekfrequenzs }),
+    )
     exportModule({
       data,
       fileName: 'ek-planung',
       store,
     })
-  }, [tpops, store, years])
+  }, [tpops, store, years, ekfrequenzs])
 
   if (aps.length > 0 && loading) return <Spinner />
 
