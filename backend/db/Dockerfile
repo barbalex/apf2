@@ -1,5 +1,5 @@
 # upgrade to 15-3.3?
-FROM postgis/postgis:14-3.3
+FROM postgis/postgis:14-3.4
 
 COPY ./init/ /docker-entrypoint-initdb.d/
 # enable to seed data
