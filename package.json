@@ -127,7 +127,7 @@
     "vercel": "32.4.1",
     "vite": "4.4.11",
     "vite-plugin-pwa": "0.16.5",
-    "vite-plugin-svgr": "3.2.0"
+    "vite-plugin-svgr": "4.1.0"
   },
   "dependenciesComments": {
     "punycode": "UNDECLARED dependency of markdown-it, see: https://github.com/markdown-it/markdown-it/issues/230 and many others",
