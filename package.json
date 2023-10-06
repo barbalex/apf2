@@ -135,7 +135,6 @@
     "react-focus-within": "2.0.2 creates dependency conflict and thus forces to npm i --force: https://github.com/ferdaber/react-focus-within/issues/15, https://github.com/ferdaber/react-focus-within/pull/16. So extracted it to FocusWithin shared component",
     "react-leaflet-bing-v2": "5.2.3: reinstall after pull-request accepted: https://github.com/TA-Geoforce/react-leaflet-bing-v2/pull/25",
     "prettier": "2.8.8: do not update to 3.0.0",
-    "react-split-pane": "0.1.92 creates dependency conflict and thus forces to npm i --force: https://github.com/tomkp/react-split-pane/pull/836",
-    "vite-plugin-svgr": "3.2.0: do not update to 4.0.0, breaks"
+    "react-split-pane": "0.1.92 creates dependency conflict and thus forces to npm i --force: https://github.com/tomkp/react-split-pane/pull/836"
   }
 }
