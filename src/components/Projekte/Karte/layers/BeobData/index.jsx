@@ -11,7 +11,7 @@ import Spinner from '../../../../shared/Spinner'
 import storeContext from '../../../../../storeContext'
 import { beob } from '../../../../shared/fragments'
 import { Info } from '../BeobZugeordnet/Marker'
-import FieldList from './List'
+import List from './List'
 
 const TopFieldContainer = styled.div`
   padding-top: 4px;
@@ -50,9 +50,6 @@ const BeobData = ({ id }) => {
       if (sortByA && sortByB) {
         return sortedBeobFields.indexOf(keyA) - sortedBeobFields.indexOf(keyB)
       }
-      // if (sortByA || sortByB) {
-      //   return 1
-      // }
       if (keyA?.toLowerCase?.() > keyB?.toLowerCase?.()) return 1
       if (keyA?.toLowerCase?.() < keyB?.toLowerCase?.()) return -1
       return 0
@@ -138,7 +135,7 @@ const BeobData = ({ id }) => {
           </Info>
         </TopFieldContainer>
       )}
-      <FieldList fields={fields} />
+      <List fields={fields} />
     </ErrorBoundary>
   )
 }
