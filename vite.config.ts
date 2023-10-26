@@ -50,6 +50,7 @@ export default defineConfig({
   plugins: [
     splitVendorChunkPlugin(),
     svgrPlugin({
+      include: '**/*.svg', // https://github.com/pd4d10/vite-plugin-svgr/issues/91#issuecomment-1732028802
       svgrOptions: {
         icon: true,
         // ...svgr options (https://react-svgr.com/docs/options/)
