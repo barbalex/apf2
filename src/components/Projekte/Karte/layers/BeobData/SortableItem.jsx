@@ -1,4 +1,6 @@
 import styled from '@emotion/styled'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 const Row = styled.div`
   display: flex;
@@ -25,11 +27,18 @@ const Value = styled.div`
   padding: 0 2px;
 `
 
-const Field = ({ label, value }) => {
+const Field = ({ field }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: field[0] })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
   return (
-    <Row>
-      <Label>{label}</Label>
-      <Value>{value}</Value>
+    <Row ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <Label>{field[0]}</Label>
+      <Value>{field[1]}</Value>
     </Row>
   )
 }
