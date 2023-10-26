@@ -39,7 +39,7 @@ const PopoverContainer = styled.div`
   border-top-right-radius: 4px;
 `
 const FormContainer = styled.div`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;

@@ -22,9 +22,10 @@ import Spinner from '../../../shared/Spinner'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 
 const Container = styled.div`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const FieldsContainer = styled.div`
   display: flex;

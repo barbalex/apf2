@@ -16,7 +16,7 @@ import Spinner from '../../../shared/Spinner'
 import TpopfreiwkontrForm from './Form'
 
 const Container = styled.div`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;

@@ -19,7 +19,7 @@ import Spinner from '../../../shared/Spinner'
 import { adresse } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
 `
@@ -41,7 +41,7 @@ const fieldTypes = {
 const Adresse = () => {
   const { adrId } = useParams()
   const store = useContext(storeContext)
-  const queryClient = useQueryClient() 
+  const queryClient = useQueryClient()
 
   const { data, error, loading } = useQuery(query, {
     variables: { id: adrId },

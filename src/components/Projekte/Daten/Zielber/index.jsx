@@ -17,7 +17,7 @@ import { zielber as zielberFragment } from '../../../shared/fragments'
 import Spinner from '../../../shared/Spinner'
 
 const Container = styled.div`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;

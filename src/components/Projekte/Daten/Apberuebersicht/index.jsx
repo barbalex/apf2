@@ -25,10 +25,10 @@ import Checkbox2States from '../../../shared/Checkbox2States'
 import historize from '../../../../modules/historize'
 
 const Container = styled.div`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  // overflow: hidden;
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;

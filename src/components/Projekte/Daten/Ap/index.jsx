@@ -13,7 +13,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 
 const Container = styled.div`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;

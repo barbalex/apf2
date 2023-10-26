@@ -17,7 +17,7 @@ import Error from '../../../shared/Error'
 import { tpopber } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
