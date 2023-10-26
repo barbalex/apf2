@@ -1,12 +1,28 @@
-import { useCallback, useContext, useEffect } from 'react'
+import { useCallback, useMemo, useContext, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
 
@@ -48,46 +64,57 @@ const topFieldNames = [
   'locality_descript',
 ]
 
+const SortableItem = ({ id, field }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
+
+  return (
+    <div
+      key={field[0]}
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+    >
+      <Beob key={field[0]} label={field[0]} value={field[1]} />
+    </div>
+  )
+}
+
 const BeobData = ({ id }) => {
   const client = useApolloClient()
 
   const store = useContext(storeContext)
-  const {
-    sortedBeobFieldsForMap: sortedBeobFieldsForMapPassed,
-    sortedBeobFields: sortedBeobFieldsPassed,
-    setSortedBeobFieldsForMap,
-  } = store
+  const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
+    store
 
   const { setBeobDetailsOpen, beobDetailsOpen } = store.map
   const onClickDetails = useCallback(
-    (event) => {
-      console.log('onClickDetails', event)
-      setBeobDetailsOpen(!beobDetailsOpen)
-    },
+    () => setBeobDetailsOpen(!beobDetailsOpen),
     [beobDetailsOpen, setBeobDetailsOpen],
   )
 
   // use existing sorting if available and no own has been set yet
-  const sortedBeobFieldsForMap = sortedBeobFieldsForMapPassed.slice()
   const sortedBeobFields = sortedBeobFieldsPassed.slice()
-  const sortedBeobFieldsToUse = sortedBeobFieldsForMap.length
-    ? sortedBeobFieldsForMap
-    : sortedBeobFields
+
+  console.log('Beob, sortedBeobFields:', sortedBeobFields)
 
   const sortFn = useCallback(
     (a, b) => {
       const keyA = a[0]
       const keyB = b[0]
-      const indexOfA = sortedBeobFieldsToUse.indexOf(keyA)
-      const indexOfB = sortedBeobFieldsToUse.indexOf(keyB)
+      const indexOfA = sortedBeobFields.indexOf(keyA)
+      const indexOfB = sortedBeobFields.indexOf(keyB)
       const sortByA = indexOfA > -1
       const sortByB = indexOfB > -1
 
       if (sortByA && sortByB) {
-        return (
-          sortedBeobFieldsToUse.indexOf(keyA) -
-          sortedBeobFieldsToUse.indexOf(keyB)
-        )
+        return sortedBeobFields.indexOf(keyA) - sortedBeobFields.indexOf(keyB)
       }
       // if (sortByA || sortByB) {
       //   return 1
@@ -96,7 +123,21 @@ const BeobData = ({ id }) => {
       if (keyA?.toLowerCase?.() < keyB?.toLowerCase?.()) return -1
       return 0
     },
-    [sortedBeobFieldsToUse],
+    [sortedBeobFields],
+  )
+
+  const [draggingField, setDraggingField] = useState(null)
+  const onDragStart = useCallback(({ active }) => setDraggingField(active), [])
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   )
 
   const { data, isLoading, error } = useQuery({
@@ -119,71 +160,81 @@ const BeobData = ({ id }) => {
   })
 
   const row = data?.data?.beobById ?? {}
-  const rowData = row.data ? JSON.parse(row.data) : {}
+  const rowData = useMemo(
+    () => (row.data ? JSON.parse(row.data) : {}),
+    [row.data],
+  )
 
-  const topFields = Object.entries(rowData)
-    .filter(([key, value]) => exists(value))
-    .filter(([key]) => topFieldNames.includes(key))
-    .sort(sortFn)
+  const topFields = useMemo(
+    () =>
+      Object.entries(rowData)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+        .filter(([key, value]) => exists(value))
+        .filter(([key]) => topFieldNames.includes(key))
+        .sort(sortFn),
+    [rowData, sortFn],
+  )
 
-  const fields = Object.entries(rowData)
-    .filter(([key, value]) => exists(value))
-    .sort(sortFn)
+  const fields = useMemo(
+    () =>
+      Object.entries(rowData)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+        .filter(([key, value]) => exists(value))
+        .sort(sortFn),
+    [rowData, sortFn],
+  )
   const keys = fields.map((f) => f[0])
 
   useEffect(() => {
     // add missing keys to sortedBeobFields
     const additionalKeys = []
     for (const key of keys) {
-      if (!sortedBeobFieldsToUse.includes(key)) {
+      if (!sortedBeobFields.includes(key)) {
         additionalKeys.push(key)
       }
     }
     if (!additionalKeys.length) return
-    setSortedBeobFieldsForMap([...sortedBeobFieldsToUse, ...additionalKeys])
-    console.log('Beob, useEffect, adding additional keys: ', additionalKeys)
-  }, [keys, setSortedBeobFieldsForMap, sortedBeobFieldsToUse])
+    setSortedBeobFields([...sortedBeobFields, ...additionalKeys])
+  }, [keys, setSortedBeobFields, sortedBeobFields])
 
-  const moveField = useCallback(
-    (dragIndex, hoverIndex) => {
-      // get item from keys
-      const itemBeingDragged = keys[dragIndex]
-      const itemBeingHovered = keys[hoverIndex]
-      // move from dragIndex to hoverIndex
-      // in sortedBeobFields
-      const fromIndex = sortedBeobFieldsToUse.indexOf(itemBeingDragged)
-      const toIndex = sortedBeobFieldsToUse.indexOf(itemBeingHovered)
+  const onDragEnd = useCallback(
+    ({ active, over }) => {
+      // TODO: over is WRONG!!!!
+      setDraggingField(null)
+      console.log('Beob, onDragEnd:', {
+        active,
+        over,
+        fields,
+        sortedBeobFields,
+      })
+      if (active.id === over.id) return
+
+      const oldIndex = sortedBeobFields.indexOf(active.id)
+      const newIndex = sortedBeobFields.indexOf(over.id)
+      console.log('Beob, onDragEnd:', { oldIndex, newIndex })
       // catch some edge cases
-      if (fromIndex === toIndex) return
-      if (fromIndex === -1) return
-      if (toIndex === -1) return
+      if (oldIndex === newIndex) return
+      if (oldIndex === -1) return
+      if (newIndex === -1) return
       // move
-      const newArray = arrayMoveImmutable(
-        sortedBeobFieldsToUse,
-        fromIndex,
-        toIndex,
-      )
-      setSortedBeobFieldsForMap(newArray)
+      const newArray = arrayMoveImmutable(sortedBeobFields, oldIndex, newIndex)
+      console.log('Beob, onDragEnd:', {
+        newArray,
+        sortedBeobFields,
+        oldIndex,
+        newIndex,
+      })
+      setSortedBeobFields(newArray)
     },
-    [keys, setSortedBeobFieldsForMap, sortedBeobFieldsToUse],
-  )
-  const renderField = useCallback(
-    (field, index) => (
-      <Beob
-        key={field[0]}
-        label={field[0]}
-        value={field[1]}
-        index={index}
-        moveField={moveField}
-      />
-    ),
-    [moveField],
+    [fields, setSortedBeobFields, sortedBeobFields],
   )
 
   if (!row) return null
   if (!fields || fields.length === 0) return null
   if (isLoading) return <Spinner />
   if (error) return <Error error={error} />
+
+  console.log('Beob, render, fields:', fields)
 
   return (
     <ErrorBoundary>
@@ -208,9 +259,34 @@ const BeobData = ({ id }) => {
         >
           <StyledAccordionSummary>Daten</StyledAccordionSummary>
           <StyledAccordionDetails>
-            <DndProvider backend={HTML5Backend}>
-              {fields.map((field, i) => renderField(field, i))}
-            </DndProvider>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={onDragEnd}
+              onDragStart={onDragStart}
+            >
+              <SortableContext
+                items={fields}
+                strategy={verticalListSortingStrategy}
+              >
+                {fields.map((field, index) => (
+                  <SortableItem
+                    key={`${field[0]}/${index}`}
+                    id={field[0]}
+                    field={field}
+                  />
+                ))}
+                <DragOverlay>
+                  {draggingField ? (
+                    <SortableItem
+                      key={draggingField[0]}
+                      id={draggingField[0]}
+                      field={draggingField}
+                    />
+                  ) : null}
+                </DragOverlay>
+              </SortableContext>
+            </DndContext>
           </StyledAccordionDetails>
         </StyledAccordion>
       </Container>
