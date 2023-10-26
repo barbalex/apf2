@@ -52,11 +52,8 @@ const BeobData = ({ id }) => {
   const client = useApolloClient()
 
   const store = useContext(storeContext)
-  const {
-    sortedBeobFieldsForMap: sortedBeobFieldsForMapPassed,
-    sortedBeobFields: sortedBeobFieldsPassed,
-    setSortedBeobFieldsForMap,
-  } = store
+  const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
+    store
 
   const { setBeobDetailsOpen, beobDetailsOpen } = store.map
   const onClickDetails = useCallback(
@@ -68,26 +65,19 @@ const BeobData = ({ id }) => {
   )
 
   // use existing sorting if available and no own has been set yet
-  const sortedBeobFieldsForMap = sortedBeobFieldsForMapPassed.slice()
   const sortedBeobFields = sortedBeobFieldsPassed.slice()
-  const sortedBeobFieldsToUse = sortedBeobFieldsForMap.length
-    ? sortedBeobFieldsForMap
-    : sortedBeobFields
 
   const sortFn = useCallback(
     (a, b) => {
       const keyA = a[0]
       const keyB = b[0]
-      const indexOfA = sortedBeobFieldsToUse.indexOf(keyA)
-      const indexOfB = sortedBeobFieldsToUse.indexOf(keyB)
+      const indexOfA = sortedBeobFields.indexOf(keyA)
+      const indexOfB = sortedBeobFields.indexOf(keyB)
       const sortByA = indexOfA > -1
       const sortByB = indexOfB > -1
 
       if (sortByA && sortByB) {
-        return (
-          sortedBeobFieldsToUse.indexOf(keyA) -
-          sortedBeobFieldsToUse.indexOf(keyB)
-        )
+        return sortedBeobFields.indexOf(keyA) - sortedBeobFields.indexOf(keyB)
       }
       // if (sortByA || sortByB) {
       //   return 1
@@ -96,7 +86,7 @@ const BeobData = ({ id }) => {
       if (keyA?.toLowerCase?.() < keyB?.toLowerCase?.()) return -1
       return 0
     },
-    [sortedBeobFieldsToUse],
+    [sortedBeobFields],
   )
 
   const { data, isLoading, error } = useQuery({
@@ -135,14 +125,14 @@ const BeobData = ({ id }) => {
     // add missing keys to sortedBeobFields
     const additionalKeys = []
     for (const key of keys) {
-      if (!sortedBeobFieldsToUse.includes(key)) {
+      if (!sortedBeobFields.includes(key)) {
         additionalKeys.push(key)
       }
     }
     if (!additionalKeys.length) return
-    setSortedBeobFieldsForMap([...sortedBeobFieldsToUse, ...additionalKeys])
+    setSortedBeobFields([...sortedBeobFields, ...additionalKeys])
     console.log('Beob, useEffect, adding additional keys: ', additionalKeys)
-  }, [keys, setSortedBeobFieldsForMap, sortedBeobFieldsToUse])
+  }, [keys, setSortedBeobFields, sortedBeobFields])
 
   const moveField = useCallback(
     (dragIndex, hoverIndex) => {
@@ -151,21 +141,17 @@ const BeobData = ({ id }) => {
       const itemBeingHovered = keys[hoverIndex]
       // move from dragIndex to hoverIndex
       // in sortedBeobFields
-      const fromIndex = sortedBeobFieldsToUse.indexOf(itemBeingDragged)
-      const toIndex = sortedBeobFieldsToUse.indexOf(itemBeingHovered)
+      const fromIndex = sortedBeobFields.indexOf(itemBeingDragged)
+      const toIndex = sortedBeobFields.indexOf(itemBeingHovered)
       // catch some edge cases
       if (fromIndex === toIndex) return
       if (fromIndex === -1) return
       if (toIndex === -1) return
       // move
-      const newArray = arrayMoveImmutable(
-        sortedBeobFieldsToUse,
-        fromIndex,
-        toIndex,
-      )
-      setSortedBeobFieldsForMap(newArray)
+      const newArray = arrayMoveImmutable(sortedBeobFields, fromIndex, toIndex)
+      setSortedBeobFields(newArray)
     },
-    [keys, setSortedBeobFieldsForMap, sortedBeobFieldsToUse],
+    [keys, setSortedBeobFields, sortedBeobFields],
   )
   const renderField = useCallback(
     (field, index) => (

@@ -15,7 +15,6 @@ const blacklist = [
   'overlays', // 2022.10.26 added overlay. Need to refresh or users will not get new ones
   'apfloraLayers', // 2022.10.28 added. Need to refresh or users will not get new ones
   'sortedBeobFields', // 2023.10.26 added because needs to update when changed in code
-  'sortedBeobFieldsForMap', // 2023.10.26 added because needs to update when changed in code
 ]
 
 const StorePersister = ({ client, store, idb }) => {
