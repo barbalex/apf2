@@ -30,6 +30,10 @@ import useSearchParamsState from '../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../modules/isMobilePhone'
 import historizeForAp from '../../../../modules/historizeForAp'
 import historize from '../../../../modules/historize'
+// adding ?react to .svg leads to error:
+// Warning: </src/components/Projekte/Karte/layers/Pop/statusGroupSymbols/100.svg?react /> is using incorrect casing.
+// Use PascalCase for React components, or lowercase for HTML elements
+// https://github.com/pd4d10/vite-plugin-svgr/issues/95
 import TpopSvg100 from '../../Karte/layers/Tpop/statusGroupSymbols/100.svg'
 import TpopSvg100Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/100Highlighted.svg'
 import TpopSvg101 from '../../Karte/layers/Tpop/statusGroupSymbols/101.svg'
