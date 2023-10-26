@@ -90,15 +90,9 @@ const IconsDiv = styled.div`
 // TODO: add icon: https://material.io/icons/#ic_info
 // for layers with legend
 
-const SortableItem = ({
-  id,
-  overlay,
-  activeOverlays,
-  setActiveOverlays,
-  apId,
-}) => {
+const SortableItem = ({ overlay, activeOverlays, setActiveOverlays, apId }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id })
+    useSortable({ id: overlay.value })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -215,7 +209,6 @@ const Overlays = () => {
           {overlays.map((overlay) => (
             <SortableItem
               key={overlay.value}
-              id={overlay.value}
               overlay={overlay}
               activeOverlays={activeOverlays}
               setActiveOverlays={setActiveOverlays}
@@ -226,7 +219,6 @@ const Overlays = () => {
             {draggingOverlay ? (
               <SortableItem
                 key={draggingOverlay.value}
-                id={draggingOverlay.value}
                 overlay={draggingOverlay}
                 activeOverlays={activeOverlays}
                 setActiveOverlays={setActiveOverlays}
