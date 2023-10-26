@@ -1,0 +1,1 @@
+Ab Version 1.102.8: SVG-Dateien (für Bilder) werden neu anders geladen. Leider cached (zwischenspeichert) der Browser solche Dateien, findet sie am alten Pfad nicht und meldet Fehler. Ihr müsst den Cache leeren und neu anmelden: Menü "Mehr" > "abmelden (und Cache leeren)". Sorry für die Umstände
