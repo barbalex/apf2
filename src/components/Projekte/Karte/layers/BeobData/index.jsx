@@ -123,19 +123,19 @@ const BeobData = ({ id }) => {
 
   return (
     <ErrorBoundary>
-      {!!topFields.length && (
-        <TopFieldContainer>
-          <Info>
-            {topFields.map(([key, value]) => (
-              <>
-                <div>{`${key}:`}</div>
-                <div>{value}</div>
-              </>
-            ))}
-          </Info>
-        </TopFieldContainer>
-      )}
-      <List fields={fields} />
+        {!!topFields.length && (
+          <TopFieldContainer>
+            <Info>
+              {topFields.map(([key, value]) => (
+                <>
+                  <div>{`${key}:`}</div>
+                  <div>{value}</div>
+                </>
+              ))}
+            </Info>
+          </TopFieldContainer>
+        )}
+        <List fields={fields} />
     </ErrorBoundary>
   )
 }

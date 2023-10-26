@@ -1,5 +1,5 @@
 import React, { useContext, useCallback } from 'react'
-import { Marker, Popup } from 'react-leaflet'
+import { Marker, Popup, useMap } from 'react-leaflet'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import styled from '@emotion/styled'
@@ -18,6 +18,12 @@ import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import Data from '../BeobData'
 
+const Container = styled.div`
+  max-height: ${(props) => `${props.maxheight}px`};
+  max-width: ${(props) => `${props.maxwidth}px`};
+  overflow-y: auto;
+  overflow-x: hidden;
+`
 const StyledH3 = styled.h3`
   margin: 7px 0;
 `
@@ -36,6 +42,9 @@ const BeobZugeordnetMarker = ({ beob }) => {
   const { apId, projId, beobId } = useParams()
   const navigate = useNavigate()
   const { search } = useLocation()
+
+  const map = useMap()
+  const mapSize = map.getSize()
 
   const client = useApolloClient()
   const store = useContext(storeContext)
@@ -159,7 +168,7 @@ const BeobZugeordnetMarker = ({ beob }) => {
       eventHandlers={{ moveend: onMoveend }}
     >
       <Popup>
-        <>
+        <Container maxheight={mapSize.y - 70} maxwidth={mapSize.x - 45}>
           <div>{`Beobachtung von ${
             beob?.aeTaxonomyByArtId?.artname ?? ''
           }`}</div>
@@ -197,7 +206,7 @@ const BeobZugeordnetMarker = ({ beob }) => {
             Formular in Strukturbaum 2 öffnen
           </StyledButton>
           <Data id={beob.id} />
-        </>
+        </Container>
       </Popup>
     </Marker>
   )
