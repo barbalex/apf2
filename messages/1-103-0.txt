@@ -1,0 +1,1 @@
+Ab Version 1.103.0: Beobachtungs-Informationen nach Vorgabe von Topos sortiert. Sie sind weiterhin von Hand umsortierbar
