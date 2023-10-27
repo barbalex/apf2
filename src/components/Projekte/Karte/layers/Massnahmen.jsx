@@ -31,3 +31,5 @@ const MassnahmenLayer = ({ layer }) => {
 }
 
 export default MassnahmenLayer
+
+// example: //wms.prod.qgiscloud.com/FNS/6c52d173-4f62-11e7-aebe-2bd3a2ea4576
