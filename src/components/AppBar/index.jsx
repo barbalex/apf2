@@ -24,7 +24,9 @@ const Container = styled.div`
   }
 `
 const StyledAppBar = styled(AppBar)`
-  min-height: 64px !important;
+  flex-basis: 64px !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
 
   @media print {
     display: none !important;
