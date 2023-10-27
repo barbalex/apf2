@@ -16,6 +16,7 @@ const SiteTitle = styled(Button)`
   border-color: rgba(255, 255, 255, 0.5) !important;
   border-width: 0 !important;
   text-transform: none !important;
+  white-space: nowrap !important;
   @media (min-width: 750px) {
     display: block !important;
   }
