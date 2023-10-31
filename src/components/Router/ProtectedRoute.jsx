@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router-dom'
 // import { getSnapshot } from 'mobx-state-tree'
-import jwtDecode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router-dom'
 
 import storeContext from '../../storeContext'

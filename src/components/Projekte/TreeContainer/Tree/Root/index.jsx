@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
-import jwtDecode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 
 import Projekt from './Projekt'
 import Users from './Users'
