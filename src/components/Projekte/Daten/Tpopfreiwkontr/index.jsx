@@ -16,7 +16,7 @@ import Spinner from '../../../shared/Spinner'
 import TpopfreiwkontrForm from './Form'
 
 const Container = styled.div`
-  flex-grow: 1;
+  flex-grow: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -31,7 +31,12 @@ const Container = styled.div`
   }
 `
 const ScrollContainer = styled.div`
+  flex-grow: 0;
+  // height: 100%;
   overflow-y: auto;
+`
+const StyledSimpleBar = styled(SimpleBar)`
+  overflow-x: hidden;
 `
 const StyledIconButton = styled(IconButton)`
   color: white !important;
@@ -137,6 +142,8 @@ const Tpopfreiwkontr = ({ id: idPassed }) => {
 
   if (Object.keys(row).length === 0) return null
 
+  console.log('Tpopfreiwkontr, isPrint:', isPrint)
+
   return (
     <Container>
       {!pathname.includes('EKF') && (
@@ -160,7 +167,7 @@ const Tpopfreiwkontr = ({ id: idPassed }) => {
         />
       ) : (
         <ScrollContainer>
-          <SimpleBar
+          <StyledSimpleBar
             style={{
               maxHeight: '100%',
               height: '100%',
@@ -172,7 +179,7 @@ const Tpopfreiwkontr = ({ id: idPassed }) => {
               apId={apId}
               refetch={refetch}
             />
-          </SimpleBar>
+          </StyledSimpleBar>
         </ScrollContainer>
       )}
     </Container>

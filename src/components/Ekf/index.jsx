@@ -16,7 +16,7 @@ import dataWithDateByUserIdGql from './dataWithDateByUserId'
 import Error from '../shared/Error'
 
 const Container = styled.div`
-  height: 100%;
+  flex-grow: 0;
   overflow: hidden;
   .SplitPane {
     position: relative !important;

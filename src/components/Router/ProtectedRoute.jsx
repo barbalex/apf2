@@ -21,7 +21,10 @@ const isInIframe = inIframe()
 
 const Container = styled.div`
   background-color: #fffde7;
-  height: 100%;
+  flex-grow: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
 
   @media print {
     margin-top: 0;

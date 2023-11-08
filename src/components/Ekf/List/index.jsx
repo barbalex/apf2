@@ -18,6 +18,9 @@ const Container = styled.div`
     height: 100%;
   }
 `
+const StyledSimplebar = styled(SimpleBar)`
+  overflow-x: hidden;
+`
 
 const EkfList = ({ ekf }) => {
   const projektCount = uniq(ekf.map((e) => e.projekt)).length
@@ -25,7 +28,7 @@ const EkfList = ({ ekf }) => {
 
   return (
     <Container>
-      <SimpleBar
+      <StyledSimplebar
         style={{
           maxHeight: '100%',
           height: '100%',
@@ -41,7 +44,7 @@ const EkfList = ({ ekf }) => {
             <Item projektCount={projektCount} style={style} row={ekf[index]} />
           )}
         </List>
-      </SimpleBar>
+      </StyledSimplebar>
     </Container>
   )
 }
