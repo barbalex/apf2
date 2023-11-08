@@ -91,7 +91,7 @@
     "screenfull": "6.0.2",
     "simplebar-react": "3.2.4",
     "typography": "0.16.24",
-    "use-debounce": "9.0.4"
+    "use-debounce": "10.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.22.15",
