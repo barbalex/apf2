@@ -18,6 +18,7 @@ import Error from '../shared/Error'
 const Container = styled.div`
   flex-grow: 0;
   overflow: hidden;
+
   .SplitPane {
     position: relative !important;
   }

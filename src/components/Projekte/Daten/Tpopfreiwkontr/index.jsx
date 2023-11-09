@@ -30,9 +30,9 @@ const Container = styled.div`
     page-break-after: always;
   }
 `
+// somehow scrollbars were not shown without explicitely setting height
 const ScrollContainer = styled.div`
-  flex-grow: 0;
-  // height: 100%;
+  height: calc(100vh - 64px);
   overflow-y: auto;
 `
 const StyledSimpleBar = styled(SimpleBar)`
