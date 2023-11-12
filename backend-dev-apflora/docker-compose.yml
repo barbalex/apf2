@@ -9,6 +9,9 @@ services:
       - '5000'
     ports:
       - '5000:5000'
+    # this is on linux to connect from docker to localhost
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     env_file:
       - ./.env
     command:
