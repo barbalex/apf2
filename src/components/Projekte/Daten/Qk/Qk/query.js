@@ -1479,7 +1479,10 @@ export default gql`
               tpopsByPopId(
                 filter: {
                   status: { equalTo: 200 }
-                  tpopmassnsByTpopId: { some: { typ: { equalTo: 1 } } }
+                  tpopmassnsByTpopId: {
+                    some: { typ: { equalTo: 1 } }
+                    none: { typ: { in: [2, 3] } }
+                  }
                   tpopkontrsByTpopId: {
                     none: { tpopkontrzaehlsByTpopkontrIdExist: true }
                   }
