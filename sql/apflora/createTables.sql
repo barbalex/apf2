@@ -3185,7 +3185,6 @@ CREATE TABLE apflora.usermessage(
   UNIQUE (user_name, message_id)
 );
 
-CREATE INDEX ON apflora.usermessage USING btree(id);
 
 CREATE INDEX ON apflora.usermessage USING btree(user_name);
 
