@@ -1,3 +1,623 @@
+
+
+-- tpopkontrzaehl_einheit_werte
+DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
+
+CREATE TABLE apflora.tpopkontrzaehl_einheit_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  code serial,
+  text varchar(50) DEFAULT NULL,
+  corresponds_to_massn_anz_triebe boolean DEFAULT FALSE,
+  corresponds_to_massn_anz_pflanzen boolean DEFAULT FALSE,
+  sort smallint DEFAULT NULL,
+  historic boolean DEFAULT FALSE,
+  needs_no_methode_anzahl boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) DEFAULT NULL
+);
+
+CREATE SEQUENCE apflora.tpopkontrzaehl_einheit_werte_code_seq owned BY apflora.tpopkontrzaehl_einheit_werte.code;
+
+ALTER TABLE apflora.tpopkontrzaehl_einheit_werte
+  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontrzaehl_einheit_werte_code_seq');
+
+SELECT
+  setval('apflora.tpopkontrzaehl_einheit_werte_code_seq',(
+      SELECT
+        max(code) + 1 FROM apflora.tpopkontrzaehl_einheit_werte), FALSE);
+
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(id);
+
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(code);
+
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(sort);
+
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(historic);
+
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(corresponds_to_massn_anz_triebe);
+
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(corresponds_to_massn_anz_pflanzen);
+
+COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.id IS 'Primärschlüssel';
+
+COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
+
+COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.corresponds_to_massn_anz_triebe IS 'Entspricht den "Anzahl Triebe" bei Massnahmen. Ermöglicht es, tpopmassn.zieleinheit_anzahl automatisch zu setzen';
+
+COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.corresponds_to_massn_anz_pflanzen IS 'Entspricht den "Anzahl Pflanzen" bei Massnahmen. Ermöglicht es, tpopmassn.zieleinheit_anzahl automatisch zu setzen';
+
+ALTER TABLE apflora.tpopkontrzaehl_einheit_werte ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.tpopkontrzaehl_einheit_werte;
+
+CREATE POLICY reader ON apflora.tpopkontrzaehl_einheit_werte
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+
+-- tpopkontrzaehl_methode_werte
+DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
+
+CREATE TABLE apflora.tpopkontrzaehl_methode_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  code serial,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) DEFAULT NULL
+);
+
+CREATE SEQUENCE apflora.tpopkontrzaehl_methode_werte_code_seq owned BY apflora.tpopkontrzaehl_methode_werte.code;
+
+ALTER TABLE apflora.tpopkontrzaehl_methode_werte
+  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontrzaehl_methode_werte_code_seq');
+
+SELECT
+  setval('apflora.tpopkontrzaehl_methode_werte_code_seq',(
+      SELECT
+        max(code) + 1 FROM apflora.tpopkontrzaehl_methode_werte), FALSE);
+
+ALTER TABLE apflora.tpopkontrzaehl_methode_werte
+  ALTER COLUMN changed_by DROP NOT NULL,
+  ALTER COLUMN changed_by SET DEFAULT NULL;
+
+ALTER TABLE apflora.tpopkontrzaehl_methode_werte
+  ALTER COLUMN changed_by SET DEFAULT NULL;
+
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(id);
+
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(code);
+
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(sort);
+
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(historic);
+
+COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.id IS 'Primärschlüssel';
+
+COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
+
+COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+ALTER TABLE apflora.tpopkontrzaehl_methode_werte ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.tpopkontrzaehl_methode_werte;
+
+CREATE POLICY reader ON apflora.tpopkontrzaehl_methode_werte
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+
+-- ziel_typ_werte
+DROP TABLE IF EXISTS apflora.ziel_typ_werte;
+
+CREATE TABLE apflora.ziel_typ_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  code serial,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) NOT NULL
+);
+
+CREATE SEQUENCE apflora.ziel_typ_werte_code_seq owned BY apflora.ziel_typ_werte.code;
+
+ALTER TABLE apflora.ziel_typ_werte
+  ALTER COLUMN code SET DEFAULT nextval('apflora.ziel_typ_werte_code_seq');
+
+SELECT
+  setval('apflora.ziel_typ_werte_code_seq',(
+      SELECT
+        max(code) + 1 FROM apflora.ziel_typ_werte), FALSE);
+
+ALTER TABLE apflora.ziel_typ_werte
+  ALTER COLUMN changed_by DROP NOT NULL,
+  ALTER COLUMN changed_by SET DEFAULT NULL;
+
+CREATE INDEX ON apflora.ziel_typ_werte USING btree(id);
+
+CREATE INDEX ON apflora.ziel_typ_werte USING btree(code);
+
+CREATE INDEX ON apflora.ziel_typ_werte USING btree(sort);
+
+CREATE INDEX ON apflora.ziel_typ_werte USING btree(historic);
+
+COMMENT ON COLUMN apflora.ziel_typ_werte.id IS 'Primärschlüssel';
+
+COMMENT ON COLUMN apflora.ziel_typ_werte.text IS 'Beschreibung des Ziels';
+
+COMMENT ON COLUMN apflora.ziel_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
+
+COMMENT ON COLUMN apflora.ziel_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+ALTER TABLE apflora.ziel_typ_werte ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.ziel_typ_werte;
+
+CREATE POLICY reader ON apflora.ziel_typ_werte
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+
+
+-- tpopkontr_idbiotuebereinst_werte
+DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
+
+CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  code serial,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) DEFAULT NULL
+);
+
+CREATE SEQUENCE apflora.tpopkontr_idbiotuebereinst_werte_code_seq owned BY apflora.tpopkontr_idbiotuebereinst_werte.code;
+
+ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte
+  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontr_idbiotuebereinst_werte_code_seq');
+
+SELECT
+  setval('apflora.tpopkontr_idbiotuebereinst_werte_code_seq',(
+      SELECT
+        max(code) + 1 FROM apflora.tpopkontr_idbiotuebereinst_werte), FALSE);
+
+ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte
+  ALTER COLUMN changed_by DROP NOT NULL,
+  ALTER COLUMN changed_by SET DEFAULT NULL;
+
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(id);
+
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(code);
+
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(sort);
+
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(historic);
+
+COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.id IS 'Primärschlüssel';
+
+COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
+
+COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.tpopkontr_idbiotuebereinst_werte;
+
+CREATE POLICY reader ON apflora.tpopkontr_idbiotuebereinst_werte
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+
+-- tpopkontr_typ_werte
+DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
+
+CREATE TABLE apflora.tpopkontr_typ_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  code serial,
+  text varchar(50) UNIQUE DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) DEFAULT NULL
+);
+
+CREATE SEQUENCE apflora.tpopkontr_typ_werte_code_seq owned BY apflora.tpopkontr_typ_werte.code;
+
+ALTER TABLE apflora.tpopkontr_typ_werte
+  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontr_typ_werte_code_seq');
+
+SELECT
+  setval('apflora.tpopkontr_typ_werte_code_seq',(
+      SELECT
+        max(code) + 1 FROM apflora.tpopkontr_typ_werte), FALSE);
+
+ALTER TABLE apflora.tpopkontr_typ_werte
+  ALTER COLUMN changed_by DROP NOT NULL,
+  ALTER COLUMN changed_by SET DEFAULT NULL;
+
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(id);
+
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(code);
+
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(sort);
+
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(historic);
+
+COMMENT ON COLUMN apflora.tpopkontr_typ_werte.id IS 'Primärschlüssel';
+
+COMMENT ON COLUMN apflora.tpopkontr_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
+
+COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+ALTER TABLE apflora.tpopkontr_typ_werte ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.tpopkontr_typ_werte;
+
+CREATE POLICY reader ON apflora.tpopkontr_typ_werte
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+
+-- ek_abrechnungstyp_werte
+DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
+
+CREATE TABLE apflora.ek_abrechnungstyp_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  code text,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) DEFAULT NULL
+);
+
+CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(id);
+
+CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(code);
+
+CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(sort);
+
+CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(historic);
+
+COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.id IS 'Primärschlüssel';
+
+COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
+
+COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+ALTER TABLE apflora.ek_abrechnungstyp_werte ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.ek_abrechnungstyp_werte;
+
+CREATE POLICY reader ON apflora.ek_abrechnungstyp_werte
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+
+-- tpop_apberrelevant_grund_werte
+DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
+
+CREATE TABLE apflora.tpop_apberrelevant_grund_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  code serial,
+  text text,
+  sort smallint DEFAULT NULL,
+  historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) DEFAULT NULL
+);
+
+CREATE SEQUENCE apflora.tpop_apberrelevant_grund_werte_code_seq owned BY apflora.tpop_apberrelevant_grund_werte.code;
+
+ALTER TABLE apflora.tpop_apberrelevant_grund_werte
+  ALTER COLUMN code SET DEFAULT nextval('apflora.tpop_apberrelevant_grund_werte_code_seq');
+
+SELECT
+  setval('apflora.tpop_apberrelevant_grund_werte_code_seq',(
+      SELECT
+        max(code) + 1 FROM apflora.tpop_apberrelevant_grund_werte), FALSE);
+
+ALTER TABLE apflora.tpop_apberrelevant_grund_werte
+  ALTER COLUMN changed_by DROP NOT NULL,
+  ALTER COLUMN changed_by SET DEFAULT NULL;
+
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(id);
+
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(code);
+
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(text);
+
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(historic);
+
+COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.id IS 'Primärschlüssel';
+
+COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
+
+COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+ALTER TABLE apflora.tpop_apberrelevant_grund_werte ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.tpop_apberrelevant_grund_werte;
+
+CREATE POLICY reader ON apflora.tpop_apberrelevant_grund_werte
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+
+-- tpopmassn_erfbeurt_werte
+DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
+
+CREATE TABLE apflora.tpopmassn_erfbeurt_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  code serial,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) DEFAULT NULL
+);
+
+CREATE SEQUENCE apflora.tpopmassn_erfbeurt_werte_code_seq owned BY apflora.tpopmassn_erfbeurt_werte.code;
+
+ALTER TABLE apflora.tpopmassn_erfbeurt_werte
+  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopmassn_erfbeurt_werte_code_seq');
+
+SELECT
+  setval('apflora.tpopmassn_erfbeurt_werte_code_seq',(
+      SELECT
+        max(code) + 1 FROM apflora.tpopmassn_erfbeurt_werte), FALSE);
+
+ALTER TABLE apflora.tpopmassn_erfbeurt_werte
+  ALTER COLUMN changed_by DROP NOT NULL,
+  ALTER COLUMN changed_by SET DEFAULT NULL;
+
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(id);
+
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(code);
+
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(sort);
+
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(historic);
+
+COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.id IS 'Primärschlüssel';
+
+COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.text IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
+
+COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
+
+COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+ALTER TABLE apflora.tpopmassn_erfbeurt_werte ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.tpopmassn_erfbeurt_werte;
+
+CREATE POLICY reader ON apflora.tpopmassn_erfbeurt_werte
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+
+-- tpopmassn_typ_werte
+DROP TABLE IF EXISTS apflora.tpopmassn_typ_werte;
+
+CREATE TABLE apflora.tpopmassn_typ_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  code serial,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  ansiedlung boolean DEFAULT FALSE,
+  anpflanzung boolean DEFAULT FALSE,
+  historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) DEFAULT NULL
+);
+
+CREATE SEQUENCE apflora.tpopmassn_typ_werte_code_seq owned BY apflora.tpopmassn_typ_werte.code;
+
+ALTER TABLE apflora.tpopmassn_typ_werte
+  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopmassn_typ_werte_code_seq');
+
+SELECT
+  setval('apflora.tpopmassn_typ_werte_code_seq',(
+      SELECT
+        max(code) + 1 FROM apflora.tpopmassn_typ_werte), FALSE);
+
+ALTER TABLE apflora.tpopmassn_typ_werte
+  ALTER COLUMN changed_by DROP NOT NULL,
+  ALTER COLUMN changed_by SET DEFAULT NULL;
+
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(id);
+
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(code);
+
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(sort);
+
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(ansiedlung);
+
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(anpflanzung);
+
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(historic);
+
+COMMENT ON COLUMN apflora.tpopmassn_typ_werte.id IS 'Primärschlüssel';
+
+COMMENT ON COLUMN apflora.tpopmassn_typ_werte.ansiedlung IS 'Handelt es sich um eine Ansiedlung?';
+
+COMMENT ON COLUMN apflora.tpopmassn_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
+
+COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+ALTER TABLE apflora.tpopmassn_typ_werte ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.tpopmassn_typ_werte;
+
+CREATE POLICY reader ON apflora.tpopmassn_typ_werte
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+  -- tpop_entwicklung_werte
+DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
+
+CREATE TABLE apflora.tpop_entwicklung_werte(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  code serial,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  historic boolean DEFAULT FALSE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) DEFAULT NULL
+);
+
+CREATE SEQUENCE apflora.tpop_entwicklung_werte_code_seq owned BY apflora.tpop_entwicklung_werte.code;
+
+ALTER TABLE apflora.tpop_entwicklung_werte
+  ALTER COLUMN code SET DEFAULT nextval('apflora.tpop_entwicklung_werte_code_seq');
+
+SELECT
+  setval('apflora.tpop_entwicklung_werte_code_seq',(
+      SELECT
+        max(code) + 1 FROM apflora.tpop_entwicklung_werte), FALSE);
+
+ALTER TABLE apflora.tpop_entwicklung_werte
+  ALTER COLUMN changed_by DROP NOT NULL,
+  ALTER COLUMN changed_by SET DEFAULT NULL;
+
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(id);
+
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(code);
+
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(sort);
+
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(historic);
+
+COMMENT ON COLUMN apflora.tpop_entwicklung_werte.id IS 'Primärschlüssel';
+
+COMMENT ON COLUMN apflora.tpop_entwicklung_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
+
+COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+ALTER TABLE apflora.tpop_entwicklung_werte ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.tpop_entwicklung_werte;
+
+CREATE POLICY reader ON apflora.tpop_entwicklung_werte
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+
+-- projekt
+DROP TABLE IF EXISTS apflora.projekt;
+
+CREATE TABLE apflora.projekt(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name varchar(150) DEFAULT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) DEFAULT NULL
+);
+
+CREATE INDEX ON apflora.projekt USING btree(id);
+
+CREATE INDEX ON apflora.projekt USING btree(name);
+
+COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+ALTER TABLE apflora.projekt ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.projekt;
+
+CREATE POLICY reader ON apflora.projekt
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+
+-- this table can not be used as foreign table
+-- because it needs to be referenced
+DROP TABLE IF EXISTS apflora.ae_taxonomies;
+
+CREATE TABLE apflora.ae_taxonomies(
+  taxonomie_id uuid,
+  taxonomie_name text,
+  id uuid PRIMARY KEY,
+  taxid integer,
+  taxid_intern integer,
+  familie text,
+  artname text,
+  tax_art_name text,
+  artwert integer
+);
+
+ALTER TABLE apflora.ae_taxonomies
+  ADD COLUMN taxid_intern integer;
+
+CREATE INDEX ON apflora.ae_taxonomies(taxonomie_id);
+
+CREATE INDEX ON apflora.ae_taxonomies(taxonomie_name);
+
+CREATE INDEX ON apflora.ae_taxonomies(id);
+
+CREATE INDEX ON apflora.ae_taxonomies(taxid);
+
+CREATE INDEX ON apflora.ae_taxonomies(taxid_intern);
+
+CREATE INDEX ON apflora.ae_taxonomies(artname);
+
+CREATE INDEX ON apflora.ae_taxonomies(tax_art_name);
+
+ALTER TABLE apflora.ae_taxonomies ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS reader ON apflora.ae_taxonomies;
+
+CREATE POLICY reader ON apflora.ae_taxonomies
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
+
+-- to update data run:
+-- INSERT INTO apflora.ae_taxonomies (taxonomie_id, taxonomie_name, id, taxid, taxid_intern, familie, artname, tax_art_name, artwert)
+-- SELECT
+--   taxonomie_id,
+--   taxonomie_name,
+--   id,
+--   taxid,
+--   taxid_intern,
+--   familie,
+--   artname,
+--   CASE WHEN taxonomie_id = 'aed47d41-7b0e-11e8-b9a5-bd4f79edbcc4' THEN
+--     concat('Info Flora 2005: ', artname)
+--   WHEN taxonomie_id = 'c87f19f2-1b77-11ea-8282-bbc40e20aff6' THEN
+--     concat('DB-TAXREF (2017): ', artname)
+--   ELSE
+--     concat('(Taxonomie unbekannt): ', artname)
+--   END AS tax_art_name,
+--   artwert
+-- FROM
+--   apflora.ae_taxonomies_download
+-- ON CONFLICT ON CONSTRAINT ae_taxonomies_pkey
+--   DO UPDATE SET
+--     taxonomie_id = excluded.taxonomie_id,
+--     taxonomie_name = excluded.taxonomie_name,
+--     taxid = excluded.taxid,
+--     taxid_intern = excluded.taxid_intern,
+--     familie = excluded.familie,
+--     artname = excluded.artname,
+--     tax_art_name = excluded.tax_art_name,
+--     artwert = excluded.artwert;
+--
+-- beob can collect beob of any provenience by following this convention:
+-- - fields that are used in apflora.ch are appended as regular fields, that is:
+--   quelle, art_id, datum, autor, geom_point
+--   These fields are extracted from the original beob at import
+-- - all fields of the original beob are put in jsonb field "data"
+--   and shown in the form that lists beob
+-- - an id field is generated inside beob because we need a unique one
+--   of defined type and id fields sometimes come as integer,
+--   sometimes as GUIDS, so neither in a defined type nor unique
+--   Worse: sometimes the id is not absolutely clear because no field contains
+--   strictly unique values... !!
+-- - "id_field" points to the original id in "data"
+--
 -- this one first because of references to it
 -- user
 DROP TABLE IF EXISTS apflora.user CASCADE;
@@ -70,7 +690,6 @@ DROP TABLE IF EXISTS adresse;
 
 CREATE TABLE apflora.adresse(
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  id serial PRIMARY KEY,
   name text DEFAULT NULL,
   adresse text DEFAULT NULL,
   telefon text DEFAULT NULL,
@@ -87,7 +706,6 @@ CREATE INDEX ON apflora.adresse USING btree(name);
 
 CREATE INDEX ON apflora.adresse USING btree(freiw_erfko);
 
-CREATE INDEX ON apflora.adresse USING btree(user_id);
 
 COMMENT ON TABLE apflora.adresse IS 'Adressen, die in anderen Tabellen zugeordent werden können. Nicht zu verwechseln mit Konten, welche den Zugriff auf apflora.ch ermöglichen (Tabelle apflora.user)';
 
@@ -338,6 +956,78 @@ CREATE POLICY reader ON apflora.ap_history
           apflora.ap_user
         WHERE
           user_name = current_user_name())));
+
+          
+
+-- ekfrequenz
+DROP TABLE IF EXISTS apflora.ekfrequenz;
+
+CREATE TABLE apflora.ekfrequenz(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ap_id uuid NOT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ektyp ek_type DEFAULT NULL,
+  anwendungsfall text DEFAULT NULL,
+  code text DEFAULT NULL,
+  kontrolljahre integer[],
+  kontrolljahre_ab ek_kontrolljahre_ab DEFAULT NULL,
+  anzahl_min integer DEFAULT NULL,
+  anzahl_max integer DEFAULT NULL,
+  bemerkungen text DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  ek_abrechnungstyp text DEFAULT NULL REFERENCES apflora.ek_abrechnungstyp_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  changed_by varchar(20) DEFAULT NULL,
+  UNIQUE (ap_id, code)
+);
+
+CREATE INDEX ON apflora.ekfrequenz USING btree(id);
+
+CREATE INDEX ON apflora.ekfrequenz USING btree(ap_id);
+
+CREATE INDEX ON apflora.ekfrequenz USING btree(ektyp);
+
+COMMENT ON COLUMN apflora.ekfrequenz.ektyp IS 'Ob diese Frequenz für EK oder EKF anwendbar ist';
+
+CREATE INDEX ON apflora.ekfrequenz USING btree(anwendungsfall);
+
+CREATE INDEX ON apflora.ekfrequenz USING btree(code);
+
+CREATE INDEX ON apflora.ekfrequenz USING btree(kontrolljahre_ab);
+
+COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre_ab IS 'Referenzjahr für die Kontrolljahre';
+
+CREATE INDEX ON apflora.ekfrequenz USING btree(sort);
+
+CREATE INDEX ON apflora.ekfrequenz USING btree(ek_abrechnungstyp);
+
+COMMENT ON COLUMN apflora.ekfrequenz.id IS 'Primärschlüssel';
+
+COMMENT ON COLUMN apflora.ekfrequenz.ap_id IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ap"';
+
+COMMENT ON COLUMN apflora.ekfrequenz.anwendungsfall IS 'Beschreibt, in welchen Fällen diese Frequenz angewandt wird. Wahrscheinliche Werte: autochthone Population, angepflanzte Population, angesäte Population, Spezialfall';
+
+COMMENT ON COLUMN apflora.ekfrequenz.code IS 'Definierend für die eqfrequenz';
+
+COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre IS ' Definiert, in welchen Jahren eine Kontrolle üblicherweise stattfinden soll. Bei Anpflanzungen sind das Jahre ab der letzten Anpflanzung. Bei autochthonen Populationen?';
+
+COMMENT ON COLUMN apflora.ekfrequenz.anzahl_min IS 'Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant. Momentan nicht implementiert, weil Ekfrequenz-Typen nicht automatisch gesetzt werden';
+
+COMMENT ON COLUMN apflora.ekfrequenz.anzahl_max IS 'Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant. Momentan nicht implementiert, weil Ekfrequenz-Typen nicht automatisch gesetzt werden';
+
+COMMENT ON COLUMN apflora.ekfrequenz.sort IS 'Damit EK-Zähleinheiten untereinander sortiert werden können';
+
+COMMENT ON COLUMN apflora.ekfrequenz.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
+
+COMMENT ON COLUMN apflora.ekfrequenz.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
+
+ALTER TABLE apflora.ekfrequenz ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS writer ON apflora.ekfrequenz;
+
+CREATE POLICY writer ON apflora.ekfrequenz
+  USING (TRUE)
+  WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- userprojekt
 -- this table is NOT YET IN USE
@@ -754,31 +1444,6 @@ CREATE POLICY reader ON apflora.assozart
           apflora.ap_user
         WHERE
           user_name = current_user_name())));
-
--- projekt
-DROP TABLE IF EXISTS apflora.projekt;
-
-CREATE TABLE apflora.projekt(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name varchar(150) DEFAULT NULL,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL
-);
-
-CREATE INDEX ON apflora.projekt USING btree(id);
-
-CREATE INDEX ON apflora.projekt USING btree(name);
-
-COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-ALTER TABLE apflora.projekt ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.projekt;
-
-CREATE POLICY reader ON apflora.projekt
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- erfkrit
 DROP TABLE IF EXISTS apflora.erfkrit;
@@ -1725,106 +2390,6 @@ CREATE POLICY reader ON apflora.tpop_history
                 WHERE
                   user_name = current_user_name()))));
 
--- tpop_apberrelevant_grund_werte
-DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
-
-CREATE TABLE apflora.tpop_apberrelevant_grund_werte(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code serial,
-  text text,
-  sort smallint DEFAULT NULL,
-  historic boolean DEFAULT FALSE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL
-);
-
-CREATE SEQUENCE apflora.tpop_apberrelevant_grund_werte_code_seq owned BY apflora.tpop_apberrelevant_grund_werte.code;
-
-ALTER TABLE apflora.tpop_apberrelevant_grund_werte
-  ALTER COLUMN code SET DEFAULT nextval('apflora.tpop_apberrelevant_grund_werte_code_seq');
-
-SELECT
-  setval('apflora.tpop_apberrelevant_grund_werte_code_seq',(
-      SELECT
-        max(code) + 1 FROM apflora.tpop_apberrelevant_grund_werte), FALSE);
-
-ALTER TABLE apflora.tpop_apberrelevant_grund_werte
-  ALTER COLUMN changed_by DROP NOT NULL,
-  ALTER COLUMN changed_by SET DEFAULT NULL;
-
-CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(id);
-
-CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(code);
-
-CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(text);
-
-CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree(historic);
-
-COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-ALTER TABLE apflora.tpop_apberrelevant_grund_werte ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.tpop_apberrelevant_grund_werte;
-
-CREATE POLICY reader ON apflora.tpop_apberrelevant_grund_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
-
--- tpop_entwicklung_werte
-DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
-
-CREATE TABLE apflora.tpop_entwicklung_werte(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code serial,
-  text varchar(50) DEFAULT NULL,
-  sort smallint DEFAULT NULL,
-  historic boolean DEFAULT FALSE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL
-);
-
-CREATE SEQUENCE apflora.tpop_entwicklung_werte_code_seq owned BY apflora.tpop_entwicklung_werte.code;
-
-ALTER TABLE apflora.tpop_entwicklung_werte
-  ALTER COLUMN code SET DEFAULT nextval('apflora.tpop_entwicklung_werte_code_seq');
-
-SELECT
-  setval('apflora.tpop_entwicklung_werte_code_seq',(
-      SELECT
-        max(code) + 1 FROM apflora.tpop_entwicklung_werte), FALSE);
-
-ALTER TABLE apflora.tpop_entwicklung_werte
-  ALTER COLUMN changed_by DROP NOT NULL,
-  ALTER COLUMN changed_by SET DEFAULT NULL;
-
-CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(id);
-
-CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(code);
-
-CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(sort);
-
-CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree(historic);
-
-COMMENT ON COLUMN apflora.tpop_entwicklung_werte.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.tpop_entwicklung_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-ALTER TABLE apflora.tpop_entwicklung_werte ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.tpop_entwicklung_werte;
-
-CREATE POLICY reader ON apflora.tpop_entwicklung_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
-
 -- tpopber
 DROP TABLE IF EXISTS apflora.tpopber;
 
@@ -2167,106 +2732,6 @@ CREATE POLICY reader ON apflora.tpopkontr_file
                                 WHERE
                                   user_name = current_user_name()))))));
 
--- tpopkontr_idbiotuebereinst_werte
-DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
-
-CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code serial,
-  text varchar(50) DEFAULT NULL,
-  sort smallint DEFAULT NULL,
-  historic boolean DEFAULT FALSE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL
-);
-
-CREATE SEQUENCE apflora.tpopkontr_idbiotuebereinst_werte_code_seq owned BY apflora.tpopkontr_idbiotuebereinst_werte.code;
-
-ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte
-  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontr_idbiotuebereinst_werte_code_seq');
-
-SELECT
-  setval('apflora.tpopkontr_idbiotuebereinst_werte_code_seq',(
-      SELECT
-        max(code) + 1 FROM apflora.tpopkontr_idbiotuebereinst_werte), FALSE);
-
-ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte
-  ALTER COLUMN changed_by DROP NOT NULL,
-  ALTER COLUMN changed_by SET DEFAULT NULL;
-
-CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(id);
-
-CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(code);
-
-CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(sort);
-
-CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree(historic);
-
-COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.tpopkontr_idbiotuebereinst_werte;
-
-CREATE POLICY reader ON apflora.tpopkontr_idbiotuebereinst_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
-
--- tpopkontr_typ_werte
-DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
-
-CREATE TABLE apflora.tpopkontr_typ_werte(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code serial,
-  text varchar(50) UNIQUE DEFAULT NULL,
-  sort smallint DEFAULT NULL,
-  historic boolean DEFAULT FALSE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL
-);
-
-CREATE SEQUENCE apflora.tpopkontr_typ_werte_code_seq owned BY apflora.tpopkontr_typ_werte.code;
-
-ALTER TABLE apflora.tpopkontr_typ_werte
-  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontr_typ_werte_code_seq');
-
-SELECT
-  setval('apflora.tpopkontr_typ_werte_code_seq',(
-      SELECT
-        max(code) + 1 FROM apflora.tpopkontr_typ_werte), FALSE);
-
-ALTER TABLE apflora.tpopkontr_typ_werte
-  ALTER COLUMN changed_by DROP NOT NULL,
-  ALTER COLUMN changed_by SET DEFAULT NULL;
-
-CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(id);
-
-CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(code);
-
-CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(sort);
-
-CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree(historic);
-
-COMMENT ON COLUMN apflora.tpopkontr_typ_werte.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.tpopkontr_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-ALTER TABLE apflora.tpopkontr_typ_werte ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.tpopkontr_typ_werte;
-
-CREATE POLICY reader ON apflora.tpopkontr_typ_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
-
 -- tpopkontrzaehl
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 
@@ -2358,117 +2823,6 @@ CREATE POLICY reader ON apflora.tpopkontrzaehl
                                   apflora.ap_user
                                 WHERE
                                   user_name = current_user_name()))))));
-
--- tpopkontrzaehl_einheit_werte
-DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
-
-CREATE TABLE apflora.tpopkontrzaehl_einheit_werte(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code serial,
-  text varchar(50) DEFAULT NULL,
-  corresponds_to_massn_anz_triebe boolean DEFAULT FALSE,
-  corresponds_to_massn_anz_pflanzen boolean DEFAULT FALSE,
-  sort smallint DEFAULT NULL,
-  historic boolean DEFAULT FALSE,
-  needs_no_methode_anzahl boolean DEFAULT FALSE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL
-);
-
-CREATE SEQUENCE apflora.tpopkontrzaehl_einheit_werte_code_seq owned BY apflora.tpopkontrzaehl_einheit_werte.code;
-
-ALTER TABLE apflora.tpopkontrzaehl_einheit_werte
-  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontrzaehl_einheit_werte_code_seq');
-
-SELECT
-  setval('apflora.tpopkontrzaehl_einheit_werte_code_seq',(
-      SELECT
-        max(code) + 1 FROM apflora.tpopkontrzaehl_einheit_werte), FALSE);
-
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(id);
-
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(code);
-
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(sort);
-
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(historic);
-
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(corresponds_to_massn_anz_triebe);
-
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(corresponds_to_massn_anz_pflanzen);
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree(needs_no_methode_einheit);
-
-COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.corresponds_to_massn_anz_triebe IS 'Entspricht den "Anzahl Triebe" bei Massnahmen. Ermöglicht es, tpopmassn.zieleinheit_anzahl automatisch zu setzen';
-
-COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.corresponds_to_massn_anz_pflanzen IS 'Entspricht den "Anzahl Pflanzen" bei Massnahmen. Ermöglicht es, tpopmassn.zieleinheit_anzahl automatisch zu setzen';
-
-ALTER TABLE apflora.tpopkontrzaehl_einheit_werte ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.tpopkontrzaehl_einheit_werte;
-
-CREATE POLICY reader ON apflora.tpopkontrzaehl_einheit_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
-
--- tpopkontrzaehl_methode_werte
-DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
-
-CREATE TABLE apflora.tpopkontrzaehl_methode_werte(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code serial,
-  text varchar(50) DEFAULT NULL,
-  sort smallint DEFAULT NULL,
-  historic boolean DEFAULT FALSE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL
-);
-
-CREATE SEQUENCE apflora.tpopkontrzaehl_methode_werte_code_seq owned BY apflora.tpopkontrzaehl_methode_werte.code;
-
-ALTER TABLE apflora.tpopkontrzaehl_methode_werte
-  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopkontrzaehl_methode_werte_code_seq');
-
-SELECT
-  setval('apflora.tpopkontrzaehl_methode_werte_code_seq',(
-      SELECT
-        max(code) + 1 FROM apflora.tpopkontrzaehl_methode_werte), FALSE);
-
-ALTER TABLE apflora.tpopkontrzaehl_methode_werte
-  ALTER COLUMN changed_by DROP NOT NULL,
-  ALTER COLUMN changed_by SET DEFAULT NULL;
-
-ALTER TABLE apflora.tpopkontrzaehl_methode_werte
-  ALTER COLUMN changed_by SET DEFAULT NULL;
-
-CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(id);
-
-CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(code);
-
-CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(sort);
-
-CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree(historic);
-
-COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-ALTER TABLE apflora.tpopkontrzaehl_methode_werte ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.tpopkontrzaehl_methode_werte;
-
-CREATE POLICY reader ON apflora.tpopkontrzaehl_methode_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- tpopmassn
 DROP TABLE IF EXISTS apflora.tpopmassn;
@@ -2687,116 +3041,6 @@ CREATE POLICY reader ON apflora.tpopmassn_file
                                 WHERE
                                   user_name = current_user_name()))))));
 
--- tpopmassn_erfbeurt_werte
-DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
-
-CREATE TABLE apflora.tpopmassn_erfbeurt_werte(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code serial,
-  text varchar(50) DEFAULT NULL,
-  sort smallint DEFAULT NULL,
-  historic boolean DEFAULT FALSE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL
-);
-
-CREATE SEQUENCE apflora.tpopmassn_erfbeurt_werte_code_seq owned BY apflora.tpopmassn_erfbeurt_werte.code;
-
-ALTER TABLE apflora.tpopmassn_erfbeurt_werte
-  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopmassn_erfbeurt_werte_code_seq');
-
-SELECT
-  setval('apflora.tpopmassn_erfbeurt_werte_code_seq',(
-      SELECT
-        max(code) + 1 FROM apflora.tpopmassn_erfbeurt_werte), FALSE);
-
-ALTER TABLE apflora.tpopmassn_erfbeurt_werte
-  ALTER COLUMN changed_by DROP NOT NULL,
-  ALTER COLUMN changed_by SET DEFAULT NULL;
-
-CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(id);
-
-CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(code);
-
-CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(sort);
-
-CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree(historic);
-
-COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.text IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
-
-COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-ALTER TABLE apflora.tpopmassn_erfbeurt_werte ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.tpopmassn_erfbeurt_werte;
-
-CREATE POLICY reader ON apflora.tpopmassn_erfbeurt_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
-
--- tpopmassn_typ_werte
-DROP TABLE IF EXISTS apflora.tpopmassn_typ_werte;
-
-CREATE TABLE apflora.tpopmassn_typ_werte(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code serial,
-  text varchar(50) DEFAULT NULL,
-  sort smallint DEFAULT NULL,
-  ansiedlung boolean DEFAULT FALSE,
-  anpflanzung boolean DEFAULT FALSE,
-  historic boolean DEFAULT FALSE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL
-);
-
-CREATE SEQUENCE apflora.tpopmassn_typ_werte_code_seq owned BY apflora.tpopmassn_typ_werte.code;
-
-ALTER TABLE apflora.tpopmassn_typ_werte
-  ALTER COLUMN code SET DEFAULT nextval('apflora.tpopmassn_typ_werte_code_seq');
-
-SELECT
-  setval('apflora.tpopmassn_typ_werte_code_seq',(
-      SELECT
-        max(code) + 1 FROM apflora.tpopmassn_typ_werte), FALSE);
-
-ALTER TABLE apflora.tpopmassn_typ_werte
-  ALTER COLUMN changed_by DROP NOT NULL,
-  ALTER COLUMN changed_by SET DEFAULT NULL;
-
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(id);
-
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(code);
-
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(sort);
-
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(ansiedlung);
-
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(anpflanzung);
-
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree(historic);
-
-COMMENT ON COLUMN apflora.tpopmassn_typ_werte.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.tpopmassn_typ_werte.ansiedlung IS 'Handelt es sich um eine Ansiedlung?';
-
-COMMENT ON COLUMN apflora.tpopmassn_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-ALTER TABLE apflora.tpopmassn_typ_werte ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.tpopmassn_typ_werte;
-
-CREATE POLICY reader ON apflora.tpopmassn_typ_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
-
 -- tpopmassnber
 DROP TABLE IF EXISTS apflora.tpopmassnber;
 
@@ -3012,58 +3256,6 @@ CREATE POLICY reader ON apflora.ziel
         WHERE
           user_name = current_user_name())));
 
--- ziel_typ_werte
-DROP TABLE IF EXISTS apflora.ziel_typ_werte;
-
-CREATE TABLE apflora.ziel_typ_werte(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code serial,
-  text varchar(50) DEFAULT NULL,
-  sort smallint DEFAULT NULL,
-  historic boolean DEFAULT FALSE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) NOT NULL
-);
-
-CREATE SEQUENCE apflora.ziel_typ_werte_code_seq owned BY apflora.ziel_typ_werte.code;
-
-ALTER TABLE apflora.ziel_typ_werte
-  ALTER COLUMN code SET DEFAULT nextval('apflora.ziel_typ_werte_code_seq');
-
-SELECT
-  setval('apflora.ziel_typ_werte_code_seq',(
-      SELECT
-        max(code) + 1 FROM apflora.ziel_typ_werte), FALSE);
-
-ALTER TABLE apflora.ziel_typ_werte
-  ALTER COLUMN changed_by DROP NOT NULL,
-  ALTER COLUMN changed_by SET DEFAULT NULL;
-
-CREATE INDEX ON apflora.ziel_typ_werte USING btree(id);
-
-CREATE INDEX ON apflora.ziel_typ_werte USING btree(code);
-
-CREATE INDEX ON apflora.ziel_typ_werte USING btree(sort);
-
-CREATE INDEX ON apflora.ziel_typ_werte USING btree(historic);
-
-COMMENT ON COLUMN apflora.ziel_typ_werte.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.ziel_typ_werte.text IS 'Beschreibung des Ziels';
-
-COMMENT ON COLUMN apflora.ziel_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.ziel_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-ALTER TABLE apflora.ziel_typ_werte ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.ziel_typ_werte;
-
-CREATE POLICY reader ON apflora.ziel_typ_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
-
 -- zielber
 DROP TABLE IF EXISTS apflora.zielber;
 
@@ -3130,91 +3322,6 @@ CREATE POLICY reader ON apflora.zielber
                 WHERE
                   user_name = current_user_name()))));
 
--- this table can not be used as foreign table
--- because it needs to be referenced
-DROP TABLE IF EXISTS apflora.ae_taxonomies;
-
-CREATE TABLE apflora.ae_taxonomies(
-  taxonomie_id uuid,
-  taxonomie_name text,
-  id uuid PRIMARY KEY,
-  taxid integer,
-  taxid_intern integer,
-  familie text,
-  artname text,
-  tax_art_name text,
-  artwert integer
-);
-
-ALTER TABLE apflora.ae_taxonomies
-  ADD COLUMN taxid_intern integer;
-
-CREATE INDEX ON apflora.ae_taxonomies(taxonomie_id);
-
-CREATE INDEX ON apflora.ae_taxonomies(taxonomie_name);
-
-CREATE INDEX ON apflora.ae_taxonomies(id);
-
-CREATE INDEX ON apflora.ae_taxonomies(taxid);
-
-CREATE INDEX ON apflora.ae_taxonomies(taxid_intern);
-
-CREATE INDEX ON apflora.ae_taxonomies(artname);
-
-CREATE INDEX ON apflora.ae_taxonomies(tax_art_name);
-
-ALTER TABLE apflora.ae_taxonomies ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.ae_taxonomies;
-
-CREATE POLICY reader ON apflora.ae_taxonomies
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
-
--- to update data run:
--- INSERT INTO apflora.ae_taxonomies (taxonomie_id, taxonomie_name, id, taxid, taxid_intern, familie, artname, tax_art_name, artwert)
--- SELECT
---   taxonomie_id,
---   taxonomie_name,
---   id,
---   taxid,
---   taxid_intern,
---   familie,
---   artname,
---   CASE WHEN taxonomie_id = 'aed47d41-7b0e-11e8-b9a5-bd4f79edbcc4' THEN
---     concat('Info Flora 2005: ', artname)
---   WHEN taxonomie_id = 'c87f19f2-1b77-11ea-8282-bbc40e20aff6' THEN
---     concat('DB-TAXREF (2017): ', artname)
---   ELSE
---     concat('(Taxonomie unbekannt): ', artname)
---   END AS tax_art_name,
---   artwert
--- FROM
---   apflora.ae_taxonomies_download
--- ON CONFLICT ON CONSTRAINT ae_taxonomies_pkey
---   DO UPDATE SET
---     taxonomie_id = excluded.taxonomie_id,
---     taxonomie_name = excluded.taxonomie_name,
---     taxid = excluded.taxid,
---     taxid_intern = excluded.taxid_intern,
---     familie = excluded.familie,
---     artname = excluded.artname,
---     tax_art_name = excluded.tax_art_name,
---     artwert = excluded.artwert;
---
--- beob can collect beob of any provenience by following this convention:
--- - fields that are used in apflora.ch are appended as regular fields, that is:
---   quelle, art_id, datum, autor, geom_point
---   These fields are extracted from the original beob at import
--- - all fields of the original beob are put in jsonb field "data"
---   and shown in the form that lists beob
--- - an id field is generated inside beob because we need a unique one
---   of defined type and id fields sometimes come as integer,
---   sometimes as GUIDS, so neither in a defined type nor unique
---   Worse: sometimes the id is not absolutely clear because no field contains
---   strictly unique values... !!
--- - "id_field" points to the original id in "data"
---
 -- beob
 DROP TABLE IF EXISTS apflora.beob;
 
@@ -3453,112 +3560,6 @@ CREATE TYPE ek_kontrolljahre_ab AS enum(
   'ek',
   'ansiedlung'
 );
-
--- ekfrequenz
-DROP TABLE IF EXISTS apflora.ekfrequenz;
-
-CREATE TABLE apflora.ekfrequenz(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  ap_id uuid NOT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  ektyp ek_type DEFAULT NULL,
-  anwendungsfall text DEFAULT NULL,
-  code text DEFAULT NULL,
-  kontrolljahre integer[],
-  kontrolljahre_ab ek_kontrolljahre_ab DEFAULT NULL,
-  anzahl_min integer DEFAULT NULL,
-  anzahl_max integer DEFAULT NULL,
-  bemerkungen text DEFAULT NULL,
-  sort smallint DEFAULT NULL,
-  ek_abrechnungstyp text DEFAULT NULL REFERENCES apflora.ek_abrechnungstyp_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL,
-  UNIQUE (ap_id, code)
-);
-
-CREATE INDEX ON apflora.ekfrequenz USING btree(id);
-
-CREATE INDEX ON apflora.ekfrequenz USING btree(ap_id);
-
-CREATE INDEX ON apflora.ekfrequenz USING btree(ektyp);
-
-COMMENT ON COLUMN apflora.ekfrequenz.ektyp IS 'Ob diese Frequenz für EK oder EKF anwendbar ist';
-
-CREATE INDEX ON apflora.ekfrequenz USING btree(anwendungsfall);
-
-CREATE INDEX ON apflora.ekfrequenz USING btree(code);
-
-CREATE INDEX ON apflora.ekfrequenz USING btree(kontrolljahre_ab);
-
-COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre_ab IS 'Referenzjahr für die Kontrolljahre';
-
-CREATE INDEX ON apflora.ekfrequenz USING btree(sort);
-
-CREATE INDEX ON apflora.ekfrequenz USING btree(ek_abrechnungstyp);
-
-COMMENT ON COLUMN apflora.ekfrequenz.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.ekfrequenz.ap_id IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ap"';
-
-COMMENT ON COLUMN apflora.ekfrequenz.anwendungsfall IS 'Beschreibt, in welchen Fällen diese Frequenz angewandt wird. Wahrscheinliche Werte: autochthone Population, angepflanzte Population, angesäte Population, Spezialfall';
-
-COMMENT ON COLUMN apflora.ekfrequenz.code IS 'Definierend für die eqfrequenz';
-
-COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre IS ' Definiert, in welchen Jahren eine Kontrolle üblicherweise stattfinden soll. Bei Anpflanzungen sind das Jahre ab der letzten Anpflanzung. Bei autochthonen Populationen?';
-
-COMMENT ON COLUMN apflora.ekfrequenz.anzahl_min IS 'Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant. Momentan nicht implementiert, weil Ekfrequenz-Typen nicht automatisch gesetzt werden';
-
-COMMENT ON COLUMN apflora.ekfrequenz.anzahl_max IS 'Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant. Momentan nicht implementiert, weil Ekfrequenz-Typen nicht automatisch gesetzt werden';
-
-COMMENT ON COLUMN apflora.ekfrequenz.sort IS 'Damit EK-Zähleinheiten untereinander sortiert werden können';
-
-COMMENT ON COLUMN apflora.ekfrequenz.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
-
-COMMENT ON COLUMN apflora.ekfrequenz.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
-
-ALTER TABLE apflora.ekfrequenz ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS writer ON apflora.ekfrequenz;
-
-CREATE POLICY writer ON apflora.ekfrequenz
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
-
--- ek_abrechnungstyp_werte
-DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
-
-CREATE TABLE apflora.ek_abrechnungstyp_werte(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code text,
-  text varchar(50) DEFAULT NULL,
-  sort smallint DEFAULT NULL,
-  historic boolean DEFAULT FALSE,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL
-);
-
-CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(id);
-
-CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(code);
-
-CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(sort);
-
-CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree(historic);
-
-COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
-COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-ALTER TABLE apflora.ek_abrechnungstyp_werte ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS reader ON apflora.ek_abrechnungstyp_werte;
-
-CREATE POLICY reader ON apflora.ek_abrechnungstyp_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- ekplan
 DROP TABLE IF EXISTS apflora.ekplan;
