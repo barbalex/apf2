@@ -539,7 +539,6 @@ CREATE INDEX ON apflora.adresse USING btree(name);
 
 CREATE INDEX ON apflora.adresse USING btree(freiw_erfko);
 
-
 COMMENT ON TABLE apflora.adresse IS 'Adressen, die in anderen Tabellen zugeordent werden können. Nicht zu verwechseln mit Konten, welche den Zugriff auf apflora.ch ermöglichen (Tabelle apflora.user)';
 
 COMMENT ON COLUMN apflora.adresse.id IS 'Primärschlüssel';
@@ -663,7 +662,6 @@ CREATE TABLE apflora.ap_history(
   changed_by varchar(20) DEFAULT NULL,
   PRIMARY KEY (id, year)
 );
-
 
 --
 CREATE INDEX ON apflora.ap_history USING btree(id);
@@ -1656,7 +1654,6 @@ CREATE TABLE apflora.tpop_history(
 ALTER TABLE apflora.tpop_history
   ADD CONSTRAINT fk_pop_history FOREIGN KEY (year, pop_id) REFERENCES apflora.pop_history(year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-
 --
 CREATE INDEX ON apflora.tpop_history USING btree(id);
 
@@ -2105,8 +2102,6 @@ CREATE TABLE apflora.usermessage(
   UNIQUE (user_name, message_id)
 );
 
-CREATE INDEX ON apflora.usermessage USING btree(id);
-
 CREATE INDEX ON apflora.usermessage USING btree(user_name);
 
 CREATE INDEX ON apflora.usermessage USING btree(message_id);
@@ -2479,27 +2474,15 @@ COMMENT ON TABLE apflora.ns_betreuung IS 'Von der FNS. Um zu das wfs betreuungsg
 --   boundary character varying COLLATE pg_catalog."default",
 --   CONSTRAINT ch_administrative_unit_pkey PRIMARY KEY (id)
 -- );
-
 -- ALTER TABLE IF EXISTS apflora.ch_administrative_unit OWNER TO postgres;
-
 -- GRANT SELECT ON TABLE apflora.ch_administrative_unit TO apflora_ap_reader;
-
 -- GRANT ALL ON TABLE apflora.ch_administrative_unit TO apflora_ap_writer;
-
 -- GRANT ALL ON TABLE apflora.ch_administrative_unit TO apflora_manager;
-
 -- GRANT SELECT ON TABLE apflora.ch_administrative_unit TO apflora_reader;
-
 -- GRANT ALL ON TABLE apflora.ch_administrative_unit TO postgres;
-
 -- CREATE INDEX IF NOT EXISTS sidx_ch_administrative_unit_geom ON apflora.ch_administrative_unit USING btree(geom);
-
 -- -- added this myself:
 -- CREATE INDEX ON apflora.ch_administrative_unit USING btree(id);
-
 -- CREATE INDEX ON apflora.ch_administrative_unit USING btree(localisedcharacterstring);
-
 -- CREATE INDEX ON apflora.ch_administrative_unit USING btree(text);
-
 -- CREATE INDEX ON apflora.ch_administrative_unit USING btree(geom);
-
