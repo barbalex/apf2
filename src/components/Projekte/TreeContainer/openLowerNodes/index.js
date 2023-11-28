@@ -16,6 +16,7 @@ const openLowerNodes = ({
   menuType,
   client,
   store,
+  jahr
 }) => {
   /**
    * 1. load all data
@@ -25,6 +26,14 @@ const openLowerNodes = ({
    * 5. activeNodeArray stays same
    * 6. refresh tree
    */
+  console.log('openLowerNodes', {
+    id,
+    parentId,
+    popId,
+    apId,
+    projId,
+    menuType,
+  })
   switch (menuType) {
     case 'popFolder':
       popFolder({ id, projId, client, store })
@@ -68,6 +77,7 @@ const openLowerNodes = ({
         parentId,
         store,
         client,
+        jahr
       })
       break
     default:

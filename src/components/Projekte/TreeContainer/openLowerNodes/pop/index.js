@@ -87,9 +87,6 @@ const openLowerNodesPop = async ({
 
   // 3. update openNodes
   addOpenNodes(newOpenNodes)
-
-  // 4. refresh tree
-  store.tree.incrementRefetcher()
 }
 
 export default openLowerNodesPop

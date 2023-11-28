@@ -52,7 +52,6 @@ export default types
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     mapFilter: types.maybe(Geojson),
     mapFilterResetter: types.optional(types.number, 0),
-    refetcher: types.optional(types.number, 0),
     showPopIcon: types.optional(types.boolean, true),
     showTpopIcon: types.optional(types.boolean, true),
   })
@@ -98,9 +97,6 @@ export default types
     },
     dataFilterEmpty() {
       self.dataFilter = initialDataFilterValues
-    },
-    incrementRefetcher() {
-      self.refetcher += 1
     },
     resetTree2Src() {
       self.tree2Src = ''

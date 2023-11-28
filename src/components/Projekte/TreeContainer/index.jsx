@@ -26,40 +26,40 @@ const CmUserFolder = lazy(() => import('./contextmenu/UserFolder'))
 const CmUser = lazy(() => import('./contextmenu/User'))
 const CmAdresseFolder = lazy(() => import('./contextmenu/AdresseFolder'))
 const CmAdresse = lazy(() => import('./contextmenu/Adresse'))
-const CmTpopApberrelevantGrundWerteFolder = lazy(() =>
-  import('./contextmenu/TpopApberrelevantGrundWerteFolder'),
+const CmTpopApberrelevantGrundWerteFolder = lazy(
+  () => import('./contextmenu/TpopApberrelevantGrundWerteFolder'),
 )
-const CmTpopApberrelevantGrundWerte = lazy(() =>
-  import('./contextmenu/TpopApberrelevantGrundWerte'),
+const CmTpopApberrelevantGrundWerte = lazy(
+  () => import('./contextmenu/TpopApberrelevantGrundWerte'),
 )
-const CmTpopkontrzaehlEinheitWerteFolder = lazy(() =>
-  import('./contextmenu/TpopkontrzaehlEinheitWerteFolder'),
+const CmTpopkontrzaehlEinheitWerteFolder = lazy(
+  () => import('./contextmenu/TpopkontrzaehlEinheitWerteFolder'),
 )
-const CmTpopkontrzaehlEinheitWerte = lazy(() =>
-  import('./contextmenu/TpopkontrzaehlEinheitWerte'),
+const CmTpopkontrzaehlEinheitWerte = lazy(
+  () => import('./contextmenu/TpopkontrzaehlEinheitWerte'),
 )
-const CmEkAbrechnungstypWerteFolder = lazy(() =>
-  import('./contextmenu/EkAbrechnungstypWerteFolder'),
+const CmEkAbrechnungstypWerteFolder = lazy(
+  () => import('./contextmenu/EkAbrechnungstypWerteFolder'),
 )
-const CmEkAbrechnungstypWerte = lazy(() =>
-  import('./contextmenu/EkAbrechnungstypWerte'),
+const CmEkAbrechnungstypWerte = lazy(
+  () => import('./contextmenu/EkAbrechnungstypWerte'),
 )
-const CmApberuebersichtFolder = lazy(() =>
-  import('./contextmenu/ApberuebersichtFolder'),
+const CmApberuebersichtFolder = lazy(
+  () => import('./contextmenu/ApberuebersichtFolder'),
 )
 const CmApberuebersicht = lazy(() => import('./contextmenu/Apberuebersicht'))
 const CmAssozartFolder = lazy(() => import('./contextmenu/AssozartFolder'))
 const CmAssozart = lazy(() => import('./contextmenu/Assozart'))
-const CmEkzaehleinheitFolder = lazy(() =>
-  import('./contextmenu/EkzaehleinheitFolder'),
+const CmEkzaehleinheitFolder = lazy(
+  () => import('./contextmenu/EkzaehleinheitFolder'),
 )
 const CmEkzaehleinheit = lazy(() => import('./contextmenu/Ekzaehleinheit'))
 const CmEkfrequenzFolder = lazy(() => import('./contextmenu/EkfrequenzFolder'))
 const CmEkfrequenz = lazy(() => import('./contextmenu/Ekfrequenz'))
 const CmApartFolder = lazy(() => import('./contextmenu/ApartFolder'))
 const CmApart = lazy(() => import('./contextmenu/Apart'))
-const CmBeobZugeordnetFolder = lazy(() =>
-  import('./contextmenu/BeobZugeordnetFolder'),
+const CmBeobZugeordnetFolder = lazy(
+  () => import('./contextmenu/BeobZugeordnetFolder'),
 )
 const CmApberFolder = lazy(() => import('./contextmenu/ApberFolder'))
 const CmApber = lazy(() => import('./contextmenu/Apber'))
@@ -72,8 +72,8 @@ const CmZielBerFolder = lazy(() => import('./contextmenu/ZielBerFolder'))
 const CmZielBer = lazy(() => import('./contextmenu/Zielber'))
 const CmPopFolder = lazy(() => import('./contextmenu/PopFolder'))
 const CmPop = lazy(() => import('./contextmenu/Pop'))
-const CmPopmassnberFolder = lazy(() =>
-  import('./contextmenu/PopmassnberFolder'),
+const CmPopmassnberFolder = lazy(
+  () => import('./contextmenu/PopmassnberFolder'),
 )
 const CmPopmassnber = lazy(() => import('./contextmenu/Popmassnber'))
 const CmPopberFolder = lazy(() => import('./contextmenu/PopberFolder'))
@@ -85,28 +85,28 @@ const CmTpop = lazy(() => import('./contextmenu/Tpop'))
 const CmTpopberFolder = lazy(() => import('./contextmenu/TpopberFolder'))
 const CmTpopber = lazy(() => import('./contextmenu/Tpopber'))
 const CmBeobZugeordnet = lazy(() => import('./contextmenu/BeobZugeordnet'))
-const CmBeobnichtbeurteilt = lazy(() =>
-  import('./contextmenu/Beobnichtbeurteilt'),
+const CmBeobnichtbeurteilt = lazy(
+  () => import('./contextmenu/Beobnichtbeurteilt'),
 )
-const CmBeobNichtZuzuordnen = lazy(() =>
-  import('./contextmenu/BeobNichtZuzuordnen'),
+const CmBeobNichtZuzuordnen = lazy(
+  () => import('./contextmenu/BeobNichtZuzuordnen'),
 )
-const CmTpopfreiwkontrFolder = lazy(() =>
-  import('./contextmenu/TpopfreiwkontrFolder'),
+const CmTpopfreiwkontrFolder = lazy(
+  () => import('./contextmenu/TpopfreiwkontrFolder'),
 )
 const CmTpopfreiwkontr = lazy(() => import('./contextmenu/Tpopfreiwkontr'))
-const CmTpopfeldkontrFolder = lazy(() =>
-  import('./contextmenu/TpopfeldkontrFolder'),
+const CmTpopfeldkontrFolder = lazy(
+  () => import('./contextmenu/TpopfeldkontrFolder'),
 )
 const CmTpopfeldkontr = lazy(() => import('./contextmenu/Tpopfeldkontr'))
-const CmTpopfeldkontrzaehlFolder = lazy(() =>
-  import('./contextmenu/TpopfeldkontrzaehlFolder'),
+const CmTpopfeldkontrzaehlFolder = lazy(
+  () => import('./contextmenu/TpopfeldkontrzaehlFolder'),
 )
-const CmTpopfeldkontrzaehl = lazy(() =>
-  import('./contextmenu/Tpopfeldkontrzaehl'),
+const CmTpopfeldkontrzaehl = lazy(
+  () => import('./contextmenu/Tpopfeldkontrzaehl'),
 )
-const CmTpopmassnberFolder = lazy(() =>
-  import('./contextmenu/TpopmassnberFolder'),
+const CmTpopmassnberFolder = lazy(
+  () => import('./contextmenu/TpopmassnberFolder'),
 )
 const CmTpopmassnber = lazy(() => import('./contextmenu/Tpopmassnber'))
 const CmTpopmassnFolder = lazy(() => import('./contextmenu/TpopmassnFolder'))
@@ -435,6 +435,7 @@ const TreeContainer = () => {
             menuType,
             client,
             store,
+            jahr,
           })
         },
         closeLowerNodes() {
@@ -501,6 +502,7 @@ const TreeContainer = () => {
             parentId: id,
             client,
             store,
+            queryClient,
           })
         },
         markForCopyingBiotop() {

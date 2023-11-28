@@ -180,7 +180,6 @@ const createNewPopFromBeob = async ({
       'BeobAssignLinesQuery',
     ],
   })
-  store.tree.incrementRefetcher()
 }
 
 export default createNewPopFromBeob

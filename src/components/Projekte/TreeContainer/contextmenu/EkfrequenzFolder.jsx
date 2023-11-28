@@ -255,7 +255,6 @@ const EkfrequenzFolder = ({ onClick }) => {
               },
             })
           }),
-          store.tree.incrementRefetcher(),
         )
       } catch (error) {
         console.log({ error })
@@ -273,7 +272,7 @@ const EkfrequenzFolder = ({ onClick }) => {
         },
       })
     },
-    [apId, client, enqueNotification, store.tree, user.name],
+    [apId, client, enqueNotification, user.name],
   )
 
   const [apOptionsError, setApOptionsError] = useState(undefined)

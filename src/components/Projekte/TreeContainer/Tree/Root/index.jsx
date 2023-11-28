@@ -9,7 +9,7 @@ import Users from './Users'
 import Messages from './Messages'
 import Werte from './Werte'
 import CurrentIssues from './CurrentIssues'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext' 
 
 const TreeRoot = () => {
   const client = useApolloClient()

@@ -219,7 +219,6 @@ const ErfkritFolder = ({ onClick }) => {
               },
             })
           }),
-          // store.tree.incrementRefetcher(),
         )
       } catch (error) {
         console.log({ error })

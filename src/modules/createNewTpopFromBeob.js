@@ -244,7 +244,6 @@ const createNewTpopFromBeob = async ({
       'BeobAssignLinesQuery',
     ],
   })
-  store.tree.incrementRefetcher()
 }
 
 export default createNewTpopFromBeob

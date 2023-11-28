@@ -45,21 +45,18 @@ const moveTo = async ({ id: newParentId, store, client }) => {
         mutation: updateTpopkontrById,
         variables: { id, tpopId: newParentId },
       })
-      store.tree.incrementRefetcher()
       break
     case 'tpopmassn':
       client.mutate({
         mutation: updateTpopmassnById,
         variables: { id, tpopId: newParentId },
       })
-      store.tree.incrementRefetcher()
       break
     case 'tpop':
       client.mutate({
         mutation: updateTpopById,
         variables: { id, popId: newParentId },
       })
-      store.tree.incrementRefetcher()
       break
     case 'pop':
       console.log('will move pop', { id, newParentId })
@@ -67,7 +64,6 @@ const moveTo = async ({ id: newParentId, store, client }) => {
         mutation: updatePopById,
         variables: { id, apId: newParentId },
       })
-      store.tree.incrementRefetcher()
       break
     default:
       // do nothing

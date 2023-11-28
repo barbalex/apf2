@@ -1,6 +1,6 @@
 import Row from '../../Row'
 import ApberuebersichtFolder from './ApberuebersichtFolder'
-import ApFolder from './ApFolder'
+import ApFolder from './ApFolder' 
 
 const ProjektNode = ({ projekt, projectIsOpen }) => {
   const url = ['Projekte', projekt.id]

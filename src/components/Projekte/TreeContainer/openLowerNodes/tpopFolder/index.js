@@ -306,9 +306,6 @@ const openLowerNodesTpopFolder = async ({
 
   // 3. update
   addOpenNodes(newOpenNodes)
-
-  // 4. refresh tree
-  store.tree.incrementRefetcher()
 }
 
 export default openLowerNodesTpopFolder

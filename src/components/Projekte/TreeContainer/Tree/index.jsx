@@ -1,12 +1,8 @@
-// import { useContext } from 'react'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import Root from './Root'
 import IntoViewScroller from './IntoViewScroller'
 import Menu from './Menu'
-
-// import storeContext from '../../../../storeContext'
 
 const Container = styled.div`
   height: calc(100% - 53px - 8px);
@@ -21,10 +17,6 @@ const Container = styled.div`
 `
 
 const TreeComponent = () => {
-  // TODO: needed?
-  // const store = useContext(storeContext)
-  // const { refetcher } = store.tree  const [onlyShowActivePathString, setOnlyShowActivePath] =
-
   return (
     <Container>
       <Root />
@@ -34,4 +26,4 @@ const TreeComponent = () => {
   )
 }
 
-export default observer(TreeComponent)
+export default TreeComponent
