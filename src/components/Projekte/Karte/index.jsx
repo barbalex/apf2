@@ -547,7 +547,7 @@ const Karte = ({ mapContainerRef }) => {
     >
       <ErrorBoundary>
         <StyledMapContainer
-          // bounds need to be set using ma.fitBounds sice v3
+          // bounds need to be set using map.fitBounds sice v3
           // but keep bounds in store as last bound will be reapplied
           // when map is re-opened
           bounds={bounds}
