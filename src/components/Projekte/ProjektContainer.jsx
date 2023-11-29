@@ -1,4 +1,4 @@
-import { useContext, useMemo, lazy, Suspense } from 'react'
+import { useContext, useMemo, lazy, Suspense, useRef } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import intersection from 'lodash/intersection'
@@ -65,6 +65,10 @@ const ProjektContainer = () => {
   const showApberForArt = apberId && pathname.endsWith('print')
   const showApberForAll = apberUebersichtId && pathname.endsWith('print')
 
+  // need this to prevent map from greying out on resize
+  // https://github.com/PaulLeCam/react-leaflet/issues/1074
+  const mapContainerRef = useRef(null)
+
   const elObj = {
     tree: (
       <InnerContainer>
@@ -88,9 +92,9 @@ const ProjektContainer = () => {
       </InnerContainer>
     ),
     karte: (
-      <InnerContainer>
+      <InnerContainer ref={mapContainerRef}>
         <Suspense fallback={<Spinner />}>
-          <Karte />
+          <Karte mapContainerRef={mapContainerRef} />
         </Suspense>
       </InnerContainer>
     ),
