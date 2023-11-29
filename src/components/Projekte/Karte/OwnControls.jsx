@@ -17,7 +17,7 @@ const OwnControls = ({ setControlHeight, mapRef }) => {
   const onResize = useCallback(
     (width, height) => {
       //console.log('height:', height)
-      setControlHeight(Math.round(height ?? 127))
+      setControlHeight(Math.round(height ?? 167))
     },
     [setControlHeight],
   )
