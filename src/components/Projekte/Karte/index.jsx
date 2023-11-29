@@ -523,14 +523,14 @@ const Karte = ({ mapContainerRef }) => {
   // 3. give overlays 100 + index in activeOverlaysSorted
   // 4. apflora layers always on top
 
-  console.log('Map', {
-    activeBaseLayer,
-    activeOverlaysSorted,
-    activeApfloraLayers,
-    controlHeight,
-    bounds,
-    mapContainerRef,
-  })
+  // console.log('Map', {
+  //   activeBaseLayer,
+  //   activeOverlaysSorted,
+  //   activeApfloraLayers,
+  //   controlHeight,
+  //   bounds,
+  //   mapContainerRef,
+  // })
   // console.log('Map, bounds:', bounds)
 
   // clustered layers receive a key that rebuilds them every time the cluster
