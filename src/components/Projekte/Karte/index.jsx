@@ -122,9 +122,19 @@ const StyledMapContainer = styled(MapContainer)`
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
-    text-shadow: 0 1px 0 white, -0 -1px 0 white, 1px 0 0 white, -1px 0 0 white,
-      0 2px 1px white, -0 -2px 1px white, 2px 0 1px white, -2px 0 1px white,
-      0 3px 2px white, -0 -3px 2px white, 3px 0 2px white, -3px 0 2px white;
+    text-shadow:
+      0 1px 0 white,
+      -0 -1px 0 white,
+      1px 0 0 white,
+      -1px 0 0 white,
+      0 2px 1px white,
+      -0 -2px 1px white,
+      2px 0 1px white,
+      -2px 0 1px white,
+      0 3px 2px white,
+      -0 -3px 2px white,
+      3px 0 2px white,
+      -3px 0 2px white;
   }
 
   .leaflet-tooltip {
@@ -412,7 +422,7 @@ const StyledMapContainer = styled(MapContainer)`
  * So: need to use app level store state
  */
 
-const Karte = () => {
+const Karte = ({ mapContainerRef }) => {
   const { apId } = useParams()
 
   const mapRef = useRef(null)
@@ -450,8 +460,9 @@ const Karte = () => {
   /**
    * need to pass the height of the self built controls
    * to move controls built by leaflet when layer menu changes height
+   * Beware: If initial value is wrong, map will render twice
    */
-  const [controlHeight, setControlHeight] = useState(127)
+  const [controlHeight, setControlHeight] = useState(167)
 
   const clustered = !(
     assigningBeob ||
@@ -479,7 +490,7 @@ const Karte = () => {
   )
   const BaseLayerComponents = useMemo(
     () => ({
-      OsmColor: () => <OsmColor />,
+      OsmColor: () => <OsmColor mapContainerRef={mapContainerRef} />,
       OsmBw: () => <OsmBw />,
       SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
       SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
@@ -511,15 +522,21 @@ const Karte = () => {
   // 3. give overlays 100 + index in activeOverlaysSorted
   // 4. apflora layers always on top
 
-  // console.log('Map', {
-  //   activeBaseLayer,
-  //   activeOverlaysSorted,
-  //   activeApfloraLayers,
-  // })
+  console.log('Map', {
+    activeBaseLayer,
+    activeOverlaysSorted,
+    activeApfloraLayers,
+    controlHeight,
+    bounds,
+    mapContainerRef,
+  })
+  // console.log('Map, bounds:', bounds)
 
   // clustered layers receive a key that rebuilds them every time the cluster
   // tool would erroneously add new markers from last time it build
   // see: https://github.com/barbalex/apf2/issues/467
+
+  // console.log('map rendering')
 
   return (
     <Container
