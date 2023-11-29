@@ -16,6 +16,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useParams } from 'react-router-dom'
 
+import MapResizer from './MapResizer'
 import Control from './Control'
 import OsmColor from './layers/OsmColor'
 import OsmBw from './layers/OsmBw'
@@ -490,7 +491,7 @@ const Karte = ({ mapContainerRef }) => {
   )
   const BaseLayerComponents = useMemo(
     () => ({
-      OsmColor: () => <OsmColor mapContainerRef={mapContainerRef} />,
+      OsmColor: () => <OsmColor />,
       OsmBw: () => <OsmBw />,
       SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
       SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
@@ -558,7 +559,11 @@ const Karte = ({ mapContainerRef }) => {
           doubleClickZoom={false}
           zoomControl={false}
         >
-          {activeBaseLayer && <BaseLayerComponent />}
+          {activeBaseLayer && (
+            <MapResizer mapContainerRef={mapContainerRef}>
+              <BaseLayerComponent />
+            </MapResizer>
+          )}
           {activeOverlaysSorted
             .reverse()
             .map((overlayName, index) => {

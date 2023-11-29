@@ -1,29 +1,7 @@
-import React, { useEffect } from 'react'
-import { TileLayer, Pane, useMap } from 'react-leaflet'
+import React from 'react'
+import { TileLayer, Pane } from 'react-leaflet'
 
-const OsmColorLayer = ({ mapContainerRef }) => {
-  const map = useMap()
-
-  // need this to prevent map from greying out on resize
-  // https://github.com/PaulLeCam/react-leaflet/issues/1074
-  useEffect(() => {
-    const container = mapContainerRef?.current
-    if (!container) return
-
-    const resizeObserver = new ResizeObserver(() => {
-      if (map) {
-        console.log('OsmColorLayer, resizeObserver resizing map')
-        map.invalidateSize()
-      }
-    })
-
-    resizeObserver.observe(container)
-
-    return () => {
-      resizeObserver.unobserve(container)
-    }
-  }, [map, mapContainerRef])
-
+const OsmColorLayer = () => {
   return (
     <Pane className="OsmColor" name="OsmColor" style={{ zIndex: 100 }}>
       <TileLayer
