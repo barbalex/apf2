@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import styled from '@emotion/styled'
+import Linkify from 'react-linkify'
 
 const Row = styled.div`
   display: flex;
@@ -90,7 +91,9 @@ const Field = ({ label, value, index, moveField }) => {
   return (
     <Row ref={ref} style={{ opacity }} data-handler-id={handlerId}>
       <Label>{label}</Label>
-      <Value>{value}</Value>
+      <Value>
+        <Linkify properties={{ target: '_blank' }}>{value}</Linkify>
+      </Value>
     </Row>
   )
 }
