@@ -19,9 +19,11 @@ import Spinner from '../shared/Spinner'
 
 const isInIframe = inIframe()
 
+// in iframes width and height need to be set, so are set to 100%
+// this need to set height of container to 100% for the iframe
 const Container = styled.div`
   background-color: #fffde7;
-  flex-grow: 1;
+  ${(props) => (props['data-isiniframe'] ? 'height: 100%;' : 'flex-grow: 1;')}
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -64,7 +66,7 @@ const ProtectedRoute = () => {
   }
 
   return (
-    <Container>
+    <Container data-isiniframe={isInIframe}>
       {!!user.token && (
         <>
           <Outlet />
