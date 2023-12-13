@@ -142,7 +142,7 @@ const Tpopfreiwkontr = ({ id: idPassed }) => {
 
   if (Object.keys(row).length === 0) return null
 
-  console.log('Tpopfreiwkontr, isPrint:', isPrint)
+  // console.log('Tpopfreiwkontr, isPrint:', isPrint)
 
   return (
     <Container>
