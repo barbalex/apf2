@@ -166,6 +166,8 @@ const Apberuebersicht = () => {
   // })
 
   const onClickHistorize = useCallback(async () => {
+    if (!row?.jahr)
+      return console.log('Apberuebersicht, onClickHistorize: year missing')
     setHistorizing(true)
     await historize({ store, apberuebersicht: row })
     queryClient.invalidateQueries({
@@ -177,6 +179,10 @@ const Apberuebersicht = () => {
   if (isLoading) return <Spinner />
 
   if (error) return <Error error={error} />
+
+  console.log('Apberuebersicht, row:', row)
+
+  if (!row) return null
 
   return (
     <ErrorBoundary>
