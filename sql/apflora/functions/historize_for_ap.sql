@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION apflora.historize_for_ap(_year integer, ap_id uuid)
+CREATE OR REPLACE FUNCTION apflora.historize_for_ap(_year integer DEFAULT 0, ap_id uuid DEFAULT '99999999-9999-9999-9999-999999999999')
   RETURNS boolean
   AS $$
 BEGIN

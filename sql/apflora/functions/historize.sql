@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION apflora.historize(_year integer)
+CREATE OR REPLACE FUNCTION apflora.historize(_year integer DEFAULT 0)
   RETURNS boolean
   AS $$
 BEGIN
@@ -13,7 +13,7 @@ BEGIN
   LEFT JOIN apflora.pop p ON p.id = h.id
   WHERE p.id IS NULL
     AND h.year = $1;
-  -- -- 1.3 ap_history
+  -- 1.3 ap_history
   DELETE FROM apflora.ap_history USING apflora.ap_history h
   LEFT JOIN apflora.ap ap ON ap.id = h.id
   WHERE ap.id IS NULL
