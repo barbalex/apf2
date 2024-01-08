@@ -4,25 +4,29 @@ CREATE OR REPLACE FUNCTION apflora.historize_for_ap(_year integer DEFAULT 0, ap_
 BEGIN
   -- 1.  empty history tables (rows of passed year)
   -- 1.1 tpop_history
-  DELETE FROM apflora.tpop_history USING apflora.tpop_history h
-  INNER JOIN apflora.pop_history hpop ON hpop.id = h.pop_id
-    AND h.year = hpop.year
-  LEFT JOIN apflora.tpop t ON t.id = h.id
-  WHERE t.id IS NULL
-    AND h.year = $1
-    AND hpop.ap_id = $2;
+  DELETE FROM apflora.tpop_history
+  WHERE year = $1
+    AND id IN(
+      SELECT
+        id
+      FROM
+        apflora.tpop
+      WHERE
+        pop_id IN(
+          SELECT
+            id
+          FROM
+            apflora.pop p
+          WHERE
+            p.ap_id = $2));
   -- 1.2. pop_history
-  DELETE FROM apflora.pop_history USING apflora.pop_history h
-  LEFT JOIN apflora.pop p ON p.id = h.id
-  WHERE p.id IS NULL
-    AND h.year = $1
-    AND h.ap_id = $2;
+  DELETE FROM apflora.pop_history ph
+  WHERE ph.year = $1
+    AND ph.ap_id = $2;
   -- 1.3. ap_history
-  DELETE FROM apflora.ap_history USING apflora.ap_history h
-  LEFT JOIN apflora.ap a ON a.id = h.id
-  WHERE a.id IS NULL
-    AND h.year = $1
-    AND h.id = $2;
+  DELETE FROM apflora.ap_history
+  WHERE year = $1
+    AND id = $2;
   --
   -- 2. insert, on conflict update
   -- 2.1 insert ap_history
