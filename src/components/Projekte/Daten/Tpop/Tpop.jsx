@@ -207,6 +207,13 @@ const Tpop = ({
             saveToDb={saveToDb}
           />
         )}
+        <MdField
+          name="bemerkungen"
+          label="Bemerkungen"
+          value={row.bemerkungen}
+          saveToDb={saveToDb}
+          error={fieldErrors.bemerkungen}
+        />
         <TextField
           name="radius"
           label="Radius (m)"
@@ -358,13 +365,6 @@ const Tpop = ({
           value={row.bewirtschaftung}
           saveToDb={saveToDb}
           error={fieldErrors.bewirtschaftung}
-        />
-        <MdField
-          name="bemerkungen"
-          label="Bemerkungen"
-          value={row.bemerkungen}
-          saveToDb={saveToDb}
-          error={fieldErrors.bemerkungen}
         />
       </Container>
     </SimpleBar>
