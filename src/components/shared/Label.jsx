@@ -8,7 +8,7 @@ const StyledLabel = styled.div`
   color: rgba(0, 0, 0, 0.5);
   pointer-events: none;
   user-select: none;
-  padding-bottom: 8px;
+  padding-bottom: 4px;
 `
 
 const Label = ({ label }) => <StyledLabel>{label}</StyledLabel>

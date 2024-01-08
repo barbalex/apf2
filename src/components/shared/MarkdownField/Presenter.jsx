@@ -7,8 +7,15 @@ import Label from '../Label'
 const mdParser = new MarkdownIt({ breaks: true })
 
 const EditorContainer = styled.div`
-  margin-bottom: 12px;
+  margin-bottom: 19px;
   cursor: pointer;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  p {
+    margin: 0 0 5px 0;
+  }
+  div {
+    line-height: 23px;
+  }
 `
 
 // setting tabIndex on Presenter to make it focusable
