@@ -29,6 +29,7 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
+  flex-grow: 1;
 `
 const FormContainer = styled.div`
   padding: 10px;

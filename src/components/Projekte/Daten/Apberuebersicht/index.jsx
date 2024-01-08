@@ -32,6 +32,7 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
+  flex-grow: 1;
 `
 const HistorizeButton = styled(Button)`
   text-transform: none !important;
@@ -179,8 +180,6 @@ const Apberuebersicht = () => {
   if (isLoading) return <Spinner />
 
   if (error) return <Error error={error} />
-
-  console.log('Apberuebersicht, row:', row)
 
   if (!row) return null
 
