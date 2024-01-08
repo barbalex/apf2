@@ -6,7 +6,6 @@ import { apberuebersicht } from '../components/shared/fragments'
 const historize = async ({ store, apberuebersicht: row }) => {
   const { enqueNotification, client } = store
   // 1. historize
-  console.log('historize', { row, year: row?.jahr })
   try {
     await client.mutate({
       mutation: gql`
