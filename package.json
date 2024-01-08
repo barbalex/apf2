@@ -39,7 +39,7 @@
     "autosuggest-highlight": "3.3.4",
     "blueimp-md5": "2.19.0",
     "browser-update": "3.3.44",
-    "date-fns": "2.30.0",
+    "date-fns": "3.1.0",
     "dexie": "3.2.4",
     "exceljs": "4.4.0",
     "file-saver": "2.0.5",
@@ -124,7 +124,7 @@
     "source-map-explorer": "2.5.3",
     "tslint-config-prettier": "1.18.0",
     "typescript": "5.3.3",
-    "vercel": "32.7.1",
+    "vercel": "33.0.2",
     "vite": "5.0.11",
     "vite-plugin-pwa": "0.17.4",
     "vite-plugin-svgr": "4.2.0"

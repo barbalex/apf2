@@ -3,7 +3,7 @@ import React, { lazy, Suspense } from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import theme from './utils/materialTheme'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
-import de from 'date-fns/locale/de'
+import { de } from 'date-fns/locale/de'
 import { ApolloProvider } from '@apollo/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import MobxStore from './store'
@@ -36,11 +36,11 @@ import 'react-datepicker/dist/react-datepicker.css'
 import Router from './components/Router'
 const IsPrintSetter = lazy(() => import('./components/IsPrintSetter'))
 const MouseWheelHandler = lazy(() => import('./components/MouseWheelHandler'))
-const LastTouchedNodeSetter = lazy(() =>
-  import('./components/LastTouchedNodeSetter'),
+const LastTouchedNodeSetter = lazy(
+  () => import('./components/LastTouchedNodeSetter'),
 )
-const LegacyBrowserInformer = lazy(() =>
-  import('./components/LegacyBrowserInformer'),
+const LegacyBrowserInformer = lazy(
+  () => import('./components/LegacyBrowserInformer'),
 )
 const StorePersister = lazy(() => import('./components/StorePersister'))
 import Spinner from './components/shared/Spinner'

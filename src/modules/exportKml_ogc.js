@@ -1,6 +1,6 @@
 // this version is ogc-compatible and can be used for https://map.geo.admin.ch
 import fileDownload from 'js-file-download'
-import format from 'date-fns/format'
+import { format } from 'date-fns/format'
 import groupBy from 'lodash/groupBy'
 
 import clean from './removeKmlNogoChar'
