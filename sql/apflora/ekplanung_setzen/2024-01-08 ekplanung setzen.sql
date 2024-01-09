@@ -212,7 +212,7 @@ tpop_plus AS (
     tpop.ekfrequenz IS NULL
     AND tpop.ekfrequenz_startjahr IS NULL
     -- nur TPop von AP's mit bearbeitung 'erstellt', 'in Bearbeitung' oder 'vorgesehen' berücksichtigen
-    --and ap.bearbeitung < 4
+    AND ap.bearbeitung < 4
     -- nur TPop, die nicht erloschen sind berücksichtigen
     AND tpop.status NOT IN (101, 202, 300)
     -- nur relevante TPop berücksichtigen
