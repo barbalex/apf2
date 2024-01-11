@@ -272,6 +272,7 @@ ORDER BY
   pop.nr,
   tpop.nr;
 
+-- 372
 -- DO: if o.k. by Topos:
 UPDATE
   apflora.tpop
@@ -283,7 +284,7 @@ FROM
 WHERE
   apflora.tpop.id = apflora.v_tpop_ekfrequenz_to_set.tpop_id;
 
--- xxx
+-- 372
 --
 -- Then add ekpläne:
 -- to check before updating:
@@ -378,4 +379,4 @@ ekplans AS (
   FROM
     ekplans;
 
--- xxx
+-- 1'944

@@ -76,7 +76,7 @@ WHERE
     FROM
       apflora.v_tpop_ekfrequenz_to_set_nie);
 
--- xxx
+-- 226
 --
 -- need to remove ekplan:
 WITH tpop_id_to_unplan AS (
@@ -94,6 +94,6 @@ WHERE tpop_id IN (
     FROM
       tpop_id_to_unplan)
   -- TODO: reset year every time this query is run:
-  AND jahr > 2022;
+  AND jahr > 2023;
 
--- xxx
+-- 564
