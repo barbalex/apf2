@@ -26,6 +26,7 @@ const Container = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  height: 100%;
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
