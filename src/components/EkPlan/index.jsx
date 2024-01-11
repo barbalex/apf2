@@ -18,6 +18,7 @@ import Spinner from '../shared/Spinner'
 const Container = styled.div`
   height: 100%;
   width: 100vw;
+  overflow: hidden;
 `
 const Header = styled.div`
   padding: 5px 10px 0 10px;
