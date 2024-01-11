@@ -203,7 +203,7 @@ WHERE
   AND tpop.lv95_x IS NOT NULL -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND kontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   AND tpop.status <> 201 -- keine Ansaatversuche
-  AND tpop.status <> 300 -- keine potentiellen Wuchs-/Ansiedlungsorte
+  AND tpop.status <> 300 -- keine potentiellen Wuchs-/Ansiedlungsorte. Issue 661
   AND kontr.bearbeiter IS NOT NULL -- nur wenn die Kontrolle einen bearbeiter hat
   AND kontr.bearbeiter <> 'a1146ae4-4e03-4032-8aa8-bc46ba02f468' -- ...und nicht unbekannt ist
   AND kontr.jahr IS NOT NULL -- nur wenn Kontrolljahr existiert
