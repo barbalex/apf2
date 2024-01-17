@@ -8,11 +8,13 @@
 -- - mehrere neue Felder: citation, project_id, project_name, external_id, image_1_url, image_2_url, image_3_url, modified_when, timestamp
 -- - timestamp feld nicht importiert, macht keinen Sinn (Daten in den drei Datums-Feldern enthalten)
 -- - guid Feld fehlt, scheint vom external_id ersetzt zu werden
+-- - xy-radius ist jetzt numeric statt integer
+-- - obs_id 2984237 ist doppelt vorhanden!!!! Entfernt > 53'625 Beobachtungen
 --
 -- 1 create temporary table for import data
 CREATE TABLE apflora.infoflora20240117original(
   interpretation_note text,
-  sisf_id integer,
+  sisf_id integer, -- was: no_isfs
   tax_id_intern integer, -- was named taxon_id in delevered list
   taxon text,
   doubt_status text,
@@ -34,7 +36,7 @@ CREATE TABLE apflora.infoflora20240117original(
   -- DANGER: is now numeric instead of integer
   y_swiss numeric,
   xy_type text,
-  xy_radius integer,
+  xy_radius numeric,
   geo_expert text,
   locality_descript text,
   altitude_min integer,
@@ -96,34 +98,34 @@ CREATE INDEX ON apflora.infoflora20240117original USING btree(obs_id);
 
 -- 2 import into apflora.infoflora20240117original
 --   using pgAdmin from csv
---   xxx (was: 710)
+--   xxx von 53'625 (was: 710)
 --
 -- 2.1: add human readable value to doubt_status
 UPDATE
   apflora.infoflora20240117original
 SET
-  doubt_status = '0  (validiert)'
+  doubt_status = '0 (validiert)'
 WHERE
   doubt_status = '0';
 
 UPDATE
   apflora.infoflora20240117original
 SET
-  doubt_status = '1  (zu validieren)'
+  doubt_status = '1 (zu validieren)'
 WHERE
   doubt_status = '1';
 
 UPDATE
   apflora.infoflora20240117original
 SET
-  doubt_status = '2  (zweifelhaft)'
+  doubt_status = '2 (zweifelhaft)'
 WHERE
   doubt_status = '2';
 
 UPDATE
   apflora.infoflora20240117original
 SET
-  doubt_status = '3  (falsch)'
+  doubt_status = '3 (falsch)'
 WHERE
   doubt_status = '3';
 
@@ -201,7 +203,7 @@ SELECT
 FROM
   apflora.infoflora20240117original ROW;
 
--- xxx (was: 710)
+-- 53'625 (was: 710)
 --
 -- 5 mark apflora kontrollen with is_apflora_ek = TRUE
 UPDATE
@@ -215,7 +217,7 @@ WHERE
     FROM
       apflora.tpopkontr);
 
--- xxx (was: 0)
+-- 9663 (was: 0)
 --
 -- 6 mark beob already imported with already_imported = TRUE
 SELECT
@@ -242,7 +244,7 @@ WHERE
       apflora.infoflora20240117beob info
       INNER JOIN apflora.beob beob ON beob.obs_id = info.obs_id);
 
--- xxx von xxx (was: 495 von 710)
+-- 38'500 (was: 495 von 710)
 --
 -- 7 check infoflora20240117beob
 --
@@ -266,7 +268,7 @@ WHERE
   is_apflora_ek = FALSE
   AND already_imported = FALSE;
 
--- xxx (was: 215)
+-- 5462 (was: 215)
 --
 -- 9 update data for already_imported = true
 -- compare with previous state
@@ -312,7 +314,7 @@ WHERE
       already_imported = TRUE
       AND is_apflora_ek = FALSE);
 
--- xxx (was: 495)
+-- 38'499 (was: 495)
 --
 -- 10 get stats
 SELECT
@@ -331,6 +333,7 @@ ORDER BY
 -- "FloZ 2017"	30935
 -- "Info Flora 2021.05"	17638
 -- "Info Flora 2022.03"	15012
+-- "Info Flora 2023.12"	5462
 -- "Info Flora 2022.12 gesamt"	3029
 -- "Info Flora 2022.01"	459
 -- "Info Flora 2023.02 Utricularia"	215
@@ -338,6 +341,7 @@ ORDER BY
 -- "Info Flora 2022.04"	87
 -- "Info Flora 2022.12 Auszug"	16
 --
+-- count beob per art
 SELECT
   beob.art_id,
   tax.artname,
