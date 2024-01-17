@@ -13,8 +13,8 @@ const EkFrequenzFolder = ({ projekt, ap, count, isLoading }) => {
   const message = isLoading
     ? '...'
     : nodeLabelFilterString
-    ? `${count} gefiltert`
-    : count
+      ? `${count} gefiltert`
+      : count
 
   const url = ['Projekte', projekt.id, 'Arten', ap.id, 'EK-Frequenzen']
 
@@ -27,12 +27,14 @@ const EkFrequenzFolder = ({ projekt, ap, count, isLoading }) => {
         n[4] === 'EK-Frequenzen',
     ).length > 0
 
+  const tableId = ap.id
+  const urlLabel = 'EK-Frequenzen'
   const node = {
     nodeType: 'folder',
     menuType: 'ekfrequenzFolder',
-    id: `${ap.id}Ekfrequenz`,
-    tableId: ap.id,
-    urlLabel: 'EK-Frequenzen',
+    id: `${tableId}/${urlLabel}`,
+    tableId,
+    urlLabel,
     label: `EK-Frequenzen (${message})`,
     url,
     hasChildren: count > 0,
