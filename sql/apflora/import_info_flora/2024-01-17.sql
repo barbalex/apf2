@@ -1,14 +1,19 @@
 -- basic method:
 -- 1 import if obs_id doesn't exist yet
 -- 2 update data where obs_id exists already
--- 3 ignore where tpop guid is in guid field
+-- 3 ignore where tpop guid is in external_id field
+--
+-- Some notes to the data:
+-- - copyright: dieses feld fehlt diesmal
+-- - mehrere neue Felder: citation, project_id, project_name, external_id, image_1_url, image_2_url, image_3_url, modified_when, timestamp
+-- - timestamp feld nicht importiert, macht keinen Sinn (Daten in den drei Datums-Feldern enthalten)
+-- - guid Feld fehlt, scheint vom external_id ersetzt zu werden
 --
 -- 1 create temporary table for import data
-CREATE TABLE apflora.infoflora20240117original (
-  GUID text,
+CREATE TABLE apflora.infoflora20240117original(
   interpretation_note text,
   sisf_id integer,
-  tax_id_intern integer, -- TODO: fehlt!
+  tax_id_intern integer, -- was named taxon_id in delevered list
   taxon text,
   doubt_status text,
   determinavit_cf text,
@@ -41,8 +46,11 @@ CREATE TABLE apflora.infoflora20240117original (
   remarks text,
   typo_ch integer,
   phenology_code integer,
-  copyright text,
   obs_id integer PRIMARY KEY,
+  citation text, -- new
+  project_id integer, -- new
+  project_name text, -- new
+  external_id text, -- new
   obs_type text,
   specimen_type text,
   herbarium_localization text,
@@ -73,18 +81,22 @@ CREATE TABLE apflora.infoflora20240117original (
   releve_stratum text,
   cover_code text,
   cover_abs real,
-  cover_rem text
+  cover_rem text,
+  image_1_url text, -- new
+  image_2_url text, -- new
+  image_3_url text, -- new
+  modified_when text -- new
 );
 
-CREATE INDEX ON apflora.infoflora20240117original USING btree (sisf_id);
+CREATE INDEX ON apflora.infoflora20240117original USING btree(sisf_id);
 
-CREATE INDEX ON apflora.infoflora20240117original USING btree (tax_id_intern);
+CREATE INDEX ON apflora.infoflora20240117original USING btree(tax_id_intern);
 
-CREATE INDEX ON apflora.infoflora20240117original USING btree (obs_id);
+CREATE INDEX ON apflora.infoflora20240117original USING btree(obs_id);
 
 -- 2 import into apflora.infoflora20240117original
 --   using pgAdmin from csv
---   710
+--   xxx (was: 710)
 --
 -- 2.1: add human readable value to doubt_status
 UPDATE
@@ -117,18 +129,18 @@ WHERE
 
 --
 -- 3 build temp beob table
-CREATE TABLE apflora.infoflora20240117beob (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
-  guid uuid DEFAULT NULL,
+CREATE TABLE apflora.infoflora20240117beob(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  external_id uuid DEFAULT NULL,
   obs_id integer,
   is_apflora_ek boolean DEFAULT FALSE,
   already_imported boolean DEFAULT FALSE,
   quelle text DEFAULT NULL,
   -- this field in data contains this datasets id
   id_field varchar(38) DEFAULT NULL,
-  art_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO action ON UPDATE CASCADE,
+  art_id uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) ON DELETE NO action ON UPDATE CASCADE,
   -- art_id can be changed. art_id_original documents this change
-  art_id_original uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO action ON UPDATE CASCADE,
+  art_id_original uuid DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) ON DELETE NO action ON UPDATE CASCADE,
   -- data without year is not imported
   -- when no month exists: month = 01
   -- when no day exists: day = 01
@@ -143,14 +155,14 @@ CREATE TABLE apflora.infoflora20240117beob (
   changed_by varchar(20) DEFAULT NULL
 );
 
-CREATE INDEX ON apflora.infoflora20240117beob USING btree (obs_id);
+CREATE INDEX ON apflora.infoflora20240117beob USING btree(obs_id);
 
-CREATE INDEX ON apflora.infoflora20240117beob USING btree (already_imported);
+CREATE INDEX ON apflora.infoflora20240117beob USING btree(already_imported);
 
 -- 4 insert importdata into temp beob table
-INSERT INTO apflora.infoflora20240117beob (guid, obs_id, id_field, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
+INSERT INTO apflora.infoflora20240117beob(external_id, obs_id, id_field, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
 SELECT
-  uuid_or_null (guid),
+  uuid_or_null(external_id),
   obs_id,
   'obs_id',
   format('%s-%s-%s', obs_year, coalesce(obs_month, '01'), coalesce(obs_day, '01'))::date,
@@ -163,7 +175,7 @@ SELECT
     FROM apflora.ae_taxonomies tax
     WHERE
       tax.taxid_intern = tax_id_intern
-      AND tax.taxonomie_name = 'DB-TAXREF (2017)'), (
+      AND tax.taxonomie_name = 'DB-TAXREF (2017)'),(
     SELECT
       id
     FROM apflora.ae_taxonomies tax
@@ -176,7 +188,7 @@ SELECT
     FROM apflora.ae_taxonomies tax
     WHERE
       tax.taxid_intern = tax_id_intern
-      AND tax.taxonomie_name = 'DB-TAXREF (2017)'), (
+      AND tax.taxonomie_name = 'DB-TAXREF (2017)'),(
     SELECT
       id
     FROM apflora.ae_taxonomies tax
@@ -184,12 +196,12 @@ SELECT
     tax.taxid = tax_id_intern::bigint
     AND tax.taxonomie_name = 'SISF (2005)')),
   'ag (import)',
-  ST_Transform (ST_SetSRID (ST_MakePoint (x_swiss, y_swiss), 2056), 4326),
-  'Info Flora 2023.02 Utricularia' -- TODO: set value
+  ST_Transform(ST_SetSRID(ST_MakePoint(x_swiss, y_swiss), 2056), 4326),
+  'Info Flora 2023.12' -- TODO: set value
 FROM
   apflora.infoflora20240117original ROW;
 
--- 710
+-- xxx (was: 710)
 --
 -- 5 mark apflora kontrollen with is_apflora_ek = TRUE
 UPDATE
@@ -197,13 +209,13 @@ UPDATE
 SET
   is_apflora_ek = TRUE
 WHERE
-  guid IN (
+  external_id IN (
     SELECT
       id
     FROM
       apflora.tpopkontr);
 
--- 0
+-- xxx (was: 0)
 --
 -- 6 mark beob already imported with already_imported = TRUE
 SELECT
@@ -230,12 +242,12 @@ WHERE
       apflora.infoflora20240117beob info
       INNER JOIN apflora.beob beob ON beob.obs_id = info.obs_id);
 
--- 495 von 710
+-- xxx von xxx (was: 495 von 710)
 --
 -- 7 check infoflora20240117beob
 --
 -- 8 insert new temp beob into beob
-INSERT INTO apflora.beob (id, id_field, obs_id, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
+INSERT INTO apflora.beob(id, id_field, obs_id, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
 SELECT
   id,
   id_field,
@@ -254,7 +266,7 @@ WHERE
   is_apflora_ek = FALSE
   AND already_imported = FALSE;
 
--- 215
+-- xxx (was: 215)
 --
 -- 9 update data for already_imported = true
 -- compare with previous state
@@ -282,7 +294,7 @@ WHERE
 UPDATE
   apflora.beob
 SET
-  data = (
+  data =(
     SELECT
       data
     FROM
@@ -300,7 +312,7 @@ WHERE
       already_imported = TRUE
       AND is_apflora_ek = FALSE);
 
--- 495
+-- xxx (was: 495)
 --
 -- 10 get stats
 SELECT
