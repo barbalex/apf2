@@ -16,7 +16,6 @@ import Highlighter from 'react-highlight-words'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import upperFirst from 'lodash/upperFirst'
 import { useApolloClient, gql } from '@apollo/client'
-import { useQueryClient } from '@tanstack/react-query'
 import { useSnackbar } from 'notistack'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
@@ -303,7 +302,7 @@ const MovingIcon = styled(MdSwapVerticalCircle)`
 const CopyingIcon = styled(MdContentCopy)`
   padding-left: 0.2em;
   height: 20px !important;
-  color: rgb(255, 90, 0) !important;
+  color: rgb(255, 90, 0) !important; 
   font-size: 1.5rem;
 `
 const BiotopCopyingIcon = styled(MdPhotoLibrary)`
@@ -336,7 +335,6 @@ const Row = ({ node }) => {
   const { search } = useLocation()
 
   const client = useApolloClient()
-  const queryClient = useQueryClient()
 
   // console.log('Row, node:', node)
 
