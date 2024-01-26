@@ -13,6 +13,7 @@
 --
 -- TODO: BEWARE info flora delivers some uuid's with CAPITAL letters!!!!!!
 -- Next time: lowercase all strings in the external_id field before importing!
+-- Maybe: remove all non uuid like values (numbers!) beforehand
 --
 -- 1 create temporary table for import data
 CREATE TABLE apflora.infoflora20240117original(
@@ -167,7 +168,8 @@ CREATE INDEX ON apflora.infoflora20240117beob USING btree(already_imported);
 -- 4 insert importdata into temp beob table
 INSERT INTO apflora.infoflora20240117beob(external_id, obs_id, id_field, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
 SELECT
-  uuid_or_null(external_id),
+  -- 2024.01.26: added lower because some uuid's are in CAPITAL letters
+  uuid_or_null(lower(external_id)),
   obs_id,
   'obs_id',
   format('%s-%s-%s', obs_year, coalesce(obs_month, '01'), coalesce(obs_day, '01'))::date,
