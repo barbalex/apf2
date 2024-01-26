@@ -11,6 +11,9 @@
 -- - xy-radius ist jetzt numeric statt integer
 -- - obs_id 2984237 ist doppelt vorhanden!!!! Entfernt > 53'625 Beobachtungen
 --
+-- TODO: BEWARE info flora delivers some uuid's with CAPITAL letters!!!!!!
+-- Next time: lowercase all strings in the external_id field before importing!
+--
 -- 1 create temporary table for import data
 CREATE TABLE apflora.infoflora20240117original(
   interpretation_note text,
