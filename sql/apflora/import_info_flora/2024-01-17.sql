@@ -169,7 +169,7 @@ CREATE INDEX ON apflora.infoflora20240117beob USING btree(already_imported);
 INSERT INTO apflora.infoflora20240117beob(external_id, obs_id, id_field, datum, autor, data, art_id, art_id_original, changed_by, geom_point, quelle)
 SELECT
   -- 2024.01.26: added lower because some uuid's are in CAPITAL letters
-  uuid_or_null(lower(external_id)),
+  uuid_or_null(lower(external_id::text)),
   obs_id,
   'obs_id',
   format('%s-%s-%s', obs_year, coalesce(obs_month, '01'), coalesce(obs_day, '01'))::date,
