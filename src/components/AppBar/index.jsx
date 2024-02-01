@@ -14,7 +14,7 @@ import storeContext from '../../storeContext'
 const isInIframe = inIframe()
 
 const Container = styled.div`
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;

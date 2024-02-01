@@ -32,7 +32,7 @@ const Container = styled.div`
 `
 // somehow scrollbars were not shown without explicitely setting height
 const ScrollContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: calc(100dvh - 64px);
   overflow-y: auto;
 `
 const StyledSimpleBar = styled(SimpleBar)`
