@@ -61,8 +61,8 @@ const TpopFeldkontrzaehl = ({ projekt, ap, pop, tpop, tpopkontr }) => {
       nodeType: 'table',
       menuType: 'tpopfeldkontrzaehl',
       id: el.id,
-      parentId: `${el.tpopkontrId}TpopfeldkontrzaehlFolder`,
-      parentTableId: el.tpopkontrId,
+      parentId: `${tpopkontr.id}TpopfeldkontrzaehlFolder`,
+      parentTableId: tpopkontr.id,
       urlLabel: el.id,
       label: el.label,
       url: [
@@ -81,6 +81,7 @@ const TpopFeldkontrzaehl = ({ projekt, ap, pop, tpop, tpopkontr }) => {
       ],
       hasChildren: false,
     }
+    console.log('TpopFeldkontrzaehl', { node, el })
 
     return <Row key={el.id} node={node} />
   })

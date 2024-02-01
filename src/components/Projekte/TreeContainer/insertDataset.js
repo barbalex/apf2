@@ -24,7 +24,7 @@ const fragments = {
 const insertDataset = async ({
   tablePassed,
   parentId,
-  id,
+  //id,
   menuType,
   url,
   client,
@@ -234,18 +234,18 @@ const insertDataset = async ({
     parentTable === 'tpopfeldkontr'
       ? 'treeTpopfeldkontrzaehl'
       : parentTable === 'tpopfreiwkontr'
-      ? 'treeTpopfreiwkontrzaehl'
-      : menuType.includes('tpopfeldkontr')
-      ? 'treeTpopfeldkontr'
-      : menuType.includes('tpopfreiwkontr')
-      ? 'treeTpopfreiwkontr'
-      : table === 'tpop_apberrelevant_grund_werte'
-      ? 'treeTpopApberrelevantGrundWerte'
-      : table === 'ek_abrechnungstyp_werte'
-      ? 'treeEkAbrechnungstypWerte'
-      : table === 'tpopkontrzaehl_einheit_werte'
-      ? 'treePopkontrzaehlEinheitWerte'
-      : `tree${upperFirst(table)}`
+        ? 'treeTpopfreiwkontrzaehl'
+        : menuType.includes('tpopfeldkontr')
+          ? 'treeTpopfeldkontr'
+          : menuType.includes('tpopfreiwkontr')
+            ? 'treeTpopfreiwkontr'
+            : table === 'tpop_apberrelevant_grund_werte'
+              ? 'treeTpopApberrelevantGrundWerte'
+              : table === 'ek_abrechnungstyp_werte'
+                ? 'treeEkAbrechnungstypWerte'
+                : table === 'tpopkontrzaehl_einheit_werte'
+                  ? 'treePopkontrzaehlEinheitWerte'
+                  : `tree${upperFirst(table)}`
   store.queryClient.invalidateQueries({
     queryKey: [queryKeyTable],
   })
@@ -258,19 +258,19 @@ const insertDataset = async ({
   const queryKeyFolder = ['apberuebersicht'].includes(table)
     ? 'treeRoot'
     : table === 'ziel'
-    ? 'treeZieljahrFolders'
-    : parentTable === 'tpopfeldkontr'
-    ? 'treeTpopfeldkontrzaehlFolders'
-    : parentTable === 'tpopfreiwkontr'
-    ? 'treeTpopfreiwkontrzaehlFolders'
-    : [
-        'adresse',
-        'tpop_apberrelevant_grund_werte',
-        'ek_abrechnungstyp_werte',
-        'tpopkontrzaehl_einheit_werte',
-      ].includes(table)
-    ? 'treeWerteFolders'
-    : `tree${upperFirst(parentTable)}Folders`
+      ? 'treeZieljahrFolders'
+      : parentTable === 'tpopfeldkontr'
+        ? 'treeTpopfeldkontrzaehlFolders'
+        : parentTable === 'tpopfreiwkontr'
+          ? 'treeTpopfreiwkontrzaehlFolders'
+          : [
+                'adresse',
+                'tpop_apberrelevant_grund_werte',
+                'ek_abrechnungstyp_werte',
+                'tpopkontrzaehl_einheit_werte',
+              ].includes(table)
+            ? 'treeWerteFolders'
+            : `tree${upperFirst(parentTable)}Folders`
   // console.log('insertDataset', {
   //   table,
   //   parentTable,
