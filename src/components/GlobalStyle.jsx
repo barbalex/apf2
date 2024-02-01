@@ -9,7 +9,7 @@ const GlobalStyle = () => (
       #root {
         overflow: hidden !important;
         font-family: Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        height: 100vh;
+        height: 100%;
         width: 100%;
         margin: 0;
         color: rgba(0, 0, 0, 0.87);
