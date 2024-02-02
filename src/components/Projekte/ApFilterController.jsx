@@ -12,7 +12,7 @@ const ApFilterController = () => {
   const { apFilter, setApFilter } = store.tree
 
   useEffect(() => {
-    // if active apId is not an ap and apFilte is true,
+    // if active apId is not an ap and apFilter is true,
     // turn apFilter off to show the active path
     if (!apId) return
     if (!apFilter) return
