@@ -41,9 +41,23 @@ const BeobsComponent = () => {
   const client = useApolloClient()
 
   const store = useContext(storeContext)
-  const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
-    store
+  const {
+    sortedBeobFields: sortedBeobFieldsPassed,
+    setSortedBeobFields,
+    html5Backend: html5BackendPassed,
+    setHtml5Backend,
+  } = store
   const sortedBeobFields = sortedBeobFieldsPassed.slice()
+
+  // Issue: only one instance of HTML5Backend can be used at a time
+  // https://github.com/react-dnd/react-dnd/issues/3178
+  // Solution: use the same instance for all components
+  const html5Backend = html5BackendPassed ?? HTML5Backend
+  useEffect(() => {
+    if (!html5BackendPassed) {
+      setHtml5Backend(html5Backend)
+    }
+  }, [html5Backend, html5BackendPassed, setHtml5Backend])
 
   const sortFn = useCallback(
     (a, b) => {
@@ -82,6 +96,7 @@ const BeobsComponent = () => {
   const row = data?.data?.beobById ?? {}
   const rowData = row.data ? JSON.parse(row.data) : {}
   const fields = Object.entries(rowData)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
     .filter(([key, value]) => exists(value))
     .sort(sortFn)
   const keys = fields.map((f) => f[0])

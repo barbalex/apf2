@@ -125,8 +125,12 @@ const MobxStore = types
     // tanstack query client
     queryClient: null,
     navigate: undefined,
+    html5Backend: null,
   }))
   .actions((self) => ({
+    setHtml5Backend(val) {
+      self.html5Backend = val
+    },
     setSortedBeobFields(val) {
       self.sortedBeobFields = val.filter((v) => !!v)
     },
