@@ -40,7 +40,7 @@ else
   # 1. copy to dropbox
   echo "uploading backup file..."
   # BEWARE: the name given in rclone needs to be the same as before the :, i.e. dropbox
-  rclone copy /sik_data/$FILENAME dropbox:Apps/apf
+  rclone copyto /sik_data/$FILENAME dropbox:Apps/apf/$FILENAME -v
   # 2. delete last.backup
   rm -f /sik_data/last.backup
   # 3. rename $FILENAME to last.backup
