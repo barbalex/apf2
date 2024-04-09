@@ -194,7 +194,7 @@ const BeobData = ({ id }) => {
         >
           <StyledAccordionSummary>Daten</StyledAccordionSummary>
           <StyledAccordionDetails>
-            <DndProvider backend={HTML5Backend}>
+            <DndProvider backend={HTML5Backend} context={window}>
               {fields.map((field, i) => renderField(field, i))}
             </DndProvider>
           </StyledAccordionDetails>

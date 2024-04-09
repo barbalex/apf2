@@ -44,20 +44,8 @@ const BeobsComponent = () => {
   const {
     sortedBeobFields: sortedBeobFieldsPassed,
     setSortedBeobFields,
-    html5Backend: html5BackendPassed,
-    setHtml5Backend,
   } = store
   const sortedBeobFields = sortedBeobFieldsPassed.slice()
-
-  // Issue: only one instance of HTML5Backend can be used at a time
-  // https://github.com/react-dnd/react-dnd/issues/3178
-  // Solution: use the same instance for all components
-  const html5Backend = html5BackendPassed ?? HTML5Backend
-  useEffect(() => {
-    if (!html5BackendPassed) {
-      setHtml5Backend(html5Backend)
-    }
-  }, [html5Backend, html5BackendPassed, setHtml5Backend])
 
   const sortFn = useCallback(
     (a, b) => {
@@ -150,6 +138,10 @@ const BeobsComponent = () => {
   if (isLoading) return <Spinner />
   if (error) return <Error error={error} />
 
+  // Issue: only one instance of HTML5Backend can be used at a time
+  // https://github.com/react-dnd/react-dnd/issues/3178
+  // Solution: use the same instance for all components
+  // NEW: alternative solution: https://github.com/react-dnd/react-dnd/issues/3257#issuecomment-1239254032
   return (
     <ErrorBoundary>
       <OuterContainer>
@@ -157,7 +149,7 @@ const BeobsComponent = () => {
           Die Felder können beliebig sortiert werden (drag and drop).
         </Explainer>
         <Container>
-          <DndProvider backend={HTML5Backend}>
+          <DndProvider backend={HTML5Backend} context={window}>
             {fields.map((field, i) => renderField(field, i))}
           </DndProvider>
         </Container>
