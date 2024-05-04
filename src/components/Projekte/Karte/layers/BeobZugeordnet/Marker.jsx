@@ -9,8 +9,8 @@ import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 
 import storeContext from '../../../../../storeContext'
-import beobIcon from './beob.svg?react'
-import beobIconHighlighted from './beobHighlighted.svg?react'
+import { beobIconString } from './beobIconString.js'
+import { beobHighlightedIconString } from './beobHighlightedIconString.js'
 import getNearestTpop from '../../../../../modules/getNearestTpop'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import updateBeobByIdGql from './updateBeobById'
@@ -43,10 +43,10 @@ const BeobZugeordnetMarker = ({ beob }) => {
 
   const isHighlighted = beobId === beob.id
   const latLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
-  const icon = window.L.icon({
-    iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
-    iconSize: [24, 24],
+  const icon = window.L.divIcon({
+    html: isHighlighted ? beobHighlightedIconString : beobIconString,
     className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
+    bgPos: [-12, -12],
   })
   // some dates are not valid
   // need to account for that
