@@ -130,6 +130,12 @@ const GlobalStyle = () => (
       .recharts-legend-item {
         margin-bottom: 3px !important;
       }
+
+      /* leaflet */
+      .leaflet-div-icon {
+        background: transparent !important;
+        border: none !important;
+      }
     `}
   />
 )

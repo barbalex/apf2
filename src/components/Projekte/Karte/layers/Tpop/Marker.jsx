@@ -6,8 +6,8 @@ import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router-dom'
 
 import storeContext from '../../../../../storeContext'
-import tpopIcon from './tpop.svg?react'
-import tpopIconHighlighted from './tpopHighlighted.svg?react'
+import { tpopIcon } from './tpopIcon.js'
+import { tpopIconHighlighted } from './tpopIconHighlighted'
 import uIcon from './statusGroup/u.svg?react'
 import uIconHighlighted from './statusGroup/uHighlighted.svg?react'
 import aIcon from './statusGroup/a.svg?react'
@@ -31,6 +31,7 @@ import svg300Highlighted from './statusGroupSymbols/300Highlighted.svg?react'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
+import { bg } from 'date-fns/locale'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -64,34 +65,34 @@ const TpopMarker = ({ tpop }) => {
   const nrLabel = `${popNr}.${tpopNr}`.toString()
   const isHighlighted = tpopId === tpop.id
 
-  const iconUrl = useMemo(() => {
-    let iconUrl = isHighlighted ? tpopIconHighlighted : tpopIcon
+  const iconHtml = useMemo(() => {
+    let html = isHighlighted ? tpopIconHighlighted : tpopIcon
     if (tpopIconName === 'statusGroup') {
-      iconUrl = isHighlighted ? qIconHighlighted : qIcon
+      html = isHighlighted ? qIconHighlighted : qIcon
       if (tpop.status === 300) {
-        iconUrl = isHighlighted ? pIconHighlighted : pIcon
+        html = isHighlighted ? pIconHighlighted : pIcon
       } else if (tpop.status >= 200) {
-        iconUrl = isHighlighted ? aIconHighlighted : aIcon
+        html = isHighlighted ? aIconHighlighted : aIcon
       } else if (tpop.status >= 100) {
-        iconUrl = isHighlighted ? uIconHighlighted : uIcon
+        html = isHighlighted ? uIconHighlighted : uIcon
       }
     } else if (tpopIconName === 'statusGroupSymbols') {
-      iconUrl = isHighlighted ? svg100Highlighted : svg100
+      html = isHighlighted ? svg100Highlighted : svg100
       if (tpop.status === 100) {
-        iconUrl = isHighlighted ? svg100Highlighted : svg100
+        html = isHighlighted ? svg100Highlighted : svg100
       } else if (tpop.status === 101) {
-        iconUrl = isHighlighted ? svg101Highlighted : svg101
+        html = isHighlighted ? svg101Highlighted : svg101
       } else if (tpop.status === 200) {
-        iconUrl = isHighlighted ? svg200Highlighted : svg200
+        html = isHighlighted ? svg200Highlighted : svg200
       } else if (tpop.status === 201) {
-        iconUrl = isHighlighted ? svg201Highlighted : svg201
+        html = isHighlighted ? svg201Highlighted : svg201
       } else if (tpop.status === 202) {
-        iconUrl = isHighlighted ? svg202Highlighted : svg202
+        html = isHighlighted ? svg202Highlighted : svg202
       } else if (tpop.status === 300) {
-        iconUrl = isHighlighted ? svg300Highlighted : svg300
+        html = isHighlighted ? svg300Highlighted : svg300
       }
     }
-    return iconUrl
+    return html
   }, [isHighlighted, tpop.status, tpopIconName])
 
   const popId = tpop?.popByPopId?.id ?? ''
@@ -139,9 +140,9 @@ const TpopMarker = ({ tpop }) => {
   }, [apId, popId, projId, tpop.id])
 
   const latLng = new window.L.LatLng(tpop.wgs84Lat, tpop.wgs84Long)
-  const icon = window.L.icon({
-    iconUrl,
-    iconSize: [24, 24],
+  const icon = window.L.divIcon({
+    html: iconHtml,
+    bgPos: [-12, -12],
   })
   let title = nrLabel
   if (tpopLabelName === 'name') title = tpop.flurname
