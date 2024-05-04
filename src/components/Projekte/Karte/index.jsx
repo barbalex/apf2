@@ -59,7 +59,7 @@ import BeobZugeordnetAssignPolylines from './layers/BeobZugeordnetAssignPolyline
 import MeasureControl from './MeasureControl'
 //import SwitchScaleControl from './ScaleControl'
 import DrawControl from './DrawControl'
-import PrintControl from './PrintControl'
+import { PrintControl } from './PrintControl'
 import OwnControls from './OwnControls'
 import CoordinatesControl from './CoordinatesControl'
 import ErrorBoundary from '../../shared/ErrorBoundary'

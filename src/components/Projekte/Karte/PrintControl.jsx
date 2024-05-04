@@ -16,11 +16,9 @@ const options = {
   spinnerBgColor: '#2e7d32',
 }
 
-const PrintControl = createControlComponent((props) =>
+export const PrintControl = createControlComponent((props) =>
   window.L.easyPrint({
     ...options,
     ...props,
   }),
 )
-
-export default PrintControl
