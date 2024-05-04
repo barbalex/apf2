@@ -10,15 +10,15 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import storeContext from '../../../../../storeContext'
-// import beobIcon from './beob.svg?react'
-import { BeobIcon as beobIcon } from './BeobIcon.jsx'
-import { BeobIconHighlighted as beobIconHighlighted } from './BeobHighlighted.jsx'
+import { beobIconString } from './beobIconString.js'
+import { beobIconHighlightedString } from './beobIconHighlightedString.js'
 import getNearestTpop from '../../../../../modules/getNearestTpop'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import updateBeobByIdGql from './updateBeobById'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import Data from '../BeobData'
+import { bg } from 'date-fns/locale'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -42,10 +42,10 @@ const BeobNichtBeurteiltMarker = ({ beob }) => {
 
   const isHighlighted = beobId === beob.id
   const latLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
-  const icon = window.L.icon({
-    iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
-    iconSize: [24, 24],
+  const icon = window.L.divIcon({
+    html: isHighlighted ? beobIconHighlightedString : beobIconString,
     className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
+    bgPos: [-12, -12],
   })
   // some dates are not valid
   // need to account for that

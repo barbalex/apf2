@@ -1,4 +1,5 @@
 import React, { useContext, useCallback } from 'react'
+import * as ReactDOMServer from 'react-dom/server'
 import { Marker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
@@ -8,8 +9,8 @@ import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router-dom'
 
 import storeContext from '../../../../../storeContext'
-import beobIcon from './beob.svg?react'
-import beobIconHighlighted from './beobHighlighted.svg?react'
+import { beobIconString } from './beobIconString.js'
+import { beobIconHighlightedString } from './beobIconHighlightedString.js'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
@@ -33,10 +34,11 @@ const BeobNichtZuzuordnenMarker = ({ beob }) => {
 
   const isHighlighted = beobId === beob.id
   const latLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
-  const icon = window.L.icon({
-    iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
-    iconSize: [24, 24],
+  // use divIcon instead? https://leafletjs.com/reference.html#divicon
+  const icon = window.L.divIcon({
+    html: isHighlighted ? beobIconHighlightedString : beobIconString,
     className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
+    bgPos: [-12, -12],
   })
   // some dates are not valid
   // need to account for that
