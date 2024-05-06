@@ -1,0 +1,1 @@
+export const svg201 = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#016f19" fill-opacity=".994" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.503" d="m.777 23.29 5.58-11.237L11.936.817l5.646 11.228 5.646 11.226-11.226.01z"/></svg>`
