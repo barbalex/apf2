@@ -19,7 +19,7 @@
     "no-empty": ["error", { "allowEmptyCatch": true }],
     "react/react-in-jsx-scope": "off",
     "import/extensions": [
-      "error",
+      "warn",
       "ignorePackages",
       {
         "js": "never",
