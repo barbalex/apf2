@@ -135,6 +135,13 @@ const GlobalStyle = () => (
       .leaflet-div-icon {
         background: transparent !important;
         border: none !important;
+        width: 0;
+        height: 0;
+        border: 0;
+        padding: 0;
+      }
+      .leaflet-div-icon svg {
+        transform: translate(-25%, -25%);
       }
     `}
   />
