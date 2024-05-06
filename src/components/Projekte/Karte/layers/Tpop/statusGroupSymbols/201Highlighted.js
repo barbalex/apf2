@@ -1,0 +1,1 @@
+export const svg201Highlighted = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ff0" fill-opacity=".994" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.649" d="m.775 23.291 5.587-11.18L11.947.932l11.306 22.34-11.239.01z"/></svg>`

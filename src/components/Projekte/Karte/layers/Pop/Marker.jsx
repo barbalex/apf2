@@ -7,28 +7,28 @@ import { useParams, useLocation } from 'react-router-dom'
 
 import storeContext from '../../../../../storeContext'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
-import popIcon from './pop.svg?react'
-import popIconHighlighted from './popHighlighted.svg?react'
-import uIcon from './statusGroup/u.svg?react'
-import uIconHighlighted from './statusGroup/uHighlighted.svg?react'
-import aIcon from './statusGroup/a.svg?react'
-import aIconHighlighted from './statusGroup/aHighlighted.svg?react'
-import pIcon from './statusGroup/p.svg?react'
-import pIconHighlighted from './statusGroup/pHighlighted.svg?react'
-import qIcon from './statusGroup/q.svg?react'
-import qIconHighlighted from './statusGroup/qHighlighted.svg?react'
-import svg100 from './statusGroupSymbols/100.svg?react'
-import svg100Highlighted from './statusGroupSymbols/100Highlighted.svg?react'
-import svg101 from './statusGroupSymbols/101.svg?react'
-import svg101Highlighted from './statusGroupSymbols/101Highlighted.svg?react'
-import svg200 from './statusGroupSymbols/200.svg?react'
-import svg200Highlighted from './statusGroupSymbols/200Highlighted.svg?react'
-import svg201 from './statusGroupSymbols/201.svg?react'
-import svg201Highlighted from './statusGroupSymbols/201Highlighted.svg?react'
-import svg202 from './statusGroupSymbols/202.svg?react'
-import svg202Highlighted from './statusGroupSymbols/202Highlighted.svg?react'
-import svg300 from './statusGroupSymbols/300.svg?react'
-import svg300Highlighted from './statusGroupSymbols/300Highlighted.svg?react'
+import { popIconString } from './popIconString'
+import { popHighlightedIconString } from './popHighlightedIconString'
+import { u as uIcon } from './statusGroup/u'
+import { uHighlighted as uIconHighlighted } from './statusGroup/uHighlighted'
+import { a as aIcon } from './statusGroup/a'
+import { aHighlighted as aIconHighlighted } from './statusGroup/aHighlighted'
+import { p as pIcon } from './statusGroup/p'
+import { pHighlighted as pIconHighlighted } from './statusGroup/pHighlighted'
+import { q as qIcon } from './statusGroup/q'
+import { qHighlighted as qIconHighlighted } from './statusGroup/qHighlighted'
+import { svg100 } from './statusGroupSymbols/100'
+import { svg100Highlighted } from './statusGroupSymbols/100Highlighted'
+import { svg101 } from './statusGroupSymbols/101'
+import { svg101Highlighted } from './statusGroupSymbols/101Highlighted'
+import { svg200 } from './statusGroupSymbols/200'
+import { svg200Highlighted } from './statusGroupSymbols/200Highlighted'
+import { svg201 } from './statusGroupSymbols/201'
+import { svg201Highlighted } from './statusGroupSymbols/201Highlighted'
+import { svg202 } from './statusGroupSymbols/202'
+import { svg202Highlighted } from './statusGroupSymbols/202Highlighted'
+import { svg300 } from './statusGroupSymbols/300'
+import { svg300Highlighted } from './statusGroupSymbols/300Highlighted'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 
@@ -69,34 +69,34 @@ const PopMarker = ({ pop }) => {
   }
   const isHighlighted = popId === pop.id
 
-  const iconUrl = useMemo(() => {
-    let iconUrl = isHighlighted ? popIconHighlighted : popIcon
+  const iconHtml = useMemo(() => {
+    let iconHtml = isHighlighted ? popHighlightedIconString : popIconString
     if (popIconName === 'statusGroup') {
-      iconUrl = isHighlighted ? qIconHighlighted : qIcon
+      iconHtml = isHighlighted ? qIconHighlighted : qIcon
       if (pop.status === 300) {
-        iconUrl = isHighlighted ? pIconHighlighted : pIcon
+        iconHtml = isHighlighted ? pIconHighlighted : pIcon
       } else if (pop.status >= 200) {
-        iconUrl = isHighlighted ? aIconHighlighted : aIcon
+        iconHtml = isHighlighted ? aIconHighlighted : aIcon
       } else if (pop.status >= 100) {
-        iconUrl = isHighlighted ? uIconHighlighted : uIcon
+        iconHtml = isHighlighted ? uIconHighlighted : uIcon
       }
     } else if (popIconName === 'statusGroupSymbols') {
-      iconUrl = isHighlighted ? svg100Highlighted : svg100
+      iconHtml = isHighlighted ? svg100Highlighted : svg100
       if (pop.status === 100) {
-        iconUrl = isHighlighted ? svg100Highlighted : svg100
+        iconHtml = isHighlighted ? svg100Highlighted : svg100
       } else if (pop.status === 101) {
-        iconUrl = isHighlighted ? svg101Highlighted : svg101
+        iconHtml = isHighlighted ? svg101Highlighted : svg101
       } else if (pop.status === 200) {
-        iconUrl = isHighlighted ? svg200Highlighted : svg200
+        iconHtml = isHighlighted ? svg200Highlighted : svg200
       } else if (pop.status === 201) {
-        iconUrl = isHighlighted ? svg201Highlighted : svg201
+        iconHtml = isHighlighted ? svg201Highlighted : svg201
       } else if (pop.status === 202) {
-        iconUrl = isHighlighted ? svg202Highlighted : svg202
+        iconHtml = isHighlighted ? svg202Highlighted : svg202
       } else if (pop.status === 300) {
-        iconUrl = isHighlighted ? svg300Highlighted : svg300
+        iconHtml = isHighlighted ? svg300Highlighted : svg300
       }
     }
-    return iconUrl
+    return iconHtml
   }, [isHighlighted, pop.status, popIconName])
 
   const [projekteTabs, setProjekteTabs] = useSearchParamsState(
@@ -138,9 +138,9 @@ const PopMarker = ({ pop }) => {
   }, [apId, pop.id, projId])
 
   const latLng = new window.L.LatLng(pop.wgs84Lat, pop.wgs84Long)
-  const icon = window.L.icon({
-    iconUrl,
-    iconSize: [24, 24],
+  const icon = window.L.divIcon({
+    html: iconHtml,
+    // bgPos: [-12, -12],
   })
   const zIndexOffset = -apfloraLayers.findIndex(
     (apfloraLayer) => apfloraLayer.value === 'pop',

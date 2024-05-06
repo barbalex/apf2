@@ -6,31 +6,32 @@ import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router-dom'
 
 import storeContext from '../../../../../storeContext'
-import tpopIcon from './tpop.svg?react'
-import tpopIconHighlighted from './tpopHighlighted.svg?react'
-import uIcon from './statusGroup/u.svg?react'
-import uIconHighlighted from './statusGroup/uHighlighted.svg?react'
-import aIcon from './statusGroup/a.svg?react'
-import aIconHighlighted from './statusGroup/aHighlighted.svg?react'
-import pIcon from './statusGroup/p.svg?react'
-import pIconHighlighted from './statusGroup/pHighlighted.svg?react'
-import qIcon from './statusGroup/q.svg?react'
-import qIconHighlighted from './statusGroup/qHighlighted.svg?react'
-import svg100 from './statusGroupSymbols/100.svg?react'
-import svg100Highlighted from './statusGroupSymbols/100Highlighted.svg?react'
-import svg101 from './statusGroupSymbols/101.svg?react'
-import svg101Highlighted from './statusGroupSymbols/101Highlighted.svg?react'
-import svg200 from './statusGroupSymbols/200.svg?react'
-import svg200Highlighted from './statusGroupSymbols/200Highlighted.svg?react'
-import svg201 from './statusGroupSymbols/201.svg?react'
-import svg201Highlighted from './statusGroupSymbols/201Highlighted.svg?react'
-import svg202 from './statusGroupSymbols/202.svg?react'
-import svg202Highlighted from './statusGroupSymbols/202Highlighted.svg?react'
-import svg300 from './statusGroupSymbols/300.svg?react'
-import svg300Highlighted from './statusGroupSymbols/300Highlighted.svg?react'
+import { tpopIcon } from './tpopIcon.js'
+import { tpopIconHighlighted } from './tpopIconHighlighted.js'
+import { u as uIcon } from './statusGroup/u.js'
+import { uHighlighted as uIconHighlighted } from './statusGroup/uHighlighted.js'
+import { a as aIcon } from './statusGroup/a.js'
+import { aHighlighted as aIconHighlighted } from './statusGroup/aHighlighted.js'
+import { p as pIcon } from './statusGroup/p.js'
+import { pHighlighted as pIconHighlighted } from './statusGroup/pHighlighted.js'
+import { q as qIcon } from './statusGroup/q.js'
+import { qHighlighted as qIconHighlighted } from './statusGroup/qHighlighted.js'
+import { svg100 } from './statusGroupSymbols/100.js'
+import { svg100Highlighted } from './statusGroupSymbols/100Highlighted.js'
+import { svg101 } from './statusGroupSymbols/101.js'
+import { svg101Highlighted } from './statusGroupSymbols/101Highlighted.js'
+import { svg200 } from './statusGroupSymbols/200.js'
+import { svg200Highlighted } from './statusGroupSymbols/200Highlighted.js'
+import { svg201 } from './statusGroupSymbols/201.js'
+import { svg201Highlighted } from './statusGroupSymbols/201Highlighted.js'
+import { svg202 } from './statusGroupSymbols/202.js'
+import { svg202Highlighted } from './statusGroupSymbols/202Highlighted.js'
+import { svg300 } from './statusGroupSymbols/300.js'
+import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
+import { bg } from 'date-fns/locale'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -64,34 +65,34 @@ const TpopMarker = ({ tpop }) => {
   const nrLabel = `${popNr}.${tpopNr}`.toString()
   const isHighlighted = tpopId === tpop.id
 
-  const iconUrl = useMemo(() => {
-    let iconUrl = isHighlighted ? tpopIconHighlighted : tpopIcon
+  const iconHtml = useMemo(() => {
+    let html = isHighlighted ? tpopIconHighlighted : tpopIcon
     if (tpopIconName === 'statusGroup') {
-      iconUrl = isHighlighted ? qIconHighlighted : qIcon
+      html = isHighlighted ? qIconHighlighted : qIcon
       if (tpop.status === 300) {
-        iconUrl = isHighlighted ? pIconHighlighted : pIcon
+        html = isHighlighted ? pIconHighlighted : pIcon
       } else if (tpop.status >= 200) {
-        iconUrl = isHighlighted ? aIconHighlighted : aIcon
+        html = isHighlighted ? aIconHighlighted : aIcon
       } else if (tpop.status >= 100) {
-        iconUrl = isHighlighted ? uIconHighlighted : uIcon
+        html = isHighlighted ? uIconHighlighted : uIcon
       }
     } else if (tpopIconName === 'statusGroupSymbols') {
-      iconUrl = isHighlighted ? svg100Highlighted : svg100
+      html = isHighlighted ? svg100Highlighted : svg100
       if (tpop.status === 100) {
-        iconUrl = isHighlighted ? svg100Highlighted : svg100
+        html = isHighlighted ? svg100Highlighted : svg100
       } else if (tpop.status === 101) {
-        iconUrl = isHighlighted ? svg101Highlighted : svg101
+        html = isHighlighted ? svg101Highlighted : svg101
       } else if (tpop.status === 200) {
-        iconUrl = isHighlighted ? svg200Highlighted : svg200
+        html = isHighlighted ? svg200Highlighted : svg200
       } else if (tpop.status === 201) {
-        iconUrl = isHighlighted ? svg201Highlighted : svg201
+        html = isHighlighted ? svg201Highlighted : svg201
       } else if (tpop.status === 202) {
-        iconUrl = isHighlighted ? svg202Highlighted : svg202
+        html = isHighlighted ? svg202Highlighted : svg202
       } else if (tpop.status === 300) {
-        iconUrl = isHighlighted ? svg300Highlighted : svg300
+        html = isHighlighted ? svg300Highlighted : svg300
       }
     }
-    return iconUrl
+    return html
   }, [isHighlighted, tpop.status, tpopIconName])
 
   const popId = tpop?.popByPopId?.id ?? ''
@@ -139,9 +140,9 @@ const TpopMarker = ({ tpop }) => {
   }, [apId, popId, projId, tpop.id])
 
   const latLng = new window.L.LatLng(tpop.wgs84Lat, tpop.wgs84Long)
-  const icon = window.L.icon({
-    iconUrl,
-    iconSize: [24, 24],
+  const icon = window.L.divIcon({
+    html: iconHtml,
+    bgPos: [-12, -12],
   })
   let title = nrLabel
   if (tpopLabelName === 'name') title = tpop.flurname
