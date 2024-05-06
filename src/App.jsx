@@ -20,30 +20,32 @@ import '@fontsource/roboto-mono/700.css'
 import '@fontsource/roboto'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
-import GlobalStyle from './components/GlobalStyle'
+import GlobalStyle from './components/GlobalStyle.jsx'
 
 import { Provider as MobxProvider } from './storeContext'
 import { Provider as IdbProvider } from './idbContext'
 
-const Notifier = lazy(() => import('./components/shared/Notifier'))
-import NotificationDismisser from './components/shared/NotificationDismisser'
+const Notifier = lazy(() => import('./components/shared/Notifier.jsx'))
+import NotificationDismisser from './components/shared/NotificationDismisser.jsx'
 
 import 'simplebar-react/dist/simplebar.min.css'
 
 import '@changey/react-leaflet-markercluster/dist/styles.min.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
-import Router from './components/Router'
-const IsPrintSetter = lazy(() => import('./components/IsPrintSetter'))
-const MouseWheelHandler = lazy(() => import('./components/MouseWheelHandler'))
+import Router from './components/Router/index.jsx'
+const IsPrintSetter = lazy(() => import('./components/IsPrintSetter.jsx'))
+const MouseWheelHandler = lazy(
+  () => import('./components/MouseWheelHandler.jsx'),
+)
 const LastTouchedNodeSetter = lazy(
-  () => import('./components/LastTouchedNodeSetter'),
+  () => import('./components/LastTouchedNodeSetter.jsx'),
 )
 const LegacyBrowserInformer = lazy(
-  () => import('./components/LegacyBrowserInformer'),
+  () => import('./components/LegacyBrowserInformer.jsx'),
 )
-const StorePersister = lazy(() => import('./components/StorePersister'))
-import Spinner from './components/shared/Spinner'
+const StorePersister = lazy(() => import('./components/StorePersister.jsx'))
+import Spinner from './components/shared/Spinner.jsx'
 
 registerLocale('de', de)
 setDefaultLocale('de')
