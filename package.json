@@ -116,7 +116,7 @@
     "cross-env": "7.0.3",
     "cypress": "13.8.1",
     "emotion-swc-plugin": "0.0.5",
-    "eslint": "9.2.0",
+    "eslint": "8.57.0",
     "eslint-plugin-import": "2.29.1",
     "eslint-plugin-react": "7.34.1",
     "eslint-plugin-react-hooks": "4.6.2",
