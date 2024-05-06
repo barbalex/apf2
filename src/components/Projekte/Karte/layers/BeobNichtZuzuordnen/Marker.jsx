@@ -38,7 +38,6 @@ const BeobNichtZuzuordnenMarker = ({ beob }) => {
   const icon = window.L.divIcon({
     html: isHighlighted ? beobIconHighlightedString : beobIconString,
     className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
-    bgPos: [-12, -12],
   })
   // some dates are not valid
   // need to account for that

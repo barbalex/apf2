@@ -138,10 +138,7 @@ const PopMarker = ({ pop }) => {
   }, [apId, pop.id, projId])
 
   const latLng = new window.L.LatLng(pop.wgs84Lat, pop.wgs84Long)
-  const icon = window.L.divIcon({
-    html: iconHtml,
-    // bgPos: [-12, -12],
-  })
+  const icon = window.L.divIcon({ html: iconHtml })
   const zIndexOffset = -apfloraLayers.findIndex(
     (apfloraLayer) => apfloraLayer.value === 'pop',
   )

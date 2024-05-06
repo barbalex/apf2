@@ -140,10 +140,7 @@ const TpopMarker = ({ tpop }) => {
   }, [apId, popId, projId, tpop.id])
 
   const latLng = new window.L.LatLng(tpop.wgs84Lat, tpop.wgs84Long)
-  const icon = window.L.divIcon({
-    html: iconHtml,
-    bgPos: [-12, -12],
-  })
+  const icon = window.L.divIcon({ html: iconHtml })
   let title = nrLabel
   if (tpopLabelName === 'name') title = tpop.flurname
   if (tpopLabelName === 'none') title = ''

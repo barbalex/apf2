@@ -46,7 +46,6 @@ const BeobZugeordnetMarker = ({ beob }) => {
   const icon = window.L.divIcon({
     html: isHighlighted ? beobHighlightedIconString : beobIconString,
     className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
-    bgPos: [-12, -12],
   })
   // some dates are not valid
   // need to account for that
