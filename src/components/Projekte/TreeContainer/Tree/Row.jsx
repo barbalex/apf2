@@ -573,12 +573,12 @@ const Row = ({ node }) => {
         )}
         {node.menuType === 'pop' && node.status && showPopIcon && (
           <IconContainer>
-            <div dangerouslySetInnerHTML={{ __html: PopIcon }} />
+            <PopIcon />
           </IconContainer>
         )}
         {node.menuType === 'tpop' && node.status && showTpopIcon && (
           <IconContainer>
-            <div dangerouslySetInnerHTML={{ __html: TpopIcon }} />
+            <TpopIcon />
           </IconContainer>
         )}
         {karteIsVisible && (
