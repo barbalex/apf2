@@ -7,14 +7,14 @@ import { useQuery } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
 import FilterTitle from '../../../shared/FilterTitle.jsx'
-import queryTpops from './queryTpops'
+import queryTpops from './queryTpops.js'
 import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import Ek from './Ek'
-import Tpop from './Tpop'
+import Ek from './Ek/index.jsx'
+import Tpop from './Tpop.jsx'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
-import OrTabs from './Tabs'
+import OrTabs from './Tabs.jsx'
 import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
