@@ -10,9 +10,9 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import BeobNichtZuzuordnen from './BeobNichtZuzuordnen'
-import BeobZugeordnet from './BeobZugeordnet'
-import BeobArtChanged from './BeobArtChanged'
+import BeobNichtZuzuordnen from './BeobNichtZuzuordnen.jsx'
+import BeobZugeordnet from './BeobZugeordnet.jsx'
+import BeobArtChanged from './BeobArtChanged.jsx'
 
 const BeobachtungenExports = () => {
   const [expanded, setExpanded] = useState(false)

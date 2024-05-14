@@ -10,19 +10,19 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import Ap from './Ap'
-import ApOhnePop from './ApOhnePop'
-import AnzMassn from './AnzMassn'
-import AnzKontr from './AnzKontr'
-import Ber from './Ber'
-import BerUndMassn from './BerUndMassn'
-import PriorisierungFuerEk from './PriorisierungFuerEk'
-import EkPlanung from './EkPlanung'
-import Ziele from './Ziele'
-import Zielber from './Zielber'
-import Erfkrit from './Erfkrit'
-import Idealbiotop from './Idealbiotop'
-import Assozart from './Assozart'
+import Ap from './Ap.jsx'
+import ApOhnePop from './ApOhnePop.jsx'
+import AnzMassn from './AnzMassn.jsx'
+import AnzKontr from './AnzKontr.jsx'
+import Ber from './Ber.jsx'
+import BerUndMassn from './BerUndMassn.jsx'
+import PriorisierungFuerEk from './PriorisierungFuerEk.jsx'
+import EkPlanung from './EkPlanung.jsx'
+import Ziele from './Ziele.jsx'
+import Zielber from './Zielber.jsx'
+import Erfkrit from './Erfkrit.jsx'
+import Idealbiotop from './Idealbiotop.jsx'
+import Assozart from './Assozart.jsx'
 
 const ApExports = () => {
   const [expanded, setExpanded] = useState(false)

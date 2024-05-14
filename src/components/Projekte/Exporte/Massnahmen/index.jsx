@@ -10,8 +10,8 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import Massnahmen from './Massnahmen'
-import MassnWebgisBun from './MassnWebgisBun'
+import Massnahmen from './Massnahmen.jsx'
+import MassnWebgisBun from './MassnWebgisBun.jsx'
 
 const MassnahmenExporte = () => {
   const [expanded, setExpanded] = useState(false)
