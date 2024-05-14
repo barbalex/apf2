@@ -25,6 +25,7 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const FieldsSubContainer = styled.div`
   padding: 10px 10px 0 10px;

@@ -27,6 +27,7 @@ const Container = styled.div`
 const FormContainer = styled.div`
   padding: 10px;
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const FilterCommentTitle = styled.div`
   margin-top: -10px;
