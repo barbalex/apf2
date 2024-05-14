@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import Bar from './Bar'
 import EkfBar from './EkfBar'
 import inIframe from '../../modules/inIframe'
-import Spinner from '../shared/Spinner'
+import Spinner from '../shared/Spinner.jsx'
 import storeContext from '../../storeContext'
 
 const isInIframe = inIframe()

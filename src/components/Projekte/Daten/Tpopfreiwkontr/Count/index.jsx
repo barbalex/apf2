@@ -15,7 +15,7 @@ import query from './query'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import storeContext from '../../../../../storeContext'
 import Error from '../../../../shared/Error'
-import Spinner from '../../../../shared/Spinner'
+import Spinner from '../../../../shared/Spinner.jsx'
 
 const AddIcon = styled(MdAddCircleOutline)`
   font-size: 1.5rem;

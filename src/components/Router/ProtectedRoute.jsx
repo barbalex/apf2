@@ -15,7 +15,7 @@ const ActiveNodeArraySetter = lazy(() => import('./ActiveNodeArraySetter'))
 const NavigateSetter = lazy(() => import('./NavigateSetter'))
 const ApfLayerNotifier = lazy(() => import('./ApfLayerNotifier'))
 const QueryClientSetter = lazy(() => import('./QueryClientSetter'))
-import Spinner from '../shared/Spinner'
+import Spinner from '../shared/Spinner.jsx'
 
 const isInIframe = inIframe()
 

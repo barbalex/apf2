@@ -27,7 +27,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import { tpopfeldkontr } from '../../../shared/fragments'
-import Spinner from '../../../shared/Spinner'
+import Spinner from '../../../shared/Spinner.jsx'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 
 const Container = styled.div`

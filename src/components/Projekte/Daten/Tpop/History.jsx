@@ -4,7 +4,7 @@ import SimpleBar from 'simplebar-react'
 import { useQuery, gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
-import Spinner from '../../../shared/Spinner'
+import Spinner from '../../../shared/Spinner.jsx'
 import History from '../../../shared/History'
 import appBaseUrl from '../../../../modules/appBaseUrl'
 

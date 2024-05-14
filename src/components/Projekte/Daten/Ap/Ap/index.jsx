@@ -18,7 +18,7 @@ import storeContext from '../../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber.js'
 import ApUsers from './ApUsers'
 import { ap, aeTaxonomies } from '../../../../shared/fragments'
-import Spinner from '../../../../shared/Spinner'
+import Spinner from '../../../../shared/Spinner.jsx'
 import Error from '../../../../shared/Error'
 
 const FormContainer = styled.div`

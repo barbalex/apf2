@@ -8,7 +8,7 @@ import SimpleBar from 'simplebar-react'
 import query from './query'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
-import Spinner from '../../../shared/Spinner'
+import Spinner from '../../../shared/Spinner.jsx'
 
 const Container = styled.div`
   height: 100%;

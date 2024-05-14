@@ -128,7 +128,7 @@ const TpopFromBeobPopList = lazy(() => import('./TpopFromBeobPopList'))
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import useSearchParamsState from '../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../modules/isMobilePhone'
-import Spinner from '../../shared/Spinner'
+import Spinner from '../../shared/Spinner.jsx'
 
 const Container = styled.div`
   height: 100%;

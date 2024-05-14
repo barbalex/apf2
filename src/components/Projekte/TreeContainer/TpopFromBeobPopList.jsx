@@ -13,7 +13,7 @@ import storeContext from '../../../storeContext'
 import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Error from '../../shared/Error'
-import Spinner from '../../shared/Spinner'
+import Spinner from '../../shared/Spinner.jsx'
 
 const StyledListItem = styled(ListItem)`
   white-space: nowrap;

@@ -31,7 +31,7 @@ import Error from '../../shared/Error'
 import exportRowFromTpop from './exportRowFromTpop'
 import exportModule from '../../../modules/export'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import Spinner from '../../shared/Spinner'
+import Spinner from '../../shared/Spinner.jsx'
 
 const Container = styled.div`
   position: relative;

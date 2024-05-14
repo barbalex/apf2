@@ -12,7 +12,7 @@ import Choose from './Choose'
 import queryQk from './queryQk'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
-import Spinner from '../../../shared/Spinner'
+import Spinner from '../../../shared/Spinner.jsx'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 
 const Container = styled.div`

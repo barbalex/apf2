@@ -25,7 +25,7 @@ import sendMail from '../../../../modules/sendMail'
 import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
-import Spinner from '../../../shared/Spinner'
+import Spinner from '../../../shared/Spinner.jsx'
 import {
   aeTaxonomies,
   beob,

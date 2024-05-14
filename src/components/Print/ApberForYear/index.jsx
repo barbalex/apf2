@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 import ApberForYear from './ApberForYear'
 import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import Spinner from '../../shared/Spinner'
+import Spinner from '../../shared/Spinner.jsx'
 
 const ApberForYearContainer = () => {
   const { apberuebersichtId = '99999999-9999-9999-9999-999999999999' } =

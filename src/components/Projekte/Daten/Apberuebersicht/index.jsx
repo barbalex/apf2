@@ -20,7 +20,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { apberuebersicht } from '../../../shared/fragments'
 import Error from '../../../shared/Error'
-import Spinner from '../../../shared/Spinner'
+import Spinner from '../../../shared/Spinner.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import historize from '../../../../modules/historize'
 

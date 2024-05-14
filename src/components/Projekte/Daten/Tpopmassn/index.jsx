@@ -25,7 +25,7 @@ import storeContext from '../../../../storeContext'
 import exists from '../../../../modules/exists'
 import Files from '../../../shared/Files'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import Spinner from '../../../shared/Spinner'
+import Spinner from '../../../shared/Spinner.jsx'
 import Error from '../../../shared/Error'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 

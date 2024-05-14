@@ -13,7 +13,7 @@ import appBaseUrl from '../../modules/appBaseUrl'
 const Error = lazy(() => import('../shared/Error'))
 import ErrorBoundary from '../shared/ErrorBoundary'
 const User = lazy(() => import('../User'))
-import Spinner from '../shared/Spinner'
+import Spinner from '../shared/Spinner.jsx'
 
 const Container = styled.div`
   height: 100%;

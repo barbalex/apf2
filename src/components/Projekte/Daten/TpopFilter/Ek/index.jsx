@@ -10,7 +10,7 @@ import Select from '../../../../shared/Select'
 import TextField from '../../../../shared/TextField'
 import queryEk from './queryEk'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import Spinner from '../../../../shared/Spinner'
+import Spinner from '../../../../shared/Spinner.jsx'
 
 const FormContainerNoColumnsInner = styled.div`
   padding: 10px;

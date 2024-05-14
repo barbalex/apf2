@@ -12,7 +12,7 @@ import createTpopkontrzaehl from './createTpopkontrzaehl'
 import FormTitle from '../../../shared/FormTitle'
 import storeContext from '../../../../storeContext'
 import Error from '../../../shared/Error'
-import Spinner from '../../../shared/Spinner'
+import Spinner from '../../../shared/Spinner.jsx'
 import TpopfreiwkontrForm from './Form'
 
 const Container = styled.div`
