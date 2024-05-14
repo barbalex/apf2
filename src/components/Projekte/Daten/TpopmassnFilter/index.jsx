@@ -6,7 +6,7 @@ import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField.jsx'
 import Select from '../../../shared/Select'
 import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypable'
 import Checkbox2States from '../../../shared/Checkbox2States'

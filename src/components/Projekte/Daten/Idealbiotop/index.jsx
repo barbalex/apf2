@@ -7,7 +7,7 @@ import Tab from '@mui/material/Tab'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField.jsx'
 import DateField from '../../../shared/Date'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import constants from '../../../../modules/constants'

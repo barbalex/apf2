@@ -4,7 +4,7 @@ import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import ErrorBoundary from './ErrorBoundary'
+import ErrorBoundary from './ErrorBoundary.jsx'
 
 const Container = styled.div`
   display: flex;

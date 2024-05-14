@@ -8,7 +8,7 @@ import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField.jsx'
 import MdField from '../../../shared/MarkdownField'
 import Select from '../../../shared/Select'
 import JesNo from '../../../shared/JesNo'

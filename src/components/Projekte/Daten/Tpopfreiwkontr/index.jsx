@@ -8,12 +8,12 @@ import SimpleBar from 'simplebar-react'
 import { useLocation, useParams } from 'react-router-dom'
 
 import query from './query.js'
-import createTpopkontrzaehl from './createTpopkontrzaehl'
+import createTpopkontrzaehl from './createTpopkontrzaehl.js'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import storeContext from '../../../../storeContext.js'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
-import TpopfreiwkontrForm from './Form'
+import TpopfreiwkontrForm from './Form.jsx'
 
 const Container = styled.div`
   flex-grow: 0;

@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField.jsx'
 import Select from '../../../shared/Select'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import FilterTitle from '../../../shared/FilterTitle'

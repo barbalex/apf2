@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 
-import TextField from '../../../../shared/TextField'
+import TextField from '../../../../shared/TextField.jsx'
 import storeContext from '../../../../../storeContext.js'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
 import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber.js'

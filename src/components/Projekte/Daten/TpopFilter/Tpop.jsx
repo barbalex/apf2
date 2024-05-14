@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField.jsx'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
 import MdField from '../../../shared/MarkdownField'
 import Status from '../../../shared/Status'

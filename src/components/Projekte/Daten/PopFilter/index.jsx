@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField.jsx'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
 import Status from '../../../shared/Status'
 import Checkbox2States from '../../../shared/Checkbox2States'
