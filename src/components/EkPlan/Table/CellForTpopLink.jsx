@@ -3,7 +3,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
-import { StyledTableCell } from './index'
+import { StyledTableCell } from './index.jsx'
 import storeContext from '../../../storeContext.js'
 
 const Link = styled.div`

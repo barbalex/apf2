@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 
 import storeContext from '../../../storeContext.js'
 import { tpop } from '../../shared/fragments.js'
-import setEkplans from './setEkplans'
+import setEkplans from './setEkplans/index.jsx'
 
 const Container = styled.div`
   font-size: 0.75rem !important;
@@ -23,8 +23,8 @@ const Container = styled.div`
     props['data-clicked']
       ? 'rgb(255,211,167) !important'
       : props['data-isodd']
-      ? 'rgb(255, 255, 252)'
-      : 'unset'};
+        ? 'rgb(255, 255, 252)'
+        : 'unset'};
   &.tpop-hovered {
     background-color: hsla(45, 100%, 90%, 1);
   }

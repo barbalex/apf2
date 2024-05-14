@@ -5,11 +5,11 @@ import { observer } from 'mobx-react-lite'
 import groupBy from 'lodash/groupBy'
 import max from 'lodash/max'
 
-import { StyledCellForSelect } from './index'
+import { StyledCellForSelect } from './index.jsx'
 import { tpop } from '../../shared/fragments.js'
 import storeContext from '../../../storeContext.js'
-import setStartjahr from './setStartjahr'
-import setEkplans from './setEkplans'
+import setStartjahr from './setStartjahr/index.jsx'
+import setEkplans from './setEkplans/index.jsx'
 
 const Select = styled.select`
   width: 100%;

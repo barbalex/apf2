@@ -8,7 +8,7 @@ import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
 import Button from '@mui/material/Button'
 import { useResizeDetector } from 'react-resize-detector'
 
-import queryAll from './queryAll'
+import queryAll from './queryAll.js'
 import CellForYearMenu from './CellForYearMenu'
 import storeContext from '../../../storeContext.js'
 import yearsFromTpops from './yearsFromTpops'
@@ -70,8 +70,8 @@ export const StyledTableCell = styled.div`
     props['data-clicked']
       ? 'rgb(255,211,167) !important'
       : props['data-isodd']
-      ? 'rgb(255, 255, 252)'
-      : 'unset'};
+        ? 'rgb(255, 255, 252)'
+        : 'unset'};
   box-sizing: border-box;
   &.tpop-hovered {
     background-color: hsla(45, 100%, 90%, 1);

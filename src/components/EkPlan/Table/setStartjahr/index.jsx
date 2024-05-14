@@ -1,7 +1,7 @@
 import max from 'lodash/max'
 
-import queryEkfrequenz from './queryEkfrequenz'
-import mutationUpdateTpop from './mutationUpdateTpop'
+import queryEkfrequenz from './queryEkfrequenz.js'
+import mutationUpdateTpop from './mutationUpdateTpop.js'
 
 const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   const { enqueNotification } = store

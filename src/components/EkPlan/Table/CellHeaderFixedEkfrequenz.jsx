@@ -5,7 +5,7 @@ import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
 import storeContext from '../../../storeContext.js'
-import TextFilter from './CellHeaderFixed/TextFilter'
+import TextFilter from './CellHeaderFixed/TextFilter.jsx'
 
 export const StyledCell = styled.div`
   display: flex;

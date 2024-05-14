@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
-import { StyledTableCell } from './index'
+import { StyledTableCell } from './index.jsx'
 import storeContext from '../../../storeContext.js'
 
 const Container = styled.div`
@@ -19,10 +19,10 @@ const CellForValue = ({ field, style, row, firstChild }) => {
 
   const { hovered } = store.ekPlan
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
-  const onMouseEnter = useCallback(() => hovered.setTpopId(row.id), [
-    hovered,
-    row.id,
-  ])
+  const onMouseEnter = useCallback(
+    () => hovered.setTpopId(row.id),
+    [hovered, row.id],
+  )
 
   return (
     <StyledTableCell
