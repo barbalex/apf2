@@ -34,6 +34,7 @@ const Container = styled.div`
 const ScrollContainer = styled.div`
   height: calc(100dvh - 64px);
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const StyledSimpleBar = styled(SimpleBar)`
   overflow-x: hidden;

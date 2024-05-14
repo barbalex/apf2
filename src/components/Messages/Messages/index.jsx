@@ -7,6 +7,7 @@ const ScrollContainer = styled.div`
   min-width: 80% !important;
   flex-grow: 1;
   overflow: auto;
+  scrollbar-width: thin;
 `
 
 const UserMessages = ({ unreadMessages }) => {

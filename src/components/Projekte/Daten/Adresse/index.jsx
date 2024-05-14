@@ -28,6 +28,7 @@ const FormContainer = styled.div`
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 
 const fieldTypes = {
