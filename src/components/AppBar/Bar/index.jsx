@@ -3,7 +3,7 @@ import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router-dom'
 
-import isMobilePhone from '../../../modules/isMobilePhone'
+import isMobilePhone from '../../../modules/isMobilePhone.js'
 import Home from './Home'
 import EkPlan from './EkPlan'
 import Projekte from './Projekte'

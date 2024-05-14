@@ -4,9 +4,9 @@ import { useMapEvents } from 'react-leaflet'
 import styled from '@emotion/styled'
 import debounce from 'lodash/debounce'
 
-import ShowCoordinates from './ShowCoordinates'
-import PanToCoordinates from './PanToCoordinates'
-import epsg4326to2056 from '../../../../modules/epsg4326to2056'
+import ShowCoordinates from './ShowCoordinates.jsx'
+import PanToCoordinates from './PanToCoordinates.jsx'
+import epsg4326to2056 from '../../../../modules/epsg4326to2056.js'
 import storeContext from '../../../../storeContext.js'
 
 /**

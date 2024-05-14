@@ -14,10 +14,10 @@ import exists from '../../../../../modules/exists.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Error from '../../../../shared/Error.jsx'
 import Spinner from '../../../../shared/Spinner.jsx'
-import Beob from './Field'
+import Beob from './Field.jsx'
 import storeContext from '../../../../../storeContext.js'
 import { beob } from '../../../../shared/fragments.js'
-import { Info } from '../BeobZugeordnet/Marker'
+import { Info } from '../BeobZugeordnet/Marker.jsx'
 
 const TopFieldContainer = styled.div`
   padding-top: 4px;

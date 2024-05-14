@@ -15,7 +15,7 @@ import getNearestTpop from '../../../../../modules/getNearestTpop'
 import appBaseUrl from '../../../../../modules/appBaseUrl.js'
 import updateBeobByIdGql from './updateBeobById'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
-import isMobilePhone from '../../../../../modules/isMobilePhone'
+import isMobilePhone from '../../../../../modules/isMobilePhone.js'
 import Data from '../BeobData'
 
 const StyledH3 = styled.h3`

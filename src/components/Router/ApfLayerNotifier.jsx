@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 
 import storeContext from '../../storeContext.js'
 import useSearchParamsState from '../../modules/useSearchParamsState.js'
-import isMobilePhone from '../../modules/isMobilePhone'
+import isMobilePhone from '../../modules/isMobilePhone.js'
 
 // TODO: only show messages if map is visible
 const ApfLayerNotifier = () => {

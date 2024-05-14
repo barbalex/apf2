@@ -10,7 +10,7 @@ import { useParams, useLocation } from 'react-router-dom'
 import storeContext from '../../../../../storeContext.js'
 import appBaseUrl from '../../../../../modules/appBaseUrl.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
-import isMobilePhone from '../../../../../modules/isMobilePhone'
+import isMobilePhone from '../../../../../modules/isMobilePhone.js'
 import Data from '../BeobData'
 
 const StyledH3 = styled.h3`

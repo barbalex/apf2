@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 import { Link, useParams, useLocation } from 'react-router-dom'
 
-import isMobilePhone from '../../../../modules/isMobilePhone'
+import isMobilePhone from '../../../../modules/isMobilePhone.js'
 import More from './More'
 import Daten from './Daten'
 import storeContext from '../../../../storeContext.js'

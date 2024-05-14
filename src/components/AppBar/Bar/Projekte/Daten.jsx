@@ -4,7 +4,7 @@ import remove from 'lodash/remove'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import isMobilePhone from '../../../../modules/isMobilePhone'
+import isMobilePhone from '../../../../modules/isMobilePhone.js'
 import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 
 const StyledButton = styled(Button)`

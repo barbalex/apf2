@@ -15,7 +15,7 @@ import StyledSplitPane from '../shared/StyledSplitPane'
 import appBaseUrl from '../../modules/appBaseUrl.js'
 import inIframe from '../../modules/inIframe'
 import useSearchParamsState from '../../modules/useSearchParamsState.js'
-import isMobilePhone from '../../modules/isMobilePhone'
+import isMobilePhone from '../../modules/isMobilePhone.js'
 const ApFilterController = lazy(() => import('./ApFilterController'))
 
 const isInIframe = inIframe()

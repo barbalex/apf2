@@ -1,13 +1,13 @@
 import styled from '@emotion/styled'
 
-import ApFilter from '../Daten/ApFilter'
-import PopFilter from '../Daten/PopFilter'
-import TpopFilter from '../Daten/TpopFilter'
-import TpopmassnFilter from '../Daten/TpopmassnFilter'
-import TpopfeldkontrFilter from '../Daten/TpopfeldkontrFilter'
-import TpopfreiwkontrFilter from '../Daten/TpopfreiwkontrFilter'
+import ApFilter from '../Daten/ApFilter/index.jsx'
+import PopFilter from '../Daten/PopFilter/index.jsx'
+import TpopFilter from '../Daten/TpopFilter/index.jsx'
+import TpopmassnFilter from '../Daten/TpopmassnFilter/index.jsx'
+import TpopfeldkontrFilter from '../Daten/TpopfeldkontrFilter/index.jsx'
+import TpopfreiwkontrFilter from '../Daten/TpopfreiwkontrFilter/index.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
-import Title from './Title'
+import Title from './Title.jsx'
 import useSearchParamsState from '../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`

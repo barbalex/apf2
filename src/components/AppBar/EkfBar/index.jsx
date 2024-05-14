@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import Badge from '@mui/material/Badge'
 import { useParams, useLocation } from 'react-router-dom'
 
-import isMobilePhone from '../../../modules/isMobilePhone'
+import isMobilePhone from '../../../modules/isMobilePhone.js'
 import EkfYear from './EkfYear'
 import User from './User'
 import storeContext from '../../../storeContext.js'
