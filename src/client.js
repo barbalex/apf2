@@ -10,9 +10,9 @@ import { onError } from '@apollo/client/link/error'
 import { jwtDecode } from 'jwt-decode'
 import uniqBy from 'lodash/uniqBy'
 
-import graphQlUri from './modules/graphQlUri'
-import existsPermissionsError from './modules/existsPermissionError'
-import existsTooLargeError from './modules/existsTooLargeError'
+import graphQlUri from './modules/graphQlUri.js'
+import existsPermissionsError from './modules/existsPermissionError.js'
+import existsTooLargeError from './modules/existsTooLargeError.js'
 
 const Client = ({ store }) => {
   const { enqueNotification } = store

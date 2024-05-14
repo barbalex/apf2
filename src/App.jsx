@@ -1,17 +1,17 @@
 import React, { lazy, Suspense } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
-import theme from './utils/materialTheme'
+import theme from './utils/materialTheme.js'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale/de'
 import { ApolloProvider } from '@apollo/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import MobxStore from './store'
+import MobxStore from './store/index.js'
 import { SnackbarProvider } from 'notistack'
 //import { onPatch } from 'mobx-state-tree'
 
-import initializeIdb from './modules/initializeIdb'
-import buildClient from './client'
+import initializeIdb from './modules/initializeIdb.js'
+import buildClient from './client.js'
 
 // see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
 import '@fontsource/roboto-mono'
@@ -23,7 +23,7 @@ import '@fontsource/roboto/700.css'
 import GlobalStyle from './components/GlobalStyle.jsx'
 
 import { Provider as MobxProvider } from './storeContext.js'
-import { Provider as IdbProvider } from './idbContext'
+import { Provider as IdbProvider } from './idbContext.js'
 
 const Notifier = lazy(() => import('./components/shared/Notifier.jsx'))
 import NotificationDismisser from './components/shared/NotificationDismisser.jsx'
