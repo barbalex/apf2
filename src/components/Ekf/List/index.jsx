@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
-import Item from './Item'
+import Item from './Item.jsx'
 
 const Container = styled.div`
   height: 100%;

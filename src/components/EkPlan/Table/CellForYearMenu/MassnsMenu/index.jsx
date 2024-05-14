@@ -1,7 +1,7 @@
 import React from 'react'
 import Menu from '@mui/material/Menu'
 
-import Massn from './Massn'
+import Massn from './Massn.jsx'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 

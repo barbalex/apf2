@@ -3,8 +3,8 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import styled from '@emotion/styled'
 
-import Ap from './Ap'
-import ChooseAp from './ChooseAp'
+import Ap from './Ap/index.jsx'
+import ChooseAp from './ChooseAp/index.jsx'
 import storeContext from '../../../storeContext.js'
 
 const Container = styled.div`

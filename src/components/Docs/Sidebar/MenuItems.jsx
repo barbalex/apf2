@@ -3,7 +3,7 @@ import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
 import styled from '@emotion/styled'
 
-import MenuItem from './MenuItem'
+import MenuItem from './MenuItem.jsx'
 import storeContext from '../../../storeContext.js'
 
 // dont know why but divider is too thick,

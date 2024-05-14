@@ -8,8 +8,8 @@ import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../storeContext.js'
-import TextFilter from './TextFilter'
-import BooleanFilter from './BooleanFilter'
+import TextFilter from './TextFilter.jsx'
+import BooleanFilter from './BooleanFilter.jsx'
 
 export const StyledCell = styled.div`
   display: flex;

@@ -9,14 +9,14 @@ import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient } from '@apollo/client'
 
 import storeContext from '../../../../storeContext.js'
-import queryTpop from './queryTpop'
-import queryEkplansOfTpop from './queryEkplansOfTpop'
-import mutationCreateEkplan from './mutationCreateEkplan'
-import mutationDeleteEkplan from './mutationDeleteEkplan'
+import queryTpop from './queryTpop.js'
+import queryEkplansOfTpop from './queryEkplansOfTpop.js'
+import mutationCreateEkplan from './mutationCreateEkplan.js'
+import mutationDeleteEkplan from './mutationDeleteEkplan.js'
 
-import EksMenu from './EksMenu'
-import EkfsMenu from './EkfsMenu'
-import MassnsMenu from './MassnsMenu'
+import EksMenu from './EksMenu/index.jsx'
+import EkfsMenu from './EkfsMenu/index.jsx'
+import MassnsMenu from './MassnsMenu/index.jsx'
 
 const YearCellMenuTitle = styled.h5`
   margin-top: 0;

@@ -1,7 +1,7 @@
 import React from 'react'
 import Menu from '@mui/material/Menu'
 
-import Ek from './Ek'
+import Ek from './Ek.jsx'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
