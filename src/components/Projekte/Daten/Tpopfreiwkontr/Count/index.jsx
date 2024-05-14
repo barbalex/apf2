@@ -8,11 +8,11 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 
-import Einheit from './Einheit'
-import Gezaehlt from './Gezaehlt'
-import Geschaetzt from './Geschaetzt'
+import Einheit from './Einheit.jsx'
+import Gezaehlt from './Gezaehlt.jsx'
+import Geschaetzt from './Geschaetzt.jsx'
 import query from './query.js'
-import createTpopkontrzaehl from './createTpopkontrzaehl'
+import createTpopkontrzaehl from './createTpopkontrzaehl.js'
 import storeContext from '../../../../../storeContext.js'
 import Error from '../../../../shared/Error.jsx'
 import Spinner from '../../../../shared/Spinner.jsx'
@@ -36,9 +36,9 @@ const Container = styled.div`
        'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
        'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
       : props.shownew
-      ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+        ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
          'showNew showNew showNew showNew showNew showNew showNew showNew'`
-      : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+        : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
            'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
            'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   grid-column-gap: 10px;
@@ -50,9 +50,9 @@ const Container = styled.div`
        'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
        'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
         : props.shownew
-        ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+          ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
          'showNew showNew showNew showNew showNew showNew showNew showNew'`
-        : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+          : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
            'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
            'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   }

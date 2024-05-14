@@ -5,7 +5,7 @@ import { useQuery, useApolloClient, gql } from '@apollo/client'
 
 import Select from '../../../../shared/Select.jsx'
 import storeContext from '../../../../../storeContext.js'
-import queryAdresses from './queryAdresses'
+import queryAdresses from './queryAdresses.js'
 import {
   adresse as adresseFragment,
   pop as popFragment,

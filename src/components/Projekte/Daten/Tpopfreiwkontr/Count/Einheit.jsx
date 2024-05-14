@@ -6,7 +6,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import Select from '../../../../shared/Select.jsx'
 import storeContext from '../../../../../storeContext.js'
-import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
+import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.js'
 import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber.js'
 
 const EinheitVal = styled.div`

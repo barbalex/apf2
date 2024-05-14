@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import TextField from '../../../shared/TextField2'
+import TextField from '../../../shared/TextField2.jsx'
 import RadioButton from '../../../shared/RadioButton'
 import veghoeheImg from './veghoehe.png'
 

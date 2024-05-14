@@ -8,7 +8,7 @@ import Checkbox2States from '../../../../shared/Checkbox2States.jsx'
 import RadioButtonGroup from '../../../../shared/RadioButtonGroup.jsx'
 import Select from '../../../../shared/Select.jsx'
 import TextField from '../../../../shared/TextField.jsx'
-import queryEk from './queryEk'
+import queryEk from './queryEk.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Spinner from '../../../../shared/Spinner.jsx'
 

@@ -10,7 +10,7 @@ import SimpleBar from 'simplebar-react'
 import { useParams, useLocation } from 'react-router-dom'
 
 import FormTitle from '../../../shared/FormTitle/index.jsx'
-import TextField from '../../../shared/TextField2'
+import TextField from '../../../shared/TextField2.jsx'
 import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
 import Select from '../../../shared/Select.jsx'
 import DateField from '../../../shared/Date.jsx'

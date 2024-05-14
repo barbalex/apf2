@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 
-import { initial as tpop } from '../../../../store/Tree/DataFilter/tpop'
+import { initial as tpop } from '../../../../store/Tree/DataFilter/tpop.js'
 import storeContext from '../../../../storeContext.js'
 
 const Row = styled.div``
