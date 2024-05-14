@@ -14,7 +14,7 @@ import queryPops from './queryPops'
 import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
-import Error from '../../../shared/Error'
+import Error from '../../../shared/Error.jsx'
 import PopOrTabs from './Tabs'
 
 const Container = styled.div`

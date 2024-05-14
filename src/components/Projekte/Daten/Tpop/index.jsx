@@ -17,7 +17,7 @@ import Tpop from './Tpop'
 import TpopHistory from './History'
 import Files from '../../../shared/Files/index.jsx'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
-import Error from '../../../shared/Error'
+import Error from '../../../shared/Error.jsx'
 import {
   popStatusWerte,
   tpop,

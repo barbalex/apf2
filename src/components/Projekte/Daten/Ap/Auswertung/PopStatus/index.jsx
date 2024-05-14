@@ -16,7 +16,7 @@ import { useParams } from 'react-router-dom'
 
 import query from './query'
 import CustomTooltip from '../CustomTooltip'
-import Error from '../../../../../shared/Error'
+import Error from '../../../../../shared/Error.jsx'
 
 const SpinnerContainer = styled.div`
   height: 400px;

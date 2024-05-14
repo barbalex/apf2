@@ -11,7 +11,7 @@ import query from './query'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import FormTitle from '../../../shared/FormTitle'
 import storeContext from '../../../../storeContext.js'
-import Error from '../../../shared/Error'
+import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 import TpopfreiwkontrForm from './Form'
 

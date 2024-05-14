@@ -13,7 +13,7 @@ import {
   tpopfreiwkontr as tpopfreiwkontrFragment,
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../../../shared/fragments.js'
-import Error from '../../../../shared/Error'
+import Error from '../../../../shared/Error.jsx'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);

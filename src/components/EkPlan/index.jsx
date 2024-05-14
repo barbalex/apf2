@@ -10,7 +10,7 @@ const Choose = lazy(() => import('./Choose'))
 import queryAps from './queryAps'
 import storeContext from '../../storeContext.js'
 import appBaseUrl from '../../modules/appBaseUrl'
-const Error = lazy(() => import('../shared/Error'))
+const Error = lazy(() => import('../shared/Error.jsx'))
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 const User = lazy(() => import('../User'))
 import Spinner from '../shared/Spinner.jsx'

@@ -12,7 +12,7 @@ import { arrayMoveImmutable } from 'array-move'
 
 import exists from '../../../../../modules/exists'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import Error from '../../../../shared/Error'
+import Error from '../../../../shared/Error.jsx'
 import Spinner from '../../../../shared/Spinner.jsx'
 import Beob from './Field'
 import storeContext from '../../../../../storeContext.js'

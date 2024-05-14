@@ -16,7 +16,7 @@ import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import { ekfrequenz } from '../../../shared/fragments.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
-import Error from '../../../shared/Error'
+import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 
 const Container = styled.div`

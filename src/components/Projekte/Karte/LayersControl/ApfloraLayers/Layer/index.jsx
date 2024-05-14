@@ -20,7 +20,7 @@ import { useMap } from 'react-leaflet'
 import { useParams } from 'react-router-dom'
 
 import Checkbox from '../../shared/Checkbox'
-import Error from '../../../../../shared/Error'
+import Error from '../../../../../shared/Error.jsx'
 import getBounds from '../../../../../../modules/getBounds'
 import storeContext from '../../../../../../storeContext.js'
 import query from './query'

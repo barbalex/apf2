@@ -15,7 +15,7 @@ import queryLists from './queryLists'
 import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
-import Error from '../../../shared/Error'
+import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 import {
   ekzaehleinheit,

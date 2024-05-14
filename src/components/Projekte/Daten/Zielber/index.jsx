@@ -12,7 +12,7 @@ import query from './query'
 import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
-import Error from '../../../shared/Error'
+import Error from '../../../shared/Error.jsx'
 import { zielber as zielberFragment } from '../../../shared/fragments.js'
 import Spinner from '../../../shared/Spinner.jsx'
 

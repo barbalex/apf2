@@ -13,7 +13,7 @@ import storeContext from '../../storeContext.js'
 import StyledSplitPane from '../shared/StyledSplitPane'
 import dataByUserIdGql from './dataByUserId'
 import dataWithDateByUserIdGql from './dataWithDateByUserId'
-import Error from '../shared/Error'
+import Error from '../shared/Error.jsx'
 
 const Container = styled.div`
   flex-grow: 0;

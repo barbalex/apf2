@@ -15,7 +15,7 @@ import { useApolloClient, useQuery } from '@apollo/client'
 
 import query from './data'
 import TextField from '../../../shared/TextField'
-import Error from '../../../shared/Error'
+import Error from '../../../shared/Error.jsx'
 import updateUserByIdGql from './updateUserById'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'

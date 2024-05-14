@@ -14,7 +14,7 @@ import Geschaetzt from './Geschaetzt'
 import query from './query'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import storeContext from '../../../../../storeContext.js'
-import Error from '../../../../shared/Error'
+import Error from '../../../../shared/Error.jsx'
 import Spinner from '../../../../shared/Spinner.jsx'
 
 const AddIcon = styled(MdAddCircleOutline)`

@@ -12,7 +12,7 @@ import { useParams, useLocation } from 'react-router-dom'
 import storeContext from '../../../storeContext.js'
 import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
-import Error from '../../shared/Error'
+import Error from '../../shared/Error.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 
 const StyledListItem = styled(ListItem)`

@@ -19,7 +19,7 @@ import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber.js'
 import ApUsers from './ApUsers'
 import { ap, aeTaxonomies } from '../../../../shared/fragments.js'
 import Spinner from '../../../../shared/Spinner.jsx'
-import Error from '../../../../shared/Error'
+import Error from '../../../../shared/Error.jsx'
 
 const FormContainer = styled.div`
   padding: 10px;

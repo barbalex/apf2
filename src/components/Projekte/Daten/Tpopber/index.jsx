@@ -13,7 +13,7 @@ import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
-import Error from '../../../shared/Error'
+import Error from '../../../shared/Error.jsx'
 import { tpopber } from '../../../shared/fragments.js'
 
 const Container = styled.div`

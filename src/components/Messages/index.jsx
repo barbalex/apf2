@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite'
 import query from './data'
 import createUsermessage from './createUsermessage'
 import storeContext from '../../storeContext.js'
-import Error from '../shared/Error'
+import Error from '../shared/Error.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import Messages from './Messages'
 
