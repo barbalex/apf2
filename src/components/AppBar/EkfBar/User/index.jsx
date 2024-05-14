@@ -32,6 +32,7 @@ const FieldsContainer = styled.div`
   padding: 24px;
   padding-top: 0;
   overflow: auto !important;
+  scrollbar-width: thin;
   height: 100%;
 `
 const StyledInput = styled(Input)`

@@ -3,9 +3,9 @@ import styled from '@emotion/styled'
 import { Outlet } from 'react-router-dom'
 import SimpleBar from 'simplebar-react'
 
-import Sidebar from './Sidebar'
-import ErrorBoundary from '../shared/ErrorBoundary'
-import Spinner from '../shared/Spinner'
+import Sidebar from './Sidebar/index.jsx'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
+import Spinner from '../shared/Spinner.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -21,6 +21,7 @@ const Doku = styled.div`
   width: 100%;
   padding: 25px;
   overflow-y: auto;
+  scrollbar-width: thin;
   box-sizing: border-box;
   ul,
   ol {

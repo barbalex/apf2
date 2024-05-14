@@ -31,6 +31,7 @@ const Container = styled.div`
 `
 const FormScrollContainer = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const ColumnContainer = styled.div`
   padding: 10px;
