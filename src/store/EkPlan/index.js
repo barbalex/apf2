@@ -2,9 +2,9 @@ import { types } from 'mobx-state-tree'
 import uniq from 'lodash/uniq'
 import groupBy from 'lodash/groupBy'
 
-import Ap from './Ap'
-import Hovered, { defaultValue as defaultHovered } from './Hovered'
-import fields from '../../components/EkPlan/Table/fields'
+import Ap from './Ap.js'
+import Hovered, { defaultValue as defaultHovered } from './Hovered.js'
+import fields from '../../components/EkPlan/Table/fields.js'
 
 export const defaultFields = [
   'ap',

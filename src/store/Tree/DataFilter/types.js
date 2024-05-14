@@ -1,11 +1,11 @@
 import { types } from 'mobx-state-tree'
 
-import { type as ap } from './ap'
-import { type as pop } from './pop'
-import { type as tpop } from './tpop'
-import { type as tpopfeldkontr } from './tpopfeldkontr'
-import { type as tpopfreiwkontr } from './tpopfreiwkontr'
-import { type as tpopmassn } from './tpopmassn'
+import { type as ap } from './ap.js'
+import { type as pop } from './pop.js'
+import { type as tpop } from './tpop.js'
+import { type as tpopfeldkontr } from './tpopfeldkontr.js'
+import { type as tpopfreiwkontr } from './tpopfreiwkontr.js'
+import { type as tpopmassn } from './tpopmassn.js'
 
 export default types.model({
   ap: types.array(ap),

@@ -1,9 +1,9 @@
-import { simpleTypes as ap } from './ap'
-import { simpleTypes as pop } from './pop'
-import { simpleTypes as tpop } from './tpop'
-import { simpleTypes as tpopfeldkontr } from './tpopfeldkontr'
-import { simpleTypes as tpopfreiwkontr } from './tpopfreiwkontr'
-import { simpleTypes as tpopmassn } from './tpopmassn'
+import { simpleTypes as ap } from './ap.js'
+import { simpleTypes as pop } from './pop.js'
+import { simpleTypes as tpop } from './tpop.js'
+import { simpleTypes as tpopfeldkontr } from './tpopfeldkontr.js'
+import { simpleTypes as tpopfreiwkontr } from './tpopfreiwkontr.js'
+import { simpleTypes as tpopmassn } from './tpopmassn.js'
 
 const simpleTypes = {
   ap,

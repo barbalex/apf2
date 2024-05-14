@@ -1,20 +1,20 @@
 import { types } from 'mobx-state-tree'
 
-import ApfloraLayer from './ApfloraLayer'
-import Copying, { defaultValue as defaultCopying } from './Copying'
+import ApfloraLayer from './ApfloraLayer.js'
+import Copying, { defaultValue as defaultCopying } from './Copying.js'
 import CopyingBiotop, {
   defaultValue as defaultCopyingBiotop,
-} from './CopyingBiotop'
-import Map, { defaultValue as defaultMap } from './Map'
-import Moving, { defaultValue as defaultMoving } from './Moving'
+} from './CopyingBiotop.js'
+import Map, { defaultValue as defaultMap } from './Map.js'
+import Moving, { defaultValue as defaultMoving } from './Moving.js'
 import MapMouseCoordinates, {
   defaultValue as defaultMapMouseCoordinates,
-} from './MapMouseCoordinates'
-import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
-import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays'
-import User, { defaultValue as defaultUser } from './User'
-import Tree, { defaultValue as defaultTree } from './Tree'
-import EkPlan, { defaultValue as defaultEkPlan } from './EkPlan'
+} from './MapMouseCoordinates.js'
+import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers.js'
+import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays.js'
+import User, { defaultValue as defaultUser } from './User.js'
+import Tree, { defaultValue as defaultTree } from './Tree/index.js'
+import EkPlan, { defaultValue as defaultEkPlan } from './EkPlan/index.js'
 
 const defaultSortedBeobFields = [
   'taxon',

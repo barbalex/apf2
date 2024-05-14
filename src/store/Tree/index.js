@@ -6,28 +6,28 @@ import isUuid from 'is-uuid'
 
 import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
-} from './NodeLabelFilter'
-import Geojson from './Geojson'
-import initialDataFilterValues from './DataFilter/initialValues'
-import DataFilter from './DataFilter/types'
-import { simpleTypes as popType } from './DataFilter/pop'
+} from './NodeLabelFilter.js'
+import Geojson from './Geojson.js'
+import initialDataFilterValues from './DataFilter/initialValues.js'
+import DataFilter from './DataFilter/types.js'
+import { simpleTypes as popType } from './DataFilter/pop.js'
 import {
   simpleTypes as tpopType,
   initial as initialTpop,
-} from './DataFilter/tpop'
+} from './DataFilter/tpop.js'
 import {
   simpleTypes as tpopmassnType,
   initial as initialTpopmassn,
-} from './DataFilter/tpopmassn'
+} from './DataFilter/tpopmassn.js'
 import {
   simpleTypes as tpopfeldkontrType,
   initial as initialTpopfeldkontr,
-} from './DataFilter/tpopfeldkontr'
+} from './DataFilter/tpopfeldkontr.js'
 import {
   simpleTypes as tpopfreiwkontrType,
   initial as initialTpopfreiwkontr,
-} from './DataFilter/tpopfreiwkontr'
-import { simpleTypes as apType, initial as initialAp } from './DataFilter/ap'
+} from './DataFilter/tpopfreiwkontr.js'
+import { simpleTypes as apType, initial as initialAp } from './DataFilter/ap.js'
 import appBaseUrl from '../../modules/appBaseUrl.js'
 
 export default types

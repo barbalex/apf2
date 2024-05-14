@@ -1,4 +1,4 @@
-import isNumeric from './isNumeric'
+import isNumeric from './isNumeric.js'
 
 const ifIsNumericAsNumber = (value) => {
   if (isNumeric(value)) return +value
