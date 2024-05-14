@@ -1,5 +1,4 @@
 import React, { useContext, useCallback } from 'react'
-import * as ReactDOMServer from 'react-dom/server'
 import { Marker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
@@ -14,7 +13,7 @@ import { beobIconHighlightedString } from './beobIconHighlightedString.js'
 import appBaseUrl from '../../../../../modules/appBaseUrl.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone.js'
-import Data from '../BeobData'
+import Data from '../BeobData/index.jsx'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;

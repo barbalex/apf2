@@ -5,7 +5,7 @@ import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useParams } from 'react-router-dom'
 // import { useMap } from 'react-leaflet'
 
-import Marker from './Marker'
+import Marker from './Marker.jsx'
 import storeContext from '../../../../../storeContext.js'
 import query from './query.js'
 
