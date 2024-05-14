@@ -7,7 +7,7 @@ import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup.jsx'
 import TextField from '../../../shared/TextField.jsx'
 import MdField from '../../../shared/MarkdownField'
 import Select from '../../../shared/Select'

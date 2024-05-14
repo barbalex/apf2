@@ -6,7 +6,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import InfoWithPopover from './InfoWithPopover'
+import InfoWithPopover from './InfoWithPopover.jsx'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;

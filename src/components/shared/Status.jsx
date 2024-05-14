@@ -8,7 +8,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
 
-import InfoWithPopover from './InfoWithPopover'
+import InfoWithPopover from './InfoWithPopover.jsx'
 import ifIsNumericAsNumber from '../../modules/ifIsNumericAsNumber.js'
 
 const FieldWithInfoContainer = styled.div`
