@@ -21,11 +21,11 @@ import { useParams } from 'react-router-dom'
 
 import Checkbox from '../../shared/Checkbox.jsx'
 import Error from '../../../../../shared/Error.jsx'
-import getBounds from '../../../../../../modules/getBounds'
+import getBounds from '../../../../../../modules/getBounds.js'
 import storeContext from '../../../../../../storeContext.js'
 import query from './query.js'
-import PopIcon from './PopIcon'
-import TpopIcon from './TpopIcon'
+import PopIcon from './PopIcon.jsx'
+import TpopIcon from './TpopIcon.jsx'
 
 const PauseCircleOutlineIcon = styled(MdPauseCircleOutline)`
   font-size: 1.5rem;
@@ -125,7 +125,7 @@ const LayerComponent = ({ apfloraLayer }) => {
     setBounds,
   } = store
   const tree = store.tree
-  const { beobGqlFilter, setMapFilter, incrementMapFilterResetter } = tree
+  const { beobGqlFilter } = tree
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
 
   const layer = apfloraLayer.value

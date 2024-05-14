@@ -10,8 +10,8 @@ import { useParams } from 'react-router-dom'
 import axios from 'redaxios'
 
 import storeContext from '../../../storeContext.js'
-import Popup from './layers/Popup'
-import xmlToLayersData from '../../../modules/xmlToLayersData'
+import Popup from './layers/Popup.jsx'
+import xmlToLayersData from '../../../modules/xmlToLayersData.js'
 
 const ClickListener = () => {
   const { apId } = useParams()
@@ -160,24 +160,24 @@ const ClickListener = () => {
         zoom > 19
           ? 1
           : zoom === 19
-          ? 2
-          : zoom === 18
-          ? 3
-          : zoom === 17
-          ? 6
-          : zoom === 16
-          ? 12
-          : zoom === 15
-          ? 20
-          : zoom === 14
-          ? 50
-          : zoom > 12
-          ? 100
-          : zoom > 10
-          ? 300
-          : zoom > 8
-          ? 800
-          : 1200
+            ? 2
+            : zoom === 18
+              ? 3
+              : zoom === 17
+                ? 6
+                : zoom === 16
+                  ? 12
+                  : zoom === 15
+                    ? 20
+                    : zoom === 14
+                      ? 50
+                      : zoom > 12
+                        ? 100
+                        : zoom > 10
+                          ? 300
+                          : zoom > 8
+                            ? 800
+                            : 1200
       try {
         const coordinates = [lng, lat]
         const options = { steps: 8, units: 'meters' }

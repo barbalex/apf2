@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import storeContext from '../../../../../storeContext.js'
-import Layer from './Layer'
-import ShowForMultipleAps from './ShowForMultipleAps'
-import KtZhFilter from './KtZhFilter'
+import Layer from './Layer/index.jsx'
+import ShowForMultipleAps from './ShowForMultipleAps.jsx'
+import KtZhFilter from './KtZhFilter/index.jsx'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);

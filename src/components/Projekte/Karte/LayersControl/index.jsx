@@ -9,9 +9,9 @@ import styled from '@emotion/styled'
 import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
-import Overlays from './Overlays'
-import ApfloraLayers from './ApfloraLayers'
-import BaseLayers from './BaseLayers'
+import Overlays from './Overlays.jsx'
+import ApfloraLayers from './ApfloraLayers/index.jsx'
+import BaseLayers from './BaseLayers/index.jsx'
 import storeContext from '../../../../storeContext.js'
 
 const ExpandMoreIcon = styled(MdExpandMore)`
