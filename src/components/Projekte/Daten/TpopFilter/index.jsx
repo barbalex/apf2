@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
-import FilterTitle from '../../../shared/FilterTitle'
+import FilterTitle from '../../../shared/FilterTitle.jsx'
 import queryTpops from './queryTpops'
 import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'

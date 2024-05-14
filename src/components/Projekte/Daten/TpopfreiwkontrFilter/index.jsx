@@ -6,7 +6,7 @@ import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
 import queryTpopkontrs from './queryTpopkontrs'
-import FilterTitle from '../../../shared/FilterTitle'
+import FilterTitle from '../../../shared/FilterTitle.jsx'
 import storeContext from '../../../../storeContext.js'
 import TpopfreiwkontrForm from './Form'
 import OrTabs from './Tabs'

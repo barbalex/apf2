@@ -8,7 +8,7 @@ import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo.j
 import TextField from '../../../shared/TextField.jsx'
 import Select from '../../../shared/Select.jsx'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
-import FilterTitle from '../../../shared/FilterTitle'
+import FilterTitle from '../../../shared/FilterTitle.jsx'
 import queryAeTaxonomiesById from './queryAeTaxonomiesById'
 import queryLists from './queryLists'
 import queryAps from './queryAps'
