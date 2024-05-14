@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup.jsx'
 import TextField from '../../../shared/TextField.jsx'
-import MdField from '../../../shared/MarkdownField'
+import MdField from '../../../shared/MarkdownField/index.jsx'
 import Select from '../../../shared/Select'
 import JesNo from '../../../shared/JesNo'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'

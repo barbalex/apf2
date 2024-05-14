@@ -11,7 +11,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField.jsx'
-import MdField from '../../../shared/MarkdownField'
+import MdField from '../../../shared/MarkdownField/index.jsx'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'

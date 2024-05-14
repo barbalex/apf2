@@ -6,7 +6,7 @@ import SimpleBar from 'simplebar-react'
 
 import TextField from '../../../shared/TextField.jsx'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo.jsx'
-import MdField from '../../../shared/MarkdownField'
+import MdField from '../../../shared/MarkdownField/index.jsx'
 import Status from '../../../shared/Status'
 import SelectCreatable from '../../../shared/SelectCreatableGemeinde'
 import Checkbox2States from '../../../shared/Checkbox2States'

@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup.jsx'
 import TextField from '../../../shared/TextField.jsx'
-import MdField from '../../../shared/MarkdownField'
+import MdField from '../../../shared/MarkdownField/index.jsx'
 import Select from '../../../shared/Select'
 import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypable'
 import Checkbox2States from '../../../shared/Checkbox2States'
