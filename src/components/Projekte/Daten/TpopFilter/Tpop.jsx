@@ -14,7 +14,7 @@ import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
 //import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import constants from '../../../../modules/constants'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 
 const Container = styled.div`
   height: 100%;

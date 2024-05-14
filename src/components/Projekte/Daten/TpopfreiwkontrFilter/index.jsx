@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 
 import queryTpopkontrs from './queryTpopkontrs'
 import FilterTitle from '../../../shared/FilterTitle'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import TpopfreiwkontrForm from './Form'
 import OrTabs from './Tabs'
 

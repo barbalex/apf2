@@ -7,7 +7,7 @@ import debounce from 'lodash/debounce'
 import ShowCoordinates from './ShowCoordinates'
 import PanToCoordinates from './PanToCoordinates'
 import epsg4326to2056 from '../../../../modules/epsg4326to2056'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 
 /**
  * onClick coordinates container: render coordinate-field-pair and go-to button

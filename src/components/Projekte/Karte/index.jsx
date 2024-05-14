@@ -66,7 +66,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import MapFilterListener from './MapFilterListener'
 import ClickListener from './ClickListener'
 
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 
 // this does not work
 // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214

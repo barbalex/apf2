@@ -13,7 +13,7 @@ import { observer } from 'mobx-react-lite'
 import xmlToLayersData from '../../../../modules/xmlToLayersData'
 import Popup from './Popup'
 import onTileError from './onTileError'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 
 const StyledPopupContent = styled.div`
   white-space: pre;

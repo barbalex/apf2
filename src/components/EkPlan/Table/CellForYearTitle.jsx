@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StyledTableCell, InfoRow } from './index'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 
 const CellForYearTitle = ({ style, row }) => {
   const store = useContext(storeContext)

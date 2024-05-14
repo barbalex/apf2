@@ -9,7 +9,7 @@ import Bar from './Bar'
 import EkfBar from './EkfBar'
 import inIframe from '../../modules/inIframe'
 import Spinner from '../shared/Spinner.jsx'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 
 const isInIframe = inIframe()
 

@@ -4,7 +4,7 @@ import Divider from '@mui/material/Divider'
 import styled from '@emotion/styled'
 
 import MenuItem from './MenuItem'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 
 // dont know why but divider is too thick,
 // thicker than ListItemButton divider

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import isEqual from 'lodash/isEqual'
 import { useLocation } from 'react-router-dom'
 
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import getActiveNodeArrayFromPathname from '../../modules/getActiveNodeArrayFromPathname'
 
 const ActiveNodeArraySetter = () => {

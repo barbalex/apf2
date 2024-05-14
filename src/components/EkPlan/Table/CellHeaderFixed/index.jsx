@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import TextFilter from './TextFilter'
 import BooleanFilter from './BooleanFilter'
 

@@ -22,7 +22,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
 import idbContext from '../idbContext'
-import storeContext from '../storeContext'
+import storeContext from '../storeContext.js'
 import getUserFromIdb from '../modules/getUserFromIdb'
 import ErrorBoundary from './shared/ErrorBoundary'
 

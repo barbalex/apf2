@@ -9,7 +9,7 @@ import ListItem from '@mui/material/ListItem'
 import { observer } from 'mobx-react-lite'
 import { useParams, useLocation } from 'react-router-dom'
 
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Error from '../../shared/Error'

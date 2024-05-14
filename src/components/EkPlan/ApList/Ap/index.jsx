@@ -3,7 +3,7 @@ import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import styled from '@emotion/styled'
 
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;

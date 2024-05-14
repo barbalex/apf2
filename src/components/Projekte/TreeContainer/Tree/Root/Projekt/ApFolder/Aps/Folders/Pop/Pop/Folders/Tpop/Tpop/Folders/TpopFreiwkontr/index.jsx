@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../../../../../../storeContext'
+import storeContext from '../../../../../../../../../../../../../../../../storeContext.js'
 import TpopFreiwkontr from './TpopFreiwkontr'
 
 const TpopFreiwkontrFolder = ({ projekt, ap, pop, tpop, isLoading, count }) => {

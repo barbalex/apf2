@@ -6,7 +6,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 
 const Container = styled.div`

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import sum from 'lodash/sum'
 
 import Row from '../../../../../../Row'
-import storeContext from '../../../../../../../../../../storeContext'
+import storeContext from '../../../../../../../../../../storeContext.js'
 import BeobNichtZuzuordnens from './BeobNichtZuzuordnens'
 
 const BeobNichtZuzuordnenFolder = ({ projekt, ap, aparts, isLoading }) => {

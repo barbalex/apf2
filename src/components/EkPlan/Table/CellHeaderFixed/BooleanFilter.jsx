@@ -3,7 +3,7 @@ import React, { useCallback, useContext } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import upperFirst from 'lodash/upperFirst'
 
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 
 // need to forward ref from Menu to MenuItem
 // see: https://github.com/mui-org/material-ui/issues/15903#issuecomment-496313450

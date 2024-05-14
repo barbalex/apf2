@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { gql, useQuery } from '@apollo/client'
 
 import Checkbox from '../shared/Checkbox'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 
 const LayerDiv = styled.div`
   display: flex;

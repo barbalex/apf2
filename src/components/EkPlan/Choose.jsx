@@ -16,7 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { observer } from 'mobx-react-lite'
 
 import Fields from './Fields'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import { allFields } from '../../store/EkPlan'
 import ErrorBoundary from '../shared/ErrorBoundary'
 

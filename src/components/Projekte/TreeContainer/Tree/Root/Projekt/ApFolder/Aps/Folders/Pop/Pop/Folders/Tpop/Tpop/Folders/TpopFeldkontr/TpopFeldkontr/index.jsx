@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../../../../../../../storeContext'
+import storeContext from '../../../../../../../../../../../../../../../../../storeContext.js'
 import ZaehlFolder from './Zaehl'
 
 const TpopFeldkontr = ({ projekt, ap, pop, tpop }) => {

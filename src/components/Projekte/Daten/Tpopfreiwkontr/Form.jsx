@@ -21,7 +21,7 @@ import Files from './Files'
 import Count from './Count'
 import Verification from './Verification'
 import Image from './Image'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import {
   adresse as adresseFragment,

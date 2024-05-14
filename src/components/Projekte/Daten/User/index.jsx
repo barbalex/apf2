@@ -20,7 +20,7 @@ import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryEkfTpops from './queryEkfTpops'
 import Select from '../../../shared/Select'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import {
   tpopkontr as tpopkontrFragment,

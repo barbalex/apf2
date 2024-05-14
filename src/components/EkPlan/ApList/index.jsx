@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 
 import Ap from './Ap'
 import ChooseAp from './ChooseAp'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;

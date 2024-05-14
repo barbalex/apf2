@@ -8,7 +8,7 @@ const ApList = lazy(() => import('./ApList'))
 const Table = lazy(() => import('./Table'))
 const Choose = lazy(() => import('./Choose'))
 import queryAps from './queryAps'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import appBaseUrl from '../../modules/appBaseUrl'
 const Error = lazy(() => import('../shared/Error'))
 import ErrorBoundary from '../shared/ErrorBoundary'

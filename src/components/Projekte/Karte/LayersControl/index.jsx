@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite'
 import Overlays from './Overlays'
 import ApfloraLayers from './ApfloraLayers'
 import BaseLayers from './BaseLayers'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 
 const ExpandMoreIcon = styled(MdExpandMore)`
   font-size: 1.5rem;

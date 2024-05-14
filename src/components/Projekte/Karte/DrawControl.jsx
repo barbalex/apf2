@@ -4,7 +4,7 @@ import 'leaflet-draw'
 import { useMap } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 
 const DrawControl = () => {
   const map = useMap()

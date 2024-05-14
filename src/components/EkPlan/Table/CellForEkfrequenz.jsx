@@ -7,7 +7,7 @@ import max from 'lodash/max'
 
 import { StyledCellForSelect } from './index'
 import { tpop } from '../../shared/fragments'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import setStartjahr from './setStartjahr'
 import setEkplans from './setEkplans'
 

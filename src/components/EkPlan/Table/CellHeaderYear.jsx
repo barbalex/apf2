@@ -6,7 +6,7 @@ import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
 
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 
 const StyledCell = styled.div`
   display: flex;

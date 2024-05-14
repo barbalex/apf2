@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 
 import FilterTitle from '../../../shared/FilterTitle'
 import queryTpops from './queryTpops'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import Ek from './Ek'
 import Tpop from './Tpop'

@@ -10,7 +10,7 @@ import { useResizeDetector } from 'react-resize-detector'
 
 import queryAll from './queryAll'
 import CellForYearMenu from './CellForYearMenu'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import yearsFromTpops from './yearsFromTpops'
 import tpopRowFromTpop from './tpopRowFromTpop'
 import yearRowFromTpop from './yearRowFromTpop'

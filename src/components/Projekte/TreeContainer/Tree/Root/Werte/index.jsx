@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
 
 import Row from '../../Row'
-import storeContext from '../../../../../../storeContext'
+import storeContext from '../../../../../../storeContext.js'
 import AdresseFolder from './Adresse'
 import ApberrelevantGrundFolder from './ApberrelevantGrund'
 import EkAbrechnungstypFolder from './EkAbrechnungstyp'

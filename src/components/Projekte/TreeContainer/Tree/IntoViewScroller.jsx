@@ -1,7 +1,7 @@
 import { useEffect, useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import isElementInViewport from '../../../../modules/isElementInViewport'
 
 const IntoViewScroller = () => {

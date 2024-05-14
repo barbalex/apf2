@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../Row'
-import storeContext from '../../../../../../../../../../storeContext'
+import storeContext from '../../../../../../../../../../storeContext.js'
 import Pop from './Pop'
 
 const PopFolder = ({ projekt, ap, count, isLoading }) => {

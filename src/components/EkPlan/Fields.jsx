@@ -5,7 +5,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import DialogContent from '@mui/material/DialogContent'
 
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
 const StyledDialogContent = styled(DialogContent)`

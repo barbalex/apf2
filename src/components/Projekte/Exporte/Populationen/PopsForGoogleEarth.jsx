@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
 import exportModule from '../../../../modules/export'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index'
 
 const PopsForGoogleEarth = () => {

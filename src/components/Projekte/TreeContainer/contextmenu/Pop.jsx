@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 // create objects outside render

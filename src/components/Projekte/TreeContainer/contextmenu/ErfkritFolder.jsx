@@ -11,7 +11,7 @@ import styled from '@emotion/styled'
 import { gql, useApolloClient } from '@apollo/client'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu'
 

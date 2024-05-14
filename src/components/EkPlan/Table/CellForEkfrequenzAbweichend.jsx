@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import Checkbox from './Checkbox'
 import { StyledCellForSelect } from './index'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 
 const CellForEkfrequenzAbweichend = ({ field, row, style }) => {
   const store = useContext(storeContext)

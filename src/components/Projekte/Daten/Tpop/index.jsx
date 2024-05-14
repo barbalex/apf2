@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import Ek from './Ek'
 import Tpop from './Tpop'

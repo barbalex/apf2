@@ -13,7 +13,7 @@ import Gezaehlt from './Gezaehlt'
 import Geschaetzt from './Geschaetzt'
 import query from './query'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import Error from '../../../../shared/Error'
 import Spinner from '../../../../shared/Spinner.jsx'
 

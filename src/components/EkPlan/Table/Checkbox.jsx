@@ -4,7 +4,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 
 import { tpop } from '../../shared/fragments'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 
 const CheckboxContainer = styled.div`
   width: 100%;

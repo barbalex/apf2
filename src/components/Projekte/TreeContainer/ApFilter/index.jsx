@@ -9,7 +9,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import apById from './apById'
 import Label from '../../../shared/Label'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const NurApDiv = styled.div`

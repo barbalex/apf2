@@ -22,7 +22,7 @@ import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import GlobalStyle from './components/GlobalStyle.jsx'
 
-import { Provider as MobxProvider } from './storeContext'
+import { Provider as MobxProvider } from './storeContext.js'
 import { Provider as IdbProvider } from './idbContext'
 
 const Notifier = lazy(() => import('./components/shared/Notifier.jsx'))

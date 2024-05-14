@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom'
 
 import tables from '../../../../modules/tables'
 import deleteDataset from './delete'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const StyledDialog = styled(Dialog)`

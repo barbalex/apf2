@@ -13,7 +13,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 
 import undelete from './undelete'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
 const List = styled.div`

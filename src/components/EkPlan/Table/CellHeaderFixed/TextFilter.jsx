@@ -14,7 +14,7 @@ import Input from '@mui/material/Input'
 import { MdClear } from 'react-icons/md'
 import upperFirst from 'lodash/upperFirst'
 
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 
 const valForStore = (valPassed) => {
   let val = valPassed

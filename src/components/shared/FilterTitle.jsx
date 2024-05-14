@@ -5,7 +5,7 @@ import { MdInfoOutline } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import exists from '../../modules/exists'
 import appBaseUrl from '../../modules/appBaseUrl'
 

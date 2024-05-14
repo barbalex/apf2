@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 
 import Polyline from './Polyline'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import query from './query'
 
 const Router = () => {

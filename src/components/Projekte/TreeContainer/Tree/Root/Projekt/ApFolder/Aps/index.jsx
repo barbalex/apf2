@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../Row'
-import storeContext from '../../../../../../../../storeContext'
+import storeContext from '../../../../../../../../storeContext.js'
 import Folders from './Folders'
 
 const Aps = ({ projekt }) => {

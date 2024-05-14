@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import max from 'lodash/max'
 
 import Row from '../../Row'
-import storeContext from '../../../../../../storeContext'
+import storeContext from '../../../../../../storeContext.js'
 import Issues from './Issues'
 
 const CurrentIssuesFolderNode = ({ count, isLoading }) => {

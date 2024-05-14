@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router-dom'
 
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 import isMobilePhone from '../../../../../modules/isMobilePhone'

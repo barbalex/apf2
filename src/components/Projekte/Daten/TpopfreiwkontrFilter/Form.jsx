@@ -11,7 +11,7 @@ import Danger from './Danger'
 import Remarks from './Remarks'
 import EkfRemarks from './EkfRemarks'
 import Verification from './Verification'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 
 const FormContainer = styled.div`

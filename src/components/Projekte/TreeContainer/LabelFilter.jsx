@@ -15,7 +15,7 @@ import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 
 import tables from '../../../modules/tables'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 
 const StyledFormControl = styled(FormControl)`
   padding-right: 0.8em !important;

@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import sortBy from 'lodash/sortBy'
 
 import Row from '../../../../../../Row'
-import storeContext from '../../../../../../../../../../storeContext'
+import storeContext from '../../../../../../../../../../storeContext.js'
 
 const BeobNichtBeurteilts = ({ projekt, ap }) => {
   const client = useApolloClient()

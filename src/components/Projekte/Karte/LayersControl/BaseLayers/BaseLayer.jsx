@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import Radio from '../shared/Radio'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 
 const LayerDiv = styled.div`
   border-bottom: 1px solid #ececec;

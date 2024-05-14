@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 
 import Row from '../../../../../../../../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../../../../../../../../storeContext'
+import storeContext from '../../../../../../../../../../../../../../../../../../storeContext.js'
 import Zaehl from './Zaehl'
 
 const TpopFeldkontrZaehlFolder = ({ projekt, ap, pop, tpop, tpopkontr }) => {

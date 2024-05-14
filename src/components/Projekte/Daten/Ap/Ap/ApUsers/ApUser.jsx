@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import styled from '@emotion/styled'
 import { useApolloClient, gql } from '@apollo/client'
 
-import storeContext from '../../../../../../storeContext'
+import storeContext from '../../../../../../storeContext.js'
 
 const DelIcon = styled(IconButton)`
   font-size: 1rem !important;

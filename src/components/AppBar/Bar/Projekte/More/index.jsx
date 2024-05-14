@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import logout from '../../../../../modules/logout'
 import EkfUser from './EkfUser'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import idbContext from '../../../../../idbContext'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState'
 

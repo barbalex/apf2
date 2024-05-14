@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import useSearchParamsState from '../../modules/useSearchParamsState'
 import isMobilePhone from '../../modules/isMobilePhone'
 

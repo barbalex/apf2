@@ -9,7 +9,7 @@ import ellipse from '@turf/ellipse'
 import { useParams } from 'react-router-dom'
 import axios from 'redaxios'
 
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import Popup from './layers/Popup'
 import xmlToLayersData from '../../../modules/xmlToLayersData'
 

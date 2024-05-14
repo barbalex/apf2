@@ -19,7 +19,7 @@ import Error from '../../../shared/Error'
 import updateUserByIdGql from './updateUserById'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import logout from '../../../../modules/logout'
 import idbContext from '../../../../idbContext'
 

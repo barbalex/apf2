@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router-dom'
 
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import { tpopIcon } from './tpopIcon.js'
 import { tpopIconHighlighted } from './tpopIconHighlighted.js'
 import { u as uIcon } from './statusGroup/u.js'

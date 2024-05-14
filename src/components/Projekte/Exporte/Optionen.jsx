@@ -7,7 +7,7 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import {
   StyledCardContent,
   CardActionTitle,

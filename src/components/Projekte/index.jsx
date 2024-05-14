@@ -9,7 +9,7 @@ import queryString from 'query-string'
 // when Karte was loaded async, it did not load,
 // but only in production!
 import ProjektContainer from './ProjektContainer'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import StyledSplitPane from '../shared/StyledSplitPane'
 // import AppRenderer from '../../AppRenderer'
 import appBaseUrl from '../../modules/appBaseUrl'

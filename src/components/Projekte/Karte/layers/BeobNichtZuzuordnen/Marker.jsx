@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router-dom'
 
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import { beobIconString } from './beobIconString.js'
 import { beobIconHighlightedString } from './beobIconHighlightedString.js'
 import appBaseUrl from '../../../../../modules/appBaseUrl'

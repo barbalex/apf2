@@ -3,7 +3,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useContext } from 'react'
 
 import Row from '../../../Row'
-import storeContext from '../../../../../../../storeContext'
+import storeContext from '../../../../../../../storeContext.js'
 
 const Apberuebersichts = () => {
   const client = useApolloClient()

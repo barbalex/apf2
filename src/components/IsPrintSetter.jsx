@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../storeContext'
+import storeContext from '../storeContext.js'
 
 const IsPrintSetter = () => {
   const store = useContext(storeContext)

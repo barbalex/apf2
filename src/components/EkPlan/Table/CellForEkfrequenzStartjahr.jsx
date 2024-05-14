@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import { tpop } from '../../shared/fragments'
 import setEkplans from './setEkplans'
 

@@ -5,7 +5,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 
 import exportModule from '../../../../modules/export'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressTextNewLine } from '../index'
 
 const Li = styled.li`

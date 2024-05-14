@@ -7,7 +7,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { useParams } from 'react-router-dom'
 
 import Marker from './Marker'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import query from './query'
 
 const iconCreateFunction = function (cluster) {

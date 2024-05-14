@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 // import { useMap } from 'react-leaflet'
 
 import Marker from './Marker'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import query from './query'
 
 const iconCreateFunction = function (cluster) {

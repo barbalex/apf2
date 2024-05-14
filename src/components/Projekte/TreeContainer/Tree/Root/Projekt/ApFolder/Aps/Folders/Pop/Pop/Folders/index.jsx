@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../../../../../../../../storeContext'
+import storeContext from '../../../../../../../../../../../../storeContext.js'
 import TpopFolder from './Tpop'
 import PopBerFolder from './PopBer'
 import PopMassnBerFolder from './PopMassnBer'

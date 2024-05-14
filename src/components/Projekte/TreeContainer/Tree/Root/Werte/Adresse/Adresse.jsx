@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
 
 import Row from '../../../Row'
-import storeContext from '../../../../../../../storeContext'
+import storeContext from '../../../../../../../storeContext.js'
 
 const AdresseNodes = () => {
   const client = useApolloClient()

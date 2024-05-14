@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../../../storeContext'
+import storeContext from '../../../../../../../storeContext.js'
 import Row from '../../../Row'
 import ApberrelevantGrundNodes from './ApberrelevantGrund'
 

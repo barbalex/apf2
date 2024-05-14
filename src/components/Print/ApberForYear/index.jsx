@@ -4,7 +4,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
 import ApberForYear from './ApberForYear'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Spinner from '../../shared/Spinner.jsx'
 

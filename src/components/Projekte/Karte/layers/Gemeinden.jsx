@@ -3,7 +3,7 @@ import { GeoJSON } from 'react-leaflet'
 import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 
 // see: https://leafletjs.com/reference-1.6.0.html#path-option
 // need to fill or else popup will only happen when line is clicked

@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../../storeContext'
+import storeContext from '../../../../../../storeContext.js'
 
 const LayerDiv = styled.div`
   min-height: 24px;

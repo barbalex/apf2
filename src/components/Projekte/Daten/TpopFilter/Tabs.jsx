@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 
 import { initial as tpop } from '../../../../store/Tree/DataFilter/tpop'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../storeContext.js'
 
 const Row = styled.div``
 const Title = styled.div`
