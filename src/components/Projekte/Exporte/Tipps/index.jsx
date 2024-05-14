@@ -15,7 +15,7 @@ import {
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
-} from '../index'
+} from '../index.jsx'
 
 const OwnStyledCardContent = styled(CardContent)`
   margin: -15px 0 0 0;

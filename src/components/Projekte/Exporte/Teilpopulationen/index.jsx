@@ -9,7 +9,7 @@ import {
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
-} from '../index'
+} from '../index.jsx'
 
 const Teilpopulationen = () => {
   const [expanded, setExpanded] = useState(false)

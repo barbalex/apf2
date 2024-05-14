@@ -5,7 +5,7 @@ import { useApolloClient, gql } from '@apollo/client'
 
 import exportModule from '../../../../modules/export.js'
 import storeContext from '../../../../storeContext.js'
-import { DownloadCardButton, StyledProgressText } from '../index'
+import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
 const LetzterMassnBericht = () => {
   const client = useApolloClient()

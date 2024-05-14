@@ -12,7 +12,7 @@ import TPopOhneBekanntSeit from './TPopOhneBekanntSeit'
 import TPopFuerGEArtname from './TPopFuerGEArtname'
 import TPopFuerGoogleEarth from './TPopFuerGoogleEarth'
 import TPopFuerWebgisBun from './TPopFuerWebgisBun'
-import { StyledCardContent } from '../index'
+import { StyledCardContent } from '../index.jsx'
 
 const Teilpopulationen = () => (
   <StyledCardContent>

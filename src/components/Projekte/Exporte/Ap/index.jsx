@@ -9,7 +9,7 @@ import {
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
-} from '../index'
+} from '../index.jsx'
 import Ap from './Ap'
 import ApOhnePop from './ApOhnePop'
 import AnzMassn from './AnzMassn'

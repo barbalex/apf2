@@ -9,7 +9,7 @@ import {
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
-} from '../index'
+} from '../index.jsx'
 import Kontrollen from './Kontrollen'
 import KontrFuerWebgisBun from './KontrFuerWebgisBun'
 import KontrAnzProZaehlEinheit from './KontrAnzProZaehlEinheit'

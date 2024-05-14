@@ -9,7 +9,7 @@ import {
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
-} from '../index'
+} from '../index.jsx'
 import Pops from './Pops'
 import PopsForGoogleEarth from './PopsForGoogleEarth'
 import PopsForGEArtname from './PopsForGEArtname'

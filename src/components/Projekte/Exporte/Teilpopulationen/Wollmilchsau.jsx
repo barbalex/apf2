@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 
 import exportModule from '../../../../modules/export.js'
 import storeContext from '../../../../storeContext.js'
-import { DownloadCardButton, StyledProgressTextNewLine } from '../index'
+import { DownloadCardButton, StyledProgressTextNewLine } from '../index.jsx'
 
 const Li = styled.li`
   margin-top: -6px;

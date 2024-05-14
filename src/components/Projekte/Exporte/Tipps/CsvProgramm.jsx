@@ -9,7 +9,7 @@ import {
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
-} from '../index'
+} from '../index.jsx'
 import { StyledCardContent } from './index'
 
 const CsvOeffnen = () => {

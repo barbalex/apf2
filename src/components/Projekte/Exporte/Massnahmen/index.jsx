@@ -9,7 +9,7 @@ import {
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
-} from '../index'
+} from '../index.jsx'
 import Massnahmen from './Massnahmen'
 import MassnWebgisBun from './MassnWebgisBun'
 

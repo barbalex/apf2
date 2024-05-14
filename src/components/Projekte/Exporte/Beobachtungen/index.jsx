@@ -9,7 +9,7 @@ import {
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
-} from '../index'
+} from '../index.jsx'
 import BeobNichtZuzuordnen from './BeobNichtZuzuordnen'
 import BeobZugeordnet from './BeobZugeordnet'
 import BeobArtChanged from './BeobArtChanged'
