@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 
-import { DokuDate } from '..'
+import { DokuDate } from '../index.jsx'
 
 const LI = styled.li`
   list-style-type: none;

@@ -1,4 +1,4 @@
-import { DokuDate } from '..'
+import { DokuDate } from '../index.jsx'
 
 const DatenSichern = () => (
   <>
