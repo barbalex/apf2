@@ -25,6 +25,7 @@ const Container = styled.div`
   background-color: #fffde7;
   ${(props) => (props['data-isiniframe'] ? 'height: 100%;' : 'flex-grow: 1;')}
   overflow: auto;
+  scrollbar-width: thin;
   display: flex;
   flex-direction: column;
 

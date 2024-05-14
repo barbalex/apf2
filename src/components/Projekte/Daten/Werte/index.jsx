@@ -23,6 +23,7 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const FormContainer = styled.div`
   padding: 10px;
@@ -35,10 +36,10 @@ const Werte = () => {
   const table = pathname.includes('ApberrelevantGrundWerte')
     ? 'tpopApberrelevantGrundWerte'
     : pathname.includes('EkAbrechnungstypWerte')
-    ? 'ekAbrechnungstypWerte'
-    : pathname.includes('TpopkontrzaehlEinheitWerte')
-    ? 'tpopkontrzaehlEinheitWerte'
-    : 'uups'
+      ? 'ekAbrechnungstypWerte'
+      : pathname.includes('TpopkontrzaehlEinheitWerte')
+        ? 'tpopkontrzaehlEinheitWerte'
+        : 'uups'
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
