@@ -183,6 +183,8 @@ const StyledNode = styled.div`
   user-select: none;
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
+  contentvisibility: auto;
+  contain-intrinsic-size: 0 23px;
 `
 const StyledExpandMoreIcon = styled(MdExpandMore)`
   margin-top: ${(props) =>
