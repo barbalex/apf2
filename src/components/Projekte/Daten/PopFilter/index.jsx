@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 
 import TextField from '../../../shared/TextField.jsx'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo.jsx'
-import Status from '../../../shared/Status'
+import Status from '../../../shared/Status.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import FilterTitle from '../../../shared/FilterTitle'
 import queryPops from './queryPops'

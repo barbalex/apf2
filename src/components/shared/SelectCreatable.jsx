@@ -3,7 +3,7 @@ import CreatableSelect from 'react-select/creatable'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import exists from '../../modules/exists'
+import exists from '../../modules/exists.js'
 
 const Container = styled.div`
   display: flex;

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import exists from '../../../../../modules/exists'
+import exists from '../../../../../modules/exists.js'
 
 const Popup = styled.div`
   background-color: white;

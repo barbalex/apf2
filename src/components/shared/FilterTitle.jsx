@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext.js'
-import exists from '../../modules/exists'
+import exists from '../../modules/exists.js'
 import appBaseUrl from '../../modules/appBaseUrl'
 
 const Container = styled.div`

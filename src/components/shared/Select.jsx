@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import Select from 'react-select'
 import styled from '@emotion/styled'
 
-import exists from '../../modules/exists'
+import exists from '../../modules/exists.js'
 
 const Container = styled.div`
   display: flex;
