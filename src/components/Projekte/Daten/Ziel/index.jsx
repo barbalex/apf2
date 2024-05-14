@@ -10,7 +10,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
-import FormTitle from '../../../shared/FormTitle'
+import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'

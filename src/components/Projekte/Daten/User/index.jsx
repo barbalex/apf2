@@ -16,7 +16,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField2'
-import FormTitle from '../../../shared/FormTitle'
+import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import queryEkfTpops from './queryEkfTpops'
 import Select from '../../../shared/Select'

@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 
 import TextField from '../../../shared/TextField'
 import DateField from '../../../shared/Date'
-import FormTitle from '../../../shared/FormTitle'
+import FormTitle from '../../../shared/FormTitle/index.jsx'
 import constants from '../../../../modules/constants'
 import query from './query.js'
 import storeContext from '../../../../storeContext.js'

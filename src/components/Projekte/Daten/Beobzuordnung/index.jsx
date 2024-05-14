@@ -9,7 +9,7 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams, useLocation } from 'react-router-dom'
 
-import FormTitle from '../../../shared/FormTitle'
+import FormTitle from '../../../shared/FormTitle/index.jsx'
 import TextField from '../../../shared/TextField2'
 import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
 import Select from '../../../shared/Select'

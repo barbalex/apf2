@@ -8,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
-import FormTitle from '../../../shared/FormTitle'
+import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext.js'

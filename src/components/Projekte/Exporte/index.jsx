@@ -7,7 +7,7 @@ import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 
-import FormTitle from '../../shared/FormTitle'
+import FormTitle from '../../shared/FormTitle/index.jsx'
 import Tipps from './Tipps'
 import Ap from './Ap'
 import Populationen from './Populationen'

@@ -16,7 +16,7 @@ import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTyp
 import Checkbox2States from '../../../shared/Checkbox2States'
 import DateField from '../../../shared/Date'
 import StringToCopy from '../../../shared/StringToCopy'
-import FormTitle from '../../../shared/FormTitle'
+import FormTitle from '../../../shared/FormTitle/index.jsx'
 import constants from '../../../../modules/constants'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import query from './query.js'
