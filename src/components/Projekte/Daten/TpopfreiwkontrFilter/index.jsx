@@ -29,6 +29,7 @@ const Container = styled.div`
 `
 const ScrollContainer = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const FilterCommentTitle = styled.div`
   margin-top: -10px;

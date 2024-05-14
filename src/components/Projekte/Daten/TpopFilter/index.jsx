@@ -28,6 +28,7 @@ const FieldsContainer = styled.div`
   height: 100%;
   overflow: hidden !important;
   overflow-y: auto;
+  scrollbar-width: thin;
   fieldset {
     padding-right: 30px;
   }
