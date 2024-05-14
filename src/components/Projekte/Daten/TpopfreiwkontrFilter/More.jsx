@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import TextField from '../../../shared/TextField2.jsx'
-import RadioButton from '../../../shared/RadioButton'
+import RadioButton from '../../../shared/RadioButton.jsx'
 import veghoeheImg from './veghoehe.png'
 
 const Area = styled.div`

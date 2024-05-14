@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import RadioButton from '../../../shared/RadioButton'
+import RadioButton from '../../../shared/RadioButton.jsx'
 import storeContext from '../../../../storeContext.js'
 
 const Area = styled.div`

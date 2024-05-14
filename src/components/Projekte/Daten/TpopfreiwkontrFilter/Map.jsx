@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import RadioButton from '../../../shared/RadioButton'
+import RadioButton from '../../../shared/RadioButton.jsx'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
