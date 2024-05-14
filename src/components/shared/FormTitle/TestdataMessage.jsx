@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useParams } from 'react-router-dom'
 
-import constants from '../../../modules/constants'
+import constants from '../../../modules/constants.js'
 
 const Div = styled.div`
   color: #c8e6c9;

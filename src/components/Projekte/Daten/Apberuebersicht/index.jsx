@@ -21,7 +21,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import { apberuebersicht } from '../../../shared/fragments.js'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
-import Checkbox2States from '../../../shared/Checkbox2States'
+import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import historize from '../../../../modules/historize'
 
 const Container = styled.div`

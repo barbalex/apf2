@@ -8,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField.jsx'
 import Select from '../../../shared/Select'
-import Checkbox2States from '../../../shared/Checkbox2States'
+import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import queryLists from './queryLists'
