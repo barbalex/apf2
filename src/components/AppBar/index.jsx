@@ -5,9 +5,9 @@ import Toolbar from '@mui/material/Toolbar'
 import { Outlet, useLocation, useParams, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
-import Bar from './Bar'
-import EkfBar from './EkfBar'
-import inIframe from '../../modules/inIframe'
+import Bar from './Bar/index.jsx'
+import EkfBar from './EkfBar/index.jsx'
+import inIframe from '../../modules/inIframe.js'
 import Spinner from '../shared/Spinner.jsx'
 import storeContext from '../../storeContext.js'
 

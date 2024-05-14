@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const YoutubeEmbed = ({ embedId }) => (
   <div className="video-responsive">
@@ -12,6 +12,6 @@ const YoutubeEmbed = ({ embedId }) => (
       title="Embedded youtube"
     />
   </div>
-);
+)
 
-export default YoutubeEmbed;
+export default YoutubeEmbed

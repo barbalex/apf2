@@ -1,4 +1,4 @@
-import { DokuDate } from '../..'
+import { DokuDate } from '../../index.jsx'
 import ekplanFilternJahr from './ekplan_filtern_jahr.gif'
 import ekplanenAp from './ekplanen_ap.png'
 import ekplanenAuto from './ekplanen_auto.gif'

@@ -7,8 +7,8 @@ import { observer } from 'mobx-react-lite'
 import { Link, useParams, useLocation } from 'react-router-dom'
 
 import isMobilePhone from '../../../../modules/isMobilePhone.js'
-import More from './More'
-import Daten from './Daten'
+import More from './More/index.jsx'
+import Daten from './Daten.jsx'
 import storeContext from '../../../../storeContext.js'
 import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 

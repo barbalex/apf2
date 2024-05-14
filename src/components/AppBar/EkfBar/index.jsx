@@ -12,12 +12,12 @@ import Badge from '@mui/material/Badge'
 import { useParams, useLocation } from 'react-router-dom'
 
 import isMobilePhone from '../../../modules/isMobilePhone.js'
-import EkfYear from './EkfYear'
-import User from './User'
+import EkfYear from './EkfYear.jsx'
+import User from './User/index.jsx'
 import storeContext from '../../../storeContext.js'
 import userQuery from './query.js'
-import dataByUserIdQuery from '../../Ekf/dataByUserId'
-import dataWithDateByUserIdQuery from '../../Ekf/dataWithDateByUserId'
+import dataByUserIdQuery from '../../Ekf/dataByUserId.js'
+import dataWithDateByUserIdQuery from '../../Ekf/dataWithDateByUserId.js'
 
 const SiteTitle = styled(Button)`
   display: none !important;
@@ -124,12 +124,15 @@ const ProjekteAppBar = () => {
     setIsPrint(true)
     // TODO: need to know when all tpopfreiwkontr forms have finisched rendering
     // idea for hack: use ekfCount to set timeout value?
-    setTimeout(() => {
-      window.print()
-      setIsPrint(false)
-      setPreparingEkfMultiprint(false)
-      setPreparingEkfMultiprint(false)
-    }, 3000 + ekfCount * 300)
+    setTimeout(
+      () => {
+        window.print()
+        setIsPrint(false)
+        setPreparingEkfMultiprint(false)
+        setPreparingEkfMultiprint(false)
+      },
+      3000 + ekfCount * 300,
+    )
   }, [ekfCount, setIsPrint])
 
   return (

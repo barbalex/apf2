@@ -7,10 +7,10 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 
 import isMobilePhone from '../../../../../modules/isMobilePhone.js'
-import logout from '../../../../../modules/logout'
-import EkfUser from './EkfUser'
+import logout from '../../../../../modules/logout.js'
+import EkfUser from './EkfUser/index.jsx'
 import storeContext from '../../../../../storeContext.js'
-import idbContext from '../../../../../idbContext'
+import idbContext from '../../../../../idbContext.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`

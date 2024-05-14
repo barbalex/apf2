@@ -13,15 +13,15 @@ import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import { useApolloClient, useQuery } from '@apollo/client'
 
-import query from './data'
+import query from './data.js'
 import TextField from '../../../shared/TextField.jsx'
 import Error from '../../../shared/Error.jsx'
-import updateUserByIdGql from './updateUserById'
+import updateUserByIdGql from './updateUserById.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import storeContext from '../../../../storeContext.js'
-import logout from '../../../../modules/logout'
-import idbContext from '../../../../idbContext'
+import logout from '../../../../modules/logout.js'
+import idbContext from '../../../../idbContext.js'
 
 const Container = styled.div`
   height: 100%;

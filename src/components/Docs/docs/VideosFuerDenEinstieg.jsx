@@ -1,5 +1,5 @@
 import { DokuDate } from '..'
-import YoutubeEmbed from '../../shared/YoutubeEmbed'
+import YoutubeEmbed from '../../shared/YoutubeEmbed.jsx'
 
 const VideosFuerDenEinstieg = () => (
   <>

@@ -1,4 +1,4 @@
-import { DokuDate, Code } from '../..'
+import { DokuDate, Code } from '../../index.jsx'
 import beobTable from './beobTable.webp'
 
 const BeobVerwalten = () => (

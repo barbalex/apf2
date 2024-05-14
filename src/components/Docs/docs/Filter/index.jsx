@@ -1,4 +1,4 @@
-import { DokuDate } from '../..'
+import { DokuDate } from '../../index.jsx'
 import entfernen1 from './entfernen_1.png'
 import formularFilter1 from './formular_filter_1.png'
 import formularFilter2 from './formular_filter_2.png'

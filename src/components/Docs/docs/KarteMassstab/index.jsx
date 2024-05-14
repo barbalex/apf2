@@ -1,4 +1,4 @@
-import { DokuDate } from '../..'
+import { DokuDate } from '../../index.jsx'
 import mapMeasure from './mapMeasure.png'
 import mapScale from './mapScale.png'
 import mapScaleOpen from './mapScaleOpen.png'

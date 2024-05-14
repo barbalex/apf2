@@ -1,4 +1,4 @@
-import { DokuDate } from '../..'
+import { DokuDate } from '../../index.jsx'
 import coordinates from './coordinates.png'
 
 const Koordinaten = () => (

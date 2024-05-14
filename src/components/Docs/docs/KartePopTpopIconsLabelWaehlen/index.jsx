@@ -1,4 +1,4 @@
-import { DokuDate } from '../..'
+import { DokuDate } from '../../index.jsx'
 import tpopSymbols1 from './tpopSymbols1.png'
 import tpopSymbols2 from './tpopSymbols2.png'
 import tpopSymbols3 from './tpopSymbols3.png'

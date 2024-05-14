@@ -1,5 +1,5 @@
-import { DokuDate } from '../..'
-import YoutubeEmbed from '../../../shared/YoutubeEmbed'
+import { DokuDate } from '../../index.jsx'
+import YoutubeEmbed from '../../../shared/YoutubeEmbed.jsx'
 import beobZuordnen from './beobZuordnen_01.png'
 
 const BeobZuordnen = () => (
