@@ -5,11 +5,11 @@ import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
-import queryTpopkontrs from './queryTpopkontrs'
+import queryTpopkontrs from './queryTpopkontrs.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
 import storeContext from '../../../../storeContext.js'
-import TpopfreiwkontrForm from './Form'
-import OrTabs from './Tabs'
+import TpopfreiwkontrForm from './Form.jsx'
+import OrTabs from './Tabs.jsx'
 
 const Container = styled.div`
   flex-grow: 1;

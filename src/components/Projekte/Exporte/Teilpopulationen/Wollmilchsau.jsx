@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 
-import exportModule from '../../../../modules/export'
+import exportModule from '../../../../modules/export.js'
 import storeContext from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressTextNewLine } from '../index'
 

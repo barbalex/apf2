@@ -29,7 +29,7 @@ import CellForValue from './CellForValue'
 import CellForYear from './CellForYear'
 import Error from '../../shared/Error.jsx'
 import exportRowFromTpop from './exportRowFromTpop'
-import exportModule from '../../../modules/export'
+import exportModule from '../../../modules/export.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 

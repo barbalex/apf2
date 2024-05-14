@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
-import exportModule from '../../../../modules/export'
+import exportModule from '../../../../modules/export.js'
 import storeContext from '../../../../storeContext.js'
 
 const AutocompleteContainer = styled.div`
