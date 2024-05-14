@@ -9,7 +9,7 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { StyledCardContent } from './index'
+import { StyledCardContent } from './index.jsx'
 
 const DatenChaotisch = () => {
   const [expanded, setExpanded] = useState(false)

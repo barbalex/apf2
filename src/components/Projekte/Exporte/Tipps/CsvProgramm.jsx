@@ -3,14 +3,14 @@ import Collapse from '@mui/material/Collapse'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import CsvInExcelOeffnen from './CsvInExcelOeffnen'
+import CsvInExcelOeffnen from './CsvInExcelOeffnen.jsx'
 import {
   CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { StyledCardContent } from './index'
+import { StyledCardContent } from './index.jsx'
 
 const CsvOeffnen = () => {
   const [expanded, setExpanded] = useState(false)

@@ -5,11 +5,11 @@ import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 
-import WasIstCsv from './WasIstCsv'
-import CsvOeffnen from './CsvOeffnen'
-import CsvProgramm from './CsvProgramm'
-import DatenChaotisch from './DatenChaotisch'
-import ZuVieleDaten from './ZuVieleDaten'
+import WasIstCsv from './WasIstCsv.jsx'
+import CsvOeffnen from './CsvOeffnen.jsx'
+import CsvProgramm from './CsvProgramm.jsx'
+import DatenChaotisch from './DatenChaotisch.jsx'
+import ZuVieleDaten from './ZuVieleDaten.jsx'
 import {
   CardActionTitle,
   StyledCard,
