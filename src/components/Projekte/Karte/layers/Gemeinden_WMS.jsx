@@ -20,6 +20,7 @@ const StyledPopupContent = styled.div`
 `
 const PopupContainer = styled.div`
   overflow: auto;
+  scrollbar-width: thin;
   max-height: ${(props) => `${props.maxheight}px`};
   span {
     font-size: x-small !important;

@@ -22,6 +22,7 @@ const InnerContainer = styled.div`
   position: absolute;
   top: 0;
   overflow-y: auto;
+  scrollbar-width: thin;
   /* prevent layout shift when scrollbar appears */
   scrollbar-gutter: stable;
   color: black !important;
@@ -53,7 +54,10 @@ const PageTitle = styled(Typography)`
   padding-top: 15px;
   padding-bottom: 0;
   font-weight: 700 !important;
-  text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
     -2px 2px 3px white;
   @media (min-width: 700px) {
     padding-top: 20px;
@@ -72,7 +76,10 @@ const TextContainer = styled.div`
   display: flex;
   justify-content: center;
   font-weight: 700 !important;
-  text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
     -2px 2px 3px white;
 `
 const Text = styled(Typography)`
@@ -81,7 +88,10 @@ const Text = styled(Typography)`
   font-weight: 700 !important;
 `
 const StyledButton = styled(Button)`
-  text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
     -2px 2px 3px white;
   border-color: white !important;
   margin-top: 10px !important;
