@@ -14,7 +14,7 @@ import {
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
-} from './index'
+} from './index.jsx'
 
 const StyledFormControlLabel = styled(FormControlLabel)`
   margin-left: 0 !important;

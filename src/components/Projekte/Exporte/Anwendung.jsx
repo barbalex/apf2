@@ -12,7 +12,7 @@ import {
   StyledCardActions,
   CardActionIconButton,
   DownloadCardButton,
-} from './index'
+} from './index.jsx'
 
 const Anwendung = () => {
   const [expanded, setExpanded] = useState(false)
