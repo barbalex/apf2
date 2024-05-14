@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import copyTo from './copyTo'
+import copyTo from './copyTo/index.js'
 
 const copyTpopsOfPop = async ({
   popIdFrom,
