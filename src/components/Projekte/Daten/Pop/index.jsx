@@ -9,24 +9,24 @@ import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
-import TextField from '../../../shared/TextField'
-import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
-import Status from '../../../shared/Status'
-import Checkbox2States from '../../../shared/Checkbox2States'
-import FormTitle from '../../../shared/FormTitle'
-import query from './query'
-import storeContext from '../../../../storeContext'
-import Coordinates from '../../../shared/Coordinates'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import Files from '../../../shared/Files'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
-import Error from '../../../shared/Error'
-import { pop } from '../../../shared/fragments'
-import Spinner from '../../../shared/Spinner'
-import useSearchParamsState from '../../../../modules/useSearchParamsState'
-import TpopMenge from './TpopMenge'
+import TextField from '../../../shared/TextField.jsx'
+import TextFieldWithInfo from '../../../shared/TextFieldWithInfo.jsx'
+import Status from '../../../shared/Status.jsx'
+import Checkbox2States from '../../../shared/Checkbox2States.jsx'
+import FormTitle from '../../../shared/FormTitle/index.jsx'
+import query from './query.js'
+import storeContext from '../../../../storeContext.js'
+import Coordinates from '../../../shared/Coordinates.jsx'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
+import Files from '../../../shared/Files/index.jsx'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import Error from '../../../shared/Error.jsx'
+import { pop } from '../../../shared/fragments.js'
+import Spinner from '../../../shared/Spinner.jsx'
+import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
+import TpopMenge from './TpopMenge/index.jsx'
 
-import PopHistory from './History'
+import PopHistory from './History.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -44,6 +44,7 @@ const StyledTab = styled(Tab)`
 `
 const TabContent = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 
 const fieldTypes = {

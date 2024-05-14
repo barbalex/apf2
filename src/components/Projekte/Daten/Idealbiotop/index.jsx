@@ -59,6 +59,7 @@ const StyledTab = styled(Tab)`
 `
 const TabContent = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const fieldTypes = {
   apId: 'UUID',

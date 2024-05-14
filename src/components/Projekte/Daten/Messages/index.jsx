@@ -18,6 +18,7 @@ const Container = styled.div`
 `
 const ScrollContainer = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
