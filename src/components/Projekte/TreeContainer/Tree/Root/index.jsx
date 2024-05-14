@@ -4,12 +4,12 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { jwtDecode } from 'jwt-decode'
 
-import Projekt from './Projekt'
-import Users from './Users'
-import Messages from './Messages'
-import Werte from './Werte'
-import CurrentIssues from './CurrentIssues'
-import storeContext from '../../../../../storeContext' 
+import Projekt from './Projekt/index.jsx'
+import Users from './Users/index.jsx'
+import Messages from './Messages.jsx'
+import Werte from './Werte/index.jsx'
+import CurrentIssues from './CurrentIssues/index.jsx'
+import storeContext from '../../../../../storeContext.js'
 
 const TreeRoot = () => {
   const client = useApolloClient()
