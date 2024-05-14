@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 
-import Polyline from './Polyline'
+import Polyline from './Polyline.jsx'
 import storeContext from '../../../../../storeContext.js'
 import query from './query.js'
 

@@ -10,9 +10,9 @@ import * as ReactDOMServer from 'react-dom/server'
 import { useDebouncedCallback } from 'use-debounce'
 import { observer } from 'mobx-react-lite'
 
-import xmlToLayersData from '../../../../modules/xmlToLayersData'
-import Popup from './Popup'
-import onTileError from './onTileError'
+import xmlToLayersData from '../../../../modules/xmlToLayersData.js'
+import Popup from './Popup.jsx'
+import onTileError from './onTileError.js'
 import storeContext from '../../../../storeContext.js'
 
 const StyledPopupContent = styled.div`

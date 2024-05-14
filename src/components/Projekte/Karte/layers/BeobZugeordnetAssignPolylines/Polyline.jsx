@@ -11,7 +11,7 @@ import storeContext from '../../../../../storeContext.js'
 import appBaseUrl from '../../../../../modules/appBaseUrl.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone.js'
-import Data from '../BeobData'
+import Data from '../BeobData/index.jsx'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;

@@ -11,12 +11,12 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import storeContext from '../../../../../storeContext.js'
 import { beobIconString } from './beobIconString.js'
 import { beobHighlightedIconString } from './beobHighlightedIconString.js'
-import getNearestTpop from '../../../../../modules/getNearestTpop'
+import getNearestTpop from '../../../../../modules/getNearestTpop.js'
 import appBaseUrl from '../../../../../modules/appBaseUrl.js'
-import updateBeobByIdGql from './updateBeobById'
+import updateBeobByIdGql from './updateBeobById.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone.js'
-import Data from '../BeobData'
+import Data from '../BeobData/index.jsx'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;

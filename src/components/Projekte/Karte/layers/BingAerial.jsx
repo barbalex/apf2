@@ -7,7 +7,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 // created https://github.com/TA-Geoforce/react-leaflet-bing-v2/pull/25
 // meantime importing it locally
 // import { BingLayer } from 'react-leaflet-bing-v2'
-import { BingLayer } from '../../../shared/react-leaflet-bing-v2'
+import { BingLayer } from '../../../shared/react-leaflet-bing-v2/index.js'
 
 const bingKey =
   'AjGOtB_ygBplpxXtKiiHtm-GERjSg9TFEoCmuBI_Yz4VWy0unRGUDo9GOZHA46Pf'

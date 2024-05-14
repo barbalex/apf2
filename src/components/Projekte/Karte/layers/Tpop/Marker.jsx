@@ -31,7 +31,6 @@ import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone.js'
 import appBaseUrl from '../../../../../modules/appBaseUrl.js'
-import { bg } from 'date-fns/locale'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;

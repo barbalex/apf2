@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 import { gql, useQuery } from '@apollo/client'
 
-import Checkbox from '../shared/Checkbox'
+import Checkbox from '../shared/Checkbox.jsx'
 import storeContext from '../../../../../storeContext.js'
 
 const LayerDiv = styled.div`

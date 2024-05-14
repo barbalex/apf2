@@ -28,7 +28,7 @@ import { useParams } from 'react-router-dom'
 import { layerLegends } from './layerLegends'
 import findIndex from 'lodash/findIndex'
 
-import Checkbox from './shared/Checkbox'
+import Checkbox from './shared/Checkbox.jsx'
 import storeContext from '../../../../storeContext.js'
 
 const CardContent = styled.div`

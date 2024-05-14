@@ -2,7 +2,7 @@
 import React from 'react'
 import * as ReactDOMServer from 'react-dom/server'
 
-import Popup from './Popup'
+import Popup from './Popup.jsx'
 // alternative: renderToString
 // see: https://gis.stackexchange.com/a/356513/13491
 const PopupFromProperties = ({ properties, layerName, mapSize }) => {
