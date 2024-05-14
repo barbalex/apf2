@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { tpopkontrzaehl } from '../../../../shared/fragments'
+import { tpopkontrzaehl } from '../../../../shared/fragments.js'
 
 export default gql`
   mutation updateAnzahlForCount(

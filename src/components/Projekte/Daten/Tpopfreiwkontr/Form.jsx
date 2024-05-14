@@ -29,7 +29,7 @@ import {
   tpop as tpopFragment,
   tpopfreiwkontr as tpopfreiwkontrFragment,
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
-} from '../../../shared/fragments'
+} from '../../../shared/fragments.js'
 
 const FormContainer = styled.div`
   padding: 10px;

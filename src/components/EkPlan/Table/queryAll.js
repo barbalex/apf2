@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { ekfrequenz } from '../../shared/fragments'
+import { ekfrequenz } from '../../shared/fragments.js'
 
 export default gql`
   query EkplanTpopQuery($tpopFilter: TpopFilter!, $apIds: [UUID!]) {

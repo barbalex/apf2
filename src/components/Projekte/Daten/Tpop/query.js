@@ -6,7 +6,7 @@ import {
   popStatusWerte,
   tpop,
   tpopApberrelevantGrundWerte,
-} from '../../../shared/fragments'
+} from '../../../shared/fragments.js'
 
 export default gql`
   query tpopByIdQuery($id: UUID!) {

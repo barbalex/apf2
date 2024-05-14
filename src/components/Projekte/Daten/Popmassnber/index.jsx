@@ -19,7 +19,7 @@ import {
   pop,
   popmassnber,
   tpopmassnErfbeurtWerte,
-} from '../../../shared/fragments'
+} from '../../../shared/fragments.js'
 
 const Container = styled.div`
   flex-grow: 1;

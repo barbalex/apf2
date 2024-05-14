@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 import {
   ekzaehleinheit,
   tpopkontrzaehlEinheitWerte,
-} from '../../../shared/fragments'
+} from '../../../shared/fragments.js'
 
 export default gql`
   query ekzaehleinheitByIdQuery($id: UUID!) {

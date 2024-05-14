@@ -16,7 +16,7 @@ import Error from '../../../../shared/Error'
 import Spinner from '../../../../shared/Spinner.jsx'
 import Beob from './Field'
 import storeContext from '../../../../../storeContext.js'
-import { beob } from '../../../../shared/fragments'
+import { beob } from '../../../../shared/fragments.js'
 import { Info } from '../BeobZugeordnet/Marker'
 
 const TopFieldContainer = styled.div`

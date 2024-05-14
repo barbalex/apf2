@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { zielber } from '../../../shared/fragments'
+import { zielber } from '../../../shared/fragments.js'
 
 export default gql`
   mutation createZielberForUndelete(

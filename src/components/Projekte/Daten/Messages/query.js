@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { message } from '../../../shared/fragments'
+import { message } from '../../../shared/fragments.js'
 
 export default gql`
   query messagesQuery {

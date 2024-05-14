@@ -5,7 +5,7 @@ import {
   beob,
   popStatusWerte,
   tpop,
-} from '../../components/shared/fragments'
+} from '../../components/shared/fragments.js'
 
 export default gql`
   mutation updateBeobForCreateNewPopFromBeob($id: UUID!, $tpopId: UUID) {

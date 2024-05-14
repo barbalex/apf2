@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { apberuebersicht } from '../../../shared/fragments'
+import { apberuebersicht } from '../../../shared/fragments.js'
 
 export default gql`
   query apberuebersichtByIdQuery($id: UUID!) {

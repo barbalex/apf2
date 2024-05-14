@@ -20,7 +20,7 @@ import Spinner from '../../../shared/Spinner.jsx'
 import {
   ekzaehleinheit,
   tpopkontrzaehlEinheitWerte,
-} from '../../../shared/fragments'
+} from '../../../shared/fragments.js'
 
 const Container = styled.div`
   flex-grow: 1;

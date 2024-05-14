@@ -15,7 +15,7 @@ import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
-import { erfkrit } from '../../../shared/fragments'
+import { erfkrit } from '../../../shared/fragments.js'
 import Spinner from '../../../shared/Spinner.jsx'
 
 const Container = styled.div`

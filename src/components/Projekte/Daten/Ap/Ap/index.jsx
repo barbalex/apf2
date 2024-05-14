@@ -17,7 +17,7 @@ import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber.js'
 import ApUsers from './ApUsers'
-import { ap, aeTaxonomies } from '../../../../shared/fragments'
+import { ap, aeTaxonomies } from '../../../../shared/fragments.js'
 import Spinner from '../../../../shared/Spinner.jsx'
 import Error from '../../../../shared/Error'
 

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { qk, apqk } from '../../../shared/fragments'
+import { qk, apqk } from '../../../shared/fragments.js'
 
 export default gql`
   query QkQueryForQkTop($apId: UUID!) {

@@ -16,7 +16,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner.jsx'
-import { adresse } from '../../../shared/fragments'
+import { adresse } from '../../../shared/fragments.js'
 
 const Container = styled.div`
   flex-grow: 1;

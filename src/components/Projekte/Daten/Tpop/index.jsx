@@ -22,7 +22,7 @@ import {
   popStatusWerte,
   tpop,
   tpopApberrelevantGrundWerte,
-} from '../../../shared/fragments'
+} from '../../../shared/fragments.js'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 
 const Container = styled.div`

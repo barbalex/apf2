@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { tpopkontrTypWerte } from '../../components/shared/fragments'
+import { tpopkontrTypWerte } from '../../components/shared/fragments.js'
 
 export default gql`
   query copyEkToQueryForEk1($tpop: UUID!) {

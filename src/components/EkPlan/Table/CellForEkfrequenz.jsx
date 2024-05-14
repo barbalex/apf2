@@ -6,7 +6,7 @@ import groupBy from 'lodash/groupBy'
 import max from 'lodash/max'
 
 import { StyledCellForSelect } from './index'
-import { tpop } from '../../shared/fragments'
+import { tpop } from '../../shared/fragments.js'
 import storeContext from '../../../storeContext.js'
 import setStartjahr from './setStartjahr'
 import setEkplans from './setEkplans'

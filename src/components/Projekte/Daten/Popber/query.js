@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { pop, popber, tpopEntwicklungWerte } from '../../../shared/fragments'
+import { pop, popber, tpopEntwicklungWerte } from '../../../shared/fragments.js'
 
 export default gql`
   query popberByIdQuery($id: UUID!) {

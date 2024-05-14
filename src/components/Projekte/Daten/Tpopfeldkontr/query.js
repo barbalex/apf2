@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { tpopfeldkontr } from '../../../shared/fragments'
+import { tpopfeldkontr } from '../../../shared/fragments.js'
 
 export default gql`
   query tpopkontrByIdQueryForEk($id: UUID!) {

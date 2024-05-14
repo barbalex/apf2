@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { beob } from '../../components/shared/fragments'
+import { beob } from '../../components/shared/fragments.js'
 
 export default gql`
   query createNewPopFromBeobQuery($id: UUID!) {

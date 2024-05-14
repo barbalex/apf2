@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
-import { tpop } from '../../shared/fragments'
+import { tpop } from '../../shared/fragments.js'
 import storeContext from '../../../storeContext.js'
 
 const Select = styled.select`

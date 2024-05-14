@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { pop } from '../../components/shared/fragments'
+import { pop } from '../../components/shared/fragments.js'
 
 export default gql`
   mutation createPopForCopyTo(

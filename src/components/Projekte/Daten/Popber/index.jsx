@@ -15,7 +15,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Spinner from '../../../shared/Spinner.jsx'
 import Error from '../../../shared/Error'
-import { pop, popber, tpopEntwicklungWerte } from '../../../shared/fragments'
+import { pop, popber, tpopEntwicklungWerte } from '../../../shared/fragments.js'
 
 const Container = styled.div`
   flex-grow: 1;

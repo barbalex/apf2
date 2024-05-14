@@ -25,7 +25,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import {
   tpopkontr as tpopkontrFragment,
   user as userFragment,
-} from '../../../shared/fragments'
+} from '../../../shared/fragments.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner.jsx'

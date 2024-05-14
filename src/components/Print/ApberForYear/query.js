@@ -9,7 +9,7 @@ import {
   tpopmassnTypWerte,
   zielber,
   zielTypWerte,
-} from '../../shared/fragments'
+} from '../../shared/fragments.js'
 
 export default gql`
   query projektByIdForApberForYear(

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { apqk } from '../../../../../shared/fragments'
+import { apqk } from '../../../../../shared/fragments.js'
 
 export default gql`
   query apqkQueryForRow($apId: UUID!, $qkName: String!) {

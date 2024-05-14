@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { ap, aeTaxonomies } from '../../../shared/fragments'
+import { ap, aeTaxonomies } from '../../../shared/fragments.js'
 
 export default gql`
   mutation updateApForFilter(

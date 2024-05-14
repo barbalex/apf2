@@ -13,7 +13,7 @@ import {
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ekAbrechnungstypWerte as ekAbrechnungstypWerteFragment,
-} from '../../shared/fragments'
+} from '../../shared/fragments.js'
 
 const fragments = {
   tpopApberrelevantGrundWerte: tpopApberrelevantGrundWerteFragment,

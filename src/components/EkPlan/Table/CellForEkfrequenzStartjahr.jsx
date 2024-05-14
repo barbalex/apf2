@@ -4,7 +4,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 
 import storeContext from '../../../storeContext.js'
-import { tpop } from '../../shared/fragments'
+import { tpop } from '../../shared/fragments.js'
 import setEkplans from './setEkplans'
 
 const Container = styled.div`

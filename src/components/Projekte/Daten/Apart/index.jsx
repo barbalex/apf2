@@ -14,7 +14,7 @@ import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import { apart } from '../../../shared/fragments'
+import { apart } from '../../../shared/fragments.js'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner.jsx'
 

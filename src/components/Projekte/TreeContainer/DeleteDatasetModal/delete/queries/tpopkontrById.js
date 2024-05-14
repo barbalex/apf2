@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { tpopkontr } from '../../../../../shared/fragments'
+import { tpopkontr } from '../../../../../shared/fragments.js'
 
 export default gql`
   query tpopkontrByIdForDelete($id: UUID!) {

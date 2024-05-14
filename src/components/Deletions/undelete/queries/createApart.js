@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { apart } from '../../../shared/fragments'
+import { apart } from '../../../shared/fragments.js'
 
 export default gql`
   mutation createApartForUndelete($id: UUID, $apId: UUID, $artId: UUID) {

@@ -31,7 +31,7 @@ import {
   beob,
   pop,
   popStatusWerte,
-} from '../../../shared/fragments'
+} from '../../../shared/fragments.js'
 
 const PopoverContainer = styled.div`
   overflow-x: auto;

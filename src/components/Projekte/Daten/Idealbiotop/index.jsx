@@ -17,7 +17,7 @@ import Files from '../../../shared/Files'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
-import { idealbiotop } from '../../../shared/fragments'
+import { idealbiotop } from '../../../shared/fragments.js'
 import Spinner from '../../../shared/Spinner.jsx'
 import useSearchParamsState from '../../../../modules/useSearchParamsState'
 

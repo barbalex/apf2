@@ -5,7 +5,7 @@ import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
 import FormTitle from '../../../shared/FormTitle'
-import { currentIssue as currentIssueFragment } from '../../../shared/fragments'
+import { currentIssue as currentIssueFragment } from '../../../shared/fragments.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner.jsx'

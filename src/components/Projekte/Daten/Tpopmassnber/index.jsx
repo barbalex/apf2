@@ -14,7 +14,7 @@ import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
-import { tpopmassnber } from '../../../shared/fragments'
+import { tpopmassnber } from '../../../shared/fragments.js'
 import Spinner from '../../../shared/Spinner.jsx'
 
 const Container = styled.div`

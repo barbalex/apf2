@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { apber } from '../../../shared/fragments'
+import { apber } from '../../../shared/fragments.js'
 
 export default gql`
   mutation createApberForUndelete(

@@ -8,7 +8,7 @@ import {
   tpop,
   aeTaxonomies,
   popStatusWerte,
-} from '../components/shared/fragments'
+} from '../components/shared/fragments.js'
 
 const createTpop = gql`
   mutation createTpopFroCreateNewTpopFromBeob(

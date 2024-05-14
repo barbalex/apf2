@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { assozart } from '../../../../../shared/fragments'
+import { assozart } from '../../../../../shared/fragments.js'
 
 export default gql`
   query assozartByIdForDelete($id: UUID!) {
