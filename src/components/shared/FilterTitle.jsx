@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext.js'
 import exists from '../../modules/exists.js'
-import appBaseUrl from '../../modules/appBaseUrl'
+import appBaseUrl from '../../modules/appBaseUrl.js'
 
 const Container = styled.div`
   background-color: #ffd3a7;

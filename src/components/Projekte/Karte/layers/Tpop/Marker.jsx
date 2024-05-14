@@ -30,7 +30,7 @@ import { svg300 } from './statusGroupSymbols/300.js'
 import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
-import appBaseUrl from '../../../../../modules/appBaseUrl'
+import appBaseUrl from '../../../../../modules/appBaseUrl.js'
 import { bg } from 'date-fns/locale'
 
 const StyledH3 = styled.h3`

@@ -12,7 +12,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useParams, useLocation } from 'react-router-dom'
 
-import appBaseUrl from '../../../../../modules/appBaseUrl'
+import appBaseUrl from '../../../../../modules/appBaseUrl.js'
 import standardQkYear from '../../../../../modules/standardQkYear'
 import query from './query.js'
 import createMessageFunctions from './createMessageFunctions'

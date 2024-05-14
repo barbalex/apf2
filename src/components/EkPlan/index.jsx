@@ -9,7 +9,7 @@ const Table = lazy(() => import('./Table'))
 const Choose = lazy(() => import('./Choose'))
 import queryAps from './queryAps'
 import storeContext from '../../storeContext.js'
-import appBaseUrl from '../../modules/appBaseUrl'
+import appBaseUrl from '../../modules/appBaseUrl.js'
 const Error = lazy(() => import('../shared/Error.jsx'))
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 const User = lazy(() => import('../User'))

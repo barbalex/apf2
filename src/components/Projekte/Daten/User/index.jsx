@@ -19,7 +19,7 @@ import TextField from '../../../shared/TextField2'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import queryEkfTpops from './queryEkfTpops'
-import Select from '../../../shared/Select'
+import Select from '../../../shared/Select.jsx'
 import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import {

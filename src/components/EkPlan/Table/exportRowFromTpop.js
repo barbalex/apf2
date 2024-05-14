@@ -1,6 +1,6 @@
 import sum from 'lodash/sum'
 
-import appBaseUrl from '../../../modules/appBaseUrl'
+import appBaseUrl from '../../../modules/appBaseUrl.js'
 
 const exportRowFromTpop = ({ tpop, years, store, ekfrequenzs }) => {
   const { einheitsByAp, showCount, fields, showEk, showEkf, showMassn } =

@@ -6,7 +6,7 @@ import SimpleBar from 'simplebar-react'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import TextField from '../../../shared/TextField.jsx'
-import Select from '../../../shared/Select'
+import Select from '../../../shared/Select.jsx'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import FilterTitle from '../../../shared/FilterTitle'
 import queryAeTaxonomiesById from './queryAeTaxonomiesById'
