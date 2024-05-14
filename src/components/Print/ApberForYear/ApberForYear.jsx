@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router-dom'
 
-import queryForYear from './query'
+import queryForYear from './query.js'
 import jberQueryForYear from './jberQuery'
 import queryForApberuebersicht from '../../Projekte/Daten/Apberuebersicht/query'
 import fnslogo from './fnslogo.png'

@@ -8,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
-import query from './query'
+import query from './query.js'
 import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'

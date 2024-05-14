@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext.js'
-import query from './query'
+import query from './query.js'
 import updateTpopById from './updateTpopById'
 
 const iconCreateFunction = (cluster) => {

@@ -14,7 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import styled from '@emotion/styled'
 import { useParams } from 'react-router-dom'
 
-import query from './query'
+import query from './query.js'
 import CustomTooltip from '../CustomTooltip'
 import Error from '../../../../../shared/Error.jsx'
 

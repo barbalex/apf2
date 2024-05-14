@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton'
 import SimpleBar from 'simplebar-react'
 import { useLocation, useParams } from 'react-router-dom'
 
-import query from './query'
+import query from './query.js'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import FormTitle from '../../../shared/FormTitle'
 import storeContext from '../../../../storeContext.js'

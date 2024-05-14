@@ -14,7 +14,7 @@ import { useParams, useLocation } from 'react-router-dom'
 
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../../modules/standardQkYear'
-import query from './query'
+import query from './query.js'
 import createMessageFunctions from './createMessageFunctions'
 import storeContext from '../../../../../storeContext.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'

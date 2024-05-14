@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 
 import Polyline from './Polyline'
 import storeContext from '../../../../../storeContext.js'
-import query from './query'
+import query from './query.js'
 
 const Router = () => {
   const store = useContext(storeContext)

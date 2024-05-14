@@ -5,7 +5,7 @@ import Linkify from 'react-linkify'
 import { DateTime } from 'luxon'
 import SimpleBar from 'simplebar-react'
 
-import query from './query'
+import query from './query.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'

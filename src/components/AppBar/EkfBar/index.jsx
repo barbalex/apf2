@@ -15,7 +15,7 @@ import isMobilePhone from '../../../modules/isMobilePhone'
 import EkfYear from './EkfYear'
 import User from './User'
 import storeContext from '../../../storeContext.js'
-import userQuery from './query'
+import userQuery from './query.js'
 import dataByUserIdQuery from '../../Ekf/dataByUserId'
 import dataWithDateByUserIdQuery from '../../Ekf/dataWithDateByUserId'
 

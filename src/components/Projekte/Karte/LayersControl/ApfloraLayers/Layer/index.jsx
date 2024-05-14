@@ -23,7 +23,7 @@ import Checkbox from '../../shared/Checkbox'
 import Error from '../../../../../shared/Error.jsx'
 import getBounds from '../../../../../../modules/getBounds'
 import storeContext from '../../../../../../storeContext.js'
-import query from './query'
+import query from './query.js'
 import PopIcon from './PopIcon'
 import TpopIcon from './TpopIcon'
 

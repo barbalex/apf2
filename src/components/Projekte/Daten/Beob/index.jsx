@@ -10,7 +10,7 @@ import { arrayMoveImmutable } from 'array-move'
 
 import constants from '../../../../modules/constants'
 import exists from '../../../../modules/exists'
-import query from './query'
+import query from './query.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
