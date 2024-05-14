@@ -14,7 +14,7 @@ import { beobHighlightedIconString } from './beobHighlightedIconString.js'
 import getNearestTpop from '../../../../../modules/getNearestTpop'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import updateBeobByIdGql from './updateBeobById'
-import useSearchParamsState from '../../../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import Data from '../BeobData'
 

@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../storeContext.js'
-import useSearchParamsState from '../../../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
   position: absolute;

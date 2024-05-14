@@ -29,7 +29,7 @@ import { svg202 } from './statusGroupSymbols/202'
 import { svg202Highlighted } from './statusGroupSymbols/202Highlighted'
 import { svg300 } from './statusGroupSymbols/300'
 import { svg300Highlighted } from './statusGroupSymbols/300Highlighted'
-import useSearchParamsState from '../../../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 
 const StyledH3 = styled.h3`

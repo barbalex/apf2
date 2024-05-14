@@ -10,7 +10,7 @@ import FormTitle from '../../../shared/FormTitle'
 import Files from '../../../shared/Files/index.jsx'
 import ApHistory from './History'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
-import useSearchParamsState from '../../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
   flex-grow: 1;

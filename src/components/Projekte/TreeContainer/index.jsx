@@ -126,7 +126,7 @@ import insertDataset from './insertDataset'
 import storeContext from '../../../storeContext.js'
 const TpopFromBeobPopList = lazy(() => import('./TpopFromBeobPopList'))
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
-import useSearchParamsState from '../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../modules/isMobilePhone'
 import Spinner from '../../shared/Spinner.jsx'
 

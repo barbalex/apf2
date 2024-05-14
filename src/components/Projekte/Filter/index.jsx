@@ -8,7 +8,7 @@ import TpopfeldkontrFilter from '../Daten/TpopfeldkontrFilter'
 import TpopfreiwkontrFilter from '../Daten/TpopfreiwkontrFilter'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Title from './Title'
-import useSearchParamsState from '../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
   height: 100%;

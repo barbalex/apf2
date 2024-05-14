@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 
 import storeContext from '../../storeContext.js'
-import useSearchParamsState from '../../modules/useSearchParamsState'
+import useSearchParamsState from '../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../modules/isMobilePhone'
 
 // TODO: only show messages if map is visible

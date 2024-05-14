@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import isMobilePhone from '../../../../modules/isMobilePhone'
-import useSearchParamsState from '../../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 
 const StyledButton = styled(Button)`
   color: white !important;

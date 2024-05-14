@@ -10,7 +10,7 @@ import isMobilePhone from '../../../../modules/isMobilePhone'
 import More from './More'
 import Daten from './Daten'
 import storeContext from '../../../../storeContext.js'
-import useSearchParamsState from '../../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 
 const StyledButton = styled(Button)`
   color: white !important;

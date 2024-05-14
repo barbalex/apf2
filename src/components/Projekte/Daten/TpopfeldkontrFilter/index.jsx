@@ -25,7 +25,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 import OrTabs from './Tabs'
-import useSearchParamsState from '../../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
   flex-grow: 1;

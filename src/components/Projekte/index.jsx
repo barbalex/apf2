@@ -14,7 +14,7 @@ import StyledSplitPane from '../shared/StyledSplitPane'
 // import AppRenderer from '../../AppRenderer'
 import appBaseUrl from '../../modules/appBaseUrl'
 import inIframe from '../../modules/inIframe'
-import useSearchParamsState from '../../modules/useSearchParamsState'
+import useSearchParamsState from '../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../modules/isMobilePhone'
 const ApFilterController = lazy(() => import('./ApFilterController'))
 

@@ -12,7 +12,7 @@ import storeContext from '../../../../../storeContext.js'
 import { beobIconString } from './beobIconString.js'
 import { beobIconHighlightedString } from './beobIconHighlightedString.js'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
-import useSearchParamsState from '../../../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import Data from '../BeobData'
 

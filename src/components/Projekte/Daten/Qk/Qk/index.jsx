@@ -19,7 +19,7 @@ import createMessageFunctions from './createMessageFunctions'
 import storeContext from '../../../../../storeContext.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Error from '../../../../shared/Error.jsx'
-import useSearchParamsState from '../../../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 
 const Container = styled.div`

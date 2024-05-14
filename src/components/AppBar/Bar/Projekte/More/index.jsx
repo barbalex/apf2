@@ -11,7 +11,7 @@ import logout from '../../../../../modules/logout'
 import EkfUser from './EkfUser'
 import storeContext from '../../../../../storeContext.js'
 import idbContext from '../../../../../idbContext'
-import useSearchParamsState from '../../../../../modules/useSearchParamsState'
+import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
   margin-top: auto;
