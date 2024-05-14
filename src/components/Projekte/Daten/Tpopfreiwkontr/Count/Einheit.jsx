@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import Select from '../../../../shared/Select'
 import storeContext from '../../../../../storeContext'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
-import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber'
+import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber.js'
 
 const EinheitVal = styled.div`
   grid-area: einheitVal;

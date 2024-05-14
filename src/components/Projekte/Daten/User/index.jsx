@@ -21,7 +21,7 @@ import query from './query'
 import queryEkfTpops from './queryEkfTpops'
 import Select from '../../../shared/Select'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import {
   tpopkontr as tpopkontrFragment,
   user as userFragment,

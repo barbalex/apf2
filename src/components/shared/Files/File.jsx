@@ -19,7 +19,7 @@ import {
   tpopmassnFile as tpopmassnFileFragment,
 } from '../fragments'
 import isImageFile from './isImageFile'
-import ifIsNumericAsNumber from '../../../modules/ifIsNumericAsNumber'
+import ifIsNumericAsNumber from '../../../modules/ifIsNumericAsNumber.js'
 import storeContext from '../../../storeContext'
 
 const Container = styled.div`

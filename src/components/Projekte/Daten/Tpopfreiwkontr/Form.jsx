@@ -22,7 +22,7 @@ import Count from './Count'
 import Verification from './Verification'
 import Image from './Image'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import {
   adresse as adresseFragment,
   pop as popFragment,
