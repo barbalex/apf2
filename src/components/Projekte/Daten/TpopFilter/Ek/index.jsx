@@ -9,7 +9,7 @@ import RadioButtonGroup from '../../../../shared/RadioButtonGroup'
 import Select from '../../../../shared/Select'
 import TextField from '../../../../shared/TextField'
 import queryEk from './queryEk'
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Spinner from '../../../../shared/Spinner.jsx'
 
 const FormContainerNoColumnsInner = styled.div`

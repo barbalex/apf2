@@ -6,7 +6,7 @@ import { DateTime } from 'luxon'
 import SimpleBar from 'simplebar-react'
 
 import query from './query'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner.jsx'
 

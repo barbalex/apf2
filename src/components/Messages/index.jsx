@@ -10,7 +10,7 @@ import query from './data'
 import createUsermessage from './createUsermessage'
 import storeContext from '../../storeContext.js'
 import Error from '../shared/Error'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import Messages from './Messages'
 
 const StyledDialog = styled(Dialog)`

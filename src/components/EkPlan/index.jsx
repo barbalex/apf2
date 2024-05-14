@@ -11,7 +11,7 @@ import queryAps from './queryAps'
 import storeContext from '../../storeContext.js'
 import appBaseUrl from '../../modules/appBaseUrl'
 const Error = lazy(() => import('../shared/Error'))
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 const User = lazy(() => import('../User'))
 import Spinner from '../shared/Spinner.jsx'
 

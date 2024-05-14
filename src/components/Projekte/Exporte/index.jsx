@@ -17,7 +17,7 @@ import Massnahmen from './Massnahmen'
 import Beobachtungen from './Beobachtungen'
 import Anwendung from './Anwendung'
 import Optionen from './Optionen'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   height: 100%;

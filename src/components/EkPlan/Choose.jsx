@@ -18,7 +18,7 @@ import { observer } from 'mobx-react-lite'
 import Fields from './Fields'
 import storeContext from '../../storeContext.js'
 import { allFields } from '../../store/EkPlan'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   display: flex;

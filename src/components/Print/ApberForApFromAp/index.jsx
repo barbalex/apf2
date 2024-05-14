@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 
 import apQuery from './apByIdJahr'
 import ApberForAp from '../ApberForAp'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 
 const ApberForApFromAp = () => {

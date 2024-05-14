@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 
 import ApberForYear from './ApberForYear'
 import storeContext from '../../../storeContext.js'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 
 const ApberForYearContainer = () => {

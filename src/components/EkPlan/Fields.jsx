@@ -6,7 +6,7 @@ import Radio from '@mui/material/Radio'
 import DialogContent from '@mui/material/DialogContent'
 
 import storeContext from '../../storeContext.js'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const StyledDialogContent = styled(DialogContent)`
   display: flex;

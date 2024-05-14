@@ -26,7 +26,7 @@ import {
   tpopkontr as tpopkontrFragment,
   user as userFragment,
 } from '../../../shared/fragments.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner.jsx'
 

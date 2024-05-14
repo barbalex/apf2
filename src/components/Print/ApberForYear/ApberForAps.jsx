@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react-lite'
 
 import ApberForAp from '../ApberForAp'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 
 const ApberForYear = ({ jahr, data, jberData }) => {
   const aps = (data?.allAps?.nodes ?? []).filter(

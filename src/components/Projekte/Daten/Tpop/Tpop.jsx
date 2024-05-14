@@ -15,7 +15,7 @@ import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
 //import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import constants from '../../../../modules/constants'
 import storeContext from '../../../../storeContext.js'
-import Coordinates from '../../../shared/Coordinates'
+import Coordinates from '../../../shared/Coordinates.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 
 const Container = styled.div`

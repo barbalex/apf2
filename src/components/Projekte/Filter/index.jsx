@@ -6,7 +6,7 @@ import TpopFilter from '../Daten/TpopFilter'
 import TpopmassnFilter from '../Daten/TpopmassnFilter'
 import TpopfeldkontrFilter from '../Daten/TpopfeldkontrFilter'
 import TpopfreiwkontrFilter from '../Daten/TpopfreiwkontrFilter'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Title from './Title'
 import useSearchParamsState from '../../../modules/useSearchParamsState'
 

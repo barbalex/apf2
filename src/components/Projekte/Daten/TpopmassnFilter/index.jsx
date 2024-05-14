@@ -18,7 +18,7 @@ import queryTpopmassns from './queryTpopmassns'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error'
 import OrTabs from './Tabs'
 

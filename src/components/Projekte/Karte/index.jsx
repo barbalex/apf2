@@ -62,7 +62,7 @@ import DrawControl from './DrawControl'
 import { PrintControl } from './PrintControl'
 import OwnControls from './OwnControls'
 import CoordinatesControl from './CoordinatesControl'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import MapFilterListener from './MapFilterListener'
 import ClickListener from './ClickListener'
 

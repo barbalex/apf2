@@ -11,7 +11,7 @@ import { useParams, useLocation } from 'react-router-dom'
 
 import storeContext from '../../../storeContext.js'
 import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Error from '../../shared/Error'
 import Spinner from '../../shared/Spinner.jsx'
 

@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
 import sortBy from 'lodash/sortBy'
 
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   display: flex;

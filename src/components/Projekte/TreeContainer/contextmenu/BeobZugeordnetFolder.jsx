@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 
 import storeContext from '../../../../storeContext.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu'
 
 // create objects outside render

@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 
 import query from './query'
 import RowComponent from './Row'
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Error from '../../../../shared/Error'
 
 const Container = styled.div`

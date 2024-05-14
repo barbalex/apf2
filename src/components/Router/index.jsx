@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 
 // WARNING: errorElement did not work
-// import ErrorBoundary from '../shared/ErrorBoundary'
+// import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 // import Unterhalt from './components/Unterhalt'
 

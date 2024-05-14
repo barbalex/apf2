@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 
 import FormTitle from '../../../shared/FormTitle'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error'
 import Spinner from '../../../shared/Spinner.jsx'
 
