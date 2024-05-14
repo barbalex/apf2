@@ -30,6 +30,7 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
   flex-grow: 1;
 `
 const FormContainer = styled.div`

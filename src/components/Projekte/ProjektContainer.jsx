@@ -6,15 +6,15 @@ import { Outlet } from 'react-router-dom'
 import { useParams, useLocation } from 'react-router-dom'
 
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
-import Karte from './Karte'
-const TreeContainer = lazy(() => import('./TreeContainer'))
-const Exporte = lazy(() => import('./Exporte'))
-const Filter = lazy(() => import('./Filter'))
-import storeContext from '../../storeContext'
-import StyledSplitPane from '../shared/StyledSplitPane'
-import useSearchParamsState from '../../modules/useSearchParamsState'
-import isMobilePhone from '../../modules/isMobilePhone'
-import Spinner from '../shared/Spinner'
+import Karte from './Karte/index.jsx'
+const TreeContainer = lazy(() => import('./TreeContainer/index.jsx'))
+const Exporte = lazy(() => import('./Exporte/index.jsx'))
+const Filter = lazy(() => import('./Filter/index.jsx'))
+import storeContext from '../../storeContext.js'
+import StyledSplitPane from '../shared/StyledSplitPane.jsx'
+import useSearchParamsState from '../../modules/useSearchParamsState.js'
+import isMobilePhone from '../../modules/isMobilePhone.js'
+import Spinner from '../shared/Spinner.jsx'
 
 const Container = styled.div`
   height: 100%;

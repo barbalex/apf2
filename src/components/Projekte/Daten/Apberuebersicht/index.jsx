@@ -33,6 +33,7 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
   // height: calc(100% - 39px);
   flex-grow: 1;
 `
