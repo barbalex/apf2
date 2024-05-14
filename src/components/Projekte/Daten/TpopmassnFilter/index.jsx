@@ -10,7 +10,7 @@ import TextField from '../../../shared/TextField.jsx'
 import Select from '../../../shared/Select.jsx'
 import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypable'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
-import DateField from '../../../shared/Date'
+import DateField from '../../../shared/Date.jsx'
 
 import FilterTitle from '../../../shared/FilterTitle'
 import constants from '../../../../modules/constants.js'
