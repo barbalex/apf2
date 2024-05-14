@@ -35,6 +35,7 @@ import {
 
 const PopoverContainer = styled.div`
   overflow-x: auto;
+  scrollbar-width: thin;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 `
@@ -46,6 +47,7 @@ const FormContainer = styled.div`
 `
 const DataContainer = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -130,10 +132,10 @@ const Beobzuordnung = () => {
   const type = pathname.includes('nicht-zuzuordnende-Beobachtungen')
     ? 'nichtZuzuordnen'
     : pathname.includes('nicht-beurteilte-Beobachtungen')
-    ? 'nichtBeurteilt'
-    : pathname.includes('Beobachtungen')
-    ? 'zugeordnet'
-    : 'uups'
+      ? 'nichtBeurteilt'
+      : pathname.includes('Beobachtungen')
+        ? 'zugeordnet'
+        : 'uups'
 
   const client = useApolloClient()
   const store = useContext(storeContext)
