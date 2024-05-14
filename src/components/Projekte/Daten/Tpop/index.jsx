@@ -15,7 +15,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import Ek from './Ek'
 import Tpop from './Tpop'
 import TpopHistory from './History'
-import Files from '../../../shared/Files'
+import Files from '../../../shared/Files/index.jsx'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Error from '../../../shared/Error'
 import {
