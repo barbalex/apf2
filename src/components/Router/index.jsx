@@ -259,59 +259,62 @@ const RouterComponent = () => {
           />
           <Route
             path="karte-drucken"
-            lazy={() => import('../Docs/docs/KarteDrucken')}
+            lazy={() => import('../Docs/docs/KarteDrucken.jsx')}
           />
           <Route
             path="gedaechtnis"
-            lazy={() => import('../Docs/docs/Gedaechtnis')}
+            lazy={() => import('../Docs/docs/Gedaechtnis.jsx')}
           />
-          <Route path="dateien" lazy={() => import('../Docs/docs/Dateien')} />
+          <Route
+            path="dateien"
+            lazy={() => import('../Docs/docs/Dateien/index.jsx')}
+          />
           <Route
             path="koordinaten"
-            lazy={() => import('../Docs/docs/Koordinaten')}
+            lazy={() => import('../Docs/docs/Koordinaten/index.jsx')}
           />
-          <Route path="melden" lazy={() => import('../Docs/docs/Melden')} />
-          <Route path="pwa" lazy={() => import('../Docs/docs/Pwa')} />
+          <Route path="melden" lazy={() => import('../Docs/docs/Melden.jsx')} />
+          <Route path="pwa" lazy={() => import('../Docs/docs/Pwa/index.jsx')} />
           <Route
             path="technologien"
-            lazy={() => import('../Docs/docs/Technologien')}
+            lazy={() => import('../Docs/docs/Technologien/index.jsx')}
           />
           <Route
             path="beobachtungen-verwalten"
-            lazy={() => import('../Docs/docs/BeobVerwalten')}
+            lazy={() => import('../Docs/docs/BeobVerwalten/index.jsx')}
           />
           <Route
             path="produkte-fuer-die-fns"
-            lazy={() => import('../Docs/docs/ProdukteFuerFNS')}
+            lazy={() => import('../Docs/docs/ProdukteFuerFNS.jsx')}
           />
           <Route
             path="daten-sichern"
-            lazy={() => import('../Docs/docs/DatenSichern')}
+            lazy={() => import('../Docs/docs/DatenSichern.jsx')}
           />
           <Route
             path="daten-wiederherstellen"
-            lazy={() => import('../Docs/docs/DatenWiederherstellen')}
+            lazy={() => import('../Docs/docs/DatenWiederherstellen.jsx')}
           />
-          <Route path="testen" lazy={() => import('../Docs/docs/Testen')} />
+          <Route path="testen" lazy={() => import('../Docs/docs/Testen.jsx')} />
           <Route
             path="geschichte"
-            lazy={() => import('../Docs/docs/Geschichte')}
+            lazy={() => import('../Docs/docs/Geschichte.jsx')}
           />
           <Route
             path="open-source"
-            lazy={() => import('../Docs/docs/OpenSource')}
+            lazy={() => import('../Docs/docs/OpenSource.jsx')}
           />
           <Route
             path="art-taxonomien-ergaenzen"
-            lazy={() => import('../Docs/docs/ArtTaxonomieErgaenzen')}
+            lazy={() => import('../Docs/docs/ArtTaxonomieErgaenzen.jsx')}
           />
           <Route
             path="info-flora-export"
-            lazy={() => import('../Docs/docs/InfofloraExport')}
+            lazy={() => import('../Docs/docs/InfofloraExport.jsx')}
           />
-          <Route path="*" lazy={() => import('../404')} />
+          <Route path="*" lazy={() => import('../404.jsx')} />
         </Route>
-        <Route path="*" lazy={() => import('../404')} />
+        <Route path="*" lazy={() => import('../404.jsx')} />
       </Route>,
     ),
   )
