@@ -2,8 +2,8 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
-import apQuery from './apByIdJahr'
-import ApberForAp from '../ApberForAp'
+import apQuery from './apByIdJahr.js'
+import ApberForAp from '../ApberForAp/index.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 

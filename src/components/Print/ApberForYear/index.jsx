@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
-import ApberForYear from './ApberForYear'
+import ApberForYear from './ApberForYear.jsx'
 import storeContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
