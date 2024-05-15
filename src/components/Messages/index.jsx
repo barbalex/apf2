@@ -6,12 +6,12 @@ import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import query from './data'
-import createUsermessage from './createUsermessage'
+import query from './data.js'
+import createUsermessage from './createUsermessage.js'
 import storeContext from '../../storeContext.js'
 import Error from '../shared/Error.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
-import Messages from './Messages'
+import Messages from './Messages/index.jsx'
 
 const StyledDialog = styled(Dialog)`
   display: flex;

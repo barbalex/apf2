@@ -15,9 +15,9 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
 import { observer } from 'mobx-react-lite'
 
-import Fields from './Fields'
+import Fields from './Fields.jsx'
 import storeContext from '../../storeContext.js'
-import { allFields } from '../../store/EkPlan'
+import { allFields } from '../../store/EkPlan/index.js'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`

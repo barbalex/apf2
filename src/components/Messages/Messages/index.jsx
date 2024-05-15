@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import Messages from './Messages'
+import Messages from './Messages.jsx'
 
 const ScrollContainer = styled.div`
   min-width: 80% !important;

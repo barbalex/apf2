@@ -4,15 +4,15 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import Button from '@mui/material/Button'
 
-const ApList = lazy(() => import('./ApList'))
-const Table = lazy(() => import('./Table'))
-const Choose = lazy(() => import('./Choose'))
-import queryAps from './queryAps'
+const ApList = lazy(() => import('./ApList/index.jsx'))
+const Table = lazy(() => import('./Table/index.jsx'))
+const Choose = lazy(() => import('./Choose.jsx'))
+import queryAps from './queryAps.js'
 import storeContext from '../../storeContext.js'
 import appBaseUrl from '../../modules/appBaseUrl.js'
 const Error = lazy(() => import('../shared/Error.jsx'))
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
-const User = lazy(() => import('../User'))
+const User = lazy(() => import('../User.jsx'))
 import Spinner from '../shared/Spinner.jsx'
 
 const Container = styled.div`
