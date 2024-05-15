@@ -14,70 +14,70 @@ import {
 const RouterComponent = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route lazy={() => import('../AppBar')}>
-        <Route index lazy={() => import('../Home')} />
-        <Route path="/Daten/*" lazy={() => import('./ProtectedRoute')}>
+      <Route lazy={() => import('../AppBar/index.jsx')}>
+        <Route index lazy={() => import('../Home/index.jsx')} />
+        <Route path="/Daten/*" lazy={() => import('./ProtectedRoute.jsx')}>
           {/* <Route path="*" element={<Unterhalt />}></Route> */}
           <Route
             path="Projekte/:projId/EK-Planung"
-            lazy={() => import('../EkPlan')}
+            lazy={() => import('../EkPlan/index.jsx')}
           />
           <Route
             path="Benutzer/:userId/EKF/:ekfYear/*"
-            lazy={() => import('../Ekf')}
+            lazy={() => import('../Ekf/index.jsx')}
           />
           <Route
             path="Benutzer/:userId/EKF/:ekfYear/:ekfId"
-            lazy={() => import('../Ekf')}
+            lazy={() => import('../Ekf/index.jsx')}
           />
-          <Route path="*" lazy={() => import('../Projekte')}>
+          <Route path="*" lazy={() => import('../Projekte/index.jsx')}>
             <Route
               path="Werte-Listen/Adressen/:adrId"
-              lazy={() => import('../Projekte/Daten/Adresse')}
+              lazy={() => import('../Projekte/Daten/Adresse/index.jsx')}
             />
             <Route
               path="Werte-Listen/ApberrelevantGrundWerte/:wertId"
-              lazy={() => import('../Projekte/Daten/Werte')}
+              lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
             />
             <Route
               path="Werte-Listen/EkAbrechnungstypWerte/:wertId"
-              lazy={() => import('../Projekte/Daten/Werte')}
+              lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
             />
             <Route
               path="Werte-Listen/TpopkontrzaehlEinheitWerte/:wertId"
-              lazy={() => import('../Projekte/Daten/Werte')}
+              lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
             />
             <Route
               path="Mitteilungen"
-              lazy={() => import('../Projekte/Daten/Messages')}
+              lazy={() => import('../Projekte/Daten/Messages/index.jsx')}
             />
             <Route
               path="Aktuelle-Fehler/:issueId"
-              lazy={() => import('../Projekte/Daten/CurrentIssue')}
+              lazy={() => import('../Projekte/Daten/CurrentIssue/index.jsx')}
             />
             <Route
               path="Projekte/:projId/*"
-              lazy={() => import('../Projekte/Daten/Projekt')}
+              lazy={() => import('../Projekte/Daten/Projekt/index.jsx')}
             />
             <Route
               path="Projekte/:projId/AP-Berichte/:apberUebersichtId"
-              lazy={() => import('../Projekte/Daten/Apberuebersicht')}
+              lazy={() => import('../Projekte/Daten/Apberuebersicht/index.jsx')}
             />
             <Route
               path="Projekte/:projId/AP-Berichte/:apberUebersichtId/print"
-              lazy={() => import('../Print/ApberForYear')}
+              lazy={() => import('../Print/ApberForYear/index.jsx')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/*"
-              lazy={() => import('../Projekte/Daten/Ap')}
+              lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Qualitaetskontrollen"
-              lazy={() => import('../Projekte/Daten/Qk')}
+              lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/nicht-zuzuordnende-Beobachtungen/:beobId"
-              lazy={() => import('../Projekte/Daten/Beobzuordnung')}
+              lazy={() => import('../Projekte/Daten/Beobzuordnung/index.jsx')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/nicht-beurteilte-Beobachtungen/:beobId"
