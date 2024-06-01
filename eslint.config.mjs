@@ -1,4 +1,5 @@
 import _import from 'eslint-plugin-import'
+import reactRefresh from 'eslint-plugin-react-refresh'
 import { fixupConfigRules } from '@eslint/compat'
 import globals from 'globals'
 import tsParser from '@typescript-eslint/parser'
@@ -30,6 +31,7 @@ export default [
   ),
   {
     plugins: {
+      'react-refresh': reactRefresh,
       import: _import,
     },
 
