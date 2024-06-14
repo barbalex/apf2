@@ -59,7 +59,7 @@
     "markdown-it": "14.1.0",
     "mobx": "6.12.4",
     "mobx-react-lite": "4.0.7",
-    "mobx-state-tree": "5.4.2",
+    "mobx-state-tree": "6.0.0",
     "mst-persist": "0.1.4",
     "notistack": "3.0.1",
     "proj4": "2.11.0",
