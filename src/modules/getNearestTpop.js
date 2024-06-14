@@ -2,7 +2,7 @@
  * gets a latLng wgs 84
  * returns tpopId of nearest tpop
  */
-import nearestPoint from '@turf/nearest-point'
+import { nearestPoint } from '@turf/nearest-point'
 import { featureCollection, point } from '@turf/helpers'
 import { gql } from '@apollo/client'
 import flatten from 'lodash/flatten'

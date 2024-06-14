@@ -5,7 +5,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { useMapEvent } from 'react-leaflet/hooks'
 import { useApolloClient, gql } from '@apollo/client'
 import L from 'leaflet'
-import ellipse from '@turf/ellipse'
+import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router-dom'
 import axios from 'redaxios'
 
