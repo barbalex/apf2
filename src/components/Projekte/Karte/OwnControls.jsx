@@ -15,7 +15,7 @@ const Container = styled.div`
 
 const OwnControls = ({ setControlHeight, mapRef }) => {
   const onResize = useCallback(
-    (width, height) => {
+    ({ width, height }) => {
       //console.log('height:', height)
       setControlHeight(Math.round(height ?? 167))
     },
