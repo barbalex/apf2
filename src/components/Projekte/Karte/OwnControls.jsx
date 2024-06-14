@@ -4,7 +4,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { useDebouncedCallback } from 'use-debounce'
 
 import LayersControl from './LayersControl/index.jsx'
-import FullscreenControl from './FullscreenControl.jsx'
+import { FullscreenControl } from './FullscreenControl.jsx'
 import PngControl from './PngControl.jsx'
 
 const Container = styled.div`

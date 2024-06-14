@@ -1,7 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useContext } from 'react'
 import styled from '@emotion/styled'
 import { FaExpandArrowsAlt, FaCompressArrowsAlt } from 'react-icons/fa'
 import screenfull from 'screenfull'
+
+import storeContext from '../../../storeContext.js'
 
 const Button = styled.button`
   background-color: white;
@@ -20,7 +22,27 @@ const Button = styled.button`
   margin-top: 7px;
 `
 
-const FullscreenControl = ({ mapRef }) => {
+export const FullscreenControl = ({ mapRef }) => {
+  // need to test if screenfull (i.e. the fullscreen api) is supported - iPhones don't support it
+  // https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API/Guide
+  const store = useContext(storeContext)
+  const { enqueNotification } = store
+
+  if (!screenfull.isEnabled) {
+    enqueNotification({
+      message: `Ihr Browser unterstützt den Vollbildmodus nicht. Bitte verwenden Sie einen anderen Browser. Hinweis: iPhones unterstützen den Vollbildmodus grundsätzlich nicht - unabhängig vom verwendeten Browser.`,
+      options: {
+        variant: 'warning',
+        autoHideDuration: 20000,
+      },
+    })
+    return null
+  }
+
+  return <FullscreenController mapRef={mapRef} />
+}
+
+const FullscreenController = ({ mapRef }) => {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const onFullscreenChange = useCallback(
     () => setIsFullscreen(screenfull.isFullscreen),
@@ -47,4 +69,3 @@ const FullscreenControl = ({ mapRef }) => {
   )
 }
 
-export default FullscreenControl
