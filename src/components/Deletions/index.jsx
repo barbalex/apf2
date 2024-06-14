@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 
-import undelete from './undelete/index.js'
+import undelete from './undelete/index.jsx'
 import storeContext from '../../storeContext.js'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
