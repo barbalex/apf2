@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext, useCallback } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
 import { useMap } from 'react-leaflet'
@@ -83,18 +83,19 @@ const DrawControl = () => {
     } else {
       map.addControl(drawControlFull)
     }
-    map.on('draw:created', (e) => {
+
+    const onDrawCreated = (e) => {
       // console.log('map, draw:created')
       drawnItems.addLayer(e.layer)
       drawControlFull.remove(map)
       drawControlEditOnly.addTo(map)
       setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
-    })
-    map.on('draw:edited', () => {
+    }
+    const onDrawEdited = () => {
       // console.log('map, draw:edited')
       setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
-    })
-    map.on('draw:deleted', () => {
+    }
+    const onDrawDeleted = () => {
       // console.log('map, draw:deleted')
       setMapFilter(undefined)
       if (drawnItems.getLayers().length === 0) {
@@ -102,27 +103,33 @@ const DrawControl = () => {
         drawControlFull.remove(map)
         drawControlFull.addTo(map)
       }
-    })
-    map.on('draw:deletedFromOutside', () => {
+    }
+    const onDrawDeletedFromOutside = () => {
       // console.log('map, draw:deletedFromOutside')
       drawControlEditOnly.remove(map)
       drawControlFull.remove(map)
       drawControlFull.addTo(map)
-    })
-    map.on('draw:clearFromOutside', () => {
+    }
+    const onDrawClearFromOutside = () => {
       // console.log('map, draw:clearFromOutside')
       drawnItems.clearLayers()
-    })
+    }
+
+    map.on('draw:created', onDrawCreated)
+    map.on('draw:edited', onDrawEdited)
+    map.on('draw:deleted', onDrawDeleted)
+    map.on('draw:deletedFromOutside', onDrawDeletedFromOutside)
+    map.on('draw:clearFromOutside', onDrawClearFromOutside)
 
     return () => {
       map.removeLayer(drawnItems)
       drawControlFull.remove(map)
       drawControlEditOnly.remove(map)
-      map.off('draw:created')
-      map.off('draw:edited')
-      map.off('draw:deleted')
-      map.off('draw:deletedFromOutside')
-      map.off('draw:clearFromOutside')
+      map.off('draw:created', onDrawCreated)
+      map.off('draw:edited', onDrawEdited)
+      map.off('draw:deleted', onDrawDeleted)
+      map.off('draw:deletedFromOutside', onDrawDeletedFromOutside)
+      map.off('draw:clearFromOutside', onDrawClearFromOutside)
       // setMapFilter(undefined)
     }
     // do not want this to re-run on every change of mapFilter!
