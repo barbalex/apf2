@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useQuery } from '@apollo/client'
@@ -60,20 +60,18 @@ const Pop = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [refetchProvoker, setRefetchProvoker] = useState(1)
+  const refetch = useCallback(() => {
+    setRefetchProvoker(Math.random())
+  }, [])
   useEffect(() => {
     // DO NOT use:
     // leafletMap.on('zoomend dragend', refetch
     // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
     // Also: leafletMap.on('zoomend dragend', ()=> refetch()) never refetches!!??
     // Also: use dragend, not moveend because moveend fires on zoomend as well
-    map.on('zoomend dragend', () => {
-      // console.log('zoomend dragend')
-      setRefetchProvoker(Math.random())
-    })
+    map.on('zoomend dragend', refetch)
     return () => {
-      map.off('zoomend dragend', () => {
-        setRefetchProvoker(Math.random())
-      })
+      map.off('zoomend dragend', refetch)
     }
   }, [map])
 
