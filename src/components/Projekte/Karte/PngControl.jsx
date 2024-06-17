@@ -50,15 +50,14 @@ const PngControl = () => {
     }
   }, [map])
 
+  const onEasyPrintFinished = useCallback(() => {
+    setHideMapControls(false)
+  }, [setHideMapControls])
   useEffect(() => {
-    map.on('easyPrint-finished', () => {
-      setHideMapControls(false)
-    })
+    map.on('easyPrint-finished', onEasyPrintFinished)
 
     return () => {
-      map.off('easyPrint-finished', () => {
-        setHideMapControls(false)
-      })
+      map.off('easyPrint-finished', onEasyPrintFinished)
     }
   }, [map, setHideMapControls])
 
