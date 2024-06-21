@@ -19,7 +19,7 @@ const ZhOrthoAktuellRgbLayer = () => (
   >
     <WMSTileLayer
       url="//wms.zh.ch/OGDOrthoZH"
-      layers="ortho_s"
+      layers="OGDOrthoZH"
       version="1.3.0"
       format="image/png"
       maxNativeZoom={18}
