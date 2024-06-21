@@ -6,7 +6,7 @@ import debounce from 'lodash/debounce'
 
 import ShowCoordinates from './ShowCoordinates.jsx'
 import PanToCoordinates from './PanToCoordinates.jsx'
-import epsg4326to2056 from '../../../../modules/epsg4326to2056.js'
+import { epsg4326to2056 } from '../../../../modules/epsg4326to2056.js'
 import storeContext from '../../../../storeContext.js'
 
 /**
