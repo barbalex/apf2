@@ -564,6 +564,7 @@ const Karte = ({ mapContainerRef }) => {
               <BaseLayerComponent />
             </MapResizer>
           )}
+          {/* TODO: subtract index from zIndex in Pane style, then remove reverse() */}
           {activeOverlaysSorted
             .reverse()
             .map((overlayName, index) => {
