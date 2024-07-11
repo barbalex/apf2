@@ -94,7 +94,6 @@
     "use-debounce": "10.0.1"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "7.24.8",
     "@babel/preset-react": "7.24.7",
     "@emotion/babel-plugin": "11.11.0",
     "@eslint/compat": "1.1.0",

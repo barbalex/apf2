@@ -16,6 +16,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import OrTabs from './Tabs.jsx'
 import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
+import { ActiveFilters } from './ActiveFilters.tsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -75,7 +76,7 @@ const TpopFilter = () => {
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
     if (dataFilter.tpop.length - 1 < activeTab) {
-      // filter was emtied, need to set correct tab
+      // filter was emptied, need to set correct tab
       setActiveTab(0)
     }
   }, [activeTab, dataFilter.tpop.length])
@@ -142,31 +143,7 @@ const TpopFilter = () => {
           filteredNr={dataTpops?.allTpopsFiltered?.totalCount ?? '...'}
           activeTab={activeTab}
         />
-        {showFilterComments && (
-          <>
-            <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
-            <FilterCommentList>
-              {!!navApFilterComment && (
-                <FilterComment>{navApFilterComment}</FilterComment>
-              )}
-              {!!navHiearchyComment && (
-                <FilterComment>{navHiearchyComment}</FilterComment>
-              )}
-              {!!navLabelComment && (
-                <FilterComment>{navLabelComment}</FilterComment>
-              )}
-              {!!artHierarchyComment && (
-                <FilterComment>{artHierarchyComment}</FilterComment>
-              )}
-              {!!popHierarchyComment && (
-                <FilterComment>{popHierarchyComment}</FilterComment>
-              )}
-              {!!mapFilterComment && (
-                <FilterComment>{mapFilterComment}</FilterComment>
-              )}
-            </FilterCommentList>
-          </>
-        )}
+        <ActiveFilters />
         <OrTabs
           dataFilter={dataFilter.tpop}
           activeTab={activeTab}

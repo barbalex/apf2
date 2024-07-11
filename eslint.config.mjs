@@ -18,14 +18,14 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['**/dist', '**/node_modules/'],
+    ignores: ['**/dist', '**/*.mjs', '**/node_modules/'],
   },
   ...fixupConfigRules(
     compat.extends(
       'eslint:recommended',
       'plugin:@typescript-eslint/recommended',
       'plugin:@typescript-eslint/stylistic',
-      'plugin:react/recommended',
+      // 'plugin:react/recommended',
       'plugin:react-hooks/recommended',
     ),
   ),
@@ -38,25 +38,17 @@ export default [
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.amd,
-        ...globals.node,
       },
 
       parser: tsParser,
-      ecmaVersion: 'latest',
-      sourceType: 'module',
+      // ecmaVersion: 'latest',
+      // sourceType: 'module',
 
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-    },
-
-    settings: {
-      react: {
-        version: 'detect',
-      },
+      // parserOptions: {
+      //   ecmaFeatures: {
+      //     jsx: true,
+      //   },
+      // },
     },
 
     rules: {
