@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
+import { getSnapshot } from 'mobx-state-tree'
 
 import FilterTitle from '../../../shared/FilterTitle.jsx'
 import queryTpops from './queryTpops.js'
@@ -44,6 +45,11 @@ export const TpopFilter = observer(() => {
   const store = useContext(storeContext)
 
   const { dataFilter, tpopGqlFilter, dataFilterSetValue } = store.tree
+
+  console.log('TpopFilter', {
+    dataFilter: getSnapshot(dataFilter),
+    tpopGqlFilter,
+  })
 
   const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
   const onChangeTab = useCallback((event, value) => setTab(value), [setTab])

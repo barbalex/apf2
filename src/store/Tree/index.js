@@ -702,17 +702,20 @@ export default types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialTpop)
       }
       // 3. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
         // add hiearchy filter
-        const singleFilter = merge(
-          singleFilterByHierarchy,
-          singleFilterByParentFiltersForFiltered,
-        )
+        // BEWARE: merge without spreading leads to the same object being used during the for loop!
+        const singleFilter = {
+          ...merge(
+            singleFilterByHierarchy,
+            singleFilterByParentFiltersForFiltered,
+          ),
+        }
         // add data filter
         const dataFilterTpop = { ...filter }
         const tpopFilterValues = Object.entries(dataFilterTpop).filter(
