@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 
 import ApFilter from '../Daten/ApFilter/index.jsx'
 import PopFilter from '../Daten/PopFilter/index.jsx'
-import TpopFilter from '../Daten/TpopFilter/index.jsx'
+import { TpopFilter } from '../Daten/TpopFilter/index.tsx'
 import TpopmassnFilter from '../Daten/TpopmassnFilter/index.jsx'
 import TpopfeldkontrFilter from '../Daten/TpopfeldkontrFilter/index.jsx'
 import TpopfreiwkontrFilter from '../Daten/TpopfreiwkontrFilter/index.jsx'
