@@ -327,7 +327,7 @@ export default types
       }
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
+        // add hierarchy filter
         const singleFilter = { ...singleFilterByHierarchy }
         // add apFilter
         if (setApFilter) {
@@ -426,7 +426,7 @@ export default types
       }
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
+        // add hierarchy filter
         const singleFilter = {}
         // add apFilter
         if (setApFilter) {
@@ -530,11 +530,13 @@ export default types
       // 3. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
-        const singleFilter = merge(
-          singleFilterByHierarchy,
-          singleFilterByParentFiltersForFiltered,
-        )
+        // add hierarchy filter
+        const singleFilter = {
+          ...merge(
+            singleFilterByHierarchy,
+            singleFilterByParentFiltersForFiltered,
+          ),
+        }
         // add data filter
         const dataFilterPop = { ...filter }
         const popFilterValues = Object.entries(dataFilterPop).filter(
@@ -607,7 +609,7 @@ export default types
       // 2. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
+        // add hierarchy filter
         const singleFilter = {}
         // add data filter
         const dataFilterPop = { ...filter }
@@ -708,7 +710,7 @@ export default types
       // 3. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
+        // add hierarchy filter
         // BEWARE: merge without spreading leads to the same object being used during the for loop!
         const singleFilter = {
           ...merge(
@@ -789,7 +791,7 @@ export default types
       // 2. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
+        // add hierarchy filter
         const singleFilter = {}
         // add data filter
         const dataFilterTpop = { ...filter }
@@ -898,11 +900,13 @@ export default types
       // 3. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
-        const singleFilter = merge(
-          singleFilterByHierarchy,
-          singleFilterByParentFiltersForFiltered,
-        )
+        // add hierarchy filter
+        const singleFilter = {
+          ...merge(
+            singleFilterByHierarchy,
+            singleFilterByParentFiltersForFiltered,
+          ),
+        }
         // add data filter
         const dataFilterTpopmassn = { ...filter }
         const tpopmassnFilterValues = Object.entries(
@@ -980,7 +984,7 @@ export default types
       // 2. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
+        // add hierarchy filter
         const singleFilter = {}
         // add data filter
         const dataFilterTpopmassn = { ...filter }
@@ -1102,11 +1106,13 @@ export default types
       // 3. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
-        const singleFilter = merge(
-          singleFilterByHierarchy,
-          singleFilterByParentFiltersForFiltered,
-        )
+        // add hierarchy filter
+        const singleFilter = {
+          ...merge(
+            singleFilterByHierarchy,
+            singleFilterByParentFiltersForFiltered,
+          ),
+        }
         // add data filter
         const dataFilter = { ...filter }
         const filterValues = Object.entries(dataFilter).filter(
@@ -1291,11 +1297,13 @@ export default types
       // 3. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
-        const singleFilter = merge(
-          singleFilterByHierarchy,
-          singleFilterByParentFiltersForFiltered,
-        )
+        // add hierarchy filter
+        const singleFilter = {
+          ...merge(
+            singleFilterByHierarchy,
+            singleFilterByParentFiltersForFiltered,
+          ),
+        }
         // add data filter
         const dataFilter = { ...filter }
         const filterValues = Object.entries(dataFilter).filter(
