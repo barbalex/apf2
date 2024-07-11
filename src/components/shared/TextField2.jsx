@@ -26,7 +26,7 @@ const MyTextField = ({
   saveToDb,
   required = false,
 }) => {
-  const value = row[name]
+  const value = row?.[name]
   const [stateValue, setStateValue] = useState(
     value || value === 0 ? value : '',
   )
