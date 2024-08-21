@@ -47,7 +47,7 @@ const ShowForMultipleAps = () => {
 
   const { data } = useQuery(
     gql`
-      query TreeRootQuery($apsFilter: ApFilter!) {
+      query LayersControlLayersQuery($apsFilter: ApFilter!) {
         allAps(filter: $apsFilter) {
           totalCount
         }
@@ -67,8 +67,8 @@ const ShowForMultipleAps = () => {
     apsCount > 5
       ? 'rgba(228, 89, 0, 1)'
       : apsCount > 50
-      ? 'rgba(228, 0, 0, 1)'
-      : ''
+        ? 'rgba(228, 0, 0, 1)'
+        : ''
 
   return (
     <LayerDiv>
