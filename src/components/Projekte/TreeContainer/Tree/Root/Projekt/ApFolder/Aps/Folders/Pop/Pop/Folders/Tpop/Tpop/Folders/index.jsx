@@ -52,7 +52,7 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
     queryFn: () =>
       client.query({
         query: gql`
-          query TreeTpopQuery(
+          query TreeTpopFolderQuery(
             $id: UUID!
             $tpopmassnsFilter: TpopmassnFilter!
             $tpopmassnbersFilter: TpopmassnberFilter!
