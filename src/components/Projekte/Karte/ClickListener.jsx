@@ -184,7 +184,7 @@ const ClickListener = () => {
         const circle = ellipse(coordinates, radius, radius, options)
         markierungenData = await client.query({
           query: gql`
-            query karteMarkierungesQuery($polygon: GeoJSON!) {
+            query KarteClickListenerQuery($polygon: GeoJSON!) {
               allMarkierungens(
                 filter: { wkbGeometry: { coveredBy: $polygon } }
               ) {
