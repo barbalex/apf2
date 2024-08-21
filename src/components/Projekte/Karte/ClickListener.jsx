@@ -57,7 +57,7 @@ const ClickListener = () => {
       let gemeindenData
       try {
         gemeindenData = await client.query({
-          query: gql`query karteGemeindesQuery {
+          query: gql`query karteAdministrativeUnitsQuery {
           allChAdministrativeUnits(
             filter: { 
               localisedcharacterstring: { equalTo: "Gemeinde" }, 
