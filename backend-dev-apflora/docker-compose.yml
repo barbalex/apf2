@@ -1,4 +1,3 @@
-version: '3.7'
 services:
   graphql:
     container_name: apf_graphql
@@ -11,7 +10,7 @@ services:
       - '5000:5000'
     # this is on linux to connect from docker to localhost
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'
     env_file:
       - ./.env
     command:

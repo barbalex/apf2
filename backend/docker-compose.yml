@@ -1,4 +1,3 @@
-version: '3.7'
 services:
   db:
     # specify container name to make it easier to run commands
