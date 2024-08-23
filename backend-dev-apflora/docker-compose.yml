@@ -1,3 +1,5 @@
+name: apf2
+
 services:
   graphql:
     container_name: apf_graphql
