@@ -1,4 +1,4 @@
-name: apf2
+name: apf
 
 services:
   graphql:
