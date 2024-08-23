@@ -128,7 +128,7 @@ const ClickListener = () => {
       let detailplaeneData
       try {
         detailplaeneData = await client.query({
-          query: gql`query karteDetailplaenesQuery {
+          query: gql`query karteDetailplaenesFilteredQuery {
           allDetailplaenes(
             filter: { 
               geom: {intersects: {type: "Point", coordinates: [${lng}, ${lat}]}}
