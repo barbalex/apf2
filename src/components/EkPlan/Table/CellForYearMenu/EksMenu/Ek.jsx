@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import Collapse from '@mui/material/Collapse'
 import {
@@ -33,6 +34,11 @@ const SyledListItem = styled(ListItem)`
   padding-bottom: 0 !important;
   font-size: 0.85rem !important;
 `
+const StyledListItemButton = styled(ListItemButton)`
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  font-size: 0.85rem !important;
+`
 const OutsideLink = styled.div`
   margin-left: 2px;
   margin-right: 6px;
@@ -60,7 +66,7 @@ const EkMenu = ({ tpop, ek, border }) => {
 
   return (
     <OuterList component="nav" border={border.toString()}>
-      <SyledListItem button onClick={toggleOpen}>
+      <StyledListItemButton onClick={toggleOpen}>
         <StyledListItemText primary={title} />
         <OutsideLink
           onClick={() => {
@@ -74,7 +80,7 @@ const EkMenu = ({ tpop, ek, border }) => {
           <FaExternalLinkAlt />
         </OutsideLink>
         {open ? <CloseIcon /> : <ExpandIcon />}
-      </SyledListItem>
+      </StyledListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <InnerList>
           {zaehls.map((z) => {
