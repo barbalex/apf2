@@ -178,10 +178,10 @@ const BeobData = ({ id }) => {
         <TopFieldContainer>
           <Info>
             {topFields.map(([key, value]) => (
-              <>
+              <div key={key}>
                 <div>{`${key}:`}</div>
                 <div>{value}</div>
-              </>
+              </div>
             ))}
           </Info>
         </TopFieldContainer>
@@ -195,7 +195,10 @@ const BeobData = ({ id }) => {
         >
           <StyledAccordionSummary>Daten</StyledAccordionSummary>
           <StyledAccordionDetails>
-            <DndProvider backend={HTML5Backend} context={window}>
+            <DndProvider
+              backend={HTML5Backend}
+              context={window}
+            >
               {fields.map((field, i) => renderField(field, i))}
             </DndProvider>
           </StyledAccordionDetails>
