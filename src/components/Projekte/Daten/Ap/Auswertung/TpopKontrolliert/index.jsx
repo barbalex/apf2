@@ -75,22 +75,23 @@ const ApAuswertungTpopKontrolliert = ({
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
 
-  //console.log('Ap TPopKontrolliert, erfolgData:', erfolgData)
-
   return (
     <>
-      {loading ? (
+      {loading ?
         <SpinnerContainer>
           <CircularProgress />
           <SpinnerText>lade kontrollierte TPop...</SpinnerText>
         </SpinnerContainer>
-      ) : erfolgData.length ? (
+      : erfolgData.length ?
         <>
           <Title>
             (<TitleKontr>kontrollierte</TitleKontr>){' '}
             <TitleTitle>Teil-Populationen</TitleTitle>
           </Title>
-          <ResponsiveContainer width="99%" height={height}>
+          <ResponsiveContainer
+            width="99%"
+            height={height}
+          >
             <LineChart
               width={600}
               height={300}
@@ -107,7 +108,10 @@ const ApAuswertungTpopKontrolliert = ({
                 }}
                 dataKey="Teil-Populationen"
               />
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal={false}
+              />
               <Line
                 type="linear"
                 dataKey="Teil-Populationen"
@@ -126,24 +130,32 @@ const ApAuswertungTpopKontrolliert = ({
                 dot={{ strokeWidth: 2, r: 4 }}
                 fill="rgba(255,253,231,0)"
               />
-              <Legend layout="horizontal" align="center" iconSize={22} />
+              <Legend
+                layout="horizontal"
+                align="center"
+                iconSize={22}
+              />
               {!isSubReport && (
                 <Tooltip
-                  content={<CustomTooltip color={color} reverse={true} />}
+                  content={
+                    <CustomTooltip
+                      color={color}
+                      reverse={true}
+                    />
+                  }
                 />
               )}
             </LineChart>
           </ResponsiveContainer>
         </>
-      ) : (
-        <>
+      : <>
           <Title>
             (<TitleKontr>kontrollierte</TitleKontr>){' '}
             <TitleTitle>Teil-Populationen</TitleTitle>
           </Title>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>
         </>
-      )}
+      }
     </>
   )
 }
