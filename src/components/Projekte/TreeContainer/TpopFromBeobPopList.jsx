@@ -1,11 +1,9 @@
-/**
- * need to keep class because of ref
- */
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
 import { observer } from 'mobx-react-lite'
 import { useParams, useLocation } from 'react-router-dom'
 
@@ -16,6 +14,11 @@ import Error from '../../shared/Error.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 
 const StyledListItem = styled(ListItem)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+const StyledListItemButton = styled(ListItemButton)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -54,10 +57,9 @@ const TpopFromBeobPopList = ({ closeNewTpopFromBeobDialog, beobId }) => {
   return (
     <ErrorBoundary>
       <List dense>
-        {pops.map((pop) => (
-          <StyledListItem
+        {pops.map(pop => (
+          <StyledListItemButton
             key={pop.id}
-            button
             onClick={() => {
               createNewTpopFromBeob({
                 pop,
@@ -72,7 +74,7 @@ const TpopFromBeobPopList = ({ closeNewTpopFromBeobDialog, beobId }) => {
             }}
           >
             {pop.label}
-          </StyledListItem>
+          </StyledListItemButton>
         ))}
       </List>
     </ErrorBoundary>
