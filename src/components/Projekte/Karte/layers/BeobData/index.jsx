@@ -32,6 +32,7 @@ const StyledAccordionSummary = styled(AccordionSummary)`
   margin: 0;
   padding: 0 10px;
   min-height: 28px;
+  font-weight: 600;
   > div {
     margin: 0;
   }
