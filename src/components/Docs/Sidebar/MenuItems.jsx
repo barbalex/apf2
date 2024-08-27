@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import MenuItem from './MenuItem.jsx'
 import storeContext from '../../../storeContext.js'
 
-// dont know why but divider is too thick,
+// don't know why but divider is too thick,
 // thicker than ListItemButton divider
 const StyledDivider = styled(Divider)`
   height: unset !important;

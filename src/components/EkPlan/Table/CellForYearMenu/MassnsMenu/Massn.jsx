@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
+import { ListItemButton } from '@mui/material'
 import ListItemText from '@mui/material/ListItemText'
 import Collapse from '@mui/material/Collapse'
 import {
@@ -29,6 +30,11 @@ const StyledListItemText = styled(ListItemText)`
   }
 `
 const StyledListItem = styled(ListItem)`
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  font-size: 0.85rem !important;
+`
+const StyledListItemButton = styled(ListItemButton)`
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   font-size: 0.85rem !important;
@@ -67,7 +73,7 @@ const MassnMenu = ({ tpop, massn, border }) => {
 
   return (
     <OuterList component="nav" border={border.toString()}>
-      <StyledListItem button onClick={toggleOpen}>
+      <StyledListItemButton onClick={toggleOpen}>
         <StyledListItemText primary={title} />
         <OutsideLink
           onClick={() => {
@@ -81,7 +87,7 @@ const MassnMenu = ({ tpop, massn, border }) => {
           <FaExternalLinkAlt />
         </OutsideLink>
         {open ? <CloseIcon /> : <ExpandIcon />}
-      </StyledListItem>
+      </StyledListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <InnerList>
           <StyledListItem component="div">

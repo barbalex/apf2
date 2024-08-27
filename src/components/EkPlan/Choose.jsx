@@ -72,7 +72,7 @@ const CheckboxDensifier = styled.div`
   margin: -8px 2px -8px -4px;
 `
 
-// placing mateiral-ui checkboxes denser
+// placing material-ui checkboxes denser
 // see: https://github.com/mui-org/material-ui/issues/6098#issuecomment-380451242
 // but styling with styled-components
 const DenserCheckbox = (props) => (
@@ -154,9 +154,7 @@ const EkPlanChoose = () => {
             onBlur={onBlurPastYears}
             size="small"
             type="number"
-            InputLabelProps={{
-              shrink: true,
-            }}
+            slotProps={{ inputLabel: { shrink: true } }}
           />
         </PastYearsContainer>
         <FelderButton
@@ -242,7 +240,10 @@ const EkPlanChoose = () => {
         <DialogTitle id="alert-dialog-title">{'Felder wählen:'}</DialogTitle>
         <Fields />
         <DialogActions>
-          <Button onClick={closeFieldsDialog} color="inherit">
+          <Button
+            onClick={closeFieldsDialog}
+            color="inherit"
+          >
             schliessen
           </Button>
         </DialogActions>
