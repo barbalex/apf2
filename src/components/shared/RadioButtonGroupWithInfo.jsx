@@ -15,7 +15,7 @@ const Container = styled.div`
 const RadioButtonGroupWithInfo = ({
   label,
   name,
-  value,
+  value = '',
   error,
   dataSource,
   saveToDb,
@@ -33,9 +33,5 @@ const RadioButtonGroupWithInfo = ({
     <InfoWithPopover name={name}>{popover}</InfoWithPopover>
   </Container>
 )
-
-RadioButtonGroupWithInfo.defaultProps = {
-  value: '',
-}
 
 export default observer(RadioButtonGroupWithInfo)

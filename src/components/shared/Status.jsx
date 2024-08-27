@@ -65,7 +65,7 @@ const StyledLabel = styled.div`
   color: ${(props) => (props.error ? '#f44336' : 'unset')};
 `
 
-const Status = ({ apJahr, showFilter, saveToDb, row = {}, errors }) => {
+const Status = ({ apJahr = null, showFilter, saveToDb, row = {}, errors }) => {
   const herkunftValue = row.status
   const bekanntSeitValue = row.bekanntSeit
   const error = errors?.status || errors?.bekanntSeit
@@ -198,14 +198,24 @@ const Status = ({ apJahr, showFilter, saveToDb, row = {}, errors }) => {
                 <GroupLabelContainer>ursprünglich:</GroupLabelContainer>
                 <FormControlLabel
                   value="100"
-                  control={<StyledRadio data-id="status_100" color="primary" />}
+                  control={
+                    <StyledRadio
+                      data-id="status_100"
+                      color="primary"
+                    />
+                  }
                   label="aktuell"
                   disabled={statusDisabled}
                   onClick={onClickButton}
                 />
                 <FormControlLabel
                   value="101"
-                  control={<StyledRadio data-id="status_101" color="primary" />}
+                  control={
+                    <StyledRadio
+                      data-id="status_101"
+                      color="primary"
+                    />
+                  }
                   label="erloschen"
                   disabled={statusDisabled}
                   onClick={onClickButton}
@@ -215,21 +225,36 @@ const Status = ({ apJahr, showFilter, saveToDb, row = {}, errors }) => {
                 <GroupLabelContainer>{angesiedeltLabel}</GroupLabelContainer>
                 <FormControlLabel
                   value="200"
-                  control={<StyledRadio data-id="status_200" color="primary" />}
+                  control={
+                    <StyledRadio
+                      data-id="status_200"
+                      color="primary"
+                    />
+                  }
                   label="aktuell"
                   disabled={statusDisabled}
                   onClick={onClickButton}
                 />
                 <FormControlLabel
                   value="201"
-                  control={<StyledRadio data-id="status_201" color="primary" />}
+                  control={
+                    <StyledRadio
+                      data-id="status_201"
+                      color="primary"
+                    />
+                  }
                   label="Ansaatversuch"
                   disabled={statusDisabled}
                   onClick={onClickButton}
                 />
                 <FormControlLabel
                   value="202"
-                  control={<StyledRadio data-id="status_202" color="primary" />}
+                  control={
+                    <StyledRadio
+                      data-id="status_202"
+                      color="primary"
+                    />
+                  }
                   label="erloschen / nicht etabliert"
                   disabled={statusDisabled}
                   onClick={onClickButton}
@@ -239,7 +264,12 @@ const Status = ({ apJahr, showFilter, saveToDb, row = {}, errors }) => {
                 <GroupLabelContainer>potenziell:</GroupLabelContainer>
                 <FormControlLabel
                   value="300"
-                  control={<StyledRadio data-id="status_300" color="primary" />}
+                  control={
+                    <StyledRadio
+                      data-id="status_300"
+                      color="primary"
+                    />
+                  }
                   label="potenzieller Wuchs-/Ansiedlungsort"
                   disabled={statusDisabled}
                   onClick={onClickButton}
@@ -254,12 +284,6 @@ const Status = ({ apJahr, showFilter, saveToDb, row = {}, errors }) => {
       </StatusContainer>
     </div>
   )
-}
-
-Status.defaultProps = {
-  apJahr: null,
-  herkunftValue: null,
-  bekanntSeitValue: '',
 }
 
 export default Status

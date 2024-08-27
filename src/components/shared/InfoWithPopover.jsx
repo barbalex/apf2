@@ -48,8 +48,4 @@ const InfoWithPopover = ({ children, name }) => {
   )
 }
 
-InfoWithPopover.defaultProps = {
-  popupAnchorEl: null,
-}
-
 export default InfoWithPopover

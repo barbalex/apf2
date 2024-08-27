@@ -32,7 +32,14 @@ const StyledFormControlLabel = styled(FormControlLabel)`
   }
 `
 
-const CheckboxWithInfo = ({ value, label, name, popover, saveToDb, error }) => {
+const CheckboxWithInfo = ({
+  value = null,
+  label,
+  name,
+  popover,
+  saveToDb,
+  error,
+}) => {
   const onCheck = useCallback((e, val) => saveToDb(val), [saveToDb])
 
   return (
@@ -66,10 +73,6 @@ const CheckboxWithInfo = ({ value, label, name, popover, saveToDb, error }) => {
       </div>
     </Container>
   )
-}
-
-CheckboxWithInfo.defaultProps = {
-  value: null,
 }
 
 export default observer(CheckboxWithInfo)

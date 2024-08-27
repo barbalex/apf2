@@ -28,7 +28,7 @@ const StyledRadio = styled(Radio)`
 `
 
 const RadioButtonGroup = ({
-  value,
+  value = null,
   label,
   name,
   error,
@@ -69,13 +69,10 @@ const RadioButtonGroup = ({
       const targetValue = event.target.value
       // values are passed as strings > need to convert
       const valueToUse =
-        targetValue === 'true'
-          ? true
-          : targetValue === 'false'
-          ? false
-          : isNaN(targetValue)
-          ? targetValue
-          : +targetValue
+        targetValue === 'true' ? true
+        : targetValue === 'false' ? false
+        : isNaN(targetValue) ? targetValue
+        : +targetValue
       const fakeEvent = {
         target: {
           value: valueToUse,
@@ -135,10 +132,6 @@ const RadioButtonGroup = ({
       )}
     </StyledFormControl>
   )
-}
-
-RadioButtonGroup.defaultProps = {
-  value: null,
 }
 
 export default RadioButtonGroup
