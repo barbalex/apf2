@@ -58,10 +58,7 @@ const BeobData = ({ id }) => {
 
   const { setBeobDetailsOpen, beobDetailsOpen } = store.map
   const onClickDetails = useCallback(
-    (event) => {
-      console.log('onClickDetails', event)
-      setBeobDetailsOpen(!beobDetailsOpen)
-    },
+    (event) => setBeobDetailsOpen(!beobDetailsOpen),
     [beobDetailsOpen, setBeobDetailsOpen],
   )
 
