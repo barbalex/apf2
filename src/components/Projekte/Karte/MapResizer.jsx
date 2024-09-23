@@ -36,7 +36,15 @@ const MapResizer = ({ children, mapContainerRef }) => {
   useEffect(() => {
     if (map) {
       console.log('MapResizer fitting bounds')
-      setTimeout(() => map.fitBounds(bounds), 800)
+      setTimeout(() => {
+        // Uncaught TypeError: Cannot read properties of undefined (reading '_leaflet_pos')
+        // thus: try/catch
+        try {
+          map.fitBounds(bounds)
+        } catch (error) {
+          console.log('MapResizer error fitting bounds:', error)
+        }
+      }, 800)
     }
   }, [bounds, map])
 
