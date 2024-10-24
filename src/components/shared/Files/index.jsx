@@ -19,7 +19,7 @@ import {
   tpopkontrFile as tpopkontrFileFragment,
   tpopmassnFile as tpopmassnFileFragment,
 } from '../fragments'
-import { Uploader } from '../Uploader'
+import { Uploader } from '../Uploader/index.jsx'
 import { UploaderContext } from '../../../UploaderContext.js'
 import File from './File'
 import 'react-image-gallery/styles/css/image-gallery.css'
@@ -129,7 +129,6 @@ const Files = ({
         }
         console.log('File uploaded: ', { info, responce })
         refetch()
-        return null
       }
       // close the uploader or it will be open when navigating to the list
       api?.doneFlow?.()
