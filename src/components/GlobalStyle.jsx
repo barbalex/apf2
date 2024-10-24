@@ -86,49 +86,23 @@ const GlobalStyle = () => (
       }
 
       /* uploadcare */
-      .uploadcare--button {
-        background-color: #2e7d32 !important;
-        background: #2e7d32 !important;
-        border: 1px solid #2e7d32 !important;
-        color: white !important;
+      .uploadcare button {
+        background: transparent !important;
+        color: rgb(46, 125, 50) !important;
+        font-weight: 500 !important;
+        border: 1px solid rgb(46, 125, 50) !important;
       }
-      .uploadcare--button:focus {
+      .uploadcare uc-source-list button {
+        color: oklch(0.21 0 0) !important;
+        border: 1px solid oklch(0.92 0 0) !important;
+      }
+      .uploadcare button:hover {
+        background: rgba(46, 125, 50, 0.05) !important;
+        border-color: rgba(46, 125, 50, 0.9) !important;
+        color: rgb(46, 125, 50) !important;
+      }
+      .uploadcare button:focus {
         outline: 2px solid rgba(46, 125, 50, 0.5) !important;
-      }
-      .uploadcare--button:hover {
-        background: rgba(46, 125, 50, 0.8) !important;
-        border-color: rgba(46, 125, 50, 0.8) !important;
-        color: white !important;
-      }
-      .uploadcare--widget__button,
-      .uploadcare--widget__button:active,
-      .uploadcare--widget__button:focus {
-        background: none !important;
-        color: black !important;
-        border: 1px solid black !important;
-        outline: none !important;
-      }
-      .uploadcare--widget__button,
-      .uploadcare--widget__button:focus {
-        color: #2e7d32 !important;
-        font-size: 0.875rem !important;
-        line-height: 24.5px !important;
-        font-weight: 500 !important;
-        border: 1px solid rgba(46, 125, 50, 0.5) !important;
-        border-radius: 4px !important;
-        padding: 5px 16px !important;
-      }
-      .uploadcare--widget__button:hover {
-        color: #2e7d32 !important;
-        font-size: 0.875rem !important;
-        line-height: 24.5px !important;
-        font-weight: 500 !important;
-        border: 1px solid #2e7d32 !important;
-        background-color: rgba(46, 125, 50, 0.08) !important;
-      }
-      .uploadcare--powered-by,
-      .uploadcare--powered-by__link {
-        display: none !important;
       }
 
       /* recharts */

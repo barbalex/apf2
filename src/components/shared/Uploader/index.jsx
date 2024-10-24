@@ -25,8 +25,8 @@ export const Uploader = memo(({ onChange }) => {
       onFileUploadSuccess={onChange}
       className="uploadcare"
       ctxName="uploadcare"
-      localeName="de"
       removeCopyright="true"
+      localeName="de"
       localeDefinitionOverride={defineLocale('de', locale)}
     />
   )
