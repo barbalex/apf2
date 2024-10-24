@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useRef, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import styled from '@emotion/styled'
@@ -19,7 +19,8 @@ import {
   tpopkontrFile as tpopkontrFileFragment,
   tpopmassnFile as tpopmassnFileFragment,
 } from '../fragments'
-import Uploader from '../Uploader'
+import { Uploader } from '../Uploader'
+import { UploaderContext } from '../../../UploaderContext.js'
 import File from './File'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import isImageFile from './isImageFile'
@@ -57,6 +58,9 @@ const Files = ({
   loadingParent,
 }) => {
   const client = useApolloClient()
+  const uploaderCtx = useContext(UploaderContext)
+  const api = uploaderCtx?.current?.getAPI?.()
+  console.log('Files, api:', api)
 
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
@@ -88,6 +92,7 @@ const Files = ({
   // console.log('Files, uploaderId:', uploaderId)
   const onChangeUploader = useCallback(
     async (info) => {
+      console.log('Files, onChangeUploader, info:', info)
       if (info) {
         let responce
         try {
@@ -124,15 +129,19 @@ const Files = ({
         }
         console.log('File uploaded: ', { info, responce })
         refetch()
-        // TODO: reinitiate uploader
-        setUploaderId(uploaderId + 1)
         return null
       }
-      setUploaderId(uploaderId + 1)
+      // close the uploader or it will be open when navigating to the list
+      api?.doneFlow?.()
+      // clear the uploader or it will show the last uploaded file when opened next time
+      api?.removeAllFiles?.()
+
       return null
     },
     [client, fields, fragment, parent, parentId, refetch, uploaderId],
   )
+
+  console.log('Files, files:', files)
 
   const images = files.filter((f) => isImageFile(f))
   const imageObjects = images.map((f) => ({
@@ -164,23 +173,29 @@ const Files = ({
       <ErrorBoundary>
         <Container>
           <ButtonsContainer>
-            <Uploader id={uploaderId} onChange={onChangeUploader} />
+            <Uploader
+              id={uploaderId}
+              onChange={onChangeUploader}
+            />
             {!!images.length && (
               <LightboxButton
                 color="primary"
                 variant="outlined"
                 onClick={onClickLightboxButton}
               >
-                {lightboxIsOpen
-                  ? 'Galerie schliessen'
-                  : 'Bilder in Galerie öffnen'}
+                {lightboxIsOpen ?
+                  'Galerie schliessen'
+                : 'Bilder in Galerie öffnen'}
               </LightboxButton>
             )}
           </ButtonsContainer>
           {lightboxIsOpen && (
             <>
               <Spacer />
-              <ImageGallery items={imageObjects} showPlayButton={false} />
+              <ImageGallery
+                items={imageObjects}
+                showPlayButton={false}
+              />
             </>
           )}
           <Spacer />

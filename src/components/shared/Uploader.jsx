@@ -1,16 +1,19 @@
-import React from 'react'
-import { Widget } from '@uploadcare/react-widget'
+import { forwardRef, memo, useContext } from 'react'
+// import { Widget } from '@uploadcare/react-widget'
+import { FileUploaderRegular as Widget } from '@uploadcare/react-uploader'
+import '@uploadcare/react-uploader/core.css'
 
 import { signature, expire } from '../../utils/uploadcareSignature'
+import { UploaderContext } from '../../UploaderContext.js'
 
-const Uploader = ({ onChange }) => {
-  // const [value, setValue] = useState()
-  // console.log('Uploader, value:', value)
-
+export const Uploader = memo(({ onChange }) => {
+  const uploaderCtx = useContext(UploaderContext)
+  const api = uploaderCtx?.current?.getAPI?.()
+  
   return (
     <Widget
-      // value={value}
-      publicKey={import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY}
+      apiRef={api}
+      pubkey={import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY}
       locale="de"
       localeTranslations={{
         buttons: {
@@ -32,9 +35,11 @@ const Uploader = ({ onChange }) => {
       secureExpire={expire}
       id="file"
       name="file"
-      onChange={onChange}
+      multiple="true"
+      multipleMax={10}
+      onFileUploadSuccess={onChange}
+      className="uploadcare"
+      ctxName="uploadcare"
     />
   )
-}
-
-export default Uploader
+})

@@ -80,6 +80,11 @@ const GlobalStyle = () => (
         background: rgba(0, 0, 0, 0);
       }
 
+      /* h3 in menu should only have a margin-top of 3 */
+      .MuiMenu-list > h3 {
+        margin-top: 3px;
+      }
+
       /* uploadcare */
       .uploadcare--button {
         background-color: #2e7d32 !important;
