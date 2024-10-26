@@ -5,8 +5,8 @@ import upperFirst from 'lodash/upperFirst'
  * used when copying for instance tpop to other pop in tree
  */
 import tables from '../tables'
-import copyTpopsOfPop from '../copyTpopsOfPop'
-import copyZaehlOfTpopKontr from '../copyZaehlOfTpopKontr'
+import { copyTpopsOfPop } from '../copyTpopsOfPop.js'
+import { copyZaehlOfTpopKontr } from '../copyZaehlOfTpopKontr.js'
 import queryTpopKontrById from './queryTpopKontrById'
 import queryTpopKontrzaehlById from './queryTpopkontrzaehlById'
 import queryTpopmassnById from './queryTpopmassnById'
@@ -21,7 +21,7 @@ import createPop from './createPop'
 //import queryTpopfreiwkontr from './queryTpopfreiwkontr'
 
 // copyTpopsOfPop can pass table and id separately
-const copyTo = async ({
+export const copyTo = async ({
   parentId,
   table: tablePassed,
   id: idPassed,
@@ -194,9 +194,8 @@ const copyTo = async ({
           nr: row.nr,
           gemeinde: row.gemeinde,
           flurname: row.flurname,
-          geomPoint: row?.geomPoint?.geojson
-            ? JSON.parse(row.geomPoint.geojson)
-            : null,
+          geomPoint:
+            row?.geomPoint?.geojson ? JSON.parse(row.geomPoint.geojson) : null,
           radius: row.radius,
           hoehe: row.hoehe,
           exposition: row.exposition,
@@ -241,9 +240,8 @@ const copyTo = async ({
           statusUnklar: row.statusUnklar,
           statusUnklarBegruendung: row.statusUnklarBegruendung,
           bekanntSeit: row.bekanntSeit,
-          geomPoint: row?.geomPoint?.geojson
-            ? JSON.parse(row.geomPoint.geojson)
-            : null,
+          geomPoint:
+            row?.geomPoint?.geojson ? JSON.parse(row.geomPoint.geojson) : null,
         },
       })
       newId = response?.data?.createPop?.pop?.id
@@ -280,5 +278,3 @@ const copyTo = async ({
     })
   }
 }
-
-export default copyTo
