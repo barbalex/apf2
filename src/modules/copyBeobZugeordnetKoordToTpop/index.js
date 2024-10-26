@@ -1,7 +1,7 @@
-import queryBeob from './queryBeob'
-import updateTpopById from './updateTpopById'
+import { queryBeob } from './queryBeob.js'
+import { updateTpopById } from './updateTpopById.js'
 
-const copyBeobZugeordnetKoordToTpop = async ({ id, store, client }) => {
+export const copyBeobZugeordnetKoordToTpop = async ({ id, store, client }) => {
   // fetch beob coodinates
   let beobResult
   try {
@@ -49,5 +49,3 @@ const copyBeobZugeordnetKoordToTpop = async ({ id, store, client }) => {
     })
   }
 }
-
-export default copyBeobZugeordnetKoordToTpop

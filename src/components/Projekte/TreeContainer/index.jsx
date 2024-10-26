@@ -116,7 +116,7 @@ import copyBiotopTo from '../../../modules/copyBiotopTo'
 import moveTo from '../../../modules/moveTo'
 import copyTo from '../../../modules/copyTo'
 import createNewPopFromBeob from '../../../modules/createNewPopFromBeob'
-import copyBeobZugeordnetKoordToTpop from '../../../modules/copyBeobZugeordnetKoordToTpop'
+import { copyBeobZugeordnetKoordToTpop } from '../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
 import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
 import tpopById from './tpopById'
 import beobById from './beobById'
@@ -721,7 +721,10 @@ const TreeContainer = () => {
               />
             </DialogContent>
             <DialogActions>
-              <Button onClick={closeNewTpopFromBeobDialog} color="inherit">
+              <Button
+                onClick={closeNewTpopFromBeobDialog}
+                color="inherit"
+              >
                 abbrechen
               </Button>
             </DialogActions>

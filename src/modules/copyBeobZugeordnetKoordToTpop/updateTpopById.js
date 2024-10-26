@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const updateTpopById = gql`
   mutation updateTpopByIdForCopyBeobZugeordnetToTpop(
     $id: UUID!
     $geomPoint: GeoJSON
