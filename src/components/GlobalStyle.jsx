@@ -104,6 +104,32 @@ const GlobalStyle = () => (
       .uploadcare button:focus {
         outline: 2px solid rgba(46, 125, 50, 0.5) !important;
       }
+      .uploadcare
+        :where([uc-drop-area]):is(
+          [drag-state='active'],
+          [drag-state='near'],
+          [drag-state='over'],
+          :hover
+        ) {
+        color: rgb(46, 125, 50);
+        background: rgba(46, 125, 50, 0.1);
+        border-color: rgba(46, 125, 50, 0.1);
+      }
+      .uploadcare
+        :where([uc-drop-area]):is(
+          [drag-state='active'],
+          [drag-state='near'],
+          [drag-state='over'],
+          :hover
+        ) {
+        color: rgb(46, 125, 50);
+        background: rgba(46, 125, 50, 0.1);
+        border-color: rgba(46, 125, 50, 0.1);
+      }
+      .uploadcare :where([uc-drop-area])[with-icon]:hover .uc-icon-container,
+      :where([uc-drop-area])[with-icon]:hover .uc-text {
+        color: rgb(46, 125, 50) !important;
+      }
 
       /* recharts */
       .recharts-legend-item {
