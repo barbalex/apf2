@@ -5,7 +5,7 @@ import Checkbox from './Checkbox.jsx'
 import { StyledCellForSelect } from './index.jsx'
 import { StoreContext } from '../../../storeContext.js'
 
-const CellForEkfrequenzAbweichend = ({ field, row, style }) => {
+export const CellForEkfrequenzAbweichend = observer(({ field, row, style }) => {
   const store = useContext(StoreContext)
 
   const { hovered } = store.ekPlan
@@ -30,6 +30,5 @@ const CellForEkfrequenzAbweichend = ({ field, row, style }) => {
       />
     </StyledCellForSelect>
   )
-}
+})
 
-export default observer(CellForEkfrequenzAbweichend)

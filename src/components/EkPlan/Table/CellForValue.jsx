@@ -39,5 +39,3 @@ export const CellForValue = observer(({ field, style, row, firstChild }) => {
     </StyledTableCell>
   )
 })
-
-export default CellForValue

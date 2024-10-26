@@ -94,4 +94,3 @@ export const CellForYear = observer(({ field, row, style }) => {
     </StyledTableCell>
   )
 })
-export default CellForYear

@@ -57,4 +57,3 @@ export const CellForTpopLink = observer(({ field, style, row }) => {
     </StyledTableCell>
   )
 })
-export default CellForTpopLink
