@@ -24,7 +24,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import idbContext from '../idbContext'
 import { StoreContext } from '../storeContext.js'
 import getUserFromIdb from '../modules/getUserFromIdb'
-import ErrorBoundary from './shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`

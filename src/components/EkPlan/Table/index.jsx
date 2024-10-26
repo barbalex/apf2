@@ -30,7 +30,7 @@ import CellForYear from './CellForYear/index.jsx'
 import Error from '../../shared/Error.jsx'
 import exportRowFromTpop from './exportRowFromTpop.js'
 import exportModule from '../../../modules/export.js'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 
 const Container = styled.div`

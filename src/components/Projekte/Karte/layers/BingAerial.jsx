@@ -1,7 +1,7 @@
 import React from 'react'
 import { Pane } from 'react-leaflet'
 
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 // issue with react-leaflet-bing-v2: https://github.com/TA-Geoforce/react-leaflet-bing-v2/issues/24
 // created https://github.com/TA-Geoforce/react-leaflet-bing-v2/pull/25

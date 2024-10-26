@@ -16,7 +16,7 @@ import Select from '../../../../shared/Select.jsx'
 import TextField from '../../../../shared/TextField.jsx'
 import queryEk from './queryEk.js'
 import EkYear from './EkYear.jsx'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import Spinner from '../../../../shared/Spinner.jsx'
 
 const FormContainerNoColumnsInner = styled.div`

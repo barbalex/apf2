@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 
 import queryApsToChoose from './queryApsToChoose.js'
 import { StoreContext } from '../../../../storeContext.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const StyledSelect = styled(AsyncSelect)`
   .react-select__control {

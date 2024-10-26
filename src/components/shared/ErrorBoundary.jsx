@@ -64,7 +64,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
   )
 }
 
-const ErrorBoundary = ({ children }) => {
+export const ErrorBoundary = ({ children }) => {
   const { idb } = useContext(idbContext)
   const onLogout = useCallback(() => logout(idb), [idb])
 
@@ -77,5 +77,3 @@ const ErrorBoundary = ({ children }) => {
     </RawErrorBoundary>
   )
 }
-
-export default ErrorBoundary

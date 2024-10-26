@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom'
 import tables from '../../../../modules/tables'
 import deleteDataset from './delete'
 import { StoreContext } from '../../../../storeContext.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const StyledDialog = styled(Dialog)`
   > div > div {

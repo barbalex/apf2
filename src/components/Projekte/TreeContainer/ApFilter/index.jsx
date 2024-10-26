@@ -10,7 +10,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import apById from './apById.js'
 import Label from '../../../shared/Label.jsx'
 import { StoreContext } from '../../../../storeContext.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const NurApDiv = styled.div`
   display: flex;

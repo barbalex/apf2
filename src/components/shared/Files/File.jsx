@@ -8,7 +8,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import upperFirst from 'lodash/upperFirst'
 
-import ErrorBoundary from '../ErrorBoundary.jsx'
+import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import TextField from '../TextField'
 import {
   apFile as apFileFragment,

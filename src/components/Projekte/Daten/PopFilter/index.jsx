@@ -13,7 +13,7 @@ import FilterTitle from '../../../shared/FilterTitle.jsx'
 import queryPops from './queryPops'
 import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import PopOrTabs from './Tabs'
 

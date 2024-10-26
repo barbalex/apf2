@@ -9,7 +9,7 @@ import { useParams, useLocation } from 'react-router-dom'
 
 import { StoreContext } from '../../../storeContext.js'
 import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import Error from '../../shared/Error.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 

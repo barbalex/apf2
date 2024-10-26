@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 import SimpleBar from 'simplebar-react'
 
 import Sidebar from './Sidebar/index.jsx'
-import ErrorBoundary from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import Spinner from '../shared/Spinner.jsx'
 
 const Container = styled.div`

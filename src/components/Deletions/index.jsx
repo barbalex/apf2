@@ -14,7 +14,7 @@ import { useApolloClient } from '@apollo/client'
 
 import undelete from './undelete/index.jsx'
 import { StoreContext } from '../../storeContext.js'
-import ErrorBoundary from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 const List = styled.div`
   padding-left: 24px;

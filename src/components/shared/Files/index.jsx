@@ -7,7 +7,7 @@ import Button from '@mui/material/Button'
 import SimpleBar from 'simplebar-react'
 import ImageGallery from 'react-image-gallery'
 
-import ErrorBoundary from '../ErrorBoundary.jsx'
+import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import Error from '../Error'
 import Spinner from '../Spinner'
 

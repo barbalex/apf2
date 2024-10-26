@@ -9,7 +9,7 @@ import Auswertung from './Auswertung'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import Files from '../../../shared/Files/index.jsx'
 import ApHistory from './History'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`

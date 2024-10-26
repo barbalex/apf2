@@ -4,7 +4,7 @@ import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/ind
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import { StoreContext } from '../../../../storeContext.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 // create objects outside render
 const openLowerNodesData = {

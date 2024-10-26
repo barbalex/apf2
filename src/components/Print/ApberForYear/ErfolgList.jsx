@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import styled from '@emotion/styled'
 
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   break-before: page;
