@@ -8,7 +8,7 @@ import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../storeContext.js'
-import TextFilter from './TextFilter.jsx'
+import { TextFilter } from './TextFilter.jsx'
 import BooleanFilter from './BooleanFilter.jsx'
 
 export const StyledCell = styled.div`
@@ -76,7 +76,11 @@ const CellHeaderFixed = ({ style, column }) => {
       >
         <Title data-label={label}>{label}</Title>
         {!nofilter && (
-          <Dropdown>{filterValue ? <StyledFaFilter /> : <Caret />}</Dropdown>
+          <Dropdown>
+            {filterValue ?
+              <StyledFaFilter />
+            : <Caret />}
+          </Dropdown>
         )}
       </StyledCell>
       <Menu
@@ -86,13 +90,18 @@ const CellHeaderFixed = ({ style, column }) => {
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}
       >
-        {typeIsBoolean ? (
-          <BooleanFilter column={column} closeMenu={closeMenu} />
-        ) : (
-          <MenuItem dense>
-            <TextFilter column={column} closeMenu={closeMenu} />
+        {typeIsBoolean ?
+          <BooleanFilter
+            column={column}
+            closeMenu={closeMenu}
+          />
+        : <MenuItem dense>
+            <TextFilter
+              column={column}
+              closeMenu={closeMenu}
+            />
           </MenuItem>
-        )}
+        }
       </Menu>
     </>
   )

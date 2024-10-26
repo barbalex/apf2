@@ -28,21 +28,24 @@ const valForState = (valPassed) => {
   return val
 }
 
-const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
+export const TextFilter = ({ column, closeMenu }) => {
   const store = useContext(StoreContext)
   const { setFilterEmptyEkfrequenz, setFilterEmptyEkfrequenzStartjahr } =
     store.ekPlan
   const { name } = column
 
-  const type = [
-    'popNr',
-    'nr',
-    'bekanntSeit',
-    'lv95X',
-    'lv95Y',
-    'ekfrequenzStartjahr',
-  ].includes(name)
-    ? 'number'
+  const type =
+    (
+      [
+        'popNr',
+        'nr',
+        'bekanntSeit',
+        'lv95X',
+        'lv95Y',
+        'ekfrequenzStartjahr',
+      ].includes(name)
+    ) ?
+      'number'
     : 'text'
 
   const storeValue = store.ekPlan?.[`filter${upperFirst(name)}`]
@@ -101,7 +104,10 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
 
   return (
     <FormControl>
-      <InputLabel htmlFor="EkPlanHeaderFilter" variant="standard">
+      <InputLabel
+        htmlFor="EkPlanHeaderFilter"
+        variant="standard"
+      >
         Filter
       </InputLabel>
       <Input
@@ -128,5 +134,3 @@ const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
     </FormControl>
   )
 }
-
-export default CellHeaderFixedTextFilter

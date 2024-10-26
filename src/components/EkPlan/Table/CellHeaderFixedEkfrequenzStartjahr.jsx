@@ -5,7 +5,7 @@ import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
 import { StoreContext } from '../../../storeContext.js'
-import TextFilter from './CellHeaderFixed/TextFilter.jsx'
+import { TextFilter } from './CellHeaderFixed/TextFilter.jsx'
 
 export const StyledCell = styled.div`
   display: flex;
@@ -54,7 +54,7 @@ const StyledMenu = styled(Menu)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
+export const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
   const store = useContext(StoreContext)
   const {
     filterEkfrequenzStartjahrEmpty,
@@ -92,11 +92,9 @@ const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
       >
         <Title>{label}</Title>
         <Dropdown>
-          {filterEkfrequenzStartjahrEmpty || filterEkfrequenzStartjahr ? (
+          {filterEkfrequenzStartjahrEmpty || filterEkfrequenzStartjahr ?
             <StyledFaFilter />
-          ) : (
-            <Caret />
-          )}
+          : <Caret />}
         </Dropdown>
       </StyledCell>
       <StyledMenu
@@ -105,17 +103,21 @@ const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}
       >
-        <MenuItem onClick={onClickFilterEmptyValues} dense>
-          {filterEkfrequenzStartjahrEmpty
-            ? 'nicht Leerwerte filtern'
-            : 'Leerwerte filtern'}
+        <MenuItem
+          onClick={onClickFilterEmptyValues}
+          dense
+        >
+          {filterEkfrequenzStartjahrEmpty ?
+            'nicht Leerwerte filtern'
+          : 'Leerwerte filtern'}
         </MenuItem>
         <TextFilterContainer>
-          <TextFilter column={column} closeMenu={closeMenu} />
+          <TextFilter
+            column={column}
+            closeMenu={closeMenu}
+          />
         </TextFilterContainer>
       </StyledMenu>
     </>
   )
 }
-
-export default CellHeaderFixedEkfrequenzStartjahr

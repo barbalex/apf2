@@ -5,7 +5,7 @@ import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
 import { StoreContext } from '../../../storeContext.js'
-import TextFilter from './CellHeaderFixed/TextFilter.jsx'
+import { TextFilter } from './CellHeaderFixed/TextFilter.jsx'
 
 export const StyledCell = styled.div`
   display: flex;
@@ -53,7 +53,7 @@ const StyledMenu = styled(Menu)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-const CellHeaderFixedEkfrequenz = ({ style, column }) => {
+export const CellHeaderFixedEkfrequenz = ({ style, column }) => {
   const store = useContext(StoreContext)
   const {
     filterEkfrequenzEmpty,
@@ -94,11 +94,9 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
       >
         <Title>{label}</Title>
         <Dropdown>
-          {filterEkfrequenzEmpty || filterEkfrequenz ? (
+          {filterEkfrequenzEmpty || filterEkfrequenz ?
             <StyledFaFilter />
-          ) : (
-            <Caret />
-          )}
+          : <Caret />}
         </Dropdown>
       </StyledCell>
       <StyledMenu
@@ -107,17 +105,22 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}
       >
-        <MenuItem onClick={onClickFilterEmptyValues} dense>
-          {filterEkfrequenzEmpty
-            ? 'nicht Leerwerte filtern'
-            : 'Leerwerte filtern'}
+        <MenuItem
+          onClick={onClickFilterEmptyValues}
+          dense
+        >
+          {filterEkfrequenzEmpty ?
+            'nicht Leerwerte filtern'
+          : 'Leerwerte filtern'}
         </MenuItem>
         <TextFilterContainer>
-          <TextFilter column={column} closeMenu={closeMenu} />
+          <TextFilter
+            column={column}
+            closeMenu={closeMenu}
+          />
         </TextFilterContainer>
       </StyledMenu>
     </>
   )
 }
 
-export default CellHeaderFixedEkfrequenz
