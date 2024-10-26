@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorBoundary as RawErrorBoundary } from 'react-error-boundary'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 
@@ -44,12 +44,19 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
         <Pre>{error?.message ?? error}</Pre>
       </Details>
       <ButtonContainer>
-        <StyledButton variant="outlined" onClick={onReload} color="inherit">
+        <StyledButton
+          variant="outlined"
+          onClick={onReload}
+          color="inherit"
+        >
           neu starten
         </StyledButton>
       </ButtonContainer>
       <ButtonContainer>
-        <StyledButton variant="outlined" onClick={resetErrorBoundary}>
+        <StyledButton
+          variant="outlined"
+          onClick={resetErrorBoundary}
+        >
           Cache leeren und neu starten (neue Anmeldung nötig)
         </StyledButton>
       </ButtonContainer>
@@ -57,15 +64,18 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
   )
 }
 
-const MyErrorBoundary = ({ children }) => {
+const ErrorBoundary = ({ children }) => {
   const { idb } = useContext(idbContext)
   const onLogout = useCallback(() => logout(idb), [idb])
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback} onReset={onLogout}>
+    <RawErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={onLogout}
+    >
       {children}
-    </ErrorBoundary>
+    </RawErrorBoundary>
   )
 }
 
-export default MyErrorBoundary
+export default ErrorBoundary
