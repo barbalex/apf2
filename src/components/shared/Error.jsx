@@ -5,7 +5,7 @@ import uniq from 'lodash/uniq'
 
 import { logout } from '../../modules/logout.js'
 import { IdbContext } from '../../idbContext.js'
-import existsPermissionError from '../../modules/existsPermissionError'
+import { existsPermissionError } from '../../modules/existsPermissionError.js'
 
 const ErrorContainer = styled.div`
   padding: 15px;

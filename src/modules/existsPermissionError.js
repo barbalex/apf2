@@ -2,7 +2,7 @@
  * Gets an array of query results passed
  * returns true if any of them returns permission denied
  */
-const existsPermissionError = (errors) => {
+export const existsPermissionError = (errors) => { 
   //console.log('existsPermissionError, errors:', errors)
   if (!errors) {
     //console.log('existsPermissionError, !errors')

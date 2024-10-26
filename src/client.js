@@ -11,7 +11,7 @@ import { jwtDecode } from 'jwt-decode'
 import uniqBy from 'lodash/uniqBy'
 
 import graphQlUri from './modules/graphQlUri.js'
-import existsPermissionsError from './modules/existsPermissionError.js'
+import { existsPermissionError } from './modules/existsPermissionError.js'
 import existsTooLargeError from './modules/existsTooLargeError.js'
 
 const Client = ({ store }) => {
@@ -71,7 +71,7 @@ const Client = ({ store }) => {
          * Test this at night
          * make sure message is what is wanted by logging it out
          */
-        if (existsPermissionsError(uniqueQraphQLErrors)) {
+        if (existsPermissionError(uniqueQraphQLErrors)) {
           // DO NOT notify
           // The User component will open and let user log in
           return
