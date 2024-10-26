@@ -11,6 +11,4 @@ const StyledLabel = styled.div`
   padding-bottom: 4px;
 `
 
-const Label = ({ label }) => <StyledLabel>{label}</StyledLabel>
-
-export default Label
+export const Label = ({ label }) => <StyledLabel>{label}</StyledLabel>

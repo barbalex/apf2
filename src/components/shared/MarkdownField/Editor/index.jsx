@@ -5,7 +5,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
 import Editor, { Plugins } from 'react-markdown-editor-lite'
 
-import Label from '../../Label'
+import { Label } from '../../Label.jsx'
 
 Editor.use(Plugins.AutoResize, {
   min: 47,

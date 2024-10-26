@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 
 import ApUser from './ApUser'
 import NewUser from './NewUser'
-import Label from '../../../../../shared/Label'
+import { Label } from '../../../../../shared/Label.jsx'
 import { Error } from '../../../../../shared/Error.jsx'
 
 const Container = styled.div`
@@ -63,7 +63,7 @@ const ApUsers = () => {
       variables: { apId },
     },
   )
-  const apUsers = data ? data?.allApUsers?.nodes ?? [] : []
+  const apUsers = data ? (data?.allApUsers?.nodes ?? []) : []
 
   if (loading) {
     return (
@@ -80,11 +80,15 @@ const ApUsers = () => {
     <Container>
       <Label label={'Benutzer mit Zugriff'} />
       <NewUserContainer>
-        {apUsers.length
-          ? apUsers.map((user) => (
-              <ApUser key={user.id} user={user} refetch={refetch} />
-            ))
-          : 'Es wurden noch keine Zugriffe erteilt'}
+        {apUsers.length ?
+          apUsers.map((user) => (
+            <ApUser
+              key={user.id}
+              user={user}
+              refetch={refetch}
+            />
+          ))
+        : 'Es wurden noch keine Zugriffe erteilt'}
         <Info>
           <InfoTitle>Zugriff hängt von der Rolle des Benutzers ab:</InfoTitle>
           <InfoList>
@@ -109,7 +113,11 @@ const ApUsers = () => {
           </InfoTitle>
         </Info>
       </NewUserContainer>
-      <NewUser apId={apId} apUsers={apUsers} refetch={refetch} />
+      <NewUser
+        apId={apId}
+        apUsers={apUsers}
+        refetch={refetch}
+      />
     </Container>
   )
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import MarkdownIt from 'markdown-it'
 import styled from '@emotion/styled'
 
-import Label from '../Label'
+import { Label } from '../Label.jsx'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
