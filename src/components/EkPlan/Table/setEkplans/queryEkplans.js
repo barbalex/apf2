@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const queryEkplans = gql`
   query EkplansQuery($jahr: Int!, $tpopId: UUID!) {
     allEkplans(
       filter: {
