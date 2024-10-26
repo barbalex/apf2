@@ -11,7 +11,7 @@ const TreeContainer = lazy(() => import('./TreeContainer/index.jsx'))
 const Exporte = lazy(() => import('./Exporte/index.jsx'))
 const Filter = lazy(() => import('./Filter/index.jsx'))
 import { StoreContext } from '../../storeContext.js'
-import StyledSplitPane from '../shared/StyledSplitPane.jsx'
+import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 import useSearchParamsState from '../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../modules/isMobilePhone.js'
 import { Spinner } from '../shared/Spinner.jsx'

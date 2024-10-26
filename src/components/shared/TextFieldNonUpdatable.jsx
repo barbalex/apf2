@@ -43,5 +43,3 @@ export const TextFieldNonUpdatable = observer(({ label, value = '' }) => {
     </StyledFormControl>
   )
 })
-
-export default TextFieldNonUpdatable

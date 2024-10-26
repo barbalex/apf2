@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import SplitPane from 'react-split-pane'
 
-export default styled(SplitPane)`
+export const StyledSplitPane = styled(SplitPane)`
   .Resizer {
     background: #388e3c;
     opacity: 1;

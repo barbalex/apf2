@@ -10,7 +10,7 @@ import queryString from 'query-string'
 // but only in production!
 import ProjektContainer from './ProjektContainer'
 import { StoreContext } from '../../storeContext.js'
-import StyledSplitPane from '../shared/StyledSplitPane'
+import { StyledSplitPane } from '../shared/StyledSplitPane'
 // import AppRenderer from '../../AppRenderer'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 import inIframe from '../../modules/inIframe'
