@@ -46,7 +46,7 @@ const StyledLabel = styled.div`
   padding-bottom: 8px;
 `
 
-const StringToCopy = ({ text, label }) => {
+export const StringToCopy = observer(({ text, label }) => {
   const [copied, setCopied] = useState(false)
   const onCopy = useCallback(() => {
     setCopied(true)
@@ -63,8 +63,14 @@ const StringToCopy = ({ text, label }) => {
         <StringToCopyContainer>
           <GuidContainer>{text}</GuidContainer>
           <CopyButtonContainer>
-            <CopyToClipboard text={text} onCopy={onCopy}>
-              <Button color="primary" onCopy={onCopy}>
+            <CopyToClipboard
+              text={text}
+              onCopy={onCopy}
+            >
+              <Button
+                color="primary"
+                onCopy={onCopy}
+              >
                 {copied ? `${label} kopiert` : `${label} kopieren`}
               </Button>
             </CopyToClipboard>
@@ -73,6 +79,4 @@ const StringToCopy = ({ text, label }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(StringToCopy)
+})
