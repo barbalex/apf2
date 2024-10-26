@@ -5,7 +5,7 @@ import { Ekf } from './Ekf.jsx'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
-const EkfsMenu = ({ tpop, ekfs, ekfsAnchor, closeEkfsMenu }) => (
+export const EkfsMenu = ({ tpop, ekfs, ekfsAnchor, closeEkfsMenu }) => (
   <Menu
     anchorEl={ekfsAnchor}
     open={Boolean(ekfsAnchor)}
