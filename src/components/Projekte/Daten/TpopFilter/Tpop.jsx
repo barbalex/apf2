@@ -8,7 +8,7 @@ import { TextField } from '../../../shared/TextField.jsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
 import MdField from '../../../shared/MarkdownField/index.jsx'
 import { Status } from '../../../shared/Status.jsx'
-import SelectCreatable from '../../../shared/SelectCreatableGemeinde.jsx'
+import { SelectCreatableGemeinde } from '../../../shared/SelectCreatableGemeinde.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover.jsx'
@@ -129,7 +129,7 @@ const Tpop = ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
         }
         {errorLists ?
           <div>errorLists.message</div>
-        : <SelectCreatable
+        : <SelectCreatableGemeinde
             name="gemeinde"
             value={row.gemeinde}
             error={fieldErrors.gemeinde}

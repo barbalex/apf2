@@ -80,7 +80,7 @@ const StyledIconButton = styled(IconButton)`
   margin-top: -5px !important;
 `
 
-const SharedSelectCreatable = ({
+export const SelectCreatableGemeinde = ({
   label,
   value,
   name,
@@ -178,5 +178,3 @@ const SharedSelectCreatable = ({
     </Container>
   )
 }
-
-export default SharedSelectCreatable
