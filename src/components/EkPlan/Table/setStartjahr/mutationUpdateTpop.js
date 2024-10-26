@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { tpop } from '../../../shared/fragments.js'
 
-export default gql`
+export const mutationUpdateTpop = gql`
   mutation updateTpopForStartjahr(
     $id: UUID!
     $ekfrequenzStartjahr: Int

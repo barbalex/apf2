@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const queryEkfrequenz = gql`
   query EkfrequenzQueryForSetStartjahr($id: UUID!) {
     ekfrequenzById(id: $id) {
       id

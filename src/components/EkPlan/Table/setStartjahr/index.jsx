@@ -1,7 +1,7 @@
 import max from 'lodash/max'
 
-import queryEkfrequenz from './queryEkfrequenz.js'
-import mutationUpdateTpop from './mutationUpdateTpop.js'
+import { queryEkfrequenz } from './queryEkfrequenz.js'
+import { mutationUpdateTpop } from './mutationUpdateTpop.js'
 
 export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   const { enqueNotification } = store
@@ -94,9 +94,9 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   }
   // 4inform user
   const message =
-    kontrolljahreAb === 'EK'
-      ? `Entsprechend der letzten Kontrolle wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
-      : `Entsprechend der letzten Ansiedlung wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
+    kontrolljahreAb === 'EK' ?
+      `Entsprechend der letzten Kontrolle wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
+    : `Entsprechend der letzten Ansiedlung wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
   enqueNotification({
     message,
     options: {
@@ -106,4 +106,3 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   // 5 return startjahr
   return ekfrequenzStartjahr
 }
-
