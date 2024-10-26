@@ -22,7 +22,7 @@ import Files from '../../../shared/Files/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import { pop } from '../../../shared/fragments.js'
-import Spinner from '../../../shared/Spinner.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
 import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 import TpopMenge from './TpopMenge/index.jsx'
 

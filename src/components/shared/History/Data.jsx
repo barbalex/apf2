@@ -4,7 +4,7 @@ import Diff from 'react-stylable-diff'
 import { observer } from 'mobx-react-lite'
 
 import toStringIfPossible from '../../../modules/toStringIfPossible'
-import Spinner from '../Spinner'
+import { Spinner } from '../Spinner'
 
 const Row = styled.div`
   display: flex;

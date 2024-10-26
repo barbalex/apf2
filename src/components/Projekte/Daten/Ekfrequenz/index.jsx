@@ -17,7 +17,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import { ekfrequenz } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
-import Spinner from '../../../shared/Spinner.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
 
 const Container = styled.div`
   flex-grow: 1;

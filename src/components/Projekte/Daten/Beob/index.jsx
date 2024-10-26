@@ -13,7 +13,7 @@ import exists from '../../../../modules/exists.js'
 import query from './query.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
-import Spinner from '../../../shared/Spinner.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
 import Beob from './Field'
 import { StoreContext } from '../../../../storeContext.js'
 

@@ -18,7 +18,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import { idealbiotop } from '../../../shared/fragments.js'
-import Spinner from '../../../shared/Spinner.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
 import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`

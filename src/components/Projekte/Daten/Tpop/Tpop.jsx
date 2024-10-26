@@ -16,7 +16,7 @@ import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover.jsx'
 import { constants } from '../../../../modules/constants.js'
 import { StoreContext } from '../../../../storeContext.js'
 import Coordinates from '../../../shared/Coordinates.jsx'
-import Spinner from '../../../shared/Spinner.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
 
 const Container = styled.div`
   height: 100%;

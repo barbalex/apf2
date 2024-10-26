@@ -47,7 +47,7 @@ const LegacyBrowserInformer = lazy(
   () => import('./components/LegacyBrowserInformer.jsx'),
 )
 const StorePersister = lazy(() => import('./components/StorePersister.jsx'))
-import Spinner from './components/shared/Spinner.jsx'
+import { Spinner } from './components/shared/Spinner.jsx'
 
 registerLocale('de', de)
 setDefaultLocale('de')

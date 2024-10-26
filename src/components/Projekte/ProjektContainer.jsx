@@ -14,7 +14,7 @@ import { StoreContext } from '../../storeContext.js'
 import StyledSplitPane from '../shared/StyledSplitPane.jsx'
 import useSearchParamsState from '../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../modules/isMobilePhone.js'
-import Spinner from '../shared/Spinner.jsx'
+import { Spinner } from '../shared/Spinner.jsx'
 
 const Container = styled.div`
   height: 100%;

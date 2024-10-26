@@ -12,7 +12,7 @@ import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import Spinner from '../../../shared/Spinner.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
 import Error from '../../../shared/Error.jsx'
 import { tpopber } from '../../../shared/fragments.js'
 

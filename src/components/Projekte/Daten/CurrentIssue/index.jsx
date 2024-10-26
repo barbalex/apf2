@@ -8,7 +8,7 @@ import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
-import Spinner from '../../../shared/Spinner.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
 
 const mdParser = new MarkdownIt({ breaks: true })
 

@@ -9,7 +9,7 @@ import ImageGallery from 'react-image-gallery'
 
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import Error from '../Error'
-import Spinner from '../Spinner'
+import { Spinner } from '../Spinner'
 
 import {
   apFile as apFileFragment,

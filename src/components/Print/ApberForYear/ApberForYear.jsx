@@ -15,7 +15,7 @@ import AktPopList from './AktPopList.jsx'
 import ErfolgList from './ErfolgList.jsx'
 import ApberForAps from './ApberForAps.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import Spinner from '../../shared/Spinner.jsx'
+import { Spinner } from '../../shared/Spinner.jsx'
 
 const mdParser = new MarkdownIt({ breaks: true })
 

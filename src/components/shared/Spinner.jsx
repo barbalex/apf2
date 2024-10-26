@@ -14,11 +14,10 @@ const SpinnerText = styled.div`
   padding: 10px;
 `
 
-const SpinnerComponent = ({ message }) => (
+export const Spinner = ({ message }) => (
   <SpinnerContainer>
     <CircularProgress />
     {!!message && <SpinnerText>{message}</SpinnerText>}
   </SpinnerContainer>
 )
 
-export default SpinnerComponent
