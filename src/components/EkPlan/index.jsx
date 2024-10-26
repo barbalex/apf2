@@ -13,7 +13,7 @@ const Table = lazy(async () => ({
 const Choose = lazy(async () => ({
   default: (await import('./Choose.jsx')).Choose,
 }))
-import queryAps from './queryAps.js'
+import { queryAps } from './queryAps.js'
 import { StoreContext } from '../../storeContext.js'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 const Error = lazy(() => import('../shared/Error.jsx'))

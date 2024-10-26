@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const queryAps = gql`
   query EkplanApQuery($ids: [UUID!]) {
     allAps(filter: { id: { in: $ids } }) {
       nodes {
