@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../storeContext.js'
 import { TextFilter } from './TextFilter.jsx'
-import BooleanFilter from './BooleanFilter.jsx'
+import { BooleanFilter } from './BooleanFilter.jsx'
 
 export const StyledCell = styled.div`
   display: flex;
@@ -51,7 +51,7 @@ const StyledFaFilter = styled(FaFilter)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-const CellHeaderFixed = ({ style, column }) => {
+export const CellHeaderFixed = observer(({ style, column }) => {
   const { name, label, nofilter } = column
   const store = useContext(StoreContext)
 
@@ -105,6 +105,4 @@ const CellHeaderFixed = ({ style, column }) => {
       </Menu>
     </>
   )
-}
-
-export default observer(CellHeaderFixed)
+})

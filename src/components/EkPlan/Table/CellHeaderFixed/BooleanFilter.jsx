@@ -8,7 +8,7 @@ import { StoreContext } from '../../../../storeContext.js'
 // need to forward ref from Menu to MenuItem
 // see: https://github.com/mui-org/material-ui/issues/15903#issuecomment-496313450
 // and: https://reactjs.org/docs/forwarding-refs.html
-const CellHeaderFixedBooleanFilter = React.forwardRef(
+export const BooleanFilter = React.forwardRef(
   ({ column, closeMenu }, ref) => {
     const store = useContext(StoreContext)
     const { name } = column
@@ -34,4 +34,3 @@ const CellHeaderFixedBooleanFilter = React.forwardRef(
   },
 )
 
-export default CellHeaderFixedBooleanFilter
