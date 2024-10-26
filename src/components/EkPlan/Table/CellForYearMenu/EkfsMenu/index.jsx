@@ -1,7 +1,7 @@
 import React from 'react'
 import Menu from '@mui/material/Menu'
 
-import Ekf from './Ekf.jsx'
+import { Ekf } from './Ekf.jsx'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
@@ -13,7 +13,12 @@ const EkfsMenu = ({ tpop, ekfs, ekfsAnchor, closeEkfsMenu }) => (
     anchorOrigin={anchorOrigin}
   >
     {ekfs.map((ekf, i) => (
-      <Ekf key={ekf.id} tpop={tpop} ekf={ekf} border={i + 1 < ekfs.length} />
+      <Ekf
+        key={ekf.id}
+        tpop={tpop}
+        ekf={ekf}
+        border={i + 1 < ekfs.length}
+      />
     ))}
   </Menu>
 )

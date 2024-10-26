@@ -50,7 +50,7 @@ const OutsideLink = styled.div`
   }
 `
 
-const EkfMenu = ({ tpop, ekf, border }) => {
+export const Ekf = ({ tpop, ekf, border }) => {
   const [open, setOpen] = useState(true)
   const toggleOpen = useCallback(() => setOpen(!open), [open])
   const zaehls = ekf?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
@@ -65,7 +65,10 @@ const EkfMenu = ({ tpop, ekf, border }) => {
   }`
 
   return (
-    <OuterList component="nav" border={border.toString()}>
+    <OuterList
+      component="nav"
+      border={border.toString()}
+    >
       <ListItemButton onClick={toggleOpen}>
         <StyledListItemText primary={title} />
         <OutsideLink
@@ -79,9 +82,15 @@ const EkfMenu = ({ tpop, ekf, border }) => {
         >
           <FaExternalLinkAlt />
         </OutsideLink>
-        {open ? <CloseIcon /> : <ExpandIcon />}
+        {open ?
+          <CloseIcon />
+        : <ExpandIcon />}
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse
+        in={open}
+        timeout="auto"
+        unmountOnExit
+      >
         <InnerList>
           {zaehls.map((z) => {
             const einheit =
@@ -92,7 +101,10 @@ const EkfMenu = ({ tpop, ekf, border }) => {
               z.anzahl !== null ? z.anzahl : '(Anzahl nicht erfasst)'
 
             return (
-              <StyledListItem key={z.id} component="div">
+              <StyledListItem
+                key={z.id}
+                component="div"
+              >
                 {`${anzahl} ${einheit}, ${methode}`}
               </StyledListItem>
             )
@@ -102,5 +114,3 @@ const EkfMenu = ({ tpop, ekf, border }) => {
     </OuterList>
   )
 }
-
-export default EkfMenu

@@ -50,7 +50,7 @@ const OutsideLink = styled.div`
   }
 `
 
-const EkMenu = ({ tpop, ek, border }) => {
+export const Eks = ({ tpop, ek, border }) => {
   const [open, setOpen] = useState(true)
   const toggleOpen = useCallback(() => setOpen(!open), [open])
   const zaehls = ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
@@ -65,7 +65,10 @@ const EkMenu = ({ tpop, ek, border }) => {
   }`
 
   return (
-    <OuterList component="nav" border={border.toString()}>
+    <OuterList
+      component="nav"
+      border={border.toString()}
+    >
       <StyledListItemButton onClick={toggleOpen}>
         <StyledListItemText primary={title} />
         <OutsideLink
@@ -79,9 +82,15 @@ const EkMenu = ({ tpop, ek, border }) => {
         >
           <FaExternalLinkAlt />
         </OutsideLink>
-        {open ? <CloseIcon /> : <ExpandIcon />}
+        {open ?
+          <CloseIcon />
+        : <ExpandIcon />}
       </StyledListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse
+        in={open}
+        timeout="auto"
+        unmountOnExit
+      >
         <InnerList>
           {zaehls.map((z) => {
             const einheit =
@@ -92,7 +101,10 @@ const EkMenu = ({ tpop, ek, border }) => {
               z.anzahl !== null ? z.anzahl : '(Anzahl nicht erfasst)'
 
             return (
-              <SyledListItem key={z.id} component="div">
+              <SyledListItem
+                key={z.id}
+                component="div"
+              >
                 {`${anzahl} ${einheit}, ${methode}`}
               </SyledListItem>
             )
@@ -102,5 +114,3 @@ const EkMenu = ({ tpop, ek, border }) => {
     </OuterList>
   )
 }
-
-export default EkMenu
