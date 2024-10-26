@@ -3,7 +3,7 @@ import queryEkfrequenz from './queryEkfrequenz.js'
 import mutationDeleteEkplan from './mutationDeleteEkplan.js'
 import mutationCreateEkplan from './mutationCreateEkplan.js'
 
-const setEkplans = async ({
+export const setEkplans = async ({
   tpopId,
   ekfrequenz: ekfrequenzValue,
   ekfrequenzStartjahr,
@@ -123,5 +123,3 @@ const setEkplans = async ({
   })
   refetchTpop()
 }
-
-export default setEkplans

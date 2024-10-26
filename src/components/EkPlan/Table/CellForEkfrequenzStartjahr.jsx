@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 
 import { StoreContext } from '../../../storeContext.js'
 import { tpop } from '../../shared/fragments.js'
-import setEkplans from './setEkplans/index.jsx'
+import { setEkplans } from './setEkplans/index.jsx'
 
 const Container = styled.div`
   font-size: 0.75rem !important;
@@ -20,11 +20,9 @@ const Container = styled.div`
   border-bottom: solid #e6e6e6 1px;
   box-sizing: border-box;
   background: ${(props) =>
-    props['data-clicked']
-      ? 'rgb(255,211,167) !important'
-      : props['data-isodd']
-        ? 'rgb(255, 255, 252)'
-        : 'unset'};
+    props['data-clicked'] ? 'rgb(255,211,167) !important'
+    : props['data-isodd'] ? 'rgb(255, 255, 252)'
+    : 'unset'};
   &.tpop-hovered {
     background-color: hsla(45, 100%, 90%, 1);
   }
@@ -67,16 +65,16 @@ const CellForEkfrequenzStartjahr = ({ row, style, refetchTpop }) => {
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
 
   const [stateValue, setStateValue] = useState(
-    row.ekfrequenzStartjahr.value || row.ekfrequenzStartjahr.value === 0
-      ? row.ekfrequenzStartjahr.value
-      : '',
+    row.ekfrequenzStartjahr.value || row.ekfrequenzStartjahr.value === 0 ?
+      row.ekfrequenzStartjahr.value
+    : '',
   )
 
   useEffect(() => {
     setStateValue(
-      !!row.ekfrequenzStartjahr.value || row.ekfrequenzStartjahr.value === 0
-        ? row.ekfrequenzStartjahr.value
-        : '',
+      !!row.ekfrequenzStartjahr.value || row.ekfrequenzStartjahr.value === 0 ?
+        row.ekfrequenzStartjahr.value
+      : '',
     )
   }, [row.ekfrequenzStartjahr.value, row.id])
 
@@ -157,7 +155,11 @@ const CellForEkfrequenzStartjahr = ({ row, style, refetchTpop }) => {
       className={className}
       data-isodd={row.isOdd}
     >
-      <Input value={stateValue} onChange={onChange} onBlur={onBlur} />
+      <Input
+        value={stateValue}
+        onChange={onChange}
+        onBlur={onBlur}
+      />
     </Container>
   )
 }

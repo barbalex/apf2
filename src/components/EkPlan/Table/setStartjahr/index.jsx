@@ -3,7 +3,7 @@ import max from 'lodash/max'
 import queryEkfrequenz from './queryEkfrequenz.js'
 import mutationUpdateTpop from './mutationUpdateTpop.js'
 
-const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
+export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   const { enqueNotification } = store
 
   // 1  get ekfrequenz's kontrolljahreAb
@@ -107,4 +107,3 @@ const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   return ekfrequenzStartjahr
 }
 
-export default setStartjahr

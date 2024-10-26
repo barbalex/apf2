@@ -42,7 +42,7 @@ const SumCounted = styled.div`
   overflow: hidden;
 `
 
-const MassnIcon = observer(({ ansiedlungs }) => {
+export const MassnIcon = observer(({ ansiedlungs }) => {
   const store = useContext(StoreContext)
   const { showCount, showEkCount } = store.ekPlan
 

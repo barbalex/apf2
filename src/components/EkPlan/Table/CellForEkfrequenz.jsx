@@ -8,8 +8,8 @@ import max from 'lodash/max'
 import { StyledCellForSelect } from './index.jsx'
 import { tpop } from '../../shared/fragments.js'
 import { StoreContext } from '../../../storeContext.js'
-import setStartjahr from './setStartjahr/index.jsx'
-import setEkplans from './setEkplans/index.jsx'
+import { setStartjahr } from './setStartjahr/index.jsx'
+import { setEkplans } from './setEkplans/index.jsx'
 
 const Select = styled.select`
   width: 100%;
@@ -161,24 +161,32 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
         onFocus={onFocus}
         onBlur={onBlur}
       >
-        {focused ? (
-          optionsGrouped ? (
+        {focused ?
+          optionsGrouped ?
             <>
-              <Option key="option1" value={null}>
+              <Option
+                key="option1"
+                value={null}
+              >
                 {''}
               </Option>
               {optionsGrouped.map((o) => (
-                <Option key={o.value} value={o.value}>
+                <Option
+                  key={o.value}
+                  value={o.value}
+                >
                   {o.label}
                 </Option>
               ))}
             </>
-          ) : null
-        ) : (
-          <Option key="option1" value={field.value}>
+          : null
+        : <Option
+            key="option1"
+            value={field.value}
+          >
             {valueToShow}
           </Option>
-        )}
+        }
       </Select>
     </StyledCellForSelect>
   )
