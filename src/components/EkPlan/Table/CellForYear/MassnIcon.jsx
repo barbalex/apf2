@@ -42,7 +42,7 @@ const SumCounted = styled.div`
   overflow: hidden;
 `
 
-const MassnIcon = ({ ansiedlungs }) => {
+const MassnIcon = observer(({ ansiedlungs }) => {
   const store = useContext(StoreContext)
   const { showCount, showEkCount } = store.ekPlan
 
@@ -70,6 +70,4 @@ const MassnIcon = ({ ansiedlungs }) => {
       )}
     </CheckboxContainer>
   )
-}
-
-export default observer(MassnIcon)
+})

@@ -3,11 +3,11 @@ import { observer } from 'mobx-react-lite'
 
 import { StyledTableCell } from '../index.jsx'
 import EkIcon from './EkIcon.jsx'
-import MassnIcon from './MassnIcon.jsx'
+import { MassnIcon } from './MassnIcon.jsx'
 import { InfoRow } from '../index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 
-const CellForYear = ({ field, row, style }) => {
+export const CellForYear = observer(({ field, row, style }) => {
   const store = useContext(StoreContext)
   const {
     showEk,
@@ -72,7 +72,11 @@ const CellForYear = ({ field, row, style }) => {
     >
       <InfoRow>
         {showEk && (
-          <EkIcon planned={value.ekPlan} eks={value.eks} einheits={einheits} />
+          <EkIcon
+            planned={value.ekPlan}
+            eks={value.eks}
+            einheits={einheits}
+          />
         )}
       </InfoRow>
       <InfoRow>
@@ -89,6 +93,5 @@ const CellForYear = ({ field, row, style }) => {
       </InfoRow>
     </StyledTableCell>
   )
-}
-
-export default observer(CellForYear)
+})
+export default CellForYear
