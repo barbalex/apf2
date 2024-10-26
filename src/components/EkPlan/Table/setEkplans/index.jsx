@@ -1,7 +1,7 @@
 import { queryEkplans } from './queryEkplans.js'
 import { queryEkfrequenz } from './queryEkfrequenz.js'
-import {mutationDeleteEkplan} from './mutationDeleteEkplan.js'
-import mutationCreateEkplan from './mutationCreateEkplan.js'
+import { mutationDeleteEkplan } from './mutationDeleteEkplan.js'
+import { mutationCreateEkplan } from './mutationCreateEkplan.js'
 
 export const setEkplans = async ({
   tpopId,
