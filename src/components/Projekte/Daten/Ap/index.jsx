@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab'
 import { useParams } from 'react-router-dom'
 
 import Ap from './Ap'
-import Auswertung from './Auswertung'
+import { Auswertung } from './Auswertung/index.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import Files from '../../../shared/Files/index.jsx'
 import ApHistory from './History'
@@ -43,19 +43,36 @@ const ApTabs = () => {
           textColor="primary"
           centered
         >
-          <StyledTab label="Art" value="ap" data-id="ap" />
+          <StyledTab
+            label="Art"
+            value="ap"
+            data-id="ap"
+          />
           <StyledTab
             label="Auswertung"
             value="auswertung"
             data-id="auswertung"
           />
-          <StyledTab label="Dateien" value="dateien" data-id="dateien" />
-          <StyledTab label="Historien" value="history" data-id="history" />
+          <StyledTab
+            label="Dateien"
+            value="dateien"
+            data-id="dateien"
+          />
+          <StyledTab
+            label="Historien"
+            value="history"
+            data-id="history"
+          />
         </Tabs>
         <TabContent>
           {tab === 'ap' && <Ap />}
           {tab === 'auswertung' && <Auswertung />}
-          {tab === 'dateien' && <Files parentId={apId} parent="ap" />}
+          {tab === 'dateien' && (
+            <Files
+              parentId={apId}
+              parent="ap"
+            />
+          )}
           {tab === 'history' && <ApHistory />}
         </TabContent>
       </Container>

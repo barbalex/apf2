@@ -4,15 +4,15 @@ import SimpleBar from 'simplebar-react'
 
 import { ApErfolg } from './ApErfolg/index.jsx'
 import { PopStatus } from './PopStatus/index.jsx'
-import PopMenge from './PopMenge'
-import TpopKontrolliert from './TpopKontrolliert'
+import { PopMenge } from './PopMenge/index.jsx'
+import { TpopKontrolliert } from './TpopKontrolliert/index.jsx'
 
 const FormContainer = styled.div`
   padding: 10px;
   padding-top: 0;
 `
 
-const ApAuswertung = () => (
+export const Auswertung = () => (
   <SimpleBar
     style={{
       maxHeight: '100%',
@@ -29,4 +29,4 @@ const ApAuswertung = () => (
   </SimpleBar>
 )
 
-export default ApAuswertung
+export default Auswertung

@@ -51,7 +51,7 @@ const color = {
   kontrolliert: 'red',
 }
 
-const ApAuswertungTpopKontrolliert = ({
+export const TpopKontrolliert = ({
   apId: apIdPassed,
   height = 400,
   print,
@@ -160,4 +160,4 @@ const ApAuswertungTpopKontrolliert = ({
   )
 }
 
-export default ApAuswertungTpopKontrolliert
+export default TpopKontrolliert

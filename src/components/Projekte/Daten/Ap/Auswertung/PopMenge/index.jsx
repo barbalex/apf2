@@ -55,13 +55,13 @@ const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 const formatNumber = (tickItem) => {
   const value =
-    exists(tickItem) && tickItem?.toLocaleString
-      ? tickItem.toLocaleString('de-ch')
-      : null
+    exists(tickItem) && tickItem?.toLocaleString ?
+      tickItem.toLocaleString('de-ch')
+    : null
   return value
 }
 
-const ApAuswertungPopMenge = ({
+export const PopMenge = ({
   apId: apIdPassed,
   height = 400,
   print,
@@ -123,12 +123,12 @@ const ApAuswertungPopMenge = ({
 
   return (
     <>
-      {loadingPopMenge ? (
+      {loadingPopMenge ?
         <SpinnerContainer>
           <CircularProgress />
           <SpinnerText>lade Mengen nach Populationen...</SpinnerText>
         </SpinnerContainer>
-      ) : popMengeData.length ? (
+      : popMengeData.length ?
         <>
           <TitleRow>
             <div>
@@ -145,7 +145,10 @@ const ApAuswertungPopMenge = ({
               </InfoIcon>
             )}
           </TitleRow>
-          <ResponsiveContainer width="99%" height={height}>
+          <ResponsiveContainer
+            width="99%"
+            height={height}
+          >
             <AreaChart
               width={600}
               height={300}
@@ -170,9 +173,8 @@ const ApAuswertungPopMenge = ({
                   color = 'grey'
                 } else {
                   const isUrspruenglich = pop?.status < 200
-                  color = isUrspruenglich
-                    ? colorUrspruenglich
-                    : colorAngesiedelt
+                  color =
+                    isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
                 }
 
                 return (
@@ -191,12 +193,14 @@ const ApAuswertungPopMenge = ({
               {!isSubReport && (
                 <Tooltip content={<CustomTooltip popsData={popsData} />} />
               )}
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal={false}
+              />
             </AreaChart>
           </ResponsiveContainer>
         </>
-      ) : (
-        <>
+      : <>
           <TitleRow>
             <div>
               <Title>{`"${zielEinheit}" nach Populationen`}</Title>
@@ -214,9 +218,8 @@ const ApAuswertungPopMenge = ({
           </TitleRow>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>
         </>
-      )}
+      }
     </>
   )
 }
 
-export default ApAuswertungPopMenge
