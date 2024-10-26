@@ -7,7 +7,9 @@ import Button from '@mui/material/Button'
 const ApList = lazy(async () => ({
   default: (await import('./ApList/index.jsx')).ApList,
 }))
-const Table = lazy(() => import('./Table/index.jsx'))
+const Table = lazy(async () => ({
+  default: (await import('./Table/index.jsx')).EkPlanTable,
+}))
 const Choose = lazy(() => import('./Choose.jsx'))
 import queryAps from './queryAps.js'
 import { StoreContext } from '../../storeContext.js'

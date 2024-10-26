@@ -67,11 +67,9 @@ export const StyledTableCell = styled.div`
   border-bottom: solid #e6e6e6 1px;
   box-sizing: border-box;
   background: ${(props) =>
-    props['data-clicked']
-      ? 'rgb(255,211,167) !important'
-      : props['data-isodd']
-        ? 'rgb(255, 255, 252)'
-        : 'unset'};
+    props['data-clicked'] ? 'rgb(255,211,167) !important'
+    : props['data-isodd'] ? 'rgb(255, 255, 252)'
+    : 'unset'};
   box-sizing: border-box;
   &.tpop-hovered {
     background-color: hsla(45, 100%, 90%, 1);
@@ -120,7 +118,7 @@ const ExportButton = styled(Button)`
   z-index: 5;
 `
 
-const EkPlanTable = () => {
+export const EkPlanTable = observer(() => {
   const store = useContext(StoreContext)
   const {
     aps,
@@ -297,8 +295,9 @@ const EkPlanTable = () => {
       ),
     [tpops, years],
   )
-  const yearColumns = yearRows.length
-    ? sortBy(
+  const yearColumns =
+    yearRows.length ?
+      sortBy(
         Object.values(yearRows[0])
           .filter((o) => typeof o === 'object')
           .filter((o) => !!o.value && !!o.value.eks)
@@ -315,8 +314,9 @@ const EkPlanTable = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [tpops, tpopFilter, tpopsStringified, apValues],
   )
-  const tpopColumns = tpopRows.length
-    ? sortBy(
+  const tpopColumns =
+    tpopRows.length ?
+      sortBy(
         Object.values(tpopRows[0])
           .filter((o) => typeof o === 'object')
           .filter((o) => !!o.name)
@@ -388,7 +388,11 @@ const EkPlanTable = () => {
 
   return (
     <ErrorBoundary>
-      <ExportButton variant="outlined" onClick={onClickExport} color="inherit">
+      <ExportButton
+        variant="outlined"
+        onClick={onClickExport}
+        color="inherit"
+      >
         exportieren
       </ExportButton>
       <Container ref={resizeRef}>
@@ -409,7 +413,10 @@ const EkPlanTable = () => {
               // Return specifically built components for columns with menu
               if (field === 'ekfrequenz') {
                 return (
-                  <CellHeaderFixedEkfrequenz style={style} column={column} />
+                  <CellHeaderFixedEkfrequenz
+                    style={style}
+                    column={column}
+                  />
                 )
               }
               if (field === 'ekfrequenzStartjahr') {
@@ -420,7 +427,12 @@ const EkPlanTable = () => {
                   />
                 )
               }
-              return <CellHeaderFixed style={style} column={column} />
+              return (
+                <CellHeaderFixed
+                  style={style}
+                  column={column}
+                />
+              )
             }}
           </VariableSizeList>
           <VariableSizeGrid
@@ -461,7 +473,11 @@ const EkPlanTable = () => {
               const value = row[column]
               if (value.name === 'yearTitle') {
                 return (
-                  <CellForYearTitle key={value.name} style={style} row={row} />
+                  <CellForYearTitle
+                    key={value.name}
+                    style={style}
+                    row={row}
+                  />
                 )
               }
               if (value.name === 'ekAbrechnungstyp') {
@@ -542,7 +558,13 @@ const EkPlanTable = () => {
               const column = yearColumns[columnIndex].name
               const value = row[column]
 
-              return <CellForYear row={row} field={value} style={style} />
+              return (
+                <CellForYear
+                  row={row}
+                  field={value}
+                  style={style}
+                />
+              )
             }}
           </FixedSizeGrid>
         </BodyContainer>
@@ -550,6 +572,4 @@ const EkPlanTable = () => {
       {!!yearMenuAnchor && <CellForYearMenu />}
     </ErrorBoundary>
   )
-}
-
-export default observer(EkPlanTable)
+})
