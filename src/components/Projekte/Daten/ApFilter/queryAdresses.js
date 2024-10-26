@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const queryAdresses = gql`
   query ApFilterAdressesQuery {
     allAdresses(orderBy: NAME_ASC) {
       nodes {
