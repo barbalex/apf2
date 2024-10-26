@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { user } from '../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query userById($id: UUID!) {
     userById(id: $id) {
       ...UserFields

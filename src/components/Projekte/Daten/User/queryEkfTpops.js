@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const queryEkfTpops = gql`
   query ekfTpopsForUserQuery($id: UUID!, $jahr: Int!, $include: Boolean!) {
     ekfTpops: allTpops(filter: { ekfKontrolleur: { equalTo: $id } })
       @include(if: $include) {
