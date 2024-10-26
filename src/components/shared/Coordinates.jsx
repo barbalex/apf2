@@ -10,7 +10,7 @@ import upperFirst from 'lodash/upperFirst'
 
 import { StoreContext } from '../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.js'
-import epsg2056to4326 from '../../modules/epsg2056to4326'
+import { epsg2056to4326 } from '../../modules/epsg2056to4326.js'
 import {
   isValid as xIsValid,
   message as xMessage,
@@ -41,7 +41,7 @@ const Row = styled.div`
   display: flex;
 `
 
-const Coordinates = ({ row, refetchForm, table }) => {
+export const Coordinates = observer(({ row, refetchForm, table }) => {
   const { lv95X, lv95Y, id } = row || {}
   const wgs84Lat = row?.geomPoint?.x
   const wgs84Long = row?.geomPoint?.y
@@ -115,8 +115,8 @@ const Coordinates = ({ row, refetchForm, table }) => {
           },
         })
       } catch (error) {
-        return projection === 'lv95'
-          ? setYError(error.message)
+        return projection === 'lv95' ?
+            setYError(error.message)
           : setWgs84LatError(error.message)
       }
       // update on map
@@ -255,7 +255,10 @@ const Coordinates = ({ row, refetchForm, table }) => {
           aria-describedby={`${id}wgs84LatErrorText`}
           variant="standard"
         >
-          <InputLabel htmlFor={`${id}wgs84Lat`} shrink>
+          <InputLabel
+            htmlFor={`${id}wgs84Lat`}
+            shrink
+          >
             Längengrad
           </InputLabel>
           <Input
@@ -285,7 +288,10 @@ const Coordinates = ({ row, refetchForm, table }) => {
           aria-describedby={`${id}wgs84LongErrorText`}
           variant="standard"
         >
-          <InputLabel htmlFor={`${id}wgs84Long`} shrink>
+          <InputLabel
+            htmlFor={`${id}wgs84Long`}
+            shrink
+          >
             Breitengrad
           </InputLabel>
           <Input
@@ -317,7 +323,10 @@ const Coordinates = ({ row, refetchForm, table }) => {
           aria-describedby={`${id}lv95XErrorText`}
           variant="standard"
         >
-          <InputLabel htmlFor={`${id}lv95X`} shrink>
+          <InputLabel
+            htmlFor={`${id}lv95X`}
+            shrink
+          >
             X-Koordinate
           </InputLabel>
           <Input
@@ -333,7 +342,10 @@ const Coordinates = ({ row, refetchForm, table }) => {
             autoCapitalize="off"
           />
           {!!xError && (
-            <FormHelperText id={`${id}lv95XErrorText`} data-id="lv95XErrorText">
+            <FormHelperText
+              id={`${id}lv95XErrorText`}
+              data-id="lv95XErrorText"
+            >
               {xError}
             </FormHelperText>
           )}
@@ -344,7 +356,10 @@ const Coordinates = ({ row, refetchForm, table }) => {
           aria-describedby={`${id}lv95YErrorText`}
           variant="standard"
         >
-          <InputLabel htmlFor={`${id}lv95Y`} shrink>
+          <InputLabel
+            htmlFor={`${id}lv95Y`}
+            shrink
+          >
             Y-Koordinate
           </InputLabel>
           <Input
@@ -360,7 +375,10 @@ const Coordinates = ({ row, refetchForm, table }) => {
             autoCapitalize="off"
           />
           {!!yError && (
-            <FormHelperText id={`${id}lv95YErrorText`} data-id="lv95YErrorText">
+            <FormHelperText
+              id={`${id}lv95YErrorText`}
+              data-id="lv95YErrorText"
+            >
               {yError}
             </FormHelperText>
           )}
@@ -368,6 +386,4 @@ const Coordinates = ({ row, refetchForm, table }) => {
       </Row>
     </>
   )
-}
-
-export default observer(Coordinates)
+})

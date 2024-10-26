@@ -8,7 +8,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import IconButton from '@mui/material/IconButton'
 import { MdMyLocation, MdClear } from 'react-icons/md'
 
-import epsg2056to4326 from '../../../../modules/epsg2056to4326.js'
+import { epsg2056to4326 } from '../../../../modules/epsg2056to4326.js'
 import panCentreIcon from '../../../../etc/panTo.png'
 
 const PanIcon = styled(MdMyLocation)`
@@ -146,7 +146,10 @@ const PanToCoordinates = ({ setControlType, map }) => {
   )
 
   return (
-    <Container onBlur={onBlurGotoContainer} onFocus={onFocusGotoContainer}>
+    <Container
+      onBlur={onBlurGotoContainer}
+      onFocus={onFocusGotoContainer}
+    >
       <FormControl
         error={!!xError}
         fullWidth
