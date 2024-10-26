@@ -1,5 +1,5 @@
 import fields from './fields.js'
-import appBaseUrl from '../../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../../modules/appBaseUrl.js'
 
 const isOdd = (num) => num % 2 === 0
 

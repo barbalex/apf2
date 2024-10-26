@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router-dom'
 
 import { StoreContext } from '../../../../../storeContext.js'
-import appBaseUrl from '../../../../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { popIconString } from './popIconString.js'
 import { popHighlightedIconString } from './popHighlightedIconString.js'
 import { u as uIcon } from './statusGroup/u.js'

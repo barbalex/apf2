@@ -11,7 +11,7 @@ import {
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
-import appBaseUrl from '../../../../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 
 const OuterList = styled(List)`
   border-bottom: ${(props) =>

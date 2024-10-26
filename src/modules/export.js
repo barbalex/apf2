@@ -1,7 +1,12 @@
 // this version is ogc-compatible and can be used for https://map.geo.admin.ch
 //import exportKml from './exportKml_ogc'
 
-const exportModule = async ({ data: dataPassed, fileName, kml, store }) => {
+export const exportModule = async ({
+  data: dataPassed,
+  fileName,
+  kml,
+  store,
+}) => {
   const { exportFileType } = store
   const { default: omit } = await import('lodash/omit')
   let data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
@@ -19,19 +24,19 @@ const exportModule = async ({ data: dataPassed, fileName, kml, store }) => {
     })
   }
   if (kml) {
-    const { default: exportKml } = await import('./exportKml')
+    const { default: exportKml } = await import('./exportKml.js')
     exportKml({
       fileName,
       data,
     })
   } else if (exportFileType === 'csv') {
-    const { default: exportCsv } = await import('./exportCsv')
+    const { default: exportCsv } = await import('./exportCsv.js')
     exportCsv({
       fileName,
       data,
     })
   } else {
-    const { default: exportXlsx } = await import('./exportXlsx')
+    const { default: exportXlsx } = await import('./exportXlsx.js')
     // pass some data in case something goes wrong
     await exportXlsx({
       fileName,
@@ -40,5 +45,3 @@ const exportModule = async ({ data: dataPassed, fileName, kml, store }) => {
     })
   }
 }
-
-export default exportModule

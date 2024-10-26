@@ -1,8 +1,8 @@
 import sum from 'lodash/sum'
 
-import appBaseUrl from '../../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../../modules/appBaseUrl.js'
 
-const exportRowFromTpop = ({ tpop, years, store, ekfrequenzs }) => {
+export const exportRowFromTpop = ({ tpop, years, store, ekfrequenzs }) => {
   const { einheitsByAp, showCount, fields, showEk, showEkf, showMassn } =
     store.ekPlan
   const row = {
@@ -165,5 +165,3 @@ const exportRowFromTpop = ({ tpop, years, store, ekfrequenzs }) => {
   })
   return row
 }
-
-export default exportRowFromTpop
