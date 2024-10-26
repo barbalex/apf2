@@ -8,7 +8,7 @@ import {
   XAxis,
   YAxis,
   Line,
-  ResponsiveContainer,
+  ResponsiveContainer, 
   CartesianGrid,
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -59,7 +59,7 @@ const addMissingErfolgData = (erfolgRawData) => {
   return allYears.map((jahr) => getErfolg({ jahr, erfolgRawData }))
 }
 
-const ApAuswertungApErfolg = () => {
+export const ApErfolg = () => {
   const { apId: id } = useParams()
 
   const {
@@ -136,4 +136,4 @@ const ApAuswertungApErfolg = () => {
   )
 }
 
-export default ApAuswertungApErfolg
+export default ApErfolg
