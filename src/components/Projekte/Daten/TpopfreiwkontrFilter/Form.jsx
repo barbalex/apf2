@@ -12,7 +12,7 @@ import Remarks from './Remarks.jsx'
 import EkfRemarks from './EkfRemarks.jsx'
 import Verification from './Verification.jsx'
 import { StoreContext } from '../../../../storeContext.js'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 
 const FormContainer = styled.div`
   padding: 10px;

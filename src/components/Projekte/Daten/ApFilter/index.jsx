@@ -15,10 +15,10 @@ import { queryAps } from './queryAps.js'
 import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import { StoreContext } from '../../../../storeContext.js'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import OrTabs from './Tabs'
+import { Tabs } from './Tabs.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -207,7 +207,7 @@ const ApFilter = () => {
             </FilterCommentList>
           </>
         )}
-        <OrTabs
+        <Tabs
           dataFilter={dataFilter.ap}
           activeTab={activeTab}
           setActiveTab={setActiveTab}

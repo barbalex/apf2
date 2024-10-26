@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import Input from '@mui/material/Input'
 import styled from '@emotion/styled'
 
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 
 const StyledInput = styled(Input)`
   width: 45px;

@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import TextField from '../../../../shared/TextField.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.js'
-import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
 
 const Gezaehlt = ({ row, refetch }) => {
   const store = useContext(StoreContext)

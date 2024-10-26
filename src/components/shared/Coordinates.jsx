@@ -9,7 +9,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import upperFirst from 'lodash/upperFirst'
 
 import { StoreContext } from '../../storeContext.js'
-import ifIsNumericAsNumber from '../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.js'
 import epsg2056to4326 from '../../modules/epsg2056to4326'
 import {
   isValid as xIsValid,

@@ -9,7 +9,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
 
 import InfoWithPopover from './InfoWithPopover.jsx'
-import ifIsNumericAsNumber from '../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.js'
 
 const FieldWithInfoContainer = styled.div`
   display: flex;
