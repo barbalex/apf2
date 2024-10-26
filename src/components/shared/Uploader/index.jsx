@@ -6,7 +6,7 @@ import { signature, expire } from '../../../utils/uploadcareSignature'
 import { UploaderContext } from '../../../UploaderContext.js'
 import { locale } from './locale.js'
 
-export const Uploader = memo(({ onChange }) => {
+export const Uploader = memo(({ onFileUploadSuccess, onFileUploadFailed }) => {
   const uploaderCtx = useContext(UploaderContext)
   const api = uploaderCtx?.current?.getAPI?.()
 
@@ -22,7 +22,8 @@ export const Uploader = memo(({ onChange }) => {
       name="file"
       multiple="true"
       multipleMax={10}
-      onFileUploadSuccess={onChange}
+      onFileUploadSuccess={onFileUploadSuccess}
+      onFileUploadFailed={onFileUploadFailed}
       className="uploadcare"
       ctxName="uploadcare"
       removeCopyright="true"
