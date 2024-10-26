@@ -1,11 +1,11 @@
 import React from 'react'
 import Menu from '@mui/material/Menu'
 
-import Massn from './Massn.jsx'
+import { Massn } from './Massn.jsx'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
-const MassnsMenu = ({ tpop, massns, massnsAnchor, closeMassnsMenu }) => {
+export const MassnsMenu = ({ tpop, massns, massnsAnchor, closeMassnsMenu }) => {
   return (
     <Menu
       anchorEl={massnsAnchor}
@@ -24,5 +24,3 @@ const MassnsMenu = ({ tpop, massns, massnsAnchor, closeMassnsMenu }) => {
     </Menu>
   )
 }
-
-export default MassnsMenu

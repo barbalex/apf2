@@ -50,7 +50,7 @@ const OutsideLink = styled.div`
   }
 `
 
-const MassnMenu = ({ tpop, massn, border }) => {
+export const Massn = ({ tpop, massn, border }) => {
   const [open, setOpen] = useState(true)
   const toggleOpen = useCallback(() => setOpen(!open), [open])
   const bearbeiter = massn?.adresseByBearbeiter?.name ?? '(kein Bearbeiter)'
@@ -72,7 +72,10 @@ const MassnMenu = ({ tpop, massn, border }) => {
   }`
 
   return (
-    <OuterList component="nav" border={border.toString()}>
+    <OuterList
+      component="nav"
+      border={border.toString()}
+    >
       <StyledListItemButton onClick={toggleOpen}>
         <StyledListItemText primary={title} />
         <OutsideLink
@@ -86,9 +89,15 @@ const MassnMenu = ({ tpop, massn, border }) => {
         >
           <FaExternalLinkAlt />
         </OutsideLink>
-        {open ? <CloseIcon /> : <ExpandIcon />}
+        {open ?
+          <CloseIcon />
+        : <ExpandIcon />}
       </StyledListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse
+        in={open}
+        timeout="auto"
+        unmountOnExit
+      >
         <InnerList>
           <StyledListItem component="div">
             {`Triebe: ${anzTriebe}`}
@@ -111,5 +120,3 @@ const MassnMenu = ({ tpop, massn, border }) => {
     </OuterList>
   )
 }
-
-export default MassnMenu

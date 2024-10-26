@@ -22,5 +22,3 @@ export const EkfsMenu = ({ tpop, ekfs, ekfsAnchor, closeEkfsMenu }) => (
     ))}
   </Menu>
 )
-
-export default EkfsMenu

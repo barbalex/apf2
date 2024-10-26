@@ -16,7 +16,7 @@ import { mutationDeleteEkplan } from './mutationDeleteEkplan.js'
 
 import { EksMenu } from './EksMenu/index.jsx'
 import { EkfsMenu } from './EkfsMenu/index.jsx'
-import MassnsMenu from './MassnsMenu/index.jsx'
+import { MassnsMenu } from './MassnsMenu/index.jsx'
 
 const YearCellMenuTitle = styled.h5`
   margin-top: 0;
