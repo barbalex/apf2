@@ -20,11 +20,10 @@ const EditorContainer = styled.div`
 
 // setting tabIndex on Presenter to make it focusable
 // see: https://stackoverflow.com/a/16261525/712005
-const Markdown = ({ value, label }) => (
+export const Presenter = ({ value, label }) => (
   <EditorContainer tabIndex="0">
     <Label label={label} />
     <div dangerouslySetInnerHTML={{ __html: mdParser.render(value || '') }} />
   </EditorContainer>
 )
 
-export default Markdown

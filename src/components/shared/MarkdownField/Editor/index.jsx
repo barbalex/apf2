@@ -3,11 +3,11 @@ import 'react-markdown-editor-lite/lib/index.css'
 import MarkdownIt from 'markdown-it'
 import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
-import Editor, { Plugins } from 'react-markdown-editor-lite'
+import ReactMarkdownEditor, { Plugins } from 'react-markdown-editor-lite'
 
 import { Label } from '../../Label.jsx'
 
-Editor.use(Plugins.AutoResize, {
+ReactMarkdownEditor.use(Plugins.AutoResize, {
   min: 47,
   max: 1000,
 })
@@ -41,7 +41,7 @@ const config = {
   markdownClass: 'editorpane',
 }
 
-const MarkdownField = ({
+export const Editor = ({
   label,
   value: valuePassed,
   name,
@@ -83,7 +83,7 @@ const MarkdownField = ({
   return (
     <EditorContainer>
       <Label label={label} />
-      <Editor
+      <ReactMarkdownEditor
         ref={el}
         id={name}
         value={value ?? ''}
@@ -98,5 +98,3 @@ const MarkdownField = ({
     </EditorContainer>
   )
 }
-
-export default MarkdownField

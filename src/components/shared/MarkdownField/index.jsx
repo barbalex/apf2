@@ -2,10 +2,10 @@ import React from 'react'
 // extracted to shared component due to peer dependency to old react version
 // import { FocusWithin } from 'react-focus-within'
 
-import Editor from './Editor'
-import Presenter from './Presenter'
-import { TextField } from '../TextField'
-import { FocusWithin } from '../FocusWithin'
+import { Editor } from './Editor/index.jsx'
+import { Presenter } from './Presenter.jsx'
+import { TextField } from '../TextField.jsx'
+import { FocusWithin } from '../FocusWithin.jsx'
 
 // render:
 // - TextField if no value exists
@@ -14,17 +14,19 @@ import { FocusWithin } from '../FocusWithin'
 // problems with react-focus-within: maybe use https://stackoverflow.com/a/63857071/712005
 const MdField = (props) => {
   const { label, value } = props
+
   return (
     <FocusWithin>
       {({ isFocused, focusProps }) => (
         <div {...focusProps}>
-          {isFocused ? (
+          {isFocused ?
             <Editor {...props} />
-          ) : value ? (
-            <Presenter value={value} label={label} />
-          ) : (
-            <TextField {...props} />
-          )}
+          : value ?
+            <Presenter
+              value={value}
+              label={label}
+            />
+          : <TextField {...props} />}
         </div>
       )}
     </FocusWithin>

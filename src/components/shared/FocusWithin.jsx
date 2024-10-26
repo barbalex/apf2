@@ -186,4 +186,3 @@ export class FocusWithin extends React.Component {
   }
 }
 
-export default FocusWithin
