@@ -46,7 +46,7 @@ const StyledListItemIcon = styled(ListItemIcon)`
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
-const CellForYearMenu = () => {
+export const CellForYearMenu = observer(() => {
   const store = useContext(StoreContext)
   const client = useApolloClient()
   const {
@@ -266,6 +266,4 @@ const CellForYearMenu = () => {
       )}
     </>
   )
-}
-
-export default observer(CellForYearMenu)
+})
