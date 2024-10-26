@@ -49,7 +49,7 @@ function tokenStateReducer(state, action) {
   }
 }
 
-const User = () => {
+export const User = observer(() => {
   const client = useApolloClient()
   const { idb } = useContext(IdbContext)
   const store = useContext(StoreContext)
@@ -253,7 +253,9 @@ const User = () => {
                     title={showPass ? 'verstecken' : 'anzeigen'}
                     size="large"
                   >
-                    {showPass ? <MdVisibilityOff /> : <MdVisibility />}
+                    {showPass ?
+                      <MdVisibilityOff />
+                    : <MdVisibility />}
                   </IconButton>
                 </InputAdornment>
               }
@@ -264,13 +266,15 @@ const User = () => {
           </FormControl>
         </StyledDiv>
         <DialogActions>
-          <Button color="primary" onClick={fetchLogin}>
+          <Button
+            color="primary"
+            onClick={fetchLogin}
+          >
             anmelden
           </Button>
         </DialogActions>
       </StyledDialog>
     </ErrorBoundary>
   )
-}
-
-export default observer(User)
+})
+export default User

@@ -16,9 +16,11 @@ const Choose = lazy(async () => ({
 import { queryAps } from './queryAps.js'
 import { StoreContext } from '../../storeContext.js'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
-const Error = lazy(() => import('../shared/Error.jsx'))
+const Error = lazy(async () => ({
+  default: (await import('../shared/Error.jsx')).Error,
+}))
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-const User = lazy(() => import('../User.jsx'))
+const User = lazy(async () => ({ default: (await import('../User.jsx')).User }))
 import { Spinner } from '../shared/Spinner.jsx'
 
 const Container = styled.div`
