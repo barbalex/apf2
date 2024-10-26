@@ -21,7 +21,7 @@ const Link = styled.div`
   }
 `
 
-const CellForTpopLink = ({ field, style, row }) => {
+export const CellForTpopLink = observer(({ field, style, row }) => {
   const store = useContext(StoreContext)
 
   const { hovered } = store.ekPlan
@@ -46,13 +46,15 @@ const CellForTpopLink = ({ field, style, row }) => {
       className={className}
       data-isodd={row.isOdd}
     >
-      <Link onClick={onClickLink} title="in neuem Fenster öffnen">
+      <Link
+        onClick={onClickLink}
+        title="in neuem Fenster öffnen"
+      >
         <div>
           <FaExternalLinkAlt />
         </div>
       </Link>
     </StyledTableCell>
   )
-}
-
-export default observer(CellForTpopLink)
+})
+export default CellForTpopLink
