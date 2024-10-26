@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../storeContext.js'
 
-const Notifier = () => {
+export const Notifier = observer(() => {
   const { enqueueSnackbar } = useSnackbar()
   const store = useContext(StoreContext)
   const { notifications, removeNotification } = store
@@ -25,6 +25,4 @@ const Notifier = () => {
   }, [displayed, enqueueSnackbar, notifications, removeNotification])
 
   return null
-}
-
-export default observer(Notifier)
+})

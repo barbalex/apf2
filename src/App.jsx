@@ -27,8 +27,10 @@ import { Provider as IdbProvider } from './idbContext.js'
 
 import { UploaderContext } from './UploaderContext.js'
 
-const Notifier = lazy(() => import('./components/shared/Notifier.jsx'))
-import NotificationDismisser from './components/shared/NotificationDismisser.jsx'
+const Notifier = lazy(async () => ({
+  default: (await import('./components/shared/Notifier.jsx')).Notifier,
+}))
+import { NotificationDismisser } from './components/shared/NotificationDismisser.jsx'
 
 import 'simplebar-react/dist/simplebar.min.css'
 
