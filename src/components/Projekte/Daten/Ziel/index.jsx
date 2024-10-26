@@ -12,7 +12,7 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup.jsx'
 import TextField from '../../../shared/TextField.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
@@ -48,7 +48,7 @@ const Ziel = () => {
   const client = useApolloClient()
   const queryClient = useQueryClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { activeNodeArray, openNodes: openNodesRaw, setOpenNodes } = store.tree
   const aNA = getSnapshot(activeNodeArray)
   const openNodes = getSnapshot(openNodesRaw)

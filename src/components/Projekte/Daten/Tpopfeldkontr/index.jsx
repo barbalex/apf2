@@ -21,7 +21,7 @@ import FormTitle from '../../../shared/FormTitle/index.jsx'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover.jsx'
 import constants from '../../../../modules/constants.js'
 import query from './query.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import Files from '../../../shared/Files/index.jsx'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
@@ -127,7 +127,7 @@ const Tpopfeldkontr = () => {
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
 

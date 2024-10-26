@@ -6,12 +6,12 @@ import union from 'lodash/union'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../Row'
-import storeContext from '../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import ZielJahre from './ZielJahre'
 
 const ApZielFolder = ({ projekt, ap }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { nodeLabelFilter, openNodes } = store.tree
 
   const zielsFilter = { apId: { equalTo: ap.id } }

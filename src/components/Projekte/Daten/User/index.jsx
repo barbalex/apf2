@@ -20,7 +20,7 @@ import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import queryEkfTpops from './queryEkfTpops.js'
 import Select from '../../../shared/Select.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import {
   tpopkontr as tpopkontrFragment,
@@ -97,7 +97,7 @@ const User = () => {
   const { userId } = useParams()
   const { search } = useLocation()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const client = useApolloClient()
   const queryClient = useQueryClient()

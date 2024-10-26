@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 
 import queryTpopkontrs from './queryTpopkontrs.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import TpopfreiwkontrForm from './Form.jsx'
 import OrTabs from './Tabs.jsx'
 
@@ -48,7 +48,7 @@ const FilterComment = styled.li`
 const Tpopfreiwkontr = () => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const tree = store.tree
   const {
     dataFilter,

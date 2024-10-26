@@ -14,7 +14,7 @@ import queryLists from './queryLists'
 import queryAps from './queryAps'
 import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
@@ -79,7 +79,7 @@ const FilterComment = styled.li`
 `
 
 const ApFilter = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     dataFilter,
     apFilter: nurApFilter,

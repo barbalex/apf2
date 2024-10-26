@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import Layer from './Layer/index.jsx'
 import ShowForMultipleAps from './ShowForMultipleAps.jsx'
 import KtZhFilter from './KtZhFilter/index.jsx'
@@ -15,7 +15,7 @@ const CardContent = styled.div`
 `
 
 const ApfloraLayers = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { apfloraLayers } = store
 
   return (

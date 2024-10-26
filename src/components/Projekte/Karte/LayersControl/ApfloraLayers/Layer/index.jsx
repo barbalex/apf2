@@ -22,7 +22,7 @@ import { useParams } from 'react-router-dom'
 import Checkbox from '../../shared/Checkbox.jsx'
 import Error from '../../../../../shared/Error.jsx'
 import getBounds from '../../../../../../modules/getBounds.js'
-import storeContext from '../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../storeContext.js'
 import query from './query.js'
 import PopIcon from './PopIcon.jsx'
 import TpopIcon from './TpopIcon.jsx'
@@ -116,7 +116,7 @@ const LayerComponent = ({ apfloraLayer }) => {
   const { apId, popId, tpopId, beobId } = useParams()
 
   const map = useMap()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     setActiveApfloraLayers,

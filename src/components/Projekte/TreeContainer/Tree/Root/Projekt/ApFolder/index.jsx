@@ -2,11 +2,11 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../Row'
-import storeContext from '../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../storeContext.js'
 import Aps from './Aps'
 
 const Ap = ({ count, projekt }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { openNodes } = store.tree
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ap ?? ''
 

@@ -14,7 +14,7 @@ import SelectLoadingOptions from '../../../../shared/SelectLoadingOptions.jsx'
 import TextFieldNonUpdatable from '../../../../shared/TextFieldNonUpdatable'
 import query from './query.js'
 import queryAeTaxonomies from './queryAeTaxonomies'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber.js'
 import ApUsers from './ApUsers'
 import { ap, aeTaxonomies } from '../../../../shared/fragments.js'
@@ -70,7 +70,7 @@ const ApAp = () => {
   const { apId } = useParams()
 
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { user } = store
   const queryClient = useQueryClient()
 

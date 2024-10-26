@@ -16,7 +16,7 @@ import FilterTitle from '../../../shared/FilterTitle.jsx'
 import constants from '../../../../modules/constants.js'
 import queryTpopmassns from './queryTpopmassns.js'
 import queryAeTaxonomies from './queryAeTaxonomies.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
@@ -54,7 +54,7 @@ const FilterComment = styled.li`
 const TpopmassnFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     dataFilter,
     tpopmassnGqlFilter,

@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import styled from '@emotion/styled'
 import { useApolloClient, gql } from '@apollo/client'
 
-import storeContext from '../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../storeContext.js'
 
 const DelIcon = styled(IconButton)`
   font-size: 1rem !important;
@@ -15,7 +15,7 @@ const DelIcon = styled(IconButton)`
 
 const ApUser = ({ user, refetch }) => {
   const client = useApolloClient()
-  const { enqueNotification } = useContext(storeContext)
+  const { enqueNotification } = useContext(StoreContext)
 
   const onClickDelete = useCallback(async () => {
     try {

@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 
 import Select from '../../../../shared/Select.jsx'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import queryAdresses from './queryAdresses.js'
 import {
   adresse as adresseFragment,
@@ -80,7 +80,7 @@ const StatusLabel = styled(Label)`
 
 const Headdata = ({ pop, tpop, row }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { user, isPrint } = store
   const { data, loading, error } = useQuery(queryAdresses)
   const [errors, setErrors] = useState(null)

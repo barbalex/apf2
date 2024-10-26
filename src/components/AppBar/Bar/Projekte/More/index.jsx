@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 import isMobilePhone from '../../../../../modules/isMobilePhone.js'
 import logout from '../../../../../modules/logout.js'
 import EkfUser from './EkfUser/index.jsx'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import idbContext from '../../../../../idbContext.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 
@@ -30,7 +30,7 @@ const Version = styled.div`
 const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
   const { projId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { deletedDatasets, user, setShowDeletions } = store
   const { idb } = useContext(idbContext)
 

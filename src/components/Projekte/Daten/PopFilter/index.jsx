@@ -11,7 +11,7 @@ import Status from '../../../shared/Status.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
 import queryPops from './queryPops'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
@@ -46,7 +46,7 @@ const FilterComment = styled.li`
 const PopFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     dataFilter,
     nodeLabelFilter,

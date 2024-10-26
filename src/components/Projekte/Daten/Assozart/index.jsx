@@ -11,7 +11,7 @@ import SelectLoadingOptions from '../../../shared/SelectLoadingOptions.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import queryAeTaxonomies from './queryAeTaxonomies'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import { assozart } from '../../../shared/fragments.js'
@@ -42,7 +42,7 @@ const Assozart = () => {
   const { assozartId: id } = useParams()
 
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const queryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState({})

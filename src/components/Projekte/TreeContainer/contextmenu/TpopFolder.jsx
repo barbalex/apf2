@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
 
@@ -28,7 +28,7 @@ const resetCopyingData = {
 }
 
 const TpopFolder = ({ onClick }) => {
-  const { copying, user, moving } = useContext(storeContext)
+  const { copying, user, moving } = useContext(StoreContext)
 
   const isMoving = moving.table && moving.table === 'tpop'
   const isCopying = copying.table && copying.table === 'tpop'

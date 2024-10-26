@@ -5,12 +5,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 
 import Row from '../../../../../../../../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../../../../../../../../../storeContext.js'
 import Zaehl from './Zaehl'
 
 const TpopFeldkontrZaehlFolder = ({ projekt, ap, pop, tpop, tpopkontr }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
   const tpopkontrzaehlsFilter = {

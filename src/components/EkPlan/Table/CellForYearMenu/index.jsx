@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient } from '@apollo/client'
 
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import queryTpop from './queryTpop.js'
 import queryEkplansOfTpop from './queryEkplansOfTpop.js'
 import mutationCreateEkplan from './mutationCreateEkplan.js'
@@ -47,7 +47,7 @@ const StyledListItemIcon = styled(ListItemIcon)`
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
 const CellForYearMenu = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const client = useApolloClient()
   const {
     showEk,
@@ -172,40 +172,38 @@ const CellForYearMenu = () => {
         <YearCellMenuTitle>{yearClicked.title}</YearCellMenuTitle>
         {showEk && (
           <div>
-            {yearClicked.ekPlan ? (
+            {yearClicked.ekPlan ?
               <StyledMenuItem onClick={onClickEkEntfernen}>
                 <StyledListItemIcon>
                   <EditIcon />
                 </StyledListItemIcon>
                 <StyledListItemText primary="EK-Planung entfernen" />
               </StyledMenuItem>
-            ) : (
-              <StyledMenuItem onClick={onClickEkPlanen}>
+            : <StyledMenuItem onClick={onClickEkPlanen}>
                 <StyledListItemIcon>
                   <EditIcon />
                 </StyledListItemIcon>
                 <StyledListItemText primary="EK planen" />
               </StyledMenuItem>
-            )}
+            }
           </div>
         )}
         {showEkf && (
           <div>
-            {yearClicked.ekfPlan ? (
+            {yearClicked.ekfPlan ?
               <StyledMenuItem onClick={onClickEkfEntfernen}>
                 <StyledListItemIcon>
                   <EditIcon />
                 </StyledListItemIcon>
                 <StyledListItemText primary="EKF-Planung entfernen" />
               </StyledMenuItem>
-            ) : (
-              <StyledMenuItem onClick={onClickEkfPlanen}>
+            : <StyledMenuItem onClick={onClickEkfPlanen}>
                 <StyledListItemIcon>
                   <EditIcon />
                 </StyledListItemIcon>
                 <StyledListItemText primary="EKF planen" />
               </StyledMenuItem>
-            )}
+            }
           </div>
         )}
         {showEk && !!eks.length && (

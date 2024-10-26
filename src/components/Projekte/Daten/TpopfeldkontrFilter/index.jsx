@@ -19,7 +19,7 @@ import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover.
 import constants from '../../../../modules/constants.js'
 import query from './query.js'
 import queryTpopkontrs from './queryTpopkontrs.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
@@ -92,7 +92,7 @@ const tpopkontrTypWerte = [
 const TpopfeldkontrFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     dataFilter,
     ekGqlFilter,

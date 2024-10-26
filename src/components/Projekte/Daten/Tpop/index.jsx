@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import Ek from './Ek/index.jsx'
 import Tpop from './Tpop.jsx'
@@ -89,7 +89,7 @@ const TpopForm = () => {
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
   const onChangeTab = useCallback((event, value) => setTab(value), [setTab])

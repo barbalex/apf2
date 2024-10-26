@@ -12,7 +12,7 @@ import DateField from '../../../shared/Date.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import constants from '../../../../modules/constants.js'
 import query from './query.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import Files from '../../../shared/Files/index.jsx'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
@@ -86,7 +86,7 @@ const fieldTypes = {
 const Idealbiotop = () => {
   const { apId: id } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const client = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState({})

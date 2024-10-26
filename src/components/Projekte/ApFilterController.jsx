@@ -3,12 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 import { useApolloClient, gql } from '@apollo/client'
 
-import storeContext from '../../storeContext.js'
+import { StoreContext } from '../../storeContext.js'
 
 const ApFilterController = () => {
   const client = useApolloClient()
   const { apId } = useParams()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { apFilter, setApFilter } = store.tree
 
   useEffect(() => {

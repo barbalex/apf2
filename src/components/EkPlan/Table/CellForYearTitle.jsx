@@ -2,10 +2,10 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StyledTableCell, InfoRow } from './index.jsx'
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 const CellForYearTitle = ({ style, row }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { showEk, showEkf, showMassn, hovered } = store.ekPlan
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
   const onMouseEnter = useCallback(

@@ -24,6 +24,7 @@ import { UploaderContext } from '../../../UploaderContext.js'
 import File from './File'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import isImageFile from './isImageFile'
+import { StoreContext } from '../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -60,7 +61,7 @@ const Files = ({
   const client = useApolloClient()
   const uploaderCtx = useContext(UploaderContext)
   const api = uploaderCtx?.current?.getAPI?.()
-  console.log('Files, api:', api)
+  const storeContext = useContext(StoreContext)
 
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
@@ -88,8 +89,6 @@ const Files = ({
 
   const files = data?.[`all${upperFirst(parent)}Files`].nodes ?? []
 
-  const [uploaderId, setUploaderId] = useState(0)
-  // console.log('Files, uploaderId:', uploaderId)
   const onFileUploadSuccess = useCallback(
     async (info) => {
       if (info) {
@@ -136,15 +135,18 @@ const Files = ({
 
       return null
     },
-    [client, fields, fragment, parent, parentId, refetch, uploaderId],
+    [client, fields, fragment, parent, parentId, refetch],
   )
 
-  const onFileUploadFailed = useCallback(
-    (error) => console.error('Upload failed:', error),
-    [],
-  )
-
-  console.log('Files, files:', files)
+  const onFileUploadFailed = useCallback((error) => {
+    console.error('Upload failed:', error)
+    store.enqueNotification({
+      message: error?.message ?? 'Upload fehlgeschlagen',
+      options: {
+        variant: 'error',
+      },
+    })
+  }, [])
 
   const images = files.filter((f) => isImageFile(f))
   const imageObjects = images.map((f) => ({
@@ -177,7 +179,6 @@ const Files = ({
         <Container>
           <ButtonsContainer>
             <Uploader
-              id={uploaderId}
               onFileUploadSuccess={onFileUploadSuccess}
               onFileUploadFailed={onFileUploadFailed}
             />

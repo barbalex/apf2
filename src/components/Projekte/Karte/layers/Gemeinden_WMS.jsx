@@ -13,7 +13,7 @@ import { observer } from 'mobx-react-lite'
 import xmlToLayersData from '../../../../modules/xmlToLayersData.js'
 import Popup from './Popup.jsx'
 import onTileError from './onTileError.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const StyledPopupContent = styled.div`
   white-space: pre;
@@ -40,7 +40,7 @@ const layer = {
 
 const WMS = () => {
   const map = useMap()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   useMapEvent('click', async (e) => {
     // console.log({ layer })

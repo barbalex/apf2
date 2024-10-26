@@ -4,11 +4,11 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
 import Zielber from './Zielber'
 
 const ZielberFolder = ({ projekt, ap, jahr, ziel }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
   const client = useApolloClient()
 

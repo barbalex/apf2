@@ -3,11 +3,11 @@ import { useContext, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../storeContext.js'
+import { StoreContext } from '../../storeContext.js'
 
 const NavigateSetter = () => {
   const navigate = useNavigate()
-  const { navigate: navigateInStore, setNavigate } = useContext(storeContext)
+  const { navigate: navigateInStore, setNavigate } = useContext(StoreContext)
   const navigateSet = useRef(false)
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import { MdGetApp } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 const FileDownloadIcon = styled(MdGetApp)`
   font-size: 1.5rem;
@@ -36,7 +36,7 @@ const options = {
 }
 
 const PngControl = () => {
-  const { setHideMapControls } = useContext(storeContext)
+  const { setHideMapControls } = useContext(StoreContext)
   const map = useMap()
   const [printPlugin, setPrintPlugin] = useState({})
 

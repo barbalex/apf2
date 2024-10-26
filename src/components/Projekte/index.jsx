@@ -9,7 +9,7 @@ import queryString from 'query-string'
 // when Karte was loaded async, it did not load,
 // but only in production!
 import ProjektContainer from './ProjektContainer'
-import storeContext from '../../storeContext.js'
+import { StoreContext } from '../../storeContext.js'
 import StyledSplitPane from '../shared/StyledSplitPane'
 // import AppRenderer from '../../AppRenderer'
 import appBaseUrl from '../../modules/appBaseUrl.js'
@@ -38,7 +38,7 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
 const Projekte = () => {
   const { pathname, search } = useLocation()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { isPrint } = store
   const { tree2Src } = store.tree
 

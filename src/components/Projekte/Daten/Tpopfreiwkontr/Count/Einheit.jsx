@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 
 import Select from '../../../../shared/Select.jsx'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.js'
 import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber.js'
 
@@ -34,7 +34,7 @@ const EinheitLabel = styled(Label)`
 `
 
 const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const client = useApolloClient()
   const queryClient = useQueryClient()
 

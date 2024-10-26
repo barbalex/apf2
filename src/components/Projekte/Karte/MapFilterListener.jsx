@@ -2,11 +2,11 @@ import { useContext, useEffect } from 'react'
 import { useMap } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 const MapFilterListener = () => {
   const map = useMap()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { mapFilter } = store.tree
 
   useEffect(() => {

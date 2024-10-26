@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom'
 
 import tables from '../../../../modules/tables'
 import deleteDataset from './delete'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 
 const StyledDialog = styled(Dialog)`
@@ -22,7 +22,7 @@ const DatasetDeleteModal = () => {
   const { search } = useLocation()
 
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { toDeleteTable, toDeleteLabel, emptyToDelete, toDeleteId } = store
 
   const table = tables.find((t) => t.table === toDeleteTable)

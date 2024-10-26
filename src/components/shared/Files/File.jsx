@@ -20,7 +20,7 @@ import {
 } from '../fragments'
 import isImageFile from './isImageFile'
 import ifIsNumericAsNumber from '../../../modules/ifIsNumericAsNumber.js'
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -85,7 +85,7 @@ const fragmentObject = {
 
 const File = ({ file, parent, refetch }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
 

@@ -66,7 +66,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import MapFilterListener from './MapFilterListener.jsx'
 import ClickListener from './ClickListener.jsx'
 
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 // this does not work
 // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
@@ -428,7 +428,7 @@ const Karte = ({ mapContainerRef }) => {
 
   const mapRef = useRef(null)
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     showApfLayersForMultipleAps,

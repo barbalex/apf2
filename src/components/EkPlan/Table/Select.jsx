@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
 import { tpop } from '../../shared/fragments.js'
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 const Select = styled.select`
   width: 100%;
@@ -24,7 +24,7 @@ const Option = styled.option`
 `
 
 const SelectComponent = ({ options, row, val, field }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
   const client = useApolloClient()
   const [focused, setFocused] = useState(false)

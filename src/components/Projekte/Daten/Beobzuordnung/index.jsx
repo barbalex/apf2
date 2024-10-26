@@ -22,7 +22,7 @@ import saveNichtZuordnenToDb from './saveNichtZuordnenToDb'
 import saveArtIdToDb from './saveArtIdToDb'
 import saveTpopIdToDb from './saveTpopIdToDb'
 import sendMail from '../../../../modules/sendMail'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
@@ -138,7 +138,7 @@ const Beobzuordnung = () => {
         : 'uups'
 
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { data, loading, error, refetch } = useQuery(query, {
     variables: {

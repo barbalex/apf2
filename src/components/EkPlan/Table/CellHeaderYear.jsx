@@ -6,7 +6,7 @@ import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
 
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 const StyledCell = styled.div`
   display: flex;
@@ -44,7 +44,7 @@ const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 const CellHeaderYear = ({ style, column, rows }) => {
   const client = useApolloClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     hovered,
     filterAnsiedlungYear,

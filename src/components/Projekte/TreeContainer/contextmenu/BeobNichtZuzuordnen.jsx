@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
 
@@ -26,7 +26,7 @@ const showCoordOfBeobOnMapGeoAdminChData = {
 }
 
 const BeobNichtZuzuordnen = ({ onClick }) => {
-  const { user } = useContext(storeContext)
+  const { user } = useContext(StoreContext)
 
   return (
     <ErrorBoundary>

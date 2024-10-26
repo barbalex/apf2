@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import RadioButton from '../../../shared/RadioButton.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -53,7 +53,7 @@ const MapVal2 = styled.div`
 `
 
 const Map = ({ saveToDb, row, errors }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { isPrint } = store
 
   const onSaveFalse = useCallback(() => {

@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import TextFilter from './TextFilter.jsx'
 import BooleanFilter from './BooleanFilter.jsx'
 
@@ -53,7 +53,7 @@ const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 const CellHeaderFixed = ({ style, column }) => {
   const { name, label, nofilter } = column
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const filterValue = store.ekPlan?.[`filter${upperFirst(name)}`]
 

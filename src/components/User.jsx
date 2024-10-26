@@ -22,7 +22,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
 import idbContext from '../idbContext'
-import storeContext from '../storeContext.js'
+import { StoreContext } from '../storeContext.js'
 import getUserFromIdb from '../modules/getUserFromIdb'
 import ErrorBoundary from './shared/ErrorBoundary.jsx'
 
@@ -52,7 +52,7 @@ function tokenStateReducer(state, action) {
 const User = () => {
   const client = useApolloClient()
   const { idb } = useContext(idbContext)
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { user } = store
 
   const [name, setName] = useState('')

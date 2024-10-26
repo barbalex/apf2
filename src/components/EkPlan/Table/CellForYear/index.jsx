@@ -5,10 +5,10 @@ import { StyledTableCell } from '../index.jsx'
 import EkIcon from './EkIcon.jsx'
 import MassnIcon from './MassnIcon.jsx'
 import { InfoRow } from '../index.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const CellForYear = ({ field, row, style }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     showEk,
     showEkf,

@@ -29,7 +29,7 @@ import { layerLegends } from './layerLegends.js'
 import findIndex from 'lodash/findIndex'
 
 import Checkbox from './shared/Checkbox.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
@@ -159,7 +159,7 @@ const SortableItem = ({
 const Overlays = () => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     overlays: overlaysIn,
     activeOverlays: activeOverlaysIn,

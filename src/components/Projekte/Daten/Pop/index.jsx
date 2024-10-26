@@ -15,7 +15,7 @@ import Status from '../../../shared/Status.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import Coordinates from '../../../shared/Coordinates.jsx'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import Files from '../../../shared/Files/index.jsx'
@@ -60,7 +60,7 @@ const fieldTypes = {
 const Pop = () => {
   const { popId: id } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const queryClient = useQueryClient()
   const client = useApolloClient()
 

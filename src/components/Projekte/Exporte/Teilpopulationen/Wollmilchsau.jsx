@@ -5,7 +5,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 
 import exportModule from '../../../../modules/export.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressTextNewLine } from '../index.jsx'
 
 const Li = styled.li`
@@ -19,7 +19,7 @@ const EwmDiv = styled.div`
 
 const Wollmilchsau = () => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
 
   const [queryState, setQueryState] = useState()

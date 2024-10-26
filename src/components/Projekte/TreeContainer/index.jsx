@@ -123,7 +123,7 @@ import beobById from './beobById'
 import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 const TpopFromBeobPopList = lazy(() => import('./TpopFromBeobPopList'))
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import useSearchParamsState from '../../../modules/useSearchParamsState.js'
@@ -310,7 +310,7 @@ const TreeContainer = () => {
   const client = useApolloClient()
   const queryClient = useQueryClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     activeApfloraLayers,
     setActiveApfloraLayers,

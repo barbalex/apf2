@@ -10,7 +10,7 @@ import Karte from './Karte/index.jsx'
 const TreeContainer = lazy(() => import('./TreeContainer/index.jsx'))
 const Exporte = lazy(() => import('./Exporte/index.jsx'))
 const Filter = lazy(() => import('./Filter/index.jsx'))
-import storeContext from '../../storeContext.js'
+import { StoreContext } from '../../storeContext.js'
 import StyledSplitPane from '../shared/StyledSplitPane.jsx'
 import useSearchParamsState from '../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../modules/isMobilePhone.js'
@@ -36,7 +36,7 @@ const ProjektContainer = () => {
   const { projId, apberUebersichtId, apberId } = useParams()
   const { pathname } = useLocation()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { isPrint } = store
   // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
   // to prevent it from causing unnessecary renders

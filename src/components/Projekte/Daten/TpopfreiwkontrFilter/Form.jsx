@@ -11,7 +11,7 @@ import Danger from './Danger.jsx'
 import Remarks from './Remarks.jsx'
 import EkfRemarks from './EkfRemarks.jsx'
 import Verification from './Verification.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 
 const FormContainer = styled.div`
@@ -97,7 +97,7 @@ const GridContainer = styled.div`
 `
 
 const TpopfreiwkontrForm = ({ row, activeTab }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { dataFilterSetValue } = store.tree
 
   const saveToDb = useCallback(

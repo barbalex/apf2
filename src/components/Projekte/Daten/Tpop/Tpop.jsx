@@ -14,7 +14,7 @@ import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo.j
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover.jsx'
 //import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import constants from '../../../../modules/constants.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import Coordinates from '../../../shared/Coordinates.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 
@@ -33,7 +33,7 @@ const Tpop = ({
   refetchTpop,
   loadingParent,
 }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
   const client = useApolloClient()
 

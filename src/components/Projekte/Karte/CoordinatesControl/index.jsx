@@ -7,7 +7,7 @@ import debounce from 'lodash/debounce'
 import ShowCoordinates from './ShowCoordinates.jsx'
 import PanToCoordinates from './PanToCoordinates.jsx'
 import { epsg4326to2056 } from '../../../../modules/epsg4326to2056.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 /**
  * onClick coordinates container: render coordinate-field-pair and go-to button
@@ -24,7 +24,7 @@ const Container = styled.div`
 `
 
 const CoordinatesControl = () => {
-  const { setMapMouseCoordinates } = useContext(storeContext)
+  const { setMapMouseCoordinates } = useContext(StoreContext)
   const [controlType, setControlType] = useState('coordinates')
 
   const setMouseCoords = useCallback(

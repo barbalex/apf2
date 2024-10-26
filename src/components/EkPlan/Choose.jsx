@@ -16,7 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { observer } from 'mobx-react-lite'
 
 import Fields from './Fields.jsx'
-import storeContext from '../../storeContext.js'
+import { StoreContext } from '../../storeContext.js'
 import { allFields } from '../../store/EkPlan/index.js'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
@@ -80,7 +80,7 @@ const DenserCheckbox = (props) => (
 )
 
 const EkPlanChoose = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     fields,
     showEk,

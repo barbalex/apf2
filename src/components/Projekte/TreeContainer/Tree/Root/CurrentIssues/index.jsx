@@ -3,11 +3,11 @@ import { observer } from 'mobx-react-lite'
 import max from 'lodash/max'
 
 import Row from '../../Row'
-import storeContext from '../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../storeContext.js'
 import Issues from './Issues'
 
 const CurrentIssuesFolderNode = ({ count, isLoading }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   let message = isLoading && !count ? '...' : max([count - 1, 0])
 

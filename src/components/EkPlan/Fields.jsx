@@ -5,7 +5,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import DialogContent from '@mui/material/DialogContent'
 
-import storeContext from '../../storeContext.js'
+import { StoreContext } from '../../storeContext.js'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const StyledDialogContent = styled(DialogContent)`
@@ -14,7 +14,7 @@ const StyledDialogContent = styled(DialogContent)`
 `
 
 const Fields = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { fields, toggleField } = store.ekPlan
 
   return (

@@ -9,7 +9,7 @@ import Bar from './Bar/index.jsx'
 import EkfBar from './EkfBar/index.jsx'
 import inIframe from '../../modules/inIframe.js'
 import Spinner from '../shared/Spinner.jsx'
-import storeContext from '../../storeContext.js'
+import { StoreContext } from '../../storeContext.js'
 
 const isInIframe = inIframe()
 
@@ -44,7 +44,7 @@ const AppBarComponent = () => {
   const { userId } = useParams()
   const { pathname, search } = useLocation()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const activeNodeArray = store.tree.activeNodeArray
 
   useEffect(() => {

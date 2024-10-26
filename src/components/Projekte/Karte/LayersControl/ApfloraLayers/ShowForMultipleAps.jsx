@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { gql, useQuery } from '@apollo/client'
 
 import Checkbox from '../shared/Checkbox.jsx'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 
 const LayerDiv = styled.div`
   display: flex;
@@ -40,7 +40,7 @@ const Comment2 = styled.span`
 const ShowForMultipleAps = () => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { showApfLayersForMultipleAps, toggleShowApfLayersForMultipleAps } =
     store
   const { apGqlFilterForTree } = store.tree

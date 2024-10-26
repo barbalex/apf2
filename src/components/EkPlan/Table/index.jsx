@@ -10,7 +10,7 @@ import { useResizeDetector } from 'react-resize-detector'
 
 import queryAll from './queryAll.js'
 import CellForYearMenu from './CellForYearMenu/index.jsx'
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 import yearsFromTpops from './yearsFromTpops.js'
 import tpopRowFromTpop from './tpopRowFromTpop.js'
 import yearRowFromTpop from './yearRowFromTpop.js'
@@ -121,7 +121,7 @@ const ExportButton = styled(Button)`
 `
 
 const EkPlanTable = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     aps,
     apValues,

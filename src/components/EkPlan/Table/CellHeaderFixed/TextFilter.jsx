@@ -14,7 +14,7 @@ import Input from '@mui/material/Input'
 import { MdClear } from 'react-icons/md'
 import upperFirst from 'lodash/upperFirst'
 
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const valForStore = (valPassed) => {
   let val = valPassed
@@ -29,7 +29,7 @@ const valForState = (valPassed) => {
 }
 
 const CellHeaderFixedTextFilter = ({ column, closeMenu }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { setFilterEmptyEkfrequenz, setFilterEmptyEkfrequenzStartjahr } =
     store.ekPlan
   const { name } = column

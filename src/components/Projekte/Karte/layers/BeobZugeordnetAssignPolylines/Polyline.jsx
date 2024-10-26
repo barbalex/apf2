@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router-dom'
 
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import appBaseUrl from '../../../../../modules/appBaseUrl.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone.js'
@@ -31,7 +31,7 @@ const PolylineComponent = ({ beob }) => {
   const { apId, projId, beobId } = useParams()
   const { search } = useLocation()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { openTree2WithActiveNodeArray } = store
 
   const isHighlighted = beobId === beob.id

@@ -2,11 +2,11 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
 import PopMassnBer from './PopMassnBer'
 
 const PopmassnberFolder = ({ projekt, ap, pop, isLoading, count }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.popmassnber ?? ''
 

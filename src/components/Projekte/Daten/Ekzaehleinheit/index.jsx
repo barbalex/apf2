@@ -12,7 +12,7 @@ import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import queryLists from './queryLists'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
@@ -50,7 +50,7 @@ const Ekzaehleinheit = () => {
 
   const queryClient = useQueryClient()
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
 

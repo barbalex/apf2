@@ -16,7 +16,7 @@ import appBaseUrl from '../../../../../modules/appBaseUrl.js'
 import standardQkYear from '../../../../../modules/standardQkYear'
 import query from './query.js'
 import createMessageFunctions from './createMessageFunctions'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Error from '../../../../shared/Error.jsx'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
@@ -83,7 +83,7 @@ const Qk = ({ qkNameQueries, qks }) => {
     isMobilePhone() ? ['tree'] : ['tree', 'daten'],
   )
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { openTree2WithActiveNodeArray } = store
 
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())

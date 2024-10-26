@@ -9,7 +9,7 @@ import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import { beobIconString } from './beobIconString.js'
 import { beobIconHighlightedString } from './beobIconHighlightedString.js'
 import getNearestTpop from '../../../../../modules/getNearestTpop.js'
@@ -36,7 +36,7 @@ const BeobNichtBeurteiltMarker = ({ beob }) => {
   const queryClient = useQueryClient()
 
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { assigningBeob, openTree2WithActiveNodeArray } = store
 
   const isHighlighted = beobId === beob.id

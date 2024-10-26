@@ -21,7 +21,7 @@ import constants from '../../../../modules/constants.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import query from './query.js'
 import queryAeTaxonomies from './queryAeTaxonomies.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import exists from '../../../../modules/exists.js'
 import Files from '../../../shared/Files/index.jsx'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
@@ -79,7 +79,7 @@ const Tpopmassn = ({ showFilter = false }) => {
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
 

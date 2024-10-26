@@ -3,7 +3,7 @@ import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import styled from '@emotion/styled'
 
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -26,7 +26,7 @@ const DelIcon = styled(IconButton)`
 `
 
 const Ap = ({ ap }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { removeAp, apsData, apsDataLoading } = store.ekPlan
 
   const onClickDelete = useCallback(() => removeAp(ap), [ap, removeAp])

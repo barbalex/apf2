@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../storeContext.js'
 import PopFolder from './Pop'
 import ApZielFolder from './ApZiel'
 import ApErfkritFolder from './ApErfkrit'
@@ -20,7 +20,7 @@ import Qk from './Qk'
 
 const ApFolders = ({ ap, projekt }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { nodeLabelFilter, beobGqlFilterForTree, popGqlFilterForTree } =
     store.tree
 

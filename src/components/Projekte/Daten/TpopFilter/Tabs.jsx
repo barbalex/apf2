@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 
 import { initial as tpop } from '../../../../store/Tree/DataFilter/tpop.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const Row = styled.div``
 const Title = styled.div`
@@ -24,7 +24,7 @@ const StyledTab = styled(Tab)`
 `
 
 const TpopOrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { dataFilterAddOr } = store.tree
 
   const lastFilterIsEmpty =

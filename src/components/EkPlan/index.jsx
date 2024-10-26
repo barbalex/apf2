@@ -8,7 +8,7 @@ const ApList = lazy(() => import('./ApList/index.jsx'))
 const Table = lazy(() => import('./Table/index.jsx'))
 const Choose = lazy(() => import('./Choose.jsx'))
 import queryAps from './queryAps.js'
-import storeContext from '../../storeContext.js'
+import { StoreContext } from '../../storeContext.js'
 import appBaseUrl from '../../modules/appBaseUrl.js'
 const Error = lazy(() => import('../shared/Error.jsx'))
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
@@ -38,7 +38,7 @@ const AnleitungButton = styled(Button)`
 `
 
 const EkPlan = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { user } = store
   const { aps, setApsData, setApsDataLoading } = store.ekPlan
 

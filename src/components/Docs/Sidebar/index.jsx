@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Link, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 import MenuItems from './MenuItems.jsx'
 import Filter from './Filter.jsx'
 import IntoViewScroller from './IntoViewScroller.jsx'
@@ -34,7 +34,7 @@ const MenuTitleLink = styled(Link)`
 const Sidebar = () => {
   const { search } = useLocation()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { dokuFilter, setDokuFilter } = store
 
   return (
