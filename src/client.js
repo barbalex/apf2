@@ -12,7 +12,7 @@ import uniqBy from 'lodash/uniqBy'
 
 import graphQlUri from './modules/graphQlUri.js'
 import { existsPermissionError } from './modules/existsPermissionError.js'
-import existsTooLargeError from './modules/existsTooLargeError.js'
+import { existsTooLargeError } from './modules/existsTooLargeError.js'
 
 const Client = ({ store }) => {
   const { enqueNotification } = store
