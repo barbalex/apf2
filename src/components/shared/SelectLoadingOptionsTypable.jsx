@@ -66,110 +66,111 @@ const StyledSelect = styled(AsyncSelect)`
   }
 `
 
-const SelectLoadingOptionsTypable = ({
-  row,
-  field = '',
-  label,
-  error: saveToDbError,
-  saveToDb,
-  query,
-  queryNodesName,
-}) => {
-  const client = useApolloClient()
-  const [inputValue, setInputValue] = useState(row?.wirtspflanze || '')
+export const SelectLoadingOptionsTypable = observer(
+  ({
+    row,
+    field = '',
+    label,
+    error: saveToDbError,
+    saveToDb,
+    query,
+    queryNodesName,
+  }) => {
+    const client = useApolloClient()
+    const [inputValue, setInputValue] = useState(row?.wirtspflanze || '')
 
-  useEffect(() => {
-    setInputValue(row?.wirtspflanze || '')
-  }, [row?.wirtspflanze])
+    useEffect(() => {
+      setInputValue(row?.wirtspflanze || '')
+    }, [row?.wirtspflanze])
 
-  const loadOptions = useCallback(
-    async (inputValue, cb) => {
-      const filter = inputValue
-        ? { artname: { includesInsensitive: inputValue } }
-        : { artname: { isNull: false } }
-      const { data } = await client.query({
-        query,
-        variables: {
-          filter,
-        },
-      })
-      const options = data?.[queryNodesName]?.nodes ?? []
-      cb(options)
-    },
-    [client, query, queryNodesName],
-  )
+    const loadOptions = useCallback(
+      async (inputValue, cb) => {
+        const filter =
+          inputValue ?
+            { artname: { includesInsensitive: inputValue } }
+          : { artname: { isNull: false } }
+        const { data } = await client.query({
+          query,
+          variables: {
+            filter,
+          },
+        })
+        const options = data?.[queryNodesName]?.nodes ?? []
+        cb(options)
+      },
+      [client, query, queryNodesName],
+    )
 
-  const onChange = useCallback(
-    (option) => {
-      const value = option && option.value ? option.value : null
-      const fakeEvent = {
-        target: {
-          name: 'wirtspflanze',
-          value,
-        },
-      }
-      saveToDb(fakeEvent)
-    },
-    [saveToDb],
-  )
-
-  const onInputChange = useCallback(
-    (value, { action }) => {
-      // update inputValue when typing in the input
-      if (!['input-blur', 'menu-close'].includes(action)) {
-        if (!value) {
-          // if inputValue was one character long, user must be deleting it
-          // THIS IS A BAD HACK BUT NECCESSARY BECAUSE AFTER CHOOSING AN OPTION
-          // onInputChange GETS A VALUE OF '', NOT THE OPTION CHOOSEN
-          if (inputValue.length === 1) {
-            onChange({ value: null, label: null })
-          }
+    const onChange = useCallback(
+      (option) => {
+        const value = option && option.value ? option.value : null
+        const fakeEvent = {
+          target: {
+            name: 'wirtspflanze',
+            value,
+          },
         }
-        setInputValue(value)
+        saveToDb(fakeEvent)
+      },
+      [saveToDb],
+    )
+
+    const onInputChange = useCallback(
+      (value, { action }) => {
+        // update inputValue when typing in the input
+        if (!['input-blur', 'menu-close'].includes(action)) {
+          if (!value) {
+            // if inputValue was one character long, user must be deleting it
+            // THIS IS A BAD HACK BUT NECCESSARY BECAUSE AFTER CHOOSING AN OPTION
+            // onInputChange GETS A VALUE OF '', NOT THE OPTION CHOOSEN
+            if (inputValue.length === 1) {
+              onChange({ value: null, label: null })
+            }
+          }
+          setInputValue(value)
+        }
+      },
+      [inputValue.length, onChange],
+    )
+
+    const onBlur = useCallback(() => {
+      if (inputValue) {
+        onChange({ value: inputValue, label: inputValue })
       }
-    },
-    [inputValue.length, onChange],
-  )
+    }, [inputValue, onChange])
 
-  const onBlur = useCallback(() => {
-    if (inputValue) {
-      onChange({ value: inputValue, label: inputValue })
+    const value = {
+      value: row?.wirtspflanze || '',
+      label: row?.wirtspflanze || '',
     }
-  }, [inputValue, onChange])
 
-  const value = {
-    value: row?.wirtspflanze || '',
-    label: row?.wirtspflanze || '',
-  }
-
-  return (
-    <Container data-id={field}>
-      {label && <Label>{label}</Label>}
-      <StyledSelect
-        id={field}
-        defaultOptions
-        name={field}
-        onChange={onChange}
-        onBlur={onBlur}
-        value={value}
-        inputValue={inputValue || ''}
-        hideSelectedOptions
-        placeholder="(Für Vorschläge tippen)"
-        isClearable
-        // remove as can't select without typing
-        nocaret
-        // don't show a no options message
-        noOptionsMessage={() => null}
-        tabSelectsValue={false}
-        // enable deleting typed values
-        backspaceRemovesValue
-        classNamePrefix="react-select"
-        onInputChange={onInputChange}
-        loadOptions={loadOptions}
-      />
-      {saveToDbError && <Error>{saveToDbError}</Error>}
-    </Container>
-  )
-}
-
-export default observer(SelectLoadingOptionsTypable)
+    return (
+      <Container data-id={field}>
+        {label && <Label>{label}</Label>}
+        <StyledSelect
+          id={field}
+          defaultOptions
+          name={field}
+          onChange={onChange}
+          onBlur={onBlur}
+          value={value}
+          inputValue={inputValue || ''}
+          hideSelectedOptions
+          placeholder="(Für Vorschläge tippen)"
+          isClearable
+          // remove as can't select without typing
+          nocaret
+          // don't show a no options message
+          noOptionsMessage={() => null}
+          tabSelectsValue={false}
+          // enable deleting typed values
+          backspaceRemovesValue
+          classNamePrefix="react-select"
+          onInputChange={onInputChange}
+          loadOptions={loadOptions}
+        />
+        {saveToDbError && <Error>{saveToDbError}</Error>}
+      </Container>
+    )
+  },
+)
