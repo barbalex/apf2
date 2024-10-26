@@ -73,91 +73,92 @@ const StyledSelect = styled(AsyncSelect)`
   }
 `
 
-const SelectTypable = ({
-  row,
-  valueLabelPath,
-  valueLabel,
-  field = '',
-  label,
-  labelSize,
-  error: saveToDbError,
-  saveToDb,
-  query,
-  filter,
-  queryNodesName,
-}) => {
-  const client = useApolloClient()
+export const SelectLoadingOptions = observer(
+  ({
+    row,
+    valueLabelPath,
+    valueLabel,
+    field = '',
+    label,
+    labelSize,
+    error: saveToDbError,
+    saveToDb,
+    query,
+    filter,
+    queryNodesName,
+  }) => {
+    const client = useApolloClient()
 
-  const loadOptions = useCallback(
-    async (inputValue, cb) => {
-      const ownFilter = inputValue
-        ? { artname: { includesInsensitive: inputValue } }
-        : { artname: { isNull: false } }
-      let result
-      try {
-        result = await client.query({
-          query,
-          variables: {
-            filter: filter ? filter(inputValue) : ownFilter,
-          },
-        })
-      } catch (error) {
-        console.log({ error })
-      }
-      const { data } = result
-      const options = data?.[queryNodesName]?.nodes ?? []
-      cb(options)
-    },
-    [client, filter, query, queryNodesName],
-  )
-
-  const onChange = useCallback(
-    (option) => {
-      const value = option && option.value ? option.value : null
-      const fakeEvent = {
-        target: {
-          name: field,
-          value,
-        },
-      }
-      saveToDb(fakeEvent)
-    },
-    [field, saveToDb],
-  )
-
-  const value = {
-    value: row[field] ?? '',
-    label: valueLabel ? valueLabel : get(row, valueLabelPath) ?? '',
-  }
-
-  return (
-    <Container data-id={field}>
-      {label && <Label labelsize={labelSize}>{label}</Label>}
-      <StyledSelect
-        id={field}
-        defaultOptions
-        name={field}
-        onChange={onChange}
-        value={value}
-        hideSelectedOptions
-        placeholder=""
-        isClearable
-        isSearchable
-        // remove as can't select without typing
-        nocaret
-        // don't show a no options message if a value exists
-        noOptionsMessage={() =>
-          value.value ? null : '(Bitte Tippen für Vorschläge)'
+    const loadOptions = useCallback(
+      async (inputValue, cb) => {
+        const ownFilter =
+          inputValue ?
+            { artname: { includesInsensitive: inputValue } }
+          : { artname: { isNull: false } }
+        let result
+        try {
+          result = await client.query({
+            query,
+            variables: {
+              filter: filter ? filter(inputValue) : ownFilter,
+            },
+          })
+        } catch (error) {
+          console.log({ error })
         }
-        // enable deleting typed values
-        backspaceRemovesValue
-        classNamePrefix="react-select"
-        loadOptions={loadOptions}
-        openMenuOnFocus
-      />
-      {saveToDbError && <Error>{saveToDbError}</Error>}
-    </Container>
-  )
-}
+        const { data } = result
+        const options = data?.[queryNodesName]?.nodes ?? []
+        cb(options)
+      },
+      [client, filter, query, queryNodesName],
+    )
 
-export default observer(SelectTypable)
+    const onChange = useCallback(
+      (option) => {
+        const value = option && option.value ? option.value : null
+        const fakeEvent = {
+          target: {
+            name: field,
+            value,
+          },
+        }
+        saveToDb(fakeEvent)
+      },
+      [field, saveToDb],
+    )
+
+    const value = {
+      value: row[field] ?? '',
+      label: valueLabel ? valueLabel : (get(row, valueLabelPath) ?? ''),
+    }
+
+    return (
+      <Container data-id={field}>
+        {label && <Label labelsize={labelSize}>{label}</Label>}
+        <StyledSelect
+          id={field}
+          defaultOptions
+          name={field}
+          onChange={onChange}
+          value={value}
+          hideSelectedOptions
+          placeholder=""
+          isClearable
+          isSearchable
+          // remove as can't select without typing
+          nocaret
+          // don't show a no options message if a value exists
+          noOptionsMessage={() =>
+            value.value ? null : '(Bitte Tippen für Vorschläge)'
+          }
+          // enable deleting typed values
+          backspaceRemovesValue
+          classNamePrefix="react-select"
+          loadOptions={loadOptions}
+          openMenuOnFocus
+        />
+        {saveToDbError && <Error>{saveToDbError}</Error>}
+      </Container>
+    )
+  },
+)
