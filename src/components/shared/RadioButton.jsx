@@ -24,39 +24,39 @@ const StyledRadio = styled(Radio)`
   width: 24px;
 `
 
-const RadioButton = ({ label, name, value, error, saveToDb }) => {
-  const onClickButton = useCallback(() => {
-    const fakeEvent = {
-      target: {
-        value: !value,
-        name,
-      },
-    }
-    // It is possible to directly click an option after editing an other field
-    // this creates a race condition in the two submits which can lead to lost inputs!
-    // so timeout inputs in option fields
-    setTimeout(() => saveToDb(fakeEvent))
-  }, [name, value, saveToDb])
+export const RadioButton = observer(
+  ({ label, name, value, error, saveToDb }) => {
+    const onClickButton = useCallback(() => {
+      const fakeEvent = {
+        target: {
+          value: !value,
+          name,
+        },
+      }
+      // It is possible to directly click an option after editing an other field
+      // this creates a race condition in the two submits which can lead to lost inputs!
+      // so timeout inputs in option fields
+      setTimeout(() => saveToDb(fakeEvent))
+    }, [name, value, saveToDb])
 
-  return (
-    <StyledFormControl
-      component="fieldset"
-      error={!!error}
-      aria-describedby={`${label}ErrorText`}
-      variant="standard"
-    >
-      <StyledFormLabel component="legend">{label}</StyledFormLabel>
-      <StyledRadio
-        data-id={name}
-        onClick={onClickButton}
-        color="primary"
-        checked={value}
-      />
-      {!!error && (
-        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-      )}
-    </StyledFormControl>
-  )
-}
-
-export default observer(RadioButton)
+    return (
+      <StyledFormControl
+        component="fieldset"
+        error={!!error}
+        aria-describedby={`${label}ErrorText`}
+        variant="standard"
+      >
+        <StyledFormLabel component="legend">{label}</StyledFormLabel>
+        <StyledRadio
+          data-id={name}
+          onClick={onClickButton}
+          color="primary"
+          checked={value}
+        />
+        {!!error && (
+          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+        )}
+      </StyledFormControl>
+    )
+  },
+)
