@@ -65,14 +65,14 @@ const ApArt = () => {
     .filter((o) => !!o)
   const aeTaxonomiesfilter = useCallback(
     (inputValue) =>
-      inputValue
-        ? apartenOfAp.length
-          ? {
-              taxArtName: { includesInsensitive: inputValue },
-              id: { notIn: apartenOfAp },
-            }
-          : { taxArtName: { includesInsensitive: inputValue } }
-        : { taxArtName: { isNull: false } },
+      inputValue ?
+        apartenOfAp.length ?
+          {
+            taxArtName: { includesInsensitive: inputValue },
+            id: { notIn: apartenOfAp },
+          }
+        : { taxArtName: { includesInsensitive: inputValue } }
+      : { taxArtName: { isNull: false } },
     [apartenOfAp],
   )
 
@@ -144,6 +144,7 @@ const ApArt = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FieldsSubContainer>
               <div>

@@ -70,6 +70,7 @@ const Messages = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FieldsContainer>
               {rows.map((m) => {

@@ -137,20 +137,20 @@ const ApAp = () => {
 
   const aeTaxonomiesfilterForData = useCallback(
     (inputValue) =>
-      inputValue
-        ? {
-            or: [
-              { apByArtIdExists: false },
-              { apByArtId: { id: { equalTo: apId } } },
-            ],
-            taxArtName: { includesInsensitive: inputValue },
-          }
-        : {
-            or: [
-              { apByArtIdExists: false },
-              { apByArtId: { id: { equalTo: apId } } },
-            ],
-          },
+      inputValue ?
+        {
+          or: [
+            { apByArtIdExists: false },
+            { apByArtId: { id: { equalTo: apId } } },
+          ],
+          taxArtName: { includesInsensitive: inputValue },
+        }
+      : {
+          or: [
+            { apByArtIdExists: false },
+            { apByArtId: { id: { equalTo: apId } } },
+          ],
+        },
     [apId],
   )
 
@@ -164,6 +164,7 @@ const ApAp = () => {
         maxHeight: '100%',
         height: '100%',
       }}
+      tabIndex={-1}
     >
       <FormContainer>
         <SelectLoadingOptions

@@ -170,11 +170,18 @@ const Idealbiotop = () => {
               value="idealbiotop"
               data-id="idealbiotop"
             />
-            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+            <StyledTab
+              label="Dateien"
+              value="dateien"
+              data-id="dateien"
+            />
           </Tabs>
           <div style={{ overflowY: 'auto' }}>
             <TabContent>
-              <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+              <SimpleBar
+                style={{ maxHeight: '100%', height: '100%' }}
+                tabIndex={-1}
+              >
                 {tab === 'idealbiotop' && (
                   <FormContainer>
                     <DateField
@@ -344,7 +351,10 @@ const Idealbiotop = () => {
                 )}
                 {tab === 'dateien' && (
                   <FilesContainer>
-                    <Files parentId={row.id} parent="idealbiotop" />
+                    <Files
+                      parentId={row.id}
+                      parent="idealbiotop"
+                    />
                   </FilesContainer>
                 )}
               </SimpleBar>

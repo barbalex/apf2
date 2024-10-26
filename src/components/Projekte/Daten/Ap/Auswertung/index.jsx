@@ -18,11 +18,12 @@ const ApAuswertung = () => (
       maxHeight: '100%',
       height: '100%',
     }}
+    tabIndex={-1}
   >
     <FormContainer>
       <ApErfolg />
       <PopStatus />
-      <PopMenge /> 
+      <PopMenge />
       <TpopKontrolliert />
     </FormContainer>
   </SimpleBar>

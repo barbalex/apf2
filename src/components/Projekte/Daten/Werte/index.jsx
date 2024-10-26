@@ -33,13 +33,12 @@ const Werte = () => {
   const { wertId: id } = useParams()
   const location = useLocation()
   const { pathname } = location
-  const table = pathname.includes('ApberrelevantGrundWerte')
-    ? 'tpopApberrelevantGrundWerte'
-    : pathname.includes('EkAbrechnungstypWerte')
-      ? 'ekAbrechnungstypWerte'
-      : pathname.includes('TpopkontrzaehlEinheitWerte')
-        ? 'tpopkontrzaehlEinheitWerte'
-        : 'uups'
+  const table =
+    pathname.includes('ApberrelevantGrundWerte') ? 'tpopApberrelevantGrundWerte'
+    : pathname.includes('EkAbrechnungstypWerte') ? 'ekAbrechnungstypWerte'
+    : pathname.includes('TpopkontrzaehlEinheitWerte') ?
+      'tpopkontrzaehlEinheitWerte'
+    : 'uups'
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
@@ -147,6 +146,7 @@ const Werte = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <TextField

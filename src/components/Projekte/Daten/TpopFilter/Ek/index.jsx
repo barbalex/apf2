@@ -64,6 +64,7 @@ const Ek = ({ saveToDb, row, fieldErrors }) => {
         width: '100%',
         maxWidth: '100%',
       }}
+      tabIndex={-1}
     >
       <ErrorBoundary>
         <>

@@ -196,6 +196,7 @@ const Apberuebersicht = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <TextField
@@ -224,16 +225,15 @@ const Apberuebersicht = () => {
                   >
                     <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
                     <Explainer>
-                      {historizing ? (
+                      {historizing ?
                         'Bitte warten, das dauert eine Weile...'
-                      ) : (
-                        <>
+                      : <>
                           Diese Option ist nur sichtbar:
                           <br /> 1. Wenn der Benutzer Manager ist
                           <br /> 2. Von Beginn des Berichtjahrs bis zum März des
                           Folgejahrs
                         </>
-                      )}
+                      }
                     </Explainer>
                   </HistorizeButton>
                 </>

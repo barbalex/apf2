@@ -129,13 +129,11 @@ const nichtZuordnenPopover = (
 const Beobzuordnung = () => {
   const { beobId: id, apId } = useParams()
   const { search, pathname } = useLocation()
-  const type = pathname.includes('nicht-zuzuordnende-Beobachtungen')
-    ? 'nichtZuzuordnen'
-    : pathname.includes('nicht-beurteilte-Beobachtungen')
-      ? 'nichtBeurteilt'
-      : pathname.includes('Beobachtungen')
-        ? 'zugeordnet'
-        : 'uups'
+  const type =
+    pathname.includes('nicht-zuzuordnende-Beobachtungen') ? 'nichtZuzuordnen'
+    : pathname.includes('nicht-beurteilte-Beobachtungen') ? 'nichtBeurteilt'
+    : pathname.includes('Beobachtungen') ? 'zugeordnet'
+    : 'uups'
 
   const client = useApolloClient()
   const store = useContext(StoreContext)
@@ -153,12 +151,12 @@ const Beobzuordnung = () => {
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
   const aeTaxonomiesfilter = useCallback(
     (inputValue) =>
-      inputValue
-        ? {
-            artname: { includesInsensitive: inputValue },
-            apartsByArtIdExist: true,
-          }
-        : { artname: { isNull: false }, apartsByArtIdExist: true },
+      inputValue ?
+        {
+          artname: { includesInsensitive: inputValue },
+          apartsByArtIdExist: true,
+        }
+      : { artname: { isNull: false }, apartsByArtIdExist: true },
     [],
   )
 
@@ -305,6 +303,7 @@ const Beobzuordnung = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FieldsContainer>
               {row && row.artId !== row.artIdOriginal && (
@@ -337,9 +336,9 @@ const Beobzuordnung = () => {
                 value={row.tpopId ?? ''}
                 field="tpopId"
                 label={
-                  row.tpopId
-                    ? 'Einer anderen Teilpopulation zuordnen'
-                    : 'Einer Teilpopulation zuordnen'
+                  row.tpopId ?
+                    'Einer anderen Teilpopulation zuordnen'
+                  : 'Einer Teilpopulation zuordnen'
                 }
                 options={tpopZuordnenSource}
                 saveToDb={onSaveTpopIdToDb}
@@ -385,11 +384,11 @@ const Beobzuordnung = () => {
                       data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`
                     })
                     const body = `${origArt}\r\n${neueArt}${
-                      bemerkungen
-                        ? `${
-                            bemerkungen ? `\r\nBemerkungen: ${bemerkungen}` : ''
-                          }`
-                        : ''
+                      bemerkungen ?
+                        `${
+                          bemerkungen ? `\r\nBemerkungen: ${bemerkungen}` : ''
+                        }`
+                      : ''
                     }\r\n\r\nOriginal-Beobachtungs-Daten:\r\n${data}`
                     sendMail({
                       to: 'info@infoflora.ch',

@@ -158,14 +158,26 @@ const Pop = () => {
           textColor="primary"
           centered
         >
-          <StyledTab label="Population" value="pop" data-id="pop" />
+          <StyledTab
+            label="Population"
+            value="pop"
+            data-id="pop"
+          />
           <StyledTab
             label="Auswertung"
             value="auswertung"
             data-id="auswertung"
           />
-          <StyledTab label="Dateien" value="dateien" data-id="dateien" />
-          <StyledTab label="Historien" value="history" data-id="history" />
+          <StyledTab
+            label="Dateien"
+            value="dateien"
+            data-id="dateien"
+          />
+          <StyledTab
+            label="Historien"
+            value="history"
+            data-id="history"
+          />
         </Tabs>
         <div style={{ overflowY: 'auto' }}>
           <TabContent>
@@ -175,6 +187,7 @@ const Pop = () => {
                   maxHeight: '100%',
                   height: '100%',
                 }}
+                tabIndex={-1}
               >
                 <FormContainer>
                   <TextField
@@ -217,12 +230,21 @@ const Pop = () => {
                     saveToDb={saveToDb}
                     error={fieldErrors.statusUnklarBegruendung}
                   />
-                  <Coordinates row={row} refetchForm={refetchPop} table="pop" />
+                  <Coordinates
+                    row={row}
+                    refetchForm={refetchPop}
+                    table="pop"
+                  />
                 </FormContainer>
               </SimpleBar>
             )}
             {tab === 'auswertung' && <TpopMenge />}
-            {tab === 'dateien' && <Files parentId={row.id} parent="pop" />}
+            {tab === 'dateien' && (
+              <Files
+                parentId={row.id}
+                parent="pop"
+              />
+            )}
             {tab === 'history' && <PopHistory />}
           </TabContent>
         </div>

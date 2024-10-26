@@ -231,13 +231,24 @@ const Tpopfeldkontr = () => {
               value="entwicklung"
               data-id="entwicklung"
             />
-            <StyledTab label="Biotop" value="biotop" data-id="biotop" />
-            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+            <StyledTab
+              label="Biotop"
+              value="biotop"
+              data-id="biotop"
+            />
+            <StyledTab
+              label="Dateien"
+              value="dateien"
+              data-id="dateien"
+            />
           </Tabs>
           <div style={{ overflowY: 'auto' }}>
             <TabContent>
               {tab === 'entwicklung' && (
-                <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+                <SimpleBar
+                  style={{ maxHeight: '100%', height: '100%' }}
+                  tabIndex={-1}
+                >
                   <FormContainer>
                     <TextField
                       name="jahr"
@@ -373,7 +384,10 @@ const Tpopfeldkontr = () => {
                       saveToDb={saveToDb}
                       error={fieldErrors.apberNichtRelevantGrund}
                     />
-                    <StringToCopy text={row.id} label="id" />
+                    <StringToCopy
+                      text={row.id}
+                      label="id"
+                    />
                   </FormContainer>
                 </SimpleBar>
               )}
@@ -481,7 +495,10 @@ const Tpopfeldkontr = () => {
                 </SimpleBar>
               )}
               {tab === 'dateien' && (
-                <Files parentId={row.id} parent="tpopkontr" />
+                <Files
+                  parentId={row.id}
+                  parent="tpopkontr"
+                />
               )}
             </TabContent>
           </div>

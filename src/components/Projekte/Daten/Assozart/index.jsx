@@ -61,14 +61,14 @@ const Assozart = () => {
     // but do include the art included in the row
     .filter((o) => o !== row.aeId)
   const aeTaxonomiesfilter = (inputValue) =>
-    inputValue
-      ? assozartenOfAp.length
-        ? {
-            taxArtName: { includesInsensitive: inputValue },
-            id: { notIn: assozartenOfAp },
-          }
-        : { taxArtName: { includesInsensitive: inputValue } }
-      : { taxArtName: { isNull: false } }
+    inputValue ?
+      assozartenOfAp.length ?
+        {
+          taxArtName: { includesInsensitive: inputValue },
+          id: { notIn: assozartenOfAp },
+        }
+      : { taxArtName: { includesInsensitive: inputValue } }
+    : { taxArtName: { isNull: false } }
 
   const saveToDb = useCallback(
     async (event) => {
@@ -145,6 +145,7 @@ const Assozart = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <SelectLoadingOptions

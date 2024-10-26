@@ -80,7 +80,10 @@ const Docs = () => (
   <ErrorBoundary>
     <Container>
       <Sidebar />
-      <SimpleBar style={{ height: '100%', width: '100%' }}>
+      <SimpleBar
+        style={{ height: '100%', width: '100%' }}
+        tabIndex={-1}
+      >
         <Doku>
           <Suspense fallback={<Spinner />}>
             <Outlet />

@@ -352,6 +352,7 @@ const User = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <StyledForm>
               <TextField
@@ -425,15 +426,18 @@ const User = () => {
                           title={showPass ? 'verstecken' : 'anzeigen'}
                           size="large"
                         >
-                          {showPass ? <MdVisibilityOff /> : <MdVisibility />}
+                          {showPass ?
+                            <MdVisibilityOff />
+                          : <MdVisibility />}
                         </IconButton>
                       </InputAdornment>
                     }
                   />
                   <FormHelperText id="passwortHelper">
-                    {passwordErrorText || (errors && !!errors.pass)
-                      ? errors.pass
-                      : 'Passwort muss mindestens 6 Zeichen lang sein und darf keine Zahl sein'}
+                    {passwordErrorText || (errors && !!errors.pass) ?
+                      errors.pass
+                    : 'Passwort muss mindestens 6 Zeichen lang sein und darf keine Zahl sein'
+                    }
                   </FormHelperText>
                 </FormControl>
               )}
@@ -468,7 +472,9 @@ const User = () => {
                           title={showPass2 ? 'verstecken' : 'anzeigen'}
                           size="large"
                         >
-                          {showPass2 ? <MdVisibilityOff /> : <MdVisibility />}
+                          {showPass2 ?
+                            <MdVisibilityOff />
+                          : <MdVisibility />}
                         </IconButton>
                       </InputAdornment>
                     }

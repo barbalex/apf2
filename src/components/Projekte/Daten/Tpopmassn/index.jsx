@@ -274,9 +274,9 @@ const Tpopmassn = ({ showFilter = false }) => {
               ${field === 'datum' ? '$jahr: Int' : ''}
               ${field === 'typ' ? '$zieleinheitEinheit: Int' : ''}
               ${
-                ['typ', 'anzTriebe', 'anzPflanzen'].includes(field)
-                  ? '$zieleinheitAnzahl: Int'
-                  : ''
+                ['typ', 'anzTriebe', 'anzPflanzen'].includes(field) ?
+                  '$zieleinheitAnzahl: Int'
+                : ''
               }
               $changedBy: String
             ) {
@@ -288,14 +288,14 @@ const Tpopmassn = ({ showFilter = false }) => {
                     ${field === 'jahr' ? 'datum: $datum' : ''}
                     ${field === 'datum' ? 'jahr: $jahr' : ''}
                     ${
-                      field === 'typ'
-                        ? 'zieleinheitEinheit: $zieleinheitEinheit'
-                        : ''
+                      field === 'typ' ?
+                        'zieleinheitEinheit: $zieleinheitEinheit'
+                      : ''
                     }
                     ${
-                      ['typ', 'anzTriebe', 'anzPflanzen'].includes(field)
-                        ? 'zieleinheitAnzahl: $zieleinheitAnzahl'
-                        : ''
+                      ['typ', 'anzTriebe', 'anzPflanzen'].includes(field) ?
+                        'zieleinheitAnzahl: $zieleinheitAnzahl'
+                      : ''
                     }
                     changedBy: $changedBy
                   }
@@ -378,13 +378,24 @@ const Tpopmassn = ({ showFilter = false }) => {
           textColor="primary"
           centered
         >
-          <StyledTab label="Massnahme" value="tpopmassn" data-id="tpopmassn" />
-          <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+          <StyledTab
+            label="Massnahme"
+            value="tpopmassn"
+            data-id="tpopmassn"
+          />
+          <StyledTab
+            label="Dateien"
+            value="dateien"
+            data-id="dateien"
+          />
         </Tabs>
         <div style={{ overflowY: 'auto' }}>
           <TabContent>
             {tab === 'tpopmassn' && (
-              <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+              <SimpleBar
+                style={{ maxHeight: '100%', height: '100%' }}
+                tabIndex={-1}
+              >
                 <ColumnContainer>
                   <FormContainer>
                     <TextField
@@ -522,9 +533,9 @@ const Tpopmassn = ({ showFilter = false }) => {
                         <TextField
                           name="zieleinheitAnzahl"
                           label={
-                            notMassnCountUnit === true
-                              ? 'Ziel-Einheit: Anzahl'
-                              : 'Ziel-Einheit: Anzahl (wird automatisch gesetzt)'
+                            notMassnCountUnit === true ?
+                              'Ziel-Einheit: Anzahl'
+                            : 'Ziel-Einheit: Anzahl (wird automatisch gesetzt)'
                           }
                           type="number"
                           value={row.zieleinheitAnzahl}
@@ -566,13 +577,21 @@ const Tpopmassn = ({ showFilter = false }) => {
                       saveToDb={saveToDb}
                       error={fieldErrors.vonAnzahlIndividuen}
                     />
-                    {!showFilter && <StringToCopy text={row.id} label="id" />}
+                    {!showFilter && (
+                      <StringToCopy
+                        text={row.id}
+                        label="id"
+                      />
+                    )}
                   </FormContainer>
                 </ColumnContainer>
               </SimpleBar>
             )}
             {tab === 'dateien' && !showFilter && (
-              <Files parentId={row.id} parent="tpopmassn" />
+              <Files
+                parentId={row.id}
+                parent="tpopmassn"
+              />
             )}
           </TabContent>
         </div>

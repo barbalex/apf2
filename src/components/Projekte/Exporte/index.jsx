@@ -99,13 +99,17 @@ const Exporte = () => {
     <ExporteContainer data-id="exporte-container">
       <ErrorBoundary>
         <Container>
-          <FormTitle title="Exporte" noTestDataMessage={true} />
+          <FormTitle
+            title="Exporte"
+            noTestDataMessage={true}
+          />
           <ScrollContainer>
             <SimpleBar
               style={{
                 maxHeight: '100%',
                 height: '100%',
               }}
+              tabIndex={-1}
             >
               <InnerContainer>
                 <Optionen />

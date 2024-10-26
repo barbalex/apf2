@@ -112,6 +112,7 @@ const Ek = ({ saveToDb, row, fieldErrors, loadingParent }) => {
         width: '100%',
         maxWidth: '100%',
       }}
+      tabIndex={-1}
     >
       <ErrorBoundary>
         <FormContainerNoColumnsInner>
@@ -161,21 +162,23 @@ const Ek = ({ saveToDb, row, fieldErrors, loadingParent }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {loadingEk ? (
+            {loadingEk ?
               <TableRow>
                 <TableCell>Lade...</TableCell>
               </TableRow>
-            ) : errorEk ? (
+            : errorEk ?
               <TableRow>
                 <TableCell>{errorEk.message}</TableCell>
               </TableRow>
-            ) : (
-              Object.keys(ekGroupedByYear)
+            : Object.keys(ekGroupedByYear)
                 .reverse()
                 .map((year) => (
-                  <EkYear key={year} data={ekGroupedByYear[year]} />
+                  <EkYear
+                    key={year}
+                    data={ekGroupedByYear[year]}
+                  />
                 ))
-            )}
+            }
           </TableBody>
         </StyledTable>
       </ErrorBoundary>

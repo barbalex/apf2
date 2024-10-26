@@ -159,6 +159,7 @@ const Ekfrequenz = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <TextField
@@ -209,10 +210,9 @@ const Ekfrequenz = () => {
                 error={fieldErrors.kontrolljahreAb}
               />
               <div>
-                {errorEkAbrechnungstypWertes ? (
+                {errorEkAbrechnungstypWertes ?
                   errorEkAbrechnungstypWertes.message
-                ) : (
-                  <RadioButtonGroup
+                : <RadioButtonGroup
                     name="ekAbrechnungstyp"
                     dataSource={
                       dataEkAbrechnungstypWertes?.allEkAbrechnungstypWertes
@@ -224,7 +224,7 @@ const Ekfrequenz = () => {
                     saveToDb={saveToDb}
                     error={fieldErrors.ekAbrechnungstyp}
                   />
-                )}
+                }
               </div>
               <TextField
                 name="bemerkungen"

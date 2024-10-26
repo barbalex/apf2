@@ -85,21 +85,24 @@ const PopFilter = () => {
     [activeTab, dataFilterSetValue],
   )
 
-  const navApFilterComment = apFilter
-    ? `Navigationsbaum, "nur AP"-Filter: Nur Populationen von AP-Arten werden berücksichtigt.`
+  const navApFilterComment =
+    apFilter ?
+      `Navigationsbaum, "nur AP"-Filter: Nur Populationen von AP-Arten werden berücksichtigt.`
     : undefined
-  const navHiearchyComment = apId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Populationen berücksichtigt.'
+  const navHiearchyComment =
+    apId ?
+      'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Populationen berücksichtigt.'
     : undefined
-  const navLabelComment = nodeLabelFilter.pop
-    ? `Navigationsbaum, Label-Filter: Das Label der Populationen wird nach "${nodeLabelFilter.pop}" gefiltert.`
+  const navLabelComment =
+    nodeLabelFilter.pop ?
+      `Navigationsbaum, Label-Filter: Das Label der Populationen wird nach "${nodeLabelFilter.pop}" gefiltert.`
     : undefined
-  const hierarchyComment = artIsFiltered
-    ? 'Formular-Filter, Ebene Art: Es werden nur Populationen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+  const hierarchyComment =
+    artIsFiltered ?
+      'Formular-Filter, Ebene Art: Es werden nur Populationen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const mapFilterComment = mapFilter
-    ? 'Karten-Filter: wird angewendet.'
-    : undefined
+  const mapFilterComment =
+    mapFilter ? 'Karten-Filter: wird angewendet.' : undefined
 
   const showFilterComments =
     !!navApFilterComment ||
@@ -153,6 +156,7 @@ const PopFilter = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <TextField
               label="Nr."

@@ -116,16 +116,14 @@ const Files = ({
             `,
           })
         } catch (error) {
-          return console.log(error)
-          // TODO: add enqueNotification
-          /*return store.enqueNotification({
-              message: error.message,
-              options: {
-                variant: 'error',
-              },
-            })*/
+          console.log(error)
+          store.enqueNotification({
+            message: error.message,
+            options: {
+              variant: 'error',
+            },
+          })
         }
-        console.log('File uploaded: ', { info, responce })
         refetch()
       }
       // close the uploader or it will be open when navigating to the list
@@ -174,6 +172,7 @@ const Files = ({
         maxHeight: '100%',
         height: '100%',
       }}
+      tabIndex={-1}
     >
       <ErrorBoundary>
         <Container>

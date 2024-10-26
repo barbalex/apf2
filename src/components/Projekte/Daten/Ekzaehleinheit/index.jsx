@@ -70,9 +70,8 @@ const Ekzaehleinheit = () => {
   ).map((o) => o.zaehleinheitId)
   // re-add this ones id
   const notToShow = ekzaehleinheitenOfAp.filter((o) => o !== row.zaehleinheitId)
-  const zaehleinheitWerteFilter = notToShow.length
-    ? { id: { notIn: notToShow } }
-    : { id: { isNull: false } }
+  const zaehleinheitWerteFilter =
+    notToShow.length ? { id: { notIn: notToShow } } : { id: { isNull: false } }
   const {
     data: dataLists,
     loading: loadingLists,
@@ -165,6 +164,7 @@ const Ekzaehleinheit = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <Select
