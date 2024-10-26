@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import Checkbox from './Checkbox.jsx'
+import { Checkbox } from './Checkbox.jsx'
 import { StyledCellForSelect } from './index.jsx'
 import { StoreContext } from '../../../storeContext.js'
 
@@ -31,4 +31,3 @@ export const CellForEkfrequenzAbweichend = observer(({ field, row, style }) => {
     </StyledCellForSelect>
   )
 })
-

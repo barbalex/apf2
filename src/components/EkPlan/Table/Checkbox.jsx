@@ -30,7 +30,7 @@ const StyledCheckbox = styled.div`
   }
 `
 
-const CheckboxComponent = ({ row, value, field }) => {
+export const Checkbox = observer(({ row, value, field }) => {
   const store = useContext(StoreContext)
   const { enqueNotification } = store
   const client = useApolloClient()
@@ -94,6 +94,4 @@ const CheckboxComponent = ({ row, value, field }) => {
       </StyledCheckbox>
     </CheckboxContainer>
   )
-}
-
-export default observer(CheckboxComponent)
+})
