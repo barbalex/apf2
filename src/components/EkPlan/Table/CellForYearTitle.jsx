@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { StyledTableCell, InfoRow } from './index.jsx'
 import { StoreContext } from '../../../storeContext.js'
 
-const CellForYearTitle = ({ style, row }) => {
+export const CellForYearTitle = observer(({ style, row }) => {
   const store = useContext(StoreContext)
   const { showEk, showEkf, showMassn, hovered } = store.ekPlan
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
@@ -26,6 +26,4 @@ const CellForYearTitle = ({ style, row }) => {
       {showMassn && <InfoRow>Ansied:</InfoRow>}
     </StyledTableCell>
   )
-}
-
-export default observer(CellForYearTitle)
+})

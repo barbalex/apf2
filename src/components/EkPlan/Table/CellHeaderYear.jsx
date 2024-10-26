@@ -41,7 +41,7 @@ const StyledMenuItem = styled(MenuItem)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-const CellHeaderYear = ({ style, column, rows }) => {
+export const CellHeaderYear = observer(({ style, column, rows }) => {
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
@@ -147,7 +147,11 @@ const CellHeaderYear = ({ style, column, rows }) => {
         onClick={onClickCell}
       >
         <Title>{column}</Title>
-        <Dropdown>{filterSet ? <FaFilter /> : <Caret />}</Dropdown>
+        <Dropdown>
+          {filterSet ?
+            <FaFilter />
+          : <Caret />}
+        </Dropdown>
       </StyledCell>
       <Menu
         anchorEl={anchorEl}
@@ -160,31 +164,29 @@ const CellHeaderYear = ({ style, column, rows }) => {
           active={yearHasKontrollen ? 1 : 0}
           dense
         >
-          {filterKontrolleYear === column
-            ? `nicht TPop mit Kontrollen in ${column} filtern`
-            : `TPop mit Kontrollen in ${column} filtern`}
+          {filterKontrolleYear === column ?
+            `nicht TPop mit Kontrollen in ${column} filtern`
+          : `TPop mit Kontrollen in ${column} filtern`}
         </StyledMenuItem>
         <StyledMenuItem
           onClick={onClickFilterEkplanYear}
           active={yearHasEkplan ? 1 : 0}
           dense
         >
-          {filterEkplanYear === column
-            ? `nicht TPop mit Ekplan in ${column} filtern`
-            : `TPop mit Ekplan in ${column} filtern`}
+          {filterEkplanYear === column ?
+            `nicht TPop mit Ekplan in ${column} filtern`
+          : `TPop mit Ekplan in ${column} filtern`}
         </StyledMenuItem>
         <StyledMenuItem
           onClick={onClickFilterAnsiedlungYear}
           active={yearHasAnsiedlungen ? 1 : 0}
           dense
         >
-          {filterAnsiedlungYear === column
-            ? `nicht TPop mit Ansiedlungen in ${column} filtern`
-            : `TPop mit Ansiedlungen in ${column} filtern`}
+          {filterAnsiedlungYear === column ?
+            `nicht TPop mit Ansiedlungen in ${column} filtern`
+          : `TPop mit Ansiedlungen in ${column} filtern`}
         </StyledMenuItem>
       </Menu>
     </>
   )
-}
-
-export default observer(CellHeaderYear)
+})
