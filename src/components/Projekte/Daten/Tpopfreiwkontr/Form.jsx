@@ -6,7 +6,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { jwtDecode } from 'jwt-decode'
 import { useQueryClient } from '@tanstack/react-query'
 
-import StringToCopy from '../../../shared/StringToCopyOnlyButton.jsx'
+import { StringToCopyOnlyButton } from '../../../shared/StringToCopyOnlyButton.jsx'
 import Title from './Title.jsx'
 import Headdata from './Headdata/index.jsx'
 import Besttime from './Besttime.jsx'
@@ -333,11 +333,27 @@ const TpopfreiwkontrForm = ({ data, refetch, row, apId }) => {
     <FormContainer>
       <GridContainer>
         <Title row={row} />
-        <Headdata pop={pop} tpop={tpop} row={row} />
+        <Headdata
+          pop={pop}
+          tpop={tpop}
+          row={row}
+        />
         <Besttime row={row} />
-        <Date saveToDb={saveToDb} row={row} errors={errors} />
-        <Map saveToDb={saveToDb} row={row} errors={errors} />
-        <Image key={apId} apId={apId} artname={artname} />
+        <Date
+          saveToDb={saveToDb}
+          row={row}
+          errors={errors}
+        />
+        <Map
+          saveToDb={saveToDb}
+          row={row}
+          errors={errors}
+        />
+        <Image
+          key={apId}
+          apId={apId}
+          artname={artname}
+        />
         {zaehls1 && (
           <Count
             key={zaehls1.id}
@@ -430,19 +446,48 @@ const TpopfreiwkontrForm = ({ data, refetch, row, apId }) => {
             ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
           />
         )}
-        <Cover saveToDb={saveToDb} row={row} errors={errors} />
-        <More saveToDb={saveToDb} row={row} errors={errors} />
-        <Danger saveToDb={saveToDb} row={row} errors={errors} />
-        <Remarks saveToDb={saveToDb} row={row} errors={errors} />
+        <Cover
+          saveToDb={saveToDb}
+          row={row}
+          errors={errors}
+        />
+        <More
+          saveToDb={saveToDb}
+          row={row}
+          errors={errors}
+        />
+        <Danger
+          saveToDb={saveToDb}
+          row={row}
+          errors={errors}
+        />
+        <Remarks
+          saveToDb={saveToDb}
+          row={row}
+          errors={errors}
+        />
         {((isPrint && ekfBemerkungen) || !isPrint) && (
-          <EkfRemarks saveToDb={saveToDb} row={row} errors={errors} />
+          <EkfRemarks
+            saveToDb={saveToDb}
+            row={row}
+            errors={errors}
+          />
         )}
         {!isPrint && <Files row={row} />}
         {!isPrint && !isFreiwillig && (
-          <Verification saveToDb={saveToDb} row={row} errors={errors} />
+          <Verification
+            saveToDb={saveToDb}
+            row={row}
+            errors={errors}
+          />
         )}
       </GridContainer>
-      {!isPrint && !isFreiwillig && <StringToCopy text={row.id} label="GUID" />}
+      {!isPrint && !isFreiwillig && (
+        <StringToCopyOnlyButton
+          text={row.id}
+          label="GUID"
+        />
+      )}
       {!isPrint && <div style={{ height: '64px' }} />}
     </FormContainer>
   )
