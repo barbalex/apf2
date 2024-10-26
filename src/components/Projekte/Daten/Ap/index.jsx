@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 
 import Ap from './Ap'
 import { Auswertung } from './Auswertung/index.jsx'
-import FormTitle from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import Files from '../../../shared/Files/index.jsx'
 import ApHistory from './History'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'

@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
-import FormTitle from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import Qk from './Qk'
 import Choose from './Choose'
 import queryQk from './queryQk'

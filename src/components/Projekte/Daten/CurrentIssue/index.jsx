@@ -4,7 +4,7 @@ import MarkdownIt from 'markdown-it'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
-import FormTitle from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'

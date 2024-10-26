@@ -39,5 +39,3 @@ export const FormTitle = ({ title, buttons, noTestDataMessage = false }) => (
     {!noTestDataMessage && <TestdataMessage />}
   </Container>
 )
-
-export default FormTitle

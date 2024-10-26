@@ -9,7 +9,7 @@ import { useLocation, useParams } from 'react-router-dom'
 
 import query from './query.js'
 import createTpopkontrzaehl from './createTpopkontrzaehl.js'
-import FormTitle from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
