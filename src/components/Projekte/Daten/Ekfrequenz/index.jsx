@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField.jsx'
-import RadioButtonGroup from '../../../shared/RadioButtonGroup.jsx'
+import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import Kontrolljahre from './Kontrolljahre'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'

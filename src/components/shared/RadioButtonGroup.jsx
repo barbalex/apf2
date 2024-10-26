@@ -27,7 +27,7 @@ const StyledRadio = styled(Radio)`
   height: 2px !important;
 `
 
-const RadioButtonGroup = ({
+export const RadioButtonGroup = ({
   value = null,
   label,
   name,
@@ -133,5 +133,3 @@ const RadioButtonGroup = ({
     </StyledFormControl>
   )
 }
-
-export default RadioButtonGroup

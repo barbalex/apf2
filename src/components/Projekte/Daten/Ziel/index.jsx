@@ -8,7 +8,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup.jsx'
+import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import TextField from '../../../shared/TextField.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
