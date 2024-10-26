@@ -1,4 +1,4 @@
-const getUserFromIdb = async ({ idb }) => {
+export const getUserFromIdb = async ({ idb }) => {
   const users = await idb.currentUser.toArray()
   const user = users[0] || { name: '', token: null }
   // set null if token is empty
@@ -6,4 +6,3 @@ const getUserFromIdb = async ({ idb }) => {
   return user
 }
 
-export default getUserFromIdb

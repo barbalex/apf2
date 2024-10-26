@@ -1,5 +1,5 @@
 import { DokuDate } from '../../index.jsx'
-import YoutubeEmbed from '../../../shared/YoutubeEmbed.jsx'
+import { YoutubeEmbed } from '../../../shared/YoutubeEmbed.jsx'
 import beobZuordnen from './beobZuordnen_01.png'
 
 const BeobZuordnen = () => (
@@ -45,7 +45,10 @@ const BeobZuordnen = () => (
         Population kann aus einer Liste gewählt werden
       </li>
     </ul>
-    <img src={beobZuordnen} alt="im Strukturbaum" />
+    <img
+      src={beobZuordnen}
+      alt="im Strukturbaum"
+    />
     <h2>2. Verfügbare Beobachtungen</h2>
     <p>
       Episodisch und bei Bedarf werden Beobachtungen importiert. Ziel:
@@ -61,7 +64,11 @@ const BeobZuordnen = () => (
       </li>
       <li>
         2017: 30&#39;935 des Projekts{' '}
-        <a href="https://www.floz.zbg.ch/" target="_blank" rel="noreferrer">
+        <a
+          href="https://www.floz.zbg.ch/"
+          target="_blank"
+          rel="noreferrer"
+        >
           Floz
         </a>{' '}
         (offenbar nur Herbarbelege)

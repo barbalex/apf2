@@ -23,7 +23,7 @@ import { useApolloClient, gql } from '@apollo/client'
 
 import { IdbContext } from '../idbContext.js'
 import { StoreContext } from '../storeContext.js'
-import getUserFromIdb from '../modules/getUserFromIdb'
+import { getUserFromIdb } from '../modules/getUserFromIdb.js'
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 
 const StyledDialog = styled(Dialog)``
@@ -277,4 +277,6 @@ export const User = observer(() => {
     </ErrorBoundary>
   )
 })
+
+// without default export get error: Uncaught TypeError: Cannot convert object to primitive value
 export default User
