@@ -3,7 +3,7 @@ import { ErrorBoundary as RawErrorBoundary } from 'react-error-boundary'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 
-import logout from '../../modules/logout'
+import { logout } from '../../modules/logout.js'
 import idbContext from '../../idbContext'
 
 const Container = styled.div`

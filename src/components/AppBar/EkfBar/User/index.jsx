@@ -20,7 +20,7 @@ import updateUserByIdGql from './updateUserById.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
-import logout from '../../../../modules/logout.js'
+import { logout } from '../../../../modules/logout.js'
 import idbContext from '../../../../idbContext.js'
 
 const Container = styled.div`
@@ -225,7 +225,9 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                           title={showPass ? 'verstecken' : 'anzeigen'}
                           size="large"
                         >
-                          {showPass ? <MdVisibilityOff /> : <MdVisibility />}
+                          {showPass ?
+                            <MdVisibilityOff />
+                          : <MdVisibility />}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -265,7 +267,9 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
                           title={showPass2 ? 'verstecken' : 'anzeigen'}
                           size="large"
                         >
-                          {showPass2 ? <MdVisibilityOff /> : <MdVisibility />}
+                          {showPass2 ?
+                            <MdVisibilityOff />
+                          : <MdVisibility />}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -280,7 +284,10 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
         </Container>
       </ErrorBoundary>
       <DialogActions>
-        <Button onClick={toggleUserOpen} color="inherit">
+        <Button
+          onClick={toggleUserOpen}
+          color="inherit"
+        >
           schliessen
         </Button>
       </DialogActions>

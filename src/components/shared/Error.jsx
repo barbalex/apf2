@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import uniq from 'lodash/uniq'
 
-import logout from '../../modules/logout'
+import { logout } from '../../modules/logout.js'
 import idbContext from '../../idbContext'
 import existsPermissionError from '../../modules/existsPermissionError'
 
