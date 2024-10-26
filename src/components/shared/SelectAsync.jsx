@@ -1,3 +1,4 @@
+// seems not in use
 import React, { useCallback } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
@@ -64,7 +65,7 @@ const StyledSelect = styled(AsyncSelect)`
   }
 `
 
-const SharedSelect = ({
+export const SelectAsync = ({
   value,
   field = '',
   label,
@@ -121,4 +122,4 @@ const SharedSelect = ({
   )
 }
 
-export default SharedSelect
+export default SelectAsync
