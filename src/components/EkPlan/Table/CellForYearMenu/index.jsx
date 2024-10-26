@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient } from '@apollo/client'
 
 import { StoreContext } from '../../../../storeContext.js'
-import queryTpop from './queryTpop.js'
+import { queryTpop } from './queryTpop.js'
 import { queryEkplansOfTpop } from './queryEkplansOfTpop.js'
 import { mutationCreateEkplan } from './mutationCreateEkplan.js'
 import { mutationDeleteEkplan } from './mutationDeleteEkplan.js'

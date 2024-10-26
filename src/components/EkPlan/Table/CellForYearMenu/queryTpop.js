@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const queryTpop = gql`
   query EkplanmenuTpopQuery(
     $tpopId: UUID!
     $jahr: Int
