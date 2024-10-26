@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
 
 import { constants } from '../../../../modules/constants.js'
-import exists from '../../../../modules/exists.js'
+import { exists } from '../../../../modules/exists.js'
 import query from './query.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'

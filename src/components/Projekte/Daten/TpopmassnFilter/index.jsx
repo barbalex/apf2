@@ -12,7 +12,7 @@ import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTyp
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import DateField from '../../../shared/Date.jsx'
 
-import FilterTitle from '../../../shared/FilterTitle.jsx'
+import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { constants } from '../../../../modules/constants.js'
 import queryTpopmassns from './queryTpopmassns.js'
 import queryAeTaxonomies from './queryAeTaxonomies.js'

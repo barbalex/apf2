@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 
-import FilterTitle from '../../../shared/FilterTitle.jsx'
+import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import queryTpops from './queryTpops.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'

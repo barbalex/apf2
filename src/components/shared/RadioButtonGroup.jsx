@@ -7,7 +7,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import styled from '@emotion/styled'
 
-import exists from '../../modules/exists.js'
+import { exists } from '../../modules/exists.js'
 
 // without slight padding radio is slightly cut off!
 const StyledFormControl = styled(FormControl)`

@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import { IoMdLocate } from 'react-icons/io'
 
-import exists from '../../modules/exists.js'
+import { exists } from '../../modules/exists.js'
 
 const AddLocationIcon = styled(IoMdLocate)`
   font-size: 1.5rem;

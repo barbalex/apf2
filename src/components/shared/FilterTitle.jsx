@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../storeContext.js'
-import exists from '../../modules/exists.js'
+import { exists } from '../../modules/exists.js'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 
 const Container = styled.div`
@@ -44,99 +44,99 @@ const StyledDeleteFilterIcon3 = styled(FaRegTrashAlt)`
 `
 const StyledInfoIcon = styled(MdInfoOutline)``
 
-const FilterTitle = ({ title, table, totalNr, filteredNr, activeTab }) => {
-  const store = useContext(StoreContext)
-  const { tableIsFiltered, dataFilterTreeIsFiltered } = store
-  const {
-    emptyMapFilter,
-    dataFilterEmpty,
-    dataFilterEmptyTab,
-    dataFilterEmptyTable,
-    setApFilter,
-  } = store.tree
+export const FilterTitle = observer(
+  ({ title, table, totalNr, filteredNr, activeTab }) => {
+    const store = useContext(StoreContext)
+    const { tableIsFiltered, dataFilterTreeIsFiltered } = store
+    const {
+      emptyMapFilter,
+      dataFilterEmpty,
+      dataFilterEmptyTab,
+      dataFilterEmptyTable,
+      setApFilter,
+    } = store.tree
 
-  const existsTableFilter = tableIsFiltered(table)
-  const existsTreeFilter = dataFilterTreeIsFiltered()
+    const existsTableFilter = tableIsFiltered(table)
+    const existsTreeFilter = dataFilterTreeIsFiltered()
 
-  const onEmptyTab = useCallback(
-    () => dataFilterEmptyTab({ table, activeTab }),
-    [dataFilterEmptyTab, table, activeTab],
-  )
-  const onEmptyTable = useCallback(
-    () => dataFilterEmptyTable({ table }),
-    [dataFilterEmptyTable, table],
-  )
-  const onEmptyTree = useCallback(() => {
-    store.tree.nodeLabelFilter.empty()
-    dataFilterEmpty()
-    emptyMapFilter()
-    setApFilter(false)
-  }, [dataFilterEmpty, emptyMapFilter, setApFilter, store])
+    const onEmptyTab = useCallback(
+      () => dataFilterEmptyTab({ table, activeTab }),
+      [dataFilterEmptyTab, table, activeTab],
+    )
+    const onEmptyTable = useCallback(
+      () => dataFilterEmptyTable({ table }),
+      [dataFilterEmptyTable, table],
+    )
+    const onEmptyTree = useCallback(() => {
+      store.tree.nodeLabelFilter.empty()
+      dataFilterEmpty()
+      emptyMapFilter()
+      setApFilter(false)
+    }, [dataFilterEmpty, emptyMapFilter, setApFilter, store])
 
-  const onClickInfo = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/filter`
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      return window.open(url, '_blank', 'toolbar=no')
-    }
-    window.open(url)
-  }, [])
+    const onClickInfo = useCallback(() => {
+      const url = `${appBaseUrl()}Dokumentation/filter`
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        return window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }, [])
 
-  return (
-    <Container>
-      <TitleRow>
-        <FilterNumbers>
-          {exists(filteredNr) && (
-            <>
-              <span title="gefilterte Anzahl">
-                {filteredNr?.toLocaleString('de-ch')}
-              </span>
-              /
-              <span title="ungefilterte Anzahl">
-                {totalNr?.toLocaleString('de-ch')}
-              </span>
-            </>
+    return (
+      <Container>
+        <TitleRow>
+          <FilterNumbers>
+            {exists(filteredNr) && (
+              <>
+                <span title="gefilterte Anzahl">
+                  {filteredNr?.toLocaleString('de-ch')}
+                </span>
+                /
+                <span title="ungefilterte Anzahl">
+                  {totalNr?.toLocaleString('de-ch')}
+                </span>
+              </>
+            )}
+          </FilterNumbers>
+          {activeTab !== undefined && (
+            <IconButton
+              aria-label={`Aktuelles Filter-Kriterium entfernen`}
+              title={`Aktuelles Filter-Kriterium entfernen`}
+              onClick={onEmptyTab}
+              size="small"
+              disabled={!existsTableFilter}
+            >
+              <StyledDeleteFilterIcon3 />
+            </IconButton>
           )}
-        </FilterNumbers>
-        {activeTab !== undefined && (
           <IconButton
-            aria-label={`Aktuelles Filter-Kriterium entfernen`}
-            title={`Aktuelles Filter-Kriterium entfernen`}
-            onClick={onEmptyTab}
+            aria-label={`${title}-Filter entfernen`}
+            title={`${title}-Filter entfernen`}
+            onClick={onEmptyTable}
             size="small"
             disabled={!existsTableFilter}
           >
-            <StyledDeleteFilterIcon3 />
+            <StyledDeleteFilterIcon2 />
           </IconButton>
-        )}
-        <IconButton
-          aria-label={`${title}-Filter entfernen`}
-          title={`${title}-Filter entfernen`}
-          onClick={onEmptyTable}
-          size="small"
-          disabled={!existsTableFilter}
-        >
-          <StyledDeleteFilterIcon2 />
-        </IconButton>
-        <IconButton
-          aria-label="Alle Filter entfernen"
-          title="Alle Filter entfernen"
-          onClick={onEmptyTree}
-          size="small"
-          disabled={!existsTreeFilter}
-        >
-          <StyledDeleteFilterIcon />
-        </IconButton>
-        <IconButton
-          aria-label="Filter-Dokumentation"
-          title="Filter-Dokumentation"
-          size="medium"
-          onClick={onClickInfo}
-        >
-          <StyledInfoIcon />
-        </IconButton>
-      </TitleRow>
-    </Container>
-  )
-}
-
-export default observer(FilterTitle)
+          <IconButton
+            aria-label="Alle Filter entfernen"
+            title="Alle Filter entfernen"
+            onClick={onEmptyTree}
+            size="small"
+            disabled={!existsTreeFilter}
+          >
+            <StyledDeleteFilterIcon />
+          </IconButton>
+          <IconButton
+            aria-label="Filter-Dokumentation"
+            title="Filter-Dokumentation"
+            size="medium"
+            onClick={onClickInfo}
+          >
+            <StyledInfoIcon />
+          </IconButton>
+        </TitleRow>
+      </Container>
+    )
+  },
+)
