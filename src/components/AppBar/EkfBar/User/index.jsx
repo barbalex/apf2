@@ -21,7 +21,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { logout } from '../../../../modules/logout.js'
-import idbContext from '../../../../idbContext.js'
+import { IdbContext } from '../../../../idbContext.js'
 
 const Container = styled.div`
   height: 100%;
@@ -52,7 +52,7 @@ const AbmeldenButton = styled(Button)`
 
 const User = ({ username, userOpen, toggleUserOpen }) => {
   const store = useContext(StoreContext)
-  const { idb } = useContext(idbContext)
+  const { idb } = useContext(IdbContext)
 
   const { data, error, loading } = useQuery(query, {
     variables: { name: username },

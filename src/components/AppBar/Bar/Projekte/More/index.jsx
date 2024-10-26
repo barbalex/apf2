@@ -10,7 +10,7 @@ import isMobilePhone from '../../../../../modules/isMobilePhone.js'
 import { logout } from '../../../../../modules/logout.js'
 import EkfUser from './EkfUser/index.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
-import idbContext from '../../../../../idbContext.js'
+import { IdbContext } from '../../../../../idbContext.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
@@ -32,7 +32,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
 
   const store = useContext(StoreContext)
   const { deletedDatasets, user, setShowDeletions } = store
-  const { idb } = useContext(idbContext)
+  const { idb } = useContext(IdbContext)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => setAnchorEl(null), [])

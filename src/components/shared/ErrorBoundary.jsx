@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 
 import { logout } from '../../modules/logout.js'
-import idbContext from '../../idbContext'
+import { IdbContext } from '../../idbContext.js'
 
 const Container = styled.div`
   padding: 15px;
@@ -65,7 +65,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
 }
 
 export const ErrorBoundary = ({ children }) => {
-  const { idb } = useContext(idbContext)
+  const { idb } = useContext(IdbContext)
   const onLogout = useCallback(() => logout(idb), [idb])
 
   return (

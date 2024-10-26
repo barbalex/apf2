@@ -1,6 +1,5 @@
 import React from 'react'
 
-const Context = React.createContext({})
-export const Provider = Context.Provider
-export const Consumer = Context.Consumer
-export default Context
+export const IdbContext = React.createContext({})
+export const Provider = IdbContext.Provider
+export const Consumer = IdbContext.Consumer

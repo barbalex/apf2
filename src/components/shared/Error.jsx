@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import uniq from 'lodash/uniq'
 
 import { logout } from '../../modules/logout.js'
-import idbContext from '../../idbContext'
+import { IdbContext } from '../../idbContext.js'
 import existsPermissionError from '../../modules/existsPermissionError'
 
 const ErrorContainer = styled.div`
@@ -16,7 +16,7 @@ const LogoutButton = styled(Button)`
 `*/
 
 export const Error = observer(({ errors: errorsPassed, error }) => {
-  const { idb } = useContext(idbContext)
+  const { idb } = useContext(IdbContext)
   // allow user to pass single error or multiple errors
   let errors = errorsPassed
   if (error && !errorsPassed) errors = [error]

@@ -21,7 +21,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
-import idbContext from '../idbContext'
+import { IdbContext } from '../idbContext.js'
 import { StoreContext } from '../storeContext.js'
 import getUserFromIdb from '../modules/getUserFromIdb'
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
@@ -51,7 +51,7 @@ function tokenStateReducer(state, action) {
 
 const User = () => {
   const client = useApolloClient()
-  const { idb } = useContext(idbContext)
+  const { idb } = useContext(IdbContext)
   const store = useContext(StoreContext)
   const { user } = store
 
