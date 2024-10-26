@@ -57,111 +57,111 @@ const Input = styled.input`
   }
 `
 
-const CellForEkfrequenzStartjahr = ({ row, style, refetchTpop }) => {
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const { enqueNotification } = store
-  const { hovered } = store.ekPlan
-  const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+export const CellForEkfrequenzStartjahr = observer(
+  ({ row, style, refetchTpop }) => {
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { enqueNotification } = store
+    const { hovered } = store.ekPlan
+    const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
 
-  const [stateValue, setStateValue] = useState(
-    row.ekfrequenzStartjahr.value || row.ekfrequenzStartjahr.value === 0 ?
-      row.ekfrequenzStartjahr.value
-    : '',
-  )
-
-  useEffect(() => {
-    setStateValue(
-      !!row.ekfrequenzStartjahr.value || row.ekfrequenzStartjahr.value === 0 ?
+    const [stateValue, setStateValue] = useState(
+      row.ekfrequenzStartjahr.value || row.ekfrequenzStartjahr.value === 0 ?
         row.ekfrequenzStartjahr.value
       : '',
     )
-  }, [row.ekfrequenzStartjahr.value, row.id])
 
-  const onMouseEnter = useCallback(
-    () => hovered.setTpopId(row.id),
-    [hovered, row.id],
-  )
-  const onChange = useCallback((e) => {
-    const value = e.target.value || e.target.value === 0 ? e.target.value : ''
-    setStateValue(value)
-  }, [])
-  const onBlur = useCallback(
-    async (e) => {
-      const value =
-        e.target.value || e.target.value === 0 ? +e.target.value : null
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation updateTpopEkfrequenzStartjahr(
-              $id: UUID!
-              $ekfrequenzStartjahr: Int
-              $changedBy: String
-            ) {
-              updateTpopById(
-                input: {
-                  id: $id
-                  tpopPatch: {
+    useEffect(() => {
+      setStateValue(
+        !!row.ekfrequenzStartjahr.value || row.ekfrequenzStartjahr.value === 0 ?
+          row.ekfrequenzStartjahr.value
+        : '',
+      )
+    }, [row.ekfrequenzStartjahr.value, row.id])
+
+    const onMouseEnter = useCallback(
+      () => hovered.setTpopId(row.id),
+      [hovered, row.id],
+    )
+    const onChange = useCallback((e) => {
+      const value = e.target.value || e.target.value === 0 ? e.target.value : ''
+      setStateValue(value)
+    }, [])
+    const onBlur = useCallback(
+      async (e) => {
+        const value =
+          e.target.value || e.target.value === 0 ? +e.target.value : null
+        try {
+          await client.mutate({
+            mutation: gql`
+              mutation updateTpopEkfrequenzStartjahr(
+                $id: UUID!
+                $ekfrequenzStartjahr: Int
+                $changedBy: String
+              ) {
+                updateTpopById(
+                  input: {
                     id: $id
-                    ekfrequenzStartjahr: $ekfrequenzStartjahr
-                    changedBy: $changedBy
+                    tpopPatch: {
+                      id: $id
+                      ekfrequenzStartjahr: $ekfrequenzStartjahr
+                      changedBy: $changedBy
+                    }
+                  }
+                ) {
+                  tpop {
+                    ...TpopFields
                   }
                 }
-              ) {
-                tpop {
-                  ...TpopFields
-                }
               }
-            }
-            ${tpop}
-          `,
-          variables: {
-            id: row.id,
+              ${tpop}
+            `,
+            variables: {
+              id: row.id,
+              ekfrequenzStartjahr: value,
+              changedBy: store.user.name,
+            },
+            refetchQueries: ['EkplanTpopQuery'],
+          })
+        } catch (error) {
+          enqueNotification({
+            message: error.message,
+            options: {
+              variant: 'error',
+            },
+          })
+        }
+        // TODO: or ekfrequenz has no kontrolljahre
+        if (row.ekfrequenz.value && value) {
+          setEkplans({
+            tpopId: row.id,
+            ekfrequenz: row.ekfrequenz.value,
             ekfrequenzStartjahr: value,
-            changedBy: store.user.name,
-          },
-          refetchQueries: ['EkplanTpopQuery'],
-        })
-      } catch (error) {
-        enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      // TODO: or ekfrequenz has no kontrolljahre
-      if (row.ekfrequenz.value && value) {
-        setEkplans({
-          tpopId: row.id,
-          ekfrequenz: row.ekfrequenz.value,
-          ekfrequenzStartjahr: value,
-          refetchTpop,
-          client,
-          store,
-        })
-      } else {
-        refetchTpop()
-      }
-    },
-    [row, client, store, enqueNotification, refetchTpop],
-  )
+            refetchTpop,
+            client,
+            store,
+          })
+        } else {
+          refetchTpop()
+        }
+      },
+      [row, client, store, enqueNotification, refetchTpop],
+    )
 
-  return (
-    <Container
-      style={style}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={hovered.reset}
-      className={className}
-      data-isodd={row.isOdd}
-    >
-      <Input
-        value={stateValue}
-        onChange={onChange}
-        onBlur={onBlur}
-      />
-    </Container>
-  )
-}
-
-export default observer(CellForEkfrequenzStartjahr)
+    return (
+      <Container
+        style={style}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={hovered.reset}
+        className={className}
+        data-isodd={row.isOdd}
+      >
+        <Input
+          value={stateValue}
+          onChange={onChange}
+          onBlur={onBlur}
+        />
+      </Container>
+    )
+  },
+)

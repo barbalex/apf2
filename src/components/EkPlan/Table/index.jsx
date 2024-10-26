@@ -22,7 +22,7 @@ import CellHeaderFixedEkfrequenzStartjahr from './CellHeaderFixedEkfrequenzStart
 import CellHeaderYear from './CellHeaderYear.jsx'
 import CellForYearTitle from './CellForYearTitle.jsx'
 import CellForEkfrequenz from './CellForEkfrequenz.jsx'
-import CellForEkfrequenzStartjahr from './CellForEkfrequenzStartjahr.jsx'
+import { CellForEkfrequenzStartjahr } from './CellForEkfrequenzStartjahr.jsx'
 import { CellForEkfrequenzAbweichend } from './CellForEkfrequenzAbweichend.jsx'
 import { CellForTpopLink } from './CellForTpopLink.jsx'
 import { CellForValue } from './CellForValue.jsx'
