@@ -3,7 +3,7 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import styled from '@emotion/styled'
 
-import Ap from './Ap/index.jsx'
+import { Component as Ap } from './Ap/index.jsx'
 import ChooseAp from './ChooseAp/index.jsx'
 import { StoreContext } from '../../../storeContext.js'
 
@@ -51,7 +51,10 @@ const ApList = () => {
         )}
       </TitleRow>
       {aps.map((ap) => (
-        <Ap key={ap.value} ap={ap} />
+        <Ap
+          key={ap.value}
+          ap={ap}
+        />
       ))}
       {(aps.length === 0 || showChoose) && (
         <ChooseAp setShowChoose={setShowChoose} />

@@ -26,7 +26,7 @@ const TabContent = styled.div`
   scrollbar-width: thin;
 `
 
-const ApTabs = () => {
+export const Component = () => {
   const { apId } = useParams()
 
   const [tab, setTab] = useSearchParamsState('apTab', 'ap')
@@ -79,5 +79,3 @@ const ApTabs = () => {
     </ErrorBoundary>
   )
 }
-
-export const Component = ApTabs
