@@ -27,7 +27,7 @@ import Files from '../../../shared/Files/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
   flex-grow: 1;

@@ -23,7 +23,7 @@ import {
   tpop,
   tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments.js'
-import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
   flex-grow: 1;

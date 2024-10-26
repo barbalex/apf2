@@ -14,7 +14,7 @@ import Tpop from './Tpop.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import OrTabs from './Tabs.jsx'
-import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { ActiveFilters } from './ActiveFilters.js'
 
 const Container = styled.div`

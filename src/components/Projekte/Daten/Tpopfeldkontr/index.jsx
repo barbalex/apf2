@@ -12,7 +12,7 @@ import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
 import MdField from '../../../shared/MarkdownField/index.jsx'
 import { Select } from '../../../shared/Select.jsx'
-import JesNo from '../../../shared/JesNo.jsx'
+import { JesNo } from '../../../shared/JesNo.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import DateField from '../../../shared/Date.jsx'
@@ -28,7 +28,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
   flex-grow: 1;

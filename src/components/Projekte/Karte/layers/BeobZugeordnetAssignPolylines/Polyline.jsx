@@ -9,7 +9,7 @@ import { useParams, useLocation } from 'react-router-dom'
 
 import { StoreContext } from '../../../../../storeContext.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
-import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
+import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone.js'
 import Data from '../BeobData/index.jsx'
 

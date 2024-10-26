@@ -11,7 +11,7 @@ import { StoreContext } from '../../../../../storeContext.js'
 import { beobIconString } from './beobIconString.js'
 import { beobIconHighlightedString } from './beobIconHighlightedString.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
-import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
+import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../../modules/isMobilePhone.js'
 import Data from '../BeobData/index.jsx'
 

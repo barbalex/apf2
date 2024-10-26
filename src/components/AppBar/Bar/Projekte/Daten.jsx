@@ -5,19 +5,19 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import isMobilePhone from '../../../../modules/isMobilePhone.js'
-import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
 const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
   border-right-color: ${(props) =>
-    props.followed === 'true'
-      ? ' rgba(255, 255, 255, 0.25)'
-      : ' rgba(255, 255, 255, 0.5)'} !important;
+    props.followed === 'true' ?
+      ' rgba(255, 255, 255, 0.25)'
+    : ' rgba(255, 255, 255, 0.5)'} !important;
   border-left-color: ${(props) =>
-    props.preceded === 'true'
-      ? ' rgba(255, 255, 255, 0.25)'
-      : ' rgba(255, 255, 255, 0.5)'} !important;
+    props.preceded === 'true' ?
+      ' rgba(255, 255, 255, 0.25)'
+    : ' rgba(255, 255, 255, 0.5)'} !important;
   border-top-left-radius: ${(props) =>
     props.preceded === 'true' ? '0' : '4px'} !important;
   border-bottom-left-radius: ${(props) =>

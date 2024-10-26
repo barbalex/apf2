@@ -11,7 +11,7 @@ import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
 import MdField from '../../../shared/MarkdownField/index.jsx'
 import { Select } from '../../../shared/Select.jsx'
-import JesNo from '../../../shared/JesNo.jsx'
+import { JesNo } from '../../../shared/JesNo.jsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import DateField from '../../../shared/Date.jsx'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
@@ -25,7 +25,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import OrTabs from './Tabs.jsx'
-import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
   flex-grow: 1;
