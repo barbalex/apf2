@@ -25,7 +25,7 @@ const DelIcon = styled(IconButton)`
   padding-bottom: 0 !important;
 `
 
-const Ap = ({ ap }) => {
+export const Ap = ({ ap }) => {
   const store = useContext(StoreContext)
   const { removeAp, apsData, apsDataLoading } = store.ekPlan
 

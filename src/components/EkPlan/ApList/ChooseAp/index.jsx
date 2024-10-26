@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 
-import queryApsToChoose from './queryApsToChoose.js'
+import { queryApsToChoose } from './queryApsToChoose.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
@@ -72,7 +72,7 @@ const Error = styled.div`
   color: red;
 `
 
-const EkPlan = ({ setShowChoose }) => {
+export const ChooseAp = observer(({ setShowChoose }) => {
   const { projId } = useParams()
 
   const store = useContext(StoreContext)
@@ -85,8 +85,9 @@ const EkPlan = ({ setShowChoose }) => {
   const error = useRef({})
   const loadOptions = useCallback(
     async (inputValue, cb) => {
-      const filter = inputValue
-        ? {
+      const filter =
+        inputValue ?
+          {
             label: { includesInsensitive: inputValue },
             id: { notIn: apValues },
             projId: { equalTo: projId },
@@ -156,6 +157,5 @@ const EkPlan = ({ setShowChoose }) => {
       </SelectContainer>
     </ErrorBoundary>
   )
-}
-
-export default observer(EkPlan)
+})
+export default ChooseAp

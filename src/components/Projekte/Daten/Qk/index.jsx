@@ -32,7 +32,7 @@ const TabContent = styled.div`
   }
 `
 
-const QkForm = () => {
+export const Component = () => {
   const { apId } = useParams()
 
   const { data, loading, error, refetch } = useQuery(queryQk, {
@@ -112,5 +112,3 @@ const QkForm = () => {
     </ErrorBoundary>
   )
 }
-
-export const Component = QkForm
