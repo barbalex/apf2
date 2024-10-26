@@ -13,7 +13,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const MyTextField = ({ label, value = '' }) => {
+export const TextFieldNonUpdatable = observer(({ label, value = '' }) => {
   const [error, setError] = useState(null)
   const onChange = useCallback(() => {
     setError('Dieser Wert ist nicht veränderbar')
@@ -42,6 +42,6 @@ const MyTextField = ({ label, value = '' }) => {
       )}
     </StyledFormControl>
   )
-}
+})
 
-export default observer(MyTextField)
+export default TextFieldNonUpdatable
