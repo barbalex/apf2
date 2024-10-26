@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import Data from './Data'
+import { Data } from './Data.jsx'
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
 
 const Container = styled.div`

@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import Diff from 'react-stylable-diff'
 import { observer } from 'mobx-react-lite'
 
-import toStringIfPossible from '../../../modules/toStringIfPossible'
+import { toStringIfPossible } from '../../../modules/toStringIfPossible.js'
 import { Spinner } from '../Spinner'
 
 const Row = styled.div`
@@ -29,7 +29,7 @@ const Key = styled.div`
   color: rgba(0, 0, 0, 0.54);
 `
 
-const ConflictData = ({ dataArray = [], loading }) => {
+export const Data = observer(({ dataArray = [], loading }) => {
   if (loading) return <Spinner />
 
   return dataArray.map((d, index) => {
@@ -46,16 +46,19 @@ const ConflictData = ({ dataArray = [], loading }) => {
     const showDiff = !['geändert', 'geändert von'].includes(d.label)
 
     return (
-      <Row key={d.label} data-last={index + 1 === dataArray.length}>
+      <Row
+        key={d.label}
+        data-last={index + 1 === dataArray.length}
+      >
         <Key>{`${d.label}:`}</Key>
-        {showDiff ? (
-          <Diff inputA={inputA} inputB={inputB} type="sentences" />
-        ) : (
-          <div>{inputB}</div>
-        )}
+        {showDiff ?
+          <Diff
+            inputA={inputA}
+            inputB={inputB}
+            type="sentences"
+          />
+        : <div>{inputB}</div>}
       </Row>
     )
   })
-}
-
-export default observer(ConflictData)
+})
