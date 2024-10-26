@@ -5,7 +5,7 @@ import { useQuery, useApolloClient, gql } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
 import { TextField } from '../../../shared/TextField.jsx'
-import TextFieldWithInfo from '../../../shared/TextFieldWithInfo.jsx'
+import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
 import MdField from '../../../shared/MarkdownField/index.jsx'
 import Status from '../../../shared/Status.jsx'
 import SelectCreatable from '../../../shared/SelectCreatableGemeinde.jsx'

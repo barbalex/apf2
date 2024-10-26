@@ -33,67 +33,73 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const TextFieldWithUrl = ({
-  field,
-  form,
-  label,
-  type = 'text',
-  multiLine = false,
-  disabled = false,
-}) => {
-  const { onChange, onBlur, value, name } = field
-  const { error: errors, handleSubmit } = form
-  const error = errors?.[name]
+export const TextFieldWithUrl = observer(
+  ({
+    field,
+    form,
+    label,
+    type = 'text',
+    multiLine = false,
+    disabled = false,
+  }) => {
+    const { onChange, onBlur, value, name } = field
+    const { error: errors, handleSubmit } = form
+    const error = errors?.[name]
 
-  const urls = value ? getUrls(value) : []
+    const urls = value ? getUrls(value) : []
 
-  const onKeyPress = useCallback(
-    (event) => {
-      event.key === 'Enter' && handleSubmit()
-    },
-    [handleSubmit],
-  )
+    const onKeyPress = useCallback(
+      (event) => {
+        event.key === 'Enter' && handleSubmit()
+      },
+      [handleSubmit],
+    )
 
-  return (
-    <Container>
-      <StyledFormControl
-        disabled={disabled}
-        fullWidth
-        error={!!error}
-        aria-describedby={`${label}ErrorText`}
-        variant="standard"
-      >
-        <InputLabel htmlFor={label} shrink>
-          {`${label} (gültige URL's beginnen mit "https://", "//" oder "www.")`}
-        </InputLabel>
-        <Input
-          id={name}
-          data-id={name}
-          value={value || value === 0 ? value : ''}
-          type={type}
-          multiline={multiLine}
-          onChange={onChange}
-          onBlur={onBlur}
-          onKeyPress={onKeyPress}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck="false"
-        />
-        {!!error && (
-          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-        )}
-      </StyledFormControl>
-      {Array.from(urls).map((url, index) => (
-        <div key={index} title={`${url} öffnen`}>
-          <StyledOpenInNewIcon
-            onClick={() => window.open(url, '_blank')}
-            data-id="open-url"
+    return (
+      <Container>
+        <StyledFormControl
+          disabled={disabled}
+          fullWidth
+          error={!!error}
+          aria-describedby={`${label}ErrorText`}
+          variant="standard"
+        >
+          <InputLabel
+            htmlFor={label}
+            shrink
+          >
+            {`${label} (gültige URL's beginnen mit "https://", "//" oder "www.")`}
+          </InputLabel>
+          <Input
+            id={name}
+            data-id={name}
+            value={value || value === 0 ? value : ''}
+            type={type}
+            multiline={multiLine}
+            onChange={onChange}
+            onBlur={onBlur}
+            onKeyPress={onKeyPress}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
           />
-        </div>
-      ))}
-    </Container>
-  )
-}
-
-export default observer(TextFieldWithUrl)
+          {!!error && (
+            <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+          )}
+        </StyledFormControl>
+        {Array.from(urls).map((url, index) => (
+          <div
+            key={index}
+            title={`${url} öffnen`}
+          >
+            <StyledOpenInNewIcon
+              onClick={() => window.open(url, '_blank')}
+              data-id="open-url"
+            />
+          </div>
+        ))}
+      </Container>
+    )
+  },
+)

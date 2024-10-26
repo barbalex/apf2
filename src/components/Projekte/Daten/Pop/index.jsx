@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.jsx'
-import TextFieldWithInfo from '../../../shared/TextFieldWithInfo.jsx'
+import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
 import Status from '../../../shared/Status.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
