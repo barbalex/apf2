@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom'
 import query from './query.js'
 import RowComponent from './Row'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import Error from '../../../../shared/Error.jsx'
+import { Error } from '../../../../shared/Error.jsx'
 
 const Container = styled.div`
   height: 100%;

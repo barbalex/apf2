@@ -15,7 +15,7 @@ const LogoutButton = styled(Button)`
   margin-top: 10px !important;
 `*/
 
-const Error = ({ errors: errorsPassed, error }) => {
+export const Error = observer(({ errors: errorsPassed, error }) => {
   const { idb } = useContext(idbContext)
   // allow user to pass single error or multiple errors
   let errors = errorsPassed
@@ -65,6 +65,4 @@ const Error = ({ errors: errorsPassed, error }) => {
       </ul>
     </ErrorContainer>
   )
-}
-
-export default observer(Error)
+})

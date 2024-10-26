@@ -17,7 +17,7 @@ import queryAeTaxonomies from './queryAeTaxonomies'
 import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import Error from '../../../shared/Error.jsx'
+import { Error } from '../../../shared/Error.jsx'
 import OrTabs from './Tabs'
 
 const Container = styled.div`

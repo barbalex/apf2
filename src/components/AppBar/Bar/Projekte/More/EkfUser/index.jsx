@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import Select from '../../../../../shared/Select.jsx'
-import Error from '../../../../../shared/Error.jsx'
+import { Error } from '../../../../../shared/Error.jsx'
 import queryAdresses from './queryAdresses.js'
 
 const Container = styled.div`

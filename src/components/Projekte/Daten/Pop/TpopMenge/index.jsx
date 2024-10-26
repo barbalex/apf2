@@ -19,7 +19,7 @@ import { useParams } from 'react-router-dom'
 import queryTpopMenge from './queryTpopMenge'
 import CustomTooltip from './CustomTooltip'
 import exists from '../../../../../modules/exists.js'
-import Error from '../../../../shared/Error.jsx'
+import { Error } from '../../../../shared/Error.jsx'
 
 const SpinnerContainer = styled.div`
   height: 400px;

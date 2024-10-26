@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client'
 import Select from '../../../../shared/Select.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
 import queryAdresses from './queryAdresses.js'
-import Error from '../../../../shared/Error.jsx'
+import { Error } from '../../../../shared/Error.jsx'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);

@@ -14,7 +14,7 @@ import query from './query.js'
 import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import Error from '../../../shared/Error.jsx'
+import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { adresse } from '../../../shared/fragments.js'
 

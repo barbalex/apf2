@@ -6,7 +6,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 
 import query from './query.js'
-import Error from '../../../../../shared/Error.jsx'
+import { Error } from '../../../../../shared/Error.jsx'
 
 const Row = styled.div`
   display: flex;
