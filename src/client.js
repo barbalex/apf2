@@ -10,7 +10,7 @@ import { onError } from '@apollo/client/link/error'
 import { jwtDecode } from 'jwt-decode'
 import uniqBy from 'lodash/uniqBy'
 
-import graphQlUri from './modules/graphQlUri.js'
+import { graphQlUri } from './modules/graphQlUri.js'
 import { existsPermissionError } from './modules/existsPermissionError.js'
 import { existsTooLargeError } from './modules/existsTooLargeError.js'
 
