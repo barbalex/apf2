@@ -79,7 +79,7 @@ const DenserCheckbox = (props) => (
   <CheckboxDensifier>{props.children}</CheckboxDensifier>
 )
 
-const EkPlanChoose = () => {
+export const Choose = observer(() => {
   const store = useContext(StoreContext)
   const {
     fields,
@@ -250,6 +250,4 @@ const EkPlanChoose = () => {
       </StyledDialog>
     </ErrorBoundary>
   )
-}
-
-export default observer(EkPlanChoose)
+})

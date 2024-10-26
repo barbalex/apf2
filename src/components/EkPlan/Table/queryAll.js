@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 import { ekfrequenz } from '../../shared/fragments.js'
 
-export default gql`
+export const queryAll = gql`
   query EkplanTpopQuery($tpopFilter: TpopFilter!, $apIds: [UUID!]) {
     allEkfrequenzs(filter: { apId: { in: $apIds } }, orderBy: SORT_ASC) {
       nodes {

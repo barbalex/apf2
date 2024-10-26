@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import Qk from './Qk'
-import Choose from './Choose'
+import { Choose } from './Choose'
 import queryQk from './queryQk'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'

@@ -10,7 +10,9 @@ const ApList = lazy(async () => ({
 const Table = lazy(async () => ({
   default: (await import('./Table/index.jsx')).EkPlanTable,
 }))
-const Choose = lazy(() => import('./Choose.jsx'))
+const Choose = lazy(async () => ({
+  default: (await import('./Choose.jsx')).Choose,
+}))
 import queryAps from './queryAps.js'
 import { StoreContext } from '../../storeContext.js'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'

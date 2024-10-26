@@ -9,7 +9,7 @@ import Button from '@mui/material/Button'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { StoreContext } from '../../../storeContext.js'
-import queryAll from './queryAll.js'
+import { queryAll } from './queryAll.js'
 import { CellForYearMenu } from './CellForYearMenu/index.jsx'
 import { yearsFromTpops } from './yearsFromTpops.js'
 import { tpopRowFromTpop } from './tpopRowFromTpop.js'
