@@ -13,7 +13,7 @@ const StyledDialogContent = styled(DialogContent)`
   flex-direction: column;
 `
 
-const Fields = () => {
+export const Fields = observer(() => {
   const store = useContext(StoreContext)
   const { fields, toggleField } = store.ekPlan
 
@@ -227,6 +227,4 @@ const Fields = () => {
       </StyledDialogContent>
     </ErrorBoundary>
   )
-}
-
-export default observer(Fields)
+})
