@@ -11,7 +11,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.jsx'
-import MdField from '../../../shared/MarkdownField/index.jsx'
+import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
 import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
@@ -246,7 +246,7 @@ const Apberuebersicht = () => {
                 helperText="Bewahrt die letze Historisierung als offiziellen Jahresbericht"
                 disabled={!row?.historyDate}
               />
-              <MdField
+              <MarkdownField
                 name="bemerkungen"
                 label="Bemerkungen"
                 value={row.bemerkungen}

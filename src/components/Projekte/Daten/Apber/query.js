@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { apber } from '../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query apberByIdQuery($id: UUID!) {
     apberById(id: $id) {
       ...ApberFields

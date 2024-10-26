@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
-import MdField from '../../../shared/MarkdownField/index.jsx'
+import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { JesNo } from '../../../shared/JesNo.jsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
@@ -356,7 +356,7 @@ const TpopfeldkontrFilter = () => {
                       value={row?.kontrolleAendern}
                       saveToDb={saveToDb}
                     />
-                    <MdField
+                    <MarkdownField
                       name="bemerkungen"
                       label="Bemerkungen"
                       value={row?.bemerkungen}

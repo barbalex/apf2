@@ -8,4 +8,4 @@ const createLeafletElement = (props) => {
   return { instance }
 }
 
-export default createLayerComponent(createLeafletElement)
+export const BingLayer = createLayerComponent(createLeafletElement)

@@ -12,7 +12,7 @@ import { FocusWithin } from '../FocusWithin.jsx'
 // - markdown presenter if value exists
 // - markdown editor if is focused
 // problems with react-focus-within: maybe use https://stackoverflow.com/a/63857071/712005
-const MdField = (props) => {
+export const MarkdownField = (props) => {
   const { label, value } = props
 
   return (
@@ -32,5 +32,3 @@ const MdField = (props) => {
     </FocusWithin>
   )
 }
-
-export default MdField

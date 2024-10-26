@@ -6,7 +6,7 @@ import SimpleBar from 'simplebar-react'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
-import MdField from '../../../shared/MarkdownField/index.jsx'
+import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
 import { Status } from '../../../shared/Status.jsx'
 import { SelectCreatableGemeinde } from '../../../shared/SelectCreatableGemeinde.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
@@ -349,7 +349,7 @@ const Tpop = ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
           saveToDb={saveToDb}
           error={fieldErrors.bewirtschaftung}
         />
-        <MdField
+        <MarkdownField
           name="bemerkungen"
           label="Bemerkungen"
           value={row.bemerkungen}

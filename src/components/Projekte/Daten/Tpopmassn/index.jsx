@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
-import MdField from '../../../shared/MarkdownField/index.jsx'
+import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { SelectLoadingOptionsTypable } from '../../../shared/SelectLoadingOptionsTypable.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
@@ -439,7 +439,7 @@ const Tpopmassn = ({ showFilter = false }) => {
                       saveToDb={saveToDb}
                       error={fieldErrors.bearbeiter}
                     />
-                    <MdField
+                    <MarkdownField
                       name="bemerkungen"
                       label="Bemerkungen"
                       value={row.bemerkungen}

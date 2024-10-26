@@ -9,12 +9,12 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
-import MdField from '../../../shared/MarkdownField/index.jsx'
+import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { DateField } from '../../../shared/Date.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { constants } from '../../../../modules/constants.js'
-import query from './query.js'
+import { query } from './query.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -152,7 +152,7 @@ const Apber = () => {
                 saveToDb={saveToDb}
                 error={fieldErrors.jahr}
               />
-              <MdField
+              <MarkdownField
                 name="vergleichVorjahrGesamtziel"
                 label="Vergleich Vorjahr - Gesamtziel"
                 value={row.vergleichVorjahrGesamtziel}
@@ -176,63 +176,63 @@ const Apber = () => {
                 saveToDb={saveToDb}
                 error={fieldErrors.beurteilung}
               />
-              <MdField
+              <MarkdownField
                 name="apberAnalyse"
                 label="Analyse"
                 value={row.apberAnalyse}
                 saveToDb={saveToDb}
                 error={fieldErrors.apberAnalyse}
               />
-              <MdField
+              <MarkdownField
                 name="konsequenzenUmsetzung"
                 label="Konsequenzen für die Umsetzung"
                 value={row.konsequenzenUmsetzung}
                 saveToDb={saveToDb}
                 error={fieldErrors.konsequenzenUmsetzung}
               />
-              <MdField
+              <MarkdownField
                 name="konsequenzenErfolgskontrolle"
                 label="Konsequenzen für die Erfolgskontrolle"
                 value={row.konsequenzenErfolgskontrolle}
                 saveToDb={saveToDb}
                 error={fieldErrors.konsequenzenErfolgskontrolle}
               />
-              <MdField
+              <MarkdownField
                 name="biotopeNeue"
                 label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
                 value={row.biotopeNeue}
                 saveToDb={saveToDb}
                 error={fieldErrors.biotopeNeue}
               />
-              <MdField
+              <MarkdownField
                 name="biotopeOptimieren"
                 label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
                 value={row.biotopeOptimieren}
                 saveToDb={saveToDb}
                 error={fieldErrors.biotopeOptimieren}
               />
-              <MdField
+              <MarkdownField
                 name="massnahmenApBearb"
                 label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Art-Verantwortlichen"
                 value={row.massnahmenApBearb}
                 saveToDb={saveToDb}
                 error={fieldErrors.massnahmenApBearb}
               />
-              <MdField
+              <MarkdownField
                 name="massnahmenPlanungVsAusfuehrung"
                 label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
                 value={row.massnahmenPlanungVsAusfuehrung}
                 saveToDb={saveToDb}
                 error={fieldErrors.massnahmenPlanungVsAusfuehrung}
               />
-              <MdField
+              <MarkdownField
                 name="massnahmenOptimieren"
                 label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
                 value={row.massnahmenOptimieren}
                 saveToDb={saveToDb}
                 error={fieldErrors.massnahmenOptimieren}
               />
-              <MdField
+              <MarkdownField
                 name="wirkungAufArt"
                 label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
                 value={row.wirkungAufArt}
