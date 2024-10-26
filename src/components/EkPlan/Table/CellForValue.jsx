@@ -12,7 +12,7 @@ const Container = styled.div`
   justify-content: center;
 `
 
-const CellForValue = ({ field, style, row, firstChild }) => {
+export const CellForValue = observer(({ field, style, row, firstChild }) => {
   const store = useContext(StoreContext)
 
   const { value } = field
@@ -38,6 +38,6 @@ const CellForValue = ({ field, style, row, firstChild }) => {
       </Container>
     </StyledTableCell>
   )
-}
+})
 
-export default observer(CellForValue)
+export default CellForValue

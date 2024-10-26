@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StyledTableCell } from '../index.jsx'
-import EkIcon from './EkIcon.jsx'
+import { EkIcon } from './EkIcon.jsx'
 import { MassnIcon } from './MassnIcon.jsx'
 import { InfoRow } from '../index.jsx'
 import { StoreContext } from '../../../../storeContext.js'

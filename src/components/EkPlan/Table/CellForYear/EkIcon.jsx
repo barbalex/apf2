@@ -48,7 +48,7 @@ const SumCounted = styled.div`
   overflow: hidden;
 `
 
-const EkIcon = ({ planned, eks, einheits }) => {
+export const EkIcon = observer(({ planned, eks, einheits }) => {
   const store = useContext(StoreContext)
   const { showCount, showEkCount } = store.ekPlan
 
@@ -108,6 +108,5 @@ const EkIcon = ({ planned, eks, einheits }) => {
       )}
     </CheckboxContainer>
   )
-}
-
-export default observer(EkIcon)
+})
+export default EkIcon
