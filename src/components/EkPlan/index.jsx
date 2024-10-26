@@ -4,7 +4,9 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import Button from '@mui/material/Button'
 
-const ApList = lazy(() => import('./ApList/index.jsx'))
+const ApList = lazy(async () => ({
+  default: (await import('./ApList/index.jsx')).ApList,
+}))
 const Table = lazy(() => import('./Table/index.jsx'))
 const Choose = lazy(() => import('./Choose.jsx'))
 import queryAps from './queryAps.js'

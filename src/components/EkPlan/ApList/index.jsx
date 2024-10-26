@@ -29,7 +29,7 @@ const PlusIcon = styled(IconButton)`
   padding-bottom: 4px !important;
 `
 
-const ApList = () => {
+export const ApList = () => {
   const store = useContext(StoreContext)
   const { aps } = store.ekPlan
 
@@ -62,5 +62,3 @@ const ApList = () => {
     </Container>
   )
 }
-
-export default ApList
