@@ -1,4 +1,4 @@
-const fields = {
+export const fields = {
   ap: {
     name: 'ap',
     label: 'Art',
@@ -112,4 +112,3 @@ const fields = {
   },
 }
 
-export default fields

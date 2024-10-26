@@ -4,7 +4,7 @@ import groupBy from 'lodash/groupBy'
 
 import Ap from './Ap.js'
 import Hovered, { defaultValue as defaultHovered } from './Hovered.js'
-import fields from '../../components/EkPlan/Table/fields.js'
+import { fields } from '../../components/EkPlan/Table/fields.js'
 
 export const defaultFields = [
   'ap',
@@ -235,86 +235,100 @@ export default types
       }
       const popNr = {
         left: ap.right,
-        right: fieldsShown.includes('popNr')
-          ? ap.right + fields.popNr.width
+        right:
+          fieldsShown.includes('popNr') ?
+            ap.right + fields.popNr.width
           : ap.right,
       }
       const popName = {
         left: popNr.right,
-        right: fieldsShown.includes('popName')
-          ? popNr.right + fields.popName.width
+        right:
+          fieldsShown.includes('popName') ?
+            popNr.right + fields.popName.width
           : popNr.right,
       }
       const popStatus = {
         left: popName.right,
-        right: fieldsShown.includes('popStatus')
-          ? popName.right + fields.popStatus.width
+        right:
+          fieldsShown.includes('popStatus') ?
+            popName.right + fields.popStatus.width
           : popName.right,
       }
       const nr = {
         left: popStatus.right,
-        right: fieldsShown.includes('nr')
-          ? popStatus.right + fields.nr.width
+        right:
+          fieldsShown.includes('nr') ?
+            popStatus.right + fields.nr.width
           : popStatus.right,
       }
       const gemeinde = {
         left: nr.right,
-        right: fieldsShown.includes('gemeinde')
-          ? nr.right + fields.gemeinde.width
+        right:
+          fieldsShown.includes('gemeinde') ?
+            nr.right + fields.gemeinde.width
           : nr.right,
       }
       const flurname = {
         left: gemeinde.right,
-        right: fieldsShown.includes('flurname')
-          ? gemeinde.right + fields.flurname.width
+        right:
+          fieldsShown.includes('flurname') ?
+            gemeinde.right + fields.flurname.width
           : gemeinde.right,
       }
       const status = {
         left: flurname.right,
-        right: fieldsShown.includes('status')
-          ? flurname.right + fields.status.width
+        right:
+          fieldsShown.includes('status') ?
+            flurname.right + fields.status.width
           : flurname.right,
       }
       const bekanntSeit = {
         left: status.right,
-        right: fieldsShown.includes('bekanntSeit')
-          ? status.right + fields.bekanntSeit.width
+        right:
+          fieldsShown.includes('bekanntSeit') ?
+            status.right + fields.bekanntSeit.width
           : status.right,
       }
       const link = {
         left: bekanntSeit.right,
-        right: fieldsShown.includes('link')
-          ? bekanntSeit.right + fields.link.width
+        right:
+          fieldsShown.includes('link') ?
+            bekanntSeit.right + fields.link.width
           : bekanntSeit.right,
       }
       const ekAbrechnungstyp = {
         left: link.right,
-        right: fieldsShown.includes('ekAbrechnungstyp')
-          ? link.right + fields.ekAbrechnungstyp.width
+        right:
+          fieldsShown.includes('ekAbrechnungstyp') ?
+            link.right + fields.ekAbrechnungstyp.width
           : link.right,
       }
       const ekfrequenz = {
         left: ekAbrechnungstyp.right,
-        right: fieldsShown.includes('ekfrequenz')
-          ? ekAbrechnungstyp.right + fields.ekfrequenz.width
+        right:
+          fieldsShown.includes('ekfrequenz') ?
+            ekAbrechnungstyp.right + fields.ekfrequenz.width
           : ekAbrechnungstyp.right,
       }
       const ekfrequenzStartjahr = {
         left: ekfrequenz.right,
-        right: fieldsShown.includes('ekfrequenzStartjahr')
-          ? ekfrequenz.right + fields.ekfrequenzStartjahr.width
+        right:
+          fieldsShown.includes('ekfrequenzStartjahr') ?
+            ekfrequenz.right + fields.ekfrequenzStartjahr.width
           : ekfrequenz.right,
       }
       const ekfrequenzAbweichend = {
         left: ekfrequenzStartjahr.right,
-        right: fieldsShown.includes('ekfrequenzAbweichend')
-          ? ekfrequenzStartjahr.right + fields.ekfrequenzAbweichend.width
+        right:
+          fieldsShown.includes('ekfrequenzAbweichend') ?
+            ekfrequenzStartjahr.right + fields.ekfrequenzAbweichend.width
           : ekfrequenzStartjahr.right,
       }
       const yearTitle = {
         left: ekfrequenzAbweichend.right,
-        right: fieldsShown.includes('yearTitle')
-          ? ekfrequenzAbweichend.right + fields.yearTitle.width
+        right:
+          fieldsShown.includes('yearTitle') ?
+            ekfrequenzAbweichend.right + fields.yearTitle.width
           : ekfrequenzAbweichend.right,
       }
 

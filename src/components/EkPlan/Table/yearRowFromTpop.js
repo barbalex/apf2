@@ -1,5 +1,5 @@
-import yearColumnWidth from './yearColumnWidth.js'
-import fields from './fields.js'
+import { yearColumnWidth } from './yearColumnWidth.js'
+import { fields } from './fields.js'
 
 const isOdd = (num) => num % 2 === 0
 
