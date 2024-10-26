@@ -51,7 +51,7 @@ const color = {
     'rgba(245,141,66,0.5)',
 }
 
-const ApAuswertungPopStatus = ({
+export const PopStatus = ({
   apId: apIdPassed,
   height = 400,
   print,
@@ -79,9 +79,8 @@ const ApAuswertungPopStatus = ({
     Ansaatversuch: row?.a9Lpop ? Number(row?.a9Lpop) : 0,
     'erloschen (nach 1950): zuvor autochthon oder vor AP angesiedelt':
       row?.a7Lpop ? Number(row?.a7Lpop) : 0,
-    'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt': row?.a8Lpop
-      ? Number(row?.a8Lpop)
-      : 0,
+    'erloschen (nach 1950): nach Beginn Aktionsplan angesiedelt':
+      row?.a8Lpop ? Number(row?.a8Lpop) : 0,
   }))
 
   if (errorPopStati) return <Error error={errorPopStati} />
@@ -93,15 +92,18 @@ const ApAuswertungPopStatus = ({
 
   return (
     <>
-      {loadingPopStati ? (
+      {loadingPopStati ?
         <SpinnerContainer>
           <CircularProgress />
           <SpinnerText>lade Populations-Stati...</SpinnerText>
         </SpinnerContainer>
-      ) : rows.length ? (
+      : rows.length ?
         <>
           <Title>Populationen nach Status</Title>
-          <ResponsiveContainer width="99%" height={height}>
+          <ResponsiveContainer
+            width="99%"
+            height={height}
+          >
             <AreaChart
               width={600}
               height={300}
@@ -191,7 +193,10 @@ const ApAuswertungPopStatus = ({
               {!isSubReport && (
                 <Tooltip content={<CustomTooltip color={color} />} />
               )}
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal={false}
+              />
               <Legend
                 layout="horizontal"
                 align="center"
@@ -201,14 +206,11 @@ const ApAuswertungPopStatus = ({
             </AreaChart>
           </ResponsiveContainer>
         </>
-      ) : (
-        <>
+      : <>
           <Title>Populationen nach Status</Title>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>
         </>
-      )}
+      }
     </>
   )
 }
-
-export default ApAuswertungPopStatus

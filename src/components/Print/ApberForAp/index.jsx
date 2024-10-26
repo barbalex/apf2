@@ -15,7 +15,7 @@ import CMengen from './CMengen.jsx'
 import { StoreContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import PopMenge from '../../Projekte/Daten/Ap/Auswertung/PopMenge/index.jsx'
-import PopStatus from '../../Projekte/Daten/Ap/Auswertung/PopStatus/index.jsx'
+import { PopStatus } from '../../Projekte/Daten/Ap/Auswertung/PopStatus/index.jsx'
 import TpopKontrolliert from '../../Projekte/Daten/Ap/Auswertung/TpopKontrolliert/index.jsx'
 
 const mdParser = new MarkdownIt({ breaks: true })
@@ -239,7 +239,11 @@ const ApberForAp = ({
             <p>{`Erste Kontrolle: ${node?.b1FirstYear ?? ''}`}</p>
           </Row>
 
-          <AMengen loading={false} node={node} jahr={jahr} />
+          <AMengen
+            loading={false}
+            node={node}
+            jahr={jahr}
+          />
           {!!apber.biotopeNeue && (
             <FieldRowFullWidth>
               <TitledLabel>
@@ -254,7 +258,12 @@ const ApberForAp = ({
               </FullWidthField>
             </FieldRowFullWidth>
           )}
-          <BMengen apId={apId} jahr={jahr} loading={false} node={node} />
+          <BMengen
+            apId={apId}
+            jahr={jahr}
+            loading={false}
+            node={node}
+          />
           <ChartContainer>
             <TpopKontrolliert
               apId={apId}
@@ -297,7 +306,11 @@ const ApberForAp = ({
             </FieldRowFullWidth>
           )}
 
-          <CMengen jahr={jahr} loading={false} node={node} />
+          <CMengen
+            jahr={jahr}
+            loading={false}
+            node={node}
+          />
           {!!apber.massnahmenPlanungVsAusfuehrung && (
             <FieldRowFullWidth>
               <TitledLabel>Vergleich Ausführung/Planung</TitledLabel>
@@ -432,9 +445,9 @@ const ApberForAp = ({
           )}
           <Row>
             {`${
-              apberDatum
-                ? format(new Date(apberDatum), 'dd.MM.yyyy')
-                : '(Datum fehlt)'
+              apberDatum ?
+                format(new Date(apberDatum), 'dd.MM.yyyy')
+              : '(Datum fehlt)'
             } / ${node?.bearbeiter ?? '(kein Bearbeiter)'}`}
           </Row>
         </ContentContainer>

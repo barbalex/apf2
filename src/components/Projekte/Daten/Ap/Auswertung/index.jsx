@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import SimpleBar from 'simplebar-react'
 
 import { ApErfolg } from './ApErfolg/index.jsx'
-import PopStatus from './PopStatus'
+import { PopStatus } from './PopStatus/index.jsx'
 import PopMenge from './PopMenge'
 import TpopKontrolliert from './TpopKontrolliert'
 
