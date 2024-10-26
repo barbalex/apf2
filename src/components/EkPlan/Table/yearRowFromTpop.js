@@ -3,7 +3,7 @@ import { fields } from './fields.js'
 
 const isOdd = (num) => num % 2 === 0
 
-const yearRowFromTpop = ({ tpop, years, index }) => {
+export const yearRowFromTpop = ({ tpop, years, index }) => {
   const ekplans = tpop?.ekplansByTpopId?.nodes
   const kontrs = tpop?.tpopkontrsByTpopId?.nodes
   const ansiedlungs = tpop?.tpopmassnsByTpopId?.nodes
@@ -55,4 +55,3 @@ const yearRowFromTpop = ({ tpop, years, index }) => {
   return row
 }
 
-export default yearRowFromTpop
