@@ -16,7 +16,7 @@ import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo.j
 import DateField from '../../../shared/Date.jsx'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover.jsx'
-import constants from '../../../../modules/constants.js'
+import { constants } from '../../../../modules/constants.js'
 import query from './query.js'
 import queryTpopkontrs from './queryTpopkontrs.js'
 import { StoreContext } from '../../../../storeContext.js'

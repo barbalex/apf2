@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import TestdataMessage from './TestdataMessage'
+import { TestdataMessage } from './TestdataMessage.jsx'
 
 const Container = styled.div`
   background-color: #388e3c;
@@ -30,7 +30,7 @@ const Buttons = styled.div`
   padding: 3px 0 3px 10px;
 `
 
-const FormTitle = ({ title, buttons, noTestDataMessage = false }) => (
+export const FormTitle = ({ title, buttons, noTestDataMessage = false }) => (
   <Container>
     <TitleRow>
       <Title data-id="form-title">{title}</Title>

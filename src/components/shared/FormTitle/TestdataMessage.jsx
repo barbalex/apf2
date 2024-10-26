@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useParams } from 'react-router-dom'
 
-import constants from '../../../modules/constants.js'
+import { constants } from '../../../modules/constants.js'
 
 const Div = styled.div`
   color: #c8e6c9;
@@ -9,7 +9,7 @@ const Div = styled.div`
   margin-top: -5px;
 `
 
-const TestdataMessage = () => {
+export const TestdataMessage = () => {
   const { apId } = useParams()
   const isTestAp = apId && constants.testAps.includes(apId)
 
@@ -22,5 +22,3 @@ const TestdataMessage = () => {
   }
   return null
 }
-
-export default TestdataMessage

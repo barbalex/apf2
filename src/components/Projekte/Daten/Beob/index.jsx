@@ -8,7 +8,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
 
-import constants from '../../../../modules/constants.js'
+import { constants } from '../../../../modules/constants.js'
 import exists from '../../../../modules/exists.js'
 import query from './query.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
