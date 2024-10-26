@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup.jsx'
 import TextField from '../../../shared/TextField.jsx'
-import Select from '../../../shared/Select.jsx'
+import { Select } from '../../../shared/Select.jsx'
 import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypable.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import DateField from '../../../shared/Date.jsx'

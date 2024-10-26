@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 
-import Select from '../../../../shared/Select.jsx'
+import { Select } from '../../../../shared/Select.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.js'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'

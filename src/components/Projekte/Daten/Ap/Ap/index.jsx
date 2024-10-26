@@ -9,7 +9,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfo.jsx'
 import TextField from '../../../../shared/TextField.jsx'
-import Select from '../../../../shared/Select.jsx'
+import { Select } from '../../../../shared/Select.jsx'
 import { SelectLoadingOptions } from '../../../../shared/SelectLoadingOptions.jsx'
 import TextFieldNonUpdatable from '../../../../shared/TextFieldNonUpdatable'
 import query from './query.js'

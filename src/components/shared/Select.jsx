@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import Select from 'react-select'
+import ReactSelect from 'react-select'
 import styled from '@emotion/styled'
 
 import { exists } from '../../modules/exists.js'
@@ -17,7 +17,7 @@ const Error = styled.div`
   font-size: 12px;
   color: red;
 `
-const StyledSelect = styled(Select)`
+const StyledSelect = styled(ReactSelect)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
     border-bottom-color: rgba(0, 0, 0, 0.1);
@@ -66,7 +66,7 @@ const StyledSelect = styled(Select)`
   }
 `
 
-const SharedSelect = ({
+export const Select = ({
   value,
   field = '',
   label,
@@ -131,5 +131,3 @@ const SharedSelect = ({
     </Container>
   )
 }
-
-export default SharedSelect

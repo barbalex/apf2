@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 
-import Select from '../../../../shared/Select.jsx'
+import { Select } from '../../../../shared/Select.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
 import queryAdresses from './queryAdresses.js'
 import {
