@@ -28,7 +28,7 @@ import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.
 import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../modules/isMobilePhone.js'
 import historizeForAp from '../../../../modules/historizeForAp.js'
-import historize from '../../../../modules/historize.js'
+import { historize } from '../../../../modules/historize.js'
 // adding ?react to .svg leads to error:
 // Warning: </src/components/Projekte/Karte/layers/Pop/statusGroupSymbols/100.svg?react /> is using incorrect casing.
 // Use PascalCase for React components, or lowercase for HTML elements
@@ -216,15 +216,15 @@ const StyledChevronRightIcon = styled(MdChevronRight)`
 `
 const StyledMoreHorizIcon = styled(MdMoreHoriz)`
   margin-top: ${(props) =>
-    props['data-nodeisinactivenodepath']
-      ? '-5px !important'
-      : '-2px !important'};
+    props['data-nodeisinactivenodepath'] ? '-5px !important' : (
+      '-2px !important'
+    )};
   padding-left: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '1px' : '2px'};
   height: ${(props) =>
-    props['data-nodeisinactivenodepath']
-      ? '26px !important'
-      : '22px !important'};
+    props['data-nodeisinactivenodepath'] ? '26px !important' : (
+      '22px !important'
+    )};
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   font-size: 1.5rem;
@@ -374,8 +374,9 @@ const Row = ({ node }) => {
   const onlyShowActivePath = onlyShowActivePathString === 'true'
 
   // only calculate if needed
-  const nodeOrParentIsInActivePath = onlyShowActivePath
-    ? isNodeOrParentInActiveNodePath({ node, activeNodeArray })
+  const nodeOrParentIsInActivePath =
+    onlyShowActivePath ?
+      isNodeOrParentInActiveNodePath({ node, activeNodeArray })
     : false
 
   // build symbols
@@ -397,9 +398,9 @@ const Row = ({ node }) => {
     showPrintIcon = true
   }
   const printIconTitle =
-    node.menuType === 'apberuebersicht'
-      ? 'Druckversion. Achtung: braucht Minuten, um vollständig zu laden'
-      : 'Druckversion'
+    node.menuType === 'apberuebersicht' ?
+      'Druckversion. Achtung: braucht Minuten, um vollständig zu laden'
+    : 'Druckversion'
   const dataUrl = JSON.stringify(node.url)
   const level =
     node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
@@ -507,23 +508,22 @@ const Row = ({ node }) => {
 
   const tpopIconIsHighlighted =
     karteIsVisible && activeApfloraLayers.includes('tpop') && nodeIsActive
-  const TpopIcon = node.status
-    ? tpopIconIsHighlighted
-      ? tpopIcons[tpopIconName][node.status + 'Highlighted']
+  const TpopIcon =
+    node.status ?
+      tpopIconIsHighlighted ?
+        tpopIcons[tpopIconName][node.status + 'Highlighted']
       : tpopIcons[tpopIconName][node.status]
-    : tpopIconIsHighlighted
-      ? TpopQIconHighlighted
-      : TpopQIcon
+    : tpopIconIsHighlighted ? TpopQIconHighlighted
+    : TpopQIcon
 
   const popIconIsHighlighted =
     karteIsVisible && activeApfloraLayers.includes('pop') && nodeIsActive
-  const PopIcon = node.status
-    ? popIconIsHighlighted
-      ? popIcons[popIconName][node.status + 'Highlighted']
+  const PopIcon =
+    node.status ?
+      popIconIsHighlighted ? popIcons[popIconName][node.status + 'Highlighted']
       : popIcons[popIconName][node.status]
-    : popIconIsHighlighted
-      ? PopQIconHighlighted
-      : PopQIcon
+    : popIconIsHighlighted ? PopQIconHighlighted
+    : PopQIcon
 
   // console.log('Row, node:', node)
 
@@ -669,14 +669,12 @@ const Row = ({ node }) => {
           node={node}
           onClick={onClickNode}
         >
-          {nodeLabelFilter?.[node.menuType] ? (
+          {nodeLabelFilter?.[node.menuType] ?
             <Highlighter
               searchWords={[nodeLabelFilter[node.menuType]]}
               textToHighlight={node.label}
             />
-          ) : (
-            node.label
-          )}
+          : node.label}
         </TextSpan>
         {isMoving && (
           <div title="zum Verschieben gemerkt, bereit zum Einfügen">
@@ -694,7 +692,10 @@ const Row = ({ node }) => {
           </div>
         )}
         {showPrintIcon && (
-          <PrintIconContainer title={printIconTitle} onClick={onClickPrint}>
+          <PrintIconContainer
+            title={printIconTitle}
+            onClick={onClickPrint}
+          >
             <PrintIcon />
           </PrintIconContainer>
         )}

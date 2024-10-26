@@ -22,7 +22,7 @@ import { apberuebersicht } from '../../../shared/fragments.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
-import historize from '../../../../modules/historize'
+import { historize } from '../../../../modules/historize.js'
 
 const Container = styled.div`
   flex-grow: 1;

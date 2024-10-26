@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 
 import { apberuebersicht } from '../components/shared/fragments.js'
 
-const historize = async ({ store, apberuebersicht: row }) => {
+export const historize = async ({ store, apberuebersicht: row }) => {
   const { enqueNotification, client } = store
   // 1. historize
   try {
@@ -72,5 +72,3 @@ const historize = async ({ store, apberuebersicht: row }) => {
   })
   return
 }
-
-export default historize
