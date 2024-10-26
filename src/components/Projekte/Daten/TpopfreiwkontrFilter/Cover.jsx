@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import TextField from '../../../shared/TextField2.jsx'
+import { TextField2 } from '../../../shared/TextField2.jsx'
 import anteilImg from './anteil.png'
 
 const Area = styled.div`
@@ -85,7 +85,7 @@ const Cover = ({ saveToDb, row }) => {
     <Container>
       <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
       <DeckApArtVal>
-        <TextField
+        <TextField2
           key={`${row?.id}deckungApArt`}
           name="deckungApArt"
           row={row}
@@ -96,7 +96,7 @@ const Cover = ({ saveToDb, row }) => {
       <DeckApArtMass>%</DeckApArtMass>
       <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
       <DeckNaBoVal>
-        <TextField
+        <TextField2
           key={`${row?.id}deckungNackterBoden`}
           name="deckungNackterBoden"
           row={row}
@@ -106,7 +106,10 @@ const Cover = ({ saveToDb, row }) => {
       </DeckNaBoVal>
       <DeckNaBoMass>%</DeckNaBoMass>
       <DeckImage>
-        <Img src={anteilImg} alt="Flächen-Anteile" />
+        <Img
+          src={anteilImg}
+          alt="Flächen-Anteile"
+        />
       </DeckImage>
     </Container>
   )

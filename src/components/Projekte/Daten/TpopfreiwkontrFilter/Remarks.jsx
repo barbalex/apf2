@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import TextField from '../../../shared/TextField2.jsx'
+import { TextField2 } from '../../../shared/TextField2.jsx'
 
 const Container = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -47,7 +47,7 @@ const Remarks = ({ saveToDb, row }) => {
         </RemarksSubLabel>
       </RemarksLabel>
       <RemarksVal>
-        <TextField
+        <TextField2
           key={`${row?.id}bemerkungen`}
           name="bemerkungen"
           row={row}

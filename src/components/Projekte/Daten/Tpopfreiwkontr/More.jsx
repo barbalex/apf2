@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import TextField from '../../../shared/TextField2.jsx'
+import { TextField2 } from '../../../shared/TextField2.jsx'
 import RadioButton from '../../../shared/RadioButton.jsx'
 import veghoeheImg from './veghoehe.png'
 
@@ -147,7 +147,7 @@ const More = ({ saveToDb, row, errors }) => (
   <Container>
     <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
     <MoreFlVal>
-      <TextField
+      <TextField2
         key={`${row.id}flaecheUeberprueft`}
         name="flaecheUeberprueft"
         row={row}
@@ -186,11 +186,14 @@ const More = ({ saveToDb, row, errors }) => (
     </JungPflVal2>
     <VeghoeheLabel0>Vegetationshöhe</VeghoeheLabel0>
     <VeghoeheImg>
-      <Img src={veghoeheImg} alt="Flächen-Anteile" />
+      <Img
+        src={veghoeheImg}
+        alt="Flächen-Anteile"
+      />
     </VeghoeheImg>
     <VeghoeheMaxLabel>Maximum (cm)</VeghoeheMaxLabel>
     <VeghoeheMaxVal>
-      <TextField
+      <TextField2
         key={`${row.id}vegetationshoeheMaximum`}
         name="vegetationshoeheMaximum"
         row={row}
@@ -201,7 +204,7 @@ const More = ({ saveToDb, row, errors }) => (
     </VeghoeheMaxVal>
     <VeghoeheMittLabel>Mittel (cm)</VeghoeheMittLabel>
     <VeghoeheMittVal>
-      <TextField
+      <TextField2
         key={`${row.id}vegetationshoeheMittel`}
         name="vegetationshoeheMittel"
         row={row}

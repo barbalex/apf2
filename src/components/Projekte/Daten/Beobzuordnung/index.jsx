@@ -10,7 +10,7 @@ import SimpleBar from 'simplebar-react'
 import { useParams, useLocation } from 'react-router-dom'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import TextField from '../../../shared/TextField2.jsx'
+import { TextField2 } from '../../../shared/TextField2.jsx'
 import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
 import { Select } from '../../../shared/Select.jsx'
 import DateField from '../../../shared/Date.jsx'
@@ -343,7 +343,7 @@ const Beobzuordnung = () => {
                 options={tpopZuordnenSource}
                 saveToDb={onSaveTpopIdToDb}
               />
-              <TextField
+              <TextField2
                 key={`${row.id}bemerkungen`}
                 name="bemerkungen"
                 label="Bemerkungen zur Zuordnung"
