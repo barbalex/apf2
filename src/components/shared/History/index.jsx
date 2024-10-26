@@ -17,7 +17,7 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
 `
 
-const History = ({ year, dataArray }) => (
+export const History = observer(({ year, dataArray }) => (
   <ErrorBoundary>
     <Container>
       <TitleRow>
@@ -26,6 +26,4 @@ const History = ({ year, dataArray }) => (
       <Data dataArray={dataArray} />
     </Container>
   </ErrorBoundary>
-)
-
-export default observer(History)
+))

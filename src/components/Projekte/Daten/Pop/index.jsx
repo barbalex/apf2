@@ -25,8 +25,7 @@ import { pop } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import TpopMenge from './TpopMenge/index.jsx'
-
-import PopHistory from './History.jsx'
+import { History } from './History.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -245,7 +244,7 @@ const Pop = () => {
                 parent="pop"
               />
             )}
-            {tab === 'history' && <PopHistory />}
+            {tab === 'history' && <History />}
           </TabContent>
         </div>
       </Container>
