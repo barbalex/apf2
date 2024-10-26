@@ -11,8 +11,8 @@ import styled from '@emotion/styled'
 import { gql, useApolloClient } from '@apollo/client'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
-import storeContext from '../../../../storeContext.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { StoreContext } from '../../../../storeContext.js'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
@@ -72,7 +72,7 @@ const Error = styled.div`
 
 const EkfrequenzFolder = ({ onClick }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { user, enqueNotification } = store
 
   // according to https://github.com/vkbansal/react-contextmenu/issues/65

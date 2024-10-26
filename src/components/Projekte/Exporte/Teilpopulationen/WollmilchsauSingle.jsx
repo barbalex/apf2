@@ -6,7 +6,7 @@ import { useApolloClient, gql } from '@apollo/client'
 
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions.jsx'
 import exportModule from '../../../../modules/export.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const AutocompleteContainer = styled.div`
   flex-basis: 450px;
@@ -16,7 +16,7 @@ const AutocompleteContainer = styled.div`
 
 const WollmilchsauSingle = () => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { enqueNotification } = store
 

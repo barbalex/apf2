@@ -9,12 +9,12 @@ import Users from './Users/index.jsx'
 import Messages from './Messages.jsx'
 import Werte from './Werte/index.jsx'
 import CurrentIssues from './CurrentIssues/index.jsx'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 
 const TreeRoot = () => {
   const client = useApolloClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { projectIsOpen, nodeLabelFilter, apGqlFilterForTree } = store.tree
   const token = store.user?.token
   const role = token ? jwtDecode(token).role : null

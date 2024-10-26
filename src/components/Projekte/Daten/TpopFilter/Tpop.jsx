@@ -14,7 +14,7 @@ import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo.j
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover.jsx'
 //import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import constants from '../../../../modules/constants.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const Container = styled.div`
   height: 100%;
@@ -23,7 +23,7 @@ const Container = styled.div`
 `
 
 const Tpop = ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
   const client = useApolloClient()
 
@@ -61,7 +61,10 @@ const Tpop = ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
   if (!row) return null
 
   return (
-    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+    <SimpleBar
+      style={{ maxHeight: '100%', height: '100%' }}
+      tabIndex={-1}
+    >
       <Container>
         <TextField
           name="nr"
@@ -112,10 +115,9 @@ const Tpop = ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
           saveToDb={saveToDb}
           error={fieldErrors.apberRelevant}
         />
-        {errorLists ? (
+        {errorLists ?
           <div>errorLists.message</div>
-        ) : (
-          <RadioButtonGroupWithInfo
+        : <RadioButtonGroupWithInfo
             name="apberRelevantGrund"
             dataSource={dataLists?.allTpopApberrelevantGrundWertes?.nodes ?? []}
             popover={TpopAbBerRelevantInfoPopover}
@@ -124,11 +126,10 @@ const Tpop = ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
             saveToDb={saveToDb}
             error={fieldErrors.apberRelevantGrund}
           />
-        )}
-        {errorLists ? (
+        }
+        {errorLists ?
           <div>errorLists.message</div>
-        ) : (
-          <SelectCreatable
+        : <SelectCreatable
             name="gemeinde"
             value={row.gemeinde}
             error={fieldErrors.gemeinde}
@@ -195,7 +196,7 @@ const Tpop = ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
             }}
             saveToDb={saveToDb}
           />
-        )}
+        }
         <TextField
           name="radius"
           label="Radius (m)"

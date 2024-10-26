@@ -10,7 +10,7 @@ import { useLocation, useParams } from 'react-router-dom'
 import query from './query.js'
 import createTpopkontrzaehl from './createTpopkontrzaehl.js'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 import TpopfreiwkontrForm from './Form.jsx'
@@ -49,7 +49,7 @@ const Tpopfreiwkontr = ({ id: idPassed }) => {
 
   const { pathname } = useLocation()
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification, isPrint, setIsPrint, user } = store
 
   const id = idPassed ?? idPassedFromUrl

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 import { tpop } from '../../shared/fragments.js'
 import setEkplans from './setEkplans/index.jsx'
 
@@ -61,7 +61,7 @@ const Input = styled.input`
 
 const CellForEkfrequenzStartjahr = ({ row, style, refetchTpop }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
   const { hovered } = store.ekPlan
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''

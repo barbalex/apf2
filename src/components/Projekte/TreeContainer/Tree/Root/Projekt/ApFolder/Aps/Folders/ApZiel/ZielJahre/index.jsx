@@ -2,11 +2,11 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../../storeContext.js'
 import Ziel from './Ziel'
 
 const ApZieljahr = ({ projekt, ap, zieljahre, ziels }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   return zieljahre.map((jahr) => {
     const labelJahr = jahr === null || jahr === undefined ? 'kein Jahr' : jahr

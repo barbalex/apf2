@@ -11,9 +11,9 @@ import Status from '../../../shared/Status.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
 import queryPops from './queryPops'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import PopOrTabs from './Tabs'
 
@@ -46,7 +46,7 @@ const FilterComment = styled.li`
 const PopFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     dataFilter,
     nodeLabelFilter,
@@ -85,21 +85,24 @@ const PopFilter = () => {
     [activeTab, dataFilterSetValue],
   )
 
-  const navApFilterComment = apFilter
-    ? `Navigationsbaum, "nur AP"-Filter: Nur Populationen von AP-Arten werden berücksichtigt.`
+  const navApFilterComment =
+    apFilter ?
+      `Navigationsbaum, "nur AP"-Filter: Nur Populationen von AP-Arten werden berücksichtigt.`
     : undefined
-  const navHiearchyComment = apId
-    ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Populationen berücksichtigt.'
+  const navHiearchyComment =
+    apId ?
+      'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Populationen berücksichtigt.'
     : undefined
-  const navLabelComment = nodeLabelFilter.pop
-    ? `Navigationsbaum, Label-Filter: Das Label der Populationen wird nach "${nodeLabelFilter.pop}" gefiltert.`
+  const navLabelComment =
+    nodeLabelFilter.pop ?
+      `Navigationsbaum, Label-Filter: Das Label der Populationen wird nach "${nodeLabelFilter.pop}" gefiltert.`
     : undefined
-  const hierarchyComment = artIsFiltered
-    ? 'Formular-Filter, Ebene Art: Es werden nur Populationen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+  const hierarchyComment =
+    artIsFiltered ?
+      'Formular-Filter, Ebene Art: Es werden nur Populationen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const mapFilterComment = mapFilter
-    ? 'Karten-Filter: wird angewendet.'
-    : undefined
+  const mapFilterComment =
+    mapFilter ? 'Karten-Filter: wird angewendet.' : undefined
 
   const showFilterComments =
     !!navApFilterComment ||
@@ -153,6 +156,7 @@ const PopFilter = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <TextField
               label="Nr."

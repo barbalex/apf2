@@ -3,11 +3,11 @@ import { observer } from 'mobx-react-lite'
 import sum from 'lodash/sum'
 
 import Row from '../../../../../../Row'
-import storeContext from '../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import BeobNichtBeurteilts from './BeobNichtBeurteilts'
 
 const BeobNichtBeurteiltFolder = ({ projekt, ap, aparts, isLoading }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
 

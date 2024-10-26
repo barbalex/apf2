@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
 
 import Row from '../../Row'
-import storeContext from '../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../storeContext.js'
 import AdresseFolder from './Adresse'
 import ApberrelevantGrundFolder from './ApberrelevantGrund'
 import EkAbrechnungstypFolder from './EkAbrechnungstyp'
@@ -13,7 +13,7 @@ import ZaehlEinheitFolder from './ZaehlEinheit'
 const WlFolderNode = () => {
   const client = useApolloClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
   const isOpen = store.tree.openNodes.some(
     (nodeArray) => nodeArray[0] === 'Werte-Listen',

@@ -21,10 +21,10 @@ import FormTitle from '../../../shared/FormTitle/index.jsx'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover.jsx'
 import constants from '../../../../modules/constants.js'
 import query from './query.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import Files from '../../../shared/Files/index.jsx'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import { tpopfeldkontr } from '../../../shared/fragments.js'
 import Spinner from '../../../shared/Spinner.jsx'
@@ -127,7 +127,7 @@ const Tpopfeldkontr = () => {
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -231,13 +231,24 @@ const Tpopfeldkontr = () => {
               value="entwicklung"
               data-id="entwicklung"
             />
-            <StyledTab label="Biotop" value="biotop" data-id="biotop" />
-            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+            <StyledTab
+              label="Biotop"
+              value="biotop"
+              data-id="biotop"
+            />
+            <StyledTab
+              label="Dateien"
+              value="dateien"
+              data-id="dateien"
+            />
           </Tabs>
           <div style={{ overflowY: 'auto' }}>
             <TabContent>
               {tab === 'entwicklung' && (
-                <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+                <SimpleBar
+                  style={{ maxHeight: '100%', height: '100%' }}
+                  tabIndex={-1}
+                >
                   <FormContainer>
                     <TextField
                       name="jahr"
@@ -373,7 +384,10 @@ const Tpopfeldkontr = () => {
                       saveToDb={saveToDb}
                       error={fieldErrors.apberNichtRelevantGrund}
                     />
-                    <StringToCopy text={row.id} label="id" />
+                    <StringToCopy
+                      text={row.id}
+                      label="id"
+                    />
                   </FormContainer>
                 </SimpleBar>
               )}
@@ -481,7 +495,10 @@ const Tpopfeldkontr = () => {
                 </SimpleBar>
               )}
               {tab === 'dateien' && (
-                <Files parentId={row.id} parent="tpopkontr" />
+                <Files
+                  parentId={row.id}
+                  parent="tpopkontr"
+                />
               )}
             </TabContent>
           </div>

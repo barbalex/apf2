@@ -9,14 +9,14 @@ import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router-dom'
 import axios from 'redaxios'
 
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 import Popup from './layers/Popup.jsx'
 import xmlToLayersData from '../../../modules/xmlToLayersData.js'
 
 const ClickListener = () => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { activeOverlays: activeOverlaysRaw, enqueNotification } = store
   const activeOverlays = getSnapshot(activeOverlaysRaw)
 

@@ -4,8 +4,8 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
 import ApberForYear from './ApberForYear.jsx'
-import storeContext from '../../../storeContext.js'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { StoreContext } from '../../../storeContext.js'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 
 const ApberForYearContainer = () => {
@@ -13,7 +13,7 @@ const ApberForYearContainer = () => {
     useParams()
 
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { printingJberYear } = store
 
   const [year, setYear] = useState(printingJberYear)

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import SimpleBar from 'simplebar-react'
 
-import ApErfolg from './ApErfolg'
+import { ApErfolg } from './ApErfolg/index.jsx'
 import PopStatus from './PopStatus'
 import PopMenge from './PopMenge'
 import TpopKontrolliert from './TpopKontrolliert'
@@ -18,11 +18,12 @@ const ApAuswertung = () => (
       maxHeight: '100%',
       height: '100%',
     }}
+    tabIndex={-1}
   >
     <FormContainer>
       <ApErfolg />
       <PopStatus />
-      <PopMenge /> 
+      <PopMenge />
       <TpopKontrolliert />
     </FormContainer>
   </SimpleBar>

@@ -11,9 +11,9 @@ import TextField from '../../../shared/TextField.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import queryLists from './queryLists'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import { erfkrit } from '../../../shared/fragments.js'
 import Spinner from '../../../shared/Spinner.jsx'
@@ -43,7 +43,7 @@ const Erfkrit = () => {
 
   const queryClient = useQueryClient()
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -126,6 +126,7 @@ const Erfkrit = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <RadioButtonGroup

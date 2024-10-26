@@ -2,11 +2,11 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../Row'
-import storeContext from '../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import ApErfkrit from './ApErfkrit'
 
 const ErfkritFolder = ({ projekt, ap, count, isLoading }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.erfkrit ?? ''
 

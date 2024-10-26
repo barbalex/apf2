@@ -8,7 +8,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import upperFirst from 'lodash/upperFirst'
 
-import ErrorBoundary from '../ErrorBoundary.jsx'
+import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import TextField from '../TextField'
 import {
   apFile as apFileFragment,
@@ -20,7 +20,7 @@ import {
 } from '../fragments'
 import isImageFile from './isImageFile'
 import ifIsNumericAsNumber from '../../../modules/ifIsNumericAsNumber.js'
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -85,7 +85,7 @@ const fragmentObject = {
 
 const File = ({ file, parent, refetch }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
 

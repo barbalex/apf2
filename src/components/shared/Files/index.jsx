@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useRef, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import styled from '@emotion/styled'
@@ -7,7 +7,7 @@ import Button from '@mui/material/Button'
 import SimpleBar from 'simplebar-react'
 import ImageGallery from 'react-image-gallery'
 
-import ErrorBoundary from '../ErrorBoundary.jsx'
+import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import Error from '../Error'
 import Spinner from '../Spinner'
 
@@ -19,10 +19,12 @@ import {
   tpopkontrFile as tpopkontrFileFragment,
   tpopmassnFile as tpopmassnFileFragment,
 } from '../fragments'
-import Uploader from '../Uploader'
+import { Uploader } from '../Uploader/index.jsx'
+import { UploaderContext } from '../../../UploaderContext.js'
 import File from './File'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import isImageFile from './isImageFile'
+import { StoreContext } from '../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -57,6 +59,9 @@ const Files = ({
   loadingParent,
 }) => {
   const client = useApolloClient()
+  const uploaderCtx = useContext(UploaderContext)
+  const api = uploaderCtx?.current?.getAPI?.()
+  const storeContext = useContext(StoreContext)
 
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
@@ -84,9 +89,7 @@ const Files = ({
 
   const files = data?.[`all${upperFirst(parent)}Files`].nodes ?? []
 
-  const [uploaderId, setUploaderId] = useState(0)
-  // console.log('Files, uploaderId:', uploaderId)
-  const onChangeUploader = useCallback(
+  const onFileUploadSuccess = useCallback(
     async (info) => {
       if (info) {
         let responce
@@ -113,26 +116,35 @@ const Files = ({
             `,
           })
         } catch (error) {
-          return console.log(error)
-          // TODO: add enqueNotification
-          /*return store.enqueNotification({
-              message: error.message,
-              options: {
-                variant: 'error',
-              },
-            })*/
+          console.log(error)
+          store.enqueNotification({
+            message: error.message,
+            options: {
+              variant: 'error',
+            },
+          })
         }
-        console.log('File uploaded: ', { info, responce })
         refetch()
-        // TODO: reinitiate uploader
-        setUploaderId(uploaderId + 1)
-        return null
       }
-      setUploaderId(uploaderId + 1)
+      // close the uploader or it will be open when navigating to the list
+      api?.doneFlow?.()
+      // clear the uploader or it will show the last uploaded file when opened next time
+      api?.removeAllFiles?.()
+
       return null
     },
-    [client, fields, fragment, parent, parentId, refetch, uploaderId],
+    [client, fields, fragment, parent, parentId, refetch],
   )
+
+  const onFileUploadFailed = useCallback((error) => {
+    console.error('Upload failed:', error)
+    store.enqueNotification({
+      message: error?.message ?? 'Upload fehlgeschlagen',
+      options: {
+        variant: 'error',
+      },
+    })
+  }, [])
 
   const images = files.filter((f) => isImageFile(f))
   const imageObjects = images.map((f) => ({
@@ -160,27 +172,34 @@ const Files = ({
         maxHeight: '100%',
         height: '100%',
       }}
+      tabIndex={-1}
     >
       <ErrorBoundary>
         <Container>
           <ButtonsContainer>
-            <Uploader id={uploaderId} onChange={onChangeUploader} />
+            <Uploader
+              onFileUploadSuccess={onFileUploadSuccess}
+              onFileUploadFailed={onFileUploadFailed}
+            />
             {!!images.length && (
               <LightboxButton
                 color="primary"
                 variant="outlined"
                 onClick={onClickLightboxButton}
               >
-                {lightboxIsOpen
-                  ? 'Galerie schliessen'
-                  : 'Bilder in Galerie öffnen'}
+                {lightboxIsOpen ?
+                  'Galerie schliessen'
+                : 'Bilder in Galerie öffnen'}
               </LightboxButton>
             )}
           </ButtonsContainer>
           {lightboxIsOpen && (
             <>
               <Spacer />
-              <ImageGallery items={imageObjects} showPlayButton={false} />
+              <ImageGallery
+                items={imageObjects}
+                showPlayButton={false}
+              />
             </>
           )}
           <Spacer />

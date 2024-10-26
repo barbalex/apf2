@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import Data from './Data'
-import ErrorBoundary from '../ErrorBoundary.jsx'
+import { ErrorBoundary } from '../ErrorBoundary.jsx'
 
 const Container = styled.div`
   padding: 10px 0;

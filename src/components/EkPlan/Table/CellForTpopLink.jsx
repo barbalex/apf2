@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import { StyledTableCell } from './index.jsx'
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 const Link = styled.div`
   cursor: pointer;
@@ -22,7 +22,7 @@ const Link = styled.div`
 `
 
 const CellForTpopLink = ({ field, style, row }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { hovered } = store.ekPlan
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''

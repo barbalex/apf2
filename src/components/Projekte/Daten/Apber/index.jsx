@@ -15,9 +15,9 @@ import DateField from '../../../shared/Date.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import constants from '../../../../modules/constants.js'
 import query from './query.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { apber } from '../../../shared/fragments.js'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
@@ -66,7 +66,7 @@ const fieldTypes = {
 const Apber = () => {
   const { apberId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const client = useApolloClient()
   const queryClient = useQueryClient()
 
@@ -141,6 +141,7 @@ const Apber = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <TextField

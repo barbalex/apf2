@@ -9,7 +9,7 @@ import { Link, useParams, useLocation } from 'react-router-dom'
 import isMobilePhone from '../../../../modules/isMobilePhone.js'
 import More from './More/index.jsx'
 import Daten from './Daten.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 
 const StyledButton = styled(Button)`
@@ -44,7 +44,7 @@ const ProjekteBar = () => {
   const { projId } = useParams()
   const { search } = useLocation()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { user } = store
   const { resetTree2Src } = store.tree
 

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import { StyledTableCell } from './index.jsx'
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 const Container = styled.div`
   height: 100%;
@@ -13,7 +13,7 @@ const Container = styled.div`
 `
 
 const CellForValue = ({ field, style, row, firstChild }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { value } = field
 

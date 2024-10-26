@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 
 import queryTpopkontrs from './queryTpopkontrs.js'
 import FilterTitle from '../../../shared/FilterTitle.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import TpopfreiwkontrForm from './Form.jsx'
 import OrTabs from './Tabs.jsx'
 
@@ -48,7 +48,7 @@ const FilterComment = styled.li`
 const Tpopfreiwkontr = () => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const tree = store.tree
   const {
     dataFilter,
@@ -78,30 +78,36 @@ const Tpopfreiwkontr = () => {
     },
   })
 
-  const navApFilterComment = apFilter
-    ? `Navigationsbaum, "nur AP"-Filter: Nur Freiwilligen-Kontrollen von AP-Arten werden berücksichtigt.`
+  const navApFilterComment =
+    apFilter ?
+      `Navigationsbaum, "nur AP"-Filter: Nur Freiwilligen-Kontrollen von AP-Arten werden berücksichtigt.`
     : undefined
   const navHiearchyComment =
     // tpopId ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.'
     // : popId
     // ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.' :
-    apId
-      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.'
-      : undefined
-  const navLabelComment = nodeLabelFilter.tpopfeldkontr
-    ? `Navigationsbaum, Label-Filter: Das Label der Freiwilligen-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
+    apId ?
+      'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Freiwilligen-Kontrollen berücksichtigt.'
     : undefined
-  const artHierarchyComment = artIsFiltered
-    ? 'Formular-Filter, Ebene Art: Es werden nur Freiwilligen-Kontrollen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+  const navLabelComment =
+    nodeLabelFilter.tpopfeldkontr ?
+      `Navigationsbaum, Label-Filter: Das Label der Freiwilligen-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
     : undefined
-  const popHierarchyComment = popIsFiltered
-    ? 'Formular-Filter, Ebene Population: Es werden nur Freiwilligen-Kontrollen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+  const artHierarchyComment =
+    artIsFiltered ?
+      'Formular-Filter, Ebene Art: Es werden nur Freiwilligen-Kontrollen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const tpopHierarchyComment = tpopIsFiltered
-    ? 'Formular-Filter, Ebene Teil-Population: Es werden nur Freiwilligen-Kontrollen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+  const popHierarchyComment =
+    popIsFiltered ?
+      'Formular-Filter, Ebene Population: Es werden nur Freiwilligen-Kontrollen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const mapFilterComment = mapFilter
-    ? 'Karten-Filter: Nur Freiwilligen-Kontrollen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
+  const tpopHierarchyComment =
+    tpopIsFiltered ?
+      'Formular-Filter, Ebene Teil-Population: Es werden nur Freiwilligen-Kontrollen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const mapFilterComment =
+    mapFilter ?
+      'Karten-Filter: Nur Freiwilligen-Kontrollen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
     : undefined
 
   const showFilterComments =
@@ -161,8 +167,12 @@ const Tpopfreiwkontr = () => {
             maxHeight: '100%',
             height: '100%',
           }}
+          tabIndex={-1}
         >
-          <TpopfreiwkontrForm row={row} activeTab={activeTab} />
+          <TpopfreiwkontrForm
+            row={row}
+            activeTab={activeTab}
+          />
         </SimpleBar>
       </ScrollContainer>
     </Container>

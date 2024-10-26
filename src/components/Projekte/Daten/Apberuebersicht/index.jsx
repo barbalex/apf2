@@ -15,9 +15,9 @@ import MdField from '../../../shared/MarkdownField/index.jsx'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { apberuebersicht } from '../../../shared/fragments.js'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
@@ -74,7 +74,7 @@ const fieldTypes = {
 const Apberuebersicht = () => {
   const { apberUebersichtId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const client = useApolloClient()
   const { user } = store
   const { token } = user
@@ -196,6 +196,7 @@ const Apberuebersicht = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <TextField
@@ -224,16 +225,15 @@ const Apberuebersicht = () => {
                   >
                     <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
                     <Explainer>
-                      {historizing ? (
+                      {historizing ?
                         'Bitte warten, das dauert eine Weile...'
-                      ) : (
-                        <>
+                      : <>
                           Diese Option ist nur sichtbar:
                           <br /> 1. Wenn der Benutzer Manager ist
                           <br /> 2. Von Beginn des Berichtjahrs bis zum März des
                           Folgejahrs
                         </>
-                      )}
+                      }
                     </Explainer>
                   </HistorizeButton>
                 </>

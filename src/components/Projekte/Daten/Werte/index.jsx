@@ -9,9 +9,9 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../shared/TextField.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 
@@ -33,17 +33,16 @@ const Werte = () => {
   const { wertId: id } = useParams()
   const location = useLocation()
   const { pathname } = location
-  const table = pathname.includes('ApberrelevantGrundWerte')
-    ? 'tpopApberrelevantGrundWerte'
-    : pathname.includes('EkAbrechnungstypWerte')
-      ? 'ekAbrechnungstypWerte'
-      : pathname.includes('TpopkontrzaehlEinheitWerte')
-        ? 'tpopkontrzaehlEinheitWerte'
-        : 'uups'
+  const table =
+    pathname.includes('ApberrelevantGrundWerte') ? 'tpopApberrelevantGrundWerte'
+    : pathname.includes('EkAbrechnungstypWerte') ? 'ekAbrechnungstypWerte'
+    : pathname.includes('TpopkontrzaehlEinheitWerte') ?
+      'tpopkontrzaehlEinheitWerte'
+    : 'uups'
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -147,6 +146,7 @@ const Werte = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <TextField

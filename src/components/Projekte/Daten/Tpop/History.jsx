@@ -191,7 +191,10 @@ const TpopHistory = () => {
   }
 
   return (
-    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+    <SimpleBar
+      style={{ maxHeight: '100%', height: '100%' }}
+      tabIndex={-1}
+    >
       <InnerContainer>
         <DocLine>
           Jährlich historisierte Daten der Teil-Population (

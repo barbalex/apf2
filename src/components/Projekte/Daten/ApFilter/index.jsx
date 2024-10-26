@@ -14,9 +14,9 @@ import queryLists from './queryLists'
 import queryAps from './queryAps'
 import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import OrTabs from './Tabs'
 
@@ -79,7 +79,7 @@ const FilterComment = styled.li`
 `
 
 const ApFilter = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     dataFilter,
     apFilter: nurApFilter,
@@ -127,9 +127,9 @@ const ApFilter = () => {
   })
 
   const artname =
-    !!dataFilter.ap?.[activeTab]?.artId && !loadingAeTaxonomiesById
-      ? dataAeTaxonomiesById?.aeTaxonomyById?.artname ?? ''
-      : ''
+    !!dataFilter.ap?.[activeTab]?.artId && !loadingAeTaxonomiesById ?
+      (dataAeTaxonomiesById?.aeTaxonomyById?.artname ?? '')
+    : ''
 
   const row = dataFilter.ap[activeTab]
   // console.log('ApFilter', { row: row ? getSnapshot(row) : undefined, artname })
@@ -166,11 +166,13 @@ const ApFilter = () => {
     ...(errorAeTaxonomiesById ? [errorAeTaxonomiesById] : []),
   ]
 
-  const navApFilterComment = nurApFilter
-    ? `Navigationsbaum, "nur AP"-Filter: Nur AP-Arten werden berücksichtigt.`
+  const navApFilterComment =
+    nurApFilter ?
+      `Navigationsbaum, "nur AP"-Filter: Nur AP-Arten werden berücksichtigt.`
     : undefined
-  const navLabelComment = nodeLabelFilter.ap
-    ? `Navigationsbaum, Label-Filter: Das Label der Art wird nach "${nodeLabelFilter.ap}" gefiltert.`
+  const navLabelComment =
+    nodeLabelFilter.ap ?
+      `Navigationsbaum, Label-Filter: Das Label der Art wird nach "${nodeLabelFilter.ap}" gefiltert.`
     : undefined
 
   const showFilterComments = !!navApFilterComment || !!navLabelComment
@@ -216,6 +218,7 @@ const ApFilter = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <SelectLoadingOptions

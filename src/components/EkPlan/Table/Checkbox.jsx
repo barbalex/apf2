@@ -4,7 +4,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 
 import { tpop } from '../../shared/fragments.js'
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 const CheckboxContainer = styled.div`
   width: 100%;
@@ -31,7 +31,7 @@ const StyledCheckbox = styled.div`
 `
 
 const CheckboxComponent = ({ row, value, field }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
   const client = useApolloClient()
 

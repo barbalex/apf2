@@ -7,7 +7,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { useParams } from 'react-router-dom'
 
 import Marker from './Marker.jsx'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import query from './query.js'
 import updateTpopById from './updateTpopById.js'
 
@@ -27,7 +27,7 @@ const iconCreateFunction = (cluster) => {
 }
 
 const TpopRouter = ({ clustered }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const tree = store.tree
   const { tpopGqlFilter } = tree
 
@@ -48,7 +48,7 @@ const TpopRouter = ({ clustered }) => {
 const Tpop = ({ clustered }) => {
   const client = useApolloClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     enqueNotification,
     setIdOfTpopBeingLocalized,

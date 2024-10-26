@@ -14,7 +14,7 @@ import { useParams, useLocation } from 'react-router-dom'
 import isMobilePhone from '../../../modules/isMobilePhone.js'
 import EkfYear from './EkfYear.jsx'
 import User from './User/index.jsx'
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 import userQuery from './query.js'
 import dataByUserIdQuery from '../../Ekf/dataByUserId.js'
 import dataWithDateByUserIdQuery from '../../Ekf/dataWithDateByUserId.js'
@@ -70,7 +70,7 @@ const ProjekteAppBar = () => {
   const { userId, ekfId, ekfYear } = useParams()
   const { search } = useLocation()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { user, setIsPrint, setIsEkfSinglePrint } = store
   const ekfIsActive = !!ekfId
 

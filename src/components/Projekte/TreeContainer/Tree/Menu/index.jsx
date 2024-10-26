@@ -6,7 +6,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import useSearchParamsState from '../../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
@@ -50,7 +50,7 @@ const StyledFaCog = styled(FaCog)`
 `
 
 const TreeMenu = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { map, tree } = store
   const { tpopIcon, setTpopIcon, popIcon, setPopIcon } = map
   const {

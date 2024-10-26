@@ -11,11 +11,11 @@ import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
 
 import exists from '../../../../../modules/exists.js'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import Error from '../../../../shared/Error.jsx'
 import Spinner from '../../../../shared/Spinner.jsx'
 import Beob from './Field.jsx'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import { beob } from '../../../../shared/fragments.js'
 import { Info } from '../BeobZugeordnet/Marker.jsx'
 
@@ -52,7 +52,7 @@ const topFieldNames = [
 const BeobData = ({ id }) => {
   const client = useApolloClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
     store
 

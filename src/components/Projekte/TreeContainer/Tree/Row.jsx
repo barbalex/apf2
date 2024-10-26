@@ -23,7 +23,7 @@ import isNodeOrParentInActiveNodePath from '../isNodeOrParentInActiveNodePath.js
 import isNodeOpen from '../isNodeOpen.js'
 import toggleNode from './toggleNode.js'
 import toggleNodeSymbol from './toggleNodeSymbol.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
 import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../modules/isMobilePhone.js'
@@ -340,7 +340,7 @@ const Row = ({ node }) => {
 
   // console.log('Row, node:', node)
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     activeApfloraLayers,
     copying,

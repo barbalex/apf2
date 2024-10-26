@@ -8,7 +8,7 @@ import { useApolloClient } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import { beobIconString } from './beobIconString.js'
 import { beobHighlightedIconString } from './beobHighlightedIconString.js'
 import getNearestTpop from '../../../../../modules/getNearestTpop.js'
@@ -38,7 +38,7 @@ const BeobZugeordnetMarker = ({ beob }) => {
   const { search } = useLocation()
 
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { assigningBeob, openTree2WithActiveNodeArray } = store
 
   const isHighlighted = beobId === beob.id

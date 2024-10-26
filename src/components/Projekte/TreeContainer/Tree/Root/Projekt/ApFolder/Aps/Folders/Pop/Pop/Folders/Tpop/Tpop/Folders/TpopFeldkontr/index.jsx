@@ -2,11 +2,11 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../../../../../../storeContext.js' 
+import { StoreContext } from '../../../../../../../../../../../../../../../../storeContext.js' 
 import TpopFeldkontr from './TpopFeldkontr'
 
 const TpopFeldkontrFolder = ({ projekt, ap, pop, tpop, isLoading, count }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpopkontr ?? ''
 

@@ -3,8 +3,8 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 
-import storeContext from '../../../../storeContext.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { StoreContext } from '../../../../storeContext.js'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const FilterCommentTitle = styled.div`
   margin-top: -10px;
@@ -23,7 +23,7 @@ const FilterComment = styled.li`
 export const ActiveFilters = observer(() => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { nodeLabelFilter, mapFilter, apFilter, artIsFiltered, popIsFiltered } =
     store.tree

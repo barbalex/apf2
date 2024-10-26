@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../../../storeContext.js'
 import TpopFolder from './Tpop'
 import PopBerFolder from './PopBer'
 import PopMassnBerFolder from './PopMassnBer'
@@ -12,7 +12,7 @@ import PopMassnBerFolder from './PopMassnBer'
 const PopFolders = ({ projekt, ap, pop }) => {
   const client = useApolloClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { tpopGqlFilterForTree, nodeLabelFilter } = store.tree
 
   const popbersFilter = { popId: { equalTo: pop.id } }

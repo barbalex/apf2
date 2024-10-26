@@ -19,9 +19,9 @@ import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover.
 import constants from '../../../../modules/constants.js'
 import query from './query.js'
 import queryTpopkontrs from './queryTpopkontrs.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 import OrTabs from './Tabs.jsx'
@@ -92,7 +92,7 @@ const tpopkontrTypWerte = [
 const TpopfeldkontrFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     dataFilter,
     ekGqlFilter,
@@ -143,30 +143,36 @@ const TpopfeldkontrFilter = () => {
     )
     .map((o) => ({ value: o, label: o }))
 
-  const navApFilterComment = apFilter
-    ? `Navigationsbaum, "nur AP"-Filter: Nur Feld-Kontrollen von AP-Arten werden berücksichtigt.`
+  const navApFilterComment =
+    apFilter ?
+      `Navigationsbaum, "nur AP"-Filter: Nur Feld-Kontrollen von AP-Arten werden berücksichtigt.`
     : undefined
   const navHiearchyComment =
     // tpopId ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
     // : popId
     // ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.' :
-    apId
-      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
-      : undefined
-  const navLabelComment = nodeLabelFilter.tpopfeldkontr
-    ? `Navigationsbaum, Label-Filter: Das Label der Feld-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
+    apId ?
+      'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
     : undefined
-  const artHierarchyComment = artIsFiltered
-    ? 'Formular-Filter, Ebene Art: Es werden nur Feld-Kontrollen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+  const navLabelComment =
+    nodeLabelFilter.tpopfeldkontr ?
+      `Navigationsbaum, Label-Filter: Das Label der Feld-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
     : undefined
-  const popHierarchyComment = popIsFiltered
-    ? 'Formular-Filter, Ebene Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+  const artHierarchyComment =
+    artIsFiltered ?
+      'Formular-Filter, Ebene Art: Es werden nur Feld-Kontrollen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const tpopHierarchyComment = tpopIsFiltered
-    ? 'Formular-Filter, Ebene Teil-Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+  const popHierarchyComment =
+    popIsFiltered ?
+      'Formular-Filter, Ebene Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const mapFilterComment = mapFilter
-    ? 'Karten-Filter: Nur Feld-Kontrollen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
+  const tpopHierarchyComment =
+    tpopIsFiltered ?
+      'Formular-Filter, Ebene Teil-Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const mapFilterComment =
+    mapFilter ?
+      'Karten-Filter: Nur Feld-Kontrollen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
     : undefined
 
   const showFilterComments =
@@ -238,12 +244,19 @@ const TpopfeldkontrFilter = () => {
               value="entwicklung"
               data-id="entwicklung"
             />
-            <StyledTab label="Biotop" value="biotop" data-id="biotop" />
+            <StyledTab
+              label="Biotop"
+              value="biotop"
+              data-id="biotop"
+            />
           </Tabs>
           <div style={{ overflowY: 'auto' }}>
             <TabContent>
               {tab === 'entwicklung' && (
-                <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+                <SimpleBar
+                  style={{ maxHeight: '100%', height: '100%' }}
+                  tabIndex={-1}
+                >
                   <FormContainer>
                     <TextField
                       name="jahr"
@@ -367,7 +380,10 @@ const TpopfeldkontrFilter = () => {
                 </SimpleBar>
               )}
               {tab === 'biotop' && (
-                <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+                <SimpleBar
+                  style={{ maxHeight: '100%', height: '100%' }}
+                  tabIndex={-1}
+                >
                   <FormContainer>
                     <TextField
                       name="flaeche"

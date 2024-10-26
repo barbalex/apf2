@@ -4,11 +4,11 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../Row'
-import storeContext from '../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../storeContext.js'
 
 const ApErfkrit = ({ projekt, ap }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
   const erfkritsFilter = { apId: { equalTo: ap.id } }

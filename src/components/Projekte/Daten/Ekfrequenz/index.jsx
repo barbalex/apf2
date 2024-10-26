@@ -12,10 +12,10 @@ import Kontrolljahre from './Kontrolljahre'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import queryEkAbrechnungstypWertes from './queryEkAbrechnungstypWertes'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import { ekfrequenz } from '../../../shared/fragments.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 
@@ -77,7 +77,7 @@ const Ekfrequenz = () => {
 
   const queryClient = useQueryClient()
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -159,6 +159,7 @@ const Ekfrequenz = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <TextField
@@ -209,10 +210,9 @@ const Ekfrequenz = () => {
                 error={fieldErrors.kontrolljahreAb}
               />
               <div>
-                {errorEkAbrechnungstypWertes ? (
+                {errorEkAbrechnungstypWertes ?
                   errorEkAbrechnungstypWertes.message
-                ) : (
-                  <RadioButtonGroup
+                : <RadioButtonGroup
                     name="ekAbrechnungstyp"
                     dataSource={
                       dataEkAbrechnungstypWertes?.allEkAbrechnungstypWertes
@@ -224,7 +224,7 @@ const Ekfrequenz = () => {
                     saveToDb={saveToDb}
                     error={fieldErrors.ekAbrechnungstyp}
                   />
-                )}
+                }
               </div>
               <TextField
                 name="bemerkungen"

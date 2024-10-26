@@ -9,9 +9,9 @@ import { useQueryClient } from '@tanstack/react-query'
 import TextField from '../../../shared/TextField.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 
@@ -48,7 +48,7 @@ const TpopkontrzaehlEinheitWerte = ({ table }) => {
   const client = useApolloClient()
   const queryClient = useQueryClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { refetch: refetchTree } = store
 
   const [fieldErrors, setFieldErrors] = useState({})
@@ -149,6 +149,7 @@ const TpopkontrzaehlEinheitWerte = ({ table }) => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <TextField

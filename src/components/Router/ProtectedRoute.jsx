@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router-dom'
 
-import storeContext from '../../storeContext.js'
+import { StoreContext } from '../../storeContext.js'
 const User = lazy(() => import('../User'))
 const Messages = lazy(() => import('../Messages'))
 const Deletions = lazy(() => import('../Deletions'))
@@ -41,7 +41,7 @@ const ProtectedRoute = () => {
   const { pathname, search } = useLocation()
   const { userId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { showDeletions, user } = store
 
   const token = user?.token

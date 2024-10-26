@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 // import { useMap } from 'react-leaflet'
 
 import Marker from './Marker.jsx'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import query from './query.js'
 
 const iconCreateFunction = function (cluster) {
@@ -26,7 +26,7 @@ const iconCreateFunction = function (cluster) {
 }
 
 const Router = ({ clustered }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const tree = store.tree
   const { beobGqlFilter } = tree
 
@@ -48,7 +48,7 @@ const Router = ({ clustered }) => {
 
 const BeobNichtBeurteiltMarker = ({ clustered }) => {
   // const leafletMap = useMap()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
   const tree = store.tree
   const { beobGqlFilter } = tree

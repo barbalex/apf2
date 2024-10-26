@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import styled from '@emotion/styled'
 
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 const LabelPopoverRow = styled.div`
   padding: 2px 5px 2px 5px;

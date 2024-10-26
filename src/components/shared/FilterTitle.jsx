@@ -5,7 +5,7 @@ import { MdInfoOutline } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../storeContext.js'
+import { StoreContext } from '../../storeContext.js'
 import exists from '../../modules/exists.js'
 import appBaseUrl from '../../modules/appBaseUrl.js'
 
@@ -45,7 +45,7 @@ const StyledDeleteFilterIcon3 = styled(FaRegTrashAlt)`
 const StyledInfoIcon = styled(MdInfoOutline)``
 
 const FilterTitle = ({ title, table, totalNr, filteredNr, activeTab }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { tableIsFiltered, dataFilterTreeIsFiltered } = store
   const {
     emptyMapFilter,

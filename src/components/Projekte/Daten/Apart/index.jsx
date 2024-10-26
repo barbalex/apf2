@@ -11,9 +11,9 @@ import SelectLoadingOptions from '../../../shared/SelectLoadingOptions.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import queryAeTaxonomies from './queryAeTaxonomies'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { apart } from '../../../shared/fragments.js'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
@@ -42,7 +42,7 @@ const fieldTypes = {
 const ApArt = () => {
   const { taxonId: id } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const client = useApolloClient()
   const queryClient = useQueryClient()
 
@@ -65,14 +65,14 @@ const ApArt = () => {
     .filter((o) => !!o)
   const aeTaxonomiesfilter = useCallback(
     (inputValue) =>
-      inputValue
-        ? apartenOfAp.length
-          ? {
-              taxArtName: { includesInsensitive: inputValue },
-              id: { notIn: apartenOfAp },
-            }
-          : { taxArtName: { includesInsensitive: inputValue } }
-        : { taxArtName: { isNull: false } },
+      inputValue ?
+        apartenOfAp.length ?
+          {
+            taxArtName: { includesInsensitive: inputValue },
+            id: { notIn: apartenOfAp },
+          }
+        : { taxArtName: { includesInsensitive: inputValue } }
+      : { taxArtName: { isNull: false } },
     [apartenOfAp],
   )
 
@@ -144,6 +144,7 @@ const ApArt = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FieldsSubContainer>
               <div>

@@ -2,11 +2,11 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../../../storeContext.js'
 import ZielberFolder from './Zielber'
 
 const Ziel = ({ projekt, ap, jahr, ziels }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   return ziels.map((ziel) => {
     const isOpen =

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../../../../../../storeContext.js'
 import TpopMassn from './TpopMassn'
 import TpopMassnBer from './TpopMassnBer'
 import TpopFeldkontr from './TpopFeldkontr'
@@ -15,7 +15,7 @@ import BeobZugeordnet from './BeobZugeordnet'
 const TpopFolders = ({ projekt, ap, pop, tpop }) => {
   const client = useApolloClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     tpopmassnGqlFilterForTree,
     ekGqlFilterForTree,

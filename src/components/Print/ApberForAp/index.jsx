@@ -12,8 +12,8 @@ import Massnahmen from './Massnahmen.jsx'
 import AMengen from './AMengen.jsx'
 import BMengen from './BMengen.jsx'
 import CMengen from './CMengen.jsx'
-import storeContext from '../../../storeContext.js'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { StoreContext } from '../../../storeContext.js'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import PopMenge from '../../Projekte/Daten/Ap/Auswertung/PopMenge/index.jsx'
 import PopStatus from '../../Projekte/Daten/Ap/Auswertung/PopStatus/index.jsx'
 import TpopKontrolliert from '../../Projekte/Daten/Ap/Auswertung/TpopKontrolliert/index.jsx'
@@ -159,7 +159,7 @@ const ApberForAp = ({
   // so only when index is 0
   subReportIndex,
 }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { setIsPrint } = store
 
   const apData = isSubReport ? apDataPassed : apDataPassed.apById

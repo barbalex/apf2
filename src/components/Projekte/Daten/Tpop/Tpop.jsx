@@ -14,7 +14,7 @@ import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo.j
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover.jsx'
 //import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import constants from '../../../../modules/constants.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import Coordinates from '../../../shared/Coordinates.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 
@@ -33,7 +33,7 @@ const Tpop = ({
   refetchTpop,
   loadingParent,
 }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
   const client = useApolloClient()
 
@@ -71,7 +71,10 @@ const Tpop = ({
   if (!row) return null
 
   return (
-    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+    <SimpleBar
+      style={{ maxHeight: '100%', height: '100%' }}
+      tabIndex={-1}
+    >
       <Container>
         <TextField
           name="nr"
@@ -122,10 +125,9 @@ const Tpop = ({
           saveToDb={saveToDb}
           error={fieldErrors.apberRelevant}
         />
-        {errorLists ? (
+        {errorLists ?
           <div>errorLists.message</div>
-        ) : (
-          <RadioButtonGroupWithInfo
+        : <RadioButtonGroupWithInfo
             name="apberRelevantGrund"
             dataSource={dataLists?.allTpopApberrelevantGrundWertes?.nodes ?? []}
             popover={TpopAbBerRelevantInfoPopover}
@@ -134,12 +136,15 @@ const Tpop = ({
             saveToDb={saveToDb}
             error={fieldErrors.apberRelevantGrund}
           />
-        )}
-        <Coordinates row={row} refetchForm={refetchTpop} table="tpop" />
-        {errorLists ? (
+        }
+        <Coordinates
+          row={row}
+          refetchForm={refetchTpop}
+          table="tpop"
+        />
+        {errorLists ?
           <div>errorLists.message</div>
-        ) : (
-          <SelectCreatable
+        : <SelectCreatable
             name="gemeinde"
             value={row.gemeinde}
             error={fieldErrors.gemeinde}
@@ -206,7 +211,7 @@ const Tpop = ({
             }}
             saveToDb={saveToDb}
           />
-        )}
+        }
         <MdField
           name="bemerkungen"
           label="Bemerkungen"

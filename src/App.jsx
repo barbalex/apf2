@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react'
+import React, { lazy, Suspense, createRef } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import theme from './utils/materialTheme.js'
@@ -24,6 +24,8 @@ import GlobalStyle from './components/GlobalStyle.jsx'
 
 import { Provider as MobxProvider } from './storeContext.js'
 import { Provider as IdbProvider } from './idbContext.js'
+
+import { UploaderContext } from './UploaderContext.js'
 
 const Notifier = lazy(() => import('./components/shared/Notifier.jsx'))
 import NotificationDismisser from './components/shared/NotificationDismisser.jsx'
@@ -65,6 +67,7 @@ const App = () => {
   const store = MobxStore.create()
   const client = buildClient({ store })
   const idbContext = { idb }
+  const uploaderRef = createRef(null)
 
   // console.log('App rendering')
 
@@ -74,6 +77,11 @@ const App = () => {
         <ApolloProvider client={client}>
           <QueryClientProvider client={queryClient}>
             <StyledEngineProvider injectFirst>
+              <uc-upload-ctx-provider
+                id="uploaderctx"
+                ctx-name="uploadcare"
+                ref={uploaderRef}
+              ></uc-upload-ctx-provider>
               <ThemeProvider theme={theme}>
                 <SnackbarProvider
                   maxSnack={3}
@@ -81,7 +89,7 @@ const App = () => {
                   autoHideDuration={10000}
                   action={(key) => <NotificationDismisser nKey={key} />}
                 >
-                  <>
+                  <UploaderContext.Provider value={uploaderRef}>
                     <GlobalStyle />
                     <Suspense fallback={<Spinner />}>
                       <Router />
@@ -92,9 +100,13 @@ const App = () => {
                       <LastTouchedNodeSetter />
                       <MouseWheelHandler />
                       <LegacyBrowserInformer />
-                      <StorePersister client={client} store={store} idb={idb} />
+                      <StorePersister
+                        client={client}
+                        store={store}
+                        idb={idb}
+                      />
                     </Suspense>
-                  </>
+                  </UploaderContext.Provider>
                 </SnackbarProvider>
               </ThemeProvider>
             </StyledEngineProvider>

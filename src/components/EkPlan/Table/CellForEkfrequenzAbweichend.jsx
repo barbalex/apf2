@@ -3,10 +3,10 @@ import { observer } from 'mobx-react-lite'
 
 import Checkbox from './Checkbox.jsx'
 import { StyledCellForSelect } from './index.jsx'
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 const CellForEkfrequenzAbweichend = ({ field, row, style }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { hovered } = store.ekPlan
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''

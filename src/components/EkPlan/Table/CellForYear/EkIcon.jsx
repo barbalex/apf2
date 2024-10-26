@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import sum from 'lodash/sum'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const CheckboxContainer = styled.div`
   width: 100%;
@@ -49,7 +49,7 @@ const SumCounted = styled.div`
 `
 
 const EkIcon = ({ planned, eks, einheits }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { showCount, showEkCount } = store.ekPlan
 
   //console.log('EkIcon', { planned, eks, einheits })

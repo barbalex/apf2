@@ -5,11 +5,11 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../../../../../../../storeContext.js'
 
 const BeobZugeordnet = ({ projekt, ap, pop, tpop }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { beobGqlFilterForTree } = store.tree
 
   const { data } = useQuery({

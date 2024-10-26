@@ -17,7 +17,7 @@ import Massnahmen from './Massnahmen/index.jsx'
 import Beobachtungen from './Beobachtungen/index.jsx'
 import Anwendung from './Anwendung.jsx'
 import Optionen from './Optionen.jsx'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -99,13 +99,17 @@ const Exporte = () => {
     <ExporteContainer data-id="exporte-container">
       <ErrorBoundary>
         <Container>
-          <FormTitle title="Exporte" noTestDataMessage={true} />
+          <FormTitle
+            title="Exporte"
+            noTestDataMessage={true}
+          />
           <ScrollContainer>
             <SimpleBar
               style={{
                 maxHeight: '100%',
                 height: '100%',
               }}
+              tabIndex={-1}
             >
               <InnerContainer>
                 <Optionen />

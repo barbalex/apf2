@@ -10,7 +10,7 @@ import FormTitle from '../../../shared/FormTitle/index.jsx'
 import Qk from './Qk'
 import Choose from './Choose'
 import queryQk from './queryQk'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 import useSearchParamsState from '../../../../modules/useSearchParamsState.js'
@@ -73,7 +73,11 @@ const QkForm = () => {
           textColor="primary"
           centered
         >
-          <StyledTab label="ausführen" value="qk" data-id="qk" />
+          <StyledTab
+            label="ausführen"
+            value="qk"
+            data-id="qk"
+          />
           <StyledTab
             label={`auswählen${qkCount ? ` (${apqkCount}/${qkCount})` : ''}`}
             value="waehlen"
@@ -87,18 +91,20 @@ const QkForm = () => {
                 maxHeight: '100%',
                 height: '100%',
               }}
+              tabIndex={-1}
             >
-              {tab === 'qk' ? (
+              {tab === 'qk' ?
                 <>
-                  {loading ? (
+                  {loading ?
                     <Spinner />
-                  ) : (
-                    <Qk key={qkCount} qkNameQueries={qkNameQueries} qks={qks} />
-                  )}
+                  : <Qk
+                      key={qkCount}
+                      qkNameQueries={qkNameQueries}
+                      qks={qks}
+                    />
+                  }
                 </>
-              ) : (
-                <Choose refetchTab={refetch} />
-              )}
+              : <Choose refetchTab={refetch} />}
             </SimpleBar>
           </TabContent>
         </div>

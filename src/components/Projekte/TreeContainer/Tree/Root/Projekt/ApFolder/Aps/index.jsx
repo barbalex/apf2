@@ -4,12 +4,12 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../Row'
-import storeContext from '../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../storeContext.js'
 import Folders from './Folders'
 
 const Aps = ({ projekt }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { openNodes, apGqlFilterForTree } = store.tree
 
   const { data } = useQuery({

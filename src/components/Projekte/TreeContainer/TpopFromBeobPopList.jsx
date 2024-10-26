@@ -7,9 +7,9 @@ import ListItemButton from '@mui/material/ListItemButton'
 import { observer } from 'mobx-react-lite'
 import { useParams, useLocation } from 'react-router-dom'
 
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import Error from '../../shared/Error.jsx'
 import Spinner from '../../shared/Spinner.jsx'
 
@@ -29,7 +29,7 @@ const TpopFromBeobPopList = ({ closeNewTpopFromBeobDialog, beobId }) => {
   const { search } = useLocation()
 
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const query = gql`
     query allPopsQueryForTpopFromBeobPopList($apId: UUID!) {

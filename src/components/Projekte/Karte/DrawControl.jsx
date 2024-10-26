@@ -4,7 +4,7 @@ import 'leaflet-draw'
 import { useMap } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../storeContext.js'
+import { StoreContext } from '../../../storeContext.js'
 
 window.L.drawLocal.draw.toolbar.buttons.polygon =
   'Umriss zeichnen, um räumlich zu filtern'
@@ -44,7 +44,7 @@ window.L.drawLocal.edit.handlers.remove.tooltip.text = `zum Löschen auf Filter-
 
 const DrawControl = () => {
   const map = useMap()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { setMapFilter, mapFilter, mapFilterResetter } = store.tree
 
   useEffect(() => {

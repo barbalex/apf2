@@ -3,11 +3,11 @@ import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
 
 import Row from '../../../Row'
-import storeContext from '../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../storeContext.js'
 
 const EkAbrechnungstypNodes = () => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
   const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte

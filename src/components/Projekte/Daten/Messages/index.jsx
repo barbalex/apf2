@@ -6,7 +6,7 @@ import { DateTime } from 'luxon'
 import SimpleBar from 'simplebar-react'
 
 import query from './query.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 
@@ -70,6 +70,7 @@ const Messages = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FieldsContainer>
               {rows.map((m) => {

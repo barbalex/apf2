@@ -1,12 +1,12 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../storeContext.js'
 import Row from '../../../Row'
 import ZaehlEinheitNodes from './ZaehlEinheit'
 
 const ZaehlEinheitFolder = ({ count, isLoading }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
   const nodeLabelFilterString =

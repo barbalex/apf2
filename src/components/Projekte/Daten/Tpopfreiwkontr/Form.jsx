@@ -21,7 +21,7 @@ import Files from './Files.jsx'
 import Count from './Count/index.jsx'
 import Verification from './Verification.jsx'
 import Image from './Image.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
 import {
   adresse as adresseFragment,
@@ -146,7 +146,7 @@ const TpopfreiwkontrForm = ({ data, refetch, row, apId }) => {
   const client = useApolloClient()
   const queryClient = useQueryClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { isPrint, user } = store
   const { dataFilterSetValue } = store.tree
   const { token } = user

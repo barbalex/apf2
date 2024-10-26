@@ -9,8 +9,8 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import apById from './apById.js'
 import Label from '../../../shared/Label.jsx'
-import storeContext from '../../../../storeContext.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { StoreContext } from '../../../../storeContext.js'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const NurApDiv = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const ApFilter = () => {
   const client = useApolloClient()
   const queryClient = useQueryClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     apFilter,
     setApFilter,

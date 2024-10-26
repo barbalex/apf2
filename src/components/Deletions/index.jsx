@@ -13,8 +13,8 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 
 import undelete from './undelete/index.jsx'
-import storeContext from '../../storeContext.js'
-import ErrorBoundary from '../shared/ErrorBoundary.jsx'
+import { StoreContext } from '../../storeContext.js'
+import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 const List = styled.div`
   padding-left: 24px;
@@ -52,7 +52,7 @@ const StyledCheckbox = styled(Checkbox)`
 
 const Deletions = () => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     removeDeletedDatasetById,
     deletedDatasets,

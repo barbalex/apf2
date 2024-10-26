@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite'
 import Overlays from './Overlays.jsx'
 import ApfloraLayers from './ApfloraLayers/index.jsx'
 import BaseLayers from './BaseLayers/index.jsx'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const ExpandMoreIcon = styled(MdExpandMore)`
   font-size: 1.5rem;
@@ -61,7 +61,7 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
 `
 
 const LayersControl = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { apfloraLayers, overlays } = store
 
   const [baseLayersExpanded, setBaseLayersExpanded] = useState(true)

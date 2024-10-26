@@ -5,12 +5,12 @@ import { useApolloClient } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 
 import TextField from '../../../../shared/TextField.jsx'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.js'
 import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber.js'
 
 const Gezaehlt = ({ row, refetch }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const client = useApolloClient()
   const queryClient = useQueryClient()
 

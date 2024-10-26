@@ -12,9 +12,9 @@ import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import query from './query.js'
 import queryLists from './queryLists'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 import {
@@ -50,7 +50,7 @@ const Ekzaehleinheit = () => {
 
   const queryClient = useQueryClient()
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -70,9 +70,8 @@ const Ekzaehleinheit = () => {
   ).map((o) => o.zaehleinheitId)
   // re-add this ones id
   const notToShow = ekzaehleinheitenOfAp.filter((o) => o !== row.zaehleinheitId)
-  const zaehleinheitWerteFilter = notToShow.length
-    ? { id: { notIn: notToShow } }
-    : { id: { isNull: false } }
+  const zaehleinheitWerteFilter =
+    notToShow.length ? { id: { notIn: notToShow } } : { id: { isNull: false } }
   const {
     data: dataLists,
     loading: loadingLists,
@@ -165,6 +164,7 @@ const Ekzaehleinheit = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <FormContainer>
               <Select

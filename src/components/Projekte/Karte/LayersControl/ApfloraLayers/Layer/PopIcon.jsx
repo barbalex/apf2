@@ -6,7 +6,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../storeContext.js'
 
 const MapIcon = styled(MdLocalFlorist)`
   margin-right: -0.1em;
@@ -37,7 +37,7 @@ const CheckIcon = styled(FaCheck)`
 `
 
 const PopIcon = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { map } = store
   const { popIcon, setPopIcon, setPopLabel, popLabel } = map
 

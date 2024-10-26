@@ -1,11 +1,11 @@
 import { useEffect, useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import isElementInViewport from '../../../../modules/isElementInViewport'
 
 const IntoViewScroller = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { activeNodeArray } = store.tree
   // when opening a folder without activating it, lastTouchedNode is not same as activeNodeArray
   // in this case we do NOT want to scroll to active node that may be out of view

@@ -11,11 +11,11 @@ import { arrayMoveImmutable } from 'array-move'
 import constants from '../../../../modules/constants.js'
 import exists from '../../../../modules/exists.js'
 import query from './query.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 import Beob from './Field'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const OuterContainer = styled.div`
   container-type: inline-size;
@@ -40,7 +40,7 @@ const BeobsComponent = () => {
   const { beobId: id } = useParams()
   const client = useApolloClient()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     sortedBeobFields: sortedBeobFieldsPassed,
     setSortedBeobFields,

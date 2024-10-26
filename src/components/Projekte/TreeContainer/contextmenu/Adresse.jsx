@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,
   MenuItem,

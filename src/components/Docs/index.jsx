@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 import SimpleBar from 'simplebar-react'
 
 import Sidebar from './Sidebar/index.jsx'
-import ErrorBoundary from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import Spinner from '../shared/Spinner.jsx'
 
 const Container = styled.div`
@@ -80,7 +80,10 @@ const Docs = () => (
   <ErrorBoundary>
     <Container>
       <Sidebar />
-      <SimpleBar style={{ height: '100%', width: '100%' }}>
+      <SimpleBar
+        style={{ height: '100%', width: '100%' }}
+        tabIndex={-1}
+      >
         <Doku>
           <Suspense fallback={<Spinner />}>
             <Outlet />

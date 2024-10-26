@@ -12,10 +12,10 @@ import DateField from '../../../shared/Date.jsx'
 import FormTitle from '../../../shared/FormTitle/index.jsx'
 import constants from '../../../../modules/constants.js'
 import query from './query.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import Files from '../../../shared/Files/index.jsx'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import { idealbiotop } from '../../../shared/fragments.js'
 import Spinner from '../../../shared/Spinner.jsx'
@@ -86,7 +86,7 @@ const fieldTypes = {
 const Idealbiotop = () => {
   const { apId: id } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const client = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState({})
@@ -170,11 +170,18 @@ const Idealbiotop = () => {
               value="idealbiotop"
               data-id="idealbiotop"
             />
-            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+            <StyledTab
+              label="Dateien"
+              value="dateien"
+              data-id="dateien"
+            />
           </Tabs>
           <div style={{ overflowY: 'auto' }}>
             <TabContent>
-              <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+              <SimpleBar
+                style={{ maxHeight: '100%', height: '100%' }}
+                tabIndex={-1}
+              >
                 {tab === 'idealbiotop' && (
                   <FormContainer>
                     <DateField
@@ -344,7 +351,10 @@ const Idealbiotop = () => {
                 )}
                 {tab === 'dateien' && (
                   <FilesContainer>
-                    <Files parentId={row.id} parent="idealbiotop" />
+                    <Files
+                      parentId={row.id}
+                      parent="idealbiotop"
+                    />
                   </FilesContainer>
                 )}
               </SimpleBar>

@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 
 import Select from '../../../../shared/Select.jsx'
-import storeContext from '../../../../../storeContext.js'
+import { StoreContext } from '../../../../../storeContext.js'
 import queryAdresses from './queryAdresses.js'
 import Error from '../../../../shared/Error.jsx'
 
@@ -45,7 +45,7 @@ const BearbVal = styled.div`
 `
 
 const Headdata = ({ row, activeTab }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { dataFilterSetValue } = store.tree
   const { data, loading, error } = useQuery(queryAdresses)
 

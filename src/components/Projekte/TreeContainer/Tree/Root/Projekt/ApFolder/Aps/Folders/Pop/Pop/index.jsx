@@ -5,12 +5,12 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import Row from '../../../../../../../Row'
-import storeContext from '../../../../../../../../../../../storeContext.js'
+import { StoreContext } from '../../../../../../../../../../../storeContext.js'
 import Folders from './Folders'
 
 const Pop = ({ projekt, ap }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { popGqlFilterForTree } = store.tree
 
   const { data } = useQuery({

@@ -16,9 +16,9 @@ import FilterTitle from '../../../shared/FilterTitle.jsx'
 import constants from '../../../../modules/constants.js'
 import queryTpopmassns from './queryTpopmassns.js'
 import queryAeTaxonomies from './queryAeTaxonomies.js'
-import storeContext from '../../../../storeContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Error from '../../../shared/Error.jsx'
 import OrTabs from './Tabs.jsx'
 
@@ -54,7 +54,7 @@ const FilterComment = styled.li`
 const TpopmassnFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const {
     dataFilter,
     tpopmassnGqlFilter,
@@ -99,30 +99,36 @@ const TpopmassnFilter = () => {
     [dataFilterSetValue, activeTab],
   )
 
-  const navApFilterComment = apFilter
-    ? `Navigationsbaum, "nur AP"-Filter: Nur Massnahmen von AP-Arten werden berücksichtigt.`
+  const navApFilterComment =
+    apFilter ?
+      `Navigationsbaum, "nur AP"-Filter: Nur Massnahmen von AP-Arten werden berücksichtigt.`
     : undefined
   const navHiearchyComment =
     // tpopId ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
     // : popId
     // ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Massnahmen berücksichtigt.' :
-    apId
-      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
-      : undefined
-  const navLabelComment = nodeLabelFilter.tpopmassn
-    ? `Navigationsbaum, Label-Filter: Das Label der Massnahmen wird nach "${nodeLabelFilter.tpopmassn}" gefiltert.`
+    apId ?
+      'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Massnahmen berücksichtigt.'
     : undefined
-  const artHierarchyComment = artIsFiltered
-    ? 'Formular-Filter, Ebene Art: Es werden nur Massnahmen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+  const navLabelComment =
+    nodeLabelFilter.tpopmassn ?
+      `Navigationsbaum, Label-Filter: Das Label der Massnahmen wird nach "${nodeLabelFilter.tpopmassn}" gefiltert.`
     : undefined
-  const popHierarchyComment = popIsFiltered
-    ? 'Formular-Filter, Ebene Population: Es werden nur Massnahmen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+  const artHierarchyComment =
+    artIsFiltered ?
+      'Formular-Filter, Ebene Art: Es werden nur Massnahmen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const tpopHierarchyComment = tpopIsFiltered
-    ? 'Formular-Filter, Ebene Teil-Population: Es werden nur Massnahmen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+  const popHierarchyComment =
+    popIsFiltered ?
+      'Formular-Filter, Ebene Population: Es werden nur Massnahmen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const mapFilterComment = mapFilter
-    ? 'Karten-Filter: Nur Massnahmen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
+  const tpopHierarchyComment =
+    tpopIsFiltered ?
+      'Formular-Filter, Ebene Teil-Population: Es werden nur Massnahmen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const mapFilterComment =
+    mapFilter ?
+      'Karten-Filter: Nur Massnahmen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
     : undefined
 
   const showFilterComments =
@@ -185,6 +191,7 @@ const TpopmassnFilter = () => {
               maxHeight: '100%',
               height: '100%',
             }}
+            tabIndex={-1}
           >
             <ColumnContainer>
               <TextField
