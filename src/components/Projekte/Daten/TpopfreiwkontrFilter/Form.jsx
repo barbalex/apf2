@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import Headdata from './Headdata/index.jsx'
-import Date from './Date.jsx'
+import { DateField } from './Date.jsx'
 import Map from './Map.jsx'
 import Cover from './Cover.jsx'
 import More from './More.jsx'
@@ -116,15 +116,42 @@ const TpopfreiwkontrForm = ({ row, activeTab }) => {
   return (
     <FormContainer>
       <GridContainer>
-        <Headdata row={row} activeTab={activeTab} />
-        <Date saveToDb={saveToDb} row={row} />
-        <Map saveToDb={saveToDb} row={row} />
-        <Cover saveToDb={saveToDb} row={row} />
-        <More saveToDb={saveToDb} row={row} />
-        <Danger saveToDb={saveToDb} row={row} />
-        <Remarks saveToDb={saveToDb} row={row} />
-        <EkfRemarks saveToDb={saveToDb} row={row} />
-        <Verification saveToDb={saveToDb} row={row} />
+        <Headdata
+          row={row}
+          activeTab={activeTab}
+        />
+        <DateField
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <Map
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <Cover
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <More
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <Danger
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <Remarks
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <EkfRemarks
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <Verification
+          saveToDb={saveToDb}
+          row={row}
+        />
       </GridContainer>
       <div style={{ height: '64px' }} />
     </FormContainer>

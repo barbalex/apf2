@@ -72,52 +72,45 @@ const dateFormat = [
   'dd',
 ]
 
-const DateField = ({
-  value,
-  name,
-  label,
-  saveToDb,
-  error,
-  popperPlacement = 'auto',
-}) => {
-  const onChangeDatePicker = useCallback(
-    (date) => {
-      if (date === null) {
-        saveToDb({
-          target: {
-            value: null,
-            name,
-          },
-        })
-      } else {
-        saveToDb({
-          target: {
-            value: DateTime.fromJSDate(date).toFormat('yyyy-LL-dd'),
-            name,
-          },
-        })
-      }
-    },
-    [name, saveToDb],
-  )
+export const DateField = observer(
+  ({ value, name, label, saveToDb, error, popperPlacement = 'auto' }) => {
+    const onChangeDatePicker = useCallback(
+      (date) => {
+        if (date === null) {
+          saveToDb({
+            target: {
+              value: null,
+              name,
+            },
+          })
+        } else {
+          saveToDb({
+            target: {
+              value: DateTime.fromJSDate(date).toFormat('yyyy-LL-dd'),
+              name,
+            },
+          })
+        }
+      },
+      [name, saveToDb],
+    )
 
-  const isValid = DateTime.fromSQL(value).isValid
-  const selected = isValid ? new Date(DateTime.fromSQL(value)) : null
+    const isValid = DateTime.fromSQL(value).isValid
+    const selected = isValid ? new Date(DateTime.fromSQL(value)) : null
 
-  // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
-  return (
-    <StyledFormControl variant="standard">
-      {!!label && <Label htmlFor={name}>{label}</Label>}
-      <StyledDatePicker
-        id={name}
-        selected={selected}
-        onChange={onChangeDatePicker}
-        dateFormat={dateFormat}
-        popperPlacement={popperPlacement}
-      />
-      {!!error && <FormHelperText>{error}</FormHelperText>}
-    </StyledFormControl>
-  )
-}
-
-export default observer(DateField)
+    // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
+    return (
+      <StyledFormControl variant="standard">
+        {!!label && <Label htmlFor={name}>{label}</Label>}
+        <StyledDatePicker
+          id={name}
+          selected={selected}
+          onChange={onChangeDatePicker}
+          dateFormat={dateFormat}
+          popperPlacement={popperPlacement}
+        />
+        {!!error && <FormHelperText>{error}</FormHelperText>}
+      </StyledFormControl>
+    )
+  },
+)

@@ -10,7 +10,7 @@ import { StringToCopyOnlyButton } from '../../../shared/StringToCopyOnlyButton.j
 import Title from './Title.jsx'
 import Headdata from './Headdata/index.jsx'
 import Besttime from './Besttime.jsx'
-import Date from './Date.jsx'
+import { DateField } from './Date.jsx'
 import Map from './Map.jsx'
 import Cover from './Cover.jsx'
 import More from './More.jsx'
@@ -339,7 +339,7 @@ const TpopfreiwkontrForm = ({ data, refetch, row, apId }) => {
           row={row}
         />
         <Besttime row={row} />
-        <Date
+        <DateField
           saveToDb={saveToDb}
           row={row}
           errors={errors}
