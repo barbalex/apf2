@@ -32,47 +32,40 @@ const StyledFormControlLabel = styled(FormControlLabel)`
   }
 `
 
-const CheckboxWithInfo = ({
-  value = null,
-  label,
-  name,
-  popover,
-  saveToDb,
-  error,
-}) => {
-  const onCheck = useCallback((e, val) => saveToDb(val), [saveToDb])
+export const CheckboxWithInfo = observer(
+  ({ value = null, label, name, popover, saveToDb, error }) => {
+    const onCheck = useCallback((e, val) => saveToDb(val), [saveToDb])
 
-  return (
-    <Container>
-      <StyledFormControl
-        component="fieldset"
-        error={!!error}
-        aria-describedby={`${label}ErrorText`}
-        variant="standard"
-      >
-        <FormGroup>
-          <StyledFormControlLabel
-            label={label}
-            control={
-              <Checkbox
-                checked={value}
-                onChange={onCheck}
-                value={label}
-                color="primary"
-                inputProps={{ 'data-id': name }}
-              />
-            }
-          />
-        </FormGroup>
-        {!!error && (
-          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-        )}
-      </StyledFormControl>
-      <div>
-        <InfoWithPopover name={name}>{popover}</InfoWithPopover>
-      </div>
-    </Container>
-  )
-}
-
-export default observer(CheckboxWithInfo)
+    return (
+      <Container>
+        <StyledFormControl
+          component="fieldset"
+          error={!!error}
+          aria-describedby={`${label}ErrorText`}
+          variant="standard"
+        >
+          <FormGroup>
+            <StyledFormControlLabel
+              label={label}
+              control={
+                <Checkbox
+                  checked={value}
+                  onChange={onCheck}
+                  value={label}
+                  color="primary"
+                  inputProps={{ 'data-id': name }}
+                />
+              }
+            />
+          </FormGroup>
+          {!!error && (
+            <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+          )}
+        </StyledFormControl>
+        <div>
+          <InfoWithPopover name={name}>{popover}</InfoWithPopover>
+        </div>
+      </Container>
+    )
+  },
+)

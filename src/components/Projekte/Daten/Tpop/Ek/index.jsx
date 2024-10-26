@@ -10,7 +10,7 @@ import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
-import Checkbox2States from '../../../../shared/Checkbox2States.jsx'
+import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'
 import { RadioButtonGroup } from '../../../../shared/RadioButtonGroup.jsx'
 import { Select } from '../../../../shared/Select.jsx'
 import { TextField } from '../../../../shared/TextField.jsx'

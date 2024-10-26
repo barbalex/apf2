@@ -11,7 +11,7 @@ import { useParams, useLocation } from 'react-router-dom'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { TextField2 } from '../../../shared/TextField2.jsx'
-import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
+import { CheckboxWithInfo } from '../../../shared/CheckboxWithInfo.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { DateField } from '../../../shared/Date.jsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'

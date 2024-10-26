@@ -23,7 +23,7 @@ const StyledCheckbox = styled(Checkbox)`
   width: 24px;
 `
 
-const Checkbox2States = ({
+export const Checkbox2States = ({
   label,
   saveToDb,
   value,
@@ -75,5 +75,3 @@ const Checkbox2States = ({
     </div>
   )
 }
-
-export default Checkbox2States
