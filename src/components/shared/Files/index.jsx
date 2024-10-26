@@ -90,9 +90,8 @@ const Files = ({
 
   const [uploaderId, setUploaderId] = useState(0)
   // console.log('Files, uploaderId:', uploaderId)
-  const onChangeUploader = useCallback(
+  const onFileUploadSuccess = useCallback(
     async (info) => {
-      console.log('Files, onChangeUploader, info:', info)
       if (info) {
         let responce
         try {
@@ -140,6 +139,11 @@ const Files = ({
     [client, fields, fragment, parent, parentId, refetch, uploaderId],
   )
 
+  const onFileUploadFailed = useCallback(
+    (error) => console.error('Upload failed:', error),
+    [],
+  )
+
   console.log('Files, files:', files)
 
   const images = files.filter((f) => isImageFile(f))
@@ -174,7 +178,8 @@ const Files = ({
           <ButtonsContainer>
             <Uploader
               id={uploaderId}
-              onChange={onChangeUploader}
+              onFileUploadSuccess={onFileUploadSuccess}
+              onFileUploadFailed={onFileUploadFailed}
             />
             {!!images.length && (
               <LightboxButton
