@@ -65,7 +65,13 @@ const StyledLabel = styled.div`
   color: ${(props) => (props.error ? '#f44336' : 'unset')};
 `
 
-const Status = ({ apJahr = null, showFilter, saveToDb, row = {}, errors }) => {
+export const Status = ({
+  apJahr = null,
+  showFilter,
+  saveToDb,
+  row = {},
+  errors,
+}) => {
   const herkunftValue = row.status
   const bekanntSeitValue = row.bekanntSeit
   const error = errors?.status || errors?.bekanntSeit
@@ -285,5 +291,3 @@ const Status = ({ apJahr = null, showFilter, saveToDb, row = {}, errors }) => {
     </div>
   )
 }
-
-export default Status
