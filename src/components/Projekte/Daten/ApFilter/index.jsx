@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 
-import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo.jsx'
+import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'

@@ -12,26 +12,18 @@ const Container = styled.div`
   break-inside: avoid;
 `
 
-const RadioButtonGroupWithInfo = ({
-  label,
-  name,
-  value = '',
-  error,
-  dataSource,
-  saveToDb,
-  popover,
-}) => (
-  <Container>
-    <RadioButtonGroup
-      value={value}
-      name={name}
-      dataSource={dataSource}
-      saveToDb={saveToDb}
-      label={label}
-      error={error}
-    />
-    <InfoWithPopover name={name}>{popover}</InfoWithPopover>
-  </Container>
+export const RadioButtonGroupWithInfo = observer(
+  ({ label, name, value = '', error, dataSource, saveToDb, popover }) => (
+    <Container>
+      <RadioButtonGroup
+        value={value}
+        name={name}
+        dataSource={dataSource}
+        saveToDb={saveToDb}
+        label={label}
+        error={error}
+      />
+      <InfoWithPopover name={name}>{popover}</InfoWithPopover>
+    </Container>
+  ),
 )
-
-export default observer(RadioButtonGroupWithInfo)

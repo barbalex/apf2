@@ -7,7 +7,7 @@ import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
-import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfo.jsx'
+import { RadioButtonGroupWithInfo } from '../../../../shared/RadioButtonGroupWithInfo.jsx'
 import { TextField } from '../../../../shared/TextField.jsx'
 import { Select } from '../../../../shared/Select.jsx'
 import { SelectLoadingOptions } from '../../../../shared/SelectLoadingOptions.jsx'
