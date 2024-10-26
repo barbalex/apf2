@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 import { useLocation } from 'react-router-dom'
 
-import tables from '../../../../modules/tables'
+import { tables } from '../../../../modules/tables.js'
 import deleteDataset from './delete'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -52,10 +52,16 @@ const DatasetDeleteModal = () => {
       <StyledDialog open={!!toDeleteId}>
         {question}
         <DialogActions>
-          <Button onClick={emptyToDelete} color="inherit">
+          <Button
+            onClick={emptyToDelete}
+            color="inherit"
+          >
             Abbrechen
           </Button>
-          <Button color="primary" onClick={onClickLoeschen}>
+          <Button
+            color="primary"
+            onClick={onClickLoeschen}
+          >
             Löschen
           </Button>
         </DialogActions>

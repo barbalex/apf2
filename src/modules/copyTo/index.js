@@ -1,10 +1,9 @@
 import { QueryClient } from '@tanstack/react-query'
-import upperFirst from 'lodash/upperFirst'
 /**
  * moves a dataset to a different parent
  * used when copying for instance tpop to other pop in tree
  */
-import tables from '../tables'
+import { tables } from '../tables.js'
 import { copyTpopsOfPop } from '../copyTpopsOfPop.js'
 import { copyZaehlOfTpopKontr } from '../copyZaehlOfTpopKontr.js'
 import queryTpopKontrById from './queryTpopKontrById'

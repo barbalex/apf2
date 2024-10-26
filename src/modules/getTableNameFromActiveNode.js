@@ -1,4 +1,4 @@
-import tables from './tables.js'
+import { tables } from './tables.js'
 
 const getTableNameFromActiveNode = (activeNode) => {
   if (!activeNode) return null

@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useState,
-  useEffect,
-} from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -14,7 +9,7 @@ import snakeCase from 'lodash/snakeCase'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 
-import tables from '../../../modules/tables'
+import { tables } from '../../../modules/tables.js'
 import { StoreContext } from '../../../storeContext.js'
 
 const StyledFormControl = styled(FormControl)`
@@ -93,7 +88,10 @@ const LabelFilter = () => {
   }, [empty])
 
   return (
-    <StyledFormControl fullWidth variant="standard">
+    <StyledFormControl
+      fullWidth
+      variant="standard"
+    >
       <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
       <StyledInput
         id={labelText}
@@ -104,7 +102,7 @@ const LabelFilter = () => {
         autoCorrect="off"
         autoCapitalize="off"
         endAdornment={
-          isFiltered ? (
+          isFiltered ?
             <InputAdornment
               position="end"
               onClick={onClickEmptyFilter}
@@ -112,7 +110,7 @@ const LabelFilter = () => {
             >
               <StyledDeleteFilterIcon />
             </InputAdornment>
-          ) : null
+          : null
         }
       />
     </StyledFormControl>

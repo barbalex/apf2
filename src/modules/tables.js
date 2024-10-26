@@ -1,4 +1,4 @@
-const tables = [
+export const tables = [
   {
     table: 'ap',
     parentTable: 'projekt',
@@ -386,5 +386,3 @@ const tables = [
     parentIdField: 'none',
   },
 ]
-
-export default tables

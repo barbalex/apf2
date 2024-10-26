@@ -2,7 +2,7 @@
  * moves a dataset to a different parent
  * used when moving for instance tpop to other pop in tree
  */
-import tables from '../tables'
+import { tables } from '../tables.js'
 import updateTpopkontrById from './updateTpopkontrById'
 import updateTpopmassnById from './updateTpopmassnById'
 import updateTpopById from './updateTpopById'
