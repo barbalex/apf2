@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem'
 import upperFirst from 'lodash/upperFirst'
 
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
-import TextField from '../TextField'
+import { TextField } from '../TextField'
 import {
   apFile as apFileFragment,
   idealbiotopFile as idealbiotopFileFragment,

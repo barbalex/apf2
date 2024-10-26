@@ -14,7 +14,7 @@ import Button from '@mui/material/Button'
 import { useApolloClient, useQuery } from '@apollo/client'
 
 import query from './data.js'
-import TextField from '../../../shared/TextField.jsx'
+import { TextField } from '../../../shared/TextField.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import updateUserByIdGql from './updateUserById.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'

@@ -4,7 +4,7 @@ import React from 'react'
 
 import Editor from './Editor'
 import Presenter from './Presenter'
-import TextField from '../TextField'
+import { TextField } from '../TextField'
 import { FocusWithin } from '../FocusWithin'
 
 // render:

@@ -6,7 +6,7 @@ import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
-import TextField from '../../../shared/TextField.jsx'
+import { TextField } from '../../../shared/TextField.jsx'
 import Checkbox2States from '../../../shared/Checkbox2States.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'

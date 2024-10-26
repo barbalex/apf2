@@ -13,74 +13,83 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const MyTextField = ({
-  value,
-  label,
-  name,
-  type = 'text',
-  multiLine = false,
-  disabled = false,
-  hintText = '',
-  helperText = '',
-  error,
-  saveToDb,
-  required = false,
-  onFocus = () => {
-    // do nothing
-  },
-}) => {
-  const [stateValue, setStateValue] = useState(
-    value || value === 0 ? value : '',
-  )
-  const onChange = useCallback((event) => setStateValue(event.target.value), [])
-  useEffect(() => {
-    setStateValue(value || value === 0 ? value : '')
-  }, [value])
-
-  const onKeyPress = useCallback(
-    (event) => {
-      if (event.key === 'Enter') {
-        saveToDb(event)
-      }
+export const TextField = observer(
+  ({
+    value,
+    label,
+    name,
+    type = 'text',
+    multiLine = false,
+    disabled = false,
+    hintText = '',
+    helperText = '',
+    error,
+    saveToDb,
+    required = false,
+    onFocus = () => {
+      // do nothing
     },
-    [saveToDb],
-  )
+  }) => {
+    const [stateValue, setStateValue] = useState(
+      value || value === 0 ? value : '',
+    )
+    const onChange = useCallback(
+      (event) => setStateValue(event.target.value),
+      [],
+    )
+    useEffect(() => {
+      setStateValue(value || value === 0 ? value : '')
+    }, [value])
 
-  return (
-    <StyledFormControl
-      fullWidth
-      disabled={disabled}
-      error={!!error}
-      aria-describedby={`${label}ErrorText`}
-      variant="standard"
-    >
-      <InputLabel htmlFor={label} shrink required={required}>
-        {label}
-      </InputLabel>
-      <Input
-        id={name}
-        // ref={textFieldRef}
-        name={name}
-        value={stateValue}
-        type={type}
-        multiline={multiLine}
-        onChange={onChange}
-        onBlur={saveToDb}
-        onFocus={onFocus}
-        onKeyPress={onKeyPress}
-        placeholder={hintText}
-        autoComplete="off"
-        autoCorrect="off"
-        autoCapitalize="off"
-      />
-      {!!error && (
-        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-      )}
-      {!!helperText && (
-        <FormHelperText id={`${label}HelperText`}>{helperText}</FormHelperText>
-      )}
-    </StyledFormControl>
-  )
-}
+    const onKeyPress = useCallback(
+      (event) => {
+        if (event.key === 'Enter') {
+          saveToDb(event)
+        }
+      },
+      [saveToDb],
+    )
 
-export default observer(MyTextField)
+    return (
+      <StyledFormControl
+        fullWidth
+        disabled={disabled}
+        error={!!error}
+        aria-describedby={`${label}ErrorText`}
+        variant="standard"
+      >
+        <InputLabel
+          htmlFor={label}
+          shrink
+          required={required}
+        >
+          {label}
+        </InputLabel>
+        <Input
+          id={name}
+          // ref={textFieldRef}
+          name={name}
+          value={stateValue}
+          type={type}
+          multiline={multiLine}
+          onChange={onChange}
+          onBlur={saveToDb}
+          onFocus={onFocus}
+          onKeyPress={onKeyPress}
+          placeholder={hintText}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+        />
+        {!!error && (
+          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+        )}
+        {!!helperText && (
+          <FormHelperText id={`${label}HelperText`}>
+            {helperText}
+          </FormHelperText>
+        )}
+      </StyledFormControl>
+    )
+  },
+)
