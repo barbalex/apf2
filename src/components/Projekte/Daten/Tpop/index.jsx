@@ -15,7 +15,7 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import Ek from './Ek/index.jsx'
 import Tpop from './Tpop.jsx'
 import TpopHistory from './History.jsx'
-import Files from '../../../shared/Files/index.jsx'
+import { Files } from '../../../shared/Files/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import {
@@ -206,13 +206,29 @@ const TpopForm = () => {
             textColor="primary"
             centered
           >
-            <StyledTab label="Teil-Population" value="tpop" data-id="tpop" />
-            <StyledTab label="EK" value="ek" data-id="ek" />
-            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
-            <StyledTab label="Historien" value="history" data-id="history" />
+            <StyledTab
+              label="Teil-Population"
+              value="tpop"
+              data-id="tpop"
+            />
+            <StyledTab
+              label="EK"
+              value="ek"
+              data-id="ek"
+            />
+            <StyledTab
+              label="Dateien"
+              value="dateien"
+              data-id="dateien"
+            />
+            <StyledTab
+              label="Historien"
+              value="history"
+              data-id="history"
+            />
           </Tabs>
           <TabContent>
-            {tab === 'tpop' ? (
+            {tab === 'tpop' ?
               <Tpop
                 saveToDb={saveToDb}
                 fieldErrors={fieldErrors}
@@ -222,18 +238,20 @@ const TpopForm = () => {
                 refetchTpop={refetchTpop}
                 loadingParent={loading}
               />
-            ) : tab === 'ek' ? (
+            : tab === 'ek' ?
               <Ek
                 saveToDb={saveToDb}
                 fieldErrors={fieldErrors}
                 row={row}
                 loadingParent={loading}
               />
-            ) : tab === 'dateien' ? (
-              <Files parentId={row?.id} parent="tpop" loadingParent={loading} />
-            ) : (
-              <TpopHistory />
-            )}
+            : tab === 'dateien' ?
+              <Files
+                parentId={row?.id}
+                parent="tpop"
+                loadingParent={loading}
+              />
+            : <TpopHistory />}
           </TabContent>
         </FieldsContainer>
       </Container>

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import Files from '../../../shared/Files/index.jsx'
+import { Files } from '../../../shared/Files/index.jsx'
 
 const Container = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -23,7 +23,10 @@ const EkfFiles = ({ row }) => (
   <Container>
     <RemarksLabel>Dateien</RemarksLabel>
     <RemarksVal>
-      <Files parentId={row?.id} parent="tpopkontr" />
+      <Files
+        parentId={row?.id}
+        parent="tpopkontr"
+      />
     </RemarksVal>
   </Container>
 )

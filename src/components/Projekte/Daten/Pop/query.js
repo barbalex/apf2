@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { pop } from '../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query popByIdQuery($id: UUID!) {
     popById(id: $id) {
       ...PopFields

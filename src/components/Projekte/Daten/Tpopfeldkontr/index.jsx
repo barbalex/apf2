@@ -22,7 +22,7 @@ import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover.
 import { constants } from '../../../../modules/constants.js'
 import query from './query.js'
 import { StoreContext } from '../../../../storeContext.js'
-import Files from '../../../shared/Files/index.jsx'
+import { Files } from '../../../shared/Files/index.jsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
