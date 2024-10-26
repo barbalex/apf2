@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const queryLists = gql`
   query apFilterListsQuery {
     allApBearbstandWertes(orderBy: SORT_ASC) {
       nodes {
