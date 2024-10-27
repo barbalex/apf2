@@ -6,9 +6,9 @@ import { useQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router-dom'
 
-import queryForYear from './query.js'
-import jberQueryForYear from './jberQuery.js'
-import queryForApberuebersicht from '../../Projekte/Daten/Apberuebersicht/query.js'
+import { query } from './query.js'
+import { jberQuery } from './jberQuery.js'
+import { query as queryForApberuebersicht } from '../../Projekte/Daten/Apberuebersicht/query.js'
 import fnslogo from './fnslogo.png'
 import AvList from './AvList.jsx'
 import AktPopList from './AktPopList.jsx'
@@ -102,7 +102,7 @@ const SecondPageText = styled.div`
   padding-top: 0.2cm;
 `
 
-const ApberForYear = () => {
+export const ApberForYear = () => {
   const { apberUebersichtId, projId } = useParams()
 
   const client = useApolloClient()
@@ -121,7 +121,7 @@ const ApberForYear = () => {
       const jahr = data1?.apberuebersichtById?.jahr
       // then get data
       const { data } = await client.query({
-        query: queryForYear,
+        query: query,
         variables: {
           projektId: projId,
           jahr,
@@ -132,7 +132,7 @@ const ApberForYear = () => {
       // then get jber data
       // WARNING: this HAS to be queried later or somehow loading never ended
       const { data: jberData } = await client.query({
-        query: jberQueryForYear,
+        query: jberQuery,
         variables: {
           jahr,
         },
@@ -165,7 +165,11 @@ const ApberForYear = () => {
             im Kanton Zürich
           </FirstPageTitle>
           <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
-          <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
+          <FirstPageFnsLogo
+            src={fnslogo}
+            alt="FNS"
+            width="350"
+          />
           <FirstPageDate>
             {DateTime.fromJSDate(new Date()).toFormat('dd.LL.yyyy')}
           </FirstPageDate>
@@ -184,7 +188,10 @@ const ApberForYear = () => {
             </SecondPage>
           )}
           <AvList data={data?.jberData} />
-          <ErfolgList jahr={jahr} data={data?.jberData} />
+          <ErfolgList
+            jahr={jahr}
+            data={data?.jberData}
+          />
           <AktPopList year={jahr} />
           <ApberForAps
             jahr={jahr}
@@ -196,5 +203,3 @@ const ApberForYear = () => {
     </ErrorBoundary>
   )
 }
-
-export default ApberForYear

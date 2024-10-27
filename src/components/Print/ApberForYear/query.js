@@ -11,7 +11,7 @@ import {
   zielTypWerte,
 } from '../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query projektByIdForApberForYear(
     $projektId: UUID!
     $jahr: Int!

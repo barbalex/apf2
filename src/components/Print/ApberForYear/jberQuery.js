@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const jberQuery = gql`
   query jberForApberForYear($jahr: Int!) {
     # this works fine from graphiql but from here: after historizing crashes (times out)
     jberAbc(jahr: $jahr) {

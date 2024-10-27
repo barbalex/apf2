@@ -3,12 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
-import ApberForYear from './ApberForYear.jsx'
+import { ApberForYear } from './ApberForYear.jsx'
 import { StoreContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 
-const ApberForYearContainer = () => {
+export const Component = () => {
   const { apberuebersichtId = '99999999-9999-9999-9999-999999999999' } =
     useParams()
 
@@ -84,9 +84,10 @@ const ApberForYearContainer = () => {
 
   return (
     <ErrorBoundary>
-      <ApberForYear jahr={year} apberuebersichtId={apberuebersichtId} />
+      <ApberForYear
+        jahr={year}
+        apberuebersichtId={apberuebersichtId}
+      />
     </ErrorBoundary>
   )
 }
-
-export const Component = observer(ApberForYearContainer)
