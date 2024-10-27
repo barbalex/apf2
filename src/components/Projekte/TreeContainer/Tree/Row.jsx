@@ -27,7 +27,7 @@ import { StoreContext } from '../../../../storeContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../../../modules/isMobilePhone.js'
-import historizeForAp from '../../../../modules/historizeForAp.js'
+import { historizeForAp } from '../../../../modules/historizeForAp.js'
 import { historize } from '../../../../modules/historize.js'
 // adding ?react to .svg leads to error:
 // Warning: </src/components/Projekte/Karte/layers/Pop/statusGroupSymbols/100.svg?react /> is using incorrect casing.

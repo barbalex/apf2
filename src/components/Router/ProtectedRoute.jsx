@@ -10,7 +10,7 @@ import { StoreContext } from '../../storeContext.js'
 const User = lazy(() => import('../User'))
 const Messages = lazy(() => import('../Messages'))
 const Deletions = lazy(() => import('../Deletions'))
-import inIframe from '../../modules/inIframe'
+import { inIframe } from '../../modules/inIframe.js'
 const ActiveNodeArraySetter = lazy(() => import('./ActiveNodeArraySetter'))
 const NavigateSetter = lazy(() => import('./NavigateSetter'))
 const ApfLayerNotifier = lazy(() => import('./ApfLayerNotifier'))

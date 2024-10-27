@@ -13,7 +13,7 @@ import { StoreContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane'
 // import AppRenderer from '../../AppRenderer'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
-import inIframe from '../../modules/inIframe'
+import { inIframe } from '../../modules/inIframe.js'
 import { useSearchParamsState } from '../../modules/useSearchParamsState.js'
 import isMobilePhone from '../../modules/isMobilePhone.js'
 const ApFilterController = lazy(() => import('./ApFilterController'))
@@ -75,10 +75,12 @@ const Projekte = () => {
     // inside iframe app bar should be hidden
     return (
       <Container>
-        {tree2Tabs.length === 0 || isPrint ? (
+        {tree2Tabs.length === 0 || isPrint ?
           <ProjektContainer />
-        ) : (
-          <StyledSplitPane split="vertical" defaultSize="50%">
+        : <StyledSplitPane
+            split="vertical"
+            defaultSize="50%"
+          >
             <ProjektContainer />
             <StyledIframe
               src={iFrameSrc}
@@ -87,7 +89,7 @@ const Projekte = () => {
               height="100%"
             />
           </StyledSplitPane>
-        )}
+        }
       </Container>
     )
   }
@@ -98,10 +100,12 @@ const Projekte = () => {
         <ApFilterController />
       </Suspense>
       <Container>
-        {tree2Tabs.length === 0 || isPrint ? (
+        {tree2Tabs.length === 0 || isPrint ?
           <ProjektContainer />
-        ) : (
-          <StyledSplitPane split="vertical" defaultSize="50%">
+        : <StyledSplitPane
+            split="vertical"
+            defaultSize="50%"
+          >
             <ProjektContainer />
             <StyledIframe
               src={iFrameSrc}
@@ -110,7 +114,7 @@ const Projekte = () => {
               height="100%"
             />
           </StyledSplitPane>
-        )}
+        }
       </Container>
     </>
   )

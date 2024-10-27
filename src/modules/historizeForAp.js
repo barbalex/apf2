@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-const historizeForAp = async ({ store, year, apId }) => {
+export const historizeForAp = async ({ store, year, apId }) => {
   const { enqueNotification, client } = store
   try {
     await client.mutate({
@@ -34,5 +34,3 @@ const historizeForAp = async ({ store, year, apId }) => {
   })
   return
 }
-
-export default historizeForAp

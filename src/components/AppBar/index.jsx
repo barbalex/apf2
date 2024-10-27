@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 
 import Bar from './Bar/index.jsx'
 import EkfBar from './EkfBar/index.jsx'
-import inIframe from '../../modules/inIframe.js'
+import { inIframe } from '../../modules/inIframe.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { StoreContext } from '../../storeContext.js'
 
@@ -65,7 +65,11 @@ const AppBarComponent = () => {
   return (
     <Container>
       <StyledAppBar position="static">
-        <StyledToolbar>{showEkf ? <EkfBar /> : <Bar />}</StyledToolbar>
+        <StyledToolbar>
+          {showEkf ?
+            <EkfBar />
+          : <Bar />}
+        </StyledToolbar>
       </StyledAppBar>
       <Suspense fallback={<Spinner />}>
         <Outlet />
