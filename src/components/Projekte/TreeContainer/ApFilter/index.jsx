@@ -24,7 +24,7 @@ const StyledSwitch = styled(Switch)`
   margin-top: -18px;
 `
 
-const ApFilter = () => {
+export const ApFilter = observer(() => {
   const { apId } = useParams()
   const navigate = useNavigate()
   const { search } = useLocation()
@@ -110,6 +110,4 @@ const ApFilter = () => {
       </NurApDiv>
     </ErrorBoundary>
   )
-}
-
-export default observer(ApFilter)
+})

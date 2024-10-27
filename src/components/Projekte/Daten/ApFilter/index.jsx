@@ -78,7 +78,7 @@ const FilterComment = styled.li`
   font-size: 0.75em;
 `
 
-const ApFilter = () => {
+export const ApFilter = observer(() => {
   const store = useContext(StoreContext)
   const {
     dataFilter,
@@ -330,6 +330,4 @@ const ApFilter = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(ApFilter)
+})

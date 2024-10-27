@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import Headdata from './Headdata/index.jsx'
-import { DateField } from './Date.jsx'
+import { Date } from './Date.jsx'
 import Map from './Map.jsx'
 import Cover from './Cover.jsx'
 import More from './More.jsx'
@@ -120,7 +120,7 @@ const TpopfreiwkontrForm = ({ row, activeTab }) => {
           row={row}
           activeTab={activeTab}
         />
-        <DateField
+        <Date
           saveToDb={saveToDb}
           row={row}
         />

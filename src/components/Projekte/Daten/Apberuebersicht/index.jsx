@@ -71,7 +71,7 @@ const fieldTypes = {
   bemerkungen: 'String',
 }
 
-const Apberuebersicht = () => {
+export const Component = observer(() => {
   const { apberUebersichtId } = useParams()
 
   const store = useContext(StoreContext)
@@ -259,6 +259,4 @@ const Apberuebersicht = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export const Component = observer(Apberuebersicht)
+})

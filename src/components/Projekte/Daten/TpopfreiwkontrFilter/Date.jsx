@@ -37,7 +37,7 @@ const DateVal = styled.div`
   }
 `
 
-const Date = ({ saveToDb, row }) => (
+export const Date = observer(({ saveToDb, row }) => (
   <Container>
     <DateLabel>Aufnahme-datum</DateLabel>
     <DateVal>
@@ -49,6 +49,4 @@ const Date = ({ saveToDb, row }) => (
       />
     </DateVal>
   </Container>
-)
-
-export default observer(Date)
+))

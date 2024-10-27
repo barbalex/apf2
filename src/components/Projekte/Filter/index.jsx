@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 
-import ApFilter from '../Daten/ApFilter/index.jsx'
+import { ApFilter } from '../Daten/ApFilter/index.jsx'
 import PopFilter from '../Daten/PopFilter/index.jsx'
 import { TpopFilter } from '../Daten/TpopFilter/index.tsx'
 import TpopmassnFilter from '../Daten/TpopmassnFilter/index.jsx'
@@ -24,7 +24,10 @@ const Filter = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <Title activeTab={tab} setActiveTab={setTab} />
+        <Title
+          activeTab={tab}
+          setActiveTab={setTab}
+        />
         {tab === 'ap' && <ApFilter />}
         {tab === 'pop' && <PopFilter />}
         {tab === 'tpop' && <TpopFilter />}

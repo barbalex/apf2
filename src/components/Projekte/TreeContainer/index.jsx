@@ -17,114 +17,122 @@ import { useParams, useLocation } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
 
-const LabelFilter = lazy(() => import('./LabelFilter'))
-const ApFilter = lazy(() => import('./ApFilter'))
-const TreeComponent = lazy(() => import('./Tree'))
-const CmApFolder = lazy(() => import('./contextmenu/ApFolder'))
-const CmAp = lazy(() => import('./contextmenu/Ap'))
-const CmUserFolder = lazy(() => import('./contextmenu/UserFolder'))
-const CmUser = lazy(() => import('./contextmenu/User'))
-const CmAdresseFolder = lazy(() => import('./contextmenu/AdresseFolder'))
+const LabelFilter = lazy(() => import('./LabelFilter.jsx'))
+const ApFilter = lazy(async () => ({
+  default: (await import('./ApFilter/index.jsx')).ApFilter,
+}))
+const TreeComponent = lazy(() => import('./Tree/index.jsx'))
+const CmApFolder = lazy(() => import('./contextmenu/ApFolder.jsx'))
+const CmAp = lazy(() => import('./contextmenu/Ap.jsx'))
+const CmUserFolder = lazy(() => import('./contextmenu/UserFolder.jsx'))
+const CmUser = lazy(() => import('./contextmenu/User.jsx'))
+const CmAdresseFolder = lazy(() => import('./contextmenu/AdresseFolder.jsx'))
 const CmAdresse = lazy(() => import('./contextmenu/Adresse.jsx'))
 const CmTpopApberrelevantGrundWerteFolder = lazy(
-  () => import('./contextmenu/TpopApberrelevantGrundWerteFolder'),
+  () => import('./contextmenu/TpopApberrelevantGrundWerteFolder.jsx'),
 )
 const CmTpopApberrelevantGrundWerte = lazy(
-  () => import('./contextmenu/TpopApberrelevantGrundWerte'),
+  () => import('./contextmenu/TpopApberrelevantGrundWerte.jsx'),
 )
 const CmTpopkontrzaehlEinheitWerteFolder = lazy(
-  () => import('./contextmenu/TpopkontrzaehlEinheitWerteFolder'),
+  () => import('./contextmenu/TpopkontrzaehlEinheitWerteFolder.jsx'),
 )
 const CmTpopkontrzaehlEinheitWerte = lazy(
-  () => import('./contextmenu/TpopkontrzaehlEinheitWerte'),
+  () => import('./contextmenu/TpopkontrzaehlEinheitWerte.jsx'),
 )
 const CmEkAbrechnungstypWerteFolder = lazy(
-  () => import('./contextmenu/EkAbrechnungstypWerteFolder'),
+  () => import('./contextmenu/EkAbrechnungstypWerteFolder.jsx'),
 )
 const CmEkAbrechnungstypWerte = lazy(
-  () => import('./contextmenu/EkAbrechnungstypWerte'),
+  () => import('./contextmenu/EkAbrechnungstypWerte.jsx'),
 )
 const CmApberuebersichtFolder = lazy(
-  () => import('./contextmenu/ApberuebersichtFolder'),
+  () => import('./contextmenu/ApberuebersichtFolder.jsx'),
 )
-const CmApberuebersicht = lazy(() => import('./contextmenu/Apberuebersicht'))
-const CmAssozartFolder = lazy(() => import('./contextmenu/AssozartFolder'))
-const CmAssozart = lazy(() => import('./contextmenu/Assozart'))
+const CmApberuebersicht = lazy(
+  () => import('./contextmenu/Apberuebersicht.jsx'),
+)
+const CmAssozartFolder = lazy(() => import('./contextmenu/AssozartFolder.jsx'))
+const CmAssozart = lazy(() => import('./contextmenu/Assozart.jsx'))
 const CmEkzaehleinheitFolder = lazy(
-  () => import('./contextmenu/EkzaehleinheitFolder'),
+  () => import('./contextmenu/EkzaehleinheitFolder.jsx'),
 )
-const CmEkzaehleinheit = lazy(() => import('./contextmenu/Ekzaehleinheit'))
-const CmEkfrequenzFolder = lazy(() => import('./contextmenu/EkfrequenzFolder'))
-const CmEkfrequenz = lazy(() => import('./contextmenu/Ekfrequenz'))
-const CmApartFolder = lazy(() => import('./contextmenu/ApartFolder'))
-const CmApart = lazy(() => import('./contextmenu/Apart'))
+const CmEkzaehleinheit = lazy(() => import('./contextmenu/Ekzaehleinheit.jsx'))
+const CmEkfrequenzFolder = lazy(
+  () => import('./contextmenu/EkfrequenzFolder.jsx'),
+)
+const CmEkfrequenz = lazy(() => import('./contextmenu/Ekfrequenz.jsx'))
+const CmApartFolder = lazy(() => import('./contextmenu/ApartFolder.jsx'))
+const CmApart = lazy(() => import('./contextmenu/Apart.jsx'))
 const CmBeobZugeordnetFolder = lazy(
-  () => import('./contextmenu/BeobZugeordnetFolder'),
+  () => import('./contextmenu/BeobZugeordnetFolder.jsx'),
 )
-const CmApberFolder = lazy(() => import('./contextmenu/ApberFolder'))
-const CmApber = lazy(() => import('./contextmenu/Apber'))
-const CmErfkritFolder = lazy(() => import('./contextmenu/ErfkritFolder'))
-const CmErfkrit = lazy(() => import('./contextmenu/Erfkrit'))
-const CmZielFolder = lazy(() => import('./contextmenu/ZielFolder'))
-const CmZielJahrFolder = lazy(() => import('./contextmenu/ZielJahrFolder'))
-const CmZiel = lazy(() => import('./contextmenu/Ziel'))
-const CmZielBerFolder = lazy(() => import('./contextmenu/ZielBerFolder'))
-const CmZielBer = lazy(() => import('./contextmenu/Zielber'))
-const CmPopFolder = lazy(() => import('./contextmenu/PopFolder'))
-const CmPop = lazy(() => import('./contextmenu/Pop'))
+const CmApberFolder = lazy(() => import('./contextmenu/ApberFolder.jsx'))
+const CmApber = lazy(() => import('./contextmenu/Apber.jsx'))
+const CmErfkritFolder = lazy(() => import('./contextmenu/ErfkritFolder.jsx'))
+const CmErfkrit = lazy(() => import('./contextmenu/Erfkrit.jsx'))
+const CmZielFolder = lazy(() => import('./contextmenu/ZielFolder.jsx'))
+const CmZielJahrFolder = lazy(() => import('./contextmenu/ZielJahrFolder.jsx'))
+const CmZiel = lazy(() => import('./contextmenu/Ziel.jsx'))
+const CmZielBerFolder = lazy(() => import('./contextmenu/ZielBerFolder.jsx'))
+const CmZielBer = lazy(() => import('./contextmenu/Zielber.jsx'))
+const CmPopFolder = lazy(() => import('./contextmenu/PopFolder.jsx'))
+const CmPop = lazy(() => import('./contextmenu/Pop.jsx'))
 const CmPopmassnberFolder = lazy(
-  () => import('./contextmenu/PopmassnberFolder'),
+  () => import('./contextmenu/PopmassnberFolder.jsx'),
 )
-const CmPopmassnber = lazy(() => import('./contextmenu/Popmassnber'))
-const CmPopberFolder = lazy(() => import('./contextmenu/PopberFolder'))
-const CmPopber = lazy(() => import('./contextmenu/Popber'))
-const CmProjekt = lazy(() => import('./contextmenu/Projekt'))
-const CmWerteListen = lazy(() => import('./contextmenu/WerteListen'))
-const CmTpopFolder = lazy(() => import('./contextmenu/TpopFolder'))
-const CmTpop = lazy(() => import('./contextmenu/Tpop'))
-const CmTpopberFolder = lazy(() => import('./contextmenu/TpopberFolder'))
-const CmTpopber = lazy(() => import('./contextmenu/Tpopber'))
-const CmBeobZugeordnet = lazy(() => import('./contextmenu/BeobZugeordnet'))
+const CmPopmassnber = lazy(() => import('./contextmenu/Popmassnber.jsx'))
+const CmPopberFolder = lazy(() => import('./contextmenu/PopberFolder.jsx'))
+const CmPopber = lazy(() => import('./contextmenu/Popber.jsx'))
+const CmProjekt = lazy(() => import('./contextmenu/Projekt.jsx'))
+const CmWerteListen = lazy(() => import('./contextmenu/WerteListen.jsx'))
+const CmTpopFolder = lazy(() => import('./contextmenu/TpopFolder.jsx'))
+const CmTpop = lazy(() => import('./contextmenu/Tpop.jsx'))
+const CmTpopberFolder = lazy(() => import('./contextmenu/TpopberFolder.jsx'))
+const CmTpopber = lazy(() => import('./contextmenu/Tpopber.jsx'))
+const CmBeobZugeordnet = lazy(() => import('./contextmenu/BeobZugeordnet.jsx'))
 const CmBeobnichtbeurteilt = lazy(
-  () => import('./contextmenu/Beobnichtbeurteilt'),
+  () => import('./contextmenu/Beobnichtbeurteilt.jsx'),
 )
 const CmBeobNichtZuzuordnen = lazy(
-  () => import('./contextmenu/BeobNichtZuzuordnen'),
+  () => import('./contextmenu/BeobNichtZuzuordnen.jsx'),
 )
 const CmTpopfreiwkontrFolder = lazy(
-  () => import('./contextmenu/TpopfreiwkontrFolder'),
+  () => import('./contextmenu/TpopfreiwkontrFolder.jsx'),
 )
-const CmTpopfreiwkontr = lazy(() => import('./contextmenu/Tpopfreiwkontr'))
+const CmTpopfreiwkontr = lazy(() => import('./contextmenu/Tpopfreiwkontr.jsx'))
 const CmTpopfeldkontrFolder = lazy(
-  () => import('./contextmenu/TpopfeldkontrFolder'),
+  () => import('./contextmenu/TpopfeldkontrFolder.jsx'),
 )
-const CmTpopfeldkontr = lazy(() => import('./contextmenu/Tpopfeldkontr'))
+const CmTpopfeldkontr = lazy(() => import('./contextmenu/Tpopfeldkontr.jsx'))
 const CmTpopfeldkontrzaehlFolder = lazy(
-  () => import('./contextmenu/TpopfeldkontrzaehlFolder'),
+  () => import('./contextmenu/TpopfeldkontrzaehlFolder.jsx'),
 )
 const CmTpopfeldkontrzaehl = lazy(
-  () => import('./contextmenu/Tpopfeldkontrzaehl'),
+  () => import('./contextmenu/Tpopfeldkontrzaehl.jsx'),
 )
 const CmTpopmassnberFolder = lazy(
-  () => import('./contextmenu/TpopmassnberFolder'),
+  () => import('./contextmenu/TpopmassnberFolder.jsx'),
 )
-const CmTpopmassnber = lazy(() => import('./contextmenu/Tpopmassnber'))
-const CmTpopmassnFolder = lazy(() => import('./contextmenu/TpopmassnFolder'))
-const CmTpopmassn = lazy(() => import('./contextmenu/Tpopmassn'))
-const DeleteDatasetModal = lazy(() => import('./DeleteDatasetModal'))
+const CmTpopmassnber = lazy(() => import('./contextmenu/Tpopmassnber.jsx'))
+const CmTpopmassnFolder = lazy(
+  () => import('./contextmenu/TpopmassnFolder.jsx'),
+)
+const CmTpopmassn = lazy(() => import('./contextmenu/Tpopmassn.jsx'))
+const DeleteDatasetModal = lazy(() => import('./DeleteDatasetModal/index.jsx'))
 import { copyBiotopTo } from '../../../modules/copyBiotopTo.js'
 import { moveTo } from '../../../modules/moveTo/index.js'
 import { copyTo } from '../../../modules/copyTo/index.js'
-import createNewPopFromBeob from '../../../modules/createNewPopFromBeob'
+import createNewPopFromBeob from '../../../modules/createNewPopFromBeob/index.js'
 import { copyBeobZugeordnetKoordToTpop } from '../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
-import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
-import tpopById from './tpopById'
-import beobById from './beobById'
-import openLowerNodes from './openLowerNodes'
-import closeLowerNodes from './closeLowerNodes'
-import insertDataset from './insertDataset'
+import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop/index.js'
+import tpopById from './tpopById.js'
+import beobById from './beobById.js'
+import openLowerNodes from './openLowerNodes/index.js'
+import closeLowerNodes from './closeLowerNodes.js'
+import insertDataset from './insertDataset.js'
 import { StoreContext } from '../../../storeContext.js'
-const TpopFromBeobPopList = lazy(() => import('./TpopFromBeobPopList'))
+const TpopFromBeobPopList = lazy(() => import('./TpopFromBeobPopList.jsx'))
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { useSearchParamsState } from '../../../modules/useSearchParamsState.js'
 import { isMobilePhone } from '../../../modules/isMobilePhone.js'
