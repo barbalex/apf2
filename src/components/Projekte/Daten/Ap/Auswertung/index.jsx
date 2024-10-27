@@ -28,5 +28,3 @@ export const Auswertung = () => (
     </FormContainer>
   </SimpleBar>
 )
-
-export default Auswertung

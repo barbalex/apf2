@@ -26,7 +26,7 @@ const Label = styled.div`
 `
 const Value = styled.div``
 
-const CustomTooltip = ({ payload = [], label, active, color, reverse }) => {
+export const CustomTooltip = ({ payload = [], label, active, color, reverse }) => {
   const data = reverse ? payload : payload?.reverse() ?? []
 
   return (
@@ -48,5 +48,3 @@ const CustomTooltip = ({ payload = [], label, active, color, reverse }) => {
     </Popup>
   )
 }
-
-export default CustomTooltip

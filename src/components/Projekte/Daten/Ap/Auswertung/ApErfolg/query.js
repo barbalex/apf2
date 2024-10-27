@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const query = gql`
   query apAuswertungErfolg($id: UUID!) {
     allApbers(
       filter: { apId: { equalTo: $id }, beurteilung: { in: [1, 3, 4, 5, 6] } }

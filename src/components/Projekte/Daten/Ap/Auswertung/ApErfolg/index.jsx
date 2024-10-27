@@ -8,15 +8,15 @@ import {
   XAxis,
   YAxis,
   Line,
-  ResponsiveContainer, 
+  ResponsiveContainer,
   CartesianGrid,
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
 import styled from '@emotion/styled'
 import { useParams } from 'react-router-dom'
 
-import queryErfolg from './queryErfolg'
-import CustomTick from './CustomTick'
+import { query } from './query.js'
+import { CustomTick } from './CustomTick.jsx'
 import { Error } from '../../../../../shared/Error.jsx'
 
 const SpinnerContainer = styled.div`
@@ -66,7 +66,7 @@ export const ApErfolg = () => {
     data: dataErfolg,
     error: errorErfolg,
     loading: loadingErfolg,
-  } = useQuery(queryErfolg, {
+  } = useQuery(query, {
     variables: { id },
   })
   const erfolgRawData = (dataErfolg?.allApbers?.nodes ?? []).map((e) => ({
@@ -84,15 +84,18 @@ export const ApErfolg = () => {
 
   return (
     <>
-      {loadingErfolg ? (
+      {loadingErfolg ?
         <SpinnerContainer>
           <CircularProgress />
           <SpinnerText>lade AP-Erfolg...</SpinnerText>
         </SpinnerContainer>
-      ) : erfolgRawData.length ? (
+      : erfolgRawData.length ?
         <>
           <Title>Erfolg des Aktionsplans</Title>
-          <ResponsiveContainer width="99%" height={400}>
+          <ResponsiveContainer
+            width="99%"
+            height={400}
+          >
             <LineChart
               width={600}
               height={300}
@@ -113,7 +116,10 @@ export const ApErfolg = () => {
                 interval={0}
                 ticks={[0, 1, 2, 3, 4, 5]}
               />
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal={false}
+              />
               <Line
                 type="monotone"
                 dataKey="value"
@@ -126,12 +132,11 @@ export const ApErfolg = () => {
             </LineChart>
           </ResponsiveContainer>
         </>
-      ) : (
-        <>
+      : <>
           <Title>Erfolg des Aktionsplans</Title>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>
         </>
-      )}
+      }
     </>
   )
 }

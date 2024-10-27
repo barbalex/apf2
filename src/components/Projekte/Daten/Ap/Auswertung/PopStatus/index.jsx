@@ -15,7 +15,7 @@ import styled from '@emotion/styled'
 import { useParams } from 'react-router-dom'
 
 import query from './query.js'
-import CustomTooltip from '../CustomTooltip'
+import { CustomTooltip } from '../CustomTooltip.jsx'
 import { Error } from '../../../../../shared/Error.jsx'
 
 const SpinnerContainer = styled.div`

@@ -8,7 +8,7 @@ import Ap from './Ap'
 import { Auswertung } from './Auswertung/index.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { Files } from '../../../shared/Files/index.jsx'
-import ApHistory from './History.jsx'
+import { History } from './History.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
@@ -73,7 +73,7 @@ export const Component = () => {
               parent="ap"
             />
           )}
-          {tab === 'history' && <ApHistory />}
+          {tab === 'history' && <History />}
         </TabContent>
       </Container>
     </ErrorBoundary>

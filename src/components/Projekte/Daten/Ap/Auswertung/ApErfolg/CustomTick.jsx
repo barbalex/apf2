@@ -1,5 +1,3 @@
-import React from 'react'
-
 const labelFromValue = {
   0: 'n.b.',
   1: 'nicht',
@@ -9,7 +7,7 @@ const labelFromValue = {
   5: 'sehr',
 }
 
-const CustomTick = ({ payload, x, y, textAnchor, stroke, radius }) => {
+export const CustomTick = ({ payload, x, y, textAnchor, stroke, radius }) => {
   return (
     <g className="recharts-layer recharts-polar-angle-axis-tick">
       <text
@@ -20,12 +18,13 @@ const CustomTick = ({ payload, x, y, textAnchor, stroke, radius }) => {
         className="recharts-text recharts-polar-angle-axis-tick-value"
         textAnchor={textAnchor}
       >
-        <tspan x={x} dy="0.3em">
+        <tspan
+          x={x}
+          dy="0.3em"
+        >
           {labelFromValue[payload?.value]}
         </tspan>
       </text>
     </g>
   )
 }
-
-export default CustomTick

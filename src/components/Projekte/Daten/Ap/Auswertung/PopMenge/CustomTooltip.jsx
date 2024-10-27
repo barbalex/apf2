@@ -29,7 +29,7 @@ const Value = styled.div``
 const colorUrspruenglich = '#2e7d32'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 
-const CustomTooltip = ({ payload = [], label, active, popsData }) => {
+export const CustomTooltip = ({ payload = [], label, active, popsData }) => {
   const payloadSorted = sortBy(payload, (p) => {
     const pop = popsData.find((d) => d.id === p.dataKey)
     if (pop) return pop.nr
@@ -46,9 +46,9 @@ const CustomTooltip = ({ payload = [], label, active, popsData }) => {
           label = `${pop.nr || '(keine Nr)'}: ${pop.name || '(kein Name)'}`
         }
         const value =
-          exists(p.value) && p.value?.toLocaleString
-            ? p.value?.toLocaleString('de-ch')
-            : null
+          exists(p.value) && p.value?.toLocaleString ?
+            p.value?.toLocaleString('de-ch')
+          : null
         let color
         if (!pop) {
           color = 'grey'
@@ -57,7 +57,10 @@ const CustomTooltip = ({ payload = [], label, active, popsData }) => {
           color = isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
         }
         return (
-          <Row key={p.dataKey} color={color}>
+          <Row
+            key={p.dataKey}
+            color={color}
+          >
             <Label>{`${label}:`}</Label>
             <Value>{value}</Value>
           </Row>
@@ -66,5 +69,3 @@ const CustomTooltip = ({ payload = [], label, active, popsData }) => {
     </Popup>
   )
 }
-
-export default CustomTooltip

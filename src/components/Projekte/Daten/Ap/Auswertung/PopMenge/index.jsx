@@ -16,8 +16,8 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import { useParams } from 'react-router-dom'
 
-import queryPopMenge from './queryPopMenge'
-import CustomTooltip from './CustomTooltip'
+import { query } from './query.js'
+import { CustomTooltip } from './CustomTooltip.jsx'
 import { exists } from '../../../../../../modules/exists.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
@@ -76,7 +76,7 @@ export const PopMenge = ({
     data: dataPopMenge,
     error: errorPopMenge,
     loading: loadingPopMenge,
-  } = useQuery(queryPopMenge, {
+  } = useQuery(query, {
     variables: { id, jahr },
   })
 
@@ -222,4 +222,3 @@ export const PopMenge = ({
     </>
   )
 }
-

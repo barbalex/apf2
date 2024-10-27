@@ -17,7 +17,7 @@ import IconButton from '@mui/material/IconButton'
 import { useParams } from 'react-router-dom'
 
 import queryTpopMenge from './queryTpopMenge'
-import CustomTooltip from './CustomTooltip'
+import { CustomTooltip } from './CustomTooltip.jsx'
 import { exists } from '../../../../../modules/exists.js'
 import { Error } from '../../../../shared/Error.jsx'
 
@@ -58,9 +58,9 @@ const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 const formatNumber = (tickItem) => {
   const value =
-    exists(tickItem) && tickItem?.toLocaleString
-      ? tickItem.toLocaleString('de-ch')
-      : null
+    exists(tickItem) && tickItem?.toLocaleString ?
+      tickItem.toLocaleString('de-ch')
+    : null
   return value
 }
 
@@ -114,12 +114,12 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
 
   return (
     <>
-      {loading ? (
+      {loading ?
         <SpinnerContainer>
           <CircularProgress />
           <SpinnerText>lade Mengen nach Teil-Populationen...</SpinnerText>
         </SpinnerContainer>
-      ) : tpopMengeData.length ? (
+      : tpopMengeData.length ?
         <>
           <TitleRow>
             <div>
@@ -134,7 +134,10 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
               <IoMdInformationCircleOutline />
             </InfoButton>
           </TitleRow>
-          <Container width="99%" height={height}>
+          <Container
+            width="99%"
+            height={height}
+          >
             <AreaChart
               width={600}
               height={300}
@@ -159,9 +162,8 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
                   color = 'grey'
                 } else {
                   const isUrspruenglich = tpop?.status < 200
-                  color = isUrspruenglich
-                    ? colorUrspruenglich
-                    : colorAngesiedelt
+                  color =
+                    isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
                 }
 
                 return (
@@ -178,12 +180,14 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
                 )
               })}
               <Tooltip content={<CustomTooltip tpopsData={tpopsData} />} />
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal={false}
+              />
             </AreaChart>
           </Container>
         </>
-      ) : (
-        <>
+      : <>
           <TitleRow>
             <div>
               <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
@@ -199,7 +203,7 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
           </TitleRow>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>
         </>
-      )}
+      }
     </>
   )
 }

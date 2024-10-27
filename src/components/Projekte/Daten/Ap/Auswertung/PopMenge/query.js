@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const query = gql`
   query apAuswertungPopMenge($id: UUID!, $jahr: Int!) {
     # function: apflora.ap_ausw_pop_menge
     apAuswPopMenge(apid: $id, jahr: $jahr) {
