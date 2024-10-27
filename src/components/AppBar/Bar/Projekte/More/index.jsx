@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 
-import isMobilePhone from '../../../../../modules/isMobilePhone.js'
+import { isMobilePhone } from '../../../../../modules/isMobilePhone.js'
 import { logout } from '../../../../../modules/logout.js'
 import EkfUser from './EkfUser/index.jsx'
 import { StoreContext } from '../../../../../storeContext.js'

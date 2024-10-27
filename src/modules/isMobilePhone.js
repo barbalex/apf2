@@ -1,6 +1,6 @@
 // from: https://stackoverflow.com/a/11381730/712005
 /* eslint-disable */
-const isMobilePhone = () => {
+export const isMobilePhone = () => {
   let check = false
   const a = navigator.userAgent || navigator.vendor || window.opera
 
@@ -23,5 +23,3 @@ const isMobilePhone = () => {
 
   return check
 }
-
-export default isMobilePhone
