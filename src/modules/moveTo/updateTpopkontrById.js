@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const updateTpopkontrById= gql`
   mutation updateTpopkontrById($id: UUID!, $tpopId: UUID) {
     updateTpopkontrById(
       input: { id: $id, tpopkontrPatch: { tpopId: $tpopId } }

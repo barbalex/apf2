@@ -1,5 +1,5 @@
-import queryTpop from './queryTpop'
-import updatePopById from './updatePopById'
+import { queryTpop } from './queryTpop.js'
+import { updatePopById } from './updatePopById.js'
 
 const copyTpopKoordToPop = async ({ id, store, client }) => {
   // fetch tpop

@@ -3,10 +3,10 @@
  * used when moving for instance tpop to other pop in tree
  */
 import { tables } from '../tables.js'
-import updateTpopkontrById from './updateTpopkontrById'
-import updateTpopmassnById from './updateTpopmassnById'
-import updateTpopById from './updateTpopById'
-import updatePopById from './updatePopById'
+import { updateTpopkontrById } from './updateTpopkontrById.js'
+import { updateTpopmassnById } from './updateTpopmassnById.js'
+import { updateTpopById } from './updateTpopById.js'
+import { updatePopById } from './updatePopById.js'
 
 const moveTo = async ({ id: newParentId, store, client }) => {
   const { enqueNotification, moving, setMoving } = store
