@@ -10,12 +10,12 @@ import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
 import { Status } from '../../../shared/Status.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import queryPops from './queryPops'
+import { query } from './query.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import PopOrTabs from './Tabs'
+import { PopOrTabs } from './PopOrTabs.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -65,7 +65,7 @@ const PopFilter = () => {
     }
   }, [activeTab, dataFilter.pop.length])
 
-  const { data: dataPops, error } = useQuery(queryPops, {
+  const { data: dataPops, error } = useQuery(query, {
     variables: {
       filteredFilter: popGqlFilter.filtered,
       allFilter: popGqlFilter.all,

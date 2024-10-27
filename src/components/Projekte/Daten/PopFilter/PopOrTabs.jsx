@@ -23,7 +23,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 
-const PopOrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
+export const PopOrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
   const store = useContext(StoreContext)
   const { dataFilterAddOr } = store.tree
 
@@ -56,7 +56,11 @@ const PopOrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
         scrollButtons="auto"
       >
         {dataFilter.map((filter, index) => (
-          <StyledTab key={index} label={index + 1} value={index} />
+          <StyledTab
+            key={index}
+            label={index + 1}
+            value={index}
+          />
         ))}
         <StyledTab
           key={dataFilter.length}
@@ -68,5 +72,3 @@ const PopOrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
     </Row>
   )
 }
-
-export default PopOrTabs
