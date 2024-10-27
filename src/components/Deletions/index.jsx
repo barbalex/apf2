@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 
-import undelete from './undelete/index.jsx'
+import { undelete } from './undelete/index.jsx'
 import { StoreContext } from '../../storeContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
@@ -128,7 +128,10 @@ const Deletions = () => {
               )
 
               return (
-                <Row key={ds.id} data-withtopline={index > 0}>
+                <Row
+                  key={ds.id}
+                  data-withtopline={index > 0}
+                >
                   <StyledFormControlLabel
                     control={
                       <StyledCheckbox
@@ -170,7 +173,10 @@ const Deletions = () => {
           >
             wiederherstellen
           </Button>
-          <Button color="primary" onClick={onClickClose}>
+          <Button
+            color="primary"
+            onClick={onClickClose}
+          >
             schliessen
           </Button>
         </DialogActions>

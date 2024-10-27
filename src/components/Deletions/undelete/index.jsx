@@ -1,7 +1,7 @@
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 
-const undelete = async ({
+export const undelete = async ({
   deletedDatasets,
   dataset,
   setShowDeletions,
@@ -47,5 +47,3 @@ const undelete = async ({
 
   if (afterDeletionHook) afterDeletionHook()
 }
-
-export default undelete
