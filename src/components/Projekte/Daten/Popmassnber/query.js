@@ -1,8 +1,11 @@
 import { gql } from '@apollo/client'
 
-import { popmassnber, tpopmassnErfbeurtWerte } from '../../../shared/fragments.js'
+import {
+  popmassnber,
+  tpopmassnErfbeurtWerte,
+} from '../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query popmassnberByIdQuery($id: UUID!) {
     popmassnberById(id: $id) {
       ...PopmassnberFields
