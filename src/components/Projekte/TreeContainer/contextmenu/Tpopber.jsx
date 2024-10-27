@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'

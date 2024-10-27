@@ -1,10 +1,13 @@
 import React, { Fragment, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const closeLowerNodesData = {
@@ -31,23 +34,38 @@ const Ap = ({ onClick }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id="treeAp" hideOnLeave={true}>
+      <ContextMenu
+        id="treeAp"
+        hideOnLeave={true}
+      >
         <div className="react-contextmenu-title">Art</div>
-        <MenuItem onClick={onClick} data={closeLowerNodesData}>
+        <MenuItem
+          onClick={onClick}
+          data={closeLowerNodesData}
+        >
           alle schliessen
         </MenuItem>
         {mayWrite && (
           <>
-            <MenuItem onClick={onClick} data={insertData}>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
               erstelle neuen
             </MenuItem>
-            <MenuItem onClick={onClick} data={deleteData}>
+            <MenuItem
+              onClick={onClick}
+              data={deleteData}
+            >
               lösche
             </MenuItem>
           </>
         )}
         {isMoving && (
-          <MenuItem onClick={onClick} data={moveData}>
+          <MenuItem
+            onClick={onClick}
+            data={moveData}
+          >
             {`verschiebe '${moving.label}' hierhin`}
           </MenuItem>
         )}

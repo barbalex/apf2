@@ -10,7 +10,7 @@ import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { gql, useApolloClient } from '@apollo/client'
 
-import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'

@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode'
 
-const userIsReadOnly = (token, freiw) => {
+export const userIsReadOnly = (token, freiw) => {
   if (!token) return true
   const { role } = jwtDecode(token)
   if (!role) return true
@@ -9,5 +9,3 @@ const userIsReadOnly = (token, freiw) => {
   if (!!freiw && role === 'apflora_freiwillig') return false
   return false
 }
-
-export default userIsReadOnly
