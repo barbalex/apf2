@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { tpopkontr } from '../../components/shared/fragments.js'
 
-export default gql`
+export const createTpopkontr = gql`
   mutation createTpopkontr(
     $typ: String
     $datum: Date
