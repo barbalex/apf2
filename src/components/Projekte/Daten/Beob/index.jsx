@@ -10,11 +10,11 @@ import { arrayMoveImmutable } from 'array-move'
 
 import { constants } from '../../../../modules/constants.js'
 import { exists } from '../../../../modules/exists.js'
-import query from './query.js'
+import { query } from './query.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import Beob from './Field'
+import { Field as BeobField } from './Field.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 
 const OuterContainer = styled.div`
@@ -36,15 +36,13 @@ const Explainer = styled.p`
   color: rgba(0, 0, 0, 0.54);
 `
 
-const BeobsComponent = () => {
+export const Beob = observer(() => {
   const { beobId: id } = useParams()
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
-  const {
-    sortedBeobFields: sortedBeobFieldsPassed,
-    setSortedBeobFields,
-  } = store
+  const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
+    store
   const sortedBeobFields = sortedBeobFieldsPassed.slice()
 
   const sortFn = useCallback(
@@ -122,7 +120,7 @@ const BeobsComponent = () => {
   )
   const renderField = useCallback(
     (field, index) => (
-      <Beob
+      <BeobField
         key={field[0]}
         label={field[0]}
         value={field[1]}
@@ -149,13 +147,14 @@ const BeobsComponent = () => {
           Die Felder können beliebig sortiert werden (drag and drop).
         </Explainer>
         <Container>
-          <DndProvider backend={HTML5Backend} context={window}>
+          <DndProvider
+            backend={HTML5Backend}
+            context={window}
+          >
             {fields.map((field, i) => renderField(field, i))}
           </DndProvider>
         </Container>
       </OuterContainer>
     </ErrorBoundary>
   )
-}
-
-export default observer(BeobsComponent)
+})

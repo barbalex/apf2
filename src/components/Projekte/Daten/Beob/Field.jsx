@@ -28,7 +28,7 @@ const ItemTypes = {
   CARD: 'card',
 }
 
-const Field = ({ label, value, index, moveField }) => {
+export const Field = ({ label, value, index, moveField }) => {
   const ref = useRef(null)
   const [{ handlerId }, drop] = useDrop({
     accept: ItemTypes.CARD,
@@ -97,5 +97,3 @@ const Field = ({ label, value, index, moveField }) => {
     </Row>
   )
 }
-
-export default Field
