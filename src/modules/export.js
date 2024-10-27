@@ -24,7 +24,7 @@ export const exportModule = async ({
     })
   }
   if (kml) {
-    const { default: exportKml } = await import('./exportKml.js')
+    const { exportKml } = await import('./exportKml.js')
     exportKml({
       fileName,
       data,
@@ -36,7 +36,7 @@ export const exportModule = async ({
       data,
     })
   } else {
-    const { default: exportXlsx } = await import('./exportXlsx.js')
+    const { exportXlsx } = await import('./exportXlsx.js')
     // pass some data in case something goes wrong
     await exportXlsx({
       fileName,

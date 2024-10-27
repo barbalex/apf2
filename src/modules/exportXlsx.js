@@ -1,7 +1,7 @@
 import fileSaver from 'file-saver'
 import { format } from 'date-fns/format'
 
-const exportXlsx = async ({ fileName, data, store }) => {
+export const exportXlsx = async ({ fileName, data, store }) => {
   const { default: getXlsxBuffer } = await import('./getXlsxBuffer.js')
   let buffer
   try {
@@ -20,5 +20,3 @@ const exportXlsx = async ({ fileName, data, store }) => {
     `${file}.xlsx`,
   )
 }
-
-export default exportXlsx
