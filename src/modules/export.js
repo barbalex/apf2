@@ -30,7 +30,7 @@ export const exportModule = async ({
       data,
     })
   } else if (exportFileType === 'csv') {
-    const { default: exportCsv } = await import('./exportCsv.js')
+    const { exportCsv } = await import('./exportCsv.js')
     exportCsv({
       fileName,
       data,
