@@ -4,9 +4,9 @@ import localForage from 'localforage'
 import { getSnapshot } from 'mobx-state-tree'
 import { persist } from 'mst-persist'
 
-import isObject from '../modules/isObject'
+import { isObject } from '../modules/isObject.js'
 
-import setUserFromIdb from '../modules/setUserFromIdb'
+import setUserFromIdb from '../modules/setUserFromIdb.js'
 
 const blacklist = [
   'user',
@@ -51,7 +51,7 @@ const StorePersister = ({ client, store, idb }) => {
         isObject(dataFilterTreeTpopfeldkontr) ||
         isObject(dataFilterTreeTpopfreiwkontr)
       ) {
-        [store.tree.dataFilterEmpty()]
+        ;[store.tree.dataFilterEmpty()]
       }
 
       const username = await setUserFromIdb({ idb, store })

@@ -1,4 +1,4 @@
-import isNumeric from './isNumeric.js'
+import { isNumeric } from './isNumeric.js'
 
 export const ifIsNumericAsNumber = (value) => {
   if (isNumeric(value)) return +value
