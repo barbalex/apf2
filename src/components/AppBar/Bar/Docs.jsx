@@ -8,7 +8,7 @@ const StyledButton = styled(Button)`
   border-color: rgba(255, 255, 255, 0.5) !important;
   text-transform: none !important;
 `
-const DokuBar = () => {
+export const Docs = () => {
   const { pathname, search } = useLocation()
 
   return (
@@ -30,5 +30,3 @@ const DokuBar = () => {
     </>
   )
 }
-
-export default DokuBar

@@ -8,7 +8,7 @@ import { Link, useParams, useLocation } from 'react-router-dom'
 
 import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
 import { More } from './More/index.jsx'
-import Daten from './Daten.jsx'
+import { Daten } from './Daten.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
@@ -40,7 +40,7 @@ const DokuButton = styled(Button)`
   text-transform: none !important;
 `
 
-const ProjekteBar = () => {
+export const Projekte = observer(() => {
   const { projId } = useParams()
   const { search } = useLocation()
 
@@ -201,6 +201,4 @@ const ProjekteBar = () => {
       />
     </>
   )
-}
-
-export default observer(ProjekteBar)
+})

@@ -31,7 +31,7 @@ const StyledButton = styled(Button)`
   text-transform: none !important;
 `
 
-const MyAppBarDaten = ({ treeNr = '' }) => {
+export const Daten = observer(({ treeNr = '' }) => {
   const [projekteTabs, setProjekteTabs] = useSearchParamsState(
     'projekteTabs',
     isMobilePhone() ? ['tree'] : ['tree', 'daten'],
@@ -70,6 +70,4 @@ const MyAppBarDaten = ({ treeNr = '' }) => {
       {`Daten${treeNr === '2' ? ' 2' : ''}`}
     </StyledButton>
   )
-}
-
-export default observer(MyAppBarDaten)
+})

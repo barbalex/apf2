@@ -4,10 +4,10 @@ import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router-dom'
 
 import { isMobilePhone } from '../../../modules/isMobilePhone.js'
-import Home from './Home.jsx'
-import EkPlan from './EkPlan.jsx'
-import Projekte from './Projekte/index.jsx'
-import Docs from './Docs.jsx'
+import { Home } from './Home.jsx'
+import { EkPlan } from './EkPlan.jsx'
+import { Projekte } from './Projekte/index.jsx'
+import { Docs } from './Docs.jsx'
 
 const SiteTitle = styled(Button)`
   display: none !important;

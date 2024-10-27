@@ -7,7 +7,7 @@ const StyledButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
 `
-const HomeBar = () => {
+export const Home = () => {
   const { pathname, search } = useLocation()
 
   return (
@@ -29,5 +29,3 @@ const HomeBar = () => {
     </>
   )
 }
-
-export default HomeBar

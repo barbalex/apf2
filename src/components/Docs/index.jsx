@@ -76,7 +76,7 @@ export const Code = styled.code`
   padding: 0 3px;
 `
 
-const Docs = () => (
+export const Component = () => (
   <ErrorBoundary>
     <Container>
       <Sidebar />
@@ -93,5 +93,3 @@ const Docs = () => (
     </Container>
   </ErrorBoundary>
 )
-
-export const Component = Docs

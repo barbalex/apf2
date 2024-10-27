@@ -15,8 +15,14 @@ const RouterComponent = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route lazy={() => import('../AppBar/index.jsx')}>
-        <Route index lazy={() => import('../Home/index.jsx')} />
-        <Route path="/Daten/*" lazy={() => import('./ProtectedRoute.jsx')}>
+        <Route
+          index
+          lazy={() => import('../Home/index.jsx')}
+        />
+        <Route
+          path="/Daten/*"
+          lazy={() => import('./ProtectedRoute.jsx')}
+        >
           {/* <Route path="*" element={<Unterhalt />}></Route> */}
           <Route
             path="Projekte/:projId/EK-Planung"
@@ -30,7 +36,10 @@ const RouterComponent = () => {
             path="Benutzer/:userId/EKF/:ekfYear/:ekfId"
             lazy={() => import('../Ekf/index.jsx')}
           />
-          <Route path="*" lazy={() => import('../Projekte/index.jsx')}>
+          <Route
+            path="*"
+            lazy={() => import('../Projekte/index.jsx')}
+          >
             <Route
               path="Werte-Listen/Adressen/:adrId"
               lazy={() => import('../Projekte/Daten/Adresse/index.jsx')}
@@ -177,8 +186,14 @@ const RouterComponent = () => {
             />
           </Route>
         </Route>
-        <Route path="/Dokumentation/*" lazy={() => import('../Docs/index.jsx')}>
-          <Route index element={null} />
+        <Route
+          path="/Dokumentation/*"
+          lazy={() => import('../Docs/index.jsx')}
+        >
+          <Route
+            index
+            element={null}
+          />
           <Route
             path="was-kann-man-mit-apflora-machen"
             lazy={() => import('../Docs/docs/WasKannApflora.jsx')}
@@ -273,8 +288,14 @@ const RouterComponent = () => {
             path="koordinaten"
             lazy={() => import('../Docs/docs/Koordinaten/index.jsx')}
           />
-          <Route path="melden" lazy={() => import('../Docs/docs/Melden.jsx')} />
-          <Route path="pwa" lazy={() => import('../Docs/docs/Pwa/index.jsx')} />
+          <Route
+            path="melden"
+            lazy={() => import('../Docs/docs/Melden.jsx')}
+          />
+          <Route
+            path="pwa"
+            lazy={() => import('../Docs/docs/Pwa/index.jsx')}
+          />
           <Route
             path="technologien"
             lazy={() => import('../Docs/docs/Technologien/index.jsx')}
@@ -295,7 +316,10 @@ const RouterComponent = () => {
             path="daten-wiederherstellen"
             lazy={() => import('../Docs/docs/DatenWiederherstellen.jsx')}
           />
-          <Route path="testen" lazy={() => import('../Docs/docs/Testen.jsx')} />
+          <Route
+            path="testen"
+            lazy={() => import('../Docs/docs/Testen.jsx')}
+          />
           <Route
             path="geschichte"
             lazy={() => import('../Docs/docs/Geschichte.jsx')}
@@ -312,9 +336,15 @@ const RouterComponent = () => {
             path="info-flora-export"
             lazy={() => import('../Docs/docs/InfofloraExport.jsx')}
           />
-          <Route path="*" lazy={() => import('../404.jsx')} />
+          <Route
+            path="*"
+            lazy={() => import('../404.jsx')}
+          />
         </Route>
-        <Route path="*" lazy={() => import('../404.jsx')} />
+        <Route
+          path="*"
+          lazy={() => import('../404.jsx')}
+        />
       </Route>,
     ),
   )
