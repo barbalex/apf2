@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { Link, useParams, useLocation } from 'react-router-dom'
 
 import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
-import More from './More/index.jsx'
+import { More } from './More/index.jsx'
 import Daten from './Daten.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
@@ -16,13 +16,13 @@ const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
   border-right-color: ${(props) =>
-    props.followed === 'true'
-      ? ' rgba(255, 255, 255, 0.25)'
-      : ' rgba(255, 255, 255, 0.5)'} !important;
+    props.followed === 'true' ?
+      ' rgba(255, 255, 255, 0.25)'
+    : ' rgba(255, 255, 255, 0.5)'} !important;
   border-left-color: ${(props) =>
-    props.preceded === 'true'
-      ? ' rgba(255, 255, 255, 0.25)'
-      : ' rgba(255, 255, 255, 0.5)'} !important;
+    props.preceded === 'true' ?
+      ' rgba(255, 255, 255, 0.25)'
+    : ' rgba(255, 255, 255, 0.5)'} !important;
   border-top-left-radius: ${(props) =>
     props.preceded === 'true' ? '0' : '4px'} !important;
   border-bottom-left-radius: ${(props) =>
@@ -195,7 +195,10 @@ const ProjekteBar = () => {
       >
         Dokumentation
       </DokuButton>
-      <More onClickExporte={onClickExporte} role={role} />
+      <More
+        onClickExporte={onClickExporte}
+        role={role}
+      />
     </>
   )
 }

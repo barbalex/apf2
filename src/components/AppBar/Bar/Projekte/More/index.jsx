@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 
 import { isMobilePhone } from '../../../../../modules/isMobilePhone.js'
 import { logout } from '../../../../../modules/logout.js'
-import EkfUser from './EkfUser/index.jsx'
+import { EkfUser } from './EkfUser/index.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
 import { IdbContext } from '../../../../../idbContext.js'
 import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
@@ -27,97 +27,97 @@ const Version = styled.div`
   user-select: none;
 `
 
-const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
-  const { projId } = useParams()
+export const More = observer(
+  ({ onClickExporte: passedOnClickExporte, role }) => {
+    const { projId } = useParams()
 
-  const store = useContext(StoreContext)
-  const { deletedDatasets, user, setShowDeletions } = store
-  const { idb } = useContext(IdbContext)
+    const store = useContext(StoreContext)
+    const { deletedDatasets, user, setShowDeletions } = store
+    const { idb } = useContext(IdbContext)
 
-  const [anchorEl, setAnchorEl] = useState(null)
-  const closeMenu = useCallback(() => setAnchorEl(null), [])
-  /**
-   * need to clone projekteTabs
-   * because otherwise removing elements errors out (because elements are sealed)
-   */
+    const [anchorEl, setAnchorEl] = useState(null)
+    const closeMenu = useCallback(() => setAnchorEl(null), [])
+    /**
+     * need to clone projekteTabs
+     * because otherwise removing elements errors out (because elements are sealed)
+     */
 
-  const isMobile = isMobilePhone()
-  const [projekteTabs] = useSearchParamsState(
-    'projekteTabs',
-    isMobile ? ['tree'] : ['tree', 'daten'],
-  )
-  const exporteIsActive = !!projId
+    const isMobile = isMobilePhone()
+    const [projekteTabs] = useSearchParamsState(
+      'projekteTabs',
+      isMobile ? ['tree'] : ['tree', 'daten'],
+    )
+    const exporteIsActive = !!projId
 
-  const showDeletedDatasets = useCallback(() => {
-    closeMenu()
-    // prevent following from happening
-    // before setAnchor has finished
-    setTimeout(() => setShowDeletions(true))
-  }, [closeMenu, setShowDeletions])
-  const onClickMehrButton = useCallback(
-    (event) => setAnchorEl(event.currentTarget),
-    [],
-  )
-  const onClickExporte = useCallback(() => {
-    closeMenu()
-    // prevent following from happening
-    // before setAnchor has finished
-    setTimeout(() => passedOnClickExporte())
-  }, [closeMenu, passedOnClickExporte])
-  const onClickLogout = useCallback(() => {
-    logout(idb)
-  }, [idb])
+    const showDeletedDatasets = useCallback(() => {
+      closeMenu()
+      // prevent following from happening
+      // before setAnchor has finished
+      setTimeout(() => setShowDeletions(true))
+    }, [closeMenu, setShowDeletions])
+    const onClickMehrButton = useCallback(
+      (event) => setAnchorEl(event.currentTarget),
+      [],
+    )
+    const onClickExporte = useCallback(() => {
+      closeMenu()
+      // prevent following from happening
+      // before setAnchor has finished
+      setTimeout(() => passedOnClickExporte())
+    }, [closeMenu, passedOnClickExporte])
+    const onClickLogout = useCallback(() => {
+      logout(idb)
+    }, [idb])
 
-  const onClickUptime = useCallback(() => {
-    window.open('https://uptime.apflora.ch')
-    setAnchorEl(null)
-  }, [])
+    const onClickUptime = useCallback(() => {
+      window.open('https://uptime.apflora.ch')
+      setAnchorEl(null)
+    }, [])
 
-  return (
-    <Container>
-      <MehrButton
-        aria-label="Mehr"
-        aria-owns={anchorEl ? 'appbar-more-menu' : null}
-        aria-haspopup="true"
-        onClick={onClickMehrButton}
-        data-id="appbar-more"
-      >
-        Mehr
-      </MehrButton>
-      <Menu
-        id="appbar-more-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={closeMenu}
-      >
-        {isMobile && exporteIsActive && (
-          <MenuItem
-            onClick={onClickExporte}
-            disabled={projekteTabs.includes('exporte')}
-          >
-            Exporte
-          </MenuItem>
-        )}
-        <MenuItem
-          onClick={showDeletedDatasets}
-          disabled={deletedDatasets.length === 0}
+    return (
+      <Container>
+        <MehrButton
+          aria-label="Mehr"
+          aria-owns={anchorEl ? 'appbar-more-menu' : null}
+          aria-haspopup="true"
+          onClick={onClickMehrButton}
+          data-id="appbar-more"
         >
-          gelöschte Datensätze wiederherstellen
-        </MenuItem>
-        {['apflora_manager', 'apflora_ap_writer'].includes(role) && (
-          <EkfUser closeMenu={closeMenu} />
-        )}
-        <MenuItem
-          onClick={onClickLogout}
-          data-id="appbar-more-logout"
-        >{`${user.name} abmelden (und Cache leeren)`}</MenuItem>
-        <MenuItem onClick={onClickUptime}>
-          Verfügbarkeit der Server von apflora.ch
-        </MenuItem>
-        <Version>Version: 1.105.7 vom 22.10.2024</Version>
-      </Menu>
-    </Container>
-  )
-}
-
-export default observer(AppbarMore)
+          Mehr
+        </MehrButton>
+        <Menu
+          id="appbar-more-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={closeMenu}
+        >
+          {isMobile && exporteIsActive && (
+            <MenuItem
+              onClick={onClickExporte}
+              disabled={projekteTabs.includes('exporte')}
+            >
+              Exporte
+            </MenuItem>
+          )}
+          <MenuItem
+            onClick={showDeletedDatasets}
+            disabled={deletedDatasets.length === 0}
+          >
+            gelöschte Datensätze wiederherstellen
+          </MenuItem>
+          {['apflora_manager', 'apflora_ap_writer'].includes(role) && (
+            <EkfUser closeMenu={closeMenu} />
+          )}
+          <MenuItem
+            onClick={onClickLogout}
+            data-id="appbar-more-logout"
+          >{`${user.name} abmelden (und Cache leeren)`}</MenuItem>
+          <MenuItem onClick={onClickUptime}>
+            Verfügbarkeit der Server von apflora.ch
+          </MenuItem>
+          <Version>Version: 1.105.7 vom 22.10.2024</Version>
+        </Menu>
+      </Container>
+    )
+  },
+)

@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 
 import { Select } from '../../../../../shared/Select.jsx'
 import { Error } from '../../../../../shared/Error.jsx'
-import queryAdresses from './queryAdresses.js'
+import { queryAdresses } from './queryAdresses.js'
 
 const Container = styled.div`
   padding: 0 16px;
@@ -14,7 +14,7 @@ const Container = styled.div`
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
 const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
-const EkfUser = ({ closeMenu }) => {
+export const EkfUser = ({ closeMenu }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
 
@@ -49,5 +49,3 @@ const EkfUser = ({ closeMenu }) => {
     </Container>
   )
 }
-
-export default EkfUser
