@@ -7,7 +7,7 @@ import { featureCollection, point } from '@turf/helpers'
 import { gql } from '@apollo/client'
 import flatten from 'lodash/flatten'
 
-const getNearestTpop = async ({ latLng, client, apId }) => {
+export const getNearestTpop = async ({ latLng, client, apId }) => {
   const { lat, lng } = latLng
   const myPoint = point([lat, lng])
   const { data } = await client.query({
@@ -48,5 +48,3 @@ const getNearestTpop = async ({ latLng, client, apId }) => {
   const nearestTpopFeature = nearestPoint(myPoint, tpopPoints)
   return nearestTpopFeature.properties
 }
-
-export default getNearestTpop

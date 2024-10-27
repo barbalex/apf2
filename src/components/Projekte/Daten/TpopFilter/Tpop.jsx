@@ -12,7 +12,7 @@ import { SelectCreatableGemeinde } from '../../../shared/SelectCreatableGemeinde
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover.jsx'
-//import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
+//import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
 import { constants } from '../../../../modules/constants.js'
 import { StoreContext } from '../../../../storeContext.js'
 
