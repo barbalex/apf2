@@ -2,7 +2,7 @@
 // Goal:
 // Check if tree node is in viewport
 // If not, IntoViewScroller will scroll to it
-const isElementInViewport = (el) => {
+export const isElementInViewport = (el) => {
   var rect = el.getBoundingClientRect()
 
   return (

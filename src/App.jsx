@@ -10,7 +10,7 @@ import MobxStore from './store/index.js'
 import { SnackbarProvider } from 'notistack'
 //import { onPatch } from 'mobx-state-tree'
 
-import initializeIdb from './modules/initializeIdb.js'
+import { initializeIdb } from './modules/initializeIdb.js'
 import buildClient from './client.js'
 
 // see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
