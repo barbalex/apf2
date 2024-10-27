@@ -7,7 +7,8 @@
  * - properties
  */
 import sortBy from 'lodash/sortBy'
-import xmlToJson from './xmlToJson.js'
+
+import { xmlToJson } from './xmlToJson.js'
 
 const xmlToLayersData = (xml) => {
   const obj = xmlToJson(xml)

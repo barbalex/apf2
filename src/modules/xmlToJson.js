@@ -6,7 +6,7 @@
  * - layer title
  * - properties
  */
-const xmlToJson = (xml) => {
+export const xmlToJson = (xml) => {
   // Create the return object
   let obj = {}
 
@@ -45,5 +45,3 @@ const xmlToJson = (xml) => {
 
   return obj
 }
-
-export default xmlToJson
