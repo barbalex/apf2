@@ -1,12 +1,12 @@
 import React, { Suspense, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
-import AppBar from '@mui/material/AppBar'
+import MuiAppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import { Outlet, useLocation, useParams, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
 import { Bar } from './Bar/index.jsx'
-import EkfBar from './EkfBar/index.jsx'
+import { EkfBar } from './EkfBar/index.jsx'
 import { inIframe } from '../../modules/inIframe.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { StoreContext } from '../../storeContext.js'
@@ -24,7 +24,7 @@ const Container = styled.div`
     overflow: visible !important;
   }
 `
-const StyledAppBar = styled(AppBar)`
+const StyledAppBar = styled(MuiAppBar)`
   flex-basis: 64px !important;
   flex-shrink: 0 !important;
   flex-grow: 0 !important;
@@ -39,7 +39,7 @@ const StyledToolbar = styled(Toolbar)`
   padding-right: 4px !important;
 `
 
-const AppBarComponent = () => {
+export const Component = observer(() => {
   const navigate = useNavigate()
   const { userId } = useParams()
   const { pathname, search } = useLocation()
@@ -76,6 +76,4 @@ const AppBarComponent = () => {
       </Suspense>
     </Container>
   )
-}
-
-export const Component = observer(AppBarComponent)
+})

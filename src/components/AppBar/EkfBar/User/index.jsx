@@ -13,10 +13,10 @@ import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import { useApolloClient, useQuery } from '@apollo/client'
 
-import query from './data.js'
+import { query } from './query.js'
 import { TextField } from '../../../shared/TextField.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import updateUserByIdGql from './updateUserById.js'
+import { updateUserById as updateUserByIdGql } from './updateUserById.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
@@ -50,7 +50,7 @@ const AbmeldenButton = styled(Button)`
   margin-top: 8px;
 `
 
-const User = ({ username, userOpen, toggleUserOpen }) => {
+export const User = ({ username, userOpen, toggleUserOpen }) => {
   const store = useContext(StoreContext)
   const { idb } = useContext(IdbContext)
 
@@ -294,5 +294,3 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
     </Dialog>
   )
 }
-
-export default User

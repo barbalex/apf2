@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { user } from '../../../shared/fragments.js'
 
-export default gql`
+export const updateUserById = gql`
   mutation updateUserForEkfUser(
     $id: UUID!
     $name: String

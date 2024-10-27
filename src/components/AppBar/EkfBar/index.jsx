@@ -13,7 +13,7 @@ import { useParams, useLocation } from 'react-router-dom'
 
 import { isMobilePhone } from '../../../modules/isMobilePhone.js'
 import { EkfYear } from './EkfYear.jsx'
-import User from './User/index.jsx'
+import { User } from './User/index.jsx'
 import { StoreContext } from '../../../storeContext.js'
 import { query } from './query.js'
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.js'
@@ -66,7 +66,7 @@ const StyledMdHourglassEmpty = styled(MdHourglassEmpty)`
   animation: ${spinning} 3s linear infinite;
 `
 
-const ProjekteAppBar = () => {
+export const EkfBar =observer( () => {
   const { userId, ekfId, ekfYear } = useParams()
   const { search } = useLocation()
 
@@ -203,6 +203,4 @@ const ProjekteAppBar = () => {
       </MenuDiv>
     </>
   )
-}
-
-export default observer(ProjekteAppBar)
+})
