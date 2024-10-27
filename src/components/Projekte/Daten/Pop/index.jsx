@@ -24,7 +24,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { pop } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
-import TpopMenge from './TpopMenge/index.jsx'
+import { TpopMenge } from './TpopMenge/index.jsx'
 import { History } from './History.jsx'
 
 const Container = styled.div`

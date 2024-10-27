@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { message } from '../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query messagesQuery {
     allMessages(orderBy: TIME_DESC) {
       nodes {

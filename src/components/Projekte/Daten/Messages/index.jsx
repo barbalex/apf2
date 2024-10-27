@@ -5,7 +5,7 @@ import Linkify from 'react-linkify'
 import { DateTime } from 'luxon'
 import SimpleBar from 'simplebar-react'
 
-import query from './query.js'
+import { query } from './query.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -49,7 +49,7 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-const Messages = () => {
+export const Component = () => {
   const { data, loading, error } = useQuery(query)
 
   const rows = data?.allMessages?.nodes ?? []
@@ -94,5 +94,3 @@ const Messages = () => {
     </ErrorBoundary>
   )
 }
-
-export const Component = Messages

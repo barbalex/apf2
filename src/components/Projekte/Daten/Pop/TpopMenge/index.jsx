@@ -16,7 +16,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import { useParams } from 'react-router-dom'
 
-import queryTpopMenge from './queryTpopMenge'
+import { queryTpopMenge } from './queryTpopMenge.js'
 import { CustomTooltip } from './CustomTooltip.jsx'
 import { exists } from '../../../../../modules/exists.js'
 import { Error } from '../../../../shared/Error.jsx'
@@ -64,7 +64,7 @@ const formatNumber = (tickItem) => {
   return value
 }
 
-const PopAuswertungTpopMenge = ({ height = 400 }) => {
+export const TpopMenge = ({ height = 400 }) => {
   const { apId, popId } = useParams()
 
   const { data, error, loading } = useQuery(queryTpopMenge, {
@@ -207,5 +207,3 @@ const PopAuswertungTpopMenge = ({ height = 400 }) => {
     </>
   )
 }
-
-export default PopAuswertungTpopMenge
