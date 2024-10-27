@@ -29,7 +29,7 @@ const MenuDiv = styled.div`
   flex-wrap: wrap;
 `
 
-const AbbBarComponentBar = () => {
+export const Bar = () => {
   const isMobile = isMobilePhone()
 
   const { search, pathname } = useLocation()
@@ -61,5 +61,3 @@ const AbbBarComponentBar = () => {
     </>
   )
 }
-
-export default AbbBarComponentBar

@@ -23,7 +23,7 @@ const Jahr = styled.p`
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
 const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
-const EkfYear = () => {
+export const EkfYear = () => {
   const { search } = useLocation()
   const { ekfYear, userId } = useParams()
   const navigate = useNavigate()
@@ -57,5 +57,3 @@ const EkfYear = () => {
     </Container>
   )
 }
-
-export default EkfYear

@@ -12,12 +12,12 @@ import Badge from '@mui/material/Badge'
 import { useParams, useLocation } from 'react-router-dom'
 
 import { isMobilePhone } from '../../../modules/isMobilePhone.js'
-import EkfYear from './EkfYear.jsx'
+import { EkfYear } from './EkfYear.jsx'
 import User from './User/index.jsx'
 import { StoreContext } from '../../../storeContext.js'
-import userQuery from './query.js'
-import dataByUserIdQuery from '../../Ekf/dataByUserId.js'
-import dataWithDateByUserIdQuery from '../../Ekf/dataWithDateByUserId.js'
+import { query } from './query.js'
+import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.js'
+import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.js'
 
 const SiteTitle = styled(Button)`
   display: none !important;
@@ -95,7 +95,7 @@ const ProjekteAppBar = () => {
   // if no ekfAdresseId
   // need to fetch adresse.id for this user
   // and use that instead
-  const { data: userData } = useQuery(userQuery, {
+  const { data: userData } = useQuery(query, {
     variables: { userId: userId ?? '99999999-9999-9999-9999-999999999999' },
   })
 
@@ -144,9 +144,9 @@ const ProjekteAppBar = () => {
           to={`/${search}`}
           title="Home"
         >
-          {userName
-            ? `AP Flora: EKF von ${userName}`
-            : 'AP Flora: Erfolgs-Kontrolle Freiwillige'}
+          {userName ?
+            `AP Flora: EKF von ${userName}`
+          : 'AP Flora: Erfolgs-Kontrolle Freiwillige'}
         </SiteTitle>
       )}
       <MenuDiv>
@@ -157,11 +157,9 @@ const ProjekteAppBar = () => {
                 onClick={onClickPrintAll}
                 title={`Alle ${ekfCount} EKF drucken`}
               >
-                {preparingEkfMultiprint ? (
+                {preparingEkfMultiprint ?
                   <StyledMdHourglassEmpty />
-                ) : (
-                  <MdPrint />
-                )}
+                : <MdPrint />}
               </StyledIconButton>
             </StyledBadge>
           )}

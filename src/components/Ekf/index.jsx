@@ -11,8 +11,8 @@ import EkfList from './List'
 import Tpopfreiwkontr from '../Projekte/Daten/Tpopfreiwkontr'
 import { StoreContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane'
-import dataByUserIdGql from './dataByUserId'
-import dataWithDateByUserIdGql from './dataWithDateByUserId'
+import { dataByUserId as dataByUserIdGql } from './dataByUserId.js'
+import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.js'
 import { Error } from '../shared/Error.jsx'
 
 const Container = styled.div`
@@ -113,7 +113,10 @@ const Ekf = () => {
     return (
       <>
         {ekf.map((e) => (
-          <Tpopfreiwkontr id={e.id} key={e.id} />
+          <Tpopfreiwkontr
+            id={e.id}
+            key={e.id}
+          />
         ))}
       </>
     )
@@ -121,9 +124,15 @@ const Ekf = () => {
 
   return (
     <Container>
-      <StyledSplitPane split="vertical" size="350px" minSize={100}>
+      <StyledSplitPane
+        split="vertical"
+        size="350px"
+        minSize={100}
+      >
         <EkfList ekf={ekf} />
-        {ekfId ? <Tpopfreiwkontr id={ekfId} /> : <InnerContainer />}
+        {ekfId ?
+          <Tpopfreiwkontr id={ekfId} />
+        : <InnerContainer />}
       </StyledSplitPane>
     </Container>
   )
