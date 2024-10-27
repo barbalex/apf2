@@ -9,7 +9,9 @@ import { useLocation, useParams, Navigate } from 'react-router-dom'
 import { StoreContext } from '../../storeContext.js'
 const User = lazy(() => import('../User'))
 const Messages = lazy(() => import('../Messages'))
-const Deletions = lazy(() => import('../Deletions'))
+const Deletions = lazy(async () => ({
+  default: (await import('../Deletions/index.jsx')).Deletions,
+}))
 import { inIframe } from '../../modules/inIframe.js'
 const ActiveNodeArraySetter = lazy(() => import('./ActiveNodeArraySetter'))
 const NavigateSetter = lazy(() => import('./NavigateSetter'))

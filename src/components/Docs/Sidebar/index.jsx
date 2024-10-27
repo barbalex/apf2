@@ -31,7 +31,7 @@ const MenuTitleLink = styled(Link)`
   }
 `
 
-const Sidebar = () => {
+export const Sidebar = observer(() => {
   const { search } = useLocation()
 
   const store = useContext(StoreContext)
@@ -43,12 +43,13 @@ const Sidebar = () => {
         <MenuTitleLink to={`/Dokumentation/${search}`}>
           Dokumentation
         </MenuTitleLink>
-        <Filter filter={dokuFilter} setFilter={setDokuFilter} />
+        <Filter
+          filter={dokuFilter}
+          setFilter={setDokuFilter}
+        />
       </MenuTitle>
       <MenuItems />
       <IntoViewScroller />
     </Menu>
   )
-}
-
-export default observer(Sidebar)
+})

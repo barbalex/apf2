@@ -50,7 +50,7 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-const Deletions = () => {
+export const Deletions = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const {
@@ -183,6 +183,4 @@ const Deletions = () => {
       </Dialog>
     </ErrorBoundary>
   )
-}
-
-export default observer(Deletions)
+})

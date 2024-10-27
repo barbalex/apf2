@@ -13,10 +13,10 @@ export const undelete = async ({
   const isWerte = table.toLowerCase().includes('werte')
   // 1. create new dataset
   // use one query for all werte tables
-  const queryName = isWerte
-    ? 'createWerte'
-    : `create${upperFirst(camelCase(table))}`
+  const queryName =
+    isWerte ? 'createWerte' : `create${upperFirst(camelCase(table))}`
   let mutation
+  console.log('undelete queryName:', queryName)
   try {
     mutation = await import(`./queries/${queryName}.js`).then((m) => m.default)
   } catch (error) {
@@ -27,12 +27,14 @@ export const undelete = async ({
       },
     })
   }
+  console.log('undelete', { isWerte, table, mutation })
   try {
     await client.mutate({
       mutation: isWerte ? mutation(table) : mutation,
       variables: data,
     })
   } catch (error) {
+    console.log('undelete error:', error)
     return store.enqueNotification({
       message: error.message,
       options: {
