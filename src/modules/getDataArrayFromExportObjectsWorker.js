@@ -1,6 +1,4 @@
 import GetDataArrayFromExportObjectsWorker from './getDataArrayFromExportObjects.worker.js'
 
-const getDataArrayFromExportObjectsWorker =
+export const getDataArrayFromExportObjectsWorker =
   typeof window === 'object' && new GetDataArrayFromExportObjectsWorker()
-
-export default getDataArrayFromExportObjectsWorker

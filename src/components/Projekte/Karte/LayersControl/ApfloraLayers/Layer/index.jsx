@@ -21,7 +21,7 @@ import { useParams } from 'react-router-dom'
 
 import Checkbox from '../../shared/Checkbox.jsx'
 import { Error } from '../../../../../shared/Error.jsx'
-import getBounds from '../../../../../../modules/getBounds.js'
+import { getBounds } from '../../../../../../modules/getBounds.js'
 import { StoreContext } from '../../../../../../storeContext.js'
 import query from './query.js'
 import PopIcon from './PopIcon.jsx'
@@ -143,7 +143,9 @@ const LayerComponent = ({ apfloraLayer }) => {
     layer === 'beobZugeordnetAssignPolylines' &&
     activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
   const highlightedId =
-    layer === 'pop' ? popId : layer === 'tpop' ? tpopId : beobId
+    layer === 'pop' ? popId
+    : layer === 'tpop' ? tpopId
+    : beobId
 
   const variables = {
     ap: apId ? [apId] : [],
@@ -230,37 +232,52 @@ const LayerComponent = ({ apfloraLayer }) => {
   const zoomToAllIconStyle = useMemo(
     () => ({
       color:
-        activeApfloraLayers.includes(apfloraLayer.value) && layerData.length > 0
-          ? 'black'
-          : '#e2e2e2',
+        (
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerData.length > 0
+        ) ?
+          'black'
+        : '#e2e2e2',
       fontWeight:
-        activeApfloraLayers.includes(apfloraLayer.value) && layerData.length > 0
-          ? 'bold'
-          : 'normal',
+        (
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerData.length > 0
+        ) ?
+          'bold'
+        : 'normal',
       cursor:
-        activeApfloraLayers.includes(apfloraLayer.value) && layerData.length > 0
-          ? 'pointer'
-          : 'not-allowed',
+        (
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerData.length > 0
+        ) ?
+          'pointer'
+        : 'not-allowed',
     }),
     [activeApfloraLayers, apfloraLayer, layerData],
   )
   const zoomToActiveIconStyle = useMemo(
     () => ({
       color:
-        activeApfloraLayers.includes(apfloraLayer.value) &&
-        layerDataHighlighted.length > 0
-          ? '#fbec04'
-          : '#e2e2e2',
+        (
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerDataHighlighted.length > 0
+        ) ?
+          '#fbec04'
+        : '#e2e2e2',
       fontWeight:
-        activeApfloraLayers.includes(apfloraLayer.value) &&
-        layerDataHighlighted.length > 0
-          ? 'bold'
-          : 'normal',
+        (
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerDataHighlighted.length > 0
+        ) ?
+          'bold'
+        : 'normal',
       cursor:
-        activeApfloraLayers.includes(apfloraLayer.value) &&
-        layerDataHighlighted.length > 0
-          ? 'pointer'
-          : 'not-allowed',
+        (
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerDataHighlighted.length > 0
+        ) ?
+          'pointer'
+        : 'not-allowed',
     }),
     [activeApfloraLayers, apfloraLayer, layerDataHighlighted],
   )
@@ -285,15 +302,14 @@ const LayerComponent = ({ apfloraLayer }) => {
               onClick={onClickZuordnen}
               color="inherit"
             >
-              {assigningBeob ? (
+              {assigningBeob ?
                 <StyledPauseCircleOutlineIcon
                   data-assigningispossible={assigningispossible}
                 />
-              ) : (
-                <StyledPlayCircleOutlineIcon
+              : <StyledPlayCircleOutlineIcon
                   data-assigningispossible={assigningispossible}
                 />
-              )}
+              }
             </StyledIconButton>
           </ZuordnenDiv>
         )}

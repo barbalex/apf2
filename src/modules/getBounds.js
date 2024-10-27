@@ -1,6 +1,6 @@
 import { bufferBoundsTo50m } from './bufferBoundsTo50m.js'
 
-const getBounds = (os) => {
+export const getBounds = (os) => {
   if (os.length === 0) return []
   const xKoords = os.map((p) => p.wgs84Lat)
   const yKoords = os.map((p) => p.wgs84Long)
@@ -15,5 +15,3 @@ const getBounds = (os) => {
   // if one single point: buffer
   return bufferBoundsTo50m(bounds)
 }
-
-export default getBounds

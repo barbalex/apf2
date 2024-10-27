@@ -4,8 +4,8 @@
 // see: https://github.com/guyonroche/exceljs/issues/313
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
-//import getDataArrayFromExportObjectsWorker from './getDataArrayFromExportObjectsWorker.js'
-import getDataArrayFromExportObjects from './getDataArrayFromExportObjects.js'
+//import { getDataArrayFromExportObjectsWorker } from './getDataArrayFromExportObjectsWorker.js'
+import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.js'
 
 const getXlsxBuffer = async ({ data, store }) => {
   /**
