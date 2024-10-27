@@ -9,8 +9,8 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import query from './query.js'
-import queryAeTaxonomies from './queryAeTaxonomies'
+import { query } from './query.js'
+import { queryAeTaxonomies } from './queryAeTaxonomies.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -39,7 +39,7 @@ const fieldTypes = {
   artId: 'UUID',
 }
 
-const ApArt = () => {
+export const Component = observer(() => {
   const { taxonId: id } = useParams()
 
   const store = useContext(StoreContext)
@@ -194,6 +194,4 @@ const ApArt = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export const Component = observer(ApArt)
+})
