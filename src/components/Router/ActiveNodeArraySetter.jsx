@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 import { useLocation } from 'react-router-dom'
 
 import { StoreContext } from '../../storeContext.js'
-import getActiveNodeArrayFromPathname from '../../modules/getActiveNodeArrayFromPathname.js'
+import { getActiveNodeArrayFromPathname } from '../../modules/getActiveNodeArrayFromPathname.js'
 
 const ActiveNodeArraySetter = () => {
   const store = useContext(StoreContext)

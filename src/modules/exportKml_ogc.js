@@ -1,11 +1,13 @@
 // this version is ogc-compatible and can be used for https://map.geo.admin.ch
+// seems not in use
 import fileDownload from 'js-file-download'
 import { format } from 'date-fns/format'
 import groupBy from 'lodash/groupBy'
 
-import clean from './removeKmlNogoChar.js'
+import { removeKmlNogoChar as clean } from './removeKmlNogoChar.js'
 
-const exportKml_ogc = ({ fileName, data }) => {
+// this version is ogc-compatible and can be used for https://map.geo.admin.ch
+export const exportKml_ogc = ({ fileName, data }) => {
   const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
   const dataByArt = groupBy(data, 'art')
   const kml = `<?xml version='1.0' encoding='UTF-8'?>
@@ -44,5 +46,3 @@ const exportKml_ogc = ({ fileName, data }) => {
   `
   fileDownload(kml, `${file}.kml`, 'application/vnd.google-earth.kmz')
 }
-
-export default exportKml_ogc

@@ -1,4 +1,4 @@
-const getActiveNodeArrayFromPathname = (pathnamePassed) => {
+export const getActiveNodeArrayFromPathname = (pathnamePassed) => {
   const pathname = pathnamePassed ?? window.location.pathname
 
   return (
@@ -17,5 +17,3 @@ const getActiveNodeArrayFromPathname = (pathnamePassed) => {
       })
   )
 }
-
-export default getActiveNodeArrayFromPathname
