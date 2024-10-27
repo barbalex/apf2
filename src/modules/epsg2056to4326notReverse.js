@@ -1,3 +1,4 @@
+// seems not in use
 import proj4 from 'proj4'
 proj4.defs(
   'EPSG:2056',
@@ -5,7 +6,5 @@ proj4.defs(
 )
 proj4.defs('EPSG:4326', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
-const epsg2056to4326notReverse = (x, y) =>
+export const epsg2056to4326notReverse = (x, y) =>
   proj4('EPSG:2056', 'EPSG:4326', [+x, +y])
-
-export default epsg2056to4326notReverse

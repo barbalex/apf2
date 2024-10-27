@@ -78,7 +78,7 @@ const updateBeobById = gql`
   ${tpop}
 `
 
-const createNewTpopFromBeob = async ({
+export const createNewTpopFromBeob = async ({
   pop,
   beobId,
   projId = '99999999-9999-9999-9999-999999999999',
@@ -115,9 +115,8 @@ const createNewTpopFromBeob = async ({
   const { datum, data } = beob
   const datumIsValid = isValid(new Date(datum))
   const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
-  const geomPoint = beob?.geomPoint?.geojson
-    ? JSON.parse(beob.geomPoint.geojson)
-    : null
+  const geomPoint =
+    beob?.geomPoint?.geojson ? JSON.parse(beob.geomPoint.geojson) : null
 
   // create new tpop for pop
   let tpopResult
@@ -245,5 +244,3 @@ const createNewTpopFromBeob = async ({
     ],
   })
 }
-
-export default createNewTpopFromBeob

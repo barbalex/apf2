@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { pop } from '../../components/shared/fragments.js'
 
-export default gql`
+export const createPop = gql`
   mutation createPopForCopyTo(
     $apId: UUID
     $nr: Int

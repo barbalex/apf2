@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams, useLocation } from 'react-router-dom'
 
 import { StoreContext } from '../../../storeContext.js'
-import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
+import { createNewTpopFromBeob } from '../../../modules/createNewTpopFromBeob.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Error } from '../../shared/Error.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
@@ -57,7 +57,7 @@ const TpopFromBeobPopList = ({ closeNewTpopFromBeobDialog, beobId }) => {
   return (
     <ErrorBoundary>
       <List dense>
-        {pops.map(pop => (
+        {pops.map((pop) => (
           <StyledListItemButton
             key={pop.id}
             onClick={() => {
