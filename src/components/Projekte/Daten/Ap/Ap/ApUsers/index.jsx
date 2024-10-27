@@ -4,8 +4,8 @@ import { useQuery, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 import { useParams } from 'react-router-dom'
 
-import ApUser from './ApUser'
-import NewUser from './NewUser'
+import { ApUser } from './ApUser.jsx'
+import { NewUser } from './NewUser.jsx'
 import { Label } from '../../../../../shared/Label.jsx'
 import { Error } from '../../../../../shared/Error.jsx'
 
@@ -33,7 +33,7 @@ const InfoRow = styled.li`
   margin-bottom: 0;
 `
 
-const ApUsers = () => {
+export const ApUsers = observer(() => {
   const { apId } = useParams()
 
   const { data, error, loading, refetch } = useQuery(
@@ -120,6 +120,4 @@ const ApUsers = () => {
       />
     </Container>
   )
-}
-
-export default observer(ApUsers)
+})

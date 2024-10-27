@@ -13,7 +13,7 @@ const DelIcon = styled(IconButton)`
   padding-bottom: 6px !important;
 `
 
-const ApUser = ({ user, refetch }) => {
+export const ApUser = observer(({ user, refetch }) => {
   const client = useApolloClient()
   const { enqueNotification } = useContext(StoreContext)
 
@@ -56,6 +56,4 @@ const ApUser = ({ user, refetch }) => {
       </DelIcon>
     </div>
   )
-}
-
-export default observer(ApUser)
+})

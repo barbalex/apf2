@@ -4,7 +4,7 @@ import { useQuery, useApolloClient, gql } from '@apollo/client'
 
 import { Select } from '../../../../../shared/Select.jsx'
 
-const NewUser = ({ apId, apUsers, refetch }) => {
+export const NewUser = observer(({ apId, apUsers, refetch }) => {
   const client = useApolloClient()
 
   const [error, setError] = useState(null)
@@ -13,29 +13,27 @@ const NewUser = ({ apId, apUsers, refetch }) => {
     data,
     loading,
     error: queryError,
-  } = useQuery(
-    gql`
-      query benutzerForNewUser {
-        allUsers(
-          orderBy: NAME_ASC
-          filter: { role: { in: ["apflora_ap_writer", "apflora_ap_reader"] } }
-        ) {
-          nodes {
-            id
-            name
-            role
-          }
+  } = useQuery(gql`
+    query benutzerForNewUser {
+      allUsers(
+        orderBy: NAME_ASC
+        filter: { role: { in: ["apflora_ap_writer", "apflora_ap_reader"] } }
+      ) {
+        nodes {
+          id
+          name
+          role
         }
       }
-    `,
-  )
-  const userData = data ? data?.allUsers?.nodes ?? [] : []
+    }
+  `)
+  const userData = data ? (data?.allUsers?.nodes ?? []) : []
   const apUserIds = apUsers.map((u) => u?.userByUserName?.id)
   const options = userData
     .filter((d) => !apUserIds.includes(d.id))
     .map((d) => ({
-      value: d.name,
-      label: `${d.name} (${d.role.replace('apflora_', '')})`,
+      value: d.name ?? '(kein Name)',
+      label: `${d.name ?? '(kein Name)'} (${d.role.replace('apflora_', '')})`,
     }))
 
   const saveToDb = useCallback(
@@ -68,6 +66,8 @@ const NewUser = ({ apId, apUsers, refetch }) => {
     if (queryError) setError(queryError.message)
   }, [queryError])
 
+  console.log('NewUser', { apUsers, userData, options })
+
   return (
     <Select
       key={apUsers.length}
@@ -80,6 +80,4 @@ const NewUser = ({ apId, apUsers, refetch }) => {
       saveToDb={saveToDb}
     />
   )
-}
-
-export default observer(NewUser)
+})
