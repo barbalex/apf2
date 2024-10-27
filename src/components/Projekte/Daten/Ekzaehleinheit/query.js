@@ -5,7 +5,7 @@ import {
   tpopkontrzaehlEinheitWerte,
 } from '../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query ekzaehleinheitByIdQuery($id: UUID!) {
     ekzaehleinheitById(id: $id) {
       ...EkzaehleinheitFields

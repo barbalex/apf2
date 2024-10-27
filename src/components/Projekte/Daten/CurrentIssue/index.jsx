@@ -35,7 +35,7 @@ const query = gql`
   ${currentIssueFragment}
 `
 
-const CurrentIssue = () => {
+export const Component = () => {
   const { issueId } = useParams()
 
   const { data, loading, error } = useQuery(query, {
@@ -75,5 +75,3 @@ const CurrentIssue = () => {
     </ErrorBoundary>
   )
 }
-
-export const Component = CurrentIssue

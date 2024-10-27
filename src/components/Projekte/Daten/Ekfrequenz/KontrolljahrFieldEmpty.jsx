@@ -12,7 +12,7 @@ const StyledInput = styled(Input)`
   }
 `
 
-const KontrolljahrFieldEmpty = ({
+export const KontrolljahrFieldEmpty = ({
   saveToDb,
   name = 'kontrolljahre',
   kontrolljahre,
@@ -45,5 +45,3 @@ const KontrolljahrFieldEmpty = ({
     />
   )
 }
-
-export default KontrolljahrFieldEmpty

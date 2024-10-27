@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const queryEkAbrechnungstypWertes = gql`
   query EkAbrechnungstypWertesQueryForEkfrequenz {
     allEkAbrechnungstypWertes(
       orderBy: SORT_ASC

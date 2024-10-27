@@ -13,44 +13,41 @@ const StyledInput = styled(Input)`
   }
 `
 
-const KontrolljahrField = ({
-  saveToDb,
-  name = 'kontrolljahre',
-  index,
-  kontrolljahre,
-  refetch,
-}) => {
-  const [value, setValue] = useState(kontrolljahre[index])
-  useEffect(() => {
-    setValue(kontrolljahre[index])
-  }, [index, kontrolljahre])
+export const KontrolljahrField = observer(
+  ({ saveToDb, name = 'kontrolljahre', index, kontrolljahre, refetch }) => {
+    const [value, setValue] = useState(kontrolljahre[index])
+    useEffect(() => {
+      setValue(kontrolljahre[index])
+    }, [index, kontrolljahre])
 
-  const onChange = useCallback((event) => {
-    setValue(ifIsNumericAsNumber(event.target.value))
-  }, [])
+    const onChange = useCallback((event) => {
+      setValue(ifIsNumericAsNumber(event.target.value))
+    }, [])
 
-  const onBlur = useCallback(async () => {
-    const newVal = [...kontrolljahre]
-    if (value || value === 0) {
-      newVal[index] = value
-    } else {
-      newVal.splice(index, 1)
-    }
-    await saveToDb({ target: { name, value: newVal } })
-    refetch()
-  }, [kontrolljahre, value, saveToDb, name, refetch, index])
+    const onBlur = useCallback(async () => {
+      const newVal = [...kontrolljahre]
+      if (value || value === 0) {
+        newVal[index] = value
+      } else {
+        newVal.splice(index, 1)
+      }
+      await saveToDb({ target: { name, value: newVal } })
+      refetch()
+    }, [kontrolljahre, value, saveToDb, name, refetch, index])
 
-  const onKeyDown = useCallback((e) => e.key === 'Enter' && onBlur(), [onBlur])
+    const onKeyDown = useCallback(
+      (e) => e.key === 'Enter' && onBlur(),
+      [onBlur],
+    )
 
-  return (
-    <StyledInput
-      value={value}
-      type="number"
-      onChange={onChange}
-      onBlur={onBlur}
-      onKeyDown={onKeyDown}
-    />
-  )
-}
-
-export default observer(KontrolljahrField)
+    return (
+      <StyledInput
+        value={value}
+        type="number"
+        onChange={onChange}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
+      />
+    )
+  },
+)
