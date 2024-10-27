@@ -8,7 +8,9 @@ import { useLocation, useParams, Navigate } from 'react-router-dom'
 
 import { StoreContext } from '../../storeContext.js'
 const User = lazy(() => import('../User'))
-const Messages = lazy(() => import('../Messages'))
+const Messages = lazy(async () => ({
+  default: (await import('../Messages/index.jsx')).Messages,
+}))
 const Deletions = lazy(async () => ({
   default: (await import('../Deletions/index.jsx')).Deletions,
 }))

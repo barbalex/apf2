@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
-import Item from './Item.jsx'
+import { Item } from './Item.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -22,7 +22,7 @@ const StyledSimplebar = styled(SimpleBar)`
   overflow-x: hidden;
 `
 
-const EkfList = ({ ekf }) => {
+export const EkfList = observer(({ ekf }) => {
   const projektCount = uniq(ekf.map((e) => e.projekt)).length
   const itemHeight = projektCount > 1 ? 110 : 91
 
@@ -41,12 +41,14 @@ const EkfList = ({ ekf }) => {
           width={350}
         >
           {({ index, style }) => (
-            <Item projektCount={projektCount} style={style} row={ekf[index]} />
+            <Item
+              projektCount={projektCount}
+              style={style}
+              row={ekf[index]}
+            />
           )}
         </List>
       </StyledSimplebar>
     </Container>
   )
-}
-
-export default observer(EkfList)
+})

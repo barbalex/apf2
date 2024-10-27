@@ -31,7 +31,7 @@ const InnerContainer = styled.div`
   }
 `
 
-const EkfList = ({ projektCount, style, row }) => {
+export const Item = ({ projektCount, style, row }) => {
   const { search } = useLocation()
   const { ekfId, userId, ekfYear } = useParams()
   const navigate = useNavigate()
@@ -59,5 +59,3 @@ const EkfList = ({ projektCount, style, row }) => {
     </OuterContainer>
   )
 }
-
-export default EkfList

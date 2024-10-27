@@ -6,12 +6,12 @@ import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import query from './data.js'
-import createUsermessage from './createUsermessage.js'
+import { query } from './query.js'
+import { createUsermessage } from './createUsermessage.js'
 import { StoreContext } from '../../storeContext.js'
 import { Error } from '../shared/Error.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import Messages from './Messages/index.jsx'
+import { MessagesList } from './Messages/index.jsx'
 
 const StyledDialog = styled(Dialog)`
   display: flex;
@@ -32,7 +32,7 @@ const AllOkButton = styled(Button)`
   right: 25px;
 `
 
-const UserMessages = () => {
+export const Messages = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { user } = store
@@ -53,7 +53,7 @@ const UserMessages = () => {
   const userNameExists = userNames.includes(userName)
   // DANGER: if no userName or non-existing, results are returned!
   const allMessages =
-    userName && userNameExists ? data?.allMessages?.nodes ?? [] : []
+    userName && userNameExists ? (data?.allMessages?.nodes ?? []) : []
   const unreadMessages = allMessages.filter(
     (m) => (m?.usermessagesByMessageId?.totalCount ?? 0) === 0,
   )
@@ -80,14 +80,16 @@ const UserMessages = () => {
       >
         <TitleRow>
           <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
-          <AllOkButton onClick={onClickReadAll} color="inherit">
+          <AllOkButton
+            onClick={onClickReadAll}
+            color="inherit"
+          >
             alle o.k.
           </AllOkButton>
         </TitleRow>
-        <Messages unreadMessages={unreadMessages} />
+        <MessagesList unreadMessages={unreadMessages} />
       </StyledDialog>
     </ErrorBoundary>
   )
-}
-
-export default observer(UserMessages)
+})
+export default Messages

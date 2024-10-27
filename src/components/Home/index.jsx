@@ -103,7 +103,7 @@ const CardTitle = styled.h3`
   margin-top: 4px;
 `
 
-const Home = () => (
+export const Component = () => (
   <OuterContainer>
     <picture>
       <source
@@ -118,7 +118,11 @@ const Home = () => (
       />
     </picture>
     <ScrollContainer>
-      <PageTitle align="center" variant="h6" color="inherit">
+      <PageTitle
+        align="center"
+        variant="h6"
+        color="inherit"
+      >
         Bedrohte Pflanzenarten fördern
       </PageTitle>
       <CardContainer>
@@ -183,7 +187,11 @@ const Home = () => (
           <CardTitle>Freiwillige</CardTitle>
           unterstützen die Artverantwortlichen bei der Kontrolle von
           Populationen und der{' '}
-          <a href="//vermehrung.ch" target="_blank" rel="noopener noreferrer">
+          <a
+            href="//vermehrung.ch"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Vermehrung von Aktionsplanarten
           </a>
           .
@@ -191,7 +199,11 @@ const Home = () => (
         <Card>
           <CardTitle>Organisation des Projektes</CardTitle>
           durch&nbsp;
-          <a href="//toposmm.ch" target="_blank" rel="noopener noreferrer">
+          <a
+            href="//toposmm.ch"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             topos
           </a>
           &nbsp;im Auftrag der&nbsp;
@@ -219,5 +231,3 @@ const Home = () => (
     </ScrollContainer>
   </OuterContainer>
 )
-
-export const Component = Home

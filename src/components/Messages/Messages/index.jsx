@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import Messages from './Messages.jsx'
+import { Messages } from './Messages.jsx'
 
 const ScrollContainer = styled.div`
   min-width: 80% !important;
@@ -10,12 +10,10 @@ const ScrollContainer = styled.div`
   scrollbar-width: thin;
 `
 
-const UserMessages = ({ unreadMessages }) => {
+export const MessagesList = ({ unreadMessages }) => {
   return (
     <ScrollContainer>
       <Messages unreadMessages={unreadMessages} />
     </ScrollContainer>
   )
 }
-
-export default UserMessages

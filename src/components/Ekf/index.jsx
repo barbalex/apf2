@@ -7,7 +7,7 @@ import sortBy from 'lodash/sortBy'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
-import EkfList from './List'
+import { EkfList } from './List/index.jsx'
 import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.jsx'
 import { StoreContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane'

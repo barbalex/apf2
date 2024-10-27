@@ -6,7 +6,7 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { DateTime } from 'luxon'
 
-import createUsermessage from '../createUsermessage.js'
+import { createUsermessage } from '../createUsermessage.js'
 import { StoreContext } from '../../../storeContext.js'
 
 const Container = styled.div`
@@ -30,7 +30,7 @@ const OkButton = styled(Button)`
   right: 12px;
 `
 
-const UserMessages = ({ unreadMessages }) => {
+export const Messages = observer(({ unreadMessages }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { user } = store
@@ -54,11 +54,17 @@ const UserMessages = ({ unreadMessages }) => {
         const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
 
         return (
-          <MessageRow key={m.id} paddBottom={paddBottom}>
+          <MessageRow
+            key={m.id}
+            paddBottom={paddBottom}
+          >
             <Linkify properties={{ target: '_blank' }}>
               <MessageDiv>{`${date}: ${m.message}`}</MessageDiv>
             </Linkify>
-            <OkButton onClick={() => onClickRead(m)} color="inherit">
+            <OkButton
+              onClick={() => onClickRead(m)}
+              color="inherit"
+            >
               o.k.
             </OkButton>
           </MessageRow>
@@ -66,6 +72,4 @@ const UserMessages = ({ unreadMessages }) => {
       })}
     </Container>
   )
-}
-
-export default observer(UserMessages)
+})
