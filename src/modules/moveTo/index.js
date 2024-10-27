@@ -8,7 +8,7 @@ import { updateTpopmassnById } from './updateTpopmassnById.js'
 import { updateTpopById } from './updateTpopById.js'
 import { updatePopById } from './updatePopById.js'
 
-const moveTo = async ({ id: newParentId, store, client }) => {
+export const moveTo = async ({ id: newParentId, store, client }) => {
   const { enqueNotification, moving, setMoving } = store
   let { table } = moving
   const { id } = moving
@@ -76,5 +76,3 @@ const moveTo = async ({ id: newParentId, store, client }) => {
     label: null,
   })
 }
-
-export default moveTo

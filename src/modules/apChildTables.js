@@ -1,4 +1,5 @@
-export default [
+// seems not in use
+export const apChildTables = [
   'popber',
   'popmassnber',
   'apart',

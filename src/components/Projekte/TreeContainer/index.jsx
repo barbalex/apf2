@@ -112,9 +112,9 @@ const CmTpopmassnber = lazy(() => import('./contextmenu/Tpopmassnber'))
 const CmTpopmassnFolder = lazy(() => import('./contextmenu/TpopmassnFolder'))
 const CmTpopmassn = lazy(() => import('./contextmenu/Tpopmassn'))
 const DeleteDatasetModal = lazy(() => import('./DeleteDatasetModal'))
-import copyBiotopTo from '../../../modules/copyBiotopTo'
-import moveTo from '../../../modules/moveTo'
-import {copyTo} from '../../../modules/copyTo'
+import { copyBiotopTo } from '../../../modules/copyBiotopTo.js'
+import { moveTo } from '../../../modules/moveTo.js'
+import { copyTo } from '../../../modules/copyTo'
 import createNewPopFromBeob from '../../../modules/createNewPopFromBeob'
 import { copyBeobZugeordnetKoordToTpop } from '../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
 import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
