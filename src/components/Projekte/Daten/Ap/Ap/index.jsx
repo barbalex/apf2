@@ -66,7 +66,7 @@ const fieldTypes = {
   projId: 'UUID',
 }
 
-const ApAp = () => {
+export const ApAp = observer(() => {
   const { apId } = useParams()
 
   const client = useApolloClient()
@@ -280,6 +280,4 @@ const ApAp = () => {
       </FormContainer>
     </SimpleBar>
   )
-}
-
-export default observer(ApAp)
+})

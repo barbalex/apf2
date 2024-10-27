@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const query = gql`
   query popDataForPopStatus($apId: UUID!, $year: Int!) {
     # function: pop_nach_status_for_jber
     popNachStatusForJber(apid: $apId, year: $year) {

@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useParams } from 'react-router-dom'
 
-import Ap from './Ap'
+import { ApAp } from './Ap/index.jsx'
 import { Auswertung } from './Auswertung/index.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { Files } from '../../../shared/Files/index.jsx'
@@ -65,7 +65,7 @@ export const Component = () => {
           />
         </Tabs>
         <TabContent>
-          {tab === 'ap' && <Ap />}
+          {tab === 'ap' && <ApAp />}
           {tab === 'auswertung' && <Auswertung />}
           {tab === 'dateien' && (
             <Files

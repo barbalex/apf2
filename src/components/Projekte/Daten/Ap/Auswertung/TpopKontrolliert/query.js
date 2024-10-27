@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const query = gql`
   query apAuswertungTpopKontrolliert($id: UUID!, $year: Int!) {
     # function: tpop_kontrolliert_for_jber
     tpopKontrolliertForJber(
