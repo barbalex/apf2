@@ -10,7 +10,7 @@ import sortBy from 'lodash/sortBy'
 
 import { xmlToJson } from './xmlToJson.js'
 
-const xmlToLayersData = (xml) => {
+export const xmlToLayersData = (xml) => {
   const obj = xmlToJson(xml)
 
   // extract layers

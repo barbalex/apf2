@@ -11,7 +11,7 @@ import axios from 'redaxios'
 
 import { StoreContext } from '../../../storeContext.js'
 import Popup from './layers/Popup.jsx'
-import xmlToLayersData from '../../../modules/xmlToLayersData.js'
+import { xmlToLayersData } from '../../../modules/xmlToLayersData.js'
 
 const ClickListener = () => {
   const { apId } = useParams()
@@ -157,27 +157,17 @@ const ClickListener = () => {
     if (activeOverlays.includes('Markierungen')) {
       let markierungenData
       const radius =
-        zoom > 19
-          ? 1
-          : zoom === 19
-            ? 2
-            : zoom === 18
-              ? 3
-              : zoom === 17
-                ? 6
-                : zoom === 16
-                  ? 12
-                  : zoom === 15
-                    ? 20
-                    : zoom === 14
-                      ? 50
-                      : zoom > 12
-                        ? 100
-                        : zoom > 10
-                          ? 300
-                          : zoom > 8
-                            ? 800
-                            : 1200
+        zoom > 19 ? 1
+        : zoom === 19 ? 2
+        : zoom === 18 ? 3
+        : zoom === 17 ? 6
+        : zoom === 16 ? 12
+        : zoom === 15 ? 20
+        : zoom === 14 ? 50
+        : zoom > 12 ? 100
+        : zoom > 10 ? 300
+        : zoom > 8 ? 800
+        : 1200
       try {
         const coordinates = [lng, lat]
         const options = { steps: 8, units: 'meters' }
@@ -444,7 +434,10 @@ const ClickListener = () => {
     if (!layersData.length) return
 
     const popupContent = ReactDOMServer.renderToString(
-      <Popup layersData={layersData} mapSize={map.getSize()} />,
+      <Popup
+        layersData={layersData}
+        mapSize={map.getSize()}
+      />,
     )
     L.popup().setLatLng(event.latlng).setContent(popupContent).openOn(map)
   })
