@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { ApberForAp } from '../ApberForAp/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-const ApberForYear = ({ jahr, data, jberData }) => {
+export const ApberForAps = observer(({ jahr, data, jberData }) => {
   const aps = (data?.allAps?.nodes ?? []).filter(
     (ap) => (ap?.apbersByApId?.totalCount ?? 0) > 0,
   )
@@ -26,6 +26,4 @@ const ApberForYear = ({ jahr, data, jberData }) => {
       ))}
     </ErrorBoundary>
   )
-}
-
-export default observer(ApberForYear)
+})

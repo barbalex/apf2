@@ -129,7 +129,7 @@ const TotalDiffColumn = styled.div`
   }
 `
 
-const AktPopList = ({ year }) => {
+export const AktPopList = ({ year }) => {
   const { projId = '99999999-9999-9999-9999-999999999999' } = useParams()
 
   const client = useApolloClient()
@@ -276,5 +276,3 @@ const AktPopList = ({ year }) => {
     </ErrorBoundary>
   )
 }
-
-export default AktPopList

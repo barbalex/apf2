@@ -25,7 +25,7 @@ const CmAp = lazy(() => import('./contextmenu/Ap'))
 const CmUserFolder = lazy(() => import('./contextmenu/UserFolder'))
 const CmUser = lazy(() => import('./contextmenu/User'))
 const CmAdresseFolder = lazy(() => import('./contextmenu/AdresseFolder'))
-const CmAdresse = lazy(() => import('./contextmenu/Adresse'))
+const CmAdresse = lazy(() => import('./contextmenu/Adresse.jsx'))
 const CmTpopApberrelevantGrundWerteFolder = lazy(
   () => import('./contextmenu/TpopApberrelevantGrundWerteFolder'),
 )

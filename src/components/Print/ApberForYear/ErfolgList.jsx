@@ -74,28 +74,36 @@ const ErfolgNicht = styled(Cell)`
   grid-column: 2 / span 1;
   text-align: center;
   background-color: ${(props) =>
-    props.val ? 'red' : props.odd ? 'rgba(0,0,0,0.03)' : 'unset'};
+    props.val ? 'red'
+    : props.odd ? 'rgba(0,0,0,0.03)'
+    : 'unset'};
   font-weight: 600;
 `
 const ErfolgWenig = styled(Cell)`
   grid-column: 3 / span 1;
   text-align: center;
   background-color: ${(props) =>
-    props.val ? 'orange' : props.odd ? 'rgba(0,0,0,0.03)' : 'unset'};
+    props.val ? 'orange'
+    : props.odd ? 'rgba(0,0,0,0.03)'
+    : 'unset'};
   font-weight: 600;
 `
 const ErfolgMaessig = styled(Cell)`
   grid-column: 4 / span 1;
   text-align: center;
   background-color: ${(props) =>
-    props.val ? 'yellow' : props.odd ? 'rgba(0,0,0,0.03)' : 'unset'};
+    props.val ? 'yellow'
+    : props.odd ? 'rgba(0,0,0,0.03)'
+    : 'unset'};
   font-weight: 600;
 `
 const ErfolgGut = styled(Cell)`
   grid-column: 5 / span 1;
   text-align: center;
   background-color: ${(props) =>
-    props.val ? '#00f6ff' : props.odd ? 'rgba(0,0,0,0.03)' : 'unset'};
+    props.val ? '#00f6ff'
+    : props.odd ? 'rgba(0,0,0,0.03)'
+    : 'unset'};
   font-weight: 600;
 `
 const ErfolgSehr = styled(Cell)`
@@ -103,7 +111,9 @@ const ErfolgSehr = styled(Cell)`
   text-align: center;
   font-weight: 600;
   background-color: ${(props) =>
-    props.val ? '#00ff00' : props.odd ? 'rgba(0,0,0,0.03)' : 'unset'};
+    props.val ? '#00ff00'
+    : props.odd ? 'rgba(0,0,0,0.03)'
+    : 'unset'};
 `
 const ErfolgVeraenderung = styled(Cell)`
   grid-column: 7 / span 1;
@@ -115,7 +125,9 @@ const ErfolgUnsicher = styled(Cell)`
   grid-column: 8 / span 1;
   text-align: center;
   background-color: ${(props) =>
-    props.val ? '#afafaf' : props.odd ? 'rgba(0,0,0,0.03)' : 'unset'};
+    props.val ? '#afafaf'
+    : props.odd ? 'rgba(0,0,0,0.03)'
+    : 'unset'};
   font-weight: 600;
 `
 const ErfolgNichtBeurteilt = styled(Cell)`
@@ -218,27 +230,23 @@ const ErfolgUnsicherTitle = styled(ErfolgTitle)`
   background-color: #afafaf;
 `
 
-const ErfolgList = ({ jahr, data }) => {
+export const ErfolgList = ({ jahr, data }) => {
   const nodes = data?.jberAbc?.nodes ?? []
   const apRows = nodes.map((ap) => {
     const veraenderung =
-      ap.erfolg === 6 || ap.erfolgVorjahr === 6
-        ? ''
-        : ap.erfolg === null || ap.erfolgVorjahr === null
-        ? ''
-        : ap.erfolg - ap.erfolgVorjahr === 0
-        ? ''
-        : ap.erfolg - ap.erfolgVorjahr > 0
-        ? '―'
-        : '╋'
+      ap.erfolg === 6 || ap.erfolgVorjahr === 6 ? ''
+      : ap.erfolg === null || ap.erfolgVorjahr === null ? ''
+      : ap.erfolg - ap.erfolgVorjahr === 0 ? ''
+      : ap.erfolg - ap.erfolgVorjahr > 0 ? '―'
+      : '╋'
     // Problem: in print some artnames are very long
     // this pushes columns to the right, off of the print
     // Seems that overflow/ellipis is not respected
     // so need to shorten names
     const artname =
-      ap.artname?.length > 82
-        ? `${ap.artname?.substring?.(0, 82)}...`
-        : ap.artname ?? ''
+      ap.artname?.length > 82 ?
+        `${ap.artname?.substring?.(0, 82)}...`
+      : (ap.artname ?? '')
 
     return {
       //ap: ap.artname,
@@ -304,34 +312,61 @@ const ErfolgList = ({ jahr, data }) => {
             return (
               <Fragment key={row.ap}>
                 <Ap odd={odd}>{row.ap}</Ap>
-                <ErfolgNicht val={!!row.erfolgNicht} odd={odd}>
+                <ErfolgNicht
+                  val={!!row.erfolgNicht}
+                  odd={odd}
+                >
                   {row.erfolgNicht}
                 </ErfolgNicht>
-                <ErfolgWenig val={!!row.erfolgWenig} odd={odd}>
+                <ErfolgWenig
+                  val={!!row.erfolgWenig}
+                  odd={odd}
+                >
                   {row.erfolgWenig}
                 </ErfolgWenig>
-                <ErfolgMaessig val={!!row.erfolgMaessig} odd={odd}>
+                <ErfolgMaessig
+                  val={!!row.erfolgMaessig}
+                  odd={odd}
+                >
                   {row.erfolgMaessig}
                 </ErfolgMaessig>
-                <ErfolgGut val={!!row.erfolgGut} odd={odd}>
+                <ErfolgGut
+                  val={!!row.erfolgGut}
+                  odd={odd}
+                >
                   {row.erfolgGut}
                 </ErfolgGut>
-                <ErfolgSehr val={!!row.erfolgSehr} odd={odd}>
+                <ErfolgSehr
+                  val={!!row.erfolgSehr}
+                  odd={odd}
+                >
                   {row.erfolgSehr}
                 </ErfolgSehr>
                 <ErfolgVeraenderung odd={odd}>
                   {row.veraenderung}
                 </ErfolgVeraenderung>
-                <ErfolgUnsicher val={!!row.erfolgUnsicher} odd={odd}>
+                <ErfolgUnsicher
+                  val={!!row.erfolgUnsicher}
+                  odd={odd}
+                >
                   {row.erfolgUnsicher}
                 </ErfolgUnsicher>
-                <ErfolgNichtBeurteilt val={!!row.nichtBeurteilt} odd={odd}>
+                <ErfolgNichtBeurteilt
+                  val={!!row.nichtBeurteilt}
+                  odd={odd}
+                >
                   {row.nichtBeurteilt}
                 </ErfolgNichtBeurteilt>
-                <KeineMassnahme val={!!row.keineMassnahme} odd={odd}>
+                <KeineMassnahme
+                  val={!!row.keineMassnahme}
+                  odd={odd}
+                >
                   {row.keineMassnahme}
                 </KeineMassnahme>
-                <ApExists val={!!row.apExists} odd={odd}>
+                <ApExists
+                  val={!!row.apExists}
+                  odd={odd}
+                >
                   {row.apExists}
                 </ApExists>
               </Fragment>
@@ -342,5 +377,3 @@ const ErfolgList = ({ jahr, data }) => {
     </ErrorBoundary>
   )
 }
-
-export default ErfolgList

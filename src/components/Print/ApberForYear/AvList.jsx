@@ -43,7 +43,7 @@ const Title = styled.p`
   margin-bottom: 4px;
 `
 
-const AvList = ({ data }) => {
+export const AvList = ({ data }) => {
   const nodes = data?.jberAbc?.nodes ?? []
   const avGrouped = groupBy(
     nodes.map((ap) => ({
@@ -80,5 +80,3 @@ const AvList = ({ data }) => {
     </ErrorBoundary>
   )
 }
-
-export default AvList

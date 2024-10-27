@@ -2,8 +2,8 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
-import Row from '../../../Row'
-import AdresseNodes from './Adresse'
+import Row from '../../../Row.jsx'
+import AdresseNodes from './Adresse.jsx'
 
 const AdressesFolder = ({ count, isLoading }) => {
   const store = useContext(StoreContext)
