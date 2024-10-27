@@ -3,7 +3,7 @@ import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
 import styled from '@emotion/styled'
 
-import MenuItem from './MenuItem.jsx'
+import { MenuItem } from './MenuItem.jsx'
 import { StoreContext } from '../../../storeContext.js'
 
 // don't know why but divider is too thick,
@@ -156,7 +156,7 @@ const nodes = [
   },
 ]
 
-const MenuItems = () => {
+export const MenuItems = () => {
   const { dokuFilter } = useContext(StoreContext)
   const nodesFiltered = nodes.filter(
     (node) => node.title?.toLowerCase?.()?.includes?.(dokuFilter) ?? true,
@@ -166,10 +166,11 @@ const MenuItems = () => {
     <List component="nav">
       <StyledDivider />
       {nodesFiltered.map((node) => (
-        <MenuItem node={node} key={node?.slug} />
+        <MenuItem
+          node={node}
+          key={node?.slug}
+        />
       ))}
     </List>
   )
 }
-
-export default MenuItems

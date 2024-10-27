@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-const MenuItem = ({ node }) => {
+export const MenuItem = ({ node }) => {
   const { pathname, search } = useLocation()
   const navigate = useNavigate()
 
@@ -31,5 +31,3 @@ const MenuItem = ({ node }) => {
     </>
   )
 }
-
-export default MenuItem

@@ -4,9 +4,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../storeContext.js'
-import MenuItems from './MenuItems.jsx'
-import Filter from './Filter.jsx'
-import IntoViewScroller from './IntoViewScroller.jsx'
+import { MenuItems } from './MenuItems.jsx'
+import { Filter } from './Filter.jsx'
+import { IntoViewScroller } from './IntoViewScroller.jsx'
 
 const Menu = styled.div`
   width: 25%;

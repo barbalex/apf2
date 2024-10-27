@@ -22,7 +22,7 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   font-size: 1.5rem;
 `
 
-const Filter = ({ filter, setFilter }) => {
+export const Filter = ({ filter, setFilter }) => {
   const onChange = useCallback((e) => setFilter(e.target.value), [setFilter])
   const onClickEmptyFilter = useCallback(() => setFilter(''), [setFilter])
 
@@ -53,4 +53,3 @@ const Filter = ({ filter, setFilter }) => {
   )
 }
 
-export default Filter

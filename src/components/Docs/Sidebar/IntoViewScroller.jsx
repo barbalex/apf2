@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 
 import { isElementInViewport } from '../../../modules/isElementInViewport.js'
 
-const IntoViewScroller = () => {
+export const IntoViewScroller = () => {
   const { pathname } = useLocation()
   const slug = pathname.split('/')[2]
 
@@ -30,5 +30,3 @@ const IntoViewScroller = () => {
 
   return null
 }
-
-export default IntoViewScroller
