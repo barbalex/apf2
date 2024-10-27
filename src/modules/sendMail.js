@@ -1,5 +1,4 @@
-// seems not in use
-export const sendEmail = ({ to, subject, body, cc }) => {
+export const sendMail = ({ to, subject, body, cc }) => {
   const link = `mailto:${to}${cc ? `?cc=${cc}` : '?'}${
     subject ? `&subject=${subject}` : ''
   }${body ? `&body=${encodeURIComponent(body)}` : ''}`

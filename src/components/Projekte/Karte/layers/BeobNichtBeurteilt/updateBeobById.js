@@ -6,7 +6,7 @@ import {
   popStatusWerte,
 } from '../../../../shared/fragments.js'
 
-export default gql`
+export const updateBeobById = gql`
   mutation updateBeobForKarteBeobNichtBeurteilt($id: UUID!, $tpopId: UUID) {
     updateBeobById(
       input: { id: $id, beobPatch: { id: $id, tpopId: $tpopId } }

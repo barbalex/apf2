@@ -2,9 +2,16 @@ import isEqual from 'lodash/isEqual'
 import { gql } from '@apollo/client'
 import { getSnapshot } from 'mobx-state-tree'
 
-import updateBeobByIdGql from './updateBeobById'
+import { updateBeobById } from './updateBeobById.js'
 
-const saveTpopIdToDb = async ({ value, id, type, client, store, search }) => {
+export const saveTpopIdToDb = async ({
+  value,
+  id,
+  type,
+  client,
+  store,
+  search,
+}) => {
   const variables = {
     id,
     tpopId: value,
@@ -13,7 +20,7 @@ const saveTpopIdToDb = async ({ value, id, type, client, store, search }) => {
   // if value, set nichtZuordnen false
   if (value) variables.nichtZuordnen = false
   await client.mutate({
-    mutation: updateBeobByIdGql,
+    mutation: updateBeobById,
     variables,
   })
 
@@ -232,5 +239,3 @@ const saveTpopIdToDb = async ({ value, id, type, client, store, search }) => {
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
 }
-
-export default saveTpopIdToDb

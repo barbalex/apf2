@@ -1,8 +1,8 @@
 import isEqual from 'lodash/isEqual'
 
-import updateBeobByIdGql from './updateBeobById'
+import { updateBeobById } from './updateBeobById.js'
 
-const saveNichtZuordnenToDb = async ({
+export const saveNichtZuordnenToDb = async ({
   value,
   id,
   refetch: refetchPassed,
@@ -17,7 +17,7 @@ const saveNichtZuordnenToDb = async ({
   // if true, empty tpopId
   if (value) variables.tpopId = null
   await client.mutate({
-    mutation: updateBeobByIdGql,
+    mutation: updateBeobById,
     variables,
   })
   store.queryClient.invalidateQueries({
@@ -30,8 +30,9 @@ const saveNichtZuordnenToDb = async ({
   const { activeNodeArray, openNodes, addOpenNodes } = store.tree
 
   let newActiveNodeArray = [...activeNodeArray]
-  newActiveNodeArray[4] = value
-    ? 'nicht-zuzuordnende-Beobachtungen'
+  newActiveNodeArray[4] =
+    value ?
+      'nicht-zuzuordnende-Beobachtungen'
     : 'nicht-beurteilte-Beobachtungen'
   newActiveNodeArray[5] = id
   newActiveNodeArray = newActiveNodeArray.slice(0, 6)
@@ -48,5 +49,3 @@ const saveNichtZuordnenToDb = async ({
   store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
   if (refetchPassed) refetchPassed()
 }
-
-export default saveNichtZuordnenToDb

@@ -13,7 +13,7 @@ import { beobIconString } from './beobIconString.js'
 import { beobHighlightedIconString } from './beobHighlightedIconString.js'
 import { getNearestTpop } from '../../../../../modules/getNearestTpop.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
-import updateBeobByIdGql from './updateBeobById.js'
+import { updateBeobById } from './updateBeobById.js'
 import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
 import { isMobilePhone } from '../../../../../modules/isMobilePhone.js'
 import Data from '../BeobData/index.jsx'
@@ -84,7 +84,7 @@ const BeobZugeordnetMarker = ({ beob }) => {
       ]
       navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
       await client.mutate({
-        mutation: updateBeobByIdGql,
+        mutation: updateBeobById,
         variables: {
           id: beob.id,
           tpopId: nearestTpop.id,

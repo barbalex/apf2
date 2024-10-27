@@ -7,7 +7,7 @@ import {
   popStatusWerte,
 } from '../../../shared/fragments.js'
 
-export default gql`
+export const updateBeobById = gql`
   mutation updateBeobForBeobzuordnung(
     $id: UUID!
     $idField: String
@@ -47,7 +47,7 @@ export default gql`
     ) {
       beob {
         ...BeobFields
-        aeTaxonomyByArtId { 
+        aeTaxonomyByArtId {
           ...AeTaxonomiesFields
           apByArtId {
             id

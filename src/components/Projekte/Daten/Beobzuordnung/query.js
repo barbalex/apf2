@@ -7,7 +7,7 @@ import {
   popStatusWerte,
 } from '../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query beobByIdQueryForZuordnung($id: UUID!, $apId: UUID!) {
     apById(id: $apId) {
       id
