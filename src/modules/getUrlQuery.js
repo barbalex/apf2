@@ -1,7 +1,8 @@
+// seems not in use
 import isString from 'lodash/isString'
 import queryString from 'query-string'
 
-const getUrlQuery = () => {
+export const getUrlQuery = () => {
   const query = queryString.parse(window.location.search)
   // on initial load an empty object can be returned
   // set initial values
@@ -23,5 +24,3 @@ const getUrlQuery = () => {
 
   return query
 }
-
-export default getUrlQuery

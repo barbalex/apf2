@@ -1,6 +1,7 @@
+// seems not is use
 import { tables } from './tables.js'
 
-const getTableNameFromActiveNode = (activeNode) => {
+export const getTableNameFromActiveNode = (activeNode) => {
   if (!activeNode) return null
   // name it projekt
   // because: /projekte has no nodes!
@@ -34,5 +35,3 @@ const getTableNameFromActiveNode = (activeNode) => {
   }
   return tableName
 }
-
-export default getTableNameFromActiveNode

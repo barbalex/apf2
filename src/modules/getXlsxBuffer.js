@@ -7,7 +7,7 @@ import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 //import { getDataArrayFromExportObjectsWorker } from './getDataArrayFromExportObjectsWorker.js'
 import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.js'
 
-const getXlsxBuffer = async ({ data, store }) => {
+export const getXlsxBuffer = async ({ data, store }) => {
   /**
    * using this worker may make the ui more responsive
    * but only while this code runs
@@ -75,5 +75,3 @@ const getXlsxBuffer = async ({ data, store }) => {
   }
   return buffer
 }
-
-export default getXlsxBuffer
