@@ -1,1 +1,2 @@
-export default ['popmassnber', 'popber', 'tpop']
+// seems not in use
+export const popChildTables = ['popmassnber', 'popber', 'tpop']
