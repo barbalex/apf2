@@ -13,7 +13,7 @@ import {
   zielTypWerte,
 } from '../../shared/fragments.js'
 
-export default gql`
+export const apByIdJahr = gql`
   query apByIdJahrForApberForApFromAp($apId: UUID!, $jahr: Int!) {
     apById: apHistoryByIdAndYear(id: $apId, year: $jahr) {
       ...ApHistoryFields

@@ -145,7 +145,7 @@ const ChartContainer = styled.div`
   }
 `
 
-const ApberForAp = ({
+export const ApberForAp = ({
   apId,
   jahr,
   apData: apDataPassed,
@@ -456,4 +456,3 @@ const ApberForAp = ({
   )
 }
 
-export default ApberForAp

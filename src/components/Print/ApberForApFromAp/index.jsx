@@ -2,8 +2,8 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
-import apQuery from './apByIdJahr.js'
-import ApberForAp from '../ApberForAp/index.jsx'
+import { apByIdJahr } from './apByIdJahr.js'
+import { ApberForAp } from '../ApberForAp/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 
@@ -35,7 +35,7 @@ const ApberForApFromAp = () => {
       if (!jahr) throw new Error('im AP-Bericht fehlt das Jahr')
 
       const { data, error } = await client.query({
-        query: apQuery,
+        query: apByIdJahr,
         variables: { apId, jahr },
         fetchPolicy: 'no-cache',
       })
