@@ -66,8 +66,6 @@ export const NewUser = observer(({ apId, apUsers, refetch }) => {
     if (queryError) setError(queryError.message)
   }, [queryError])
 
-  console.log('NewUser', { apUsers, userData, options })
-
   return (
     <Select
       key={apUsers.length}

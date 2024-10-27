@@ -63,7 +63,7 @@ const fieldTypes = {
   bearbeiter: 'UUID',
 }
 
-const Apber = () => {
+export const Component = observer(() => {
   const { apberId } = useParams()
 
   const store = useContext(StoreContext)
@@ -261,6 +261,4 @@ const Apber = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export const Component = observer(Apber)
+})
