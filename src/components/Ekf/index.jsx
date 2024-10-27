@@ -8,7 +8,7 @@ import sortBy from 'lodash/sortBy'
 // when Karte was loaded async, it did not load,
 // but only in production!
 import EkfList from './List'
-import Tpopfreiwkontr from '../Projekte/Daten/Tpopfreiwkontr'
+import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.jsx'
 import { StoreContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane'
 import { dataByUserId as dataByUserIdGql } from './dataByUserId.js'
@@ -62,7 +62,7 @@ const getEkfFromData = ({ data }) => {
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
 }
 
-const Ekf = () => {
+export const Component = observer(() => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const { userId, ekfId, ekfYear } = useParams()
@@ -136,6 +136,4 @@ const Ekf = () => {
       </StyledSplitPane>
     </Container>
   )
-}
-
-export const Component = observer(Ekf)
+})

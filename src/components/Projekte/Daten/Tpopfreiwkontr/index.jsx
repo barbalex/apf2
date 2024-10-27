@@ -44,7 +44,7 @@ const StyledIconButton = styled(IconButton)`
   margin-right: 10px !important;
 `
 
-const Tpopfreiwkontr = ({ id: idPassed }) => {
+export const Component = observer(({ id: idPassed }) => {
   const { tpopkontrId: idPassedFromUrl } = useParams()
 
   const { pathname } = useLocation()
@@ -152,22 +152,24 @@ const Tpopfreiwkontr = ({ id: idPassed }) => {
           title="Freiwilligen-Kontrolle"
           buttons={
             <>
-              <StyledIconButton onClick={onClickPrint} title="drucken">
+              <StyledIconButton
+                onClick={onClickPrint}
+                title="drucken"
+              >
                 <MdPrint />
               </StyledIconButton>
             </>
           }
         />
       )}
-      {isPrint ? (
+      {isPrint ?
         <TpopfreiwkontrForm
           data={data}
           row={row}
           apId={apId}
           refetch={refetch}
         />
-      ) : (
-        <ScrollContainer>
+      : <ScrollContainer>
           <StyledSimpleBar
             style={{
               maxHeight: '100%',
@@ -182,11 +184,7 @@ const Tpopfreiwkontr = ({ id: idPassed }) => {
             />
           </StyledSimpleBar>
         </ScrollContainer>
-      )}
+      }
     </Container>
   )
-}
-
-export const Component = observer(Tpopfreiwkontr)
-
-export default observer(Tpopfreiwkontr)
+})

@@ -5,7 +5,7 @@ import { useQuery, gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { History } from '../../../shared/History/index.jsx'
+import { History as HistoryComponent } from '../../../shared/History/index.jsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 
 const popHistoriesQuery = gql`
@@ -106,7 +106,7 @@ const Aktuell = styled.span`
   background-color: rgb(201, 238, 211);
 `
 
-const PopHistory = () => {
+export const History = () => {
   const { popId } = useParams()
 
   const { error, data, loading } = useQuery(popHistoriesQuery, {
@@ -200,7 +200,7 @@ const PopHistory = () => {
           ]
 
           return (
-            <History
+            <HistoryComponent
               key={`${r.id}${r.year}`}
               year={r?.year}
               dataArray={dataArray}
@@ -211,5 +211,3 @@ const PopHistory = () => {
     </SimpleBar>
   )
 }
-
-export default PopHistory
