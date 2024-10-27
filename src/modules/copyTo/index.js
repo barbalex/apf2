@@ -6,10 +6,10 @@ import { QueryClient } from '@tanstack/react-query'
 import { tables } from '../tables.js'
 import { copyTpopsOfPop } from '../copyTpopsOfPop.js'
 import { copyZaehlOfTpopKontr } from '../copyZaehlOfTpopKontr.js'
-import queryTpopKontrById from './queryTpopKontrById'
-import queryTpopKontrzaehlById from './queryTpopkontrzaehlById'
-import queryTpopmassnById from './queryTpopmassnById'
-import queryTpopById from './queryTpopById'
+import { queryTpopKontrById } from './queryTpopKontrById.js'
+import { queryTpopkontrzaehlById } from './queryTpopkontrzaehlById.js'
+import { queryTpopmassnById } from './queryTpopmassnById.js'
+import { queryTpopById } from './queryTpopById.js'
 import queryPopById from './queryPopById'
 import createTpopkontr from './createTpopkontr'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
@@ -45,7 +45,7 @@ export const copyTo = async ({
   switch (table) {
     case 'tpopkontrzaehl': {
       const { data: data0 } = await client.query({
-        query: queryTpopKontrzaehlById,
+        query: queryTpopkontrzaehlById,
         variables: { id },
       })
       row = data0?.tpopkontrzaehlById
