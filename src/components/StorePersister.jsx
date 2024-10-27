@@ -5,8 +5,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { persist } from 'mst-persist'
 
 import { isObject } from '../modules/isObject.js'
-
-import setUserFromIdb from '../modules/setUserFromIdb.js'
+import { setUserFromIdb } from '../modules/setUserFromIdb.js'
 
 const blacklist = [
   'user',

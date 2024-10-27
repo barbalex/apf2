@@ -13,9 +13,9 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { useParams, useLocation } from 'react-router-dom'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
-import standardQkYear from '../../../../../modules/standardQkYear'
+import { standardQkYear } from '../../../../../modules/standardQkYear.js'
 import query from './query.js'
-import createMessageFunctions from './createMessageFunctions'
+import createMessageFunctions from './createMessageFunctions.js'
 import { StoreContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
@@ -135,7 +135,10 @@ const Qk = ({ qkNameQueries, qks }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <StyledFormControl fullWidth variant="standard">
+        <StyledFormControl
+          fullWidth
+          variant="standard"
+        >
           <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
           <Input
             id="berichtjahr"
@@ -144,28 +147,46 @@ const Qk = ({ qkNameQueries, qks }) => {
             onChange={onChangeBerichtjahr}
           />
         </StyledFormControl>
-        <StyledFormControl fullWidth variant="standard">
+        <StyledFormControl
+          fullWidth
+          variant="standard"
+        >
           <InputLabel htmlFor="filter">
             nach Abschnitts-Titel filtern
           </InputLabel>
-          <Input id="filter" value={filter} onChange={onChangeFilter} />
+          <Input
+            id="filter"
+            value={filter}
+            onChange={onChangeFilter}
+          />
         </StyledFormControl>
-        {loading ? (
-          <AnalyzingButton onClick={() => refetch()} variant="outlined">
+        {loading ?
+          <AnalyzingButton
+            onClick={() => refetch()}
+            variant="outlined"
+          >
             <AnalyzingSpan>Die Daten werden analysiert</AnalyzingSpan>
             <CircularProgress />
           </AnalyzingButton>
-        ) : (
-          <div>
-            <Badge badgeContent={messageGroupsFiltered.length} color="primary">
-              <AnalyzingButton onClick={() => refetch()} variant="outlined">
+        : <div>
+            <Badge
+              badgeContent={messageGroupsFiltered.length}
+              color="primary"
+            >
+              <AnalyzingButton
+                onClick={() => refetch()}
+                variant="outlined"
+              >
                 neu analysieren
               </AnalyzingButton>
             </Badge>
           </div>
-        )}
+        }
         {messageGroupsFiltered.map((messageGroup) => (
-          <StyledPaper key={messageGroup.title} elevation={2}>
+          <StyledPaper
+            key={messageGroup.title}
+            elevation={2}
+          >
             <Title>{messageGroup.title}</Title>
             {messageGroup.messages.map((m, i) => (
               <Row key={`${m.text}Index${i}`}>

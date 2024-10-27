@@ -1,9 +1,10 @@
+// seems not in use
 import { useEffect } from 'react'
 
 // custom Hook for automatic abortion on unmount or dependency change
 // You might add onFailure for promise errors as well.
 // source: https://stackoverflow.com/a/60907638/712005
-function useAsync(asyncFn, onSuccess) {
+export function useAsync(asyncFn, onSuccess) {
   useEffect(() => {
     let isActive = true
     asyncFn().then((data) => {
@@ -15,5 +16,3 @@ function useAsync(asyncFn, onSuccess) {
     }
   }, [asyncFn, onSuccess])
 }
-
-export default useAsync

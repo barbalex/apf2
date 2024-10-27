@@ -9,5 +9,3 @@ export const setUserFromIdb = async ({ idb, store }) => {
 
   return name
 }
-
-export default setUserFromIdb
