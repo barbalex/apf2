@@ -89,7 +89,7 @@ const tpopkontrTypWerte = [
   },
 ]
 
-const TpopfeldkontrFilter = () => {
+export const TpopfeldkontrFilter = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(StoreContext)
@@ -480,6 +480,4 @@ const TpopfeldkontrFilter = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(TpopfeldkontrFilter)
+})

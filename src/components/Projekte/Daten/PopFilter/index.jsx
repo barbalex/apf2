@@ -43,7 +43,7 @@ const FilterComment = styled.li`
   font-size: 0.75em;
 `
 
-const PopFilter = () => {
+export const PopFilter = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(StoreContext)
@@ -198,6 +198,4 @@ const PopFilter = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(PopFilter)
+})

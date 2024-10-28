@@ -51,7 +51,7 @@ const FilterComment = styled.li`
   font-size: 0.75em;
 `
 
-const TpopmassnFilter = () => {
+export const TpopmassnFilter = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(StoreContext)
@@ -355,6 +355,4 @@ const TpopmassnFilter = () => {
       </ErrorBoundary>
     </Container>
   )
-}
-
-export default observer(TpopmassnFilter)
+})

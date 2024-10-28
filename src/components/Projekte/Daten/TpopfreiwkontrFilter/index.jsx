@@ -45,7 +45,7 @@ const FilterComment = styled.li`
   font-size: 0.75em;
 `
 
-const Tpopfreiwkontr = () => {
+export const TpopfreiwkontrFilter = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(StoreContext)
@@ -177,6 +177,4 @@ const Tpopfreiwkontr = () => {
       </ScrollContainer>
     </Container>
   )
-}
-
-export default observer(Tpopfreiwkontr)
+})
