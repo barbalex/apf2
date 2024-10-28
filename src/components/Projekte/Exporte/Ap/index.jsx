@@ -11,8 +11,8 @@ import {
   CardActionIconButton,
 } from '../index.jsx'
 import { Ap as ApComponent } from './Ap.jsx'
-import ApOhnePop from './ApOhnePop.jsx'
-import AnzMassn from './AnzMassn.jsx'
+import { ApOhnePop } from './ApOhnePop.jsx'
+import { AnzMassn } from './AnzMassn.jsx'
 import AnzKontr from './AnzKontr.jsx'
 import Ber from './Ber.jsx'
 import BerUndMassn from './BerUndMassn.jsx'
