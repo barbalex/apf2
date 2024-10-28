@@ -6,9 +6,9 @@ import { useMap } from 'react-leaflet'
 import cloneDeep from 'lodash/cloneDeep'
 import { useParams } from 'react-router-dom'
 
-import Marker from './Marker.jsx'
+import { Marker } from './Marker.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
-import query from './query.js'
+import { query } from './query.js'
 
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -23,24 +23,6 @@ const iconCreateFunction = function (cluster) {
     iconSize: window.L.point(40, 40),
   })
 }
-
-export const Pop = observer(() => {
-  const store = useContext(StoreContext)
-  const tree = store.tree
-  const { popGqlFilter } = tree
-
-  const { apId } = useParams()
-
-  // Problem: popGqlFilter updates AFTER apId
-  // if navigating from ap to pop, apId is set before popGqlFilter
-  // thus query fetches data for all aps
-  // Solution: do not return pop if apId exists but popGqlFilter does not contain it (yet)
-  const gqlFilterHasApId = !!popGqlFilter.filtered?.or?.[0]?.apId
-  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
-
-  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
-  return <ObservedPop />
-})
 
 const ObservedPop = observer(() => {
   const map = useMap()
@@ -97,4 +79,22 @@ const ObservedPop = observer(() => {
       ))}
     </MarkerClusterGroup>
   )
+})
+
+export const Pop = observer(() => {
+  const store = useContext(StoreContext)
+  const tree = store.tree
+  const { popGqlFilter } = tree
+
+  const { apId } = useParams()
+
+  // Problem: popGqlFilter updates AFTER apId
+  // if navigating from ap to pop, apId is set before popGqlFilter
+  // thus query fetches data for all aps
+  // Solution: do not return pop if apId exists but popGqlFilter does not contain it (yet)
+  const gqlFilterHasApId = !!popGqlFilter.filtered?.or?.[0]?.apId
+  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+
+  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+  return <ObservedPop />
 })
