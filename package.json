@@ -133,7 +133,7 @@
     "vite-plugin-svgr": "4.2.0"
   },
   "dependenciesComments": {
-    "react-leaflet-markercluster": "got weird problems. Trying to solve with @changey/react-leaflet-markercluster and upgrading leaflet deps",
+    "react-leaflet-markercluster": "got weird problems. Trying to solve with @changey/react-leaflet-markercluster and upgrading leaflet deps. Try again when https://github.com/yuzhva/react-leaflet-markercluster/pull/194 is merged",
     "react-focus-within": "2.0.2 creates dependency conflict and thus forces to npm i --force: https://github.com/ferdaber/react-focus-within/issues/15, https://github.com/ferdaber/react-focus-within/pull/16. So extracted it to FocusWithin shared component",
     "react-leaflet-bing-v2": "5.2.3: reinstall after pull-request accepted: https://github.com/TA-Geoforce/react-leaflet-bing-v2/pull/25",
     "react-split-pane": "0.1.92 creates dependency conflict and thus forces to npm i --force: https://github.com/tomkp/react-split-pane/pull/836. TODO: migrate off of it",
