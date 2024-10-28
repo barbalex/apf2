@@ -6,7 +6,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const Teilpopulationen = ({ filtered = false }) => {
+export const TPop = observer(({ filtered = false }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification, tableIsFiltered } = store
@@ -212,11 +212,9 @@ const Teilpopulationen = ({ filtered = false }) => {
       disabled={!!queryState || (filtered && !tpopIsFiltered)}
     >
       {filtered ? 'Teilpopulationen (gefiltert)' : 'Teilpopulationen'}
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(Teilpopulationen)
+})

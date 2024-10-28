@@ -1,6 +1,6 @@
 import React from 'react'
 
-import TPop from './TPop.jsx'
+import { TPop } from './TPop.jsx'
 import Wollmilchsau from './Wollmilchsau.jsx'
 import WollmilchsauSingle from './WollmilchsauSingle.jsx'
 import LetzteZaehlungen from './LetzteZaehlungen.jsx'
