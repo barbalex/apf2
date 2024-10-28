@@ -6,7 +6,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const KontrollenButton = ({ filtered = false }) => {
+export const Kontrollen = observer(({ filtered = false }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -311,11 +311,9 @@ const KontrollenButton = ({ filtered = false }) => {
       }}
     >
       {filtered ? 'Kontrollen (gefiltert)' : 'Kontrollen'}
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(KontrollenButton)
+})

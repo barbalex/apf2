@@ -10,16 +10,19 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import Kontrollen from './Kontrollen.jsx'
+import { Kontrollen as KontrollenComponent } from './Kontrollen.jsx'
 import KontrFuerWebgisBun from './KontrFuerWebgisBun.jsx'
 import KontrAnzProZaehlEinheit from './KontrAnzProZaehlEinheit.jsx'
 
-const KontrollenComponent = () => {
+export const Kontrollen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>Kontrollen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -32,18 +35,20 @@ const KontrollenComponent = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        {expanded ? (
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
+        {expanded ?
           <StyledCardContent>
-            <Kontrollen />
-            <Kontrollen filtered={true} />
+            <KontrollenComponent />
+            <KontrollenComponent filtered={true} />
             <KontrFuerWebgisBun />
             <KontrAnzProZaehlEinheit />
           </StyledCardContent>
-        ) : null}
+        : null}
       </Collapse>
     </StyledCard>
   )
 }
-
-export default KontrollenComponent
