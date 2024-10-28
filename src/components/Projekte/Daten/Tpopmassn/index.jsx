@@ -74,7 +74,7 @@ const fieldTypes = {
   planVorhanden: 'Boolean',
 }
 
-const Tpopmassn = ({ showFilter = false }) => {
+export const Component = observer(({ showFilter = false }) => {
   const { tpopmassnId, apId } = useParams()
 
   const client = useApolloClient()
@@ -598,6 +598,4 @@ const Tpopmassn = ({ showFilter = false }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export const Component = observer(Tpopmassn)
+})

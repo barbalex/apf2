@@ -9,7 +9,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import query from './query.js'
+import { query } from './query.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -38,7 +38,7 @@ const fieldTypes = {
   bemerkungen: 'String',
 }
 
-const Tpopmassnber = () => {
+export const Component = observer(() => {
   const { tpopmassnberId: id } = useParams()
 
   const client = useApolloClient()
@@ -163,6 +163,4 @@ const Tpopmassnber = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export const Component = observer(Tpopmassnber)
+})
