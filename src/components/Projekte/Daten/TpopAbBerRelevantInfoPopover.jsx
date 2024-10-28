@@ -33,7 +33,7 @@ const Container = styled.div`
   height: 100%;
 `
 
-const TpopApBerRelevantInfoPopover = (
+export const TpopAbBerRelevantInfoPopover = (
   <ErrorBoundary>
     <Container>
       <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
@@ -65,5 +65,3 @@ const TpopApBerRelevantInfoPopover = (
     </Container>
   </ErrorBoundary>
 )
-
-export default TpopApBerRelevantInfoPopover
