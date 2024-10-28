@@ -9,14 +9,24 @@ const StyledDiv = styled.div`
   background-color: transparent;
   color: rgb(48, 48, 48);
   font-weight: 700;
-  text-shadow: 0 1px 0 white, -0 -1px 0 white, 1px 0 0 white, -1px 0 0 white,
-    0 2px 1px white, -0 -2px 1px white, 2px 0 1px white, -2px 0 1px white,
-    0 3px 2px white, -0 -3px 2px white, 3px 0 2px white, -3px 0 2px white;
+  text-shadow:
+    0 1px 0 white,
+    -0 -1px 0 white,
+    1px 0 0 white,
+    -1px 0 0 white,
+    0 2px 1px white,
+    -0 -2px 1px white,
+    2px 0 1px white,
+    -2px 0 1px white,
+    0 3px 2px white,
+    -0 -3px 2px white,
+    3px 0 2px white,
+    -3px 0 2px white;
   cursor: pointer;
   margin-bottom: 2px !important;
 `
 
-const ShowCoordinates = ({ setControlType }) => {
+export const ShowCoordinates = observer(({ setControlType }) => {
   const { mapMouseCoordinates } = useContext(StoreContext)
   const x = mapMouseCoordinates.x?.toLocaleString('de-ch')
   const y = mapMouseCoordinates.y?.toLocaleString('de-ch')
@@ -24,10 +34,11 @@ const ShowCoordinates = ({ setControlType }) => {
   const onClick = useCallback(() => setControlType('goto'), [setControlType])
 
   return (
-    <StyledDiv onClick={onClick} title="Klicken um Koordinaten zu suchen">
+    <StyledDiv
+      onClick={onClick}
+      title="Klicken um Koordinaten zu suchen"
+    >
       {`${x}, ${y}`}
     </StyledDiv>
   )
-}
-
-export default observer(ShowCoordinates)
+})

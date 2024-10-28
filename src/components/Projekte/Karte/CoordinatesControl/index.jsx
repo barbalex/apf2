@@ -4,8 +4,8 @@ import { useMapEvents } from 'react-leaflet'
 import styled from '@emotion/styled'
 import debounce from 'lodash/debounce'
 
-import ShowCoordinates from './ShowCoordinates.jsx'
-import PanToCoordinates from './PanToCoordinates.jsx'
+import { ShowCoordinates } from './ShowCoordinates.jsx'
+import { PanToCoordinates } from './PanToCoordinates.jsx'
 import { epsg4326to2056 } from '../../../../modules/epsg4326to2056.js'
 import { StoreContext } from '../../../../storeContext.js'
 
@@ -23,7 +23,7 @@ const Container = styled.div`
   margin-bottom: 10px !important;
 `
 
-const CoordinatesControl = () => {
+export const CoordinatesControl = () => {
   const { setMapMouseCoordinates } = useContext(StoreContext)
   const [controlType, setControlType] = useState('coordinates')
 
@@ -51,13 +51,13 @@ const CoordinatesControl = () => {
 
   return (
     <Container>
-      {controlType === 'coordinates' ? (
+      {controlType === 'coordinates' ?
         <ShowCoordinates setControlType={setControlType} />
-      ) : (
-        <PanToCoordinates setControlType={setControlType} map={map} />
-      )}
+      : <PanToCoordinates
+          setControlType={setControlType}
+          map={map}
+        />
+      }
     </Container>
   )
 }
-
-export default CoordinatesControl

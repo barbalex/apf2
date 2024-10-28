@@ -48,7 +48,7 @@ const StyledInput = styled(Input)`
 const xIsValid = (x) => !x || (x >= 2485071 && x < 2828516)
 const yIsValid = (y) => !y || (y >= 1075346 && y < 1299942)
 
-const PanToCoordinates = ({ setControlType, map }) => {
+export const PanToCoordinates = ({ setControlType, map }) => {
   const xkoordField = useRef(null)
 
   useEffect(() => {
@@ -205,5 +205,3 @@ const PanToCoordinates = ({ setControlType, map }) => {
     </Container>
   )
 }
-
-export default PanToCoordinates
