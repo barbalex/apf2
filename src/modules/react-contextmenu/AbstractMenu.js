@@ -1,3 +1,5 @@
+import React from 'react'
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError('Cannot call a class as a function')
@@ -10,8 +12,8 @@ function _possibleConstructorReturn(self, call) {
       "this hasn't been initialised - super() hasn't been called",
     )
   }
-  return call && (typeof call === 'object' || typeof call === 'function')
-    ? call
+  return call && (typeof call === 'object' || typeof call === 'function') ?
+      call
     : self
 }
 
@@ -31,9 +33,9 @@ function _inherits(subClass, superClass) {
     },
   })
   if (superClass)
-    Object.setPrototypeOf
-      ? Object.setPrototypeOf(subClass, superClass)
-      : (subClass.__proto__ = superClass)
+    Object.setPrototypeOf ?
+      Object.setPrototypeOf(subClass, superClass)
+    : (subClass.__proto__ = superClass)
 }
 
 import { Component } from 'react'

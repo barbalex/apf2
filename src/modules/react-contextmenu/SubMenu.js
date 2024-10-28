@@ -55,8 +55,8 @@ function _possibleConstructorReturn(self, call) {
       "this hasn't been initialised - super() hasn't been called",
     )
   }
-  return call && (typeof call === 'object' || typeof call === 'function')
-    ? call
+  return call && (typeof call === 'object' || typeof call === 'function') ?
+      call
     : self
 }
 
@@ -76,9 +76,9 @@ function _inherits(subClass, superClass) {
     },
   })
   if (superClass)
-    Object.setPrototypeOf
-      ? Object.setPrototypeOf(subClass, superClass)
-      : (subClass.__proto__ = superClass)
+    Object.setPrototypeOf ?
+      Object.setPrototypeOf(subClass, superClass)
+    : (subClass.__proto__ = superClass)
 }
 
 import React from 'react'
@@ -250,7 +250,7 @@ var SubMenu = (function (_AbstractMenu) {
     {
       key: 'getSubMenuType',
       value: function getSubMenuType() {
-        // eslint-disable-line class-methods-use-this
+         
         return SubMenu
       },
     },
@@ -274,8 +274,9 @@ var SubMenu = (function (_AbstractMenu) {
         if (this.props.forceOpen || this.state.visible) {
           var wrapper = window.requestAnimationFrame || setTimeout
           wrapper(function () {
-            var styles = _this2.props.rtl
-              ? _this2.getRTLMenuPosition()
+            var styles =
+              _this2.props.rtl ?
+                _this2.getRTLMenuPosition()
               : _this2.getMenuPosition()
 
             _this2.subMenu.style.removeProperty('top')
