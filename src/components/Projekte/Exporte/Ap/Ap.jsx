@@ -6,7 +6,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const Ap = ({ filtered = false }) => {
+export const Ap = observer(({ filtered = false }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification, tableIsFiltered } = store
@@ -96,11 +96,9 @@ const Ap = ({ filtered = false }) => {
       disabled={!!queryState || (filtered && !apIsFiltered)}
     >
       {filtered ? 'Arten (gefiltert)' : 'Arten'}
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(Ap)
+})

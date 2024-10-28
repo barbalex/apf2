@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton'
 
 import { FormTitle } from '../../shared/FormTitle/index.jsx'
 import Tipps from './Tipps/index.jsx'
-import Ap from './Ap/index.jsx'
+import { Ap } from './Ap/index.jsx'
 import Populationen from './Populationen/index.jsx'
 import Teilpopulationen from './Teilpopulationen/index.jsx'
 import Kontrollen from './Kontrollen/index.jsx'

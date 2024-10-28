@@ -10,7 +10,7 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import Ap from './Ap.jsx'
+import { Ap as ApComponent } from './Ap.jsx'
 import ApOhnePop from './ApOhnePop.jsx'
 import AnzMassn from './AnzMassn.jsx'
 import AnzKontr from './AnzKontr.jsx'
@@ -24,14 +24,17 @@ import Erfkrit from './Erfkrit.jsx'
 import Idealbiotop from './Idealbiotop.jsx'
 import Assozart from './Assozart.jsx'
 
-const ApExports = () => {
+export const Ap = () => {
   const [expanded, setExpanded] = useState(false)
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={onClickAction}>
+      <StyledCardActions
+        disableSpacing
+        onClick={onClickAction}
+      >
         <CardActionTitle>Art</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -44,11 +47,15 @@ const ApExports = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        {expanded ? (
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
+        {expanded ?
           <StyledCardContent>
-            <Ap />
-            <Ap filtered={true} />
+            <ApComponent />
+            <ApComponent filtered={true} />
             <ApOhnePop />
             <AnzMassn />
             <AnzKontr />
@@ -62,10 +69,8 @@ const ApExports = () => {
             <Idealbiotop />
             <Assozart />
           </StyledCardContent>
-        ) : null}
+        : null}
       </Collapse>
     </StyledCard>
   )
 }
-
-export default ApExports
