@@ -6,18 +6,17 @@ import { useMapEvents } from 'react-leaflet'
 import cloneDeep from 'lodash/cloneDeep'
 import { useParams } from 'react-router-dom'
 
-import Marker from './Marker.jsx'
+import { Marker } from './Marker.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
-import query from './query.js'
-import updateTpopById from './updateTpopById.js'
+import { query } from './query.js'
+import { updateTpopById } from './updateTpopById.js'
 
 const iconCreateFunction = (cluster) => {
   const hasHighlightedTpop = cluster
     .getAllChildMarkers()
     .some((m) => m.options.icon.options.isHighlighted)
-  const className = hasHighlightedTpop
-    ? 'tpopClusterHighlighted'
-    : 'tpopCluster'
+  const className =
+    hasHighlightedTpop ? 'tpopClusterHighlighted' : 'tpopCluster'
 
   return window.L.divIcon({
     html: cluster.getChildCount(),
@@ -26,26 +25,7 @@ const iconCreateFunction = (cluster) => {
   })
 }
 
-const TpopRouter = ({ clustered }) => {
-  const store = useContext(StoreContext)
-  const tree = store.tree
-  const { tpopGqlFilter } = tree
-
-  const { apId } = useParams()
-
-  // Problem: gqlFilter updates AFTER apId
-  // if navigating from ap to pop, apId is set before gqlFilter
-  // thus query fetches data for all aps
-  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
-  const gqlFilterHasApId = !!tpopGqlFilter.filtered?.or?.[0]?.popByPopId?.apId
-  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
-
-  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
-
-  return <ObservedTpop clustered={clustered} />
-}
-
-const Tpop = ({ clustered }) => {
+const ObservedTpop = observer(({ clustered }) => {
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
@@ -166,7 +146,10 @@ const Tpop = ({ clustered }) => {
   }, [fetchTpopDataForMap])
 
   const tpopMarkers = (data?.allTpops?.nodes ?? []).map((tpop) => (
-    <Marker key={tpop.id} tpop={tpop} />
+    <Marker
+      key={tpop.id}
+      tpop={tpop}
+    />
   ))
 
   if (clustered) {
@@ -180,8 +163,23 @@ const Tpop = ({ clustered }) => {
     )
   }
   return tpopMarkers
-}
+})
 
-const ObservedTpop = observer(Tpop)
+export const Tpop = observer(({ clustered }) => {
+  const store = useContext(StoreContext)
+  const tree = store.tree
+  const { tpopGqlFilter } = tree
 
-export default observer(TpopRouter)
+  const { apId } = useParams()
+
+  // Problem: gqlFilter updates AFTER apId
+  // if navigating from ap to pop, apId is set before gqlFilter
+  // thus query fetches data for all aps
+  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
+  const gqlFilterHasApId = !!tpopGqlFilter.filtered?.or?.[0]?.popByPopId?.apId
+  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+
+  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+
+  return <ObservedTpop clustered={clustered} />
+})

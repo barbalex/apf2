@@ -1,5 +1,5 @@
 import { useContext, useCallback, useMemo } from 'react'
-import { Marker, Tooltip, Popup } from 'react-leaflet'
+import { Marker as LeafletMarker, Tooltip, Popup } from 'react-leaflet'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
@@ -51,7 +51,7 @@ const Info = styled.div`
   column-gap: 5px;
 `
 
-const TpopMarker = ({ tpop }) => {
+export const Marker = observer(({ tpop }) => {
   const { apId, projId, tpopId } = useParams()
   const { search } = useLocation()
 
@@ -146,7 +146,11 @@ const TpopMarker = ({ tpop }) => {
   const artname = tpop?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? ''
 
   return (
-    <Marker position={latLng} icon={icon} title={title}>
+    <LeafletMarker
+      position={latLng}
+      icon={icon}
+      title={title}
+    >
       <Popup>
         <>
           <div>Teil-Population</div>
@@ -195,11 +199,13 @@ const TpopMarker = ({ tpop }) => {
           </StyledButton>
         </>
       </Popup>
-      <StyledTooltip direction="bottom" opacity={1} permanent>
+      <StyledTooltip
+        direction="bottom"
+        opacity={1}
+        permanent
+      >
         <span className="mapTooltip">{title}</span>
       </StyledTooltip>
-    </Marker>
+    </LeafletMarker>
   )
-}
-
-export default observer(TpopMarker)
+})
