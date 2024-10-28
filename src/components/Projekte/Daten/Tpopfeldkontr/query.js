@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { tpopfeldkontr } from '../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query tpopkontrByIdQueryForEk($id: UUID!) {
     tpopkontrById(id: $id) {
       ...TpopfeldkontrFields

@@ -81,9 +81,13 @@ const TpopFeldkontrzaehl = ({ projekt, ap, pop, tpop, tpopkontr }) => {
       ],
       hasChildren: false,
     }
-    console.log('TpopFeldkontrzaehl', { node, el })
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
 }
 

@@ -30,7 +30,7 @@ const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
 
-const TpopfeldkontrentwicklungPopover = (
+export const TpopfeldkontrentwicklungPopover = (
   <ErrorBoundary>
     <Fragment>
       <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
@@ -75,5 +75,3 @@ const TpopfeldkontrentwicklungPopover = (
     </Fragment>
   </ErrorBoundary>
 )
-
-export default TpopfeldkontrentwicklungPopover
