@@ -143,7 +143,7 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const More = ({ saveToDb, row, errors }) => (
+export const More = observer(({ saveToDb, row, errors }) => (
   <Container>
     <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
     <MoreFlVal>
@@ -215,6 +215,4 @@ const More = ({ saveToDb, row, errors }) => (
     </VeghoeheMittVal>
     <VeghoeheMinLabel>(Minimum)</VeghoeheMinLabel>
   </Container>
-)
-
-export default observer(More)
+))

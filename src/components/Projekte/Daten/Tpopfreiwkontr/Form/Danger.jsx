@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -34,10 +34,8 @@ const DangerVal = styled.div`
   }
 `
 
-const Danger = ({ saveToDb, row, errors }) => {
-  //console.log('Danger rendering')
-
-  return (
+export const Danger = memo(
+  observer(({ saveToDb, row, errors }) => (
     <Container>
       <DangerLabel>
         Gefährdung{' '}
@@ -57,7 +55,5 @@ const Danger = ({ saveToDb, row, errors }) => {
         />
       </DangerVal>
     </Container>
-  )
-}
-
-export default observer(Danger)
+  )),
+)

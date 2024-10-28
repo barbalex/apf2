@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -34,10 +34,8 @@ const RemarksVal = styled.div`
   }
 `
 
-const Remarks = ({ saveToDb, row, errors }) => {
-  //console.log('Remarks rendering')
-
-  return (
+export const Remarks = memo(
+  observer(({ saveToDb, row, errors }) => (
     <Container>
       <RemarksLabel>
         Spezielle Bemerkungen
@@ -58,7 +56,5 @@ const Remarks = ({ saveToDb, row, errors }) => {
         />
       </RemarksVal>
     </Container>
-  )
-}
-
-export default observer(Remarks)
+  )),
+)
