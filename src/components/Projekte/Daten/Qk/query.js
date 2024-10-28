@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { qk, apqk } from '../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query QkQueryForQkTop($apId: UUID!) {
     allQks(orderBy: [SORT_ASC, NAME_ASC]) {
       totalCount

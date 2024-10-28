@@ -33,7 +33,7 @@ const fieldTypes = {
   name: 'String',
 }
 
-const Projekt = () => {
+export const Component = observer(() => {
   const { projId } = useParams()
 
   const queryClient = useQueryClient()
@@ -129,6 +129,4 @@ const Projekt = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export const Component = observer(Projekt)
+})

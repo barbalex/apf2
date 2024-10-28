@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import Qk from './Qk'
 import { Choose } from './Choose'
-import queryQk from './queryQk'
+import { query } from './query.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -35,7 +35,7 @@ const TabContent = styled.div`
 export const Component = () => {
   const { apId } = useParams()
 
-  const { data, loading, error, refetch } = useQuery(queryQk, {
+  const { data, loading, error, refetch } = useQuery(query, {
     variables: { apId },
     fetchPolicy: 'no-cache',
   })
