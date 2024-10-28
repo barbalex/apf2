@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { ap, ziel } from '../../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query QkQuery(
     $berichtjahr: Int
     $notIsBerichtjahr: Boolean!

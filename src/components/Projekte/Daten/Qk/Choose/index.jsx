@@ -7,8 +7,8 @@ import { useQuery } from '@apollo/client'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useParams } from 'react-router-dom'
 
-import query from './query.js'
-import RowComponent from './Row'
+import { query } from './query.js'
+import { Row } from './Row/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 
@@ -38,7 +38,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const ChooseQk = ({ refetchTab }) => {
+export const Choose = ({ refetchTab }) => {
   const { apId } = useParams()
 
   const { data, error, loading } = useQuery(query)
@@ -49,17 +49,17 @@ const ChooseQk = ({ refetchTab }) => {
     (event) => setFilter(event.target.value),
     [],
   )
-  const rowsFiltered = filter
-    ? rows.filter((r) => {
+  const rowsFiltered =
+    filter ?
+      rows.filter((r) => {
         if (!r.titel) return false
         const rTitel = r.titel.toLowerCase ? r.titel.toLowerCase() : r.titel
         const filterValue = filter.toLowerCase ? filter.toLowerCase() : filter
         return rTitel.includes(filterValue)
       })
     : rows
-  const label = filter
-    ? `filtern: ${rowsFiltered.length}/${rows.length}`
-    : 'filtern'
+  const label =
+    filter ? `filtern: ${rowsFiltered.length}/${rows.length}` : 'filtern'
 
   if (loading) {
     return (
@@ -74,13 +74,20 @@ const ChooseQk = ({ refetchTab }) => {
     <ErrorBoundary>
       <Container>
         <FilterContainer>
-          <StyledFormControl fullWidth variant="standard">
+          <StyledFormControl
+            fullWidth
+            variant="standard"
+          >
             <InputLabel htmlFor="filter">{label}</InputLabel>
-            <Input id="filter" value={filter} onChange={onChangeFilter} />
+            <Input
+              id="filter"
+              value={filter}
+              onChange={onChangeFilter}
+            />
           </StyledFormControl>
         </FilterContainer>
         {rowsFiltered.map((row) => (
-          <RowComponent
+          <Row
             key={row.name}
             apId={apId}
             qk={row}
@@ -91,5 +98,3 @@ const ChooseQk = ({ refetchTab }) => {
     </ErrorBoundary>
   )
 }
-
-export default ChooseQk

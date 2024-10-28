@@ -1,6 +1,6 @@
 import flatten from 'lodash/flatten'
 
-const createMessageFunctions = ({ data, projId, apId }) => ({
+export const createMessageFunctions = ({ data, projId, apId }) => ({
   tpopsOutsideZh: () =>
     (data?.tpopsOutsideZh?.nodes ?? []).map((r) => ({
       url: [
@@ -808,8 +808,8 @@ const createMessageFunctions = ({ data, projId, apId }) => ({
   },
   tpopStatusAnsaatversuchMitAnpflanzung: () => {
     const popNodes =
-      data?.tpopStatusAnsaatversuchMitAnpflanzung?.apsByProjId
-        ?.nodes?.[0]?.popsByApId?.nodes ?? []
+      data?.tpopStatusAnsaatversuchMitAnpflanzung?.apsByProjId?.nodes?.[0]
+        ?.popsByApId?.nodes ?? []
     const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
     return tpopNodes.map((n) => ({
       url: [
@@ -1730,5 +1730,3 @@ const createMessageFunctions = ({ data, projId, apId }) => ({
     })
   },
 })
-
-export default createMessageFunctions

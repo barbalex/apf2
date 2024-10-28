@@ -5,10 +5,10 @@ import Checkbox from '@mui/material/Checkbox'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 
-import query from './query.js'
+import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
-const Row = styled.div`
+const RowDiv = styled.div`
   display: flex;
   padding: 5px;
   border-bottom: 1px solid #e8e8e8;
@@ -27,7 +27,7 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-const ChooseQkRow = ({ apId, qk, refetchTab }) => {
+export const Row = observer(({ apId, qk, refetchTab }) => {
   const client = useApolloClient()
 
   const { data, error, refetch } = useQuery(query, {
@@ -74,14 +74,16 @@ const ChooseQkRow = ({ apId, qk, refetchTab }) => {
 
   if (error) return <Error error={error} />
   return (
-    <Row>
+    <RowDiv>
       <Check>
-        <Checkbox checked={checked} onChange={onChange} color="primary" />
+        <Checkbox
+          checked={checked}
+          onChange={onChange}
+          color="primary"
+        />
       </Check>
       <Titel>{qk.titel}</Titel>
       <Beschreibung>{qk.beschreibung}</Beschreibung>
-    </Row>
+    </RowDiv>
   )
-}
-
-export default observer(ChooseQkRow)
+})

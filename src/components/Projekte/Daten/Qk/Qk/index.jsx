@@ -14,8 +14,8 @@ import { useParams, useLocation } from 'react-router-dom'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { standardQkYear } from '../../../../../modules/standardQkYear.js'
-import query from './query.js'
-import createMessageFunctions from './createMessageFunctions.js'
+import { query } from './query.js'
+import { createMessageFunctions } from './createMessageFunctions.js'
 import { StoreContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
@@ -74,7 +74,7 @@ const AnalyzingSpan = styled.span`
   padding-right: 13px;
 `
 
-const Qk = ({ qkNameQueries, qks }) => {
+export const Qk = observer(({ qkNameQueries, qks }) => {
   const { apId, projId } = useParams()
   const { search } = useLocation()
 
@@ -230,6 +230,4 @@ const Qk = ({ qkNameQueries, qks }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Qk)
+})
