@@ -10,10 +10,10 @@ import { useParams } from 'react-router-dom'
 import axios from 'redaxios'
 
 import { StoreContext } from '../../../storeContext.js'
-import Popup from './layers/Popup.jsx'
+import { Popup } from './layers/Popup.jsx'
 import { xmlToLayersData } from '../../../modules/xmlToLayersData.js'
 
-const ClickListener = () => {
+export const ClickListener = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(StoreContext)
@@ -443,6 +443,4 @@ const ClickListener = () => {
   })
 
   return null
-}
-
-export default observer(ClickListener)
+})

@@ -4,7 +4,7 @@ import Linkify from 'react-linkify'
 // Somehow emotions styles were not applied
 // So need to style inline
 
-const Popup = ({ layersData, mapSize = { x: 1000, y: 1000 } }) => (
+export const Popup = ({ layersData, mapSize = { x: 1000, y: 1000 } }) => (
   <div
     style={{
       overflow: 'auto',
@@ -41,7 +41,11 @@ const Popup = ({ layersData, mapSize = { x: 1000, y: 1000 } }) => (
             >{`${key}:`}</div>
             <Linkify
               componentDecorator={(decoratedHref, decoratedText, key) => (
-                <a target="blank" href={decoratedHref} key={key}>
+                <a
+                  target="blank"
+                  href={decoratedHref}
+                  key={key}
+                >
                   {decoratedText}
                 </a>
               )}
@@ -54,5 +58,3 @@ const Popup = ({ layersData, mapSize = { x: 1000, y: 1000 } }) => (
     ))}
   </div>
 )
-
-export default Popup

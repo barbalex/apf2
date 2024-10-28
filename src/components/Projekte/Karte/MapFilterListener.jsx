@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../storeContext.js'
 
-const MapFilterListener = () => {
+export const MapFilterListener = observer(() => {
   const map = useMap()
   const store = useContext(StoreContext)
   const { mapFilter } = store.tree
@@ -16,6 +16,4 @@ const MapFilterListener = () => {
   }, [map, mapFilter])
 
   return null
-}
-
-export default observer(MapFilterListener)
+})
