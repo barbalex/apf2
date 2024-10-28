@@ -5,18 +5,17 @@ import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useParams } from 'react-router-dom'
 // import { useMap } from 'react-leaflet'
 
-import Marker from './Marker.jsx'
+import { Marker } from './Marker.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
-import query from './query.js'
+import { query } from './query.js'
 
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedBeob = markers.some(
     (m) => m.options.icon.options.className === 'beobIconHighlighted',
   )
-  const className = hasHighlightedBeob
-    ? 'beobClusterHighlighted'
-    : 'beobCluster'
+  const className =
+    hasHighlightedBeob ? 'beobClusterHighlighted' : 'beobCluster'
 
   return window.L.divIcon({
     html: markers.length,
@@ -25,28 +24,7 @@ const iconCreateFunction = function (cluster) {
   })
 }
 
-const Router = ({ clustered }) => {
-  const store = useContext(StoreContext)
-  const tree = store.tree
-  const { beobGqlFilter } = tree
-
-  const { apId } = useParams()
-
-  // Problem: gqlFilter updates AFTER apId
-  // if navigating from ap to pop, apId is set before gqlFilter
-  // thus query fetches data for all aps
-  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
-  const gqlFilterHasApId =
-    !!beobGqlFilter('nichtBeurteilt').filtered?.aeTaxonomyByArtId?.apartsByArtId
-      ?.some?.apId
-  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
-
-  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
-
-  return <ObservedBeobNichtBeurteiltMarker clustered={clustered} />
-}
-
-const BeobNichtBeurteiltMarker = ({ clustered }) => {
+const BeobNichtBeurteiltMarker = observer(({ clustered }) => {
   // const leafletMap = useMap()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -83,7 +61,10 @@ const BeobNichtBeurteiltMarker = ({ clustered }) => {
   }
 
   const beobMarkers = (data?.allBeobs?.nodes ?? []).map((beob) => (
-    <Marker key={beob.id} beob={beob} />
+    <Marker
+      key={beob.id}
+      beob={beob}
+    />
   ))
 
   if (clustered) {
@@ -97,8 +78,25 @@ const BeobNichtBeurteiltMarker = ({ clustered }) => {
     )
   }
   return beobMarkers
-}
+})
 
-const ObservedBeobNichtBeurteiltMarker = observer(BeobNichtBeurteiltMarker)
+export const BeobNichtBeurteilt = observer(({ clustered }) => {
+  const store = useContext(StoreContext)
+  const tree = store.tree
+  const { beobGqlFilter } = tree
 
-export default observer(Router)
+  const { apId } = useParams()
+
+  // Problem: gqlFilter updates AFTER apId
+  // if navigating from ap to pop, apId is set before gqlFilter
+  // thus query fetches data for all aps
+  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
+  const gqlFilterHasApId =
+    !!beobGqlFilter('nichtBeurteilt').filtered?.aeTaxonomyByArtId?.apartsByArtId
+      ?.some?.apId
+  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+
+  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+
+  return <BeobNichtBeurteiltMarker clustered={clustered} />
+})
