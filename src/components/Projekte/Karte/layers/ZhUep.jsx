@@ -1,8 +1,12 @@
 import React from 'react'
 import { WMSTileLayer, Pane } from 'react-leaflet'
 
-const UepLayer = () => (
-  <Pane className="ZhUep" name="ZhUep" style={{ zIndex: 100 }}>
+export const ZhUep = () => (
+  <Pane
+    className="ZhUep"
+    name="ZhUep"
+    style={{ zIndex: 100 }}
+  >
     <WMSTileLayer
       url="//wms.zh.ch/upwms"
       layers="Uebersichtsplan"
@@ -14,5 +18,3 @@ const UepLayer = () => (
     />
   </Pane>
 )
-
-export default UepLayer
