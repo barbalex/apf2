@@ -2,20 +2,20 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import { TextField2 } from '../../../shared/TextField2.jsx'
+import { TextField2 } from '../../../../shared/TextField2.jsx'
 
 const Container = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 6px;
   padding: 10px;
   break-inside: avoid;
-  grid-area: danger;
+  grid-area: remarks;
 `
-const DangerLabel = styled.div`
+const RemarksLabel = styled.div`
   font-weight: 700;
   margin-bottom: -10px;
 `
-const DangerSubLabel = styled.span`
+const RemarksSubLabel = styled.span`
   padding-left: 5px;
   font-weight: 700;
   font-size: 14px;
@@ -23,7 +23,7 @@ const DangerSubLabel = styled.span`
     font-size: 11px;
   }
 `
-const DangerVal = styled.div`
+const RemarksVal = styled.div`
   > div {
     margin-bottom: -25px;
   }
@@ -34,29 +34,30 @@ const DangerVal = styled.div`
   }
 `
 
-const Danger = ({ saveToDb, row }) => {
-  //console.log('Danger rendering')
+const Remarks = ({ saveToDb, row }) => {
+  //console.log('Remarks rendering')
 
   return (
     <Container>
-      <DangerLabel>
-        Gefährdung{' '}
-        <DangerSubLabel>
-          (Problemarten, Verbuschung, Tritt, Hunde, ...), welche?
-        </DangerSubLabel>
-      </DangerLabel>
-      <DangerVal>
+      <RemarksLabel>
+        Spezielle Bemerkungen
+        <RemarksSubLabel>
+          (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
+          Begebenheiten)
+        </RemarksSubLabel>
+      </RemarksLabel>
+      <RemarksVal>
         <TextField2
-          key={`${row?.id}gefaehrdung`}
-          name="gefaehrdung"
+          key={`${row?.id}bemerkungen`}
+          name="bemerkungen"
           row={row}
           type="text"
           multiLine
           saveToDb={saveToDb}
         />
-      </DangerVal>
+      </RemarksVal>
     </Container>
   )
 }
 
-export default observer(Danger)
+export default observer(Remarks)

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import { RadioButton } from '../../../shared/RadioButton.jsx'
+import { RadioButton } from '../../../../shared/RadioButton.jsx'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -51,7 +51,7 @@ const MapVal2 = styled.div`
   }
 `
 
-const Map = ({ saveToDb, row }) => {
+export const Map = observer(({ saveToDb, row }) => {
   const onSaveFalse = useCallback(() => {
     const fakeEvent = {
       target: {
@@ -94,6 +94,4 @@ const Map = ({ saveToDb, row }) => {
       </MapVal2>
     </Container>
   )
-}
-
-export default observer(Map)
+})

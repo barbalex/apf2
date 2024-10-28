@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import { TextField2 } from '../../../shared/TextField2.jsx'
+import { TextField2 } from '../../../../shared/TextField2.jsx'
 import anteilImg from './anteil.png'
 
 const Area = styled.div`
@@ -78,7 +78,7 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const Cover = ({ saveToDb, row }) => {
+export const Cover = observer(({ saveToDb, row }) => {
   //console.log('Cover rendering')
 
   return (
@@ -113,6 +113,4 @@ const Cover = ({ saveToDb, row }) => {
       </DeckImage>
     </Container>
   )
-}
-
-export default observer(Cover)
+})

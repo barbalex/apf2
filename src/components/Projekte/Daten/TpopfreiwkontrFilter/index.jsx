@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 import queryTpopkontrs from './queryTpopkontrs.js'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { StoreContext } from '../../../../storeContext.js'
-import TpopfreiwkontrForm from './Form.jsx'
+import TpopfreiwkontrForm from './Form/index.jsx'
 import OrTabs from './Tabs.jsx'
 
 const Container = styled.div`

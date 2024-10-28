@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const query = gql`
   query TpopfreiwkontrAdressesFilterQuery {
     allAdresses(orderBy: NAME_ASC) {
       nodes {

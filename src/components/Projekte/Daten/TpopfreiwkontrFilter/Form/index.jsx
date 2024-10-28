@@ -2,17 +2,17 @@ import React, { useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import Headdata from './Headdata/index.jsx'
+import { Headdata } from './Headdata/index.jsx'
 import { Date } from './Date.jsx'
-import Map from './Map.jsx'
-import Cover from './Cover.jsx'
+import { Map } from './Map.jsx'
+import { Cover } from './Cover.jsx'
 import More from './More.jsx'
 import Danger from './Danger.jsx'
 import Remarks from './Remarks.jsx'
 import EkfRemarks from './EkfRemarks.jsx'
 import Verification from './Verification.jsx'
-import { StoreContext } from '../../../../storeContext.js'
-import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
+import { StoreContext } from '../../../../../storeContext.js'
+import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
 
 const FormContainer = styled.div`
   padding: 10px;

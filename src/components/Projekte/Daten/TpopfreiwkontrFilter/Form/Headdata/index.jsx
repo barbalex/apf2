@@ -3,10 +3,10 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 
-import { Select } from '../../../../shared/Select.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
-import queryAdresses from './queryAdresses.js'
-import { Error } from '../../../../shared/Error.jsx'
+import { Select } from '../../../../../shared/Select.jsx'
+import { StoreContext } from '../../../../../../storeContext.js'
+import { query } from './query.js'
+import { Error } from '../../../../../shared/Error.jsx'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -44,14 +44,13 @@ const BearbVal = styled.div`
   }
 `
 
-const Headdata = ({ row, activeTab }) => {
+export const Headdata = observer(({ row, activeTab }) => {
   const store = useContext(StoreContext)
   const { dataFilterSetValue } = store.tree
-  const { data, loading, error } = useQuery(queryAdresses)
+  const { data, loading, error } = useQuery(query)
 
   const saveToDb = useCallback(
     async (event) => {
-      console.log('Headdata setting:', { value: event.target.value })
       dataFilterSetValue({
         table: 'tpopfreiwkontr',
         key: 'bearbeiter',
@@ -80,6 +79,4 @@ const Headdata = ({ row, activeTab }) => {
       </BearbVal>
     </Container>
   )
-}
-
-export default observer(Headdata)
+})

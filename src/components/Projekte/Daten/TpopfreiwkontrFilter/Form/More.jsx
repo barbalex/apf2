@@ -2,8 +2,8 @@ import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import { TextField2 } from '../../../shared/TextField2.jsx'
-import { RadioButton } from '../../../shared/RadioButton.jsx'
+import { TextField2 } from '../../../../shared/TextField2.jsx'
+import { RadioButton } from '../../../../shared/RadioButton.jsx'
 import veghoeheImg from './veghoehe.png'
 
 const Area = styled.div`
