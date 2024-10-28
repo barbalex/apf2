@@ -20,11 +20,11 @@ import { MapResizer } from './MapResizer.jsx'
 import { Control } from './Control.jsx'
 import { OsmColor } from './layers/OsmColor.jsx'
 import { OsmBw } from './layers/OsmBw.jsx'
-import SwissTopoPixelFarbe from './layers/SwisstopoPixelFarbe.jsx'
-import SwissTopoPixelGrau from './layers/SwisstopoPixelGrau.jsx'
-import SwisstopoSiegfried from './layers/SwisstopoSiegfried.jsx'
-import SwisstopoDufour from './layers/SwisstopoDufour.jsx'
-import BingAerial from './layers/BingAerial.jsx'
+import { SwisstopoPixelFarbe } from './layers/SwisstopoPixelFarbe.jsx'
+import { SwisstopoPixelGrau } from './layers/SwisstopoPixelGrau.jsx'
+import { SwisstopoSiegfried } from './layers/SwisstopoSiegfried.jsx'
+import { SwisstopoDufour } from './layers/SwisstopoDufour.jsx'
+import { BingAerial } from './layers/BingAerial.jsx'
 import ZhOrtho2014Rgb from './layers/ZhOrtho2014Rgb.jsx'
 import ZhOrtho2014Ir from './layers/ZhOrtho2014Ir.jsx'
 import ZhOrtho2015Rgb from './layers/ZhOrtho2015Rgb.jsx'
@@ -493,8 +493,8 @@ export const Karte = observer(({ mapContainerRef }) => {
     () => ({
       OsmColor: () => <OsmColor />,
       OsmBw: () => <OsmBw />,
-      SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
-      SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
+      SwissTopoPixelFarbe: () => <SwisstopoPixelFarbe />,
+      SwissTopoPixelGrau: () => <SwisstopoPixelGrau />,
       SwisstopoSiegfried: () => <SwisstopoSiegfried />,
       SwisstopoDufour: () => <SwisstopoDufour />,
       ZhUep: () => <ZhUep />,

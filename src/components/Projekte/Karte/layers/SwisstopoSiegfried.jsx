@@ -3,7 +3,7 @@ import { TileLayer, Pane } from 'react-leaflet'
 
 // https://wmts.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
 
-const SwissTopoSiegfriedLayer = () => (
+export const SwisstopoSiegfried = () => (
   <Pane
     className="SwisstopoSiegfried"
     name="SwisstopoSiegfried"
@@ -18,5 +18,3 @@ const SwissTopoSiegfriedLayer = () => (
     />
   </Pane>
 )
-
-export default SwissTopoSiegfriedLayer

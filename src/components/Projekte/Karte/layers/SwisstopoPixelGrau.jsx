@@ -3,7 +3,7 @@ import { TileLayer, Pane } from 'react-leaflet'
 
 // https://wmts.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
 
-const SwissTopoPixelFarbeLayer = () => (
+export const SwisstopoPixelGrau = () => (
   <Pane
     className="SwissTopoPixelGrau"
     name="SwissTopoPixelGrau"
@@ -18,5 +18,3 @@ const SwissTopoPixelFarbeLayer = () => (
     />
   </Pane>
 )
-
-export default SwissTopoPixelFarbeLayer
