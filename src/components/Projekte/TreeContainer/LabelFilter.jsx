@@ -31,7 +31,7 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   font-size: 1.5rem;
 `
 
-const LabelFilter = () => {
+export const LabelFilter = observer(() => {
   const store = useContext(StoreContext)
   const { nodeLabelFilter, activeFilterTable } = store.tree
   const {
@@ -115,6 +115,4 @@ const LabelFilter = () => {
       />
     </StyledFormControl>
   )
-}
-
-export default observer(LabelFilter)
+})

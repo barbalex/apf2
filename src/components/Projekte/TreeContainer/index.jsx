@@ -17,7 +17,9 @@ import { useParams, useLocation } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
 
-const LabelFilter = lazy(() => import('./LabelFilter.jsx'))
+const LabelFilter = lazy(async () => ({
+  default: (await import('./LabelFilter.jsx')).LabelFilter,
+}))
 const ApFilter = lazy(async () => ({
   default: (await import('./ApFilter/index.jsx')).ApFilter,
 }))

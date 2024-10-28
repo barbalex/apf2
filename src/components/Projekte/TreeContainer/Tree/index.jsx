@@ -18,12 +18,10 @@ const Container = styled.div`
   }
 `
 
-export const TreeComponent = () => {
-  return (
-    <Container>
-      <Root />
-      <IntoViewScroller />
-      <Menu />
-    </Container>
-  )
-}
+export const TreeComponent = () => (
+  <Container>
+    <Root />
+    <IntoViewScroller />
+    <Menu />
+  </Container>
+)
