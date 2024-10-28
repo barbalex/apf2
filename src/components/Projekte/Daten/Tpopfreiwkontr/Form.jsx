@@ -142,7 +142,7 @@ const fieldTypes = {
   ekfBemerkungen: 'String',
 }
 
-const TpopfreiwkontrForm = ({ data, refetch, row, apId }) => {
+export const Form = observer(({ data, refetch, row, apId }) => {
   const client = useApolloClient()
   const queryClient = useQueryClient()
 
@@ -491,6 +491,4 @@ const TpopfreiwkontrForm = ({ data, refetch, row, apId }) => {
       {!isPrint && <div style={{ height: '64px' }} />}
     </FormContainer>
   )
-}
-
-export default observer(TpopfreiwkontrForm)
+})
