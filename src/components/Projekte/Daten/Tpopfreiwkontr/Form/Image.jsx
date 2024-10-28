@@ -41,7 +41,7 @@ const NotifContainer = styled.div`
   align-items: center;
 `
 
-const Image = ({ artname, apId }) => {
+export const Image = ({ artname, apId }) => {
   const [notif, setNotif] = useState(null)
 
   // show notification if image is not found
@@ -58,8 +58,15 @@ const Image = ({ artname, apId }) => {
       {!notif && (
         <ImageContainer>
           <picture>
-            <source srcSet={`/${apId}.avif`} type="image/avif" />
-            <Img src={`/${apId}.webp`} onError={onError} alt={artname} />
+            <source
+              srcSet={`/${apId}.avif`}
+              type="image/avif"
+            />
+            <Img
+              src={`/${apId}.webp`}
+              onError={onError}
+              alt={artname}
+            />
           </picture>
         </ImageContainer>
       )}
@@ -67,5 +74,3 @@ const Image = ({ artname, apId }) => {
     </Container>
   )
 }
-
-export default Image

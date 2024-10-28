@@ -42,7 +42,7 @@ const Grund = styled.div`
   }
 `
 
-const Verification = ({ saveToDb, row, errors }) => (
+export const Verification = observer(({ saveToDb, row, errors }) => (
   <Container>
     <Relevant>
       <RadioButton
@@ -67,6 +67,4 @@ const Verification = ({ saveToDb, row, errors }) => (
       />
     </Grund>
   </Container>
-)
-
-export default observer(Verification)
+))
