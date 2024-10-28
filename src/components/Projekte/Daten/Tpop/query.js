@@ -8,7 +8,7 @@ import {
   tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query tpopByIdQuery($id: UUID!) {
     tpopById(id: $id) {
       ...TpopFields

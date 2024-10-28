@@ -14,7 +14,7 @@ import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'
 import { RadioButtonGroup } from '../../../../shared/RadioButtonGroup.jsx'
 import { Select } from '../../../../shared/Select.jsx'
 import { TextField } from '../../../../shared/TextField.jsx'
-import queryEk from './queryEk.js'
+import { query } from './query.js'
 import EkYear from './EkYear.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
@@ -59,14 +59,14 @@ const EkplanTitle = styled.h5`
   margin-bottom: 10px;
 `
 
-const Ek = ({ saveToDb, row, fieldErrors, loadingParent }) => {
+export const Ek = ({ saveToDb, row, fieldErrors, loadingParent }) => {
   const { tpopId, apId } = useParams()
 
   const {
     data: dataEk,
     loading: loadingEk,
     error: errorEk,
-  } = useQuery(queryEk, {
+  } = useQuery(query, {
     variables: {
       id: tpopId,
       isEk: true,
@@ -185,5 +185,3 @@ const Ek = ({ saveToDb, row, fieldErrors, loadingParent }) => {
     </SimpleBar>
   )
 }
-
-export default Ek
