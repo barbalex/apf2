@@ -11,7 +11,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import query from './query.js'
+import { query } from './query.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -40,7 +40,7 @@ const fieldTypes = {
   bezeichnung: 'String',
 }
 
-const Ziel = () => {
+export const Component = observer(() => {
   const { zielId: id } = useParams()
   const { search } = useLocation()
   const navigate = useNavigate()
@@ -185,6 +185,4 @@ const Ziel = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export const Component = observer(Ziel)
+})

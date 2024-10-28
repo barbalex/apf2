@@ -29,7 +29,7 @@ const FormContainer = styled.div`
   padding: 10px;
 `
 
-const Werte = () => {
+export const Component = observer(() => {
   const { wertId: id } = useParams()
   const location = useLocation()
   const { pathname } = location
@@ -179,6 +179,4 @@ const Werte = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export const Component = observer(Werte)
+})

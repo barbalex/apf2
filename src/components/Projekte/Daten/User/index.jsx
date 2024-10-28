@@ -93,7 +93,7 @@ const fieldTypes = {
   adresseId: 'UUID',
 }
 
-const User = () => {
+export const Component = observer(() => {
   const { userId } = useParams()
   const { search } = useLocation()
 
@@ -490,6 +490,4 @@ const User = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export const Component = observer(User)
+})
