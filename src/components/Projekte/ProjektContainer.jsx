@@ -11,7 +11,9 @@ const TreeContainer = lazy(() => import('./TreeContainer/index.jsx'))
 const Exporte = lazy(async () => ({
   default: (await import('./Exporte/index.jsx')).Exporte,
 }))
-const Filter = lazy(() => import('./Filter/index.jsx'))
+const Filter = lazy(async () => ({
+  default: (await import('./Filter/index.jsx')).Filter,
+}))
 import { StoreContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 import { useSearchParamsState } from '../../modules/useSearchParamsState.js'

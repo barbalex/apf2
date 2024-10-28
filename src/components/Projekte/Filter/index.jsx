@@ -18,7 +18,7 @@ const Container = styled.div`
   background-color: #ffd3a7;
 `
 
-const Filter = () => {
+export const Filter = () => {
   const [tab, setTab] = useSearchParamsState('filterTab', 'ap')
 
   return (
@@ -39,4 +39,3 @@ const Filter = () => {
   )
 }
 
-export default Filter
