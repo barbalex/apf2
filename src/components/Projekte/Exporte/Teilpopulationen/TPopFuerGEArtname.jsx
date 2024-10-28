@@ -7,7 +7,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const TPopFuerGEArtname = () => {
+export const TPopFuerGEArtname = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -79,11 +79,9 @@ const TPopFuerGEArtname = () => {
       }}
     >
       {`Teilpopulationen für Google Earth (beschriftet mit Artname, PopNr/TPopNr)`}
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(TPopFuerGEArtname)
+})

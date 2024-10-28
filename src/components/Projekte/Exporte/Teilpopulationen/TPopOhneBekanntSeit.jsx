@@ -6,7 +6,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const TPopOhneBekanntSeit = () => {
+export const TPopOhneBekanntSeit = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -68,11 +68,9 @@ const TPopOhneBekanntSeit = () => {
       }}
     >
       {'Teilpopulationen von AP-Arten ohne "Bekannt seit"'}
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(TPopOhneBekanntSeit)
+})
