@@ -7,7 +7,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const Zielber = () => {
+export const Zielber = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -124,11 +124,9 @@ const Zielber = () => {
       disabled={!!queryState}
     >
       Ziel-Berichte
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(Zielber)
+})
