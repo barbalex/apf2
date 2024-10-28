@@ -37,7 +37,7 @@ const fieldTypes = {
   bemerkungen: 'String',
 }
 
-const Tpopber = () => {
+export const Component = observer(() => {
   const { tpopberId: id } = useParams()
 
   const client = useApolloClient()
@@ -172,6 +172,4 @@ const Tpopber = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export const Component = observer(Tpopber)
+})
