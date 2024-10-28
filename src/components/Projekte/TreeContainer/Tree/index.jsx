@@ -18,7 +18,7 @@ const Container = styled.div`
   }
 `
 
-const TreeComponent = () => {
+export const TreeComponent = () => {
   return (
     <Container>
       <Root />
@@ -27,5 +27,3 @@ const TreeComponent = () => {
     </Container>
   )
 }
-
-export default TreeComponent
