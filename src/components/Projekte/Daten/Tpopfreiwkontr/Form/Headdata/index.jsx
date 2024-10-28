@@ -5,7 +5,7 @@ import { useQuery, useApolloClient, gql } from '@apollo/client'
 
 import { Select } from '../../../../../shared/Select.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
-import queryAdresses from './queryAdresses.js'
+import { query } from './query.js'
 import {
   adresse as adresseFragment,
   pop as popFragment,
@@ -78,11 +78,11 @@ const StatusLabel = styled(Label)`
   grid-area: statusVal;
 `
 
-const Headdata = ({ pop, tpop, row }) => {
+export const Headdata = observer(({ pop, tpop, row }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { user, isPrint } = store
-  const { data, loading, error } = useQuery(queryAdresses)
+  const { data, loading, error } = useQuery(query)
   const [errors, setErrors] = useState(null)
 
   const saveToDb = useCallback(
@@ -199,6 +199,4 @@ const Headdata = ({ pop, tpop, row }) => {
       <StatusLabel>{status}</StatusLabel>
     </Container>
   )
-}
-
-export default observer(Headdata)
+})
