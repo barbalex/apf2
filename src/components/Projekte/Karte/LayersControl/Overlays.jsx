@@ -161,7 +161,7 @@ const SortableItem = ({
     </LayerDiv>
   )
 }
-const Overlays = () => {
+export const Overlays = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(StoreContext)
@@ -243,6 +243,4 @@ const Overlays = () => {
       </DndContext>
     </CardContent>
   )
-}
-
-export default observer(Overlays)
+})

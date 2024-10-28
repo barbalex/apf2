@@ -35,7 +35,7 @@ const options = {
   hideControlContainer: true,
 }
 
-const PngControl = () => {
+export const PngControl = observer(() => {
   const { setHideMapControls } = useContext(StoreContext)
   const map = useMap()
   const [printPlugin, setPrintPlugin] = useState({})
@@ -71,10 +71,11 @@ const PngControl = () => {
   )
 
   return (
-    <StyledButton onClick={savePng} title="Karte als png speichern">
+    <StyledButton
+      onClick={savePng}
+      title="Karte als png speichern"
+    >
       <FileDownloadIcon />
     </StyledButton>
   )
-}
-
-export default observer(PngControl)
+})
