@@ -5,7 +5,7 @@ import { useApolloClient, gql } from '@apollo/client'
 
 import { StoreContext } from '../../storeContext.js'
 
-const ApFilterController = () => {
+export const ApFilterController = observer(() => {
   const client = useApolloClient()
   const { apId } = useParams()
   const store = useContext(StoreContext)
@@ -37,6 +37,4 @@ const ApFilterController = () => {
   }, [apFilter, apId, client, setApFilter])
 
   return null
-}
-
-export default observer(ApFilterController)
+})

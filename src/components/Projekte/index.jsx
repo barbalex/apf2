@@ -3,20 +3,21 @@ import styled from '@emotion/styled'
 import intersection from 'lodash/intersection'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router-dom'
-
 import queryString from 'query-string'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
-import ProjektContainer from './ProjektContainer'
+import { ProjektContainer } from './ProjektContainer.jsx'
 import { StoreContext } from '../../storeContext.js'
-import { StyledSplitPane } from '../shared/StyledSplitPane'
+import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 // import AppRenderer from '../../AppRenderer'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 import { inIframe } from '../../modules/inIframe.js'
 import { useSearchParamsState } from '../../modules/useSearchParamsState.js'
 import { isMobilePhone } from '../../modules/isMobilePhone.js'
-const ApFilterController = lazy(() => import('./ApFilterController'))
+const ApFilterController = lazy(async () => ({
+  default: (await import('./ApFilterController.jsx')).ApFilterController,
+}))
 
 const isInIframe = inIframe()
 
@@ -36,7 +37,7 @@ const StyledIframe = styled.iframe`
 
 const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
-const Projekte = () => {
+export const Component = observer(() => {
   const { pathname, search } = useLocation()
   const store = useContext(StoreContext)
   const { isPrint } = store
@@ -118,6 +119,4 @@ const Projekte = () => {
       </Container>
     </>
   )
-}
-
-export const Component = observer(Projekte)
+})

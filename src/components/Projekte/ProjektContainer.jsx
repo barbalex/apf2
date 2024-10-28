@@ -38,7 +38,7 @@ const InnerContainer = styled.div`
   height: 100%;
 `
 
-const ProjektContainer = () => {
+export const ProjektContainer = observer(() => {
   const { projId, apberUebersichtId, apberId } = useParams()
   const { pathname } = useLocation()
 
@@ -187,6 +187,4 @@ const ProjektContainer = () => {
       </StyledSplitPane>
     </Container>
   )
-}
-
-export default observer(ProjektContainer)
+})
