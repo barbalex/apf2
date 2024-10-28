@@ -10,10 +10,10 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import Pops from './Pops.jsx'
-import PopsForGoogleEarth from './PopsForGoogleEarth.jsx'
-import PopsForGEArtname from './PopsForGEArtname.jsx'
-import ApOhneStatus from './ApOhneStatus.jsx'
+import { Pops } from './Pops.jsx'
+import { PopsForGoogleEarth } from './PopsForGoogleEarth.jsx'
+import { PopsForGEArtname } from './PopsForGEArtname.jsx'
+import { ApOhneStatus } from './ApOhneStatus.jsx'
 import OhneKoord from './OhneKoord.jsx'
 import AnzMassnBerichtsjahr from './AnzMassnBerichtsjahr.jsx'
 import AnzMassnProPop from './AnzMassnProPop.jsx'
@@ -29,7 +29,10 @@ export const Populationen = () => {
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>Populationen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -42,8 +45,12 @@ export const Populationen = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        {expanded ? (
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
+        {expanded ?
           <StyledCardContent>
             <Pops />
             <Pops filtered={true} />
@@ -60,9 +67,8 @@ export const Populationen = () => {
             <LetzteZaehlung />
             <LetzteZaehlungInklAnpflanz />
           </StyledCardContent>
-        ) : null}
+        : null}
       </Collapse>
     </StyledCard>
   )
 }
-

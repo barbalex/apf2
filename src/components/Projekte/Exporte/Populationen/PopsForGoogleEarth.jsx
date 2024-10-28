@@ -7,7 +7,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const PopsForGoogleEarth = () => {
+export const PopsForGoogleEarth = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -81,11 +81,9 @@ const PopsForGoogleEarth = () => {
       }}
     >
       {`Populationen für Google Earth (beschriftet mit PopNr)`}
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(PopsForGoogleEarth)
+})
