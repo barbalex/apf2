@@ -20,9 +20,9 @@ import { AnzMassnProPop } from './AnzMassnProPop.jsx'
 import { AnzKontrProPop } from './AnzKontrProPop.jsx'
 import { Berichte } from './Berichte.jsx'
 import { LetzterPopBericht } from './LetzterPopBericht.jsx'
-import LetzterMassnBericht from './LetzterMassnBericht.jsx'
-import LetzteZaehlung from './LetzteZaehlung.jsx'
-import LetzteZaehlungInklAnpflanz from './LetzteZaehlungInklAnpflanz.jsx'
+import { LetzterMassnBericht } from './LetzterMassnBericht.jsx'
+import { LetzteZaehlung } from './LetzteZaehlung.jsx'
+import { LetzteZaehlungInklAnpflanz } from './LetzteZaehlungInklAnpflanz.jsx'
 
 export const Populationen = () => {
   const [expanded, setExpanded] = useState(false)

@@ -7,7 +7,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const LetzteZaehlungInklAnpflanz = () => {
+export const LetzteZaehlungInklAnpflanz = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -170,11 +170,9 @@ const LetzteZaehlungInklAnpflanz = () => {
       }}
     >
       Aktuellste Zählung inklusive seither erfolgter Anpflanzungen
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(LetzteZaehlungInklAnpflanz)
+})
