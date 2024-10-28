@@ -1,5 +1,5 @@
 import { useContext, useCallback } from 'react'
-import { Polyline, Popup } from 'react-leaflet'
+import { Polyline as LeafletPolyline, Popup } from 'react-leaflet'
 import styled from '@emotion/styled'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
@@ -27,7 +27,7 @@ const Info = styled.div`
   column-gap: 5px;
 `
 
-const PolylineComponent = ({ beob }) => {
+export const Polyline = observer(({ beob }) => {
   const { apId, projId, beobId } = useParams()
   const { search } = useLocation()
 
@@ -133,7 +133,7 @@ const PolylineComponent = ({ beob }) => {
   }, [apId, popId, projId, tpopId])
 
   return (
-    <Polyline
+    <LeafletPolyline
       positions={[beobLatLng, tpopLatLng]}
       color={isHighlighted ? 'yellow' : '#FF00FF'}
     >
@@ -200,8 +200,6 @@ const PolylineComponent = ({ beob }) => {
           <Data id={beob.id} />
         </>
       </Popup>
-    </Polyline>
+    </LeafletPolyline>
   )
-}
-
-export default observer(PolylineComponent)
+})

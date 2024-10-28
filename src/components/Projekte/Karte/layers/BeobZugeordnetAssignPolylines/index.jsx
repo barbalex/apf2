@@ -3,32 +3,11 @@ import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 
-import Polyline from './Polyline.jsx'
+import { Polyline } from './Polyline.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
-import query from './query.js'
+import { query } from './query.js'
 
-const Router = () => {
-  const store = useContext(StoreContext)
-  const tree = store.tree
-  const { beobGqlFilter } = tree
-
-  const { apId } = useParams()
-
-  // Problem: gqlFilter updates AFTER apId
-  // if navigating from ap to pop, apId is set before gqlFilter
-  // thus query fetches data for all aps
-  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
-  const gqlFilterHasApId =
-    !!beobGqlFilter('zugeordnet').filtered?.aeTaxonomyByArtId?.apartsByArtId
-      ?.some?.apId
-  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
-
-  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
-
-  return <ObservedBeobZugeordnetAssignPolylines />
-}
-
-const BeobZugeordnetAssignPolylines = () => {
+const Polylines = observer(() => {
   const store = useContext(StoreContext)
   const { enqueNotification } = store
   const { beobGqlFilter } = store.tree
@@ -47,12 +26,30 @@ const BeobZugeordnetAssignPolylines = () => {
   }
 
   return (data?.allBeobs?.nodes ?? []).map((beob) => (
-    <Polyline key={beob.id} beob={beob} />
+    <Polyline
+      key={beob.id}
+      beob={beob}
+    />
   ))
-}
+})
 
-const ObservedBeobZugeordnetAssignPolylines = observer(
-  BeobZugeordnetAssignPolylines,
-)
+export const BeobZugeordnetAssignPolylines = observer(() => {
+  const store = useContext(StoreContext)
+  const tree = store.tree
+  const { beobGqlFilter } = tree
 
-export default observer(Router)
+  const { apId } = useParams()
+
+  // Problem: gqlFilter updates AFTER apId
+  // if navigating from ap to pop, apId is set before gqlFilter
+  // thus query fetches data for all aps
+  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
+  const gqlFilterHasApId =
+    !!beobGqlFilter('zugeordnet').filtered?.aeTaxonomyByArtId?.apartsByArtId
+      ?.some?.apId
+  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+
+  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+
+  return <Polylines />
+})
