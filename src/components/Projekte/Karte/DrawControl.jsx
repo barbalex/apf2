@@ -42,7 +42,7 @@ window.L.drawLocal.edit.handlers.edit.tooltip.subtext =
   'Punkte ziehen, um Filter-Umriss zu ändern'
 window.L.drawLocal.edit.handlers.remove.tooltip.text = `zum Löschen auf Filter-Umriss klicken, dann auf 'speichern'`
 
-const DrawControl = () => {
+export const DrawControl = observer(() => {
   const map = useMap()
   const store = useContext(StoreContext)
   const { setMapFilter, mapFilter, mapFilterResetter } = store.tree
@@ -51,9 +51,8 @@ const DrawControl = () => {
     // solution to allow only one geometry to be drawn
     // see: https://github.com/Leaflet/Leaflet.draw/issues/315#issuecomment-500246272
     // also: pass in mapFilter if exists
-    const drawnItems = mapFilter
-      ? window.L.geoJSON(mapFilter)
-      : new window.L.FeatureGroup()
+    const drawnItems =
+      mapFilter ? window.L.geoJSON(mapFilter) : new window.L.FeatureGroup()
     map.addLayer(drawnItems)
 
     const drawControlFull = new window.L.Control.Draw({
@@ -135,6 +134,4 @@ const DrawControl = () => {
   }, [map, setMapFilter, mapFilterResetter])
 
   return <div style={{ display: 'none' }} />
-}
-
-export default observer(DrawControl)
+})

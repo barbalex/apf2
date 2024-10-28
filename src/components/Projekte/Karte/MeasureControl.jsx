@@ -30,8 +30,6 @@ window.L.Control.Measure.include({
   },
 })
 
-const MeasureControl = createControlComponent(
+export const MeasureControl = createControlComponent(
   () => new window.L.Control.Measure(options),
 )
-
-export default MeasureControl
