@@ -24,7 +24,7 @@ const pTLOptions = {
 const pointToLayer = (feature, latlng) =>
   window.L.circleMarker(latlng, pTLOptions)
 
-const MarkierungenLayer = () => {
+export const Markierungen = observer(() => {
   const store = useContext(StoreContext)
   const { enqueNotification } = store
 
@@ -74,6 +74,4 @@ const MarkierungenLayer = () => {
       interactive={false}
     />
   )
-}
-
-export default observer(MarkierungenLayer)
+})

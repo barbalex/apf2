@@ -1,7 +1,7 @@
 import React from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-const SvoColorLayer = () => (
+export const ZhSvoColor = () => (
   <WMSTileLayer
     url="//wms.zh.ch/FnsSVOZHWMS"
     layers="zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte,svo-zonen-labels,schutzverordnungsobjekt-nr"
@@ -14,5 +14,3 @@ const SvoColorLayer = () => (
     maxZoom={22}
   />
 )
-
-export default SvoColorLayer

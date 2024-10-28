@@ -1,7 +1,7 @@
 import React from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-const ZhPflegeplanLayer = () => (
+export const ZhPflegeplan = () => (
   <WMSTileLayer
     url="//wms.zh.ch/FnsPflegeZHWMS"
     layers="pfpl-aktuell,ueberlagerung1-aktuell,ueberlagerung2-aktuell,pfpl-label-aktuell"
@@ -14,5 +14,3 @@ const ZhPflegeplanLayer = () => (
     maxZoom={22}
   />
 )
-
-export default ZhPflegeplanLayer
