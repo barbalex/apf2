@@ -24,7 +24,7 @@ const iconCreateFunction = function (cluster) {
   })
 }
 
-const PopRouter = () => {
+export const Pop = observer(() => {
   const store = useContext(StoreContext)
   const tree = store.tree
   const { popGqlFilter } = tree
@@ -40,9 +40,9 @@ const PopRouter = () => {
 
   if (apIdExistsButGqlFilterDoesNotKnowYet) return null
   return <ObservedPop />
-}
+})
 
-const Pop = () => {
+const ObservedPop = observer(() => {
   const map = useMap()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -90,12 +90,11 @@ const Pop = () => {
       iconCreateFunction={iconCreateFunction}
     >
       {(data?.allPops?.nodes ?? []).map((pop) => (
-        <Marker key={pop.id} pop={pop} />
+        <Marker
+          key={pop.id}
+          pop={pop}
+        />
       ))}
     </MarkerClusterGroup>
   )
-}
-
-const ObservedPop = observer(Pop)
-
-export default observer(PopRouter)
+})

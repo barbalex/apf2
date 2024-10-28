@@ -1,7 +1,7 @@
 import React from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-const UepLayer = () => (
+export const ZhUepOverlay = () => (
   <WMSTileLayer
     url="//wms.zh.ch/upwms"
     layers="Uebersichtsplan"
@@ -13,5 +13,3 @@ const UepLayer = () => (
     maxZoom={22}
   />
 )
-
-export default UepLayer
