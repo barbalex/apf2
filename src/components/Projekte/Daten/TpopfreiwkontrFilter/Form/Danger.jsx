@@ -34,7 +34,7 @@ const DangerVal = styled.div`
   }
 `
 
-const Danger = ({ saveToDb, row }) => {
+export const Danger = observer(({ saveToDb, row }) => {
   //console.log('Danger rendering')
 
   return (
@@ -57,6 +57,4 @@ const Danger = ({ saveToDb, row }) => {
       </DangerVal>
     </Container>
   )
-}
-
-export default observer(Danger)
+})

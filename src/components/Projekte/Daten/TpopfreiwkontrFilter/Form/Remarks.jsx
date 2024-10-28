@@ -34,7 +34,7 @@ const RemarksVal = styled.div`
   }
 `
 
-const Remarks = ({ saveToDb, row }) => {
+export const Remarks = observer(({ saveToDb, row }) => {
   //console.log('Remarks rendering')
 
   return (
@@ -58,6 +58,4 @@ const Remarks = ({ saveToDb, row }) => {
       </RemarksVal>
     </Container>
   )
-}
-
-export default observer(Remarks)
+})
