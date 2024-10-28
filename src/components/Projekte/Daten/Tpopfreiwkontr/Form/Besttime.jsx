@@ -25,18 +25,11 @@ const BesttimeVal = styled.div`
   grid-area: besttimeVal;
 `
 
-const Besttime = ({ row }) => {
-  //console.log('Besttime rendering')
-
-  return (
-    <Container>
-      <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
-      <BesttimeVal>
-        {row?.tpopByTpopId?.popByPopId?.apByApId?.ekfBeobachtungszeitpunkt ??
-          ''}
-      </BesttimeVal>
-    </Container>
-  )
-}
-
-export default Besttime
+export const Besttime = ({ row }) => (
+  <Container>
+    <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
+    <BesttimeVal>
+      {row?.tpopByTpopId?.popByPopId?.apByApId?.ekfBeobachtungszeitpunkt ?? ''}
+    </BesttimeVal>
+  </Container>
+)
