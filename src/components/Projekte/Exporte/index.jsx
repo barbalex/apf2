@@ -94,7 +94,7 @@ export const CardActionIconButton = styled(IconButton)`
   transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 
-const Exporte = () => {
+export const Exporte = () => {
   return (
     <ExporteContainer data-id="exporte-container">
       <ErrorBoundary>
@@ -129,5 +129,3 @@ const Exporte = () => {
     </ExporteContainer>
   )
 }
-
-export default Exporte

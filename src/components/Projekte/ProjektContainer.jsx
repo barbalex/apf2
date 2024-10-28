@@ -8,7 +8,9 @@ import { useParams, useLocation } from 'react-router-dom'
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
 import Karte from './Karte/index.jsx'
 const TreeContainer = lazy(() => import('./TreeContainer/index.jsx'))
-const Exporte = lazy(() => import('./Exporte/index.jsx'))
+const Exporte = lazy(async () => ({
+  default: (await import('./Exporte/index.jsx')).Exporte,
+}))
 const Filter = lazy(() => import('./Filter/index.jsx'))
 import { StoreContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
@@ -116,22 +118,24 @@ const ProjektContainer = () => {
       <StyledSplitPane
         split="vertical"
         size={
-          treeTabs.length === 2 && treeTabs[0] === 'tree'
-            ? '33%'
-            : `${100 / treeTabs.length}%`
+          treeTabs.length === 2 && treeTabs[0] === 'tree' ?
+            '33%'
+          : `${100 / treeTabs.length}%`
         }
         maxSize={-10}
         overflowPane1={
-          treeTabs[0] === 'daten' && (showApberForAll || showApberForArt)
-            ? 'auto'
-            : 'hidden'
+          treeTabs[0] === 'daten' && (showApberForAll || showApberForArt) ?
+            'auto'
+          : 'hidden'
         }
         overflowPane2={
-          treeTabs[1] === 'daten' &&
-          treeTabs.length === 2 &&
-          (showApberForAll || showApberForArt)
-            ? 'auto'
-            : 'hidden'
+          (
+            treeTabs[1] === 'daten' &&
+            treeTabs.length === 2 &&
+            (showApberForAll || showApberForArt)
+          ) ?
+            'auto'
+          : 'hidden'
         }
       >
         {elObj[treeTabs[0]]}
@@ -143,11 +147,13 @@ const ProjektContainer = () => {
             size={`${100 / (treeTabs.length - 1)}%`}
             maxSize={-10}
             overflowPane1={
-              treeTabs[1] === 'daten' &&
-              treeTabs.length > 2 &&
-              (showApberForAll || showApberForArt)
-                ? 'auto'
-                : 'hidden'
+              (
+                treeTabs[1] === 'daten' &&
+                treeTabs.length > 2 &&
+                (showApberForAll || showApberForArt)
+              ) ?
+                'auto'
+              : 'hidden'
             }
           >
             {elObj[treeTabs[1]]}
@@ -161,7 +167,11 @@ const ProjektContainer = () => {
                 {elObj[treeTabs[2]]}
                 {treeTabs.length === 4 && elObj[treeTabs[3]]}
                 {treeTabs.length === 5 && (
-                  <StyledSplitPane split="vertical" size="50%" maxSize={-10}>
+                  <StyledSplitPane
+                    split="vertical"
+                    size="50%"
+                    maxSize={-10}
+                  >
                     {elObj[treeTabs[3]]}
                     {elObj[treeTabs[4]]}
                   </StyledSplitPane>
