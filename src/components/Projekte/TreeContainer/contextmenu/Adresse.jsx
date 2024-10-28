@@ -16,18 +16,25 @@ const deleteData = {
   table: 'adresse',
 }
 
-const Adresse = ({ onClick }) => (
+export const Adresse = ({ onClick }) => (
   <ErrorBoundary>
-    <ContextMenu id="treeAdresse" hideOnLeave={true}>
+    <ContextMenu
+      id="treeAdresse"
+      hideOnLeave={true}
+    >
       <div className="react-contextmenu-title">Adresse</div>
-      <MenuItem onClick={onClick} data={insertData}>
+      <MenuItem
+        onClick={onClick}
+        data={insertData}
+      >
         erstelle neue
       </MenuItem>
-      <MenuItem onClick={onClick} data={deleteData}>
+      <MenuItem
+        onClick={onClick}
+        data={deleteData}
+      >
         lösche
       </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
 )
-
-export default Adresse
