@@ -23,9 +23,9 @@ import { Checkbox } from '../../shared/Checkbox.jsx'
 import { Error } from '../../../../../shared/Error.jsx'
 import { getBounds } from '../../../../../../modules/getBounds.js'
 import { StoreContext } from '../../../../../../storeContext.js'
-import query from './query.js'
-import PopIcon from './PopIcon.jsx'
-import TpopIcon from './TpopIcon.jsx'
+import { query } from './query.js'
+import { PopIcon } from './PopIcon.jsx'
+import { TpopIcon } from './TpopIcon.jsx'
 
 const PauseCircleOutlineIcon = styled(MdPauseCircleOutline)`
   font-size: 1.5rem;
@@ -112,7 +112,7 @@ const BeobZugeordnetAssignPolylinesIcon = styled(RemoveIcon)`
 `
 const MapIconDiv = styled.div``
 
-const LayerComponent = ({ apfloraLayer }) => {
+export const Layer = observer(({ apfloraLayer }) => {
   const { apId, popId, tpopId, beobId } = useParams()
 
   const map = useMap()
@@ -367,6 +367,4 @@ const LayerComponent = ({ apfloraLayer }) => {
       </IconsDiv>
     </LayerDiv>
   )
-}
-
-export default observer(LayerComponent)
+})

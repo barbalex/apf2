@@ -36,7 +36,7 @@ const CheckIcon = styled(FaCheck)`
   padding-right: 5px;
 `
 
-const PopIcon = () => {
+export const PopIcon = observer(() => {
   const store = useContext(StoreContext)
   const { map } = store
   const { popIcon, setPopIcon, setPopLabel, popLabel } = map
@@ -120,6 +120,4 @@ const PopIcon = () => {
       </Menu>
     </>
   )
-}
-
-export default observer(PopIcon)
+})

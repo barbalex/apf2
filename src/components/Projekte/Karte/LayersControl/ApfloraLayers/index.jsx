@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import { StoreContext } from '../../../../../storeContext.js'
-import Layer from './Layer/index.jsx'
+import { Layer } from './Layer/index.jsx'
 import { ShowForMultipleAps } from './ShowForMultipleAps.jsx'
 import { KtZhFilter } from './KtZhFilter/index.jsx'
 
