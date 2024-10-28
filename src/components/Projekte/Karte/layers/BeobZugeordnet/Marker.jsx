@@ -1,5 +1,5 @@
 import { useContext, useCallback } from 'react'
-import { Marker, Popup } from 'react-leaflet'
+import { Marker as LeafletMarker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import styled from '@emotion/styled'
@@ -32,7 +32,7 @@ export const Info = styled.div`
   column-gap: 5px;
 `
 
-const BeobZugeordnetMarker = ({ beob }) => {
+export const Marker = observer(({ beob }) => {
   const { apId, projId, beobId } = useParams()
   const navigate = useNavigate()
   const { search } = useLocation()
@@ -150,7 +150,7 @@ const BeobZugeordnetMarker = ({ beob }) => {
   const pop = beob?.tpopByTpopId?.popByPopId
 
   return (
-    <Marker
+    <LeafletMarker
       position={latLng}
       icon={icon}
       title={label}
@@ -198,8 +198,6 @@ const BeobZugeordnetMarker = ({ beob }) => {
           <Data id={beob.id} />
         </>
       </Popup>
-    </Marker>
+    </LeafletMarker>
   )
-}
-
-export default observer(BeobZugeordnetMarker)
+})
