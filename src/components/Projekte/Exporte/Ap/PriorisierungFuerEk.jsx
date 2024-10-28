@@ -6,7 +6,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const PriorisierungFuerEk = () => {
+export const PriorisierungFuerEk = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -129,11 +129,9 @@ const PriorisierungFuerEk = () => {
       disabled={!!queryState}
     >
       Priorisierung für EK basierend auf Pop-Entwicklung
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(PriorisierungFuerEk)
+})

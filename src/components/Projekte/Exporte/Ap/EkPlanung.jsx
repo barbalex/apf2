@@ -6,7 +6,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const EkPlanung = () => {
+export const EkPlanung = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -80,11 +80,9 @@ const EkPlanung = () => {
       disabled={!!queryState}
     >
       EK-Planung pro Jahr nach Abrechnungstyp
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(EkPlanung)
+})
