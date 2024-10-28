@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useContext, useEffect } from 'react'
-import Tabs from '@mui/material/Tabs'
+import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -15,16 +15,16 @@ import { JesNo } from '../../../shared/JesNo.jsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import { DateField } from '../../../shared/Date.jsx'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover.jsx'
+import { TpopfeldkontrentwicklungPopover } from '../TpopfeldkontrentwicklungPopover.jsx'
 import { constants } from '../../../../modules/constants.js'
-import query from './query.js'
-import queryTpopkontrs from './queryTpopkontrs.js'
+import { query } from './query.js'
+import { queryTpopkontrs } from './queryTpopkontrs.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import OrTabs from './Tabs.jsx'
+import { Tabs } from './Tabs.jsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
@@ -226,13 +226,13 @@ const TpopfeldkontrFilter = () => {
             </FilterCommentList>
           </>
         )}
-        <OrTabs
+        <Tabs
           dataFilter={dataFilter.tpopfeldkontr}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
         <FieldsContainer>
-          <Tabs
+          <MuiTabs
             value={tab}
             onChange={onChangeTab}
             indicatorColor="primary"
@@ -249,7 +249,7 @@ const TpopfeldkontrFilter = () => {
               value="biotop"
               data-id="biotop"
             />
-          </Tabs>
+          </MuiTabs>
           <div style={{ overflowY: 'auto' }}>
             <TabContent>
               {tab === 'entwicklung' && (

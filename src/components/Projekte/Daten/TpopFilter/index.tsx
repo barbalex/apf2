@@ -1,19 +1,19 @@
 import React, { useCallback, useContext, useState, useEffect } from 'react'
-import Tabs from '@mui/material/Tabs'
+import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import queryTpops from './queryTpops.js'
+import { queryTpops } from './queryTpops.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
-import Ek from './Ek/index.jsx'
-import Tpop from './Tpop.jsx'
+import { Ek } from './Ek/index.jsx'
+import { Tpop } from './Tpop.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import OrTabs from './Tabs.jsx'
+import { Tabs } from './Tabs.jsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { ActiveFilters } from './ActiveFilters.js'
 
@@ -90,24 +90,32 @@ export const TpopFilter = observer(() => {
           activeTab={activeTab}
         />
         <ActiveFilters />
-        <OrTabs
+        <Tabs
           dataFilter={dataFilter.tpop}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
         <FieldsContainer>
-          <Tabs
+          <MuiTabs
             value={tab}
             onChange={onChangeTab}
             indicatorColor="primary"
             textColor="primary"
             centered
           >
-            <StyledTab label="Teil-Population" value="tpop" data-id="tpop" />
-            <StyledTab label="EK" value="ek" data-id="ek" />
-          </Tabs>
+            <StyledTab
+              label="Teil-Population"
+              value="tpop"
+              data-id="tpop"
+            />
+            <StyledTab
+              label="EK"
+              value="ek"
+              data-id="ek"
+            />
+          </MuiTabs>
           <TabContent>
-            {tab === 'tpop' ? (
+            {tab === 'tpop' ?
               <Tpop
                 saveToDb={saveToDb}
                 fieldErrors={fieldErrors}
@@ -115,9 +123,12 @@ export const TpopFilter = observer(() => {
                 row={row}
                 rowStringified={JSON.stringify(row)}
               />
-            ) : (
-              <Ek saveToDb={saveToDb} fieldErrors={fieldErrors} row={row} />
-            )}
+            : <Ek
+                saveToDb={saveToDb}
+                fieldErrors={fieldErrors}
+                row={row}
+              />
+            }
           </TabContent>
         </FieldsContainer>
       </Container>

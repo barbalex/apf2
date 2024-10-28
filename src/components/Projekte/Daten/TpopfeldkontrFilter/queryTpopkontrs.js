@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const queryTpopkontrs = gql`
   query tpopkontrQueryForEk(
     $filteredFilter: TpopkontrFilter!
     $allFilter: TpopkontrFilter!

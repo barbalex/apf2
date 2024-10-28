@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const query = gql`
   query tpopkontrByIdQueryForEkFilter {
     allTpopkontrIdbiotuebereinstWertes(orderBy: SORT_ASC) {
       nodes {

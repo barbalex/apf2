@@ -8,7 +8,7 @@ import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'
 import { RadioButtonGroup } from '../../../../shared/RadioButtonGroup.jsx'
 import { Select } from '../../../../shared/Select.jsx'
 import { TextField } from '../../../../shared/TextField.jsx'
-import queryEk from './queryEk.js'
+import { query } from './query.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 
@@ -29,10 +29,10 @@ const EkfrequenzOptionsContainer = styled.div`
   }
 `
 
-const Ek = ({ saveToDb, row, fieldErrors }) => {
+export const Ek = ({ saveToDb, row, fieldErrors }) => {
   const { apId } = useParams()
 
-  const { data: dataEk, loading: loadingEk } = useQuery(queryEk, {
+  const { data: dataEk, loading: loadingEk } = useQuery(query, {
     variables: {
       apId,
     },
@@ -110,5 +110,3 @@ const Ek = ({ saveToDb, row, fieldErrors }) => {
     </SimpleBar>
   )
 }
-
-export default Ek
