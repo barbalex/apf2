@@ -1,4 +1,5 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+// TODO: seems not to be in use?
+import { useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
@@ -42,7 +43,7 @@ const query = gql`
   }
 `
 
-const TpopkontrzaehlEinheitWerte = ({ table }) => {
+export const TpopkontrzaehlEinheitWerte = observer(({ table }) => {
   const { zaehleinheitId: id } = useParams()
 
   const client = useApolloClient()
@@ -58,7 +59,6 @@ const TpopkontrzaehlEinheitWerte = ({ table }) => {
       id,
     },
   })
-  console.log('TpopkontrzaehlEinheitWerte:', { id, data })
 
   const row = useMemo(
     () => data?.tpopkontrzaehlEinheitWerteById ?? {},
@@ -113,7 +113,6 @@ const TpopkontrzaehlEinheitWerte = ({ table }) => {
             }
           }
         `
-        //console.log('TpopkontrzaehlEinheitWerte:', { variables, updateName })
         await client.mutate({
           mutation,
           variables,
@@ -132,8 +131,6 @@ const TpopkontrzaehlEinheitWerte = ({ table }) => {
     },
     [client, queryClient, refetch, refetchTree, row.id, store.user.name, table],
   )
-
-  console.log('TpopkontrzaehlEinheitWerte, loading:', loading)
 
   if (loading) return <Spinner />
 
@@ -196,6 +193,4 @@ const TpopkontrzaehlEinheitWerte = ({ table }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(TpopkontrzaehlEinheitWerte)
+})
