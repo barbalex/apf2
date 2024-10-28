@@ -143,7 +143,7 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const More = ({ saveToDb, row }) => {
+export const More = observer(({ saveToDb, row }) => {
   const jungpflanzenVorhandenOnSaveFalse = useCallback(() => {
     const fakeEvent = {
       target: {
@@ -229,6 +229,4 @@ const More = ({ saveToDb, row }) => {
       <VeghoeheMinLabel>(Minimum)</VeghoeheMinLabel>
     </Container>
   )
-}
-
-export default observer(More)
+})
