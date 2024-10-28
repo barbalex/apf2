@@ -6,7 +6,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const Kontrollen = () => {
+export const KontrFuerWebgisBun = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -108,11 +108,9 @@ const Kontrollen = () => {
       }}
     >
       Kontrollen für WebGIS BUN
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(Kontrollen)
+})

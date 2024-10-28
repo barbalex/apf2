@@ -6,7 +6,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const KontrAnzProZaehlEinheit = () => {
+export const KontrAnzProZaehlEinheit = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -137,11 +137,9 @@ const KontrAnzProZaehlEinheit = () => {
       }}
     >
       Kontrollen: Anzahl pro Zähleinheit
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(KontrAnzProZaehlEinheit)
+})

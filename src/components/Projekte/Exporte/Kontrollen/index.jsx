@@ -11,8 +11,8 @@ import {
   CardActionIconButton,
 } from '../index.jsx'
 import { Kontrollen as KontrollenComponent } from './Kontrollen.jsx'
-import KontrFuerWebgisBun from './KontrFuerWebgisBun.jsx'
-import KontrAnzProZaehlEinheit from './KontrAnzProZaehlEinheit.jsx'
+import { KontrFuerWebgisBun } from './KontrFuerWebgisBun.jsx'
+import { KontrAnzProZaehlEinheit } from './KontrAnzProZaehlEinheit.jsx'
 
 export const Kontrollen = () => {
   const [expanded, setExpanded] = useState(false)
