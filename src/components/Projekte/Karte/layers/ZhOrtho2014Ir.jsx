@@ -3,8 +3,12 @@ import { WMSTileLayer, Pane } from 'react-leaflet'
 
 // https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
 
-const ZhOrthoFcirLayer = () => (
-  <Pane className="ZhOrtho2014Ir" name="ZhOrtho2014Ir" style={{ zIndex: 100 }}>
+export const ZhOrtho2014Ir = () => (
+  <Pane
+    className="ZhOrtho2014Ir"
+    name="ZhOrtho2014Ir"
+    style={{ zIndex: 100 }}
+  >
     <WMSTileLayer
       url="//wms.zh.ch/OrthoZHWMS"
       layers="ortho_fcir_2014"
@@ -16,5 +20,3 @@ const ZhOrthoFcirLayer = () => (
     />
   </Pane>
 )
-
-export default ZhOrthoFcirLayer

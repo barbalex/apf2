@@ -3,7 +3,7 @@ import { WMSTileLayer, Pane } from 'react-leaflet'
 
 // https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
 
-const ZhOrtho2018RgbLayer = () => (
+export const ZhOrtho2018Rgb = () => (
   <Pane
     className="ZhOrtho2018Rgb"
     name="ZhOrtho2018Rgb"
@@ -20,5 +20,3 @@ const ZhOrtho2018RgbLayer = () => (
     />
   </Pane>
 )
-
-export default ZhOrtho2018RgbLayer
