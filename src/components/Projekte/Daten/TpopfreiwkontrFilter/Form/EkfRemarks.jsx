@@ -26,7 +26,7 @@ const RemarksVal = styled.div`
   }
 `
 
-const EkfRemarks = ({ saveToDb, row }) => (
+export const EkfRemarks = observer(({ saveToDb, row }) => (
   <Container>
     <RemarksLabel>Mitteilungen zwischen AV/Topos und Freiwilligen</RemarksLabel>
     <RemarksVal>
@@ -40,6 +40,4 @@ const EkfRemarks = ({ saveToDb, row }) => (
       />
     </RemarksVal>
   </Container>
-)
-
-export default observer(EkfRemarks)
+))

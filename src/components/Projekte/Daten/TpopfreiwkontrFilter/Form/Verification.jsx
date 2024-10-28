@@ -42,7 +42,7 @@ const Grund = styled.div`
   }
 `
 
-const Verification = ({ saveToDb, row }) => {
+export const Verification = observer(({ saveToDb, row }) => {
   const onSaveTrue = useCallback(() => {
     const fakeEvent = {
       target: {
@@ -77,6 +77,4 @@ const Verification = ({ saveToDb, row }) => {
       </Grund>
     </Container>
   )
-}
-
-export default observer(Verification)
+})
