@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -26,21 +26,23 @@ const RemarksVal = styled.div`
   }
 `
 
-const EkfRemarks = ({ saveToDb, row, errors }) => (
-  <Container>
-    <RemarksLabel>Mitteilungen zwischen AV/Topos und Freiwilligen</RemarksLabel>
-    <RemarksVal>
-      <TextField2
-        key={`${row.id}ekfBemerkungen`}
-        name="ekfBemerkungen"
-        row={row}
-        type="text"
-        multiLine
-        saveToDb={saveToDb}
-        errors={errors}
-      />
-    </RemarksVal>
-  </Container>
+export const EkfRemarks = memo(
+  observer(({ saveToDb, row, errors }) => (
+    <Container>
+      <RemarksLabel>
+        Mitteilungen zwischen AV/Topos und Freiwilligen
+      </RemarksLabel>
+      <RemarksVal>
+        <TextField2
+          key={`${row.id}ekfBemerkungen`}
+          name="ekfBemerkungen"
+          row={row}
+          type="text"
+          multiLine
+          saveToDb={saveToDb}
+          errors={errors}
+        />
+      </RemarksVal>
+    </Container>
+  )),
 )
-
-export default observer(EkfRemarks)
