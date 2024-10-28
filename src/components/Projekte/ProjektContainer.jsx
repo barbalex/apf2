@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom'
 import { useParams, useLocation } from 'react-router-dom'
 
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
-import Karte from './Karte/index.jsx'
+import { Karte } from './Karte/index.jsx'
 const TreeContainer = lazy(() => import('./TreeContainer/index.jsx'))
 const Exporte = lazy(async () => ({
   default: (await import('./Exporte/index.jsx')).Exporte,

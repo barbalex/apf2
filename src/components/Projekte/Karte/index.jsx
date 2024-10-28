@@ -423,7 +423,7 @@ const StyledMapContainer = styled(MapContainer)`
  * So: need to use app level store state
  */
 
-const Karte = ({ mapContainerRef }) => {
+export const Karte = observer(({ mapContainerRef }) => {
   const { apId } = useParams()
 
   const mapRef = useRef(null)
@@ -656,6 +656,4 @@ const Karte = ({ mapContainerRef }) => {
       </ErrorBoundary>
     </Container>
   )
-}
-
-export default observer(Karte)
+})
