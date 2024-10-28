@@ -16,7 +16,7 @@ const style = () => ({
   opacity: 1,
 })
 
-const DetailplaeneLayer = () => {
+export const Detailplaene = observer(() => {
   const { enqueNotification } = useContext(StoreContext)
 
   const { data, error } = useQuery(gql`
@@ -51,7 +51,11 @@ const DetailplaeneLayer = () => {
     geometry: JSON.parse(n?.geom?.geojson),
   }))
 
-  return <GeoJSON data={detailplaene} style={style} interactive={false} />
-}
-
-export default observer(DetailplaeneLayer)
+  return (
+    <GeoJSON
+      data={detailplaene}
+      style={style}
+      interactive={false}
+    />
+  )
+})

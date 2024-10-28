@@ -18,7 +18,7 @@ const style = () => ({
   opacity: 1,
 })
 
-const BetreuungsgebieteLayer = () => {
+export const Betreuungsgebiete = observer(() => {
   const { enqueNotification } = useContext(StoreContext)
 
   const { data, error } = useQuery(gql`
@@ -52,7 +52,11 @@ const BetreuungsgebieteLayer = () => {
     geometry: JSON.parse(n?.geom?.geojson),
   }))
 
-  return <GeoJSON data={betrGebiete} style={style} interactive={false} />
-}
-
-export default observer(BetreuungsgebieteLayer)
+  return (
+    <GeoJSON
+      data={betrGebiete}
+      style={style}
+      interactive={false}
+    />
+  )
+})

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 const version = '1.3.0'
 const format = 'image/png'
 
-const MassnahmenLayer = ({ layer }) => {
+export const Massnahmen = ({ layer }) => {
   const { apId } = useParams()
 
   if (!apId) return null
@@ -29,7 +29,5 @@ const MassnahmenLayer = ({ layer }) => {
     />
   )
 }
-
-export default MassnahmenLayer
 
 // example: //wms.prod.qgiscloud.com/FNS/6c52d173-4f62-11e7-aebe-2bd3a2ea4576
