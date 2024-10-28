@@ -4,7 +4,7 @@ import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
 import Overlays from './Overlays.jsx'
-import ApfloraLayers from './ApfloraLayers/index.jsx'
+import { ApfloraLayers } from './ApfloraLayers/index.jsx'
 import { BaseLayers } from './BaseLayers/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 

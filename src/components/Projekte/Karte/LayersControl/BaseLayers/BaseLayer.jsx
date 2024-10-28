@@ -2,7 +2,7 @@ import { useContext, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import Radio from '../shared/Radio.jsx'
+import { Radio } from '../shared/Radio.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
 
 const LayerDiv = styled.div`

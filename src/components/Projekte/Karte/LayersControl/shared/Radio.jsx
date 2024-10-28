@@ -10,7 +10,7 @@ const Label = styled.label`
   user-select: none;
 `
 
-const Radio = ({ name, value, label, checked, onChange }) => (
+export const Radio = ({ name, value, label, checked, onChange }) => (
   <Label>
     <Input
       type="radio"
@@ -22,5 +22,3 @@ const Radio = ({ name, value, label, checked, onChange }) => (
     {label}
   </Label>
 )
-
-export default Radio

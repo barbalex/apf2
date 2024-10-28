@@ -14,7 +14,7 @@ const CardContent = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 `
 
-const ApfloraLayers = () => {
+export const ApfloraLayers = observer(() => {
   const store = useContext(StoreContext)
   const { apfloraLayers } = store
 
@@ -24,12 +24,13 @@ const ApfloraLayers = () => {
         // prevent deprecated layer from showing in case some users still have it in layers
         .filter((l) => l.value !== 'mapFilter')
         .map((apfloraLayer, index) => (
-          <Layer key={index} apfloraLayer={apfloraLayer} />
+          <Layer
+            key={index}
+            apfloraLayer={apfloraLayer}
+          />
         ))}
       <ShowForMultipleAps />
       <KtZhFilter />
     </CardContent>
   )
-}
-
-export default observer(ApfloraLayers)
+})
