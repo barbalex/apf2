@@ -17,7 +17,7 @@ const EwmDiv = styled.div`
   margin-bottom: 3px;
 `
 
-const Wollmilchsau = () => {
+export const Wollmilchsau = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -655,11 +655,9 @@ const Wollmilchsau = () => {
       <EwmDiv>
         {'= "Eier legende Wollmilchsau". Vorsicht: kann > 2 Minuten dauern!'}
       </EwmDiv>
-      {queryState ? (
+      {queryState ?
         <StyledProgressTextNewLine>{queryState}</StyledProgressTextNewLine>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(Wollmilchsau)
+})
