@@ -14,7 +14,7 @@ import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { Ek } from './Ek/index.jsx'
 import { Tpop } from './Tpop.jsx'
-import TpopHistory from './History.jsx'
+import { History } from './History.jsx'
 import { Files } from '../../../shared/Files/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
@@ -251,7 +251,7 @@ const TpopForm = () => {
                 parent="tpop"
                 loadingParent={loading}
               />
-            : <TpopHistory />}
+            : <History />}
           </TabContent>
         </FieldsContainer>
       </Container>
