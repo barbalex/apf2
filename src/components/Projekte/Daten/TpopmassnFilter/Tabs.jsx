@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react'
-import Tabs from '@mui/material/Tabs'
+import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 
@@ -15,7 +15,7 @@ const Title = styled.div`
   padding-left: 10px;
   color: rgba(0, 0, 0, 0.87);
 `
-const StyledTabs = styled(Tabs)`
+const StyledTabs = styled(MuiTabs)`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 `
 const StyledTab = styled(Tab)`
@@ -23,7 +23,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 
-const TpopmassnOrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
+export const Tabs = ({ activeTab, setActiveTab, dataFilter }) => {
   const store = useContext(StoreContext)
   const { dataFilterAddOr } = store.tree
 
@@ -69,4 +69,3 @@ const TpopmassnOrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
   )
 }
 
-export default TpopmassnOrTabs

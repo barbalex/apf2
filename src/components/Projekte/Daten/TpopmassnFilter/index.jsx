@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, useEffect } from 'react'
+import { useCallback, useContext, useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
@@ -14,13 +14,13 @@ import { DateField } from '../../../shared/Date.jsx'
 
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { constants } from '../../../../modules/constants.js'
-import queryTpopmassns from './queryTpopmassns.js'
-import queryAeTaxonomies from './queryAeTaxonomies.js'
+import { query } from './query.js'
+import { queryAeTaxonomies } from './queryAeTaxonomies.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import OrTabs from './Tabs.jsx'
+import { Tabs } from './Tabs.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -75,7 +75,7 @@ const TpopmassnFilter = () => {
     }
   }, [activeTab, dataFilter.tpopmassn.length])
 
-  const { data, loading, error } = useQuery(queryTpopmassns, {
+  const { data, loading, error } = useQuery(query, {
     variables: {
       filteredFilter: tpopmassnGqlFilter.filtered,
       allFilter: tpopmassnGqlFilter.all,
@@ -180,7 +180,7 @@ const TpopmassnFilter = () => {
             </FilterCommentList>
           </>
         )}
-        <OrTabs
+        <Tabs
           dataFilter={dataFilter.tpopmassn}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
