@@ -5,11 +5,11 @@ import { useQuery } from '@apollo/client'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
-import queryTpopkontrs from './queryTpopkontrs.js'
+import { query } from './query.js'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { StoreContext } from '../../../../storeContext.js'
-import TpopfreiwkontrForm from './Form/index.jsx'
-import OrTabs from './Tabs.jsx'
+import { Form } from './Form/index.jsx'
+import { Tabs } from './Tabs.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -71,7 +71,7 @@ const Tpopfreiwkontr = () => {
 
   const row = dataFilter.tpopfreiwkontr[activeTab]
 
-  const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
+  const { data: dataTpopkontrs } = useQuery(query, {
     variables: {
       filteredFilter: ekfGqlFilter.filtered,
       allFilter: ekfGqlFilter.all,
@@ -156,7 +156,7 @@ const Tpopfreiwkontr = () => {
           </FilterCommentList>
         </>
       )}
-      <OrTabs
+      <Tabs
         dataFilter={dataFilter.tpopfreiwkontr}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -169,7 +169,7 @@ const Tpopfreiwkontr = () => {
           }}
           tabIndex={-1}
         >
-          <TpopfreiwkontrForm
+          <Form
             row={row}
             activeTab={activeTab}
           />

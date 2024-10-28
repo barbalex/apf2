@@ -1,16 +1,15 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const query = gql`
   query tpopkontrQueryForEkfFilter(
     $filteredFilter: TpopkontrFilter!
     $allFilter: TpopkontrFilter!
   ) {
-    allTpopkontrs(filter: $allFilter)  {
-      totalCount 
+    allTpopkontrs(filter: $allFilter) {
+      totalCount
     }
-    tpopkontrsFiltered: allTpopkontrs(filter: $filteredFilter)
-      {
-      totalCount 
+    tpopkontrsFiltered: allTpopkontrs(filter: $filteredFilter) {
+      totalCount
     }
   }
 `

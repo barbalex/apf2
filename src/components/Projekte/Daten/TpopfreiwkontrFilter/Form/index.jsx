@@ -96,7 +96,7 @@ const GridContainer = styled.div`
   }
 `
 
-const TpopfreiwkontrForm = ({ row, activeTab }) => {
+export const Form = observer(({ row, activeTab }) => {
   const store = useContext(StoreContext)
   const { dataFilterSetValue } = store.tree
 
@@ -156,6 +156,4 @@ const TpopfreiwkontrForm = ({ row, activeTab }) => {
       <div style={{ height: '64px' }} />
     </FormContainer>
   )
-}
-
-export default observer(TpopfreiwkontrForm)
+})
