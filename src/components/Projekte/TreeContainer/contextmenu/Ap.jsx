@@ -25,7 +25,7 @@ const moveData = {
   action: 'move',
 }
 
-const Ap = ({ onClick }) => {
+export const Ap = observer(({ onClick }) => {
   const store = useContext(StoreContext)
   const { user, moving } = store
 
@@ -72,6 +72,4 @@ const Ap = ({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-}
-
-export default observer(Ap)
+})

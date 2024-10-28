@@ -26,8 +26,12 @@ const ApFilter = lazy(async () => ({
 const TreeComponent = lazy(async () => ({
   default: (await import('./Tree/index.jsx')).TreeComponent,
 }))
-const CmApFolder = lazy(() => import('./contextmenu/ApFolder.jsx'))
-const CmAp = lazy(() => import('./contextmenu/Ap.jsx'))
+const CmApFolder = lazy(async () => ({
+  default: (await import('./contextmenu/ApFolder.jsx')).Apfolder,
+}))
+const CmAp = lazy(async () => ({
+  default: (await import('./contextmenu/Ap.jsx')).Ap,
+}))
 const CmUserFolder = lazy(() => import('./contextmenu/UserFolder.jsx'))
 const CmUser = lazy(() => import('./contextmenu/User.jsx'))
 const CmAdresseFolder = lazy(() => import('./contextmenu/AdresseFolder.jsx'))
