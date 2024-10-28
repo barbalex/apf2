@@ -6,10 +6,10 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../../../shared/TextField.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
-import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.js'
+import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.js'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
 
-const Gezaehlt = ({ row, refetch }) => {
+export const Gezaehlt = observer(({ row, refetch }) => {
   const store = useContext(StoreContext)
   const client = useApolloClient()
   const queryClient = useQueryClient()
@@ -30,7 +30,7 @@ const Gezaehlt = ({ row, refetch }) => {
       }
       try {
         await client.mutate({
-          mutation: updateTpopkontrzaehlByIdGql,
+          mutation: updateTpopkontrzaehlById,
           variables,
         })
       } catch (error) {
@@ -66,6 +66,4 @@ const Gezaehlt = ({ row, refetch }) => {
       errors={errors}
     />
   )
-}
-
-export default observer(Gezaehlt)
+})

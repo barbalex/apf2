@@ -6,7 +6,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { Select } from '../../../../../shared/Select.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
-import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.js'
+import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.js'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
 
 const EinheitVal = styled.div`
@@ -33,7 +33,7 @@ const EinheitLabel = styled(Label)`
   margin-top: 5px;
 `
 
-const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
+export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
   const store = useContext(StoreContext)
   const client = useApolloClient()
   const queryClient = useQueryClient()
@@ -52,7 +52,7 @@ const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
       }
       try {
         await client.mutate({
-          mutation: updateTpopkontrzaehlByIdGql,
+          mutation: updateTpopkontrzaehlById,
           variables,
         })
       } catch (error) {
@@ -90,6 +90,4 @@ const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
       </EinheitVal>
     </>
   )
-}
-
-export default observer(Einheit)
+})
