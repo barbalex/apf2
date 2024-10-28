@@ -13,17 +13,17 @@ const LayerDiv = styled.div`
   padding-bottom: 4px;
 `
 
-const BaseLayer = ({ layer }) => {
+export const BaseLayer = observer(({ layer }) => {
   const store = useContext(StoreContext)
   const { activeBaseLayer, setActiveBaseLayer } = store
-  const onChange = useCallback(() => setActiveBaseLayer(layer.value), [
-    layer.value,
-    setActiveBaseLayer,
-  ])
+  const onChange = useCallback(
+    () => setActiveBaseLayer(layer.value),
+    [layer.value, setActiveBaseLayer],
+  )
 
   return (
     <LayerDiv
-      onClick={event => {
+      onClick={(event) => {
         if (layer.value === activeBaseLayer) {
           setActiveBaseLayer(null)
           // prevent click bubbling to Radio
@@ -41,6 +41,4 @@ const BaseLayer = ({ layer }) => {
       />
     </LayerDiv>
   )
-}
-
-export default observer(BaseLayer)
+})

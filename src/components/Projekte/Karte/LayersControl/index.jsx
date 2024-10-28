@@ -1,17 +1,11 @@
-import {
-  useContext,
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-} from 'react'
+import { useContext, useState, useCallback, useEffect, useRef } from 'react'
 import styled from '@emotion/styled'
 import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
 import Overlays from './Overlays.jsx'
 import ApfloraLayers from './ApfloraLayers/index.jsx'
-import BaseLayers from './BaseLayers/index.jsx'
+import { BaseLayers } from './BaseLayers/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 
 const ExpandMoreIcon = styled(MdExpandMore)`
@@ -60,7 +54,7 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   height: 18px !important;
 `
 
-const LayersControl = () => {
+export const LayersControl = observer(() => {
   const store = useContext(StoreContext)
   const { apfloraLayers, overlays } = store
 
@@ -101,9 +95,9 @@ const LayersControl = () => {
   }, [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded])
 
   const ApfloraCard =
-    baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded
-      ? CardTitle
-      : CardTitleApfloraOpen
+    baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded ?
+      CardTitle
+    : CardTitleApfloraOpen
 
   // hack to get control to show on first load
   // depends on state being changed, so needs to be true above
@@ -126,11 +120,9 @@ const LayersControl = () => {
         <CardHeader onClick={onToggleApfloraLayersExpanded}>
           <ApfloraCard>apflora</ApfloraCard>
           <div>
-            {apfloraLayersExpanded ? (
+            {apfloraLayersExpanded ?
               <StyledExpandLessIcon />
-            ) : (
-              <StyledExpandMoreIcon />
-            )}
+            : <StyledExpandMoreIcon />}
           </div>
         </CardHeader>
         {apfloraLayersExpanded && (
@@ -147,11 +139,9 @@ const LayersControl = () => {
         <CardHeader onClick={onToggleOverlaysExpanded}>
           <CardTitle>überlagernd</CardTitle>
           <div>
-            {overlaysExpanded ? (
+            {overlaysExpanded ?
               <StyledExpandLessIcon />
-            ) : (
-              <StyledExpandMoreIcon />
-            )}
+            : <StyledExpandMoreIcon />}
           </div>
         </CardHeader>
         {overlaysExpanded && (
@@ -168,17 +158,13 @@ const LayersControl = () => {
         <CardHeader onClick={onToggleBaseLayersExpanded}>
           <CardTitle>Hintergrund</CardTitle>
           <div>
-            {baseLayersExpanded ? (
+            {baseLayersExpanded ?
               <StyledExpandLessIcon />
-            ) : (
-              <StyledExpandMoreIcon />
-            )}
+            : <StyledExpandMoreIcon />}
           </div>
         </CardHeader>
         {baseLayersExpanded && <BaseLayers />}
       </Card>
     </CardContainer>
   )
-}
-
-export default observer(LayersControl)
+})

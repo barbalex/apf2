@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 import { useDebouncedCallback } from 'use-debounce'
 
-import LayersControl from './LayersControl/index.jsx'
+import { LayersControl } from './LayersControl/index.jsx'
 import { FullscreenControl } from './FullscreenControl.jsx'
 import PngControl from './PngControl.jsx'
 
@@ -13,7 +13,7 @@ const Container = styled.div`
   align-items: flex-end;
 `
 
-const OwnControls = ({ setControlHeight, mapRef }) => {
+export const OwnControls = ({ setControlHeight, mapRef }) => {
   const onResize = useCallback(
     ({ width, height }) => {
       //console.log('height:', height)
@@ -34,5 +34,3 @@ const OwnControls = ({ setControlHeight, mapRef }) => {
     </Container>
   )
 }
-
-export default OwnControls

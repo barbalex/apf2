@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import BaseLayer from './BaseLayer.jsx'
+import { BaseLayer } from './BaseLayer.jsx'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
@@ -69,12 +69,13 @@ export const baseLayers = [
   },
 ]
 
-const BaseLayers = () => (
+export const BaseLayers = () => (
   <CardContent>
     {baseLayers.map((layer, index) => (
-      <BaseLayer key={index} layer={layer} />
+      <BaseLayer
+        key={index}
+        layer={layer}
+      />
     ))}
   </CardContent>
 )
-
-export default BaseLayers
