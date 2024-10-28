@@ -52,7 +52,7 @@ const MapVal2 = styled.div`
   }
 `
 
-const Map = ({ saveToDb, row, errors }) => {
+export const Map = observer(({ saveToDb, row, errors }) => {
   const store = useContext(StoreContext)
   const { isPrint } = store
 
@@ -90,6 +90,4 @@ const Map = ({ saveToDb, row, errors }) => {
       </MapVal2>
     </Container>
   )
-}
-
-export default observer(Map)
+})
