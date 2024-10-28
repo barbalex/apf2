@@ -8,8 +8,12 @@ const StyledTileLayer = styled(TileLayer)`
   }
 `
 
-const OsmBwLayer = () => (
-  <Pane className="OsmBw" name="OsmBw" style={{ zIndex: 100 }}>
+export const OsmBw = () => (
+  <Pane
+    className="OsmBw"
+    name="OsmBw"
+    style={{ zIndex: 100 }}
+  >
     <StyledTileLayer
       url="//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       attribution='&copy; <a href="//osm.org/copyright">OpenStreetMap</a>'
@@ -19,5 +23,3 @@ const OsmBwLayer = () => (
     />
   </Pane>
 )
-
-export default OsmBwLayer

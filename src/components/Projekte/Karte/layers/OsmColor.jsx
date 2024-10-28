@@ -1,9 +1,13 @@
 import React from 'react'
 import { TileLayer, Pane } from 'react-leaflet'
 
-const OsmColorLayer = () => {
+export const OsmColor = () => {
   return (
-    <Pane className="OsmColor" name="OsmColor" style={{ zIndex: 100 }}>
+    <Pane
+      className="OsmColor"
+      name="OsmColor"
+      style={{ zIndex: 100 }}
+    >
       <TileLayer
         url="//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" // only loads sporadic, 2018.06.06. Reinstated 2019.09.14 because supports cors
         //url="//{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"  // did not work
@@ -17,5 +21,3 @@ const OsmColorLayer = () => {
     </Pane>
   )
 }
-
-export default OsmColorLayer
