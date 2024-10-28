@@ -1,7 +1,7 @@
 import React from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-const LichtwaldObjekteLayer = () => (
+export const ZhLichteWaelder = () => (
   <WMSTileLayer
     url="//wms.zh.ch/FnsLWZHWMS"
     layers="objekte-lichte-waelder-kanton-zuerich"
@@ -14,5 +14,3 @@ const LichtwaldObjekteLayer = () => (
     maxZoom={22}
   />
 )
-
-export default LichtwaldObjekteLayer

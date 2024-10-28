@@ -16,7 +16,7 @@ const style = () => ({
   opacity: 1,
 })
 
-const GemeindeLayer = () => {
+export const Gemeinden = observer(() => {
   const { enqueNotification } = useContext(StoreContext)
 
   const { data, error } = useQuery(gql`
@@ -52,7 +52,11 @@ const GemeindeLayer = () => {
     geometry: JSON.parse(n?.geom?.geojson),
   }))
 
-  return <GeoJSON data={gemeinden} style={style} interactive={false} />
-}
-
-export default observer(GemeindeLayer)
+  return (
+    <GeoJSON
+      data={gemeinden}
+      style={style}
+      interactive={false}
+    />
+  )
+})
