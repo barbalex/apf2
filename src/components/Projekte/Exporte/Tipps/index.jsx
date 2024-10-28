@@ -5,8 +5,8 @@ import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 
-import WasIstCsv from './WasIstCsv.jsx'
-import CsvOeffnen from './CsvOeffnen.jsx'
+import { WasIstCsv } from './WasIstCsv.jsx'
+import { CsvOeffnen } from './CsvOeffnen.jsx'
 import CsvProgramm from './CsvProgramm.jsx'
 import DatenChaotisch from './DatenChaotisch.jsx'
 import ZuVieleDaten from './ZuVieleDaten.jsx'
@@ -30,12 +30,15 @@ export const StyledCardContent = styled(CardContent)`
   }
 `
 
-const Tipps = () => {
+export const Tipps = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>Tipps und Tricks</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -47,8 +50,12 @@ const Tipps = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        {expanded ? (
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
+        {expanded ?
           <OwnStyledCardContent>
             <WasIstCsv />
             <CsvOeffnen />
@@ -56,10 +63,8 @@ const Tipps = () => {
             <DatenChaotisch />
             <ZuVieleDaten />
           </OwnStyledCardContent>
-        ) : null}
+        : null}
       </Collapse>
     </StyledCard>
   )
 }
-
-export default Tipps

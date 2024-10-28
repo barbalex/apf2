@@ -11,12 +11,15 @@ import {
 } from '../index.jsx'
 import { StyledCardContent } from './index.jsx'
 
-const CsvOeffnen = () => {
+export const CsvOeffnen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>Wie öffne ich eine .csv-Datei?</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -28,7 +31,11 @@ const CsvOeffnen = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
         <StyledCardContent>
           Es gibt zwei Möglichkeiten:
           <ol>
@@ -58,5 +65,3 @@ const CsvOeffnen = () => {
     </StyledCard>
   )
 }
-
-export default CsvOeffnen

@@ -11,12 +11,15 @@ import {
 } from '../index.jsx'
 import { StyledCardContent } from './index.jsx'
 
-const WasIstCsv = () => {
+export const WasIstCsv = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>Was ist eine .csv-Datei?</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -28,7 +31,11 @@ const WasIstCsv = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
         <StyledCardContent>
           {'Eine reine Textdatei, deren Name mit ".csv" endet.'}
           <br />
@@ -60,5 +67,3 @@ const WasIstCsv = () => {
     </StyledCard>
   )
 }
-
-export default WasIstCsv
