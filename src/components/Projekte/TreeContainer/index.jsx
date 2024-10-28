@@ -44,12 +44,14 @@ const CmAdresseFolder = lazy(async () => ({
 const CmAdresse = lazy(async () => ({
   default: (await import('./contextmenu/Adresse.jsx')).Adresse,
 }))
-const CmTpopApberrelevantGrundWerteFolder = lazy(
-  () => import('./contextmenu/TpopApberrelevantGrundWerteFolder.jsx'),
-)
-const CmTpopApberrelevantGrundWerte = lazy(
-  () => import('./contextmenu/TpopApberrelevantGrundWerte.jsx'),
-)
+const CmTpopApberrelevantGrundWerteFolder = lazy(async () => ({
+  default: (await import('./contextmenu/TpopApberrelevantGrundWerteFolder.jsx'))
+    .TpopApberrelevantGrundWerteFolder,
+}))
+const CmTpopApberrelevantGrundWerte = lazy(async () => ({
+  default: (await import('./contextmenu/TpopApberrelevantGrundWerte.jsx'))
+    .TpopApberrelevantGrundWerte,
+}))
 const CmTpopkontrzaehlEinheitWerteFolder = lazy(
   () => import('./contextmenu/TpopkontrzaehlEinheitWerteFolder.jsx'),
 )
