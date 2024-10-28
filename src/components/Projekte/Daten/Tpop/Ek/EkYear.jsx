@@ -10,7 +10,7 @@ const StyledTableRow = styled(TableRow)`
   }
 `
 
-const typRenamed = e => {
+const typRenamed = (e) => {
   switch (e.typ) {
     case 'Freiwilligen-Erfolgskontrolle':
       return 'EKF'
@@ -21,25 +21,29 @@ const typRenamed = e => {
   }
 }
 
-const EkYear = ({ data }) => {
-  const ekplans = sortBy(data.filter(o => o.is === 'ekplan'), 'typ')
-  const tpopkontrs = sortBy(data.filter(o => o.is === 'ek'), 'typ')
+export const EkYear = ({ data }) => {
+  const ekplans = sortBy(
+    data.filter((o) => o.is === 'ekplan'),
+    'typ',
+  )
+  const tpopkontrs = sortBy(
+    data.filter((o) => o.is === 'ek'),
+    'typ',
+  )
 
   return (
     <StyledTableRow>
       <TableCell>{data[0].jahr}</TableCell>
       <TableCell>
-        {ekplans.map(e => (
+        {ekplans.map((e) => (
           <div key={e.id}>{e.typ.toUpperCase()}</div>
         ))}
       </TableCell>
       <TableCell>
-        {tpopkontrs.map(e => (
+        {tpopkontrs.map((e) => (
           <div key={e.id}>{typRenamed(e)}</div>
         ))}
       </TableCell>
     </StyledTableRow>
   )
 }
-
-export default EkYear

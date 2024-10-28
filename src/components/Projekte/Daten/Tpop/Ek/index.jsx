@@ -15,7 +15,7 @@ import { RadioButtonGroup } from '../../../../shared/RadioButtonGroup.jsx'
 import { Select } from '../../../../shared/Select.jsx'
 import { TextField } from '../../../../shared/TextField.jsx'
 import { query } from './query.js'
-import EkYear from './EkYear.jsx'
+import { EkYear } from './EkYear.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 
