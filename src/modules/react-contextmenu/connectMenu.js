@@ -78,7 +78,7 @@ function _toConsumableArray(arr) {
   }
 }
 
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 import ContextMenuTrigger from './ContextMenuTrigger.js'
 import listener from './globalEventListener.js'

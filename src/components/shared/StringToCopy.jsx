@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'

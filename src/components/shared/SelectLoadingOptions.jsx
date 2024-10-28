@@ -4,7 +4,7 @@
  * BUT DOES NOT SHOW THEM WHEN USER ENTERS FIELD
  */
 
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import sum from 'lodash/sum'
 import { GoZap } from 'react-icons/go'

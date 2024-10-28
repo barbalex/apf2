@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import 'leaflet'
 import styled from '@emotion/styled'
 import Input from '@mui/material/Input'

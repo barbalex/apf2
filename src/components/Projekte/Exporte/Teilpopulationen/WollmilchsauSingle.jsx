@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from 'react'
+import { useContext, useState, useCallback } from 'react'
 import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'

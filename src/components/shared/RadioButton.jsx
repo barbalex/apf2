@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import Radio from '@mui/material/Radio'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'

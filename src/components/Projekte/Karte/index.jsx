@@ -5,7 +5,7 @@
  *
  */
 
-import React, { useContext, useMemo, useState, useRef } from 'react'
+import { useContext, useMemo, useState, useRef } from 'react'
 import { MapContainer, ScaleControl, ZoomControl, Pane } from 'react-leaflet'
 import styled from '@emotion/styled'
 import 'leaflet'
@@ -632,7 +632,10 @@ const Karte = ({ mapContainerRef }) => {
           )}
           <ClickListener />
           <ScaleControl imperial={false} />
-          <Control position="topright" visible={!hideMapControls}>
+          <Control
+            position="topright"
+            visible={!hideMapControls}
+          >
             <OwnControls
               setControlHeight={setControlHeight}
               // this enforces rerendering when sorting changes

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useCallback } from 'react'
+import { useEffect, useContext, useCallback } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
 import { useMap } from 'react-leaflet'

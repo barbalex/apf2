@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useRef } from 'react'
+import { useContext, useCallback, useRef } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'

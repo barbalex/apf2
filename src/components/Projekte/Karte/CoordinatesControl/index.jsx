@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
 import 'leaflet'
 import { useMapEvents } from 'react-leaflet'
 import styled from '@emotion/styled'

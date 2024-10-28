@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useContext } from 'react'
+import { useCallback, useContext } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import upperFirst from 'lodash/upperFirst'
 

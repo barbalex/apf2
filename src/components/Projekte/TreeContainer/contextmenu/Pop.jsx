@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
 

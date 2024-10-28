@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import { useCallback, useContext } from 'react'
 import { ErrorBoundary as RawErrorBoundary } from 'react-error-boundary'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'

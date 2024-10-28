@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Icon from '@mui/material/Icon'
 import FormControlLabel from '@mui/material/FormControlLabel'

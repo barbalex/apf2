@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'

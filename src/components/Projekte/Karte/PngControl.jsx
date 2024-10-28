@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useContext } from 'react'
+import { useCallback, useState, useEffect, useContext } from 'react'
 import 'leaflet'
 import { useMap } from 'react-leaflet'
 import 'leaflet-easyprint'

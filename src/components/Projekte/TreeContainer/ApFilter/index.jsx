@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import { useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import Switch from '@mui/material/Switch'
 import { observer } from 'mobx-react-lite'

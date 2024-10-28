@@ -2,7 +2,7 @@
  * not used any more
  * used to be used for berichte
  */
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { MdOpenInNew } from 'react-icons/md'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'

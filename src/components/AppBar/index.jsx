@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useContext } from 'react'
+import { Suspense, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import MuiAppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'

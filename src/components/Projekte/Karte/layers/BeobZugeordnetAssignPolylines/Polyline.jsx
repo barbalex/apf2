@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import { useContext, useCallback } from 'react'
 import { Polyline, Popup } from 'react-leaflet'
 import styled from '@emotion/styled'
 import { format } from 'date-fns/format'

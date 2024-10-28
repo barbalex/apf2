@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StyledTableCell } from '../index.jsx'

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
 import { observer } from 'mobx-react-lite'

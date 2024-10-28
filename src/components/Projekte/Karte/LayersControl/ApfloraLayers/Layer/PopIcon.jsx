@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react'
+import { useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { MdLocalFlorist } from 'react-icons/md'
 import { FaCheck } from 'react-icons/fa'

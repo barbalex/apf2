@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, createRef } from 'react'
+import { lazy, Suspense, createRef } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import theme from './utils/materialTheme.js'

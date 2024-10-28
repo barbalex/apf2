@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import List from '@mui/material/List'

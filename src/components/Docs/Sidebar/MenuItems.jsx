@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
 import styled from '@emotion/styled'

@@ -1,5 +1,5 @@
 // seems not in use
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 

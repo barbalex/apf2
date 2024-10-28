@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'

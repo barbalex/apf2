@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import { useContext, useCallback } from 'react'
 import 'leaflet'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'

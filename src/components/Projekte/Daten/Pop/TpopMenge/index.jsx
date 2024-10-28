@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { useQuery } from '@apollo/client'
 import sortBy from 'lodash/sortBy'
 import {

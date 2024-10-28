@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import ReactSelect from 'react-select'
 import styled from '@emotion/styled'
 

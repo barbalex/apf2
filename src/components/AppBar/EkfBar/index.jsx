@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from 'react'
+import { useContext, useState, useCallback } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { keyframes } from '@emotion/react'

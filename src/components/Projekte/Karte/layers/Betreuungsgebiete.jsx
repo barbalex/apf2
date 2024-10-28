@@ -1,6 +1,6 @@
 // https://stackoverflow.com/a/25296972/712005
 // also: https://gis.stackexchange.com/a/130553/13491
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { GeoJSON } from 'react-leaflet'
 import { useQuery, gql } from '@apollo/client'

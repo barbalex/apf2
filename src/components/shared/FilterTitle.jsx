@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import { useContext, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
 import { MdInfoOutline } from 'react-icons/md'

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react'
+import { useContext, useEffect, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
 import { useQuery } from '@apollo/client'

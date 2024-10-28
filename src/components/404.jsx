@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
