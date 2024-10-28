@@ -3,7 +3,7 @@ import { WMSTileLayer, Pane } from 'react-leaflet'
 
 // https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
 
-const ZhOrthoFcirAktuellLayer = () => (
+export const ZhOrthoAktuellIr = () => (
   <Pane
     className="ZhOrthoAktuellIr"
     name="ZhOrthoAktuellIr"
@@ -20,5 +20,3 @@ const ZhOrthoFcirAktuellLayer = () => (
     />
   </Pane>
 )
-
-export default ZhOrthoFcirAktuellLayer
