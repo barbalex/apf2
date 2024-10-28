@@ -12,12 +12,15 @@ import {
 } from '../index.jsx'
 import { StyledCardContent } from './index.jsx'
 
-const CsvOeffnen = () => {
+export const CsvProgramm = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>
           Welches Programm soll ich dazu verwenden?
         </CardActionTitle>
@@ -31,7 +34,11 @@ const CsvOeffnen = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
         <StyledCardContent>
           {
             'Um die Datei das erste Mal zu öffnen eignet sich Libre Office am besten: '
@@ -58,5 +65,3 @@ const CsvOeffnen = () => {
     </StyledCard>
   )
 }
-
-export default CsvOeffnen

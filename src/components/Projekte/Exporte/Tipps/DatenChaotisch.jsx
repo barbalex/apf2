@@ -11,12 +11,15 @@ import {
 } from '../index.jsx'
 import { StyledCardContent } from './index.jsx'
 
-const DatenChaotisch = () => {
+export const DatenChaotisch = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>
           Sind die Daten ungeordnet und chaotisch?
         </CardActionTitle>
@@ -30,7 +33,11 @@ const DatenChaotisch = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
         <StyledCardContent>
           {
             'Das Programm hat wohl beim Öffnen die Feld-Grenzen nicht richtig erkannt.'
@@ -58,5 +65,3 @@ const DatenChaotisch = () => {
     </StyledCard>
   )
 }
-
-export default DatenChaotisch

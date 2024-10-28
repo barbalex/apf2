@@ -7,9 +7,9 @@ import styled from '@emotion/styled'
 
 import { WasIstCsv } from './WasIstCsv.jsx'
 import { CsvOeffnen } from './CsvOeffnen.jsx'
-import CsvProgramm from './CsvProgramm.jsx'
-import DatenChaotisch from './DatenChaotisch.jsx'
-import ZuVieleDaten from './ZuVieleDaten.jsx'
+import { CsvProgramm } from './CsvProgramm.jsx'
+import { DatenChaotisch } from './DatenChaotisch.jsx'
+import { ZuVieleDaten } from './ZuVieleDaten.jsx'
 import {
   CardActionTitle,
   StyledCard,

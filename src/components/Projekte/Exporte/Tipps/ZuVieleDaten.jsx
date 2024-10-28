@@ -11,12 +11,15 @@ import {
 } from '../index.jsx'
 import { StyledCardContent } from './index.jsx'
 
-const ZuVieleDaten = () => {
+export const ZuVieleDaten = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>Hilfe, das sind viel zu viele Daten!</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -28,7 +31,11 @@ const ZuVieleDaten = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
         <StyledCardContent>
           {'Meist werden alle verfügbaren Datensätze und Felder exportiert.'}
           <br />
@@ -44,5 +51,3 @@ const ZuVieleDaten = () => {
     </StyledCard>
   )
 }
-
-export default ZuVieleDaten
