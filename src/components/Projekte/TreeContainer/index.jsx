@@ -312,7 +312,7 @@ const getAndValidateCoordinatesOfBeob = async ({
   return { lv95X, lv95Y }
 }
 
-const TreeContainer = () => {
+export const TreeContainer = observer(() => {
   const params = useParams()
   const { apId, projId, popId } = params
   const { search } = useLocation()
@@ -743,6 +743,4 @@ const TreeContainer = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(TreeContainer)
+})
