@@ -14,7 +14,7 @@ import TPopFuerGoogleEarth from './TPopFuerGoogleEarth.jsx'
 import TPopFuerWebgisBun from './TPopFuerWebgisBun.jsx'
 import { StyledCardContent } from '../index.jsx'
 
-const Teilpopulationen = () => (
+export const CardContent = () => (
   <StyledCardContent>
     <TPop />
     <TPop filtered={true} />
@@ -31,5 +31,3 @@ const Teilpopulationen = () => (
     <LetzteZaehlungenInklAnpflanzungen />
   </StyledCardContent>
 )
-
-export default Teilpopulationen
