@@ -32,8 +32,12 @@ const CmApFolder = lazy(async () => ({
 const CmAp = lazy(async () => ({
   default: (await import('./contextmenu/Ap.jsx')).Ap,
 }))
-const CmUserFolder = lazy(() => import('./contextmenu/UserFolder.jsx'))
-const CmUser = lazy(() => import('./contextmenu/User.jsx'))
+const CmUserFolder = lazy(async () => ({
+  default: (await import('./contextmenu/UserFolder.jsx')).UserFolder,
+}))
+const CmUser = lazy(async () => ({
+  default: (await import('./contextmenu/User.jsx')).User,
+}))
 const CmAdresseFolder = lazy(() => import('./contextmenu/AdresseFolder.jsx'))
 const CmAdresse = lazy(() => import('./contextmenu/Adresse.jsx'))
 const CmTpopApberrelevantGrundWerteFolder = lazy(
