@@ -1,0 +1,1 @@
+Ab Version 1.106.0: Mehrere Dateien (maximal 10) können gleichzeitig hochgeladen werden
