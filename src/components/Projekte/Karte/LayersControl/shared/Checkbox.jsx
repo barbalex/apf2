@@ -14,7 +14,7 @@ const Label = styled.label`
   user-select: none;
 `
 
-const Checkbox = ({ value, label, checked, onChange }) => (
+export const Checkbox = ({ value, label, checked, onChange }) => (
   <Container>
     <Label>
       <Input
@@ -27,5 +27,3 @@ const Checkbox = ({ value, label, checked, onChange }) => (
     </Label>
   </Container>
 )
-
-export default Checkbox

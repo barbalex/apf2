@@ -28,7 +28,7 @@ import { useParams } from 'react-router-dom'
 import { layerLegends } from './layerLegends.js'
 import findIndex from 'lodash/findIndex'
 
-import Checkbox from './shared/Checkbox.jsx'
+import { Checkbox } from './shared/Checkbox.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 
 const CardContent = styled.div`
@@ -106,7 +106,12 @@ const SortableItem = ({
   }
 
   return (
-    <LayerDiv ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <LayerDiv
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+    >
       <LabelDiv>
         <CheckDiv>
           <Checkbox
@@ -223,7 +228,7 @@ const Overlays = () => {
             />
           ))}
           <DragOverlay>
-            {draggingOverlay ? (
+            {draggingOverlay ?
               <SortableItem
                 key={draggingOverlay.value}
                 id={draggingOverlay.value}
@@ -232,7 +237,7 @@ const Overlays = () => {
                 setActiveOverlays={setActiveOverlays}
                 apId={apId}
               />
-            ) : null}
+            : null}
           </DragOverlay>
         </SortableContext>
       </DndContext>

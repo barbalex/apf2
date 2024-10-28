@@ -20,7 +20,7 @@ const StyledButton = styled(Button)`
   justify-content: flex-start;
 `
 
-const KtZhFilter = () => {
+export const KtZhFilter = observer(() => {
   const store = useContext(StoreContext)
   const { setMapFilter, incrementMapFilterResetter } = store.tree
 
@@ -43,6 +43,4 @@ const KtZhFilter = () => {
       </StyledButton>
     </LayerDiv>
   )
-}
-
-export default observer(KtZhFilter)
+})

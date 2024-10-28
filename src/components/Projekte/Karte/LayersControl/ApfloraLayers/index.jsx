@@ -4,8 +4,8 @@ import styled from '@emotion/styled'
 
 import { StoreContext } from '../../../../../storeContext.js'
 import Layer from './Layer/index.jsx'
-import ShowForMultipleAps from './ShowForMultipleAps.jsx'
-import KtZhFilter from './KtZhFilter/index.jsx'
+import { ShowForMultipleAps } from './ShowForMultipleAps.jsx'
+import { KtZhFilter } from './KtZhFilter/index.jsx'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);

@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 import { gql, useQuery } from '@apollo/client'
 
-import Checkbox from '../shared/Checkbox.jsx'
+import { Checkbox } from '../shared/Checkbox.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
 
 const LayerDiv = styled.div`
@@ -37,7 +37,7 @@ const Comment2 = styled.span`
   padding-left: 3px;
 `
 
-const ShowForMultipleAps = () => {
+export const ShowForMultipleAps = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(StoreContext)
@@ -64,11 +64,9 @@ const ShowForMultipleAps = () => {
 
   const comment = apsCount > 1 ? `${apsCount} Arten aktiv.` : ''
   const color =
-    apsCount > 5
-      ? 'rgba(228, 89, 0, 1)'
-      : apsCount > 50
-        ? 'rgba(228, 0, 0, 1)'
-        : ''
+    apsCount > 5 ? 'rgba(228, 89, 0, 1)'
+    : apsCount > 50 ? 'rgba(228, 0, 0, 1)'
+    : ''
 
   return (
     <LayerDiv>
@@ -88,6 +86,4 @@ const ShowForMultipleAps = () => {
       )}
     </LayerDiv>
   )
-}
-
-export default observer(ShowForMultipleAps)
+})
