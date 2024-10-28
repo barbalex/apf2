@@ -20,9 +20,9 @@ import { PriorisierungFuerEk } from './PriorisierungFuerEk.jsx'
 import { EkPlanung } from './EkPlanung.jsx'
 import { Ziele } from './Ziele.jsx'
 import { Zielber } from './Zielber.jsx'
-import Erfkrit from './Erfkrit.jsx'
-import Idealbiotop from './Idealbiotop.jsx'
-import Assozart from './Assozart.jsx'
+import { Erfkrit } from './Erfkrit.jsx'
+import { Idealbiotop } from './Idealbiotop.jsx'
+import { Assozart } from './Assozart.jsx'
 
 export const Ap = () => {
   const [expanded, setExpanded] = useState(false)
