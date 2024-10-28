@@ -10,18 +10,21 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import BeobNichtZuzuordnen from './BeobNichtZuzuordnen.jsx'
-import BeobZugeordnet from './BeobZugeordnet.jsx'
-import BeobArtChanged from './BeobArtChanged.jsx'
+import { BeobNichtZuzuordnen } from './BeobNichtZuzuordnen.jsx'
+import { BeobZugeordnet } from './BeobZugeordnet.jsx'
+import { BeobArtChanged } from './BeobArtChanged.jsx'
 
-const BeobachtungenExports = () => {
+export const Beobachtungen = () => {
   const [expanded, setExpanded] = useState(false)
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={onClickAction}>
+      <StyledCardActions
+        disableSpacing
+        onClick={onClickAction}
+      >
         <CardActionTitle>Beobachtungen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -34,17 +37,19 @@ const BeobachtungenExports = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        {expanded ? (
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
+        {expanded ?
           <StyledCardContent>
             <BeobArtChanged t />
             <BeobZugeordnet />
             <BeobNichtZuzuordnen />
           </StyledCardContent>
-        ) : null}
+        : null}
       </Collapse>
     </StyledCard>
   )
 }
-
-export default BeobachtungenExports

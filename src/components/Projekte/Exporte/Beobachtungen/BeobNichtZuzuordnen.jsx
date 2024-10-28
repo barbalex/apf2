@@ -6,7 +6,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const BeobNichtZuzuordnen = () => {
+export const BeobNichtZuzuordnen = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -74,11 +74,9 @@ const BeobNichtZuzuordnen = () => {
       }}
     >
       Alle nicht zuzuordnenden Beobachtungen
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(BeobNichtZuzuordnen)
+})

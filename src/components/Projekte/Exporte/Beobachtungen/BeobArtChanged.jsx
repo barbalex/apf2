@@ -6,7 +6,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const BeobachtungenExports = () => {
+export const BeobArtChanged = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -19,8 +19,9 @@ const BeobachtungenExports = () => {
     let result
     try {
       // view: v_beob_art_changed
-      result = mapFilter
-        ? await client.query({
+      result =
+        mapFilter ?
+          await client.query({
             query: gql`
               query allBeobsArtChangedFilteredByMap {
                 allVBeobArtChangeds {
@@ -136,11 +137,9 @@ const BeobachtungenExports = () => {
       disabled={!!queryState}
     >
       Alle Beobachtungen, bei denen die Art verändert wurde
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(BeobachtungenExports)
+})
