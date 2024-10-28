@@ -24,7 +24,7 @@ import LetzterMassnBericht from './LetzterMassnBericht.jsx'
 import LetzteZaehlung from './LetzteZaehlung.jsx'
 import LetzteZaehlungInklAnpflanz from './LetzteZaehlungInklAnpflanz.jsx'
 
-const PopulationenExports = () => {
+export const Populationen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
@@ -66,4 +66,3 @@ const PopulationenExports = () => {
   )
 }
 
-export default PopulationenExports
