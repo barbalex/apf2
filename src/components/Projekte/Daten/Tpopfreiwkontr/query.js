@@ -11,7 +11,7 @@ import {
   tpopkontrzaehlEinheitWerte,
 } from '../../../shared/fragments.js'
 
-export default gql`
+export const query = gql`
   query tpopkontrByIdQueryForEkf($id: UUID!) {
     tpopkontrById(id: $id) {
       ...TpopfreiwkontrFields

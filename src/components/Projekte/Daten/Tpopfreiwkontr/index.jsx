@@ -7,13 +7,13 @@ import IconButton from '@mui/material/IconButton'
 import SimpleBar from 'simplebar-react'
 import { useLocation, useParams } from 'react-router-dom'
 
-import query from './query.js'
-import createTpopkontrzaehl from './createTpopkontrzaehl.js'
+import { query } from './query.js'
+import { createTpopkontrzaehl } from './createTpopkontrzaehl.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import TpopfreiwkontrForm from './Form.jsx'
+import Form from './Form.jsx'
 
 const Container = styled.div`
   flex-grow: 0;
@@ -30,7 +30,7 @@ const Container = styled.div`
     page-break-after: always;
   }
 `
-// somehow scrollbars were not shown without explicitely setting height
+// somehow scrollbars were not shown without explicitly setting height
 const ScrollContainer = styled.div`
   height: calc(100dvh - 64px);
   overflow-y: auto;
@@ -163,7 +163,7 @@ export const Component = observer(({ id: idPassed }) => {
         />
       )}
       {isPrint ?
-        <TpopfreiwkontrForm
+        <Form
           data={data}
           row={row}
           apId={apId}
@@ -176,7 +176,7 @@ export const Component = observer(({ id: idPassed }) => {
               height: '100%',
             }}
           >
-            <TpopfreiwkontrForm
+            <Form
               data={data}
               row={row}
               apId={apId}
