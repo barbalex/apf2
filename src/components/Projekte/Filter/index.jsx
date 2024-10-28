@@ -7,7 +7,7 @@ import TpopmassnFilter from '../Daten/TpopmassnFilter/index.jsx'
 import TpopfeldkontrFilter from '../Daten/TpopfeldkontrFilter/index.jsx'
 import TpopfreiwkontrFilter from '../Daten/TpopfreiwkontrFilter/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import Title from './Title.jsx'
+import { Title } from './Title.jsx'
 import { useSearchParamsState } from '../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
@@ -38,4 +38,3 @@ export const Filter = () => {
     </ErrorBoundary>
   )
 }
-

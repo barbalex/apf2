@@ -19,7 +19,7 @@ const StyledTab = styled(Tab)`
 const TitleRow = styled.div`
   background-color: #d84315;
 `
-const Title = styled.div`
+const TitleDiv = styled.div`
   padding: 10px 10px 0 10px;
   color: white;
   font-weight: bold;
@@ -34,7 +34,7 @@ const titleObject = {
   tpopfreiwkontr: 'Freiwilligen-Kontrollen Filter',
 }
 
-const FilterTitle = ({ activeTab, setActiveTab }) => {
+export const Title = ({ activeTab, setActiveTab }) => {
   const onChangeTab = useCallback(
     (event, value) => setActiveTab(value),
     [setActiveTab],
@@ -42,7 +42,7 @@ const FilterTitle = ({ activeTab, setActiveTab }) => {
 
   return (
     <TitleRow>
-      <Title data-id="form-title">{titleObject[activeTab]}</Title>
+      <TitleDiv data-id="form-title">{titleObject[activeTab]}</TitleDiv>
       <StyledTabs
         value={activeTab}
         onChange={onChangeTab}
@@ -51,11 +51,31 @@ const FilterTitle = ({ activeTab, setActiveTab }) => {
         variant="scrollable"
         scrollButtons="auto"
       >
-        <StyledTab label="Art" value="ap" data-id="ap" />
-        <StyledTab label="Pop" value="pop" data-id="pop" />
-        <StyledTab label="T-Pop" value="tpop" data-id="tpop" />
-        <StyledTab label="Massn" value="tpopmassn" data-id="tpopmassn" />
-        <StyledTab label="EK" value="tpopfeldkontr" data-id="tpopfeldkontr" />
+        <StyledTab
+          label="Art"
+          value="ap"
+          data-id="ap"
+        />
+        <StyledTab
+          label="Pop"
+          value="pop"
+          data-id="pop"
+        />
+        <StyledTab
+          label="T-Pop"
+          value="tpop"
+          data-id="tpop"
+        />
+        <StyledTab
+          label="Massn"
+          value="tpopmassn"
+          data-id="tpopmassn"
+        />
+        <StyledTab
+          label="EK"
+          value="tpopfeldkontr"
+          data-id="tpopfeldkontr"
+        />
         <StyledTab
           label="EKF"
           value="tpopfreiwkontr"
@@ -65,5 +85,3 @@ const FilterTitle = ({ activeTab, setActiveTab }) => {
     </TitleRow>
   )
 }
-
-export default FilterTitle
