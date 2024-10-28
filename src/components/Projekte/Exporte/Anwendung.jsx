@@ -14,7 +14,7 @@ import {
   DownloadCardButton,
 } from './index.jsx'
 
-const Anwendung = () => {
+export const Anwendung = observer(() => {
   const [expanded, setExpanded] = useState(false)
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
@@ -24,7 +24,10 @@ const Anwendung = () => {
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={onClickAction}>
+      <StyledCardActions
+        disableSpacing
+        onClick={onClickAction}
+      >
         <CardActionTitle>Anwendung</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -37,17 +40,22 @@ const Anwendung = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        {expanded ? (
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
+        {expanded ?
           <StyledCardContent>
-            <DownloadCardButton onClick={onClickGrafisch} color="inherit">
+            <DownloadCardButton
+              onClick={onClickGrafisch}
+              color="inherit"
+            >
               Datenstruktur grafisch dargestellt
             </DownloadCardButton>
           </StyledCardContent>
-        ) : null}
+        : null}
       </Collapse>
     </StyledCard>
   )
-}
-
-export default observer(Anwendung)
+})

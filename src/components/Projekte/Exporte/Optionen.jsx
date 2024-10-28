@@ -24,14 +24,17 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-const Optionen = () => {
+export const Optionen = observer(() => {
   const store = useContext(StoreContext)
   const { setExportFileType, exportFileType } = store
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>Optionen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -43,7 +46,11 @@ const Optionen = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
         <StyledCardContent>
           <StyledFormControlLabel
             control={
@@ -62,6 +69,4 @@ const Optionen = () => {
       </Collapse>
     </StyledCard>
   )
-}
-
-export default observer(Optionen)
+})

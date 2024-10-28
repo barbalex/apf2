@@ -15,8 +15,8 @@ import Teilpopulationen from './Teilpopulationen/index.jsx'
 import Kontrollen from './Kontrollen/index.jsx'
 import Massnahmen from './Massnahmen/index.jsx'
 import Beobachtungen from './Beobachtungen/index.jsx'
-import Anwendung from './Anwendung.jsx'
-import Optionen from './Optionen.jsx'
+import { Anwendung } from './Anwendung.jsx'
+import { Optionen } from './Optionen.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
