@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import { useContext, useCallback, useMemo, memo } from 'react'
 import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
 import uniqBy from 'lodash/uniqBy'
@@ -10,9 +10,9 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import Einheit from './Einheit.jsx'
 import Gezaehlt from './Gezaehlt.jsx'
-import Geschaetzt from './Geschaetzt.jsx'
-import query from './query.js'
-import createTpopkontrzaehl from './createTpopkontrzaehl.js'
+import { Geschaetzt } from './Geschaetzt.jsx'
+import { query } from './query.js'
+import { createTpopkontrzaehl } from './createTpopkontrzaehl.js'
 import { StoreContext } from '../../../../../../storeContext.js'
 import { Error } from '../../../../../shared/Error.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
@@ -160,172 +160,177 @@ const ShowNew = styled.div`
   }
 `
 
-const Count = ({
-  id,
-  tpopkontrId,
-  nr,
-  showEmpty,
-  showNew,
-  refetch,
-  einheitsUsed = [],
-  ekzaehleinheits = [],
-  ekzaehleinheitsOriginal = [],
-}) => {
-  const client = useApolloClient()
-  const queryClient = useQueryClient()
+export const Count = memo(
+  observer(
+    ({
+      id,
+      tpopkontrId,
+      nr,
+      showEmpty,
+      showNew,
+      refetch,
+      einheitsUsed = [],
+      ekzaehleinheits = [],
+      ekzaehleinheitsOriginal = [],
+    }) => {
+      const client = useApolloClient()
+      const queryClient = useQueryClient()
 
-  const store = useContext(StoreContext)
-  const { setToDelete } = useContext(StoreContext)
+      const store = useContext(StoreContext)
+      const { setToDelete } = useContext(StoreContext)
 
-  const { activeNodeArray } = store.tree
+      const { activeNodeArray } = store.tree
 
-  const {
-    data,
-    loading,
-    error,
-    refetch: refetchMe,
-  } = useQuery(query, {
-    variables: {
-      id: id || '99999999-9999-9999-9999-999999999999',
-    },
-  })
-
-  const row = data?.tpopkontrzaehlById ?? {}
-
-  const createNew = useCallback(() => {
-    client
-      .mutate({
-        mutation: createTpopkontrzaehl,
-        variables: { tpopkontrId },
+      const {
+        data,
+        loading,
+        error,
+        refetch: refetchMe,
+      } = useQuery(query, {
+        variables: {
+          id: id || '99999999-9999-9999-9999-999999999999',
+        },
       })
-      .then(() => refetch())
-  }, [client, refetch, tpopkontrId])
 
-  const zaehleinheitWerte = useMemo(() => {
-    const allEinheits = data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
-    // do list this count's einheit
-    const einheitsNotToList = einheitsUsed.filter((e) => e !== row.einheit)
-    let zaehleinheitWerte = ekzaehleinheits
-      // remove already set values
-      .filter((e) => !einheitsNotToList.includes(e.code))
-    // add this zaehleineits value if missing
-    // so as to show values input in earlier years that shall not be input any more
-    const thisRowsEinheit = allEinheits.find((e) => e.code === row.einheit)
-    if (thisRowsEinheit) {
-      zaehleinheitWerte = uniqBy([thisRowsEinheit, ...zaehleinheitWerte], 'id')
-    }
-    return sortBy(zaehleinheitWerte, (z) => {
-      const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
-        (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.code,
+      const row = data?.tpopkontrzaehlById ?? {}
+
+      const createNew = useCallback(() => {
+        client
+          .mutate({
+            mutation: createTpopkontrzaehl,
+            variables: { tpopkontrId },
+          })
+          .then(() => refetch())
+      }, [client, refetch, tpopkontrId])
+
+      const zaehleinheitWerte = useMemo(() => {
+        const allEinheits = data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+        // do list this count's einheit
+        const einheitsNotToList = einheitsUsed.filter((e) => e !== row.einheit)
+        let zaehleinheitWerte = ekzaehleinheits
+          // remove already set values
+          .filter((e) => !einheitsNotToList.includes(e.code))
+        // add this zaehleineits value if missing
+        // so as to show values input in earlier years that shall not be input any more
+        const thisRowsEinheit = allEinheits.find((e) => e.code === row.einheit)
+        if (thisRowsEinheit) {
+          zaehleinheitWerte = uniqBy(
+            [thisRowsEinheit, ...zaehleinheitWerte],
+            'id',
+          )
+        }
+        return sortBy(zaehleinheitWerte, (z) => {
+          const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
+            (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.code,
+          )
+          if (!ekzaehleinheitOriginal) return 999
+          return ekzaehleinheitOriginal.sort || 999
+        }).map((el) => ({
+          value: el.code,
+          label: el.text,
+        }))
+      }, [
+        data?.allTpopkontrzaehlEinheitWertes?.nodes,
+        einheitsUsed,
+        ekzaehleinheits,
+        ekzaehleinheitsOriginal,
+        row.einheit,
+      ])
+
+      const showDelete = nr > 1
+
+      const remove = useCallback(
+        ({ row }) => {
+          const afterDeletionHook = () => {
+            refetch()
+            queryClient.invalidateQueries({
+              queryKey: [`treeTpopfreiwkontrzaehl`],
+            })
+          }
+          setToDelete({
+            table: 'tpopkontrzaehl',
+            id: row.id,
+            label: null,
+            url: activeNodeArray,
+            afterDeletionHook,
+          })
+        },
+        [setToDelete, activeNodeArray, refetch, queryClient],
       )
-      if (!ekzaehleinheitOriginal) return 999
-      return ekzaehleinheitOriginal.sort || 999
-    }).map((el) => ({
-      value: el.code,
-      label: el.text,
-    }))
-  }, [
-    data?.allTpopkontrzaehlEinheitWertes?.nodes,
-    einheitsUsed,
-    ekzaehleinheits,
-    ekzaehleinheitsOriginal,
-    row.einheit,
-  ])
 
-  const showDelete = nr > 1
+      //console.log('Count, row:', row)
 
-  const remove = useCallback(
-    ({ row }) => {
-      const afterDeletionHook = () => {
-        refetch()
-        queryClient.invalidateQueries({
-          queryKey: [`treeTpopfreiwkontrzaehl`],
-        })
+      if (showNew) {
+        return (
+          <Container
+            nr={nr}
+            shownew={showNew}
+          >
+            <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+            <ShowNew>
+              <Button
+                color="primary"
+                onClick={createNew}
+              >
+                <StyledAddIcon /> Neu
+              </Button>
+            </ShowNew>
+          </Container>
+        )
       }
-      setToDelete({
-        table: 'tpopkontrzaehl',
-        id: row.id,
-        label: null,
-        url: activeNodeArray,
-        afterDeletionHook,
-      })
+      if (showEmpty) {
+        return (
+          <Container
+            nr={nr}
+            showempty={showEmpty}
+          >
+            <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+          </Container>
+        )
+      }
+      if (loading) return <Spinner />
+
+      if (error) return <Error error={error} />
+
+      return (
+        <StyledForm
+          nr={nr}
+          data-id={`count${nr}`}
+          showdelete={showDelete.toString()}
+        >
+          <Einheit
+            row={row}
+            refetch={refetch}
+            zaehleinheitWerte={zaehleinheitWerte}
+            nr={nr}
+          />
+          <GezaehltLabel>gezählt</GezaehltLabel>
+          <GeschaetztLabel>geschätzt</GeschaetztLabel>
+          <GezaehltVal>
+            <Gezaehlt
+              row={row}
+              refetch={refetchMe}
+            />
+          </GezaehltVal>
+          <GeschaetztVal>
+            <Geschaetzt
+              row={row}
+              refetch={refetchMe}
+            />
+          </GeschaetztVal>
+          {showDelete && (
+            <Delete>
+              <StyledDeleteButton
+                title="löschen"
+                onClick={() => remove({ row })}
+                color="inherit"
+              >
+                <DeleteIcon />
+              </StyledDeleteButton>
+            </Delete>
+          )}
+        </StyledForm>
+      )
     },
-    [setToDelete, activeNodeArray, refetch, queryClient],
-  )
-
-  //console.log('Count, row:', row)
-
-  if (showNew) {
-    return (
-      <Container
-        nr={nr}
-        shownew={showNew}
-      >
-        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-        <ShowNew>
-          <Button
-            color="primary"
-            onClick={createNew}
-          >
-            <StyledAddIcon /> Neu
-          </Button>
-        </ShowNew>
-      </Container>
-    )
-  }
-  if (showEmpty) {
-    return (
-      <Container
-        nr={nr}
-        showempty={showEmpty}
-      >
-        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-      </Container>
-    )
-  }
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
-
-  return (
-    <StyledForm
-      nr={nr}
-      data-id={`count${nr}`}
-      showdelete={showDelete.toString()}
-    >
-      <Einheit
-        row={row}
-        refetch={refetch}
-        zaehleinheitWerte={zaehleinheitWerte}
-        nr={nr}
-      />
-      <GezaehltLabel>gezählt</GezaehltLabel>
-      <GeschaetztLabel>geschätzt</GeschaetztLabel>
-      <GezaehltVal>
-        <Gezaehlt
-          row={row}
-          refetch={refetchMe}
-        />
-      </GezaehltVal>
-      <GeschaetztVal>
-        <Geschaetzt
-          row={row}
-          refetch={refetchMe}
-        />
-      </GeschaetztVal>
-      {showDelete && (
-        <Delete>
-          <StyledDeleteButton
-            title="löschen"
-            onClick={() => remove({ row })}
-            color="inherit"
-          >
-            <DeleteIcon />
-          </StyledDeleteButton>
-        </Delete>
-      )}
-    </StyledForm>
-  )
-}
-
-export default observer(Count)
+  ),
+)

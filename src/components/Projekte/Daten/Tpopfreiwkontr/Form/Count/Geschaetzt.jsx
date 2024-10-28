@@ -8,7 +8,7 @@ import { StoreContext } from '../../../../../../storeContext.js'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.js'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
 
-const Geschaetzt = ({ row, refetch }) => {
+export const Geschaetzt =observer( ({ row, refetch }) => {
   const store = useContext(StoreContext)
   const client = useApolloClient()
   const queryClient = useQueryClient()
@@ -68,6 +68,4 @@ const Geschaetzt = ({ row, refetch }) => {
       errors={errors}
     />
   )
-}
-
-export default observer(Geschaetzt)
+})
