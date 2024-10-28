@@ -6,7 +6,7 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-const TPopInklBerichte = () => {
+export const TPopInklBerichte = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
@@ -110,11 +110,9 @@ const TPopInklBerichte = () => {
       }}
     >
       Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
-      {queryState ? (
+      {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
-      ) : null}
+      : null}
     </DownloadCardButton>
   )
-}
-
-export default observer(TPopInklBerichte)
+})

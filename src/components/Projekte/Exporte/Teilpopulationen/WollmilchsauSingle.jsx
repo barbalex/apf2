@@ -14,7 +14,7 @@ const AutocompleteContainer = styled.div`
   padding-right: 8px;
 `
 
-const WollmilchsauSingle = () => {
+export const WollmilchsauSingle = observer(() => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
 
@@ -24,13 +24,13 @@ const WollmilchsauSingle = () => {
 
   const aeTaxonomiesfilter = useCallback(
     (inputValue) =>
-      inputValue
-        ? {
-            artname: { includesInsensitive: inputValue },
-            // needed to turn this off because the postgraphile addon caused cors issues in production
-            apByArtIdExists: true,
-          }
-        : { artname: { isNull: false } /*, apByArtIdExists: true*/ },
+      inputValue ?
+        {
+          artname: { includesInsensitive: inputValue },
+          // needed to turn this off because the postgraphile addon caused cors issues in production
+          apByArtIdExists: true,
+        }
+      : { artname: { isNull: false } /*, apByArtIdExists: true*/ },
     [],
   )
 
@@ -680,6 +680,4 @@ const WollmilchsauSingle = () => {
       />
     </AutocompleteContainer>
   )
-}
-
-export default observer(WollmilchsauSingle)
+})
