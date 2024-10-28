@@ -1,5 +1,5 @@
 import { useContext, useCallback } from 'react'
-import { Marker, Popup } from 'react-leaflet'
+import { Marker as LeafletMarker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import styled from '@emotion/styled'
@@ -24,7 +24,7 @@ const StyledButton = styled(Button)`
   padding: 2px 0;
 `
 
-const BeobNichtZuzuordnenMarker = ({ beob }) => {
+export const Marker = observer(({ beob }) => {
   const { apId, projId, beobId } = useParams()
   const { search } = useLocation()
 
@@ -88,7 +88,7 @@ const BeobNichtZuzuordnenMarker = ({ beob }) => {
   }, [apId, beob.id, projId])
 
   return (
-    <Marker
+    <LeafletMarker
       position={latLng}
       icon={icon}
       title={label}
@@ -125,8 +125,6 @@ const BeobNichtZuzuordnenMarker = ({ beob }) => {
           <Data id={beob.id} />
         </>
       </Popup>
-    </Marker>
+    </LeafletMarker>
   )
-}
-
-export default observer(BeobNichtZuzuordnenMarker)
+})
