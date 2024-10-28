@@ -89,7 +89,7 @@ const File = ({ file, parent, refetch }) => {
 
   const [fieldErrors, setFieldErrors] = useState({})
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const tableName = `${parent}File`
@@ -193,14 +193,12 @@ const File = ({ file, parent, refetch }) => {
   return (
     <ErrorBoundary>
       <Container>
-        {isImage ? (
+        {isImage ?
           <Img
             src={`https://ucarecdn.com/${file.fileId}/-/resize/80x/-/quality/lightest/${file.name}`}
             alt={file.name}
           />
-        ) : (
-          <ImgReplacement>...</ImgReplacement>
-        )}
+        : <ImgReplacement>...</ImgReplacement>}
         <DateiTypField>
           <TextField
             name="fileMimeType"
@@ -236,7 +234,10 @@ const File = ({ file, parent, refetch }) => {
             error={fieldErrors.beschreibung}
           />
         </BeschreibungField>
-        <DownloadIcon title="herunterladen" onClick={onClickDownload}>
+        <DownloadIcon
+          title="herunterladen"
+          onClick={onClickDownload}
+        >
           <FaDownload />
         </DownloadIcon>
         <DelIcon
