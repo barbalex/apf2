@@ -10,15 +10,18 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import Massnahmen from './Massnahmen.jsx'
-import MassnWebgisBun from './MassnWebgisBun.jsx'
+import { Massnahmen as MassnahmenComponent } from './Massnahmen.jsx'
+import { MassnWebgisBun } from './MassnWebgisBun.jsx'
 
-const MassnahmenExporte = () => {
+export const Massnahmen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>Massnahmen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -31,17 +34,19 @@ const MassnahmenExporte = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        {expanded ? (
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
+        {expanded ?
           <StyledCardContent>
-            <Massnahmen />
-            <Massnahmen filtered={true} />
+            <MassnahmenComponent />
+            <MassnahmenComponent filtered={true} />
             <MassnWebgisBun />
           </StyledCardContent>
-        ) : null}
+        : null}
       </Collapse>
     </StyledCard>
   )
 }
-
-export default MassnahmenExporte
