@@ -6,7 +6,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { jwtDecode } from 'jwt-decode'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { StringToCopyOnlyButton } from '../../../shared/StringToCopyOnlyButton.jsx'
+import { StringToCopyOnlyButton } from '../../../../shared/StringToCopyOnlyButton.jsx'
 import Title from './Title.jsx'
 import Headdata from './Headdata/index.jsx'
 import Besttime from './Besttime.jsx'
@@ -21,15 +21,15 @@ import Files from './Files.jsx'
 import Count from './Count/index.jsx'
 import Verification from './Verification.jsx'
 import Image from './Image.jsx'
-import { StoreContext } from '../../../../storeContext.js'
-import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
+import { StoreContext } from '../../../../../storeContext.js'
+import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
 import {
   adresse as adresseFragment,
   pop as popFragment,
   tpop as tpopFragment,
   tpopfreiwkontr as tpopfreiwkontrFragment,
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
-} from '../../../shared/fragments.js'
+} from '../../../../shared/fragments.js'
 
 const FormContainer = styled.div`
   padding: 10px;

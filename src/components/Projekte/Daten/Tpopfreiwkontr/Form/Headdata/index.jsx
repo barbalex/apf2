@@ -3,8 +3,8 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 
-import { Select } from '../../../../shared/Select.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
+import { Select } from '../../../../../shared/Select.jsx'
+import { StoreContext } from '../../../../../../storeContext.js'
 import queryAdresses from './queryAdresses.js'
 import {
   adresse as adresseFragment,
@@ -12,8 +12,8 @@ import {
   tpop as tpopFragment,
   tpopfreiwkontr as tpopfreiwkontrFragment,
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
-} from '../../../../shared/fragments.js'
-import { Error } from '../../../../shared/Error.jsx'
+} from '../../../../../shared/fragments.js'
+import { Error } from '../../../../../shared/Error.jsx'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -165,9 +165,8 @@ const Headdata = ({ pop, tpop, row }) => {
   const userCount = row?.adresseByBearbeiter?.usersByAdresseId?.totalCount ?? 0
 
   const statusValue = tpop?.status ?? ''
-  const status = [200, 201, 202].includes(statusValue)
-    ? 'angesiedelt'
-    : 'natürlich'
+  const status =
+    [200, 201, 202].includes(statusValue) ? 'angesiedelt' : 'natürlich'
 
   if (error) return <Error error={error} />
   return (
@@ -191,9 +190,9 @@ const Headdata = ({ pop, tpop, row }) => {
           loading={loading}
           saveToDb={saveToDb}
           error={
-            row.bearbeiter && !userCount && !isPrint
-              ? 'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, dem diese Adresse zugeordnet wurde.'
-              : errors
+            row.bearbeiter && !userCount && !isPrint ?
+              'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, dem diese Adresse zugeordnet wurde.'
+            : errors
           }
         />
       </BearbVal>

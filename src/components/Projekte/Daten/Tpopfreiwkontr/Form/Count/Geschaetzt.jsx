@@ -1,15 +1,14 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { TextField } from '../../../../shared/TextField.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
+import { TextField } from '../../../../../shared/TextField.jsx'
+import { StoreContext } from '../../../../../../storeContext.js'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.js'
-import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
 
-const Gezaehlt = ({ row, refetch }) => {
+const Geschaetzt = ({ row, refetch }) => {
   const store = useContext(StoreContext)
   const client = useApolloClient()
   const queryClient = useQueryClient()
@@ -19,12 +18,17 @@ const Gezaehlt = ({ row, refetch }) => {
   const onChange = useCallback(
     async (event) => {
       const val = ifIsNumericAsNumber(event.target.value)
-      if (val === null && row.methode === 1) return
-      if (row.anzahl === val && row.methode === 2) return
+      /*console.log('Geschaetzt, onChange:', {
+        row,
+        val,
+        targetValue: event.target.value,
+      })*/
+      if (val === null && row.methode === 2) return
+      if (row.anzahl === val && row.methode === 1) return
       const variables = {
         id: row.id,
         anzahl: val,
-        methode: 2,
+        methode: 1,
         einheit: row.einheit,
         changedBy: store.user.name,
       }
@@ -43,22 +47,20 @@ const Gezaehlt = ({ row, refetch }) => {
     },
     [
       client,
+      queryClient,
       refetch,
       row.anzahl,
       row.einheit,
       row.id,
       row.methode,
-      store.refetch,
       store.user.name,
-      store.tree,
-      queryClient,
     ],
   )
-  //console.log('Gezaehlt, row:', row)
+  //console.log('Geschaetzt, row:', row)
 
   return (
     <TextField
-      value={row.methode === 2 ? row.anzahl : null}
+      value={row.methode === 1 ? row.anzahl : null}
       label=""
       name="anzahl"
       type="number"
@@ -68,4 +70,4 @@ const Gezaehlt = ({ row, refetch }) => {
   )
 }
 
-export default observer(Gezaehlt)
+export default observer(Geschaetzt)

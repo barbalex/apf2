@@ -13,7 +13,7 @@ import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Form } from './Form.jsx'
+import { Form } from './Form/index.jsx'
 
 const Container = styled.div`
   flex-grow: 0;

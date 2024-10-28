@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import { DateField as DateFieldComponent } from '../../../shared/Date.jsx'
+import { DateField as DateFieldComponent } from '../../../../shared/Date.jsx'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -51,4 +51,3 @@ export const DateField = observer(({ saveToDb, row, errors }) => (
     </DateVal>
   </Container>
 ))
-

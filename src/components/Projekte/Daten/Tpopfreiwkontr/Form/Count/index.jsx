@@ -13,9 +13,9 @@ import Gezaehlt from './Gezaehlt.jsx'
 import Geschaetzt from './Geschaetzt.jsx'
 import query from './query.js'
 import createTpopkontrzaehl from './createTpopkontrzaehl.js'
-import { StoreContext } from '../../../../../storeContext.js'
-import { Error } from '../../../../shared/Error.jsx'
-import { Spinner } from '../../../../shared/Spinner.jsx'
+import { StoreContext } from '../../../../../../storeContext.js'
+import { Error } from '../../../../../shared/Error.jsx'
+import { Spinner } from '../../../../../shared/Spinner.jsx'
 
 const AddIcon = styled(MdAddCircleOutline)`
   font-size: 1.5rem;
@@ -31,28 +31,28 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-areas: ${(props) =>
-    props.showempty
-      ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+    props.showempty ?
+      `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
        'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
        'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
-      : props.shownew
-        ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+    : props.shownew ?
+      `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
          'showNew showNew showNew showNew showNew showNew showNew showNew'`
-        : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+    : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
            'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
            'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   grid-column-gap: 10px;
   break-inside: avoid;
   @media print {
     grid-template-areas: ${(props) =>
-      props.showempty
-        ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+      props.showempty ?
+        `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
        'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
        'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
-        : props.shownew
-          ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+      : props.shownew ?
+        `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
          'showNew showNew showNew showNew showNew showNew showNew showNew'`
-          : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+      : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
            'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
            'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   }
@@ -66,11 +66,11 @@ const StyledForm = styled.div`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-areas: ${(props) =>
-    props.showdelete === 'true'
-      ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+    props.showdelete === 'true' ?
+      `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
              'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel .'
              'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal delete'`
-      : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+    : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
              'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
              'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   grid-column-gap: 10px;
@@ -257,10 +257,16 @@ const Count = ({
 
   if (showNew) {
     return (
-      <Container nr={nr} shownew={showNew}>
+      <Container
+        nr={nr}
+        shownew={showNew}
+      >
         <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
         <ShowNew>
-          <Button color="primary" onClick={createNew}>
+          <Button
+            color="primary"
+            onClick={createNew}
+          >
             <StyledAddIcon /> Neu
           </Button>
         </ShowNew>
@@ -269,7 +275,10 @@ const Count = ({
   }
   if (showEmpty) {
     return (
-      <Container nr={nr} showempty={showEmpty}>
+      <Container
+        nr={nr}
+        showempty={showEmpty}
+      >
         <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
       </Container>
     )
@@ -293,10 +302,16 @@ const Count = ({
       <GezaehltLabel>gezählt</GezaehltLabel>
       <GeschaetztLabel>geschätzt</GeschaetztLabel>
       <GezaehltVal>
-        <Gezaehlt row={row} refetch={refetchMe} />
+        <Gezaehlt
+          row={row}
+          refetch={refetchMe}
+        />
       </GezaehltVal>
       <GeschaetztVal>
-        <Geschaetzt row={row} refetch={refetchMe} />
+        <Geschaetzt
+          row={row}
+          refetch={refetchMe}
+        />
       </GeschaetztVal>
       {showDelete && (
         <Delete>

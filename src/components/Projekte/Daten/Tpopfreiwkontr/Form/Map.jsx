@@ -2,8 +2,8 @@ import React, { useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import { RadioButton } from '../../../shared/RadioButton.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { RadioButton } from '../../../../shared/RadioButton.jsx'
+import { StoreContext } from '../../../../../storeContext.js'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
