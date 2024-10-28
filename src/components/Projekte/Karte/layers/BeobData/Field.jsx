@@ -31,7 +31,7 @@ const ItemTypes = {
   CARD: 'card',
 }
 
-const Field = ({ label, value, index, moveField }) => {
+export const Field = ({ label, value, index, moveField }) => {
   const ref = useRef(null)
   const [{ handlerId }, drop] = useDrop({
     accept: ItemTypes.CARD,
@@ -92,11 +92,13 @@ const Field = ({ label, value, index, moveField }) => {
   drag(drop(ref))
 
   return (
-    <Row ref={ref} style={{ opacity }} data-handler-id={handlerId}>
+    <Row
+      ref={ref}
+      style={{ opacity }}
+      data-handler-id={handlerId}
+    >
       <Label>{label}</Label>
       <Value>{value}</Value>
     </Row>
   )
 }
-
-export default Field

@@ -14,7 +14,7 @@ import { exists } from '../../../../../modules/exists.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
-import Beob from './Field.jsx'
+import { Field } from './Field.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
 import { beob } from '../../../../shared/fragments.js'
 import { Info } from '../BeobZugeordnet/Marker.jsx'
@@ -49,7 +49,7 @@ const topFieldNames = [
   'locality_descript',
 ]
 
-const BeobData = ({ id }) => {
+export const Data = observer(({ id }) => {
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
@@ -153,7 +153,7 @@ const BeobData = ({ id }) => {
   )
   const renderField = useCallback(
     (field, index) => (
-      <Beob
+      <Field
         key={field[0]}
         label={field[0]}
         value={field[1]}
@@ -203,6 +203,4 @@ const BeobData = ({ id }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(BeobData)
+})
