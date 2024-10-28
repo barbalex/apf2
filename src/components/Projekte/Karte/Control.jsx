@@ -7,7 +7,7 @@ const OuterDiv = styled.div`
 const InnerDiv = styled.div`
   border: none !important;
   box-shadow: none !important;
-  /* float children right */ 
+  /* float children right */
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -21,7 +21,7 @@ const POSITION_CLASSES = {
   topright: 'leaflet-top leaflet-right',
 }
 
-const Control = ({ children, position, visible = true }) => {
+export const Control = ({ children, position, visible = true }) => {
   const positionClass =
     (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright
 
@@ -36,5 +36,3 @@ const Control = ({ children, position, visible = true }) => {
     </OuterDiv>
   )
 }
-
-export default Control

@@ -5,7 +5,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { StoreContext } from '../../../storeContext.js'
 
-const MapResizer = ({ children, mapContainerRef }) => {
+export const MapResizer = observer(({ children, mapContainerRef }) => {
   const map = useMap()
   const store = useContext(StoreContext)
   const { bounds: boundsRaw } = store
@@ -49,6 +49,4 @@ const MapResizer = ({ children, mapContainerRef }) => {
   }, [bounds, map])
 
   return children
-}
-
-export default observer(MapResizer)
+})
