@@ -10,7 +10,7 @@ import ApberrelevantGrundFolder from './ApberrelevantGrund'
 import EkAbrechnungstypFolder from './EkAbrechnungstyp/index.jsx'
 import ZaehlEinheitFolder from './ZaehlEinheit'
 
-const WlFolderNode = () => {
+export const Werte = observer(() => {
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
@@ -138,6 +138,4 @@ const WlFolderNode = () => {
       )}
     </>
   )
-}
-
-export default observer(WlFolderNode)
+})
