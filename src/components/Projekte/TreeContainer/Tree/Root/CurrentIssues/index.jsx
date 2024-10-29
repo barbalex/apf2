@@ -6,7 +6,7 @@ import Row from '../../Row'
 import { StoreContext } from '../../../../../../storeContext.js'
 import Issues from './Issues'
 
-const CurrentIssuesFolderNode = ({ count, isLoading }) => {
+export const CurrentIssues = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)
 
   let message = isLoading && !count ? '...' : max([count - 1, 0])
@@ -31,6 +31,4 @@ const CurrentIssuesFolderNode = ({ count, isLoading }) => {
       {isOpen && <Issues />}
     </>
   )
-}
-
-export default observer(CurrentIssuesFolderNode)
+})

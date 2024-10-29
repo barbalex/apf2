@@ -8,10 +8,10 @@ import Projekt from './Projekt/index.jsx'
 import Users from './Users/index.jsx'
 import Messages from './Messages.jsx'
 import Werte from './Werte/index.jsx'
-import CurrentIssues from './CurrentIssues/index.jsx'
+import { CurrentIssues } from './CurrentIssues/index.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
 
-const TreeRoot = () => {
+export const Root = observer(() => {
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
@@ -126,6 +126,4 @@ const TreeRoot = () => {
       />
     </>
   )
-}
-
-export default observer(TreeRoot)
+})

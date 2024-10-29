@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 
-import Root from './Root/index.jsx'
+import { Root } from './Root/index.jsx'
 import { IntoViewScroller } from './IntoViewScroller.jsx'
 import { Menu } from './Menu/index.jsx'
 
