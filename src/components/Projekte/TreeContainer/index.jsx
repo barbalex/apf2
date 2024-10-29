@@ -81,13 +81,17 @@ const CmAssozartFolder = lazy(async () => ({
 const CmAssozart = lazy(async () => ({
   default: (await import('./contextmenu/Assozart.jsx')).AssozartFolder,
 }))
-const CmEkzaehleinheitFolder = lazy(
-  () => import('./contextmenu/EkzaehleinheitFolder.jsx'),
-)
-const CmEkzaehleinheit = lazy(() => import('./contextmenu/Ekzaehleinheit.jsx'))
-const CmEkfrequenzFolder = lazy(
-  () => import('./contextmenu/EkfrequenzFolder.jsx'),
-)
+const CmEkzaehleinheitFolder = lazy(async () => ({
+  default: (await import('./contextmenu/EkzaehleinheitFolder.jsx'))
+    .EkzaehleinheitFolder,
+}))
+const CmEkzaehleinheit = lazy(async () => ({
+  default: (await import('./contextmenu/Ekzaehleinheit.jsx')).Ekzaehleinheit,
+}))
+const CmEkfrequenzFolder = lazy(async () => ({
+  default: (await import('./contextmenu/EkfrequenzFolder.jsx'))
+    .EkfrequenzFolder,
+}))
 const CmEkfrequenz = lazy(() => import('./contextmenu/Ekfrequenz.jsx'))
 const CmApartFolder = lazy(() => import('./contextmenu/ApartFolder.jsx'))
 const CmApart = lazy(() => import('./contextmenu/Apart.jsx'))

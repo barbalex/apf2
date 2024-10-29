@@ -4,7 +4,10 @@ import { observer } from 'mobx-react-lite'
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const insertData = {
@@ -16,19 +19,28 @@ const deleteData = {
   table: 'ekzaehleinheit',
 }
 
-const Ekzaehleinheit = ({ onClick }) => {
+export const Ekzaehleinheit = observer(({ onClick }) => {
   const { user } = useContext(StoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id="treeEkzaehleinheit" hideOnLeave={true}>
+      <ContextMenu
+        id="treeEkzaehleinheit"
+        hideOnLeave={true}
+      >
         <div className="react-contextmenu-title">EK-Zähleinheit</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem onClick={onClick} data={insertData}>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
               erstelle neue
             </MenuItem>
-            <MenuItem onClick={onClick} data={deleteData}>
+            <MenuItem
+              onClick={onClick}
+              data={deleteData}
+            >
               lösche
             </MenuItem>
           </>
@@ -36,6 +48,4 @@ const Ekzaehleinheit = ({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-}
-
-export default observer(Ekzaehleinheit)
+})
