@@ -3,7 +3,10 @@ import { useContext } from 'react'
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const insertData = {
@@ -15,20 +18,29 @@ const deleteData = {
   table: 'apber',
 }
 
-const Apber = ({ onClick }) => {
+export const Apber = ({ onClick }) => {
   const { user } = useContext(StoreContext)
   const isReadOnly = userIsReadOnly(user.token)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id="treeApber" hideOnLeave={true}>
+      <ContextMenu
+        id="treeApber"
+        hideOnLeave={true}
+      >
         <div className="react-contextmenu-title">AP-Bericht</div>
         {!isReadOnly && (
           <>
-            <MenuItem onClick={onClick} data={insertData}>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
               erstelle neuen
             </MenuItem>
-            <MenuItem onClick={onClick} data={deleteData}>
+            <MenuItem
+              onClick={onClick}
+              data={deleteData}
+            >
               lösche
             </MenuItem>
           </>
@@ -37,5 +49,3 @@ const Apber = ({ onClick }) => {
     </ErrorBoundary>
   )
 }
-
-export default Apber
