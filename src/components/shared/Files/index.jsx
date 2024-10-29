@@ -190,7 +190,7 @@ export const Files = observer(
                 >
                   {lightboxIsOpen ?
                     'Galerie schliessen'
-                  : 'Bilder in Galerie öffnen'}
+                  : 'Vorschau-Galerie öffnen'}
                 </LightboxButton>
               )}
             </ButtonsContainer>
