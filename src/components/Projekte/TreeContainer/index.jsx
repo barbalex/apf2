@@ -157,9 +157,15 @@ const CmProjekt = lazy(async () => ({
 const CmWerteListen = lazy(async () => ({
   default: (await import('./contextmenu/WerteListen.jsx')).WerteListen,
 }))
-const CmTpopFolder = lazy(() => import('./contextmenu/TpopFolder.jsx'))
-const CmTpop = lazy(() => import('./contextmenu/Tpop.jsx'))
-const CmTpopberFolder = lazy(() => import('./contextmenu/TpopberFolder.jsx'))
+const CmTpopFolder = lazy(async () => ({
+  default: (await import('./contextmenu/TpopFolder.jsx')).TpopFolder,
+}))
+const CmTpop = lazy(async () => ({
+  default: (await import('./contextmenu/Tpop.jsx')).Tpop,
+}))
+const CmTpopberFolder = lazy(async () => ({
+  default: (await import('./contextmenu/TpopberFolder.jsx')).TpopberFolder,
+}))
 const CmTpopber = lazy(() => import('./contextmenu/Tpopber.jsx'))
 const CmBeobZugeordnet = lazy(() => import('./contextmenu/BeobZugeordnet.jsx'))
 const CmBeobnichtbeurteilt = lazy(
