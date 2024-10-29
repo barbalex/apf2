@@ -4,7 +4,10 @@ import { observer } from 'mobx-react-lite'
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const insertData = {
@@ -12,16 +15,22 @@ const insertData = {
   table: 'apart',
 }
 
-const ApartFolder = ({ onClick }) => {
+export const ApartFolder = observer(({ onClick }) => {
   const { user } = useContext(StoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id="treeApartFolder" hideOnLeave={true}>
+      <ContextMenu
+        id="treeApartFolder"
+        hideOnLeave={true}
+      >
         <div className="react-contextmenu-title">Taxa</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem onClick={onClick} data={insertData}>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
               erstelle neue
             </MenuItem>
           </>
@@ -29,6 +38,4 @@ const ApartFolder = ({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-}
-
-export default observer(ApartFolder)
+})

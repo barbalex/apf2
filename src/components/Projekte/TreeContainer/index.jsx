@@ -92,9 +92,15 @@ const CmEkfrequenzFolder = lazy(async () => ({
   default: (await import('./contextmenu/EkfrequenzFolder.jsx'))
     .EkfrequenzFolder,
 }))
-const CmEkfrequenz = lazy(() => import('./contextmenu/Ekfrequenz.jsx'))
-const CmApartFolder = lazy(() => import('./contextmenu/ApartFolder.jsx'))
-const CmApart = lazy(() => import('./contextmenu/Apart.jsx'))
+const CmEkfrequenz = lazy(async () => ({
+  default: (await import('./contextmenu/Ekfrequenz.jsx')).Ekfrequenz,
+}))
+const CmApartFolder = lazy(async () => ({
+  default: (await import('./contextmenu/ApartFolder.jsx')).ApartFolder,
+}))
+const CmApart = lazy(async () => ({
+  default: (await import('./contextmenu/Apart.jsx')).Apart,
+}))
 const CmBeobZugeordnetFolder = lazy(
   () => import('./contextmenu/BeobZugeordnetFolder.jsx'),
 )
