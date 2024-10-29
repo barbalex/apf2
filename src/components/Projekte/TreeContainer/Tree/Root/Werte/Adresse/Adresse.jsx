@@ -5,13 +5,14 @@ import { gql, useApolloClient } from '@apollo/client'
 import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
 
-const AdresseNodes = () => {
+export const Adresse = () => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
-  const adressesFilter = nodeLabelFilter.adresse
-    ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
+  const adressesFilter =
+    nodeLabelFilter.adresse ?
+      { label: { includesInsensitive: nodeLabelFilter.adresse } }
     : { id: { isNull: false } }
 
   const { data } = useQuery({
@@ -47,8 +48,11 @@ const AdresseNodes = () => {
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
 }
-
-export default AdresseNodes
