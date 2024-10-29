@@ -1,6 +1,6 @@
 import { Row } from '../Row.jsx'
 
-export const Messages = ({ count, isLoading }) => {
+export const MessagesFolder = ({ count, isLoading }) => {
   const message = isLoading && !count ? '...' : count
 
   const node = {

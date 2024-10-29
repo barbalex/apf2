@@ -6,7 +6,7 @@ import { Row } from '../../Row.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
 import { Issues } from './Issues.jsx'
 
-export const CurrentIssues = observer(({ count, isLoading }) => {
+export const CurrentIssuesFolder = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)
 
   let message = isLoading && !count ? '...' : max([count - 1, 0])
