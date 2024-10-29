@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { StoreContext } from '../../../../storeContext.js'
 import { isElementInViewport } from '../../../../modules/isElementInViewport.js'
 
-const IntoViewScroller = () => {
+export const IntoViewScroller = observer(() => {
   const store = useContext(StoreContext)
   const { activeNodeArray } = store.tree
   // when opening a folder without activating it, lastTouchedNode is not same as activeNodeArray
@@ -39,6 +39,4 @@ const IntoViewScroller = () => {
   }, [scroller])
 
   return null
-}
-
-export default observer(IntoViewScroller)
+})

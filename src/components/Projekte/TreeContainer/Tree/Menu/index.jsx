@@ -2,7 +2,7 @@ import { useState, useCallback, useContext } from 'react'
 import { FaCog, FaCheck } from 'react-icons/fa'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
-import Menu from '@mui/material/Menu'
+import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { observer } from 'mobx-react-lite'
 
@@ -14,7 +14,7 @@ const Container = styled.div`
   top: -2px;
   right: 6px;
 `
-const MyMenu = styled(Menu)`
+const MyMenu = styled(MuiMenu)`
   ul {
     padding: 0;
   }
@@ -49,7 +49,7 @@ const StyledFaCog = styled(FaCog)`
   color: #2e7d32;
 `
 
-const TreeMenu = () => {
+export const Menu = observer(() => {
   const store = useContext(StoreContext)
   const { map, tree } = store
   const { tpopIcon, setTpopIcon, popIcon, setPopIcon } = map
@@ -172,6 +172,4 @@ const TreeMenu = () => {
       </MyMenu>
     </Container>
   )
-}
-
-export default observer(TreeMenu)
+})
