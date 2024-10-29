@@ -7,7 +7,7 @@ import { Row } from '../../Row'
 import { StoreContext } from '../../../../../../storeContext.js'
 import AdresseFolder from './Adresse'
 import ApberrelevantGrundFolder from './ApberrelevantGrund'
-import EkAbrechnungstypFolder from './EkAbrechnungstyp/index.jsx'
+import { EkAbrechnungstypFolder } from './EkAbrechnungstyp/index.jsx'
 import { ZaehlEinheitFolder } from './ZaehlEinheit/index.jsx'
 
 export const Werte = observer(() => {

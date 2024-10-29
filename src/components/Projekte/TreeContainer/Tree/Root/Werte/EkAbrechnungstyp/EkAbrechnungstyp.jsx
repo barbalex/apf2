@@ -5,7 +5,7 @@ import { gql, useApolloClient } from '@apollo/client'
 import { Row } from '../../../Row'
 import { StoreContext } from '../../../../../../../storeContext.js'
 
-const EkAbrechnungstypNodes = () => {
+export const EkAbrechnungstyp = () => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
@@ -63,5 +63,3 @@ const EkAbrechnungstypNodes = () => {
     )
   })
 }
-
-export default EkAbrechnungstypNodes
