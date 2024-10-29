@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { isNodeOpen } from '../isNodeOpen.js'
-import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
+import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.js'
 
 export const toggleNodeSymbol = ({ node, store, search, navigate }) => {
   if (!node.url) throw new Error('passed node has no url')

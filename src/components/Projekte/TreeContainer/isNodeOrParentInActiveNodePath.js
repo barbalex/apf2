@@ -1,8 +1,8 @@
 import isEqual from 'lodash/isEqual'
 
-import isNodeInActiveNodePath from './isNodeInActiveNodePath'
+import { isNodeInActiveNodePath } from './isNodeInActiveNodePath.js'
 
-const isNodeOrParentInActiveNodePath = ({ node, activeNodeArray }) => {
+export const isNodeOrParentInActiveNodePath = ({ node, activeNodeArray }) => {
   if (!node) return false
   if (!node.url) return false
   if (!activeNodeArray) return false
@@ -27,5 +27,3 @@ const isNodeOrParentInActiveNodePath = ({ node, activeNodeArray }) => {
 
   return isEqual(node.url.slice(0, activeNodeArray.length), activeNodeArray)
 }
-
-export default isNodeOrParentInActiveNodePath
