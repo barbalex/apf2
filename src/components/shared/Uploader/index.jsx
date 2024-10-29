@@ -20,7 +20,7 @@ export const Uploader = memo(({ onFileUploadSuccess, onFileUploadFailed }) => {
       secureExpire={expire}
       id="file"
       name="file"
-      multiple="true"
+      multiple="false"
       multipleMax={10}
       onFileUploadSuccess={onFileUploadSuccess}
       onFileUploadFailed={onFileUploadFailed}

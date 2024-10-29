@@ -125,12 +125,12 @@ export const Files = observer(
               },
             })
           }
-          refetch()
         }
         // close the uploader or it will be open when navigating to the list
         api?.doneFlow?.()
         // clear the uploader or it will show the last uploaded file when opened next time
         api?.removeAllFiles?.()
+        refetch()
 
         return null
       },
