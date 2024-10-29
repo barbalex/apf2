@@ -10,7 +10,7 @@ import { tables } from '../../../../../modules/tables.js'
 const isFreiwilligenKontrolle = (activeNodeArray) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
-const deleteModule = async ({ client, store, search }) => {
+export const deleteModule = async ({ client, store, search }) => {
   const {
     emptyToDelete,
     addDeletedDataset,
@@ -187,4 +187,3 @@ const deleteModule = async ({ client, store, search }) => {
   emptyToDelete()
 }
 
-export default deleteModule

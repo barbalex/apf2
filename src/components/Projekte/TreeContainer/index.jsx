@@ -209,11 +209,16 @@ const CmTpopmassnberFolder = lazy(async () => ({
 const CmTpopmassnber = lazy(async () => ({
   default: (await import('./contextmenu/Tpopmassnber.jsx')).Tpopmassnber,
 }))
-const CmTpopmassnFolder = lazy(
-  () => import('./contextmenu/TpopmassnFolder.jsx'),
-)
-const CmTpopmassn = lazy(() => import('./contextmenu/Tpopmassn.jsx'))
-const DeleteDatasetModal = lazy(() => import('./DeleteDatasetModal/index.jsx'))
+const CmTpopmassnFolder = lazy(async () => ({
+  default: (await import('./contextmenu/TpopmassnFolder.jsx')).TpopmassnFolder,
+}))
+const CmTpopmassn = lazy(async () => ({
+  default: (await import('./contextmenu/Tpopmassn.jsx')).Tpopmassn,
+}))
+const DeleteDatasetModal = lazy(async () => ({
+  default: (await import('./DeleteDatasetModal/index.jsx')).DatasetDeleteModal,
+}))
+
 import { copyBiotopTo } from '../../../modules/copyBiotopTo.js'
 import { moveTo } from '../../../modules/moveTo/index.js'
 import { copyTo } from '../../../modules/copyTo/index.js'
