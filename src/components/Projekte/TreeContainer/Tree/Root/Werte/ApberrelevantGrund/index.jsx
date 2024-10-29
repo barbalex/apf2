@@ -5,7 +5,7 @@ import { StoreContext } from '../../../../../../../storeContext.js'
 import { Row } from '../../../Row.jsx'
 import ApberrelevantGrundNodes from './ApberrelevantGrund'
 
-const ApberrelevantGrundFolder = ({ count, isLoading }) => {
+export const ApberrelevantGrundFolder = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
@@ -33,10 +33,11 @@ const ApberrelevantGrundFolder = ({ count, isLoading }) => {
 
   return (
     <>
-      <Row key="wlApberrelevantGrundFolder" node={node} />
+      <Row
+        key="wlApberrelevantGrundFolder"
+        node={node}
+      />
       {isOpen && <ApberrelevantGrundNodes />}
     </>
   )
-}
-
-export default observer(ApberrelevantGrundFolder)
+})
