@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
 import { Row } from '../../../Row.jsx'
-import ApberrelevantGrundNodes from './ApberrelevantGrund'
+import { ApberrelevantGrund } from './ApberrelevantGrund.jsx'
 
 export const ApberrelevantGrundFolder = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)
@@ -37,7 +37,7 @@ export const ApberrelevantGrundFolder = observer(({ count, isLoading }) => {
         key="wlApberrelevantGrundFolder"
         node={node}
       />
-      {isOpen && <ApberrelevantGrundNodes />}
+      {isOpen && <ApberrelevantGrund />}
     </>
   )
 })
