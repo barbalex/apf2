@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { jwtDecode } from 'jwt-decode'
 
-import Projekt from './Projekt/index.jsx'
+import { Projekt } from './Projekt/index.jsx'
 import { UsersFolder } from './Users/index.jsx'
 import { MessagesFolder } from './Messages.jsx'
 import { WerteFolder } from './Werte/index.jsx'

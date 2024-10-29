@@ -1,8 +1,8 @@
 import { Row } from '../../Row.jsx'
 import ApberuebersichtFolder from './ApberuebersichtFolder'
-import ApFolder from './ApFolder' 
+import ApFolder from './ApFolder'
 
-const ProjektNode = ({ projekt, projectIsOpen }) => {
+export const Projekt = ({ projekt, projectIsOpen }) => {
   const url = ['Projekte', projekt.id]
   const node = {
     nodeType: 'table',
@@ -32,5 +32,3 @@ const ProjektNode = ({ projekt, projectIsOpen }) => {
     </>
   )
 }
-
-export default ProjektNode
