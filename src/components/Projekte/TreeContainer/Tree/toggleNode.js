@@ -3,7 +3,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import isNodeOpen from '../isNodeOpen'
 import openNode from '../openNode'
 
-const toggleNode = ({ node, store, navigate, search }) => {
+export const toggleNode = ({ node, store, navigate, search }) => {
   if (!node.url) throw new Error('passed node has no url')
   const {
     openNodes: openNodesRaw,
@@ -20,7 +20,7 @@ const toggleNode = ({ node, store, navigate, search }) => {
     openNode({ node, openNodes, store })
     newActiveNodeArray = [...node.url]
     // some elements are numbers but they are contained in url as text
-    // eslint-disable-next-line eqeqeq
+     
   } else if (node.urlLabel == aNA.slice(-1)[0]) {
     // the node is open
     // AND it is the active node
@@ -36,5 +36,3 @@ const toggleNode = ({ node, store, navigate, search }) => {
   navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
   setLastTouchedNode(node.url)
 }
-
-export default toggleNode
