@@ -1,6 +1,6 @@
 import { Row } from '../../Row.jsx'
-import ApberuebersichtFolder from './ApberuebersichtFolder'
-import ApFolder from './ApFolder'
+import ApberuebersichtFolder from './ApberuebersichtFolder/index.jsx'
+import ApFolder from './ApFolder/index.jsx'
 
 export const Projekt = ({ projekt, projectIsOpen }) => {
   const url = ['Projekte', projekt.id]
