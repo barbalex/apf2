@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
 import { Row } from '../../../Row.jsx'
-import ZaehlEinheitNodes from './ZaehlEinheit'
+import { ZaehlEinheit } from './ZaehlEinheit.jsx'
 
 export const ZaehlEinheitFolder = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)
@@ -35,7 +35,7 @@ export const ZaehlEinheitFolder = observer(({ count, isLoading }) => {
   return (
     <>
       <Row node={node} />
-      {isOpen && <ZaehlEinheitNodes />}
+      {isOpen && <ZaehlEinheit />}
     </>
   )
 })
