@@ -1,7 +1,7 @@
 import { getSnapshot } from 'mobx-state-tree'
 
 import { isNodeOpen } from '../isNodeOpen.js'
-import openNode from '../openNode'
+import { openNode } from '../openNode.js'
 
 export const toggleNode = ({ node, store, navigate, search }) => {
   if (!node.url) throw new Error('passed node has no url')
