@@ -148,9 +148,15 @@ const CmPopmassnber = lazy(async () => ({
 const CmPopberFolder = lazy(async () => ({
   default: (await import('./contextmenu/PopberFolder.jsx')).PopberFolder,
 }))
-const CmPopber = lazy(() => import('./contextmenu/Popber.jsx'))
-const CmProjekt = lazy(() => import('./contextmenu/Projekt.jsx'))
-const CmWerteListen = lazy(() => import('./contextmenu/WerteListen.jsx'))
+const CmPopber = lazy(async () => ({
+  default: (await import('./contextmenu/Popber.jsx')).Popber,
+}))
+const CmProjekt = lazy(async () => ({
+  default: (await import('./contextmenu/Projekt.jsx')).Projekt,
+}))
+const CmWerteListen = lazy(async () => ({
+  default: (await import('./contextmenu/WerteListen.jsx')).WerteListen,
+}))
 const CmTpopFolder = lazy(() => import('./contextmenu/TpopFolder.jsx'))
 const CmTpop = lazy(() => import('./contextmenu/Tpop.jsx'))
 const CmTpopberFolder = lazy(() => import('./contextmenu/TpopberFolder.jsx'))
