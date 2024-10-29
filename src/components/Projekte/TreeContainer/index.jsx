@@ -111,9 +111,15 @@ const CmApberFolder = lazy(async () => ({
 const CmApber = lazy(async () => ({
   default: (await import('./contextmenu/Apber.jsx')).Apber,
 }))
-const CmErfkritFolder = lazy(() => import('./contextmenu/ErfkritFolder.jsx'))
-const CmErfkrit = lazy(() => import('./contextmenu/Erfkrit.jsx'))
-const CmZielFolder = lazy(() => import('./contextmenu/ZielFolder.jsx'))
+const CmErfkritFolder = lazy(async () => ({
+  default: (await import('./contextmenu/ErfkritFolder.jsx')).ErfkritFolder,
+}))
+const CmErfkrit = lazy(async () => ({
+  default: (await import('./contextmenu/Erfkrit.jsx')).Erfkrit,
+}))
+const CmZielFolder = lazy(async () => ({
+  default: (await import('./contextmenu/ZielFolder.jsx')).ZielFolder,
+}))
 const CmZielJahrFolder = lazy(() => import('./contextmenu/ZielJahrFolder.jsx'))
 const CmZiel = lazy(() => import('./contextmenu/Ziel.jsx'))
 const CmZielBerFolder = lazy(() => import('./contextmenu/ZielBerFolder.jsx'))
