@@ -331,7 +331,7 @@ const IconContainer = styled.div`
   font-size: 1.1rem;
 `
 
-const Row = ({ node }) => {
+export const Row = observer(({ node }) => {
   const { apId, tpopId } = useParams()
   const navigate = useNavigate()
   const { search } = useLocation()
@@ -702,6 +702,6 @@ const Row = ({ node }) => {
       </StyledNode>
     </ContextMenuTrigger>
   )
-}
+})
 
 export default observer(Row)

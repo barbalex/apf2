@@ -4,7 +4,7 @@ import max from 'lodash/max'
 
 import Row from '../../Row'
 import { StoreContext } from '../../../../../../storeContext.js'
-import Issues from './Issues'
+import { Issues } from './Issues'
 
 export const CurrentIssues = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)

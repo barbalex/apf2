@@ -4,7 +4,7 @@ import { useApolloClient } from '@apollo/client'
 
 import Row from '../../Row'
 
-const CurrentIssuesNode = () => {
+export const Issues = () => {
   const client = useApolloClient()
 
   const { data } = useQuery({
@@ -36,7 +36,10 @@ const CurrentIssuesNode = () => {
     hasChildren: false,
   }))
 
-  return nodes.map((node) => <Row key={node.id} node={node} />)
+  return nodes.map((node) => (
+    <Row
+      key={node.id}
+      node={node}
+    />
+  ))
 }
-
-export default CurrentIssuesNode
