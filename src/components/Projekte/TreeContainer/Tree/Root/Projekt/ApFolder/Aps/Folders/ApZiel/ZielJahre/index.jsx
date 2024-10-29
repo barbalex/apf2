@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { Row } from '../../../../../../../Row'
+import { Row } from '../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../storeContext.js'
 import Ziel from './Ziel'
 

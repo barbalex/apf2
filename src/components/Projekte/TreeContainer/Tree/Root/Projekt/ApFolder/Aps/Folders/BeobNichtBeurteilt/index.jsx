@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import sum from 'lodash/sum'
 
-import { Row } from '../../../../../../Row'
+import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import BeobNichtBeurteilts from './BeobNichtBeurteilts'
 

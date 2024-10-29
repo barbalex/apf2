@@ -1,4 +1,4 @@
-import { Row } from '../../../../../../../../../Row'
+import { Row } from '../../../../../../../../../Row.jsx'
 
 const Zielber = ({ zielbers, projekt, ap, jahr, ziel }) =>
   (zielbers ?? []).map((el) => {

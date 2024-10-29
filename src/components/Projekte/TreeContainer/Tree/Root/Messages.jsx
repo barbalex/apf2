@@ -1,4 +1,4 @@
-import { Row } from '../Row'
+import { Row } from '../Row.jsx'
 
 const MessagesNode = ({ count, isLoading }) => {
   const message = isLoading && !count ? '...' : count

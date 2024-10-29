@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
 
-import { Row } from '../../../Row'
+import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
 
 export const EkAbrechnungstyp = () => {

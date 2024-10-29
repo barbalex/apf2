@@ -1,4 +1,4 @@
-import { Row } from '../../../../../Row'
+import { Row } from '../../../../../Row.jsx'
 
 const IdealbiotopFolder = ({ projekt, ap }) => {
   const url = ['Projekte', projekt.id, 'Arten', ap.id, 'Qualitaetskontrollen']
