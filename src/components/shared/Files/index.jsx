@@ -92,6 +92,7 @@ export const Files = observer(
 
     const onFileUploadSuccess = useCallback(
       async (info) => {
+        console.log('onFileUploadSuccess', info)
         if (info) {
           let responce
           try {

@@ -1,7 +1,10 @@
 import React from 'react'
 
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const insertData = {
@@ -13,18 +16,25 @@ const deleteData = {
   table: 'tpopkontrzaehl_einheit_werte',
 }
 
-const TpopkontrzaehlEinheitWerte = ({ onClick }) => (
+export const TpopkontrzaehlEinheitWerte = ({ onClick }) => (
   <ErrorBoundary>
-    <ContextMenu id="treeTpopkontrzaehlEinheitWerte" hideOnLeave={true}>
+    <ContextMenu
+      id="treeTpopkontrzaehlEinheitWerte"
+      hideOnLeave={true}
+    >
       <div className="react-contextmenu-title">Zähl-Einheit</div>
-      <MenuItem onClick={onClick} data={insertData}>
+      <MenuItem
+        onClick={onClick}
+        data={insertData}
+      >
         erstelle neue
       </MenuItem>
-      <MenuItem onClick={onClick} data={deleteData}>
+      <MenuItem
+        onClick={onClick}
+        data={deleteData}
+      >
         lösche
       </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
 )
-
-export default TpopkontrzaehlEinheitWerte

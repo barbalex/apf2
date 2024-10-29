@@ -24,6 +24,9 @@ export const Uploader = memo(({ onFileUploadSuccess, onFileUploadFailed }) => {
       multipleMax={10}
       onFileUploadSuccess={onFileUploadSuccess}
       onFileUploadFailed={onFileUploadFailed}
+      onCommonUploadSuccess={(result) => {
+        console.log('onCommonUploadSuccess', result)
+      }}
       className="uploadcare"
       ctxName="uploadcare"
       removeCopyright="true"

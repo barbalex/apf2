@@ -52,15 +52,18 @@ const CmTpopApberrelevantGrundWerte = lazy(async () => ({
   default: (await import('./contextmenu/TpopApberrelevantGrundWerte.jsx'))
     .TpopApberrelevantGrundWerte,
 }))
-const CmTpopkontrzaehlEinheitWerteFolder = lazy(
-  () => import('./contextmenu/TpopkontrzaehlEinheitWerteFolder.jsx'),
-)
-const CmTpopkontrzaehlEinheitWerte = lazy(
-  () => import('./contextmenu/TpopkontrzaehlEinheitWerte.jsx'),
-)
-const CmEkAbrechnungstypWerteFolder = lazy(
-  () => import('./contextmenu/EkAbrechnungstypWerteFolder.jsx'),
-)
+const CmTpopkontrzaehlEinheitWerteFolder = lazy(async () => ({
+  default: (await import('./contextmenu/TpopkontrzaehlEinheitWerteFolder.jsx'))
+    .TpopkontrzaehlEinheitWerteFolder,
+}))
+const CmTpopkontrzaehlEinheitWerte = lazy(async () => ({
+  default: (await import('./contextmenu/TpopkontrzaehlEinheitWerte.jsx'))
+    .TpopkontrzaehlEinheitWerte,
+}))
+const CmEkAbrechnungstypWerteFolder = lazy(async () => ({
+  default: (await import('./contextmenu/EkAbrechnungstypWerteFolder.jsx'))
+    .EkAbrechnungstypWerteFolder,
+}))
 const CmEkAbrechnungstypWerte = lazy(
   () => import('./contextmenu/EkAbrechnungstypWerte.jsx'),
 )
