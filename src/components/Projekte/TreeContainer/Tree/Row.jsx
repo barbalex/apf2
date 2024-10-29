@@ -20,7 +20,7 @@ import { useSnackbar } from 'notistack'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath.js'
 import isNodeOrParentInActiveNodePath from '../isNodeOrParentInActiveNodePath.js'
-import isNodeOpen from '../isNodeOpen.js'
+import { isNodeOpen } from '../isNodeOpen.js'
 import { toggleNode } from './toggleNode.js'
 import { toggleNodeSymbol } from './toggleNodeSymbol.js'
 import { StoreContext } from '../../../../storeContext.js'

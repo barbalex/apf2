@@ -1,7 +1,7 @@
 import isEqual from 'lodash/isEqual'
 import { getSnapshot } from 'mobx-state-tree'
 
-import isNodeOpen from '../isNodeOpen'
+import { isNodeOpen } from '../isNodeOpen.js'
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 
 export const toggleNodeSymbol = ({ node, store, search, navigate }) => {

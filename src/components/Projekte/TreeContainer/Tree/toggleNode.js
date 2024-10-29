@@ -1,6 +1,6 @@
 import { getSnapshot } from 'mobx-state-tree'
 
-import isNodeOpen from '../isNodeOpen'
+import { isNodeOpen } from '../isNodeOpen.js'
 import openNode from '../openNode'
 
 export const toggleNode = ({ node, store, navigate, search }) => {
@@ -20,7 +20,6 @@ export const toggleNode = ({ node, store, navigate, search }) => {
     openNode({ node, openNodes, store })
     newActiveNodeArray = [...node.url]
     // some elements are numbers but they are contained in url as text
-     
   } else if (node.urlLabel == aNA.slice(-1)[0]) {
     // the node is open
     // AND it is the active node
