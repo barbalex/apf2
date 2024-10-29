@@ -1,6 +1,6 @@
 import { Row } from '../Row.jsx'
 
-const MessagesNode = ({ count, isLoading }) => {
+export const Messages = ({ count, isLoading }) => {
   const message = isLoading && !count ? '...' : count
 
   const node = {
@@ -15,5 +15,3 @@ const MessagesNode = ({ count, isLoading }) => {
 
   return <Row node={node} />
 }
-
-export default MessagesNode
