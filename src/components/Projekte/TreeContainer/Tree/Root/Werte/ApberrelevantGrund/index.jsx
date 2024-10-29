@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
-import Row from '../../../Row'
+import { Row } from '../../../Row'
 import ApberrelevantGrundNodes from './ApberrelevantGrund'
 
 const ApberrelevantGrundFolder = ({ count, isLoading }) => {

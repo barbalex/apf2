@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client'
 import union from 'lodash/union'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../../../../Row'
+import { Row } from '../../../../../../Row'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import ZielJahre from './ZielJahre'
 

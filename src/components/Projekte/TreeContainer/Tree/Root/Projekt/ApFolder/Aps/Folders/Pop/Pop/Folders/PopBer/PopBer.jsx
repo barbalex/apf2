@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../../../../../../../Row'
+import { Row } from '../../../../../../../../../Row'
 import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
 
 const PopBer = ({ projekt, ap, pop }) => {

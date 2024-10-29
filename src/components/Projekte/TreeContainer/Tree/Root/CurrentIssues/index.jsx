@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import max from 'lodash/max'
 
-import Row from '../../Row'
+import { Row } from '../../Row'
 import { StoreContext } from '../../../../../../storeContext.js'
 import { Issues } from './Issues'
 

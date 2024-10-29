@@ -703,5 +703,3 @@ export const Row = observer(({ node }) => {
     </ContextMenuTrigger>
   )
 })
-
-export default observer(Row)

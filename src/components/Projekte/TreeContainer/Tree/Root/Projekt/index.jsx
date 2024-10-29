@@ -1,4 +1,4 @@
-import Row from '../../Row'
+import { Row } from '../../Row'
 import ApberuebersichtFolder from './ApberuebersichtFolder'
 import ApFolder from './ApFolder' 
 

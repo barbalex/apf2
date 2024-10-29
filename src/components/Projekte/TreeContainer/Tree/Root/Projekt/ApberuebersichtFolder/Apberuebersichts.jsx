@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient, gql } from '@apollo/client'
 import { useContext } from 'react'
 
-import Row from '../../../Row'
+import { Row } from '../../../Row'
 import { StoreContext } from '../../../../../../../storeContext.js'
 
 const Apberuebersichts = () => {

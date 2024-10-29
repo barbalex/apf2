@@ -2,8 +2,8 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
-import Row from '../../../Row'
-import EkAbrechnungstypNodes from './EkAbrechnungstyp'
+import { Row } from '../../../Row'
+import EkAbrechnungstypNodes from './EkAbrechnungstyp.jsx'
 
 const EkAbrechnungstypFolder = ({ count, isLoading }) => {
   const store = useContext(StoreContext)

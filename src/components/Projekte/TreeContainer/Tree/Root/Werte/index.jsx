@@ -3,11 +3,11 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
 
-import Row from '../../Row'
+import { Row } from '../../Row'
 import { StoreContext } from '../../../../../../storeContext.js'
 import AdresseFolder from './Adresse'
 import ApberrelevantGrundFolder from './ApberrelevantGrund'
-import EkAbrechnungstypFolder from './EkAbrechnungstyp'
+import EkAbrechnungstypFolder from './EkAbrechnungstyp/index.jsx'
 import ZaehlEinheitFolder from './ZaehlEinheit'
 
 const WlFolderNode = () => {
@@ -19,30 +19,32 @@ const WlFolderNode = () => {
     (nodeArray) => nodeArray[0] === 'Werte-Listen',
   )
 
-  const adressesFilter = nodeLabelFilter.adresse
-    ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
+  const adressesFilter =
+    nodeLabelFilter.adresse ?
+      { label: { includesInsensitive: nodeLabelFilter.adresse } }
     : { id: { isNull: false } }
   const apberrelevantGrundWertesFilter =
-    nodeLabelFilter.tpopApberrelevantGrundWerte
-      ? {
-          label: {
-            includesInsensitive: nodeLabelFilter.tpopApberrelevantGrundWerte,
-          },
-        }
-      : { id: { isNull: false } }
-  const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
-    ? {
+    nodeLabelFilter.tpopApberrelevantGrundWerte ?
+      {
+        label: {
+          includesInsensitive: nodeLabelFilter.tpopApberrelevantGrundWerte,
+        },
+      }
+    : { id: { isNull: false } }
+  const ekAbrechnungstypWertesFilter =
+    nodeLabelFilter.ekAbrechnungstypWerte ?
+      {
         label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
       }
     : { id: { isNull: false } }
   const tpopkontrzaehlEinheitWertesFilter =
-    nodeLabelFilter.tpopkontrzaehlEinheitWerte
-      ? {
-          label: {
-            includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
-          },
-        }
-      : { id: { isNull: false } }
+    nodeLabelFilter.tpopkontrzaehlEinheitWerte ?
+      {
+        label: {
+          includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
+        },
+      }
+    : { id: { isNull: false } }
 
   const { data, isLoading } = useQuery({
     queryKey: [
@@ -116,7 +118,10 @@ const WlFolderNode = () => {
       <Row node={node} />
       {isOpen && (
         <>
-          <AdresseFolder isLoading={isLoading} count={adressenCount} />
+          <AdresseFolder
+            isLoading={isLoading}
+            count={adressenCount}
+          />
           <ApberrelevantGrundFolder
             isLoading={isLoading}
             count={apberrelevantGrundWertesCount}
