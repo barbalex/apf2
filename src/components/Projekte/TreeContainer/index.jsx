@@ -129,9 +129,15 @@ const CmZiel = lazy(async () => ({
 const CmZielBerFolder = lazy(async () => ({
   default: (await import('./contextmenu/ZielBerFolder.jsx')).ZielBerFolder,
 }))
-const CmZielBer = lazy(() => import('./contextmenu/Zielber.jsx'))
-const CmPopFolder = lazy(() => import('./contextmenu/PopFolder.jsx'))
-const CmPop = lazy(() => import('./contextmenu/Pop.jsx'))
+const CmZielBer = lazy(async () => ({
+  default: (await import('./contextmenu/Zielber.jsx')).Zielber,
+}))
+const CmPopFolder = lazy(async () => ({
+  default: (await import('./contextmenu/PopFolder.jsx')).PopFolder,
+}))
+const CmPop = lazy(async () => ({
+  default: (await import('./contextmenu/Pop.jsx')).Pop,
+}))
 const CmPopmassnberFolder = lazy(
   () => import('./contextmenu/PopmassnberFolder.jsx'),
 )
