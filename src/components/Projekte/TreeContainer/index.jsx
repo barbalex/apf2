@@ -198,13 +198,17 @@ const CmTpopfeldkontrzaehlFolder = lazy(async () => ({
   default: (await import('./contextmenu/TpopfeldkontrzaehlFolder.jsx'))
     .TpopfeldkontrzaehlFolder,
 }))
-const CmTpopfeldkontrzaehl = lazy(
-  () => import('./contextmenu/Tpopfeldkontrzaehl.jsx'),
-)
-const CmTpopmassnberFolder = lazy(
-  () => import('./contextmenu/TpopmassnberFolder.jsx'),
-)
-const CmTpopmassnber = lazy(() => import('./contextmenu/Tpopmassnber.jsx'))
+const CmTpopfeldkontrzaehl = lazy(async () => ({
+  default: (await import('./contextmenu/Tpopfeldkontrzaehl.jsx'))
+    .Tpopfeldkontrzaehl,
+}))
+const CmTpopmassnberFolder = lazy(async () => ({
+  default: (await import('./contextmenu/TpopmassnberFolder.jsx'))
+    .TpopmassnberFolder,
+}))
+const CmTpopmassnber = lazy(async () => ({
+  default: (await import('./contextmenu/Tpopmassnber.jsx')).Tpopmassnber,
+}))
 const CmTpopmassnFolder = lazy(
   () => import('./contextmenu/TpopmassnFolder.jsx'),
 )
