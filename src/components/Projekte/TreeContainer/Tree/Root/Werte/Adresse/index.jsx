@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
 import { Row } from '../../../Row.jsx'
-import AdresseNodes from './Adresse.jsx'
+import Adresse from './Adresse.jsx'
 
-const AdressesFolder = ({ count, isLoading }) => {
+export const AdresseFolder = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
@@ -34,9 +34,7 @@ const AdressesFolder = ({ count, isLoading }) => {
   return (
     <>
       <Row node={node} />
-      {isOpen && <AdresseNodes />}
+      {isOpen && <Adresse />}
     </>
   )
-}
-
-export default observer(AdressesFolder)
+})

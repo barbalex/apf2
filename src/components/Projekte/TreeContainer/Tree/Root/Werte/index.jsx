@@ -5,7 +5,7 @@ import { gql, useApolloClient } from '@apollo/client'
 
 import { Row } from '../../Row.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
-import AdresseFolder from './Adresse'
+import { AdresseFolder } from './Adresse/index.jsx'
 import { ApberrelevantGrundFolder } from './ApberrelevantGrund/index.jsx'
 import { EkAbrechnungstypFolder } from './EkAbrechnungstyp/index.jsx'
 import { ZaehlEinheitFolder } from './ZaehlEinheit/index.jsx'
