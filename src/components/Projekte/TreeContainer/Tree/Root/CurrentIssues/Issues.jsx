@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 
-import { Row } from '../../Row'
+import { Row } from '../../Row.jsx'
 
 export const Issues = () => {
   const client = useApolloClient()

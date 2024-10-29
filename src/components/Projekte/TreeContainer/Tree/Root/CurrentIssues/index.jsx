@@ -2,9 +2,9 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import max from 'lodash/max'
 
-import { Row } from '../../Row'
+import { Row } from '../../Row.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
-import { Issues } from './Issues'
+import { Issues } from './Issues.jsx'
 
 export const CurrentIssues = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)
