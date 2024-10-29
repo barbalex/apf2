@@ -5,7 +5,10 @@ import styled from '@emotion/styled'
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 const SecondLine = styled.span`
   margin-left: 15px;
@@ -25,23 +28,32 @@ const showCoordOfBeobOnMapGeoAdminChData = {
   action: 'showCoordOfBeobOnMapGeoAdminCh',
 }
 
-const BeobNichtBeurteilt = ({ onClick }) => {
+export const BeobNichtBeurteilt = observer(({ onClick }) => {
   const { user } = useContext(StoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id="treeBeobNichtBeurteilt" hideOnLeave={true}>
+      <ContextMenu
+        id="treeBeobNichtBeurteilt"
+        hideOnLeave={true}
+      >
         <div className="react-contextmenu-title">Beobachtung</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem onClick={onClick} data={createNewPopFromBeobData}>
+            <MenuItem
+              onClick={onClick}
+              data={createNewPopFromBeobData}
+            >
               neue Population und Teil-Population gründen
               <br />
               <SecondLine>
                 und Beobachtung der Teil-Population zuordnen
               </SecondLine>
             </MenuItem>
-            <MenuItem onClick={onClick} data={createNewTpopFromBeobData}>
+            <MenuItem
+              onClick={onClick}
+              data={createNewTpopFromBeobData}
+            >
               neue Teil-Population in bestehender Population gründen
               <br />
               <SecondLine>
@@ -50,15 +62,19 @@ const BeobNichtBeurteilt = ({ onClick }) => {
             </MenuItem>
           </>
         )}
-        <MenuItem onClick={onClick} data={showCoordOfBeobOnMapsZhChData}>
+        <MenuItem
+          onClick={onClick}
+          data={showCoordOfBeobOnMapsZhChData}
+        >
           Zeige auf maps.zh.ch
         </MenuItem>
-        <MenuItem onClick={onClick} data={showCoordOfBeobOnMapGeoAdminChData}>
+        <MenuItem
+          onClick={onClick}
+          data={showCoordOfBeobOnMapGeoAdminChData}
+        >
           Zeige auf map.geo.admin.ch
         </MenuItem>
       </ContextMenu>
     </ErrorBoundary>
   )
-}
-
-export default observer(BeobNichtBeurteilt)
+})
