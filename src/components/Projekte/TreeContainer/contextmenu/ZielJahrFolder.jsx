@@ -4,7 +4,10 @@ import { observer } from 'mobx-react-lite'
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const openLowerNodesData = {
@@ -18,22 +21,34 @@ const insertData = {
   table: 'ziel',
 }
 
-const ZielJahrFolder = ({ onClick }) => {
+export const ZielJahrFolder = observer(({ onClick }) => {
   const { user } = useContext(StoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id="treeZieljahrFolder" hideOnLeave={true}>
+      <ContextMenu
+        id="treeZieljahrFolder"
+        hideOnLeave={true}
+      >
         <div className="react-contextmenu-title">Ziele</div>
-        <MenuItem onClick={onClick} data={openLowerNodesData}>
+        <MenuItem
+          onClick={onClick}
+          data={openLowerNodesData}
+        >
           alle öffnen
         </MenuItem>
-        <MenuItem onClick={onClick} data={closeLowerNodesData}>
+        <MenuItem
+          onClick={onClick}
+          data={closeLowerNodesData}
+        >
           alle schliessen
         </MenuItem>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem onClick={onClick} data={insertData}>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
               erstelle neues
             </MenuItem>
           </>
@@ -41,6 +56,4 @@ const ZielJahrFolder = ({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-}
-
-export default observer(ZielJahrFolder)
+})

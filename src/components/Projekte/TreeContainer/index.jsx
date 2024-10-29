@@ -120,9 +120,15 @@ const CmErfkrit = lazy(async () => ({
 const CmZielFolder = lazy(async () => ({
   default: (await import('./contextmenu/ZielFolder.jsx')).ZielFolder,
 }))
-const CmZielJahrFolder = lazy(() => import('./contextmenu/ZielJahrFolder.jsx'))
-const CmZiel = lazy(() => import('./contextmenu/Ziel.jsx'))
-const CmZielBerFolder = lazy(() => import('./contextmenu/ZielBerFolder.jsx'))
+const CmZielJahrFolder = lazy(async () => ({
+  default: (await import('./contextmenu/ZielJahrFolder.jsx')).ZielJahrFolder,
+}))
+const CmZiel = lazy(async () => ({
+  default: (await import('./contextmenu/Ziel.jsx')).Ziel,
+}))
+const CmZielBerFolder = lazy(async () => ({
+  default: (await import('./contextmenu/ZielBerFolder.jsx')).ZielBerFolder,
+}))
 const CmZielBer = lazy(() => import('./contextmenu/Zielber.jsx'))
 const CmPopFolder = lazy(() => import('./contextmenu/PopFolder.jsx'))
 const CmPop = lazy(() => import('./contextmenu/Pop.jsx'))
