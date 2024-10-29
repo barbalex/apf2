@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../Row.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
-import Users from './Users'
+import { Users } from './Users.jsx'
 
 export const UsersFolder = observer(({ count, isLoading, usersFilter }) => {
   const store = useContext(StoreContext)
