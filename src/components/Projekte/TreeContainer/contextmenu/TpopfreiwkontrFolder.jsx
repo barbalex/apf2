@@ -4,7 +4,10 @@ import { observer } from 'mobx-react-lite'
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const openLowerNodesData = {
@@ -27,7 +30,7 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-const TpopfreiwkontrFolder = ({ onClick }) => {
+export const TpopfreiwkontrFolder = observer(({ onClick }) => {
   const { copying, user, moving } = useContext(StoreContext)
 
   const isMoving = moving.table && moving.table === 'tpopfreiwkontr'
@@ -35,31 +38,52 @@ const TpopfreiwkontrFolder = ({ onClick }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id="treeTpopfreiwkontrFolder" hideOnLeave={true}>
+      <ContextMenu
+        id="treeTpopfreiwkontrFolder"
+        hideOnLeave={true}
+      >
         <div className="react-contextmenu-title">Freiwilligen-Kontrollen</div>
-        <MenuItem onClick={onClick} data={openLowerNodesData}>
+        <MenuItem
+          onClick={onClick}
+          data={openLowerNodesData}
+        >
           alle öffnen
         </MenuItem>
-        <MenuItem onClick={onClick} data={closeLowerNodesData}>
+        <MenuItem
+          onClick={onClick}
+          data={closeLowerNodesData}
+        >
           alle schliessen
         </MenuItem>
         {!userIsReadOnly(user.token, 'freiw') && (
           <>
-            <MenuItem onClick={onClick} data={insertData}>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
               erstelle neue
             </MenuItem>
             {isMoving && (
-              <MenuItem onClick={onClick} data={moveData}>
+              <MenuItem
+                onClick={onClick}
+                data={moveData}
+              >
                 {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
             )}
             {isCopying && (
-              <MenuItem onClick={onClick} data={copyData}>
+              <MenuItem
+                onClick={onClick}
+                data={copyData}
+              >
                 {`kopiere '${copying.label}' hierhin`}
               </MenuItem>
             )}
             {copying.table && (
-              <MenuItem onClick={onClick} data={resetCopyingData}>
+              <MenuItem
+                onClick={onClick}
+                data={resetCopyingData}
+              >
                 Kopieren aufheben
               </MenuItem>
             )}
@@ -68,6 +92,4 @@ const TpopfreiwkontrFolder = ({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-}
-
-export default observer(TpopfreiwkontrFolder)
+})

@@ -176,13 +176,17 @@ const CmBeobnichtbeurteilt = lazy(async () => ({
   default: (await import('./contextmenu/Beobnichtbeurteilt.jsx'))
     .BeobNichtBeurteilt,
 }))
-const CmBeobNichtZuzuordnen = lazy(
-  () => import('./contextmenu/BeobNichtZuzuordnen.jsx'),
-)
-const CmTpopfreiwkontrFolder = lazy(
-  () => import('./contextmenu/TpopfreiwkontrFolder.jsx'),
-)
-const CmTpopfreiwkontr = lazy(() => import('./contextmenu/Tpopfreiwkontr.jsx'))
+const CmBeobNichtZuzuordnen = lazy(async () => ({
+  default: (await import('./contextmenu/BeobNichtZuzuordnen.jsx'))
+    .BeobNichtZuzuordnen,
+}))
+const CmTpopfreiwkontrFolder = lazy(async () => ({
+  default: (await import('./contextmenu/TpopfreiwkontrFolder.jsx'))
+    .TpopfreiwkontrFolder,
+}))
+const CmTpopfreiwkontr = lazy(async () => ({
+  default: (await import('./contextmenu/Tpopfreiwkontr.jsx')).Tpopfreiwkontr,
+}))
 const CmTpopfeldkontrFolder = lazy(
   () => import('./contextmenu/TpopfeldkontrFolder.jsx'),
 )
