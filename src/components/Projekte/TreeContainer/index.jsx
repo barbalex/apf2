@@ -64,17 +64,23 @@ const CmEkAbrechnungstypWerteFolder = lazy(async () => ({
   default: (await import('./contextmenu/EkAbrechnungstypWerteFolder.jsx'))
     .EkAbrechnungstypWerteFolder,
 }))
-const CmEkAbrechnungstypWerte = lazy(
-  () => import('./contextmenu/EkAbrechnungstypWerte.jsx'),
-)
-const CmApberuebersichtFolder = lazy(
-  () => import('./contextmenu/ApberuebersichtFolder.jsx'),
-)
-const CmApberuebersicht = lazy(
-  () => import('./contextmenu/Apberuebersicht.jsx'),
-)
-const CmAssozartFolder = lazy(() => import('./contextmenu/AssozartFolder.jsx'))
-const CmAssozart = lazy(() => import('./contextmenu/Assozart.jsx'))
+const CmEkAbrechnungstypWerte = lazy(async () => ({
+  default: (await import('./contextmenu/EkAbrechnungstypWerte.jsx'))
+    .EkAbrechnungstypWerte,
+}))
+const CmApberuebersichtFolder = lazy(async () => ({
+  default: (await import('./contextmenu/ApberuebersichtFolder.jsx'))
+    .ApberuebersichtFolder,
+}))
+const CmApberuebersicht = lazy(async () => ({
+  default: (await import('./contextmenu/Apberuebersicht.jsx')).Apberuebersicht,
+}))
+const CmAssozartFolder = lazy(async () => ({
+  default: (await import('./contextmenu/AssozartFolder.jsx')).AssozartFolder,
+}))
+const CmAssozart = lazy(async () => ({
+  default: (await import('./contextmenu/Assozart.jsx')).AssozartFolder,
+}))
 const CmEkzaehleinheitFolder = lazy(
   () => import('./contextmenu/EkzaehleinheitFolder.jsx'),
 )
