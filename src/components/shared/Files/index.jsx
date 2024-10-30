@@ -90,6 +90,19 @@ export const Files = observer(
 
     const files = data?.[`all${upperFirst(parent)}Files`].nodes ?? []
 
+    const onCommonUploadSuccess = useCallback(
+      async (info) => {
+        console.log('onCommonUploadSuccess', info)
+        // close the uploader or it will be open when navigating to the list
+        api?.doneFlow?.()
+        // clear the uploader or it will show the last uploaded file when opened next time
+        api?.removeAllFiles?.()
+        // somehow this needs to be delayed or sometimes not all files will be uploaded
+        setTimeout(() => refetch(), 500)
+      },
+      [client, fields, fragment, parent, parentId, refetch],
+    )
+
     const onFileUploadSuccess = useCallback(
       async (info) => {
         console.log('onFileUploadSuccess', info)
@@ -127,13 +140,6 @@ export const Files = observer(
             })
           }
         }
-        // close the uploader or it will be open when navigating to the list
-        api?.doneFlow?.()
-        // clear the uploader or it will show the last uploaded file when opened next time
-        api?.removeAllFiles?.()
-        refetch()
-
-        return null
       },
       [client, fields, fragment, parent, parentId, refetch],
     )
@@ -146,6 +152,12 @@ export const Files = observer(
           variant: 'error',
         },
       })
+      // close the uploader or it will be open when navigating to the list
+      api?.doneFlow?.()
+      // clear the uploader or it will show the last uploaded file when opened next time
+      api?.removeAllFiles?.()
+      // somehow this needs to be delayed or sometimes not all files will be uploaded
+      setTimeout(() => refetch(), 500)
     }, [])
 
     const images = files.filter((f) => isImageFile(f))
@@ -182,6 +194,7 @@ export const Files = observer(
               <Uploader
                 onFileUploadSuccess={onFileUploadSuccess}
                 onFileUploadFailed={onFileUploadFailed}
+                onCommonUploadSuccess={onCommonUploadSuccess}
               />
               {!!images.length && (
                 <LightboxButton
