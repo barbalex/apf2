@@ -1,7 +1,7 @@
 import { queryTpop } from './queryTpop.js'
 import { updatePopById } from './updatePopById.js'
 
-const copyTpopKoordToPop = async ({ id, store, client }) => {
+export const copyTpopKoordToPop = async ({ id, store, client }) => {
   // fetch tpop
   let tpopResult
   try {
@@ -56,5 +56,3 @@ const copyTpopKoordToPop = async ({ id, store, client }) => {
     include: ['TpopForMapQuery', 'PopForMapQuery'],
   })
 }
-
-export default copyTpopKoordToPop

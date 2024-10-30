@@ -7,7 +7,7 @@ import {
   tpop,
 } from '../../components/shared/fragments.js'
 
-export default gql`
+export const updateBeobById = gql`
   mutation updateBeobForCreateNewPopFromBeob($id: UUID!, $tpopId: UUID) {
     updateBeobById(
       input: {
