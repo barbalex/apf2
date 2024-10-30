@@ -1,13 +1,13 @@
-import tpopfreiwkontrFolder from './tpopfreiwkontrFolder'
-import tpopfeldkontrFolder from './tpopfeldkontrFolder'
-import tpop from './tpop'
-import tpopFolder from './tpopFolder'
-import pop from './pop'
-import popFolder from './popFolder'
-import zielFolder from './zielFolder'
-import zieljahrFolder from './zieljahrFolder'
+import tpopfreiwkontrFolder from './tpopfreiwkontrFolder/index.js'
+import tpopfeldkontrFolder from './tpopfeldkontrFolder/index.js'
+import tpop from './tpop/index.js'
+import tpopFolder from './tpopFolder/index.js'
+import pop from './pop/index.js'
+import popFolder from './popFolder/index.js'
+import zielFolder from './zielFolder/index.js'
+import zieljahrFolder from './zieljahrFolder/index.js'
 
-const openLowerNodes = ({
+export const openLowerNodes = ({
   id,
   parentId,
   popId,
@@ -16,7 +16,7 @@ const openLowerNodes = ({
   menuType,
   client,
   store,
-  jahr
+  jahr,
 }) => {
   /**
    * 1. load all data
@@ -77,7 +77,7 @@ const openLowerNodes = ({
         parentId,
         store,
         client,
-        jahr
+        jahr,
       })
       break
     default:
@@ -85,5 +85,3 @@ const openLowerNodes = ({
       break
   }
 }
-
-export default openLowerNodes
