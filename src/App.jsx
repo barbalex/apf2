@@ -41,9 +41,10 @@ import Router from './components/Router/index.jsx'
 const IsPrintSetter = lazy(async () => ({
   default: (await import('./components/IsPrintSetter.jsx')).IsPrintSetter,
 }))
-const MouseWheelHandler = lazy(
-  () => import('./components/MouseWheelHandler.jsx'),
-)
+const MouseWheelHandler = lazy(async () => ({
+  default: (await import('./components/MouseWheelHandler.jsx'))
+    .MouseWheelHandler,
+}))
 const LastTouchedNodeSetter = lazy(async () => ({
   default: (await import('./components/LastTouchedNodeSetter.jsx'))
     .LastTouchedNodeSetter,
