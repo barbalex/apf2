@@ -3,17 +3,16 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
-import ApBer from './ApBer'
+import {ApBer} from './ApBer.jsx'
 
-const ApBerFolder = ({ projekt, ap, count, isLoading }) => {
+export const ApBerFolder = observer(({ projekt, ap, count, isLoading }) => {
   const store = useContext(StoreContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.apber ?? ''
 
-  const message = isLoading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${count} gefiltert`
+  const message =
+    isLoading ? '...'
+    : nodeLabelFilterString ? `${count} gefiltert`
     : count
 
   const url = ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Berichte']
@@ -41,9 +40,12 @@ const ApBerFolder = ({ projekt, ap, count, isLoading }) => {
   return (
     <>
       <Row node={node} />
-      {isOpen && <ApBer projekt={projekt} ap={ap} />}
+      {isOpen && (
+        <ApBer
+          projekt={projekt}
+          ap={ap}
+        />
+      )}
     </>
   )
-}
-
-export default observer(ApBerFolder)
+})
