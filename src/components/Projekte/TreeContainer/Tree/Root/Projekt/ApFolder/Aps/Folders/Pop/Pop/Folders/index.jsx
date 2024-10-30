@@ -5,9 +5,9 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../../../../../../storeContext.js'
-import TpopFolder from './Tpop'
-import PopBerFolder from './PopBer'
-import PopMassnBerFolder from './PopMassnBer'
+import TpopFolder from './Tpop/index.jsx'
+import PopBerFolder from './PopBer/index.jsx'
+import PopMassnBerFolder from './PopMassnBer/index.jsx'
 
 export const PopFolders = observer(({ projekt, ap, pop }) => {
   const client = useApolloClient()
