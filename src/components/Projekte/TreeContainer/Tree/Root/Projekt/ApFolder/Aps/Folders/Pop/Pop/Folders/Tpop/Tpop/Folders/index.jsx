@@ -9,7 +9,7 @@ import TpopMassn from './TpopMassn/index.jsx'
 import TpopMassnBer from './TpopMassnBer/index.jsx'
 import TpopFeldkontr from './TpopFeldkontr/index.jsx'
 import TpopFreiwkontr from './TpopFreiwkontr/index.jsx'
-import TpopBer from './TpopBer/index.jsx'
+import { TpopBerFolder } from './TpopBer/index.jsx'
 import { BeobZugeordnetFolder } from './BeobZugeordnet/index.jsx'
 
 export const TpopFolders = observer(({ projekt, ap, pop, tpop }) => {
@@ -150,7 +150,7 @@ export const TpopFolders = observer(({ projekt, ap, pop, tpop }) => {
         isLoading={isLoading}
         count={tpopfreiwkontrCount}
       />
-      <TpopBer
+      <TpopBerFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
