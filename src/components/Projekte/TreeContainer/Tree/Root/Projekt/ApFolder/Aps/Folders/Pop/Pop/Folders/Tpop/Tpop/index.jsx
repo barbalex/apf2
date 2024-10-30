@@ -8,7 +8,7 @@ import { Row } from '../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../storeContext.js'
 import Folders from './Folders'
 
-const Tpop = ({ projekt, ap, pop }) => {
+export const Tpop = observer(({ projekt, ap, pop }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { tpopGqlFilterForTree } = store.tree
@@ -82,10 +82,15 @@ const Tpop = ({ projekt, ap, pop }) => {
     return (
       <div key={el.id}>
         <Row node={node} />
-        {isOpen && <Folders projekt={projekt} ap={ap} pop={pop} tpop={el} />}
+        {isOpen && (
+          <Folders
+            projekt={projekt}
+            ap={ap}
+            pop={pop}
+            tpop={el}
+          />
+        )}
       </div>
     )
   })
-}
-
-export default observer(Tpop)
+})
