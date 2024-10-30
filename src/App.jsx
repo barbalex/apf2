@@ -20,7 +20,7 @@ import '@fontsource/roboto-mono/700.css'
 import '@fontsource/roboto'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
-import GlobalStyle from './components/GlobalStyle.jsx'
+import {GlobalStyle} from './components/GlobalStyle.jsx'
 
 import { Provider as MobxProvider } from './storeContext.js'
 import { Provider as IdbProvider } from './idbContext.js'
