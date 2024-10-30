@@ -12,7 +12,7 @@ import TpopFreiwkontr from './TpopFreiwkontr'
 import TpopBer from './TpopBer'
 import BeobZugeordnet from './BeobZugeordnet'
 
-const TpopFolders = ({ projekt, ap, pop, tpop }) => {
+export const TpopFolders = observer(({ projekt, ap, pop, tpop }) => {
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
@@ -168,6 +168,4 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
       />
     </>
   )
-}
-
-export default observer(TpopFolders)
+})

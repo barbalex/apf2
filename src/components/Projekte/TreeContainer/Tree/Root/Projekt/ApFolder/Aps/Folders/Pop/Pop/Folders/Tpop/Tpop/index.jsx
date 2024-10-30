@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../storeContext.js'
-import Folders from './Folders'
+import { TpopFolders } from './Folders/index.jsx'
 
 export const Tpop = observer(({ projekt, ap, pop }) => {
   const client = useApolloClient()
@@ -83,7 +83,7 @@ export const Tpop = observer(({ projekt, ap, pop }) => {
       <div key={el.id}>
         <Row node={node} />
         {isOpen && (
-          <Folders
+          <TpopFolders
             projekt={projekt}
             ap={ap}
             pop={pop}
