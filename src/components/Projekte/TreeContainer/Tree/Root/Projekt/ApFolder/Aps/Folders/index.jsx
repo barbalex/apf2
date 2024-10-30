@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../../../storeContext.js'
-import PopFolder from './Pop/index.jsx'
+import { PopFolder } from './Pop/index.jsx'
 import { ApZielFolder } from './ApZiel/index.jsx'
 import { ApErfkritFolder } from './ApErfkrit/index.jsx'
 import { ApBerFolder } from './ApBer/index.jsx'
