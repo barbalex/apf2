@@ -4,9 +4,9 @@
  * 3. update openNodes
  * 4. refresh tree
  */
-import dataGql from './data'
+import { query } from './query.js'
 
-const openLowerNodesZieljahrFolder = async ({
+export const zieljahrFolder = async ({
   parentId: apId,
   projId = '99999999-9999-9999-9999-999999999999',
   client,
@@ -19,7 +19,7 @@ const openLowerNodesZieljahrFolder = async ({
 
   // 1. load all data
   const { data } = await client.query({
-    query: dataGql,
+    query: query,
     variables: { id: apId, jahr },
   })
   const ziels = data?.apById?.zielsByApId?.nodes ?? []
@@ -64,5 +64,3 @@ const openLowerNodesZieljahrFolder = async ({
   // 3. update
   addOpenNodes(newOpenNodes)
 }
-
-export default openLowerNodesZieljahrFolder

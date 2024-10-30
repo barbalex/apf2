@@ -5,7 +5,7 @@ import { tpopFolder } from './tpopFolder/index.js'
 import { pop } from './pop/index.js'
 import { popFolder } from './popFolder/index.js'
 import { zielFolder } from './zielFolder/index.js'
-import zieljahrFolder from './zieljahrFolder/index.js'
+import { zieljahrFolder } from './zieljahrFolder/index.js'
 
 export const openLowerNodes = ({
   id,
