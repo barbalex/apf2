@@ -14,19 +14,19 @@ import { epsg2056to4326 } from '../../modules/epsg2056to4326.js'
 import {
   isValid as xIsValid,
   message as xMessage,
-} from '../../modules/lv95XIsValid'
+} from '../../modules/lv95XIsValid.js'
 import {
   isValid as yIsValid,
   message as yMessage,
-} from '../../modules/lv95YIsValid'
+} from '../../modules/lv95YIsValid.js'
 import {
   isValid as wgs84LatIsValid,
   message as wgs84LatMessage,
-} from '../../modules/wgs84LatIsValid'
+} from '../../modules/wgs84LatIsValid.js'
 import {
   isValid as wgs84LongIsValid,
   message as wgs84LongMessage,
-} from '../../modules/wgs84LongIsValid'
+} from '../../modules/wgs84LongIsValid.js'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
