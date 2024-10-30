@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../storeContext.js'
 
-const TpopMassn = ({ projekt, ap, pop, tpop }) => {
+export const TpopMassn = observer(({ projekt, ap, pop, tpop }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { tpopmassnGqlFilterForTree } = store.tree
@@ -69,8 +69,11 @@ const TpopMassn = ({ projekt, ap, pop, tpop }) => {
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
-}
-
-export default observer(TpopMassn)
+})
