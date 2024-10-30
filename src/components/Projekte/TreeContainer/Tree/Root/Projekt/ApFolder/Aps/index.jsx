@@ -7,7 +7,7 @@ import { Row } from '../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../storeContext.js'
 import Folders from './Folders'
 
-const Aps = ({ projekt }) => {
+export const Aps = observer(({ projekt }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { openNodes, apGqlFilterForTree } = store.tree
@@ -62,10 +62,13 @@ const Aps = ({ projekt }) => {
     return (
       <div key={ap.id}>
         <Row node={node} />
-        {isOpen && <Folders ap={ap} projekt={projekt} />}
+        {isOpen && (
+          <Folders
+            ap={ap}
+            projekt={projekt}
+          />
+        )}
       </div>
     )
   })
-}
-
-export default observer(Aps)
+})
