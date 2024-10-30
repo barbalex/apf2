@@ -1,6 +1,6 @@
 import { Row } from '../../../../../Row.jsx'
 
-const IdealbiotopFolder = ({ projekt, ap }) => {
+export const Qk = ({ projekt, ap }) => {
   const url = ['Projekte', projekt.id, 'Arten', ap.id, 'Qualitaetskontrollen']
 
   const node = {
@@ -17,5 +17,3 @@ const IdealbiotopFolder = ({ projekt, ap }) => {
 
   return <Row node={node} />
 }
-
-export default IdealbiotopFolder

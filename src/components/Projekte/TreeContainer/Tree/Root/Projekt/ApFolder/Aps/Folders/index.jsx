@@ -5,20 +5,20 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../../../storeContext.js'
-import PopFolder from './Pop'
-import ApZielFolder from './ApZiel'
-import ApErfkritFolder from './ApErfkrit'
-import ApBerFolder from './ApBer'
-import IdealbiotopFolder from './Idealbiotop'
-import ApArtFolder from './ApArt'
-import AssozArtFolder from './AssozArt'
-import EkFrequenzFolder from './EkFrequenz'
-import EkZaehleinheitFolder from './EkZaehleinheit'
-import BeobNichtBeurteiltFolder from './BeobNichtBeurteilt'
-import BeobNichtZuzuordnenFolder from './BeobNichtZuzuordnen'
-import Qk from './Qk'
+import PopFolder from './Pop/index.jsx'
+import ApZielFolder from './ApZiel/index.jsx'
+import ApErfkritFolder from './ApErfkrit/index.jsx'
+import ApBerFolder from './ApBer/index.jsx'
+import IdealbiotopFolder from './Idealbiotop.jsx'
+import ApArtFolder from './ApArt/index.jsx'
+import AssozArtFolder from './AssozArt/index.jsx'
+import EkFrequenzFolder from './EkFrequenz/index.jsx'
+import EkZaehleinheitFolder from './EkZaehleinheit/index.jsx'
+import BeobNichtBeurteiltFolder from './BeobNichtBeurteilt/index.jsx'
+import BeobNichtZuzuordnenFolder from './BeobNichtZuzuordnen/index.jsx'
+import { Qk } from './Qk.jsx'
 
-const ApFolders = ({ ap, projekt }) => {
+export const ApFolders = observer(({ ap, projekt }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter, beobGqlFilterForTree, popGqlFilterForTree } =
@@ -162,7 +162,10 @@ const ApFolders = ({ ap, projekt }) => {
         count={data?.data?.apById?.popsByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
-      <ApZielFolder projekt={projekt} ap={ap} />
+      <ApZielFolder
+        projekt={projekt}
+        ap={ap}
+      />
       <ApErfkritFolder
         projekt={projekt}
         ap={ap}
@@ -175,7 +178,10 @@ const ApFolders = ({ ap, projekt }) => {
         count={data?.data?.apById?.apbersByApId?.totalCount ?? 0}
         isLoading={isLoading}
       />
-      <IdealbiotopFolder projekt={projekt} ap={ap} />
+      <IdealbiotopFolder
+        projekt={projekt}
+        ap={ap}
+      />
       <ApArtFolder
         projekt={projekt}
         ap={ap}
@@ -212,9 +218,10 @@ const ApFolders = ({ ap, projekt }) => {
         aparts={data?.data?.apById?.beobNichtZuzuordnen?.nodes ?? []}
         isLoading={isLoading}
       />
-      <Qk projekt={projekt} ap={ap} />
+      <Qk
+        projekt={projekt}
+        ap={ap}
+      />
     </>
   )
-}
-
-export default observer(ApFolders)
+})
