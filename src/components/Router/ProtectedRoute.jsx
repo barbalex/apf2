@@ -15,7 +15,9 @@ const Deletions = lazy(async () => ({
   default: (await import('../Deletions/index.jsx')).Deletions,
 }))
 import { inIframe } from '../../modules/inIframe.js'
-const ActiveNodeArraySetter = lazy(() => import('./ActiveNodeArraySetter'))
+const ActiveNodeArraySetter = lazy(async () => ({
+  default: (await import('./ActiveNodeArraySetter')).ActiveNodeArraySetter,
+}))
 const NavigateSetter = lazy(() => import('./NavigateSetter'))
 const ApfLayerNotifier = lazy(() => import('./ApfLayerNotifier'))
 const QueryClientSetter = lazy(() => import('./QueryClientSetter'))

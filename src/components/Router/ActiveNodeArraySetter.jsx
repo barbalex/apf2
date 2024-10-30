@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom'
 import { StoreContext } from '../../storeContext.js'
 import { getActiveNodeArrayFromPathname } from '../../modules/getActiveNodeArrayFromPathname.js'
 
-const ActiveNodeArraySetter = () => {
+export const ActiveNodeArraySetter = observer(() => {
   const store = useContext(StoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -23,6 +23,4 @@ const ActiveNodeArraySetter = () => {
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
   return null
-}
-
-export default observer(ActiveNodeArraySetter)
+})
