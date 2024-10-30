@@ -5,9 +5,9 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
-import Zielber from './Zielber'
+import { Zielber } from './Zielber.jsx'
 
-const ZielberFolder = ({ projekt, ap, jahr, ziel }) => {
+export const ZielberFolder = observer(({ projekt, ap, jahr, ziel }) => {
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
   const client = useApolloClient()
@@ -53,10 +53,9 @@ const ZielberFolder = ({ projekt, ap, jahr, ziel }) => {
   const zielbers = data?.data?.zielById?.zielbersByZielId?.nodes ?? []
   const zielbersLength = zielbers.length
 
-  const message = isLoading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${zielbersLength} gefiltert`
+  const message =
+    isLoading ? '...'
+    : nodeLabelFilterString ? `${zielbersLength} gefiltert`
     : zielbersLength
 
   const url = [
@@ -106,6 +105,4 @@ const ZielberFolder = ({ projekt, ap, jahr, ziel }) => {
       )}
     </>
   )
-}
-
-export default observer(ZielberFolder)
+})

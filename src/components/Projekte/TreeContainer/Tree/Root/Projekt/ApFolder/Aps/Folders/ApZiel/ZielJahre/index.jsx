@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../storeContext.js'
-import Ziel from './Ziel'
+import { Ziel } from './Ziel/index.jsx'
 
-const ApZieljahr = ({ projekt, ap, zieljahre, ziels }) => {
+export const ZielJahre = observer(({ projekt, ap, zieljahre, ziels }) => {
   const store = useContext(StoreContext)
 
   return zieljahre.map((jahr) => {
@@ -38,11 +38,14 @@ const ApZieljahr = ({ projekt, ap, zieljahre, ziels }) => {
       <div key={`${ap.id}/${jahr}`}>
         <Row node={node} />
         {isOpen && (
-          <Ziel projekt={projekt} ap={ap} jahr={jahr} ziels={zieleOfJahr} />
+          <Ziel
+            projekt={projekt}
+            ap={ap}
+            jahr={jahr}
+            ziels={zieleOfJahr}
+          />
         )}
       </div>
     )
   })
-}
-
-export default observer(ApZieljahr)
+})

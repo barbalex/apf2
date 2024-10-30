@@ -7,9 +7,9 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
-import ZielJahre from './ZielJahre'
+import { ZielJahre } from './ZielJahre/index.jsx'
 
-const ApZielFolder = ({ projekt, ap }) => {
+export const ApZielFolder = observer(({ projekt, ap }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter, openNodes } = store.tree
@@ -60,10 +60,10 @@ const ApZielFolder = ({ projekt, ap }) => {
     .reduce((a, el) => union(a, [el.jahr]), [])
     .sort((a, b) => a - b)
   const zieljahreLength = zieljahre.length
-  const message = isLoading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'} gefiltert`
+  const message =
+    isLoading ? '...'
+    : nodeLabelFilterString ?
+      `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'} gefiltert`
     : `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'}`
 
   const url = ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Ziele']
@@ -101,6 +101,4 @@ const ApZielFolder = ({ projekt, ap }) => {
       )}
     </>
   )
-}
-
-export default observer(ApZielFolder)
+})

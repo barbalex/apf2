@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../storeContext.js'
-import ZielberFolder from './Zielber'
+import { ZielberFolder } from './Zielber/index.jsx'
 
-const Ziel = ({ projekt, ap, jahr, ziels }) => {
+export const Ziel = observer(({ projekt, ap, jahr, ziels }) => {
   const store = useContext(StoreContext)
 
   return ziels.map((ziel) => {
@@ -44,11 +44,14 @@ const Ziel = ({ projekt, ap, jahr, ziels }) => {
       <div key={ziel.id}>
         <Row node={node} />
         {isOpen && (
-          <ZielberFolder projekt={projekt} ap={ap} jahr={jahr} ziel={ziel} />
+          <ZielberFolder
+            projekt={projekt}
+            ap={ap}
+            jahr={jahr}
+            ziel={ziel}
+          />
         )}
       </div>
     )
   })
-}
-
-export default observer(Ziel)
+})
