@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../../../../../../../../../storeContext.js'
 import TpopMassnFolder from './TpopMassn/index.jsx'
-import TpopMassnBerFolder from './TpopMassnBer/index.jsx'
+import { TpopMassnBerFolder } from './TpopMassnBer/index.jsx'
 import { TpopFeldkontrFolder } from './TpopFeldkontr/index.jsx'
 import { TpopFreiwkontrFolder } from './TpopFreiwkontr/index.jsx'
 import { TpopBerFolder } from './TpopBer/index.jsx'
