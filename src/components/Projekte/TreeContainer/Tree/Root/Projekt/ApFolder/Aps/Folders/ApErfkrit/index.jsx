@@ -3,17 +3,16 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
-import ApErfkrit from './ApErfkrit'
+import { ApErfkrit } from './ApErfkrit.jsx'
 
-const ErfkritFolder = ({ projekt, ap, count, isLoading }) => {
+export const ApErfkritFolder = observer(({ projekt, ap, count, isLoading }) => {
   const store = useContext(StoreContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.erfkrit ?? ''
 
-  const message = isLoading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${count} gefiltert`
+  const message =
+    isLoading ? '...'
+    : nodeLabelFilterString ? `${count} gefiltert`
     : count
 
   const url = ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Erfolgskriterien']
@@ -41,9 +40,12 @@ const ErfkritFolder = ({ projekt, ap, count, isLoading }) => {
   return (
     <>
       <Row node={node} />
-      {isOpen && <ApErfkrit projekt={projekt} ap={ap} />}
+      {isOpen && (
+        <ApErfkrit
+          projekt={projekt}
+          ap={ap}
+        />
+      )}
     </>
   )
-}
-
-export default observer(ErfkritFolder)
+})
