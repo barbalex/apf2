@@ -9,7 +9,7 @@ import TpopFolder from './Tpop'
 import PopBerFolder from './PopBer'
 import PopMassnBerFolder from './PopMassnBer'
 
-const PopFolders = ({ projekt, ap, pop }) => {
+export const PopFolders = observer(({ projekt, ap, pop }) => {
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
@@ -98,6 +98,4 @@ const PopFolders = ({ projekt, ap, pop }) => {
       />
     </>
   )
-}
-
-export default observer(PopFolders)
+})

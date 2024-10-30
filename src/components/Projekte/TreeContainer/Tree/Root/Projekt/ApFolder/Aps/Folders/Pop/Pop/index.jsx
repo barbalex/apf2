@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../storeContext.js'
-import Folders from './Folders'
+import { PopFolders } from './Folders/index.jsx'
 
 export const Pop = observer(({ projekt, ap }) => {
   const client = useApolloClient()
@@ -68,7 +68,7 @@ export const Pop = observer(({ projekt, ap }) => {
       <div key={el.id}>
         <Row node={node} />
         {isOpen && (
-          <Folders
+          <PopFolders
             projekt={projekt}
             ap={ap}
             pop={el}
