@@ -16,7 +16,7 @@ const blacklist = [
   'sortedBeobFields', // 2023.10.26 added because needs to update when changed in code
 ]
 
-const StorePersister = ({ client, store, idb }) => {
+export const StorePersister = ({ client, store, idb }) => {
   const visitedTopDomain = window.location.pathname === '/'
   useEffect(() => {
     persist('store', store, {
@@ -79,4 +79,3 @@ const StorePersister = ({ client, store, idb }) => {
   return null
 }
 
-export default StorePersister

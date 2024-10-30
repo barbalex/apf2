@@ -53,7 +53,9 @@ const LegacyBrowserInformer = lazy(async () => ({
   default: (await import('./components/LegacyBrowserInformer.jsx'))
     .LegacyBrowserInformer,
 }))
-const StorePersister = lazy(() => import('./components/StorePersister.jsx'))
+const StorePersister = lazy(async () => ({
+  default: (await import('./components/StorePersister.jsx')).StorePersister,
+}))
 import { Spinner } from './components/shared/Spinner.jsx'
 
 registerLocale('de', de)
