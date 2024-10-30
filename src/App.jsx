@@ -48,9 +48,10 @@ const LastTouchedNodeSetter = lazy(async () => ({
   default: (await import('./components/LastTouchedNodeSetter.jsx'))
     .LastTouchedNodeSetter,
 }))
-const LegacyBrowserInformer = lazy(
-  () => import('./components/LegacyBrowserInformer.jsx'),
-)
+const LegacyBrowserInformer = lazy(async () => ({
+  default: (await import('./components/LegacyBrowserInformer.jsx'))
+    .LegacyBrowserInformer,
+}))
 const StorePersister = lazy(() => import('./components/StorePersister.jsx'))
 import { Spinner } from './components/shared/Spinner.jsx'
 
