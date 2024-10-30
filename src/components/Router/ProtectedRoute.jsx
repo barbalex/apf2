@@ -24,7 +24,9 @@ const NavigateSetter = lazy(async () => ({
 const ApfLayerNotifier = lazy(async () => ({
   default: (await import('./ApfLayerNotifier')).ApfLayerNotifier,
 }))
-const QueryClientSetter = lazy(() => import('./QueryClientSetter'))
+const QueryClientSetter = lazy(async () => ({
+  default: (await import('./QueryClientSetter')).QueryClientSetter,
+}))
 import { Spinner } from '../shared/Spinner.jsx'
 
 const isInIframe = inIframe()
