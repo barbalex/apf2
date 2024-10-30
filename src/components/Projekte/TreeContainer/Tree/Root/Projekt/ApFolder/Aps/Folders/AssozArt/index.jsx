@@ -3,17 +3,16 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
-import AssozArt from './AssozArt'
+import { AssozArt } from './AssozArt.jsx'
 
-const AssozArtFolder = ({ projekt, ap, count, isLoading }) => {
+export const AssozArtFolder = observer(({ projekt, ap, count, isLoading }) => {
   const store = useContext(StoreContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.assozart ?? ''
 
-  const message = isLoading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${count} gefiltert`
+  const message =
+    isLoading ? '...'
+    : nodeLabelFilterString ? `${count} gefiltert`
     : count
 
   const url = ['Projekte', projekt.id, 'Arten', ap.id, 'assoziierte-Arten']
@@ -41,9 +40,12 @@ const AssozArtFolder = ({ projekt, ap, count, isLoading }) => {
   return (
     <>
       <Row node={node} />
-      {isOpen && <AssozArt projekt={projekt} ap={ap} />}
+      {isOpen && (
+        <AssozArt
+          projekt={projekt}
+          ap={ap}
+        />
+      )}
     </>
   )
-}
-
-export default observer(AssozArtFolder)
+})

@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 
-const AssozArt = ({ projekt, ap }) => {
+export const AssozArt = observer(({ projekt, ap }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
@@ -60,8 +60,11 @@ const AssozArt = ({ projekt, ap }) => {
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
-}
-
-export default observer(AssozArt)
+})
