@@ -8,7 +8,7 @@ import {
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-// import Unterhalt from './components/Unterhalt'
+// import { Unterhalt } from './components/Unterhalt.jsx'
 
 // uncomment unterhalt route for Unterhalt
 const RouterComponent = () => {

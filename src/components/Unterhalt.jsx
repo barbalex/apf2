@@ -3,7 +3,9 @@ import React from 'react'
 import styled from '@emotion/styled'
 
 const Container = styled.div`
-  font: 20px Helvetica, sans-serif;
+  font:
+    20px Helvetica,
+    sans-serif;
   color: #333;
   text-align: center;
   padding: 150px;
@@ -28,7 +30,7 @@ const A = styled.a`
   }
 `
 
-const App = () => (
+export const Unterhalt = () => (
   <Container>
     <Article>
       <Titel>Wir sind bald zurück!</Titel>
@@ -44,5 +46,3 @@ const App = () => (
     </Article>
   </Container>
 )
-
-export default App
