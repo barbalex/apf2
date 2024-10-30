@@ -5,12 +5,12 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../../../../../../../../../storeContext.js'
-import TpopMassn from './TpopMassn'
-import TpopMassnBer from './TpopMassnBer'
-import TpopFeldkontr from './TpopFeldkontr'
-import TpopFreiwkontr from './TpopFreiwkontr'
-import TpopBer from './TpopBer'
-import BeobZugeordnet from './BeobZugeordnet'
+import TpopMassn from './TpopMassn/index.jsx'
+import TpopMassnBer from './TpopMassnBer/index.jsx'
+import TpopFeldkontr from './TpopFeldkontr/index.jsx'
+import TpopFreiwkontr from './TpopFreiwkontr/index.jsx'
+import TpopBer from './TpopBer/index.jsx'
+import { BeobZugeordnetFolder } from './BeobZugeordnet/index.jsx'
 
 export const TpopFolders = observer(({ projekt, ap, pop, tpop }) => {
   const client = useApolloClient()
@@ -158,7 +158,7 @@ export const TpopFolders = observer(({ projekt, ap, pop, tpop }) => {
         isLoading={isLoading}
         count={tpopberCount}
       />
-      <BeobZugeordnet
+      <BeobZugeordnetFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
