@@ -5,9 +5,9 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../../../../../../../../../storeContext.js'
-import TpopMassn from './TpopMassn/index.jsx'
-import TpopMassnBer from './TpopMassnBer/index.jsx'
-import TpopFeldkontr from './TpopFeldkontr/index.jsx'
+import TpopMassnFolder from './TpopMassn/index.jsx'
+import TpopMassnBerFolder from './TpopMassnBer/index.jsx'
+import { TpopFeldkontrFolder } from './TpopFeldkontr/index.jsx'
 import { TpopFreiwkontrFolder } from './TpopFreiwkontr/index.jsx'
 import { TpopBerFolder } from './TpopBer/index.jsx'
 import { BeobZugeordnetFolder } from './BeobZugeordnet/index.jsx'
@@ -118,7 +118,7 @@ export const TpopFolders = observer(({ projekt, ap, pop, tpop }) => {
 
   return (
     <>
-      <TpopMassn
+      <TpopMassnFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -126,7 +126,7 @@ export const TpopFolders = observer(({ projekt, ap, pop, tpop }) => {
         isLoading={isLoading}
         count={tpopmassnCount}
       />
-      <TpopMassnBer
+      <TpopMassnBerFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -134,7 +134,7 @@ export const TpopFolders = observer(({ projekt, ap, pop, tpop }) => {
         isLoading={isLoading}
         count={tpopmassnberCount}
       />
-      <TpopFeldkontr
+      <TpopFeldkontrFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
