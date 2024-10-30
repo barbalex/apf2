@@ -1,5 +1,5 @@
 import { tpopfreiwkontrFolder } from './tpopfreiwkontrFolder/index.js'
-import tpopfeldkontrFolder from './tpopfeldkontrFolder/index.js'
+import { tpopfeldkontrFolder } from './tpopfeldkontrFolder/index.js'
 import tpop from './tpop/index.js'
 import tpopFolder from './tpopFolder/index.js'
 import pop from './pop/index.js'
