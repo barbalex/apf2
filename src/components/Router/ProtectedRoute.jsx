@@ -18,7 +18,9 @@ import { inIframe } from '../../modules/inIframe.js'
 const ActiveNodeArraySetter = lazy(async () => ({
   default: (await import('./ActiveNodeArraySetter')).ActiveNodeArraySetter,
 }))
-const NavigateSetter = lazy(() => import('./NavigateSetter'))
+const NavigateSetter = lazy(async () => ({
+  default: (await import('./NavigateSetter')).NavigateSetter,
+}))
 const ApfLayerNotifier = lazy(async () => ({
   default: (await import('./ApfLayerNotifier')).ApfLayerNotifier,
 }))

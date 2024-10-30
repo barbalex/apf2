@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../storeContext.js'
 
-const NavigateSetter = () => {
+export const NavigateSetter = observer(() => {
   const navigate = useNavigate()
   const { navigate: navigateInStore, setNavigate } = useContext(StoreContext)
   const navigateSet = useRef(false)
@@ -22,6 +22,4 @@ const NavigateSetter = () => {
   }, [navigate, navigateInStore, setNavigate])
 
   return null
-}
-
-export default observer(NavigateSetter)
+})
