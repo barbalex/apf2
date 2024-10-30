@@ -19,7 +19,9 @@ const ActiveNodeArraySetter = lazy(async () => ({
   default: (await import('./ActiveNodeArraySetter')).ActiveNodeArraySetter,
 }))
 const NavigateSetter = lazy(() => import('./NavigateSetter'))
-const ApfLayerNotifier = lazy(() => import('./ApfLayerNotifier'))
+const ApfLayerNotifier = lazy(async () => ({
+  default: (await import('./ApfLayerNotifier')).ApfLayerNotifier,
+}))
 const QueryClientSetter = lazy(() => import('./QueryClientSetter'))
 import { Spinner } from '../shared/Spinner.jsx'
 

@@ -7,7 +7,7 @@ import { useSearchParamsState } from '../../modules/useSearchParamsState.js'
 import { isMobilePhone } from '../../modules/isMobilePhone.js'
 
 // TODO: only show messages if map is visible
-const ApfLayerNotifier = () => {
+export const ApfLayerNotifier = observer(() => {
   const store = useContext(StoreContext)
   const {
     showApfLayersForMultipleAps,
@@ -64,6 +64,4 @@ const ApfLayerNotifier = () => {
   }, [showApfLayersForMultipleAps, activeApfloraLayers.length, apId, mapIsOpen])
 
   return null
-}
-
-export default observer(ApfLayerNotifier)
+})
