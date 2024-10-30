@@ -8,7 +8,7 @@ import sortBy from 'lodash/sortBy'
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 
-const BeobNichtBeurteilts = ({ projekt, ap }) => {
+export const BeobNichtBeurteilts = observer(({ projekt, ap }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { beobGqlFilterForTree } = store.tree
@@ -82,8 +82,11 @@ const BeobNichtBeurteilts = ({ projekt, ap }) => {
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
-}
-
-export default observer(BeobNichtBeurteilts)
+})
