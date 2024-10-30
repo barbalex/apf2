@@ -20,7 +20,7 @@ import '@fontsource/roboto-mono/700.css'
 import '@fontsource/roboto'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
-import {GlobalStyle} from './components/GlobalStyle.jsx'
+import { GlobalStyle } from './components/GlobalStyle.jsx'
 
 import { Provider as MobxProvider } from './storeContext.js'
 import { Provider as IdbProvider } from './idbContext.js'
@@ -38,13 +38,16 @@ import '@changey/react-leaflet-markercluster/dist/styles.min.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import Router from './components/Router/index.jsx'
-const IsPrintSetter = lazy(() => import('./components/IsPrintSetter.jsx'))
+const IsPrintSetter = lazy(async () => ({
+  default: (await import('./components/IsPrintSetter.jsx')).IsPrintSetter,
+}))
 const MouseWheelHandler = lazy(
   () => import('./components/MouseWheelHandler.jsx'),
 )
-const LastTouchedNodeSetter = lazy(
-  () => import('./components/LastTouchedNodeSetter.jsx'),
-)
+const LastTouchedNodeSetter = lazy(async () => ({
+  default: (await import('./components/LastTouchedNodeSetter.jsx'))
+    .LastTouchedNodeSetter,
+}))
 const LegacyBrowserInformer = lazy(
   () => import('./components/LegacyBrowserInformer.jsx'),
 )

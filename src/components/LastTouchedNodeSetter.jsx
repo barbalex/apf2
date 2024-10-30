@@ -4,7 +4,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { StoreContext } from '../storeContext.js'
 
-const LastTouchedNodeSetter = () => {
+export const LastTouchedNodeSetter = observer(() => {
   const store = useContext(StoreContext)
   const { activeNodeArray, setLastTouchedNode } = store.tree
 
@@ -14,6 +14,4 @@ const LastTouchedNodeSetter = () => {
   }, [activeNodeArray, setLastTouchedNode])
 
   return null
-}
-
-export default observer(LastTouchedNodeSetter)
+})
