@@ -5,7 +5,7 @@ import { useContext } from 'react'
 import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
 
-const Apberuebersichts = () => {
+export const Apberuebersichts = () => {
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
@@ -60,8 +60,11 @@ const Apberuebersichts = () => {
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
 }
-
-export default Apberuebersichts
