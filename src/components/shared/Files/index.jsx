@@ -21,9 +21,9 @@ import {
 } from '../fragments'
 import { Uploader } from '../Uploader/index.jsx'
 import { UploaderContext } from '../../../UploaderContext.js'
-import File from './File'
+import { File } from './File.jsx'
 import 'react-image-gallery/styles/css/image-gallery.css'
-import isImageFile from './isImageFile'
+import { isImageFile } from './isImageFile.js'
 import { StoreContext } from '../../../storeContext.js'
 
 const Container = styled.div`

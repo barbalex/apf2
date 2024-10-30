@@ -18,7 +18,7 @@ import {
   tpopkontrFile as tpopkontrFileFragment,
   tpopmassnFile as tpopmassnFileFragment,
 } from '../fragments'
-import isImageFile from './isImageFile'
+import { isImageFile } from './isImageFile.js'
 import { ifIsNumericAsNumber } from '../../../modules/ifIsNumericAsNumber.js'
 import { StoreContext } from '../../../storeContext.js'
 
@@ -83,7 +83,7 @@ const fragmentObject = {
   tpopmassn: tpopmassnFileFragment,
 }
 
-const File = ({ file, parent, refetch }) => {
+export const File = observer(({ file, parent, refetch }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
 
@@ -268,6 +268,4 @@ const File = ({ file, parent, refetch }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(File)
+})
