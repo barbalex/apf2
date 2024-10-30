@@ -15,7 +15,7 @@ import AssozArtFolder from './AssozArt/index.jsx'
 import EkFrequenzFolder from './EkFrequenz/index.jsx'
 import EkZaehleinheitFolder from './EkZaehleinheit/index.jsx'
 import BeobNichtBeurteiltFolder from './BeobNichtBeurteilt/index.jsx'
-import BeobNichtZuzuordnenFolder from './BeobNichtZuzuordnen/index.jsx'
+import { BeobNichtZuzuordnenFolder } from './BeobNichtZuzuordnen/index.jsx'
 import { Qk } from './Qk.jsx'
 
 export const ApFolders = observer(({ ap, projekt }) => {
