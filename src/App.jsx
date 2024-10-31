@@ -1,17 +1,12 @@
 import { lazy, Suspense, createRef } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
-import theme from './utils/materialTheme.js'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale/de'
 import { ApolloProvider } from '@apollo/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import MobxStore from './store/index.js'
 import { SnackbarProvider } from 'notistack'
 //import { onPatch } from 'mobx-state-tree'
-
-import { initializeIdb } from './modules/initializeIdb.js'
-import buildClient from './client.js'
 
 // see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
 import '@fontsource/roboto-mono'
@@ -20,7 +15,13 @@ import '@fontsource/roboto-mono/700.css'
 import '@fontsource/roboto'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
+
 import { GlobalStyle } from './components/GlobalStyle.jsx'
+import { theme } from './utils/materialTheme.js'
+
+import { initializeIdb } from './modules/initializeIdb.js'
+import { MobxStore } from './store/index.js'
+import { buildClient } from './client.js'
 
 import { Provider as MobxProvider } from './storeContext.js'
 import { Provider as IdbProvider } from './idbContext.js'

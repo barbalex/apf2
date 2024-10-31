@@ -14,7 +14,7 @@ import { graphQlUri } from './modules/graphQlUri.js'
 import { existsPermissionError } from './modules/existsPermissionError.js'
 import { existsTooLargeError } from './modules/existsTooLargeError.js'
 
-const Client = ({ store }) => {
+export const buildClient = ({ store }) => {
   const { enqueNotification } = store
   const cleanTypeName = new ApolloLink((operation, forward) => {
     if (operation.variables) {
@@ -217,5 +217,3 @@ const Client = ({ store }) => {
   store.setClient(client)
   return client
 }
-
-export default Client

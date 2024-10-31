@@ -66,7 +66,7 @@ const defaultSortedBeobFields = [
   'STATION',
 ]
 
-const MobxStore = types
+export const MobxStore = types
   .model({
     apfloraLayers: types.optional(
       types.array(ApfloraLayer),
@@ -315,4 +315,3 @@ const MobxStore = types
     },
   }))
 
-export default MobxStore
