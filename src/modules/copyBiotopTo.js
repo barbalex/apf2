@@ -75,5 +75,3 @@ export const copyBiotopTo = async ({ id, client, copyingBiotop }) => {
     },
   })
 }
-
-export default copyBiotopTo
