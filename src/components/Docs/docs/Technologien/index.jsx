@@ -1,7 +1,7 @@
 import { DokuDate } from '../../index.jsx'
 // import beziehungen from './beziehungen.png'
 
-const Technologien = () => (
+export const Component = () => (
   <>
     <h1>Technologien</h1>
     <DokuDate>1.1.2023</DokuDate>
@@ -158,11 +158,11 @@ const Technologien = () => (
             width="100%"
             height="800"
             src="https://dbdiagram.io/e/65639a833be1495787c2f457/67238c12b1b39dd8581538b4"
+            frameBorder="0.5"
+            style={{ border: '1px solid #dbdbdb' }}
           ></iframe>
         </p>
       </li>
     </ul>
   </>
 )
-
-export const Component = Technologien
