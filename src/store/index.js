@@ -1,8 +1,9 @@
 import { types } from 'mobx-state-tree'
 
-import ApfloraLayer from './ApfloraLayer.js'
-import Copying, { defaultValue as defaultCopying } from './Copying.js'
-import CopyingBiotop, {
+import { ApfloraLayer } from './ApfloraLayer.js'
+import { Copying, defaultValue as defaultCopying } from './Copying.js'
+import {
+  CopyingBiotop,
   defaultValue as defaultCopyingBiotop,
 } from './CopyingBiotop.js'
 import Map, { defaultValue as defaultMap } from './Map.js'
@@ -314,4 +315,3 @@ export const MobxStore = types
       }
     },
   }))
-
