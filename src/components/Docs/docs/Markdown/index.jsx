@@ -1,14 +1,17 @@
 import { DokuDate } from '../../index.jsx'
 import field from './field.png'
 
-const Markdown = () => (
+export const Component = () => (
   <>
     <h1>Formatierbare Felder</h1>
     <DokuDate>04.05.2020</DokuDate>
     <p>
       Am 19.04.2020 wurden formatierbare Felder eingeführt:
       <br />
-      <img src={field} alt="Filter öffnen" />
+      <img
+        src={field}
+        alt="Filter öffnen"
+      />
     </p>
     <p>Dafür wird ein sogenannter &quot;markdown editor&quot; verwendet.</p>
     <p>
@@ -37,5 +40,3 @@ const Markdown = () => (
     </p>
   </>
 )
-
-export const Component = Markdown

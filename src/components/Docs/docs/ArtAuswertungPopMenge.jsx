@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const ArtAuswertungPopMenge = () => (
+export constComponent = () => (
   <>
     <h1>Art: Auswertung Population Mengen</h1>
     <DokuDate>27.03.2020 (Ebene Population ergänzt am 31.3.2023)</DokuDate>
@@ -66,4 +66,3 @@ const ArtAuswertungPopMenge = () => (
   </>
 )
 
-export const Component = ArtAuswertungPopMenge
