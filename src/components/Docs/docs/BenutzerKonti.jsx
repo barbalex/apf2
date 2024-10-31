@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const BenutzerKonti = () => (
+export const Component = () => (
   <>
     <h1>Benutzer-Konti</h1>
     <DokuDate>29.04.2020</DokuDate>
@@ -60,5 +60,3 @@ const BenutzerKonti = () => (
     </ul>
   </>
 )
-
-export const Component = BenutzerKonti

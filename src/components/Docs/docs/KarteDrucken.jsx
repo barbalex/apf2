@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const KarteDrucken = () => (
+export const Component = () => (
   <>
     <h1>Karte: Drucken</h1>
     <DokuDate>14.09.2019</DokuDate>
@@ -35,5 +35,3 @@ const KarteDrucken = () => (
     </p>
   </>
 )
-
-export const Component = KarteDrucken
