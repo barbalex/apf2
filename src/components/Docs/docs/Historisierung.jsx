@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const Historisierung = () => (
+export const Component = () => (
   <>
     <h1>Historisierung</h1>
     <DokuDate>10.12.2020</DokuDate>
@@ -232,5 +232,3 @@ const Historisierung = () => (
     </table>
   </>
 )
-
-export const Component = Historisierung

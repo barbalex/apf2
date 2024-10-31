@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const KarteFilter = () => (
+export const Component = () => (
   <>
     <h1>Karte: Filter</h1>
     <DokuDate>09.02.2022</DokuDate>
@@ -29,5 +29,3 @@ const KarteFilter = () => (
     </object>
   </>
 )
-
-export const Component = KarteFilter

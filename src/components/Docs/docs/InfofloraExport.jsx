@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const InfoFloraExport = () => (
+export const Component = () => (
   <>
     <h1>Info-Flora-Export</h1>
     <DokuDate>31.03.2022</DokuDate>
@@ -232,5 +232,3 @@ const InfoFloraExport = () => (
     </p>
   </>
 )
-
-export const Component = InfoFloraExport
