@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const FalschBestimmteBeob = () => (
+export const Component = () => (
   <>
     <h1>Falsch bestimmte Beobachtungen</h1>
     <DokuDate>30.01.2019</DokuDate>
@@ -38,5 +38,3 @@ const FalschBestimmteBeob = () => (
     </p>
   </>
 )
-
-export const Component = FalschBestimmteBeob

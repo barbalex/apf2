@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const KarteTpopAllerArten = () => (
+export const Component = () => (
   <>
     <h1>Karte: (Teil-)Populationen aller Arten anzeigen</h1>
     <DokuDate>20.05.2020</DokuDate>
@@ -32,5 +32,3 @@ const KarteTpopAllerArten = () => (
     <p>Wurde am 11.12.2018 eingeführt. Und am 20.5.2020 verbessert.</p>
   </>
 )
-
-export const Component = KarteTpopAllerArten
