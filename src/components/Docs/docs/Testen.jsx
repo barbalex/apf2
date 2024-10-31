@@ -6,7 +6,7 @@ const LI = styled.li`
   list-style-type: none;
 `
 
-const Testen = () => (
+export const Component = () => (
   <>
     <h1>Funktionalität testen</h1>
     <DokuDate>18.04.2019</DokuDate>
@@ -99,5 +99,3 @@ const Testen = () => (
     </ul>
   </>
 )
-
-export const Component = Testen

@@ -1,7 +1,7 @@
 import { DokuDate } from '../index.jsx'
 import { YoutubeEmbed } from '../../shared/YoutubeEmbed.jsx'
 
-const VideosFuerDenEinstieg = () => (
+export const Component = () => (
   <>
     <h1>Videos für den Einstieg</h1>
     <DokuDate>15.09.2017</DokuDate>
@@ -27,5 +27,3 @@ const VideosFuerDenEinstieg = () => (
     <YoutubeEmbed embedId={'Oy-TDV37xhI'} />
   </>
 )
-
-export const Component = VideosFuerDenEinstieg

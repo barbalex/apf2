@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const TechnischeVoraussetzungen = () => (
+export const Component = () => (
   <>
     <h1>Technische Voraussetzungen</h1>
     <DokuDate>29.04.2020</DokuDate>
@@ -41,5 +41,3 @@ const TechnischeVoraussetzungen = () => (
     <p>&nbsp;</p>
   </>
 )
-
-export const Component = TechnischeVoraussetzungen

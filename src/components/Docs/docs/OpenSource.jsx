@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const OpenSource = () => (
+export const Component = () => (
   <>
     <h1>Open source</h1>
     <DokuDate>30.01.2019</DokuDate>
@@ -53,5 +53,3 @@ const OpenSource = () => (
     </p>
   </>
 )
-
-export const Component = OpenSource
