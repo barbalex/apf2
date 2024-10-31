@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const Ekf = () => (
+export const Component = () => (
   <>
     <h1>Erfolgs-Kontrollen Freiwillige (EKF)</h1>
     <DokuDate>13.01.2020</DokuDate>
@@ -158,5 +158,3 @@ const Ekf = () => (
     </ol>
   </>
 )
-
-export const Component = Ekf

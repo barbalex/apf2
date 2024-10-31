@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const Melden = () => (
+export const Component = () => (
   <>
     <h1>Fehler, Ideen, Vorschläge melden</h1>
     <DokuDate>16.04.2019</DokuDate>
@@ -46,5 +46,3 @@ const Melden = () => (
     </p>
   </>
 )
-
-export const Component = Melden

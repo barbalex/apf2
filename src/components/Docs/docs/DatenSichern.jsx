@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const DatenSichern = () => (
+export const Component = () => (
   <>
     <h1>Daten sichern</h1>
     <DokuDate>18.04.2019</DokuDate>
@@ -19,5 +19,3 @@ const DatenSichern = () => (
     </p>
   </>
 )
-
-export const Component = DatenSichern
