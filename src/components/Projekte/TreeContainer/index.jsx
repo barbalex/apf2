@@ -228,7 +228,7 @@ import { copyTpopKoordToPop } from '../../../modules/copyTpopKoordToPop/index.js
 import { tpopById } from './tpopById.js'
 import { beobById } from './beobById.js'
 import { openLowerNodes } from './openLowerNodes/index.js'
-import closeLowerNodes from './closeLowerNodes.js'
+import { closeLowerNodes } from './closeLowerNodes.js'
 import insertDataset from './insertDataset.js'
 import { StoreContext } from '../../../storeContext.js'
 const TpopFromBeobPopList = lazy(() => import('./TpopFromBeobPopList.jsx'))
