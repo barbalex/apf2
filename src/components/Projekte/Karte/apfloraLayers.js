@@ -1,4 +1,4 @@
-const apfloraLayers = [
+export const standardApfloraLayers = [
   {
     label: 'Populationen',
     value: 'pop',
@@ -24,5 +24,3 @@ const apfloraLayers = [
     value: 'beobZugeordnetAssignPolylines',
   },
 ]
-
-export default apfloraLayers
