@@ -4,11 +4,12 @@ import merge from 'lodash/merge'
 import queryString from 'query-string'
 import isUuid from 'is-uuid'
 
-import NodeLabelFilter, {
+import {
+  NodeLabelFilter,
   defaultValue as defaultNodeLabelFilter,
 } from './NodeLabelFilter.js'
-import Geojson from './Geojson.js'
-import initialDataFilterValues from './DataFilter/initialValues.js'
+import { Geojson } from './Geojson.js'
+import { initialDataFilterValues } from './DataFilter/initialValues.js'
 import DataFilter from './DataFilter/types.js'
 import { simpleTypes as popType } from './DataFilter/pop.js'
 import {

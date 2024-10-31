@@ -5,7 +5,7 @@ import { initial as tpopmassn } from './tpopmassn.js'
 import { initial as tpopfeldkontr } from './tpopfeldkontr.js'
 import { initial as tpopfreiwkontr } from './tpopfreiwkontr.js'
 
-const initialValues = {
+export const initialDataFilterValues = {
   ap: [ap],
   pop: [pop],
   tpop: [tpop],
@@ -13,5 +13,3 @@ const initialValues = {
   tpopfreiwkontr: [tpopfreiwkontr],
   tpopmassn: [tpopmassn],
 }
-
-export default initialValues
