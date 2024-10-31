@@ -1,4 +1,3 @@
-import React from 'react'
 import Typography from '@mui/material/Typography'
 import MaterialCard from '@mui/material/Card'
 import styled from '@emotion/styled'

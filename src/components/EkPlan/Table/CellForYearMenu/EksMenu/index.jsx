@@ -1,4 +1,3 @@
-import React from 'react'
 import Menu from '@mui/material/Menu'
 
 import { Eks } from './Eks.jsx'
