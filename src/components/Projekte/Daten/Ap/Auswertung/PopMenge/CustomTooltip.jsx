@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
 
@@ -29,43 +29,45 @@ const Value = styled.div``
 const colorUrspruenglich = '#2e7d32'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 
-export const CustomTooltip = ({ payload = [], label, active, popsData }) => {
-  const payloadSorted = sortBy(payload, (p) => {
-    const pop = popsData.find((d) => d.id === p.dataKey)
-    if (pop) return pop.nr
-    return p.dataKey
-  })
+export const CustomTooltip = memo(
+  ({ payload = [], label, active, popsData }) => {
+    const payloadSorted = sortBy(payload, (p) => {
+      const pop = popsData.find((d) => d.id === p.dataKey)
+      if (pop) return pop.nr
+      return p.dataKey
+    })
 
-  return (
-    <Popup>
-      <Title>{label}</Title>
-      {payloadSorted.map((p, i) => {
-        const pop = popsData.find((d) => d.id === p.dataKey)
-        let label = p.dataKey
-        if (pop) {
-          label = `${pop.nr || '(keine Nr)'}: ${pop.name || '(kein Name)'}`
-        }
-        const value =
-          exists(p.value) && p.value?.toLocaleString ?
-            p.value?.toLocaleString('de-ch')
-          : null
-        let color
-        if (!pop) {
-          color = 'grey'
-        } else {
-          const isUrspruenglich = pop?.status < 200
-          color = isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
-        }
-        return (
-          <Row
-            key={p.dataKey}
-            color={color}
-          >
-            <Label>{`${label}:`}</Label>
-            <Value>{value}</Value>
-          </Row>
-        )
-      })}
-    </Popup>
-  )
-}
+    return (
+      <Popup>
+        <Title>{label}</Title>
+        {payloadSorted.map((p, i) => {
+          const pop = popsData.find((d) => d.id === p.dataKey)
+          let label = p.dataKey
+          if (pop) {
+            label = `${pop.nr || '(keine Nr)'}: ${pop.name || '(kein Name)'}`
+          }
+          const value =
+            exists(p.value) && p.value?.toLocaleString ?
+              p.value?.toLocaleString('de-ch')
+            : null
+          let color
+          if (!pop) {
+            color = 'grey'
+          } else {
+            const isUrspruenglich = pop?.status < 200
+            color = isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
+          }
+          return (
+            <Row
+              key={p.dataKey}
+              color={color}
+            >
+              <Label>{`${label}:`}</Label>
+              <Value>{value}</Value>
+            </Row>
+          )
+        })}
+      </Popup>
+    )
+  },
+)

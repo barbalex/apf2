@@ -5,7 +5,7 @@
  *
  */
 
-import { useContext, useMemo, useState, useRef } from 'react'
+import { useContext, useMemo, useState, useRef, memo } from 'react'
 import { MapContainer, ScaleControl, ZoomControl, Pane } from 'react-leaflet'
 import styled from '@emotion/styled'
 import 'leaflet'
@@ -424,237 +424,239 @@ const StyledMapContainer = styled(MapContainer)`
  * So: need to use app level store state
  */
 
-export const Karte = observer(({ mapContainerRef }) => {
-  const { apId } = useParams()
+export const Karte = memo(
+  observer(({ mapContainerRef }) => {
+    const { apId } = useParams()
 
-  const mapRef = useRef(null)
+    const mapRef = useRef(null)
 
-  const store = useContext(StoreContext)
-  const {
-    activeApfloraLayers: activeApfloraLayersRaw,
-    showApfLayersForMultipleAps,
-    overlays,
-    activeOverlays: activeOverlaysRaw,
-    activeBaseLayer,
-    bounds: boundsRaw,
-    assigningBeob,
-    hideMapControls,
-  } = store
-  const tree = store.tree
-  const { mapFilter } = tree
-  const bounds = getSnapshot(boundsRaw)
-  const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
-  const activeOverlays = getSnapshot(activeOverlaysRaw)
+    const store = useContext(StoreContext)
+    const {
+      activeApfloraLayers: activeApfloraLayersRaw,
+      showApfLayersForMultipleAps,
+      overlays,
+      activeOverlays: activeOverlaysRaw,
+      activeBaseLayer,
+      bounds: boundsRaw,
+      assigningBeob,
+      hideMapControls,
+    } = store
+    const tree = store.tree
+    const { mapFilter } = tree
+    const bounds = getSnapshot(boundsRaw)
+    const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
+    const activeOverlays = getSnapshot(activeOverlaysRaw)
 
-  const showApfLayers = showApfLayersForMultipleAps || !!apId
-  const showPop = activeApfloraLayers.includes('pop') && showApfLayers
-  const showTpop = activeApfloraLayers.includes('tpop') && showApfLayers
-  const showBeobNichtBeurteilt =
-    activeApfloraLayers.includes('beobNichtBeurteilt') && showApfLayers
-  const showBeobNichtZuzuordnen =
-    activeApfloraLayers.includes('beobNichtZuzuordnen') && showApfLayers
-  const showBeobZugeordnet =
-    activeApfloraLayers.includes('beobZugeordnet') && showApfLayers
-  const showBeobZugeordnetAssignPolylines =
-    activeApfloraLayers.includes('beobZugeordnetAssignPolylines') &&
-    showApfLayers
+    const showApfLayers = showApfLayersForMultipleAps || !!apId
+    const showPop = activeApfloraLayers.includes('pop') && showApfLayers
+    const showTpop = activeApfloraLayers.includes('tpop') && showApfLayers
+    const showBeobNichtBeurteilt =
+      activeApfloraLayers.includes('beobNichtBeurteilt') && showApfLayers
+    const showBeobNichtZuzuordnen =
+      activeApfloraLayers.includes('beobNichtZuzuordnen') && showApfLayers
+    const showBeobZugeordnet =
+      activeApfloraLayers.includes('beobZugeordnet') && showApfLayers
+    const showBeobZugeordnetAssignPolylines =
+      activeApfloraLayers.includes('beobZugeordnetAssignPolylines') &&
+      showApfLayers
 
-  /**
-   * need to pass the height of the self built controls
-   * to move controls built by leaflet when layer menu changes height
-   * Beware: If initial value is wrong, map will render twice
-   */
-  const [controlHeight, setControlHeight] = useState(167)
+    /**
+     * need to pass the height of the self built controls
+     * to move controls built by leaflet when layer menu changes height
+     * Beware: If initial value is wrong, map will render twice
+     */
+    const [controlHeight, setControlHeight] = useState(167)
 
-  const clustered = !(
-    assigningBeob ||
-    activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
-  )
-  const OverlayComponents = useMemo(
-    () => ({
-      ZhUep: () => <ZhUepOverlay />,
-      // rebuild detailplaene on localizing change to close popups and rebuild without popups
-      Detailplaene: () => <Detailplaene />,
-      Markierungen: () => <Markierungen />,
-      MassnahmenFlaechen: () => <Massnahmen layer="flaechen" />,
-      MassnahmenLinien: () => <Massnahmen layer="linien" />,
-      MassnahmenPunkte: () => <Massnahmen layer="punkte" />,
-      Betreuungsgebiete: () => <Betreuungsgebiete />,
-      Gemeinden: () => <Gemeinden />,
-      ZhSvoColor: () => <ZhSvoColor />,
-      ZhSvoGrey: () => <ZhSvoGrey />,
-      ZhPflegeplan: () => <ZhPflegeplan />,
-      ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
-      ZhLichteWaelder: () => <ZhLichteWaelder />,
-      ZhWaelderVegetation: () => <ZhWaelderVegetation />,
-    }),
-    [],
-  )
-  const BaseLayerComponents = useMemo(
-    () => ({
-      OsmColor: () => <OsmColor />,
-      OsmBw: () => <OsmBw />,
-      SwissTopoPixelFarbe: () => <SwisstopoPixelFarbe />,
-      SwissTopoPixelGrau: () => <SwisstopoPixelGrau />,
-      SwisstopoSiegfried: () => <SwisstopoSiegfried />,
-      SwisstopoDufour: () => <SwisstopoDufour />,
-      ZhUep: () => <ZhUep />,
-      BingAerial: () => <BingAerial />,
-      ZhOrthoAktuellRgb: () => <ZhOrthoAktuellRgb />,
-      ZhOrthoAktuellIr: () => <ZhOrthoAktuellIr />,
-      ZhOrtho2018Rgb: () => <ZhOrtho2018Rgb />,
-      ZhOrtho2018Ir: () => <ZhOrtho2018Ir />,
-      ZhOrtho2015Rgb: () => <ZhOrtho2015Rgb />,
-      ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
-      ZhOrtho2014Rgb: () => <ZhOrtho2014Rgb />,
-      ZhOrtho2014Ir: () => <ZhOrtho2014Ir />,
-    }),
-    [],
-  )
-  const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
-  const activeOverlaysSorted = sortBy(activeOverlays, (activeOverlay) =>
-    overlays.findIndex((o) => o.value === activeOverlay),
-  )
+    const clustered = !(
+      assigningBeob ||
+      activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
+    )
+    const OverlayComponents = useMemo(
+      () => ({
+        ZhUep: () => <ZhUepOverlay />,
+        // rebuild detailplaene on localizing change to close popups and rebuild without popups
+        Detailplaene: () => <Detailplaene />,
+        Markierungen: () => <Markierungen />,
+        MassnahmenFlaechen: () => <Massnahmen layer="flaechen" />,
+        MassnahmenLinien: () => <Massnahmen layer="linien" />,
+        MassnahmenPunkte: () => <Massnahmen layer="punkte" />,
+        Betreuungsgebiete: () => <Betreuungsgebiete />,
+        Gemeinden: () => <Gemeinden />,
+        ZhSvoColor: () => <ZhSvoColor />,
+        ZhSvoGrey: () => <ZhSvoGrey />,
+        ZhPflegeplan: () => <ZhPflegeplan />,
+        ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
+        ZhLichteWaelder: () => <ZhLichteWaelder />,
+        ZhWaelderVegetation: () => <ZhWaelderVegetation />,
+      }),
+      [],
+    )
+    const BaseLayerComponents = useMemo(
+      () => ({
+        OsmColor: () => <OsmColor />,
+        OsmBw: () => <OsmBw />,
+        SwissTopoPixelFarbe: () => <SwisstopoPixelFarbe />,
+        SwissTopoPixelGrau: () => <SwisstopoPixelGrau />,
+        SwisstopoSiegfried: () => <SwisstopoSiegfried />,
+        SwisstopoDufour: () => <SwisstopoDufour />,
+        ZhUep: () => <ZhUep />,
+        BingAerial: () => <BingAerial />,
+        ZhOrthoAktuellRgb: () => <ZhOrthoAktuellRgb />,
+        ZhOrthoAktuellIr: () => <ZhOrthoAktuellIr />,
+        ZhOrtho2018Rgb: () => <ZhOrtho2018Rgb />,
+        ZhOrtho2018Ir: () => <ZhOrtho2018Ir />,
+        ZhOrtho2015Rgb: () => <ZhOrtho2015Rgb />,
+        ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
+        ZhOrtho2014Rgb: () => <ZhOrtho2014Rgb />,
+        ZhOrtho2014Ir: () => <ZhOrtho2014Ir />,
+      }),
+      [],
+    )
+    const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
+    const activeOverlaysSorted = sortBy(activeOverlays, (activeOverlay) =>
+      overlays.findIndex((o) => o.value === activeOverlay),
+    )
 
-  // explicitly sort Layers
-  // Use Pane with z-index: https://github.com/PaulLeCam/react-leaflet/issues/271#issuecomment-609752044
-  // Idea:
-  // 1. create pane for each layer, give it className of layer name
-  // 2. give base layer pane z-index: 100
-  // 3. give overlays 100 + index in activeOverlaysSorted
-  // 4. apflora layers always on top
+    // explicitly sort Layers
+    // Use Pane with z-index: https://github.com/PaulLeCam/react-leaflet/issues/271#issuecomment-609752044
+    // Idea:
+    // 1. create pane for each layer, give it className of layer name
+    // 2. give base layer pane z-index: 100
+    // 3. give overlays 100 + index in activeOverlaysSorted
+    // 4. apflora layers always on top
 
-  // console.log('Map', {
-  //   activeBaseLayer,
-  //   activeOverlaysSorted,
-  //   activeApfloraLayers,
-  //   controlHeight,
-  //   bounds,
-  //   mapContainerRef,
-  // })
-  // console.log('Map, bounds:', bounds)
+    // console.log('Map', {
+    //   activeBaseLayer,
+    //   activeOverlaysSorted,
+    //   activeApfloraLayers,
+    //   controlHeight,
+    //   bounds,
+    //   mapContainerRef,
+    // })
+    // console.log('Map, bounds:', bounds)
 
-  // clustered layers receive a key that rebuilds them every time the cluster
-  // tool would erroneously add new markers from last time it build
-  // see: https://github.com/barbalex/apf2/issues/467
+    // clustered layers receive a key that rebuilds them every time the cluster
+    // tool would erroneously add new markers from last time it build
+    // see: https://github.com/barbalex/apf2/issues/467
 
-  // console.log('map rendering')
+    // console.log('map rendering')
 
-  return (
-    <Container
-      data-id="karten-container1"
-      data-control-height={controlHeight}
-      ref={mapRef}
-    >
-      <ErrorBoundary>
-        <StyledMapContainer
-          // bounds need to be set using map.fitBounds sice v3
-          // but keep bounds in store as last bound will be reapplied
-          // when map is re-opened
-          bounds={bounds}
-          // need max and min zoom because otherwise
-          // something errors
-          // probably clustering function
-          maxZoom={23}
-          minZoom={0}
-          doubleClickZoom={false}
-          zoomControl={false}
-        >
-          {activeBaseLayer && (
-            <MapResizer mapContainerRef={mapContainerRef}>
-              <BaseLayerComponent />
-            </MapResizer>
-          )}
-          {/* TODO: Set paneBaseIndex to 400 (?), subtract index from zIndex in Pane style, then remove reverse() */}
-          {activeOverlaysSorted
-            .reverse()
-            .map((overlayName, index) => {
-              const OverlayComponent = OverlayComponents[overlayName]
-              // prevent bad error if wrong overlayName was passed
-              // for instance after an overlay was renamed but user still has old name in cache
-              if (!OverlayComponent) return null
-
-              return (
-                <Pane
-                  key={`${overlayName}/${index}`}
-                  className={overlayName}
-                  name={overlayName}
-                  style={{ zIndex: 200 + index }}
-                >
-                  <OverlayComponent />
-                </Pane>
-              )
-            })
-            .reverse()}
-          {showPop && (
-            // add no pane
-            // it prevented pop svgs from appearing
-            // leaflet sets z-index to 600 anyway
-            <Pop
-              key={`${apId ?? ''}/pop/${activeApfloraLayers.join()}/${
-                mapFilter?.coordinates ?? 99
-              }`}
-            />
-          )}
-          {showTpop && (
-            <Tpop
-              key={`${apId}/tpop/${activeApfloraLayers.join()}/${
-                mapFilter?.coordinates ?? 99
-              }`}
-              clustered={clustered}
-            />
-          )}
-          {showBeobNichtBeurteilt && (
-            <BeobNichtBeurteilt
-              key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}/${
-                mapFilter?.coordinates ?? 99
-              }`}
-              clustered={clustered}
-            />
-          )}
-          {showBeobNichtZuzuordnen && (
-            <BeobNichtZuzuordnen
-              key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}/${
-                mapFilter?.coordinates ?? 99
-              }`}
-              clustered={clustered}
-            />
-          )}
-          {showBeobZugeordnet && (
-            <BeobZugeordnet
-              key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}/${
-                mapFilter?.coordinates ?? 99
-              }`}
-              clustered={clustered}
-            />
-          )}
-          {showBeobZugeordnetAssignPolylines && (
-            <BeobZugeordnetAssignPolylines />
-          )}
-          <ClickListener />
-          <ScaleControl imperial={false} />
-          <Control
-            position="topright"
-            visible={!hideMapControls}
+    return (
+      <Container
+        data-id="karten-container1"
+        data-control-height={controlHeight}
+        ref={mapRef}
+      >
+        <ErrorBoundary>
+          <StyledMapContainer
+            // bounds need to be set using map.fitBounds sice v3
+            // but keep bounds in store as last bound will be reapplied
+            // when map is re-opened
+            bounds={bounds}
+            // need max and min zoom because otherwise
+            // something errors
+            // probably clustering function
+            maxZoom={23}
+            minZoom={0}
+            doubleClickZoom={false}
+            zoomControl={false}
           >
-            <OwnControls
-              setControlHeight={setControlHeight}
-              // this enforces rerendering when sorting changes
-              activeOverlaysString={activeOverlays.join()}
-              activeApfloraLayersString={activeApfloraLayers.join()}
-              mapRef={mapRef}
-            />
-          </Control>
-          <PrintControl />
-          <ZoomControl position="topright" />
-          <MeasureControl />
-          <DrawControl />
-          <Control position="bottomright">
-            <CoordinatesControl />
-          </Control>
-          <MapFilterListener />
-        </StyledMapContainer>
-      </ErrorBoundary>
-    </Container>
-  )
-})
+            {activeBaseLayer && (
+              <MapResizer mapContainerRef={mapContainerRef}>
+                <BaseLayerComponent />
+              </MapResizer>
+            )}
+            {/* TODO: Set paneBaseIndex to 400 (?), subtract index from zIndex in Pane style, then remove reverse() */}
+            {activeOverlaysSorted
+              .reverse()
+              .map((overlayName, index) => {
+                const OverlayComponent = OverlayComponents[overlayName]
+                // prevent bad error if wrong overlayName was passed
+                // for instance after an overlay was renamed but user still has old name in cache
+                if (!OverlayComponent) return null
+
+                return (
+                  <Pane
+                    key={`${overlayName}/${index}`}
+                    className={overlayName}
+                    name={overlayName}
+                    style={{ zIndex: 200 + index }}
+                  >
+                    <OverlayComponent />
+                  </Pane>
+                )
+              })
+              .reverse()}
+            {showPop && (
+              // add no pane
+              // it prevented pop svgs from appearing
+              // leaflet sets z-index to 600 anyway
+              <Pop
+                key={`${apId ?? ''}/pop/${activeApfloraLayers.join()}/${
+                  mapFilter?.coordinates ?? 99
+                }`}
+              />
+            )}
+            {showTpop && (
+              <Tpop
+                key={`${apId}/tpop/${activeApfloraLayers.join()}/${
+                  mapFilter?.coordinates ?? 99
+                }`}
+                clustered={clustered}
+              />
+            )}
+            {showBeobNichtBeurteilt && (
+              <BeobNichtBeurteilt
+                key={`${apId}/beobNichtBeurteilt/${activeApfloraLayers.join()}/${
+                  mapFilter?.coordinates ?? 99
+                }`}
+                clustered={clustered}
+              />
+            )}
+            {showBeobNichtZuzuordnen && (
+              <BeobNichtZuzuordnen
+                key={`${apId}/beobNichtZuzuordnen/${activeApfloraLayers.join()}/${
+                  mapFilter?.coordinates ?? 99
+                }`}
+                clustered={clustered}
+              />
+            )}
+            {showBeobZugeordnet && (
+              <BeobZugeordnet
+                key={`${apId}/beobZugeordnet/${activeApfloraLayers.join()}/${
+                  mapFilter?.coordinates ?? 99
+                }`}
+                clustered={clustered}
+              />
+            )}
+            {showBeobZugeordnetAssignPolylines && (
+              <BeobZugeordnetAssignPolylines />
+            )}
+            <ClickListener />
+            <ScaleControl imperial={false} />
+            <Control
+              position="topright"
+              visible={!hideMapControls}
+            >
+              <OwnControls
+                setControlHeight={setControlHeight}
+                // this enforces rerendering when sorting changes
+                activeOverlaysString={activeOverlays.join()}
+                activeApfloraLayersString={activeApfloraLayers.join()}
+                mapRef={mapRef}
+              />
+            </Control>
+            <PrintControl />
+            <ZoomControl position="topright" />
+            <MeasureControl />
+            <DrawControl />
+            <Control position="bottomright">
+              <CoordinatesControl />
+            </Control>
+            <MapFilterListener />
+          </StyledMapContainer>
+        </ErrorBoundary>
+      </Container>
+    )
+  }),
+)
