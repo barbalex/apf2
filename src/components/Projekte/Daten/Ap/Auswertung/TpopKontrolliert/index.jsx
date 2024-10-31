@@ -159,5 +159,3 @@ export const TpopKontrolliert = ({
     </>
   )
 }
-
-export default TpopKontrolliert

@@ -1,3 +1,4 @@
+// seems not to be used
 import { useCallback } from 'react'
 import Select from 'react-select'
 import styled from '@emotion/styled'
@@ -41,44 +42,44 @@ const StyledSelect = styled(Select)`
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
-    height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
   }
 `
 
-const SharedSelect = ({
-  value,
-  field = '',
-  label,
-  error,
-  options,
-  saveToDb,
-  maxHeight = null,
-}) => {
-  const onChange = useCallback(
-    option => saveToDb(option ? option.value : null),
-    [saveToDb],
-  )
+export const SharedSelect = observer(
+  ({
+    value,
+    field = '',
+    label,
+    error,
+    options,
+    saveToDb,
+    maxHeight = null,
+  }) => {
+    const onChange = useCallback(
+      (option) => saveToDb(option ? option.value : null),
+      [saveToDb],
+    )
 
-  return (
-    <Container>
-      {label && <Label>{label}</Label>}
-      <StyledSelect
-        id={field}
-        name={field}
-        defaultValue={options.find(o => o.value === value)}
-        options={options}
-        onChange={onChange}
-        hideSelectedOptions
-        placeholder=""
-        isClearable
-        isSearchable
-        noOptionsMessage={() => '(keine)'}
-        maxheight={maxHeight}
-        classNamePrefix="react-select"
-      />
-      {error && <Error>{error}</Error>}
-    </Container>
-  )
-}
-
-export default observer(SharedSelect)
+    return (
+      <Container>
+        {label && <Label>{label}</Label>}
+        <StyledSelect
+          id={field}
+          name={field}
+          defaultValue={options.find((o) => o.value === value)}
+          options={options}
+          onChange={onChange}
+          hideSelectedOptions
+          placeholder=""
+          isClearable
+          isSearchable
+          noOptionsMessage={() => '(keine)'}
+          maxheight={maxHeight}
+          classNamePrefix="react-select"
+        />
+        {error && <Error>{error}</Error>}
+      </Container>
+    )
+  },
+)
