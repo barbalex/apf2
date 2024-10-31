@@ -34,9 +34,13 @@ import { UploaderContext } from './UploaderContext.js'
 const Notifier = lazy(async () => ({
   default: (await import('./components/shared/Notifier.jsx')).Notifier,
 }))
-import { NotificationDismisser } from './components/shared/NotificationDismisser.jsx'
-
-import { Router } from './components/Router/index.jsx'
+const NotificationDismisser = lazy(async () => ({
+  default: (await import('./components/shared/NotificationDismisser.jsx'))
+    .NotificationDismisser,
+}))
+const Router = lazy(async () => ({
+  default: (await import('./components/Router/index.jsx')).Router,
+}))
 const IsPrintSetter = lazy(async () => ({
   default: (await import('./components/IsPrintSetter.jsx')).IsPrintSetter,
 }))
@@ -55,7 +59,9 @@ const LegacyBrowserInformer = lazy(async () => ({
 const StorePersister = lazy(async () => ({
   default: (await import('./components/StorePersister.jsx')).StorePersister,
 }))
-import { Spinner } from './components/shared/Spinner.jsx'
+const Spinner = lazy(async () => ({
+  default: (await import('./components/shared/Spinner.jsx')).Spinner,
+}))
 
 registerLocale('de', de)
 setDefaultLocale('de')
