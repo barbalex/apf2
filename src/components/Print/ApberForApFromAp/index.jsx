@@ -7,7 +7,7 @@ import { ApberForAp } from '../ApberForAp/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 
-const ApberForApFromAp = () => {
+export const Component = () => {
   const { apberId, apId } = useParams()
 
   const client = useApolloClient()
@@ -60,5 +60,3 @@ const ApberForApFromAp = () => {
     </ErrorBoundary>
   )
 }
-
-export const Component = ApberForApFromAp

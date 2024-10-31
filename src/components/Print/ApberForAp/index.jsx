@@ -7,7 +7,7 @@ import { MdPrint } from 'react-icons/md'
 import Fab from '@mui/material/Fab'
 import MarkdownIt from 'markdown-it'
 
-import Ziele from './Ziele.jsx'
+import { Ziele } from './Ziele.jsx'
 import { Massnahmen } from './Massnahmen.jsx'
 import { AMengen } from './AMengen.jsx'
 import { BMengen } from './BMengen.jsx'
