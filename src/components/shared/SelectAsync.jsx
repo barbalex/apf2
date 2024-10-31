@@ -121,5 +121,3 @@ export const SelectAsync = ({
     </Container>
   )
 }
-
-export default SelectAsync
