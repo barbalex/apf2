@@ -1,11 +1,11 @@
 import { types } from 'mobx-state-tree'
 
-export default types
+export const Hovered = types
   .model('Hovered', {
     year: types.optional(types.maybeNull(types.number), null),
     tpopId: types.optional(types.maybeNull(types.string), null),
   })
-  .actions(self => ({
+  .actions((self) => ({
     set(val) {
       self.year = val.year
       self.tpopId = val.tpopId

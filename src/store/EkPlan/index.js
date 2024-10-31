@@ -2,8 +2,8 @@ import { types } from 'mobx-state-tree'
 import uniq from 'lodash/uniq'
 import groupBy from 'lodash/groupBy'
 
-import Ap from './Ap.js'
-import Hovered, { defaultValue as defaultHovered } from './Hovered.js'
+import { Ap } from './Ap.js'
+import { Hovered, defaultValue as defaultHovered } from './Hovered.js'
 import { fields } from '../../components/EkPlan/Table/fields.js'
 
 export const defaultFields = [
@@ -41,7 +41,7 @@ const initialYearClicked = {
   ekfPlan: false,
 }
 
-export default types
+export const EkPlan = types
   .model('EkPlan', {
     showEk: types.optional(types.boolean, true),
     showEkf: types.optional(types.boolean, true),
