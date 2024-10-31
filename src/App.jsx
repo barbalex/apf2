@@ -75,7 +75,7 @@ const queryClient = new QueryClient({
   },
 })
 
-const App = () => {
+export const App = () => {
   const idb = initializeIdb()
   const store = MobxStore.create()
   const client = buildClient({ store })
@@ -129,5 +129,3 @@ const App = () => {
     </IdbProvider>
   )
 }
-
-export default App
