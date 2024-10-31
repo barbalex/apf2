@@ -19,9 +19,13 @@ import { appBaseUrl } from '../../modules/appBaseUrl.js'
 const Error = lazy(async () => ({
   default: (await import('../shared/Error.jsx')).Error,
 }))
-import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+const ErrorBoundary = lazy(async () => ({
+  default: (await import('../shared/ErrorBoundary.jsx')).ErrorBoundary,
+}))
 const User = lazy(async () => ({ default: (await import('../User.jsx')).User }))
-import { Spinner } from '../shared/Spinner.jsx'
+const Spinner = lazy(async () => ({
+  default: (await import('../shared/Spinner.jsx')).Spinner,
+}))
 
 const Container = styled.div`
   height: 100%;
@@ -45,7 +49,7 @@ const AnleitungButton = styled(Button)`
   line-height: unset !important;
 `
 
-const EkPlan = () => {
+export const Component = observer(() => {
   const store = useContext(StoreContext)
   const { user } = store
   const { aps, setApsData, setApsDataLoading } = store.ekPlan
@@ -99,10 +103,4 @@ const EkPlan = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(EkPlan)
-
-export const Component = observer(EkPlan)
-
-export const errorElement = ErrorBoundary
+})
