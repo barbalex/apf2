@@ -1,6 +1,6 @@
 import { DokuDate } from '../index.jsx'
 
-const VideosFuerDenEinstieg = () => (
+export const Component = () => (
   <>
     <h1>Anleitung zur Eingabe (inhaltlich), topos</h1>
     <DokuDate>14.02.2022</DokuDate>
@@ -29,5 +29,3 @@ const VideosFuerDenEinstieg = () => (
     </object>
   </>
 )
-
-export const Component = VideosFuerDenEinstieg
