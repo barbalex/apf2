@@ -8,10 +8,10 @@ import Fab from '@mui/material/Fab'
 import MarkdownIt from 'markdown-it'
 
 import Ziele from './Ziele.jsx'
-import Massnahmen from './Massnahmen.jsx'
-import AMengen from './AMengen.jsx'
-import BMengen from './BMengen.jsx'
-import CMengen from './CMengen.jsx'
+import { Massnahmen } from './Massnahmen.jsx'
+import { AMengen } from './AMengen.jsx'
+import { BMengen } from './BMengen.jsx'
+import { CMengen } from './CMengen.jsx'
 import { StoreContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { PopMenge } from '../../Projekte/Daten/Ap/Auswertung/PopMenge/index.jsx'
@@ -455,4 +455,3 @@ export const ApberForAp = ({
     </ErrorBoundary>
   )
 }
-

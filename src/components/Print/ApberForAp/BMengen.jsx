@@ -48,7 +48,7 @@ const PopSeit = styled(Number)`
 `
 const TpopSeit = styled(Number)``
 
-const BMengen = ({ jahr, loading, node }) => {
+export const BMengen = ({ jahr, loading, node }) => {
   const b1LPop = node?.b1LPop
   const b1LTpop = node?.b1LTpop
   const b1RPop = node?.b1RPop
@@ -79,5 +79,3 @@ const BMengen = ({ jahr, loading, node }) => {
     </Container>
   )
 }
-
-export default BMengen

@@ -92,4 +92,3 @@ export const Messages = observer(() => {
     </ErrorBoundary>
   )
 })
-export default Messages
