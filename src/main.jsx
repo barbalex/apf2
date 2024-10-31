@@ -1,5 +1,4 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
 
 import { App } from './App.jsx'
@@ -7,7 +6,7 @@ import { App } from './App.jsx'
 // https://vite-pwa-org.netlify.app/guide/auto-update.html
 registerSW({ immediate: true })
 
-ReactDOM.createRoot(document.getElementById('root'))
+createRoot(document.getElementById('root'))
   // todo: causes mstPersist to run twice
   // .render(
   //   <React.StrictMode>
