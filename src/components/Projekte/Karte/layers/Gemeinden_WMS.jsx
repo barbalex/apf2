@@ -1,6 +1,7 @@
 // Tried to integrate gemeinden WMS
 // but: querying did not work
 // and covers background
+// so: not used
 import { useContext } from 'react'
 import { useMap, WMSTileLayer } from 'react-leaflet'
 import styled from '@emotion/styled'
@@ -11,8 +12,8 @@ import { useDebouncedCallback } from 'use-debounce'
 import { observer } from 'mobx-react-lite'
 
 import { xmlToLayersData } from '../../../../modules/xmlToLayersData.js'
-import Popup from './Popup.jsx'
-import onTileError from './onTileError.js'
+import { Popup } from './Popup.jsx'
+import { onTileError } from './onTileError.js'
 import { StoreContext } from '../../../../storeContext.js'
 
 const StyledPopupContent = styled.div`
@@ -38,7 +39,7 @@ const layer = {
   wms_base_url: `https://wms.geo.admin.ch/`,
 }
 
-const WMS = () => {
+export const WMS = observer(() => {
   const map = useMap()
   const store = useContext(StoreContext)
 
@@ -197,6 +198,4 @@ const WMS = () => {
       }}
     />
   )
-}
-
-export default observer(WMS)
+})
