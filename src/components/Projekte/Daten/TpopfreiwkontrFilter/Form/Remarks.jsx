@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -34,28 +34,30 @@ const RemarksVal = styled.div`
   }
 `
 
-export const Remarks = observer(({ saveToDb, row }) => {
-  //console.log('Remarks rendering')
+export const Remarks = memo(
+  observer(({ saveToDb, row }) => {
+    //console.log('Remarks rendering')
 
-  return (
-    <Container>
-      <RemarksLabel>
-        Spezielle Bemerkungen
-        <RemarksSubLabel>
-          (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
-          Begebenheiten)
-        </RemarksSubLabel>
-      </RemarksLabel>
-      <RemarksVal>
-        <TextField2
-          key={`${row?.id}bemerkungen`}
-          name="bemerkungen"
-          row={row}
-          type="text"
-          multiLine
-          saveToDb={saveToDb}
-        />
-      </RemarksVal>
-    </Container>
-  )
-})
+    return (
+      <Container>
+        <RemarksLabel>
+          Spezielle Bemerkungen
+          <RemarksSubLabel>
+            (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
+            Begebenheiten)
+          </RemarksSubLabel>
+        </RemarksLabel>
+        <RemarksVal>
+          <TextField2
+            key={`${row?.id}bemerkungen`}
+            name="bemerkungen"
+            row={row}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+          />
+        </RemarksVal>
+      </Container>
+    )
+  }),
+)
