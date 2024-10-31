@@ -159,4 +159,3 @@ export const SelectCreatable = observer(
     )
   },
 )
-export default SelectCreatable

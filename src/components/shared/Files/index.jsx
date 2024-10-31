@@ -232,4 +232,3 @@ export const Files = observer(
     )
   },
 )
-export default Files
