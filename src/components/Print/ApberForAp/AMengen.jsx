@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 
 const Container = styled.div`
@@ -82,12 +81,10 @@ const AMengen = ({ loading, jahr, node }) => {
   const a8LTpop = node?.a8LTpop
   const a9LPop = node?.a9LPop
   const a9LTpop = node?.a9LTpop
-  const a1LPop = loading
-    ? '...'
-    : a3LPop + a4LPop + a5LPop + a7LPop + a8LPop + a9LPop
-  const a1LTpop = loading
-    ? '...'
-    : a3LTpop + a4LTpop + a5LTpop + a7LTpop + a8LTpop + a9LTpop
+  const a1LPop =
+    loading ? '...' : a3LPop + a4LPop + a5LPop + a7LPop + a8LPop + a9LPop
+  const a1LTpop =
+    loading ? '...' : a3LTpop + a4LTpop + a5LTpop + a7LTpop + a8LTpop + a9LTpop
   const a2LPop = loading ? '...' : a3LPop + a4LPop + a5LPop
   const a2LTpop = loading ? '...' : a3LTpop + a4LTpop + a5LTpop
   const a6LPop = loading ? '...' : a7LPop + a8LPop
