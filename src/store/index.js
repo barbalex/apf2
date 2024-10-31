@@ -6,9 +6,10 @@ import {
   CopyingBiotop,
   defaultValue as defaultCopyingBiotop,
 } from './CopyingBiotop.js'
-import Map, { defaultValue as defaultMap } from './Map.js'
-import Moving, { defaultValue as defaultMoving } from './Moving.js'
-import MapMouseCoordinates, {
+import { Map, defaultValue as defaultMap } from './Map.js'
+import { Moving, defaultValue as defaultMoving } from './Moving.js'
+import {
+  MapMouseCoordinates,
   defaultValue as defaultMapMouseCoordinates,
 } from './MapMouseCoordinates.js'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers.js'

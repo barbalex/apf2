@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree'
 
-export default types.model('MapMouseCoordinates', {
+export const MapMouseCoordinates = types.model('MapMouseCoordinates', {
   x: types.optional(types.maybeNull(types.number), 2683000),
   y: types.optional(types.maybeNull(types.number), 1247500),
 })
