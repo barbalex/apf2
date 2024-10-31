@@ -15,6 +15,9 @@ import '@fontsource/roboto-mono/700.css'
 import '@fontsource/roboto'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
+import 'simplebar-react/dist/simplebar.min.css'
+import '@changey/react-leaflet-markercluster/dist/styles.min.css'
+import 'react-datepicker/dist/react-datepicker.css'
 
 import { GlobalStyle } from './components/GlobalStyle.jsx'
 import { theme } from './utils/materialTheme.js'
@@ -33,12 +36,7 @@ const Notifier = lazy(async () => ({
 }))
 import { NotificationDismisser } from './components/shared/NotificationDismisser.jsx'
 
-import 'simplebar-react/dist/simplebar.min.css'
-
-import '@changey/react-leaflet-markercluster/dist/styles.min.css'
-import 'react-datepicker/dist/react-datepicker.css'
-
-import Router from './components/Router/index.jsx'
+import { Router } from './components/Router/index.jsx'
 const IsPrintSetter = lazy(async () => ({
   default: (await import('./components/IsPrintSetter.jsx')).IsPrintSetter,
 }))
