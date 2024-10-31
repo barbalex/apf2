@@ -1,7 +1,7 @@
-import React from 'react'
+import { memo } from 'react'
 import { TileLayer, Pane } from 'react-leaflet'
 
-export const OsmColor = () => {
+export const OsmColor = memo(() => {
   return (
     <Pane
       className="OsmColor"
@@ -20,4 +20,4 @@ export const OsmColor = () => {
       />
     </Pane>
   )
-}
+})

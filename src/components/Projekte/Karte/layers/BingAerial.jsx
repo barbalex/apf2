@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import { Pane } from 'react-leaflet'
 
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -12,7 +12,7 @@ import { BingLayer } from '../../../shared/react-leaflet-bing-v2/index.js'
 const bingKey =
   'AjGOtB_ygBplpxXtKiiHtm-GERjSg9TFEoCmuBI_Yz4VWy0unRGUDo9GOZHA46Pf'
 
-export const BingAerial = () => (
+export const BingAerial = memo(() => (
   <ErrorBoundary>
     <Pane
       className="BingAerial"
@@ -27,4 +27,4 @@ export const BingAerial = () => (
       />
     </Pane>
   </ErrorBoundary>
-)
+))
