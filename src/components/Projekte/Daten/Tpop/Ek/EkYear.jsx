@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import sortBy from 'lodash/sortBy'
@@ -21,7 +21,7 @@ const typRenamed = (e) => {
   }
 }
 
-export const EkYear = ({ data }) => {
+export const EkYear = memo(({ data }) => {
   const ekplans = sortBy(
     data.filter((o) => o.is === 'ekplan'),
     'typ',
@@ -46,4 +46,4 @@ export const EkYear = ({ data }) => {
       </TableCell>
     </StyledTableRow>
   )
-}
+})
