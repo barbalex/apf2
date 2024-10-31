@@ -10,7 +10,7 @@ import {
 } from './NodeLabelFilter.js'
 import { Geojson } from './Geojson.js'
 import { initialDataFilterValues } from './DataFilter/initialValues.js'
-import DataFilter from './DataFilter/types.js'
+import { DataFilter } from './DataFilter/types.js'
 import { simpleTypes as popType } from './DataFilter/pop.js'
 import {
   simpleTypes as tpopType,

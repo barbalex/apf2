@@ -7,7 +7,7 @@ import { type as tpopfeldkontr } from './tpopfeldkontr.js'
 import { type as tpopfreiwkontr } from './tpopfreiwkontr.js'
 import { type as tpopmassn } from './tpopmassn.js'
 
-export default types.model({
+export const DataFilter = types.model({
   ap: types.array(ap),
   pop: types.array(pop),
   tpop: types.array(tpop),
