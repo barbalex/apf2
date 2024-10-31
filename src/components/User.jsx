@@ -277,6 +277,3 @@ export const User = observer(() => {
     </ErrorBoundary>
   )
 })
-
-// without default export get error: Uncaught TypeError: Cannot convert object to primitive value
-export default User
