@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -42,29 +42,31 @@ const Grund = styled.div`
   }
 `
 
-export const Verification = observer(({ saveToDb, row, errors }) => (
-  <Container>
-    <Relevant>
-      <RadioButton
-        key={`${row.id}apberNichtRelevant`}
-        name="apberNichtRelevant"
-        label="Im Jahresbericht nicht berücksichtigen"
-        value={row.apberNichtRelevant}
-        saveToDb={saveToDb}
-        error={errors.apberNichtRelevant}
-      />
-    </Relevant>
-    <Grund>
-      <TextField2
-        key={`${row.id}apberNichtRelevantGrund`}
-        name="apberNichtRelevantGrund"
-        label="Wieso nicht?"
-        row={row}
-        type="text"
-        multiLine
-        saveToDb={saveToDb}
-        errors={errors}
-      />
-    </Grund>
-  </Container>
-))
+export const Verification = memo(
+  observer(({ saveToDb, row, errors }) => (
+    <Container>
+      <Relevant>
+        <RadioButton
+          key={`${row.id}apberNichtRelevant`}
+          name="apberNichtRelevant"
+          label="Im Jahresbericht nicht berücksichtigen"
+          value={row.apberNichtRelevant}
+          saveToDb={saveToDb}
+          error={errors.apberNichtRelevant}
+        />
+      </Relevant>
+      <Grund>
+        <TextField2
+          key={`${row.id}apberNichtRelevantGrund`}
+          name="apberNichtRelevantGrund"
+          label="Wieso nicht?"
+          row={row}
+          type="text"
+          multiLine
+          saveToDb={saveToDb}
+          errors={errors}
+        />
+      </Grund>
+    </Container>
+  )),
+)
