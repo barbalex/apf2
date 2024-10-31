@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router-dom'
 
 import { StoreContext } from '../../storeContext.js'
-const User = lazy(() => import('../User'))
+const User = lazy(async () => ({ default: (await import('../User.jsx')).User }))
 const Messages = lazy(async () => ({
   default: (await import('../Messages/index.jsx')).Messages,
 }))
