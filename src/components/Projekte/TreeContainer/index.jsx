@@ -218,6 +218,15 @@ const CmTpopmassn = lazy(async () => ({
 const DeleteDatasetModal = lazy(async () => ({
   default: (await import('./DeleteDatasetModal/index.jsx')).DatasetDeleteModal,
 }))
+const TpopFromBeobPopList = lazy(async () => ({
+  default: (await import('./TpopFromBeobPopList.jsx')).TpopFromBeobPopList,
+}))
+const ErrorBoundary = lazy(async () => ({
+  default: (await import('../../shared/ErrorBoundary.jsx')).ErrorBoundary,
+}))
+const Spinner = lazy(async () => ({
+  default: (await import('../../shared/Spinner.jsx')).Spinner,
+}))
 
 import { copyBiotopTo } from '../../../modules/copyBiotopTo.js'
 import { moveTo } from '../../../modules/moveTo/index.js'
@@ -231,13 +240,8 @@ import { openLowerNodes } from './openLowerNodes/index.js'
 import { closeLowerNodes } from './closeLowerNodes.js'
 import { insertDataset } from './insertDataset.js'
 import { StoreContext } from '../../../storeContext.js'
-const TpopFromBeobPopList = lazy(async () => ({
-  default: (await import('./TpopFromBeobPopList.jsx')).TpopFromBeobPopList,
-}))
-import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { useSearchParamsState } from '../../../modules/useSearchParamsState.js'
 import { isMobilePhone } from '../../../modules/isMobilePhone.js'
-import { Spinner } from '../../shared/Spinner.jsx'
 
 const Container = styled.div`
   height: 100%;
