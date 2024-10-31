@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 
 import { exists } from '../../../../../modules/exists.js'
@@ -26,25 +26,30 @@ const Label = styled.div`
 `
 const Value = styled.div``
 
-export const CustomTooltip = ({ payload = [], label, active, color, reverse }) => {
-  const data = reverse ? payload : payload?.reverse() ?? []
+export const CustomTooltip = memo(
+  ({ payload = [], label, active, color, reverse }) => {
+    const data = reverse ? payload : (payload?.reverse() ?? [])
 
-  return (
-    <Popup>
-      <Title>{label}</Title>
-      {data.map((o, i) => {
-        const value =
-          exists(o.value) && o.value?.toLocaleString
-            ? o.value?.toLocaleString('de-ch')
+    return (
+      <Popup>
+        <Title>{label}</Title>
+        {data.map((o, i) => {
+          const value =
+            exists(o.value) && o.value?.toLocaleString ?
+              o.value?.toLocaleString('de-ch')
             : null
 
-        return (
-          <Row key={`${i}/${o.dataKey}`} color={color[o.dataKey]}>
-            <Label>{`${o.dataKey}:`}</Label>
-            <Value>{value}</Value>
-          </Row>
-        )
-      })}
-    </Popup>
-  )
-}
+          return (
+            <Row
+              key={`${i}/${o.dataKey}`}
+              color={color[o.dataKey]}
+            >
+              <Label>{`${o.dataKey}:`}</Label>
+              <Value>{value}</Value>
+            </Row>
+          )
+        })}
+      </Popup>
+    )
+  },
+)
