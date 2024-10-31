@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 
 import { TPop } from './TPop.jsx'
 import { TPopFuerWebgisBun } from './TPopFuerWebgisBun.jsx'
@@ -14,7 +14,7 @@ import { LetzteZaehlungen } from './LetzteZaehlungen.jsx'
 import { LetzteZaehlungenInklAnpflanzungen } from './LetzteZaehlungenInklAnpflanzungen.jsx'
 import { StyledCardContent } from '../index.jsx'
 
-export const CardContent = () => (
+export const CardContent = memo(() => (
   <StyledCardContent>
     <TPop />
     <TPop filtered={true} />
@@ -30,4 +30,4 @@ export const CardContent = () => (
     <LetzteZaehlungen />
     <LetzteZaehlungenInklAnpflanzungen />
   </StyledCardContent>
-)
+))
