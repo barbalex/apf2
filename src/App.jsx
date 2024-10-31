@@ -28,7 +28,6 @@ import { buildClient } from './client.js'
 
 import { Provider as MobxProvider } from './storeContext.js'
 import { Provider as IdbProvider } from './idbContext.js'
-
 import { UploaderContext } from './UploaderContext.js'
 
 const Notifier = lazy(async () => ({
