@@ -88,7 +88,7 @@ const MassnBeschreibung = styled.div`
   width: 100%;
 `
 
-const Massnahmen = ({ massns }) => (
+export const Massnahmen = ({ massns }) => (
   <Container>
     <Title>Massnahmen im Berichtsjahr:</Title>
     <TitleRow>
@@ -125,5 +125,3 @@ const Massnahmen = ({ massns }) => (
     })}
   </Container>
 )
-
-export default Massnahmen

@@ -109,4 +109,3 @@ export const EkIcon = observer(({ planned, eks, einheits }) => {
     </CheckboxContainer>
   )
 })
-export default EkIcon
