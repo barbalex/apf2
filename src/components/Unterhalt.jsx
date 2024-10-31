@@ -1,5 +1,4 @@
 // This is the entry file for the application
-import React from 'react'
 import styled from '@emotion/styled'
 
 const Container = styled.div`
