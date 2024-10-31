@@ -2,7 +2,7 @@ import { DokuDate } from '../../index.jsx'
 import { YoutubeEmbed } from '../../../shared/YoutubeEmbed.jsx'
 import beobZuordnen from './beobZuordnen_01.png'
 
-const BeobZuordnen = () => (
+export const  = () => (
   <>
     <h1>Beobachtungen Teil-Populationen zuordnen</h1>
     <DokuDate>05.06.2019</DokuDate>
@@ -168,4 +168,3 @@ const BeobZuordnen = () => (
   </>
 )
 
-export const Component = BeobZuordnen

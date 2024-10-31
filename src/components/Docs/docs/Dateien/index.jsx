@@ -4,7 +4,7 @@ import files02Gallery from './files_02_gallery.png'
 import files03Herunterladen from './files_03_herunterladen.png'
 import files04Upload from './files_04_upload.png'
 
-const Dateien = () => (
+export const Component = () => (
   <>
     <h1>Dateien anfügen</h1>
     <DokuDate>27.05.2019</DokuDate>
@@ -22,7 +22,11 @@ const Dateien = () => (
     </ul>
     <p>
       Beispiel Idealbiotop:
-      <img src={files01} alt="Datein" width="100%" />
+      <img
+        src={files01}
+        alt="Datein"
+        width="100%"
+      />
       <br />
     </p>
     <p>
@@ -48,19 +52,31 @@ const Dateien = () => (
     </ul>
     <p>
       Hochladen-Dialog:
-      <img src={files04Upload} alt="hochladen" width="100%" />
+      <img
+        src={files04Upload}
+        alt="hochladen"
+        width="100%"
+      />
       <br />
     </p>
     <p>
       Meist dürfte es sich um Bilder handeln. Daher gibt es auch eine
       Möglichkeit, die Bilder inklusive Beschreibung in einer{' '}
       <strong>Galerie-Ansicht</strong> zu öffnen:
-      <img src={files02Gallery} alt="Galerie-Ansicht" width="100%" />
+      <img
+        src={files02Gallery}
+        alt="Galerie-Ansicht"
+        width="100%"
+      />
       <br />
     </p>
     <p>
       Ihr könnt Dateien auch <strong>herunterladen</strong>:
-      <img src={files03Herunterladen} alt="herunterladen" width="100%" />
+      <img
+        src={files03Herunterladen}
+        alt="herunterladen"
+        width="100%"
+      />
       <br />
     </p>
     <p>
@@ -77,5 +93,3 @@ const Dateien = () => (
     </ul>
   </>
 )
-
-export const Component = Dateien

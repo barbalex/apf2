@@ -20,7 +20,7 @@ import ekplanenPlan from './ekplanen_plan.png'
 import ekplanenSpalten from './ekplanen_spalten.png'
 import filtern from './filtern.gif'
 
-const EkPlanen = () => (
+export const Component = () => (
   <>
     <h1>Erfolgs-Kontrollen planen</h1>
     <DokuDate>10.09.2019</DokuDate>
@@ -169,7 +169,11 @@ const EkPlanen = () => (
       Oben links wählt man, von welchen Arten Teil-Populationen angezeigt werden
       sollen:
       <br />
-      <img src={ekplanenForm2} referrerPolicy="no-referrer" alt="Formular" />
+      <img
+        src={ekplanenForm2}
+        referrerPolicy="no-referrer"
+        alt="Formular"
+      />
     </p>
     <p>
       Sobald eine Art gewählt wurde, erscheinen die zugehörigen
@@ -231,7 +235,11 @@ const EkPlanen = () => (
     <ul>
       <li>
         Grüne Haken symbolisieren ausgeführte Kontrollen{' '}
-        <img src={ekplanenHaken} referrerPolicy="no-referrer" alt="Kontrolle" />
+        <img
+          src={ekplanenHaken}
+          referrerPolicy="no-referrer"
+          alt="Kontrolle"
+        />
       </li>
       <li>
         Direkt rechts des Hakens stellt eine rote Zahl die Anzahl Kontrollen
@@ -375,5 +383,3 @@ const EkPlanen = () => (
     </p>
   </>
 )
-
-export const Component = EkPlanen

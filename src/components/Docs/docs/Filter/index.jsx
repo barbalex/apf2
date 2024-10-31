@@ -10,7 +10,7 @@ import uebersicht1 from './uebersicht_1.png'
 import zusammenspiel from './zusammenspiel.png'
 import kartenFilterEntfernen from './karten-filter-entfernen.gif'
 
-const Filter = () => (
+export const Component = () => (
   <>
     <h1>Filter</h1>
     <DokuDate>08.08.2022</DokuDate>
@@ -140,7 +140,11 @@ const Filter = () => (
       Im Formular-Filter gibt es nummerierte Register. Und rechts daneben ein
       (zunächst inaktives) mit <code>oder</code> beschriftetes.
       <br />
-      <img src={formularFilter3} referrerPolicy="no-referrer" alt="Register" />
+      <img
+        src={formularFilter3}
+        referrerPolicy="no-referrer"
+        alt="Register"
+      />
     </p>
     <p>
       Die Nummern nummerieren Kriterien der Oder-Filterung. Sobald in einem
@@ -218,7 +222,11 @@ const Filter = () => (
     <p>
       Im Formular-Filter gibt es oben drei Symbole:
       <br />
-      <img src={entfernen1} referrerPolicy="no-referrer" alt="Entfernen" />
+      <img
+        src={entfernen1}
+        referrerPolicy="no-referrer"
+        alt="Entfernen"
+      />
     </p>
     <ul>
       <li>
@@ -254,9 +262,11 @@ const Filter = () => (
       Ebene. Dort wird aufgelistet, welche der übrigen Filter auf dieser Ebene
       wirksam sind.
       <br />
-      <img src={uebersicht1} referrerPolicy="no-referrer" alt="Übersicht" />
+      <img
+        src={uebersicht1}
+        referrerPolicy="no-referrer"
+        alt="Übersicht"
+      />
     </p>
   </>
 )
-
-export const Component = Filter
