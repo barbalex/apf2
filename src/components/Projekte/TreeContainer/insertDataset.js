@@ -18,7 +18,7 @@ const fragments = {
   ekAbrechnungstypWerte: ekAbrechnungstypWerteFragment,
 }
 
-const insertDataset = async ({
+export const insertDataset = async ({
   tablePassed,
   parentId,
   //id,
@@ -273,5 +273,3 @@ const insertDataset = async ({
     queryKey: [queryKeyFolder],
   })
 }
-
-export default insertDataset

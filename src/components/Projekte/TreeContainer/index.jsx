@@ -229,9 +229,11 @@ import { tpopById } from './tpopById.js'
 import { beobById } from './beobById.js'
 import { openLowerNodes } from './openLowerNodes/index.js'
 import { closeLowerNodes } from './closeLowerNodes.js'
-import insertDataset from './insertDataset.js'
+import { insertDataset } from './insertDataset.js'
 import { StoreContext } from '../../../storeContext.js'
-const TpopFromBeobPopList = lazy(() => import('./TpopFromBeobPopList.jsx'))
+const TpopFromBeobPopList = lazy(async () => ({
+  default: (await import('./TpopFromBeobPopList.jsx')).TpopFromBeobPopList,
+}))
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { useSearchParamsState } from '../../../modules/useSearchParamsState.js'
 import { isMobilePhone } from '../../../modules/isMobilePhone.js'
