@@ -1,7 +1,9 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../../index.jsx'
 import coordinates from './coordinates.png'
 
-export const Component = () => (
+export const Component = memo(() => (
   <>
     <h1>Koordinaten</h1>
     <DokuDate>02.06.2019</DokuDate>
@@ -71,4 +73,4 @@ export const Component = () => (
       .
     </p>
   </>
-)
+))

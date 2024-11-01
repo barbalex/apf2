@@ -1,7 +1,9 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../../index.jsx'
 import field from './field.png'
 
-export const Component = () => (
+export const Component = memo(() => (
   <>
     <h1>Formatierbare Felder</h1>
     <DokuDate>04.05.2020</DokuDate>
@@ -39,4 +41,4 @@ export const Component = () => (
       und Leer-Zeilen zu ermöglichen.
     </p>
   </>
-)
+))
