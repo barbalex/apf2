@@ -6,7 +6,7 @@ import upperFirst from 'lodash/upperFirst'
 import Button from '@mui/material/Button'
 import SimpleBar from 'simplebar-react'
 import ImageGallery from 'react-image-gallery'
-import { FaPlus, FaMinus } from 'react-icons/fa6'
+import { FaPlus, FaMinus, FaEye, FaRectangleList } from 'react-icons/fa6'
 
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import { Error } from '../Error'
@@ -73,7 +73,7 @@ export const Files = memo(
       const api = uploaderCtx?.current?.getAPI?.()
       const storeContext = useContext(StoreContext)
 
-      const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
+      const [isPreview, setIsPreview] = useState(false)
 
       const queryName = `all${upperFirst(parent)}Files`
       const parentIdName = `${parent}Id`
@@ -81,18 +81,18 @@ export const Files = memo(
       const fragment = fragmentObject[parent]
 
       const query = gql`
-  query FileQuery($parentId: UUID!) {
-    ${queryName}(
-      orderBy: NAME_ASC
-      filter: { ${parentIdName}: { equalTo: $parentId } }
-    ) {
-      nodes {
-        ...${fields}
-      }
-    }
-  }
-  ${fragment}
-`
+        query FileQuery($parentId: UUID!) {
+          ${queryName}(
+            orderBy: NAME_ASC
+            filter: { ${parentIdName}: { equalTo: $parentId } }
+          ) {
+            nodes {
+              ...${fields}
+            }
+          }
+        }
+        ${fragment}
+      `
       const { data, error, loading, refetch } = useQuery(query, {
         variables: { parentId },
       })
@@ -180,20 +180,28 @@ export const Files = memo(
         originalTitle: f.name || '',
         thumbnailTitle: f.name || '',
       }))
-      const onClickLightboxButton = useCallback(
-        () => setLightboxIsOpen(!lightboxIsOpen),
-        [lightboxIsOpen],
+
+      console.log('Files', { isPreview })
+
+      const togglePreview = useCallback(
+        () => setIsPreview(!isPreview),
+        [isPreview, setIsPreview],
       )
 
-      const menus = useMemo(
+      const menus = useCallback(
         () => [
           {
             title: 'Dateien hochladen',
             iconComponent: <FaPlus />,
             onClick: () => api?.initFlow?.(),
           },
+          {
+            title: isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen',
+            iconComponent: isPreview ? <FaRectangleList /> : <FaEye />,
+            onClick: togglePreview,
+          },
         ],
-        [],
+        [isPreview, togglePreview],
       )
 
       if (loading || loadingParent) return <Spinner />
@@ -218,27 +226,7 @@ export const Files = memo(
                     onFileUploadFailed={onFileUploadFailed}
                     onCommonUploadSuccess={onCommonUploadSuccess}
                   />
-                  {!!images.length && (
-                    <LightboxButton
-                      color="primary"
-                      variant="outlined"
-                      onClick={onClickLightboxButton}
-                    >
-                      {lightboxIsOpen ?
-                        'Galerie schliessen'
-                      : 'Bilder in Galerie öffnen'}
-                    </LightboxButton>
-                  )}
                 </ButtonsContainer>
-                {lightboxIsOpen && (
-                  <>
-                    <Spacer />
-                    <ImageGallery
-                      items={imageObjects}
-                      showPlayButton={false}
-                    />
-                  </>
-                )}
                 <Spacer />
                 {files.map((file) => (
                   <File

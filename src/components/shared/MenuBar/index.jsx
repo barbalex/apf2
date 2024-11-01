@@ -97,13 +97,13 @@ const gapWidth = 5
 export const MenuBar = memo(({ menus = testMenus }) => {
   const containerRef = useRef(null)
   const [buttons, setButtons] = useState([])
-  const [menuItems, setMenuItems] = useState(<div />)
+  const [menuItems, setMenuItems] = useState([])
 
   const onResize = useCallback(({ width }) => {
     // TODO: build menus
     // width of one tool button is buttonWidth
-    // toolsWidth is tools.length * buttonWidth + (tools.length - 1) * gapWidth
-    // if toolsWidth > container width
+    // buttonsWidth is tools.length * buttonWidth + (tools.length - 1) * gapWidth
+    // if buttonsWidth > container width
     // fit tools into containerWidth - MenuButtonWidth - gapWidth
     // fit fitting tools into container
     // add overflowing tools to menu
