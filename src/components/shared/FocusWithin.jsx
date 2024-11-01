@@ -1,17 +1,20 @@
 // https://github.com/ferdaber/react-focus-within/blob/master/src/index.js
 // extracted because of outdated peer dependencies causing npm installation to fail
-import React from 'react'
 import PropTypes from 'prop-types'
 
 export function withFocusWithin(Component) {
   const WrappedComponent = ({ onFocus, onBlur, ...props }) => (
-    <FocusWithin onFocus={onFocus} onBlur={onBlur}>
+    <FocusWithin
+      onFocus={onFocus}
+      onBlur={onBlur}
+    >
       {({ getFocusProps, isFocused }) =>
-        typeof Component === 'string' ? (
+        typeof Component === 'string' ?
           <Component {...getFocusProps(props)} />
-        ) : (
-          <Component {...getFocusProps(props)} isFocused={isFocused} />
-        )
+        : <Component
+            {...getFocusProps(props)}
+            isFocused={isFocused}
+          />
       }
     </FocusWithin>
   )
@@ -53,16 +56,15 @@ export class FocusWithin extends React.Component {
     const setStateCb = () => {
       if (this.isUnmounted) return
       this.setState((state) =>
-        state.isFocused === isFocused
-          ? state
-          : !isFocused
-          ? {
-              isFocused,
-              isBlurring: true,
-            }
-          : {
-              isFocused,
-            },
+        state.isFocused === isFocused ? state
+        : !isFocused ?
+          {
+            isFocused,
+            isBlurring: true,
+          }
+        : {
+            isFocused,
+          },
       )
     }
     // delay processing native events for one turn of the event loop
@@ -175,8 +177,8 @@ export class FocusWithin extends React.Component {
   }
 
   render() {
-    return this.props.children
-      ? this.props.children({
+    return this.props.children ?
+        this.props.children({
           focusProps: this.getFocusProps(),
           getFocusProps: this.getFocusProps,
           // stabilize isFocused so that it only changes corresponding to its event emissions
@@ -185,4 +187,3 @@ export class FocusWithin extends React.Component {
       : null
   }
 }
-
