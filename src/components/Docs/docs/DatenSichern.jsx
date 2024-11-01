@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-export const Component = () => (
+export const Component = memo(() => (
   <>
     <h1>Daten sichern</h1>
     <DokuDate>18.04.2019</DokuDate>
@@ -18,4 +20,4 @@ export const Component = () => (
       Gleichzeitig werden so Sicherung und Wiederherstellung getestet.
     </p>
   </>
-)
+))
