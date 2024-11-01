@@ -16,6 +16,7 @@ const Container = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  column-gap: 5px;
 `
 const ToolDiv = styled.div`
   display: inline;
