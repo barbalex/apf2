@@ -12,7 +12,6 @@ import { FaBars } from 'react-icons/fa6'
 import styled from 'styled-components'
 
 const Container = styled.div`
-  width: 100%;
   padding: 5px;
   display: flex;
   justify-content: flex-end;
@@ -48,6 +47,7 @@ const testTools = [
   { title: 'Tool 9', icon: 'icon9', onClick: () => console.log('Tool 9') },
   { title: 'Tool 10', icon: 'icon10', onClick: () => console.log('Tool 10') },
 ]
+const buttonWidth = 40
 
 // TODO: pass in Tools as children?
 // or rather: need info for menu AND button
@@ -55,8 +55,8 @@ const testTools = [
 // then: build menu and or buttons from that
 export const Toolbar = memo(({ tools = testTools }) => {
   const containerRef = useRef(null)
-  const [toolsAsButtons, setToolsAsButtons] = useState(<div />)
-  const [toolsAsMenuItems, setToolsAsMenuItems] = useState(<div />)
+  const [buttons, setButtons] = useState(<div />)
+  const [menuItems, setMenuItems] = useState(<div />)
 
   const onResize = useCallback(({ width }) => {
     console.log('width:', width)
@@ -67,7 +67,7 @@ export const Toolbar = memo(({ tools = testTools }) => {
     // fit tools into containerWidth - MenuButtonWidth - columnGapWidth
     // fit fitting tools into container
     // add overflowing tools to menu
-    setToolsAsButtons(
+    setButtons(
       testTools.map((tool) => <ToolDiv key={tool.title}>{tool.title}</ToolDiv>),
     )
   }, [])
