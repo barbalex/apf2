@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
@@ -15,7 +15,7 @@ const insertData = {
   table: 'tpop_apberrelevant_grund_werte',
 }
 
-export const TpopApberrelevantGrundWerteFolder = ({ onClick }) => (
+export const TpopApberrelevantGrundWerteFolder = memo(({ onClick }) => (
   <ErrorBoundary>
     <ContextMenu
       id="treeTpopApberrelevantGrundWerteFolder"
@@ -36,4 +36,4 @@ export const TpopApberrelevantGrundWerteFolder = ({ onClick }) => (
       </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
-)
+))
