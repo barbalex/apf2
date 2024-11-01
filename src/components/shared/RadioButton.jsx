@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, memo } from 'react'
 import Radio from '@mui/material/Radio'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
@@ -24,8 +24,8 @@ const StyledRadio = styled(Radio)`
   width: 24px;
 `
 
-export const RadioButton = observer(
-  ({ label, name, value, error, saveToDb }) => {
+export const RadioButton = memo(
+  observer(({ label, name, value, error, saveToDb }) => {
     const onClickButton = useCallback(() => {
       const fakeEvent = {
         target: {
@@ -58,5 +58,5 @@ export const RadioButton = observer(
         )}
       </StyledFormControl>
     )
-  },
+  }),
 )
