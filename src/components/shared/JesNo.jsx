@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, memo } from 'react'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormLabel from '@mui/material/FormLabel'
@@ -37,8 +37,8 @@ const dataSource = [
   },
 ]
 
-export const JesNo = observer(
-  ({ label, helperText = '', saveToDb, value, name, error }) => {
+export const JesNo = memo(
+  observer(({ label, helperText = '', saveToDb, value, name, error }) => {
     const onClickButton = useCallback(
       (event) => {
         /**
@@ -135,5 +135,5 @@ export const JesNo = observer(
         )}
       </StyledFormControl>
     )
-  },
+  }),
 )
