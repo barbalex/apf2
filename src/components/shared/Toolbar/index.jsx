@@ -8,7 +8,7 @@ import {
 } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
 import { IconButton } from '@mui/material'
-import { FaBars } from 'react-icons/fa6'
+import { FaBars, FaAlignLeft } from 'react-icons/fa6'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -36,30 +36,70 @@ const Tools = () => [
 ]
 
 const testTools = [
-  { title: 'Tool 1', icon: 'icon1', onClick: () => console.log('Tool 1') },
-  { title: 'Tool 2', icon: 'icon2', onClick: () => console.log('Tool 2') },
-  { title: 'Tool 3', icon: 'icon3', onClick: () => console.log('Tool 3') },
-  { title: 'Tool 4', icon: 'icon4', onClick: () => console.log('Tool 4') },
-  { title: 'Tool 5', icon: 'icon5', onClick: () => console.log('Tool 5') },
-  { title: 'Tool 6', icon: 'icon6', onClick: () => console.log('Tool 6') },
-  { title: 'Tool 7', icon: 'icon7', onClick: () => console.log('Tool 7') },
-  { title: 'Tool 8', icon: 'icon8', onClick: () => console.log('Tool 8') },
-  { title: 'Tool 9', icon: 'icon9', onClick: () => console.log('Tool 9') },
-  { title: 'Tool 10', icon: 'icon10', onClick: () => console.log('Tool 10') },
+  {
+    title: 'Tool 1',
+    iconComponent: <FaAlignLeft />,
+    onClick: () => console.log('Tool 1'),
+  },
+  {
+    title: 'Tool 2',
+    iconComponent: <FaAlignLeft />,
+    onClick: () => console.log('Tool 2'),
+  },
+  {
+    title: 'Tool 3',
+    iconComponent: <FaAlignLeft />,
+    onClick: () => console.log('Tool 3'),
+  },
+  {
+    title: 'Tool 4',
+    iconComponent: <FaAlignLeft />,
+    onClick: () => console.log('Tool 4'),
+  },
+  {
+    title: 'Tool 5',
+    iconComponent: <FaAlignLeft />,
+    onClick: () => console.log('Tool 5'),
+  },
+  {
+    title: 'Tool 6',
+    iconComponent: <FaAlignLeft />,
+    onClick: () => console.log('Tool 6'),
+  },
+  {
+    title: 'Tool 7',
+    iconComponent: <FaAlignLeft />,
+    onClick: () => console.log('Tool 7'),
+  },
+  {
+    title: 'Tool 8',
+    iconComponent: <FaAlignLeft />,
+    onClick: () => console.log('Tool 8'),
+  },
+  {
+    title: 'Tool 9',
+    iconComponent: <FaAlignLeft />,
+    onClick: () => console.log('Tool 9'),
+  },
+  {
+    title: 'Tool 10',
+    iconComponent: <FaAlignLeft />,
+    onClick: () => console.log('Tool 10'),
+  },
 ]
 const buttonWidth = 40
 
 // TODO: pass in Tools as children?
 // or rather: need info for menu AND button
-// so: object with: title, icon, onClick, width?
+// so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
 export const Toolbar = memo(({ tools = testTools }) => {
   const containerRef = useRef(null)
-  const [buttons, setButtons] = useState(<div />)
+  const [buttons, setButtons] = useState([])
   const [menuItems, setMenuItems] = useState(<div />)
 
   const onResize = useCallback(({ width }) => {
-    console.log('width:', width)
+    console.log('onResize:', { width, testTools })
     // TODO: build menus
     // width of one tool button is toolButtonWidth
     // toolsWidth is tools.length * toolWidth + (tools.length - 1) * columnGapWidth
@@ -67,9 +107,7 @@ export const Toolbar = memo(({ tools = testTools }) => {
     // fit tools into containerWidth - MenuButtonWidth - columnGapWidth
     // fit fitting tools into container
     // add overflowing tools to menu
-    setButtons(
-      testTools.map((tool) => <ToolDiv key={tool.title}>{tool.title}</ToolDiv>),
-    )
+    setButtons(testTools)
   }, [])
 
   const { width } = useResizeDetector({
@@ -82,7 +120,9 @@ export const Toolbar = memo(({ tools = testTools }) => {
 
   return (
     <Container ref={containerRef}>
-      <Tools />
+      {buttons.map((tool) => (
+        <IconButton key={tool.title}>{tool.iconComponent}</IconButton>
+      ))}
       <IconButton>
         <FaBars />
       </IconButton>
