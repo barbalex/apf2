@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, memo } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -13,80 +13,82 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-export const TextField2 = observer(
-  ({
-    row,
-    label,
-    name,
-    type = 'text',
-    multiLine = false,
-    disabled = false,
-    hintText = '',
-    helperText = '',
-    errors,
-    saveToDb,
-    required = false,
-  }) => {
-    const value = row?.[name]
-    const [stateValue, setStateValue] = useState(
-      value || value === 0 ? value : '',
-    )
-    const onChange = useCallback(
-      (event) => setStateValue(event.target.value),
-      [],
-    )
-    useEffect(() => {
-      setStateValue(value || value === 0 ? value : '')
-    }, [value])
+export const TextField2 = memo(
+  observer(
+    ({
+      row,
+      label,
+      name,
+      type = 'text',
+      multiLine = false,
+      disabled = false,
+      hintText = '',
+      helperText = '',
+      errors,
+      saveToDb,
+      required = false,
+    }) => {
+      const value = row?.[name]
+      const [stateValue, setStateValue] = useState(
+        value || value === 0 ? value : '',
+      )
+      const onChange = useCallback(
+        (event) => setStateValue(event.target.value),
+        [],
+      )
+      useEffect(() => {
+        setStateValue(value || value === 0 ? value : '')
+      }, [value])
 
-    const onKeyPress = useCallback(
-      (event) => {
-        if (event.key === 'Enter') {
-          saveToDb(event)
-        }
-      },
-      [saveToDb],
-    )
-    const error = errors ? errors?.[name] : null
+      const onKeyPress = useCallback(
+        (event) => {
+          if (event.key === 'Enter') {
+            saveToDb(event)
+          }
+        },
+        [saveToDb],
+      )
+      const error = errors ? errors?.[name] : null
 
-    return (
-      <StyledFormControl
-        fullWidth
-        disabled={disabled}
-        error={!!error}
-        aria-describedby={`${label}ErrorText`}
-        variant="standard"
-      >
-        <InputLabel
-          htmlFor={label}
-          shrink
-          required={required}
+      return (
+        <StyledFormControl
+          fullWidth
+          disabled={disabled}
+          error={!!error}
+          aria-describedby={`${label}ErrorText`}
+          variant="standard"
         >
-          {label}
-        </InputLabel>
-        <Input
-          id={name}
-          name={name}
-          value={stateValue}
-          type={type}
-          multiline={multiLine}
-          onChange={onChange}
-          onBlur={saveToDb}
-          onKeyPress={onKeyPress}
-          placeholder={hintText}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-        />
-        {!!error && (
-          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-        )}
-        {!!helperText && (
-          <FormHelperText id={`${label}HelperText`}>
-            {helperText}
-          </FormHelperText>
-        )}
-      </StyledFormControl>
-    )
-  },
+          <InputLabel
+            htmlFor={label}
+            shrink
+            required={required}
+          >
+            {label}
+          </InputLabel>
+          <Input
+            id={name}
+            name={name}
+            value={stateValue}
+            type={type}
+            multiline={multiLine}
+            onChange={onChange}
+            onBlur={saveToDb}
+            onKeyPress={onKeyPress}
+            placeholder={hintText}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+          />
+          {!!error && (
+            <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+          )}
+          {!!helperText && (
+            <FormHelperText id={`${label}HelperText`}>
+              {helperText}
+            </FormHelperText>
+          )}
+        </StyledFormControl>
+      )
+    },
+  ),
 )
