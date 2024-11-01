@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import { DokuDate, Code } from '../../index.jsx'
 import beobTable from './beobTable.webp'
 
-export const Component = () => (
+export const Component = memo(() => (
   <>
     <h1>Beobachtungen verwalten</h1>
     <DokuDate>16.04.2023</DokuDate>
@@ -189,4 +190,4 @@ export const Component = () => (
       (v.a. Taxon, Datum und Koordinaten).`}
     </p>
   </>
-)
+))
