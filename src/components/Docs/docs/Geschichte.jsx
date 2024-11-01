@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-export const Component = () => (
+export const Component = memo(() => (
   <>
     <h1>Entstehungs-Geschichte</h1>
     <DokuDate>18.04.2019</DokuDate>
@@ -75,4 +77,4 @@ export const Component = () => (
       aktuell verwendeten Technologien.
     </p>
   </>
-)
+))
