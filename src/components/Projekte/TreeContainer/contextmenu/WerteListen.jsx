@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
@@ -11,7 +11,7 @@ const closeLowerNodesData = {
   action: 'closeLowerNodes',
 }
 
-export const WerteListen = ({ onClick }) => (
+export const WerteListen = memo(({ onClick }) => (
   <ErrorBoundary>
     <ContextMenu
       id="treeWlFolder"
@@ -26,4 +26,4 @@ export const WerteListen = ({ onClick }) => (
       </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
-)
+))
