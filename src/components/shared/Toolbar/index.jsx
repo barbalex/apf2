@@ -73,9 +73,11 @@ export const Toolbar = memo(({ tools = testTools }) => {
   })
 
   // width of one tool button is toolButtonWidth
-  // if width of all tools is bigger than container width
-  // then show menu
-  // and add overflowing tools to menu
+  // toolsWidth is tools.length * toolWidth + (tools.length - 1) * columnGapWidth
+  // if toolsWidth > container width
+  // fit tools into containerWidth - MenuButtonWidth - columnGapWidth
+  // fit fitting tools into container
+  // add overflowing tools to menu
 
   console.log('Toobar, overflowing:', overflowing)
 
