@@ -1,10 +1,12 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../../index.jsx'
 import files01 from './files_01.png'
 import files02Gallery from './files_02_gallery.png'
 import files03Herunterladen from './files_03_herunterladen.png'
 import files04Upload from './files_04_upload.png'
 
-export const Component = () => (
+export const Component = memo(() => (
   <>
     <h1>Dateien anfügen</h1>
     <DokuDate>27.05.2019</DokuDate>
@@ -92,4 +94,4 @@ export const Component = () => (
       <li>Maximale Datei-Grösse ist 100MB</li>
     </ul>
   </>
-)
+))

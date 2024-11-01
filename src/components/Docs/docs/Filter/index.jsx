@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../../index.jsx'
 import entfernen1 from './entfernen_1.png'
 import formularFilter1 from './formular_filter_1.png'
@@ -10,7 +12,7 @@ import uebersicht1 from './uebersicht_1.png'
 import zusammenspiel from './zusammenspiel.png'
 import kartenFilterEntfernen from './karten-filter-entfernen.gif'
 
-export const Component = () => (
+export const Component = memo(() => (
   <>
     <h1>Filter</h1>
     <DokuDate>08.08.2022</DokuDate>
@@ -269,4 +271,4 @@ export const Component = () => (
       />
     </p>
   </>
-)
+))
