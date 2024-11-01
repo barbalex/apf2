@@ -1,8 +1,7 @@
 import { memo } from 'react'
 import { TileLayer, Pane } from 'react-leaflet'
 
-// memoizing creates error: Component is not a function
-export const OsmColor = () => (
+export const OsmColor = memo(() => (
   <Pane
     className="OsmColor"
     name="OsmColor"
@@ -19,4 +18,4 @@ export const OsmColor = () => (
       maxZoom={23}
     />
   </Pane>
-)
+))
