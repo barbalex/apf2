@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import { useParams } from 'react-router-dom'
 
@@ -9,7 +10,7 @@ const Div = styled.div`
   margin-top: -5px;
 `
 
-export const TestdataMessage = () => {
+export const TestdataMessage = memo(() => {
   const { apId } = useParams()
   const isTestAp = apId && constants.testAps.includes(apId)
 
@@ -21,4 +22,4 @@ export const TestdataMessage = () => {
     )
   }
   return null
-}
+})
