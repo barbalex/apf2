@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import Diff from 'react-stylable-diff'
 import { observer } from 'mobx-react-lite'
@@ -29,36 +29,38 @@ const Key = styled.div`
   color: rgba(0, 0, 0, 0.54);
 `
 
-export const Data = observer(({ dataArray = [], loading }) => {
-  if (loading) return <Spinner />
+export const Data = memo(
+  observer(({ dataArray = [], loading }) => {
+    if (loading) return <Spinner />
 
-  return dataArray.map((d, index) => {
-    // need to use get to enable passing paths as key, for instance 'person.name'
-    // also stringify because Diff split's it
-    let inputA = toStringIfPossible(d.valueInRow)
-    let inputB = toStringIfPossible(d.valueInHist)
-    // explicitly show when only one of the values is empty
-    if (inputA !== inputB) {
-      inputA = inputA ?? '(nichts)'
-      inputB = inputB ?? '(nichts)'
-    }
+    return dataArray.map((d, index) => {
+      // need to use get to enable passing paths as key, for instance 'person.name'
+      // also stringify because Diff split's it
+      let inputA = toStringIfPossible(d.valueInRow)
+      let inputB = toStringIfPossible(d.valueInHist)
+      // explicitly show when only one of the values is empty
+      if (inputA !== inputB) {
+        inputA = inputA ?? '(nichts)'
+        inputB = inputB ?? '(nichts)'
+      }
 
-    const showDiff = !['geändert', 'geändert von'].includes(d.label)
+      const showDiff = !['geändert', 'geändert von'].includes(d.label)
 
-    return (
-      <Row
-        key={d.label}
-        data-last={index + 1 === dataArray.length}
-      >
-        <Key>{`${d.label}:`}</Key>
-        {showDiff ?
-          <Diff
-            inputA={inputA}
-            inputB={inputB}
-            type="sentences"
-          />
-        : <div>{inputB}</div>}
-      </Row>
-    )
-  })
-})
+      return (
+        <Row
+          key={d.label}
+          data-last={index + 1 === dataArray.length}
+        >
+          <Key>{`${d.label}:`}</Key>
+          {showDiff ?
+            <Diff
+              inputA={inputA}
+              inputB={inputB}
+              type="sentences"
+            />
+          : <div>{inputB}</div>}
+        </Row>
+      )
+    })
+  }),
+)
