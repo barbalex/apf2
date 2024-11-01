@@ -10,6 +10,7 @@ import ImageGallery from 'react-image-gallery'
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import { Error } from '../Error'
 import { Spinner } from '../Spinner'
+import { Toolbar } from '../Toolbar/index.jsx'
 
 import {
   apFile as apFileFragment,
@@ -25,6 +26,11 @@ import { File } from './File.jsx'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import { isImageFile } from './isImageFile.js'
 import { StoreContext } from '../../../storeContext.js'
+
+const OuterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 
 const Container = styled.div`
   display: flex;
@@ -182,54 +188,57 @@ export const Files = memo(
       if (error) return <Error error={error} />
 
       return (
-        <SimpleBar
-          style={{
-            maxHeight: '100%',
-            height: '100%',
-          }}
-          tabIndex={-1}
-        >
-          <ErrorBoundary>
-            <Container>
-              <ButtonsContainer>
-                <Uploader
-                  onFileUploadSuccess={onFileUploadSuccess}
-                  onFileUploadFailed={onFileUploadFailed}
-                  onCommonUploadSuccess={onCommonUploadSuccess}
-                />
-                {!!images.length && (
-                  <LightboxButton
-                    color="primary"
-                    variant="outlined"
-                    onClick={onClickLightboxButton}
-                  >
-                    {lightboxIsOpen ?
-                      'Galerie schliessen'
-                    : 'Bilder in Galerie öffnen'}
-                  </LightboxButton>
-                )}
-              </ButtonsContainer>
-              {lightboxIsOpen && (
-                <>
-                  <Spacer />
-                  <ImageGallery
-                    items={imageObjects}
-                    showPlayButton={false}
+        <OuterContainer>
+          <Toolbar />
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+            tabIndex={-1}
+          >
+            <ErrorBoundary>
+              <Container>
+                <ButtonsContainer>
+                  <Uploader
+                    onFileUploadSuccess={onFileUploadSuccess}
+                    onFileUploadFailed={onFileUploadFailed}
+                    onCommonUploadSuccess={onCommonUploadSuccess}
                   />
-                </>
-              )}
-              <Spacer />
-              {files.map((file) => (
-                <File
-                  key={file.fileId}
-                  file={file}
-                  parent={parent}
-                  refetch={refetch}
-                />
-              ))}
-            </Container>
-          </ErrorBoundary>
-        </SimpleBar>
+                  {!!images.length && (
+                    <LightboxButton
+                      color="primary"
+                      variant="outlined"
+                      onClick={onClickLightboxButton}
+                    >
+                      {lightboxIsOpen ?
+                        'Galerie schliessen'
+                      : 'Bilder in Galerie öffnen'}
+                    </LightboxButton>
+                  )}
+                </ButtonsContainer>
+                {lightboxIsOpen && (
+                  <>
+                    <Spacer />
+                    <ImageGallery
+                      items={imageObjects}
+                      showPlayButton={false}
+                    />
+                  </>
+                )}
+                <Spacer />
+                {files.map((file) => (
+                  <File
+                    key={file.fileId}
+                    file={file}
+                    parent={parent}
+                    refetch={refetch}
+                  />
+                ))}
+              </Container>
+            </ErrorBoundary>
+          </SimpleBar>
+        </OuterContainer>
       )
     },
   ),
