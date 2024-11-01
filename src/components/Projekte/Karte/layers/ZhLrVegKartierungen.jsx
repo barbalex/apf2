@@ -1,4 +1,3 @@
-import React from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
 // //wms.zh.ch/FnsLRKZHWMS?SERVICE=WMS&Request=GetCapabilities
