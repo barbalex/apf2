@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef, useContext, memo } from 'react'
+import { useCallback, useState, useRef, useContext, memo, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import styled from '@emotion/styled'
@@ -6,11 +6,12 @@ import upperFirst from 'lodash/upperFirst'
 import Button from '@mui/material/Button'
 import SimpleBar from 'simplebar-react'
 import ImageGallery from 'react-image-gallery'
+import { FaPlus, FaMinus } from 'react-icons/fa6'
 
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import { Error } from '../Error'
 import { Spinner } from '../Spinner'
-import { Toolbar } from '../Toolbar/index.jsx'
+import { MenuBar } from '../MenuBar/index.jsx'
 
 import {
   apFile as apFileFragment,
@@ -26,6 +27,7 @@ import { File } from './File.jsx'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import { isImageFile } from './isImageFile.js'
 import { StoreContext } from '../../../storeContext.js'
+import { icon } from 'leaflet'
 
 const OuterContainer = styled.div`
   display: flex;
@@ -183,13 +185,24 @@ export const Files = memo(
         [lightboxIsOpen],
       )
 
+      const menus = useMemo(
+        () => [
+          {
+            title: 'Dateien hochladen',
+            iconComponent: <FaPlus />,
+            onClick: () => api?.initFlow?.(),
+          },
+        ],
+        [],
+      )
+
       if (loading || loadingParent) return <Spinner />
 
       if (error) return <Error error={error} />
 
       return (
         <OuterContainer>
-          <Toolbar />
+          <MenuBar menus={menus} />
           <SimpleBar
             style={{
               maxHeight: '100%',

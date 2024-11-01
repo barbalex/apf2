@@ -35,7 +35,7 @@ const ToolDiv = styled.div`
   padding: 0 10px 0 0;
 `
 
-const testTools = [
+const testMenus = [
   {
     title: 'Tool 1',
     iconComponent: <FaAlignLeft />,
@@ -94,13 +94,12 @@ const gapWidth = 5
 // or rather: need info for menu AND button
 // so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
-export const Toolbar = memo(({ tools = testTools }) => {
+export const MenuBar = memo(({ menus = testMenus }) => {
   const containerRef = useRef(null)
   const [buttons, setButtons] = useState([])
   const [menuItems, setMenuItems] = useState(<div />)
 
   const onResize = useCallback(({ width }) => {
-    console.log('onResize:', { width, testTools })
     // TODO: build menus
     // width of one tool button is buttonWidth
     // toolsWidth is tools.length * buttonWidth + (tools.length - 1) * gapWidth
@@ -108,7 +107,7 @@ export const Toolbar = memo(({ tools = testTools }) => {
     // fit tools into containerWidth - MenuButtonWidth - gapWidth
     // fit fitting tools into container
     // add overflowing tools to menu
-    setButtons(testTools)
+    setButtons(menus)
   }, [])
 
   const { width } = useResizeDetector({
@@ -122,12 +121,13 @@ export const Toolbar = memo(({ tools = testTools }) => {
   // TODO: build menu from menuItems
   return (
     <Container ref={containerRef}>
-      {buttons.map((tool) => (
+      {buttons.map((menu) => (
         <IconButton
-          key={tool.title}
-          title={tool.title}
+          key={menu.title}
+          title={menu.title}
+          onClick={menu.onClick}
         >
-          {tool.iconComponent}
+          {menu.iconComponent}
         </IconButton>
       ))}
       <IconButton>
