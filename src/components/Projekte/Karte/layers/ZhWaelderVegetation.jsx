@@ -1,6 +1,7 @@
+import { memo } from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-export const ZhWaelderVegetation = () => (
+export const ZhWaelderVegetation = memo(() => (
   <WMSTileLayer
     url="//wms.zh.ch/WaldVKWMS"
     layers="waldgesellschaften,beschriftung-einheit-nach-ek72"
@@ -12,4 +13,4 @@ export const ZhWaelderVegetation = () => (
     minZoom={0}
     maxZoom={22}
   />
-)
+))
