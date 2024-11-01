@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useParams } from 'react-router-dom'
 // import { useMap } from 'react-leaflet'
 

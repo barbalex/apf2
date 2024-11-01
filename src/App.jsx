@@ -16,7 +16,7 @@ import '@fontsource/roboto'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import 'simplebar-react/dist/simplebar.min.css'
-import '@changey/react-leaflet-markercluster/dist/styles.min.css'
+import 'react-leaflet-markercluster/dist/styles.min.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import { GlobalStyle } from './components/GlobalStyle.jsx'
