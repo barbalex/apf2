@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
@@ -16,7 +16,7 @@ const deleteData = {
   table: 'tpopkontrzaehl_einheit_werte',
 }
 
-export const TpopkontrzaehlEinheitWerte = ({ onClick }) => (
+export const TpopkontrzaehlEinheitWerte = memo(({ onClick }) => (
   <ErrorBoundary>
     <ContextMenu
       id="treeTpopkontrzaehlEinheitWerte"
@@ -37,4 +37,4 @@ export const TpopkontrzaehlEinheitWerte = ({ onClick }) => (
       </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
-)
+))
