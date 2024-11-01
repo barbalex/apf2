@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-export const Component = () => (
+export const Component = memo(() => (
   <>
     <h1>Art-Taxonomien ergänzen</h1>
     <DokuDate>27.12.2021</DokuDate>
@@ -80,4 +82,4 @@ export const Component = () => (
       .
     </p>
   </>
-)
+))

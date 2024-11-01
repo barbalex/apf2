@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-export const Component = () => (
+export const Component = memo(() => (
   <>
     <h1>Art: Auswertung Population Mengen</h1>
     <DokuDate>27.03.2020 (Ebene Population ergänzt am 31.3.2023)</DokuDate>
@@ -64,4 +66,4 @@ export const Component = () => (
     <h3>Population: Auswertung Teil-Population Mengen</h3>
     <p>In Populationen gibt es eine analoge Auswertung wie auf Ebene Art.</p>
   </>
-)
+))
