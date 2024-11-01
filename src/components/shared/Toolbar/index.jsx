@@ -7,12 +7,15 @@ import {
   useCallback,
 } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
+import { IconButton } from '@mui/material'
+import { FaBars } from 'react-icons/fa6'
 import styled from 'styled-components'
 
 const Container = styled.div`
   width: 100%;
   overflow: hidden;
   padding: 5px;
+  float: right;
 `
 const ToolDiv = styled.div`
   display: inline;
@@ -47,7 +50,7 @@ const testTools = [
 
 // TODO: pass in Tools as children?
 // or rather: need info for menu AND button
-// so: object with: title, icon, onClick
+// so: object with: title, icon, onClick, width?
 // then: build menu and or buttons from that
 export const Toolbar = memo(({ tools = testTools }) => {
   const [overflowing, setOverflowing] = useState(false)
@@ -84,6 +87,9 @@ export const Toolbar = memo(({ tools = testTools }) => {
   return (
     <Container ref={containerRef}>
       <Tools />
+      <IconButton>
+        <FaBars />
+      </IconButton>
     </Container>
   )
 })
