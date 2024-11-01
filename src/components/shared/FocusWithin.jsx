@@ -1,3 +1,4 @@
+import React from 'react'
 // https://github.com/ferdaber/react-focus-within/blob/master/src/index.js
 // extracted because of outdated peer dependencies causing npm installation to fail
 import PropTypes from 'prop-types'
