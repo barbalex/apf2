@@ -24,61 +24,61 @@ const StyledListItemButton = styled(ListItemButton)`
   text-overflow: ellipsis;
 `
 
-const TpopFromBeobPopList = ({ closeNewTpopFromBeobDialog, beobId }) => {
-  const { projId, apId } = useParams()
-  const { search } = useLocation()
+export const TpopFromBeobPopList = observer(
+  ({ closeNewTpopFromBeobDialog, beobId }) => {
+    const { projId, apId } = useParams()
+    const { search } = useLocation()
 
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
 
-  const query = gql`
-    query allPopsQueryForTpopFromBeobPopList($apId: UUID!) {
-      allPops(
-        filter: { apId: { equalTo: $apId } }
-        orderBy: [NR_ASC, NAME_ASC]
-      ) {
-        nodes {
-          id
-          label
+    const query = gql`
+      query allPopsQueryForTpopFromBeobPopList($apId: UUID!) {
+        allPops(
+          filter: { apId: { equalTo: $apId } }
+          orderBy: [NR_ASC, NAME_ASC]
+        ) {
+          nodes {
+            id
+            label
+          }
         }
       }
-    }
-  `
-  const { data, error, loading } = useQuery(query, {
-    variables: { apId },
-  })
+    `
+    const { data, error, loading } = useQuery(query, {
+      variables: { apId },
+    })
 
-  if (loading) return <Spinner />
+    if (loading) return <Spinner />
 
-  if (error) return <Error error={error} />
+    if (error) return <Error error={error} />
 
-  const pops = data?.allPops?.nodes ?? []
+    const pops = data?.allPops?.nodes ?? []
 
-  return (
-    <ErrorBoundary>
-      <List dense>
-        {pops.map((pop) => (
-          <StyledListItemButton
-            key={pop.id}
-            onClick={() => {
-              createNewTpopFromBeob({
-                pop,
-                beobId,
-                projId,
-                apId,
-                client,
-                store,
-                search,
-              })
-              closeNewTpopFromBeobDialog()
-            }}
-          >
-            {pop.label}
-          </StyledListItemButton>
-        ))}
-      </List>
-    </ErrorBoundary>
-  )
-}
-
-export default observer(TpopFromBeobPopList)
+    return (
+      <ErrorBoundary>
+        <List dense>
+          {pops.map((pop) => (
+            <StyledListItemButton
+              key={pop.id}
+              onClick={() => {
+                createNewTpopFromBeob({
+                  pop,
+                  beobId,
+                  projId,
+                  apId,
+                  client,
+                  store,
+                  search,
+                })
+                closeNewTpopFromBeobDialog()
+              }}
+            >
+              {pop.label}
+            </StyledListItemButton>
+          ))}
+        </List>
+      </ErrorBoundary>
+    )
+  },
+)

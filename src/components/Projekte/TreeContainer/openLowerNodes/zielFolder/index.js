@@ -6,9 +6,9 @@
  */
 import groupBy from 'lodash/groupBy'
 
-import dataGql from './data'
+import { query } from './query.js'
 
-const openLowerNodesZielFolder = async ({
+export const zielFolder = async ({
   id,
   projId = '99999999-9999-9999-9999-999999999999',
   client,
@@ -19,7 +19,7 @@ const openLowerNodesZielFolder = async ({
 
   // 1. load all data
   const { data } = await client.query({
-    query: dataGql,
+    query: query,
     variables: { id },
   })
   const zielsGrouped = groupBy(data?.apById?.zielsByApId?.nodes ?? [], 'jahr')
@@ -71,5 +71,3 @@ const openLowerNodesZielFolder = async ({
   // 3. update openNodes
   addOpenNodes(newOpenNodes)
 }
-
-export default openLowerNodesZielFolder

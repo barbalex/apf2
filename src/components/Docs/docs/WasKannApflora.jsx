@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-const WasKannApflora = () => (
+export const Component = memo(() => (
   <>
     <h1>Was kann man mit apflora.ch machen?</h1>
     <DokuDate>15.04.2019</DokuDate>
@@ -22,7 +24,11 @@ const WasKannApflora = () => (
     <ul>
       <li>
         Alle Beobachtungen der{' '}
-        <a href="https://infoflora.ch" target="_blank" rel="noreferrer">
+        <a
+          href="https://infoflora.ch"
+          target="_blank"
+          rel="noreferrer"
+        >
           Info Flora
         </a>{' '}
         innerhalb des Kantons Zürich und im nahen Umfeld
@@ -241,6 +247,4 @@ const WasKannApflora = () => (
     </ul>
     <br />
   </>
-)
-
-export const Component = WasKannApflora
+))

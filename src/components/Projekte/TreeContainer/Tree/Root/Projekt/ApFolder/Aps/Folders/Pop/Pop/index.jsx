@@ -4,11 +4,11 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../../../../../Row'
+import { Row } from '../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../storeContext.js'
-import Folders from './Folders'
+import { PopFolders } from './Folders/index.jsx'
 
-const Pop = ({ projekt, ap }) => {
+export const Pop = observer(({ projekt, ap }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { popGqlFilterForTree } = store.tree
@@ -67,10 +67,14 @@ const Pop = ({ projekt, ap }) => {
     return (
       <div key={el.id}>
         <Row node={node} />
-        {isOpen && <Folders projekt={projekt} ap={ap} pop={el} />}
+        {isOpen && (
+          <PopFolders
+            projekt={projekt}
+            ap={ap}
+            pop={el}
+          />
+        )}
       </div>
     )
   })
-}
-
-export default observer(Pop)
+})

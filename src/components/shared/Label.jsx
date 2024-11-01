@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 
 const StyledLabel = styled.div`
@@ -11,4 +11,4 @@ const StyledLabel = styled.div`
   padding-bottom: 4px;
 `
 
-export const Label = ({ label }) => <StyledLabel>{label}</StyledLabel>
+export const Label = memo(({ label }) => <StyledLabel>{label}</StyledLabel>)

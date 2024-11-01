@@ -2,12 +2,12 @@ import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import { isEqual } from 'date-fns/isEqual'
 
-import queryBeob from './queryBeob'
-import createPop from './createPop'
-import createTpop from './createTpop'
-import updateBeobById from './updateBeobById'
+import { queryBeob } from './queryBeob.js'
+import { createPop } from './createPop.js'
+import { createTpop } from './createTpop.js'
+import { updateBeobById } from './updateBeobById.js'
 
-const createNewPopFromBeob = async ({
+export const createNewPopFromBeob = async ({
   id,
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
@@ -38,9 +38,8 @@ const createNewPopFromBeob = async ({
   const datumIsValid = isValid(new Date(datum))
   const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
 
-  const newGeomPoint = geomPoint?.geojson
-    ? JSON.parse(geomPoint?.geojson)
-    : null
+  const newGeomPoint =
+    geomPoint?.geojson ? JSON.parse(geomPoint?.geojson) : null
 
   // create new pop for ap
   let popResult
@@ -181,5 +180,3 @@ const createNewPopFromBeob = async ({
     ],
   })
 }
-
-export default createNewPopFromBeob

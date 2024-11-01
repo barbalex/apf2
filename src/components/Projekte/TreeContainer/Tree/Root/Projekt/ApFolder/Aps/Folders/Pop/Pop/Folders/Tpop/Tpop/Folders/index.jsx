@@ -5,14 +5,14 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../../../../../../../../../storeContext.js'
-import TpopMassn from './TpopMassn'
-import TpopMassnBer from './TpopMassnBer'
-import TpopFeldkontr from './TpopFeldkontr'
-import TpopFreiwkontr from './TpopFreiwkontr'
-import TpopBer from './TpopBer'
-import BeobZugeordnet from './BeobZugeordnet'
+import { TpopMassnFolder } from './TpopMassn/index.jsx'
+import { TpopMassnBerFolder } from './TpopMassnBer/index.jsx'
+import { TpopFeldkontrFolder } from './TpopFeldkontr/index.jsx'
+import { TpopFreiwkontrFolder } from './TpopFreiwkontr/index.jsx'
+import { TpopBerFolder } from './TpopBer/index.jsx'
+import { BeobZugeordnetFolder } from './BeobZugeordnet/index.jsx'
 
-const TpopFolders = ({ projekt, ap, pop, tpop }) => {
+export const TpopFolders = observer(({ projekt, ap, pop, tpop }) => {
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
@@ -118,7 +118,7 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
 
   return (
     <>
-      <TpopMassn
+      <TpopMassnFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -126,7 +126,7 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         isLoading={isLoading}
         count={tpopmassnCount}
       />
-      <TpopMassnBer
+      <TpopMassnBerFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -134,7 +134,7 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         isLoading={isLoading}
         count={tpopmassnberCount}
       />
-      <TpopFeldkontr
+      <TpopFeldkontrFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -142,7 +142,7 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         isLoading={isLoading}
         count={tpopfeldkontrCount}
       />
-      <TpopFreiwkontr
+      <TpopFreiwkontrFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -150,7 +150,7 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         isLoading={isLoading}
         count={tpopfreiwkontrCount}
       />
-      <TpopBer
+      <TpopBerFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -158,7 +158,7 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
         isLoading={isLoading}
         count={tpopberCount}
       />
-      <BeobZugeordnet
+      <BeobZugeordnetFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
@@ -168,6 +168,4 @@ const TpopFolders = ({ projekt, ap, pop, tpop }) => {
       />
     </>
   )
-}
-
-export default observer(TpopFolders)
+})

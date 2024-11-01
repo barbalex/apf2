@@ -4,12 +4,13 @@ import merge from 'lodash/merge'
 import queryString from 'query-string'
 import isUuid from 'is-uuid'
 
-import NodeLabelFilter, {
+import {
+  NodeLabelFilter,
   defaultValue as defaultNodeLabelFilter,
 } from './NodeLabelFilter.js'
-import Geojson from './Geojson.js'
-import initialDataFilterValues from './DataFilter/initialValues.js'
-import DataFilter from './DataFilter/types.js'
+import { Geojson } from './Geojson.js'
+import { initialDataFilterValues } from './DataFilter/initialValues.js'
+import { DataFilter } from './DataFilter/types.js'
 import { simpleTypes as popType } from './DataFilter/pop.js'
 import {
   simpleTypes as tpopType,
@@ -30,7 +31,7 @@ import {
 import { simpleTypes as apType, initial as initialAp } from './DataFilter/ap.js'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 
-export default types
+export const Tree = types
   .model('Tree', {
     // used to open tree2 on a specific activeNodeArray
     tree2Src: types.optional(types.string, ''),
@@ -275,13 +276,11 @@ export default types
       const store = getParent(self)
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
-      const singleFilterByHierarchy = projId
-        ? { projId: { equalTo: projId } }
-        : {}
+      const singleFilterByHierarchy =
+        projId ? { projId: { equalTo: projId } } : {}
       // 2. prepare data filter
-      let filterArrayInStore = self.dataFilter.ap
-        ? [...getSnapshot(self.dataFilter.ap)]
-        : []
+      let filterArrayInStore =
+        self.dataFilter.ap ? [...getSnapshot(self.dataFilter.ap)] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -365,8 +364,9 @@ export default types
       )
 
       const apGqlFilter = {
-        all: Object.keys(singleFilterByHierarchy).length
-          ? singleFilterByHierarchy
+        all:
+          Object.keys(singleFilterByHierarchy).length ?
+            singleFilterByHierarchy
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
@@ -378,9 +378,8 @@ export default types
     get apGqlFilterForTree() {
       const store = getParent(self)
       // 1. prepare data filter
-      let filterArrayInStore = self.dataFilter.ap
-        ? [...getSnapshot(self.dataFilter.ap)]
-        : []
+      let filterArrayInStore =
+        self.dataFilter.ap ? [...getSnapshot(self.dataFilter.ap)] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -489,9 +488,8 @@ export default types
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
-      const projHiearchyFilter = projId
-        ? { apByApId: { projId: { equalTo: projId } } }
-        : {}
+      const projHiearchyFilter =
+        projId ? { apByApId: { projId: { equalTo: projId } } } : {}
       const singleFilterByHierarchy = merge(
         apHiearchyFilter,
         projHiearchyFilter,
@@ -507,9 +505,8 @@ export default types
         apByApId: self.apGqlFilter.filtered,
       }
       // 2. prepare data filter
-      let filterArrayInStore = self.dataFilter.pop
-        ? [...getSnapshot(self.dataFilter.pop)]
-        : []
+      let filterArrayInStore =
+        self.dataFilter.pop ? [...getSnapshot(self.dataFilter.pop)] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -574,8 +571,9 @@ export default types
       )
 
       const popGqlFilter = {
-        all: Object.keys(singleFilterForAll).length
-          ? singleFilterForAll
+        all:
+          Object.keys(singleFilterForAll).length ?
+            singleFilterForAll
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
@@ -586,9 +584,8 @@ export default types
     },
     get popGqlFilterForTree() {
       // 1. prepare data filter
-      let filterArrayInStore = self.dataFilter.pop
-        ? [...getSnapshot(self.dataFilter.pop)]
-        : []
+      let filterArrayInStore =
+        self.dataFilter.pop ? [...getSnapshot(self.dataFilter.pop)] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -666,11 +663,11 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      const apHiearchyFilter = apId
-        ? { popByPopId: { apId: { equalTo: apId } } }
-        : {}
-      const projHiearchyFilter = projId
-        ? { popByPopId: { apByApId: { projId: { equalTo: projId } } } }
+      const apHiearchyFilter =
+        apId ? { popByPopId: { apId: { equalTo: apId } } } : {}
+      const projHiearchyFilter =
+        projId ?
+          { popByPopId: { apByApId: { projId: { equalTo: projId } } } }
         : {}
       const singleFilterByHierarchy = merge(
         apHiearchyFilter,
@@ -687,9 +684,8 @@ export default types
         popByPopId: self.popGqlFilter.filtered,
       }
       // 2. prepare data filter
-      let filterArrayInStore = self.dataFilter.tpop
-        ? [...getSnapshot(self.dataFilter.tpop)]
-        : []
+      let filterArrayInStore =
+        self.dataFilter.tpop ? [...getSnapshot(self.dataFilter.tpop)] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -756,8 +752,9 @@ export default types
       )
 
       const tpopGqlFilter = {
-        all: Object.keys(singleFilterForAll).length
-          ? singleFilterForAll
+        all:
+          Object.keys(singleFilterForAll).length ?
+            singleFilterForAll
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
@@ -768,9 +765,8 @@ export default types
     },
     get tpopGqlFilterForTree() {
       // 1. prepare data filter
-      let filterArrayInStore = self.dataFilter.tpop
-        ? [...getSnapshot(self.dataFilter.tpop)]
-        : []
+      let filterArrayInStore =
+        self.dataFilter.tpop ? [...getSnapshot(self.dataFilter.tpop)] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -852,11 +848,13 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      const apHiearchyFilter = apId
-        ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+      const apHiearchyFilter =
+        apId ?
+          { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
-      const projHiearchyFilter = projId
-        ? {
+      const projHiearchyFilter =
+        projId ?
+          {
             tpopByTpopId: {
               popByPopId: { apByApId: { projId: { equalTo: projId } } },
             },
@@ -877,8 +875,9 @@ export default types
         tpopByTpopId: self.tpopGqlFilter.filtered,
       }
       // 2. prepare data filter
-      let filterArrayInStore = self.dataFilter.tpopmassn
-        ? [...getSnapshot(self.dataFilter.tpopmassn)]
+      let filterArrayInStore =
+        self.dataFilter.tpopmassn ?
+          [...getSnapshot(self.dataFilter.tpopmassn)]
         : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
@@ -949,8 +948,9 @@ export default types
       )
 
       const tpopmassnGqlFilter = {
-        all: Object.keys(singleFilterForAll).length
-          ? singleFilterForAll
+        all:
+          Object.keys(singleFilterForAll).length ?
+            singleFilterForAll
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
@@ -961,8 +961,9 @@ export default types
     },
     get tpopmassnGqlFilterForTree() {
       // 1. prepare data filter
-      let filterArrayInStore = self.dataFilter.tpopmassn
-        ? [...getSnapshot(self.dataFilter.tpopmassn)]
+      let filterArrayInStore =
+        self.dataFilter.tpopmassn ?
+          [...getSnapshot(self.dataFilter.tpopmassn)]
         : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
@@ -1050,11 +1051,13 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      const apHiearchyFilter = apId
-        ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+      const apHiearchyFilter =
+        apId ?
+          { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
-      const projHiearchyFilter = projId
-        ? {
+      const projHiearchyFilter =
+        projId ?
+          {
             tpopByTpopId: {
               popByPopId: { apByApId: { projId: { equalTo: projId } } },
             },
@@ -1083,8 +1086,9 @@ export default types
         tpopByTpopId: self.tpopGqlFilter.filtered,
       }
       // 2. prepare data filter
-      let filterArrayInStore = self.dataFilter.tpopfeldkontr
-        ? [...getSnapshot(self.dataFilter.tpopfeldkontr)]
+      let filterArrayInStore =
+        self.dataFilter.tpopfeldkontr ?
+          [...getSnapshot(self.dataFilter.tpopfeldkontr)]
         : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
@@ -1152,8 +1156,9 @@ export default types
       )
 
       const ekGqlFilter = {
-        all: Object.keys(singleFilterForAll).length
-          ? singleFilterForAll
+        all:
+          Object.keys(singleFilterForAll).length ?
+            singleFilterForAll
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
@@ -1164,8 +1169,9 @@ export default types
     },
     get ekGqlFilterForTree() {
       // 1. prepare data filter
-      let filterArrayInStore = self.dataFilter.tpopfeldkontr
-        ? [...getSnapshot(self.dataFilter.tpopfeldkontr)]
+      let filterArrayInStore =
+        self.dataFilter.tpopfeldkontr ?
+          [...getSnapshot(self.dataFilter.tpopfeldkontr)]
         : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
@@ -1246,11 +1252,13 @@ export default types
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
-      const apHiearchyFilter = apId
-        ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+      const apHiearchyFilter =
+        apId ?
+          { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
-      const projHiearchyFilter = projId
-        ? {
+      const projHiearchyFilter =
+        projId ?
+          {
             tpopByTpopId: {
               popByPopId: { apByApId: { projId: { equalTo: projId } } },
             },
@@ -1274,8 +1282,9 @@ export default types
         tpopByTpopId: self.tpopGqlFilter.filtered,
       }
       // 2. prepare data filter
-      let filterArrayInStore = self.dataFilter.tpopfreiwkontr
-        ? [...getSnapshot(self.dataFilter.tpopfreiwkontr)]
+      let filterArrayInStore =
+        self.dataFilter.tpopfreiwkontr ?
+          [...getSnapshot(self.dataFilter.tpopfreiwkontr)]
         : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
@@ -1342,8 +1351,9 @@ export default types
       )
 
       const ekfGqlFilter = {
-        all: Object.keys(singleFilterForAll).length
-          ? singleFilterForAll
+        all:
+          Object.keys(singleFilterForAll).length ?
+            singleFilterForAll
           : { or: [] },
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
@@ -1354,8 +1364,9 @@ export default types
     },
     get ekfGqlFilterForTree() {
       // 1. prepare data filter
-      let filterArrayInStore = self.dataFilter.tpopfreiwkontr
-        ? [...getSnapshot(self.dataFilter.tpopfreiwkontr)]
+      let filterArrayInStore =
+        self.dataFilter.tpopfreiwkontr ?
+          [...getSnapshot(self.dataFilter.tpopfreiwkontr)]
         : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
@@ -1450,8 +1461,9 @@ export default types
       // reason: ['Benutzer', '738eaf0c-35e5-11e9-97ea-57d86602b143', 'EKF', 2023]
       // Solution: check all positions in array
       const apId = self.apIdInActiveNodeArray
-      const openApIds = apId
-        ? [apId]
+      const openApIds =
+        apId ?
+          [apId]
         : [
             ...new Set(
               self.openNodes
@@ -1478,11 +1490,13 @@ export default types
         },
       }
 
-      const apHiearchyFilter = apId
-        ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+      const apHiearchyFilter =
+        apId ?
+          { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
-      const projHiearchyFilter = projId
-        ? {
+      const projHiearchyFilter =
+        projId ?
+          {
             tpopByTpopId: {
               popByPopId: { apByApId: { projId: { equalTo: projId } } },
             },
@@ -1510,27 +1524,29 @@ export default types
         tpopByTpopId: self.tpopGqlFilter.all,
       }
       const singleFilterForAll =
-        type === 'zugeordnet'
-          ? merge(
-              merge(merge(typeFilter, apFilter), singleFilterByHierarchy),
-              singleFilterByParentFiltersForAll,
-            )
-          : merge(typeFilter, apFilter)
+        type === 'zugeordnet' ?
+          merge(
+            merge(merge(typeFilter, apFilter), singleFilterByHierarchy),
+            singleFilterByParentFiltersForAll,
+          )
+        : merge(typeFilter, apFilter)
       const singleFilterByParentFiltersForFiltered = {
         tpopByTpopId: self.tpopGqlFilter.filtered,
       }
 
       // node label filter
-      const nodeLabelFilter = self.nodeLabelFilter.beob
-        ? {
+      const nodeLabelFilter =
+        self.nodeLabelFilter.beob ?
+          {
             label: {
               includesInsensitive: self.nodeLabelFilter.beob,
             },
           }
         : {}
       // mapFilter
-      const mapFilter = self.mapFilter
-        ? {
+      const mapFilter =
+        self.mapFilter ?
+          {
             geomPoint: {
               coveredBy: self.mapFilter,
             },
@@ -1548,8 +1564,9 @@ export default types
       singleFilter = merge(singleFilter, mapFilter)
 
       const beobGqlFilter = {
-        all: Object.keys(singleFilterForAll).length
-          ? singleFilterForAll
+        all:
+          Object.keys(singleFilterForAll).length ?
+            singleFilterForAll
           : { or: [] },
         filtered: singleFilter,
       }
@@ -1575,8 +1592,9 @@ export default types
       }
 
       // node label filter
-      const nodeLabelFilter = self.nodeLabelFilter.beob
-        ? {
+      const nodeLabelFilter =
+        self.nodeLabelFilter.beob ?
+          {
             label: {
               includesInsensitive: self.nodeLabelFilter.beob,
             },
@@ -1584,8 +1602,9 @@ export default types
         : {}
 
       // mapFilter
-      const mapFilter = self.mapFilter
-        ? {
+      const mapFilter =
+        self.mapFilter ?
+          {
             geomPoint: {
               coveredBy: self.mapFilter,
             },

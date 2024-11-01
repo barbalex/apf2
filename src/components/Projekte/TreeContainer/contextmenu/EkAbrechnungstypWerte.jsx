@@ -1,7 +1,8 @@
-import React from 'react'
-
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const insertData = {
@@ -13,18 +14,25 @@ const deleteData = {
   table: 'ek_abrechnungstyp_werte',
 }
 
-const EkAbrechnungstypWerte = ({ onClick }) => (
+export const EkAbrechnungstypWerte = ({ onClick }) => (
   <ErrorBoundary>
-    <ContextMenu id="treeEkAbrechnungstypWerte" hideOnLeave={true}>
+    <ContextMenu
+      id="treeEkAbrechnungstypWerte"
+      hideOnLeave={true}
+    >
       <div className="react-contextmenu-title">EK-Abrechnungstyp</div>
-      <MenuItem onClick={onClick} data={insertData}>
+      <MenuItem
+        onClick={onClick}
+        data={insertData}
+      >
         erstelle neue
       </MenuItem>
-      <MenuItem onClick={onClick} data={deleteData}>
+      <MenuItem
+        onClick={onClick}
+        data={deleteData}
+      >
         lösche
       </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
 )
-
-export default EkAbrechnungstypWerte

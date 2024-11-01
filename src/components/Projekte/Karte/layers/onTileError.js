@@ -3,7 +3,7 @@ import axios from 'redaxios'
 
 import { xmlToJson } from '../../../../modules/xmlToJson.js'
 
-const onTileError = async (store, map, layer, ignore) => {
+export const onTileError = async (store, map, layer, ignore) => {
   console.log('onTileError', { ignore, map, layer, store })
   const mapSize = map.getSize()
   const bbox = map.getBounds().toBBoxString()
@@ -40,5 +40,3 @@ const onTileError = async (store, map, layer, ignore) => {
     },
   })
 }
-
-export default onTileError

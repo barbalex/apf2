@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import { DokuDate, Code } from '../../index.jsx'
 import beobTable from './beobTable.webp'
 
-const BeobVerwalten = () => (
+export const Component = memo(() => (
   <>
     <h1>Beobachtungen verwalten</h1>
     <DokuDate>16.04.2023</DokuDate>
@@ -9,7 +10,12 @@ const BeobVerwalten = () => (
     <p>
       Beobachtungen werden in der Tabelle <Code>beob</Code> gespeichert:
       <br />
-      <img src={beobTable} alt="Tabelle beob" width="280" height="575" />
+      <img
+        src={beobTable}
+        alt="Tabelle beob"
+        width="280"
+        height="575"
+      />
       <br />
     </p>
     <p>Ein Datensatz besteht aus jeweils zwei Teilen:</p>
@@ -184,6 +190,4 @@ const BeobVerwalten = () => (
       (v.a. Taxon, Datum und Koordinaten).`}
     </p>
   </>
-)
-
-export const Component = BeobVerwalten
+))

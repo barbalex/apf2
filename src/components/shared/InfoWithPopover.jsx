@@ -1,6 +1,5 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, memo } from 'react'
 import Popover from '@mui/material/Popover'
-
 import { MdInfoOutline } from 'react-icons/md'
 import styled from '@emotion/styled'
 
@@ -14,7 +13,7 @@ const StyledPopover = styled(Popover)`
   border-radius: 4px;
 `
 
-export const InfoWithPopover = ({ children, name }) => {
+export const InfoWithPopover = memo(({ children, name }) => {
   const [popupOpen, changePopupOpen] = useState(false)
   const [popupAnchorEl, changePopupAnchorEl] = useState(null)
 
@@ -46,4 +45,4 @@ export const InfoWithPopover = ({ children, name }) => {
       </StyledPopover>
     </>
   )
-}
+})

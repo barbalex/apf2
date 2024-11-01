@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 
 import { TestdataMessage } from './TestdataMessage.jsx'
@@ -30,12 +30,14 @@ const Buttons = styled.div`
   padding: 3px 0 3px 10px;
 `
 
-export const FormTitle = ({ title, buttons, noTestDataMessage = false }) => (
-  <Container>
-    <TitleRow>
-      <Title data-id="form-title">{title}</Title>
-      <Buttons>{buttons}</Buttons>
-    </TitleRow>
-    {!noTestDataMessage && <TestdataMessage />}
-  </Container>
+export const FormTitle = memo(
+  ({ title, buttons, noTestDataMessage = false }) => (
+    <Container>
+      <TitleRow>
+        <Title data-id="form-title">{title}</Title>
+        <Buttons>{buttons}</Buttons>
+      </TitleRow>
+      {!noTestDataMessage && <TestdataMessage />}
+    </Container>
+  ),
 )

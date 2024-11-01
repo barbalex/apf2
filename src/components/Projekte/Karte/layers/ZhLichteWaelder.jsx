@@ -1,7 +1,8 @@
-import React from 'react'
+import { memo } from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-export const ZhLichteWaelder = () => (
+// memoizing causes error: Component is not a function
+export const ZhLichteWaelder = memo(() => (
   <WMSTileLayer
     url="//wms.zh.ch/FnsLWZHWMS"
     layers="objekte-lichte-waelder-kanton-zuerich"
@@ -13,4 +14,4 @@ export const ZhLichteWaelder = () => (
     minZoom={0}
     maxZoom={22}
   />
-)
+))

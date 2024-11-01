@@ -48,5 +48,3 @@ export const xmlToLayersData = (xml) => {
 
   return sortBy(returnValues, 'label')
 }
-
-export default xmlToLayersData

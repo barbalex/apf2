@@ -1,11 +1,11 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../Row'
+import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
-import Aps from './Aps'
+import {Aps} from './Aps/index.jsx'
 
-const Ap = ({ count, projekt }) => {
+export const ApFolder = observer(({ count, projekt }) => {
   const store = useContext(StoreContext)
   const { openNodes } = store.tree
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ap ?? ''
@@ -36,6 +36,4 @@ const Ap = ({ count, projekt }) => {
       {isOpen && <Aps projekt={projekt} />}
     </>
   )
-}
-
-export default observer(Ap)
+})

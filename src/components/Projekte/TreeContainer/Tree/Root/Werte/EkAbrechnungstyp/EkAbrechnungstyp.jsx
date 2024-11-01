@@ -2,16 +2,17 @@ import { useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
 
-import Row from '../../../Row'
+import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
 
-const EkAbrechnungstypNodes = () => {
+export const EkAbrechnungstyp = () => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
-  const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
-    ? {
+  const ekAbrechnungstypWertesFilter =
+    nodeLabelFilter.ekAbrechnungstypWerte ?
+      {
         label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
       }
     : { id: { isNull: false } }
@@ -54,8 +55,11 @@ const EkAbrechnungstypNodes = () => {
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
 }
-
-export default EkAbrechnungstypNodes

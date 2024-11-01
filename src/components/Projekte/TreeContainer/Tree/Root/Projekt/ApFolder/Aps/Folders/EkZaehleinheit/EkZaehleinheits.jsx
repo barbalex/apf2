@@ -4,10 +4,10 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../../../../Row'
+import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 
-const EkZaehleinheits = ({ projekt, ap }) => {
+export const EkZaehleinheits = observer(({ projekt, ap }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
@@ -63,8 +63,11 @@ const EkZaehleinheits = ({ projekt, ap }) => {
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
-}
-
-export default observer(EkZaehleinheits)
+})

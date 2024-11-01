@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 
 const Container = styled.div`
@@ -32,7 +31,7 @@ const Opinion = styled.div`
   padding-top: 0.1cm;
 `
 
-const Ziele = ({ ziele }) => (
+export const Ziele = ({ ziele }) => (
   <Container>
     <Title>Ziele im Berichtsjahr:</Title>
     <TitleRow>
@@ -58,5 +57,3 @@ const Ziele = ({ ziele }) => (
     })}
   </Container>
 )
-
-export default Ziele

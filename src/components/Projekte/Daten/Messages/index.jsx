@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client'
 import Linkify from 'react-linkify'
@@ -49,7 +49,7 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-export const Component = () => {
+export const Component = memo(() => {
   const { data, loading, error } = useQuery(query)
 
   const rows = data?.allMessages?.nodes ?? []
@@ -93,4 +93,4 @@ export const Component = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})

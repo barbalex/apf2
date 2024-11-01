@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 
-import Root from './Root/index.jsx'
-import IntoViewScroller from './IntoViewScroller.jsx'
-import Menu from './Menu/index.jsx'
+import { Root } from './Root/index.jsx'
+import { IntoViewScroller } from './IntoViewScroller.jsx'
+import { Menu } from './Menu/index.jsx'
 
 const Container = styled.div`
   height: calc(100% - 53px - 8px);

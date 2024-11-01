@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, memo } from 'react'
 import Checkbox from '@mui/material/Checkbox'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
@@ -23,55 +23,49 @@ const StyledCheckbox = styled(Checkbox)`
   width: 24px;
 `
 
-export const Checkbox2States = ({
-  label,
-  saveToDb,
-  value,
-  name,
-  error,
-  helperText,
-  disabled = false,
-}) => {
-  const onClickButton = useCallback(() => {
-    const fakeEvent = {
-      target: {
-        value: !value,
-        name,
-      },
-    }
-    // It is possible to directly click an option after editing an other field
-    // this creates a race condition in the two submits which can lead to lost inputs!
-    // so timeout inputs in option fields
-    setTimeout(() => saveToDb(fakeEvent))
-  }, [value, name, saveToDb])
+export const Checkbox2States = memo(
+  ({ label, saveToDb, value, name, error, helperText, disabled = false }) => {
+    const onClickButton = useCallback(() => {
+      const fakeEvent = {
+        target: {
+          value: !value,
+          name,
+        },
+      }
+      // It is possible to directly click an option after editing an other field
+      // this creates a race condition in the two submits which can lead to lost inputs!
+      // so timeout inputs in option fields
+      setTimeout(() => saveToDb(fakeEvent))
+    }, [value, name, saveToDb])
 
-  const checked = value === true
+    const checked = value === true
 
-  return (
-    <div>
-      <StyledFormControl
-        component="fieldset"
-        error={!!error}
-        aria-describedby={`${label}ErrorText`}
-        variant="standard"
-      >
-        <StyledFormLabel component="legend">{label}</StyledFormLabel>
-        <StyledCheckbox
-          inputProps={{ 'data-id': name }}
-          onClick={onClickButton}
-          color="primary"
-          checked={checked}
-          disabled={disabled}
-        />
-        {!!helperText && (
-          <FormHelperText id={`${label}helperText`}>
-            {helperText}
-          </FormHelperText>
-        )}
-        {!!error && (
-          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-        )}
-      </StyledFormControl>
-    </div>
-  )
-}
+    return (
+      <div>
+        <StyledFormControl
+          component="fieldset"
+          error={!!error}
+          aria-describedby={`${label}ErrorText`}
+          variant="standard"
+        >
+          <StyledFormLabel component="legend">{label}</StyledFormLabel>
+          <StyledCheckbox
+            inputProps={{ 'data-id': name }}
+            onClick={onClickButton}
+            color="primary"
+            checked={checked}
+            disabled={disabled}
+          />
+          {!!helperText && (
+            <FormHelperText id={`${label}helperText`}>
+              {helperText}
+            </FormHelperText>
+          )}
+          {!!error && (
+            <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+          )}
+        </StyledFormControl>
+      </div>
+    )
+  },
+)

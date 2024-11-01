@@ -97,7 +97,7 @@ const StyledButton = styled(Button)`
   margin-top: 10px !important;
 `
 
-const FourOhFour = () => {
+export const Component = () => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const onClickBack = useCallback(
@@ -120,17 +120,27 @@ const FourOhFour = () => {
         />
       </picture>
       <InnerContainer>
-        <PageTitle align="center" variant="h6" color="inherit">
+        <PageTitle
+          align="center"
+          variant="h6"
+          color="inherit"
+        >
           Bedrohte Pflanzenarten fördern
         </PageTitle>
         <CardContainer>
           <TextContainer>
-            <PageTitle align="center" variant="h6">
+            <PageTitle
+              align="center"
+              variant="h6"
+            >
               Oh je
             </PageTitle>
           </TextContainer>
           <TextContainer>
-            <Text align="center" variant="h6">
+            <Text
+              align="center"
+              variant="h6"
+            >
               Diese Seite ist nicht verfügbar.
             </Text>
           </TextContainer>
@@ -148,5 +158,3 @@ const FourOhFour = () => {
     </OuterContainer>
   )
 }
-
-export const Component = FourOhFour

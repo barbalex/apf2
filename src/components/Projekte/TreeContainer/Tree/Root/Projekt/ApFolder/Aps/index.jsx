@@ -3,11 +3,11 @@ import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../../Row'
+import { Row } from '../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../storeContext.js'
-import Folders from './Folders'
+import { ApFolders } from './Folders/index.jsx'
 
-const Aps = ({ projekt }) => {
+export const Aps = observer(({ projekt }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { openNodes, apGqlFilterForTree } = store.tree
@@ -62,10 +62,13 @@ const Aps = ({ projekt }) => {
     return (
       <div key={ap.id}>
         <Row node={node} />
-        {isOpen && <Folders ap={ap} projekt={projekt} />}
+        {isOpen && (
+          <ApFolders
+            ap={ap}
+            projekt={projekt}
+          />
+        )}
       </div>
     )
   })
-}
-
-export default observer(Aps)
+})

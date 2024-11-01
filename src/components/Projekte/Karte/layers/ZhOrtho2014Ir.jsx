@@ -1,9 +1,9 @@
-import React from 'react'
+import { memo } from 'react'
 import { WMSTileLayer, Pane } from 'react-leaflet'
 
 // https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
 
-export const ZhOrtho2014Ir = () => (
+export const ZhOrtho2014Ir = memo(() => (
   <Pane
     className="ZhOrtho2014Ir"
     name="ZhOrtho2014Ir"
@@ -19,4 +19,4 @@ export const ZhOrtho2014Ir = () => (
       maxZoom={23}
     />
   </Pane>
-)
+))

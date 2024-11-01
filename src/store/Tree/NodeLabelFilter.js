@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree'
 
-export default types
+export const NodeLabelFilter = types
   .model('NodeLabelFilter', {
     ap: types.optional(
       types.maybeNull(types.union(types.string, types.number)),

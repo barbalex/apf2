@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useCallback, useContext, memo } from 'react'
 import { ErrorBoundary as RawErrorBoundary } from 'react-error-boundary'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
@@ -64,7 +64,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
   )
 }
 
-export const ErrorBoundary = ({ children }) => {
+export const ErrorBoundary = memo(({ children }) => {
   const { idb } = useContext(IdbContext)
   const onLogout = useCallback(() => logout(idb), [idb])
 
@@ -76,4 +76,4 @@ export const ErrorBoundary = ({ children }) => {
       {children}
     </RawErrorBoundary>
   )
-}
+})

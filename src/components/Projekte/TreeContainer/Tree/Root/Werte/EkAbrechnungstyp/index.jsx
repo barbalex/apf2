@@ -2,10 +2,10 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
-import Row from '../../../Row'
-import EkAbrechnungstypNodes from './EkAbrechnungstyp'
+import { Row } from '../../../Row.jsx'
+import { EkAbrechnungstyp } from './EkAbrechnungstyp.jsx'
 
-const EkAbrechnungstypFolder = ({ count, isLoading }) => {
+export const EkAbrechnungstypFolder = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
@@ -34,9 +34,7 @@ const EkAbrechnungstypFolder = ({ count, isLoading }) => {
   return (
     <>
       <Row node={node} />
-      {isOpen && <EkAbrechnungstypNodes />}
+      {isOpen && <EkAbrechnungstyp />}
     </>
   )
-}
-
-export default observer(EkAbrechnungstypFolder)
+})

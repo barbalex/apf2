@@ -1,4 +1,3 @@
-import React from 'react'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router-dom'

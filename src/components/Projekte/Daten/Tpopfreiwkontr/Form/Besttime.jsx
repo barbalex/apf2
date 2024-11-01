@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 
 const Area = styled.div`
@@ -25,11 +25,11 @@ const BesttimeVal = styled.div`
   grid-area: besttimeVal;
 `
 
-export const Besttime = ({ row }) => (
+export const Besttime = memo(({ row }) => (
   <Container>
     <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
     <BesttimeVal>
       {row?.tpopByTpopId?.popByPopId?.apByApId?.ekfBeobachtungszeitpunkt ?? ''}
     </BesttimeVal>
   </Container>
-)
+))

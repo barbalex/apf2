@@ -2,10 +2,10 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
-import Row from '../../../Row'
-import ApberrelevantGrundNodes from './ApberrelevantGrund'
+import { Row } from '../../../Row.jsx'
+import { ApberrelevantGrund } from './ApberrelevantGrund.jsx'
 
-const ApberrelevantGrundFolder = ({ count, isLoading }) => {
+export const ApberrelevantGrundFolder = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
@@ -33,10 +33,11 @@ const ApberrelevantGrundFolder = ({ count, isLoading }) => {
 
   return (
     <>
-      <Row key="wlApberrelevantGrundFolder" node={node} />
-      {isOpen && <ApberrelevantGrundNodes />}
+      <Row
+        key="wlApberrelevantGrundFolder"
+        node={node}
+      />
+      {isOpen && <ApberrelevantGrund />}
     </>
   )
-}
-
-export default observer(ApberrelevantGrundFolder)
+})

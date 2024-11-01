@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, memo } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
@@ -80,101 +80,103 @@ const StyledIconButton = styled(IconButton)`
   margin-top: -5px !important;
 `
 
-export const SelectCreatableGemeinde = ({
-  label,
-  value,
-  name,
-  error,
-  options: optionsIn,
-  loading,
-  showLocate,
-  onClickLocate,
-  maxHeight = null,
-  noCaret = false,
-  saveToDb,
-}) => {
-  const [stateValue, setStateValue] = useState(null)
+export const SelectCreatableGemeinde = memo(
+  ({
+    label,
+    value,
+    name,
+    error,
+    options: optionsIn,
+    loading,
+    showLocate,
+    onClickLocate,
+    maxHeight = null,
+    noCaret = false,
+    saveToDb,
+  }) => {
+    const [stateValue, setStateValue] = useState(null)
 
-  const onMyChange = useCallback(
-    (option) => {
-      const fakeEvent = {
-        target: {
-          name,
-          value: option ? option.value : null,
-        },
+    const onMyChange = useCallback(
+      (option) => {
+        const fakeEvent = {
+          target: {
+            name,
+            value: option ? option.value : null,
+          },
+        }
+        saveToDb(fakeEvent)
+      },
+      [name, saveToDb],
+    )
+    const onInputChange = useCallback((value) => setStateValue(value), [])
+    const onMyBlur = useCallback(() => {
+      if (stateValue) {
+        const fakeEvent = {
+          target: {
+            name,
+            value: stateValue,
+          },
+        }
+        saveToDb(fakeEvent)
       }
-      saveToDb(fakeEvent)
-    },
-    [name, saveToDb],
-  )
-  const onInputChange = useCallback((value) => setStateValue(value), [])
-  const onMyBlur = useCallback(() => {
-    if (stateValue) {
-      const fakeEvent = {
-        target: {
-          name,
-          value: stateValue,
-        },
-      }
-      saveToDb(fakeEvent)
+    }, [stateValue, name, saveToDb])
+
+    useEffect(() => {
+      setStateValue(value)
+    }, [value])
+
+    // need to add value to options list if it is not yet included
+    const valuesArray = optionsIn.map((o) => o.value)
+    const options = [...optionsIn]
+    if (value && !valuesArray.includes(value)) {
+      options.push({ label: value, value })
     }
-  }, [stateValue, name, saveToDb])
 
-  useEffect(() => {
-    setStateValue(value)
-  }, [value])
+    // filter out historic options - if they are not the value set
+    const realOptions = options.filter((o) => {
+      const dontShowHistoric = !exists(value) || value !== o.value
+      if (dontShowHistoric) return !o.historic
+      return true
+    })
 
-  // need to add value to options list if it is not yet included
-  const valuesArray = optionsIn.map((o) => o.value)
-  const options = [...optionsIn]
-  if (value && !valuesArray.includes(value)) {
-    options.push({ label: value, value })
-  }
+    // show ... while options are loading
+    const loadingOptions = [{ value, label: '...' }]
+    const optionsToUse = loading && value ? loadingOptions : realOptions
+    const selectValue = optionsToUse.find((o) => o.value === value)
 
-  // filter out historic options - if they are not the value set
-  const realOptions = options.filter((o) => {
-    const dontShowHistoric = !exists(value) || value !== o.value
-    if (dontShowHistoric) return !o.historic
-    return true
-  })
-
-  // show ... while options are loading
-  const loadingOptions = [{ value, label: '...' }]
-  const optionsToUse = loading && value ? loadingOptions : realOptions
-  const selectValue = optionsToUse.find((o) => o.value === value)
-
-  return (
-    <Container data-id={name}>
-      {label && <Label error={!!error}>{label}</Label>}
-      <Field>
-        <StyledSelect
-          id={name}
-          name={name}
-          value={selectValue}
-          options={realOptions}
-          onChange={onMyChange}
-          onBlur={onMyBlur}
-          onInputChange={onInputChange}
-          hideSelectedOptions
-          placeholder=""
-          isClearable
-          isSearchable
-          noOptionsMessage={() => '(keine)'}
-          maxheight={maxHeight}
-          classNamePrefix="react-select"
-          nocaret={noCaret}
-        />
-        {showLocate && (
-          <StyledIconButton
-            aria-label="Mit Hilfe der Koordinaten automatisch setzen"
-            title="Mit Hilfe der Koordinaten automatisch setzen"
-            onClick={onClickLocate}
-          >
-            <AddLocationIcon />
-          </StyledIconButton>
-        )}
-      </Field>
-      {error && <Error>{error}</Error>}
-    </Container>
-  )
-}
+    return (
+      <Container data-id={name}>
+        {label && <Label error={!!error}>{label}</Label>}
+        <Field>
+          <StyledSelect
+            id={name}
+            name={name}
+            value={selectValue}
+            options={realOptions}
+            onChange={onMyChange}
+            onBlur={onMyBlur}
+            onInputChange={onInputChange}
+            hideSelectedOptions
+            placeholder=""
+            isClearable
+            isSearchable
+            noOptionsMessage={() => '(keine)'}
+            maxheight={maxHeight}
+            classNamePrefix="react-select"
+            nocaret={noCaret}
+          />
+          {showLocate && (
+            <StyledIconButton
+              aria-label="Mit Hilfe der Koordinaten automatisch setzen"
+              title="Mit Hilfe der Koordinaten automatisch setzen"
+              onClick={onClickLocate}
+            >
+              <AddLocationIcon />
+            </StyledIconButton>
+          )}
+        </Field>
+        {error && <Error>{error}</Error>}
+      </Container>
+    )
+  },
+)

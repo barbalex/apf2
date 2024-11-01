@@ -4,9 +4,9 @@
  * 3. update openNodes
  * 4. refresh tree
  */
-import dataGql from './data'
+import { query } from './query.js'
 
-const openLowerNodesTpopfeldkontrFolder = async ({
+export const tpopfeldkontrFolder = async ({
   id,
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
@@ -18,7 +18,7 @@ const openLowerNodesTpopfeldkontrFolder = async ({
   const { addOpenNodes } = tree
   // 1. load all data
   const { data } = await client.query({
-    query: dataGql,
+    query: query,
     variables: { id },
   })
   const tpopkontrs = data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []
@@ -90,5 +90,3 @@ const openLowerNodesTpopfeldkontrFolder = async ({
   // 3. update openNodes
   addOpenNodes(newOpenNodes)
 }
-
-export default openLowerNodesTpopfeldkontrFolder

@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-const IstApfloraLangsam = () => (
+export const Component = memo(() => (
   <>
     <h1>Ist apflora langsam?</h1>
     <DokuDate>18.04.2019</DokuDate>
@@ -120,6 +122,4 @@ const IstApfloraLangsam = () => (
       </li>
     </ul>
   </>
-)
-
-export const Component = IstApfloraLangsam
+))

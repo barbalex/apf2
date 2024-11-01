@@ -158,4 +158,3 @@ export const ChooseAp = observer(({ setShowChoose }) => {
     </ErrorBoundary>
   )
 })
-export default ChooseAp

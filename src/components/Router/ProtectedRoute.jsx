@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router-dom'
 
 import { StoreContext } from '../../storeContext.js'
-const User = lazy(() => import('../User'))
+const User = lazy(async () => ({ default: (await import('../User.jsx')).User }))
 const Messages = lazy(async () => ({
   default: (await import('../Messages/index.jsx')).Messages,
 }))
@@ -15,10 +15,18 @@ const Deletions = lazy(async () => ({
   default: (await import('../Deletions/index.jsx')).Deletions,
 }))
 import { inIframe } from '../../modules/inIframe.js'
-const ActiveNodeArraySetter = lazy(() => import('./ActiveNodeArraySetter'))
-const NavigateSetter = lazy(() => import('./NavigateSetter'))
-const ApfLayerNotifier = lazy(() => import('./ApfLayerNotifier'))
-const QueryClientSetter = lazy(() => import('./QueryClientSetter'))
+const ActiveNodeArraySetter = lazy(async () => ({
+  default: (await import('./ActiveNodeArraySetter')).ActiveNodeArraySetter,
+}))
+const NavigateSetter = lazy(async () => ({
+  default: (await import('./NavigateSetter')).NavigateSetter,
+}))
+const ApfLayerNotifier = lazy(async () => ({
+  default: (await import('./ApfLayerNotifier')).ApfLayerNotifier,
+}))
+const QueryClientSetter = lazy(async () => ({
+  default: (await import('./QueryClientSetter')).QueryClientSetter,
+}))
 import { Spinner } from '../shared/Spinner.jsx'
 
 const isInIframe = inIframe()

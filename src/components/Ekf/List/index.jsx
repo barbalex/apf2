@@ -1,4 +1,3 @@
-import React from 'react'
 import { FixedSizeList as List } from 'react-window'
 import uniq from 'lodash/uniq'
 import styled from '@emotion/styled'

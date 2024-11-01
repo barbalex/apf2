@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client'
 
-export default gql`
-  query ekOpenLowerNodesQuery($id: UUID!) {
+export const query = gql`
+  query ekfFolderOpenLowerNodesQuery($id: UUID!) {
     tpopById(id: $id) {
       id
       tpopkontrsByTpopId(
-        filter: { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } }
+        filter: { typ: { equalTo: "Freiwilligen-Erfolgskontrolle" } }
       ) {
         nodes {
           id

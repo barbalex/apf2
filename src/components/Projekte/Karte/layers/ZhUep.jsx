@@ -1,7 +1,7 @@
-import React from 'react'
+import { memo } from 'react'
 import { WMSTileLayer, Pane } from 'react-leaflet'
 
-export const ZhUep = () => (
+export const ZhUep = memo(() => (
   <Pane
     className="ZhUep"
     name="ZhUep"
@@ -17,4 +17,4 @@ export const ZhUep = () => (
       maxZoom={23}
     />
   </Pane>
-)
+))

@@ -5,10 +5,10 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import sortBy from 'lodash/sortBy'
 
-import Row from '../../../../../../Row'
+import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 
-const BeobNichtZuzuordnens = ({ projekt, ap }) => {
+export const BeobNichtZuzuordnens = observer(({ projekt, ap }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { beobGqlFilterForTree } = store.tree
@@ -82,8 +82,11 @@ const BeobNichtZuzuordnens = ({ projekt, ap }) => {
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
-}
-
-export default observer(BeobNichtZuzuordnens)
+})

@@ -1,7 +1,9 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../../index.jsx'
 import installieren from './installieren.png'
 
-const PWA = () => (
+export const Component = memo(() => (
   <>
     <h1>Progressive Web App</h1>
     <DokuDate>27.12.2021</DokuDate>
@@ -32,7 +34,10 @@ const PWA = () => (
           <li>
             In Chrome auf PC und Mac öffnen Sie dazu das Menü ganz oben rechts:
             <br />
-            <img src={installieren} alt="installieren" />
+            <img
+              src={installieren}
+              alt="installieren"
+            />
             <br />
             In der URL-Zeile finden Sie dafür ein Symbol.
           </li>
@@ -69,6 +74,4 @@ const PWA = () => (
       </li>
     </ul>
   </>
-)
-
-export const Component = PWA
+))

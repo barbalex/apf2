@@ -4,10 +4,10 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../../../../../../../Row'
+import { Row } from '../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
 
-const PopMassnBer = ({ projekt, ap, pop }) => {
+export const PopMassnBer = observer(({ projekt, ap, pop }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
@@ -74,8 +74,11 @@ const PopMassnBer = ({ projekt, ap, pop }) => {
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
-}
-
-export default observer(PopMassnBer)
+})

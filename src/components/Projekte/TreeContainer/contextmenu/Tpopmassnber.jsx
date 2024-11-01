@@ -4,7 +4,10 @@ import { observer } from 'mobx-react-lite'
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const insertData = {
@@ -16,21 +19,33 @@ const deleteData = {
   table: 'tpopmassnber',
 }
 
-const Tpopmassnber = ({ onClick }) => {
+export const Tpopmassnber = observer(({ onClick }) => {
   const { user } = useContext(StoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id="treeTpopmassnber" hideOnLeave={true}>
-        <div className="react-contextmenu-title" style={{ width: '180px' }}>
+      <ContextMenu
+        id="treeTpopmassnber"
+        hideOnLeave={true}
+      >
+        <div
+          className="react-contextmenu-title"
+          style={{ width: '180px' }}
+        >
           Massnahmen-Bericht
         </div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem onClick={onClick} data={insertData}>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
               erstelle neuen
             </MenuItem>
-            <MenuItem onClick={onClick} data={deleteData}>
+            <MenuItem
+              onClick={onClick}
+              data={deleteData}
+            >
               lösche
             </MenuItem>
           </>
@@ -38,6 +53,4 @@ const Tpopmassnber = ({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-}
-
-export default observer(Tpopmassnber)
+})

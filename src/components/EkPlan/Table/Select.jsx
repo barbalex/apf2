@@ -1,3 +1,4 @@
+// seems not in use
 import { useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -23,7 +24,7 @@ const Option = styled.option`
   font-size: 1rem;
 `
 
-const SelectComponent = ({ options, row, val, field }) => {
+export const SelectComponent = observer(({ options, row, val, field }) => {
   const store = useContext(StoreContext)
   const { enqueNotification } = store
   const client = useApolloClient()
@@ -90,26 +91,32 @@ const SelectComponent = ({ options, row, val, field }) => {
       onFocus={onFocus}
       onBlur={onBlur}
     >
-      {focused ? (
-        options ? (
+      {focused ?
+        options ?
           <>
-            <Option key="option1" value={null}>
+            <Option
+              key="option1"
+              value={null}
+            >
               {''}
             </Option>
             {options.map((o) => (
-              <Option key={o.value} value={o.value}>
+              <Option
+                key={o.value}
+                value={o.value}
+              >
                 {o.label}
               </Option>
             ))}
           </>
-        ) : null
-      ) : (
-        <Option key="option1" value={valueToShow}>
+        : null
+      : <Option
+          key="option1"
+          value={valueToShow}
+        >
           {valueToShow}
         </Option>
-      )}
+      }
     </Select>
   )
-}
-
-export default observer(SelectComponent)
+})

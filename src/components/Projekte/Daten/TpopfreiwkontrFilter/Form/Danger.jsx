@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -34,27 +34,29 @@ const DangerVal = styled.div`
   }
 `
 
-export const Danger = observer(({ saveToDb, row }) => {
-  //console.log('Danger rendering')
+export const Danger = memo(
+  observer(({ saveToDb, row }) => {
+    //console.log('Danger rendering')
 
-  return (
-    <Container>
-      <DangerLabel>
-        Gefährdung{' '}
-        <DangerSubLabel>
-          (Problemarten, Verbuschung, Tritt, Hunde, ...), welche?
-        </DangerSubLabel>
-      </DangerLabel>
-      <DangerVal>
-        <TextField2
-          key={`${row?.id}gefaehrdung`}
-          name="gefaehrdung"
-          row={row}
-          type="text"
-          multiLine
-          saveToDb={saveToDb}
-        />
-      </DangerVal>
-    </Container>
-  )
-})
+    return (
+      <Container>
+        <DangerLabel>
+          Gefährdung{' '}
+          <DangerSubLabel>
+            (Problemarten, Verbuschung, Tritt, Hunde, ...), welche?
+          </DangerSubLabel>
+        </DangerLabel>
+        <DangerVal>
+          <TextField2
+            key={`${row?.id}gefaehrdung`}
+            name="gefaehrdung"
+            row={row}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+          />
+        </DangerVal>
+      </Container>
+    )
+  }),
+)

@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-const FalschBestimmteBeob = () => (
+export const Component = memo(() => (
   <>
     <h1>Falsch bestimmte Beobachtungen</h1>
     <DokuDate>30.01.2019</DokuDate>
@@ -37,6 +39,4 @@ const FalschBestimmteBeob = () => (
       denen die Art verändert wurde&quot;.
     </p>
   </>
-)
-
-export const Component = FalschBestimmteBeob
+))

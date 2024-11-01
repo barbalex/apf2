@@ -3,14 +3,14 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
 
-import Row from '../../Row'
+import { Row } from '../../Row.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
-import AdresseFolder from './Adresse'
-import ApberrelevantGrundFolder from './ApberrelevantGrund'
-import EkAbrechnungstypFolder from './EkAbrechnungstyp'
-import ZaehlEinheitFolder from './ZaehlEinheit'
+import { AdresseFolder } from './Adresse/index.jsx'
+import { ApberrelevantGrundFolder } from './ApberrelevantGrund/index.jsx'
+import { EkAbrechnungstypFolder } from './EkAbrechnungstyp/index.jsx'
+import { ZaehlEinheitFolder } from './ZaehlEinheit/index.jsx'
 
-const WlFolderNode = () => {
+export const WerteFolder = observer(() => {
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
@@ -19,30 +19,32 @@ const WlFolderNode = () => {
     (nodeArray) => nodeArray[0] === 'Werte-Listen',
   )
 
-  const adressesFilter = nodeLabelFilter.adresse
-    ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
+  const adressesFilter =
+    nodeLabelFilter.adresse ?
+      { label: { includesInsensitive: nodeLabelFilter.adresse } }
     : { id: { isNull: false } }
   const apberrelevantGrundWertesFilter =
-    nodeLabelFilter.tpopApberrelevantGrundWerte
-      ? {
-          label: {
-            includesInsensitive: nodeLabelFilter.tpopApberrelevantGrundWerte,
-          },
-        }
-      : { id: { isNull: false } }
-  const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
-    ? {
+    nodeLabelFilter.tpopApberrelevantGrundWerte ?
+      {
+        label: {
+          includesInsensitive: nodeLabelFilter.tpopApberrelevantGrundWerte,
+        },
+      }
+    : { id: { isNull: false } }
+  const ekAbrechnungstypWertesFilter =
+    nodeLabelFilter.ekAbrechnungstypWerte ?
+      {
         label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
       }
     : { id: { isNull: false } }
   const tpopkontrzaehlEinheitWertesFilter =
-    nodeLabelFilter.tpopkontrzaehlEinheitWerte
-      ? {
-          label: {
-            includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
-          },
-        }
-      : { id: { isNull: false } }
+    nodeLabelFilter.tpopkontrzaehlEinheitWerte ?
+      {
+        label: {
+          includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
+        },
+      }
+    : { id: { isNull: false } }
 
   const { data, isLoading } = useQuery({
     queryKey: [
@@ -116,7 +118,10 @@ const WlFolderNode = () => {
       <Row node={node} />
       {isOpen && (
         <>
-          <AdresseFolder isLoading={isLoading} count={adressenCount} />
+          <AdresseFolder
+            isLoading={isLoading}
+            count={adressenCount}
+          />
           <ApberrelevantGrundFolder
             isLoading={isLoading}
             count={apberrelevantGrundWertesCount}
@@ -133,6 +138,4 @@ const WlFolderNode = () => {
       )}
     </>
   )
-}
-
-export default observer(WlFolderNode)
+})

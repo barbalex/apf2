@@ -1,10 +1,10 @@
-import React from 'react'
+import { memo } from 'react'
 import Linkify from 'react-linkify'
 
 // Somehow emotions styles were not applied
 // So need to style inline
 
-export const Popup = ({ layersData, mapSize = { x: 1000, y: 1000 } }) => (
+export const Popup = memo(({ layersData, mapSize = { x: 1000, y: 1000 } }) => (
   <div
     style={{
       overflow: 'auto',
@@ -57,4 +57,4 @@ export const Popup = ({ layersData, mapSize = { x: 1000, y: 1000 } }) => (
       </div>
     ))}
   </div>
-)
+))

@@ -18,11 +18,11 @@ import upperFirst from 'lodash/upperFirst'
 import { useApolloClient, gql } from '@apollo/client'
 import { useSnackbar } from 'notistack'
 
-import isNodeInActiveNodePath from '../isNodeInActiveNodePath.js'
-import isNodeOrParentInActiveNodePath from '../isNodeOrParentInActiveNodePath.js'
-import isNodeOpen from '../isNodeOpen.js'
-import toggleNode from './toggleNode.js'
-import toggleNodeSymbol from './toggleNodeSymbol.js'
+import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.js'
+import { isNodeOrParentInActiveNodePath } from '../isNodeOrParentInActiveNodePath.js'
+import { isNodeOpen } from '../isNodeOpen.js'
+import { toggleNode } from './toggleNode.js'
+import { toggleNodeSymbol } from './toggleNodeSymbol.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
@@ -331,7 +331,7 @@ const IconContainer = styled.div`
   font-size: 1.1rem;
 `
 
-const Row = ({ node }) => {
+export const Row = observer(({ node }) => {
   const { apId, tpopId } = useParams()
   const navigate = useNavigate()
   const { search } = useLocation()
@@ -702,6 +702,4 @@ const Row = ({ node }) => {
       </StyledNode>
     </ContextMenuTrigger>
   )
-}
-
-export default observer(Row)
+})

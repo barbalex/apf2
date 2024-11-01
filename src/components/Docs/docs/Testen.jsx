@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import styled from '@emotion/styled'
 
 import { DokuDate } from '../index.jsx'
@@ -6,7 +7,7 @@ const LI = styled.li`
   list-style-type: none;
 `
 
-const Testen = () => (
+export const Component = memo(() => (
   <>
     <h1>Funktionalität testen</h1>
     <DokuDate>18.04.2019</DokuDate>
@@ -98,6 +99,4 @@ const Testen = () => (
       <LI>◻️: todo</LI>
     </ul>
   </>
-)
-
-export const Component = Testen
+))

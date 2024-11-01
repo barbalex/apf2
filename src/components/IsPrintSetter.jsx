@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../storeContext.js'
 
-const IsPrintSetter = () => {
+export const IsPrintSetter = observer(() => {
   const store = useContext(StoreContext)
   const { setIsPrint } = store
 
@@ -26,6 +26,4 @@ const IsPrintSetter = () => {
 
   // using render props on Layout to pass down appbarheight without using store
   return null
-}
-
-export default observer(IsPrintSetter)
+})

@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-const VideosFuerDenEinstieg = () => (
+export const Component = memo(() => (
   <>
     <h1>Anleitung zur Eingabe (inhaltlich), topos</h1>
     <DokuDate>14.02.2022</DokuDate>
@@ -28,6 +30,4 @@ const VideosFuerDenEinstieg = () => (
       </p>
     </object>
   </>
-)
-
-export const Component = VideosFuerDenEinstieg
+))

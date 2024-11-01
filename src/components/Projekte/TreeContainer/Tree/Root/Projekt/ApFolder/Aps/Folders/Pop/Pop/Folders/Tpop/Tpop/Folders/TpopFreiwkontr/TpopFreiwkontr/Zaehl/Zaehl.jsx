@@ -4,10 +4,10 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../../../../../../../../../../../../Row'
+import { Row } from '../../../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../../../storeContext.js'
 
-const TpopFreiwkontrzaehl = ({ projekt, ap, pop, tpop, tpopkontr }) => {
+export const Zaehl = observer(({ projekt, ap, pop, tpop, tpopkontr }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
@@ -82,8 +82,11 @@ const TpopFreiwkontrzaehl = ({ projekt, ap, pop, tpop, tpopkontr }) => {
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
-}
-
-export default observer(TpopFreiwkontrzaehl)
+})

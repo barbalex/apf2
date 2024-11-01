@@ -3,7 +3,7 @@ import Collapse from '@mui/material/Collapse'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import CsvInExcelOeffnen from './CsvInExcelOeffnen.jsx'
+import { CsvInExcelOeffnen } from './CsvInExcelOeffnen.jsx'
 import {
   CardActionTitle,
   StyledCard,

@@ -1,13 +1,19 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-const ArtTaxonomieErgaenzen = () => (
+export const Component = memo(() => (
   <>
     <h1>Art-Taxonomien ergänzen</h1>
     <DokuDate>27.12.2021</DokuDate>
     <h3>Herkunft der Art-Listen</h3>
     <p>
       Artenlisten stammen aus{' '}
-      <a href="https://arteigenschaften.ch" target="_blank" rel="noreferrer">
+      <a
+        href="https://arteigenschaften.ch"
+        target="_blank"
+        rel="noreferrer"
+      >
         arteigenschaften.ch
       </a>
       . Momentan werden die Arten aus den Taxonomien{' '}
@@ -76,6 +82,4 @@ const ArtTaxonomieErgaenzen = () => (
       .
     </p>
   </>
-)
-
-export const Component = ArtTaxonomieErgaenzen
+))

@@ -1,3 +1,4 @@
+// not in use
 // https://github.com/Flexberry/leaflet-switch-scale-control
 // but due to semantic ui requirement using this instead:
 // https://github.com/victorzinho/leaflet-switch-scale-control
@@ -37,8 +38,6 @@ const options = {
   },
 }
 
-const ScaleControl = createControlComponent(
+export const ScaleControl = createControlComponent(
   () => new window.L.Control.SwitchScaleControl(options),
 )
-
-export default ScaleControl

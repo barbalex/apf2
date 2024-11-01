@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-const DatenWiederherstellen = () => (
+export const Component = memo(() => (
   <>
     <h1>Daten aus Sicherung herstellen</h1>
     <DokuDate>18.11.2021</DokuDate>
@@ -11,13 +13,19 @@ const DatenWiederherstellen = () => (
     <h3>1. Datenbank erstellen</h3>
     <p>Entweder in pgAdmin oder:</p>
     <pre>
-      <code className="language-sql" lang="sql">
+      <code
+        className="language-sql"
+        lang="sql"
+      >
         CREATE DATABASE apflora encoding &#39;UTF8&#39;;
       </code>
     </pre>
     <h3>2. Rollen erstellen</h3>
     <pre>
-      <code className="language-sql" lang="sql">
+      <code
+        className="language-sql"
+        lang="sql"
+      >
         create role apflora_reader; <br />
         create role apflora_ap_reader; <br />
         create role apflora_manager in group apflora_reader; <br />
@@ -53,6 +61,4 @@ const DatenWiederherstellen = () => (
       </code>
     </pre>
   </>
-)
-
-export const Component = DatenWiederherstellen
+))

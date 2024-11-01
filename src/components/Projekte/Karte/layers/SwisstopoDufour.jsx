@@ -1,9 +1,10 @@
-import React from 'react'
+import { memo } from 'react'
 import { TileLayer, Pane } from 'react-leaflet'
 
 // https://wmts.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
 
-export const SwisstopoDufour = () => (
+// memoizing causes error: Component is not a function
+export const SwisstopoDufour = memo(() => (
   <Pane
     className="SwisstopoDufour"
     name="SwisstopoDufour"
@@ -17,4 +18,4 @@ export const SwisstopoDufour = () => (
       maxZoom={23}
     />
   </Pane>
-)
+))

@@ -1,5 +1,5 @@
 // seems not in use
-import { useCallback } from 'react'
+import { useCallback, memo } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 
@@ -65,61 +65,61 @@ const StyledSelect = styled(AsyncSelect)`
   }
 `
 
-export const SelectAsync = ({
-  value,
-  field = '',
-  label,
-  labelSize,
-  name,
-  error,
-  loadOptions,
-  setInputValue,
-  maxHeight = null,
-  noCaret = false,
-  saveToDb,
-}) => {
-  const onInputChange = useCallback(
-    (newValue) => {
-      const inputValue = newValue.replace(/\W/g, '')
-      setInputValue(inputValue)
-      loadOptions(inputValue)
-      return inputValue
-    },
-    [loadOptions, setInputValue],
-  )
-  const onChange = useCallback(
-    (option) => {
-      const fakeEvent = {
-        target: {
-          name,
-          value: option ? option.value : null,
-        },
-      }
-      saveToDb(fakeEvent)
-    },
-    [name, saveToDb],
-  )
+export const SelectAsync = memo(
+  ({
+    value,
+    field = '',
+    label,
+    labelSize,
+    name,
+    error,
+    loadOptions,
+    setInputValue,
+    maxHeight = null,
+    noCaret = false,
+    saveToDb,
+  }) => {
+    const onInputChange = useCallback(
+      (newValue) => {
+        const inputValue = newValue.replace(/\W/g, '')
+        setInputValue(inputValue)
+        loadOptions(inputValue)
+        return inputValue
+      },
+      [loadOptions, setInputValue],
+    )
+    const onChange = useCallback(
+      (option) => {
+        const fakeEvent = {
+          target: {
+            name,
+            value: option ? option.value : null,
+          },
+        }
+        saveToDb(fakeEvent)
+      },
+      [name, saveToDb],
+    )
 
-  return (
-    <Container data-id={field}>
-      {label && <Label labelsize={labelSize}>{label}</Label>}
-      <StyledSelect
-        id={field}
-        name={field}
-        onChange={onChange}
-        hideSelectedOptions
-        placeholder=""
-        isClearable
-        isSearchable
-        noOptionsMessage={() => '(keine)'}
-        maxheight={maxHeight}
-        classNamePrefix="react-select"
-        nocaret={noCaret}
-        onInputChange={onInputChange}
-      />
-      {error && <Error>{error}</Error>}
-    </Container>
-  )
-}
-
-export default SelectAsync
+    return (
+      <Container data-id={field}>
+        {label && <Label labelsize={labelSize}>{label}</Label>}
+        <StyledSelect
+          id={field}
+          name={field}
+          onChange={onChange}
+          hideSelectedOptions
+          placeholder=""
+          isClearable
+          isSearchable
+          noOptionsMessage={() => '(keine)'}
+          maxheight={maxHeight}
+          classNamePrefix="react-select"
+          nocaret={noCaret}
+          onInputChange={onInputChange}
+        />
+        {error && <Error>{error}</Error>}
+      </Container>
+    )
+  },
+)

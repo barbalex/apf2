@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-const Melden = () => (
+export const Component = memo(() => (
   <>
     <h1>Fehler, Ideen, Vorschläge melden</h1>
     <DokuDate>16.04.2019</DokuDate>
@@ -45,6 +47,4 @@ const Melden = () => (
       <a href="mailto:alex@gabriel-software.ch">email</a> melden.
     </p>
   </>
-)
-
-export const Component = Melden
+))

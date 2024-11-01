@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import SimpleBar from 'simplebar-react'
 import Button from '@mui/material/Button'
@@ -94,7 +94,7 @@ export const CardActionIconButton = styled(IconButton)`
   transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 
-export const Exporte = () => {
+export const Exporte = memo(() => {
   return (
     <ExporteContainer data-id="exporte-container">
       <ErrorBoundary>
@@ -128,4 +128,4 @@ export const Exporte = () => {
       </ErrorBoundary>
     </ExporteContainer>
   )
-}
+})

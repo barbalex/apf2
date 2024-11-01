@@ -1,11 +1,11 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../Row'
+import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
-import Apberuebersichts from './Apberuebersichts'
+import { Apberuebersichts } from './Apberuebersichts.jsx'
 
-const ApberuebersichtNode = ({ count, projekt }) => {
+export const ApberuebersichtFolder = observer(({ count, projekt }) => {
   const store = useContext(StoreContext)
   const nodeLabelFilterString =
     store.tree?.nodeLabelFilter?.apberuebersicht ?? ''
@@ -34,6 +34,4 @@ const ApberuebersichtNode = ({ count, projekt }) => {
       {isOpen && <Apberuebersichts />}
     </>
   )
-}
-
-export default observer(ApberuebersichtNode)
+})

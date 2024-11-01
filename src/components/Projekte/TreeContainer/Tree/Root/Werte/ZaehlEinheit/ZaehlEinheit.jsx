@@ -2,22 +2,22 @@ import { useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
 
-import Row from '../../../Row'
+import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
 
-const ZaehlEinheitNodes = () => {
+export const ZaehlEinheit = () => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
   const tpopkontrzaehlEinheitWertesFilter =
-    nodeLabelFilter.tpopkontrzaehlEinheitWerte
-      ? {
-          label: {
-            includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
-          },
-        }
-      : { id: { isNull: false } }
+    nodeLabelFilter.tpopkontrzaehlEinheitWerte ?
+      {
+        label: {
+          includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
+        },
+      }
+    : { id: { isNull: false } }
 
   const { data } = useQuery({
     queryKey: [
@@ -60,8 +60,11 @@ const ZaehlEinheitNodes = () => {
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
 }
-
-export default ZaehlEinheitNodes

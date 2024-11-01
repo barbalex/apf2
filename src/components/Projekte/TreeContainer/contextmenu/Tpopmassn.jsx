@@ -4,7 +4,10 @@ import { observer } from 'mobx-react-lite'
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const insertData = {
@@ -27,29 +30,47 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-const Tpopmassn = ({ onClick }) => {
+export const Tpopmassn = observer(({ onClick }) => {
   const { copying, user } = useContext(StoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id="treeTpopmassn" hideOnLeave={true}>
+      <ContextMenu
+        id="treeTpopmassn"
+        hideOnLeave={true}
+      >
         <div className="react-contextmenu-title">Massnahme</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem onClick={onClick} data={insertData}>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
               erstelle neue
             </MenuItem>
-            <MenuItem onClick={onClick} data={deleteData}>
+            <MenuItem
+              onClick={onClick}
+              data={deleteData}
+            >
               lösche
             </MenuItem>
-            <MenuItem onClick={onClick} data={markForMovingData}>
+            <MenuItem
+              onClick={onClick}
+              data={markForMovingData}
+            >
               verschiebe
             </MenuItem>
-            <MenuItem onClick={onClick} data={markForCopyingData}>
+            <MenuItem
+              onClick={onClick}
+              data={markForCopyingData}
+            >
               kopiere
             </MenuItem>
             {copying.table && (
-              <MenuItem onClick={onClick} data={resetCopyingData}>
+              <MenuItem
+                onClick={onClick}
+                data={resetCopyingData}
+              >
                 Kopieren aufheben
               </MenuItem>
             )}
@@ -58,6 +79,4 @@ const Tpopmassn = ({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-}
-
-export default observer(Tpopmassn)
+})

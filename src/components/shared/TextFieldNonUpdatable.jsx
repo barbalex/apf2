@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, memo } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -13,33 +13,35 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-export const TextFieldNonUpdatable = observer(({ label, value = '' }) => {
-  const [error, setError] = useState(null)
-  const onChange = useCallback(() => {
-    setError('Dieser Wert ist nicht veränderbar')
-    // can fire after component was unmounted...
-    setTimeout(() => setError(null), 5000)
-  }, [])
+export const TextFieldNonUpdatable = memo(
+  observer(({ label, value = '' }) => {
+    const [error, setError] = useState(null)
+    const onChange = useCallback(() => {
+      setError('Dieser Wert ist nicht veränderbar')
+      // can fire after component was unmounted...
+      setTimeout(() => setError(null), 5000)
+    }, [])
 
-  return (
-    <StyledFormControl
-      error={!!error}
-      fullWidth
-      aria-describedby={`${label}-helper`}
-      variant="standard"
-    >
-      <InputLabel shrink>{label}</InputLabel>
-      <Input
-        id={label}
-        value={value || value === 0 ? value : ''}
-        onChange={onChange}
-        autoComplete="off"
-        autoCorrect="off"
-        autoCapitalize="off"
-      />
-      {!!error && (
-        <FormHelperText id={`${label}-helper`}>{error}</FormHelperText>
-      )}
-    </StyledFormControl>
-  )
-})
+    return (
+      <StyledFormControl
+        error={!!error}
+        fullWidth
+        aria-describedby={`${label}-helper`}
+        variant="standard"
+      >
+        <InputLabel shrink>{label}</InputLabel>
+        <Input
+          id={label}
+          value={value || value === 0 ? value : ''}
+          onChange={onChange}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+        />
+        {!!error && (
+          <FormHelperText id={`${label}-helper`}>{error}</FormHelperText>
+        )}
+      </StyledFormControl>
+    )
+  }),
+)

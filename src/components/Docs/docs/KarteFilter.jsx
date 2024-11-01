@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-const KarteFilter = () => (
+export const Component = memo(() => (
   <>
     <h1>Karte: Filter</h1>
     <DokuDate>09.02.2022</DokuDate>
@@ -28,6 +30,4 @@ const KarteFilter = () => (
       </p>
     </object>
   </>
-)
-
-export const Component = KarteFilter
+))

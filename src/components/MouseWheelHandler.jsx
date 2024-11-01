@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-const MouseWheelHandler = () => {
+export const MouseWheelHandler = () => {
   // prevent scrolling/mousewheel from changing numbers
   // while not preventing scrolling itself!
   // https://stackoverflow.com/a/20838527/712005
@@ -40,5 +40,3 @@ const MouseWheelHandler = () => {
 
   return null
 }
-
-export default MouseWheelHandler

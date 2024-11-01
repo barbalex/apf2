@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const tpopById = gql`
   query tpopById($id: UUID!) {
     tpopById(id: $id) {
       id

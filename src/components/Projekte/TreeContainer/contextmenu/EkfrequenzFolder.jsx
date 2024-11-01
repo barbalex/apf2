@@ -13,7 +13,10 @@ import { gql, useApolloClient } from '@apollo/client'
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const insertData = {
@@ -70,7 +73,7 @@ const Error = styled.div`
   color: red;
 `
 
-const EkfrequenzFolder = ({ onClick }) => {
+export const EkfrequenzFolder = observer(({ onClick }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { user, enqueNotification } = store
@@ -279,8 +282,9 @@ const EkfrequenzFolder = ({ onClick }) => {
   const apOptions = useCallback(
     async (inputValue, cb) => {
       if (apId === 0) return
-      const filter = inputValue
-        ? {
+      const filter =
+        inputValue ?
+          {
             label: { includesInsensitive: inputValue },
             id: { notEqualTo: apId },
           }
@@ -332,7 +336,10 @@ const EkfrequenzFolder = ({ onClick }) => {
         <div className="react-contextmenu-title">EK-Frequenz</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem onClick={onClick} data={insertData}>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
               erstelle neue
             </MenuItem>
             <MenuItem onClick={onOpenChooseApDialog}>
@@ -341,7 +348,10 @@ const EkfrequenzFolder = ({ onClick }) => {
           </>
         )}
       </ContextMenu>
-      <Dialog open={openChooseAp} onClose={onCloseChooseApDialog}>
+      <Dialog
+        open={openChooseAp}
+        onClose={onCloseChooseApDialog}
+      >
         <DialogTitle>EK-Frequenzen aus anderer Art kopieren</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -379,6 +389,4 @@ const EkfrequenzFolder = ({ onClick }) => {
       </Dialog>
     </ErrorBoundary>
   )
-}
-
-export default observer(EkfrequenzFolder)
+})

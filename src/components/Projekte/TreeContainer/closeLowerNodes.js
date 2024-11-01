@@ -1,7 +1,7 @@
 import isEqual from 'lodash/isEqual'
 import { getSnapshot } from 'mobx-state-tree'
 
-const closeLowerNodes = async ({ url, store,search }) => {
+export const closeLowerNodes = async ({ url, store, search }) => {
   const { setOpenNodes } = store.tree
   const openNodes = getSnapshot(store.tree.openNodes)
   const activeNodeArray = getSnapshot(store.tree.activeNodeArray)
@@ -16,5 +16,3 @@ const closeLowerNodes = async ({ url, store,search }) => {
     store.navigate(`/Daten/${url.join('/')}${search}`)
   }
 }
-
-export default closeLowerNodes

@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 
 const Input = styled.input`
@@ -10,7 +10,7 @@ const Label = styled.label`
   user-select: none;
 `
 
-export const Radio = ({ name, value, label, checked, onChange }) => (
+export const Radio = memo(({ name, value, label, checked, onChange }) => (
   <Label>
     <Input
       type="radio"
@@ -21,4 +21,4 @@ export const Radio = ({ name, value, label, checked, onChange }) => (
     />
     {label}
   </Label>
-)
+))

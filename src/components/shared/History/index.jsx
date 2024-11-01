@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -17,13 +17,15 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
 `
 
-export const History = observer(({ year, dataArray }) => (
-  <ErrorBoundary>
-    <Container>
-      <TitleRow>
-        <Title>{year}</Title>
-      </TitleRow>
-      <Data dataArray={dataArray} />
-    </Container>
-  </ErrorBoundary>
-))
+export const History = memo(
+  observer(({ year, dataArray }) => (
+    <ErrorBoundary>
+      <Container>
+        <TitleRow>
+          <Title>{year}</Title>
+        </TitleRow>
+        <Data dataArray={dataArray} />
+      </Container>
+    </ErrorBoundary>
+  )),
+)

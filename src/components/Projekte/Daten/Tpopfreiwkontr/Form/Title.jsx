@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 
 const Area = styled.div`
@@ -16,8 +16,8 @@ const Container = styled(Area)`
   }
 `
 
-export const Title = ({ row }) => {
+export const Title = memo(({ row }) => {
   const year = row?.jahr ?? new Date().getFullYear()
 
   return <Container>{`Erfolgskontrolle Artenschutz Flora ${year}`}</Container>
-}
+})

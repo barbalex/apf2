@@ -1,7 +1,10 @@
-import React from 'react'
+import { memo } from 'react'
 
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const closeLowerNodesData = {
@@ -12,18 +15,25 @@ const insertData = {
   table: 'ek_abrechnungstyp_werte',
 }
 
-const EkAbrechnungstypWerteFolder = ({ onClick }) => (
+export const EkAbrechnungstypWerteFolder = memo(({ onClick }) => (
   <ErrorBoundary>
-    <ContextMenu id="treeEkAbrechnungstypWerteFolder" hideOnLeave={true}>
+    <ContextMenu
+      id="treeEkAbrechnungstypWerteFolder"
+      hideOnLeave={true}
+    >
       <div className="react-contextmenu-title">EK-Abrechnungstyp</div>
-      <MenuItem onClick={onClick} data={closeLowerNodesData}>
+      <MenuItem
+        onClick={onClick}
+        data={closeLowerNodesData}
+      >
         alle schliessen
       </MenuItem>
-      <MenuItem onClick={onClick} data={insertData}>
+      <MenuItem
+        onClick={onClick}
+        data={insertData}
+      >
         erstelle neue
       </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
-)
-
-export default EkAbrechnungstypWerteFolder
+))

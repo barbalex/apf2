@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree'
 
-export default types
+export const Map = types
   .model('Map', {
     // icons: oneOf: normal, statusGroup, statusGroupSymbols
     popIcon: types.string,

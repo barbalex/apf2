@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 
 const Container = styled.div`
@@ -14,7 +14,7 @@ const Label = styled.label`
   user-select: none;
 `
 
-export const Checkbox = ({ value, label, checked, onChange }) => (
+export const Checkbox = memo(({ value, label, checked, onChange }) => (
   <Container>
     <Label>
       <Input
@@ -26,4 +26,4 @@ export const Checkbox = ({ value, label, checked, onChange }) => (
       {label}
     </Label>
   </Container>
-)
+))

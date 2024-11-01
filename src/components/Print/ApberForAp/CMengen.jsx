@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -72,7 +71,7 @@ const PopSeit = styled(Number)`
 `
 const TpopSeit = styled(Number)``
 
-const CMengen = ({ jahr, loading, node }) => {
+export const CMengen = observer(({ jahr, loading, node }) => {
   const c1LPop = loading ? '...' : node?.c1LPop
   const c1LTpop = loading ? '...' : node?.c1LTpop
   const c1RPop = loading ? '...' : node?.c1RPop
@@ -157,6 +156,4 @@ const CMengen = ({ jahr, loading, node }) => {
       </Row>
     </Container>
   )
-}
-
-export default observer(CMengen)
+})

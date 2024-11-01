@@ -1,6 +1,6 @@
-import isNodeOpen from './isNodeOpen'
+import { isNodeOpen } from './isNodeOpen.js'
 
-const openNode = async ({ node, openNodes, store }) => {
+export const openNode = async ({ node, openNodes, store }) => {
   const { treeNodeLabelFilterResetExceptAp } = store
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
@@ -24,5 +24,3 @@ const openNode = async ({ node, openNodes, store }) => {
     treeNodeLabelFilterResetExceptAp()
   }
 }
-
-export default openNode

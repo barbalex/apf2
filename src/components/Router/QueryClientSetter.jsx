@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { StoreContext } from '../../storeContext.js'
 
-const QueryClientSetter = () => {
+export const QueryClientSetter = observer(() => {
   const queryClient = useQueryClient()
   const store = useContext(StoreContext)
   const { setQueryClient } = store
@@ -24,6 +24,4 @@ const QueryClientSetter = () => {
   }, [queryClient, setQueryClient, store.queryClient])
 
   return null
-}
-
-export default observer(QueryClientSetter)
+})

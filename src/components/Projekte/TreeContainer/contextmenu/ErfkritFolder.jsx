@@ -13,7 +13,10 @@ import { gql, useApolloClient } from '@apollo/client'
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const insertData = {
@@ -70,7 +73,7 @@ const Error = styled.div`
   color: red;
 `
 
-const ErfkritFolder = ({ onClick }) => {
+export const ErfkritFolder = observer(({ onClick }) => {
   const client = useApolloClient()
   const { user, enqueNotification } = useContext(StoreContext)
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
@@ -243,8 +246,9 @@ const ErfkritFolder = ({ onClick }) => {
   const apOptions = useCallback(
     async (inputValue, cb) => {
       if (apId === 0) return
-      const filter = inputValue
-        ? {
+      const filter =
+        inputValue ?
+          {
             label: { includesInsensitive: inputValue },
             id: { notEqualTo: apId },
           }
@@ -296,7 +300,10 @@ const ErfkritFolder = ({ onClick }) => {
         <div className="react-contextmenu-title">AP-Erfolgskriterien</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem onClick={onClick} data={insertData}>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
               erstelle neues
             </MenuItem>
             <MenuItem onClick={onOpenChooseApDialog}>
@@ -305,7 +312,10 @@ const ErfkritFolder = ({ onClick }) => {
           </>
         )}
       </ContextMenu>
-      <Dialog open={openChooseAp} onClose={onCloseChooseApDialog}>
+      <Dialog
+        open={openChooseAp}
+        onClose={onCloseChooseApDialog}
+      >
         <DialogTitle>Erfolgskriterien aus anderer Art kopieren</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -343,6 +353,4 @@ const ErfkritFolder = ({ onClick }) => {
       </Dialog>
     </ErrorBoundary>
   )
-}
-
-export default observer(ErfkritFolder)
+})

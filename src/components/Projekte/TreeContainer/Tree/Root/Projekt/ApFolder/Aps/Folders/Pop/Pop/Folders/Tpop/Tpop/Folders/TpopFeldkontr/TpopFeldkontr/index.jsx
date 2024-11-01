@@ -4,11 +4,11 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../../../../../../../../../../../Row'
+import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../../storeContext.js'
-import ZaehlFolder from './Zaehl'
+import { ZaehlFolder } from './Zaehl/index.jsx'
 
-const TpopFeldkontr = ({ projekt, ap, pop, tpop }) => {
+export const TpopFeldkontr = observer(({ projekt, ap, pop, tpop }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { ekGqlFilterForTree } = store.tree
@@ -99,6 +99,4 @@ const TpopFeldkontr = ({ projekt, ap, pop, tpop }) => {
       </div>
     )
   })
-}
-
-export default observer(TpopFeldkontr)
+})

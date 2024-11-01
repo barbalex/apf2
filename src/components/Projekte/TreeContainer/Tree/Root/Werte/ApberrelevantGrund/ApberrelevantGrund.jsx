@@ -2,22 +2,22 @@ import { useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
 
-import Row from '../../../Row'
+import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
 
-const ApberrelevantGrundNodes = () => {
+export const ApberrelevantGrund = () => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
   const apberrelevantGrundWertesFilter =
-    nodeLabelFilter.tpopApberrelevantGrundWerte
-      ? {
-          label: {
-            includesInsensitive: nodeLabelFilter.tpopApberrelevantGrundWerte,
-          },
-        }
-      : { id: { isNull: false } }
+    nodeLabelFilter.tpopApberrelevantGrundWerte ?
+      {
+        label: {
+          includesInsensitive: nodeLabelFilter.tpopApberrelevantGrundWerte,
+        },
+      }
+    : { id: { isNull: false } }
 
   const { data } = useQuery({
     queryKey: [
@@ -62,7 +62,10 @@ const ApberrelevantGrundNodes = () => {
 
   if (!nodes.length) return null
 
-  return nodes.map((node) => <Row key={node.id} node={node} />)
+  return nodes.map((node) => (
+    <Row
+      key={node.id}
+      node={node}
+    />
+  ))
 }
-
-export default ApberrelevantGrundNodes

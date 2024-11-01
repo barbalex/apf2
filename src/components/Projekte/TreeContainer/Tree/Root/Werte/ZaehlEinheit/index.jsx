@@ -2,10 +2,10 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
-import Row from '../../../Row'
-import ZaehlEinheitNodes from './ZaehlEinheit'
+import { Row } from '../../../Row.jsx'
+import { ZaehlEinheit } from './ZaehlEinheit.jsx'
 
-const ZaehlEinheitFolder = ({ count, isLoading }) => {
+export const ZaehlEinheitFolder = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
@@ -35,9 +35,7 @@ const ZaehlEinheitFolder = ({ count, isLoading }) => {
   return (
     <>
       <Row node={node} />
-      {isOpen && <ZaehlEinheitNodes />}
+      {isOpen && <ZaehlEinheit />}
     </>
   )
-}
-
-export default observer(ZaehlEinheitFolder)
+})

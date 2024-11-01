@@ -1,7 +1,9 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../../index.jsx'
 import coordinates from './coordinates.png'
 
-const Koordinaten = () => (
+export const Component = memo(() => (
   <>
     <h1>Koordinaten</h1>
     <DokuDate>02.06.2019</DokuDate>
@@ -54,7 +56,10 @@ const Koordinaten = () => (
       In Formularen (Populationen und Teil-Populationen) werden neu beide
       Projektionen dargestellt:
       <br />
-      <img src={coordinates} alt="Koordinaten-Felder" />
+      <img
+        src={coordinates}
+        alt="Koordinaten-Felder"
+      />
       <br />
       ...und die Daten können auch in beiden verändert werden.
     </p>
@@ -68,6 +73,4 @@ const Koordinaten = () => (
       .
     </p>
   </>
-)
-
-export const Component = Koordinaten
+))

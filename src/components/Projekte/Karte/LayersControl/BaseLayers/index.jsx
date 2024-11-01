@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 
 import { BaseLayer } from './BaseLayer.jsx'
@@ -69,7 +69,7 @@ export const baseLayers = [
   },
 ]
 
-export const BaseLayers = () => (
+export const BaseLayers = memo(() => (
   <CardContent>
     {baseLayers.map((layer, index) => (
       <BaseLayer
@@ -78,4 +78,4 @@ export const BaseLayers = () => (
       />
     ))}
   </CardContent>
-)
+))

@@ -13,5 +13,3 @@ export const isElementInViewport = (el) => {
     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   )
 }
-
-export default isElementInViewport

@@ -4,11 +4,11 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
 
-import Row from '../../../../../../../../../../../../../../Row'
+import { Row } from '../../../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../../../storeContext.js'
-import Zaehl from './Zaehl'
+import { Zaehl } from './Zaehl.jsx'
 
-const TpopFeldkontrZaehlFolder = ({ projekt, ap, pop, tpop, tpopkontr }) => {
+export const ZaehlFolder = observer(({ projekt, ap, pop, tpop, tpopkontr }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
@@ -57,10 +57,9 @@ const TpopFeldkontrZaehlFolder = ({ projekt, ap, pop, tpop, tpopkontr }) => {
   const nodeLabelFilterString =
     store.tree?.nodeLabelFilter?.tpopkontrzaehl ?? ''
 
-  const message = isLoading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${count} gefiltert`
+  const message =
+    isLoading ? '...'
+    : nodeLabelFilterString ? `${count} gefiltert`
     : count
 
   const url = [
@@ -116,6 +115,4 @@ const TpopFeldkontrZaehlFolder = ({ projekt, ap, pop, tpop, tpopkontr }) => {
       )}
     </>
   )
-}
-
-export default observer(TpopFeldkontrZaehlFolder)
+})

@@ -1,20 +1,28 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../../index.jsx'
 import tpopSymbols1 from './tpopSymbols1.png'
 import tpopSymbols2 from './tpopSymbols2.png'
 import tpopSymbols3 from './tpopSymbols3.png'
 
-const KartePopTpopIconsLabelWaehlen = () => (
+export const Component = memo(() => (
   <>
     <h1>Karte: Symbole und Label für (Teil-)Populationen wählen</h1>
     <DokuDate>30.01.2019</DokuDate>Seit dem 26.12.2018 ist das Blumen-Symbol für
     Populationen und Teil-Populationen im Layer-Tool der Karte interaktiv:
     <br />
-    <img src={tpopSymbols1} alt="Symbol im Layertool" />
+    <img
+      src={tpopSymbols1}
+      alt="Symbol im Layertool"
+    />
     <br />
     <br />
     Klickt man darauf, öffnet sich ein Menü:
     <br />
-    <img src={tpopSymbols2} alt="Menü" />
+    <img
+      src={tpopSymbols2}
+      alt="Menü"
+    />
     <br />
     <br />
     Darin kann man wählen, mit welcher Symbolisierung und Labels Populationen
@@ -34,7 +42,10 @@ const KartePopTpopIconsLabelWaehlen = () => (
         </ul>
       </li>
     </ul>
-    <img src={tpopSymbols3} alt="Neue Symbole" />
+    <img
+      src={tpopSymbols3}
+      alt="Neue Symbole"
+    />
     <br />
     <h3>Label:</h3>
     <ul>
@@ -43,6 +54,4 @@ const KartePopTpopIconsLabelWaehlen = () => (
     </ul>
     <br />
   </>
-)
-
-export const Component = KartePopTpopIconsLabelWaehlen
+))

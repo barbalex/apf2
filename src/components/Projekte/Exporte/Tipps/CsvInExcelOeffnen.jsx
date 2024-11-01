@@ -11,12 +11,15 @@ import {
 } from '../index.jsx'
 import { StyledCardContent } from './index.jsx'
 
-const CsvInExcelOeffnen = () => {
+export const CsvInExcelOeffnen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>
           Sie wollen die .csv-Datei direkt in Excel öffnen? Das wird nicht
           empfohlen, aber hier erfahren Sie, wie es funktionieren kann:
@@ -31,7 +34,11 @@ const CsvInExcelOeffnen = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
         <StyledCardContent>
           <ol>
             <li>Excel öffnen</li>
@@ -64,5 +71,3 @@ const CsvInExcelOeffnen = () => {
     </StyledCard>
   )
 }
-
-export default CsvInExcelOeffnen

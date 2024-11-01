@@ -4,9 +4,9 @@
  * 3. update openNodes
  * 4. refresh tree
  */
-import dataGql from './data'
+import { query } from './query.js'
 
-const openLowerNodesTpop = async ({
+export const tpop = async ({
   id,
   popId = '99999999-9999-9999-9999-999999999999',
   apId = '99999999-9999-9999-9999-999999999999',
@@ -18,7 +18,7 @@ const openLowerNodesTpop = async ({
   const { addOpenNodes } = tree
   // 1. load all data
   const { data } = await client.query({
-    query: dataGql,
+    query: query,
     variables: { id },
   })
   const tpopmassns = data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []
@@ -292,5 +292,3 @@ const openLowerNodesTpop = async ({
   // 3. update openNodes
   addOpenNodes(newOpenNodes)
 }
-
-export default openLowerNodesTpop

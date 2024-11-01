@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { tpop } from '../../components/shared/fragments.js'
 
-export default gql`
+export const createTpop = gql`
   mutation createTpopForCreateNewPopFromBeob(
     $popId: UUID
     $gemeinde: String

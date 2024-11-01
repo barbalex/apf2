@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import SimpleBar from 'simplebar-react'
 
@@ -12,7 +12,7 @@ const FormContainer = styled.div`
   padding-top: 0;
 `
 
-export const Auswertung = () => (
+export const Auswertung = memo(() => (
   <SimpleBar
     style={{
       maxHeight: '100%',
@@ -27,4 +27,4 @@ export const Auswertung = () => (
       <TpopKontrolliert />
     </FormContainer>
   </SimpleBar>
-)
+))

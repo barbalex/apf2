@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, memo } from 'react'
 import ReactSelect from 'react-select'
 import styled from '@emotion/styled'
 
@@ -66,68 +66,70 @@ const StyledSelect = styled(ReactSelect)`
   }
 `
 
-export const Select = ({
-  value,
-  field = '',
-  label,
-  labelSize,
-  name,
-  error,
-  options,
-  loading,
-  maxHeight = null,
-  noCaret = false,
-  saveToDb,
-}) => {
-  const onChange = useCallback(
-    (option) => {
-      const fakeEvent = {
-        target: {
-          name,
-          value: option ? option.value : null,
-        },
-      }
-      saveToDb(fakeEvent)
-    },
-    [name, saveToDb],
-  )
+export const Select = memo(
+  ({
+    value,
+    field = '',
+    label,
+    labelSize,
+    name,
+    error,
+    options,
+    loading,
+    maxHeight = null,
+    noCaret = false,
+    saveToDb,
+  }) => {
+    const onChange = useCallback(
+      (option) => {
+        const fakeEvent = {
+          target: {
+            name,
+            value: option ? option.value : null,
+          },
+        }
+        saveToDb(fakeEvent)
+      },
+      [name, saveToDb],
+    )
 
-  // filter out historic options - if they are not the value set
-  const realOptions = options.filter((o) => {
-    const dontShowHistoric = !exists(value) || value !== o.value
-    if (dontShowHistoric) return !o.historic
-    return true
-  })
+    // filter out historic options - if they are not the value set
+    const realOptions = options.filter((o) => {
+      const dontShowHistoric = !exists(value) || value !== o.value
+      if (dontShowHistoric) return !o.historic
+      return true
+    })
 
-  // show ... while options are loading
-  const loadingOptions = [{ value, label: '...' }]
-  const optionsToUse = loading && value ? loadingOptions : realOptions
-  const selectValue = optionsToUse.find((o) => o.value === value)
+    // show ... while options are loading
+    const loadingOptions = [{ value, label: '...' }]
+    const optionsToUse = loading && value ? loadingOptions : realOptions
+    const selectValue = optionsToUse.find((o) => o.value === value)
 
-  return (
-    <Container data-id={field}>
-      {label && <Label labelsize={labelSize}>{label}</Label>}
-      <StyledSelect
-        id={field}
-        name={field}
-        value={selectValue}
-        options={optionsToUse}
-        onChange={onChange}
-        onKeyDown={(e) => {
-          // without stopping propagation, the event will bubble up to the parent
-          // in the more menu typing a will shift focus to a menu starting with a
-          e.stopPropagation()
-        }}
-        hideSelectedOptions
-        placeholder=""
-        isClearable
-        isSearchable
-        noOptionsMessage={() => '(keine)'}
-        maxheight={maxHeight}
-        classNamePrefix="react-select"
-        nocaret={noCaret}
-      />
-      {error && <Error>{error}</Error>}
-    </Container>
-  )
-}
+    return (
+      <Container data-id={field}>
+        {label && <Label labelsize={labelSize}>{label}</Label>}
+        <StyledSelect
+          id={field}
+          name={field}
+          value={selectValue}
+          options={optionsToUse}
+          onChange={onChange}
+          onKeyDown={(e) => {
+            // without stopping propagation, the event will bubble up to the parent
+            // in the more menu typing a will shift focus to a menu starting with a
+            e.stopPropagation()
+          }}
+          hideSelectedOptions
+          placeholder=""
+          isClearable
+          isSearchable
+          noOptionsMessage={() => '(keine)'}
+          maxheight={maxHeight}
+          classNamePrefix="react-select"
+          nocaret={noCaret}
+        />
+        {error && <Error>{error}</Error>}
+      </Container>
+    )
+  },
+)

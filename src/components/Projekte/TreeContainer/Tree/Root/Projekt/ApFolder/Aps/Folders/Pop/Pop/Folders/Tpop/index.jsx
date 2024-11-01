@@ -1,19 +1,18 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../../../../../../../Row'
+import { Row } from '../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
-import Tpop from './Tpop'
+import { Tpop } from './Tpop/index.jsx'
 
-const TpopFolder = ({ projekt, ap, pop, isLoading, count }) => {
+export const TpopFolder = observer(({ projekt, ap, pop, isLoading, count }) => {
   const store = useContext(StoreContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpop ?? ''
 
-  const message = isLoading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${count} gefiltert`
+  const message =
+    isLoading ? '...'
+    : nodeLabelFilterString ? `${count} gefiltert`
     : count
 
   const url = [
@@ -51,9 +50,13 @@ const TpopFolder = ({ projekt, ap, pop, isLoading, count }) => {
   return (
     <>
       <Row node={node} />
-      {isOpen && <Tpop projekt={projekt} ap={ap} pop={pop} />}
+      {isOpen && (
+        <Tpop
+          projekt={projekt}
+          ap={ap}
+          pop={pop}
+        />
+      )}
     </>
   )
-}
-
-export default observer(TpopFolder)
+})

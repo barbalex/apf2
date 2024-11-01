@@ -4,7 +4,10 @@ import { observer } from 'mobx-react-lite'
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { ContextMenu, MenuItem } from '../../../../modules/react-contextmenu/index.js'
+import {
+  ContextMenu,
+  MenuItem,
+} from '../../../../modules/react-contextmenu/index.js'
 
 // create objects outside render
 const insertData = {
@@ -37,41 +40,68 @@ const resetCopyingBiotopData = {
   action: 'resetCopyingBiotop',
 }
 
-const Tpopfeldkontr = ({ onClick }) => {
+export const Tpopfeldkontr = observer(({ onClick }) => {
   const { copying, user, copyingBiotop } = useContext(StoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id="treeTpopfeldkontr" hideOnLeave={true}>
+      <ContextMenu
+        id="treeTpopfeldkontr"
+        hideOnLeave={true}
+      >
         <div className="react-contextmenu-title">Feld-Kontrolle</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem onClick={onClick} data={insertData}>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
               erstelle neue
             </MenuItem>
-            <MenuItem onClick={onClick} data={deleteData}>
+            <MenuItem
+              onClick={onClick}
+              data={deleteData}
+            >
               lösche
             </MenuItem>
-            <MenuItem onClick={onClick} data={markForMovingData}>
+            <MenuItem
+              onClick={onClick}
+              data={markForMovingData}
+            >
               verschiebe
             </MenuItem>
-            <MenuItem onClick={onClick} data={markForCopyingData}>
+            <MenuItem
+              onClick={onClick}
+              data={markForCopyingData}
+            >
               kopiere
             </MenuItem>
             {copying.table && (
-              <MenuItem onClick={onClick} data={resetCopyingData}>
+              <MenuItem
+                onClick={onClick}
+                data={resetCopyingData}
+              >
                 Kopieren aufheben
               </MenuItem>
             )}
-            <MenuItem onClick={onClick} data={markForCopyingBiotopData}>
+            <MenuItem
+              onClick={onClick}
+              data={markForCopyingBiotopData}
+            >
               kopiere Biotop
             </MenuItem>
             {copyingBiotop.label && (
               <>
-                <MenuItem onClick={onClick} data={copyBiotopData}>
+                <MenuItem
+                  onClick={onClick}
+                  data={copyBiotopData}
+                >
                   {`kopiere Biotop von '${copyingBiotop.label}' hierhin`}
                 </MenuItem>
-                <MenuItem onClick={onClick} data={resetCopyingBiotopData}>
+                <MenuItem
+                  onClick={onClick}
+                  data={resetCopyingBiotopData}
+                >
                   Biotop Kopieren aufheben
                 </MenuItem>
               </>
@@ -81,6 +111,4 @@ const Tpopfeldkontr = ({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-}
-
-export default observer(Tpopfeldkontr)
+})

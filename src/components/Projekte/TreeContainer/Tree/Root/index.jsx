@@ -4,14 +4,14 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { jwtDecode } from 'jwt-decode'
 
-import Projekt from './Projekt/index.jsx'
-import Users from './Users/index.jsx'
-import Messages from './Messages.jsx'
-import Werte from './Werte/index.jsx'
-import CurrentIssues from './CurrentIssues/index.jsx'
+import { Projekt } from './Projekt/index.jsx'
+import { UsersFolder } from './Users/index.jsx'
+import { MessagesFolder } from './Messages.jsx'
+import { WerteFolder } from './Werte/index.jsx'
+import { CurrentIssuesFolder } from './CurrentIssues/index.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
 
-const TreeRoot = () => {
+export const Root = observer(() => {
   const client = useApolloClient()
 
   const store = useContext(StoreContext)
@@ -110,22 +110,20 @@ const TreeRoot = () => {
         projekt={data?.data?.allProjekts?.nodes?.[0]}
         projectIsOpen={projectIsOpen}
       />
-      <Users
+      <UsersFolder
         count={data?.data?.allUsers?.totalCount ?? 0}
         isLoading={isLoading}
         usersFilter={usersFilter}
       />
-      {role === 'apflora_manager' && <Werte />}
-      <Messages
+      {role === 'apflora_manager' && <WerteFolder />}
+      <MessagesFolder
         count={data?.data?.allMessages?.totalCount ?? 0}
         isLoading={isLoading}
       />
-      <CurrentIssues
+      <CurrentIssuesFolder
         count={data?.data?.allCurrentissues?.totalCount ?? 0}
         isLoading
       />
     </>
   )
-}
-
-export default observer(TreeRoot)
+})

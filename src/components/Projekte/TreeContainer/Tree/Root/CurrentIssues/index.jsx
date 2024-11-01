@@ -2,11 +2,11 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import max from 'lodash/max'
 
-import Row from '../../Row'
+import { Row } from '../../Row.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
-import Issues from './Issues'
+import { Issues } from './Issues.jsx'
 
-const CurrentIssuesFolderNode = ({ count, isLoading }) => {
+export const CurrentIssuesFolder = observer(({ count, isLoading }) => {
   const store = useContext(StoreContext)
 
   let message = isLoading && !count ? '...' : max([count - 1, 0])
@@ -31,6 +31,4 @@ const CurrentIssuesFolderNode = ({ count, isLoading }) => {
       {isOpen && <Issues />}
     </>
   )
-}
-
-export default observer(CurrentIssuesFolderNode)
+})

@@ -1,19 +1,18 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../../../../../Row'
+import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
-import ApArt from './ApArt'
+import { ApArt } from './ApArt.jsx'
 
-const ApArtFolder = ({ projekt, ap, count, isLoading }) => {
+export const ApArtFolder = observer(({ projekt, ap, count, isLoading }) => {
   const store = useContext(StoreContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.apart ?? ''
 
-  const message = isLoading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${count} gefiltert`
+  const message =
+    isLoading ? '...'
+    : nodeLabelFilterString ? `${count} gefiltert`
     : count
 
   const isOpen =
@@ -39,9 +38,12 @@ const ApArtFolder = ({ projekt, ap, count, isLoading }) => {
   return (
     <>
       <Row node={node} />
-      {isOpen && <ApArt projekt={projekt} ap={ap} />}
+      {isOpen && (
+        <ApArt
+          projekt={projekt}
+          ap={ap}
+        />
+      )}
     </>
   )
-}
-
-export default observer(ApArtFolder)
+})

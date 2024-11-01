@@ -1,6 +1,8 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../index.jsx'
 
-const TechnischeVoraussetzungen = () => (
+export const Component = memo(() => (
   <>
     <h1>Technische Voraussetzungen</h1>
     <DokuDate>29.04.2020</DokuDate>
@@ -40,6 +42,4 @@ const TechnischeVoraussetzungen = () => (
     </ul>
     <p>&nbsp;</p>
   </>
-)
-
-export const Component = TechnischeVoraussetzungen
+))

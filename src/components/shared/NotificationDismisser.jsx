@@ -1,9 +1,9 @@
-import { useCallback } from 'react'
+import { useCallback, memo } from 'react'
 import IconButton from '@mui/material/IconButton'
 import { MdClose as CloseIcon } from 'react-icons/md'
 import { useSnackbar } from 'notistack'
 
-export const NotificationDismisser = ({ nKey }) => {
+export const NotificationDismisser = memo(({ nKey }) => {
   const { closeSnackbar } = useSnackbar()
   const onClick = useCallback(() => closeSnackbar(nKey), [closeSnackbar, nKey])
 
@@ -18,4 +18,4 @@ export const NotificationDismisser = ({ nKey }) => {
       <CloseIcon />
     </IconButton>
   )
-}
+})

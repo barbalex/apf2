@@ -1,6 +1,6 @@
-import Row from '../../../../../../../../../Row'
+import { Row } from '../../../../../../../../../Row.jsx'
 
-const Zielber = ({ zielbers, projekt, ap, jahr, ziel }) =>
+export const Zielber = ({ zielbers, projekt, ap, jahr, ziel }) =>
   (zielbers ?? []).map((el) => {
     const node = {
       nodeType: 'table',
@@ -24,7 +24,10 @@ const Zielber = ({ zielbers, projekt, ap, jahr, ziel }) =>
       hasChildren: false,
     }
 
-    return <Row key={el.id} node={node} />
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
+    )
   })
-
-export default Zielber

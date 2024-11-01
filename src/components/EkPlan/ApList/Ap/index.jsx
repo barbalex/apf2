@@ -37,13 +37,13 @@ export const Ap = ({ ap }) => {
     (e) => e?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text,
   )
   const einheitsText =
-    einheits.length === 0
-      ? 'Keine! Bitte erfassen Sie eine zielrelevante EK-Zähleinheit'
-      : einheits.join(', ')
+    einheits.length === 0 ?
+      'Keine! Bitte erfassen Sie eine zielrelevante EK-Zähleinheit'
+    : einheits.join(', ')
   const labelText =
-    einheits.length > 1
-      ? 'Zielrelevante Zähleinheiten:'
-      : 'Zielrelevante Zähleinheit:'
+    einheits.length > 1 ?
+      'Zielrelevante Zähleinheiten:'
+    : 'Zielrelevante Zähleinheit:'
 
   return (
     <Container>
@@ -65,5 +65,3 @@ export const Ap = ({ ap }) => {
     </Container>
   )
 }
-
-export default Ap

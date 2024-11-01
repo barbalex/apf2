@@ -1,18 +1,17 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import Row from '../../Row'
+import { Row } from '../../Row.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
-import Users from './Users'
+import { Users } from './Users.jsx'
 
-const UserFolderNode = ({ count, isLoading, usersFilter }) => {
+export const UsersFolder = observer(({ count, isLoading, usersFilter }) => {
   const store = useContext(StoreContext)
 
   const nodeLabelFilterString = store.tree?.nodeLabelFilter?.user ?? ''
-  const message = isLoading
-    ? '...'
-    : nodeLabelFilterString
-    ? `${count} gefiltert`
+  const message =
+    isLoading ? '...'
+    : nodeLabelFilterString ? `${count} gefiltert`
     : count
 
   const node = {
@@ -35,6 +34,4 @@ const UserFolderNode = ({ count, isLoading, usersFilter }) => {
       {isOpen && <Users usersFilter={usersFilter} />}
     </>
   )
-}
-
-export default observer(UserFolderNode)
+})

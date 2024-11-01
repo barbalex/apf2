@@ -1,10 +1,12 @@
+import { memo } from 'react'
+
 import { DokuDate } from '../../index.jsx'
 import mapMeasure from './mapMeasure.png'
 import mapScale from './mapScale.png'
 import mapScaleOpen from './mapScaleOpen.png'
 import mapScaleSet from './mapScaleSet.png'
 
-const KarteMassstab = () => (
+export const Component = memo(() => (
   <>
     <h1>Karte: Massstab</h1>
     <DokuDate>18.04.2019</DokuDate>
@@ -13,7 +15,10 @@ const KarteMassstab = () => (
       Ihr findet das Massstab-Werkzeug unten links auf der Karte, oberhalb des
       Werkzeugs, dass eine Distanz anzeigt:
       <br />
-      <img src={mapScale} alt="Massstab-Werkzeug" />
+      <img
+        src={mapScale}
+        alt="Massstab-Werkzeug"
+      />
       <br />
     </p>
     <p>Was kann es?</p>
@@ -40,7 +45,10 @@ const KarteMassstab = () => (
             Wenn ihr also eine Distanz messen wollt, benutzt dafür das
             Mess-Werkzeug oben rechts unter dem Layer-Werkzeug:
             <br />
-            <img src={mapMeasure} alt="Messen" />
+            <img
+              src={mapMeasure}
+              alt="Messen"
+            />
           </li>
         </ul>
       </li>
@@ -48,15 +56,19 @@ const KarteMassstab = () => (
         Klickt man auf das Massstab-Werkzeug, öffnet sich eine Liste von
         Massstäben, aus denen man wählen kann
         <br />
-        <img src={mapScaleOpen} alt="Massstab wählen" />
+        <img
+          src={mapScaleOpen}
+          alt="Massstab wählen"
+        />
       </li>
       <li>
         ...und im untersten Feld kann man einen beliebigen Massstab setzen
         <br />
-        <img src={mapScaleSet} alt="Massstab setzen" />
+        <img
+          src={mapScaleSet}
+          alt="Massstab setzen"
+        />
       </li>
     </ul>
   </>
-)
-
-export const Component = KarteMassstab
+))

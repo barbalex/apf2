@@ -1,7 +1,9 @@
-import { DokuDate } from '../../index.jsx'
-import beziehungen from './beziehungen.png'
+import { memo } from 'react'
 
-const Technologien = () => (
+import { DokuDate } from '../../index.jsx'
+// import beziehungen from './beziehungen.png'
+
+export const Component = memo(() => (
   <>
     <h1>Technologien</h1>
     <DokuDate>1.1.2023</DokuDate>
@@ -16,7 +18,11 @@ const Technologien = () => (
         Die <strong>App</strong> bzw. das Frontend ist auf{' '}
         <a href="//apflora.ch">apflora.ch</a> erreichbar. Sie läuft serverless
         auf{' '}
-        <a href="https://vercel.com" target="_blank" rel="noreferrer">
+        <a
+          href="https://vercel.com"
+          target="_blank"
+          rel="noreferrer"
+        >
           vercel
         </a>
       </li>
@@ -37,7 +43,11 @@ const Technologien = () => (
       </li>
       <li>
         <p>
-          <a href="//vitejs.dev/" target="_blank" rel="noreferrer">
+          <a
+            href="//vitejs.dev/"
+            target="_blank"
+            rel="noreferrer"
+          >
             Vite
           </a>
           : Modernes Werkzeug, um dynamische Apps zu erzeugen
@@ -75,7 +85,11 @@ const Technologien = () => (
       </li>
       <li>
         <p>
-          <a href="//facebook.github.io/react" target="_blank" rel="noreferrer">
+          <a
+            href="//facebook.github.io/react"
+            target="_blank"
+            rel="noreferrer"
+          >
             React
           </a>
           : Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten
@@ -83,7 +97,11 @@ const Technologien = () => (
       </li>
       <li>
         <p>
-          <a href="https://www.apollodata.com" target="_blank" rel="noreferrer">
+          <a
+            href="https://www.apollodata.com"
+            target="_blank"
+            rel="noreferrer"
+          >
             Apollo
           </a>
           . Komponenten definieren, welche Daten sie brauchen. Apollo stellt sie
@@ -104,7 +122,11 @@ const Technologien = () => (
       </li>
       <li>
         <p>
-          <a href="https://www.cypress.io" target="_blank" rel="noreferrer">
+          <a
+            href="https://www.cypress.io"
+            target="_blank"
+            rel="noreferrer"
+          >
             Cypress
           </a>
           : automatisiert testen
@@ -113,23 +135,36 @@ const Technologien = () => (
       <li>
         <p>
           Als Datenbank dient{' '}
-          <a href="//postgresql.org/" target="_blank" rel="noreferrer">
+          <a
+            href="//postgresql.org/"
+            target="_blank"
+            rel="noreferrer"
+          >
             PostgreSQL
           </a>
           . Hier ein{' '}
           <a
-            href="//raw.githubusercontent.com/barbalex/apf2/master/src/etc/beziehungen.png"
+            href="//dbdiagram.io/d/apflora-65639a833be1495787c2f457"
             target="_blank"
             rel="noreferrer"
           >
             Diagramm der Beziehungen
           </a>
           :
-          <img src={beziehungen} alt="Beziehungs-Diagramm" width="100%" />
+          {/* <img
+            src={beziehungen}
+            alt="Beziehungs-Diagramm"
+            width="100%"
+          /> */}
+          <iframe
+            width="100%"
+            height="800"
+            src="https://dbdiagram.io/e/65639a833be1495787c2f457/67238c12b1b39dd8581538b4"
+            frameBorder="0.5"
+            style={{ border: '1px solid #dbdbdb' }}
+          ></iframe>
         </p>
       </li>
     </ul>
   </>
-)
-
-export const Component = Technologien
+))

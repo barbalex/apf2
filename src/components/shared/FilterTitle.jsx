@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { useContext, useCallback, memo } from 'react'
 import styled from '@emotion/styled'
 import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
 import { MdInfoOutline } from 'react-icons/md'
@@ -44,8 +44,8 @@ const StyledDeleteFilterIcon3 = styled(FaRegTrashAlt)`
 `
 const StyledInfoIcon = styled(MdInfoOutline)``
 
-export const FilterTitle = observer(
-  ({ title, table, totalNr, filteredNr, activeTab }) => {
+export const FilterTitle = memo(
+  observer(({ title, table, totalNr, filteredNr, activeTab }) => {
     const store = useContext(StoreContext)
     const { tableIsFiltered, dataFilterTreeIsFiltered } = store
     const {
@@ -138,5 +138,5 @@ export const FilterTitle = observer(
         </TitleRow>
       </Container>
     )
-  },
+  }),
 )

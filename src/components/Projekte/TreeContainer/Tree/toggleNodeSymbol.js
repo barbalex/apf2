@@ -1,10 +1,10 @@
 import isEqual from 'lodash/isEqual'
 import { getSnapshot } from 'mobx-state-tree'
 
-import isNodeOpen from '../isNodeOpen'
-import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
+import { isNodeOpen } from '../isNodeOpen.js'
+import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.js'
 
-const toggleNodeSymbol = ({ node, store, search, navigate }) => {
+export const toggleNodeSymbol = ({ node, store, search, navigate }) => {
   if (!node.url) throw new Error('passed node has no url')
   const {
     openNodes: openNodesRaw,
@@ -34,5 +34,3 @@ const toggleNodeSymbol = ({ node, store, search, navigate }) => {
   setLastTouchedNode(node.url)
   setOpenNodes(newOpenNodes)
 }
-
-export default toggleNodeSymbol

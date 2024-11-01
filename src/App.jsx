@@ -1,17 +1,12 @@
 import { lazy, Suspense, createRef } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
-import theme from './utils/materialTheme.js'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale/de'
 import { ApolloProvider } from '@apollo/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import MobxStore from './store/index.js'
 import { SnackbarProvider } from 'notistack'
 //import { onPatch } from 'mobx-state-tree'
-
-import { initializeIdb } from './modules/initializeIdb.js'
-import buildClient from './client.js'
 
 // see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
 import '@fontsource/roboto-mono'
@@ -20,36 +15,52 @@ import '@fontsource/roboto-mono/700.css'
 import '@fontsource/roboto'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
-import GlobalStyle from './components/GlobalStyle.jsx'
+import 'simplebar-react/dist/simplebar.min.css'
+import 'react-leaflet-markercluster/dist/styles.min.css'
+import 'react-datepicker/dist/react-datepicker.css'
+
+import { GlobalStyle } from './components/GlobalStyle.jsx'
+import { theme } from './utils/materialTheme.js'
+
+import { initializeIdb } from './modules/initializeIdb.js'
+import { MobxStore } from './store/index.js'
+import { buildClient } from './client.js'
 
 import { Provider as MobxProvider } from './storeContext.js'
 import { Provider as IdbProvider } from './idbContext.js'
-
 import { UploaderContext } from './UploaderContext.js'
 
 const Notifier = lazy(async () => ({
   default: (await import('./components/shared/Notifier.jsx')).Notifier,
 }))
-import { NotificationDismisser } from './components/shared/NotificationDismisser.jsx'
-
-import 'simplebar-react/dist/simplebar.min.css'
-
-import '@changey/react-leaflet-markercluster/dist/styles.min.css'
-import 'react-datepicker/dist/react-datepicker.css'
-
-import Router from './components/Router/index.jsx'
-const IsPrintSetter = lazy(() => import('./components/IsPrintSetter.jsx'))
-const MouseWheelHandler = lazy(
-  () => import('./components/MouseWheelHandler.jsx'),
-)
-const LastTouchedNodeSetter = lazy(
-  () => import('./components/LastTouchedNodeSetter.jsx'),
-)
-const LegacyBrowserInformer = lazy(
-  () => import('./components/LegacyBrowserInformer.jsx'),
-)
-const StorePersister = lazy(() => import('./components/StorePersister.jsx'))
-import { Spinner } from './components/shared/Spinner.jsx'
+const NotificationDismisser = lazy(async () => ({
+  default: (await import('./components/shared/NotificationDismisser.jsx'))
+    .NotificationDismisser,
+}))
+const Router = lazy(async () => ({
+  default: (await import('./components/Router/index.jsx')).Router,
+}))
+const IsPrintSetter = lazy(async () => ({
+  default: (await import('./components/IsPrintSetter.jsx')).IsPrintSetter,
+}))
+const MouseWheelHandler = lazy(async () => ({
+  default: (await import('./components/MouseWheelHandler.jsx'))
+    .MouseWheelHandler,
+}))
+const LastTouchedNodeSetter = lazy(async () => ({
+  default: (await import('./components/LastTouchedNodeSetter.jsx'))
+    .LastTouchedNodeSetter,
+}))
+const LegacyBrowserInformer = lazy(async () => ({
+  default: (await import('./components/LegacyBrowserInformer.jsx'))
+    .LegacyBrowserInformer,
+}))
+const StorePersister = lazy(async () => ({
+  default: (await import('./components/StorePersister.jsx')).StorePersister,
+}))
+const Spinner = lazy(async () => ({
+  default: (await import('./components/shared/Spinner.jsx')).Spinner,
+}))
 
 registerLocale('de', de)
 setDefaultLocale('de')
@@ -64,7 +75,7 @@ const queryClient = new QueryClient({
   },
 })
 
-const App = () => {
+export const App = () => {
   const idb = initializeIdb()
   const store = MobxStore.create()
   const client = buildClient({ store })
@@ -118,5 +129,3 @@ const App = () => {
     </IdbProvider>
   )
 }
-
-export default App

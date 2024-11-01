@@ -8,10 +8,10 @@ import {
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-// import Unterhalt from './components/Unterhalt'
+// import { Unterhalt } from './components/Unterhalt.jsx'
 
 // uncomment unterhalt route for Unterhalt
-const RouterComponent = () => {
+export const Router = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route lazy={() => import('../AppBar/index.jsx')}>
@@ -351,5 +351,3 @@ const RouterComponent = () => {
 
   return <RouterProvider router={router} />
 }
-
-export default RouterComponent

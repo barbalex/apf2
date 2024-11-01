@@ -8,7 +8,7 @@ import { useApolloClient } from '@apollo/client'
 import { useLocation } from 'react-router-dom'
 
 import { tables } from '../../../../modules/tables.js'
-import deleteDataset from './delete'
+import { deleteModule } from './delete/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
@@ -18,7 +18,7 @@ const StyledDialog = styled(Dialog)`
   }
 `
 
-const DatasetDeleteModal = () => {
+export const DatasetDeleteModal = observer(() => {
   const { search } = useLocation()
 
   const client = useApolloClient()
@@ -39,7 +39,7 @@ const DatasetDeleteModal = () => {
 
   const onClickLoeschen = useCallback(
     () =>
-      deleteDataset({
+      deleteModule({
         client,
         store,
         search,
@@ -68,6 +68,4 @@ const DatasetDeleteModal = () => {
       </StyledDialog>
     </ErrorBoundary>
   )
-}
-
-export default observer(DatasetDeleteModal)
+})
