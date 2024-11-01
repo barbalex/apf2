@@ -7,6 +7,8 @@ import Button from '@mui/material/Button'
 import SimpleBar from 'simplebar-react'
 import { FaPlus, FaMinus, FaEye, FaRectangleList } from 'react-icons/fa6'
 
+import './index.css'
+
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import { Error } from '../Error'
 import { Spinner } from '../Spinner'
@@ -179,14 +181,12 @@ export const Files = memo(
         thumbnailTitle: f.name || '',
       }))
 
-      console.log('Files', { isPreview })
-
       const togglePreview = useCallback(
         () => setIsPreview(!isPreview),
         [isPreview, setIsPreview],
       )
 
-      const menus = useCallback(
+      const menus = useMemo(
         () => [
           {
             title: 'Dateien hochladen',
@@ -195,12 +195,17 @@ export const Files = memo(
           },
           {
             title: isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen',
-            iconComponent: isPreview ? <FaRectangleList /> : <FaEye />,
+            iconComponent:
+              isPreview ?
+                <FaRectangleList key={isPreview} />
+              : <FaEye key={isPreview} />,
             onClick: togglePreview,
           },
         ],
         [isPreview, togglePreview],
       )
+
+      console.log('Files', { isPreview, menus })
 
       if (loading || loadingParent) return <Spinner />
 
