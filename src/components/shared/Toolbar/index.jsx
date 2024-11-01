@@ -13,9 +13,10 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   width: 100%;
-  overflow: hidden;
   padding: 5px;
-  float: right;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 `
 const ToolDiv = styled.div`
   display: inline;
@@ -53,36 +54,31 @@ const testTools = [
 // so: object with: title, icon, onClick, width?
 // then: build menu and or buttons from that
 export const Toolbar = memo(({ tools = testTools }) => {
-  const [overflowing, setOverflowing] = useState(false)
   const containerRef = useRef(null)
+  const [toolsAsButtons, setToolsAsButtons] = useState(<div />)
+  const [toolsAsMenuItems, setToolsAsMenuItems] = useState(<div />)
 
-  const checkOverflow = useCallback(() => {
-    const container = containerRef.current
-    const isOverflowing = container.scrollWidth > container.clientWidth
-    if (isOverflowing !== overflowing) {
-      setOverflowing(isOverflowing)
-      if (isOverflowing) {
-        // TODO: send right tool into menu
-      }
-    }
-  }, [overflowing])
+  const onResize = useCallback(({ width }) => {
+    console.log('width:', width)
+    // TODO: build menus
+    // width of one tool button is toolButtonWidth
+    // toolsWidth is tools.length * toolWidth + (tools.length - 1) * columnGapWidth
+    // if toolsWidth > container width
+    // fit tools into containerWidth - MenuButtonWidth - columnGapWidth
+    // fit fitting tools into container
+    // add overflowing tools to menu
+    setToolsAsButtons(
+      testTools.map((tool) => <ToolDiv key={tool.title}>{tool.title}</ToolDiv>),
+    )
+  }, [])
 
   const { width } = useResizeDetector({
-    onResize: checkOverflow,
+    onResize,
     targetRef: containerRef,
     refreshMode: 'debounce',
     refreshRate: 200,
     refreshOptions: { trailing: true },
   })
-
-  // width of one tool button is toolButtonWidth
-  // toolsWidth is tools.length * toolWidth + (tools.length - 1) * columnGapWidth
-  // if toolsWidth > container width
-  // fit tools into containerWidth - MenuButtonWidth - columnGapWidth
-  // fit fitting tools into container
-  // add overflowing tools to menu
-
-  console.log('Toobar, overflowing:', overflowing)
 
   return (
     <Container ref={containerRef}>
