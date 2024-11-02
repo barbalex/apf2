@@ -1,3 +1,7 @@
+/* move it off screen */
+/* reason: not displaying will prevent api.initFlow() from working */
 .uploadcare {
-  display: none;
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
 }

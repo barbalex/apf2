@@ -191,6 +191,7 @@ export const Files = memo(
                   'Files.menus.hochladen.onClick, initFlow:',
                   api?.initFlow?.(),
                 )
+                api?.initFlow?.()
               }}
             >
               <FaPlus />
