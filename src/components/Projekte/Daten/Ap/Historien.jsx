@@ -8,64 +8,69 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { History as HistoryComponent } from '../../../shared/History/index.jsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 
-const popHistoriesQuery = gql`
-  query popHistoryQuery($popId: UUID!) {
-    popById(id: $popId) {
+const apHistoriesQuery = gql`
+  query apHistoryQuery($apId: UUID!) {
+    apById(id: $apId) {
       id
-      apId
-      apByApId {
+      label
+      artId
+      aeTaxonomyByArtId {
         id
-        aeTaxonomyByArtId {
-          id
-          artname
-        }
+        artname
       }
-      nr
-      name
-      status
-      popStatusWerteByStatus {
+      bearbeitung
+      apBearbstandWerteByBearbeitung {
         id
         text
       }
-      statusUnklar
-      statusUnklarBegruendung
-      bekanntSeit
-      geomPoint {
-        geojson
-        x
-        y
+      startJahr
+      umsetzung
+      apUmsetzungWerteByUmsetzung {
+        id
+        text
+      }
+      artId
+      bearbeiter
+      adresseByBearbeiter {
+        id
+        name
+      }
+      ekfBeobachtungszeitpunkt
+      projId
+      projektByProjId {
+        id
+        name
       }
       changedBy
     }
-    allPopHistories(filter: { id: { equalTo: $popId } }, orderBy: YEAR_DESC) {
+    allApHistories(filter: { id: { equalTo: $apId } }, orderBy: YEAR_DESC) {
       totalCount
       nodes {
         id
         year
-        apId
-        apByApId {
+        artId
+        aeTaxonomyByArtId {
           id
-          aeTaxonomyByArtId {
-            id
-            artname
-          }
+          artname
         }
-        nr
-        name
-        status
-        popStatusWerteByStatus {
+        bearbeitung
+        apBearbstandWerteByBearbeitung {
           id
           text
         }
-        statusUnklar
-        statusUnklarBegruendung
-        bekanntSeit
-        geomPoint {
-          geojson
-          x
-          y
+        startJahr
+        umsetzung
+        apUmsetzungWerteByUmsetzung {
+          id
+          text
         }
-        changedBy
+        artId
+        bearbeiter
+        adresseByBearbeiter {
+          id
+          name
+        }
+        ekfBeobachtungszeitpunkt
       }
     }
   }
@@ -106,17 +111,16 @@ const Aktuell = styled.span`
   background-color: rgb(201, 238, 211);
 `
 
-export const History = () => {
-  const { popId } = useParams()
-
-  const { error, data, loading } = useQuery(popHistoriesQuery, {
+export const Component = () => {
+  const { apId } = useParams()
+  const { error, data, loading } = useQuery(apHistoriesQuery, {
     variables: {
-      popId,
+      apId,
     },
   })
 
-  const row = data?.popById
-  const rows = data?.allPopHistories.nodes ?? []
+  const row = data?.apById
+  const rows = data?.allApHistories.nodes ?? []
 
   const openDocs = useCallback(() => {
     const url = `${appBaseUrl()}/Dokumentation/historisierung`
@@ -141,7 +145,7 @@ export const History = () => {
     >
       <InnerContainer>
         <DocLine>
-          Jährlich historisierte Daten der Population (
+          Jährlich historisierte Daten der Art (
           <DocLink onClick={openDocs}>Dokumentation</DocLink>
           ).
         </DocLine>
@@ -152,50 +156,37 @@ export const History = () => {
         {rows.map((r) => {
           const dataArray = [
             {
+              valueInRow: row?.aeTaxonomyByArtId?.artname ?? row?.artId,
+              valueInHist: r?.aeTaxonomyByArtId?.artname ?? r?.artId,
+              label: 'Art (id)',
+            },
+            {
               valueInRow:
-                row?.apByApId?.aeTaxonomyByArtId?.artname ?? row?.apId,
-              valueInHist: r?.apByApId?.aeTaxonomyByArtId?.artname ?? r?.apId,
-              label: 'Art',
+                row?.apBearbstandWerteByBearbeitung?.text ?? row?.bearbeitung,
+              valueInHist:
+                r?.apBearbstandWerteByBearbeitung?.text ?? r?.bearbeitung,
+              label: 'Aktionsplan',
             },
             {
-              valueInRow: row?.nr,
-              valueInHist: r?.nr,
-              label: 'Nr.',
+              valueInRow:
+                row?.apUmsetzungWerteByUmsetzung?.text ?? row?.umsetzung,
+              valueInHist: r?.apUmsetzungWerteByUmsetzung?.text ?? r?.umsetzung,
+              label: 'Stand Umsetzung',
             },
             {
-              valueInRow: row?.name,
-              valueInHist: r?.name,
-              label: 'Name',
+              valueInRow: row?.adresseByBearbeiter?.name ?? row?.bearbeiter,
+              valueInHist: r?.adresseByBearbeiter?.name ?? r?.bearbeiter,
+              label: 'Verantwortlich',
             },
             {
-              valueInRow: row?.bekanntSeit,
-              valueInHist: r?.bekanntSeit,
-              label: 'bekannt seit',
+              valueInRow: row?.startJahr,
+              valueInHist: r?.startJahr,
+              label: 'Start im Jahr',
             },
             {
-              valueInRow: row?.popStatusWerteByStatus?.text ?? row?.status,
-              valueInHist: r?.popStatusWerteByStatus?.text ?? r?.status,
-              label: 'Status',
-            },
-            {
-              valueInRow: row?.statusUnklar,
-              valueInHist: r?.statusUnklar,
-              label: 'Status unklar',
-            },
-            {
-              valueInRow: row?.statusUnklarBegruendung,
-              valueInHist: r?.statusUnklarBegruendung,
-              label: 'Begründung (für Status unklar)',
-            },
-            {
-              valueInRow: row?.geomPoint?.x,
-              valueInHist: r?.geomPoint?.x,
-              label: 'Längengrad',
-            },
-            {
-              valueInRow: row?.geomPoint?.y,
-              valueInHist: r?.geomPoint?.y,
-              label: 'Breitengrad',
+              valueInRow: row?.ekfBeobachtungszeitpunkt,
+              valueInHist: r?.ekfBeobachtungszeitpunkt,
+              label: 'Bester Beobachtungszeitpunkt für EKF',
             },
           ]
 

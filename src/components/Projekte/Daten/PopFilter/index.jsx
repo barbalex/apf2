@@ -48,7 +48,7 @@ export const PopFilter = observer(() => {
 
   const store = useContext(StoreContext)
   const {
-    dataFilter,
+    dataFilter: dataFilterRaw,
     nodeLabelFilter,
     popGqlFilter,
     mapFilter,
@@ -56,6 +56,9 @@ export const PopFilter = observer(() => {
     apFilter,
     dataFilterSetValue,
   } = store.tree
+
+  // somenow to live updates without this
+  const dataFilter = dataFilterRaw.toJSON()
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -73,6 +76,7 @@ export const PopFilter = observer(() => {
   })
 
   const row = dataFilter.pop[activeTab]
+  console.log('PopFilter', { row, activeTab, dataFilter })
 
   const saveToDb = useCallback(
     async (event) =>

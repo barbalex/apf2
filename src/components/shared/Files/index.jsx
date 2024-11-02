@@ -74,7 +74,7 @@ export const Files = memo(
     ({
       parentId = '99999999-9999-9999-9999-999999999999',
       parent,
-      loadingParent,
+      loadingParent, // still in use?
     }) => {
       const client = useApolloClient()
       const uploaderCtx = useContext(UploaderContext)
@@ -101,6 +101,29 @@ export const Files = memo(
         }
         ${fragment}
       `
+
+      console.log('Files', {
+        parentId,
+        parent,
+        loadingParent,
+        queryName,
+        parentIdName,
+        fields,
+        fragment,
+        queryString: `
+        query FileQuery($parentId: UUID!) {
+          ${queryName}(
+            orderBy: NAME_ASC
+            filter: { ${parentIdName}: { equalTo: $parentId } }
+          ) {
+            nodes {
+              ...${fields}
+            }
+          }
+        }
+        ${fragment}
+      `,
+      })
       const { data, error, loading, refetch } = useQuery(query, {
         variables: { parentId },
       })

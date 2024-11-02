@@ -1,3 +1,4 @@
+import { useContext, useState, useCallback } from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -6,7 +7,8 @@ import TableRow from '@mui/material/TableRow'
 import styled from '@emotion/styled'
 import max from 'lodash/max'
 import groupBy from 'lodash/groupBy'
-import { useQuery } from '@apollo/client'
+import { useQuery, useApolloClient, gql } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
@@ -18,6 +20,15 @@ import { query } from './query.js'
 import { EkYear } from './EkYear.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
+import { StoreContext } from '../../../../../storeContext.js'
+import { query as tpopQuery } from '../query.js'
+import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
+import {
+  popStatusWerte,
+  tpop,
+  tpopApberrelevantGrundWerte,
+} from '../../../../shared/fragments.js'
+import { fieldTypes } from '../index.jsx'
 
 const FormContainerNoColumnsInner = styled.div`
   padding: 10px;
@@ -59,8 +70,107 @@ const EkplanTitle = styled.h5`
   margin-bottom: 10px;
 `
 
-export const Ek = ({ saveToDb, row, fieldErrors, loadingParent }) => {
+export const Component = () => {
   const { tpopId, apId } = useParams()
+  const store = useContext(StoreContext)
+  const client = useApolloClient()
+  const queryClient = useQueryClient()
+
+  const {
+    data,
+    loading,
+    error,
+    refetch: refetchTpop,
+  } = useQuery(tpopQuery, {
+    variables: {
+      id: tpopId,
+    },
+  })
+
+  const row = data?.tpopById ?? {}
+  const [fieldErrors, setFieldErrors] = useState({})
+  const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      const value = ifIsNumericAsNumber(event.target.value)
+
+      const variables = {
+        id: tpopId,
+        [field]: value,
+        changedBy: store.user.name,
+      }
+      try {
+        await client.mutate({
+          mutation: gql`
+            mutation updateTpop${field}(
+              $id: UUID!
+              $${field}: ${fieldTypes[field]}
+              $changedBy: String
+            ) {
+              updateTpopById(
+                input: {
+                  id: $id
+                  tpopPatch: {
+                    ${field}: $${field}
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                tpop {
+                  ...TpopFields
+                  popStatusWerteByStatus {
+                    ...PopStatusWerteFields
+                  }
+                  tpopApberrelevantGrundWerteByApberRelevantGrund {
+                    ...TpopApberrelevantGrundWerteFields
+                  }
+                  popByPopId {
+                    id
+                    apId
+                  }
+                }
+              }
+            }
+            ${popStatusWerte}
+            ${tpop}
+            ${tpopApberrelevantGrundWerte}
+          `,
+          variables,
+          // no optimistic responce as geomPoint
+        })
+      } catch (error) {
+        return setFieldErrors({ [field]: error.message })
+      }
+      // update tpop on map
+      if (
+        (value &&
+          ((field === 'ylv95Y' && row?.lv95X) ||
+            (field === 'lv95X' && row?.y))) ||
+        (!value && (field === 'ylv95Y' || field === 'lv95X'))
+      ) {
+        client.refetchQueries({
+          include: ['TpopForMapQuery', 'PopForMapQuery'],
+        })
+      }
+      if (Object.keys(fieldErrors).length) {
+        setFieldErrors({})
+      }
+      if (['nr', 'flurname'].includes(field)) {
+        queryClient.invalidateQueries({
+          queryKey: [`treeTpop`],
+        })
+      }
+    },
+    [
+      client,
+      fieldErrors,
+      queryClient,
+      row.id,
+      row?.lv95X,
+      row?.y,
+      store.user.name,
+    ],
+  )
 
   const {
     data: dataEk,
@@ -100,7 +210,7 @@ export const Ek = ({ saveToDb, row, fieldErrors, loadingParent }) => {
     'jahr',
   )
 
-  if (loadingEk || loadingParent) return <Spinner />
+  if (loadingEk) return <Spinner />
 
   if (!row) return null
 

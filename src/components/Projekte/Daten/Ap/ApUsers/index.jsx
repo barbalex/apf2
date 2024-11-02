@@ -6,8 +6,8 @@ import { useParams } from 'react-router-dom'
 
 import { ApUser } from './ApUser.jsx'
 import { NewUser } from './NewUser.jsx'
-import { Label } from '../../../../../shared/Label.jsx'
-import { Error } from '../../../../../shared/Error.jsx'
+import { Label } from '../../../../shared/Label.jsx'
+import { Error } from '../../../../shared/Error.jsx'
 
 const Container = styled.div`
   margin-top: 10px;

@@ -12,7 +12,7 @@ const FormContainer = styled.div`
   padding-top: 0;
 `
 
-export const Auswertung = memo(() => (
+export const Component = memo(() => (
   <SimpleBar
     style={{
       maxHeight: '100%',
