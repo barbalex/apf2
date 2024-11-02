@@ -180,7 +180,10 @@ export const Files = memo(
             title: 'Dateien hochladen',
             iconComponent: <FaPlus />,
             onClick: () => {
-              console.log('Files.menus.hochladen.onClick, api:', api)
+              console.log(
+                'Files.menus.hochladen.onClick, initFlow:',
+                api?.initFlow?.(),
+              )
               api?.initFlow?.()
             },
           },
@@ -190,10 +193,10 @@ export const Files = memo(
             onClick: togglePreview,
           },
         ],
-        [isPreview, togglePreview, api],
+        [isPreview, togglePreview, api?.initFlow],
       )
 
-      console.log('Files', { isPreview, menus })
+      console.log('Files', { isPreview, menus, initFlow: api?.initFlow })
 
       if (loading || loadingParent) return <Spinner />
 
@@ -201,7 +204,10 @@ export const Files = memo(
 
       return (
         <OuterContainer>
-          <MenuBar menus={menus} />
+          <MenuBar
+            menus={menus}
+            initFlow={api?.initFlow}
+          />
           <SimpleBar
             style={{
               maxHeight: '100%',

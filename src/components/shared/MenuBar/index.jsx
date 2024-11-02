@@ -94,8 +94,8 @@ const gapWidth = 5
 // or rather: need info for menu AND button
 // so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
-export const MenuBar = memo(({ menus = testMenus }) => {
-  console.log('MenuBar, menus:', menus)
+export const MenuBar = memo(({ menus = testMenus, initFlow }) => {
+  console.log('MenuBar', { menus, initFlow })
   const containerRef = useRef(null)
   const [buttons, setButtons] = useState([])
   const [menuItems, setMenuItems] = useState([])
