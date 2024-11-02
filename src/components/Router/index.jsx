@@ -148,8 +148,21 @@ export const Router = () => {
             </Route>
             <Route
               path="Projekte/:projId/Arten/:apId/Qualitaetskontrollen"
-              lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
-            />
+              lazy={() => import('../Projekte/Daten/QkRouter/index.jsx')}
+            >
+              <Route
+                index={true}
+                lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
+              />
+              <Route
+                path="ausfuehren"
+                lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
+              />
+              <Route
+                path="waehlen"
+                lazy={() => import('../Projekte/Daten/Qk/Choose/index.jsx')}
+              />
+            </Route>
             <Route
               path="Projekte/:projId/Arten/:apId/nicht-zuzuordnende-Beobachtungen/:beobId"
               lazy={() => import('../Projekte/Daten/Beobzuordnung/index.jsx')}

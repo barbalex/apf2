@@ -27,10 +27,10 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-export const Row = observer(({ apId, qk, refetchTab }) => {
+export const Row = observer(({ apId, qk }) => {
   const client = useApolloClient()
 
-  const { data, error, refetch } = useQuery(query, {
+  const { data, error } = useQuery(query, {
     variables: { apId, qkName: qk.name },
   })
   const apqk = data?.apqkByApIdAndQkName
@@ -65,12 +65,16 @@ export const Row = observer(({ apId, qk, refetchTab }) => {
           }
         `,
         variables,
+        refetchQueries: ['QkQueryForQkTopRouter'],
       })
     }
     // 3. refetch data
-    refetch()
-    setTimeout(() => refetchTab())
-  }, [apId, checked, client, qk.name, refetch, refetchTab])
+    setTimeout(() =>
+      client.refetchQueries({
+        include: ['QkQueryForQkTopRouter', 'apqkQueryForRow'],
+      }),
+    )
+  }, [apId, checked, client, qk.name])
 
   if (error) return <Error error={error} />
   return (

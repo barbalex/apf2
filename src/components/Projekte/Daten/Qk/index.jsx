@@ -1,38 +1,14 @@
-import { useCallback } from 'react'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
-import styled from '@emotion/styled'
+import { memo } from 'react'
 import { useQuery } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { Qk } from './Qk/index.jsx'
-import { Choose } from './Choose/index.jsx'
 import { query } from './query.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
-`
-const StyledTab = styled(Tab)`
-  text-transform: none !important;
-`
-const TabContent = styled.div`
-  height: 100%;
-  fieldset {
-    padding-right: 30px;
-  }
-`
-
-export const Component = () => {
+export const Component = memo(() => {
   const { apId } = useParams()
 
   const { data, loading, error, refetch } = useQuery(query, {
@@ -55,60 +31,19 @@ export const Component = () => {
   )
 
   const qkCount = loading ? '...' : data?.allQks?.totalCount
-  const apqkCount = loading ? '...' : data?.allApqks?.totalCount
-
-  const [tab, setTab] = useSearchParamsState('qkTab', 'qk')
-  const onChangeTab = useCallback((event, value) => setTab(value), [setTab])
 
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <Container>
-        <FormTitle title="Qualitätskontrollen" />
-        <Tabs
-          value={tab}
-          onChange={onChangeTab}
-          indicatorColor="primary"
-          textColor="primary"
-          centered
-        >
-          <StyledTab
-            label="ausführen"
-            value="qk"
-            data-id="qk"
-          />
-          <StyledTab
-            label={`auswählen${qkCount ? ` (${apqkCount}/${qkCount})` : ''}`}
-            value="waehlen"
-            data-id="waehlen"
-          />
-        </Tabs>
-        <div style={{ overflowY: 'auto' }}>
-          <TabContent>
-            <SimpleBar
-              style={{
-                maxHeight: '100%',
-                height: '100%',
-              }}
-              tabIndex={-1}
-            >
-              {tab === 'qk' ?
-                <>
-                  {loading ?
-                    <Spinner />
-                  : <Qk
-                      key={qkCount}
-                      qkNameQueries={qkNameQueries}
-                      qks={qks}
-                    />
-                  }
-                </>
-              : <Choose refetchTab={refetch} />}
-            </SimpleBar>
-          </TabContent>
-        </div>
-      </Container>
+      {loading ?
+        <Spinner />
+      : <Qk
+          key={qkCount}
+          qkNameQueries={qkNameQueries}
+          qks={qks}
+        />
+      }
     </ErrorBoundary>
   )
-}
+})
