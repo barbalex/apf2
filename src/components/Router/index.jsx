@@ -347,8 +347,21 @@ export const Router = () => {
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Massnahmen/:tpopmassnId/*"
-              lazy={() => import('../Projekte/Daten/Tpopmassn/index.jsx')}
-            />
+              lazy={() => import('../Projekte/Daten/TpopmassnRouter/index.jsx')}
+            >
+              <Route
+                index={true}
+                lazy={() => import('../Projekte/Daten/Tpopmassn/index.jsx')}
+              />
+              <Route
+                path="Massnahme"
+                lazy={() => import('../Projekte/Daten/Tpopmassn/index.jsx')}
+              />
+              <Route
+                path="Dateien"
+                lazy={() => import('../Projekte/Daten/Tpopmassn/Dateien.jsx')}
+              />
+            </Route>
             <Route
               path="Benutzer/:userId/*"
               lazy={() => import('../Projekte/Daten/User/index.jsx')}
