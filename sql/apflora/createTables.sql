@@ -1618,7 +1618,7 @@ ALTER TABLE apflora.idealbiotop_file ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS reader ON apflora.idealbiotop_file;
 
--- in idealbiotop/dateien getting:
+-- TODO: in idealbiotop/dateien getting:
 -- [GraphQL error]: Message: infinite recursion detected in policy for relation "idealbiotop_file", Location: [{"line":2,"column":3}], Path: allIdealbiotopFiles
 CREATE POLICY reader ON apflora.idealbiotop_file
   USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
