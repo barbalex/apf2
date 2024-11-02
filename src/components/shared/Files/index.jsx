@@ -6,7 +6,14 @@ import upperFirst from 'lodash/upperFirst'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import SimpleBar from 'simplebar-react'
-import { FaPlus, FaMinus, FaEye, FaRectangleList } from 'react-icons/fa6'
+import {
+  FaPlus,
+  FaMinus,
+  FaEye,
+  FaRectangleList,
+  FaChevronLeft,
+  FaChevronRight,
+} from 'react-icons/fa6'
 
 import './index.css'
 
@@ -184,6 +191,14 @@ export const Files = memo(
           <MenuBar>
             <>
               <IconButton
+                title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
+                onClick={togglePreview}
+              >
+                {isPreview ?
+                  <FaRectangleList />
+                : <FaEye />}
+              </IconButton>
+              <IconButton
                 title="Dateien hochladen"
                 onClick={api?.initFlow}
               >
@@ -199,16 +214,24 @@ export const Files = memo(
                   >
                     <FaMinus />
                   </IconButton>
+                  <IconButton
+                    title="vorige Datei"
+                    onClick={() => {
+                      console.log('TODO: navigate. How to know which file?')
+                    }}
+                  >
+                    <FaChevronLeft />
+                  </IconButton>
+                  <IconButton
+                    title="nächste Datei"
+                    onClick={() => {
+                      console.log('TODO: navigate. How to know which file?')
+                    }}
+                  >
+                    <FaChevronRight />
+                  </IconButton>
                 </>
               )}
-              <IconButton
-                title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
-                onClick={togglePreview}
-              >
-                {isPreview ?
-                  <FaRectangleList />
-                : <FaEye />}
-              </IconButton>
             </>
           </MenuBar>
           <SimpleBar
