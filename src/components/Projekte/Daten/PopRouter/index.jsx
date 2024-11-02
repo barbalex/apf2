@@ -1,13 +1,13 @@
 import { useCallback, Suspense } from 'react'
-import styled from '@emotion/styled'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import styled from '@emotion/styled'
 import { useParams, Outlet, useNavigate, useLocation } from 'react-router-dom'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -24,30 +24,30 @@ const TabContent = styled.div`
 `
 
 export const Component = () => {
-  const { apId } = useParams()
+  const { popId } = useParams()
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
   const onChangeTab = useCallback(
     (event, value) =>
-      pathname.endsWith(apId) ? navigate(`./${value}`) : navigate(value),
-    [apId, navigate],
+      pathname.endsWith(popId) ? navigate(`./${value}`) : navigate(value),
+    [popId, navigate],
   )
 
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Art" />
+        <FormTitle title="Population" />
         <Tabs
           value={
-            pathname.endsWith('Art') ? 'Art'
+            pathname.endsWith('Population') ? 'Population'
             : pathname.endsWith('Auswertung') ?
               'Auswertung'
             : pathname.endsWith('Dateien') ?
               'Dateien'
             : pathname.endsWith('Historien') ?
               'Historien'
-            : 'Art'
+            : 'Population'
           }
           onChange={onChangeTab}
           indicatorColor="primary"
@@ -55,9 +55,9 @@ export const Component = () => {
           centered
         >
           <StyledTab
-            label="Art"
-            value="Art"
-            data-id="Art"
+            label="Population"
+            value="Population"
+            data-id="Population"
           />
           <StyledTab
             label="Auswertung"
@@ -75,11 +75,13 @@ export const Component = () => {
             data-id="Historien"
           />
         </Tabs>
-        <TabContent>
-          <Suspense fallback={<Spinner />}>
-            <Outlet />
-          </Suspense>
-        </TabContent>
+        <div style={{ overflowY: 'auto' }}>
+          <TabContent>
+            <Suspense fallback={<Spinner />}>
+              <Outlet />
+            </Suspense>
+          </TabContent>
+        </div>
       </Container>
     </ErrorBoundary>
   )

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export const queryTpopMenge = gql`
+export const query = gql`
   query popAuswertungTpopMenge($apId: UUID!, $id: UUID!) {
     # function apflora.pop_ausw_tpop_menge
     popAuswTpopMenge(popid: $id) {

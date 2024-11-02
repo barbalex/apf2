@@ -200,8 +200,43 @@ export const Router = () => {
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/*"
-              lazy={() => import('../Projekte/Daten/Pop/index.jsx')}
-            />
+              lazy={() => import('../Projekte/Daten/PopRouter/index.jsx')}
+            >
+              <Route
+                index={true}
+                lazy={() => import('../Projekte/Daten/Pop/index.jsx')}
+              />
+              <Route
+                path="Population"
+                lazy={() => import('../Projekte/Daten/Pop/index.jsx')}
+              />
+              <Route
+                path="Auswertung"
+                lazy={() =>
+                  import('../Projekte/Daten/Pop/Auswertung/index.jsx')
+                }
+              />
+              <Route
+                path="Dateien"
+                lazy={() => import('../Projekte/Daten/Pop/Dateien.jsx')}
+              />
+              <Route
+                path="Historien"
+                lazy={() => import('../Projekte/Daten/Pop/Historien.jsx')}
+              />
+              <Route
+                path="Massnahmen-Berichte"
+                lazy={() => import('../Projekte/Daten/Pop/index.jsx')}
+              />
+              <Route
+                path="Kontroll-Berichte"
+                lazy={() => import('../Projekte/Daten/Pop/index.jsx')}
+              />
+              <Route
+                path="Teil-Populationen"
+                lazy={() => import('../Projekte/Daten/Pop/index.jsx')}
+              />
+            </Route>
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Massnahmen-Berichte/:popmassnberId/*"
               lazy={() => import('../Projekte/Daten/Popmassnber/index.jsx')}
