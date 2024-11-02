@@ -18,7 +18,6 @@ import { TpopAbBerRelevantInfoPopover } from '../TpopAbBerRelevantInfoPopover.js
 import { constants } from '../../../../modules/constants.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { Coordinates } from '../../../shared/Coordinates.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
 import { query } from './query.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import {
