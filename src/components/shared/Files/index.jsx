@@ -4,6 +4,7 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
 import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
 import SimpleBar from 'simplebar-react'
 import { FaPlus, FaMinus, FaEye, FaRectangleList } from 'react-icons/fa6'
 
@@ -174,29 +175,7 @@ export const Files = memo(
         setIsPreview(!isPreview)
       }, [isPreview, setIsPreview])
 
-      const menus = useMemo(
-        () => [
-          {
-            title: 'Dateien hochladen',
-            iconComponent: <FaPlus />,
-            onClick: () => {
-              console.log(
-                'Files.menus.hochladen.onClick, initFlow:',
-                api?.initFlow?.(),
-              )
-              api?.initFlow?.()
-            },
-          },
-          {
-            title: isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen',
-            iconComponent: isPreview ? <FaRectangleList /> : <FaEye />,
-            onClick: togglePreview,
-          },
-        ],
-        [isPreview, togglePreview, api?.initFlow],
-      )
-
-      console.log('Files', { isPreview, menus, initFlow: api?.initFlow })
+      console.log('Files', { isPreview })
 
       if (loading || loadingParent) return <Spinner />
 
@@ -204,10 +183,27 @@ export const Files = memo(
 
       return (
         <OuterContainer>
-          <MenuBar
-            menus={menus}
-            initFlow={api?.initFlow}
-          />
+          <MenuBar>
+            <IconButton
+              title="Dateien hochladen"
+              onClick={() => {
+                console.log(
+                  'Files.menus.hochladen.onClick, initFlow:',
+                  api?.initFlow?.(),
+                )
+              }}
+            >
+              <FaPlus />
+            </IconButton>
+            <IconButton
+              title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
+              onClick={togglePreview}
+            >
+              {isPreview ?
+                <FaRectangleList />
+              : <FaEye />}
+            </IconButton>
+          </MenuBar>
           <SimpleBar
             style={{
               maxHeight: '100%',

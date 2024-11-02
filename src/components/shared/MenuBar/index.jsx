@@ -25,10 +25,11 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   padding: 5px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  column-gap: 5px;
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: 0;
+  margin-top: auto;
+  margin-bottom: auto;
 `
 const ToolDiv = styled.div`
   display: inline;
@@ -94,10 +95,8 @@ const gapWidth = 5
 // or rather: need info for menu AND button
 // so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
-export const MenuBar = memo(({ menus = testMenus, initFlow }) => {
-  console.log('MenuBar', { menus, initFlow })
+export const MenuBar = memo(({ menus = testMenus, initFlow, children }) => {
   const containerRef = useRef(null)
-  const [buttons, setButtons] = useState([])
   const [menuItems, setMenuItems] = useState([])
 
   const onResize = useCallback(({ width }) => {
@@ -108,7 +107,6 @@ export const MenuBar = memo(({ menus = testMenus, initFlow }) => {
     // fit tools into containerWidth - MenuButtonWidth - gapWidth
     // fit fitting tools into container
     // add overflowing tools to menu
-    setButtons(menus)
   }, [])
 
   const { width } = useResizeDetector({
@@ -122,18 +120,10 @@ export const MenuBar = memo(({ menus = testMenus, initFlow }) => {
   // TODO: build menu from menuItems
   return (
     <Container ref={containerRef}>
-      {buttons.map((menu, index) => (
-        <IconButton
-          key={`${menu.title}/${index}`}
-          title={menu.title}
-          onClick={menu.onClick}
-        >
-          {menu.iconComponent}
-        </IconButton>
-      ))}
-      <IconButton>
+      {children}
+      {/* <IconButton>
         <FaBars />
-      </IconButton>
+      </IconButton> */}
     </Container>
   )
 })
