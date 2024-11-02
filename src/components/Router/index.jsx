@@ -176,8 +176,23 @@ export const Router = () => {
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Idealbiotop"
-              lazy={() => import('../Projekte/Daten/Idealbiotop/index.jsx')}
-            />
+              lazy={() =>
+                import('../Projekte/Daten/IdealbiotopRouter/index.jsx')
+              }
+            >
+              <Route
+                index={true}
+                lazy={() => import('../Projekte/Daten/Idealbiotop/index.jsx')}
+              />
+              <Route
+                path="Idealbiotop"
+                lazy={() => import('../Projekte/Daten/Idealbiotop/index.jsx')}
+              />
+              <Route
+                path="Dateien"
+                lazy={() => import('../Projekte/Daten/Idealbiotop/Dateien.jsx')}
+              />
+            </Route>
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Berichte/:apberId"
               lazy={() => import('../Projekte/Daten/Apber/index.jsx')}
