@@ -84,7 +84,7 @@ const fieldTypes = {
   statusUnklar: 'Boolean',
 }
 
-const TpopForm = () => {
+export const Component = observer(() => {
   const { tpopId: id } = useParams()
 
   const client = useApolloClient()
@@ -257,6 +257,4 @@ const TpopForm = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export const Component = observer(TpopForm)
+})
