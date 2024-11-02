@@ -122,9 +122,9 @@ export const MenuBar = memo(({ menus = testMenus }) => {
   // TODO: build menu from menuItems
   return (
     <Container ref={containerRef}>
-      {buttons.map((menu) => (
+      {buttons.map((menu, index) => (
         <IconButton
-          key={menu.title}
+          key={`${menu.title}/${index}`}
           title={menu.title}
           onClick={menu.onClick}
         >

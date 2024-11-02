@@ -169,40 +169,28 @@ export const Files = memo(
         setTimeout(() => refetch(), 500)
       }, [])
 
-      const images = files.filter((f) => isImageFile(f))
-      const imageObjects = images.map((f) => ({
-        original: `https://ucarecdn.com/${f.fileId}/-/resize/1200x/-/quality/lightest/${f.name}`,
-        thumbnail: `https://ucarecdn.com/${f.fileId}/-/resize/250x/-/quality/lightest/${f.name}`,
-        fullscreen: `https://ucarecdn.com/${f.fileId}/-/resize/1800x/-/quality/lightest/${f.name}`,
-        originalAlt: f.beschreibung || '',
-        thumbnailAlt: f.beschreibung || '',
-        description: f.beschreibung || '',
-        originalTitle: f.name || '',
-        thumbnailTitle: f.name || '',
-      }))
-
-      const togglePreview = useCallback(
-        () => setIsPreview(!isPreview),
-        [isPreview, setIsPreview],
-      )
+      const togglePreview = useCallback(() => {
+        console.log('Files.togglePreview setting isPreview to:', !isPreview)
+        setIsPreview(!isPreview)
+      }, [isPreview, setIsPreview])
 
       const menus = useMemo(
         () => [
           {
             title: 'Dateien hochladen',
             iconComponent: <FaPlus />,
-            onClick: () => api?.initFlow?.(),
+            onClick: () => {
+              console.log('Files.menus.hochladen.onClick, api:', api)
+              api?.initFlow?.()
+            },
           },
           {
             title: isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen',
-            iconComponent:
-              isPreview ?
-                <FaRectangleList key={isPreview} />
-              : <FaEye key={isPreview} />,
+            iconComponent: isPreview ? <FaRectangleList /> : <FaEye />,
             onClick: togglePreview,
           },
         ],
-        [isPreview, togglePreview],
+        [isPreview, togglePreview, api],
       )
 
       console.log('Files', { isPreview, menus })
