@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 
-import { Select } from '../../../../../shared/Select.jsx'
+import { Select } from '../../../../shared/Select.jsx'
 
 export const NewUser = observer(({ apId, apUsers, refetch }) => {
   const client = useApolloClient()

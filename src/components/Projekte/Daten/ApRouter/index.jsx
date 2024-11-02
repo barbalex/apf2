@@ -30,7 +30,14 @@ export const Component = () => {
 
   const onChangeTab = useCallback(
     (event, value) => {
-      navigate(`./${value}`)
+      console.log('ApRouter.onChangeTab', {
+        pathname,
+        apId,
+        pathEndsWithApId: pathname.endsWith(apId),
+        value,
+        navigatingTo: pathname.endsWith(apId) ? `./${value}` : `../${value}`,
+      })
+      pathname.endsWith(apId) ? navigate(`./${value}`) : navigate(value)
     },
     [apId, navigate],
   )

@@ -111,7 +111,7 @@ const Aktuell = styled.span`
   background-color: rgb(201, 238, 211);
 `
 
-export const History = () => {
+export const Component = () => {
   const { apId } = useParams()
   const { error, data, loading } = useQuery(apHistoriesQuery, {
     variables: {
