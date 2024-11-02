@@ -170,12 +170,10 @@ export const Files = memo(
         setTimeout(() => refetch(), 500)
       }, [])
 
-      const togglePreview = useCallback(() => {
-        console.log('Files.togglePreview setting isPreview to:', !isPreview)
-        setIsPreview(!isPreview)
-      }, [isPreview, setIsPreview])
-
-      console.log('Files', { isPreview })
+      const togglePreview = useCallback(
+        () => setIsPreview(!isPreview),
+        [isPreview, setIsPreview],
+      )
 
       if (loading || loadingParent) return <Spinner />
 
@@ -184,26 +182,34 @@ export const Files = memo(
       return (
         <OuterContainer>
           <MenuBar>
-            <IconButton
-              title="Dateien hochladen"
-              onClick={() => {
-                console.log(
-                  'Files.menus.hochladen.onClick, initFlow:',
-                  api?.initFlow?.(),
-                )
-                api?.initFlow?.()
-              }}
-            >
-              <FaPlus />
-            </IconButton>
-            <IconButton
-              title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
-              onClick={togglePreview}
-            >
-              {isPreview ?
-                <FaRectangleList />
-              : <FaEye />}
-            </IconButton>
+            <>
+              <IconButton
+                title="Dateien hochladen"
+                onClick={api?.initFlow}
+              >
+                <FaPlus />
+              </IconButton>
+              {isPreview && (
+                <>
+                  <IconButton
+                    title="löschen"
+                    onClick={() => {
+                      console.log('TODO: delete. How to know which file?')
+                    }}
+                  >
+                    <FaMinus />
+                  </IconButton>
+                </>
+              )}
+              <IconButton
+                title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
+                onClick={togglePreview}
+              >
+                {isPreview ?
+                  <FaRectangleList />
+                : <FaEye />}
+              </IconButton>
+            </>
           </MenuBar>
           <SimpleBar
             style={{
