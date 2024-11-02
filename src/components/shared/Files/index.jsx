@@ -74,7 +74,7 @@ export const Files = memo(
     ({
       parentId = '99999999-9999-9999-9999-999999999999',
       parent,
-      loadingParent,
+      loadingParent, // still in use?
     }) => {
       const client = useApolloClient()
       const uploaderCtx = useContext(UploaderContext)

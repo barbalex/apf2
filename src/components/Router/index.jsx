@@ -247,8 +247,53 @@ export const Router = () => {
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/*"
-              lazy={() => import('../Projekte/Daten/Tpop/index.jsx')}
-            />
+              lazy={() => import('../Projekte/Daten/TpopRouter/index.jsx')}
+            >
+              <Route
+                index={true}
+                lazy={() => import('../Projekte/Daten/Tpop/index.jsx')}
+              />
+              <Route
+                path="Teil-Population"
+                lazy={() => import('../Projekte/Daten/Tpop/index.jsx')}
+              />
+              <Route
+                path="EK"
+                lazy={() => import('../Projekte/Daten/Tpop/Ek/index.jsx')}
+              />
+              <Route
+                path="Dateien"
+                lazy={() => import('../Projekte/Daten/Tpop/Dateien.jsx')}
+              />
+              <Route
+                path="Historien"
+                lazy={() => import('../Projekte/Daten/Tpop/Historien.jsx')}
+              />
+              <Route
+                path="Massnahmen"
+                lazy={() => import('../Projekte/Daten/Tpop/index.jsx')}
+              />
+              <Route
+                path="Massnahmen-Berichte"
+                lazy={() => import('../Projekte/Daten/Tpop/index.jsx')}
+              />
+              <Route
+                path="Feld-Kontrollen"
+                lazy={() => import('../Projekte/Daten/Tpop/index.jsx')}
+              />
+              <Route
+                path="Freiwilligen-Kontrollen"
+                lazy={() => import('../Projekte/Daten/Tpop/index.jsx')}
+              />
+              <Route
+                path="Kontroll-Berichte"
+                lazy={() => import('../Projekte/Daten/Tpop/index.jsx')}
+              />
+              <Route
+                path="Beobachtungen"
+                lazy={() => import('../Projekte/Daten/Tpop/index.jsx')}
+              />
+            </Route>
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Beobachtungen/:beobId/*"
               lazy={() => import('../Projekte/Daten/Beobzuordnung/index.jsx')}

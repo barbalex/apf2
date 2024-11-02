@@ -6,7 +6,6 @@ import { useParams, Outlet, useNavigate, useLocation } from 'react-router-dom'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 
 const Container = styled.div`
