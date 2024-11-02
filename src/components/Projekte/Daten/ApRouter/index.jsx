@@ -1,16 +1,13 @@
-import { useCallback } from 'react'
+import { useCallback, Suspense } from 'react'
 import styled from '@emotion/styled'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { useParams } from 'react-router-dom'
+import { useParams, Outlet, useNavigate, useLocation } from 'react-router-dom'
 
-import { ApAp } from './Ap/index.jsx'
-import { Auswertung } from './Auswertung/index.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import { Files } from '../../../shared/Files/index.jsx'
-import { History } from './History.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
+import { Spinner } from '../../../shared/Spinner.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -28,18 +25,31 @@ const TabContent = styled.div`
 
 export const Component = () => {
   const { apId } = useParams()
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
 
-  const [tab, setTab] = useSearchParamsState('apTab', 'ap')
-  const onChangeTab = useCallback((event, value) => setTab(value), [setTab])
-
-  console.log('Ap.index.js rendering')
+  const onChangeTab = useCallback(
+    (event, value) => {
+      navigate(`./${value}`)
+    },
+    [apId, navigate],
+  )
 
   return (
     <ErrorBoundary>
       <Container>
         <FormTitle title="Art" />
         <Tabs
-          value={tab}
+          value={
+            pathname.endsWith('Art') ? 'Art'
+            : pathname.endsWith('Auswertung') ?
+              'Auswertung'
+            : pathname.endsWith('Dateien') ?
+              'Dateien'
+            : pathname.endsWith('Historien') ?
+              'Historien'
+            : 'Art'
+          }
           onChange={onChangeTab}
           indicatorColor="primary"
           textColor="primary"
@@ -47,35 +57,29 @@ export const Component = () => {
         >
           <StyledTab
             label="Art"
-            value="ap"
-            data-id="ap"
+            value="Art"
+            data-id="Art"
           />
           <StyledTab
             label="Auswertung"
-            value="auswertung"
-            data-id="auswertung"
+            value="Auswertung"
+            data-id="Auswertung"
           />
           <StyledTab
             label="Dateien"
-            value="dateien"
-            data-id="dateien"
+            value="Dateien"
+            data-id="Dateien"
           />
           <StyledTab
             label="Historien"
-            value="history"
-            data-id="history"
+            value="Historien"
+            data-id="Historien"
           />
         </Tabs>
         <TabContent>
-          {tab === 'ap' && <ApAp />}
-          {tab === 'auswertung' && <Auswertung />}
-          {tab === 'dateien' && (
-            <Files
-              parentId={apId}
-              parent="ap"
-            />
-          )}
-          {tab === 'history' && <History />}
+          <Suspense fallback={<Spinner />}>
+            <Outlet />
+          </Suspense>
         </TabContent>
       </Container>
     </ErrorBoundary>
