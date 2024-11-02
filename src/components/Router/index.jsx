@@ -77,7 +77,7 @@ export const Router = () => {
               lazy={() => import('../Print/ApberForYear/index.jsx')}
             />
             <Route
-              path="Projekte/:projId/Arten/:apId/*"
+              path="Projekte/:projId/Arten/:apId"
               lazy={() => import('../Projekte/Daten/ApRouter/index.jsx')}
             >
               <Route
@@ -100,6 +100,50 @@ export const Router = () => {
               <Route
                 path="Historien"
                 lazy={() => import('../Projekte/Daten/Ap/Historien.jsx')}
+              />
+              <Route
+                path="nicht-zuzuordnende-Beobachtungen"
+                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+              />
+              <Route
+                path="nicht-beurteilte-Beobachtungen"
+                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+              />
+              <Route
+                path="EK-Zähleinheiten"
+                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+              />
+              <Route
+                path="EK-Frequenzen"
+                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+              />
+              <Route
+                path="assoziierte-Arten"
+                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+              />
+              <Route
+                path="Taxa"
+                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+              />
+              <Route
+                path="AP-Berichte"
+                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+              />
+              <Route
+                path="AP-Erfolgskriterien"
+                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+              />
+              <Route
+                path="AP-Ziele"
+                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+              />
+              <Route
+                path="AP-Ziele/:jahr"
+                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+              />
+              <Route
+                path="Populationen"
+                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
               />
             </Route>
             <Route
