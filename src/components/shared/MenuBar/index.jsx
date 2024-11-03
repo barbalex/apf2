@@ -22,20 +22,24 @@ import {
   FaCaretUp,
 } from 'react-icons/fa6'
 import styled from 'styled-components'
-import { set } from 'lodash'
+import { over, set } from 'lodash'
+import { useAtom, atom } from 'jotai'
 
 const Container = styled.div`
+  overflow-y: hidden;
+  overflow-x: hidden;
+  max-height: 50px;
   padding: 5px;
-  overflow: hidden;
   margin-left: auto;
   margin-right: 0;
   margin-top: auto;
   margin-bottom: auto;
-  max-height: 50px;
 `
 
 const buttonWidth = 40
 const gapWidth = 5
+
+const overflowingAtom = atom(false)
 
 // TODO: pass in Tools as children?
 // or rather: need info for menu AND button
@@ -44,18 +48,16 @@ const gapWidth = 5
 export const MenuBar = memo(({ children }) => {
   const containerRef = useRef(null)
   const [menuItems, setMenuItems] = useState([])
-  const [overflowing, setOverflowing] = useState([])
+  const [overflowing, setOverflowing] = useAtom(overflowingAtom)
+  console.log('MenuBar, overflowing:', overflowing)
 
-  // need to detect when containerRef overflows
-  useLayoutEffect(() => {
+  const checkOverflow = useCallback(() => {
     if (!containerRef.current) return
-    const { clientWidth, scrollWidth } = containerRef.current
-    console.log('MenuBar.useLayoutEffect', { clientWidth, scrollWidth })
-    if (scrollWidth > clientWidth) {
-      console.log('overflow')
-      setOverflowing(menuItems)
-    }
-  }, [menuItems])
+    const { clientWidth, scrollWidth, scrollHeight, clientHeight } =
+      containerRef.current
+    const overflowing = scrollHeight > clientHeight || scrollWidth > clientWidth
+    setOverflowing(overflowing)
+  }, [overflowing])
 
   const onResize = useCallback(({ width }) => {
     // TODO: build menus
@@ -65,6 +67,8 @@ export const MenuBar = memo(({ children }) => {
     // fit tools into containerWidth - MenuButtonWidth - gapWidth
     // fit fitting tools into container
     // add overflowing tools to menu
+    console.log('MenuBar.onResize, width:', width)
+    checkOverflow()
   }, [])
 
   const { width } = useResizeDetector({
