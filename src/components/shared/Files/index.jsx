@@ -59,10 +59,6 @@ const LightboxButton = styled(Button)`
   margin-left: 10px !important;
   text-transform: none !important;
 `
-// ensure inline placement
-const StyledIconButton = styled(IconButton)`
-  display: inline;
-`
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -217,7 +213,7 @@ export const Files = memo(
 
       const menus = useMemo(
         () => [
-          <StyledIconButton
+          <IconButton
             key="1"
             title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
             onClick={togglePreview}
@@ -225,19 +221,19 @@ export const Files = memo(
             {isPreview ?
               <FaEyeSlash />
             : <FaEye />}
-          </StyledIconButton>,
-          <StyledIconButton
+          </IconButton>,
+          <IconButton
             title="Dateien hochladen"
             onClick={api?.initFlow}
           >
             <FaPlus />
-          </StyledIconButton>,
+          </IconButton>,
         ],
         [],
       )
       const previewMenus = useMemo(
         () => [
-          <StyledIconButton
+          <IconButton
             key="3"
             title="löschen"
             onClick={() => {
@@ -245,8 +241,8 @@ export const Files = memo(
             }}
           >
             <FaMinus />
-          </StyledIconButton>,
-          <StyledIconButton
+          </IconButton>,
+          <IconButton
             key="4"
             title="vorige Datei"
             onClick={() => {
@@ -254,8 +250,8 @@ export const Files = memo(
             }}
           >
             <FaChevronLeft />
-          </StyledIconButton>,
-          <StyledIconButton
+          </IconButton>,
+          <IconButton
             key="5"
             title="nächste Datei"
             onClick={() => {
@@ -263,7 +259,7 @@ export const Files = memo(
             }}
           >
             <FaChevronRight />
-          </StyledIconButton>,
+          </IconButton>,
         ],
         [],
       )

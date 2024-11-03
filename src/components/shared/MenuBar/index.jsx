@@ -32,8 +32,8 @@ import { useDebouncedCallback } from 'use-debounce'
 const Container = styled.div`
   overflow-y: hidden;
   overflow-x: hidden;
-  max-height: 50px;
-  padding: 5px;
+  max-height: 40px;
+  padding: 0 5px;
   margin-left: auto;
   margin-right: 0;
   margin-top: auto;
