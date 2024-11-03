@@ -1,5 +1,6 @@
 import {
   memo,
+  useMemo,
   useRef,
   useState,
   useLayoutEffect,
@@ -54,25 +55,36 @@ const widthAtom = atom(0)
 // or rather: need info for menu AND button
 // so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
-export const MenuBar = memo(({ children }) => {
-  const usableChildren = children.filter((child) => !!child)
+export const MenuBar = memo(({ children, menuRerenderer }) => {
+  const usableChildren = useMemo(
+    () => children.filter((child) => !!child),
+    [children, menuRerenderer],
+  )
   const containerRef = useRef(null)
   const previousWidthRef = useRef(null)
   const previousMeasurementTimeRef = useRef(0)
   const childrenCount = Children.count(usableChildren)
   const [menuChildrenCount, setMenuChildrenCount] = useState(0)
 
-  const buttonChildren = Children.map(usableChildren, (child, index) => {
-    if (!(index + 1 <= childrenCount - menuChildrenCount)) return null
-    if (!child) return null
-    return cloneElement(child)
-  }).filter((child) => !!child)
+  const buttonChildren = useMemo(
+    () =>
+      Children.map(usableChildren, (child, index) => {
+        if (!(index + 1 <= childrenCount - menuChildrenCount)) return null
+        if (!child) return null
+        return cloneElement(child)
+      }).filter((child) => !!child),
+    [usableChildren, childrenCount, menuChildrenCount, menuRerenderer],
+  )
 
-  const menuChildren = Children.map(usableChildren, (child, index) => {
-    if (!(index + 1 > childrenCount - menuChildrenCount)) return null
-    if (!child) return null
-    return cloneElement(child)
-  }).filter((child) => !!child)
+  const menuChildren = useMemo(
+    () =>
+      Children.map(usableChildren, (child, index) => {
+        if (!(index + 1 > childrenCount - menuChildrenCount)) return null
+        if (!child) return null
+        return cloneElement(child)
+      }).filter((child) => !!child),
+    [usableChildren, childrenCount, menuChildrenCount, menuRerenderer],
+  )
 
   console.log('MenuBar', {
     usableChildren,
@@ -81,6 +93,7 @@ export const MenuBar = memo(({ children }) => {
     childrenCount,
     menuChildrenCount,
     menuChildrenLength: menuChildren.length,
+    menuRerenderer,
   })
 
   const incrementNumberOfMenuChildren = useCallback(() => {
@@ -145,11 +158,6 @@ export const MenuBar = memo(({ children }) => {
         const percentageChanged =
           ((width - previousWidthRef.current) / width) * 100
         const shouldCheckOverflow = Math.abs(percentageChanged) > 1
-        console.log('MenuBar.resizeObserver', {
-          width,
-          percentageChanged,
-          shouldCheckOverflow,
-        })
         if (!shouldCheckOverflow) return
 
         previousWidthRef.current = width
@@ -164,14 +172,10 @@ export const MenuBar = memo(({ children }) => {
     }
   }, [])
 
-  const onClickMenuButton = useCallback((event) => {
-    console.log('MenuBar.onClickMenuButton', { event })
-    setMenuAnchorEl(event.currentTarget)
-  })
-  const onCloseMenu = useCallback(() => {
-    console.log('MenuBar.onCloseMenu')
-    setMenuAnchorEl(null)
-  }, [])
+  const onClickMenuButton = useCallback((event) =>
+    setMenuAnchorEl(event.currentTarget),
+  )
+  const onCloseMenu = useCallback(() => setMenuAnchorEl(null), [])
   const [menuAnchorEl, setMenuAnchorEl] = useState(null)
   const menuIsOpen = Boolean(menuAnchorEl)
 

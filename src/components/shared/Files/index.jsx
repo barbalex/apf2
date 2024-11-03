@@ -91,6 +91,7 @@ export const Files = memo(
         () => setMenuRerenderer((prev) => prev + 1),
         [],
       )
+      console.log('Files', { isPreview, menuRerenderer })
 
       const queryName = `all${upperFirst(parent)}Files`
       const parentIdName = `${parent}Id`
@@ -277,7 +278,12 @@ export const Files = memo(
 
       return (
         <OuterContainer>
-          <MenuBar key={menuRerenderer}>{allMenus}</MenuBar>
+          <MenuBar
+            key={menuRerenderer}
+            menuRerenderer={menuRerenderer}
+          >
+            {allMenus}
+          </MenuBar>
           <SimpleBar
             style={{
               maxHeight: '100%',
