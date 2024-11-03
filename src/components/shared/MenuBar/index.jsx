@@ -38,6 +38,11 @@ const Container = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
+const StyledMenu = styled(Menu)`
+  ul {
+    padding: 0 !important;
+  }
+`
 
 const buttonWidth = 40
 const gapWidth = 5
@@ -173,21 +178,24 @@ export const MenuBar = memo(({ children }) => {
   return (
     <Container ref={containerRef}>
       {buttonChildren}
-      <IconButton
-        id="menubutton"
-        onClick={onClickMenuButton}
-      >
-        <FaBars />
-      </IconButton>
-      {!!menuChildrenCount && (
-        <Menu
-          id="menubutton"
-          anchorEl={menuAnchorEl}
-          open={menuIsOpen}
-          onClose={onCloseMenu}
-        >
-          {menuChildren}
-        </Menu>
+      {!!menuChildren.length && (
+        <>
+          <IconButton
+            id="menubutton"
+            onClick={onClickMenuButton}
+          >
+            <FaBars />
+          </IconButton>
+
+          <StyledMenu
+            id="menubutton"
+            anchorEl={menuAnchorEl}
+            open={menuIsOpen}
+            onClose={onCloseMenu}
+          >
+            {menuChildren}
+          </StyledMenu>
+        </>
       )}
     </Container>
   )
