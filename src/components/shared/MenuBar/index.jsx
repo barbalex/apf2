@@ -5,6 +5,8 @@ import {
   useLayoutEffect,
   useEffect,
   useCallback,
+  Children,
+  cloneElement,
 } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
 import { IconButton } from '@mui/material'
@@ -48,13 +50,45 @@ const widthAtom = atom(0)
 // so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
 export const MenuBar = memo(({ children }) => {
+  const usableChildren = children.filter((child) => !!child)
   const containerRef = useRef(null)
-  const [menuItems, setMenuItems] = useState([])
   const [overflowing, setOverflowing] = useAtom(overflowingAtom)
   const previousWidthRef = useRef(null)
   const previousMeasurementTimeRef = useRef(0)
-  console.log('MenuBar, overflowing:', overflowing)
-  console.log('MenuBar, children:', children)
+  const childrenCount = Children.count(usableChildren)
+  const [menuChildrenCount, setMenuChildrenCount] = useState(0)
+
+  const buttonChildren = Children.map(usableChildren, (child, index) => {
+    console.log('MenuBar.buttonChildren', { child, index })
+    if (!(index + 1 <= childrenCount - menuChildrenCount)) return null
+    if (!child) return null
+    return cloneElement(child)
+  }).filter((child) => !!child)
+
+  const menuChildren = Children.map(usableChildren, (child, index) => {
+    console.log('MenuBar.menuChildren', { child, index })
+    if (!(index + 1 > childrenCount - menuChildrenCount)) return null
+    if (!child) return null
+    return cloneElement(child)
+  }).filter((child) => !!child)
+
+  console.log('MenuBar', {
+    overflowing,
+    children: usableChildren,
+    buttonChildren,
+    menuChildren,
+    childrenCount,
+    menuChildrenCount,
+  })
+
+  const incrementNumberOfMenuChildren = useCallback(
+    () => setMenuChildrenCount((prev) => prev + 1),
+    [],
+  )
+  const decrementNumberOfMenuChildren = useCallback(
+    () => setMenuChildrenCount((prev) => prev - 1),
+    [],
+  )
 
   // this was quite some work to get right
   // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
@@ -64,14 +98,25 @@ export const MenuBar = memo(({ children }) => {
     // only change if overflowing has changed
     const { clientWidth, scrollWidth, scrollHeight, clientHeight } =
       containerRef.current
-    const nowOverflowing =
-      scrollHeight > clientHeight || scrollWidth > clientWidth
+    const needToIncrement = scrollWidth > clientWidth + 50
+    const needToDecrement = scrollWidth + 50 < clientWidth
+
+    console.log('MenuBar.checkOverflow', {
+      clientWidth,
+      scrollWidth,
+      needToIncrement,
+      needToDecrement,
+    })
 
     // This somehow prevents changing overflowing from true to false
     // if (nowOverflowing === overflowing) return
 
-    return setOverflowing(nowOverflowing)
-  }, [overflowing])
+    // setOverflowing(nowOverflowing)
+    // TODO: set number of menu children instead
+    needToIncrement && incrementNumberOfMenuChildren()
+    needToDecrement && decrementNumberOfMenuChildren()
+    // TODO: need to move children from menu to buttons and vice versa
+  }, [])
 
   const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
 
@@ -112,10 +157,10 @@ export const MenuBar = memo(({ children }) => {
   // TODO: build menu from menuItems
   return (
     <Container ref={containerRef}>
-      {children}
-      {/* <IconButton>
+      {buttonChildren}
+      <IconButton>
         <FaBars />
-      </IconButton> */}
+      </IconButton>
     </Container>
   )
 })

@@ -216,50 +216,48 @@ export const Files = memo(
       return (
         <OuterContainer>
           <MenuBar>
-            <>
-              <StyledIconButton
-                title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
-                onClick={togglePreview}
-              >
-                {isPreview ?
-                  <FaEyeSlash />
-                : <FaEye />}
-              </StyledIconButton>
-              <StyledIconButton
-                title="Dateien hochladen"
-                onClick={api?.initFlow}
-              >
-                <FaPlus />
-              </StyledIconButton>
-              {isPreview && (
-                <>
-                  <StyledIconButton
-                    title="löschen"
-                    onClick={() => {
-                      console.log('TODO: delete. How to know which file?')
-                    }}
-                  >
-                    <FaMinus />
-                  </StyledIconButton>
-                  <StyledIconButton
-                    title="vorige Datei"
-                    onClick={() => {
-                      console.log('TODO: navigate. How to know which file?')
-                    }}
-                  >
-                    <FaChevronLeft />
-                  </StyledIconButton>
-                  <StyledIconButton
-                    title="nächste Datei"
-                    onClick={() => {
-                      console.log('TODO: navigate. How to know which file?')
-                    }}
-                  >
-                    <FaChevronRight />
-                  </StyledIconButton>
-                </>
-              )}
-            </>
+            <StyledIconButton
+              title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
+              onClick={togglePreview}
+            >
+              {isPreview ?
+                <FaEyeSlash />
+              : <FaEye />}
+            </StyledIconButton>
+            <StyledIconButton
+              title="Dateien hochladen"
+              onClick={api?.initFlow}
+            >
+              <FaPlus />
+            </StyledIconButton>
+            {!!isPreview && (
+              <>
+                <StyledIconButton
+                  title="löschen"
+                  onClick={() => {
+                    console.log('TODO: delete. How to know which file?')
+                  }}
+                >
+                  <FaMinus />
+                </StyledIconButton>
+                <StyledIconButton
+                  title="vorige Datei"
+                  onClick={() => {
+                    console.log('TODO: navigate. How to know which file?')
+                  }}
+                >
+                  <FaChevronLeft />
+                </StyledIconButton>
+                <StyledIconButton
+                  title="nächste Datei"
+                  onClick={() => {
+                    console.log('TODO: navigate. How to know which file?')
+                  }}
+                >
+                  <FaChevronRight />
+                </StyledIconButton>
+              </>
+            )}
           </MenuBar>
           <SimpleBar
             style={{
