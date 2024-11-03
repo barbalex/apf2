@@ -38,6 +38,13 @@ const Container = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
+// inner container that shrinks to fit its children
+// const InnerContainer = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   overflow-x: hidden;
+//   overflow-y: hidden;
+// `
 
 const buttonWidth = 40
 const gapWidth = 5
