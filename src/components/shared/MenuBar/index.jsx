@@ -38,13 +38,6 @@ const Container = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
-// inner container that shrinks to fit its children
-// const InnerContainer = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   overflow-x: hidden;
-//   overflow-y: hidden;
-// `
 
 const buttonWidth = 40
 const gapWidth = 5
@@ -59,7 +52,6 @@ const widthAtom = atom(0)
 export const MenuBar = memo(({ children }) => {
   const usableChildren = children.filter((child) => !!child)
   const containerRef = useRef(null)
-  const [overflowing, setOverflowing] = useAtom(overflowingAtom)
   const previousWidthRef = useRef(null)
   const previousMeasurementTimeRef = useRef(0)
   const childrenCount = Children.count(usableChildren)
@@ -78,8 +70,7 @@ export const MenuBar = memo(({ children }) => {
   }).filter((child) => !!child)
 
   console.log('MenuBar', {
-    overflowing,
-    children: usableChildren,
+    usableChildren,
     buttonChildren,
     menuChildren,
     childrenCount,
@@ -103,9 +94,13 @@ export const MenuBar = memo(({ children }) => {
     // only change if overflowing has changed
     const { clientWidth, scrollWidth, scrollHeight, clientHeight } =
       containerRef.current
+    // the left margin of the container is the room available
+    const containerStyle = window.getComputedStyle(containerRef.current)
+    const containerMarginLeft = parseFloat(containerStyle.marginLeft)
+
     const needToIncrement =
       scrollWidth > clientWidth + 50 || scrollHeight > clientHeight
-    const needToDecrement = scrollWidth + 50 < clientWidth
+    const needToDecrement = containerMarginLeft > buttonWidth
 
     console.log('MenuBar.checkOverflow', {
       clientWidth,
@@ -114,12 +109,9 @@ export const MenuBar = memo(({ children }) => {
       scrollHeight,
       needToIncrement,
       needToDecrement,
+      containerMarginLeft: parseFloat(containerStyle.marginLeft),
     })
 
-    // This somehow prevents changing overflowing from true to false
-    // if (nowOverflowing === overflowing) return
-
-    // setOverflowing(nowOverflowing)
     // TODO: set number of menu children instead
     needToIncrement && incrementNumberOfMenuChildren()
     needToDecrement && decrementNumberOfMenuChildren()
@@ -147,9 +139,13 @@ export const MenuBar = memo(({ children }) => {
         const percentageChanged =
           ((width - previousWidthRef.current) / width) * 100
         const shouldCheckOverflow = Math.abs(percentageChanged) > 1
+        console.log('MenuBar.resizeObserver', {
+          width,
+          percentageChanged,
+          shouldCheckOverflow,
+        })
         if (!shouldCheckOverflow) return
 
-        // check if the container is overflowing
         previousWidthRef.current = width
         checkOverflowDebounced()
       }
@@ -162,14 +158,35 @@ export const MenuBar = memo(({ children }) => {
     }
   }, [])
 
+  const onClickMenuButton = useCallback((event) => {
+    console.log('MenuBar.onClickMenuButton', { event })
+    setMenuAnchorEl(event.currentTarget)
+  })
+  const onCloseMenu = useCallback(() => {
+    console.log('MenuBar.onCloseMenu')
+    setMenuAnchorEl(null)
+  }, [])
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null)
+  const menuIsOpen = Boolean(menuAnchorEl)
+
   // TODO: build menu from menuItems
   return (
     <Container ref={containerRef}>
       {buttonChildren}
-      <IconButton id="menubutton">
+      <IconButton
+        id="menubutton"
+        onClick={onClickMenuButton}
+      >
         <FaBars />
       </IconButton>
-      <Menu id="menubutton">{menuChildren}</Menu>
+      <Menu
+        id="menubutton"
+        anchorEl={menuAnchorEl}
+        open={menuIsOpen}
+        onClose={onCloseMenu}
+      >
+        {menuChildren}
+      </Menu>
     </Container>
   )
 })
