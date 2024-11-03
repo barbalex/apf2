@@ -75,6 +75,7 @@ export const MenuBar = memo(({ children }) => {
     menuChildren,
     childrenCount,
     menuChildrenCount,
+    menuChildrenLength: menuChildren.length,
   })
 
   const incrementNumberOfMenuChildren = useCallback(() => {
@@ -169,7 +170,6 @@ export const MenuBar = memo(({ children }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null)
   const menuIsOpen = Boolean(menuAnchorEl)
 
-  // TODO: build menu from menuItems
   return (
     <Container ref={containerRef}>
       {buttonChildren}
@@ -179,14 +179,16 @@ export const MenuBar = memo(({ children }) => {
       >
         <FaBars />
       </IconButton>
-      <Menu
-        id="menubutton"
-        anchorEl={menuAnchorEl}
-        open={menuIsOpen}
-        onClose={onCloseMenu}
-      >
-        {menuChildren}
-      </Menu>
+      {!!menuChildrenCount && (
+        <Menu
+          id="menubutton"
+          anchorEl={menuAnchorEl}
+          open={menuIsOpen}
+          onClose={onCloseMenu}
+        >
+          {menuChildren}
+        </Menu>
+      )}
     </Container>
   )
 })

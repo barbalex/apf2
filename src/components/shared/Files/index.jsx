@@ -86,6 +86,11 @@ export const Files = memo(
       const storeContext = useContext(StoreContext)
 
       const [isPreview, setIsPreview] = useState(false)
+      const [menuRerenderer, setMenuRerenderer] = useState(0)
+      const incrementMenuRerenderer = useCallback(
+        () => setMenuRerenderer((prev) => prev + 1),
+        [],
+      )
 
       const queryName = `all${upperFirst(parent)}Files`
       const parentIdName = `${parent}Id`
@@ -204,10 +209,10 @@ export const Files = memo(
         setTimeout(() => refetch(), 500)
       }, [])
 
-      const togglePreview = useCallback(
-        () => setIsPreview(!isPreview),
-        [isPreview, setIsPreview],
-      )
+      const togglePreview = useCallback(() => {
+        setIsPreview(!isPreview)
+        incrementMenuRerenderer()
+      }, [isPreview, setIsPreview])
 
       const menus = useMemo(
         () => [
@@ -272,7 +277,7 @@ export const Files = memo(
 
       return (
         <OuterContainer>
-          <MenuBar>{allMenus}</MenuBar>
+          <MenuBar key={menuRerenderer}>{allMenus}</MenuBar>
           <SimpleBar
             style={{
               maxHeight: '100%',
