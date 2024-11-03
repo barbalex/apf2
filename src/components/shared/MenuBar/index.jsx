@@ -31,10 +31,7 @@ const Container = styled.div`
   margin-right: 0;
   margin-top: auto;
   margin-bottom: auto;
-`
-const ToolDiv = styled.div`
-  display: inline;
-  padding: 0 10px 0 0;
+  max-height: 50px;
 `
 
 const buttonWidth = 40
@@ -53,6 +50,7 @@ export const MenuBar = memo(({ children }) => {
   useLayoutEffect(() => {
     if (!containerRef.current) return
     const { clientWidth, scrollWidth } = containerRef.current
+    console.log('MenuBar.useLayoutEffect', { clientWidth, scrollWidth })
     if (scrollWidth > clientWidth) {
       console.log('overflow')
       setOverflowing(menuItems)

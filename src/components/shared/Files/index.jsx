@@ -59,6 +59,10 @@ const LightboxButton = styled(Button)`
   margin-left: 10px !important;
   text-transform: none !important;
 `
+// ensure inline placement
+const StyledIconButton = styled(IconButton)`
+  display: inline;
+`
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -102,28 +106,28 @@ export const Files = memo(
         ${fragment}
       `
 
-      console.log('Files', {
-        parentId,
-        parent,
-        loadingParent,
-        queryName,
-        parentIdName,
-        fields,
-        fragment,
-        queryString: `
-        query FileQuery($parentId: UUID!) {
-          ${queryName}(
-            orderBy: NAME_ASC
-            filter: { ${parentIdName}: { equalTo: $parentId } }
-          ) {
-            nodes {
-              ...${fields}
-            }
-          }
-        }
-        ${fragment}
-      `,
-      })
+      // console.log('Files', {
+      //   parentId,
+      //   parent,
+      //   loadingParent,
+      //   queryName,
+      //   parentIdName,
+      //   fields,
+      //   fragment,
+      //   queryString: `
+      //   query FileQuery($parentId: UUID!) {
+      //     ${queryName}(
+      //       orderBy: NAME_ASC
+      //       filter: { ${parentIdName}: { equalTo: $parentId } }
+      //     ) {
+      //       nodes {
+      //         ...${fields}
+      //       }
+      //     }
+      //   }
+      //   ${fragment}
+      // `,
+      // })
       const { data, error, loading, refetch } = useQuery(query, {
         variables: { parentId },
       })
@@ -213,46 +217,46 @@ export const Files = memo(
         <OuterContainer>
           <MenuBar>
             <>
-              <IconButton
+              <StyledIconButton
                 title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
                 onClick={togglePreview}
               >
                 {isPreview ?
                   <FaRectangleList />
                 : <FaEye />}
-              </IconButton>
-              <IconButton
+              </StyledIconButton>
+              <StyledIconButton
                 title="Dateien hochladen"
                 onClick={api?.initFlow}
               >
                 <FaPlus />
-              </IconButton>
+              </StyledIconButton>
               {isPreview && (
                 <>
-                  <IconButton
+                  <StyledIconButton
                     title="löschen"
                     onClick={() => {
                       console.log('TODO: delete. How to know which file?')
                     }}
                   >
                     <FaMinus />
-                  </IconButton>
-                  <IconButton
+                  </StyledIconButton>
+                  <StyledIconButton
                     title="vorige Datei"
                     onClick={() => {
                       console.log('TODO: navigate. How to know which file?')
                     }}
                   >
                     <FaChevronLeft />
-                  </IconButton>
-                  <IconButton
+                  </StyledIconButton>
+                  <StyledIconButton
                     title="nächste Datei"
                     onClick={() => {
                       console.log('TODO: navigate. How to know which file?')
                     }}
                   >
                     <FaChevronRight />
-                  </IconButton>
+                  </StyledIconButton>
                 </>
               )}
             </>
