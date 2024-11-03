@@ -5,9 +5,11 @@ import {
   useLayoutEffect,
   useEffect,
   useCallback,
+  Children,
+  cloneElement,
 } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
-import { IconButton } from '@mui/material'
+import { IconButton, Menu, MenuItem } from '@mui/material'
 import {
   FaBars,
   FaAlignLeft,
@@ -22,118 +24,171 @@ import {
   FaCaretUp,
 } from 'react-icons/fa6'
 import styled from 'styled-components'
+import { over, set } from 'lodash'
+import { useAtom, atom } from 'jotai'
+import { useDebouncedCallback } from 'use-debounce'
 
 const Container = styled.div`
+  overflow-y: hidden;
+  overflow-x: hidden;
+  max-height: 50px;
   padding: 5px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  column-gap: 5px;
-`
-const ToolDiv = styled.div`
-  display: inline;
-  padding: 0 10px 0 0;
+  margin-left: auto;
+  margin-right: 0;
+  margin-top: auto;
+  margin-bottom: auto;
 `
 
-const testMenus = [
-  {
-    title: 'Tool 1',
-    iconComponent: <FaAlignLeft />,
-    onClick: () => console.log('Tool 1'),
-  },
-  {
-    title: 'Tool 2',
-    iconComponent: <FaArrowDown />,
-    onClick: () => console.log('Tool 2'),
-  },
-  {
-    title: 'Tool 3',
-    iconComponent: <FaArrowLeft />,
-    onClick: () => console.log('Tool 3'),
-  },
-  {
-    title: 'Tool 4',
-    iconComponent: <FaArrowRight />,
-    onClick: () => console.log('Tool 4'),
-  },
-  {
-    title: 'Tool 5',
-    iconComponent: <FaArrowUp />,
-    onClick: () => console.log('Tool 5'),
-  },
-  {
-    title: 'Tool 6',
-    iconComponent: <FaCaretDown />,
-    onClick: () => console.log('Tool 6'),
-  },
-  {
-    title: 'Tool 7',
-    iconComponent: <FaCaretLeft />,
-    onClick: () => console.log('Tool 7'),
-  },
-  {
-    title: 'Tool 8',
-    iconComponent: <FaCaretRight />,
-    onClick: () => console.log('Tool 8'),
-  },
-  {
-    title: 'Tool 9',
-    iconComponent: <FaCaretUp />,
-    onClick: () => console.log('Tool 9'),
-  },
-  {
-    title: 'Tool 10',
-    iconComponent: <FaAlignRight />,
-    onClick: () => console.log('Tool 10'),
-  },
-]
 const buttonWidth = 40
 const gapWidth = 5
+
+const overflowingAtom = atom(false)
+const widthAtom = atom(0)
 
 // TODO: pass in Tools as children?
 // or rather: need info for menu AND button
 // so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
-export const MenuBar = memo(({ menus = testMenus, initFlow }) => {
-  console.log('MenuBar', { menus, initFlow })
+export const MenuBar = memo(({ children }) => {
+  const usableChildren = children.filter((child) => !!child)
   const containerRef = useRef(null)
-  const [buttons, setButtons] = useState([])
-  const [menuItems, setMenuItems] = useState([])
+  const previousWidthRef = useRef(null)
+  const previousMeasurementTimeRef = useRef(0)
+  const childrenCount = Children.count(usableChildren)
+  const [menuChildrenCount, setMenuChildrenCount] = useState(0)
 
-  const onResize = useCallback(({ width }) => {
-    // TODO: build menus
-    // width of one tool button is buttonWidth
-    // buttonsWidth is tools.length * buttonWidth + (tools.length - 1) * gapWidth
-    // if buttonsWidth > container width
-    // fit tools into containerWidth - MenuButtonWidth - gapWidth
-    // fit fitting tools into container
-    // add overflowing tools to menu
-    setButtons(menus)
-  }, [])
+  const buttonChildren = Children.map(usableChildren, (child, index) => {
+    if (!(index + 1 <= childrenCount - menuChildrenCount)) return null
+    if (!child) return null
+    return cloneElement(child)
+  }).filter((child) => !!child)
 
-  const { width } = useResizeDetector({
-    onResize,
-    targetRef: containerRef,
-    refreshMode: 'debounce',
-    refreshRate: 200,
-    refreshOptions: { trailing: true },
+  const menuChildren = Children.map(usableChildren, (child, index) => {
+    if (!(index + 1 > childrenCount - menuChildrenCount)) return null
+    if (!child) return null
+    return cloneElement(child)
+  }).filter((child) => !!child)
+
+  console.log('MenuBar', {
+    usableChildren,
+    buttonChildren,
+    menuChildren,
+    childrenCount,
+    menuChildrenCount,
+    menuChildrenLength: menuChildren.length,
   })
 
-  // TODO: build menu from menuItems
+  const incrementNumberOfMenuChildren = useCallback(() => {
+    console.log('MenuBar.incrementNumberOfMenuChildren')
+    setMenuChildrenCount((prev) => prev + 1)
+  }, [])
+  const decrementNumberOfMenuChildren = useCallback(() => {
+    console.log('MenuBar.decrementNumberOfMenuChildren')
+    setMenuChildrenCount((prev) => prev - 1)
+  }, [])
+
+  // this was quite some work to get right
+  // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
+  const checkOverflow = useCallback(() => {
+    if (!containerRef.current) return
+
+    // only change if overflowing has changed
+    const { clientWidth, scrollWidth, scrollHeight, clientHeight } =
+      containerRef.current
+    // the left margin of the container is the room available
+    const containerStyle = window.getComputedStyle(containerRef.current)
+    const containerMarginLeft = parseFloat(containerStyle.marginLeft)
+
+    const needToIncrement =
+      scrollWidth > clientWidth + 50 || scrollHeight > clientHeight
+    const needToDecrement = containerMarginLeft > buttonWidth
+
+    console.log('MenuBar.checkOverflow', {
+      clientWidth,
+      scrollWidth,
+      clientHeight,
+      scrollHeight,
+      needToIncrement,
+      needToDecrement,
+      containerMarginLeft: parseFloat(containerStyle.marginLeft),
+    })
+
+    // TODO: set number of menu children instead
+    needToIncrement && incrementNumberOfMenuChildren()
+    needToDecrement && decrementNumberOfMenuChildren()
+    // TODO: need to move children from menu to buttons and vice versa
+  }, [])
+
+  const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
+
+  useEffect(() => {
+    if (!containerRef.current) return
+    // set up a resize observer for the container
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = entry.contentRect.width
+        // console.log('MenuBar.resizeObserver, measuring')
+
+        // only go on if enough time has past since the last measurement (prevent unnecessary rerenders)
+        const currentTime = Date.now()
+        const timeSinceLastMeasurement =
+          currentTime - previousMeasurementTimeRef.current
+        if (timeSinceLastMeasurement < 300) return
+
+        // only go on if the width has changed enough (prevent unnecessary rerenders)
+        previousMeasurementTimeRef.current = currentTime
+        const percentageChanged =
+          ((width - previousWidthRef.current) / width) * 100
+        const shouldCheckOverflow = Math.abs(percentageChanged) > 1
+        console.log('MenuBar.resizeObserver', {
+          width,
+          percentageChanged,
+          shouldCheckOverflow,
+        })
+        if (!shouldCheckOverflow) return
+
+        previousWidthRef.current = width
+        checkOverflowDebounced()
+      }
+    })
+
+    observer.observe(containerRef.current)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
+  const onClickMenuButton = useCallback((event) => {
+    console.log('MenuBar.onClickMenuButton', { event })
+    setMenuAnchorEl(event.currentTarget)
+  })
+  const onCloseMenu = useCallback(() => {
+    console.log('MenuBar.onCloseMenu')
+    setMenuAnchorEl(null)
+  }, [])
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null)
+  const menuIsOpen = Boolean(menuAnchorEl)
+
   return (
     <Container ref={containerRef}>
-      {buttons.map((menu, index) => (
-        <IconButton
-          key={`${menu.title}/${index}`}
-          title={menu.title}
-          onClick={menu.onClick}
-        >
-          {menu.iconComponent}
-        </IconButton>
-      ))}
-      <IconButton>
+      {buttonChildren}
+      <IconButton
+        id="menubutton"
+        onClick={onClickMenuButton}
+      >
         <FaBars />
       </IconButton>
+      {!!menuChildrenCount && (
+        <Menu
+          id="menubutton"
+          anchorEl={menuAnchorEl}
+          open={menuIsOpen}
+          onClose={onCloseMenu}
+        >
+          {menuChildren}
+        </Menu>
+      )}
     </Container>
   )
 })

@@ -38,7 +38,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-export const Choose = ({ refetchTab }) => {
+export const Component = ({ refetchTab }) => {
   const { apId } = useParams()
 
   const { data, error, loading } = useQuery(query)

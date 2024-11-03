@@ -8,7 +8,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { History as SharedHistory } from '../../../shared/History/index.jsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 
-const tpopHistoriesQuery = gql`
+const query = gql`
   query tpopHistoryQuery($tpopId: UUID!) {
     tpopById(id: $tpopId) {
       id
@@ -164,10 +164,10 @@ const Aktuell = styled.span`
   background-color: rgb(201, 238, 211);
 `
 
-export const History = () => {
+export const Component = () => {
   const { tpopId } = useParams()
 
-  const { error, data, loading } = useQuery(tpopHistoriesQuery, {
+  const { error, data, loading } = useQuery(query, {
     variables: {
       tpopId,
     },

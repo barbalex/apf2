@@ -1606,7 +1606,7 @@ CREATE TABLE apflora.idealbiotop_file(
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX ON apflora.idealbiotop USING btree(id);
+CREATE INDEX ON apflora.idealbiotop_file USING btree(id);
 
 CREATE INDEX ON apflora.idealbiotop_file USING btree(idealbiotop_id);
 
@@ -1618,6 +1618,8 @@ ALTER TABLE apflora.idealbiotop_file ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS reader ON apflora.idealbiotop_file;
 
+-- TODO: in idealbiotop/dateien getting:
+-- [GraphQL error]: Message: infinite recursion detected in policy for relation "idealbiotop_file", Location: [{"line":2,"column":3}], Path: allIdealbiotopFiles
 CREATE POLICY reader ON apflora.idealbiotop_file
   USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
     OR (CURRENT_USER IN ('apflora_ap_reader') AND id IN (

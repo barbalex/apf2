@@ -4,8 +4,16 @@ import { useApolloClient, useQuery, gql } from '@apollo/client'
 import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
 import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
 import SimpleBar from 'simplebar-react'
-import { FaPlus, FaMinus, FaEye, FaRectangleList } from 'react-icons/fa6'
+import {
+  FaPlus,
+  FaMinus,
+  FaEye,
+  FaEyeSlash,
+  FaChevronLeft,
+  FaChevronRight,
+} from 'react-icons/fa6'
 
 import './index.css'
 
@@ -51,6 +59,10 @@ const LightboxButton = styled(Button)`
   margin-left: 10px !important;
   text-transform: none !important;
 `
+// ensure inline placement
+const StyledIconButton = styled(IconButton)`
+  display: inline;
+`
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -66,7 +78,7 @@ export const Files = memo(
     ({
       parentId = '99999999-9999-9999-9999-999999999999',
       parent,
-      loadingParent,
+      loadingParent, // still in use?
     }) => {
       const client = useApolloClient()
       const uploaderCtx = useContext(UploaderContext)
@@ -74,6 +86,11 @@ export const Files = memo(
       const storeContext = useContext(StoreContext)
 
       const [isPreview, setIsPreview] = useState(false)
+      const [menuRerenderer, setMenuRerenderer] = useState(0)
+      const incrementMenuRerenderer = useCallback(
+        () => setMenuRerenderer((prev) => prev + 1),
+        [],
+      )
 
       const queryName = `all${upperFirst(parent)}Files`
       const parentIdName = `${parent}Id`
@@ -93,6 +110,29 @@ export const Files = memo(
         }
         ${fragment}
       `
+
+      // console.log('Files', {
+      //   parentId,
+      //   parent,
+      //   loadingParent,
+      //   queryName,
+      //   parentIdName,
+      //   fields,
+      //   fragment,
+      //   queryString: `
+      //   query FileQuery($parentId: UUID!) {
+      //     ${queryName}(
+      //       orderBy: NAME_ASC
+      //       filter: { ${parentIdName}: { equalTo: $parentId } }
+      //     ) {
+      //       nodes {
+      //         ...${fields}
+      //       }
+      //     }
+      //   }
+      //   ${fragment}
+      // `,
+      // })
       const { data, error, loading, refetch } = useQuery(query, {
         variables: { parentId },
       })
@@ -170,33 +210,66 @@ export const Files = memo(
       }, [])
 
       const togglePreview = useCallback(() => {
-        console.log('Files.togglePreview setting isPreview to:', !isPreview)
         setIsPreview(!isPreview)
+        incrementMenuRerenderer()
       }, [isPreview, setIsPreview])
 
       const menus = useMemo(
         () => [
-          {
-            title: 'Dateien hochladen',
-            iconComponent: <FaPlus />,
-            onClick: () => {
-              console.log(
-                'Files.menus.hochladen.onClick, initFlow:',
-                api?.initFlow?.(),
-              )
-              api?.initFlow?.()
-            },
-          },
-          {
-            title: isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen',
-            iconComponent: isPreview ? <FaRectangleList /> : <FaEye />,
-            onClick: togglePreview,
-          },
+          <StyledIconButton
+            key="1"
+            title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
+            onClick={togglePreview}
+          >
+            {isPreview ?
+              <FaEyeSlash />
+            : <FaEye />}
+          </StyledIconButton>,
+          <StyledIconButton
+            title="Dateien hochladen"
+            onClick={api?.initFlow}
+          >
+            <FaPlus />
+          </StyledIconButton>,
         ],
-        [isPreview, togglePreview, api?.initFlow],
+        [],
       )
-
-      console.log('Files', { isPreview, menus, initFlow: api?.initFlow })
+      const previewMenus = useMemo(
+        () => [
+          <StyledIconButton
+            key="3"
+            title="löschen"
+            onClick={() => {
+              console.log('TODO: delete. How to know which file?')
+            }}
+          >
+            <FaMinus />
+          </StyledIconButton>,
+          <StyledIconButton
+            key="4"
+            title="vorige Datei"
+            onClick={() => {
+              console.log('TODO: navigate. How to know which file?')
+            }}
+          >
+            <FaChevronLeft />
+          </StyledIconButton>,
+          <StyledIconButton
+            key="5"
+            title="nächste Datei"
+            onClick={() => {
+              console.log('TODO: navigate. How to know which file?')
+            }}
+          >
+            <FaChevronRight />
+          </StyledIconButton>,
+        ],
+        [],
+      )
+      const allMenus = useMemo(
+        () => (isPreview ? [...menus, ...previewMenus] : menus),
+        [isPreview, menus, previewMenus],
+      )
 
       if (loading || loadingParent) return <Spinner />
 
@@ -204,10 +277,7 @@ export const Files = memo(
 
       return (
         <OuterContainer>
-          <MenuBar
-            menus={menus}
-            initFlow={api?.initFlow}
-          />
+          <MenuBar key={menuRerenderer}>{allMenus}</MenuBar>
           <SimpleBar
             style={{
               maxHeight: '100%',

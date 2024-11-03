@@ -1,8 +1,8 @@
-import _import from 'eslint-plugin-import'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import pluginReactRefresh from 'eslint-plugin-react-refresh'
+import pluginImport from 'eslint-plugin-import'
 import { fixupConfigRules } from '@eslint/compat'
 import globals from 'globals'
-import tsParser from '@typescript-eslint/parser'
+// import tsParser from '@typescript-eslint/parser'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import js from '@eslint/js'
@@ -23,16 +23,16 @@ export default [
   ...fixupConfigRules(
     compat.extends(
       'eslint:recommended',
-      'plugin:@typescript-eslint/recommended',
-      'plugin:@typescript-eslint/stylistic',
+      // 'plugin:@typescript-eslint/recommended',
+      // 'plugin:@typescript-eslint/stylistic',
       // 'plugin:react/recommended',
       'plugin:react-hooks/recommended',
     ),
   ),
   {
     plugins: {
-      'react-refresh': reactRefresh,
-      import: _import,
+      'react-refresh': pluginReactRefresh,
+      import: pluginImport,
     },
 
     languageOptions: {
@@ -40,7 +40,8 @@ export default [
         ...globals.browser,
       },
 
-      parser: tsParser,
+      // does this work well for js and jsx files?
+      // parser: tsParser,
       // ecmaVersion: 'latest',
       // sourceType: 'module',
 
@@ -81,8 +82,8 @@ export default [
         'ignorePackages',
         {
           jsx: 'never',
-          ts: 'never',
-          tsx: 'never',
+          // ts: 'never',
+          // tsx: 'never',
         },
       ],
     },

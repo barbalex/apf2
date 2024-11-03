@@ -6,6 +6,7 @@ import { de } from 'date-fns/locale/de'
 import { ApolloProvider } from '@apollo/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SnackbarProvider } from 'notistack'
+import { Provider as JotaiProvider } from 'jotai'
 //import { onPatch } from 'mobx-state-tree'
 
 // see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
@@ -25,6 +26,8 @@ import { theme } from './utils/materialTheme.js'
 import { initializeIdb } from './modules/initializeIdb.js'
 import { MobxStore } from './store/index.js'
 import { buildClient } from './client.js'
+
+import { store as jotaiStore } from './JotaiStore/index.js'
 
 import { Provider as MobxProvider } from './storeContext.js'
 import { Provider as IdbProvider } from './idbContext.js'
@@ -85,47 +88,49 @@ export const App = () => {
   // console.log('App rendering')
 
   return (
-    <IdbProvider value={idbContext}>
-      <MobxProvider value={store}>
-        <ApolloProvider client={client}>
-          <QueryClientProvider client={queryClient}>
-            <StyledEngineProvider injectFirst>
-              <uc-upload-ctx-provider
-                id="uploaderctx"
-                ctx-name="uploadcare"
-                ref={uploaderRef}
-              ></uc-upload-ctx-provider>
-              <ThemeProvider theme={theme}>
-                <SnackbarProvider
-                  maxSnack={3}
-                  preventDuplicate
-                  autoHideDuration={10000}
-                  action={(key) => <NotificationDismisser nKey={key} />}
-                >
-                  <UploaderContext.Provider value={uploaderRef}>
-                    <GlobalStyle />
-                    <Suspense fallback={<Spinner />}>
-                      <Router />
-                    </Suspense>
-                    <Suspense fallback={null}>
-                      <Notifier />
-                      <IsPrintSetter />
-                      <LastTouchedNodeSetter />
-                      <MouseWheelHandler />
-                      <LegacyBrowserInformer />
-                      <StorePersister
-                        client={client}
-                        store={store}
-                        idb={idb}
-                      />
-                    </Suspense>
-                  </UploaderContext.Provider>
-                </SnackbarProvider>
-              </ThemeProvider>
-            </StyledEngineProvider>
-          </QueryClientProvider>
-        </ApolloProvider>
-      </MobxProvider>
-    </IdbProvider>
+    <JotaiProvider store={jotaiStore}>
+      <IdbProvider value={idbContext}>
+        <MobxProvider value={store}>
+          <ApolloProvider client={client}>
+            <QueryClientProvider client={queryClient}>
+              <StyledEngineProvider injectFirst>
+                <uc-upload-ctx-provider
+                  id="uploaderctx"
+                  ctx-name="uploadcare"
+                  ref={uploaderRef}
+                ></uc-upload-ctx-provider>
+                <ThemeProvider theme={theme}>
+                  <SnackbarProvider
+                    maxSnack={3}
+                    preventDuplicate
+                    autoHideDuration={10000}
+                    action={(key) => <NotificationDismisser nKey={key} />}
+                  >
+                    <UploaderContext.Provider value={uploaderRef}>
+                      <GlobalStyle />
+                      <Suspense fallback={<Spinner />}>
+                        <Router />
+                      </Suspense>
+                      <Suspense fallback={null}>
+                        <Notifier />
+                        <IsPrintSetter />
+                        <LastTouchedNodeSetter />
+                        <MouseWheelHandler />
+                        <LegacyBrowserInformer />
+                        <StorePersister
+                          client={client}
+                          store={store}
+                          idb={idb}
+                        />
+                      </Suspense>
+                    </UploaderContext.Provider>
+                  </SnackbarProvider>
+                </ThemeProvider>
+              </StyledEngineProvider>
+            </QueryClientProvider>
+          </ApolloProvider>
+        </MobxProvider>
+      </IdbProvider>
+    </JotaiProvider>
   )
 }
