@@ -55,18 +55,20 @@ export const MenuBar = memo(({ children }) => {
   const previousMeasurementTimeRef = useRef(0)
   console.log('MenuBar, overflowing:', overflowing)
 
+  // this was quite some work to get right
+  // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
   const checkOverflow = useCallback(() => {
     if (!containerRef.current) return
+
+    // only change if overflowing has changed
     const { clientWidth, scrollWidth, scrollHeight, clientHeight } =
       containerRef.current
     const nowOverflowing =
       scrollHeight > clientHeight || scrollWidth > clientWidth
-    if (nowOverflowing === overflowing) return
 
-    console.log(
-      'MenuBar.checkOverflow, setting overflowing to:',
-      nowOverflowing,
-    )
+    // This somehow prevents changing overflowing from true to false
+    // if (nowOverflowing === overflowing) return
+
     return setOverflowing(nowOverflowing)
   }, [overflowing])
 
