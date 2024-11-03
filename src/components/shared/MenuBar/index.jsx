@@ -54,6 +54,7 @@ export const MenuBar = memo(({ children }) => {
   const previousWidthRef = useRef(null)
   const previousMeasurementTimeRef = useRef(0)
   console.log('MenuBar, overflowing:', overflowing)
+  console.log('MenuBar, children:', children)
 
   // this was quite some work to get right
   // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
@@ -80,7 +81,7 @@ export const MenuBar = memo(({ children }) => {
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const width = entry.contentRect.width
-        console.log('MenuBar.resizeObserver, measuring')
+        // console.log('MenuBar.resizeObserver, measuring')
 
         // only go on if enough time has past since the last measurement (prevent unnecessary rerenders)
         const currentTime = Date.now()
@@ -93,15 +94,6 @@ export const MenuBar = memo(({ children }) => {
         const percentageChanged =
           ((width - previousWidthRef.current) / width) * 100
         const shouldCheckOverflow = Math.abs(percentageChanged) > 1
-        console.log(
-          'MenuBar.resizeObserver, checking if the width has changed enough',
-          {
-            width,
-            previousWidth: previousWidthRef.current,
-            percentageChanged,
-            shouldCheckOverflow,
-          },
-        )
         if (!shouldCheckOverflow) return
 
         // check if the container is overflowing

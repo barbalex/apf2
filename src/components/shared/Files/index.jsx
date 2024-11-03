@@ -10,7 +10,7 @@ import {
   FaPlus,
   FaMinus,
   FaEye,
-  FaRectangleList,
+  FaEyeSlash,
   FaChevronLeft,
   FaChevronRight,
 } from 'react-icons/fa6'
@@ -222,7 +222,7 @@ export const Files = memo(
                 onClick={togglePreview}
               >
                 {isPreview ?
-                  <FaRectangleList />
+                  <FaEyeSlash />
                 : <FaEye />}
               </StyledIconButton>
               <StyledIconButton
