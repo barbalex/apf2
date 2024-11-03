@@ -9,7 +9,7 @@ import {
   cloneElement,
 } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
-import { IconButton } from '@mui/material'
+import { IconButton, Menu, MenuItem } from '@mui/material'
 import {
   FaBars,
   FaAlignLeft,
@@ -59,14 +59,12 @@ export const MenuBar = memo(({ children }) => {
   const [menuChildrenCount, setMenuChildrenCount] = useState(0)
 
   const buttonChildren = Children.map(usableChildren, (child, index) => {
-    console.log('MenuBar.buttonChildren', { child, index })
     if (!(index + 1 <= childrenCount - menuChildrenCount)) return null
     if (!child) return null
     return cloneElement(child)
   }).filter((child) => !!child)
 
   const menuChildren = Children.map(usableChildren, (child, index) => {
-    console.log('MenuBar.menuChildren', { child, index })
     if (!(index + 1 > childrenCount - menuChildrenCount)) return null
     if (!child) return null
     return cloneElement(child)
@@ -81,14 +79,14 @@ export const MenuBar = memo(({ children }) => {
     menuChildrenCount,
   })
 
-  const incrementNumberOfMenuChildren = useCallback(
-    () => setMenuChildrenCount((prev) => prev + 1),
-    [],
-  )
-  const decrementNumberOfMenuChildren = useCallback(
-    () => setMenuChildrenCount((prev) => prev - 1),
-    [],
-  )
+  const incrementNumberOfMenuChildren = useCallback(() => {
+    console.log('MenuBar.incrementNumberOfMenuChildren')
+    setMenuChildrenCount((prev) => prev + 1)
+  }, [])
+  const decrementNumberOfMenuChildren = useCallback(() => {
+    console.log('MenuBar.decrementNumberOfMenuChildren')
+    setMenuChildrenCount((prev) => prev - 1)
+  }, [])
 
   // this was quite some work to get right
   // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
@@ -98,12 +96,15 @@ export const MenuBar = memo(({ children }) => {
     // only change if overflowing has changed
     const { clientWidth, scrollWidth, scrollHeight, clientHeight } =
       containerRef.current
-    const needToIncrement = scrollWidth > clientWidth + 50
+    const needToIncrement =
+      scrollWidth > clientWidth + 50 || scrollHeight > clientHeight
     const needToDecrement = scrollWidth + 50 < clientWidth
 
     console.log('MenuBar.checkOverflow', {
       clientWidth,
       scrollWidth,
+      clientHeight,
+      scrollHeight,
       needToIncrement,
       needToDecrement,
     })
@@ -158,9 +159,10 @@ export const MenuBar = memo(({ children }) => {
   return (
     <Container ref={containerRef}>
       {buttonChildren}
-      <IconButton>
+      <IconButton id="menubutton">
         <FaBars />
       </IconButton>
+      <Menu id="menubutton">{menuChildren}</Menu>
     </Container>
   )
 })

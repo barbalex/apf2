@@ -209,56 +209,70 @@ export const Files = memo(
         [isPreview, setIsPreview],
       )
 
+      const menus = useMemo(
+        () => [
+          <StyledIconButton
+            key="1"
+            title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
+            onClick={togglePreview}
+          >
+            {isPreview ?
+              <FaEyeSlash />
+            : <FaEye />}
+          </StyledIconButton>,
+          <StyledIconButton
+            title="Dateien hochladen"
+            onClick={api?.initFlow}
+          >
+            <FaPlus />
+          </StyledIconButton>,
+        ],
+        [],
+      )
+      const previewMenus = useMemo(
+        () => [
+          <StyledIconButton
+            key="3"
+            title="löschen"
+            onClick={() => {
+              console.log('TODO: delete. How to know which file?')
+            }}
+          >
+            <FaMinus />
+          </StyledIconButton>,
+          <StyledIconButton
+            key="4"
+            title="vorige Datei"
+            onClick={() => {
+              console.log('TODO: navigate. How to know which file?')
+            }}
+          >
+            <FaChevronLeft />
+          </StyledIconButton>,
+          <StyledIconButton
+            key="5"
+            title="nächste Datei"
+            onClick={() => {
+              console.log('TODO: navigate. How to know which file?')
+            }}
+          >
+            <FaChevronRight />
+          </StyledIconButton>,
+        ],
+        [],
+      )
+      const allMenus = useMemo(
+        () => (isPreview ? [...menus, ...previewMenus] : menus),
+        [isPreview, menus, previewMenus],
+      )
+
       if (loading || loadingParent) return <Spinner />
 
       if (error) return <Error error={error} />
 
       return (
         <OuterContainer>
-          <MenuBar>
-            <StyledIconButton
-              title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
-              onClick={togglePreview}
-            >
-              {isPreview ?
-                <FaEyeSlash />
-              : <FaEye />}
-            </StyledIconButton>
-            <StyledIconButton
-              title="Dateien hochladen"
-              onClick={api?.initFlow}
-            >
-              <FaPlus />
-            </StyledIconButton>
-            {!!isPreview && (
-              <>
-                <StyledIconButton
-                  title="löschen"
-                  onClick={() => {
-                    console.log('TODO: delete. How to know which file?')
-                  }}
-                >
-                  <FaMinus />
-                </StyledIconButton>
-                <StyledIconButton
-                  title="vorige Datei"
-                  onClick={() => {
-                    console.log('TODO: navigate. How to know which file?')
-                  }}
-                >
-                  <FaChevronLeft />
-                </StyledIconButton>
-                <StyledIconButton
-                  title="nächste Datei"
-                  onClick={() => {
-                    console.log('TODO: navigate. How to know which file?')
-                  }}
-                >
-                  <FaChevronRight />
-                </StyledIconButton>
-              </>
-            )}
-          </MenuBar>
+          <MenuBar>{allMenus}</MenuBar>
           <SimpleBar
             style={{
               maxHeight: '100%',
