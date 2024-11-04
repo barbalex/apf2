@@ -28,9 +28,90 @@ const TextDiv = styled.div`
 
 export const Component = memo(() => {
   const { parentId, parent, files } = useOutletContext()
-  console.log('Files', { parentId, parent, files })
   const { fileId } = useParams()
   const previewRef = useRef(null)
 
-  return <div>Preview</div>
+  const row = files?.find((file) => file.fileId === fileId) ?? {}
+  console.log('Files', { parentId, parent, files, row })
+
+  const { width, height, ref } = useResizeDetector({
+    // handleHeight: false,
+    refreshMode: 'debounce',
+    refreshRate: 300,
+    refreshOptions: { leading: false, trailing: true },
+  })
+
+  const isImage = row.fileMimeType.includes('image')
+  const isPdf = row.fileMimeType.includes('pdf')
+  const isReactDocViewable =
+    !isImage &&
+    !isPdf &&
+    row.fileMimeType &&
+    [
+      'text/csv',
+      'application/vnd.oasis.opendocument.text',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/htm',
+      'text/html',
+      'application/vnd.ms-powerpoint',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      'text/plain',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'video/mp4',
+    ].includes(row.fileMimeType)
+  const isNotViewable = !isImage && !isPdf && !isReactDocViewable
+
+  console.log('Files', { isImage, isPdf, isReactDocViewable, isNotViewable })
+
+  return (
+    <FileDiv ref={ref}>
+      {isImage && row.url && width && (
+        <img
+          src={`https://ucarecdn.com/${file.fileId}/-/preview/${Math.floor(width)}x${Math.floor(
+            height,
+          )}/-/format/auto/-/quality/smart/`}
+          alt={row.name}
+          width={width}
+          height={
+            row.width && row.height ?
+              (width / row.width) * row.height
+            : undefined
+          }
+          style={imageStyle}
+        />
+      )}
+      {isPdf && (
+        <object
+          data={`https://ucarecdn.com/${file.fileId}`}
+          type="application/pdf"
+          style={{
+            width,
+            height: '100%',
+          }}
+        />
+      )}
+      {isReactDocViewable && (
+        <div style={{ height: '100%' }}>
+          <DocViewer
+            key={width}
+            documents={[
+              {
+                uri: `https://ucarecdn.com/${file.fileId}`,
+                mimeType: row.fileMimeType,
+              },
+            ]}
+            renderers={DocViewerRenderers}
+            config={{ header: { disableHeader: true } }}
+            style={{ height: '100%' }}
+            className="doc-viewer"
+          />
+        </div>
+      )}
+      {isNotViewable && (
+        <TextDiv>{`Files with mime type '${row.fileMimeType}' can't be previewed (yet)`}</TextDiv>
+      )}
+    </FileDiv>
+  )
 })

@@ -20,8 +20,6 @@ export const Component = memo(() => {
     [data?.allIdealbiotops?.nodes],
   )
 
-  console.log('Idealbiotop/Dateien', { apId, row, data })
-
   return (
     <FilesRouter
       parentId={row.id}
