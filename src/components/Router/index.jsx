@@ -95,7 +95,11 @@ export const Router = () => {
               />
               <Route
                 path="Dateien"
-                lazy={() => import('../Projekte/Daten/Ap/Dateien.jsx')}
+                lazy={() => import('../Projekte/Daten/Ap/Dateien/index.jsx')}
+              />
+              <Route
+                path="Dateien/:fileId/Vorschau"
+                lazy={() => import('../Projekte/Daten/Ap/Dateien/Preview.jsx')}
               />
               <Route
                 path="Historien"

@@ -14,6 +14,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from 'react-icons/fa6'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import './index.css'
 
@@ -71,11 +72,12 @@ const fragmentObject = {
 
 export const Files = memo(
   observer(({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
+    const navigate = useNavigate()
+    const { pathname } = useLocation()
+    const isPreview = pathname.endsWith('Vorschau')
     const client = useApolloClient()
     const uploaderCtx = useContext(UploaderContext)
     const api = uploaderCtx?.current?.getAPI?.()
-
-    const [isPreview, setIsPreview] = useState(false)
 
     const queryName = `all${upperFirst(parent)}Files`
     const parentIdName = `${parent}Id`
@@ -172,16 +174,24 @@ export const Files = memo(
       setTimeout(() => refetch(), 500)
     }, [])
 
-    const setPreview = useCallback(() => setIsPreview(true), [setIsPreview])
-    const unsetPreview = useCallback(() => setIsPreview(false), [setIsPreview])
+    const firstFileId = files?.[0]?.fileId
+
+    console.log('Files, firstFileId:', firstFileId)
+
+    const onClickPreview = useCallback(
+      () => navigate(`${firstFileId}/Vorschau`),
+      [firstFileId],
+    )
+    const onClickClosePreview = useCallback(() => navigate('../../'), [])
 
     // BEWARE: functions passed into menus do not react to state changes
+    // unless they are added to the dependencies array
     const menus = useMemo(
       () => [
         <IconButton
           key="vorschau_oeffnen"
           title="Vorschau öffnen"
-          onClick={setPreview}
+          onClick={onClickPreview}
         >
           <FaEye />
         </IconButton>,
@@ -193,14 +203,14 @@ export const Files = memo(
           <FaPlus />
         </IconButton>,
       ],
-      [],
+      [onClickPreview],
     )
     const previewMenus = useMemo(
       () => [
         <IconButton
           key="vorschau_schliessen"
           title="Vorschau schliessen"
-          onClick={unsetPreview}
+          onClick={onClickClosePreview}
         >
           <FaEyeSlash />
         </IconButton>,
@@ -239,11 +249,7 @@ export const Files = memo(
           <FaChevronRight />
         </IconButton>,
       ],
-      [],
-    )
-    const allMenus = useMemo(
-      () => (isPreview ? [...menus, ...previewMenus] : menus),
-      [isPreview, menus, previewMenus],
+      [onClickClosePreview],
     )
 
     if (loading) return <Spinner />
