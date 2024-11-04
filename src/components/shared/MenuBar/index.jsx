@@ -39,6 +39,7 @@ const Container = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
+// remove the margin mui adds to top and bottom of menu
 const StyledMenu = styled(Menu)`
   ul {
     padding: 0 !important;
@@ -95,7 +96,7 @@ export const MenuBar = memo(({ children }) => {
     menuChildrenLength: menuChildren.length,
   })
 
-  const incrementNumberOfMenuChildren = useCallback(() => {
+  const incrementMenuChildrenCount = useCallback(() => {
     setMenuChildrenCount((prev) => {
       console.log('MenuBar.incrementNumberOfMenuChildren from:', {
         prev,
@@ -104,7 +105,7 @@ export const MenuBar = memo(({ children }) => {
       return prev + 1
     })
   }, [])
-  const incrementNumberOfMenuChildrenRevealingMenu = useCallback(() => {
+  const incrementMenuChildrenCountRevealingMenu = useCallback(() => {
     setMenuChildrenCount((prev) => {
       console.log('MenuBar.incrementNumberOfMenuChildrenRevealingMenu from:', {
         prev,
@@ -113,7 +114,7 @@ export const MenuBar = memo(({ children }) => {
       return prev + 2
     })
   }, [])
-  const decrementNumberOfMenuChildren = useCallback(() => {
+  const decrementMenuChildrenCount = useCallback(() => {
     setMenuChildrenCount((prev) => {
       console.log('MenuBar.decrementNumberOfMenuChildren from:', {
         prev,
@@ -122,6 +123,15 @@ export const MenuBar = memo(({ children }) => {
       return prev - 1
     })
   }, [])
+  const decrementMenuChildrenCountHidingMenu = useCallback(() => {
+    setMenuChildrenCount((prev) => {
+      console.log('MenuBar.decrementNumberOfMenuChildrenHidingMenu from:', {
+        prev,
+        to: prev - menuChildrenCount,
+      })
+      return prev - menuChildrenCount
+    })
+  }, [menuChildrenCount])
 
   // this was quite some work to get right
   // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
@@ -141,6 +151,7 @@ export const MenuBar = memo(({ children }) => {
       needToIncrement && menuChildrenCount === 0
     const needToDecrement =
       containerMarginLeft > buttonWidth && menuChildrenCount > 0
+    const needToDecrementHidingMenu = needToDecrement && menuChildrenCount < 3
 
     console.log('MenuBar.checkOverflow', {
       clientWidth,
@@ -155,36 +166,50 @@ export const MenuBar = memo(({ children }) => {
 
     // TODO: set number of menu children instead
     if (needToIncrementRevealingMenu) {
-      return incrementNumberOfMenuChildrenRevealingMenu()
+      return incrementMenuChildrenCountRevealingMenu()
     }
-    if (needToIncrement) return incrementNumberOfMenuChildren()
-    if (needToDecrement) decrementNumberOfMenuChildren()
+    if (needToIncrement) return incrementMenuChildrenCount()
+    if (needToDecrementHidingMenu) {
+      return decrementMenuChildrenCountHidingMenu()
+    }
+    if (needToDecrement) decrementMenuChildrenCount()
     // TODO: need to move children from menu to buttons and vice versa
   }, [menuChildrenCount])
 
   const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
 
   useEffect(() => {
-    if (!containerRef.current) return
+    if (!containerRef.current) {
+      console.log('MenuBar.useEffect, no containerRef')
+      return
+    }
     // set up a resize observer for the container
     const observer = new ResizeObserver((entries) => {
+      console.log('MenuBar.resizeObserver, entries:', entries)
       for (const entry of entries) {
         const width = entry.contentRect.width
-        // console.log('MenuBar.resizeObserver, measuring')
+        console.log('MenuBar.resizeObserver, measuring, width:', width)
 
         // only go on if enough time has past since the last measurement (prevent unnecessary rerenders)
         const currentTime = Date.now()
         const timeSinceLastMeasurement =
           currentTime - previousMeasurementTimeRef.current
-        if (timeSinceLastMeasurement < 300) return
+        if (timeSinceLastMeasurement < 300) {
+          console.log('MenuBar.resizeObserver, not enough time has passed')
+          return
+        }
 
         // only go on if the width has changed enough (prevent unnecessary rerenders)
         // this is the reason for not using react-resize-detector
         previousMeasurementTimeRef.current = currentTime
-        const percentageChanged =
-          ((width - previousWidthRef.current) / width) * 100
+        const percentageChanged = Math.abs(
+          ((width - previousWidthRef.current) / width) * 100,
+        )
         const shouldCheckOverflow = Math.abs(percentageChanged) > 1
-        if (!shouldCheckOverflow) return
+        if (!shouldCheckOverflow) {
+          console.log('MenuBar.resizeObserver, not enough change')
+          return
+        }
 
         previousWidthRef.current = width
         checkOverflowDebounced()
@@ -194,9 +219,10 @@ export const MenuBar = memo(({ children }) => {
     observer.observe(containerRef.current)
 
     return () => {
+      console.log('MenuBar.useEffect, observer.disconnect')
       observer.disconnect()
     }
-  }, [])
+  }, [previousWidthRef.current])
 
   const onClickMenuButton = useCallback((event) =>
     setMenuAnchorEl(event.currentTarget),
