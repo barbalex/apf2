@@ -1,0 +1,7 @@
+.doc-viewer #proxy-renderer {
+  height: 100%;
+}
+
+.doc-viewer #msdoc-renderer {
+  height: 100%;
+}

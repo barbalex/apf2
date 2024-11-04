@@ -102,7 +102,7 @@ export const Router = () => {
                 />
                 <Route
                   path=":fileId/Vorschau"
-                  lazy={() => import('../shared/Files/Preview.jsx')}
+                  lazy={() => import('../shared/Files/Preview/index.jsx')}
                 />
               </Route>
               <Route
@@ -219,7 +219,7 @@ export const Router = () => {
                 />
                 <Route
                   path=":fileId/Vorschau"
-                  lazy={() => import('../shared/Files/Preview.jsx')}
+                  lazy={() => import('../shared/Files/Preview/index.jsx')}
                 />
               </Route>
             </Route>
@@ -271,7 +271,7 @@ export const Router = () => {
                 />
                 <Route
                   path=":fileId/Vorschau"
-                  lazy={() => import('../shared/Files/Preview.jsx')}
+                  lazy={() => import('../shared/Files/Preview/index.jsx')}
                 />
               </Route>
               <Route
@@ -325,7 +325,7 @@ export const Router = () => {
                 />
                 <Route
                   path=":fileId/Vorschau"
-                  lazy={() => import('../shared/Files/Preview.jsx')}
+                  lazy={() => import('../shared/Files/Preview/index.jsx')}
                 />
               </Route>
               <Route
@@ -401,7 +401,7 @@ export const Router = () => {
                 />
                 <Route
                   path=":fileId/Vorschau"
-                  lazy={() => import('../shared/Files/Preview.jsx')}
+                  lazy={() => import('../shared/Files/Preview/index.jsx')}
                 />
               </Route>
               <Route
@@ -439,7 +439,7 @@ export const Router = () => {
                 />
                 <Route
                   path=":fileId/Vorschau"
-                  lazy={() => import('../shared/Files/Preview.jsx')}
+                  lazy={() => import('../shared/Files/Preview/index.jsx')}
                 />
               </Route>
             </Route>
