@@ -27,12 +27,13 @@ const TextDiv = styled.div`
 `
 
 export const Component = memo(() => {
-  const { parentId, parent, files } = useOutletContext()
+  // containerRef is will be passed to the FullscreenControl
+  const { parentId, parent, files, containerRef } = useOutletContext()
   const { fileId } = useParams()
   const previewRef = useRef(null)
 
   const row = files?.find((file) => file.fileId === fileId) ?? {}
-  console.log('Files', { parentId, parent, files, row })
+  console.log('Files', { parentId, parent, files, row, containerRef })
 
   const { width, height, ref } = useResizeDetector({
     // handleHeight: false,
@@ -63,13 +64,19 @@ export const Component = memo(() => {
     ].includes(row.fileMimeType)
   const isNotViewable = !isImage && !isPdf && !isReactDocViewable
 
-  console.log('Files', { isImage, isPdf, isReactDocViewable, isNotViewable })
+  console.log('Files', {
+    isImage,
+    isPdf,
+    isReactDocViewable,
+    isNotViewable,
+    dataUrl: `https://ucarecdn.com/${row.fileId}`,
+  })
 
   return (
     <FileDiv ref={ref}>
       {isImage && row.url && width && (
         <img
-          src={`https://ucarecdn.com/${file.fileId}/-/preview/${Math.floor(width)}x${Math.floor(
+          src={`https://ucarecdn.com/${row.fileId}/-/preview/${Math.floor(width)}x${Math.floor(
             height,
           )}/-/format/auto/-/quality/smart/`}
           alt={row.name}
@@ -84,7 +91,7 @@ export const Component = memo(() => {
       )}
       {isPdf && (
         <object
-          data={`https://ucarecdn.com/${file.fileId}`}
+          data={`https://ucarecdn.com/${row.fileId}/${row.name}`}
           type="application/pdf"
           style={{
             width,
@@ -98,7 +105,7 @@ export const Component = memo(() => {
             key={width}
             documents={[
               {
-                uri: `https://ucarecdn.com/${file.fileId}`,
+                uri: `https://ucarecdn.com/${row.fileId}/${row.name}`,
                 mimeType: row.fileMimeType,
               },
             ]}

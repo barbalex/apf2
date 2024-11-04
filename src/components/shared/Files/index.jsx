@@ -85,6 +85,8 @@ export const FilesRouter = memo(
     const uploaderCtx = useContext(UploaderContext)
     const api = uploaderCtx?.current?.getAPI?.()
 
+    const containerRef = useRef(null)
+
     const queryName = `all${upperFirst(parent)}Files`
     const parentIdName = `${parent}Id`
     const fields = `${upperFirst(parent)}FileFields`
@@ -268,7 +270,7 @@ export const FilesRouter = memo(
 
     return (
       <ErrorBoundary>
-        <OuterContainer>
+        <OuterContainer ref={containerRef}>
           <Uploader
             onFileUploadSuccess={onFileUploadSuccess}
             onFileUploadFailed={onFileUploadFailed}
@@ -283,7 +285,9 @@ export const FilesRouter = memo(
             tabIndex={-1}
           >
             <Suspense fallback={<Spinner />}>
-              <Outlet context={{ files, parent, parentId, refetch }} />
+              <Outlet
+                context={{ files, parent, parentId, refetch, containerRef }}
+              />
             </Suspense>
           </SimpleBar>
         </OuterContainer>
