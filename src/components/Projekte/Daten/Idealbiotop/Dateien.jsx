@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { useApolloClient, useQuery } from '@apollo/client'
 
-import { Files } from '../../../shared/Files/index.jsx'
+import { FilesRouter } from '../../../shared/Files/index.jsx'
 import { query } from './query.js'
 
 export const Component = memo(() => {
@@ -23,7 +23,7 @@ export const Component = memo(() => {
   console.log('Idealbiotop/Dateien', { apId, row, data })
 
   return (
-    <Files
+    <FilesRouter
       parentId={row.id}
       parent="idealbiotop"
     />

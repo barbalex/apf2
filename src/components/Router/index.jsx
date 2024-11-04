@@ -86,7 +86,6 @@ export const Router = () => {
               />
               <Route
                 path="Art"
-                index={true}
                 lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
               />
               <Route
@@ -96,11 +95,18 @@ export const Router = () => {
               <Route
                 path="Dateien"
                 lazy={() => import('../Projekte/Daten/Ap/Dateien/index.jsx')}
-              />
-              <Route
-                path="Dateien/:fileId/Vorschau"
-                lazy={() => import('../Projekte/Daten/Ap/Dateien/Preview.jsx')}
-              />
+              >
+                <Route
+                  index={true}
+                  lazy={() => import('../shared/Files/Files/index.jsx')}
+                />
+                <Route
+                  path=":fileId/Vorschau"
+                  lazy={() =>
+                    import('../Projekte/Daten/Ap/Dateien/Preview.jsx')
+                  }
+                />
+              </Route>
               <Route
                 path="Historien"
                 lazy={() => import('../Projekte/Daten/Ap/Historien.jsx')}

@@ -1,4 +1,12 @@
-import { useCallback, useState, useRef, useContext, memo, useMemo } from 'react'
+import {
+  useCallback,
+  useState,
+  useRef,
+  useContext,
+  memo,
+  useMemo,
+  Suspense,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import styled from '@emotion/styled'
@@ -14,7 +22,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from 'react-icons/fa6'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Outlet } from 'react-router-dom'
 
 import './index.css'
 
@@ -33,7 +41,7 @@ import {
 } from '../fragments'
 import { Uploader } from '../Uploader/index.jsx'
 import { UploaderContext } from '../../../UploaderContext.js'
-import { File } from './File.jsx'
+import { File } from './Files/File.jsx'
 import { isImageFile } from './isImageFile.js'
 import { StoreContext } from '../../../storeContext.js'
 import { icon } from 'leaflet'
@@ -52,10 +60,6 @@ const Container = styled.div`
 const Spacer = styled.div`
   height: 10px;
 `
-const ButtonsContainer = styled.div`
-  display: flex;
-  margin-top: 8px;
-`
 const LightboxButton = styled(Button)`
   margin-left: 10px !important;
   text-transform: none !important;
@@ -70,8 +74,9 @@ const fragmentObject = {
   tpopmassn: tpopmassnFileFragment,
 }
 
-export const Files = memo(
+export const FilesRouter = memo(
   observer(({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
+    const store = useContext(StoreContext)
     const navigate = useNavigate()
     const { pathname } = useLocation()
     const isPreview = pathname.endsWith('Vorschau')
@@ -176,8 +181,6 @@ export const Files = memo(
 
     const firstFileId = files?.[0]?.fileId
 
-    console.log('Files, firstFileId:', firstFileId)
-
     const onClickPreview = useCallback(
       () => navigate(`${firstFileId}/Vorschau`),
       [firstFileId],
@@ -252,42 +255,34 @@ export const Files = memo(
       [onClickClosePreview],
     )
 
+    console.log('FilesRouter', { loading, error })
+
     if (loading) return <Spinner />
 
     if (error) return <Error error={error} />
 
     return (
-      <OuterContainer>
-        <MenuBar>{isPreview ? previewMenus : menus}</MenuBar>
-        <SimpleBar
-          style={{
-            maxHeight: '100%',
-            height: '100%',
-          }}
-          tabIndex={-1}
-        >
-          <ErrorBoundary>
-            <Container>
-              <ButtonsContainer>
-                <Uploader
-                  onFileUploadSuccess={onFileUploadSuccess}
-                  onFileUploadFailed={onFileUploadFailed}
-                  onCommonUploadSuccess={onCommonUploadSuccess}
-                />
-              </ButtonsContainer>
-              <Spacer />
-              {files.map((file) => (
-                <File
-                  key={file.fileId}
-                  file={file}
-                  parent={parent}
-                  refetch={refetch}
-                />
-              ))}
-            </Container>
-          </ErrorBoundary>
-        </SimpleBar>
-      </OuterContainer>
+      <ErrorBoundary>
+        <OuterContainer>
+          <Uploader
+            onFileUploadSuccess={onFileUploadSuccess}
+            onFileUploadFailed={onFileUploadFailed}
+            onCommonUploadSuccess={onCommonUploadSuccess}
+          />
+          <MenuBar>{isPreview ? previewMenus : menus}</MenuBar>
+          <SimpleBar
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+            tabIndex={-1}
+          >
+            <Suspense fallback={<Spinner />}>
+              <Outlet context={{ files, parent, parentId, refetch }} />
+            </Suspense>
+          </SimpleBar>
+        </OuterContainer>
+      </ErrorBoundary>
     )
   }),
 )

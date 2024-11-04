@@ -2,7 +2,7 @@ import { memo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import { Files as SharedFiles } from '../../../../shared/Files/index.jsx'
+import { FilesRouter } from '../../../../shared/Files/index.jsx'
 
 const Container = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -24,7 +24,7 @@ export const Files = memo(
     <Container>
       <RemarksLabel>Dateien</RemarksLabel>
       <RemarksVal>
-        <SharedFiles
+        <FilesRouter
           parentId={row.id}
           parent="tpopkontr"
         />

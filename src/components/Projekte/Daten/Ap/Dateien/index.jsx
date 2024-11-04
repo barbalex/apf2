@@ -1,13 +1,14 @@
 import { memo } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { Files } from '../../../../shared/Files/index.jsx'
+import { FilesRouter } from '../../../../shared/Files/index.jsx'
 
 export const Component = memo(() => {
   const { apId } = useParams()
+  console.log('ApFiles', { apId })
 
   return (
-    <Files
+    <FilesRouter
       parentId={apId}
       parent="ap"
     />
