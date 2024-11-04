@@ -206,21 +206,23 @@ export const Files = memo(
         setTimeout(() => refetch(), 500)
       }, [])
 
-      const togglePreview = useCallback(() => {
-        setIsPreview(!isPreview)
+      const setPreview = useCallback(() => {
+        setIsPreview(true)
         incrementMenuRerenderer()
-      }, [isPreview, setIsPreview])
+      }, [setIsPreview])
+      const unsetPreview = useCallback(() => {
+        setIsPreview(false)
+        incrementMenuRerenderer()
+      }, [setIsPreview])
 
       const menus = useMemo(
         () => [
           <IconButton
             key="1"
-            title={isPreview ? 'Vorschau schliessen' : 'Vorschau öffnen'}
-            onClick={togglePreview}
+            title="Vorschau öffnen"
+            onClick={setPreview}
           >
-            {isPreview ?
-              <FaEyeSlash />
-            : <FaEye />}
+            <FaEye />
           </IconButton>,
           <IconButton
             title="Dateien hochladen"
@@ -233,6 +235,19 @@ export const Files = memo(
       )
       const previewMenus = useMemo(
         () => [
+          <IconButton
+            key="1"
+            title="Vorschau schliessen"
+            onClick={unsetPreview}
+          >
+            <FaEyeSlash />
+          </IconButton>,
+          <IconButton
+            title="Dateien hochladen"
+            onClick={api?.initFlow}
+          >
+            <FaPlus />
+          </IconButton>,
           <IconButton
             key="3"
             title="löschen"
@@ -275,10 +290,10 @@ export const Files = memo(
       return (
         <OuterContainer>
           <MenuBar
-            key={menuRerenderer}
+            key={`${menuRerenderer}/${isPreview}`}
             menuRerenderer={menuRerenderer}
           >
-            {allMenus}
+            {isPreview ? previewMenus : menus}
           </MenuBar>
           <SimpleBar
             style={{

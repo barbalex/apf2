@@ -71,7 +71,7 @@ export const MenuBar = memo(({ children, menuRerenderer }) => {
       Children.map(usableChildren, (child, index) => {
         if (!(index + 1 <= childrenCount - menuChildrenCount)) return null
         if (!child) return null
-        return cloneElement(child)
+        return cloneElement(child, { key: `${index}/${menuRerenderer}` })
       }).filter((child) => !!child),
     [usableChildren, childrenCount, menuChildrenCount, menuRerenderer],
   )
@@ -154,6 +154,7 @@ export const MenuBar = memo(({ children, menuRerenderer }) => {
         if (timeSinceLastMeasurement < 300) return
 
         // only go on if the width has changed enough (prevent unnecessary rerenders)
+        // this is the reason for not using react-resize-detector
         previousMeasurementTimeRef.current = currentTime
         const percentageChanged =
           ((width - previousWidthRef.current) / width) * 100
