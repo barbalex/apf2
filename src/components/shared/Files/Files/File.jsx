@@ -115,18 +115,18 @@ export const File = memo(
         `,
         })
       } catch (error) {
-        return console.log(error)
-        // TODO: enque
-        /*return store.enqueNotification({
-        message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
-        options: {
-          variant: 'error',
-        },
-      })*/
+        console.log(error)
+        return store.enqueNotification({
+          message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
+          options: {
+            variant: 'error',
+          },
+        })
       }
       refetch()
       setDelMenuAnchorEl(null)
     }, [client, file.id, parent, refetch, tableName])
+
     const onClickDownload = useCallback(
       () => window.open(`https://ucarecdn.com/${file.fileId}/-/inline/no/`),
       [file],
