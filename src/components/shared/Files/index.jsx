@@ -82,12 +82,6 @@ export const Files = memo(
       const storeContext = useContext(StoreContext)
 
       const [isPreview, setIsPreview] = useState(false)
-      const [menuRerenderer, setMenuRerenderer] = useState(0)
-      const incrementMenuRerenderer = useCallback(
-        () => setMenuRerenderer((prev) => prev + 1),
-        [],
-      )
-      console.log('Files', { isPreview, menuRerenderer })
 
       const queryName = `all${upperFirst(parent)}Files`
       const parentIdName = `${parent}Id`
@@ -108,28 +102,6 @@ export const Files = memo(
         ${fragment}
       `
 
-      // console.log('Files', {
-      //   parentId,
-      //   parent,
-      //   loadingParent,
-      //   queryName,
-      //   parentIdName,
-      //   fields,
-      //   fragment,
-      //   queryString: `
-      //   query FileQuery($parentId: UUID!) {
-      //     ${queryName}(
-      //       orderBy: NAME_ASC
-      //       filter: { ${parentIdName}: { equalTo: $parentId } }
-      //     ) {
-      //       nodes {
-      //         ...${fields}
-      //       }
-      //     }
-      //   }
-      //   ${fragment}
-      // `,
-      // })
       const { data, error, loading, refetch } = useQuery(query, {
         variables: { parentId },
       })
@@ -206,15 +178,13 @@ export const Files = memo(
         setTimeout(() => refetch(), 500)
       }, [])
 
-      const setPreview = useCallback(() => {
-        setIsPreview(true)
-        incrementMenuRerenderer()
-      }, [setIsPreview])
-      const unsetPreview = useCallback(() => {
-        setIsPreview(false)
-        incrementMenuRerenderer()
-      }, [setIsPreview])
+      const setPreview = useCallback(() => setIsPreview(true), [setIsPreview])
+      const unsetPreview = useCallback(
+        () => setIsPreview(false),
+        [setIsPreview],
+      )
 
+      // BEWARE: functions passed into menus do not react to state changes
       const menus = useMemo(
         () => [
           <IconButton
@@ -243,6 +213,7 @@ export const Files = memo(
             <FaEyeSlash />
           </IconButton>,
           <IconButton
+            key="2"
             title="Dateien hochladen"
             onClick={api?.initFlow}
           >
@@ -289,12 +260,7 @@ export const Files = memo(
 
       return (
         <OuterContainer>
-          <MenuBar
-            key={`${menuRerenderer}/${isPreview}`}
-            menuRerenderer={menuRerenderer}
-          >
-            {isPreview ? previewMenus : menus}
-          </MenuBar>
+          <MenuBar>{isPreview ? previewMenus : menus}</MenuBar>
           <SimpleBar
             style={{
               maxHeight: '100%',
@@ -312,7 +278,7 @@ export const Files = memo(
                   />
                 </ButtonsContainer>
                 <Spacer />
-                {files.map((file) => (
+                {files.map((file, index) => (
                   <File
                     key={file.fileId}
                     file={file}

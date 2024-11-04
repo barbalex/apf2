@@ -55,10 +55,10 @@ const widthAtom = atom(0)
 // or rather: need info for menu AND button
 // so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
-export const MenuBar = memo(({ children, menuRerenderer }) => {
+export const MenuBar = memo(({ children }) => {
   const usableChildren = useMemo(
     () => children.filter((child) => !!child),
-    [children, menuRerenderer],
+    [children],
   )
   const containerRef = useRef(null)
   const previousWidthRef = useRef(null)
@@ -71,9 +71,9 @@ export const MenuBar = memo(({ children, menuRerenderer }) => {
       Children.map(usableChildren, (child, index) => {
         if (!(index + 1 <= childrenCount - menuChildrenCount)) return null
         if (!child) return null
-        return cloneElement(child, { key: `${index}/${menuRerenderer}` })
+        return cloneElement(child)
       }).filter((child) => !!child),
-    [usableChildren, childrenCount, menuChildrenCount, menuRerenderer],
+    [usableChildren, childrenCount, menuChildrenCount],
   )
 
   const menuChildren = useMemo(
@@ -83,7 +83,7 @@ export const MenuBar = memo(({ children, menuRerenderer }) => {
         if (!child) return null
         return cloneElement(child)
       }).filter((child) => !!child),
-    [usableChildren, childrenCount, menuChildrenCount, menuRerenderer],
+    [usableChildren, childrenCount, menuChildrenCount],
   )
 
   console.log('MenuBar', {
@@ -93,7 +93,6 @@ export const MenuBar = memo(({ children, menuRerenderer }) => {
     childrenCount,
     menuChildrenCount,
     menuChildrenLength: menuChildren.length,
-    menuRerenderer,
   })
 
   const incrementNumberOfMenuChildren = useCallback(() => {
