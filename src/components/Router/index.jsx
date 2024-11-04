@@ -94,7 +94,7 @@ export const Router = () => {
               />
               <Route
                 path="Dateien"
-                lazy={() => import('../Projekte/Daten/Ap/Dateien/index.jsx')}
+                lazy={() => import('../Projekte/Daten/Ap/Dateien.jsx')}
               >
                 <Route
                   index={true}
@@ -102,9 +102,7 @@ export const Router = () => {
                 />
                 <Route
                   path=":fileId/Vorschau"
-                  lazy={() =>
-                    import('../Projekte/Daten/Ap/Dateien/Preview.jsx')
-                  }
+                  lazy={() => import('../shared/Files/Preview.jsx')}
                 />
               </Route>
               <Route
@@ -214,7 +212,16 @@ export const Router = () => {
               <Route
                 path="Dateien"
                 lazy={() => import('../Projekte/Daten/Idealbiotop/Dateien.jsx')}
-              />
+              >
+                <Route
+                  index={true}
+                  lazy={() => import('../shared/Files/Files/index.jsx')}
+                />
+                <Route
+                  path=":fileId/Vorschau"
+                  lazy={() => import('../shared/Files/Preview.jsx')}
+                />
+              </Route>
             </Route>
             <Route
               path="Projekte/:projId/Arten/:apId/AP-Berichte/:apberId"
@@ -257,7 +264,16 @@ export const Router = () => {
               <Route
                 path="Dateien"
                 lazy={() => import('../Projekte/Daten/Pop/Dateien.jsx')}
-              />
+              >
+                <Route
+                  index={true}
+                  lazy={() => import('../shared/Files/Files/index.jsx')}
+                />
+                <Route
+                  path=":fileId/Vorschau"
+                  lazy={() => import('../shared/Files/Preview.jsx')}
+                />
+              </Route>
               <Route
                 path="Historien"
                 lazy={() => import('../Projekte/Daten/Pop/Historien.jsx')}
@@ -302,7 +318,16 @@ export const Router = () => {
               <Route
                 path="Dateien"
                 lazy={() => import('../Projekte/Daten/Tpop/Dateien.jsx')}
-              />
+              >
+                <Route
+                  index={true}
+                  lazy={() => import('../shared/Files/Files/index.jsx')}
+                />
+                <Route
+                  path=":fileId/Vorschau"
+                  lazy={() => import('../shared/Files/Preview.jsx')}
+                />
+              </Route>
               <Route
                 path="Historien"
                 lazy={() => import('../Projekte/Daten/Tpop/Historien.jsx')}
@@ -369,7 +394,16 @@ export const Router = () => {
                 lazy={() =>
                   import('../Projekte/Daten/Tpopfeldkontr/Dateien.jsx')
                 }
-              />
+              >
+                <Route
+                  index={true}
+                  lazy={() => import('../shared/Files/Files/index.jsx')}
+                />
+                <Route
+                  path=":fileId/Vorschau"
+                  lazy={() => import('../shared/Files/Preview.jsx')}
+                />
+              </Route>
               <Route
                 path="Zaehlungen"
                 lazy={() => import('../Projekte/Daten/Tpopfeldkontr/index.jsx')}
@@ -398,7 +432,16 @@ export const Router = () => {
               <Route
                 path="Dateien"
                 lazy={() => import('../Projekte/Daten/Tpopmassn/Dateien.jsx')}
-              />
+              >
+                <Route
+                  index={true}
+                  lazy={() => import('../shared/Files/Files/index.jsx')}
+                />
+                <Route
+                  path=":fileId/Vorschau"
+                  lazy={() => import('../shared/Files/Preview.jsx')}
+                />
+              </Route>
             </Route>
             <Route
               path="Benutzer/:userId/*"
