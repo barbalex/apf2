@@ -96,12 +96,22 @@ export const MenuBar = memo(({ children }) => {
   })
 
   const incrementNumberOfMenuChildren = useCallback(() => {
-    console.log('MenuBar.incrementNumberOfMenuChildren')
-    setMenuChildrenCount((prev) => prev + 1)
+    setMenuChildrenCount((prev) => {
+      console.log('MenuBar.incrementNumberOfMenuChildren from:', {
+        prev,
+        to: prev + 1,
+      })
+      return prev + 1
+    })
   }, [])
   const decrementNumberOfMenuChildren = useCallback(() => {
-    console.log('MenuBar.decrementNumberOfMenuChildren')
-    setMenuChildrenCount((prev) => prev - 1)
+    setMenuChildrenCount((prev) => {
+      console.log('MenuBar.decrementNumberOfMenuChildren from:', {
+        prev,
+        to: prev - 1,
+      })
+      return prev - 1
+    })
   }, [])
 
   // this was quite some work to get right
@@ -118,7 +128,8 @@ export const MenuBar = memo(({ children }) => {
 
     const needToIncrement =
       scrollWidth > clientWidth + 50 || scrollHeight > clientHeight
-    const needToDecrement = containerMarginLeft > buttonWidth
+    const needToDecrement =
+      containerMarginLeft > buttonWidth && menuChildrenCount > 0
 
     console.log('MenuBar.checkOverflow', {
       clientWidth,
