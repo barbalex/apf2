@@ -29,9 +29,9 @@ import { over, set } from 'lodash'
 import { useAtom, atom } from 'jotai'
 import { useDebouncedCallback } from 'use-debounce'
 
+const MeasuredOuterContainer = styled.div``
 const Container = styled.div`
-  overflow-y: hidden;
-  overflow-x: hidden;
+  overflow: hidden;
   max-height: 40px;
   padding: 0 5px;
   margin-left: auto;
