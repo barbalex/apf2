@@ -148,6 +148,7 @@ export const MenuBar = memo(({ children }) => {
       clientHeight,
       scrollHeight,
       needToIncrement,
+      needToIncrementRevealingMenu,
       needToDecrement,
       containerMarginLeft: parseFloat(containerStyle.marginLeft),
     })
@@ -159,7 +160,7 @@ export const MenuBar = memo(({ children }) => {
     if (needToIncrement) return incrementNumberOfMenuChildren()
     if (needToDecrement) decrementNumberOfMenuChildren()
     // TODO: need to move children from menu to buttons and vice versa
-  }, [])
+  }, [menuChildrenCount])
 
   const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
 
