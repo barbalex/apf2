@@ -22,7 +22,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from 'react-icons/fa6'
-import { useNavigate, useLocation, Outlet } from 'react-router-dom'
+import { useNavigate, useLocation, Outlet, useParams } from 'react-router-dom'
 
 import './index.css'
 
@@ -77,6 +77,7 @@ const fragmentObject = {
 export const FilesRouter = memo(
   observer(({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
     const store = useContext(StoreContext)
+    const { fileId } = useParams()
     const navigate = useNavigate()
     const { pathname } = useLocation()
     const isPreview = pathname.endsWith('Vorschau')
@@ -111,7 +112,6 @@ export const FilesRouter = memo(
 
     const onCommonUploadSuccess = useCallback(
       async (info) => {
-        console.log('onCommonUploadSuccess', info)
         // close the uploader or it will be open when navigating to the list
         api?.doneFlow?.()
         // clear the uploader or it will show the last uploaded file when opened next time
@@ -124,7 +124,6 @@ export const FilesRouter = memo(
 
     const onFileUploadSuccess = useCallback(
       async (info) => {
-        console.log('onFileUploadSuccess', info)
         if (info) {
           let responce
           try {
@@ -185,7 +184,12 @@ export const FilesRouter = memo(
       () => navigate(`${firstFileId}/Vorschau`),
       [firstFileId],
     )
-    const onClickClosePreview = useCallback(() => navigate('../../'), [])
+    const onClickClosePreview = useCallback(() => {
+      // relative navigation using ../.. does not work here
+      const fileIdBeginsAt = pathname.indexOf(fileId)
+      const newPathname = pathname.slice(0, fileIdBeginsAt)
+      navigate(newPathname)
+    }, [pathname, fileId])
 
     // BEWARE: functions passed into menus do not react to state changes
     // unless they are added to the dependencies array
@@ -255,7 +259,7 @@ export const FilesRouter = memo(
       [onClickClosePreview],
     )
 
-    console.log('FilesRouter', { loading, error })
+    console.log('FilesRouter', { loading, error, fileId })
 
     if (loading) return <Spinner />
 
