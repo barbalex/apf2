@@ -125,6 +125,7 @@ export const File = memo(
       })*/
       }
       refetch()
+      setDelMenuAnchorEl(null)
     }, [client, file.id, parent, refetch, tableName])
     const onClickDownload = useCallback(
       () => window.open(`https://ucarecdn.com/${file.fileId}/-/inline/no/`),
