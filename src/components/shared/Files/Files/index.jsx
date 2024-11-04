@@ -18,7 +18,6 @@ const Spacer = styled.div`
 
 export const Component = memo(() => {
   const { parentId, parent, files, refetch } = useOutletContext()
-  console.log('Files', { parentId, parent, files })
 
   return (
     <ErrorBoundary>
