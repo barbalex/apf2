@@ -29,15 +29,24 @@ import { over, set } from 'lodash'
 import { useAtom, atom } from 'jotai'
 import { useDebouncedCallback } from 'use-debounce'
 
-const MeasuredOuterContainer = styled.div``
-const Container = styled.div`
+const buttonSize = 40
+
+const MeasuredOuterContainer = styled.div`
   overflow: hidden;
-  max-height: 40px;
-  padding: 0 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+`
+// align items to the right
+const InnerContainer = styled.div`
+  max-height: ${buttonSize}px;
   margin-left: auto;
   margin-right: 0;
   margin-top: auto;
   margin-bottom: auto;
+`
+const StylingContainer = styled.div`
+  padding: 0 5px;
 `
 // remove the margin mui adds to top and bottom of menu
 const StyledMenu = styled(Menu)`
@@ -45,9 +54,6 @@ const StyledMenu = styled(Menu)`
     padding: 0 !important;
   }
 `
-
-const buttonWidth = 40
-const gapWidth = 5
 
 const overflowingAtom = atom(false)
 const widthAtom = atom(0)
@@ -61,7 +67,9 @@ export const MenuBar = memo(({ children }) => {
     () => children.filter((child) => !!child),
     [children],
   )
-  const containerRef = useRef(null)
+  const outerContainerRef = useRef(null)
+  const innerContainerRef = useRef(null)
+
   const previousWidthRef = useRef(null)
   const previousMeasurementTimeRef = useRef(0)
   const childrenCount = Children.count(usableChildren)
@@ -136,21 +144,21 @@ export const MenuBar = memo(({ children }) => {
   // this was quite some work to get right
   // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
   const checkOverflow = useCallback(() => {
-    if (!containerRef.current) return
+    if (!outerContainerRef.current) return
 
     // only change if overflowing has changed
     const { clientWidth, scrollWidth, scrollHeight, clientHeight } =
-      containerRef.current
+      outerContainerRef.current
+
     // the left margin of the container is the room available
-    const containerStyle = window.getComputedStyle(containerRef.current)
-    const containerMarginLeft = parseFloat(containerStyle.marginLeft)
+    const containerStyle = window.getComputedStyle(outerContainerRef.current)
+    const growableSpace = clientWidth - innerContainerRef.current.clientWidth
 
     const needToIncrement =
       scrollWidth > clientWidth + 50 || scrollHeight > clientHeight
     const needToIncrementRevealingMenu =
       needToIncrement && menuChildrenCount === 0
-    const needToDecrement =
-      containerMarginLeft > buttonWidth && menuChildrenCount > 0
+    const needToDecrement = growableSpace > buttonSize && menuChildrenCount > 0
     const needToDecrementHidingMenu = needToDecrement && menuChildrenCount < 3
 
     console.log('MenuBar.checkOverflow', {
@@ -161,7 +169,7 @@ export const MenuBar = memo(({ children }) => {
       needToIncrement,
       needToIncrementRevealingMenu,
       needToDecrement,
-      containerMarginLeft: parseFloat(containerStyle.marginLeft),
+      growableSpace,
     })
 
     // TODO: set number of menu children instead
@@ -179,7 +187,7 @@ export const MenuBar = memo(({ children }) => {
   const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
 
   useEffect(() => {
-    if (!containerRef.current) {
+    if (!outerContainerRef.current) {
       console.log('MenuBar.useEffect, no containerRef')
       return
     }
@@ -216,7 +224,7 @@ export const MenuBar = memo(({ children }) => {
       }
     })
 
-    observer.observe(containerRef.current)
+    observer.observe(outerContainerRef.current)
 
     return () => {
       console.log('MenuBar.useEffect, observer.disconnect')
@@ -232,27 +240,31 @@ export const MenuBar = memo(({ children }) => {
   const menuIsOpen = Boolean(menuAnchorEl)
 
   return (
-    <Container ref={containerRef}>
-      {buttonChildren}
-      {!!menuChildren.length && (
-        <>
-          <IconButton
-            id="menubutton"
-            onClick={onClickMenuButton}
-          >
-            <FaBars />
-          </IconButton>
+    <MeasuredOuterContainer ref={outerContainerRef}>
+      <InnerContainer ref={innerContainerRef}>
+        <StylingContainer>
+          {buttonChildren}
+          {!!menuChildren.length && (
+            <>
+              <IconButton
+                id="menubutton"
+                onClick={onClickMenuButton}
+              >
+                <FaBars />
+              </IconButton>
 
-          <StyledMenu
-            id="menubutton"
-            anchorEl={menuAnchorEl}
-            open={menuIsOpen}
-            onClose={onCloseMenu}
-          >
-            {menuChildren}
-          </StyledMenu>
-        </>
-      )}
-    </Container>
+              <StyledMenu
+                id="menubutton"
+                anchorEl={menuAnchorEl}
+                open={menuIsOpen}
+                onClose={onCloseMenu}
+              >
+                {menuChildren}
+              </StyledMenu>
+            </>
+          )}
+        </StylingContainer>
+      </InnerContainer>
+    </MeasuredOuterContainer>
   )
 })
