@@ -2,7 +2,7 @@ import { memo, useRef } from 'react'
 import { useOutletContext, useParams } from 'react-router-dom'
 import { useResizeDetector } from 'react-resize-detector'
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import '@cyntler/react-doc-viewer/dist/index.css'
 import './style.css'
