@@ -188,13 +188,14 @@ export const Files = memo(
       const menus = useMemo(
         () => [
           <IconButton
-            key="1"
+            key="vorschau_oeffnen"
             title="Vorschau öffnen"
             onClick={setPreview}
           >
             <FaEye />
           </IconButton>,
           <IconButton
+            key="dateien_hochladen"
             title="Dateien hochladen"
             onClick={api?.initFlow}
           >
@@ -206,21 +207,21 @@ export const Files = memo(
       const previewMenus = useMemo(
         () => [
           <IconButton
-            key="1"
+            key="vorschau_schliessen"
             title="Vorschau schliessen"
             onClick={unsetPreview}
           >
             <FaEyeSlash />
           </IconButton>,
           <IconButton
-            key="2"
+            key="dateien_hochladen"
             title="Dateien hochladen"
             onClick={api?.initFlow}
           >
             <FaPlus />
           </IconButton>,
           <IconButton
-            key="3"
+            key="loeschen"
             title="löschen"
             onClick={() => {
               console.log('TODO: delete. How to know which file?')
@@ -229,7 +230,7 @@ export const Files = memo(
             <FaMinus />
           </IconButton>,
           <IconButton
-            key="4"
+            key="vorige_datei"
             title="vorige Datei"
             onClick={() => {
               console.log('TODO: navigate. How to know which file?')
@@ -238,7 +239,7 @@ export const Files = memo(
             <FaChevronLeft />
           </IconButton>,
           <IconButton
-            key="5"
+            key="naechste_datei"
             title="nächste Datei"
             onClick={() => {
               console.log('TODO: navigate. How to know which file?')
@@ -278,7 +279,7 @@ export const Files = memo(
                   />
                 </ButtonsContainer>
                 <Spacer />
-                {files.map((file, index) => (
+                {files.map((file) => (
                   <File
                     key={file.fileId}
                     file={file}
