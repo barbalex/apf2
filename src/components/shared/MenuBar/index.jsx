@@ -104,6 +104,15 @@ export const MenuBar = memo(({ children }) => {
       return prev + 1
     })
   }, [])
+  const incrementNumberOfMenuChildrenRevealingMenu = useCallback(() => {
+    setMenuChildrenCount((prev) => {
+      console.log('MenuBar.incrementNumberOfMenuChildrenRevealingMenu from:', {
+        prev,
+        to: prev + 2,
+      })
+      return prev + 2
+    })
+  }, [])
   const decrementNumberOfMenuChildren = useCallback(() => {
     setMenuChildrenCount((prev) => {
       console.log('MenuBar.decrementNumberOfMenuChildren from:', {
@@ -128,6 +137,8 @@ export const MenuBar = memo(({ children }) => {
 
     const needToIncrement =
       scrollWidth > clientWidth + 50 || scrollHeight > clientHeight
+    const needToIncrementRevealingMenu =
+      needToIncrement && menuChildrenCount === 0
     const needToDecrement =
       containerMarginLeft > buttonWidth && menuChildrenCount > 0
 
@@ -142,8 +153,11 @@ export const MenuBar = memo(({ children }) => {
     })
 
     // TODO: set number of menu children instead
-    needToIncrement && incrementNumberOfMenuChildren()
-    needToDecrement && decrementNumberOfMenuChildren()
+    if (needToIncrementRevealingMenu) {
+      return incrementNumberOfMenuChildrenRevealingMenu()
+    }
+    if (needToIncrement) return incrementNumberOfMenuChildren()
+    if (needToDecrement) decrementNumberOfMenuChildren()
     // TODO: need to move children from menu to buttons and vice versa
   }, [])
 
