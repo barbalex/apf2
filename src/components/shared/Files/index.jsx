@@ -46,23 +46,13 @@ import { isImageFile } from './isImageFile.js'
 import { StoreContext } from '../../../storeContext.js'
 import { icon } from 'leaflet'
 
-const OuterContainer = styled.div`
+const Container = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 `
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
-  padding: 0 10px;
-`
-const Spacer = styled.div`
-  height: 10px;
-`
-const LightboxButton = styled(Button)`
-  margin-left: 10px !important;
-  text-transform: none !important;
+const OutletContainer = styled.div`
+  flex-grow: 1;
 `
 
 const fragmentObject = {
@@ -274,23 +264,21 @@ export const FilesRouter = memo(
 
     return (
       <ErrorBoundary>
-        <OuterContainer ref={containerRef}>
+        <Container ref={containerRef}>
           <Uploader
             onFileUploadSuccess={onFileUploadSuccess}
             onFileUploadFailed={onFileUploadFailed}
             onCommonUploadSuccess={onCommonUploadSuccess}
           />
           <MenuBar>{isPreview ? previewMenus : menus}</MenuBar>
-          <div
-            style={{ overflowY: 'unset', flexGrow: 1, scrollbarWidth: 'thin' }}
-          >
+          <OutletContainer>
             <Suspense fallback={<Spinner />}>
               <Outlet
                 context={{ files, parent, parentId, refetch, containerRef }}
               />
             </Suspense>
-          </div>
-        </OuterContainer>
+          </OutletContainer>
+        </Container>
       </ErrorBoundary>
     )
   }),
