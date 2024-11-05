@@ -27,6 +27,7 @@ import {
   FaChevronRight,
   FaMaximize,
   FaMinimize,
+  FaDownload,
 } from 'react-icons/fa6'
 import { useNavigate, useLocation, Outlet, useParams } from 'react-router-dom'
 import screenfull from 'screenfull'
@@ -294,6 +295,11 @@ export const FilesRouter = memo(
       return () => screenfull.off('change')
     }, [])
 
+    const onClickDownload = useCallback(
+      () => window.open(`https://ucarecdn.com/${fileId}/-/inline/no/`),
+      [fileId],
+    )
+
     // BEWARE: functions passed into menus do not react to state changes
     // unless they are added to the dependencies array
     const menus = useMemo(
@@ -338,6 +344,13 @@ export const FilesRouter = memo(
             </IconButton>
           : [],
         ],
+        <IconButton
+          key="download"
+          title="herunterladen"
+          onClick={onClickDownload}
+        >
+          <FaDownload />
+        </IconButton>,
         <IconButton
           key="dateien_hochladen"
           title="Dateien hochladen"
