@@ -25,6 +25,9 @@ const TextDiv = styled.div`
   align-self: center;
   padding-top: 2em;
 `
+const imageStyle = {
+  objectFit: 'contain',
+}
 
 export const Component = memo(() => {
   // containerRef is will be passed to the FullscreenControl
@@ -70,22 +73,21 @@ export const Component = memo(() => {
     isReactDocViewable,
     isNotViewable,
     dataUrl: `https://ucarecdn.com/${row.fileId}`,
+    imgSrc: `https://ucarecdn.com/${row.fileId}/-/preview/${Math.floor(width)}x${Math.floor(
+      height,
+    )}/-/format/auto/-/quality/smart/`,
   })
 
   return (
     <FileDiv ref={ref}>
-      {isImage && row.url && width && (
+      {isImage && width && (
         <img
           src={`https://ucarecdn.com/${row.fileId}/-/preview/${Math.floor(width)}x${Math.floor(
             height,
           )}/-/format/auto/-/quality/smart/`}
           alt={row.name}
           width={width}
-          height={
-            row.width && row.height ?
-              (width / row.width) * row.height
-            : undefined
-          }
+          height={height}
           style={imageStyle}
         />
       )}
