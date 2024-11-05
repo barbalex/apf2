@@ -180,6 +180,14 @@ export const FilesRouter = memo(
             })
           }
           // console.log('FilesRouter.onFileUploadSuccess', { info, responce })
+          // navigate to the new file
+          const newFile =
+            responce?.data?.[`create${upperFirst(parent)}File`]?.[
+              `${parent}File`
+            ]
+          if (newFile) {
+            navigate(`${newFile.fileId}/Vorschau`)
+          }
         }
       },
       [client, fields, fragment, parent, parentId, refetch],
