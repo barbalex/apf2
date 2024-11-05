@@ -108,7 +108,7 @@ export const Component = memo(() => {
         </div>
       )}
       {isNotViewable && (
-        <TextDiv>{`Files with mime type '${row.fileMimeType}' can't be previewed (yet)`}</TextDiv>
+        <TextDiv>{`Sorry, für Dateien vom Typ '${row.fileMimeType}' gibt es keine Vorschau.`}</TextDiv>
       )}
     </FileDiv>
   )
