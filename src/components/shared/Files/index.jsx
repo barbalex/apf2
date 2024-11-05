@@ -8,11 +8,14 @@ import {
   Suspense,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import SimpleBar from 'simplebar-react'
 import {
   FaPlus,
@@ -56,6 +59,16 @@ const Container = styled.div`
 const OutletContainer = styled.div`
   flex-grow: 1;
 `
+const MenuTitle = styled.h3`
+  padding-top: 8px;
+  padding-left: 15px;
+  padding-right: 16px;
+  padding-bottom: 0;
+  margin-bottom: 3px;
+  &:focus {
+    outline: none;
+  }
+`
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -68,6 +81,7 @@ const fragmentObject = {
 
 export const FilesRouter = memo(
   observer(({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
+    // console.log('FilesRouter', { parentId, parent })
     const store = useContext(StoreContext)
     const { fileId } = useParams()
     const navigate = useNavigate()
@@ -98,16 +112,23 @@ export const FilesRouter = memo(
         }
         ${fragment}
       `
-
-    const { data, error, loading, refetch } = useQuery(query, {
-      variables: { parentId },
+    const { data, error, isLoading, refetch } = useQuery({
+      queryKey: ['FileQuery', parentId],
+      queryFn: () =>
+        client.query({
+          query,
+          variables: { parentId },
+          fetchPolicy: 'no-cache',
+        }),
     })
 
-    const files = data?.[`all${upperFirst(parent)}Files`].nodes ?? []
+    const files = data?.data?.[`all${upperFirst(parent)}Files`].nodes ?? []
+
+    console.log('FilesRouter', { files })
 
     const onCommonUploadSuccess = useCallback(
       async (info) => {
-        // reset infiUuidsProcessed
+        // reset infoUuidsProcessed
         infoUuidsProcessed.current = []
         // close the uploader or it will be open when navigating to the list
         api?.doneFlow?.()
@@ -192,6 +213,59 @@ export const FilesRouter = memo(
       navigate(newPathname)
     }, [pathname, fileId])
 
+    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+    const delMenuOpen = Boolean(delMenuAnchorEl)
+    const onClickDelete = useCallback(async () => {
+      const indexOfFileInPathname = pathname.indexOf(fileId)
+      // delete file with fileId
+      // first get fileId of next file to navigate to it after deleting this one
+      // get index of current file in files
+      const index = files.findIndex((file) => file.fileId === fileId)
+      const file = files[index]
+      // get file to navigate to after deleting this one
+      const nextFile = files[index + 1]
+      const prevFile = files[index - 1]
+      const nextPathname =
+        nextFile ?
+          `${pathname.slice(0, indexOfFileInPathname)}${nextFile.fileId}/Vorschau`
+        : prevFile ?
+          `${pathname.slice(0, indexOfFileInPathname)}${prevFile.fileId}/Vorschau`
+        : pathname.slice(0, indexOfFileInPathname)
+      try {
+        const tableName = `${parent}File`
+        const mutationName = `delete${upperFirst(parent)}FileById`
+        await client.mutate({
+          mutation: gql`
+          mutation deleteDataset {
+            ${mutationName}(
+              input: {
+                id: "${file.id}"
+              }
+            ) {
+              ${tableName} {
+                id
+              }
+            }
+          }
+        `,
+        })
+      } catch (error) {
+        console.log(error)
+        return store.enqueNotification({
+          message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      setDelMenuAnchorEl(null)
+      navigate(nextPathname)
+      // TODO: works but when navigating to file list, that has not been updated
+      store.queryClient.invalidateQueries({
+        queryKey: ['FileQuery'],
+      })
+    }, [fileId, files, client, parent, pathname])
+
     // BEWARE: functions passed into menus do not react to state changes
     // unless they are added to the dependencies array
     const menus = useMemo(
@@ -230,15 +304,34 @@ export const FilesRouter = memo(
         >
           <FaPlus />
         </IconButton>,
-        <IconButton
+        <div
           key="loeschen"
-          title="löschen"
-          onClick={() => {
-            console.log('TODO: delete. How to know which file?')
-          }}
+          style={{ display: 'inline' }}
         >
-          <FaMinus />
-        </IconButton>,
+          <IconButton
+            title="löschen"
+            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+            aria-owns={delMenuOpen ? 'previewDelMenu' : undefined}
+          >
+            <FaMinus />
+          </IconButton>
+          <Menu
+            id="previewDelMenu"
+            anchorEl={delMenuAnchorEl}
+            open={delMenuOpen}
+            onClose={() => setDelMenuAnchorEl(null)}
+            PaperProps={{
+              style: {
+                maxHeight: 48 * 4.5,
+                width: 120,
+              },
+            }}
+          >
+            <MenuTitle>löschen?</MenuTitle>
+            <MenuItem onClick={onClickDelete}>ja</MenuItem>
+            <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+          </Menu>
+        </div>,
         <IconButton
           key="vorige_datei"
           title="vorige Datei"
@@ -258,10 +351,10 @@ export const FilesRouter = memo(
           <FaChevronRight />
         </IconButton>,
       ],
-      [onClickClosePreview],
+      [onClickClosePreview, delMenuOpen, delMenuAnchorEl, onClickDelete],
     )
 
-    if (loading) return <Spinner />
+    if (isLoading) return <Spinner />
 
     if (error) return <Error error={error} />
 
