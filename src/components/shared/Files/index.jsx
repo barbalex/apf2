@@ -330,7 +330,7 @@ export const FilesRouter = memo(
             <IconButton
               key="minimieren"
               title={isFullscreen ? 'minimieren' : 'maximieren'}
-              onClick={() => screenfull.toggle()}
+              onClick={() => screenfull.toggle(containerRef.current)}
             >
               {isFullscreen ?
                 <FaMinimize />
