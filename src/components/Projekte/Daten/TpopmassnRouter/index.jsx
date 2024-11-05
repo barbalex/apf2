@@ -31,14 +31,17 @@ const TabContent = styled.div`
 `
 
 export const Component = () => {
-  const { tpopmassnId } = useParams()
+  const { tpopmassnId, tpopId, popId, apId, projId } = useParams()
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
   const onChangeTab = useCallback(
-    (event, value) =>
-      pathname.endsWith(tpopmassnId) ? navigate(`./${value}`) : navigate(value),
-    [],
+    (event, value) => {
+      navigate(
+        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${tpopmassnId}/${value}`,
+      )
+    },
+    [projId, apId, popId, tpopId, tpopmassnId, navigate],
   )
 
   return (
