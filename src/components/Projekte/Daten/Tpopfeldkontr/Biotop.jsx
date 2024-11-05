@@ -19,6 +19,8 @@ import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { fieldTypes, FormContainer, Section } from './index.jsx'
 
+const simplebarStyle = { maxHeight: '100%', height: '100%' }
+
 export const Component = observer(() => {
   const { tpopkontrId } = useParams()
 
@@ -110,7 +112,7 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      <SimpleBar style={simplebarStyle}>
         <FormContainer>
           <TextField
             name="flaeche"

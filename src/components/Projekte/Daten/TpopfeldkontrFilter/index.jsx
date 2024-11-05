@@ -77,6 +77,7 @@ const FilterComment = styled.li`
   padding: 0 10px;
   font-size: 0.75em;
 `
+const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
 const tpopkontrTypWerte = [
   {
@@ -254,7 +255,7 @@ export const TpopfeldkontrFilter = observer(() => {
             <TabContent>
               {tab === 'entwicklung' && (
                 <SimpleBar
-                  style={{ maxHeight: '100%', height: '100%' }}
+                  style={simplebarStyle}
                   tabIndex={-1}
                 >
                   <FormContainer>
@@ -381,7 +382,7 @@ export const TpopfeldkontrFilter = observer(() => {
               )}
               {tab === 'biotop' && (
                 <SimpleBar
-                  style={{ maxHeight: '100%', height: '100%' }}
+                  style={simplebarStyle}
                   tabIndex={-1}
                 >
                   <FormContainer>

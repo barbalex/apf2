@@ -31,6 +31,7 @@ const ColumnContainer = styled.div`
 const FormContainer = styled.div`
   padding: 10px;
 `
+const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
 const fieldTypes = {
   typ: 'Int',
@@ -350,7 +351,7 @@ export const Component = observer(({ showFilter = false }) => {
   return (
     <ErrorBoundary>
       <SimpleBar
-        style={{ maxHeight: '100%', height: '100%' }}
+        style={simplebarStyle}
         tabIndex={-1}
       >
         <ColumnContainer>

@@ -30,6 +30,8 @@ const Section = styled.div`
     content: ':';
   }
 `
+const simplebarStyle = { maxHeight: '100%', height: '100%' }
+
 const fieldTypes = {
   apId: 'UUID',
   erstelldatum: 'Date',
@@ -122,7 +124,7 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <SimpleBar
-        style={{ maxHeight: '100%', height: '100%' }}
+        style={simplebarStyle}
         tabIndex={-1}
       >
         <FormContainer>
