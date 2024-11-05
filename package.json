@@ -34,7 +34,6 @@
     "@turf/helpers": "7.1.0",
     "@turf/nearest-point": "7.1.0",
     "@uploadcare/react-uploader": "1.1.0",
-    "@uploadcare/react-widget": "2.4.7",
     "array-move": "4.0.0",
     "autosuggest-highlight": "3.3.4",
     "blueimp-md5": "2.19.0",
