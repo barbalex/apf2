@@ -268,8 +268,6 @@ export const FilesRouter = memo(
       [onClickClosePreview],
     )
 
-    console.log('FilesRouter', { loading, error, fileId })
-
     if (loading) return <Spinner />
 
     if (error) return <Error error={error} />
