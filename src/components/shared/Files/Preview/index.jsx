@@ -13,7 +13,7 @@ const Container = styled.div`
   flex-direction: column;
 `
 const FileDiv = styled.div`
-  flex-grow: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: white;

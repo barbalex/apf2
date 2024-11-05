@@ -17,6 +17,10 @@ const Container = styled.div`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
+const TabContentContainer = styled.div`
+  overflow-y: auto;
+  flex-grow: 1;
+`
 const TabContent = styled.div`
   height: 100%;
 `
@@ -59,13 +63,13 @@ export const Component = () => {
             data-id="Dateien"
           />
         </Tabs>
-        <div style={{ overflowY: 'auto' }}>
+        <TabContentContainer>
           <TabContent>
             <Suspense fallback={<Spinner />}>
               <Outlet />
             </Suspense>
           </TabContent>
-        </div>
+        </TabContentContainer>
       </Container>
     </ErrorBoundary>
   )

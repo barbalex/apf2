@@ -47,6 +47,7 @@ import { StoreContext } from '../../../storeContext.js'
 import { icon } from 'leaflet'
 
 const OuterContainer = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
 `

@@ -32,6 +32,7 @@ const buttonSize = 40
 
 const MeasuredOuterContainer = styled.div`
   overflow: hidden;
+  max-height: ${buttonSize}px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
