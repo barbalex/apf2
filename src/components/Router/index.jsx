@@ -380,6 +380,10 @@ export const Router = () => {
                 lazy={() => import('../Projekte/Daten/Tpopfeldkontr/index.jsx')}
               />
               <Route
+                path="Entwicklung"
+                lazy={() => import('../Projekte/Daten/Tpopfeldkontr/index.jsx')}
+              />
+              <Route
                 path="Teil-Population"
                 lazy={() => import('../Projekte/Daten/Tpopfeldkontr/index.jsx')}
               />

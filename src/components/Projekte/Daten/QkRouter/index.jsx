@@ -45,10 +45,8 @@ export const Component = () => {
       pathname.endsWith(apId) ? navigate(`./${value}`) : navigate(value),
     [pathname, apId, navigate],
   )
-  const lastPathEl = pathname
-    .split('/')
-    .filter((el) => !!el)
-    .at(-1)
+  const path = pathname.split('/').filter((el) => !!el)
+  const lastPathEl = path.at(-1)
 
   return (
     <ErrorBoundary>

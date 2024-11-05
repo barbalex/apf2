@@ -40,10 +40,8 @@ export const Component = () => {
       pathname.endsWith(apId) ? navigate(`./${value}`) : navigate(value),
     [],
   )
-  const lastPathEl = pathname
-    .split('/')
-    .filter((el) => !!el)
-    .at(-1)
+  const path = pathname.split('/').filter((el) => !!el)
+  const lastPathEl = path.at(-1)
 
   return (
     <ErrorBoundary>
@@ -52,7 +50,7 @@ export const Component = () => {
         <Tabs
           value={
             lastPathEl === 'Idealbiotop' ? 'Idealbiotop'
-            : lastPathEl === 'Dateien' ?
+            : pathname.includes(`${apId}/Idealbiotop/Dateien`) ?
               'Dateien'
             : 'Idealbiotop'
           }
