@@ -19,10 +19,15 @@ const StyledTab = styled(Tab)`
 `
 const TabContentContainer = styled.div`
   overflow-y: auto;
+  scrollbar-width: thin;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 `
 const TabContent = styled.div`
-  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 `
 
 export const Component = () => {
