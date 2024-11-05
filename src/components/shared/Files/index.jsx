@@ -157,7 +157,7 @@ export const FilesRouter = memo(
               },
             })
           }
-          console.log('FilesRouter.onFileUploadSuccess', { info, responce })
+          // console.log('FilesRouter.onFileUploadSuccess', { info, responce })
         }
       },
       [client, fields, fragment, parent, parentId, refetch],

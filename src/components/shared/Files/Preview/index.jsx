@@ -36,7 +36,6 @@ export const Component = memo(() => {
   const previewRef = useRef(null)
 
   const row = files?.find((file) => file.fileId === fileId) ?? {}
-  console.log('Files', { parentId, parent, files, row, containerRef })
 
   const { width, height, ref } = useResizeDetector({
     // handleHeight: false,
@@ -66,17 +65,6 @@ export const Component = memo(() => {
       'video/mp4',
     ].includes(row.fileMimeType)
   const isNotViewable = !isImage && !isPdf && !isReactDocViewable
-
-  console.log('Files', {
-    isImage,
-    isPdf,
-    isReactDocViewable,
-    isNotViewable,
-    dataUrl: `https://ucarecdn.com/${row.fileId}`,
-    imgSrc: `https://ucarecdn.com/${row.fileId}/-/preview/${Math.floor(width)}x${Math.floor(
-      height,
-    )}/-/format/auto/-/quality/smart/`,
-  })
 
   return (
     <FileDiv ref={ref}>

@@ -14,15 +14,6 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const FieldsContainer = styled.div`
-  height: 100%;
-  overflow: hidden !important;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  fieldset {
-    padding-right: 30px;
-  }
-`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
@@ -55,52 +46,50 @@ export const Component = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Teil-Population" />
-        <FieldsContainer>
-          <Tabs
-            value={
-              pathname.includes(`${tpopId}/Teil-Population`) ? 'Teil-Population'
-              : pathname.includes(`${tpopId}/EK`) ?
-                'EK'
-              : pathname.includes(`${tpopId}/Dateien`) ?
-                'Dateien'
-              : pathname.includes(`${tpopId}/Historien`) ?
-                'Historien'
-              : 'Teil-Population'
-            }
-            onChange={onChangeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <StyledTab
-              label="Teil-Population"
-              value="Teil-Population"
-              data-id="Teil-Population"
-            />
-            <StyledTab
-              label="EK"
-              value="EK"
-              data-id="EK"
-            />
-            <StyledTab
-              label="Dateien"
-              value="Dateien"
-              data-id="Dateien"
-            />
-            <StyledTab
-              label="Historien"
-              value="Historien"
-              data-id="Historien"
-            />
-          </Tabs>
-          <TabContentContainer>
-            <TabContent>
-              <Suspense fallback={<Spinner />}>
-                <Outlet />
-              </Suspense>
-            </TabContent>
-          </TabContentContainer>
-        </FieldsContainer>
+        <Tabs
+          value={
+            pathname.includes(`${tpopId}/Teil-Population`) ? 'Teil-Population'
+            : pathname.includes(`${tpopId}/EK`) ?
+              'EK'
+            : pathname.includes(`${tpopId}/Dateien`) ?
+              'Dateien'
+            : pathname.includes(`${tpopId}/Historien`) ?
+              'Historien'
+            : 'Teil-Population'
+          }
+          onChange={onChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <StyledTab
+            label="Teil-Population"
+            value="Teil-Population"
+            data-id="Teil-Population"
+          />
+          <StyledTab
+            label="EK"
+            value="EK"
+            data-id="EK"
+          />
+          <StyledTab
+            label="Dateien"
+            value="Dateien"
+            data-id="Dateien"
+          />
+          <StyledTab
+            label="Historien"
+            value="Historien"
+            data-id="Historien"
+          />
+        </Tabs>
+        <TabContentContainer>
+          <TabContent>
+            <Suspense fallback={<Spinner />}>
+              <Outlet />
+            </Suspense>
+          </TabContent>
+        </TabContentContainer>
       </Container>
     </ErrorBoundary>
   )

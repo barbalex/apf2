@@ -16,16 +16,6 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const FieldsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  > div:first-of-type {
-    > div:first-of-type {
-      display: block !important;
-    }
-  }
-`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
@@ -57,45 +47,43 @@ export const Component = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Feld-Kontrolle" />
-        <FieldsContainer>
-          <Tabs
-            value={
-              pathname.includes(`${tpopkontrId}/Entwicklung`) ? 'Entwicklung'
-              : pathname.includes(`${tpopkontrId}/Dateien`) ?
-                'Dateien'
-              : pathname.includes(`${tpopkontrId}/Biotop`) ?
-                'Biotop'
-              : 'Entwicklung'
-            }
-            onChange={onChangeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <StyledTab
-              label="Entwicklung"
-              value="Entwicklung"
-              data-id="Entwicklung"
-            />
-            <StyledTab
-              label="Biotop"
-              value="Biotop"
-              data-id="Biotop"
-            />
-            <StyledTab
-              label="Dateien"
-              value="Dateien"
-              data-id="Dateien"
-            />
-          </Tabs>
-          <TabContentContainer>
-            <TabContent>
-              <Suspense fallback={<Spinner />}>
-                <Outlet />
-              </Suspense>
-            </TabContent>
-          </TabContentContainer>
-        </FieldsContainer>
+        <Tabs
+          value={
+            pathname.includes(`${tpopkontrId}/Entwicklung`) ? 'Entwicklung'
+            : pathname.includes(`${tpopkontrId}/Dateien`) ?
+              'Dateien'
+            : pathname.includes(`${tpopkontrId}/Biotop`) ?
+              'Biotop'
+            : 'Entwicklung'
+          }
+          onChange={onChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <StyledTab
+            label="Entwicklung"
+            value="Entwicklung"
+            data-id="Entwicklung"
+          />
+          <StyledTab
+            label="Biotop"
+            value="Biotop"
+            data-id="Biotop"
+          />
+          <StyledTab
+            label="Dateien"
+            value="Dateien"
+            data-id="Dateien"
+          />
+        </Tabs>
+        <TabContentContainer>
+          <TabContent>
+            <Suspense fallback={<Spinner />}>
+              <Outlet />
+            </Suspense>
+          </TabContent>
+        </TabContentContainer>
       </Container>
     </ErrorBoundary>
   )
