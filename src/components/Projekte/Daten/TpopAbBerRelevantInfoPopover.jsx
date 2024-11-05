@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -33,7 +32,7 @@ const Container = styled.div`
   height: 100%;
 `
 
-export const TpopAbBerRelevantInfoPopover = memo(
+export const TpopAbBerRelevantInfoPopover = (
   <ErrorBoundary>
     <Container>
       <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
@@ -63,5 +62,5 @@ export const TpopAbBerRelevantInfoPopover = memo(
         }
       </LabelPopoverContentRow>
     </Container>
-  </ErrorBoundary>,
+  </ErrorBoundary>
 )
