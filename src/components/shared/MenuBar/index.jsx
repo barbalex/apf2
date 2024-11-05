@@ -36,7 +36,11 @@ const MeasuredOuterContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  // background-color: rgba(46, 125, 50, 0.1); TODO: decide later on styling
+  background-color: rgb(
+    255,
+    253,
+    231
+  ); // needed as in fullscreen backed by black
   border-top: 1px solid rgba(46, 125, 50, 0.15); // TODO: decide later on styling
   border-bottom: 1px solid rgba(46, 125, 50, 0.15); //  TODO: decide later on styling
 `
@@ -49,7 +53,7 @@ const InnerContainer = styled.div`
   margin-bottom: auto;
 `
 const StylingContainer = styled.div`
-  padding: 0 5px;
+  padding: 0 10px;
   max-height: ${buttonSize}px;
 `
 // remove the margin mui adds to top and bottom of menu

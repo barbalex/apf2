@@ -45,9 +45,11 @@ const ImgReplacement = styled.div`
 `
 const DelIcon = styled(IconButton)`
   margin-bottom: 20px !important;
+  height: 40px;
 `
 const DownloadIcon = styled(IconButton)`
   margin-bottom: 20px !important;
+  height: 40px;
 `
 const Spacer = styled.div`
   min-width: 12px;

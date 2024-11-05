@@ -6,6 +6,7 @@ import {
   memo,
   useMemo,
   Suspense,
+  useEffect,
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
@@ -28,6 +29,7 @@ import {
   FaMinimize,
 } from 'react-icons/fa6'
 import { useNavigate, useLocation, Outlet, useParams } from 'react-router-dom'
+import screenfull from 'screenfull'
 
 import './index.css'
 
@@ -50,6 +52,7 @@ import { File } from './Files/File.jsx'
 import { isImageFile } from './isImageFile.js'
 import { StoreContext } from '../../../storeContext.js'
 import { icon } from 'leaflet'
+import { set } from 'lodash'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -200,10 +203,10 @@ export const FilesRouter = memo(
 
     const firstFileId = files?.[0]?.fileId
 
-    const onClickPreview = useCallback(
-      () => navigate(`${firstFileId}/Vorschau`),
-      [firstFileId],
-    )
+    const onClickPreview = useCallback(() => {
+      navigate(`${firstFileId}/Vorschau`)
+      // force a rerender of the menu bar
+    }, [firstFileId])
     const onClickClosePreview = useCallback(() => {
       // relative navigation using ../.. does not work here
       const fileIdBeginsAt = pathname.indexOf(fileId)
@@ -277,6 +280,12 @@ export const FilesRouter = memo(
       navigate(`${prevFile.fileId}/Vorschau`)
     }, [fileId, files, navigate])
 
+    const [isFullscreen, setIsFullscreen] = useState(false)
+    useEffect(() => {
+      screenfull.on('change', () => setIsFullscreen(screenfull.isFullscreen))
+      return () => screenfull.off('change')
+    }, [])
+
     // BEWARE: functions passed into menus do not react to state changes
     // unless they are added to the dependencies array
     const menus = useMemo(
@@ -308,6 +317,19 @@ export const FilesRouter = memo(
         >
           <FaEyeSlash />
         </IconButton>,
+        ...[
+          screenfull.isEnabled ?
+            <IconButton
+              key="minimieren"
+              title={isFullscreen ? 'minimieren' : 'maximieren'}
+              onClick={() => screenfull.toggle()}
+            >
+              {isFullscreen ?
+                <FaMinimize />
+              : <FaMaximize />}
+            </IconButton>
+          : [],
+        ],
         <IconButton
           key="dateien_hochladen"
           title="Dateien hochladen"
@@ -365,6 +387,8 @@ export const FilesRouter = memo(
         onClickDelete,
         onClickNext,
         onClickPrev,
+        isFullscreen,
+        screenfull.isEnabled,
       ],
     )
 
