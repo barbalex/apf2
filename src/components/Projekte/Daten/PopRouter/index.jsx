@@ -41,6 +41,10 @@ export const Component = () => {
       pathname.endsWith(popId) ? navigate(`./${value}`) : navigate(value),
     [popId, navigate],
   )
+  const lastPathEl = pathname
+    .split('/')
+    .filter((el) => !!el)
+    .at(-1)
 
   return (
     <ErrorBoundary>
@@ -48,12 +52,12 @@ export const Component = () => {
         <FormTitle title="Population" />
         <Tabs
           value={
-            pathname.endsWith('Population') ? 'Population'
-            : pathname.endsWith('Auswertung') ?
+            lastPathEl === 'Population' ? 'Population'
+            : lastPathEl === 'Auswertung' ?
               'Auswertung'
-            : pathname.endsWith('Dateien') ?
+            : lastPathEl === 'Dateien' ?
               'Dateien'
-            : pathname.endsWith('Historien') ?
+            : lastPathEl === 'Historien' ?
               'Historien'
             : 'Population'
           }

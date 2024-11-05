@@ -45,6 +45,10 @@ export const Component = () => {
       pathname.endsWith(apId) ? navigate(`./${value}`) : navigate(value),
     [pathname, apId, navigate],
   )
+  const lastPathEl = pathname
+    .split('/')
+    .filter((el) => !!el)
+    .at(-1)
 
   return (
     <ErrorBoundary>
@@ -52,8 +56,8 @@ export const Component = () => {
         <FormTitle title="Qualitätskontrollen" />
         <Tabs
           value={
-            pathname.endsWith('ausfuehren') ? 'ausfuehren'
-            : pathname.endsWith('waehlen') ?
+            lastPathEl === 'ausfuehren' ? 'ausfuehren'
+            : lastPathEl === 'waehlen' ?
               'waehlen'
             : 'ausfuehren'
           }
