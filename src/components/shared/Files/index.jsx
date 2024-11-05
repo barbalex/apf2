@@ -47,11 +47,10 @@ import { StoreContext } from '../../../storeContext.js'
 import { icon } from 'leaflet'
 
 const OuterContainer = styled.div`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
 `
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -85,6 +84,7 @@ export const FilesRouter = memo(
     const client = useApolloClient()
     const uploaderCtx = useContext(UploaderContext)
     const api = uploaderCtx?.current?.getAPI?.()
+    const infoUuidsProcessed = useRef([])
 
     const containerRef = useRef(null)
 
@@ -115,6 +115,8 @@ export const FilesRouter = memo(
 
     const onCommonUploadSuccess = useCallback(
       async (info) => {
+        // reset infiUuidsProcessed
+        infoUuidsProcessed.current = []
         // close the uploader or it will be open when navigating to the list
         api?.doneFlow?.()
         // clear the uploader or it will show the last uploaded file when opened next time
@@ -125,9 +127,12 @@ export const FilesRouter = memo(
       [client, fields, fragment, parent, parentId, refetch],
     )
 
+    // ISSUE: sometimes this is called multiple times with the same info.uuid
     const onFileUploadSuccess = useCallback(
       async (info) => {
         if (info) {
+          if (infoUuidsProcessed.current.includes(info.uuid)) return
+          infoUuidsProcessed.current.push(info.uuid)
           let responce
           try {
             responce = await client.mutate({
@@ -278,19 +283,15 @@ export const FilesRouter = memo(
             onCommonUploadSuccess={onCommonUploadSuccess}
           />
           <MenuBar>{isPreview ? previewMenus : menus}</MenuBar>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
+          <div
+            style={{ overflowY: 'unset', flexGrow: 1, scrollbarWidth: 'thin' }}
           >
             <Suspense fallback={<Spinner />}>
               <Outlet
                 context={{ files, parent, parentId, refetch, containerRef }}
               />
             </Suspense>
-          </SimpleBar>
+          </div>
         </OuterContainer>
       </ErrorBoundary>
     )
