@@ -50,6 +50,7 @@ const InnerContainer = styled.div`
 `
 const StylingContainer = styled.div`
   padding: 0 5px;
+  max-height: ${buttonSize}px;
 `
 // remove the margin mui adds to top and bottom of menu
 const StyledMenu = styled(Menu)`
