@@ -205,7 +205,6 @@ export const FilesRouter = memo(
 
     const onClickPreview = useCallback(() => {
       navigate(`${firstFileId}/Vorschau`)
-      // force a rerender of the menu bar
     }, [firstFileId])
     const onClickClosePreview = useCallback(() => {
       // relative navigation using ../.. does not work here
@@ -280,6 +279,7 @@ export const FilesRouter = memo(
       navigate(`${prevFile.fileId}/Vorschau`)
     }, [fileId, files, navigate])
 
+    // enable reacting to fullscreen changes
     const [isFullscreen, setIsFullscreen] = useState(false)
     useEffect(() => {
       screenfull.on('change', () => setIsFullscreen(screenfull.isFullscreen))
@@ -389,6 +389,7 @@ export const FilesRouter = memo(
         onClickPrev,
         isFullscreen,
         screenfull.isEnabled,
+        isPreview,
       ],
     )
 
@@ -404,7 +405,9 @@ export const FilesRouter = memo(
             onFileUploadFailed={onFileUploadFailed}
             onCommonUploadSuccess={onCommonUploadSuccess}
           />
-          <MenuBar>{isPreview ? previewMenus : menus}</MenuBar>
+          <MenuBar isPreview={isPreview}>
+            {isPreview ? previewMenus : menus}
+          </MenuBar>
           <OutletContainer>
             <Suspense fallback={<Spinner />}>
               <Outlet

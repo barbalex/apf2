@@ -67,15 +67,15 @@ const StyledMenu = styled(Menu)`
 // or rather: need info for menu AND button
 // so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
-export const MenuBar = memo(({ children }) => {
+export const MenuBar = memo(({ children, isPreview }) => {
   const usableChildren = useMemo(
     () => children.filter((child) => !!child),
     [children],
   )
   const outerContainerRef = useRef(null)
   const innerContainerRef = useRef(null)
+  const previousPreview = useRef(null)
 
-  const previousWidthRef = useRef(null)
   const previousMeasurementTimeRef = useRef(0)
   const childrenCount = Children.count(usableChildren)
   const [menuChildrenCount, setMenuChildrenCount] = useState(0)
@@ -100,14 +100,13 @@ export const MenuBar = memo(({ children }) => {
     [usableChildren, childrenCount, menuChildrenCount],
   )
 
-  // console.log('MenuBar', {
-  //   usableChildren,
-  //   buttonChildren,
-  //   menuChildren,
-  //   childrenCount,
-  //   menuChildrenCount,
-  //   menuChildrenLength: menuChildren.length,
-  // })
+  console.log('MenuBar', {
+    usableChildren,
+    buttonChildren,
+    menuChildren,
+    childrenCount,
+    menuChildrenCount,
+  })
 
   const incrementMenuChildrenCount = useCallback(
     () => setMenuChildrenCount((prev) => prev + 1),
@@ -146,16 +145,16 @@ export const MenuBar = memo(({ children }) => {
     const needToDecrement = growableSpace > buttonSize && menuChildrenCount > 0
     const needToDecrementHidingMenu = needToDecrement && menuChildrenCount < 3
 
-    // console.log('MenuBar.checkOverflow', {
-    //   clientWidth,
-    //   scrollWidth,
-    //   clientHeight,
-    //   scrollHeight,
-    //   needToIncrement,
-    //   needToIncrementRevealingMenu,
-    //   needToDecrement,
-    //   growableSpace,
-    // })
+    console.log('MenuBar.checkOverflow', {
+      clientWidth,
+      scrollWidth,
+      clientHeight,
+      scrollHeight,
+      needToIncrement,
+      needToIncrementRevealingMenu,
+      needToDecrement,
+      growableSpace,
+    })
 
     if (needToIncrementRevealingMenu) {
       return incrementMenuChildrenCountRevealingMenu()
@@ -169,9 +168,20 @@ export const MenuBar = memo(({ children }) => {
 
   const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
 
+  const previousWidthRef = useRef(null)
+  useEffect(() => {
+    if (isPreview !== previousPreview.current) {
+      previousPreview.current = isPreview
+      console.log('MenuBar.useEffect, isPreview changed to:', isPreview)
+      setMenuChildrenCount(0)
+      setTimeout(() => checkOverflow(), 0)
+      setTimeout(() => checkOverflow(), 1000)
+    }
+  }, [isPreview])
+
   useEffect(() => {
     if (!outerContainerRef.current) {
-      // console.log('MenuBar.useEffect, no containerRef')
+      console.log('MenuBar.useEffect, no containerRef')
       return
     }
     // set up a resize observer for the container
@@ -184,7 +194,7 @@ export const MenuBar = memo(({ children }) => {
         const timeSinceLastMeasurement =
           currentTime - previousMeasurementTimeRef.current
         if (timeSinceLastMeasurement < 300) {
-          // console.log('MenuBar.resizeObserver, not enough time has passed')
+          console.log('MenuBar.resizeObserver, not enough time has passed')
           return
         }
 
@@ -196,7 +206,7 @@ export const MenuBar = memo(({ children }) => {
         )
         const shouldCheckOverflow = Math.abs(percentageChanged) > 1
         if (!shouldCheckOverflow) {
-          // console.log('MenuBar.resizeObserver, not enough change')
+          console.log('MenuBar.resizeObserver, not enough change')
           return
         }
 
@@ -211,7 +221,7 @@ export const MenuBar = memo(({ children }) => {
       // console.log('MenuBar.useEffect, observer.disconnect')
       observer.disconnect()
     }
-  }, [previousWidthRef.current])
+  }, [previousWidthRef.current, isPreview])
 
   const onClickMenuButton = useCallback((event) =>
     setMenuAnchorEl(event.currentTarget),
