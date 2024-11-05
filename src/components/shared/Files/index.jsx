@@ -21,6 +21,8 @@ import {
   FaEyeSlash,
   FaChevronLeft,
   FaChevronRight,
+  FaMaximize,
+  FaMinimize,
 } from 'react-icons/fa6'
 import { useNavigate, useLocation, Outlet, useParams } from 'react-router-dom'
 
@@ -198,6 +200,7 @@ export const FilesRouter = memo(
           key="vorschau_oeffnen"
           title="Vorschau öffnen"
           onClick={onClickPreview}
+          disabled={!firstFileId}
         >
           <FaEye />
         </IconButton>,
