@@ -97,13 +97,13 @@ export const MenuBar = memo(({ children, isPreview }) => {
     [usableChildren, childrenCount, menuChildrenCount],
   )
 
-  console.log('MenuBar', {
-    usableChildren,
-    buttonChildren,
-    menuChildren,
-    childrenCount,
-    menuChildrenCount,
-  })
+  // console.log('MenuBar', {
+  //   usableChildren,
+  //   buttonChildren,
+  //   menuChildren,
+  //   childrenCount,
+  //   menuChildrenCount,
+  // })
 
   const incrementMenuChildrenCount = useCallback(
     () => setMenuChildrenCount((prev) => prev + 1),
@@ -142,7 +142,7 @@ export const MenuBar = memo(({ children, isPreview }) => {
     const needToDecrement = growableSpace > buttonSize && menuChildrenCount > 0
     const needToDecrementHidingMenu = needToDecrement && menuChildrenCount < 3
 
-    console.log('MenuBar.checkOverflow')
+    // console.log('MenuBar.checkOverflow')
 
     // console.log('MenuBar.checkOverflow', {
     //   clientWidth,
