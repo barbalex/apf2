@@ -27,6 +27,7 @@ const TextDiv = styled.div`
 `
 const imageStyle = {
   objectFit: 'contain',
+  margin: 'auto',
 }
 
 export const Component = memo(() => {
@@ -70,12 +71,12 @@ export const Component = memo(() => {
     <FileDiv ref={ref}>
       {isImage && width && (
         <img
-          src={`https://ucarecdn.com/${row.fileId}/-/preview/${Math.floor(width)}x${Math.floor(
-            height,
+          src={`https://ucarecdn.com/${row.fileId}/-/preview/${Math.floor(width - 10)}x${Math.floor(
+            height - 10,
           )}/-/format/auto/-/quality/smart/`}
           alt={row.name}
-          width={width}
-          height={height}
+          width={width - 10}
+          height={height - 10}
           style={imageStyle}
         />
       )}
