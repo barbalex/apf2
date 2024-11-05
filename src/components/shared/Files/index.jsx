@@ -124,8 +124,6 @@ export const FilesRouter = memo(
 
     const files = data?.data?.[`all${upperFirst(parent)}Files`].nodes ?? []
 
-    console.log('FilesRouter', { files })
-
     const onCommonUploadSuccess = useCallback(
       async (info) => {
         // reset infoUuidsProcessed
@@ -259,12 +257,25 @@ export const FilesRouter = memo(
         })
       }
       setDelMenuAnchorEl(null)
+      refetch()
       navigate(nextPathname)
-      // TODO: works but when navigating to file list, that has not been updated
-      store.queryClient.invalidateQueries({
-        queryKey: ['FileQuery'],
-      })
     }, [fileId, files, client, parent, pathname])
+
+    const onClickNext = useCallback(() => {
+      // get index of current file in files
+      const index = files.findIndex((file) => file.fileId === fileId)
+      // get file to navigate to
+      const nextFile = files[index + 1] ?? files[0]
+      navigate(`${nextFile.fileId}/Vorschau`)
+    }, [fileId, files, navigate])
+
+    const onClickPrev = useCallback(() => {
+      // get index of current file in files
+      const index = files.findIndex((file) => file.fileId === fileId)
+      // get file to navigate to
+      const prevFile = files[index - 1] ?? files[files.length - 1]
+      navigate(`${prevFile.fileId}/Vorschau`)
+    }, [fileId, files, navigate])
 
     // BEWARE: functions passed into menus do not react to state changes
     // unless they are added to the dependencies array
@@ -335,23 +346,26 @@ export const FilesRouter = memo(
         <IconButton
           key="vorige_datei"
           title="vorige Datei"
-          onClick={() => {
-            console.log('TODO: navigate. How to know which file?')
-          }}
+          onClick={onClickPrev}
         >
           <FaChevronLeft />
         </IconButton>,
         <IconButton
           key="naechste_datei"
           title="nächste Datei"
-          onClick={() => {
-            console.log('TODO: navigate. How to know which file?')
-          }}
+          onClick={onClickNext}
         >
           <FaChevronRight />
         </IconButton>,
       ],
-      [onClickClosePreview, delMenuOpen, delMenuAnchorEl, onClickDelete],
+      [
+        onClickClosePreview,
+        delMenuOpen,
+        delMenuAnchorEl,
+        onClickDelete,
+        onClickNext,
+        onClickPrev,
+      ],
     )
 
     if (isLoading) return <Spinner />
