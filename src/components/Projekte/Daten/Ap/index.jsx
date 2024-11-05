@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -20,6 +19,7 @@ import { ApUsers } from './ApUsers/index.jsx'
 import { ap, aeTaxonomies } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const FormContainer = styled.div`
   padding: 10px;
@@ -159,13 +159,7 @@ export const Component = observer(() => {
   if (error) return <Error error={error} />
 
   return (
-    <SimpleBar
-      style={{
-        maxHeight: '100%',
-        height: '100%',
-      }}
-      tabIndex={-1}
-    >
+    <ErrorBoundary>
       <FormContainer>
         <SelectLoadingOptions
           field="artId"
@@ -278,6 +272,6 @@ export const Component = observer(() => {
           }
         />
       </FormContainer>
-    </SimpleBar>
+    </ErrorBoundary>
   )
 })

@@ -29,8 +29,17 @@ const FieldsContainer = styled.div`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
+const TabContentContainer = styled.div`
+  overflow-y: auto;
+  scrollbar-width: thin;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+`
 const TabContent = styled.div`
-  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 `
 
 export const Component = () => {
@@ -79,13 +88,13 @@ export const Component = () => {
               data-id="Dateien"
             />
           </Tabs>
-          <div style={{ overflowY: 'auto' }}>
+          <TabContentContainer>
             <TabContent>
               <Suspense fallback={<Spinner />}>
                 <Outlet />
               </Suspense>
             </TabContent>
-          </div>
+          </TabContentContainer>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

@@ -2,7 +2,6 @@ import { useCallback, useContext, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -350,198 +349,193 @@ export const Component = observer(({ showFilter = false }) => {
 
   return (
     <ErrorBoundary>
-      <SimpleBar
-        style={simplebarStyle}
-        tabIndex={-1}
-      >
-        <ColumnContainer>
-          <FormContainer>
-            <TextField
-              name="jahr"
-              label="Jahr"
-              type="number"
-              value={row.jahr}
-              saveToDb={saveToDb}
-              error={fieldErrors.jahr}
-            />
-            <DateField
-              name="datum"
-              label="Datum"
-              value={row.datum}
-              saveToDb={saveToDb}
-              error={fieldErrors.datum}
-            />
-            <RadioButtonGroup
-              name="typ"
-              label="Typ"
-              dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
-              loading={loading}
-              value={row.typ}
-              saveToDb={saveToDb}
-              error={fieldErrors.typ}
-            />
-            <TextField
-              name="beschreibung"
-              label="Massnahme"
-              type="text"
-              value={row.beschreibung}
-              saveToDb={saveToDb}
-              error={fieldErrors.beschreibung}
-            />
-            <Select
-              name="bearbeiter"
-              label="BearbeiterIn"
-              value={row.bearbeiter}
-              options={data?.allAdresses?.nodes ?? []}
-              loading={loading}
-              saveToDb={saveToDb}
-              error={fieldErrors.bearbeiter}
-            />
-            <MarkdownField
-              name="bemerkungen"
-              label="Bemerkungen"
-              value={row.bemerkungen}
-              saveToDb={saveToDb}
-              error={fieldErrors.bemerkungen}
-            />
-            <Checkbox2States
-              name="planVorhanden"
-              label="Plan vorhanden"
-              value={row.planVorhanden}
-              saveToDb={saveToDb}
-              error={fieldErrors.planVorhanden}
-            />
-            <TextField
-              name="planBezeichnung"
-              label="Plan Bezeichnung"
-              type="text"
-              value={row.planBezeichnung}
-              saveToDb={saveToDb}
-              error={fieldErrors.planBezeichnung}
-            />
-            <TextField
-              name="flaeche"
-              label="Fläche (m2)"
-              type="number"
-              value={row.flaeche}
-              saveToDb={saveToDb}
-              error={fieldErrors.flaeche}
-            />
-            <TextField
-              name="form"
-              label="Form der Ansiedlung"
-              type="text"
-              value={row.form}
-              saveToDb={saveToDb}
-              error={fieldErrors.form}
-            />
-            <TextField
-              name="pflanzanordnung"
-              label="Pflanzanordnung"
-              type="text"
-              value={row.pflanzanordnung}
-              saveToDb={saveToDb}
-              error={fieldErrors.pflanzanordnung}
-            />
-            <TextField
-              name="markierung"
-              label="Markierung"
-              type="text"
-              value={row.markierung}
-              saveToDb={saveToDb}
-              error={fieldErrors.markierung}
-            />
-            <TextField
-              name="anzTriebe"
-              label="Anzahl Triebe"
-              type="number"
-              value={row.anzTriebe}
-              saveToDb={saveToDb}
-              error={fieldErrors.anzTriebe}
-            />
-            <TextField
-              name="anzPflanzen"
-              label="Anzahl Pflanzen"
-              type="number"
-              value={row.anzPflanzen}
-              saveToDb={saveToDb}
-              error={fieldErrors.anzPflanzen}
-            />
-            <TextField
-              name="anzPflanzstellen"
-              label="Anzahl Pflanzstellen"
-              type="number"
-              value={row.anzPflanzstellen}
-              saveToDb={saveToDb}
-              error={fieldErrors.anzPflanzstellen}
-            />
-            {isAnpflanzung && (
-              <>
-                <Select
-                  name="zieleinheitEinheit"
-                  label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
-                  value={row.zieleinheitEinheit}
-                  options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
-                  loading={loading}
-                  saveToDb={saveToDb}
-                  error={fieldErrors.zieleinheitEinheit}
-                />
-                <TextField
-                  name="zieleinheitAnzahl"
-                  label={
-                    notMassnCountUnit === true ?
-                      'Ziel-Einheit: Anzahl'
-                    : 'Ziel-Einheit: Anzahl (wird automatisch gesetzt)'
-                  }
-                  type="number"
-                  value={row.zieleinheitAnzahl}
-                  saveToDb={saveToDb}
-                  error={fieldErrors.zieleinheitAnzahl}
-                />
-              </>
-            )}
-            <SelectLoadingOptionsTypable
-              key={`${id}${!!row.wirtspflanze}`}
-              label="Wirtspflanze"
-              row={row}
-              query={queryAeTaxonomies}
-              queryNodesName="allAeTaxonomies"
-              saveToDb={saveToDb}
-              error={fieldErrors.wirtspflanze}
-            />
-            <TextField
-              name="herkunftPop"
-              label="Herkunftspopulation"
-              type="text"
-              value={row.herkunftPop}
-              saveToDb={saveToDb}
-              error={fieldErrors.herkunftPop}
-            />
-            <TextField
-              name="sammeldatum"
-              label="Sammeldatum"
-              type="text"
-              value={row.sammeldatum}
-              saveToDb={saveToDb}
-              error={fieldErrors.sammeldatum}
-            />
-            <TextField
-              name="vonAnzahlIndividuen"
-              label="Anzahl besammelte Individuen der Herkunftspopulation"
-              type="number"
-              value={row.vonAnzahlIndividuen}
-              saveToDb={saveToDb}
-              error={fieldErrors.vonAnzahlIndividuen}
-            />
-            {!showFilter && (
-              <StringToCopy
-                text={row.id}
-                label="id"
+      <ColumnContainer>
+        <FormContainer>
+          <TextField
+            name="jahr"
+            label="Jahr"
+            type="number"
+            value={row.jahr}
+            saveToDb={saveToDb}
+            error={fieldErrors.jahr}
+          />
+          <DateField
+            name="datum"
+            label="Datum"
+            value={row.datum}
+            saveToDb={saveToDb}
+            error={fieldErrors.datum}
+          />
+          <RadioButtonGroup
+            name="typ"
+            label="Typ"
+            dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
+            loading={loading}
+            value={row.typ}
+            saveToDb={saveToDb}
+            error={fieldErrors.typ}
+          />
+          <TextField
+            name="beschreibung"
+            label="Massnahme"
+            type="text"
+            value={row.beschreibung}
+            saveToDb={saveToDb}
+            error={fieldErrors.beschreibung}
+          />
+          <Select
+            name="bearbeiter"
+            label="BearbeiterIn"
+            value={row.bearbeiter}
+            options={data?.allAdresses?.nodes ?? []}
+            loading={loading}
+            saveToDb={saveToDb}
+            error={fieldErrors.bearbeiter}
+          />
+          <MarkdownField
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
+            saveToDb={saveToDb}
+            error={fieldErrors.bemerkungen}
+          />
+          <Checkbox2States
+            name="planVorhanden"
+            label="Plan vorhanden"
+            value={row.planVorhanden}
+            saveToDb={saveToDb}
+            error={fieldErrors.planVorhanden}
+          />
+          <TextField
+            name="planBezeichnung"
+            label="Plan Bezeichnung"
+            type="text"
+            value={row.planBezeichnung}
+            saveToDb={saveToDb}
+            error={fieldErrors.planBezeichnung}
+          />
+          <TextField
+            name="flaeche"
+            label="Fläche (m2)"
+            type="number"
+            value={row.flaeche}
+            saveToDb={saveToDb}
+            error={fieldErrors.flaeche}
+          />
+          <TextField
+            name="form"
+            label="Form der Ansiedlung"
+            type="text"
+            value={row.form}
+            saveToDb={saveToDb}
+            error={fieldErrors.form}
+          />
+          <TextField
+            name="pflanzanordnung"
+            label="Pflanzanordnung"
+            type="text"
+            value={row.pflanzanordnung}
+            saveToDb={saveToDb}
+            error={fieldErrors.pflanzanordnung}
+          />
+          <TextField
+            name="markierung"
+            label="Markierung"
+            type="text"
+            value={row.markierung}
+            saveToDb={saveToDb}
+            error={fieldErrors.markierung}
+          />
+          <TextField
+            name="anzTriebe"
+            label="Anzahl Triebe"
+            type="number"
+            value={row.anzTriebe}
+            saveToDb={saveToDb}
+            error={fieldErrors.anzTriebe}
+          />
+          <TextField
+            name="anzPflanzen"
+            label="Anzahl Pflanzen"
+            type="number"
+            value={row.anzPflanzen}
+            saveToDb={saveToDb}
+            error={fieldErrors.anzPflanzen}
+          />
+          <TextField
+            name="anzPflanzstellen"
+            label="Anzahl Pflanzstellen"
+            type="number"
+            value={row.anzPflanzstellen}
+            saveToDb={saveToDb}
+            error={fieldErrors.anzPflanzstellen}
+          />
+          {isAnpflanzung && (
+            <>
+              <Select
+                name="zieleinheitEinheit"
+                label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
+                value={row.zieleinheitEinheit}
+                options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
+                loading={loading}
+                saveToDb={saveToDb}
+                error={fieldErrors.zieleinheitEinheit}
               />
-            )}
-          </FormContainer>
-        </ColumnContainer>
-      </SimpleBar>
+              <TextField
+                name="zieleinheitAnzahl"
+                label={
+                  notMassnCountUnit === true ?
+                    'Ziel-Einheit: Anzahl'
+                  : 'Ziel-Einheit: Anzahl (wird automatisch gesetzt)'
+                }
+                type="number"
+                value={row.zieleinheitAnzahl}
+                saveToDb={saveToDb}
+                error={fieldErrors.zieleinheitAnzahl}
+              />
+            </>
+          )}
+          <SelectLoadingOptionsTypable
+            key={`${id}${!!row.wirtspflanze}`}
+            label="Wirtspflanze"
+            row={row}
+            query={queryAeTaxonomies}
+            queryNodesName="allAeTaxonomies"
+            saveToDb={saveToDb}
+            error={fieldErrors.wirtspflanze}
+          />
+          <TextField
+            name="herkunftPop"
+            label="Herkunftspopulation"
+            type="text"
+            value={row.herkunftPop}
+            saveToDb={saveToDb}
+            error={fieldErrors.herkunftPop}
+          />
+          <TextField
+            name="sammeldatum"
+            label="Sammeldatum"
+            type="text"
+            value={row.sammeldatum}
+            saveToDb={saveToDb}
+            error={fieldErrors.sammeldatum}
+          />
+          <TextField
+            name="vonAnzahlIndividuen"
+            label="Anzahl besammelte Individuen der Herkunftspopulation"
+            type="number"
+            value={row.vonAnzahlIndividuen}
+            saveToDb={saveToDb}
+            error={fieldErrors.vonAnzahlIndividuen}
+          />
+          {!showFilter && (
+            <StringToCopy
+              text={row.id}
+              label="id"
+            />
+          )}
+        </FormContainer>
+      </ColumnContainer>
     </ErrorBoundary>
   )
 })

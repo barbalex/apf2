@@ -14,22 +14,20 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const FieldsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  > div:first-of-type {
-    > div:first-of-type {
-      display: block !important;
-    }
-  }
-`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
-const TabContent = styled.div`
+const TabContentContainer = styled.div`
   overflow-y: auto;
   scrollbar-width: thin;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+`
+const TabContent = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 `
 
 export const Component = () => {
@@ -47,38 +45,36 @@ export const Component = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Idealbiotop" />
-        <FieldsContainer>
-          <Tabs
-            value={
-              pathname.endsWith('Idealbiotop/Idealbiotop') ? 'Idealbiotop'
-              : pathname.endsWith('Dateien') ?
-                'Dateien'
-              : 'Idealbiotop'
-            }
-            onChange={onChangeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <StyledTab
-              label="Idealbiotop"
-              value="Idealbiotop"
-              data-id="Idealbiotop"
-            />
-            <StyledTab
-              label="Dateien"
-              value="Dateien"
-              data-id="Dateien"
-            />
-          </Tabs>
-          <div style={{ overflowY: 'auto' }}>
-            <TabContent>
-              <Suspense fallback={<Spinner />}>
-                <Outlet />
-              </Suspense>
-            </TabContent>
-          </div>
-        </FieldsContainer>
+        <Tabs
+          value={
+            pathname.endsWith('Idealbiotop/Idealbiotop') ? 'Idealbiotop'
+            : pathname.endsWith('Dateien') ?
+              'Dateien'
+            : 'Idealbiotop'
+          }
+          onChange={onChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <StyledTab
+            label="Idealbiotop"
+            value="Idealbiotop"
+            data-id="Idealbiotop"
+          />
+          <StyledTab
+            label="Dateien"
+            value="Dateien"
+            data-id="Dateien"
+          />
+        </Tabs>
+        <TabContentContainer>
+          <TabContent>
+            <Suspense fallback={<Spinner />}>
+              <Outlet />
+            </Suspense>
+          </TabContent>
+        </TabContentContainer>
       </Container>
     </ErrorBoundary>
   )

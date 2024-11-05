@@ -17,9 +17,17 @@ const Container = styled.div`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
-const TabContent = styled.div`
+const TabContentContainer = styled.div`
   overflow-y: auto;
   scrollbar-width: thin;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+`
+const TabContent = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 `
 
 export const Component = () => {
@@ -32,6 +40,10 @@ export const Component = () => {
       pathname.endsWith(apId) ? navigate(`./${value}`) : navigate(value),
     [apId, navigate],
   )
+  const lastPathEl = pathname
+    .split('/')
+    .filter((el) => !!el)
+    .at(-1)
 
   return (
     <ErrorBoundary>
@@ -39,12 +51,12 @@ export const Component = () => {
         <FormTitle title="Art" />
         <Tabs
           value={
-            pathname.endsWith('Art') ? 'Art'
-            : pathname.endsWith('Auswertung') ?
+            lastPathEl === 'Art' ? 'Art'
+            : lastPathEl === 'Auswertung' ?
               'Auswertung'
-            : pathname.endsWith('Dateien') ?
+            : lastPathEl === 'Dateien' ?
               'Dateien'
-            : pathname.endsWith('Historien') ?
+            : lastPathEl === 'Historien' ?
               'Historien'
             : 'Art'
           }
@@ -74,11 +86,13 @@ export const Component = () => {
             data-id="Historien"
           />
         </Tabs>
-        <TabContent>
-          <Suspense fallback={<Spinner />}>
-            <Outlet />
-          </Suspense>
-        </TabContent>
+        <TabContentContainer>
+          <TabContent>
+            <Suspense fallback={<Spinner />}>
+              <Outlet />
+            </Suspense>
+          </TabContent>
+        </TabContentContainer>
       </Container>
     </ErrorBoundary>
   )
