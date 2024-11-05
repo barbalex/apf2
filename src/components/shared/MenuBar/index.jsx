@@ -36,13 +36,11 @@ const MeasuredOuterContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  background-color: rgb(
-    255,
-    253,
-    231
-  ); // needed as in fullscreen backed by black
-  border-top: 1px solid rgba(46, 125, 50, 0.15); // TODO: decide later on styling
-  border-bottom: 1px solid rgba(46, 125, 50, 0.15); //  TODO: decide later on styling
+  // needed as in fullscreen backed by black
+  background-color: rgb(255, 253, 231);
+  // TODO: decide later on styling
+  border-top: 1px solid rgba(46, 125, 50, 0.15);
+  border-bottom: 1px solid rgba(46, 125, 50, 0.15);
 `
 // align items to the right
 const InnerContainer = styled.div`
@@ -74,7 +72,6 @@ export const MenuBar = memo(({ children, isPreview }) => {
   )
   const outerContainerRef = useRef(null)
   const innerContainerRef = useRef(null)
-  const previousPreview = useRef(null)
 
   const previousMeasurementTimeRef = useRef(0)
   const childrenCount = Children.count(usableChildren)
@@ -145,16 +142,18 @@ export const MenuBar = memo(({ children, isPreview }) => {
     const needToDecrement = growableSpace > buttonSize && menuChildrenCount > 0
     const needToDecrementHidingMenu = needToDecrement && menuChildrenCount < 3
 
-    console.log('MenuBar.checkOverflow', {
-      clientWidth,
-      scrollWidth,
-      clientHeight,
-      scrollHeight,
-      needToIncrement,
-      needToIncrementRevealingMenu,
-      needToDecrement,
-      growableSpace,
-    })
+    console.log('MenuBar.checkOverflow')
+
+    // console.log('MenuBar.checkOverflow', {
+    //   clientWidth,
+    //   scrollWidth,
+    //   clientHeight,
+    //   scrollHeight,
+    //   needToIncrement,
+    //   needToIncrementRevealingMenu,
+    //   needToDecrement,
+    //   growableSpace,
+    // })
 
     if (needToIncrementRevealingMenu) {
       return incrementMenuChildrenCountRevealingMenu()
@@ -168,17 +167,14 @@ export const MenuBar = memo(({ children, isPreview }) => {
 
   const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
 
-  const previousWidthRef = useRef(null)
   useEffect(() => {
-    if (isPreview !== previousPreview.current) {
-      previousPreview.current = isPreview
-      console.log('MenuBar.useEffect, isPreview changed to:', isPreview)
-      setMenuChildrenCount(0)
-      setTimeout(() => checkOverflow(), 0)
-      setTimeout(() => checkOverflow(), 1000)
-    }
+    // reset children count
+    setMenuChildrenCount(0)
+    // and check overflow when preview changes
+    checkOverflow()
   }, [isPreview])
 
+  const previousWidthRef = useRef(null)
   useEffect(() => {
     if (!outerContainerRef.current) {
       console.log('MenuBar.useEffect, no containerRef')
@@ -205,6 +201,7 @@ export const MenuBar = memo(({ children, isPreview }) => {
           ((width - previousWidthRef.current) / width) * 100,
         )
         const shouldCheckOverflow = Math.abs(percentageChanged) > 1
+        // if isPreview has changed, always check overflow
         if (!shouldCheckOverflow) {
           console.log('MenuBar.resizeObserver, not enough change')
           return
