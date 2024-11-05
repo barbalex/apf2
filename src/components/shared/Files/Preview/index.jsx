@@ -45,8 +45,8 @@ export const Component = memo(() => {
     refreshOptions: { leading: false, trailing: true },
   })
 
-  const isImage = row.fileMimeType.includes('image')
-  const isPdf = row.fileMimeType.includes('pdf')
+  const isImage = row.fileMimeType?.includes?.('image')
+  const isPdf = row.fileMimeType?.includes?.('pdf')
   const isReactDocViewable =
     !isImage &&
     !isPdf &&
