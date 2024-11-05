@@ -8,7 +8,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { History as HistoryComponent } from '../../../shared/History/index.jsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 
-const popHistoriesQuery = gql`
+const query = gql`
   query popHistoryQuery($popId: UUID!) {
     popById(id: $popId) {
       id
@@ -105,11 +105,12 @@ const Aenderung = styled.span`
 const Aktuell = styled.span`
   background-color: rgb(201, 238, 211);
 `
+const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
-export const History = () => {
+export const Component = () => {
   const { popId } = useParams()
 
-  const { error, data, loading } = useQuery(popHistoriesQuery, {
+  const { error, data, loading } = useQuery(query, {
     variables: {
       popId,
     },
@@ -136,7 +137,7 @@ export const History = () => {
 
   return (
     <SimpleBar
-      style={{ maxHeight: '100%', height: '100%' }}
+      style={simplebarStyle}
       tabIndex={-1}
     >
       <InnerContainer>

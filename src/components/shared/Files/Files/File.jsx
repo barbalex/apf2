@@ -8,8 +8,8 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import upperFirst from 'lodash/upperFirst'
 
-import { ErrorBoundary } from '../ErrorBoundary.jsx'
-import { TextField } from '../TextField'
+import { ErrorBoundary } from '../../ErrorBoundary.jsx'
+import { TextField } from '../../TextField.jsx'
 import {
   apFile as apFileFragment,
   idealbiotopFile as idealbiotopFileFragment,
@@ -17,10 +17,10 @@ import {
   tpopFile as tpopFileFragment,
   tpopkontrFile as tpopkontrFileFragment,
   tpopmassnFile as tpopmassnFileFragment,
-} from '../fragments'
-import { isImageFile } from './isImageFile.js'
-import { ifIsNumericAsNumber } from '../../../modules/ifIsNumericAsNumber.js'
-import { StoreContext } from '../../../storeContext.js'
+} from '../../fragments.js'
+import { isImageFile } from '../isImageFile.js'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -45,9 +45,11 @@ const ImgReplacement = styled.div`
 `
 const DelIcon = styled(IconButton)`
   margin-bottom: 20px !important;
+  height: 40px;
 `
 const DownloadIcon = styled(IconButton)`
   margin-bottom: 20px !important;
+  height: 40px;
 `
 const Spacer = styled.div`
   min-width: 12px;
@@ -115,17 +117,18 @@ export const File = memo(
         `,
         })
       } catch (error) {
-        return console.log(error)
-        // TODO: enque
-        /*return store.enqueNotification({
-        message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
-        options: {
-          variant: 'error',
-        },
-      })*/
+        console.log(error)
+        return store.enqueNotification({
+          message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
+          options: {
+            variant: 'error',
+          },
+        })
       }
       refetch()
+      setDelMenuAnchorEl(null)
     }, [client, file.id, parent, refetch, tableName])
+
     const onClickDownload = useCallback(
       () => window.open(`https://ucarecdn.com/${file.fileId}/-/inline/no/`),
       [file],

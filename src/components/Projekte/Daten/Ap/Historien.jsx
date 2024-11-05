@@ -110,8 +110,9 @@ const Aenderung = styled.span`
 const Aktuell = styled.span`
   background-color: rgb(201, 238, 211);
 `
+const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
-export const History = () => {
+export const Component = () => {
   const { apId } = useParams()
   const { error, data, loading } = useQuery(apHistoriesQuery, {
     variables: {
@@ -140,7 +141,7 @@ export const History = () => {
 
   return (
     <SimpleBar
-      style={{ maxHeight: '100%', height: '100%' }}
+      style={simplebarStyle}
       tabIndex={-1}
     >
       <InnerContainer>

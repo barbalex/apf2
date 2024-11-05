@@ -14,7 +14,7 @@ import { useParams, useLocation } from 'react-router-dom'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { standardQkYear } from '../../../../../modules/standardQkYear.js'
-import { query } from './query.js'
+import { query as query2 } from './query.js'
 import { createMessageFunctions } from './createMessageFunctions.js'
 import { StoreContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
@@ -89,7 +89,12 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')
 
-  const { data, error, loading, refetch } = useQuery(query, {
+  const {
+    data: data2,
+    error: error2,
+    loading: loading2,
+    refetch: refetch2,
+  } = useQuery(query2, {
     // want to explicitly show user re-loading
     fetchPolicy: 'no-cache',
     notifyOnNetworkStatusChange: true,
@@ -112,7 +117,7 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
   )
 
   const messageFunctions = createMessageFunctions({
-    data,
+    data: data2,
     projId,
     apId,
   })
@@ -131,7 +136,7 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
     return true
   })
 
-  if (error) return <Error error={error} />
+  if (error2) return <Error error={error2} />
   return (
     <ErrorBoundary>
       <Container>
@@ -160,9 +165,9 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
             onChange={onChangeFilter}
           />
         </StyledFormControl>
-        {loading ?
+        {loading2 ?
           <AnalyzingButton
-            onClick={() => refetch()}
+            onClick={() => refetch2()}
             variant="outlined"
           >
             <AnalyzingSpan>Die Daten werden analysiert</AnalyzingSpan>
@@ -174,7 +179,7 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
               color="primary"
             >
               <AnalyzingButton
-                onClick={() => refetch()}
+                onClick={() => refetch2()}
                 variant="outlined"
               >
                 neu analysieren
@@ -224,7 +229,7 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
             ))}
           </StyledPaper>
         ))}
-        {!loading && messageGroups.length === 0 && (
+        {!loading2 && messageGroups.length === 0 && (
           <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
         )}
       </Container>

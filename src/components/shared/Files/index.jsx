@@ -1,15 +1,42 @@
-import { useCallback, useState, useRef, useContext, memo } from 'react'
+import {
+  useCallback,
+  useState,
+  useRef,
+  useContext,
+  memo,
+  useMemo,
+  Suspense,
+  useEffect,
+} from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
 import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import SimpleBar from 'simplebar-react'
-import ImageGallery from 'react-image-gallery'
+import {
+  FaPlus,
+  FaMinus,
+  FaEye,
+  FaEyeSlash,
+  FaChevronLeft,
+  FaChevronRight,
+  FaMaximize,
+  FaMinimize,
+} from 'react-icons/fa6'
+import { useNavigate, useLocation, Outlet, useParams } from 'react-router-dom'
+import screenfull from 'screenfull'
+
+import './index.css'
 
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import { Error } from '../Error'
 import { Spinner } from '../Spinner'
+import { MenuBar } from '../MenuBar/index.jsx'
 
 import {
   apFile as apFileFragment,
@@ -21,27 +48,29 @@ import {
 } from '../fragments'
 import { Uploader } from '../Uploader/index.jsx'
 import { UploaderContext } from '../../../UploaderContext.js'
-import { File } from './File.jsx'
-import 'react-image-gallery/styles/css/image-gallery.css'
+import { File } from './Files/File.jsx'
 import { isImageFile } from './isImageFile.js'
 import { StoreContext } from '../../../storeContext.js'
+import { icon } from 'leaflet'
+import { set } from 'lodash'
 
 const Container = styled.div`
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
-  padding: 0 10px;
 `
-const Spacer = styled.div`
-  height: 10px;
+const OutletContainer = styled.div`
+  flex-grow: 1;
 `
-const ButtonsContainer = styled.div`
-  display: flex;
-  margin-top: 8px;
-`
-const LightboxButton = styled(Button)`
-  margin-left: 10px !important;
-  text-transform: none !important;
+const MenuTitle = styled.h3`
+  padding-top: 8px;
+  padding-left: 15px;
+  padding-right: 16px;
+  padding-bottom: 0;
+  margin-bottom: 3px;
+  &:focus {
+    outline: none;
+  }
 `
 
 const fragmentObject = {
@@ -53,65 +82,75 @@ const fragmentObject = {
   tpopmassn: tpopmassnFileFragment,
 }
 
-export const Files = memo(
-  observer(
-    ({
-      parentId = '99999999-9999-9999-9999-999999999999',
-      parent,
-      loadingParent,
-    }) => {
-      const client = useApolloClient()
-      const uploaderCtx = useContext(UploaderContext)
-      const api = uploaderCtx?.current?.getAPI?.()
-      const storeContext = useContext(StoreContext)
+export const FilesRouter = memo(
+  observer(({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
+    // console.log('FilesRouter', { parentId, parent })
+    const store = useContext(StoreContext)
+    const { fileId } = useParams()
+    const navigate = useNavigate()
+    const { pathname } = useLocation()
+    const isPreview = pathname.endsWith('Vorschau')
+    const client = useApolloClient()
+    const uploaderCtx = useContext(UploaderContext)
+    const api = uploaderCtx?.current?.getAPI?.()
+    const infoUuidsProcessed = useRef([])
 
-      const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
+    const containerRef = useRef(null)
 
-      const queryName = `all${upperFirst(parent)}Files`
-      const parentIdName = `${parent}Id`
-      const fields = `${upperFirst(parent)}FileFields`
-      const fragment = fragmentObject[parent]
+    const queryName = `all${upperFirst(parent)}Files`
+    const parentIdName = `${parent}Id`
+    const fields = `${upperFirst(parent)}FileFields`
+    const fragment = fragmentObject[parent]
 
-      const query = gql`
-  query FileQuery($parentId: UUID!) {
-    ${queryName}(
-      orderBy: NAME_ASC
-      filter: { ${parentIdName}: { equalTo: $parentId } }
-    ) {
-      nodes {
-        ...${fields}
-      }
-    }
-  }
-  ${fragment}
-`
-      const { data, error, loading, refetch } = useQuery(query, {
-        variables: { parentId },
-      })
+    const query = gql`
+        query FileQuery($parentId: UUID!) {
+          ${queryName}(
+            orderBy: NAME_ASC
+            filter: { ${parentIdName}: { equalTo: $parentId } }
+          ) {
+            nodes {
+              ...${fields}
+            }
+          }
+        }
+        ${fragment}
+      `
+    const { data, error, isLoading, refetch } = useQuery({
+      queryKey: ['FileQuery', parentId],
+      queryFn: () =>
+        client.query({
+          query,
+          variables: { parentId },
+          fetchPolicy: 'no-cache',
+        }),
+    })
 
-      const files = data?.[`all${upperFirst(parent)}Files`].nodes ?? []
+    const files = data?.data?.[`all${upperFirst(parent)}Files`].nodes ?? []
 
-      const onCommonUploadSuccess = useCallback(
-        async (info) => {
-          console.log('onCommonUploadSuccess', info)
-          // close the uploader or it will be open when navigating to the list
-          api?.doneFlow?.()
-          // clear the uploader or it will show the last uploaded file when opened next time
-          api?.removeAllFiles?.()
-          // somehow this needs to be delayed or sometimes not all files will be uploaded
-          setTimeout(() => refetch(), 500)
-        },
-        [client, fields, fragment, parent, parentId, refetch],
-      )
+    const onCommonUploadSuccess = useCallback(
+      async (info) => {
+        // reset infoUuidsProcessed
+        infoUuidsProcessed.current = []
+        // close the uploader or it will be open when navigating to the list
+        api?.doneFlow?.()
+        // clear the uploader or it will show the last uploaded file when opened next time
+        api?.removeAllFiles?.()
+        // somehow this needs to be delayed or sometimes not all files will be uploaded
+        setTimeout(() => refetch(), 500)
+      },
+      [client, fields, fragment, parent, parentId, refetch],
+    )
 
-      const onFileUploadSuccess = useCallback(
-        async (info) => {
-          console.log('onFileUploadSuccess', info)
-          if (info) {
-            let responce
-            try {
-              responce = await client.mutate({
-                mutation: gql`
+    // ISSUE: sometimes this is called multiple times with the same info.uuid
+    const onFileUploadSuccess = useCallback(
+      async (info) => {
+        if (info) {
+          if (infoUuidsProcessed.current.includes(info.uuid)) return
+          infoUuidsProcessed.current.push(info.uuid)
+          let responce
+          try {
+            responce = await client.mutate({
+              mutation: gql`
               mutation insertFile {
                 create${upperFirst(parent)}File(
                   input: {
@@ -130,107 +169,254 @@ export const Files = memo(
               }
               ${fragment}
             `,
-              })
-            } catch (error) {
-              console.log(error)
-              store.enqueNotification({
-                message: error.message,
-                options: {
-                  variant: 'error',
-                },
-              })
+            })
+          } catch (error) {
+            console.log(error)
+            store.enqueNotification({
+              message: error.message,
+              options: {
+                variant: 'error',
+              },
+            })
+          }
+          // console.log('FilesRouter.onFileUploadSuccess', { info, responce })
+        }
+      },
+      [client, fields, fragment, parent, parentId, refetch],
+    )
+
+    const onFileUploadFailed = useCallback((error) => {
+      console.error('Upload failed:', error)
+      store.enqueNotification({
+        message: error?.message ?? 'Upload fehlgeschlagen',
+        options: {
+          variant: 'error',
+        },
+      })
+      // close the uploader or it will be open when navigating to the list
+      api?.doneFlow?.()
+      // clear the uploader or it will show the last uploaded file when opened next time
+      api?.removeAllFiles?.()
+      // somehow this needs to be delayed or sometimes not all files will be uploaded
+      setTimeout(() => refetch(), 500)
+    }, [])
+
+    const firstFileId = files?.[0]?.fileId
+
+    const onClickPreview = useCallback(() => {
+      navigate(`${firstFileId}/Vorschau`)
+    }, [firstFileId])
+    const onClickClosePreview = useCallback(() => {
+      // relative navigation using ../.. does not work here
+      const fileIdBeginsAt = pathname.indexOf(fileId)
+      const newPathname = pathname.slice(0, fileIdBeginsAt)
+      navigate(newPathname)
+    }, [pathname, fileId])
+
+    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+    const delMenuOpen = Boolean(delMenuAnchorEl)
+    const onClickDelete = useCallback(async () => {
+      const indexOfFileInPathname = pathname.indexOf(fileId)
+      // delete file with fileId
+      // first get fileId of next file to navigate to it after deleting this one
+      // get index of current file in files
+      const index = files.findIndex((file) => file.fileId === fileId)
+      const file = files[index]
+      // get file to navigate to after deleting this one
+      const nextFile = files[index + 1]
+      const prevFile = files[index - 1]
+      const nextPathname =
+        nextFile ?
+          `${pathname.slice(0, indexOfFileInPathname)}${nextFile.fileId}/Vorschau`
+        : prevFile ?
+          `${pathname.slice(0, indexOfFileInPathname)}${prevFile.fileId}/Vorschau`
+        : pathname.slice(0, indexOfFileInPathname)
+      try {
+        const tableName = `${parent}File`
+        const mutationName = `delete${upperFirst(parent)}FileById`
+        await client.mutate({
+          mutation: gql`
+          mutation deleteDataset {
+            ${mutationName}(
+              input: {
+                id: "${file.id}"
+              }
+            ) {
+              ${tableName} {
+                id
+              }
             }
           }
-        },
-        [client, fields, fragment, parent, parentId, refetch],
-      )
-
-      const onFileUploadFailed = useCallback((error) => {
-        console.error('Upload failed:', error)
-        store.enqueNotification({
-          message: error?.message ?? 'Upload fehlgeschlagen',
+        `,
+        })
+      } catch (error) {
+        console.log(error)
+        return store.enqueNotification({
+          message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
           options: {
             variant: 'error',
           },
         })
-        // close the uploader or it will be open when navigating to the list
-        api?.doneFlow?.()
-        // clear the uploader or it will show the last uploaded file when opened next time
-        api?.removeAllFiles?.()
-        // somehow this needs to be delayed or sometimes not all files will be uploaded
-        setTimeout(() => refetch(), 500)
-      }, [])
+      }
+      setDelMenuAnchorEl(null)
+      refetch()
+      navigate(nextPathname)
+    }, [fileId, files, client, parent, pathname])
 
-      const images = files.filter((f) => isImageFile(f))
-      const imageObjects = images.map((f) => ({
-        original: `https://ucarecdn.com/${f.fileId}/-/resize/1200x/-/quality/lightest/${f.name}`,
-        thumbnail: `https://ucarecdn.com/${f.fileId}/-/resize/250x/-/quality/lightest/${f.name}`,
-        fullscreen: `https://ucarecdn.com/${f.fileId}/-/resize/1800x/-/quality/lightest/${f.name}`,
-        originalAlt: f.beschreibung || '',
-        thumbnailAlt: f.beschreibung || '',
-        description: f.beschreibung || '',
-        originalTitle: f.name || '',
-        thumbnailTitle: f.name || '',
-      }))
-      const onClickLightboxButton = useCallback(
-        () => setLightboxIsOpen(!lightboxIsOpen),
-        [lightboxIsOpen],
-      )
+    const onClickNext = useCallback(() => {
+      // get index of current file in files
+      const index = files.findIndex((file) => file.fileId === fileId)
+      // get file to navigate to
+      const nextFile = files[index + 1] ?? files[0]
+      navigate(`${nextFile.fileId}/Vorschau`)
+    }, [fileId, files, navigate])
 
-      if (loading || loadingParent) return <Spinner />
+    const onClickPrev = useCallback(() => {
+      // get index of current file in files
+      const index = files.findIndex((file) => file.fileId === fileId)
+      // get file to navigate to
+      const prevFile = files[index - 1] ?? files[files.length - 1]
+      navigate(`${prevFile.fileId}/Vorschau`)
+    }, [fileId, files, navigate])
 
-      if (error) return <Error error={error} />
+    // enable reacting to fullscreen changes
+    const [isFullscreen, setIsFullscreen] = useState(false)
+    useEffect(() => {
+      screenfull.on('change', () => setIsFullscreen(screenfull.isFullscreen))
+      return () => screenfull.off('change')
+    }, [])
 
-      return (
-        <SimpleBar
-          style={{
-            maxHeight: '100%',
-            height: '100%',
-          }}
-          tabIndex={-1}
+    // BEWARE: functions passed into menus do not react to state changes
+    // unless they are added to the dependencies array
+    const menus = useMemo(
+      () => [
+        <IconButton
+          key="vorschau_oeffnen"
+          title="Vorschau öffnen"
+          onClick={onClickPreview}
+          disabled={!firstFileId}
         >
-          <ErrorBoundary>
-            <Container>
-              <ButtonsContainer>
-                <Uploader
-                  onFileUploadSuccess={onFileUploadSuccess}
-                  onFileUploadFailed={onFileUploadFailed}
-                  onCommonUploadSuccess={onCommonUploadSuccess}
-                />
-                {!!images.length && (
-                  <LightboxButton
-                    color="primary"
-                    variant="outlined"
-                    onClick={onClickLightboxButton}
-                  >
-                    {lightboxIsOpen ?
-                      'Galerie schliessen'
-                    : 'Bilder in Galerie öffnen'}
-                  </LightboxButton>
-                )}
-              </ButtonsContainer>
-              {lightboxIsOpen && (
-                <>
-                  <Spacer />
-                  <ImageGallery
-                    items={imageObjects}
-                    showPlayButton={false}
-                  />
-                </>
-              )}
-              <Spacer />
-              {files.map((file) => (
-                <File
-                  key={file.fileId}
-                  file={file}
-                  parent={parent}
-                  refetch={refetch}
-                />
-              ))}
-            </Container>
-          </ErrorBoundary>
-        </SimpleBar>
-      )
-    },
-  ),
+          <FaEye />
+        </IconButton>,
+        <IconButton
+          key="dateien_hochladen"
+          title="Dateien hochladen"
+          onClick={api?.initFlow}
+        >
+          <FaPlus />
+        </IconButton>,
+      ],
+      [onClickPreview],
+    )
+    const previewMenus = useMemo(
+      () => [
+        <IconButton
+          key="vorschau_schliessen"
+          title="Vorschau schliessen"
+          onClick={onClickClosePreview}
+        >
+          <FaEyeSlash />
+        </IconButton>,
+        ...[
+          screenfull.isEnabled ?
+            <IconButton
+              key="minimieren"
+              title={isFullscreen ? 'minimieren' : 'maximieren'}
+              onClick={() => screenfull.toggle()}
+            >
+              {isFullscreen ?
+                <FaMinimize />
+              : <FaMaximize />}
+            </IconButton>
+          : [],
+        ],
+        <IconButton
+          key="dateien_hochladen"
+          title="Dateien hochladen"
+          onClick={api?.initFlow}
+        >
+          <FaPlus />
+        </IconButton>,
+        <div
+          key="loeschen"
+          style={{ display: 'inline' }}
+        >
+          <IconButton
+            title="löschen"
+            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+            aria-owns={delMenuOpen ? 'previewDelMenu' : undefined}
+          >
+            <FaMinus />
+          </IconButton>
+          <Menu
+            id="previewDelMenu"
+            anchorEl={delMenuAnchorEl}
+            open={delMenuOpen}
+            onClose={() => setDelMenuAnchorEl(null)}
+            PaperProps={{
+              style: {
+                maxHeight: 48 * 4.5,
+                width: 120,
+              },
+            }}
+          >
+            <MenuTitle>löschen?</MenuTitle>
+            <MenuItem onClick={onClickDelete}>ja</MenuItem>
+            <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+          </Menu>
+        </div>,
+        <IconButton
+          key="vorige_datei"
+          title="vorige Datei"
+          onClick={onClickPrev}
+        >
+          <FaChevronLeft />
+        </IconButton>,
+        <IconButton
+          key="naechste_datei"
+          title="nächste Datei"
+          onClick={onClickNext}
+        >
+          <FaChevronRight />
+        </IconButton>,
+      ],
+      [
+        onClickClosePreview,
+        delMenuOpen,
+        delMenuAnchorEl,
+        onClickDelete,
+        onClickNext,
+        onClickPrev,
+        isFullscreen,
+        screenfull.isEnabled,
+        isPreview,
+      ],
+    )
+
+    if (isLoading) return <Spinner />
+
+    if (error) return <Error error={error} />
+
+    return (
+      <ErrorBoundary>
+        <Container ref={containerRef}>
+          <Uploader
+            onFileUploadSuccess={onFileUploadSuccess}
+            onFileUploadFailed={onFileUploadFailed}
+            onCommonUploadSuccess={onCommonUploadSuccess}
+          />
+          <MenuBar isPreview={isPreview}>
+            {isPreview ? previewMenus : menus}
+          </MenuBar>
+          <OutletContainer>
+            <Suspense fallback={<Spinner />}>
+              <Outlet
+                context={{ files, parent, parentId, refetch, containerRef }}
+              />
+            </Suspense>
+          </OutletContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  }),
 )

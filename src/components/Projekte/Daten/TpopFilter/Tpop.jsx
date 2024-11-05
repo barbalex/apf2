@@ -21,6 +21,7 @@ const Container = styled.div`
   padding: 0 10px;
   column-width: ${constants.columnWidth}px;
 `
+const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
 export const Tpop = observer(
   ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
@@ -63,7 +64,7 @@ export const Tpop = observer(
 
     return (
       <SimpleBar
-        style={{ maxHeight: '100%', height: '100%' }}
+        style={simplebarStyle}
         tabIndex={-1}
       >
         <Container>
