@@ -6,6 +6,8 @@ import { signature, expire } from '../../../utils/uploadcareSignature'
 import { UploaderContext } from '../../../UploaderContext.js'
 import { locale } from './locale.js'
 
+defineLocale('de', locale)
+
 export const Uploader = memo(
   ({ onFileUploadSuccess, onFileUploadFailed, onCommonUploadSuccess }) => {
     const uploaderCtx = useContext(UploaderContext)
@@ -30,7 +32,6 @@ export const Uploader = memo(
         ctxName="uploadcare"
         removeCopyright="true"
         localeName="de"
-        localeDefinitionOverride={defineLocale('de', locale)}
       />
     )
   },
