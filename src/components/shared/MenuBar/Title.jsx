@@ -28,6 +28,22 @@ const TitleDiv = styled.h3`
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
 `
+// left label, right value
+const Content = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  column-gap: 10px;
+  row-gap: 2px;
+`
+
+const Label = styled.div`
+  // width: 80px;
+  // min-width: 80px;
+  display: inline-block;
+`
+const Value = styled.div`
+  display: inline-block;
+`
 
 const FileNameForTooltip = memo(
   forwardRef(({ file, ...props }, ref) => (
@@ -35,18 +51,20 @@ const FileNameForTooltip = memo(
       ref={ref}
       {...props}
     >
-      {file.fileMimeType && (
-        <>
-          <div>Typ:</div>
-          <div>{file.fileMimeType}</div>
-        </>
-      )}
-      {file.beschreibung && (
-        <>
-          <div>Beschreibung:</div>
-          <div>{file.beschreibung}</div>
-        </>
-      )}
+      <Content>
+        {file.fileMimeType && (
+          <>
+            <Label>Typ:</Label>
+            <Value>{file.fileMimeType}</Value>
+          </>
+        )}
+        {file.beschreibung && (
+          <>
+            <Label>Beschreibung:</Label>
+            <Value>{file.beschreibung}</Value>
+          </>
+        )}
+      </Content>
     </TitleContainer>
   )),
 )
