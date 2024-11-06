@@ -426,7 +426,10 @@ export const FilesRouter = memo(
             onFileUploadFailed={onFileUploadFailed}
             onCommonUploadSuccess={onCommonUploadSuccess}
           />
-          <MenuBar isPreview={isPreview}>
+          <MenuBar
+            isPreview={isPreview}
+            file={files.find((f) => f.fileId === fileId)}
+          >
             {isPreview ? previewMenus : menus}
           </MenuBar>
           <OutletContainer>

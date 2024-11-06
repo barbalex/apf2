@@ -60,12 +60,31 @@ const StyledMenu = styled(Menu)`
     padding: 0 !important;
   }
 `
+const Title = styled.h3`
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 0;
+  margin-right: auto;
+  padding: 0;
+  padding-left: 10px;
+  display: -webkit-box;
+  font-size: 0.9rem;
+  font-weight: 400;
+  width: 150px;
+  max-width: 150px;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
 
 // TODO: pass in Tools as children?
 // or rather: need info for menu AND button
 // so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
-export const MenuBar = memo(({ children, isPreview }) => {
+export const MenuBar = memo(({ children, isPreview, file }) => {
+  console.log('MenuBar', { file })
   const usableChildren = useMemo(
     () => children.filter((child) => !!child),
     [children],
@@ -229,6 +248,7 @@ export const MenuBar = memo(({ children, isPreview }) => {
 
   return (
     <MeasuredOuterContainer ref={outerContainerRef}>
+      {!!file?.name && <Title>{file.name}</Title>}
       <InnerContainer ref={innerContainerRef}>
         <StylingContainer>
           {buttonChildren}
