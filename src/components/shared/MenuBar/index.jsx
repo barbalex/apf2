@@ -66,7 +66,6 @@ const StyledMenu = styled(Menu)`
 // so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
 export const MenuBar = memo(({ children, isPreview, file }) => {
-  console.log('MenuBar', { file })
   const usableChildren = useMemo(
     () => children.filter((child) => !!child),
     [children],

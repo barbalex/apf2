@@ -28,21 +28,11 @@ const TitleDiv = styled.h3`
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
 `
-// left label, right value
 const Content = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  column-gap: 10px;
+  grid-template-columns: auto 1fr;
+  column-gap: 8px;
   row-gap: 2px;
-`
-
-const Label = styled.div`
-  // width: 80px;
-  // min-width: 80px;
-  display: inline-block;
-`
-const Value = styled.div`
-  display: inline-block;
 `
 
 const FileNameForTooltip = memo(
@@ -52,16 +42,22 @@ const FileNameForTooltip = memo(
       {...props}
     >
       <Content>
+        {file.name && (
+          <>
+            <div>Name:</div>
+            <div>{file.name}</div>
+          </>
+        )}
         {file.fileMimeType && (
           <>
-            <Label>Typ:</Label>
-            <Value>{file.fileMimeType}</Value>
+            <div>Typ:</div>
+            <div>{file.fileMimeType}</div>
           </>
         )}
         {file.beschreibung && (
           <>
-            <Label>Beschreibung:</Label>
-            <Value>{file.beschreibung}</Value>
+            <div>Beschreibung:</div>
+            <div>{file.beschreibung}</div>
           </>
         )}
       </Content>
@@ -69,10 +65,6 @@ const FileNameForTooltip = memo(
   )),
 )
 
-// TODO: pass in Tools as children?
-// or rather: need info for menu AND button
-// so: object with: title, iconComponent, onClick, width?
-// then: build menu and or buttons from that
 export const Title = memo(({ file }) => (
   <ErrorBoundary>
     <Tooltip title={<FileNameForTooltip file={file} />}>
