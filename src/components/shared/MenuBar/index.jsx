@@ -177,7 +177,7 @@ export const MenuBar = memo(({ children, isPreview }) => {
   const previousWidthRef = useRef(null)
   useEffect(() => {
     if (!outerContainerRef.current) {
-      console.log('MenuBar.useEffect, no containerRef')
+      // console.log('MenuBar.useEffect, no containerRef')
       return
     }
     // set up a resize observer for the container
@@ -190,7 +190,7 @@ export const MenuBar = memo(({ children, isPreview }) => {
         const timeSinceLastMeasurement =
           currentTime - previousMeasurementTimeRef.current
         if (timeSinceLastMeasurement < 300) {
-          console.log('MenuBar.resizeObserver, not enough time has passed')
+          // console.log('MenuBar.resizeObserver, not enough time has passed')
           return
         }
 
@@ -203,7 +203,7 @@ export const MenuBar = memo(({ children, isPreview }) => {
         const shouldCheckOverflow = Math.abs(percentageChanged) > 1
         // if isPreview has changed, always check overflow
         if (!shouldCheckOverflow) {
-          console.log('MenuBar.resizeObserver, not enough change')
+          // console.log('MenuBar.resizeObserver, not enough change')
           return
         }
 
