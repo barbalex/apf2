@@ -1620,16 +1620,47 @@ DROP POLICY IF EXISTS reader ON apflora.idealbiotop_file;
 
 -- TODO: in idealbiotop/dateien getting:
 -- [GraphQL error]: Message: infinite recursion detected in policy for relation "idealbiotop_file", Location: [{"line":2,"column":3}], Path: allIdealbiotopFiles
+-- CREATE POLICY reader ON apflora.idealbiotop_file
+--   USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+--     OR (CURRENT_USER IN ('apflora_ap_reader') AND id IN (
+--       SELECT
+--         apflora.idealbiotop_file.id
+--       FROM
+--         apflora.idealbiotop_file
+--         INNER JOIN apflora.idealbiotop ON apflora.idealbiotop.id = apflora.idealbiotop_file.idealbiotop_id
+--       WHERE
+--         apflora.idealbiotop.ap_id IN (
+--           SELECT
+--             ap_id
+--           FROM
+--             apflora.ap_user
+--           WHERE
+--             user_name = current_user_name()))))
+--           WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+--           OR (CURRENT_USER IN ('apflora_ap_writer') AND id IN (
+--             SELECT
+--               apflora.idealbiotop_file.id
+--             FROM
+--               apflora.idealbiotop_file
+--               INNER JOIN apflora.idealbiotop ON apflora.idealbiotop.id = apflora.idealbiotop_file.idealbiotop_id
+--             WHERE
+--               apflora.idealbiotop.ap_id IN (
+--                 SELECT
+--                   ap_id
+--                 FROM
+--                   apflora.ap_user
+--                 WHERE
+--                   user_name = current_user_name()))));
+
 CREATE POLICY reader ON apflora.idealbiotop_file
   USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND id IN (
+    OR (CURRENT_USER IN ('apflora_ap_reader') AND idealbiotop_id IN (
       SELECT
-        apflora.idealbiotop_file.id
+        id
       FROM
-        apflora.idealbiotop_file
-        INNER JOIN apflora.idealbiotop ON apflora.idealbiotop.id = apflora.idealbiotop_file.idealbiotop_id
+        apflora.idealbiotop
       WHERE
-        apflora.idealbiotop.ap_id IN (
+        ap_id IN (
           SELECT
             ap_id
           FROM
@@ -1637,14 +1668,13 @@ CREATE POLICY reader ON apflora.idealbiotop_file
           WHERE
             user_name = current_user_name()))))
           WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-          OR (CURRENT_USER IN ('apflora_ap_writer') AND id IN (
+          OR (CURRENT_USER IN ('apflora_ap_writer') AND idealbiotop_id IN (
             SELECT
-              apflora.idealbiotop_file.id
+              id
             FROM
-              apflora.idealbiotop_file
-              INNER JOIN apflora.idealbiotop ON apflora.idealbiotop.id = apflora.idealbiotop_file.idealbiotop_id
+              apflora.idealbiotop
             WHERE
-              apflora.idealbiotop.ap_id IN (
+              ap_id IN (
                 SELECT
                   ap_id
                 FROM
