@@ -8,9 +8,10 @@ import {
   useCallback,
   Children,
   cloneElement,
+  forwardRef,
 } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
-import { IconButton, Menu, MenuItem } from '@mui/material'
+import { IconButton, Menu, MenuItem, Tooltip } from '@mui/material'
 import {
   FaBars,
   FaAlignLeft,
@@ -60,24 +61,53 @@ const StyledMenu = styled(Menu)`
     padding: 0 !important;
   }
 `
+const TitleContainer = styled.div``
 const Title = styled.h3`
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 0;
-  margin-right: auto;
-  padding: 0;
-  padding-left: 10px;
-  display: -webkit-box;
+  padding: 0 10px;
   font-size: 0.9rem;
   font-weight: 400;
+  color: rgba(0, 0, 0, 0.7);
+  // center vertically
+  margin-top: auto;
+  margin-bottom: auto;
+  // fix width to prevent jumping
   width: 150px;
   max-width: 150px;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
+  // place left without using right margin auto
+  // as that reduces the width of the menu container
+  position: relative;
+  top: 0;
+  left: 0;
+  // break once, then ellipsis
+  display: -webkit-box;
   overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   text-overflow: ellipsis;
 `
+
+const FileNameForTooltip = forwardRef(({ file, ...props }, ref) => {
+  console.log('FileNameForTooltip', { file })
+  return (
+    <TitleContainer
+      ref={ref}
+      {...props}
+    >
+      {file.fileMimeType && (
+        <>
+          <div>Typ:</div>
+          <div>{file.fileMimeType}</div>
+        </>
+      )}
+      {file.beschreibung && (
+        <>
+          <div>Beschreibung:</div>
+          <div>{file.beschreibung}</div>
+        </>
+      )}
+    </TitleContainer>
+  )
+})
 
 // TODO: pass in Tools as children?
 // or rather: need info for menu AND button
@@ -248,7 +278,11 @@ export const MenuBar = memo(({ children, isPreview, file }) => {
 
   return (
     <MeasuredOuterContainer ref={outerContainerRef}>
-      {!!file?.name && <Title>{file.name}</Title>}
+      {!!file?.name && (
+        <Tooltip title={<FileNameForTooltip file={file} />}>
+          <Title>{file.name}</Title>
+        </Tooltip>
+      )}
       <InnerContainer ref={innerContainerRef}>
         <StylingContainer>
           {buttonChildren}
