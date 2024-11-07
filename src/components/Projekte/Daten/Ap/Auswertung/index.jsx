@@ -1,6 +1,5 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
-import SimpleBar from 'simplebar-react'
 
 import { ApErfolg } from './ApErfolg/index.jsx'
 import { PopStatus } from './PopStatus/index.jsx'
@@ -8,23 +7,21 @@ import { PopMenge } from './PopMenge/index.jsx'
 import { TpopKontrolliert } from './TpopKontrolliert/index.jsx'
 
 const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
   padding: 10px;
   padding-top: 0;
 `
 
 export const Component = memo(() => (
-  <SimpleBar
-    style={{
-      maxHeight: '100%',
-      height: '100%',
-    }}
-    tabIndex={-1}
-  >
-    <FormContainer>
-      <ApErfolg />
-      <PopStatus />
-      <PopMenge />
-      <TpopKontrolliert />
-    </FormContainer>
-  </SimpleBar>
+  <FormContainer>
+    <ApErfolg />
+    <PopStatus />
+    <PopMenge />
+    <TpopKontrolliert />
+  </FormContainer>
 ))

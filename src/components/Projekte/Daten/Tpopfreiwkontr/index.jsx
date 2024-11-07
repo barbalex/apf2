@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { MdPrint } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
-import SimpleBar from 'simplebar-react'
 import { useLocation, useParams } from 'react-router-dom'
 
 import { query } from './query.js'
@@ -32,12 +31,12 @@ const Container = styled.div`
 `
 // somehow scrollbars were not shown without explicitly setting height
 const ScrollContainer = styled.div`
-  height: calc(100dvh - 64px);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const StyledSimpleBar = styled(SimpleBar)`
-  overflow-x: hidden;
 `
 const StyledIconButton = styled(IconButton)`
   color: white !important;
@@ -170,19 +169,12 @@ export const Component = observer(({ id: idPassed }) => {
           refetch={refetch}
         />
       : <ScrollContainer>
-          <StyledSimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-          >
-            <Form
-              data={data}
-              row={row}
-              apId={apId}
-              refetch={refetch}
-            />
-          </StyledSimpleBar>
+          <Form
+            data={data}
+            row={row}
+            apId={apId}
+            refetch={refetch}
+          />
         </ScrollContainer>
       }
     </Container>

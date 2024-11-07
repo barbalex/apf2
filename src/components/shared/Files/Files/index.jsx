@@ -10,19 +10,17 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
-  padding: 0 10px;
-`
-const Spacer = styled.div`
-  height: 10px;
+  padding: 10px;
+  overflow-y: auto;
+  scrollbar-width: thin;
 `
 
 export const Component = memo(() => {
-  const { parentId, parent, files, refetch } = useOutletContext()
+  const { parent, files, refetch } = useOutletContext()
 
   return (
     <ErrorBoundary>
       <Container>
-        <Spacer />
         {files.map((file) => (
           <File
             key={file.fileId}

@@ -2,7 +2,6 @@ import { useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -26,6 +25,12 @@ import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 
 export const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
   padding: 10px;
   height: 100%;
   column-width: ${constants.columnWidth}px;
@@ -39,7 +44,6 @@ export const Section = styled.div`
     content: ':';
   }
 `
-const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
 export const fieldTypes = {
   typ: 'String',
@@ -181,151 +185,146 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <SimpleBar
-        style={simplebarStyle}
-        tabIndex={-1}
-      >
-        <FormContainer>
-          <TextField
-            name="jahr"
-            label="Jahr"
-            type="number"
-            value={row.jahr}
-            saveToDb={saveToDb}
-            error={fieldErrors.jahr}
-          />
-          <DateField
-            name="datum"
-            label="Datum"
-            value={row.datum}
-            saveToDb={saveToDb}
-            error={fieldErrors.datum}
-          />
-          <RadioButtonGroup
-            name="typ"
-            label="Kontrolltyp"
-            dataSource={tpopkontrTypWerte}
-            value={row.typ}
-            saveToDb={saveToDb}
-            error={fieldErrors.typ}
-          />
-          <Select
-            name="bearbeiter"
-            label="BearbeiterIn"
-            options={data?.allAdresses?.nodes ?? []}
-            loading={loading}
-            value={row.bearbeiter}
-            saveToDb={saveToDb}
-            error={fieldErrors.bearbeiter}
-          />
-          <JesNo
-            name="jungpflanzenVorhanden"
-            label="Jungpflanzen vorhanden"
-            value={row.jungpflanzenVorhanden}
-            saveToDb={saveToDb}
-            error={fieldErrors.jungpflanzenVorhanden}
-          />
-          <TextField
-            name="vitalitaet"
-            label="Vitalität"
-            type="text"
-            value={row.vitalitaet}
-            saveToDb={saveToDb}
-            error={fieldErrors.vitalitaet}
-          />
-          <TextField
-            name="ueberlebensrate"
-            label="Überlebensrate (in Prozent)"
-            type="number"
-            value={row.ueberlebensrate}
-            saveToDb={saveToDb}
-            error={fieldErrors.ueberlebensrate}
-          />
-          <RadioButtonGroupWithInfo
-            name="entwicklung"
-            label="Entwicklung"
-            dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
-            loading={loading}
-            popover={TpopfeldkontrentwicklungPopover}
-            value={row.entwicklung}
-            saveToDb={saveToDb}
-            error={fieldErrors.entwicklung}
-          />
-          <TextField
-            name="ursachen"
-            label="Ursachen"
-            hintText="Standort: ..., Klima: ..., anderes: ..."
-            type="text"
-            multiLine
-            value={row.ursachen}
-            saveToDb={saveToDb}
-            error={fieldErrors.ursachen}
-          />
-          <TextField
-            name="gefaehrdung"
-            label="Gefährdung"
-            type="text"
-            multiLine
-            value={row.gefaehrdung}
-            saveToDb={saveToDb}
-            error={fieldErrors.gefaehrdung}
-          />
-          <TextField
-            name="erfolgsbeurteilung"
-            label="Erfolgsbeurteilung"
-            type="text"
-            multiLine
-            value={row.erfolgsbeurteilung}
-            saveToDb={saveToDb}
-            error={fieldErrors.erfolgsbeurteilung}
-          />
-          <TextField
-            name="umsetzungAendern"
-            label="Änderungs-Vorschläge Umsetzung"
-            type="text"
-            multiLine
-            value={row.umsetzungAendern}
-            saveToDb={saveToDb}
-            error={fieldErrors.umsetzungAendern}
-          />
-          <TextField
-            name="kontrolleAendern"
-            label="Änderungs-Vorschläge Kontrolle"
-            type="text"
-            multiLine
-            value={row.kontrolleAendern}
-            saveToDb={saveToDb}
-            error={fieldErrors.kontrolleAendern}
-          />
-          <MarkdownField
-            name="bemerkungen"
-            label="Bemerkungen"
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={fieldErrors.bemerkungen}
-          />
-          <Checkbox2States
-            name="apberNichtRelevant"
-            label="Im Jahresbericht nicht berücksichtigen"
-            value={row.apberNichtRelevant}
-            saveToDb={saveToDb}
-            error={fieldErrors.apberNichtRelevant}
-          />
-          <TextField
-            name="apberNichtRelevantGrund"
-            label="Wieso im Jahresbericht nicht berücksichtigen?"
-            type="text"
-            multiLine
-            value={row.apberNichtRelevantGrund}
-            saveToDb={saveToDb}
-            error={fieldErrors.apberNichtRelevantGrund}
-          />
-          <StringToCopy
-            text={row.id}
-            label="id"
-          />
-        </FormContainer>
-      </SimpleBar>
+      <FormContainer>
+        <TextField
+          name="jahr"
+          label="Jahr"
+          type="number"
+          value={row.jahr}
+          saveToDb={saveToDb}
+          error={fieldErrors.jahr}
+        />
+        <DateField
+          name="datum"
+          label="Datum"
+          value={row.datum}
+          saveToDb={saveToDb}
+          error={fieldErrors.datum}
+        />
+        <RadioButtonGroup
+          name="typ"
+          label="Kontrolltyp"
+          dataSource={tpopkontrTypWerte}
+          value={row.typ}
+          saveToDb={saveToDb}
+          error={fieldErrors.typ}
+        />
+        <Select
+          name="bearbeiter"
+          label="BearbeiterIn"
+          options={data?.allAdresses?.nodes ?? []}
+          loading={loading}
+          value={row.bearbeiter}
+          saveToDb={saveToDb}
+          error={fieldErrors.bearbeiter}
+        />
+        <JesNo
+          name="jungpflanzenVorhanden"
+          label="Jungpflanzen vorhanden"
+          value={row.jungpflanzenVorhanden}
+          saveToDb={saveToDb}
+          error={fieldErrors.jungpflanzenVorhanden}
+        />
+        <TextField
+          name="vitalitaet"
+          label="Vitalität"
+          type="text"
+          value={row.vitalitaet}
+          saveToDb={saveToDb}
+          error={fieldErrors.vitalitaet}
+        />
+        <TextField
+          name="ueberlebensrate"
+          label="Überlebensrate (in Prozent)"
+          type="number"
+          value={row.ueberlebensrate}
+          saveToDb={saveToDb}
+          error={fieldErrors.ueberlebensrate}
+        />
+        <RadioButtonGroupWithInfo
+          name="entwicklung"
+          label="Entwicklung"
+          dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
+          loading={loading}
+          popover={TpopfeldkontrentwicklungPopover}
+          value={row.entwicklung}
+          saveToDb={saveToDb}
+          error={fieldErrors.entwicklung}
+        />
+        <TextField
+          name="ursachen"
+          label="Ursachen"
+          hintText="Standort: ..., Klima: ..., anderes: ..."
+          type="text"
+          multiLine
+          value={row.ursachen}
+          saveToDb={saveToDb}
+          error={fieldErrors.ursachen}
+        />
+        <TextField
+          name="gefaehrdung"
+          label="Gefährdung"
+          type="text"
+          multiLine
+          value={row.gefaehrdung}
+          saveToDb={saveToDb}
+          error={fieldErrors.gefaehrdung}
+        />
+        <TextField
+          name="erfolgsbeurteilung"
+          label="Erfolgsbeurteilung"
+          type="text"
+          multiLine
+          value={row.erfolgsbeurteilung}
+          saveToDb={saveToDb}
+          error={fieldErrors.erfolgsbeurteilung}
+        />
+        <TextField
+          name="umsetzungAendern"
+          label="Änderungs-Vorschläge Umsetzung"
+          type="text"
+          multiLine
+          value={row.umsetzungAendern}
+          saveToDb={saveToDb}
+          error={fieldErrors.umsetzungAendern}
+        />
+        <TextField
+          name="kontrolleAendern"
+          label="Änderungs-Vorschläge Kontrolle"
+          type="text"
+          multiLine
+          value={row.kontrolleAendern}
+          saveToDb={saveToDb}
+          error={fieldErrors.kontrolleAendern}
+        />
+        <MarkdownField
+          name="bemerkungen"
+          label="Bemerkungen"
+          value={row.bemerkungen}
+          saveToDb={saveToDb}
+          error={fieldErrors.bemerkungen}
+        />
+        <Checkbox2States
+          name="apberNichtRelevant"
+          label="Im Jahresbericht nicht berücksichtigen"
+          value={row.apberNichtRelevant}
+          saveToDb={saveToDb}
+          error={fieldErrors.apberNichtRelevant}
+        />
+        <TextField
+          name="apberNichtRelevantGrund"
+          label="Wieso im Jahresbericht nicht berücksichtigen?"
+          type="text"
+          multiLine
+          value={row.apberNichtRelevantGrund}
+          saveToDb={saveToDb}
+          error={fieldErrors.apberNichtRelevantGrund}
+        />
+        <StringToCopy
+          text={row.id}
+          label="id"
+        />
+      </FormContainer>
     </ErrorBoundary>
   )
 })

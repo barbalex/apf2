@@ -23,15 +23,19 @@ import {
 import { Uploader } from '../Uploader/index.jsx'
 import { UploaderContext } from '../../../UploaderContext.js'
 import { StoreContext } from '../../../storeContext.js'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu/index.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const OutletContainer = styled.div`
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `
 
 const fragmentObject = {
@@ -187,9 +191,7 @@ export const FilesRouter = memo(
           />
           <OutletContainer>
             <Suspense fallback={<Spinner />}>
-              <Outlet
-                context={{ files, parent, parentId, refetch, containerRef }}
-              />
+              <Outlet context={{ files, parent, refetch }} />
             </Suspense>
           </OutletContainer>
         </Container>

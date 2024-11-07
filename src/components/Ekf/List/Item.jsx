@@ -31,7 +31,7 @@ const InnerContainer = styled.div`
   }
 `
 
-export const Item = ({ projektCount, style, row }) => {
+export const Item = ({ projektCount, row }) => {
   const { search } = useLocation()
   const { ekfId, userId, ekfYear } = useParams()
   const navigate = useNavigate()
@@ -45,7 +45,6 @@ export const Item = ({ projektCount, style, row }) => {
 
   return (
     <OuterContainer
-      style={style}
       onClick={onClick}
       active={ekfId === row.id}
       height={innerContainerHeight}

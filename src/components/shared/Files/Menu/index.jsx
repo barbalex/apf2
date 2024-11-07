@@ -27,13 +27,13 @@ import {
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import screenfull from 'screenfull'
 
-import { ErrorBoundary } from '../ErrorBoundary.jsx'
-import { MenuBar } from '../MenuBar/index.jsx'
+import { ErrorBoundary } from '../../ErrorBoundary.jsx'
+import { MenuBar } from '../../MenuBar/index.jsx'
+import { Title } from './Title.jsx'
+import { UploaderContext } from '../../../../UploaderContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
-import { UploaderContext } from '../../../UploaderContext.js'
-import { StoreContext } from '../../../storeContext.js'
-
-const MenuTitle = styled.h3`
+export const MenuTitle = styled.h3`
   padding-top: 8px;
   padding-left: 15px;
   padding-right: 16px;
@@ -56,6 +56,8 @@ export const Menu = memo(
     const api = uploaderCtx?.current?.getAPI?.()
 
     const firstFileId = files?.[0]?.fileId
+    const file = files.find((f) => f.fileId === fileId)
+    const index = files.findIndex((f) => f.fileId === fileId)
 
     const onClickPreview = useCallback(() => {
       navigate(`${firstFileId}/Vorschau`)
@@ -73,9 +75,6 @@ export const Menu = memo(
       const indexOfFileInPathname = pathname.indexOf(fileId)
       // delete file with fileId
       // first get fileId of next file to navigate to it after deleting this one
-      // get index of current file in files
-      const index = files.findIndex((file) => file.fileId === fileId)
-      const file = files[index]
       // get file to navigate to after deleting this one
       const nextFile = files[index + 1]
       const prevFile = files[index - 1]
@@ -115,23 +114,27 @@ export const Menu = memo(
       setDelMenuAnchorEl(null)
       refetch()
       navigate(nextPathname)
-    }, [fileId, files, client, parent, pathname])
+    }, [
+      fileId,
+      files,
+      client,
+      parent,
+      pathname,
+      index,
+      refetch,
+      store,
+      navigate,
+    ])
 
     const onClickNext = useCallback(() => {
-      // get index of current file in files
-      const index = files.findIndex((file) => file.fileId === fileId)
-      // get file to navigate to
       const nextFile = files[index + 1] ?? files[0]
       navigate(`${nextFile.fileId}/Vorschau`)
-    }, [fileId, files, navigate])
+    }, [fileId, files, navigate, index])
 
     const onClickPrev = useCallback(() => {
-      // get index of current file in files
-      const index = files.findIndex((file) => file.fileId === fileId)
-      // get file to navigate to
       const prevFile = files[index - 1] ?? files[files.length - 1]
       navigate(`${prevFile.fileId}/Vorschau`)
-    }, [fileId, files, navigate])
+    }, [fileId, files, navigate, index])
 
     // enable reacting to fullscreen changes
     const [isFullscreen, setIsFullscreen] = useState(false)
@@ -145,8 +148,6 @@ export const Menu = memo(
       [fileId],
     )
 
-    // BEWARE: functions passed into menus do not react to state changes
-    // unless they are added to the dependencies array
     const menus = useMemo(
       () => [
         <IconButton
@@ -167,6 +168,8 @@ export const Menu = memo(
       ],
       [onClickPreview],
     )
+    // need to ensure that all menus are on the top level
+    // so no <>, instead separate arrays
     const previewMenus = useMemo(
       () => [
         <IconButton
@@ -259,11 +262,20 @@ export const Menu = memo(
       ],
     )
 
+    const numbers = file ? `${index + 1}/${files.length}` : files.length
+    const titleComponentWidth = 60
+
     return (
       <ErrorBoundary>
         <MenuBar
-          isPreview={isPreview}
-          file={files.find((f) => f.fileId === fileId)}
+          rerenderer={`${isPreview}/${isFullscreen}`}
+          titleComponent={
+            <Title
+              file={file}
+              numbers={numbers}
+            />
+          }
+          titleComponentWidth={titleComponentWidth}
         >
           {isPreview ? previewMenus : menus}
         </MenuBar>

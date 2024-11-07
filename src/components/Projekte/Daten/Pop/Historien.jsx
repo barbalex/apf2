@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
 import styled from '@emotion/styled'
-import SimpleBar from 'simplebar-react'
 import { useQuery, gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
@@ -71,23 +70,12 @@ const query = gql`
   }
 `
 
-const InnerContainer = styled.div`
+const Container = styled.div`
   padding: 8px 25px 0 25px;
-  height: 100%;
-  .slick-prev:before,
-  .slick-next:before,
-  .slick-dots li button:before {
-    color: #4a148c;
-  }
-  .slick-prev {
-    left: -20px;
-  }
-  .slick-next {
-    right: -20px;
-  }
-  .slick-dots {
-    bottom: -10px;
-  }
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
 `
 const ErrorContainer = styled.div`
   padding: 25px;
@@ -136,79 +124,73 @@ export const Component = () => {
   }
 
   return (
-    <SimpleBar
-      style={simplebarStyle}
-      tabIndex={-1}
-    >
-      <InnerContainer>
-        <DocLine>
-          Jährlich historisierte Daten der Population (
-          <DocLink onClick={openDocs}>Dokumentation</DocLink>
-          ).
-        </DocLine>
-        <DocLine>
-          <Aenderung>Änderungen</Aenderung> zum{' '}
-          <Aktuell>aktuellen Zustand</Aktuell> sind hervorgehoben.
-        </DocLine>
-        {rows.map((r) => {
-          const dataArray = [
-            {
-              valueInRow:
-                row?.apByApId?.aeTaxonomyByArtId?.artname ?? row?.apId,
-              valueInHist: r?.apByApId?.aeTaxonomyByArtId?.artname ?? r?.apId,
-              label: 'Art',
-            },
-            {
-              valueInRow: row?.nr,
-              valueInHist: r?.nr,
-              label: 'Nr.',
-            },
-            {
-              valueInRow: row?.name,
-              valueInHist: r?.name,
-              label: 'Name',
-            },
-            {
-              valueInRow: row?.bekanntSeit,
-              valueInHist: r?.bekanntSeit,
-              label: 'bekannt seit',
-            },
-            {
-              valueInRow: row?.popStatusWerteByStatus?.text ?? row?.status,
-              valueInHist: r?.popStatusWerteByStatus?.text ?? r?.status,
-              label: 'Status',
-            },
-            {
-              valueInRow: row?.statusUnklar,
-              valueInHist: r?.statusUnklar,
-              label: 'Status unklar',
-            },
-            {
-              valueInRow: row?.statusUnklarBegruendung,
-              valueInHist: r?.statusUnklarBegruendung,
-              label: 'Begründung (für Status unklar)',
-            },
-            {
-              valueInRow: row?.geomPoint?.x,
-              valueInHist: r?.geomPoint?.x,
-              label: 'Längengrad',
-            },
-            {
-              valueInRow: row?.geomPoint?.y,
-              valueInHist: r?.geomPoint?.y,
-              label: 'Breitengrad',
-            },
-          ]
+    <Container>
+      <DocLine>
+        Jährlich historisierte Daten der Population (
+        <DocLink onClick={openDocs}>Dokumentation</DocLink>
+        ).
+      </DocLine>
+      <DocLine>
+        <Aenderung>Änderungen</Aenderung> zum{' '}
+        <Aktuell>aktuellen Zustand</Aktuell> sind hervorgehoben.
+      </DocLine>
+      {rows.map((r) => {
+        const dataArray = [
+          {
+            valueInRow: row?.apByApId?.aeTaxonomyByArtId?.artname ?? row?.apId,
+            valueInHist: r?.apByApId?.aeTaxonomyByArtId?.artname ?? r?.apId,
+            label: 'Art',
+          },
+          {
+            valueInRow: row?.nr,
+            valueInHist: r?.nr,
+            label: 'Nr.',
+          },
+          {
+            valueInRow: row?.name,
+            valueInHist: r?.name,
+            label: 'Name',
+          },
+          {
+            valueInRow: row?.bekanntSeit,
+            valueInHist: r?.bekanntSeit,
+            label: 'bekannt seit',
+          },
+          {
+            valueInRow: row?.popStatusWerteByStatus?.text ?? row?.status,
+            valueInHist: r?.popStatusWerteByStatus?.text ?? r?.status,
+            label: 'Status',
+          },
+          {
+            valueInRow: row?.statusUnklar,
+            valueInHist: r?.statusUnklar,
+            label: 'Status unklar',
+          },
+          {
+            valueInRow: row?.statusUnklarBegruendung,
+            valueInHist: r?.statusUnklarBegruendung,
+            label: 'Begründung (für Status unklar)',
+          },
+          {
+            valueInRow: row?.geomPoint?.x,
+            valueInHist: r?.geomPoint?.x,
+            label: 'Längengrad',
+          },
+          {
+            valueInRow: row?.geomPoint?.y,
+            valueInHist: r?.geomPoint?.y,
+            label: 'Breitengrad',
+          },
+        ]
 
-          return (
-            <HistoryComponent
-              key={`${r.id}${r.year}`}
-              year={r?.year}
-              dataArray={dataArray}
-            />
-          )
-        })}
-      </InnerContainer>
-    </SimpleBar>
+        return (
+          <HistoryComponent
+            key={`${r.id}${r.year}`}
+            year={r?.year}
+            dataArray={dataArray}
+          />
+        )
+      })}
+    </Container>
   )
 }

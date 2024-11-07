@@ -23,7 +23,7 @@ const Image = styled.img`
 `
 const TextDiv = styled.div`
   align-self: center;
-  padding-top: 2em;
+  padding: 2em 1em;
 `
 const imageStyle = {
   objectFit: 'contain',
@@ -31,8 +31,7 @@ const imageStyle = {
 }
 
 export const Component = memo(() => {
-  // containerRef is will be passed to the FullscreenControl
-  const { parentId, parent, files, containerRef } = useOutletContext()
+  const { files } = useOutletContext()
   const { fileId } = useParams()
   const previewRef = useRef(null)
 

@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import { jwtDecode } from 'jwt-decode'
 import { format } from 'date-fns/format'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
@@ -23,18 +22,17 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { historize } from '../../../../modules/historize.js'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  // overflow: hidden;
+  overflow: hidden;
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
   scrollbar-width: thin;
-  // height: calc(100% - 39px);
   flex-grow: 1;
 `
 const HistorizeButton = styled(Button)`
@@ -190,71 +188,64 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="AP-Bericht Jahresübersicht" />
+        <Menu row={row} />
         <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FormContainer>
-              <TextField
-                name="jahr"
-                label="Jahr"
-                type="number"
-                value={row.jahr}
-                saveToDb={saveToDb}
-                error={fieldErrors.jahr}
+          <FormContainer>
+            <TextField
+              name="jahr"
+              label="Jahr"
+              type="number"
+              value={row.jahr}
+              saveToDb={saveToDb}
+              error={fieldErrors.jahr}
+            />
+            {!!row.historyDate && (
+              <TextFieldNonUpdatable
+                value={format(new Date(row.historyDate), 'dd.MM.yyyy')}
+                label="Datum, an dem Arten, Pop und TPop historisiert wurden"
               />
-              {!!row.historyDate && (
-                <TextFieldNonUpdatable
-                  value={format(new Date(row.historyDate), 'dd.MM.yyyy')}
-                  label="Datum, an dem Arten, Pop und TPop historisiert wurden"
-                />
-              )}
-              {showHistorize && (
-                <>
-                  <HistorizeButton
-                    variant="outlined"
-                    onClick={onClickHistorize}
-                    title="historisieren"
-                    color="inherit"
-                    data-historizing={historizing}
-                    disabled={historizing || row?.historyFixed}
-                  >
-                    <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
-                    <Explainer>
-                      {historizing ?
-                        'Bitte warten, das dauert eine Weile...'
-                      : <>
-                          Diese Option ist nur sichtbar:
-                          <br /> 1. Wenn der Benutzer Manager ist
-                          <br /> 2. Von Beginn des Berichtjahrs bis zum März des
-                          Folgejahrs
-                        </>
-                      }
-                    </Explainer>
-                  </HistorizeButton>
-                </>
-              )}
-              <Checkbox2States
-                label="Historisierung fixieren"
-                name="historyFixed"
-                value={row?.historyFixed}
-                saveToDb={saveToDb}
-                helperText="Bewahrt die letze Historisierung als offiziellen Jahresbericht"
-                disabled={!row?.historyDate}
-              />
-              <MarkdownField
-                name="bemerkungen"
-                label="Bemerkungen"
-                value={row.bemerkungen}
-                saveToDb={saveToDb}
-                error={fieldErrors.bemerkungen}
-              />
-            </FormContainer>
-          </SimpleBar>
+            )}
+            {showHistorize && (
+              <>
+                <HistorizeButton
+                  variant="outlined"
+                  onClick={onClickHistorize}
+                  title="historisieren"
+                  color="inherit"
+                  data-historizing={historizing}
+                  disabled={historizing || row?.historyFixed}
+                >
+                  <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
+                  <Explainer>
+                    {historizing ?
+                      'Bitte warten, das dauert eine Weile...'
+                    : <>
+                        Diese Option ist nur sichtbar:
+                        <br /> 1. Wenn der Benutzer Manager ist
+                        <br /> 2. Von Beginn des Berichtjahrs bis zum März des
+                        Folgejahrs
+                      </>
+                    }
+                  </Explainer>
+                </HistorizeButton>
+              </>
+            )}
+            <Checkbox2States
+              label="Historisierung fixieren"
+              name="historyFixed"
+              value={row?.historyFixed}
+              saveToDb={saveToDb}
+              helperText="Bewahrt die letze Historisierung als offiziellen Jahresbericht"
+              disabled={!row?.historyDate}
+            />
+            <MarkdownField
+              name="bemerkungen"
+              label="Bemerkungen"
+              value={row.bemerkungen}
+              saveToDb={saveToDb}
+              error={fieldErrors.bemerkungen}
+            />
+          </FormContainer>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

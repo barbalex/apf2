@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import max from 'lodash/max'
 import { useQuery } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
 import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'
@@ -12,7 +11,13 @@ import { query } from './query.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 
-const FormContainerNoColumnsInner = styled.div`
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
   padding: 10px;
   padding-bottom: 35px;
 `
@@ -57,56 +62,44 @@ export const Ek = ({ saveToDb, row, fieldErrors }) => {
   if (!row) return null
 
   return (
-    <SimpleBar
-      style={{
-        maxHeight: '100%',
-        height: '100%',
-        width: '100%',
-        maxWidth: '100%',
-      }}
-      tabIndex={-1}
-    >
-      <ErrorBoundary>
-        <>
-          <FormContainerNoColumnsInner>
-            <EkfrequenzOptionsContainer>
-              <RadioButtonGroup
-                name="ekfrequenz"
-                dataSource={ekfrequenzOptions}
-                loading={loadingEk}
-                label="EK-Frequenz"
-                value={row.ekfrequenz}
-                saveToDb={saveToDb}
-                error={fieldErrors.ekfrequenz}
-              />
-            </EkfrequenzOptionsContainer>
-            <Checkbox2States
-              name="ekfrequenzAbweichend"
-              label="EK-Frequenz abweichend"
-              value={row.ekfrequenzAbweichend}
-              saveToDb={saveToDb}
-              error={fieldErrors.ekfrequenzAbweichend}
-            />
-            <TextField
-              name="ekfrequenzStartjahr"
-              label="Startjahr"
-              type="number"
-              value={row.ekfrequenzStartjahr}
-              saveToDb={saveToDb}
-              error={fieldErrors.ekfrequenzStartjahr}
-            />
-            <Select
-              name="ekfKontrolleur"
-              label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
-              options={dataEk?.allAdresses?.nodes ?? []}
-              loading={loadingEk}
-              value={row.ekfKontrolleur}
-              saveToDb={saveToDb}
-              error={fieldErrors.ekfKontrolleur}
-            />
-          </FormContainerNoColumnsInner>
-        </>
-      </ErrorBoundary>
-    </SimpleBar>
+    <ErrorBoundary>
+      <Container>
+        <EkfrequenzOptionsContainer>
+          <RadioButtonGroup
+            name="ekfrequenz"
+            dataSource={ekfrequenzOptions}
+            loading={loadingEk}
+            label="EK-Frequenz"
+            value={row.ekfrequenz}
+            saveToDb={saveToDb}
+            error={fieldErrors.ekfrequenz}
+          />
+        </EkfrequenzOptionsContainer>
+        <Checkbox2States
+          name="ekfrequenzAbweichend"
+          label="EK-Frequenz abweichend"
+          value={row.ekfrequenzAbweichend}
+          saveToDb={saveToDb}
+          error={fieldErrors.ekfrequenzAbweichend}
+        />
+        <TextField
+          name="ekfrequenzStartjahr"
+          label="Startjahr"
+          type="number"
+          value={row.ekfrequenzStartjahr}
+          saveToDb={saveToDb}
+          error={fieldErrors.ekfrequenzStartjahr}
+        />
+        <Select
+          name="ekfKontrolleur"
+          label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
+          options={dataEk?.allAdresses?.nodes ?? []}
+          loading={loadingEk}
+          value={row.ekfKontrolleur}
+          saveToDb={saveToDb}
+          error={fieldErrors.ekfKontrolleur}
+        />
+      </Container>
+    </ErrorBoundary>
   )
 }

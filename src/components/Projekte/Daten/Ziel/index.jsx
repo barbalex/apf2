@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
@@ -25,11 +24,13 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const FieldsContainer = styled.div`
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -144,44 +145,34 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Ziel" />
-        <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FormContainer>
-              <TextField
-                name="jahr"
-                label="Jahr"
-                type="number"
-                value={row.jahr}
-                saveToDb={saveToDb}
-                error={fieldErrors.jahr}
-              />
-              <RadioButtonGroup
-                name="typ"
-                label="Zieltyp"
-                dataSource={data?.allZielTypWertes?.nodes ?? []}
-                loading={loading}
-                value={row.typ}
-                saveToDb={saveToDb}
-                error={fieldErrors.typ}
-              />
-              <TextField
-                name="bezeichnung"
-                label="Ziel"
-                type="text"
-                multiLine
-                value={row.bezeichnung}
-                saveToDb={saveToDb}
-                error={fieldErrors.bezeichnung}
-              />
-            </FormContainer>
-          </SimpleBar>
-        </FieldsContainer>
+        <FormContainer>
+          <TextField
+            name="jahr"
+            label="Jahr"
+            type="number"
+            value={row.jahr}
+            saveToDb={saveToDb}
+            error={fieldErrors.jahr}
+          />
+          <RadioButtonGroup
+            name="typ"
+            label="Zieltyp"
+            dataSource={data?.allZielTypWertes?.nodes ?? []}
+            loading={loading}
+            value={row.typ}
+            saveToDb={saveToDb}
+            error={fieldErrors.typ}
+          />
+          <TextField
+            name="bezeichnung"
+            label="Ziel"
+            type="text"
+            multiLine
+            value={row.bezeichnung}
+            saveToDb={saveToDb}
+            error={fieldErrors.bezeichnung}
+          />
+        </FormContainer>
       </Container>
     </ErrorBoundary>
   )

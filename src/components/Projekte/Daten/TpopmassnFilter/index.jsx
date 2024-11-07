@@ -2,7 +2,6 @@ import { useCallback, useContext, useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
@@ -30,6 +29,10 @@ const Container = styled.div`
   background-color: #ffd3a7;
 `
 const FormScrollContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
 `
@@ -143,8 +146,8 @@ export const TpopmassnFilter = observer(() => {
   if (error) return <Error error={error} />
 
   return (
-    <Container>
-      <ErrorBoundary>
+    <ErrorBoundary>
+      <Container>
         <FilterTitle
           title="Massnahmen"
           table="tpopmassn"
@@ -186,173 +189,165 @@ export const TpopmassnFilter = observer(() => {
           setActiveTab={setActiveTab}
         />
         <FormScrollContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <ColumnContainer>
-              <TextField
-                name="jahr"
-                label="Jahr"
-                type="number"
-                value={row?.jahr}
-                saveToDb={saveToDb}
-              />
-              <DateField
-                name="datum"
-                label="Datum"
-                value={row?.datum}
-                saveToDb={saveToDb}
-              />
-              <RadioButtonGroup
-                name="typ"
-                label="Typ"
-                dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
-                loading={loading}
-                value={row?.typ}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="beschreibung"
-                label="Massnahme"
-                type="text"
-                value={row?.beschreibung}
-                saveToDb={saveToDb}
-              />
-              <Select
-                name="bearbeiter"
-                label="BearbeiterIn"
-                options={data?.allAdresses?.nodes ?? []}
-                loading={loading}
-                value={row?.bearbeiter}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="bemerkungen"
-                label="Bemerkungen"
-                type="text"
-                multiLine
-                value={row?.bemerkungen}
-                saveToDb={saveToDb}
-              />
-              <Checkbox2States
-                name="planVorhanden"
-                label="Plan vorhanden"
-                value={row?.planVorhanden}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="planBezeichnung"
-                label="Plan Bezeichnung"
-                type="text"
-                value={row?.planBezeichnung}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="flaeche"
-                label="Fläche (m2)"
-                type="number"
-                value={row?.flaeche}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="form"
-                label="Form der Ansiedlung"
-                type="text"
-                value={row?.form}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="pflanzanordnung"
-                label="Pflanzanordnung"
-                type="text"
-                value={row?.pflanzanordnung}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="markierung"
-                label="Markierung"
-                type="text"
-                value={row?.markierung}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="anzTriebe"
-                label="Anzahl Triebe"
-                type="number"
-                value={row?.anzTriebe}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="anzPflanzen"
-                label="Anzahl Pflanzen"
-                type="number"
-                value={row?.anzPflanzen}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="anzPflanzstellen"
-                label="Anzahl Pflanzstellen"
-                type="number"
-                value={row?.anzPflanzstellen}
-                saveToDb={saveToDb}
-              />
-              {isAnpflanzung && (
-                <>
-                  <Select
-                    name="zieleinheitEinheit"
-                    label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
-                    options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
-                    loading={loading}
-                    value={row?.zieleinheitEinheit}
-                    saveToDb={saveToDb}
-                  />
-                  <TextField
-                    name="zieleinheitAnzahl"
-                    label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
-                    type="number"
-                    value={row?.zieleinheitAnzahl}
-                    saveToDb={saveToDb}
-                  />
-                </>
-              )}
-              <SelectLoadingOptionsTypable
-                field="wirtspflanze"
-                label="Wirtspflanze"
-                query={queryAeTaxonomies}
-                queryNodesName="allAeTaxonomies"
-                value={row?.wirtspflanze}
-                saveToDb={saveToDb}
-                row={row}
-              />
-              <TextField
-                name="herkunftPop"
-                label="Herkunftspopulation"
-                type="text"
-                value={row?.herkunftPop}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="sammeldatum"
-                label="Sammeldatum"
-                type="text"
-                value={row?.sammeldatum}
-                saveToDb={saveToDb}
-              />
-              <TextField
-                name="vonAnzahlIndividuen"
-                label="Anzahl besammelte Individuen der Herkunftspopulation"
-                type="number"
-                value={row?.vonAnzahlIndividuen}
-                saveToDb={saveToDb}
-              />
-            </ColumnContainer>
-          </SimpleBar>
+          <ColumnContainer>
+            <TextField
+              name="jahr"
+              label="Jahr"
+              type="number"
+              value={row?.jahr}
+              saveToDb={saveToDb}
+            />
+            <DateField
+              name="datum"
+              label="Datum"
+              value={row?.datum}
+              saveToDb={saveToDb}
+            />
+            <RadioButtonGroup
+              name="typ"
+              label="Typ"
+              dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
+              loading={loading}
+              value={row?.typ}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="beschreibung"
+              label="Massnahme"
+              type="text"
+              value={row?.beschreibung}
+              saveToDb={saveToDb}
+            />
+            <Select
+              name="bearbeiter"
+              label="BearbeiterIn"
+              options={data?.allAdresses?.nodes ?? []}
+              loading={loading}
+              value={row?.bearbeiter}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="bemerkungen"
+              label="Bemerkungen"
+              type="text"
+              multiLine
+              value={row?.bemerkungen}
+              saveToDb={saveToDb}
+            />
+            <Checkbox2States
+              name="planVorhanden"
+              label="Plan vorhanden"
+              value={row?.planVorhanden}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="planBezeichnung"
+              label="Plan Bezeichnung"
+              type="text"
+              value={row?.planBezeichnung}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="flaeche"
+              label="Fläche (m2)"
+              type="number"
+              value={row?.flaeche}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="form"
+              label="Form der Ansiedlung"
+              type="text"
+              value={row?.form}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="pflanzanordnung"
+              label="Pflanzanordnung"
+              type="text"
+              value={row?.pflanzanordnung}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="markierung"
+              label="Markierung"
+              type="text"
+              value={row?.markierung}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="anzTriebe"
+              label="Anzahl Triebe"
+              type="number"
+              value={row?.anzTriebe}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="anzPflanzen"
+              label="Anzahl Pflanzen"
+              type="number"
+              value={row?.anzPflanzen}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="anzPflanzstellen"
+              label="Anzahl Pflanzstellen"
+              type="number"
+              value={row?.anzPflanzstellen}
+              saveToDb={saveToDb}
+            />
+            {isAnpflanzung && (
+              <>
+                <Select
+                  name="zieleinheitEinheit"
+                  label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
+                  options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
+                  loading={loading}
+                  value={row?.zieleinheitEinheit}
+                  saveToDb={saveToDb}
+                />
+                <TextField
+                  name="zieleinheitAnzahl"
+                  label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
+                  type="number"
+                  value={row?.zieleinheitAnzahl}
+                  saveToDb={saveToDb}
+                />
+              </>
+            )}
+            <SelectLoadingOptionsTypable
+              field="wirtspflanze"
+              label="Wirtspflanze"
+              query={queryAeTaxonomies}
+              queryNodesName="allAeTaxonomies"
+              value={row?.wirtspflanze}
+              saveToDb={saveToDb}
+              row={row}
+            />
+            <TextField
+              name="herkunftPop"
+              label="Herkunftspopulation"
+              type="text"
+              value={row?.herkunftPop}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="sammeldatum"
+              label="Sammeldatum"
+              type="text"
+              value={row?.sammeldatum}
+              saveToDb={saveToDb}
+            />
+            <TextField
+              name="vonAnzahlIndividuen"
+              label="Anzahl besammelte Individuen der Herkunftspopulation"
+              type="number"
+              value={row?.vonAnzahlIndividuen}
+              saveToDb={saveToDb}
+            />
+          </ColumnContainer>
         </FormScrollContainer>
-      </ErrorBoundary>
-    </Container>
+      </Container>
+    </ErrorBoundary>
   )
 })

@@ -10,7 +10,6 @@ import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams, useLocation, Link } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -37,10 +36,12 @@ const Container = styled.div`
   overflow: hidden;
 `
 const ScrollContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const StyledForm = styled.div`
   padding: 10px;
 `
 const StyledInput = styled(Input)`
@@ -347,145 +348,135 @@ export const Component = observer(() => {
           }
         />
         <ScrollContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <StyledForm>
-              <TextField2
-                key={`${row.id}name`}
-                name="name"
-                label="Name (nur von Managern veränderbar)"
-                row={row}
-                saveToDb={saveToDb}
-                errors={errors}
+          <TextField2
+            key={`${row.id}name`}
+            name="name"
+            label="Name (nur von Managern veränderbar)"
+            row={row}
+            saveToDb={saveToDb}
+            errors={errors}
+          />
+          <TextField2
+            key={`${row.id}email`}
+            name="email"
+            label="Email"
+            row={row}
+            saveToDb={saveToDb}
+            errors={errors}
+            helperText="Bitte email aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
+          />
+          <RadioButtonGroup
+            key={`${row.id}role`}
+            name="role"
+            value={row.role}
+            dataSource={roleWerte}
+            saveToDb={saveToDb}
+            error={errors.role}
+            label="Rolle (nur von Managern veränderbar)"
+          />
+          <Select
+            key={`${row.id}adresseId`}
+            name="adresseId"
+            value={row.adresseId}
+            field="adresseId"
+            label="Zugehörige Adresse"
+            options={data?.allAdresses?.nodes ?? []}
+            loading={loading}
+            saveToDb={saveToDb}
+            error={errors.adresseId}
+          />
+          {!!passwordMessage && (
+            <PasswordMessage>{passwordMessage}</PasswordMessage>
+          )}
+          {(editPassword || errors.pass) && (
+            <FormControl
+              error={!!passwordErrorText}
+              fullWidth
+              aria-describedby="passwortHelper"
+              variant="standard"
+            >
+              <InputLabel htmlFor="passwort">Neues Passwort</InputLabel>
+              <StyledInput
+                id="passwort"
+                name="pass"
+                type={showPass ? 'text' : 'password'}
+                defaultValue={password}
+                onBlur={onBlurPassword}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    onBlurPassword(e)
+                  }
+                }}
+                autoComplete="current-password"
+                autoCorrect="off"
+                spellCheck="false"
+                error={!!errors.pass}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPass(!showPass)}
+                      onMouseDown={(e) => e.preventDefault()}
+                      title={showPass ? 'verstecken' : 'anzeigen'}
+                      size="large"
+                    >
+                      {showPass ?
+                        <MdVisibilityOff />
+                      : <MdVisibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
-              <TextField2
-                key={`${row.id}email`}
-                name="email"
-                label="Email"
-                row={row}
-                saveToDb={saveToDb}
-                errors={errors}
-                helperText="Bitte email aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
+              <FormHelperText id="passwortHelper">
+                {passwordErrorText || (errors && !!errors.pass) ?
+                  errors.pass
+                : 'Passwort muss mindestens 6 Zeichen lang sein und darf keine Zahl sein'
+                }
+              </FormHelperText>
+            </FormControl>
+          )}
+          {(editPassword || errors.pass) && !!password && (
+            <FormControl
+              error={!!password2ErrorText}
+              fullWidth
+              aria-describedby="passwortHelper"
+              variant="standard"
+            >
+              <InputLabel htmlFor="passwort">
+                Neues Passwort wiederholen
+              </InputLabel>
+              <StyledInput
+                id="passwort2"
+                name="pass"
+                type={showPass2 ? 'text' : 'password'}
+                defaultValue={password2}
+                onBlur={onBlurPassword2}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    onBlurPassword(e)
+                  }
+                }}
+                autoCorrect="off"
+                spellCheck="false"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPass2(!showPass2)}
+                      onMouseDown={(e) => e.preventDefault()}
+                      title={showPass2 ? 'verstecken' : 'anzeigen'}
+                      size="large"
+                    >
+                      {showPass2 ?
+                        <MdVisibilityOff />
+                      : <MdVisibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
-              <RadioButtonGroup
-                key={`${row.id}role`}
-                name="role"
-                value={row.role}
-                dataSource={roleWerte}
-                saveToDb={saveToDb}
-                error={errors.role}
-                label="Rolle (nur von Managern veränderbar)"
-              />
-              <Select
-                key={`${row.id}adresseId`}
-                name="adresseId"
-                value={row.adresseId}
-                field="adresseId"
-                label="Zugehörige Adresse"
-                options={data?.allAdresses?.nodes ?? []}
-                loading={loading}
-                saveToDb={saveToDb}
-                error={errors.adresseId}
-              />
-              {!!passwordMessage && (
-                <PasswordMessage>{passwordMessage}</PasswordMessage>
-              )}
-              {(editPassword || errors.pass) && (
-                <FormControl
-                  error={!!passwordErrorText}
-                  fullWidth
-                  aria-describedby="passwortHelper"
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="passwort">Neues Passwort</InputLabel>
-                  <StyledInput
-                    id="passwort"
-                    name="pass"
-                    type={showPass ? 'text' : 'password'}
-                    defaultValue={password}
-                    onBlur={onBlurPassword}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        onBlurPassword(e)
-                      }
-                    }}
-                    autoComplete="current-password"
-                    autoCorrect="off"
-                    spellCheck="false"
-                    error={!!errors.pass}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPass(!showPass)}
-                          onMouseDown={(e) => e.preventDefault()}
-                          title={showPass ? 'verstecken' : 'anzeigen'}
-                          size="large"
-                        >
-                          {showPass ?
-                            <MdVisibilityOff />
-                          : <MdVisibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText id="passwortHelper">
-                    {passwordErrorText || (errors && !!errors.pass) ?
-                      errors.pass
-                    : 'Passwort muss mindestens 6 Zeichen lang sein und darf keine Zahl sein'
-                    }
-                  </FormHelperText>
-                </FormControl>
-              )}
-              {(editPassword || errors.pass) && !!password && (
-                <FormControl
-                  error={!!password2ErrorText}
-                  fullWidth
-                  aria-describedby="passwortHelper"
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="passwort">
-                    Neues Passwort wiederholen
-                  </InputLabel>
-                  <StyledInput
-                    id="passwort2"
-                    name="pass"
-                    type={showPass2 ? 'text' : 'password'}
-                    defaultValue={password2}
-                    onBlur={onBlurPassword2}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        onBlurPassword(e)
-                      }
-                    }}
-                    autoCorrect="off"
-                    spellCheck="false"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPass2(!showPass2)}
-                          onMouseDown={(e) => e.preventDefault()}
-                          title={showPass2 ? 'verstecken' : 'anzeigen'}
-                          size="large"
-                        >
-                          {showPass2 ?
-                            <MdVisibilityOff />
-                          : <MdVisibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                  <FormHelperText id="passwortHelper">
-                    {password2ErrorText}
-                  </FormHelperText>
-                </FormControl>
-              )}
-            </StyledForm>
-          </SimpleBar>
+              <FormHelperText id="passwortHelper">
+                {password2ErrorText}
+              </FormHelperText>
+            </FormControl>
+          )}
         </ScrollContainer>
       </Container>
     </ErrorBoundary>

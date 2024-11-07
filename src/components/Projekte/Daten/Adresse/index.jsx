@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -22,6 +21,7 @@ const Container = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const FormContainer = styled.div`
   padding: 10px;
@@ -110,55 +110,47 @@ export const Component = observer(() => {
       <Container>
         <FormTitle title="Adresse" />
         <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FormContainer>
-              <TextField
-                name="name"
-                label="Name"
-                type="text"
-                value={row.name}
-                saveToDb={saveToDb}
-                error={fieldErrors.name}
-              />
-              <TextField
-                name="adresse"
-                label="Adresse"
-                type="text"
-                value={row.adresse}
-                saveToDb={saveToDb}
-                error={fieldErrors.adresse}
-              />
-              <TextField
-                name="telefon"
-                label="Telefon"
-                type="text"
-                value={row.telefon}
-                saveToDb={saveToDb}
-                error={fieldErrors.telefon}
-              />
-              <TextField
-                name="email"
-                label="Email"
-                type="email"
-                value={row.email}
-                saveToDb={saveToDb}
-                error={fieldErrors.email}
-              />
-              <Checkbox2States
-                name="freiwErfko"
-                label="freiwillige ErfolgskontrolleurIn"
-                value={row.freiwErfko}
-                saveToDb={saveToDb}
-                error={fieldErrors.freiwErfko}
-              />
-            </FormContainer>
-          </SimpleBar>
+          <FormContainer>
+            <TextField
+              name="name"
+              label="Name"
+              type="text"
+              value={row.name}
+              saveToDb={saveToDb}
+              error={fieldErrors.name}
+            />
+            <TextField
+              name="adresse"
+              label="Adresse"
+              type="text"
+              value={row.adresse}
+              saveToDb={saveToDb}
+              error={fieldErrors.adresse}
+            />
+            <TextField
+              name="telefon"
+              label="Telefon"
+              type="text"
+              value={row.telefon}
+              saveToDb={saveToDb}
+              error={fieldErrors.telefon}
+            />
+            <TextField
+              name="email"
+              label="Email"
+              type="email"
+              value={row.email}
+              saveToDb={saveToDb}
+              error={fieldErrors.email}
+            />
+            <Checkbox2States
+              name="freiwErfko"
+              label="freiwillige ErfolgskontrolleurIn"
+              value={row.freiwErfko}
+              saveToDb={saveToDb}
+              error={fieldErrors.freiwErfko}
+            />
+          </FormContainer>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

@@ -55,6 +55,7 @@ export const GlobalStyle = () => (
       }
 
       /* newer syntax for firefox */
+      // somehow scrollbar-width is seen at lower levels but not applied !!??
       html {
         scrollbar-color: #2e7d32#F2FEF3;
         scrollbar-width: thin;
@@ -90,7 +91,7 @@ export const GlobalStyle = () => (
         color: rgb(46, 125, 50) !important;
         font-weight: 500 !important;
         border: 1px solid rgb(46, 125, 50) !important;
-        border-radius: 4px !important;  
+        border-radius: 4px !important;
       }
       .uploadcare uc-source-list button {
         color: oklch(0.21 0 0) !important;

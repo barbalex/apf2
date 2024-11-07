@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
 import styled from '@emotion/styled'
 import { Outlet } from 'react-router-dom'
-import SimpleBar from 'simplebar-react'
 
 import { Sidebar } from './Sidebar/index.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -80,16 +79,11 @@ export const Component = () => (
   <ErrorBoundary>
     <Container>
       <Sidebar />
-      <SimpleBar
-        style={{ height: '100%', width: '100%' }}
-        tabIndex={-1}
-      >
-        <Doku>
-          <Suspense fallback={<Spinner />}>
-            <Outlet />
-          </Suspense>
-        </Doku>
-      </SimpleBar>
+      <Doku>
+        <Suspense fallback={<Spinner />}>
+          <Outlet />
+        </Suspense>
+      </Doku>
     </Container>
   </ErrorBoundary>
 )

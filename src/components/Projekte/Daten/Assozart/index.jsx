@@ -2,7 +2,6 @@ import { useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -24,11 +23,13 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const FieldsContainer = styled.div`
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -139,38 +140,28 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container data-id="assozart">
         <FormTitle title="assoziierte Art" />
-        <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FormContainer>
-              <SelectLoadingOptions
-                field="aeId"
-                valueLabelPath="aeTaxonomyByAeId.taxArtName"
-                label="Art"
-                row={row}
-                query={queryAeTaxonomies}
-                filter={aeTaxonomiesfilter}
-                queryNodesName="allAeTaxonomies"
-                value={row.aeId}
-                saveToDb={saveToDb}
-                error={fieldErrors.aeId}
-              />
-              <TextField
-                name="bemerkungen"
-                label="Bemerkungen zur Assoziation"
-                type="text"
-                value={row.bemerkungen}
-                saveToDb={saveToDb}
-                error={fieldErrors.bemerkungen}
-              />
-            </FormContainer>
-          </SimpleBar>
-        </FieldsContainer>
+        <FormContainer>
+          <SelectLoadingOptions
+            field="aeId"
+            valueLabelPath="aeTaxonomyByAeId.taxArtName"
+            label="Art"
+            row={row}
+            query={queryAeTaxonomies}
+            filter={aeTaxonomiesfilter}
+            queryNodesName="allAeTaxonomies"
+            value={row.aeId}
+            saveToDb={saveToDb}
+            error={fieldErrors.aeId}
+          />
+          <TextField
+            name="bemerkungen"
+            label="Bemerkungen zur Assoziation"
+            type="text"
+            value={row.bemerkungen}
+            saveToDb={saveToDb}
+            error={fieldErrors.bemerkungen}
+          />
+        </FormContainer>
       </Container>
     </ErrorBoundary>
   )

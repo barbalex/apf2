@@ -1,8 +1,6 @@
-import { FixedSizeList as List } from 'react-window'
 import uniq from 'lodash/uniq'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import SimpleBar from 'simplebar-react'
 
 import { Item } from './Item.jsx'
 
@@ -11,43 +9,24 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
   border-right: 1px solid rgb(46, 125, 50);
   box-sizing: border-box !important;
-  .simplebar-content {
-    height: 100%;
-  }
-`
-const StyledSimplebar = styled(SimpleBar)`
-  overflow-x: hidden;
 `
 
 export const EkfList = observer(({ ekf }) => {
   const projektCount = uniq(ekf.map((e) => e.projekt)).length
-  const itemHeight = projektCount > 1 ? 110 : 91
 
   return (
     <Container>
-      <StyledSimplebar
-        style={{
-          maxHeight: '100%',
-          height: '100%',
-        }}
-      >
-        <List
-          height={ekf.length * itemHeight}
-          itemCount={ekf.length}
-          itemSize={itemHeight}
-          width={350}
-        >
-          {({ index, style }) => (
-            <Item
-              projektCount={projektCount}
-              style={style}
-              row={ekf[index]}
-            />
-          )}
-        </List>
-      </StyledSimplebar>
+      {ekf.map((ek) => (
+        <Item
+          key={ek.id}
+          projektCount={projektCount}
+          row={ek}
+        />
+      ))}
     </Container>
   )
 })

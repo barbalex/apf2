@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { useQuery, gql } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
@@ -19,6 +18,9 @@ const Container = styled.div`
   overflow: hidden;
 `
 const FieldsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   overflow-y: auto;
   scrollbar-width: thin;
 `
@@ -57,19 +59,11 @@ export const Component = () => {
       <Container>
         <FormTitle title="Aktueller Fehler" />
         <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
+          <Content
+            dangerouslySetInnerHTML={{
+              __html: mdParser.render(row.issue),
             }}
-            tabIndex={-1}
-          >
-            <Content
-              dangerouslySetInnerHTML={{
-                __html: mdParser.render(row.issue),
-              }}
-            />
-          </SimpleBar>
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
