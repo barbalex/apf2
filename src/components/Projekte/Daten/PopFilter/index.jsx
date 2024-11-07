@@ -2,7 +2,6 @@ import { useContext, useCallback, useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
 import { TextField } from '../../../shared/TextField.jsx'
@@ -25,7 +24,11 @@ const Container = styled.div`
   background-color: #ffd3a7;
 `
 const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   padding: 10px;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
 `
@@ -155,49 +158,41 @@ export const PopFilter = observer(() => {
           setActiveTab={setActiveTab}
         />
         <FormContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <TextField
-              label="Nr."
-              name="nr"
-              type="number"
-              value={row?.nr}
-              saveToDb={saveToDb}
-            />
-            <TextFieldWithInfo
-              label="Name"
-              name="name"
-              type="text"
-              popover="Dieses Feld möglichst immer ausfüllen"
-              value={row?.name}
-              saveToDb={saveToDb}
-            />
-            <Status
-              apJahr={row?.apByApId?.startJahr}
-              showFilter={true}
-              saveToDb={saveToDb}
-              row={row}
-            />
-            <Checkbox2States
-              label="Status unklar"
-              name="statusUnklar"
-              value={row?.statusUnklar}
-              saveToDb={saveToDb}
-            />
-            <TextField
-              label="Begründung"
-              name="statusUnklarBegruendung"
-              type="text"
-              multiLine
-              value={row?.statusUnklarBegruendung}
-              saveToDb={saveToDb}
-            />
-          </SimpleBar>
+          <TextField
+            label="Nr."
+            name="nr"
+            type="number"
+            value={row?.nr}
+            saveToDb={saveToDb}
+          />
+          <TextFieldWithInfo
+            label="Name"
+            name="name"
+            type="text"
+            popover="Dieses Feld möglichst immer ausfüllen"
+            value={row?.name}
+            saveToDb={saveToDb}
+          />
+          <Status
+            apJahr={row?.apByApId?.startJahr}
+            showFilter={true}
+            saveToDb={saveToDb}
+            row={row}
+          />
+          <Checkbox2States
+            label="Status unklar"
+            name="statusUnklar"
+            value={row?.statusUnklar}
+            saveToDb={saveToDb}
+          />
+          <TextField
+            label="Begründung"
+            name="statusUnklarBegruendung"
+            type="text"
+            multiLine
+            value={row?.statusUnklarBegruendung}
+            saveToDb={saveToDb}
+          />
         </FormContainer>
       </Container>
     </ErrorBoundary>

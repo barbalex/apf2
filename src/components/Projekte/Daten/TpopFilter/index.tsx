@@ -24,20 +24,8 @@ const Container = styled.div`
   overflow: hidden;
   background-color: #ffd3a7;
 `
-const FieldsContainer = styled.div`
-  height: 100%;
-  overflow: hidden !important;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  fieldset {
-    padding-right: 30px;
-  }
-`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
-`
-const TabContent = styled.div`
-  height: calc(100% - 48px);
 `
 
 export const TpopFilter = observer(() => {
@@ -95,42 +83,38 @@ export const TpopFilter = observer(() => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
-        <FieldsContainer>
-          <MuiTabs
-            value={tab}
-            onChange={onChangeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <StyledTab
-              label="Teil-Population"
-              value="tpop"
-              data-id="tpop"
-            />
-            <StyledTab
-              label="EK"
-              value="ek"
-              data-id="ek"
-            />
-          </MuiTabs>
-          <TabContent>
-            {tab === 'tpop' ?
-              <Tpop
-                saveToDb={saveToDb}
-                fieldErrors={fieldErrors}
-                setFieldErrors={setFieldErrors}
-                row={row}
-                rowStringified={JSON.stringify(row)}
-              />
-            : <Ek
-                saveToDb={saveToDb}
-                fieldErrors={fieldErrors}
-                row={row}
-              />
-            }
-          </TabContent>
-        </FieldsContainer>
+        <MuiTabs
+          value={tab}
+          onChange={onChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <StyledTab
+            label="Teil-Population"
+            value="tpop"
+            data-id="tpop"
+          />
+          <StyledTab
+            label="EK"
+            value="ek"
+            data-id="ek"
+          />
+        </MuiTabs>
+        {tab === 'tpop' ?
+          <Tpop
+            saveToDb={saveToDb}
+            fieldErrors={fieldErrors}
+            setFieldErrors={setFieldErrors}
+            row={row}
+            rowStringified={JSON.stringify(row)}
+          />
+        : <Ek
+            saveToDb={saveToDb}
+            fieldErrors={fieldErrors}
+            row={row}
+          />
+        }
       </Container>
     </ErrorBoundary>
   )
