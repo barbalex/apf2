@@ -57,6 +57,7 @@ export const Menu = memo(
 
     const firstFileId = files?.[0]?.fileId
     const file = files.find((f) => f.fileId === fileId)
+    const index = files.findIndex((f) => f.fileId === fileId)
 
     const onClickPreview = useCallback(() => {
       navigate(`${firstFileId}/Vorschau`)
@@ -74,8 +75,6 @@ export const Menu = memo(
       const indexOfFileInPathname = pathname.indexOf(fileId)
       // delete file with fileId
       // first get fileId of next file to navigate to it after deleting this one
-      // get index of current file in files
-      const index = files.findIndex((file) => file.fileId === fileId)
       // get file to navigate to after deleting this one
       const nextFile = files[index + 1]
       const prevFile = files[index - 1]
@@ -115,23 +114,29 @@ export const Menu = memo(
       setDelMenuAnchorEl(null)
       refetch()
       navigate(nextPathname)
-    }, [fileId, files, client, parent, pathname])
+    }, [
+      fileId,
+      files,
+      client,
+      parent,
+      pathname,
+      index,
+      refetch,
+      store,
+      navigate,
+    ])
 
     const onClickNext = useCallback(() => {
-      // get index of current file in files
-      const index = files.findIndex((file) => file.fileId === fileId)
       // get file to navigate to
       const nextFile = files[index + 1] ?? files[0]
       navigate(`${nextFile.fileId}/Vorschau`)
-    }, [fileId, files, navigate])
+    }, [fileId, files, navigate, index])
 
     const onClickPrev = useCallback(() => {
-      // get index of current file in files
-      const index = files.findIndex((file) => file.fileId === fileId)
       // get file to navigate to
       const prevFile = files[index - 1] ?? files[files.length - 1]
       navigate(`${prevFile.fileId}/Vorschau`)
-    }, [fileId, files, navigate])
+    }, [fileId, files, navigate, index])
 
     // enable reacting to fullscreen changes
     const [isFullscreen, setIsFullscreen] = useState(false)
@@ -259,12 +264,20 @@ export const Menu = memo(
       ],
     )
 
+    const numbers = file ? `${index + 1}/${files.length}` : files.length
+    const titleComponentWidth = 60
+
     return (
       <ErrorBoundary>
         <MenuBar
           isPreview={isPreview}
-          file={file}
-          titleComponent={<Title file={file} />}
+          titleComponent={
+            <Title
+              file={file}
+              numbers={numbers}
+            />
+          }
+          titleComponentWidth={titleComponentWidth}
         >
           {isPreview ? previewMenus : menus}
         </MenuBar>

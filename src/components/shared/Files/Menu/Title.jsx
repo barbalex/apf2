@@ -9,13 +9,13 @@ const TitleDiv = styled.h3`
   padding: 0 10px;
   font-size: 0.9rem;
   font-weight: 400;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(0, 0, 0, 0.8);
   // center vertically
   margin-top: auto;
   margin-bottom: auto;
   // fix width to prevent jumping
-  width: 150px;
-  max-width: 150px;
+  width: ${(props) => props.titleComponentWidth}px;
+  max-width: ${(props) => props.titleComponentWidth}px;
   // place left without using right margin auto
   // as that reduces the width of the menu container
   position: relative;
@@ -65,13 +65,13 @@ const FileNameForTooltip = memo(
   )),
 )
 
-export const Title = memo(({ file }) => {
-  if (!file) return null
+export const Title = memo(({ file, numbers, titleComponentWidth }) => {
+  if (!file && numbers === undefined) return null
 
   return (
     <ErrorBoundary>
-      <Tooltip title={<FileNameForTooltip file={file} />}>
-        <TitleDiv>{file.name}</TitleDiv>
+      <Tooltip title={file ? <FileNameForTooltip file={file} /> : null}>
+        <TitleDiv titleComponentWidth={titleComponentWidth}>{numbers}</TitleDiv>
       </Tooltip>
     </ErrorBoundary>
   )
