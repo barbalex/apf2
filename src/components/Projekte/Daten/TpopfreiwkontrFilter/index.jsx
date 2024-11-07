@@ -2,7 +2,6 @@ import { useEffect, useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
 import { query } from './query.js'
@@ -28,6 +27,10 @@ const Container = styled.div`
   }
 `
 const ScrollContainer = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
 `
@@ -162,18 +165,10 @@ export const TpopfreiwkontrFilter = observer(() => {
         setActiveTab={setActiveTab}
       />
       <ScrollContainer>
-        <SimpleBar
-          style={{
-            maxHeight: '100%',
-            height: '100%',
-          }}
-          tabIndex={-1}
-        >
-          <Form
-            row={row}
-            activeTab={activeTab}
-          />
-        </SimpleBar>
+        <Form
+          row={row}
+          activeTab={activeTab}
+        />
       </ScrollContainer>
     </Container>
   )
