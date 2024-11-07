@@ -4,8 +4,7 @@ import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
-import { useParams } from 'react-router-dom'
+import { Form, useParams } from 'react-router-dom'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
@@ -33,16 +32,6 @@ const Container = styled.div`
   flex-grow: 1;
   overflow: hidden;
   background-color: #ffd3a7;
-`
-const FieldsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  > div:first-of-type {
-    > div:first-of-type {
-      display: block !important;
-    }
-  }
 `
 const FormContainer = styled.div`
   display: flex;
@@ -234,238 +223,238 @@ export const TpopfeldkontrFilter = observer(() => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
-        <FieldsContainer>
-          <MuiTabs
-            value={tab}
-            onChange={onChangeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <StyledTab
-              label="Entwicklung"
-              value="entwicklung"
-              data-id="entwicklung"
-            />
-            <StyledTab
-              label="Biotop"
-              value="biotop"
-              data-id="biotop"
-            />
-          </MuiTabs>
+        <MuiTabs
+          value={tab}
+          onChange={onChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <StyledTab
+            label="Entwicklung"
+            value="entwicklung"
+            data-id="entwicklung"
+          />
+          <StyledTab
+            label="Biotop"
+            value="biotop"
+            data-id="biotop"
+          />
+        </MuiTabs>
+        <FormContainer>
           {tab === 'entwicklung' && (
-              <FormContainer>
-                <TextField
-                  name="jahr"
-                  label="Jahr"
-                  type="number"
-                  value={row?.jahr}
-                  saveToDb={saveToDb}
-                />
-                <DateField
-                  name="datum"
-                  label="Datum"
-                  value={row?.datum}
-                  saveToDb={saveToDb}
-                />
-                <RadioButtonGroup
-                  name="typ"
-                  label="Kontrolltyp"
-                  dataSource={tpopkontrTypWerte}
-                  value={row?.typ}
-                  saveToDb={saveToDb}
-                />
-                <Select
-                  name="bearbeiter"
-                  label="BearbeiterIn"
-                  options={data?.allAdresses?.nodes ?? []}
-                  loading={loading}
-                  value={row?.bearbeiter}
-                  saveToDb={saveToDb}
-                />
-                <JesNo
-                  name="jungpflanzenVorhanden"
-                  label="Jungpflanzen vorhanden"
-                  value={row?.jungpflanzenVorhanden}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="vitalitaet"
-                  label="Vitalität"
-                  type="text"
-                  value={row?.vitalitaet}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="ueberlebensrate"
-                  label="Überlebensrate (in Prozent)"
-                  type="number"
-                  value={row?.ueberlebensrate}
-                  saveToDb={saveToDb}
-                />
-                <RadioButtonGroupWithInfo
-                  name="entwicklung"
-                  label="Entwicklung"
-                  dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
-                  loading={loading}
-                  popover={TpopfeldkontrentwicklungPopover}
-                  value={row?.entwicklung}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="ursachen"
-                  label="Ursachen"
-                  hintText="Standort: ..., Klima: ..., anderes: ..."
-                  type="text"
-                  multiLine
-                  value={row?.ursachen}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="gefaehrdung"
-                  label="Gefährdung"
-                  type="text"
-                  multiLine
-                  value={row?.gefaehrdung}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="erfolgsbeurteilung"
-                  label="Erfolgsbeurteilung"
-                  type="text"
-                  multiLine
-                  value={row?.erfolgsbeurteilung}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="umsetzungAendern"
-                  label="Änderungs-Vorschläge Umsetzung"
-                  type="text"
-                  multiLine
-                  value={row?.umsetzungAendern}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="kontrolleAendern"
-                  label="Änderungs-Vorschläge Kontrolle"
-                  type="text"
-                  multiLine
-                  value={row?.kontrolleAendern}
-                  saveToDb={saveToDb}
-                />
-                <MarkdownField
-                  name="bemerkungen"
-                  label="Bemerkungen"
-                  value={row?.bemerkungen}
-                  saveToDb={saveToDb}
-                />
-                <JesNo
-                  name="apberNichtRelevant"
-                  label="Im Jahresbericht nicht berücksichtigen"
-                  value={row?.apberNichtRelevant}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="apberNichtRelevantGrund"
-                  label="Wieso im Jahresbericht nicht berücksichtigen?"
-                  type="text"
-                  multiLine
-                  value={row?.apberNichtRelevantGrund}
-                  saveToDb={saveToDb}
-                />
-              </FormContainer>
+            <>
+              <TextField
+                name="jahr"
+                label="Jahr"
+                type="number"
+                value={row?.jahr}
+                saveToDb={saveToDb}
+              />
+              <DateField
+                name="datum"
+                label="Datum"
+                value={row?.datum}
+                saveToDb={saveToDb}
+              />
+              <RadioButtonGroup
+                name="typ"
+                label="Kontrolltyp"
+                dataSource={tpopkontrTypWerte}
+                value={row?.typ}
+                saveToDb={saveToDb}
+              />
+              <Select
+                name="bearbeiter"
+                label="BearbeiterIn"
+                options={data?.allAdresses?.nodes ?? []}
+                loading={loading}
+                value={row?.bearbeiter}
+                saveToDb={saveToDb}
+              />
+              <JesNo
+                name="jungpflanzenVorhanden"
+                label="Jungpflanzen vorhanden"
+                value={row?.jungpflanzenVorhanden}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="vitalitaet"
+                label="Vitalität"
+                type="text"
+                value={row?.vitalitaet}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="ueberlebensrate"
+                label="Überlebensrate (in Prozent)"
+                type="number"
+                value={row?.ueberlebensrate}
+                saveToDb={saveToDb}
+              />
+              <RadioButtonGroupWithInfo
+                name="entwicklung"
+                label="Entwicklung"
+                dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
+                loading={loading}
+                popover={TpopfeldkontrentwicklungPopover}
+                value={row?.entwicklung}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="ursachen"
+                label="Ursachen"
+                hintText="Standort: ..., Klima: ..., anderes: ..."
+                type="text"
+                multiLine
+                value={row?.ursachen}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="gefaehrdung"
+                label="Gefährdung"
+                type="text"
+                multiLine
+                value={row?.gefaehrdung}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="erfolgsbeurteilung"
+                label="Erfolgsbeurteilung"
+                type="text"
+                multiLine
+                value={row?.erfolgsbeurteilung}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="umsetzungAendern"
+                label="Änderungs-Vorschläge Umsetzung"
+                type="text"
+                multiLine
+                value={row?.umsetzungAendern}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="kontrolleAendern"
+                label="Änderungs-Vorschläge Kontrolle"
+                type="text"
+                multiLine
+                value={row?.kontrolleAendern}
+                saveToDb={saveToDb}
+              />
+              <MarkdownField
+                name="bemerkungen"
+                label="Bemerkungen"
+                value={row?.bemerkungen}
+                saveToDb={saveToDb}
+              />
+              <JesNo
+                name="apberNichtRelevant"
+                label="Im Jahresbericht nicht berücksichtigen"
+                value={row?.apberNichtRelevant}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="apberNichtRelevantGrund"
+                label="Wieso im Jahresbericht nicht berücksichtigen?"
+                type="text"
+                multiLine
+                value={row?.apberNichtRelevantGrund}
+                saveToDb={saveToDb}
+              />
+            </>
           )}
           {tab === 'biotop' && (
-              <FormContainer>
-                <TextField
-                  name="flaeche"
-                  label="Fläche"
-                  type="number"
-                  value={row?.flaeche}
-                  saveToDb={saveToDb}
-                />
-                <Section>Vegetation</Section>
-                <Select
-                  data-id="lrDelarze"
-                  name="lrDelarze"
-                  label="Lebensraum nach Delarze"
-                  options={aeLrWerte}
-                  loading={loading}
-                  value={row?.lrDelarze}
-                  saveToDb={saveToDb}
-                />
-                <Select
-                  name="lrUmgebungDelarze"
-                  label="Umgebung nach Delarze"
-                  options={aeLrWerte}
-                  loading={loading}
-                  value={row?.lrUmgebungDelarze}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="vegetationstyp"
-                  label="Vegetationstyp"
-                  type="text"
-                  value={row?.vegetationstyp}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="konkurrenz"
-                  label="Konkurrenz"
-                  type="text"
-                  value={row?.konkurrenz}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="moosschicht"
-                  label="Moosschicht"
-                  type="text"
-                  value={row?.moosschicht}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="krautschicht"
-                  label="Krautschicht"
-                  type="text"
-                  value={row?.krautschicht}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="strauchschicht"
-                  label="Strauchschicht"
-                  type="text"
-                  value={row?.strauchschicht}
-                  saveToDb={saveToDb}
-                />
-                <TextField
-                  name="baumschicht"
-                  label="Baumschicht"
-                  type="text"
-                  value={row?.baumschicht}
-                  saveToDb={saveToDb}
-                />
-                <Section>Beurteilung</Section>
-                <TextField
-                  name="handlungsbedarf"
-                  label="Handlungsbedarf"
-                  type="text"
-                  multiline
-                  value={row?.handlungsbedarf}
-                  saveToDb={saveToDb}
-                />
-                <RadioButtonGroup
-                  name="idealbiotopUebereinstimmung"
-                  label="Übereinstimmung mit Idealbiotop"
-                  dataSource={
-                    data?.allTpopkontrIdbiotuebereinstWertes?.nodes ?? []
-                  }
-                  loading={loading}
-                  value={row?.idealbiotopUebereinstimmung}
-                  saveToDb={saveToDb}
-                />
-              </FormContainer>
+            <>
+              <TextField
+                name="flaeche"
+                label="Fläche"
+                type="number"
+                value={row?.flaeche}
+                saveToDb={saveToDb}
+              />
+              <Section>Vegetation</Section>
+              <Select
+                data-id="lrDelarze"
+                name="lrDelarze"
+                label="Lebensraum nach Delarze"
+                options={aeLrWerte}
+                loading={loading}
+                value={row?.lrDelarze}
+                saveToDb={saveToDb}
+              />
+              <Select
+                name="lrUmgebungDelarze"
+                label="Umgebung nach Delarze"
+                options={aeLrWerte}
+                loading={loading}
+                value={row?.lrUmgebungDelarze}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="vegetationstyp"
+                label="Vegetationstyp"
+                type="text"
+                value={row?.vegetationstyp}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="konkurrenz"
+                label="Konkurrenz"
+                type="text"
+                value={row?.konkurrenz}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="moosschicht"
+                label="Moosschicht"
+                type="text"
+                value={row?.moosschicht}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="krautschicht"
+                label="Krautschicht"
+                type="text"
+                value={row?.krautschicht}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="strauchschicht"
+                label="Strauchschicht"
+                type="text"
+                value={row?.strauchschicht}
+                saveToDb={saveToDb}
+              />
+              <TextField
+                name="baumschicht"
+                label="Baumschicht"
+                type="text"
+                value={row?.baumschicht}
+                saveToDb={saveToDb}
+              />
+              <Section>Beurteilung</Section>
+              <TextField
+                name="handlungsbedarf"
+                label="Handlungsbedarf"
+                type="text"
+                multiline
+                value={row?.handlungsbedarf}
+                saveToDb={saveToDb}
+              />
+              <RadioButtonGroup
+                name="idealbiotopUebereinstimmung"
+                label="Übereinstimmung mit Idealbiotop"
+                dataSource={
+                  data?.allTpopkontrIdbiotuebereinstWertes?.nodes ?? []
+                }
+                loading={loading}
+                value={row?.idealbiotopUebereinstimmung}
+                saveToDb={saveToDb}
+              />
+            </>
           )}
-        </FieldsContainer>
+        </FormContainer>
       </Container>
     </ErrorBoundary>
   )
