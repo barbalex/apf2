@@ -29,9 +29,13 @@ const Container = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const OutletContainer = styled.div`
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `
 
 const fragmentObject = {

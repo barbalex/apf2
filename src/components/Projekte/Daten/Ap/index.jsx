@@ -22,6 +22,11 @@ import { Error } from '../../../shared/Error.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
   padding: 10px;
   padding-top: 0;
 `

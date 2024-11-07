@@ -31,6 +31,7 @@ const buttonSize = 40
 
 const MeasuredOuterContainer = styled.div`
   overflow: hidden;
+  min-height: ${buttonSize}px;
   max-height: ${buttonSize}px;
   display: flex;
   flex-direction: row;
@@ -43,6 +44,7 @@ const MeasuredOuterContainer = styled.div`
 `
 // align items to the right
 const InnerContainer = styled.div`
+  min-height: ${buttonSize}px;
   max-height: ${buttonSize}px;
   margin-left: auto;
   margin-right: 0;

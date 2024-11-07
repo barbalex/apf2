@@ -33,7 +33,7 @@ import { Title } from './Title.jsx'
 import { UploaderContext } from '../../../../UploaderContext.js'
 import { StoreContext } from '../../../../storeContext.js'
 
-const MenuTitle = styled.h3`
+export const MenuTitle = styled.h3`
   padding-top: 8px;
   padding-left: 15px;
   padding-right: 16px;

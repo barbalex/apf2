@@ -18,16 +18,16 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 const TabContentContainer = styled.div`
-  overflow-y: auto;
-  scrollbar-width: thin;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const TabContent = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 
 export const Component = () => {

@@ -11,6 +11,8 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
   padding: 10px;
+  overflow-y: auto;
+  scrollbar-width: thin;
 `
 
 export const Component = memo(() => {
