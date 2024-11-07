@@ -53,7 +53,7 @@ export const Menu = memo(
       })
       const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
       navigate(`/Daten/Projekte/${projId}/AP-Berichte/${id}${search}`)
-    }, [projId, client])
+    }, [projId, client, store, queryClient, navigate, search])
 
     return (
       <ErrorBoundary>
@@ -63,6 +63,12 @@ export const Menu = memo(
             onClick={onClickAdd}
           >
             <FaPlus />
+          </IconButton>
+          <IconButton
+            title="Löschen"
+            onClick={onClickAdd}
+          >
+            <FaMinus />
           </IconButton>
         </MenuBar>
       </ErrorBoundary>
