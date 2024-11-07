@@ -2,7 +2,6 @@ import { useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -18,8 +17,6 @@ import { Error } from '../../../shared/Error.jsx'
 import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { fieldTypes, FormContainer, Section } from './index.jsx'
-
-const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
 export const Component = observer(() => {
   const { tpopkontrId } = useParams()
@@ -112,105 +109,103 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <SimpleBar style={simplebarStyle}>
-        <FormContainer>
-          <TextField
-            name="flaeche"
-            label="Fläche"
-            type="number"
-            value={row.flaeche}
-            saveToDb={saveToDb}
-            error={fieldErrors.flaeche}
-          />
-          <Section>Vegetation</Section>
-          <Select
-            data-id="lrDelarze"
-            name="lrDelarze"
-            label="Lebensraum nach Delarze"
-            options={aeLrWerte}
-            loading={loading}
-            value={row.lrDelarze}
-            saveToDb={saveToDb}
-            error={fieldErrors.lrDelarze}
-          />
-          <Select
-            name="lrUmgebungDelarze"
-            label="Umgebung nach Delarze"
-            options={aeLrWerte}
-            loading={loading}
-            value={row.lrUmgebungDelarze}
-            saveToDb={saveToDb}
-            error={fieldErrors.lrUmgebungDelarze}
-          />
-          <TextField
-            name="vegetationstyp"
-            label="Vegetationstyp"
-            type="text"
-            value={row.vegetationstyp}
-            saveToDb={saveToDb}
-            error={fieldErrors.vegetationstyp}
-          />
-          <TextField
-            name="konkurrenz"
-            label="Konkurrenz"
-            type="text"
-            value={row.konkurrenz}
-            saveToDb={saveToDb}
-            error={fieldErrors.konkurrenz}
-          />
-          <TextField
-            name="moosschicht"
-            label="Moosschicht"
-            type="text"
-            value={row.moosschicht}
-            saveToDb={saveToDb}
-            error={fieldErrors.moosschicht}
-          />
-          <TextField
-            name="krautschicht"
-            label="Krautschicht"
-            type="text"
-            value={row.krautschicht}
-            saveToDb={saveToDb}
-            error={fieldErrors.krautschicht}
-          />
-          <TextField
-            name="strauchschicht"
-            label="Strauchschicht"
-            type="text"
-            value={row.strauchschicht}
-            saveToDb={saveToDb}
-            error={fieldErrors.strauchschicht}
-          />
-          <TextField
-            name="baumschicht"
-            label="Baumschicht"
-            type="text"
-            value={row.baumschicht}
-            saveToDb={saveToDb}
-            error={fieldErrors.baumschicht}
-          />
-          <Section>Beurteilung</Section>
-          <TextField
-            name="handlungsbedarf"
-            label="Handlungsbedarf"
-            type="text"
-            multiline
-            value={row.handlungsbedarf}
-            saveToDb={saveToDb}
-            error={fieldErrors.handlungsbedarf}
-          />
-          <RadioButtonGroup
-            name="idealbiotopUebereinstimmung"
-            label="Übereinstimmung mit Idealbiotop"
-            dataSource={data?.allTpopkontrIdbiotuebereinstWertes?.nodes ?? []}
-            loading={loading}
-            value={row.idealbiotopUebereinstimmung}
-            saveToDb={saveToDb}
-            error={fieldErrors.idealbiotopUebereinstimmung}
-          />
-        </FormContainer>
-      </SimpleBar>
+      <FormContainer>
+        <TextField
+          name="flaeche"
+          label="Fläche"
+          type="number"
+          value={row.flaeche}
+          saveToDb={saveToDb}
+          error={fieldErrors.flaeche}
+        />
+        <Section>Vegetation</Section>
+        <Select
+          data-id="lrDelarze"
+          name="lrDelarze"
+          label="Lebensraum nach Delarze"
+          options={aeLrWerte}
+          loading={loading}
+          value={row.lrDelarze}
+          saveToDb={saveToDb}
+          error={fieldErrors.lrDelarze}
+        />
+        <Select
+          name="lrUmgebungDelarze"
+          label="Umgebung nach Delarze"
+          options={aeLrWerte}
+          loading={loading}
+          value={row.lrUmgebungDelarze}
+          saveToDb={saveToDb}
+          error={fieldErrors.lrUmgebungDelarze}
+        />
+        <TextField
+          name="vegetationstyp"
+          label="Vegetationstyp"
+          type="text"
+          value={row.vegetationstyp}
+          saveToDb={saveToDb}
+          error={fieldErrors.vegetationstyp}
+        />
+        <TextField
+          name="konkurrenz"
+          label="Konkurrenz"
+          type="text"
+          value={row.konkurrenz}
+          saveToDb={saveToDb}
+          error={fieldErrors.konkurrenz}
+        />
+        <TextField
+          name="moosschicht"
+          label="Moosschicht"
+          type="text"
+          value={row.moosschicht}
+          saveToDb={saveToDb}
+          error={fieldErrors.moosschicht}
+        />
+        <TextField
+          name="krautschicht"
+          label="Krautschicht"
+          type="text"
+          value={row.krautschicht}
+          saveToDb={saveToDb}
+          error={fieldErrors.krautschicht}
+        />
+        <TextField
+          name="strauchschicht"
+          label="Strauchschicht"
+          type="text"
+          value={row.strauchschicht}
+          saveToDb={saveToDb}
+          error={fieldErrors.strauchschicht}
+        />
+        <TextField
+          name="baumschicht"
+          label="Baumschicht"
+          type="text"
+          value={row.baumschicht}
+          saveToDb={saveToDb}
+          error={fieldErrors.baumschicht}
+        />
+        <Section>Beurteilung</Section>
+        <TextField
+          name="handlungsbedarf"
+          label="Handlungsbedarf"
+          type="text"
+          multiline
+          value={row.handlungsbedarf}
+          saveToDb={saveToDb}
+          error={fieldErrors.handlungsbedarf}
+        />
+        <RadioButtonGroup
+          name="idealbiotopUebereinstimmung"
+          label="Übereinstimmung mit Idealbiotop"
+          dataSource={data?.allTpopkontrIdbiotuebereinstWertes?.nodes ?? []}
+          loading={loading}
+          value={row.idealbiotopUebereinstimmung}
+          saveToDb={saveToDb}
+          error={fieldErrors.idealbiotopUebereinstimmung}
+        />
+      </FormContainer>
     </ErrorBoundary>
   )
 })
