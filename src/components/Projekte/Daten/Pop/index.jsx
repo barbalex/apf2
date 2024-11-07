@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -21,6 +20,12 @@ import { pop } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 
 const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
   padding: 10px;
   padding-top: 0;
   height: 100%;
@@ -125,61 +130,53 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <SimpleBar
-        style={{
-          maxHeight: '100%',
-          height: '100%',
-        }}
-        tabIndex={-1}
-      >
-        <FormContainer>
-          <TextField
-            label="Nr."
-            name="nr"
-            type="number"
-            value={row.nr}
-            saveToDb={saveToDb}
-            error={fieldErrors.nr}
-          />
-          <TextFieldWithInfo
-            label="Name"
-            name="name"
-            type="text"
-            popover="Dieses Feld möglichst immer ausfüllen"
-            value={row.name}
-            saveToDb={saveToDb}
-            error={fieldErrors.name}
-          />
-          <Status
-            apJahr={row?.apByApId?.startJahr}
-            showFilter={false}
-            row={row}
-            saveToDb={saveToDb}
-            error={fieldErrors}
-          />
-          <Checkbox2States
-            label="Status unklar"
-            name="statusUnklar"
-            value={row.statusUnklar}
-            saveToDb={saveToDb}
-            error={fieldErrors.statusUnklar}
-          />
-          <TextField
-            label="Begründung"
-            name="statusUnklarBegruendung"
-            type="text"
-            multiLine
-            value={row.statusUnklarBegruendung}
-            saveToDb={saveToDb}
-            error={fieldErrors.statusUnklarBegruendung}
-          />
-          <Coordinates
-            row={row}
-            refetchForm={refetchPop}
-            table="pop"
-          />
-        </FormContainer>
-      </SimpleBar>
+      <FormContainer>
+        <TextField
+          label="Nr."
+          name="nr"
+          type="number"
+          value={row.nr}
+          saveToDb={saveToDb}
+          error={fieldErrors.nr}
+        />
+        <TextFieldWithInfo
+          label="Name"
+          name="name"
+          type="text"
+          popover="Dieses Feld möglichst immer ausfüllen"
+          value={row.name}
+          saveToDb={saveToDb}
+          error={fieldErrors.name}
+        />
+        <Status
+          apJahr={row?.apByApId?.startJahr}
+          showFilter={false}
+          row={row}
+          saveToDb={saveToDb}
+          error={fieldErrors}
+        />
+        <Checkbox2States
+          label="Status unklar"
+          name="statusUnklar"
+          value={row.statusUnklar}
+          saveToDb={saveToDb}
+          error={fieldErrors.statusUnklar}
+        />
+        <TextField
+          label="Begründung"
+          name="statusUnklarBegruendung"
+          type="text"
+          multiLine
+          value={row.statusUnklarBegruendung}
+          saveToDb={saveToDb}
+          error={fieldErrors.statusUnklarBegruendung}
+        />
+        <Coordinates
+          row={row}
+          refetchForm={refetchPop}
+          table="pop"
+        />
+      </FormContainer>
     </ErrorBoundary>
   )
 })
