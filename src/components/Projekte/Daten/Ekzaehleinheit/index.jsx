@@ -20,6 +20,7 @@ import {
   ekzaehleinheit,
   tpopkontrzaehlEinheitWerte,
 } from '../../../shared/fragments.js'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -159,6 +160,7 @@ const Ekzaehleinheit = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="EK-Zähleinheit" />
+        <Menu row={row} />
         <FormContainer>
           <Select
             name="zaehleinheitId"
