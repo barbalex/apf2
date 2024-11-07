@@ -1,0 +1,1 @@
+Ab Version 1.107.0: Es gibt eine Vorschau-Ansicht für Dateien. Sie kann maximiert werden, um den ganzen Bildschirm zu nutzen
