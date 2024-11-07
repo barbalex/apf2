@@ -31,8 +31,7 @@ const imageStyle = {
 }
 
 export const Component = memo(() => {
-  // containerRef is will be passed to the FullscreenControl
-  const { parentId, parent, files, containerRef } = useOutletContext()
+  const { files } = useOutletContext()
   const { fileId } = useParams()
   const previewRef = useRef(null)
 

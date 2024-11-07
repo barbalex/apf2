@@ -187,9 +187,7 @@ export const FilesRouter = memo(
           />
           <OutletContainer>
             <Suspense fallback={<Spinner />}>
-              <Outlet
-                context={{ files, parent, parentId, refetch, containerRef }}
-              />
+              <Outlet context={{ files, parent, refetch }} />
             </Suspense>
           </OutletContainer>
         </Container>
