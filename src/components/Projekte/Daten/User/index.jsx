@@ -28,6 +28,7 @@ import {
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -347,6 +348,7 @@ export const Component = observer(() => {
             </>
           }
         />
+        <Menu row={row} />
         <ScrollContainer>
           <TextField2
             key={`${row.id}name`}
