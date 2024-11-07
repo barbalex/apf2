@@ -2,7 +2,6 @@ import { useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -24,11 +23,13 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const FieldsContainer = styled.div`
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -120,36 +121,26 @@ const Erfkrit = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Erfolgs-Kriterium" />
-        <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FormContainer>
-              <RadioButtonGroup
-                name="erfolg"
-                label="Beurteilung"
-                dataSource={dataLists?.allApErfkritWertes?.nodes ?? []}
-                loading={loadingLists}
-                value={row.erfolg}
-                saveToDb={saveToDb}
-                error={fieldErrors.erfolg}
-              />
-              <TextField
-                name="kriterien"
-                label="Kriterien"
-                type="text"
-                multiLine
-                value={row.kriterien}
-                saveToDb={saveToDb}
-                error={fieldErrors.kriterien}
-              />
-            </FormContainer>
-          </SimpleBar>
-        </FieldsContainer>
+        <FormContainer>
+          <RadioButtonGroup
+            name="erfolg"
+            label="Beurteilung"
+            dataSource={dataLists?.allApErfkritWertes?.nodes ?? []}
+            loading={loadingLists}
+            value={row.erfolg}
+            saveToDb={saveToDb}
+            error={fieldErrors.erfolg}
+          />
+          <TextField
+            name="kriterien"
+            label="Kriterien"
+            type="text"
+            multiLine
+            value={row.kriterien}
+            saveToDb={saveToDb}
+            error={fieldErrors.kriterien}
+          />
+        </FormContainer>
       </Container>
     </ErrorBoundary>
   )

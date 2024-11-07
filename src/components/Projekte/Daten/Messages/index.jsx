@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client'
 import Linkify from 'react-linkify'
 import { DateTime } from 'luxon'
-import SimpleBar from 'simplebar-react'
 
 import { query } from './query.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -17,10 +16,12 @@ const Container = styled.div`
   overflow: hidden;
 `
 const ScrollContainer = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
 `
@@ -65,30 +66,20 @@ export const Component = memo(() => {
           <Title data-id="form-title">Mitteilungen</Title>
         </TitleRow>
         <ScrollContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FieldsContainer>
-              {rows.map((m) => {
-                const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
+          {rows.map((m) => {
+            const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
 
-                return (
-                  <MessageRow key={m.id}>
-                    <Date>{date}</Date>
-                    <Message>
-                      <Linkify properties={{ target: '_blank' }}>
-                        {m.message}
-                      </Linkify>
-                    </Message>
-                  </MessageRow>
-                )
-              })}
-            </FieldsContainer>
-          </SimpleBar>
+            return (
+              <MessageRow key={m.id}>
+                <Date>{date}</Date>
+                <Message>
+                  <Linkify properties={{ target: '_blank' }}>
+                    {m.message}
+                  </Linkify>
+                </Message>
+              </MessageRow>
+            )
+          })}
         </ScrollContainer>
       </Container>
     </ErrorBoundary>
