@@ -23,7 +23,7 @@ const Image = styled.img`
 `
 const TextDiv = styled.div`
   align-self: center;
-  padding-top: 2em;
+  padding: 2em 1em;
 `
 const imageStyle = {
   objectFit: 'contain',
