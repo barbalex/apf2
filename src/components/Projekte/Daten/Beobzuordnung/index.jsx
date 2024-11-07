@@ -6,7 +6,6 @@ import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams, useLocation } from 'react-router-dom'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
@@ -39,16 +38,21 @@ const PopoverContainer = styled.div`
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 `
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+`
 const FormContainer = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`
-const DataContainer = styled.div`
   overflow-y: auto;
   scrollbar-width: thin;
 `
+const DataContainer = styled.div``
 const FieldsContainer = styled.div`
   padding: 10px;
   padding-bottom: 0;
@@ -295,120 +299,108 @@ const Beobzuordnung = () => {
 
   return (
     <ErrorBoundary>
-      <FormContainer>
+      <Container>
         <FormTitle title="Beobachtung" />
-        <DataContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FieldsContainer>
-              {row && row.artId !== row.artIdOriginal && (
-                <OriginalArtDiv>{`Art gemäss Original-Meldung: ${
-                  row?.aeTaxonomyByArtIdOriginal?.artname ?? '(kein Name)'
-                }`}</OriginalArtDiv>
-              )}
-              <SelectLoadingOptions
-                key={`${row.id}artId`}
-                field="artId"
-                valueLabelPath="aeTaxonomyByArtId.artname"
-                label="Art"
-                row={row}
-                saveToDb={onSaveArtIdToDb}
-                query={queryAeTaxonomies}
-                filter={aeTaxonomiesfilter}
-                queryNodesName="allAeTaxonomies"
-              />
-              <CheckboxWithInfo
-                key={`${row.id}nichtZuordnen`}
-                name="nichtZuordnen"
-                label="Nicht zuordnen"
-                value={row.nichtZuordnen}
-                saveToDb={onSaveNichtZuordnenToDb}
-                popover={nichtZuordnenPopover}
-              />
-              <Select
-                key={`${row.id}tpopId`}
-                name="tpopId"
-                value={row.tpopId ?? ''}
-                field="tpopId"
-                label={
-                  row.tpopId ?
-                    'Einer anderen Teilpopulation zuordnen'
-                  : 'Einer Teilpopulation zuordnen'
-                }
-                options={tpopZuordnenSource}
-                saveToDb={onSaveTpopIdToDb}
-              />
-              <TextField2
-                key={`${row.id}bemerkungen`}
-                name="bemerkungen"
-                label="Bemerkungen zur Zuordnung"
-                row={row}
-                type="text"
-                multiLine
+        <FormContainer>
+          <FieldsContainer>
+            {row && row.artId !== row.artIdOriginal && (
+              <OriginalArtDiv>{`Art gemäss Original-Meldung: ${
+                row?.aeTaxonomyByArtIdOriginal?.artname ?? '(kein Name)'
+              }`}</OriginalArtDiv>
+            )}
+            <SelectLoadingOptions
+              key={`${row.id}artId`}
+              field="artId"
+              valueLabelPath="aeTaxonomyByArtId.artname"
+              label="Art"
+              row={row}
+              saveToDb={onSaveArtIdToDb}
+              query={queryAeTaxonomies}
+              filter={aeTaxonomiesfilter}
+              queryNodesName="allAeTaxonomies"
+            />
+            <CheckboxWithInfo
+              key={`${row.id}nichtZuordnen`}
+              name="nichtZuordnen"
+              label="Nicht zuordnen"
+              value={row.nichtZuordnen}
+              saveToDb={onSaveNichtZuordnenToDb}
+              popover={nichtZuordnenPopover}
+            />
+            <Select
+              key={`${row.id}tpopId`}
+              name="tpopId"
+              value={row.tpopId ?? ''}
+              field="tpopId"
+              label={
+                row.tpopId ?
+                  'Einer anderen Teilpopulation zuordnen'
+                : 'Einer Teilpopulation zuordnen'
+              }
+              options={tpopZuordnenSource}
+              saveToDb={onSaveTpopIdToDb}
+            />
+            <TextField2
+              key={`${row.id}bemerkungen`}
+              name="bemerkungen"
+              label="Bemerkungen zur Zuordnung"
+              row={row}
+              type="text"
+              multiLine
+              saveToDb={onUpdateField}
+            />
+            <InfofloraRow>
+              <DateField
+                key={`${row.id}infofloraInformiertDatum`}
+                name="infofloraInformiertDatum"
+                label="Info Flora informiert am:"
+                value={row.infofloraInformiertDatum}
                 saveToDb={onUpdateField}
               />
-              <InfofloraRow>
-                <DateField
-                  key={`${row.id}infofloraInformiertDatum`}
-                  name="infofloraInformiertDatum"
-                  label="Info Flora informiert am:"
-                  value={row.infofloraInformiertDatum}
-                  saveToDb={onUpdateField}
-                />
-                <EmailButton
-                  variant="outlined"
-                  color="inherit"
-                  onClick={() => {
-                    const origArt = `Art gemäss Beobachtung: SISF-Nr: ${
-                      row?.aeTaxonomyByArtId?.taxid ?? '(keine)'
-                    }, Artname: ${
-                      row?.aeTaxonomyByArtId?.artname ?? '(keiner)'
-                    }`
-                    const neueArt = `Korrigierte Art: SISF-Nr: ${
-                      row?.aeTaxonomyByArtIdOriginal?.taxid ?? '(keine)'
-                    }, Artname: ${
-                      row?.aeTaxonomyByArtIdOriginal?.artname ?? '(keiner)'
-                    }`
-                    const bemerkungen = row.bemerkungen
-                    // remove all keys with null
-                    const dataArray = Object.entries(
-                      JSON.parse(row.data),
-                    ).filter((a) => !!a[1] || a[1] === 0 || a[1] === false)
-                    let data = ''
-                    dataArray.forEach((d) => {
-                      data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`
-                    })
-                    const body = `${origArt}\r\n${neueArt}${
-                      bemerkungen ?
-                        `${
-                          bemerkungen ? `\r\nBemerkungen: ${bemerkungen}` : ''
-                        }`
-                      : ''
-                    }\r\n\r\nOriginal-Beobachtungs-Daten:\r\n${data}`
-                    sendMail({
-                      to: 'info@infoflora.ch',
-                      subject: 'Flora-Beobachtung: Verifikation',
-                      body,
-                    })
-                  }}
-                >
-                  <StyledSendIcon />
-                  Email an Info Flora
-                </EmailButton>
-              </InfofloraRow>
-            </FieldsContainer>
-            <Title>{`Informationen aus ${
-              row?.quelle ?? '?'
-            } (nicht veränderbar)`}</Title>
-            <Beob />
-          </SimpleBar>
-        </DataContainer>
-      </FormContainer>
+              <EmailButton
+                variant="outlined"
+                color="inherit"
+                onClick={() => {
+                  const origArt = `Art gemäss Beobachtung: SISF-Nr: ${
+                    row?.aeTaxonomyByArtId?.taxid ?? '(keine)'
+                  }, Artname: ${row?.aeTaxonomyByArtId?.artname ?? '(keiner)'}`
+                  const neueArt = `Korrigierte Art: SISF-Nr: ${
+                    row?.aeTaxonomyByArtIdOriginal?.taxid ?? '(keine)'
+                  }, Artname: ${
+                    row?.aeTaxonomyByArtIdOriginal?.artname ?? '(keiner)'
+                  }`
+                  const bemerkungen = row.bemerkungen
+                  // remove all keys with null
+                  const dataArray = Object.entries(JSON.parse(row.data)).filter(
+                    (a) => !!a[1] || a[1] === 0 || a[1] === false,
+                  )
+                  let data = ''
+                  dataArray.forEach((d) => {
+                    data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`
+                  })
+                  const body = `${origArt}\r\n${neueArt}${
+                    bemerkungen ?
+                      `${bemerkungen ? `\r\nBemerkungen: ${bemerkungen}` : ''}`
+                    : ''
+                  }\r\n\r\nOriginal-Beobachtungs-Daten:\r\n${data}`
+                  sendMail({
+                    to: 'info@infoflora.ch',
+                    subject: 'Flora-Beobachtung: Verifikation',
+                    body,
+                  })
+                }}
+              >
+                <StyledSendIcon />
+                Email an Info Flora
+              </EmailButton>
+            </InfofloraRow>
+          </FieldsContainer>
+          <Title>{`Informationen aus ${
+            row?.quelle ?? '?'
+          } (nicht veränderbar)`}</Title>
+          <Beob />
+        </FormContainer>
+      </Container>
     </ErrorBoundary>
   )
 }
