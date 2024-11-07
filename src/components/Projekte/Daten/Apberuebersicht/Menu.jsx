@@ -39,7 +39,6 @@ export const Menu = memo(
             }
           `,
           variables: { projId },
-          // refetchQueries: ['?'],
         })
       } catch (error) {
         return store.addNotification({
