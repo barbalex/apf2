@@ -168,6 +168,8 @@ export const Menu = memo(
       ],
       [onClickPreview],
     )
+    // need to ensure that all menus are on the top level
+    // so no <>, instead separate arrays
     const previewMenus = useMemo(
       () => [
         <IconButton
