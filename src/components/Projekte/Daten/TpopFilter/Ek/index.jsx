@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import max from 'lodash/max'
 import { useQuery } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
 import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'
