@@ -1,6 +1,5 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
-import SimpleBar from 'simplebar-react'
 import Button from '@mui/material/Button'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
@@ -29,6 +28,10 @@ const Container = styled.div`
   }
 `
 const ScrollContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
 `
@@ -104,25 +107,17 @@ export const Exporte = memo(() => {
             noTestDataMessage={true}
           />
           <ScrollContainer>
-            <SimpleBar
-              style={{
-                maxHeight: '100%',
-                height: '100%',
-              }}
-              tabIndex={-1}
-            >
-              <InnerContainer>
-                <Optionen />
-                <Tipps />
-                <Ap />
-                <Populationen />
-                <Teilpopulationen />
-                <Kontrollen />
-                <Massnahmen />
-                <Beobachtungen />
-                <Anwendung />
-              </InnerContainer>
-            </SimpleBar>
+            <InnerContainer>
+              <Optionen />
+              <Tipps />
+              <Ap />
+              <Populationen />
+              <Teilpopulationen />
+              <Kontrollen />
+              <Massnahmen />
+              <Beobachtungen />
+              <Anwendung />
+            </InnerContainer>
           </ScrollContainer>
         </Container>
       </ErrorBoundary>
