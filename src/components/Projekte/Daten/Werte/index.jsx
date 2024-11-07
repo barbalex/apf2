@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams, useLocation } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -21,11 +20,13 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const FieldsContainer = styled.div`
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -140,42 +141,32 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container>
         <FormTitle title={table} />
-        <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FormContainer>
-              <TextField
-                name="text"
-                label="Text"
-                type="text"
-                value={row.text}
-                saveToDb={saveToDb}
-                error={fieldErrors.text}
-              />
-              <TextField
-                name="code"
-                label="Code"
-                type={codeFieldType}
-                value={row.code}
-                saveToDb={saveToDb}
-                error={fieldErrors.code}
-              />
-              <TextField
-                name="sort"
-                label="Sort"
-                type="number"
-                value={row.sort}
-                saveToDb={saveToDb}
-                error={fieldErrors.sort}
-              />
-            </FormContainer>
-          </SimpleBar>
-        </FieldsContainer>
+        <FormContainer>
+          <TextField
+            name="text"
+            label="Text"
+            type="text"
+            value={row.text}
+            saveToDb={saveToDb}
+            error={fieldErrors.text}
+          />
+          <TextField
+            name="code"
+            label="Code"
+            type={codeFieldType}
+            value={row.code}
+            saveToDb={saveToDb}
+            error={fieldErrors.code}
+          />
+          <TextField
+            name="sort"
+            label="Sort"
+            type="number"
+            value={row.sort}
+            saveToDb={saveToDb}
+            error={fieldErrors.sort}
+          />
+        </FormContainer>
       </Container>
     </ErrorBoundary>
   )
