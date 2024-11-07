@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -22,16 +21,16 @@ const Container = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 const FieldsContainer = styled.div`
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const FieldsSubContainer = styled.div`
   padding: 10px 10px 0 10px;
 `
 const FormContainer = styled.div`
-  padding: 10px;
+  padding: 10px 0;
 `
 
 const fieldTypes = {
@@ -139,57 +138,47 @@ export const Component = observer(() => {
       <Container>
         <FormTitle title="Taxon" />
         <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FieldsSubContainer>
-              <div>
-                In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
-                Gründe um mehrere zu erfassen:
-                <ul>
-                  <li>Die Art hat Synonyme</li>
-                  <li>
-                    Die Art umfasst nicht synonyme aber eng verwandte Arten
-                    (z.B. Unterarten)
-                  </li>
-                  <li>
-                    Beobachtungen liegen in unterschiedlichen Taxonomien vor,
-                    z.B. SISF (2005) und DB-TAXREF (2017)
-                  </li>
-                </ul>
-              </div>
-              <div>
-                {
-                  'Beobachtungen aller Taxa stehen im Ordner "Beobachtungen nicht beurteilt" zur Verfügung und können Teilpopulationen zugeordnet werden.'
-                }
-                <br />
-                <br />
-              </div>
-              <div>
-                Das namensgebende Taxon gibt nicht nur den Namen. Unter ihrer id
-                werden auch die Kontrollen an InfoFlora geliefert.
-                <br />
-                <br />
-              </div>
-              <FormContainer>
-                <SelectLoadingOptions
-                  field="artId"
-                  valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
-                  label="Taxon"
-                  row={row}
-                  query={queryAeTaxonomies}
-                  filter={aeTaxonomiesfilter}
-                  queryNodesName="allAeTaxonomies"
-                  saveToDb={saveToDb}
-                  error={fieldErrors.artId}
-                />
-              </FormContainer>
-            </FieldsSubContainer>
-          </SimpleBar>
+          <div>
+            In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
+            Gründe um mehrere zu erfassen:
+            <ul>
+              <li>Die Art hat Synonyme</li>
+              <li>
+                Die Art umfasst nicht synonyme aber eng verwandte Arten (z.B.
+                Unterarten)
+              </li>
+              <li>
+                Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B.
+                SISF (2005) und DB-TAXREF (2017)
+              </li>
+            </ul>
+          </div>
+          <div>
+            {
+              'Beobachtungen aller Taxa stehen im Ordner "Beobachtungen nicht beurteilt" zur Verfügung und können Teilpopulationen zugeordnet werden.'
+            }
+            <br />
+            <br />
+          </div>
+          <div>
+            Das namensgebende Taxon gibt nicht nur den Namen. Unter ihrer id
+            werden auch die Kontrollen an InfoFlora geliefert.
+            <br />
+            <br />
+          </div>
+          <FormContainer>
+            <SelectLoadingOptions
+              field="artId"
+              valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
+              label="Taxon"
+              row={row}
+              query={queryAeTaxonomies}
+              filter={aeTaxonomiesfilter}
+              queryNodesName="allAeTaxonomies"
+              saveToDb={saveToDb}
+              error={fieldErrors.artId}
+            />
+          </FormContainer>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
