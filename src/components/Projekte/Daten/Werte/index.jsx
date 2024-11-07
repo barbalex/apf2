@@ -13,6 +13,7 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -141,6 +142,10 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container>
         <FormTitle title={table} />
+        <Menu
+          row={row}
+          table={table}
+        />
         <FormContainer>
           <TextField
             name="text"

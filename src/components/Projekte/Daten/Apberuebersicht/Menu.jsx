@@ -106,7 +106,7 @@ export const Menu = memo(
       })
       // navigate to parent
       navigate(`/Daten/Projekte/${projId}/AP-Berichte${search}`)
-    }, [])
+    }, [client, store, queryClient, navigate, search, projId, row, pathname])
 
     const onClickPrint = useCallback(() => {
       navigate(`print${search}`)

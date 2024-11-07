@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import isEqual from 'lodash/isEqual'
+import upperFirst from 'lodash/upperFirst'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -17,21 +18,30 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { Icon } from '@mui/material'
 
 export const Menu = memo(
-  observer(({ row }) => {
+  observer(({ row, table }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
     const store = useContext(StoreContext)
 
+    const typename = upperFirst(table)
+    const pathName =
+      table === 'tpopApberrelevantGrundWerte' ? 'ApberrelevantGrundWerte'
+      : table === 'ekAbrechnungstypWerte' ? 'EkAbrechnungstypWerte'
+      : table === 'tpopkontrzaehlEinheitWerte' ? 'TpopkontrzaehlEinheitWerte'
+      : 'uups'
+
     const onClickAdd = useCallback(async () => {
       let result
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createAdresseForAdresseForm {
-              createAdresse(input: { adresse: {} }) {
-                adresse {
+            mutation create${typename}For${typename}Form {
+              create${typename}(
+                input: { ${table}: {  } }
+              ) {
+                ${table} {
                   id
                 }
               }
@@ -39,7 +49,7 @@ export const Menu = memo(
           `,
         })
       } catch (error) {
-        console.log('error:', error)
+        console.log('error', error)
         return store.enqueNotification({
           message: error.message,
           options: {
@@ -48,14 +58,14 @@ export const Menu = memo(
         })
       }
       queryClient.invalidateQueries({
-        queryKey: ['treeWerteFolders'],
+        queryKey: [`tree${typename}`],
       })
       queryClient.invalidateQueries({
-        queryKey: ['treeAdresse'],
+        queryKey: [`treeWerteFolders`],
       })
-      const id = result?.data?.createAdresse?.adresse?.id
-      navigate(`/Daten/Werte-Listen/Adressen/${id}${search}`)
-    }, [client, store, queryClient, navigate, search])
+      const id = result?.data?.[`create${typename}`]?.[table]?.id
+      navigate(`/Daten/Werte-Listen/${pathName}/${id}${search}`)
+    }, [client, store, queryClient, navigate, search, typename, table])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -65,9 +75,9 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation deleteAdresse($id: UUID!) {
-              deleteAdresseById(input: { id: $id }) {
-                adresse {
+            mutation delete${typename}($id: UUID!) {
+              delete${typename}ById(input: { id: $id }) {
+                ${table} {
                   id
                 }
               }
@@ -76,7 +86,7 @@ export const Menu = memo(
           variables: { id: row.id },
         })
       } catch (error) {
-        console.log('error:', error)
+        console.log('error', error)
         return store.enqueNotification({
           message: error.message,
           options: {
@@ -94,20 +104,30 @@ export const Menu = memo(
 
       // update tree query
       queryClient.invalidateQueries({
-        queryKey: [`treeWerteFolders`],
+        queryKey: [`tree${typename}`],
       })
       queryClient.invalidateQueries({
-        queryKey: ['treeAdresse'],
+        queryKey: [`treeWerteFolders`],
       })
       // navigate to parent
-      navigate(`/Daten/Werte-Listen/Adressen${search}`)
-    }, [client, store, queryClient, navigate, search, pathname, row.id])
+      navigate(`/Daten/Werte-Listen/${pathName}${search}`)
+    }, [
+      client,
+      store,
+      queryClient,
+      navigate,
+      row.id,
+      pathname,
+      search,
+      table,
+      typename,
+    ])
 
     return (
       <ErrorBoundary>
         <MenuBar>
           <IconButton
-            title="Neue Adresse erstellen"
+            title="Neuen Wert erstellen"
             onClick={onClickAdd}
           >
             <FaPlus />
@@ -115,13 +135,13 @@ export const Menu = memo(
           <IconButton
             title="Löschen"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'adresseDelMenu' : undefined}
+            aria-owns={delMenuOpen ? 'wertDelMenu' : undefined}
           >
             <FaMinus />
           </IconButton>
         </MenuBar>
         <MuiMenu
-          id="adresseDelMenu"
+          id="wertDelMenu"
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}
