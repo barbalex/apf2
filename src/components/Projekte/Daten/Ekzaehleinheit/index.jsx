@@ -2,7 +2,6 @@ import { useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -28,11 +27,13 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const FieldsContainer = styled.div`
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -158,60 +159,50 @@ const Ekzaehleinheit = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="EK-Zähleinheit" />
-        <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FormContainer>
-              <Select
-                name="zaehleinheitId"
-                label="Zähleinheit"
-                options={dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
-                loading={loadingLists}
-                value={row.zaehleinheitId}
-                saveToDb={saveToDb}
-                error={fieldErrors.zaehleinheitId}
-              />
-              <Checkbox2States
-                name="zielrelevant"
-                label="zielrelevant"
-                value={row.zielrelevant}
-                saveToDb={saveToDb}
-                error={fieldErrors.zielrelevant}
-              />
-              {row.zielrelevant && (
-                <Checkbox2States
-                  name="notMassnCountUnit"
-                  label="Entspricht bewusst keiner Massnahmen-Zähleinheit ('Anzahl Pflanzen' oder 'Anzahl Triebe')"
-                  value={row.notMassnCountUnit}
-                  saveToDb={saveToDb}
-                  error={fieldErrors.notMassnCountUnit}
-                />
-              )}
-              <TextField
-                name="sort"
-                label="Sortierung"
-                type="number"
-                value={row.sort}
-                saveToDb={saveToDb}
-                error={fieldErrors.sort}
-              />
-              <TextField
-                name="bemerkungen"
-                label="Bemerkungen"
-                type="text"
-                multiLine
-                value={row.bemerkungen}
-                saveToDb={saveToDb}
-                error={fieldErrors.bemerkungen}
-              />
-            </FormContainer>
-          </SimpleBar>
-        </FieldsContainer>
+        <FormContainer>
+          <Select
+            name="zaehleinheitId"
+            label="Zähleinheit"
+            options={dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
+            loading={loadingLists}
+            value={row.zaehleinheitId}
+            saveToDb={saveToDb}
+            error={fieldErrors.zaehleinheitId}
+          />
+          <Checkbox2States
+            name="zielrelevant"
+            label="zielrelevant"
+            value={row.zielrelevant}
+            saveToDb={saveToDb}
+            error={fieldErrors.zielrelevant}
+          />
+          {row.zielrelevant && (
+            <Checkbox2States
+              name="notMassnCountUnit"
+              label="Entspricht bewusst keiner Massnahmen-Zähleinheit ('Anzahl Pflanzen' oder 'Anzahl Triebe')"
+              value={row.notMassnCountUnit}
+              saveToDb={saveToDb}
+              error={fieldErrors.notMassnCountUnit}
+            />
+          )}
+          <TextField
+            name="sort"
+            label="Sortierung"
+            type="number"
+            value={row.sort}
+            saveToDb={saveToDb}
+            error={fieldErrors.sort}
+          />
+          <TextField
+            name="bemerkungen"
+            label="Bemerkungen"
+            type="text"
+            multiLine
+            value={row.bemerkungen}
+            saveToDb={saveToDb}
+            error={fieldErrors.bemerkungen}
+          />
+        </FormContainer>
       </Container>
     </ErrorBoundary>
   )

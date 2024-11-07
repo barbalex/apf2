@@ -2,7 +2,6 @@ import { useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -25,11 +24,13 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const FieldsContainer = styled.div`
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const FormContainer = styled.div`
   padding: 10px;
 `
 const KontrolljahrContainer = styled.div`
@@ -153,98 +154,88 @@ const Ekfrequenz = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="EK-Frequenz" />
-        <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FormContainer>
-              <TextField
-                name="code"
-                label="Kürzel"
-                type="text"
-                value={row.code}
-                saveToDb={saveToDb}
-                error={fieldErrors.code}
-              />
-              <TextField
-                name="anwendungsfall"
-                label="Anwendungsfall"
-                type="text"
-                value={row.anwendungsfall}
-                saveToDb={saveToDb}
-                error={fieldErrors.anwendungsfall}
-              />
-              <RadioButtonGroup
-                name="ektyp"
-                dataSource={ektypeWertes}
-                loading={false}
-                label="EK-Typ"
-                value={row.ektyp}
-                saveToDb={saveToDb}
-                error={fieldErrors.ektyp}
-              />
-              <KontrolljahrContainer>
-                <LabelRow>
-                  <StyledLabel>
-                    Kontrolljahre (= Anzahl Jahre nach Start bzw. Ansiedlung)
-                  </StyledLabel>
-                </LabelRow>
-                <Kontrolljahre
-                  kontrolljahre={row?.kontrolljahre?.slice()}
-                  saveToDb={saveToDb}
-                  refetch={refetch}
-                  //kontrolljahreString={JSON.stringify(row.kontrolljahre)}
-                />
-              </KontrolljahrContainer>
-              <RadioButtonGroup
-                name="kontrolljahreAb"
-                dataSource={kontrolljahreAbWertes}
-                loading={false}
-                label="Kontrolljahre ab letzter"
-                value={row.kontrolljahreAb}
-                saveToDb={saveToDb}
-                error={fieldErrors.kontrolljahreAb}
-              />
-              <div>
-                {errorEkAbrechnungstypWertes ?
-                  errorEkAbrechnungstypWertes.message
-                : <RadioButtonGroup
-                    name="ekAbrechnungstyp"
-                    dataSource={
-                      dataEkAbrechnungstypWertes?.allEkAbrechnungstypWertes
-                        ?.nodes ?? []
-                    }
-                    loading={loadingEkAbrechnungstypWertes}
-                    label="EK-Abrechnungstyp"
-                    value={row.ekAbrechnungstyp}
-                    saveToDb={saveToDb}
-                    error={fieldErrors.ekAbrechnungstyp}
-                  />
+        <FormContainer>
+          <TextField
+            name="code"
+            label="Kürzel"
+            type="text"
+            value={row.code}
+            saveToDb={saveToDb}
+            error={fieldErrors.code}
+          />
+          <TextField
+            name="anwendungsfall"
+            label="Anwendungsfall"
+            type="text"
+            value={row.anwendungsfall}
+            saveToDb={saveToDb}
+            error={fieldErrors.anwendungsfall}
+          />
+          <RadioButtonGroup
+            name="ektyp"
+            dataSource={ektypeWertes}
+            loading={false}
+            label="EK-Typ"
+            value={row.ektyp}
+            saveToDb={saveToDb}
+            error={fieldErrors.ektyp}
+          />
+          <KontrolljahrContainer>
+            <LabelRow>
+              <StyledLabel>
+                Kontrolljahre (= Anzahl Jahre nach Start bzw. Ansiedlung)
+              </StyledLabel>
+            </LabelRow>
+            <Kontrolljahre
+              kontrolljahre={row?.kontrolljahre?.slice()}
+              saveToDb={saveToDb}
+              refetch={refetch}
+              //kontrolljahreString={JSON.stringify(row.kontrolljahre)}
+            />
+          </KontrolljahrContainer>
+          <RadioButtonGroup
+            name="kontrolljahreAb"
+            dataSource={kontrolljahreAbWertes}
+            loading={false}
+            label="Kontrolljahre ab letzter"
+            value={row.kontrolljahreAb}
+            saveToDb={saveToDb}
+            error={fieldErrors.kontrolljahreAb}
+          />
+          <div>
+            {errorEkAbrechnungstypWertes ?
+              errorEkAbrechnungstypWertes.message
+            : <RadioButtonGroup
+                name="ekAbrechnungstyp"
+                dataSource={
+                  dataEkAbrechnungstypWertes?.allEkAbrechnungstypWertes
+                    ?.nodes ?? []
                 }
-              </div>
-              <TextField
-                name="bemerkungen"
-                label="Bemerkungen"
-                type="text"
-                value={row.bemerkungen}
+                loading={loadingEkAbrechnungstypWertes}
+                label="EK-Abrechnungstyp"
+                value={row.ekAbrechnungstyp}
                 saveToDb={saveToDb}
-                error={fieldErrors.bemerkungen}
+                error={fieldErrors.ekAbrechnungstyp}
               />
-              <TextField
-                name="sort"
-                label="Sortierung"
-                type="number"
-                value={row.sort}
-                saveToDb={saveToDb}
-                error={fieldErrors.sort}
-              />
-            </FormContainer>
-          </SimpleBar>
-        </FieldsContainer>
+            }
+          </div>
+          <TextField
+            name="bemerkungen"
+            label="Bemerkungen"
+            type="text"
+            value={row.bemerkungen}
+            saveToDb={saveToDb}
+            error={fieldErrors.bemerkungen}
+          />
+          <TextField
+            name="sort"
+            label="Sortierung"
+            type="number"
+            value={row.sort}
+            saveToDb={saveToDb}
+            error={fieldErrors.sort}
+          />
+        </FormContainer>
       </Container>
     </ErrorBoundary>
   )
