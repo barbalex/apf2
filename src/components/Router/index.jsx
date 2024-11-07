@@ -625,6 +625,10 @@ export const Router = () => {
         v7_startTransition: true,
         v7_partialHydration: true,
         v7_skipActionStatusRevalidation: true,
+        // This did not work on first try
+        // Looks like LOTS of work and many possible errors...
+        // https://reactrouter.com/en/6.27.0/upgrading/future#v7_relativesplatpath
+        // v7_relativeSplatPath: true,
       },
     },
   )

@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { FaPlus, FaMinus, FaFilePdf } from 'react-icons/fa6'
+import { FaPlus, FaMinus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -22,7 +22,6 @@ export const Menu = memo(
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const { projId } = useParams()
     const store = useContext(StoreContext)
 
     const onClickAdd = useCallback(async () => {
@@ -30,22 +29,17 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createApberuebersichtForApberuebersichtForm(
-              $projId: UUID!
-            ) {
-              createApberuebersicht(
-                input: { apberuebersicht: { projId: $projId } }
-              ) {
-                apberuebersicht {
+            mutation createAdresseForAdresseForm {
+              createAdresse(input: { adresse: {} }) {
+                adresse {
                   id
-                  projId
                 }
               }
             }
           `,
-          variables: { projId },
         })
       } catch (error) {
+        console.log('error:', error)
         return store.enqueNotification({
           message: error.message,
           options: {
@@ -54,14 +48,14 @@ export const Menu = memo(
         })
       }
       queryClient.invalidateQueries({
-        queryKey: [`treeApberuebersicht`],
+        queryKey: ['treeWerteFolders'],
       })
       queryClient.invalidateQueries({
-        queryKey: [`treeRoot`],
+        queryKey: ['treeAdresse'],
       })
-      const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
-      navigate(`/Daten/Projekte/${projId}/AP-Berichte/${id}${search}`)
-    }, [projId, client, store, queryClient, navigate, search])
+      const id = result?.data?.createAdresse?.adresse?.id
+      navigate(`/Daten/Werte-Listen/Adressen/${id}${search}`)
+    }, [client, store, queryClient, navigate, search])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -71,9 +65,9 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation deleteApberuebersicht($id: UUID!) {
-              deleteApberuebersichtById(input: { id: $id }) {
-                apberuebersicht {
+            mutation deleteAdresse($id: UUID!) {
+              deleteAdresseById(input: { id: $id }) {
+                adresse {
                   id
                 }
               }
@@ -99,24 +93,20 @@ export const Menu = memo(
 
       // update tree query
       queryClient.invalidateQueries({
-        queryKey: [`treeApberuebersicht`],
+        queryKey: [`treeWerteFolders`],
       })
       queryClient.invalidateQueries({
-        queryKey: [`treeRoot`],
+        queryKey: ['treeAdresse'],
       })
       // navigate to parent
-      navigate(`/Daten/Projekte/${projId}/AP-Berichte${search}`)
+      navigate(`/Daten/Werte-Listen/Adressen${search}`)
     }, [])
-
-    const onClickPrint = useCallback(() => {
-      navigate(`print${search}`)
-    }, [navigate, search])
 
     return (
       <ErrorBoundary>
         <MenuBar>
           <IconButton
-            title="Neuen AP-Bericht erstellen"
+            title="Neue Adresse erstellen"
             onClick={onClickAdd}
           >
             <FaPlus />
@@ -124,19 +114,13 @@ export const Menu = memo(
           <IconButton
             title="Löschen"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'abperuebersichtDelMenu' : undefined}
+            aria-owns={delMenuOpen ? 'adresseDelMenu' : undefined}
           >
             <FaMinus />
           </IconButton>
-          <IconButton
-            title="Druckversion öffnen. Achtung: lädt sehr viele Daten, ist daher langsam und stresst den Server."
-            onClick={onClickPrint}
-          >
-            <FaFilePdf />
-          </IconButton>
         </MenuBar>
         <MuiMenu
-          id="abperuebersichtDelMenu"
+          id="adresseDelMenu"
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}

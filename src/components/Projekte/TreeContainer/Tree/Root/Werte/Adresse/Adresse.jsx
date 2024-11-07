@@ -1,12 +1,13 @@
 import { useContext } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
 
 import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
 
 export const Adresse = () => {
   const client = useApolloClient()
+  const tanstackClient = useQueryClient()
   const store = useContext(StoreContext)
   const { nodeLabelFilter } = store.tree
 
