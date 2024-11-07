@@ -65,7 +65,7 @@ const StyledMenu = styled(Menu)`
 export const MenuBar = memo(
   ({ children, rerenderer, titleComponent, titleComponentWidth = 60 }) => {
     const usableChildren = useMemo(
-      () => children.filter((child) => !!child),
+      () => children?.filter?.((child) => !!child) ?? children,
       [children],
     )
     const outerContainerRef = useRef(null)
