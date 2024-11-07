@@ -60,7 +60,8 @@ const StyledMenu = styled(Menu)`
     padding: 0 !important;
   }
 `
-
+// the rerenderer ensures re-calculating the overflow when the children change due to special effects
+// example: changing to preview for files
 export const MenuBar = memo(
   ({ children, rerenderer, titleComponent, titleComponentWidth = 60 }) => {
     const usableChildren = useMemo(

@@ -270,7 +270,7 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={isPreview}
+          rerenderer={`${isPreview}/${isFullscreen}`}
           titleComponent={
             <Title
               file={file}
