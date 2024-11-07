@@ -2,7 +2,6 @@ import { useCallback, useContext, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -22,11 +21,13 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const FieldsContainer = styled.div`
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -131,44 +132,34 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Kontroll-Bericht Teil-Population" />
-        <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FormContainer>
-              <TextField
-                name="jahr"
-                label="Jahr"
-                type="number"
-                value={row.jahr}
-                saveToDb={saveToDb}
-                error={fieldErrors.jahr}
-              />
-              <RadioButtonGroup
-                name="entwicklung"
-                label="Entwicklung"
-                dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
-                loading={loading}
-                value={row.entwicklung}
-                saveToDb={saveToDb}
-                error={fieldErrors.entwicklung}
-              />
-              <TextField
-                name="bemerkungen"
-                label="Bemerkungen"
-                type="text"
-                value={row.bemerkungen}
-                multiLine
-                saveToDb={saveToDb}
-                error={fieldErrors.bemerkungen}
-              />
-            </FormContainer>
-          </SimpleBar>
-        </FieldsContainer>
+        <FormContainer>
+          <TextField
+            name="jahr"
+            label="Jahr"
+            type="number"
+            value={row.jahr}
+            saveToDb={saveToDb}
+            error={fieldErrors.jahr}
+          />
+          <RadioButtonGroup
+            name="entwicklung"
+            label="Entwicklung"
+            dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
+            loading={loading}
+            value={row.entwicklung}
+            saveToDb={saveToDb}
+            error={fieldErrors.entwicklung}
+          />
+          <TextField
+            name="bemerkungen"
+            label="Bemerkungen"
+            type="text"
+            value={row.bemerkungen}
+            multiLine
+            saveToDb={saveToDb}
+            error={fieldErrors.bemerkungen}
+          />
+        </FormContainer>
       </Container>
     </ErrorBoundary>
   )

@@ -9,7 +9,6 @@ import max from 'lodash/max'
 import groupBy from 'lodash/groupBy'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 
 import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'
@@ -30,6 +29,14 @@ import {
 } from '../../../../shared/fragments.js'
 import { fieldTypes } from '../index.jsx'
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+`
 const FormContainerNoColumnsInner = styled.div`
   padding: 10px;
   padding-bottom: 35px;
@@ -215,16 +222,8 @@ export const Component = () => {
   if (!row) return null
 
   return (
-    <SimpleBar
-      style={{
-        maxHeight: '100%',
-        height: '100%',
-        width: '100%',
-        maxWidth: '100%',
-      }}
-      tabIndex={-1}
-    >
-      <ErrorBoundary>
+    <ErrorBoundary>
+      <Container>
         <FormContainerNoColumnsInner>
           <EkfrequenzOptionsContainer>
             <RadioButtonGroup
@@ -291,7 +290,7 @@ export const Component = () => {
             }
           </TableBody>
         </StyledTable>
-      </ErrorBoundary>
-    </SimpleBar>
+      </Container>
+    </ErrorBoundary>
   )
 }
