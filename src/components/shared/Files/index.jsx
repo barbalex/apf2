@@ -1,43 +1,16 @@
-import {
-  useCallback,
-  useState,
-  useRef,
-  useContext,
-  memo,
-  useMemo,
-  Suspense,
-  useEffect,
-} from 'react'
+import { useCallback, useRef, useContext, memo, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import SimpleBar from 'simplebar-react'
-import {
-  FaPlus,
-  FaMinus,
-  FaEye,
-  FaEyeSlash,
-  FaChevronLeft,
-  FaChevronRight,
-  FaMaximize,
-  FaMinimize,
-  FaDownload,
-} from 'react-icons/fa6'
-import { useNavigate, useLocation, Outlet, useParams } from 'react-router-dom'
-import screenfull from 'screenfull'
+import { useNavigate, Outlet, useParams } from 'react-router-dom'
 
 import './index.css'
 
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
-import { Error } from '../Error'
-import { Spinner } from '../Spinner'
-import { MenuBar } from '../MenuBar/index.jsx'
+import { Error } from '../Error.jsx'
+import { Spinner } from '../Spinner.jsx'
 
 import {
   apFile as apFileFragment,
@@ -49,11 +22,8 @@ import {
 } from '../fragments'
 import { Uploader } from '../Uploader/index.jsx'
 import { UploaderContext } from '../../../UploaderContext.js'
-import { File } from './Files/File.jsx'
-import { isImageFile } from './isImageFile.js'
 import { StoreContext } from '../../../storeContext.js'
-import { icon } from 'leaflet'
-import { set } from 'lodash'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -62,16 +32,6 @@ const Container = styled.div`
 `
 const OutletContainer = styled.div`
   flex-grow: 1;
-`
-const MenuTitle = styled.h3`
-  padding-top: 8px;
-  padding-left: 15px;
-  padding-right: 16px;
-  padding-bottom: 0;
-  margin-bottom: 3px;
-  &:focus {
-    outline: none;
-  }
 `
 
 const fragmentObject = {
@@ -85,12 +45,9 @@ const fragmentObject = {
 
 export const FilesRouter = memo(
   observer(({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
-    // console.log('FilesRouter', { parentId, parent })
     const store = useContext(StoreContext)
     const { fileId } = useParams()
     const navigate = useNavigate()
-    const { pathname } = useLocation()
-    const isPreview = pathname.endsWith('Vorschau')
     const client = useApolloClient()
     const uploaderCtx = useContext(UploaderContext)
     const api = uploaderCtx?.current?.getAPI?.()
@@ -210,210 +167,6 @@ export const FilesRouter = memo(
       setTimeout(() => refetch(), 500)
     }, [])
 
-    const firstFileId = files?.[0]?.fileId
-
-    const onClickPreview = useCallback(() => {
-      navigate(`${firstFileId}/Vorschau`)
-    }, [firstFileId])
-    const onClickClosePreview = useCallback(() => {
-      // relative navigation using ../.. does not work here
-      const fileIdBeginsAt = pathname.indexOf(fileId)
-      const newPathname = pathname.slice(0, fileIdBeginsAt)
-      navigate(newPathname)
-    }, [pathname, fileId])
-
-    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
-    const delMenuOpen = Boolean(delMenuAnchorEl)
-    const onClickDelete = useCallback(async () => {
-      const indexOfFileInPathname = pathname.indexOf(fileId)
-      // delete file with fileId
-      // first get fileId of next file to navigate to it after deleting this one
-      // get index of current file in files
-      const index = files.findIndex((file) => file.fileId === fileId)
-      const file = files[index]
-      // get file to navigate to after deleting this one
-      const nextFile = files[index + 1]
-      const prevFile = files[index - 1]
-      const nextPathname =
-        nextFile ?
-          `${pathname.slice(0, indexOfFileInPathname)}${nextFile.fileId}/Vorschau`
-        : prevFile ?
-          `${pathname.slice(0, indexOfFileInPathname)}${prevFile.fileId}/Vorschau`
-        : pathname.slice(0, indexOfFileInPathname)
-      try {
-        const tableName = `${parent}File`
-        const mutationName = `delete${upperFirst(parent)}FileById`
-        await client.mutate({
-          mutation: gql`
-          mutation deleteDataset {
-            ${mutationName}(
-              input: {
-                id: "${file.id}"
-              }
-            ) {
-              ${tableName} {
-                id
-              }
-            }
-          }
-        `,
-        })
-      } catch (error) {
-        console.log(error)
-        return store.enqueNotification({
-          message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      setDelMenuAnchorEl(null)
-      refetch()
-      navigate(nextPathname)
-    }, [fileId, files, client, parent, pathname])
-
-    const onClickNext = useCallback(() => {
-      // get index of current file in files
-      const index = files.findIndex((file) => file.fileId === fileId)
-      // get file to navigate to
-      const nextFile = files[index + 1] ?? files[0]
-      navigate(`${nextFile.fileId}/Vorschau`)
-    }, [fileId, files, navigate])
-
-    const onClickPrev = useCallback(() => {
-      // get index of current file in files
-      const index = files.findIndex((file) => file.fileId === fileId)
-      // get file to navigate to
-      const prevFile = files[index - 1] ?? files[files.length - 1]
-      navigate(`${prevFile.fileId}/Vorschau`)
-    }, [fileId, files, navigate])
-
-    // enable reacting to fullscreen changes
-    const [isFullscreen, setIsFullscreen] = useState(false)
-    useEffect(() => {
-      screenfull.on('change', () => setIsFullscreen(screenfull.isFullscreen))
-      return () => screenfull.off('change')
-    }, [])
-
-    const onClickDownload = useCallback(
-      () => window.open(`https://ucarecdn.com/${fileId}/-/inline/no/`),
-      [fileId],
-    )
-
-    // BEWARE: functions passed into menus do not react to state changes
-    // unless they are added to the dependencies array
-    const menus = useMemo(
-      () => [
-        <IconButton
-          key="vorschau_oeffnen"
-          title="Vorschau öffnen"
-          onClick={onClickPreview}
-          disabled={!firstFileId}
-        >
-          <FaEye />
-        </IconButton>,
-        <IconButton
-          key="dateien_hochladen"
-          title="Dateien hochladen"
-          onClick={api?.initFlow}
-        >
-          <FaPlus />
-        </IconButton>,
-      ],
-      [onClickPreview],
-    )
-    const previewMenus = useMemo(
-      () => [
-        <IconButton
-          key="vorschau_schliessen"
-          title="Vorschau schliessen"
-          onClick={onClickClosePreview}
-        >
-          <FaEyeSlash />
-        </IconButton>,
-        ...[
-          screenfull.isEnabled ?
-            <IconButton
-              key="minimieren"
-              title={isFullscreen ? 'minimieren' : 'maximieren'}
-              onClick={() => screenfull.toggle(containerRef.current)}
-            >
-              {isFullscreen ?
-                <FaMinimize />
-              : <FaMaximize />}
-            </IconButton>
-          : [],
-        ],
-        <IconButton
-          key="download"
-          title="herunterladen"
-          onClick={onClickDownload}
-        >
-          <FaDownload />
-        </IconButton>,
-        <IconButton
-          key="dateien_hochladen"
-          title="Dateien hochladen"
-          onClick={api?.initFlow}
-        >
-          <FaPlus />
-        </IconButton>,
-        <div
-          key="loeschen"
-          style={{ display: 'inline' }}
-        >
-          <IconButton
-            title="löschen"
-            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'previewDelMenu' : undefined}
-          >
-            <FaMinus />
-          </IconButton>
-          <Menu
-            id="previewDelMenu"
-            anchorEl={delMenuAnchorEl}
-            open={delMenuOpen}
-            onClose={() => setDelMenuAnchorEl(null)}
-            PaperProps={{
-              style: {
-                maxHeight: 48 * 4.5,
-                width: 120,
-              },
-            }}
-          >
-            <MenuTitle>löschen?</MenuTitle>
-            <MenuItem onClick={onClickDelete}>ja</MenuItem>
-            <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
-          </Menu>
-        </div>,
-        <IconButton
-          key="vorige_datei"
-          title="vorige Datei"
-          onClick={onClickPrev}
-        >
-          <FaChevronLeft />
-        </IconButton>,
-        <IconButton
-          key="naechste_datei"
-          title="nächste Datei"
-          onClick={onClickNext}
-        >
-          <FaChevronRight />
-        </IconButton>,
-      ],
-      [
-        onClickClosePreview,
-        delMenuOpen,
-        delMenuAnchorEl,
-        onClickDelete,
-        onClickNext,
-        onClickPrev,
-        isFullscreen,
-        screenfull.isEnabled,
-        isPreview,
-      ],
-    )
-
     if (isLoading) return <Spinner />
 
     if (error) return <Error error={error} />
@@ -426,12 +179,12 @@ export const FilesRouter = memo(
             onFileUploadFailed={onFileUploadFailed}
             onCommonUploadSuccess={onCommonUploadSuccess}
           />
-          <MenuBar
-            isPreview={isPreview}
-            file={files.find((f) => f.fileId === fileId)}
-          >
-            {isPreview ? previewMenus : menus}
-          </MenuBar>
+          <Menu
+            parent={parent}
+            files={files}
+            refetch={refetch}
+            containerRef={containerRef}
+          />
           <OutletContainer>
             <Suspense fallback={<Spinner />}>
               <Outlet
