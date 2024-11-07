@@ -23,18 +23,17 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { historize } from '../../../../modules/historize.js'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
-  // overflow: hidden;
 `
 const FieldsContainer = styled.div`
   overflow-y: auto;
   scrollbar-width: thin;
-  // height: calc(100% - 39px);
   flex-grow: 1;
 `
 const HistorizeButton = styled(Button)`
@@ -190,6 +189,7 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="AP-Bericht Jahresübersicht" />
+        {/* <Menu /> */}
         <FieldsContainer>
           <SimpleBar
             style={{
