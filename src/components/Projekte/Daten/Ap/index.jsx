@@ -28,7 +28,6 @@ const FormContainer = styled.div`
   overflow-y: auto;
   scrollbar-width: thin;
   padding: 10px;
-  padding-top: 0;
 `
 const FieldContainer = styled.div`
   display: flex;
