@@ -189,7 +189,7 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="AP-Bericht Jahresübersicht" />
-        {/* <Menu /> */}
+        <Menu row={row} />
         <FieldsContainer>
           <SimpleBar
             style={{
