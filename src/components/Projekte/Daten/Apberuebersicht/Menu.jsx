@@ -123,7 +123,7 @@ export const Menu = memo(
             <FaMinus />
           </IconButton>
           <IconButton
-            title="Druckversion öffnen. Achtung: Braucht ev. Minuten, um vollständig zu laden!"
+            title="Druckversion öffnen. Achtung: lädt sehr viele Daten, ist daher langsam und stresst den Server."
             onClick={onClickPrint}
           >
             <FaFilePdf />
