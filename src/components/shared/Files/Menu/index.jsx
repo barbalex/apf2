@@ -127,13 +127,11 @@ export const Menu = memo(
     ])
 
     const onClickNext = useCallback(() => {
-      // get file to navigate to
       const nextFile = files[index + 1] ?? files[0]
       navigate(`${nextFile.fileId}/Vorschau`)
     }, [fileId, files, navigate, index])
 
     const onClickPrev = useCallback(() => {
-      // get file to navigate to
       const prevFile = files[index - 1] ?? files[files.length - 1]
       navigate(`${prevFile.fileId}/Vorschau`)
     }, [fileId, files, navigate, index])
@@ -150,8 +148,6 @@ export const Menu = memo(
       [fileId],
     )
 
-    // BEWARE: functions passed into menus do not react to state changes
-    // unless they are added to the dependencies array
     const menus = useMemo(
       () => [
         <IconButton
