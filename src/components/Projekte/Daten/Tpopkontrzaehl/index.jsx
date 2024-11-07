@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
-import SimpleBar from 'simplebar-react'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -25,11 +24,13 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `
-const FieldsContainer = styled.div`
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const FormContainer = styled.div`
   padding: 10px;
 `
 
@@ -127,43 +128,33 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Zählung" />
-        <FieldsContainer>
-          <SimpleBar
-            style={{
-              maxHeight: '100%',
-              height: '100%',
-            }}
-            tabIndex={-1}
-          >
-            <FormContainer>
-              <Select
-                name="einheit"
-                label="Einheit"
-                options={zaehlEinheitOptions}
-                loading={loading}
-                value={row.einheit}
-                saveToDb={saveToDb}
-                error={fieldErrors.einheit}
-              />
-              <TextField
-                name="anzahl"
-                label="Anzahl"
-                type="number"
-                value={row.anzahl}
-                saveToDb={saveToDb}
-                error={fieldErrors.anzahl}
-              />
-              <RadioButtonGroup
-                name="methode"
-                label="Methode"
-                dataSource={data?.allTpopkontrzaehlMethodeWertes?.nodes ?? []}
-                value={row.methode}
-                saveToDb={saveToDb}
-                error={fieldErrors.methode}
-              />
-            </FormContainer>
-          </SimpleBar>
-        </FieldsContainer>
+        <FormContainer>
+          <Select
+            name="einheit"
+            label="Einheit"
+            options={zaehlEinheitOptions}
+            loading={loading}
+            value={row.einheit}
+            saveToDb={saveToDb}
+            error={fieldErrors.einheit}
+          />
+          <TextField
+            name="anzahl"
+            label="Anzahl"
+            type="number"
+            value={row.anzahl}
+            saveToDb={saveToDb}
+            error={fieldErrors.anzahl}
+          />
+          <RadioButtonGroup
+            name="methode"
+            label="Methode"
+            dataSource={data?.allTpopkontrzaehlMethodeWertes?.nodes ?? []}
+            value={row.methode}
+            saveToDb={saveToDb}
+            error={fieldErrors.methode}
+          />
+        </FormContainer>
       </Container>
     </ErrorBoundary>
   )
