@@ -62,7 +62,7 @@ const StyledMenu = styled(Menu)`
 `
 
 export const MenuBar = memo(
-  ({ children, isPreview, titleComponent, titleComponentWidth = 60 }) => {
+  ({ children, rerenderer, titleComponent, titleComponentWidth = 60 }) => {
     const usableChildren = useMemo(
       () => children.filter((child) => !!child),
       [children],
@@ -184,7 +184,7 @@ export const MenuBar = memo(
       // and check overflow when preview changes
       // console.log('MenuBar.useEffect, calling checkOverflow')
       checkOverflow()
-    }, [isPreview])
+    }, [rerenderer])
 
     const previousWidthRef = useRef(null)
     useEffect(() => {
@@ -230,7 +230,7 @@ export const MenuBar = memo(
         // console.log('MenuBar.useEffect, observer.disconnect')
         observer.disconnect()
       }
-    }, [previousWidthRef.current, isPreview, menuChildrenCount])
+    }, [previousWidthRef.current, rerenderer, menuChildrenCount])
 
     const onClickMenuButton = useCallback((event) =>
       setMenuAnchorEl(event.currentTarget),
