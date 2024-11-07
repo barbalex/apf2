@@ -26,7 +26,6 @@ import {
 import styled from '@emotion/styled'
 import { over, set } from 'lodash'
 import { useDebouncedCallback } from 'use-debounce'
-import { Title } from './Title.jsx'
 
 const buttonSize = 40
 
@@ -65,7 +64,7 @@ const StyledMenu = styled(Menu)`
 // or rather: need info for menu AND button
 // so: object with: title, iconComponent, onClick, width?
 // then: build menu and or buttons from that
-export const MenuBar = memo(({ children, isPreview, file }) => {
+export const MenuBar = memo(({ children, isPreview, file, titleComponent }) => {
   const usableChildren = useMemo(
     () => children.filter((child) => !!child),
     [children],
@@ -229,7 +228,7 @@ export const MenuBar = memo(({ children, isPreview, file }) => {
 
   return (
     <MeasuredOuterContainer ref={outerContainerRef}>
-      {!!file?.name && <Title file={file} />}
+      {titleComponent}
       <InnerContainer ref={innerContainerRef}>
         <StylingContainer>
           {buttonChildren}

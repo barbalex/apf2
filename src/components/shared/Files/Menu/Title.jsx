@@ -2,7 +2,7 @@ import { memo, forwardRef } from 'react'
 import { Tooltip } from '@mui/material'
 import styled from '@emotion/styled'
 
-import { ErrorBoundary } from '../ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../ErrorBoundary.jsx'
 
 const TitleContainer = styled.div``
 const TitleDiv = styled.h3`
@@ -65,10 +65,14 @@ const FileNameForTooltip = memo(
   )),
 )
 
-export const Title = memo(({ file }) => (
-  <ErrorBoundary>
-    <Tooltip title={<FileNameForTooltip file={file} />}>
-      <TitleDiv>{file.name}</TitleDiv>
-    </Tooltip>
-  </ErrorBoundary>
-))
+export const Title = memo(({ file }) => {
+  if (!file) return null
+
+  return (
+    <ErrorBoundary>
+      <Tooltip title={<FileNameForTooltip file={file} />}>
+        <TitleDiv>{file.name}</TitleDiv>
+      </Tooltip>
+    </ErrorBoundary>
+  )
+})

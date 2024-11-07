@@ -23,7 +23,7 @@ import {
 import { Uploader } from '../Uploader/index.jsx'
 import { UploaderContext } from '../../../UploaderContext.js'
 import { StoreContext } from '../../../storeContext.js'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu/index.jsx'
 
 const Container = styled.div`
   flex-grow: 1;

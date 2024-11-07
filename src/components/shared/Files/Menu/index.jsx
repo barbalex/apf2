@@ -27,11 +27,11 @@ import {
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import screenfull from 'screenfull'
 
-import { ErrorBoundary } from '../ErrorBoundary.jsx'
-import { MenuBar } from '../MenuBar/index.jsx'
-
-import { UploaderContext } from '../../../UploaderContext.js'
-import { StoreContext } from '../../../storeContext.js'
+import { ErrorBoundary } from '../../ErrorBoundary.jsx'
+import { MenuBar } from '../../MenuBar/index.jsx'
+import { Title } from './Title.jsx'
+import { UploaderContext } from '../../../../UploaderContext.js'
+import { StoreContext } from '../../../../storeContext.js'
 
 const MenuTitle = styled.h3`
   padding-top: 8px;
@@ -56,6 +56,7 @@ export const Menu = memo(
     const api = uploaderCtx?.current?.getAPI?.()
 
     const firstFileId = files?.[0]?.fileId
+    const file = files.find((f) => f.fileId === fileId)
 
     const onClickPreview = useCallback(() => {
       navigate(`${firstFileId}/Vorschau`)
@@ -75,7 +76,6 @@ export const Menu = memo(
       // first get fileId of next file to navigate to it after deleting this one
       // get index of current file in files
       const index = files.findIndex((file) => file.fileId === fileId)
-      const file = files[index]
       // get file to navigate to after deleting this one
       const nextFile = files[index + 1]
       const prevFile = files[index - 1]
@@ -263,7 +263,8 @@ export const Menu = memo(
       <ErrorBoundary>
         <MenuBar
           isPreview={isPreview}
-          file={files.find((f) => f.fileId === fileId)}
+          file={file}
+          titleComponent={<Title file={file} />}
         >
           {isPreview ? previewMenus : menus}
         </MenuBar>
