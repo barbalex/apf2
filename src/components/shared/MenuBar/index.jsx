@@ -27,12 +27,13 @@ import styled from '@emotion/styled'
 import { over, set } from 'lodash'
 import { useDebouncedCallback } from 'use-debounce'
 
-const buttonSize = 40
+const buttonHeight = 40
+const buttonWidth = 40
 
 const MeasuredOuterContainer = styled.div`
   overflow: hidden;
-  min-height: ${buttonSize}px;
-  max-height: ${buttonSize}px;
+  min-height: ${buttonHeight}px;
+  max-height: ${buttonHeight}px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -44,8 +45,8 @@ const MeasuredOuterContainer = styled.div`
 `
 // align items to the right
 const InnerContainer = styled.div`
-  min-height: ${buttonSize}px;
-  max-height: ${buttonSize}px;
+  min-height: ${buttonHeight}px;
+  max-height: ${buttonHeight}px;
   margin-left: auto;
   margin-right: 0;
   margin-top: auto;
@@ -54,7 +55,7 @@ const InnerContainer = styled.div`
 const StylingContainer = styled.div`
   display: flex;
   padding: 0 10px;
-  max-height: ${buttonSize}px;
+  max-height: ${buttonHeight}px;
 `
 // remove the margin mui adds to top and bottom of menu
 const StyledMenu = styled(Menu)`
@@ -64,8 +65,16 @@ const StyledMenu = styled(Menu)`
 `
 // the rerenderer ensures re-calculating the overflow when the children change due to special effects
 // example: changing to preview for files
+// TODO: enable passing in elements with different widths
+// use childrenWidths array for that?
 export const MenuBar = memo(
-  ({ children, rerenderer, titleComponent, titleComponentWidth = 60 }) => {
+  ({
+    children,
+    widths,
+    rerenderer,
+    titleComponent,
+    titleComponentWidth = 60,
+  }) => {
     const usableChildren = useMemo(
       () => children?.filter?.((child) => !!child) ?? children,
       [children],
@@ -75,51 +84,51 @@ export const MenuBar = memo(
 
     const previousMeasurementTimeRef = useRef(0)
     const childrenCount = Children.count(usableChildren)
-    const [menuChildrenCount, setMenuChildrenCount] = useState(0)
+    const [menusCount, setMenusCount] = useState(0)
 
-    const buttonChildren = useMemo(
+    const buttons = useMemo(
       () =>
         Children.map(usableChildren, (child, index) => {
-          if (!(index + 1 <= childrenCount - menuChildrenCount)) return null
+          if (!(index + 1 <= childrenCount - menusCount)) return null
           if (!child) return null
           return cloneElement(child)
         }).filter((child) => !!child),
-      [usableChildren, childrenCount, menuChildrenCount],
+      [usableChildren, childrenCount, menusCount],
     )
 
-    const menuChildren = useMemo(
+    const menus = useMemo(
       () =>
         Children.map(usableChildren, (child, index) => {
-          if (!(index + 1 > childrenCount - menuChildrenCount)) return null
+          if (!(index + 1 > childrenCount - menusCount)) return null
           if (!child) return null
           return cloneElement(child)
         }).filter((child) => !!child),
-      [usableChildren, childrenCount, menuChildrenCount],
+      [usableChildren, childrenCount, menusCount],
     )
 
     // console.log('MenuBar', {
     //   usableChildren,
-    //   buttonChildren,
-    //   menuChildren,
+    //   buttons,
+    //   menus,
     //   childrenCount,
-    //   menuChildrenCount,
+    //   menusCount,
     // })
 
-    const incrementMenuChildrenCount = useCallback(
-      () => setMenuChildrenCount((prev) => prev + 1),
+    const incrementMenusCount = useCallback(
+      () => setMenusCount((prev) => prev + 1),
       [],
     )
-    const incrementMenuChildrenCountRevealingMenu = useCallback(
-      () => setMenuChildrenCount((prev) => prev + 2),
+    const incrementMenusCountRevealingMenu = useCallback(
+      () => setMenusCount((prev) => prev + 2),
       [],
     )
-    const decrementMenuChildrenCount = useCallback(
-      () => setMenuChildrenCount((prev) => prev - 1),
+    const decrementMenusCount = useCallback(
+      () => setMenusCount((prev) => prev - 1),
       [],
     )
-    const decrementMenuChildrenCountHidingMenu = useCallback(
-      () => setMenuChildrenCount((prev) => prev - menuChildrenCount),
-      [menuChildrenCount],
+    const decrementMenusCountHidingMenu = useCallback(
+      () => setMenusCount((prev) => prev - menusCount),
+      [menusCount],
     )
 
     // this was quite some work to get right
@@ -139,15 +148,17 @@ export const MenuBar = memo(
       const growableSpace =
         containerWidth - titleWidth - innerContainerRef.current.clientWidth
 
+      // TODO: instead of buttonWidth, use the passed in width of the last button
+      const widthOfLastButton = widths?.[buttons.length - 1] ?? buttonWidth
+      const widthOfFirstMenu = widths?.[buttons.length] ?? buttonWidth
       const needToIncrement =
         growableSpace < 0 ||
-        containerScrollWidth > containerWidth + buttonSize ||
+        containerScrollWidth > containerWidth + widthOfLastButton ||
         containerScrollHeight > containerHeight
-      const needToIncrementRevealingMenu =
-        needToIncrement && menuChildrenCount === 0
-      const needToDecrement =
-        growableSpace > buttonSize && menuChildrenCount > 0
-      const needToDecrementHidingMenu = needToDecrement && menuChildrenCount < 3
+      const needToIncrementRevealingMenu = needToIncrement && menusCount === 0
+      // TODO: instead of buttonWidth, use the passed in width of the first menu
+      const needToDecrement = growableSpace > buttonWidth && menusCount > 0
+      const needToDecrementHidingMenu = needToDecrement && menusCount < 3
 
       // console.log('MenuBar.checkOverflow')
 
@@ -162,28 +173,28 @@ export const MenuBar = memo(
       //   needToDecrement,
       //   growableSpace,
       //   usableChildren,
-      //   buttonChildren,
-      //   menuChildren,
+      //   buttons,
+      //   menus,
       //   childrenCount,
-      //   menuChildrenCount,
+      //   menusCount,
       //   titleWidth,
       // })
 
       if (needToIncrementRevealingMenu) {
-        return incrementMenuChildrenCountRevealingMenu()
+        return incrementMenusCountRevealingMenu()
       }
-      if (needToIncrement) return incrementMenuChildrenCount()
+      if (needToIncrement) return incrementMenusCount()
       if (needToDecrementHidingMenu) {
-        return decrementMenuChildrenCountHidingMenu()
+        return decrementMenusCountHidingMenu()
       }
-      if (needToDecrement) decrementMenuChildrenCount()
-    }, [menuChildrenCount])
+      if (needToDecrement) decrementMenusCount()
+    }, [menusCount])
 
     const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
 
     useEffect(() => {
       // reset children count
-      setMenuChildrenCount(0)
+      setMenusCount(0)
       // and check overflow when preview changes
       // console.log('MenuBar.useEffect, calling checkOverflow')
       checkOverflow()
@@ -233,7 +244,7 @@ export const MenuBar = memo(
         // console.log('MenuBar.useEffect, observer.disconnect')
         observer.disconnect()
       }
-    }, [previousWidthRef.current, rerenderer, menuChildrenCount])
+    }, [previousWidthRef.current, rerenderer, menusCount])
 
     const onClickMenuButton = useCallback((event) =>
       setMenuAnchorEl(event.currentTarget),
@@ -247,8 +258,8 @@ export const MenuBar = memo(
         {titleComponent}
         <InnerContainer ref={innerContainerRef}>
           <StylingContainer>
-            {buttonChildren}
-            {!!menuChildren.length && (
+            {buttons}
+            {!!menus.length && (
               <>
                 <IconButton
                   id="menubutton"
@@ -263,7 +274,7 @@ export const MenuBar = memo(
                   open={menuIsOpen}
                   onClose={onCloseMenu}
                 >
-                  {menuChildren}
+                  {menus}
                 </StyledMenu>
               </>
             )}
