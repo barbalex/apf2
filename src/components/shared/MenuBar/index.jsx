@@ -159,7 +159,8 @@ export const MenuBar = memo(
       const needToIncrementMenusRevealingMenu =
         needToIncrementMenus && menusCount === 0
       // TODO: instead of buttonWidth, use the passed in width of the first menu
-      const needToDecrementMenus = growableSpace > buttonWidth && menusCount > 0
+      const needToDecrementMenus =
+        growableSpace > widthOfFirstMenu && menusCount > 0
       const needToDecrementMenusHidingMenu =
         needToDecrementMenus && menusCount < 3
 
