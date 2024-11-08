@@ -79,11 +79,8 @@ export const MenuBar = memo(
       () => children?.filter?.((child) => !!child) ?? children,
       [children],
     )
-    const outerContainerRef = useRef(null)
-    const innerContainerRef = useRef(null)
-
-    const previousMeasurementTimeRef = useRef(0)
     const childrenCount = Children.count(usableChildren)
+
     const [menusCount, setMenusCount] = useState(0)
 
     const buttons = useMemo(
@@ -105,6 +102,10 @@ export const MenuBar = memo(
         }).filter((child) => !!child),
       [usableChildren, childrenCount, menusCount],
     )
+
+    const outerContainerRef = useRef(null)
+    const innerContainerRef = useRef(null)
+    const previousMeasurementTimeRef = useRef(0)
 
     // console.log('MenuBar', {
     //   usableChildren,
@@ -151,14 +152,16 @@ export const MenuBar = memo(
       // TODO: instead of buttonWidth, use the passed in width of the last button
       const widthOfLastButton = widths?.[buttons.length - 1] ?? buttonWidth
       const widthOfFirstMenu = widths?.[buttons.length] ?? buttonWidth
-      const needToIncrement =
+      const needToIncrementMenus =
         growableSpace < 0 ||
         containerScrollWidth > containerWidth + widthOfLastButton ||
         containerScrollHeight > containerHeight
-      const needToIncrementRevealingMenu = needToIncrement && menusCount === 0
+      const needToIncrementMenusRevealingMenu =
+        needToIncrementMenus && menusCount === 0
       // TODO: instead of buttonWidth, use the passed in width of the first menu
-      const needToDecrement = growableSpace > buttonWidth && menusCount > 0
-      const needToDecrementHidingMenu = needToDecrement && menusCount < 3
+      const needToDecrementMenus = growableSpace > buttonWidth && menusCount > 0
+      const needToDecrementMenusHidingMenu =
+        needToDecrementMenus && menusCount < 3
 
       // console.log('MenuBar.checkOverflow')
 
@@ -180,14 +183,14 @@ export const MenuBar = memo(
       //   titleWidth,
       // })
 
-      if (needToIncrementRevealingMenu) {
+      if (needToIncrementMenusRevealingMenu) {
         return incrementMenusCountRevealingMenu()
       }
-      if (needToIncrement) return incrementMenusCount()
-      if (needToDecrementHidingMenu) {
+      if (needToIncrementMenus) return incrementMenusCount()
+      if (needToDecrementMenusHidingMenu) {
         return decrementMenusCountHidingMenu()
       }
-      if (needToDecrement) decrementMenusCount()
+      if (needToDecrementMenus) decrementMenusCount()
     }, [menusCount])
 
     const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
