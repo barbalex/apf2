@@ -25,6 +25,7 @@ const StyledButton = styled(Button)`
   text-transform: none;
   line-height: 1.1;
   font-size: 0.8rem;
+  max-height: 36px;
 `
 const StyledLoadingButton = styled(LoadingButton)`
   margin: 0 5px;
@@ -191,13 +192,12 @@ export const Menu = memo(
           {!isBeobZugeordnet && (
             <StyledButton
               variant="outlined"
-              style={{ width: 130 }}
+              style={{ width: 210 }}
               onClick={() =>
                 console.log('TODO: new population and Teilpopulation and Beob')
               }
             >
-              Neue Population und Teilpopulation gründen und Beobachtung der
-              Teilpopulation zuordnen
+              {'Pop. u. TPop. gründen > Beobachtung der TPop. zuordnen'}
             </StyledButton>
           )}
           <StyledButton
