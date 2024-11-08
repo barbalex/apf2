@@ -17,6 +17,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { ziel as zielFragment } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -145,6 +146,7 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Ziel" />
+        <Menu row={row} />
         <FormContainer>
           <TextField
             name="jahr"
