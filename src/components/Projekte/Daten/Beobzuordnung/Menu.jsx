@@ -174,7 +174,9 @@ export const Menu = memo(
       })
     }, [beobId, client, store])
 
+    const [creatingNewPopFromBeob, setCreatingNewPopFromBeob] = useState(false)
     const onClickCreateNewPopFromBeob = useCallback(async () => {
+      setCreatingNewPopFromBeob(true)
       await createNewPopFromBeob({
         id: beobId,
         apId,
@@ -184,6 +186,7 @@ export const Menu = memo(
         search,
         tanstackQueryClient,
       })
+      setCreatingNewPopFromBeob(false)
     }, [beobId, apId, projId, client, store, search])
 
     const widths = useMemo(
@@ -200,7 +203,7 @@ export const Menu = memo(
       <ErrorBoundary>
         <MenuBar
           widths={widths}
-          rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}/${isBeobNichtBeurteilt}`}
+          rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}/${isBeobNichtBeurteilt}/${creatingNewPopFromBeob}`}
         >
           {isBeobZugeordnet && (
             <StyledLoadingButton
@@ -213,13 +216,14 @@ export const Menu = memo(
             </StyledLoadingButton>
           )}
           {isBeobNichtBeurteilt && (
-            <StyledButton
+            <StyledLoadingButton
               variant="outlined"
               style={{ width: 210 }}
               onClick={onClickCreateNewPopFromBeob}
+              loading={creatingNewPopFromBeob}
             >
               {'Pop. u. TPop. gründen > Beobachtung der TPop. zuordnen'}
-            </StyledButton>
+            </StyledLoadingButton>
           )}
           {isBeobNichtBeurteilt && (
             <StyledButton
