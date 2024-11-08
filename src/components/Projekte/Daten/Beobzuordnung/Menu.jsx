@@ -187,15 +187,20 @@ export const Menu = memo(
     }, [beobId, apId, projId, client, store, search])
 
     const widths = useMemo(
-      () => [...(isBeobZugeordnet ? [192] : [222, 252]), 102, 142],
-      [isBeobZugeordnet],
+      () => [
+        ...(isBeobZugeordnet ? [192] : []),
+        ...(isBeobNichtBeurteilt ? [222, 252] : []),
+        102,
+        142,
+      ],
+      [isBeobZugeordnet, isBeobNichtBeurteilt],
     )
 
     return (
       <ErrorBoundary>
         <MenuBar
-          widths={[192, 222, 252, 102, 142]}
-          rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}`}
+          widths={widths}
+          rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}/${isBeobNichtBeurteilt}`}
         >
           {isBeobZugeordnet && (
             <StyledLoadingButton
@@ -207,7 +212,7 @@ export const Menu = memo(
               Koordinaten auf die Teilpopulation übertragen
             </StyledLoadingButton>
           )}
-          {!isBeobZugeordnet && (
+          {isBeobNichtBeurteilt && (
             <StyledButton
               variant="outlined"
               style={{ width: 210 }}
@@ -216,7 +221,7 @@ export const Menu = memo(
               {'Pop. u. TPop. gründen > Beobachtung der TPop. zuordnen'}
             </StyledButton>
           )}
-          {!isBeobZugeordnet && (
+          {isBeobNichtBeurteilt && (
             <StyledButton
               variant="outlined"
               style={{ width: 240 }}
