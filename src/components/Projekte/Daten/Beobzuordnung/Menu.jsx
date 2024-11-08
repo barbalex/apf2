@@ -40,8 +40,14 @@ export const Menu = memo(
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const { projId, apId, beobId } = useParams()
+    const { projId, apId, beobId, tpopId } = useParams()
     const store = useContext(StoreContext)
+
+    const isBeobZugeordnet = !!tpopId
+    const isBeobNichtBeurteilt =
+      !tpopId && pathname.includes('nicht-beurteilte-Beobachtungen')
+    const isBeobNichtZuzuordnen =
+      !tpopId && pathname.includes('nicht-zuzuordnende-Beobachtungen')
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -148,45 +154,63 @@ export const Menu = memo(
         enqueNotification: store.enqueNotification,
       })
       setCopyingBeobZugeordnetKoordToTpop(false)
-    })
+    }, [beobId, client, store])
+
+    const onClickShowCoordOfBeobOnMapGeoAdminCh = useCallback(() => {
+      showCoordOfBeobOnMapGeoAdminCh({
+        id: beobId,
+        client,
+        enqueNotification: store.enqueNotification,
+      })
+    }, [beobId, client, store])
+
+    const onClickShowCoordOfBeobOnMapsZhCh = useCallback(() => {
+      showCoordOfBeobOnMapsZhCh({
+        id: beobId,
+        client,
+        enqueNotification: store.enqueNotification,
+      })
+    }, [beobId, client, store])
 
     return (
       <ErrorBoundary>
         <MenuBar
           widths={[192, 102, 142]}
-          rerenderer={copyingBeobZugeordnetKoordToTpop}
+          rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}`}
         >
-          <StyledLoadingButton
-            variant="outlined"
-            style={{ width: 180 }}
-            onClick={onClickCopyingBeobZugeordnetKoordToTpop}
-            loading={copyingBeobZugeordnetKoordToTpop}
-          >
-            Koordinaten auf die Teilpopulation übertragen
-          </StyledLoadingButton>
+          {isBeobZugeordnet && (
+            <StyledLoadingButton
+              variant="outlined"
+              style={{ width: 180 }}
+              onClick={onClickCopyingBeobZugeordnetKoordToTpop}
+              loading={copyingBeobZugeordnetKoordToTpop}
+            >
+              Koordinaten auf die Teilpopulation übertragen
+            </StyledLoadingButton>
+          )}
+          {!isBeobZugeordnet && (
+            <StyledButton
+              variant="outlined"
+              style={{ width: 130 }}
+              onClick={() =>
+                console.log('TODO: new population and Teilpopulation and Beob')
+              }
+            >
+              Neue Population und Teilpopulation gründen und Beobachtung der
+              Teilpopulation zuordnen
+            </StyledButton>
+          )}
           <StyledButton
             variant="outlined"
             style={{ width: 90 }}
-            onClick={() =>
-              showCoordOfBeobOnMapsZhCh({
-                id: beobId,
-                client,
-                enqueNotification: store.enqueNotification,
-              })
-            }
+            onClick={onClickShowCoordOfBeobOnMapsZhCh}
           >
             zeige auf maps.zh.ch
           </StyledButton>
           <StyledButton
             variant="outlined"
             style={{ width: 130 }}
-            onClick={() =>
-              showCoordOfBeobOnMapGeoAdminCh({
-                id: beobId,
-                client,
-                enqueNotification: store.enqueNotification,
-              })
-            }
+            onClick={onClickShowCoordOfBeobOnMapGeoAdminCh}
           >
             zeige auf map.geo.admin.ch
           </StyledButton>
