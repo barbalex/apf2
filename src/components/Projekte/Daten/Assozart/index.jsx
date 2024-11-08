@@ -16,6 +16,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { assozart } from '../../../shared/fragments.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -140,6 +141,7 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container data-id="assozart">
         <FormTitle title="assoziierte Art" />
+        <Menu row={row} />
         <FormContainer>
           <SelectLoadingOptions
             field="aeId"
