@@ -29,9 +29,9 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createEkzaehleinheitForEkzaehleinheitForm($apId: UUID!) {
-              createEkzaehleinheit(input: { ekzaehleinheit: { apId: $apId } }) {
-                ekzaehleinheit {
+            mutation createEkfrequenzForEkfrequenzForm($apId: UUID!) {
+              createEkfrequenz(input: { ekfrequenz: { apId: $apId } }) {
+                ekfrequenz {
                   id
                   apId
                 }
@@ -49,14 +49,14 @@ export const Menu = memo(
         })
       }
       queryClient.invalidateQueries({
-        queryKey: [`treeEkzaehleinheit`],
+        queryKey: [`treeEkfrequenz`],
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
-      const id = result?.data?.createEkzaehleinheit?.ekzaehleinheit?.id
+      const id = result?.data?.createEkfrequenz?.ekfrequenz?.id
       navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten/${id}${search}`,
+        `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen/${id}${search}`,
       )
     }, [apId, client, store, queryClient, navigate, search, projId])
 
@@ -68,9 +68,9 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation deleteEkzaehleinheit($id: UUID!) {
-              deleteEkzaehleinheitById(input: { id: $id }) {
-                ekzaehleinheit {
+            mutation deleteEkfrequenz($id: UUID!) {
+              deleteEkfrequenzById(input: { id: $id }) {
+                ekfrequenz {
                   id
                 }
               }
@@ -96,15 +96,13 @@ export const Menu = memo(
 
       // update tree query
       queryClient.invalidateQueries({
-        queryKey: [`treeEkzaehleinheit`],
+        queryKey: [`treeEkfrequenz`],
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
       // navigate to parent
-      navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten${search}`,
-      )
+      navigate(`/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen${search}`)
     }, [
       client,
       store,

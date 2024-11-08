@@ -17,6 +17,7 @@ import { ekfrequenz } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -154,6 +155,7 @@ const Ekfrequenz = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="EK-Frequenz" />
+        <Menu row={row} />
         <FormContainer>
           <TextField
             name="code"
