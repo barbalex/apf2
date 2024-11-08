@@ -37,24 +37,21 @@ const MeasuredOuterContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  column-gap: 0;
   // needed as in fullscreen backed by black
   background-color: rgb(255, 253, 231);
   // TODO: decide later on styling
   border-top: 1px solid rgba(46, 125, 50, 0.15);
   border-bottom: 1px solid rgba(46, 125, 50, 0.15);
 `
-// align items to the right
-const InnerContainer = styled.div`
-  min-height: ${buttonHeight}px;
-  max-height: ${buttonHeight}px;
-  margin-left: auto;
-  margin-right: 0;
-  margin-top: auto;
-  margin-bottom: auto;
-`
 const StylingContainer = styled.div`
   display: flex;
-  padding: 0 10px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 0;
+  // padding: 0 10px;
+  min-height: ${buttonHeight}px;
   max-height: ${buttonHeight}px;
 `
 // remove the margin mui adds to top and bottom of menu
@@ -68,43 +65,17 @@ const StyledMenu = styled(Menu)`
 // TODO: enable passing in elements with different widths
 // use childrenWidths array for that?
 export const MenuBar = memo(
-  ({
-    children,
-    widths,
-    rerenderer,
-    titleComponent,
-    titleComponentWidth = 60,
-  }) => {
+  ({ children, widths, rerenderer, titleComponent, titleComponentWidth }) => {
     const usableChildren = useMemo(
       () => children?.filter?.((child) => !!child) ?? children,
       [children],
     )
     const childrenCount = Children.count(usableChildren)
 
-    const [menusCount, setMenusCount] = useState(0)
-
-    const buttons = useMemo(
-      () =>
-        Children.map(usableChildren, (child, index) => {
-          if (!(index + 1 <= childrenCount - menusCount)) return null
-          if (!child) return null
-          return cloneElement(child)
-        }).filter((child) => !!child),
-      [usableChildren, childrenCount, menusCount],
-    )
-
-    const menus = useMemo(
-      () =>
-        Children.map(usableChildren, (child, index) => {
-          if (!(index + 1 > childrenCount - menusCount)) return null
-          if (!child) return null
-          return cloneElement(child)
-        }).filter((child) => !!child),
-      [usableChildren, childrenCount, menusCount],
-    )
+    const [buttons, setButtons] = useState([])
+    const [menus, setMenus] = useState([])
 
     const outerContainerRef = useRef(null)
-    const innerContainerRef = useRef(null)
     const previousMeasurementTimeRef = useRef(0)
 
     // console.log('MenuBar', {
@@ -112,25 +83,7 @@ export const MenuBar = memo(
     //   buttons,
     //   menus,
     //   childrenCount,
-    //   menusCount,
     // })
-
-    const incrementMenusCount = useCallback(
-      () => setMenusCount((prev) => prev + 1),
-      [],
-    )
-    const incrementMenusCountRevealingMenu = useCallback(
-      () => setMenusCount((prev) => prev + 2),
-      [],
-    )
-    const decrementMenusCount = useCallback(
-      () => setMenusCount((prev) => prev - 1),
-      [],
-    )
-    const decrementMenusCountHidingMenu = useCallback(
-      () => setMenusCount((prev) => prev - menusCount),
-      [menusCount],
-    )
 
     // this was quite some work to get right
     // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
@@ -138,72 +91,46 @@ export const MenuBar = memo(
       if (!outerContainerRef.current) return
 
       // only change if overflowing has changed
-      const {
-        clientWidth: containerWidth,
-        scrollWidth: containerScrollWidth,
-        scrollHeight: containerScrollHeight,
-        clientHeight: containerHeight,
-      } = outerContainerRef.current
+      const { clientWidth: containerWidth } = outerContainerRef.current
 
-      const titleWidth = titleComponent ? titleComponentWidth : 0
-      const growableSpace =
-        containerWidth - titleWidth - innerContainerRef.current.clientWidth
-
-      const widthOfLastButton = widths?.[buttons.length - 1] ?? buttonWidth
-      const widthOfFirstMenu = widths?.[buttons.length] ?? buttonWidth
-      const widthOfAllMenus = menus.reduce(
-        (acc, menu, index) =>
-          acc + (widths?.[buttons.length + index] ?? buttonWidth),
-        0,
-      )
-
-      const needToIncrementMenus =
-        growableSpace < 0 ||
-        containerScrollWidth > containerWidth + widthOfLastButton ||
-        containerScrollHeight > containerHeight
-      const needToIncrementMenusRevealingMenu =
-        needToIncrementMenus && menusCount === 0
-      const needToDecrementMenus =
-        growableSpace > widthOfFirstMenu && menusCount > 0
-      // TODO: check if total width of menus is smaller than growableSpace
-      const needToDecrementMenusHidingMenu =
-        needToDecrementMenus && widthOfAllMenus < growableSpace
-
-      // console.log('MenuBar.checkOverflow')
-
-      // console.log('MenuBar.checkOverflow', {
-      //   containerWidth,
-      //   innerContainerWidth: innerContainerRef.current.clientWidth,
-      //   containerScrollWidth,
-      //   containerHeight,
-      //   containerScrollHeight,
-      //   needToIncrement,
-      //   needToIncrementRevealingMenu,
-      //   needToDecrement,
-      //   growableSpace,
-      //   usableChildren,
-      //   buttons,
-      //   menus,
-      //   childrenCount,
-      //   menusCount,
-      //   titleWidth,
-      // })
-
-      if (needToIncrementMenusRevealingMenu) {
-        return incrementMenusCountRevealingMenu()
+      const titleWidth = titleComponentWidth ?? 0
+      const spaceForButtonsAndMenus = containerWidth - titleWidth
+      const widthOfAllPassedInButtons =
+        widths ?
+          widths.reduce((acc, w) => acc + w, 0)
+        : childrenCount * buttonWidth
+      const needMenu = widthOfAllPassedInButtons > spaceForButtonsAndMenus
+      const spaceForButtons =
+        needMenu ?
+          spaceForButtonsAndMenus - buttonWidth
+        : spaceForButtonsAndMenus
+      // sum widths fitting into spaceForButtons
+      const newButtons = []
+      const newMenus = []
+      let widthSum = 0
+      for (const [index, child] of Children.toArray(usableChildren).entries()) {
+        const width = widths?.[index] ?? buttonWidth
+        if (widthSum + width > spaceForButtons) {
+          newMenus.push(cloneElement(child))
+        } else {
+          newButtons.push(cloneElement(child))
+          widthSum += width
+        }
       }
-      if (needToIncrementMenus) return incrementMenusCount()
-      if (needToDecrementMenusHidingMenu) {
-        return decrementMenusCountHidingMenu()
-      }
-      if (needToDecrementMenus) decrementMenusCount()
-    }, [menusCount])
+      setButtons(newButtons)
+      setMenus(newMenus)
+    }, [
+      buttons,
+      menus,
+      widths,
+      titleComponentWidth,
+      childrenCount,
+      buttonWidth,
+    ])
 
     const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
 
     useEffect(() => {
-      // reset children count
-      setMenusCount(0)
       // and check overflow when preview changes
       // console.log('MenuBar.useEffect, calling checkOverflow')
       checkOverflow()
@@ -253,7 +180,7 @@ export const MenuBar = memo(
         // console.log('MenuBar.useEffect, observer.disconnect')
         observer.disconnect()
       }
-    }, [previousWidthRef.current, rerenderer, menusCount])
+    }, [previousWidthRef.current, rerenderer])
 
     const onClickMenuButton = useCallback((event) =>
       setMenuAnchorEl(event.currentTarget),
@@ -265,30 +192,28 @@ export const MenuBar = memo(
     return (
       <MeasuredOuterContainer ref={outerContainerRef}>
         {titleComponent}
-        <InnerContainer ref={innerContainerRef}>
-          <StylingContainer>
-            {buttons}
-            {!!menus.length && (
-              <>
-                <IconButton
-                  id="menubutton"
-                  onClick={onClickMenuButton}
-                >
-                  <FaBars />
-                </IconButton>
+        <StylingContainer>
+          {buttons}
+          {!!menus.length && (
+            <>
+              <IconButton
+                id="menubutton"
+                onClick={onClickMenuButton}
+              >
+                <FaBars />
+              </IconButton>
 
-                <StyledMenu
-                  id="menubutton"
-                  anchorEl={menuAnchorEl}
-                  open={menuIsOpen}
-                  onClose={onCloseMenu}
-                >
-                  {menus}
-                </StyledMenu>
-              </>
-            )}
-          </StylingContainer>
-        </InnerContainer>
+              <StyledMenu
+                id="menubutton"
+                anchorEl={menuAnchorEl}
+                open={menuIsOpen}
+                onClose={onCloseMenu}
+              >
+                {menus}
+              </StyledMenu>
+            </>
+          )}
+        </StylingContainer>
       </MeasuredOuterContainer>
     )
   },

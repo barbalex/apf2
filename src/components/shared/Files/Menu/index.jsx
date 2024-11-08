@@ -273,6 +273,7 @@ export const Menu = memo(
             <Title
               file={file}
               numbers={numbers}
+              titleComponentWidth={titleComponentWidth}
             />
           }
           titleComponentWidth={titleComponentWidth}

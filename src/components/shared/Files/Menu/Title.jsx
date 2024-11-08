@@ -14,19 +14,16 @@ const TitleDiv = styled.h3`
   margin-top: auto;
   margin-bottom: auto;
   // fix width to prevent jumping
-  width: ${(props) => props.titleComponentWidth}px;
-  max-width: ${(props) => props.titleComponentWidth}px;
-  // place left without using right margin auto
-  // as that reduces the width of the menu container
-  position: relative;
-  top: 0;
-  left: 0;
-  // break once, then ellipsis
-  display: -webkit-box;
+  // but remember to subtract padding
+  width: ${(props) => props.titleComponentWidth - 20}px;
+  min-width: ${(props) => props.titleComponentWidth - 20}px;
+  max-width: ${(props) => props.titleComponentWidth - 20}px;
+  // place left
+  margin-right: auto;
+  display: block;
   overflow: hidden;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
+  flex-grow: 0;
+  flex-shrink: 0;
 `
 const Content = styled.div`
   display: grid;
