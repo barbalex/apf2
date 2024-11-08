@@ -149,20 +149,25 @@ export const MenuBar = memo(
       const growableSpace =
         containerWidth - titleWidth - innerContainerRef.current.clientWidth
 
-      // TODO: instead of buttonWidth, use the passed in width of the last button
       const widthOfLastButton = widths?.[buttons.length - 1] ?? buttonWidth
       const widthOfFirstMenu = widths?.[buttons.length] ?? buttonWidth
+      const widthOfAllMenus = menus.reduce(
+        (acc, menu, index) =>
+          acc + (widths?.[buttons.length + index] ?? buttonWidth),
+        0,
+      )
+
       const needToIncrementMenus =
         growableSpace < 0 ||
         containerScrollWidth > containerWidth + widthOfLastButton ||
         containerScrollHeight > containerHeight
       const needToIncrementMenusRevealingMenu =
         needToIncrementMenus && menusCount === 0
-      // TODO: instead of buttonWidth, use the passed in width of the first menu
       const needToDecrementMenus =
         growableSpace > widthOfFirstMenu && menusCount > 0
+      // TODO: check if total width of menus is smaller than growableSpace
       const needToDecrementMenusHidingMenu =
-        needToDecrementMenus && menusCount < 3
+        needToDecrementMenus && widthOfAllMenus < growableSpace
 
       // console.log('MenuBar.checkOverflow')
 
