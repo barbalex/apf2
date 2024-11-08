@@ -78,13 +78,6 @@ export const MenuBar = memo(
     const outerContainerRef = useRef(null)
     const previousMeasurementTimeRef = useRef(0)
 
-    // console.log('MenuBar', {
-    //   usableChildren,
-    //   buttons,
-    //   menus,
-    //   childrenCount,
-    // })
-
     // this was quite some work to get right
     // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
     const checkOverflow = useCallback(() => {
@@ -120,19 +113,17 @@ export const MenuBar = memo(
       setButtons(newButtons)
       setMenus(newMenus)
     }, [
-      buttons,
-      menus,
-      widths,
       titleComponentWidth,
+      widths,
       childrenCount,
       buttonWidth,
+      usableChildren,
     ])
 
     const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
 
     useEffect(() => {
       // and check overflow when preview changes
-      // console.log('MenuBar.useEffect, calling checkOverflow')
       checkOverflow()
     }, [rerenderer])
 
@@ -180,7 +171,7 @@ export const MenuBar = memo(
         // console.log('MenuBar.useEffect, observer.disconnect')
         observer.disconnect()
       }
-    }, [previousWidthRef.current, rerenderer])
+    }, [rerenderer, checkOverflowDebounced])
 
     const onClickMenuButton = useCallback((event) =>
       setMenuAnchorEl(event.currentTarget),
