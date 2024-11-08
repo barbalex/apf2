@@ -7,6 +7,7 @@ import { getSnapshot } from 'mobx-state-tree'
 // import { FaPlus, FaMinus } from 'react-icons/fa6'
 // import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
+import LoadingButton from '@mui/lab/LoadingButton'
 import isEqual from 'lodash/isEqual'
 import styled from '@emotion/styled'
 
@@ -14,8 +15,18 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
+import { showCoordOfBeobOnMapsZhCh } from '../../../../modules/showCoordOfBeobOnMapsZhCh.js'
+import { showCoordOfBeobOnMapGeoAdminCh } from '../../../../modules/showCoordOfBeobOnMapGeoAdminCh.js'
+import { copyBeobZugeordnetKoordToTpop } from '../../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
 
 const StyledButton = styled(Button)`
+  margin: 0 5px;
+  padding: 3px 10px;
+  text-transform: none;
+  line-height: 1.1;
+  font-size: 0.8rem;
+`
+const StyledLoadingButton = styled(LoadingButton)`
   margin: 0 5px;
   padding: 3px 10px;
   text-transform: none;
@@ -29,7 +40,7 @@ export const Menu = memo(
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const { projId, apId } = useParams()
+    const { projId, apId, beobId } = useParams()
     const store = useContext(StoreContext)
 
     const onClickAdd = useCallback(async () => {
@@ -125,29 +136,57 @@ export const Menu = memo(
       pathname,
     ])
 
+    const [
+      copyingBeobZugeordnetKoordToTpop,
+      setCopyingBeobZugeordnetKoordToTpop,
+    ] = useState(false)
+    const onClickCopyingBeobZugeordnetKoordToTpop = useCallback(async () => {
+      setCopyingBeobZugeordnetKoordToTpop(true)
+      await copyBeobZugeordnetKoordToTpop({
+        id: beobId,
+        client,
+        enqueNotification: store.enqueNotification,
+      })
+      setCopyingBeobZugeordnetKoordToTpop(false)
+    })
+
     return (
       <ErrorBoundary>
-        <MenuBar widths={[192, 102, 142]}>
-          <StyledButton
+        <MenuBar
+          widths={[192, 102, 142]}
+          rerenderer={copyingBeobZugeordnetKoordToTpop}
+        >
+          <StyledLoadingButton
             variant="outlined"
             style={{ width: 180 }}
-            onClick={() =>
-              console.log('Koordinaten auf die Teilpopulation übertragen')
-            }
+            onClick={onClickCopyingBeobZugeordnetKoordToTpop}
+            loading={copyingBeobZugeordnetKoordToTpop}
           >
             Koordinaten auf die Teilpopulation übertragen
-          </StyledButton>
+          </StyledLoadingButton>
           <StyledButton
             variant="outlined"
             style={{ width: 90 }}
-            onClick={() => console.log('zeige auf maps.zh.ch')}
+            onClick={() =>
+              showCoordOfBeobOnMapsZhCh({
+                id: beobId,
+                client,
+                enqueNotification: store.enqueNotification,
+              })
+            }
           >
             zeige auf maps.zh.ch
           </StyledButton>
           <StyledButton
             variant="outlined"
             style={{ width: 130 }}
-            onClick={() => console.log('zeige auf map.geo.admin.ch')}
+            onClick={() =>
+              showCoordOfBeobOnMapGeoAdminCh({
+                id: beobId,
+                client,
+                enqueNotification: store.enqueNotification,
+              })
+            }
           >
             zeige auf map.geo.admin.ch
           </StyledButton>

@@ -40,7 +40,6 @@ const MeasuredOuterContainer = styled.div`
   column-gap: 0;
   // needed as in fullscreen backed by black
   background-color: rgb(255, 253, 231);
-  // TODO: decide later on styling
   border-top: 1px solid rgba(46, 125, 50, 0.15);
   border-bottom: 1px solid rgba(46, 125, 50, 0.15);
 `
@@ -60,10 +59,7 @@ const StyledMenu = styled(Menu)`
     padding: 0 !important;
   }
 `
-// the rerenderer ensures re-calculating the overflow when the children change due to special effects
-// example: changing to preview for files
-// TODO: enable passing in elements with different widths
-// use childrenWidths array for that?
+
 export const MenuBar = memo(
   ({ children, widths, rerenderer, titleComponent, titleComponentWidth }) => {
     const usableChildren = useMemo(
@@ -123,7 +119,8 @@ export const MenuBar = memo(
     const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
 
     useEffect(() => {
-      // and check overflow when preview changes
+      // check overflow when rerenderer changes
+      // Example: file preview (any action that changes the menus passed in)
       checkOverflow()
     }, [rerenderer])
 

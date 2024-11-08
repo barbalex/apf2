@@ -48,4 +48,5 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id, store, client }) => {
       },
     })
   }
+  return
 }

@@ -31,6 +31,7 @@ import {
   pop,
   popStatusWerte,
 } from '../../../shared/fragments.js'
+import { Menu } from './Menu.jsx'
 
 const PopoverContainer = styled.div`
   overflow-x: auto;
@@ -301,6 +302,7 @@ const Beobzuordnung = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Beobachtung" />
+        <Menu row={row} />
         <FormContainer>
           <FieldsContainer>
             {row && row.artId !== row.artIdOriginal && (
