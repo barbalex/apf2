@@ -334,11 +334,7 @@ const Beobzuordnung = () => {
               name="tpopId"
               value={row.tpopId ?? ''}
               field="tpopId"
-              label={
-                row.tpopId ?
-                  'Einer anderen Teilpopulation zuordnen'
-                : 'Einer Teilpopulation zuordnen'
-              }
+              label="Teilpopulation"
               options={tpopZuordnenSource}
               saveToDb={onSaveTpopIdToDb}
             />
