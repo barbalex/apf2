@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { FaPlus, FaMinus } from 'react-icons/fa6'
+import { FaPlus, FaMinus, FaFilePdf } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -29,9 +29,9 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createAssozartForAssozartForm($apId: UUID!) {
-              createAssozart(input: { assozart: { apId: $apId } }) {
-                assozart {
+            mutation createApberForApberForm($apId: UUID!) {
+              createApber(input: { apber: { apId: $apId } }) {
+                apber {
                   id
                   apId
                 }
@@ -49,14 +49,14 @@ export const Menu = memo(
         })
       }
       queryClient.invalidateQueries({
-        queryKey: [`treeAssozart`],
+        queryKey: [`treeApber`],
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
-      const id = result?.data?.createAssozart?.assozart?.id
+      const id = result?.data?.createApber?.apber?.id
       navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/assoziierte-Arten/${id}${search}`,
+        `/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte/${id}${search}`,
       )
     }, [apId, client, store, queryClient, navigate, search, projId])
 
@@ -68,9 +68,9 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation deleteAssozart($id: UUID!) {
-              deleteAssozartById(input: { id: $id }) {
-                assozart {
+            mutation deleteApber($id: UUID!) {
+              deleteApberById(input: { id: $id }) {
+                apber {
                   id
                 }
               }
@@ -96,15 +96,13 @@ export const Menu = memo(
 
       // update tree query
       queryClient.invalidateQueries({
-        queryKey: [`treeAssozart`],
+        queryKey: [`treeApber`],
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
       // navigate to parent
-      navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/assoziierte-Arten${search}`,
-      )
+      navigate(`/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte${search}`)
     }, [
       client,
       store,
@@ -116,6 +114,10 @@ export const Menu = memo(
       row,
       pathname,
     ])
+
+    const onClickPrint = useCallback(() => {
+      navigate(`print${search}`)
+    }, [navigate, search])
 
     return (
       <ErrorBoundary>
@@ -129,13 +131,19 @@ export const Menu = memo(
           <IconButton
             title="Löschen"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'assozartDelMenu' : undefined}
+            aria-owns={delMenuOpen ? 'apberDelMenu' : undefined}
           >
             <FaMinus />
           </IconButton>
+          <IconButton
+            title="Druckversion öffnen. Achtung: lädt sehr viele Daten, ist daher langsam und stresst den Server."
+            onClick={onClickPrint}
+          >
+            <FaFilePdf />
+          </IconButton>
         </MenuBar>
         <MuiMenu
-          id="assozartDelMenu"
+          id="apberDelMenu"
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}

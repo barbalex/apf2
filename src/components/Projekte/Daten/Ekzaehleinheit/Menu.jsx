@@ -129,13 +129,13 @@ export const Menu = memo(
           <IconButton
             title="Löschen"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'abperuebersichtDelMenu' : undefined}
+            aria-owns={delMenuOpen ? 'ekzaehleinheitDelMenu' : undefined}
           >
             <FaMinus />
           </IconButton>
         </MenuBar>
         <MuiMenu
-          id="abperuebersichtDelMenu"
+          id="ekzaehleinheitDelMenu"
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}
