@@ -186,7 +186,9 @@ export const Menu = memo(
         search,
         tanstackQueryClient,
       })
-      setCreatingNewPopFromBeob(false)
+      setTimeout(() => {
+        setCreatingNewPopFromBeob(false)
+      }, 500)
     }, [beobId, apId, projId, client, store, search])
 
     const widths = useMemo(
