@@ -17,6 +17,12 @@ import { useParams, useLocation } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
 
+import { useSetAtom, useAtom } from 'jotai'
+import {
+  newTpopFromBeobDialogOpenAtom,
+  newTpopFromBeobBeobIdAtom,
+} from '../../../JotaiStore/index.js'
+
 const LabelFilter = lazy(async () => ({
   default: (await import('./LabelFilter.jsx')).LabelFilter,
 }))
@@ -427,9 +433,12 @@ export const TreeContainer = observer(() => {
   //   }
   // }, [treeNodes, openNodes, projId, setOpenNodes, navigate, search, pathname])
 
-  const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] =
-    useState(false)
-  const [newTpopFromBeobBeobId, setNewTpopFromBeobBeobId] = useState(null)
+  const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
+    newTpopFromBeobDialogOpenAtom,
+  )
+  const [newTpopFromBeobBeobId, setNewTpopFromBeobBeobId] = useAtom(
+    newTpopFromBeobBeobIdAtom,
+  )
   const closeNewTpopFromBeobDialog = useCallback(
     () => setNewTpopFromBeobDialogOpen(false),
     [],
@@ -610,7 +619,6 @@ export const TreeContainer = observer(() => {
           })
         },
         createNewTpopFromBeob() {
-          // TODO: outsource this so it can be used in other places too
           setNewTpopFromBeobBeobId(id)
           setNewTpopFromBeobDialogOpen(true)
         },

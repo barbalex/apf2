@@ -11,6 +11,12 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import isEqual from 'lodash/isEqual'
 import styled from '@emotion/styled'
 
+import { useSetAtom, useAtom } from 'jotai'
+import {
+  newTpopFromBeobDialogOpenAtom,
+  newTpopFromBeobBeobIdAtom,
+} from '../../../../JotaiStore/index.js'
+
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
@@ -201,6 +207,21 @@ export const Menu = memo(
       [isBeobZugeordnet, isBeobNichtBeurteilt],
     )
 
+    const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
+      newTpopFromBeobDialogOpenAtom,
+    )
+    const [newTpopFromBeobBeobId, setNewTpopFromBeobBeobId] = useAtom(
+      newTpopFromBeobBeobIdAtom,
+    )
+    const closeNewTpopFromBeobDialog = useCallback(
+      () => setNewTpopFromBeobDialogOpen(false),
+      [],
+    )
+    const onClickNewTpopFromBeob = useCallback(() => {
+      setNewTpopFromBeobBeobId(beobId)
+      setNewTpopFromBeobDialogOpen(true)
+    }, [beobId, setNewTpopFromBeobBeobId, setNewTpopFromBeobDialogOpen])
+
     return (
       <ErrorBoundary>
         <MenuBar
@@ -231,9 +252,7 @@ export const Menu = memo(
             <StyledButton
               variant="outlined"
               style={{ width: 240 }}
-              onClick={() =>
-                console.log('TODO: new population and Teilpopulation and Beob')
-              }
+              onClick={onClickNewTpopFromBeob}
             >
               {
                 'TPop. in bestehender Pop. gründen > Beobachtung der TPop. zuordnen'
