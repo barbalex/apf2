@@ -16,6 +16,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { erfkrit } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -121,6 +122,7 @@ const Erfkrit = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Erfolgs-Kriterium" />
+        <Menu row={row} />
         <FormContainer>
           <RadioButtonGroup
             name="erfolg"
