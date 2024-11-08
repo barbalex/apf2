@@ -389,7 +389,7 @@ export const TreeContainer = observer(() => {
   const { search } = useLocation()
 
   const client = useApolloClient()
-  const queryClient = useQueryClient()
+  const tanstakQueryClient = useQueryClient()
 
   const store = useContext(StoreContext)
   const {
@@ -535,7 +535,7 @@ export const TreeContainer = observer(() => {
             afterDeletionHook: () => {
               const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
               setOpenNodes(newOpenNodes)
-              queryClient.invalidateQueries({
+              tanstakQueryClient.invalidateQueries({
                 queryKey: [`tree${upperFirst(table)}`],
               })
             },
@@ -583,7 +583,7 @@ export const TreeContainer = observer(() => {
             parentId: id,
             client,
             store,
-            queryClient,
+            queryClient: tanstakQueryClient,
           })
         },
         markForCopyingBiotop() {
@@ -606,9 +606,11 @@ export const TreeContainer = observer(() => {
             client,
             store,
             search,
+            tanstakQueryClient,
           })
         },
         createNewTpopFromBeob() {
+          // TODO: outsource this so it can be used in other places too
           setNewTpopFromBeobBeobId(id)
           setNewTpopFromBeobDialogOpen(true)
         },
@@ -670,7 +672,7 @@ export const TreeContainer = observer(() => {
       setToDelete,
       openNodes,
       setOpenNodes,
-      queryClient,
+      tanstakQueryClient,
       showMapIfNotYetVisible,
       projekteTabs,
       activeApfloraLayers,

@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useState } from 'react'
+import { memo, useCallback, useContext, useState, useMemo } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -18,6 +18,7 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { showCoordOfBeobOnMapsZhCh } from '../../../../modules/showCoordOfBeobOnMapsZhCh.js'
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../../modules/showCoordOfBeobOnMapGeoAdminCh.js'
 import { copyBeobZugeordnetKoordToTpop } from '../../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
+import { createNewPopFromBeob } from '../../../../modules/createNewPopFromBeob/index.js'
 
 const StyledButton = styled(Button)`
   margin: 0 5px;
@@ -40,7 +41,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tanstackQueryClient = useQueryClient()
     const { projId, apId, beobId, tpopId } = useParams()
     const store = useContext(StoreContext)
 
@@ -74,17 +75,17 @@ export const Menu = memo(
           },
         })
       }
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treeEkzaehleinheit`],
       })
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
       const id = result?.data?.createEkzaehleinheit?.ekzaehleinheit?.id
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten/${id}${search}`,
       )
-    }, [apId, client, store, queryClient, navigate, search, projId])
+    }, [apId, client, store, tanstackQueryClient, navigate, search, projId])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -121,10 +122,10 @@ export const Menu = memo(
       store.tree.setOpenNodes(newOpenNodes)
 
       // update tree query
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treeEkzaehleinheit`],
       })
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
       // navigate to parent
@@ -134,7 +135,7 @@ export const Menu = memo(
     }, [
       client,
       store,
-      queryClient,
+      tanstackQueryClient,
       navigate,
       search,
       apId,
@@ -173,10 +174,27 @@ export const Menu = memo(
       })
     }, [beobId, client, store])
 
+    const onClickCreateNewPopFromBeob = useCallback(async () => {
+      await createNewPopFromBeob({
+        id: beobId,
+        apId,
+        projId,
+        client,
+        store,
+        search,
+        tanstackQueryClient,
+      })
+    }, [beobId, apId, projId, client, store, search])
+
+    const widths = useMemo(
+      () => [...(isBeobZugeordnet ? [192] : [222, 252]), 102, 142],
+      [isBeobZugeordnet],
+    )
+
     return (
       <ErrorBoundary>
         <MenuBar
-          widths={[192, 102, 142]}
+          widths={[192, 222, 252, 102, 142]}
           rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}`}
         >
           {isBeobZugeordnet && (
@@ -193,11 +211,22 @@ export const Menu = memo(
             <StyledButton
               variant="outlined"
               style={{ width: 210 }}
+              onClick={onClickCreateNewPopFromBeob}
+            >
+              {'Pop. u. TPop. gründen > Beobachtung der TPop. zuordnen'}
+            </StyledButton>
+          )}
+          {!isBeobZugeordnet && (
+            <StyledButton
+              variant="outlined"
+              style={{ width: 240 }}
               onClick={() =>
                 console.log('TODO: new population and Teilpopulation and Beob')
               }
             >
-              {'Pop. u. TPop. gründen > Beobachtung der TPop. zuordnen'}
+              {
+                'TPop. in bestehender Pop. gründen > Beobachtung der TPop. zuordnen'
+              }
             </StyledButton>
           )}
           <StyledButton

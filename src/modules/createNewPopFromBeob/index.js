@@ -12,6 +12,7 @@ export const createNewPopFromBeob = async ({
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
   client,
+  tanstackQueryClient,
   store,
   search,
 }) => {
@@ -170,7 +171,7 @@ export const createNewPopFromBeob = async ({
   addOpenNodes(newOpenNodes)
   store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
-  // TODO: what is this for?
+  // TODO: use tanstack to get this to actually work...
   client.refetchQueries({
     include: [
       'KarteBeobNichtZuzuordnenQuery',
@@ -179,4 +180,17 @@ export const createNewPopFromBeob = async ({
       'BeobAssignLinesQuery',
     ],
   })
+  tanstackQueryClient.invalidateQueries({
+    queryKey: [`treeApFolders`],
+  })
+  tanstackQueryClient.invalidateQueries({
+    queryKey: [`treeBeobZugeordnet`],
+  })
+  tanstackQueryClient.invalidateQueries({
+    queryKey: [`treeBeobNichtZuzuordnen`],
+  })
+  tanstackQueryClient.invalidateQueries({
+    queryKey: [`treeBeobNichtBeurteilt`],
+  })
+  return
 }
