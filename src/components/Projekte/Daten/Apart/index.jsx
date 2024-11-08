@@ -16,6 +16,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { apart } from '../../../shared/fragments.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -31,6 +32,9 @@ const FieldsContainer = styled.div`
 `
 const FormContainer = styled.div`
   padding: 10px 0;
+`
+const Spacer = styled.div`
+  height: 500px;
 `
 
 const fieldTypes = {
@@ -137,6 +141,7 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Taxon" />
+        <Menu row={row} />
         <FieldsContainer>
           <div>
             In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
@@ -178,6 +183,7 @@ export const Component = observer(() => {
               saveToDb={saveToDb}
               error={fieldErrors.artId}
             />
+            <Spacer />
           </FormContainer>
         </FieldsContainer>
       </Container>
