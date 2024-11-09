@@ -568,7 +568,13 @@ export const TreeContainer = observer(() => {
           setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
         },
         markForMoving() {
-          setMoving({ table, id, label })
+          setMoving({
+            table,
+            id,
+            label,
+            moveToTable: actionTable,
+            moveFromId: apId,
+          })
         },
         move() {
           moveTo({ id, store, client })

@@ -23,8 +23,11 @@ export const Menu = memo(
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const { projId } = useParams()
+    const { projId, apId } = useParams()
     const store = useContext(StoreContext)
+
+    const { setMoving, moving } = store
+    const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -111,7 +114,9 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar>
+        <MenuBar
+          rerenderer={`${isMoving}/${moving.moveToTable}/${moving.moveFromId}`}
+        >
           <IconButton
             title="Neue Art erstellen"
             onClick={onClickAdd}
@@ -125,12 +130,16 @@ export const Menu = memo(
           >
             <FaMinus />
           </IconButton>
-          <IconButton
-            title="Hierhin verschieben"
-            onClick={onClickMoveHere}
-          >
-            <MdOutlineMoveDown />
-          </IconButton>
+          {isMoving &&
+            moving.moveToTable === 'ap' &&
+            moving.moveFromId !== apId && (
+              <IconButton
+                title="Hierhin verschieben"
+                onClick={onClickMoveHere}
+              >
+                <MdOutlineMoveDown />
+              </IconButton>
+            )}
         </MenuBar>
         <MuiMenu
           id="apDelMenu"

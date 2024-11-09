@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import isEqual from 'lodash/isEqual'
+import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -20,6 +21,11 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
+
+const MoveIcon = styled(MdOutlineMoveDown)`
+  color: ${(props) =>
+    props.moving ? 'rgb(255, 90, 0) !important' : 'inherit'};
+`
 
 export const Menu = memo(
   observer(({ row }) => {
@@ -149,6 +155,8 @@ export const Menu = memo(
         id: row.id,
         label: row.label,
         table: 'pop',
+        moveToTable: 'ap',
+        moveFromId: apId,
       })
     }, [row, setMoving])
 
@@ -196,20 +204,26 @@ export const Menu = memo(
           >
             <RiFolderCloseFill />
           </IconButton>
-          {isMoving ?
+          {!(isMoving && moving.id !== popId && moving.moveFromId !== apId) && (
+            <IconButton
+              title={
+                isMoving ?
+                  'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
+                : 'Verschiebe im Navigationsbaum'
+              }
+              onClick={onClickMoveInTree}
+            >
+              <MoveIcon moving={isMoving && moving.id === row.id} />
+            </IconButton>
+          )}
+          {isMoving && (
             <IconButton
               title="Verschieben abbrechen"
               onClick={onClickStopMoving}
             >
               <BsSignStopFill />
             </IconButton>
-          : <IconButton
-              title="Verschiebe im Navigationsbaum"
-              onClick={onClickMoveInTree}
-            >
-              <MdOutlineMoveDown />
-            </IconButton>
-          }
+          )}
         </MenuBar>
         <MuiMenu
           id="popDelMenu"

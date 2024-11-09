@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import {
   MdLocalFlorist,
   MdSwapVerticalCircle,
+  MdOutlineMoveDown,
   MdExpandMore,
   MdContentCopy,
   MdPhotoLibrary,
@@ -295,7 +296,7 @@ const BeobZugeordnetFilteredMapIcon = styled(BeobZugeordnetMapIcon)`
   stroke-width: 8px;
   stroke: #fff900;
 `
-const MovingIcon = styled(MdSwapVerticalCircle)`
+const MovingIcon = styled(MdOutlineMoveDown)`
   padding-left: 0.2em;
   height: 20px !important;
   color: rgb(255, 90, 0) !important;
@@ -677,7 +678,7 @@ export const Row = observer(({ node }) => {
           : node.label}
         </TextSpan>
         {isMoving && (
-          <div title="zum Verschieben gemerkt, bereit zum Einfügen">
+          <div title="zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen">
             <MovingIcon />
           </div>
         )}
