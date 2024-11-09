@@ -22,6 +22,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
+import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 
 export const Menu = memo(
   observer(({ row }) => {
@@ -136,6 +137,14 @@ export const Menu = memo(
       })
     }, [projId, apId, popId, client, store])
 
+    const onClickCloseLowerNodes = useCallback(() => {
+      closeLowerNodes({
+        url: ['Projekte', projId, 'Arten', apId, 'Populationen', popId],
+        store,
+        search,
+      })
+    }, [projId, apId, popId, store, search])
+
     return (
       <ErrorBoundary>
         <MenuBar>
@@ -160,7 +169,7 @@ export const Menu = memo(
           </IconButton>
           <IconButton
             title="Ordner im Navigationsbaum schliessen"
-            onClick={onClickOpenLowerNodes}
+            onClick={onClickCloseLowerNodes}
           >
             <FaFolderClosed />
           </IconButton>
