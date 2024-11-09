@@ -51,7 +51,7 @@ export const Ap = observer(({ onClick }) => {
               onClick={onClick}
               data={insertData}
             >
-              erstelle neuen
+              erstelle neue
             </MenuItem>
             <MenuItem
               onClick={onClick}

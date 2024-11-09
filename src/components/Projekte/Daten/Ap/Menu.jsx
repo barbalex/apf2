@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import { MdOutlineMoveDown } from 'react-icons/md'
+import { RiFolderCloseFill } from 'react-icons/ri'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -17,6 +18,7 @@ import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { Icon } from '@mui/material'
 import { moveTo } from '../../../../modules/moveTo/index.js'
+import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 
 export const Menu = memo(
   observer(({ row }) => {
@@ -127,6 +129,14 @@ export const Menu = memo(
       })
     }, [apId, store, client])
 
+    const onClickCloseLowerNodes = useCallback(() => {
+      closeLowerNodes({
+        url: ['Projekte', projId, 'Arten', apId],
+        store,
+        search,
+      })
+    }, [projId, apId, store, search])
+
     return (
       <ErrorBoundary>
         <MenuBar
@@ -144,6 +154,12 @@ export const Menu = memo(
             aria-owns={delMenuOpen ? 'apDelMenu' : undefined}
           >
             <FaMinus />
+          </IconButton>
+          <IconButton
+            title="Ordner im Navigationsbaum schliessen"
+            onClick={onClickCloseLowerNodes}
+          >
+            <RiFolderCloseFill />
           </IconButton>
           {isMoving &&
             moving.moveToTable === 'ap' &&
