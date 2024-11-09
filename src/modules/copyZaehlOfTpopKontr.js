@@ -7,7 +7,7 @@ export const copyZaehlOfTpopKontr = async ({
   tpopkontrIdTo,
   client,
   store,
-  queryClient,
+  tanstackQueryClient,
 }) => {
   // 1. fetch all tpopkontrzaehl
   const { data } = await client.query({
@@ -34,7 +34,7 @@ export const copyZaehlOfTpopKontr = async ({
       id: zaehl.id,
       client,
       store,
-      queryClient,
+      tanstackQueryClient,
     }),
   )
 }

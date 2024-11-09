@@ -8,7 +8,12 @@ import { updateTpopmassnById } from './updateTpopmassnById.js'
 import { updateTpopById } from './updateTpopById.js'
 import { updatePopById } from './updatePopById.js'
 
-export const moveTo = async ({ id: newParentId, store, client }) => {
+export const moveTo = async ({
+  id: newParentId,
+  store,
+  client,
+  tanstackQueryClient,
+}) => {
   const { enqueNotification, moving, setMoving } = store
   let { table } = moving
   const { id } = moving
@@ -59,7 +64,6 @@ export const moveTo = async ({ id: newParentId, store, client }) => {
       })
       break
     case 'pop':
-      console.log('will move pop', { id, newParentId })
       client.mutate({
         mutation: updatePopById,
         variables: { id, apId: newParentId },
@@ -74,5 +78,18 @@ export const moveTo = async ({ id: newParentId, store, client }) => {
     table: null,
     id: '99999999-9999-9999-9999-999999999999',
     label: null,
+    moveToTable: null,
+    moveFromId: null,
+  })
+
+  // update tree ap queries, tree pop folder queries, tree pop queries
+  tanstackQueryClient.invalidateQueries({
+    queryKey: [`treeApFolders`],
+  })
+  tanstackQueryClient.invalidateQueries({
+    queryKey: [`treePopFolders`],
+  })
+  tanstackQueryClient.invalidateQueries({
+    queryKey: [`treePop`],
   })
 }

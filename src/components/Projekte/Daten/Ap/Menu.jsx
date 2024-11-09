@@ -16,13 +16,14 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { Icon } from '@mui/material'
+import { moveTo } from '../../../../modules/moveTo/index.js'
 
 export const Menu = memo(
   observer(({ row }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tanstackQueryClient = useQueryClient()
     const { projId, apId } = useParams()
     const store = useContext(StoreContext)
 
@@ -53,15 +54,15 @@ export const Menu = memo(
           },
         })
       }
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treeRoot`],
       })
       const id = result?.data?.createAp?.ap?.id
       navigate(`/Daten/Projekte/${projId}/Arten/${id}${search}`)
-    }, [projId, client, store, queryClient, navigate, search])
+    }, [projId, client, store, tanstackQueryClient, navigate, search])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -98,19 +99,33 @@ export const Menu = memo(
       store.tree.setOpenNodes(newOpenNodes)
 
       // update tree query
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treeRoot`],
       })
       // navigate to parent
       navigate(`/Daten/Projekte/${projId}/Arten${search}`)
-    }, [client, store, queryClient, navigate, search, projId, row, pathname])
+    }, [
+      client,
+      store,
+      tanstackQueryClient,
+      navigate,
+      search,
+      projId,
+      row,
+      pathname,
+    ])
 
     const onClickMoveHere = useCallback(() => {
-      console.log('move here')
-    }, [])
+      moveTo({
+        id: apId,
+        store,
+        client,
+        tanstackQueryClient,
+      })
+    }, [apId, store, client])
 
     return (
       <ErrorBoundary>
@@ -134,7 +149,7 @@ export const Menu = memo(
             moving.moveToTable === 'ap' &&
             moving.moveFromId !== apId && (
               <IconButton
-                title="Hierhin verschieben"
+                title={`Verschiebe ${moving.label} hierhin`}
                 onClick={onClickMoveHere}
               >
                 <MdOutlineMoveDown />

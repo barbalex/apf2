@@ -24,7 +24,7 @@ import { moveTo } from '../../../../modules/moveTo/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: ${(props) =>
-    props.moving ? 'rgb(255, 90, 0) !important' : 'inherit'};
+    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'inherit'};
 `
 
 export const Menu = memo(
@@ -32,7 +32,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId } = useParams()
     const store = useContext(StoreContext)
     const { setMoving, moving } = store
@@ -61,17 +61,17 @@ export const Menu = memo(
           },
         })
       }
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treePop`],
       })
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
       const id = result?.data?.createPop?.pop?.id
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${id}${search}`,
       )
-    }, [apId, client, store, queryClient, navigate, search, projId])
+    }, [apId, client, store, tanstackQueryClient, navigate, search, projId])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -108,10 +108,10 @@ export const Menu = memo(
       store.tree.setOpenNodes(newOpenNodes)
 
       // update tree query
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treePop`],
       })
-      queryClient.invalidateQueries({
+      tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
       // navigate to parent
@@ -119,7 +119,7 @@ export const Menu = memo(
     }, [
       client,
       store,
-      queryClient,
+      tanstackQueryClient,
       navigate,
       search,
       apId,
@@ -165,6 +165,8 @@ export const Menu = memo(
         table: null,
         id: '99999999-9999-9999-9999-999999999999',
         label: null,
+        moveToTable: null,
+        moveFromId: null,
       })
     }, [setMoving])
 
@@ -173,6 +175,7 @@ export const Menu = memo(
         id: apId,
         client,
         store,
+        tanstackQueryClient,
       })
     }, [client, store, popId])
 
@@ -213,7 +216,9 @@ export const Menu = memo(
               }
               onClick={onClickMoveInTree}
             >
-              <MoveIcon moving={isMoving && moving.id === row.id} />
+              <MoveIcon
+                moving={(isMoving && moving.id === row.id).toString()}
+              />
             </IconButton>
           )}
           {isMoving && (

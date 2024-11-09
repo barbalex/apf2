@@ -26,7 +26,7 @@ export const copyTo = async ({
   id: idPassed,
   client,
   store,
-  queryClient,
+  tanstackQueryClient,
 }) => {
   const { copying, enqueNotification } = store
   let table = tablePassed || copying.table
@@ -257,7 +257,7 @@ export const copyTo = async ({
       popIdTo: newId,
       client,
       store,
-      QueryClient,
+      tanstackQueryClient,
     })
   }
   if (table === 'tpopkontr') {
@@ -267,12 +267,12 @@ export const copyTo = async ({
       tpopkontrIdTo: newId,
       client,
       store,
-      queryClient,
+      tanstackQueryClient,
     })
-    queryClient.invalidateQueries({
+    tanstackQueryClient.invalidateQueries({
       queryKey: ['treeTpopFolders'],
     })
-    queryClient.invalidateQueries({
+    tanstackQueryClient.invalidateQueries({
       queryKey: ['treeTpopfeldkontr'],
     })
   }

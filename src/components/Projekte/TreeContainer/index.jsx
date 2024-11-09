@@ -395,7 +395,7 @@ export const TreeContainer = observer(() => {
   const { search } = useLocation()
 
   const client = useApolloClient()
-  const tanstakQueryClient = useQueryClient()
+  const tanstackQueryClient = useQueryClient()
 
   const store = useContext(StoreContext)
   const {
@@ -544,7 +544,7 @@ export const TreeContainer = observer(() => {
             afterDeletionHook: () => {
               const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
               setOpenNodes(newOpenNodes)
-              tanstakQueryClient.invalidateQueries({
+              tanstackQueryClient.invalidateQueries({
                 queryKey: [`tree${upperFirst(table)}`],
               })
             },
@@ -577,7 +577,7 @@ export const TreeContainer = observer(() => {
           })
         },
         move() {
-          moveTo({ id, store, client })
+          moveTo({ id, store, client, tanstackQueryClient })
         },
         markForCopying() {
           setCopying({ table, id, label, withNextLevel: false })
@@ -598,7 +598,7 @@ export const TreeContainer = observer(() => {
             parentId: id,
             client,
             store,
-            queryClient: tanstakQueryClient,
+            tanstackQueryClient,
           })
         },
         markForCopyingBiotop() {
@@ -621,7 +621,7 @@ export const TreeContainer = observer(() => {
             client,
             store,
             search,
-            tanstakQueryClient,
+            tanstakQueryClient: tanstackQueryClient,
           })
         },
         createNewTpopFromBeob() {
@@ -686,7 +686,7 @@ export const TreeContainer = observer(() => {
       setToDelete,
       openNodes,
       setOpenNodes,
-      tanstakQueryClient,
+      tanstackQueryClient,
       showMapIfNotYetVisible,
       projekteTabs,
       activeApfloraLayers,
