@@ -20,6 +20,7 @@ import { ap, aeTaxonomies } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { Menu } from './Menu.jsx'
 
 const FormContainer = styled.div`
   display: flex;
@@ -164,6 +165,7 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
+      <Menu row={row} />
       <FormContainer>
         <SelectLoadingOptions
           field="artId"
