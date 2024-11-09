@@ -4,7 +4,14 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { FaPlus, FaMinus } from 'react-icons/fa6'
+import {
+  FaPlus,
+  FaMinus,
+  FaFolderOpen,
+  FaRegFolderOpen,
+  FaFolderClosed,
+  FaRegFolderClosed,
+} from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -14,6 +21,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
+import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 
 export const Menu = memo(
   observer(({ row }) => {
@@ -21,7 +29,7 @@ export const Menu = memo(
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const { projId, apId } = useParams()
+    const { projId, apId, popId } = useParams()
     const store = useContext(StoreContext)
 
     const onClickAdd = useCallback(async () => {
@@ -115,6 +123,19 @@ export const Menu = memo(
       pathname,
     ])
 
+    const onClickOpenLowerNodes = useCallback(() => {
+      openLowerNodes({
+        id: popId,
+        projId,
+        apId,
+        popId,
+        client,
+        store,
+        menuType: 'pop',
+        parentId: apId,
+      })
+    }, [projId, apId, popId, client, store])
+
     return (
       <ErrorBoundary>
         <MenuBar>
@@ -130,6 +151,18 @@ export const Menu = memo(
             aria-owns={delMenuOpen ? 'popDelMenu' : undefined}
           >
             <FaMinus />
+          </IconButton>
+          <IconButton
+            title="Ordner im Navigationsbaum öffnen"
+            onClick={onClickOpenLowerNodes}
+          >
+            <FaFolderOpen />
+          </IconButton>
+          <IconButton
+            title="Ordner im Navigationsbaum schliessen"
+            onClick={onClickOpenLowerNodes}
+          >
+            <FaFolderClosed />
           </IconButton>
         </MenuBar>
         <MuiMenu
