@@ -4,14 +4,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import {
-  FaPlus,
-  FaMinus,
-  FaFolderOpen,
-  FaRegFolderOpen,
-  FaFolderClosed,
-  FaRegFolderClosed,
-} from 'react-icons/fa6'
+import { FaPlus, FaMinus, FaFolder, FaFolderTree } from 'react-icons/fa6'
+import { RiFolderCloseFill } from 'react-icons/ri'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -165,13 +159,13 @@ export const Menu = memo(
             title="Ordner im Navigationsbaum öffnen"
             onClick={onClickOpenLowerNodes}
           >
-            <FaFolderOpen />
+            <FaFolderTree />
           </IconButton>
           <IconButton
             title="Ordner im Navigationsbaum schliessen"
             onClick={onClickCloseLowerNodes}
           >
-            <FaFolderClosed />
+            <RiFolderCloseFill />
           </IconButton>
         </MenuBar>
         <MuiMenu
