@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus, FaFolder, FaFolderTree } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
-import { MdOutlineMoveDown } from 'react-icons/md'
+import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
@@ -35,7 +35,7 @@ export const Menu = memo(
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId } = useParams()
     const store = useContext(StoreContext)
-    const { setMoving, moving } = store
+    const { setMoving, moving, setCopying, copying } = store
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -179,6 +179,16 @@ export const Menu = memo(
       })
     }, [client, store, popId])
 
+    const onClickCopy = useCallback(() => {
+      // TODO: add moveToTable, moveFromId for better control
+      setCopying({
+        table: 'pop',
+        id: popId,
+        label: row.label,
+        withNextLevel: false,
+      })
+    }, [])
+
     return (
       <ErrorBoundary>
         <MenuBar rerenderer={`${isMoving}`}>
@@ -229,6 +239,12 @@ export const Menu = memo(
               <BsSignStopFill />
             </IconButton>
           )}
+          <IconButton
+            title="Kopieren"
+            onClick={onClickCopy}
+          >
+            <MdContentCopy />
+          </IconButton>
         </MenuBar>
         <MuiMenu
           id="popDelMenu"
