@@ -143,8 +143,6 @@ export const Menu = memo(
       })
     }, [projId, apId, popId, store, search])
 
-    console.log('Pop.Menu, moving.id:', moving.id)
-
     const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
     const onClickMoveInTree = useCallback(() => {
       setMoving({
