@@ -6,6 +6,8 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus, FaFolder, FaFolderTree } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
+import { MdOutlineMoveDown } from 'react-icons/md'
+import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -17,6 +19,7 @@ import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
+import { moveTo } from '../../../../modules/moveTo/index.js'
 
 export const Menu = memo(
   observer(({ row }) => {
@@ -26,6 +29,7 @@ export const Menu = memo(
     const queryClient = useQueryClient()
     const { projId, apId, popId } = useParams()
     const store = useContext(StoreContext)
+    const { setMoving, moving } = store
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -139,9 +143,36 @@ export const Menu = memo(
       })
     }, [projId, apId, popId, store, search])
 
+    console.log('Pop.Menu, moving.id:', moving.id)
+
+    const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
+    const onClickMoveInTree = useCallback(() => {
+      setMoving({
+        id: row.id,
+        label: row.label,
+        table: 'pop',
+      })
+    }, [row, setMoving])
+
+    const onClickStopMoving = useCallback(() => {
+      setMoving({
+        table: null,
+        id: '99999999-9999-9999-9999-999999999999',
+        label: null,
+      })
+    }, [setMoving])
+
+    const onClickMoveHere = useCallback(() => {
+      moveTo({
+        id: apId,
+        client,
+        store,
+      })
+    }, [client, store, popId])
+
     return (
       <ErrorBoundary>
-        <MenuBar>
+        <MenuBar rerenderer={`${isMoving}`}>
           <IconButton
             title="Neue Population erstellen"
             onClick={onClickAdd}
@@ -167,6 +198,20 @@ export const Menu = memo(
           >
             <RiFolderCloseFill />
           </IconButton>
+          {isMoving ?
+            <IconButton
+              title="Verschieben abbrechen"
+              onClick={onClickStopMoving}
+            >
+              <BsSignStopFill />
+            </IconButton>
+          : <IconButton
+              title="Verschiebe im Navigationsbaum"
+              onClick={onClickMoveInTree}
+            >
+              <MdOutlineMoveDown />
+            </IconButton>
+          }
         </MenuBar>
         <MuiMenu
           id="popDelMenu"
