@@ -18,6 +18,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { pop } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Menu } from './Menu.jsx'
 
 const FormContainer = styled.div`
   display: flex;
@@ -27,7 +28,6 @@ const FormContainer = styled.div`
   overflow-y: auto;
   scrollbar-width: thin;
   padding: 10px;
-  padding-top: 0;
   height: 100%;
 `
 
@@ -130,6 +130,7 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
+      <Menu row={row} />
       <FormContainer>
         <TextField
           label="Nr."
