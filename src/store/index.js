@@ -257,8 +257,8 @@ export const MobxStore = types
     setCopyingBiotop({ id, label }) {
       self.copyingBiotop = { id, label }
     },
-    setMoving({ table, id, label, moveToTable, moveFromId }) {
-      self.moving = { table, id, label, moveToTable, moveFromId }
+    setMoving({ table, id, label, toTable, fromParentId }) {
+      self.moving = { table, id, label, toTable, fromParentId }
     },
     setMapMouseCoordinates({ x, y }) {
       self.mapMouseCoordinates = { x, y }

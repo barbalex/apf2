@@ -26,6 +26,10 @@ const MoveIcon = styled(MdOutlineMoveDown)`
   color: ${(props) =>
     props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'inherit'};
 `
+const CopyIcon = styled(MdContentCopy)`
+  color: ${(props) =>
+    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'inherit'};
+`
 
 export const Menu = memo(
   observer(({ row }) => {
@@ -155,8 +159,8 @@ export const Menu = memo(
         id: row.id,
         label: row.label,
         table: 'pop',
-        moveToTable: 'ap',
-        moveFromId: apId,
+        toTable: 'ap',
+        fromParentId: apId,
       })
     }, [row, setMoving])
 
@@ -165,8 +169,8 @@ export const Menu = memo(
         table: null,
         id: '99999999-9999-9999-9999-999999999999',
         label: null,
-        moveToTable: null,
-        moveFromId: null,
+        toTable: null,
+        fromParentId: null,
       })
     }, [setMoving])
 
@@ -179,8 +183,9 @@ export const Menu = memo(
       })
     }, [client, store, popId])
 
+    const isCopying = copying.id !== '99999999-9999-9999-9999-999999999999'
     const onClickCopy = useCallback(() => {
-      // TODO: add moveToTable, moveFromId for better control
+      // TODO: add toTable for better control
       setCopying({
         table: 'pop',
         id: popId,
@@ -191,7 +196,7 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar rerenderer={`${isMoving}`}>
+        <MenuBar rerenderer={`${isMoving}/${isCopying}`}>
           <IconButton
             title="Neue Population erstellen"
             onClick={onClickAdd}
@@ -217,7 +222,11 @@ export const Menu = memo(
           >
             <RiFolderCloseFill />
           </IconButton>
-          {!(isMoving && moving.id !== popId && moving.moveFromId !== apId) && (
+          {!(
+            isMoving &&
+            moving.id !== popId &&
+            moving.fromParentId !== apId
+          ) && (
             <IconButton
               title={
                 isMoving ?
@@ -239,12 +248,19 @@ export const Menu = memo(
               <BsSignStopFill />
             </IconButton>
           )}
-          <IconButton
-            title="Kopieren"
-            onClick={onClickCopy}
-          >
-            <MdContentCopy />
-          </IconButton>
+          {!(
+            isCopying &&
+            copying.id !== popId
+          ) && (
+            <IconButton
+              title="Kopieren"
+              onClick={onClickCopy}
+            >
+              <CopyIcon
+                copying={(isCopying && copying.id === row.id).toString()}
+              />
+            </IconButton>
+          )}
         </MenuBar>
         <MuiMenu
           id="popDelMenu"

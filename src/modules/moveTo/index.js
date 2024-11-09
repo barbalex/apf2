@@ -78,8 +78,8 @@ export const moveTo = async ({
     table: null,
     id: '99999999-9999-9999-9999-999999999999',
     label: null,
-    moveToTable: null,
-    moveFromId: null,
+    toTable: null,
+    fromParentId: null,
   })
 
   // update tree ap queries, tree pop folder queries, tree pop queries

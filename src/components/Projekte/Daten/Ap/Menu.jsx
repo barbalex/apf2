@@ -140,7 +140,7 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${isMoving}/${moving.moveToTable}/${moving.moveFromId}`}
+          rerenderer={`${isMoving}/${moving.toTable}/${moving.fromParentId}`}
         >
           <IconButton
             title="Neue Art erstellen"
@@ -162,8 +162,8 @@ export const Menu = memo(
             <RiFolderCloseFill />
           </IconButton>
           {isMoving &&
-            moving.moveToTable === 'ap' &&
-            moving.moveFromId !== apId && (
+            moving.toTable === 'ap' &&
+            moving.fromParentId !== apId && (
               <IconButton
                 title={`Verschiebe ${moving.label} hierhin`}
                 onClick={onClickMoveHere}

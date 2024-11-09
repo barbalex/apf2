@@ -572,8 +572,8 @@ export const TreeContainer = observer(() => {
             table,
             id,
             label,
-            moveToTable: actionTable,
-            moveFromId: apId,
+            toTable: actionTable,
+            fromParentId: apId,
           })
         },
         move() {
