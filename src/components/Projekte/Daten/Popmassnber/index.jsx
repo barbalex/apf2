@@ -19,6 +19,7 @@ import {
   popmassnber,
   tpopmassnErfbeurtWerte,
 } from '../../../shared/fragments.js'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -128,6 +129,7 @@ const Popmassnber = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Massnahmen-Bericht Population" />
+        <Menu row={row} />
         <FormContainer>
           <TextField
             name="jahr"
