@@ -81,6 +81,9 @@ export const Menu = memo(
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
 
+    const [copyMenuAnchorEl, setCopyMenuAnchorEl] = useState(null)
+    const copyMenuOpen = Boolean(copyMenuAnchorEl)
+
     const onClickDelete = useCallback(async () => {
       let result
       try {
@@ -189,33 +192,45 @@ export const Menu = memo(
     const isCopying =
       copying.id !== '99999999-9999-9999-9999-999999999999' && !!copying.id
     const thisPopIsCopying = copying.id === popId
-    const onClickCopy = useCallback(() => {
-      if (isCopying) {
-        // copy to this ap
-        return copyTo({
-          parentId: apId,
-          client,
-          store,
-          tanstackQueryClient,
+
+    const onClickCopy = useCallback(
+      (withNextLevel) => {
+        if (isCopying) {
+          // copy to this ap
+          return copyTo({
+            parentId: apId,
+            client,
+            store,
+            tanstackQueryClient,
+          })
+        }
+        setCopying({
+          table: 'pop',
+          id: popId,
+          label: row.label,
+          withNextLevel: false,
         })
-      }
-      setCopying({
-        table: 'pop',
-        id: popId,
-        label: row.label,
-        withNextLevel: false,
-      })
-    }, [
-      isCopying,
-      copyTo,
-      apId,
-      client,
-      store,
-      tanstackQueryClient,
-      popId,
-      row,
-      setCopying,
-    ])
+      },
+      [
+        isCopying,
+        copyTo,
+        apId,
+        client,
+        store,
+        tanstackQueryClient,
+        popId,
+        row,
+        setCopying,
+      ],
+    )
+    const onClickCopyWithoutNextLevel = useCallback(
+      () => onClickCopy(false),
+      [onClickCopy],
+    )
+    const onClickCopyWithNextLevel = useCallback(
+      () => onClickCopy(true),
+      [onClickCopy],
+    )
 
     const onClickStopCopying = useCallback(() => {
       setCopying({
@@ -294,6 +309,28 @@ export const Menu = memo(
             </IconButton>
           )}
         </MenuBar>
+        <MuiMenu
+          id="copyMenu"
+          anchorEl={copyMenuAnchorEl}
+          open={copyMenuOpen}
+          onClose={() => setCopyMenuAnchorEl(null)}
+          PaperProps={{
+            style: {
+              maxHeight: 48 * 4.5,
+              width: 120,
+            },
+          }}
+        >
+          <MenuItem onClick={onClickCopyWithNextLevel}>
+            mit Teilpopulationen
+          </MenuItem>
+          <MenuItem onClick={onClickCopyWithoutNextLevel}>
+            ohne Teilpopulationen
+          </MenuItem>
+          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>
+            abbrechen
+          </MenuItem>
+        </MuiMenu>
         <MuiMenu
           id="popDelMenu"
           anchorEl={delMenuAnchorEl}
