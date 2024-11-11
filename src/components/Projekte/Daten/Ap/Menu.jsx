@@ -5,7 +5,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
-import { MdOutlineMoveDown } from 'react-icons/md'
+import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
@@ -19,6 +19,7 @@ import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { Icon } from '@mui/material'
 import { moveTo } from '../../../../modules/moveTo/index.js'
+import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 
 export const Menu = memo(
@@ -31,8 +32,6 @@ export const Menu = memo(
     const store = useContext(StoreContext)
 
     const { setMoving, moving, copying, setCopying } = store
-    const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
-    const isCopying = copying.id !== '99999999-9999-9999-9999-999999999999'
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -141,6 +140,15 @@ export const Menu = memo(
       })
     }, [setMoving])
 
+    const onClickCopyTo = useCallback(() => {
+      copyTo({
+        parentId: apId,
+        client,
+        store,
+        tanstackQueryClient,
+      })
+    }, [apId, client, store, tanstackQueryClient])
+
     const onClickCloseLowerNodes = useCallback(() => {
       closeLowerNodes({
         url: ['Projekte', projId, 'Arten', apId],
@@ -149,9 +157,21 @@ export const Menu = memo(
       })
     }, [projId, apId, store, search])
 
+    const onClickStopCopying = useCallback(() => {
+      setCopying({
+        table: null,
+        id: '99999999-9999-9999-9999-999999999999',
+        label: null,
+        withNextLevel: false,
+      })
+    }, [setCopying])
+
+    const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
+    const isCopying = copying.id !== '99999999-9999-9999-9999-999999999999'
+
     return (
       <ErrorBoundary>
-        <MenuBar rerenderer={`${isMoving}/${isCopying}`}>
+        <MenuBar rerenderer={`${moving.id}/${copying.id}`}>
           <IconButton
             title="Neue Art erstellen"
             onClick={onClickAdd}
@@ -185,6 +205,22 @@ export const Menu = memo(
             <IconButton
               title={`Verschieben von '${moving.label}' abbrechen`}
               onClick={onClickStopMoving}
+            >
+              <BsSignStopFill />
+            </IconButton>
+          )}
+          {isCopying && (
+            <IconButton
+              title={`Kopiere '${copying.label}' in diese Art`}
+              onClick={onClickCopyTo}
+            >
+              <MdContentCopy />
+            </IconButton>
+          )}
+          {isCopying && (
+            <IconButton
+              title={`Kopieren von '${copying.label}' abbrechen`}
+              onClick={onClickStopCopying}
             >
               <BsSignStopFill />
             </IconButton>

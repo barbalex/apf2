@@ -188,7 +188,7 @@ export const Menu = memo(
 
     const isCopying =
       copying.id !== '99999999-9999-9999-9999-999999999999' && !!copying.id
-    const thisPopIsCopying = isCopying && copying.id === popId
+    const thisPopIsCopying = copying.id === popId
     const onClickCopy = useCallback(() => {
       if (isCopying) {
         // copy to this ap
@@ -279,18 +279,14 @@ export const Menu = memo(
               <BsSignStopFill />
             </IconButton>
           )}
-          {!(isCopying && copying.id !== popId) && (
-            <IconButton
-              title={
-                isCopying ?
-                  `Kopiere '${copying.label}' in diese Art`
-                : 'Kopieren'
-              }
-              onClick={onClickCopy}
-            >
-              <CopyIcon copying={thisPopIsCopying.toString()} />
-            </IconButton>
-          )}
+          <IconButton
+            title={
+              isCopying ? `Kopiere '${copying.label}' in diese Art` : 'Kopieren'
+            }
+            onClick={onClickCopy}
+          >
+            <CopyIcon copying={thisPopIsCopying.toString()} />
+          </IconButton>
           {isCopying && (
             <IconButton
               title={`Kopieren von '${copying.label}' abbrechen`}
