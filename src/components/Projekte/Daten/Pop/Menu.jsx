@@ -272,7 +272,7 @@ export const Menu = memo(
           )}
           {isMoving && (
             <IconButton
-              title="Verschieben abbrechen"
+              title={`Verschieben von '${row.label}' abbrechen`}
               onClick={onClickStopMoving}
             >
               <BsSignStopFill />
@@ -292,7 +292,7 @@ export const Menu = memo(
           )}
           {isCopying && (
             <IconButton
-              title="Kopieren abbrechen"
+              title={`Kopieren von '${row.label}' abbrechen`}
               onClick={onClickStopCopying}
             >
               <BsSignStopFill />

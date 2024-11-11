@@ -102,6 +102,7 @@ export const copyTo = async ({
   let newId
   switch (table) {
     case 'tpopkontrzaehl':
+      // TODO: this never happens, right?
       response = await client.mutate({
         mutation: createTpopkontrzaehl,
         variables: {
@@ -275,6 +276,14 @@ export const copyTo = async ({
     })
   }
   if (table === 'tpopkontr') {
+    // always copy Zaehlungen
+    copyZaehlOfTpopKontr({
+      tpopkontrIdFrom: id,
+      tpopkontrIdTo: newId,
+      client,
+      store,
+      tanstackQueryClient,
+    })
     tanstackQueryClient.invalidateQueries({
       queryKey: ['treeTpopfeldkontr'],
     })
@@ -299,22 +308,6 @@ export const copyTo = async ({
       client,
       store,
       tanstackQueryClient,
-    })
-  }
-  if (table === 'tpopkontr') {
-    // always copy Zaehlungen
-    copyZaehlOfTpopKontr({
-      tpopkontrIdFrom: id,
-      tpopkontrIdTo: newId,
-      client,
-      store,
-      tanstackQueryClient,
-    })
-    tanstackQueryClient.invalidateQueries({
-      queryKey: ['treeTpopFolders'],
-    })
-    tanstackQueryClient.invalidateQueries({
-      queryKey: ['treeTpopfeldkontr'],
     })
   }
 }
