@@ -224,7 +224,7 @@ export const Menu = memo(
         label: null,
         withNextLevel: false,
       })
-    }, [setMoving])
+    }, [setCopying])
 
     return (
       <ErrorBoundary>
