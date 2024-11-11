@@ -151,7 +151,7 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar rerenderer={`${moving}/${copying}`}>
+        <MenuBar rerenderer={`${isMoving}/${isCopying}`}>
           <IconButton
             title="Neue Art erstellen"
             onClick={onClickAdd}
