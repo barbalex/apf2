@@ -7,6 +7,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import { MdOutlineMoveDown } from 'react-icons/md'
 import { RiFolderCloseFill } from 'react-icons/ri'
+import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -29,8 +30,9 @@ export const Menu = memo(
     const { projId, apId } = useParams()
     const store = useContext(StoreContext)
 
-    const { setMoving, moving } = store
+    const { setMoving, moving, copying, setCopying } = store
     const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
+    const isCopying = copying.id !== '99999999-9999-9999-9999-999999999999'
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -129,6 +131,16 @@ export const Menu = memo(
       })
     }, [apId, store, client])
 
+    const onClickStopMoving = useCallback(() => {
+      setMoving({
+        table: null,
+        id: '99999999-9999-9999-9999-999999999999',
+        label: null,
+        toTable: null,
+        fromParentId: null,
+      })
+    }, [setMoving])
+
     const onClickCloseLowerNodes = useCallback(() => {
       closeLowerNodes({
         url: ['Projekte', projId, 'Arten', apId],
@@ -139,9 +151,7 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar
-          rerenderer={`${isMoving}/${moving.toTable}/${moving.fromParentId}`}
-        >
+        <MenuBar rerenderer={`${moving}/${copying}`}>
           <IconButton
             title="Neue Art erstellen"
             onClick={onClickAdd}
@@ -165,12 +175,20 @@ export const Menu = memo(
             moving.toTable === 'ap' &&
             moving.fromParentId !== apId && (
               <IconButton
-                title={`Verschiebe ${moving.label} hierhin`}
+                title={`Verschiebe ${moving.label} zu dieser Art`}
                 onClick={onClickMoveHere}
               >
                 <MdOutlineMoveDown />
               </IconButton>
             )}
+          {isMoving && (
+            <IconButton
+              title={`Verschieben von '${moving.label}' abbrechen`}
+              onClick={onClickStopMoving}
+            >
+              <BsSignStopFill />
+            </IconButton>
+          )}
         </MenuBar>
         <MuiMenu
           id="apDelMenu"

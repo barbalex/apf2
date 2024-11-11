@@ -94,7 +94,7 @@ export const Menu = memo(
               }
             }
           `,
-          variables: { id: row.id },
+          variables: { id: popId },
         })
       } catch (error) {
         return store.enqueNotification({
@@ -129,7 +129,7 @@ export const Menu = memo(
       search,
       apId,
       projId,
-      row,
+      popId,
       pathname,
     ])
 
@@ -155,6 +155,8 @@ export const Menu = memo(
     }, [projId, apId, popId, store, search])
 
     const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
+    const thisPopIsMoving = moving.id === popId
+    const popMovingFromThisAp = moving.fromParentId === apId
     const onClickMoveInTree = useCallback(() => {
       setMoving({
         id: row.id,
@@ -163,7 +165,7 @@ export const Menu = memo(
         toTable: 'ap',
         fromParentId: apId,
       })
-    }, [row, setMoving])
+    }, [row, setMoving, apId])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -224,6 +226,8 @@ export const Menu = memo(
       })
     }, [setMoving])
 
+    console.log('Pop.Menu', { isMoving, moving, popId, apId })
+
     return (
       <ErrorBoundary>
         <MenuBar rerenderer={`${isMoving}/${isCopying}`}>
@@ -252,27 +256,24 @@ export const Menu = memo(
           >
             <RiFolderCloseFill />
           </IconButton>
-          {!(
-            isMoving &&
-            moving.id !== popId &&
-            moving.fromParentId !== apId
-          ) && (
+          {
             <IconButton
               title={
-                isMoving ?
+                !isMoving ? `'${row.label}' zu einer anderen Art verschieben`
+                : thisPopIsMoving ?
                   'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
-                : 'Verschiebe im Navigationsbaum'
+                : popMovingFromThisAp ?
+                  `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
+                : `Verschiebe '${moving.label}' zu dieser Art`
               }
               onClick={onClickMoveInTree}
             >
-              <MoveIcon
-                moving={(isMoving && moving.id === row.id).toString()}
-              />
+              <MoveIcon moving={(isMoving && thisPopIsMoving).toString()} />
             </IconButton>
-          )}
+          }
           {isMoving && (
             <IconButton
-              title={`Verschieben von '${row.label}' abbrechen`}
+              title={`Verschieben von '${moving.label}' abbrechen`}
               onClick={onClickStopMoving}
             >
               <BsSignStopFill />
@@ -292,7 +293,7 @@ export const Menu = memo(
           )}
           {isCopying && (
             <IconButton
-              title={`Kopieren von '${row.label}' abbrechen`}
+              title={`Kopieren von '${copying.label}' abbrechen`}
               onClick={onClickStopCopying}
             >
               <BsSignStopFill />
