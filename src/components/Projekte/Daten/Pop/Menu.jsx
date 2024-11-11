@@ -321,6 +321,7 @@ export const Menu = memo(
           open={copyMenuOpen}
           onClose={() => setCopyMenuAnchorEl(null)}
         >
+          <MenuTitle>Kopieren:</MenuTitle>
           <MenuItem onClick={onClickCopyWithNextLevel}>
             mit Teilpopulationen
           </MenuItem>
@@ -336,12 +337,6 @@ export const Menu = memo(
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}
-          PaperProps={{
-            style: {
-              maxHeight: 48 * 4.5,
-              width: 120,
-            },
-          }}
         >
           <MenuTitle>löschen?</MenuTitle>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>

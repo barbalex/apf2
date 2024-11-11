@@ -34,7 +34,7 @@ import { UploaderContext } from '../../../../UploaderContext.js'
 import { StoreContext } from '../../../../storeContext.js'
 
 export const MenuTitle = styled.h3`
-  padding-top: 8px;
+  padding-top: 2px;
   padding-left: 15px;
   padding-right: 16px;
   padding-bottom: 0;
@@ -222,12 +222,6 @@ export const Menu = memo(
             anchorEl={delMenuAnchorEl}
             open={delMenuOpen}
             onClose={() => setDelMenuAnchorEl(null)}
-            PaperProps={{
-              style: {
-                maxHeight: 48 * 4.5,
-                width: 120,
-              },
-            }}
           >
             <MenuTitle>löschen?</MenuTitle>
             <MenuItem onClick={onClickDelete}>ja</MenuItem>
