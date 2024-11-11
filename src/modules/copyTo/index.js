@@ -249,6 +249,47 @@ export const copyTo = async ({
       // do nothing
       break
   }
+  // update tree data
+  if (table === 'pop') {
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treePop'],
+    })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treeApFolders'],
+    })
+  }
+  if (table === 'tpop') {
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treeTpop'],
+    })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treePopFolders'],
+    })
+  }
+  if (table === 'tpopmassn') {
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treeTpopmassn'],
+    })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treeTpopFolders'],
+    })
+  }
+  if (table === 'tpopkontr') {
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treeTpopfeldkontr'],
+    })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treeTpopFolders'],
+    })
+  }
+  if (table === 'tpopfreiwkontr') {
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treeTpopfreiwkontr'],
+    })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treeTpopFolders'],
+    })
+  }
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {

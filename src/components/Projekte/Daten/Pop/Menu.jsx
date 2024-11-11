@@ -21,6 +21,7 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
+import { copyTo } from '../../../../modules/copyTo/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: ${(props) =>
@@ -183,16 +184,45 @@ export const Menu = memo(
       })
     }, [client, store, popId])
 
-    const isCopying = copying.id !== '99999999-9999-9999-9999-999999999999'
+    const isCopying =
+      copying.id !== '99999999-9999-9999-9999-999999999999' && !!copying.id
+    const thisPopIsCopying = isCopying && copying.id === popId
     const onClickCopy = useCallback(() => {
-      // TODO: add toTable for better control
+      if (isCopying) {
+        // copy to this ap
+        return copyTo({
+          parentId: apId,
+          client,
+          store,
+          tanstackQueryClient,
+        })
+      }
       setCopying({
         table: 'pop',
         id: popId,
         label: row.label,
         withNextLevel: false,
       })
-    }, [])
+    }, [
+      isCopying,
+      copyTo,
+      apId,
+      client,
+      store,
+      tanstackQueryClient,
+      popId,
+      row,
+      setCopying,
+    ])
+
+    const onClickStopCopying = useCallback(() => {
+      setCopying({
+        table: null,
+        id: '99999999-9999-9999-9999-999999999999',
+        label: null,
+        withNextLevel: false,
+      })
+    }, [setMoving])
 
     return (
       <ErrorBoundary>
@@ -248,17 +278,24 @@ export const Menu = memo(
               <BsSignStopFill />
             </IconButton>
           )}
-          {!(
-            isCopying &&
-            copying.id !== popId
-          ) && (
+          {!(isCopying && copying.id !== popId) && (
             <IconButton
-              title="Kopieren"
+              title={
+                isCopying ?
+                  `Kopiere '${copying.label}' in diese Art`
+                : 'Kopieren'
+              }
               onClick={onClickCopy}
             >
-              <CopyIcon
-                copying={(isCopying && copying.id === row.id).toString()}
-              />
+              <CopyIcon copying={thisPopIsCopying.toString()} />
+            </IconButton>
+          )}
+          {isCopying && (
+            <IconButton
+              title="Kopieren abbrechen"
+              onClick={onClickStopCopying}
+            >
+              <BsSignStopFill />
             </IconButton>
           )}
         </MenuBar>

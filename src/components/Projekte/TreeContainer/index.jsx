@@ -588,7 +588,7 @@ export const TreeContainer = observer(() => {
         resetCopying() {
           setCopying({
             table: null,
-            id: null,
+            id: '99999999-9999-9999-9999-999999999999',
             label: null,
             withNextLevel: false,
           })
