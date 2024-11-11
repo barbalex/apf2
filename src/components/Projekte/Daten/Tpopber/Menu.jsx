@@ -22,7 +22,7 @@ export const Menu = memo(
     const navigate = useNavigate()
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
-    const { projId, apId, popId, popberId } = useParams()
+    const { projId, apId, popId, tpopId, tpopberId } = useParams()
     const store = useContext(StoreContext)
 
     const onClickAdd = useCallback(async () => {
@@ -30,16 +30,16 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createPopberForPopberForm($popId: UUID!) {
-              createPopber(input: { popber: { popId: $popId } }) {
-                popber {
+            mutation createTpopberForTpopberForm($tpopId: UUID!) {
+              createTpopber(input: { tpopber: { tpopId: $tpopId } }) {
+                tpopber {
                   id
-                  popId
+                  tpopId
                 }
               }
             }
           `,
-          variables: { popId },
+          variables: { tpopId },
         })
       } catch (error) {
         return store.enqueNotification({
@@ -50,14 +50,14 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treePopber`],
+        queryKey: [`treeTpopber`],
       })
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treePopFolders`],
+        queryKey: [`treeTpopFolders`],
       })
-      const id = result?.data?.createPopber?.popber?.id
+      const id = result?.data?.createTpopber?.tpopber?.id
       navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Kontroll-Berichte/${id}${search}`,
+        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Kontroll-Berichte/${id}${search}`,
       )
     }, [
       apId,
@@ -68,6 +68,7 @@ export const Menu = memo(
       search,
       projId,
       popId,
+      tpopId,
     ])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
@@ -78,15 +79,15 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation deletePopber($id: UUID!) {
-              deletePopberById(input: { id: $id }) {
-                popber {
+            mutation deleteTpopber($id: UUID!) {
+              deleteTpopberById(input: { id: $id }) {
+                tpopber {
                   id
                 }
               }
             }
           `,
-          variables: { id: popberId },
+          variables: { id: tpopberId },
         })
       } catch (error) {
         return store.enqueNotification({
@@ -106,14 +107,14 @@ export const Menu = memo(
 
       // update tree query
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treePopber`],
+        queryKey: [`treeTpopber`],
       })
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treePopFolders`],
+        queryKey: [`treeTpopFolders`],
       })
       // navigate to parent
       navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Kontroll-Berichte${search}`,
+        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Kontroll-Berichte${search}`,
       )
     }, [
       client,
@@ -124,7 +125,7 @@ export const Menu = memo(
       apId,
       projId,
       popId,
-      popberId,
+      tpopId,
       pathname,
     ])
 
@@ -140,13 +141,13 @@ export const Menu = memo(
           <IconButton
             title="Löschen"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'popberDelMenu' : undefined}
+            aria-owns={delMenuOpen ? 'tpopberDelMenu' : undefined}
           >
             <FaMinus />
           </IconButton>
         </MenuBar>
         <MuiMenu
-          id="popberDelMenu"
+          id="tpopberDelMenu"
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}

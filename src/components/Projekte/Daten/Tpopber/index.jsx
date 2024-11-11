@@ -14,6 +14,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { tpopber } from '../../../shared/fragments.js'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -39,7 +40,7 @@ const fieldTypes = {
 }
 
 export const Component = observer(() => {
-  const { tpopberId: id } = useParams()
+  const { tpopberId } = useParams()
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
@@ -64,7 +65,7 @@ export const Component = observer(() => {
     `,
     {
       variables: {
-        id,
+        id: tpopberId,
       },
     },
   )
@@ -132,6 +133,7 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Kontroll-Bericht Teil-Population" />
+        <Menu row={row} />
         <FormContainer>
           <TextField
             name="jahr"

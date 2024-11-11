@@ -59,7 +59,16 @@ export const Menu = memo(
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte/${id}${search}`,
       )
-    }, [apId, client, store, tanstackQueryClient, navigate, search, projId])
+    }, [
+      apId,
+      client,
+      store,
+      tanstackQueryClient,
+      navigate,
+      search,
+      projId,
+      popId,
+    ])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -114,6 +123,7 @@ export const Menu = memo(
       search,
       apId,
       projId,
+      popId,
       popmassnberId,
       pathname,
     ])
