@@ -226,8 +226,6 @@ export const Menu = memo(
       })
     }, [setMoving])
 
-    console.log('Pop.Menu', { isMoving, moving, popId, apId })
-
     return (
       <ErrorBoundary>
         <MenuBar rerenderer={`${isMoving}/${isCopying}`}>
