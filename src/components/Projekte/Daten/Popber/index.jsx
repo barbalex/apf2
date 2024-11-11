@@ -15,6 +15,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { pop, popber, tpopEntwicklungWerte } from '../../../shared/fragments.js'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -124,6 +125,7 @@ const Popber = () => {
     <ErrorBoundary>
       <Container>
         <FormTitle title="Kontroll-Bericht Population" />
+        <Menu row={row} />
         <FormContainer>
           <TextField
             name="jahr"
