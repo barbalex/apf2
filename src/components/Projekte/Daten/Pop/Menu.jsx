@@ -208,8 +208,9 @@ export const Menu = memo(
           table: 'pop',
           id: popId,
           label: row.label,
-          withNextLevel: false,
+          withNextLevel,
         })
+        setCopyMenuAnchorEl(null)
       },
       [
         isCopying,
@@ -296,7 +297,12 @@ export const Menu = memo(
             title={
               isCopying ? `Kopiere '${copying.label}' in diese Art` : 'Kopieren'
             }
-            onClick={onClickCopy}
+            onClick={(event) =>
+              isCopying ? onClickCopy() : (
+                setCopyMenuAnchorEl(event.currentTarget)
+              )
+            }
+            aria-owns={copyMenuOpen ? 'copyMenu' : undefined}
           >
             <CopyIcon copying={thisPopIsCopying.toString()} />
           </IconButton>
@@ -314,12 +320,6 @@ export const Menu = memo(
           anchorEl={copyMenuAnchorEl}
           open={copyMenuOpen}
           onClose={() => setCopyMenuAnchorEl(null)}
-          PaperProps={{
-            style: {
-              maxHeight: 48 * 4.5,
-              width: 120,
-            },
-          }}
         >
           <MenuItem onClick={onClickCopyWithNextLevel}>
             mit Teilpopulationen
@@ -327,7 +327,7 @@ export const Menu = memo(
           <MenuItem onClick={onClickCopyWithoutNextLevel}>
             ohne Teilpopulationen
           </MenuItem>
-          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>
+          <MenuItem onClick={() => setCopyMenuAnchorEl(null)}>
             abbrechen
           </MenuItem>
         </MuiMenu>
