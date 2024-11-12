@@ -14,7 +14,8 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
-import { Icon } from '@mui/material'
+
+const iconStyle = { color: 'white' }
 
 export const Menu = memo(
   observer(({ row }) => {
@@ -114,25 +115,28 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar>
+        <MenuBar
+          bgColor="#388e3c"
+          color="white"
+        >
           <IconButton
             title="Neuen AP-Bericht erstellen"
             onClick={onClickAdd}
           >
-            <FaPlus />
+            <FaPlus style={iconStyle} />
           </IconButton>
           <IconButton
             title="Löschen"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
             aria-owns={delMenuOpen ? 'abperuebersichtDelMenu' : undefined}
           >
-            <FaMinus />
+            <FaMinus style={iconStyle} />
           </IconButton>
           <IconButton
             title="Druckversion öffnen. Achtung: lädt sehr viele Daten, ist daher langsam und stresst den Server."
             onClick={onClickPrint}
           >
-            <FaFilePdf />
+            <FaFilePdf style={iconStyle} />
           </IconButton>
         </MenuBar>
         <MuiMenu
