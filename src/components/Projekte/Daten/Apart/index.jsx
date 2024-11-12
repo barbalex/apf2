@@ -140,8 +140,10 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Taxon" />
-        <Menu row={row} />
+        <FormTitle
+          title="Taxon"
+          menuBar={<Menu row={row} />}
+        />
         <FieldsContainer>
           <div>
             In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
