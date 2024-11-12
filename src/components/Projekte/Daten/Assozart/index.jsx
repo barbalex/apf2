@@ -140,8 +140,10 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <Container data-id="assozart">
-        <FormTitle title="assoziierte Art" />
-        <Menu row={row} />
+        <FormTitle
+          title="assoziierte Art"
+          menuBar={<Menu row={row} />}
+        />
         <FormContainer>
           <SelectLoadingOptions
             field="aeId"
