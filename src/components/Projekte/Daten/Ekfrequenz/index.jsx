@@ -154,8 +154,10 @@ const Ekfrequenz = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="EK-Frequenz" />
-        <Menu row={row} />
+        <FormTitle
+          title="EK-Frequenz"
+          menuBar={<Menu row={row} />}
+        />
         <FormContainer>
           <TextField
             name="code"
