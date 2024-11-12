@@ -124,8 +124,10 @@ const Popber = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Kontroll-Bericht Population" />
-        <Menu row={row} />
+        <FormTitle
+          title="Kontroll-Bericht Population"
+          menuBar={<Menu row={row} />}
+        />
         <FormContainer>
           <TextField
             name="jahr"
