@@ -2,7 +2,7 @@ import { useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useParams, useOutletContext } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
@@ -16,7 +16,6 @@ import { DateField } from '../../../shared/Date.jsx'
 import { StringToCopy } from '../../../shared/StringToCopy.jsx'
 import { TpopfeldkontrentwicklungPopover } from '../TpopfeldkontrentwicklungPopover.jsx'
 import { constants } from '../../../../modules/constants.js'
-import { query } from './query.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -102,20 +101,15 @@ const tpopkontrTypWerte = [
 
 export const Component = observer(() => {
   const { tpopkontrId } = useParams()
+  const { data } = useOutletContext()
+
+  const row = data?.tpopkontrById ?? {}
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
   const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
-
-  const { data, loading, error } = useQuery(query, {
-    variables: {
-      id: tpopkontrId,
-    },
-  })
-
-  const row = data?.tpopkontrById ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
@@ -179,10 +173,6 @@ export const Component = observer(() => {
     [client, queryClient, row.id, store.user.name],
   )
 
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
-
   return (
     <ErrorBoundary>
       <FormContainer>
@@ -213,7 +203,7 @@ export const Component = observer(() => {
           name="bearbeiter"
           label="BearbeiterIn"
           options={data?.allAdresses?.nodes ?? []}
-          loading={loading}
+          loading={false}
           value={row.bearbeiter}
           saveToDb={saveToDb}
           error={fieldErrors.bearbeiter}
@@ -245,7 +235,7 @@ export const Component = observer(() => {
           name="entwicklung"
           label="Entwicklung"
           dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
-          loading={loading}
+          loading={false}
           popover={TpopfeldkontrentwicklungPopover}
           value={row.entwicklung}
           saveToDb={saveToDb}

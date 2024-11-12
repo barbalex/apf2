@@ -9,6 +9,8 @@ import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Menu } from './Menu.jsx'
+import { query } from './query.js'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -37,6 +39,14 @@ export const Component = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
+  const { data, loading, error } = useQuery(query, {
+    variables: {
+      id: tpopkontrId,
+    },
+  })
+
+  const row = data?.tpopkontrById ?? {}
+
   const onChangeTab = useCallback(
     (event, value) =>
       pathname.endsWith(tpopkontrId) ? navigate(`./${value}`) : navigate(value),
@@ -46,7 +56,10 @@ export const Component = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Feld-Kontrolle" />
+        <FormTitle
+          title="Feld-Kontrolle"
+          menuBar={loading ? null : <Menu row={row} />}
+        />
         <Tabs
           value={
             pathname.includes(`${tpopkontrId}/Entwicklung`) ? 'Entwicklung'
@@ -79,9 +92,14 @@ export const Component = () => {
         </Tabs>
         <TabContentContainer>
           <TabContent>
-            <Suspense fallback={<Spinner />}>
-              <Outlet />
-            </Suspense>
+            {loading ?
+              <Spinner />
+            : error ?
+              <Error error={error} />
+            : <Suspense fallback={<Spinner />}>
+                <Outlet context={{ data }} />
+              </Suspense>
+            }
           </TabContent>
         </TabContentContainer>
       </Container>
