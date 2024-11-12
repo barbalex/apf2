@@ -3,10 +3,13 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 import { useParams, Outlet, useNavigate, useLocation } from 'react-router-dom'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Error } from '../../../shared/Error.jsx'
+import { query } from '../TpopmassnRouter/query.js'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -34,6 +37,12 @@ export const Component = () => {
   const { tpopmassnId, tpopId, popId, apId, projId } = useParams()
   const navigate = useNavigate()
   const { pathname } = useLocation()
+
+  const { data, loading, error } = useQuery(query, {
+    variables: {
+      id: tpopmassnId,
+    },
+  })
 
   const onChangeTab = useCallback(
     (event, value) => {
@@ -73,9 +82,14 @@ export const Component = () => {
         </Tabs>
         <TabContentContainer>
           <TabContent>
-            <Suspense fallback={<Spinner />}>
-              <Outlet />
-            </Suspense>
+            {loading ?
+              <Spinner />
+            : error ?
+              <Error error={error} />
+            : <Suspense fallback={<Spinner />}>
+                <Outlet context={{ data }} />
+              </Suspense>
+            }
           </TabContent>
         </TabContentContainer>
       </Container>

@@ -2,7 +2,7 @@ import { useCallback, useContext, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useParams, useOutletContext } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
@@ -15,13 +15,10 @@ import { DateField } from '../../../shared/Date.jsx'
 import { StringToCopy } from '../../../shared/StringToCopy.jsx'
 import { constants } from '../../../../modules/constants.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
-import { query } from './query.js'
 import { queryAeTaxonomies } from './queryAeTaxonomies.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { exists } from '../../../../modules/exists.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
-import { Error } from '../../../shared/Error.jsx'
 
 const ColumnContainer = styled.div`
   padding: 10px;
@@ -59,20 +56,13 @@ const fieldTypes = {
 
 export const Component = observer(({ showFilter = false }) => {
   const { tpopmassnId, apId } = useParams()
+  const { data } = useOutletContext()
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
   const store = useContext(StoreContext)
 
   const [fieldErrors, setFieldErrors] = useState({})
-
-  const id = showFilter ? '99999999-9999-9999-9999-999999999999' : tpopmassnId
-
-  const { data, loading, error } = useQuery(query, {
-    variables: {
-      id,
-    },
-  })
 
   const notMassnCountUnit =
     data?.tpopmassnById?.tpopByTpopId?.popByPopId?.apByApId
@@ -343,10 +333,6 @@ export const Component = observer(({ showFilter = false }) => {
     ],
   )
 
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
-
   return (
     <ErrorBoundary>
       <ColumnContainer>
@@ -370,7 +356,7 @@ export const Component = observer(({ showFilter = false }) => {
             name="typ"
             label="Typ"
             dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
-            loading={loading}
+            loading={false}
             value={row.typ}
             saveToDb={saveToDb}
             error={fieldErrors.typ}
@@ -388,7 +374,7 @@ export const Component = observer(({ showFilter = false }) => {
             label="BearbeiterIn"
             value={row.bearbeiter}
             options={data?.allAdresses?.nodes ?? []}
-            loading={loading}
+            loading={false}
             saveToDb={saveToDb}
             error={fieldErrors.bearbeiter}
           />
@@ -477,7 +463,7 @@ export const Component = observer(({ showFilter = false }) => {
                 label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
                 value={row.zieleinheitEinheit}
                 options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
-                loading={loading}
+                loading={false}
                 saveToDb={saveToDb}
                 error={fieldErrors.zieleinheitEinheit}
               />
@@ -496,7 +482,7 @@ export const Component = observer(({ showFilter = false }) => {
             </>
           )}
           <SelectLoadingOptionsTypable
-            key={`${id}${!!row.wirtspflanze}`}
+            key={`${tpopmassnId}${!!row.wirtspflanze}`}
             label="Wirtspflanze"
             row={row}
             query={queryAeTaxonomies}
