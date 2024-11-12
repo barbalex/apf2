@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useParams, useOutletContext } from 'react-router-dom'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
@@ -17,7 +17,6 @@ import { TpopAbBerRelevantInfoPopover } from '../TpopAbBerRelevantInfoPopover.js
 import { constants } from '../../../../modules/constants.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { Coordinates } from '../../../shared/Coordinates.jsx'
-import { query } from './query.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import {
   popStatusWerte,
@@ -74,23 +73,13 @@ export const fieldTypes = {
 }
 
 export const Component = observer(() => {
-  const { tpopId: id } = useParams()
+  const { data, refetchTpop } = useOutletContext()
+  const { tpopId } = useParams()
   const store = useContext(StoreContext)
   const { enqueNotification } = store
   const client = useApolloClient()
   const queryClient = useQueryClient()
 
-  //console.log('Tpop rendering')
-  const {
-    data,
-    loading,
-    error,
-    refetch: refetchTpop,
-  } = useQuery(query, {
-    variables: {
-      id,
-    },
-  })
   const apJahr = data?.tpopById?.popByPopId?.apByApId?.startJahr ?? null
 
   const row = data?.tpopById ?? {}
@@ -204,8 +193,6 @@ export const Component = observer(() => {
       store.user.name,
     ],
   )
-
-  if (error) return <Error error={error} />
 
   return (
     <Container>

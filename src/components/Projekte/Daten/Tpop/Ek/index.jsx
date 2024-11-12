@@ -20,7 +20,7 @@ import { EkYear } from './EkYear.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
-import { query as tpopQuery } from '../query.js'
+import { query as tpopQuery } from '../../TpopRouter/query.js'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
 import {
   popStatusWerte,

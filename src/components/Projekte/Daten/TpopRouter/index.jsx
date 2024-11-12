@@ -3,10 +3,13 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 import { useParams, Outlet, useNavigate, useLocation } from 'react-router-dom'
+import { useQuery, useApolloClient, gql } from '@apollo/client'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Error } from '../../../shared/Error.jsx'
+import { query } from './query.js'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -35,6 +38,19 @@ export const Component = () => {
   const { tpopId } = useParams()
   const navigate = useNavigate()
   const { pathname } = useLocation()
+
+  const {
+    data,
+    loading,
+    error,
+    refetch: refetchTpop,
+  } = useQuery(query, {
+    variables: {
+      id: tpopId,
+    },
+  })
+
+  const row = data?.tpopById ?? {}
 
   const onChangeTab = useCallback(
     (event, value) =>
@@ -85,10 +101,16 @@ export const Component = () => {
         </Tabs>
         <TabContentContainer>
           <TabContent>
-            <Suspense fallback={<Spinner />}>
-              <Outlet />
-            </Suspense>
+            {loading ?
+              <Spinner />
+            : error ?
+              <Error error={error} />
+            : <Suspense fallback={<Spinner />}>
+                <Outlet context={{ data, refetchTpop }} />
+              </Suspense>
+            }
           </TabContent>
+          }
         </TabContentContainer>
       </Container>
     </ErrorBoundary>
