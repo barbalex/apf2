@@ -311,44 +311,20 @@ export const Component = observer(() => {
         <FormTitle
           title="Benutzer"
           menuBar={
-            <>
-              {!editPassword && !passwordMessage && (
-                <StyledButton
-                  variant="outlined"
-                  onClick={() => {
-                    setEditPassword(true)
-                    setPasswordMessage('')
-                  }}
-                >
-                  Passwort ändern
-                </StyledButton>
-              )}
-              {hasEkfTpopsWithoutEkfThisYear && (
-                <StyledButton
-                  variant="outlined"
-                  onClick={onClickCreateEkfForms}
-                  title={`Erzeugt in ${ekfTpops.length} Teil-Population${
-                    ekfTpops.length > 1 ? 'en' : ''
-                  }, in de${
-                    ekfTpops.length > 1 ? 'nen' : 'r'
-                  } dieser Benutzer als EKF-Kontrolleur erfasst ist, EKF-Formulare für das Jahr ${thisYear}`}
-                >
-                  {`(Fehlende) EKF-Formulare für ${thisYear} erzeugen`}
-                </StyledButton>
-              )}
-              {hasEkfTpops && (
-                <StyledButton
-                  variant="outlined"
-                  component={Link}
-                  to={`/Daten/Benutzer/${row.id}/EKF/${thisYear}${search}`}
-                >
-                  {`EKF-Formulare für ${thisYear} öffnen`}
-                </StyledButton>
-              )}
-            </>
+            <Menu
+              row={row}
+              editPassword={editPassword}
+              setEditPassword={setEditPassword}
+              passwordMessage={passwordMessage}
+              setPasswordMessage={setPasswordMessage}
+              onClickCreateEkfForms={onClickCreateEkfForms}
+              ekfTpops={ekfTpops}
+              thisYear={thisYear}
+              hasEkfTpopsWithoutEkfThisYear={hasEkfTpopsWithoutEkfThisYear}
+            />
           }
         />
-        <Menu row={row} />
+
         <ScrollContainer>
           <TextField2
             key={`${row.id}name`}
