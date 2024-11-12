@@ -109,8 +109,10 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Adresse" />
-        <Menu row={row} />
+        <FormTitle
+          title="Adresse"
+          menuBar={<Menu row={row} />}
+        />
         <FieldsContainer>
           <FormContainer>
             <TextField
