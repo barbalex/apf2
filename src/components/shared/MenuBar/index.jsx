@@ -34,10 +34,13 @@ const MeasuredOuterContainer = styled.div`
   overflow: hidden;
   min-height: ${buttonHeight}px;
   max-height: ${buttonHeight}px;
+  min-width: ${buttonWidth};
+  flex-basis: ${buttonWidth}px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   flex-grow: 1;
+  flex-shrink: 0;
   column-gap: 0;
   // needed (not transparent) as in fullscreen backed by black
   background-color: ${(props) => props.bgColor};
@@ -56,9 +59,13 @@ const StylingContainer = styled.div`
 `
 // remove the margin mui adds to top and bottom of menu
 const StyledMenu = styled(Menu)`
+  background-color: ${(props) => props.bgColor};
   ul {
     padding: 0 !important;
   }
+`
+const MenuContent = styled.div`
+  background-color: ${(props) => props.bgColor};
 `
 
 export const MenuBar = memo(
@@ -69,6 +76,7 @@ export const MenuBar = memo(
     titleComponent,
     titleComponentWidth,
     bgColor = 'rgb(255, 253, 231)',
+    color = 'rgba(0, 0, 0, 0.54)',
   }) => {
     const usableChildren = useMemo(
       () => children?.filter?.((child) => !!child) ?? children,
@@ -81,6 +89,8 @@ export const MenuBar = memo(
 
     const outerContainerRef = useRef(null)
     const previousMeasurementTimeRef = useRef(0)
+
+    const iconStyle = useMemo(() => ({ color }), [color])
 
     // this was quite some work to get right
     // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
@@ -148,7 +158,7 @@ export const MenuBar = memo(
           const timeSinceLastMeasurement =
             currentTime - previousMeasurementTimeRef.current
           if (timeSinceLastMeasurement < 300) {
-            // console.log('MenuBar.resizeObserver, not enough time has passed')
+            console.log('MenuBar.resizeObserver, not enough time has passed')
             return
           }
 
@@ -160,12 +170,12 @@ export const MenuBar = memo(
           )
           const shouldCheckOverflow = Math.abs(percentageChanged) > 1
           if (!shouldCheckOverflow) {
-            // console.log('MenuBar.resizeObserver, not enough change')
+            console.log('MenuBar.resizeObserver, not enough change')
             return
           }
 
           previousWidthRef.current = width
-          // console.log('MenuBar.resizeObserver, calling checkOverflowDebounced')
+          console.log('MenuBar.resizeObserver, calling checkOverflowDebounced')
           checkOverflowDebounced()
         }
       })
@@ -199,7 +209,7 @@ export const MenuBar = memo(
                 id="menubutton"
                 onClick={onClickMenuButton}
               >
-                <FaBars />
+                <FaBars style={iconStyle} />
               </IconButton>
 
               <StyledMenu
@@ -208,7 +218,7 @@ export const MenuBar = memo(
                 open={menuIsOpen}
                 onClose={onCloseMenu}
               >
-                {menus}
+                <MenuContent bgColor={bgColor}>{menus}</MenuContent>
               </StyledMenu>
             </>
           )}

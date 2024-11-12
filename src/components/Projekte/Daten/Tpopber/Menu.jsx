@@ -133,7 +133,10 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar bgColor="#388e3c">
+        <MenuBar
+          bgColor="#388e3c"
+          color="white"
+        >
           <IconButton
             title="Neuen Bericht erstellen"
             onClick={onClickAdd}

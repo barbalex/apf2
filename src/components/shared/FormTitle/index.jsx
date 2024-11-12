@@ -18,22 +18,19 @@ const TitleRow = styled.div`
   flex-direction: row;
   justify-content: space-between;
   min-height: 42px;
-  flex-shrink: 0;
+  max-width: 100%;
+  overflow: hidden;
 `
 const Title = styled.div`
+  display: block;
   margin-top: auto;
   margin-bottom: auto;
   padding: 10px;
   color: white;
   font-weight: bold;
-  /* height: 43px; */
-`
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-  align-items: center;
-  padding: 0 0 0 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `
 
 export const FormTitle = memo(
@@ -41,7 +38,7 @@ export const FormTitle = memo(
     <Container>
       <TitleRow>
         <Title data-id="form-title">{title}</Title>
-        <Buttons>{menuBar}</Buttons>
+        {menuBar}
       </TitleRow>
       {!noTestDataMessage && <TestdataMessage />}
     </Container>
