@@ -1,0 +1,1 @@
+Ab Version 1.108.0: Die Menüzeile wird in den Berichtskopf integriert
