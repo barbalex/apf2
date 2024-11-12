@@ -121,8 +121,10 @@ const Erfkrit = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Erfolgs-Kriterium" />
-        <Menu row={row} />
+        <FormTitle
+          title="Erfolgs-Kriterium"
+          menuBar={<Menu row={row} />}
+        />
         <FormContainer>
           <RadioButtonGroup
             name="erfolg"
