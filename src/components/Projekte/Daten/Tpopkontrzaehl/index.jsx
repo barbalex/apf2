@@ -17,6 +17,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { tpopkontrzaehl } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -127,7 +128,10 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Zählung" />
+        <FormTitle
+          title="Zählung"
+          menuBar={<Menu row={row} />}
+        />
         <FormContainer>
           <Select
             name="einheit"
