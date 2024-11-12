@@ -1,4 +1,4 @@
-import { useCallback, Suspense } from 'react'
+import { useCallback, Suspense, useMemo } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
@@ -10,6 +10,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { query } from '../TpopmassnRouter/query.js'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -44,6 +45,8 @@ export const Component = () => {
     },
   })
 
+  const row = useMemo(() => data?.tpopmassnById ?? {}, [data?.tpopmassnById])
+
   const onChangeTab = useCallback(
     (event, value) => {
       navigate(
@@ -56,7 +59,10 @@ export const Component = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Massnahme" />
+        <FormTitle
+          title="Massnahme"
+          menuBar={<Menu row={row} />}
+        />
         <Tabs
           value={
             pathname.includes(`${tpopmassnId}/Massnahme`) ? 'Massnahme'
