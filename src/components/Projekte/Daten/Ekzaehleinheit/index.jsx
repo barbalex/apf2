@@ -159,8 +159,10 @@ const Ekzaehleinheit = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="EK-Zähleinheit" />
-        <Menu row={row} />
+        <FormTitle
+          title="EK-Zähleinheit"
+          menuBar={<Menu row={row} />}
+        />
         <FormContainer>
           <Select
             name="zaehleinheitId"
