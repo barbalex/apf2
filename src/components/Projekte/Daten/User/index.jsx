@@ -8,23 +8,17 @@ import FormHelperText from '@mui/material/FormHelperText'
 import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useParams, useLocation, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField2 } from '../../../shared/TextField2.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { query } from './query.js'
-import { queryEkfTpops } from './queryEkfTpops.js'
 import { Select } from '../../../shared/Select.jsx'
-import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
-import {
-  tpopkontr as tpopkontrFragment,
-  user as userFragment,
-} from '../../../shared/fragments.js'
+import { user as userFragment } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -52,15 +46,6 @@ const StyledInput = styled(Input)`
 `
 const PasswordMessage = styled.div`
   padding-bottom: 10px;
-`
-const StyledButton = styled(Button)`
-  text-transform: none !important;
-  margin-right: 10px !important;
-  color: white !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  &:hover {
-    background-color: rgba(28, 74, 30, 0.2) !important;
-  }
 `
 
 const roleWerte = [
@@ -95,11 +80,8 @@ const fieldTypes = {
   adresseId: 'UUID',
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const { userId } = useParams()
-  const { search } = useLocation()
-
-  const store = useContext(StoreContext)
 
   const client = useApolloClient()
   const queryClient = useQueryClient()
@@ -121,24 +103,6 @@ export const Component = observer(() => {
   })
 
   const row = data?.userById ?? {}
-
-  const thisYear = new Date().getFullYear()
-  const { data: dataEkfTpops, refetch: refetchEkfTpops } = useQuery(
-    queryEkfTpops,
-    {
-      variables: {
-        id: row.adresseId || '9999999999999999999999999',
-        jahr: thisYear,
-        include: !!row.adresseId,
-      },
-    },
-  )
-  const ekfTpops = dataEkfTpops?.ekfTpops?.nodes ?? []
-  const hasEkfTpops = !!ekfTpops.length
-  const ekfTpopsWithoutEkfThisYear = ekfTpops
-    .filter((e) => e?.ekfInJahr?.totalCount === 0)
-    .map((e) => e.id)
-  const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
 
   useEffect(() => {
     setErrors({})
@@ -232,72 +196,6 @@ export const Component = observer(() => {
     },
     [password, saveToDb],
   )
-  const onClickCreateEkfForms = useCallback(async () => {
-    const errors = []
-    for (const tpopId of ekfTpopsWithoutEkfThisYear) {
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation createTpopkontrFromUser(
-              $typ: String
-              $tpopId: UUID
-              $bearbeiter: UUID
-              $jahr: Int
-            ) {
-              createTpopkontr(
-                input: {
-                  tpopkontr: {
-                    typ: $typ
-                    tpopId: $tpopId
-                    bearbeiter: $bearbeiter
-                    jahr: $jahr
-                  }
-                }
-              ) {
-                tpopkontr {
-                  ...TpopkontrFields
-                }
-              }
-            }
-            ${tpopkontrFragment}
-          `,
-          variables: {
-            tpopId,
-            typ: 'Freiwilligen-Erfolgskontrolle',
-            bearbeiter: row.adresseId,
-            jahr: thisYear,
-          },
-        })
-      } catch (error) {
-        errors.push(error)
-      }
-    }
-    if (errors.length) {
-      errors.forEach((error) =>
-        store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        }),
-      )
-    } else {
-      store.enqueNotification({
-        message: `${ekfTpopsWithoutEkfThisYear.length} EKF-Formulare erzeugt`,
-        options: {
-          variant: 'info',
-        },
-      })
-      refetchEkfTpops()
-    }
-  }, [
-    client,
-    ekfTpopsWithoutEkfThisYear,
-    refetchEkfTpops,
-    row.adresseId,
-    store,
-    thisYear,
-  ])
 
   if (loading) return <Spinner />
 
@@ -317,10 +215,6 @@ export const Component = observer(() => {
               setEditPassword={setEditPassword}
               passwordMessage={passwordMessage}
               setPasswordMessage={setPasswordMessage}
-              onClickCreateEkfForms={onClickCreateEkfForms}
-              ekfTpops={ekfTpops}
-              thisYear={thisYear}
-              hasEkfTpopsWithoutEkfThisYear={hasEkfTpopsWithoutEkfThisYear}
             />
           }
         />
@@ -459,4 +353,4 @@ export const Component = observer(() => {
       </Container>
     </ErrorBoundary>
   )
-})
+}

@@ -1,5 +1,5 @@
-import { memo, useCallback, useContext, useState } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
+import { memo, useCallback, useContext, useState, useMemo } from 'react'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
@@ -16,6 +16,8 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
+import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments.js'
+import { queryEkfTpops } from './queryEkfTpops.js'
 
 const StyledButton = styled(Button)`
   text-transform: none !important;
@@ -37,17 +39,31 @@ export const Menu = memo(
       setEditPassword,
       passwordMessage,
       setPasswordMessage,
-      onClickCreateEkfForms,
-      ekfTpops,
-      thisYear,
-      hasEkfTpopsWithoutEkfThisYear,
     }) => {
       const { search, pathname } = useLocation()
       const navigate = useNavigate()
       const client = useApolloClient()
       const queryClient = useQueryClient()
       const store = useContext(StoreContext)
+
+      const thisYear = new Date().getFullYear()
+      const { data, refetch } = useQuery(queryEkfTpops, {
+        variables: {
+          id: row.adresseId || '9999999999999999999999999',
+          jahr: thisYear,
+          include: !!row.adresseId,
+        },
+      })
+      const ekfTpops = data?.ekfTpops?.nodes ?? []
       const hasEkfTpops = !!ekfTpops.length
+      const ekfTpopsWithoutEkfThisYear = useMemo(
+        () =>
+          ekfTpops
+            .filter((e) => e?.ekfInJahr?.totalCount === 0)
+            .map((e) => e.id),
+        [ekfTpops],
+      )
+      const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
 
       const onClickAdd = useCallback(async () => {
         let result
@@ -125,6 +141,73 @@ export const Menu = memo(
         // navigate to parent
         navigate(`/Daten/Benutzer${search}`)
       }, [client, store, queryClient, navigate, search, row, pathname])
+
+      const onClickCreateEkfForms = useCallback(async () => {
+        const errors = []
+        for (const tpopId of ekfTpopsWithoutEkfThisYear) {
+          try {
+            await client.mutate({
+              mutation: gql`
+                mutation createTpopkontrFromUser(
+                  $typ: String
+                  $tpopId: UUID
+                  $bearbeiter: UUID
+                  $jahr: Int
+                ) {
+                  createTpopkontr(
+                    input: {
+                      tpopkontr: {
+                        typ: $typ
+                        tpopId: $tpopId
+                        bearbeiter: $bearbeiter
+                        jahr: $jahr
+                      }
+                    }
+                  ) {
+                    tpopkontr {
+                      ...TpopkontrFields
+                    }
+                  }
+                }
+                ${tpopkontrFragment}
+              `,
+              variables: {
+                tpopId,
+                typ: 'Freiwilligen-Erfolgskontrolle',
+                bearbeiter: row.adresseId,
+                jahr: thisYear,
+              },
+            })
+          } catch (error) {
+            errors.push(error)
+          }
+        }
+        if (errors.length) {
+          errors.forEach((error) =>
+            store.enqueNotification({
+              message: error.message,
+              options: {
+                variant: 'error',
+              },
+            }),
+          )
+        } else {
+          store.enqueNotification({
+            message: `${ekfTpopsWithoutEkfThisYear.length} EKF-Formulare erzeugt`,
+            options: {
+              variant: 'info',
+            },
+          })
+          refetch()
+        }
+      }, [
+        client,
+        ekfTpopsWithoutEkfThisYear,
+        refetch,
+        row.adresseId,
+        store,
+        thisYear,
+      ])
 
       return (
         <ErrorBoundary>
