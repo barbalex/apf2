@@ -113,8 +113,10 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Ziel-Bericht" />
-        <Menu row={row} />
+        <FormTitle
+          title="Ziel-Bericht"
+          menuBar={<Menu row={row} />}
+        />
         <FormContainer>
           <TextField
             name="jahr"
