@@ -128,8 +128,10 @@ const Popmassnber = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Massnahmen-Bericht Population" />
-        <Menu row={row} />
+        <FormTitle
+          title="Massnahmen-Bericht Population"
+          menuBar={<Menu row={row} />}
+        />
         <FormContainer>
           <TextField
             name="jahr"
