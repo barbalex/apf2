@@ -32,6 +32,8 @@ const StyledButton = styled(Button)`
   line-height: 1.1;
   font-size: 0.8rem;
   max-height: 36px;
+  color: white;
+  border-color: white;
 `
 const StyledLoadingButton = styled(LoadingButton)`
   margin: 0 5px;
@@ -39,6 +41,8 @@ const StyledLoadingButton = styled(LoadingButton)`
   text-transform: none;
   line-height: 1.1;
   font-size: 0.8rem;
+  color: white;
+  border-color: white;
 `
 
 export const Menu = memo(
@@ -226,6 +230,8 @@ export const Menu = memo(
         <MenuBar
           widths={widths}
           rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}/${isBeobNichtBeurteilt}/${creatingNewPopFromBeob}`}
+          bgColor="#388e3c"
+          color="white"
         >
           {isBeobZugeordnet && (
             <StyledLoadingButton

@@ -301,8 +301,10 @@ const Beobzuordnung = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Beobachtung" />
-        <Menu row={row} />
+        <FormTitle
+          title="Beobachtung"
+          menuBar={<Menu row={row} />}
+        />
         <FormContainer>
           <FieldsContainer>
             {row && row.artId !== row.artIdOriginal && (
