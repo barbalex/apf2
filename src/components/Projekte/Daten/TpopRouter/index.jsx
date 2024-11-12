@@ -10,6 +10,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { query } from './query.js'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -61,7 +62,10 @@ export const Component = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Teil-Population" />
+        <FormTitle
+          title="Teil-Population"
+          menuBar={<Menu row={row} />}
+        />
         <Tabs
           value={
             pathname.includes(`${tpopId}/Teil-Population`) ? 'Teil-Population'
