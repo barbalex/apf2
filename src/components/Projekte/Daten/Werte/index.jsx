@@ -141,10 +141,14 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title={table} />
-        <Menu
-          row={row}
-          table={table}
+        <FormTitle
+          title={table}
+          menuBar={
+            <Menu
+              row={row}
+              table={table}
+            />
+          }
         />
         <FormContainer>
           <TextField
