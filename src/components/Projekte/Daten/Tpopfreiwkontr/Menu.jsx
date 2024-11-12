@@ -5,6 +5,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
+import { MdPrint } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -16,6 +17,8 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 
+const iconStyle = { color: 'white' }
+
 export const Menu = memo(
   observer(({ row }) => {
     const { search, pathname } = useLocation()
@@ -24,6 +27,7 @@ export const Menu = memo(
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
     const store = useContext(StoreContext)
+    const { setIsPrint } = store
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -135,21 +139,40 @@ export const Menu = memo(
       pathname,
     ])
 
+    const onClickPrint = useCallback(() => {
+      setIsPrint(true)
+      // wait for file to load
+      // https://github.com/barbalex/apf2/issues/617
+      setTimeout(() => {
+        window.print()
+        setIsPrint(false)
+      }, 0)
+    }, [setIsPrint])
+
     return (
       <ErrorBoundary>
-        <MenuBar>
+        <MenuBar
+          bgColor="#388e3c"
+          color="white"
+        >
           <IconButton
             title="Neuen Bericht erstellen"
             onClick={onClickAdd}
           >
-            <FaPlus />
+            <FaPlus style={iconStyle} />
           </IconButton>
           <IconButton
             title="Löschen"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
             aria-owns={delMenuOpen ? 'tpopfreiwkontrDelMenu' : undefined}
           >
-            <FaMinus />
+            <FaMinus style={iconStyle} />
+          </IconButton>
+          <IconButton
+            onClick={onClickPrint}
+            title="drucken"
+          >
+            <MdPrint style={iconStyle} />
           </IconButton>
         </MenuBar>
         <MuiMenu

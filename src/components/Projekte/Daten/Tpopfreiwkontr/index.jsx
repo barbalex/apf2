@@ -50,7 +50,7 @@ export const Component = observer(({ id: idPassed }) => {
   const { pathname } = useLocation()
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { enqueNotification, isPrint, setIsPrint, user } = store
+  const { enqueNotification, isPrint, user } = store
 
   const id = idPassed ?? idPassedFromUrl
   const { data, loading, error, refetch } = useQuery(query, {
@@ -127,16 +127,6 @@ export const Component = observer(({ id: idPassed }) => {
     zaehls.length,
   ])
 
-  const onClickPrint = useCallback(() => {
-    setIsPrint(true)
-    // wait for file to load
-    // https://github.com/barbalex/apf2/issues/617
-    setTimeout(() => {
-      window.print()
-      setIsPrint(false)
-    }, 0)
-  }, [setIsPrint])
-
   if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
@@ -151,18 +141,8 @@ export const Component = observer(({ id: idPassed }) => {
         <>
           <FormTitle
             title="Freiwilligen-Kontrolle"
-            menuBar={
-              <>
-                <StyledIconButton
-                  onClick={onClickPrint}
-                  title="drucken"
-                >
-                  <MdPrint />
-                </StyledIconButton>
-              </>
-            }
+            menuBar={<Menu row={row} />}
           />
-          <Menu row={row} />
         </>
       )}
       {isPrint ?
