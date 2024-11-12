@@ -310,7 +310,7 @@ export const Component = observer(() => {
       <Container>
         <FormTitle
           title="Benutzer"
-          buttons={
+          menuBar={
             <>
               {!editPassword && !passwordMessage && (
                 <StyledButton

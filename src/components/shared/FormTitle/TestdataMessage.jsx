@@ -6,8 +6,7 @@ import { constants } from '../../../modules/constants.js'
 
 const Div = styled.div`
   color: #c8e6c9;
-  padding: 0 10px 10px 10px;
-  margin-top: -5px;
+  padding: 3px 10px 10px 10px;
 `
 
 export const TestdataMessage = memo(() => {

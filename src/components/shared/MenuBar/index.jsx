@@ -37,9 +37,10 @@ const MeasuredOuterContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  flex-grow: 1;
   column-gap: 0;
-  // needed as in fullscreen backed by black
-  background-color: rgb(255, 253, 231);
+  // needed (not transparent) as in fullscreen backed by black
+  background-color: ${(props) => props.bgColor};
   border-top: 1px solid rgba(46, 125, 50, 0.15);
   border-bottom: 1px solid rgba(46, 125, 50, 0.15);
 `
@@ -61,7 +62,14 @@ const StyledMenu = styled(Menu)`
 `
 
 export const MenuBar = memo(
-  ({ children, widths, rerenderer, titleComponent, titleComponentWidth }) => {
+  ({
+    children,
+    widths,
+    rerenderer,
+    titleComponent,
+    titleComponentWidth,
+    bgColor = 'rgb(255, 253, 231)',
+  }) => {
     const usableChildren = useMemo(
       () => children?.filter?.((child) => !!child) ?? children,
       [children],
@@ -178,7 +186,10 @@ export const MenuBar = memo(
     const menuIsOpen = Boolean(menuAnchorEl)
 
     return (
-      <MeasuredOuterContainer ref={outerContainerRef}>
+      <MeasuredOuterContainer
+        ref={outerContainerRef}
+        bgColor={bgColor}
+      >
         {titleComponent}
         <StylingContainer>
           {buttons}

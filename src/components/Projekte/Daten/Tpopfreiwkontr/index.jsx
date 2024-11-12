@@ -151,7 +151,7 @@ export const Component = observer(({ id: idPassed }) => {
         <>
           <FormTitle
             title="Freiwilligen-Kontrolle"
-            buttons={
+            menuBar={
               <>
                 <StyledIconButton
                   onClick={onClickPrint}

@@ -15,7 +15,10 @@ const Container = styled.div`
 `
 const TitleRow = styled.div`
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  min-height: 42px;
+  flex-shrink: 0;
 `
 const Title = styled.div`
   margin-top: auto;
@@ -27,15 +30,18 @@ const Title = styled.div`
 `
 const Buttons = styled.div`
   display: flex;
-  padding: 3px 0 3px 10px;
+  flex-direction: row;
+  flex-grow: 1;
+  align-items: center;
+  padding: 0 0 0 10px;
 `
 
 export const FormTitle = memo(
-  ({ title, buttons, noTestDataMessage = false }) => (
+  ({ title, menuBar, noTestDataMessage = false }) => (
     <Container>
       <TitleRow>
         <Title data-id="form-title">{title}</Title>
-        <Buttons>{buttons}</Buttons>
+        <Buttons>{menuBar}</Buttons>
       </TitleRow>
       {!noTestDataMessage && <TestdataMessage />}
     </Container>
