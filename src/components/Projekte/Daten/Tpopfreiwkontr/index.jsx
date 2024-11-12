@@ -13,6 +13,7 @@ import { StoreContext } from '../../../../storeContext.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Form } from './Form/index.jsx'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 0;
@@ -147,19 +148,22 @@ export const Component = observer(({ id: idPassed }) => {
   return (
     <Container>
       {!pathname.includes('EKF') && (
-        <FormTitle
-          title="Freiwilligen-Kontrolle"
-          buttons={
-            <>
-              <StyledIconButton
-                onClick={onClickPrint}
-                title="drucken"
-              >
-                <MdPrint />
-              </StyledIconButton>
-            </>
-          }
-        />
+        <>
+          <FormTitle
+            title="Freiwilligen-Kontrolle"
+            buttons={
+              <>
+                <StyledIconButton
+                  onClick={onClickPrint}
+                  title="drucken"
+                >
+                  <MdPrint />
+                </StyledIconButton>
+              </>
+            }
+          />
+          <Menu row={row} />
+        </>
       )}
       {isPrint ?
         <Form
