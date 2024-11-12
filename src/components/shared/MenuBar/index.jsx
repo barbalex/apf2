@@ -158,7 +158,7 @@ export const MenuBar = memo(
           const timeSinceLastMeasurement =
             currentTime - previousMeasurementTimeRef.current
           if (timeSinceLastMeasurement < 300) {
-            console.log('MenuBar.resizeObserver, not enough time has passed')
+            // console.log('MenuBar.resizeObserver, not enough time has passed')
             return
           }
 
@@ -170,12 +170,12 @@ export const MenuBar = memo(
           )
           const shouldCheckOverflow = Math.abs(percentageChanged) > 1
           if (!shouldCheckOverflow) {
-            console.log('MenuBar.resizeObserver, not enough change')
+            // console.log('MenuBar.resizeObserver, not enough change')
             return
           }
 
           previousWidthRef.current = width
-          console.log('MenuBar.resizeObserver, calling checkOverflowDebounced')
+          // console.log('MenuBar.resizeObserver, calling checkOverflowDebounced')
           checkOverflowDebounced()
         }
       })
