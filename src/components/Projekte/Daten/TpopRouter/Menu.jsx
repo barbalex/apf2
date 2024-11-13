@@ -13,6 +13,7 @@ import {
 } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
+import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import ToggleButton from '@mui/material/ToggleButton'
 import MuiMenu from '@mui/material/Menu'
@@ -240,13 +241,77 @@ export const Menu = memo(
     const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
     const thisTpopIsMoving = moving.id === tpopId
     const tpopMovingFromThisPop = moving.fromParentId === popId
+    const onClickMoveInTree = useCallback(() => {
+      setMoving({
+        id: row.id,
+        label: row.label,
+        table: 'pop',
+        toTable: 'pop',
+        fromParentId: popId,
+      })
+    }, [row, setMoving, popId])
+
+    const onClickStopMoving = useCallback(() => {
+      setMoving({
+        table: null,
+        id: '99999999-9999-9999-9999-999999999999',
+        label: null,
+        toTable: null,
+        fromParentId: null,
+      })
+    }, [setMoving])
+
+    const onClickMoveHere = useCallback(() => {
+      moveTo({
+        id: popId,
+        client,
+        store,
+        tanstackQueryClient,
+      })
+    }, [client, store, popId])
+
+    const [copyMenuAnchorEl, setCopyMenuAnchorEl] = useState(null)
+    const copyMenuOpen = Boolean(copyMenuAnchorEl)
+
+    const isCopying =
+      copying.id !== '99999999-9999-9999-9999-999999999999' && !!copying.id
+    const thisTpopIsCopying = copying.id === tpopId
+
+    const onClickCopy = useCallback(() => {
+      if (isCopying) {
+        // copy to this ap
+        return copyTo({
+          parentId: popId,
+          client,
+          store,
+          tanstackQueryClient,
+        })
+      }
+      setCopying({
+        table: 'tpop',
+        id: tpopId,
+        label: row.label,
+        withNextLevel: false,
+      })
+      setCopyMenuAnchorEl(null)
+    }, [
+      isCopying,
+      copyTo,
+      popId,
+      tpopId,
+      client,
+      store,
+      tanstackQueryClient,
+      row,
+      setCopying,
+    ])
 
     return (
       <ErrorBoundary>
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${idOfTpopBeingLocalized}`}
+          rerenderer={`${idOfTpopBeingLocalized}/${isMoving}/${isCopying}/${tpopMovingFromThisPop}`}
         >
           <IconButton
             title="Neue Teil-Population erstellen"
@@ -281,6 +346,28 @@ export const Menu = memo(
           >
             <FaMapLocationDot style={iconStyle} />
           </RoundToggleButton>
+          <IconButton
+            title={
+              !isMoving ?
+                `'${row.label}' zu einer anderen Population verschieben`
+              : thisTpopIsMoving ?
+                'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
+              : tpopMovingFromThisPop ?
+                `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
+              : `Verschiebe '${moving.label}' zu dieser Population`
+            }
+            onClick={onClickMoveInTree}
+          >
+            <MoveIcon moving={(isMoving && thisTpopIsMoving).toString()} />
+          </IconButton>
+          {isMoving && (
+            <IconButton
+              title={`Verschieben von '${moving.label}' abbrechen`}
+              onClick={onClickStopMoving}
+            >
+              <BsSignStopFill style={iconStyle} />
+            </IconButton>
+          )}
         </MenuBar>
         <MuiMenu
           id="tpopDelMenu"

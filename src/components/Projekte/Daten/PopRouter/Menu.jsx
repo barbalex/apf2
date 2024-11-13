@@ -248,7 +248,7 @@ export const Menu = memo(
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${isMoving}/${isCopying}`}
+          rerenderer={`${isMoving}/${isCopying}/${popMovingFromThisAp}`}
         >
           <IconButton
             title="Neue Population erstellen"
