@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from 'react'
+import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
@@ -40,51 +40,52 @@ const fieldTypes = {
   apId: 'UUID',
 }
 
-export const Component = observer(() => {
-  const { assozartId: id } = useParams()
+export const Component = memo(
+  observer(() => {
+    const { assozartId: id } = useParams()
 
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const queryClient = useQueryClient()
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const queryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+    const [fieldErrors, setFieldErrors] = useState({})
 
-  const { data, loading, error } = useQuery(query, {
-    variables: {
-      id,
-    },
-  })
+    const { data, loading, error } = useQuery(query, {
+      variables: {
+        id,
+      },
+    })
 
-  const row = useMemo(() => data?.assozartById ?? {}, [data?.assozartById])
+    const row = useMemo(() => data?.assozartById ?? {}, [data?.assozartById])
 
-  // do not include already choosen assozarten
-  const assozartenOfAp = (row?.apByApId?.assozartsByApId?.nodes ?? [])
-    .map((o) => o.aeId)
-    // but do include the art included in the row
-    .filter((o) => o !== row.aeId)
-  const aeTaxonomiesfilter = (inputValue) =>
-    inputValue ?
-      assozartenOfAp.length ?
-        {
-          taxArtName: { includesInsensitive: inputValue },
-          id: { notIn: assozartenOfAp },
+    // do not include already choosen assozarten
+    const assozartenOfAp = (row?.apByApId?.assozartsByApId?.nodes ?? [])
+      .map((o) => o.aeId)
+      // but do include the art included in the row
+      .filter((o) => o !== row.aeId)
+    const aeTaxonomiesfilter = (inputValue) =>
+      inputValue ?
+        assozartenOfAp.length ?
+          {
+            taxArtName: { includesInsensitive: inputValue },
+            id: { notIn: assozartenOfAp },
+          }
+        : { taxArtName: { includesInsensitive: inputValue } }
+      : { taxArtName: { isNull: false } }
+
+    const saveToDb = useCallback(
+      async (event) => {
+        const field = event.target.name
+        const value = ifIsNumericAsNumber(event.target.value)
+
+        const variables = {
+          id: row.id,
+          [field]: value,
+          changedBy: store.user.name,
         }
-      : { taxArtName: { includesInsensitive: inputValue } }
-    : { taxArtName: { isNull: false } }
-
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
-
-      const variables = {
-        id: row.id,
-        [field]: value,
-        changedBy: store.user.name,
-      }
-      try {
-        await client.mutate({
-          mutation: gql`
+        try {
+          await client.mutate({
+            mutation: gql`
                 mutation updateAssozart(
                   $id: UUID!
                   $${field}: ${fieldTypes[field]}
@@ -118,55 +119,56 @@ export const Component = observer(() => {
                 }
                 ${assozart}
               `,
-          variables,
-        })
-      } catch (error) {
-        return setFieldErrors({ [field]: error.message })
-      }
-      setFieldErrors({})
-      if (field === 'aeId') {
-        queryClient.invalidateQueries({
-          queryKey: [`treeAssozart`],
-        })
-      }
-    },
-    [client, queryClient, row.id, store.user.name],
-  )
+            variables,
+          })
+        } catch (error) {
+          return setFieldErrors({ [field]: error.message })
+        }
+        setFieldErrors({})
+        if (field === 'aeId') {
+          queryClient.invalidateQueries({
+            queryKey: [`treeAssozart`],
+          })
+        }
+      },
+      [client, queryClient, row.id, store.user.name],
+    )
 
-  if (loading) return <Spinner />
+    if (loading) return <Spinner />
 
-  if (error) return <Error error={error} />
+    if (error) return <Error error={error} />
 
-  return (
-    <ErrorBoundary>
-      <Container data-id="assozart">
-        <FormTitle
-          title="assoziierte Art"
-          menuBar={<Menu row={row} />}
-        />
-        <FormContainer>
-          <SelectLoadingOptions
-            field="aeId"
-            valueLabelPath="aeTaxonomyByAeId.taxArtName"
-            label="Art"
-            row={row}
-            query={queryAeTaxonomies}
-            filter={aeTaxonomiesfilter}
-            queryNodesName="allAeTaxonomies"
-            value={row.aeId}
-            saveToDb={saveToDb}
-            error={fieldErrors.aeId}
+    return (
+      <ErrorBoundary>
+        <Container data-id="assozart">
+          <FormTitle
+            title="assoziierte Art"
+            menuBar={<Menu row={row} />}
           />
-          <TextField
-            name="bemerkungen"
-            label="Bemerkungen zur Assoziation"
-            type="text"
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={fieldErrors.bemerkungen}
-          />
-        </FormContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-})
+          <FormContainer>
+            <SelectLoadingOptions
+              field="aeId"
+              valueLabelPath="aeTaxonomyByAeId.taxArtName"
+              label="Art"
+              row={row}
+              query={queryAeTaxonomies}
+              filter={aeTaxonomiesfilter}
+              queryNodesName="allAeTaxonomies"
+              value={row.aeId}
+              saveToDb={saveToDb}
+              error={fieldErrors.aeId}
+            />
+            <TextField
+              name="bemerkungen"
+              label="Bemerkungen zur Assoziation"
+              type="text"
+              value={row.bemerkungen}
+              saveToDb={saveToDb}
+              error={fieldErrors.bemerkungen}
+            />
+          </FormContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  }),
+)
