@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useMemo } from 'react'
+import { memo, useState, useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -41,152 +41,154 @@ const StyledMenuItem = styled(MenuItem)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderYear = observer(({ style, column, rows }) => {
-  const client = useApolloClient()
+export const CellHeaderYear = memo(
+  observer(({ style, column, rows }) => {
+    const client = useApolloClient()
 
-  const store = useContext(StoreContext)
-  const {
-    hovered,
-    filterAnsiedlungYear,
-    setFilterAnsiedlungYear,
-    filterKontrolleYear,
-    setFilterKontrolleYear,
-    filterEkplanYear,
-    setFilterEkplanYear,
-  } = store.ekPlan
+    const store = useContext(StoreContext)
+    const {
+      hovered,
+      filterAnsiedlungYear,
+      setFilterAnsiedlungYear,
+      filterKontrolleYear,
+      setFilterKontrolleYear,
+      filterEkplanYear,
+      setFilterEkplanYear,
+    } = store.ekPlan
 
-  const [anchorEl, setAnchorEl] = useState(null)
+    const [anchorEl, setAnchorEl] = useState(null)
 
-  const filterSet =
-    filterAnsiedlungYear === column ||
-    filterKontrolleYear === column ||
-    filterEkplanYear === column
+    const filterSet =
+      filterAnsiedlungYear === column ||
+      filterKontrolleYear === column ||
+      filterEkplanYear === column
 
-  const yearHasKontrollen = useMemo(() => {
-    if (filterKontrolleYear && filterKontrolleYear !== column) return false
-    return (
-      rows.filter(
-        (row) =>
-          (row?.tpop?.tpopkontrsByTpopId?.nodes ?? []).filter(
-            (node) => node.jahr === column,
-          ).length > 0,
-      ).length > 0
+    const yearHasKontrollen = useMemo(() => {
+      if (filterKontrolleYear && filterKontrolleYear !== column) return false
+      return (
+        rows.filter(
+          (row) =>
+            (row?.tpop?.tpopkontrsByTpopId?.nodes ?? []).filter(
+              (node) => node.jahr === column,
+            ).length > 0,
+        ).length > 0
+      )
+    }, [column, filterKontrolleYear, rows])
+    const yearHasAnsiedlungen = useMemo(() => {
+      if (filterAnsiedlungYear && filterAnsiedlungYear !== column) return false
+      return (
+        rows.filter(
+          (row) =>
+            (row?.tpop?.tpopmassnsByTpopId?.nodes ?? []).filter(
+              (node) => node.jahr === column,
+            ).length > 0,
+        ).length > 0
+      )
+    }, [column, filterAnsiedlungYear, rows])
+    const yearHasEkplan = useMemo(() => {
+      if (filterEkplanYear && filterEkplanYear !== column) return false
+      return (
+        rows.filter(
+          (row) =>
+            (row?.tpop?.ekplansByTpopId?.nodes ?? []).filter(
+              (node) => node.jahr === column,
+            ).length > 0,
+        ).length > 0
+      )
+    }, [column, filterEkplanYear, rows])
+
+    const closeMenu = useCallback(() => setAnchorEl(null), [])
+    const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
+    const onClickFilterAnsiedlungYear = useCallback(() => {
+      if (!yearHasAnsiedlungen) return
+      setFilterAnsiedlungYear(filterAnsiedlungYear ? null : column)
+      setAnchorEl(null)
+      setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
+    }, [
+      client,
+      column,
+      filterAnsiedlungYear,
+      setFilterAnsiedlungYear,
+      yearHasAnsiedlungen,
+    ])
+    const onClickFilterKontrolleYear = useCallback(() => {
+      if (!yearHasKontrollen) return
+      setFilterKontrolleYear(filterKontrolleYear ? null : column)
+      setAnchorEl(null)
+      setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
+    }, [
+      client,
+      column,
+      filterKontrolleYear,
+      setFilterKontrolleYear,
+      yearHasKontrollen,
+    ])
+    const onClickFilterEkplanYear = useCallback(() => {
+      if (!yearHasEkplan) return
+      setFilterEkplanYear(filterEkplanYear ? null : column)
+      setAnchorEl(null)
+      setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
+    }, [client, column, filterEkplanYear, setFilterEkplanYear, yearHasEkplan])
+
+    const onMouseEnter = useCallback(
+      () => hovered.setYear(column),
+      [column, hovered],
     )
-  }, [column, filterKontrolleYear, rows])
-  const yearHasAnsiedlungen = useMemo(() => {
-    if (filterAnsiedlungYear && filterAnsiedlungYear !== column) return false
+    const className = hovered.year === column ? 'column-hovered' : ''
+
     return (
-      rows.filter(
-        (row) =>
-          (row?.tpop?.tpopmassnsByTpopId?.nodes ?? []).filter(
-            (node) => node.jahr === column,
-          ).length > 0,
-      ).length > 0
+      <>
+        <StyledCell
+          style={style}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={hovered.reset}
+          className={className}
+          aria-controls="yearHeaderMenu"
+          aria-haspopup="true"
+          onClick={onClickCell}
+        >
+          <Title>{column}</Title>
+          <Dropdown>
+            {filterSet ?
+              <FaFilter />
+            : <Caret />}
+          </Dropdown>
+        </StyledCell>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={closeMenu}
+          anchorOrigin={anchorOrigin}
+        >
+          <StyledMenuItem
+            onClick={onClickFilterKontrolleYear}
+            active={yearHasKontrollen ? 1 : 0}
+            dense
+          >
+            {filterKontrolleYear === column ?
+              `nicht TPop mit Kontrollen in ${column} filtern`
+            : `TPop mit Kontrollen in ${column} filtern`}
+          </StyledMenuItem>
+          <StyledMenuItem
+            onClick={onClickFilterEkplanYear}
+            active={yearHasEkplan ? 1 : 0}
+            dense
+          >
+            {filterEkplanYear === column ?
+              `nicht TPop mit Ekplan in ${column} filtern`
+            : `TPop mit Ekplan in ${column} filtern`}
+          </StyledMenuItem>
+          <StyledMenuItem
+            onClick={onClickFilterAnsiedlungYear}
+            active={yearHasAnsiedlungen ? 1 : 0}
+            dense
+          >
+            {filterAnsiedlungYear === column ?
+              `nicht TPop mit Ansiedlungen in ${column} filtern`
+            : `TPop mit Ansiedlungen in ${column} filtern`}
+          </StyledMenuItem>
+        </Menu>
+      </>
     )
-  }, [column, filterAnsiedlungYear, rows])
-  const yearHasEkplan = useMemo(() => {
-    if (filterEkplanYear && filterEkplanYear !== column) return false
-    return (
-      rows.filter(
-        (row) =>
-          (row?.tpop?.ekplansByTpopId?.nodes ?? []).filter(
-            (node) => node.jahr === column,
-          ).length > 0,
-      ).length > 0
-    )
-  }, [column, filterEkplanYear, rows])
-
-  const closeMenu = useCallback(() => setAnchorEl(null), [])
-  const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
-  const onClickFilterAnsiedlungYear = useCallback(() => {
-    if (!yearHasAnsiedlungen) return
-    setFilterAnsiedlungYear(filterAnsiedlungYear ? null : column)
-    setAnchorEl(null)
-    setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
-  }, [
-    client,
-    column,
-    filterAnsiedlungYear,
-    setFilterAnsiedlungYear,
-    yearHasAnsiedlungen,
-  ])
-  const onClickFilterKontrolleYear = useCallback(() => {
-    if (!yearHasKontrollen) return
-    setFilterKontrolleYear(filterKontrolleYear ? null : column)
-    setAnchorEl(null)
-    setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
-  }, [
-    client,
-    column,
-    filterKontrolleYear,
-    setFilterKontrolleYear,
-    yearHasKontrollen,
-  ])
-  const onClickFilterEkplanYear = useCallback(() => {
-    if (!yearHasEkplan) return
-    setFilterEkplanYear(filterEkplanYear ? null : column)
-    setAnchorEl(null)
-    setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
-  }, [client, column, filterEkplanYear, setFilterEkplanYear, yearHasEkplan])
-
-  const onMouseEnter = useCallback(
-    () => hovered.setYear(column),
-    [column, hovered],
-  )
-  const className = hovered.year === column ? 'column-hovered' : ''
-
-  return (
-    <>
-      <StyledCell
-        style={style}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={hovered.reset}
-        className={className}
-        aria-controls="yearHeaderMenu"
-        aria-haspopup="true"
-        onClick={onClickCell}
-      >
-        <Title>{column}</Title>
-        <Dropdown>
-          {filterSet ?
-            <FaFilter />
-          : <Caret />}
-        </Dropdown>
-      </StyledCell>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={closeMenu}
-        anchorOrigin={anchorOrigin}
-      >
-        <StyledMenuItem
-          onClick={onClickFilterKontrolleYear}
-          active={yearHasKontrollen ? 1 : 0}
-          dense
-        >
-          {filterKontrolleYear === column ?
-            `nicht TPop mit Kontrollen in ${column} filtern`
-          : `TPop mit Kontrollen in ${column} filtern`}
-        </StyledMenuItem>
-        <StyledMenuItem
-          onClick={onClickFilterEkplanYear}
-          active={yearHasEkplan ? 1 : 0}
-          dense
-        >
-          {filterEkplanYear === column ?
-            `nicht TPop mit Ekplan in ${column} filtern`
-          : `TPop mit Ekplan in ${column} filtern`}
-        </StyledMenuItem>
-        <StyledMenuItem
-          onClick={onClickFilterAnsiedlungYear}
-          active={yearHasAnsiedlungen ? 1 : 0}
-          dense
-        >
-          {filterAnsiedlungYear === column ?
-            `nicht TPop mit Ansiedlungen in ${column} filtern`
-          : `TPop mit Ansiedlungen in ${column} filtern`}
-        </StyledMenuItem>
-      </Menu>
-    </>
-  )
-})
+  }),
+)
