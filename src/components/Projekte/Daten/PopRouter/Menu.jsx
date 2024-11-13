@@ -25,12 +25,13 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: ${(props) =>
-    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'inherit'};
+    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
 `
 const CopyIcon = styled(MdContentCopy)`
   color: ${(props) =>
-    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'inherit'};
+    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
 `
+const iconStyle = { color: 'white' }
 
 export const Menu = memo(
   observer(({ row }) => {
@@ -244,31 +245,35 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar rerenderer={`${isMoving}/${isCopying}`}>
+        <MenuBar
+          bgColor="#388e3c"
+          color="white"
+          rerenderer={`${isMoving}/${isCopying}`}
+        >
           <IconButton
             title="Neue Population erstellen"
             onClick={onClickAdd}
           >
-            <FaPlus />
+            <FaPlus style={iconStyle} />
           </IconButton>
           <IconButton
             title="Löschen"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
             aria-owns={delMenuOpen ? 'popDelMenu' : undefined}
           >
-            <FaMinus />
+            <FaMinus style={iconStyle} />
           </IconButton>
           <IconButton
             title="Ordner im Navigationsbaum öffnen"
             onClick={onClickOpenLowerNodes}
           >
-            <FaFolderTree />
+            <FaFolderTree style={iconStyle} />
           </IconButton>
           <IconButton
             title="Ordner im Navigationsbaum schliessen"
             onClick={onClickCloseLowerNodes}
           >
-            <RiFolderCloseFill />
+            <RiFolderCloseFill style={iconStyle} />
           </IconButton>
           <IconButton
             title={
@@ -288,7 +293,7 @@ export const Menu = memo(
               title={`Verschieben von '${moving.label}' abbrechen`}
               onClick={onClickStopMoving}
             >
-              <BsSignStopFill />
+              <BsSignStopFill style={iconStyle} />
             </IconButton>
           )}
           <IconButton
@@ -309,7 +314,7 @@ export const Menu = memo(
               title={`Kopieren von '${copying.label}' abbrechen`}
               onClick={onClickStopCopying}
             >
-              <BsSignStopFill />
+              <BsSignStopFill style={iconStyle} />
             </IconButton>
           )}
         </MenuBar>

@@ -2,7 +2,7 @@ import { useContext, useCallback, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useParams, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.jsx'
@@ -14,7 +14,6 @@ import { Coordinates } from '../../../shared/Coordinates.jsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { pop } from '../../../shared/fragments.js'
-import { Menu } from './Menu.jsx' // id, store, client
 
 const FormContainer = styled.div`
   display: flex;
@@ -38,7 +37,6 @@ const fieldTypes = {
 }
 
 export const Component = observer(() => {
-  const { popId } = useParams() // TODO: not used?
   const { data, refetchPop } = useOutletContext()
 
   const store = useContext(StoreContext)
@@ -112,7 +110,6 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Menu row={row} />
       <FormContainer>
         <TextField
           label="Nr."

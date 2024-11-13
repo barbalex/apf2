@@ -10,6 +10,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { query } from '../PopRouter/query.js'
+import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -60,7 +61,10 @@ export const Component = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Population" />
+        <FormTitle
+          title="Population"
+          menuBar={<Menu row={row} />}
+        />
         <Tabs
           value={
             pathname.includes(`${popId}/Population`) ? 'Population'
