@@ -238,7 +238,9 @@ export const Menu = memo(
       setActiveApfloraLayers,
       idOfTpopBeingLocalized,
     ])
-    const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
+    const isMoving =
+      moving.id !== '99999999-9999-9999-9999-999999999999' &&
+      moving.table === 'tpop'
     const thisTpopIsMoving = moving.id === tpopId
     const tpopMovingFromThisPop = moving.fromParentId === popId
     const onClickMoveInTree = useCallback(() => {
@@ -274,7 +276,9 @@ export const Menu = memo(
     const copyMenuOpen = Boolean(copyMenuAnchorEl)
 
     const isCopying =
-      copying.id !== '99999999-9999-9999-9999-999999999999' && !!copying.id
+      copying.id !== '99999999-9999-9999-9999-999999999999' &&
+      !!copying.id &&
+      copying.table === 'tpop'
     const thisTpopIsCopying = copying.id === tpopId
 
     const onClickCopy = useCallback(() => {

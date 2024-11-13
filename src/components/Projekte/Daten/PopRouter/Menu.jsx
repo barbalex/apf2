@@ -158,7 +158,9 @@ export const Menu = memo(
       })
     }, [projId, apId, popId, store, search])
 
-    const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
+    const isMoving =
+      moving.id !== '99999999-9999-9999-9999-999999999999' &&
+      moving.table === 'pop'
     const thisPopIsMoving = moving.id === popId
     const popMovingFromThisAp = moving.fromParentId === apId
     const onClickMoveInTree = useCallback(() => {
@@ -191,7 +193,9 @@ export const Menu = memo(
     }, [client, store, apId])
 
     const isCopying =
-      copying.id !== '99999999-9999-9999-9999-999999999999' && !!copying.id
+      copying.id !== '99999999-9999-9999-9999-999999999999' &&
+      !!copying.id &&
+      copying.table === 'pop'
     const thisPopIsCopying = copying.id === popId
 
     const onClickCopy = useCallback(
