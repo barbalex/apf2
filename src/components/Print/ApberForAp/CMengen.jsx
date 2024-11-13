@@ -1,5 +1,5 @@
+import { memo } from 'react'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -71,7 +71,7 @@ const PopSeit = styled(Number)`
 `
 const TpopSeit = styled(Number)``
 
-export const CMengen = observer(({ jahr, loading, node }) => {
+export const CMengen = memo(({ jahr, loading, node }) => {
   const c1LPop = loading ? '...' : node?.c1LPop
   const c1LTpop = loading ? '...' : node?.c1LTpop
   const c1RPop = loading ? '...' : node?.c1RPop

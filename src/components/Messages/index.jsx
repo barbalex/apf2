@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react'
+import { memo, useCallback, useContext, useMemo } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
@@ -32,63 +32,65 @@ const AllOkButton = styled(Button)`
   right: 25px;
 `
 
-export const Messages = observer(() => {
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const { user } = store
-  const userName = user.name
+export const Messages = memo(
+  observer(() => {
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { user } = store
+    const userName = user.name
 
-  const aYearAgo = useMemo(() => {
-    const now = new Date()
-    now.setDate(now.getDate() - 365)
-    return now.toISOString()
-  }, [])
+    const aYearAgo = useMemo(() => {
+      const now = new Date()
+      now.setDate(now.getDate() - 365)
+      return now.toISOString()
+    }, [])
 
-  const { data, error, loading, refetch } = useQuery(query, {
-    fetchPolicy: 'network-only',
-    variables: { name: userName, aYearAgo },
-  })
-  // ensure username exists
-  const userNames = (data?.allUsers?.nodes ?? []).map((u) => u.name)
-  const userNameExists = userNames.includes(userName)
-  // DANGER: if no userName or non-existing, results are returned!
-  const allMessages =
-    userName && userNameExists ? (data?.allMessages?.nodes ?? []) : []
-  const unreadMessages = allMessages.filter(
-    (m) => (m?.usermessagesByMessageId?.totalCount ?? 0) === 0,
-  )
-
-  const onClickReadAll = useCallback(async () => {
-    await Promise.all(
-      unreadMessages.map(async (message) => {
-        await client.mutate({
-          mutation: createUsermessage,
-          variables: { userName, id: message.id },
-        })
-      }),
+    const { data, error, loading, refetch } = useQuery(query, {
+      fetchPolicy: 'network-only',
+      variables: { name: userName, aYearAgo },
+    })
+    // ensure username exists
+    const userNames = (data?.allUsers?.nodes ?? []).map((u) => u.name)
+    const userNameExists = userNames.includes(userName)
+    // DANGER: if no userName or non-existing, results are returned!
+    const allMessages =
+      userName && userNameExists ? (data?.allMessages?.nodes ?? []) : []
+    const unreadMessages = allMessages.filter(
+      (m) => (m?.usermessagesByMessageId?.totalCount ?? 0) === 0,
     )
-    return refetch()
-  }, [client, refetch, unreadMessages, userName])
 
-  if (error) return <Error error={error} />
+    const onClickReadAll = useCallback(async () => {
+      await Promise.all(
+        unreadMessages.map(async (message) => {
+          await client.mutate({
+            mutation: createUsermessage,
+            variables: { userName, id: message.id },
+          })
+        }),
+      )
+      return refetch()
+    }, [client, refetch, unreadMessages, userName])
 
-  return (
-    <ErrorBoundary>
-      <StyledDialog
-        open={unreadMessages.length > 0 && !!userName && !loading}
-        aria-labelledby="dialog-title"
-      >
-        <TitleRow>
-          <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
-          <AllOkButton
-            onClick={onClickReadAll}
-            color="inherit"
-          >
-            alle o.k.
-          </AllOkButton>
-        </TitleRow>
-        <MessagesList unreadMessages={unreadMessages} />
-      </StyledDialog>
-    </ErrorBoundary>
-  )
-})
+    if (error) return <Error error={error} />
+
+    return (
+      <ErrorBoundary>
+        <StyledDialog
+          open={unreadMessages.length > 0 && !!userName && !loading}
+          aria-labelledby="dialog-title"
+        >
+          <TitleRow>
+            <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
+            <AllOkButton
+              onClick={onClickReadAll}
+              color="inherit"
+            >
+              alle o.k.
+            </AllOkButton>
+          </TitleRow>
+          <MessagesList unreadMessages={unreadMessages} />
+        </StyledDialog>
+      </ErrorBoundary>
+    )
+  }),
+)

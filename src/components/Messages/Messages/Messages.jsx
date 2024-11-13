@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
@@ -30,46 +30,48 @@ const OkButton = styled(Button)`
   right: 12px;
 `
 
-export const Messages = observer(({ unreadMessages }) => {
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const { user } = store
-  const userName = user.name
+export const Messages = memo(
+  observer(({ unreadMessages }) => {
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { user } = store
+    const userName = user.name
 
-  const onClickRead = useCallback(
-    async (message) => {
-      await client.mutate({
-        mutation: createUsermessage,
-        variables: { userName, id: message.id },
-        refetchQueries: ['UsermessagesQuery'],
-      })
-    },
-    [client, userName],
-  )
+    const onClickRead = useCallback(
+      async (message) => {
+        await client.mutate({
+          mutation: createUsermessage,
+          variables: { userName, id: message.id },
+          refetchQueries: ['UsermessagesQuery'],
+        })
+      },
+      [client, userName],
+    )
 
-  return (
-    <Container>
-      {unreadMessages.map((m, index) => {
-        const paddBottom = index === unreadMessages.length - 1
-        const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
+    return (
+      <Container>
+        {unreadMessages.map((m, index) => {
+          const paddBottom = index === unreadMessages.length - 1
+          const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
 
-        return (
-          <MessageRow
-            key={m.id}
-            paddBottom={paddBottom}
-          >
-            <Linkify properties={{ target: '_blank' }}>
-              <MessageDiv>{`${date}: ${m.message}`}</MessageDiv>
-            </Linkify>
-            <OkButton
-              onClick={() => onClickRead(m)}
-              color="inherit"
+          return (
+            <MessageRow
+              key={m.id}
+              paddBottom={paddBottom}
             >
-              o.k.
-            </OkButton>
-          </MessageRow>
-        )
-      })}
-    </Container>
-  )
-})
+              <Linkify properties={{ target: '_blank' }}>
+                <MessageDiv>{`${date}: ${m.message}`}</MessageDiv>
+              </Linkify>
+              <OkButton
+                onClick={() => onClickRead(m)}
+                color="inherit"
+              >
+                o.k.
+              </OkButton>
+            </MessageRow>
+          )
+        })}
+      </Container>
+    )
+  }),
+)
