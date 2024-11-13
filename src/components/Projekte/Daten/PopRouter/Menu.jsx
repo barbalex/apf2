@@ -188,7 +188,7 @@ export const Menu = memo(
         store,
         tanstackQueryClient,
       })
-    }, [client, store, popId])
+    }, [client, store, apId])
 
     const isCopying =
       copying.id !== '99999999-9999-9999-9999-999999999999' && !!copying.id
