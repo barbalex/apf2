@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { FaPlus, FaMinus } from 'react-icons/fa6'
+import { FaPlus, FaMinus, FaFolder, FaFolderTree } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -15,6 +15,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
+import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 
 const iconStyle = { color: 'white' }
 
@@ -133,6 +134,19 @@ export const Menu = memo(
       pathname,
     ])
 
+    const onClickOpenLowerNodes = useCallback(() => {
+      openLowerNodes({
+        id: tpopId,
+        projId,
+        apId,
+        popId,
+        client,
+        store,
+        menuType: 'tpop',
+        parentId: popId,
+      })
+    }, [projId, apId, popId, tpopId, client, store])
+
     return (
       <ErrorBoundary>
         <MenuBar
@@ -151,6 +165,12 @@ export const Menu = memo(
             aria-owns={delMenuOpen ? 'tpopDelMenu' : undefined}
           >
             <FaMinus style={iconStyle} />
+          </IconButton>
+          <IconButton
+            title="Ordner im Navigationsbaum öffnen"
+            onClick={onClickOpenLowerNodes}
+          >
+            <FaFolderTree style={iconStyle} />
           </IconButton>
         </MenuBar>
         <MuiMenu
