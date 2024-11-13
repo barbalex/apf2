@@ -1,6 +1,5 @@
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 import Checkbox from '@mui/material/Checkbox'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@apollo/client'
@@ -27,7 +26,7 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-export const Row = observer(({ apId, qk }) => {
+export const Row = memo(({ apId, qk }) => {
   const client = useApolloClient()
 
   const { data, error } = useQuery(query, {
