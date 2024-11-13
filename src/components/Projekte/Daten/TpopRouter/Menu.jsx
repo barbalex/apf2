@@ -263,6 +263,7 @@ export const Menu = memo(
       })
     }, [setMoving])
 
+    // TODO: add this in pop
     const onClickMoveHere = useCallback(() => {
       moveTo({
         id: popId,
@@ -311,7 +312,7 @@ export const Menu = memo(
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${idOfTpopBeingLocalized}/${isMoving}/${isCopying}/${tpopMovingFromThisPop}`}
+          rerenderer={`${idOfTpopBeingLocalized}/${isMoving}/${isCopying}/${tpopMovingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}`}
         >
           <IconButton
             title="Neue Teil-Population erstellen"

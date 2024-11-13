@@ -15,8 +15,8 @@ export const moveTo = async ({
   tanstackQueryClient,
 }) => {
   const { enqueNotification, moving, setMoving } = store
-  let { table } = moving
-  const { id } = moving
+  let table = moving?.table
+  const id = moving?.id
 
   // ensure derived data exists
   const tabelle = tables.find((t) => t.table === table)
@@ -83,13 +83,21 @@ export const moveTo = async ({
   })
 
   // update tree ap queries, tree pop folder queries, tree pop queries
-  tanstackQueryClient.invalidateQueries({
-    queryKey: [`treeApFolders`],
-  })
-  tanstackQueryClient.invalidateQueries({
-    queryKey: [`treePopFolders`],
-  })
-  tanstackQueryClient.invalidateQueries({
-    queryKey: [`treePop`],
-  })
+  if (table === 'pop') {
+    tanstackQueryClient.invalidateQueries({
+      queryKey: [`treePop`],
+    })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: [`treeApFolders`],
+    })
+  }
+  if (table === 'tpop') {
+    tanstackQueryClient.invalidateQueries({
+      queryKey: [`treeTpop`],
+    })
+
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treePopFolders'],
+    })
+  }
 }

@@ -161,9 +161,20 @@ export const Menu = memo(
     const isMoving =
       moving.id !== '99999999-9999-9999-9999-999999999999' &&
       moving.table === 'pop'
+    const isTpopMoving =
+      moving.id !== '99999999-9999-9999-9999-999999999999' &&
+      moving.table === 'tpop'
     const thisPopIsMoving = moving.id === popId
     const popMovingFromThisAp = moving.fromParentId === apId
     const onClickMoveInTree = useCallback(() => {
+      if (isTpopMoving) {
+        return moveTo({
+          id: popId,
+          client,
+          store,
+          tanstackQueryClient,
+        })
+      }
       setMoving({
         id: row.id,
         label: row.label,
@@ -182,15 +193,6 @@ export const Menu = memo(
         fromParentId: null,
       })
     }, [setMoving])
-
-    const onClickMoveHere = useCallback(() => {
-      moveTo({
-        id: apId,
-        client,
-        store,
-        tanstackQueryClient,
-      })
-    }, [client, store, apId])
 
     const isCopying =
       copying.id !== '99999999-9999-9999-9999-999999999999' &&
@@ -281,11 +283,14 @@ export const Menu = memo(
           </IconButton>
           <IconButton
             title={
-              !isMoving ? `'${row.label}' zu einer anderen Art verschieben`
+              !isMoving && !isTpopMoving ?
+                `'${row.label}' zu einer anderen Art verschieben`
               : thisPopIsMoving ?
                 'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
               : popMovingFromThisAp ?
                 `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
+              : isTpopMoving ?
+                `Verschiebe '${moving.label}' zu dieser Population`
               : `Verschiebe '${moving.label}' zu dieser Art`
             }
             onClick={onClickMoveInTree}
