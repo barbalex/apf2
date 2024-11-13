@@ -1,9 +1,8 @@
 import { useContext, useCallback, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
-import { gql } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useApolloClient, gql } from '@apollo/client'
+import { useParams, useOutletContext } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
@@ -11,16 +10,12 @@ import { TextField } from '../../../shared/TextField.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
 import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.jsx'
-import { query } from './query.js'
 import { queryAeTaxonomies } from './queryAeTaxonomies.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ApUsers } from './ApUsers/index.jsx'
 import { ap, aeTaxonomies } from '../../../shared/fragments.js'
-import { Spinner } from '../../../shared/Spinner.jsx'
-import { Error } from '../../../shared/Error.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Menu } from './Menu.jsx'
 
 const FormContainer = styled.div`
   display: flex;
@@ -73,6 +68,7 @@ const fieldTypes = {
 
 export const Component = observer(() => {
   const { apId } = useParams()
+  const { data } = useOutletContext()
 
   const client = useApolloClient()
   const store = useContext(StoreContext)
@@ -80,10 +76,6 @@ export const Component = observer(() => {
   const queryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState({})
-
-  const { data, error, loading } = useQuery(query, {
-    variables: { id: apId },
-  })
 
   const row = useMemo(() => data?.apById ?? {}, [data?.apById])
 
@@ -159,13 +151,8 @@ export const Component = observer(() => {
     [apId],
   )
 
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
-
   return (
     <ErrorBoundary>
-      <Menu row={row} />
       <FormContainer>
         <SelectLoadingOptions
           field="artId"
@@ -182,7 +169,7 @@ export const Component = observer(() => {
         <RadioButtonGroupWithInfo
           name="bearbeitung"
           dataSource={data?.allApBearbstandWertes?.nodes ?? []}
-          loading={loading}
+          loading={false}
           popover={
             <>
               <LabelPopoverTitleRow data-id="info-icon-popover">
@@ -219,7 +206,7 @@ export const Component = observer(() => {
           <RadioButtonGroupWithInfo
             name="umsetzung"
             dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
-            loading={loading}
+            loading={false}
             popover={
               <>
                 <LabelPopoverTitleRow data-id="info-icon-popover">
@@ -256,7 +243,7 @@ export const Component = observer(() => {
           name="bearbeiter"
           label="Verantwortlich"
           options={data?.allAdresses?.nodes ?? []}
-          loading={loading}
+          loading={false}
           value={row.bearbeiter}
           saveToDb={saveToDb}
           error={fieldErrors.bearbeiter}

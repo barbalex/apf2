@@ -1,12 +1,16 @@
-import { useCallback, Suspense } from 'react'
+import { useCallback, Suspense, useMemo } from 'react'
 import styled from '@emotion/styled'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useParams, Outlet, useNavigate, useLocation } from 'react-router-dom'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Error } from '../../../shared/Error.jsx'
+import { query } from './query.js'
+import { Menu } from '../ApRouter/Menu.jsx'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -35,6 +39,12 @@ export const Component = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
+  const { data, error, loading } = useQuery(query, {
+    variables: { id: apId },
+  })
+
+  const row = useMemo(() => data?.apById ?? {}, [data?.apById])
+
   const onChangeTab = useCallback(
     (event, value) =>
       pathname.endsWith(apId) ? navigate(`./${value}`) : navigate(value),
@@ -44,7 +54,10 @@ export const Component = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Art" />
+        <FormTitle
+          title="Art"
+          menuBar={<Menu row={row} />}
+        />
         <Tabs
           value={
             pathname.includes(`${apId}/Art`) ? 'Art'
@@ -84,9 +97,14 @@ export const Component = () => {
         </Tabs>
         <TabContentContainer>
           <TabContent>
-            <Suspense fallback={<Spinner />}>
-              <Outlet />
-            </Suspense>
+            {loading ?
+              <Spinner />
+            : error ?
+              <Error error={error} />
+            : <Suspense fallback={<Spinner />}>
+                <Outlet context={{ data }} />
+              </Suspense>
+            }
           </TabContent>
         </TabContentContainer>
       </Container>

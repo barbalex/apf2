@@ -22,6 +22,8 @@ import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 
+const iconStyle = { color: 'white' }
+
 export const Menu = memo(
   observer(({ row }) => {
     const { search, pathname } = useLocation()
@@ -171,25 +173,29 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar rerenderer={`${moving.id}/${copying.id}`}>
+        <MenuBar
+          bgColor="#388e3c"
+          color="white"
+          rerenderer={`${moving.id}/${copying.id}`}
+        >
           <IconButton
             title="Neue Art erstellen"
             onClick={onClickAdd}
           >
-            <FaPlus />
+            <FaPlus style={iconStyle} />
           </IconButton>
           <IconButton
             title="Löschen"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
             aria-owns={delMenuOpen ? 'apDelMenu' : undefined}
           >
-            <FaMinus />
+            <FaMinus style={iconStyle} />
           </IconButton>
           <IconButton
             title="Ordner im Navigationsbaum schliessen"
             onClick={onClickCloseLowerNodes}
           >
-            <RiFolderCloseFill />
+            <RiFolderCloseFill style={iconStyle} />
           </IconButton>
           {isMoving &&
             moving.toTable === 'ap' &&
@@ -198,7 +204,7 @@ export const Menu = memo(
                 title={`Verschiebe ${moving.label} zu dieser Art`}
                 onClick={onClickMoveHere}
               >
-                <MdOutlineMoveDown />
+                <MdOutlineMoveDown style={iconStyle} />
               </IconButton>
             )}
           {isMoving && (
@@ -206,7 +212,7 @@ export const Menu = memo(
               title={`Verschieben von '${moving.label}' abbrechen`}
               onClick={onClickStopMoving}
             >
-              <BsSignStopFill />
+              <BsSignStopFill style={iconStyle} />
             </IconButton>
           )}
           {isCopying && (
@@ -214,7 +220,7 @@ export const Menu = memo(
               title={`Kopiere '${copying.label}' in diese Art`}
               onClick={onClickCopyTo}
             >
-              <MdContentCopy />
+              <MdContentCopy style={iconStyle} />
             </IconButton>
           )}
           {isCopying && (
@@ -222,7 +228,7 @@ export const Menu = memo(
               title={`Kopieren von '${copying.label}' abbrechen`}
               onClick={onClickStopCopying}
             >
-              <BsSignStopFill />
+              <BsSignStopFill style={iconStyle} />
             </IconButton>
           )}
         </MenuBar>
