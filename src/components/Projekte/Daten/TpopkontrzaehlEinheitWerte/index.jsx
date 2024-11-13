@@ -1,5 +1,5 @@
 // TODO: seems not to be in use?
-import { useCallback, useContext, useMemo, useState } from 'react'
+import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
@@ -44,144 +44,154 @@ const query = gql`
   }
 `
 
-export const TpopkontrzaehlEinheitWerte = observer(({ table }) => {
-  const { zaehleinheitId: id } = useParams()
+export const TpopkontrzaehlEinheitWerte = memo(
+  observer(({ table }) => {
+    const { zaehleinheitId: id } = useParams()
 
-  const client = useApolloClient()
-  const queryClient = useQueryClient()
+    const client = useApolloClient()
+    const queryClient = useQueryClient()
 
-  const store = useContext(StoreContext)
-  const { refetch: refetchTree } = store
+    const store = useContext(StoreContext)
+    const { refetch: refetchTree } = store
 
-  const [fieldErrors, setFieldErrors] = useState({})
+    const [fieldErrors, setFieldErrors] = useState({})
 
-  const { data, loading, error, refetch } = useQuery(query, {
-    variables: {
-      id,
-    },
-  })
+    const { data, loading, error, refetch } = useQuery(query, {
+      variables: {
+        id,
+      },
+    })
 
-  const row = useMemo(
-    () => data?.tpopkontrzaehlEinheitWerteById ?? {},
-    [data?.tpopkontrzaehlEinheitWerteById],
-  )
+    const row = useMemo(
+      () => data?.tpopkontrzaehlEinheitWerteById ?? {},
+      [data?.tpopkontrzaehlEinheitWerteById],
+    )
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+    const saveToDb = useCallback(
+      async (event) => {
+        const field = event.target.name
+        const value = ifIsNumericAsNumber(event.target.value)
 
-      const variables = {
-        id: row.id,
-        [field]: value,
-        changedBy: store.user.name,
-      }
+        const variables = {
+          id: row.id,
+          [field]: value,
+          changedBy: store.user.name,
+        }
 
-      try {
-        const mutation = gql`
-          mutation updateWert(
-            $id: UUID!
-            $code: Int
-            $text: String
-            $correspondsToMassnAnzPflanzen: Boolean
-            $correspondsToMassnAnzTriebe: Boolean
-            $sort: Int
-            $changedBy: String
-          ) {
-            updateTpopkontrzaehlEinheitWerteById(
-              input: {
-                id: $id
-                tpopkontrzaehlEinheitWertePatch: {
+        try {
+          const mutation = gql`
+            mutation updateWert(
+              $id: UUID!
+              $code: Int
+              $text: String
+              $correspondsToMassnAnzPflanzen: Boolean
+              $correspondsToMassnAnzTriebe: Boolean
+              $sort: Int
+              $changedBy: String
+            ) {
+              updateTpopkontrzaehlEinheitWerteById(
+                input: {
                   id: $id
-                  code: $code
-                  text: $text
-                  correspondsToMassnAnzPflanzen: $correspondsToMassnAnzPflanzen
-                  correspondsToMassnAnzTriebe: $correspondsToMassnAnzTriebe
-                  sort: $sort
-                  changedBy: $changedBy
+                  tpopkontrzaehlEinheitWertePatch: {
+                    id: $id
+                    code: $code
+                    text: $text
+                    correspondsToMassnAnzPflanzen: $correspondsToMassnAnzPflanzen
+                    correspondsToMassnAnzTriebe: $correspondsToMassnAnzTriebe
+                    sort: $sort
+                    changedBy: $changedBy
+                  }
+                }
+              ) {
+                tpopkontrzaehlEinheitWerte {
+                  id
+                  code
+                  text
+                  correspondsToMassnAnzPflanzen
+                  correspondsToMassnAnzTriebe
+                  sort
+                  changedBy
                 }
               }
-            ) {
-              tpopkontrzaehlEinheitWerte {
-                id
-                code
-                text
-                correspondsToMassnAnzPflanzen
-                correspondsToMassnAnzTriebe
-                sort
-                changedBy
-              }
             }
-          }
-        `
-        await client.mutate({
-          mutation,
-          variables,
+          `
+          await client.mutate({
+            mutation,
+            variables,
+          })
+        } catch (error) {
+          return setFieldErrors({ [field]: error.message })
+        }
+        refetch()
+        const refetchTableName = `${table}s`
+        // for unknown reason refetching is necessary here
+        refetchTree[refetchTableName] && refetchTree[refetchTableName]()
+        setFieldErrors({})
+        queryClient.invalidateQueries({
+          queryKey: [`treeTpopkontrzaehlEinheitWerte`],
         })
-      } catch (error) {
-        return setFieldErrors({ [field]: error.message })
-      }
-      refetch()
-      const refetchTableName = `${table}s`
-      // for unknown reason refetching is necessary here
-      refetchTree[refetchTableName] && refetchTree[refetchTableName]()
-      setFieldErrors({})
-      queryClient.invalidateQueries({
-        queryKey: [`treeTpopkontrzaehlEinheitWerte`],
-      })
-    },
-    [client, queryClient, refetch, refetchTree, row.id, store.user.name, table],
-  )
+      },
+      [
+        client,
+        queryClient,
+        refetch,
+        refetchTree,
+        row.id,
+        store.user.name,
+        table,
+      ],
+    )
 
-  if (loading) return <Spinner />
+    if (loading) return <Spinner />
 
-  if (error) return <Error error={error} />
+    if (error) return <Error error={error} />
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle title={table} />
-        <FormContainer>
-          <TextField
-            name="text"
-            label="Text"
-            type="text"
-            value={row.text}
-            saveToDb={saveToDb}
-            error={fieldErrors.text}
-          />
-          <TextField
-            name="code"
-            label="Code"
-            type="number"
-            value={row.code}
-            saveToDb={saveToDb}
-            error={fieldErrors.code}
-          />
-          <Checkbox2States
-            name="correspondsToMassnAnzPflanzen"
-            label="Entspricht 'Anzahl Pflanzen' in Massnahmen"
-            value={row.correspondsToMassnAnzPflanzen}
-            saveToDb={saveToDb}
-            error={fieldErrors.correspondsToMassnAnzPflanzen}
-          />
-          <Checkbox2States
-            name="correspondsToMassnAnzTriebe"
-            label="Entspricht 'Anzahl Triebe' in Massnahmen"
-            value={row.correspondsToMassnAnzTriebe}
-            saveToDb={saveToDb}
-            error={fieldErrors.correspondsToMassnAnzTriebe}
-          />
-          <TextField
-            name="sort"
-            label="Sort"
-            type="number"
-            value={row.sort}
-            saveToDb={saveToDb}
-            error={fieldErrors.sort}
-          />
-        </FormContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-})
+    return (
+      <ErrorBoundary>
+        <Container>
+          <FormTitle title={table} />
+          <FormContainer>
+            <TextField
+              name="text"
+              label="Text"
+              type="text"
+              value={row.text}
+              saveToDb={saveToDb}
+              error={fieldErrors.text}
+            />
+            <TextField
+              name="code"
+              label="Code"
+              type="number"
+              value={row.code}
+              saveToDb={saveToDb}
+              error={fieldErrors.code}
+            />
+            <Checkbox2States
+              name="correspondsToMassnAnzPflanzen"
+              label="Entspricht 'Anzahl Pflanzen' in Massnahmen"
+              value={row.correspondsToMassnAnzPflanzen}
+              saveToDb={saveToDb}
+              error={fieldErrors.correspondsToMassnAnzPflanzen}
+            />
+            <Checkbox2States
+              name="correspondsToMassnAnzTriebe"
+              label="Entspricht 'Anzahl Triebe' in Massnahmen"
+              value={row.correspondsToMassnAnzTriebe}
+              saveToDb={saveToDb}
+              error={fieldErrors.correspondsToMassnAnzTriebe}
+            />
+            <TextField
+              name="sort"
+              label="Sort"
+              type="number"
+              value={row.sort}
+              saveToDb={saveToDb}
+              error={fieldErrors.sort}
+            />
+          </FormContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  }),
+)
