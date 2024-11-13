@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
@@ -21,39 +21,41 @@ const Link = styled.div`
   }
 `
 
-export const CellForTpopLink = observer(({ field, style, row }) => {
-  const store = useContext(StoreContext)
+export const CellForTpopLink = memo(
+  observer(({ field, style, row }) => {
+    const store = useContext(StoreContext)
 
-  const { hovered } = store.ekPlan
-  const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
-  const onMouseEnter = useCallback(
-    () => hovered.setTpopId(row.id),
-    [hovered, row.id],
-  )
+    const { hovered } = store.ekPlan
+    const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+    const onMouseEnter = useCallback(
+      () => hovered.setTpopId(row.id),
+      [hovered, row.id],
+    )
 
-  const onClickLink = useCallback(() => {
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      window.open(field.value, '_blank', 'toolbar=no')
-    }
-    window.open(field.value)
-  }, [field.value])
+    const onClickLink = useCallback(() => {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(field.value, '_blank', 'toolbar=no')
+      }
+      window.open(field.value)
+    }, [field.value])
 
-  return (
-    <StyledTableCell
-      style={style}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={hovered.reset}
-      className={className}
-      data-isodd={row.isOdd}
-    >
-      <Link
-        onClick={onClickLink}
-        title="in neuem Fenster öffnen"
+    return (
+      <StyledTableCell
+        style={style}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={hovered.reset}
+        className={className}
+        data-isodd={row.isOdd}
       >
-        <div>
-          <FaExternalLinkAlt />
-        </div>
-      </Link>
-    </StyledTableCell>
-  )
-})
+        <Link
+          onClick={onClickLink}
+          title="in neuem Fenster öffnen"
+        >
+          <div>
+            <FaExternalLinkAlt />
+          </div>
+        </Link>
+      </StyledTableCell>
+    )
+  }),
+)

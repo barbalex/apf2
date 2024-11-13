@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useEffect } from 'react'
+import { memo, useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import styled from '@emotion/styled'
@@ -57,8 +57,8 @@ const Input = styled.input`
   }
 `
 
-export const CellForEkfrequenzStartjahr = observer(
-  ({ row, style, refetchTpop }) => {
+export const CellForEkfrequenzStartjahr = memo(
+  observer(({ row, style, refetchTpop }) => {
     const client = useApolloClient()
     const store = useContext(StoreContext)
     const { enqueNotification } = store
@@ -163,5 +163,5 @@ export const CellForEkfrequenzStartjahr = observer(
         />
       </Container>
     )
-  },
+  }),
 )
