@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useMemo } from 'react'
+import { memo, useContext, useCallback, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
@@ -28,8 +28,8 @@ const Option = styled.option`
   font-size: 0.85rem;
 `
 
-export const CellForEkfrequenz = observer(
-  ({ row, field, style, refetchTpop, ekfrequenzs }) => {
+export const CellForEkfrequenz = memo(
+  observer(({ row, field, style, refetchTpop, ekfrequenzs }) => {
     const client = useApolloClient()
     const store = useContext(StoreContext)
     const { enqueNotification } = store
@@ -183,5 +183,5 @@ export const CellForEkfrequenz = observer(
         </Select>
       </StyledCellForSelect>
     )
-  },
+  }),
 )

@@ -1,4 +1,4 @@
-import { useContext, useCallback, useRef } from 'react'
+import { memo, useContext, useCallback, useRef } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
@@ -72,89 +72,91 @@ const Error = styled.div`
   color: red;
 `
 
-export const ChooseAp = observer(({ setShowChoose }) => {
-  const { projId } = useParams()
+export const ChooseAp = memo(
+  observer(({ setShowChoose }) => {
+    const { projId } = useParams()
 
-  const store = useContext(StoreContext)
-  const { aps, addAp } = store.ekPlan
-  const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { aps, addAp } = store.ekPlan
+    const client = useApolloClient()
 
-  const apValues = aps.map((a) => a.value)
+    const apValues = aps.map((a) => a.value)
 
-  const data = useRef({})
-  const error = useRef({})
-  const loadOptions = useCallback(
-    async (inputValue, cb) => {
-      const filter =
-        inputValue ?
-          {
-            label: { includesInsensitive: inputValue },
-            id: { notIn: apValues },
-            projId: { equalTo: projId },
-          }
-        : {
-            label: { isNull: false },
-            id: { notIn: apValues },
-            projId: { equalTo: projId },
-          }
-      let result
-      try {
-        result = await client.query({
-          query: queryApsToChoose,
-          variables: {
-            filter,
-          },
-        })
-      } catch (err) {
-        error.current = err
+    const data = useRef({})
+    const error = useRef({})
+    const loadOptions = useCallback(
+      async (inputValue, cb) => {
+        const filter =
+          inputValue ?
+            {
+              label: { includesInsensitive: inputValue },
+              id: { notIn: apValues },
+              projId: { equalTo: projId },
+            }
+          : {
+              label: { isNull: false },
+              id: { notIn: apValues },
+              projId: { equalTo: projId },
+            }
+        let result
+        try {
+          result = await client.query({
+            query: queryApsToChoose,
+            variables: {
+              filter,
+            },
+          })
+        } catch (err) {
+          error.current = err
+        }
+        data.current = result.data
+        const options = data.current?.allAps?.nodes ?? []
+        cb(options)
+      },
+      [apValues, client, projId],
+    )
+
+    const onChange = (option) => {
+      if (option && option.value) {
+        addAp(option)
+        setShowChoose(false)
       }
-      data.current = result.data
-      const options = data.current?.allAps?.nodes ?? []
-      cb(options)
-    },
-    [apValues, client, projId],
-  )
-
-  const onChange = (option) => {
-    if (option && option.value) {
-      addAp(option)
-      setShowChoose(false)
     }
-  }
 
-  const label = apValues.length ? 'Art hinzufügen' : 'Art wählen'
-  const value = {
-    value: '',
-    label: '',
-  }
+    const label = apValues.length ? 'Art hinzufügen' : 'Art wählen'
+    const value = {
+      value: '',
+      label: '',
+    }
 
-  return (
-    <ErrorBoundary>
-      <SelectContainer>
-        <Label>{label}</Label>
-        <StyledSelect
-          defaultOptions
-          onChange={onChange}
-          onBlur={() => setShowChoose(false)}
-          value={value}
-          hideSelectedOptions
-          placeholder="Bitte Tippen für Vorschläge"
-          isSearchable
-          // remove as can't select without typing
-          nocaret
-          // don't show a no options message if a value exists
-          noOptionsMessage={() =>
-            value.value ? null : '(Bitte Tippen für Vorschläge)'
-          }
-          // enable deleting typed values
-          backspaceRemovesValue
-          classNamePrefix="react-select"
-          loadOptions={loadOptions}
-          openMenuOnFocus
-          autoFocus
-        />
-        {error.current && <Error>{error.current.message}</Error>}
-      </SelectContainer>
-    </ErrorBoundary>
-  )
-})
+    return (
+      <ErrorBoundary>
+        <SelectContainer>
+          <Label>{label}</Label>
+          <StyledSelect
+            defaultOptions
+            onChange={onChange}
+            onBlur={() => setShowChoose(false)}
+            value={value}
+            hideSelectedOptions
+            placeholder="Bitte Tippen für Vorschläge"
+            isSearchable
+            // remove as can't select without typing
+            nocaret
+            // don't show a no options message if a value exists
+            noOptionsMessage={() =>
+              value.value ? null : '(Bitte Tippen für Vorschläge)'
+            }
+            // enable deleting typed values
+            backspaceRemovesValue
+            classNamePrefix="react-select"
+            loadOptions={loadOptions}
+            openMenuOnFocus
+            autoFocus
+          />
+          {error.current && <Error>{error.current.message}</Error>}
+        </SelectContainer>
+      </ErrorBoundary>
+    )
+  }),
+)

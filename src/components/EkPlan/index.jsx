@@ -1,4 +1,4 @@
-import { useContext, useCallback, lazy, Suspense } from 'react'
+import { memo, useContext, useCallback, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
@@ -49,58 +49,60 @@ const AnleitungButton = styled(Button)`
   line-height: unset !important;
 `
 
-export const Component = observer(() => {
-  const store = useContext(StoreContext)
-  const { user } = store
-  const { aps, setApsData, setApsDataLoading } = store.ekPlan
+export const Component = memo(
+  observer(() => {
+    const store = useContext(StoreContext)
+    const { user } = store
+    const { aps, setApsData, setApsDataLoading } = store.ekPlan
 
-  const { data, loading, error } = useQuery(queryAps, {
-    variables: {
-      ids: aps.map((ap) => ap.value),
-    },
-  })
-  setApsData(data)
-  setApsDataLoading(loading)
+    const { data, loading, error } = useQuery(queryAps, {
+      variables: {
+        ids: aps.map((ap) => ap.value),
+      },
+    })
+    setApsData(data)
+    setApsDataLoading(loading)
 
-  const onClickAnleitung = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/erfolgs-kontrollen-planen`
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      return window.open(url, '_blank', 'toolbar=no')
-    }
-    window.open(url)
-  }, [])
+    const onClickAnleitung = useCallback(() => {
+      const url = `${appBaseUrl()}Dokumentation/erfolgs-kontrollen-planen`
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        return window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }, [])
 
-  if (error) {
-    return (
-      <Suspense fallback={<Spinner />}>
-        <Error error={error} />
-      </Suspense>
-    )
-  }
-
-  return (
-    <ErrorBoundary>
-      <Container>
+    if (error) {
+      return (
         <Suspense fallback={<Spinner />}>
-          {!!user.token && (
-            <>
-              <Header>
-                <ApList />
-                <AnleitungButton
-                  variant="outlined"
-                  onClick={onClickAnleitung}
-                  color="inherit"
-                >
-                  Anleitung
-                </AnleitungButton>
-                <Choose />
-              </Header>
-              <Table />
-            </>
-          )}
-          <User />
+          <Error error={error} />
         </Suspense>
-      </Container>
-    </ErrorBoundary>
-  )
-})
+      )
+    }
+
+    return (
+      <ErrorBoundary>
+        <Container>
+          <Suspense fallback={<Spinner />}>
+            {!!user.token && (
+              <>
+                <Header>
+                  <ApList />
+                  <AnleitungButton
+                    variant="outlined"
+                    onClick={onClickAnleitung}
+                    color="inherit"
+                  >
+                    Anleitung
+                  </AnleitungButton>
+                  <Choose />
+                </Header>
+                <Table />
+              </>
+            )}
+            <User />
+          </Suspense>
+        </Container>
+      </ErrorBoundary>
+    )
+  }),
+)
