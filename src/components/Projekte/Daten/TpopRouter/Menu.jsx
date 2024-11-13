@@ -5,6 +5,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus, FaFolder, FaFolderTree } from 'react-icons/fa6'
+import { RiFolderCloseFill } from 'react-icons/ri'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -16,6 +17,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
+import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 
 const iconStyle = { color: 'white' }
 
@@ -147,6 +149,23 @@ export const Menu = memo(
       })
     }, [projId, apId, popId, tpopId, client, store])
 
+    const onClickCloseLowerNodes = useCallback(() => {
+      closeLowerNodes({
+        url: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+        ],
+        store,
+        search,
+      })
+    }, [projId, apId, popId, tpopId, store, search])
+
     return (
       <ErrorBoundary>
         <MenuBar
@@ -171,6 +190,12 @@ export const Menu = memo(
             onClick={onClickOpenLowerNodes}
           >
             <FaFolderTree style={iconStyle} />
+          </IconButton>
+          <IconButton
+            title="Ordner im Navigationsbaum schliessen"
+            onClick={onClickCloseLowerNodes}
+          >
+            <RiFolderCloseFill style={iconStyle} />
           </IconButton>
         </MenuBar>
         <MuiMenu
