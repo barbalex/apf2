@@ -1,23 +1,19 @@
 import { useContext, useCallback, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
-import { gql } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { useParams, useOutletContext } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
 import { Status } from '../../../shared/Status.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
-import { query } from './query.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { Coordinates } from '../../../shared/Coordinates.jsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Error } from '../../../shared/Error.jsx'
 import { pop } from '../../../shared/fragments.js'
-import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx' // id, store, client
 
 const FormContainer = styled.div`
@@ -42,24 +38,14 @@ const fieldTypes = {
 }
 
 export const Component = observer(() => {
-  const { popId: id } = useParams()
+  const { popId } = useParams() // TODO: not used?
+  const { data, refetchPop } = useOutletContext()
 
   const store = useContext(StoreContext)
   const queryClient = useQueryClient()
   const client = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState({})
-
-  const {
-    data,
-    loading,
-    error,
-    refetch: refetchPop,
-  } = useQuery(query, {
-    variables: {
-      id,
-    },
-  })
 
   const row = useMemo(() => data?.popById ?? {}, [data?.popById])
 
@@ -123,10 +109,6 @@ export const Component = observer(() => {
     },
     [client, queryClient, row, store.user.name],
   )
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
