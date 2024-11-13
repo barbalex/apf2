@@ -270,21 +270,19 @@ export const Menu = memo(
           >
             <RiFolderCloseFill />
           </IconButton>
-          {
-            <IconButton
-              title={
-                !isMoving ? `'${row.label}' zu einer anderen Art verschieben`
-                : thisPopIsMoving ?
-                  'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
-                : popMovingFromThisAp ?
-                  `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
-                : `Verschiebe '${moving.label}' zu dieser Art`
-              }
-              onClick={onClickMoveInTree}
-            >
-              <MoveIcon moving={(isMoving && thisPopIsMoving).toString()} />
-            </IconButton>
-          }
+          <IconButton
+            title={
+              !isMoving ? `'${row.label}' zu einer anderen Art verschieben`
+              : thisPopIsMoving ?
+                'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
+              : popMovingFromThisAp ?
+                `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
+              : `Verschiebe '${moving.label}' zu dieser Art`
+            }
+            onClick={onClickMoveInTree}
+          >
+            <MoveIcon moving={(isMoving && thisPopIsMoving).toString()} />
+          </IconButton>
           {isMoving && (
             <IconButton
               title={`Verschieben von '${moving.label}' abbrechen`}

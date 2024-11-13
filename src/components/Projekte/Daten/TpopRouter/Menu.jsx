@@ -12,6 +12,7 @@ import {
   FaMapLocationDot,
 } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
+import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import ToggleButton from '@mui/material/ToggleButton'
 import MuiMenu from '@mui/material/Menu'
@@ -28,6 +29,8 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
+import { moveTo } from '../../../../modules/moveTo/index.js'
+import { copyTo } from '../../../../modules/copyTo/index.js'
 
 const iconStyle = { color: 'white' }
 // unfortunately, toggle buttons are different from icon buttons...
@@ -39,6 +42,14 @@ const RoundToggleButton = styled(ToggleButton)`
     height: 24px;
     width: 24px;
   }
+`
+const MoveIcon = styled(MdOutlineMoveDown)`
+  color: ${(props) =>
+    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'inherit'};
+`
+const CopyIcon = styled(MdContentCopy)`
+  color: ${(props) =>
+    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'inherit'};
 `
 
 export const Menu = memo(
