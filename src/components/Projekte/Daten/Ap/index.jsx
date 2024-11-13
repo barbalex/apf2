@@ -1,4 +1,4 @@
-import { useContext, useCallback, useMemo, useState } from 'react'
+import { memo, useContext, useCallback, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
@@ -66,32 +66,33 @@ const fieldTypes = {
   projId: 'UUID',
 }
 
-export const Component = observer(() => {
-  const { apId } = useParams()
-  const { data } = useOutletContext()
+export const Component = memo(
+  observer(() => {
+    const { apId } = useParams()
+    const { data } = useOutletContext()
 
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const { user } = store
-  const queryClient = useQueryClient()
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { user } = store
+    const queryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+    const [fieldErrors, setFieldErrors] = useState({})
 
-  const row = useMemo(() => data?.apById ?? {}, [data?.apById])
+    const row = useMemo(() => data?.apById ?? {}, [data?.apById])
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+    const saveToDb = useCallback(
+      async (event) => {
+        const field = event.target.name
+        const value = ifIsNumericAsNumber(event.target.value)
 
-      const variables = {
-        id: row.id,
-        [field]: value,
-        changedBy: user.name,
-      }
-      try {
-        await client.mutate({
-          mutation: gql`
+        const variables = {
+          id: row.id,
+          [field]: value,
+          changedBy: user.name,
+        }
+        try {
+          await client.mutate({
+            mutation: gql`
             mutation updateAp(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -117,95 +118,58 @@ export const Component = observer(() => {
             ${ap}
             ${aeTaxonomies}
           `,
-          variables,
-        })
-      } catch (error) {
-        return setFieldErrors({ [field]: error.message })
-      }
-      setFieldErrors({})
-      if (field === 'artId') {
-        queryClient.invalidateQueries({
-          queryKey: [`treeAp`],
-        })
-      }
-    },
-    [client, queryClient, row.id, user.name],
-  )
-
-  const aeTaxonomiesfilterForData = useCallback(
-    (inputValue) =>
-      inputValue ?
-        {
-          or: [
-            { apByArtIdExists: false },
-            { apByArtId: { id: { equalTo: apId } } },
-          ],
-          taxArtName: { includesInsensitive: inputValue },
+            variables,
+          })
+        } catch (error) {
+          return setFieldErrors({ [field]: error.message })
         }
-      : {
-          or: [
-            { apByArtIdExists: false },
-            { apByArtId: { id: { equalTo: apId } } },
-          ],
-        },
-    [apId],
-  )
+        setFieldErrors({})
+        if (field === 'artId') {
+          queryClient.invalidateQueries({
+            queryKey: [`treeAp`],
+          })
+        }
+      },
+      [client, queryClient, row.id, user.name],
+    )
 
-  return (
-    <ErrorBoundary>
-      <FormContainer>
-        <SelectLoadingOptions
-          field="artId"
-          valueLabelPath="aeTaxonomyByArtId.taxArtName"
-          label="Art (das namensgebende Taxon)"
-          row={row}
-          query={queryAeTaxonomies}
-          filter={aeTaxonomiesfilterForData}
-          queryNodesName="allAeTaxonomies"
-          //value={row.artId}
-          saveToDb={saveToDb}
-          error={fieldErrors.artId}
-        />
-        <RadioButtonGroupWithInfo
-          name="bearbeitung"
-          dataSource={data?.allApBearbstandWertes?.nodes ?? []}
-          loading={false}
-          popover={
-            <>
-              <LabelPopoverTitleRow data-id="info-icon-popover">
-                Legende
-              </LabelPopoverTitleRow>
-              <LabelPopoverContentRow>
-                <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
-                <LabelPopoverRowColumnRight>
-                  kein Aktionsplan vorgesehen
-                </LabelPopoverRowColumnRight>
-              </LabelPopoverContentRow>
-              <LabelPopoverContentRow>
-                <LabelPopoverRowColumnLeft>erstellt:</LabelPopoverRowColumnLeft>
-                <LabelPopoverRowColumnRight>
-                  Aktionsplan fertig, auf der Webseite der FNS
-                </LabelPopoverRowColumnRight>
-              </LabelPopoverContentRow>
-            </>
+    const aeTaxonomiesfilterForData = useCallback(
+      (inputValue) =>
+        inputValue ?
+          {
+            or: [
+              { apByArtIdExists: false },
+              { apByArtId: { id: { equalTo: apId } } },
+            ],
+            taxArtName: { includesInsensitive: inputValue },
           }
-          label="Aktionsplan"
-          value={row.bearbeitung}
-          saveToDb={saveToDb}
-          error={fieldErrors.bearbeitung}
-        />
-        <TextField
-          name="startJahr"
-          label="Start im Jahr"
-          type="number"
-          value={row.startJahr}
-          saveToDb={saveToDb}
-          error={fieldErrors.startJahr}
-        />
-        <FieldContainer>
+        : {
+            or: [
+              { apByArtIdExists: false },
+              { apByArtId: { id: { equalTo: apId } } },
+            ],
+          },
+      [apId],
+    )
+
+    return (
+      <ErrorBoundary>
+        <FormContainer>
+          <SelectLoadingOptions
+            field="artId"
+            valueLabelPath="aeTaxonomyByArtId.taxArtName"
+            label="Art (das namensgebende Taxon)"
+            row={row}
+            query={queryAeTaxonomies}
+            filter={aeTaxonomiesfilterForData}
+            queryNodesName="allAeTaxonomies"
+            //value={row.artId}
+            saveToDb={saveToDb}
+            error={fieldErrors.artId}
+          />
           <RadioButtonGroupWithInfo
-            name="umsetzung"
-            dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
+            name="bearbeitung"
+            dataSource={data?.allApBearbstandWertes?.nodes ?? []}
             loading={false}
             popover={
               <>
@@ -213,58 +177,98 @@ export const Component = observer(() => {
                   Legende
                 </LabelPopoverTitleRow>
                 <LabelPopoverContentRow>
-                  <LabelPopoverRowColumnLeft>
-                    noch keine
-                    <br />
-                    Umsetzung:
-                  </LabelPopoverRowColumnLeft>
+                  <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
                   <LabelPopoverRowColumnRight>
-                    noch keine Massnahmen ausgeführt
+                    kein Aktionsplan vorgesehen
                   </LabelPopoverRowColumnRight>
                 </LabelPopoverContentRow>
                 <LabelPopoverContentRow>
                   <LabelPopoverRowColumnLeft>
-                    in Umsetzung:
+                    erstellt:
                   </LabelPopoverRowColumnLeft>
                   <LabelPopoverRowColumnRight>
-                    bereits Massnahmen ausgeführt (auch wenn AP noch nicht
-                    erstellt)
+                    Aktionsplan fertig, auf der Webseite der FNS
                   </LabelPopoverRowColumnRight>
                 </LabelPopoverContentRow>
               </>
             }
-            label="Stand Umsetzung"
-            value={row.umsetzung}
+            label="Aktionsplan"
+            value={row.bearbeitung}
             saveToDb={saveToDb}
-            error={fieldErrors.umsetzung}
+            error={fieldErrors.bearbeitung}
           />
-        </FieldContainer>
-        <Select
-          name="bearbeiter"
-          label="Verantwortlich"
-          options={data?.allAdresses?.nodes ?? []}
-          loading={false}
-          value={row.bearbeiter}
-          saveToDb={saveToDb}
-          error={fieldErrors.bearbeiter}
-        />
-        <ApUsers />
-        <TextField
-          name="ekfBeobachtungszeitpunkt"
-          label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
-          type="text"
-          value={row.ekfBeobachtungszeitpunkt}
-          saveToDb={saveToDb}
-          error={fieldErrors.ekfBeobachtungszeitpunkt}
-        />
-        <TextFieldNonUpdatable
-          key={`${row.id}artwert`}
-          label="Artwert"
-          value={
-            row?.aeTaxonomyByArtId?.artwert ?? 'Diese Art hat keinen Artwert'
-          }
-        />
-      </FormContainer>
-    </ErrorBoundary>
-  )
-})
+          <TextField
+            name="startJahr"
+            label="Start im Jahr"
+            type="number"
+            value={row.startJahr}
+            saveToDb={saveToDb}
+            error={fieldErrors.startJahr}
+          />
+          <FieldContainer>
+            <RadioButtonGroupWithInfo
+              name="umsetzung"
+              dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
+              loading={false}
+              popover={
+                <>
+                  <LabelPopoverTitleRow data-id="info-icon-popover">
+                    Legende
+                  </LabelPopoverTitleRow>
+                  <LabelPopoverContentRow>
+                    <LabelPopoverRowColumnLeft>
+                      noch keine
+                      <br />
+                      Umsetzung:
+                    </LabelPopoverRowColumnLeft>
+                    <LabelPopoverRowColumnRight>
+                      noch keine Massnahmen ausgeführt
+                    </LabelPopoverRowColumnRight>
+                  </LabelPopoverContentRow>
+                  <LabelPopoverContentRow>
+                    <LabelPopoverRowColumnLeft>
+                      in Umsetzung:
+                    </LabelPopoverRowColumnLeft>
+                    <LabelPopoverRowColumnRight>
+                      bereits Massnahmen ausgeführt (auch wenn AP noch nicht
+                      erstellt)
+                    </LabelPopoverRowColumnRight>
+                  </LabelPopoverContentRow>
+                </>
+              }
+              label="Stand Umsetzung"
+              value={row.umsetzung}
+              saveToDb={saveToDb}
+              error={fieldErrors.umsetzung}
+            />
+          </FieldContainer>
+          <Select
+            name="bearbeiter"
+            label="Verantwortlich"
+            options={data?.allAdresses?.nodes ?? []}
+            loading={false}
+            value={row.bearbeiter}
+            saveToDb={saveToDb}
+            error={fieldErrors.bearbeiter}
+          />
+          <ApUsers />
+          <TextField
+            name="ekfBeobachtungszeitpunkt"
+            label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
+            type="text"
+            value={row.ekfBeobachtungszeitpunkt}
+            saveToDb={saveToDb}
+            error={fieldErrors.ekfBeobachtungszeitpunkt}
+          />
+          <TextFieldNonUpdatable
+            key={`${row.id}artwert`}
+            label="Artwert"
+            value={
+              row?.aeTaxonomyByArtId?.artwert ?? 'Diese Art hat keinen Artwert'
+            }
+          />
+        </FormContainer>
+      </ErrorBoundary>
+    )
+  }),
+)

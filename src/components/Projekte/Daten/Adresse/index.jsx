@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from 'react'
+import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
@@ -40,33 +40,34 @@ const fieldTypes = {
   freiwErfko: 'Boolean',
 }
 
-export const Component = observer(() => {
-  const { adrId } = useParams()
-  const store = useContext(StoreContext)
-  const queryClient = useQueryClient()
+export const Component = memo(
+  observer(() => {
+    const { adrId } = useParams()
+    const store = useContext(StoreContext)
+    const queryClient = useQueryClient()
 
-  const { data, error, loading } = useQuery(query, {
-    variables: { id: adrId },
-  })
-  const client = useApolloClient()
+    const { data, error, loading } = useQuery(query, {
+      variables: { id: adrId },
+    })
+    const client = useApolloClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+    const [fieldErrors, setFieldErrors] = useState({})
 
-  const row = useMemo(() => data?.adresseById ?? {}, [data?.adresseById])
+    const row = useMemo(() => data?.adresseById ?? {}, [data?.adresseById])
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+    const saveToDb = useCallback(
+      async (event) => {
+        const field = event.target.name
+        const value = ifIsNumericAsNumber(event.target.value)
 
-      const variables = {
-        id: row.id,
-        [field]: value,
-        changedBy: store.user.name,
-      }
-      try {
-        await client.mutate({
-          mutation: gql`
+        const variables = {
+          id: row.id,
+          [field]: value,
+          changedBy: store.user.name,
+        }
+        try {
+          await client.mutate({
+            mutation: gql`
             mutation updateAdresse(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -88,75 +89,76 @@ export const Component = observer(() => {
             }
             ${adresse}
           `,
-          variables,
-        })
-      } catch (error) {
-        return setFieldErrors({ [field]: error.message })
-      }
-      setFieldErrors({})
-      if (field === 'name') {
-        queryClient.invalidateQueries({
-          queryKey: [`treeAdresse`],
-        })
-      }
-    },
-    [client, queryClient, row.id, store.user.name],
-  )
+            variables,
+          })
+        } catch (error) {
+          return setFieldErrors({ [field]: error.message })
+        }
+        setFieldErrors({})
+        if (field === 'name') {
+          queryClient.invalidateQueries({
+            queryKey: [`treeAdresse`],
+          })
+        }
+      },
+      [client, queryClient, row.id, store.user.name],
+    )
 
-  if (loading) return <Spinner />
-  if (error) return <Error error={error} />
+    if (loading) return <Spinner />
+    if (error) return <Error error={error} />
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle
-          title="Adresse"
-          menuBar={<Menu row={row} />}
-        />
-        <FieldsContainer>
-          <FormContainer>
-            <TextField
-              name="name"
-              label="Name"
-              type="text"
-              value={row.name}
-              saveToDb={saveToDb}
-              error={fieldErrors.name}
-            />
-            <TextField
-              name="adresse"
-              label="Adresse"
-              type="text"
-              value={row.adresse}
-              saveToDb={saveToDb}
-              error={fieldErrors.adresse}
-            />
-            <TextField
-              name="telefon"
-              label="Telefon"
-              type="text"
-              value={row.telefon}
-              saveToDb={saveToDb}
-              error={fieldErrors.telefon}
-            />
-            <TextField
-              name="email"
-              label="Email"
-              type="email"
-              value={row.email}
-              saveToDb={saveToDb}
-              error={fieldErrors.email}
-            />
-            <Checkbox2States
-              name="freiwErfko"
-              label="freiwillige ErfolgskontrolleurIn"
-              value={row.freiwErfko}
-              saveToDb={saveToDb}
-              error={fieldErrors.freiwErfko}
-            />
-          </FormContainer>
-        </FieldsContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-})
+    return (
+      <ErrorBoundary>
+        <Container>
+          <FormTitle
+            title="Adresse"
+            menuBar={<Menu row={row} />}
+          />
+          <FieldsContainer>
+            <FormContainer>
+              <TextField
+                name="name"
+                label="Name"
+                type="text"
+                value={row.name}
+                saveToDb={saveToDb}
+                error={fieldErrors.name}
+              />
+              <TextField
+                name="adresse"
+                label="Adresse"
+                type="text"
+                value={row.adresse}
+                saveToDb={saveToDb}
+                error={fieldErrors.adresse}
+              />
+              <TextField
+                name="telefon"
+                label="Telefon"
+                type="text"
+                value={row.telefon}
+                saveToDb={saveToDb}
+                error={fieldErrors.telefon}
+              />
+              <TextField
+                name="email"
+                label="Email"
+                type="email"
+                value={row.email}
+                saveToDb={saveToDb}
+                error={fieldErrors.email}
+              />
+              <Checkbox2States
+                name="freiwErfko"
+                label="freiwillige ErfolgskontrolleurIn"
+                value={row.freiwErfko}
+                saveToDb={saveToDb}
+                error={fieldErrors.freiwErfko}
+              />
+            </FormContainer>
+          </FieldsContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  }),
+)
