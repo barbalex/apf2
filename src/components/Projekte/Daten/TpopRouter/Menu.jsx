@@ -247,8 +247,8 @@ export const Menu = memo(
       setMoving({
         id: row.id,
         label: row.label,
-        table: 'pop',
-        toTable: 'pop',
+        table: 'tpop',
+        toTable: 'tpop',
         fromParentId: popId,
       })
     }, [row, setMoving, popId])
@@ -272,9 +272,6 @@ export const Menu = memo(
       })
     }, [client, store, popId])
 
-    const [copyMenuAnchorEl, setCopyMenuAnchorEl] = useState(null)
-    const copyMenuOpen = Boolean(copyMenuAnchorEl)
-
     const isCopying =
       copying.id !== '99999999-9999-9999-9999-999999999999' &&
       !!copying.id &&
@@ -283,7 +280,7 @@ export const Menu = memo(
 
     const onClickCopy = useCallback(() => {
       if (isCopying) {
-        // copy to this ap
+        // copy to this pop
         return copyTo({
           parentId: popId,
           client,
@@ -297,7 +294,6 @@ export const Menu = memo(
         label: row.label,
         withNextLevel: false,
       })
-      setCopyMenuAnchorEl(null)
     }, [
       isCopying,
       copyTo,
