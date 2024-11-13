@@ -4,12 +4,20 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { FaPlus, FaMinus, FaFolder, FaFolderTree } from 'react-icons/fa6'
+import {
+  FaPlus,
+  FaMinus,
+  FaFolder,
+  FaFolderTree,
+  FaMapLocationDot,
+} from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import IconButton from '@mui/material/IconButton'
+import ToggleButton from '@mui/material/ToggleButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import isEqual from 'lodash/isEqual'
+import uniq from 'lodash/uniq'
 import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
@@ -18,8 +26,20 @@ import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
+import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
 const iconStyle = { color: 'white' }
+// unfortunately, toggle buttons are different from icon buttons...
+const RoundToggleButton = styled(ToggleButton)`
+  border-radius: 50%;
+  border-width: 0;
+  padding: 8px;
+  svg {
+    height: 24px;
+    width: 24px;
+  }
+`
 
 export const Menu = memo(
   observer(({ row }) => {
@@ -29,6 +49,12 @@ export const Menu = memo(
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId } = useParams()
     const store = useContext(StoreContext)
+    const {
+      setIdOfTpopBeingLocalized,
+      idOfTpopBeingLocalized,
+      activeApfloraLayers,
+      setActiveApfloraLayers,
+    } = store
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -166,11 +192,43 @@ export const Menu = memo(
       })
     }, [projId, apId, popId, tpopId, store, search])
 
+    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
+      'projekteTabs',
+      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
+    )
+    const showMapIfNotYetVisible = useCallback(
+      (projekteTabs) => {
+        const isVisible = projekteTabs.includes('karte')
+        if (!isVisible) {
+          setProjekteTabs([...projekteTabs, 'karte'])
+        }
+      },
+      [setProjekteTabs],
+    )
+    const isLocalizing = !!idOfTpopBeingLocalized
+    const onClickLocalizeOnMap = useCallback(() => {
+      if (isLocalizing) {
+        return setIdOfTpopBeingLocalized(null)
+      }
+      setIdOfTpopBeingLocalized(tpopId)
+      showMapIfNotYetVisible(projekteTabs)
+      setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
+    }, [
+      setIdOfTpopBeingLocalized,
+      tpopId,
+      showMapIfNotYetVisible,
+      projekteTabs,
+      activeApfloraLayers,
+      setActiveApfloraLayers,
+      idOfTpopBeingLocalized,
+    ])
+
     return (
       <ErrorBoundary>
         <MenuBar
           bgColor="#388e3c"
           color="white"
+          rerenderer={`${idOfTpopBeingLocalized}`}
         >
           <IconButton
             title="Neue Teil-Population erstellen"
@@ -197,6 +255,14 @@ export const Menu = memo(
           >
             <RiFolderCloseFill style={iconStyle} />
           </IconButton>
+          <RoundToggleButton
+            value={idOfTpopBeingLocalized ?? ''}
+            title="Auf Karte verorten (mit Doppelklick)"
+            onChange={onClickLocalizeOnMap}
+            selected={isLocalizing}
+          >
+            <FaMapLocationDot style={iconStyle} />
+          </RoundToggleButton>
         </MenuBar>
         <MuiMenu
           id="tpopDelMenu"
