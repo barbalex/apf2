@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import Button from '@mui/material/Button'
 import remove from 'lodash/remove'
 import styled from '@emotion/styled'
@@ -31,7 +31,7 @@ const StyledButton = styled(Button)`
   text-transform: none !important;
 `
 
-export const Daten = observer(({ treeNr = '' }) => {
+export const Daten = memo(({ treeNr = '' }) => {
   const [projekteTabs, setProjekteTabs] = useSearchParamsState(
     'projekteTabs',
     isMobilePhone() ? ['tree'] : ['tree', 'daten'],

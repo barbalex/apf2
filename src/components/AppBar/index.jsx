@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useContext } from 'react'
+import { memo, Suspense, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import MuiAppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
@@ -39,41 +39,43 @@ const StyledToolbar = styled(Toolbar)`
   padding-right: 4px !important;
 `
 
-export const Component = observer(() => {
-  const navigate = useNavigate()
-  const { userId } = useParams()
-  const { pathname, search } = useLocation()
+export const Component = memo(
+  observer(() => {
+    const navigate = useNavigate()
+    const { userId } = useParams()
+    const { pathname, search } = useLocation()
 
-  const store = useContext(StoreContext)
-  const activeNodeArray = store.tree.activeNodeArray
+    const store = useContext(StoreContext)
+    const activeNodeArray = store.tree.activeNodeArray
 
-  useEffect(() => {
-    if (isInIframe) return
+    useEffect(() => {
+      if (isInIframe) return
 
-    // if app was opened on top level, navigate to last active node
-    if (pathname === '/') {
-      navigate('/Daten/' + activeNodeArray.join('/') + search)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+      // if app was opened on top level, navigate to last active node
+      if (pathname === '/') {
+        navigate('/Daten/' + activeNodeArray.join('/') + search)
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
-  if (isInIframe) return <Outlet />
+    if (isInIframe) return <Outlet />
 
-  const showEkf =
-    !!userId && pathname.startsWith(`/Daten/Benutzer/${userId}/EKF`)
+    const showEkf =
+      !!userId && pathname.startsWith(`/Daten/Benutzer/${userId}/EKF`)
 
-  return (
-    <Container>
-      <StyledAppBar position="static">
-        <StyledToolbar>
-          {showEkf ?
-            <EkfBar />
-          : <Bar />}
-        </StyledToolbar>
-      </StyledAppBar>
-      <Suspense fallback={<Spinner />}>
-        <Outlet />
-      </Suspense>
-    </Container>
-  )
-})
+    return (
+      <Container>
+        <StyledAppBar position="static">
+          <StyledToolbar>
+            {showEkf ?
+              <EkfBar />
+            : <Bar />}
+          </StyledToolbar>
+        </StyledAppBar>
+        <Suspense fallback={<Spinner />}>
+          <Outlet />
+        </Suspense>
+      </Container>
+    )
+  }),
+)
