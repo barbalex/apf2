@@ -1,6 +1,5 @@
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { RadioButton } from '../../../../shared/RadioButton.jsx'
 
@@ -51,7 +50,7 @@ const MapVal2 = styled.div`
   }
 `
 
-export const Map = observer(({ saveToDb, row }) => {
+export const Map = memo(({ saveToDb, row }) => {
   const onSaveFalse = useCallback(() => {
     const fakeEvent = {
       target: {

@@ -1,6 +1,5 @@
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { TextField2 } from '../../../../shared/TextField2.jsx'
 import { RadioButton } from '../../../../shared/RadioButton.jsx'
@@ -143,7 +142,7 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-export const More = observer(({ saveToDb, row }) => {
+export const More = memo(({ saveToDb, row }) => {
   const jungpflanzenVorhandenOnSaveFalse = useCallback(() => {
     const fakeEvent = {
       target: {
