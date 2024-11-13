@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useContext } from 'react'
+import { memo, useState, useCallback, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
@@ -142,89 +142,91 @@ const fieldTypes = {
   ekfBemerkungen: 'String',
 }
 
-export const Form = observer(({ data, refetch, row, apId }) => {
-  const client = useApolloClient()
-  const queryClient = useQueryClient()
+export const Form = memo(
+  observer(({ data, refetch, row, apId }) => {
+    const client = useApolloClient()
+    const queryClient = useQueryClient()
 
-  const store = useContext(StoreContext)
-  const { isPrint, user } = store
-  const { dataFilterSetValue } = store.tree
-  const { token } = user
-  const role = token ? jwtDecode(token).role : null
+    const store = useContext(StoreContext)
+    const { isPrint, user } = store
+    const { dataFilterSetValue } = store.tree
+    const { token } = user
+    const role = token ? jwtDecode(token).role : null
 
-  const [errors, setErrors] = useState({})
+    const [errors, setErrors] = useState({})
 
-  const ekzaehleinheitsOriginal =
-    data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
-      ?.ekzaehleinheitsByApId?.nodes ?? []
-  const ekzaehleinheits = ekzaehleinheitsOriginal
-    .map((n) => n?.tpopkontrzaehlEinheitWerteByZaehleinheitId ?? {})
-    // remove null values stemming from efkzaehleinheit without zaehleinheit_id
-    .filter((n) => n !== null)
-  const zaehls = data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
-  const zaehlsSorted = sortBy(zaehls, (z) => {
-    const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
-      (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.einheit,
-    )
-    if (!ekzaehleinheitOriginal) return 999
-    return ekzaehleinheitOriginal.sort || 999
-  })
-  const zaehls1 = zaehlsSorted[0]
-  const zaehls2 = zaehlsSorted[1]
-  const zaehls3 = zaehlsSorted[2]
-  const zaehl1WasAttributed =
-    zaehls1 && (zaehls1.anzahl || zaehls1.anzahl === 0 || zaehls1.einheit)
-  const zaehl2ShowNew =
-    zaehl1WasAttributed && !zaehls2 && ekzaehleinheits.length > 1
-  const zaehl1ShowEmpty =
-    ekzaehleinheits.length === 0 && zaehlsSorted.length === 0
-  const zaehl2ShowEmpty =
-    (!zaehl1WasAttributed && !zaehls2) || ekzaehleinheits.length < 2
-  const zaehl2WasAttributed =
-    zaehl1WasAttributed &&
-    zaehls2 &&
-    (zaehls2.anzahl || zaehls2.anzahl === 0 || zaehls2.einheit)
-  const zaehl3ShowNew =
-    zaehl2WasAttributed && !zaehls3 && ekzaehleinheits.length > 2
-  const zaehl3ShowEmpty =
-    (!zaehl2WasAttributed && !zaehls3) || ekzaehleinheits.length < 3
-  const einheitsUsed = zaehlsSorted
-    .filter((n) => !!n.einheit)
-    .map((n) => n.einheit)
-  const isFreiwillig = role === 'apflora_freiwillig'
+    const ekzaehleinheitsOriginal =
+      data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
+        ?.ekzaehleinheitsByApId?.nodes ?? []
+    const ekzaehleinheits = ekzaehleinheitsOriginal
+      .map((n) => n?.tpopkontrzaehlEinheitWerteByZaehleinheitId ?? {})
+      // remove null values stemming from efkzaehleinheit without zaehleinheit_id
+      .filter((n) => n !== null)
+    const zaehls =
+      data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+    const zaehlsSorted = sortBy(zaehls, (z) => {
+      const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
+        (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.einheit,
+      )
+      if (!ekzaehleinheitOriginal) return 999
+      return ekzaehleinheitOriginal.sort || 999
+    })
+    const zaehls1 = zaehlsSorted[0]
+    const zaehls2 = zaehlsSorted[1]
+    const zaehls3 = zaehlsSorted[2]
+    const zaehl1WasAttributed =
+      zaehls1 && (zaehls1.anzahl || zaehls1.anzahl === 0 || zaehls1.einheit)
+    const zaehl2ShowNew =
+      zaehl1WasAttributed && !zaehls2 && ekzaehleinheits.length > 1
+    const zaehl1ShowEmpty =
+      ekzaehleinheits.length === 0 && zaehlsSorted.length === 0
+    const zaehl2ShowEmpty =
+      (!zaehl1WasAttributed && !zaehls2) || ekzaehleinheits.length < 2
+    const zaehl2WasAttributed =
+      zaehl1WasAttributed &&
+      zaehls2 &&
+      (zaehls2.anzahl || zaehls2.anzahl === 0 || zaehls2.einheit)
+    const zaehl3ShowNew =
+      zaehl2WasAttributed && !zaehls3 && ekzaehleinheits.length > 2
+    const zaehl3ShowEmpty =
+      (!zaehl2WasAttributed && !zaehls3) || ekzaehleinheits.length < 3
+    const einheitsUsed = zaehlsSorted
+      .filter((n) => !!n.einheit)
+      .map((n) => n.einheit)
+    const isFreiwillig = role === 'apflora_freiwillig'
 
-  const artname =
-    row?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? ''
-  const pop = row?.tpopByTpopId?.popByPopId ?? {}
-  const tpop = row?.tpopByTpopId ?? {}
-  const { ekfBemerkungen } = row
+    const artname =
+      row?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? ''
+    const pop = row?.tpopByTpopId?.popByPopId ?? {}
+    const tpop = row?.tpopByTpopId ?? {}
+    const { ekfBemerkungen } = row
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
-      /**
-       * enable passing two values
-       * with same update
-       */
-      const variables = {
-        id: row.id,
-        [field]: value,
-        changedBy: user.name,
-      }
-      let field2
-      if (field === 'datum') field2 = 'jahr'
-      let value2
-      if (field === 'datum') {
-        // this broke 13.2.2019
-        // value2 = !!value ? +format(new Date(value), 'yyyy') : null
-        // value can be null so check if substring method exists
-        value2 = value && value.substring ? +value.substring(0, 4) : value
-      }
-      if (field2) variables[field2] = value2
-      try {
-        await client.mutate({
-          mutation: gql`
+    const saveToDb = useCallback(
+      async (event) => {
+        const field = event.target.name
+        const value = ifIsNumericAsNumber(event.target.value)
+        /**
+         * enable passing two values
+         * with same update
+         */
+        const variables = {
+          id: row.id,
+          [field]: value,
+          changedBy: user.name,
+        }
+        let field2
+        if (field === 'datum') field2 = 'jahr'
+        let value2
+        if (field === 'datum') {
+          // this broke 13.2.2019
+          // value2 = !!value ? +format(new Date(value), 'yyyy') : null
+          // value can be null so check if substring method exists
+          value2 = value && value.substring ? +value.substring(0, 4) : value
+        }
+        if (field2) variables[field2] = value2
+        try {
+          await client.mutate({
+            mutation: gql`
             mutation updateTpopkontrForEkf(
               $id: UUID!
                 $${field}: ${fieldTypes[field]}
@@ -284,211 +286,212 @@ export const Form = observer(({ data, refetch, row, apId }) => {
             ${tpopfreiwkontrFragment}
             ${tpopkontrzaehlEinheitWerteFragment}
           `,
-          variables,
+            variables,
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        queryClient.invalidateQueries({
+          queryKey: [`treeTpopfreiwkontr`],
         })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [
+        row.id,
+        row.typ,
+        row.jahr,
+        row.datum,
+        row.bemerkungen,
+        row.flaecheUeberprueft,
+        row.deckungVegetation,
+        row.deckungNackterBoden,
+        row.deckungApArt,
+        row.vegetationshoeheMaximum,
+        row.vegetationshoeheMittel,
+        row.gefaehrdung,
+        row.tpopId,
+        row.bearbeiter,
+        row.planVorhanden,
+        row.jungpflanzenVorhanden,
+        row.apberNichtRelevant,
+        row.apberNichtRelevantGrund,
+        row.ekfBemerkungen,
+        row.tpopByTpopId,
+        row.tpopkontrzaehlsByTpopkontrId,
+        user.name,
+        dataFilterSetValue,
+        client,
+        store.tree,
+        queryClient,
+      ],
+    )
+
+    useEffect(() => {
       setErrors({})
-      queryClient.invalidateQueries({
-        queryKey: [`treeTpopfreiwkontr`],
-      })
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      row.id,
-      row.typ,
-      row.jahr,
-      row.datum,
-      row.bemerkungen,
-      row.flaecheUeberprueft,
-      row.deckungVegetation,
-      row.deckungNackterBoden,
-      row.deckungApArt,
-      row.vegetationshoeheMaximum,
-      row.vegetationshoeheMittel,
-      row.gefaehrdung,
-      row.tpopId,
-      row.bearbeiter,
-      row.planVorhanden,
-      row.jungpflanzenVorhanden,
-      row.apberNichtRelevant,
-      row.apberNichtRelevantGrund,
-      row.ekfBemerkungen,
-      row.tpopByTpopId,
-      row.tpopkontrzaehlsByTpopkontrId,
-      user.name,
-      dataFilterSetValue,
-      client,
-      store.tree,
-      queryClient,
-    ],
-  )
+    }, [row.id])
 
-  useEffect(() => {
-    setErrors({})
-  }, [row.id])
-
-  return (
-    <FormContainer>
-      <GridContainer>
-        <Title row={row} />
-        <Headdata
-          pop={pop}
-          tpop={tpop}
-          row={row}
-        />
-        <Besttime row={row} />
-        <DateField
-          saveToDb={saveToDb}
-          row={row}
-          errors={errors}
-        />
-        <Map
-          saveToDb={saveToDb}
-          row={row}
-          errors={errors}
-        />
-        <Image
-          key={apId}
-          apId={apId}
-          artname={artname}
-        />
-        {zaehls1 && (
-          <Count
-            key={zaehls1.id}
-            id={zaehls1.id}
-            tpopkontrId={row.id}
-            nr="1"
-            refetch={refetch}
-            einheitsUsed={einheitsUsed}
-            ekzaehleinheits={ekzaehleinheits}
-            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+    return (
+      <FormContainer>
+        <GridContainer>
+          <Title row={row} />
+          <Headdata
+            pop={pop}
+            tpop={tpop}
+            row={row}
           />
-        )}
-        {zaehl1ShowEmpty && (
-          <CountHint>
-            Sie müssen auf Ebene Art EK-Zähleinheiten definieren, um hier
-            Zählungen erfassen zu können.
-          </CountHint>
-        )}
-        {zaehls2 && (
-          <Count
-            key={zaehls2.id}
-            id={zaehls2.id}
-            tpopkontrId={row.id}
-            nr="2"
-            refetch={refetch}
-            einheitsUsed={einheitsUsed}
-            ekzaehleinheits={ekzaehleinheits}
-            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-          />
-        )}
-        {zaehl2ShowNew && (
-          <Count
-            id={null}
-            tpopkontrId={row.id}
-            nr="2"
-            showNew
-            refetch={refetch}
-            einheitsUsed={einheitsUsed}
-            ekzaehleinheits={ekzaehleinheits}
-            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-          />
-        )}
-        {zaehl2ShowEmpty && !zaehl1ShowEmpty && (
-          <Count
-            id={null}
-            tpopkontrId={row.id}
-            nr="2"
-            showEmpty
-            showNew
-            refetch={refetch}
-            einheitsUsed={einheitsUsed}
-            ekzaehleinheits={ekzaehleinheits}
-            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-          />
-        )}
-        {zaehls3 && (
-          <Count
-            key={zaehls3.id}
-            id={zaehls3.id}
-            tpopkontrId={row.id}
-            nr="3"
-            refetch={refetch}
-            einheitsUsed={einheitsUsed}
-            ekzaehleinheits={ekzaehleinheits}
-            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-          />
-        )}
-        {zaehl3ShowNew && (
-          <Count
-            id={null}
-            tpopkontrId={row.id}
-            nr="3"
-            showNew
-            refetch={refetch}
-            einheitsUsed={einheitsUsed}
-            ekzaehleinheits={ekzaehleinheits}
-            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-          />
-        )}
-        {zaehl3ShowEmpty && !zaehl2ShowEmpty && (
-          <Count
-            id={null}
-            tpopkontrId={row.id}
-            nr="3"
-            showEmpty
-            showNew
-            refetch={refetch}
-            einheitsUsed={einheitsUsed}
-            ekzaehleinheits={ekzaehleinheits}
-            ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
-          />
-        )}
-        <Cover
-          saveToDb={saveToDb}
-          row={row}
-          errors={errors}
-        />
-        <More
-          saveToDb={saveToDb}
-          row={row}
-          errors={errors}
-        />
-        <Danger
-          saveToDb={saveToDb}
-          row={row}
-          errors={errors}
-        />
-        <Remarks
-          saveToDb={saveToDb}
-          row={row}
-          errors={errors}
-        />
-        {((isPrint && ekfBemerkungen) || !isPrint) && (
-          <EkfRemarks
+          <Besttime row={row} />
+          <DateField
             saveToDb={saveToDb}
             row={row}
             errors={errors}
           />
-        )}
-        {!isPrint && <Files row={row} />}
+          <Map
+            saveToDb={saveToDb}
+            row={row}
+            errors={errors}
+          />
+          <Image
+            key={apId}
+            apId={apId}
+            artname={artname}
+          />
+          {zaehls1 && (
+            <Count
+              key={zaehls1.id}
+              id={zaehls1.id}
+              tpopkontrId={row.id}
+              nr="1"
+              refetch={refetch}
+              einheitsUsed={einheitsUsed}
+              ekzaehleinheits={ekzaehleinheits}
+              ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            />
+          )}
+          {zaehl1ShowEmpty && (
+            <CountHint>
+              Sie müssen auf Ebene Art EK-Zähleinheiten definieren, um hier
+              Zählungen erfassen zu können.
+            </CountHint>
+          )}
+          {zaehls2 && (
+            <Count
+              key={zaehls2.id}
+              id={zaehls2.id}
+              tpopkontrId={row.id}
+              nr="2"
+              refetch={refetch}
+              einheitsUsed={einheitsUsed}
+              ekzaehleinheits={ekzaehleinheits}
+              ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            />
+          )}
+          {zaehl2ShowNew && (
+            <Count
+              id={null}
+              tpopkontrId={row.id}
+              nr="2"
+              showNew
+              refetch={refetch}
+              einheitsUsed={einheitsUsed}
+              ekzaehleinheits={ekzaehleinheits}
+              ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            />
+          )}
+          {zaehl2ShowEmpty && !zaehl1ShowEmpty && (
+            <Count
+              id={null}
+              tpopkontrId={row.id}
+              nr="2"
+              showEmpty
+              showNew
+              refetch={refetch}
+              einheitsUsed={einheitsUsed}
+              ekzaehleinheits={ekzaehleinheits}
+              ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            />
+          )}
+          {zaehls3 && (
+            <Count
+              key={zaehls3.id}
+              id={zaehls3.id}
+              tpopkontrId={row.id}
+              nr="3"
+              refetch={refetch}
+              einheitsUsed={einheitsUsed}
+              ekzaehleinheits={ekzaehleinheits}
+              ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            />
+          )}
+          {zaehl3ShowNew && (
+            <Count
+              id={null}
+              tpopkontrId={row.id}
+              nr="3"
+              showNew
+              refetch={refetch}
+              einheitsUsed={einheitsUsed}
+              ekzaehleinheits={ekzaehleinheits}
+              ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            />
+          )}
+          {zaehl3ShowEmpty && !zaehl2ShowEmpty && (
+            <Count
+              id={null}
+              tpopkontrId={row.id}
+              nr="3"
+              showEmpty
+              showNew
+              refetch={refetch}
+              einheitsUsed={einheitsUsed}
+              ekzaehleinheits={ekzaehleinheits}
+              ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+            />
+          )}
+          <Cover
+            saveToDb={saveToDb}
+            row={row}
+            errors={errors}
+          />
+          <More
+            saveToDb={saveToDb}
+            row={row}
+            errors={errors}
+          />
+          <Danger
+            saveToDb={saveToDb}
+            row={row}
+            errors={errors}
+          />
+          <Remarks
+            saveToDb={saveToDb}
+            row={row}
+            errors={errors}
+          />
+          {((isPrint && ekfBemerkungen) || !isPrint) && (
+            <EkfRemarks
+              saveToDb={saveToDb}
+              row={row}
+              errors={errors}
+            />
+          )}
+          {!isPrint && <Files row={row} />}
+          {!isPrint && !isFreiwillig && (
+            <Verification
+              saveToDb={saveToDb}
+              row={row}
+              errors={errors}
+            />
+          )}
+        </GridContainer>
         {!isPrint && !isFreiwillig && (
-          <Verification
-            saveToDb={saveToDb}
-            row={row}
-            errors={errors}
+          <StringToCopyOnlyButton
+            text={row.id}
+            label="GUID"
           />
         )}
-      </GridContainer>
-      {!isPrint && !isFreiwillig && (
-        <StringToCopyOnlyButton
-          text={row.id}
-          label="GUID"
-        />
-      )}
-      {!isPrint && <div style={{ height: '64px' }} />}
-    </FormContainer>
-  )
-})
+        {!isPrint && <div style={{ height: '64px' }} />}
+      </FormContainer>
+    )
+  }),
+)

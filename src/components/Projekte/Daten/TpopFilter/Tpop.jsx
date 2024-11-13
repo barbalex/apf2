@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
@@ -24,8 +24,8 @@ const Container = styled.div`
   scrollbar-width: thin;
 `
 
-export const Tpop = observer(
-  ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
+export const Tpop = memo(
+  observer(({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
     const store = useContext(StoreContext)
     const { enqueNotification } = store
     const client = useApolloClient()
@@ -357,5 +357,5 @@ export const Tpop = observer(
         />
       </Container>
     )
-  },
+  }),
 )
