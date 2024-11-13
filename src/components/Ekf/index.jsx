@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { memo, useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -62,78 +62,82 @@ const getEkfFromData = ({ data }) => {
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
 }
 
-export const Component = observer(() => {
-  const { search } = useLocation()
-  const navigate = useNavigate()
-  const { userId, ekfId, ekfYear } = useParams()
-  const { isPrint, isEkfSinglePrint } = useContext(StoreContext)
+export const Component = memo(
+  observer(() => {
+    const { search } = useLocation()
+    const navigate = useNavigate()
+    const { userId, ekfId, ekfYear } = useParams()
+    const { isPrint, isEkfSinglePrint } = useContext(StoreContext)
 
-  const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
-  const ekfRefYear = new Date(ekfRefDate).getFullYear()
+    const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
+    const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
-  const query =
-    ekfRefYear === ekfYear ? dataByUserIdGql : dataWithDateByUserIdGql
+    const query =
+      ekfRefYear === ekfYear ? dataByUserIdGql : dataWithDateByUserIdGql
 
-  const { data, loading, error } = useQuery(query, {
-    variables: { id: userId, jahr: +ekfYear },
-    fetchPolicy: 'network-only',
-  })
+    const { data, loading, error } = useQuery(query, {
+      variables: { id: userId, jahr: +ekfYear },
+      fetchPolicy: 'network-only',
+    })
 
-  const ekf = getEkfFromData({ data })
+    const ekf = getEkfFromData({ data })
 
-  useEffect(() => {
-    // navigate to first kontrId so form is shown for first ekf
-    // IF none is choosen yet
-    if (!loading && ekf.length > 0 && !ekfId) {
-      console.log('Ekf, useEffect, navigating to first ekf')
-      navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${ekf[0].id}${search}`)
+    useEffect(() => {
+      // navigate to first kontrId so form is shown for first ekf
+      // IF none is choosen yet
+      if (!loading && ekf.length > 0 && !ekfId) {
+        console.log('Ekf, useEffect, navigating to first ekf')
+        navigate(
+          `/Daten/Benutzer/${userId}/EKF/${ekfYear}/${ekf[0].id}${search}`,
+        )
+      }
+      // adding ekf as dependency causes infinite loop
+      // https://github.com/barbalex/apf2/issues/629
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ekfYear, ekfId, navigate, userId, search, loading])
+
+    if (error) {
+      return <Error error={error} />
     }
-    // adding ekf as dependency causes infinite loop
-    // https://github.com/barbalex/apf2/issues/629
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ekfYear, ekfId, navigate, userId, search, loading])
 
-  if (error) {
-    return <Error error={error} />
-  }
+    if (!loading && ekf.length === 0) {
+      return (
+        <NoDataContainer>
+          {`Für das Jahr ${ekfYear} existieren offenbar keine Erfolgskontrollen mit Ihnen als BearbeiterIn`}
+        </NoDataContainer>
+      )
+    }
 
-  if (!loading && ekf.length === 0) {
+    if (isPrint && isEkfSinglePrint) {
+      return <Tpopfreiwkontr id={ekfId} />
+    }
+
+    if (isPrint && ekf.length > 0) {
+      return (
+        <>
+          {ekf.map((e) => (
+            <Tpopfreiwkontr
+              id={e.id}
+              key={e.id}
+            />
+          ))}
+        </>
+      )
+    }
+
     return (
-      <NoDataContainer>
-        {`Für das Jahr ${ekfYear} existieren offenbar keine Erfolgskontrollen mit Ihnen als BearbeiterIn`}
-      </NoDataContainer>
+      <Container>
+        <StyledSplitPane
+          split="vertical"
+          size="350px"
+          minSize={100}
+        >
+          <EkfList ekf={ekf} />
+          {ekfId ?
+            <Tpopfreiwkontr id={ekfId} />
+          : <InnerContainer />}
+        </StyledSplitPane>
+      </Container>
     )
-  }
-
-  if (isPrint && isEkfSinglePrint) {
-    return <Tpopfreiwkontr id={ekfId} />
-  }
-
-  if (isPrint && ekf.length > 0) {
-    return (
-      <>
-        {ekf.map((e) => (
-          <Tpopfreiwkontr
-            id={e.id}
-            key={e.id}
-          />
-        ))}
-      </>
-    )
-  }
-
-  return (
-    <Container>
-      <StyledSplitPane
-        split="vertical"
-        size="350px"
-        minSize={100}
-      >
-        <EkfList ekf={ekf} />
-        {ekfId ?
-          <Tpopfreiwkontr id={ekfId} />
-        : <InnerContainer />}
-      </StyledSplitPane>
-    </Container>
-  )
-})
+  }),
+)

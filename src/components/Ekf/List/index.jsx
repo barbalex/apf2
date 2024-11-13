@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import uniq from 'lodash/uniq'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -15,7 +16,7 @@ const Container = styled.div`
   box-sizing: border-box !important;
 `
 
-export const EkfList = observer(({ ekf }) => {
+export const EkfList = memo(({ ekf }) => {
   const projektCount = uniq(ekf.map((e) => e.projekt)).length
 
   return (
