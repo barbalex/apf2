@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react'
+import { memo, useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
@@ -6,83 +6,85 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-export const EkPlanung = observer(() => {
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const { enqueNotification } = store
+export const EkPlanung = memo(
+  observer(() => {
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { enqueNotification } = store
 
-  const [queryState, setQueryState] = useState()
+    const [queryState, setQueryState] = useState()
 
-  const onClickEkPlanung = useCallback(async () => {
-    setQueryState('lade Daten...')
-    let result
-    try {
-      result = await client.query({
-        query: gql`
-          query ekPlanungNachAbrechnungstyps {
-            allVEkPlanungNachAbrechnungstyps {
-              nodes {
-                apId
-                artname
-                artverantwortlich
-                jahr
-                a
-                b
-                d
-                ekf
+    const onClickEkPlanung = useCallback(async () => {
+      setQueryState('lade Daten...')
+      let result
+      try {
+        result = await client.query({
+          query: gql`
+            query ekPlanungNachAbrechnungstyps {
+              allVEkPlanungNachAbrechnungstyps {
+                nodes {
+                  apId
+                  artname
+                  artverantwortlich
+                  jahr
+                  a
+                  b
+                  d
+                  ekf
+                }
               }
             }
-          }
-        `,
+          `,
+        })
+      } catch (error) {
+        enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      setQueryState('verarbeite...')
+      const rows = (
+        result.data?.allVEkPlanungNachAbrechnungstyps?.nodes ?? []
+      ).map((z) => ({
+        ap_id: z?.apId,
+        artname: z?.artname ?? '',
+        artverantwortlich: z?.artverantwortlich ?? '',
+        jahr: z.jahr ?? '',
+        a: z?.a ?? 0,
+        b: z?.b ?? 0,
+        d: z?.d ?? 0,
+        ekf: z?.ekf ?? 0,
+      }))
+      if (rows.length === 0) {
+        setQueryState(undefined)
+        return enqueNotification({
+          message: 'Die Abfrage retournierte 0 Datensätze',
+          options: {
+            variant: 'warning',
+          },
+        })
+      }
+      exportModule({
+        data: rows,
+        fileName: 'EkPlanungProJahrNachAbrechnungstyp',
+        store,
       })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    setQueryState('verarbeite...')
-    const rows = (
-      result.data?.allVEkPlanungNachAbrechnungstyps?.nodes ?? []
-    ).map((z) => ({
-      ap_id: z?.apId,
-      artname: z?.artname ?? '',
-      artverantwortlich: z?.artverantwortlich ?? '',
-      jahr: z.jahr ?? '',
-      a: z?.a ?? 0,
-      b: z?.b ?? 0,
-      d: z?.d ?? 0,
-      ekf: z?.ekf ?? 0,
-    }))
-    if (rows.length === 0) {
       setQueryState(undefined)
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: rows,
-      fileName: 'EkPlanungProJahrNachAbrechnungstyp',
-      store,
-    })
-    setQueryState(undefined)
-  }, [enqueNotification, client, store])
+    }, [enqueNotification, client, store])
 
-  return (
-    <DownloadCardButton
-      onClick={onClickEkPlanung}
-      color="inherit"
-      disabled={!!queryState}
-    >
-      EK-Planung pro Jahr nach Abrechnungstyp
-      {queryState ?
-        <StyledProgressText>{queryState}</StyledProgressText>
-      : null}
-    </DownloadCardButton>
-  )
-})
+    return (
+      <DownloadCardButton
+        onClick={onClickEkPlanung}
+        color="inherit"
+        disabled={!!queryState}
+      >
+        EK-Planung pro Jahr nach Abrechnungstyp
+        {queryState ?
+          <StyledProgressText>{queryState}</StyledProgressText>
+        : null}
+      </DownloadCardButton>
+    )
+  }),
+)
