@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from 'react'
+import { memo, useCallback, useContext, useState } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -46,224 +46,229 @@ const StyledListItemIcon = styled(ListItemIcon)`
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
-export const CellForYearMenu = observer(() => {
-  const store = useContext(StoreContext)
-  const client = useApolloClient()
-  const {
-    showEk,
-    showEkf,
-    showMassn,
-    yearClicked,
-    yearMenuAnchor,
-    closeYearCellMenu,
-  } = store.ekPlan
-  const { year, tpopId } = yearClicked
-
-  const [eksAnchor, setEksAnchor] = useState(null)
-  const [ekfsAnchor, setEkfsAnchor] = useState(null)
-  const [massnsAnchor, setMassnsAnchor] = useState(null)
-
-  const closeEksMenu = useCallback(() => setEksAnchor(null), [])
-  const closeEkfsMenu = useCallback(() => setEkfsAnchor(null), [])
-  const closeMassnsMenu = useCallback(() => setMassnsAnchor(null), [])
-
-  const removeEkPlan = useCallback(
-    async (typ) => {
-      let qResult
-      try {
-        qResult = await client.query({
-          query: queryEkplansOfTpop,
-          variables: {
-            tpopId,
-            jahr: year,
-          },
-        })
-      } catch (error) {
-        closeYearCellMenu()
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      const id = qResult.data.allEkplans.nodes.find((o) => o.typ === typ).id
-      try {
-        await client.mutate({
-          mutation: mutationDeleteEkplan,
-          variables: {
-            id,
-          },
-          refetchQueries: ['EkplanTpopQuery'],
-        })
-      } catch (error) {
-        store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      closeYearCellMenu()
-    },
-    [client, closeYearCellMenu, store, tpopId, year],
-  )
-  const onClickEkEntfernen = useCallback(
-    () => removeEkPlan('EK'),
-    [removeEkPlan],
-  )
-  const onClickEkfEntfernen = useCallback(
-    () => removeEkPlan('EKF'),
-    [removeEkPlan],
-  )
-
-  const addEkPlan = useCallback(
-    async (typ) => {
-      const variables = {
-        tpopId,
-        jahr: year,
-        typ,
-        changedBy: store.user.name,
-      }
-      try {
-        await client.mutate({
-          mutation: mutationCreateEkplan,
-          variables,
-          refetchQueries: ['EkplanTpopQuery'],
-        })
-      } catch (error) {
-        store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      closeYearCellMenu()
-    },
-    [client, closeYearCellMenu, store, tpopId, year],
-  )
-  const onClickEkPlanen = useCallback(() => addEkPlan('EK'), [addEkPlan])
-  const onClickEkfPlanen = useCallback(() => addEkPlan('EKF'), [addEkPlan])
-
-  const { data } = useQuery(queryTpop, {
-    variables: {
-      tpopId,
-      jahr: year,
+export const CellForYearMenu = memo(
+  observer(() => {
+    const store = useContext(StoreContext)
+    const client = useApolloClient()
+    const {
       showEk,
       showEkf,
       showMassn,
-    },
-  })
-  const tpop = data?.tpopById ?? {}
-  const eks = data?.tpopById?.eks?.nodes ?? []
-  const ekfs = data?.tpopById?.ekfs?.nodes ?? []
-  const massns = data?.tpopById?.massns?.nodes ?? []
+      yearClicked,
+      yearMenuAnchor,
+      closeYearCellMenu,
+    } = store.ekPlan
+    const { year, tpopId } = yearClicked
 
-  return (
-    <>
-      <Menu
-        anchorReference="anchorPosition"
-        anchorPosition={{ top: yearMenuAnchor.top, left: yearMenuAnchor.right }}
-        anchorOrigin={anchorOrigin}
-        open={Boolean(yearMenuAnchor)}
-        onClose={closeYearCellMenu}
-      >
-        <YearCellMenuTitle>{yearClicked.title}</YearCellMenuTitle>
-        {showEk && (
-          <div>
-            {yearClicked.ekPlan ?
-              <StyledMenuItem onClick={onClickEkEntfernen}>
-                <StyledListItemIcon>
-                  <EditIcon />
-                </StyledListItemIcon>
-                <StyledListItemText primary="EK-Planung entfernen" />
-              </StyledMenuItem>
-            : <StyledMenuItem onClick={onClickEkPlanen}>
-                <StyledListItemIcon>
-                  <EditIcon />
-                </StyledListItemIcon>
-                <StyledListItemText primary="EK planen" />
-              </StyledMenuItem>
-            }
-          </div>
+    const [eksAnchor, setEksAnchor] = useState(null)
+    const [ekfsAnchor, setEkfsAnchor] = useState(null)
+    const [massnsAnchor, setMassnsAnchor] = useState(null)
+
+    const closeEksMenu = useCallback(() => setEksAnchor(null), [])
+    const closeEkfsMenu = useCallback(() => setEkfsAnchor(null), [])
+    const closeMassnsMenu = useCallback(() => setMassnsAnchor(null), [])
+
+    const removeEkPlan = useCallback(
+      async (typ) => {
+        let qResult
+        try {
+          qResult = await client.query({
+            query: queryEkplansOfTpop,
+            variables: {
+              tpopId,
+              jahr: year,
+            },
+          })
+        } catch (error) {
+          closeYearCellMenu()
+          return store.enqueNotification({
+            message: error.message,
+            options: {
+              variant: 'error',
+            },
+          })
+        }
+        const id = qResult.data.allEkplans.nodes.find((o) => o.typ === typ).id
+        try {
+          await client.mutate({
+            mutation: mutationDeleteEkplan,
+            variables: {
+              id,
+            },
+            refetchQueries: ['EkplanTpopQuery'],
+          })
+        } catch (error) {
+          store.enqueNotification({
+            message: error.message,
+            options: {
+              variant: 'error',
+            },
+          })
+        }
+        closeYearCellMenu()
+      },
+      [client, closeYearCellMenu, store, tpopId, year],
+    )
+    const onClickEkEntfernen = useCallback(
+      () => removeEkPlan('EK'),
+      [removeEkPlan],
+    )
+    const onClickEkfEntfernen = useCallback(
+      () => removeEkPlan('EKF'),
+      [removeEkPlan],
+    )
+
+    const addEkPlan = useCallback(
+      async (typ) => {
+        const variables = {
+          tpopId,
+          jahr: year,
+          typ,
+          changedBy: store.user.name,
+        }
+        try {
+          await client.mutate({
+            mutation: mutationCreateEkplan,
+            variables,
+            refetchQueries: ['EkplanTpopQuery'],
+          })
+        } catch (error) {
+          store.enqueNotification({
+            message: error.message,
+            options: {
+              variant: 'error',
+            },
+          })
+        }
+        closeYearCellMenu()
+      },
+      [client, closeYearCellMenu, store, tpopId, year],
+    )
+    const onClickEkPlanen = useCallback(() => addEkPlan('EK'), [addEkPlan])
+    const onClickEkfPlanen = useCallback(() => addEkPlan('EKF'), [addEkPlan])
+
+    const { data } = useQuery(queryTpop, {
+      variables: {
+        tpopId,
+        jahr: year,
+        showEk,
+        showEkf,
+        showMassn,
+      },
+    })
+    const tpop = data?.tpopById ?? {}
+    const eks = data?.tpopById?.eks?.nodes ?? []
+    const ekfs = data?.tpopById?.ekfs?.nodes ?? []
+    const massns = data?.tpopById?.massns?.nodes ?? []
+
+    return (
+      <>
+        <Menu
+          anchorReference="anchorPosition"
+          anchorPosition={{
+            top: yearMenuAnchor.top,
+            left: yearMenuAnchor.right,
+          }}
+          anchorOrigin={anchorOrigin}
+          open={Boolean(yearMenuAnchor)}
+          onClose={closeYearCellMenu}
+        >
+          <YearCellMenuTitle>{yearClicked.title}</YearCellMenuTitle>
+          {showEk && (
+            <div>
+              {yearClicked.ekPlan ?
+                <StyledMenuItem onClick={onClickEkEntfernen}>
+                  <StyledListItemIcon>
+                    <EditIcon />
+                  </StyledListItemIcon>
+                  <StyledListItemText primary="EK-Planung entfernen" />
+                </StyledMenuItem>
+              : <StyledMenuItem onClick={onClickEkPlanen}>
+                  <StyledListItemIcon>
+                    <EditIcon />
+                  </StyledListItemIcon>
+                  <StyledListItemText primary="EK planen" />
+                </StyledMenuItem>
+              }
+            </div>
+          )}
+          {showEkf && (
+            <div>
+              {yearClicked.ekfPlan ?
+                <StyledMenuItem onClick={onClickEkfEntfernen}>
+                  <StyledListItemIcon>
+                    <EditIcon />
+                  </StyledListItemIcon>
+                  <StyledListItemText primary="EKF-Planung entfernen" />
+                </StyledMenuItem>
+              : <StyledMenuItem onClick={onClickEkfPlanen}>
+                  <StyledListItemIcon>
+                    <EditIcon />
+                  </StyledListItemIcon>
+                  <StyledListItemText primary="EKF planen" />
+                </StyledMenuItem>
+              }
+            </div>
+          )}
+          {showEk && !!eks.length && (
+            <StyledMenuItem
+              onClick={(e) => setEksAnchor(e.currentTarget)}
+              active={Boolean(eksAnchor).toString()}
+            >
+              <StyledListItemIcon>
+                <ListIcon />
+              </StyledListItemIcon>
+              <StyledListItemText primary={`EK (${eks.length})`} />
+            </StyledMenuItem>
+          )}
+          {showEkf && !!ekfs.length && (
+            <StyledMenuItem
+              onClick={(e) => setEkfsAnchor(e.currentTarget)}
+              active={Boolean(ekfsAnchor).toString()}
+            >
+              <StyledListItemIcon>
+                <ListIcon />
+              </StyledListItemIcon>
+              <StyledListItemText primary={`EKF (${ekfs.length})`} />
+            </StyledMenuItem>
+          )}
+          {showMassn && !!massns.length && (
+            <StyledMenuItem
+              onClick={(e) => setMassnsAnchor(e.currentTarget)}
+              active={Boolean(massnsAnchor).toString()}
+            >
+              <StyledListItemIcon>
+                <ListIcon />
+              </StyledListItemIcon>
+              <StyledListItemText primary={`Ansiedlungen (${massns.length})`} />
+            </StyledMenuItem>
+          )}
+        </Menu>
+        {!!eksAnchor && (
+          <EksMenu
+            tpop={tpop}
+            eks={eks}
+            eksAnchor={eksAnchor}
+            closeEksMenu={closeEksMenu}
+          />
         )}
-        {showEkf && (
-          <div>
-            {yearClicked.ekfPlan ?
-              <StyledMenuItem onClick={onClickEkfEntfernen}>
-                <StyledListItemIcon>
-                  <EditIcon />
-                </StyledListItemIcon>
-                <StyledListItemText primary="EKF-Planung entfernen" />
-              </StyledMenuItem>
-            : <StyledMenuItem onClick={onClickEkfPlanen}>
-                <StyledListItemIcon>
-                  <EditIcon />
-                </StyledListItemIcon>
-                <StyledListItemText primary="EKF planen" />
-              </StyledMenuItem>
-            }
-          </div>
+        {!!ekfsAnchor && (
+          <EkfsMenu
+            tpop={tpop}
+            ekfs={ekfs}
+            ekfsAnchor={ekfsAnchor}
+            closeEkfsMenu={closeEkfsMenu}
+          />
         )}
-        {showEk && !!eks.length && (
-          <StyledMenuItem
-            onClick={(e) => setEksAnchor(e.currentTarget)}
-            active={Boolean(eksAnchor).toString()}
-          >
-            <StyledListItemIcon>
-              <ListIcon />
-            </StyledListItemIcon>
-            <StyledListItemText primary={`EK (${eks.length})`} />
-          </StyledMenuItem>
+        {!!massnsAnchor && (
+          <MassnsMenu
+            tpop={tpop}
+            massns={massns}
+            massnsAnchor={massnsAnchor}
+            closeMassnsMenu={closeMassnsMenu}
+          />
         )}
-        {showEkf && !!ekfs.length && (
-          <StyledMenuItem
-            onClick={(e) => setEkfsAnchor(e.currentTarget)}
-            active={Boolean(ekfsAnchor).toString()}
-          >
-            <StyledListItemIcon>
-              <ListIcon />
-            </StyledListItemIcon>
-            <StyledListItemText primary={`EKF (${ekfs.length})`} />
-          </StyledMenuItem>
-        )}
-        {showMassn && !!massns.length && (
-          <StyledMenuItem
-            onClick={(e) => setMassnsAnchor(e.currentTarget)}
-            active={Boolean(massnsAnchor).toString()}
-          >
-            <StyledListItemIcon>
-              <ListIcon />
-            </StyledListItemIcon>
-            <StyledListItemText primary={`Ansiedlungen (${massns.length})`} />
-          </StyledMenuItem>
-        )}
-      </Menu>
-      {!!eksAnchor && (
-        <EksMenu
-          tpop={tpop}
-          eks={eks}
-          eksAnchor={eksAnchor}
-          closeEksMenu={closeEksMenu}
-        />
-      )}
-      {!!ekfsAnchor && (
-        <EkfsMenu
-          tpop={tpop}
-          ekfs={ekfs}
-          ekfsAnchor={ekfsAnchor}
-          closeEkfsMenu={closeEkfsMenu}
-        />
-      )}
-      {!!massnsAnchor && (
-        <MassnsMenu
-          tpop={tpop}
-          massns={massns}
-          massnsAnchor={massnsAnchor}
-          closeMassnsMenu={closeMassnsMenu}
-        />
-      )}
-    </>
-  )
-})
+      </>
+    )
+  }),
+)
