@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
 import sum from 'lodash/sum'
 import { GoZap } from 'react-icons/go'
@@ -42,32 +42,34 @@ const SumCounted = styled.div`
   overflow: hidden;
 `
 
-export const MassnIcon = observer(({ ansiedlungs }) => {
-  const store = useContext(StoreContext)
-  const { showCount, showEkCount } = store.ekPlan
+export const MassnIcon = memo(
+  observer(({ ansiedlungs }) => {
+    const store = useContext(StoreContext)
+    const { showCount, showEkCount } = store.ekPlan
 
-  if (!ansiedlungs.length) {
-    return <CheckboxContainer>&nbsp;</CheckboxContainer>
-  }
-  let sumCounted = null
-  const ansiedlungsWithCount = ansiedlungs.filter(
-    (ans) => ans.zieleinheitAnzahl !== null,
-  )
-  if (ansiedlungsWithCount.length) {
-    sumCounted = sum(ansiedlungsWithCount.map((ans) => ans.zieleinheitAnzahl))
-  }
+    if (!ansiedlungs.length) {
+      return <CheckboxContainer>&nbsp;</CheckboxContainer>
+    }
+    let sumCounted = null
+    const ansiedlungsWithCount = ansiedlungs.filter(
+      (ans) => ans.zieleinheitAnzahl !== null,
+    )
+    if (ansiedlungsWithCount.length) {
+      sumCounted = sum(ansiedlungsWithCount.map((ans) => ans.zieleinheitAnzahl))
+    }
 
-  return (
-    <CheckboxContainer showcount={showCount}>
-      <MassnContainer>
-        <MassnSymbol />
-        {showEkCount && ansiedlungs.length > 1 && (
-          <NrOfMassn>{ansiedlungs.length}</NrOfMassn>
+    return (
+      <CheckboxContainer showcount={showCount}>
+        <MassnContainer>
+          <MassnSymbol />
+          {showEkCount && ansiedlungs.length > 1 && (
+            <NrOfMassn>{ansiedlungs.length}</NrOfMassn>
+          )}
+        </MassnContainer>
+        {showCount && (
+          <SumCounted>{sumCounted !== null ? sumCounted : ' '}</SumCounted>
         )}
-      </MassnContainer>
-      {showCount && (
-        <SumCounted>{sumCounted !== null ? sumCounted : ' '}</SumCounted>
-      )}
-    </CheckboxContainer>
-  )
-})
+      </CheckboxContainer>
+    )
+  }),
+)
