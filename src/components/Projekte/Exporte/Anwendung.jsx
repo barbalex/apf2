@@ -1,8 +1,7 @@
-import { useState, useCallback } from 'react'
+import { memo, useState, useCallback } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import { observer } from 'mobx-react-lite'
 
 import beziehungen from '../../../etc/beziehungen.png'
 import {
@@ -14,7 +13,7 @@ import {
   DownloadCardButton,
 } from './index.jsx'
 
-export const Anwendung = observer(() => {
+export const Anwendung = memo(() => {
   const [expanded, setExpanded] = useState(false)
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])

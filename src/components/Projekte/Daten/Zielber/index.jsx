@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from 'react'
+import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
@@ -39,37 +39,38 @@ const fieldTypes = {
   bemerkungen: 'String',
 }
 
-export const Component = observer(() => {
-  const { zielberId: id } = useParams()
+export const Component = memo(
+  observer(() => {
+    const { zielberId: id } = useParams()
 
-  const client = useApolloClient()
-  const queryClient = useQueryClient()
+    const client = useApolloClient()
+    const queryClient = useQueryClient()
 
-  const store = useContext(StoreContext)
+    const store = useContext(StoreContext)
 
-  const [fieldErrors, setFieldErrors] = useState({})
+    const [fieldErrors, setFieldErrors] = useState({})
 
-  const { data, loading, error } = useQuery(query, {
-    variables: {
-      id,
-    },
-  })
+    const { data, loading, error } = useQuery(query, {
+      variables: {
+        id,
+      },
+    })
 
-  const row = useMemo(() => data?.zielberById ?? {}, [data?.zielberById])
+    const row = useMemo(() => data?.zielberById ?? {}, [data?.zielberById])
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+    const saveToDb = useCallback(
+      async (event) => {
+        const field = event.target.name
+        const value = ifIsNumericAsNumber(event.target.value)
 
-      const variables = {
-        id: row.id,
-        [field]: value,
-        changedBy: store.user.name,
-      }
-      try {
-        await client.mutate({
-          mutation: gql`
+        const variables = {
+          id: row.id,
+          [field]: value,
+          changedBy: store.user.name,
+        }
+        try {
+          await client.mutate({
+            mutation: gql`
             mutation updateZielber(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -91,60 +92,61 @@ export const Component = observer(() => {
             }
             ${zielberFragment}
           `,
-          variables,
-        })
-      } catch (error) {
-        return setFieldErrors({ [field]: error.message })
-      }
-      setFieldErrors({})
-      if (['jahr', 'erreichung'].includes(field)) {
-        queryClient.invalidateQueries({
-          queryKey: [`treeZielber`],
-        })
-      }
-    },
-    [client, queryClient, row.id, store.user.name],
-  )
+            variables,
+          })
+        } catch (error) {
+          return setFieldErrors({ [field]: error.message })
+        }
+        setFieldErrors({})
+        if (['jahr', 'erreichung'].includes(field)) {
+          queryClient.invalidateQueries({
+            queryKey: [`treeZielber`],
+          })
+        }
+      },
+      [client, queryClient, row.id, store.user.name],
+    )
 
-  if (loading) return <Spinner />
+    if (loading) return <Spinner />
 
-  if (error) return <Error error={error} />
+    if (error) return <Error error={error} />
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle
-          title="Ziel-Bericht"
-          menuBar={<Menu row={row} />}
-        />
-        <FormContainer>
-          <TextField
-            name="jahr"
-            label="Jahr"
-            type="number"
-            value={row.jahr}
-            saveToDb={saveToDb}
-            error={fieldErrors.jahr}
+    return (
+      <ErrorBoundary>
+        <Container>
+          <FormTitle
+            title="Ziel-Bericht"
+            menuBar={<Menu row={row} />}
           />
-          <TextField
-            name="erreichung"
-            label="Ziel-Erreichung"
-            type="text"
-            value={row.erreichung}
-            saveToDb={saveToDb}
-            error={fieldErrors.erreichung}
-          />
-          <TextField
-            name="bemerkungen"
-            label="Bemerkungen"
-            type="text"
-            multiLine
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={fieldErrors.bemerkungen}
-          />
-        </FormContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-})
+          <FormContainer>
+            <TextField
+              name="jahr"
+              label="Jahr"
+              type="number"
+              value={row.jahr}
+              saveToDb={saveToDb}
+              error={fieldErrors.jahr}
+            />
+            <TextField
+              name="erreichung"
+              label="Ziel-Erreichung"
+              type="text"
+              value={row.erreichung}
+              saveToDb={saveToDb}
+              error={fieldErrors.erreichung}
+            />
+            <TextField
+              name="bemerkungen"
+              label="Bemerkungen"
+              type="text"
+              multiLine
+              value={row.bemerkungen}
+              saveToDb={saveToDb}
+              error={fieldErrors.bemerkungen}
+            />
+          </FormContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  }),
+)
