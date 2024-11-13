@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useEffect } from 'react'
+import { memo, useCallback, useContext, useState, useEffect } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
@@ -28,94 +28,96 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 
-export const TpopFilter = observer(() => {
-  const store = useContext(StoreContext)
+export const TpopFilter = memo(
+  observer(() => {
+    const store = useContext(StoreContext)
 
-  const { dataFilter, tpopGqlFilter, dataFilterSetValue } = store.tree
+    const { dataFilter, tpopGqlFilter, dataFilterSetValue } = store.tree
 
-  const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
-  const onChangeTab = useCallback((event, value) => setTab(value), [setTab])
+    const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
+    const onChangeTab = useCallback((event, value) => setTab(value), [setTab])
 
-  const [activeTab, setActiveTab] = useState(0)
-  useEffect(() => {
-    if (dataFilter.tpop.length - 1 < activeTab) {
-      // filter was emptied, need to set correct tab
-      setActiveTab(0)
-    }
-  }, [activeTab, dataFilter.tpop.length])
+    const [activeTab, setActiveTab] = useState(0)
+    useEffect(() => {
+      if (dataFilter.tpop.length - 1 < activeTab) {
+        // filter was emptied, need to set correct tab
+        setActiveTab(0)
+      }
+    }, [activeTab, dataFilter.tpop.length])
 
-  const { data: dataTpops, error } = useQuery(queryTpops, {
-    variables: {
-      filteredFilter: tpopGqlFilter.filtered,
-      allFilter: tpopGqlFilter.all,
-    },
-  })
+    const { data: dataTpops, error } = useQuery(queryTpops, {
+      variables: {
+        filteredFilter: tpopGqlFilter.filtered,
+        allFilter: tpopGqlFilter.all,
+      },
+    })
 
-  const row = dataFilter.tpop[activeTab]
+    const row = dataFilter.tpop[activeTab]
 
-  const [fieldErrors, setFieldErrors] = useState({})
-  const saveToDb = useCallback(
-    async (event) =>
-      dataFilterSetValue({
-        table: 'tpop',
-        key: event.target.name,
-        value: ifIsNumericAsNumber(event.target.value),
-        index: activeTab,
-      }),
-    [activeTab, dataFilterSetValue],
-  )
+    const [fieldErrors, setFieldErrors] = useState({})
+    const saveToDb = useCallback(
+      async (event) =>
+        dataFilterSetValue({
+          table: 'tpop',
+          key: event.target.name,
+          value: ifIsNumericAsNumber(event.target.value),
+          index: activeTab,
+        }),
+      [activeTab, dataFilterSetValue],
+    )
 
-  if (error) return <Error error={error} />
+    if (error) return <Error error={error} />
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FilterTitle
-          title="Teil-Population"
-          table="tpop"
-          totalNr={dataTpops?.allTpops?.totalCount ?? '...'}
-          filteredNr={dataTpops?.allTpopsFiltered?.totalCount ?? '...'}
-          activeTab={activeTab}
-        />
-        <ActiveFilters />
-        <Tabs
-          dataFilter={dataFilter.tpop}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
-        <MuiTabs
-          value={tab}
-          onChange={onChangeTab}
-          indicatorColor="primary"
-          textColor="primary"
-          centered
-        >
-          <StyledTab
-            label="Teil-Population"
-            value="tpop"
-            data-id="tpop"
+    return (
+      <ErrorBoundary>
+        <Container>
+          <FilterTitle
+            title="Teil-Population"
+            table="tpop"
+            totalNr={dataTpops?.allTpops?.totalCount ?? '...'}
+            filteredNr={dataTpops?.allTpopsFiltered?.totalCount ?? '...'}
+            activeTab={activeTab}
           />
-          <StyledTab
-            label="EK"
-            value="ek"
-            data-id="ek"
+          <ActiveFilters />
+          <Tabs
+            dataFilter={dataFilter.tpop}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
           />
-        </MuiTabs>
-        {tab === 'tpop' ?
-          <Tpop
-            saveToDb={saveToDb}
-            fieldErrors={fieldErrors}
-            setFieldErrors={setFieldErrors}
-            row={row}
-            rowStringified={JSON.stringify(row)}
-          />
-        : <Ek
-            saveToDb={saveToDb}
-            fieldErrors={fieldErrors}
-            row={row}
-          />
-        }
-      </Container>
-    </ErrorBoundary>
-  )
-})
+          <MuiTabs
+            value={tab}
+            onChange={onChangeTab}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+          >
+            <StyledTab
+              label="Teil-Population"
+              value="tpop"
+              data-id="tpop"
+            />
+            <StyledTab
+              label="EK"
+              value="ek"
+              data-id="ek"
+            />
+          </MuiTabs>
+          {tab === 'tpop' ?
+            <Tpop
+              saveToDb={saveToDb}
+              fieldErrors={fieldErrors}
+              setFieldErrors={setFieldErrors}
+              row={row}
+              rowStringified={JSON.stringify(row)}
+            />
+          : <Ek
+              saveToDb={saveToDb}
+              fieldErrors={fieldErrors}
+              row={row}
+            />
+          }
+        </Container>
+      </ErrorBoundary>
+    )
+  }),
+)
