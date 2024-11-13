@@ -32,7 +32,6 @@ import { useSearchParamsState } from '../../../../modules/useSearchParamsState.j
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 
-const iconStyle = { color: 'white' }
 // unfortunately, toggle buttons are different from icon buttons...
 const RoundToggleButton = styled(ToggleButton)`
   border-radius: 50%;
@@ -45,12 +44,13 @@ const RoundToggleButton = styled(ToggleButton)`
 `
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: ${(props) =>
-    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'inherit'};
+    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
 `
 const CopyIcon = styled(MdContentCopy)`
   color: ${(props) =>
-    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'inherit'};
+    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
 `
+const iconStyle = { color: 'white' }
 
 export const Menu = memo(
   observer(({ row }) => {
@@ -65,6 +65,10 @@ export const Menu = memo(
       idOfTpopBeingLocalized,
       activeApfloraLayers,
       setActiveApfloraLayers,
+      setMoving,
+      moving,
+      setCopying,
+      copying,
     } = store
 
     const onClickAdd = useCallback(async () => {
@@ -233,6 +237,9 @@ export const Menu = memo(
       setActiveApfloraLayers,
       idOfTpopBeingLocalized,
     ])
+    const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
+    const thisTpopIsMoving = moving.id === tpopId
+    const tpopMovingFromThisPop = moving.fromParentId === popId
 
     return (
       <ErrorBoundary>
