@@ -307,6 +307,15 @@ export const Menu = memo(
       setCopying,
     ])
 
+    const onClickStopCopying = useCallback(() => {
+      setCopying({
+        table: null,
+        id: '99999999-9999-9999-9999-999999999999',
+        label: null,
+        withNextLevel: false,
+      })
+    }, [setCopying])
+
     return (
       <ErrorBoundary>
         <MenuBar
@@ -371,12 +380,22 @@ export const Menu = memo(
           )}
           <IconButton
             title={
-              isCopying ? `Kopiere '${copying.label}' in diese Art` : 'Kopieren'
+              isCopying
+                ? `Kopiere '${copying.label}' in diese Population`
+                : 'Kopieren'
             }
             onClick={onClickCopy}
           >
             <CopyIcon copying={thisTpopIsCopying.toString()} />
           </IconButton>
+          {isCopying && (
+            <IconButton
+              title={`Kopieren von '${copying.label}' abbrechen`}
+              onClick={onClickStopCopying}
+            >
+              <BsSignStopFill style={iconStyle} />
+            </IconButton>
+          )}
         </MenuBar>
         <MuiMenu
           id="tpopDelMenu"

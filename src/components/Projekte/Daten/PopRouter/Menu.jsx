@@ -194,15 +194,22 @@ export const Menu = memo(
       })
     }, [setMoving])
 
-    const isCopying =
-      copying.id !== '99999999-9999-9999-9999-999999999999' &&
-      !!copying.id &&
-      copying.table === 'pop'
+    const isCopyingPop = copying.table === 'pop'
     const thisPopIsCopying = copying.id === popId
+    const isCopyingTpop = copying.table === 'tpop'
 
-    const onClickCopy = useCallback(
+    const onClickPasteTpop = useCallback(() => {
+      copyTo({
+        parentId: popId,
+        client,
+        store,
+        tanstackQueryClient,
+      })
+    }, [popId, client, store, tanstackQueryClient])
+
+    const onClickCopyPop = useCallback(
       (withNextLevel) => {
-        if (isCopying) {
+        if (isCopyingPop) {
           // copy to this ap
           return copyTo({
             parentId: apId,
@@ -220,7 +227,7 @@ export const Menu = memo(
         setCopyMenuAnchorEl(null)
       },
       [
-        isCopying,
+        isCopyingPop,
         copyTo,
         apId,
         client,
@@ -232,12 +239,12 @@ export const Menu = memo(
       ],
     )
     const onClickCopyWithoutNextLevel = useCallback(
-      () => onClickCopy(false),
-      [onClickCopy],
+      () => onClickCopyPop(false),
+      [onClickCopyPop],
     )
     const onClickCopyWithNextLevel = useCallback(
-      () => onClickCopy(true),
-      [onClickCopy],
+      () => onClickCopyPop(true),
+      [onClickCopyPop],
     )
 
     const onClickStopCopying = useCallback(() => {
@@ -254,12 +261,9 @@ export const Menu = memo(
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${isMoving}/${isCopying}/${popMovingFromThisAp}`}
+          rerenderer={`${isMoving}/${isCopyingPop}/${popMovingFromThisAp}`}
         >
-          <IconButton
-            title="Neue Population erstellen"
-            onClick={onClickAdd}
-          >
+          <IconButton title="Neue Population erstellen" onClick={onClickAdd}>
             <FaPlus style={iconStyle} />
           </IconButton>
           <IconButton
@@ -283,15 +287,15 @@ export const Menu = memo(
           </IconButton>
           <IconButton
             title={
-              !isMoving && !isTpopMoving ?
-                `'${row.label}' zu einer anderen Art verschieben`
-              : thisPopIsMoving ?
-                'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
-              : popMovingFromThisAp ?
-                `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
-              : isTpopMoving ?
-                `Verschiebe '${moving.label}' zu dieser Population`
-              : `Verschiebe '${moving.label}' zu dieser Art`
+              !isMoving && !isTpopMoving
+                ? `'${row.label}' zu einer anderen Art verschieben`
+                : thisPopIsMoving
+                  ? 'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
+                  : popMovingFromThisAp
+                    ? `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
+                    : isTpopMoving
+                      ? `Verschiebe '${moving.label}' zu dieser Population`
+                      : `Verschiebe '${moving.label}' zu dieser Art`
             }
             onClick={onClickMoveInTree}
           >
@@ -307,18 +311,24 @@ export const Menu = memo(
           )}
           <IconButton
             title={
-              isCopying ? `Kopiere '${copying.label}' in diese Art` : 'Kopieren'
+              isCopyingPop
+                ? `Kopiere '${copying.label}' in diese Art`
+                : isCopyingTpop
+                  ? `Kopiere '${copying.label}' in diese Population`
+                  : 'Kopieren'
             }
             onClick={(event) =>
-              isCopying ? onClickCopy() : (
-                setCopyMenuAnchorEl(event.currentTarget)
-              )
+              isCopyingTpop
+                ? onClickPasteTpop()
+                : isCopyingPop
+                  ? onClickCopyPop()
+                  : setCopyMenuAnchorEl(event.currentTarget)
             }
             aria-owns={copyMenuOpen ? 'copyMenu' : undefined}
           >
             <CopyIcon copying={thisPopIsCopying.toString()} />
           </IconButton>
-          {isCopying && (
+          {(isCopyingPop || isCopyingTpop) && (
             <IconButton
               title={`Kopieren von '${copying.label}' abbrechen`}
               onClick={onClickStopCopying}
