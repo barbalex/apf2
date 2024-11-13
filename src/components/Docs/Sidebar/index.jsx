@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
 import { Link, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
@@ -31,25 +31,27 @@ const MenuTitleLink = styled(Link)`
   }
 `
 
-export const Sidebar = observer(() => {
-  const { search } = useLocation()
+export const Sidebar = memo(
+  observer(() => {
+    const { search } = useLocation()
 
-  const store = useContext(StoreContext)
-  const { dokuFilter, setDokuFilter } = store
+    const store = useContext(StoreContext)
+    const { dokuFilter, setDokuFilter } = store
 
-  return (
-    <Menu>
-      <MenuTitle>
-        <MenuTitleLink to={`/Dokumentation/${search}`}>
-          Dokumentation
-        </MenuTitleLink>
-        <Filter
-          filter={dokuFilter}
-          setFilter={setDokuFilter}
-        />
-      </MenuTitle>
-      <MenuItems />
-      <IntoViewScroller />
-    </Menu>
-  )
-})
+    return (
+      <Menu>
+        <MenuTitle>
+          <MenuTitleLink to={`/Dokumentation/${search}`}>
+            Dokumentation
+          </MenuTitleLink>
+          <Filter
+            filter={dokuFilter}
+            setFilter={setDokuFilter}
+          />
+        </MenuTitle>
+        <MenuItems />
+        <IntoViewScroller />
+      </Menu>
+    )
+  }),
+)

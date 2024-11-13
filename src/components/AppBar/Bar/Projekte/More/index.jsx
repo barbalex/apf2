@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react'
+import { memo, useContext, useState, useCallback } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
@@ -27,8 +27,8 @@ const Version = styled.div`
   user-select: none;
 `
 
-export const More = observer(
-  ({ onClickExporte: passedOnClickExporte, role }) => {
+export const More = memo(
+  observer(({ onClickExporte: passedOnClickExporte, role }) => {
     const { projId } = useParams()
 
     const store = useContext(StoreContext)
@@ -119,5 +119,5 @@ export const More = observer(
         </Menu>
       </Container>
     )
-  },
+  }),
 )
