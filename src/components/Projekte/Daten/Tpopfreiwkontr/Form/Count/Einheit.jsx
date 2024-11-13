@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from 'react'
+import { memo, useCallback, useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
@@ -33,61 +33,63 @@ const EinheitLabel = styled(Label)`
   margin-top: 5px;
 `
 
-export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
-  const store = useContext(StoreContext)
-  const client = useApolloClient()
-  const queryClient = useQueryClient()
+export const Einheit = memo(
+  observer(({ nr, row, refetch, zaehleinheitWerte }) => {
+    const store = useContext(StoreContext)
+    const client = useApolloClient()
+    const queryClient = useQueryClient()
 
-  const [error, setErrors] = useState(null)
+    const [error, setErrors] = useState(null)
 
-  const onChange = useCallback(
-    async (event) => {
-      const val = ifIsNumericAsNumber(event.target.value)
-      const variables = {
-        id: row.id,
-        anzahl: row.anzahl,
-        methode: row.methode,
-        einheit: val,
-        changedBy: store.user.name,
-      }
-      try {
-        await client.mutate({
-          mutation: updateTpopkontrzaehlById,
-          variables,
+    const onChange = useCallback(
+      async (event) => {
+        const val = ifIsNumericAsNumber(event.target.value)
+        const variables = {
+          id: row.id,
+          anzahl: row.anzahl,
+          methode: row.methode,
+          einheit: val,
+          changedBy: store.user.name,
+        }
+        try {
+          await client.mutate({
+            mutation: updateTpopkontrzaehlById,
+            variables,
+          })
+        } catch (error) {
+          return setErrors(error.message)
+        }
+        refetch()
+        queryClient.invalidateQueries({
+          queryKey: [`treeTpopfreiwkontrzaehl`],
         })
-      } catch (error) {
-        return setErrors(error.message)
-      }
-      refetch()
-      queryClient.invalidateQueries({
-        queryKey: [`treeTpopfreiwkontrzaehl`],
-      })
-    },
-    [
-      client,
-      queryClient,
-      refetch,
-      row.anzahl,
-      row.id,
-      row.methode,
-      store.user.name,
-    ],
-  )
+      },
+      [
+        client,
+        queryClient,
+        refetch,
+        row.anzahl,
+        row.id,
+        row.methode,
+        store.user.name,
+      ],
+    )
 
-  return (
-    <>
-      <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-      <EinheitVal>
-        <Select
-          value={row.einheit}
-          label=""
-          name="einheit"
-          error={error}
-          options={zaehleinheitWerte}
-          saveToDb={onChange}
-          noCaret
-        />
-      </EinheitVal>
-    </>
-  )
-})
+    return (
+      <>
+        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+        <EinheitVal>
+          <Select
+            value={row.einheit}
+            label=""
+            name="einheit"
+            error={error}
+            options={zaehleinheitWerte}
+            saveToDb={onChange}
+            noCaret
+          />
+        </EinheitVal>
+      </>
+    )
+  }),
+)
