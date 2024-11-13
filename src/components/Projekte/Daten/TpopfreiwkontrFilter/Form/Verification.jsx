@@ -1,6 +1,5 @@
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { RadioButton } from '../../../../shared/RadioButton.jsx'
 import { TextField2 } from '../../../../shared/TextField2.jsx'
@@ -42,7 +41,7 @@ const Grund = styled.div`
   }
 `
 
-export const Verification = observer(({ saveToDb, row }) => {
+export const Verification = memo(({ saveToDb, row }) => {
   const onSaveTrue = useCallback(() => {
     const fakeEvent = {
       target: {

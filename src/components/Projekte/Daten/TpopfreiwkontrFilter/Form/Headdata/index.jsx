@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
@@ -44,39 +44,41 @@ const BearbVal = styled.div`
   }
 `
 
-export const Headdata = observer(({ row, activeTab }) => {
-  const store = useContext(StoreContext)
-  const { dataFilterSetValue } = store.tree
-  const { data, loading, error } = useQuery(query)
+export const Headdata = memo(
+  observer(({ row, activeTab }) => {
+    const store = useContext(StoreContext)
+    const { dataFilterSetValue } = store.tree
+    const { data, loading, error } = useQuery(query)
 
-  const saveToDb = useCallback(
-    async (event) => {
-      dataFilterSetValue({
-        table: 'tpopfreiwkontr',
-        key: 'bearbeiter',
-        value: event.target.value,
-        index: activeTab,
-      })
-    },
-    [activeTab, dataFilterSetValue],
-  )
+    const saveToDb = useCallback(
+      async (event) => {
+        dataFilterSetValue({
+          table: 'tpopfreiwkontr',
+          key: 'bearbeiter',
+          value: event.target.value,
+          index: activeTab,
+        })
+      },
+      [activeTab, dataFilterSetValue],
+    )
 
-  if (error) return <Error error={error} />
+    if (error) return <Error error={error} />
 
-  return (
-    <Container>
-      <BearbLabel>BeobachterIn</BearbLabel>
-      <BearbVal>
-        <Select
-          key={`${row?.id}${activeTab}bearbeiter`}
-          name="bearbeiter"
-          value={row?.bearbeiter}
-          field="bearbeiter"
-          options={data?.allAdresses?.nodes ?? []}
-          loading={loading}
-          saveToDb={saveToDb}
-        />
-      </BearbVal>
-    </Container>
-  )
-})
+    return (
+      <Container>
+        <BearbLabel>BeobachterIn</BearbLabel>
+        <BearbVal>
+          <Select
+            key={`${row?.id}${activeTab}bearbeiter`}
+            name="bearbeiter"
+            value={row?.bearbeiter}
+            field="bearbeiter"
+            options={data?.allAdresses?.nodes ?? []}
+            loading={loading}
+            saveToDb={saveToDb}
+          />
+        </BearbVal>
+      </Container>
+    )
+  }),
+)

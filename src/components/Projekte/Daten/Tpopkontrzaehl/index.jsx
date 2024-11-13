@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from 'react'
+import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
@@ -41,50 +41,51 @@ const fieldTypes = {
   methode: 'Int',
 }
 
-export const Component = observer(() => {
-  const { tpopkontrzaehlId, tpopkontrId } = useParams()
+export const Component = memo(
+  observer(() => {
+    const { tpopkontrzaehlId, tpopkontrId } = useParams()
 
-  const client = useApolloClient()
-  const queryClient = useQueryClient()
-  const store = useContext(StoreContext)
+    const client = useApolloClient()
+    const queryClient = useQueryClient()
+    const store = useContext(StoreContext)
 
-  const [fieldErrors, setFieldErrors] = useState({})
+    const [fieldErrors, setFieldErrors] = useState({})
 
-  const { data, loading, error } = useQuery(query, {
-    variables: {
-      id: tpopkontrzaehlId,
-      tpopkontrId,
-    },
-  })
+    const { data, loading, error } = useQuery(query, {
+      variables: {
+        id: tpopkontrzaehlId,
+        tpopkontrId,
+      },
+    })
 
-  const zaehlEinheitCodesAlreadyUsed = (data?.otherZaehlOfEk?.nodes ?? [])
-    .map((n) => n.einheit)
-    // prevent null values which cause error in query
-    .filter((e) => !!e)
+    const zaehlEinheitCodesAlreadyUsed = (data?.otherZaehlOfEk?.nodes ?? [])
+      .map((n) => n.einheit)
+      // prevent null values which cause error in query
+      .filter((e) => !!e)
 
-  // filter out already used in other zaehlung of same kontr
-  const zaehlEinheitOptions = (
-    data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
-  ).filter((o) => !zaehlEinheitCodesAlreadyUsed.includes(o.value))
+    // filter out already used in other zaehlung of same kontr
+    const zaehlEinheitOptions = (
+      data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+    ).filter((o) => !zaehlEinheitCodesAlreadyUsed.includes(o.value))
 
-  const row = useMemo(
-    () => data?.tpopkontrzaehlById ?? {},
-    [data?.tpopkontrzaehlById],
-  )
+    const row = useMemo(
+      () => data?.tpopkontrzaehlById ?? {},
+      [data?.tpopkontrzaehlById],
+    )
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+    const saveToDb = useCallback(
+      async (event) => {
+        const field = event.target.name
+        const value = ifIsNumericAsNumber(event.target.value)
 
-      const variables = {
-        id: row.id,
-        [field]: value,
-        changedBy: store.user.name,
-      }
-      try {
-        await client.mutate({
-          mutation: gql`
+        const variables = {
+          id: row.id,
+          [field]: value,
+          changedBy: store.user.name,
+        }
+        try {
+          await client.mutate({
+            mutation: gql`
             mutation updateAnzahlForEkZaehl(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -106,60 +107,61 @@ export const Component = observer(() => {
             }
             ${tpopkontrzaehl}
           `,
-          variables,
+            variables,
+          })
+        } catch (error) {
+          return setFieldErrors({ [field]: error.message })
+        }
+        setFieldErrors({})
+        queryClient.invalidateQueries({
+          queryKey: [`treeTpopfeldkontrzaehl`],
         })
-      } catch (error) {
-        return setFieldErrors({ [field]: error.message })
-      }
-      setFieldErrors({})
-      queryClient.invalidateQueries({
-        queryKey: [`treeTpopfeldkontrzaehl`],
-      })
-    },
-    [client, queryClient, row.id, store.user.name],
-  )
+      },
+      [client, queryClient, row.id, store.user.name],
+    )
 
-  // console.log('Tpopkontrzaehl rendering')
+    // console.log('Tpopkontrzaehl rendering')
 
-  if (loading) return <Spinner />
+    if (loading) return <Spinner />
 
-  if (error) return <Error errors={[error]} />
+    if (error) return <Error errors={[error]} />
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle
-          title="Zählung"
-          menuBar={<Menu row={row} />}
-        />
-        <FormContainer>
-          <Select
-            name="einheit"
-            label="Einheit"
-            options={zaehlEinheitOptions}
-            loading={loading}
-            value={row.einheit}
-            saveToDb={saveToDb}
-            error={fieldErrors.einheit}
+    return (
+      <ErrorBoundary>
+        <Container>
+          <FormTitle
+            title="Zählung"
+            menuBar={<Menu row={row} />}
           />
-          <TextField
-            name="anzahl"
-            label="Anzahl"
-            type="number"
-            value={row.anzahl}
-            saveToDb={saveToDb}
-            error={fieldErrors.anzahl}
-          />
-          <RadioButtonGroup
-            name="methode"
-            label="Methode"
-            dataSource={data?.allTpopkontrzaehlMethodeWertes?.nodes ?? []}
-            value={row.methode}
-            saveToDb={saveToDb}
-            error={fieldErrors.methode}
-          />
-        </FormContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-})
+          <FormContainer>
+            <Select
+              name="einheit"
+              label="Einheit"
+              options={zaehlEinheitOptions}
+              loading={loading}
+              value={row.einheit}
+              saveToDb={saveToDb}
+              error={fieldErrors.einheit}
+            />
+            <TextField
+              name="anzahl"
+              label="Anzahl"
+              type="number"
+              value={row.anzahl}
+              saveToDb={saveToDb}
+              error={fieldErrors.anzahl}
+            />
+            <RadioButtonGroup
+              name="methode"
+              label="Methode"
+              dataSource={data?.allTpopkontrzaehlMethodeWertes?.nodes ?? []}
+              value={row.methode}
+              saveToDb={saveToDb}
+              error={fieldErrors.methode}
+            />
+          </FormContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  }),
+)
