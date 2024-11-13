@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react'
+import { memo, useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
@@ -6,92 +6,94 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-export const AnzMassn = observer(() => {
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const { enqueNotification } = store
+export const AnzMassn = memo(
+  observer(() => {
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { enqueNotification } = store
 
-  const [queryState, setQueryState] = useState()
+    const [queryState, setQueryState] = useState()
 
-  const onClickAnzMassnProAp = useCallback(async () => {
-    setQueryState('lade Daten...')
-    let result
-    try {
-      result = await client.query({
-        query: gql`
-          query apAnzmassnsForExportQuery {
-            allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
-              nodes {
-                id
-                aeTaxonomyByArtId {
+    const onClickAnzMassnProAp = useCallback(async () => {
+      setQueryState('lade Daten...')
+      let result
+      try {
+        result = await client.query({
+          query: gql`
+            query apAnzmassnsForExportQuery {
+              allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
+                nodes {
                   id
-                  artname
-                }
-                apBearbstandWerteByBearbeitung {
-                  id
-                  text
-                }
-                startJahr
-                apUmsetzungWerteByUmsetzung {
-                  id
-                  text
-                }
-                vApAnzmassnsById {
-                  nodes {
+                  aeTaxonomyByArtId {
                     id
-                    anzahlMassnahmen
+                    artname
+                  }
+                  apBearbstandWerteByBearbeitung {
+                    id
+                    text
+                  }
+                  startJahr
+                  apUmsetzungWerteByUmsetzung {
+                    id
+                    text
+                  }
+                  vApAnzmassnsById {
+                    nodes {
+                      id
+                      anzahlMassnahmen
+                    }
                   }
                 }
               }
             }
-          }
-        `,
+          `,
+        })
+      } catch (error) {
+        enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      setQueryState('verarbeite...')
+      const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
+        id: z.id,
+        artname: z?.aeTaxonomyByArtId?.artname ?? '',
+        bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
+        start_jahr: z.startJahr,
+        umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
+        anzahl_kontrollen:
+          z?.vApAnzmassnsById?.nodes?.[0]?.anzahlMassnahmen ?? '',
+      }))
+      if (rows.length === 0) {
+        setQueryState(undefined)
+        return enqueNotification({
+          message: 'Die Abfrage retournierte 0 Datensätze',
+          options: {
+            variant: 'warning',
+          },
+        })
+      }
+      exportModule({
+        data: rows,
+        fileName: 'ApAnzahlMassnahmen',
+        store,
       })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
-      id: z.id,
-      artname: z?.aeTaxonomyByArtId?.artname ?? '',
-      bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-      start_jahr: z.startJahr,
-      umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      anzahl_kontrollen:
-        z?.vApAnzmassnsById?.nodes?.[0]?.anzahlMassnahmen ?? '',
-    }))
-    if (rows.length === 0) {
       setQueryState(undefined)
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: rows,
-      fileName: 'ApAnzahlMassnahmen',
-      store,
-    })
-    setQueryState(undefined)
-  }, [enqueNotification, client, store])
+    }, [enqueNotification, client, store])
 
-  return (
-    <DownloadCardButton
-      onClick={onClickAnzMassnProAp}
-      color="inherit"
-      disabled={!!queryState}
-    >
-      Anzahl Massnahmen pro Art
-      {queryState ?
-        <StyledProgressText>{queryState}</StyledProgressText>
-      : null}
-    </DownloadCardButton>
-  )
-})
+    return (
+      <DownloadCardButton
+        onClick={onClickAnzMassnProAp}
+        color="inherit"
+        disabled={!!queryState}
+      >
+        Anzahl Massnahmen pro Art
+        {queryState ?
+          <StyledProgressText>{queryState}</StyledProgressText>
+        : null}
+      </DownloadCardButton>
+    )
+  }),
+)

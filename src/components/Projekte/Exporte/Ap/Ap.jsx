@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react'
+import { memo, useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
@@ -6,99 +6,101 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-export const Ap = observer(({ filtered = false }) => {
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const { enqueNotification, tableIsFiltered } = store
-  const { apGqlFilter } = store.tree
+export const Ap = memo(
+  observer(({ filtered = false }) => {
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { enqueNotification, tableIsFiltered } = store
+    const { apGqlFilter } = store.tree
 
-  const [queryState, setQueryState] = useState()
+    const [queryState, setQueryState] = useState()
 
-  const onClickAp = useCallback(async () => {
-    setQueryState('lade Daten...')
-    let result
-    try {
-      result = await client.query({
-        query: gql`
-          query apForExportQuery($filter: ApFilter) {
-            allAps(
-              filter: $filter
-              orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
-            ) {
-              nodes {
-                id
-                aeTaxonomyByArtId {
+    const onClickAp = useCallback(async () => {
+      setQueryState('lade Daten...')
+      let result
+      try {
+        result = await client.query({
+          query: gql`
+            query apForExportQuery($filter: ApFilter) {
+              allAps(
+                filter: $filter
+                orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
+              ) {
+                nodes {
                   id
-                  artname
+                  aeTaxonomyByArtId {
+                    id
+                    artname
+                  }
+                  apBearbstandWerteByBearbeitung {
+                    id
+                    text
+                  }
+                  startJahr
+                  apUmsetzungWerteByUmsetzung {
+                    id
+                    text
+                  }
+                  createdAt
+                  updatedAt
+                  changedBy
                 }
-                apBearbstandWerteByBearbeitung {
-                  id
-                  text
-                }
-                startJahr
-                apUmsetzungWerteByUmsetzung {
-                  id
-                  text
-                }
-                createdAt
-                updatedAt
-                changedBy
               }
             }
-          }
-        `,
-        variables: {
-          filter: filtered ? apGqlFilter.filtered : { or: [] },
-        },
+          `,
+          variables: {
+            filter: filtered ? apGqlFilter.filtered : { or: [] },
+          },
+        })
+      } catch (error) {
+        enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      setQueryState('verarbeite...')
+      const rows = (result.data?.allAps?.nodes ?? []).map((n) => ({
+        id: n.id,
+        artname: n?.aeTaxonomyByArtId?.artname ?? null,
+        bearbeitung: n?.apBearbstandWerteByBearbeitung?.text ?? null,
+        startJahr: n.startJahr,
+        umsetzung: n?.apUmsetzungWerteByUmsetzung?.text ?? null,
+        createdAt: n.createdAt,
+        updatedAt: n.updatedAt,
+        changedBy: n.changedBy,
+      }))
+      if (rows.length === 0) {
+        setQueryState(undefined)
+        return enqueNotification({
+          message: 'Die Abfrage retournierte 0 Datensätze',
+          options: {
+            variant: 'warning',
+          },
+        })
+      }
+      exportModule({
+        data: rows,
+        fileName: `Arten${filtered ? '_gefiltert' : ''}`,
+        store,
       })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? []).map((n) => ({
-      id: n.id,
-      artname: n?.aeTaxonomyByArtId?.artname ?? null,
-      bearbeitung: n?.apBearbstandWerteByBearbeitung?.text ?? null,
-      startJahr: n.startJahr,
-      umsetzung: n?.apUmsetzungWerteByUmsetzung?.text ?? null,
-      createdAt: n.createdAt,
-      updatedAt: n.updatedAt,
-      changedBy: n.changedBy,
-    }))
-    if (rows.length === 0) {
       setQueryState(undefined)
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: rows,
-      fileName: `Arten${filtered ? '_gefiltert' : ''}`,
-      store,
-    })
-    setQueryState(undefined)
-  }, [apGqlFilter, client, enqueNotification, filtered, store])
+    }, [apGqlFilter, client, enqueNotification, filtered, store])
 
-  const apIsFiltered = tableIsFiltered('ap')
+    const apIsFiltered = tableIsFiltered('ap')
 
-  return (
-    <DownloadCardButton
-      onClick={onClickAp}
-      color="inherit"
-      disabled={!!queryState || (filtered && !apIsFiltered)}
-    >
-      {filtered ? 'Arten (gefiltert)' : 'Arten'}
-      {queryState ?
-        <StyledProgressText>{queryState}</StyledProgressText>
-      : null}
-    </DownloadCardButton>
-  )
-})
+    return (
+      <DownloadCardButton
+        onClick={onClickAp}
+        color="inherit"
+        disabled={!!queryState || (filtered && !apIsFiltered)}
+      >
+        {filtered ? 'Arten (gefiltert)' : 'Arten'}
+        {queryState ?
+          <StyledProgressText>{queryState}</StyledProgressText>
+        : null}
+      </DownloadCardButton>
+    )
+  }),
+)
