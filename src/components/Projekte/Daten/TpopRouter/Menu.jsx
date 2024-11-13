@@ -349,13 +349,13 @@ export const Menu = memo(
           </RoundToggleButton>
           <IconButton
             title={
-              !isMoving ?
-                `'${row.label}' zu einer anderen Population verschieben`
-              : thisTpopIsMoving ?
-                'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
-              : tpopMovingFromThisPop ?
-                `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
-              : `Verschiebe '${moving.label}' zu dieser Population`
+              !isMoving
+                ? `'${row.label}' zu einer anderen Population verschieben`
+                : thisTpopIsMoving
+                  ? 'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
+                  : tpopMovingFromThisPop
+                    ? `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
+                    : `Verschiebe '${moving.label}' zu dieser Population`
             }
             onClick={onClickMoveInTree}
           >
@@ -369,6 +369,14 @@ export const Menu = memo(
               <BsSignStopFill style={iconStyle} />
             </IconButton>
           )}
+          <IconButton
+            title={
+              isCopying ? `Kopiere '${copying.label}' in diese Art` : 'Kopieren'
+            }
+            onClick={onClickCopy}
+          >
+            <CopyIcon copying={thisTpopIsCopying.toString()} />
+          </IconButton>
         </MenuBar>
         <MuiMenu
           id="tpopDelMenu"
