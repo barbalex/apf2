@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import Input from '@mui/material/Input'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 
@@ -13,7 +12,7 @@ const StyledInput = styled(Input)`
   }
 `
 
-export const KontrolljahrField = observer(
+export const KontrolljahrField = memo(
   ({ saveToDb, name = 'kontrolljahre', index, kontrolljahre, refetch }) => {
     const [value, setValue] = useState(kontrolljahre[index])
     useEffect(() => {

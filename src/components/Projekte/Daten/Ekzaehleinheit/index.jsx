@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from 'react'
+import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
@@ -47,56 +47,61 @@ const fieldTypes = {
   sort: 'Int',
 }
 
-const Ekzaehleinheit = () => {
-  const { zaehleinheitId: id } = useParams()
+export const Component = memo(
+  observer(() => {
+    const { zaehleinheitId: id } = useParams()
 
-  const queryClient = useQueryClient()
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
+    const queryClient = useQueryClient()
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
 
-  const [fieldErrors, setFieldErrors] = useState({})
+    const [fieldErrors, setFieldErrors] = useState({})
 
-  const { data, loading, error } = useQuery(query, {
-    variables: {
-      id,
-    },
-  })
+    const { data, loading, error } = useQuery(query, {
+      variables: {
+        id,
+      },
+    })
 
-  const row = useMemo(
-    () => data?.ekzaehleinheitById ?? {},
-    [data?.ekzaehleinheitById],
-  )
+    const row = useMemo(
+      () => data?.ekzaehleinheitById ?? {},
+      [data?.ekzaehleinheitById],
+    )
 
-  const ekzaehleinheitenOfAp = (
-    row?.apByApId?.ekzaehleinheitsByApId?.nodes ?? []
-  ).map((o) => o.zaehleinheitId)
-  // re-add this ones id
-  const notToShow = ekzaehleinheitenOfAp.filter((o) => o !== row.zaehleinheitId)
-  const zaehleinheitWerteFilter =
-    notToShow.length ? { id: { notIn: notToShow } } : { id: { isNull: false } }
-  const {
-    data: dataLists,
-    loading: loadingLists,
-    error: errorLists,
-  } = useQuery(queryLists, {
-    variables: {
-      filter: zaehleinheitWerteFilter,
-    },
-  })
+    const ekzaehleinheitenOfAp = (
+      row?.apByApId?.ekzaehleinheitsByApId?.nodes ?? []
+    ).map((o) => o.zaehleinheitId)
+    // re-add this ones id
+    const notToShow = ekzaehleinheitenOfAp.filter(
+      (o) => o !== row.zaehleinheitId,
+    )
+    const zaehleinheitWerteFilter =
+      notToShow.length ?
+        { id: { notIn: notToShow } }
+      : { id: { isNull: false } }
+    const {
+      data: dataLists,
+      loading: loadingLists,
+      error: errorLists,
+    } = useQuery(queryLists, {
+      variables: {
+        filter: zaehleinheitWerteFilter,
+      },
+    })
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+    const saveToDb = useCallback(
+      async (event) => {
+        const field = event.target.name
+        const value = ifIsNumericAsNumber(event.target.value)
 
-      const variables = {
-        id: row.id,
-        [field]: value,
-        changedBy: store.user.name,
-      }
-      try {
-        await client.mutate({
-          mutation: gql`
+        const variables = {
+          id: row.id,
+          [field]: value,
+          changedBy: store.user.name,
+        }
+        try {
+          await client.mutate({
+            mutation: gql`
             mutation updateEkzaehleinheit(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -122,94 +127,93 @@ const Ekzaehleinheit = () => {
             ${ekzaehleinheit}
             ${tpopkontrzaehlEinheitWerte}
           `,
-          variables,
-        })
-      } catch (error) {
-        if (
-          field === 'zielrelevant' &&
-          (error.message.includes('doppelter Schlüsselwert') ||
-            error.message.includes('duplicate key value'))
-        ) {
-          return setFieldErrors({
-            [field]: 'Pro Art darf nur eine Einheit zielrelevant sein',
+            variables,
+          })
+        } catch (error) {
+          if (
+            field === 'zielrelevant' &&
+            (error.message.includes('doppelter Schlüsselwert') ||
+              error.message.includes('duplicate key value'))
+          ) {
+            return setFieldErrors({
+              [field]: 'Pro Art darf nur eine Einheit zielrelevant sein',
+            })
+          }
+          return setFieldErrors({ [field]: error.message })
+        }
+        setFieldErrors({})
+        if (['zaehleinheitId', 'sort'].includes(field)) {
+          queryClient.invalidateQueries({
+            queryKey: [`treeEkzaehleinheit`],
           })
         }
-        return setFieldErrors({ [field]: error.message })
-      }
-      setFieldErrors({})
-      if (['zaehleinheitId', 'sort'].includes(field)) {
-        queryClient.invalidateQueries({
-          queryKey: [`treeEkzaehleinheit`],
-        })
-      }
-    },
-    [client, queryClient, row.id, store.user.name],
-  )
+      },
+      [client, queryClient, row.id, store.user.name],
+    )
 
-  // console.log('Ekzaehleinheit rendering, loading:', loading)
+    // console.log('Ekzaehleinheit rendering, loading:', loading)
 
-  if (loading) return <Spinner />
+    if (loading) return <Spinner />
 
-  const errors = [
-    ...(error ? [error] : []),
-    ...(errorLists ? [errorLists] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
+    const errors = [
+      ...(error ? [error] : []),
+      ...(errorLists ? [errorLists] : []),
+    ]
+    if (errors.length) return <Error errors={errors} />
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle
-          title="EK-Zähleinheit"
-          menuBar={<Menu row={row} />}
-        />
-        <FormContainer>
-          <Select
-            name="zaehleinheitId"
-            label="Zähleinheit"
-            options={dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
-            loading={loadingLists}
-            value={row.zaehleinheitId}
-            saveToDb={saveToDb}
-            error={fieldErrors.zaehleinheitId}
+    return (
+      <ErrorBoundary>
+        <Container>
+          <FormTitle
+            title="EK-Zähleinheit"
+            menuBar={<Menu row={row} />}
           />
-          <Checkbox2States
-            name="zielrelevant"
-            label="zielrelevant"
-            value={row.zielrelevant}
-            saveToDb={saveToDb}
-            error={fieldErrors.zielrelevant}
-          />
-          {row.zielrelevant && (
-            <Checkbox2States
-              name="notMassnCountUnit"
-              label="Entspricht bewusst keiner Massnahmen-Zähleinheit ('Anzahl Pflanzen' oder 'Anzahl Triebe')"
-              value={row.notMassnCountUnit}
+          <FormContainer>
+            <Select
+              name="zaehleinheitId"
+              label="Zähleinheit"
+              options={dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
+              loading={loadingLists}
+              value={row.zaehleinheitId}
               saveToDb={saveToDb}
-              error={fieldErrors.notMassnCountUnit}
+              error={fieldErrors.zaehleinheitId}
             />
-          )}
-          <TextField
-            name="sort"
-            label="Sortierung"
-            type="number"
-            value={row.sort}
-            saveToDb={saveToDb}
-            error={fieldErrors.sort}
-          />
-          <TextField
-            name="bemerkungen"
-            label="Bemerkungen"
-            type="text"
-            multiLine
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={fieldErrors.bemerkungen}
-          />
-        </FormContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-}
-
-export const Component = observer(Ekzaehleinheit)
+            <Checkbox2States
+              name="zielrelevant"
+              label="zielrelevant"
+              value={row.zielrelevant}
+              saveToDb={saveToDb}
+              error={fieldErrors.zielrelevant}
+            />
+            {row.zielrelevant && (
+              <Checkbox2States
+                name="notMassnCountUnit"
+                label="Entspricht bewusst keiner Massnahmen-Zähleinheit ('Anzahl Pflanzen' oder 'Anzahl Triebe')"
+                value={row.notMassnCountUnit}
+                saveToDb={saveToDb}
+                error={fieldErrors.notMassnCountUnit}
+              />
+            )}
+            <TextField
+              name="sort"
+              label="Sortierung"
+              type="number"
+              value={row.sort}
+              saveToDb={saveToDb}
+              error={fieldErrors.sort}
+            />
+            <TextField
+              name="bemerkungen"
+              label="Bemerkungen"
+              type="text"
+              multiLine
+              value={row.bemerkungen}
+              saveToDb={saveToDb}
+              error={fieldErrors.bemerkungen}
+            />
+          </FormContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  }),
+)
