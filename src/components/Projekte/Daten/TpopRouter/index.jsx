@@ -114,7 +114,6 @@ export const Component = () => {
               </Suspense>
             }
           </TabContent>
-          }
         </TabContentContainer>
       </Container>
     </ErrorBoundary>
