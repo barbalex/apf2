@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
@@ -6,74 +6,76 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 
-export const ApErfkrit = observer(({ projekt, ap }) => {
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const { nodeLabelFilter } = store.tree
+export const ApErfkrit = memo(
+  observer(({ projekt, ap }) => {
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { nodeLabelFilter } = store.tree
 
-  const erfkritsFilter = { apId: { equalTo: ap.id } }
-  if (nodeLabelFilter.erfkrit) {
-    erfkritsFilter.label = {
-      includesInsensitive: nodeLabelFilter.erfkrit,
+    const erfkritsFilter = { apId: { equalTo: ap.id } }
+    if (nodeLabelFilter.erfkrit) {
+      erfkritsFilter.label = {
+        includesInsensitive: nodeLabelFilter.erfkrit,
+      }
     }
-  }
 
-  const { data } = useQuery({
-    queryKey: ['treeErfkrit', ap.id, erfkritsFilter],
-    queryFn: () =>
-      client.query({
-        query: gql`
-          query TreeErfkritQuery(
-            $apId: UUID!
-            $erfkritsFilter: ErfkritFilter!
-          ) {
-            apById(id: $apId) {
-              id
-              erfkritsByApId(
-                filter: $erfkritsFilter
-                orderBy: AP_ERFKRIT_WERTE_BY_ERFOLG__SORT_ASC
-              ) {
-                nodes {
-                  id
-                  label
+    const { data } = useQuery({
+      queryKey: ['treeErfkrit', ap.id, erfkritsFilter],
+      queryFn: () =>
+        client.query({
+          query: gql`
+            query TreeErfkritQuery(
+              $apId: UUID!
+              $erfkritsFilter: ErfkritFilter!
+            ) {
+              apById(id: $apId) {
+                id
+                erfkritsByApId(
+                  filter: $erfkritsFilter
+                  orderBy: AP_ERFKRIT_WERTE_BY_ERFOLG__SORT_ASC
+                ) {
+                  nodes {
+                    id
+                    label
+                  }
                 }
               }
             }
-          }
-        `,
-        variables: {
-          apId: ap.id,
-          erfkritsFilter,
-        },
-        fetchPolicy: 'no-cache',
-      }),
-  })
+          `,
+          variables: {
+            apId: ap.id,
+            erfkritsFilter,
+          },
+          fetchPolicy: 'no-cache',
+        }),
+    })
 
-  return (data?.data?.apById?.erfkritsByApId?.nodes ?? []).map((el) => {
-    const node = {
-      nodeType: 'table',
-      menuType: 'erfkrit',
-      id: el.id,
-      parentId: ap.id,
-      parentTableId: ap.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: [
-        'Projekte',
-        projekt.id,
-        'Arten',
-        ap.id,
-        'AP-Erfolgskriterien',
-        el.id,
-      ],
-      hasChildren: false,
-    }
+    return (data?.data?.apById?.erfkritsByApId?.nodes ?? []).map((el) => {
+      const node = {
+        nodeType: 'table',
+        menuType: 'erfkrit',
+        id: el.id,
+        parentId: ap.id,
+        parentTableId: ap.id,
+        urlLabel: el.id,
+        label: el.label,
+        url: [
+          'Projekte',
+          projekt.id,
+          'Arten',
+          ap.id,
+          'AP-Erfolgskriterien',
+          el.id,
+        ],
+        hasChildren: false,
+      }
 
-    return (
-      <Row
-        key={el.id}
-        node={node}
-      />
-    )
-  })
-})
+      return (
+        <Row
+          key={el.id}
+          node={node}
+        />
+      )
+    })
+  }),
+)
