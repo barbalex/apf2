@@ -471,7 +471,7 @@ export const Menu = memo(
               loading={copyingCoordToTpop}
               width={180}
             >
-              Koordinaten auf die Population übertragen
+              Koordinaten auf die Population kopieren
             </StyledLoadingButton>
           )}
           <StyledButton
