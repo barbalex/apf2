@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import Switch from '@mui/material/Switch'
 import { observer } from 'mobx-react-lite'
@@ -24,90 +24,92 @@ const StyledSwitch = styled(Switch)`
   margin-top: -18px;
 `
 
-export const ApFilter = observer(() => {
-  const { apId } = useParams()
-  const navigate = useNavigate()
-  const { search } = useLocation()
+export const ApFilter = memo(
+  observer(() => {
+    const { apId } = useParams()
+    const navigate = useNavigate()
+    const { search } = useLocation()
 
-  const client = useApolloClient()
-  const queryClient = useQueryClient()
+    const client = useApolloClient()
+    const queryClient = useQueryClient()
 
-  const store = useContext(StoreContext)
-  const {
-    apFilter,
-    setApFilter,
-    activeNodeArray,
-    openNodes: openNodesRaw,
-    setOpenNodes,
-  } = store.tree
-  const aNA = getSnapshot(activeNodeArray)
-  const openNodes = getSnapshot(openNodesRaw)
+    const store = useContext(StoreContext)
+    const {
+      apFilter,
+      setApFilter,
+      activeNodeArray,
+      openNodes: openNodesRaw,
+      setOpenNodes,
+    } = store.tree
+    const aNA = getSnapshot(activeNodeArray)
+    const openNodes = getSnapshot(openNodesRaw)
 
-  const onChange = useCallback(async () => {
-    const previousApFilter = apFilter
-    // console.log('ApFilter, onChange', { apFilter, previousApFilter })
-    if (!previousApFilter) {
-      // need to fetch previously not had aps
-      queryClient.invalidateQueries({
-        queryKey: [`treeAp`],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [`treeProject`],
-      })
-      // apFilter was set to true
-      let result
-      if (apId) {
-        // check if this is real ap
-        result = await client.query({
-          query: apById,
-          variables: { id: apId },
+    const onChange = useCallback(async () => {
+      const previousApFilter = apFilter
+      // console.log('ApFilter, onChange', { apFilter, previousApFilter })
+      if (!previousApFilter) {
+        // need to fetch previously not had aps
+        queryClient.invalidateQueries({
+          queryKey: [`treeAp`],
         })
-      }
-      const isAp = [1, 2, 3].includes(result?.data?.apById?.bearbeitung) //@485
-      if (!isAp && aNA[2] === 'Arten') {
-        // not a real ap
-        // shorten active node array to Arten
-        const newActiveNodeArray = [aNA[0], aNA[1], aNA[2]]
-        navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
-        // remove from openNodes
-        const newOpenNodes = openNodes.filter((n) => {
-          if (
-            n.length > newActiveNodeArray.length &&
-            n[0] === newActiveNodeArray[0] &&
-            n[1] === newActiveNodeArray[1] &&
-            n[2] === newActiveNodeArray[2]
-          )
-            return false
-          return true
+        queryClient.invalidateQueries({
+          queryKey: [`treeProject`],
         })
-        setOpenNodes(newOpenNodes)
+        // apFilter was set to true
+        let result
+        if (apId) {
+          // check if this is real ap
+          result = await client.query({
+            query: apById,
+            variables: { id: apId },
+          })
+        }
+        const isAp = [1, 2, 3].includes(result?.data?.apById?.bearbeitung) //@485
+        if (!isAp && aNA[2] === 'Arten') {
+          // not a real ap
+          // shorten active node array to Arten
+          const newActiveNodeArray = [aNA[0], aNA[1], aNA[2]]
+          navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+          // remove from openNodes
+          const newOpenNodes = openNodes.filter((n) => {
+            if (
+              n.length > newActiveNodeArray.length &&
+              n[0] === newActiveNodeArray[0] &&
+              n[1] === newActiveNodeArray[1] &&
+              n[2] === newActiveNodeArray[2]
+            )
+              return false
+            return true
+          })
+          setOpenNodes(newOpenNodes)
+        }
       }
-    }
-    setApFilter(!apFilter)
-  }, [
-    aNA,
-    apFilter,
-    apId,
-    client,
-    navigate,
-    openNodes,
-    queryClient,
-    search,
-    setApFilter,
-    setOpenNodes,
-  ])
+      setApFilter(!apFilter)
+    }, [
+      aNA,
+      apFilter,
+      apId,
+      client,
+      navigate,
+      openNodes,
+      queryClient,
+      search,
+      setApFilter,
+      setOpenNodes,
+    ])
 
-  return (
-    <ErrorBoundary>
-      <NurApDiv>
-        <Label label="nur AP" />
-        <StyledSwitch
-          data-id="ap-filter"
-          checked={apFilter}
-          onChange={onChange}
-          color="primary"
-        />
-      </NurApDiv>
-    </ErrorBoundary>
-  )
-})
+    return (
+      <ErrorBoundary>
+        <NurApDiv>
+          <Label label="nur AP" />
+          <StyledSwitch
+            data-id="ap-filter"
+            checked={apFilter}
+            onChange={onChange}
+            color="primary"
+          />
+        </NurApDiv>
+      </ErrorBoundary>
+    )
+  }),
+)

@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import List from '@mui/material/List'
@@ -24,8 +24,8 @@ const StyledListItemButton = styled(ListItemButton)`
   text-overflow: ellipsis;
 `
 
-export const TpopFromBeobPopList = observer(
-  ({ closeNewTpopFromBeobDialog, beobId }) => {
+export const TpopFromBeobPopList = memo(
+  observer(({ closeNewTpopFromBeobDialog, beobId }) => {
     const { projId, apId } = useParams()
     const { search } = useLocation()
 
@@ -80,5 +80,5 @@ export const TpopFromBeobPopList = observer(
         </List>
       </ErrorBoundary>
     )
-  },
+  }),
 )

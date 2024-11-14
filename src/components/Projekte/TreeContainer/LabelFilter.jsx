@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useEffect } from 'react'
+import { memo, useCallback, useContext, useState, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -31,88 +31,90 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   font-size: 1.5rem;
 `
 
-export const LabelFilter = observer(() => {
-  const store = useContext(StoreContext)
-  const { nodeLabelFilter, activeFilterTable } = store.tree
-  const {
-    setKey: setNodeLabelFilterKey,
-    isFiltered: runIsFiltered,
-    empty,
-  } = nodeLabelFilter
-  const isFiltered = runIsFiltered()
+export const LabelFilter = memo(
+  observer(() => {
+    const store = useContext(StoreContext)
+    const { nodeLabelFilter, activeFilterTable } = store.tree
+    const {
+      setKey: setNodeLabelFilterKey,
+      isFiltered: runIsFiltered,
+      empty,
+    } = nodeLabelFilter
+    const isFiltered = runIsFiltered()
 
-  let labelText = '(filtern nicht möglich)'
-  let filterValue = ''
-  if (activeFilterTable) {
-    filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
-    // make sure 0 is kept
-    if (!filterValue && filterValue !== 0) filterValue = ''
-    // should be to_under_score_case
-    const table = tables.find((t) => t.table === snakeCase(activeFilterTable))
-    const tableLabel = table ? table.label : null
-    // danger: Projekte can not be filtered because no parent folder
-    if (tableLabel !== 'Projekte') {
-      labelText = `${tableLabel} filtern`
+    let labelText = '(filtern nicht möglich)'
+    let filterValue = ''
+    if (activeFilterTable) {
+      filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+      // make sure 0 is kept
+      if (!filterValue && filterValue !== 0) filterValue = ''
+      // should be to_under_score_case
+      const table = tables.find((t) => t.table === snakeCase(activeFilterTable))
+      const tableLabel = table ? table.label : null
+      // danger: Projekte can not be filtered because no parent folder
+      if (tableLabel !== 'Projekte') {
+        labelText = `${tableLabel} filtern`
+      }
     }
-  }
 
-  const [value, setValue] = useState('')
+    const [value, setValue] = useState('')
 
-  useEffect(() => {
-    setValue(filterValue)
-  }, [filterValue, activeFilterTable])
+    useEffect(() => {
+      setValue(filterValue)
+    }, [filterValue, activeFilterTable])
 
-  const setValuesAfterChange = useCallback(
-    (val) =>
-      setNodeLabelFilterKey({
-        value: val,
-        key: activeFilterTable,
-      }),
-    [setNodeLabelFilterKey, activeFilterTable],
-  )
-  const changeDebounced = useDebouncedCallback(setValuesAfterChange, 600)
+    const setValuesAfterChange = useCallback(
+      (val) =>
+        setNodeLabelFilterKey({
+          value: val,
+          key: activeFilterTable,
+        }),
+      [setNodeLabelFilterKey, activeFilterTable],
+    )
+    const changeDebounced = useDebouncedCallback(setValuesAfterChange, 600)
 
-  const onChange = useCallback(
-    (e) => {
-      const val = e.target.value
-      setValue(val)
-      if (labelText === '(filtern nicht möglich)') return
-      changeDebounced(val)
-    },
-    [labelText, changeDebounced],
-  )
+    const onChange = useCallback(
+      (e) => {
+        const val = e.target.value
+        setValue(val)
+        if (labelText === '(filtern nicht möglich)') return
+        changeDebounced(val)
+      },
+      [labelText, changeDebounced],
+    )
 
-  const onClickEmptyFilter = useCallback(() => {
-    empty()
-    setValue('')
-  }, [empty])
+    const onClickEmptyFilter = useCallback(() => {
+      empty()
+      setValue('')
+    }, [empty])
 
-  return (
-    <StyledFormControl
-      fullWidth
-      variant="standard"
-    >
-      <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
-      <StyledInput
-        id={labelText}
-        value={value}
-        onChange={onChange}
-        spellCheck="false"
-        autoComplete="off"
-        autoCorrect="off"
-        autoCapitalize="off"
-        endAdornment={
-          isFiltered ?
-            <InputAdornment
-              position="end"
-              onClick={onClickEmptyFilter}
-              title="Alle Filter entfernen"
-            >
-              <StyledDeleteFilterIcon />
-            </InputAdornment>
-          : null
-        }
-      />
-    </StyledFormControl>
-  )
-})
+    return (
+      <StyledFormControl
+        fullWidth
+        variant="standard"
+      >
+        <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
+        <StyledInput
+          id={labelText}
+          value={value}
+          onChange={onChange}
+          spellCheck="false"
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          endAdornment={
+            isFiltered ?
+              <InputAdornment
+                position="end"
+                onClick={onClickEmptyFilter}
+                title="Alle Filter entfernen"
+              >
+                <StyledDeleteFilterIcon />
+              </InputAdornment>
+            : null
+          }
+        />
+      </StyledFormControl>
+    )
+  }),
+)
