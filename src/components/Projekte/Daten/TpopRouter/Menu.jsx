@@ -16,6 +16,7 @@ import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import ToggleButton from '@mui/material/ToggleButton'
+import LoadingButton from '@mui/lab/LoadingButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import isEqual from 'lodash/isEqual'
@@ -33,7 +34,6 @@ import { useSearchParamsState } from '../../../../modules/useSearchParamsState.j
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.js'
-import { LoadingButtonFittingText } from '../../../shared/LoadingButtonFittingText.jsx'
 
 // unfortunately, toggle buttons are different from icon buttons...
 const RoundToggleButton = styled(ToggleButton)`
@@ -52,6 +52,16 @@ const MoveIcon = styled(MdOutlineMoveDown)`
 const CopyIcon = styled(MdContentCopy)`
   color: ${(props) =>
     props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
+`
+const StyledLoadingButton = styled(LoadingButton)`
+  margin: 0 5px;
+  padding: 3px 10px;
+  text-transform: none;
+  line-height: 1.1;
+  font-size: 0.8rem;
+  color: white;
+  border-color: white;
+  width: ${(props) => props.width}px;
 `
 const iconStyle = { color: 'white' }
 
@@ -424,13 +434,14 @@ export const Menu = memo(
             </IconButton>
           )}
           {tpopHasCoord && (
-            <LoadingButtonFittingText
-              text="Koordinaten auf die Population übertragen"
+            <StyledLoadingButton
+              variant="outlined"
               onClick={onCopyCoordToPop}
               loading={copyingCoordToTpop}
               width={180}
-              height={35}
-            />
+            >
+              Koordinaten auf die Population übertragen
+            </StyledLoadingButton>
           )}
         </MenuBar>
         <MuiMenu
