@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { memo, useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { MdLocalFlorist } from 'react-icons/md'
 import { FaCheck } from 'react-icons/fa'
@@ -36,87 +36,89 @@ const CheckIcon = styled(FaCheck)`
   padding-right: 5px;
 `
 
-export const TpopIcon = observer(() => {
-  const store = useContext(StoreContext)
-  const { map } = store
-  const { tpopIcon, setTpopIcon, tpopLabel, setTpopLabel } = map
+export const TpopIcon = memo(
+  observer(() => {
+    const store = useContext(StoreContext)
+    const { map } = store
+    const { tpopIcon, setTpopIcon, tpopLabel, setTpopLabel } = map
 
-  const [anchorEl, setAnchorEl] = useState(null)
-  const onClickIconContainer = useCallback(
-    (e) => setAnchorEl(e.currentTarget),
-    [],
-  )
-  const onClose = useCallback(() => setAnchorEl(null), [])
+    const [anchorEl, setAnchorEl] = useState(null)
+    const onClickIconContainer = useCallback(
+      (e) => setAnchorEl(e.currentTarget),
+      [],
+    )
+    const onClose = useCallback(() => setAnchorEl(null), [])
 
-  const onClickAllSame = useCallback(() => {
-    setTpopIcon('normal')
-    onClose()
-  }, [onClose, setTpopIcon])
-  const onClickByStatusGroup = useCallback(() => {
-    setTpopIcon('statusGroup')
-    onClose()
-  }, [onClose, setTpopIcon])
-  const onClickByStatusGroupSymbols = useCallback(() => {
-    setTpopIcon('statusGroupSymbols')
-    onClose()
-  }, [onClose, setTpopIcon])
-  const onClickPopTpopNr = useCallback(() => {
-    setTpopLabel('nr')
-    onClose()
-  }, [onClose, setTpopLabel])
-  const onClickFlurname = useCallback(() => {
-    setTpopLabel('name')
-    onClose()
-  }, [onClose, setTpopLabel])
-  const onClickNoLabel = useCallback(() => {
-    setTpopLabel('none')
-    onClose()
-  }, [onClose, setTpopLabel])
+    const onClickAllSame = useCallback(() => {
+      setTpopIcon('normal')
+      onClose()
+    }, [onClose, setTpopIcon])
+    const onClickByStatusGroup = useCallback(() => {
+      setTpopIcon('statusGroup')
+      onClose()
+    }, [onClose, setTpopIcon])
+    const onClickByStatusGroupSymbols = useCallback(() => {
+      setTpopIcon('statusGroupSymbols')
+      onClose()
+    }, [onClose, setTpopIcon])
+    const onClickPopTpopNr = useCallback(() => {
+      setTpopLabel('nr')
+      onClose()
+    }, [onClose, setTpopLabel])
+    const onClickFlurname = useCallback(() => {
+      setTpopLabel('name')
+      onClose()
+    }, [onClose, setTpopLabel])
+    const onClickNoLabel = useCallback(() => {
+      setTpopLabel('none')
+      onClose()
+    }, [onClose, setTpopLabel])
 
-  return (
-    <>
-      <IconContainer
-        aria-label="Symbole und Beschriftung wählen"
-        aria-owns={anchorEl ? 'menu' : null}
-        aria-haspopup="true"
-        onClick={onClickIconContainer}
-        title="Symbole und Beschriftung wählen"
-      >
-        <MapIcon id="TpopMapIcon" />
-      </IconContainer>
-      <Menu
-        id="menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={onClose}
-      >
-        <MenuTitle>Symbole wählen:</MenuTitle>
-        <StyledMenuItem onClick={onClickAllSame}>
-          {tpopIcon === 'normal' && <CheckIcon />}
-          {`alle gleich (Blume)`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickByStatusGroup}>
-          {tpopIcon === 'statusGroup' && <CheckIcon />}
-          {`nach Status, mit Buchstaben`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickByStatusGroupSymbols}>
-          {tpopIcon === 'statusGroupSymbols' && <CheckIcon />}
-          {`nach Status, mit Symbolen`}
-        </StyledMenuItem>
-        <MenuTitle>Beschriftung wählen:</MenuTitle>
-        <StyledMenuItem onClick={onClickPopTpopNr}>
-          {tpopLabel === 'nr' && <CheckIcon />}
-          {`Pop-Nr / TPop-Nr`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickFlurname}>
-          {tpopLabel === 'name' && <CheckIcon />}
-          {`Flurname`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickNoLabel}>
-          {tpopLabel === 'none' && <CheckIcon />}
-          {`keine`}
-        </StyledMenuItem>
-      </Menu>
-    </>
-  )
-})
+    return (
+      <>
+        <IconContainer
+          aria-label="Symbole und Beschriftung wählen"
+          aria-owns={anchorEl ? 'menu' : null}
+          aria-haspopup="true"
+          onClick={onClickIconContainer}
+          title="Symbole und Beschriftung wählen"
+        >
+          <MapIcon id="TpopMapIcon" />
+        </IconContainer>
+        <Menu
+          id="menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={onClose}
+        >
+          <MenuTitle>Symbole wählen:</MenuTitle>
+          <StyledMenuItem onClick={onClickAllSame}>
+            {tpopIcon === 'normal' && <CheckIcon />}
+            {`alle gleich (Blume)`}
+          </StyledMenuItem>
+          <StyledMenuItem onClick={onClickByStatusGroup}>
+            {tpopIcon === 'statusGroup' && <CheckIcon />}
+            {`nach Status, mit Buchstaben`}
+          </StyledMenuItem>
+          <StyledMenuItem onClick={onClickByStatusGroupSymbols}>
+            {tpopIcon === 'statusGroupSymbols' && <CheckIcon />}
+            {`nach Status, mit Symbolen`}
+          </StyledMenuItem>
+          <MenuTitle>Beschriftung wählen:</MenuTitle>
+          <StyledMenuItem onClick={onClickPopTpopNr}>
+            {tpopLabel === 'nr' && <CheckIcon />}
+            {`Pop-Nr / TPop-Nr`}
+          </StyledMenuItem>
+          <StyledMenuItem onClick={onClickFlurname}>
+            {tpopLabel === 'name' && <CheckIcon />}
+            {`Flurname`}
+          </StyledMenuItem>
+          <StyledMenuItem onClick={onClickNoLabel}>
+            {tpopLabel === 'none' && <CheckIcon />}
+            {`keine`}
+          </StyledMenuItem>
+        </Menu>
+      </>
+    )
+  }),
+)
