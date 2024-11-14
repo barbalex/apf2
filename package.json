@@ -89,6 +89,7 @@
     "recharts": "2.13.3",
     "redaxios": "0.5.1",
     "screenfull": "6.0.2",
+    "textfit": "2.4.0",
     "typography": "0.16.24",
     "use-debounce": "10.0.4"
   },

@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useState } from 'react'
+import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -22,7 +22,7 @@ import isEqual from 'lodash/isEqual'
 import uniq from 'lodash/uniq'
 import styled from '@emotion/styled'
 
-import { MenuBar } from '../../../shared/MenuBar/index.jsx'
+import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
@@ -32,6 +32,8 @@ import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
+import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.js'
+import { LoadingButtonFittingText } from '../../../shared/LoadingButtonFittingText.jsx'
 
 // unfortunately, toggle buttons are different from icon buttons...
 const RoundToggleButton = styled(ToggleButton)`
@@ -316,12 +318,35 @@ export const Menu = memo(
       })
     }, [setCopying])
 
+    const tpopHasCoord = !!row.lv95X && !!row.lv95Y
+    const [copyingCoordToTpop, setCopyingCoordToTpop] = useState(false)
+    const onCopyCoordToPop = useCallback(() => {
+      copyTpopKoordToPop({ id: tpopId, store, client })
+    }, [tpopId, store, client])
+
+    const widths = useMemo(
+      () => [
+        buttonWidth,
+        buttonWidth,
+        buttonWidth,
+        buttonWidth,
+        buttonWidth,
+        buttonWidth,
+        ...(isMoving ? [buttonWidth] : []),
+        buttonWidth,
+        ...(isCopying ? [buttonWidth] : []),
+        ...(tpopHasCoord ? [180] : []),
+      ],
+      [isCopying, isMoving, tpopHasCoord],
+    )
+
     return (
       <ErrorBoundary>
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${idOfTpopBeingLocalized}/${isMoving}/${isCopying}/${tpopMovingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}`}
+          rerenderer={`${idOfTpopBeingLocalized}/${isMoving}/${isCopying}/${tpopMovingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}`}
+          widths={widths}
         >
           <IconButton
             title="Neue Teil-Population erstellen"
@@ -358,13 +383,13 @@ export const Menu = memo(
           </RoundToggleButton>
           <IconButton
             title={
-              !isMoving
-                ? `'${row.label}' zu einer anderen Population verschieben`
-                : thisTpopIsMoving
-                  ? 'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
-                  : tpopMovingFromThisPop
-                    ? `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
-                    : `Verschiebe '${moving.label}' zu dieser Population`
+              !isMoving ?
+                `'${row.label}' zu einer anderen Population verschieben`
+              : thisTpopIsMoving ?
+                'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
+              : tpopMovingFromThisPop ?
+                `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
+              : `Verschiebe '${moving.label}' zu dieser Population`
             }
             onClick={onClickMoveInTree}
           >
@@ -380,9 +405,9 @@ export const Menu = memo(
           )}
           <IconButton
             title={
-              isCopying
-                ? `Kopiere '${copying.label}' in diese Population`
-                : 'Kopieren'
+              isCopying ?
+                `Kopiere '${copying.label}' in diese Population`
+              : 'Kopieren'
             }
             onClick={onClickCopy}
           >
@@ -395,6 +420,15 @@ export const Menu = memo(
             >
               <BsSignStopFill style={iconStyle} />
             </IconButton>
+          )}
+          {tpopHasCoord && (
+            <LoadingButtonFittingText
+              text="Koordinaten auf die Population übertragen"
+              onClick={onCopyCoordToPop}
+              loading={copyingCoordToTpop}
+              width={180}
+              height={35}
+            />
           )}
         </MenuBar>
         <MuiMenu

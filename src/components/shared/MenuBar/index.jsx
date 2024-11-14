@@ -28,7 +28,7 @@ import { over, set } from 'lodash'
 import { useDebouncedCallback } from 'use-debounce'
 
 const buttonHeight = 40
-const buttonWidth = 40
+export const buttonWidth = 40
 
 const MeasuredOuterContainer = styled.div`
   overflow: hidden;
