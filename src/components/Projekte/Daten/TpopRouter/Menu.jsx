@@ -361,6 +361,8 @@ export const Menu = memo(
         buttonWidth,
         ...(isCopying ? [buttonWidth] : []),
         ...(tpopHasCoord ? [180] : []),
+        130,
+        90,
       ],
       [isCopying, isMoving, tpopHasCoord],
     )
