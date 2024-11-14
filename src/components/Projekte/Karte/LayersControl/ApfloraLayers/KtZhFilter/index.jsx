@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { memo, useContext, useCallback } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
@@ -20,27 +20,29 @@ const StyledButton = styled(Button)`
   justify-content: flex-start;
 `
 
-export const KtZhFilter = observer(() => {
-  const store = useContext(StoreContext)
-  const { setMapFilter, incrementMapFilterResetter } = store.tree
+export const KtZhFilter = memo(
+  observer(() => {
+    const store = useContext(StoreContext)
+    const { setMapFilter, incrementMapFilterResetter } = store.tree
 
-  const onClickFilterZh = useCallback(() => {
-    import('./ktZh.json').then((module) => {
-      const ktZh = module.default
-      incrementMapFilterResetter()
-      setMapFilter(ktZh)
-    })
-  }, [incrementMapFilterResetter, setMapFilter])
+    const onClickFilterZh = useCallback(() => {
+      import('./ktZh.json').then((module) => {
+        const ktZh = module.default
+        incrementMapFilterResetter()
+        setMapFilter(ktZh)
+      })
+    }, [incrementMapFilterResetter, setMapFilter])
 
-  return (
-    <LayerDiv>
-      <StyledButton
-        title="Kt. ZH filtern"
-        onClick={onClickFilterZh}
-        color="inherit"
-      >
-        Kanton Zürich filtern
-      </StyledButton>
-    </LayerDiv>
-  )
-})
+    return (
+      <LayerDiv>
+        <StyledButton
+          title="Kt. ZH filtern"
+          onClick={onClickFilterZh}
+          color="inherit"
+        >
+          Kanton Zürich filtern
+        </StyledButton>
+      </LayerDiv>
+    )
+  }),
+)
