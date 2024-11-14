@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { memo, useContext, useCallback } from 'react'
 import { Marker as LeafletMarker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
@@ -24,107 +24,109 @@ const StyledButton = styled(Button)`
   padding: 2px 0;
 `
 
-export const Marker = observer(({ beob }) => {
-  const { apId, projId, beobId } = useParams()
-  const { search } = useLocation()
+export const Marker = memo(
+  observer(({ beob }) => {
+    const { apId, projId, beobId } = useParams()
+    const { search } = useLocation()
 
-  const store = useContext(StoreContext)
-  const { openTree2WithActiveNodeArray } = store
+    const store = useContext(StoreContext)
+    const { openTree2WithActiveNodeArray } = store
 
-  const isHighlighted = beobId === beob.id
-  const latLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
-  // use divIcon instead? https://leafletjs.com/reference.html#divicon
-  const icon = window.L.divIcon({
-    html: isHighlighted ? beobIconHighlightedString : beobIconString,
-    className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
-  })
-  // some dates are not valid
-  // need to account for that
-  let datum = '(kein Datum)'
-  if (!isValid(new Date(beob.datum))) {
-    datum = '(ungültiges Datum)'
-  } else if (beob.datum) {
-    datum = format(new Date(beob.datum), 'yyyy.MM.dd')
-  }
-  const autor = beob.autor ?? '(kein Autor)'
-  const quelle = beob?.quelle ?? ''
-  const label = `${datum}: ${autor} (${quelle})`
-
-  const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-    'projekteTabs',
-    isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-  )
-  const openBeobInTree2 = useCallback(() => {
-    openTree2WithActiveNodeArray({
-      activeNodeArray: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'nicht-zuzuordnende-Beobachtungen',
-        beob.id,
-      ],
-      search,
-      projekteTabs,
-      setProjekteTabs,
+    const isHighlighted = beobId === beob.id
+    const latLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
+    // use divIcon instead? https://leafletjs.com/reference.html#divicon
+    const icon = window.L.divIcon({
+      html: isHighlighted ? beobIconHighlightedString : beobIconString,
+      className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
     })
-  }, [
-    apId,
-    beob.id,
-    openTree2WithActiveNodeArray,
-    projId,
-    projekteTabs,
-    search,
-    setProjekteTabs,
-  ])
-  const openBeobInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/nicht-zuzuordnende-Beobachtungen/${
-      beob.id
-    }`
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      return window.open(url, '_blank', 'toolbar=no')
+    // some dates are not valid
+    // need to account for that
+    let datum = '(kein Datum)'
+    if (!isValid(new Date(beob.datum))) {
+      datum = '(ungültiges Datum)'
+    } else if (beob.datum) {
+      datum = format(new Date(beob.datum), 'yyyy.MM.dd')
     }
-    window.open(url)
-  }, [apId, beob.id, projId])
+    const autor = beob.autor ?? '(kein Autor)'
+    const quelle = beob?.quelle ?? ''
+    const label = `${datum}: ${autor} (${quelle})`
 
-  return (
-    <LeafletMarker
-      position={latLng}
-      icon={icon}
-      title={label}
-    >
-      <Popup>
-        <>
-          <div>{`Beobachtung von ${
-            beob?.aeTaxonomyByArtId?.artname ?? ''
-          }`}</div>
-          <StyledH3>{label}</StyledH3>
-          <div>
-            {`Koordinaten: ${beob.lv95X?.toLocaleString(
-              'de-ch',
-            )} / ${beob.lv95Y?.toLocaleString('de-ch')}`}
-          </div>
-          <StyledButton
-            size="small"
-            variant="text"
-            onClick={openBeobInTab}
-            color="inherit"
-            fullWidth
-          >
-            Formular in neuem Fenster öffnen
-          </StyledButton>
-          <StyledButton
-            size="small"
-            variant="text"
-            onClick={openBeobInTree2}
-            color="inherit"
-            fullWidth
-          >
-            Formular in Strukturbaum 2 öffnen
-          </StyledButton>
-          <Data id={beob.id} />
-        </>
-      </Popup>
-    </LeafletMarker>
-  )
-})
+    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
+      'projekteTabs',
+      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
+    )
+    const openBeobInTree2 = useCallback(() => {
+      openTree2WithActiveNodeArray({
+        activeNodeArray: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'nicht-zuzuordnende-Beobachtungen',
+          beob.id,
+        ],
+        search,
+        projekteTabs,
+        setProjekteTabs,
+      })
+    }, [
+      apId,
+      beob.id,
+      openTree2WithActiveNodeArray,
+      projId,
+      projekteTabs,
+      search,
+      setProjekteTabs,
+    ])
+    const openBeobInTab = useCallback(() => {
+      const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/nicht-zuzuordnende-Beobachtungen/${
+        beob.id
+      }`
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        return window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }, [apId, beob.id, projId])
+
+    return (
+      <LeafletMarker
+        position={latLng}
+        icon={icon}
+        title={label}
+      >
+        <Popup>
+          <>
+            <div>{`Beobachtung von ${
+              beob?.aeTaxonomyByArtId?.artname ?? ''
+            }`}</div>
+            <StyledH3>{label}</StyledH3>
+            <div>
+              {`Koordinaten: ${beob.lv95X?.toLocaleString(
+                'de-ch',
+              )} / ${beob.lv95Y?.toLocaleString('de-ch')}`}
+            </div>
+            <StyledButton
+              size="small"
+              variant="text"
+              onClick={openBeobInTab}
+              color="inherit"
+              fullWidth
+            >
+              Formular in neuem Fenster öffnen
+            </StyledButton>
+            <StyledButton
+              size="small"
+              variant="text"
+              onClick={openBeobInTree2}
+              color="inherit"
+              fullWidth
+            >
+              Formular in Strukturbaum 2 öffnen
+            </StyledButton>
+            <Data id={beob.id} />
+          </>
+        </Popup>
+      </LeafletMarker>
+    )
+  }),
+)
