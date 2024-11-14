@@ -1,12 +1,12 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { EkFrequenz } from './EkFrequenz.jsx'
 
-export const EkFrequenzFolder = observer(
-  ({ projekt, ap, count, isLoading }) => {
+export const EkFrequenzFolder = memo(
+  observer(({ projekt, ap, count, isLoading }) => {
     const store = useContext(StoreContext)
 
     const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ekfrequenz ?? ''
@@ -51,5 +51,5 @@ export const EkFrequenzFolder = observer(
         )}
       </>
     )
-  },
+  }),
 )

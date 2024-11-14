@@ -1,12 +1,12 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { EkZaehleinheits } from './EkZaehleinheits.jsx'
 
-export const EkZaehleinheitFolder = observer(
-  ({ projekt, ap, count, isLoading }) => {
+export const EkZaehleinheitFolder = memo(
+  observer(({ projekt, ap, count, isLoading }) => {
     const store = useContext(StoreContext)
 
     const nodeLabelFilterString =
@@ -50,5 +50,5 @@ export const EkZaehleinheitFolder = observer(
         )}
       </>
     )
-  },
+  }),
 )
