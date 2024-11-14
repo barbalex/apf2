@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import sum from 'lodash/sum'
 
@@ -6,8 +6,8 @@ import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { BeobNichtBeurteilts } from './BeobNichtBeurteilts.jsx'
 
-export const BeobNichtBeurteiltFolder = observer(
-  ({ projekt, ap, aparts, isLoading }) => {
+export const BeobNichtBeurteiltFolder = memo(
+  observer(({ projekt, ap, aparts, isLoading }) => {
     const store = useContext(StoreContext)
 
     const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
@@ -61,5 +61,5 @@ export const BeobNichtBeurteiltFolder = observer(
         )}
       </>
     )
-  },
+  }),
 )
