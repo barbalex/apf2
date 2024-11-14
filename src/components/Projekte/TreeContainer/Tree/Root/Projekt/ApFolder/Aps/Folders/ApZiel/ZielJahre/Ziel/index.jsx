@@ -1,57 +1,59 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../storeContext.js'
 import { ZielberFolder } from './Zielber/index.jsx'
 
-export const Ziel = observer(({ projekt, ap, jahr, ziels }) => {
-  const store = useContext(StoreContext)
+export const Ziel = memo(
+  observer(({ projekt, ap, jahr, ziels }) => {
+    const store = useContext(StoreContext)
 
-  return ziels.map((ziel) => {
-    const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n.length > 7 &&
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'AP-Ziele' &&
-          n[5] === jahr &&
-          n[6] === ziel.id,
-      ).length > 0
+    return ziels.map((ziel) => {
+      const isOpen =
+        store.tree.openNodes.filter(
+          (n) =>
+            n.length > 7 &&
+            n[1] === projekt.id &&
+            n[3] === ap.id &&
+            n[4] === 'AP-Ziele' &&
+            n[5] === jahr &&
+            n[6] === ziel.id,
+        ).length > 0
 
-    const node = {
-      nodeType: 'table',
-      menuType: 'ziel',
-      id: ziel.id,
-      parentId: ap.id,
-      parentTableId: ap.id,
-      urlLabel: ziel.id,
-      label: ziel.label,
-      url: [
-        'Projekte',
-        projekt.id,
-        'Arten',
-        ap.id,
-        'AP-Ziele',
-        ziel.jahr,
-        ziel.id,
-      ],
-      hasChildren: true,
-    }
+      const node = {
+        nodeType: 'table',
+        menuType: 'ziel',
+        id: ziel.id,
+        parentId: ap.id,
+        parentTableId: ap.id,
+        urlLabel: ziel.id,
+        label: ziel.label,
+        url: [
+          'Projekte',
+          projekt.id,
+          'Arten',
+          ap.id,
+          'AP-Ziele',
+          ziel.jahr,
+          ziel.id,
+        ],
+        hasChildren: true,
+      }
 
-    return (
-      <div key={ziel.id}>
-        <Row node={node} />
-        {isOpen && (
-          <ZielberFolder
-            projekt={projekt}
-            ap={ap}
-            jahr={jahr}
-            ziel={ziel}
-          />
-        )}
-      </div>
-    )
-  })
-})
+      return (
+        <div key={ziel.id}>
+          <Row node={node} />
+          {isOpen && (
+            <ZielberFolder
+              projekt={projekt}
+              ap={ap}
+              jahr={jahr}
+              ziel={ziel}
+            />
+          )}
+        </div>
+      )
+    })
+  }),
+)
