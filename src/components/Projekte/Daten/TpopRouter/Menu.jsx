@@ -15,6 +15,7 @@ import { RiFolderCloseFill } from 'react-icons/ri'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
+import Button from '@mui/material/Button'
 import ToggleButton from '@mui/material/ToggleButton'
 import LoadingButton from '@mui/lab/LoadingButton'
 import MuiMenu from '@mui/material/Menu'
@@ -64,6 +65,16 @@ const StyledLoadingButton = styled(LoadingButton)`
   color: white;
   border-color: white;
   width: ${(props) => props.width}px;
+`
+const StyledButton = styled(Button)`
+  margin: 0 5px;
+  padding: 3px 10px;
+  text-transform: none;
+  line-height: 1.1;
+  font-size: 0.8rem;
+  max-height: 36px;
+  color: white;
+  border-color: white;
 `
 const iconStyle = { color: 'white' }
 
@@ -461,6 +472,20 @@ export const Menu = memo(
               Koordinaten auf die Population übertragen
             </StyledLoadingButton>
           )}
+          <StyledButton
+            variant="outlined"
+            style={{ width: 90 }}
+            onClick={onClickShowCoordOfTpopOnMapsZhCh}
+          >
+            zeige auf maps.zh.ch
+          </StyledButton>
+          <StyledButton
+            variant="outlined"
+            style={{ width: 130 }}
+            onClick={onClickShowCoordOfTpopOnMapGeoAdminCh}
+          >
+            zeige auf map.geo.admin.ch
+          </StyledButton>
         </MenuBar>
         <MuiMenu
           id="tpopDelMenu"

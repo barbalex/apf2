@@ -4,8 +4,6 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-// import { FaPlus, FaMinus } from 'react-icons/fa6'
-// import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import LoadingButton from '@mui/lab/LoadingButton'
 import isEqual from 'lodash/isEqual'
@@ -267,7 +265,7 @@ export const Menu = memo(
           <StyledButton
             variant="outlined"
             style={{ width: 90 }}
-            onClick={onClickShowCoordOfBeobOnMapsZhCh} 
+            onClick={onClickShowCoordOfBeobOnMapsZhCh}
           >
             zeige auf maps.zh.ch
           </StyledButton>
