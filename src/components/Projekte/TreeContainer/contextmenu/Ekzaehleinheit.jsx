@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
@@ -19,33 +19,35 @@ const deleteData = {
   table: 'ekzaehleinheit',
 }
 
-export const Ekzaehleinheit = observer(({ onClick }) => {
-  const { user } = useContext(StoreContext)
+export const Ekzaehleinheit = memo(
+  observer(({ onClick }) => {
+    const { user } = useContext(StoreContext)
 
-  return (
-    <ErrorBoundary>
-      <ContextMenu
-        id="treeEkzaehleinheit"
-        hideOnLeave={true}
-      >
-        <div className="react-contextmenu-title">EK-Zähleinheit</div>
-        {!userIsReadOnly(user.token) && (
-          <>
-            <MenuItem
-              onClick={onClick}
-              data={insertData}
-            >
-              erstelle neue
-            </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={deleteData}
-            >
-              lösche
-            </MenuItem>
-          </>
-        )}
-      </ContextMenu>
-    </ErrorBoundary>
-  )
-})
+    return (
+      <ErrorBoundary>
+        <ContextMenu
+          id="treeEkzaehleinheit"
+          hideOnLeave={true}
+        >
+          <div className="react-contextmenu-title">EK-Zähleinheit</div>
+          {!userIsReadOnly(user.token) && (
+            <>
+              <MenuItem
+                onClick={onClick}
+                data={insertData}
+              >
+                erstelle neue
+              </MenuItem>
+              <MenuItem
+                onClick={onClick}
+                data={deleteData}
+              >
+                lösche
+              </MenuItem>
+            </>
+          )}
+        </ContextMenu>
+      </ErrorBoundary>
+    )
+  }),
+)

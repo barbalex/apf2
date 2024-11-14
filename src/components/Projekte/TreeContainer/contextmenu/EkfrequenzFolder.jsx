@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react'
+import { memo, useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -73,320 +73,322 @@ const Error = styled.div`
   color: red;
 `
 
-export const EkfrequenzFolder = observer(({ onClick }) => {
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const { user, enqueNotification } = store
+export const EkfrequenzFolder = memo(
+  observer(({ onClick }) => {
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { user, enqueNotification } = store
 
-  // according to https://github.com/vkbansal/react-contextmenu/issues/65
-  // this is how to pass data from ContextMenuTrigger to ContextMenu
-  // i.e. to know what node was clicked
-  const [apId, changeApId] = useState(0)
-  const onShow = useCallback(
-    (event) => changeApId(event.detail.data.tableId),
-    [],
-  )
+    // according to https://github.com/vkbansal/react-contextmenu/issues/65
+    // this is how to pass data from ContextMenuTrigger to ContextMenu
+    // i.e. to know what node was clicked
+    const [apId, changeApId] = useState(0)
+    const onShow = useCallback(
+      (event) => changeApId(event.detail.data.tableId),
+      [],
+    )
 
-  const [openChooseAp, setOpenChooseAp] = useState(false)
-  const onCloseChooseApDialog = useCallback(() => setOpenChooseAp(false), [])
-  const onOpenChooseApDialog = useCallback(() => setOpenChooseAp(true), [])
+    const [openChooseAp, setOpenChooseAp] = useState(false)
+    const onCloseChooseApDialog = useCallback(() => setOpenChooseAp(false), [])
+    const onOpenChooseApDialog = useCallback(() => setOpenChooseAp(true), [])
 
-  const onChooseAp = useCallback(
-    async (option) => {
-      const newApId = option.value
-      // 0. choosing no option is not possible so needs not be catched
-      // 1. delete existing ekfrequenz
-      // 1.1: query existing ekfrequenz
-      let existingEkfrequenzResult
-      try {
-        existingEkfrequenzResult = await client.query({
-          query: gql`
-            query getExistingEkfrequenzForEkfrequenzFolder($apId: UUID) {
-              allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
-                nodes {
-                  id
+    const onChooseAp = useCallback(
+      async (option) => {
+        const newApId = option.value
+        // 0. choosing no option is not possible so needs not be catched
+        // 1. delete existing ekfrequenz
+        // 1.1: query existing ekfrequenz
+        let existingEkfrequenzResult
+        try {
+          existingEkfrequenzResult = await client.query({
+            query: gql`
+              query getExistingEkfrequenzForEkfrequenzFolder($apId: UUID) {
+                allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
+                  nodes {
+                    id
+                  }
                 }
               }
-            }
-          `,
-          variables: {
-            apId,
-          },
-          // got errors when not setting 'network-only' policy
-          // when copying repeatedly
-          // apollo seemed to use local cache which was not up to date any more
-          // so probably not the newly inserted were queried but the earlier deleted ones
-          // which created conflicts with uniqueness
-          fetchPolicy: 'network-only',
-        })
-      } catch (error) {
-        console.log({ error })
-        setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
-      }
-      const existingEkfrequenzs = (
-        existingEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
-      ).map((e) => e.id)
+            `,
+            variables: {
+              apId,
+            },
+            // got errors when not setting 'network-only' policy
+            // when copying repeatedly
+            // apollo seemed to use local cache which was not up to date any more
+            // so probably not the newly inserted were queried but the earlier deleted ones
+            // which created conflicts with uniqueness
+            fetchPolicy: 'network-only',
+          })
+        } catch (error) {
+          console.log({ error })
+          setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
+        }
+        const existingEkfrequenzs = (
+          existingEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
+        ).map((e) => e.id)
 
-      // 1.2: delete existing ekfrequenz
-      try {
-        await Promise.allSettled(
-          existingEkfrequenzs.map(
-            async (id) =>
-              await client.mutate({
+        // 1.2: delete existing ekfrequenz
+        try {
+          await Promise.allSettled(
+            existingEkfrequenzs.map(
+              async (id) =>
+                await client.mutate({
+                  mutation: gql`
+                    mutation deleteExistingEkfrequenzForEkfrequenzFolder(
+                      $id: UUID!
+                    ) {
+                      deleteEkfrequenzById(input: { id: $id }) {
+                        deletedEkfrequenzId
+                      }
+                    }
+                  `,
+                  variables: {
+                    id,
+                  },
+                  update(cache) {
+                    cache.evict({ id })
+                  },
+                }),
+            ),
+          )
+        } catch (error) {
+          console.log({ error })
+          setApOptionsError(
+            `Fehler beim Löschen der existierenden EK-Frequenzen: ${error.message}`,
+          )
+        }
+
+        // 2. add ekfrequenz from other ap
+        // 2.1: query ekfrequenz
+        let newEkfrequenzResult
+        try {
+          newEkfrequenzResult = await client.query({
+            query: gql`
+              query getNewEkfrequenzForEkfrequenzFolder($apId: UUID) {
+                allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
+                  nodes {
+                    id
+                    anwendungsfall
+                    apId
+                    bemerkungen
+                    code
+                    ekAbrechnungstyp
+                    ektyp
+                    kontrolljahre
+                    kontrolljahreAb
+                    sort
+                  }
+                }
+              }
+            `,
+            variables: {
+              apId: newApId,
+            },
+          })
+        } catch (error) {
+          console.log({ error })
+          return setApOptionsError(
+            `Fehler beim Abfragen der neuen EK-Frequenzen: ${error.message}`,
+          )
+        }
+        const newEkfrequenzs =
+          newEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
+
+        // 2.2: insert ekfrequenz
+        try {
+          await Promise.allSettled(
+            newEkfrequenzs.map(async (ekf) => {
+              client.mutate({
                 mutation: gql`
-                  mutation deleteExistingEkfrequenzForEkfrequenzFolder(
-                    $id: UUID!
+                  mutation insertEkfrequenzForEkfrequenzFolder(
+                    $apId: UUID!
+                    $anwendungsfall: String
+                    $bemerkungen: String
+                    $changedBy: String
+                    $code: String
+                    $ekAbrechnungstyp: String
+                    $ektyp: EkType
+                    $kontrolljahre: [Int]
+                    $kontrolljahreAb: EkKontrolljahreAb
+                    $sort: Int
                   ) {
-                    deleteEkfrequenzById(input: { id: $id }) {
-                      deletedEkfrequenzId
+                    createEkfrequenz(
+                      input: {
+                        ekfrequenz: {
+                          apId: $apId
+                          anwendungsfall: $anwendungsfall
+                          bemerkungen: $bemerkungen
+                          changedBy: $changedBy
+                          code: $code
+                          ekAbrechnungstyp: $ekAbrechnungstyp
+                          ektyp: $ektyp
+                          kontrolljahre: $kontrolljahre
+                          kontrolljahreAb: $kontrolljahreAb
+                          sort: $sort
+                        }
+                      }
+                    ) {
+                      ekfrequenz {
+                        id
+                        anwendungsfall
+                        apId
+                        bemerkungen
+                        code
+                        ekAbrechnungstyp
+                        ektyp
+                        kontrolljahre
+                        kontrolljahreAb
+                        sort
+                        changedBy
+                      }
                     }
                   }
                 `,
                 variables: {
-                  id,
+                  anwendungsfall: ekf.anwendungsfall,
+                  apId: apId,
+                  bemerkungen: ekf.bemerkungen,
+                  code: ekf.code,
+                  ekAbrechnungstyp: ekf.ekAbrechnungstyp,
+                  ektyp: ekf.ektyp,
+                  kontrolljahre: ekf.kontrolljahre,
+                  kontrolljahreAb: ekf.kontrolljahreAb,
+                  sort: ekf.sort,
+                  changedBy: user.name,
                 },
-                update(cache) {
-                  cache.evict({ id })
-                },
-              }),
-          ),
-        )
-      } catch (error) {
-        console.log({ error })
-        setApOptionsError(
-          `Fehler beim Löschen der existierenden EK-Frequenzen: ${error.message}`,
-        )
-      }
+              })
+            }),
+          )
+        } catch (error) {
+          console.log({ error })
+          return setApOptionsError(
+            `Fehler beim Kopieren der EK-Frequenzen: ${error.message}`,
+          )
+        }
 
-      // 2. add ekfrequenz from other ap
-      // 2.1: query ekfrequenz
-      let newEkfrequenzResult
-      try {
-        newEkfrequenzResult = await client.query({
-          query: gql`
-            query getNewEkfrequenzForEkfrequenzFolder($apId: UUID) {
-              allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
-                nodes {
-                  id
-                  anwendungsfall
-                  apId
-                  bemerkungen
-                  code
-                  ekAbrechnungstyp
-                  ektyp
-                  kontrolljahre
-                  kontrolljahreAb
-                  sort
-                }
-              }
-            }
-          `,
-          variables: {
-            apId: newApId,
+        // 3. inform user
+        setOpenChooseAp(false)
+        enqueNotification({
+          message: `Die EK-Frequenzen wurden kopiert`,
+          options: {
+            variant: 'info',
           },
         })
-      } catch (error) {
-        console.log({ error })
-        return setApOptionsError(
-          `Fehler beim Abfragen der neuen EK-Frequenzen: ${error.message}`,
-        )
-      }
-      const newEkfrequenzs =
-        newEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
+      },
+      [apId, client, enqueNotification, user.name],
+    )
 
-      // 2.2: insert ekfrequenz
-      try {
-        await Promise.allSettled(
-          newEkfrequenzs.map(async (ekf) => {
-            client.mutate({
-              mutation: gql`
-                mutation insertEkfrequenzForEkfrequenzFolder(
-                  $apId: UUID!
-                  $anwendungsfall: String
-                  $bemerkungen: String
-                  $changedBy: String
-                  $code: String
-                  $ekAbrechnungstyp: String
-                  $ektyp: EkType
-                  $kontrolljahre: [Int]
-                  $kontrolljahreAb: EkKontrolljahreAb
-                  $sort: Int
-                ) {
-                  createEkfrequenz(
-                    input: {
-                      ekfrequenz: {
-                        apId: $apId
-                        anwendungsfall: $anwendungsfall
-                        bemerkungen: $bemerkungen
-                        changedBy: $changedBy
-                        code: $code
-                        ekAbrechnungstyp: $ekAbrechnungstyp
-                        ektyp: $ektyp
-                        kontrolljahre: $kontrolljahre
-                        kontrolljahreAb: $kontrolljahreAb
-                        sort: $sort
-                      }
-                    }
-                  ) {
-                    ekfrequenz {
-                      id
-                      anwendungsfall
-                      apId
-                      bemerkungen
-                      code
-                      ekAbrechnungstyp
-                      ektyp
-                      kontrolljahre
-                      kontrolljahreAb
-                      sort
-                      changedBy
+    const [apOptionsError, setApOptionsError] = useState(undefined)
+    const apOptions = useCallback(
+      async (inputValue, cb) => {
+        if (apId === 0) return
+        const filter =
+          inputValue ?
+            {
+              label: { includesInsensitive: inputValue },
+              id: { notEqualTo: apId },
+            }
+          : { label: { isNull: false }, id: { notEqualTo: apId } }
+        let result
+        try {
+          result = await client.query({
+            // would be elegant to query only ap with ekfrequenz
+            // solution: https://github.com/graphile/pg-aggregates
+            query: gql`
+              query apForEkfrequenzfolder($filter: ApFilter) {
+                allAps(orderBy: [LABEL_ASC], filter: $filter) {
+                  nodes {
+                    value: id
+                    label
+                    ekfrequenzsByApId {
+                      totalCount
                     }
                   }
                 }
-              `,
-              variables: {
-                anwendungsfall: ekf.anwendungsfall,
-                apId: apId,
-                bemerkungen: ekf.bemerkungen,
-                code: ekf.code,
-                ekAbrechnungstyp: ekf.ekAbrechnungstyp,
-                ektyp: ekf.ektyp,
-                kontrolljahre: ekf.kontrolljahre,
-                kontrolljahreAb: ekf.kontrolljahreAb,
-                sort: ekf.sort,
-                changedBy: user.name,
-              },
-            })
-          }),
-        )
-      } catch (error) {
-        console.log({ error })
-        return setApOptionsError(
-          `Fehler beim Kopieren der EK-Frequenzen: ${error.message}`,
-        )
-      }
-
-      // 3. inform user
-      setOpenChooseAp(false)
-      enqueNotification({
-        message: `Die EK-Frequenzen wurden kopiert`,
-        options: {
-          variant: 'info',
-        },
-      })
-    },
-    [apId, client, enqueNotification, user.name],
-  )
-
-  const [apOptionsError, setApOptionsError] = useState(undefined)
-  const apOptions = useCallback(
-    async (inputValue, cb) => {
-      if (apId === 0) return
-      const filter =
-        inputValue ?
-          {
-            label: { includesInsensitive: inputValue },
-            id: { notEqualTo: apId },
-          }
-        : { label: { isNull: false }, id: { notEqualTo: apId } }
-      let result
-      try {
-        result = await client.query({
-          // would be elegant to query only ap with ekfrequenz
-          // solution: https://github.com/graphile/pg-aggregates
-          query: gql`
-            query apForEkfrequenzfolder($filter: ApFilter) {
-              allAps(orderBy: [LABEL_ASC], filter: $filter) {
-                nodes {
-                  value: id
-                  label
-                  ekfrequenzsByApId {
-                    totalCount
-                  }
-                }
               }
-            }
-          `,
-          variables: {
-            filter: filter,
-          },
-        })
-      } catch (error) {
-        console.log({ error })
-        setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
-      }
-      const options = result?.data?.allAps?.nodes ?? []
-      // only show options with ekfrequenzs
-      const optionsWithEkfrequenzs = options.filter(
-        (e) => e.ekfrequenzsByApId.totalCount > 0,
-      )
-      cb(optionsWithEkfrequenzs)
-    },
-    [apId, client],
-  )
+            `,
+            variables: {
+              filter: filter,
+            },
+          })
+        } catch (error) {
+          console.log({ error })
+          setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
+        }
+        const options = result?.data?.allAps?.nodes ?? []
+        // only show options with ekfrequenzs
+        const optionsWithEkfrequenzs = options.filter(
+          (e) => e.ekfrequenzsByApId.totalCount > 0,
+        )
+        cb(optionsWithEkfrequenzs)
+      },
+      [apId, client],
+    )
 
-  return (
-    <ErrorBoundary>
-      <ContextMenu
-        id="treeEkfrequenzFolder"
-        collect={(props) => props}
-        onShow={onShow}
-        hideOnLeave={true}
-      >
-        <div className="react-contextmenu-title">EK-Frequenz</div>
-        {!userIsReadOnly(user.token) && (
-          <>
-            <MenuItem
-              onClick={onClick}
-              data={insertData}
-            >
-              erstelle neue
-            </MenuItem>
-            <MenuItem onClick={onOpenChooseApDialog}>
-              aus anderer Art kopieren
-            </MenuItem>
-          </>
-        )}
-      </ContextMenu>
-      <Dialog
-        open={openChooseAp}
-        onClose={onCloseChooseApDialog}
-      >
-        <DialogTitle>EK-Frequenzen aus anderer Art kopieren</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Achtung: Allfällige bestehende EK-Frequenzen werden gelöscht und mit
-            den kopierten ersetzt, sobald Sie einen Aktionsplän wählen
-          </DialogContentText>
-          <SelectContainer>
-            <SelectLabel>Art (nur solche mit EK-Frequenzen)</SelectLabel>
-            <SelectStyled
-              autoFocus
-              defaultOptions
-              name="ap"
-              onChange={onChooseAp}
-              value=""
-              hideSelectedOptions
-              placeholder=""
-              isClearable
-              isSearchable
-              // remove as can't select without typing
-              nocaret
-              // don't show a no options message if a value exists
-              noOptionsMessage={() => '(Bitte Tippen für Vorschläge)'}
-              // enable deleting typed values
-              backspaceRemovesValue
-              classNamePrefix="react-select"
-              loadOptions={apOptions}
-              openMenuOnFocus
-            />
-            {apOptionsError && <Error>{apOptionsError}</Error>}
-          </SelectContainer>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onCloseChooseApDialog}>abbrechen</Button>
-        </DialogActions>
-      </Dialog>
-    </ErrorBoundary>
-  )
-})
+    return (
+      <ErrorBoundary>
+        <ContextMenu
+          id="treeEkfrequenzFolder"
+          collect={(props) => props}
+          onShow={onShow}
+          hideOnLeave={true}
+        >
+          <div className="react-contextmenu-title">EK-Frequenz</div>
+          {!userIsReadOnly(user.token) && (
+            <>
+              <MenuItem
+                onClick={onClick}
+                data={insertData}
+              >
+                erstelle neue
+              </MenuItem>
+              <MenuItem onClick={onOpenChooseApDialog}>
+                aus anderer Art kopieren
+              </MenuItem>
+            </>
+          )}
+        </ContextMenu>
+        <Dialog
+          open={openChooseAp}
+          onClose={onCloseChooseApDialog}
+        >
+          <DialogTitle>EK-Frequenzen aus anderer Art kopieren</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Achtung: Allfällige bestehende EK-Frequenzen werden gelöscht und
+              mit den kopierten ersetzt, sobald Sie einen Aktionsplän wählen
+            </DialogContentText>
+            <SelectContainer>
+              <SelectLabel>Art (nur solche mit EK-Frequenzen)</SelectLabel>
+              <SelectStyled
+                autoFocus
+                defaultOptions
+                name="ap"
+                onChange={onChooseAp}
+                value=""
+                hideSelectedOptions
+                placeholder=""
+                isClearable
+                isSearchable
+                // remove as can't select without typing
+                nocaret
+                // don't show a no options message if a value exists
+                noOptionsMessage={() => '(Bitte Tippen für Vorschläge)'}
+                // enable deleting typed values
+                backspaceRemovesValue
+                classNamePrefix="react-select"
+                loadOptions={apOptions}
+                openMenuOnFocus
+              />
+              {apOptionsError && <Error>{apOptionsError}</Error>}
+            </SelectContainer>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onCloseChooseApDialog}>abbrechen</Button>
+          </DialogActions>
+        </Dialog>
+      </ErrorBoundary>
+    )
+  }),
+)
