@@ -1,4 +1,4 @@
-import { useContext, lazy, Suspense } from 'react'
+import { memo, useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router-dom'
@@ -49,57 +49,57 @@ const Container = styled.div`
   }
 `
 
-const ProtectedRoute = () => {
-  const { pathname, search } = useLocation()
-  const { userId } = useParams()
+export const Component = memo(
+  observer(() => {
+    const { pathname, search } = useLocation()
+    const { userId } = useParams()
 
-  const store = useContext(StoreContext)
-  const { showDeletions, user } = store
+    const store = useContext(StoreContext)
+    const { showDeletions, user } = store
 
-  const token = user?.token
-  const tokenDecoded = token ? jwtDecode(token) : null
-  const role = tokenDecoded ? tokenDecoded.role : null
-  const isFreiwillig = role === 'apflora_freiwillig'
-  const userIdToUse = userId ?? user?.id
+    const token = user?.token
+    const tokenDecoded = token ? jwtDecode(token) : null
+    const role = tokenDecoded ? tokenDecoded.role : null
+    const isFreiwillig = role === 'apflora_freiwillig'
+    const userIdToUse = userId ?? user?.id
 
-  // if user is freiwillig
-  // and path is not in /Benutzer/:userId
-  // then redirect to /Benutzer/:userId/EKF
-  // userId was undefined thus not navigating
-  const shouldNavigate =
-    isFreiwillig &&
-    userIdToUse &&
-    !pathname.includes(`Daten/Benutzer/${userIdToUse}`)
-  if (shouldNavigate) {
+    // if user is freiwillig
+    // and path is not in /Benutzer/:userId
+    // then redirect to /Benutzer/:userId/EKF
+    // userId was undefined thus not navigating
+    const shouldNavigate =
+      isFreiwillig &&
+      userIdToUse &&
+      !pathname.includes(`Daten/Benutzer/${userIdToUse}`)
+    if (shouldNavigate) {
+      return (
+        <Navigate
+          to={`/Daten/Benutzer/${userIdToUse}/EKF/${new Date().getFullYear()}${search}`}
+        />
+      )
+    }
+
     return (
-      <Navigate
-        to={`/Daten/Benutzer/${userIdToUse}/EKF/${new Date().getFullYear()}${search}`}
-      />
+      <Container data-isiniframe={isInIframe}>
+        {!!user.token && (
+          <>
+            <Outlet />
+            <Suspense fallback={<Spinner />}>
+              {!isFreiwillig && !isInIframe && <Messages />}
+              {!isFreiwillig && showDeletions && <Deletions />}
+            </Suspense>
+            <Suspense fallback={null}>
+              <ActiveNodeArraySetter />
+              <NavigateSetter />
+              <QueryClientSetter />
+              <ApfLayerNotifier />
+            </Suspense>
+          </>
+        )}
+        <Suspense fallback={null}>
+          <User />
+        </Suspense>
+      </Container>
     )
-  }
-
-  return (
-    <Container data-isiniframe={isInIframe}>
-      {!!user.token && (
-        <>
-          <Outlet />
-          <Suspense fallback={<Spinner />}>
-            {!isFreiwillig && !isInIframe && <Messages />}
-            {!isFreiwillig && showDeletions && <Deletions />}
-          </Suspense>
-          <Suspense fallback={null}>
-            <ActiveNodeArraySetter />
-            <NavigateSetter />
-            <QueryClientSetter />
-            <ApfLayerNotifier />
-          </Suspense>
-        </>
-      )}
-      <Suspense fallback={null}>
-        <User />
-      </Suspense>
-    </Container>
-  )
-}
-
-export const Component = observer(ProtectedRoute)
+  }),
+)

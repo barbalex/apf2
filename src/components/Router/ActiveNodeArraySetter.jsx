@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { memo, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import isEqual from 'lodash/isEqual'
 import { useLocation } from 'react-router-dom'
@@ -6,21 +6,23 @@ import { useLocation } from 'react-router-dom'
 import { StoreContext } from '../../storeContext.js'
 import { getActiveNodeArrayFromPathname } from '../../modules/getActiveNodeArrayFromPathname.js'
 
-export const ActiveNodeArraySetter = observer(() => {
-  const store = useContext(StoreContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+export const ActiveNodeArraySetter = memo(
+  observer(() => {
+    const store = useContext(StoreContext)
+    const { activeNodeArray, setActiveNodeArray } = store.tree
 
-  const { pathname } = useLocation()
+    const { pathname } = useLocation()
 
-  // when pathname changes, update activeNodeArray
-  useEffect(() => {
-    const newAna = getActiveNodeArrayFromPathname(pathname)
-    if (!isEqual(newAna, activeNodeArray.slice())) {
-      // console.log('ActiveNodeArraySetter setting activeNodeArray to: ', newAna)
-      // user pushed back button > update activeNodeArray
-      setActiveNodeArray(newAna)
-    }
-  }, [activeNodeArray, pathname, setActiveNodeArray])
+    // when pathname changes, update activeNodeArray
+    useEffect(() => {
+      const newAna = getActiveNodeArrayFromPathname(pathname)
+      if (!isEqual(newAna, activeNodeArray.slice())) {
+        // console.log('ActiveNodeArraySetter setting activeNodeArray to: ', newAna)
+        // user pushed back button > update activeNodeArray
+        setActiveNodeArray(newAna)
+      }
+    }, [activeNodeArray, pathname, setActiveNodeArray])
 
-  return null
-})
+    return null
+  }),
+)
