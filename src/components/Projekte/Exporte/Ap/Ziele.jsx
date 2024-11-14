@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react'
+import { memo, useContext, useState, useCallback } from 'react'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
@@ -7,110 +7,112 @@ import { exportModule } from '../../../../modules/export.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-export const Ziele = observer(() => {
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const { enqueNotification } = store
+export const Ziele = memo(
+  observer(() => {
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { enqueNotification } = store
 
-  const [queryState, setQueryState] = useState()
+    const [queryState, setQueryState] = useState()
 
-  const onClickZiele = useCallback(async () => {
-    setQueryState('lade Daten...')
-    let result
-    try {
-      result = await client.query({
-        query: gql`
-          query zielsForExportQuery {
-            allZiels(
-              orderBy: [
-                AP_BY_AP_ID__ART_ID_ASC
-                JAHR_ASC
-                ZIEL_TYP_WERTE_BY_TYP__TEXT_ASC
-                ZIEL_TYP_WERTE_BY_TYP__TEXT_ASC
-              ]
-            ) {
-              nodes {
-                id
-                jahr
-                typ
-                zielTypWerteByTyp {
+    const onClickZiele = useCallback(async () => {
+      setQueryState('lade Daten...')
+      let result
+      try {
+        result = await client.query({
+          query: gql`
+            query zielsForExportQuery {
+              allZiels(
+                orderBy: [
+                  AP_BY_AP_ID__ART_ID_ASC
+                  JAHR_ASC
+                  ZIEL_TYP_WERTE_BY_TYP__TEXT_ASC
+                  ZIEL_TYP_WERTE_BY_TYP__TEXT_ASC
+                ]
+              ) {
+                nodes {
                   id
-                  text
-                }
-                bezeichnung
-                apByApId {
-                  id
-                  apBearbstandWerteByBearbeitung {
+                  jahr
+                  typ
+                  zielTypWerteByTyp {
                     id
                     text
                   }
-                  startJahr
-                  apUmsetzungWerteByUmsetzung {
+                  bezeichnung
+                  apByApId {
                     id
-                    text
-                  }
-                  adresseByBearbeiter {
-                    id
-                    name
-                  }
-                  aeTaxonomyByArtId {
-                    id
-                    artname
+                    apBearbstandWerteByBearbeitung {
+                      id
+                      text
+                    }
+                    startJahr
+                    apUmsetzungWerteByUmsetzung {
+                      id
+                      text
+                    }
+                    adresseByBearbeiter {
+                      id
+                      name
+                    }
+                    aeTaxonomyByArtId {
+                      id
+                      artname
+                    }
                   }
                 }
               }
             }
-          }
-        `,
+          `,
+        })
+      } catch (error) {
+        enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      setQueryState('verarbeite...')
+      const rows = (result.data?.allZiels?.nodes ?? []).map((z) => ({
+        ap_id: z.id,
+        artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
+        ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
+        ap_start_jahr: z?.apByApId?.startJahr ?? '',
+        ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
+        ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
+        id: z.id,
+        jahr: z.jahr,
+        typ: z?.zielTypWerteByTyp?.text ?? '',
+        bezeichnung: z.bezeichnung,
+      }))
+      if (rows.length === 0) {
+        setQueryState(undefined)
+        return enqueNotification({
+          message: 'Die Abfrage retournierte 0 Datensätze',
+          options: {
+            variant: 'warning',
+          },
+        })
+      }
+      exportModule({
+        data: sortBy(rows, 'artname'),
+        fileName: 'ApZiele',
+        store,
       })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    setQueryState('verarbeite...')
-    const rows = (result.data?.allZiels?.nodes ?? []).map((z) => ({
-      ap_id: z.id,
-      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
-      ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
-      ap_start_jahr: z?.apByApId?.startJahr ?? '',
-      ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
-      id: z.id,
-      jahr: z.jahr,
-      typ: z?.zielTypWerteByTyp?.text ?? '',
-      bezeichnung: z.bezeichnung,
-    }))
-    if (rows.length === 0) {
       setQueryState(undefined)
-      return enqueNotification({
-        message: 'Die Abfrage retournierte 0 Datensätze',
-        options: {
-          variant: 'warning',
-        },
-      })
-    }
-    exportModule({
-      data: sortBy(rows, 'artname'),
-      fileName: 'ApZiele',
-      store,
-    })
-    setQueryState(undefined)
-  }, [enqueNotification, client, store])
+    }, [enqueNotification, client, store])
 
-  return (
-    <DownloadCardButton
-      onClick={onClickZiele}
-      color="inherit"
-      disabled={!!queryState}
-    >
-      Ziele
-      {queryState ?
-        <StyledProgressText>{queryState}</StyledProgressText>
-      : null}
-    </DownloadCardButton>
-  )
-})
+    return (
+      <DownloadCardButton
+        onClick={onClickZiele}
+        color="inherit"
+        disabled={!!queryState}
+      >
+        Ziele
+        {queryState ?
+          <StyledProgressText>{queryState}</StyledProgressText>
+        : null}
+      </DownloadCardButton>
+    )
+  }),
+)
