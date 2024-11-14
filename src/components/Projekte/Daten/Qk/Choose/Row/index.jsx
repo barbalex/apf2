@@ -1,8 +1,7 @@
 import { memo, useCallback } from 'react'
 import styled from '@emotion/styled'
 import Checkbox from '@mui/material/Checkbox'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 
 import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'

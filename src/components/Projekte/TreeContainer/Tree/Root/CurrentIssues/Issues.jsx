@@ -1,6 +1,5 @@
-import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
 
 import { Row } from '../../Row.jsx'
 
