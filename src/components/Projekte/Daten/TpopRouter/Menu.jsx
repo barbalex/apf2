@@ -320,8 +320,10 @@ export const Menu = memo(
 
     const tpopHasCoord = !!row.lv95X && !!row.lv95Y
     const [copyingCoordToTpop, setCopyingCoordToTpop] = useState(false)
-    const onCopyCoordToPop = useCallback(() => {
-      copyTpopKoordToPop({ id: tpopId, store, client })
+    const onCopyCoordToPop = useCallback(async () => {
+      setCopyingCoordToTpop(true)
+      await copyTpopKoordToPop({ id: tpopId, store, client })
+      setCopyingCoordToTpop(false)
     }, [tpopId, store, client])
 
     const widths = useMemo(

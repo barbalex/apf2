@@ -10,6 +10,10 @@ const StyledLoadingButton = styled(LoadingButton)`
   line-height: 1.1;
   color: white;
   border-color: white;
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  resize: both;
+  overflow: hidden;
 `
 const Span = styled.span`
   padding: 1px 4px;
@@ -17,24 +21,32 @@ const Span = styled.span`
 
 export const LoadingButtonFittingText = memo(
   ({ width, height, onClick, loading, text }) => {
-    const ref = useRef()
-    useLayoutEffect(() => {
-      textFit(ref.current, {
-        // multiLine: true,
-        alignVert: true,
-        alignHoriz: true,
-      })
-    }, [])
-
     return (
       <StyledLoadingButton
         variant="outlined"
-        style={{ width, height }}
         onClick={onClick}
         loading={loading}
-        ref={ref}
+        width={width}
+        height={height}
       >
-        <Span>{text}</Span>
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 500 75"
+          preserveAspectRatio="xMinYMid meet"
+          // style={{ backgroundColor: 'green' }}
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        >
+          <text
+            x="0"
+            y="75"
+            fontSize="30"
+            fill="black"
+          >
+            {text}
+          </text>
+        </svg>
       </StyledLoadingButton>
     )
   },

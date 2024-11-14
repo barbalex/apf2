@@ -55,4 +55,5 @@ export const copyTpopKoordToPop = async ({ id, store, client }) => {
   client.refetchQueries({
     include: ['TpopForMapQuery', 'PopForMapQuery'],
   })
+  return
 }
