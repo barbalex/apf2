@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react'
+import { memo, useContext, useCallback } from 'react'
 import 'leaflet'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -26,19 +26,21 @@ const StyledDiv = styled.div`
   margin-bottom: 2px !important;
 `
 
-export const ShowCoordinates = observer(({ setControlType }) => {
-  const { mapMouseCoordinates } = useContext(StoreContext)
-  const x = mapMouseCoordinates.x?.toLocaleString('de-ch')
-  const y = mapMouseCoordinates.y?.toLocaleString('de-ch')
+export const ShowCoordinates = memo(
+  observer(({ setControlType }) => {
+    const { mapMouseCoordinates } = useContext(StoreContext)
+    const x = mapMouseCoordinates.x?.toLocaleString('de-ch')
+    const y = mapMouseCoordinates.y?.toLocaleString('de-ch')
 
-  const onClick = useCallback(() => setControlType('goto'), [setControlType])
+    const onClick = useCallback(() => setControlType('goto'), [setControlType])
 
-  return (
-    <StyledDiv
-      onClick={onClick}
-      title="Klicken um Koordinaten zu suchen"
-    >
-      {`${x}, ${y}`}
-    </StyledDiv>
-  )
-})
+    return (
+      <StyledDiv
+        onClick={onClick}
+        title="Klicken um Koordinaten zu suchen"
+      >
+        {`${x}, ${y}`}
+      </StyledDiv>
+    )
+  }),
+)

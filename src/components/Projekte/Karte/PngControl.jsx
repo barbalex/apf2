@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useContext } from 'react'
+import { memo, useCallback, useState, useEffect, useContext } from 'react'
 import 'leaflet'
 import { useMap } from 'react-leaflet'
 import 'leaflet-easyprint'
@@ -35,47 +35,49 @@ const options = {
   hideControlContainer: true,
 }
 
-export const PngControl = observer(() => {
-  const { setHideMapControls } = useContext(StoreContext)
-  const map = useMap()
-  const [printPlugin, setPrintPlugin] = useState({})
+export const PngControl = memo(
+  observer(() => {
+    const { setHideMapControls } = useContext(StoreContext)
+    const map = useMap()
+    const [printPlugin, setPrintPlugin] = useState({})
 
-  useEffect(() => {
-    const pp = window.L.easyPrint(options)
-    pp.addTo(map)
-    setPrintPlugin(pp)
+    useEffect(() => {
+      const pp = window.L.easyPrint(options)
+      pp.addTo(map)
+      setPrintPlugin(pp)
 
-    return () => {
-      pp.remove()
-    }
-  }, [map])
+      return () => {
+        pp.remove()
+      }
+    }, [map])
 
-  const onEasyPrintFinished = useCallback(() => {
-    setHideMapControls(false)
-  }, [setHideMapControls])
-  useEffect(() => {
-    map.on('easyPrint-finished', onEasyPrintFinished)
+    const onEasyPrintFinished = useCallback(() => {
+      setHideMapControls(false)
+    }, [setHideMapControls])
+    useEffect(() => {
+      map.on('easyPrint-finished', onEasyPrintFinished)
 
-    return () => {
-      map.off('easyPrint-finished', onEasyPrintFinished)
-    }
-  }, [map, setHideMapControls])
+      return () => {
+        map.off('easyPrint-finished', onEasyPrintFinished)
+      }
+    }, [map, setHideMapControls])
 
-  const savePng = useCallback(
-    (event) => {
-      event.preventDefault()
-      setHideMapControls(true)
-      printPlugin.printMap('CurrentSize', 'apfloraKarte')
-    },
-    [printPlugin, setHideMapControls],
-  )
+    const savePng = useCallback(
+      (event) => {
+        event.preventDefault()
+        setHideMapControls(true)
+        printPlugin.printMap('CurrentSize', 'apfloraKarte')
+      },
+      [printPlugin, setHideMapControls],
+    )
 
-  return (
-    <StyledButton
-      onClick={savePng}
-      title="Karte als png speichern"
-    >
-      <FileDownloadIcon />
-    </StyledButton>
-  )
-})
+    return (
+      <StyledButton
+        onClick={savePng}
+        title="Karte als png speichern"
+      >
+        <FileDownloadIcon />
+      </StyledButton>
+    )
+  }),
+)
