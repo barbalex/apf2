@@ -1,8 +1,7 @@
 // seems not to be used
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import Select from 'react-select'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`
   display: flex;
@@ -46,7 +45,7 @@ const StyledSelect = styled(Select)`
   }
 `
 
-export const SharedSelect = observer(
+export const SharedSelect = memo(
   ({
     value,
     field = '',
