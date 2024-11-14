@@ -1,4 +1,11 @@
-import { useContext, useState, useCallback, useEffect, useRef } from 'react'
+import {
+  memo,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react'
 import styled from '@emotion/styled'
 import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
@@ -54,117 +61,119 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   height: 18px !important;
 `
 
-export const LayersControl = observer(() => {
-  const store = useContext(StoreContext)
-  const { apfloraLayers, overlays } = store
+export const LayersControl = memo(
+  observer(() => {
+    const store = useContext(StoreContext)
+    const { apfloraLayers, overlays } = store
 
-  const [baseLayersExpanded, setBaseLayersExpanded] = useState(true)
-  const [overlaysExpanded, setOverlaysExpanded] = useState(false)
-  const [apfloraLayersExpanded, setApfloraLayersExpanded] = useState(false)
+    const [baseLayersExpanded, setBaseLayersExpanded] = useState(true)
+    const [overlaysExpanded, setOverlaysExpanded] = useState(false)
+    const [apfloraLayersExpanded, setApfloraLayersExpanded] = useState(false)
 
-  const onToggleBaseLayersExpanded = useCallback(
-    (event) => {
-      event.stopPropagation()
-      setBaseLayersExpanded(!baseLayersExpanded)
-      if (overlaysExpanded) {
-        setOverlaysExpanded(!overlaysExpanded)
+    const onToggleBaseLayersExpanded = useCallback(
+      (event) => {
+        event.stopPropagation()
+        setBaseLayersExpanded(!baseLayersExpanded)
+        if (overlaysExpanded) {
+          setOverlaysExpanded(!overlaysExpanded)
+        }
+        if (apfloraLayersExpanded) {
+          setApfloraLayersExpanded(!apfloraLayersExpanded)
+        }
+      },
+      [baseLayersExpanded, overlaysExpanded, apfloraLayersExpanded],
+    )
+    const onToggleOverlaysExpanded = useCallback(() => {
+      setOverlaysExpanded(!overlaysExpanded)
+      if (baseLayersExpanded) {
+        setBaseLayersExpanded(!baseLayersExpanded)
       }
       if (apfloraLayersExpanded) {
         setApfloraLayersExpanded(!apfloraLayersExpanded)
       }
-    },
-    [baseLayersExpanded, overlaysExpanded, apfloraLayersExpanded],
-  )
-  const onToggleOverlaysExpanded = useCallback(() => {
-    setOverlaysExpanded(!overlaysExpanded)
-    if (baseLayersExpanded) {
-      setBaseLayersExpanded(!baseLayersExpanded)
-    }
-    if (apfloraLayersExpanded) {
+    }, [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded])
+    const onToggleApfloraLayersExpanded = useCallback(() => {
       setApfloraLayersExpanded(!apfloraLayersExpanded)
-    }
-  }, [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded])
-  const onToggleApfloraLayersExpanded = useCallback(() => {
-    setApfloraLayersExpanded(!apfloraLayersExpanded)
-    if (overlaysExpanded) {
-      setOverlaysExpanded(!overlaysExpanded)
-    }
-    if (baseLayersExpanded) {
-      setBaseLayersExpanded(!baseLayersExpanded)
-    }
-  }, [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded])
+      if (overlaysExpanded) {
+        setOverlaysExpanded(!overlaysExpanded)
+      }
+      if (baseLayersExpanded) {
+        setBaseLayersExpanded(!baseLayersExpanded)
+      }
+    }, [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded])
 
-  const ApfloraCard =
-    baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded ?
-      CardTitle
-    : CardTitleApfloraOpen
+    const ApfloraCard =
+      baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded ?
+        CardTitle
+      : CardTitleApfloraOpen
 
-  // hack to get control to show on first load
-  // depends on state being changed, so needs to be true above
-  // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
-  useEffect(() => {
-    setBaseLayersExpanded(false)
-  }, [])
+    // hack to get control to show on first load
+    // depends on state being changed, so needs to be true above
+    // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
+    useEffect(() => {
+      setBaseLayersExpanded(false)
+    }, [])
 
-  // prevent click propagation on to map
-  // https://stackoverflow.com/a/57013052/712005
-  const ref = useRef()
-  useEffect(() => {
-    window.L.DomEvent.disableClickPropagation(ref.current)
-    window.L.DomEvent.disableScrollPropagation(ref.current)
-  }, [])
+    // prevent click propagation on to map
+    // https://stackoverflow.com/a/57013052/712005
+    const ref = useRef()
+    useEffect(() => {
+      window.L.DomEvent.disableClickPropagation(ref.current)
+      window.L.DomEvent.disableScrollPropagation(ref.current)
+    }, [])
 
-  return (
-    <CardContainer ref={ref}>
-      <Card>
-        <CardHeader onClick={onToggleApfloraLayersExpanded}>
-          <ApfloraCard>apflora</ApfloraCard>
-          <div>
-            {apfloraLayersExpanded ?
-              <StyledExpandLessIcon />
-            : <StyledExpandMoreIcon />}
-          </div>
-        </CardHeader>
-        {apfloraLayersExpanded && (
-          <ApfloraLayers
-            /**
-             * overlaysString enforces rererender
-             * even when only the sorting changes
-             */
-            apfloraLayersString={apfloraLayers.map((o) => o.value).join()}
-          />
-        )}
-      </Card>
-      <Card>
-        <CardHeader onClick={onToggleOverlaysExpanded}>
-          <CardTitle>überlagernd</CardTitle>
-          <div>
-            {overlaysExpanded ?
-              <StyledExpandLessIcon />
-            : <StyledExpandMoreIcon />}
-          </div>
-        </CardHeader>
-        {overlaysExpanded && (
-          <Overlays
-            /**
-             * overlaysString enforces rererender
-             * even when only the sorting changes
-             */
-            overlaysString={overlays.map((o) => o.value).join()}
-          />
-        )}
-      </Card>
-      <Card>
-        <CardHeader onClick={onToggleBaseLayersExpanded}>
-          <CardTitle>Hintergrund</CardTitle>
-          <div>
-            {baseLayersExpanded ?
-              <StyledExpandLessIcon />
-            : <StyledExpandMoreIcon />}
-          </div>
-        </CardHeader>
-        {baseLayersExpanded && <BaseLayers />}
-      </Card>
-    </CardContainer>
-  )
-})
+    return (
+      <CardContainer ref={ref}>
+        <Card>
+          <CardHeader onClick={onToggleApfloraLayersExpanded}>
+            <ApfloraCard>apflora</ApfloraCard>
+            <div>
+              {apfloraLayersExpanded ?
+                <StyledExpandLessIcon />
+              : <StyledExpandMoreIcon />}
+            </div>
+          </CardHeader>
+          {apfloraLayersExpanded && (
+            <ApfloraLayers
+              /**
+               * overlaysString enforces rererender
+               * even when only the sorting changes
+               */
+              apfloraLayersString={apfloraLayers.map((o) => o.value).join()}
+            />
+          )}
+        </Card>
+        <Card>
+          <CardHeader onClick={onToggleOverlaysExpanded}>
+            <CardTitle>überlagernd</CardTitle>
+            <div>
+              {overlaysExpanded ?
+                <StyledExpandLessIcon />
+              : <StyledExpandMoreIcon />}
+            </div>
+          </CardHeader>
+          {overlaysExpanded && (
+            <Overlays
+              /**
+               * overlaysString enforces rererender
+               * even when only the sorting changes
+               */
+              overlaysString={overlays.map((o) => o.value).join()}
+            />
+          )}
+        </Card>
+        <Card>
+          <CardHeader onClick={onToggleBaseLayersExpanded}>
+            <CardTitle>Hintergrund</CardTitle>
+            <div>
+              {baseLayersExpanded ?
+                <StyledExpandLessIcon />
+              : <StyledExpandMoreIcon />}
+            </div>
+          </CardHeader>
+          {baseLayersExpanded && <BaseLayers />}
+        </Card>
+      </CardContainer>
+    )
+  }),
+)
