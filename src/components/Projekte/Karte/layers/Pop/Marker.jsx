@@ -1,4 +1,4 @@
-import { useContext, useCallback, useMemo } from 'react'
+import { memo, useContext, useCallback, useMemo } from 'react'
 import { Marker as LeafletMarker, Tooltip, Popup } from 'react-leaflet'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -51,153 +51,155 @@ const Info = styled.div`
   column-gap: 5px;
 `
 
-export const Marker = observer(({ pop }) => {
-  const { apId, projId, popId } = useParams()
-  const { search } = useLocation()
+export const Marker = memo(
+  observer(({ pop }) => {
+    const { apId, projId, popId } = useParams()
+    const { search } = useLocation()
 
-  const store = useContext(StoreContext)
-  const { apfloraLayers, openTree2WithActiveNodeArray, map } = store
-  const { popIcon: popIconName, popLabel: popLabelName } = map
+    const store = useContext(StoreContext)
+    const { apfloraLayers, openTree2WithActiveNodeArray, map } = store
+    const { popIcon: popIconName, popLabel: popLabelName } = map
 
-  const nrLabel = pop?.nr?.toString?.() ?? '(keine Nr)'
-  let title = nrLabel
-  if (popLabelName === 'name') title = pop?.name ?? '(kein Name)'
-  if (popLabelName === 'none') title = ''
-  // beware: leaflet needs title to always be a string
-  if (title && title.toString) {
-    title = title.toString()
-  }
-  const isHighlighted = popId === pop.id
+    const nrLabel = pop?.nr?.toString?.() ?? '(keine Nr)'
+    let title = nrLabel
+    if (popLabelName === 'name') title = pop?.name ?? '(kein Name)'
+    if (popLabelName === 'none') title = ''
+    // beware: leaflet needs title to always be a string
+    if (title && title.toString) {
+      title = title.toString()
+    }
+    const isHighlighted = popId === pop.id
 
-  const iconHtml = useMemo(() => {
-    let iconHtml = isHighlighted ? popHighlightedIconString : popIconString
-    if (popIconName === 'statusGroup') {
-      iconHtml = isHighlighted ? qIconHighlighted : qIcon
-      if (pop.status === 300) {
-        iconHtml = isHighlighted ? pIconHighlighted : pIcon
-      } else if (pop.status >= 200) {
-        iconHtml = isHighlighted ? aIconHighlighted : aIcon
-      } else if (pop.status >= 100) {
-        iconHtml = isHighlighted ? uIconHighlighted : uIcon
-      }
-    } else if (popIconName === 'statusGroupSymbols') {
-      iconHtml = isHighlighted ? svg100Highlighted : svg100
-      if (pop.status === 100) {
+    const iconHtml = useMemo(() => {
+      let iconHtml = isHighlighted ? popHighlightedIconString : popIconString
+      if (popIconName === 'statusGroup') {
+        iconHtml = isHighlighted ? qIconHighlighted : qIcon
+        if (pop.status === 300) {
+          iconHtml = isHighlighted ? pIconHighlighted : pIcon
+        } else if (pop.status >= 200) {
+          iconHtml = isHighlighted ? aIconHighlighted : aIcon
+        } else if (pop.status >= 100) {
+          iconHtml = isHighlighted ? uIconHighlighted : uIcon
+        }
+      } else if (popIconName === 'statusGroupSymbols') {
         iconHtml = isHighlighted ? svg100Highlighted : svg100
-      } else if (pop.status === 101) {
-        iconHtml = isHighlighted ? svg101Highlighted : svg101
-      } else if (pop.status === 200) {
-        iconHtml = isHighlighted ? svg200Highlighted : svg200
-      } else if (pop.status === 201) {
-        iconHtml = isHighlighted ? svg201Highlighted : svg201
-      } else if (pop.status === 202) {
-        iconHtml = isHighlighted ? svg202Highlighted : svg202
-      } else if (pop.status === 300) {
-        iconHtml = isHighlighted ? svg300Highlighted : svg300
+        if (pop.status === 100) {
+          iconHtml = isHighlighted ? svg100Highlighted : svg100
+        } else if (pop.status === 101) {
+          iconHtml = isHighlighted ? svg101Highlighted : svg101
+        } else if (pop.status === 200) {
+          iconHtml = isHighlighted ? svg200Highlighted : svg200
+        } else if (pop.status === 201) {
+          iconHtml = isHighlighted ? svg201Highlighted : svg201
+        } else if (pop.status === 202) {
+          iconHtml = isHighlighted ? svg202Highlighted : svg202
+        } else if (pop.status === 300) {
+          iconHtml = isHighlighted ? svg300Highlighted : svg300
+        }
       }
-    }
-    return iconHtml
-  }, [isHighlighted, pop.status, popIconName])
+      return iconHtml
+    }, [isHighlighted, pop.status, popIconName])
 
-  const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-    'projekteTabs',
-    isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-  )
-  const openPopInTree2 = useCallback(() => {
-    openTree2WithActiveNodeArray({
-      activeNodeArray: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        pop.id,
-      ],
-      search,
+    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
+      'projekteTabs',
+      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
+    )
+    const openPopInTree2 = useCallback(() => {
+      openTree2WithActiveNodeArray({
+        activeNodeArray: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          pop.id,
+        ],
+        search,
+        projekteTabs,
+        setProjekteTabs,
+      })
+    }, [
+      apId,
+      openTree2WithActiveNodeArray,
+      pop.id,
+      projId,
       projekteTabs,
+      search,
       setProjekteTabs,
-    })
-  }, [
-    apId,
-    openTree2WithActiveNodeArray,
-    pop.id,
-    projId,
-    projekteTabs,
-    search,
-    setProjekteTabs,
-  ])
+    ])
 
-  const openPopInTab = useCallback(() => {
-    const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/Populationen/${
-      pop.id
-    }`
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      return window.open(url, '_blank', 'toolbar=no')
-    }
-    window.open(url)
-  }, [apId, pop.id, projId])
+    const openPopInTab = useCallback(() => {
+      const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/Populationen/${
+        pop.id
+      }`
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        return window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }, [apId, pop.id, projId])
 
-  const latLng = new window.L.LatLng(pop.wgs84Lat, pop.wgs84Long)
-  const icon = window.L.divIcon({ html: iconHtml })
-  const zIndexOffset = -apfloraLayers.findIndex(
-    (apfloraLayer) => apfloraLayer.value === 'pop',
-  )
-  const artname = pop?.apByApId?.aeTaxonomyByArtId?.artname ?? ''
+    const latLng = new window.L.LatLng(pop.wgs84Lat, pop.wgs84Long)
+    const icon = window.L.divIcon({ html: iconHtml })
+    const zIndexOffset = -apfloraLayers.findIndex(
+      (apfloraLayer) => apfloraLayer.value === 'pop',
+    )
+    const artname = pop?.apByApId?.aeTaxonomyByArtId?.artname ?? ''
 
-  return (
-    <LeafletMarker
-      position={latLng}
-      icon={icon}
-      title={title}
-      zIndexOffset={zIndexOffset}
-    >
-      <Popup>
-        <>
-          <div>Population</div>
-          <StyledH3>
-            {`${pop.nr ?? '(keine Nummer)'}: ${pop.name ?? '(kein Name)'}`}
-          </StyledH3>
-          <Info>
-            <div>Art:</div>
-            <div>{artname}</div>
-            <div>Koordinaten:</div>
-            <div>
-              {`${pop.lv95X ? pop.lv95X?.toLocaleString('de-ch') : ''} / ${
-                pop.lv95Y ? pop.lv95Y?.toLocaleString('de-ch') : ''
-              }`}
-            </div>
-            <div>Status:</div>
-            <div>{`${
-              pop?.popStatusWerteByStatus?.text ?? '(kein Status)'
-            }`}</div>
-          </Info>
-          <StyledButton
-            size="small"
-            variant="text"
-            color="inherit"
-            onClick={openPopInTab}
-            fullWidth
-          >
-            Formular in neuem Fenster öffnen
-          </StyledButton>
-          <StyledButton
-            size="small"
-            variant="text"
-            color="inherit"
-            onClick={openPopInTree2}
-            fullWidth
-          >
-            Formular in Strukturbaum 2 öffnen
-          </StyledButton>
-        </>
-      </Popup>
-      <StyledTooltip
-        direction="bottom"
-        opacity={1}
-        permanent
+    return (
+      <LeafletMarker
+        position={latLng}
+        icon={icon}
+        title={title}
+        zIndexOffset={zIndexOffset}
       >
-        <span className="mapTooltip">{title}</span>
-      </StyledTooltip>
-    </LeafletMarker>
-  )
-})
+        <Popup>
+          <>
+            <div>Population</div>
+            <StyledH3>
+              {`${pop.nr ?? '(keine Nummer)'}: ${pop.name ?? '(kein Name)'}`}
+            </StyledH3>
+            <Info>
+              <div>Art:</div>
+              <div>{artname}</div>
+              <div>Koordinaten:</div>
+              <div>
+                {`${pop.lv95X ? pop.lv95X?.toLocaleString('de-ch') : ''} / ${
+                  pop.lv95Y ? pop.lv95Y?.toLocaleString('de-ch') : ''
+                }`}
+              </div>
+              <div>Status:</div>
+              <div>{`${
+                pop?.popStatusWerteByStatus?.text ?? '(kein Status)'
+              }`}</div>
+            </Info>
+            <StyledButton
+              size="small"
+              variant="text"
+              color="inherit"
+              onClick={openPopInTab}
+              fullWidth
+            >
+              Formular in neuem Fenster öffnen
+            </StyledButton>
+            <StyledButton
+              size="small"
+              variant="text"
+              color="inherit"
+              onClick={openPopInTree2}
+              fullWidth
+            >
+              Formular in Strukturbaum 2 öffnen
+            </StyledButton>
+          </>
+        </Popup>
+        <StyledTooltip
+          direction="bottom"
+          opacity={1}
+          permanent
+        >
+          <span className="mapTooltip">{title}</span>
+        </StyledTooltip>
+      </LeafletMarker>
+    )
+  }),
+)
