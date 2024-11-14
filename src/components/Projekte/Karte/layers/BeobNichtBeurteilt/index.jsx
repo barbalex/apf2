@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
@@ -24,79 +24,83 @@ const iconCreateFunction = function (cluster) {
   })
 }
 
-const BeobNichtBeurteiltMarker = observer(({ clustered }) => {
-  // const leafletMap = useMap()
-  const store = useContext(StoreContext)
-  const { enqueNotification } = store
-  const tree = store.tree
-  const { beobGqlFilter } = tree
+const BeobNichtBeurteiltMarker = memo(
+  observer(({ clustered }) => {
+    // const leafletMap = useMap()
+    const store = useContext(StoreContext)
+    const { enqueNotification } = store
+    const tree = store.tree
+    const { beobGqlFilter } = tree
 
-  const { data, error } = useQuery(query, {
-    variables: {
-      beobFilter: beobGqlFilter('nichtBeurteilt').filtered,
-    },
-  })
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const [refetchProvoker, setRefetchProvoker] = useState(1)
-  // useEffect(() => {
-  //   // DO NOT use:
-  //   // leafletMap.on('zoomend dragend', refetch
-  //   // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
-  //   // Also: leafletMap.on('zoomend dragend', ()=> refetch()) never refetches!!??
-  //   // Also: use dragend, not moveend because moveend fires on zoomend as well
-  //   leafletMap.on('zoomend dragend', () => setRefetchProvoker(Math.random()))
-  //   return () => {
-  //     leafletMap.off('zoomend dragend', () => setRefetchProvoker(Math.random()))
-  //   }
-  // }, [leafletMap])
-
-  if (error) {
-    enqueNotification({
-      message: `Fehler beim Laden der Nicht beurteilten Beobachtungen für die Karte: ${error.message}`,
-      options: {
-        variant: 'error',
+    const { data, error } = useQuery(query, {
+      variables: {
+        beobFilter: beobGqlFilter('nichtBeurteilt').filtered,
       },
     })
-  }
 
-  const beobMarkers = (data?.allBeobs?.nodes ?? []).map((beob) => (
-    <Marker
-      key={beob.id}
-      beob={beob}
-    />
-  ))
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // const [refetchProvoker, setRefetchProvoker] = useState(1)
+    // useEffect(() => {
+    //   // DO NOT use:
+    //   // leafletMap.on('zoomend dragend', refetch
+    //   // see: https://github.com/apollographql/apollo-client/issues/1291#issuecomment-367911441
+    //   // Also: leafletMap.on('zoomend dragend', ()=> refetch()) never refetches!!??
+    //   // Also: use dragend, not moveend because moveend fires on zoomend as well
+    //   leafletMap.on('zoomend dragend', () => setRefetchProvoker(Math.random()))
+    //   return () => {
+    //     leafletMap.off('zoomend dragend', () => setRefetchProvoker(Math.random()))
+    //   }
+    // }, [leafletMap])
 
-  if (clustered) {
-    return (
-      <MarkerClusterGroup
-        maxClusterRadius={66}
-        iconCreateFunction={iconCreateFunction}
-      >
-        {beobMarkers}
-      </MarkerClusterGroup>
-    )
-  }
-  return beobMarkers
-})
+    if (error) {
+      enqueNotification({
+        message: `Fehler beim Laden der Nicht beurteilten Beobachtungen für die Karte: ${error.message}`,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
 
-export const BeobNichtBeurteilt = observer(({ clustered }) => {
-  const store = useContext(StoreContext)
-  const tree = store.tree
-  const { beobGqlFilter } = tree
+    const beobMarkers = (data?.allBeobs?.nodes ?? []).map((beob) => (
+      <Marker
+        key={beob.id}
+        beob={beob}
+      />
+    ))
 
-  const { apId } = useParams()
+    if (clustered) {
+      return (
+        <MarkerClusterGroup
+          maxClusterRadius={66}
+          iconCreateFunction={iconCreateFunction}
+        >
+          {beobMarkers}
+        </MarkerClusterGroup>
+      )
+    }
+    return beobMarkers
+  }),
+)
 
-  // Problem: gqlFilter updates AFTER apId
-  // if navigating from ap to pop, apId is set before gqlFilter
-  // thus query fetches data for all aps
-  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
-  const gqlFilterHasApId =
-    !!beobGqlFilter('nichtBeurteilt').filtered?.aeTaxonomyByArtId?.apartsByArtId
-      ?.some?.apId
-  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+export const BeobNichtBeurteilt = memo(
+  observer(({ clustered }) => {
+    const store = useContext(StoreContext)
+    const tree = store.tree
+    const { beobGqlFilter } = tree
 
-  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+    const { apId } = useParams()
 
-  return <BeobNichtBeurteiltMarker clustered={clustered} />
-})
+    // Problem: gqlFilter updates AFTER apId
+    // if navigating from ap to pop, apId is set before gqlFilter
+    // thus query fetches data for all aps
+    // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
+    const gqlFilterHasApId =
+      !!beobGqlFilter('nichtBeurteilt').filtered?.aeTaxonomyByArtId
+        ?.apartsByArtId?.some?.apId
+    const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+
+    if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+
+    return <BeobNichtBeurteiltMarker clustered={clustered} />
+  }),
+)

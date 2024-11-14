@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
 import { observer } from 'mobx-react-lite'
@@ -24,54 +24,56 @@ const pTLOptions = {
 const pointToLayer = (feature, latlng) =>
   window.L.circleMarker(latlng, pTLOptions)
 
-export const Markierungen = observer(() => {
-  const store = useContext(StoreContext)
-  const { enqueNotification } = store
+export const Markierungen = memo(
+  observer(() => {
+    const store = useContext(StoreContext)
+    const { enqueNotification } = store
 
-  const { data, error } = useQuery(gql`
-    query KarteMarkierungensQuery {
-      allMarkierungens {
-        nodes {
-          id: ogcFid
-          gebiet
-          pfostennum
-          markierung
-          wkbGeometry {
-            geojson
+    const { data, error } = useQuery(gql`
+      query KarteMarkierungensQuery {
+        allMarkierungens {
+          nodes {
+            id: ogcFid
+            gebiet
+            pfostennum
+            markierung
+            wkbGeometry {
+              geojson
+            }
           }
         }
       }
+    `)
+
+    if (error) {
+      enqueNotification({
+        message: `Fehler beim Laden der Markierungen für die Karte: ${error.message}`,
+        options: {
+          variant: 'error',
+        },
+      })
     }
-  `)
 
-  if (error) {
-    enqueNotification({
-      message: `Fehler beim Laden der Markierungen für die Karte: ${error.message}`,
-      options: {
-        variant: 'error',
+    if (!data) return null
+
+    const nodes = data?.allMarkierungens?.nodes ?? []
+    const markierungen = nodes.map((n) => ({
+      type: 'Feature',
+      properties: {
+        Gebiet: n.gebiet ?? '',
+        PfostenNr: n.pfostennum ?? '',
+        Markierung: n.markierung ?? '',
       },
-    })
-  }
+      geometry: JSON.parse(n?.wkbGeometry?.geojson),
+    }))
 
-  if (!data) return null
-
-  const nodes = data?.allMarkierungens?.nodes ?? []
-  const markierungen = nodes.map((n) => ({
-    type: 'Feature',
-    properties: {
-      Gebiet: n.gebiet ?? '',
-      PfostenNr: n.pfostennum ?? '',
-      Markierung: n.markierung ?? '',
-    },
-    geometry: JSON.parse(n?.wkbGeometry?.geojson),
-  }))
-
-  return (
-    <GeoJSON
-      data={markierungen}
-      style={style}
-      pointToLayer={pointToLayer}
-      interactive={false}
-    />
-  )
-})
+    return (
+      <GeoJSON
+        data={markierungen}
+        style={style}
+        pointToLayer={pointToLayer}
+        interactive={false}
+      />
+    )
+  }),
+)
