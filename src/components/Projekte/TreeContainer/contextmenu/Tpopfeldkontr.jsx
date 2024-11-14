@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
@@ -40,75 +40,77 @@ const resetCopyingBiotopData = {
   action: 'resetCopyingBiotop',
 }
 
-export const Tpopfeldkontr = observer(({ onClick }) => {
-  const { copying, user, copyingBiotop } = useContext(StoreContext)
+export const Tpopfeldkontr = memo(
+  observer(({ onClick }) => {
+    const { copying, user, copyingBiotop } = useContext(StoreContext)
 
-  return (
-    <ErrorBoundary>
-      <ContextMenu
-        id="treeTpopfeldkontr"
-        hideOnLeave={true}
-      >
-        <div className="react-contextmenu-title">Feld-Kontrolle</div>
-        {!userIsReadOnly(user.token) && (
-          <>
-            <MenuItem
-              onClick={onClick}
-              data={insertData}
-            >
-              erstelle neue
-            </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={deleteData}
-            >
-              lösche
-            </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={markForMovingData}
-            >
-              verschiebe
-            </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={markForCopyingData}
-            >
-              kopiere
-            </MenuItem>
-            {copying.table && (
+    return (
+      <ErrorBoundary>
+        <ContextMenu
+          id="treeTpopfeldkontr"
+          hideOnLeave={true}
+        >
+          <div className="react-contextmenu-title">Feld-Kontrolle</div>
+          {!userIsReadOnly(user.token) && (
+            <>
               <MenuItem
                 onClick={onClick}
-                data={resetCopyingData}
+                data={insertData}
               >
-                Kopieren aufheben
+                erstelle neue
               </MenuItem>
-            )}
-            <MenuItem
-              onClick={onClick}
-              data={markForCopyingBiotopData}
-            >
-              kopiere Biotop
-            </MenuItem>
-            {copyingBiotop.label && (
-              <>
+              <MenuItem
+                onClick={onClick}
+                data={deleteData}
+              >
+                lösche
+              </MenuItem>
+              <MenuItem
+                onClick={onClick}
+                data={markForMovingData}
+              >
+                verschiebe
+              </MenuItem>
+              <MenuItem
+                onClick={onClick}
+                data={markForCopyingData}
+              >
+                kopiere
+              </MenuItem>
+              {copying.table && (
                 <MenuItem
                   onClick={onClick}
-                  data={copyBiotopData}
+                  data={resetCopyingData}
                 >
-                  {`kopiere Biotop von '${copyingBiotop.label}' hierhin`}
+                  Kopieren aufheben
                 </MenuItem>
-                <MenuItem
-                  onClick={onClick}
-                  data={resetCopyingBiotopData}
-                >
-                  Biotop Kopieren aufheben
-                </MenuItem>
-              </>
-            )}
-          </>
-        )}
-      </ContextMenu>
-    </ErrorBoundary>
-  )
-})
+              )}
+              <MenuItem
+                onClick={onClick}
+                data={markForCopyingBiotopData}
+              >
+                kopiere Biotop
+              </MenuItem>
+              {copyingBiotop.label && (
+                <>
+                  <MenuItem
+                    onClick={onClick}
+                    data={copyBiotopData}
+                  >
+                    {`kopiere Biotop von '${copyingBiotop.label}' hierhin`}
+                  </MenuItem>
+                  <MenuItem
+                    onClick={onClick}
+                    data={resetCopyingBiotopData}
+                  >
+                    Biotop Kopieren aufheben
+                  </MenuItem>
+                </>
+              )}
+            </>
+          )}
+        </ContextMenu>
+      </ErrorBoundary>
+    )
+  }),
+)

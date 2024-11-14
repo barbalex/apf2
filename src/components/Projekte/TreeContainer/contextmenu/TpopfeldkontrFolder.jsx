@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
@@ -30,66 +30,68 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-export const TpopfeldkontrFolder = observer(({ onClick }) => {
-  const { copying, user, moving } = useContext(StoreContext)
+export const TpopfeldkontrFolder = memo(
+  observer(({ onClick }) => {
+    const { copying, user, moving } = useContext(StoreContext)
 
-  const isMoving = moving.table && moving.table === 'tpopfeldkontr'
-  const isCopying = copying.table && copying.table === 'tpopfeldkontr'
+    const isMoving = moving.table && moving.table === 'tpopfeldkontr'
+    const isCopying = copying.table && copying.table === 'tpopfeldkontr'
 
-  return (
-    <ErrorBoundary>
-      <ContextMenu
-        id="treeTpopfeldkontrFolder"
-        hideOnLeave={true}
-      >
-        <div className="react-contextmenu-title">Feld-Kontrollen</div>
-        <MenuItem
-          onClick={onClick}
-          data={openLowerNodesData}
+    return (
+      <ErrorBoundary>
+        <ContextMenu
+          id="treeTpopfeldkontrFolder"
+          hideOnLeave={true}
         >
-          alle öffnen
-        </MenuItem>
-        <MenuItem
-          onClick={onClick}
-          data={closeLowerNodesData}
-        >
-          alle schliessen
-        </MenuItem>
-        {!userIsReadOnly(user.token) && (
-          <>
-            <MenuItem
-              onClick={onClick}
-              data={insertData}
-            >
-              erstelle neue
-            </MenuItem>
-            {isMoving && (
+          <div className="react-contextmenu-title">Feld-Kontrollen</div>
+          <MenuItem
+            onClick={onClick}
+            data={openLowerNodesData}
+          >
+            alle öffnen
+          </MenuItem>
+          <MenuItem
+            onClick={onClick}
+            data={closeLowerNodesData}
+          >
+            alle schliessen
+          </MenuItem>
+          {!userIsReadOnly(user.token) && (
+            <>
               <MenuItem
                 onClick={onClick}
-                data={moveData}
+                data={insertData}
               >
-                {`verschiebe '${moving.label}' hierhin`}
+                erstelle neue
               </MenuItem>
-            )}
-            {isCopying && (
-              <MenuItem
-                onClick={onClick}
-                data={copyData}
-              >
-                {`kopiere '${copying.label}' hierhin`}
-              </MenuItem>
-            )}
-            {copying.table && (
-              <MenuItem
-                onClick={onClick}
-                data={resetCopyingData}
-              >
-                Kopieren aufheben
-              </MenuItem>
-            )}
-          </>
-        )}
-      </ContextMenu>
-    </ErrorBoundary>
-  )
-})
+              {isMoving && (
+                <MenuItem
+                  onClick={onClick}
+                  data={moveData}
+                >
+                  {`verschiebe '${moving.label}' hierhin`}
+                </MenuItem>
+              )}
+              {isCopying && (
+                <MenuItem
+                  onClick={onClick}
+                  data={copyData}
+                >
+                  {`kopiere '${copying.label}' hierhin`}
+                </MenuItem>
+              )}
+              {copying.table && (
+                <MenuItem
+                  onClick={onClick}
+                  data={resetCopyingData}
+                >
+                  Kopieren aufheben
+                </MenuItem>
+              )}
+            </>
+          )}
+        </ContextMenu>
+      </ErrorBoundary>
+    )
+  }),
+)
