@@ -267,7 +267,7 @@ export const Menu = memo(
           <StyledButton
             variant="outlined"
             style={{ width: 90 }}
-            onClick={onClickShowCoordOfBeobOnMapsZhCh}
+            onClick={onClickShowCoordOfBeobOnMapsZhCh} 
           >
             zeige auf maps.zh.ch
           </StyledButton>

@@ -240,7 +240,6 @@ import { copyTo } from '../../../modules/copyTo/index.js'
 import { createNewPopFromBeob } from '../../../modules/createNewPopFromBeob/index.js'
 import { copyBeobZugeordnetKoordToTpop } from '../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
 import { copyTpopKoordToPop } from '../../../modules/copyTpopKoordToPop/index.js'
-import { tpopById } from './tpopById.js'
 import { openLowerNodes } from './openLowerNodes/index.js'
 import { closeLowerNodes } from './closeLowerNodes.js'
 import { insertDataset } from './insertDataset.js'
@@ -249,6 +248,9 @@ import { useSearchParamsState } from '../../../modules/useSearchParamsState.js'
 import { isMobilePhone } from '../../../modules/isMobilePhone.js'
 import { showCoordOfBeobOnMapsZhCh } from '../../../modules/showCoordOfBeobOnMapsZhCh.js'
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../modules/showCoordOfBeobOnMapGeoAdminCh.js'
+import { getAndValidateCoordinatesOfTpop } from '../../../modules/getAndValidateCoordinatesOfTpop.js'
+import { showCoordOfTpopOnMapsZhCh } from '../../../modules/showCoordOfTpopOnMapsZhCh.js'
+import { showCoordOfTpopOnMapGeoAdminCh } from '../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
 
 const Container = styled.div`
   height: 100%;
@@ -355,39 +357,6 @@ const StyledDialog = styled(Dialog)`
     overflow-y: hidden;
   }
 `
-
-const getAndValidateCoordinatesOfTpop = async ({
-  id,
-  enqueNotification,
-  client,
-}) => {
-  let tpopResult
-  try {
-    tpopResult = await client.query({
-      query: tpopById,
-      variables: { id },
-    })
-  } catch (error) {
-    enqueNotification({
-      message: error.message,
-      options: {
-        variant: 'error',
-      },
-    })
-  }
-  const tpop = tpopResult?.data?.tpopById
-  const { lv95X, lv95Y } = tpop
-  if (!lv95X) {
-    enqueNotification({
-      message: `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
-      options: {
-        variant: 'warning',
-      },
-    })
-    return { lv95X: null, lv95Y: null }
-  }
-  return { lv95X, lv95Y }
-}
 
 export const TreeContainer = memo(
   observer(() => {
@@ -633,30 +602,14 @@ export const TreeContainer = memo(
             copyBeobZugeordnetKoordToTpop({ id, store, client })
           },
           async showCoordOfTpopOnMapsZhCh() {
-            const { lv95X, lv95Y } = await getAndValidateCoordinatesOfTpop({
-              id,
-              enqueNotification,
-              client,
-            })
-            if (lv95X && lv95Y) {
-              window.open(
-                `https://maps.zh.ch/?x=${lv95X}&y=${lv95Y}&scale=3000&markers=ring`,
-                'target="_blank"',
-              )
-            }
+            showCoordOfTpopOnMapsZhCh({ id, enqueNotification, client })
           },
           async showCoordOfTpopOnMapGeoAdminCh() {
-            const { lv95X, lv95Y } = await getAndValidateCoordinatesOfTpop({
+            showCoordOfTpopOnMapGeoAdminCh({
               id,
               enqueNotification,
               client,
             })
-            if (lv95X && lv95Y) {
-              window.open(
-                `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${lv95X}&X=${lv95Y}&zoom=10&crosshair=circle`,
-                'target="_blank"',
-              )
-            }
           },
           async showCoordOfBeobOnMapsZhCh() {
             showCoordOfBeobOnMapsZhCh({ id, enqueNotification, client })

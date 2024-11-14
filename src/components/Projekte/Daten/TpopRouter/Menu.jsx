@@ -34,6 +34,8 @@ import { useSearchParamsState } from '../../../../modules/useSearchParamsState.j
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.js'
+import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
+import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.js'
 
 // unfortunately, toggle buttons are different from icon buttons...
 const RoundToggleButton = styled(ToggleButton)`
@@ -351,6 +353,22 @@ export const Menu = memo(
       ],
       [isCopying, isMoving, tpopHasCoord],
     )
+
+    const onClickShowCoordOfTpopOnMapGeoAdminCh = useCallback(() => {
+      showCoordOfTpopOnMapGeoAdminCh({
+        id: tpopId,
+        client,
+        enqueNotification: store.enqueNotification,
+      })
+    }, [tpopId, client, store])
+
+    const onClickShowCoordOfTpopOnMapsZhCh = useCallback(() => {
+      showCoordOfTpopOnMapsZhCh({
+        id: tpopId,
+        client,
+        enqueNotification: store.enqueNotification,
+      })
+    }, [tpopId, client, store])
 
     return (
       <ErrorBoundary>
