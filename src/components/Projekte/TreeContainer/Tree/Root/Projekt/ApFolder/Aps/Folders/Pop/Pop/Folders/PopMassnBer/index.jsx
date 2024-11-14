@@ -1,12 +1,12 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
 import { PopMassnBer } from './PopMassnBer.jsx'
 
-export const PopMassnBerFolder = observer(
-  ({ projekt, ap, pop, isLoading, count }) => {
+export const PopMassnBerFolder = memo(
+  observer(({ projekt, ap, pop, isLoading, count }) => {
     const store = useContext(StoreContext)
 
     const nodeLabelFilterString = store.tree?.nodeLabelFilter?.popmassnber ?? ''
@@ -57,5 +57,5 @@ export const PopMassnBerFolder = observer(
         )}
       </>
     )
-  },
+  }),
 )

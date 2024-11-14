@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client'
@@ -7,72 +7,74 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
 
-export const PopBer = observer(({ projekt, ap, pop }) => {
-  const client = useApolloClient()
-  const store = useContext(StoreContext)
-  const { nodeLabelFilter } = store.tree
+export const PopBer = memo(
+  observer(({ projekt, ap, pop }) => {
+    const client = useApolloClient()
+    const store = useContext(StoreContext)
+    const { nodeLabelFilter } = store.tree
 
-  const popbersFilter = { popId: { equalTo: pop.id } }
-  if (nodeLabelFilter.popber) {
-    popbersFilter.label = {
-      includesInsensitive: nodeLabelFilter.popber,
+    const popbersFilter = { popId: { equalTo: pop.id } }
+    if (nodeLabelFilter.popber) {
+      popbersFilter.label = {
+        includesInsensitive: nodeLabelFilter.popber,
+      }
     }
-  }
 
-  const { data } = useQuery({
-    queryKey: ['treePopber', pop.id, popbersFilter],
-    queryFn: () =>
-      client.query({
-        query: gql`
-          query TreePopberQuery($id: UUID!, $popbersFilter: PopberFilter!) {
-            popById(id: $id) {
-              id
-              popbersByPopId(filter: $popbersFilter, orderBy: LABEL_ASC) {
-                nodes {
-                  id
-                  label
+    const { data } = useQuery({
+      queryKey: ['treePopber', pop.id, popbersFilter],
+      queryFn: () =>
+        client.query({
+          query: gql`
+            query TreePopberQuery($id: UUID!, $popbersFilter: PopberFilter!) {
+              popById(id: $id) {
+                id
+                popbersByPopId(filter: $popbersFilter, orderBy: LABEL_ASC) {
+                  nodes {
+                    id
+                    label
+                  }
                 }
               }
             }
-          }
-        `,
-        variables: {
-          id: pop.id,
-          popbersFilter,
-        },
-        // without 'network-only' or using tanstack,
-        // ui does not update when inserting and deleting
-        fetchPolicy: 'no-cache',
-      }),
-  })
+          `,
+          variables: {
+            id: pop.id,
+            popbersFilter,
+          },
+          // without 'network-only' or using tanstack,
+          // ui does not update when inserting and deleting
+          fetchPolicy: 'no-cache',
+        }),
+    })
 
-  return (data?.data?.popById?.popbersByPopId?.nodes ?? []).map((el) => {
-    const node = {
-      nodeType: 'table',
-      menuType: 'popber',
-      id: el.id,
-      parentId: pop.id,
-      parentTableId: pop.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: [
-        'Projekte',
-        projekt.id,
-        'Arten',
-        ap.id,
-        'Populationen',
-        pop.id,
-        'Kontroll-Berichte',
-        el.id,
-      ],
-      hasChildren: false,
-    }
+    return (data?.data?.popById?.popbersByPopId?.nodes ?? []).map((el) => {
+      const node = {
+        nodeType: 'table',
+        menuType: 'popber',
+        id: el.id,
+        parentId: pop.id,
+        parentTableId: pop.id,
+        urlLabel: el.id,
+        label: el.label,
+        url: [
+          'Projekte',
+          projekt.id,
+          'Arten',
+          ap.id,
+          'Populationen',
+          pop.id,
+          'Kontroll-Berichte',
+          el.id,
+        ],
+        hasChildren: false,
+      }
 
-    return (
-      <Row
-        key={el.id}
-        node={node}
-      />
-    )
-  })
-})
+      return (
+        <Row
+          key={el.id}
+          node={node}
+        />
+      )
+    })
+  }),
+)

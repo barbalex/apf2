@@ -1,12 +1,12 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
 import { PopBer } from './PopBer.jsx'
 
-export const PopBerFolder = observer(
-  ({ projekt, ap, pop, isLoading, count }) => {
+export const PopBerFolder = memo(
+  observer(({ projekt, ap, pop, isLoading, count }) => {
     const store = useContext(StoreContext)
 
     const nodeLabelFilterString = store.tree?.nodeLabelFilter?.popber ?? ''
@@ -57,5 +57,5 @@ export const PopBerFolder = observer(
         )}
       </>
     )
-  },
+  }),
 )
