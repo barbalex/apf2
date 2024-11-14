@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
@@ -37,53 +37,55 @@ const Comment2 = styled.span`
   padding-left: 3px;
 `
 
-export const ShowForMultipleAps = observer(() => {
-  const { apId } = useParams()
+export const ShowForMultipleAps = memo(
+  observer(() => {
+    const { apId } = useParams()
 
-  const store = useContext(StoreContext)
-  const { showApfLayersForMultipleAps, toggleShowApfLayersForMultipleAps } =
-    store
-  const { apGqlFilterForTree } = store.tree
+    const store = useContext(StoreContext)
+    const { showApfLayersForMultipleAps, toggleShowApfLayersForMultipleAps } =
+      store
+    const { apGqlFilterForTree } = store.tree
 
-  const { data } = useQuery(
-    gql`
-      query LayersControlLayersQuery($apsFilter: ApFilter!) {
-        allAps(filter: $apsFilter) {
-          totalCount
+    const { data } = useQuery(
+      gql`
+        query LayersControlLayersQuery($apsFilter: ApFilter!) {
+          allAps(filter: $apsFilter) {
+            totalCount
+          }
         }
-      }
-    `,
-    {
-      variables: {
-        apsFilter: apGqlFilterForTree,
+      `,
+      {
+        variables: {
+          apsFilter: apGqlFilterForTree,
+        },
       },
-    },
-  )
+    )
 
-  const apsCount = data?.allAps?.totalCount ?? 0
+    const apsCount = data?.allAps?.totalCount ?? 0
 
-  const comment = apsCount > 1 ? `${apsCount} Arten aktiv.` : ''
-  const color =
-    apsCount > 5 ? 'rgba(228, 89, 0, 1)'
-    : apsCount > 50 ? 'rgba(228, 0, 0, 1)'
-    : ''
+    const comment = apsCount > 1 ? `${apsCount} Arten aktiv.` : ''
+    const color =
+      apsCount > 5 ? 'rgba(228, 89, 0, 1)'
+      : apsCount > 50 ? 'rgba(228, 0, 0, 1)'
+      : ''
 
-  return (
-    <LayerDiv>
-      <Checkbox
-        value={showApfLayersForMultipleAps}
-        label="Layer auch anzeigen, wenn mehr als eine Art aktiv ist"
-        checked={showApfLayersForMultipleAps}
-        onChange={toggleShowApfLayersForMultipleAps}
-      />
-      {!apId && showApfLayersForMultipleAps && (
-        <>
-          <Comments>
-            <Comment1 data-color={color}>{comment}</Comment1>
-            <Comment2>Je mehr, desto langsamer wird die App</Comment2>
-          </Comments>
-        </>
-      )}
-    </LayerDiv>
-  )
-})
+    return (
+      <LayerDiv>
+        <Checkbox
+          value={showApfLayersForMultipleAps}
+          label="Layer auch anzeigen, wenn mehr als eine Art aktiv ist"
+          checked={showApfLayersForMultipleAps}
+          onChange={toggleShowApfLayersForMultipleAps}
+        />
+        {!apId && showApfLayersForMultipleAps && (
+          <>
+            <Comments>
+              <Comment1 data-color={color}>{comment}</Comment1>
+              <Comment2>Je mehr, desto langsamer wird die App</Comment2>
+            </Comments>
+          </>
+        )}
+      </LayerDiv>
+    )
+  }),
+)
