@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
@@ -30,53 +30,55 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-export const Tpopfreiwkontr = observer(({ onClick }) => {
-  const { copying, user } = useContext(StoreContext)
+export const Tpopfreiwkontr = memo(
+  observer(({ onClick }) => {
+    const { copying, user } = useContext(StoreContext)
 
-  return (
-    <ErrorBoundary>
-      <ContextMenu
-        id="treeTpopfreiwkontr"
-        hideOnLeave={true}
-      >
-        <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
-        {!userIsReadOnly(user.token, 'freiw') && (
-          <>
-            <MenuItem
-              onClick={onClick}
-              data={insertData}
-            >
-              erstelle neue
-            </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={deleteData}
-            >
-              lösche
-            </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={markForMovingData}
-            >
-              verschiebe
-            </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={markForCopyingData}
-            >
-              kopiere
-            </MenuItem>
-            {copying.table && (
+    return (
+      <ErrorBoundary>
+        <ContextMenu
+          id="treeTpopfreiwkontr"
+          hideOnLeave={true}
+        >
+          <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
+          {!userIsReadOnly(user.token, 'freiw') && (
+            <>
               <MenuItem
                 onClick={onClick}
-                data={resetCopyingData}
+                data={insertData}
               >
-                Kopieren aufheben
+                erstelle neue
               </MenuItem>
-            )}
-          </>
-        )}
-      </ContextMenu>
-    </ErrorBoundary>
-  )
-})
+              <MenuItem
+                onClick={onClick}
+                data={deleteData}
+              >
+                lösche
+              </MenuItem>
+              <MenuItem
+                onClick={onClick}
+                data={markForMovingData}
+              >
+                verschiebe
+              </MenuItem>
+              <MenuItem
+                onClick={onClick}
+                data={markForCopyingData}
+              >
+                kopiere
+              </MenuItem>
+              {copying.table && (
+                <MenuItem
+                  onClick={onClick}
+                  data={resetCopyingData}
+                >
+                  Kopieren aufheben
+                </MenuItem>
+              )}
+            </>
+          )}
+        </ContextMenu>
+      </ErrorBoundary>
+    )
+  }),
+)
