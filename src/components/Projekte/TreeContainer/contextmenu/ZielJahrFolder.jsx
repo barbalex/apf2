@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
@@ -21,39 +21,41 @@ const insertData = {
   table: 'ziel',
 }
 
-export const ZielJahrFolder = observer(({ onClick }) => {
-  const { user } = useContext(StoreContext)
+export const ZielJahrFolder = memo(
+  observer(({ onClick }) => {
+    const { user } = useContext(StoreContext)
 
-  return (
-    <ErrorBoundary>
-      <ContextMenu
-        id="treeZieljahrFolder"
-        hideOnLeave={true}
-      >
-        <div className="react-contextmenu-title">Ziele</div>
-        <MenuItem
-          onClick={onClick}
-          data={openLowerNodesData}
+    return (
+      <ErrorBoundary>
+        <ContextMenu
+          id="treeZieljahrFolder"
+          hideOnLeave={true}
         >
-          alle öffnen
-        </MenuItem>
-        <MenuItem
-          onClick={onClick}
-          data={closeLowerNodesData}
-        >
-          alle schliessen
-        </MenuItem>
-        {!userIsReadOnly(user.token) && (
-          <>
-            <MenuItem
-              onClick={onClick}
-              data={insertData}
-            >
-              erstelle neues
-            </MenuItem>
-          </>
-        )}
-      </ContextMenu>
-    </ErrorBoundary>
-  )
-})
+          <div className="react-contextmenu-title">Ziele</div>
+          <MenuItem
+            onClick={onClick}
+            data={openLowerNodesData}
+          >
+            alle öffnen
+          </MenuItem>
+          <MenuItem
+            onClick={onClick}
+            data={closeLowerNodesData}
+          >
+            alle schliessen
+          </MenuItem>
+          {!userIsReadOnly(user.token) && (
+            <>
+              <MenuItem
+                onClick={onClick}
+                data={insertData}
+              >
+                erstelle neues
+              </MenuItem>
+            </>
+          )}
+        </ContextMenu>
+      </ErrorBoundary>
+    )
+  }),
+)
