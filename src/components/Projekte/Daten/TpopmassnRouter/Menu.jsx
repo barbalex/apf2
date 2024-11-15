@@ -153,7 +153,7 @@ export const Menu = memo(
     const onClickMoveInTree = useCallback(() => {
       if (isMovingTpopmassn) {
         return moveTo({
-          parentId: tpopId,
+          id: tpopId,
           client,
           store,
           tanstackQueryClient,

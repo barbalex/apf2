@@ -46,25 +46,25 @@ export const moveTo = async ({
   // move
   switch (table) {
     case 'tpopkontr':
-      client.mutate({
+      await client.mutate({
         mutation: updateTpopkontrById,
         variables: { id, tpopId: newParentId },
       })
       break
     case 'tpopmassn':
-      client.mutate({
+      await client.mutate({
         mutation: updateTpopmassnById,
         variables: { id, tpopId: newParentId },
       })
       break
     case 'tpop':
-      client.mutate({
+      await client.mutate({
         mutation: updateTpopById,
         variables: { id, popId: newParentId },
       })
       break
     case 'pop':
-      client.mutate({
+      await client.mutate({
         mutation: updatePopById,
         variables: { id, apId: newParentId },
       })
@@ -100,4 +100,29 @@ export const moveTo = async ({
       queryKey: ['treePopFolders'],
     })
   }
+  if (table === 'tpopmassn') {
+    tanstackQueryClient.invalidateQueries({
+      queryKey: [`treeTpopmassn`],
+    })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: [`treeTpopFolders`],
+    })
+  }
+  if (moving.table === 'tpopfeldkontr') {
+    tanstackQueryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontr`],
+    })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: [`treeTpopFolders`],
+    })
+  }
+  if (moving.table === 'tpopfreiwkontr') {
+    tanstackQueryClient.invalidateQueries({
+      queryKey: [`treeTpopfreiwkontr`],
+    })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: [`treeTpopFolders`],
+    })
+  }
+  return
 }

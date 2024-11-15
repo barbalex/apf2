@@ -274,7 +274,7 @@ export const Menu = memo(
       if (isMovingTpop) {
         // move to this pop
         return moveTo({
-          parentId: popId,
+          id: popId,
           client,
           store,
           tanstackQueryClient,
@@ -287,7 +287,7 @@ export const Menu = memo(
       ) {
         // move to this tpop
         return moveTo({
-          parentId: tpopId,
+          id: tpopId,
           client,
           store,
           tanstackQueryClient,
@@ -480,8 +480,7 @@ export const Menu = memo(
           </RoundToggleButton>
           <IconButton
             title={
-              !isMovingTpop ?
-                `'${row.label}' zu einer anderen Population verschieben`
+              !isMovingTpop ? `'${row.label}' hierhin verschieben`
               : thisTpopIsMoving ?
                 'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
               : movingFromThisPop ?

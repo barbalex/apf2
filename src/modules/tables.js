@@ -92,6 +92,7 @@ export const tables = [
   {
     table: 'tpopmassn',
     parentTable: 'tpop',
+    dbTable: 'tpopmassn',
     label: 'Massnahmen',
     labelSingular: 'Massnahme',
     idField: 'id',

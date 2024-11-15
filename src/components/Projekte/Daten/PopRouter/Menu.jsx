@@ -198,6 +198,7 @@ export const Menu = memo(
     const thisPopIsCopying = copying.id === popId
     const isCopyingTpop = copying.table === 'tpop'
 
+    // TODO: add for feldkontr/frwkontr/massn in tpop menu
     const onClickCopyTpopToHere = useCallback(() => {
       copyTo({
         parentId: popId,
