@@ -579,13 +579,6 @@ export const TreeContainer = memo(
           },
           copyBiotop() {
             copyBiotopTo({ id, copyingBiotop, client })
-            copyTo({
-              parentId: id,
-              biotop: true,
-              client,
-              store,
-              tanstackQueryClient,
-            })
           },
           copyTpopKoordToPop() {
             copyTpopKoordToPop({ id, store, client })
