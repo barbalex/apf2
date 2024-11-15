@@ -20,6 +20,7 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyBiotopTo } from '../../../../modules/copyBiotopTo.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
+import { is } from 'date-fns/locale'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: ${(props) =>
@@ -196,6 +197,8 @@ export const Menu = memo(
     }, [setMoving])
 
     const isCopyingTpopfeldkontr = copying.table === 'tpopfeldkontr'
+    const isCopyingBiotop = !!copyingBiotop.id
+    const isCopying = isCopyingTpopfeldkontr || isCopyingBiotop
     const thisTpopfeldkontrIsCopying = copying.id === tpopkontrId
     const onClickCopy = useCallback(() => {
       if (isCopyingTpopfeldkontr) {
@@ -207,6 +210,13 @@ export const Menu = memo(
           tanstackQueryClient,
         })
       }
+      if (isCopyingBiotop) {
+        return copyBiotopTo({
+          id: tpopkontrId,
+          copyingBiotop,
+          client,
+        })
+      }
       setCopying({
         table: 'tpopfeldkontr',
         id: tpopkontrId,
@@ -215,7 +225,9 @@ export const Menu = memo(
       })
     }, [
       isCopyingTpopfeldkontr,
+      isCopyingBiotop,
       copyTo,
+      copyBiotopTo,
       tpopId,
       tpopkontrId,
       client,
@@ -227,12 +239,15 @@ export const Menu = memo(
     ])
 
     const onClickStopCopying = useCallback(() => {
-      setCopying({
-        table: null,
-        id: '99999999-9999-9999-9999-999999999999',
-        label: null,
-        withNextLevel: false,
-      })
+      if (isCopyingTpopfeldkontr) {
+        return setCopying({
+          table: null,
+          id: '99999999-9999-9999-9999-999999999999',
+          label: null,
+          withNextLevel: false,
+        })
+      }
+      setCopyingBiotop({ id: null, label: null })
     }, [setCopying])
 
     return (
@@ -240,7 +255,7 @@ export const Menu = memo(
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${isMovingFeldkontr}/${moving.label}/${isCopyingTpopfeldkontr}/${copying.label}/${movingFromThisTpop}/${thisTpopfeldkontrIsMoving}/${thisTpopfeldkontrIsCopying}`}
+          rerenderer={`${isMovingFeldkontr}/${moving.label}/${isCopyingTpopfeldkontr}/${isCopyingBiotop}/${copying.label}/${movingFromThisTpop}/${thisTpopfeldkontrIsMoving}/${thisTpopfeldkontrIsCopying}`}
         >
           <IconButton
             title="Neue Feld-Kontrolle erstellen"
@@ -285,13 +300,15 @@ export const Menu = memo(
             title={
               isCopyingTpopfeldkontr ?
                 `Kopiere '${copying.label}' in diese Teilpopulation`
+              : isCopyingBiotop ?
+                `Kopiere Biotop von '${copyingBiotop.label}' hierhin`
               : 'Kopieren'
             }
             onClick={onClickCopy}
           >
             <CopyIcon copying={thisTpopfeldkontrIsCopying.toString()} />
           </IconButton>
-          {isCopyingTpopfeldkontr && (
+          {(isCopyingTpopfeldkontr || isCopyingBiotop) && (
             <IconButton
               title={`Kopieren von '${copying.label}' abbrechen`}
               onClick={onClickStopCopying}
