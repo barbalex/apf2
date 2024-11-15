@@ -198,8 +198,7 @@ export const Menu = memo(
     const thisPopIsCopying = copying.id === popId
     const isCopyingTpop = copying.table === 'tpop'
 
-    // TODO: test
-    const onClickPasteTpop = useCallback(() => {
+    const onClickCopyTpopToHere = useCallback(() => {
       copyTo({
         parentId: popId,
         client,
@@ -264,7 +263,10 @@ export const Menu = memo(
           color="white"
           rerenderer={`${isMoving}/${isCopyingPop}/${popMovingFromThisAp}`}
         >
-          <IconButton title="Neue Population erstellen" onClick={onClickAdd}>
+          <IconButton
+            title="Neue Population erstellen"
+            onClick={onClickAdd}
+          >
             <FaPlus style={iconStyle} />
           </IconButton>
           <IconButton
@@ -288,15 +290,15 @@ export const Menu = memo(
           </IconButton>
           <IconButton
             title={
-              !isMoving && !isTpopMoving
-                ? `'${row.label}' zu einer anderen Art verschieben`
-                : thisPopIsMoving
-                  ? 'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
-                  : popMovingFromThisAp
-                    ? `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
-                    : isTpopMoving
-                      ? `Verschiebe '${moving.label}' zu dieser Population`
-                      : `Verschiebe '${moving.label}' zu dieser Art`
+              !isMoving && !isTpopMoving ?
+                `'${row.label}' zu einer anderen Art verschieben`
+              : thisPopIsMoving ?
+                'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
+              : popMovingFromThisAp ?
+                `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
+              : isTpopMoving ?
+                `Verschiebe '${moving.label}' zu dieser Population`
+              : `Verschiebe '${moving.label}' zu dieser Art`
             }
             onClick={onClickMoveInTree}
           >
@@ -312,18 +314,15 @@ export const Menu = memo(
           )}
           <IconButton
             title={
-              isCopyingPop
-                ? `Kopiere '${copying.label}' in diese Art`
-                : isCopyingTpop
-                  ? `Kopiere '${copying.label}' in diese Population`
-                  : 'Kopieren'
+              isCopyingPop ? `Kopiere '${copying.label}' in diese Art`
+              : isCopyingTpop ?
+                `Kopiere '${copying.label}' in diese Population`
+              : 'Kopieren'
             }
             onClick={(event) =>
-              isCopyingTpop
-                ? onClickPasteTpop()
-                : isCopyingPop
-                  ? onClickCopyPop()
-                  : setCopyMenuAnchorEl(event.currentTarget)
+              isCopyingTpop ? onClickCopyTpopToHere()
+              : isCopyingPop ? onClickCopyPop()
+              : setCopyMenuAnchorEl(event.currentTarget)
             }
             aria-owns={copyMenuOpen ? 'copyMenu' : undefined}
           >

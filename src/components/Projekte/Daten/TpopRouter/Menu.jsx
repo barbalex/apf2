@@ -263,11 +263,10 @@ export const Menu = memo(
       setActiveApfloraLayers,
       idOfTpopBeingLocalized,
     ])
-    const isMoving =
-      moving.id !== '99999999-9999-9999-9999-999999999999' &&
-      moving.table === 'tpop'
+
+    const isMoving = moving.table === 'tpop'
     const thisTpopIsMoving = moving.id === tpopId
-    const tpopMovingFromThisPop = moving.fromParentId === popId
+    const movingFromThisPop = moving.fromParentId === popId
     const onClickMoveInTree = useCallback(() => {
       setMoving({
         id: row.id,
@@ -288,22 +287,16 @@ export const Menu = memo(
       })
     }, [setMoving])
 
-    // TODO: add this in pop
-    const onClickMoveHere = useCallback(() => {
-      moveTo({
-        id: popId,
-        client,
-        store,
-        tanstackQueryClient,
-      })
-    }, [client, store, popId])
-
-    const isCopying =
-      copying.id !== '99999999-9999-9999-9999-999999999999' &&
-      !!copying.id &&
-      copying.table === 'tpop'
+    const isCopyingTpop = copying.table === 'tpop'
     const thisTpopIsCopying = copying.id === tpopId
-
+    const isCopyingFeldkontr = copying.table === 'tpopfeldkontr'
+    const isCopyingFreiwkontr = copying.table === 'tpopfreiwkontr'
+    const isCopyingMassn = copying.table === 'tpopmassn'
+    const isCopying =
+      isCopyingTpop ||
+      isCopyingFeldkontr ||
+      isCopyingFreiwkontr ||
+      isCopyingMassn
     const onClickCopy = useCallback(() => {
       if (isCopying) {
         // copy to this pop
@@ -359,12 +352,12 @@ export const Menu = memo(
         buttonWidth,
         ...(isMoving ? [buttonWidth] : []),
         buttonWidth,
-        ...(isCopying ? [buttonWidth] : []),
+        ...(isCopyingTpop ? [buttonWidth] : []),
         ...(tpopHasCoord ? [180] : []),
         130,
         90,
       ],
-      [isCopying, isMoving, tpopHasCoord],
+      [isCopyingTpop, isMoving, tpopHasCoord],
     )
 
     const onClickShowCoordOfTpopOnMapGeoAdminCh = useCallback(() => {
@@ -383,12 +376,22 @@ export const Menu = memo(
       })
     }, [tpopId, client, store])
 
+    // to paste copied feldkontr/frwkontr/massn
+    const onClickCopyLowerElementToHere = useCallback(() => {
+      copyTo({
+        parentId: tpopId,
+        client,
+        store,
+        tanstackQueryClient,
+      })
+    }, [tpopId, client, store, tanstackQueryClient])
+
     return (
       <ErrorBoundary>
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${idOfTpopBeingLocalized}/${isMoving}/${isCopying}/${tpopMovingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}`}
+          rerenderer={`${idOfTpopBeingLocalized}/${isMoving}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}`}
           widths={widths}
         >
           <IconButton
@@ -430,7 +433,7 @@ export const Menu = memo(
                 `'${row.label}' zu einer anderen Population verschieben`
               : thisTpopIsMoving ?
                 'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
-              : tpopMovingFromThisPop ?
+              : movingFromThisPop ?
                 `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
               : `Verschiebe '${moving.label}' zu dieser Population`
             }
@@ -448,7 +451,7 @@ export const Menu = memo(
           )}
           <IconButton
             title={
-              isCopying ?
+              isCopyingTpop ?
                 `Kopiere '${copying.label}' in diese Population`
               : 'Kopieren'
             }
@@ -456,7 +459,7 @@ export const Menu = memo(
           >
             <CopyIcon copying={thisTpopIsCopying.toString()} />
           </IconButton>
-          {isCopying && (
+          {isCopyingTpop && (
             <IconButton
               title={`Kopieren von '${copying.label}' abbrechen`}
               onClick={onClickStopCopying}

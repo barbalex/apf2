@@ -5,7 +5,8 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
-import { MdPrint } from 'react-icons/md'
+import { MdOutlineMoveDown, MdContentCopy, MdPrint } from 'react-icons/md'
+import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -16,7 +17,17 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
+import { copyTo } from '../../../../modules/copyTo/index.js'
+import { moveTo } from '../../../../modules/moveTo/index.js'
 
+const MoveIcon = styled(MdOutlineMoveDown)`
+  color: ${(props) =>
+    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
+`
+const CopyIcon = styled(MdContentCopy)`
+  color: ${(props) =>
+    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
+`
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
@@ -27,7 +38,7 @@ export const Menu = memo(
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
     const store = useContext(StoreContext)
-    const { setIsPrint } = store
+    const { moving, setMoving, copying, setCopying, setIsPrint } = store
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -149,11 +160,74 @@ export const Menu = memo(
       }, 0)
     }, [setIsPrint])
 
+    const isMoving = moving.table === 'tpopfreiwkontr'
+    const thisTpopfreiwkontrIsMoving = moving.id === tpopkontrId
+    const movingFromThisTpop = moving.fromParentId === tpopId
+    const onClickMoveInTree = useCallback(() => {
+      setMoving({
+        id: row.id,
+        label: row.labelEkf,
+        table: 'tpopfreiwkontr',
+        toTable: 'tpopfreiwkontr',
+        fromParentId: tpopId,
+      })
+    }, [row, setMoving, tpopId])
+
+    const onClickStopMoving = useCallback(() => {
+      setMoving({
+        table: null,
+        id: '99999999-9999-9999-9999-999999999999',
+        label: null,
+        toTable: null,
+        fromParentId: null,
+      })
+    }, [setMoving])
+
+    const isCopyingTpopfreiwkontr = copying.table === 'tpopfreiwkontr'
+    const thisTpopfreiwkontrIsCopying = copying.id === tpopkontrId
+    const onClickCopy = useCallback(() => {
+      if (isCopyingTpopfreiwkontr) {
+        // copy to this tpop
+        return copyTo({
+          parentId: tpopId,
+          client,
+          store,
+          tanstackQueryClient,
+        })
+      }
+      setCopying({
+        table: 'tpopfreiwkontr',
+        id: tpopkontrId,
+        label: row.labelEkf,
+        withNextLevel: false,
+      })
+    }, [
+      isCopyingTpopfreiwkontr,
+      copyTo,
+      tpopId,
+      tpopkontrId,
+      client,
+      store,
+      tanstackQueryClient,
+      row,
+      setCopying,
+    ])
+
+    const onClickStopCopying = useCallback(() => {
+      setCopying({
+        table: null,
+        id: '99999999-9999-9999-9999-999999999999',
+        label: null,
+        withNextLevel: false,
+      })
+    }, [setCopying])
+
     return (
       <ErrorBoundary>
         <MenuBar
           bgColor="#388e3c"
           color="white"
+          rerenderer={`${isMoving}/${moving.label}/${isCopyingTpopfreiwkontr}/${copying.label}/${movingFromThisTpop}/${thisTpopfreiwkontrIsMoving}/${thisTpopfreiwkontrIsCopying}`}
         >
           <IconButton
             title="Neuen Bericht erstellen"
@@ -174,6 +248,48 @@ export const Menu = memo(
           >
             <MdPrint style={iconStyle} />
           </IconButton>
+          <IconButton
+            title={
+              !isMoving ?
+                `'${row.labelEkf}' zu einer anderen Population verschieben`
+              : thisTpopfreiwkontrIsMoving ?
+                'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
+              : movingFromThisTpop ?
+                `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
+              : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
+            }
+            onClick={onClickMoveInTree}
+          >
+            <MoveIcon
+              moving={(isMoving && thisTpopfreiwkontrIsMoving).toString()}
+            />
+          </IconButton>
+          {isMoving && (
+            <IconButton
+              title={`Verschieben von '${moving.label}' abbrechen`}
+              onClick={onClickStopMoving}
+            >
+              <BsSignStopFill style={iconStyle} />
+            </IconButton>
+          )}
+          <IconButton
+            title={
+              isCopyingTpopfreiwkontr ?
+                `Kopiere '${copying.label}' in diese Teilpopulation`
+              : 'Kopieren'
+            }
+            onClick={onClickCopy}
+          >
+            <CopyIcon copying={thisTpopfreiwkontrIsCopying.toString()} />
+          </IconButton>
+          {isCopyingTpopfreiwkontr && (
+            <IconButton
+              title={`Kopieren von '${copying.label}' abbrechen`}
+              onClick={onClickStopCopying}
+            >
+              <BsSignStopFill style={iconStyle} />
+            </IconButton>
+          )}
         </MenuBar>
         <MuiMenu
           id="tpopfreiwkontrDelMenu"

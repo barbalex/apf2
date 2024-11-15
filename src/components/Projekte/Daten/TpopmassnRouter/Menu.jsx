@@ -5,6 +5,8 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
+import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
+import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -15,7 +17,17 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
+import { copyTo } from '../../../../modules/copyTo/index.js'
+import { moveTo } from '../../../../modules/moveTo/index.js'
 
+const MoveIcon = styled(MdOutlineMoveDown)`
+  color: ${(props) =>
+    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
+`
+const CopyIcon = styled(MdContentCopy)`
+  color: ${(props) =>
+    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
+`
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
@@ -26,6 +38,7 @@ export const Menu = memo(
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId, tpopmassnId } = useParams()
     const store = useContext(StoreContext)
+    const { moving, setMoving, copying, setCopying } = store
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -134,11 +147,74 @@ export const Menu = memo(
       pathname,
     ])
 
+    const isMoving = moving.table === 'tpopmassn'
+    const thisTpopmassnIsMoving = moving.id === tpopmassnId
+    const movingFromThisTpop = moving.fromParentId === tpopId
+    const onClickMoveInTree = useCallback(() => {
+      setMoving({
+        id: row.id,
+        label: row.label,
+        table: 'tpopmassn',
+        toTable: 'tpopmassn',
+        fromParentId: tpopId,
+      })
+    }, [row, setMoving, tpopId])
+
+    const onClickStopMoving = useCallback(() => {
+      setMoving({
+        table: null,
+        id: '99999999-9999-9999-9999-999999999999',
+        label: null,
+        toTable: null,
+        fromParentId: null,
+      })
+    }, [setMoving])
+
+    const isCopyingTpopmassn = copying.table === 'tpopmassn'
+    const thisTpopmassnIsCopying = copying.id === tpopmassnId
+    const onClickCopy = useCallback(() => {
+      if (isCopyingTpopmassn) {
+        // copy to this tpop
+        return copyTo({
+          parentId: tpopId,
+          client,
+          store,
+          tanstackQueryClient,
+        })
+      }
+      setCopying({
+        table: 'tpopmassnkontr',
+        id: tpopmassnId,
+        label: row.label,
+        withNextLevel: false,
+      })
+    }, [
+      isCopyingTpopmassn,
+      copyTo,
+      tpopId,
+      tpopmassnId,
+      client,
+      store,
+      tanstackQueryClient,
+      row,
+      setCopying,
+    ])
+
+    const onClickStopCopying = useCallback(() => {
+      setCopying({
+        table: null,
+        id: '99999999-9999-9999-9999-999999999999',
+        label: null,
+        withNextLevel: false,
+      })
+    }, [setCopying])
+
     return (
       <ErrorBoundary>
         <MenuBar
           bgColor="#388e3c"
           color="white"
+          rerenderer={`${isMoving}/${moving.label}/${isCopyingTpopmassn}/${copying.label}/${movingFromThisTpop}/${thisTpopmassnIsMoving}/${thisTpopmassnIsCopying}`}
         >
           <IconButton
             title="Neue Massnahme erstellen"
@@ -153,6 +229,46 @@ export const Menu = memo(
           >
             <FaMinus style={iconStyle} />
           </IconButton>
+          <IconButton
+            title={
+              !isMoving ?
+                `'${row.label}' zu einer anderen Population verschieben`
+              : thisTpopmassnIsMoving ?
+                'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
+              : movingFromThisTpop ?
+                `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
+              : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
+            }
+            onClick={onClickMoveInTree}
+          >
+            <MoveIcon moving={(isMoving && thisTpopmassnIsMoving).toString()} />
+          </IconButton>
+          {isMoving && (
+            <IconButton
+              title={`Verschieben von '${moving.label}' abbrechen`}
+              onClick={onClickStopMoving}
+            >
+              <BsSignStopFill style={iconStyle} />
+            </IconButton>
+          )}
+          <IconButton
+            title={
+              isCopyingTpopmassn ?
+                `Kopiere '${copying.label}' in diese Teilpopulation`
+              : 'Kopieren'
+            }
+            onClick={onClickCopy}
+          >
+            <CopyIcon copying={thisTpopmassnIsCopying.toString()} />
+          </IconButton>
+          {isCopyingTpopmassn && (
+            <IconButton
+              title={`Kopieren von '${copying.label}' abbrechen`}
+              onClick={onClickStopCopying}
+            >
+              <BsSignStopFill style={iconStyle} />
+            </IconButton>
+          )}
         </MenuBar>
         <MuiMenu
           id="tpopmassnDelMenu"
