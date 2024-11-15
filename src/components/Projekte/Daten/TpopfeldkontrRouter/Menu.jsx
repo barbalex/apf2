@@ -147,10 +147,18 @@ export const Menu = memo(
       pathname,
     ])
 
-    const isMoving = moving.table === 'tpopfeldkontr'
+    const isMovingFeldkontr = moving.table === 'tpopfeldkontr'
     const thisTpopfeldkontrIsMoving = moving.id === tpopkontrId
     const movingFromThisTpop = moving.fromParentId === tpopId
     const onClickMoveInTree = useCallback(() => {
+      if (isMovingFeldkontr) {
+        return moveTo({
+          parentId: tpopId,
+          client,
+          store,
+          tanstackQueryClient,
+        })
+      }
       setMoving({
         id: row.id,
         label: row.labelEk,
@@ -158,7 +166,16 @@ export const Menu = memo(
         toTable: 'tpopfeldkontr',
         fromParentId: tpopId,
       })
-    }, [row, setMoving, tpopId])
+    }, [
+      row,
+      setMoving,
+      tpopId,
+      isMovingFeldkontr,
+      moveTo,
+      client,
+      store,
+      tanstackQueryClient,
+    ])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -198,6 +215,7 @@ export const Menu = memo(
       tanstackQueryClient,
       row,
       setCopying,
+      moveTo,
     ])
 
     const onClickStopCopying = useCallback(() => {
@@ -214,7 +232,7 @@ export const Menu = memo(
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${isMoving}/${moving.label}/${isCopyingTpopfeldkontr}/${copying.label}/${movingFromThisTpop}/${thisTpopfeldkontrIsMoving}/${thisTpopfeldkontrIsCopying}`}
+          rerenderer={`${isMovingFeldkontr}/${moving.label}/${isCopyingTpopfeldkontr}/${copying.label}/${movingFromThisTpop}/${thisTpopfeldkontrIsMoving}/${thisTpopfeldkontrIsCopying}`}
         >
           <IconButton
             title="Neue Feld-Kontrolle erstellen"
@@ -231,7 +249,7 @@ export const Menu = memo(
           </IconButton>
           <IconButton
             title={
-              !isMoving ?
+              !isMovingFeldkontr ?
                 `'${row.labelEk}' zu einer anderen Population verschieben`
               : thisTpopfeldkontrIsMoving ?
                 'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
@@ -242,10 +260,12 @@ export const Menu = memo(
             onClick={onClickMoveInTree}
           >
             <MoveIcon
-              moving={(isMoving && thisTpopfeldkontrIsMoving).toString()}
+              moving={(
+                isMovingFeldkontr && thisTpopfeldkontrIsMoving
+              ).toString()}
             />
           </IconButton>
-          {isMoving && (
+          {isMovingFeldkontr && (
             <IconButton
               title={`Verschieben von '${moving.label}' abbrechen`}
               onClick={onClickStopMoving}

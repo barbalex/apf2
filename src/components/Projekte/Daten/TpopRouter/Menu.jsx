@@ -264,10 +264,35 @@ export const Menu = memo(
       idOfTpopBeingLocalized,
     ])
 
-    const isMoving = moving.table === 'tpop'
+    const isMovingTpop = moving.table === 'tpop'
     const thisTpopIsMoving = moving.id === tpopId
     const movingFromThisPop = moving.fromParentId === popId
+    const isMovingTpopfeldkontr = moving.table === 'tpopfeldkontr'
+    const isMovingTpopfreiwkontr = moving.table === 'tpopfreiwkontr'
+    const isMovingTpopmassn = moving.table === 'tpopmassn'
     const onClickMoveInTree = useCallback(() => {
+      if (isMovingTpop) {
+        // move to this pop
+        return moveTo({
+          parentId: popId,
+          client,
+          store,
+          tanstackQueryClient,
+        })
+      }
+      if (
+        isMovingTpopfeldkontr ||
+        isMovingTpopfreiwkontr ||
+        isMovingTpopmassn
+      ) {
+        // move to this tpop
+        return moveTo({
+          parentId: tpopId,
+          client,
+          store,
+          tanstackQueryClient,
+        })
+      }
       setMoving({
         id: row.id,
         label: row.label,
@@ -275,7 +300,20 @@ export const Menu = memo(
         toTable: 'tpop',
         fromParentId: popId,
       })
-    }, [row, setMoving, popId])
+    }, [
+      row,
+      setMoving,
+      popId,
+      tpopId,
+      client,
+      store,
+      tanstackQueryClient,
+      isMovingTpop,
+      isMovingTpopfeldkontr,
+      isMovingTpopfreiwkontr,
+      isMovingTpopmassn,
+      moveTo,
+    ])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -298,10 +336,19 @@ export const Menu = memo(
       isCopyingFreiwkontr ||
       isCopyingMassn
     const onClickCopy = useCallback(() => {
-      if (isCopying) {
+      if (isCopyingTpop) {
         // copy to this pop
         return copyTo({
           parentId: popId,
+          client,
+          store,
+          tanstackQueryClient,
+        })
+      }
+      if (isCopyingFeldkontr || isCopyingFreiwkontr || isCopyingMassn) {
+        // copy to this tpop
+        return copyTo({
+          parentId: tpopId,
           client,
           store,
           tanstackQueryClient,
@@ -323,6 +370,10 @@ export const Menu = memo(
       tanstackQueryClient,
       row,
       setCopying,
+      isCopyingTpop,
+      isCopyingFeldkontr,
+      isCopyingFreiwkontr,
+      isCopyingMassn,
     ])
 
     const onClickStopCopying = useCallback(() => {
@@ -350,14 +401,14 @@ export const Menu = memo(
         buttonWidth,
         buttonWidth,
         buttonWidth,
-        ...(isMoving ? [buttonWidth] : []),
+        ...(isMovingTpop ? [buttonWidth] : []),
         buttonWidth,
         ...(isCopyingTpop ? [buttonWidth] : []),
         ...(tpopHasCoord ? [180] : []),
         130,
         90,
       ],
-      [isCopyingTpop, isMoving, tpopHasCoord],
+      [isCopyingTpop, isMovingTpop, tpopHasCoord],
     )
 
     const onClickShowCoordOfTpopOnMapGeoAdminCh = useCallback(() => {
@@ -391,7 +442,7 @@ export const Menu = memo(
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${idOfTpopBeingLocalized}/${isMoving}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}`}
+          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}`}
           widths={widths}
         >
           <IconButton
@@ -429,7 +480,7 @@ export const Menu = memo(
           </RoundToggleButton>
           <IconButton
             title={
-              !isMoving ?
+              !isMovingTpop ?
                 `'${row.label}' zu einer anderen Population verschieben`
               : thisTpopIsMoving ?
                 'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
@@ -439,9 +490,9 @@ export const Menu = memo(
             }
             onClick={onClickMoveInTree}
           >
-            <MoveIcon moving={(isMoving && thisTpopIsMoving).toString()} />
+            <MoveIcon moving={(isMovingTpop && thisTpopIsMoving).toString()} />
           </IconButton>
-          {isMoving && (
+          {isMovingTpop && (
             <IconButton
               title={`Verschieben von '${moving.label}' abbrechen`}
               onClick={onClickStopMoving}

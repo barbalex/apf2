@@ -160,10 +160,18 @@ export const Menu = memo(
       }, 0)
     }, [setIsPrint])
 
-    const isMoving = moving.table === 'tpopfreiwkontr'
+    const isMovingTpopfreiwkontr = moving.table === 'tpopfreiwkontr'
     const thisTpopfreiwkontrIsMoving = moving.id === tpopkontrId
     const movingFromThisTpop = moving.fromParentId === tpopId
     const onClickMoveInTree = useCallback(() => {
+      if (isMovingTpopfreiwkontr) {
+        return moveTo({
+          parentId: tpopId,
+          client,
+          store,
+          tanstackQueryClient,
+        })
+      }
       setMoving({
         id: row.id,
         label: row.labelEkf,
@@ -171,7 +179,16 @@ export const Menu = memo(
         toTable: 'tpopfreiwkontr',
         fromParentId: tpopId,
       })
-    }, [row, setMoving, tpopId])
+    }, [
+      row,
+      setMoving,
+      tpopId,
+      isMovingTpopfreiwkontr,
+      moveTo,
+      client,
+      store,
+      tanstackQueryClient,
+    ])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -227,7 +244,7 @@ export const Menu = memo(
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${isMoving}/${moving.label}/${isCopyingTpopfreiwkontr}/${copying.label}/${movingFromThisTpop}/${thisTpopfreiwkontrIsMoving}/${thisTpopfreiwkontrIsCopying}`}
+          rerenderer={`${isMovingTpopfreiwkontr}/${moving.label}/${isCopyingTpopfreiwkontr}/${copying.label}/${movingFromThisTpop}/${thisTpopfreiwkontrIsMoving}/${thisTpopfreiwkontrIsCopying}`}
         >
           <IconButton
             title="Neuen Bericht erstellen"
@@ -250,7 +267,7 @@ export const Menu = memo(
           </IconButton>
           <IconButton
             title={
-              !isMoving ?
+              !isMovingTpopfreiwkontr ?
                 `'${row.labelEkf}' zu einer anderen Population verschieben`
               : thisTpopfreiwkontrIsMoving ?
                 'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
@@ -261,10 +278,12 @@ export const Menu = memo(
             onClick={onClickMoveInTree}
           >
             <MoveIcon
-              moving={(isMoving && thisTpopfreiwkontrIsMoving).toString()}
+              moving={(
+                isMovingTpopfreiwkontr && thisTpopfreiwkontrIsMoving
+              ).toString()}
             />
           </IconButton>
-          {isMoving && (
+          {isMovingTpopfreiwkontr && (
             <IconButton
               title={`Verschieben von '${moving.label}' abbrechen`}
               onClick={onClickStopMoving}

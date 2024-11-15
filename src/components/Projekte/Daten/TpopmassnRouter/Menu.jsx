@@ -147,10 +147,18 @@ export const Menu = memo(
       pathname,
     ])
 
-    const isMoving = moving.table === 'tpopmassn'
+    const isMovingTpopmassn = moving.table === 'tpopmassn'
     const thisTpopmassnIsMoving = moving.id === tpopmassnId
     const movingFromThisTpop = moving.fromParentId === tpopId
     const onClickMoveInTree = useCallback(() => {
+      if (isMovingTpopmassn) {
+        return moveTo({
+          parentId: tpopId,
+          client,
+          store,
+          tanstackQueryClient,
+        })
+      }
       setMoving({
         id: row.id,
         label: row.label,
@@ -158,7 +166,7 @@ export const Menu = memo(
         toTable: 'tpopmassn',
         fromParentId: tpopId,
       })
-    }, [row, setMoving, tpopId])
+    }, [row, setMoving, tpopId, moveTo, client, store, tanstackQueryClient])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -214,7 +222,7 @@ export const Menu = memo(
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${isMoving}/${moving.label}/${isCopyingTpopmassn}/${copying.label}/${movingFromThisTpop}/${thisTpopmassnIsMoving}/${thisTpopmassnIsCopying}`}
+          rerenderer={`${isMovingTpopmassn}/${moving.label}/${isCopyingTpopmassn}/${copying.label}/${movingFromThisTpop}/${thisTpopmassnIsMoving}/${thisTpopmassnIsCopying}`}
         >
           <IconButton
             title="Neue Massnahme erstellen"
@@ -231,7 +239,7 @@ export const Menu = memo(
           </IconButton>
           <IconButton
             title={
-              !isMoving ?
+              !isMovingTpopmassn ?
                 `'${row.label}' zu einer anderen Population verschieben`
               : thisTpopmassnIsMoving ?
                 'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
@@ -241,9 +249,11 @@ export const Menu = memo(
             }
             onClick={onClickMoveInTree}
           >
-            <MoveIcon moving={(isMoving && thisTpopmassnIsMoving).toString()} />
+            <MoveIcon
+              moving={(isMovingTpopmassn && thisTpopmassnIsMoving).toString()}
+            />
           </IconButton>
-          {isMoving && (
+          {isMovingTpopmassn && (
             <IconButton
               title={`Verschieben von '${moving.label}' abbrechen`}
               onClick={onClickStopMoving}
