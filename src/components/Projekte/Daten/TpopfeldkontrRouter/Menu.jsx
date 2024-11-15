@@ -18,6 +18,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { copyTo } from '../../../../modules/copyTo/index.js'
+import { copyBiotopTo } from '../../../../modules/copyBiotopTo.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
@@ -38,7 +39,14 @@ export const Menu = memo(
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
     const store = useContext(StoreContext)
-    const { moving, setMoving, copying, setCopying } = store
+    const {
+      moving,
+      setMoving,
+      copying,
+      setCopying,
+      copyingBiotop,
+      setCopyingBiotop,
+    } = store
 
     const onClickAdd = useCallback(async () => {
       let result

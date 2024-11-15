@@ -16,7 +16,7 @@ export const copyBiotopTo = async ({ id, client, copyingBiotop }) => {
     `,
     variables: { id: previousId },
   })
-  const from = dataFrom?.tpopkontrById
+  const from = dataFrom?.tpopkontrById 
   await client.mutate({
     mutation: gql`
       mutation updateTpopkontrForCopyBiotopTo(

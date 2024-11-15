@@ -15,18 +15,25 @@ import { createTpopkontrzaehl } from './createTpopkontrzaehl.js'
 import { createTpopmassn } from './createTpopmassn.js'
 import { createTpop } from './createTpop.js'
 import { createPop } from './createPop.js'
-//import queryTpopfeldkontr from './queryTpopfeldkontr'
-//import queryTpopfreiwkontr from './queryTpopfreiwkontr'
+import { copyBiotopTo } from '../copyBiotopTo.js'
 
 // copyTpopsOfPop can pass table and id separately
-export const copyTo = async ({
+export const copyTo = async ({ 
   parentId,
   table: tablePassed,
+  biotop: false,
   id: idPassed,
   client,
   store,
   tanstackQueryClient,
 }) => {
+  if (biotop) {
+    return copyBiotopTo({
+      id: idPassed,
+      client,
+      copyingBiotop: store.copyingBiotop,
+    })
+  }
   const { copying, enqueNotification } = store
   const table = tablePassed ?? copying.table
   const id = idPassed ?? copying.id
