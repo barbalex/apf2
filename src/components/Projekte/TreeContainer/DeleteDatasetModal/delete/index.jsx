@@ -186,4 +186,3 @@ export const deleteModule = async ({ client, store, search }) => {
   // reset datasetToDelete
   emptyToDelete()
 }
-

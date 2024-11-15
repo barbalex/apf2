@@ -24,7 +24,7 @@ export const ZaehlFolder = memo(
 
     const { data, isLoading } = useQuery({
       queryKey: [
-        'treeTpopfeldkontrzaehlFolders',
+        'treeTpopfreiwkontrzaehlFolders',
         tpopkontr.id,
         tpopkontrzaehlsFilter,
       ],

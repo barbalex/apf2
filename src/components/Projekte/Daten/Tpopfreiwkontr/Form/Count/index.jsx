@@ -200,7 +200,15 @@ export const Count = memo(
             mutation: createTpopkontrzaehl,
             variables: { tpopkontrId },
           })
-          .then(() => refetch())
+          .then(() => {
+            refetch()
+            queryClient.invalidateQueries({
+              queryKey: [`treeTpopfreiwkontrzaehl`],
+            })
+            queryClient.invalidateQueries({
+              queryKey: [`treeTpopfreiwkontrzaehlFolders`],
+            })
+          })
       }, [client, refetch, tpopkontrId])
 
       const zaehleinheitWerte = useMemo(() => {
@@ -245,6 +253,9 @@ export const Count = memo(
             refetch()
             queryClient.invalidateQueries({
               queryKey: [`treeTpopfreiwkontrzaehl`],
+            })
+            queryClient.invalidateQueries({
+              queryKey: [`treeTpopfreiwkontrzaehlFolders`],
             })
           }
           setToDelete({
