@@ -100,6 +100,8 @@ export const Menu = memo(
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
+    const [copyBiotopMenuAnchorEl, setCopyBiotopMenuAnchorEl] = useState(null)
+    const copyBiotopMenuOpen = Boolean(copyBiotopMenuAnchorEl)
 
     const onClickDelete = useCallback(async () => {
       let result
@@ -200,43 +202,37 @@ export const Menu = memo(
     const isCopyingBiotop = !!copyingBiotop.id
     const isCopying = isCopyingTpopfeldkontr || isCopyingBiotop
     const thisTpopfeldkontrIsCopying = copying.id === tpopkontrId
-    const onClickCopy = useCallback(() => {
-      if (isCopyingTpopfeldkontr) {
-        // copy to this tpop
-        return copyTo({
-          parentId: tpopId,
-          client,
-          store,
-          tanstackQueryClient,
-        })
-      }
-      if (isCopyingBiotop) {
-        return copyBiotopTo({
-          id: tpopkontrId,
-          copyingBiotop,
-          client,
-        })
-      }
+    const onClickCopyFeldkontrToHere = useCallback(() => {
+      copyTo({
+        parentId: tpopId,
+        client,
+        store,
+        tanstackQueryClient,
+      })
+    }, [copyTo, tpopId, client, store, tanstackQueryClient])
+    const onClickCopyBiotopToHere = useCallback(() => {
+      copyBiotopTo({
+        id: tpopkontrId,
+        copyingBiotop,
+        client,
+      })
+    }, [copyBiotopTo, copyingBiotop, tpopkontrId, client])
+    const onClickSetFeldkontrCopying = useCallback(() => {
       setCopying({
         table: 'tpopfeldkontr',
         id: tpopkontrId,
         label: row.labelEk,
         withNextLevel: false,
       })
-    }, [
-      isCopyingTpopfeldkontr,
-      isCopyingBiotop,
-      copyTo,
-      copyBiotopTo,
-      tpopId,
-      tpopkontrId,
-      client,
-      store,
-      tanstackQueryClient,
-      row,
-      setCopying,
-      moveTo,
-    ])
+      setCopyBiotopMenuAnchorEl(null)
+    }, [tpopkontrId, row, setCopying])
+    const onClickSetBiotopCopying = useCallback(() => {
+      setCopyingBiotop({
+        id: tpopkontrId,
+        label: row.labelEk,
+      })
+      setCopyBiotopMenuAnchorEl(null)
+    }, [tpopkontrId, row, setCopyingBiotop])
 
     const onClickStopCopying = useCallback(() => {
       if (isCopyingTpopfeldkontr) {
@@ -296,18 +292,30 @@ export const Menu = memo(
               <BsSignStopFill style={iconStyle} />
             </IconButton>
           )}
-          <IconButton
-            title={
-              isCopyingTpopfeldkontr ?
-                `Kopiere '${copying.label}' in diese Teilpopulation`
-              : isCopyingBiotop ?
-                `Kopiere Biotop von '${copyingBiotop.label}' hierhin`
-              : 'Kopieren'
-            }
-            onClick={onClickCopy}
-          >
-            <CopyIcon copying={thisTpopfeldkontrIsCopying.toString()} />
-          </IconButton>
+          {isCopyingTpopfeldkontr ?
+            <IconButton
+              title={`Kopiere '${copying.label}' in diese Teilpopulation`}
+              onClick={onClickCopyFeldkontrToHere}
+            >
+              <CopyIcon copying={thisTpopfeldkontrIsCopying.toString()} />
+            </IconButton>
+          : isCopyingBiotop ?
+            <IconButton
+              title={`Kopiere Biotop von '${copyingBiotop.label}' hierhin`}
+              onClick={onClickCopyBiotopToHere}
+            >
+              <CopyIcon copying={'false'} />
+            </IconButton>
+          : <IconButton
+              title="Kopieren"
+              onClick={(event) =>
+                setCopyBiotopMenuAnchorEl(event.currentTarget)
+              }
+              aria-owns={copyBiotopMenuOpen ? 'copyBiotopMenu' : undefined}
+            >
+              <CopyIcon copying={thisTpopfeldkontrIsCopying.toString()} />
+            </IconButton>
+          }
           {(isCopyingTpopfeldkontr || isCopyingBiotop) && (
             <IconButton
               title={`Kopieren von '${copying.label}' abbrechen`}
@@ -326,6 +334,18 @@ export const Menu = memo(
           <MenuTitle>löschen?</MenuTitle>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+        </MuiMenu>
+        <MuiMenu
+          id="copyBiotopMenu"
+          anchorEl={copyBiotopMenuAnchorEl}
+          open={copyBiotopMenuOpen}
+          onClose={() => setCopyBiotopMenuAnchorEl(null)}
+        >
+          <MenuTitle>Kopieren:</MenuTitle>
+          <MenuItem onClick={onClickSetFeldkontrCopying}>
+            Feld-Kontrolle
+          </MenuItem>
+          <MenuItem onClick={onClickSetBiotopCopying}>Biotop</MenuItem>
         </MuiMenu>
       </ErrorBoundary>
     )
