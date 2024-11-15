@@ -1,4 +1,3 @@
-import { QueryClient } from '@tanstack/react-query'
 /**
  * moves a dataset to a different parent
  * used when copying for instance tpop to other pop in tree
@@ -29,58 +28,56 @@ export const copyTo = async ({
   tanstackQueryClient,
 }) => {
   const { copying, enqueNotification } = store
-  let table = tablePassed || copying.table
-  const id = idPassed || copying.id
+  const table = tablePassed ?? copying.table
+  const id = idPassed ?? copying.id
   const withNextLevel = copying.withNextLevel ?? false
 
   // ensure derived data exists
   const tabelle = tables.find((t) => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
-  if (tabelle && tabelle.dbTable) {
-    table = tabelle.dbTable
-  }
+  const dbTable = tabelle?.dbTable ?? table
 
   // get data
   let row
-  switch (table) {
+  switch (dbTable) {
     case 'tpopkontrzaehl': {
-      const { data: data0 } = await client.query({
+      const { data } = await client.query({
         query: queryTpopkontrzaehlById,
         variables: { id },
       })
-      row = data0?.tpopkontrzaehlById
+      row = data?.tpopkontrzaehlById
       break
     }
     case 'tpopkontr': {
-      const { data: data1 } = await client.query({
+      const { data } = await client.query({
         query: queryTpopKontrById,
         variables: { id },
       })
-      row = data1?.tpopkontrById
+      row = data?.tpopkontrById
       break
     }
     case 'tpopmassn': {
-      const { data: data2 } = await client.query({
+      const { data } = await client.query({
         query: queryTpopmassnById,
         variables: { id },
       })
-      row = data2?.tpopmassnById
+      row = data?.tpopmassnById
       break
     }
     case 'tpop': {
-      const { data: data3 } = await client.query({
+      const { data } = await client.query({
         query: queryTpopById,
         variables: { id },
       })
-      row = data3?.tpopById
+      row = data?.tpopById
       break
     }
     case 'pop': {
-      const { data: data4 } = await client.query({
+      const { data } = await client.query({
         query: queryPopById,
         variables: { id },
       })
-      row = data4?.popById
+      row = data?.popById
       break
     }
     default:
@@ -100,7 +97,7 @@ export const copyTo = async ({
   // insert
   let response
   let newId
-  switch (table) {
+  switch (dbTable) {
     case 'tpopkontrzaehl':
       // TODO: this never happens, right?
       response = await client.mutate({
@@ -275,7 +272,7 @@ export const copyTo = async ({
       queryKey: ['treeTpopFolders'],
     })
   }
-  if (table === 'tpopkontr') {
+  if (table === 'tpopfeldkontr') {
     // always copy Zaehlungen
     copyZaehlOfTpopKontr({
       tpopkontrIdFrom: id,

@@ -15,16 +15,14 @@ export const moveTo = async ({
   tanstackQueryClient,
 }) => {
   const { enqueNotification, moving, setMoving } = store
-  let table = moving?.table
+  const table = moving?.table
   const id = moving?.id
 
   // ensure derived data exists
   const tabelle = tables.find((t) => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
-  if (tabelle.dbTable) {
-    table = tabelle.dbTable
-  }
-  const idField = tabelle ? tabelle.idField : undefined
+  const dbTable = tabelle?.dbTable ?? table
+  const idField = tabelle?.idField
   if (!idField) {
     return enqueNotification({
       message: 'change was not saved: Reason: idField was not found',
@@ -44,7 +42,7 @@ export const moveTo = async ({
   }
 
   // move
-  switch (table) {
+  switch (dbTable) {
     case 'tpopkontr':
       await client.mutate({
         mutation: updateTpopkontrById,
@@ -108,7 +106,7 @@ export const moveTo = async ({
       queryKey: [`treeTpopFolders`],
     })
   }
-  if (moving.table === 'tpopfeldkontr') {
+  if (table === 'tpopfeldkontr') {
     tanstackQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
@@ -116,7 +114,7 @@ export const moveTo = async ({
       queryKey: [`treeTpopFolders`],
     })
   }
-  if (moving.table === 'tpopfreiwkontr') {
+  if (table === 'tpopfreiwkontr') {
     tanstackQueryClient.invalidateQueries({
       queryKey: [`treeTpopfreiwkontr`],
     })
