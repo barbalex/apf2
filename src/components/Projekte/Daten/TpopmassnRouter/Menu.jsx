@@ -180,6 +180,10 @@ export const Menu = memo(
 
     const isCopyingTpopmassn = copying.table === 'tpopmassn'
     const thisTpopmassnIsCopying = copying.id === tpopmassnId
+    console.log('Tpopmassn.Menu', {
+      isCopyingTpopmassn,
+      thisTpopmassnIsCopying,
+    })
     const onClickCopy = useCallback(() => {
       if (isCopyingTpopmassn) {
         // copy to this tpop
@@ -191,7 +195,7 @@ export const Menu = memo(
         })
       }
       setCopying({
-        table: 'tpopmassnkontr',
+        table: 'tpopmassn',
         id: tpopmassnId,
         label: row.label,
         withNextLevel: false,

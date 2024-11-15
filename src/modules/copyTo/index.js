@@ -31,7 +31,7 @@ export const copyTo = async ({
   const { copying, enqueNotification } = store
   let table = tablePassed || copying.table
   const id = idPassed || copying.id
-  const withNextLevel = copying.withNextLevel
+  const withNextLevel = copying.withNextLevel ?? false
 
   // ensure derived data exists
   const tabelle = tables.find((t) => t.table === table)

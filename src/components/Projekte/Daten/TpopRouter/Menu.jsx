@@ -501,7 +501,7 @@ export const Menu = memo(
           )}
           <IconButton
             title={
-              isCopyingTpop ?
+              isCopying ?
                 `Kopiere '${copying.label}' in diese Population`
               : 'Kopieren'
             }
@@ -509,7 +509,7 @@ export const Menu = memo(
           >
             <CopyIcon copying={thisTpopIsCopying.toString()} />
           </IconButton>
-          {isCopyingTpop && (
+          {isCopying && (
             <IconButton
               title={`Kopieren von '${copying.label}' abbrechen`}
               onClick={onClickStopCopying}
