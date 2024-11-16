@@ -1,13 +1,14 @@
 import { memo } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 
 import { KontrolljahrField } from './KontrolljahrField.jsx'
 import { KontrolljahrFieldEmpty } from './KontrolljahrFieldEmpty.jsx'
 
 const DelIcon = styled(IconButton)`
-  font-size: 1rem !important;
+  font-size: 1.1rem !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 `
@@ -27,20 +28,21 @@ export const Kontrolljahre = memo(
             kontrolljahre={kontrolljahreSorted}
             refetch={refetch}
           />
-          <DelIcon
-            title={`${kontrolljahreSorted[index]} entfernen`}
-            aria-label={`${kontrolljahreSorted[index]} entfernen`}
-            onClick={async () => {
-              const newVal = [...kontrolljahreSorted]
-              newVal.splice(index, 1)
-              await saveToDb({
-                target: { name: 'kontrolljahre', value: newVal },
-              })
-              refetch()
-            }}
-          >
-            <FaTimes />
-          </DelIcon>
+          <Tooltip title={`${kontrolljahreSorted[index]} entfernen`}>
+            <DelIcon
+              aria-label={`${kontrolljahreSorted[index]} entfernen`}
+              onClick={async () => {
+                const newVal = [...kontrolljahreSorted]
+                newVal.splice(index, 1)
+                await saveToDb({
+                  target: { name: 'kontrolljahre', value: newVal },
+                })
+                refetch()
+              }}
+            >
+              <FaTimes />
+            </DelIcon>
+          </Tooltip>
         </div>
       )),
       <KontrolljahrFieldEmpty
