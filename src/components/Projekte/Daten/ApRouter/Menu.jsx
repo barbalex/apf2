@@ -169,8 +169,8 @@ export const Menu = memo(
       })
     }, [setCopying])
 
-    const isMoving = moving.id !== '99999999-9999-9999-9999-999999999999'
-    const isCopying = copying.id !== '99999999-9999-9999-9999-999999999999'
+    const isMoving = !!moving.table
+    const isCopying = !!copying.table
 
     return (
       <ErrorBoundary>
