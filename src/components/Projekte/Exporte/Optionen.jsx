@@ -1,8 +1,8 @@
 import { memo, useContext, useState } from 'react'
 import Collapse from '@mui/material/Collapse'
-import Icon from '@mui/material/Icon'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
+import Tooltip from '@mui/material/Tooltip'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -37,15 +37,15 @@ export const Optionen = memo(
           onClick={() => setExpanded(!expanded)}
         >
           <CardActionTitle>Optionen</CardActionTitle>
-          <CardActionIconButton
-            data-expanded={expanded}
-            aria-expanded={expanded}
-            aria-label="öffnen"
-          >
-            <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+          <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
+            <CardActionIconButton
+              data-expanded={expanded}
+              aria-expanded={expanded}
+              aria-label={expanded ? 'schliessen' : 'öffnen'}
+            >
               <ExpandMoreIcon />
-            </Icon>
-          </CardActionIconButton>
+            </CardActionIconButton>
+          </Tooltip>
         </StyledCardActions>
         <Collapse
           in={expanded}
