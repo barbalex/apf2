@@ -14,6 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import styled from '@emotion/styled'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
+import MuiTooltip from '@mui/material/Tooltip'
 import { useParams } from 'react-router-dom'
 
 import { query } from './query.js'
@@ -45,10 +46,8 @@ const TitleRow = styled.div`
 `
 const Title = styled.h4`
   margin-bottom: 0;
+  margin-top: 0;
   padding: 0 10px;
-`
-const InfoButton = styled(IconButton)`
-  margin-bottom: -20px;
 `
 const Container = styled(ResponsiveContainer)`
   overflow: hidden;
@@ -95,7 +94,7 @@ export const Component = ({ height = 400 }) => {
 
   const zielEinheit =
     data?.allEkzaehleinheits?.nodes?.[0]
-      ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text
+      ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text ?? '(keine Zielenheit)'
 
   const onClickMoreInfo = useCallback(() => {
     const url = 'https://apflora.ch/Dokumentation/art-auswertung-pop-menge'
@@ -122,17 +121,16 @@ export const Component = ({ height = 400 }) => {
       : tpopMengeData.length ?
         <>
           <TitleRow>
-            <div>
-              <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
-            </div>
-            <InfoButton
-              aria-label="Mehr Informationen"
-              title="Mehr Informationen"
-              onClick={onClickMoreInfo}
-              size="large"
-            >
-              <IoMdInformationCircleOutline />
-            </InfoButton>
+            <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
+            <Tooltip title="Mehr Informationen">
+              <IconButton
+                aria-label="Mehr Informationen"
+                onClick={onClickMoreInfo}
+                size="large"
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </Tooltip>
           </TitleRow>
           <Container
             width="99%"
@@ -189,17 +187,16 @@ export const Component = ({ height = 400 }) => {
         </>
       : <>
           <TitleRow>
-            <div>
-              <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
-            </div>
-            <IconButton
-              aria-label="Mehr Informationen"
-              title="Mehr Informationen"
-              onClick={onClickMoreInfo}
-              size="large"
-            >
-              <IoMdInformationCircleOutline />
-            </IconButton>
+            <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
+            <MuiTooltip title="Mehr Informationen">
+              <IconButton
+                aria-label="Mehr Informationen"
+                onClick={onClickMoreInfo}
+                size="large"
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </MuiTooltip>
           </TitleRow>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>
         </>

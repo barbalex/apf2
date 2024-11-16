@@ -8,6 +8,7 @@ import { FaPlus, FaMinus, FaFilePdf } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Tooltip from '@mui/material/Tooltip'
 import isEqual from 'lodash/isEqual'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
@@ -119,25 +120,24 @@ export const Menu = memo(
           bgColor="#388e3c"
           color="white"
         >
-          <IconButton
-            title="Neuen AP-Bericht erstellen"
-            onClick={onClickAdd}
-          >
-            <FaPlus style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Löschen"
-            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'abperuebersichtDelMenu' : undefined}
-          >
-            <FaMinus style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Druckversion öffnen. Achtung: lädt sehr viele Daten, ist daher langsam und stresst den Server."
-            onClick={onClickPrint}
-          >
-            <FaFilePdf style={iconStyle} />
-          </IconButton>
+          <Tooltip title="Neuen AP-Bericht erstellen">
+            <IconButton onClick={onClickAdd}>
+              <FaPlus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Löschen">
+            <IconButton
+              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+              aria-owns={delMenuOpen ? 'abperuebersichtDelMenu' : undefined}
+            >
+              <FaMinus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Druckversion öffnen. Achtung: lädt sehr viele Daten, ist daher langsam und stresst den Server.">
+            <IconButton onClick={onClickPrint}>
+              <FaFilePdf style={iconStyle} />
+            </IconButton>
+          </Tooltip>
         </MenuBar>
         <MuiMenu
           id="abperuebersichtDelMenu"

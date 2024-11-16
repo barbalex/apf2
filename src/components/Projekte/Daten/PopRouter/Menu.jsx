@@ -11,6 +11,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Tooltip from '@mui/material/Tooltip'
 import isEqual from 'lodash/isEqual'
 import styled from '@emotion/styled'
 
@@ -264,32 +265,30 @@ export const Menu = memo(
           color="white"
           rerenderer={`${isMoving}/${isCopyingPop}/${popMovingFromThisAp}`}
         >
-          <IconButton
-            title="Neue Population erstellen"
-            onClick={onClickAdd}
-          >
-            <FaPlus style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Löschen"
-            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'popDelMenu' : undefined}
-          >
-            <FaMinus style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Ordner im Navigationsbaum öffnen"
-            onClick={onClickOpenLowerNodes}
-          >
-            <FaFolderTree style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Ordner im Navigationsbaum schliessen"
-            onClick={onClickCloseLowerNodes}
-          >
-            <RiFolderCloseFill style={iconStyle} />
-          </IconButton>
-          <IconButton
+          <Tooltip title="Neue Population erstellen">
+            <IconButton onClick={onClickAdd}>
+              <FaPlus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Löschen">
+            <IconButton
+              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+              aria-owns={delMenuOpen ? 'popDelMenu' : undefined}
+            >
+              <FaMinus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Ordner im Navigationsbaum öffnen">
+            <IconButton onClick={onClickOpenLowerNodes}>
+              <FaFolderTree style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Ordner im Navigationsbaum schliessen">
+            <IconButton onClick={onClickCloseLowerNodes}>
+              <RiFolderCloseFill style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip
             title={
               !isMoving && !isTpopMoving ?
                 `'${row.label}' zu einer anderen Art verschieben`
@@ -301,41 +300,43 @@ export const Menu = memo(
                 `Verschiebe '${moving.label}' zu dieser Population`
               : `Verschiebe '${moving.label}' zu dieser Art`
             }
-            onClick={onClickMoveInTree}
           >
-            <MoveIcon moving={(isMoving && thisPopIsMoving).toString()} />
-          </IconButton>
-          {isMoving && (
-            <IconButton
-              title={`Verschieben von '${moving.label}' abbrechen`}
-              onClick={onClickStopMoving}
-            >
-              <BsSignStopFill style={iconStyle} />
+            <IconButton onClick={onClickMoveInTree}>
+              <MoveIcon moving={(isMoving && thisPopIsMoving).toString()} />
             </IconButton>
+          </Tooltip>
+          {isMoving && (
+            <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
+              <IconButton onClick={onClickStopMoving}>
+                <BsSignStopFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
           )}
-          <IconButton
+          <Tooltip
             title={
               isCopyingPop ? `Kopiere '${copying.label}' in diese Art`
               : isCopyingTpop ?
                 `Kopiere '${copying.label}' in diese Population`
               : 'Kopieren'
             }
-            onClick={(event) =>
-              isCopyingTpop ? onClickCopyTpopToHere()
-              : isCopyingPop ? onClickCopyPop()
-              : setCopyMenuAnchorEl(event.currentTarget)
-            }
-            aria-owns={copyMenuOpen ? 'copyMenu' : undefined}
           >
-            <CopyIcon copying={thisPopIsCopying.toString()} />
-          </IconButton>
-          {(isCopyingPop || isCopyingTpop) && (
             <IconButton
-              title={`Kopieren von '${copying.label}' abbrechen`}
-              onClick={onClickStopCopying}
+              onClick={(event) =>
+                isCopyingTpop ? onClickCopyTpopToHere()
+                : isCopyingPop ? onClickCopyPop()
+                : setCopyMenuAnchorEl(event.currentTarget)
+              }
+              aria-owns={copyMenuOpen ? 'copyMenu' : undefined}
             >
-              <BsSignStopFill style={iconStyle} />
+              <CopyIcon copying={thisPopIsCopying.toString()} />
             </IconButton>
+          </Tooltip>
+          {(isCopyingPop || isCopyingTpop) && (
+            <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
+              <IconButton onClick={onClickStopCopying}>
+                <BsSignStopFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
           )}
         </MenuBar>
         <MuiMenu
