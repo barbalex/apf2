@@ -12,7 +12,7 @@ import { Label } from '../../../shared/Label.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const NurApDiv = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding-right: 5px;
@@ -21,11 +21,11 @@ const NurApDiv = styled.div`
 `
 const StyledSwitch = styled(Switch)`
   margin-left: -13px;
-  margin-top: -18px;
+  margin-top: -15px;
 `
 
 export const ApFilter = memo(
-  observer(() => {
+  observer(({ color }) => {
     const { apId } = useParams()
     const navigate = useNavigate()
     const { search } = useLocation()
@@ -100,15 +100,18 @@ export const ApFilter = memo(
 
     return (
       <ErrorBoundary>
-        <NurApDiv>
-          <Label label="nur AP" />
+        <Container>
+          <Label
+            label="nur AP"
+            color={color}
+          />
           <StyledSwitch
             data-id="ap-filter"
             checked={apFilter}
             onChange={onChange}
             color="primary"
           />
-        </NurApDiv>
+        </Container>
       </ErrorBoundary>
     )
   }),
