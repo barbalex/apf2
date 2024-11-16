@@ -28,11 +28,7 @@ export const Component = memo(
     const aps = data?.data?.allAps?.nodes ?? []
     const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
-    console.log('Aps', { data, aps, totalCount, error })
-
-    if (isLoading) {
-      return <Spinner />
-    }
+    if (isLoading) return <Spinner />
 
     if (error) return <Error error={error} />
 
