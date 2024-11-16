@@ -77,6 +77,10 @@ export const Router = () => {
               lazy={() => import('../Print/ApberForYear/index.jsx')}
             />
             <Route
+              path="Projekte/:projId/Arten"
+              lazy={() => import('../Projekte/Daten/Aps/index.jsx')}
+            />
+            <Route
               path="Projekte/:projId/Arten/:apId"
               lazy={() => import('../Projekte/Daten/ApRouter/index.jsx')}
             >

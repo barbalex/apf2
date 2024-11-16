@@ -2,27 +2,38 @@ import { memo, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
+import { useParams } from 'react-router-dom'
 
 import { StoreContext } from '../../../../storeContext.js'
 import { createApsQuery } from '../../../../modules/createApsQuery.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
 
 export const Component = memo(
   observer(() => {
+    const { projId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { apGqlFilterForTree } = store.tree
 
-    const { data } = useQuery(
+    console.log('Aps', { projId, apGqlFilterForTree })
+
+    const { data, isLoading, error } = useQuery(
       createApsQuery({
-        projectId: projekt.id,
+        projId,
         apGqlFilterForTree,
         apolloClient,
       }),
     )
     const aps = data?.data?.allAps?.nodes ?? []
     const totalCount = data?.data?.totalCount?.totalCount ?? 0
+
+    console.log('Aps', { data, aps, totalCount, error })
+
+    if (isLoading) {
+      return <Spinner />
+    }
 
     return (
       <List

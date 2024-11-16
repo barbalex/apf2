@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client'
 
 export const createApsQuery = ({
-  projektId,
+  projId,
   apGqlFilterForTree,
   apolloClient,
 }) => ({
-  queryKey: ['treeAp', projektId, apGqlFilterForTree],
+  queryKey: ['treeAp', projId, apGqlFilterForTree],
   queryFn: () =>
     apolloClient.query({
       query: gql`
@@ -23,7 +23,7 @@ export const createApsQuery = ({
       `,
       variables: {
         apsFilter: apGqlFilterForTree,
-        projId: projektId,
+        projId: projId,
       },
       fetchPolicy: 'no-cache',
     }),

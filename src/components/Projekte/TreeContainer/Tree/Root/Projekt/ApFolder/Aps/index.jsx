@@ -16,7 +16,7 @@ export const Aps = memo(
 
     const { data } = useQuery(
       createApsQuery({
-        projectId: projekt.id,
+        projId: projekt.id,
         apGqlFilterForTree,
         apolloClient,
       }),
