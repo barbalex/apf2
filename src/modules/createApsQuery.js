@@ -23,7 +23,7 @@ export const createApsQuery = ({
       `,
       variables: {
         apsFilter: apGqlFilterForTree,
-        projId: projId,
+        projId,
       },
       fetchPolicy: 'no-cache',
     }),

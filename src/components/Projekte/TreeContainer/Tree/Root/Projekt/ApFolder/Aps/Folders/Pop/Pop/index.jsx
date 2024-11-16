@@ -6,42 +6,25 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../storeContext.js'
 import { PopFolders } from './Folders/index.jsx'
+import { createPopsQuery } from '../../../../../../../../../../../modules/createPopsQuery.js'
 
 export const Pop = memo(
   observer(({ projekt, ap }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { popGqlFilterForTree } = store.tree
 
-    const { data } = useQuery({
-      queryKey: ['treePop', ap.id, popGqlFilterForTree],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreePopQuery($apId: UUID!, $popsFilter: PopFilter!) {
-              apById(id: $apId) {
-                id
-                popsByApId(filter: $popsFilter, orderBy: [NR_ASC, NAME_ASC]) {
-                  nodes {
-                    id
-                    label
-                    status
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            apId: ap.id,
-            popsFilter: popGqlFilterForTree,
-          },
-          // without 'network-only' or using tanstack,
-          // ui does not update when inserting and deleting
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createPopsQuery({
+        apId: ap.id,
+        popGqlFilterForTree,
+        apolloClient,
+      }),
+    )
+    const pops = data?.data?.apById?.popsByApId?.nodes ?? []
+    const totalCount = data?.data?.apById?.popsCount?.totalCount ?? 0
 
-    return (data?.data?.apById?.popsByApId?.nodes ?? []).map((el) => {
+    return (pops).map((el) => {
       const node = {
         nodeType: 'table',
         menuType: 'pop',
