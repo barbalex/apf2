@@ -19,19 +19,18 @@ const ListContainer = styled.div`
   scrollbar-width: thin;
 `
 const Row = styled.div`
+  padding: 5px 10px;
   display: flex;
-  justify-content: center;
-  border-top: rgba(46, 125, 50, 0.5) solid 1px;
-  width: 100%;
-  height: 50px;
-  line-height: 50px;
-  text-align: center;
-  vertical-align: middle;
+  justify-content: flex-start;
+  align-items: center;
+  flex-grow: 0;
+  min-height: 35px;
   cursor: pointer;
   user-select: none;
   &:hover {
     background-color: rgba(103, 216, 101, 0.07);
   }
+  border-top: rgba(46, 125, 50, 0.5) solid 1px;
   &:last-child {
     border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
   }

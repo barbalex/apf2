@@ -9,6 +9,7 @@ import { createApsQuery } from '../../../../modules/createApsQuery.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { Error } from '../../../shared/Error.jsx'
 
 export const Component = memo(
   observer(() => {
@@ -16,8 +17,6 @@ export const Component = memo(
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { apGqlFilterForTree } = store.tree
-
-    console.log('Aps', { projId, apGqlFilterForTree })
 
     const { data, isLoading, error } = useQuery(
       createApsQuery({
@@ -35,12 +34,14 @@ export const Component = memo(
       return <Spinner />
     }
 
+    if (error) return <Error error={error} />
+
     return (
       <List
         items={aps}
         title="Arten"
         totalCount={totalCount}
-        menuBar={Menu}
+        menuBar={<Menu />}
       />
     )
   }),
