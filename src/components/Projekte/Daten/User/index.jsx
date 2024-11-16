@@ -8,6 +8,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
@@ -285,16 +286,17 @@ export const Component = () => {
                 error={!!errors.pass}
                 endAdornment={
                   <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPass(!showPass)}
-                      onMouseDown={(e) => e.preventDefault()}
-                      title={showPass ? 'verstecken' : 'anzeigen'}
-                      size="large"
-                    >
-                      {showPass ?
-                        <MdVisibilityOff />
-                      : <MdVisibility />}
-                    </IconButton>
+                    <Tooltip title={showPass ? 'verstecken' : 'anzeigen'}>
+                      <IconButton
+                        onClick={() => setShowPass(!showPass)}
+                        onMouseDown={(e) => e.preventDefault()}
+                        size="large"
+                      >
+                        {showPass ?
+                          <MdVisibilityOff />
+                        : <MdVisibility />}
+                      </IconButton>
+                    </Tooltip>
                   </InputAdornment>
                 }
               />
@@ -331,16 +333,17 @@ export const Component = () => {
                 spellCheck="false"
                 endAdornment={
                   <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPass2(!showPass2)}
-                      onMouseDown={(e) => e.preventDefault()}
-                      title={showPass2 ? 'verstecken' : 'anzeigen'}
-                      size="large"
-                    >
-                      {showPass2 ?
-                        <MdVisibilityOff />
-                      : <MdVisibility />}
-                    </IconButton>
+                    <Tooltip title={showPass2 ? 'verstecken' : 'anzeigen'}>
+                      <IconButton
+                        onClick={() => setShowPass2(!showPass2)}
+                        onMouseDown={(e) => e.preventDefault()}
+                        size="large"
+                      >
+                        {showPass2 ?
+                          <MdVisibilityOff />
+                        : <MdVisibility />}
+                      </IconButton>
+                    </Tooltip>
                   </InputAdornment>
                 }
               />

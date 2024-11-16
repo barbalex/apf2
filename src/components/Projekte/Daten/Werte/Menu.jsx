@@ -8,6 +8,7 @@ import { FaPlus, FaMinus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Tooltip from '@mui/material/Tooltip'
 import isEqual from 'lodash/isEqual'
 import upperFirst from 'lodash/upperFirst'
 
@@ -15,7 +16,6 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
-import { Icon } from '@mui/material'
 
 const iconStyle = { color: 'white' }
 
@@ -131,19 +131,19 @@ export const Menu = memo(
           bgColor="#388e3c"
           color="white"
         >
-          <IconButton
-            title="Neuen Wert erstellen"
-            onClick={onClickAdd}
-          >
-            <FaPlus style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Löschen"
-            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'wertDelMenu' : undefined}
-          >
-            <FaMinus style={iconStyle} />
-          </IconButton>
+          <Tooltip title="Neuen Wert erstellen">
+            <IconButton onClick={onClickAdd}>
+              <FaPlus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Löschen">
+            <IconButton
+              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+              aria-owns={delMenuOpen ? 'wertDelMenu' : undefined}
+            >
+              <FaMinus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
         </MenuBar>
         <MuiMenu
           id="wertDelMenu"

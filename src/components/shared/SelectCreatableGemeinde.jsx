@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, memo } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import { IoMdLocate } from 'react-icons/io'
 
 import { exists } from '../../modules/exists.js'
@@ -166,13 +167,14 @@ export const SelectCreatableGemeinde = memo(
             nocaret={noCaret}
           />
           {showLocate && (
-            <StyledIconButton
-              aria-label="Mit Hilfe der Koordinaten automatisch setzen"
-              title="Mit Hilfe der Koordinaten automatisch setzen"
-              onClick={onClickLocate}
-            >
-              <AddLocationIcon />
-            </StyledIconButton>
+            <Tooltip title="Mit Hilfe der Koordinaten automatisch setzen">
+              <StyledIconButton
+                aria-label="Mit Hilfe der Koordinaten automatisch setzen"
+                onClick={onClickLocate}
+              >
+                <AddLocationIcon />
+              </StyledIconButton>
+            </Tooltip>
           )}
         </Field>
         {error && <Error>{error}</Error>}

@@ -6,6 +6,7 @@ import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Tooltip from '@mui/material/Tooltip'
 import upperFirst from 'lodash/upperFirst'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
@@ -238,21 +239,21 @@ export const File = memo(
               error={fieldErrors.beschreibung}
             />
           </BeschreibungField>
-          <DownloadIcon
-            title="herunterladen"
-            onClick={onClickDownload}
-          >
-            <FaDownload />
-          </DownloadIcon>
-          <DelIcon
-            title="löschen"
-            aria-label="löschen"
-            aria-owns={delMenuOpen ? 'delMenu' : undefined}
-            aria-haspopup="true"
-            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-          >
-            <FaTimes />
-          </DelIcon>
+          <Tooltip title="herunterladen">
+            <DownloadIcon onClick={onClickDownload}>
+              <FaDownload />
+            </DownloadIcon>
+          </Tooltip>
+          <Tooltip title="löschen">
+            <DelIcon
+              aria-label="löschen"
+              aria-owns={delMenuOpen ? 'delMenu' : undefined}
+              aria-haspopup="true"
+              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+            >
+              <FaTimes />
+            </DelIcon>
+          </Tooltip>
           <Menu
             id="delMenu"
             anchorEl={delMenuAnchorEl}

@@ -13,6 +13,7 @@ import upperFirst from 'lodash/upperFirst'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Tooltip from '@mui/material/Tooltip'
 import {
   FaPlus,
   FaMinus,
@@ -150,21 +151,25 @@ export const Menu = memo(
 
     const menus = useMemo(
       () => [
-        <IconButton
+        <Tooltip
           key="vorschau_oeffnen"
           title="Vorschau öffnen"
-          onClick={onClickPreview}
-          disabled={!firstFileId}
         >
-          <FaEye />
-        </IconButton>,
-        <IconButton
+          <IconButton
+            onClick={onClickPreview}
+            disabled={!firstFileId}
+          >
+            <FaEye />
+          </IconButton>
+        </Tooltip>,
+        <Tooltip
           key="dateien_hochladen"
           title="Dateien hochladen"
-          onClick={api?.initFlow}
         >
-          <FaPlus />
-        </IconButton>,
+          <IconButton onClick={api?.initFlow}>
+            <FaPlus />
+          </IconButton>
+        </Tooltip>,
       ],
       [onClickPreview],
     )
@@ -172,76 +177,74 @@ export const Menu = memo(
     // so no <>, instead separate arrays
     const previewMenus = useMemo(
       () => [
-        <IconButton
+        <Tooltip
           key="vorschau_schliessen"
           title="Vorschau schliessen"
-          onClick={onClickClosePreview}
         >
-          <FaEyeSlash />
-        </IconButton>,
+          <IconButton onClick={onClickClosePreview}>
+            <FaEyeSlash />
+          </IconButton>
+        </Tooltip>,
         ...[
           screenfull.isEnabled ?
-            <IconButton
+            <Tooltip
               key="minimieren"
               title={isFullscreen ? 'minimieren' : 'maximieren'}
-              onClick={() => screenfull.toggle(containerRef.current)}
             >
-              {isFullscreen ?
-                <FaMinimize />
-              : <FaMaximize />}
-            </IconButton>
+              <IconButton
+                onClick={() => screenfull.toggle(containerRef.current)}
+              >
+                {isFullscreen ?
+                  <FaMinimize />
+                : <FaMaximize />}
+              </IconButton>
+            </Tooltip>
           : [],
         ],
-        <IconButton
+        <Tooltip
           key="download"
           title="herunterladen"
-          onClick={onClickDownload}
         >
-          <FaDownload />
-        </IconButton>,
-        <IconButton
+          <IconButton onClick={onClickDownload}>
+            <FaDownload />
+          </IconButton>
+        </Tooltip>,
+        <Tooltip
           key="dateien_hochladen"
           title="Dateien hochladen"
-          onClick={api?.initFlow}
         >
-          <FaPlus />
-        </IconButton>,
-        <div
+          <IconButton onClick={api?.initFlow}>
+            <FaPlus />
+          </IconButton>
+        </Tooltip>,
+        <Tooltip
           key="loeschen"
+          title="löschen"
           style={{ display: 'inline' }}
         >
           <IconButton
-            title="löschen"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
             aria-owns={delMenuOpen ? 'previewDelMenu' : undefined}
           >
             <FaMinus />
           </IconButton>
-          <MuiMenu
-            id="previewDelMenu"
-            anchorEl={delMenuAnchorEl}
-            open={delMenuOpen}
-            onClose={() => setDelMenuAnchorEl(null)}
-          >
-            <MenuTitle>löschen?</MenuTitle>
-            <MenuItem onClick={onClickDelete}>ja</MenuItem>
-            <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
-          </MuiMenu>
-        </div>,
-        <IconButton
+        </Tooltip>,
+        <Tooltip
           key="vorige_datei"
           title="vorige Datei"
-          onClick={onClickPrev}
         >
-          <FaChevronLeft />
-        </IconButton>,
-        <IconButton
+          <IconButton onClick={onClickPrev}>
+            <FaChevronLeft />
+          </IconButton>
+        </Tooltip>,
+        <Tooltip
           key="naechste_datei"
           title="nächste Datei"
-          onClick={onClickNext}
         >
-          <FaChevronRight />
-        </IconButton>,
+          <IconButton onClick={onClickNext}>
+            <FaChevronRight />
+          </IconButton>
+        </Tooltip>,
       ],
       [
         onClickClosePreview,
@@ -274,6 +277,16 @@ export const Menu = memo(
         >
           {isPreview ? previewMenus : menus}
         </MenuBar>
+        <MuiMenu
+          id="previewDelMenu"
+          anchorEl={delMenuAnchorEl}
+          open={delMenuOpen}
+          onClose={() => setDelMenuAnchorEl(null)}
+        >
+          <MenuTitle>löschen?</MenuTitle>
+          <MenuItem onClick={onClickDelete}>ja</MenuItem>
+          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+        </MuiMenu>
       </ErrorBoundary>
     )
   }),
