@@ -1,0 +1,1 @@
+Ab Version 1.109.0: Die Menüzeile wurde in den Formularkopf integriert. Alle Menüs im Navigationsbaum sind in der Menüzeile verfügbar. Auf Mobilgeräten kann man lange auf ein Menü-Symbol drücken, um zu sehen, was es macht.
