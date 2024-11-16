@@ -80,7 +80,6 @@ export const PopFilter = memo(
     })
 
     const row = dataFilter.pop[activeTab]
-    console.log('PopFilter', { row, activeTab, dataFilter })
 
     const saveToDb = useCallback(
       async (event) =>

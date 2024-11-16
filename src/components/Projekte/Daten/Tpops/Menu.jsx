@@ -29,29 +29,31 @@ const iconStyle = { color: 'white' }
 
 export const Menu = memo(
   observer(() => {
-    const { search, pathname } = useLocation()
+    const { search } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const tanstackQueryClient = useQueryClient()
-    const { projId, apId } = useParams()
+    const { projId, apId, popId } = useParams()
     const store = useContext(StoreContext)
     const { setMoving, moving, setCopying, copying } = store
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
-            mutation createPopForPopForm($apId: UUID!) {
-              createPop(input: { pop: { apId: $apId } }) {
-                pop {
+            mutation createTpopForTpopForm($popId: UUID!) {
+              createTpop(input: { tpop: { popId: $popId } }) {
+                tpop {
                   id
-                  apId
+                  popId
                 }
               }
             }
           `,
-          variables: { apId },
+          variables: {
+            popId,
+          },
         })
       } catch (error) {
         return store.enqueNotification({
@@ -62,46 +64,54 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treePop`],
+        queryKey: [`treeTpop`],
       })
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeApFolders`],
+        queryKey: [`treePopFolders`],
       })
-      const id = result?.data?.createPop?.pop?.id
+      const id = result?.data?.createTpop?.tpop?.id
       navigate(`./${id}${search}`)
-    }, [apId, client, store, tanstackQueryClient, navigate, search])
+    }, [apolloClient, store, tanstackQueryClient, navigate, search, popId])
 
     const onClickOpenLowerNodes = useCallback(() => {
       openLowerNodes({
-        id: apId,
+        id: popId,
         projId,
         apId,
-        client,
+        popId,
+        client: apolloClient,
         store,
-        menuType: 'popFolder',
+        menuType: 'tpopFolder',
       })
-    }, [projId, apId, client, store])
+    }, [projId, apId, popId, apolloClient, store])
 
     const onClickCloseLowerNodes = useCallback(() => {
       closeLowerNodes({
-        url: ['Projekte', projId, 'Arten', apId, 'Populationen'],
+        url: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+        ],
         store,
         search,
       })
-    }, [projId, apId, store, search])
+    }, [projId, apId, popId, store, search])
 
-    const isMovingPop = moving.table === 'pop'
-    const popMovingFromThisAp = moving.fromParentId === apId
-    const onClickMovePopToHere = useCallback(() => {
+    const isTpopMoving = moving.table === 'tpop'
+    const onClickMoveTpopToHere = useCallback(() => {
       moveTo({
-        id: apId,
-        client,
+        id: popId,
+        client: apolloClient,
         store,
         tanstackQueryClient,
       })
-    }, [client, store, tanstackQueryClient, apId])
+    }, [popId, apolloClient, store, tanstackQueryClient])
 
-    const onClickStopMovingPop = useCallback(() => {
+    const onClickStopMovingTpop = useCallback(() => {
       setMoving({
         table: null,
         id: '99999999-9999-9999-9999-999999999999',
@@ -111,18 +121,18 @@ export const Menu = memo(
       })
     }, [setMoving])
 
-    const isCopyingPop = copying.table === 'pop'
+    const isCopyingTpop = copying.table === 'tpop'
 
-    const onClickCopyPopToHere = useCallback(() => {
-      return copyTo({
-        parentId: apId,
-        client,
+    const onClickCopyTpopToHere = useCallback(() => {
+      copyTo({
+        parentId: popId,
+        client: apolloClient,
         store,
         tanstackQueryClient,
       })
-    }, [apId, client, store, tanstackQueryClient])
+    }, [popId, apolloClient, store, tanstackQueryClient])
 
-    const onClickStopCopyingPop = useCallback(() => {
+    const onClickStopCopyingTpop = useCallback(() => {
       setCopying({
         table: null,
         id: '99999999-9999-9999-9999-999999999999',
@@ -136,9 +146,9 @@ export const Menu = memo(
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${isMovingPop}/${isCopyingPop}/${popMovingFromThisAp}`}
+          rerenderer={`${isTpopMoving}/${isCopyingTpop}`}
         >
-          <Tooltip title="Neue Population erstellen">
+          <Tooltip title="Neue Teil-Population erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
             </IconButton>
@@ -153,36 +163,25 @@ export const Menu = memo(
               <RiFolderCloseFill style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {isMovingPop && (
+          {isTpopMoving && (
             <Tooltip
-              title={
-                popMovingFromThisAp ?
-                  `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
-                : `Verschiebe '${moving.label}' zu dieser Art`
-              }
+              title={`Verschiebe '${moving.label}' zu dieser Population`}
             >
-              <IconButton onClick={onClickMovePopToHere}>
+              <IconButton onClick={onClickMoveTpopToHere}>
                 <MoveIcon />
               </IconButton>
             </Tooltip>
           )}
-          {isMovingPop && (
-            <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
-              <IconButton onClick={onClickStopMovingPop}>
-                <BsSignStopFill style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          {isCopyingPop && (
-            <Tooltip title={`Kopiere '${copying.label}' in diese Art`}>
-              <IconButton onClick={onClickCopyPopToHere}>
+          {isCopyingTpop && (
+            <Tooltip title={`Kopiere '${copying.label}' in diese Population`}>
+              <IconButton onClick={onClickCopyTpopToHere}>
                 <CopyIcon />
               </IconButton>
             </Tooltip>
           )}
-          {isCopyingPop && (
+          {isCopyingTpop && (
             <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
-              <IconButton onClick={onClickStopCopyingPop}>
+              <IconButton onClick={onClickStopCopyingTpop}>
                 <BsSignStopFill style={iconStyle} />
               </IconButton>
             </Tooltip>

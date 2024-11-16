@@ -6,43 +6,17 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../storeContext.js'
 import { TpopFolders } from './Folders/index.jsx'
+import { createTpopsQuery } from '../../../../../../../../../../../../../../modules/createTpopsQuery.js'
 
 export const Tpop = memo(
   observer(({ projekt, ap, pop }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { tpopGqlFilterForTree } = store.tree
 
-    const { data } = useQuery({
-      queryKey: ['treeTpop', pop.id, tpopGqlFilterForTree],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeTpopQuery($id: UUID!, $tpopsFilter: TpopFilter!) {
-              popById(id: $id) {
-                id
-                tpopsByPopId(
-                  filter: $tpopsFilter
-                  orderBy: [NR_ASC, FLURNAME_ASC]
-                ) {
-                  nodes {
-                    id
-                    label
-                    status
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            id: pop.id,
-            tpopsFilter: tpopGqlFilterForTree,
-          },
-          // without 'network-only' or using tanstack,
-          // ui does not update when inserting and deleting
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createTpopsQuery({ popId: pop.id, tpopGqlFilterForTree, apolloClient }),
+    )
 
     return (data?.data?.popById?.tpopsByPopId?.nodes ?? []).map((el) => {
       const isOpen =
