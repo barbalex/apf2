@@ -15,8 +15,6 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
-import { Icon } from '@mui/material'
-
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(

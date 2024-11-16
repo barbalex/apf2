@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import styled from '@emotion/styled'
 
 import { FormTitle } from '../FormTitle/index.jsx'
@@ -39,8 +39,12 @@ const Row = styled.div`
 
 export const List = memo(({ items, title, totalCount, menuBar = null }) => {
   const navigate = useNavigate()
+  const { search } = useLocation()
 
-  const onClickRow = useCallback((item) => navigate(item.id), [navigate])
+  const onClickRow = useCallback(
+    (item) => navigate(`./${item.id}${search}`),
+    [navigate, search],
+  )
 
   return (
     <ErrorBoundary>

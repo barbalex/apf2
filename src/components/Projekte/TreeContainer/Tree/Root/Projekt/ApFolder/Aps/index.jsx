@@ -6,34 +6,21 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../storeContext.js'
 import { ApFolders } from './Folders/index.jsx'
+import { createApsQuery } from '../../../../../../../../modules/createApsQuery.js'
 
 export const Aps = memo(
   observer(({ projekt }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { openNodes, apGqlFilterForTree } = store.tree
 
-    const { data } = useQuery({
-      queryKey: ['treeAp', projekt.id, apGqlFilterForTree],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeApsQuery($apsFilter: ApFilter!) {
-              allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
-                nodes {
-                  id
-                  label
-                }
-              }
-            }
-          `,
-          variables: {
-            apsFilter: apGqlFilterForTree,
-          },
-          fetchPolicy: 'no-cache',
-        }),
-    })
-
+    const { data } = useQuery(
+      createApsQuery({
+        projectId: projekt.id,
+        apGqlFilterForTree,
+        apolloClient,
+      }),
+    )
     const aps = data?.data?.allAps?.nodes ?? []
 
     return aps.map((ap) => {

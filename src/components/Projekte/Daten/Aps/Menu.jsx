@@ -1,18 +1,14 @@
-import { memo, useCallback, useContext, useState } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
-import { FaPlus, FaMinus } from 'react-icons/fa6'
+import { FaPlus } from 'react-icons/fa6'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
-import MuiMenu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import isEqual from 'lodash/isEqual'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -68,60 +64,6 @@ export const Menu = memo(
       const id = result?.data?.createAp?.ap?.id
       navigate(`/Daten/Projekte/${projId}/Arten/${id}${search}`)
     }, [projId, client, store, tanstackQueryClient, navigate, search])
-
-    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
-    const delMenuOpen = Boolean(delMenuAnchorEl)
-
-    const onClickDelete = useCallback(async () => {
-      let result
-      try {
-        result = await client.mutate({
-          mutation: gql`
-            mutation deleteAp($id: UUID!) {
-              deleteApById(input: { id: $id }) {
-                ap {
-                  id
-                }
-              }
-            }
-          `,
-          variables: { id: row.id },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-
-      // remove active path from openNodes
-      const openNodesRaw = store?.tree?.openNodes
-      const openNodes = getSnapshot(openNodesRaw)
-      const activePath = pathname.split('/').filter((p) => !!p)
-      const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-      store.tree.setOpenNodes(newOpenNodes)
-
-      // update tree query
-      tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeAp`],
-      })
-      tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeRoot`],
-      })
-      // navigate to parent
-      navigate(`/Daten/Projekte/${projId}/Arten${search}`)
-    }, [
-      client,
-      store,
-      tanstackQueryClient,
-      navigate,
-      search,
-      projId,
-      row,
-      pathname,
-    ])
 
     const onClickMoveHere = useCallback(() => {
       moveTo({
@@ -183,14 +125,6 @@ export const Menu = memo(
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Löschen">
-            <IconButton
-              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-              aria-owns={delMenuOpen ? 'apDelMenu' : undefined}
-            >
-              <FaMinus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
           <Tooltip title="Ordner im Navigationsbaum schliessen">
             <IconButton onClick={onClickCloseLowerNodes}>
               <RiFolderCloseFill style={iconStyle} />
@@ -227,16 +161,6 @@ export const Menu = memo(
             </Tooltip>
           )}
         </MenuBar>
-        <MuiMenu
-          id="apDelMenu"
-          anchorEl={delMenuAnchorEl}
-          open={delMenuOpen}
-          onClose={() => setDelMenuAnchorEl(null)}
-        >
-          <MenuTitle>löschen?</MenuTitle>
-          <MenuItem onClick={onClickDelete}>ja</MenuItem>
-          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
-        </MuiMenu>
       </ErrorBoundary>
     )
   }),
