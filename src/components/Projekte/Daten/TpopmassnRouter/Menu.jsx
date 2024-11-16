@@ -10,6 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Tooltip from '@mui/material/Tooltip'
 import isEqual from 'lodash/isEqual'
 import styled from '@emotion/styled'
 
@@ -224,20 +225,20 @@ export const Menu = memo(
           color="white"
           rerenderer={`${isMovingTpopmassn}/${moving.label}/${isCopyingTpopmassn}/${copying.label}/${movingFromThisTpop}/${thisTpopmassnIsMoving}/${thisTpopmassnIsCopying}`}
         >
-          <IconButton
-            title="Neue Massnahme erstellen"
-            onClick={onClickAdd}
-          >
-            <FaPlus style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Löschen"
-            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'tpopmassnDelMenu' : undefined}
-          >
-            <FaMinus style={iconStyle} />
-          </IconButton>
-          <IconButton
+          <Tooltip title="Neue Massnahme erstellen">
+            <IconButton onClick={onClickAdd}>
+              <FaPlus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Löschen">
+            <IconButton
+              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+              aria-owns={delMenuOpen ? 'tpopmassnDelMenu' : undefined}
+            >
+              <FaMinus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip
             title={
               !isMovingTpopmassn ?
                 `'${row.label}' zu einer anderen Population verschieben`
@@ -247,37 +248,37 @@ export const Menu = memo(
                 `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
               : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
             }
-            onClick={onClickMoveInTree}
           >
-            <MoveIcon
-              moving={(isMovingTpopmassn && thisTpopmassnIsMoving).toString()}
-            />
-          </IconButton>
-          {isMovingTpopmassn && (
-            <IconButton
-              title={`Verschieben von '${moving.label}' abbrechen`}
-              onClick={onClickStopMoving}
-            >
-              <BsSignStopFill style={iconStyle} />
+            <IconButton onClick={onClickMoveInTree}>
+              <MoveIcon
+                moving={(isMovingTpopmassn && thisTpopmassnIsMoving).toString()}
+              />
             </IconButton>
+          </Tooltip>
+          {isMovingTpopmassn && (
+            <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
+              <IconButton onClick={onClickStopMoving}>
+                <BsSignStopFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
           )}
-          <IconButton
+          <Tooltip
             title={
               isCopyingTpopmassn ?
                 `Kopiere '${copying.label}' in diese Teilpopulation`
               : 'Kopieren'
             }
-            onClick={onClickCopy}
           >
-            <CopyIcon copying={thisTpopmassnIsCopying.toString()} />
-          </IconButton>
-          {isCopyingTpopmassn && (
-            <IconButton
-              title={`Kopieren von '${copying.label}' abbrechen`}
-              onClick={onClickStopCopying}
-            >
-              <BsSignStopFill style={iconStyle} />
+            <IconButton onClick={onClickCopy}>
+              <CopyIcon copying={thisTpopmassnIsCopying.toString()} />
             </IconButton>
+          </Tooltip>
+          {isCopyingTpopmassn && (
+            <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
+              <IconButton onClick={onClickStopCopying}>
+                <BsSignStopFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
           )}
         </MenuBar>
         <MuiMenu

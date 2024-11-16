@@ -10,6 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Tooltip from '@mui/material/Tooltip'
 import isEqual from 'lodash/isEqual'
 import styled from '@emotion/styled'
 
@@ -253,20 +254,20 @@ export const Menu = memo(
           color="white"
           rerenderer={`${isMovingFeldkontr}/${moving.label}/${isCopyingTpopfeldkontr}/${isCopyingBiotop}/${copying.label}/${movingFromThisTpop}/${thisTpopfeldkontrIsMoving}/${thisTpopfeldkontrIsCopying}`}
         >
-          <IconButton
-            title="Neue Feld-Kontrolle erstellen"
-            onClick={onClickAdd}
-          >
-            <FaPlus style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Löschen"
-            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'tpopfeldkontrDelMenu' : undefined}
-          >
-            <FaMinus style={iconStyle} />
-          </IconButton>
-          <IconButton
+          <Tooltip title="Neue Feld-Kontrolle erstellen">
+            <IconButton onClick={onClickAdd}>
+              <FaPlus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Löschen">
+            <IconButton
+              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+              aria-owns={delMenuOpen ? 'tpopfeldkontrDelMenu' : undefined}
+            >
+              <FaMinus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip
             title={
               !isMovingFeldkontr ?
                 `'${row.labelEk}' zu einer anderen Population verschieben`
@@ -276,53 +277,55 @@ export const Menu = memo(
                 `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
               : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
             }
-            onClick={onClickMoveInTree}
           >
-            <MoveIcon
-              moving={(
-                isMovingFeldkontr && thisTpopfeldkontrIsMoving
-              ).toString()}
-            />
-          </IconButton>
-          {isMovingFeldkontr && (
-            <IconButton
-              title={`Verschieben von '${moving.label}' abbrechen`}
-              onClick={onClickStopMoving}
-            >
-              <BsSignStopFill style={iconStyle} />
+            <IconButton onClick={onClickMoveInTree}>
+              <MoveIcon
+                moving={(
+                  isMovingFeldkontr && thisTpopfeldkontrIsMoving
+                ).toString()}
+              />
             </IconButton>
+          </Tooltip>
+          {isMovingFeldkontr && (
+            <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
+              <IconButton onClick={onClickStopMoving}>
+                <BsSignStopFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
           )}
           {isCopyingTpopfeldkontr ?
-            <IconButton
+            <Tooltip
               title={`Kopiere '${copying.label}' in diese Teilpopulation`}
-              onClick={onClickCopyFeldkontrToHere}
             >
-              <CopyIcon copying={thisTpopfeldkontrIsCopying.toString()} />
-            </IconButton>
+              <IconButton onClick={onClickCopyFeldkontrToHere}>
+                <CopyIcon copying={thisTpopfeldkontrIsCopying.toString()} />
+              </IconButton>
+            </Tooltip>
           : isCopyingBiotop ?
-            <IconButton
+            <Tooltip
               title={`Kopiere Biotop von '${copyingBiotop.label}' hierhin`}
-              onClick={onClickCopyBiotopToHere}
             >
-              <CopyIcon copying={'false'} />
-            </IconButton>
-          : <IconButton
-              title="Kopieren"
-              onClick={(event) =>
-                setCopyBiotopMenuAnchorEl(event.currentTarget)
-              }
-              aria-owns={copyBiotopMenuOpen ? 'copyBiotopMenu' : undefined}
-            >
-              <CopyIcon copying={thisTpopfeldkontrIsCopying.toString()} />
-            </IconButton>
+              <IconButton onClick={onClickCopyBiotopToHere}>
+                <CopyIcon copying={'false'} />
+              </IconButton>
+            </Tooltip>
+          : <Tooltip title="Kopieren">
+              <IconButton
+                onClick={(event) =>
+                  setCopyBiotopMenuAnchorEl(event.currentTarget)
+                }
+                aria-owns={copyBiotopMenuOpen ? 'copyBiotopMenu' : undefined}
+              >
+                <CopyIcon copying={thisTpopfeldkontrIsCopying.toString()} />
+              </IconButton>
+            </Tooltip>
           }
           {(isCopyingTpopfeldkontr || isCopyingBiotop) && (
-            <IconButton
-              title={`Kopieren von '${copying.label}' abbrechen`}
-              onClick={onClickStopCopying}
-            >
-              <BsSignStopFill style={iconStyle} />
-            </IconButton>
+            <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
+              <IconButton onClick={onClickStopCopying}>
+                <BsSignStopFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
           )}
         </MenuBar>
         <MuiMenu

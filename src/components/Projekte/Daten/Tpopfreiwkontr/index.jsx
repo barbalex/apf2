@@ -1,9 +1,7 @@
-import { memo, useCallback, useEffect, useContext } from 'react'
+import { memo, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { MdPrint } from 'react-icons/md'
-import IconButton from '@mui/material/IconButton'
 import { useLocation, useParams } from 'react-router-dom'
 
 import { query } from './query.js'
@@ -38,10 +36,6 @@ const ScrollContainer = styled.div`
   overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-`
-const StyledIconButton = styled(IconButton)`
-  color: white !important;
-  margin-right: 10px !important;
 `
 
 export const Component = memo(

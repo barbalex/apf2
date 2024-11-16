@@ -10,6 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Tooltip from '@mui/material/Tooltip'
 import isEqual from 'lodash/isEqual'
 import styled from '@emotion/styled'
 
@@ -246,26 +247,25 @@ export const Menu = memo(
           color="white"
           rerenderer={`${isMovingTpopfreiwkontr}/${moving.label}/${isCopyingTpopfreiwkontr}/${copying.label}/${movingFromThisTpop}/${thisTpopfreiwkontrIsMoving}/${thisTpopfreiwkontrIsCopying}`}
         >
-          <IconButton
-            title="Neuen Bericht erstellen"
-            onClick={onClickAdd}
-          >
-            <FaPlus style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Löschen"
-            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'tpopfreiwkontrDelMenu' : undefined}
-          >
-            <FaMinus style={iconStyle} />
-          </IconButton>
-          <IconButton
-            onClick={onClickPrint}
-            title="drucken"
-          >
-            <MdPrint style={iconStyle} />
-          </IconButton>
-          <IconButton
+          <Tooltip title="Neuen Bericht erstellen">
+            <IconButton onClick={onClickAdd}>
+              <FaPlus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Löschen">
+            <IconButton
+              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+              aria-owns={delMenuOpen ? 'tpopfreiwkontrDelMenu' : undefined}
+            >
+              <FaMinus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="drucken">
+            <IconButton onClick={onClickPrint}>
+              <MdPrint style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip
             title={
               !isMovingTpopfreiwkontr ?
                 `'${row.labelEkf}' zu einer anderen Population verschieben`
@@ -275,39 +275,39 @@ export const Menu = memo(
                 `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
               : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
             }
-            onClick={onClickMoveInTree}
           >
-            <MoveIcon
-              moving={(
-                isMovingTpopfreiwkontr && thisTpopfreiwkontrIsMoving
-              ).toString()}
-            />
-          </IconButton>
-          {isMovingTpopfreiwkontr && (
-            <IconButton
-              title={`Verschieben von '${moving.label}' abbrechen`}
-              onClick={onClickStopMoving}
-            >
-              <BsSignStopFill style={iconStyle} />
+            <IconButton onClick={onClickMoveInTree}>
+              <MoveIcon
+                moving={(
+                  isMovingTpopfreiwkontr && thisTpopfreiwkontrIsMoving
+                ).toString()}
+              />
             </IconButton>
+          </Tooltip>
+          {isMovingTpopfreiwkontr && (
+            <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
+              <IconButton onClick={onClickStopMoving}>
+                <BsSignStopFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
           )}
-          <IconButton
+          <Tooltip
             title={
               isCopyingTpopfreiwkontr ?
                 `Kopiere '${copying.label}' in diese Teilpopulation`
               : 'Kopieren'
             }
-            onClick={onClickCopy}
           >
-            <CopyIcon copying={thisTpopfreiwkontrIsCopying.toString()} />
-          </IconButton>
-          {isCopyingTpopfreiwkontr && (
-            <IconButton
-              title={`Kopieren von '${copying.label}' abbrechen`}
-              onClick={onClickStopCopying}
-            >
-              <BsSignStopFill style={iconStyle} />
+            <IconButton onClick={onClickCopy}>
+              <CopyIcon copying={thisTpopfreiwkontrIsCopying.toString()} />
             </IconButton>
+          </Tooltip>
+          {isCopyingTpopfreiwkontr && (
+            <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
+              <IconButton onClick={onClickStopCopying}>
+                <BsSignStopFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
           )}
         </MenuBar>
         <MuiMenu

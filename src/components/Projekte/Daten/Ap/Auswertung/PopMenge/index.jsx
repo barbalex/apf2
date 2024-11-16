@@ -14,6 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import styled from '@emotion/styled'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
+import MuiTooltip from '@mui/material/Tooltip'
 import { useParams } from 'react-router-dom'
 
 import { query } from './query.js'
@@ -41,14 +42,12 @@ const TitleRow = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 15px;
+  margin-top: 25px;
 `
 const Title = styled.h4`
   margin-bottom: 0;
+  margin-top: 0;
   padding: 0 10px;
-`
-const InfoIcon = styled(IconButton)`
-  margin-bottom: -20px;
 `
 
 const colorUrspruenglich = 'rgba(46,125,50,0.3)'
@@ -104,7 +103,7 @@ export const PopMenge = ({
 
   const zielEinheit =
     dataPopMenge?.allEkzaehleinheits?.nodes?.[0]
-      ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text
+      ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text ?? '(keine Einheit)'
 
   const onClickMoreInfo = useCallback(() => {
     const url = 'https://apflora.ch/Dokumentation/art-auswertung-pop-menge'
@@ -131,18 +130,17 @@ export const PopMenge = ({
       : popMengeData.length ?
         <>
           <TitleRow>
-            <div>
-              <Title>{`"${zielEinheit}" nach Populationen`}</Title>
-            </div>
+            <Title>{`"${zielEinheit}" nach Populationen`}</Title>
             {!print && (
-              <InfoIcon
-                aria-label="Mehr Informationen"
-                title="Mehr Informationen"
-                onClick={onClickMoreInfo}
-                size="large"
-              >
-                <IoMdInformationCircleOutline />
-              </InfoIcon>
+              <MuiTooltip title="Mehr Informationen">
+                <IconButton
+                  aria-label="Mehr Informationen"
+                  onClick={onClickMoreInfo}
+                  size="large"
+                >
+                  <IoMdInformationCircleOutline />
+                </IconButton>
+              </MuiTooltip>
             )}
           </TitleRow>
           <ResponsiveContainer
@@ -202,18 +200,17 @@ export const PopMenge = ({
         </>
       : <>
           <TitleRow>
-            <div>
-              <Title>{`"${zielEinheit}" nach Populationen`}</Title>
-            </div>
+            <Title>{`"${zielEinheit}" nach Populationen`}</Title>
             {!print && (
-              <InfoIcon
-                aria-label="Mehr Informationen"
-                title="Mehr Informationen"
-                onClick={onClickMoreInfo}
-                size="large"
-              >
-                <IoMdInformationCircleOutline />
-              </InfoIcon>
+              <MuiTooltip title="Mehr Informationen">
+                <IconButton
+                  aria-label="Mehr Informationen"
+                  onClick={onClickMoreInfo}
+                  size="large"
+                >
+                  <IoMdInformationCircleOutline />
+                </IconButton>
+              </MuiTooltip>
             )}
           </TitleRow>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>

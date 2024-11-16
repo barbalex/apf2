@@ -6,6 +6,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import { MdMyLocation, MdClear } from 'react-icons/md'
 
 import { epsg2056to4326 } from '../../../../modules/epsg2056to4326.js'
@@ -187,21 +188,25 @@ export const PanToCoordinates = ({ setControlType, map }) => {
         />
         <FormHelperText id="yhelper">{yError}</FormHelperText>
       </FormControl>
-      <StyledIconButton
-        title="auf Koordinaten zentrieren"
-        aria-label="auf Koordinaten zentrieren"
-        onClick={onClickGoto}
-        disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))}
-      >
-        <StyledPanIcon disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))} />
-      </StyledIconButton>
-      <StyledIconButton
-        title="schliessen"
-        aria-label="schliessen"
-        onClick={onClickClear}
-      >
-        <StyledClearIcon />
-      </StyledIconButton>
+      <Tooltip title="auf Koordinaten zentrieren">
+        <StyledIconButton
+          aria-label="auf Koordinaten zentrieren"
+          onClick={onClickGoto}
+          disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))}
+        >
+          <StyledPanIcon
+            disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))}
+          />
+        </StyledIconButton>
+      </Tooltip>
+      <Tooltip title="schliessen">
+        <StyledIconButton
+          aria-label="schliessen"
+          onClick={onClickClear}
+        >
+          <StyledClearIcon />
+        </StyledIconButton>
+      </Tooltip>
     </Container>
   )
 }

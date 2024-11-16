@@ -1,6 +1,7 @@
 import { useCallback, useState, useContext } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 
 import { Ap } from './Ap/index.jsx'
@@ -41,13 +42,14 @@ export const ApList = () => {
       <TitleRow>
         <ApTitle>Arten</ApTitle>
         {!showChoose && (
-          <PlusIcon
-            title="Art hinzufügen"
-            aria-label="Art hinzufügen"
-            onClick={onClickAdd}
-          >
-            <FaPlus />
-          </PlusIcon>
+          <Tooltip title="Art hinzufügen">
+            <PlusIcon
+              aria-label="Art hinzufügen"
+              onClick={onClickAdd}
+            >
+              <FaPlus />
+            </PlusIcon>
+          </Tooltip>
         )}
       </TitleRow>
       {aps.map((ap) => (

@@ -18,6 +18,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
@@ -252,16 +253,17 @@ export const User = memo(
                 spellCheck="false"
                 endAdornment={
                   <InputAdornment position="end">
-                    <IconButton
-                      onClick={onClickShowPass}
-                      onMouseDown={onMouseDownShowPass}
-                      title={showPass ? 'verstecken' : 'anzeigen'}
-                      size="large"
-                    >
-                      {showPass ?
-                        <MdVisibilityOff />
-                      : <MdVisibility />}
-                    </IconButton>
+                    <Tooltip title={showPass ? 'verstecken' : 'anzeigen'}>
+                      <IconButton
+                        onClick={onClickShowPass}
+                        onMouseDown={onMouseDownShowPass}
+                        size="large"
+                      >
+                        {showPass ?
+                          <MdVisibilityOff />
+                        : <MdVisibility />}
+                      </IconButton>
+                    </Tooltip>
                   </InputAdornment>
                 }
               />

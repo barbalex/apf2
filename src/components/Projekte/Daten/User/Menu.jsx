@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
 import isEqual from 'lodash/isEqual'
 import styled from '@emotion/styled'
 
@@ -215,19 +216,19 @@ export const Menu = memo(
             bgColor="#388e3c"
             color="white"
           >
-            <IconButton
-              title="Neuen Benutzer erstellen"
-              onClick={onClickAdd}
-            >
-              <FaPlus style={iconStyle} />
-            </IconButton>
-            <IconButton
-              title="Löschen"
-              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-              aria-owns={delMenuOpen ? 'userDelMenu' : undefined}
-            >
-              <FaMinus style={iconStyle} />
-            </IconButton>
+            <Tooltip title="Neuen Benutzer erstellen">
+              <IconButton onClick={onClickAdd}>
+                <FaPlus style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Löschen">
+              <IconButton
+                onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+                aria-owns={delMenuOpen ? 'userDelMenu' : undefined}
+              >
+                <FaMinus style={iconStyle} />
+              </IconButton>
+            </Tooltip>
 
             {!editPassword && !passwordMessage && (
               <StyledButton

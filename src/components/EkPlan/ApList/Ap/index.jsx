@@ -1,6 +1,7 @@
 import { useCallback, useContext } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 
 import { StoreContext } from '../../../../storeContext.js'
@@ -53,13 +54,14 @@ export const Ap = ({ ap }) => {
           <EinheitsDiv data-warn={einheits.length === 0}>
             <Label>{labelText}</Label> {einheitsText}
           </EinheitsDiv>
-          <DelIcon
-            title={`${ap.label} entfernen`}
-            aria-label={`${ap.label} entfernen`}
-            onClick={onClickDelete}
-          >
-            <FaTimes />
-          </DelIcon>
+          <Tooltip title={`${ap.label} entfernen`}>
+            <DelIcon
+              aria-label={`${ap.label} entfernen`}
+              onClick={onClickDelete}
+            >
+              <FaTimes />
+            </DelIcon>
+          </Tooltip>
         </>
       )}
     </Container>

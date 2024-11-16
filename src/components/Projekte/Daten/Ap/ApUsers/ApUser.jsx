@@ -2,6 +2,7 @@ import { memo, useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 import { useApolloClient, gql } from '@apollo/client'
 
@@ -48,13 +49,14 @@ export const ApUser = memo(
       <div>
         {user.userName}
         {!!role && <span>{` (${role})`}</span>}
-        <DelIcon
-          title={`${user.userName} entfernen`}
-          aria-label={`${user.userName} entfernen`}
-          onClick={onClickDelete}
-        >
-          <FaTimes />
-        </DelIcon>
+        <Tooltip title={`${user.userName} entfernen`}>
+          <DelIcon
+            aria-label={`${user.userName} entfernen`}
+            onClick={onClickDelete}
+          >
+            <FaTimes />
+          </DelIcon>
+        </Tooltip>
       </div>
     )
   }),

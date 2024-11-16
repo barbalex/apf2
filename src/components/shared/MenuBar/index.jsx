@@ -10,6 +10,7 @@ import {
 } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
 import { IconButton, Menu, MenuItem } from '@mui/material'
+import Tooltip from '@mui/material/Tooltip'
 import {
   FaBars,
   FaAlignLeft,
@@ -205,12 +206,14 @@ export const MenuBar = memo(
           {buttons}
           {!!menus.length && (
             <>
-              <IconButton
-                id="menubutton"
-                onClick={onClickMenuButton}
-              >
-                <FaBars style={iconStyle} />
-              </IconButton>
+              <Tooltip title="Mehr Befehle">
+                <IconButton
+                  id="menubutton"
+                  onClick={onClickMenuButton}
+                >
+                  <FaBars style={iconStyle} />
+                </IconButton>
+              </Tooltip>
 
               <StyledMenu
                 id="menubutton"

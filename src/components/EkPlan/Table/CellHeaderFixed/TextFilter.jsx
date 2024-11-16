@@ -1,16 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  useState,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-} from 'react'
+import { useState, useCallback, useContext, useEffect, useRef } from 'react'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Input from '@mui/material/Input'
+import Tooltip from '@mui/material/Tooltip'
 import { MdClear } from 'react-icons/md'
 import upperFirst from 'lodash/upperFirst'
 
@@ -120,14 +115,15 @@ export const TextFilter = ({ column, closeMenu }) => {
         onKeyDown={onKeyDown}
         endAdornment={
           <InputAdornment position="end">
-            <IconButton
-              aria-label="Filter leeren"
-              title="Filter leeren"
-              onClick={onClickEmpty}
-              size="large"
-            >
-              <MdClear />
-            </IconButton>
+            <Tooltip title="Filter leeren">
+              <IconButton
+                aria-label="Filter leeren"
+                onClick={onClickEmpty}
+                size="large"
+              >
+                <MdClear />
+              </IconButton>
+            </Tooltip>
           </InputAdornment>
         }
       />

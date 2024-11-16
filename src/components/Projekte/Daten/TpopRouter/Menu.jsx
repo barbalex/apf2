@@ -20,6 +20,7 @@ import ToggleButton from '@mui/material/ToggleButton'
 import LoadingButton from '@mui/lab/LoadingButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Tooltip from '@mui/material/Tooltip'
 import isEqual from 'lodash/isEqual'
 import uniq from 'lodash/uniq'
 import styled from '@emotion/styled'
@@ -445,40 +446,39 @@ export const Menu = memo(
           rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}`}
           widths={widths}
         >
-          <IconButton
-            title="Neue Teil-Population erstellen"
-            onClick={onClickAdd}
-          >
-            <FaPlus style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Löschen"
-            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            aria-owns={delMenuOpen ? 'tpopDelMenu' : undefined}
-          >
-            <FaMinus style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Ordner im Navigationsbaum öffnen"
-            onClick={onClickOpenLowerNodes}
-          >
-            <FaFolderTree style={iconStyle} />
-          </IconButton>
-          <IconButton
-            title="Ordner im Navigationsbaum schliessen"
-            onClick={onClickCloseLowerNodes}
-          >
-            <RiFolderCloseFill style={iconStyle} />
-          </IconButton>
-          <RoundToggleButton
-            value={idOfTpopBeingLocalized ?? ''}
-            title="Auf Karte verorten (mit Doppelklick)"
-            onChange={onClickLocalizeOnMap}
-            selected={isLocalizing}
-          >
-            <FaMapLocationDot style={iconStyle} />
-          </RoundToggleButton>
-          <IconButton
+          <Tooltip title="Neue Teil-Population erstellen">
+            <IconButton onClick={onClickAdd}>
+              <FaPlus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Löschen">
+            <IconButton
+              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+              aria-owns={delMenuOpen ? 'tpopDelMenu' : undefined}
+            >
+              <FaMinus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Ordner im Navigationsbaum öffnen">
+            <IconButton onClick={onClickOpenLowerNodes}>
+              <FaFolderTree style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Ordner im Navigationsbaum schliessen">
+            <IconButton onClick={onClickCloseLowerNodes}>
+              <RiFolderCloseFill style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Auf Karte verorten (mit Doppelklick)">
+            <RoundToggleButton
+              value={idOfTpopBeingLocalized ?? ''}
+              onChange={onClickLocalizeOnMap}
+              selected={isLocalizing}
+            >
+              <FaMapLocationDot style={iconStyle} />
+            </RoundToggleButton>
+          </Tooltip>
+          <Tooltip
             title={
               !isMovingTpop ? `'${row.label}' hierhin verschieben`
               : thisTpopIsMoving ?
@@ -487,35 +487,37 @@ export const Menu = memo(
                 `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
               : `Verschiebe '${moving.label}' zu dieser Population`
             }
-            onClick={onClickMoveInTree}
           >
-            <MoveIcon moving={(isMovingTpop && thisTpopIsMoving).toString()} />
-          </IconButton>
-          {isMovingTpop && (
-            <IconButton
-              title={`Verschieben von '${moving.label}' abbrechen`}
-              onClick={onClickStopMoving}
-            >
-              <BsSignStopFill style={iconStyle} />
+            <IconButton onClick={onClickMoveInTree}>
+              <MoveIcon
+                moving={(isMovingTpop && thisTpopIsMoving).toString()}
+              />
             </IconButton>
+          </Tooltip>
+          {isMovingTpop && (
+            <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
+              <IconButton onClick={onClickStopMoving}>
+                <BsSignStopFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
           )}
-          <IconButton
+          <Tooltip
             title={
               isCopying ?
                 `Kopiere '${copying.label}' in diese Population`
               : 'Kopieren'
             }
-            onClick={onClickCopy}
           >
-            <CopyIcon copying={thisTpopIsCopying.toString()} />
-          </IconButton>
-          {isCopying && (
-            <IconButton
-              title={`Kopieren von '${copying.label}' abbrechen`}
-              onClick={onClickStopCopying}
-            >
-              <BsSignStopFill style={iconStyle} />
+            <IconButton onClick={onClickCopy}>
+              <CopyIcon copying={thisTpopIsCopying.toString()} />
             </IconButton>
+          </Tooltip>
+          {isCopying && (
+            <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
+              <IconButton onClick={onClickStopCopying}>
+                <BsSignStopFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
           )}
           {tpopHasCoord && (
             <StyledLoadingButton

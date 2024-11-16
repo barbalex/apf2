@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
-import Icon from '@mui/material/Icon'
+import Tooltip from '@mui/material/Tooltip'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import {
@@ -24,16 +24,16 @@ export const Kontrollen = () => {
         onClick={() => setExpanded(!expanded)}
       >
         <CardActionTitle>Kontrollen</CardActionTitle>
-        <CardActionIconButton
-          data-expanded={expanded}
-          aria-expanded={expanded}
-          aria-label="öffnen"
-          color="inherit"
-        >
-          <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+        <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
+          <CardActionIconButton
+            data-expanded={expanded}
+            aria-expanded={expanded}
+            aria-label={expanded ? 'schliessen' : 'öffnen'}
+            color="inherit"
+          >
             <ExpandMoreIcon />
-          </Icon>
-        </CardActionIconButton>
+          </CardActionIconButton>
+        </Tooltip>
       </StyledCardActions>
       <Collapse
         in={expanded}

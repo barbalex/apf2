@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../../storeContext.js'
@@ -111,15 +112,16 @@ export const Menu = memo(
 
     return (
       <Container>
-        <IconButton
-          size="small"
-          title="Einstellungen"
-          aria-label="Optionen wählen"
-          aria-owns={anchorEl ? 'menu' : null}
-          onClick={onClickConfig}
-        >
-          <StyledFaCog />
-        </IconButton>
+        <Tooltip title="Einstellungen">
+          <IconButton
+            size="small"
+            aria-label="Optionen wählen"
+            aria-owns={anchorEl ? 'menu' : null}
+            onClick={onClickConfig}
+          >
+            <StyledFaCog />
+          </IconButton>
+        </Tooltip>
         <MyMenu
           id="menu"
           anchorEl={anchorEl}

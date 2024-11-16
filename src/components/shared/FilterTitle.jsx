@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
 import { MdInfoOutline } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../storeContext.js'
@@ -99,42 +100,46 @@ export const FilterTitle = memo(
             )}
           </FilterNumbers>
           {activeTab !== undefined && (
+            <Tooltip title={`Aktuelles Filter-Kriterium entfernen`}>
+              <IconButton
+                aria-label={`Aktuelles Filter-Kriterium entfernen`}
+                onClick={onEmptyTab}
+                size="small"
+                disabled={!existsTableFilter}
+              >
+                <StyledDeleteFilterIcon3 />
+              </IconButton>
+            </Tooltip>
+          )}
+          <Tooltip title={`${title}-Filter entfernen`}>
             <IconButton
-              aria-label={`Aktuelles Filter-Kriterium entfernen`}
-              title={`Aktuelles Filter-Kriterium entfernen`}
-              onClick={onEmptyTab}
+              aria-label={`${title}-Filter entfernen`}
+              onClick={onEmptyTable}
               size="small"
               disabled={!existsTableFilter}
             >
-              <StyledDeleteFilterIcon3 />
+              <StyledDeleteFilterIcon2 />
             </IconButton>
-          )}
-          <IconButton
-            aria-label={`${title}-Filter entfernen`}
-            title={`${title}-Filter entfernen`}
-            onClick={onEmptyTable}
-            size="small"
-            disabled={!existsTableFilter}
-          >
-            <StyledDeleteFilterIcon2 />
-          </IconButton>
-          <IconButton
-            aria-label="Alle Filter entfernen"
-            title="Alle Filter entfernen"
-            onClick={onEmptyTree}
-            size="small"
-            disabled={!existsTreeFilter}
-          >
-            <StyledDeleteFilterIcon />
-          </IconButton>
-          <IconButton
-            aria-label="Filter-Dokumentation"
-            title="Filter-Dokumentation"
-            size="medium"
-            onClick={onClickInfo}
-          >
-            <StyledInfoIcon />
-          </IconButton>
+          </Tooltip>
+          <Tooltip title="Alle Filter entfernen">
+            <IconButton
+              aria-label="Alle Filter entfernen"
+              onClick={onEmptyTree}
+              size="small"
+              disabled={!existsTreeFilter}
+            >
+              <StyledDeleteFilterIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Filter-Dokumentation">
+            <IconButton
+              aria-label="Filter-Dokumentation"
+              size="medium"
+              onClick={onClickInfo}
+            >
+              <StyledInfoIcon />
+            </IconButton>
+          </Tooltip>
         </TitleRow>
       </Container>
     )

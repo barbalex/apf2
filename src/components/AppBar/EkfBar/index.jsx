@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/client'
 import { Link } from 'react-router-dom'
 import { MdPrint, MdHourglassEmpty } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import Badge from '@mui/material/Badge'
 import { useParams, useLocation } from 'react-router-dom'
 
@@ -66,7 +67,7 @@ const StyledMdHourglassEmpty = styled(MdHourglassEmpty)`
   animation: ${spinning} 3s linear infinite;
 `
 
-export const EkfBar =observer( () => {
+export const EkfBar = observer(() => {
   const { userId, ekfId, ekfYear } = useParams()
   const { search } = useLocation()
 
@@ -153,23 +154,23 @@ export const EkfBar =observer( () => {
         <>
           {ekfCount > 1 && (
             <StyledBadge badgeContent={ekfCount}>
-              <StyledIconButton
-                onClick={onClickPrintAll}
-                title={`Alle ${ekfCount} EKF drucken`}
-              >
-                {preparingEkfMultiprint ?
-                  <StyledMdHourglassEmpty />
-                : <MdPrint />}
-              </StyledIconButton>
+              <Tooltip title={`Alle ${ekfCount} EKF drucken`}>
+                <StyledIconButton onClick={onClickPrintAll}>
+                  {preparingEkfMultiprint ?
+                    <StyledMdHourglassEmpty />
+                  : <MdPrint />}
+                </StyledIconButton>
+              </Tooltip>
             </StyledBadge>
           )}
-          <StyledIconButton
-            onClick={onClickPrintSingle}
-            disabled={!ekfIsActive}
-            title="Angezeigte EKF drucken"
-          >
-            <MdPrint />
-          </StyledIconButton>
+          <Tooltip title="Angezeigte EKF drucken">
+            <StyledIconButton
+              onClick={onClickPrintSingle}
+              disabled={!ekfIsActive}
+            >
+              <MdPrint />
+            </StyledIconButton>
+          </Tooltip>
           <EkfYear />
           {!isFreiwillig && (
             <StyledButton
