@@ -5,47 +5,24 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../storeContext.js'
+import { createTpopmassnsQuery } from '../../../../../../../../../../../../../../../../modules/createTpopmassnsQuery.js'
 
 export const TpopMassn = memo(
   observer(({ projekt, ap, pop, tpop }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { tpopmassnGqlFilterForTree } = store.tree
 
-    const { data } = useQuery({
-      queryKey: ['treeTpopmassn', tpop.id, tpopmassnGqlFilterForTree],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeTpopmassnQuery(
-              $id: UUID!
-              $tpopmassnsFilter: TpopmassnFilter!
-            ) {
-              tpopById(id: $id) {
-                id
-                tpopmassnsByTpopId(
-                  filter: $tpopmassnsFilter
-                  orderBy: [JAHR_ASC, DATUM_ASC]
-                ) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            id: tpop.id,
-            tpopmassnsFilter: tpopmassnGqlFilterForTree,
-          },
-          // without 'network-only' or using tanstack,
-          // ui does not update when inserting and deleting
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createTpopmassnsQuery({
+        tpopId: tpop.id,
+        apolloClient,
+        tpopmassnGqlFilterForTree,
+      }),
+    )
+    const tpopmassns = data?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []
 
-    return (data?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map((el) => {
+    return tpopmassns.map((el) => {
       const node = {
         nodeType: 'table',
         menuType: 'tpopmassn',

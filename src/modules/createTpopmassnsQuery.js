@@ -5,11 +5,14 @@ export const createTpopmassnsQuery = ({
   tpopmassnGqlFilterForTree,
   apolloClient,
 }) => ({
-  queryKey: ['treeTpop', tpopId, tpopmassnGqlFilterForTree],
+  queryKey: ['treeTpopmassn', tpopId, tpopmassnGqlFilterForTree],
   queryFn: () =>
     apolloClient.query({
       query: gql`
-        query TreeTpopQuery($tpopId: UUID!, $tpopmassnsFilter: TpopFilter!) {
+        query TreeTpopQuery(
+          $tpopId: UUID!
+          $tpopmassnsFilter: TpopmassnFilter!
+        ) {
           tpopById(id: $id) {
             id
             tpopmassnsByTpopId(
@@ -21,14 +24,14 @@ export const createTpopmassnsQuery = ({
                 label
               }
             }
-            tpopmassnCount: tpopmassnsByTpopId {
+            tpopmassnCount: tpopmassnsByTpopId(id: $tpopId) {
               totalCount
             }
           }
         }
       `,
       variables: {
-        tpopmassnsFilter: tpopGqlFilterForTree,
+        tpopmassnsFilter: tpopmassnGqlFilterForTree,
         tpopId,
       },
       fetchPolicy: 'no-cache',
