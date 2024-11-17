@@ -17,7 +17,7 @@ export const createTpopmassnbersQuery = ({
             id
             tpopmassnbersByTpopId(
               filter: $tpopmassnbersFilter
-              orderBy: [JAHR_ASC, DATUM_ASC]
+              orderBy: [LABEL_ASC]
             ) {
               nodes {
                 id

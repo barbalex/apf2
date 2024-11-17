@@ -5,52 +5,21 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../storeContext.js'
+import { createTpopmassnbersQuery } from '../../../../../../../../../../../../../../../../modules/createTpopmassnbersQuery.js'
 
 export const TpopMassnBer = memo(
   observer(({ projekt, ap, pop, tpop }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
+    const { tpopmassnberGqlFilterForTree } = store.tree
 
-    const tpopmassnbersFilter = { tpopId: { equalTo: tpop.id } }
-    if (nodeLabelFilter.tpopmassnber) {
-      tpopmassnbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopmassnber,
-      }
-    }
-
-    const { data } = useQuery({
-      queryKey: ['treeTpopmassnber', tpop.id, tpopmassnbersFilter],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeTpopmassnBerQuery(
-              $id: UUID!
-              $tpopmassnbersFilter: TpopmassnberFilter!
-            ) {
-              tpopById(id: $id) {
-                id
-                tpopmassnbersByTpopId(
-                  filter: $tpopmassnbersFilter
-                  orderBy: LABEL_ASC
-                ) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            id: tpop.id,
-            tpopmassnbersFilter,
-          },
-          // without 'network-only' or using tanstack,
-          // ui does not update when inserting and deleting
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createTpopmassnbersQuery({
+        tpopId: tpop.id,
+        tpopmassnberGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     return (data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes ?? []).map(
       (el) => {

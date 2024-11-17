@@ -1056,7 +1056,7 @@ export const Tree = types
       }
       // 2. node label filter
       if (self.nodeLabelFilter.tpopmassn) {
-        singleFilter.label = {
+        tpopmassnGqlFilter.label = {
           includesInsensitive: self.nodeLabelFilter.tpopmassn,
         }
       }
