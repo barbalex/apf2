@@ -4,12 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import {
-  FaPlus,
-  FaFolder,
-  FaFolderTree,
-  FaMapLocationDot,
-} from 'react-icons/fa6'
+import { FaPlus, FaFolder, FaFolderTree } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
@@ -30,8 +25,6 @@ import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
-import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.js'
@@ -87,10 +80,8 @@ export const Menu = memo(
     const { projId, apId, popId, tpopId } = useParams()
     const store = useContext(StoreContext)
     const {
-      setIdOfTpopBeingLocalized,
       idOfTpopBeingLocalized,
       activeApfloraLayers,
-      setActiveApfloraLayers,
       setMoving,
       moving,
       setCopying,
@@ -172,37 +163,6 @@ export const Menu = memo(
         search,
       })
     }, [projId, apId, popId, tpopId, store, search])
-
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
-    const showMapIfNotYetVisible = useCallback(
-      (projekteTabs) => {
-        const isVisible = projekteTabs.includes('karte')
-        if (!isVisible) {
-          setProjekteTabs([...projekteTabs, 'karte'])
-        }
-      },
-      [setProjekteTabs],
-    )
-    const isLocalizing = !!idOfTpopBeingLocalized
-    const onClickLocalizeOnMap = useCallback(() => {
-      if (isLocalizing) {
-        return setIdOfTpopBeingLocalized(null)
-      }
-      setIdOfTpopBeingLocalized(tpopId)
-      showMapIfNotYetVisible(projekteTabs)
-      setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
-    }, [
-      setIdOfTpopBeingLocalized,
-      tpopId,
-      showMapIfNotYetVisible,
-      projekteTabs,
-      activeApfloraLayers,
-      setActiveApfloraLayers,
-      idOfTpopBeingLocalized,
-    ])
 
     const isMovingTpop = moving.table === 'tpop'
     const thisTpopIsMoving = moving.id === tpopId
@@ -399,15 +359,6 @@ export const Menu = memo(
             <IconButton onClick={onClickCloseLowerNodes}>
               <RiFolderCloseFill style={iconStyle} />
             </IconButton>
-          </Tooltip>
-          <Tooltip title="Auf Karte verorten (mit Doppelklick)">
-            <RoundToggleButton
-              value={idOfTpopBeingLocalized ?? ''}
-              onChange={onClickLocalizeOnMap}
-              selected={isLocalizing}
-            >
-              <FaMapLocationDot style={iconStyle} />
-            </RoundToggleButton>
           </Tooltip>
           <Tooltip
             title={
