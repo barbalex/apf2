@@ -9,11 +9,11 @@ export const createTpopmassnsQuery = ({
   queryFn: () =>
     apolloClient.query({
       query: gql`
-        query TreeTpopQuery(
+        query TreeTpopmassnsQuery(
           $tpopId: UUID!
           $tpopmassnsFilter: TpopmassnFilter!
         ) {
-          tpopById(id: $id) {
+          tpopById(id: $tpopId) {
             id
             tpopmassnsByTpopId(
               filter: $tpopmassnsFilter
@@ -24,7 +24,7 @@ export const createTpopmassnsQuery = ({
                 label
               }
             }
-            tpopmassnCount: tpopmassnsByTpopId(id: $tpopId) {
+            tpopmassnCount: tpopmassnsByTpopId {
               totalCount
             }
           }
