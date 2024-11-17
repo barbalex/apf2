@@ -5,49 +5,21 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../storeContext.js'
+import { createTpopbersQuery } from '../../../../../../../../../../../../../../../../modules/createTpopbersQuery.js'
 
 export const TpopBer = memo(
   observer(({ projekt, ap, pop, tpop }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
+    const { tpopberGqlFilterForTree } = store.tree
 
-    const tpopbersFilter = { tpopId: { equalTo: tpop.id } }
-    if (nodeLabelFilter.tpopber) {
-      tpopbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopber,
-      }
-    }
-
-    const { data } = useQuery({
-      queryKey: ['treeTpopber', tpop.id, tpopbersFilter],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeTpopberQuery(
-              $id: UUID!
-              $tpopbersFilter: TpopberFilter!
-            ) {
-              tpopById(id: $id) {
-                id
-                tpopbersByTpopId(filter: $tpopbersFilter, orderBy: LABEL_ASC) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            id: tpop.id,
-            tpopbersFilter,
-          },
-          // without 'network-only' or using tanstack,
-          // ui does not update when inserting and deleting
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createTpopbersQuery({
+        tpopId: tpop.id,
+        tpopberGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     return (data?.data?.tpopById?.tpopbersByTpopId?.nodes ?? []).map((el) => {
       const node = {
