@@ -12,7 +12,6 @@ export const TpopMassnBer = memo(
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { tpopmassnberGqlFilterForTree } = store.tree
-    console.log('Tree.TpopMassnBer', { tpopmassnberGqlFilterForTree })
 
     const { data } = useQuery(
       createTpopmassnbersQuery({
