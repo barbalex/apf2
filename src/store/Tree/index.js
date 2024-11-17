@@ -1047,6 +1047,22 @@ export const Tree = types
       )
       return entries.length > 0
     },
+    get tpopmassnberGqlFilterForTree() {
+      const tpopmassnGqlFilter = {}
+      // 1. hiearchy filter
+      const tpopId = self.tpopIdInActiveNodeArray
+      if (tpopId) {
+        tpopmassnGqlFilter.tpopId = { equalTo: tpopId }
+      }
+      // 2. node label filter
+      if (self.nodeLabelFilter.tpopmassn) {
+        singleFilter.label = {
+          includesInsensitive: self.nodeLabelFilter.tpopmassn,
+        }
+      }
+
+      return tpopmassnGqlFilter
+    },
     get ekGqlFilter() {
       // 1. prepare hiearchy filter
       const projId = self.projIdInActiveNodeArray
