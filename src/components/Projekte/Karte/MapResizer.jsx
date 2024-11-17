@@ -36,7 +36,7 @@ export const MapResizer = memo(
     // somehow on reload of the page they are not set
     useEffect(() => {
       if (map) {
-        console.log('MapResizer fitting bounds')
+        // console.log('MapResizer fitting bounds')
         setTimeout(() => {
           // Uncaught TypeError: Cannot read properties of undefined (reading '_leaflet_pos')
           // thus: try/catch
