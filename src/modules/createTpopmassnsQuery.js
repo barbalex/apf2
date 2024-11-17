@@ -24,7 +24,7 @@ export const createTpopmassnsQuery = ({
                 label
               }
             }
-            tpopmassnCount: tpopmassnsByTpopId {
+            tpopmassnsCount: tpopmassnsByTpopId {
               totalCount
             }
           }

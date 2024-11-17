@@ -57,7 +57,6 @@ export const Menu = memo(
           `,
           variables: {
             tpopId,
-            // typ: 'Zwischenbeurteilung'
           },
         })
       } catch (error) {
@@ -240,13 +239,13 @@ export const Menu = memo(
           </Tooltip>
           <Tooltip
             title={
-              !isMovingTpopmassn ?
-                `'${row.label}' zu einer anderen Population verschieben`
-              : thisTpopmassnIsMoving ?
-                'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
-              : movingFromThisTpop ?
-                `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
-              : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
+              !isMovingTpopmassn
+                ? `'${row.label}' zu einer anderen Population verschieben`
+                : thisTpopmassnIsMoving
+                  ? 'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
+                  : movingFromThisTpop
+                    ? `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
+                    : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
             }
           >
             <IconButton onClick={onClickMoveInTree}>
@@ -264,9 +263,9 @@ export const Menu = memo(
           )}
           <Tooltip
             title={
-              isCopyingTpopmassn ?
-                `Kopiere '${copying.label}' in diese Teilpopulation`
-              : 'Kopieren'
+              isCopyingTpopmassn
+                ? `Kopiere '${copying.label}' in diese Teilpopulation`
+                : 'Kopieren'
             }
           >
             <IconButton onClick={onClickCopy}>
