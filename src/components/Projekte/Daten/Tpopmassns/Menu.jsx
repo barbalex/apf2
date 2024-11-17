@@ -27,9 +27,6 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
-import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.js'
-import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
-import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.js'
 
 // unfortunately, toggle buttons are different from icon buttons...
 const RoundToggleButton = styled(ToggleButton)`
@@ -42,12 +39,10 @@ const RoundToggleButton = styled(ToggleButton)`
   }
 `
 const MoveIcon = styled(MdOutlineMoveDown)`
-  color: ${(props) =>
-    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
+  color: white;
 `
 const CopyIcon = styled(MdContentCopy)`
-  color: ${(props) =>
-    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
+  color: white;
 `
 const StyledLoadingButton = styled(LoadingButton)`
   margin: 0 5px;
@@ -79,14 +74,8 @@ export const Menu = memo(
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId } = useParams()
     const store = useContext(StoreContext)
-    const {
-      idOfTpopBeingLocalized,
-      activeApfloraLayers,
-      setMoving,
-      moving,
-      setCopying,
-      copying,
-    } = store
+    const { activeApfloraLayers, setMoving, moving, setCopying, copying } =
+      store
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -285,14 +274,6 @@ export const Menu = memo(
       })
     }, [setCopying])
 
-    const tpopHasCoord = !!row.lv95X && !!row.lv95Y
-    const [copyingCoordToTpop, setCopyingCoordToTpop] = useState(false)
-    const onCopyCoordToPop = useCallback(async () => {
-      setCopyingCoordToTpop(true)
-      await copyTpopKoordToPop({ id: tpopId, store, client })
-      setCopyingCoordToTpop(false)
-    }, [tpopId, store, client])
-
     const widths = useMemo(
       () => [
         buttonWidth,
@@ -304,28 +285,11 @@ export const Menu = memo(
         ...(isMovingTpop ? [buttonWidth] : []),
         buttonWidth,
         ...(isCopyingTpop ? [buttonWidth] : []),
-        ...(tpopHasCoord ? [180] : []),
         130,
         90,
       ],
-      [isCopyingTpop, isMovingTpop, tpopHasCoord],
+      [isCopyingTpop, isMovingTpop],
     )
-
-    const onClickShowCoordOfTpopOnMapGeoAdminCh = useCallback(() => {
-      showCoordOfTpopOnMapGeoAdminCh({
-        id: tpopId,
-        client,
-        enqueNotification: store.enqueNotification,
-      })
-    }, [tpopId, client, store])
-
-    const onClickShowCoordOfTpopOnMapsZhCh = useCallback(() => {
-      showCoordOfTpopOnMapsZhCh({
-        id: tpopId,
-        client,
-        enqueNotification: store.enqueNotification,
-      })
-    }, [tpopId, client, store])
 
     // to paste copied feldkontr/frwkontr/massn
     const onClickCopyLowerElementToHere = useCallback(() => {
@@ -342,7 +306,7 @@ export const Menu = memo(
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}`}
+          rerenderer={`${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}`}
           widths={widths}
         >
           <Tooltip title="Neue Teil-Population erstellen">
@@ -362,8 +326,6 @@ export const Menu = memo(
           </Tooltip>
           <Tooltip
             title={
-              !isMovingTpop
-                ? `'${row.label}' hierhin verschieben`
                 : thisTpopIsMoving
                   ? 'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
                   : movingFromThisPop
@@ -373,7 +335,6 @@ export const Menu = memo(
           >
             <IconButton onClick={onClickMoveInTree}>
               <MoveIcon
-                moving={(isMovingTpop && thisTpopIsMoving).toString()}
               />
             </IconButton>
           </Tooltip>
@@ -392,7 +353,7 @@ export const Menu = memo(
             }
           >
             <IconButton onClick={onClickCopy}>
-              <CopyIcon copying={thisTpopIsCopying.toString()} />
+              <CopyIcon  />
             </IconButton>
           </Tooltip>
           {isCopying && (
@@ -402,30 +363,6 @@ export const Menu = memo(
               </IconButton>
             </Tooltip>
           )}
-          {tpopHasCoord && (
-            <StyledLoadingButton
-              variant="outlined"
-              onClick={onCopyCoordToPop}
-              loading={copyingCoordToTpop}
-              width={180}
-            >
-              Koordinaten auf die Population kopieren
-            </StyledLoadingButton>
-          )}
-          <StyledButton
-            variant="outlined"
-            style={{ width: 90 }}
-            onClick={onClickShowCoordOfTpopOnMapsZhCh}
-          >
-            zeige auf maps.zh.ch
-          </StyledButton>
-          <StyledButton
-            variant="outlined"
-            style={{ width: 130 }}
-            onClick={onClickShowCoordOfTpopOnMapGeoAdminCh}
-          >
-            zeige auf map.geo.admin.ch
-          </StyledButton>
         </MenuBar>
       </ErrorBoundary>
     )
