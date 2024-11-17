@@ -130,7 +130,7 @@ export const Data = memo(
       }
       if (!additionalKeys.length) return
       setSortedBeobFields([...sortedBeobFields, ...additionalKeys])
-      console.log('Beob, useEffect, adding additional keys: ', additionalKeys)
+      // console.log('Beob, useEffect, adding additional keys: ', additionalKeys)
     }, [keys, setSortedBeobFields, sortedBeobFields])
 
     const moveField = useCallback(
