@@ -8,7 +8,7 @@ import { StoreContext } from '../../../../storeContext.js'
 import { createApsQuery } from '../../../../modules/createApsQuery.js'
 import { createTpopmassnsQuery } from '../../../../modules/createTpopmassnsQuery.js'
 import { List } from '../../../shared/List/index.jsx'
-import { Menu } from './Menu.jsx'
+// import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 
@@ -26,7 +26,7 @@ export const Component = memo(
         apolloClient,
       }),
     )
-    const tpopmassns = data?.data?.tpopById?.tpopmassnsByPopId?.nodes ?? []
+    const tpopmassns = data?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []
     const totalCount = data?.data?.tpopById?.tpopmassnsCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -38,7 +38,7 @@ export const Component = memo(
         items={tpopmassns}
         title="Massnahmen"
         totalCount={totalCount}
-        menuBar={<Menu />}
+        // menuBar={<Menu />}
       />
     )
   }),
