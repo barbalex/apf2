@@ -12,6 +12,7 @@ export const TpopMassnBer = memo(
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { tpopmassnberGqlFilterForTree } = store.tree
+    console.log('Tree.TpopMassnBer', { tpopmassnberGqlFilterForTree })
 
     const { data } = useQuery(
       createTpopmassnbersQuery({
@@ -20,39 +21,39 @@ export const TpopMassnBer = memo(
         apolloClient,
       }),
     )
+    const tpopmassnbers =
+      data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes ?? []
 
-    return (data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes ?? []).map(
-      (el) => {
-        const node = {
-          nodeType: 'table',
-          menuType: 'tpopmassnber',
-          parentId: tpop.id,
-          parentTableId: tpop.id,
-          id: el.id,
-          urlLabel: el.id,
-          label: el.label,
-          url: [
-            'Projekte',
-            projekt.id,
-            'Arten',
-            ap.id,
-            'Populationen',
-            pop.id,
-            'Teil-Populationen',
-            tpop.id,
-            'Massnahmen-Berichte',
-            el.id,
-          ],
-          hasChildren: false,
-        }
+    return tpopmassnbers.map((el) => {
+      const node = {
+        nodeType: 'table',
+        menuType: 'tpopmassnber',
+        parentId: tpop.id,
+        parentTableId: tpop.id,
+        id: el.id,
+        urlLabel: el.id,
+        label: el.label,
+        url: [
+          'Projekte',
+          projekt.id,
+          'Arten',
+          ap.id,
+          'Populationen',
+          pop.id,
+          'Teil-Populationen',
+          tpop.id,
+          'Massnahmen-Berichte',
+          el.id,
+        ],
+        hasChildren: false,
+      }
 
-        return (
-          <Row
-            key={el.id}
-            node={node}
-          />
-        )
-      },
-    )
+      return (
+        <Row
+          key={el.id}
+          node={node}
+        />
+      )
+    })
   }),
 )

@@ -138,7 +138,7 @@ export const Menu = memo(
           bgColor="#388e3c"
           color="white"
         >
-          <Tooltip title="Neuen Bericht erstellen">
+          <Tooltip title="Neuen Massnahmen-Bericht erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
             </IconButton>
