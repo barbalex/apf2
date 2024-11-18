@@ -58,7 +58,7 @@ export const List = memo(({ items, title, totalCount, menuBar = null }) => {
               key={item.id}
               onClick={onClickRow.bind(this, item)}
             >
-              {item.label}
+              {item.label ?? item.labelEkf ?? item.labelEk}
             </Row>
           ))}
         </ListContainer>

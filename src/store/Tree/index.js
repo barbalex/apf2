@@ -1242,9 +1242,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.tpopfeldkontr) {
-          singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.tpopfeldkontr,
+        if (self.nodeLabelFilter.tpopkontr) {
+          singleFilter.labelEk = {
+            includesInsensitive: self.nodeLabelFilter.tpopkontr,
           }
         }
         // add mapFilter
@@ -1360,9 +1360,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.tpopfreiwkontr) {
-          singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.tpopfreiwkontr,
+        if (self.nodeLabelFilter.tpopkontr) {
+          singleFilter.labelEkf = {
+            includesInsensitive: self.nodeLabelFilter.tpopkontr,
           }
         }
         // add mapFilter
@@ -1437,9 +1437,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.tpopfreiwkontr) {
-          singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.tpopfreiwkontr,
+        if (self.nodeLabelFilter.tpopkontr) {
+          singleFilter.labelEkf = {
+            includesInsensitive: self.nodeLabelFilter.tpopkontr,
           }
         }
         // add mapFilter

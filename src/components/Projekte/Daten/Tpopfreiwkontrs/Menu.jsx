@@ -28,7 +28,7 @@ export const Menu = memo(
   observer(({ row }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { tpopId } = useParams()
     const store = useContext(StoreContext)
@@ -37,11 +37,18 @@ export const Menu = memo(
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
-            mutation createTpopmassnForTpopmassnForm($tpopId: UUID!) {
-              createTpopmassn(input: { tpopmassn: { tpopId: $tpopId } }) {
-                tpopmassn {
+            mutation createTpopfreiwkontrForTpopfreiwkontrForm($tpopId: UUID!) {
+              createTpopkontr(
+                input: {
+                  tpopkontr: {
+                    tpopId: $tpopId
+                    typ: "Freiwilligen-Erfolgskontrolle"
+                  }
+                }
+              ) {
+                tpopkontr {
                   id
                   tpopId
                 }
@@ -61,24 +68,24 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpopmassn`],
+        queryKey: [`treeTpopfreiwkontr`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopFolders`],
       })
-      const id = result?.data?.createTpopmassn?.tpopmassn?.id
+      const id = result?.data?.createTpopkontr?.tpopkontr?.id
       navigate(`./${id}${search}`)
-    }, [client, store, tanstackQueryClient, navigate, search, tpopId])
+    }, [apolloClient, store, tanstackQueryClient, navigate, search, tpopId])
 
-    const isMovingMassn = moving.table === 'tpopmassn'
-    const onClickMoveMassnToHere = useCallback(() => {
+    const isMovingEkf = moving.table === 'tpopfreiwkontr'
+    const onClickMoveEkfToHere = useCallback(() => {
       return moveTo({
         id: tpopId,
-        client,
+        client: apolloClient,
         store,
         tanstackQueryClient,
       })
-    }, [tpopId, client, store, tanstackQueryClient, moveTo])
+    }, [tpopId, apolloClient, store, tanstackQueryClient, moveTo])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -90,15 +97,15 @@ export const Menu = memo(
       })
     }, [setMoving])
 
-    const isCopyingMassn = copying.table === 'tpopmassn'
-    const onClickCopyMassnToHere = useCallback(() => {
+    const isCopyingEkf = copying.table === 'tpopfreiwkontr'
+    const onClickCopyEkfToHere = useCallback(() => {
       return copyTo({
         parentId: tpopId,
-        client,
+        client: apolloClient,
         store,
         tanstackQueryClient,
       })
-    }, [copyTo, tpopId, client, store, tanstackQueryClient])
+    }, [copyTo, tpopId, apolloClient, store, tanstackQueryClient])
 
     const onClickStopCopying = useCallback(() => {
       setCopying({
@@ -114,35 +121,35 @@ export const Menu = memo(
         <MenuBar
           bgColor="#388e3c"
           color="white"
-          rerenderer={`${moving.label}/${copying.label}/${isMovingMassn}/${isCopyingMassn}`}
+          rerenderer={`${moving.label}/${copying.label}/${isMovingEkf}/${isCopyingEkf}`}
         >
-          <Tooltip title="Neue Massnahme erstellen">
+          <Tooltip title="Neue Freiwilligen-Kontrolle erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {isMovingMassn && (
+          {isMovingEkf && (
             <Tooltip title={`Verschiebe '${moving.label}' hierhin`}>
-              <IconButton onClick={onClickMoveMassnToHere}>
+              <IconButton onClick={onClickMoveEkfToHere}>
                 <MoveIcon />
               </IconButton>
             </Tooltip>
           )}
-          {isMovingMassn && (
+          {isMovingEkf && (
             <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
               <IconButton onClick={onClickStopMoving}>
                 <BsSignStopFill style={iconStyle} />
               </IconButton>
             </Tooltip>
           )}
-          {isCopyingMassn && (
+          {isCopyingEkf && (
             <Tooltip title={`Kopiere '${copying.label}' hierhin`}>
-              <IconButton onClick={onClickCopyMassnToHere}>
+              <IconButton onClick={onClickCopyEkfToHere}>
                 <CopyIcon />
               </IconButton>
             </Tooltip>
           )}
-          {isCopyingMassn && (
+          {isCopyingEkf && (
             <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
               <IconButton onClick={onClickStopCopying}>
                 <BsSignStopFill style={iconStyle} />
