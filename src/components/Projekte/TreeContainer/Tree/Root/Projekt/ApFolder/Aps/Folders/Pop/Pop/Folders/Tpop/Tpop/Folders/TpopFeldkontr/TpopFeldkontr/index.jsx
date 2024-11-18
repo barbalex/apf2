@@ -6,45 +6,21 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../../storeContext.js'
 import { ZaehlFolder } from './Zaehl/index.jsx'
+import { createTpopfeldkontrQuery } from '../../../../../../../../../../../../../../../../../modules/createTpopfeldkontrQuery.js'
 
 export const TpopFeldkontr = memo(
   observer(({ projekt, ap, pop, tpop }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { ekGqlFilterForTree } = store.tree
 
-    const { data } = useQuery({
-      queryKey: ['treeTpopfeldkontr', tpop.id, ekGqlFilterForTree],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeTpopfeldkontrQuery(
-              $id: UUID!
-              $tpopfeldkontrsFilter: TpopkontrFilter!
-            ) {
-              tpopById(id: $id) {
-                id
-                tpopfeldkontrs: tpopkontrsByTpopId(
-                  filter: $tpopfeldkontrsFilter
-                  orderBy: [JAHR_ASC, DATUM_ASC]
-                ) {
-                  nodes {
-                    id
-                    labelEk
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            id: tpop.id,
-            tpopfeldkontrsFilter: ekGqlFilterForTree,
-          },
-          // without 'network-only' or using tanstack,
-          // ui does not update when inserting and deleting
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createTpopfeldkontrQuery({
+        tpopId: tpop.id,
+        ekGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     return (data?.data?.tpopById?.tpopfeldkontrs?.nodes ?? []).map((el) => {
       const isOpen =
