@@ -5,50 +5,21 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
+import { createEkfrequenzsQuery } from '../../../../../../../../../../modules/createEkfrequenzsQuery.js'
 
 export const EkFrequenz = memo(
   observer(({ projekt, ap }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
+    const { ekfrequenzGqlFilterForTree } = store.tree
 
-    const ekfrequenzsFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.ekfrequenz) {
-      ekfrequenzsFilter.label = {
-        includesInsensitive: nodeLabelFilter.ekfrequenz,
-      }
-    }
-
-    const { data } = useQuery({
-      queryKey: ['treeEkfrequenz', ap.id, ekfrequenzsFilter],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeEkfrequenzQuery(
-              $apId: UUID!
-              $ekfrequenzsFilter: EkfrequenzFilter!
-            ) {
-              apById(id: $apId) {
-                id
-                ekfrequenzsByApId(
-                  filter: $ekfrequenzsFilter
-                  orderBy: SORT_ASC
-                ) {
-                  nodes {
-                    id
-                    code
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            apId: ap.id,
-            ekfrequenzsFilter,
-          },
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createEkfrequenzsQuery({
+        apId: ap.id,
+        ekfrequenzGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     return (data?.data?.apById?.ekfrequenzsByApId?.nodes ?? []).map((el) => {
       const node = {

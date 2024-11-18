@@ -43,7 +43,7 @@ export const ApFolders = memo(
     }
     const ekfrequenzsFilter = { apId: { equalTo: ap.id } }
     if (nodeLabelFilter.ekfrequenz) {
-      ekfrequenzsFilter.label = {
+      ekfrequenzsFilter.code = {
         includesInsensitive: nodeLabelFilter.ekfrequenz,
       }
     }
