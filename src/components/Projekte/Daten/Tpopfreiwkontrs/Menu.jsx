@@ -3,7 +3,8 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import { FaPlus } from 'react-icons/fa6'
+import { FaPlus, FaFolderTree } from 'react-icons/fa6'
+import { RiFolderCloseFill } from 'react-icons/ri'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
@@ -13,6 +14,8 @@ import styled from '@emotion/styled'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
+import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
+import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 
@@ -25,12 +28,12 @@ const CopyIcon = styled(MdContentCopy)`
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(({ row }) => {
+  observer(() => {
     const { search } = useLocation()
     const navigate = useNavigate()
     const apolloClient = useApolloClient()
     const tanstackQueryClient = useQueryClient()
-    const { tpopId } = useParams()
+    const { projId, apId, popId, tpopId } = useParams()
     const store = useContext(StoreContext)
     const { setMoving, moving, setCopying, copying } = store
 
@@ -76,6 +79,36 @@ export const Menu = memo(
       const id = result?.data?.createTpopkontr?.tpopkontr?.id
       navigate(`./${id}${search}`)
     }, [apolloClient, store, tanstackQueryClient, navigate, search, tpopId])
+
+    const onClickOpenLowerNodes = useCallback(() => {
+      openLowerNodes({
+        id: tpopId,
+        projId,
+        apId,
+        popId,
+        client: apolloClient,
+        store,
+        menuType: 'tpopfreiwkontrFolder',
+      })
+    }, [projId, apId, popId, apolloClient, store])
+
+    const onClickCloseLowerNodes = useCallback(() => {
+      closeLowerNodes({
+        url: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Freiwilligen-Kontrollen',
+        ],
+        store,
+        search,
+      })
+    }, [projId, apId, popId, store, search])
 
     const isMovingEkf = moving.table === 'tpopfreiwkontr'
     const onClickMoveEkfToHere = useCallback(() => {
@@ -126,6 +159,16 @@ export const Menu = memo(
           <Tooltip title="Neue Freiwilligen-Kontrolle erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Ordner im Navigationsbaum öffnen">
+            <IconButton onClick={onClickOpenLowerNodes}>
+              <FaFolderTree style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Ordner im Navigationsbaum schliessen">
+            <IconButton onClick={onClickCloseLowerNodes}>
+              <RiFolderCloseFill style={iconStyle} />
             </IconButton>
           </Tooltip>
           {isMovingEkf && (
