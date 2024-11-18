@@ -16,23 +16,23 @@ export const Menu = memo(() => {
   const navigate = useNavigate()
   const client = useApolloClient()
   const tanstackQueryClient = useQueryClient()
-  const { popId } = useParams()
+  const { apId } = useParams()
 
   const onClickAdd = useCallback(async () => {
     let result
     try {
       result = await client.mutate({
         mutation: gql`
-          mutation createPopmassnberForPopmassnberForm($popId: UUID!) {
-            createPopmassnber(input: { popmassnber: { popId: $popId } }) {
-              popmassnber {
+          mutation createEkzaehleinheitForEkzaehleinheitForm($apId: UUID!) {
+            createEkzaehleinheit(input: { ekzaehleinheit: { apId: $apId } }) {
+              ekzaehleinheit {
                 id
-                popId
+                apId
               }
             }
           }
         `,
-        variables: { popId },
+        variables: { apId },
       })
     } catch (error) {
       return store.enqueNotification({
@@ -43,14 +43,14 @@ export const Menu = memo(() => {
       })
     }
     tanstackQueryClient.invalidateQueries({
-      queryKey: [`treePopmassnber`],
+      queryKey: [`treeEkzaehleinheit`],
     })
     tanstackQueryClient.invalidateQueries({
-      queryKey: [`treePopFolders`],
+      queryKey: [`treeApFolders`],
     })
-    const id = result?.data?.createPopmassnber?.popmassnber?.id
+    const id = result?.data?.createEkzaehleinheit?.ekzaehleinheit?.id
     navigate(`./${id}${search}`)
-  }, [client, store, tanstackQueryClient, navigate, search, popId])
+  }, [client, store, tanstackQueryClient, navigate, search, apId])
 
   return (
     <ErrorBoundary>
@@ -58,7 +58,7 @@ export const Menu = memo(() => {
         bgColor="#388e3c"
         color="white"
       >
-        <Tooltip title="Neuen Massnahmen-Bericht erstellen">
+        <Tooltip title="Neue EK-Zähleinheiten erstellen">
           <IconButton onClick={onClickAdd}>
             <FaPlus style={iconStyle} />
           </IconButton>

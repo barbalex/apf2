@@ -5,12 +5,13 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
+import { createEkzaehleinheitsQuery } from '../../../../../../../../../../modules/createEkzaehleinheitsQuery.js'
 
 export const EkZaehleinheits = memo(
   observer(({ projekt, ap }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
+    const { nodeLabelFilter, ekzaehleinheitGqlFilterForTree } = store.tree
 
     const ekzaehleinheitsFilter = { apId: { equalTo: ap.id } }
     if (nodeLabelFilter.ekzaehleinheit) {
@@ -19,36 +20,13 @@ export const EkZaehleinheits = memo(
       }
     }
 
-    const { data } = useQuery({
-      queryKey: ['treeEkzaehleinheit', ap.id, ekzaehleinheitsFilter],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeEkzaehleinheitQuery(
-              $apId: UUID!
-              $ekzaehleinheitsFilter: EkzaehleinheitFilter!
-            ) {
-              apById(id: $apId) {
-                id
-                ekzaehleinheitsByApId(
-                  filter: $ekzaehleinheitsFilter
-                  orderBy: [SORT_ASC, LABEL_ASC]
-                ) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            apId: ap.id,
-            ekzaehleinheitsFilter,
-          },
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createEkzaehleinheitsQuery({
+        apId: ap.id,
+        ekzaehleinheitGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     return (data?.data?.apById?.ekzaehleinheitsByApId?.nodes ?? []).map(
       (el) => {
