@@ -344,10 +344,6 @@ export const Router = () => {
                 path="Freiwilligen-Kontrollen"
                 lazy={() => import('../Projekte/Daten/Tpop/index.jsx')}
               />
-              <Route
-                path="Beobachtungen"
-                lazy={() => import('../Projekte/Daten/Tpop/index.jsx')}
-              />
             </Route>
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Massnahmen"
@@ -360,6 +356,10 @@ export const Router = () => {
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Kontroll-Berichte"
               lazy={() => import('../Projekte/Daten/Tpopbers/index.jsx')}
+            />
+            <Route
+              path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Beobachtungen"
+              lazy={() => import('../Projekte/Daten/Beobzuordnungs/index.jsx')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Beobachtungen/:beobId/*"

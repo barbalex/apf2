@@ -1612,51 +1612,35 @@ export const Tree = types
       return beobGqlFilter
     },
     beobGqlFilterForTree(type) {
-      // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet
-      const typeFilter = {
+      const filter = {
         wgs84Lat: { isNull: false },
       }
       if (type === 'zugeordnet') {
-        typeFilter.tpopId = { isNull: false }
+        filter.tpopId = { isNull: false }
       }
       if (type === 'nichtBeurteilt') {
-        typeFilter.tpopId = { isNull: true }
-        typeFilter.nichtZuordnen = { equalTo: false }
+        filter.tpopId = { isNull: true }
+        filter.nichtZuordnen = { equalTo: false }
       }
       if (type === 'nichtZuzuordnen') {
-        typeFilter.nichtZuordnen = { equalTo: true }
+        filter.nichtZuordnen = { equalTo: true }
       }
 
       // node label filter
-      const nodeLabelFilter =
-        self.nodeLabelFilter.beob ?
-          {
-            label: {
-              includesInsensitive: self.nodeLabelFilter.beob,
-            },
-          }
-        : {}
+      if (self.nodeLabelFilter.beob) {
+        filter.label = {
+          includesInsensitive: self.nodeLabelFilter.beob,
+        }
+      }
 
       // mapFilter
-      const mapFilter =
-        self.mapFilter ?
-          {
-            geomPoint: {
-              coveredBy: self.mapFilter,
-            },
-          }
-        : {}
+      if (self.mapFilter) {
+        filter.geomPoint = {
+          coveredBy: self.mapFilter,
+        }
+      }
 
-      // merge all
-      let singleFilter = typeFilter
-      singleFilter = merge(singleFilter, nodeLabelFilter)
-      singleFilter = merge(singleFilter, mapFilter)
-
-      const beobGqlFilter = singleFilter
-
-      // console.log('beobGqlFilter:', { beobGqlFilter, type })
-
-      return beobGqlFilter
+      return filter
     },
   }))
 

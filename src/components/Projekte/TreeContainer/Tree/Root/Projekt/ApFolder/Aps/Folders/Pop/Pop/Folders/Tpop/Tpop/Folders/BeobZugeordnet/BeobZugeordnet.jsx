@@ -5,51 +5,24 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../storeContext.js'
+import { createBeobsQuery } from '../../../../../../../../../../../../../../../../modules/createBeobsQuery.js'
 
 export const BeobZugeordnet = memo(
   observer(({ projekt, ap, pop, tpop }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { beobGqlFilterForTree } = store.tree
 
-    const { data } = useQuery({
-      queryKey: [
-        'treeBeobZugeordnet',
-        tpop.id,
-        beobGqlFilterForTree('zugeordnet'),
-      ],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeBeobZugeordnetQuery(
-              $id: UUID!
-              $beobZugeordnetsFilter: BeobFilter!
-            ) {
-              tpopById(id: $id) {
-                id
-                beobsByTpopId(
-                  filter: $beobZugeordnetsFilter
-                  orderBy: [DATUM_DESC, AUTOR_ASC]
-                ) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            id: tpop.id,
-            beobZugeordnetsFilter: beobGqlFilterForTree('zugeordnet'),
-          },
-          // without 'network-only' or using tanstack,
-          // ui does not update when inserting and deleting
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createBeobsQuery({
+        tpopId: tpop.id,
+        beobGqlFilterForTree,
+        apolloClient,
+        type: 'zugeordnet',
+      }),
+    )
 
-    return (data?.data?.tpopById?.beobsByTpopId?.nodes ?? []).map((el) => {
+    return (data?.data?.allBeobs?.nodes ?? []).map((el) => {
       const node = {
         nodeType: 'table',
         menuType: 'beobZugeordnet',
