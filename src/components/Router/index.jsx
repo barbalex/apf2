@@ -114,14 +114,6 @@ export const Router = () => {
                 lazy={() => import('../Projekte/Daten/Ap/Historien.jsx')}
               />
               <Route
-                path="nicht-zuzuordnende-Beobachtungen"
-                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
-              />
-              <Route
-                path="nicht-beurteilte-Beobachtungen"
-                lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
-              />
-              <Route
                 path="EK-Zähleinheiten"
                 lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
               />
@@ -172,8 +164,16 @@ export const Router = () => {
               />
             </Route>
             <Route
+              path="Projekte/:projId/Arten/:apId/nicht-zuzuordnende-Beobachtungen"
+              lazy={() => import('../Projekte/Daten/Beobzuordnungs/index.jsx')}
+            />
+            <Route
               path="Projekte/:projId/Arten/:apId/nicht-zuzuordnende-Beobachtungen/:beobId"
               lazy={() => import('../Projekte/Daten/Beobzuordnung/index.jsx')}
+            />
+            <Route
+              path="Projekte/:projId/Arten/:apId/nicht-beurteilte-Beobachtungen"
+              lazy={() => import('../Projekte/Daten/Beobzuordnungs/index.jsx')}
             />
             <Route
               path="Projekte/:projId/Arten/:apId/nicht-beurteilte-Beobachtungen/:beobId"

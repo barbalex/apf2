@@ -13,7 +13,7 @@ import { StoreContext } from '../../../../storeContext.js'
 
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(() => {
+export const Menu = memo(({ apfloraLayer }) => {
   const tanstackQueryClient = useQueryClient()
 
   const store = useContext(StoreContext)
@@ -34,7 +34,7 @@ export const Menu = memo(() => {
   )
   const onClickShowOnMap = useCallback(() => {
     showMapIfNotYetVisible(projekteTabs)
-    setActiveApfloraLayers(uniq([...activeApfloraLayers, 'beobZugeordnet']))
+    setActiveApfloraLayers(uniq([...activeApfloraLayers, apfloraLayer]))
   }, [
     showMapIfNotYetVisible,
     projekteTabs,

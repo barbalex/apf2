@@ -12,7 +12,13 @@ export const createBeobsQuery = ({
     gqlFilter.tpopId = { equalTo: tpopId }
   }
   if (apId) {
-    gqlFilter.apId = { equalTo: apId }
+    gqlFilter.aeTaxonomyByArtId = {
+      apartsByArtId: {
+        some: {
+          apId: { equalTo: apId },
+        },
+      },
+    }
   }
 
   const totalCountFilter = { ...gqlFilter }
