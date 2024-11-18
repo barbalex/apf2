@@ -116,6 +116,7 @@ export const MobxStore = types
       defaultSortedBeobFields,
     ),
     openChooseApToCopyEkfrequenzsFrom: types.optional(types.boolean, false),
+    openChooseApToCopyErfkritsFrom: types.optional(types.boolean, false),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -130,6 +131,9 @@ export const MobxStore = types
     navigate: undefined,
   }))
   .actions((self) => ({
+    setOpenApToCopyErfkritsFrom(val) {
+      self.openChooseApToCopyErfkritsFrom = val
+    },
     setOpenChooseApToCopyEkfrequenzsFrom(val) {
       self.openChooseApToCopyEkfrequenzsFrom = val
     },
