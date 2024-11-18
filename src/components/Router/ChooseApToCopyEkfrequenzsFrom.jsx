@@ -10,6 +10,7 @@ import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { gql, useApolloClient } from '@apollo/client'
 import { useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { userIsReadOnly } from '../../modules/userIsReadOnly.js'
 import { StoreContext } from '../../storeContext.js'
@@ -64,10 +65,13 @@ const Error = styled.div`
   color: red;
 `
 
+// const textEncoder = new TextEncoder()
+
 export const ChooseApToCopyEkfrequenzsFrom = memo(
   observer(() => {
     const { apId } = useParams()
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
+    const tanstackClient = useQueryClient()
     const store = useContext(StoreContext)
     const {
       user,
@@ -89,7 +93,7 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
         // 1.1: query existing ekfrequenz
         let existingEkfrequenzResult
         try {
-          existingEkfrequenzResult = await client.query({
+          existingEkfrequenzResult = await apolloClient.query({
             query: gql`
               query getExistingEkfrequenzForEkfrequenzFolder($apId: UUID) {
                 allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
@@ -122,7 +126,7 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
           await Promise.allSettled(
             existingEkfrequenzs.map(
               async (id) =>
-                await client.mutate({
+                await apolloClient.mutate({
                   mutation: gql`
                     mutation deleteExistingEkfrequenzForEkfrequenzFolder(
                       $id: UUID!
@@ -152,7 +156,7 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
         // 2.1: query ekfrequenz
         let newEkfrequenzResult
         try {
-          newEkfrequenzResult = await client.query({
+          newEkfrequenzResult = await apolloClient.query({
             query: gql`
               query getNewEkfrequenzForEkfrequenzFolder($apId: UUID) {
                 allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
@@ -185,10 +189,11 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
           newEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
 
         // 2.2: insert ekfrequenz
+        let res
         try {
-          await Promise.allSettled(
-            newEkfrequenzs.map(async (ekf) => {
-              client.mutate({
+          res = await Promise.allSettled(
+            newEkfrequenzs.map(async (ekf) =>
+              apolloClient.mutate({
                 mutation: gql`
                   mutation insertEkfrequenzForEkfrequenzFolder(
                     $apId: UUID!
@@ -208,20 +213,20 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
                           apId: $apId
                           anwendungsfall: $anwendungsfall
                           bemerkungen: $bemerkungen
-                          changedBy: $changedBy
                           code: $code
                           ekAbrechnungstyp: $ekAbrechnungstyp
                           ektyp: $ektyp
                           kontrolljahre: $kontrolljahre
                           kontrolljahreAb: $kontrolljahreAb
                           sort: $sort
+                          changedBy: $changedBy
                         }
                       }
                     ) {
                       ekfrequenz {
                         id
-                        anwendungsfall
                         apId
+                        anwendungsfall
                         bemerkungen
                         code
                         ekAbrechnungstyp
@@ -234,27 +239,30 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
                     }
                   }
                 `,
+                // somehow in dev i got errors claiming the strings were not utf-8
+                // invalid byte sequence for encoding "UTF8"
                 variables: {
-                  anwendungsfall: ekf.anwendungsfall,
                   apId: apId,
-                  bemerkungen: ekf.bemerkungen,
-                  code: ekf.code,
-                  ekAbrechnungstyp: ekf.ekAbrechnungstyp,
-                  ektyp: ekf.ektyp,
-                  kontrolljahre: ekf.kontrolljahre,
-                  kontrolljahreAb: ekf.kontrolljahreAb,
-                  sort: ekf.sort,
+                  anwendungsfall: ekf.anwendungsfall ?? null,
+                  bemerkungen: ekf.bemerkungen ?? null,
+                  code: ekf.code ?? null,
+                  ekAbrechnungstyp: ekf.ekAbrechnungstyp ?? null,
+                  ektyp: ekf.ektyp ?? null,
+                  kontrolljahre: ekf.kontrolljahre ?? null,
+                  kontrolljahreAb: ekf.kontrolljahreAb ?? null,
+                  sort: ekf.sort ?? null,
                   changedBy: user.name,
                 },
-              })
-            }),
+              }),
+            ),
           )
         } catch (error) {
-          console.log({ error })
+          console.log('Error adding copied EK-Frequenzen:', error)
           return setApOptionsError(
             `Fehler beim Kopieren der EK-Frequenzen: ${error.message}`,
           )
         }
+        // console.log('ChooseApToCopyEkfrequenzsFrom, res:', res)
 
         // 3. inform user
         setOpenChooseApToCopyEkfrequenzsFrom(false)
@@ -264,10 +272,12 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
             variant: 'info',
           },
         })
+        tanstackClient.invalidateQueries({ queryKey: [`treeEkfrequenz`] })
+        tanstackClient.invalidateQueries({ queryKey: [`treeApFolders`] })
       },
       [
         apId,
-        client,
+        apolloClient,
         enqueNotification,
         user.name,
         setOpenChooseApToCopyEkfrequenzsFrom,
@@ -287,7 +297,7 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
           : { label: { isNull: false }, id: { notEqualTo: apId } }
         let result
         try {
-          result = await client.query({
+          result = await apolloClient.query({
             // would be elegant to query only ap with ekfrequenz
             // solution: https://github.com/graphile/pg-aggregates
             query: gql`
@@ -318,7 +328,7 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
         )
         cb(optionsWithEkfrequenzs)
       },
-      [apId, client],
+      [apId, apolloClient],
     )
 
     return (
