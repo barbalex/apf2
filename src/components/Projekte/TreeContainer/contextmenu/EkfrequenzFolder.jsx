@@ -77,7 +77,12 @@ export const EkfrequenzFolder = memo(
   observer(({ onClick }) => {
     const client = useApolloClient()
     const store = useContext(StoreContext)
-    const { user, enqueNotification } = store
+    const {
+      user,
+      enqueNotification,
+      openChooseApToCopyEkfrequenzsFrom,
+      setOpenChooseApToCopyEkfrequenzsFrom,
+    } = store
 
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
@@ -88,9 +93,14 @@ export const EkfrequenzFolder = memo(
       [],
     )
 
-    const [openChooseAp, setOpenChooseAp] = useState(false)
-    const onCloseChooseApDialog = useCallback(() => setOpenChooseAp(false), [])
-    const onOpenChooseApDialog = useCallback(() => setOpenChooseAp(true), [])
+    const onCloseChooseApDialog = useCallback(
+      () => setOpenChooseApToCopyEkfrequenzsFrom(false),
+      [setOpenChooseApToCopyEkfrequenzsFrom],
+    )
+    const onOpenChooseApDialog = useCallback(
+      () => setOpenChooseApToCopyEkfrequenzsFrom(true),
+      [setOpenChooseApToCopyEkfrequenzsFrom],
+    )
 
     const onChooseAp = useCallback(
       async (option) => {
@@ -268,7 +278,7 @@ export const EkfrequenzFolder = memo(
         }
 
         // 3. inform user
-        setOpenChooseAp(false)
+        setOpenChooseApToCopyEkfrequenzsFrom(false)
         enqueNotification({
           message: `Die EK-Frequenzen wurden kopiert`,
           options: {
@@ -276,7 +286,13 @@ export const EkfrequenzFolder = memo(
           },
         })
       },
-      [apId, client, enqueNotification, user.name],
+      [
+        apId,
+        client,
+        enqueNotification,
+        user.name,
+        setOpenChooseApToCopyEkfrequenzsFrom,
+      ],
     )
 
     const [apOptionsError, setApOptionsError] = useState(undefined)
@@ -350,14 +366,14 @@ export const EkfrequenzFolder = memo(
           )}
         </ContextMenu>
         <Dialog
-          open={openChooseAp}
+          open={openChooseApToCopyEkfrequenzsFrom}
           onClose={onCloseChooseApDialog}
         >
           <DialogTitle>EK-Frequenzen aus anderer Art kopieren</DialogTitle>
           <DialogContent>
             <DialogContentText>
               Achtung: Allfällige bestehende EK-Frequenzen werden gelöscht und
-              mit den kopierten ersetzt, sobald Sie einen Aktionsplän wählen
+              mit den kopierten ersetzt, sobald Sie eine Art wählen
             </DialogContentText>
             <SelectContainer>
               <SelectLabel>Art (nur solche mit EK-Frequenzen)</SelectLabel>

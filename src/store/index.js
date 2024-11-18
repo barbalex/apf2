@@ -115,6 +115,7 @@ export const MobxStore = types
       types.array(types.string),
       defaultSortedBeobFields,
     ),
+    openChooseApToCopyEkfrequenzsFrom: types.optional(types.boolean, false),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -129,6 +130,9 @@ export const MobxStore = types
     navigate: undefined,
   }))
   .actions((self) => ({
+    setOpenChooseApToCopyEkfrequenzsFrom(val) {
+      self.openChooseApToCopyEkfrequenzsFrom = val
+    },
     setSortedBeobFields(val) {
       self.sortedBeobFields = val.filter((v) => !!v)
     },
