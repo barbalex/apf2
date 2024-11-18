@@ -11,6 +11,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const iconStyle = { color: 'white' }
 
+// TODO: add menu to setOpenChooseApToCopyEkfrequenzsFrom
 export const Menu = memo(() => {
   const { search } = useLocation()
   const navigate = useNavigate()
