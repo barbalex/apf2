@@ -282,11 +282,11 @@ export const Router = () => {
                 path="Historien"
                 lazy={() => import('../Projekte/Daten/Pop/Historien.jsx')}
               />
-              <Route
-                path="Massnahmen-Berichte"
-                lazy={() => import('../Projekte/Daten/Pop/index.jsx')}
-              />
             </Route>
+            <Route
+              path="Projekte/:projId/Arten/:apId/Populationen/:popId/Massnahmen-Berichte"
+              lazy={() => import('../Projekte/Daten/Popmassnbers/index.jsx')}
+            />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Massnahmen-Berichte/:popmassnberId/*"
               lazy={() => import('../Projekte/Daten/Popmassnber/index.jsx')}

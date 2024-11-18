@@ -1070,12 +1070,30 @@ export const Tree = types
       // 1. hierarchy filter
       const popId = self.popIdInActiveNodeArray
       if (popId) {
-        gqlFilter.tpopId = { equalTo: popId }
+        gqlFilter.popId = { equalTo: popId }
       }
       // 2. node label filter
       if (self.nodeLabelFilter.popber) {
         gqlFilter.label = {
           includesInsensitive: self.nodeLabelFilter.popber,
+        }
+      }
+
+      if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+      return gqlFilter
+    },
+    get popmassnberGqlFilterForTree() {
+      const gqlFilter = {}
+      // 1. hierarchy filter
+      const popId = self.popIdInActiveNodeArray
+      if (popId) {
+        gqlFilter.popId = { equalTo: popId }
+      }
+      // 2. node label filter
+      if (self.nodeLabelFilter.popmassnber) {
+        gqlFilter.label = {
+          includesInsensitive: self.nodeLabelFilter.popmassnber,
         }
       }
 

@@ -5,52 +5,21 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
+import { createPopmassnbersQuery } from '../../../../../../../../../../../../../modules/createPopmassnbersQuery.js'
 
 export const PopMassnBer = memo(
   observer(({ projekt, ap, pop }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
+    const { popmassnberGqlFilterForTree } = store.tree
 
-    const popmassnbersFilter = { popId: { equalTo: pop.id } }
-    if (nodeLabelFilter.popmassnber) {
-      popmassnbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.popmassnber,
-      }
-    }
-
-    const { data } = useQuery({
-      queryKey: ['treePopmassnber', pop.id, popmassnbersFilter],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeTpopmassnberQuery(
-              $id: UUID!
-              $popmassnbersFilter: PopmassnberFilter!
-            ) {
-              popById(id: $id) {
-                id
-                popmassnbersByPopId(
-                  filter: $popmassnbersFilter
-                  orderBy: LABEL_ASC
-                ) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            id: pop.id,
-            popmassnbersFilter,
-          },
-          // without 'network-only' or using tanstack,
-          // ui does not update when inserting and deleting
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createPopmassnbersQuery({
+        popId: pop.id,
+        popmassnberGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     return (data?.data?.popById?.popmassnbersByPopId?.nodes ?? []).map((el) => {
       const node = {
