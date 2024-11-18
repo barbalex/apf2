@@ -27,6 +27,11 @@ const ApfLayerNotifier = lazy(async () => ({
 const QueryClientSetter = lazy(async () => ({
   default: (await import('./QueryClientSetter')).QueryClientSetter,
 }))
+const ChooseApToCopyEkfrequenzsFrom = lazy(async () => ({
+  default: (await import('./ChooseApToCopyEkfrequenzsFrom'))
+    .ChooseApToCopyEkfrequenzsFrom,
+}))
+
 import { Spinner } from '../shared/Spinner.jsx'
 
 const isInIframe = inIframe()
@@ -92,6 +97,7 @@ export const Component = memo(
               <ActiveNodeArraySetter />
               <NavigateSetter />
               <QueryClientSetter />
+              <ChooseApToCopyEkfrequenzsFrom />
               <ApfLayerNotifier />
             </Suspense>
           </>
