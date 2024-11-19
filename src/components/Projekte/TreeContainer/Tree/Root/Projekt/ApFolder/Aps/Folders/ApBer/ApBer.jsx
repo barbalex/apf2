@@ -5,42 +5,21 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
+import { createApbersQuery } from '../../../../../../../../../../modules/createApbersQuery.js'
 
 export const ApBer = memo(
   observer(({ projekt, ap }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
+    const { apberGqlFilterForTree } = store.tree
 
-    const apbersFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.apber) {
-      apbersFilter.label = { includesInsensitive: nodeLabelFilter.apber }
-    }
-
-    const { data } = useQuery({
-      queryKey: ['treeApber', ap.id, apbersFilter],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeApberQuery($apId: UUID!, $apbersFilter: ApberFilter!) {
-              apById(id: $apId) {
-                id
-                apbersByApId(filter: $apbersFilter, orderBy: LABEL_ASC) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            apId: ap.id,
-            apbersFilter,
-          },
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createApbersQuery({
+        apId: ap.id,
+        apberGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     return (data?.data?.apById?.apbersByApId?.nodes ?? []).map((el) => {
       const node = {
