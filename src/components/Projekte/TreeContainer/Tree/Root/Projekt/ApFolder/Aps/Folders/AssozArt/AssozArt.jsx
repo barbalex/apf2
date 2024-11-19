@@ -5,47 +5,21 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
+import { createAssozartsQuery } from '../../../../../../../../../../modules/createAssozartsQuery.js'
 
 export const AssozArt = memo(
   observer(({ projekt, ap }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
+    const { assozartGqlFilterForTree } = store.tree
 
-    const assozartFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.assozart) {
-      assozartFilter.label = {
-        includesInsensitive: nodeLabelFilter.assozart,
-      }
-    }
-
-    const { data } = useQuery({
-      queryKey: ['treeAssozart', ap.id, assozartFilter],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeAssozartQuery(
-              $apId: UUID!
-              $assozartFilter: AssozartFilter!
-            ) {
-              apById(id: $apId) {
-                id
-                assozartsByApId(filter: $assozartFilter, orderBy: LABEL_ASC) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            apId: ap.id,
-            assozartFilter,
-          },
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createAssozartsQuery({
+        apId: ap.id,
+        assozartGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     return (data?.data?.apById?.assozartsByApId?.nodes ?? []).map((el) => {
       const node = {
