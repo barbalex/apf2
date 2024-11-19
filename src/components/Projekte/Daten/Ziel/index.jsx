@@ -111,7 +111,7 @@ export const Component = memo(
         }
         setFieldErrors({})
         queryClient.invalidateQueries({
-          queryKey: [`treeZieljahrFolders`],
+          queryKey: [`treeZiel`],
         })
         // if jahr of ziel is updated, activeNodeArray und openNodes need to change
         if (field === 'jahr') {

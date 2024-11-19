@@ -7,50 +7,21 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { ZielJahre } from './ZielJahre/index.jsx'
+import { createZielsQuery } from '../../../../../../../../../../modules/createZielsQuery.js'
 
 export const ApZielFolder = memo(
   observer(({ projekt, ap }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { nodeLabelFilter, openNodes } = store.tree
+    const { openNodes, zielGqlFilterForTree } = store.tree
 
-    const zielsFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.ziel) {
-      zielsFilter.label = {
-        includesInsensitive: nodeLabelFilter.ziel,
-      }
-    }
-
-    const { data, isLoading } = useQuery({
-      queryKey: ['treeZieljahrFolders', ap.id, zielsFilter],
-      queryFn: async () => {
-        const { data, loading: isLoading } = await client.query({
-          query: gql`
-            query TreeApZieljahrFolderQuery(
-              $apId: UUID!
-              $zielsFilter: ZielFilter!
-            ) {
-              apById(id: $apId) {
-                id
-                zielsByApId(filter: $zielsFilter, orderBy: LABEL_ASC) {
-                  nodes {
-                    id
-                    label
-                    jahr
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            apId: ap.id,
-            zielsFilter,
-          },
-          fetchPolicy: 'no-cache',
-        })
-        return { data, isLoading }
-      },
-    })
+    const { data, isLoading } = useQuery(
+      createZielsQuery({
+        apId: ap.id,
+        zielGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ziel ?? ''
 
@@ -87,6 +58,8 @@ export const ApZielFolder = memo(
       url,
       hasChildren: zieljahreLength > 0,
     }
+
+    console.log('tree.ApZiel.index', { ziels, zieljahre, data: data?.data })
 
     return (
       <>

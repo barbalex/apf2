@@ -75,7 +75,10 @@ export const LabelFilter = memo(
 
     const onChange = useCallback(
       (e) => {
-        const val = e.target.value
+        // TODO: some values can cause exceptions in regular expressions
+        // remove them
+        const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
+
         setValue(val)
         if (labelText === '(filtern nicht möglich)') return
         changeDebounced(val)

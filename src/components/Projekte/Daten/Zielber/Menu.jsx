@@ -55,7 +55,7 @@ export const Menu = memo(
         queryKey: [`treeZielber`],
       })
       queryClient.invalidateQueries({
-        queryKey: [`treeZieljahrFolders`],
+        queryKey: [`treeZiel`],
       })
       const id = result?.data?.createZielber?.zielber?.id
       navigate(
@@ -102,7 +102,7 @@ export const Menu = memo(
         queryKey: [`treeZielber`],
       })
       queryClient.invalidateQueries({
-        queryKey: [`treeZieljahrFolders`],
+        queryKey: [`treeZiel`],
       })
       // navigate to parent
       navigate(

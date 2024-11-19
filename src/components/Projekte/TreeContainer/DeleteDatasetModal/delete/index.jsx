@@ -160,7 +160,7 @@ export const deleteModule = async ({ client, store, search }) => {
   })
   const queryKeyFolders =
     ['apberuebersicht'].includes(table) ? 'treeRoot'
-    : table === 'ziel' ? 'treeZieljahrFolders'
+    : table === 'ziel' ? 'treeZiel'
     : parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehlFolders'
     : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehlFolders'
     : (

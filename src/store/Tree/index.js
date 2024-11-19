@@ -1065,6 +1065,36 @@ export const Tree = types
 
       return gqlFilter
     },
+    get zielGqlFilterForTree() {
+      const gqlFilter = {}
+      // 1. hierarchy filter
+      const apId = self.apIdInActiveNodeArray
+      if (apId) {
+        gqlFilter.apId = { equalTo: apId }
+      }
+      // 2. node label filter
+      if (self.nodeLabelFilter.ziel) {
+        gqlFilter.or = [
+          { label: { includesInsensitive: self.nodeLabelFilter.ziel } },
+        ]
+        if (!isNaN(self.nodeLabelFilter.ziel)) {
+          gqlFilter.or.push({ jahr: { equalTo: +self.nodeLabelFilter.ziel } })
+        }
+        // gqlFilter.jahr = { equalTo: +self.nodeLabelFilter.ziel }
+        // gqlFilter.label = {
+        //   includesInsensitive: self.nodeLabelFilter.ziel,
+        // }
+        console.log('store.zielGqlFilterForTree', {
+          nodeLabelFilterZiel: self.nodeLabelFilter.ziel,
+          jahrValue: +self.nodeLabelFilter.ziel,
+          gqlFilter,
+        })
+      }
+
+      if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+      return gqlFilter
+    },
     get apberGqlFilterForTree() {
       const gqlFilter = {}
       // 1. hierarchy filter

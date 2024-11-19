@@ -248,7 +248,7 @@ export const insertDataset = async ({
   // })
   const queryKeyFolder =
     ['apberuebersicht'].includes(table) ? 'treeRoot'
-    : table === 'ziel' ? 'treeZieljahrFolders'
+    : table === 'ziel' ? 'treeZiel'
     : parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehlFolders'
     : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehlFolders'
     : (
