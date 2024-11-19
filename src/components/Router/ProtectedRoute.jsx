@@ -31,6 +31,10 @@ const ChooseApToCopyEkfrequenzsFrom = lazy(async () => ({
   default: (await import('./ChooseApToCopyEkfrequenzsFrom'))
     .ChooseApToCopyEkfrequenzsFrom,
 }))
+const ChooseApToCopyErfkritsFrom = lazy(async () => ({
+  default: (await import('./ChooseApToCopyErfkritsFrom'))
+    .ChooseApToCopyErfkritsFrom,
+}))
 
 import { Spinner } from '../shared/Spinner.jsx'
 
@@ -98,6 +102,7 @@ export const Component = memo(
               <NavigateSetter />
               <QueryClientSetter />
               <ChooseApToCopyEkfrequenzsFrom />
+              <ChooseApToCopyErfkritsFrom />
               <ApfLayerNotifier />
             </Suspense>
           </>
