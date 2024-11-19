@@ -1065,7 +1065,7 @@ export const Tree = types
 
       return gqlFilter
     },
-    get taxaGqlFilterForTree() {
+    get apartGqlFilterForTree() {
       const gqlFilter = {}
       // 1. hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -1073,9 +1073,9 @@ export const Tree = types
         gqlFilter.apId = { equalTo: apId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.taxa) {
+      if (self.nodeLabelFilter.apart) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.taxa,
+          includesInsensitive: self.nodeLabelFilter.apart,
         }
       }
 

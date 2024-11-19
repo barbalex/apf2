@@ -5,42 +5,21 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
+import { createApartsQuery } from '../../../../../../../../../../modules/createApartsQuery.js'
 
 export const ApArt = memo(
   observer(({ projekt, ap }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
+    const { apartGqlFilterForTree } = store.tree
 
-    const apartsFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.apart) {
-      apartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
-    }
-
-    const { data } = useQuery({
-      queryKey: ['treeApart', ap.id, apartsFilter],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeApartQuery($apId: UUID!, $apartsFilter: ApartFilter!) {
-              apById(id: $apId) {
-                id
-                apartsByApId(filter: $apartsFilter, orderBy: LABEL_ASC) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            apId: ap.id,
-            apartsFilter,
-          },
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createApartsQuery({
+        apId: ap.id,
+        apartGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     return (data?.data?.apById?.apartsByApId?.nodes ?? []).map((el) => {
       const node = {
