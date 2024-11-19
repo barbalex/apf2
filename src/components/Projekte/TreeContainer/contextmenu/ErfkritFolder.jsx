@@ -75,8 +75,14 @@ const Error = styled.div`
 
 export const ErfkritFolder = memo(
   observer(({ onClick }) => {
-    const client = useApolloClient()
-    const { user, enqueNotification } = useContext(StoreContext)
+    const apolloClient = useApolloClient()
+    const store = useContext(StoreContext)
+    const {
+      user,
+      enqueNotification,
+      openChooseApToCopyErfkritsFrom,
+      setOpenApToCopyErfkritsFrom,
+    } = store
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
     // i.e. to know what node was clicked
@@ -86,9 +92,14 @@ export const ErfkritFolder = memo(
       [],
     )
 
-    const [openChooseAp, setOpenChooseAp] = useState(false)
-    const onCloseChooseApDialog = useCallback(() => setOpenChooseAp(false), [])
-    const onOpenChooseApDialog = useCallback(() => setOpenChooseAp(true), [])
+    const onCloseChooseApDialog = useCallback(
+      () => setOpenApToCopyErfkritsFrom(false),
+      [],
+    )
+    const onOpenChooseApDialog = useCallback(
+      () => setOpenApToCopyErfkritsFrom(true),
+      [],
+    )
 
     const onChooseAp = useCallback(
       async (option) => {
@@ -98,7 +109,7 @@ export const ErfkritFolder = memo(
         // 1.1: query existing erfkrit
         let existingErfkritResult
         try {
-          existingErfkritResult = await client.query({
+          existingErfkritResult = await apolloClient.query({
             query: gql`
               query getExistingErfkritForErfkritFolder($apId: UUID) {
                 allErfkrits(filter: { apId: { equalTo: $apId } }) {
@@ -131,7 +142,7 @@ export const ErfkritFolder = memo(
           await Promise.allSettled(
             existingErfkrits.map(
               async (id) =>
-                await client.mutate({
+                await apolloClient.mutate({
                   mutation: gql`
                     mutation deleteExistingErfkritForErfkritFolder($id: UUID!) {
                       deleteErfkritById(input: { id: $id }) {
@@ -159,7 +170,7 @@ export const ErfkritFolder = memo(
         // 2.1: query erfkrit
         let newErfkritResult
         try {
-          newErfkritResult = await client.query({
+          newErfkritResult = await apolloClient.query({
             query: gql`
               query getNewErfkritForErfkritFolder($apId: UUID) {
                 allErfkrits(filter: { apId: { equalTo: $apId } }) {
@@ -188,7 +199,7 @@ export const ErfkritFolder = memo(
         try {
           await Promise.allSettled(
             newErfkrits.map(async (ekf) => {
-              client.mutate({
+              apolloClient.mutate({
                 mutation: gql`
                   mutation insertErfkritForErfkritFolder(
                     $apId: UUID!
@@ -232,7 +243,7 @@ export const ErfkritFolder = memo(
         }
 
         // 3. inform user
-        setOpenChooseAp(false)
+        setOpenApToCopyErfkritsFrom(false)
         enqueNotification({
           message: `Die Erfolgskriterien wurden kopiert`,
           options: {
@@ -240,7 +251,7 @@ export const ErfkritFolder = memo(
           },
         })
       },
-      [apId, client, enqueNotification, user.name],
+      [apId, apolloClient, enqueNotification, user.name],
     )
 
     const [apOptionsError, setApOptionsError] = useState(undefined)
@@ -256,7 +267,7 @@ export const ErfkritFolder = memo(
           : { label: { isNull: false }, id: { notEqualTo: apId } }
         let result
         try {
-          result = await client.query({
+          result = await apolloClient.query({
             // would be elegant to query only ap with erfkrit
             // solution: https://github.com/graphile/pg-aggregates
             query: gql`
@@ -287,7 +298,7 @@ export const ErfkritFolder = memo(
         )
         cb(optionsWithErfkrits)
       },
-      [apId, client],
+      [apId, apolloClient],
     )
 
     return (
@@ -314,7 +325,7 @@ export const ErfkritFolder = memo(
           )}
         </ContextMenu>
         <Dialog
-          open={openChooseAp}
+          open={openChooseApToCopyErfkritsFrom}
           onClose={onCloseChooseApDialog}
         >
           <DialogTitle>Erfolgskriterien aus anderer Art kopieren</DialogTitle>
