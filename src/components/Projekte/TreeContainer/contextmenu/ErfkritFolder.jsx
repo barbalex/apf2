@@ -21,7 +21,7 @@ export const ErfkritFolder = memo(
     const {
       user,
       openChooseApToCopyErfkritsFrom,
-      setOpenApToCopyErfkritsFrom,
+      setOpenChooseApToCopyErfkritsFrom,
     } = store
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
@@ -33,7 +33,7 @@ export const ErfkritFolder = memo(
     )
 
     const onOpenChooseApDialog = useCallback(
-      () => setOpenApToCopyErfkritsFrom(true),
+      () => setOpenChooseApToCopyErfkritsFrom(true),
       [],
     )
 

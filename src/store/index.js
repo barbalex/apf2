@@ -131,7 +131,7 @@ export const MobxStore = types
     navigate: undefined,
   }))
   .actions((self) => ({
-    setOpenApToCopyErfkritsFrom(val) {
+    setOpenChooseApToCopyErfkritsFrom(val) {
       self.openChooseApToCopyErfkritsFrom = val
     },
     setOpenChooseApToCopyEkfrequenzsFrom(val) {

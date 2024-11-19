@@ -77,12 +77,12 @@ export const ChooseApToCopyErfkritsFrom = memo(
       user,
       enqueNotification,
       openChooseApToCopyErfkritsFrom,
-      setOpenApToCopyErfkritsFrom,
+      setOpenChooseApToCopyErfkritsFrom,
     } = store
 
     const onCloseChooseApDialog = useCallback(
-      () => setOpenApToCopyErfkritsFrom(false),
-      [setOpenApToCopyErfkritsFrom],
+      () => setOpenChooseApToCopyErfkritsFrom(false),
+      [setOpenChooseApToCopyErfkritsFrom],
     )
 
     const onChooseAp = useCallback(
@@ -224,7 +224,7 @@ export const ChooseApToCopyErfkritsFrom = memo(
         }
 
         // 3. inform user
-        setOpenApToCopyErfkritsFrom(false)
+        setOpenChooseApToCopyErfkritsFrom(false)
         enqueNotification({
           message: `Die Erfolgskriterien wurden kopiert`,
           options: { variant: 'info' },
@@ -237,7 +237,7 @@ export const ChooseApToCopyErfkritsFrom = memo(
         apolloClient,
         enqueNotification,
         user.name,
-        setOpenApToCopyErfkritsFrom,
+        setOpenChooseApToCopyErfkritsFrom,
       ],
     )
 
