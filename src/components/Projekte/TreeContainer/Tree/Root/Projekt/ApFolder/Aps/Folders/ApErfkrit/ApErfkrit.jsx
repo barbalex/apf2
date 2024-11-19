@@ -1,54 +1,25 @@
 import { memo, useContext } from 'react'
-import { gql, useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
+import { createErfkritsQuery } from '../../../../../../../../../../modules/createErfkritsQuery.js'
 
 export const ApErfkrit = memo(
   observer(({ projekt, ap }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
+    const { erfkritGqlFilterForTree } = store.tree
 
-    const erfkritsFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.erfkrit) {
-      erfkritsFilter.label = {
-        includesInsensitive: nodeLabelFilter.erfkrit,
-      }
-    }
-
-    const { data } = useQuery({
-      queryKey: ['treeErfkrit', ap.id, erfkritsFilter],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeErfkritQuery(
-              $apId: UUID!
-              $erfkritsFilter: ErfkritFilter!
-            ) {
-              apById(id: $apId) {
-                id
-                erfkritsByApId(
-                  filter: $erfkritsFilter
-                  orderBy: AP_ERFKRIT_WERTE_BY_ERFOLG__SORT_ASC
-                ) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            apId: ap.id,
-            erfkritsFilter,
-          },
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createErfkritsQuery({
+        apId: ap.id,
+        erfkritGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     return (data?.data?.apById?.erfkritsByApId?.nodes ?? []).map((el) => {
       const node = {

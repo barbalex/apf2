@@ -1065,6 +1065,24 @@ export const Tree = types
 
       return gqlFilter
     },
+    get erfkritGqlFilterForTree() {
+      const gqlFilter = {}
+      // 1. hierarchy filter
+      const apId = self.apIdInActiveNodeArray
+      if (apId) {
+        gqlFilter.apId = { equalTo: apId }
+      }
+      // 2. node label filter
+      if (self.nodeLabelFilter.erfkrit) {
+        gqlFilter.label = {
+          includesInsensitive: self.nodeLabelFilter.erfkrit,
+        }
+      }
+
+      if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+      return gqlFilter
+    },
     get ekfrequenzGqlFilterForTree() {
       const gqlFilter = {}
       // 1. hierarchy filter
