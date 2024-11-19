@@ -23,19 +23,17 @@ export const ApZielFolder = memo(
       }),
     )
 
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ziel ?? ''
+    const isFiltered = !!(store.tree?.nodeLabelFilter?.ziel ?? '')
 
     const ziels = data?.data?.apById?.zielsByApId?.nodes ?? []
     const zieljahre = ziels
       // reduce to distinct years
       .reduce((a, el) => union(a, [el.jahr]), [])
       .sort((a, b) => a - b)
-    const zieljahreLength = zieljahre.length
     const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ?
-        `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'} gefiltert`
-      : `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'}`
+      isLoading ? '...' : (
+        `${zieljahre.length} ${zieljahre.length === 1 ? 'Jahr' : 'Jahre'}${isFiltered ? ' gefiltert' : ''}`
+      )
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Ziele']
 
@@ -56,10 +54,8 @@ export const ApZielFolder = memo(
       urlLabel: 'AP-Ziele',
       label: `AP-Ziele (${message})`,
       url,
-      hasChildren: zieljahreLength > 0,
+      hasChildren: zieljahre.length > 0,
     }
-
-    console.log('tree.ApZiel.index', { ziels, zieljahre, data: data?.data })
 
     return (
       <>

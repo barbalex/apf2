@@ -12,7 +12,7 @@ export const createZielsQuery = ({
         query TreeZielsQuery($apId: UUID!, $zielsFilter: ZielFilter!) {
           apById(id: $apId) {
             id
-            zielsByApId(filter: $zielsFilter, orderBy: LABEL_ASC) {
+            zielsByApId(filter: $zielsFilter, orderBy: [JAHR_ASC, LABEL_ASC]) {
               nodes {
                 id
                 label
