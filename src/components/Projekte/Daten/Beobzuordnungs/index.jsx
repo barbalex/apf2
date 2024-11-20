@@ -35,6 +35,11 @@ export const Component = memo(
       : type === 'nichtBeurteilt' ? 'beobNichtBeurteilt'
       : type === 'nichtZuzuordnen' ? 'beobNichtZuzuordnen'
       : 'beobNichtZuzuordnen'
+    const title =
+      type === 'zugeordnet' ? 'Beobachtungen zugeordnet'
+      : type === 'nichtBeurteilt' ? 'Beobachtungen nicht beurteilt'
+      : type === 'nichtZuzuordnen' ? 'Beobachtungen nicht zuzuordnen'
+      : 'Beobachtungen'
 
     const { data, isLoading, error } = useQuery(
       createBeobsQuery({
@@ -55,7 +60,7 @@ export const Component = memo(
     return (
       <List
         items={beobs}
-        title="Beobachtungen"
+        title={title}
         totalCount={totalCount}
         menuBar={<Menu apfloraLayer={apfloraLayer} />}
       />

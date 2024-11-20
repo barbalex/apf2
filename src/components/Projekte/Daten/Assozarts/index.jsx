@@ -36,7 +36,7 @@ export const Component = memo(
     return (
       <List
         items={assozarts}
-        title="Assonziierte Arten"
+        title="Assoziierte Arten"
         totalCount={totalCount}
         menuBar={<Menu />}
       />

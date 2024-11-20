@@ -49,7 +49,7 @@ export const Component = memo(
     return (
       <List
         items={zieljahreItems}
-        title="Ziel-Jahre"
+        title="AP-Ziele Jahre"
         totalCount={zieljahreItems.length}
         menuBar={<Menu />}
       />

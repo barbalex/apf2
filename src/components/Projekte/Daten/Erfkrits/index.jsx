@@ -36,7 +36,7 @@ export const Component = memo(
     return (
       <List
         items={erfkrits}
-        title="Erfolgs-Kriterien"
+        title="AP-Erfolgskriterien"
         totalCount={totalCount}
         menuBar={<Menu />}
       />
