@@ -1065,6 +1065,20 @@ export const Tree = types
 
       return gqlFilter
     },
+    get userGqlFilterForTree() {
+      const gqlFilter = {}
+      // 1. hierarchy filter: none
+      // 2. node label filter
+      if (self.nodeLabelFilter.user) {
+        gqlFilter.label = {
+          includesInsensitive: self.nodeLabelFilter.user,
+        }
+      }
+
+      if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+      return gqlFilter
+    },
     get apberuebersichtGqlFilterForTree() {
       const gqlFilter = {}
       // 1. hierarchy filter
