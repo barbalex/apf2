@@ -20,14 +20,14 @@ export const Router = () => {
           lazy={() => import('../Home/index.jsx')}
         />
         <Route
-          path="/Daten"
-          lazy={() => import('../Projekte/Daten/Root/index.jsx')}
-        />
-        <Route
           path="/Daten/*"
           lazy={() => import('./ProtectedRoute.jsx')}
         >
           {/* <Route path="*" element={<Unterhalt />}></Route> */}
+          <Route
+            index
+            lazy={() => import('../Projekte/Daten/Root/index.jsx')}
+          />
           <Route
             path="Projekte/:projId/EK-Planung"
             lazy={() => import('../EkPlan/index.jsx')}
