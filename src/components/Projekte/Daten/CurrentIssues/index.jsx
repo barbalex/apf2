@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 
-import { createCurrentissuesQuery } from '../../../../modules/createCurrentIssuesQueryy.js'
+import { createCurrentissuesQuery } from '../../../../modules/createCurrentissuesQuery.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
