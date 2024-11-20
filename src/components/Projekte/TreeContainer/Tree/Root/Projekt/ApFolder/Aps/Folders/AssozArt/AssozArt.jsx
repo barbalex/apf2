@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
-import { createAssozartsQuery } from '../../../../../../../../../../modules/createAssozartsQueryy.js'
+import { createAssozartsQuery } from '../../../../../../../../../../modules/createAssozartsQuery.js'
 
 export const AssozArt = memo(
   observer(({ projekt, ap }) => {
