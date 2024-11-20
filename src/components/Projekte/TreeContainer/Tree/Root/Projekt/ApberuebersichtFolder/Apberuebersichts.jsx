@@ -1,51 +1,26 @@
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient, gql } from '@apollo/client'
 import { useContext } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
+import { createApberuebersichtsQuery } from '../../../../../../../modules/createApberuebersichtsQuery.js'
 
 export const Apberuebersichts = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
+  const { projId } = useParams()
 
   const store = useContext(StoreContext)
-  const { nodeLabelFilter } = store.tree
+  const { apberuebersichtGqlFilterForTree } = store.tree
 
-  const apberuebersichtsFilter = {
-    projId: { in: ['e57f56f4-4376-11e8-ab21-4314b6749d13'] },
-  }
-  if (nodeLabelFilter.apberuebersicht) {
-    apberuebersichtsFilter.label = {
-      includesInsensitive: nodeLabelFilter.apberuebersicht,
-    }
-  }
-
-  const { data } = useQuery({
-    queryKey: ['treeApberuebersicht', apberuebersichtsFilter],
-    queryFn: () =>
-      client.query({
-        query: gql`
-          query TreeApberuebersichtsQuery(
-            $apberuebersichtsFilter: ApberuebersichtFilter!
-          ) {
-            allApberuebersichts(
-              filter: $apberuebersichtsFilter
-              orderBy: LABEL_ASC
-            ) {
-              nodes {
-                id
-                projId
-                label
-              }
-            }
-          }
-        `,
-        variables: {
-          apberuebersichtsFilter,
-        },
-        fetchPolicy: 'no-cache',
-      }),
-  })
+  const { data } = useQuery(
+    createApberuebersichtsQuery({
+      projId,
+      apberuebersichtGqlFilterForTree,
+      apolloClient,
+    }),
+  )
 
   return (data?.data?.allApberuebersichts?.nodes ?? []).map((el) => {
     const node = {

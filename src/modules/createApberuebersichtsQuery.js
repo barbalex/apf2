@@ -13,6 +13,7 @@ export const createApberuebersichtsQuery = ({
           allApberuebersichts(filter: $apberuebersichtsFilter, orderBy: LABEL_ASC) {
             nodes {
               id
+              projId
               label
             }
           }
