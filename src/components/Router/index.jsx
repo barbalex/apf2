@@ -462,6 +462,10 @@ export const Router = () => {
               </Route>
             </Route>
             <Route
+              path="Benutzer"
+              lazy={() => import('../Projekte/Daten/Users/index.jsx')}
+            />
+            <Route
               path="Benutzer/:userId/*"
               lazy={() => import('../Projekte/Daten/User/index.jsx')}
             />
