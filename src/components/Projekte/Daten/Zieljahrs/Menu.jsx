@@ -2,13 +2,16 @@ import { memo, useCallback, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import { FaPlus } from 'react-icons/fa6'
+import { FaPlus, FaFolderTree } from 'react-icons/fa6'
+import { RiFolderCloseFill } from 'react-icons/ri'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { StoreContext } from '../../../../storeContext.js'
+import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
+import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 
 const iconStyle = { color: 'white' }
 
@@ -17,7 +20,7 @@ export const Menu = memo(() => {
   const navigate = useNavigate()
   const client = useApolloClient()
   const tanstackQueryClient = useQueryClient()
-  const { apId } = useParams()
+  const { projId, apId } = useParams()
 
   const onClickAdd = useCallback(async () => {
     let result
@@ -53,6 +56,25 @@ export const Menu = memo(() => {
     navigate(`./1/${id}${search}`)
   }, [client, store, tanstackQueryClient, navigate, search, apId])
 
+  const onClickOpenLowerNodes = useCallback(() => {
+    openLowerNodes({
+      id: apId,
+      projId,
+      apId,
+      client,
+      store,
+      menuType: 'zielFolder',
+    })
+  }, [projId, apId, client, store])
+
+  const onClickCloseLowerNodes = useCallback(() => {
+    closeLowerNodes({
+      url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele'],
+      store,
+      search,
+    })
+  }, [projId, apId, store, search])
+
   return (
     <ErrorBoundary>
       <MenuBar
@@ -62,6 +84,16 @@ export const Menu = memo(() => {
         <Tooltip title="Neues Ziel erstellen">
           <IconButton onClick={onClickAdd}>
             <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Ordner im Navigationsbaum öffnen">
+          <IconButton onClick={onClickOpenLowerNodes}>
+            <FaFolderTree style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Ordner im Navigationsbaum schliessen">
+          <IconButton onClick={onClickCloseLowerNodes}>
+            <RiFolderCloseFill style={iconStyle} />
           </IconButton>
         </Tooltip>
       </MenuBar>
