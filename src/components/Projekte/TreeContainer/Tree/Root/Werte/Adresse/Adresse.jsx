@@ -4,38 +4,20 @@ import { useQueryClient, useQuery } from '@tanstack/react-query'
 
 import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
+import { createAdressesQuery } from '../../../../../../../modules/createAdressesQuery.js'
 
 export const Adresse = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const tanstackClient = useQueryClient()
   const store = useContext(StoreContext)
-  const { nodeLabelFilter } = store.tree
+  const { adresseGqlFilterForTree } = store.tree
 
-  const adressesFilter =
-    nodeLabelFilter.adresse ?
-      { label: { includesInsensitive: nodeLabelFilter.adresse } }
-    : { id: { isNull: false } }
-
-  const { data } = useQuery({
-    queryKey: ['treeAdresse', adressesFilter],
-    queryFn: async () =>
-      client.query({
-        query: gql`
-          query TreeAdressesQuery($adressesFilter: AdresseFilter!) {
-            allAdresses(filter: $adressesFilter, orderBy: LABEL_ASC) {
-              nodes {
-                id
-                label
-              }
-            }
-          }
-        `,
-        variables: {
-          adressesFilter,
-        },
-        fetchPolicy: 'no-cache',
-      }),
-  })
+  const { data } = useQuery(
+    createAdressesQuery({
+      adresseGqlFilterForTree,
+      apolloClient,
+    }),
+  )
 
   return (data?.data?.allAdresses?.nodes ?? []).map((el) => {
     const node = {
