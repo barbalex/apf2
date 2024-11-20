@@ -4,49 +4,20 @@ import { gql, useApolloClient } from '@apollo/client'
 
 import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
+import { createTpopApberrelevantGrundWertesQuery } from '../../../../../../../modules/createTpopApberrelevantGrundWertesQuery.js'
 
 export const ApberrelevantGrund = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const store = useContext(StoreContext)
-  const { nodeLabelFilter } = store.tree
+  const { tpopApberrelevantGrundWerteGqlFilterForTree } = store.tree
 
-  const apberrelevantGrundWertesFilter =
-    nodeLabelFilter.tpopApberrelevantGrundWerte ?
-      {
-        label: {
-          includesInsensitive: nodeLabelFilter.tpopApberrelevantGrundWerte,
-        },
-      }
-    : { id: { isNull: false } }
+  const { data } = useQuery(
+    createTpopApberrelevantGrundWertesQuery({
+      tpopApberrelevantGrundWerteGqlFilterForTree,
+      apolloClient,
+    }),
+  )
 
-  const { data } = useQuery({
-    queryKey: [
-      'treeTpopApberrelevantGrundWerte',
-      apberrelevantGrundWertesFilter,
-    ],
-    queryFn: async () =>
-      client.query({
-        query: gql`
-          query TreeApberrelevantGrundWerteQuery(
-            $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
-          ) {
-            allTpopApberrelevantGrundWertes(
-              filter: $apberrelevantGrundWertesFilter
-              orderBy: SORT_ASC
-            ) {
-              nodes {
-                id
-                label
-              }
-            }
-          }
-        `,
-        variables: {
-          apberrelevantGrundWertesFilter,
-        },
-        fetchPolicy: 'no-cache',
-      }),
-  })
   const nodes = (data?.data?.allTpopApberrelevantGrundWertes?.nodes ?? []).map(
     (el) => ({
       nodeType: 'table',

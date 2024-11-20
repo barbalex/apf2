@@ -1065,6 +1065,47 @@ export const Tree = types
 
       return gqlFilter
     },
+    get tpopkontrzaehlEinheitWerteGqlFilterForTree() {
+      const gqlFilter = {}
+      // 1. hierarchy filter: none
+      // 2. node label filter
+      if (self.nodeLabelFilter.tpopkontrzaehlEinheitWerte) {
+        gqlFilter.label = {
+          includesInsensitive: self.nodeLabelFilter.tpopkontrzaehlEinheitWerte,
+        }
+      }
+
+      if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+      return gqlFilter
+    },
+    get ekAbrechnungstypWerteGqlFilterForTree() {
+      const gqlFilter = {}
+      // 1. hierarchy filter: none
+      // 2. node label filter
+      if (self.nodeLabelFilter.ekAbrechnungstypWerte) {
+        gqlFilter.label = {
+          includesInsensitive: self.nodeLabelFilter.ekAbrechnungstypWerte,
+        }
+      }
+
+      if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+      return gqlFilter
+    },
+    get tpopApberrelevantGrundWerteGqlFilterForTree() {
+      // include a condition that ensures a filter is always set
+      const gqlFilter = { id: { isNull: false } }
+      // 1. hierarchy filter: none
+      // 2. node label filter
+      if (self.nodeLabelFilter.tpopApberrelevantGrundWerte) {
+        gqlFilter.label = {
+          includesInsensitive: self.nodeLabelFilter.tpopApberrelevantGrundWerte,
+        }
+      }
+
+      return gqlFilter
+    },
     get adresseGqlFilterForTree() {
       const gqlFilter = {}
       // 1. hierarchy filter: none
