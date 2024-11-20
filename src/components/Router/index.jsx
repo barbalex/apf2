@@ -41,6 +41,10 @@ export const Router = () => {
             lazy={() => import('../Ekf/index.jsx')}
           />
           <Route
+            path="Projekte"
+            lazy={() => import('../Projekte/Daten/Projects/index.jsx')}
+          />
+          <Route
             path="*"
             lazy={() => import('../Projekte/index.jsx')}
           >

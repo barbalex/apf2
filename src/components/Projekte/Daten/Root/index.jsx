@@ -11,11 +11,11 @@ export const Component = memo(() => {
   const apolloClient = useApolloClient()
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['treeWertes'],
+    queryKey: ['treeRoot'],
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query TreeWertesQuery {
+          query TreeRootQuery {
             allUsers {
               totalCount
             }
@@ -39,7 +39,7 @@ export const Component = memo(() => {
     () => [
       {
         id: 'Projekte',
-        label: `AP Flora Kt. Zürich`,
+        label: `Projekte`,
       },
       {
         id: 'Benutzer',
