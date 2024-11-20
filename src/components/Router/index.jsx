@@ -25,10 +25,6 @@ export const Router = () => {
         >
           {/* <Route path="*" element={<Unterhalt />}></Route> */}
           <Route
-            index
-            lazy={() => import('../Projekte/Daten/Root/index.jsx')}
-          />
-          <Route
             path="Projekte/:projId/EK-Planung"
             lazy={() => import('../EkPlan/index.jsx')}
           />
@@ -41,13 +37,17 @@ export const Router = () => {
             lazy={() => import('../Ekf/index.jsx')}
           />
           <Route
-            path="Projekte"
-            lazy={() => import('../Projekte/Daten/Projects/index.jsx')}
-          />
-          <Route
             path="*"
             lazy={() => import('../Projekte/index.jsx')}
           >
+            <Route
+              index
+              lazy={() => import('../Projekte/Daten/Root/index.jsx')}
+            />
+            <Route
+              path="Projekte"
+              lazy={() => import('../Projekte/Daten/Projects/index.jsx')}
+            />
             <Route
               path="Werte-Listen"
               lazy={() => import('../Projekte/Daten/Wertes/index.jsx')}
