@@ -71,6 +71,14 @@ export const Router = () => {
               lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
             />
             <Route
+              path="Werte-Listen/TpopkontrzaehlEinheitWerte"
+              lazy={() =>
+                import(
+                  '../Projekte/Daten/TpopkontrzaehlEinheitWertes/index.jsx'
+                )
+              }
+            />
+            <Route
               path="Werte-Listen/TpopkontrzaehlEinheitWerte/:wertId"
               lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
             />

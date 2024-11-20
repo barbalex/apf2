@@ -4,49 +4,19 @@ import { gql, useApolloClient } from '@apollo/client'
 
 import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
+import { createTpopkontrzaehlEinheitWertesQuery } from '../../../../../../../modules/createTpopkontrzaehlEinheitWertesQuery.js'
 
 export const ZaehlEinheit = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const store = useContext(StoreContext)
-  const { nodeLabelFilter } = store.tree
+  const { tpopkontrzaehlEinheitWerteGqlFilterForTree } = store.tree
 
-  const tpopkontrzaehlEinheitWertesFilter =
-    nodeLabelFilter.tpopkontrzaehlEinheitWerte ?
-      {
-        label: {
-          includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
-        },
-      }
-    : { id: { isNull: false } }
-
-  const { data } = useQuery({
-    queryKey: [
-      'treeTpopkontrzaehlEinheitWerte',
-      tpopkontrzaehlEinheitWertesFilter,
-    ],
-    queryFn: async () =>
-      client.query({
-        query: gql`
-          query TreeTpopkontrzaehlEinheitWertesQuery(
-            $tpopkontrzaehlEinheitWertesFilter: TpopkontrzaehlEinheitWerteFilter!
-          ) {
-            allTpopkontrzaehlEinheitWertes(
-              filter: $tpopkontrzaehlEinheitWertesFilter
-              orderBy: SORT_ASC
-            ) {
-              nodes {
-                id
-                label
-              }
-            }
-          }
-        `,
-        variables: {
-          tpopkontrzaehlEinheitWertesFilter,
-        },
-        fetchPolicy: 'no-cache',
-      }),
-  })
+  const { data } = useQuery(
+    createTpopkontrzaehlEinheitWertesQuery({
+      tpopkontrzaehlEinheitWerteGqlFilterForTree,
+      apolloClient,
+    }),
+  )
 
   return (data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map((el) => {
     const node = {
