@@ -24,9 +24,9 @@ export const Menu = memo(() => {
     try {
       result = await client.mutate({
         mutation: gql`
-          mutation createApberForApberForm($apId: UUID!) {
-            createApber(input: { apber: { apId: $apId } }) {
-              apber {
+          mutation createZielForZielForm($apId: UUID!) {
+            createZiel(input: { ziel: { apId: $apId, jahr: 1 } }) {
+              ziel {
                 id
                 apId
               }
@@ -44,13 +44,13 @@ export const Menu = memo(() => {
       })
     }
     tanstackQueryClient.invalidateQueries({
-      queryKey: [`treeApber`],
+      queryKey: [`treeZiel`],
     })
     tanstackQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    const id = result?.data?.createApber?.apber?.id
-    navigate(`./${id}${search}`)
+    const id = result?.data?.createZiel?.ziel?.id
+    navigate(`./1/${id}${search}`)
   }, [client, store, tanstackQueryClient, navigate, search, apId])
 
   return (
@@ -59,7 +59,7 @@ export const Menu = memo(() => {
         bgColor="#388e3c"
         color="white"
       >
-        <Tooltip title="Neuen AP-Bericht erstellen">
+        <Tooltip title="Neues Ziel erstellen">
           <IconButton onClick={onClickAdd}>
             <FaPlus style={iconStyle} />
           </IconButton>

@@ -1080,15 +1080,6 @@ export const Tree = types
         if (!isNaN(self.nodeLabelFilter.ziel)) {
           gqlFilter.or.push({ jahr: { equalTo: +self.nodeLabelFilter.ziel } })
         }
-        // gqlFilter.jahr = { equalTo: +self.nodeLabelFilter.ziel }
-        // gqlFilter.label = {
-        //   includesInsensitive: self.nodeLabelFilter.ziel,
-        // }
-        console.log('store.zielGqlFilterForTree', {
-          nodeLabelFilterZiel: self.nodeLabelFilter.ziel,
-          jahrValue: +self.nodeLabelFilter.ziel,
-          gqlFilter,
-        })
       }
 
       if (Object.keys(gqlFilter).length === 0) return { or: [] }
