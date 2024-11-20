@@ -1065,6 +1065,22 @@ export const Tree = types
 
       return gqlFilter
     },
+    get zielberGqlFilterForTree() {
+      const gqlFilter = {}
+      // 1. hierarchy filter
+      const zielId = self.zielIdInActiveNodeArray
+      if (zielId) {
+        gqlFilter.zielId = { equalTo: zielId }
+      }
+      // 2. node label filter
+      if (self.nodeLabelFilter.zielber) {
+        gqlFilter.label = { includesInsensitive: self.nodeLabelFilter.zielber }
+      }
+
+      if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+      return gqlFilter
+    },
     get zielGqlFilterForTree() {
       const gqlFilter = {}
       // 1. hierarchy filter

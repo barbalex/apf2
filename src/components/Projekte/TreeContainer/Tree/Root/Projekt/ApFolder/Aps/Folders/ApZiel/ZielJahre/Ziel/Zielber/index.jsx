@@ -6,57 +6,29 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
 import { Zielber } from './Zielber.jsx'
+import { createZielbersQuery } from '../../../../../../../../../../../../../modules/createZielbersQuery.js'
 
 export const ZielberFolder = memo(
   observer(({ projekt, ap, jahr, ziel }) => {
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
-    const client = useApolloClient()
+    const { zielberGqlFilterForTree, nodeLabelFilter } = store.tree
+    const apolloClient = useApolloClient()
 
-    const zielbersFilter = { zielId: { equalTo: ziel.id } }
-    if (nodeLabelFilter.zielber) {
-      zielbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.zielber,
-      }
-    }
+    const { data, isLoading } = useQuery(
+      createZielbersQuery({
+        zielId: ziel.id,
+        zielberGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
-    const { data, isLoading } = useQuery({
-      queryKey: ['treeZielber', ziel.id, zielbersFilter],
-      queryFn: async () => {
-        const { data, loading: isLoading } = await client.query({
-          query: gql`
-            query TreeApzielberFolderQuery(
-              $id: UUID!
-              $zielbersFilter: ZielberFilter!
-            ) {
-              zielById(id: $id) {
-                id
-                zielbersByZielId(filter: $zielbersFilter, orderBy: LABEL_ASC) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            id: ziel.id,
-            zielbersFilter,
-          },
-          fetchPolicy: 'no-cache',
-        })
-        return { data, isLoading }
-      },
-    })
-
-    const nodeLabelFilterString = nodeLabelFilter?.zielber ?? ''
+    const isFiltered = !!nodeLabelFilter?.zielber
     const zielbers = data?.data?.zielById?.zielbersByZielId?.nodes ?? []
     const zielbersLength = zielbers.length
 
     const message =
       isLoading ? '...'
-      : nodeLabelFilterString ? `${zielbersLength} gefiltert`
+      : isFiltered ? `${zielbersLength} gefiltert`
       : zielbersLength
 
     const url = [
