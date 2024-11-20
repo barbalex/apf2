@@ -464,11 +464,11 @@ export const Router = () => {
                   lazy={() => import('../shared/Files/Preview/index.jsx')}
                 />
               </Route>
-              <Route
-                path="Zaehlungen"
-                lazy={() => import('../Projekte/Daten/Tpopfeldkontr/index.jsx')}
-              />
             </Route>
+            <Route
+              path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Feld-Kontrollen/:tpopkontrId/Zaehlungen"
+              lazy={() => import('../Projekte/Daten/Tpopkontrzaehls/index.jsx')}
+            />
             <Route
               path="Projekte/:projId/Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Feld-Kontrollen/:tpopkontrId/Zaehlungen/:tpopkontrzaehlId/*"
               lazy={() => import('../Projekte/Daten/Tpopkontrzaehl/index.jsx')}

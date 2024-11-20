@@ -5,54 +5,21 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../../../storeContext.js'
+import { createTpopkontrzaehlsQuery } from '../../../../../../../../../../../../../../../../../../modules/createTpopkontrzaehlsQuery.js'
 
 export const Zaehl = memo(
   observer(({ projekt, ap, pop, tpop, tpopkontr }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
+    const { tpopkontrzaehlGqlFilterForTree } = store.tree
 
-    const tpopkontrzaehlsFilter = {
-      tpopkontrId: { equalTo: tpopkontr.id },
-    }
-    if (nodeLabelFilter.tpopkontrzaehl) {
-      tpopkontrzaehlsFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
-      }
-    }
-
-    const { data } = useQuery({
-      queryKey: ['treeTpopfeldkontrzaehl', tpopkontr.id, tpopkontrzaehlsFilter],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeTpopfeldkontrzaehlQuery(
-              $id: UUID!
-              $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
-            ) {
-              tpopkontrById(id: $id) {
-                id
-                tpopkontrzaehlsByTpopkontrId(
-                  filter: $tpopkontrzaehlsFilter
-                  orderBy: LABEL_ASC
-                ) {
-                  nodes {
-                    id
-                    label
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            id: tpopkontr.id,
-            tpopkontrzaehlsFilter,
-          },
-          // without 'network-only' or using tanstack,
-          // ui does not update when inserting and deleting
-          fetchPolicy: 'no-cache',
-        }),
-    })
+    const { data } = useQuery(
+      createTpopkontrzaehlsQuery({
+        tpopkontrId: tpopkontr.id,
+        tpopkontrzaehlGqlFilterForTree,
+        apolloClient,
+      }),
+    )
 
     return (
       data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []

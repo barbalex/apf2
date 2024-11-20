@@ -1333,6 +1333,24 @@ export const Tree = types
 
       return gqlFilter
     },
+    get tpopkontrzaehlGqlFilterForTree() {
+      const gqlFilter = {}
+      // 1. hierarchy filter
+      const tpopkontrId = self.tpopkontrIdInActiveNodeArray
+      if (tpopkontrId) {
+        gqlFilter.tpopkontrId = { equalTo: tpopkontrId }
+      }
+      // 2. node label filter
+      if (self.nodeLabelFilter.tpopkontrzaehl) {
+        gqlFilter.label = {
+          includesInsensitive: self.nodeLabelFilter.tpopkontrzaehl,
+        }
+      }
+
+      if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+      return gqlFilter
+    },
     get tpopberGqlFilterForTree() {
       const gqlFilter = {}
       // 1. hierarchy filter
