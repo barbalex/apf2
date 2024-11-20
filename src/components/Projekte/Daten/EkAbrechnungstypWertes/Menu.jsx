@@ -28,18 +28,16 @@ export const Menu = memo(() => {
   const navigate = useNavigate()
   const client = useApolloClient()
   const tanstackQueryClient = useQueryClient()
-  const { projId, tpopApberrelevantGrundWerteId } = useParams()
+  const { projId, ekAbrechnungstypWerteId } = useParams()
 
   const onClickAdd = useCallback(async () => {
     let result
     try {
       result = await client.mutate({
         mutation: gql`
-          mutation createTpopApberrelevantGrundWerteForTpopApberrelevantGrundWerteForm {
-            createTpopApberrelevantGrundWerte(
-              input: { tpopApberrelevantGrundWerte: {} }
-            ) {
-              tpopApberrelevantGrundWerte {
+          mutation createEkAbrechnungstypWerteForEkAbrechnungstypWerteForm {
+            createEkAbrechnungstypWerte(input: { ekAbrechnungstypWerte: {} }) {
+              ekAbrechnungstypWerte {
                 id
               }
             }
@@ -55,14 +53,13 @@ export const Menu = memo(() => {
       })
     }
     tanstackQueryClient.invalidateQueries({
-      queryKey: [`treeTpopApberrelevantGrundWerte`],
+      queryKey: [`treeEkAbrechnungstypWerte`],
     })
     tanstackQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     const id =
-      result?.data?.createTpopApberrelevantGrundWerte
-        ?.tpopApberrelevantGrundWerte?.id
+      result?.data?.createEkAbrechnungstypWerte?.ekAbrechnungstypWerte?.id
     navigate(`./${id}${search}`)
   }, [client, store, tanstackQueryClient, navigate, search])
 
@@ -72,7 +69,7 @@ export const Menu = memo(() => {
         bgColor="#388e3c"
         color="white"
       >
-        <Tooltip title="Neuen Grund erstellen">
+        <Tooltip title="Neuen Abrechnungstyp erstellen">
           <IconButton onClick={onClickAdd}>
             <FaPlus style={iconStyle} />
           </IconButton>

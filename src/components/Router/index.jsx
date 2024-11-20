@@ -61,6 +61,12 @@ export const Router = () => {
               lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
             />
             <Route
+              path="Werte-Listen/EkAbrechnungstypWerte"
+              lazy={() =>
+                import('../Projekte/Daten/EkAbrechnungstypWertes/index.jsx')
+              }
+            />
+            <Route
               path="Werte-Listen/EkAbrechnungstypWerte/:wertId"
               lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
             />
