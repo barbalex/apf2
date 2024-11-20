@@ -23,7 +23,6 @@ export const Component = memo(
         zielId,
         zielberGqlFilterForTree,
         apolloClient,
-        jahr,
       }),
     )
     const zielbers = data?.data?.zielById?.zielbersByZielId?.nodes ?? []
@@ -36,7 +35,7 @@ export const Component = memo(
     return (
       <List
         items={zielbers}
-        title={`Zielbere für das Jahr ${jahr}`}
+        title="Zielberichte"
         totalCount={totalCount}
         menuBar={<Menu />}
       />

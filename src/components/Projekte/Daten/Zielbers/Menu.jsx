@@ -59,7 +59,7 @@ export const Menu = memo(() => {
         bgColor="#388e3c"
         color="white"
       >
-        <Tooltip title="Neues Zielber erstellen">
+        <Tooltip title="Neuen Zielbericht erstellen">
           <IconButton onClick={onClickAdd}>
             <FaPlus style={iconStyle} />
           </IconButton>
