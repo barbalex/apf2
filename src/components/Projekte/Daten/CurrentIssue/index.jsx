@@ -57,7 +57,7 @@ export const Component = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Aktueller Fehler" />
+        <FormTitle title={row.title} />
         <FieldsContainer>
           <Content
             dangerouslySetInnerHTML={{
