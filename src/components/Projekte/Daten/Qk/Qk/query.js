@@ -1497,9 +1497,8 @@ export const query = gql`
                     some: { typ: { equalTo: 1 } }
                     none: { typ: { in: [2, 3] } }
                   }
-                  tpopkontrsByTpopId: {
-                    none: { tpopkontrzaehlsByTpopkontrIdExist: true }
-                  }
+                  tpopkontrsByTpopIdExist: false
+                  beobsByTpopIdExist: false
                 }
                 orderBy: NR_ASC
               ) {
