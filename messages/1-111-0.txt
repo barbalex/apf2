@@ -1,1 +1,1 @@
-Ab Version 1.110.0: Neue Qualitätskontrolle, listet Teil-Populationen auf, die jünger deklariert sind (bekannt seit) als die erste Massnahme. Es sollte nicht vorkommen, dass Massnahmen durchgeführt wurden, bevor die Teil-Populationen bekannt war
+Ab Version 1.111.0: Neue Qualitätskontrolle, listet Teil-Populationen auf, die jünger deklariert sind (bekannt seit) als die erste Massnahme. Es sollte nicht vorkommen, dass Massnahmen durchgeführt wurden, bevor die Teil-Populationen bekannt war
