@@ -1,6 +1,7 @@
 import { memo, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import styled from '@emotion/styled'
+import Highlighter from 'react-highlight-words'
 
 import { FormTitle } from '../FormTitle/index.jsx'
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
@@ -36,33 +37,44 @@ const Row = styled.div`
   }
 `
 
-export const List = memo(({ items, title, totalCount, menuBar = null }) => {
-  const navigate = useNavigate()
-  const { search } = useLocation()
+export const List = memo(
+  ({ items, title, totalCount, menuBar = null, highlightSearchString }) => {
+    const navigate = useNavigate()
+    const { search } = useLocation()
 
-  const onClickRow = useCallback(
-    (item) => navigate(`./${item.id}${search}`),
-    [navigate, search],
-  )
+    const onClickRow = useCallback(
+      (item) => navigate(`./${item.id}${search}`),
+      [navigate, search],
+    )
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle
-          title={`${title} (${items.length}/${totalCount ?? items.length})`}
-          menuBar={menuBar}
-        />
-        <ListContainer>
-          {items.map((item) => (
-            <Row
-              key={item.id}
-              onClick={onClickRow.bind(this, item)}
-            >
-              {item.label ?? item.labelEkf ?? item.labelEk}
-            </Row>
-          ))}
-        </ListContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-})
+    return (
+      <ErrorBoundary>
+        <Container>
+          <FormTitle
+            title={`${title} (${items.length}/${totalCount ?? items.length})`}
+            menuBar={menuBar}
+          />
+          <ListContainer>
+            {items.map((item) => {
+              const label = item.label ?? item.labelEkf ?? item.labelEk
+
+              return (
+                <Row
+                  key={item.id}
+                  onClick={onClickRow.bind(this, item)}
+                >
+                  {highlightSearchString ?
+                    <Highlighter
+                      searchWords={[highlightSearchString]}
+                      textToHighlight={label}
+                    />
+                  : label}
+                </Row>
+              )
+            })}
+          </ListContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  },
+)
