@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { memo, useCallback, useContext, useMemo } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -10,8 +10,9 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
-import { MenuBar } from '../../../shared/MenuBar/index.jsx'
+import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { moveTo } from '../../../../modules/moveTo/index.js'
@@ -19,6 +20,7 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { LabelFilter } from '../../../shared/LabelFilter.jsx'
 import { StoreContext } from '../../../../storeContext.js'
+import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 
 const Fitter = styled.div`
   margin-top: -15px;
@@ -72,11 +74,24 @@ export const Menu = memo(() => {
     navigate(`./${id}${search}`)
   }, [projId, client, store, tanstackQueryClient, navigate, search])
 
+  const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
+  // TODO: pass widths if nodeLabelFilter.apberuebersichts is active
+  // LabelFilter is 192px wide
+  const widths = useMemo(
+    () =>
+      !labelFilterIsIcon ? [192, buttonWidth] : [buttonWidth, buttonWidth],
+    [labelFilterIsIcon],
+  )
+
+  console.log('Apberuebersichts.Menu, widths:', widths)
+  console.log('Apberuebersichts.Menu, labelFilterIsIcon:', labelFilterIsIcon)
+
   return (
     <ErrorBoundary>
       <MenuBar
         bgColor="#388e3c"
         color="white"
+        widhts={widths}
       >
         <LabelFilter />
         <Tooltip title="Neuen AP-Bericht erstellen">

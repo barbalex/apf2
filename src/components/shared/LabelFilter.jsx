@@ -13,9 +13,10 @@ import Tooltip from '@mui/material/Tooltip'
 import { MdSearch } from 'react-icons/md'
 import { FaTimes } from 'react-icons/fa'
 import styled from '@emotion/styled'
+import { useAtom } from 'jotai'
 
 import { StoreContext } from '../../storeContext.js'
-import { set } from 'lodash'
+import { listLabelFilterIsIconAtom } from '../../JotaiStore/index.js'
 
 const Wrapper = styled.div`
   position: relative;
@@ -26,6 +27,8 @@ const Input = styled.input`
   border-radius: 2px;
   height: 24px;
   padding: 0 25px 0 5px;
+  width: 162px;
+  max-width: 162px;
   &:focus-visible {
     outline: 3px solid rgb(46, 125, 50);
   }
@@ -49,7 +52,8 @@ export const LabelFilter = memo(
 
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     const [value, setValue] = useState(filterValue)
-    const [isIcon, setIsIcon] = useState(!isFiltered && value === '')
+
+    const [isIcon, setIsIcon] = useAtom(listLabelFilterIsIconAtom)
     useEffect(() => {
       setValue(filterValue)
       setIsIcon(!isFiltered && filterValue === '')
@@ -126,10 +130,10 @@ export const LabelFilter = memo(
           ref={inputRef}
         />
         <InputIcon>
-          <Tooltip title="löschen">
+          <Tooltip title="Filter entfernen">
             <IconButton
               size="small"
-              aria-label="löschen"
+              aria-label="Filter entfernen"
               onClick={onClickEmpty}
             >
               <FaTimes />
