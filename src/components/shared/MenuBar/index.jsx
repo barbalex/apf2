@@ -215,7 +215,6 @@ export const MenuBar = memo(
                   <FaBars style={iconStyle} />
                 </IconButton>
               </Tooltip>
-
               <StyledMenu
                 id="menubutton"
                 anchorEl={menuAnchorEl}
