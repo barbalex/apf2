@@ -21,7 +21,13 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 const TabContent = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
   fieldset {
     padding-right: 30px;
   }
@@ -75,13 +81,11 @@ export const Component = () => {
             data-id="waehlen"
           />
         </Tabs>
-        <div style={{ overflowY: 'auto' }}>
-          <TabContent>
-            <Suspense fallback={<Spinner />}>
-              <Outlet />
-            </Suspense>
-          </TabContent>
-        </div>
+        <TabContent>
+          <Suspense fallback={<Spinner />}>
+            <Outlet />
+          </Suspense>
+        </TabContent>
       </Container>
     </ErrorBoundary>
   )
