@@ -73,7 +73,7 @@ export const Menu = memo(() => {
         bgColor="#388e3c"
         color="white"
       >
-        <LabelFilter nodeLabelName="apberuebersicht" />
+        <LabelFilter />
         <Tooltip title="Neuen AP-Bericht erstellen">
           <IconButton onClick={onClickAdd}>
             <FaPlus style={iconStyle} />
