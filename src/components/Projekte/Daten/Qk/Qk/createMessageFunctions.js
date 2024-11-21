@@ -980,6 +980,22 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
         n.nr || n.id
       }`,
     })),
+  tpopErsteMassnVorBekanntSeit: () =>
+    (data?.tpopErsteMassnVorBekanntSeit?.nodes ?? []).map((n) => ({
+      url: [
+        'Projekte',
+        n.projId,
+        'Arten',
+        n.apId,
+        'Populationen',
+        n.popId,
+        'Teil-Populationen',
+        n.id,
+      ],
+      text: `Population: ${n.popNr || n.popId}, Teil-Population: ${
+        n.nr || n.id
+      } (${n.bemerkung})`,
+    })),
   tpopMitAktuellenKontrollenOhneZielrelevanteEinheit: () =>
     (data?.tpopMitAktuellenKontrollenOhneZielrelevanteEinheit?.nodes ?? []).map(
       (n) => ({

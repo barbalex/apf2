@@ -70,6 +70,7 @@ export const query = gql`
     $tpopErloschenUndRelevantLetzteBeobVor1950: Boolean!
     $tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl: Boolean!
     $tpopMitStatusPotentiellUndAnsiedlung: Boolean!
+    $tpopErsteMassnVorBekanntSeit: Boolean!
     $tpopMitAktuellenKontrollenOhneZielrelevanteEinheit: Boolean!
     $tpopMitAktuellenAnpflanzungenOhneZielrelevanteEinheit: Boolean!
     $tpopMitStatusPotentiellUndZaehlungMitAnzahl: Boolean!
@@ -1441,6 +1442,19 @@ export const query = gql`
         popNr
         id
         nr
+      }
+    }
+    tpopErsteMassnVorBekanntSeit: allVQTpopErsteMassnVorBekanntSeits(
+      filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+    ) @include(if: $tpopErsteMassnVorBekanntSeit) {
+      nodes {
+        projId
+        apId
+        popId
+        popNr
+        id
+        nr
+        bemerkung
       }
     }
     tpopMitAktuellenKontrollenOhneZielrelevanteEinheit: allVQTpopMitAktuellenKontrollenOhneZielrelevanteEinheits(
