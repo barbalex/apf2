@@ -1,8 +1,13 @@
 import { memo, useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
+import { MdSearch } from 'react-icons/md'
 
 import { StoreContext } from '../../storeContext.js'
+
+const iconStyle = { color: 'white' }
 
 export const LabelFilter = memo(
   observer(() => {
@@ -55,10 +60,23 @@ export const LabelFilter = memo(
 
     // if isIcon, show search icon
     if (isIcon) {
-      return null
+      return (
+        <Tooltip title="Filtern">
+          <IconButton
+            aria-label="Filtern"
+            onClick={() => {
+              setValue('')
+              setNodeLabelFilterAfterChange('')
+              setIsIcon(false)
+            }}
+          >
+            <MdSearch style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+      )
     }
 
     // show search input
-    return null
+    return <span>Filtern</span>
   }),
 )
