@@ -61,6 +61,7 @@ const StylingContainer = styled.div`
 // remove the margin mui adds to top and bottom of menu
 const StyledMenu = styled(Menu)`
   background-color: ${(props) => props.bgColor};
+  overflow: hidden;
   ul {
     padding: 0 !important;
   }
@@ -195,6 +196,8 @@ export const MenuBar = memo(
     const onCloseMenu = useCallback(() => setMenuAnchorEl(null), [])
     const [menuAnchorEl, setMenuAnchorEl] = useState(null)
     const menuIsOpen = Boolean(menuAnchorEl)
+
+    console.log('MenuBar', { buttons, menus, widths })
 
     return (
       <MeasuredOuterContainer

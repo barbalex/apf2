@@ -19,7 +19,9 @@ import { StoreContext } from '../../storeContext.js'
 import { listLabelFilterIsIconAtom } from '../../JotaiStore/index.js'
 
 const Wrapper = styled.div`
+  display: block;
   position: relative;
+  overflow: hidden;
 `
 const Input = styled.input`
   outline: none;
@@ -56,14 +58,13 @@ export const LabelFilter = memo(
     const [isIcon, setIsIcon] = useAtom(listLabelFilterIsIconAtom)
     useEffect(() => {
       setValue(filterValue)
-      setIsIcon(!isFiltered && filterValue === '')
     }, [filterValue])
 
     const onBlurInput = useCallback(() => {
       if (value === '') {
         setIsIcon(true)
       }
-    }, [value])
+    }, [value, setIsIcon])
 
     const inputRef = useRef(null)
 
@@ -94,6 +95,7 @@ export const LabelFilter = memo(
     const onClickEmpty = useCallback(() => {
       setValue('')
       setNodeLabelFilterAfterChange('')
+      setIsIcon(true)
     }, [setNodeLabelFilterAfterChange])
 
     // if no activeFilterTable, show nothing
