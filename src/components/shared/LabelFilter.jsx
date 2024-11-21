@@ -77,6 +77,14 @@ export const LabelFilter = memo(
     }
 
     // show search input
-    return <span>Filtern</span>
+    return (
+      <span
+        onClick={() => {
+          setIsIcon(true)
+        }}
+      >
+        Filtern
+      </span>
+    )
   }),
 )
