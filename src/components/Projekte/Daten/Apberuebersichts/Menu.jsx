@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -9,6 +9,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
+import { observer } from 'mobx-react-lite'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -17,6 +18,7 @@ import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { LabelFilter } from '../../../shared/LabelFilter.jsx'
+import { StoreContext } from '../../../../storeContext.js'
 
 const Fitter = styled.div`
   margin-top: -15px;
@@ -30,6 +32,9 @@ export const Menu = memo(() => {
   const client = useApolloClient()
   const tanstackQueryClient = useQueryClient()
   const { projId, apberuebersichtId } = useParams()
+
+  const store = useContext(StoreContext)
+  const { nodeLabelFilter, activeFilterTable } = store.tree
 
   const onClickAdd = useCallback(async () => {
     let result
@@ -72,6 +77,7 @@ export const Menu = memo(() => {
       <MenuBar
         bgColor="#388e3c"
         color="white"
+        // rerenderer={`${nodeLabelFilter?.[activeFilterTable]}`}
       >
         <LabelFilter />
         <Tooltip title="Neuen AP-Bericht erstellen">

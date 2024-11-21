@@ -46,13 +46,15 @@ export const LabelFilter = memo(
       [setNodeLabelFilterDebounced],
     )
 
-    const [isIcon, setIsIcon] = useState(filterValue !== '')
+    const [isIcon, setIsIcon] = useState(!isFiltered && value === '')
 
     console.log('LabelFilter', {
       filterValue,
       activeFilterTable,
       nodeLabelFilter: nodeLabelFilter?.toJSON(),
       isFiltered,
+      value,
+      isIcon,
     })
 
     // if no activeFilterTable, show nothing
@@ -83,7 +85,7 @@ export const LabelFilter = memo(
           setIsIcon(true)
         }}
       >
-        Filtern
+        {value !== '' ? value : 'Filtern'}
       </span>
     )
   }),
