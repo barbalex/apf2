@@ -11,20 +11,30 @@ import { useDebouncedCallback } from 'use-debounce'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { MdSearch } from 'react-icons/md'
+import { FaTimes } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
 import { StoreContext } from '../../storeContext.js'
 import { set } from 'lodash'
 
+const Wrapper = styled.div`
+  position: relative;
+`
 const Input = styled.input`
   outline: none;
   border: none;
   border-radius: 2px;
   height: 24px;
-  padding: 0 5px;
+  padding: 0 25px 0 5px;
   &:focus-visible {
     outline: 3px solid rgb(46, 125, 50);
   }
+`
+const InputIcon = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
 `
 const iconStyle = { color: 'white' }
 
@@ -45,7 +55,11 @@ export const LabelFilter = memo(
       setIsIcon(!isFiltered && filterValue === '')
     }, [filterValue])
 
-    console.log('LabelFilter, filterValue:', filterValue)
+    const onBlurInput = useCallback(() => {
+      if (value === '') {
+        setIsIcon(true)
+      }
+    }, [value])
 
     const inputRef = useRef(null)
 
@@ -73,6 +87,11 @@ export const LabelFilter = memo(
       [setNodeLabelFilterDebounced],
     )
 
+    const onClickEmpty = useCallback(() => {
+      setValue('')
+      setNodeLabelFilterAfterChange('')
+    }, [setNodeLabelFilterAfterChange])
+
     // if no activeFilterTable, show nothing
     if (!activeFilterTable) return null
 
@@ -99,11 +118,25 @@ export const LabelFilter = memo(
 
     // show search input
     return (
-      <Input
-        value={value}
-        onChange={onChange}
-        ref={inputRef}
-      />
+      <Wrapper>
+        <Input
+          value={value}
+          onChange={onChange}
+          onBlur={onBlurInput}
+          ref={inputRef}
+        />
+        <InputIcon>
+          <Tooltip title="löschen">
+            <IconButton
+              size="small"
+              aria-label="löschen"
+              onClick={onClickEmpty}
+            >
+              <FaTimes />
+            </IconButton>
+          </Tooltip>
+        </InputIcon>
+      </Wrapper>
     )
   }),
 )
