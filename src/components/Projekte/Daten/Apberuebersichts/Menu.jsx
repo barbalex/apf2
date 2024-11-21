@@ -16,6 +16,7 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
+import { LabelFilter } from '../../../shared/LabelFilter.jsx'
 
 const Fitter = styled.div`
   margin-top: -15px;
@@ -23,63 +24,62 @@ const Fitter = styled.div`
 `
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  (() => {
-    const { search, pathname } = useLocation()
-    const navigate = useNavigate()
-    const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
-    const { projId, apberuebersichtId } = useParams()
+export const Menu = memo(() => {
+  const { search, pathname } = useLocation()
+  const navigate = useNavigate()
+  const client = useApolloClient()
+  const tanstackQueryClient = useQueryClient()
+  const { projId, apberuebersichtId } = useParams()
 
-
-    const onClickAdd = useCallback(async () => {
-      let result
-      try {
-        result = await client.mutate({
-          mutation: gql`
-            mutation createApberuebersichtForApberuebersichtForm($projId: UUID!) {
-              createApberuebersicht(input: { apberuebersicht: { projId: $projId } }) {
-                apberuebersicht {
-                  id
-                  projId
-                }
+  const onClickAdd = useCallback(async () => {
+    let result
+    try {
+      result = await client.mutate({
+        mutation: gql`
+          mutation createApberuebersichtForApberuebersichtForm($projId: UUID!) {
+            createApberuebersicht(
+              input: { apberuebersicht: { projId: $projId } }
+            ) {
+              apberuebersicht {
+                id
+                projId
               }
             }
-          `,
-          variables: { projId },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeApberuebersicht`],
+          }
+        `,
+        variables: { projId },
       })
-      tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeRoot`],
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-      const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
-      navigate(`./${id}${search}`)
-    }, [projId, client, store, tanstackQueryClient, navigate, search])
+    }
+    tanstackQueryClient.invalidateQueries({
+      queryKey: [`treeApberuebersicht`],
+    })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: [`treeRoot`],
+    })
+    const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
+    navigate(`./${id}${search}`)
+  }, [projId, client, store, tanstackQueryClient, navigate, search])
 
-
-    return (
-      <ErrorBoundary>
-        <MenuBar
-          bgColor="#388e3c"
-          color="white"
-        >
-          <Tooltip title="Neuen AP-Bericht erstellen">
-            <IconButton onClick={onClickAdd}>
-              <FaPlus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-        </MenuBar>
-      </ErrorBoundary>
-    )
-  }),
-)
+  return (
+    <ErrorBoundary>
+      <MenuBar
+        bgColor="#388e3c"
+        color="white"
+      >
+        <LabelFilter nodeLabelName="apberuebersicht" />
+        <Tooltip title="Neuen AP-Bericht erstellen">
+          <IconButton onClick={onClickAdd}>
+            <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+      </MenuBar>
+    </ErrorBoundary>
+  )
+})
