@@ -18,6 +18,8 @@ import { useAtom } from 'jotai'
 import { StoreContext } from '../../storeContext.js'
 import { listLabelFilterIsIconAtom } from '../../JotaiStore/index.js'
 
+export const labelFilterWidth = 192
+
 const Wrapper = styled.div`
   display: block;
   position: relative;
@@ -29,8 +31,8 @@ const Input = styled.input`
   border-radius: 2px;
   height: 24px;
   padding: 0 25px 0 5px;
-  width: 162px;
-  max-width: 162px;
+  width: ${labelFilterWidth - 30}px;
+  max-width: ${labelFilterWidth - 30}px;
   &:focus-visible {
     outline: 3px solid rgb(46, 125, 50);
   }

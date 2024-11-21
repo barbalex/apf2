@@ -32,6 +32,8 @@ export const Component = memo(
 
     if (error) return <Error error={error} />
 
+    // TODO: pass labelFilter
+    // then list can highlight filter text
     return (
       <List
         items={apberuebersichts}

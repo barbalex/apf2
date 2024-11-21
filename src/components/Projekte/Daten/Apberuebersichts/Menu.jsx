@@ -18,8 +18,8 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
-import { LabelFilter } from '../../../shared/LabelFilter.jsx'
 import { StoreContext } from '../../../../storeContext.js'
+import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
 import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 
 const Fitter = styled.div`
@@ -28,78 +28,78 @@ const Fitter = styled.div`
 `
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(() => {
-  const { search, pathname } = useLocation()
-  const navigate = useNavigate()
-  const client = useApolloClient()
-  const tanstackQueryClient = useQueryClient()
-  const { projId, apberuebersichtId } = useParams()
+export const Menu = memo(
+  observer(() => {
+    const { search, pathname } = useLocation()
+    const navigate = useNavigate()
+    const client = useApolloClient()
+    const tanstackQueryClient = useQueryClient()
+    const { projId, apberuebersichtId } = useParams()
 
-  const store = useContext(StoreContext)
-  const { nodeLabelFilter, activeFilterTable } = store.tree
+    const store = useContext(StoreContext)
 
-  const onClickAdd = useCallback(async () => {
-    let result
-    try {
-      result = await client.mutate({
-        mutation: gql`
-          mutation createApberuebersichtForApberuebersichtForm($projId: UUID!) {
-            createApberuebersicht(
-              input: { apberuebersicht: { projId: $projId } }
+    const onClickAdd = useCallback(async () => {
+      let result
+      try {
+        result = await client.mutate({
+          mutation: gql`
+            mutation createApberuebersichtForApberuebersichtForm(
+              $projId: UUID!
             ) {
-              apberuebersicht {
-                id
-                projId
+              createApberuebersicht(
+                input: { apberuebersicht: { projId: $projId } }
+              ) {
+                apberuebersicht {
+                  id
+                  projId
+                }
               }
             }
-          }
-        `,
-        variables: { projId },
+          `,
+          variables: { projId },
+        })
+      } catch (error) {
+        return store.enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeApberuebersicht`],
       })
-    } catch (error) {
-      return store.enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeRoot`],
       })
-    }
-    tanstackQueryClient.invalidateQueries({
-      queryKey: [`treeApberuebersicht`],
-    })
-    tanstackQueryClient.invalidateQueries({
-      queryKey: [`treeRoot`],
-    })
-    const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
-    navigate(`./${id}${search}`)
-  }, [projId, client, store, tanstackQueryClient, navigate, search])
+      const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
+      navigate(`./${id}${search}`)
+    }, [projId, client, store, tanstackQueryClient, navigate, search])
 
-  const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-  // TODO: pass widths if nodeLabelFilter.apberuebersichts is active
-  // LabelFilter is 192px wide
-  const widths = useMemo(
-    () =>
-      !labelFilterIsIcon ? [192, buttonWidth] : [buttonWidth, buttonWidth],
-    [labelFilterIsIcon],
-  )
+    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
+    const widths = useMemo(
+      () =>
+        labelFilterIsIcon ?
+          [buttonWidth, buttonWidth]
+        : [labelFilterWidth, buttonWidth],
+      [labelFilterIsIcon],
+    )
 
-  console.log('Apberuebersichts.Menu, widths:', widths)
-  console.log('Apberuebersichts.Menu, labelFilterIsIcon:', labelFilterIsIcon)
-
-  return (
-    <ErrorBoundary>
-      <MenuBar
-        bgColor="#388e3c"
-        color="white"
-        widths={widths}
-      >
-        <LabelFilter />
-        <Tooltip title="Neuen AP-Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
-            <FaPlus style={iconStyle} />
-          </IconButton>
-        </Tooltip>
-      </MenuBar>
-    </ErrorBoundary>
-  )
-})
+    return (
+      <ErrorBoundary>
+        <MenuBar
+          bgColor="#388e3c"
+          color="white"
+          widths={widths}
+        >
+          <LabelFilter />
+          <Tooltip title="Neuen AP-Bericht erstellen">
+            <IconButton onClick={onClickAdd}>
+              <FaPlus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+        </MenuBar>
+      </ErrorBoundary>
+    )
+  }),
+)

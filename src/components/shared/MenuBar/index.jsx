@@ -197,8 +197,6 @@ export const MenuBar = memo(
     const [menuAnchorEl, setMenuAnchorEl] = useState(null)
     const menuIsOpen = Boolean(menuAnchorEl)
 
-    console.log('MenuBar', { buttons, menus, widths })
-
     return (
       <MeasuredOuterContainer
         ref={outerContainerRef}
