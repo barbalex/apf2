@@ -1,25 +1,53 @@
-import { memo, useContext, useState, useCallback } from 'react'
+import {
+  memo,
+  useContext,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { MdSearch } from 'react-icons/md'
+import styled from '@emotion/styled'
 
 import { StoreContext } from '../../storeContext.js'
+import { set } from 'lodash'
 
+const Input = styled.input`
+  outline: none;
+  border: none;
+  border-radius: 2px;
+  height: 24px;
+  padding: 0 5px;
+  &:focus-visible {
+    outline: 3px solid rgb(46, 125, 50);
+  }
+`
 const iconStyle = { color: 'white' }
 
 export const LabelFilter = memo(
   observer(() => {
     const store = useContext(StoreContext)
     const { nodeLabelFilter, activeFilterTable } = store.tree
-    const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
-    const {
-      setKey: setNodeLabelFilterKey,
-      isFiltered: runIsFiltered,
-      empty,
-    } = nodeLabelFilter
+
+    const { setKey: setNodeLabelFilterKey, isFiltered: runIsFiltered } =
+      nodeLabelFilter
     const isFiltered = runIsFiltered()
+
+    const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+    const [value, setValue] = useState(filterValue)
+    const [isIcon, setIsIcon] = useState(!isFiltered && value === '')
+    useEffect(() => {
+      setValue(filterValue)
+      setIsIcon(!isFiltered && filterValue === '')
+    }, [filterValue])
+
+    console.log('LabelFilter, filterValue:', filterValue)
+
+    const inputRef = useRef(null)
 
     const setNodeLabelFilterAfterChange = useCallback(
       (val) =>
@@ -34,7 +62,6 @@ export const LabelFilter = memo(
       600,
     )
 
-    const [value, setValue] = useState(filterValue)
     const onChange = useCallback(
       (e) => {
         // remove some values as they can cause exceptions in regular expressions
@@ -45,17 +72,6 @@ export const LabelFilter = memo(
       },
       [setNodeLabelFilterDebounced],
     )
-
-    const [isIcon, setIsIcon] = useState(!isFiltered && value === '')
-
-    console.log('LabelFilter', {
-      filterValue,
-      activeFilterTable,
-      nodeLabelFilter: nodeLabelFilter?.toJSON(),
-      isFiltered,
-      value,
-      isIcon,
-    })
 
     // if no activeFilterTable, show nothing
     if (!activeFilterTable) return null
@@ -70,6 +86,9 @@ export const LabelFilter = memo(
               setValue('')
               setNodeLabelFilterAfterChange('')
               setIsIcon(false)
+              setTimeout(() => {
+                inputRef.current.focus()
+              }, 0)
             }}
           >
             <MdSearch style={iconStyle} />
@@ -80,13 +99,11 @@ export const LabelFilter = memo(
 
     // show search input
     return (
-      <span
-        onClick={() => {
-          setIsIcon(true)
-        }}
-      >
-        {value !== '' ? value : 'Filtern'}
-      </span>
+      <Input
+        value={value}
+        onChange={onChange}
+        ref={inputRef}
+      />
     )
   }),
 )

@@ -77,7 +77,6 @@ export const Menu = memo(() => {
       <MenuBar
         bgColor="#388e3c"
         color="white"
-        // rerenderer={`${nodeLabelFilter?.[activeFilterTable]}`}
       >
         <LabelFilter />
         <Tooltip title="Neuen AP-Bericht erstellen">
