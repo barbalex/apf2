@@ -10,8 +10,8 @@ import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { MdSearch } from 'react-icons/md'
 import { FaTimes } from 'react-icons/fa'
+import { MdFilterAlt } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { useAtom } from 'jotai'
 
@@ -30,18 +30,29 @@ const Input = styled.input`
   border: none;
   border-radius: 2px;
   height: 24px;
-  padding: 0 25px 0 5px;
-  width: ${labelFilterWidth - 30}px;
-  max-width: ${labelFilterWidth - 30}px;
+  padding: 0 25px 0 22px;
+  width: ${labelFilterWidth - 47}px;
+  max-width: ${labelFilterWidth - 47}px;
   &:focus-visible {
     outline: 3px solid rgb(46, 125, 50);
   }
 `
-const InputIcon = styled.div`
+const InputEndIcon = styled.div`
   position: absolute;
   top: 50%;
   right: 0;
   transform: translateY(-50%);
+`
+const InputStartIcon = styled.div`
+  position: absolute;
+  height: 24px;
+  top: 50%;
+  left: 2px;
+  transform: translateY(-50%);
+  color: rgba(0, 0, 0, 0.54);
+  display: flex;
+  align-items: center;
+  margin-top: -1px;
 `
 const iconStyle = { color: 'white' }
 
@@ -118,7 +129,7 @@ export const LabelFilter = memo(
               }, 0)
             }}
           >
-            <MdSearch style={iconStyle} />
+            <MdFilterAlt style={iconStyle} />
           </IconButton>
         </Tooltip>
       )
@@ -127,13 +138,18 @@ export const LabelFilter = memo(
     // show search input
     return (
       <Wrapper>
-        <Input
-          value={value}
-          onChange={onChange}
-          onBlur={onBlurInput}
-          ref={inputRef}
-        />
-        <InputIcon>
+        <Tooltip
+          title="Filter"
+          disableFocusListener={true}
+        >
+          <Input
+            value={value}
+            onChange={onChange}
+            onBlur={onBlurInput}
+            ref={inputRef}
+          />
+        </Tooltip>
+        <InputEndIcon>
           <Tooltip title="Filter entfernen">
             <IconButton
               size="small"
@@ -143,7 +159,10 @@ export const LabelFilter = memo(
               <FaTimes />
             </IconButton>
           </Tooltip>
-        </InputIcon>
+        </InputEndIcon>
+        <InputStartIcon>
+          <MdFilterAlt />
+        </InputStartIcon>
       </Wrapper>
     )
   }),
