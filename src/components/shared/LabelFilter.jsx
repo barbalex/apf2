@@ -52,7 +52,11 @@ const InputStartIcon = styled.div`
   color: rgba(0, 0, 0, 0.54);
   display: flex;
   align-items: center;
-  margin-top: -1px;
+  margin-top: -0.5px;
+  svg {
+    height: 18px;
+    width: 18px;
+  }
 `
 const iconStyle = { color: 'white' }
 
