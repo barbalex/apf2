@@ -14,7 +14,7 @@ export const Component = memo(
   observer(() => {
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { userGqlFilterForTree } = store.tree
+    const { userGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createUsersQuery({
@@ -35,6 +35,7 @@ export const Component = memo(
         title="Benutzer"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.user}
       />
     )
   }),

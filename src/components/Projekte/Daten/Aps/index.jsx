@@ -16,7 +16,7 @@ export const Component = memo(
     const { projId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { apGqlFilterForTree } = store.tree
+    const { apGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createApsQuery({
@@ -38,6 +38,7 @@ export const Component = memo(
         title="Arten"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.ap}
       />
     )
   }),
