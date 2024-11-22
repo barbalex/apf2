@@ -67,7 +67,9 @@ const StyledMenu = styled(Menu)`
   }
 `
 const MenuContent = styled.div`
+  display: flex;
   background-color: ${(props) => props.bgColor};
+  overflow: hidden;
 `
 
 export const MenuBar = memo(
@@ -120,7 +122,7 @@ export const MenuBar = memo(
       for (const [index, child] of Children.toArray(usableChildren).entries()) {
         const width = widths?.[index] ?? buttonWidth
         if (widthSum + width > spaceForButtons) {
-          newMenus.push(cloneElement(child))
+          newMenus.push(cloneElement(child, { inMenu: true }))
         } else {
           newButtons.push(cloneElement(child))
           widthSum += width
