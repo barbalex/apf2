@@ -134,10 +134,7 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar
-          bgColor="#388e3c"
-          color="white"
-        >
+        <MenuBar>
           <Tooltip title="Neuen Massnahmen-Bericht erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
