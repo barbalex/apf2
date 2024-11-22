@@ -32,6 +32,8 @@ const StyledButton = styled(Button)`
   max-height: 36px;
   color: white;
   border-color: white;
+  border-width: 0.67px;
+  border-color: rgba(255, 255, 255, 0.5) !important;
 `
 const StyledLoadingButton = styled(LoadingButton)`
   margin: 0 5px;
@@ -41,6 +43,8 @@ const StyledLoadingButton = styled(LoadingButton)`
   font-size: 0.8rem;
   color: white;
   border-color: white;
+  border-width: 0.67px;
+  border-color: rgba(255, 255, 255, 0.5) !important;
 `
 
 export const Menu = memo(

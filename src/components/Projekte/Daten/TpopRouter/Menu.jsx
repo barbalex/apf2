@@ -64,8 +64,10 @@ const StyledLoadingButton = styled(LoadingButton)`
   line-height: 1.1;
   font-size: 0.8rem;
   color: white;
-  border-color: white;
   width: ${(props) => props.width}px;
+  border-color: white;
+  border-width: 0.67px;
+  border-color: rgba(255, 255, 255, 0.5) !important;
 `
 const StyledButton = styled(Button)`
   margin: 0 5px;
@@ -76,6 +78,8 @@ const StyledButton = styled(Button)`
   max-height: 36px;
   color: white;
   border-color: white;
+  border-width: 0.67px;
+  border-color: rgba(255, 255, 255, 0.5) !important;
 `
 const iconStyle = { color: 'white' }
 
