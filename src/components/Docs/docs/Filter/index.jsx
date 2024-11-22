@@ -15,12 +15,12 @@ import kartenFilterEntfernen from './karten-filter-entfernen.gif'
 export const Component = memo(() => (
   <>
     <h1>Filter</h1>
-    <DokuDate>08.08.2022</DokuDate>
+    <DokuDate>22.11.2024</DokuDate>
     <p>
       Filtern hat in apflora eine lange Geschichte und wurde Schritt um Schritt
       erweitert.
       <br />
-      Zuletzt im Juli 2022.
+      Zuletzt im Juli 2022 und im November 2024.
     </p>
     <h2>Welche Filter gibt es?</h2>
     <h3>1. Navigationsbaum, Hierarchie-Filter</h3>
@@ -31,7 +31,7 @@ export const Component = memo(() => (
       Populationen angezeigt.
     </p>
 
-    <h3>2. Navigationsbaum, Label-Filter</h3>
+    <h3>2. Navigationsbaum und Listen-Ansichten: Label-Filter</h3>
     <p>
       Im Navigationsbaum gibt es oben links den Label-Filter. Er heisst jeweils
       so, wie die aktive Ebene, z.B. &quot;Arten filtern&quot; oder
@@ -49,7 +49,11 @@ export const Component = memo(() => (
       Erfassen Sie im Label-Filter auf Stufe Art &quot;carex&quot;, wird nach
       den Arten mit dieser Zeichenfolge im Namen gefiltert.
     </p>
-    <h3>3. Navigationsbaum, nur-AP-Filter</h3>
+    <p>
+      In den Listen-Ansichten gibt es einen funktionsgleichen Filter. Er filtert
+      jeweils die Tabelle, die in der Liste dargestellt wird.
+    </p>
+    <h3>3. Navigationsbaum und Listen-Ansichten, nur-AP-Filter</h3>
     <p>
       Weil das Anzeigen nur der AP-Arten ein häufiger Vorgang ist (und es früher
       keine oder-Filterung gab), kann man im Navigationsbaum oben rechts mit
@@ -61,6 +65,7 @@ export const Component = memo(() => (
         alt="nur-AP-Filter"
       />
     </p>
+    <p>In der Listen-Ansicht der Arten gibt es denselben Filter.</p>
     <h3>4. Karten-Filter</h3>
     <p>
       Auf der Karte kann man im Layer-Tool oben rechts unter{' '}
@@ -167,6 +172,7 @@ export const Component = memo(() => (
     <h2>Wo werden Filter angewendet?</h2>
     <ul>
       <li>Im Navigationsbaum</li>
+      <li>In den Listen-Ansichten der Tabellen</li>
       <li>In der Karte (Populationen, Teil-Populationen)</li>
       <li>
         In einigen Exporten gibt es zwei Befehle: Neben dem normalen, der alle
