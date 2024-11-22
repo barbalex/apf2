@@ -17,7 +17,7 @@ export const Component = memo(
     const { apId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { popGqlFilterForTree } = store.tree
+    const { popGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createPopsQuery({
@@ -39,6 +39,7 @@ export const Component = memo(
         title="Populationen"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.pop}
       />
     )
   }),
