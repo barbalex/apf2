@@ -17,7 +17,7 @@ export const Component = memo(
     const { apId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { apberGqlFilterForTree } = store.tree
+    const { apberGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createApbersQuery({
@@ -39,6 +39,7 @@ export const Component = memo(
         title="AP-Berichte"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.apber}
       />
     )
   }),

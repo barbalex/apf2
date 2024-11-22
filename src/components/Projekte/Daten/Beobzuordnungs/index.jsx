@@ -17,7 +17,7 @@ export const Component = memo(
     const { apId, tpopId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { beobGqlFilterForTree } = store.tree
+    const { beobGqlFilterForTree, nodeLabelFilter } = store.tree
     const { pathname } = useLocation()
 
     const isBeobzugeordnet = !!tpopId && pathname.includes('Beobachtungen')
@@ -63,6 +63,7 @@ export const Component = memo(
         title={title}
         totalCount={totalCount}
         menuBar={<Menu apfloraLayer={apfloraLayer} />}
+        highlightSearchString={nodeLabelFilter.beob}
       />
     )
   }),

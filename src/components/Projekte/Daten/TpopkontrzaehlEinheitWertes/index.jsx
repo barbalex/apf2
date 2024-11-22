@@ -14,7 +14,8 @@ export const Component = memo(
   observer(() => {
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { tpopkontrzaehlEinheitWerteGqlFilterForTree } = store.tree
+    const { tpopkontrzaehlEinheitWerteGqlFilterForTree, nodeLabelFilter } =
+      store.tree
 
     const { data, isLoading, error } = useQuery(
       createTpopkontrzaehlEinheitWertesQuery({
@@ -36,6 +37,7 @@ export const Component = memo(
         title="Teil-Population: Zähl-Einheiten"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.tpopkontrzaehlEinheitWerte}
       />
     )
   }),

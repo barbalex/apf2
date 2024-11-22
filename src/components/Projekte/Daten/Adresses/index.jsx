@@ -14,7 +14,7 @@ export const Component = memo(
   observer(() => {
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { adresseGqlFilterForTree } = store.tree
+    const { adresseGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createAdressesQuery({
@@ -35,6 +35,7 @@ export const Component = memo(
         title="Adressen"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.adresse}
       />
     )
   }),

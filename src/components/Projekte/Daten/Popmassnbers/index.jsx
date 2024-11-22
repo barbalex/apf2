@@ -1,8 +1,9 @@
-import { memo, useContext } from 'react'
+import { memo, useContext, useMemo } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
+import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
 import { StoreContext } from '../../../../storeContext.js'
 import { createApsQuery } from '../../../../modules/createApsQuery.js'
@@ -17,7 +18,7 @@ export const Component = memo(
     const { popId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { popmassnberGqlFilterForTree } = store.tree
+    const { popmassnberGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createPopmassnbersQuery({
@@ -39,6 +40,7 @@ export const Component = memo(
         title="Massnahmen-Berichte"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.popmassnber}
       />
     )
   }),

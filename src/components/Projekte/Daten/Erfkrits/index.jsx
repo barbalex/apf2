@@ -17,7 +17,7 @@ export const Component = memo(
     const { apId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { erfkritGqlFilterForTree } = store.tree
+    const { erfkritGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createErfkritsQuery({
@@ -39,6 +39,7 @@ export const Component = memo(
         title="AP-Erfolgskriterien"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.erfkrit}
       />
     )
   }),

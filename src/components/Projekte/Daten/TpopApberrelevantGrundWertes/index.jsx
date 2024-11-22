@@ -14,7 +14,8 @@ export const Component = memo(
   observer(() => {
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { tpopApberrelevantGrundWerteGqlFilterForTree } = store.tree
+    const { tpopApberrelevantGrundWerteGqlFilterForTree, nodeLabelFilter } =
+      store.tree
 
     const { data, isLoading, error } = useQuery(
       createTpopApberrelevantGrundWertesQuery({
@@ -36,6 +37,7 @@ export const Component = memo(
         title="Teil-Population: Grund für AP-Bericht Relevanz"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.tpopApberrelevantGrundWerte}
       />
     )
   }),

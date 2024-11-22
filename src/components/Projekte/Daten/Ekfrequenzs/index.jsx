@@ -17,7 +17,7 @@ export const Component = memo(
     const { apId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { ekfrequenzGqlFilterForTree } = store.tree
+    const { ekfrequenzGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createEkfrequenzsQuery({
@@ -41,6 +41,7 @@ export const Component = memo(
         title="EK-Frequenzen"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.ekfrequenz}
       />
     )
   }),

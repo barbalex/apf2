@@ -63,7 +63,7 @@ export const LabelFilter = memo(
       setValue(filterValue)
     }, [filterValue, activeFilterTable])
 
-    const setValuesAfterChange = useCallback(
+    const setNodeLabelFilterAfterChange = useCallback(
       (val) =>
         setNodeLabelFilterKey({
           value: val,
@@ -71,12 +71,14 @@ export const LabelFilter = memo(
         }),
       [setNodeLabelFilterKey, activeFilterTable],
     )
-    const changeDebounced = useDebouncedCallback(setValuesAfterChange, 600)
+    const changeDebounced = useDebouncedCallback(
+      setNodeLabelFilterAfterChange,
+      600,
+    )
 
     const onChange = useCallback(
       (e) => {
-        // TODO: some values can cause exceptions in regular expressions
-        // remove them
+        // remove some values as they can cause exceptions in regular expressions
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
 
         setValue(val)

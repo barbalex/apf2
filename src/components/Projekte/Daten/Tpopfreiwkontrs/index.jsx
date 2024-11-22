@@ -17,7 +17,7 @@ export const Component = memo(
     const { tpopId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { ekfGqlFilterForTree } = store.tree
+    const { ekfGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createTpopfreiwkontrQuery({
@@ -40,6 +40,7 @@ export const Component = memo(
         title="Freiwilligen-Kontrollen"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.tpopkontr}
       />
     )
   }),

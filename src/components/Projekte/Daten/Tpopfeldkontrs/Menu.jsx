@@ -1,8 +1,7 @@
-import { memo, useCallback, useContext } from 'react'
+import { memo, useCallback, useContext, useMemo } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import { observer } from 'mobx-react-lite'
 import { FaPlus, FaFolderTree } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
@@ -10,14 +9,18 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
+import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
-import { MenuBar } from '../../../shared/MenuBar/index.jsx'
+import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
+import { StoreContext } from '../../../../storeContext.js'
+import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
+import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: white;
@@ -149,13 +152,38 @@ export const Menu = memo(
       })
     }, [setCopying])
 
+    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
+    const widths = useMemo(
+      () =>
+        labelFilterIsIcon ?
+          [
+            buttonWidth,
+            buttonWidth,
+            buttonWidth,
+            buttonWidth,
+            ...(isMovingEk ? [buttonWidth, buttonWidth] : []),
+            ...(isCopyingEk ? [buttonWidth, buttonWidth] : []),
+          ]
+        : [
+            labelFilterWidth,
+            buttonWidth,
+            buttonWidth,
+            buttonWidth,
+            ...(isMovingEk ? [buttonWidth, buttonWidth] : []),
+            ...(isCopyingEk ? [buttonWidth, buttonWidth] : []),
+          ],
+      [labelFilterIsIcon],
+    )
+
     return (
       <ErrorBoundary>
         <MenuBar
           bgColor="#388e3c"
           color="white"
           rerenderer={`${moving.label}/${copying.label}/${isMovingEk}/${isCopyingEk}`}
+          widths={widths}
         >
+          <LabelFilter />
           <Tooltip title="Neue Feld-Kontrolle erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />

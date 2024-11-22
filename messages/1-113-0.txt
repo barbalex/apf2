@@ -1,0 +1,1 @@
+Ab Version 1.113.0: Die Listenansichten enthalten einen Filter, der nach den in der Liste angezeigten Beschriftungen filtert. Es ist derselbe, wie er schon länger im Navigationsbaum existiert

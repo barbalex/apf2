@@ -11,3 +11,7 @@ export const newTpopFromBeobBeobIdAtom = atomWithStorage(
   'newTpopFromBeobBeobId',
   null,
 )
+export const listLabelFilterIsIconAtom = atomWithStorage(
+  'listLabelFilterIsIcon',
+  true,
+)
