@@ -79,11 +79,7 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar
-          bgColor="#388e3c"
-          color="white"
-          widths={widths}
-        >
+        <MenuBar widths={widths}>
           <LabelFilter />
           <Tooltip title="Neue EK-Frequenz erstellen">
             <IconButton onClick={onClickAdd}>
