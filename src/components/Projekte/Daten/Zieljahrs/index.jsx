@@ -18,7 +18,7 @@ export const Component = memo(
     const { apId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { zielGqlFilterForTree } = store.tree
+    const { zielGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createZielsQuery({
@@ -42,6 +42,12 @@ export const Component = memo(
       [ziels],
     )
 
+    console.log('Zieljahre', {
+      labelFilter: nodeLabelFilter.ziel,
+      isNaN: isNaN(nodeLabelFilter.ziel),
+      zieljahreItems,
+    })
+
     if (isLoading) return <Spinner />
 
     if (error) return <Error error={error} />
@@ -52,6 +58,7 @@ export const Component = memo(
         title="AP-Ziele Jahre"
         totalCount={zieljahreItems.length}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.ziel}
       />
     )
   }),
