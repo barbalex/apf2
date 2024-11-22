@@ -17,7 +17,7 @@ export const Component = memo(
     const { tpopId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { tpopberGqlFilterForTree } = store.tree
+    const { tpopberGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createTpopbersQuery({
@@ -39,6 +39,7 @@ export const Component = memo(
         title="Kontroll-Berichte"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.tpopber}
       />
     )
   }),
