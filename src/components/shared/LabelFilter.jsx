@@ -118,7 +118,7 @@ export const LabelFilter = memo(
     // if no activeFilterTable, show nothing
     if (!activeFilterTable) return null
 
-    // if isIcon, show search icon
+    // if isIcon, show filter icon
     if (isIcon) {
       return (
         <Tooltip title="Filtern">
@@ -139,7 +139,7 @@ export const LabelFilter = memo(
       )
     }
 
-    // show search input
+    // show filter input
     return (
       <Wrapper>
         <Tooltip
