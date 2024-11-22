@@ -16,7 +16,7 @@ export const Component = memo(
     const { zielId, jahr } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { zielberGqlFilterForTree } = store.tree
+    const { zielberGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createZielbersQuery({
@@ -38,6 +38,7 @@ export const Component = memo(
         title="Zielberichte"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.zielber}
       />
     )
   }),

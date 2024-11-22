@@ -126,8 +126,36 @@ export const Menu = memo(
     const widths = useMemo(
       () =>
         labelFilterIsIcon ?
-          [buttonWidth, buttonWidth]
-        : [labelFilterWidth, buttonWidth],
+          [
+            buttonWidth,
+            buttonWidth,
+            buttonWidth,
+            ...((
+              isMoving &&
+              moving.toTable === 'ap' &&
+              moving.fromParentId !== apId
+            ) ?
+              [buttonWidth]
+            : []),
+            ...(isMoving ? [buttonWidth] : []),
+            ...(isCopying ? [buttonWidth, buttonWidth] : []),
+            buttonWidth,
+          ]
+        : [
+            labelFilterWidth,
+            buttonWidth,
+            buttonWidth,
+            ...((
+              isMoving &&
+              moving.toTable === 'ap' &&
+              moving.fromParentId !== apId
+            ) ?
+              [buttonWidth]
+            : []),
+            ...(isMoving ? [buttonWidth] : []),
+            ...(isCopying ? [buttonWidth, buttonWidth] : []),
+            buttonWidth,
+          ],
       [labelFilterIsIcon],
     )
 

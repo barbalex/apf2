@@ -72,8 +72,8 @@ export const Menu = memo(
     const widths = useMemo(
       () =>
         labelFilterIsIcon ?
-          [buttonWidth, buttonWidth]
-        : [labelFilterWidth, buttonWidth],
+          [buttonWidth, buttonWidth, buttonWidth]
+        : [labelFilterWidth, buttonWidth, buttonWidth],
       [labelFilterIsIcon],
     )
 

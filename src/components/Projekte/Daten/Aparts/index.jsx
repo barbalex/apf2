@@ -17,7 +17,7 @@ export const Component = memo(
     const { apId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { apartGqlFilterForTree } = store.tree
+    const { apartGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createApartsQuery({
@@ -39,6 +39,7 @@ export const Component = memo(
         title="Taxa"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.apart}
       />
     )
   }),
