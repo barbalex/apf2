@@ -228,8 +228,6 @@ export const Menu = memo(
         <MenuBar
           widths={widths}
           rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}/${isBeobNichtBeurteilt}/${creatingNewPopFromBeob}`}
-          bgColor="#388e3c"
-          color="white"
         >
           {isBeobZugeordnet && (
             <StyledLoadingButton
