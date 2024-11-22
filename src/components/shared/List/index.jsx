@@ -66,7 +66,7 @@ export const List = memo(
                   {highlightSearchString ?
                     <Highlighter
                       searchWords={[highlightSearchString]}
-                      textToHighlight={label}
+                      textToHighlight={label?.toString()}
                     />
                   : label}
                 </Row>
