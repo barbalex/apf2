@@ -14,7 +14,8 @@ export const Component = memo(
   observer(() => {
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { ekAbrechnungstypWerteGqlFilterForTree } = store.tree
+    const { ekAbrechnungstypWerteGqlFilterForTree, nodeLabelFilter } =
+      store.tree
 
     const { data, isLoading, error } = useQuery(
       createEkAbrechnungstypWertesQuery({
@@ -36,6 +37,7 @@ export const Component = memo(
         title="Teil-Population: EK-Abrechnungstypen"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.ekAbrechnungstypWerte}
       />
     )
   }),

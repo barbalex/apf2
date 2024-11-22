@@ -35,7 +35,6 @@ export const Menu = memo(
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { projId, apberuebersichtId } = useParams()
-
     const store = useContext(StoreContext)
 
     const onClickAdd = useCallback(async () => {

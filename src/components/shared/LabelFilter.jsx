@@ -82,8 +82,8 @@ export const LabelFilter = memo(
     }, [setIsIcon])
     const fadeInInput = useCallback(async () => {
       await animWidth.start({ width: labelFilterWidth })
-      await animInputFade.start({ opacity: 1 })
       setIsIcon(false)
+      await animInputFade.start({ opacity: 1 })
     }, [animWidth])
 
     const onBlurInput = useCallback(() => {
