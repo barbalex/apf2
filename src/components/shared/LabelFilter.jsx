@@ -1,11 +1,4 @@
-import {
-  memo,
-  useContext,
-  useState,
-  useCallback,
-  useRef,
-  useEffect,
-} from 'react'
+import { memo, useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 import IconButton from '@mui/material/IconButton'
@@ -83,14 +76,13 @@ export const LabelFilter = memo(
       }
     }, [value, setIsIcon])
 
-    const inputRef = useRef(null)
-
     const setNodeLabelFilterAfterChange = useCallback(
-      (val) =>
+      (val) => {
         setNodeLabelFilterKey({
           value: val,
           key: activeFilterTable,
-        }),
+        })
+      },
       [setNodeLabelFilterKey, activeFilterTable],
     )
     const setNodeLabelFilterDebounced = useDebouncedCallback(
@@ -128,9 +120,6 @@ export const LabelFilter = memo(
               setValue('')
               setNodeLabelFilterAfterChange('')
               setIsIcon(false)
-              setTimeout(() => {
-                inputRef.current.focus()
-              }, 0)
             }}
           >
             <MdFilterAlt style={iconStyle} />
@@ -150,7 +139,8 @@ export const LabelFilter = memo(
             value={value}
             onChange={onChange}
             onBlur={onBlurInput}
-            ref={inputRef}
+            // ref={inputRef}
+            autoFocus={true}
           />
         </Tooltip>
         <InputEndIcon>
