@@ -151,8 +151,8 @@ export const Component = memo(
               <ul>
                 <li>Die Art hat Synonyme</li>
                 <li>
-                  Die Art umfasst nicht synonyme aber eng verwandte Arten (z.B.
-                  Unterarten)
+                  Die Art umfasst eng verwandte Arten, die nicht synonym sind
+                  (z.B. Unterarten)
                 </li>
                 <li>
                   Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B.
