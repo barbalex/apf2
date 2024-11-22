@@ -250,8 +250,6 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          bgColor="#388e3c"
-          color="white"
           rerenderer={`${isMovingFeldkontr}/${moving.label}/${isCopyingTpopfeldkontr}/${isCopyingBiotop}/${copying.label}/${movingFromThisTpop}/${thisTpopfeldkontrIsMoving}/${thisTpopfeldkontrIsCopying}`}
         >
           <Tooltip title="Neue Feld-Kontrolle erstellen">

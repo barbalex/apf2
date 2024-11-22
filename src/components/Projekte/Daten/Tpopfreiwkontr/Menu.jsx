@@ -243,8 +243,6 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          bgColor="#388e3c"
-          color="white"
           rerenderer={`${isMovingTpopfreiwkontr}/${moving.label}/${isCopyingTpopfreiwkontr}/${copying.label}/${movingFromThisTpop}/${thisTpopfreiwkontrIsMoving}/${thisTpopfreiwkontrIsCopying}`}
         >
           <Tooltip title="Neuen Bericht erstellen">
