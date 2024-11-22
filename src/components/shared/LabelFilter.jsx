@@ -63,7 +63,6 @@ export const LabelFilter = memo(
 
     const animWidth = useAnimation()
     const animInputFade = useAnimation()
-    const animIconFade = useAnimation()
 
     const { setKey: setNodeLabelFilterKey, isFiltered: runIsFiltered } =
       nodeLabelFilter
@@ -79,13 +78,11 @@ export const LabelFilter = memo(
     const fadeOutInput = useCallback(async () => {
       await animWidth.start({ width: buttonWidth })
       await animInputFade.start({ opacity: 0 })
-      animIconFade.start({ opacity: 1 })
       setIsIcon(true)
     }, [setIsIcon])
     const fadeInInput = useCallback(async () => {
       await animWidth.start({ width: labelFilterWidth })
       await animInputFade.start({ opacity: 1 })
-      animIconFade.start({ opacity: 0 })
       setIsIcon(false)
     }, [animWidth])
 
@@ -158,7 +155,6 @@ export const LabelFilter = memo(
                   value={value}
                   onChange={onChange}
                   onBlur={onBlurInput}
-                  // ref={inputRef}
                   autoFocus={true}
                 />
               </Tooltip>
