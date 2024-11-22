@@ -170,8 +170,6 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          bgColor="#388e3c"
-          color="white"
           rerenderer={`${isTpopMoving}/${isCopyingTpop}`}
           widths={widths}
         >

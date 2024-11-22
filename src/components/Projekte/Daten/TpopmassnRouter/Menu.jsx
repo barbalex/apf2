@@ -220,8 +220,6 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          bgColor="#388e3c"
-          color="white"
           rerenderer={`${isMovingTpopmassn}/${moving.label}/${isCopyingTpopmassn}/${copying.label}/${movingFromThisTpop}/${thisTpopmassnIsMoving}/${thisTpopmassnIsCopying}`}
         >
           <Tooltip title="Neue Massnahme erstellen">
