@@ -17,7 +17,7 @@ export const Component = memo(
     const { apId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { ekzaehleinheitGqlFilterForTree } = store.tree
+    const { ekzaehleinheitGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createEkzaehleinheitsQuery({
@@ -41,6 +41,7 @@ export const Component = memo(
         title="EK-Zähleinheiten"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.ekzaehleinheit}
       />
     )
   }),

@@ -17,7 +17,7 @@ export const Component = memo(
     const { apId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { assozartGqlFilterForTree } = store.tree
+    const { assozartGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createAssozartsQuery({
@@ -39,6 +39,7 @@ export const Component = memo(
         title="Assoziierte Arten"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.assozart}
       />
     )
   }),
