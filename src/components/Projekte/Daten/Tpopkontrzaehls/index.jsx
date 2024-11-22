@@ -17,7 +17,7 @@ export const Component = memo(
     const { tpopkontrId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { tpopkontrzaehlGqlFilterForTree } = store.tree
+    const { tpopkontrzaehlGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createTpopkontrzaehlsQuery({
@@ -41,6 +41,7 @@ export const Component = memo(
         title="Zählungen"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.tpopkontrzaehl}
       />
     )
   }),
