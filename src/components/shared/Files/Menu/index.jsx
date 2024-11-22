@@ -274,6 +274,8 @@ export const Menu = memo(
             />
           }
           titleComponentWidth={titleComponentWidth}
+          color="rgba(0, 0, 0, 0.54)"
+          bgColor="rgb(255, 253, 231)"
         >
           {isPreview ? previewMenus : menus}
         </MenuBar>

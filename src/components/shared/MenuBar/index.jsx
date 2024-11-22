@@ -79,8 +79,8 @@ export const MenuBar = memo(
     rerenderer,
     titleComponent,
     titleComponentWidth,
-    bgColor = 'rgb(255, 253, 231)',
-    color = 'rgba(0, 0, 0, 0.54)',
+    bgColor = '#388e3c',
+    color = 'white',
   }) => {
     const usableChildren = useMemo(
       () => children?.filter?.((child) => !!child) ?? children,
