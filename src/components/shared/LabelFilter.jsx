@@ -7,11 +7,14 @@ import { FaTimes } from 'react-icons/fa'
 import { MdFilterAlt } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { useAtom } from 'jotai'
+import { motion, useAnimation } from 'framer-motion'
 
 import { StoreContext } from '../../storeContext.js'
 import { listLabelFilterIsIconAtom } from '../../JotaiStore/index.js'
 
 export const labelFilterWidth = 192
+import { buttonWidth } from './MenuBar/index.jsx'
+const inputWidth = labelFilterWidth - 47
 
 const Wrapper = styled.div`
   display: block;
@@ -24,8 +27,8 @@ const Input = styled.input`
   border-radius: 2px;
   height: 24px;
   padding: 0 25px 0 22px;
-  width: ${labelFilterWidth - 47}px;
-  max-width: ${labelFilterWidth - 47}px;
+  width: ${inputWidth}px;
+  max-width: ${inputWidth}px;
   &:focus-visible {
     outline: 3px solid rgb(46, 125, 50);
   }
@@ -58,22 +61,30 @@ export const LabelFilter = memo(
     const store = useContext(StoreContext)
     const { nodeLabelFilter, activeFilterTable } = store.tree
 
+    const anim = useAnimation()
+
     const { setKey: setNodeLabelFilterKey, isFiltered: runIsFiltered } =
       nodeLabelFilter
     const isFiltered = runIsFiltered()
 
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     const [value, setValue] = useState(filterValue)
-
-    const [isIcon, setIsIcon] = useAtom(listLabelFilterIsIconAtom)
     useEffect(() => {
       setValue(filterValue)
     }, [filterValue])
 
+    const [isIcon, setIsIcon] = useAtom(listLabelFilterIsIconAtom)
+    const fadeOutInput = useCallback(async () => {
+      await anim.start({ width: buttonWidth })
+      setIsIcon(true)
+    }, [setIsIcon])
+    const fadeInInput = useCallback(async () => {
+      await anim.start({ width: labelFilterWidth })
+      setIsIcon(false)
+    }, [anim])
+
     const onBlurInput = useCallback(() => {
-      if (value === '') {
-        setIsIcon(true)
-      }
+      if (value === '') fadeOutInput()
     }, [value, setIsIcon])
 
     const setNodeLabelFilterAfterChange = useCallback(
@@ -104,60 +115,60 @@ export const LabelFilter = memo(
     const onClickEmpty = useCallback(() => {
       setValue('')
       setNodeLabelFilterAfterChange('')
-      setIsIcon(true)
+      fadeOutInput()
     }, [setNodeLabelFilterAfterChange])
 
     // if no activeFilterTable, show nothing
     if (!activeFilterTable) return null
 
-    // if isIcon, show filter icon
-    if (isIcon) {
-      return (
-        <Tooltip title="Filtern">
-          <IconButton
-            aria-label="Filtern"
-            onClick={() => {
-              setValue('')
-              setNodeLabelFilterAfterChange('')
-              setIsIcon(false)
-            }}
-          >
-            <MdFilterAlt style={iconStyle} />
-          </IconButton>
-        </Tooltip>
-      )
-    }
-
-    // show filter input
     return (
-      <Wrapper>
-        <Tooltip
-          title="Filter"
-          disableFocusListener={true}
-        >
-          <Input
-            value={value}
-            onChange={onChange}
-            onBlur={onBlurInput}
-            // ref={inputRef}
-            autoFocus={true}
-          />
-        </Tooltip>
-        <InputEndIcon>
-          <Tooltip title="Filter entfernen">
+      <motion.div
+        animate={anim}
+        transition={{ type: 'just', duration: 0.2 }}
+      >
+        {isIcon ?
+          <Tooltip title="Filtern">
             <IconButton
-              size="small"
-              aria-label="Filter entfernen"
-              onClick={onClickEmpty}
+              aria-label="Filtern"
+              onClick={() => {
+                setValue('')
+                setNodeLabelFilterAfterChange('')
+                fadeInInput()
+              }}
             >
-              <FaTimes />
+              <MdFilterAlt style={iconStyle} />
             </IconButton>
           </Tooltip>
-        </InputEndIcon>
-        <InputStartIcon>
-          <MdFilterAlt />
-        </InputStartIcon>
-      </Wrapper>
+        : <Wrapper>
+            <Tooltip
+              title="Filter"
+              disableFocusListener={true}
+            >
+              <Input
+                value={value}
+                onChange={onChange}
+                onBlur={onBlurInput}
+                // ref={inputRef}
+                autoFocus={true}
+              />
+            </Tooltip>
+            <InputEndIcon>
+              <Tooltip title="Filter entfernen">
+                <IconButton
+                  size="small"
+                  aria-label="Filter entfernen"
+                  onClick={onClickEmpty}
+                >
+                  <FaTimes />
+                </IconButton>
+              </Tooltip>
+            </InputEndIcon>
+            <InputStartIcon>
+              <MdFilterAlt />
+            </InputStartIcon>
+          </Wrapper>
+        }
+      </motion.div>
     )
   }),
 )
