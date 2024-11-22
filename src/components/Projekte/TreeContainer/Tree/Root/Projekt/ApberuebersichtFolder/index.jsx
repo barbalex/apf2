@@ -32,7 +32,7 @@ export const ApberuebersichtFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && <Apberuebersichts />}
+        {isOpen && <Apberuebersichts projekt={projekt} />}
       </>
     )
   }),
