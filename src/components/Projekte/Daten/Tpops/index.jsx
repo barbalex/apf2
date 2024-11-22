@@ -17,7 +17,7 @@ export const Component = memo(
     const { apId, popId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { tpopGqlFilterForTree } = store.tree
+    const { tpopGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { data, isLoading, error } = useQuery(
       createTpopsQuery({
@@ -39,6 +39,7 @@ export const Component = memo(
         title="Teil-Populationen"
         totalCount={totalCount}
         menuBar={<Menu />}
+        highlightSearchString={nodeLabelFilter.tpop}
       />
     )
   }),
