@@ -19,12 +19,8 @@ import { StoreContext } from '../../../storeContext.js'
 import { query } from './query.js'
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.js'
-import { SiteTitle } from '../Bar/index.jsx'
+import { SiteTitle, MenuDiv } from '../Bar/index.jsx'
 
-const MenuDiv = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`
 const StyledButton = styled(Button)`
   color: white !important;
   text-transform: none !important;

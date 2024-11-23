@@ -24,7 +24,7 @@ export const SiteTitle = styled(Button)`
     border-width: 1px !important;
   }
 `
-const MenuDiv = styled.div`
+export const MenuDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
