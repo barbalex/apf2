@@ -11,7 +11,7 @@ import { More } from './More/index.jsx'
 import { Daten } from './Daten.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
-import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { minWidthToShowAllMenus } from '../../index.jsx'
 
 export const StyledButton = styled(Button)`
@@ -123,8 +123,28 @@ export const ProjekteMenus = memo(
     const filter2IsVisible = projekteTabs.includes('filter2')
     const karte2IsVisible = projekteTabs.includes('karte2')
 
+    const widths = useMemo(
+      () => [
+        134,
+        83,
+        77,
+        77,
+        ...(!!projId ? [95] : []),
+        ...(showAllMenus ? [147, 92, 88] : []),
+        ...(showAllMenus && !!projId ? [101] : []),
+        129,
+        71,
+      ],
+      [],
+    )
+
+    // TODO: in MenuBar clicking menus does not work
     return (
-      <>
+      <
+        // MenuBar
+        // widths={widths}
+        // rerenderer={`${projId}/${showAllMenus}`}
+      >
         <StyledButton
           name="tree"
           variant={treeIsVisible ? 'outlined' : 'text'}
