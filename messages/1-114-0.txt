@@ -1,0 +1,1 @@
+Ab Version 1.114.0: Das Top-Menü (in dem man Strukturbaum, Daten, Filter, Karte etc. wählt) wird nun wie das Formular-Menü dynamisch an die verfügbare Breite angepasst. Das ist v.a. auf Mobilgeräten nützlich
