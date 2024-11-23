@@ -36,6 +36,7 @@ const StyledBadge = styled(Badge)`
   .MuiBadge-anchorOriginTopRightRectangular {
     top: 9px !important;
     right: 9px !important;
+    color: white !important;
   }
 `
 const spinning = keyframes`

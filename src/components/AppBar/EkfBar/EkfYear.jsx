@@ -18,6 +18,7 @@ const Container = styled.div`
 const Jahr = styled.p`
   margin-top: auto;
   margin-bottom: auto;
+  color: white;
 `
 
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
