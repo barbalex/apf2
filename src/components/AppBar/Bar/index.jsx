@@ -1,15 +1,25 @@
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router-dom'
+import { useResizeDetector } from 'react-resize-detector'
 
 import { isMobilePhone } from '../../../modules/isMobilePhone.js'
 import { HomeMenus } from './Home.jsx'
 import { EkPlanMenus } from './EkPlan.jsx'
 import { ProjekteMenus } from './Projekte/index.jsx'
 import { DocsMenus } from './Docs.jsx'
+import { minWidthToShowAllMenus, minWidthToShowTitle } from '../index.jsx'
 
+export const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: ${(props) =>
+    props.alignFlexEnd ? 'flex-end' : 'space-between'};
+  align-items: center;
+  flex-grow: 1;
+`
 export const SiteTitle = styled(Button)`
-  display: none !important;
+  display: ${(props) => (props.hide ? 'none' : 'block')} !important;
   color: white !important;
   font-size: 1em !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
@@ -17,9 +27,6 @@ export const SiteTitle = styled(Button)`
   text-transform: none !important;
   white-space: nowrap !important;
 
-  @media (min-width: 1200px) {
-    display: block !important;
-  }
   :hover {
     border-width: 1px !important;
   }
@@ -27,6 +34,8 @@ export const SiteTitle = styled(Button)`
 export const MenuDiv = styled.div`
   display: flex;
   flex-wrap: nowrap;
+  flex-grow: 1;
+  justify-content: flex-end;
 `
 
 export const Bar = () => {
@@ -38,14 +47,28 @@ export const Bar = () => {
   // const showProjekte = pathname.startsWith('/Daten') && !showEkPlan
   const showDocs = pathname.startsWith('/Dokumentation')
 
+  const { width, ref } = useResizeDetector({
+    handleHeight: false,
+    refreshMode: 'debounce',
+    refreshRate: 500,
+    refreshOptions: { leading: false, trailing: true },
+  })
+
+  const showAllMenus = width >= minWidthToShowAllMenus
+
   return (
-    <>
+    <Container
+      ref={ref}
+      desktopMinWidth={minWidthToShowAllMenus}
+      alignFlexEnd={width < minWidthToShowTitle}
+    >
       {!isMobile && (
         <SiteTitle
           variant="outlined"
           component={Link}
           to={`/${search}`}
           title="Home"
+          hide={width <= minWidthToShowTitle}
         >
           AP Flora
         </SiteTitle>
@@ -57,8 +80,8 @@ export const Bar = () => {
           <DocsMenus />
         : showEkPlan ?
           <EkPlanMenus />
-        : <ProjekteMenus />}
+        : <ProjekteMenus showAllMenus={showAllMenus} />}
       </MenuDiv>
-    </>
+    </Container>
   )
 }

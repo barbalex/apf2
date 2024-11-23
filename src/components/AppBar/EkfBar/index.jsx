@@ -20,6 +20,7 @@ import { query } from './query.js'
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.js'
 import { SiteTitle, MenuDiv } from '../Bar/index.jsx'
+import { Container } from '../Bar/index.jsx'
 
 const StyledButton = styled(Button)`
   color: white !important;
@@ -121,7 +122,7 @@ export const EkfBar = observer(() => {
   }, [ekfCount, setIsPrint])
 
   return (
-    <>
+    <Container>
       {!isMobile && (
         <SiteTitle
           variant="outlined"
@@ -186,6 +187,6 @@ export const EkfBar = observer(() => {
           </StyledButton>
         </>
       </MenuDiv>
-    </>
+    </Container>
   )
 })

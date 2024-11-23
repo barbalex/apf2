@@ -10,6 +10,8 @@ import { Spinner } from '../shared/Spinner.jsx'
 import { StoreContext } from '../../storeContext.js'
 
 const isInIframe = inIframe()
+export const minWidthToShowAllMenus = 1095
+export const minWidthToShowTitle = 1200
 
 const Container = styled.div`
   height: 100dvh;
@@ -33,7 +35,7 @@ const Appbar = styled.div`
   background-color: #2e7d32;
   height: 38px;
 
-  @media (max-width: 1199px) {
+  @media (max-width: ${minWidthToShowTitle - 1}px) {
     justify-content: flex-end;
   }
 

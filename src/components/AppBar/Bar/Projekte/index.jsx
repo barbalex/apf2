@@ -12,6 +12,7 @@ import { Daten } from './Daten.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { minWidthToShowAllMenus } from '../../index.jsx'
 
 export const StyledButton = styled(Button)`
   color: white !important;
@@ -38,9 +39,7 @@ export const StyledButton = styled(Button)`
   width: ${(props) => `${props.width}px` ?? 'unset'} !important;
 `
 export const StyledDesktopButton = styled(StyledButton)`
-  @media (max-width: 1095px) {
-    display: none !important;
-  }
+  ${(props) => props.hide && 'display: none !important;'}
 `
 const DokuButton = styled(Button)`
   color: white !important;
@@ -49,7 +48,7 @@ const DokuButton = styled(Button)`
 `
 
 export const ProjekteMenus = memo(
-  observer(() => {
+  observer(({ showAllMenus }) => {
     const { projId } = useParams()
     const { search } = useLocation()
 
@@ -184,6 +183,7 @@ export const ProjekteMenus = memo(
             onClick={onClickTree2}
             data-id="nav-tree2"
             width={147}
+            hide={!showAllMenus}
           >
             Strukturbaum 2
           </StyledDesktopButton>
@@ -198,6 +198,7 @@ export const ProjekteMenus = memo(
             data-id="nav-filter2"
             title="Daten filtern"
             width={88}
+            hide={!showAllMenus}
           >
             Filter 2
           </StyledDesktopButton>
@@ -212,6 +213,7 @@ export const ProjekteMenus = memo(
             data-id="ek-planung"
             title="EK und EKF planen"
             width={101}
+            hide={!showAllMenus}
           >
             EK-Planung
           </StyledDesktopButton>

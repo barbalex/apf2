@@ -8,7 +8,6 @@ import {
   Children,
   cloneElement,
 } from 'react'
-import { useResizeDetector } from 'react-resize-detector'
 import { IconButton, Menu, MenuItem } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
 import {
