@@ -18,7 +18,7 @@ const TitleRow = styled.div`
   flex-direction: row;
   justify-content: space-between;
   min-height: 42px;
-  max-width: 100%;
+  flex-grow: 1;
   overflow: hidden;
 `
 const Title = styled.div`
