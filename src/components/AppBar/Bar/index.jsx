@@ -19,7 +19,7 @@ export const Container = styled.div`
   flex-grow: 1;
 `
 export const SiteTitle = styled(Button)`
-  display: ${(props) => (props.hide ? 'none' : 'block')} !important;
+  display: ${(props) => (props.hide === 'true' ? 'none' : 'block')} !important;
   color: white !important;
   font-size: 1em !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
@@ -54,7 +54,7 @@ export const Bar = () => {
     refreshOptions: { leading: false, trailing: true },
   })
 
-  const showAllMenus = width >= minWidthToShowAllMenus
+  const showAllMenus = !isMobile && width >= minWidthToShowAllMenus
 
   return (
     <Container
@@ -68,7 +68,7 @@ export const Bar = () => {
           component={Link}
           to={`/${search}`}
           title="Home"
-          hide={width <= minWidthToShowTitle}
+          hide={(width <= minWidthToShowTitle).toString()}
         >
           AP Flora
         </SiteTitle>
