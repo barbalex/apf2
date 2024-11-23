@@ -120,7 +120,7 @@ export const MenuBar = memo(
       for (const [index, child] of Children.toArray(usableChildren).entries()) {
         const width = widths?.[index] ?? buttonWidth
         if (widthSum + width > spaceForButtons) {
-          newMenus.push(cloneElement(child, { inMenu: true }))
+          newMenus.push(cloneElement(child, { inmenu: 'true' }))
         } else {
           newButtons.push(cloneElement(child))
           widthSum += width

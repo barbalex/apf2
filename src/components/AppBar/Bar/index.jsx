@@ -14,7 +14,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: ${(props) =>
-    props.alignFlexEnd ? 'flex-end' : 'space-between'};
+    props.alignFlexEnd === 'true' ? 'flex-end' : 'space-between'};
   align-items: center;
   flex-grow: 1;
 `
@@ -55,14 +55,16 @@ export const Bar = () => {
   })
 
   const showAllMenus = !isMobile && width >= minWidthToShowAllMenus
+  const showTitle = width >= minWidthToShowTitle
+
+
 
   return (
     <Container
       ref={ref}
-      desktopMinWidth={minWidthToShowAllMenus}
-      alignFlexEnd={width < minWidthToShowTitle}
+      alignFlexEnd={(width < minWidthToShowTitle).toString()}
     >
-      {!isMobile && (
+      {showTitle && (
         <SiteTitle
           variant="outlined"
           component={Link}

@@ -24,7 +24,7 @@ import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
 import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 
 const Fitter = styled.div`
-  margin-top: ${(props) => (props.inMenu ? -8 : -15)}px;
+  margin-top: ${(props) => (props.inmenu === 'true' ? -8 : -15)}px;
   padding-left: 5px;
 `
 const iconStyle = { color: 'white' }

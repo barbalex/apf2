@@ -11,8 +11,8 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Badge from '@mui/material/Badge'
 import { useParams, useLocation } from 'react-router-dom'
+import { useResizeDetector } from 'react-resize-detector'
 
-import { isMobilePhone } from '../../../modules/isMobilePhone.js'
 import { EkfYear } from './EkfYear.jsx'
 import { User } from './User/index.jsx'
 import { StoreContext } from '../../../storeContext.js'
@@ -52,6 +52,8 @@ const StyledMdHourglassEmpty = styled(MdHourglassEmpty)`
   animation: ${spinning} 3s linear infinite;
 `
 
+const minWidthToShowTitle = 800
+
 export const EkfBar = observer(() => {
   const { userId, ekfId, ekfYear } = useParams()
   const { search } = useLocation()
@@ -59,8 +61,6 @@ export const EkfBar = observer(() => {
   const store = useContext(StoreContext)
   const { user, setIsPrint, setIsEkfSinglePrint } = store
   const ekfIsActive = !!ekfId
-
-  const isMobile = isMobilePhone()
 
   const { token, name: username } = user
   const tokenDecoded = token ? jwtDecode(token) : null
@@ -121,9 +121,20 @@ export const EkfBar = observer(() => {
     )
   }, [ekfCount, setIsPrint])
 
+  const { width, ref } = useResizeDetector({
+    handleHeight: false,
+    refreshMode: 'debounce',
+    refreshRate: 500,
+    refreshOptions: { leading: false, trailing: true },
+  })
+  const showTitle = width >= minWidthToShowTitle
+
   return (
-    <Container>
-      {!isMobile && (
+    <Container
+      ref={ref}
+      alignFlexEnd={(width < minWidthToShowTitle).toString()}
+    >
+      {showTitle && (
         <SiteTitle
           variant="outlined"
           component={Link}

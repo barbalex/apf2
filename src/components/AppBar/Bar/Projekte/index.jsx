@@ -138,12 +138,10 @@ export const ProjekteMenus = memo(
       [],
     )
 
-    // TODO: in MenuBar clicking menus does not work
     return (
-      <
-        // MenuBar
-        // widths={widths}
-        // rerenderer={`${projId}/${showAllMenus}`}
+      <MenuBar
+        widths={widths}
+        rerenderer={`${projId}/${showAllMenus}/${projekteTabs}`}
       >
         <StyledButton
           name="tree"
@@ -250,7 +248,7 @@ export const ProjekteMenus = memo(
           onClickExporte={onClickExporte}
           role={role}
         />
-      </>
+      </MenuBar>
     )
   }),
 )
