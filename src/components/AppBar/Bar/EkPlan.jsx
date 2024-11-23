@@ -6,6 +6,7 @@ const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
   text-transform: none !important;
+  width: ${(props) => `${props.width}px` ?? 'unset'} !important;
 `
 export const EkPlanMenus = () => {
   const { pathname, search } = useLocation()
@@ -16,6 +17,7 @@ export const EkPlanMenus = () => {
       variant="text"
       component={Link}
       to={`/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13${search}`}
+      width={140}
     >
       Arten bearbeiten
     </StyledButton>,
@@ -24,6 +26,7 @@ export const EkPlanMenus = () => {
       variant={pathname.startsWith('/Dokumentation') ? 'outlined' : 'text'}
       component={Link}
       to={`/Dokumentation/${search}`}
+      width={130}
     >
       Dokumentation
     </StyledButton>,
