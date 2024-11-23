@@ -115,22 +115,22 @@ export const ProjekteMenus = memo(
       onClickButton('tree2')
     }, [onClickButton, resetTree2Src])
 
-    const showTree = projekteTabs.includes('tree')
-    const showDaten = projekteTabs.includes('daten')
-    const showFilter = projekteTabs.includes('filter')
-    const showExporte = projekteTabs.includes('exporte')
-    const showKarte = projekteTabs.includes('karte')
-    const showTree2 = projekteTabs.includes('tree2')
-    const showDaten2 = projekteTabs.includes('daten2')
-    const showFilter2 = projekteTabs.includes('filter2')
-    const showKarte2 = projekteTabs.includes('karte2')
+    const treeIsVisible = projekteTabs.includes('tree')
+    const datenIsVisible = projekteTabs.includes('daten')
+    const filterIsVisible = projekteTabs.includes('filter')
+    const exporteIsVisible = projekteTabs.includes('exporte')
+    const karteIsVisible = projekteTabs.includes('karte')
+    const tree2IsVisible = projekteTabs.includes('tree2')
+    const daten2IsVisible = projekteTabs.includes('daten2')
+    const filter2IsVisible = projekteTabs.includes('filter2')
+    const karte2IsVisible = projekteTabs.includes('karte2')
 
     return (
       <>
         <StyledButton
           name="tree"
-          variant={showTree ? 'outlined' : 'text'}
-          followed={showDaten?.toString()}
+          variant={treeIsVisible ? 'outlined' : 'text'}
+          followed={datenIsVisible?.toString()}
           onClick={onClickTree}
           data-id="nav-tree1"
           width={134}
@@ -139,9 +139,9 @@ export const ProjekteMenus = memo(
         </StyledButton>
         <Daten />
         <StyledButton
-          variant={showFilter ? 'outlined' : 'text'}
-          preceded={showDaten?.toString()}
-          followed={showKarte?.toString()}
+          variant={filterIsVisible ? 'outlined' : 'text'}
+          preceded={datenIsVisible?.toString()}
+          followed={karteIsVisible?.toString()}
           onClick={onClickFilter}
           data-id="nav-filter1"
           title="Daten filtern"
@@ -150,11 +150,11 @@ export const ProjekteMenus = memo(
           Filter
         </StyledButton>
         <StyledButton
-          variant={showKarte ? 'outlined' : 'text'}
-          preceded={showFilter?.toString()}
+          variant={karteIsVisible ? 'outlined' : 'text'}
+          preceded={filterIsVisible?.toString()}
           followed={(
-            (!isMobile && exporteIsActive && showExporte) ||
-            (!isMobile && !exporteIsActive && showTree2)
+            (!isMobile && exporteIsActive && exporteIsVisible) ||
+            (!isMobile && !exporteIsActive && tree2IsVisible)
           )?.toString()}
           onClick={onClickKarte}
           data-id="nav-karte1"
@@ -164,9 +164,9 @@ export const ProjekteMenus = memo(
         </StyledButton>
         {!isMobile && exporteIsActive && (
           <StyledButton
-            variant={showExporte ? 'outlined' : 'text'}
-            preceded={showKarte?.toString()}
-            followed={showTree2?.toString()}
+            variant={exporteIsVisible ? 'outlined' : 'text'}
+            preceded={karteIsVisible?.toString()}
+            followed={tree2IsVisible?.toString()}
             onClick={onClickExporte}
             data-id="nav-exporte"
             width={95}
@@ -176,12 +176,12 @@ export const ProjekteMenus = memo(
         )}
         {!isMobile && (
           <StyledDesktopButton
-            variant={showTree2 ? 'outlined' : 'text'}
+            variant={tree2IsVisible ? 'outlined' : 'text'}
             preceded={(
-              (exporteIsActive && showExporte) ||
-              (!exporteIsActive && showKarte)
+              (exporteIsActive && exporteIsVisible) ||
+              (!exporteIsActive && karteIsVisible)
             )?.toString()}
-            followed={showDaten2?.toString()}
+            followed={daten2IsVisible?.toString()}
             onClick={onClickTree2}
             data-id="nav-tree2"
             width={147}
@@ -189,12 +189,12 @@ export const ProjekteMenus = memo(
             Strukturbaum 2
           </StyledDesktopButton>
         )}
-        {!isMobile && showTree2 && <Daten treeNr="2" />}
-        {!isMobile && showTree2 && (
+        {!isMobile && tree2IsVisible && <Daten treeNr="2" />}
+        {!isMobile && tree2IsVisible && (
           <StyledDesktopButton
-            variant={showFilter2 ? 'outlined' : 'text'}
-            preceded={showDaten2?.toString()}
-            followed={showKarte2?.toString()}
+            variant={filter2IsVisible ? 'outlined' : 'text'}
+            preceded={daten2IsVisible?.toString()}
+            followed={karte2IsVisible?.toString()}
             onClick={onClickFilter2}
             data-id="nav-filter2"
             title="Daten filtern"
