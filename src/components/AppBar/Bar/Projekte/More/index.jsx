@@ -20,6 +20,7 @@ const Container = styled.div`
 const MehrButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
+  width: ${(props) => `${props.width}px` ?? 'unset'} !important;
 `
 const Version = styled.div`
   padding: 12px 16px;
@@ -82,6 +83,7 @@ export const More = memo(
           aria-haspopup="true"
           onClick={onClickMehrButton}
           data-id="appbar-more"
+          width={71}
         >
           Mehr
         </MehrButton>

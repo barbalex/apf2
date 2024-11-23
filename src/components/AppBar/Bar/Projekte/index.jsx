@@ -11,8 +11,9 @@ import { More } from './More/index.jsx'
 import { Daten } from './Daten.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
+import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 
-const StyledButton = styled(Button)`
+export const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
   border-right-color: ${(props) =>
@@ -34,15 +35,17 @@ const StyledButton = styled(Button)`
   margin-right: ${(props) =>
     props.followed === 'true' ? '-1px' : 'unset'} !important;
   text-transform: none !important;
+  width: ${(props) => `${props.width}px` ?? 'unset'} !important;
 `
 const StyledDesktopButton = styled(StyledButton)`
-  @media (max-width: 884px) {
+  @media (max-width: 1030px) {
     display: none !important;
   }
 `
 const DokuButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
+  width: ${(props) => `${props.width}px` ?? 'unset'} !important;
 `
 
 export const ProjekteMenus = memo(
@@ -120,6 +123,7 @@ export const ProjekteMenus = memo(
           followed={projekteTabs.includes('daten')?.toString()}
           onClick={onClickTree}
           data-id="nav-tree1"
+          width={134}
         >
           Strukturbaum
         </StyledButton>
@@ -131,6 +135,7 @@ export const ProjekteMenus = memo(
           onClick={onClickFilter}
           data-id="nav-filter1"
           title="Daten filtern"
+          width={71}
         >
           Filter
         </StyledButton>
@@ -145,6 +150,7 @@ export const ProjekteMenus = memo(
           )?.toString()}
           onClick={onClickKarte}
           data-id="nav-karte1"
+          width={74}
         >
           Karte
         </StyledButton>
@@ -155,6 +161,7 @@ export const ProjekteMenus = memo(
             followed={projekteTabs.includes('tree2')?.toString()}
             onClick={onClickExporte}
             data-id="nav-exporte"
+            width={74}
           >
             Exporte
           </StyledDesktopButton>
@@ -169,6 +176,7 @@ export const ProjekteMenus = memo(
             followed={projekteTabs.includes('daten2')?.toString()}
             onClick={onClickTree2}
             data-id="nav-tree2"
+            width={147}
           >
             Strukturbaum 2
           </StyledDesktopButton>
@@ -182,6 +190,7 @@ export const ProjekteMenus = memo(
             onClick={onClickFilter2}
             data-id="nav-filter2"
             title="Daten filtern"
+            width={71}
           >
             Filter 2
           </StyledDesktopButton>
@@ -195,6 +204,7 @@ export const ProjekteMenus = memo(
             to={`/Daten/Projekte/${projId}/EK-Planung${search}`}
             data-id="ek-planung"
             title="EK und EKF planen"
+            width={101}
           >
             EK-Planung
           </StyledDesktopButton>
@@ -203,6 +213,7 @@ export const ProjekteMenus = memo(
           variant="text"
           component={Link}
           to={`/Dokumentation/${search}`}
+          width={129}
         >
           Dokumentation
         </DokuButton>

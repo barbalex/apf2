@@ -6,30 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
-
-const StyledButton = styled(Button)`
-  color: white !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  border-right-color: ${(props) =>
-    props.followed === 'true' ?
-      ' rgba(255, 255, 255, 0.25)'
-    : ' rgba(255, 255, 255, 0.5)'} !important;
-  border-left-color: ${(props) =>
-    props.preceded === 'true' ?
-      ' rgba(255, 255, 255, 0.25)'
-    : ' rgba(255, 255, 255, 0.5)'} !important;
-  border-top-left-radius: ${(props) =>
-    props.preceded === 'true' ? '0' : '4px'} !important;
-  border-bottom-left-radius: ${(props) =>
-    props.preceded === 'true' ? '0' : '4px'} !important;
-  border-top-right-radius: ${(props) =>
-    props.followed === 'true' ? '0' : '4px'} !important;
-  border-bottom-right-radius: ${(props) =>
-    props.followed === 'true' ? '0' : '4px'} !important;
-  margin-right: ${(props) =>
-    props.followed === 'true' ? '-1px' : 'unset'} !important;
-  text-transform: none !important;
-`
+import { StyledButton } from './index.jsx'
 
 export const Daten = memo(({ treeNr = '' }) => {
   const [projekteTabs, setProjekteTabs] = useSearchParamsState(
@@ -66,6 +43,7 @@ export const Daten = memo(({ treeNr = '' }) => {
       followed={followed.toString()}
       onClick={onClickButton}
       data-id={`nav-daten${treeNr || 1}`}
+      width={77}
     >
       {`Daten${treeNr === '2' ? ' 2' : ''}`}
     </StyledButton>

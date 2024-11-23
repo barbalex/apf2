@@ -17,7 +17,7 @@ export const SiteTitle = styled(Button)`
   text-transform: none !important;
   white-space: nowrap !important;
 
-  @media (min-width: 885px) {
+  @media (min-width: 1130px) {
     display: block !important;
   }
   :hover {
@@ -26,7 +26,7 @@ export const SiteTitle = styled(Button)`
 `
 export const MenuDiv = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 `
 
 export const Bar = () => {

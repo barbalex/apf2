@@ -32,7 +32,7 @@ const Appbar = styled.div`
   padding: 4px;
   background-color: #2e7d32;
 
-  @media (max-width: 884px) {
+  @media (max-width: 1129px) {
     justify-content: flex-end;
   }
 
