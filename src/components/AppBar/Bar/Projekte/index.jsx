@@ -57,7 +57,6 @@ export const ProjekteMenus = memo(
     const { user } = store
     const { resetTree2Src } = store.tree
 
-    const exporteIsActive = !!projId
     const isMobile = isMobilePhone()
 
     const token = user?.token
@@ -153,8 +152,8 @@ export const ProjekteMenus = memo(
           variant={karteIsVisible ? 'outlined' : 'text'}
           preceded={filterIsVisible?.toString()}
           followed={(
-            (!isMobile && exporteIsActive && exporteIsVisible) ||
-            (!isMobile && !exporteIsActive && tree2IsVisible)
+            (!isMobile && !!projId && exporteIsVisible) ||
+            (!isMobile && !projId && tree2IsVisible)
           )?.toString()}
           onClick={onClickKarte}
           data-id="nav-karte1"
@@ -162,7 +161,7 @@ export const ProjekteMenus = memo(
         >
           Karte
         </StyledButton>
-        {!isMobile && exporteIsActive && (
+        {!isMobile && !!projId && (
           <StyledButton
             variant={exporteIsVisible ? 'outlined' : 'text'}
             preceded={karteIsVisible?.toString()}
@@ -178,8 +177,8 @@ export const ProjekteMenus = memo(
           <StyledDesktopButton
             variant={tree2IsVisible ? 'outlined' : 'text'}
             preceded={(
-              (exporteIsActive && exporteIsVisible) ||
-              (!exporteIsActive && karteIsVisible)
+              (!!projId && exporteIsVisible) ||
+              (!projId && karteIsVisible)
             )?.toString()}
             followed={daten2IsVisible?.toString()}
             onClick={onClickTree2}
