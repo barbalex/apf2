@@ -3,10 +3,10 @@ import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router-dom'
 
 import { isMobilePhone } from '../../../modules/isMobilePhone.js'
-import { Home } from './Home.jsx'
-import { EkPlan } from './EkPlan.jsx'
-import { Projekte } from './Projekte/index.jsx'
-import { Docs } from './Docs.jsx'
+import { HomeMenus } from './Home.jsx'
+import { EkPlanMenus } from './EkPlan.jsx'
+import { ProjekteMenus } from './Projekte/index.jsx'
+import { DocsMenus } from './Docs.jsx'
 
 export const SiteTitle = styled(Button)`
   display: none !important;
@@ -52,10 +52,10 @@ export const Bar = () => {
       )}
       <MenuDiv>
         <>
-          {showHome && <Home />}
-          {showEkPlan && <EkPlan />}
-          {showProjekte && <Projekte />}
-          {showDocs && <Docs />}
+          {showHome && <HomeMenus />}
+          {showEkPlan && <EkPlanMenus />}
+          {showProjekte && <ProjekteMenus />}
+          {showDocs && <DocsMenus />}
         </>
       </MenuDiv>
     </>

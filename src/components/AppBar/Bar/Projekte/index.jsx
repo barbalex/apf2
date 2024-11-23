@@ -35,12 +35,17 @@ const StyledButton = styled(Button)`
     props.followed === 'true' ? '-1px' : 'unset'} !important;
   text-transform: none !important;
 `
+const StyledDesktopButton = styled(StyledButton)`
+  @media (max-width: 884px) {
+    display: none !important;
+  }
+`
 const DokuButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
 `
 
-export const Projekte = memo(
+export const ProjekteMenus = memo(
   observer(() => {
     const { projId } = useParams()
     const { search } = useLocation()
@@ -144,7 +149,7 @@ export const Projekte = memo(
           Karte
         </StyledButton>
         {!isMobile && exporteIsActive && (
-          <StyledButton
+          <StyledDesktopButton
             variant={projekteTabs.includes('exporte') ? 'outlined' : 'text'}
             preceded={projekteTabs.includes('karte')?.toString()}
             followed={projekteTabs.includes('tree2')?.toString()}
@@ -152,10 +157,10 @@ export const Projekte = memo(
             data-id="nav-exporte"
           >
             Exporte
-          </StyledButton>
+          </StyledDesktopButton>
         )}
         {!isMobile && (
-          <StyledButton
+          <StyledDesktopButton
             variant={projekteTabs.includes('tree2') ? 'outlined' : 'text'}
             preceded={(
               (exporteIsActive && projekteTabs.includes('exporte')) ||
@@ -166,11 +171,11 @@ export const Projekte = memo(
             data-id="nav-tree2"
           >
             Strukturbaum 2
-          </StyledButton>
+          </StyledDesktopButton>
         )}
         {!isMobile && projekteTabs.includes('tree2') && <Daten treeNr="2" />}
         {!isMobile && projekteTabs.includes('tree2') && (
-          <StyledButton
+          <StyledDesktopButton
             variant={projekteTabs.includes('filter2') ? 'outlined' : 'text'}
             preceded={projekteTabs.includes('daten2')?.toString()}
             followed={projekteTabs.includes('karte2')?.toString()}
@@ -179,10 +184,10 @@ export const Projekte = memo(
             title="Daten filtern"
           >
             Filter 2
-          </StyledButton>
+          </StyledDesktopButton>
         )}
         {!isMobile && !!projId && (
-          <StyledButton
+          <StyledDesktopButton
             variant="text"
             preceded={false?.toString()}
             followed={false.toString()}
@@ -192,7 +197,7 @@ export const Projekte = memo(
             title="EK und EKF planen"
           >
             EK-Planung
-          </StyledButton>
+          </StyledDesktopButton>
         )}
         <DokuButton
           variant="text"
