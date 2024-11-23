@@ -35,7 +35,7 @@ export const Bar = () => {
   const { search, pathname } = useLocation()
   const showHome = pathname === '/'
   const showEkPlan = pathname.includes('/EK-Planung')
-  const showProjekte = pathname.startsWith('/Daten') && !showEkPlan
+  // const showProjekte = pathname.startsWith('/Daten') && !showEkPlan
   const showDocs = pathname.startsWith('/Dokumentation')
 
   return (
@@ -51,12 +51,13 @@ export const Bar = () => {
         </SiteTitle>
       )}
       <MenuDiv>
-        <>
-          {showHome && <HomeMenus />}
-          {showEkPlan && <EkPlanMenus />}
-          {showProjekte && <ProjekteMenus />}
-          {showDocs && <DocsMenus />}
-        </>
+        {showHome ?
+          <HomeMenus />
+        : showDocs ?
+          <DocsMenus />
+        : showEkPlan ?
+          <EkPlanMenus />
+        : <ProjekteMenus />}
       </MenuDiv>
     </>
   )
