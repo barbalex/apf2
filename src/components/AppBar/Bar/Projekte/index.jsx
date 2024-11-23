@@ -142,6 +142,7 @@ export const ProjekteMenus = memo(
       <MenuBar
         widths={widths}
         rerenderer={`${projId}/${showAllMenus}/${projekteTabs}`}
+        bgColor="rgb(46, 125, 50)"
       >
         <StyledButton
           name="tree"

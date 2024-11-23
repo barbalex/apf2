@@ -20,6 +20,9 @@ export const Container = styled.div`
 `
 export const SiteTitle = styled(Button)`
   display: ${(props) => (props.hide === 'true' ? 'none' : 'block')} !important;
+  flex-basis: 110px;
+  flex-grow: 0;
+  flex-shrink: 0;
   color: white !important;
   font-size: 1em !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
@@ -56,8 +59,7 @@ export const Bar = () => {
 
   const showAllMenus = !isMobile && width >= minWidthToShowAllMenus
   const showTitle = width >= minWidthToShowTitle
-
-
+  const menuDivWidth = showTitle ? width - 110 : width
 
   return (
     <Container
@@ -75,7 +77,7 @@ export const Bar = () => {
           AP Flora
         </SiteTitle>
       )}
-      <MenuDiv>
+      <MenuDiv width={menuDivWidth}>
         {showHome ?
           <HomeMenus />
         : showDocs ?
