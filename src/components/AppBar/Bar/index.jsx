@@ -11,13 +11,13 @@ import { Docs } from './Docs.jsx'
 export const SiteTitle = styled(Button)`
   display: none !important;
   color: white !important;
-  font-size: 1.2em !important;
+  font-size: 1em !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
   border-width: 0 !important;
   text-transform: none !important;
   white-space: nowrap !important;
 
-  @media (min-width: 800px) {
+  @media (min-width: 885px) {
     display: block !important;
   }
   :hover {
