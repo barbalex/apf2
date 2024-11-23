@@ -115,12 +115,22 @@ export const ProjekteMenus = memo(
       onClickButton('tree2')
     }, [onClickButton, resetTree2Src])
 
+    const showTree = projekteTabs.includes('tree')
+    const showDaten = projekteTabs.includes('daten')
+    const showFilter = projekteTabs.includes('filter')
+    const showExporte = projekteTabs.includes('exporte')
+    const showKarte = projekteTabs.includes('karte')
+    const showTree2 = projekteTabs.includes('tree2')
+    const showDaten2 = projekteTabs.includes('daten2')
+    const showFilter2 = projekteTabs.includes('filter2')
+    const showKarte2 = projekteTabs.includes('karte2')
+
     return (
       <>
         <StyledButton
           name="tree"
-          variant={projekteTabs.includes('tree') ? 'outlined' : 'text'}
-          followed={projekteTabs.includes('daten')?.toString()}
+          variant={showTree ? 'outlined' : 'text'}
+          followed={showDaten?.toString()}
           onClick={onClickTree}
           data-id="nav-tree1"
           width={134}
@@ -129,9 +139,9 @@ export const ProjekteMenus = memo(
         </StyledButton>
         <Daten />
         <StyledButton
-          variant={projekteTabs.includes('filter') ? 'outlined' : 'text'}
-          preceded={projekteTabs.includes('daten')?.toString()}
-          followed={projekteTabs.includes('karte')?.toString()}
+          variant={showFilter ? 'outlined' : 'text'}
+          preceded={showDaten?.toString()}
+          followed={showKarte?.toString()}
           onClick={onClickFilter}
           data-id="nav-filter1"
           title="Daten filtern"
@@ -140,13 +150,11 @@ export const ProjekteMenus = memo(
           Filter
         </StyledButton>
         <StyledButton
-          variant={projekteTabs.includes('karte') ? 'outlined' : 'text'}
-          preceded={projekteTabs.includes('filter')?.toString()}
+          variant={showKarte ? 'outlined' : 'text'}
+          preceded={showFilter?.toString()}
           followed={(
-            (!isMobile &&
-              exporteIsActive &&
-              projekteTabs.includes('exporte')) ||
-            (!isMobile && !exporteIsActive && projekteTabs.includes('tree2'))
+            (!isMobile && exporteIsActive && showExporte) ||
+            (!isMobile && !exporteIsActive && showTree2)
           )?.toString()}
           onClick={onClickKarte}
           data-id="nav-karte1"
@@ -156,9 +164,9 @@ export const ProjekteMenus = memo(
         </StyledButton>
         {!isMobile && exporteIsActive && (
           <StyledButton
-            variant={projekteTabs.includes('exporte') ? 'outlined' : 'text'}
-            preceded={projekteTabs.includes('karte')?.toString()}
-            followed={projekteTabs.includes('tree2')?.toString()}
+            variant={showExporte ? 'outlined' : 'text'}
+            preceded={showKarte?.toString()}
+            followed={showTree2?.toString()}
             onClick={onClickExporte}
             data-id="nav-exporte"
             width={95}
@@ -168,12 +176,12 @@ export const ProjekteMenus = memo(
         )}
         {!isMobile && (
           <StyledDesktopButton
-            variant={projekteTabs.includes('tree2') ? 'outlined' : 'text'}
+            variant={showTree2 ? 'outlined' : 'text'}
             preceded={(
-              (exporteIsActive && projekteTabs.includes('exporte')) ||
-              (!exporteIsActive && projekteTabs.includes('karte'))
+              (exporteIsActive && showExporte) ||
+              (!exporteIsActive && showKarte)
             )?.toString()}
-            followed={projekteTabs.includes('daten2')?.toString()}
+            followed={showDaten2?.toString()}
             onClick={onClickTree2}
             data-id="nav-tree2"
             width={147}
@@ -181,12 +189,12 @@ export const ProjekteMenus = memo(
             Strukturbaum 2
           </StyledDesktopButton>
         )}
-        {!isMobile && projekteTabs.includes('tree2') && <Daten treeNr="2" />}
-        {!isMobile && projekteTabs.includes('tree2') && (
+        {!isMobile && showTree2 && <Daten treeNr="2" />}
+        {!isMobile && showTree2 && (
           <StyledDesktopButton
-            variant={projekteTabs.includes('filter2') ? 'outlined' : 'text'}
-            preceded={projekteTabs.includes('daten2')?.toString()}
-            followed={projekteTabs.includes('karte2')?.toString()}
+            variant={showFilter2 ? 'outlined' : 'text'}
+            preceded={showDaten2?.toString()}
+            followed={showKarte2?.toString()}
             onClick={onClickFilter2}
             data-id="nav-filter2"
             title="Daten filtern"
