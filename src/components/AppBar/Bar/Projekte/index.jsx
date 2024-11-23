@@ -37,8 +37,8 @@ export const StyledButton = styled(Button)`
   text-transform: none !important;
   width: ${(props) => `${props.width}px` ?? 'unset'} !important;
 `
-const StyledDesktopButton = styled(StyledButton)`
-  @media (max-width: 1030px) {
+export const StyledDesktopButton = styled(StyledButton)`
+  @media (max-width: 1095px) {
     display: none !important;
   }
 `
@@ -135,7 +135,7 @@ export const ProjekteMenus = memo(
           onClick={onClickFilter}
           data-id="nav-filter1"
           title="Daten filtern"
-          width={71}
+          width={77}
         >
           Filter
         </StyledButton>
@@ -150,7 +150,7 @@ export const ProjekteMenus = memo(
           )?.toString()}
           onClick={onClickKarte}
           data-id="nav-karte1"
-          width={74}
+          width={77}
         >
           Karte
         </StyledButton>
@@ -161,7 +161,7 @@ export const ProjekteMenus = memo(
             followed={projekteTabs.includes('tree2')?.toString()}
             onClick={onClickExporte}
             data-id="nav-exporte"
-            width={74}
+            width={95}
           >
             Exporte
           </StyledButton>
@@ -190,7 +190,7 @@ export const ProjekteMenus = memo(
             onClick={onClickFilter2}
             data-id="nav-filter2"
             title="Daten filtern"
-            width={71}
+            width={88}
           >
             Filter 2
           </StyledDesktopButton>

@@ -17,7 +17,7 @@ export const SiteTitle = styled(Button)`
   text-transform: none !important;
   white-space: nowrap !important;
 
-  @media (min-width: 1130px) {
+  @media (min-width: 1200px) {
     display: block !important;
   }
   :hover {

@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
-import { StyledButton } from './index.jsx'
+import { StyledDesktopButton } from './index.jsx'
 
 export const Daten = memo(({ treeNr = '' }) => {
   const [projekteTabs, setProjekteTabs] = useSearchParamsState(
@@ -37,15 +37,15 @@ export const Daten = memo(({ treeNr = '' }) => {
   }
 
   return (
-    <StyledButton
+    <StyledDesktopButton
       variant={isDaten ? 'outlined' : 'text'}
       preceded={isTree.toString()}
       followed={followed.toString()}
       onClick={onClickButton}
       data-id={`nav-daten${treeNr || 1}`}
-      width={77}
+      width={treeNr === '2' ? 92 : 83}
     >
       {`Daten${treeNr === '2' ? ' 2' : ''}`}
-    </StyledButton>
+    </StyledDesktopButton>
   )
 })
