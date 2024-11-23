@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback } from 'react'
+import { memo, useContext, useCallback, useMemo } from 'react'
 import Button from '@mui/material/Button'
 import remove from 'lodash/remove'
 import styled from '@emotion/styled'
@@ -155,7 +155,7 @@ export const ProjekteMenus = memo(
           Karte
         </StyledButton>
         {!isMobile && exporteIsActive && (
-          <StyledDesktopButton
+          <StyledButton
             variant={projekteTabs.includes('exporte') ? 'outlined' : 'text'}
             preceded={projekteTabs.includes('karte')?.toString()}
             followed={projekteTabs.includes('tree2')?.toString()}
@@ -164,7 +164,7 @@ export const ProjekteMenus = memo(
             width={74}
           >
             Exporte
-          </StyledDesktopButton>
+          </StyledButton>
         )}
         {!isMobile && (
           <StyledDesktopButton
