@@ -54,7 +54,6 @@ const StylingContainer = styled.div`
   align-items: center;
   justify-content: flex-end;
   column-gap: 0;
-  // padding: 0 10px;
   min-height: ${buttonHeight}px;
   max-height: ${buttonHeight}px;
 `
