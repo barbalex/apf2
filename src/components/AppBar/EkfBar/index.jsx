@@ -19,21 +19,8 @@ import { StoreContext } from '../../../storeContext.js'
 import { query } from './query.js'
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.js'
+import { SiteTitle } from '../Bar/index.jsx'
 
-const SiteTitle = styled(Button)`
-  display: none !important;
-  color: white !important;
-  font-size: 20px !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  border-width: 0 !important;
-  text-transform: none !important;
-  @media (min-width: 750px) {
-    display: block !important;
-  }
-  :hover {
-    border-width: 1px !important;
-  }
-`
 const MenuDiv = styled.div`
   display: flex;
   flex-wrap: wrap;

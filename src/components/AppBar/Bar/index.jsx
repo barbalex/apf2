@@ -8,15 +8,16 @@ import { EkPlan } from './EkPlan.jsx'
 import { Projekte } from './Projekte/index.jsx'
 import { Docs } from './Docs.jsx'
 
-const SiteTitle = styled(Button)`
+export const SiteTitle = styled(Button)`
   display: none !important;
   color: white !important;
-  font-size: 20px !important;
+  font-size: 1.2em !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
   border-width: 0 !important;
   text-transform: none !important;
   white-space: nowrap !important;
-  @media (min-width: 750px) {
+
+  @media (min-width: 800px) {
     display: block !important;
   }
   :hover {

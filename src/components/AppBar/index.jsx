@@ -1,7 +1,5 @@
 import { memo, Suspense, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
-import MuiAppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
 import { Outlet, useLocation, useParams, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
@@ -24,19 +22,19 @@ const Container = styled.div`
     overflow: visible !important;
   }
 `
-const StyledAppBar = styled(MuiAppBar)`
-  flex-basis: 64px !important;
-  flex-shrink: 0 !important;
-  flex-grow: 0 !important;
+const Appbar = styled.div`
+  position: static;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+  background-color: #2e7d32;
 
   @media print {
     display: none !important;
   }
-`
-const StyledToolbar = styled(Toolbar)`
-  justify-content: space-between;
-  padding-left: 4px !important;
-  padding-right: 4px !important;
 `
 
 export const Component = memo(
@@ -65,13 +63,11 @@ export const Component = memo(
 
     return (
       <Container>
-        <StyledAppBar position="static">
-          <StyledToolbar>
-            {showEkf ?
-              <EkfBar />
-            : <Bar />}
-          </StyledToolbar>
-        </StyledAppBar>
+        <Appbar>
+          {showEkf ?
+            <EkfBar />
+          : <Bar />}
+        </Appbar>
         <Suspense fallback={<Spinner />}>
           <Outlet />
         </Suspense>
