@@ -21,6 +21,7 @@ import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dat
 const StyledButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
+  width: ${(props) => `${props.width}px` ?? 'unset'} !important;
 `
 const StyledIconButton = styled(IconButton)`
   color: white !important;
@@ -158,6 +159,7 @@ export const Menus = memo(
             variant="text"
             component={Link}
             to={`/Dokumentation/${search}`}
+            // width={129}
           >
             Dokumentation
           </StyledButton>

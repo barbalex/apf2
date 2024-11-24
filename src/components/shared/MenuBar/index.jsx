@@ -85,6 +85,11 @@ export const MenuBar = memo(
       [children],
     )
     const childrenCount = Children.count(usableChildren)
+    console.log('MenuBar', {
+      usableChildren,
+      widthsRead: usableChildren.map((c) => c.props.width ?? buttonWidth),
+      widthsPassedIn: widths,
+    })
 
     const [buttons, setButtons] = useState([])
     const [menus, setMenus] = useState([])

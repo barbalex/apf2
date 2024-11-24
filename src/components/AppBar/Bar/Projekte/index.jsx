@@ -38,9 +38,6 @@ export const StyledButton = styled(Button)`
   text-transform: none !important;
   width: ${(props) => `${props.width}px` ?? 'unset'} !important;
 `
-export const StyledDesktopButton = styled(StyledButton)`
-  ${(props) => props.hide === 'true' && 'display: none !important;'}
-`
 const DokuButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
@@ -130,7 +127,8 @@ export const ProjekteMenus = memo(
         77,
         77,
         ...(!!projId ? [95] : []),
-        ...(showAllMenus ? [147, 92, 88] : []),
+        ...(showAllMenus ? [147] : []),
+        ...(showAllMenus && tree2IsVisible ? [92, 88] : []),
         ...(showAllMenus && !!projId ? [101] : []),
         129,
         71,
@@ -154,7 +152,7 @@ export const ProjekteMenus = memo(
         >
           Strukturbaum
         </StyledButton>
-        <Daten />
+        <Daten width={83} />
         <StyledButton
           variant={filterIsVisible ? 'outlined' : 'text'}
           preceded={datenIsVisible?.toString()}
@@ -192,7 +190,7 @@ export const ProjekteMenus = memo(
           </StyledButton>
         )}
         {showAllMenus && (
-          <StyledDesktopButton
+          <StyledButton
             variant={tree2IsVisible ? 'outlined' : 'text'}
             preceded={(
               (!!projId && exporteIsVisible) ||
@@ -202,14 +200,18 @@ export const ProjekteMenus = memo(
             onClick={onClickTree2}
             data-id="nav-tree2"
             width={147}
-            hide={(!showAllMenus).toString()}
           >
             Strukturbaum 2
-          </StyledDesktopButton>
+          </StyledButton>
         )}
-        {showAllMenus && tree2IsVisible && <Daten treeNr="2" />}
         {showAllMenus && tree2IsVisible && (
-          <StyledDesktopButton
+          <Daten
+            treeNr="2"
+            width={92}
+          />
+        )}
+        {showAllMenus && tree2IsVisible && (
+          <StyledButton
             variant={filter2IsVisible ? 'outlined' : 'text'}
             preceded={daten2IsVisible?.toString()}
             followed={karte2IsVisible?.toString()}
@@ -217,13 +219,12 @@ export const ProjekteMenus = memo(
             data-id="nav-filter2"
             title="Daten filtern"
             width={88}
-            hide={(!showAllMenus).toString()}
           >
             Filter 2
-          </StyledDesktopButton>
+          </StyledButton>
         )}
         {showAllMenus && !!projId && (
-          <StyledDesktopButton
+          <StyledButton
             variant="text"
             preceded={false?.toString()}
             followed={false.toString()}
@@ -232,10 +233,9 @@ export const ProjekteMenus = memo(
             data-id="ek-planung"
             title="EK und EKF planen"
             width={101}
-            hide={(!showAllMenus).toString()}
           >
             EK-Planung
-          </StyledDesktopButton>
+          </StyledButton>
         )}
         <DokuButton
           variant="text"
@@ -248,6 +248,7 @@ export const ProjekteMenus = memo(
         <More
           onClickExporte={onClickExporte}
           role={role}
+          width={71}
         />
       </MenuBar>
     )
