@@ -31,7 +31,7 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createApartForApartForm($apId: UUID!) {
+            mutation createApartForApartsForm($apId: UUID!) {
               createApart(input: { apart: { apId: $apId } }) {
                 apart {
                   id
