@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -135,35 +135,15 @@ export const Menu = memo(
     }, [setCopying])
 
     const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-    const widths = useMemo(
-      () =>
-        labelFilterIsIcon ?
-          [
-            buttonWidth,
-            buttonWidth,
-            buttonWidth,
-            buttonWidth,
-            ...(isMovingPop ? [buttonWidth, buttonWidth] : []),
-            ...(isCopyingPop ? [buttonWidth, buttonWidth] : []),
-          ]
-        : [
-            labelFilterWidth,
-            buttonWidth,
-            buttonWidth,
-            buttonWidth,
-            ...(isMovingPop ? [buttonWidth, buttonWidth] : []),
-            ...(isCopyingPop ? [buttonWidth, buttonWidth] : []),
-          ],
-      [labelFilterIsIcon],
-    )
 
     return (
       <ErrorBoundary>
         <MenuBar
           rerenderer={`${isMovingPop}/${isCopyingPop}/${popMovingFromThisAp}`}
-          widths={widths}
         >
-          <LabelFilter />
+          <LabelFilter
+            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
+          />
           <Tooltip title="Neue Population erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />

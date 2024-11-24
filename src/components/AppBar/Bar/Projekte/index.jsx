@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback, useMemo } from 'react'
+import { memo, useContext, useCallback } from 'react'
 import Button from '@mui/material/Button'
 import remove from 'lodash/remove'
 import styled from '@emotion/styled'
@@ -120,25 +120,8 @@ export const ProjekteMenus = memo(
     const filter2IsVisible = projekteTabs.includes('filter2')
     const karte2IsVisible = projekteTabs.includes('karte2')
 
-    const widths = useMemo(
-      () => [
-        134,
-        83,
-        77,
-        77,
-        ...(!!projId ? [95] : []),
-        ...(showAllMenus ? [147] : []),
-        ...(showAllMenus && tree2IsVisible ? [92, 88] : []),
-        ...(showAllMenus && !!projId ? [101] : []),
-        129,
-        71,
-      ],
-      [],
-    )
-
     return (
       <MenuBar
-        widths={widths}
         rerenderer={`${projId}/${showAllMenus}/${projekteTabs}`}
         bgColor="rgb(46, 125, 50)"
       >
