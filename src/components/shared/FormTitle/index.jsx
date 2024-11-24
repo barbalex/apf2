@@ -8,6 +8,7 @@ const Container = styled.div`
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 
   @media print {
     display: none !important;
@@ -18,11 +19,13 @@ const TitleRow = styled.div`
   flex-direction: row;
   justify-content: space-between;
   min-height: 42px;
-  flex-grow: 1;
+  flew-wrap: nowrap;
   overflow: hidden;
 `
 const Title = styled.div`
   display: block;
+  flex-grow: 0;
+  flex-shrink: 1;
   margin-top: auto;
   margin-bottom: auto;
   padding: 10px;

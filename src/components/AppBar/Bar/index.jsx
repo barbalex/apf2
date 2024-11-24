@@ -1,3 +1,4 @@
+import { memo, useRef } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router-dom'
@@ -17,6 +18,7 @@ export const Container = styled.div`
     props.alignFlexEnd === 'true' ? 'flex-end' : 'space-between'};
   align-items: center;
   flex-grow: 1;
+  overflow: hidden;
 `
 export const SiteTitle = styled(Button)`
   display: ${(props) => (props.hide === 'true' ? 'none' : 'block')} !important;
@@ -29,6 +31,10 @@ export const SiteTitle = styled(Button)`
   border-width: 0 !important;
   text-transform: none !important;
   white-space: nowrap !important;
+  transform: ${(props) =>
+    props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
+  // need to take hidden elements out of flow
+  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'unset')};
 
   :hover {
     border-width: 1px !important;
@@ -39,9 +45,10 @@ export const MenuDiv = styled.div`
   flex-wrap: nowrap;
   flex-grow: 1;
   justify-content: flex-end;
+  overflow: hidden;
 `
 
-export const Bar = () => {
+export const Bar = memo(() => {
   const isMobile = isMobilePhone()
 
   const { search, pathname } = useLocation()
@@ -58,26 +65,25 @@ export const Bar = () => {
   })
 
   const showAllMenus = !isMobile && width >= minWidthToShowAllMenus
-  const showTitle = width >= minWidthToShowTitle
-  const menuDivWidth = showTitle ? width - 110 : width
+
+  const menuDivRef = useRef(null)
+  const menuDivWidth = menuDivRef.current?.offsetWidth ?? 0
 
   return (
     <Container
       ref={ref}
       alignFlexEnd={(width < minWidthToShowTitle).toString()}
     >
-      {showTitle && (
-        <SiteTitle
-          variant="outlined"
-          component={Link}
-          to={`/${search}`}
-          title="Home"
-          hide={(width <= minWidthToShowTitle).toString()}
-        >
-          AP Flora
-        </SiteTitle>
-      )}
-      <MenuDiv width={menuDivWidth}>
+      <SiteTitle
+        variant="outlined"
+        component={Link}
+        to={`/${search}`}
+        title="Home"
+        hide={(width <= minWidthToShowTitle).toString()}
+      >
+        AP Flora
+      </SiteTitle>
+      <MenuDiv ref={menuDivRef}>
         {showHome ?
           <HomeMenus />
         : showDocs ?
@@ -88,4 +94,4 @@ export const Bar = () => {
       </MenuDiv>
     </Container>
   )
-}
+})

@@ -20,7 +20,6 @@ import { showCoordOfBeobOnMapGeoAdminCh } from '../../../../modules/showCoordOfB
 import { copyBeobZugeordnetKoordToTpop } from '../../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
 import { createNewPopFromBeob } from '../../../../modules/createNewPopFromBeob/index.js'
 import { StyledLoadingButton, StyledButton } from '../TpopRouter/Menu.jsx'
-import { map } from 'lodash'
 
 export const Menu = memo(
   observer(() => {
@@ -99,21 +98,26 @@ export const Menu = memo(
       setNewTpopFromBeobDialogOpen(true)
     }, [beobId, setNewTpopFromBeobBeobId, setNewTpopFromBeobDialogOpen])
 
+    // TODO: somehow these refs return null??????!!!!!!
     const coordCopyRef = useRef(null)
-    const coordCopyRefWidth = coordCopyRef?.current?.offsetWidth ?? 0
+    const coordCopyRefWidth = coordCopyRef?.current?.offsetWidth ?? 185
     const zuordnen1Ref = useRef(null)
-    const zuordnen1RefWidth = zuordnen1Ref?.current?.offsetWidth ?? 0
+    const zuordnen1RefWidth = zuordnen1Ref?.current?.offsetWidth ?? 230
     const zuordnen2Ref = useRef(null)
-    const zuordnen2RefWidth = zuordnen2Ref?.current?.offsetWidth ?? 0
-    const mapsZhChRef = useRef(null)
-    const mapsZhChRefWidth = mapsZhChRef?.current?.offsetWidth ?? 0
-    const mapGeoAdminChRef = useRef(null)
-    const mapGeoAdminChRefWidth = mapGeoAdminChRef?.current?.offsetWidth ?? 0
+    const zuordnen2RefWidth = zuordnen2Ref?.current?.offsetWidth ?? 242
+    const showOnMapsZhChRef = useRef(null)
+    const showOnMapsZhChRefWidth = showOnMapsZhChRef?.current?.offsetWidth ?? 98
+    const showOnMapGeoAdminChRef = useRef(null)
+    const showOnMapGeoAdminChRefWidth =
+      showOnMapGeoAdminChRef?.current?.offsetWidth ?? 141
 
-    console.log('Beobzuordnung.Menu', {
-      mapsZhChRef: mapsZhChRef.current,
-      mapsZhChRefWidth,
-    })
+    // console.log('Beobzuordnung.Menu', {
+    //   showOnMapsZhChRefWidth,
+    //   zuordnen2RefWidth,
+    //   showOnMapGeoAdminChRefWidth,
+    //   zuordnen1RefWidth,
+    //   coordCopyRefWidth,
+    // })
 
     return (
       <ErrorBoundary>
@@ -156,20 +160,22 @@ export const Menu = memo(
             {'> Beobachtung der TPop. zuordnen'}
           </StyledButton>
           <StyledButton
-            ref={mapsZhChRef}
+            ref={showOnMapsZhChRef}
             variant="outlined"
             onClick={onClickShowCoordOfBeobOnMapsZhCh}
-            width={mapsZhChRefWidth}
+            width={showOnMapsZhChRefWidth}
+            hide={'false'}
           >
             zeige auf
             <br />
             maps.zh.ch
           </StyledButton>
           <StyledButton
-            ref={mapGeoAdminChRef}
+            ref={showOnMapGeoAdminChRef}
             variant="outlined"
             onClick={onClickShowCoordOfBeobOnMapGeoAdminCh}
-            width={mapGeoAdminChRefWidth}
+            width={showOnMapGeoAdminChRefWidth}
+            hide={'false'}
           >
             zeige auf
             <br />

@@ -38,6 +38,7 @@ const MeasuredOuterContainer = styled.div`
   flex-basis: ${buttonWidth}px;
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: flex-end;
   flex-grow: 1;
   flex-shrink: 0;
@@ -52,9 +53,13 @@ const StylingContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
   column-gap: 0;
   min-height: ${buttonHeight}px;
   max-height: ${buttonHeight}px;
+  overflow: hidden;
 `
 // remove the margin mui adds to top and bottom of menu
 const StyledMenu = styled(Menu)`
@@ -82,32 +87,16 @@ export const MenuBar = memo(
     // top menu bar has no margin between menus, others do
     addMargin = true,
   }) => {
-    const usableChildren = useMemo(
-      () => children?.filter?.((child) => !!child) ?? children,
-      [children],
-    )
-    const childrenCount = Children.count(usableChildren)
-    // add 12px for margin and border width to props.width
-    const widths = useMemo(
-      () =>
-        usableChildren.map((c) => {
-          console.log('MenuBar', { c, width: c.props.width })
-          return
-          c.props.width ?
-            addMargin ? c.props.width + 12
-            : c.props.width
-          : buttonWidth
-        }),
-      [usableChildren],
-    )
-
-    console.log('MenuBar', { widths, usableChildren })
-
     const [buttons, setButtons] = useState([])
     const [menus, setMenus] = useState([])
 
     const outerContainerRef = useRef(null)
+    const outerContainerWidth = outerContainerRef.current?.clientWidth
     const previousMeasurementTimeRef = useRef(0)
+
+    console.log('MenuBar', {
+      outerContainerWidth,
+    })
 
     const iconStyle = useMemo(() => ({ color }), [color])
 
@@ -115,6 +104,21 @@ export const MenuBar = memo(
     // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
     const checkOverflow = useCallback(() => {
       if (!outerContainerRef.current) return
+
+      const usableChildren = children?.filter?.((child) => !!child) ?? children
+      const usableChildrenNotHidden = []
+      for (const [index, child] of Children.toArray(usableChildren).entries()) {
+        console.log('MenuBar.checkOverflow, childProps:', child.props)
+        if (child.props.hide === 'true') continue
+        usableChildrenNotHidden.push(child)
+      }
+      // add 12px for margin and border width to props.width
+      const widths = usableChildrenNotHidden.map((c) =>
+        c.props.width ?
+          addMargin ? c.props.width + 12
+          : c.props.width
+        : buttonWidth,
+      )
 
       // only change if overflowing has changed
       const { clientWidth: containerWidth } = outerContainerRef.current
@@ -124,7 +128,7 @@ export const MenuBar = memo(
       const widthOfAllPassedInButtons =
         widths ?
           widths.reduce((acc, w) => acc + w, 0)
-        : childrenCount * buttonWidth
+        : usableChildrenNotHidden.length * buttonWidth
       const needMenu = widthOfAllPassedInButtons > spaceForButtonsAndMenus
       const spaceForButtons =
         needMenu ?
@@ -135,6 +139,8 @@ export const MenuBar = memo(
       const newMenus = []
       let widthSum = 0
       for (const [index, child] of Children.toArray(usableChildren).entries()) {
+        console.log('MenuBar.checkOverflow, childProps:', child.props)
+        if (child.props.hide === 'true') continue
         const width = widths?.[index] ?? buttonWidth
         if (widthSum + width > spaceForButtons) {
           newMenus.push(cloneElement(child, { inmenu: 'true' }))
@@ -145,13 +151,7 @@ export const MenuBar = memo(
       }
       setButtons(newButtons)
       setMenus(newMenus)
-    }, [
-      titleComponentWidth,
-      widths,
-      childrenCount,
-      buttonWidth,
-      usableChildren,
-    ])
+    }, [titleComponentWidth, buttonWidth, children])
 
     const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
 
