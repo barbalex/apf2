@@ -45,7 +45,7 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createPopForPopForm($apId: UUID!) {
+            mutation createPopForPopsForm($apId: UUID!) {
               createPop(input: { pop: { apId: $apId } }) {
                 pop {
                   id
