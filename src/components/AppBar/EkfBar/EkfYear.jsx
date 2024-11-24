@@ -33,10 +33,6 @@ export const EkfYear = () => {
 
   useEffect(() => setStateValue(ekfYear), [ekfYear])
 
-  const onChange = useCallback(
-    (event) => setStateValue(event.target.value ? +event.target.value : ''),
-    [],
-  )
   const onBlur = useCallback(
     (event) => {
       const newValue = event.target.value ? +event.target.value : ekfRefYear
@@ -44,6 +40,10 @@ export const EkfYear = () => {
     },
     [navigate, search, userId],
   )
+  const onChange = useCallback((event) => {
+    setStateValue(event.target.value ? +event.target.value : '')
+    if (event.target.value.length === 4) onBlur(event)
+  }, [])
 
   return (
     <Container>
