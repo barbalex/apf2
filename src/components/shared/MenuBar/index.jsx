@@ -84,7 +84,7 @@ export const MenuBar = memo(
       [children],
     )
     const childrenCount = Children.count(usableChildren)
-    // TODO: add 12px for margin and border width to props.width?
+    // add 12px for margin and border width to props.width
     const widths = useMemo(
       () =>
         usableChildren.map((c) =>
