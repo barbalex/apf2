@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -76,18 +76,13 @@ export const Menu = memo(
     }, [projId, client, store, tanstackQueryClient, navigate, search])
 
     const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-    const widths = useMemo(
-      () =>
-        labelFilterIsIcon ?
-          [buttonWidth, buttonWidth]
-        : [labelFilterWidth, buttonWidth],
-      [labelFilterIsIcon],
-    )
 
     return (
       <ErrorBoundary>
-        <MenuBar widths={widths}>
-          <LabelFilter />
+        <MenuBar>
+          <LabelFilter
+            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
+          />
           <Tooltip title="Neuen AP-Bericht erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />

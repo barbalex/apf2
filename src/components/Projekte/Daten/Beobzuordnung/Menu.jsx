@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useState, useMemo } from 'react'
+import { memo, useCallback, useContext, useState } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -34,6 +34,7 @@ const StyledButton = styled(Button)`
   border-color: white;
   border-width: 0.67px;
   border-color: rgba(255, 255, 255, 0.5) !important;
+  width: ${(props) => props.width}px;
 `
 const StyledLoadingButton = styled(LoadingButton)`
   margin: 0 5px;
@@ -45,6 +46,7 @@ const StyledLoadingButton = styled(LoadingButton)`
   border-color: white;
   border-width: 0.67px;
   border-color: rgba(255, 255, 255, 0.5) !important;
+  width: ${(props) => props.width}px;
 `
 
 export const Menu = memo(
@@ -202,16 +204,6 @@ export const Menu = memo(
       }, 500)
     }, [beobId, apId, projId, client, store, search])
 
-    const widths = useMemo(
-      () => [
-        ...(isBeobZugeordnet ? [192] : []),
-        ...(isBeobNichtBeurteilt ? [222, 252] : []),
-        102,
-        142,
-      ],
-      [isBeobZugeordnet, isBeobNichtBeurteilt],
-    )
-
     const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
       newTpopFromBeobDialogOpenAtom,
     )
@@ -230,15 +222,14 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          widths={widths}
           rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}/${isBeobNichtBeurteilt}/${creatingNewPopFromBeob}`}
         >
           {isBeobZugeordnet && (
             <StyledLoadingButton
               variant="outlined"
-              style={{ width: 180 }}
               onClick={onClickCopyingBeobZugeordnetKoordToTpop}
               loading={copyingBeobZugeordnetKoordToTpop}
+              width={180}
             >
               Koordinaten auf die Teilpopulation übertragen
             </StyledLoadingButton>
@@ -246,9 +237,9 @@ export const Menu = memo(
           {isBeobNichtBeurteilt && (
             <StyledLoadingButton
               variant="outlined"
-              style={{ width: 210 }}
               onClick={onClickCreateNewPopFromBeob}
               loading={creatingNewPopFromBeob}
+              width={210}
             >
               {'Pop. u. TPop. gründen > Beobachtung der TPop. zuordnen'}
             </StyledLoadingButton>
@@ -256,8 +247,8 @@ export const Menu = memo(
           {isBeobNichtBeurteilt && (
             <StyledButton
               variant="outlined"
-              style={{ width: 240 }}
               onClick={onClickNewTpopFromBeob}
+              width={240}
             >
               {
                 'TPop. in bestehender Pop. gründen > Beobachtung der TPop. zuordnen'
@@ -266,15 +257,15 @@ export const Menu = memo(
           )}
           <StyledButton
             variant="outlined"
-            style={{ width: 90 }}
             onClick={onClickShowCoordOfBeobOnMapsZhCh}
+            width={90}
           >
             zeige auf maps.zh.ch
           </StyledButton>
           <StyledButton
             variant="outlined"
-            style={{ width: 130 }}
             onClick={onClickShowCoordOfBeobOnMapGeoAdminCh}
+            width={130}
           >
             zeige auf map.geo.admin.ch
           </StyledButton>

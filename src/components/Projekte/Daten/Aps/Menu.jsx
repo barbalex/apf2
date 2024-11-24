@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -123,49 +123,13 @@ export const Menu = memo(
     const isCopying = !!copying.table
 
     const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-    const widths = useMemo(
-      () =>
-        labelFilterIsIcon ?
-          [
-            buttonWidth,
-            buttonWidth,
-            buttonWidth,
-            ...((
-              isMoving &&
-              moving.toTable === 'ap' &&
-              moving.fromParentId !== apId
-            ) ?
-              [buttonWidth]
-            : []),
-            ...(isMoving ? [buttonWidth] : []),
-            ...(isCopying ? [buttonWidth, buttonWidth] : []),
-            buttonWidth,
-          ]
-        : [
-            labelFilterWidth,
-            buttonWidth,
-            buttonWidth,
-            ...((
-              isMoving &&
-              moving.toTable === 'ap' &&
-              moving.fromParentId !== apId
-            ) ?
-              [buttonWidth]
-            : []),
-            ...(isMoving ? [buttonWidth] : []),
-            ...(isCopying ? [buttonWidth, buttonWidth] : []),
-            buttonWidth,
-          ],
-      [labelFilterIsIcon],
-    )
 
     return (
       <ErrorBoundary>
-        <MenuBar
-          rerenderer={`${moving.id}/${copying.id}`}
-          widths={widths}
-        >
-          <LabelFilter />
+        <MenuBar rerenderer={`${moving.id}/${copying.id}`}>
+          <LabelFilter
+            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
+          />
           <Tooltip title="Neue Art erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
