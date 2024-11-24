@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
+import { memo, useCallback, useContext, useState } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -68,6 +68,7 @@ const StyledLoadingButton = styled(LoadingButton)`
   border-color: white;
   border-width: 0.67px;
   border-color: rgba(255, 255, 255, 0.5) !important;
+  width: ${(props) => props.width}px;
 `
 const StyledButton = styled(Button)`
   margin: 0 5px;
@@ -80,6 +81,7 @@ const StyledButton = styled(Button)`
   border-color: white;
   border-width: 0.67px;
   border-color: rgba(255, 255, 255, 0.5) !important;
+  width: ${(props) => props.width}px;
 `
 const iconStyle = { color: 'white' }
 
@@ -398,24 +400,6 @@ export const Menu = memo(
       setCopyingCoordToTpop(false)
     }, [tpopId, store, client])
 
-    const widths = useMemo(
-      () => [
-        buttonWidth,
-        buttonWidth,
-        buttonWidth,
-        buttonWidth,
-        buttonWidth,
-        buttonWidth,
-        ...(isMovingTpop ? [buttonWidth] : []),
-        buttonWidth,
-        ...(isCopyingTpop ? [buttonWidth] : []),
-        ...(tpopHasCoord ? [192] : []),
-        142,
-        102,
-      ],
-      [isCopyingTpop, isMovingTpop, tpopHasCoord],
-    )
-
     const onClickShowCoordOfTpopOnMapGeoAdminCh = useCallback(() => {
       showCoordOfTpopOnMapGeoAdminCh({
         id: tpopId,
@@ -446,7 +430,6 @@ export const Menu = memo(
       <ErrorBoundary>
         <MenuBar
           rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}`}
-          widths={widths}
         >
           <Tooltip title="Neue Teil-Population erstellen">
             <IconButton onClick={onClickAdd}>
@@ -533,15 +516,15 @@ export const Menu = memo(
           )}
           <StyledButton
             variant="outlined"
-            style={{ width: 90 }}
             onClick={onClickShowCoordOfTpopOnMapsZhCh}
+            width={90}
           >
             zeige auf maps.zh.ch
           </StyledButton>
           <StyledButton
             variant="outlined"
-            style={{ width: 130 }}
             onClick={onClickShowCoordOfTpopOnMapGeoAdminCh}
+            width={130}
           >
             zeige auf map.geo.admin.ch
           </StyledButton>
