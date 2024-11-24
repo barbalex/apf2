@@ -31,7 +31,7 @@ export const ZaehlFolder = memo(
       queryFn: () =>
         client.query({
           query: gql`
-            query TreeTpopkontrzaehlsQuery(
+            query TreeTpopfreiwkontrzaehlsQuery(
               $id: UUID!
               $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
             ) {

@@ -13,7 +13,7 @@ export const createTpopkontrzaehlsQuery = ({
   queryFn: () =>
     apolloClient.query({
       query: gql`
-        query TreeTpopkontrzaehlsQuery(
+        query TreeTpopfeldkontrzaehlsQuery(
           $tpopkontrId: UUID!
           $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
         ) {
