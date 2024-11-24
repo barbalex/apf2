@@ -33,7 +33,7 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createZielForZielForm($apId: UUID!) {
+            mutation createZielForZieljahrs($apId: UUID!) {
               createZiel(input: { ziel: { apId: $apId, jahr: 1 } }) {
                 ziel {
                   id
