@@ -31,7 +31,7 @@ export const Menu = memo(
       try {
         result = await apolloClient.mutate({
           mutation: gql`
-            mutation createTpopkontrzaehlForTpopkontrzaehlForm(
+            mutation createTpopkontrzaehlForTpopkontrzaehlsForm(
               $tpopkontrId: UUID!
             ) {
               createTpopkontrzaehl(
