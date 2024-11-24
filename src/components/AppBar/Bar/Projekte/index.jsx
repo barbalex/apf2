@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback } from 'react'
+import { memo, useContext, useCallback, useRef } from 'react'
 import Button from '@mui/material/Button'
 import remove from 'lodash/remove'
 import styled from '@emotion/styled'
@@ -14,6 +14,10 @@ import { useSearchParamsState } from '../../../../modules/useSearchParamsState.j
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { minWidthToShowAllMenus } from '../../index.jsx'
 
+// getting widths of elements from refs
+// BEWARE: ref.current is only set on first render
+// if element is conditionally rendered and not visible on first render, ref.current will be null!!!
+// Solution: instead of not rendering, set offscreen with transform: translateX(-9999px)
 export const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
@@ -36,7 +40,8 @@ export const StyledButton = styled(Button)`
   margin-right: ${(props) =>
     props.followed === 'true' ? '-1px' : 'unset'} !important;
   text-transform: none !important;
-  width: ${(props) => `${props.width}px` ?? 'unset'} !important;
+  transform: ${(props) =>
+    props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
 `
 const DokuButton = styled(Button)`
   color: white !important;
@@ -120,34 +125,64 @@ export const ProjekteMenus = memo(
     const filter2IsVisible = projekteTabs.includes('filter2')
     const karte2IsVisible = projekteTabs.includes('karte2')
 
+    const tree1Ref = useRef(null)
+    const tree1RefWidth = tree1Ref?.current?.offsetWidth ?? 0
+    const daten1Ref = useRef(null)
+    const daten1RefWidth = daten1Ref?.current?.offsetWidth ?? 0
+    const filter1Ref = useRef(null)
+    const filter1RefWidth = filter1Ref?.current?.offsetWidth ?? 0
+    const karte1Ref = useRef(null)
+    const karte1RefWidth = karte1Ref?.current?.offsetWidth ?? 0
+    const exporte1Ref = useRef(null)
+    const exporte1RefWidth = exporte1Ref?.current?.offsetWidth ?? 0
+    const tree2Ref = useRef(null)
+    const tree2RefWidth = tree2Ref?.current?.offsetWidth ?? 0
+    const daten2Ref = useRef(null)
+    const daten2RefWidth = daten2Ref?.current?.offsetWidth ?? 0
+
+    console.log('ProjektMenu', {
+      exporte1RefWidth,
+      tree2RefWidth,
+      tree1RefWidth,
+      daten2RefWidth,
+      showAllMenus,
+      projId,
+    })
+
     return (
       <MenuBar
         rerenderer={`${projId}/${showAllMenus}/${projekteTabs}`}
         bgColor="rgb(46, 125, 50)"
+        addMargin={false}
       >
         <StyledButton
-          name="tree"
+          ref={tree1Ref}
           variant={treeIsVisible ? 'outlined' : 'text'}
           followed={datenIsVisible?.toString()}
           onClick={onClickTree}
           data-id="nav-tree1"
-          width={134}
+          width={tree1RefWidth}
         >
           Strukturbaum
         </StyledButton>
-        <Daten width={83} />
+        <Daten
+          ref={daten1Ref}
+          width={daten1RefWidth}
+        />
         <StyledButton
+          ref={filter1Ref}
           variant={filterIsVisible ? 'outlined' : 'text'}
           preceded={datenIsVisible?.toString()}
           followed={karteIsVisible?.toString()}
           onClick={onClickFilter}
           data-id="nav-filter1"
           title="Daten filtern"
-          width={77}
+          width={filter1RefWidth}
         >
           Filter
         </StyledButton>
         <StyledButton
+          ref={karte1Ref}
           variant={karteIsVisible ? 'outlined' : 'text'}
           preceded={filterIsVisible?.toString()}
           followed={(
@@ -156,43 +191,44 @@ export const ProjekteMenus = memo(
           )?.toString()}
           onClick={onClickKarte}
           data-id="nav-karte1"
-          width={77}
+          width={karte1RefWidth}
         >
           Karte
         </StyledButton>
-        {!!projId && (
-          <StyledButton
-            variant={exporteIsVisible ? 'outlined' : 'text'}
-            preceded={karteIsVisible?.toString()}
-            followed={(showAllMenus && tree2IsVisible)?.toString()}
-            onClick={onClickExporte}
-            data-id="nav-exporte"
-            width={95}
-          >
-            Exporte
-          </StyledButton>
-        )}
-        {showAllMenus && (
-          <StyledButton
-            variant={tree2IsVisible ? 'outlined' : 'text'}
-            preceded={(
-              (!!projId && exporteIsVisible) ||
-              (!projId && karteIsVisible)
-            )?.toString()}
-            followed={daten2IsVisible?.toString()}
-            onClick={onClickTree2}
-            data-id="nav-tree2"
-            width={147}
-          >
-            Strukturbaum 2
-          </StyledButton>
-        )}
-        {showAllMenus && tree2IsVisible && (
-          <Daten
-            treeNr="2"
-            width={92}
-          />
-        )}
+        <StyledButton
+          ref={exporte1Ref}
+          variant={exporteIsVisible ? 'outlined' : 'text'}
+          preceded={karteIsVisible?.toString()}
+          followed={(showAllMenus && tree2IsVisible)?.toString()}
+          onClick={onClickExporte}
+          data-id="nav-exporte"
+          width={exporte1RefWidth}
+          hide={(!projId).toString()}
+        >
+          Exporte
+        </StyledButton>
+        <StyledButton
+          ref={tree2Ref}
+          variant={tree2IsVisible ? 'outlined' : 'text'}
+          preceded={(
+            (!!projId && exporteIsVisible) ||
+            (!projId && karteIsVisible)
+          )?.toString()}
+          followed={daten2IsVisible?.toString()}
+          onClick={onClickTree2}
+          data-id="nav-tree2"
+          // width={147}
+          width={tree2RefWidth}
+          hide={(!showAllMenus).toString()}
+        >
+          Strukturbaum 2
+        </StyledButton>
+        <Daten
+          ref={daten2Ref}
+          treeNr="2"
+          width={daten2RefWidth}
+          hide={!showAllMenus || !tree2IsVisible}
+        />
         {showAllMenus && tree2IsVisible && (
           <StyledButton
             variant={filter2IsVisible ? 'outlined' : 'text'}

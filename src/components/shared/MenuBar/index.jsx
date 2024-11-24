@@ -78,6 +78,8 @@ export const MenuBar = memo(
     titleComponentWidth,
     bgColor = '#388e3c',
     color = 'white',
+    // top menu bar has no margin, others do
+    addMargin = true,
   }) => {
     const usableChildren = useMemo(
       () => children?.filter?.((child) => !!child) ?? children,
@@ -88,11 +90,14 @@ export const MenuBar = memo(
     const widths = useMemo(
       () =>
         usableChildren.map((c) =>
-          c.props.width ? c.props.width + 12 : buttonWidth,
+          c.props.width ?
+            addMargin ? c.props.width + 12
+            : c.props.width
+          : buttonWidth,
         ),
       [usableChildren],
     )
-    // console.log('MenuBar, widths:', widths)
+    console.log('MenuBar, widths:', widths)
 
     const [buttons, setButtons] = useState([])
     const [menus, setMenus] = useState([])
