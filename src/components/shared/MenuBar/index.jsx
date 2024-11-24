@@ -73,7 +73,6 @@ const MenuContent = styled.div`
 export const MenuBar = memo(
   ({
     children,
-    widths,
     rerenderer,
     titleComponent,
     titleComponentWidth,
@@ -85,11 +84,15 @@ export const MenuBar = memo(
       [children],
     )
     const childrenCount = Children.count(usableChildren)
-    console.log('MenuBar', {
-      usableChildren,
-      widthsRead: usableChildren.map((c) => c.props.width ?? buttonWidth),
-      widthsPassedIn: widths,
-    })
+    // TODO: add 12px for margin and border width to props.width?
+    const widths = useMemo(
+      () =>
+        usableChildren.map((c) =>
+          c.props.width ? c.props.width + 12 : buttonWidth,
+        ),
+      [usableChildren],
+    )
+    // console.log('MenuBar, widths:', widths)
 
     const [buttons, setButtons] = useState([])
     const [menus, setMenus] = useState([])
