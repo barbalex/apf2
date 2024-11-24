@@ -34,7 +34,7 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createEkfrequenzForEkfrequenzForm($apId: UUID!) {
+            mutation createEkfrequenzForEkfrequenzsForm($apId: UUID!) {
               createEkfrequenz(input: { ekfrequenz: { apId: $apId } }) {
                 ekfrequenz {
                   id
