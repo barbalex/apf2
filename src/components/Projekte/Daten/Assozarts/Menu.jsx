@@ -31,7 +31,7 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createAssozartForAssozartForm($apId: UUID!) {
+            mutation createAssozartForAssozartsForm($apId: UUID!) {
               createAssozart(input: { assozart: { apId: $apId } }) {
                 assozart {
                   id
