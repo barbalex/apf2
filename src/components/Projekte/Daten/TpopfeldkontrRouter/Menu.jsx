@@ -109,7 +109,7 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation deleteTpopkontr($id: UUID!) {
+            mutation deleteTpopkontrForTpopfeldkontrRouter($id: UUID!) {
               deleteTpopkontrById(input: { id: $id }) {
                 tpopkontr {
                   id
