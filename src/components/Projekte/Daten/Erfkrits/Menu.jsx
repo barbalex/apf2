@@ -33,7 +33,7 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createErfkritForErfkritForm($apId: UUID!) {
+            mutation createErfkritForErfkritsForm($apId: UUID!) {
               createErfkrit(input: { erfkrit: { apId: $apId } }) {
                 erfkrit {
                   id
