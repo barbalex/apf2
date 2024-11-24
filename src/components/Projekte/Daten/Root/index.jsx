@@ -15,7 +15,7 @@ export const Component = memo(() => {
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query TreeRootQuery {
+          query TreeRootQueryForRootForm {
             allUsers {
               totalCount
             }
