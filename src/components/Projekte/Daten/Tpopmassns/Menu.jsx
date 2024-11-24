@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -113,31 +113,15 @@ export const Menu = memo(
     }, [setCopying])
 
     const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-    const widths = useMemo(
-      () =>
-        labelFilterIsIcon ?
-          [
-            buttonWidth,
-            buttonWidth,
-            ...(isMovingMassn ? [buttonWidth, buttonWidth] : []),
-            ...(isCopyingMassn ? [buttonWidth, buttonWidth] : []),
-          ]
-        : [
-            labelFilterWidth,
-            buttonWidth,
-            ...(isMovingMassn ? [buttonWidth, buttonWidth] : []),
-            ...(isCopyingMassn ? [buttonWidth, buttonWidth] : []),
-          ],
-      [labelFilterIsIcon],
-    )
 
     return (
       <ErrorBoundary>
         <MenuBar
           rerenderer={`${moving.label}/${copying.label}/${isMovingMassn}/${isCopyingMassn}`}
-          widths={widths}
         >
-          <LabelFilter />
+          <LabelFilter
+            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
+          />
           <Tooltip title="Neue Massnahme erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
