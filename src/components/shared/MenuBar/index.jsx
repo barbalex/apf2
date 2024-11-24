@@ -94,10 +94,6 @@ export const MenuBar = memo(
     const outerContainerWidth = outerContainerRef.current?.clientWidth
     const previousMeasurementTimeRef = useRef(0)
 
-    console.log('MenuBar', {
-      outerContainerWidth,
-    })
-
     const iconStyle = useMemo(() => ({ color }), [color])
 
     // this was quite some work to get right
