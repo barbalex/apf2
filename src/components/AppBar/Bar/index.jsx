@@ -20,9 +20,9 @@ export const Container = styled.div`
 `
 export const SiteTitle = styled(Button)`
   display: ${(props) => (props.hide === 'true' ? 'none' : 'block')} !important;
-  flex-basis: 110px;
+  max-width: 110px;
   flex-grow: 0;
-  flex-shrink: 0;
+  flex-shrink: 1;
   color: white !important;
   font-size: 1em !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
