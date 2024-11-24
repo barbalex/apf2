@@ -106,7 +106,7 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation deleteEkzaehleinheit($id: UUID!) {
+            mutation deleteEkzaehleinheitForBeobzuordnung($id: UUID!) {
               deleteEkzaehleinheitById(input: { id: $id }) {
                 ekzaehleinheit {
                   id
