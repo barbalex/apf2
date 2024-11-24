@@ -90,14 +90,18 @@ export const MenuBar = memo(
     // add 12px for margin and border width to props.width
     const widths = useMemo(
       () =>
-        usableChildren.map((c) =>
+        usableChildren.map((c) => {
+          console.log('MenuBar', { c, width: c.props.width })
+          return
           c.props.width ?
             addMargin ? c.props.width + 12
             : c.props.width
-          : buttonWidth,
-        ),
+          : buttonWidth
+        }),
       [usableChildren],
     )
+
+    console.log('MenuBar', { widths, usableChildren })
 
     const [buttons, setButtons] = useState([])
     const [menus, setMenus] = useState([])

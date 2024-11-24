@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useState } from 'react'
+import { memo, useCallback, useContext, useState, useRef } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -57,20 +57,25 @@ const CopyIcon = styled(MdContentCopy)`
   color: ${(props) =>
     props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
 `
-const StyledLoadingButton = styled(LoadingButton)`
+export const StyledLoadingButton = styled(LoadingButton)`
   margin: 0 5px;
   padding: 3px 10px;
   text-transform: none;
   line-height: 1.1;
   font-size: 0.8rem;
   color: white;
-  width: ${(props) => props.width}px;
   border-color: white;
   border-width: 0.67px;
   border-color: rgba(255, 255, 255, 0.5) !important;
-  width: ${(props) => props.width}px;
+  transform: ${(props) =>
+    props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
+  // need to take hidden elements out of flow
+  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'unset')};
+  // prevent text from breaking into multiple lines
+  flex-shrink: 0;
+  flex-grow: 0;
 `
-const StyledButton = styled(Button)`
+export const StyledButton = styled(Button)`
   margin: 0 5px;
   padding: 3px 10px;
   text-transform: none;
@@ -81,7 +86,13 @@ const StyledButton = styled(Button)`
   border-color: white;
   border-width: 0.67px;
   border-color: rgba(255, 255, 255, 0.5) !important;
-  width: ${(props) => props.width}px;
+  transform: ${(props) =>
+    props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
+  // need to take hidden elements out of flow
+  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'unset')};
+  // prevent text from breaking into multiple lines
+  flex-shrink: 0;
+  flex-grow: 0;
 `
 const iconStyle = { color: 'white' }
 
@@ -426,6 +437,14 @@ export const Menu = memo(
       })
     }, [tpopId, client, store, tanstackQueryClient])
 
+    const coordCopyRef = useRef(null)
+    const coordCopyRefWidth = coordCopyRef?.current?.offsetWidth ?? 0
+    const showOnMapsZhChRef = useRef(null)
+    const showOnMapsZhChRefWidth = showOnMapsZhChRef?.current?.offsetWidth ?? 0
+    const showOnGeoAdminChRef = useRef(null)
+    const showOnGeoAdminChRefWidth =
+      showOnGeoAdminChRef?.current?.offsetWidth ?? 0
+
     return (
       <ErrorBoundary>
         <MenuBar
@@ -504,29 +523,37 @@ export const Menu = memo(
               </IconButton>
             </Tooltip>
           )}
-          {tpopHasCoord && (
-            <StyledLoadingButton
-              variant="outlined"
-              onClick={onCopyCoordToPop}
-              loading={copyingCoordToTpop}
-              width={180}
-            >
-              Koordinaten auf die Population kopieren
-            </StyledLoadingButton>
-          )}
+          <StyledLoadingButton
+            ref={coordCopyRef}
+            variant="outlined"
+            onClick={onCopyCoordToPop}
+            loading={copyingCoordToTpop}
+            width={coordCopyRefWidth}
+            hide={(!tpopHasCoord).toString()}
+          >
+            Koordinaten auf die
+            <br />
+            Population kopieren
+          </StyledLoadingButton>
           <StyledButton
+            ref={showOnMapsZhChRef}
             variant="outlined"
             onClick={onClickShowCoordOfTpopOnMapsZhCh}
-            width={90}
+            width={showOnMapsZhChRefWidth}
           >
-            zeige auf maps.zh.ch
+            zeige auf
+            <br />
+            maps.zh.ch
           </StyledButton>
           <StyledButton
+            ref={showOnGeoAdminChRef}
             variant="outlined"
             onClick={onClickShowCoordOfTpopOnMapGeoAdminCh}
-            width={130}
+            width={showOnGeoAdminChRefWidth}
           >
-            zeige auf map.geo.admin.ch
+            zeige auf
+            <br />
+            map.geo.admin.ch
           </StyledButton>
         </MenuBar>
         <MuiMenu
