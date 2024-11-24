@@ -1,82 +1,21 @@
-import { useContext, useState, useCallback } from 'react'
-import Button from '@mui/material/Button'
-import styled from '@emotion/styled'
-import { keyframes } from '@emotion/react'
-import { jwtDecode } from 'jwt-decode'
-import { observer } from 'mobx-react-lite'
+import { memo } from 'react'
 import { useQuery } from '@apollo/client'
 import { Link } from 'react-router-dom'
-import { MdPrint, MdHourglassEmpty } from 'react-icons/md'
-import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
-import Badge from '@mui/material/Badge'
 import { useParams, useLocation } from 'react-router-dom'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { EkfYear } from './EkfYear.jsx'
 import { User } from './User/index.jsx'
-import { StoreContext } from '../../../storeContext.js'
 import { query } from './query.js'
-import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.js'
-import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.js'
 import { SiteTitle, MenuDiv } from '../Bar/index.jsx'
 import { Container } from '../Bar/index.jsx'
-
-const StyledButton = styled(Button)`
-  color: white !important;
-  text-transform: none !important;
-`
-const StyledIconButton = styled(IconButton)`
-  color: white !important;
-  span {
-    top: -5px !important;
-    right: -5px !important;
-  }
-`
-const StyledBadge = styled(Badge)`
-  .MuiBadge-anchorOriginTopRightRectangular {
-    top: 9px !important;
-    right: 9px !important;
-    color: white !important;
-  }
-`
-const spinning = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(359deg);
-  }
-`
-const StyledMdHourglassEmpty = styled(MdHourglassEmpty)`
-  animation: ${spinning} 3s linear infinite;
-`
+import { Menus } from './Menus.jsx'
 
 const minWidthToShowTitle = 800
 
-export const EkfBar = observer(() => {
-  const { userId, ekfId, ekfYear } = useParams()
+export const EkfBar = memo(() => {
+  const { userId } = useParams()
   const { search } = useLocation()
-
-  const store = useContext(StoreContext)
-  const { user, setIsPrint, setIsEkfSinglePrint } = store
-  const ekfIsActive = !!ekfId
-
-  const { token, name: username } = user
-  const tokenDecoded = token ? jwtDecode(token) : null
-  const role = tokenDecoded ? tokenDecoded.role : null
-  const isFreiwillig = role === 'apflora_freiwillig'
-
-  const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
-  const ekfRefYear = new Date(ekfRefDate).getFullYear()
-
-  const query =
-    ekfRefYear === ekfYear ? dataByUserIdQuery : dataWithDateByUserIdQuery
-
-  const { data } = useQuery(query, {
-    variables: { id: userId, jahr: +ekfYear },
-    fetchPolicy: 'network-only',
-  })
 
   // if no ekfAdresseId
   // need to fetch adresse.id for this user
@@ -86,40 +25,6 @@ export const EkfBar = observer(() => {
   })
 
   const userName = userData?.userById?.name ?? null
-  const ekfCount = (
-    data?.userById?.adresseByAdresseId?.tpopkontrsByBearbeiter?.nodes ?? []
-  ).length
-
-  const [userOpen, setUserOpen] = useState(false)
-  const [preparingEkfMultiprint, setPreparingEkfMultiprint] = useState(false)
-
-  const toggleUserOpen = useCallback(() => setUserOpen(!userOpen), [userOpen])
-
-  const onClickPrintSingle = useCallback(() => {
-    setIsPrint(true)
-    setIsEkfSinglePrint(true)
-    setTimeout(() => {
-      window.print()
-      setIsPrint(false)
-      setIsEkfSinglePrint(false)
-    })
-  }, [setIsEkfSinglePrint, setIsPrint])
-
-  const onClickPrintAll = useCallback(() => {
-    setPreparingEkfMultiprint(true)
-    setIsPrint(true)
-    // TODO: need to know when all tpopfreiwkontr forms have finisched rendering
-    // idea for hack: use ekfCount to set timeout value?
-    setTimeout(
-      () => {
-        window.print()
-        setIsPrint(false)
-        setPreparingEkfMultiprint(false)
-        setPreparingEkfMultiprint(false)
-      },
-      3000 + ekfCount * 300,
-    )
-  }, [ekfCount, setIsPrint])
 
   const { width, ref } = useResizeDetector({
     handleHeight: false,
@@ -147,56 +52,7 @@ export const EkfBar = observer(() => {
         </SiteTitle>
       )}
       <MenuDiv>
-        <>
-          {ekfCount > 1 && (
-            <StyledBadge badgeContent={ekfCount}>
-              <Tooltip title={`Alle ${ekfCount} EKF drucken`}>
-                <StyledIconButton onClick={onClickPrintAll}>
-                  {preparingEkfMultiprint ?
-                    <StyledMdHourglassEmpty />
-                  : <MdPrint />}
-                </StyledIconButton>
-              </Tooltip>
-            </StyledBadge>
-          )}
-          <Tooltip title="Angezeigte EKF drucken">
-            <StyledIconButton
-              onClick={onClickPrintSingle}
-              disabled={!ekfIsActive}
-            >
-              <MdPrint />
-            </StyledIconButton>
-          </Tooltip>
-          <EkfYear />
-          {!isFreiwillig && (
-            <StyledButton
-              variant="text"
-              component={Link}
-              to={`/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13${search}`}
-            >
-              Normal-Ansicht
-            </StyledButton>
-          )}
-          {isFreiwillig && (
-            <>
-              <StyledButton onClick={toggleUserOpen}>
-                {`Benutzer: ${username}`}
-              </StyledButton>
-              <User
-                username={username}
-                userOpen={userOpen}
-                toggleUserOpen={toggleUserOpen}
-              />
-            </>
-          )}
-          <StyledButton
-            variant="text"
-            component={Link}
-            to={`/Dokumentation/${search}`}
-          >
-            Dokumentation
-          </StyledButton>
-        </>
+        <Menus />
       </MenuDiv>
     </Container>
   )
