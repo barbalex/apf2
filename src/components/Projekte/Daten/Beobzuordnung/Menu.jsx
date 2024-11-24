@@ -67,7 +67,7 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createEkzaehleinheitForEkzaehleinheitForm($apId: UUID!) {
+            mutation createEkzaehleinheitForBeobzuordnungForm($apId: UUID!) {
               createEkzaehleinheit(input: { ekzaehleinheit: { apId: $apId } }) {
                 ekzaehleinheit {
                   id
