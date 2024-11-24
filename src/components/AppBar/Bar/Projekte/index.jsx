@@ -42,11 +42,17 @@ export const StyledButton = styled(Button)`
   text-transform: none !important;
   transform: ${(props) =>
     props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
+  // need to take hidden elements out of flow
+  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'unset')};
+  // prevent text from breaking into multiple lines
+  flex-shrink: 0;
+  flex-grow: 0;
 `
 const DokuButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
-  width: ${(props) => `${props.width}px` ?? 'unset'} !important;
+  flex-shrink: 0;
+  flex-grow: 0;
 `
 
 export const ProjekteMenus = memo(
@@ -139,15 +145,14 @@ export const ProjekteMenus = memo(
     const tree2RefWidth = tree2Ref?.current?.offsetWidth ?? 0
     const daten2Ref = useRef(null)
     const daten2RefWidth = daten2Ref?.current?.offsetWidth ?? 0
-
-    console.log('ProjektMenu', {
-      exporte1RefWidth,
-      tree2RefWidth,
-      tree1RefWidth,
-      daten2RefWidth,
-      showAllMenus,
-      projId,
-    })
+    const filter2Ref = useRef(null)
+    const filter2RefWidth = filter2Ref?.current?.offsetWidth ?? 0
+    const ekPlanungRef = useRef(null)
+    const ekPlanungRefWidth = ekPlanungRef?.current?.offsetWidth ?? 0
+    const dokuRef = useRef(null)
+    const dokuRefWidth = dokuRef?.current?.offsetWidth ?? 0
+    const mehrRef = useRef(null)
+    const mehrRefWidth = mehrRef?.current?.offsetWidth ?? 0
 
     return (
       <MenuBar
@@ -217,7 +222,6 @@ export const ProjekteMenus = memo(
           followed={daten2IsVisible?.toString()}
           onClick={onClickTree2}
           data-id="nav-tree2"
-          // width={147}
           width={tree2RefWidth}
           hide={(!showAllMenus).toString()}
         >
@@ -229,45 +233,46 @@ export const ProjekteMenus = memo(
           width={daten2RefWidth}
           hide={!showAllMenus || !tree2IsVisible}
         />
-        {showAllMenus && tree2IsVisible && (
-          <StyledButton
-            variant={filter2IsVisible ? 'outlined' : 'text'}
-            preceded={daten2IsVisible?.toString()}
-            followed={karte2IsVisible?.toString()}
-            onClick={onClickFilter2}
-            data-id="nav-filter2"
-            title="Daten filtern"
-            width={88}
-          >
-            Filter 2
-          </StyledButton>
-        )}
-        {showAllMenus && !!projId && (
-          <StyledButton
-            variant="text"
-            preceded={false?.toString()}
-            followed={false.toString()}
-            component={Link}
-            to={`/Daten/Projekte/${projId}/EK-Planung${search}`}
-            data-id="ek-planung"
-            title="EK und EKF planen"
-            width={101}
-          >
-            EK-Planung
-          </StyledButton>
-        )}
+        <StyledButton
+          variant={filter2IsVisible ? 'outlined' : 'text'}
+          preceded={daten2IsVisible?.toString()}
+          followed={karte2IsVisible?.toString()}
+          onClick={onClickFilter2}
+          data-id="nav-filter2"
+          title="Daten filtern"
+          width={filter2RefWidth}
+          hide={(!showAllMenus || !tree2IsVisible).toString()}
+        >
+          Filter 2
+        </StyledButton>
+        <StyledButton
+          ref={ekPlanungRef}
+          variant="text"
+          preceded={false?.toString()}
+          followed={false.toString()}
+          component={Link}
+          to={`/Daten/Projekte/${projId}/EK-Planung${search}`}
+          data-id="ek-planung"
+          title="EK und EKF planen"
+          width={ekPlanungRefWidth}
+          hide={(!showAllMenus || !projId).toString()}
+        >
+          EK-Planung
+        </StyledButton>
         <DokuButton
+          ref={dokuRef}
           variant="text"
           component={Link}
           to={`/Dokumentation/${search}`}
-          width={129}
+          width={dokuRefWidth}
         >
           Dokumentation
         </DokuButton>
         <More
+          ref={mehrRef}
           onClickExporte={onClickExporte}
           role={role}
-          width={71}
+          width={mehrRefWidth}
         />
       </MenuBar>
     )

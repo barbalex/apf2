@@ -66,6 +66,7 @@ const StyledMenu = styled(Menu)`
 `
 const MenuContent = styled.div`
   display: flex;
+  flex-wrap: wrap;
   background-color: ${(props) => props.bgColor};
   overflow: hidden;
 `
@@ -78,7 +79,7 @@ export const MenuBar = memo(
     titleComponentWidth,
     bgColor = '#388e3c',
     color = 'white',
-    // top menu bar has no margin, others do
+    // top menu bar has no margin between menus, others do
     addMargin = true,
   }) => {
     const usableChildren = useMemo(
@@ -97,7 +98,6 @@ export const MenuBar = memo(
         ),
       [usableChildren],
     )
-    console.log('MenuBar, widths:', widths)
 
     const [buttons, setButtons] = useState([])
     const [menus, setMenus] = useState([])
