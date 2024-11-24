@@ -41,7 +41,7 @@ export const Menu = memo(() => {
     try {
       result = await client.mutate({
         mutation: gql`
-          mutation createAdresseForAdresseForm {
+          mutation createAdresseForAdressesForm {
             createAdresse(input: { adresse: {} }) {
               adresse {
                 id
