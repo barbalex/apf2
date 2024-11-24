@@ -79,12 +79,15 @@ const MenuContent = styled.div`
 export const MenuBar = memo(
   ({
     children,
+    // enable the parent to force rerenders
     rerenderer,
+    // files pass in titleComponent and its width
     titleComponent,
     titleComponentWidth,
     bgColor = '#388e3c',
     color = 'white',
     // top menu bar has no margin between menus, others do
+    // and that needs to be compensated for
     addMargin = true,
   }) => {
     const [buttons, setButtons] = useState([])
