@@ -42,7 +42,7 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createApberuebersichtForApberuebersichtForm(
+            mutation createApberuebersichtForApberuebersichtsForm(
               $projId: UUID!
             ) {
               createApberuebersicht(
