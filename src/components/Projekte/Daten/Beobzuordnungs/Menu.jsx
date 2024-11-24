@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { FaMap } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
@@ -48,18 +48,13 @@ export const Menu = memo(
     ])
 
     const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-    const widths = useMemo(
-      () =>
-        labelFilterIsIcon ?
-          [buttonWidth, buttonWidth]
-        : [labelFilterWidth, buttonWidth],
-      [labelFilterIsIcon],
-    )
 
     return (
       <ErrorBoundary>
-        <MenuBar widths={widths}>
-          <LabelFilter />
+        <MenuBar>
+          <LabelFilter
+            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
+          />
           <Tooltip title="Zeige auf Karte">
             <IconButton onClick={onClickShowOnMap}>
               <FaMap style={iconStyle} />
