@@ -44,52 +44,54 @@ export const Router = () => {
               index
               lazy={() => import('../Projekte/Daten/Root/index.jsx')}
             />
-            <Route
-              path="Werte-Listen"
-              lazy={() => import('../Projekte/Daten/Wertes/index.jsx')}
-            />
-            <Route
-              path="Werte-Listen/Adressen"
-              lazy={() => import('../Projekte/Daten/Adresses/index.jsx')}
-            />
-            <Route
-              path="Werte-Listen/Adressen/:adrId"
-              lazy={() => import('../Projekte/Daten/Adresse/index.jsx')}
-            />
-            <Route
-              path="Werte-Listen/ApberrelevantGrundWerte"
-              lazy={() =>
-                import(
-                  '../Projekte/Daten/TpopApberrelevantGrundWertes/index.jsx'
-                )
-              }
-            />
-            <Route
-              path="Werte-Listen/ApberrelevantGrundWerte/:wertId"
-              lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
-            />
-            <Route
-              path="Werte-Listen/EkAbrechnungstypWerte"
-              lazy={() =>
-                import('../Projekte/Daten/EkAbrechnungstypWertes/index.jsx')
-              }
-            />
-            <Route
-              path="Werte-Listen/EkAbrechnungstypWerte/:wertId"
-              lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
-            />
-            <Route
-              path="Werte-Listen/TpopkontrzaehlEinheitWerte"
-              lazy={() =>
-                import(
-                  '../Projekte/Daten/TpopkontrzaehlEinheitWertes/index.jsx'
-                )
-              }
-            />
-            <Route
-              path="Werte-Listen/TpopkontrzaehlEinheitWerte/:wertId"
-              lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
-            />
+            <Route path="Werte-Listen">
+              <Route
+                path="*"
+                lazy={() => import('../Projekte/Daten/Wertes/index.jsx')}
+              />
+              <Route
+                path="Adressen"
+                lazy={() => import('../Projekte/Daten/Adresses/index.jsx')}
+              />
+              <Route
+                path="Adressen/:adrId"
+                lazy={() => import('../Projekte/Daten/Adresse/index.jsx')}
+              />
+              <Route
+                path="ApberrelevantGrundWerte"
+                lazy={() =>
+                  import(
+                    '../Projekte/Daten/TpopApberrelevantGrundWertes/index.jsx'
+                  )
+                }
+              />
+              <Route
+                path="ApberrelevantGrundWerte/:wertId"
+                lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
+              />
+              <Route
+                path="EkAbrechnungstypWerte"
+                lazy={() =>
+                  import('../Projekte/Daten/EkAbrechnungstypWertes/index.jsx')
+                }
+              />
+              <Route
+                path="EkAbrechnungstypWerte/:wertId"
+                lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
+              />
+              <Route
+                path="TpopkontrzaehlEinheitWerte"
+                lazy={() =>
+                  import(
+                    '../Projekte/Daten/TpopkontrzaehlEinheitWertes/index.jsx'
+                  )
+                }
+              />
+              <Route
+                path="TpopkontrzaehlEinheitWerte/:wertId"
+                lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
+              />
+            </Route>
             <Route
               path="Mitteilungen"
               lazy={() => import('../Projekte/Daten/Messages/index.jsx')}
