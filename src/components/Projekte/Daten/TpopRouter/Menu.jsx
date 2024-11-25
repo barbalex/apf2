@@ -1,11 +1,4 @@
-import {
-  memo,
-  useCallback,
-  useContext,
-  useState,
-  useRef,
-  useEffect,
-} from 'react'
+import { memo, useCallback, useContext, useState } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -443,37 +436,14 @@ export const Menu = memo(
       })
     }, [tpopId, client, store, tanstackQueryClient])
 
-    // ISSUE: refs are sometimes not set on first render
-    // SOLUTION: rerender in effect after 500ms if ref is not set
-    const coordCopyRef = useRef(null)
-    const coordCopyRefWidth = coordCopyRef?.current?.offsetWidth ?? 0
-    const showOnMapsZhChRef = useRef(null)
-    const showOnMapsZhChRefWidth = showOnMapsZhChRef?.current?.offsetWidth ?? 0
-    const showOnGeoAdminChRef = useRef(null)
-    const showOnGeoAdminChRefWidth =
-      showOnGeoAdminChRef?.current?.offsetWidth ?? 0
-
-    console.log('TpopRouter/Menu', {
-      coordCopyRefWidth,
-      showOnMapsZhChRefWidth,
-      showOnGeoAdminChRefWidth,
-    })
-
-    const [rerenderer, setRerenderer] = useState(0)
-    useEffect(() => {
-      if (
-        !coordCopyRef.current ||
-        !showOnMapsZhChRef.current ||
-        !showOnGeoAdminChRef.current
-      ) {
-        setTimeout(() => setRerenderer((prev) => prev + 1), 500)
-      }
-    }, [])
+    // ISSUE: refs are sometimes/often not set on first render
+    // trying to measure widths of menus leads to complete chaos
+    // so passing in static widths instead
 
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}/${rerenderer}`}
+          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}`}
         >
           <Tooltip title="Neue Teil-Population erstellen">
             <IconButton onClick={onClickAdd}>
@@ -549,11 +519,10 @@ export const Menu = memo(
             </Tooltip>
           )}
           <StyledLoadingButton
-            ref={coordCopyRef}
             variant="outlined"
             onClick={onCopyCoordToPop}
             loading={copyingCoordToTpop}
-            width={coordCopyRefWidth}
+            width={155}
             hide={(!tpopHasCoord).toString()}
           >
             Koordinaten auf die
@@ -561,20 +530,18 @@ export const Menu = memo(
             Population kopieren
           </StyledLoadingButton>
           <StyledButton
-            ref={showOnMapsZhChRef}
             variant="outlined"
             onClick={onClickShowCoordOfTpopOnMapsZhCh}
-            width={showOnMapsZhChRefWidth}
+            width={103}
           >
             zeige auf
             <br />
             maps.zh.ch
           </StyledButton>
           <StyledButton
-            ref={showOnGeoAdminChRef}
             variant="outlined"
             onClick={onClickShowCoordOfTpopOnMapGeoAdminCh}
-            width={showOnGeoAdminChRefWidth}
+            width={146}
           >
             zeige auf
             <br />

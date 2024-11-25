@@ -1,11 +1,4 @@
-import {
-  memo,
-  useCallback,
-  useContext,
-  useState,
-  useRef,
-  useEffect,
-} from 'react'
+import { memo, useCallback, useContext, useState } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -105,26 +98,9 @@ export const Menu = memo(
       setNewTpopFromBeobDialogOpen(true)
     }, [beobId, setNewTpopFromBeobBeobId, setNewTpopFromBeobDialogOpen])
 
-    // ISSUE: refs are sometimes not set on first render
-    // SOLUTION: rerender in effect after 500ms if ref is not set
-    const coordCopyRef = useRef(null)
-    const coordCopyRefWidth = coordCopyRef?.current?.offsetWidth ?? 185
-    const zuordnen1Ref = useRef(null)
-    const zuordnen1RefWidth = zuordnen1Ref?.current?.offsetWidth ?? 230
-    const zuordnen2Ref = useRef(null)
-    const zuordnen2RefWidth = zuordnen2Ref?.current?.offsetWidth ?? 242
-    const showOnMapsZhChRef = useRef(null)
-    const showOnMapsZhChRefWidth = showOnMapsZhChRef?.current?.offsetWidth ?? 98
-    const showOnMapGeoAdminChRef = useRef(null)
-    const showOnMapGeoAdminChRefWidth =
-      showOnMapGeoAdminChRef?.current?.offsetWidth ?? 141
-
-    const [rerenderer, setRerenderer] = useState(0)
-    useEffect(() => {
-      if (!showOnMapsZhChRef.current) {
-        setTimeout(() => setRerenderer((prev) => prev + 1), 500)
-      }
-    }, [])
+    // ISSUE: refs are sometimes/often not set on first render
+    // trying to measure widths of menus leads to complete chaos
+    // so passing in static widths instead
 
     return (
       <ErrorBoundary>
@@ -132,11 +108,10 @@ export const Menu = memo(
           rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}/${isBeobNichtBeurteilt}/${creatingNewPopFromBeob}`}
         >
           <StyledLoadingButton
-            ref={coordCopyRef}
             variant="outlined"
             onClick={onClickCopyingBeobZugeordnetKoordToTpop}
             loading={copyingBeobZugeordnetKoordToTpop}
-            width={coordCopyRefWidth}
+            width={190}
             hide={(!isBeobZugeordnet).toString()}
           >
             Koordinaten auf die
@@ -144,11 +119,10 @@ export const Menu = memo(
             Teilpopulation übertragen
           </StyledLoadingButton>
           <StyledLoadingButton
-            ref={zuordnen1Ref}
             variant="outlined"
             onClick={onClickCreateNewPopFromBeob}
             loading={creatingNewPopFromBeob}
-            width={zuordnen1RefWidth}
+            width={245}
             hide={(!isBeobNichtBeurteilt).toString()}
           >
             {'Pop. und TPop. gründen >'}
@@ -156,10 +130,9 @@ export const Menu = memo(
             {'Beobachtung der TPop. zuordnen'}
           </StyledLoadingButton>
           <StyledButton
-            ref={zuordnen2Ref}
             variant="outlined"
             onClick={onClickNewTpopFromBeob}
-            width={zuordnen2RefWidth}
+            width={258}
             hide={(!isBeobNichtBeurteilt).toString()}
           >
             {'TPop. in bestehender Pop. gründen'}
@@ -167,10 +140,9 @@ export const Menu = memo(
             {'> Beobachtung der TPop. zuordnen'}
           </StyledButton>
           <StyledButton
-            ref={showOnMapsZhChRef}
             variant="outlined"
             onClick={onClickShowCoordOfBeobOnMapsZhCh}
-            width={showOnMapsZhChRefWidth}
+            width={105}
             hide={'false'}
           >
             zeige auf
@@ -178,10 +150,9 @@ export const Menu = memo(
             maps.zh.ch
           </StyledButton>
           <StyledButton
-            ref={showOnMapGeoAdminChRef}
             variant="outlined"
             onClick={onClickShowCoordOfBeobOnMapGeoAdminCh}
-            width={showOnMapGeoAdminChRefWidth}
+            width={147}
             hide={'false'}
           >
             zeige auf

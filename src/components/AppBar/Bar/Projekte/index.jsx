@@ -1,11 +1,4 @@
-import {
-  memo,
-  useContext,
-  useCallback,
-  useRef,
-  useEffect,
-  useState,
-} from 'react'
+import { memo, useContext, useCallback } from 'react'
 import Button from '@mui/material/Button'
 import remove from 'lodash/remove'
 import styled from '@emotion/styled'
@@ -138,37 +131,9 @@ export const ProjekteMenus = memo(
     const filter2IsVisible = projekteTabs.includes('filter2')
     const karte2IsVisible = projekteTabs.includes('karte2')
 
-    // ISSUE: refs are sometimes not set on first render
-    // SOLUTION: rerender in effect after 500ms if ref is not set
-    const tree1Ref = useRef(null)
-    const tree1RefWidth = tree1Ref?.current?.offsetWidth ?? 0
-    const daten1Ref = useRef(null)
-    const daten1RefWidth = daten1Ref?.current?.offsetWidth ?? 0
-    const filter1Ref = useRef(null)
-    const filter1RefWidth = filter1Ref?.current?.offsetWidth ?? 0
-    const karte1Ref = useRef(null)
-    const karte1RefWidth = karte1Ref?.current?.offsetWidth ?? 0
-    const exporte1Ref = useRef(null)
-    const exporte1RefWidth = exporte1Ref?.current?.offsetWidth ?? 0
-    const tree2Ref = useRef(null)
-    const tree2RefWidth = tree2Ref?.current?.offsetWidth ?? 0
-    const daten2Ref = useRef(null)
-    const daten2RefWidth = daten2Ref?.current?.offsetWidth ?? 0
-    const filter2Ref = useRef(null)
-    const filter2RefWidth = filter2Ref?.current?.offsetWidth ?? 0
-    const ekPlanungRef = useRef(null)
-    const ekPlanungRefWidth = ekPlanungRef?.current?.offsetWidth ?? 0
-    const dokuRef = useRef(null)
-    const dokuRefWidth = dokuRef?.current?.offsetWidth ?? 0
-    const mehrRef = useRef(null)
-    const mehrRefWidth = mehrRef?.current?.offsetWidth ?? 0
-
-    const [rerenderer, setRerenderer] = useState(0)
-    useEffect(() => {
-      if (!tree1Ref.current) {
-        setTimeout(() => setRerenderer((prev) => prev + 1), 500)
-      }
-    }, [])
+    // ISSUE: refs are sometimes/often not set on first render
+    // trying to measure widths of menus leads to complete chaos
+    // so passing in static widths instead
 
     return (
       <MenuBar
@@ -177,33 +142,27 @@ export const ProjekteMenus = memo(
         addMargin={false}
       >
         <StyledButton
-          ref={tree1Ref}
           variant={treeIsVisible ? 'outlined' : 'text'}
           followed={datenIsVisible?.toString()}
           onClick={onClickTree}
           data-id="nav-tree1"
-          width={tree1RefWidth}
+          width={134}
         >
           Strukturbaum
         </StyledButton>
-        <Daten
-          ref={daten1Ref}
-          width={daten1RefWidth}
-        />
+        <Daten width={77} />
         <StyledButton
-          ref={filter1Ref}
           variant={filterIsVisible ? 'outlined' : 'text'}
           preceded={datenIsVisible?.toString()}
           followed={karteIsVisible?.toString()}
           onClick={onClickFilter}
           data-id="nav-filter1"
           title="Daten filtern"
-          width={filter1RefWidth}
+          width={70}
         >
           Filter
         </StyledButton>
         <StyledButton
-          ref={karte1Ref}
           variant={karteIsVisible ? 'outlined' : 'text'}
           preceded={filterIsVisible?.toString()}
           followed={(
@@ -212,24 +171,22 @@ export const ProjekteMenus = memo(
           )?.toString()}
           onClick={onClickKarte}
           data-id="nav-karte1"
-          width={karte1RefWidth}
+          width={70}
         >
           Karte
         </StyledButton>
         <StyledButton
-          ref={exporte1Ref}
           variant={exporteIsVisible ? 'outlined' : 'text'}
           preceded={karteIsVisible?.toString()}
           followed={(showAllMenus && tree2IsVisible)?.toString()}
           onClick={onClickExporte}
           data-id="nav-exporte"
-          width={exporte1RefWidth}
+          width={74}
           hide={(!projId).toString()}
         >
           Exporte
         </StyledButton>
         <StyledButton
-          ref={tree2Ref}
           variant={tree2IsVisible ? 'outlined' : 'text'}
           preceded={(
             (!!projId && exporteIsVisible) ||
@@ -238,15 +195,14 @@ export const ProjekteMenus = memo(
           followed={daten2IsVisible?.toString()}
           onClick={onClickTree2}
           data-id="nav-tree2"
-          width={tree2RefWidth}
+          width={147}
           hide={(!showAllMenus).toString()}
         >
           Strukturbaum 2
         </StyledButton>
         <Daten
-          ref={daten2Ref}
           treeNr="2"
-          width={daten2RefWidth}
+          width={73}
           hide={!showAllMenus || !tree2IsVisible}
         />
         <StyledButton
@@ -256,13 +212,12 @@ export const ProjekteMenus = memo(
           onClick={onClickFilter2}
           data-id="nav-filter2"
           title="Daten filtern"
-          width={filter2RefWidth}
+          width={70}
           hide={(!showAllMenus || !tree2IsVisible).toString()}
         >
           Filter 2
         </StyledButton>
         <StyledButton
-          ref={ekPlanungRef}
           variant="text"
           preceded={false?.toString()}
           followed={false.toString()}
@@ -270,25 +225,23 @@ export const ProjekteMenus = memo(
           to={`/Daten/Projekte/${projId}/EK-Planung${search}`}
           data-id="ek-planung"
           title="EK und EKF planen"
-          width={ekPlanungRefWidth}
+          width={101}
           hide={(!showAllMenus || !projId).toString()}
         >
           EK-Planung
         </StyledButton>
         <DokuButton
-          ref={dokuRef}
           variant="text"
           component={Link}
           to={`/Dokumentation/${search}`}
-          width={dokuRefWidth}
+          width={129}
         >
           Dokumentation
         </DokuButton>
         <More
-          ref={mehrRef}
           onClickExporte={onClickExporte}
           role={role}
-          width={mehrRefWidth}
+          width={70}
         />
       </MenuBar>
     )
