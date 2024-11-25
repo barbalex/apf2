@@ -172,6 +172,50 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Ap/Historien.jsx')}
                   />
                 </Route>
+                <Route
+                  path="Idealbiotop"
+                  lazy={() =>
+                    import('../Projekte/Daten/IdealbiotopRouter/index.jsx')
+                  }
+                >
+                  <Route
+                    index={true}
+                    lazy={() =>
+                      import('../Projekte/Daten/Idealbiotop/index.jsx')
+                    }
+                  />
+                  <Route
+                    path="Idealbiotop"
+                    lazy={() =>
+                      import('../Projekte/Daten/Idealbiotop/index.jsx')
+                    }
+                  />
+                  <Route
+                    path="Dateien"
+                    lazy={() =>
+                      import('../Projekte/Daten/Idealbiotop/Dateien.jsx')
+                    }
+                  >
+                    <Route
+                      index={true}
+                      lazy={() => import('../shared/Files/Files/index.jsx')}
+                    />
+                    <Route
+                      path=":fileId/Vorschau"
+                      lazy={() => import('../shared/Files/Preview/index.jsx')}
+                    />
+                  </Route>
+                </Route>
+                <Route path="Taxa">
+                  <Route
+                    path="*"
+                    lazy={() => import('../Projekte/Daten/Aparts/index.jsx')}
+                  />
+                  <Route
+                    path=":taxonId"
+                    lazy={() => import('../Projekte/Daten/Apart/index.jsx')}
+                  />
+                </Route>
                 <Route path="assoziierte-Arten">
                   <Route
                     path="*"
@@ -253,44 +297,6 @@ export const Router = () => {
                   <Route
                     path="waehlen"
                     lazy={() => import('../Projekte/Daten/Qk/Choose/index.jsx')}
-                  />
-                </Route>
-              </Route>
-              <Route
-                path="Arten/:apId/Taxa"
-                lazy={() => import('../Projekte/Daten/Aparts/index.jsx')}
-              />
-              <Route
-                path="Arten/:apId/Taxa/:taxonId"
-                lazy={() => import('../Projekte/Daten/Apart/index.jsx')}
-              />
-              <Route
-                path="Arten/:apId/Idealbiotop"
-                lazy={() =>
-                  import('../Projekte/Daten/IdealbiotopRouter/index.jsx')
-                }
-              >
-                <Route
-                  index={true}
-                  lazy={() => import('../Projekte/Daten/Idealbiotop/index.jsx')}
-                />
-                <Route
-                  path="Idealbiotop"
-                  lazy={() => import('../Projekte/Daten/Idealbiotop/index.jsx')}
-                />
-                <Route
-                  path="Dateien"
-                  lazy={() =>
-                    import('../Projekte/Daten/Idealbiotop/Dateien.jsx')
-                  }
-                >
-                  <Route
-                    index={true}
-                    lazy={() => import('../shared/Files/Files/index.jsx')}
-                  />
-                  <Route
-                    path=":fileId/Vorschau"
-                    lazy={() => import('../shared/Files/Preview/index.jsx')}
                   />
                 </Route>
               </Route>
