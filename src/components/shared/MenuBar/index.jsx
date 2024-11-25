@@ -81,7 +81,7 @@ const MenuContent = styled.div`
   padding: 3px !important;
 `
 
-// possible improvements:
+// possible improvement:
 // add refs in here to measure their widths
 export const MenuBar = memo(
   ({
