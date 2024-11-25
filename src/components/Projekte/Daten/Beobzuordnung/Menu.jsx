@@ -126,11 +126,6 @@ export const Menu = memo(
       }
     }, [])
 
-    console.log('Beobzuordnung.Menu', {
-      showOnMapsZhChRef: showOnMapsZhChRef.current,
-      showOnMapsZhChRefWidth,
-    })
-
     return (
       <ErrorBoundary>
         <MenuBar

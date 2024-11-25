@@ -109,9 +109,8 @@ export const MenuBar = memo(
     const checkOverflow = useCallback(() => {
       if (!outerContainerRef.current) return
 
-      const usableChildren = children?.filter?.((child) => !!child) ?? children
       const usableChildrenNotHidden = []
-      for (const [index, child] of Children.toArray(usableChildren).entries()) {
+      for (const [index, child] of Children.toArray(children).entries()) {
         // console.log('MenuBar.checkOverflow, childProps:', child.props)
         if (child.props.hide === 'true') continue
         usableChildrenNotHidden.push(child)
@@ -142,9 +141,9 @@ export const MenuBar = memo(
       const newButtons = []
       const newMenus = []
       let widthSum = 0
-      for (const [index, child] of Children.toArray(usableChildren).entries()) {
-        // console.log('MenuBar.checkOverflow, childProps:', child.props)
-        if (child.props.hide === 'true') continue
+      for (const [index, child] of Children.toArray(
+        usableChildrenNotHidden,
+      ).entries()) {
         const width =
           child.props.width ?
             addMargin ? child.props.width + 12
@@ -159,15 +158,6 @@ export const MenuBar = memo(
       }
       setButtons(newButtons)
       setMenus(newMenus)
-      console.log('MenuBar.checkOverflow', {
-        widths,
-        usableChildrenNotHidden,
-        children,
-        needMenu,
-        spaceForButtonsAndMenus,
-        containerWidth,
-        titleWidth,
-      })
     }, [titleComponentWidth, buttonWidth, children])
 
     const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
