@@ -330,22 +330,26 @@ export const Router = () => {
                     path="*"
                     lazy={() => import('../Projekte/Daten/Zieljahrs/index.jsx')}
                   />
-                  <Route
-                    path=":jahr"
-                    lazy={() => import('../Projekte/Daten/Ziels/index.jsx')}
-                  />
-                  <Route
-                    path=":jahr/:zielId/*"
-                    lazy={() => import('../Projekte/Daten/Ziel/index.jsx')}
-                  />
-                  <Route
-                    path=":jahr/:zielId/Berichte"
-                    lazy={() => import('../Projekte/Daten/Zielbers/index.jsx')}
-                  />
-                  <Route
-                    path=":jahr/:zielId/Berichte/:zielberId"
-                    lazy={() => import('../Projekte/Daten/Zielber/index.jsx')}
-                  />
+                  <Route path=":jahr">
+                    <Route
+                      path="*"
+                      lazy={() => import('../Projekte/Daten/Ziels/index.jsx')}
+                    />
+                    <Route
+                      path=":zielId/*"
+                      lazy={() => import('../Projekte/Daten/Ziel/index.jsx')}
+                    />
+                    <Route
+                      path=":zielId/Berichte"
+                      lazy={() =>
+                        import('../Projekte/Daten/Zielbers/index.jsx')
+                      }
+                    />
+                    <Route
+                      path=":zielId/Berichte/:zielberId"
+                      lazy={() => import('../Projekte/Daten/Zielber/index.jsx')}
+                    />
+                  </Route>
                 </Route>
               </Route>
               <Route
