@@ -45,10 +45,6 @@ export const Router = () => {
               lazy={() => import('../Projekte/Daten/Root/index.jsx')}
             />
             <Route
-              path="Projekte"
-              lazy={() => import('../Projekte/Daten/Projects/index.jsx')}
-            />
-            <Route
               path="Werte-Listen"
               lazy={() => import('../Projekte/Daten/Wertes/index.jsx')}
             />
@@ -105,6 +101,10 @@ export const Router = () => {
             <Route
               path="Aktuelle-Fehler/:issueId"
               lazy={() => import('../Projekte/Daten/CurrentIssue/index.jsx')}
+            />
+            <Route
+              path="Projekte"
+              lazy={() => import('../Projekte/Daten/Projects/index.jsx')}
             />
             <Route path="Projekte/:projId">
               <Route
