@@ -31,7 +31,7 @@ const Appbar = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 4px;
+  padding: 4px 0;
   background-color: #2e7d32;
   height: 38px;
 
