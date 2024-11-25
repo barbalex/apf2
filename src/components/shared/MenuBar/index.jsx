@@ -81,6 +81,8 @@ const MenuContent = styled.div`
   padding: 3px !important;
 `
 
+// possible improvements:
+// add refs in here to measure their widths
 export const MenuBar = memo(
   ({
     children,
@@ -123,7 +125,6 @@ export const MenuBar = memo(
         : buttonWidth,
       )
 
-      // only change if overflowing has changed
       const containerWidth = outerContainerRef.current?.clientWidth
 
       const titleWidth = titleComponentWidth ?? 0
