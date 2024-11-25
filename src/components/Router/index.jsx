@@ -172,23 +172,23 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Ap/Historien.jsx')}
                   />
                 </Route>
-              </Route>
-              <Route
-                path="Arten/:apId/Qualitaetskontrollen"
-                lazy={() => import('../Projekte/Daten/QkRouter/index.jsx')}
-              >
                 <Route
-                  index={true}
-                  lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
-                />
-                <Route
-                  path="ausfuehren"
-                  lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
-                />
-                <Route
-                  path="waehlen"
-                  lazy={() => import('../Projekte/Daten/Qk/Choose/index.jsx')}
-                />
+                  path="Qualitaetskontrollen"
+                  lazy={() => import('../Projekte/Daten/QkRouter/index.jsx')}
+                >
+                  <Route
+                    index={true}
+                    lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
+                  />
+                  <Route
+                    path="ausfuehren"
+                    lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
+                  />
+                  <Route
+                    path="waehlen"
+                    lazy={() => import('../Projekte/Daten/Qk/Choose/index.jsx')}
+                  />
+                </Route>
               </Route>
               <Route
                 path="Arten/:apId/nicht-zuzuordnende-Beobachtungen"
