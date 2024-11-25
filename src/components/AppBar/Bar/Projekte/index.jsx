@@ -126,6 +126,7 @@ export const ProjekteMenus = memo(
     const daten2IsVisible = projekteTabs.includes('daten2')
     const filter2IsVisible = projekteTabs.includes('filter2')
     const karte2IsVisible = projekteTabs.includes('karte2')
+    const ekplanungIsVisible = projekteTabs.includes('ekplanung')
 
     // ISSUE: refs are sometimes/often not set on first render
     // trying to measure widths of menus leads to complete chaos
@@ -183,7 +184,7 @@ export const ProjekteMenus = memo(
             Exporte
           </StyledButton>
         )}
-        {showAllMenus && (
+        {(showAllMenus || tree2IsVisible) && (
           <StyledButton
             variant={tree2IsVisible ? 'outlined' : 'text'}
             preceded={(
@@ -198,13 +199,13 @@ export const ProjekteMenus = memo(
             Strukturbaum 2
           </StyledButton>
         )}
-        {showAllMenus && tree2IsVisible && (
+        {((showAllMenus && tree2IsVisible) || daten2IsVisible) && (
           <Daten
             treeNr="2"
             width={73}
           />
         )}
-        {showAllMenus && tree2IsVisible && (
+        {((showAllMenus && tree2IsVisible) || filter2IsVisible) && (
           <StyledButton
             variant={filter2IsVisible ? 'outlined' : 'text'}
             preceded={daten2IsVisible?.toString()}
