@@ -453,9 +453,19 @@ export const Menu = memo(
     const showOnGeoAdminChRefWidth =
       showOnGeoAdminChRef?.current?.offsetWidth ?? 0
 
+    console.log('TpopRouter/Menu', {
+      coordCopyRefWidth,
+      showOnMapsZhChRefWidth,
+      showOnGeoAdminChRefWidth,
+    })
+
     const [rerenderer, setRerenderer] = useState(0)
     useEffect(() => {
-      if (!showOnGeoAdminChRef.current) {
+      if (
+        !coordCopyRef.current ||
+        !showOnMapsZhChRef.current ||
+        !showOnGeoAdminChRef.current
+      ) {
         setTimeout(() => setRerenderer((prev) => prev + 1), 500)
       }
     }, [])
@@ -463,7 +473,7 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}`}
+          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}/${rerenderer}`}
         >
           <Tooltip title="Neue Teil-Population erstellen">
             <IconButton onClick={onClickAdd}>
