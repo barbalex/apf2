@@ -172,6 +172,22 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Ap/Historien.jsx')}
                   />
                 </Route>
+                <Route path="AP-Berichte">
+                  <Route
+                    path="*"
+                    lazy={() => import('../Projekte/Daten/Apbers/index.jsx')}
+                  />
+                  <Route path=":apberId">
+                    <Route
+                      path="*"
+                      lazy={() => import('../Projekte/Daten/Apber/index.jsx')}
+                    />
+                    <Route
+                      path="print"
+                      lazy={() => import('../Print/ApberForApFromAp/index.jsx')}
+                    />
+                  </Route>
+                </Route>
                 <Route
                   path="Idealbiotop"
                   lazy={() =>
@@ -300,18 +316,6 @@ export const Router = () => {
                   />
                 </Route>
               </Route>
-              <Route
-                path="Arten/:apId/AP-Berichte/"
-                lazy={() => import('../Projekte/Daten/Apbers/index.jsx')}
-              />
-              <Route
-                path="Arten/:apId/AP-Berichte/:apberId"
-                lazy={() => import('../Projekte/Daten/Apber/index.jsx')}
-              />
-              <Route
-                path="Arten/:apId/AP-Berichte/:apberId/print"
-                lazy={() => import('../Print/ApberForApFromAp/index.jsx')}
-              />
               <Route
                 path="Arten/:apId/AP-Erfolgskriterien"
                 lazy={() => import('../Projekte/Daten/Erfkrits/index.jsx')}
