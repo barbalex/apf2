@@ -124,7 +124,7 @@ export const MenuBar = memo(
       )
 
       // only change if overflowing has changed
-      const { clientWidth: containerWidth } = outerContainerRef.current
+      const containerWidth = outerContainerRef.current?.clientWidth
 
       const titleWidth = titleComponentWidth ?? 0
       const spaceForButtonsAndMenus = containerWidth - titleWidth
