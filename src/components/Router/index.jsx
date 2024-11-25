@@ -189,17 +189,19 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Qk/Choose/index.jsx')}
                   />
                 </Route>
+                <Route
+                  path="nicht-zuzuordnende-Beobachtungen"
+                  lazy={() =>
+                    import('../Projekte/Daten/Beobzuordnungs/index.jsx')
+                  }
+                />
+                <Route
+                  path="nicht-zuzuordnende-Beobachtungen/:beobId"
+                  lazy={() =>
+                    import('../Projekte/Daten/Beobzuordnung/index.jsx')
+                  }
+                />
               </Route>
-              <Route
-                path="Arten/:apId/nicht-zuzuordnende-Beobachtungen"
-                lazy={() =>
-                  import('../Projekte/Daten/Beobzuordnungs/index.jsx')
-                }
-              />
-              <Route
-                path="Arten/:apId/nicht-zuzuordnende-Beobachtungen/:beobId"
-                lazy={() => import('../Projekte/Daten/Beobzuordnung/index.jsx')}
-              />
               <Route
                 path="Arten/:apId/nicht-beurteilte-Beobachtungen"
                 lazy={() =>
