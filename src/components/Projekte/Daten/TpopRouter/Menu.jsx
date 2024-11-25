@@ -63,8 +63,8 @@ export const StyledLoadingButton = styled(LoadingButton)`
   text-transform: none;
   line-height: 1.1;
   font-size: 0.8rem;
+  max-height: 40px;
   color: white;
-  border-color: white;
   border-width: 0.67px;
   border-color: rgba(255, 255, 255, 0.5) !important;
   transform: ${(props) =>
@@ -81,9 +81,8 @@ export const StyledButton = styled(Button)`
   text-transform: none;
   line-height: 1.1;
   font-size: 0.8rem;
-  max-height: 36px;
+  max-height: 40px;
   color: white;
-  border-color: white;
   border-width: 0.67px;
   border-color: rgba(255, 255, 255, 0.5) !important;
   transform: ${(props) =>

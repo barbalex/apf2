@@ -48,6 +48,7 @@ const MeasuredOuterContainer = styled.div`
   border-top: 1px solid rgba(46, 125, 50, 0.15);
   border-bottom: 1px solid rgba(46, 125, 50, 0.15);
 `
+// TODO: StylingContainer overflows parent????!!!!
 const StylingContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -59,6 +60,7 @@ const StylingContainer = styled.div`
   column-gap: 0;
   min-height: ${buttonHeight}px;
   max-height: ${buttonHeight}px;
+  max-width: ${(props) => props.width}px;
   overflow: hidden;
 `
 // remove the margin mui adds to top and bottom of menu
@@ -72,8 +74,10 @@ const StyledMenu = styled(Menu)`
 const MenuContent = styled.div`
   display: flex;
   flex-wrap: wrap;
+  row-gap: 3px;
   background-color: ${(props) => props.bgColor};
   overflow: hidden;
+  padding: 3px !important;
 `
 
 export const MenuBar = memo(
@@ -219,7 +223,9 @@ export const MenuBar = memo(
         bgColor={bgColor}
       >
         {titleComponent}
-        <StylingContainer>
+        <StylingContainer
+          width={outerContainerWidth - (titleComponentWidth ?? 0)}
+        >
           {buttons}
           {!!menus.length && (
             <>
