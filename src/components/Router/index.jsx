@@ -172,6 +172,48 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Ap/Historien.jsx')}
                   />
                 </Route>
+                <Route path="EK-Zähleinheiten">
+                  <Route
+                    path="*"
+                    lazy={() =>
+                      import('../Projekte/Daten/Ekzaehleinheits/index.jsx')
+                    }
+                  />
+                  <Route
+                    path=":zaehleinheitId"
+                    lazy={() =>
+                      import('../Projekte/Daten/Ekzaehleinheit/index.jsx')
+                    }
+                  />
+                </Route>
+                <Route path="nicht-beurteilte-Beobachtungen">
+                  <Route
+                    path="*"
+                    lazy={() =>
+                      import('../Projekte/Daten/Beobzuordnungs/index.jsx')
+                    }
+                  />
+                  <Route
+                    path=":beobId"
+                    lazy={() =>
+                      import('../Projekte/Daten/Beobzuordnung/index.jsx')
+                    }
+                  />
+                </Route>
+                <Route path="nicht-zuzuordnende-Beobachtungen">
+                  <Route
+                    path="*"
+                    lazy={() =>
+                      import('../Projekte/Daten/Beobzuordnungs/index.jsx')
+                    }
+                  />
+                  <Route
+                    path=":beobId"
+                    lazy={() =>
+                      import('../Projekte/Daten/Beobzuordnung/index.jsx')
+                    }
+                  />
+                </Route>
                 <Route
                   path="Qualitaetskontrollen"
                   lazy={() => import('../Projekte/Daten/QkRouter/index.jsx')}
@@ -189,41 +231,7 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Qk/Choose/index.jsx')}
                   />
                 </Route>
-                <Route
-                  path="nicht-zuzuordnende-Beobachtungen"
-                  lazy={() =>
-                    import('../Projekte/Daten/Beobzuordnungs/index.jsx')
-                  }
-                />
-                <Route
-                  path="nicht-zuzuordnende-Beobachtungen/:beobId"
-                  lazy={() =>
-                    import('../Projekte/Daten/Beobzuordnung/index.jsx')
-                  }
-                />
               </Route>
-              <Route
-                path="Arten/:apId/nicht-beurteilte-Beobachtungen"
-                lazy={() =>
-                  import('../Projekte/Daten/Beobzuordnungs/index.jsx')
-                }
-              />
-              <Route
-                path="Arten/:apId/nicht-beurteilte-Beobachtungen/:beobId"
-                lazy={() => import('../Projekte/Daten/Beobzuordnung/index.jsx')}
-              />
-              <Route
-                path="Arten/:apId/EK-Zähleinheiten"
-                lazy={() =>
-                  import('../Projekte/Daten/Ekzaehleinheits/index.jsx')
-                }
-              />
-              <Route
-                path="Arten/:apId/EK-Zähleinheiten/:zaehleinheitId"
-                lazy={() =>
-                  import('../Projekte/Daten/Ekzaehleinheit/index.jsx')
-                }
-              />
               <Route
                 path="Arten/:apId/EK-Frequenzen"
                 lazy={() => import('../Projekte/Daten/Ekfrequenzs/index.jsx')}
