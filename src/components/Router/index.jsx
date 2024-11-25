@@ -172,6 +172,38 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Ap/Historien.jsx')}
                   />
                 </Route>
+                <Route path="AP-Ziele">
+                  <Route
+                    path="*"
+                    lazy={() => import('../Projekte/Daten/Zieljahrs/index.jsx')}
+                  />
+                  <Route path=":jahr">
+                    <Route
+                      path="*"
+                      lazy={() => import('../Projekte/Daten/Ziels/index.jsx')}
+                    />
+                    <Route path=":zielId">
+                      <Route
+                        path="*"
+                        lazy={() => import('../Projekte/Daten/Ziel/index.jsx')}
+                      />
+                      <Route path="Berichte">
+                        <Route
+                          path="*"
+                          lazy={() =>
+                            import('../Projekte/Daten/Zielbers/index.jsx')
+                          }
+                        />
+                        <Route
+                          path=":zielberId"
+                          lazy={() =>
+                            import('../Projekte/Daten/Zielber/index.jsx')
+                          }
+                        />
+                      </Route>
+                    </Route>
+                  </Route>
+                </Route>
                 <Route path="AP-Erfolgskriterien">
                   <Route
                     path="*"
@@ -324,38 +356,6 @@ export const Router = () => {
                     path="waehlen"
                     lazy={() => import('../Projekte/Daten/Qk/Choose/index.jsx')}
                   />
-                </Route>
-                <Route path="AP-Ziele">
-                  <Route
-                    path="*"
-                    lazy={() => import('../Projekte/Daten/Zieljahrs/index.jsx')}
-                  />
-                  <Route path=":jahr">
-                    <Route
-                      path="*"
-                      lazy={() => import('../Projekte/Daten/Ziels/index.jsx')}
-                    />
-                    <Route path=":zielId">
-                      <Route
-                        path="*"
-                        lazy={() => import('../Projekte/Daten/Ziel/index.jsx')}
-                      />
-                      <Route path="Berichte">
-                        <Route
-                          path="*"
-                          lazy={() =>
-                            import('../Projekte/Daten/Zielbers/index.jsx')
-                          }
-                        />
-                        <Route
-                          path=":zielberId"
-                          lazy={() =>
-                            import('../Projekte/Daten/Zielber/index.jsx')
-                          }
-                        />
-                      </Route>
-                    </Route>
-                  </Route>
                 </Route>
               </Route>
               <Route
