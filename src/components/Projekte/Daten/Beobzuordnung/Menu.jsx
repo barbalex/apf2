@@ -107,43 +107,45 @@ export const Menu = memo(
         <MenuBar
           rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}/${isBeobNichtBeurteilt}/${creatingNewPopFromBeob}`}
         >
-          <StyledLoadingButton
-            variant="outlined"
-            onClick={onClickCopyingBeobZugeordnetKoordToTpop}
-            loading={copyingBeobZugeordnetKoordToTpop}
-            width={190}
-            hide={(!isBeobZugeordnet).toString()}
-          >
-            Koordinaten auf die
-            <br />
-            Teilpopulation übertragen
-          </StyledLoadingButton>
-          <StyledLoadingButton
-            variant="outlined"
-            onClick={onClickCreateNewPopFromBeob}
-            loading={creatingNewPopFromBeob}
-            width={245}
-            hide={(!isBeobNichtBeurteilt).toString()}
-          >
-            {'Pop. und TPop. gründen >'}
-            <br />
-            {'Beobachtung der TPop. zuordnen'}
-          </StyledLoadingButton>
-          <StyledButton
-            variant="outlined"
-            onClick={onClickNewTpopFromBeob}
-            width={258}
-            hide={(!isBeobNichtBeurteilt).toString()}
-          >
-            {'TPop. in bestehender Pop. gründen'}
-            <br />
-            {'> Beobachtung der TPop. zuordnen'}
-          </StyledButton>
+          {isBeobZugeordnet && (
+            <StyledLoadingButton
+              variant="outlined"
+              onClick={onClickCopyingBeobZugeordnetKoordToTpop}
+              loading={copyingBeobZugeordnetKoordToTpop}
+              width={190}
+            >
+              Koordinaten auf die
+              <br />
+              Teilpopulation übertragen
+            </StyledLoadingButton>
+          )}
+          {isBeobNichtBeurteilt && (
+            <StyledLoadingButton
+              variant="outlined"
+              onClick={onClickCreateNewPopFromBeob}
+              loading={creatingNewPopFromBeob}
+              width={245}
+            >
+              {'Pop. und TPop. gründen >'}
+              <br />
+              {'Beobachtung der TPop. zuordnen'}
+            </StyledLoadingButton>
+          )}
+          {isBeobNichtBeurteilt && (
+            <StyledButton
+              variant="outlined"
+              onClick={onClickNewTpopFromBeob}
+              width={258}
+            >
+              {'TPop. in bestehender Pop. gründen'}
+              <br />
+              {'> Beobachtung der TPop. zuordnen'}
+            </StyledButton>
+          )}
           <StyledButton
             variant="outlined"
             onClick={onClickShowCoordOfBeobOnMapsZhCh}
             width={105}
-            hide={'false'}
           >
             zeige auf
             <br />
@@ -153,7 +155,6 @@ export const Menu = memo(
             variant="outlined"
             onClick={onClickShowCoordOfBeobOnMapGeoAdminCh}
             width={147}
-            hide={'false'}
           >
             zeige auf
             <br />

@@ -45,7 +45,6 @@ export const Daten = memo(
         followed={followed.toString()}
         onClick={onClickButton}
         data-id={`nav-daten${treeNr || 1}`}
-        hide={hide.toString()}
       >
         {`Daten${treeNr === '2' ? ' 2' : ''}`}
       </StyledButton>

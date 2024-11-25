@@ -100,8 +100,6 @@ export const MenuBar = memo(
     const { visibleChildren, widths } = useMemo(() => {
       const visibleChildren = []
       for (const [index, child] of Children.toArray(children).entries()) {
-        // console.log('MenuBar.checkOverflow, childProps:', child.props)
-        if (child.props.hide === 'true') continue
         visibleChildren.push(child)
       }
       // add 12px for margin and border width to props.width
@@ -160,17 +158,17 @@ export const MenuBar = memo(
       }
       setButtons(newButtons)
       setMenus(newMenus)
-      console.log('MenuBar.checkOverflow', {
-        widths,
-        visibleChildren,
-        needMenu,
-        spaceForButtonsAndMenus,
-        containerWidth,
-        titleWidth,
-        spaceForButtons,
-        newButtons,
-        newMenus,
-      })
+      // console.log('MenuBar.checkOverflow', {
+      //   widths,
+      //   visibleChildren,
+      //   needMenu,
+      //   spaceForButtonsAndMenus,
+      //   containerWidth,
+      //   titleWidth,
+      //   spaceForButtons,
+      //   newButtons,
+      //   newMenus,
+      // })
     }, [titleComponentWidth, buttonWidth, widths, visibleChildren, addMargin])
 
     const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300, {
@@ -188,7 +186,7 @@ export const MenuBar = memo(
     const previousWidthRef = useRef(null)
     useEffect(() => {
       if (!outerContainerRef.current) {
-        console.log('MenuBar.useEffect, no containerRef')
+        // console.log('MenuBar.useEffect, no containerRef')
         return
       }
       // set up a resize observer for the container
@@ -202,7 +200,7 @@ export const MenuBar = memo(
           const timeSinceLastMeasurement =
             currentTime - previousMeasurementTimeRef.current
           if (timeSinceLastMeasurement < 300) {
-            console.log('MenuBar.resizeObserver, not enough time has passed')
+            // console.log('MenuBar.resizeObserver, not enough time has passed')
             return
           }
 
@@ -214,12 +212,12 @@ export const MenuBar = memo(
           )
           const shouldCheckOverflow = Math.abs(percentageChanged) > 1
           if (!shouldCheckOverflow) {
-            console.log('MenuBar.resizeObserver, not enough change')
+            // console.log('MenuBar.resizeObserver, not enough change')
             return
           }
 
           previousWidthRef.current = width
-          console.log('MenuBar.resizeObserver, calling checkOverflowDebounced')
+          // console.log('MenuBar.resizeObserver, calling checkOverflowDebounced')
           checkOverflowDebounced()
         }
       })

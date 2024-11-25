@@ -67,10 +67,6 @@ export const StyledLoadingButton = styled(LoadingButton)`
   color: white;
   border-width: 0.67px;
   border-color: rgba(255, 255, 255, 0.5) !important;
-  transform: ${(props) =>
-    props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
-  // need to take hidden elements out of flow
-  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'static')};
   // prevent text from breaking into multiple lines
   flex-shrink: 0;
   flex-grow: 0;
@@ -85,10 +81,6 @@ export const StyledButton = styled(Button)`
   color: white;
   border-width: 0.67px;
   border-color: rgba(255, 255, 255, 0.5) !important;
-  transform: ${(props) =>
-    props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
-  // need to take hidden elements out of flow
-  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'static')};
   // prevent text from breaking into multiple lines
   flex-shrink: 0;
   flex-grow: 0;
@@ -518,17 +510,18 @@ export const Menu = memo(
               </IconButton>
             </Tooltip>
           )}
-          <StyledLoadingButton
-            variant="outlined"
-            onClick={onCopyCoordToPop}
-            loading={copyingCoordToTpop}
-            width={155}
-            hide={(!tpopHasCoord).toString()}
-          >
-            Koordinaten auf die
-            <br />
-            Population kopieren
-          </StyledLoadingButton>
+          {tpopHasCoord && (
+            <StyledLoadingButton
+              variant="outlined"
+              onClick={onCopyCoordToPop}
+              loading={copyingCoordToTpop}
+              width={155}
+            >
+              Koordinaten auf die
+              <br />
+              Population kopieren
+            </StyledLoadingButton>
+          )}
           <StyledButton
             variant="outlined"
             onClick={onClickShowCoordOfTpopOnMapsZhCh}

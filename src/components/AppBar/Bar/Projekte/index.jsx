@@ -40,10 +40,6 @@ export const StyledButton = styled(Button)`
   margin-right: ${(props) =>
     props.followed === 'true' ? '-1px' : 'unset'} !important;
   text-transform: none !important;
-  transform: ${(props) =>
-    props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
-  // need to take hidden elements out of flow
-  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'unset')};
   // prevent text from breaking into multiple lines
   flex-shrink: 0;
   flex-grow: 0;
@@ -175,61 +171,66 @@ export const ProjekteMenus = memo(
         >
           Karte
         </StyledButton>
-        <StyledButton
-          variant={exporteIsVisible ? 'outlined' : 'text'}
-          preceded={karteIsVisible?.toString()}
-          followed={(showAllMenus && tree2IsVisible)?.toString()}
-          onClick={onClickExporte}
-          data-id="nav-exporte"
-          width={74}
-          hide={(!projId).toString()}
-        >
-          Exporte
-        </StyledButton>
-        <StyledButton
-          variant={tree2IsVisible ? 'outlined' : 'text'}
-          preceded={(
-            (!!projId && exporteIsVisible) ||
-            (!projId && karteIsVisible)
-          )?.toString()}
-          followed={daten2IsVisible?.toString()}
-          onClick={onClickTree2}
-          data-id="nav-tree2"
-          width={147}
-          hide={(!showAllMenus).toString()}
-        >
-          Strukturbaum 2
-        </StyledButton>
-        <Daten
-          treeNr="2"
-          width={73}
-          hide={!showAllMenus || !tree2IsVisible}
-        />
-        <StyledButton
-          variant={filter2IsVisible ? 'outlined' : 'text'}
-          preceded={daten2IsVisible?.toString()}
-          followed={karte2IsVisible?.toString()}
-          onClick={onClickFilter2}
-          data-id="nav-filter2"
-          title="Daten filtern"
-          width={70}
-          hide={(!showAllMenus || !tree2IsVisible).toString()}
-        >
-          Filter 2
-        </StyledButton>
-        <StyledButton
-          variant="text"
-          preceded={false?.toString()}
-          followed={false.toString()}
-          component={Link}
-          to={`/Daten/Projekte/${projId}/EK-Planung${search}`}
-          data-id="ek-planung"
-          title="EK und EKF planen"
-          width={101}
-          hide={(!showAllMenus || !projId).toString()}
-        >
-          EK-Planung
-        </StyledButton>
+        {!!projId && (
+          <StyledButton
+            variant={exporteIsVisible ? 'outlined' : 'text'}
+            preceded={karteIsVisible?.toString()}
+            followed={(showAllMenus && tree2IsVisible)?.toString()}
+            onClick={onClickExporte}
+            data-id="nav-exporte"
+            width={74}
+          >
+            Exporte
+          </StyledButton>
+        )}
+        {showAllMenus && (
+          <StyledButton
+            variant={tree2IsVisible ? 'outlined' : 'text'}
+            preceded={(
+              (!!projId && exporteIsVisible) ||
+              (!projId && karteIsVisible)
+            )?.toString()}
+            followed={daten2IsVisible?.toString()}
+            onClick={onClickTree2}
+            data-id="nav-tree2"
+            width={147}
+          >
+            Strukturbaum 2
+          </StyledButton>
+        )}
+        {showAllMenus && tree2IsVisible && (
+          <Daten
+            treeNr="2"
+            width={73}
+          />
+        )}
+        {showAllMenus && tree2IsVisible && (
+          <StyledButton
+            variant={filter2IsVisible ? 'outlined' : 'text'}
+            preceded={daten2IsVisible?.toString()}
+            followed={karte2IsVisible?.toString()}
+            onClick={onClickFilter2}
+            data-id="nav-filter2"
+            title="Daten filtern"
+            width={70}
+          >
+            Filter 2
+          </StyledButton>
+        )}
+        {showAllMenus && !!projId && (
+          <StyledButton
+            variant="text"
+            preceded={false?.toString()}
+            followed={false.toString()}
+            component={Link}
+            to={`/Daten/Projekte/${projId}/EK-Planung${search}`}
+            data-id="ek-planung"
+            title="EK und EKF planen"
+            width={101}
+          >
+            EK-Planung
+          </StyledButton>
+        )}
         <DokuButton
           variant="text"
           component={Link}
