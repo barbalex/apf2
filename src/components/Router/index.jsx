@@ -119,16 +119,18 @@ export const Router = () => {
                   import('../Projekte/Daten/Apberuebersichts/index.jsx')
                 }
               />
-              <Route
-                path="AP-Berichte/:apberUebersichtId"
-                lazy={() =>
-                  import('../Projekte/Daten/Apberuebersicht/index.jsx')
-                }
-              />
-              <Route
-                path="AP-Berichte/:apberUebersichtId/print"
-                lazy={() => import('../Print/ApberForYear/index.jsx')}
-              />
+              <Route path="AP-Berichte/:apberUebersichtId">
+                <Route
+                  path="*"
+                  lazy={() =>
+                    import('../Projekte/Daten/Apberuebersicht/index.jsx')
+                  }
+                />
+                <Route
+                  path="print"
+                  lazy={() => import('../Print/ApberForYear/index.jsx')}
+                />
+              </Route>
               <Route
                 path="Arten"
                 lazy={() => import('../Projekte/Daten/Aps/index.jsx')}
