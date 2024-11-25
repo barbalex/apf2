@@ -172,6 +172,16 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Ap/Historien.jsx')}
                   />
                 </Route>
+                <Route path="assoziierte-Arten">
+                  <Route
+                    path="*"
+                    lazy={() => import('../Projekte/Daten/Assozarts/index.jsx')}
+                  />
+                  <Route
+                    path=":assozartId"
+                    lazy={() => import('../Projekte/Daten/Assozart/index.jsx')}
+                  />
+                </Route>
                 <Route path="EK-Frequenzen">
                   <Route
                     path="*"
@@ -246,14 +256,6 @@ export const Router = () => {
                   />
                 </Route>
               </Route>
-              <Route
-                path="Arten/:apId/assoziierte-Arten"
-                lazy={() => import('../Projekte/Daten/Assozarts/index.jsx')}
-              />
-              <Route
-                path="Arten/:apId/assoziierte-Arten/:assozartId"
-                lazy={() => import('../Projekte/Daten/Assozart/index.jsx')}
-              />
               <Route
                 path="Arten/:apId/Taxa"
                 lazy={() => import('../Projekte/Daten/Aparts/index.jsx')}
