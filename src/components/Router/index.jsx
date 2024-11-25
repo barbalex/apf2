@@ -135,41 +135,43 @@ export const Router = () => {
                 path="Arten"
                 lazy={() => import('../Projekte/Daten/Aps/index.jsx')}
               />
-              <Route
-                path="Arten/:apId"
-                lazy={() => import('../Projekte/Daten/ApRouter/index.jsx')}
-              >
+              <Route path="Arten/:apId">
                 <Route
-                  index={true}
-                  lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
-                />
-                <Route
-                  path="Art"
-                  lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
-                />
-                <Route
-                  path="Auswertung"
-                  lazy={() =>
-                    import('../Projekte/Daten/Ap/Auswertung/index.jsx')
-                  }
-                />
-                <Route
-                  path="Dateien"
-                  lazy={() => import('../Projekte/Daten/Ap/Dateien.jsx')}
+                  path="*"
+                  lazy={() => import('../Projekte/Daten/ApRouter/index.jsx')}
                 >
                   <Route
                     index={true}
-                    lazy={() => import('../shared/Files/Files/index.jsx')}
+                    lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
                   />
                   <Route
-                    path=":fileId/Vorschau"
-                    lazy={() => import('../shared/Files/Preview/index.jsx')}
+                    path="Art"
+                    lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+                  />
+                  <Route
+                    path="Auswertung"
+                    lazy={() =>
+                      import('../Projekte/Daten/Ap/Auswertung/index.jsx')
+                    }
+                  />
+                  <Route
+                    path="Dateien"
+                    lazy={() => import('../Projekte/Daten/Ap/Dateien.jsx')}
+                  >
+                    <Route
+                      index={true}
+                      lazy={() => import('../shared/Files/Files/index.jsx')}
+                    />
+                    <Route
+                      path=":fileId/Vorschau"
+                      lazy={() => import('../shared/Files/Preview/index.jsx')}
+                    />
+                  </Route>
+                  <Route
+                    path="Historien"
+                    lazy={() => import('../Projekte/Daten/Ap/Historien.jsx')}
                   />
                 </Route>
-                <Route
-                  path="Historien"
-                  lazy={() => import('../Projekte/Daten/Ap/Historien.jsx')}
-                />
               </Route>
               <Route
                 path="Arten/:apId/Qualitaetskontrollen"
