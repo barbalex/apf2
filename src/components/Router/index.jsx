@@ -325,26 +325,28 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Qk/Choose/index.jsx')}
                   />
                 </Route>
-                <Route
-                  path="AP-Ziele"
-                  lazy={() => import('../Projekte/Daten/Zieljahrs/index.jsx')}
-                />
-                <Route
-                  path="AP-Ziele/:jahr"
-                  lazy={() => import('../Projekte/Daten/Ziels/index.jsx')}
-                />
-                <Route
-                  path="AP-Ziele/:jahr/:zielId/*"
-                  lazy={() => import('../Projekte/Daten/Ziel/index.jsx')}
-                />
-                <Route
-                  path="AP-Ziele/:jahr/:zielId/Berichte"
-                  lazy={() => import('../Projekte/Daten/Zielbers/index.jsx')}
-                />
-                <Route
-                  path="AP-Ziele/:jahr/:zielId/Berichte/:zielberId"
-                  lazy={() => import('../Projekte/Daten/Zielber/index.jsx')}
-                />
+                <Route path="AP-Ziele">
+                  <Route
+                    path="*"
+                    lazy={() => import('../Projekte/Daten/Zieljahrs/index.jsx')}
+                  />
+                  <Route
+                    path=":jahr"
+                    lazy={() => import('../Projekte/Daten/Ziels/index.jsx')}
+                  />
+                  <Route
+                    path=":jahr/:zielId/*"
+                    lazy={() => import('../Projekte/Daten/Ziel/index.jsx')}
+                  />
+                  <Route
+                    path=":jahr/:zielId/Berichte"
+                    lazy={() => import('../Projekte/Daten/Zielbers/index.jsx')}
+                  />
+                  <Route
+                    path=":jahr/:zielId/Berichte/:zielberId"
+                    lazy={() => import('../Projekte/Daten/Zielber/index.jsx')}
+                  />
+                </Route>
               </Route>
               <Route
                 path="Arten/:apId/Populationen"
