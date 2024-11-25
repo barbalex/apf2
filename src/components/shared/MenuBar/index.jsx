@@ -123,11 +123,6 @@ export const MenuBar = memo(
           : c.props.width
         : buttonWidth,
       )
-      console.log('MenuBar.checkOverflow', {
-        widths,
-        usableChildrenNotHidden,
-        children,
-      })
 
       // only change if overflowing has changed
       const { clientWidth: containerWidth } = outerContainerRef.current
@@ -150,7 +145,11 @@ export const MenuBar = memo(
       for (const [index, child] of Children.toArray(usableChildren).entries()) {
         // console.log('MenuBar.checkOverflow, childProps:', child.props)
         if (child.props.hide === 'true') continue
-        const width = widths?.[index] ?? buttonWidth
+        const width =
+          child.props.width ?
+            addMargin ? child.props.width + 12
+            : child.props.width
+          : buttonWidth
         if (widthSum + width > spaceForButtons) {
           newMenus.push(cloneElement(child, { inmenu: 'true' }))
         } else {
@@ -160,6 +159,15 @@ export const MenuBar = memo(
       }
       setButtons(newButtons)
       setMenus(newMenus)
+      console.log('MenuBar.checkOverflow', {
+        widths,
+        usableChildrenNotHidden,
+        children,
+        needMenu,
+        spaceForButtonsAndMenus,
+        containerWidth,
+        titleWidth,
+      })
     }, [titleComponentWidth, buttonWidth, children])
 
     const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300)
@@ -230,7 +238,9 @@ export const MenuBar = memo(
       >
         {titleComponent}
         <StylingContainer
-          width={outerContainerWidth - (titleComponentWidth ?? 0)}
+          width={
+            Math.abs(outerContainerWidth ?? 0) - (titleComponentWidth ?? 0)
+          }
         >
           {buttons}
           {!!menus.length && (

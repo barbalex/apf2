@@ -1,4 +1,11 @@
-import { memo, useCallback, useContext, useState, useRef } from 'react'
+import {
+  memo,
+  useCallback,
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+} from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -98,7 +105,8 @@ export const Menu = memo(
       setNewTpopFromBeobDialogOpen(true)
     }, [beobId, setNewTpopFromBeobBeobId, setNewTpopFromBeobDialogOpen])
 
-    // TODO: somehow these refs return null??????!!!!!!
+    // ISSUE: refs are sometimes not set on first render
+    // SOLUTION: rerender in effect after 500ms if ref is not set
     const coordCopyRef = useRef(null)
     const coordCopyRefWidth = coordCopyRef?.current?.offsetWidth ?? 185
     const zuordnen1Ref = useRef(null)
@@ -111,13 +119,17 @@ export const Menu = memo(
     const showOnMapGeoAdminChRefWidth =
       showOnMapGeoAdminChRef?.current?.offsetWidth ?? 141
 
-    // console.log('Beobzuordnung.Menu', {
-    //   showOnMapsZhChRefWidth,
-    //   zuordnen2RefWidth,
-    //   showOnMapGeoAdminChRefWidth,
-    //   zuordnen1RefWidth,
-    //   coordCopyRefWidth,
-    // })
+    const [rerenderer, setRerenderer] = useState(0)
+    useEffect(() => {
+      if (!showOnMapsZhChRef.current) {
+        setTimeout(() => setRerenderer((prev) => prev + 1), 500)
+      }
+    }, [])
+
+    console.log('Beobzuordnung.Menu', {
+      showOnMapsZhChRef: showOnMapsZhChRef.current,
+      showOnMapsZhChRefWidth,
+    })
 
     return (
       <ErrorBoundary>

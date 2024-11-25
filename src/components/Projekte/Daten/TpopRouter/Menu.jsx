@@ -1,4 +1,11 @@
-import { memo, useCallback, useContext, useState, useRef } from 'react'
+import {
+  memo,
+  useCallback,
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+} from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -70,7 +77,7 @@ export const StyledLoadingButton = styled(LoadingButton)`
   transform: ${(props) =>
     props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
   // need to take hidden elements out of flow
-  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'unset')};
+  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'static')};
   // prevent text from breaking into multiple lines
   flex-shrink: 0;
   flex-grow: 0;
@@ -88,7 +95,7 @@ export const StyledButton = styled(Button)`
   transform: ${(props) =>
     props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
   // need to take hidden elements out of flow
-  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'unset')};
+  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'static')};
   // prevent text from breaking into multiple lines
   flex-shrink: 0;
   flex-grow: 0;
@@ -436,6 +443,8 @@ export const Menu = memo(
       })
     }, [tpopId, client, store, tanstackQueryClient])
 
+    // ISSUE: refs are sometimes not set on first render
+    // SOLUTION: rerender in effect after 500ms if ref is not set
     const coordCopyRef = useRef(null)
     const coordCopyRefWidth = coordCopyRef?.current?.offsetWidth ?? 0
     const showOnMapsZhChRef = useRef(null)
@@ -443,6 +452,13 @@ export const Menu = memo(
     const showOnGeoAdminChRef = useRef(null)
     const showOnGeoAdminChRefWidth =
       showOnGeoAdminChRef?.current?.offsetWidth ?? 0
+
+    const [rerenderer, setRerenderer] = useState(0)
+    useEffect(() => {
+      if (!showOnGeoAdminChRef.current) {
+        setTimeout(() => setRerenderer((prev) => prev + 1), 500)
+      }
+    }, [])
 
     return (
       <ErrorBoundary>
