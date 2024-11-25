@@ -48,7 +48,8 @@ const MeasuredOuterContainer = styled.div`
   border-top: 1px solid rgba(46, 125, 50, 0.15);
   border-bottom: 1px solid rgba(46, 125, 50, 0.15);
 `
-// TODO: StylingContainer overflows parent????!!!!
+// StylingContainer overflows parent????!!!!
+// Possible solution: pass in max-width
 const StylingContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -111,7 +112,7 @@ export const MenuBar = memo(
       const usableChildren = children?.filter?.((child) => !!child) ?? children
       const usableChildrenNotHidden = []
       for (const [index, child] of Children.toArray(usableChildren).entries()) {
-        console.log('MenuBar.checkOverflow, childProps:', child.props)
+        // console.log('MenuBar.checkOverflow, childProps:', child.props)
         if (child.props.hide === 'true') continue
         usableChildrenNotHidden.push(child)
       }
@@ -122,6 +123,11 @@ export const MenuBar = memo(
           : c.props.width
         : buttonWidth,
       )
+      console.log('MenuBar.checkOverflow', {
+        widths,
+        usableChildrenNotHidden,
+        children,
+      })
 
       // only change if overflowing has changed
       const { clientWidth: containerWidth } = outerContainerRef.current
@@ -142,7 +148,7 @@ export const MenuBar = memo(
       const newMenus = []
       let widthSum = 0
       for (const [index, child] of Children.toArray(usableChildren).entries()) {
-        console.log('MenuBar.checkOverflow, childProps:', child.props)
+        // console.log('MenuBar.checkOverflow, childProps:', child.props)
         if (child.props.hide === 'true') continue
         const width = widths?.[index] ?? buttonWidth
         if (widthSum + width > spaceForButtons) {

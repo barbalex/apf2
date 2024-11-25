@@ -1,4 +1,11 @@
-import { memo, useContext, useCallback, useRef } from 'react'
+import {
+  memo,
+  useContext,
+  useCallback,
+  useRef,
+  useEffect,
+  useState,
+} from 'react'
 import Button from '@mui/material/Button'
 import remove from 'lodash/remove'
 import styled from '@emotion/styled'
@@ -131,6 +138,8 @@ export const ProjekteMenus = memo(
     const filter2IsVisible = projekteTabs.includes('filter2')
     const karte2IsVisible = projekteTabs.includes('karte2')
 
+    // ISSUE: refs are sometimes not set on first render
+    // SOLUTION: rerender in effect after 500ms if ref is not set
     const tree1Ref = useRef(null)
     const tree1RefWidth = tree1Ref?.current?.offsetWidth ?? 0
     const daten1Ref = useRef(null)
@@ -153,6 +162,13 @@ export const ProjekteMenus = memo(
     const dokuRefWidth = dokuRef?.current?.offsetWidth ?? 0
     const mehrRef = useRef(null)
     const mehrRefWidth = mehrRef?.current?.offsetWidth ?? 0
+
+    const [rerenderer, setRerenderer] = useState(0)
+    useEffect(() => {
+      if (!tree1Ref.current) {
+        setTimeout(() => setRerenderer((prev) => prev + 1), 500)
+      }
+    }, [])
 
     return (
       <MenuBar
