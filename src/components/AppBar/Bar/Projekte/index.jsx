@@ -126,7 +126,6 @@ export const ProjekteMenus = memo(
     const daten2IsVisible = projekteTabs.includes('daten2')
     const filter2IsVisible = projekteTabs.includes('filter2')
     const karte2IsVisible = projekteTabs.includes('karte2')
-    const ekplanungIsVisible = projekteTabs.includes('ekplanung')
 
     // ISSUE: refs are sometimes/often not set on first render
     // trying to measure widths of menus leads to complete chaos
