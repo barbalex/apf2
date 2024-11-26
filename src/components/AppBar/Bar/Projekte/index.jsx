@@ -5,15 +5,13 @@ import styled from '@emotion/styled'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 import { Link, useParams, useLocation } from 'react-router'
-import { useAtom } from 'jotai'
 
 import { More } from './More/index.jsx'
 import { Daten } from './Daten.jsx'
 import { StoreContext } from '../../../../storeContext.js'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
+import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { constants } from '../../../../modules/constants.js'
-import { alwaysShowTreeAtom } from '../../../../JotaiStore/index.js'
 
 const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
@@ -63,20 +61,11 @@ export const ProjekteMenus = memo(
     const { user } = store
     const { resetTree2Src } = store.tree
 
-    const [alwaysShowTree] = useAtom(alwaysShowTreeAtom)
-    const showTree = alwaysShowTree || !isMobileView
-
     const token = user?.token
     const tokenDecoded = token ? jwtDecode(token) : null
     const role = tokenDecoded ? tokenDecoded.role : null
 
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      showTree ?
-        isMobileView ? ['tree']
-        : ['tree', 'daten']
-      : ['daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
 
     const onClickButton = useCallback(
       (name) => {

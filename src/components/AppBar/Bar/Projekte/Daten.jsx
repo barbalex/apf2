@@ -3,27 +3,16 @@ import Button from '@mui/material/Button'
 import remove from 'lodash/remove'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useAtom } from 'jotai'
 
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { StyledButton } from './index.jsx'
 import { constants } from '../../../../modules/constants.js'
-import { alwaysShowTreeAtom } from '../../../../JotaiStore/index.js'
+import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 
 const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
 export const Daten = memo(
   forwardRef(({ treeNr = '', hide = false }, ref) => {
-    const [alwaysShowTree] = useAtom(alwaysShowTreeAtom)
-    const showTree = alwaysShowTree || !isMobileView
-
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      showTree ?
-        isMobileView ? ['tree']
-        : ['tree', 'daten']
-      : ['daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
     const isDaten = projekteTabs.includes(`daten${treeNr}`)
     const isTree = projekteTabs.includes(`tree${treeNr}`)
 
