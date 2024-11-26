@@ -12,7 +12,6 @@ import { Daten } from './Daten.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
-import { minWidthToShowAllMenus } from '../../index.jsx'
 
 // getting widths of elements from refs
 // BEWARE: ref.current is only set on first render

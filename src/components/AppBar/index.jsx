@@ -11,8 +11,7 @@ import { Spinner } from '../shared/Spinner.jsx'
 import { StoreContext } from '../../storeContext.js'
 
 const isInIframe = inIframe()
-export const minWidthToShowAllMenus = 920
-export const minWidthToShowTitle = 1030
+export const minWidthToShowTitle = 1040
 
 const Container = styled.div`
   height: 100dvh;
