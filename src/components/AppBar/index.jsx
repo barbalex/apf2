@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Bar } from './Bar/index.jsx'
 import { EkfBar } from './EkfBar/index.jsx'
+import { Bookmarks } from '../Bookmarks/index.jsx'
 import { inIframe } from '../../modules/inIframe.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { StoreContext } from '../../storeContext.js'
@@ -75,6 +76,7 @@ export const Component = memo(
             <EkfBar />
           : <Bar />}
         </Appbar>
+        <Bookmarks />
         <Suspense fallback={<Spinner />}>
           <Outlet />
         </Suspense>
