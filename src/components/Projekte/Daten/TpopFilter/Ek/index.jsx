@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import max from 'lodash/max'
 import { useQuery } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'
 import { RadioButtonGroup } from '../../../../shared/RadioButtonGroup.jsx'

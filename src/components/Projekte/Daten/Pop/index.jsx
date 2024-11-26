@@ -2,7 +2,7 @@ import { memo, useContext, useCallback, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.jsx'

@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import sumBy from 'lodash/sumBy'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 

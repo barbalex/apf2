@@ -2,7 +2,7 @@ import { memo, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { StoreContext } from '../../../../storeContext.js'
 import { createApsQuery } from '../../../../modules/createApsQuery.js'

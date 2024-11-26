@@ -4,7 +4,7 @@ import remove from 'lodash/remove'
 import styled from '@emotion/styled'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
-import { Link, useParams, useLocation } from 'react-router-dom'
+import { Link, useParams, useLocation } from 'react-router'
 
 import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
 import { More } from './More/index.jsx'

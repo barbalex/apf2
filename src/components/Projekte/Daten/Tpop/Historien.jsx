@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { useQuery, gql } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { History as SharedHistory } from '../../../shared/History/index.jsx'

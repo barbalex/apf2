@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { TextField2 } from '../../../shared/TextField2.jsx'

@@ -1,6 +1,6 @@
 import { memo, Suspense, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
-import { Outlet, useLocation, useParams, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useParams, useNavigate } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
 import { Bar } from './Bar/index.jsx'

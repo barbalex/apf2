@@ -1,7 +1,7 @@
 import { memo, useContext } from 'react'
 import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { Polyline } from './Polyline.jsx'
 import { StoreContext } from '../../../../../storeContext.js'

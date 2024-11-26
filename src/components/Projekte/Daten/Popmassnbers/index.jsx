@@ -1,7 +1,7 @@
 import { memo, useContext, useMemo } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 

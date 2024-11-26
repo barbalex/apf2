@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 import styled from '@emotion/styled'
 import Highlighter from 'react-highlight-words'
 

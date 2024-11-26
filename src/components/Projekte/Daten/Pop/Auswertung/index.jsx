@@ -15,7 +15,7 @@ import styled from '@emotion/styled'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import MuiTooltip from '@mui/material/Tooltip'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { query } from './query.js'
 import { CustomTooltip } from './CustomTooltip.jsx'

@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { constants } from '../../../modules/constants.js'
 

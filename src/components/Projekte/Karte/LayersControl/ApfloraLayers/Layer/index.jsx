@@ -17,7 +17,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { useMap } from 'react-leaflet'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { Checkbox } from '../../shared/Checkbox.jsx'
 import { Error } from '../../../../../shared/Error.jsx'

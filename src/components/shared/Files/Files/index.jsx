@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
-import { useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
 

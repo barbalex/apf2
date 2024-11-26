@@ -1,7 +1,7 @@
 import { memo, useRef } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation, Link } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { isMobilePhone } from '../../../modules/isMobilePhone.js'

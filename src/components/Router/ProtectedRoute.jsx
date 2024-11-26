@@ -1,10 +1,10 @@
 import { memo, useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router'
 // import { getSnapshot } from 'mobx-state-tree'
 import { jwtDecode } from 'jwt-decode'
-import { useLocation, useParams, Navigate } from 'react-router-dom'
+import { useLocation, useParams, Navigate } from 'react-router'
 
 import { StoreContext } from '../../storeContext.js'
 const User = lazy(async () => ({ default: (await import('../User.jsx')).User }))

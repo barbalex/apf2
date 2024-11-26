@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation, Link } from 'react-router'
 
 const StyledButton = styled(Button)`
   color: white !important;

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { useQuery } from '@apollo/client'
-import { Link } from 'react-router-dom'
-import { useParams, useLocation } from 'react-router-dom'
+import { Link } from 'react-router'
+import { useParams, useLocation } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { EkfYear } from './EkfYear.jsx'

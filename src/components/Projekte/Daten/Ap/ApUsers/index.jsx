@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
 import styled from '@emotion/styled'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { ApUser } from './ApUser.jsx'
 import { NewUser } from './NewUser.jsx'

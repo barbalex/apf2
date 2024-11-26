@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 
 import { Select } from '../../../../../shared/Select.jsx'
 import { Error } from '../../../../../shared/Error.jsx'

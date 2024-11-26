@@ -2,8 +2,8 @@ import { memo, useContext, useMemo, lazy, Suspense, useRef } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import intersection from 'lodash/intersection'
-import { Outlet } from 'react-router-dom'
-import { useParams, useLocation } from 'react-router-dom'
+import { Outlet } from 'react-router'
+import { useParams, useLocation } from 'react-router'
 
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
 import { Karte } from './Karte/index.jsx'

@@ -2,7 +2,7 @@ import { useCallback, Suspense } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
-import { useParams, Outlet, useNavigate, useLocation } from 'react-router-dom'
+import { useParams, Outlet, useNavigate, useLocation } from 'react-router'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'

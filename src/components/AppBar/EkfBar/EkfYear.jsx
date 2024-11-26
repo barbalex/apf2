@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router'
 
 const StyledInput = styled(Input)`
   width: 60px;

@@ -5,7 +5,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import { observer } from 'mobx-react-lite'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router'
 
 import { StoreContext } from '../../../storeContext.js'
 import { createNewTpopFromBeob } from '../../../modules/createNewTpopFromBeob.js'

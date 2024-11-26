@@ -2,7 +2,7 @@ import { memo, useContext, useCallback, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
-import { useParams, useOutletContext } from 'react-router-dom'
+import { useParams, useOutletContext } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'

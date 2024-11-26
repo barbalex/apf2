@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 
 const Img = styled.img`
   display: block;
