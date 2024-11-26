@@ -1,0 +1,46 @@
+import { useEffect, useState } from 'react'
+import { useApolloClient, gql } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
+import { autorun } from 'mobx'
+
+export const useRootNavData = ({ userGqlFilterForTree }) => {
+  const apolloClient = useApolloClient()
+
+  // this is how to make the filter reactive in a hook
+  // see: https://stackoverflow.com/a/72229014/712005
+  const [filter, setFilter] = useState(userGqlFilterForTree)
+  useEffect(() => {
+    const disposer = autorun(() => {
+      setFilter(userGqlFilterForTree)
+    })
+    return () => disposer()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return useQuery({
+    queryKey: ['treeRoot', userGqlFilterForTree],
+    queryFn: () =>
+      apolloClient.query({
+        query: gql`
+          query TreeRootQuery($usersFilter: UserFilter!) {
+            allUsers {
+              totalCount
+            }
+            filteredUsers: allUsers(filter: $usersFilter) {
+              totalCount
+            }
+            allMessages {
+              totalCount
+            }
+            allCurrentissues {
+              totalCount
+            }
+          }
+        `,
+        variables: {
+          usersFilter: filter,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+}

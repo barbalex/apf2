@@ -1,6 +1,4 @@
 import { memo, useMemo, useContext } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { createCurrentissuesQuery } from '../../../../modules/createCurrentissuesQuery.js'
@@ -8,20 +6,14 @@ import { List } from '../../../shared/List/index.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { StoreContext } from '../../../../storeContext.js'
-import { createRootQuery } from '../../../../modules/createRootQuery.js'
+import { useRootNavData } from '../../../../modules/useRootNavData.js'
 
 export const Component = memo(
   observer(() => {
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
+    // calling filter even though not used here so useRootNavData re-runs when the filter changes
     const { userGqlFilterForTree } = store.tree
-
-    const { data, isLoading, error } = useQuery(
-      createRootQuery({
-        userGqlFilterForTree,
-        apolloClient,
-      }),
-    )
+    const { data, isLoading, error } = useRootNavData({userGqlFilterForTree})
     const totalCount = 5
     const usersCount = data?.data?.allUsers?.totalCount ?? 0
     const usersFilteredCount = data?.data?.filteredUsers?.totalCount ?? 0

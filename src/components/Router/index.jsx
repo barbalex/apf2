@@ -22,6 +22,7 @@ export const Router = () => {
         <Route
           path="/Daten"
           lazy={() => import('./ProtectedRoute.jsx')}
+          handle={(props) => console.log('ProtectedRoute, props:', props)}
         >
           {/* <Route path="*" element={<Unterhalt />}></Route> */}
           <Route
