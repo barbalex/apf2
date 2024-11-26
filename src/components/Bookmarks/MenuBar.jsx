@@ -9,33 +9,19 @@ import {
   cloneElement,
 } from 'react'
 import { IconButton, Menu, MenuItem } from '@mui/material'
-import Tooltip from '@mui/material/Tooltip'
-import {
-  FaBars,
-  FaAlignLeft,
-  FaAlignRight,
-  FaArrowDown,
-  FaArrowRight,
-  FaArrowLeft,
-  FaArrowUp,
-  FaCaretDown,
-  FaCaretLeft,
-  FaCaretRight,
-  FaCaretUp,
-} from 'react-icons/fa6'
-import styled from '@emotion/styled'
-import { over, set } from 'lodash'
+import { FaCaretDown } from 'react-icons/fa6'
 import { useDebouncedCallback } from 'use-debounce'
+import styled from '@emotion/styled'
 
-const buttonHeight = 40
-export const buttonWidth = 40
+const height = 40
+const collectingMenuWidth = 100
 
 const MeasuredOuterContainer = styled.div`
   overflow: hidden;
-  min-height: ${buttonHeight}px;
-  max-height: ${buttonHeight}px;
-  min-width: ${buttonWidth};
-  flex-basis: ${buttonWidth}px;
+  min-height: ${height}px;
+  max-height: ${height}px;
+  min-width: ${height}; // TODO: remove?
+  flex-basis: ${height}px; // TODO: remove?
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -50,17 +36,18 @@ const MeasuredOuterContainer = styled.div`
 `
 // StylingContainer overflows parent????!!!!
 // Possible solution: pass in max-width
+// TODO: reduce to single container
 const StylingContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   flex-grow: 1;
   flex-shrink: 0;
   flex-wrap: nowrap;
   column-gap: 0;
-  min-height: ${buttonHeight}px;
-  max-height: ${buttonHeight}px;
+  min-height: ${height}px;
+  max-height: ${height}px;
   max-width: ${(props) => props.width}px;
   overflow: hidden;
 `
@@ -88,14 +75,8 @@ export const MenuBar = memo(
     children,
     // enable the parent to force rerenders
     rerenderer,
-    // files pass in titleComponent and its width
-    titleComponent,
-    titleComponentWidth,
     bgColor = '#388e3c',
     color = 'white',
-    // top menu bar has no margin between menus, others do
-    // and that needs to be compensated for
-    addMargin = true,
   }) => {
     const { visibleChildren, widths } = useMemo(() => {
       const visibleChildren = []
@@ -103,17 +84,12 @@ export const MenuBar = memo(
         visibleChildren.push(child)
       }
       // add 12px for margin and border width to props.width
-      const widths = visibleChildren.map((c) =>
-        c.props.width ?
-          addMargin ? c.props.width + 12
-          : c.props.width
-        : buttonWidth,
-      )
+      const widths = visibleChildren.map((c) => c.props.width + 12)
       return { visibleChildren, widths }
     }, [children])
 
     const outerContainerRef = useRef(null)
-    const outerContainerWidth = outerContainerRef.current?.clientWidth
+    const outerContainerWidth = outerContainerRef.current?.clientWidth ?? 0
     const previousMeasurementTimeRef = useRef(0)
 
     const [buttons, setButtons] = useState([])
@@ -126,16 +102,12 @@ export const MenuBar = memo(
 
       const containerWidth = outerContainerRef.current?.clientWidth
 
-      const titleWidth = titleComponentWidth ?? 0
-      const spaceForButtonsAndMenus = containerWidth - titleWidth
-      const widthOfAllPassedInButtons =
-        widths ?
-          widths.reduce((acc, w) => acc + w, 0)
-        : visibleChildren.length * buttonWidth
+      const spaceForButtonsAndMenus = containerWidth
+      const widthOfAllPassedInButtons = widths.reduce((acc, w) => acc + w, 0)
       const needMenu = widthOfAllPassedInButtons > spaceForButtonsAndMenus
       const spaceForButtons =
         needMenu ?
-          spaceForButtonsAndMenus - buttonWidth
+          spaceForButtonsAndMenus - collectingMenuWidth
         : spaceForButtonsAndMenus
       // sum widths fitting into spaceForButtons
       const newButtons = []
@@ -144,11 +116,7 @@ export const MenuBar = memo(
       for (const [index, child] of Children.toArray(
         visibleChildren,
       ).entries()) {
-        const width =
-          child.props.width ?
-            addMargin ? child.props.width + 12
-            : child.props.width
-          : buttonWidth
+        const width = child.props.width + 12
         if (widthSum + width > spaceForButtons) {
           newMenus.push(cloneElement(child, { inmenu: 'true' }))
         } else {
@@ -164,12 +132,11 @@ export const MenuBar = memo(
       //   needMenu,
       //   spaceForButtonsAndMenus,
       //   containerWidth,
-      //   titleWidth,
       //   spaceForButtons,
       //   newButtons,
       //   newMenus,
       // })
-    }, [titleComponentWidth, buttonWidth, widths, visibleChildren, addMargin])
+    }, [collectingMenuWidth, widths, visibleChildren])
 
     const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300, {
       leading: false,
@@ -242,23 +209,15 @@ export const MenuBar = memo(
         ref={outerContainerRef}
         bgColor={bgColor}
       >
-        {titleComponent}
-        <StylingContainer
-          width={
-            Math.abs(outerContainerWidth ?? 0) - (titleComponentWidth ?? 0)
-          }
-        >
-          {buttons}
+        <StylingContainer width={outerContainerWidth}>
           {!!menus.length && (
             <>
-              <Tooltip title="Mehr Befehle">
-                <IconButton
-                  id="menubutton"
-                  onClick={onClickMenuButton}
-                >
-                  <FaBars style={{ color }} />
-                </IconButton>
-              </Tooltip>
+              <IconButton
+                id="menubutton"
+                onClick={onClickMenuButton}
+              >
+                {`+${menus.length}`}
+              </IconButton>
               <StyledMenu
                 id="menubutton"
                 anchorEl={menuAnchorEl}
@@ -269,6 +228,7 @@ export const MenuBar = memo(
               </StyledMenu>
             </>
           )}
+          {buttons}
         </StylingContainer>
       </MeasuredOuterContainer>
     )
