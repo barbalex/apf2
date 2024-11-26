@@ -244,8 +244,7 @@ import { openLowerNodes } from './openLowerNodes/index.js'
 import { closeLowerNodes } from './closeLowerNodes.js'
 import { insertDataset } from './insertDataset.js'
 import { StoreContext } from '../../../storeContext.js'
-import { useSearchParamsState } from '../../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../../modules/isMobilePhone.js'
+import { useProjekteTabs } from '../../../modules/useProjekteTabs.js'
 import { showCoordOfBeobOnMapsZhCh } from '../../../modules/showCoordOfBeobOnMapsZhCh.js'
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../modules/showCoordOfBeobOnMapGeoAdminCh.js'
 import { getAndValidateCoordinatesOfTpop } from '../../../modules/getAndValidateCoordinatesOfTpop.js'
@@ -414,10 +413,7 @@ export const TreeContainer = memo(
       [],
     )
 
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
     const showMapIfNotYetVisible = useCallback(
       (projekteTabs) => {
         const isVisible = projekteTabs.includes('karte')

@@ -9,8 +9,7 @@ import { useParams, useLocation } from 'react-router'
 
 import { StoreContext } from '../../../../../storeContext.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
-import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../../../../modules/isMobilePhone.js'
+import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { Data } from '../BeobData/index.jsx'
 
 const StyledH3 = styled.h3`
@@ -55,10 +54,7 @@ export const Polyline = memo(
     const popId = beob?.tpopByTpopId?.popId ?? ''
     const tpopId = beob?.tpopByTpopId?.id ?? ''
 
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
     const openBeobInTree2 = useCallback(() => {
       openTree2WithActiveNodeArray({
         activeNodeArray: [
