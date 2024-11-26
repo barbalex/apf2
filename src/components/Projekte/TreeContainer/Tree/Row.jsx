@@ -26,10 +26,10 @@ import { toggleNode } from './toggleNode.js'
 import { toggleNodeSymbol } from './toggleNodeSymbol.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
+import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { historizeForAp } from '../../../../modules/historizeForAp.js'
 import { historize } from '../../../../modules/historize.js'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 // adding ?react to .svg leads to error:
 // Warning: </src/components/Projekte/Karte/layers/Pop/statusGroupSymbols/100.svg?react /> is using incorrect casing.
 // Use PascalCase for React components, or lowercase for HTML elements
@@ -505,10 +505,7 @@ export const Row = memo(
       store,
     ])
 
-    const [projekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs] = useProjekteTabs()
     const karteIsVisible = projekteTabs.includes('karte')
 
     const tpopIconIsHighlighted =

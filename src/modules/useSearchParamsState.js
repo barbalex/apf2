@@ -15,14 +15,6 @@ export function useSearchParamsState(searchParamName, defaultValue) {
     searchParamsState = acquiredSearchParam ? acquiredSearchParam : defaultValue
   }
 
-  // console.log('useSearchParamsState', {
-  //   acquiredSearchParam,
-  //   searchParamsState,
-  //   searchParamName,
-  //   defaultValue,
-  //   searchParamsEntries: [...searchParams.entries()],
-  // })
-
   const setSearchParamsState = (newState) => {
     const previous = [...searchParams.entries()].reduce((o, [key, value]) => {
       if (key in o) {
