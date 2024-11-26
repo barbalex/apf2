@@ -6,21 +6,15 @@ import { StoreContext } from '../../../../../../storeContext.js'
 import { Users } from './Users.jsx'
 
 export const UsersFolder = memo(
-  observer(({ count, isLoading, usersFilter }) => {
+  observer(({ count, countFiltered, isLoading, usersFilter }) => {
     const store = useContext(StoreContext)
-
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.user ?? ''
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const node = {
       nodeType: 'folder',
       menuType: 'userFolder',
       id: 'benutzerFolder',
       urlLabel: 'Benutzer',
-      label: `Benutzer (${message})`,
+      label: `Benutzer (${isLoading ? '...' : `${countFiltered}/${count}`})`,
       url: ['Benutzer'],
       hasChildren: count > 0,
     }

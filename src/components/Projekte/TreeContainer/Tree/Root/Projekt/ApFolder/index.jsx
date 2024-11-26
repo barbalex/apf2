@@ -6,12 +6,9 @@ import { StoreContext } from '../../../../../../../storeContext.js'
 import { Aps } from './Aps/index.jsx'
 
 export const ApFolder = memo(
-  observer(({ count, projekt }) => {
+  observer(({ count, countFiltered, projekt, isLoading }) => {
     const store = useContext(StoreContext)
     const { openNodes } = store.tree
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ap ?? ''
-
-    const message = nodeLabelFilterString ? `${count} gefiltert` : count
 
     const isOpen =
       openNodes.filter(
@@ -26,7 +23,7 @@ export const ApFolder = memo(
       id: `${projekt.id}ApFolder`,
       tableId: projekt.id,
       urlLabel: 'Arten',
-      label: `Arten (${message})`,
+      label: `Arten (${isLoading ? '...' : `${countFiltered}/${count}`})`,
       url,
       hasChildren: count > 0,
     }

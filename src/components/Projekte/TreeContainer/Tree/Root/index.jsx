@@ -62,11 +62,19 @@ export const Root = memo(
                 nodes {
                   id
                   label
-                  apberuebersichtsByProjId(filter: $apberuebersichtsFilter)
-                    @include(if: $projectIsOpen) {
+                  apberuebersichtsByProjId @include(if: $projectIsOpen) {
                     totalCount
                   }
-                  apsByProjId(filter: $apsFilter) @include(if: $projectIsOpen) {
+                  filteredApberuebersichts: apberuebersichtsByProjId(
+                    filter: $apberuebersichtsFilter
+                  ) @include(if: $projectIsOpen) {
+                    totalCount
+                  }
+                  apsByProjId @include(if: $projectIsOpen) {
+                    totalCount
+                  }
+                  apsFiltered: apsByProjId(filter: $apsFilter)
+                    @include(if: $projectIsOpen) {
                     totalCount
                   }
                 }
@@ -77,7 +85,10 @@ export const Root = memo(
               allMessages {
                 totalCount
               }
-              allUsers(filter: $usersFilter) {
+              allUsers {
+                totalCount
+              }
+              filteredUsers: allUsers(filter: $usersFilter) {
                 totalCount
               }
             }
@@ -109,10 +120,12 @@ export const Root = memo(
       <>
         <Projekt
           projekt={data?.data?.allProjekts?.nodes?.[0]}
+          isLoading={isLoading}
           projectIsOpen={projectIsOpen}
         />
         <UsersFolder
           count={data?.data?.allUsers?.totalCount ?? 0}
+          countFiltered={data?.data?.filteredUsers?.totalCount ?? 0}
           isLoading={isLoading}
           usersFilter={usersFilter}
         />

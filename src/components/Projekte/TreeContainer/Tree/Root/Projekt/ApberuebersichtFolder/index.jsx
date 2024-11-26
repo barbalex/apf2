@@ -6,12 +6,8 @@ import { StoreContext } from '../../../../../../../storeContext.js'
 import { Apberuebersichts } from './Apberuebersichts.jsx'
 
 export const ApberuebersichtFolder = memo(
-  observer(({ count, projekt }) => {
+  observer(({ count, countFiltered, projekt, isLoading }) => {
     const store = useContext(StoreContext)
-    const nodeLabelFilterString =
-      store.tree?.nodeLabelFilter?.apberuebersicht ?? ''
-
-    const message = nodeLabelFilterString ? `${count} gefiltert` : count
 
     const isOpen =
       store.tree.openNodes.filter(
@@ -24,7 +20,7 @@ export const ApberuebersichtFolder = memo(
       id: `${projekt.id}/ApberuebersichtsFolder`,
       tableId: projekt.id,
       urlLabel: 'AP-Berichte',
-      label: `AP-Berichte (${message})`,
+      label: `AP-Berichte (${isLoading ? '...' : `${countFiltered}/${count}`})`,
       url: ['Projekte', projekt.id, 'AP-Berichte'],
       hasChildren: count > 0,
     }
