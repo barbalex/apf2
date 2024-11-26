@@ -650,7 +650,7 @@ export const Router = () => {
           </Route>
         </Route>
         <Route
-          path="/Dokumentation/*"
+          path="/Dokumentation"
           lazy={() => import('../Docs/index.jsx')}
         >
           <Route
