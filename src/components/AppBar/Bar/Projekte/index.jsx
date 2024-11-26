@@ -5,13 +5,17 @@ import styled from '@emotion/styled'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 import { Link, useParams, useLocation } from 'react-router'
+import { useAtom } from 'jotai'
 
-import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
 import { More } from './More/index.jsx'
 import { Daten } from './Daten.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
+import { constants } from '../../../../modules/constants.js'
+import { alwaysShowTreeAtom } from '../../../../JotaiStore/index.js'
+
+const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
 // getting widths of elements from refs
 // BEWARE: ref.current is only set on first render
@@ -59,7 +63,8 @@ export const ProjekteMenus = memo(
     const { user } = store
     const { resetTree2Src } = store.tree
 
-    const isMobile = isMobilePhone()
+    const [alwaysShowTree] = useAtom(alwaysShowTreeAtom)
+    const showTree = alwaysShowTree || !isMobileView
 
     const token = user?.token
     const tokenDecoded = token ? jwtDecode(token) : null
@@ -67,12 +72,15 @@ export const ProjekteMenus = memo(
 
     const [projekteTabs, setProjekteTabs] = useSearchParamsState(
       'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
+      showTree ?
+        isMobileView ? ['tree']
+        : ['tree', 'daten']
+      : ['daten'],
     )
 
     const onClickButton = useCallback(
       (name) => {
-        if (isMobile) {
+        if (isMobileView) {
           // show one tab only
           setProjekteTabs([name])
         } else {
@@ -89,7 +97,7 @@ export const ProjekteMenus = memo(
           setProjekteTabs(newProjekteTabs)
         }
       },
-      [isMobile, setProjekteTabs, projekteTabs],
+      [isMobileView, setProjekteTabs, projekteTabs],
     )
     const onClickTree = useCallback(
       () => onClickButton('tree'),
