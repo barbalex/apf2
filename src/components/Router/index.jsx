@@ -510,21 +510,21 @@ export const Router = () => {
                       </Route>
                     </Route>
                   </Route>
+                  <Route path=":tpopId/Massnahmen-Berichte">
+                    <Route
+                      path="*"
+                      lazy={() =>
+                        import('../Projekte/Daten/Tpopmassnbers/index.jsx')
+                      }
+                    />
+                    <Route
+                      path=":tpopmassnberId/*"
+                      lazy={() =>
+                        import('../Projekte/Daten/Tpopmassnber/index.jsx')
+                      }
+                    />
+                  </Route>
                 </Route>
-              </Route>
-              <Route path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Massnahmen-Berichte">
-                <Route
-                  path="*"
-                  lazy={() =>
-                    import('../Projekte/Daten/Tpopmassnbers/index.jsx')
-                  }
-                />
-                <Route
-                  path=":tpopmassnberId/*"
-                  lazy={() =>
-                    import('../Projekte/Daten/Tpopmassnber/index.jsx')
-                  }
-                />
               </Route>
               <Route
                 path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Kontroll-Berichte"
