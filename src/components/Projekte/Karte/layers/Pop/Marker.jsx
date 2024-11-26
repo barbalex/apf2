@@ -29,8 +29,7 @@ import { svg202 } from './statusGroupSymbols/202.js'
 import { svg202Highlighted } from './statusGroupSymbols/202Highlighted.js'
 import { svg300 } from './statusGroupSymbols/300.js'
 import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.js'
-import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../../../../modules/isMobilePhone.js'
+import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -100,10 +99,7 @@ export const Marker = memo(
       return iconHtml
     }, [isHighlighted, pop.status, popIconName])
 
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
     const openPopInTree2 = useCallback(() => {
       openTree2WithActiveNodeArray({
         activeNodeArray: [
