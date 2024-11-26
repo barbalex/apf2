@@ -9,8 +9,7 @@ import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
+import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
 import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
@@ -24,10 +23,7 @@ export const Menu = memo(
     const store = useContext(StoreContext)
     const { setActiveApfloraLayers, activeApfloraLayers } = store
 
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
     const showMapIfNotYetVisible = useCallback(
       (projekteTabs) => {
         const isVisible = projekteTabs.includes('karte')

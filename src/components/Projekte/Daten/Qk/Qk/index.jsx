@@ -19,8 +19,7 @@ import { createMessageFunctions } from './createMessageFunctions.js'
 import { StoreContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
-import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../../../../modules/isMobilePhone.js'
+import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 
 const Container = styled.div`
   height: 100%;
@@ -79,10 +78,7 @@ export const Qk = memo(
     const { apId, projId } = useParams()
     const { search } = useLocation()
 
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
 
     const store = useContext(StoreContext)
     const { openTree2WithActiveNodeArray } = store

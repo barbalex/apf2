@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import intersection from 'lodash/intersection'
 import { Outlet } from 'react-router'
 import { useParams, useLocation } from 'react-router'
-import { useAtom } from 'jotai'
 
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
 import { Karte } from './Karte/index.jsx'
@@ -19,10 +18,8 @@ const Filter = lazy(async () => ({
 }))
 import { StoreContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
-import { useSearchParamsState } from '../../modules/useSearchParamsState.js'
 import { Spinner } from '../shared/Spinner.jsx'
-import { constants } from '../../modules/constants.js'
-import { alwaysShowTreeAtom } from '../../JotaiStore/index.js'
+import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
 
 const Container = styled.div`
   height: 100%;
@@ -39,7 +36,6 @@ const InnerContainer = styled.div`
   width: 100%;
   height: 100%;
 `
-const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
 export const ProjektContainer = memo(
   observer(() => {
@@ -49,8 +45,6 @@ export const ProjektContainer = memo(
     const store = useContext(StoreContext)
     const { isPrint } = store
 
-    const [alwaysShowTree] = useAtom(alwaysShowTreeAtom)
-    const showTree = alwaysShowTree || !isMobileView
     // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
     // to prevent it from causing unnessecary renders
     // BUT: this prevents necessary renders: clicking tabs does not cause re-render!
@@ -63,13 +57,7 @@ export const ProjektContainer = memo(
       ...(projId ? ['exporte'] : []),
     ]
 
-    const [projekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      showTree ?
-        isMobileView ? ['tree']
-        : ['tree', 'daten']
-      : ['daten'],
-    )
+    const [projekteTabs] = useProjekteTabs()
 
     const treeTabs = useMemo(
       () => intersection(treeTabValues, projekteTabs),
