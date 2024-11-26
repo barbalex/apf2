@@ -524,17 +524,19 @@ export const Router = () => {
                       }
                     />
                   </Route>
+                  <Route path=":tpopId/Kontroll-Berichte">
+                    <Route
+                      path="*"
+                      lazy={() =>
+                        import('../Projekte/Daten/Tpopbers/index.jsx')
+                      }
+                    />
+                    <Route
+                      path=":tpopberId/*"
+                      lazy={() => import('../Projekte/Daten/Tpopber/index.jsx')}
+                    />
+                  </Route>
                 </Route>
-              </Route>
-              <Route path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Kontroll-Berichte">
-                <Route
-                  path="*"
-                  lazy={() => import('../Projekte/Daten/Tpopbers/index.jsx')}
-                />
-                <Route
-                  path=":tpopberId/*"
-                  lazy={() => import('../Projekte/Daten/Tpopber/index.jsx')}
-                />
               </Route>
               <Route
                 path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Beobachtungen"
