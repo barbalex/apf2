@@ -536,21 +536,21 @@ export const Router = () => {
                       lazy={() => import('../Projekte/Daten/Tpopber/index.jsx')}
                     />
                   </Route>
+                  <Route path=":tpopId/Beobachtungen">
+                    <Route
+                      path="*"
+                      lazy={() =>
+                        import('../Projekte/Daten/Beobzuordnungs/index.jsx')
+                      }
+                    />
+                    <Route
+                      path=":beobId/*"
+                      lazy={() =>
+                        import('../Projekte/Daten/Beobzuordnung/index.jsx')
+                      }
+                    />
+                  </Route>
                 </Route>
-              </Route>
-              <Route path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Beobachtungen">
-                <Route
-                  path="*"
-                  lazy={() =>
-                    import('../Projekte/Daten/Beobzuordnungs/index.jsx')
-                  }
-                />
-                <Route
-                  path=":beobId/*"
-                  lazy={() =>
-                    import('../Projekte/Daten/Beobzuordnung/index.jsx')
-                  }
-                />
               </Route>
               <Route
                 path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Freiwilligen-Kontrollen"
