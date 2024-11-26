@@ -31,8 +31,7 @@ import { StoreContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
-import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
+import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.js'
@@ -242,10 +241,7 @@ export const Menu = memo(
       })
     }, [projId, apId, popId, tpopId, store, search])
 
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
     const showMapIfNotYetVisible = useCallback(
       (projekteTabs) => {
         const isVisible = projekteTabs.includes('karte')
