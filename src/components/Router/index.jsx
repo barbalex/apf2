@@ -364,7 +364,7 @@ export const Router = () => {
                   lazy={() => import('../Projekte/Daten/Pops/index.jsx')}
                 />
                 <Route
-                  path=":popId/*"
+                  path=":popId"
                   lazy={() => import('../Projekte/Daten/PopRouter/index.jsx')}
                 >
                   <Route
@@ -399,28 +399,30 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Pop/Historien.jsx')}
                   />
                 </Route>
-              </Route>
-              <Route path="Arten/:apId/Populationen/:popId/Massnahmen-Berichte">
-                <Route
-                  path="*"
-                  lazy={() =>
-                    import('../Projekte/Daten/Popmassnbers/index.jsx')
-                  }
-                />
-                <Route
-                  path=":popmassnberId/*"
-                  lazy={() => import('../Projekte/Daten/Popmassnber/index.jsx')}
-                />
-              </Route>
-              <Route path="Arten/:apId/Populationen/:popId/Kontroll-Berichte">
-                <Route
-                  path="*"
-                  lazy={() => import('../Projekte/Daten/Popbers/index.jsx')}
-                />
-                <Route
-                  path=":popberId/*"
-                  lazy={() => import('../Projekte/Daten/Popber/index.jsx')}
-                />
+                <Route path=":popId/Massnahmen-Berichte">
+                  <Route
+                    path="*"
+                    lazy={() =>
+                      import('../Projekte/Daten/Popmassnbers/index.jsx')
+                    }
+                  />
+                  <Route
+                    path=":popmassnberId/*"
+                    lazy={() =>
+                      import('../Projekte/Daten/Popmassnber/index.jsx')
+                    }
+                  />
+                </Route>
+                <Route path=":popId/Kontroll-Berichte">
+                  <Route
+                    path="*"
+                    lazy={() => import('../Projekte/Daten/Popbers/index.jsx')}
+                  />
+                  <Route
+                    path=":popberId/*"
+                    lazy={() => import('../Projekte/Daten/Popber/index.jsx')}
+                  />
+                </Route>
               </Route>
               <Route
                 path="Arten/:apId/Populationen/:popId/Teil-Populationen"
