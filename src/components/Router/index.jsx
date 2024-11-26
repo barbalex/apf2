@@ -412,7 +412,7 @@ export const Router = () => {
                     }
                   />
                   <Route
-                    path=":popmassnberId/*"
+                    path=":popmassnberId"
                     lazy={() =>
                       import('../Projekte/Daten/Popmassnber/index.jsx')
                     }
@@ -424,7 +424,7 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Popbers/index.jsx')}
                   />
                   <Route
-                    path=":popberId/*"
+                    path=":popberId"
                     lazy={() => import('../Projekte/Daten/Popber/index.jsx')}
                   />
                 </Route>
