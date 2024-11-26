@@ -16,6 +16,7 @@ export const Daten = memo(
   forwardRef(({ treeNr = '', hide = false }, ref) => {
     const [alwaysShowTree] = useAtom(alwaysShowTreeAtom)
     const showTree = alwaysShowTree || !isMobileView
+
     const [projekteTabs, setProjekteTabs] = useSearchParamsState(
       'projekteTabs',
       showTree ?

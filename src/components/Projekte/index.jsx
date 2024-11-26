@@ -4,6 +4,7 @@ import intersection from 'lodash/intersection'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
 import queryString from 'query-string'
+import { useAtom } from 'jotai'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -14,7 +15,11 @@ import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 import { inIframe } from '../../modules/inIframe.js'
 import { useSearchParamsState } from '../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../modules/isMobilePhone.js'
+import { constants } from '../../modules/constants.js'
+import { alwaysShowTreeAtom } from '../../JotaiStore/index.js'
+
+const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
+
 const ApFilterController = lazy(async () => ({
   default: (await import('./ApFilterController.jsx')).ApFilterController,
 }))
@@ -43,10 +48,15 @@ export const Component = memo(
     const store = useContext(StoreContext)
     const { isPrint } = store
     const { tree2Src } = store.tree
+    const [alwaysShowTree] = useAtom(alwaysShowTreeAtom)
+    const showTree = alwaysShowTree || !isMobileView
 
     const [projekteTabs] = useSearchParamsState(
       'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
+      showTree ?
+        isMobileView ? ['tree']
+        : ['tree', 'daten']
+      : ['daten'],
     )
     const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
