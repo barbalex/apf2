@@ -640,14 +640,16 @@ export const Router = () => {
                 path="*"
                 lazy={() => import('../Projekte/Daten/Users/index.jsx')}
               />
-              <Route
-                path=":userId/*"
-                lazy={() => import('../Projekte/Daten/User/index.jsx')}
-              />
-              <Route
-                path=":userId/EKF/*"
-                lazy={() => import('./EkfYearNavigator.jsx')}
-              />
+              <Route path=":userId">
+                <Route
+                  path="*"
+                  lazy={() => import('../Projekte/Daten/User/index.jsx')}
+                />
+                <Route
+                  path="EKF/*"
+                  lazy={() => import('./EkfYearNavigator.jsx')}
+                />
+              </Route>
             </Route>
           </Route>
         </Route>
