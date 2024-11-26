@@ -15,3 +15,8 @@ export const listLabelFilterIsIconAtom = atomWithStorage(
   'listLabelFilterIsIcon',
   true,
 )
+export const alwaysShowBookmarksAtom = atomWithStorage(
+  'alwaysShowBookmarks',
+  false,
+)
+export const alwaysShowTreeAtom = atomWithStorage('alwaysShowTree', false)

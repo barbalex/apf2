@@ -2,6 +2,7 @@ import { memo, Suspense, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { Outlet, useLocation, useParams, useNavigate } from 'react-router'
 import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
 import { Bar } from './Bar/index.jsx'
 import { EkfBar } from './EkfBar/index.jsx'
@@ -9,7 +10,10 @@ import { Bookmarks } from '../Bookmarks/index.jsx'
 import { inIframe } from '../../modules/inIframe.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { StoreContext } from '../../storeContext.js'
+import { constants } from '../../modules/constants.js'
+import { alwaysShowBookmarksAtom } from '../../JotaiStore/index.js'
 
+const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 const isInIframe = inIframe()
 export const minWidthToShowTitle = 1040
 
@@ -52,6 +56,7 @@ export const Component = memo(
 
     const store = useContext(StoreContext)
     const activeNodeArray = store.tree.activeNodeArray
+    const [alwaysShowBookmarks] = useAtom(alwaysShowBookmarksAtom)
 
     useEffect(() => {
       if (isInIframe) return
@@ -75,7 +80,7 @@ export const Component = memo(
             <EkfBar />
           : <Bar />}
         </Appbar>
-        <Bookmarks />
+        {(isMobileView || alwaysShowBookmarks) && <Bookmarks />}
         <Suspense fallback={<Spinner />}>
           <Outlet />
         </Suspense>

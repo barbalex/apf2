@@ -12,6 +12,8 @@ import { EkfUser } from './EkfUser/index.jsx'
 import { StoreContext } from '../../../../../storeContext.js'
 import { IdbContext } from '../../../../../idbContext.js'
 import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
+import { AlwaysShowBookmarks } from './AlwaysShowBookmarks.jsx'
+import { AlwaysShowTree } from './AlwaysShowTree.jsx'
 
 const Container = styled.div`
   margin-top: auto;
@@ -113,6 +115,12 @@ export const More = memo(
             {['apflora_manager', 'apflora_ap_writer'].includes(role) && (
               <EkfUser closeMenu={closeMenu} />
             )}
+            <MenuItem>
+              <AlwaysShowBookmarks />
+            </MenuItem>
+            <MenuItem>
+              <AlwaysShowTree />
+            </MenuItem>
             <MenuItem
               onClick={onClickLogout}
               data-id="appbar-more-logout"
