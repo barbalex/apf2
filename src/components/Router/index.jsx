@@ -549,7 +549,7 @@ export const Router = () => {
                       }
                     />
                     <Route
-                      path=":beobId/*"
+                      path=":beobId"
                       lazy={() =>
                         import('../Projekte/Daten/Beobzuordnung/index.jsx')
                       }
@@ -562,12 +562,14 @@ export const Router = () => {
                         import('../Projekte/Daten/Tpopfreiwkontrs/index.jsx')
                       }
                     />
-                    <Route
-                      path=":tpopkontrId/*"
-                      lazy={() =>
-                        import('../Projekte/Daten/Tpopfreiwkontr/index.jsx')
-                      }
-                    />
+                    <Route path=":tpopkontrId">
+                      <Route
+                        path="*"
+                        lazy={() =>
+                          import('../Projekte/Daten/Tpopfreiwkontr/index.jsx')
+                        }
+                      />
+                    </Route>
                   </Route>
                 </Route>
               </Route>
