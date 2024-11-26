@@ -9,7 +9,7 @@ import {
   cloneElement,
 } from 'react'
 import { IconButton, Menu, MenuItem } from '@mui/material'
-import { FaCaretDown } from 'react-icons/fa6'
+import { BsCaretDown } from 'react-icons/bs'
 import { useDebouncedCallback } from 'use-debounce'
 import styled from '@emotion/styled'
 
