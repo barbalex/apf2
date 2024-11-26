@@ -1,7 +1,7 @@
 import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { gql, useQuery } from '@apollo/client'
 
 import { Checkbox } from '../shared/Checkbox.jsx'

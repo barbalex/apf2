@@ -24,7 +24,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { arrayMoveImmutable } from 'array-move'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { layerLegends } from './layerLegends.js'
 import findIndex from 'lodash/findIndex'
 

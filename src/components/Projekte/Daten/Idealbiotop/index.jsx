@@ -2,7 +2,7 @@ import { memo, useState, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { DateField } from '../../../shared/Date.jsx'

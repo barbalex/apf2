@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import { useQuery } from '@apollo/client'
 import CircularProgress from '@mui/material/CircularProgress'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { query } from './query.js'
 import { Row } from './Row/index.jsx'

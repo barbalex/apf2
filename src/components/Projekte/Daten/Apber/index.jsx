@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client'
 import { gql } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'

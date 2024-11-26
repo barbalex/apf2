@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
 import { tables } from '../../../../modules/tables.js'
 import { deleteModule } from './delete/index.jsx'

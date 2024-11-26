@@ -1,7 +1,7 @@
 import { memo, useCallback, useContext, useState, useMemo } from 'react'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
-import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
+import { useParams, useNavigate, useLocation, Link } from 'react-router'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus } from 'react-icons/fa6'

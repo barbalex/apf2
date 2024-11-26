@@ -3,7 +3,7 @@ import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { queryApsToChoose } from './queryApsToChoose.js'
 import { StoreContext } from '../../../../storeContext.js'

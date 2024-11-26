@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useQuery, gql } from '@apollo/client'
 import MarkdownIt from 'markdown-it'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments.js'

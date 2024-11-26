@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import { jwtDecode } from 'jwt-decode'
 import { format } from 'date-fns/format'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
 

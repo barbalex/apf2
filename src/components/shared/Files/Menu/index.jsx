@@ -25,7 +25,7 @@ import {
   FaMinimize,
   FaDownload,
 } from 'react-icons/fa6'
-import { useNavigate, useLocation, useParams } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router'
 import screenfull from 'screenfull'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'

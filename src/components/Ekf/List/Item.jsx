@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import styled from '@emotion/styled'
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router'
 
 const OuterContainer = styled.div`
   box-sizing: border-box;

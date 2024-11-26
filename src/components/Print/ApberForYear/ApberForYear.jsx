@@ -4,7 +4,7 @@ import { DateTime } from 'luxon'
 import { useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { query } from './query.js'
 import { jberQuery } from './jberQuery.js'

@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.jsx'

@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
-import { Form, useParams } from 'react-router-dom'
+import { Form, useParams } from 'react-router'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'

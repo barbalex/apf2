@@ -2,7 +2,7 @@ import { memo, useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import intersection from 'lodash/intersection'
 import { observer } from 'mobx-react-lite'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import queryString from 'query-string'
 
 // when Karte was loaded async, it did not load,

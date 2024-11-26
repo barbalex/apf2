@@ -1,5 +1,5 @@
 import { WMSTileLayer } from 'react-leaflet'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 const version = '1.3.0'
 const format = 'image/png'

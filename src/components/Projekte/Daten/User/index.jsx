@@ -10,7 +10,7 @@ import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'

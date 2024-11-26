@@ -5,7 +5,7 @@ import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router'
 
 import { StoreContext } from '../../../../../storeContext.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'

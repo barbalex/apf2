@@ -1,6 +1,6 @@
 import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../storeContext.js'

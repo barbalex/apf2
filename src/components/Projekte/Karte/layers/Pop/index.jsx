@@ -4,7 +4,7 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from '@apollo/client'
 import { useMap } from 'react-leaflet'
 import cloneDeep from 'lodash/cloneDeep'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { Marker } from './Marker.jsx'
 import { StoreContext } from '../../../../../storeContext.js'

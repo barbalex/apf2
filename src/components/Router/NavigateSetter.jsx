@@ -1,6 +1,6 @@
 // This is the entry file for the application
 import { memo, useContext, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../storeContext.js'

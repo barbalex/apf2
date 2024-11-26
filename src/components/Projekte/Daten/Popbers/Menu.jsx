@@ -1,7 +1,7 @@
 import { memo, useCallback, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'

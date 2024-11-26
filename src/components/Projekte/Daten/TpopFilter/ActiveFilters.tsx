@@ -1,7 +1,7 @@
 import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { StoreContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'

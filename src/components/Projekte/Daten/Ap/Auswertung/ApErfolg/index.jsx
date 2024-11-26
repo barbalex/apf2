@@ -13,7 +13,7 @@ import {
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
 import styled from '@emotion/styled'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { query } from './query.js'
 import { CustomTick } from './CustomTick.jsx'

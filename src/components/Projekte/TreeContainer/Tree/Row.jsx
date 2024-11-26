@@ -14,7 +14,7 @@ import {
 } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router'
 import upperFirst from 'lodash/upperFirst'
 import { useApolloClient, gql } from '@apollo/client'
 import { useSnackbar } from 'notistack'

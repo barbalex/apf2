@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { isMobilePhone } from '../../../../../modules/isMobilePhone.js'
 import { logout } from '../../../../../modules/logout.js'

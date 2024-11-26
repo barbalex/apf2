@@ -14,7 +14,7 @@ import 'proj4leaflet'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { MapResizer } from './MapResizer.jsx'
 import { Control } from './Control.jsx'

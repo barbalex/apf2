@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { useQuery } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { Qk } from './Qk/index.jsx'
 import { query } from './query.js'

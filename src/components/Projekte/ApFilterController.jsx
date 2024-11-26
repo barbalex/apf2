@@ -1,6 +1,6 @@
 import { memo, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { useApolloClient, gql } from '@apollo/client'
 
 import { StoreContext } from '../../storeContext.js'

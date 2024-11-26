@@ -4,7 +4,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
-import { useNavigate, Outlet, useParams } from 'react-router-dom'
+import { useNavigate, Outlet, useParams } from 'react-router'
 
 import './index.css'
 
