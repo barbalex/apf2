@@ -566,12 +566,14 @@ export const Router = () => {
                   </Route>
                 </Route>
               </Route>
-              <Route
-                path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Feld-Kontrollen"
-                lazy={() =>
-                  import('../Projekte/Daten/Tpopfeldkontrs/index.jsx')
-                }
-              />
+              <Route path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Feld-Kontrollen">
+                <Route
+                  path="*"
+                  lazy={() =>
+                    import('../Projekte/Daten/Tpopfeldkontrs/index.jsx')
+                  }
+                />
+              </Route>
               <Route
                 path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Feld-Kontrollen/:tpopkontrId/*"
                 lazy={() =>
