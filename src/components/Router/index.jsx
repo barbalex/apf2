@@ -429,7 +429,7 @@ export const Router = () => {
                     lazy={() => import('../Projekte/Daten/Tpops/index.jsx')}
                   />
                   <Route
-                    path=":tpopId/*"
+                    path=":tpopId"
                     lazy={() =>
                       import('../Projekte/Daten/TpopRouter/index.jsx')
                     }
