@@ -29,13 +29,18 @@ export const Router = () => {
             lazy={() => import('../EkPlan/index.jsx')}
           />
           <Route
-            path="Benutzer/:userId/EKF/:ekfYear/*"
+            path="Benutzer/:userId/EKF/:ekfYear"
             lazy={() => import('../Ekf/index.jsx')}
-          />
-          <Route
-            path="Benutzer/:userId/EKF/:ekfYear/:ekfId"
-            lazy={() => import('../Ekf/index.jsx')}
-          />
+          >
+            <Route
+              path="*"
+              lazy={() => import('../Ekf/index.jsx')}
+            />
+            <Route
+              path=":ekfId"
+              lazy={() => import('../Ekf/index.jsx')}
+            />
+          </Route>
           <Route
             path="*"
             lazy={() => import('../Projekte/index.jsx')}
