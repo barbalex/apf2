@@ -575,7 +575,7 @@ export const Router = () => {
                 />
               </Route>
               <Route
-                path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Feld-Kontrollen/:tpopkontrId/*"
+                path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Feld-Kontrollen/:tpopkontrId"
                 lazy={() =>
                   import('../Projekte/Daten/TpopfeldkontrRouter/index.jsx')
                 }
