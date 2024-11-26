@@ -42,12 +42,6 @@ export const Component = memo(
       [ziels],
     )
 
-    console.log('Zieljahre', {
-      labelFilter: nodeLabelFilter.ziel,
-      isNaN: isNaN(nodeLabelFilter.ziel),
-      zieljahreItems,
-    })
-
     if (isLoading) return <Spinner />
 
     if (error) return <Error error={error} />
