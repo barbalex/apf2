@@ -538,16 +538,20 @@ export const Router = () => {
                   </Route>
                 </Route>
               </Route>
-              <Route
-                path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Beobachtungen"
-                lazy={() =>
-                  import('../Projekte/Daten/Beobzuordnungs/index.jsx')
-                }
-              />
-              <Route
-                path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Beobachtungen/:beobId/*"
-                lazy={() => import('../Projekte/Daten/Beobzuordnung/index.jsx')}
-              />
+              <Route path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Beobachtungen">
+                <Route
+                  path="*"
+                  lazy={() =>
+                    import('../Projekte/Daten/Beobzuordnungs/index.jsx')
+                  }
+                />
+                <Route
+                  path=":beobId/*"
+                  lazy={() =>
+                    import('../Projekte/Daten/Beobzuordnung/index.jsx')
+                  }
+                />
+              </Route>
               <Route
                 path="Arten/:apId/Populationen/:popId/Teil-Populationen/:tpopId/Freiwilligen-Kontrollen"
                 lazy={() =>
