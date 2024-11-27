@@ -12,7 +12,7 @@ const StyledLink = styled(Link)`
   text-overflow: ellipsis;
   white-space: nowrap;
   border-right: ${(props) =>
-    props.borderRight === 'true' ? 'rgba(46, 125, 50, 0.5) solid 1px' : 'none'};
+    props.borderright === 'true' ? 'rgba(46, 125, 50, 0.5) solid 1px' : 'none'};
   &:hover {
     text-decoration: underline;
     text-decoration-color: rgba(55, 118, 28, 0.5);
@@ -30,7 +30,7 @@ export const Nav = memo(({ item, needsBorderRight = false }) => {
       <StyledLink
         key={item.id}
         to={{ pathname: `${pathnameWithoutLastSlash}/${item.id}`, search }}
-        borderRight={needsBorderRight.toString()}
+        borderright={needsBorderRight.toString()}
       >
         {item.label}
       </StyledLink>

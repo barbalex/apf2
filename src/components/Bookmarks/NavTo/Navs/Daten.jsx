@@ -8,8 +8,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Nav } from '../Nav.jsx'
 
-
-export const DatenNav = memo(
+export const Menu = memo(
   observer(() => {
     const store = useContext(StoreContext)
     // calling filter even though not used here so useRootNavData re-runs when the filter changes
@@ -22,18 +21,12 @@ export const DatenNav = memo(
 
     if (error) return <Error error={error} />
 
-    // TODO: relative paths are not working using Link
-    // use a with onClick instead
-    return (
-      <>
-        {navData.menus.map((item, index) => (
-          <Nav
-            key={item.id}
-            item={item}
-            needsBorderRight={index < navData.menus.length - 1}
-          />
-        ))}
-      </>
-    )
+    return navData.menus.map((item, index) => (
+      <Nav
+        key={item.id}
+        item={item}
+        needsBorderRight={index < navData.menus.length - 1}
+      />
+    ))
   }),
 )

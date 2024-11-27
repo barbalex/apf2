@@ -9,10 +9,16 @@ import { RouterProvider } from 'react-router/dom'
 // import { DatenNav } from '../Bookmarks/NavTo/Navs/Daten.jsx'
 
 const DatenNav = lazy(async () => ({
-  default: (await import('../Bookmarks/NavTo/Navs/Daten.jsx')).DatenNav,
+  default: (await import('../Bookmarks/NavTo/Navs/Daten.jsx')).Menu,
 }))
 const datenHandle = {
   nav: DatenNav,
+}
+const ProjekteNav = lazy(async () => ({
+  default: (await import('../Bookmarks/NavTo/Navs/Projects.jsx')).Menu,
+}))
+const projekteHandle = {
+  nav: ProjekteNav,
 }
 
 // WARNING: errorElement did not work
@@ -123,6 +129,7 @@ export const Router = () => {
             <Route
               path="Projekte"
               lazy={() => import('../Projekte/Daten/Projects/index.jsx')}
+              handle={projekteHandle}
             />
             <Route path="Projekte/:projId">
               <Route
