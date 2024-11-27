@@ -10,10 +10,14 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex-wrap: nowrap;
-  padding: 0 3px 0 5px;
+  fex-grow: 1;
+  flex-shrink: 0;
+  padding: 0 3px;
   height: 40px;
   min-height: 40px;
   border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
+  overflow-x: overlay;
+  scrollbar-width: thin;
 `
 
 export const NavTo = memo(() => {
@@ -27,7 +31,11 @@ export const NavTo = memo(() => {
   )
   const Nav = match?.handle?.nav
 
-  return <Container>{Nav ? <Nav /> : null}</Container>
-
-
+  return (
+    <Container>
+      {!!Nav ?
+        <Nav />
+      : null}
+    </Container>
+  )
 })

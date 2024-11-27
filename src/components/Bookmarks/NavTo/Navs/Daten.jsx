@@ -8,16 +8,6 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Nav } from '../Nav.jsx'
 
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
-  padding: 0 3px 0 5px;
-  height: 40px;
-  min-height: 40px;
-  border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
-`
 
 export const DatenNav = memo(
   observer(() => {
@@ -36,10 +26,11 @@ export const DatenNav = memo(
     // use a with onClick instead
     return (
       <>
-        {navData.menus.map((item) => (
+        {navData.menus.map((item, index) => (
           <Nav
             key={item.id}
             item={item}
+            needsBorderRight={index < navData.menus.length - 1}
           />
         ))}
       </>
