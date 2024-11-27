@@ -8,6 +8,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex-wrap: nowrap;
+  padding: 0 12px;
   height: 40px;
   border-top: rgba(46, 125, 50, 0.5) solid 1px;
   border-bottom: rgba(46, 125, 50, 0.5) solid 1px;

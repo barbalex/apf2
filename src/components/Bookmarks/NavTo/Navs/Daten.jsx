@@ -13,6 +13,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex-wrap: nowrap;
+  padding: 0 3px 0 5px;
   height: 40px;
   border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
 `
