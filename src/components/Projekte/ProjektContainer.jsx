@@ -27,6 +27,11 @@ import { alwaysShowBookmarksAtom } from '../../JotaiStore/index.js'
 
 const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
+const OuterContainer = styled.div`
+  display: block;
+  height: 100%;
+  overflow: hidden;
+`
 const Container = styled.div`
   height: 100%;
   position: relative;
@@ -125,75 +130,77 @@ export const ProjektContainer = memo(
     }
 
     return (
-      <Container>
+      <OuterContainer>
         {showBookmarks && <Bookmarks />}
-        <StyledSplitPane
-          split="vertical"
-          size={
-            treeTabs.length === 2 && treeTabs[0] === 'tree' ?
-              '33%'
-            : `${100 / treeTabs.length}%`
-          }
-          maxSize={-10}
-          overflowPane1={
-            treeTabs[0] === 'daten' && (showApberForAll || showApberForArt) ?
-              'auto'
-            : 'hidden'
-          }
-          overflowPane2={
-            (
-              treeTabs[1] === 'daten' &&
-              treeTabs.length === 2 &&
-              (showApberForAll || showApberForArt)
-            ) ?
-              'auto'
-            : 'hidden'
-          }
-        >
-          {elObj[treeTabs[0]]}
-          {treeTabs.length === 1 && <></>}
-          {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
-          {treeTabs.length > 2 && (
-            <StyledSplitPane
-              split="vertical"
-              size={`${100 / (treeTabs.length - 1)}%`}
-              maxSize={-10}
-              overflowPane1={
-                (
-                  treeTabs[1] === 'daten' &&
-                  treeTabs.length > 2 &&
-                  (showApberForAll || showApberForArt)
-                ) ?
-                  'auto'
-                : 'hidden'
-              }
-            >
-              {elObj[treeTabs[1]]}
-              {treeTabs.length === 3 && elObj[treeTabs[2]]}
-              {treeTabs.length > 3 && (
-                <StyledSplitPane
-                  split="vertical"
-                  size={`${100 / (treeTabs.length - 2)}%`}
-                  maxSize={-10}
-                >
-                  {elObj[treeTabs[2]]}
-                  {treeTabs.length === 4 && elObj[treeTabs[3]]}
-                  {treeTabs.length === 5 && (
-                    <StyledSplitPane
-                      split="vertical"
-                      size="50%"
-                      maxSize={-10}
-                    >
-                      {elObj[treeTabs[3]]}
-                      {elObj[treeTabs[4]]}
-                    </StyledSplitPane>
-                  )}
-                </StyledSplitPane>
-              )}
-            </StyledSplitPane>
-          )}
-        </StyledSplitPane>
-      </Container>
+        <Container>
+          <StyledSplitPane
+            split="vertical"
+            size={
+              treeTabs.length === 2 && treeTabs[0] === 'tree' ?
+                '33%'
+              : `${100 / treeTabs.length}%`
+            }
+            maxSize={-10}
+            overflowPane1={
+              treeTabs[0] === 'daten' && (showApberForAll || showApberForArt) ?
+                'auto'
+              : 'hidden'
+            }
+            overflowPane2={
+              (
+                treeTabs[1] === 'daten' &&
+                treeTabs.length === 2 &&
+                (showApberForAll || showApberForArt)
+              ) ?
+                'auto'
+              : 'hidden'
+            }
+          >
+            {elObj[treeTabs[0]]}
+            {treeTabs.length === 1 && <></>}
+            {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
+            {treeTabs.length > 2 && (
+              <StyledSplitPane
+                split="vertical"
+                size={`${100 / (treeTabs.length - 1)}%`}
+                maxSize={-10}
+                overflowPane1={
+                  (
+                    treeTabs[1] === 'daten' &&
+                    treeTabs.length > 2 &&
+                    (showApberForAll || showApberForArt)
+                  ) ?
+                    'auto'
+                  : 'hidden'
+                }
+              >
+                {elObj[treeTabs[1]]}
+                {treeTabs.length === 3 && elObj[treeTabs[2]]}
+                {treeTabs.length > 3 && (
+                  <StyledSplitPane
+                    split="vertical"
+                    size={`${100 / (treeTabs.length - 2)}%`}
+                    maxSize={-10}
+                  >
+                    {elObj[treeTabs[2]]}
+                    {treeTabs.length === 4 && elObj[treeTabs[3]]}
+                    {treeTabs.length === 5 && (
+                      <StyledSplitPane
+                        split="vertical"
+                        size="50%"
+                        maxSize={-10}
+                      >
+                        {elObj[treeTabs[3]]}
+                        {elObj[treeTabs[4]]}
+                      </StyledSplitPane>
+                    )}
+                  </StyledSplitPane>
+                )}
+              </StyledSplitPane>
+            )}
+          </StyledSplitPane>
+        </Container>
+      </OuterContainer>
     )
   }),
 )
