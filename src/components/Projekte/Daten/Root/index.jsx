@@ -12,33 +12,33 @@ export const Component = memo(
     const store = useContext(StoreContext)
     // calling filter even though not used here so useRootNavData re-runs when the filter changes
     const { userGqlFilterForTree } = store.tree
-    const { data, isLoading, error } = useRootNavData({userGqlFilterForTree})
+    const { data, isLoading, error } = useRootNavData({ userGqlFilterForTree })
     const totalCount = 5
     const usersCount = data?.data?.allUsers?.totalCount ?? 0
     const usersFilteredCount = data?.data?.filteredUsers?.totalCount ?? 0
     const messagesCount = data?.data?.allMessages?.totalCount ?? 0
     const currentIssuesCount = data?.data?.allCurrentissues?.totalCount ?? 0
 
-    const items = useMemo(
+    const navs = useMemo(
       () => [
         {
-          id: 'Projekte',
+          url: 'Projekte',
           label: `Projekte`,
         },
         {
-          id: 'Benutzer',
+          url: 'Benutzer',
           label: `Benutzer (${usersFilteredCount}/${usersCount})`,
         },
         {
-          id: 'Werte-Listen',
+          url: 'Werte-Listen',
           label: `Werte-Listen (4)`,
         },
         {
-          id: 'Mitteilungen',
+          url: 'Mitteilungen',
           label: `Mitteilungen (${messagesCount})`,
         },
         {
-          id: 'Aktuelle-Fehler',
+          url: 'Aktuelle-Fehler',
           label: `Aktuelle Fehler (${currentIssuesCount})`,
         },
       ],
@@ -51,7 +51,7 @@ export const Component = memo(
 
     return (
       <List
-        items={items}
+        items={navs}
         title="AP Flora"
         totalCount={totalCount}
       />

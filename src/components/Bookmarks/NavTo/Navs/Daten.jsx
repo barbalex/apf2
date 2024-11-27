@@ -19,28 +19,29 @@ export const DatenNav = memo(
     const messagesCount = data?.data?.allMessages?.totalCount ?? 0
     const currentIssuesCount = data?.data?.allCurrentissues?.totalCount ?? 0
 
-    const bookmark = useMemo(
+    const navData = useMemo(
       () => ({
-        title: `AP Flora (5/5)`,
+        title: `AP Flora`,
+        totalCount,
         menus: [
           {
-            url: 'Projekte',
+            id: 'Projekte',
             label: `Projekte`,
           },
           {
-            url: 'Benutzer',
+            id: 'Benutzer',
             label: `Benutzer (${usersFilteredCount}/${usersCount})`,
           },
           {
-            url: 'Werte-Listen',
+            id: 'Werte-Listen',
             label: `Werte-Listen (4)`,
           },
           {
-            url: 'Mitteilungen',
+            id: 'Mitteilungen',
             label: `Mitteilungen (${messagesCount})`,
           },
           {
-            url: 'Aktuelle-Fehler',
+            id: 'Aktuelle-Fehler',
             label: `Aktuelle Fehler (${currentIssuesCount})`,
           },
         ],
@@ -52,6 +53,6 @@ export const DatenNav = memo(
 
     if (error) return <Error error={error} />
 
-    return <div>{bookmark.menus.map((item) => item.label)}</div>
+    return <div>{navData.menus.map((item) => item.label)}</div>
   }),
 )
