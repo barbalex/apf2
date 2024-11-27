@@ -62,7 +62,9 @@ export const Component = memo(
       if (isInIframe) return
 
       // if app was opened on top level, navigate to last active node
-      if (pathname === '/') {
+      // but only if activeNodeArray is not empty
+      // otherwise first time users are navigated to the login
+      if (pathname === '/' && activeNodeArray.length > 0) {
         navigate('/Daten/' + activeNodeArray.join('/') + search)
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
