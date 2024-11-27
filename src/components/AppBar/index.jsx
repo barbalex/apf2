@@ -74,6 +74,10 @@ export const Component = memo(
 
     const showEkf =
       !!userId && pathname.startsWith(`/Daten/Benutzer/${userId}/EKF`)
+    const isDokumentation = pathname.startsWith('/Dokumentation')
+    const isEkplanung = pathname.includes('/EK-Planung')
+    const showBookmarks =
+      !isDokumentation && !isEkplanung && (isMobileView || alwaysShowBookmarks)
 
     return (
       <Container>
@@ -82,7 +86,7 @@ export const Component = memo(
             <EkfBar />
           : <Bar />}
         </Appbar>
-        {(isMobileView || alwaysShowBookmarks) && <Bookmarks />}
+        {showBookmarks && <Bookmarks />}
         <Suspense fallback={<Spinner />}>
           <Outlet />
         </Suspense>
