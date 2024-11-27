@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import intersection from 'lodash/intersection'
 import { Outlet } from 'react-router'
 import { useParams, useLocation } from 'react-router'
+import { useAtom } from 'jotai'
 
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
 import { Karte } from './Karte/index.jsx'
@@ -20,6 +21,11 @@ import { StoreContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
+import { Bookmarks } from '../Bookmarks/index.jsx'
+import { constants } from '../../modules/constants.js'
+import { alwaysShowBookmarksAtom } from '../../JotaiStore/index.js'
+
+const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
 const Container = styled.div`
   height: 100%;
@@ -44,6 +50,7 @@ export const ProjektContainer = memo(
 
     const store = useContext(StoreContext)
     const { isPrint } = store
+    const [alwaysShowBookmarks] = useAtom(alwaysShowBookmarksAtom)
 
     // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
     // to prevent it from causing unnessecary renders
@@ -111,12 +118,15 @@ export const ProjektContainer = memo(
       ),
     }
 
+    const showBookmarks = isMobileView || alwaysShowBookmarks
+
     if (isPrint) {
       return <Outlet />
     }
 
     return (
       <Container>
+        {showBookmarks && <Bookmarks />}
         <StyledSplitPane
           split="vertical"
           size={
