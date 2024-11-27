@@ -1,6 +1,7 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Link, useLocation } from 'react-router'
+import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 
 import { StoreContext } from '../../../storeContext.js'
@@ -11,6 +12,10 @@ import { Error } from '../../shared/Error.jsx'
 const StyledLink = styled(Link)`
   text-decoration: none;
   padding: 0 7px 0 9px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   &:hover {
     text-decoration: underline;
     text-decoration-color: rgba(55, 118, 28, 0.5);
@@ -33,12 +38,14 @@ export const Nav = memo(
     const pathnameWithoutLastSlash = pathname.replace(/\/$/, '')
 
     return (
-      <StyledLink
-        key={item.id}
-        to={{ pathname: `${pathnameWithoutLastSlash}/${item.id}`, search }}
-      >
-        {item.label}
-      </StyledLink>
+      <Tooltip title={item.label}>
+        <StyledLink
+          key={item.id}
+          to={{ pathname: `${pathnameWithoutLastSlash}/${item.id}`, search }}
+        >
+          {item.label}
+        </StyledLink>
+      </Tooltip>
     )
   }),
 )
