@@ -1,9 +1,7 @@
-import { memo, useState, useEffect, useContext } from 'react'
+import { memo } from 'react'
 import { useMatches, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-
-import { StoreContext } from '../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -21,7 +19,6 @@ const Container = styled.div`
 `
 
 export const NavTo = memo(() => {
-  const store = useContext(StoreContext)
   const { pathname } = useLocation()
   const matches = useMatches()
   // get match that contains the current pathname minus the last slash - if it ends with a slash
