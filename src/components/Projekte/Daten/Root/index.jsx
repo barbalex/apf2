@@ -1,7 +1,6 @@
 import { memo, useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { createCurrentissuesQuery } from '../../../../modules/createCurrentissuesQuery.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'

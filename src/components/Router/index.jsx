@@ -1,9 +1,19 @@
+import { lazy } from 'react'
 import {
   Route,
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
+
+// import { DatenNav } from '../Bookmarks/NavTo/Navs/Daten.jsx'
+
+const DatenNav = lazy(async () => ({
+  default: (await import('../Bookmarks/NavTo/Navs/Daten.jsx')).DatenNav,
+}))
+const datenHandle = {
+  nav: DatenNav,
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -22,7 +32,7 @@ export const Router = () => {
         <Route
           path="/Daten"
           lazy={() => import('./ProtectedRoute.jsx')}
-          handle={(props) => console.log('ProtectedRoute, props:', props)}
+          handle={datenHandle}
         >
           {/* <Route path="*" element={<Unterhalt />}></Route> */}
           <Route
