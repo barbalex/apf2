@@ -14,7 +14,7 @@ export const NavTo = memo(() => {
   const match = matches.find(
     (m) => m.pathname === pathname || `${m.pathname}/` === pathname,
   )
-  const Nav = match?.handle?.navTo
+  const Nav = match?.handle?.nav
 
   if (!Nav) return null
 

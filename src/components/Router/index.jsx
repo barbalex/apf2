@@ -12,7 +12,7 @@ const DatenNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Daten.jsx')).DatenNav,
 }))
 const datenHandle = {
-  navTo: DatenNav,
+  nav: DatenNav,
 }
 
 // WARNING: errorElement did not work
