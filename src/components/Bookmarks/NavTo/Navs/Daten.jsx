@@ -15,6 +15,7 @@ const Container = styled.div`
   flex-wrap: nowrap;
   padding: 0 3px 0 5px;
   height: 40px;
+  min-height: 40px;
   border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
 `
 
@@ -34,14 +35,14 @@ export const DatenNav = memo(
     // TODO: relative paths are not working using Link
     // use a with onClick instead
     return (
-      <Container>
+      <>
         {navData.menus.map((item) => (
           <Nav
             key={item.id}
             item={item}
           />
         ))}
-      </Container>
+      </>
     )
   }),
 )

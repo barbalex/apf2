@@ -1,8 +1,20 @@
 import { memo, useState, useEffect, useContext } from 'react'
 import { useMatches, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
+import styled from '@emotion/styled'
 
 import { StoreContext } from '../../../storeContext.js'
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  padding: 0 3px 0 5px;
+  height: 40px;
+  min-height: 40px;
+  border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
+`
 
 export const NavTo = memo(() => {
   const store = useContext(StoreContext)
@@ -15,7 +27,7 @@ export const NavTo = memo(() => {
   )
   const Nav = match?.handle?.nav
 
-  if (!Nav) return null
+  return <Container>{Nav ? <Nav /> : null}</Container>
 
-  return <Nav />
+
 })
