@@ -1,4 +1,4 @@
-import { memo, useMemo, useContext } from 'react'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../storeContext.js'
@@ -12,42 +12,9 @@ export const DatenNav = memo(
     const store = useContext(StoreContext)
     // calling filter even though not used here so useRootNavData re-runs when the filter changes
     const { userGqlFilterForTree } = store.tree
-    const { data, isLoading, error } = useRootNavData({ userGqlFilterForTree })
-    const totalCount = 5
-    const usersCount = data?.data?.allUsers?.totalCount ?? 0
-    const usersFilteredCount = data?.data?.filteredUsers?.totalCount ?? 0
-    const messagesCount = data?.data?.allMessages?.totalCount ?? 0
-    const currentIssuesCount = data?.data?.allCurrentissues?.totalCount ?? 0
-
-    const navData = useMemo(
-      () => ({
-        title: `AP Flora`,
-        totalCount,
-        menus: [
-          {
-            id: 'Projekte',
-            label: `Projekte`,
-          },
-          {
-            id: 'Benutzer',
-            label: `Benutzer (${usersFilteredCount}/${usersCount})`,
-          },
-          {
-            id: 'Werte-Listen',
-            label: `Werte-Listen (4)`,
-          },
-          {
-            id: 'Mitteilungen',
-            label: `Mitteilungen (${messagesCount})`,
-          },
-          {
-            id: 'Aktuelle-Fehler',
-            label: `Aktuelle Fehler (${currentIssuesCount})`,
-          },
-        ],
-      }),
-      [usersCount, messagesCount, currentIssuesCount],
-    )
+    const { navData, isLoading, error } = useRootNavData({
+      userGqlFilterForTree,
+    })
 
     if (isLoading) return <Spinner />
 
