@@ -5,7 +5,7 @@ import { StoreContext } from '../../../../storeContext.js'
 import { useRootNavData } from '../../../../modules/useRootNavData.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import { title } from 'process'
+import { Nav } from '../Nav.jsx'
 
 export const DatenNav = memo(
   observer(() => {
@@ -20,6 +20,17 @@ export const DatenNav = memo(
 
     if (error) return <Error error={error} />
 
-    return <div>{navData.menus.map((item) => item.label)}</div>
+    // TODO: relative paths are not working using Link
+    // use a with onClick instead
+    return (
+      <div>
+        {navData.menus.map((item) => (
+          <Nav
+            key={item.id}
+            item={item}
+          />
+        ))}
+      </div>
+    )
   }),
 )
