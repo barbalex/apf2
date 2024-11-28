@@ -6,7 +6,7 @@ import { navData } from '../../../Bookmarks/NavTo/Navs/Projects.jsx'
 export const Component = memo(() => (
   <List
     items={navData.menus}
-    title={navData.title}
+    title={navData.label}
     totalCount={navData.totalCount}
   />
 ))

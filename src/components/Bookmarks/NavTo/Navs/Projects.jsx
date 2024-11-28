@@ -9,7 +9,9 @@ import { Error } from '../../../shared/Error.jsx'
 import { Nav } from '../Nav.jsx'
 
 export const navData = {
-  title: `Projekte`,
+  id: 'projekte',
+  url: '/Daten/Projekte',
+  label: `Projekte`,
   totalCount: 1,
   menus: [
     {
@@ -24,6 +26,7 @@ export const Menu = memo(() => {
     <Nav
       key={item.id}
       item={item}
+      baseUrl={navData.url}
       needsBorderRight={index < navData.menus.length - 1}
     />
   ))
