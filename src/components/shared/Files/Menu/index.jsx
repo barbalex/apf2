@@ -59,7 +59,7 @@ export const Menu = memo(
 
     const firstFileId = files?.[0]?.fileId
     const file = files.find((f) => f.fileId === fileId)
-    const index = files.findIndex((f) => f.fileId === fileId)
+    const fileIndex = files.findIndex((f) => f.fileId === fileId)
 
     const onClickPreview = useCallback(() => {
       navigate(`${firstFileId}/Vorschau`)
@@ -78,8 +78,8 @@ export const Menu = memo(
       // delete file with fileId
       // first get fileId of next file to navigate to it after deleting this one
       // get file to navigate to after deleting this one
-      const nextFile = files[index + 1]
-      const prevFile = files[index - 1]
+      const nextFile = files[fileIndex + 1]
+      const prevFile = files[fileIndex - 1]
       const nextPathname =
         nextFile ?
           `${pathname.slice(0, indexOfFileInPathname)}${nextFile.fileId}/Vorschau`
@@ -122,21 +122,21 @@ export const Menu = memo(
       client,
       parent,
       pathname,
-      index,
+      fileIndex,
       refetch,
       store,
       navigate,
     ])
 
     const onClickNext = useCallback(() => {
-      const nextFile = files[index + 1] ?? files[0]
+      const nextFile = files[fileIndex + 1] ?? files[0]
       navigate(`${nextFile.fileId}/Vorschau`)
-    }, [fileId, files, navigate, index])
+    }, [fileId, files, navigate, fileIndex])
 
     const onClickPrev = useCallback(() => {
-      const prevFile = files[index - 1] ?? files[files.length - 1]
+      const prevFile = files[fileIndex - 1] ?? files[files.length - 1]
       navigate(`${prevFile.fileId}/Vorschau`)
-    }, [fileId, files, navigate, index])
+    }, [fileId, files, navigate, fileIndex])
 
     // enable reacting to fullscreen changes
     const [isFullscreen, setIsFullscreen] = useState(false)
@@ -260,7 +260,7 @@ export const Menu = memo(
       ],
     )
 
-    const numbers = file ? `${index + 1}/${files.length}` : files.length
+    const numbers = file ? `${fileIndex + 1}/${files.length}` : files.length
     const titleComponentWidth = 60
 
     return (
