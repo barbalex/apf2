@@ -22,7 +22,7 @@ export const useRootNavData = ({ userGqlFilterForTree }) => {
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query TreeRootQuery($usersFilter: UserFilter!) {
+          query NavRootQuery($usersFilter: UserFilter!) {
             allUsers {
               totalCount
             }
