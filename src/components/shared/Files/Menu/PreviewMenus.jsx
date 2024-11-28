@@ -104,20 +104,13 @@ export const PreviewMenus = memo(
     const onClickNext = useCallback(() => {
       const nextFileIndex = fileIndex + 1
       const nextFile = files[nextFileIndex] ?? files[0]
-      console.log('Files.Menu.onClickNext', {
-        fileId,
-        nextFileId: nextFile.fileId,
-        fileIndex,
-        nextFileIndex,
-        files,
-      })
       navigate(`${nextFile.fileId}/Vorschau`)
-    }, [fileIndex, files, fileId, navigate])
+    }, [fileIndex, files, navigate])
 
     const onClickPrev = useCallback(() => {
       const prevFile = files[fileIndex - 1] ?? files[files.length - 1]
       navigate(`${prevFile.fileId}/Vorschau`)
-    }, [fileId, files, navigate, fileIndex])
+    }, [fileIndex, files, navigate])
 
     // enable reacting to fullscreen changes
     const [isFullscreen, setIsFullscreen] = useState(false)
