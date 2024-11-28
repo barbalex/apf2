@@ -167,10 +167,16 @@ export const Router = () => {
                       index={true}
                       lazy={() => import('../shared/Files/Files/index.jsx')}
                     />
-                    <Route
-                      path=":fileId/Vorschau"
-                      lazy={() => import('../shared/Files/Preview/index.jsx')}
-                    />
+                    <Route path=":fileId">
+                      <Route
+                        path="*"
+                        lazy={() => import('../shared/Files/Preview/index.jsx')}
+                      />
+                      <Route
+                        path="Vorschau"
+                        lazy={() => import('../shared/Files/Preview/index.jsx')}
+                      />
+                    </Route>
                   </Route>
                   <Route
                     path="Historien"
@@ -394,10 +400,16 @@ export const Router = () => {
                       index={true}
                       lazy={() => import('../shared/Files/Files/index.jsx')}
                     />
-                    <Route
-                      path=":fileId/Vorschau"
-                      lazy={() => import('../shared/Files/Preview/index.jsx')}
-                    />
+                    <Route path=":fileId">
+                      <Route
+                        index={true}
+                        lazy={() => import('../shared/Files/Preview/index.jsx')}
+                      />
+                      <Route
+                        path="Vorschau"
+                        lazy={() => import('../shared/Files/Preview/index.jsx')}
+                      />
+                    </Route>
                   </Route>
                   <Route
                     path="Historien"
