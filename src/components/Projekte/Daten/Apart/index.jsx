@@ -52,9 +52,7 @@ export const Component = memo(
     const [fieldErrors, setFieldErrors] = useState({})
 
     const { data, loading, error, refetch } = useQuery(query, {
-      variables: {
-        id,
-      },
+      variables: { id },
     })
 
     const row = useMemo(() => data?.apartById ?? {}, [data?.apartById])
@@ -142,7 +140,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="Taxon"
-            menuBar={<Menu row={row} />}
+            menuBar={<Menu />}
           />
           <FieldsContainer>
             <div>
