@@ -51,6 +51,7 @@ export const Menu = memo(
     const { fileId } = useParams()
     const navigate = useNavigate()
     const { pathname } = useLocation()
+    // also show preview if Vorschau is omitted (until that rout is used for something else)
     const isPreview = pathname.endsWith('Vorschau') || pathname.includes(fileId)
     const client = useApolloClient()
     const uploaderCtx = useContext(UploaderContext)
