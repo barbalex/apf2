@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { useMatches, useLocation } from 'react-router'
 import styled from '@emotion/styled'
 
 const Container = styled.div`
@@ -16,8 +17,19 @@ const Container = styled.div`
   scrollbar-width: thin;
 `
 
-export const NavTo = memo(({match}) => {
-  const Nav = match?.handle?.nav
+export const NavTo = memo(() => {
+  const { pathname } = useLocation()
+  const allMatches = useMatches()
+  // get match that contains the current pathname minus the last slash - if it ends with a slash
+  // Hm. So many matches. Often multiple with same path. Hard to find the right one.
+  // TODO: ensure this works for all cases
+  const navMatches = allMatches.filter(
+    (m) =>
+      (m.pathname === pathname || `${m.pathname}/` === pathname) &&
+      m.handle?.nav,
+  )
+  const navMatch = navMatches?.[0]
+  const Nav = navMatch?.handle?.nav
 
   return (
     <Container>
