@@ -20,7 +20,7 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(({ row }) => {
+  observer(() => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()

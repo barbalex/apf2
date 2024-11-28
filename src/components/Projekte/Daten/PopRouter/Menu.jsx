@@ -177,13 +177,13 @@ export const Menu = memo(
         })
       }
       setMoving({
-        id: row.id,
+        id: popId,
         label: row.label,
         table: 'pop',
         toTable: 'ap',
         fromParentId: apId,
       })
-    }, [row, setMoving, apId])
+    }, [row, setMoving, apId, popId])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({

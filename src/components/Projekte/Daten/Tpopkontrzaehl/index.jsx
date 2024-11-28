@@ -130,7 +130,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="Zählung"
-            menuBar={<Menu row={row} />}
+            menuBar={<Menu />}
           />
           <FormContainer>
             <Select

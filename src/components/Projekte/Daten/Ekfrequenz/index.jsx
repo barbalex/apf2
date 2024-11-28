@@ -160,7 +160,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="EK-Frequenz"
-            menuBar={<Menu row={row} />}
+            menuBar={<Menu />}
           />
           <FormContainer>
             <TextField

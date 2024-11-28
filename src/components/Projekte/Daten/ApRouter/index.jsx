@@ -56,7 +56,7 @@ export const Component = () => {
       <Container>
         <FormTitle
           title="Art"
-          menuBar={<Menu row={row} />}
+          menuBar={<Menu />}
         />
         <Tabs
           value={

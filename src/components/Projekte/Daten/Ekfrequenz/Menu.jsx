@@ -19,12 +19,12 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(({ row }) => {
+  observer(() => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const { projId, apId } = useParams()
+    const { projId, apId, ekfrequenzId } = useParams()
     const store = useContext(StoreContext)
 
     const onClickAdd = useCallback(async () => {
@@ -79,7 +79,7 @@ export const Menu = memo(
               }
             }
           `,
-          variables: { id: row.id },
+          variables: { id: ekfrequenzId },
         })
       } catch (error) {
         return store.enqueNotification({
@@ -114,7 +114,7 @@ export const Menu = memo(
       search,
       apId,
       projId,
-      row,
+      ekfrequenzId,
       pathname,
     ])
 

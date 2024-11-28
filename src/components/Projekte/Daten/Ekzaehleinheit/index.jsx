@@ -166,7 +166,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="EK-Zähleinheit"
-            menuBar={<Menu row={row} />}
+            menuBar={<Menu />}
           />
           <FormContainer>
             <Select

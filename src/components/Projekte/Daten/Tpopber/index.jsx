@@ -135,7 +135,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="Kontroll-Bericht Teil-Population"
-            menuBar={<Menu row={row} />}
+            menuBar={<Menu />}
           />
           <FormContainer>
             <TextField

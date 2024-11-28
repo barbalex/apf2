@@ -172,7 +172,7 @@ export const Menu = memo(
         })
       }
       setMoving({
-        id: row.id,
+        id: tpopkontrId,
         label: row.labelEk,
         table: 'tpopfeldkontr',
         toTable: 'tpopfeldkontr',
@@ -182,6 +182,7 @@ export const Menu = memo(
       row,
       setMoving,
       tpopId,
+      tpopkontrId,
       isMovingFeldkontr,
       moveTo,
       client,
