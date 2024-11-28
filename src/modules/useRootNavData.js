@@ -51,12 +51,13 @@ export const useRootNavData = ({ userGqlFilterForTree }) => {
 
   const navData = useMemo(
     () => ({
-      title: `AP Flora`,
+      id: 'Daten',
+      label: `Daten`,
       totalCount,
       menus: [
         {
           id: 'Projekte',
-          label: `Projekte`,
+          label: `Projekte (1/1)`,
         },
         {
           id: 'Benutzer',

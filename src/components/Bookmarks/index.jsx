@@ -1,7 +1,9 @@
 import { memo } from 'react'
+import { useMatches, useLocation } from 'react-router'
 import styled from '@emotion/styled'
 
 import { NavTo } from './NavTo/index.jsx'
+import { Bookmarks as Bookmarkss } from './Bookmarks/index.jsx'
 
 const Container = styled.div`
   display: flex;
@@ -15,6 +17,20 @@ const Container = styled.div`
 `
 
 export const Bookmarks = memo(() => {
+  const { pathname } = useLocation()
+  const allMatches = useMatches()
+  // get match that contains the current pathname minus the last slash - if it ends with a slash
+  // Hm. So many matches. Often multiple with same path. Hard to find the right one.
+  // TODO: ensure this works for all cases
+  const matches = allMatches.filter(
+    (m) =>
+      (m.pathname === pathname || `${m.pathname}/` === pathname) &&
+      m.handle?.nav,
+  )
+  const match = matches?.[0]
+  const Nav = match?.handle?.nav
+  const Bookmark = match?.handle?.bookmark
+
   // TODO:
   // from top do bottom
   // get: bookmarks (label, url) and children (array of same)
@@ -22,8 +38,8 @@ export const Bookmarks = memo(() => {
   // if children: render as menu
   return (
     <>
-      <Container>{`Bookmarks. Window width: ${window.innerWidth}`}</Container>
-      <NavTo />
+      <Bookmarkss match={match} />
+      <NavTo match={match} />
     </>
   )
 })

@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { Link, useLocation } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
+import { navData } from '../NavTo/Navs/Projects'
 
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -11,27 +12,31 @@ const StyledLink = styled(Link)`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-right: ${(props) =>
-    props.borderright === 'true' ? 'rgba(46, 125, 50, 0.5) solid 1px' : 'none'};
   &:hover {
-    text-decoration: underline;
+    text-decoration: ${(props) =>
+      props.islink === 'true' ? 'underline' : 'none'};
     text-decoration-color: rgba(55, 118, 28, 0.5);
   }
 `
 
-export const Nav = memo(({ item, needsBorderRight = false }) => {
+export const Bookmark = memo(({ navData }) => {
   const { pathname, search } = useLocation()
 
   // issue: relative paths are not working!!!???
   const pathnameWithoutLastSlash = pathname.replace(/\/$/, '')
+  const linksToSomewhereElse = pathnameWithoutLastSlash.endsWith(
+    navData.id || `${navData.id}/`,
+  )
+
+  const label = `${navData.label} (${navData.menus.length}/${navData.totalCount})`
 
   return (
-    <Tooltip title={item.label}>
+    <Tooltip title={label}>
       <StyledLink
-        to={{ pathname: `${pathnameWithoutLastSlash}/${item.id}`, search }}
-        borderright={needsBorderRight.toString()}
+        to={{ pathname: `${pathnameWithoutLastSlash}/${navData.id}`, search }}
+        islink={linksToSomewhereElse.toString()}
       >
-        {item.label}
+        {label}
       </StyledLink>
     </Tooltip>
   )

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
 
-const Container = styled.div`
+const Container = styled.nav`
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -16,13 +16,13 @@ const Container = styled.div`
   scrollbar-width: thin;
 `
 
-export const NavTo = memo(({match}) => {
-  const Nav = match?.handle?.nav
+export const Bookmarks = memo(({ match }) => {
+  const Bookmark = match?.handle?.bookmark
 
   return (
     <Container>
-      {!!Nav ?
-        <Nav />
+      {!!Bookmark ?
+        <Bookmark />
       : null}
     </Container>
   )

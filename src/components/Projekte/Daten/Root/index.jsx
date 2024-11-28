@@ -23,7 +23,7 @@ export const Component = memo(
     return (
       <List
         items={navData.menus}
-        title={navData.title}
+        title={navData.label}
         totalCount={navData.totalCount}
       />
     )

@@ -11,8 +11,12 @@ import { RouterProvider } from 'react-router/dom'
 const DatenNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Daten.jsx')).Menu,
 }))
+const DatenBookmark = lazy(async () => ({
+  default: (await import('../Bookmarks/Bookmarks/Daten.jsx')).Menu,
+}))
 const datenHandle = {
   nav: DatenNav,
+  bookmark: DatenBookmark,
 }
 const ProjekteNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Projects.jsx')).Menu,
