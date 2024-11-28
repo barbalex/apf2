@@ -61,6 +61,8 @@ export const Menu = memo(
     const file = files.find((f) => f.fileId === fileId)
     const fileIndex = files.findIndex((f) => f.fileId === fileId)
 
+    console.log('Files.Menu', { fileId, fileIndex, file })
+
     const onClickPreview = useCallback(() => {
       navigate(`${firstFileId}/Vorschau`)
     }, [firstFileId])
@@ -129,9 +131,17 @@ export const Menu = memo(
     ])
 
     const onClickNext = useCallback(() => {
-      const nextFile = files[fileIndex + 1] ?? files[0]
+      const nextFileIndex = fileIndex + 1
+      const nextFile = files[nextFileIndex] ?? files[0]
+      console.log('Files.Menu.onClickNext', {
+        fileId,
+        nextFileId: nextFile.fileId,
+        fileIndex,
+        nextFileIndex,
+        files,
+      })
       navigate(`${nextFile.fileId}/Vorschau`)
-    }, [fileId, files, navigate, fileIndex])
+    }, [fileIndex, files, fileId, navigate])
 
     const onClickPrev = useCallback(() => {
       const prevFile = files[fileIndex - 1] ?? files[files.length - 1]
