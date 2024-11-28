@@ -2,7 +2,6 @@ import { memo } from 'react'
 import { Link, useLocation } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
-import { navData } from '../NavTo/Navs/Projects'
 
 const StyledLink = styled(Link)`
   padding: 0 9px;
@@ -36,15 +35,6 @@ export const Bookmark = memo(({ navData }) => {
   )
 
   const label = `${navData.label} (${navData.menus.length}/${navData.totalCount})`
-
-  console.log('Bookmark', {
-    navData,
-    pathname,
-    search,
-    pathnameWithoutLastSlash,
-    linksToSomewhereElse,
-    label,
-  })
 
   return (
     <Tooltip title={label}>
