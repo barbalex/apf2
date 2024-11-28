@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useMatches, useLocation } from 'react-router'
 import styled from '@emotion/styled'
 
-const Container = styled.div`
+const Container = styled.nav`
   display: flex;
   align-items: center;
   justify-content: flex-start;
