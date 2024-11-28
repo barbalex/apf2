@@ -18,7 +18,8 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(({ row }) => {
+  observer(() => {
+    const { adrId } = useParams()
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
@@ -74,7 +75,7 @@ export const Menu = memo(
               }
             }
           `,
-          variables: { id: row.id },
+          variables: { id: adrId },
         })
       } catch (error) {
         console.log('error:', error)
@@ -102,7 +103,7 @@ export const Menu = memo(
       })
       // navigate to parent
       navigate(`/Daten/Werte-Listen/Adressen${search}`)
-    }, [client, store, queryClient, navigate, search, pathname, row.id])
+    }, [client, store, queryClient, navigate, search, pathname, adrId])
 
     return (
       <ErrorBoundary>
