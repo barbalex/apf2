@@ -25,6 +25,7 @@ export const Menu = memo(
       <Nav
         key={item.id}
         item={item}
+        baseUrl={navData.url}
         needsBorderRight={index < navData.menus.length - 1}
       />
     ))

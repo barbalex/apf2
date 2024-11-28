@@ -39,11 +39,7 @@ export const Bookmark = memo(({ navData }) => {
   return (
     <Tooltip title={label}>
       {linksToSomewhereElse ?
-        <StyledLink
-          to={{ pathname: `${pathnameWithoutLastSlash}/${navData.id}`, search }}
-        >
-          {label}
-        </StyledLink>
+        <StyledLink to={{ pathname: navData.url, search }}>{label}</StyledLink>
       : <StyledText>{label}</StyledText>}
     </Tooltip>
   )

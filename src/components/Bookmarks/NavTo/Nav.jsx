@@ -19,7 +19,7 @@ const StyledLink = styled(Link)`
   }
 `
 
-export const Nav = memo(({ item, needsBorderRight = false }) => {
+export const Nav = memo(({ item, baseUrl, needsBorderRight = false }) => {
   const { pathname, search } = useLocation()
 
   // issue: relative paths are not working!!!???
@@ -28,7 +28,10 @@ export const Nav = memo(({ item, needsBorderRight = false }) => {
   return (
     <Tooltip title={item.label}>
       <StyledLink
-        to={{ pathname: `${pathnameWithoutLastSlash}/${item.id}`, search }}
+        to={{
+          pathname: `${baseUrl ?? pathnameWithoutLastSlash}/${item.id}`,
+          search,
+        }}
         borderright={needsBorderRight.toString()}
       >
         {item.label}
