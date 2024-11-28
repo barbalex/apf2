@@ -19,12 +19,12 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(({ row }) => {
+  observer(() => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const { projId } = useParams()
+    const { projId, apberUebersichtId } = useParams()
     const store = useContext(StoreContext)
 
     const onClickAdd = useCallback(async () => {
@@ -81,7 +81,7 @@ export const Menu = memo(
               }
             }
           `,
-          variables: { id: row.id },
+          variables: { id: apberUebersichtId },
         })
       } catch (error) {
         return store.enqueNotification({
@@ -108,7 +108,16 @@ export const Menu = memo(
       })
       // navigate to parent
       navigate(`/Daten/Projekte/${projId}/AP-Berichte${search}`)
-    }, [client, store, queryClient, navigate, search, projId, row, pathname])
+    }, [
+      client,
+      store,
+      queryClient,
+      navigate,
+      search,
+      projId,
+      apberUebersichtId,
+      pathname,
+    ])
 
     const onClickPrint = useCallback(() => {
       navigate(`print${search}`)
