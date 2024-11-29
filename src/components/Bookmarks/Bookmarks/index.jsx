@@ -2,6 +2,9 @@ import { memo } from 'react'
 import { useMatches, useLocation } from 'react-router'
 import styled from '@emotion/styled'
 
+import { Fetcher } from './Fetcher.jsx'
+import { FetcherImporter } from './HookImporter.jsx'
+
 const Container = styled.nav`
   display: flex;
   align-items: center;
@@ -28,11 +31,18 @@ export const Bookmarks = memo(() => {
   return (
     <Container>
       {bookmarkMatches.map((match) => {
-        const Bookmark = match.handle?.bookmark
+        const fetcher = match.handle?.bookmarkFetcher
+        const fetcherName = match.handle?.bookmarkFetcherName
+        const filterName = match.handle?.filterName
 
-        if (!Bookmark) return null
+        if (!match) return null
 
-        return <Bookmark key={match.id} />
+        return (
+          <FetcherImporter
+            key={match.id}
+            match={match}
+          />
+        )
       })}
     </Container>
   )
