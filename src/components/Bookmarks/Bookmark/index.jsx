@@ -37,9 +37,7 @@ export const Bookmark = memo(({ navData }) => {
 
   // issue: relative paths are not working!!!???
   const pathnameWithoutLastSlash = pathname.replace(/\/$/, '')
-  const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(
-    navData.id || `${navData.id}/`,
-  )
+  const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(navData.url)
 
   const label = `${navData.label} (${navData.menus.length}/${navData.totalCount})`
 
