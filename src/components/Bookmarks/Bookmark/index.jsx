@@ -1,8 +1,7 @@
 import { memo } from 'react'
 import { Link, useLocation } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
-import IconButton from '@mui/material/IconButton'
-import { BsCaretDown } from 'react-icons/bs'
+import { Menu } from './Menu/index.jsx'
 import styled from '@emotion/styled'
 
 const StyledLink = styled(Link)`
@@ -50,9 +49,7 @@ export const Bookmark = memo(({ navData }) => {
             {label}
           </StyledLink>
         : <StyledText>{label}</StyledText>}
-        <IconButton size="small">
-          <BsCaretDown />
-        </IconButton>
+        <Menu />
       </Container>
     </Tooltip>
   )
