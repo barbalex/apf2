@@ -11,16 +11,19 @@ export const Fetcher = memo(
     const store = useContext(StoreContext)
 
     const fetcherName = match.handle?.bookmarkFetcherName
-    const filterName = match.handle?.filterName
+    const filterNames = match.handle?.filterNames
 
     // calling filter even though not used here so useRootNavData re-runs when the filter changes
     // TODO: check if fallback works
-    const filter = store.tree?.[filterName] ?? {
-      id: { notEqualTo: '99999999-9999-9999-9999-999999999999' },
-    }
-    const { navData, isLoading, error } = fetcherModule?.[fetcherName]({
-      [filterName]: filter,
+    let args = {}
+    filterNames?.forEach((filterName) => {
+      const filter = store.tree?.[filterName] ?? {
+        id: { notEqualTo: '99999999-9999-9999-9999-999999999999' },
+      }
+      if (!filter) return
+      args = { ...args, [filterName]: filter }
     })
+    const { navData, isLoading, error } = fetcherModule?.[fetcherName](args)
 
     if (isLoading) return <Spinner />
 

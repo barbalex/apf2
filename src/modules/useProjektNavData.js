@@ -12,6 +12,14 @@ export const useProjektNavData = ({
   const { projId: projIdFromParams } = useParams()
   const projId = projIdPassedIn ?? projIdFromParams
 
+  console.log('useProjektNavData', {
+    projId,
+    projIdFromParams,
+    projIdPassedIn,
+    apGqlFilterForTree,
+    apberuebersichtGqlFilterForTree,
+  })
+
   const { data, isLoading, error } = useQuery({
     queryKey: ['treeProject', projId],
     queryFn: () =>
@@ -49,6 +57,7 @@ export const useProjektNavData = ({
       }),
   })
 
+  const label = data?.data?.projektById?.label ?? 'Projekt'
   const artsCount = data?.data?.projektById?.apsByProjId?.totalCount ?? 0
   const allArtsCount = data?.data?.projektById?.allAps?.totalCount ?? 0
   const apberuebersichtsCount =
@@ -60,7 +69,7 @@ export const useProjektNavData = ({
     () => ({
       id: 'projekt',
       url: `/Daten/Projekte/${projId}`,
-      label: `Projekt`,
+      label,
       totalCount: 1,
       menus: [
         {
@@ -78,6 +87,7 @@ export const useProjektNavData = ({
       allArtsCount,
       apberuebersichtsCount,
       artsCount,
+      label,
       projId,
     ],
   )

@@ -18,7 +18,7 @@ const datenHandle = {
   nav: DatenNav,
   bookmarkFetcher: datenBookmarkFetcher,
   bookmarkFetcherName: 'useRootNavData',
-  filterName: 'userGqlFilterForTree',
+  filterNames: ['userGqlFilterForTree'],
 }
 const ProjekteNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Projects.jsx')).Menu,
@@ -31,6 +31,15 @@ const projekteHandle = {
   nav: ProjekteNav,
   bookmarkFetcher: projekteBookmarkFetcher,
   bookmarkFetcherName: 'useProjekteNavData',
+}
+const projektBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useProjektNavData.js'))
+    .useProjektNavData,
+}))
+const projektHandle = {
+  bookmarkFetcher: projektBookmarkFetcher,
+  bookmarkFetcherName: 'useProjektNavData',
+  filterNames: ['apGqlFilterForTree', 'apberuebersichtGqlFilterForTree'],
 }
 
 // WARNING: errorElement did not work
@@ -146,7 +155,10 @@ export const Router = () => {
                 path="*"
                 lazy={() => import('../Projekte/Daten/Projects/index.jsx')}
               />
-              <Route path=":projId">
+              <Route
+                path=":projId"
+                handle={projektHandle}
+              >
                 <Route
                   path="*"
                   lazy={() => import('../Projekte/Daten/Projekt/index.jsx')}
