@@ -1,15 +1,12 @@
-import { useQuery } from '@tanstack/react-query'
-import { useApolloClient, gql } from '@apollo/client'
+import { memo } from 'react'
 
 import { Row } from '../../Row.jsx'
-import { createCurrentissuesQuery } from '../../../../../../modules/createCurrentissuesQuery.js'
+import { useCurrentissuesNavData } from '../../../../../../modules/useCurrentissuesNavData.js'
 
-export const Issues = () => {
-  const apolloClient = useApolloClient()
+export const Issues = memo(() => {
+  const { navData } = useCurrentissuesNavData()
 
-  const { data } = useQuery(createCurrentissuesQuery({ apolloClient }))
-
-  const currentIssues = data?.data?.allCurrentissues?.nodes ?? []
+  const currentIssues = navData?.menus ?? []
   const nodes = currentIssues.map((el) => ({
     nodeType: 'table',
     menuType: 'currentIssue',
@@ -26,4 +23,4 @@ export const Issues = () => {
       node={node}
     />
   ))
-}
+})

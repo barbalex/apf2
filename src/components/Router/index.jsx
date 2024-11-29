@@ -61,6 +61,14 @@ const usersHandle = {
   bookmarkFetcher: usersBookmarkFetcher,
   bookmarkFetcherName: 'useUsersNavData',
 }
+const currentissuesBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useCurrentissuesNavData.js'))
+    .useCurrentissuesNavData,
+}))
+const currentissuesHandle = {
+  bookmarkFetcher: currentissuesBookmarkFetcher,
+  bookmarkFetcherName: 'useCurrentissuesNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -161,12 +169,17 @@ export const Router = () => {
             />
             <Route
               path="Aktuelle-Fehler"
-              lazy={() => import('../Projekte/Daten/CurrentIssues/index.jsx')}
-            />
-            <Route
-              path="Aktuelle-Fehler/:issueId"
-              lazy={() => import('../Projekte/Daten/CurrentIssue/index.jsx')}
-            />
+              handle={currentissuesHandle}
+            >
+              <Route
+                path="*"
+                lazy={() => import('../Projekte/Daten/CurrentIssues/index.jsx')}
+              />
+              <Route
+                path=":issueId"
+                lazy={() => import('../Projekte/Daten/CurrentIssue/index.jsx')}
+              />
+            </Route>
             <Route
               path="Projekte"
               handle={projekteHandle}
