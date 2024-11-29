@@ -9,6 +9,7 @@ const StyledLink = styled(Link)`
   text-overflow: ellipsis;
   white-space: nowrap;
   text-decoration: none;
+  align-content: center;
   &:hover {
     text-decoration: underline;
     text-decoration-color: rgba(55, 118, 28, 0.5);
@@ -20,6 +21,7 @@ const StyledText = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  align-content: center;
 `
 const Container = styled.div`
   padding: 0 9px;
@@ -27,7 +29,7 @@ const Container = styled.div`
   max-width: 180px;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
 `
 
 export const Bookmark = memo(({ navData }) => {
@@ -42,15 +44,15 @@ export const Bookmark = memo(({ navData }) => {
   const label = `${navData.label} (${navData.menus.length}/${navData.totalCount})`
 
   return (
-    <Tooltip title={label}>
-      <Container>
+    <Container>
+      <Tooltip title={label}>
         {linksToSomewhereElse ?
           <StyledLink to={{ pathname: navData.url, search }}>
             {label}
           </StyledLink>
         : <StyledText>{label}</StyledText>}
-        <Menu />
-      </Container>
-    </Tooltip>
+      </Tooltip>
+      <Menu navData={navData} />
+    </Container>
   )
 })
