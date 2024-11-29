@@ -72,7 +72,7 @@ export const useProjektNavData = () => {
       id: 'projekt',
       url: `/Daten/Projekte/${projId}`,
       label,
-      totalCount: 1,
+      // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Arten',

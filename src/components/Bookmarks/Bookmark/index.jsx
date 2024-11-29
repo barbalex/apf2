@@ -39,7 +39,7 @@ export const Bookmark = memo(({ navData }) => {
   const pathnameWithoutLastSlash = pathname.replace(/\/$/, '')
   const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(navData.url)
 
-  const label = `${navData.label} (${navData.menus.length}/${navData.totalCount})`
+  const label = `${navData.label}${!!navData.menus && !!navData.totalCount ? ` (${navData.menus.length}/${navData.totalCount})` : ''}`
 
   return (
     <Container>
@@ -50,7 +50,7 @@ export const Bookmark = memo(({ navData }) => {
           </StyledLink>
         : <StyledText>{label}</StyledText>}
       </Tooltip>
-      <Menu navData={navData} />
+      {!!navData.menus && <Menu navData={navData} />}
     </Container>
   )
 })

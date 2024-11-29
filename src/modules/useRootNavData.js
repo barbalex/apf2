@@ -43,7 +43,6 @@ export const useRootNavData = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
-  const totalCount = 5
   const usersCount = data?.data?.allUsers?.totalCount ?? 0
   const usersFilteredCount = data?.data?.filteredUsers?.totalCount ?? 0
   const messagesCount = data?.data?.allMessages?.totalCount ?? 0
@@ -54,7 +53,7 @@ export const useRootNavData = () => {
       id: 'Daten',
       url: '/Daten',
       label: `Daten`,
-      totalCount,
+      // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Projekte',
