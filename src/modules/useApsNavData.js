@@ -53,14 +53,14 @@ export const useApsNavData = ({
       id: 'Daten',
       url: '/Daten',
       label: `Daten`,
-      totalCount: data?.data?.allAps?.totalCount ?? 0,
+      totalCount: data?.data?.totalCount?.totalCount ?? 0,
       menus:
         data?.data?.allAps?.nodes.map((p) => ({
           id: p.id,
           label: p.label,
         })) ?? [],
     }),
-    [data?.data?.allAps?.nodes, data?.data?.allAps?.totalCount],
+    [data?.data?.allAps?.nodes, data?.data?.totalCount?.totalCount],
   )
 
   return { isLoading, error, navData }

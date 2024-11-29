@@ -19,9 +19,6 @@ export const Component = memo(
     const { apGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { navData, isLoading, error } = useApsNavData({ apGqlFilterForTree })
-    console.log('Aps, navData:', navData)
-    const aps = navData?.data?.allAps?.nodes ?? []
-    const totalCount = navData?.data?.totalCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
 
