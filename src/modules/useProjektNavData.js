@@ -28,13 +28,13 @@ export const useProjektNavData = ({
               apberuebersichtsByProjId(filter: $apberuebersichtFilter) {
                 totalCount
               }
-              allApberuebersichts {
+              allApberuebersichts: apberuebersichtsByProjId {
                 totalCount
               }
               apsByProjId(filter: $apFilter) {
                 totalCount
               }
-              allAps {
+              allAps: apsByProjId {
                 totalCount
               }
             }
