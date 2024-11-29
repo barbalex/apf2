@@ -8,7 +8,6 @@ import styled from '@emotion/styled'
 import { Item } from './Item.jsx'
 
 export const Menu = memo(({ navData }) => {
-  console.log('Menu', { navData })
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const onClick = useCallback((event) => setAnchorEl(event.currentTarget), [])

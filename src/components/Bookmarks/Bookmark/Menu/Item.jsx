@@ -3,6 +3,10 @@ import MenuItem from '@mui/material/MenuItem'
 import { Link, useLocation, useNavigate } from 'react-router'
 import styled from '@emotion/styled'
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`
+
 export const Item = memo(({ menu, baseUrl, onClose }) => {
   const { pathname, search } = useLocation()
   const navigate = useNavigate()
@@ -10,10 +14,17 @@ export const Item = memo(({ menu, baseUrl, onClose }) => {
   // issue: relative paths are not working!!!???
   const pathnameWithoutLastSlash = pathname.replace(/\/$/, '')
 
-  const onClick = useCallback(() => {
-    navigate(`${baseUrl ?? pathnameWithoutLastSlash}/${menu.id}${search}`)
-    onClose()
-  }, [navigate, baseUrl, pathnameWithoutLastSlash, menu.id, search])
-
-  return <MenuItem onClick={onClick}>{menu.label}</MenuItem>
+  return (
+    <MenuItem>
+      <StyledLink
+        to={{
+          pathname: `${baseUrl ?? pathnameWithoutLastSlash}/${menu.id}`,
+          search,
+        }}
+        onClick={onClose}
+      >
+        {menu.label}
+      </StyledLink>
+    </MenuItem>
+  )
 })

@@ -4,6 +4,14 @@ import Tooltip from '@mui/material/Tooltip'
 import { Menu } from './Menu/index.jsx'
 import styled from '@emotion/styled'
 
+const Container = styled.div`
+  padding: 0 9px;
+  min-width: 80px;
+  max-width: 180px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+`
 const StyledLink = styled(Link)`
   overflow: hidden;
   text-overflow: ellipsis;
@@ -22,14 +30,6 @@ const StyledText = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   align-content: center;
-`
-const Container = styled.div`
-  padding: 0 9px;
-  min-width: 80px;
-  max-width: 180px;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
 `
 
 export const Bookmark = memo(({ navData }) => {
