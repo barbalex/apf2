@@ -3,7 +3,7 @@ import { useMatches, useLocation } from 'react-router'
 import styled from '@emotion/styled'
 
 import { Fetcher } from './Fetcher.jsx'
-import { FetcherImporter } from './HookImporter.jsx'
+import { FetcherImporter } from './FetcherImporter.jsx'
 
 const Container = styled.nav`
   display: flex;
@@ -20,6 +20,7 @@ const Container = styled.nav`
   scrollbar-width: thin;
 `
 
+// this component extracts matches
 export const Bookmarks = memo(() => {
   const { pathname } = useLocation()
   const allMatches = useMatches()
