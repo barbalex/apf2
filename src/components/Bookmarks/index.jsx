@@ -7,6 +7,6 @@ import { Bookmarks as Bookmarkss } from './Bookmarks/index.jsx'
 export const Bookmarks = memo(() => (
   <>
     <Bookmarkss />
-    <NavTo />
+    {/* <NavTo /> */}
   </>
 ))
