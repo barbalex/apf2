@@ -5,6 +5,8 @@ import MenuItem from '@mui/material/MenuItem'
 import { BsCaretDown } from 'react-icons/bs'
 import styled from '@emotion/styled'
 
+import { Item } from './Item.jsx'
+
 export const Menu = memo(({ navData }) => {
   console.log('Menu', { navData })
   const [anchorEl, setAnchorEl] = useState(null)
@@ -35,9 +37,14 @@ export const Menu = memo(({ navData }) => {
           'aria-labelledby': iconId,
         }}
       >
-        <MenuItem onClick={onClose}>Profile</MenuItem>
-        <MenuItem onClick={onClose}>My account</MenuItem>
-        <MenuItem onClick={onClose}>Logout</MenuItem>
+        {navData.menus.map((menu) => (
+          <Item
+            key={menu.id}
+            menu={menu}
+            baseUrl={navData.url}
+            onClose={onClose}
+          />
+        ))}
       </MuiMenu>
     </>
   )
