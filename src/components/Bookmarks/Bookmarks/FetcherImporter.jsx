@@ -7,8 +7,6 @@ export const FetcherImporter = memo(({ match }) => {
 
   const fetcherName = match.handle?.bookmarkFetcherName
 
-  console.log('HookImporter, fetcherName:', fetcherName)
-
   useEffect(() => {
     // return the module, not the hook as that would already be called
     import(`../../../modules/${fetcherName}.js`).then((module) => {
