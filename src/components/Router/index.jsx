@@ -206,7 +206,6 @@ export const Router = () => {
                   <Route
                     path="*"
                     lazy={() => import('../Projekte/Daten/Aps/index.jsx')}
-                    handle={apsHandle}
                   />
                   <Route path=":apId">
                     <Route

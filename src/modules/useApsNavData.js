@@ -12,10 +12,9 @@ export const useApsNavData = (props) => {
   const projId = props?.projId ?? projIdFromParams
 
   const store = useContext(StoreContext)
-  const { apGqlFilterForTree } = store.tree
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeAp', projId, apGqlFilterForTree],
+    queryKey: ['treeAp', projId, store.tree.apGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`
@@ -32,7 +31,7 @@ export const useApsNavData = (props) => {
           }
         `,
         variables: {
-          apsFilter: apGqlFilterForTree,
+          apsFilter: store.tree.apGqlFilterForTree,
           projId,
         },
         fetchPolicy: 'no-cache',
@@ -42,7 +41,7 @@ export const useApsNavData = (props) => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => apGqlFilterForTree, refetch),
+    () => reaction(() => store.tree.apGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
