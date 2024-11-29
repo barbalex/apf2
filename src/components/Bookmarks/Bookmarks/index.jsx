@@ -30,6 +30,7 @@ export const Bookmarks = memo(() => {
   const bookmarkMatches = allMatches.filter(
     (m) => m.handle?.bookmarkFetcher && m.handle?.bookmarkFetcherName,
   )
+  console.log('Bookmarks', { bookmarkMatches, allMatches })
 
   return (
     <Container>
