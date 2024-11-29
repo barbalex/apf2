@@ -51,8 +51,8 @@ export const useApsNavData = ({
   const navData = useMemo(
     () => ({
       id: 'Daten',
-      url: '/Daten',
-      label: `Daten`,
+      url: `/Daten/Projekte/${projId}/Arten`,
+      label: `Arten`,
       totalCount: data?.data?.totalCount?.totalCount ?? 0,
       menus:
         data?.data?.allAps?.nodes.map((p) => ({
@@ -60,7 +60,7 @@ export const useApsNavData = ({
           label: p.label,
         })) ?? [],
     }),
-    [data?.data?.allAps?.nodes, data?.data?.totalCount?.totalCount],
+    [data?.data?.allAps?.nodes, data?.data?.totalCount?.totalCount, projId],
   )
 
   return { isLoading, error, navData }

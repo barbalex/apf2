@@ -3,7 +3,10 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-export const useApsNavData = ({ apId: apIdPassedIn, projId: projIdPasssedIn }) => {
+export const useApsNavData = ({
+  apId: apIdPassedIn,
+  projId: projIdPasssedIn,
+}) => {
   const apolloClient = useApolloClient()
   const { apId: apIdFromParams, projId: projIdFromParams } = useParams()
   const apId = apIdPassedIn ?? apIdFromParams
@@ -28,9 +31,9 @@ export const useApsNavData = ({ apId: apIdPassedIn, projId: projIdPasssedIn }) =
 
   const navData = useMemo(
     () => ({
-      id: 'Daten',
-      url: '/Daten',
-      label: `Daten`,
+      id: 'apNav',
+      url: `/Daten/Projekte/${projId}/Arten/${apId}`,
+      label: `Art`,
       totalCount: data?.data?.totalCount?.totalCount ?? 0,
       menus:
         data?.data?.allAps?.nodes.map((p) => ({
@@ -38,7 +41,12 @@ export const useApsNavData = ({ apId: apIdPassedIn, projId: projIdPasssedIn }) =
           label: p.label,
         })) ?? [],
     }),
-    [data?.data?.allAps?.nodes, data?.data?.totalCount?.totalCount],
+    [
+      apId,
+      data?.data?.allAps?.nodes,
+      data?.data?.totalCount?.totalCount,
+      projId,
+    ],
   )
 
   return { isLoading, error, navData }
