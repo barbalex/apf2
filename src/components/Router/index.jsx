@@ -11,15 +11,11 @@ import { RouterProvider } from 'react-router/dom'
 const DatenNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Daten.jsx')).Menu,
 }))
-const DatenBookmark = lazy(
-  async () => (await import('../Bookmarks/Bookmarks/Daten.jsx')).Menu,
-)
 const datenBookmarkFetcher = lazy(async () => ({
   default: (await import('../../modules/useRootNavData.js')).useRootNavData,
 }))
 const datenHandle = {
   nav: DatenNav,
-  bookmark: DatenBookmark,
   bookmarkFetcher: datenBookmarkFetcher,
   bookmarkFetcherName: 'useRootNavData',
   filterName: 'userGqlFilterForTree',
@@ -27,8 +23,14 @@ const datenHandle = {
 const ProjekteNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Projects.jsx')).Menu,
 }))
+const projekteBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useProjekteNavData.js'))
+    .useProjekteNavData,
+}))
 const projekteHandle = {
   nav: ProjekteNav,
+  bookmarkFetcher: projekteBookmarkFetcher,
+  bookmarkFetcherName: 'useProjekteNavData',
 }
 
 // WARNING: errorElement did not work

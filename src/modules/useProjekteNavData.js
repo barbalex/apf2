@@ -11,7 +11,7 @@ export const useProjekteNavData = () => {
       apolloClient.query({
         query: gql`
           query NavProjectsQuery {
-            allProjects {
+            allProjekts {
               totalCount
               nodes {
                 id
@@ -29,13 +29,14 @@ export const useProjekteNavData = () => {
       id: 'projekte',
       url: '/Daten/Projekte',
       label: `Projekte`,
-      totalCount: data?.data?.allProjects?.totalCount ?? 0,
-      menus: data?.data?.allProjects?.nodes.map((p) => ({
-        id: p.id,
-        label: p.name,
-      })),
+      totalCount: data?.data?.allProjekts?.totalCount ?? 0,
+      menus:
+        data?.data?.allProjekts?.nodes.map((p) => ({
+          id: p.id,
+          label: p.name,
+        })) ?? [],
     }),
-    [data?.data?.allProjects?.nodes, data?.data?.allProjects?.totalCount],
+    [data?.data?.allProjekts?.nodes, data?.data?.allProjekts?.totalCount],
   )
 
   return { isLoading, error, navData }
