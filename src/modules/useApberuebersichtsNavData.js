@@ -1,16 +1,39 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect, useState, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { autorun } from 'mobx'
+
+import { StoreContext } from '../storeContext.js'
 
 export const useApberuebersichtsNavData = ({
   projId: projIdPassedIn,
-  apberuebersichtGqlFilterForTree,
+  // apberuebersichtGqlFilterForTree,
 }) => {
   const apolloClient = useApolloClient()
+  const store = useContext(StoreContext)
 
   const { projId: projIdFromParams } = useParams()
   const projId = projIdPassedIn ?? projIdFromParams
+
+  // this is how to make the filter reactive in a hook
+  // see: https://stackoverflow.com/a/72229014/712005
+  // TODO: this is not working yet
+  const [filter, setFilter] = useState(
+    store.tree.apberuebersichtGqlFilterForTree,
+  )
+  useEffect(
+    () =>
+      autorun(() => {
+        console.log(
+          'useApberuebersichtsNavData autorun, apberuebersichtGqlFilterForTree:',
+          store.tree.apberuebersichtGqlFilterForTree,
+        )
+        setFilter(store.tree.apberuebersichtGqlFilterForTree)
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['treeApberuebersichts', projId],
@@ -38,7 +61,7 @@ export const useApberuebersichtsNavData = ({
         `,
         variables: {
           projId,
-          apberuebersichtFilter: apberuebersichtGqlFilterForTree,
+          apberuebersichtFilter: filter,
         },
         fetchPolicy: 'no-cache',
       }),
