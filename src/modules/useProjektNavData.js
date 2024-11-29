@@ -12,14 +12,6 @@ export const useProjektNavData = ({
   const { projId: projIdFromParams } = useParams()
   const projId = projIdPassedIn ?? projIdFromParams
 
-  console.log('useProjektNavData', {
-    projId,
-    projIdFromParams,
-    projIdPassedIn,
-    apGqlFilterForTree,
-    apberuebersichtGqlFilterForTree,
-  })
-
   const { data, isLoading, error } = useQuery({
     queryKey: ['treeProject', projId],
     queryFn: () =>
