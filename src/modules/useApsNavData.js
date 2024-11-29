@@ -1,16 +1,18 @@
-import { useMemo, useEffect } from 'react'
+import { useMemo, useEffect, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
-export const useApsNavData = ({
-  apGqlFilterForTree,
-  projId: projIdPassedIn,
-}) => {
+import { StoreContext } from '../storeContext.js'
+
+export const useApsNavData = (props) => {
   const apolloClient = useApolloClient()
   const { projId: projIdFromParams } = useParams()
-  const projId = projIdPassedIn ?? projIdFromParams
+  const projId = props?.projId ?? projIdFromParams
+
+  const store = useContext(StoreContext)
+  const { apGqlFilterForTree } = store.tree
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeAp', projId, apGqlFilterForTree],

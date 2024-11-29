@@ -9,12 +9,9 @@ import { useApsNavData } from '../../../../../../../../modules/useApsNavData.js'
 export const Aps = memo(
   observer(({ projekt }) => {
     const store = useContext(StoreContext)
-    const { openNodes, apGqlFilterForTree } = store.tree
+    const { openNodes } = store.tree
 
-    const { navData } = useApsNavData({
-      projId: projekt.id,
-      apGqlFilterForTree,
-    })
+    const { navData } = useApsNavData({ projId: projekt.id })
 
     return navData?.menus.map((ap) => {
       const isOpen =

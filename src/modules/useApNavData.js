@@ -3,7 +3,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-export const useApsNavData = ({
+export const useApNavData = ({
   apId: apIdPassedIn,
   projId: projIdPasssedIn,
 }) => {

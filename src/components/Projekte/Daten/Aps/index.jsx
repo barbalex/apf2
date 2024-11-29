@@ -16,9 +16,9 @@ export const Component = memo(
     const { projId } = useParams()
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { apGqlFilterForTree, nodeLabelFilter } = store.tree
+    const { nodeLabelFilter } = store.tree
 
-    const { navData, isLoading, error } = useApsNavData({ apGqlFilterForTree })
+    const { navData, isLoading, error } = useApsNavData()
 
     if (isLoading) return <Spinner />
 
