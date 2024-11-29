@@ -1,7 +1,7 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo, useEffect } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
-import { autorun } from 'mobx'
+import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 export const useApsNavData = ({
@@ -12,18 +12,7 @@ export const useApsNavData = ({
   const { projId: projIdFromParams } = useParams()
   const projId = projIdPassedIn ?? projIdFromParams
 
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  const [filter, setFilter] = useState(apGqlFilterForTree)
-  useEffect(() => {
-    const disposer = autorun(() => {
-      setFilter(apGqlFilterForTree)
-    })
-    return () => disposer()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeAp', projId, apGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
@@ -41,12 +30,20 @@ export const useApsNavData = ({
           }
         `,
         variables: {
-          apsFilter: filter,
+          apsFilter: apGqlFilterForTree,
           projId,
         },
         fetchPolicy: 'no-cache',
       }),
   })
+  // this is how to make the filter reactive in a hook
+  // see: https://stackoverflow.com/a/72229014/712005
+  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
+  useEffect(
+    () => reaction(() => apGqlFilterForTree, refetch),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const navData = useMemo(
     () => ({

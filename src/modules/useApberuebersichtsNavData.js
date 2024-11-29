@@ -44,8 +44,7 @@ export const useApberuebersichtsNavData = ({ projId: projIdPassedIn }) => {
         fetchPolicy: 'no-cache',
       }),
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
+  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
     () => reaction(() => store.tree.apberuebersichtGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps

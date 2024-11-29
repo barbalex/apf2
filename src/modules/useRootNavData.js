@@ -1,23 +1,12 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo, useEffect } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
-import { autorun } from 'mobx'
+import { reaction } from 'mobx'
 
 export const useRootNavData = ({ userGqlFilterForTree }) => {
   const apolloClient = useApolloClient()
 
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  const [filter, setFilter] = useState(userGqlFilterForTree)
-  useEffect(() => {
-    const disposer = autorun(() => {
-      setFilter(userGqlFilterForTree)
-    })
-    return () => disposer()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeRoot', userGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
@@ -38,11 +27,17 @@ export const useRootNavData = ({ userGqlFilterForTree }) => {
           }
         `,
         variables: {
-          usersFilter: filter,
+          usersFilter: userGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
       }),
   })
+  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
+  useEffect(
+    () => reaction(() => userGqlFilterForTree, refetch),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
   const totalCount = 5
   const usersCount = data?.data?.allUsers?.totalCount ?? 0
   const usersFilteredCount = data?.data?.filteredUsers?.totalCount ?? 0
