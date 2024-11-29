@@ -6,12 +6,11 @@ import { reaction } from 'mobx'
 
 import { StoreContext } from '../storeContext.js'
 
-export const useApberuebersichtsNavData = ({ projId: projIdPassedIn }) => {
+export const useApberuebersichtsNavData = () => {
   const apolloClient = useApolloClient()
   const store = useContext(StoreContext)
 
-  const { projId: projIdFromParams } = useParams()
-  const projId = projIdPassedIn ?? projIdFromParams
+  const { projId } = useParams()
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeApberuebersichts', projId],

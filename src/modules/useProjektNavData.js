@@ -1,18 +1,19 @@
-import { useMemo } from 'react'
+import { useMemo, useContext, useEffect } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { reaction } from 'mobx'
 
-export const useProjektNavData = ({
-  projId: projIdPassedIn,
-  apGqlFilterForTree,
-  apberuebersichtGqlFilterForTree,
-}) => {
+import { StoreContext } from '../storeContext.js'
+
+export const useProjektNavData = () => {
   const apolloClient = useApolloClient()
-  const { projId: projIdFromParams } = useParams()
-  const projId = projIdPassedIn ?? projIdFromParams
+  const { projId } = useParams()
 
-  const { data, isLoading, error } = useQuery({
+  const store = useContext(StoreContext)
+  const { apGqlFilterForTree, apberuebersichtGqlFilterForTree } = store.tree
+
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeProject', projId],
     queryFn: () =>
       apolloClient.query({
@@ -48,6 +49,17 @@ export const useProjektNavData = ({
         fetchPolicy: 'no-cache',
       }),
   })
+  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
+  useEffect(
+    () => reaction(() => apGqlFilterForTree, refetch),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => apberuebersichtGqlFilterForTree, refetch),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const label = data?.data?.projektById?.label ?? 'Projekt'
   const artsCount = data?.data?.projektById?.apsByProjId?.totalCount ?? 0

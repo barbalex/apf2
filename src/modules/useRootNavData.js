@@ -1,10 +1,15 @@
-import { useMemo, useEffect } from 'react'
+import { useMemo, useEffect, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
-export const useRootNavData = ({ userGqlFilterForTree }) => {
+import { StoreContext } from '../storeContext.js'
+
+export const useRootNavData = () => {
   const apolloClient = useApolloClient()
+
+  const store = useContext(StoreContext)
+  const { userGqlFilterForTree } = store.tree
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeRoot', userGqlFilterForTree],

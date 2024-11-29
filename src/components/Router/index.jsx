@@ -18,7 +18,6 @@ const datenHandle = {
   nav: DatenNav,
   bookmarkFetcher: datenBookmarkFetcher,
   bookmarkFetcherName: 'useRootNavData',
-  filterNames: ['userGqlFilterForTree'],
 }
 const ProjekteNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Projects.jsx')).Menu,
@@ -39,7 +38,6 @@ const projektBookmarkFetcher = lazy(async () => ({
 const projektHandle = {
   bookmarkFetcher: projektBookmarkFetcher,
   bookmarkFetcherName: 'useProjektNavData',
-  filterNames: ['apGqlFilterForTree', 'apberuebersichtGqlFilterForTree'],
 }
 const apberuebersichtsBookmarkFetcher = lazy(async () => ({
   default: (await import('../../modules/useApberuebersichtsNavData.js'))
@@ -48,7 +46,6 @@ const apberuebersichtsBookmarkFetcher = lazy(async () => ({
 const apberuebersichtsHandle = {
   bookmarkFetcher: apberuebersichtsBookmarkFetcher,
   bookmarkFetcherName: 'useApberuebersichtsNavData',
-  filterNames: ['apberuebersichtGqlFilterForTree'],
 }
 
 // WARNING: errorElement did not work
