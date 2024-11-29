@@ -146,7 +146,7 @@ export const Component = () => {
       setErrors({})
       if (field === 'name') {
         queryClient.invalidateQueries({
-          queryKey: [`treeUser`],
+          queryKey: [`treeUsers`],
         })
       }
     },

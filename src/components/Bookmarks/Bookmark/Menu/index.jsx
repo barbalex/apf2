@@ -7,6 +7,12 @@ import styled from '@emotion/styled'
 
 import { Item } from './Item.jsx'
 
+const StyledMenu = styled(MuiMenu)`
+  .MuiPaper-root {
+    scrollbar-width: thin !important;
+  }
+`
+
 export const Menu = memo(({ navData }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -27,7 +33,7 @@ export const Menu = memo(({ navData }) => {
       >
         <BsCaretDown />
       </IconButton>
-      <MuiMenu
+      <StyledMenu
         id={menuId}
         anchorEl={anchorEl}
         open={open}
@@ -44,7 +50,7 @@ export const Menu = memo(({ navData }) => {
             onClose={onClose}
           />
         ))}
-      </MuiMenu>
+      </StyledMenu>
     </>
   )
 })

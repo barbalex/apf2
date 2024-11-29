@@ -54,6 +54,13 @@ const apsHandle = {
   bookmarkFetcher: apsBookmarkFetcher,
   bookmarkFetcherName: 'useApsNavData',
 }
+const usersBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useUsersNavData.js')).useUsersNavData,
+}))
+const usersHandle = {
+  bookmarkFetcher: usersBookmarkFetcher,
+  bookmarkFetcherName: 'useUsersNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -861,7 +868,10 @@ export const Router = () => {
                 </Route>
               </Route>
             </Route>
-            <Route path="Benutzer">
+            <Route
+              path="Benutzer"
+              handle={usersHandle}
+            >
               <Route
                 path="*"
                 lazy={() => import('../Projekte/Daten/Users/index.jsx')}
