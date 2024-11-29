@@ -11,7 +11,6 @@ export const useProjektNavData = () => {
   const { projId } = useParams()
 
   const store = useContext(StoreContext)
-  const { apGqlFilterForTree, apberuebersichtGqlFilterForTree } = store.tree
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeProject', projId],
@@ -43,20 +42,19 @@ export const useProjektNavData = () => {
         `,
         variables: {
           projId,
-          apFilter: apGqlFilterForTree,
-          apberuebersichtFilter: apberuebersichtGqlFilterForTree,
+          apFilter: store.tree.apGqlFilterForTree,
+          apberuebersichtFilter: store.tree.apberuebersichtGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
       }),
   })
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => apGqlFilterForTree, refetch),
+    () => reaction(() => store.tree.apGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
   useEffect(
-    () => reaction(() => apberuebersichtGqlFilterForTree, refetch),
+    () => reaction(() => store.tree.apberuebersichtGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
