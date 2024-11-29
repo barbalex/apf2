@@ -41,6 +41,15 @@ const projektHandle = {
   bookmarkFetcherName: 'useProjektNavData',
   filterNames: ['apGqlFilterForTree', 'apberuebersichtGqlFilterForTree'],
 }
+const apberuebersichtsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useApberuebersichtsNavData.js'))
+    .useApberuebersichtsNavData,
+}))
+const apberuebersichtsHandle = {
+  bookmarkFetcher: apberuebersichtsBookmarkFetcher,
+  bookmarkFetcherName: 'useApberuebersichtsNavData',
+  filterNames: ['apberuebersichtGqlFilterForTree'],
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -165,21 +174,26 @@ export const Router = () => {
                 />
                 <Route
                   path="AP-Berichte"
-                  lazy={() =>
-                    import('../Projekte/Daten/Apberuebersichts/index.jsx')
-                  }
-                />
-                <Route path="AP-Berichte/:apberUebersichtId">
+                  handle={apberuebersichtsHandle}
+                >
                   <Route
                     path="*"
                     lazy={() =>
-                      import('../Projekte/Daten/Apberuebersicht/index.jsx')
+                      import('../Projekte/Daten/Apberuebersichts/index.jsx')
                     }
                   />
-                  <Route
-                    path="print"
-                    lazy={() => import('../Print/ApberForYear/index.jsx')}
-                  />
+                  <Route path=":apberUebersichtId">
+                    <Route
+                      path="*"
+                      lazy={() =>
+                        import('../Projekte/Daten/Apberuebersicht/index.jsx')
+                      }
+                    />
+                    <Route
+                      path="print"
+                      lazy={() => import('../Print/ApberForYear/index.jsx')}
+                    />
+                  </Route>
                 </Route>
                 <Route
                   path="Arten"
