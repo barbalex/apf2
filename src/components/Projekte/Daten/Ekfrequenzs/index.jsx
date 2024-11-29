@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createApsQuery } from '../../../../modules/createApsQuery.js'
 import { createEkfrequenzsQuery } from '../../../../modules/createEkfrequenzsQuery.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
@@ -26,10 +25,8 @@ export const Component = memo(
         apolloClient,
       }),
     )
-    const ekfrequenzs =
-      data?.data?.apById?.ekfrequenzsByApId?.nodes ?? []
-    const totalCount =
-      data?.data?.apById?.ekfrequenzsCount?.totalCount ?? 0
+    const ekfrequenzs = data?.data?.apById?.ekfrequenzsByApId?.nodes ?? []
+    const totalCount = data?.data?.apById?.ekfrequenzsCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
 

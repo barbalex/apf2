@@ -6,7 +6,6 @@ import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createApsQuery } from '../../../../modules/createApsQuery.js'
 import { createPopmassnbersQuery } from '../../../../modules/createPopmassnbersQuery.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'

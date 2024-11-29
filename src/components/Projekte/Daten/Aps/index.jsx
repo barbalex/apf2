@@ -5,11 +5,11 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createApsQuery } from '../../../../modules/createApsQuery.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
+import { useApsNavData } from '../../../../modules/useApsNavData.js'
 
 export const Component = memo(
   observer(() => {
@@ -18,15 +18,10 @@ export const Component = memo(
     const store = useContext(StoreContext)
     const { apGqlFilterForTree, nodeLabelFilter } = store.tree
 
-    const { data, isLoading, error } = useQuery(
-      createApsQuery({
-        projId,
-        apGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const aps = data?.data?.allAps?.nodes ?? []
-    const totalCount = data?.data?.totalCount?.totalCount ?? 0
+    const { navData, isLoading, error } = useApsNavData({ apGqlFilterForTree })
+    console.log('Aps, navData:', navData)
+    const aps = navData?.data?.allAps?.nodes ?? []
+    const totalCount = navData?.data?.totalCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
 
@@ -34,9 +29,9 @@ export const Component = memo(
 
     return (
       <List
-        items={aps}
-        title="Arten"
-        totalCount={totalCount}
+        items={navData.menus}
+        title={navData.label}
+        totalCount={navData.totalCount}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.ap}
       />

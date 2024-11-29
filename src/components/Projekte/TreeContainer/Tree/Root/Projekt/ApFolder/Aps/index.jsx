@@ -1,29 +1,22 @@
 import { memo, useContext } from 'react'
-import { gql, useApolloClient } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../storeContext.js'
 import { ApFolders } from './Folders/index.jsx'
-import { createApsQuery } from '../../../../../../../../modules/createApsQuery.js'
+import { useApsNavData } from '../../../../../../../../modules/useApsNavData.js'
 
 export const Aps = memo(
   observer(({ projekt }) => {
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { openNodes, apGqlFilterForTree } = store.tree
 
-    const { data } = useQuery(
-      createApsQuery({
-        projId: projekt.id,
-        apGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const aps = data?.data?.allAps?.nodes ?? []
+    const { navData } = useApsNavData({
+      projId: projekt.id,
+      apGqlFilterForTree,
+    })
 
-    return aps.map((ap) => {
+    return navData?.menus.map((ap) => {
       const isOpen =
         openNodes.filter(
           (n) =>

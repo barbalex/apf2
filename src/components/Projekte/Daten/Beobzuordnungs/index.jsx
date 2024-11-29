@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import { useParams, useLocation } from 'react-router'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createApsQuery } from '../../../../modules/createApsQuery.js'
 import { createBeobsQuery } from '../../../../modules/createBeobsQuery.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'

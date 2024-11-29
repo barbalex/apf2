@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createApsQuery } from '../../../../modules/createApsQuery.js'
 import { createZielsQuery } from '../../../../modules/createZielsQuery.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
