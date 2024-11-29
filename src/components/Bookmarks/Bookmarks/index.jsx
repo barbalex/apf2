@@ -26,24 +26,18 @@ export const Bookmarks = memo(() => {
   // get match that contains the current pathname minus the last slash - if it ends with a slash
   // Hm. So many matches. Often multiple with same path. Hard to find the right one.
   // TODO: ensure this works for all cases
-  const bookmarkMatches = allMatches.filter((m) => m.handle?.bookmark)
+  const bookmarkMatches = allMatches.filter(
+    (m) => m.handle?.bookmarkFetcher && m.handle?.bookmarkFetcherName,
+  )
 
   return (
     <Container>
-      {bookmarkMatches.map((match) => {
-        const fetcher = match.handle?.bookmarkFetcher
-        const fetcherName = match.handle?.bookmarkFetcherName
-        const filterName = match.handle?.filterName
-
-        if (!match) return null
-
-        return (
-          <FetcherImporter
-            key={match.id}
-            match={match}
-          />
-        )
-      })}
+      {bookmarkMatches.map((match) => (
+        <FetcherImporter
+          key={match.id}
+          match={match}
+        />
+      ))}
     </Container>
   )
 })
