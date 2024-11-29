@@ -1,12 +1,11 @@
 import { memo } from 'react'
 import { Link, useLocation } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
+import IconButton from '@mui/material/IconButton'
+import { BsCaretDown } from 'react-icons/bs'
 import styled from '@emotion/styled'
 
 const StyledLink = styled(Link)`
-  padding: 0 9px;
-  min-width: 50px;
-  max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -17,12 +16,19 @@ const StyledLink = styled(Link)`
   }
 `
 const StyledText = styled.div`
-  padding: 0 9px;
   min-width: 50px;
   max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`
+const Container = styled.div`
+  padding: 0 9px;
+  min-width: 80px;
+  max-width: 180px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `
 
 export const Bookmark = memo(({ navData }) => {
@@ -38,9 +44,16 @@ export const Bookmark = memo(({ navData }) => {
 
   return (
     <Tooltip title={label}>
-      {linksToSomewhereElse ?
-        <StyledLink to={{ pathname: navData.url, search }}>{label}</StyledLink>
-      : <StyledText>{label}</StyledText>}
+      <Container>
+        {linksToSomewhereElse ?
+          <StyledLink to={{ pathname: navData.url, search }}>
+            {label}
+          </StyledLink>
+        : <StyledText>{label}</StyledText>}
+        <IconButton size="small">
+          <BsCaretDown />
+        </IconButton>
+      </Container>
     </Tooltip>
   )
 })
