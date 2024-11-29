@@ -1,31 +1,17 @@
-import { useMemo, useEffect, useState, useContext } from 'react'
+import { useMemo, useEffect, useContext } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { autorun } from 'mobx'
-import { atom, useAtom } from 'jotai'
+import { reaction } from 'mobx'
 
 import { StoreContext } from '../storeContext.js'
 
-const filterAtom = atom()
-
-export const useApberuebersichtsNavData = ({
-  projId: projIdPassedIn,
-  // apberuebersichtGqlFilterForTree,
-}) => {
+export const useApberuebersichtsNavData = ({ projId: projIdPassedIn }) => {
   const apolloClient = useApolloClient()
   const store = useContext(StoreContext)
 
   const { projId: projIdFromParams } = useParams()
   const projId = projIdPassedIn ?? projIdFromParams
-
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // TODO: this is not working yet
-  const [filter, setFilter] = useAtom(filterAtom)
-  useEffect(() => {
-    setFilter(store.tree.apberuebersichtGqlFilterForTree)
-  }, [])
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeApberuebersichts', projId],
@@ -53,24 +39,15 @@ export const useApberuebersichtsNavData = ({
         `,
         variables: {
           projId,
-          apberuebersichtFilter:
-            filter ?? store.tree.apberuebersichtGqlFilterForTree,
+          apberuebersichtFilter: store.tree.apberuebersichtGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
       }),
   })
+  // this is how to make the filter reactive in a hook
+  // see: https://stackoverflow.com/a/72229014/712005
   useEffect(
-    () =>
-      autorun(() => {
-        console.log(
-          'useApberuebersichtsNavData autorun, apberuebersichtGqlFilterForTree:',
-          store.tree.apberuebersichtGqlFilterForTree,
-        )
-        setFilter(store.tree.apberuebersichtGqlFilterForTree)
-        setTimeout(() => {
-          refetch()
-        }, 300)
-      }),
+    () => reaction(() => store.tree.apberuebersichtGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -93,11 +70,6 @@ export const useApberuebersichtsNavData = ({
       projId,
     ],
   )
-  console.log('useApberuebersichtsNavData', {
-    filter,
-    navData,
-    menusLength: navData.menus.length,
-  })
 
   return { isLoading, error, navData }
 }
