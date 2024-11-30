@@ -118,6 +118,13 @@ const tpopkontrzaehlEinheitWertesHandle = {
   bookmarkFetcher: tpopkontrzaehlEinheitWertesBookmarkFetcher,
   bookmarkFetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
 }
+const apBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useApNavData.js')).useApNavData,
+}))
+const apHandle = {
+  bookmarkFetcher: apBookmarkFetcher,
+  bookmarkFetcherName: 'useApNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -300,7 +307,10 @@ export const Router = () => {
                     path="*"
                     lazy={() => import('../Projekte/Daten/Aps/index.jsx')}
                   />
-                  <Route path=":apId">
+                  <Route
+                    path=":apId"
+                    handle={apHandle}
+                  >
                     <Route
                       path="*"
                       lazy={() =>
