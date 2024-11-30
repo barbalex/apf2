@@ -92,6 +92,15 @@ const adressesHandle = {
   bookmarkFetcher: adressesBookmarkFetcher,
   bookmarkFetcherName: 'useAdressesNavData',
 }
+const tpopApberrelevantGrundWertesBookmarkFetcher = lazy(async () => ({
+  default: (
+    await import('../../modules/useTpopApberrelevantGrundWertesNavData.js')
+  ).useTpopApberrelevantGrundWertesNavData,
+}))
+const tpopApberrelevantGrundWertesHandle = {
+  bookmarkFetcher: tpopApberrelevantGrundWertesBookmarkFetcher,
+  bookmarkFetcherName: 'useTpopApberrelevantGrundWertesNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -161,16 +170,21 @@ export const Router = () => {
               </Route>
               <Route
                 path="ApberrelevantGrundWerte"
-                lazy={() =>
-                  import(
-                    '../Projekte/Daten/TpopApberrelevantGrundWertes/index.jsx'
-                  )
-                }
-              />
-              <Route
-                path="ApberrelevantGrundWerte/:wertId"
-                lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
-              />
+                handle={tpopApberrelevantGrundWertesHandle}
+              >
+                <Route
+                  path="*"
+                  lazy={() =>
+                    import(
+                      '../Projekte/Daten/TpopApberrelevantGrundWertes/index.jsx'
+                    )
+                  }
+                />
+                <Route
+                  path=":wertId"
+                  lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
+                />
+              </Route>
               <Route
                 path="EkAbrechnungstypWerte"
                 lazy={() =>
