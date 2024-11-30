@@ -1,10 +1,8 @@
 import { memo, useContext } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createEkAbrechnungstypWertesQuery } from '../../../../modules/createEkAbrechnungstypWertesQuery.js'
+import { useEkAbrechnungstypWertesNavData } from '../../../../modules/useEkAbrechnungstypWertesNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -12,21 +10,10 @@ import { Error } from '../../../shared/Error.jsx'
 
 export const Component = memo(
   observer(() => {
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { ekAbrechnungstypWerteGqlFilterForTree, nodeLabelFilter } =
-      store.tree
+    const { nodeLabelFilter } = store.tree
 
-    const { data, isLoading, error } = useQuery(
-      createEkAbrechnungstypWertesQuery({
-        ekAbrechnungstypWerteGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const ekAbrechnungstypWertes =
-      data?.data?.allEkAbrechnungstypWertes?.nodes ?? []
-    const count = ekAbrechnungstypWertes.length
-    const totalCount = data?.data?.totalCount?.totalCount ?? 0
+    const { navData, isLoading, error } = useEkAbrechnungstypWertesNavData()
 
     if (isLoading) return <Spinner />
 
@@ -34,8 +21,8 @@ export const Component = memo(
 
     return (
       <List
-        items={ekAbrechnungstypWertes}
-        title={`Teil-Population: EK-Abrechnungstypen ${isLoading ? '...' : `${count}/${totalCount}`}`}
+        items={navData.menus}
+        title={navData.label}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.ekAbrechnungstypWerte}
       />
