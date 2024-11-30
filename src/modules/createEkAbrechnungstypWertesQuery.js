@@ -5,7 +5,7 @@ export const createEkAbrechnungstypWertesQuery = ({
   apolloClient,
 }) => ({
   queryKey: [
-    'treeEkAbrechnungstypWerte',
+    'treeEkAbrechnungstypWertes',
     ekAbrechnungstypWerteGqlFilterForTree,
   ],
   queryFn: () =>

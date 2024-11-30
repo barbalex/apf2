@@ -5,30 +5,38 @@ import { reaction } from 'mobx'
 
 import { StoreContext } from '../storeContext.js'
 
-export const useAdressesNavData = () => {
+export const useEkAbrechnungstypWertesNavData = () => {
   const apolloClient = useApolloClient()
 
   const store = useContext(StoreContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeAdresses', store.tree.adresseGqlFilterForTree],
+    queryKey: [
+      'treeEkAbrechnungstypWertes',
+      store.tree.ekAbrechnungstypWerteGqlFilterForTree,
+    ],
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query TreeAdressesQuery($adressesFilter: AdresseFilter!) {
-            allAdresses(filter: $adressesFilter, orderBy: LABEL_ASC) {
+          query TreeEkAbrechnungstypWertesQuery(
+            $filter: EkAbrechnungstypWerteFilter!
+          ) {
+            allEkAbrechnungstypWertes(
+              filter: $filter
+              orderBy: [SORT_ASC, TEXT_ASC]
+            ) {
               nodes {
                 id
                 label
               }
             }
-            totalCount: allAdresses {
+            totalCount: allEkAbrechnungstypWertes {
               totalCount
             }
           }
         `,
         variables: {
-          adressesFilter: store.tree.adresseGqlFilterForTree,
+          filter: store.tree.ekAbrechnungstypWerteGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
       }),
@@ -37,25 +45,31 @@ export const useAdressesNavData = () => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => store.tree.adresseGqlFilterForTree, refetch),
+    () =>
+      reaction(() => store.tree.ekAbrechnungstypWerteGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
-  const count = data?.data?.allAdresses?.nodes?.length ?? 0
+  const count = data?.data?.allEkAbrechnungstypWertes?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
-      id: 'Adressen',
-      url: `/Daten/Werte-Listen/Adressen`,
-      label: `Adressen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      id: 'EkAbrechnungstypWerte',
+      url: `/Daten/Werte-Listen/EkAbrechnungstypWerte`,
+      label: `Teil-Population: EK-Abrechnungstypen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       menus:
-        data?.data?.allAdresses?.nodes.map((p) => ({
+        data?.data?.allEkAbrechnungstypWertes?.nodes.map((p) => ({
           id: p.id,
           label: p.label,
         })) ?? [],
     }),
-    [count, data?.data?.allAdresses?.nodes, isLoading, totalCount],
+    [
+      count,
+      data?.data?.allEkAbrechnungstypWertes?.nodes,
+      isLoading,
+      totalCount,
+    ],
   )
 
   return { isLoading, error, navData }

@@ -101,6 +101,14 @@ const tpopApberrelevantGrundWertesHandle = {
   bookmarkFetcher: tpopApberrelevantGrundWertesBookmarkFetcher,
   bookmarkFetcherName: 'useTpopApberrelevantGrundWertesNavData',
 }
+const ekAbrechnungstypWertesBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useEkAbrechnungstypWertesNavData.js'))
+    .useEkAbrechnungstypWertesNavData,
+}))
+const ekAbrechnungstypWertesHandle = {
+  bookmarkFetcher: ekAbrechnungstypWertesBookmarkFetcher,
+  bookmarkFetcherName: 'useEkAbrechnungstypWertesNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -187,14 +195,19 @@ export const Router = () => {
               </Route>
               <Route
                 path="EkAbrechnungstypWerte"
-                lazy={() =>
-                  import('../Projekte/Daten/EkAbrechnungstypWertes/index.jsx')
-                }
-              />
-              <Route
-                path="EkAbrechnungstypWerte/:wertId"
-                lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
-              />
+                handle={ekAbrechnungstypWertesHandle}
+              >
+                <Route
+                  path="*"
+                  lazy={() =>
+                    import('../Projekte/Daten/EkAbrechnungstypWertes/index.jsx')
+                  }
+                />
+                <Route
+                  path=":wertId"
+                  lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
+                />
+              </Route>
               <Route
                 path="TpopkontrzaehlEinheitWerte"
                 lazy={() =>

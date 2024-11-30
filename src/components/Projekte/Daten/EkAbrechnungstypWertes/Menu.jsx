@@ -62,7 +62,7 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeEkAbrechnungstypWerte`],
+        queryKey: [`treeEkAbrechnungstypWertes`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeRoot`],

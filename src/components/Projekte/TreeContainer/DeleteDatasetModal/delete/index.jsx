@@ -151,7 +151,7 @@ export const deleteModule = async ({ client, store, search }) => {
     : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontr'
     : table === 'tpop_apberrelevant_grund_werte' ?
       'treeTpopApberrelevantGrundWerte'
-    : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWerte'
+    : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWertes'
     : table === 'tpopkontrzaehl_einheit_werte' ?
       'treeTpopkontrzaehlEinheitWerte'
     : `tree${upperFirst(table)}`
