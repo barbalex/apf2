@@ -1,31 +1,21 @@
-import { memo, useMemo, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { memo } from 'react'
 
 import { List } from '../../../shared/List/index.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import { StoreContext } from '../../../../storeContext.js'
 import { useRootNavData } from '../../../../modules/useRootNavData.js'
 
-export const Component = memo(
-  observer(() => {
-    const store = useContext(StoreContext)
-    // calling filter even though not used here so useRootNavData re-runs when the filter changes
-    const { userGqlFilterForTree } = store.tree
-    const { navData, isLoading, error } = useRootNavData({
-      userGqlFilterForTree,
-    })
+export const Component = memo(() => {
+  const { navData, isLoading, error } = useRootNavData()
 
-    if (isLoading) return <Spinner />
+  if (isLoading) return <Spinner />
 
-    if (error) return <Error error={error} />
+  if (error) return <Error error={error} />
 
-    return (
-      <List
-        items={navData.menus}
-        title={navData.label}
-        totalCount={navData.totalCount}
-      />
-    )
-  }),
-)
+  return (
+    <List
+      items={navData.menus}
+      title={navData.label}
+    />
+  )
+})

@@ -1,11 +1,5 @@
-import { memo, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
+import { memo } from 'react'
 
-import { StoreContext } from '../../../../storeContext.js'
-import { useRootNavData } from '../../../../modules/useRootNavData.js'
-import { Spinner } from '../../../shared/Spinner.jsx'
-import { Error } from '../../../shared/Error.jsx'
 import { Nav } from '../Nav.jsx'
 
 export const navData = {

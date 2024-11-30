@@ -15,6 +15,9 @@ export const useRootNavData = () => {
       apolloClient.query({
         query: gql`
           query NavRootQuery($usersFilter: UserFilter!) {
+            allProjekts {
+              totalCount
+            }
             allUsers {
               totalCount
             }
@@ -41,6 +44,7 @@ export const useRootNavData = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  const projectsCount = data?.data?.allProjekts?.totalCount ?? 0
   const usersCount = data?.data?.allUsers?.totalCount ?? 0
   const usersFilteredCount = data?.data?.filteredUsers?.totalCount ?? 0
   const messagesCount = data?.data?.allMessages?.totalCount ?? 0
@@ -55,27 +59,34 @@ export const useRootNavData = () => {
       menus: [
         {
           id: 'Projekte',
-          label: `Projekte (1/1)`,
+          label: `Projekte (${isLoading ? '...' : projectsCount})`,
         },
         {
           id: 'Benutzer',
-          label: `Benutzer (${usersFilteredCount}/${usersCount})`,
+          label: `Benutzer (${isLoading ? '...' : `${usersFilteredCount}/${usersCount}`})`,
         },
         {
           id: 'Werte-Listen',
-          label: `Werte-Listen (4)`,
+          label: `Werte-Listen`,
         },
         {
           id: 'Mitteilungen',
-          label: `Mitteilungen (${messagesCount})`,
+          label: `Mitteilungen (${isLoading ? '...' : messagesCount})`,
         },
         {
           id: 'Aktuelle-Fehler',
-          label: `Aktuelle Fehler (${currentIssuesCount})`,
+          label: `Aktuelle Fehler (${isLoading ? '...' : currentIssuesCount})`,
         },
       ],
     }),
-    [usersFilteredCount, usersCount, messagesCount, currentIssuesCount],
+    [
+      isLoading,
+      projectsCount,
+      usersFilteredCount,
+      usersCount,
+      messagesCount,
+      currentIssuesCount,
+    ],
   )
 
   return { isLoading, error, navData }
