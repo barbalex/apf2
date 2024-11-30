@@ -27,7 +27,7 @@ export const WerteFolder = memo(
       menuType: 'wlFolder',
       id: 'wlFolder',
       urlLabel: 'Werte-Listen',
-      label: `Werte-Listen`,
+      label: navData?.label,
       url: ['Werte-Listen'],
       hasChildren: true,
     }
