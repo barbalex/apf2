@@ -26,6 +26,7 @@ export const Component = memo(
       }),
     )
     const tpopfreiwkontrs = data?.data?.tpopById?.tpopfreiwkontrs?.nodes ?? []
+    const count = tpopfreiwkontrs.length
     const totalCount =
       data?.data?.tpopById?.tpopfreiwkontrsCount?.totalCount ?? 0
 
@@ -36,8 +37,7 @@ export const Component = memo(
     return (
       <List
         items={tpopfreiwkontrs}
-        title="Freiwilligen-Kontrollen"
-        totalCount={totalCount}
+        title={`Freiwilligen-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.tpopkontr}
       />
