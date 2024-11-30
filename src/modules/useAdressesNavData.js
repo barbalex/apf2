@@ -41,12 +41,14 @@ export const useAdressesNavData = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  const count = data?.data?.allAdresses?.nodes?.length ?? 0
+  const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
-      id: 'Benutzer',
-      url: `/Daten/Benutzer`,
-      label: `Benutzer`,
+      id: 'Adressen',
+      url: `/Daten/Werte-Listen/Adressen`,
+      label: `Adressen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       totalCount: data?.data?.totalCount?.totalCount ?? 0,
       menus:
         data?.data?.allAdresses?.nodes.map((p) => ({
@@ -54,7 +56,13 @@ export const useAdressesNavData = () => {
           label: p.label,
         })) ?? [],
     }),
-    [data?.data?.allAdresses?.nodes, data?.data?.totalCount?.totalCount],
+    [
+      count,
+      data?.data?.allAdresses?.nodes,
+      data?.data?.totalCount?.totalCount,
+      isLoading,
+      totalCount,
+    ],
   )
 
   return { isLoading, error, navData }
