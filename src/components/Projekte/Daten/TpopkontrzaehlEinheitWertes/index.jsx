@@ -25,6 +25,7 @@ export const Component = memo(
     )
     const tpopkontrzaehlEinheitWertes =
       data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+    const count = tpopkontrzaehlEinheitWertes.length
     const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -34,8 +35,7 @@ export const Component = memo(
     return (
       <List
         items={tpopkontrzaehlEinheitWertes}
-        title="Teil-Population: Zähl-Einheiten"
-        totalCount={totalCount}
+        title={`Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.tpopkontrzaehlEinheitWerte}
       />

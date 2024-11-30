@@ -25,6 +25,7 @@ export const Component = memo(
     )
     const tpopApberrelevantGrundWertes =
       data?.data?.allTpopApberrelevantGrundWertes?.nodes ?? []
+    const count = tpopApberrelevantGrundWertes.length
     const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -34,8 +35,7 @@ export const Component = memo(
     return (
       <List
         items={tpopApberrelevantGrundWertes}
-        title="Teil-Population: Grund für AP-Bericht Relevanz"
-        totalCount={totalCount}
+        title={`Teil-Population: Grund für AP-Bericht Relevanz (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.tpopApberrelevantGrundWerte}
       />

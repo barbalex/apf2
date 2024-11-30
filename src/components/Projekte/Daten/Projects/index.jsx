@@ -7,6 +7,5 @@ export const Component = memo(() => (
   <List
     items={navData.menus}
     title={navData.label}
-    totalCount={navData.totalCount}
   />
 ))
