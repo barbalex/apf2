@@ -1942,6 +1942,28 @@ export const Tree = types
 
       return filter
     },
+    get beobNichtZugeordnetGqlFilterForTree() {
+      const filter = {
+        wgs84Lat: { isNull: false },
+        tpopId: { isNull: false },
+      }
+
+      // node label filter
+      if (self.nodeLabelFilter.beob) {
+        filter.label = {
+          includesInsensitive: self.nodeLabelFilter.beob,
+        }
+      }
+
+      // mapFilter
+      if (self.mapFilter) {
+        filter.geomPoint = {
+          coveredBy: self.mapFilter,
+        }
+      }
+
+      return filter
+    },
     beobGqlFilterForTree(type) {
       const filter = {
         wgs84Lat: { isNull: false },

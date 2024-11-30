@@ -11,17 +11,20 @@ export const BeobNichtZuzuordnens = memo(
   observer(({ projekt, ap }) => {
     const client = useApolloClient()
     const store = useContext(StoreContext)
-    const { beobGqlFilterForTree } = store.tree
-    const beobNichtZuzuordnensFilter = beobGqlFilterForTree('nichtZuzuordnen')
+    const { beobNichtZuzuordnenGqlFilterForTree } = store.tree
 
     const { data } = useQuery({
-      queryKey: ['treeBeobNichtZuzuordnen', ap.id, beobNichtZuzuordnensFilter],
+      queryKey: [
+        'treeBeobNichtZuzuordnen',
+        ap.id,
+        beobNichtZuzuordnenGqlFilterForTree,
+      ],
       queryFn: () =>
         client.query({
           query: gql`
             query TreeBeobNichtZuzuordnensQuery(
               $apId: UUID!
-              $beobNichtZuzuordnensFilter: BeobFilter
+              $filter: BeobFilter
             ) {
               apById(id: $apId) {
                 id
@@ -31,7 +34,7 @@ export const BeobNichtZuzuordnens = memo(
                     aeTaxonomyByArtId {
                       id
                       beobsByArtId(
-                        filter: $beobNichtZuzuordnensFilter
+                        filter: $filter
                         orderBy: [DATUM_DESC, AUTOR_ASC]
                       ) {
                         nodes {
@@ -47,7 +50,7 @@ export const BeobNichtZuzuordnens = memo(
           `,
           variables: {
             apId: ap.id,
-            beobNichtZuzuordnensFilter,
+            filter: beobNichtZuzuordnenGqlFilterForTree,
           },
           fetchPolicy: 'no-cache',
         }),

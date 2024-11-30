@@ -59,7 +59,6 @@ export const useApNavData = (props) => {
       store.tree.assozartGqlFilterForTree,
       store.tree.ekfrequenzGqlFilterForTree,
       store.tree.ekzaehleinheitGqlFilterForTree,
-      store.tree.beobGqlFilterForTree,
       store.tree.beobNichtBeurteiltGqlFilterForTree,
       store.tree.beobNichtZuzuordnenGqlFilterForTree,
     ],

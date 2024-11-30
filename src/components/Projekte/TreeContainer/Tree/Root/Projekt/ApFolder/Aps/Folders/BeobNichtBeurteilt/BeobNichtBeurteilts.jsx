@@ -11,17 +11,20 @@ export const BeobNichtBeurteilts = memo(
   observer(({ projekt, ap }) => {
     const client = useApolloClient()
     const store = useContext(StoreContext)
-    const { beobGqlFilterForTree } = store.tree
-    const beobNichtBeurteiltsFilter = beobGqlFilterForTree('nichtBeurteilt')
+    const { beobNichtBeurteiltGqlFilterForTree } = store.tree
 
     const { data } = useQuery({
-      queryKey: ['treeBeobNichtBeurteilt', ap.id, beobNichtBeurteiltsFilter],
+      queryKey: [
+        'treeBeobNichtBeurteilt',
+        ap.id,
+        beobNichtBeurteiltGqlFilterForTree,
+      ],
       queryFn: () =>
         client.query({
           query: gql`
             query TreeBeobNichtBeurteiltsQuery(
               $apId: UUID!
-              $beobNichtBeurteiltsFilter: BeobFilter
+              $filter: BeobFilter
             ) {
               apById(id: $apId) {
                 id
@@ -31,7 +34,7 @@ export const BeobNichtBeurteilts = memo(
                     aeTaxonomyByArtId {
                       id
                       beobsByArtId(
-                        filter: $beobNichtBeurteiltsFilter
+                        filter: $filter
                         orderBy: [DATUM_DESC, AUTOR_ASC]
                       ) {
                         nodes {
@@ -47,7 +50,7 @@ export const BeobNichtBeurteilts = memo(
           `,
           variables: {
             apId: ap.id,
-            beobNichtBeurteiltsFilter,
+            filter: beobNichtBeurteiltGqlFilterForTree,
           },
           fetchPolicy: 'no-cache',
         }),
