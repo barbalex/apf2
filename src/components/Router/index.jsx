@@ -77,6 +77,13 @@ const messagesHandle = {
   bookmarkFetcher: messagesBookmarkFetcher,
   bookmarkFetcherName: 'useMessagesNavData',
 }
+const wertesBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useWertesNavData.js')).useWertesNavData,
+}))
+const wertesHandle = {
+  bookmarkFetcher: wertesBookmarkFetcher,
+  bookmarkFetcherName: 'useWertesNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -123,7 +130,10 @@ export const Router = () => {
               index
               lazy={() => import('../Projekte/Daten/Root/index.jsx')}
             />
-            <Route path="Werte-Listen">
+            <Route
+              path="Werte-Listen"
+              handle={wertesHandle}
+            >
               <Route
                 path="*"
                 lazy={() => import('../Projekte/Daten/Wertes/index.jsx')}
