@@ -34,7 +34,7 @@ export const Component = memo(
       : type === 'nichtBeurteilt' ? 'beobNichtBeurteilt'
       : type === 'nichtZuzuordnen' ? 'beobNichtZuzuordnen'
       : 'beobNichtZuzuordnen'
-    const title =
+    const baseTitle =
       type === 'zugeordnet' ? 'Beobachtungen zugeordnet'
       : type === 'nichtBeurteilt' ? 'Beobachtungen nicht beurteilt'
       : type === 'nichtZuzuordnen' ? 'Beobachtungen nicht zuzuordnen'
@@ -50,6 +50,7 @@ export const Component = memo(
       }),
     )
     const beobs = data?.data?.allBeobs?.nodes ?? []
+    const count = beobs.length
     const totalCount = data?.data?.beobsCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -59,8 +60,7 @@ export const Component = memo(
     return (
       <List
         items={beobs}
-        title={title}
-        totalCount={totalCount}
+        title={`${baseTitle} (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu apfloraLayer={apfloraLayer} />}
         highlightSearchString={nodeLabelFilter.beob}
       />

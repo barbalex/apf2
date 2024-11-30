@@ -26,6 +26,7 @@ export const Component = memo(
       }),
     )
     const apbers = data?.data?.apById?.apbersByApId?.nodes ?? []
+    const count = apbers.length
     const totalCount = data?.data?.apById?.apbersCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -35,8 +36,7 @@ export const Component = memo(
     return (
       <List
         items={apbers}
-        title="AP-Berichte"
-        totalCount={totalCount}
+        title={`AP-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.apber}
       />
