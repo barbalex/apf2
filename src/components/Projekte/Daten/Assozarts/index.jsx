@@ -26,6 +26,7 @@ export const Component = memo(
       }),
     )
     const assozarts = data?.data?.apById?.assozartsByApId?.nodes ?? []
+    const count = assozarts.length
     const totalCount = data?.data?.apById?.assozartsCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -35,8 +36,7 @@ export const Component = memo(
     return (
       <List
         items={assozarts}
-        title="Assoziierte Arten"
-        totalCount={totalCount}
+        title={`Assoziierte Arten (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.assozart}
       />

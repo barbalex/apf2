@@ -25,6 +25,7 @@ export const Component = memo(
     )
     const ekAbrechnungstypWertes =
       data?.data?.allEkAbrechnungstypWertes?.nodes ?? []
+    const count = ekAbrechnungstypWertes.length
     const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -34,8 +35,7 @@ export const Component = memo(
     return (
       <List
         items={ekAbrechnungstypWertes}
-        title="Teil-Population: EK-Abrechnungstypen"
-        totalCount={totalCount}
+        title={`Teil-Population: EK-Abrechnungstypen ${isLoading ? '...' : `${count}/${totalCount}`}`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.ekAbrechnungstypWerte}
       />
