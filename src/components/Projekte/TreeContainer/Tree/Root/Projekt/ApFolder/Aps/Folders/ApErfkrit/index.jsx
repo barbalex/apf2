@@ -6,15 +6,8 @@ import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { ApErfkrit } from './ApErfkrit.jsx'
 
 export const ApErfkritFolder = memo(
-  observer(({ projekt, ap, count, isLoading }) => {
+  observer(({ projekt, ap, menu }) => {
     const store = useContext(StoreContext)
-
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.erfkrit ?? ''
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Erfolgskriterien']
 
@@ -33,9 +26,9 @@ export const ApErfkritFolder = memo(
       id: `${ap.id}ErfkritFolder`,
       tableId: ap.id,
       urlLabel: 'AP-Erfolgskriterien',
-      label: `AP-Erfolgskriterien (${message})`,
+      label: menu.label,
       url,
-      hasChildren: count > 0,
+      hasChildren: menu.count > 0,
     }
 
     return (

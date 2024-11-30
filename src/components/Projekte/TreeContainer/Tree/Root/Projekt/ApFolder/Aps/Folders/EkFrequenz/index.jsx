@@ -6,15 +6,8 @@ import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { EkFrequenz } from './EkFrequenz.jsx'
 
 export const EkFrequenzFolder = memo(
-  observer(({ projekt, ap, count, isLoading }) => {
+  observer(({ projekt, ap, menu }) => {
     const store = useContext(StoreContext)
-
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ekfrequenz ?? ''
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'EK-Frequenzen']
 
@@ -35,9 +28,9 @@ export const EkFrequenzFolder = memo(
       id: `${tableId}/${urlLabel}`,
       tableId,
       urlLabel,
-      label: `EK-Frequenzen (${message})`,
+      label: menu.label,
       url,
-      hasChildren: count > 0,
+      hasChildren: menu.count > 0,
     }
 
     return (

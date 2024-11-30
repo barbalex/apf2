@@ -10,7 +10,7 @@ import { ZielJahre } from './ZielJahre/index.jsx'
 import { createZielsQuery } from '../../../../../../../../../../modules/createZielsQuery.js'
 
 export const ApZielFolder = memo(
-  observer(({ projekt, ap }) => {
+  observer(({ projekt, ap, menu }) => {
     const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
     const { openNodes, zielGqlFilterForTree } = store.tree
@@ -30,10 +30,6 @@ export const ApZielFolder = memo(
       // reduce to distinct years
       .reduce((a, el) => union(a, [el.jahr]), [])
       .sort((a, b) => a - b)
-    const message =
-      isLoading ? '...' : (
-        `${zieljahre.length} ${zieljahre.length === 1 ? 'Jahr' : 'Jahre'}${isFiltered ? ' gefiltert' : ''}`
-      )
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Ziele']
 
@@ -52,9 +48,9 @@ export const ApZielFolder = memo(
       id: `${ap.id}ApzielFolder`,
       tableId: ap.id,
       urlLabel: 'AP-Ziele',
-      label: `AP-Ziele (${message})`,
+      label: menu.label,
       url,
-      hasChildren: zieljahre.length > 0,
+      hasChildren: menu.count > 0,
     }
 
     return (
