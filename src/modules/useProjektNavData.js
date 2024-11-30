@@ -76,11 +76,11 @@ export const useProjektNavData = () => {
       menus: [
         {
           id: 'Arten',
-          label: `Arten (${artsCount}/${allArtsCount})`,
+          label: `Arten (${isLoading ? '...' : `${artsCount}/${allArtsCount}`})`,
         },
         {
           id: 'AP-Berichte',
-          label: `AP-Berichte (${apberuebersichtsCount}/${allApberuebersichtsCount})`,
+          label: `AP-Berichte (${isLoading ? '...' : `${apberuebersichtsCount}/${allApberuebersichtsCount}`})`,
         },
       ],
     }),
@@ -89,6 +89,7 @@ export const useProjektNavData = () => {
       allArtsCount,
       apberuebersichtsCount,
       artsCount,
+      isLoading,
       label,
       projId,
     ],
