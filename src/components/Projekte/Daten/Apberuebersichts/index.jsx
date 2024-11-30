@@ -10,6 +10,7 @@ import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
+import { ap } from '../../../shared/fragments.js'
 
 export const Component = memo(
   observer(() => {
@@ -26,6 +27,7 @@ export const Component = memo(
       }),
     )
     const apberuebersichts = data?.data?.allApberuebersichts?.nodes ?? []
+    const count = apberuebersichts.length
     const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -35,8 +37,7 @@ export const Component = memo(
     return (
       <List
         items={apberuebersichts}
-        title="AP-Berichte"
-        totalCount={totalCount}
+        title={`AP-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.apberuebersicht}
       />
