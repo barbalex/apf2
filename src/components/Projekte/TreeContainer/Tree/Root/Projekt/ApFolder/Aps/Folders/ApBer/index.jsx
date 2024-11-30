@@ -6,15 +6,8 @@ import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { ApBer } from './ApBer.jsx'
 
 export const ApBerFolder = memo(
-  observer(({ projekt, ap, count, isLoading }) => {
+  observer(({ projekt, ap, menu }) => {
     const store = useContext(StoreContext)
-
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.apber ?? ''
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Berichte']
 
@@ -33,9 +26,9 @@ export const ApBerFolder = memo(
       id: `${ap.id}ApberFolder`,
       tableId: ap.id,
       urlLabel: 'AP-Berichte',
-      label: `AP-Berichte (${message})`,
+      label: menu.label,
       url,
-      hasChildren: count > 0,
+      hasChildren: menu.count > 0,
     }
 
     return (

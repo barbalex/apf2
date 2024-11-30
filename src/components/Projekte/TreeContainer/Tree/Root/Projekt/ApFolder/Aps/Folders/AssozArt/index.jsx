@@ -6,15 +6,8 @@ import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { AssozArt } from './AssozArt.jsx'
 
 export const AssozArtFolder = memo(
-  observer(({ projekt, ap, count, isLoading }) => {
+  observer(({ projekt, ap, menu }) => {
     const store = useContext(StoreContext)
-
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.assozart ?? ''
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'assoziierte-Arten']
 
@@ -33,9 +26,9 @@ export const AssozArtFolder = memo(
       id: `${ap.id}AssozartFolder`,
       tableId: ap.id,
       urlLabel: 'assoziierte-Arten',
-      label: `assoziierte Arten (${message})`,
+      label: menu.label,
       url,
-      hasChildren: count > 0,
+      hasChildren: menu.count > 0,
     }
 
     return (
