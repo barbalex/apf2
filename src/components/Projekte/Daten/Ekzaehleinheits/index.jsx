@@ -27,6 +27,7 @@ export const Component = memo(
     )
     const ekzaehleinheits =
       data?.data?.apById?.ekzaehleinheitsByApId?.nodes ?? []
+    const count = ekzaehleinheits.length
     const totalCount = data?.data?.apById?.ekzaehleinheitsCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -36,8 +37,7 @@ export const Component = memo(
     return (
       <List
         items={ekzaehleinheits}
-        title="EK-Zähleinheiten"
-        totalCount={totalCount}
+        title={`EK-Zähleinheiten (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.ekzaehleinheit}
       />

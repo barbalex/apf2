@@ -26,6 +26,7 @@ export const Component = memo(
       }),
     )
     const erfkrits = data?.data?.apById?.erfkritsByApId?.nodes ?? []
+    const count = erfkrits.length
     const totalCount = data?.data?.apById?.erfkritsCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -35,8 +36,7 @@ export const Component = memo(
     return (
       <List
         items={erfkrits}
-        title="AP-Erfolgskriterien"
-        totalCount={totalCount}
+        title={`AP-Erfolgskriterien (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.erfkrit}
       />

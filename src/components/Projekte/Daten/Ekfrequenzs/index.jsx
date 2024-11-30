@@ -26,6 +26,7 @@ export const Component = memo(
       }),
     )
     const ekfrequenzs = data?.data?.apById?.ekfrequenzsByApId?.nodes ?? []
+    const count = ekfrequenzs.length
     const totalCount = data?.data?.apById?.ekfrequenzsCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -35,8 +36,7 @@ export const Component = memo(
     return (
       <List
         items={ekfrequenzs}
-        title="EK-Frequenzen"
-        totalCount={totalCount}
+        title={`EK-Frequenzen (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.ekfrequenz}
       />
