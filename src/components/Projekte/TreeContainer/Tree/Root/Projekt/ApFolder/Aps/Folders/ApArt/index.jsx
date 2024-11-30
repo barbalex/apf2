@@ -6,15 +6,8 @@ import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { ApArt } from './ApArt.jsx'
 
 export const ApArtFolder = memo(
-  observer(({ projekt, ap, count, isLoading }) => {
+  observer(({ projekt, ap, menu }) => {
     const store = useContext(StoreContext)
-
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.apart ?? ''
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const isOpen =
       store.tree.openNodes.filter(
@@ -31,9 +24,9 @@ export const ApArtFolder = memo(
       id: `${ap.id}ApartFolder`,
       tableId: ap.id,
       urlLabel: 'Taxa',
-      label: `Taxa (${message})`,
+      label: menu.label,
       url: ['Projekte', projekt.id, 'Arten', ap.id, 'Taxa'],
-      hasChildren: count > 0,
+      hasChildren: menu.count > 0,
     }
 
     return (
