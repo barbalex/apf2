@@ -27,6 +27,7 @@ export const Component = memo(
       }),
     )
     const popbers = data?.data?.popById?.popbersByPopId?.nodes ?? []
+    const count = popbers.length
     const totalCount = data?.data?.popById?.popbersCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -36,8 +37,7 @@ export const Component = memo(
     return (
       <List
         items={popbers}
-        title="Kontroll-Berichte"
-        totalCount={totalCount}
+        title={`Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.popber}
       />
