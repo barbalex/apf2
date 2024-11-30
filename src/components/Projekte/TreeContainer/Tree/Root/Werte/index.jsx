@@ -14,9 +14,8 @@ import { useWertesNavData } from '../../../../../../modules/useWertesNavData.js'
 export const WerteFolder = memo(
   observer(() => {
     const client = useApolloClient()
-
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
+
     const isOpen = store.tree.openNodes.some(
       (nodeArray) => nodeArray[0] === 'Werte-Listen',
     )
@@ -32,11 +31,6 @@ export const WerteFolder = memo(
       url: ['Werte-Listen'],
       hasChildren: true,
     }
-
-    console.log('TreeWerteFolder, navData:', navData)
-    // TODO:
-    // clean up this mess
-    // pass counts in other use... hooks?
 
     return (
       <>

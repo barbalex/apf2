@@ -32,31 +32,32 @@ export const useWertesNavData = (props) => {
             allAdresses @include(if: $include) {
               totalCount
             }
-            filteredAdresses: allAdresses(filter: $adressesFilter) {
+            filteredAdresses: allAdresses(filter: $adressesFilter)
+              @include(if: $include) {
               totalCount
             }
-            allTpopApberrelevantGrundWertes {
+            allTpopApberrelevantGrundWertes @include(if: $include) {
               totalCount
             }
             filteredTpopApberrelevantGrundWertes: allTpopApberrelevantGrundWertes(
               filter: $tpopApberrelevantGrundWerteFilter
-            ) {
+            ) @include(if: $include) {
               totalCount
             }
-            allEkAbrechnungstypWertes {
+            allEkAbrechnungstypWertes @include(if: $include) {
               totalCount
             }
             filteredEkAbrechnungstypWertes: allEkAbrechnungstypWertes(
               filter: $ekAbrechnungstypWerteFilter
-            ) {
+            ) @include(if: $include) {
               totalCount
             }
-            allTpopkontrzaehlEinheitWertes {
+            allTpopkontrzaehlEinheitWertes @include(if: $include) {
               totalCount
             }
             filteredTpopkontrzaehlEinheitWertes: allTpopkontrzaehlEinheitWertes(
               filter: $tpopkontrzaehlEinheitWerteFilter
-            ) {
+            ) @include(if: $include) {
               totalCount
             }
           }
