@@ -1,10 +1,8 @@
 import { memo, useContext } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createTpopkontrzaehlEinheitWertesQuery } from '../../../../modules/createTpopkontrzaehlEinheitWertesQuery.js'
+import { useTpopkontrzaehlEinheitWertesNavData } from '../../../../modules/useTpopkontrzaehlEinheitWertesNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -12,21 +10,11 @@ import { Error } from '../../../shared/Error.jsx'
 
 export const Component = memo(
   observer(() => {
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { tpopkontrzaehlEinheitWerteGqlFilterForTree, nodeLabelFilter } =
-      store.tree
+    const { nodeLabelFilter } = store.tree
 
-    const { data, isLoading, error } = useQuery(
-      createTpopkontrzaehlEinheitWertesQuery({
-        tpopkontrzaehlEinheitWerteGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const tpopkontrzaehlEinheitWertes =
-      data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
-    const count = tpopkontrzaehlEinheitWertes.length
-    const totalCount = data?.data?.totalCount?.totalCount ?? 0
+    const { navData, isLoading, error } =
+      useTpopkontrzaehlEinheitWertesNavData()
 
     if (isLoading) return <Spinner />
 
@@ -34,8 +22,8 @@ export const Component = memo(
 
     return (
       <List
-        items={tpopkontrzaehlEinheitWertes}
-        title={`Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${count}/${totalCount}`})`}
+        items={navData.menus}
+        title={navData.label}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.tpopkontrzaehlEinheitWerte}
       />

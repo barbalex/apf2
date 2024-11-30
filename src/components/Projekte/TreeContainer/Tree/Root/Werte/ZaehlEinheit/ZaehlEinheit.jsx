@@ -1,24 +1,12 @@
-import { useContext } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { gql, useApolloClient } from '@apollo/client'
+import { memo } from 'react'
 
 import { Row } from '../../../Row.jsx'
-import { StoreContext } from '../../../../../../../storeContext.js'
-import { createTpopkontrzaehlEinheitWertesQuery } from '../../../../../../../modules/createTpopkontrzaehlEinheitWertesQuery.js'
+import { useTpopkontrzaehlEinheitWertesNavData } from '../../../../../../../modules/useTpopkontrzaehlEinheitWertesNavData.js'
 
-export const ZaehlEinheit = () => {
-  const apolloClient = useApolloClient()
-  const store = useContext(StoreContext)
-  const { tpopkontrzaehlEinheitWerteGqlFilterForTree } = store.tree
+export const ZaehlEinheit = memo(() => {
+  const { navData } = useTpopkontrzaehlEinheitWertesNavData()
 
-  const { data } = useQuery(
-    createTpopkontrzaehlEinheitWertesQuery({
-      tpopkontrzaehlEinheitWerteGqlFilterForTree,
-      apolloClient,
-    }),
-  )
-
-  return (data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map((el) => {
+  return navData.menus.map((el) => {
     const node = {
       nodeType: 'table',
       menuType: 'tpopkontrzaehlEinheitWerte',
@@ -37,4 +25,4 @@ export const ZaehlEinheit = () => {
       />
     )
   })
-}
+})
