@@ -6,16 +6,8 @@ import { Row } from '../../../Row.jsx'
 import { Adresse } from './Adresse.jsx'
 
 export const AdresseFolder = memo(
-  observer(({ count, isLoading }) => {
+  observer(({ menu }) => {
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
-
-    const nodeLabelFilterString = nodeLabelFilter?.adresse ?? ''
-
-    let message = isLoading && !count ? '...' : count
-    if (nodeLabelFilterString) {
-      message = `${count} gefiltert`
-    }
 
     const isOpen =
       store.tree.openNodes.filter(
@@ -27,9 +19,9 @@ export const AdresseFolder = memo(
       menuType: 'adresseFolder',
       id: 'adresseFolder',
       urlLabel: 'Adressen',
-      label: `Adressen (${message})`,
+      label: menu?.label,
       url: ['Werte-Listen', 'Adressen'],
-      hasChildren: count > 0,
+      hasChildren: menu?.count > 0,
     }
 
     return (

@@ -6,16 +6,8 @@ import { Row } from '../../../Row.jsx'
 import { ApberrelevantGrund } from './ApberrelevantGrund.jsx'
 
 export const ApberrelevantGrundFolder = memo(
-  observer(({ count, isLoading }) => {
+  observer(({ menu }) => {
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
-
-    const nodeLabelFilterString = nodeLabelFilter?.apberrelevantGrundWerte ?? ''
-
-    let message = isLoading && !count ? '...' : count
-    if (nodeLabelFilterString) {
-      message = `${count} gefiltert`
-    }
 
     const isOpen =
       store.tree.openNodes.filter(
@@ -27,9 +19,9 @@ export const ApberrelevantGrundFolder = memo(
       menuType: 'tpopApberrelevantGrundWerteFolder',
       id: 'tpopApberrelevantGrundWerteFolder',
       urlLabel: 'ApberrelevantGrundWerte',
-      label: `Teil-Population: Grund für AP-Bericht Relevanz (${message})`,
+      label: menu?.label,
       url: ['Werte-Listen', 'ApberrelevantGrundWerte'],
-      hasChildren: count > 0,
+      hasChildren: menu?.count > 0,
     }
 
     return (

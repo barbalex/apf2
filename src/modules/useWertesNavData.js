@@ -5,8 +5,9 @@ import { reaction } from 'mobx'
 
 import { StoreContext } from '../storeContext.js'
 
-export const useWertesNavData = () => {
+export const useWertesNavData = (props) => {
   const apolloClient = useApolloClient()
+  const include = props?.include ?? true
 
   const store = useContext(StoreContext)
 
@@ -26,8 +27,9 @@ export const useWertesNavData = () => {
             $tpopApberrelevantGrundWerteFilter: TpopApberrelevantGrundWerteFilter!
             $ekAbrechnungstypWerteFilter: EkAbrechnungstypWerteFilter!
             $tpopkontrzaehlEinheitWerteFilter: TpopkontrzaehlEinheitWerteFilter!
+            $include: Boolean!
           ) {
-            allAdresses {
+            allAdresses @include(if: $include) {
               totalCount
             }
             filteredAdresses: allAdresses(filter: $adressesFilter) {
@@ -67,6 +69,7 @@ export const useWertesNavData = () => {
             store.tree.ekAbrechnungstypWerteGqlFilterForTree,
           tpopkontrzaehlEinheitWerteFilter:
             store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
+          include,
         },
         fetchPolicy: 'no-cache',
       }),
@@ -125,19 +128,23 @@ export const useWertesNavData = () => {
       menus: [
         {
           id: 'Adressen',
-          label: `Adressen (${adressesFilteredCount}/${adressesCount})`,
+          label: `Adressen (${isLoading ? '...' : `${adressesFilteredCount}/${adressesCount}`})`,
+          count: adressesCount,
         },
         {
           id: 'ApberrelevantGrundWerte',
-          label: `Teil-Population: Grund für AP-Bericht Relevanz (${tpopApberrelevantGrundWerteFilteredCount}/${tpopApberrelevantGrundWerteCount})`,
+          label: `Teil-Population: Grund für AP-Bericht Relevanz (${isLoading ? '...' : `${tpopApberrelevantGrundWerteFilteredCount}/${tpopApberrelevantGrundWerteCount}`})`,
+          count: tpopApberrelevantGrundWerteCount,
         },
         {
           id: 'EkAbrechnungstypWerte',
-          label: `Teil-Population: EK-Abrechnungstypen (${ekAbrechnungstypWerteFilteredCount}/${ekAbrechnungstypWerteCount})`,
+          label: `Teil-Population: EK-Abrechnungstypen (${isLoading ? '...' : `${ekAbrechnungstypWerteFilteredCount}/${ekAbrechnungstypWerteCount}`})`,
+          count: ekAbrechnungstypWerteCount,
         },
         {
           id: 'TpopkontrzaehlEinheitWerte',
-          label: `Teil-Population: Zähl-Einheiten (${tpopkontrzaehlEinheitWerteFilteredCount}/${tpopkontrzaehlEinheitWerteCount})`,
+          label: `Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${tpopkontrzaehlEinheitWerteFilteredCount}/${tpopkontrzaehlEinheitWerteCount}`})`,
+          count: tpopkontrzaehlEinheitWerteCount,
         },
       ],
     }),
@@ -146,6 +153,7 @@ export const useWertesNavData = () => {
       adressesFilteredCount,
       ekAbrechnungstypWerteCount,
       ekAbrechnungstypWerteFilteredCount,
+      isLoading,
       tpopApberrelevantGrundWerteCount,
       tpopApberrelevantGrundWerteFilteredCount,
       tpopkontrzaehlEinheitWerteCount,

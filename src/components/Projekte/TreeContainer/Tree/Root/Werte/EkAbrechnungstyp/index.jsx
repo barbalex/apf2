@@ -6,16 +6,8 @@ import { Row } from '../../../Row.jsx'
 import { EkAbrechnungstyp } from './EkAbrechnungstyp.jsx'
 
 export const EkAbrechnungstypFolder = memo(
-  observer(({ count, isLoading }) => {
+  observer(({ menu }) => {
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
-
-    const nodeLabelFilterString = nodeLabelFilter?.ekAbrechnungstypWerte ?? ''
-
-    let message = isLoading && !count ? '...' : count
-    if (nodeLabelFilterString) {
-      message = `${count} gefiltert`
-    }
 
     const isOpen =
       store.tree.openNodes.filter(
@@ -27,9 +19,9 @@ export const EkAbrechnungstypFolder = memo(
       menuType: 'ekAbrechnungstypWerteFolder',
       id: 'ekAbrechnungstypWerteFolder',
       urlLabel: 'EkAbrechnungstypWerte',
-      label: `Teil-Population: EK-Abrechnungstypen (${message})`,
+      label: menu?.label,
       url: ['Werte-Listen', 'EkAbrechnungstypWerte'],
-      hasChildren: count > 0,
+      hasChildren: menu?.count > 0,
     }
 
     return (

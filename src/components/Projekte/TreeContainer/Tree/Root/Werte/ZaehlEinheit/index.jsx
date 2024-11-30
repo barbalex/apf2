@@ -6,17 +6,8 @@ import { Row } from '../../../Row.jsx'
 import { ZaehlEinheit } from './ZaehlEinheit.jsx'
 
 export const ZaehlEinheitFolder = memo(
-  observer(({ count, isLoading }) => {
+  observer(({ menu }) => {
     const store = useContext(StoreContext)
-    const { nodeLabelFilter } = store.tree
-
-    const nodeLabelFilterString =
-      nodeLabelFilter?.tpopkontrzaehlEinheitWerte ?? ''
-
-    let message = isLoading && !count ? '...' : count
-    if (nodeLabelFilterString) {
-      message = `${count} gefiltert`
-    }
 
     const isOpen =
       store.tree.openNodes.filter(
@@ -28,10 +19,12 @@ export const ZaehlEinheitFolder = memo(
       menuType: 'tpopkontrzaehlEinheitWerteFolder',
       id: 'tpopkontrzaehlEinheitWerteFolder',
       urlLabel: 'TpopkontrzaehlEinheitWerte',
-      label: `Teil-Population: Zähl-Einheiten (${message})`,
+      label: menu?.label,
       url: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
-      hasChildren: count > 0,
+      hasChildren: menu?.count > 0,
     }
+
+    console.log('Tree.ZaehlEinheitFolder, menu:', menu)
 
     return (
       <>
