@@ -50,11 +50,16 @@ export const useApberuebersichtsNavData = () => {
     [],
   )
 
+  const count =
+    data?.data?.projektById?.apberuebersichtsByProjId?.nodes?.length ?? 0
+  const totalCount =
+    data?.data?.projektById?.allApberuebersichts?.totalCount ?? 0
+
   const navData = useMemo(
     () => ({
       id: 'projekte',
       url: `/Daten/Projekte/${projId}/AP-Berichte`,
-      label: 'AP-Berichte',
+      label: 'AP-Berichte ' + (isLoading ? '...' : `${count}/${totalCount}`),
       totalCount: data?.data?.projektById?.allApberuebersichts?.totalCount ?? 0,
       menus:
         data?.data?.projektById?.apberuebersichtsByProjId?.nodes.map((p) => ({
@@ -63,9 +68,12 @@ export const useApberuebersichtsNavData = () => {
         })) ?? [],
     }),
     [
+      count,
       data?.data?.projektById?.allApberuebersichts?.totalCount,
       data?.data?.projektById?.apberuebersichtsByProjId?.nodes,
+      isLoading,
       projId,
+      totalCount,
     ],
   )
 

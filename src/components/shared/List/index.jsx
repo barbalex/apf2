@@ -5,6 +5,8 @@ import Highlighter from 'react-highlight-words'
 
 import { FormTitle } from '../FormTitle/index.jsx'
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
+import { navData } from '../../Bookmarks/NavTo/Navs/Projects.jsx'
+import { t } from 'mobx-state-tree'
 
 const Container = styled.div`
   display: flex;
@@ -38,7 +40,7 @@ const Row = styled.div`
 `
 
 export const List = memo(
-  ({ items, title, totalCount, menuBar = null, highlightSearchString }) => {
+  ({ items, title, menuBar = null, highlightSearchString }) => {
     const navigate = useNavigate()
     const { search } = useLocation()
 
@@ -51,7 +53,7 @@ export const List = memo(
       <ErrorBoundary>
         <Container>
           <FormTitle
-            title={`${title} (${items.length}/${totalCount ?? items.length})`}
+            title={title}
             menuBar={menuBar}
           />
           <ListContainer>

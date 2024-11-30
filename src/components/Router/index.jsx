@@ -84,6 +84,14 @@ const wertesHandle = {
   bookmarkFetcher: wertesBookmarkFetcher,
   bookmarkFetcherName: 'useWertesNavData',
 }
+const adressesBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useAdressesNavData.js'))
+    .useAdressesNavData,
+}))
+const adressesHandle = {
+  bookmarkFetcher: adressesBookmarkFetcher,
+  bookmarkFetcherName: 'useAdressesNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -140,12 +148,17 @@ export const Router = () => {
               />
               <Route
                 path="Adressen"
-                lazy={() => import('../Projekte/Daten/Adresses/index.jsx')}
-              />
-              <Route
-                path="Adressen/:adrId"
-                lazy={() => import('../Projekte/Daten/Adresse/index.jsx')}
-              />
+                handle={adressesHandle}
+              >
+                <Route
+                  path="*"
+                  lazy={() => import('../Projekte/Daten/Adresses/index.jsx')}
+                />
+                <Route
+                  path=":adrId"
+                  lazy={() => import('../Projekte/Daten/Adresse/index.jsx')}
+                />
+              </Route>
               <Route
                 path="ApberrelevantGrundWerte"
                 lazy={() =>
