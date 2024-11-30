@@ -26,6 +26,7 @@ export const Component = memo(
       }),
     )
     const tpops = data?.data?.popById?.tpopsByPopId?.nodes ?? []
+    const count = tpops.length
     const totalCount = data?.data?.popById?.tpopsCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -35,8 +36,7 @@ export const Component = memo(
     return (
       <List
         items={tpops}
-        title="Teil-Populationen"
-        totalCount={totalCount}
+        title={`Teil-Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.tpop}
       />

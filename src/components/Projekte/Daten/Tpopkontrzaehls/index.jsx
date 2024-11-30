@@ -27,6 +27,7 @@ export const Component = memo(
     )
     const tpopkontrzaehls =
       data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+    const count = tpopkontrzaehls.length
     const totalCount =
       data?.data?.tpopkontrById?.tpopkontrzaehlsCount?.totalCount ?? 0
 
@@ -37,8 +38,7 @@ export const Component = memo(
     return (
       <List
         items={tpopkontrzaehls}
-        title="Zählungen"
-        totalCount={totalCount}
+        title={`Zählungen (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.tpopkontrzaehl}
       />
