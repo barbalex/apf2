@@ -1,25 +1,12 @@
-import { useContext } from 'react'
-import { gql, useApolloClient } from '@apollo/client'
-import { useQueryClient, useQuery } from '@tanstack/react-query'
+import { memo } from 'react'
 
 import { Row } from '../../../Row.jsx'
-import { StoreContext } from '../../../../../../../storeContext.js'
-import { createAdressesQuery } from '../../../../../../../modules/createAdressesQuery.js'
+import { useAdressesNavData } from '../../../../../../../modules/useAdressesNavData.js'
 
-export const Adresse = () => {
-  const apolloClient = useApolloClient()
-  const tanstackClient = useQueryClient()
-  const store = useContext(StoreContext)
-  const { adresseGqlFilterForTree } = store.tree
+export const Adresse = memo(() => {
+  const { navData } = useAdressesNavData()
 
-  const { data } = useQuery(
-    createAdressesQuery({
-      adresseGqlFilterForTree,
-      apolloClient,
-    }),
-  )
-
-  return (data?.data?.allAdresses?.nodes ?? []).map((el) => {
+  return (navData?.menus ?? []).map((el) => {
     const node = {
       nodeType: 'table',
       menuType: 'adresse',
@@ -38,4 +25,4 @@ export const Adresse = () => {
       />
     )
   })
-}
+})

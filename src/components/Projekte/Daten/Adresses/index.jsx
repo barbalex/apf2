@@ -1,10 +1,8 @@
 import { memo, useContext } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createAdressesQuery } from '../../../../modules/createAdressesQuery.js'
+import { useAdressesNavData } from '../../../../modules/useAdressesNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -12,18 +10,10 @@ import { Error } from '../../../shared/Error.jsx'
 
 export const Component = memo(
   observer(() => {
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { adresseGqlFilterForTree, nodeLabelFilter } = store.tree
+    const { nodeLabelFilter } = store.tree
 
-    const { data, isLoading, error } = useQuery(
-      createAdressesQuery({
-        adresseGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const adresses = data?.data?.allAdresses?.nodes ?? []
-    const totalCount = data?.data?.totalCount?.totalCount ?? 0
+    const { navData, isLoading, error } = useAdressesNavData()
 
     if (isLoading) return <Spinner />
 
@@ -31,9 +21,8 @@ export const Component = memo(
 
     return (
       <List
-        items={adresses}
-        title="Adressen"
-        totalCount={totalCount}
+        items={navData.menus}
+        title={navData.label}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.adresse}
       />
