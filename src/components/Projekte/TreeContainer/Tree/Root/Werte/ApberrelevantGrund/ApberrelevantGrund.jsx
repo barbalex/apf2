@@ -1,35 +1,21 @@
-import { useContext } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { gql, useApolloClient } from '@apollo/client'
+import { memo } from 'react'
 
 import { Row } from '../../../Row.jsx'
-import { StoreContext } from '../../../../../../../storeContext.js'
-import { createTpopApberrelevantGrundWertesQuery } from '../../../../../../../modules/createTpopApberrelevantGrundWertesQuery.js'
+import { useTpopApberrelevantGrundWertesNavData } from '../../../../../../../modules/useTpopApberrelevantGrundWertesNavData.js'
 
-export const ApberrelevantGrund = () => {
-  const apolloClient = useApolloClient()
-  const store = useContext(StoreContext)
-  const { tpopApberrelevantGrundWerteGqlFilterForTree } = store.tree
+export const ApberrelevantGrund = memo(() => {
+  const { navData } = useTpopApberrelevantGrundWertesNavData()
 
-  const { data } = useQuery(
-    createTpopApberrelevantGrundWertesQuery({
-      tpopApberrelevantGrundWerteGqlFilterForTree,
-      apolloClient,
-    }),
-  )
-
-  const nodes = (data?.data?.allTpopApberrelevantGrundWertes?.nodes ?? []).map(
-    (el) => ({
-      nodeType: 'table',
-      menuType: 'tpopApberrelevantGrundWerte',
-      id: el.id,
-      parentId: 'tpopApberrelevantGrundWerteFolder',
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Werte-Listen', 'ApberrelevantGrundWerte', el.id],
-      hasChildren: false,
-    }),
-  )
+  const nodes = (navData?.menus).map((el) => ({
+    nodeType: 'table',
+    menuType: 'tpopApberrelevantGrundWerte',
+    id: el.id,
+    parentId: 'tpopApberrelevantGrundWerteFolder',
+    urlLabel: el.id,
+    label: el.label,
+    url: ['Werte-Listen', 'ApberrelevantGrundWerte', el.id],
+    hasChildren: false,
+  }))
 
   if (!nodes.length) return null
 
@@ -39,4 +25,4 @@ export const ApberrelevantGrund = () => {
       node={node}
     />
   ))
-}
+})
