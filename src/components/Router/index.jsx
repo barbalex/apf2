@@ -109,6 +109,15 @@ const ekAbrechnungstypWertesHandle = {
   bookmarkFetcher: ekAbrechnungstypWertesBookmarkFetcher,
   bookmarkFetcherName: 'useEkAbrechnungstypWertesNavData',
 }
+const tpopkontrzaehlEinheitWertesBookmarkFetcher = lazy(async () => ({
+  default: (
+    await import('../../modules/useTpopkontrzaehlEinheitWertesNavData.js')
+  ).useTpopkontrzaehlEinheitWertesNavData,
+}))
+const tpopkontrzaehlEinheitWertesHandle = {
+  bookmarkFetcher: tpopkontrzaehlEinheitWertesBookmarkFetcher,
+  bookmarkFetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -210,16 +219,21 @@ export const Router = () => {
               </Route>
               <Route
                 path="TpopkontrzaehlEinheitWerte"
-                lazy={() =>
-                  import(
-                    '../Projekte/Daten/TpopkontrzaehlEinheitWertes/index.jsx'
-                  )
-                }
-              />
-              <Route
-                path="TpopkontrzaehlEinheitWerte/:wertId"
-                lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
-              />
+                handle={tpopkontrzaehlEinheitWertesHandle}
+              >
+                <Route
+                  path="*"
+                  lazy={() =>
+                    import(
+                      '../Projekte/Daten/TpopkontrzaehlEinheitWertes/index.jsx'
+                    )
+                  }
+                />
+                <Route
+                  path=":wertId"
+                  lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
+                />
+              </Route>
             </Route>
             <Route
               path="Mitteilungen"

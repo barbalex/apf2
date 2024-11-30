@@ -62,7 +62,7 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpopkontrzaehlEinheitWerte`],
+        queryKey: [`treeTpopkontrzaehlEinheitWertes`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeRoot`],

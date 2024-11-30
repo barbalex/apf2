@@ -5,7 +5,7 @@ export const createTpopkontrzaehlEinheitWertesQuery = ({
   apolloClient,
 }) => ({
   queryKey: [
-    'treeTpopkontrzaehlEinheitWerte',
+    'treeTpopkontrzaehlEinheitWertes',
     tpopkontrzaehlEinheitWerteGqlFilterForTree,
   ],
   queryFn: () =>

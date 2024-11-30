@@ -153,7 +153,7 @@ export const deleteModule = async ({ client, store, search }) => {
       'treeTpopApberrelevantGrundWerte'
     : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWertes'
     : table === 'tpopkontrzaehl_einheit_werte' ?
-      'treeTpopkontrzaehlEinheitWerte'
+      'treeTpopkontrzaehlEinheitWertes'
     : `tree${upperFirst(table)}`
   store.queryClient.invalidateQueries({
     queryKey: [queryKeyTable],
