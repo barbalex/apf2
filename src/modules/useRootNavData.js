@@ -7,12 +7,10 @@ import { StoreContext } from '../storeContext.js'
 
 export const useRootNavData = () => {
   const apolloClient = useApolloClient()
-
   const store = useContext(StoreContext)
-  const { userGqlFilterForTree } = store.tree
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeRoot', userGqlFilterForTree],
+    queryKey: ['treeRoot', store.tree.userGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`
@@ -32,14 +30,14 @@ export const useRootNavData = () => {
           }
         `,
         variables: {
-          usersFilter: userGqlFilterForTree,
+          usersFilter: store.tree.userGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
       }),
   })
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => userGqlFilterForTree, refetch),
+    () => reaction(() => store.tree.userGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
