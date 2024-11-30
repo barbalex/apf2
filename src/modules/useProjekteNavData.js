@@ -24,19 +24,20 @@ export const useProjekteNavData = () => {
       }),
   })
 
+  const count = data?.data?.allProjekts?.nodes?.length ?? 0
+
   const navData = useMemo(
     () => ({
       id: 'projekte',
       url: '/Daten/Projekte',
-      label: `Projekte`,
-      totalCount: data?.data?.allProjekts?.totalCount ?? 0,
+      label: `Projekte (${isLoading ? '...' : count})`,
       menus:
         data?.data?.allProjekts?.nodes.map((p) => ({
           id: p.id,
           label: p.name,
         })) ?? [],
     }),
-    [data?.data?.allProjekts?.nodes, data?.data?.allProjekts?.totalCount],
+    [count, data?.data?.allProjekts?.nodes, isLoading],
   )
 
   return { isLoading, error, navData }
