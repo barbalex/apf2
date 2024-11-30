@@ -40,6 +40,7 @@ export const Component = memo(
           })),
       [ziels],
     )
+    const count = zieljahreItems.length
 
     if (isLoading) return <Spinner />
 
@@ -48,8 +49,7 @@ export const Component = memo(
     return (
       <List
         items={zieljahreItems}
-        title="AP-Ziele Jahre"
-        totalCount={zieljahreItems.length}
+        title={`AP-Ziele Jahre (${isLoading ? '...' : count})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.ziel}
       />

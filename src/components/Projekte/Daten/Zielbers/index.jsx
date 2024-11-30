@@ -26,6 +26,7 @@ export const Component = memo(
       }),
     )
     const zielbers = data?.data?.zielById?.zielbersByZielId?.nodes ?? []
+    const count = zielbers.length
     const totalCount = data?.data?.zielById?.zielbersCount?.totalCount ?? 0
 
     if (isLoading) return <Spinner />
@@ -35,8 +36,7 @@ export const Component = memo(
     return (
       <List
         items={zielbers}
-        title="Zielberichte"
-        totalCount={totalCount}
+        title={`Zielberichte (${isLoading ? '...' : `${count}/${totalCount}`})`}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.zielber}
       />
