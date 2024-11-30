@@ -34,6 +34,9 @@ export const WerteFolder = memo(
     }
 
     console.log('TreeWerteFolder, navData:', navData)
+    // TODO:
+    // clean up this mess
+    // pass counts in other use... hooks?
 
     return (
       <>
