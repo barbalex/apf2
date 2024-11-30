@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 import countBy from 'lodash/countBy'
-import { getSnapshot } from 'mobx-state-tree'
 
 import { StoreContext } from '../storeContext.js'
 
@@ -14,7 +13,7 @@ export const useApNavData = () => {
 
   const store = useContext(StoreContext)
 
-  const beobNichtZuzuordnenApFilter = useMemo(
+  const allBeobNichtZuzuordnenFilter = useMemo(
     () => ({
       nichtZuordnen: { equalTo: true },
       aeTaxonomyByArtId: {
@@ -29,7 +28,7 @@ export const useApNavData = () => {
     }),
     [apId],
   )
-  const beobNichtBeurteiltApFilter = useMemo(
+  const allBeobNichtBeurteiltFilter = useMemo(
     () => ({
       tpopId: { isNull: true },
       nichtZuordnen: { equalTo: false },
@@ -91,8 +90,8 @@ export const useApNavData = () => {
             $ekfrequenzFilter: EkfrequenzFilter!
             $beobNichtBeurteiltFilter: BeobFilter!
             $beobNichtZuzuordnenFilter: BeobFilter!
-            $beobNichtZuzuordnenApFilter: BeobFilter!
-            $beobNichtBeurteiltApFilter: BeobFilter!
+            $allBeobNichtZuzuordnenFilter: BeobFilter!
+            $allBeobNichtBeurteiltFilter: BeobFilter!
           ) {
             apById(id: $apId) {
               id
@@ -144,7 +143,9 @@ export const useApNavData = () => {
                 totalCount
               }
             }
-            beobsNichtBeurteilt: allBeobs(filter: $beobNichtBeurteiltApFilter) {
+            beobsNichtBeurteilt: allBeobs(
+              filter: $allBeobNichtBeurteiltFilter
+            ) {
               totalCount
             }
             filteredBeobsNichtBeurteilt: allBeobs(
@@ -153,7 +154,7 @@ export const useApNavData = () => {
               totalCount
             }
             beobsNichtZuzuordnen: allBeobs(
-              filter: $beobNichtZuzuordnenApFilter
+              filter: $allBeobNichtZuzuordnenFilter
             ) {
               totalCount
             }
@@ -174,8 +175,8 @@ export const useApNavData = () => {
           ekfrequenzFilter: store.tree.ekfrequenzGqlFilterForTree,
           beobNichtBeurteiltFilter,
           beobNichtZuzuordnenFilter,
-          beobNichtZuzuordnenApFilter,
-          beobNichtBeurteiltApFilter,
+          allBeobNichtZuzuordnenFilter,
+          allBeobNichtBeurteiltFilter,
         },
         fetchPolicy: 'no-cache',
       }),
