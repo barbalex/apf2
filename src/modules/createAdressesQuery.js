@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const createAdressesQuery = ({ adresseGqlFilterForTree, apolloClient }) => ({
-  queryKey: ['treeAdresse', adresseGqlFilterForTree],
+  queryKey: ['treeAdresses', adresseGqlFilterForTree],
   queryFn: () =>
     apolloClient.query({
       query: gql`

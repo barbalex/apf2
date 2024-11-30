@@ -24,8 +24,6 @@ export const ZaehlEinheitFolder = memo(
       hasChildren: menu?.count > 0,
     }
 
-    console.log('Tree.ZaehlEinheitFolder, menu:', menu)
-
     return (
       <>
         <Row node={node} />

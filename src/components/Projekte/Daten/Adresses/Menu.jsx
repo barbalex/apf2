@@ -59,7 +59,7 @@ export const Menu = memo(() => {
       })
     }
     tanstackQueryClient.invalidateQueries({
-      queryKey: [`treeAdresse`],
+      queryKey: [`treeAdresses`],
     })
     tanstackQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],

@@ -53,7 +53,7 @@ export const Menu = memo(
         queryKey: ['treeWerteFolders'],
       })
       queryClient.invalidateQueries({
-        queryKey: ['treeAdresse'],
+        queryKey: ['treeAdresses'],
       })
       const id = result?.data?.createAdresse?.adresse?.id
       navigate(`/Daten/Werte-Listen/Adressen/${id}${search}`)
@@ -99,7 +99,7 @@ export const Menu = memo(
         queryKey: [`treeWerteFolders`],
       })
       queryClient.invalidateQueries({
-        queryKey: ['treeAdresse'],
+        queryKey: ['treeAdresses'],
       })
       // navigate to parent
       navigate(`/Daten/Werte-Listen/Adressen${search}`)
