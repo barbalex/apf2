@@ -7,9 +7,10 @@ import countBy from 'lodash/countBy'
 
 import { StoreContext } from '../storeContext.js'
 
-export const useApNavData = () => {
+export const useApNavData = (props) => {
   const apolloClient = useApolloClient()
-  const { projId, apId } = useParams()
+  const { projId, apId: apIdFromParams } = useParams()
+  const apId = props?.apId ?? apIdFromParams
 
   const store = useContext(StoreContext)
 
@@ -44,39 +45,24 @@ export const useApNavData = () => {
     }),
     [apId],
   )
-  const beobNichtZuzuordnenFilter = useMemo(
-    () => ({
-      ...store.tree.beobGqlFilterForTree('nichtZuzuordnen'),
-      aeTaxonomyByArtId: {
-        apartsByArtId: {
-          some: {
-            apByApId: {
-              id: { equalTo: apId },
-            },
-          },
-        },
-      },
-    }),
-    [apId, store.tree],
-  )
-  const beobNichtBeurteiltFilter = useMemo(
-    () => ({
-      ...store.tree.beobGqlFilterForTree('nichtBeurteilt'),
-      aeTaxonomyByArtId: {
-        apartsByArtId: {
-          some: {
-            apByApId: {
-              id: { equalTo: apId },
-            },
-          },
-        },
-      },
-    }),
-    [apId, store.tree],
-  )
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeAp', projId, apId],
+    queryKey: [
+      'treeAp',
+      projId,
+      apId,
+      store.tree.popGqlFilterForTree,
+      store.tree.zielGqlFilterForTree,
+      store.tree.erfkritGqlFilterForTree,
+      store.tree.apberGqlFilterForTree,
+      store.tree.apartGqlFilterForTree,
+      store.tree.assozartGqlFilterForTree,
+      store.tree.ekfrequenzGqlFilterForTree,
+      store.tree.ekzaehleinheitGqlFilterForTree,
+      store.tree.beobGqlFilterForTree,
+      store.tree.beobNichtBeurteiltGqlFilterForTree,
+      store.tree.beobNichtZuzuordnenGqlFilterForTree,
+    ],
     queryFn: () =>
       apolloClient.query({
         query: gql`
@@ -85,9 +71,11 @@ export const useApNavData = () => {
             $popFilter: PopFilter!
             $zielFilter: ZielFilter!
             $erfkritFilter: ErfkritFilter!
+            $apberFilter: ApberFilter!
             $apartFilter: ApartFilter!
             $assozartFilter: AssozartFilter!
             $ekfrequenzFilter: EkfrequenzFilter!
+            $ekzaehleinheitFilter: EkzaehleinheitFilter!
             $beobNichtBeurteiltFilter: BeobFilter!
             $beobNichtZuzuordnenFilter: BeobFilter!
             $allBeobNichtZuzuordnenFilter: BeobFilter!
@@ -122,6 +110,12 @@ export const useApNavData = () => {
               filteredErfkrits: erfkritsByApId(filter: $erfkritFilter) {
                 totalCount
               }
+              apbersByApId {
+                totalCount
+              }
+              filteredApbers: apbersByApId(filter: $apberFilter) {
+                totalCount
+              }
               apartsByApId {
                 totalCount
               }
@@ -139,6 +133,14 @@ export const useApNavData = () => {
               }
               filteredEkfrequenzs: ekfrequenzsByApId(
                 filter: $ekfrequenzFilter
+              ) {
+                totalCount
+              }
+              ekzaehleinheitsByApId {
+                totalCount
+              }
+              filteredEkzaehleinheits: ekzaehleinheitsByApId(
+                filter: $ekzaehleinheitFilter
               ) {
                 totalCount
               }
@@ -170,11 +172,35 @@ export const useApNavData = () => {
           popFilter: store.tree.popGqlFilterForTree,
           zielFilter: store.tree.zielGqlFilterForTree,
           erfkritFilter: store.tree.erfkritGqlFilterForTree,
+          apberFilter: store.tree.apberGqlFilterForTree,
           apartFilter: store.tree.apartGqlFilterForTree,
           assozartFilter: store.tree.assozartGqlFilterForTree,
           ekfrequenzFilter: store.tree.ekfrequenzGqlFilterForTree,
-          beobNichtBeurteiltFilter,
-          beobNichtZuzuordnenFilter,
+          ekzaehleinheitFilter: store.tree.ekzaehleinheitGqlFilterForTree,
+          beobNichtBeurteiltFilter: {
+            ...store.tree.beobNichtBeurteiltGqlFilterForTree,
+            aeTaxonomyByArtId: {
+              apartsByArtId: {
+                some: {
+                  apByApId: {
+                    id: { equalTo: apId },
+                  },
+                },
+              },
+            },
+          },
+          beobNichtZuzuordnenFilter: {
+            ...store.tree.beobNichtZuzuordnenGqlFilterForTree,
+            aeTaxonomyByArtId: {
+              apartsByArtId: {
+                some: {
+                  apByApId: {
+                    id: { equalTo: apId },
+                  },
+                },
+              },
+            },
+          },
           allBeobNichtZuzuordnenFilter,
           allBeobNichtBeurteiltFilter,
         },
@@ -197,6 +223,11 @@ export const useApNavData = () => {
     [],
   )
   useEffect(
+    () => reaction(() => store.tree.apberGqlFilterForTree, refetch),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
     () => reaction(() => store.tree.apartGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
@@ -212,7 +243,19 @@ export const useApNavData = () => {
     [],
   )
   useEffect(
-    () => reaction(() => store.tree.beobGqlFilterForTree, refetch),
+    () => reaction(() => store.tree.ekzaehleinheitGqlFilterForTree, refetch),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () =>
+      reaction(() => store.tree.beobNichtBeurteiltGqlFilterForTree, refetch),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () =>
+      reaction(() => store.tree.beobNichtZuzuordnenGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -229,6 +272,9 @@ export const useApNavData = () => {
   const erfkritsCount = data?.data?.apById?.erfkritsByApId?.totalCount ?? 0
   const filteredErfkritsCount =
     data?.data?.apById?.filteredErfkrits?.totalCount ?? 0
+  const apbersCount = data?.data?.apById?.apbersByApId?.totalCount ?? 0
+  const filteredApbersCount =
+    data?.data?.apById?.filteredApbers?.totalCount ?? 0
   const apartsCount = data?.data?.apById?.apartsByApId?.totalCount ?? 0
   const filteredApartsCount =
     data?.data?.apById?.filteredAparts?.totalCount ?? 0
@@ -239,6 +285,10 @@ export const useApNavData = () => {
     data?.data?.apById?.ekfrequenzsByApId?.totalCount ?? 0
   const filteredEkfrequenzsCount =
     data?.data?.apById?.filteredEkfrequenzs?.totalCount ?? 0
+  const ekzaehleinheitsCount =
+    data?.data?.apById?.ekzaehleinheitsByApId?.totalCount ?? 0
+  const filteredEkzaehleinheitsCount =
+    data?.data?.apById?.filteredEkzaehleinheits?.totalCount ?? 0
   const beobsNichtBeurteiltCount =
     data?.data?.beobsNichtBeurteilt?.totalCount ?? 0
   const filteredBeobsNichtBeurteiltCount =
@@ -257,15 +307,23 @@ export const useApNavData = () => {
       menus: [
         {
           id: 'Populationen',
-          label: `Populationen (${isLoading ? '...' : `${popsCount}/${filteredPopsCount}`})`,
+          label: `Populationen (${isLoading ? '...' : `${filteredPopsCount}/${popsCount}`})`,
+          count: popsCount,
         },
         {
           id: 'AP-Ziele',
           label: `AP-Ziele Jahre (${isLoading ? '...' : `${filteredApZielJahrsCount}/${apZielJahrsCount}`})`,
+          count: apZielJahrsCount,
         },
         {
           id: 'AP-Erfolgskriterien',
           label: `AP-Erfolgskriterien (${isLoading ? '...' : `${filteredErfkritsCount}/${erfkritsCount}`})`,
+          count: erfkritsCount,
+        },
+        {
+          id: 'AP-Berichte',
+          label: `AP-Berichte (${isLoading ? '...' : `${filteredApbersCount}/${apbersCount}`})`,
+          count: apbersCount,
         },
         {
           id: 'Idealbiotop',
@@ -274,22 +332,32 @@ export const useApNavData = () => {
         {
           id: 'Taxa',
           label: `Taxa (${isLoading ? '...' : `${filteredApartsCount}/${apartsCount}`})`,
+          count: apartsCount,
         },
         {
           id: 'assoziierte-Arten',
           label: `Assoziierte Arten (${isLoading ? '...' : `${filteredAssozartsCount}/${assozartsCount}`})`,
+          count: assozartsCount,
         },
         {
           id: 'EK-Frequenzen',
           label: `EK-Frequenzen (${isLoading ? '...' : `${filteredEkfrequenzsCount}/${ekfrequenzsCount}`})`,
+          count: ekfrequenzsCount,
+        },
+        {
+          id: 'EK-Zähleinheiten',
+          label: `EK-Zähleinheiten (${isLoading ? '...' : `${filteredEkzaehleinheitsCount}/${ekzaehleinheitsCount}`})`,
+          count: ekzaehleinheitsCount,
         },
         {
           id: 'nicht-beurteilte-Beobachtungen',
           label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredBeobsNichtBeurteiltCount}/${beobsNichtBeurteiltCount}`})`,
+          count: beobsNichtBeurteiltCount,
         },
         {
           id: 'nicht-zuzuordnende-Beobachtungen',
           label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredBeobsNichtZuzuordnenCount}/${beobsNichtZuzuordnenCount}`})`,
+          count: beobsNichtZuzuordnenCount,
         },
         {
           id: 'Qualitaetskontrollen',
@@ -301,17 +369,21 @@ export const useApNavData = () => {
       apId,
       apZielJahrsCount,
       apartsCount,
+      apbersCount,
       assozartsCount,
       beobsNichtBeurteiltCount,
       beobsNichtZuzuordnenCount,
       ekfrequenzsCount,
+      ekzaehleinheitsCount,
       erfkritsCount,
       filteredApZielJahrsCount,
       filteredApartsCount,
+      filteredApbersCount,
       filteredAssozartsCount,
       filteredBeobsNichtBeurteiltCount,
       filteredBeobsNichtZuzuordnenCount,
       filteredEkfrequenzsCount,
+      filteredEkzaehleinheitsCount,
       filteredErfkritsCount,
       filteredPopsCount,
       isLoading,

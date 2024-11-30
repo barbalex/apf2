@@ -6,15 +6,9 @@ import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { Pop } from './Pop/index.jsx'
 
 export const PopFolder = memo(
-  observer(({ projekt, ap, count, isLoading }) => {
+  observer(({ projekt, ap,   menu }) => {
     const store = useContext(StoreContext)
 
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.pop ?? ''
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'Populationen']
 
@@ -33,9 +27,9 @@ export const PopFolder = memo(
       id: `${ap.id}PopFolder`,
       tableId: ap.id,
       urlLabel: 'Populationen',
-      label: `Populationen (${message})`,
+      label: menu.label,
       url,
-      hasChildren: count > 0,
+      hasChildren: menu.count > 0,
     }
 
     return (

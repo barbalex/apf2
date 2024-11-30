@@ -1897,6 +1897,51 @@ export const Tree = types
 
       return beobGqlFilter
     },
+    get beobNichtBeurteiltGqlFilterForTree() {
+      const filter = {
+        wgs84Lat: { isNull: false },
+        tpopId: { isNull: true },
+        nichtZuordnen: { equalTo: false },
+      }
+
+      // node label filter
+      if (self.nodeLabelFilter.beob) {
+        filter.label = {
+          includesInsensitive: self.nodeLabelFilter.beob,
+        }
+      }
+
+      // mapFilter
+      if (self.mapFilter) {
+        filter.geomPoint = {
+          coveredBy: self.mapFilter,
+        }
+      }
+
+      return filter
+    },
+    get beobNichtZuzuordnenGqlFilterForTree() {
+      const filter = {
+        wgs84Lat: { isNull: false },
+        nichtZuordnen: { equalTo: true },
+      }
+
+      // node label filter
+      if (self.nodeLabelFilter.beob) {
+        filter.label = {
+          includesInsensitive: self.nodeLabelFilter.beob,
+        }
+      }
+
+      // mapFilter
+      if (self.mapFilter) {
+        filter.geomPoint = {
+          coveredBy: self.mapFilter,
+        }
+      }
+
+      return filter
+    },
     beobGqlFilterForTree(type) {
       const filter = {
         wgs84Lat: { isNull: false },
