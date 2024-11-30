@@ -1,26 +1,13 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import sum from 'lodash/sum'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { BeobNichtBeurteilts } from './BeobNichtBeurteilts.jsx'
 
 export const BeobNichtBeurteiltFolder = memo(
-  observer(({ projekt, ap, aparts, isLoading }) => {
+  observer(({ projekt, ap, menu }) => {
     const store = useContext(StoreContext)
-
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
-
-    const counts = aparts.map(
-      (a) => a.aeTaxonomyByArtId?.beobsByArtId?.totalCount ?? 0,
-    )
-    const count = sum(counts)
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const url = [
       'Projekte',
@@ -45,9 +32,9 @@ export const BeobNichtBeurteiltFolder = memo(
       id: `${ap.id}BeobNichtBeurteiltFolder`,
       tableId: ap.id,
       urlLabel: 'nicht-beurteilte-Beobachtungen',
-      label: `Beobachtungen nicht beurteilt (${message})`,
+      label: menu.label,
       url,
-      hasChildren: count > 0,
+      hasChildren: menu.count > 0,
     }
 
     return (

@@ -6,16 +6,8 @@ import { StoreContext } from '../../../../../../../../../../storeContext.js'
 import { EkZaehleinheits } from './EkZaehleinheits.jsx'
 
 export const EkZaehleinheitFolder = memo(
-  observer(({ projekt, ap, count, isLoading }) => {
+  observer(({ projekt, ap, menu }) => {
     const store = useContext(StoreContext)
-
-    const nodeLabelFilterString =
-      store.tree?.nodeLabelFilter?.ekzaehleinheit ?? ''
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'EK-Zähleinheiten']
 
@@ -34,9 +26,9 @@ export const EkZaehleinheitFolder = memo(
       id: `${ap.id}Ekzaehleinheit`,
       tableId: ap.id,
       urlLabel: 'EK-Zähleinheiten',
-      label: `EK-Zähleinheiten (${message})`,
+      label: menu.label,
       url,
-      hasChildren: count > 0,
+      hasChildren: menu.count > 0,
     }
 
     return (
