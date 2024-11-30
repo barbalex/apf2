@@ -42,19 +42,21 @@ export const useUsersNavData = () => {
     [],
   )
 
+  const count = data?.data?.allUsers?.nodes?.length ?? 0
+  const totalCount = data?.data?.totalCount?.totalCount ?? 0
+
   const navData = useMemo(
     () => ({
       id: 'Benutzer',
       url: `/Daten/Benutzer`,
-      label: `Benutzer`,
-      totalCount: data?.data?.totalCount?.totalCount ?? 0,
+      label: `Benutzer (${isLoading ? '...' : `${count}/${totalCount}`})`,
       menus:
         data?.data?.allUsers?.nodes.map((p) => ({
           id: p.id,
           label: p.label,
         })) ?? [],
     }),
-    [data?.data?.allUsers?.nodes, data?.data?.totalCount?.totalCount],
+    [count, data?.data?.allUsers?.nodes, isLoading, totalCount],
   )
 
   return { isLoading, error, navData }

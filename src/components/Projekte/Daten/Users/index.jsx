@@ -1,5 +1,4 @@
 import { memo, useContext } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../storeContext.js'
@@ -24,7 +23,6 @@ export const Component = memo(
       <List
         items={navData.menus}
         title={navData.label}
-        totalCount={navData.totalCount}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.user}
       />
