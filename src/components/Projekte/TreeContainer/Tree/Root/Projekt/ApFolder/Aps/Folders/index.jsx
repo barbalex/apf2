@@ -1,7 +1,7 @@
 import { memo } from 'react'
 
 import { PopFolder } from './Pop/index.jsx'
-import { ApZielFolder } from './ApZiel/index.jsx'
+import { ApZielJahrs } from './ApZielJahrs/index.jsx'
 import { ApErfkritFolder } from './ApErfkrit/index.jsx'
 import { ApBerFolder } from './ApBer/index.jsx'
 import { IdealbiotopFolder } from './Idealbiotop.jsx'
@@ -24,7 +24,7 @@ export const ApFolders = memo(({ ap, projekt }) => {
         ap={ap}
         menu={navData?.menus.find((m) => m.id === 'Populationen')}
       />
-      <ApZielFolder
+      <ApZielJahrs
         projekt={projekt}
         ap={ap}
         menu={navData?.menus.find((m) => m.id === 'AP-Ziele')}
@@ -66,12 +66,16 @@ export const ApFolders = memo(({ ap, projekt }) => {
       <BeobNichtBeurteiltFolder
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find((m) => m.id === 'nicht-beurteilte-Beobachtungen')}
+        menu={navData?.menus.find(
+          (m) => m.id === 'nicht-beurteilte-Beobachtungen',
+        )}
       />
       <BeobNichtZuzuordnenFolder
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find((m) => m.id === 'nicht-zuzuordnende-Beobachtungen')}
+        menu={navData?.menus.find(
+          (m) => m.id === 'nicht-zuzuordnende-Beobachtungen',
+        )}
       />
       <Qk
         projekt={projekt}

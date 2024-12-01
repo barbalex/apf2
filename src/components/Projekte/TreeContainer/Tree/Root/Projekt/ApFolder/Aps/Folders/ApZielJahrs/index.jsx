@@ -3,10 +3,10 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
-import { ZielJahre } from './ZielJahre/index.jsx'
+import { ZielJahr } from './ZielJahr/index.jsx'
 import { useZieljahrsNavData } from '../../../../../../../../../../modules/useZieljahrsNavData.js'
 
-export const ApZielFolder = memo(
+export const ApZielJahrs = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(StoreContext)
     const { openNodes } = store.tree
@@ -35,19 +35,20 @@ export const ApZielFolder = memo(
       urlLabel: 'AP-Ziele',
       label: navData.label,
       url,
-      hasChildren: navData.menus.count > 0,
+      hasChildren: true,
     }
 
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <ZielJahre
-            projekt={projekt}
-            ap={ap}
-            menus={navData.menus}
-          />
-        )}
+        {isOpen &&
+          navData.menus.map((menu) => (
+            <ZielJahr
+              projekt={projekt}
+              ap={ap}
+              menu={menu}
+            />
+          ))}
       </>
     )
   }),

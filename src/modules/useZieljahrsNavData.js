@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import union from 'lodash/union'
+import countBy from 'lodash/countBy'
 
 import { StoreContext } from '../storeContext.js'
 
@@ -66,39 +67,31 @@ export const useZieljahrsNavData = (props) => {
     () => data?.data?.apById?.filteredZiels?.nodes ?? [],
     [data?.data?.apById?.filteredZiels?.nodes],
   )
-  const menus = useMemo(
-    () =>
-      ziels
-        // reduce to distinct years
-        .reduce((a, el) => union(a, [el.jahr]), [])
-        .sort((a, b) => a - b)
-        .map((z) => ({
-          id: z,
-          label: z,
-        })),
-    [ziels],
-  )
-  const filteredMenus = useMemo(
-    () =>
-      filteredZiels
-        // reduce to distinct years
-        .reduce((a, el) => union(a, [el.jahr]), [])
-        .sort((a, b) => a - b)
-        .map((z) => ({
-          id: z,
-          label: z,
-        })),
-    [filteredZiels],
-  )
+  const zieljahrsCount = useMemo(() => {
+    const jahrs = countBy(ziels, 'jahr')
+    const count = Object.keys(jahrs).length
+    return count
+  }, [ziels])
+
+  const menus = useMemo(() => {
+    const countByJahr = countBy(filteredZiels, 'jahr')
+    const unfilteredCountByJahr = countBy(ziels, 'jahr')
+    // convert into array of objects with id=jahr and count
+    const jahre = Object.keys(countByJahr).map((jahr) => ({
+      id: jahr,
+      label: `${jahr} (${countByJahr[jahr]}/${unfilteredCountByJahr[jahr]})`,
+    }))
+    return jahre
+  }, [filteredZiels, ziels])
 
   const navData = useMemo(
     () => ({
       id: 'AP-Ziele',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele`,
-      label: `AP-Ziele Jahre (${isLoading ? '...' : `${filteredMenus.length}/${menus.length}`})`,
-      menus: filteredMenus,
+      label: `AP-Ziele Jahre (${isLoading ? '...' : `${menus.length}/${zieljahrsCount}`})`,
+      menus,
     }),
-    [apId, filteredMenus, isLoading, menus.length, projId],
+    [apId, menus, isLoading, projId, zieljahrsCount],
   )
 
   return { isLoading, error, navData }
