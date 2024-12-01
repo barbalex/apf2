@@ -1942,7 +1942,7 @@ export const Tree = types
 
       return filter
     },
-    get beobNichtZugeordnetGqlFilterForTree() {
+    get beobZugeordnetGqlFilterForTree() {
       const filter = {
         wgs84Lat: { isNull: false },
         tpopId: { isNull: false },

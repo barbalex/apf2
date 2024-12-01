@@ -141,6 +141,14 @@ const beobNichtZuzuordnenHandle = {
   bookmarkFetcher: beobNichtZuzuordnensBookmarkFetcher,
   bookmarkFetcherName: 'useBeobNichtZuzuordnensNavData',
 }
+const beobZugeordnetsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useBeobZugeordnetsNavData.js'))
+    .useBeobZugeordnetsNavData,
+}))
+const beobZugeordnetHandle = {
+  bookmarkFetcher: beobZugeordnetsBookmarkFetcher,
+  bookmarkFetcherName: 'useBeobZugeordnetsNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -848,7 +856,10 @@ export const Router = () => {
                             }
                           />
                         </Route>
-                        <Route path=":tpopId/Beobachtungen">
+                        <Route
+                          path=":tpopId/Beobachtungen"
+                          handle={beobZugeordnetHandle}
+                        >
                           <Route
                             path="*"
                             lazy={() =>

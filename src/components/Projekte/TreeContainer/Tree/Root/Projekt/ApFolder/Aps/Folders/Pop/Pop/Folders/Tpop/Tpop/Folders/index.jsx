@@ -20,7 +20,7 @@ export const TpopFolders = memo(
       tpopmassnGqlFilterForTree,
       ekGqlFilterForTree,
       ekfGqlFilterForTree,
-      beobNichtZugeordnetGqlFilterForTree,
+      beobZugeordnetGqlFilterForTree,
       nodeLabelFilter,
     } = store.tree
 
@@ -47,7 +47,7 @@ export const TpopFolders = memo(
         tpopbersFilter,
         ekGqlFilterForTree,
         ekfGqlFilterForTree,
-        beobNichtZugeordnetGqlFilterForTree,
+        beobZugeordnetGqlFilterForTree,
       ],
       queryFn: () =>
         client.query({
@@ -97,7 +97,7 @@ export const TpopFolders = memo(
             tpopbersFilter,
             tpopfeldkontrsFilter: ekGqlFilterForTree,
             tpopfreiwkontrsFilter: ekfGqlFilterForTree,
-            beobZugeordnetsFilter: beobNichtZugeordnetGqlFilterForTree,
+            beobZugeordnetsFilter: beobZugeordnetGqlFilterForTree,
           },
           fetchPolicy: 'no-cache',
         }),

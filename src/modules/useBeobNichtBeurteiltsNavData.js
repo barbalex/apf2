@@ -54,7 +54,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query NavApQuery(
+          query NavBeobNichtBeurteiltsQuery(
             $beobNichtBeurteiltFilter: BeobFilter!
             $allBeobNichtBeurteiltFilter: BeobFilter!
           ) {

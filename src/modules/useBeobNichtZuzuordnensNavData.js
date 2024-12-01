@@ -38,7 +38,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query NavApQuery(
+          query NavBeobNichtZuzuordnensQuery(
             $beobNichtZuzuordnenFilter: BeobFilter!
             $allBeobNichtZuzuordnenFilter: BeobFilter!
           ) {
