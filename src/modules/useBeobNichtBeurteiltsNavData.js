@@ -62,6 +62,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
           ) {
             beobsNichtBeurteilt: allBeobs(
               filter: $allBeobNichtBeurteiltFilter
+              orderBy: [DATUM_DESC, AUTOR_ASC]
             ) {
               totalCount
               nodes {
@@ -71,6 +72,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
             }
             filteredBeobsNichtBeurteilt: allBeobs(
               filter: $beobNichtBeurteiltFilter
+              orderBy: [DATUM_DESC, AUTOR_ASC]
             ) {
               totalCount
               nodes {
@@ -151,9 +153,9 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
 
   const navData = useMemo(
     () => ({
-      id: 'projekt',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}`,
-      label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+      id: 'nicht-beurteilte-Beobachtungen',
+      url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-beurteilte-Beobachtungen`,
+      label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       // leave totalCount undefined as the menus are folders
       menus:
         data?.data?.filteredBeobsNichtBeurteilt?.nodes?.map((p) => ({
@@ -161,7 +163,14 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
           label: p.label,
         })) ?? [],
     }),
-    [],
+    [
+      apId,
+      count,
+      data?.data?.filteredBeobsNichtBeurteilt?.nodes,
+      filteredCount,
+      isLoading,
+      projId,
+    ],
   )
 
   return { isLoading, error, navData }
