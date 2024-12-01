@@ -46,13 +46,10 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
               filter: $allBeobNichtZuzuordnenFilter
             ) {
               totalCount
-              nodes {
-                id
-                label
-              }
             }
             filteredBeobsNichtZuzuordnen: allBeobs(
               filter: $beobNichtZuzuordnenFilter
+              orderBy: [DATUM_DESC, AUTOR_ASC]
             ) {
               totalCount
               nodes {

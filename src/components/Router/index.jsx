@@ -864,7 +864,7 @@ export const Router = () => {
                             path="*"
                             lazy={() =>
                               import(
-                                '../Projekte/Daten/Beobzuordnungs/index.jsx'
+                                '../Projekte/Daten/BeobZugeordnets/index.jsx'
                               )
                             }
                           />

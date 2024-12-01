@@ -35,12 +35,11 @@ export const useBeobZugeordnetsNavData = (props) => {
           ) {
             beobsZugeordnet: allBeobs(filter: $allBeobZugeordnetFilter) {
               totalCount
-              nodes {
-                id
-                label
-              }
             }
-            filteredBeobsZugeordnet: allBeobs(filter: $beobZugeordnetFilter) {
+            filteredBeobsZugeordnet: allBeobs(
+              filter: $beobZugeordnetFilter
+              orderBy: [DATUM_DESC, AUTOR_ASC]
+            ) {
               totalCount
               nodes {
                 id
