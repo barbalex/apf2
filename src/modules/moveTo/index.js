@@ -83,7 +83,7 @@ export const moveTo = async ({
   // update tree ap queries, tree pop folder queries, tree pop queries
   if (table === 'pop') {
     tanstackQueryClient.invalidateQueries({
-      queryKey: [`treePop`],
+      queryKey: [`treePops`],
     })
     tanstackQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],

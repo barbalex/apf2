@@ -149,6 +149,13 @@ const beobZugeordnetHandle = {
   bookmarkFetcher: beobZugeordnetsBookmarkFetcher,
   bookmarkFetcherName: 'useBeobZugeordnetsNavData',
 }
+const popsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/usePopsNavData.js')).usePopsNavData,
+}))
+const popsHandle = {
+  bookmarkFetcher: popsBookmarkFetcher,
+  bookmarkFetcherName: 'usePopsNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -616,7 +623,10 @@ export const Router = () => {
                         }
                       />
                     </Route>
-                    <Route path="Populationen">
+                    <Route
+                      path="Populationen"
+                      handle={popsHandle}
+                    >
                       <Route
                         path="*"
                         lazy={() => import('../Projekte/Daten/Pops/index.jsx')}

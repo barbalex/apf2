@@ -69,7 +69,7 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treePop`],
+        queryKey: [`treePops`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
@@ -119,7 +119,7 @@ export const Menu = memo(
 
       // update tree query
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treePop`],
+        queryKey: [`treePops`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],

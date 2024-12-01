@@ -5,7 +5,7 @@ export const createPopsQuery = ({
   popGqlFilterForTree,
   apolloClient,
 }) => ({
-  queryKey: ['treePop', apId, popGqlFilterForTree],
+  queryKey: ['treePops', apId, popGqlFilterForTree],
   queryFn: () =>
     apolloClient.query({
       query: gql`

@@ -248,7 +248,7 @@ export const copyTo = async ({
   // update tree data
   if (table === 'pop') {
     tanstackQueryClient.invalidateQueries({
-      queryKey: ['treePop'],
+      queryKey: ['treePops'],
     })
     tanstackQueryClient.invalidateQueries({
       queryKey: ['treeApFolders'],
