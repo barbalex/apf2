@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../storeContext.js'
 import { PopFolders } from './Folders/index.jsx'
-import { createPopsQuery } from '../../../../../../../../../../../modules/createPopsQuery.js'
+import { usePopsNavData } from '../../../../../../../../../../../modules/usePopsNavData.js'
 
 export const Pop = memo(
   observer(({ projekt, ap }) => {
@@ -14,17 +14,9 @@ export const Pop = memo(
     const store = useContext(StoreContext)
     const { popGqlFilterForTree } = store.tree
 
-    const { data } = useQuery(
-      createPopsQuery({
-        apId: ap.id,
-        popGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const pops = data?.data?.apById?.popsByApId?.nodes ?? []
-    const totalCount = data?.data?.apById?.popsCount?.totalCount ?? 0
+    const { navData } = usePopsNavData({ projId: projekt.id, apId: ap.id })
 
-    return (pops).map((el) => {
+    return navData.menus.map((el) => {
       const node = {
         nodeType: 'table',
         menuType: 'pop',
