@@ -1,7 +1,7 @@
 import { memo } from 'react'
 
 import { Row } from '../../../../../../Row.jsx'
-import { useBeobNichtBeurteiltsNavData } from '../../../../../../../../../../modules/useBeobNichtbeurteiltsNavData.js'
+import { useBeobNichtBeurteiltsNavData } from '../../../../../../../../../../modules/useBeobNichtBeurteiltsNavData.js'
 
 export const BeobNichtBeurteilts = memo(({ projekt, ap }) => {
   const { navData } = useBeobNichtBeurteiltsNavData({ apId: ap.id })

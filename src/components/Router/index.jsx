@@ -127,7 +127,7 @@ const apHandle = {
 }
 const beobNichtBeurteiltsBookmarkFetcher = lazy(async () => ({
   default: (await import('../../modules/useBeobNichtBeurteiltsNavData.js'))
-    .useBeobNichtbeurteiltsNavData,
+    .useBeobNichtBeurteiltsNavData,
 }))
 const beobNichtBeurteiltHandle = {
   bookmarkFetcher: beobNichtBeurteiltsBookmarkFetcher,
@@ -135,7 +135,7 @@ const beobNichtBeurteiltHandle = {
 }
 const beobNichtZuzuordnensBookmarkFetcher = lazy(async () => ({
   default: (await import('../../modules/useBeobNichtZuzuordnensNavData.js'))
-    .useBeobNichtbeurteiltsNavData,
+    .useBeobNichtBeurteiltsNavData,
 }))
 const beobNichtZuzuordnenHandle = {
   bookmarkFetcher: beobNichtZuzuordnensBookmarkFetcher,
